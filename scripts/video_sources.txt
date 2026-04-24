@@ -1,0 +1,18 @@
+# Mayhem Oracle — Video Knowledge Sources
+# Add YouTube URLs (one per line) to feed the knowledge pipeline.
+# Run: python scripts/learn_from_video.py --batch scripts/video_sources.txt
+#
+# Priority categories:
+# [MECHANICS] — Explains augment rules, reroll logic, set bonuses
+# [CHAMPION]  — Champion-specific augment synergies and builds
+# [COMBO]     — Multi-augment interaction chains
+# [PATCH]     — Patch change impact analysis
+
+# ─── Jason's verified sources ───
+https://www.youtube.com/shorts/wnkM8h36xjk
+
+# ─── Add more URLs below ───
+# [MECHANICS] Example: How augment selection works
+# [CHAMPION] Example: Best augments for Urgot W
+# [COMBO] Example: Bread Sandwich hidden combo
+# [PATCH] Example: Patch 26.7 augment changes

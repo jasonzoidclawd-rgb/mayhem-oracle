@@ -1,0 +1,715 @@
+"use client";
+
+import { useState, useMemo } from "react";
+import Image from "next/image";
+import { useTranslations } from "next-intl";
+import { baselineOracleScore, type ScoredAugment } from "@/lib/oracle-score";
+import { Tooltip } from "@/components/Tooltip";
+import type { AffinityTier, SetSynergyResult, ChampSetAffinity } from "@/lib/set-synergy";
+
+// ─── Constants ───────────────────────────────────────────────────────────────
+
+type Rarity = "all" | "prismatic" | "gold" | "silver";
+type ViewMode = "sets" | "grid";
+
+const RARITY_STYLES = {
+  prismatic: {
+    badge: "text-purple-300 border-purple-400/40 bg-purple-400/10",
+    glow: "hover:border-purple-400/40 hover:shadow-[0_0_12px_rgba(200,150,255,0.15)]",
+  },
+  gold: {
+    badge: "text-yellow-300 border-yellow-400/40 bg-yellow-400/10",
+    glow: "hover:border-yellow-400/30 hover:shadow-[0_0_12px_rgba(255,215,0,0.1)]",
+  },
+  silver: {
+    badge: "text-slate-300 border-slate-400/40 bg-slate-400/10",
+    glow: "hover:border-slate-400/30",
+  },
+} as const;
+
+const SCORE_COLOR = (score: number) => {
+  if (score >= 80) return "text-amber-300";
+  if (score >= 70) return "text-yellow-400";
+  if (score >= 60) return "text-green-400";
+  return "text-slate-400";
+};
+
+const TIER_STYLE: Record<AffinityTier, { bg: string; text: string }> = {
+  "S+": { bg: "bg-red-500/20 border-red-400/40", text: "text-red-300" },
+  S: { bg: "bg-orange-500/15 border-orange-400/30", text: "text-orange-300" },
+  A: { bg: "bg-blue-500/15 border-blue-400/30", text: "text-blue-300" },
+};
+
+// ─── Helpers ─────────────────────────────────────────────────────────────────
+
+function localizedName(aug: ScoredAugment, locale: string): string {
+  if (locale === "zh-TW") return aug.name_zh_TW ?? aug.name_zh_CN ?? aug.name;
+  if (locale === "zh-CN") return aug.name_zh_CN ?? aug.name;
+  if (locale === "ja") return aug.name_ja ?? aug.name;
+  if (locale === "ko") return aug.name_ko ?? aug.name;
+  return aug.name;
+}
+
+// ─── Main Component ─────────────────────────────────────────────────────────
+
+export function AugmentsClient({
+  augments,
+  locale = "en",
+  setSynergies = [],
+}: {
+  augments: ScoredAugment[];
+  locale?: string;
+  setSynergies?: SetSynergyResult[];
+}) {
+  const t = useTranslations("augments");
+  const tChamp = useTranslations("champion");
+
+  const [viewMode, setViewMode] = useState<ViewMode>("sets");
+  const [activeRarity, setActiveRarity] = useState<Rarity>("all");
+  const [activeSet, setActiveSet] = useState<string>("all");
+  const [search, setSearch] = useState("");
+  const [sortBy, setSortBy] = useState<"score" | "winrate" | "name">("score");
+
+  // Collect unique set names for grid filter
+  const sets = useMemo(() => {
+    const names = new Set(augments.map((a) => a.set).filter(Boolean) as string[]);
+    return ["all", ...Array.from(names).sort()];
+  }, [augments]);
+
+  // Grid view filtering
+  const filtered = useMemo(() => {
+    return augments.filter((a) => {
+      const rarityMatch = activeRarity === "all" || a.rarity === activeRarity;
+      const setMatch = activeSet === "all" || a.set === activeSet;
+      const displayName = localizedName(a, locale);
+      const q = search.toLowerCase();
+      const searchMatch =
+        !search ||
+        displayName.toLowerCase().includes(q) ||
+        a.name.toLowerCase().includes(q) ||
+        (a.set ?? "").toLowerCase().includes(q) ||
+        (a.wikiDescription ?? a.description ?? "").toLowerCase().includes(q);
+      return rarityMatch && setMatch && searchMatch;
+    });
+  }, [augments, activeRarity, activeSet, search, locale]);
+
+  const sorted = useMemo(() => {
+    return [...filtered].sort((a, b) => {
+      if (sortBy === "score") return baselineOracleScore(b) - baselineOracleScore(a);
+      if (sortBy === "winrate") return (b.win_rate ?? 0) - (a.win_rate ?? 0);
+      return a.name.localeCompare(b.name);
+    });
+  }, [filtered, sortBy]);
+
+  const counts = useMemo(
+    () => ({
+      all: augments.length,
+      prismatic: augments.filter((a) => a.rarity === "prismatic").length,
+      gold: augments.filter((a) => a.rarity === "gold").length,
+      silver: augments.filter((a) => a.rarity === "silver").length,
+    }),
+    [augments],
+  );
+
+  const rarityLabel: Record<Rarity, string> = {
+    all: t("all"),
+    prismatic: tChamp("prismatic"),
+    gold: tChamp("gold"),
+    silver: tChamp("silver"),
+  };
+
+  // Filter augments by rarity (shared across both views)
+  const rarityFiltered = useMemo(() => {
+    if (activeRarity === "all") return augments;
+    return augments.filter((a) => a.rarity === activeRarity);
+  }, [augments, activeRarity]);
+
+  // Group rarity-filtered augments by set
+  const filteredBySet = useMemo(() => {
+    const map: Record<string, ScoredAugment[]> = {};
+    for (const a of rarityFiltered) {
+      if (a.set) {
+        if (!map[a.set]) map[a.set] = [];
+        map[a.set].push(a);
+      }
+    }
+    return map;
+  }, [rarityFiltered]);
+
+  return (
+    <div>
+      {/* ─── Game Notes (collapsible) ─── */}
+      <GameNotes />
+
+      {/* ─── View Toggle + Rarity Tabs ─── */}
+      <div className="flex flex-wrap items-center gap-2 mb-6">
+        <button
+          onClick={() => setViewMode("sets")}
+          className={`px-4 py-2 rounded-lg text-sm font-medium transition-all border ${
+            viewMode === "sets"
+              ? "bg-[var(--color-neon-primary)]/15 text-[var(--color-neon-primary)] border-[var(--color-neon-primary)]/40"
+              : "bg-[var(--color-bg-card)] text-[var(--color-text-secondary)] border-[var(--color-border-default)]"
+          }`}
+        >
+          {t("viewSets")}
+        </button>
+        <button
+          onClick={() => setViewMode("grid")}
+          className={`px-4 py-2 rounded-lg text-sm font-medium transition-all border ${
+            viewMode === "grid"
+              ? "bg-[var(--color-neon-primary)]/15 text-[var(--color-neon-primary)] border-[var(--color-neon-primary)]/40"
+              : "bg-[var(--color-bg-card)] text-[var(--color-text-secondary)] border-[var(--color-border-default)]"
+          }`}
+        >
+          {t("viewAll")}
+        </button>
+        <span className="w-px h-6 bg-[var(--color-border-default)] mx-1" />
+        {(["all", "prismatic", "gold", "silver"] as Rarity[]).map((r) => (
+          <button
+            key={r}
+            onClick={() => setActiveRarity(r)}
+            className={`px-4 py-2 rounded-lg text-sm font-medium transition-all border ${
+              activeRarity === r
+                ? r === "all"
+                  ? "bg-[var(--color-neon-primary)]/15 text-[var(--color-neon-primary)] border-[var(--color-neon-primary)]/40"
+                  : `${RARITY_STYLES[r].badge} border-current`
+                : "bg-[var(--color-bg-card)] text-[var(--color-text-secondary)] border-[var(--color-border-default)]"
+            }`}
+          >
+            {rarityLabel[r]}{" "}
+            <span className="opacity-60 text-xs ml-1">({counts[r]})</span>
+          </button>
+        ))}
+      </div>
+
+      {viewMode === "sets" ? (
+        /* ─── SET VIEW ─── */
+        <div className="space-y-6">
+          {/* Sets with synergy data */}
+          {setSynergies.map((syn) => {
+            const setAugs = filteredBySet[syn.setName] ?? [];
+            if (setAugs.length === 0) return null;
+            const avgWr =
+              setAugs.reduce((s, a) => s + (a.win_rate ?? 0), 0) / setAugs.length;
+            return (
+              <SetCard
+                key={syn.setName}
+                synergy={syn}
+                augments={setAugs}
+                avgWinRate={avgWr}
+                locale={locale}
+              />
+            );
+          })}
+
+          {/* Sets without synergy data (hybrid sets) */}
+          {Object.entries(filteredBySet)
+            .filter(([name]) => !setSynergies.some((s) => s.setName === name))
+            .map(([name, setAugs]) => {
+              const avgWr =
+                setAugs.reduce((s, a) => s + (a.win_rate ?? 0), 0) / setAugs.length;
+              return (
+                <SetCard
+                  key={name}
+                  synergy={{ setName: name, description: "Hybrid set", topChampions: [] }}
+                  augments={setAugs}
+                  avgWinRate={avgWr}
+                  locale={locale}
+                />
+              );
+            })}
+
+          {/* Standalone augments (no set) */}
+          <StandaloneSection augments={rarityFiltered} locale={locale} />
+        </div>
+      ) : (
+        /* ─── GRID VIEW ─── */
+        <div>
+          {/* Controls */}
+          <div className="flex flex-col sm:flex-row gap-3 mb-6">
+            <input
+              type="search"
+              placeholder={t("search")}
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              className="flex-1 max-w-xs px-4 py-2 rounded-lg border border-[var(--color-border-default)] bg-[var(--color-bg-card)] text-sm focus:outline-none focus:border-[var(--color-neon-primary)]/50"
+            />
+            <select
+              value={activeSet}
+              onChange={(e) => setActiveSet(e.target.value)}
+              className="px-3 py-2 rounded-lg border border-[var(--color-border-default)] bg-[var(--color-bg-card)] text-sm focus:outline-none"
+            >
+              {sets.map((s) => (
+                <option key={s} value={s}>
+                  {s === "all" ? t("allSets") : s}
+                </option>
+              ))}
+            </select>
+            <select
+              value={sortBy}
+              onChange={(e) => setSortBy(e.target.value as typeof sortBy)}
+              className="px-3 py-2 rounded-lg border border-[var(--color-border-default)] bg-[var(--color-bg-card)] text-sm focus:outline-none"
+            >
+              <option value="score">{t("sortScore")}</option>
+              <option value="winrate">{t("sortWinRate")}</option>
+              <option value="name">{t("sortName")}</option>
+            </select>
+          </div>
+
+          {/* Grid */}
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3">
+            {sorted.map((aug) => (
+              <AugmentCard
+                key={aug.slug}
+                augment={aug}
+                locale={locale}
+                rarityLabel={rarityLabel[aug.rarity]}
+              />
+            ))}
+          </div>
+
+          {sorted.length === 0 && (
+            <p className="text-center text-[var(--color-text-muted)] py-16">
+              {t("noResults")}
+            </p>
+          )}
+
+          <p className="text-xs text-[var(--color-text-muted)] mt-8 text-center">
+            {t("showing", { count: sorted.length, total: augments.length })}
+          </p>
+        </div>
+      )}
+    </div>
+  );
+}
+
+// ─── Game Notes ─────────────────────────────────────────────────────────────
+
+function GameNotes() {
+  const [open, setOpen] = useState(false);
+
+  return (
+    <div className="mb-6 glass-card border border-[var(--color-border-default)] overflow-hidden">
+      <button
+        onClick={() => setOpen(!open)}
+        className="w-full px-5 py-3 flex items-center gap-3 text-left hover:bg-white/[0.02] transition-colors"
+      >
+        <span className="text-base font-bold">Game Notes &amp; Interactions</span>
+        <span className="text-[var(--color-text-muted)] text-xs">wiki-sourced mechanics</span>
+        <span className="ml-auto text-[var(--color-text-muted)] text-xl">{open ? "−" : "+"}</span>
+      </button>
+
+      {open && (
+        <div className="px-5 pb-5 space-y-5 text-sm leading-relaxed">
+          {/* Bread Sandwich */}
+          <NoteBlock title="Bread Sandwich Combo">
+            Collecting all 3 Bread augments (<Em>Bread and Butter</Em> + <Em>Bread and Cheese</Em> + <Em>Bread and Jam</Em>)
+            grants the <Em>Bread Sandwich</Em> buff: <Stat>250 ultimate haste</Stat> and <Stat>50 ability haste</Stat> on
+            each basic ability. This is one of the strongest hidden combos in the mode.
+          </NoteBlock>
+
+          {/* Burn Stacking */}
+          <NoteBlock title="Burn Stacking Rules">
+            <p>
+              All Burn effects stack infinitely and refresh on application. When a Burn is first applied to a target,
+              all subsequent Burn sources from <em>any player</em> stack onto that first source and credit damage to the
+              first source&apos;s owner (e.g. <Em>Tormentor</Em> applied first will be stacked by <Em>Slow Cooker</Em>).
+            </p>
+            <ul className="mt-2 space-y-1 list-disc list-inside text-[var(--color-text-secondary)]">
+              <li><Em>Firebrand</Em> — basic attacks, <Stat>0.4% target max HP/s</Stat> (2% over 5s)</li>
+              <li><Em>Tormentor</Em> — on CC, <Stat>0.8% target max HP/s</Stat> (4% over 5s)</li>
+              <li><Em>Slow Cooker</Em> — 500-unit aura, <Stat>0.66% your max HP/s</Stat> (2% over 3s)</li>
+              <li><Em>Infernal Conduit</Em> — ability hits, <Stat>2–20 (+4.6% bonus AD)(+2% AP)/s</Stat> over 3s</li>
+              <li><Em>Grandma&apos;s Chili Oil</Em> — next hit, <Stat>100–350 magic dmg</Stat> over 3s + AoE explosion</li>
+              <li><Em>Holy Fire</Em> — heals/shields fire a missile, <Stat>0.2% target max HP/s</Stat> over 5s</li>
+              <li><Em>Quest: Icathia&apos;s Fall</Em> — Void Immolation counts as <Stat>2 Burn sources</Stat></li>
+            </ul>
+          </NoteBlock>
+
+          {/* Crit Interaction */}
+          <NoteBlock title="Jeweled Gauntlet × Vulnerability">
+            <p>
+              <Em>Jeweled Gauntlet</Em>: abilities crit for <Stat>(145% + bonus crit dmg)</Stat>,
+              gain <Stat>25% (+4.5% per 100 AP) crit chance</Stat>.
+            </p>
+            <p className="mt-1">
+              <Em>Vulnerability</Em>: items &amp; DoTs crit for <Stat>(145% + bonus crit dmg)</Stat>,
+              gain <Stat>25% crit chance</Stat> (5s CD per cast).
+            </p>
+            <p className="mt-1 text-[var(--color-text-muted)]">
+              If both are equipped, only the augment with higher crit damage rolls its crit chance (not both).
+              Known bug: may behave incorrectly with persistent area damage.
+            </p>
+          </NoteBlock>
+
+          {/* Conversion Augments */}
+          <NoteBlock title="Stat Conversion Augments">
+            <ul className="space-y-1 list-disc list-inside text-[var(--color-text-secondary)]">
+              <li><Em>ADAPt</Em> — converts bonus AD → AP at <Stat>1 AP per 0.6 bonus AD</Stat>, then <Stat>+15% AP</Stat></li>
+              <li><Em>Purist - Caster</Em> — converts bonus AS → ability haste at <Stat>0.65 AH per 1% AS</Stat>, then <Stat>−10% total CD</Stat></li>
+              <li><Em>Zealot</Em> — <Stat>35% (+5% per 100 AP) AS</Stat> and <Stat>25% (+5% per 100 AP) crit chance</Stat></li>
+            </ul>
+          </NoteBlock>
+
+          {/* Key Augment Stats */}
+          <NoteBlock title="Notable Augment Stats">
+            <ul className="space-y-1 list-disc list-inside text-[var(--color-text-secondary)]">
+              <li><Em>Apex Inventor</Em> — <Stat>100 item haste</Stat> (50% item CDR). A 60s item CD becomes 30s; a 120s becomes 60s.</li>
+              <li><Em>Giant Slayer</Em> — shrink 75%, <Stat>+30% move speed</Stat>, <Stat>10/15/25/30% bonus dmg</Stat> based on target size.</li>
+              <li><Em>???</Em> — missing pings fire missiles: <Stat>100–400 (+10% missing HP) magic dmg</Stat>, heals allies for the same. Ping limit scales with Honor level (2/4/6/7/7).</li>
+              <li><Em>It&apos;s Killing Time</Em> — ult applies Death Mark to all enemies (8s CD), stores <Stat>40% post-mitigation dmg</Stat>, detonates as true damage after 5s.</li>
+              <li><Em>Final City Transit</Em> — on death, summon train dealing <Stat>150–750 (+65% bonus AD)(+50% AP)(+15% max HP)</Stat> physical damage globally.</li>
+              <li><Em>Poro Blaster</Em> — summon poros every 3.5s (max 5). Each deals <Stat>3% target max HP true dmg</Stat>. At 5 poros, first hit knocks up 0.5s. Limited to 1 player per team.</li>
+              <li><Em>Void Rift</Em> — ability hits create Void Scars. Two scars within 1250 units create a rift dealing <Stat>100–450 (+5.5 per Lethality)(+5.5 per flat magic pen)</Stat> magic dmg + 99% slow.</li>
+              <li><Em>Stuck in Here With Me</Em> — ult grants aura (500 units over 2s), then <Stat>2s taunt + 50% dmg reduction</Stat>. <Stat>+30 ult haste</Stat>. 30s CD.</li>
+              <li><Em>Hand of Baron</Em> — grants modified Baron buff: <Stat>25% increased adaptive force</Stat> + greatly empowered nearby minions.</li>
+              <li><Em>Phenomenal Evil</Em> — <Stat>+1 AP per stack</Stat> (on ability dmg to champ, 1s global CD). Starts with <Stat>40 stacks</Stat> if not first augment.</li>
+              <li><Em>All For You</Em> — heals/shields on allies <Stat>+30% effectiveness</Stat>.</li>
+              <li><Em>Hat on a Hat</Em> — <Stat>+15 AP, +8 MR per hat item</Stat> (reduced to 8 AP, 4 MR for hats from Cappa Juice/Stat Bonus).</li>
+            </ul>
+          </NoteBlock>
+
+          {/* Spin To Win */}
+          <NoteBlock title="Spin To Win — Eligible Abilities">
+            <p>
+              <Stat>+30% damage</Stat> and <Stat>30 ability haste</Stat> on spinning abilities.
+            </p>
+            <p className="mt-1 text-[var(--color-text-secondary)]">
+              Ahri (Fox-Fire, Spirit Rush) · Amumu (Tantrum) · Ambessa (Lacerate) · Darius (Decimate) ·
+              Draven (Spinning Axe, Stand Aside, Whirling Death) · Garen (Judgment) · Hecarim (Rampage) ·
+              Jax (Counter Strike) · Katarina (Voracity, Death Lotus) · Kayn (Reaping Slash) ·
+              Lillia (Blooming Blows) · Nocturne (Umbra Blades) · Rammus (Powerball) ·
+              Renekton (Cull the Meek) · Riven (Broken Wings) · Samira (Blade Whirl, Inferno Trigger) ·
+              Wukong (Cyclone) · Tryndamere (Spinning Slash) · Zed (Shadow Slash)
+            </p>
+          </NoteBlock>
+
+          {/* Transmuted / High Roller */}
+          <NoteBlock title="Transmuted Augments (High Roller set)">
+            <p className="text-[var(--color-text-secondary)]">
+              Transmuted augments reroll into a random augment of a different tier.
+              <Em>Transmute: Gold</Em> (silver rarity) gives 1 random gold augment.
+              <Em>Transmute: Prismatic</Em> (gold rarity) gives 1 random prismatic.
+              <Em>Transmute: Chaos</Em> (prismatic rarity) gives 2 completely random augments.
+              The result is prefixed &quot;Transmuted:&quot; in its title.
+            </p>
+          </NoteBlock>
+
+          {/* Disabled */}
+          <NoteBlock title="Currently Disabled Augments">
+            <p className="text-[var(--color-text-muted)]">
+              <Em>Fetch</Em> (silver), <Em>Quest: Sneakerhead</Em> (prismatic),
+              and <Em>Spin Me Right Round</Em> (silver) are currently disabled and cannot appear in games.
+            </p>
+          </NoteBlock>
+
+          <p className="text-[11px] text-[var(--color-text-muted)] pt-2">
+            Source: wiki.leagueoflegends.com/en-us/ARAM:_Mayhem/Augments
+          </p>
+        </div>
+      )}
+    </div>
+  );
+}
+
+function NoteBlock({ title, children }: { title: string; children: React.ReactNode }) {
+  return (
+    <div>
+      <h3 className="text-sm font-semibold text-[var(--color-text-primary)] mb-1">{title}</h3>
+      <div className="text-[var(--color-text-secondary)]">{children}</div>
+    </div>
+  );
+}
+
+function Em({ children }: { children: React.ReactNode }) {
+  return <span className="text-[var(--color-text-primary)] font-medium">{children}</span>;
+}
+
+function Stat({ children }: { children: React.ReactNode }) {
+  return <span className="text-[var(--color-neon-primary)] font-medium">{children}</span>;
+}
+
+// ─── Augment Tooltip ────────────────────────────────────────────────────────
+
+function AugmentTooltip({
+  aug,
+  displayName,
+  score,
+}: {
+  aug: ScoredAugment;
+  displayName: string;
+  score: number;
+}) {
+  const desc = aug.wikiDescription ?? aug.description;
+  return (
+    <div className="max-w-xs">
+      <div className="font-medium">{displayName}</div>
+      {desc && (
+        <div className="text-xs opacity-80 mt-1 leading-relaxed">{desc}</div>
+      )}
+      {aug.notes && aug.notes.length > 0 && (
+        <div className="mt-2 pt-2 border-t border-white/10 space-y-1">
+          {aug.notes.map((note, i) => (
+            <div key={i} className="text-[11px] text-amber-300/90 leading-snug">
+              {note}
+            </div>
+          ))}
+        </div>
+      )}
+      <div className="text-xs mt-2 text-white/50">
+        {aug.win_rate !== null ? `${aug.win_rate?.toFixed(1)}% WR` : ""}{" "}
+        · Oracle {score}
+      </div>
+    </div>
+  );
+}
+
+// ─── Set Card ────────────────────────────────────────────────────────────────
+
+function SetCard({
+  synergy,
+  augments,
+  avgWinRate,
+  locale,
+}: {
+  synergy: SetSynergyResult;
+  augments: ScoredAugment[];
+  avgWinRate: number;
+  locale: string;
+}) {
+  const [expanded, setExpanded] = useState(true);
+
+  const tierGroups = useMemo(() => {
+    const groups: Record<AffinityTier, ChampSetAffinity[]> = { "S+": [], S: [], A: [] };
+    for (const c of synergy.topChampions) {
+      groups[c.tier].push(c);
+    }
+    return groups;
+  }, [synergy.topChampions]);
+
+  return (
+    <div className="glass-card border border-[var(--color-border-default)] overflow-hidden">
+      {/* Header */}
+      <button
+        onClick={() => setExpanded(!expanded)}
+        className="w-full px-5 py-4 flex items-center gap-4 text-left hover:bg-white/[0.02] transition-colors"
+      >
+        <div className="flex-1 min-w-0">
+          <div className="flex items-center gap-3">
+            <h2 className="text-lg font-bold">{synergy.setName}</h2>
+            <span className="text-xs text-[var(--color-text-muted)] bg-[var(--color-bg-card)] px-2 py-0.5 rounded">
+              {augments.length} augments
+            </span>
+            <span className="text-xs text-green-400">
+              {avgWinRate.toFixed(1)}% avg WR
+            </span>
+          </div>
+          <p className="text-sm text-[var(--color-text-secondary)] mt-1">
+            {synergy.description}
+          </p>
+        </div>
+        <span className="text-[var(--color-text-muted)] text-xl shrink-0">
+          {expanded ? "−" : "+"}
+        </span>
+      </button>
+
+      {expanded && (
+        <div className="px-5 pb-5 space-y-4">
+          {/* Augments row */}
+          <div className="flex flex-wrap gap-2">
+            {augments.map((aug) => {
+              const rarity = aug.rarity as keyof typeof RARITY_STYLES;
+              const styles = RARITY_STYLES[rarity];
+              const displayName = localizedName(aug, locale);
+              const score = baselineOracleScore(aug);
+              return (
+                <Tooltip
+                  key={aug.slug}
+                  content={<AugmentTooltip aug={aug} displayName={displayName} score={score} />}
+                >
+                  <div
+                    className={`flex items-center gap-2 px-2 py-1.5 rounded-lg border ${styles.glow} border-[var(--color-border-default)] bg-[var(--color-bg-card)] cursor-default transition-all`}
+                  >
+                    <div className="relative w-8 h-8 rounded overflow-hidden shrink-0">
+                      <Image
+                        src={aug.icon}
+                        alt={aug.name}
+                        fill
+                        className="object-contain"
+                        sizes="32px"
+                        unoptimized
+                      />
+                    </div>
+                    <div className="min-w-0">
+                      <div className="text-xs font-medium truncate max-w-[120px] flex items-center gap-1">
+                        {displayName}
+                        {aug.notes && aug.notes.length > 0 && (
+                          <span className="text-amber-400 text-[9px]" title="Has special notes">*</span>
+                        )}
+                      </div>
+                      <div className="flex gap-2 text-[10px] text-[var(--color-text-muted)]">
+                        <span className={styles.badge.split(" ")[0]}>
+                          {aug.rarity}
+                        </span>
+                        <span className={SCORE_COLOR(score)}>{score}</span>
+                      </div>
+                    </div>
+                  </div>
+                </Tooltip>
+              );
+            })}
+          </div>
+
+          {/* Champion Synergies */}
+          {synergy.topChampions.length > 0 && (
+            <div className="space-y-3">
+              {(["S+", "S", "A"] as AffinityTier[]).map((tier) => {
+                const champs = tierGroups[tier];
+                if (champs.length === 0) return null;
+                const style = TIER_STYLE[tier];
+                return (
+                  <div key={tier}>
+                    <div className="flex items-center gap-2 mb-2">
+                      <span
+                        className={`text-xs font-bold px-2 py-0.5 rounded border ${style.bg} ${style.text}`}
+                      >
+                        {tier}
+                      </span>
+                      <span className="text-xs text-[var(--color-text-muted)]">
+                        {tier === "S+"
+                          ? "Godlike"
+                          : tier === "S"
+                            ? "Strong"
+                            : "Good"}
+                      </span>
+                    </div>
+                    <div className="flex flex-wrap gap-1.5">
+                      {champs.map((c) => (
+                        <Tooltip key={c.slug} content={`${c.name} — ${c.reason}`}>
+                          <div className="relative w-8 h-8 rounded-full overflow-hidden border border-[var(--color-border-default)] cursor-default hover:border-[var(--color-neon-primary)]/50 transition-colors">
+                            <Image
+                              src={c.icon}
+                              alt={c.name}
+                              fill
+                              className="object-cover"
+                              sizes="32px"
+                              unoptimized
+                            />
+                          </div>
+                        </Tooltip>
+                      ))}
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          )}
+        </div>
+      )}
+    </div>
+  );
+}
+
+// ─── Standalone Augments Section ─────────────────────────────────────────────
+
+function StandaloneSection({
+  augments,
+  locale,
+}: {
+  augments: ScoredAugment[];
+  locale: string;
+}) {
+  const standalone = useMemo(
+    () =>
+      augments
+        .filter((a) => !a.set)
+        .sort((a, b) => baselineOracleScore(b) - baselineOracleScore(a)),
+    [augments],
+  );
+
+  if (standalone.length === 0) return null;
+
+  return (
+    <div className="glass-card border border-[var(--color-border-default)] overflow-hidden">
+      <div className="px-5 py-4">
+        <div className="flex items-center gap-3">
+          <h2 className="text-lg font-bold">Standalone Augments</h2>
+          <span className="text-xs text-[var(--color-text-muted)] bg-[var(--color-bg-card)] px-2 py-0.5 rounded">
+            {standalone.length} augments
+          </span>
+        </div>
+        <p className="text-sm text-[var(--color-text-secondary)] mt-1">
+          Augments not part of any set — evaluated individually
+        </p>
+      </div>
+      <div className="px-5 pb-5">
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3">
+          {standalone.map((aug) => (
+            <AugmentCard
+              key={aug.slug}
+              augment={aug}
+              locale={locale}
+              rarityLabel={aug.rarity}
+            />
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ─── Augment Card ────────────────────────────────────────────────────────────
+
+function AugmentCard({
+  augment,
+  locale,
+  rarityLabel,
+}: {
+  augment: ScoredAugment;
+  locale: string;
+  rarityLabel: string;
+}) {
+  const rarity = augment.rarity as keyof typeof RARITY_STYLES;
+  const styles = RARITY_STYLES[rarity];
+  const score = baselineOracleScore(augment);
+  const wr = augment.win_rate;
+  const displayName = localizedName(augment, locale);
+
+  return (
+    <Tooltip content={<AugmentTooltip aug={augment} displayName={displayName} score={score} />}>
+      <div
+        className={`glass-card p-3 flex flex-col items-center gap-2 border border-[var(--color-border-default)] transition-all cursor-default ${styles.glow}`}
+      >
+        <div className="relative w-14 h-14 rounded-lg overflow-hidden shrink-0">
+          <Image
+            src={augment.icon}
+            alt={augment.name}
+            fill
+            className="object-contain"
+            sizes="56px"
+            unoptimized
+          />
+        </div>
+        <span className="text-xs font-medium text-center leading-tight line-clamp-2 w-full">
+          {displayName}
+        </span>
+        {augment.set ? (
+          <span className="text-[9px] text-[var(--color-text-muted)] text-center leading-tight truncate w-full italic">
+            {augment.set}
+          </span>
+        ) : (
+          <span className="text-[9px] invisible">—</span>
+        )}
+        <span
+          className={`text-[10px] font-bold px-1.5 py-0.5 rounded border ${styles.badge}`}
+        >
+          {rarityLabel}
+        </span>
+        <div className="flex justify-between w-full text-[10px] text-[var(--color-text-muted)] mt-auto">
+          <span>{wr !== null ? `${wr.toFixed(1)}% WR` : "—"}</span>
+          <span className={`font-bold ${SCORE_COLOR(score)}`}>{score}</span>
+        </div>
+      </div>
+    </Tooltip>
+  );
+}

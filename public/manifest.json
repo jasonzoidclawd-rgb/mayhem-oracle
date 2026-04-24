@@ -1,0 +1,42 @@
+{
+  "name": "Mayhem Oracle — ARAM Mayhem Companion",
+  "short_name": "Mayhem Oracle",
+  "description": "Champion tier lists, augment scoring, and patch analysis for LoL ARAM Mayhem.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0a0e17",
+  "theme_color": "#0a0e17",
+  "orientation": "portrait-primary",
+  "categories": ["games", "utilities"],
+  "lang": "en",
+  "dir": "ltr",
+  "icons": [
+    {
+      "src": "/icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "screenshots": [],
+  "shortcuts": [
+    {
+      "name": "Tier List",
+      "short_name": "Tiers",
+      "url": "/tier-list",
+      "description": "View champion tier rankings"
+    },
+    {
+      "name": "Augments",
+      "short_name": "Augs",
+      "url": "/augments",
+      "description": "Browse augment scores"
+    }
+  ]
+}

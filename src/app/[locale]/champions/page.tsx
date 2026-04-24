@@ -1,0 +1,63 @@
+import { getTranslations, setRequestLocale } from "next-intl/server";
+import { readFile } from "fs/promises";
+import path from "path";
+import { ChampionsIndex } from "@/components/ChampionsIndex";
+
+export type ChampionEntry = {
+  slug: string;
+  name: string;
+  title?: string;
+  tier: string;
+  rank: number;
+  win_rate: number | null;
+  pick_rate: number | null;
+  icon: string;
+  tags: string[];
+  classes?: string[];
+  release_date?: string;
+  last_changed?: string;
+  baseStats?: {
+    baseHP: number;
+    hpGrowth: number;
+    baseArmor: number;
+    armorGrowth: number;
+    baseMR: number;
+    mrGrowth: number;
+    baseAD: number;
+    adGrowth: number;
+    baseAS: number;
+    asGrowth: number;
+    attackRange: number;
+    moveSpeed: number;
+    baseMP: number;
+    mpGrowth: number;
+    baseHPRegen: number;
+    hpRegenGrowth: number;
+  };
+};
+
+export default async function ChampionsIndexPage({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}) {
+  const { locale } = await params;
+  setRequestLocale(locale);
+  const t = await getTranslations("champion");
+
+  const dataPath = path.join(process.cwd(), "public", "data", "champions.json");
+  const raw = await readFile(dataPath, "utf-8");
+  const { champions } = JSON.parse(raw) as { champions: ChampionEntry[] };
+
+  return (
+    <div className="py-8">
+      <header className="mb-8">
+        <h1 className="text-3xl font-bold mb-1">{t("indexTitle")}</h1>
+        <p className="text-[var(--color-text-secondary)]">
+          {t("indexSubtitle", { count: champions.length })}
+        </p>
+      </header>
+      <ChampionsIndex champions={champions} locale={locale} />
+    </div>
+  );
+}

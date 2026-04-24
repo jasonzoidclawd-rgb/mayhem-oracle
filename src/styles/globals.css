@@ -1,0 +1,85 @@
+@import "tailwindcss";
+
+/* ─── Mayhem Oracle Dark Gaming Theme ─── */
+@theme {
+  /* Core palette — inspired by arammayhem.com + blitz.gg */
+  --color-bg-primary: #0a0e17;
+  --color-bg-secondary: #111827;
+  --color-bg-card: #1a1f2e;
+  --color-bg-card-hover: #222839;
+  --color-bg-elevated: #252b3b;
+
+  /* Accent colors — tier system */
+  --color-accent-god: #ff4655;      /* S+ red */
+  --color-accent-strong: #ff8c00;   /* S orange */
+  --color-accent-good: #3b82f6;     /* A blue */
+  --color-accent-average: #22c55e;  /* B green */
+  --color-accent-weak: #6b7280;     /* C/D gray */
+
+  /* Neon accent for interactive elements */
+  --color-neon-primary: #00d4ff;
+  --color-neon-secondary: #7c3aed;
+  --color-neon-glow: rgba(0, 212, 255, 0.15);
+
+  /* Text */
+  --color-text-primary: #f1f5f9;
+  --color-text-secondary: #94a3b8;
+  --color-text-muted: #64748b;
+
+  /* Borders */
+  --color-border-default: rgba(148, 163, 184, 0.12);
+  --color-border-hover: rgba(148, 163, 184, 0.25);
+
+  /* Win rate spectrum */
+  --color-wr-high: #22c55e;
+  --color-wr-mid: #eab308;
+  --color-wr-low: #ef4444;
+
+  /* Spacing */
+  --radius-card: 12px;
+  --radius-badge: 6px;
+}
+
+/* ─── Base styles ─── */
+body {
+  background-color: var(--color-bg-primary);
+  color: var(--color-text-primary);
+  font-family: "Inter", system-ui, -apple-system, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ─── Glassmorphism card utility ─── */
+.glass-card {
+  background: rgba(26, 31, 46, 0.7);
+  backdrop-filter: blur(12px);
+  border: 1px solid var(--color-border-default);
+  border-radius: var(--radius-card);
+  transition: border-color 0.2s, background 0.2s;
+}
+.glass-card:hover {
+  border-color: var(--color-border-hover);
+  background: rgba(34, 40, 57, 0.8);
+}
+
+/* ─── Neon glow for interactive elements ─── */
+.neon-border {
+  border: 1px solid rgba(0, 212, 255, 0.3);
+  box-shadow: 0 0 8px rgba(0, 212, 255, 0.08);
+}
+.neon-border:hover {
+  border-color: rgba(0, 212, 255, 0.5);
+  box-shadow: 0 0 16px rgba(0, 212, 255, 0.15);
+}
+
+/* ─── Tier badge colors ─── */
+.tier-god    { background: rgba(255, 70, 85, 0.15); color: #ff4655; border: 1px solid rgba(255, 70, 85, 0.3); }
+.tier-strong { background: rgba(255, 140, 0, 0.15); color: #ff8c00; border: 1px solid rgba(255, 140, 0, 0.3); }
+.tier-good   { background: rgba(59, 130, 246, 0.15); color: #3b82f6; border: 1px solid rgba(59, 130, 246, 0.3); }
+.tier-avg    { background: rgba(34, 197, 94, 0.15); color: #22c55e; border: 1px solid rgba(34, 197, 94, 0.3); }
+.tier-weak   { background: rgba(107, 114, 128, 0.15); color: #6b7280; border: 1px solid rgba(107, 114, 128, 0.3); }
+
+/* ─── Scrollbar styling ─── */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--color-bg-primary); }
+::-webkit-scrollbar-thumb { background: var(--color-bg-elevated); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--color-text-muted); }

@@ -1,0 +1,40 @@
+# Runs daily to scrape fresh data and commit updated JSON to the repo.
+# Vercel auto-deploys on push, so the site updates automatically.
+
+name: Update Mayhem Data
+
+on:
+  schedule:
+    - cron: "0 6 * * *" # 6 AM UTC daily
+  workflow_dispatch: # Allow manual trigger
+
+jobs:
+  scrape:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: pip install youtube-transcript-api
+
+      - name: Scrape arammayhem.com
+        run: python scripts/scrape_arammayhem.py
+
+      - name: Process video knowledge
+        run: python scripts/learn_from_video.py --batch scripts/video_sources.txt || true
+
+      - name: Commit updated data
+        run: |
+          git config user.name "Mayhem Oracle Bot"
+          git config user.email "bot@mayhem-oracle.dev"
+          git add public/data/
+          git diff --cached --quiet || git commit -m "chore: update mayhem data $(date +%Y-%m-%d)"
+          git push
