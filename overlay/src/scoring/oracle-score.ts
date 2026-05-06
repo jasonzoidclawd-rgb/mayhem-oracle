@@ -25,10 +25,15 @@ export interface ScoredAugment {
   win_rate: number | null;
   icon: string;
   set?: string;
+  wikiSet?: string;
   description?: string;
   wikiDescription?: string;
   notes?: string[];
   kit_tags?: ChampionTag[];
+  flags?: {
+    system_breaker?: boolean;
+    lifecycle?: string;
+  };
 }
 
 export interface OracleScoreInput {

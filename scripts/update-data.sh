@@ -39,6 +39,34 @@ python3 scripts/scrape_patch_notes.py
 step "8/9  classify champions/augments  →  kit_tags"
 python3 scripts/classify_champions.py
 python3 scripts/classify_augments.py
+python3 - <<'PY'
+import json
+from pathlib import Path
+
+data_dir = Path("public/data")
+champions = json.loads((data_dir / "champions.json").read_text())["champions"]
+augments = json.loads((data_dir / "augments.json").read_text())["augments"]
+
+champion_tagged = sum(1 for c in champions if c.get("kit_tags"))
+augment_tagged = sum(1 for a in augments if a.get("kit_tags"))
+missing_breakers = [
+    slug
+    for slug in {
+        "draw-your-sword", "jeweled-gauntlet", "master-of-duality",
+        "mystic-punch", "tap-dancer", "marksmage",
+        "slow-and-steady", "vulnerability",
+    }
+    if not next((a for a in augments if a.get("slug") == slug and a.get("flags", {}).get("system_breaker") is True), None)
+]
+
+if champion_tagged == 0 or augment_tagged == 0 or missing_breakers:
+    raise SystemExit(
+        "classification validation failed: "
+        f"champion kit_tags={champion_tagged}/{len(champions)}, "
+        f"augment kit_tags={augment_tagged}/{len(augments)}, "
+        f"missing system breakers={missing_breakers}"
+    )
+PY
 
 step "9/9  generate pool rules  →  pool-rules.json"
 python3 scripts/generate_pool_rules.py

@@ -15,6 +15,14 @@
 import { buildPoolProfile, isInAugmentPool } from "./augment-tailoring";
 import type { AbilityProfile, ChampionBaseStats, ChampionTag, PoolRules } from "./types";
 
+function normalizeItemKey(key: string): string {
+  return key.toLowerCase().replace(/[^a-z0-9]/g, "");
+}
+
+function normalizeAugmentKey(slug: string): string {
+  return slug.toLowerCase().replace(/[^a-z0-9]/g, "");
+}
+
 export interface PoolAugmentInput {
   slug: string;
   rarity: "silver" | "gold" | "prismatic";
@@ -51,12 +59,13 @@ export function getChampionAugmentPool<T extends PoolAugmentInput>(args: {
 
   const profile = buildPoolProfile(championSlug, abilityProfile, baseStats);
 
-  const disabledSet = new Set(poolRules.disabled);
-  const removedSet  = new Set(Object.keys(poolRules.lifecycle.removed));
+  const disabledSet = new Set(poolRules.disabled.map(normalizeAugmentKey));
+  const removedSet  = new Set(Object.keys(poolRules.lifecycle.removed).map(normalizeAugmentKey));
+  const normalizedOwnedItems = new Set(ownedItems.map(normalizeItemKey));
   const blockedByItem = new Set(
     poolRules.item_exclusions
-      .filter((r) => ownedItems.includes(r.blocked_by_item))
-      .map((r) => r.augment),
+      .filter((r) => normalizedOwnedItems.has(normalizeItemKey(r.blocked_by_item)))
+      .map((r) => normalizeAugmentKey(r.augment)),
   );
 
   const silver:    T[] = [];
@@ -66,12 +75,13 @@ export function getChampionAugmentPool<T extends PoolAugmentInput>(args: {
 
   for (const aug of augments) {
     const slug = aug.slug;
+    const normalizedSlug = normalizeAugmentKey(slug);
 
-    if (disabledSet.has(slug)) {
+    if (disabledSet.has(normalizedSlug)) {
       excluded.push({ slug, reason: "disabled" });
       continue;
     }
-    if (removedSet.has(slug)) {
+    if (removedSet.has(normalizedSlug)) {
       excluded.push({ slug, reason: "removed" });
       continue;
     }
@@ -90,7 +100,7 @@ export function getChampionAugmentPool<T extends PoolAugmentInput>(args: {
       }
     }
 
-    if (blockedByItem.has(slug)) {
+    if (blockedByItem.has(normalizedSlug)) {
       excluded.push({ slug, reason: "item-exclusion" });
       continue;
     }

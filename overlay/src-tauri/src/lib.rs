@@ -9,17 +9,15 @@ extern crate objc;
 
 // ─── Types ──────────────────────────────────────────────────────────────────
 
-#[derive(Serialize, Deserialize, Clone, Debug)]
-pub struct LeagueClientInfo {
-    pub port: u16,
-    pub auth_token: String,
-    pub pid: u32,
+#[derive(Clone, Debug)]
+struct LeagueClientCredentials {
+    port: u16,
+    auth_token: String,
 }
 
 #[derive(Serialize, Deserialize, Clone, Debug)]
 pub struct LivePlayerData {
     pub champion: String,
-    pub summoner_name: String,
     pub level: u32,
     pub is_dead: bool,
     pub game_time: f64,
@@ -88,15 +86,14 @@ fn find_lockfile_path() -> Option<PathBuf> {
     None
 }
 
-fn parse_lockfile(path: &PathBuf) -> Option<LeagueClientInfo> {
+fn parse_lockfile(path: &PathBuf) -> Option<LeagueClientCredentials> {
     let content = std::fs::read_to_string(path).ok()?;
     // Format: LeagueClient:pid:port:password:https
     let parts: Vec<&str> = content.trim().split(':').collect();
     if parts.len() < 5 {
         return None;
     }
-    Some(LeagueClientInfo {
-        pid: parts[1].parse().ok()?,
+    Some(LeagueClientCredentials {
         port: parts[2].parse().ok()?,
         auth_token: parts[3].to_string(),
     })
@@ -105,14 +102,19 @@ fn parse_lockfile(path: &PathBuf) -> Option<LeagueClientInfo> {
 // ─── Tauri Commands ─────────────────────────────────────────────────────────
 
 #[tauri::command]
-fn detect_league_client() -> Option<LeagueClientInfo> {
-    let path = find_lockfile_path()?;
-    parse_lockfile(&path)
+fn detect_league_client() -> bool {
+    let Some(path) = find_lockfile_path() else {
+        return false;
+    };
+
+    parse_lockfile(&path).is_some()
 }
 
 #[tauri::command]
-async fn get_game_phase(port: u16, auth_token: String) -> Option<String> {
-    let url = format!("https://127.0.0.1:{}/lol-gameflow/v1/gameflow-phase", port);
+async fn get_game_phase() -> Option<String> {
+    let path = find_lockfile_path()?;
+    let credentials = parse_lockfile(&path)?;
+    let url = format!("https://127.0.0.1:{}/lol-gameflow/v1/gameflow-phase", credentials.port);
     let client = reqwest::Client::builder()
         .danger_accept_invalid_certs(true)
         .build()
@@ -120,7 +122,7 @@ async fn get_game_phase(port: u16, auth_token: String) -> Option<String> {
 
     let resp = client
         .get(&url)
-        .basic_auth("riot", Some(&auth_token))
+        .basic_auth("riot", Some(&credentials.auth_token))
         .send()
         .await
         .ok()?;
@@ -209,7 +211,6 @@ async fn get_live_player_data() -> Option<LivePlayerData> {
 
     Some(LivePlayerData {
         champion,
-        summoner_name,
         level,
         is_dead,
         game_time,
@@ -226,6 +227,12 @@ pub struct CardRegion {
     pub w: f64,
     pub h: f64,
 }
+
+const CARD_NAME_REGIONS: [CardRegion; 3] = [
+    CardRegion { x: 0.248, y: 0.365, w: 0.115, h: 0.04 },
+    CardRegion { x: 0.442, y: 0.365, w: 0.115, h: 0.04 },
+    CardRegion { x: 0.636, y: 0.365, w: 0.115, h: 0.04 },
+];
 
 #[derive(Serialize, Deserialize, Clone, Debug)]
 pub struct DetectedAugment {
@@ -245,7 +252,23 @@ fn check_tesseract() -> bool {
 }
 
 #[tauri::command]
-async fn detect_augment_names(regions: Vec<CardRegion>) -> Result<Vec<DetectedAugment>, String> {
+fn check_screen_capture_available() -> bool {
+    let Ok(monitors) = xcap::Monitor::all() else {
+        return false;
+    };
+    let Some(monitor) = monitors.into_iter().next() else {
+        return false;
+    };
+
+    monitor.capture_image().is_ok()
+}
+
+#[tauri::command]
+async fn detect_augment_names() -> Result<Vec<DetectedAugment>, String> {
+    if !is_league_foreground() {
+        return Err("League of Legends is not the foreground application".to_string());
+    }
+
     // Capture the primary screen
     let screens = xcap::Monitor::all().map_err(|e| format!("Failed to list monitors: {}", e))?;
     let monitor = screens.into_iter().next().ok_or("No monitor found")?;
@@ -256,7 +279,7 @@ async fn detect_augment_names(regions: Vec<CardRegion>) -> Result<Vec<DetectedAu
 
     let mut results = Vec::new();
 
-    for (i, region) in regions.iter().enumerate() {
+    for (i, region) in CARD_NAME_REGIONS.iter().enumerate() {
         // Convert fractional coordinates to pixels
         let px = (region.x * screen_w) as u32;
         let py = (region.y * screen_h) as u32;
@@ -271,13 +294,17 @@ async fn detect_augment_names(regions: Vec<CardRegion>) -> Result<Vec<DetectedAu
         // Crop to the card name region
         let cropped = screenshot.view(px, py, pw, ph).to_image();
 
-        // Write to temp file for tesseract
-        let tmp_path = std::env::temp_dir().join(format!("mayhem_ocr_{}.png", i));
-        cropped.save(&tmp_path).map_err(|e| format!("Save failed: {}", e))?;
+        // Write to a securely-created temp file for tesseract.
+        let tmp_file = tempfile::Builder::new()
+            .prefix("mayhem_ocr_")
+            .suffix(".png")
+            .tempfile()
+            .map_err(|e| format!("Temp file failed: {}", e))?;
+        cropped.save(tmp_file.path()).map_err(|e| format!("Save failed: {}", e))?;
 
         // Run tesseract with chi_tra (Traditional Chinese)
         let output = std::process::Command::new("tesseract")
-            .arg(&tmp_path)
+            .arg(tmp_file.path())
             .arg("stdout")
             .arg("-l")
             .arg("chi_tra")
@@ -290,9 +317,6 @@ async fn detect_augment_names(regions: Vec<CardRegion>) -> Result<Vec<DetectedAu
             .trim()
             .replace(' ', "")
             .replace('\n', "");
-
-        // Clean up temp file
-        let _ = std::fs::remove_file(&tmp_path);
 
         if !text.is_empty() {
             results.push(DetectedAugment {
@@ -307,6 +331,7 @@ async fn detect_augment_names(regions: Vec<CardRegion>) -> Result<Vec<DetectedAu
 
 // ─── API Probe (check if augment data available via Live Client) ────────────
 
+#[cfg(debug_assertions)]
 #[tauri::command]
 async fn probe_augment_api() -> Result<String, String> {
     let client = reqwest::Client::builder()
@@ -346,6 +371,12 @@ async fn probe_augment_api() -> Result<String, String> {
     }
 
     Ok(out)
+}
+
+#[cfg(not(debug_assertions))]
+#[tauri::command]
+async fn probe_augment_api() -> Result<String, String> {
+    Err("Augment API probe is available in debug builds only.".to_string())
 }
 
 // ─── Dock & Settings Commands ───────────────────────────────────────────────
@@ -430,12 +461,12 @@ fn open_screen_recording_settings() {
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
     tauri::Builder::default()
-        .plugin(tauri_plugin_opener::init())
         .invoke_handler(tauri::generate_handler![
             detect_league_client,
             get_game_phase,
             get_live_player_data,
             check_tesseract,
+            check_screen_capture_available,
             detect_augment_names,
             probe_augment_api,
             set_dock_visible,

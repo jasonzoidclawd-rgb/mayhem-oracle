@@ -181,7 +181,7 @@ def parse_combos(html: str) -> list[dict]:
 
 def extract_patch(html: str) -> str | None:
     m = re.search(r'[Pp]atch\s+([\d.]+)', html)
-    return m.group(1) if m else None
+    return m.group(1).rstrip(".") if m else None
 
 
 # ── Main ───────────────────────────────────────────────────────────────────

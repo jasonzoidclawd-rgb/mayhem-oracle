@@ -52,7 +52,7 @@ export function getChampionResource(slug: string): ResourceType {
 // ── Kit analysis for pool filtering ─────────────────────────────────
 
 export interface ChampionPoolProfile {
-  attackType: "melee" | "ranged";
+  attackType: "melee" | "ranged" | "unknown";
   resource: ResourceType;
   /** Has at least one hard CC ability (stun, root, knockup, charm, suppress, fear, taunt) */
   hasHardCC: boolean;
@@ -90,7 +90,7 @@ export function buildPoolProfile(
 ): ChampionPoolProfile {
   void _baseStats;
   const resource = getChampionResource(slug);
-  const attackType = abilityProfile?.attackType ?? "melee";
+  const attackType = abilityProfile?.attackType ?? "unknown";
   const damageType = abilityProfile?.damageType ?? "mixed";
 
   let hasHardCC = false;
@@ -103,7 +103,9 @@ export function buildPoolProfile(
   let hasCritSynergy = false;
 
   if (abilityProfile) {
-    const allDesc = abilityProfile.abilities.map((a) => a.description).join(" ");
+    const allDesc = abilityProfile.abilities
+      .map((a) => `${a.description ?? ""} ${a.wikiDescription ?? ""}`)
+      .join(" ");
 
     for (const ab of abilityProfile.abilities) {
       const s = ab.stats;

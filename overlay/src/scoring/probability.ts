@@ -164,12 +164,13 @@ export function buildChampionPool(
 
   for (const aug of poolAugments) {
     const comboTier = combos.get(aug.slug);
-    const result = computeOracleScore({
-      augment: aug,
-      championWinRate: champWr,
-      comboTier,
-      abilityProfile,
-    });
+      const result = computeOracleScore({
+        augment: aug,
+        championWinRate: champWr,
+        comboTier,
+        abilityProfile,
+        isSystemBreaker: aug.flags?.system_breaker === true,
+      });
 
     byRarity[aug.rarity].push({
       slug: aug.slug,

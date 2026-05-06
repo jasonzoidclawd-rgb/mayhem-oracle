@@ -141,7 +141,11 @@
       "name_ja": "剣を構えよ",
       "name_ko": "검을 뽑아라",
       "name_zh_TW": "拔劍吧",
-      "wikiDescription": "Become melee , modifying your attack range to 200 units. Additionally, gain 30% bonus attack damage , 25% bonus attack speed , 30% bonus health , 25% bonus movement speed , and 20% life steal. These bonuses are increased by 0% – 30% (based on champion's default attack range) . This augment is only available for ranged champions. This augment is not offered if the champion has built Runaan's Hurricane ."
+      "wikiDescription": "Become melee , modifying your attack range to 200 units. Additionally, gain 30% bonus attack damage , 25% bonus attack speed , 30% bonus health , 25% bonus movement speed , and 20% life steal. These bonuses are increased by 0% – 30% (based on champion's default attack range) . This augment is only available for ranged champions. This augment is not offered if the champion has built Runaan's Hurricane .",
+      "flags": {
+        "system_breaker": true,
+        "lifecycle": "active"
+      }
     },
     {
       "slug": "dropkick",
@@ -383,7 +387,11 @@
       "name_ja": "ジュエル ガントレット",
       "name_ko": "보석 건틀릿",
       "name_zh_TW": "寶石手套",
-      "wikiDescription": "Your abilities can now critically strike for (145% + bonus critical damage ) damage. Additionally, gain 25% (+ 4. 5 % per 100 AP) critical strike chance . If both Jeweled Gauntlet and Vulnerability are equipped, only rolls the critical strike chance of the augment that has the higher critical damage (or either if equal). The interaction between Jeweled Gauntlet and Vulnerability may behave incorrectly with persistent area damage effects. (bug)"
+      "wikiDescription": "Your abilities can now critically strike for (145% + bonus critical damage ) damage. Additionally, gain 25% (+ 4. 5 % per 100 AP) critical strike chance . If both Jeweled Gauntlet and Vulnerability are equipped, only rolls the critical strike chance of the augment that has the higher critical damage (or either if equal). The interaction between Jeweled Gauntlet and Vulnerability may behave incorrectly with persistent area damage effects. (bug)",
+      "flags": {
+        "system_breaker": true,
+        "lifecycle": "active"
+      }
     },
     {
       "slug": "king-me",
@@ -427,6 +435,10 @@
       "name_ko": "결투의 대가",
       "name_zh_TW": "雙修大師",
       "wikiDescription": "Basic attacks on-hit grant 6 – 18 (based on level) ability power and damaging abilities once per cast instance grant 3 – 9 (based on level) bonus attack damage , lasting for 5 seconds, with the duration of both refreshing on subsequent hits, and stacking infinitely.",
+      "flags": {
+        "system_breaker": true,
+        "lifecycle": "active"
+      },
       "wikiSet": "Stackosaurus Rex"
     },
     {
@@ -438,7 +450,11 @@
       "name_ja": "神秘の鉄拳",
       "name_ko": "신비한 주먹",
       "name_zh_TW": "祕術拳擊",
-      "wikiDescription": "Basic attacks on-hit reduce the remaining cooldowns of your abilities by 1. 25 seconds."
+      "wikiDescription": "Basic attacks on-hit reduce the remaining cooldowns of your abilities by 1. 25 seconds.",
+      "flags": {
+        "system_breaker": true,
+        "lifecycle": "active"
+      }
     },
     {
       "slug": "ominous-pact",
@@ -615,6 +631,10 @@
       "name_ko": "탭 댄서",
       "name_zh_TW": "輕舞飛揚",
       "wikiDescription": "Basic attacks on-hit against enemy champions and minions grant 10 bonus movement speed , lasting for 5 seconds, refreshing on subsequent triggers, and stacking infinitely. Additionally, gain bonus attack speed equal to 10% total movement speed .",
+      "flags": {
+        "system_breaker": true,
+        "lifecycle": "active"
+      },
       "wikiSet": "Stackosaurus Rex"
     },
     {
@@ -735,8 +755,7 @@
       "name_ja": "至高の発明家",
       "name_ko": "최첨단 발명가",
       "name_zh_TW": "頂尖發明家",
-      "wikiDescription": "Grants 100 item haste , which is equivalent to 50% cooldown reduction for items. Item Cooldowns Items Base Cooldown Reduced Cooldown with Apex Inventor 1",
-      "wikiSet": "0.75"
+      "wikiDescription": "Grants 100 item haste , which is equivalent to 50% cooldown reduction for items. Item Cooldowns Items Base Cooldown Reduced Cooldown with Apex Inventor 1"
     },
     {
       "slug": "big-brain",
@@ -1070,7 +1089,11 @@
       "name_ja": "マークスメイジ",
       "name_ko": "마법 명사수",
       "name_zh_TW": "射手法師",
-      "wikiDescription": "Basic attacks deal bonus physical damage equal to 75% AP ."
+      "wikiDescription": "Basic attacks deal bonus physical damage equal to 75% AP .",
+      "flags": {
+        "system_breaker": true,
+        "lifecycle": "active"
+      }
     },
     {
       "slug": "minionmancer",
@@ -1283,7 +1306,11 @@
       "name_ja": "ゆっくり着実に",
       "name_ko": "천천히, 꾸준히",
       "name_zh_TW": "穩紮穩打",
-      "wikiDescription": "Your base attack speed is set to a static amount of 0. 625 and your attack rate no longer benefits from any source of attack speed bonuses. In return, you gain 25 bonus attack damage and convert every 1% bonus attack speed into 1 bonus attack damage ."
+      "wikiDescription": "Your base attack speed is set to a static amount of 0. 625 and your attack rate no longer benefits from any source of attack speed bonuses. In return, you gain 25 bonus attack damage and convert every 1% bonus attack speed into 1 bonus attack damage .",
+      "flags": {
+        "system_breaker": true,
+        "lifecycle": "active"
+      }
     },
     {
       "slug": "snowball-roulette",
@@ -1462,7 +1489,11 @@
       "name_ja": "搦め手",
       "name_ko": "취약",
       "name_zh_TW": "見縫插針",
-      "wikiDescription": "Damage dealt by items and damage over time effects can now critically strike for (145% + bonus critical damage ) damage (5 second cooldown per cast instance ). Additionally, gain 25% critical strike chance . If both Jeweled Gauntlet and Vulnerability are equipped, only rolls the critical strike chance of the augment that has the higher critical damage (or either if equal). The interaction between Jeweled Gauntlet and Vulnerability may behave incorrectly with persistent area damage effects. (bug)"
+      "wikiDescription": "Damage dealt by items and damage over time effects can now critically strike for (145% + bonus critical damage ) damage (5 second cooldown per cast instance ). Additionally, gain 25% critical strike chance . If both Jeweled Gauntlet and Vulnerability are equipped, only rolls the critical strike chance of the augment that has the higher critical damage (or either if equal). The interaction between Jeweled Gauntlet and Vulnerability may behave incorrectly with persistent area damage effects. (bug)",
+      "flags": {
+        "system_breaker": true,
+        "lifecycle": "active"
+      }
     },
     {
       "slug": "with-haste",

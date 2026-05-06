@@ -20,17 +20,10 @@ import "./App.css";
 
 interface LivePlayerData {
   champion: string;
-  summoner_name: string;
   level: number;
   is_dead: boolean;
   game_time: number;
   game_mode: string;
-}
-
-interface LeagueClientInfo {
-  port: number;
-  auth_token: string;
-  pid: number;
 }
 
 interface DetectedAugment {
@@ -55,7 +48,12 @@ interface OverlayAugment {
   wikiDescription?: string;
   notes?: string[];
   set?: string;
+  wikiSet?: string;
   kit_tags?: ChampionTag[];
+  flags?: {
+    system_breaker?: boolean;
+    lifecycle?: string;
+  };
 }
 
 interface OverlayChampion {
@@ -74,6 +72,7 @@ interface OverlayChampion {
 interface OverlayCombo {
   champion: string;
   augment: string;
+  augmentSlug?: string;
   tier: string;
 }
 
@@ -89,14 +88,6 @@ type Phase = "idle" | "client_found" | "in_game" | "augment_selection";
 // ─── Constants ───
 
 const AUGMENT_LEVELS = [3, 7, 11, 15];
-
-// Card name regions as fraction of screen (calibrated for 2560x1440 / 1920x1080)
-// These target the augment name text area on each of the 3 cards
-const CARD_NAME_REGIONS = [
-  { x: 0.248, y: 0.365, w: 0.115, h: 0.04 },
-  { x: 0.442, y: 0.365, w: 0.115, h: 0.04 },
-  { x: 0.636, y: 0.365, w: 0.115, h: 0.04 },
-];
 
 // Badge positions — centered below each card
 const BADGE_POSITIONS = [
@@ -182,6 +173,7 @@ function App() {
   const [abilityProfiles, setAbilityProfiles] = useState<Record<string, AbilityProfile | null>>({});
   const [dataError, setDataError] = useState<string | null>(null);
   const runOcrRef = useRef<() => Promise<void>>(async () => {});
+  const lastGameTimeRef = useRef<number | null>(null);
 
   useEffect(() => {
     let cancelled = false;
@@ -229,6 +221,7 @@ function App() {
       .catch(() => {
         if (cancelled) return;
         setAbilityProfiles((prev) => ({ ...prev, [championSlug]: null }));
+        setDataError(`Failed to load ability profile for ${championSlug}`);
       });
 
     return () => {
@@ -236,10 +229,13 @@ function App() {
     };
   }, [abilityProfiles, championSlug]);
 
-  // On mount: hide dock icon + check screen recording permission
+  // On mount: hide dock icon + check local OCR and capture prerequisites.
   useEffect(() => {
     invoke("set_dock_visible", { visible: false });
     invoke<boolean>("check_tesseract").then((ok) => {
+      if (!ok) setDataError("Tesseract OCR is not installed or not available on PATH.");
+    });
+    invoke<boolean>("check_screen_capture_available").then((ok) => {
       if (!ok) invoke("open_screen_recording_settings");
     });
     const tipTimer = setTimeout(() => setShowStartupTip(false), 6000);
@@ -286,11 +282,14 @@ function App() {
     const champ = overlayData.champions.find((c) => c.slug === championSlug);
     if (!champ) return null;
 
-    const abilityProfile = abilityProfiles[championSlug] ?? undefined;
+    const abilityProfileState = abilityProfiles[championSlug];
+    if (abilityProfileState === undefined) return null;
+
+    const abilityProfile = abilityProfileState ?? undefined;
     const champCombos = overlayData.combos.filter((c) => c.champion === championSlug);
     const comboBySlug = new Map<string, ComboTier>(
       champCombos.map((c) => [
-        c.augment.replace(/ /g, "-"),
+        c.augmentSlug ?? c.augment.replace(/ /g, "-"),
         c.tier as ComboTier,
       ]),
     );
@@ -356,9 +355,7 @@ function App() {
   const runOcr = useCallback(async () => {
     if (!nameLookup.size) return;
     try {
-      const detected = await invoke<DetectedAugment[]>("detect_augment_names", {
-        regions: CARD_NAME_REGIONS,
-      });
+      const detected = await invoke<DetectedAugment[]>("detect_augment_names");
 
       const matched: MatchedCard[] = [];
       for (const det of detected) {
@@ -413,6 +410,14 @@ function App() {
     try {
       const data = await invoke<LivePlayerData | null>("get_live_player_data");
       if (data) {
+        const lastGameTime = lastGameTimeRef.current;
+        if (lastGameTime !== null && data.game_time + 5 < lastGameTime) {
+          setLastAugmentLevel(0);
+          setPickedAugments([]);
+          setMatchedCards([]);
+          stopOcr();
+        }
+        lastGameTimeRef.current = data.game_time;
         setPlayerData(data);
         const slug = champNameToSlug(data.champion);
         if (slug !== championSlug) {
@@ -422,19 +427,19 @@ function App() {
           stopOcr();
         }
 
-        const level = data.level;
-        const isAtAugmentLevel = AUGMENT_LEVELS.includes(level);
+        const augmentLevel = [...AUGMENT_LEVELS]
+          .reverse()
+          .find((threshold) => data.level >= threshold && threshold > lastAugmentLevel);
 
         // Augment selection trigger:
         // Level 3 (round 1): at spawn (no death required)
         // Level 7, 11, 15: must be dead
         const shouldShowSelection =
-          isAtAugmentLevel &&
-          level > lastAugmentLevel &&
-          (level === 3 || data.is_dead);
+          augmentLevel !== undefined &&
+          (augmentLevel === 3 || data.is_dead);
 
         if (shouldShowSelection) {
-          setLastAugmentLevel(level);
+          setLastAugmentLevel(augmentLevel);
           setPhase("augment_selection");
           startOcr();
         } else if (phase === "augment_selection") {
@@ -442,7 +447,7 @@ function App() {
           // Rounds 2-4 (level 7/11/15): exit as soon as they respawn
           const pickedAtLevel3 = lastAugmentLevel === 3;
           const doneSelecting = pickedAtLevel3
-            ? !isAtAugmentLevel
+            ? data.level > 3
             : !data.is_dead;
           if (doneSelecting) {
             setPhase("in_game");
@@ -458,14 +463,18 @@ function App() {
     }
 
     try {
-      const info = await invoke<LeagueClientInfo | null>("detect_league_client");
-      if (info) {
+      const clientFound = await invoke<boolean>("detect_league_client");
+      setPlayerData(null);
+      setChampionSlug(null);
+      setLastAugmentLevel(0);
+      setPickedAugments([]);
+      setMatchedCards([]);
+      lastGameTimeRef.current = null;
+      stopOcr();
+      if (clientFound) {
         setPhase("client_found");
       } else {
         setPhase("idle");
-        setPlayerData(null);
-        setChampionSlug(null);
-        stopOcr();
       }
     } catch {
       setPhase("idle");

@@ -80,4 +80,4 @@ Every handoff should include:
 - `CLAUDE.md` is the standing repo context and should stay stable.
 - `CO_WORKFLOW.md` is the reusable handoff contract between agents.
 - For this repo, validate web changes with `npm run lint`, `npm test`, and `npm run build`.
-- For overlay changes, also validate with `npm --workspace overlay run build`.
+- For overlay changes, also validate with `cd overlay && npm run build`.
