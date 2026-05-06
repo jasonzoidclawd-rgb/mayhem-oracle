@@ -46,6 +46,7 @@ export interface RankedOfferedAugment {
   score: number;
   scoreBand: ScoreBand;
   reasons: OfferedRankingReason[];
+  rerollEv?: OfferedRankingRerollEv;
   shopTiming?: OfferedRankingShopTiming;
   flags?: string[];
 }
@@ -67,6 +68,10 @@ export interface RankingAugment {
   wikiDescription?: string;
   notes?: string[];
   kit_tags?: string[];
+  flags?: {
+    system_breaker?: boolean;
+    lifecycle?: string;
+  };
 }
 
 export interface RankingChampion {
@@ -300,6 +305,7 @@ export function rankOfferedAugments(input: RankOfferedAugmentsInput): OfferedRan
       pickedSetIds,
       augmentSetId,
       abilityProfile: input.champion.abilityProfile,
+      isSystemBreaker: augment.flags?.system_breaker === true,
     });
     const explicitBreakdown = input.scoreBreakdownsBySlot?.[originalIndex]
       ?? (isDuplicate ? undefined : input.scoreBreakdowns?.[augment.slug]);
@@ -353,6 +359,7 @@ export function rankOfferedAugments(input: RankOfferedAugmentsInput): OfferedRan
       score,
       scoreBand: band,
       reasons,
+      rerollEv: qualitativeRerollEv,
       shopTiming: qualitativeShopTiming,
       flags,
     };
@@ -373,6 +380,7 @@ export function rankOfferedAugments(input: RankOfferedAugmentsInput): OfferedRan
       score: ranking.score,
       scoreBand: ranking.scoreBand,
       reasons: ranking.reasons,
+      rerollEv: ranking.rerollEv,
       shopTiming: ranking.shopTiming,
       flags: ranking.flags,
     })),

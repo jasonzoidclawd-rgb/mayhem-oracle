@@ -10,6 +10,10 @@ type TestAugment = {
   set?: string;
   wikiDescription?: string;
   kit_tags?: string[];
+  flags?: {
+    system_breaker?: boolean;
+    lifecycle?: string;
+  };
 };
 
 type TestChampion = {
@@ -283,6 +287,21 @@ describe("rankOfferedAugments", () => {
     expect(available.rankings[0].shopTiming?.status).toBe("open");
     expect(unavailable.rankings[0].shopTiming?.message).not.toBe(available.rankings[0].shopTiming?.message);
     expect(available.rankings[0].shopTiming?.message).not.toMatch(/client|automation|ocr|memory/i);
+  });
+
+  test("system breaker flags flow into offered ranking score", () => {
+    const result = rankOfferedAugments({
+      champion,
+      offeredAugments: [
+        makeAugment({ slug: "breaker", win_rate: 45, flags: { system_breaker: true } }),
+        makeAugment({ slug: "normal-high", win_rate: 55 }),
+        makeAugment({ slug: "normal-mid", win_rate: 50 }),
+      ],
+      ownedAugments: [],
+    });
+
+    expect(result.status).toBe("ranked");
+    expect(result.rankings[0].augment.slug).toBe("breaker");
   });
 
   test("champion-specific mode overrides can affect score and reasons when concrete metadata supports them", () => {

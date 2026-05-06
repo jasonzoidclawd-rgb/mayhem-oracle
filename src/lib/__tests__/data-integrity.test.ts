@@ -2,6 +2,7 @@ import { describe, expect, test } from "vitest";
 import augmentsData from "../../../public/data/augments.json";
 import championsData from "../../../public/data/champions.json";
 import combosData from "../../../public/data/combos.json";
+import { VALID_AUGMENT_SET_LABELS } from "../data/augment-set";
 import { buildComboTierLookup } from "../data/combo-lookup";
 
 describe("data integrity", () => {
@@ -18,6 +19,32 @@ describe("data integrity", () => {
 
     for (const combo of combosData.combos) {
       expect(validTiers.has(combo.tier)).toBe(true);
+    }
+  });
+
+  test("wiki set labels are known augment set names", () => {
+    for (const augment of augmentsData.augments) {
+      if ("wikiSet" in augment && augment.wikiSet) {
+        expect(VALID_AUGMENT_SET_LABELS.has(augment.wikiSet)).toBe(true);
+      }
+    }
+  });
+
+  test("known system breaker augments are flagged in generated data", () => {
+    const systemBreakers = new Set([
+      "draw-your-sword",
+      "jeweled-gauntlet",
+      "master-of-duality",
+      "mystic-punch",
+      "tap-dancer",
+      "marksmage",
+      "slow-and-steady",
+      "vulnerability",
+    ]);
+
+    for (const slug of systemBreakers) {
+      const augment = augmentsData.augments.find((candidate) => candidate.slug === slug);
+      expect(augment?.flags?.system_breaker).toBe(true);
     }
   });
 

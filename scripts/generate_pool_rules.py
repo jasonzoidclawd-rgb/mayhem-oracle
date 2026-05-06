@@ -57,6 +57,10 @@ def _slugify(name: str) -> str:
     return s.strip("-")
 
 
+def _lookup_key(name: str) -> str:
+    return re.sub(r"[^a-z0-9]+", "", name.lower())
+
+
 def build_augment_name_map(augments: list) -> dict:
     """Map lowercase name variants → slug."""
     m = {}
@@ -66,6 +70,8 @@ def build_augment_name_map(augments: list) -> dict:
         m[slug] = slug  # slug maps to itself
         # Also add slugified version of name
         m[_slugify(a["name"])] = slug
+        m[_lookup_key(a["name"])] = slug
+        m[_lookup_key(slug)] = slug
     return m
 
 
@@ -82,6 +88,8 @@ def build_item_name_map(items_raw) -> dict:
         slug = item.get("slug") or _slugify(name)
         m[name.lower()] = slug
         m[_slugify(name)] = slug
+        m[_lookup_key(name)] = slug
+        m[_lookup_key(slug)] = slug
     return m
 
 
@@ -93,6 +101,9 @@ def resolve_name(name: str, name_map: dict, fallback_slug: bool = True) -> str:
     slg = _slugify(name)
     if slg in name_map:
         return name_map[slg]
+    lookup = _lookup_key(name)
+    if lookup in name_map:
+        return name_map[lookup]
     return slg if fallback_slug else ""
 
 

@@ -20,6 +20,19 @@ from pathlib import Path
 OUT = Path(__file__).parent.parent / "public" / "data" / "augments.json"
 
 WIKI_API = "https://wiki.leagueoflegends.com/api.php"
+VALID_WIKI_SETS = {
+    "Archmage",
+    "Dive Bomb",
+    "Dive Bomb Fully Automated",
+    "Firecracker",
+    "Fully Automated",
+    "Fully Automated Wee Woo Wee Woo",
+    "High Roller",
+    "Make it Rain",
+    "Snowday",
+    "Stackosaurus Rex",
+    "Wee Woo Wee Woo",
+}
 
 
 def fetch_wiki_html(page_title: str) -> str | None:
@@ -81,7 +94,7 @@ def extract_augments(html: str) -> list[dict]:
 
         # Set
         set_name = re.sub(r"<[^>]+>", "", m.group(5)).strip()
-        if set_name == "-":
+        if set_name == "-" or set_name not in VALID_WIKI_SETS:
             set_name = ""
 
         if name and desc:
