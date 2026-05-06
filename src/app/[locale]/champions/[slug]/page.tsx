@@ -9,7 +9,9 @@ import { Tooltip } from "@/components/ui/Tooltip";
 import { getChampionResource } from "@/lib/scoring/augment-tailoring";
 import { getChampionAugmentPool } from "@/lib/scoring/pool-orchestrator";
 import { analyzeInteractions, type MechanicalInteraction, type AugmentMechanic } from "@/lib/scoring/augment-interactions";
+import { normalizeAugmentSet } from "@/lib/data/augment-set";
 import { buildComboTierLookup, resolveChampionCombos } from "@/lib/data/combo-lookup";
+import { routing } from "@/i18n/routing";
 
 // ─── Types ───────────────────────────────────────────────────────────────────
 
@@ -35,6 +37,8 @@ interface AugmentData extends ScoredAugment {
   rarity: "prismatic" | "gold" | "silver";
   win_rate: number | null;
   icon: string;
+  set?: string;
+  wikiSet?: string;
   wikiDescription?: string;
   kit_tags?: ChampionTag[];
 }
@@ -59,13 +63,14 @@ type PillLabels = {
 
 // ─── Static params for all 172 champions ─────────────────────────────────────
 
+export const dynamicParams = false;
+
 export async function generateStaticParams() {
   const dataPath = path.join(process.cwd(), "public", "data", "champions.json");
   const raw = await readFile(dataPath, "utf-8");
   const { champions } = JSON.parse(raw) as { champions: ChampionData[] };
 
-  const locales = ["en", "zh-TW", "zh-CN", "ja", "ko"];
-  return locales.flatMap((locale) =>
+  return routing.locales.flatMap((locale) =>
     champions.map((c) => ({ locale, slug: c.slug }))
   );
 }
@@ -91,7 +96,10 @@ async function loadData() {
 
   return {
     champions: JSON.parse(champsRaw).champions as ChampionData[],
-    augments: JSON.parse(augsRaw).augments as AugmentData[],
+    augments: (JSON.parse(augsRaw).augments as AugmentData[]).map((augment) => ({
+      ...augment,
+      set: normalizeAugmentSet(augment.set, augment.wikiSet),
+    })),
     combos: JSON.parse(combosRaw).combos as ComboData[],
     poolRules: JSON.parse(poolRulesRaw) as PoolRules,
     patch: JSON.parse(champsRaw).patch as string,
@@ -143,6 +151,7 @@ export default async function ChampionPage({
       championWinRate: champWr,
       comboTier,
       abilityProfile,
+      isSystemBreaker: aug.flags?.system_breaker === true,
     });
     return { aug, score: result.total, breakdown: result.breakdown, comboTier };
   });

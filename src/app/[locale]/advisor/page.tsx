@@ -1,4 +1,5 @@
 import { AdvisorClient } from "@/components/advisor/AdvisorClient";
+import { normalizeAugmentSet } from "@/lib/data/augment-set";
 import type { ComboMetadataEntry } from "@/lib/scoring/offered-ranking";
 import type { AbilityProfile } from "@/lib/types";
 import { readFile } from "fs/promises";
@@ -17,14 +18,23 @@ type RawAugment = {
   slug: string;
   name: string;
   displayName?: string;
+  name_zh_TW?: string;
+  name_zh_CN?: string;
+  name_ja?: string;
+  name_ko?: string;
   rarity?: "silver" | "gold" | "prismatic";
   win_rate?: number | null;
   icon?: string;
   set?: string | null;
+  wikiSet?: string | null;
   description?: string;
   wikiDescription?: string;
   notes?: string[];
   kit_tags?: string[];
+  flags?: {
+    system_breaker?: boolean;
+    lifecycle?: string;
+  };
 };
 
 type RawAbilityProfiles = { profiles: Record<string, AbilityProfile> };
@@ -52,7 +62,10 @@ function compactAbilityProfile(profile: AbilityProfile | undefined) {
 }
 
 function normalizeComboKey(value: string): string {
-  return value.trim().toLowerCase();
+  return value
+    .toLowerCase()
+    .replace(/&amp;|&#38;|&/g, "and")
+    .replace(/[^a-z0-9]+/g, "");
 }
 
 function comboTier(tier: RawCombo["tier"]): ComboMetadataEntry["tier"] {
@@ -116,19 +129,28 @@ export default async function AdvisorPage({
     win_rate,
     abilityProfile: compactAbilityProfile(profiles[slug]),
   }));
+  const localizedAugmentName = (augment: RawAugment): string => {
+    if (locale === "zh-TW") return augment.name_zh_TW ?? augment.name_zh_CN ?? augment.name;
+    if (locale === "zh-CN") return augment.name_zh_CN ?? augment.name;
+    if (locale === "ja") return augment.name_ja ?? augment.name;
+    if (locale === "ko") return augment.name_ko ?? augment.name;
+    return augment.displayName ?? augment.name;
+  };
+
   const augmentOptions = augments.map(
-    ({ slug, name, displayName, rarity, win_rate, icon, set, description, wikiDescription, notes, kit_tags }) => ({
-      slug,
-      name,
-      displayName: displayName ?? name,
-      rarity: rarity ?? "gold",
-      win_rate: win_rate ?? null,
-      icon: icon ?? "",
-      set: set ?? undefined,
-      description,
-      wikiDescription,
-      notes,
-      kit_tags,
+    (augment) => ({
+      slug: augment.slug,
+      name: augment.name,
+      displayName: localizedAugmentName(augment),
+      rarity: augment.rarity ?? "gold",
+      win_rate: augment.win_rate ?? null,
+      icon: augment.icon ?? "",
+      set: normalizeAugmentSet(augment.set, augment.wikiSet),
+      description: augment.description,
+      wikiDescription: augment.wikiDescription,
+      notes: augment.notes,
+      kit_tags: augment.kit_tags,
+      flags: augment.flags,
     }),
   );
 

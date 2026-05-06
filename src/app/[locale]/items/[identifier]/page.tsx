@@ -4,6 +4,7 @@ import { readFile } from "fs/promises";
 import path from "path";
 import { notFound } from "next/navigation";
 import { Link } from "@/i18n/navigation";
+import { routing } from "@/i18n/routing";
 import type { Item } from "@/lib/types";
 
 // Friendly display names for raw Riot API category identifiers
@@ -147,11 +148,12 @@ function parseDescription(raw: string): ParsedDescription {
 
 // ─── Static params ────────────────────────────────────────────────────────────
 
+export const dynamicParams = false;
+
 export async function generateStaticParams() {
   try {
     const data = await loadItemsData();
-    const locales = ["en", "zh-TW", "zh-CN", "ja", "ko"];
-    return locales.flatMap((locale) => [
+    return routing.locales.flatMap((locale) => [
       ...data.mayhemExclusive.map((item) => ({
         locale,
         identifier: item.slug,
