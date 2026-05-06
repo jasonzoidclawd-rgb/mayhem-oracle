@@ -11,8 +11,8 @@ import { setRequestLocale } from "next-intl/server";
 import { readFile } from "fs/promises";
 import path from "path";
 import type { Item, ChampionBaseStats, AbilityProfile } from "@/lib/types";
-import { parseItemStats, computeDamageProfile, computeMagicDamageProfile } from "@/lib/itemStats";
-import DamageCalculator, { type CalcChampion, type CalcItem } from "./DamageCalculator";
+import { parseItemStats, computeDamageProfile, computeMagicDamageProfile } from "@/lib/data/itemStats";
+import DamageCalculator, { type CalcChampion, type CalcItem } from "@/components/damage-sim/DamageCalculator";
 
 // ─── Data loaders ─────────────────────────────────────────────────────────────
 

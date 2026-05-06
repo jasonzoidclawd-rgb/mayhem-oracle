@@ -51,3 +51,9 @@ npm run dev      # localhost:3000
 npm run build    # production build
 npm run lint     # ESLint
 ```
+
+## Cowork Notes (2026-04-25)
+- Use `@/i18n/navigation` for internal app links in locale-routed UI. Avoid `next/link` in app components unless you explicitly want to bypass locale handling.
+- On champion pages, render combo chips from `resolveChampionCombos(...).augmentSlug`; do not re-slugify combo names with ad-hoc string replacement.
+- Keep the web app TypeScript boundary scoped to the Next app. `tsconfig.json` excludes `overlay/`, `packages/`, and `scripts/` so unrelated workspace issues do not break `npm run build`.
+- Shared scoring logic currently exists in both `src/lib/*` and `packages/scoring/src/*`. If you change one side, mirror the change or dedupe the implementation before the two copies drift.

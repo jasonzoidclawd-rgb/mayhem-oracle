@@ -348,7 +348,7 @@ async function main() {
   >;
   // Build slug → DDragon key map
   const slugToDDKey = new Map<string, string>();
-  for (const [key, val] of Object.entries(ddChamps)) {
+  for (const [key] of Object.entries(ddChamps)) {
     const slug = key.toLowerCase().replace(/[^a-z0-9]/g, "");
     slugToDDKey.set(slug, key);
   }
@@ -403,7 +403,6 @@ async function main() {
     ];
 
     // Map: P, Q, W, E, R
-    const spellPaths = [passivePath, ...spellNames.map((n) => `Characters/${cdId[0].toUpperCase() + cdId.slice(1)}/Spells/${n}`)];
     // Normalize paths — CDragon paths use exact casing from bin keys
     const abilityKeys = ["passive", "Q", "W", "E", "R"];
 

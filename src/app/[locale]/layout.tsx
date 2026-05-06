@@ -1,10 +1,11 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { NextIntlClientProvider } from "next-intl";
 import { getMessages, getTranslations } from "next-intl/server";
 import { setRequestLocale } from "next-intl/server";
 import { routing } from "@/i18n/routing";
-import { Navbar } from "@/components/Navbar";
-import { NavigationProgress } from "@/components/NavigationProgress";
+import { Navbar } from "@/components/ui/Navbar";
+import { NavigationProgress } from "@/components/ui/NavigationProgress";
+import { Footer } from "@/components/ui/Footer";
 
 // Generate static params for all locales (enables static rendering)
 export function generateStaticParams() {
@@ -27,8 +28,6 @@ export async function generateMetadata({
     },
     description: t("description"),
     manifest: "/manifest.json",
-    themeColor: "#0a0e17",
-    viewport: "width=device-width, initial-scale=1, viewport-fit=cover",
     appleWebApp: {
       capable: true,
       statusBarStyle: "black-translucent",
@@ -36,6 +35,13 @@ export async function generateMetadata({
     },
   };
 }
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  viewportFit: "cover",
+  themeColor: "#0a0e17",
+};
 
 export default async function LocaleLayout({
   children,
@@ -51,7 +57,6 @@ export default async function LocaleLayout({
 
   // Load all messages for client components
   const messages = await getMessages();
-  const tCommon = await getTranslations("common");
 
   return (
     <NextIntlClientProvider messages={messages}>
@@ -60,9 +65,7 @@ export default async function LocaleLayout({
       <main className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 pt-20 pb-12">
         {children}
       </main>
-      <footer className="border-t border-[var(--color-border-default)] py-6 text-center text-sm text-[var(--color-text-muted)]">
-        Mayhem Oracle — {tCommon("notAffiliated")}
-      </footer>
+      <Footer />
     </NextIntlClientProvider>
   );
 }

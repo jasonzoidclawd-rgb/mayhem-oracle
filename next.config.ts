@@ -20,6 +20,10 @@ const nextConfig: NextConfig = {
         protocol: "https" as const,
         hostname: "arammayhem.com",
       },
+      {
+        protocol: "https" as const,
+        hostname: "pub-2322c7068eed43b08bc0dddf6528d1e2.r2.dev",
+      },
     ],
   },
 };

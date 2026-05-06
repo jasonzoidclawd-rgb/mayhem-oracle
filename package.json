@@ -2,23 +2,23 @@
   "name": "mayhem-oracle",
   "version": "0.1.0",
   "private": true,
-  "workspaces": [
-    "packages/*",
-    "overlay"
-  ],
   "scripts": {
-    "dev": "next dev",
+    "dev": "next dev --turbopack",
     "build": "next build",
     "start": "next start",
     "lint": "eslint .",
     "test": "vitest run",
-    "test:watch": "vitest"
+    "test:watch": "vitest",
+    "update-data": "./scripts/update-data.sh"
   },
   "dependencies": {
-    "next": "^15.3.0",
+    "next": "^16.2.4",
     "next-intl": "^4.1.0",
     "react": "^19.1.0",
     "react-dom": "^19.1.0"
+  },
+  "overrides": {
+    "postcss": "$postcss"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4.1.0",

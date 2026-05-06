@@ -13,15 +13,20 @@ export default async function HomePage({
   const t = await getTranslations("home");
 
   const dataDir = path.join(process.cwd(), "public", "data");
-  const [champRaw, augRaw] = await Promise.all([
+  const [champRaw, augRaw, metaRaw] = await Promise.all([
     readFile(path.join(dataDir, "champions.json"), "utf-8"),
     readFile(path.join(dataDir, "augments.json"), "utf-8"),
+    readFile(path.join(dataDir, "meta.json"), "utf-8"),
   ]);
   const { champions, patch } = JSON.parse(champRaw);
   const { augments } = JSON.parse(augRaw);
+  const { scraped_at } = JSON.parse(metaRaw) as { scraped_at?: string };
   const champCount = (champions as unknown[]).length;
   const augCount = (augments as unknown[]).length;
   const patchLabel = (patch as string).replace(/\.$/, "");
+  const lastUpdatedLabel = scraped_at
+    ? new Intl.DateTimeFormat(locale, { dateStyle: "medium" }).format(new Date(scraped_at))
+    : patchLabel;
 
   return (
     <div className="flex flex-col items-center gap-12 py-12">
@@ -69,7 +74,7 @@ export default async function HomePage({
           <StatCard label={t("championsTracked")} value={String(champCount)} />
           <StatCard label={t("augmentsScored")} value={String(augCount)} />
           <StatCard label={t("patchVersion")} value={patchLabel} />
-          <StatCard label={t("lastUpdated")} value={patchLabel} />
+          <StatCard label={t("lastUpdated")} value={lastUpdatedLabel} />
         </div>
       </section>
     </div>

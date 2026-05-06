@@ -1,7 +1,7 @@
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { readFile } from "fs/promises";
 import path from "path";
-import { ChampionsIndex } from "@/components/ChampionsIndex";
+import { ChampionsIndex } from "@/components/champions/ChampionsIndex";
 
 export type ChampionEntry = {
   slug: string;
@@ -57,7 +57,7 @@ export default async function ChampionsIndexPage({
           {t("indexSubtitle", { count: champions.length })}
         </p>
       </header>
-      <ChampionsIndex champions={champions} locale={locale} />
+      <ChampionsIndex champions={champions} />
     </div>
   );
 }

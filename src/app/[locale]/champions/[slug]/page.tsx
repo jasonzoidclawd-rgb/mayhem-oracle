@@ -3,12 +3,13 @@ import Image from "next/image";
 import { readFile } from "fs/promises";
 import path from "path";
 import { notFound } from "next/navigation";
-import { computeOracleScore, type ScoredAugment, type ComboTier } from "@/lib/oracle-score";
-import type { AbilityProfile, AbilityEntry, AbilityStats, ChampionBaseStats } from "@/lib/types";
-import { Tooltip } from "@/components/Tooltip";
-import { isInAugmentPool, getChampionResource, buildPoolProfile } from "@/lib/augment-tailoring";
-import { analyzeInteractions, type MechanicalInteraction, type AugmentMechanic } from "@/lib/augment-interactions";
-import { buildComboTierLookup, resolveChampionCombos } from "@/lib/combo-lookup";
+import { computeOracleScore, type ScoredAugment, type ComboTier } from "@/lib/scoring/oracle-score";
+import type { AbilityProfile, AbilityEntry, AbilityStats, ChampionBaseStats, ChampionTag, PoolRules } from "@/lib/types";
+import { Tooltip } from "@/components/ui/Tooltip";
+import { getChampionResource } from "@/lib/scoring/augment-tailoring";
+import { getChampionAugmentPool } from "@/lib/scoring/pool-orchestrator";
+import { analyzeInteractions, type MechanicalInteraction, type AugmentMechanic } from "@/lib/scoring/augment-interactions";
+import { buildComboTierLookup, resolveChampionCombos } from "@/lib/data/combo-lookup";
 
 // ─── Types ───────────────────────────────────────────────────────────────────
 
@@ -25,6 +26,7 @@ interface ChampionData {
   last_changed?: string;
   icon: string;
   baseStats?: ChampionBaseStats;
+  kit_tags?: ChampionTag[];
 }
 
 interface AugmentData extends ScoredAugment {
@@ -34,6 +36,7 @@ interface AugmentData extends ScoredAugment {
   win_rate: number | null;
   icon: string;
   wikiDescription?: string;
+  kit_tags?: ChampionTag[];
 }
 
 interface ComboData {
@@ -71,10 +74,11 @@ export async function generateStaticParams() {
 
 async function loadData() {
   const base = path.join(process.cwd(), "public", "data");
-  const [champsRaw, augsRaw, combosRaw] = await Promise.all([
+  const [champsRaw, augsRaw, combosRaw, poolRulesRaw] = await Promise.all([
     readFile(path.join(base, "champions.json"), "utf-8"),
     readFile(path.join(base, "augments.json"), "utf-8"),
     readFile(path.join(base, "combos.json"), "utf-8"),
+    readFile(path.join(base, "pool-rules.json"), "utf-8"),
   ]);
 
   let abilitiesData: Record<string, AbilityProfile> = {};
@@ -89,6 +93,7 @@ async function loadData() {
     champions: JSON.parse(champsRaw).champions as ChampionData[],
     augments: JSON.parse(augsRaw).augments as AugmentData[],
     combos: JSON.parse(combosRaw).combos as ComboData[],
+    poolRules: JSON.parse(poolRulesRaw) as PoolRules,
     patch: JSON.parse(champsRaw).patch as string,
     abilities: abilitiesData,
   };
@@ -105,7 +110,7 @@ export default async function ChampionPage({
   setRequestLocale(locale);
   const t = await getTranslations("champion");
 
-  const { champions, augments, combos, patch, abilities } = await loadData();
+  const { champions, augments, combos, poolRules, patch, abilities } = await loadData();
 
   const champ = champions.find((c) => c.slug === slug);
   if (!champ) notFound();
@@ -116,19 +121,19 @@ export default async function ChampionPage({
   // Build combo lookup for this champion: augment-slug → tier
   const champCombos = resolveChampionCombos(slug, combos, augments);
   const comboBySlug = buildComboTierLookup(slug, combos, augments);
+  const augmentBySlug = new Map(augments.map((augment) => [augment.slug, augment]));
 
   // ── Smart Tailoring: filter augment pool ──
-  // In Mayhem, champions only see augments compatible with their
-  // attack type, resource, damage type, CC, dashes, and kit mechanics.
   const resource = getChampionResource(slug);
-  const championPool = buildPoolProfile(slug, abilityProfile, champ.baseStats);
-
-  const poolAugments = augments.filter((aug) =>
-    isInAugmentPool(
-      { slug: aug.slug, description: aug.description ?? "" },
-      championPool,
-    ),
-  );
+  const pool = getChampionAugmentPool({
+    championSlug: slug,
+    augments,
+    abilityProfile,
+    baseStats: champ.baseStats,
+    championKitTags: champ.kit_tags ?? [],
+    poolRules,
+  });
+  const poolAugments = [...pool.silver, ...pool.gold, ...pool.prismatic];
 
   // Score filtered augments for this champion
   const scoredAugments = poolAugments.map((aug) => {
@@ -256,6 +261,18 @@ export default async function ChampionPage({
               </span>
             ))}
           </div>
+          {(champ.kit_tags ?? []).length > 0 && (
+            <div className="flex gap-1 mt-1 flex-wrap">
+              {(champ.kit_tags ?? []).map((tag) => (
+                <span
+                  key={tag}
+                  className="px-1.5 py-0.5 text-[10px] rounded border border-[var(--color-neon-primary)]/30 bg-[var(--color-neon-primary)]/5 text-[var(--color-neon-primary)]/70"
+                >
+                  {tag}
+                </span>
+              ))}
+            </div>
+          )}
         </div>
       </div>
 
@@ -272,9 +289,9 @@ export default async function ChampionPage({
               </h2>
               <div className="flex flex-wrap gap-1.5">
                 {strongCombos.map((c) => {
-                  const aug = augments.find((a) => a.slug === c.augment.replace(/ /g, "-"));
+                  const aug = augmentBySlug.get(c.augmentSlug);
                   return (
-                    <Tooltip key={c.ref} content={aug?.wikiDescription ?? aug?.description}>
+                    <Tooltip key={`${c.champion}-${c.augmentSlug}-${c.tier}`} content={aug?.wikiDescription ?? aug?.description}>
                       <div className="flex items-center gap-1.5 px-2 py-1.5 rounded-lg border border-green-400/30 bg-green-400/5 cursor-default">
                         {aug && (
                           <Image
@@ -307,9 +324,9 @@ export default async function ChampionPage({
               </h2>
               <div className="flex flex-wrap gap-1.5">
                 {avoidCombos.map((c) => {
-                  const aug = augments.find((a) => a.slug === c.augment.replace(/ /g, "-"));
+                  const aug = augmentBySlug.get(c.augmentSlug);
                   return (
-                    <Tooltip key={c.ref} content={aug?.wikiDescription ?? aug?.description}>
+                    <Tooltip key={`${c.champion}-${c.augmentSlug}-${c.tier}`} content={aug?.wikiDescription ?? aug?.description}>
                       <div className="flex items-center gap-1.5 px-2 py-1.5 rounded-lg border border-red-400/30 bg-red-400/5 cursor-default">
                         {aug && (
                           <Image
@@ -457,7 +474,8 @@ export default async function ChampionPage({
           {t("augments")} — {t("oracleRanked")}
         </h2>
         <p className="text-[10px] text-[var(--color-text-muted)] mb-3 pl-3">
-          {poolAugments.length}/{augments.length} in pool
+          <span className="font-medium text-[var(--color-text-primary)]">N={pool.total}</span>
+          <span> / {augments.length} total</span>
           {resource !== "mana" && <span> · {resource === "none" ? "manaless" : resource}</span>}
           {abilityProfile && <span> · {abilityProfile.attackType}</span>}
         </p>

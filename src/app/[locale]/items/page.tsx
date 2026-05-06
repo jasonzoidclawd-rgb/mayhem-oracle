@@ -1,7 +1,7 @@
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { readFile } from "fs/promises";
 import path from "path";
-import { ItemsClient } from "@/components/ItemsClient";
+import { ItemsClient } from "@/components/items/ItemsClient";
 import type { Item } from "@/lib/types";
 
 interface ItemsData {

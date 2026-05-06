@@ -387,6 +387,33 @@ fn set_click_through(app: tauri::AppHandle, ignore: bool) {
     }
 }
 
+/// Returns true if League of Legends is the frontmost application
+#[tauri::command]
+fn is_league_foreground() -> bool {
+    #[cfg(target_os = "macos")]
+    unsafe {
+        use std::ffi::CStr;
+        let workspace: cocoa::base::id =
+            objc::msg_send![objc::class!(NSWorkspace), sharedWorkspace];
+        let frontmost: cocoa::base::id = objc::msg_send![workspace, frontmostApplication];
+        if frontmost.is_null() {
+            return false;
+        }
+        let bundle_id: cocoa::base::id = objc::msg_send![frontmost, bundleIdentifier];
+        if bundle_id.is_null() {
+            return false;
+        }
+        let ptr = cocoa::foundation::NSString::UTF8String(bundle_id);
+        if ptr.is_null() {
+            return false;
+        }
+        let s = CStr::from_ptr(ptr).to_str().unwrap_or("");
+        s.contains("LeagueofLegends") || s.contains("riotgames")
+    }
+    #[cfg(not(target_os = "macos"))]
+    { true }
+}
+
 /// Open macOS System Settings → Privacy → Screen Recording
 #[tauri::command]
 fn open_screen_recording_settings() {
@@ -414,6 +441,7 @@ pub fn run() {
             set_dock_visible,
             set_click_through,
             open_screen_recording_settings,
+            is_league_foreground,
         ])
         .setup(|app| {
             // ─── System Tray Icon ──────────────────────────────────────
@@ -455,20 +483,19 @@ pub fn run() {
                     let _: () = objc::msg_send![app_ptr, setActivationPolicy: NSApplicationActivationPolicy::NSApplicationActivationPolicyAccessory];
                 }
 
-                // Initial setup — borderless overlay covering full screen
+                // Initial setup — overlay covering full screen
                 unsafe {
-                    use cocoa::appkit::{NSWindow, NSWindowCollectionBehavior, NSWindowStyleMask};
+                    use cocoa::appkit::{NSWindow, NSWindowCollectionBehavior};
                     let ns_win = ns_win_ptr as cocoa::base::id;
-
-                    // Borderless (no title bar / traffic lights)
-                    ns_win.setStyleMask_(NSWindowStyleMask::NSBorderlessWindowMask);
 
                     // Cover the full screen without native fullscreen
                     let main_screen: cocoa::base::id = msg_send![objc::class!(NSScreen), mainScreen];
                     let frame: cocoa::foundation::NSRect = msg_send![main_screen, frame];
                     ns_win.setFrame_display_(frame, cocoa::base::YES);
 
-                    ns_win.setLevel_(1000);
+                    // kCGAssistiveTechHighWindowLevel = 1500; above screen saver (1000)
+                    // and most game windows, keeps overlay on top in borderless windowed mode
+                    ns_win.setLevel_(1500);
                     ns_win.setCollectionBehavior_(
                         NSWindowCollectionBehavior::NSWindowCollectionBehaviorCanJoinAllSpaces
                             | NSWindowCollectionBehavior::NSWindowCollectionBehaviorStationary
@@ -479,23 +506,27 @@ pub fn run() {
                     ns_win.setHidesOnDeactivate_(cocoa::base::NO);
                 }
 
-                // Periodically re-assert window to front via main thread
-                let ns_win_addr = ns_win_ptr as usize;
+                // Re-assert level every 5s — game windows can temporarily jump above us
+                // during mode switches. Fetches ns_window fresh on main thread each time
+                // to avoid retaining a stale raw pointer across the thread boundary.
                 let win = app.get_webview_window("overlay").unwrap();
                 std::thread::spawn(move || {
                     loop {
-                        std::thread::sleep(std::time::Duration::from_secs(1));
-                        let addr = ns_win_addr;
+                        std::thread::sleep(std::time::Duration::from_secs(5));
+                        let win_ref = win.clone();
                         let _ = win.run_on_main_thread(move || {
-                            unsafe {
-                                use cocoa::appkit::NSWindow;
-                                let ns_win = addr as cocoa::base::id;
-                                ns_win.setLevel_(1000);
-                                let _: () = objc::msg_send![ns_win, orderFrontRegardless];
+                            if let Ok(ptr) = win_ref.ns_window() {
+                                unsafe {
+                                    use cocoa::appkit::NSWindow;
+                                    let ns_win = ptr as cocoa::base::id;
+                                    ns_win.setLevel_(1500);
+                                    let _: () = objc::msg_send![ns_win, orderFrontRegardless];
+                                }
                             }
                         });
                     }
                 });
+
             }
             Ok(())
         })

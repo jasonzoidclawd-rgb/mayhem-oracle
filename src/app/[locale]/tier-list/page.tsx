@@ -1,5 +1,5 @@
 import { getTranslations, setRequestLocale } from "next-intl/server";
-import { TierListClient } from "@/components/TierListClient";
+import { TierListClient } from "@/components/tier-list/TierListClient";
 import { readFile } from "fs/promises";
 import path from "path";
 

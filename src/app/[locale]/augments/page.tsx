@@ -1,8 +1,8 @@
 import { getTranslations, setRequestLocale } from "next-intl/server";
-import { AugmentsClient } from "@/components/AugmentsClient";
+import { AugmentsClient } from "@/components/augments/AugmentsClient";
 import { readFile } from "fs/promises";
 import path from "path";
-import { evaluateAllSetSynergies, type SetSynergyResult } from "@/lib/set-synergy";
+import { evaluateAllSetSynergies, type SetSynergyResult } from "@/lib/scoring/set-synergy";
 import type { AbilityProfile, ChampionBaseStats } from "@/lib/types";
 
 export default async function AugmentsPage({
