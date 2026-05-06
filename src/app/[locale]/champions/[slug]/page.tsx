@@ -6,7 +6,7 @@ import { notFound } from "next/navigation";
 import { computeOracleScore, type ScoredAugment, type ComboTier } from "@/lib/scoring/oracle-score";
 import type { AbilityProfile, AbilityEntry, AbilityStats, ChampionBaseStats, ChampionTag, PoolRules } from "@/lib/types";
 import { Tooltip } from "@/components/ui/Tooltip";
-import { getChampionResource } from "@/lib/scoring/augment-tailoring";
+import { buildPoolProfile } from "@/lib/scoring/augment-tailoring";
 import { getChampionAugmentPool } from "@/lib/scoring/pool-orchestrator";
 import { analyzeInteractions, type MechanicalInteraction, type AugmentMechanic } from "@/lib/scoring/augment-interactions";
 import { normalizeAugmentSet } from "@/lib/data/augment-set";
@@ -59,6 +59,31 @@ type PillLabels = {
   atkType: string;
   cc: string;
   mismatch: string;
+};
+
+type PoolLayer = {
+  key: string;
+  label: string;
+  detail: string;
+  kept: number;
+  removed: number;
+};
+
+type PoolProfileChip = {
+  label: string;
+  value: string;
+};
+
+type PoolRaritySummary = {
+  key: AugmentData["rarity"];
+  label: string;
+  count: number;
+};
+
+type TailoredHighlight = {
+  aug: AugmentData;
+  score: number;
+  comboTier?: ComboTier;
 };
 
 // ─── Static params for all 172 champions ─────────────────────────────────────
@@ -132,7 +157,7 @@ export default async function ChampionPage({
   const augmentBySlug = new Map(augments.map((augment) => [augment.slug, augment]));
 
   // ── Smart Tailoring: filter augment pool ──
-  const resource = getChampionResource(slug);
+  const poolProfile = buildPoolProfile(slug, abilityProfile, champ.baseStats);
   const pool = getChampionAugmentPool({
     championSlug: slug,
     augments,
@@ -158,6 +183,100 @@ export default async function ChampionPage({
 
   // Sort by Oracle Score descending
   scoredAugments.sort((a, b) => b.score - a.score);
+
+  const excludedByReason = pool.excluded.reduce<Record<string, number>>((accumulator, entry) => {
+    accumulator[entry.reason] = (accumulator[entry.reason] ?? 0) + 1;
+    return accumulator;
+  }, {});
+  const countExcluded = (...reasons: string[]) =>
+    reasons.reduce((total, reason) => total + (excludedByReason[reason] ?? 0), 0);
+
+  let poolLayerRemainder = augments.length;
+  const poolLayers: PoolLayer[] = [
+    {
+      key: "source",
+      label: t("poolStepSource"),
+      detail: t("poolStepSourceDetail"),
+      kept: poolLayerRemainder,
+      removed: 0,
+    },
+  ];
+  const appendPoolLayer = (key: string, label: string, detail: string, removed: number) => {
+    poolLayerRemainder -= removed;
+    poolLayers.push({ key, label, detail, kept: poolLayerRemainder, removed });
+  };
+
+  appendPoolLayer(
+    "lifecycle",
+    t("poolStepLifecycle"),
+    t("poolStepLifecycleDetail"),
+    countExcluded("disabled", "removed"),
+  );
+  appendPoolLayer(
+    "hard",
+    t("poolStepHard"),
+    t("poolStepHardDetail"),
+    countExcluded("hard-exclusion"),
+  );
+  appendPoolLayer(
+    "tags",
+    t("poolStepTags"),
+    t("poolStepTagsDetail"),
+    countExcluded("tag-mismatch"),
+  );
+  appendPoolLayer(
+    "items",
+    t("poolStepItems"),
+    t("poolStepItemsDetail"),
+    countExcluded("item-exclusion"),
+  );
+
+  // Pre-compute translated damage/attack type labels
+  const damageTypeLabel: Record<string, string> = {
+    magic:    t("magicDamage"),
+    physical: t("physicalDamage"),
+    mixed:    t("mixedDamage"),
+  };
+  const attackTypeLabel: Record<string, string> = {
+    ranged: t("ranged"),
+    melee:  t("melee"),
+  };
+
+  const poolProfileChips: PoolProfileChip[] = [
+    {
+      label: t("poolChipResource"),
+      value:
+        poolProfile.resource === "none"
+          ? t("resourceNone")
+          : poolProfile.resource === "energy"
+            ? t("resourceEnergy")
+            : t("resourceMana"),
+    },
+    {
+      label: t("attackType"),
+      value: attackTypeLabel[poolProfile.attackType] ?? poolProfile.attackType,
+    },
+    {
+      label: t("damageType"),
+      value: damageTypeLabel[poolProfile.damageType] ?? poolProfile.damageType,
+    },
+    {
+      label: t("poolChipTags"),
+      value: (champ.kit_tags ?? []).length > 0 ? (champ.kit_tags ?? []).join(", ") : t("poolUniversal"),
+    },
+  ];
+
+  const poolRaritySummary: PoolRaritySummary[] = [
+    { key: "silver", label: t("silver"), count: pool.silver.length },
+    { key: "gold", label: t("gold"), count: pool.gold.length },
+    { key: "prismatic", label: t("prismatic"), count: pool.prismatic.length },
+  ];
+
+  const tailoredHighlights = scoredAugments.slice(0, 6).map(({ aug, score, comboTier }) => ({
+    aug,
+    score,
+    comboTier,
+  }));
 
   const strongCombos = champCombos.filter((c) => c.tier === "S");
   const avoidCombos = champCombos.filter((c) => c.tier === "C");
@@ -216,17 +335,6 @@ export default async function ChampionPage({
     ["mobility",     t("playstyleMobility")],
     ["utility",      t("playstyleUtility")],
   ];
-
-  // Pre-compute translated damage/attack type labels
-  const damageTypeLabel: Record<string, string> = {
-    magic:    t("magicDamage"),
-    physical: t("physicalDamage"),
-    mixed:    t("mixedDamage"),
-  };
-  const attackTypeLabel: Record<string, string> = {
-    ranged: t("ranged"),
-    melee:  t("melee"),
-  };
 
   return (
     <div className="py-4 sm:py-8 max-w-4xl">
@@ -477,6 +585,25 @@ export default async function ChampionPage({
         </section>
       )}
 
+      <PoolConstructionSection
+        title={t("poolConstruction")}
+        subtitle={t("poolConstructionSubtitle", {
+          name: champ.name,
+          kept: pool.total,
+          total: augments.length,
+        })}
+        rarityTitle={t("poolRarityMix")}
+        filterTitle={t("poolFilterStack")}
+        highlightsTitle={t("poolTopTailored")}
+        keptLabel={(count: number) => t("poolKept", { count })}
+        removedLabel={(count: number) => t("poolRemoved", { count })}
+        profileChips={poolProfileChips}
+        raritySummary={poolRaritySummary}
+        layers={poolLayers}
+        highlights={tailoredHighlights}
+        totalAugments={augments.length}
+      />
+
       {/* ─── Augment Rankings ─── */}
       <section className="glass-card p-4">
         <h2 className="text-sm font-bold mb-1 border-l-2 border-[var(--color-neon-primary)] pl-2">
@@ -485,7 +612,7 @@ export default async function ChampionPage({
         <p className="text-[10px] text-[var(--color-text-muted)] mb-3 pl-3">
           <span className="font-medium text-[var(--color-text-primary)]">N={pool.total}</span>
           <span> / {augments.length} total</span>
-          {resource !== "mana" && <span> · {resource === "none" ? "manaless" : resource}</span>}
+          {poolProfile.resource !== "mana" && <span> · {poolProfile.resource === "none" ? "manaless" : poolProfile.resource}</span>}
           {abilityProfile && <span> · {abilityProfile.attackType}</span>}
         </p>
 
@@ -538,6 +665,164 @@ const SCORE_COLOR = (score: number) => {
   if (score >= 60) return "text-green-400";
   return "text-slate-400";
 };
+
+const RARITY_BAR_STYLES: Record<AugmentData["rarity"], string> = {
+  prismatic: "bg-purple-400",
+  gold:      "bg-yellow-400",
+  silver:    "bg-slate-400",
+};
+
+function PoolConstructionSection({
+  title,
+  subtitle,
+  rarityTitle,
+  filterTitle,
+  highlightsTitle,
+  keptLabel,
+  removedLabel,
+  profileChips,
+  raritySummary,
+  layers,
+  highlights,
+  totalAugments,
+}: {
+  title: string;
+  subtitle: string;
+  rarityTitle: string;
+  filterTitle: string;
+  highlightsTitle: string;
+  keptLabel: (count: number) => string;
+  removedLabel: (count: number) => string;
+  profileChips: PoolProfileChip[];
+  raritySummary: PoolRaritySummary[];
+  layers: PoolLayer[];
+  highlights: TailoredHighlight[];
+  totalAugments: number;
+}) {
+  return (
+    <section className="glass-card p-4 mb-3 sm:mb-6">
+      <h2 className="text-sm font-bold mb-1 border-l-2 border-[var(--color-neon-primary)] pl-2">
+        {title}
+      </h2>
+      <p className="text-[10px] text-[var(--color-text-muted)] mb-3 pl-3">
+        {subtitle}
+      </p>
+
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 mb-4">
+        {profileChips.map((chip) => (
+          <div key={chip.label} className="min-w-0 rounded-lg border border-[var(--color-border-default)]/60 px-2 py-2 bg-[var(--color-bg-card)]/40">
+            <div className="text-[9px] uppercase tracking-wide text-[var(--color-text-muted)]">
+              {chip.label}
+            </div>
+            <div className="text-xs font-semibold text-[var(--color-text-primary)] truncate">
+              {chip.value}
+            </div>
+          </div>
+        ))}
+      </div>
+
+      <div className="grid gap-4 sm:grid-cols-[0.8fr_1.2fr] mb-4">
+        <div>
+          <h3 className="text-xs font-semibold text-[var(--color-text-secondary)] mb-2">
+            {rarityTitle}
+          </h3>
+          <div className="space-y-2">
+            {raritySummary.map((rarity) => {
+              const pct = totalAugments > 0 ? Math.round((rarity.count / totalAugments) * 100) : 0;
+              return (
+                <div key={rarity.key}>
+                  <div className="flex items-center justify-between gap-2 mb-1 text-[10px]">
+                    <span className="text-[var(--color-text-secondary)]">{rarity.label}</span>
+                    <span className="font-semibold text-[var(--color-text-primary)]">{rarity.count}</span>
+                  </div>
+                  <div className="h-1.5 rounded-full bg-[var(--color-border-default)]/40 overflow-hidden">
+                    <div
+                      className={`h-full rounded-full ${RARITY_BAR_STYLES[rarity.key]}`}
+                      style={{ width: `${pct}%` }}
+                    />
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+
+        <div>
+          <h3 className="text-xs font-semibold text-[var(--color-text-secondary)] mb-2">
+            {filterTitle}
+          </h3>
+          <div className="space-y-1">
+            {layers.map((layer) => (
+              <div key={layer.key} className="flex items-center gap-2 rounded-lg border border-[var(--color-border-default)]/50 px-2 py-1.5">
+                <div className="flex-1 min-w-0">
+                  <div className="text-xs font-medium text-[var(--color-text-primary)] truncate">
+                    {layer.label}
+                  </div>
+                  <div className="text-[9px] text-[var(--color-text-muted)] truncate">
+                    {layer.detail}
+                  </div>
+                </div>
+                <div className="text-right shrink-0">
+                  <div className="text-[10px] font-semibold text-[var(--color-text-primary)]">
+                    {keptLabel(layer.kept)}
+                  </div>
+                  <div className="text-[9px] text-red-300/80">
+                    {removedLabel(layer.removed)}
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {highlights.length > 0 && (
+        <div>
+          <h3 className="text-xs font-semibold text-[var(--color-text-secondary)] mb-2">
+            {highlightsTitle}
+          </h3>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-1.5">
+            {highlights.map(({ aug, score, comboTier }) => (
+              <Tooltip key={aug.slug} content={aug.wikiDescription ?? aug.description}>
+                <div className="flex items-center gap-2 rounded-lg border border-[var(--color-border-default)]/50 px-2 py-1.5 cursor-default">
+                  <div className="relative w-6 h-6 rounded shrink-0">
+                    <Image
+                      src={aug.icon}
+                      alt={aug.name}
+                      fill
+                      className="object-contain"
+                      sizes="24px"
+                      unoptimized
+                    />
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center gap-1.5">
+                      <span className="text-xs font-medium truncate">{aug.name}</span>
+                      <span className={`w-1.5 h-1.5 rounded-full shrink-0 ${RARITY_DOT[aug.rarity] ?? ""}`} />
+                      {comboTier && (
+                        <span className="text-[9px] font-bold px-1 rounded bg-green-400/20 text-green-400 shrink-0">
+                          {comboTier}
+                        </span>
+                      )}
+                    </div>
+                    {(aug.kit_tags ?? []).length > 0 && (
+                      <div className="text-[9px] text-[var(--color-text-muted)] truncate">
+                        {(aug.kit_tags ?? []).join(", ")}
+                      </div>
+                    )}
+                  </div>
+                  <span className={`text-sm font-bold w-10 text-right shrink-0 ${SCORE_COLOR(score)}`}>
+                    {Math.round(score)}
+                  </span>
+                </div>
+              </Tooltip>
+            ))}
+          </div>
+        </div>
+      )}
+    </section>
+  );
+}
 
 function AugmentRow({
   rank,
