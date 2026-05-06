@@ -24,7 +24,7 @@ jobs:
           cache: 'npm'
 
       - name: Install Node deps
-        run: npm ci
+        run: npm install
 
       - name: Scrape arammayhem.com
         run: python3 scripts/scrape_arammayhem.py
