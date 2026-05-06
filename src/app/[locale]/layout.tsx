@@ -2,10 +2,14 @@ import type { Metadata, Viewport } from "next";
 import { NextIntlClientProvider } from "next-intl";
 import { getMessages, getTranslations } from "next-intl/server";
 import { setRequestLocale } from "next-intl/server";
-import { routing } from "@/i18n/routing";
+import { notFound } from "next/navigation";
+import { routing, isSupportedLocale } from "@/i18n/routing";
 import { Navbar } from "@/components/ui/Navbar";
 import { NavigationProgress } from "@/components/ui/NavigationProgress";
 import { Footer } from "@/components/ui/Footer";
+import "@/styles/globals.css";
+
+export const dynamicParams = false;
 
 // Generate static params for all locales (enables static rendering)
 export function generateStaticParams() {
@@ -19,6 +23,8 @@ export async function generateMetadata({
   params: Promise<{ locale: string }>;
 }): Promise<Metadata> {
   const { locale } = await params;
+  if (!isSupportedLocale(locale)) notFound();
+
   const t = await getTranslations({ locale, namespace: "metadata" });
 
   return {
@@ -51,6 +57,7 @@ export default async function LocaleLayout({
   params: Promise<{ locale: string }>;
 }) {
   const { locale } = await params;
+  if (!isSupportedLocale(locale)) notFound();
 
   // Enable static rendering for this layout
   setRequestLocale(locale);
@@ -59,13 +66,17 @@ export default async function LocaleLayout({
   const messages = await getMessages();
 
   return (
-    <NextIntlClientProvider messages={messages}>
-      <NavigationProgress />
-      <Navbar />
-      <main className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 pt-20 pb-12">
-        {children}
-      </main>
-      <Footer />
-    </NextIntlClientProvider>
+    <html lang={locale} className="dark">
+      <body className="min-h-screen bg-[var(--color-bg-primary)] text-[var(--color-text-primary)]">
+        <NextIntlClientProvider messages={messages}>
+          <NavigationProgress />
+          <Navbar />
+          <main className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 pt-20 pb-12">
+            {children}
+          </main>
+          <Footer />
+        </NextIntlClientProvider>
+      </body>
+    </html>
   );
 }
