@@ -1,15 +1,12 @@
-# Runs daily to scrape fresh data and commit updated JSON to the repo.
-# Vercel auto-deploys on push, so the site updates automatically.
-
-name: Update Mayhem Data
+name: Update Data
 
 on:
   schedule:
-    - cron: "0 6 * * *" # 6 AM UTC daily
-  workflow_dispatch: # Allow manual trigger
+    - cron: '0 22 * * *'   # 22:00 UTC = 06:00 Taipei
+  workflow_dispatch:
 
 jobs:
-  scrape:
+  update:
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -17,24 +14,56 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Set up Python
-        uses: actions/setup-python@v5
+      - uses: actions/setup-python@v5
         with:
-          python-version: "3.12"
+          python-version: '3.11'
 
-      - name: Install dependencies
-        run: pip install youtube-transcript-api
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install Node deps
+        run: npm ci
 
       - name: Scrape arammayhem.com
-        run: python scripts/scrape_arammayhem.py
+        run: python3 scripts/scrape_arammayhem.py
 
-      - name: Process video knowledge
-        run: python scripts/learn_from_video.py --batch scripts/video_sources.txt || true
+      - name: Scrape CommunityDragon
+        run: python3 scripts/scrape_community_dragon.py
 
-      - name: Commit updated data
+      - name: Scrape base stats
+        run: python3 scripts/scrape_base_stats.py
+
+      - name: Scrape ability stats
+        run: npx tsx scripts/scrape_ability_stats.ts
+
+      - name: Scrape wiki augments
+        run: python3 scripts/scrape_wiki_augments.py
+
+      - name: Enrich wiki items
+        run: python3 scripts/enrich_wiki.py
+
+      - name: Scrape patch notes
+        run: python3 scripts/scrape_patch_notes.py
+        # LLM proxy unavailable in CI — falls back to arrow-direction heuristic
+
+      - name: Generate pool rules
+        run: python3 scripts/generate_pool_rules.py
+
+      - name: Commit and push
         run: |
-          git config user.name "Mayhem Oracle Bot"
-          git config user.email "bot@mayhem-oracle.dev"
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
           git add public/data/
-          git diff --cached --quiet || git commit -m "chore: update mayhem data $(date +%Y-%m-%d)"
+          git diff --cached --quiet && echo "No data changes" && exit 0
+          git commit -m "data: auto-update $(date -u +%Y-%m-%d)"
           git push
+
+      - name: Deploy to Vercel
+        if: success()
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+        run: npx vercel --prod --yes --archive=tgz --token "$VERCEL_TOKEN"
