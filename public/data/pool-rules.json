@@ -1,6 +1,6 @@
 {
   "patch": "26.9",
-  "scraped_at": "2026-05-06T11:54:58.751698+00:00",
+  "scraped_at": "2026-05-06T22:48:35.207684+00:00",
   "item_exclusions": [
     {
       "augment": "draw-your-sword",
@@ -32,13 +32,13 @@
     "added": {
       "cerberus": "25.24",
       "earthwake": "25.24",
-      "orbital-laser": "25.24",
-      "pandoras-box": "25.24",
+      "orbitallaser": "25.24",
+      "pandorasbox": "25.24",
       "repulsor": "25.23",
       "self-destruct": "25.23",
       "snowball-roulette": "25.23",
-      "stackosaurus-rex": "25.24",
-      "trueshot-prodigy": "25.24",
+      "stackosaurusrex": "25.24",
+      "trueshotprodigy": "25.24",
       "upgrade-sword-of-blossoming-dawn": "26.5"
     },
     "removed": {}

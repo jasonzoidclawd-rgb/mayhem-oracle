@@ -1,6 +1,6 @@
 {
-  "patch": "26.8.",
-  "scraped_at": "2026-05-06T11:47:53.927509+00:00",
+  "patch": "26.8",
+  "scraped_at": "2026-05-06T22:41:19.647438+00:00",
   "augments": [
     {
       "slug": "back-to-basics",
@@ -130,7 +130,7 @@
       "icon": "https://arammayhem.com/augments/Devil_on_Your_Shoulder_mayhem_augment.webp",
       "name_ja": "肩の上の悪魔",
       "name_ko": "어깨 위의 악마",
-      "wikiDescription": "Forge a pact with Little Devil Teemo , who drains 0. 5 % of your current health every second, increased to 5% if there are enemy champions within 1000 units. In return, you deal 15% bonus true damage and your basic attacks and abilities summon a Life Remnant nearby for 5 seconds (0. 75 -second spawn cooldown). You can absorb a Life Remnant by moving over it, healing you for 50 – 150 (based on level) (+ 50% bonus AD) (+ 25% AP) and granting you 15% bonus movement speed ."
+      "wikiDescription": "Forge a pact with Little Devil Teemo , who drains 0. 5 % of your current health every second, increased to 5% if there are enemy champions within 1000 units. In return, you deal 20% bonus true damage and your basic attacks and abilities summon a Life Remnant nearby for 5 seconds (0. 75 -second spawn cooldown). You can absorb a Life Remnant by moving over it, healing you for 50 – 150 (based on level) (+ 50% bonus AD) (+ 25% AP) and granting you 15% bonus movement speed ."
     },
     {
       "slug": "draw-your-sword",
@@ -141,11 +141,7 @@
       "name_ja": "剣を構えよ",
       "name_ko": "검을 뽑아라",
       "name_zh_TW": "拔劍吧",
-      "wikiDescription": "Become melee , modifying your attack range to 200 units. Additionally, gain 30% bonus attack damage , 25% bonus attack speed , 30% bonus health , 25% bonus movement speed , and 20% life steal. These bonuses are increased by 0% – 30% (based on champion's default attack range) . This augment is only available for ranged champions. This augment is not offered if the champion has built Runaan's Hurricane .",
-      "flags": {
-        "system_breaker": true,
-        "lifecycle": "active"
-      }
+      "wikiDescription": "Become melee , modifying your attack range to 200 units. Additionally, gain 30% bonus attack damage , 25% bonus attack speed , 30% bonus health , 25% bonus movement speed , and 20% life steal. These bonuses are increased by 0% – 30% (based on champion's default attack range) . This augment is only available for ranged champions. This augment is not offered if the champion has built Runaan's Hurricane ."
     },
     {
       "slug": "dropkick",
@@ -387,11 +383,7 @@
       "name_ja": "ジュエル ガントレット",
       "name_ko": "보석 건틀릿",
       "name_zh_TW": "寶石手套",
-      "wikiDescription": "Your abilities can now critically strike for (145% + bonus critical damage ) damage. Additionally, gain 25% (+ 4. 5 % per 100 AP) critical strike chance . If both Jeweled Gauntlet and Vulnerability are equipped, only rolls the critical strike chance of the augment that has the higher critical damage (or either if equal). The interaction between Jeweled Gauntlet and Vulnerability may behave incorrectly with persistent area damage effects. (bug)",
-      "flags": {
-        "system_breaker": true,
-        "lifecycle": "active"
-      }
+      "wikiDescription": "Your abilities can now critically strike for (145% + bonus critical damage ) damage. Additionally, gain 25% (+ 4. 5 % per 100 AP) critical strike chance . If both Jeweled Gauntlet and Vulnerability are equipped, only rolls the critical strike chance of the augment that has the higher critical damage (or either if equal). The interaction between Jeweled Gauntlet and Vulnerability may behave incorrectly with persistent area damage effects. (bug)"
     },
     {
       "slug": "king-me",
@@ -435,10 +427,6 @@
       "name_ko": "결투의 대가",
       "name_zh_TW": "雙修大師",
       "wikiDescription": "Basic attacks on-hit grant 6 – 18 (based on level) ability power and damaging abilities once per cast instance grant 3 – 9 (based on level) bonus attack damage , lasting for 5 seconds, with the duration of both refreshing on subsequent hits, and stacking infinitely.",
-      "flags": {
-        "system_breaker": true,
-        "lifecycle": "active"
-      },
       "wikiSet": "Stackosaurus Rex"
     },
     {
@@ -450,11 +438,7 @@
       "name_ja": "神秘の鉄拳",
       "name_ko": "신비한 주먹",
       "name_zh_TW": "祕術拳擊",
-      "wikiDescription": "Basic attacks on-hit reduce the remaining cooldowns of your abilities by 1. 25 seconds.",
-      "flags": {
-        "system_breaker": true,
-        "lifecycle": "active"
-      }
+      "wikiDescription": "Basic attacks on-hit reduce the remaining cooldowns of your abilities by 1. 25 seconds."
     },
     {
       "slug": "ominous-pact",
@@ -631,10 +615,6 @@
       "name_ko": "탭 댄서",
       "name_zh_TW": "輕舞飛揚",
       "wikiDescription": "Basic attacks on-hit against enemy champions and minions grant 10 bonus movement speed , lasting for 5 seconds, refreshing on subsequent triggers, and stacking infinitely. Additionally, gain bonus attack speed equal to 10% total movement speed .",
-      "flags": {
-        "system_breaker": true,
-        "lifecycle": "active"
-      },
       "wikiSet": "Stackosaurus Rex"
     },
     {
@@ -1089,11 +1069,7 @@
       "name_ja": "マークスメイジ",
       "name_ko": "마법 명사수",
       "name_zh_TW": "射手法師",
-      "wikiDescription": "Basic attacks deal bonus physical damage equal to 75% AP .",
-      "flags": {
-        "system_breaker": true,
-        "lifecycle": "active"
-      }
+      "wikiDescription": "Basic attacks deal bonus physical damage equal to 75% AP ."
     },
     {
       "slug": "minionmancer",
@@ -1306,11 +1282,7 @@
       "name_ja": "ゆっくり着実に",
       "name_ko": "천천히, 꾸준히",
       "name_zh_TW": "穩紮穩打",
-      "wikiDescription": "Your base attack speed is set to a static amount of 0. 625 and your attack rate no longer benefits from any source of attack speed bonuses. In return, you gain 25 bonus attack damage and convert every 1% bonus attack speed into 1 bonus attack damage .",
-      "flags": {
-        "system_breaker": true,
-        "lifecycle": "active"
-      }
+      "wikiDescription": "Your base attack speed is set to a static amount of 0. 625 and your attack rate no longer benefits from any source of attack speed bonuses. In return, you gain 25 bonus attack damage and convert every 1% bonus attack speed into 1 bonus attack damage ."
     },
     {
       "slug": "snowball-roulette",
@@ -1489,11 +1461,7 @@
       "name_ja": "搦め手",
       "name_ko": "취약",
       "name_zh_TW": "見縫插針",
-      "wikiDescription": "Damage dealt by items and damage over time effects can now critically strike for (145% + bonus critical damage ) damage (5 second cooldown per cast instance ). Additionally, gain 25% critical strike chance . If both Jeweled Gauntlet and Vulnerability are equipped, only rolls the critical strike chance of the augment that has the higher critical damage (or either if equal). The interaction between Jeweled Gauntlet and Vulnerability may behave incorrectly with persistent area damage effects. (bug)",
-      "flags": {
-        "system_breaker": true,
-        "lifecycle": "active"
-      }
+      "wikiDescription": "Damage dealt by items and damage over time effects can now critically strike for (145% + bonus critical damage ) damage (5 second cooldown per cast instance ). Additionally, gain 25% critical strike chance . If both Jeweled Gauntlet and Vulnerability are equipped, only rolls the critical strike chance of the augment that has the higher critical damage (or either if equal). The interaction between Jeweled Gauntlet and Vulnerability may behave incorrectly with persistent area damage effects. (bug)"
     },
     {
       "slug": "with-haste",
