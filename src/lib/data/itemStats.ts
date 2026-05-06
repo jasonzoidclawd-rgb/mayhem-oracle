@@ -22,56 +22,56 @@ export function parseItemStats(statLines: string[]): ItemStats {
     const name = m[3].trim().toLowerCase();
 
     if (name === "attack damage") {
-      stats.attackDamage = value;
+      stats.attackDamage = (stats.attackDamage ?? 0) + value;
     } else if (name === "ability power") {
-      stats.abilityPower = value;
+      stats.abilityPower = (stats.abilityPower ?? 0) + value;
     } else if (name === "lethality") {
-      stats.lethality = value;
+      stats.lethality = (stats.lethality ?? 0) + value;
     } else if (name === "armor penetration" && isPercent) {
-      stats.armorPenPct = value / 100;
+      stats.armorPenPct = (stats.armorPenPct ?? 0) + value / 100;
     } else if (name === "magic penetration") {
-      if (isPercent) stats.magicPenPct = value / 100;
-      else stats.magicPenFlat = value;
+      if (isPercent) stats.magicPenPct = (stats.magicPenPct ?? 0) + value / 100;
+      else stats.magicPenFlat = (stats.magicPenFlat ?? 0) + value;
     } else if (name === "critical strike chance") {
-      stats.critChance = value / 100;
+      stats.critChance = (stats.critChance ?? 0) + value / 100;
     } else if (name === "critical strike damage" || name === "critical strike") {
       // "Critical Strike" (% only) = bonus crit damage from IE-style passives
       // Flat "Critical Strike" is a scraper artifact — skip it
-      if (isPercent) stats.critDamage = value / 100;
+      if (isPercent) stats.critDamage = (stats.critDamage ?? 0) + value / 100;
     } else if (name === "attack speed") {
-      stats.attackSpeed = value / 100;
+      stats.attackSpeed = (stats.attackSpeed ?? 0) + value / 100;
     } else if (name === "life steal") {
-      if (isPercent) stats.lifeSteal = value / 100;
+      if (isPercent) stats.lifeSteal = (stats.lifeSteal ?? 0) + value / 100;
       // flat life steal is an artifact — skip
     } else if (name === "omnivamp") {
-      stats.omnivamp = value / 100;
+      stats.omnivamp = (stats.omnivamp ?? 0) + value / 100;
     } else if (name === "ability haste") {
-      stats.abilityHaste = value;
+      stats.abilityHaste = (stats.abilityHaste ?? 0) + value;
     } else if (name === "movement speed" || name === "move speed") {
-      if (isPercent) stats.moveSpeedPct = value / 100;
-      else stats.moveSpeedFlat = value;
+      if (isPercent) stats.moveSpeedPct = (stats.moveSpeedPct ?? 0) + value / 100;
+      else stats.moveSpeedFlat = (stats.moveSpeedFlat ?? 0) + value;
     } else if (name === "tenacity") {
-      if (isPercent) stats.tenacity = value / 100;
+      if (isPercent) stats.tenacity = (stats.tenacity ?? 0) + value / 100;
     } else if (name === "health") {
-      stats.health = value;
+      stats.health = (stats.health ?? 0) + value;
     } else if (name === "armor") {
-      if (!isPercent) stats.armor = value;
+      if (!isPercent) stats.armor = (stats.armor ?? 0) + value;
     } else if (name === "magic resistance" || name === "magic resist") {
-      if (!isPercent) stats.magicResist = value;
+      if (!isPercent) stats.magicResist = (stats.magicResist ?? 0) + value;
     } else if (name === "mana") {
-      stats.mana = value;
+      stats.mana = (stats.mana ?? 0) + value;
     } else if (
       name === "health regeneration" ||
       name === "base health regen" ||
       name === "health regen"
     ) {
-      stats.healthRegen = value;
+      stats.healthRegen = (stats.healthRegen ?? 0) + value;
     } else if (
       name === "mana regeneration" ||
       name === "base mana regen" ||
       name === "mana regen"
     ) {
-      stats.manaRegen = value;
+      stats.manaRegen = (stats.manaRegen ?? 0) + value;
     }
   }
 
@@ -100,11 +100,14 @@ export function computeDamageProfile(
   targetArmor = 100
 ): DamageProfile {
   const ad = stats.attackDamage ?? 0;
+  const safeTargetArmor = Math.max(0, targetArmor);
+  const armorPenPct = Math.min(1, Math.max(0, stats.armorPenPct ?? 0));
+  const critChance = Math.min(1, Math.max(0, stats.critChance ?? 0));
 
   // Armor pen applied in wiki-correct order:
   //   Step 3: % armor penetration (multiplicative)
   //   Step 4: lethality = flat armor penetration (applied last, floor at 0)
-  const armorAfterPctPen = targetArmor * (1 - (stats.armorPenPct ?? 0));
+  const armorAfterPctPen = safeTargetArmor * (1 - armorPenPct);
   const effectiveArmor = Math.max(0, armorAfterPctPen - (stats.lethality ?? 0));
 
   const armorMultiplier = 100 / (100 + effectiveArmor);
@@ -113,7 +116,6 @@ export function computeDamageProfile(
   // League base crit multiplier is 2.0 (200% AD total on crit) since v26.01.
   // critDamage is the bonus addend from items like IE (e.g. +0.40 → 2.40 total).
   const critTotalMultiplier = 2.0 + (stats.critDamage ?? 0);
-  const critChance = stats.critChance ?? 0;
 
   const critAutoHit = effectiveAD * critTotalMultiplier;
   // Expected damage multiplier per auto-attack (probability-weighted)
@@ -123,7 +125,7 @@ export function computeDamageProfile(
     effectiveAD,
     critAutoHit,
     critExpectedMultiplier,
-    targetArmor,
+    targetArmor: safeTargetArmor,
   };
 }
 
@@ -144,8 +146,10 @@ export function computeMagicDamageProfile(
   targetMR = 50
 ): MagicDamageProfile {
   const ap = stats.abilityPower ?? 0;
-  const mrAfterPctPen = targetMR * (1 - (stats.magicPenPct ?? 0));
+  const safeTargetMR = Math.max(0, targetMR);
+  const magicPenPct = Math.min(1, Math.max(0, stats.magicPenPct ?? 0));
+  const mrAfterPctPen = safeTargetMR * (1 - magicPenPct);
   const effectiveMR = Math.max(0, mrAfterPctPen - (stats.magicPenFlat ?? 0));
   const magicMultiplier = 100 / (100 + effectiveMR);
-  return { ap, magicMultiplier, effectiveMR, targetMR };
+  return { ap, magicMultiplier, effectiveMR, targetMR: safeTargetMR };
 }

@@ -18,8 +18,27 @@ export interface ResolvedComboLookupEntry extends ComboLookupEntry {
 export function normalizeLookupKey(value: string): string {
   return value
     .toLowerCase()
-    .replace(/&#38;|&/g, "and")
+    .replace(/&amp;|&#38;|&/g, "and")
     .replace(/[^a-z0-9]+/g, "");
+}
+
+const VALID_COMBO_TIERS = new Set<string>(["S", "A", "B", "C"]);
+
+function buildAugmentSlugIndex(augments: AugmentLookupEntry[]): Map<string, string> {
+  const index = new Map<string, string>();
+  const ambiguous = new Set<string>();
+  for (const augment of augments) {
+    for (const key of [normalizeLookupKey(augment.slug), normalizeLookupKey(augment.name)]) {
+      if (ambiguous.has(key)) continue;
+      if (index.has(key) && index.get(key) !== augment.slug) {
+        ambiguous.add(key);
+        index.delete(key);
+      } else {
+        index.set(key, augment.slug);
+      }
+    }
+  }
+  return index;
 }
 
 export function buildComboTierLookup(
@@ -28,17 +47,13 @@ export function buildComboTierLookup(
   augments: AugmentLookupEntry[],
 ): Map<string, ComboTier> {
   const championKey = normalizeLookupKey(championSlug);
-  const augmentSlugByKey = new Map<string, string>();
-
-  for (const augment of augments) {
-    augmentSlugByKey.set(normalizeLookupKey(augment.slug), augment.slug);
-    augmentSlugByKey.set(normalizeLookupKey(augment.name), augment.slug);
-  }
+  const augmentSlugByKey = buildAugmentSlugIndex(augments);
 
   const comboBySlug = new Map<string, ComboTier>();
 
   for (const combo of combos) {
     if (normalizeLookupKey(combo.champion) !== championKey) continue;
+    if (!VALID_COMBO_TIERS.has(combo.tier)) continue;
 
     const augmentSlug = augmentSlugByKey.get(normalizeLookupKey(combo.augment));
     if (!augmentSlug) continue;
@@ -55,12 +70,7 @@ export function resolveChampionCombos(
   augments: AugmentLookupEntry[],
 ): ResolvedComboLookupEntry[] {
   const championKey = normalizeLookupKey(championSlug);
-  const augmentSlugByKey = new Map<string, string>();
-
-  for (const augment of augments) {
-    augmentSlugByKey.set(normalizeLookupKey(augment.slug), augment.slug);
-    augmentSlugByKey.set(normalizeLookupKey(augment.name), augment.slug);
-  }
+  const augmentSlugByKey = buildAugmentSlugIndex(augments);
 
   const resolved: ResolvedComboLookupEntry[] = [];
 

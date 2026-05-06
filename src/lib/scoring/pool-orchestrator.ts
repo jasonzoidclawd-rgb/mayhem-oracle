@@ -13,6 +13,14 @@
  */
 
 import { buildPoolProfile, isInAugmentPool } from "./augment-tailoring";
+
+function normalizeItemKey(key: string): string {
+  return key.toLowerCase().replace(/[^a-z0-9]/g, "");
+}
+
+function normalizeAugmentKey(slug: string): string {
+  return slug.toLowerCase().replace(/[^a-z0-9]/g, "");
+}
 import type { AbilityProfile, ChampionBaseStats, ChampionTag, PoolRules } from "../types";
 
 export interface PoolAugmentInput {
@@ -51,12 +59,13 @@ export function getChampionAugmentPool<T extends PoolAugmentInput>(args: {
 
   const profile = buildPoolProfile(championSlug, abilityProfile, baseStats);
 
-  const disabledSet = new Set(poolRules.disabled);
-  const removedSet  = new Set(Object.keys(poolRules.lifecycle.removed));
+  const disabledSet = new Set(poolRules.disabled.map(normalizeAugmentKey));
+  const removedSet  = new Set(Object.keys(poolRules.lifecycle.removed).map(normalizeAugmentKey));
+  const normalizedOwnedItems = new Set(ownedItems.map(normalizeItemKey));
   const blockedByItem = new Set(
     poolRules.item_exclusions
-      .filter((r) => ownedItems.includes(r.blocked_by_item))
-      .map((r) => r.augment),
+      .filter((r) => normalizedOwnedItems.has(normalizeItemKey(r.blocked_by_item)))
+      .map((r) => normalizeAugmentKey(r.augment)),
   );
 
   const silver:    T[] = [];
@@ -66,13 +75,14 @@ export function getChampionAugmentPool<T extends PoolAugmentInput>(args: {
 
   for (const aug of augments) {
     const slug = aug.slug;
+    const normalizedSlug = normalizeAugmentKey(slug);
 
     // Layer 1 — lifecycle / disabled
-    if (disabledSet.has(slug)) {
+    if (disabledSet.has(normalizedSlug)) {
       excluded.push({ slug, reason: "disabled" });
       continue;
     }
-    if (removedSet.has(slug)) {
+    if (removedSet.has(normalizedSlug)) {
       excluded.push({ slug, reason: "removed" });
       continue;
     }
@@ -95,7 +105,7 @@ export function getChampionAugmentPool<T extends PoolAugmentInput>(args: {
     // augTags.length === 0 → universal augment, always passes
 
     // Layer 4 — item exclusions
-    if (blockedByItem.has(slug)) {
+    if (blockedByItem.has(normalizedSlug)) {
       excluded.push({ slug, reason: "item-exclusion" });
       continue;
     }

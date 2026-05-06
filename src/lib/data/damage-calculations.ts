@@ -22,21 +22,30 @@ export function computeDamageCalculation(
   targetBaseStats: ChampionStatsAtLevel,
   targetBonusStats: Pick<ItemStats, "armor" | "magicResist"> = {},
 ): DamageCalculationResult {
-  const targetArmor = targetBaseStats.armor + (targetBonusStats.armor ?? 0);
-  const targetMR = targetBaseStats.mr + (targetBonusStats.magicResist ?? 0);
+  const targetArmor = Math.max(0, targetBaseStats.armor + (targetBonusStats.armor ?? 0));
+  const targetMR = Math.max(0, targetBaseStats.mr + (targetBonusStats.magicResist ?? 0));
 
-  const armorAfterPctPen = targetArmor * (1 - combined.armorPenPct);
-  const effectiveArmor = Math.max(0, armorAfterPctPen - combined.lethality);
+  const armorPenPct = Math.min(1, Math.max(0, combined.armorPenPct));
+  const lethality = Math.max(0, combined.lethality);
+  const totalAD = Math.max(0, Number.isFinite(combined.totalAD) ? combined.totalAD : 0);
+  const attackSpeed = Math.max(0, Number.isFinite(combined.attackSpeed) ? combined.attackSpeed : 0);
+  const critChance = Math.min(1, Math.max(0, combined.critChance));
+  const critDamage = Math.max(0, combined.critDamage);
+  const magicPenPct = Math.min(1, Math.max(0, combined.magicPenPct));
+  const magicPenFlat = Math.max(0, combined.magicPenFlat);
+
+  const armorAfterPctPen = targetArmor * (1 - armorPenPct);
+  const effectiveArmor = Math.max(0, armorAfterPctPen - lethality);
   const armorMult = 100 / (100 + effectiveArmor);
 
-  const autoPhys = combined.totalAD * armorMult;
-  const critMult = BASE_CRIT_MULT + combined.critDamage;
+  const autoPhys = totalAD * armorMult;
+  const critMult = BASE_CRIT_MULT + critDamage;
   const critAutoPhys = autoPhys * critMult;
-  const avgAutoPhys = autoPhys * (1 + combined.critChance * (critMult - 1));
-  const dps = avgAutoPhys * combined.attackSpeed;
+  const avgAutoPhys = autoPhys * (1 + critChance * (critMult - 1));
+  const dps = avgAutoPhys * attackSpeed;
 
-  const mrAfterPctPen = targetMR * (1 - combined.magicPenPct);
-  const effectiveMR = Math.max(0, mrAfterPctPen - combined.magicPenFlat);
+  const mrAfterPctPen = targetMR * (1 - magicPenPct);
+  const effectiveMR = Math.max(0, mrAfterPctPen - magicPenFlat);
   const mrMult = 100 / (100 + effectiveMR);
 
   return {

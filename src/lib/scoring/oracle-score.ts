@@ -89,7 +89,7 @@ function detectAugmentProfile(description: string): {
 export function computeOracleScore(input: OracleScoreInput): OracleScoreResult {
   const {
     augment,
-    championWinRate = 0,
+    championWinRate,
     comboTier,
     pickedSetIds = [],
     augmentSetId,
@@ -102,7 +102,8 @@ export function computeOracleScore(input: OracleScoreInput): OracleScoreResult {
   // Use augment's own win rate as base (not champion WR which is constant per champ)
   const baseScore = augment.win_rate ?? 50;
   // Champion WR as minor adjustment: +-2 pts max around 50% baseline
-  const championAdj = ((championWinRate || 50) - 50) * 0.1;
+  const wr = typeof championWinRate === "number" && Number.isFinite(championWinRate) ? championWinRate : 50;
+  const championAdj = (wr - 50) * 0.1;
   const championWr = baseScore + championAdj;
   const setTierBonus = SCORE_WEIGHTS.SET_TIER_BONUS[rarity];
   const rarityBonus = SCORE_WEIGHTS.RARITY_BONUS[rarity];

@@ -571,6 +571,28 @@ export function AdvisorClient({
           </div>
         ) : (
           <div className="mt-4 grid gap-4 lg:grid-cols-3">
+            {rankingResult.rerollEv ? (
+              <div className="mb-4 rounded-md border border-[var(--color-border-default)] p-3 text-xs">
+                <p className="font-semibold text-[var(--color-text-primary)]">{copy.rerollEvLabel}</p>
+                <p className="mt-1">
+                  {copy.rerollStanceLabel}: {stanceLabels[rankingResult.rerollEv.stance] ?? readableCode(rankingResult.rerollEv.stance)}
+                </p>
+                <p>
+                  {copy.confidenceLabel}: {confidenceLabels[rankingResult.rerollEv.confidence]}
+                </p>
+                <ul className="mt-2 list-disc space-y-1 pl-4">
+                  <li>
+                    {copy.selectedRerollsLabel}: {normalRerolls}
+                    {goldenRerollAvailable ? ` + ${copy.goldenRerollLabel}` : ""}
+                  </li>
+                  {rankingResult.rerollEv.factors.map((factor) => (
+                    <li key={factor}>
+                      {copy.rerollFactorLabel}: {factorLabels[factor] ?? readableCode(factor)}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ) : null}
             {rankingResult.rankings.map((ranking) => (
               <article
                 key={`${ranking.rank}-${ranking.augment.slug}`}
@@ -615,29 +637,6 @@ export function AdvisorClient({
                     <p className="mt-2 text-sm text-[var(--color-text-muted)]">{copy.noReasons}</p>
                   )}
                 </div>
-
-                {ranking.rerollEv ? (
-                  <div className="mt-4 rounded-md border border-[var(--color-border-default)] p-3 text-xs">
-                    <p className="font-semibold text-[var(--color-text-primary)]">{copy.rerollEvLabel}</p>
-                    <p className="mt-1">
-                      {copy.rerollStanceLabel}: {stanceLabels[ranking.rerollEv.stance] ?? readableCode(ranking.rerollEv.stance)}
-                    </p>
-                    <p>
-                      {copy.confidenceLabel}: {confidenceLabels[ranking.rerollEv.confidence]}
-                    </p>
-                    <ul className="mt-2 list-disc space-y-1 pl-4">
-                      <li>
-                        {copy.selectedRerollsLabel}: {normalRerolls}
-                        {goldenRerollAvailable ? ` + ${copy.goldenRerollLabel}` : ""}
-                      </li>
-                      {ranking.rerollEv.factors.map((factor) => (
-                        <li key={factor}>
-                          {copy.rerollFactorLabel}: {factorLabels[factor] ?? readableCode(factor)}
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                ) : null}
 
                 {ranking.shopTiming ? (
                   <div className="mt-4 rounded-md border border-[var(--color-border-default)] p-3 text-xs">

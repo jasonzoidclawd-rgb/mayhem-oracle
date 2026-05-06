@@ -33,7 +33,9 @@ export function statsAtLevel(
   base: ChampionBaseStats,
   level: number
 ): ChampionStatsAtLevel {
-  const g = growthFactor(level);
+  const safeLevel = Number.isFinite(level) ? level : 1;
+  const clampedLevel = Math.min(18, Math.max(1, Math.round(safeLevel)));
+  const g = growthFactor(clampedLevel);
   return {
     hp: base.baseHP + base.hpGrowth * g,
     ad: base.baseAD + base.adGrowth * g,

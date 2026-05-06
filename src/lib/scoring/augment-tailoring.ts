@@ -43,16 +43,21 @@ const MANALESS = new Set([
 /** Energy champions. */
 const ENERGY = new Set(["akali", "kennen", "leesin", "shen", "zed"]);
 
+function normalizeChampionSlug(slug: string): string {
+  return slug.toLowerCase().replace(/[^a-z0-9]/g, "");
+}
+
 export function getChampionResource(slug: string): ResourceType {
-  if (MANALESS.has(slug)) return "none";
-  if (ENERGY.has(slug)) return "energy";
+  const key = normalizeChampionSlug(slug);
+  if (MANALESS.has(key)) return "none";
+  if (ENERGY.has(key)) return "energy";
   return "mana";
 }
 
 // ── Kit analysis for pool filtering ─────────────────────────────────
 
 export interface ChampionPoolProfile {
-  attackType: "melee" | "ranged";
+  attackType: "melee" | "ranged" | "unknown";
   resource: ResourceType;
   /** Has at least one hard CC ability (stun, root, knockup, charm, suppress, fear, taunt) */
   hasHardCC: boolean;
@@ -90,7 +95,7 @@ export function buildPoolProfile(
 ): ChampionPoolProfile {
   void _baseStats;
   const resource = getChampionResource(slug);
-  const attackType = abilityProfile?.attackType ?? "melee";
+  const attackType = abilityProfile?.attackType ?? "unknown";
   const damageType = abilityProfile?.damageType ?? "mixed";
 
   let hasHardCC = false;
@@ -103,7 +108,9 @@ export function buildPoolProfile(
   let hasCritSynergy = false;
 
   if (abilityProfile) {
-    const allDesc = abilityProfile.abilities.map((a) => a.description).join(" ");
+    const allDesc = abilityProfile.abilities
+      .map((a) => `${a.description ?? ""} ${a.wikiDescription ?? ""}`)
+      .join(" ");
 
     for (const ab of abilityProfile.abilities) {
       const s = ab.stats;

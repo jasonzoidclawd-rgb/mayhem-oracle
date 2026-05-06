@@ -46,7 +46,6 @@ export interface RankedOfferedAugment {
   score: number;
   scoreBand: ScoreBand;
   reasons: OfferedRankingReason[];
-  rerollEv?: OfferedRankingRerollEv;
   shopTiming?: OfferedRankingShopTiming;
   flags?: string[];
 }
@@ -54,6 +53,7 @@ export interface RankedOfferedAugment {
 export interface OfferedRankingResult {
   status: RankingStatus;
   rankings: RankedOfferedAugment[];
+  rerollEv?: OfferedRankingRerollEv;
 }
 
 export interface RankingAugment {
@@ -108,7 +108,9 @@ export interface RankOfferedAugmentsInput {
   offeredAugments: RankingAugment[];
   ownedAugments?: RankingAugment[];
   comboMetadata?: Record<string, ComboMetadataEntry>;
+  comboMetadataBySlot?: Array<ComboMetadataEntry | undefined>;
   scoreBreakdowns?: Record<string, Partial<Record<string, number>>>;
+  scoreBreakdownsBySlot?: Array<Partial<Record<string, number>> | undefined>;
   modeRules?: {
     championOverrides?: Record<string, {
       preferredAugments?: Record<string, ChampionModeOverrideEntry>;
@@ -129,6 +131,12 @@ export interface RankOfferedAugmentsInput {
     status: "open" | "closed" | "unknown" | string;
   };
 }
+
+const EXPLICIT_BREAKDOWN_KEYS = new Set<string>([
+  "comboBonus", "trapPenalty", "abilityTypeSynergy", "attackTypeSynergy",
+  "ccSynergy", "tagMismatch", "championWr", "setTierBonus", "sameSetSynergy",
+  "rarityBonus", "systemBreakerBonus",
+]);
 
 function normalizeSetId(setId: string | undefined): string | undefined {
   const normalized = setId?.trim().toLowerCase();
@@ -226,6 +234,10 @@ function championKey(champion: RankingChampion): string | undefined {
   return champion.slug ?? champion.id;
 }
 
+function normalizeChampionKey(key: string): string {
+  return key.toLowerCase().replace(/[^a-z0-9]/g, "");
+}
+
 function addBreakdownReasons(
   reasons: OfferedRankingReason[],
   breakdown: Partial<Record<string, number>>,
@@ -265,13 +277,22 @@ export function rankOfferedAugments(input: RankOfferedAugmentsInput): OfferedRan
       .filter((slug, index, slugs) => slugs.indexOf(slug) !== index),
   );
   const champKey = championKey(input.champion);
-  const championOverrides = champKey ? input.modeRules?.championOverrides?.[champKey] : undefined;
+  const normalizedChampKey = champKey ? normalizeChampionKey(champKey) : undefined;
+  const championOverrides = (() => {
+    if (!normalizedChampKey || !input.modeRules?.championOverrides) return undefined;
+    for (const [k, v] of Object.entries(input.modeRules.championOverrides)) {
+      if (normalizeChampionKey(k) === normalizedChampKey) return v;
+    }
+    return undefined;
+  })();
   const qualitativeRerollEv = rerollEv(input);
   const qualitativeShopTiming = shopTiming(input);
 
   const ranked = input.offeredAugments.map((augment, originalIndex) => {
     const augmentSetId = normalizeSetId(augment.set);
-    const combo = input.comboMetadata?.[augment.slug];
+    const isDuplicate = duplicateSlugs.has(augment.slug);
+    const combo = input.comboMetadataBySlot?.[originalIndex]
+      ?? (isDuplicate ? undefined : input.comboMetadata?.[augment.slug]);
     const oracle = computeOracleScore({
       augment: augment as ScoredAugment,
       championWinRate: input.champion.win_rate ?? input.champion.winRate,
@@ -280,7 +301,8 @@ export function rankOfferedAugments(input: RankOfferedAugmentsInput): OfferedRan
       augmentSetId,
       abilityProfile: input.champion.abilityProfile,
     });
-    const explicitBreakdown = input.scoreBreakdowns?.[augment.slug];
+    const explicitBreakdown = input.scoreBreakdownsBySlot?.[originalIndex]
+      ?? (isDuplicate ? undefined : input.scoreBreakdowns?.[augment.slug]);
     const reasons: OfferedRankingReason[] = [];
 
     if (augmentSetId && pickedSetIds.includes(augmentSetId)) {
@@ -288,11 +310,16 @@ export function rankOfferedAugments(input: RankOfferedAugmentsInput): OfferedRan
     }
 
     addBreakdownReasons(reasons, oracle.breakdown, combo);
-    if (explicitBreakdown) {
-      addBreakdownReasons(reasons, explicitBreakdown);
-    }
 
     let adjustedScore = oracle.total;
+    if (explicitBreakdown) {
+      for (const [k, v] of Object.entries(explicitBreakdown)) {
+        if (EXPLICIT_BREAKDOWN_KEYS.has(k) && Number.isFinite(v)) {
+          adjustedScore += v as number;
+        }
+      }
+      addBreakdownReasons(reasons, explicitBreakdown);
+    }
     const preferredOverride = championOverrides?.preferredAugments?.[augment.slug];
     if (preferredOverride) {
       adjustedScore += preferredOverride.scoreDelta;
@@ -326,7 +353,6 @@ export function rankOfferedAugments(input: RankOfferedAugmentsInput): OfferedRan
       score,
       scoreBand: band,
       reasons,
-      rerollEv: qualitativeRerollEv,
       shopTiming: qualitativeShopTiming,
       flags,
     };
@@ -347,9 +373,9 @@ export function rankOfferedAugments(input: RankOfferedAugmentsInput): OfferedRan
       score: ranking.score,
       scoreBand: ranking.scoreBand,
       reasons: ranking.reasons,
-      rerollEv: ranking.rerollEv,
       shopTiming: ranking.shopTiming,
       flags: ranking.flags,
     })),
+    rerollEv: qualitativeRerollEv,
   };
 }
