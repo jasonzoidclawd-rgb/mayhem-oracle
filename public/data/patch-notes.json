@@ -1,8 +1,503 @@
 {
-  "patch": "26.8",
-  "scraped_at": "2026-04-25T11:15:43.717856+00:00",
+  "patch": "26.9",
+  "scraped_at": "2026-05-06T11:42:57.412991+00:00",
   "source": "https://arammayhem.com",
   "patches": [
+    {
+      "version": "26.9",
+      "title": "Patch 26.9 - ARAM Mayhem 26.9 - Bard and Ornn Timing Buffs, Health Relic AoE Buff, and Augment Adjustments",
+      "released": "Released: April 28, 2026",
+      "sections": [
+        {
+          "id": "highlights",
+          "title": "Highlights",
+          "changes": [
+            {
+              "subject": {
+                "en": "",
+                "zh-cn": "",
+                "ja-jp": "",
+                "ko-kr": ""
+              },
+              "text": {
+                "en": "Bard gets stronger Caretaker's Shrine movement speed scaling and a faster shrine ammo cooldown in ARAM: Mayhem.",
+                "zh-cn": "巴德的“游神圣坛（W）”移速加成与法强收益提高，充能冷却也从 10 秒缩短到 8 秒。",
+                "ja-jp": "バードの「回復の遺物（W）」は移動速度と魔力反映率が上がり、チャージクールダウンも10秒から8秒に短縮されました。",
+                "ko-kr": "바드의 W - 수호자의 성소 이동 속도와 주문력 계수가 증가하고, 충전 대기시간이 10초에서 8초로 줄었습니다."
+              },
+              "kind": "changed"
+            },
+            {
+              "subject": {
+                "en": "",
+                "zh-cn": "",
+                "ja-jp": "",
+                "ko-kr": ""
+              },
+              "text": {
+                "en": "Ornn's Living Forge cooldown now scales down from 90 to 10 seconds by level instead of staying at 120 seconds.",
+                "zh-cn": "奥恩“活体锻炉（被动）”冷却时间从固定 120 秒改为随等级降低的 90-10 秒。",
+                "ja-jp": "オーンの「歩く鍛冶場（P）」のクールダウンが固定120秒から、レベルに応じて90～10秒に短縮される形になりました。",
+                "ko-kr": "오른의 기본 지속 효과 - 간이 대장간 재사용 대기시간이 고정 120초에서 레벨에 따라 90~10초로 감소합니다."
+              },
+              "kind": "changed"
+            },
+            {
+              "subject": {
+                "en": "",
+                "zh-cn": "",
+                "ja-jp": "",
+                "ko-kr": ""
+              },
+              "text": {
+                "en": "Health Relic AoE missing health and mana restoration rises from 16% to 22%, while pickup restoration stays at 8%.",
+                "zh-cn": "生命遗迹拾取回复仍为已损失生命值/法力值的 8%，范围效果回复从 16% 提高到 22%。",
+                "ja-jp": "生命の遺宝の取得時回復は減少体力/マナの8%のまま、範囲効果の回復量が16%から22%に増加しました。",
+                "ko-kr": "체력의 유물 획득 시 회복은 잃은 체력/마나의 8%로 유지되며, 광역 회복 효과는 16%에서 22%로 증가했습니다."
+              },
+              "kind": "changed"
+            },
+            {
+              "subject": {
+                "en": "",
+                "zh-cn": "",
+                "ja-jp": "",
+                "ko-kr": ""
+              },
+              "text": {
+                "en": "Upgrade Sword of Blossoming Dawn loses its basic attack damage penalty, Prom Queen cooldown increases, and Grandma's Chili Oil trades healing for damage.",
+                "zh-cn": "升级版黎明绽放之剑移除对英雄普攻只造成 50% 伤害的限制；舞会女王冷却提高；祖母的辣椒油伤害提高但治疗降低。",
+                "ja-jp": "「アップグレード版 ブロッサム ドーンブレード」は対チャンピオン通常攻撃ダメージ50%の制限が削除、「プロムクイーン」はクールダウン増加、「おばあちゃんのラー油」は回復量を下げてダメージ寄りに調整されました。",
+                "ko-kr": "업그레이드 새벽꽃 검의 챔피언 대상 기본 공격 피해량 50% 제한이 제거되고, 퀸카는 재사용 대기시간이 증가하며, 할머니의 고추기름은 회복량을 낮추는 대신 피해량이 조정됩니다."
+              },
+              "kind": "changed"
+            }
+          ]
+        },
+        {
+          "id": "general",
+          "title": "General Changes",
+          "changes": [
+            {
+              "subject": {
+                "en": "ARAM: Mayhem Focus",
+                "zh-cn": "ARAM: Mayhem Focus",
+                "ja-jp": "ARAM: Mayhem Focus",
+                "ko-kr": "ARAM: Mayhem Focus"
+              },
+              "text": {
+                "en": "Patch 26.9 is a small ARAM: Mayhem pass focused on time-based champion abilities, Health Relic team value, and a few augment balance updates.",
+                "zh-cn": "26.9 是一次小型海克斯大乱斗更新，重点调整时间型英雄技能、生命遗迹的团队回复价值，以及少量强化符文平衡。",
+                "ja-jp": "26.9は、時間経過に関わるチャンピオンスキル、生命の遺宝のチーム回復価値、一部オーグメントのバランスに焦点を当てた小規模なメイヘム更新です。",
+                "ko-kr": "26.9는 시간 기반 챔피언 스킬, 체력의 유물의 팀 회복 가치, 일부 증강 밸런스를 조정하는 소규모 아수라장 업데이트입니다."
+              },
+              "kind": "changed"
+            },
+            {
+              "subject": {
+                "en": "Health Relic Buff",
+                "zh-cn": "Health Relic Buff",
+                "ja-jp": "Health Relic Buff",
+                "ko-kr": "Health Relic Buff"
+              },
+              "text": {
+                "en": "Pickup restoration remains 8% missing Health/Mana, but the AoE effect now restores 22% missing Health and Mana instead of 16%.",
+                "zh-cn": "拾取回复维持已损失生命值/法力值的 8%，但范围效果回复从 16% 提高到 22%。",
+                "ja-jp": "取得時の回復量は減少体力/マナの8%で据え置きですが、範囲効果は16%から22%に増加しました。",
+                "ko-kr": "획득 시 회복량은 잃은 체력/마나의 8%로 유지되지만, 광역 효과는 16%에서 22%로 증가했습니다."
+              },
+              "kind": "changed"
+            }
+          ]
+        },
+        {
+          "id": "augments",
+          "title": "Augment Changes",
+          "changes": [
+            {
+              "subject": {
+                "en": "Upgrade Sword of Blossoming Dawn",
+                "zh-cn": "Upgrade Sword of Blossoming Dawn",
+                "ja-jp": "Upgrade Sword of Blossoming Dawn",
+                "ko-kr": "Upgrade Sword of Blossoming Dawn"
+              },
+              "text": {
+                "en": "• Removed: Basic attacks against champions now deal 50% damage.",
+                "zh-cn": "• Removed: Basic attacks against champions now deal 50% damage.",
+                "ja-jp": "• Removed: Basic attacks against champions now deal 50% damage.",
+                "ko-kr": "• Removed: Basic attacks against champions now deal 50% damage."
+              },
+              "kind": "nerfed"
+            },
+            {
+              "subject": {
+                "en": "Prom Queen",
+                "zh-cn": "Prom Queen",
+                "ja-jp": "プロムクイーン",
+                "ko-kr": "퀸카",
+                "zh-tw": "舞會皇后"
+              },
+              "text": {
+                "en": "• Cooldown: 25 seconds => 35 seconds.",
+                "zh-cn": "• Cooldown: 25 seconds => 35 seconds.",
+                "ja-jp": "• Cooldown: 25 seconds => 35 seconds.",
+                "ko-kr": "• Cooldown: 25 seconds => 35 seconds."
+              },
+              "kind": "changed"
+            },
+            {
+              "subject": {
+                "en": "Grandma's Chili Oil",
+                "zh-cn": "Grandma's Chili Oil",
+                "ja-jp": "おばあちゃんのラー油 grandma's chili oil",
+                "ko-kr": "할머니의 고추기름 grandma's chili oil",
+                "zh-tw": "阿嬤的辣油"
+              },
+              "text": {
+                "en": "• Base damage per second: 100 => 150.",
+                "zh-cn": "• Base damage per second: 100 => 150.",
+                "ja-jp": "• Base damage per second: 100 => 150.",
+                "ko-kr": "• Base damage per second: 100 => 150."
+              },
+              "kind": "changed"
+            },
+            {
+              "subject": {
+                "en": "Grandma's Chili Oil",
+                "zh-cn": "Grandma's Chili Oil",
+                "ja-jp": "おばあちゃんのラー油 grandma's chili oil",
+                "ko-kr": "할머니의 고추기름 grandma's chili oil",
+                "zh-tw": "阿嬤的辣油"
+              },
+              "text": {
+                "en": "• Bonus damage per burn source: 60 => 50.",
+                "zh-cn": "• Bonus damage per burn source: 60 => 50.",
+                "ja-jp": "• Bonus damage per burn source: 60 => 50.",
+                "ko-kr": "• Bonus damage per burn source: 60 => 50."
+              },
+              "kind": "changed"
+            },
+            {
+              "subject": {
+                "en": "Grandma's Chili Oil",
+                "zh-cn": "Grandma's Chili Oil",
+                "ja-jp": "おばあちゃんのラー油 grandma's chili oil",
+                "ko-kr": "할머니의 고추기름 grandma's chili oil",
+                "zh-tw": "阿嬤的辣油"
+              },
+              "text": {
+                "en": "• Base heal per second: 60 - 150 based on level => 30 - 75 based on level.",
+                "zh-cn": "• Base heal per second: 60 - 150 based on level => 30 - 75 based on level.",
+                "ja-jp": "• Base heal per second: 60 - 150 based on level => 30 - 75 based on level.",
+                "ko-kr": "• Base heal per second: 60 - 150 based on level => 30 - 75 based on level."
+              },
+              "kind": "changed"
+            },
+            {
+              "subject": {
+                "en": "Grandma's Chili Oil",
+                "zh-cn": "Grandma's Chili Oil",
+                "ja-jp": "おばあちゃんのラー油 grandma's chili oil",
+                "ko-kr": "할머니의 고추기름 grandma's chili oil",
+                "zh-tw": "阿嬤的辣油"
+              },
+              "text": {
+                "en": "• Bonus heal per burn source: 50 => 25.",
+                "zh-cn": "• Bonus heal per burn source: 50 => 25.",
+                "ja-jp": "• Bonus heal per burn source: 50 => 25.",
+                "ko-kr": "• Bonus heal per burn source: 50 => 25."
+              },
+              "kind": "changed"
+            }
+          ]
+        },
+        {
+          "id": "champions",
+          "title": "Champion Balance Changes",
+          "changes": [
+            {
+              "subject": {
+                "en": "Bard",
+                "zh-cn": "Bard",
+                "ja-jp": "Bard",
+                "ko-kr": "Bard"
+              },
+              "text": {
+                "en": "Caretaker's Shrine W Move Speed: 20 / 22.5 / 25 / 27.5 / 30% (+6% per 100 AP) => 25 / 27.5 / 30 / 32.5 / 35% (+7.5% per 100 AP)",
+                "zh-cn": "Caretaker's Shrine W Move Speed: 20 / 22.5 / 25 / 27.5 / 30% (+6% per 100 AP) => 25 / 27.5 / 30 / 32.5 / 35% (+7.5% per 100 AP)",
+                "ja-jp": "Caretaker's Shrine W Move Speed: 20 / 22.5 / 25 / 27.5 / 30% (+6% per 100 AP) => 25 / 27.5 / 30 / 32.5 / 35% (+7.5% per 100 AP)",
+                "ko-kr": "Caretaker's Shrine W Move Speed: 20 / 22.5 / 25 / 27.5 / 30% (+6% per 100 AP) => 25 / 27.5 / 30 / 32.5 / 35% (+7.5% per 100 AP)"
+              },
+              "kind": "changed",
+              "subjectSlug": "bard"
+            },
+            {
+              "subject": {
+                "en": "Bard",
+                "zh-cn": "Bard",
+                "ja-jp": "Bard",
+                "ko-kr": "Bard"
+              },
+              "text": {
+                "en": "Caretaker's Shrine W Ammo Cooldown: 10 seconds => 8 seconds",
+                "zh-cn": "Caretaker's Shrine W Ammo Cooldown: 10 seconds => 8 seconds",
+                "ja-jp": "Caretaker's Shrine W Ammo Cooldown: 10 seconds => 8 seconds",
+                "ko-kr": "Caretaker's Shrine W Ammo Cooldown: 10 seconds => 8 seconds"
+              },
+              "kind": "changed",
+              "subjectSlug": "bard"
+            },
+            {
+              "subject": {
+                "en": "Ornn",
+                "zh-cn": "Ornn",
+                "ja-jp": "Ornn",
+                "ko-kr": "Ornn"
+              },
+              "text": {
+                "en": "Living Forge P Cooldown: 120 seconds => 90 - 10 seconds based on level",
+                "zh-cn": "Living Forge P Cooldown: 120 seconds => 90 - 10 seconds based on level",
+                "ja-jp": "Living Forge P Cooldown: 120 seconds => 90 - 10 seconds based on level",
+                "ko-kr": "Living Forge P Cooldown: 120 seconds => 90 - 10 seconds based on level"
+              },
+              "kind": "changed",
+              "subjectSlug": "ornn"
+            }
+          ]
+        },
+        {
+          "id": "bugfixes",
+          "title": "Bug Fixes",
+          "changes": [
+            {
+              "subject": {
+                "en": "",
+                "zh-cn": "",
+                "ja-jp": "",
+                "ko-kr": ""
+              },
+              "text": {
+                "en": "Fixed a bug where Lightning Strikes granted 20% bonus attack speed instead of 20% total attack speed in Mayhem.",
+                "zh-cn": "Fixed a bug where Lightning Strikes granted 20% bonus attack speed instead of 20% total attack speed in Mayhem.",
+                "ja-jp": "Fixed a bug where Lightning Strikes granted 20% bonus attack speed instead of 20% total attack speed in Mayhem.",
+                "ko-kr": "Fixed a bug where Lightning Strikes granted 20% bonus attack speed instead of 20% total attack speed in Mayhem."
+              },
+              "kind": "changed"
+            },
+            {
+              "subject": {
+                "en": "",
+                "zh-cn": "",
+                "ja-jp": "",
+                "ko-kr": ""
+              },
+              "text": {
+                "en": "Fixed a bug where Kaenic Rookern and Opportunity did not benefit from Item Haste.",
+                "zh-cn": "Fixed a bug where Kaenic Rookern and Opportunity did not benefit from Item Haste.",
+                "ja-jp": "Fixed a bug where Kaenic Rookern and Opportunity did not benefit from Item Haste.",
+                "ko-kr": "Fixed a bug where Kaenic Rookern and Opportunity did not benefit from Item Haste."
+              },
+              "kind": "changed"
+            },
+            {
+              "subject": {
+                "en": "",
+                "zh-cn": "",
+                "ja-jp": "",
+                "ko-kr": ""
+              },
+              "text": {
+                "en": "Fixed a bug where Azir's mana costs appeared doubled with Overflow but were not actually increased in Mayhem ARAM.",
+                "zh-cn": "Fixed a bug where Azir's mana costs appeared doubled with Overflow but were not actually increased in Mayhem ARAM.",
+                "ja-jp": "Fixed a bug where Azir's mana costs appeared doubled with Overflow but were not actually increased in Mayhem ARAM.",
+                "ko-kr": "Fixed a bug where Azir's mana costs appeared doubled with Overflow but were not actually increased in Mayhem ARAM."
+              },
+              "kind": "buffed"
+            },
+            {
+              "subject": {
+                "en": "",
+                "zh-cn": "",
+                "ja-jp": "",
+                "ko-kr": ""
+              },
+              "text": {
+                "en": "Fixed a bug where Ekko stayed invisible after using Clown College followed by E in Mayhem ARAM.",
+                "zh-cn": "Fixed a bug where Ekko stayed invisible after using Clown College followed by E in Mayhem ARAM.",
+                "ja-jp": "Fixed a bug where Ekko stayed invisible after using Clown College followed by E in Mayhem ARAM.",
+                "ko-kr": "Fixed a bug where Ekko stayed invisible after using Clown College followed by E in Mayhem ARAM."
+              },
+              "kind": "changed"
+            },
+            {
+              "subject": {
+                "en": "",
+                "zh-cn": "",
+                "ja-jp": "",
+                "ko-kr": ""
+              },
+              "text": {
+                "en": "Fixed a bug where champions with recasts were charged for their recast spell with the augment Overflow.",
+                "zh-cn": "Fixed a bug where champions with recasts were charged for their recast spell with the augment Overflow.",
+                "ja-jp": "Fixed a bug where champions with recasts were charged for their recast spell with the augment Overflow.",
+                "ko-kr": "Fixed a bug where champions with recasts were charged for their recast spell with the augment Overflow."
+              },
+              "kind": "changed"
+            },
+            {
+              "subject": {
+                "en": "",
+                "zh-cn": "",
+                "ja-jp": "",
+                "ko-kr": ""
+              },
+              "text": {
+                "en": "Fixed a bug where selecting Buff Buddies before Ocean Soul caused Red Brambleback to become ineffective in Mayhem ARAM.",
+                "zh-cn": "Fixed a bug where selecting Buff Buddies before Ocean Soul caused Red Brambleback to become ineffective in Mayhem ARAM.",
+                "ja-jp": "Fixed a bug where selecting Buff Buddies before Ocean Soul caused Red Brambleback to become ineffective in Mayhem ARAM.",
+                "ko-kr": "Fixed a bug where selecting Buff Buddies before Ocean Soul caused Red Brambleback to become ineffective in Mayhem ARAM."
+              },
+              "kind": "changed"
+            },
+            {
+              "subject": {
+                "en": "",
+                "zh-cn": "",
+                "ja-jp": "",
+                "ko-kr": ""
+              },
+              "text": {
+                "en": "Fixed a bug where Taliyah T-posed after dying to Empowered by the Faithful's execution in Mayhem ARAM.",
+                "zh-cn": "Fixed a bug where Taliyah T-posed after dying to Empowered by the Faithful's execution in Mayhem ARAM.",
+                "ja-jp": "Fixed a bug where Taliyah T-posed after dying to Empowered by the Faithful's execution in Mayhem ARAM.",
+                "ko-kr": "Fixed a bug where Taliyah T-posed after dying to Empowered by the Faithful's execution in Mayhem ARAM."
+              },
+              "kind": "changed"
+            },
+            {
+              "subject": {
+                "en": "",
+                "zh-cn": "",
+                "ja-jp": "",
+                "ko-kr": ""
+              },
+              "text": {
+                "en": "Fixed a bug where some champions could not trigger the Marksmage effect with empowered attacks in Mayhem ARAM.",
+                "zh-cn": "Fixed a bug where some champions could not trigger the Marksmage effect with empowered attacks in Mayhem ARAM.",
+                "ja-jp": "Fixed a bug where some champions could not trigger the Marksmage effect with empowered attacks in Mayhem ARAM.",
+                "ko-kr": "Fixed a bug where some champions could not trigger the Marksmage effect with empowered attacks in Mayhem ARAM."
+              },
+              "kind": "changed"
+            },
+            {
+              "subject": {
+                "en": "",
+                "zh-cn": "",
+                "ja-jp": "",
+                "ko-kr": ""
+              },
+              "text": {
+                "en": "Fixed a bug where Vel'Koz's Q mana cost was not doubled after selecting Overflow in Hextech Mayhem ARAM.",
+                "zh-cn": "Fixed a bug where Vel'Koz's Q mana cost was not doubled after selecting Overflow in Hextech Mayhem ARAM.",
+                "ja-jp": "Fixed a bug where Vel'Koz's Q mana cost was not doubled after selecting Overflow in Hextech Mayhem ARAM.",
+                "ko-kr": "Fixed a bug where Vel'Koz's Q mana cost was not doubled after selecting Overflow in Hextech Mayhem ARAM."
+              },
+              "kind": "changed"
+            },
+            {
+              "subject": {
+                "en": "",
+                "zh-cn": "",
+                "ja-jp": "",
+                "ko-kr": ""
+              },
+              "text": {
+                "en": "Fixed a bug where Shaco's clone did not display a health bar or model at high Shrink Engine stacks in Mayhem ARAM.",
+                "zh-cn": "Fixed a bug where Shaco's clone did not display a health bar or model at high Shrink Engine stacks in Mayhem ARAM.",
+                "ja-jp": "Fixed a bug where Shaco's clone did not display a health bar or model at high Shrink Engine stacks in Mayhem ARAM.",
+                "ko-kr": "Fixed a bug where Shaco's clone did not display a health bar or model at high Shrink Engine stacks in Mayhem ARAM."
+              },
+              "kind": "changed"
+            },
+            {
+              "subject": {
+                "en": "",
+                "zh-cn": "",
+                "ja-jp": "",
+                "ko-kr": ""
+              },
+              "text": {
+                "en": "Fixed a bug where Empowered by the Faithful's effect was lost if revived by Zilean's R in Mayhem ARAM.",
+                "zh-cn": "Fixed a bug where Empowered by the Faithful's effect was lost if revived by Zilean's R in Mayhem ARAM.",
+                "ja-jp": "Fixed a bug where Empowered by the Faithful's effect was lost if revived by Zilean's R in Mayhem ARAM.",
+                "ko-kr": "Fixed a bug where Empowered by the Faithful's effect was lost if revived by Zilean's R in Mayhem ARAM."
+              },
+              "kind": "changed"
+            },
+            {
+              "subject": {
+                "en": "",
+                "zh-cn": "",
+                "ja-jp": "",
+                "ko-kr": ""
+              },
+              "text": {
+                "en": "Fixed a bug where Droppybara's actual damage range exceeded its indicator range.",
+                "zh-cn": "Fixed a bug where Droppybara's actual damage range exceeded its indicator range.",
+                "ja-jp": "Fixed a bug where Droppybara's actual damage range exceeded its indicator range.",
+                "ko-kr": "Fixed a bug where Droppybara's actual damage range exceeded its indicator range."
+              },
+              "kind": "changed"
+            },
+            {
+              "subject": {
+                "en": "",
+                "zh-cn": "",
+                "ja-jp": "",
+                "ko-kr": ""
+              },
+              "text": {
+                "en": "Fixed a bug where Xayah and Aphelios could continuously trigger ReEnergize without cooldown in Mayhem ARAM.",
+                "zh-cn": "Fixed a bug where Xayah and Aphelios could continuously trigger ReEnergize without cooldown in Mayhem ARAM.",
+                "ja-jp": "Fixed a bug where Xayah and Aphelios could continuously trigger ReEnergize without cooldown in Mayhem ARAM.",
+                "ko-kr": "Fixed a bug where Xayah and Aphelios could continuously trigger ReEnergize without cooldown in Mayhem ARAM."
+              },
+              "kind": "changed"
+            },
+            {
+              "subject": {
+                "en": "",
+                "zh-cn": "",
+                "ja-jp": "",
+                "ko-kr": ""
+              },
+              "text": {
+                "en": "Fixed a bug where selecting Hextech Biggest Snowball Ever followed by Hextech Pinball caused Pinball to lose its true damage in Mayhem.",
+                "zh-cn": "Fixed a bug where selecting Hextech Biggest Snowball Ever followed by Hextech Pinball caused Pinball to lose its true damage in Mayhem.",
+                "ja-jp": "Fixed a bug where selecting Hextech Biggest Snowball Ever followed by Hextech Pinball caused Pinball to lose its true damage in Mayhem.",
+                "ko-kr": "Fixed a bug where selecting Hextech Biggest Snowball Ever followed by Hextech Pinball caused Pinball to lose its true damage in Mayhem."
+              },
+              "kind": "changed"
+            },
+            {
+              "subject": {
+                "en": "",
+                "zh-cn": "",
+                "ja-jp": "",
+                "ko-kr": ""
+              },
+              "text": {
+                "en": "Fixed a bug where Neeko displayed Draw Your Sword VFX while disguised as a non-champion.",
+                "zh-cn": "Fixed a bug where Neeko displayed Draw Your Sword VFX while disguised as a non-champion.",
+                "ja-jp": "Fixed a bug where Neeko displayed Draw Your Sword VFX while disguised as a non-champion.",
+                "ko-kr": "Fixed a bug where Neeko displayed Draw Your Sword VFX while disguised as a non-champion."
+              },
+              "kind": "changed"
+            }
+          ]
+        }
+      ]
+    },
     {
       "version": "26.8",
       "title": "Patch 26.8 - ARAM Mayhem 26.8 - Movement Speed Nerfs, Item Cooldown Buffs, and 22 Fixes",
@@ -25,7 +520,7 @@
                 "ja-jp": "メイヘムのオーグメントが付与する自動効果や恒久効果による移動速度を引き続き下げ、戦闘への対応と視認性を改善しました。",
                 "ko-kr": "아수라장에서 증강이 고정적으로 제공하는 이동 속도를 계속 낮춰, 반응 시간을 늘리고 전투 가시성을 높였습니다."
               },
-              "kind": "nerfed"
+              "kind": "changed"
             },
             {
               "subject": {
@@ -40,7 +535,7 @@
                 "ja-jp": "イモータル シールドボウ、ソラリのロケット、マルモティウスの胃袋、プロトプラズム ハーネス、ランデュイン オーメン、シュレリアの戦歌、ステラックの篭手のクールダウンを短縮。",
                 "ko-kr": "불멸의 철갑궁, 강철의 솔라리 펜던트, 맬모셔스의 아귀, 원형질 안전벨트, 란두인의 예언, 슈렐리아의 군가, 스테락의 도전의 재사용 대기시간이 감소했습니다."
               },
-              "kind": "buffed"
+              "kind": "changed"
             },
             {
               "subject": {
@@ -55,7 +550,7 @@
                 "ja-jp": "メルの「反駁（W）」クールダウンが 35 / 32 / 29 / 26 / 23 から 45 / 44 / 43 / 42 / 41 に延長されました。",
                 "ko-kr": "멜의 W - 반박 재사용 대기시간이 35 / 32 / 29 / 26 / 23초에서 45 / 44 / 43 / 42 / 41초로 증가했습니다."
               },
-              "kind": "nerfed"
+              "kind": "changed"
             },
             {
               "subject": {
@@ -106,7 +601,7 @@
                 "ja-jp": "イモータル シールドボウ 75秒 ⇒ 60秒、ソラリのロケット 90秒 ⇒ 75秒、マルモティウスの胃袋 75秒 ⇒ 60秒、プロトプラズム ハーネス 90秒 ⇒ 60秒、ランデュイン オーメン 90秒 ⇒ 60秒、シュレリアの戦歌 75秒 ⇒ 60秒、ステラックの篭手 75秒 ⇒ 60秒。",
                 "ko-kr": "불멸의 철갑궁 75초 ⇒ 60초, 강철의 솔라리 펜던트 90초 ⇒ 75초, 맬모셔스의 아귀 75초 ⇒ 60초, 원형질 안전벨트 90초 ⇒ 60초, 란두인의 예언 90초 ⇒ 60초, 슈렐리아의 군가 75초 ⇒ 60초, 스테락의 도전 75초 ⇒ 60초."
               },
-              "kind": "buffed"
+              "kind": "nerfed"
             }
           ]
         },
@@ -132,7 +627,7 @@
             {
               "subject": {
                 "en": "Giant Slayer",
-                "zh-cn": "巨人杀手",
+                "zh-cn": "Giant Slayer",
                 "ja-jp": "ジャイアント スレイヤー",
                 "ko-kr": "거인 학살자",
                 "zh-tw": "巨人殺手"
@@ -179,7 +674,7 @@
             {
               "subject": {
                 "en": "Homeguard",
-                "zh-cn": "家园卫士",
+                "zh-cn": "Homeguard",
                 "ja-jp": "ホームガード",
                 "ko-kr": "민병대",
                 "zh-tw": "守護家園"
@@ -190,12 +685,12 @@
                 "ja-jp": "• Time to regain bonus movespeed after taking damage: 3 ⇒ 6 seconds",
                 "ko-kr": "• Time to regain bonus movespeed after taking damage: 3 ⇒ 6 seconds"
               },
-              "kind": "nerfed"
+              "kind": "buffed"
             },
             {
               "subject": {
                 "en": "Quantum Computing",
-                "zh-cn": "量子计算",
+                "zh-cn": "Quantum Computing",
                 "ja-jp": "量子演算",
                 "ko-kr": "양자 연산",
                 "zh-tw": "量子計算"
@@ -211,7 +706,7 @@
             {
               "subject": {
                 "en": "Quantum Computing",
-                "zh-cn": "量子计算",
+                "zh-cn": "Quantum Computing",
                 "ja-jp": "量子演算",
                 "ko-kr": "양자 연산",
                 "zh-tw": "量子計算"
@@ -227,7 +722,7 @@
             {
               "subject": {
                 "en": "Quantum Computing",
-                "zh-cn": "量子计算",
+                "zh-cn": "Quantum Computing",
                 "ja-jp": "量子演算",
                 "ko-kr": "양자 연산",
                 "zh-tw": "量子計算"
@@ -243,7 +738,7 @@
             {
               "subject": {
                 "en": "Red Envelopes",
-                "zh-cn": "红包",
+                "zh-cn": "Red Envelopes",
                 "ja-jp": "紅いお年玉袋",
                 "ko-kr": "붉은 봉투",
                 "zh-tw": "紅包"
@@ -259,7 +754,7 @@
             {
               "subject": {
                 "en": "Red Envelopes",
-                "zh-cn": "红包",
+                "zh-cn": "Red Envelopes",
                 "ja-jp": "紅いお年玉袋",
                 "ko-kr": "붉은 봉투",
                 "zh-tw": "紅包"
@@ -275,7 +770,7 @@
             {
               "subject": {
                 "en": "With Haste",
-                "zh-cn": "急急小子",
+                "zh-cn": "With Haste",
                 "ja-jp": "大急ぎ",
                 "ko-kr": "속행",
                 "zh-tw": "腳程加速"
@@ -291,7 +786,7 @@
             {
               "subject": {
                 "en": "With Haste",
-                "zh-cn": "急急小子",
+                "zh-cn": "With Haste",
                 "ja-jp": "大急ぎ",
                 "ko-kr": "속행",
                 "zh-tw": "腳程加速"
@@ -375,7 +870,7 @@
                 "ja-jp": "Fixed a bug that caused Karma’s R cooldown to be reduced by the Firefox augment.",
                 "ko-kr": "Fixed a bug that caused Karma’s R cooldown to be reduced by the Firefox augment."
               },
-              "kind": "changed"
+              "kind": "nerfed"
             },
             {
               "subject": {
@@ -405,7 +900,7 @@
                 "ja-jp": "Fixed a bug where Marksmage Hextech did not trigger additional damage when purchasing Ability Power items on Aphelios in Mayhem ARAM.",
                 "ko-kr": "Fixed a bug where Marksmage Hextech did not trigger additional damage when purchasing Ability Power items on Aphelios in Mayhem ARAM."
               },
-              "kind": "changed"
+              "kind": "buffed"
             },
             {
               "subject": {
@@ -420,7 +915,7 @@
                 "ja-jp": "Fixed a bug where Graves dealt higher than intended damage with Marksmage in Mayhem ARAM.",
                 "ko-kr": "Fixed a bug where Graves dealt higher than intended damage with Marksmage in Mayhem ARAM."
               },
-              "kind": "nerfed"
+              "kind": "changed"
             },
             {
               "subject": {
@@ -435,7 +930,7 @@
                 "ja-jp": "Fixed a bug that caused Illaoi’s E clone to gain the effects of the Final Form.",
                 "ko-kr": "Fixed a bug that caused Illaoi’s E clone to gain the effects of the Final Form."
               },
-              "kind": "nerfed"
+              "kind": "changed"
             },
             {
               "subject": {
@@ -450,7 +945,7 @@
                 "ja-jp": "Fixed a bug where Quantum Computing was doing more than double damage on the inside circle.",
                 "ko-kr": "Fixed a bug where Quantum Computing was doing more than double damage on the inside circle."
               },
-              "kind": "nerfed"
+              "kind": "changed"
             },
             {
               "subject": {
@@ -465,7 +960,7 @@
                 "ja-jp": "Fixed a bug where Infernal Conduit dealt higher than intended base damage and scaling in Mayhem.",
                 "ko-kr": "Fixed a bug where Infernal Conduit dealt higher than intended base damage and scaling in Mayhem."
               },
-              "kind": "nerfed"
+              "kind": "changed"
             },
             {
               "subject": {
@@ -540,7 +1035,7 @@
                 "ja-jp": "Fixed a bug where Devil on Your Shoulder did not apply to all target-sourced damage over time effects in Mayhem.",
                 "ko-kr": "Fixed a bug where Devil on Your Shoulder did not apply to all target-sourced damage over time effects in Mayhem."
               },
-              "kind": "buffed"
+              "kind": "changed"
             },
             {
               "subject": {
@@ -570,7 +1065,7 @@
                 "ja-jp": "Fixed a bug where Kai’Sa could not evolve her W after gaining Ability Power from Stat Anvil in Mayhem ARAM.",
                 "ko-kr": "Fixed a bug where Kai’Sa could not evolve her W after gaining Ability Power from Stat Anvil in Mayhem ARAM."
               },
-              "kind": "buffed"
+              "kind": "changed"
             },
             {
               "subject": {
@@ -585,7 +1080,7 @@
                 "ja-jp": "Fixed a bug where Fan the Hammer dealt less of its displayed damage in Mayhem ARAM.",
                 "ko-kr": "Fixed a bug where Fan the Hammer dealt less of its displayed damage in Mayhem ARAM."
               },
-              "kind": "buffed"
+              "kind": "changed"
             },
             {
               "subject": {
@@ -615,7 +1110,7 @@
                 "ja-jp": "Fixed a bug where selecting Biggest Snowball Ever followed by Pinball caused Pinball to lose its true damage in Mayhem ARAM.",
                 "ko-kr": "Fixed a bug where selecting Biggest Snowball Ever followed by Pinball caused Pinball to lose its true damage in Mayhem ARAM."
               },
-              "kind": "nerfed"
+              "kind": "changed"
             },
             {
               "subject": {
@@ -630,7 +1125,7 @@
                 "ja-jp": "Fixed a bug where Void Immolation’s Immolate effect could stop working shortly after activation in Mayhem.",
                 "ko-kr": "Fixed a bug where Void Immolation’s Immolate effect could stop working shortly after activation in Mayhem."
               },
-              "kind": "nerfed"
+              "kind": "changed"
             },
             {
               "subject": {
@@ -703,7 +1198,7 @@
                 "ja-jp": "Poro Blaster now only knocks back once at 5 poros, poro respawns drop from 5 seconds to 3.5 seconds, and Void Rift gains a 0.75 second per-target cooldown.",
                 "ko-kr": "Poro Blaster now only knocks back once at 5 poros, poro respawns drop from 5 seconds to 3.5 seconds, and Void Rift gains a 0.75 second per-target cooldown."
               },
-              "kind": "nerfed"
+              "kind": "changed"
             },
             {
               "subject": {
@@ -718,7 +1213,7 @@
                 "ja-jp": "Shyvana's Fury Generation doubles from 1.25 to 2.5, and 52 Mayhem bug fixes clean up augments, shop flows, and champion interactions.",
                 "ko-kr": "Shyvana's Fury Generation doubles from 1.25 to 2.5, and 52 Mayhem bug fixes clean up augments, shop flows, and champion interactions."
               },
-              "kind": "buffed"
+              "kind": "changed"
             }
           ]
         },
@@ -889,7 +1384,7 @@
                 "ja-jp": "New Item, Party Favor, is in the shop. Using it starts or joins a dance party. The more the merrier!",
                 "ko-kr": "New Item, Party Favor, is in the shop. Using it starts or joins a dance party. The more the merrier!"
               },
-              "kind": "buffed"
+              "kind": "changed"
             },
             {
               "subject": {
@@ -904,7 +1399,7 @@
                 "ja-jp": "New Item, Custom Healthbars, is in the shop. Purchase automatically changes the color of the buyers healthbar to the corresponding color.",
                 "ko-kr": "New Item, Custom Healthbars, is in the shop. Purchase automatically changes the color of the buyers healthbar to the corresponding color."
               },
-              "kind": "buffed"
+              "kind": "changed"
             },
             {
               "subject": {
@@ -919,7 +1414,7 @@
                 "ja-jp": "All champion abilities that directly interact with stats (Yasuo Q Cooldown, Kai'sa Evolutions) now scale with stat anvils in Mayhem.",
                 "ko-kr": "All champion abilities that directly interact with stats (Yasuo Q Cooldown, Kai'sa Evolutions) now scale with stat anvils in Mayhem."
               },
-              "kind": "buffed"
+              "kind": "changed"
             },
             {
               "subject": {
@@ -934,7 +1429,7 @@
                 "ja-jp": "Vampirism is no longer offered if you have Warmog's Armor.",
                 "ko-kr": "Vampirism is no longer offered if you have Warmog's Armor."
               },
-              "kind": "changed"
+              "kind": "nerfed"
             },
             {
               "subject": {
@@ -949,7 +1444,7 @@
                 "ja-jp": "Draw Your Sword is no longer offered if you have Runaan's Hurricane.",
                 "ko-kr": "Draw Your Sword is no longer offered if you have Runaan's Hurricane."
               },
-              "kind": "changed"
+              "kind": "nerfed"
             },
             {
               "subject": {
@@ -964,7 +1459,7 @@
                 "ja-jp": "Kayn no longer loses the ability to shop after choosing a form.",
                 "ko-kr": "Kayn no longer loses the ability to shop after choosing a form."
               },
-              "kind": "changed"
+              "kind": "nerfed"
             },
             {
               "subject": {
@@ -979,7 +1474,7 @@
                 "ja-jp": "Yuumi no longer loses the ability to shop after attaching to an ally.",
                 "ko-kr": "Yuumi no longer loses the ability to shop after attaching to an ally."
               },
-              "kind": "changed"
+              "kind": "nerfed"
             },
             {
               "subject": {
@@ -994,7 +1489,7 @@
                 "ja-jp": "Dropkick no longer overrides a champion's execute indicator if they have one.",
                 "ko-kr": "Dropkick no longer overrides a champion's execute indicator if they have one."
               },
-              "kind": "changed"
+              "kind": "nerfed"
             },
             {
               "subject": {
@@ -1009,7 +1504,7 @@
                 "ja-jp": "Little Legends no longer display an icon on the minimap.",
                 "ko-kr": "Little Legends no longer display an icon on the minimap."
               },
-              "kind": "changed"
+              "kind": "nerfed"
             }
           ]
         },
@@ -1056,7 +1551,7 @@
             {
               "subject": {
                 "en": "Poro Blaster",
-                "zh-cn": "魄罗爆破手",
+                "zh-cn": "Poro Blaster",
                 "ja-jp": "ポロブラスター",
                 "ko-kr": "포로 발사기"
               },
@@ -1066,12 +1561,12 @@
                 "ja-jp": "• Knocks back enemies once only when you have 5 poros.",
                 "ko-kr": "• Knocks back enemies once only when you have 5 poros."
               },
-              "kind": "buffed"
+              "kind": "changed"
             },
             {
               "subject": {
                 "en": "Poro Blaster",
-                "zh-cn": "魄罗爆破手",
+                "zh-cn": "Poro Blaster",
                 "ja-jp": "ポロブラスター",
                 "ko-kr": "포로 발사기"
               },
@@ -1081,12 +1576,12 @@
                 "ja-jp": "• Poro respawn time: 5s ⇒ 3.5s",
                 "ko-kr": "• Poro respawn time: 5s ⇒ 3.5s"
               },
-              "kind": "buffed"
+              "kind": "nerfed"
             },
             {
               "subject": {
                 "en": "Void Rift",
-                "zh-cn": "虚空裂隙",
+                "zh-cn": "Void Rift",
                 "ja-jp": "ヴォイドの裂谷",
                 "ko-kr": "공허 균열",
                 "zh-tw": "虛空裂縫"
@@ -1097,7 +1592,7 @@
                 "ja-jp": "• Added 0.75 second cooldown per target.",
                 "ko-kr": "• Added 0.75 second cooldown per target."
               },
-              "kind": "nerfed"
+              "kind": "changed"
             }
           ]
         },
@@ -1155,7 +1650,7 @@
                 "ja-jp": "Fixed a bug where Shyvana lost fury on death with Final City Transit.",
                 "ko-kr": "Fixed a bug where Shyvana lost fury on death with Final City Transit."
               },
-              "kind": "buffed"
+              "kind": "changed"
             },
             {
               "subject": {
@@ -1380,7 +1875,7 @@
                 "ja-jp": "Fixed a bug where Taliyah with Rabble Rousing could spam R to heal.",
                 "ko-kr": "Fixed a bug where Taliyah with Rabble Rousing could spam R to heal."
               },
-              "kind": "nerfed"
+              "kind": "changed"
             },
             {
               "subject": {
@@ -1440,7 +1935,7 @@
                 "ja-jp": "Fixed a bug where Heimerdinger could trigger It's Killing Time by simply toggling R.",
                 "ko-kr": "Fixed a bug where Heimerdinger could trigger It's Killing Time by simply toggling R."
               },
-              "kind": "nerfed"
+              "kind": "changed"
             },
             {
               "subject": {
@@ -1455,7 +1950,7 @@
                 "ja-jp": "Fixed a bug where Tahm Kench with It's Killing Time would fail to cast R but still trigger the rune.",
                 "ko-kr": "Fixed a bug where Tahm Kench with It's Killing Time would fail to cast R but still trigger the rune."
               },
-              "kind": "nerfed"
+              "kind": "changed"
             },
             {
               "subject": {
@@ -1635,7 +2130,7 @@
                 "ja-jp": "Fixed a bug where the actual cooldown of Ultimate Awakening was 35 seconds instead of the described 20 seconds.",
                 "ko-kr": "Fixed a bug where the actual cooldown of Ultimate Awakening was 35 seconds instead of the described 20 seconds."
               },
-              "kind": "nerfed"
+              "kind": "changed"
             },
             {
               "subject": {
@@ -1695,7 +2190,7 @@
                 "ja-jp": "Fixed a bug where Restless Restoration would restore excessive health when first selected.",
                 "ko-kr": "Fixed a bug where Restless Restoration would restore excessive health when first selected."
               },
-              "kind": "nerfed"
+              "kind": "changed"
             },
             {
               "subject": {
@@ -1785,7 +2280,7 @@
                 "ja-jp": "Fixed a bug where Prom Queen could charm nearby champions and minions on death.",
                 "ko-kr": "Fixed a bug where Prom Queen could charm nearby champions and minions on death."
               },
-              "kind": "nerfed"
+              "kind": "changed"
             },
             {
               "subject": {
@@ -1905,7 +2400,7 @@
                 "ja-jp": "Fixed a bug where Hand of Baron's VFX were not removed while dead.",
                 "ko-kr": "Fixed a bug where Hand of Baron's VFX were not removed while dead."
               },
-              "kind": "changed"
+              "kind": "nerfed"
             }
           ]
         }
@@ -1933,7 +2428,7 @@
                 "ja-jp": "Multiple tank/melee champions buffed: Illaoi, Sett, Shyvana, Sion, Swain, Urgot, and Vladimir had damage taken modifiers reduced or removed.",
                 "ko-kr": "Multiple tank/melee champions buffed: Illaoi, Sett, Shyvana, Sion, Swain, Urgot, and Vladimir had damage taken modifiers reduced or removed."
               },
-              "kind": "buffed"
+              "kind": "nerfed"
             },
             {
               "subject": {
@@ -1948,7 +2443,7 @@
                 "ja-jp": "Movement speed augments tuned down: Fire Fox, Sonata, Speed Demon, and Ice Cold nerfed to reduce frustrating mobility against melee champions.",
                 "ko-kr": "Movement speed augments tuned down: Fire Fox, Sonata, Speed Demon, and Ice Cold nerfed to reduce frustrating mobility against melee champions."
               },
-              "kind": "nerfed"
+              "kind": "changed"
             },
             {
               "subject": {
@@ -1999,7 +2494,7 @@
                 "ja-jp": "Red Envelopes no longer appear on the Minimap for either team.",
                 "ko-kr": "Red Envelopes no longer appear on the Minimap for either team."
               },
-              "kind": "changed"
+              "kind": "nerfed"
             },
             {
               "subject": {
@@ -2029,7 +2524,7 @@
                 "ja-jp": "Vampirism and Perseverance are now mutually exclusive and are no longer offered when you possess one or the other.",
                 "ko-kr": "Vampirism and Perseverance are now mutually exclusive and are no longer offered when you possess one or the other."
               },
-              "kind": "changed"
+              "kind": "nerfed"
             },
             {
               "subject": {
@@ -2059,7 +2554,7 @@
                 "ja-jp": "Champion Summons such as Naafiri's Packmates no longer display a chat message when they have a large amount of Hats.",
                 "ko-kr": "Champion Summons such as Naafiri's Packmates no longer display a chat message when they have a large amount of Hats."
               },
-              "kind": "changed"
+              "kind": "nerfed"
             },
             {
               "subject": {
@@ -2085,7 +2580,7 @@
             {
               "subject": {
                 "en": "Droppybara",
-                "zh-cn": "卡皮巴拉空投",
+                "zh-cn": "Droppybara",
                 "ja-jp": "ドロッピバラ",
                 "ko-kr": "카피바라 폭격"
               },
@@ -2100,7 +2595,7 @@
             {
               "subject": {
                 "en": "Droppybara",
-                "zh-cn": "卡皮巴拉空投",
+                "zh-cn": "Droppybara",
                 "ja-jp": "ドロッピバラ",
                 "ko-kr": "카피바라 폭격"
               },
@@ -2115,7 +2610,7 @@
             {
               "subject": {
                 "en": "Droppybara",
-                "zh-cn": "卡皮巴拉空投",
+                "zh-cn": "Droppybara",
                 "ja-jp": "ドロッピバラ",
                 "ko-kr": "카피바라 폭격"
               },
@@ -2130,7 +2625,7 @@
             {
               "subject": {
                 "en": "Dual Wield",
-                "zh-cn": "双刀流",
+                "zh-cn": "Dual Wield",
                 "ja-jp": "二刀流",
                 "ko-kr": "양손잡이",
                 "zh-tw": "雙刀流"
@@ -2161,7 +2656,7 @@
             {
               "subject": {
                 "en": "Ice Cold",
-                "zh-cn": "冰寒",
+                "zh-cn": "Ice Cold",
                 "ja-jp": "結氷",
                 "ko-kr": "차가운 냉기",
                 "zh-tw": "雪地踱步"
@@ -2177,7 +2672,7 @@
             {
               "subject": {
                 "en": "Juiced",
-                "zh-cn": "注魔",
+                "zh-cn": "Juiced",
                 "ja-jp": "パワーアップ",
                 "ko-kr": "도취",
                 "zh-tw": "強化攻擊"
@@ -2193,7 +2688,7 @@
             {
               "subject": {
                 "en": "Juiced",
-                "zh-cn": "注魔",
+                "zh-cn": "Juiced",
                 "ja-jp": "パワーアップ",
                 "ko-kr": "도취",
                 "zh-tw": "強化攻擊"
@@ -2204,12 +2699,12 @@
                 "ja-jp": "• Now only affects Champions",
                 "ko-kr": "• Now only affects Champions"
               },
-              "kind": "nerfed"
+              "kind": "changed"
             },
             {
               "subject": {
                 "en": "Prom Queen",
-                "zh-cn": "舞会女王",
+                "zh-cn": "Prom Queen",
                 "ja-jp": "プロムクイーン",
                 "ko-kr": "퀸카",
                 "zh-tw": "舞會皇后"
@@ -2225,7 +2720,7 @@
             {
               "subject": {
                 "en": "Sonata",
-                "zh-cn": "咏叹奏鸣",
+                "zh-cn": "Sonata",
                 "ja-jp": "ソナタ",
                 "ko-kr": "소나타",
                 "zh-tw": "奏鳴曲"
@@ -2241,7 +2736,7 @@
             {
               "subject": {
                 "en": "Sonata",
-                "zh-cn": "咏叹奏鸣",
+                "zh-cn": "Sonata",
                 "ja-jp": "ソナタ",
                 "ko-kr": "소나타",
                 "zh-tw": "奏鳴曲"
@@ -2257,7 +2752,7 @@
             {
               "subject": {
                 "en": "Speed Demon",
-                "zh-cn": "速度恶魔",
+                "zh-cn": "Speed Demon",
                 "ja-jp": "悪魔のごとき脚速",
                 "ko-kr": "질주하는 악마",
                 "zh-tw": "極限衝鋒"
@@ -2268,12 +2763,12 @@
                 "ja-jp": "• Decay Time: 1 ⇒ 0.75 seconds",
                 "ko-kr": "• Decay Time: 1 ⇒ 0.75 seconds"
               },
-              "kind": "buffed"
+              "kind": "nerfed"
             },
             {
               "subject": {
                 "en": "Stuck In Here With Me",
-                "zh-cn": "和我一起困在这里",
+                "zh-cn": "Stuck In Here With Me",
                 "ja-jp": "一緒に閉じ込められた",
                 "ko-kr": "도망갈 수 없어",
                 "zh-tw": "隨我同困"
@@ -2289,7 +2784,7 @@
             {
               "subject": {
                 "en": "Triggered Inferno",
-                "zh-cn": "扳机炼狱",
+                "zh-cn": "Triggered Inferno",
                 "ja-jp": "巻き起こるインフェルノ",
                 "ko-kr": "지옥불 난사 발동"
               },
@@ -2304,7 +2799,7 @@
             {
               "subject": {
                 "en": "Triggered Inferno",
-                "zh-cn": "扳机炼狱",
+                "zh-cn": "Triggered Inferno",
                 "ja-jp": "巻き起こるインフェルノ",
                 "ko-kr": "지옥불 난사 발동"
               },
@@ -2359,7 +2854,7 @@
                 "ja-jp": "• Level 2: Drops 6 coins",
                 "ko-kr": "• Level 2: Drops 6 coins"
               },
-              "kind": "buffed"
+              "kind": "changed"
             },
             {
               "subject": {
@@ -2374,7 +2869,7 @@
                 "ja-jp": "• Level 3: Drops 12 coins",
                 "ko-kr": "• Level 3: Drops 12 coins"
               },
-              "kind": "buffed"
+              "kind": "changed"
             },
             {
               "subject": {
@@ -2389,7 +2884,7 @@
                 "ja-jp": "• Dropped Coins each grant 5 gold and can only be picked up by the Augment holder and allied champions",
                 "ko-kr": "• Dropped Coins each grant 5 gold and can only be picked up by the Augment holder and allied champions"
               },
-              "kind": "buffed"
+              "kind": "changed"
             }
           ]
         },
@@ -2406,11 +2901,11 @@
               },
               "text": {
                 "en": "Defense: Damage Taken: 105% ⇒ 100%",
-                "zh-cn": "防御: Damage Taken: 105% ⇒ 100%",
+                "zh-cn": "Defense: Damage Taken: 105% ⇒ 100%",
                 "ja-jp": "Defense: Damage Taken: 105% ⇒ 100%",
                 "ko-kr": "Defense: Damage Taken: 105% ⇒ 100%"
               },
-              "kind": "buffed",
+              "kind": "nerfed",
               "subjectSlug": "illaoi"
             },
             {
@@ -2422,7 +2917,7 @@
               },
               "text": {
                 "en": "Healing: Healing: 80% ⇒ 90%",
-                "zh-cn": "治疗: Healing: 80% ⇒ 90%",
+                "zh-cn": "Healing: Healing: 80% ⇒ 90%",
                 "ja-jp": "Healing: Healing: 80% ⇒ 90%",
                 "ko-kr": "Healing: Healing: 80% ⇒ 90%"
               },
@@ -2438,11 +2933,11 @@
               },
               "text": {
                 "en": "Defense: Damage Taken: 110% ⇒ 100%",
-                "zh-cn": "防御: Damage Taken: 110% ⇒ 100%",
+                "zh-cn": "Defense: Damage Taken: 110% ⇒ 100%",
                 "ja-jp": "Defense: Damage Taken: 110% ⇒ 100%",
                 "ko-kr": "Defense: Damage Taken: 110% ⇒ 100%"
               },
-              "kind": "buffed",
+              "kind": "nerfed",
               "subjectSlug": "sett"
             },
             {
@@ -2454,11 +2949,11 @@
               },
               "text": {
                 "en": "Defense: Damage Taken: 105% ⇒ 100%",
-                "zh-cn": "防御: Damage Taken: 105% ⇒ 100%",
+                "zh-cn": "Defense: Damage Taken: 105% ⇒ 100%",
                 "ja-jp": "Defense: Damage Taken: 105% ⇒ 100%",
                 "ko-kr": "Defense: Damage Taken: 105% ⇒ 100%"
               },
-              "kind": "buffed",
+              "kind": "nerfed",
               "subjectSlug": "shyvana"
             },
             {
@@ -2470,11 +2965,11 @@
               },
               "text": {
                 "en": "Defense: Damage Taken: 110% ⇒ 100%",
-                "zh-cn": "防御: Damage Taken: 110% ⇒ 100%",
+                "zh-cn": "Defense: Damage Taken: 110% ⇒ 100%",
                 "ja-jp": "Defense: Damage Taken: 110% ⇒ 100%",
                 "ko-kr": "Defense: Damage Taken: 110% ⇒ 100%"
               },
-              "kind": "buffed",
+              "kind": "nerfed",
               "subjectSlug": "sion"
             },
             {
@@ -2486,11 +2981,11 @@
               },
               "text": {
                 "en": "Defense: Damage Taken: 115% ⇒ 105%",
-                "zh-cn": "防御: Damage Taken: 115% ⇒ 105%",
+                "zh-cn": "Defense: Damage Taken: 115% ⇒ 105%",
                 "ja-jp": "Defense: Damage Taken: 115% ⇒ 105%",
                 "ko-kr": "Defense: Damage Taken: 115% ⇒ 105%"
               },
-              "kind": "buffed",
+              "kind": "nerfed",
               "subjectSlug": "swain"
             },
             {
@@ -2502,7 +2997,7 @@
               },
               "text": {
                 "en": "Healing: Healing: 80% ⇒ 90%",
-                "zh-cn": "治疗: Healing: 80% ⇒ 90%",
+                "zh-cn": "Healing: Healing: 80% ⇒ 90%",
                 "ja-jp": "Healing: Healing: 80% ⇒ 90%",
                 "ko-kr": "Healing: Healing: 80% ⇒ 90%"
               },
@@ -2518,7 +3013,7 @@
               },
               "text": {
                 "en": "Offense: Damage Dealt: 95% ⇒ 100%",
-                "zh-cn": "进攻: Damage Dealt: 95% ⇒ 100%",
+                "zh-cn": "Offense: Damage Dealt: 95% ⇒ 100%",
                 "ja-jp": "Offense: Damage Dealt: 95% ⇒ 100%",
                 "ko-kr": "Offense: Damage Dealt: 95% ⇒ 100%"
               },
@@ -2534,11 +3029,11 @@
               },
               "text": {
                 "en": "Defense: Damage Taken: 105% ⇒ 100%",
-                "zh-cn": "防御: Damage Taken: 105% ⇒ 100%",
+                "zh-cn": "Defense: Damage Taken: 105% ⇒ 100%",
                 "ja-jp": "Defense: Damage Taken: 105% ⇒ 100%",
                 "ko-kr": "Defense: Damage Taken: 105% ⇒ 100%"
               },
-              "kind": "buffed",
+              "kind": "nerfed",
               "subjectSlug": "urgot"
             },
             {
@@ -2550,11 +3045,11 @@
               },
               "text": {
                 "en": "Defense: Damage Taken: 105% ⇒ 100%",
-                "zh-cn": "防御: Damage Taken: 105% ⇒ 100%",
+                "zh-cn": "Defense: Damage Taken: 105% ⇒ 100%",
                 "ja-jp": "Defense: Damage Taken: 105% ⇒ 100%",
                 "ko-kr": "Defense: Damage Taken: 105% ⇒ 100%"
               },
-              "kind": "buffed",
+              "kind": "nerfed",
               "subjectSlug": "vladimir"
             },
             {
@@ -2566,7 +3061,7 @@
               },
               "text": {
                 "en": "Healing: Healing: 90% ⇒ 100%",
-                "zh-cn": "治疗: Healing: 90% ⇒ 100%",
+                "zh-cn": "Healing: Healing: 90% ⇒ 100%",
                 "ja-jp": "Healing: Healing: 90% ⇒ 100%",
                 "ko-kr": "Healing: Healing: 90% ⇒ 100%"
               },
@@ -2582,7 +3077,7 @@
               },
               "text": {
                 "en": "Offense: Damage Dealt: 95% ⇒ 100%",
-                "zh-cn": "进攻: Damage Dealt: 95% ⇒ 100%",
+                "zh-cn": "Offense: Damage Dealt: 95% ⇒ 100%",
                 "ja-jp": "Offense: Damage Dealt: 95% ⇒ 100%",
                 "ko-kr": "Offense: Damage Dealt: 95% ⇒ 100%"
               },
@@ -2848,7 +3343,7 @@
                 "ja-jp": "Fixed a bug where players could no longer purchase items after taking lethal damage if a Stat Anvil selection was in progress.",
                 "ko-kr": "Fixed a bug where players could no longer purchase items after taking lethal damage if a Stat Anvil selection was in progress."
               },
-              "kind": "changed"
+              "kind": "nerfed"
             },
             {
               "subject": {
@@ -2863,7 +3358,7 @@
                 "ja-jp": "Fixed a bug where players no longer could purchase items during Stat Anvil selection after recalling with the Cheating Augment.",
                 "ko-kr": "Fixed a bug where players no longer could purchase items during Stat Anvil selection after recalling with the Cheating Augment."
               },
-              "kind": "changed"
+              "kind": "nerfed"
             },
             {
               "subject": {
@@ -2908,7 +3403,7 @@
                 "ja-jp": "Fixed a bug where Karthus' Overflow mana consumption would return to normal after revival instead of maintaining the increased cost.",
                 "ko-kr": "Fixed a bug where Karthus' Overflow mana consumption would return to normal after revival instead of maintaining the increased cost."
               },
-              "kind": "changed"
+              "kind": "buffed"
             },
             {
               "subject": {
@@ -3559,7 +4054,7 @@
             {
               "subject": {
                 "en": "Upgrade Immolate",
-                "zh-cn": "升级：献祭",
+                "zh-cn": "Upgrade Immolate",
                 "ja-jp": "猛火 アップグレード",
                 "ko-kr": "불사르기 업그레이드",
                 "zh-tw": "升級獻祭"
@@ -3575,7 +4070,7 @@
             {
               "subject": {
                 "en": "Slow Cooker",
-                "zh-cn": "慢炖",
+                "zh-cn": "Slow Cooker",
                 "ja-jp": "スロウクッカー",
                 "ko-kr": "찜솥",
                 "zh-tw": "細煮慢燉"
@@ -3591,7 +4086,7 @@
             {
               "subject": {
                 "en": "Slow Cooker",
-                "zh-cn": "慢炖",
+                "zh-cn": "Slow Cooker",
                 "ja-jp": "スロウクッカー",
                 "ko-kr": "찜솥",
                 "zh-tw": "細煮慢燉"
@@ -3607,7 +4102,7 @@
             {
               "subject": {
                 "en": "Celestial Body",
-                "zh-cn": "星界躯体",
+                "zh-cn": "Celestial Body",
                 "ja-jp": "聖体",
                 "ko-kr": "천상의 신체",
                 "zh-tw": "天界之身"
@@ -3623,7 +4118,7 @@
             {
               "subject": {
                 "en": "Guilty Pleasure",
-                "zh-cn": "恶趣味",
+                "zh-cn": "Guilty Pleasure",
                 "ja-jp": "罪なる喜び",
                 "ko-kr": "죄책감의 쾌락",
                 "zh-tw": "惡趣味"
@@ -3639,7 +4134,7 @@
             {
               "subject": {
                 "en": "Perseverance",
-                "zh-cn": "坚韧",
+                "zh-cn": "Perseverance",
                 "ja-jp": "忍耐",
                 "ko-kr": "인내심",
                 "zh-tw": "剛毅"
@@ -3655,7 +4150,7 @@
             {
               "subject": {
                 "en": "Courage of the Colossus",
-                "zh-cn": "巨像的勇气",
+                "zh-cn": "Courage of the Colossus",
                 "ja-jp": "巨人の勇気",
                 "ko-kr": "거석상의 용기",
                 "zh-tw": "巨像勇氣"
@@ -3671,7 +4166,7 @@
             {
               "subject": {
                 "en": "Adamant",
-                "zh-cn": "坚若磐石",
+                "zh-cn": "Adamant",
                 "ja-jp": "アダマント",
                 "ko-kr": "단호함",
                 "zh-tw": "意志堅定"
@@ -3687,7 +4182,7 @@
             {
               "subject": {
                 "en": "Impassable",
-                "zh-cn": "不动如山",
+                "zh-cn": "Impassable",
                 "ja-jp": "通行不可",
                 "ko-kr": "넘을 수 없는 벽",
                 "zh-tw": "不可通行"
@@ -3718,7 +4213,7 @@
             {
               "subject": {
                 "en": "Dropkick",
-                "zh-cn": "飞身踢",
+                "zh-cn": "Dropkick",
                 "ja-jp": "ドロップキック",
                 "ko-kr": "드롭킥",
                 "zh-tw": "奪命飛踢"
@@ -3734,7 +4229,7 @@
             {
               "subject": {
                 "en": "Droppybara",
-                "zh-cn": "卡皮巴拉空投",
+                "zh-cn": "Droppybara",
                 "ja-jp": "ドロッピバラ",
                 "ko-kr": "카피바라 폭격"
               },
@@ -3809,7 +4304,7 @@
             {
               "subject": {
                 "en": "Void Rift",
-                "zh-cn": "虚空裂隙",
+                "zh-cn": "Void Rift",
                 "ja-jp": "ヴォイドの裂谷",
                 "ko-kr": "공허 균열",
                 "zh-tw": "虛空裂縫"
@@ -3825,7 +4320,7 @@
             {
               "subject": {
                 "en": "Escape Plan",
-                "zh-cn": "逃跑计划",
+                "zh-cn": "Escape Plan",
                 "ja-jp": "脱出プラン",
                 "ko-kr": "도주 계획",
                 "zh-tw": "逃跑計畫"
@@ -3841,7 +4336,7 @@
             {
               "subject": {
                 "en": "Critical Missile",
-                "zh-cn": "暴击飞弹",
+                "zh-cn": "Critical Missile",
                 "ja-jp": "クリティカルミサイル",
                 "ko-kr": "치명적 미사일",
                 "zh-tw": "暴擊沖天炮"
@@ -4347,7 +4842,7 @@
             {
               "subject": {
                 "en": "Poro Blaster",
-                "zh-cn": "魄罗爆破手",
+                "zh-cn": "Poro Blaster",
                 "ja-jp": "ポロブラスター",
                 "ko-kr": "포로 발사기"
               },
@@ -4362,7 +4857,7 @@
             {
               "subject": {
                 "en": "Poro Blaster",
-                "zh-cn": "魄罗爆破手",
+                "zh-cn": "Poro Blaster",
                 "ja-jp": "ポロブラスター",
                 "ko-kr": "포로 발사기"
               },
@@ -4452,7 +4947,7 @@
             {
               "subject": {
                 "en": "Speed Demon",
-                "zh-cn": "速度恶魔",
+                "zh-cn": "Speed Demon",
                 "ja-jp": "悪魔のごとき脚速",
                 "ko-kr": "질주하는 악마",
                 "zh-tw": "極限衝鋒"
@@ -4468,7 +4963,7 @@
             {
               "subject": {
                 "en": "Kill Secured",
-                "zh-cn": "杀意翻涌",
+                "zh-cn": "Kill Secured",
                 "ja-jp": "キルを確認",
                 "ko-kr": "확보된 킬"
               },
@@ -4543,7 +5038,7 @@
             {
               "subject": {
                 "en": "Donation",
-                "zh-cn": "捐赠",
+                "zh-cn": "Donation",
                 "ja-jp": "寄付",
                 "ko-kr": "후원",
                 "zh-tw": "斗內"
@@ -4604,7 +5099,7 @@
             {
               "subject": {
                 "en": "Shrink Engine",
-                "zh-cn": "缩小引擎",
+                "zh-cn": "Shrink Engine",
                 "ja-jp": "縮小エンジン",
                 "ko-kr": "축소 엔진",
                 "zh-tw": "縮小引擎"
@@ -4620,7 +5115,7 @@
             {
               "subject": {
                 "en": "Shrink Engine",
-                "zh-cn": "缩小引擎",
+                "zh-cn": "Shrink Engine",
                 "ja-jp": "縮小エンジン",
                 "ko-kr": "축소 엔진",
                 "zh-tw": "縮小引擎"
@@ -4636,7 +5131,7 @@
             {
               "subject": {
                 "en": "Vampirism",
-                "zh-cn": "吸血习性",
+                "zh-cn": "Vampirism",
                 "ja-jp": "吸血鬼信仰",
                 "ko-kr": "흡혈병"
               },
@@ -4681,7 +5176,7 @@
             {
               "subject": {
                 "en": "Hand of Baron",
-                "zh-cn": "男爵之手",
+                "zh-cn": "Hand of Baron",
                 "ja-jp": "バロンの牙",
                 "ko-kr": "남작의 도움",
                 "zh-tw": "巴龍之爪"
@@ -5546,7 +6041,7 @@
             {
               "subject": {
                 "en": "Empyrean Promise",
-                "zh-cn": "至高天诺言",
+                "zh-cn": "Empyrean Promise",
                 "ja-jp": "荘厳の天球の約束",
                 "ko-kr": "창공의 서약"
               },
@@ -5561,7 +6056,7 @@
             {
               "subject": {
                 "en": "Empyrean Promise",
-                "zh-cn": "至高天诺言",
+                "zh-cn": "Empyrean Promise",
                 "ja-jp": "荘厳の天球の約束",
                 "ko-kr": "창공의 서약"
               },
@@ -5576,7 +6071,7 @@
             {
               "subject": {
                 "en": "Empyrean Promise",
-                "zh-cn": "至高天诺言",
+                "zh-cn": "Empyrean Promise",
                 "ja-jp": "荘厳の天球の約束",
                 "ko-kr": "창공의 서약"
               },
@@ -5591,7 +6086,7 @@
             {
               "subject": {
                 "en": "Empyrean Promise",
-                "zh-cn": "至高天诺言",
+                "zh-cn": "Empyrean Promise",
                 "ja-jp": "荘厳の天球の約束",
                 "ko-kr": "창공의 서약"
               },
@@ -5636,7 +6131,7 @@
             {
               "subject": {
                 "en": "Cerberus",
-                "zh-cn": "地狱三头犬",
+                "zh-cn": "Cerberus",
                 "ja-jp": "ケルベロス",
                 "ko-kr": "케르베로스"
               },
@@ -5651,7 +6146,7 @@
             {
               "subject": {
                 "en": "Cerberus",
-                "zh-cn": "地狱三头犬",
+                "zh-cn": "Cerberus",
                 "ja-jp": "ケルベロス",
                 "ko-kr": "케르베로스"
               },
@@ -5666,7 +6161,7 @@
             {
               "subject": {
                 "en": "Goldrend",
-                "zh-cn": "夺金",
+                "zh-cn": "Goldrend",
                 "ja-jp": "ゴールドレンド",
                 "ko-kr": "골드 강탈",
                 "zh-tw": "黃金撕裂"
@@ -5742,7 +6237,7 @@
             {
               "subject": {
                 "en": "Mystic Punch",
-                "zh-cn": "秘术冲拳",
+                "zh-cn": "Mystic Punch",
                 "ja-jp": "神秘の鉄拳",
                 "ko-kr": "신비한 주먹",
                 "zh-tw": "祕術拳擊"
@@ -5758,7 +6253,7 @@
             {
               "subject": {
                 "en": "Poro Blaster",
-                "zh-cn": "魄罗爆破手",
+                "zh-cn": "Poro Blaster",
                 "ja-jp": "ポロブラスター",
                 "ko-kr": "포로 발사기"
               },
@@ -5773,7 +6268,7 @@
             {
               "subject": {
                 "en": "Poro Blaster",
-                "zh-cn": "魄罗爆破手",
+                "zh-cn": "Poro Blaster",
                 "ja-jp": "ポロブラスター",
                 "ko-kr": "포로 발사기"
               },
@@ -5833,7 +6328,7 @@
             {
               "subject": {
                 "en": "Devil on Your Shoulder",
-                "zh-cn": "你肩上的恶魔",
+                "zh-cn": "Devil on Your Shoulder",
                 "ja-jp": "肩の上の悪魔",
                 "ko-kr": "어깨 위의 악마"
               },
@@ -5848,7 +6343,7 @@
             {
               "subject": {
                 "en": "Devil on Your Shoulder",
-                "zh-cn": "你肩上的恶魔",
+                "zh-cn": "Devil on Your Shoulder",
                 "ja-jp": "肩の上の悪魔",
                 "ko-kr": "어깨 위의 악마"
               },
@@ -5863,7 +6358,7 @@
             {
               "subject": {
                 "en": "Speed Demon",
-                "zh-cn": "速度恶魔",
+                "zh-cn": "Speed Demon",
                 "ja-jp": "悪魔のごとき脚速",
                 "ko-kr": "질주하는 악마",
                 "zh-tw": "極限衝鋒"
@@ -5879,7 +6374,7 @@
             {
               "subject": {
                 "en": "Kill Secured",
-                "zh-cn": "杀意翻涌",
+                "zh-cn": "Kill Secured",
                 "ja-jp": "キルを確認",
                 "ko-kr": "확보된 킬"
               },
@@ -5951,7 +6446,7 @@
               },
               "text": {
                 "en": "Stats: Health per level: 93 → 99",
-                "zh-cn": "属性: Health per level: 93 → 99",
+                "zh-cn": "Stats: Health per level: 93 → 99",
                 "ja-jp": "Stats: Health per level: 93 → 99",
                 "ko-kr": "Stats: Health per level: 93 → 99"
               },
@@ -6355,7 +6850,7 @@
             {
               "subject": {
                 "en": "Snowball Roulette",
-                "zh-cn": "雪球扭蛋机",
+                "zh-cn": "Snowball Roulette",
                 "ja-jp": "雪玉ルーレット",
                 "ko-kr": "눈덩이 룰렛"
               },
@@ -6493,7 +6988,7 @@
               },
               "text": {
                 "en": "Offense: Damage Dealt: 95% → 100%",
-                "zh-cn": "进攻: Damage Dealt: 95% → 100%",
+                "zh-cn": "Offense: Damage Dealt: 95% → 100%",
                 "ja-jp": "Offense: Damage Dealt: 95% → 100%",
                 "ko-kr": "Offense: Damage Dealt: 95% → 100%"
               },
@@ -6509,7 +7004,7 @@
               },
               "text": {
                 "en": "Shielding: Shielding Done: 80% → 100%",
-                "zh-cn": "护盾: Shielding Done: 80% → 100%",
+                "zh-cn": "Shielding: Shielding Done: 80% → 100%",
                 "ja-jp": "Shielding: Shielding Done: 80% → 100%",
                 "ko-kr": "Shielding: Shielding Done: 80% → 100%"
               },
@@ -6525,7 +7020,7 @@
               },
               "text": {
                 "en": "Offense: Damage Dealt: 95% → 100%",
-                "zh-cn": "进攻: Damage Dealt: 95% → 100%",
+                "zh-cn": "Offense: Damage Dealt: 95% → 100%",
                 "ja-jp": "Offense: Damage Dealt: 95% → 100%",
                 "ko-kr": "Offense: Damage Dealt: 95% → 100%"
               },
@@ -6541,7 +7036,7 @@
               },
               "text": {
                 "en": "Defense: Damage Taken: 105% → 100%",
-                "zh-cn": "防御: Damage Taken: 105% → 100%",
+                "zh-cn": "Defense: Damage Taken: 105% → 100%",
                 "ja-jp": "Defense: Damage Taken: 105% → 100%",
                 "ko-kr": "Defense: Damage Taken: 105% → 100%"
               },
@@ -6557,7 +7052,7 @@
               },
               "text": {
                 "en": "Healing: Healing: 90% → 100%",
-                "zh-cn": "治疗: Healing: 90% → 100%",
+                "zh-cn": "Healing: Healing: 90% → 100%",
                 "ja-jp": "Healing: Healing: 90% → 100%",
                 "ko-kr": "Healing: Healing: 90% → 100%"
               },
@@ -6573,7 +7068,7 @@
               },
               "text": {
                 "en": "Shielding: Shielding: 95% → 100%",
-                "zh-cn": "护盾: Shielding: 95% → 100%",
+                "zh-cn": "Shielding: Shielding: 95% → 100%",
                 "ja-jp": "Shielding: Shielding: 95% → 100%",
                 "ko-kr": "Shielding: Shielding: 95% → 100%"
               },
@@ -6589,7 +7084,7 @@
               },
               "text": {
                 "en": "Ability: RQ Bonus Damage: 40/90/140/190 → 40/100/160/220",
-                "zh-cn": "技能: RQ Bonus Damage: 40/90/140/190 → 40/100/160/220",
+                "zh-cn": "Ability: RQ Bonus Damage: 40/90/140/190 → 40/100/160/220",
                 "ja-jp": "Ability: RQ Bonus Damage: 40/90/140/190 → 40/100/160/220",
                 "ko-kr": "Ability: RQ Bonus Damage: 40/90/140/190 → 40/100/160/220"
               },
@@ -6605,7 +7100,7 @@
               },
               "text": {
                 "en": "Healing: Healing: 95% → 100%",
-                "zh-cn": "治疗: Healing: 95% → 100%",
+                "zh-cn": "Healing: Healing: 95% → 100%",
                 "ja-jp": "Healing: Healing: 95% → 100%",
                 "ko-kr": "Healing: Healing: 95% → 100%"
               },
@@ -6621,7 +7116,7 @@
               },
               "text": {
                 "en": "Shielding: Shielding: 90% → 100%",
-                "zh-cn": "护盾: Shielding: 90% → 100%",
+                "zh-cn": "Shielding: Shielding: 90% → 100%",
                 "ja-jp": "Shielding: Shielding: 90% → 100%",
                 "ko-kr": "Shielding: Shielding: 90% → 100%"
               },
@@ -6637,7 +7132,7 @@
               },
               "text": {
                 "en": "Stats: Ability Haste: -10 → 0",
-                "zh-cn": "属性: Ability Haste: -10 → 0",
+                "zh-cn": "Stats: Ability Haste: -10 → 0",
                 "ja-jp": "Stats: Ability Haste: -10 → 0",
                 "ko-kr": "Stats: Ability Haste: -10 → 0"
               },
@@ -6653,7 +7148,7 @@
               },
               "text": {
                 "en": "Offense: Damage Dealt: 95% → 100%",
-                "zh-cn": "进攻: Damage Dealt: 95% → 100%",
+                "zh-cn": "Offense: Damage Dealt: 95% → 100%",
                 "ja-jp": "Offense: Damage Dealt: 95% → 100%",
                 "ko-kr": "Offense: Damage Dealt: 95% → 100%"
               },
@@ -6669,7 +7164,7 @@
               },
               "text": {
                 "en": "Defense: Damage Taken: 105% → 100%",
-                "zh-cn": "防御: Damage Taken: 105% → 100%",
+                "zh-cn": "Defense: Damage Taken: 105% → 100%",
                 "ja-jp": "Defense: Damage Taken: 105% → 100%",
                 "ko-kr": "Defense: Damage Taken: 105% → 100%"
               },
@@ -6685,7 +7180,7 @@
               },
               "text": {
                 "en": "Offense: Damage Dealt: 95% → 100%",
-                "zh-cn": "进攻: Damage Dealt: 95% → 100%",
+                "zh-cn": "Offense: Damage Dealt: 95% → 100%",
                 "ja-jp": "Offense: Damage Dealt: 95% → 100%",
                 "ko-kr": "Offense: Damage Dealt: 95% → 100%"
               },
@@ -6701,7 +7196,7 @@
               },
               "text": {
                 "en": "Shielding: Shielding: 80% → 100%",
-                "zh-cn": "护盾: Shielding: 80% → 100%",
+                "zh-cn": "Shielding: Shielding: 80% → 100%",
                 "ja-jp": "Shielding: Shielding: 80% → 100%",
                 "ko-kr": "Shielding: Shielding: 80% → 100%"
               },
@@ -6717,7 +7212,7 @@
               },
               "text": {
                 "en": "Ability: W Heal Ratio: 20% → 30%",
-                "zh-cn": "技能: W Heal Ratio: 20% → 30%",
+                "zh-cn": "Ability: W Heal Ratio: 20% → 30%",
                 "ja-jp": "Ability: W Heal Ratio: 20% → 30%",
                 "ko-kr": "Ability: W Heal Ratio: 20% → 30%"
               },
@@ -6733,7 +7228,7 @@
               },
               "text": {
                 "en": "Ability: W Shield Ratio: 20% → 25%",
-                "zh-cn": "技能: W Shield Ratio: 20% → 25%",
+                "zh-cn": "Ability: W Shield Ratio: 20% → 25%",
                 "ja-jp": "Ability: W Shield Ratio: 20% → 25%",
                 "ko-kr": "Ability: W Shield Ratio: 20% → 25%"
               },
@@ -6749,7 +7244,7 @@
               },
               "text": {
                 "en": "Ability: Q Cooldown: 10s → 8s",
-                "zh-cn": "技能: Q Cooldown: 10s → 8s",
+                "zh-cn": "Ability: Q Cooldown: 10s → 8s",
                 "ja-jp": "Ability: Q Cooldown: 10s → 8s",
                 "ko-kr": "Ability: Q Cooldown: 10s → 8s"
               },
@@ -7120,7 +7615,7 @@
             {
               "subject": {
                 "en": "Cerberus",
-                "zh-cn": "地狱三头犬",
+                "zh-cn": "Cerberus",
                 "ja-jp": "ケルベロス",
                 "ko-kr": "케르베로스"
               },
@@ -7135,7 +7630,7 @@
             {
               "subject": {
                 "en": "Cerberus",
-                "zh-cn": "地狱三头犬",
+                "zh-cn": "Cerberus",
                 "ja-jp": "ケルベロス",
                 "ko-kr": "케르베로스"
               },
@@ -7150,7 +7645,7 @@
             {
               "subject": {
                 "en": "Cerberus",
-                "zh-cn": "地狱三头犬",
+                "zh-cn": "Cerberus",
                 "ja-jp": "ケルベロス",
                 "ko-kr": "케르베로스"
               },
@@ -7195,7 +7690,7 @@
             {
               "subject": {
                 "en": "Ultimate Awakening",
-                "zh-cn": "终极唤醒",
+                "zh-cn": "Ultimate Awakening",
                 "ja-jp": "究極の目覚め",
                 "ko-kr": "궁극의 각성"
               },
@@ -7210,7 +7705,7 @@
             {
               "subject": {
                 "en": "Ultimate Awakening",
-                "zh-cn": "终极唤醒",
+                "zh-cn": "Ultimate Awakening",
                 "ja-jp": "究極の目覚め",
                 "ko-kr": "궁극의 각성"
               },
@@ -7225,7 +7720,7 @@
             {
               "subject": {
                 "en": "Ultimate Awakening",
-                "zh-cn": "终极唤醒",
+                "zh-cn": "Ultimate Awakening",
                 "ja-jp": "究極の目覚め",
                 "ko-kr": "궁극의 각성"
               },
@@ -7240,7 +7735,7 @@
             {
               "subject": {
                 "en": "Empyrean Promise",
-                "zh-cn": "至高天诺言",
+                "zh-cn": "Empyrean Promise",
                 "ja-jp": "荘厳の天球の約束",
                 "ko-kr": "창공의 서약"
               },
@@ -7255,7 +7750,7 @@
             {
               "subject": {
                 "en": "Feel the Burn",
-                "zh-cn": "感受燃烧",
+                "zh-cn": "Feel the Burn",
                 "ja-jp": "熱気",
                 "ko-kr": "저주의 화염",
                 "zh-tw": "感受灼燒"
@@ -7271,7 +7766,7 @@
             {
               "subject": {
                 "en": "Feel the Burn",
-                "zh-cn": "感受燃烧",
+                "zh-cn": "Feel the Burn",
                 "ja-jp": "熱気",
                 "ko-kr": "저주의 화염",
                 "zh-tw": "感受灼燒"
@@ -7302,7 +7797,7 @@
             {
               "subject": {
                 "en": "Snowball Upgrade",
-                "zh-cn": "升级：雪球",
+                "zh-cn": "Snowball Upgrade",
                 "ja-jp": "雪玉アップグレード",
                 "ko-kr": "눈덩이 업그레이드",
                 "zh-tw": "雪球升級"
@@ -7318,7 +7813,7 @@
             {
               "subject": {
                 "en": "Snowball Upgrade",
-                "zh-cn": "升级：雪球",
+                "zh-cn": "Snowball Upgrade",
                 "ja-jp": "雪玉アップグレード",
                 "ko-kr": "눈덩이 업그레이드",
                 "zh-tw": "雪球升級"
@@ -7387,7 +7882,7 @@
                 "ja-jp": "Silver augments appear less frequently in first round",
                 "ko-kr": "Silver augments appear less frequently in first round"
               },
-              "kind": "nerfed"
+              "kind": "changed"
             },
             {
               "subject": {
@@ -7402,7 +7897,7 @@
                 "ja-jp": "No more back-to-back silver augments in rounds 1 and 2",
                 "ko-kr": "No more back-to-back silver augments in rounds 1 and 2"
               },
-              "kind": "nerfed"
+              "kind": "changed"
             },
             {
               "subject": {
@@ -7453,7 +7948,7 @@
                 "ja-jp": "Silver Tier augments will now appear less frequently in the first round of augment choices",
                 "ko-kr": "Silver Tier augments will now appear less frequently in the first round of augment choices"
               },
-              "kind": "nerfed"
+              "kind": "changed"
             },
             {
               "subject": {
@@ -7534,7 +8029,7 @@
                 "ja-jp": "New consumable item that lets you spend extra gold in the late game to boost your stats. Silver, Gold, and Prismatic Anvils are available. Each Anvil comes with a hat! Available at level 9 for 750 gold each Shardholder Value Shard is not included",
                 "ko-kr": "New consumable item that lets you spend extra gold in the late game to boost your stats. Silver, Gold, and Prismatic Anvils are available. Each Anvil comes with a hat! Available at level 9 for 750 gold each Shardholder Value Shard is not included"
               },
-              "kind": "buffed"
+              "kind": "changed"
             }
           ]
         },
@@ -7545,7 +8040,7 @@
             {
               "subject": {
                 "en": "Blunt Force",
-                "zh-cn": "大力",
+                "zh-cn": "Blunt Force",
                 "ja-jp": "無骨なる力",
                 "ko-kr": "육중한 힘",
                 "zh-tw": "蠻力重擊"
@@ -7556,12 +8051,12 @@
                 "ja-jp": "• AD: 15% → 20%",
                 "ko-kr": "• AD: 15% → 20%"
               },
-              "kind": "buffed"
+              "kind": "changed"
             },
             {
               "subject": {
                 "en": "Gash",
-                "zh-cn": "砍伤",
+                "zh-cn": "Gash",
                 "ja-jp": "深手",
                 "ko-kr": "깊은 상처"
               },
@@ -7571,7 +8066,7 @@
                 "ja-jp": "• Additionally gain 50% Attack Speed",
                 "ko-kr": "• Additionally gain 50% Attack Speed"
               },
-              "kind": "buffed"
+              "kind": "changed"
             },
             {
               "subject": {
@@ -7586,12 +8081,12 @@
                 "ja-jp": "• Attack Speed Requirement for Bonus: 4 → 3.5",
                 "ko-kr": "• Attack Speed Requirement for Bonus: 4 → 3.5"
               },
-              "kind": "buffed"
+              "kind": "changed"
             },
             {
               "subject": {
                 "en": "Protein Shake",
-                "zh-cn": "蛋白粉奶昔",
+                "zh-cn": "Protein Shake",
                 "ja-jp": "プロテインシェイク",
                 "ko-kr": "프로틴 음료",
                 "zh-tw": "蛋白飲"
@@ -7602,12 +8097,12 @@
                 "ja-jp": "• Base Heal and Shield Power: 20% → 25%",
                 "ko-kr": "• Base Heal and Shield Power: 20% → 25%"
               },
-              "kind": "buffed"
+              "kind": "changed"
             },
             {
               "subject": {
                 "en": "Protein Shake",
-                "zh-cn": "蛋白粉奶昔",
+                "zh-cn": "Protein Shake",
                 "ja-jp": "プロテインシェイク",
                 "ko-kr": "프로틴 음료",
                 "zh-tw": "蛋白飲"
@@ -7618,12 +8113,12 @@
                 "ja-jp": "• Armor and Magic Resist Conversion Rate: 30% → 35%",
                 "ko-kr": "• Armor and Magic Resist Conversion Rate: 30% → 35%"
               },
-              "kind": "buffed"
+              "kind": "changed"
             },
             {
               "subject": {
                 "en": "Self Destruct",
-                "zh-cn": "自我毁灭",
+                "zh-cn": "Self Destruct",
                 "ja-jp": "自己破壊",
                 "ko-kr": "자폭",
                 "zh-tw": "自我毀滅"
@@ -7634,12 +8129,12 @@
                 "ja-jp": "• NEW: Every 25 seconds, attach a bomb to yourself that explodes dealing damage and knocking up enemies",
                 "ko-kr": "• NEW: Every 25 seconds, attach a bomb to yourself that explodes dealing damage and knocking up enemies"
               },
-              "kind": "buffed"
+              "kind": "changed"
             },
             {
               "subject": {
                 "en": "Snowball Roulette",
-                "zh-cn": "雪球扭蛋机",
+                "zh-cn": "Snowball Roulette",
                 "ja-jp": "雪玉ルーレット",
                 "ko-kr": "눈덩이 룰렛"
               },
@@ -7649,12 +8144,12 @@
                 "ja-jp": "• NEW: Cast a random harmful Summoner Spell on your target when your snowball hits an enemy target",
                 "ko-kr": "• NEW: Cast a random harmful Summoner Spell on your target when your snowball hits an enemy target"
               },
-              "kind": "buffed"
+              "kind": "changed"
             },
             {
               "subject": {
                 "en": "Snowball Roulette",
-                "zh-cn": "雪球扭蛋机",
+                "zh-cn": "Snowball Roulette",
                 "ja-jp": "雪玉ルーレット",
                 "ko-kr": "눈덩이 룰렛"
               },
@@ -7664,7 +8159,7 @@
                 "ja-jp": "• NEW: Cast a random beneficial Summoner Spell on yourself when you take your snowball dash",
                 "ko-kr": "• NEW: Cast a random beneficial Summoner Spell on yourself when you take your snowball dash"
               },
-              "kind": "buffed"
+              "kind": "changed"
             },
             {
               "subject": {
@@ -7679,12 +8174,12 @@
                 "ja-jp": "• Stack requirement: 350 → 300",
                 "ko-kr": "• Stack requirement: 350 → 300"
               },
-              "kind": "buffed"
+              "kind": "changed"
             },
             {
               "subject": {
                 "en": "Repulsor",
-                "zh-cn": "退敌力场",
+                "zh-cn": "Repulsor",
                 "ja-jp": "リパルサー",
                 "ko-kr": "반발",
                 "zh-tw": "反重力裝置"
@@ -7695,7 +8190,7 @@
                 "ja-jp": "• NEW: When dropping below 35% health, knock back enemies and slow them for 90% for 1.5 seconds (25 second cooldown or refresh on death)",
                 "ko-kr": "• NEW: When dropping below 35% health, knock back enemies and slow them for 90% for 1.5 seconds (25 second cooldown or refresh on death)"
               },
-              "kind": "buffed"
+              "kind": "changed"
             },
             {
               "subject": {
@@ -7710,7 +8205,7 @@
                 "ja-jp": "• Takedowns required: 22 → 18",
                 "ko-kr": "• Takedowns required: 22 → 18"
               },
-              "kind": "buffed"
+              "kind": "changed"
             }
           ]
         },
@@ -7727,11 +8222,11 @@
               },
               "text": {
                 "en": "Defense: Damage Taken: 100% → 95%",
-                "zh-cn": "防御: Damage Taken: 100% → 95%",
+                "zh-cn": "Defense: Damage Taken: 100% → 95%",
                 "ja-jp": "Defense: Damage Taken: 100% → 95%",
                 "ko-kr": "Defense: Damage Taken: 100% → 95%"
               },
-              "kind": "buffed",
+              "kind": "changed",
               "subjectSlug": "cho'gath"
             },
             {
@@ -7743,11 +8238,11 @@
               },
               "text": {
                 "en": "Defense: Damage Taken: 110% → 100%",
-                "zh-cn": "防御: Damage Taken: 110% → 100%",
+                "zh-cn": "Defense: Damage Taken: 110% → 100%",
                 "ja-jp": "Defense: Damage Taken: 110% → 100%",
                 "ko-kr": "Defense: Damage Taken: 110% → 100%"
               },
-              "kind": "buffed",
+              "kind": "changed",
               "subjectSlug": "maokai"
             },
             {
@@ -7759,11 +8254,11 @@
               },
               "text": {
                 "en": "Offense: Damage Dealt: 85% → 95%",
-                "zh-cn": "进攻: Damage Dealt: 85% → 95%",
+                "zh-cn": "Offense: Damage Dealt: 85% → 95%",
                 "ja-jp": "Offense: Damage Dealt: 85% → 95%",
                 "ko-kr": "Offense: Damage Dealt: 85% → 95%"
               },
-              "kind": "buffed",
+              "kind": "changed",
               "subjectSlug": "maokai"
             },
             {
@@ -7775,11 +8270,11 @@
               },
               "text": {
                 "en": "Offense: Damage Dealt: 90% → 100%",
-                "zh-cn": "进攻: Damage Dealt: 90% → 100%",
+                "zh-cn": "Offense: Damage Dealt: 90% → 100%",
                 "ja-jp": "Offense: Damage Dealt: 90% → 100%",
                 "ko-kr": "Offense: Damage Dealt: 90% → 100%"
               },
-              "kind": "buffed",
+              "kind": "changed",
               "subjectSlug": "nasus"
             },
             {
@@ -7791,11 +8286,11 @@
               },
               "text": {
                 "en": "Defense: Damage Taken: 110% → 100%",
-                "zh-cn": "防御: Damage Taken: 110% → 100%",
+                "zh-cn": "Defense: Damage Taken: 110% → 100%",
                 "ja-jp": "Defense: Damage Taken: 110% → 100%",
                 "ko-kr": "Defense: Damage Taken: 110% → 100%"
               },
-              "kind": "buffed",
+              "kind": "changed",
               "subjectSlug": "nautilus"
             },
             {
@@ -7807,11 +8302,11 @@
               },
               "text": {
                 "en": "Offense: Damage Dealt: 95% → 100%",
-                "zh-cn": "进攻: Damage Dealt: 95% → 100%",
+                "zh-cn": "Offense: Damage Dealt: 95% → 100%",
                 "ja-jp": "Offense: Damage Dealt: 95% → 100%",
                 "ko-kr": "Offense: Damage Dealt: 95% → 100%"
               },
-              "kind": "buffed",
+              "kind": "changed",
               "subjectSlug": "nautilus"
             },
             {
@@ -7823,11 +8318,11 @@
               },
               "text": {
                 "en": "Stats: Ability Haste: -20 → 0",
-                "zh-cn": "属性: Ability Haste: -20 → 0",
+                "zh-cn": "Stats: Ability Haste: -20 → 0",
                 "ja-jp": "Stats: Ability Haste: -20 → 0",
                 "ko-kr": "Stats: Ability Haste: -20 → 0"
               },
-              "kind": "buffed",
+              "kind": "changed",
               "subjectSlug": "seraphine"
             },
             {
@@ -7839,11 +8334,11 @@
               },
               "text": {
                 "en": "Defense: Damage Taken: 100% → 95%",
-                "zh-cn": "防御: Damage Taken: 100% → 95%",
+                "zh-cn": "Defense: Damage Taken: 100% → 95%",
                 "ja-jp": "Defense: Damage Taken: 100% → 95%",
                 "ko-kr": "Defense: Damage Taken: 100% → 95%"
               },
-              "kind": "buffed",
+              "kind": "changed",
               "subjectSlug": "skarner"
             },
             {
@@ -7855,11 +8350,11 @@
               },
               "text": {
                 "en": "Offense: Damage Dealt: 100% → 105%",
-                "zh-cn": "进攻: Damage Dealt: 100% → 105%",
+                "zh-cn": "Offense: Damage Dealt: 100% → 105%",
                 "ja-jp": "Offense: Damage Dealt: 100% → 105%",
                 "ko-kr": "Offense: Damage Dealt: 100% → 105%"
               },
-              "kind": "buffed",
+              "kind": "changed",
               "subjectSlug": "skarner"
             },
             {
@@ -7871,11 +8366,11 @@
               },
               "text": {
                 "en": "Ability: E Cooldown: 22/21/20/19/18 → 18/17/16/15/14",
-                "zh-cn": "技能: E Cooldown: 22/21/20/19/18 → 18/17/16/15/14",
+                "zh-cn": "Ability: E Cooldown: 22/21/20/19/18 → 18/17/16/15/14",
                 "ja-jp": "Ability: E Cooldown: 22/21/20/19/18 → 18/17/16/15/14",
                 "ko-kr": "Ability: E Cooldown: 22/21/20/19/18 → 18/17/16/15/14"
               },
-              "kind": "buffed",
+              "kind": "changed",
               "subjectSlug": "skarner"
             },
             {
@@ -7887,11 +8382,11 @@
               },
               "text": {
                 "en": "Defense: Damage Taken: 105% → 100%",
-                "zh-cn": "防御: Damage Taken: 105% → 100%",
+                "zh-cn": "Defense: Damage Taken: 105% → 100%",
                 "ja-jp": "Defense: Damage Taken: 105% → 100%",
                 "ko-kr": "Defense: Damage Taken: 105% → 100%"
               },
-              "kind": "buffed",
+              "kind": "changed",
               "subjectSlug": "tahm kench"
             },
             {
@@ -7903,11 +8398,11 @@
               },
               "text": {
                 "en": "Defense: Damage Taken: 105% → 100%",
-                "zh-cn": "防御: Damage Taken: 105% → 100%",
+                "zh-cn": "Defense: Damage Taken: 105% → 100%",
                 "ja-jp": "Defense: Damage Taken: 105% → 100%",
                 "ko-kr": "Defense: Damage Taken: 105% → 100%"
               },
-              "kind": "buffed",
+              "kind": "changed",
               "subjectSlug": "thresh"
             },
             {
@@ -7919,11 +8414,11 @@
               },
               "text": {
                 "en": "Ability: E Shield Amount: 11% Max Health → 14% Max Health",
-                "zh-cn": "技能: E Shield Amount: 11% Max Health → 14% Max Health",
+                "zh-cn": "Ability: E Shield Amount: 11% Max Health → 14% Max Health",
                 "ja-jp": "Ability: E Shield Amount: 11% Max Health → 14% Max Health",
                 "ko-kr": "Ability: E Shield Amount: 11% Max Health → 14% Max Health"
               },
-              "kind": "buffed",
+              "kind": "changed",
               "subjectSlug": "volibear"
             }
           ]
@@ -8029,7 +8524,7 @@
             {
               "subject": {
                 "en": "Draw Your Sword",
-                "zh-cn": "亮出你的剑",
+                "zh-cn": "Draw Your Sword",
                 "ja-jp": "剣を構えよ",
                 "ko-kr": "검을 뽑아라",
                 "zh-tw": "拔劍吧"
@@ -8040,12 +8535,12 @@
                 "ja-jp": "• Attack damage bonus: 35% → 30%",
                 "ko-kr": "• Attack damage bonus: 35% → 30%"
               },
-              "kind": "nerfed"
+              "kind": "changed"
             },
             {
               "subject": {
                 "en": "Draw Your Sword",
-                "zh-cn": "亮出你的剑",
+                "zh-cn": "Draw Your Sword",
                 "ja-jp": "剣を構えよ",
                 "ko-kr": "검을 뽑아라",
                 "zh-tw": "拔劍吧"
@@ -8056,12 +8551,12 @@
                 "ja-jp": "• Health bonus: 35% → 30%",
                 "ko-kr": "• Health bonus: 35% → 30%"
               },
-              "kind": "nerfed"
+              "kind": "changed"
             },
             {
               "subject": {
                 "en": "Draw Your Sword",
-                "zh-cn": "亮出你的剑",
+                "zh-cn": "Draw Your Sword",
                 "ja-jp": "剣を構えよ",
                 "ko-kr": "검을 뽑아라",
                 "zh-tw": "拔劍吧"
@@ -8072,12 +8567,12 @@
                 "ja-jp": "• Life steal: 25% → 20%",
                 "ko-kr": "• Life steal: 25% → 20%"
               },
-              "kind": "nerfed"
+              "kind": "changed"
             },
             {
               "subject": {
                 "en": "Draw Your Sword",
-                "zh-cn": "亮出你的剑",
+                "zh-cn": "Draw Your Sword",
                 "ja-jp": "剣を構えよ",
                 "ko-kr": "검을 뽑아라",
                 "zh-tw": "拔劍吧"
@@ -8088,12 +8583,12 @@
                 "ja-jp": "• Bug fix: Kayle no longer remains ranged after equipping",
                 "ko-kr": "• Bug fix: Kayle no longer remains ranged after equipping"
               },
-              "kind": "changed"
+              "kind": "nerfed"
             },
             {
               "subject": {
                 "en": "Dual Wield",
-                "zh-cn": "双刀流",
+                "zh-cn": "Dual Wield",
                 "ja-jp": "二刀流",
                 "ko-kr": "양손잡이",
                 "zh-tw": "雙刀流"
@@ -8104,12 +8599,12 @@
                 "ja-jp": "• Total attack speed: 25% → 20%",
                 "ko-kr": "• Total attack speed: 25% → 20%"
               },
-              "kind": "nerfed"
+              "kind": "changed"
             },
             {
               "subject": {
                 "en": "Dual Wield",
-                "zh-cn": "双刀流",
+                "zh-cn": "Dual Wield",
                 "ja-jp": "二刀流",
                 "ko-kr": "양손잡이",
                 "zh-tw": "雙刀流"
@@ -8120,12 +8615,12 @@
                 "ja-jp": "• Removed duplicate tooltip text regarding on-hit effects",
                 "ko-kr": "• Removed duplicate tooltip text regarding on-hit effects"
               },
-              "kind": "changed"
+              "kind": "nerfed"
             },
             {
               "subject": {
                 "en": "Empyrean Promise",
-                "zh-cn": "至高天诺言",
+                "zh-cn": "Empyrean Promise",
                 "ja-jp": "荘厳の天球の約束",
                 "ko-kr": "창공의 서약"
               },
@@ -8135,12 +8630,12 @@
                 "ja-jp": "• Heal and shield power: 10% → 15%",
                 "ko-kr": "• Heal and shield power: 10% → 15%"
               },
-              "kind": "buffed"
+              "kind": "changed"
             },
             {
               "subject": {
                 "en": "Empyrean Promise",
-                "zh-cn": "至高天诺言",
+                "zh-cn": "Empyrean Promise",
                 "ja-jp": "荘厳の天球の約束",
                 "ko-kr": "창공의 서약"
               },
@@ -8150,12 +8645,12 @@
                 "ja-jp": "• Cooldown: 40s → 30s",
                 "ko-kr": "• Cooldown: 40s → 30s"
               },
-              "kind": "buffed"
+              "kind": "changed"
             },
             {
               "subject": {
                 "en": "Biggest Snowball Ever",
-                "zh-cn": "史上最大雪球",
+                "zh-cn": "Biggest Snowball Ever",
                 "ja-jp": "超特大の雪玉！",
                 "ko-kr": "데굴데굴 눈덩이!",
                 "zh-tw": "巨無霸雪球"
