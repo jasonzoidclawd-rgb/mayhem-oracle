@@ -66,32 +66,32 @@ CHAMPION_ALIASES = {
 }
 
 AUGMENT_ALIASES = {
-    # Known augment names → canonical ID
-    "tap dancer": "tap_dancer", "踏舞者": "tap_dancer",
-    "jeweled gauntlet": "jeweled_gauntlet", "珠光护手": "jeweled_gauntlet",
+    # Known augment names → canonical slug (hyphens, matching augments.json)
+    "tap dancer": "tap-dancer", "踏舞者": "tap-dancer",
+    "jeweled gauntlet": "jeweled-gauntlet", "珠光护手": "jeweled-gauntlet",
     "marksmage": "marksmage", "奥术射手": "marksmage", "奧術射手": "marksmage",
     "vulnerability": "vulnerability", "致命弱点": "vulnerability",
-    "master of duality": "master_of_duality", "二元大师": "master_of_duality",
-    "slow and steady": "slow_and_steady", "慢而稳健": "slow_and_steady",
-    "mystic punch": "mystic_punch",
+    "master of duality": "master-of-duality", "二元大师": "master-of-duality",
+    "slow and steady": "slow-and-steady", "慢而稳健": "slow-and-steady",
+    "mystic punch": "mystic-punch",
     "earthwake": "earthwake", "地动山摇": "earthwake",
-    "draw your sword": "draw_your_sword", "拔剑": "draw_your_sword",
-    "phenomenal evil": "phenomenal_evil", "超凡邪恶": "phenomenal_evil",
-    "bread and butter": "bread_and_butter", "bread and cheese": "bread_and_cheese",
-    "bread and jam": "bread_and_jam",
+    "draw your sword": "draw-your-sword", "拔剑": "draw-your-sword",
+    "phenomenal evil": "phenomenal-evil", "超凡邪恶": "phenomenal-evil",
+    "bread and butter": "bread-and-butter", "bread and cheese": "bread-and-cheese",
+    "bread and jam": "bread-and-jam",
     "runecarver": "runecarver", "刻符者": "runecarver",
     "goliath": "goliath",
-    "back to basics": "back_to_basics",
-    "blunt force": "blunt_force",
-    "snowball fight": "snowball_fight",
-    "poro blaster": "poro_blaster",
-    "infernal conduit": "infernal_conduit",
-    "lightning strikes": "lightning_strikes",
-    "magic missile": "magic_missile", "魔法导弹": "magic_missile",
-    "witchful thinking": "witchful_thinking",
-    "conqueror": "conqueror_augment",  # augment version
-    "dark harvest": "dark_harvest_augment",  # augment version
-    "press the attack": "press_the_attack_augment",
+    "back to basics": "back-to-basics",
+    "blunt force": "blunt-force",
+    "snowball fight": "snowball-fight",
+    "poro blaster": "poro-blaster",
+    "infernal conduit": "infernal-conduit",
+    "lightning strikes": "lightning-strikes",
+    "magic missile": "magic-missile", "魔法导弹": "magic-missile",
+    "witchful thinking": "witchful-thinking",
+    "conqueror": "conqueror-augment",  # augment version
+    "dark harvest": "dark-harvest-augment",  # augment version
+    "press the attack": "press-the-attack-augment",
 }
 
 # Interaction signal phrases — indicate a champion × augment synergy
@@ -183,6 +183,16 @@ def _format_transcript(entries) -> str:
 
 # ─── Knowledge Extraction ───
 
+_CJK_RE = re.compile(r'[一-鿿぀-ゟ゠-ヿ가-퟿]')
+
+
+def _alias_matches(alias: str, text_lower: str) -> bool:
+    """Match alias against lowercased text. CJK: substring; Latin: word boundary."""
+    if _CJK_RE.search(alias):
+        return alias in text_lower
+    return bool(re.search(r'\b' + re.escape(alias) + r'\b', text_lower))
+
+
 def extract_entities(text: str) -> dict:
     """Extract champion and augment mentions from transcript text."""
     text_lower = text.lower()
@@ -191,11 +201,11 @@ def extract_entities(text: str) -> dict:
     augments_found = set()
 
     for alias, canonical in CHAMPION_ALIASES.items():
-        if alias in text_lower:
+        if _alias_matches(alias, text_lower):
             champions_found.add(canonical)
 
     for alias, canonical in AUGMENT_ALIASES.items():
-        if alias in text_lower:
+        if _alias_matches(alias, text_lower):
             augments_found.add(canonical)
 
     return {
@@ -219,9 +229,9 @@ def extract_interactions(text: str, entities: dict) -> list:
 
         # Find which champions and augments appear in this sentence
         champs_in = [c for c in entities["champions"]
-                     if any(a in s_lower for a, cid in CHAMPION_ALIASES.items() if cid == c)]
+                     if any(_alias_matches(a, s_lower) for a, cid in CHAMPION_ALIASES.items() if cid == c)]
         augs_in = [a for a in entities["augments"]
-                   if any(al in s_lower for al, aid in AUGMENT_ALIASES.items() if aid == a)]
+                   if any(_alias_matches(al, s_lower) for al, aid in AUGMENT_ALIASES.items() if aid == a)]
 
         if not champs_in or not augs_in:
             continue
@@ -294,8 +304,13 @@ def process_video(url: str, output_dir: str = "public/data/video_knowledge") -> 
 
     print(f"  📹 Processing video: {video_id}")
 
+    # Resolve output_dir relative to repo root so the script works from any CWD
+    output_path_obj = Path(output_dir)
+    if not output_path_obj.is_absolute():
+        output_path_obj = Path(__file__).parent.parent / output_dir
+
     # Check if already processed
-    output_path = Path(output_dir) / f"{video_id}.json"
+    output_path = output_path_obj / f"{video_id}.json"
     if output_path.exists():
         print(f"  ⏭️  Already processed: {output_path}")
         with open(output_path) as f:
@@ -346,6 +361,8 @@ def aggregate_knowledge(knowledge_dir: str = "public/data/video_knowledge") -> d
     This feeds into the Oracle Score algorithm as a supplementary signal.
     """
     knowledge_path = Path(knowledge_dir)
+    if not knowledge_path.is_absolute():
+        knowledge_path = Path(__file__).parent.parent / knowledge_dir
     if not knowledge_path.exists():
         return {}
 
@@ -416,22 +433,25 @@ def _count_topics(insights: list) -> dict:
 # ─── CLI ───
 
 if __name__ == "__main__":
-    if len(sys.argv) < 2:
-        print("Usage:")
-        print("  python scripts/learn_from_video.py <youtube_url>")
-        print("  python scripts/learn_from_video.py --batch <urls_file>")
-        print("  python scripts/learn_from_video.py --aggregate")
-        sys.exit(1)
+    import argparse as _argparse
+    parser = _argparse.ArgumentParser(description="Extract knowledge from YouTube videos")
+    group = parser.add_mutually_exclusive_group(required=True)
+    group.add_argument("url", nargs="?", help="YouTube URL to process")
+    group.add_argument("--batch", metavar="FILE", help="File containing YouTube URLs, one per line")
+    group.add_argument("--aggregate", action="store_true", help="Aggregate all processed videos")
+    parser.add_argument("--also-aggregate", action="store_true",
+                        help="Also aggregate after processing a URL or batch")
+    args = parser.parse_args()
 
-    if sys.argv[1] == "--aggregate":
+    if args.aggregate:
         aggregate_knowledge()
-    elif sys.argv[1] == "--batch":
-        with open(sys.argv[2]) as f:
+    elif args.batch:
+        with open(args.batch) as f:
             urls = [line.strip() for line in f if line.strip() and not line.startswith("#")]
         for url in urls:
             process_video(url)
         aggregate_knowledge()
     else:
-        process_video(sys.argv[1])
-        if "--aggregate" in sys.argv:
+        process_video(args.url)
+        if args.also_aggregate:
             aggregate_knowledge()

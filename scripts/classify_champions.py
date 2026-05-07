@@ -258,6 +258,7 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--dry-run", action="store_true", help="Print results without writing")
     parser.add_argument("--show-all", action="store_true", help="Print all champion tags")
+    parser.add_argument("--allow-partial", action="store_true", help="Write output even if some champions still have empty kit_tags")
     args = parser.parse_args()
 
     ab_raw  = json.loads(ABILITIES_PATH.read_text("utf-8"))
@@ -289,6 +290,7 @@ def main():
     print(f"Need LLM fallback: {len(needs_llm)}")
 
     # LLM fallback for zero-tag champions
+    llm_failures = 0
     if needs_llm and not args.dry_run:
         batch_size = 10
         batches = [needs_llm[i:i+batch_size] for i in range(0, len(needs_llm), batch_size)]
@@ -307,6 +309,7 @@ def main():
                 print(" ✓")
             except Exception as e:
                 print(f" ✗ {e}")
+                llm_failures += 1
 
     # Print summary stats
     tag_counts = {}
@@ -332,6 +335,15 @@ def main():
     if args.dry_run:
         print("\n[DRY RUN — nothing written]")
         return
+
+    # Fail if LLM outage left champions with empty kit_tags
+    zero_tag = [c["slug"] for c in champions if not c.get("kit_tags")]
+    if zero_tag and not args.allow_partial:
+        print(f"\n✗ {len(zero_tag)} champions have empty kit_tags after LLM fallback: {zero_tag[:10]}")
+        print("  Pass --allow-partial to write anyway (e.g. during a network outage).")
+        sys.exit(1)
+    if llm_failures:
+        print(f"  ⚠ {llm_failures} LLM batch(es) failed; {len(zero_tag)} champions remain untagged")
 
     # Write back
     if is_dict:

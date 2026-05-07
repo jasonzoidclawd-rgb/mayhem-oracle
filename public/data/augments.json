@@ -864,6 +864,12 @@
       "flags": {
         "system_breaker": false,
         "lifecycle": "active"
+      },
+      "recentChanges": {
+        "patch": "26.9",
+        "changes": [
+          "Cooldown: 25 seconds ⇒ 35 seconds"
+        ]
       }
     },
     {
@@ -1674,6 +1680,15 @@
       "flags": {
         "system_breaker": false,
         "lifecycle": "active"
+      },
+      "recentChanges": {
+        "patch": "26.9",
+        "changes": [
+          "Base Damage per second:100 ⇒ 150",
+          "Bonus Damage per burn source: 60 ⇒ 50",
+          "Base Heal per second: 60 - 150 (based on level) ⇒ 30 - 75 (based on level)",
+          "Bonus heal per burn source: 50 ⇒ 25"
+        ]
       }
     },
     {

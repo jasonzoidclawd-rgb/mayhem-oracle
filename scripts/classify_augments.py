@@ -216,6 +216,7 @@ def main():
     parser.add_argument("--dry-run", action="store_true", help="Print first batch prompt and exit")
     parser.add_argument("--batch-size", type=int, default=10, help="Augments per LLM call (default 10)")
     parser.add_argument("--skip-classified", action="store_true", help="Skip augments that already have kit_tags (CI mode)")
+    parser.add_argument("--allow-partial", action="store_true", help="Write output even if batches fail or coverage is low")
     args = parser.parse_args()
 
     raw = json.loads(AUGMENTS_PATH.read_text(encoding="utf-8"))
@@ -238,12 +239,20 @@ def main():
     print(f"Have set: {sum(1 for a in augments if a.get('set'))}/{total}")
 
     # Phase 2: LLM classification for tags (all augments) and missing sets
-    to_classify = [a for a in augments if not a.get("kit_tags")] if args.skip_classified else augments
+    # When skipping classified augments, validate existing tags — augments with only
+    # unknown/legacy tags are treated as needing reclassification.
+    def _has_valid_tags(aug: dict) -> bool:
+        return bool([t for t in (aug.get("kit_tags") or []) if t in VALID_TAGS])
+
+    to_classify = [a for a in augments if not _has_valid_tags(a)] if args.skip_classified else augments
 
     batches = [to_classify[i:i + args.batch_size] for i in range(0, len(to_classify), args.batch_size)]
     print(f"Will run {len(batches)} LLM batches of up to {args.batch_size} augments each")
 
     if args.dry_run:
+        if not batches:
+            print("Nothing to classify.")
+            return
         first_batch = batches[0]
         prompt = "Classify these augments:\n" + json.dumps(
             [build_input_block(a) for a in first_batch], indent=2
@@ -255,6 +264,7 @@ def main():
         return
 
     results: dict[str, dict] = {}
+    failed_batches: list[int] = []
     for i, batch in enumerate(batches):
         slugs = [a["slug"] for a in batch]
         prompt = "Classify these augments:\n" + json.dumps(
@@ -269,6 +279,7 @@ def main():
         except json.JSONDecodeError as e:
             print(f" ✗ JSON parse failed: {e}")
             print("Raw:", raw_resp[:200])
+            failed_batches.append(i + 1)
             continue
 
     # Phase 3: merge results back into augments
@@ -287,8 +298,13 @@ def main():
         applied += 1
 
     print(f"\nApplied classifications to {applied}/{total} augments")
-    print(f"Final kit_tags coverage: {sum(1 for a in augments if a.get('kit_tags'))}/{total}")
+    final_tagged = sum(1 for a in augments if _has_valid_tags(a))
+    print(f"Final kit_tags coverage: {final_tagged}/{total}")
     print(f"Final set coverage: {sum(1 for a in augments if a.get('set'))}/{total}")
+
+    if failed_batches and not args.allow_partial:
+        print(f"\n✗ {len(failed_batches)} batch(es) failed (batch numbers: {failed_batches}). Pass --allow-partial to write anyway.")
+        sys.exit(1)
 
     # Phase 4: write back
     if is_dict_root:

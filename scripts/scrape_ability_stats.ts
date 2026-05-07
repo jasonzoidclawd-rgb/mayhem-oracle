@@ -311,16 +311,25 @@ async function fetchChampionBin(
   }
 }
 
+async function fetchDDragonVersion(): Promise<string> {
+  const resp = await fetch("https://ddragon.leagueoflegends.com/api/versions.json");
+  if (!resp.ok) throw new Error(`Failed to fetch DDragon version list: ${resp.status}`);
+  const versions = await resp.json() as string[];
+  if (!versions.length) throw new Error("DDragon version list is empty");
+  return versions[0];
+}
+
 // DDragon for ability descriptions (has tooltip with readable text)
 async function fetchDDragonSpells(
   champKey: string,
+  version: string,
 ): Promise<{
   passive: { description: string };
   spells: Array<{ description: string; tooltip: string }>;
 } | null> {
   try {
     const resp = await fetch(
-      `https://ddragon.leagueoflegends.com/cdn/15.7.1/data/en_US/champion/${champKey}.json`,
+      `https://ddragon.leagueoflegends.com/cdn/${version}/data/en_US/champion/${champKey}.json`,
     );
     if (!resp.ok) return null;
     const data = (await resp.json()) as DDragonChampionData;
@@ -337,9 +346,12 @@ async function main() {
   ) as AbilitiesFile;
   const profiles = abilities.profiles;
 
+  const ddVersion = await fetchDDragonVersion();
+  console.log(`Using DDragon version: ${ddVersion}`);
+
   // DDragon champion list for key mapping (e.g. "FiddleSticks" vs "Fiddlesticks")
   const ddResp = await fetch(
-    "https://ddragon.leagueoflegends.com/cdn/15.7.1/data/en_US/champion.json",
+    `https://ddragon.leagueoflegends.com/cdn/${ddVersion}/data/en_US/champion.json`,
   );
   const ddData = (await ddResp.json()) as DDragonChampionData;
   const ddChamps = ddData.data as Record<
@@ -396,7 +408,7 @@ async function main() {
 
     // Get DDragon descriptions for damage type detection
     const ddKey = slugToDDKey.get(cdId);
-    const ddSpells = ddKey ? await fetchDDragonSpells(ddKey) : null;
+    const ddSpells = ddKey ? await fetchDDragonSpells(ddKey, ddVersion) : null;
     const ddDescs = [
       ddSpells?.passive?.description ?? "",
       ...(ddSpells?.spells ?? []).map((s) => s.description ?? ""),
@@ -542,4 +554,4 @@ async function main() {
   console.log(`Wrote ${ABILITIES_PATH}`);
 }
 
-main().catch(console.error);
+main().catch((e) => { console.error(e); process.exitCode = 1; });

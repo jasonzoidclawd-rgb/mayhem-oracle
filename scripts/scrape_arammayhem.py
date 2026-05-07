@@ -15,8 +15,10 @@ Output files:
 """
 
 from __future__ import annotations
+import os
 import re
 import json
+import tempfile
 import time
 import html as html_module
 from datetime import datetime, timezone
@@ -177,6 +179,22 @@ def parse_combos(html: str) -> list[dict]:
     return combos
 
 
+# ── Atomic write ──────────────────────────────────────────────────────────
+
+def atomic_write(path: Path, data: dict) -> None:
+    fd, tmp = tempfile.mkstemp(dir=path.parent, prefix=".tmp")
+    try:
+        with os.fdopen(fd, "w", encoding="utf-8") as f:
+            json.dump(data, f, indent=2)
+        os.replace(tmp, path)
+    except Exception:
+        try:
+            os.unlink(tmp)
+        except OSError:
+            pass
+        raise
+
+
 # ── Patch version ──────────────────────────────────────────────────────────
 
 def extract_patch(html: str) -> str | None:
@@ -224,7 +242,7 @@ def main():
         if has_en_attr and pattern:
             # zh-cn: data-name="珠光护手" data-name-en="jeweled gauntlet"
             for loc_name, en_name in re.findall(pattern, locale_html):
-                slug = en_name.replace(" ", "-")
+                slug = re.sub(r"[^a-z0-9]+", "-", en_name.lower()).strip("-")
                 if slug in by_slug:
                     by_slug[slug][field] = unescape(loc_name)
                     matched += 1
@@ -286,25 +304,34 @@ def main():
     combos = parse_combos(combo_html)
     print(f"  → {len(combos)} combos")
 
-    # Write output
+    # Sanity checks — abort before touching existing data if counts look wrong
+    MIN_CHAMPIONS = 50
+    MIN_AUGMENTS  = 50
+    MIN_COMBOS    = 1
+    errors = []
+    if len(champions) < MIN_CHAMPIONS:
+        errors.append(f"champions={len(champions)} < {MIN_CHAMPIONS} (source markup may have changed)")
+    if len(augments) < MIN_AUGMENTS:
+        errors.append(f"augments={len(augments)} < {MIN_AUGMENTS} (source markup may have changed)")
+    if len(combos) < MIN_COMBOS:
+        errors.append(f"combos={len(combos)} < {MIN_COMBOS}")
+    if errors:
+        for e in errors:
+            print(f"  ✗ SANITY FAIL: {e}")
+        raise SystemExit("Aborting — parsed counts too low; existing data NOT overwritten")
+
+    # Atomic writes — each file is written to a temp then renamed so partial
+    # failures never leave a truncated JSON on disk.
     scraped_at = datetime.now(timezone.utc).isoformat()
 
-    (OUT_DIR / "champions.json").write_text(
-        json.dumps({"patch": patch, "scraped_at": scraped_at, "champions": champions}, indent=2),
-        encoding="utf-8",
-    )
-    (OUT_DIR / "augments.json").write_text(
-        json.dumps({"patch": patch, "scraped_at": scraped_at, "augments": augments}, indent=2),
-        encoding="utf-8",
-    )
-    (OUT_DIR / "combos.json").write_text(
-        json.dumps({"patch": patch, "scraped_at": scraped_at, "combos": combos}, indent=2),
-        encoding="utf-8",
-    )
-    (OUT_DIR / "meta.json").write_text(
-        json.dumps({"patch": patch, "scraped_at": scraped_at, "source": BASE_URL}, indent=2),
-        encoding="utf-8",
-    )
+    atomic_write(OUT_DIR / "champions.json",
+                 {"patch": patch, "scraped_at": scraped_at, "champions": champions})
+    atomic_write(OUT_DIR / "augments.json",
+                 {"patch": patch, "scraped_at": scraped_at, "augments": augments})
+    atomic_write(OUT_DIR / "combos.json",
+                 {"patch": patch, "scraped_at": scraped_at, "combos": combos})
+    atomic_write(OUT_DIR / "meta.json",
+                 {"patch": patch, "scraped_at": scraped_at, "source": BASE_URL})
 
     print(f"\nDone. Files written to {OUT_DIR}/")
     print(f"  champions.json  ({len(champions)} entries)")

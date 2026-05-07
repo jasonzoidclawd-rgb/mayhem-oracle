@@ -132,29 +132,59 @@ def extract_rules(patches: list, aug_map: dict, item_map: dict) -> dict:
                 # ── Item exclusions ──
                 m = ITEM_EXCL_RE.search(text)
                 if m:
-                    aug_slug  = resolve_name(m.group(1), aug_map)
-                    item_slug = resolve_name(m.group(2), item_map)
-                    item_exclusions[(aug_slug, item_slug)] = True
+                    aug_slug  = resolve_name(m.group(1), aug_map, fallback_slug=False)
+                    item_slug = resolve_name(m.group(2), item_map, fallback_slug=False)
+                    if aug_slug and item_slug:
+                        item_exclusions[(aug_slug, item_slug)] = True
+                    else:
+                        print(f"  [pool-rules] unresolved item-exclusion: {m.group(1)!r}/{m.group(2)!r} (patch {pv})")
 
                 # ── Mutual exclusions ──
                 m = MUTUAL_EXCL_RE.search(text)
                 if m:
-                    a = resolve_name(m.group(1), aug_map)
-                    b = resolve_name(m.group(2), aug_map)
-                    mutual_exclusive.add(frozenset([a, b]))
+                    a = resolve_name(m.group(1), aug_map, fallback_slug=False)
+                    b = resolve_name(m.group(2), aug_map, fallback_slug=False)
+                    if a and b:
+                        mutual_exclusive.add(frozenset([a, b]))
+                    else:
+                        print(f"  [pool-rules] unresolved mutual-exclusion: {m.group(1)!r}/{m.group(2)!r} (patch {pv})")
 
                 # ── Ally exclusions (chain-heal carve-outs) ──
                 m = ALLY_EXCL_RE.search(text)
                 if m:
-                    source = resolve_name(subj or m.group(1), aug_map)
-                    target = resolve_name(m.group(2), aug_map)
-                    ally_exclusions[(source, target)] = True
+                    source = resolve_name(subj or m.group(1), aug_map, fallback_slug=False)
+                    target = resolve_name(m.group(2), aug_map, fallback_slug=False)
+                    if source and target:
+                        ally_exclusions[(source, target)] = True
+                    else:
+                        print(f"  [pool-rules] unresolved ally-exclusion: {subj or m.group(1)!r}/{m.group(2)!r} (patch {pv})")
 
                 # ── Lifecycle: NEW augments ──
                 if text.startswith("• NEW:") or text.startswith("NEW:"):
                     if subj:
-                        slug = resolve_name(subj, aug_map)
-                        lifecycle_added.setdefault(slug, pv)
+                        slug = resolve_name(subj, aug_map, fallback_slug=False)
+                        if slug:
+                            lifecycle_added.setdefault(slug, pv)
+                        else:
+                            print(f"  [pool-rules] unresolved NEW augment: {subj!r} (patch {pv})")
+
+                # ── Lifecycle: REMOVED augments ──
+                text_l = text.lower()
+                if subj and any([
+                    text_l.startswith("• removed:") or text_l.startswith("removed:"),
+                    re.search(r"(?:has been|have been|is|are)\s+(?:permanently\s+)?removed\b", text_l),
+                    re.search(r"no longer (?:available|offered)\b", text_l),
+                    "removed from the pool" in text_l,
+                ]):
+                    slug = resolve_name(subj, aug_map, fallback_slug=False)
+                    if slug:
+                        lifecycle_removed.setdefault(slug, pv)
+
+                # ── Disabled (temporarily removed from pool) ──
+                if subj and re.search(r"\bdisabled\b|temporarily\s+(?:removed|unavailable)", text_l):
+                    slug = resolve_name(subj, aug_map, fallback_slug=False)
+                    if slug:
+                        disabled.add(slug)
 
     return {
         "item_exclusions":  [

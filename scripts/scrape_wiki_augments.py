@@ -16,6 +16,7 @@ import json
 import re
 import subprocess
 from pathlib import Path
+from urllib.parse import urlencode
 
 OUT = Path(__file__).parent.parent / "public" / "data" / "augments.json"
 
@@ -36,7 +37,7 @@ VALID_WIKI_SETS = {
 
 
 def fetch_wiki_html(page_title: str) -> str | None:
-    url = f"{WIKI_API}?action=parse&page={page_title}&prop=text&format=json"
+    url = WIKI_API + "?" + urlencode({"action": "parse", "page": page_title, "prop": "text", "format": "json"})
     result = subprocess.run(
         ["curl", "-sL", url, "-H", "User-Agent: Mozilla/5.0"],
         capture_output=True, text=True, timeout=30,
@@ -44,7 +45,12 @@ def fetch_wiki_html(page_title: str) -> str | None:
     if result.returncode != 0:
         print(f"  ✗ curl failed: {result.stderr}")
         return None
-    data = json.loads(result.stdout)
+    try:
+        data = json.loads(result.stdout)
+    except json.JSONDecodeError as e:
+        preview = result.stdout[:200].replace("\n", " ")
+        print(f"  ✗ JSON parse failed: {e} — response preview: {preview!r}")
+        return None
     if "error" in data:
         print(f"  ✗ API error: {data['error'].get('info', '')}")
         return None

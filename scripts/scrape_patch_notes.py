@@ -1,16 +1,22 @@
 """
 Mayhem Oracle — Patch Notes Scraper
 ====================================
-Fetches /patch-notes for en/zh-cn/ja-jp/ko-kr from arammayhem.com,
-parses patch cards into structured changes, and classifies each
-change as buffed/nerfed/changed via local LiteLLM cerebras-batch
-(falls back to arrow-direction heuristic if proxy unreachable).
+Fetches ARAM: Mayhem patch notes from the official League of Legends site
+(https://www.leagueoflegends.com) for en/zh-tw/ja-jp/ko-kr locales.
+
+Significantly more timely than wiki-sourced data — the official page is
+published on patch day, while the wiki can lag by several days.
+
+After scraping, also writes recentChanges to public/data/augments.json
+so augment detail pages reflect same-day stat updates even if
+wikiDescription hasn't caught up yet.
 
 Usage:
     python3 scripts/scrape_patch_notes.py
 
 Output:
-    public/data/patch-notes.json
+    public/data/patch-notes.json   – structured change feed
+    public/data/augments.json       – recentChanges field updated in-place
 """
 
 from __future__ import annotations
@@ -24,7 +30,10 @@ from pathlib import Path
 from urllib.error import URLError
 from urllib.request import Request, urlopen
 
-BASE_URL = "https://arammayhem.com"
+BASE_URL = "https://www.leagueoflegends.com"
+NEWS_PATH = "/en-us/news/game-updates/"
+SCRAPE_N_PATCHES = 6
+
 HEADERS = {
     "User-Agent": (
         "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) "
@@ -36,195 +45,228 @@ HEADERS = {
 }
 OUT_DIR = Path(__file__).parent.parent / "public" / "data"
 
-LOCALES = [
-    ("en", "/patch-notes"),
-    ("zh-cn", "/zh-cn/patch-notes"),
-    ("ja-jp", "/ja-jp/patch-notes"),
-    ("ko-kr", "/ko-kr/patch-notes"),
-]
-
-# Stable section h3 text → canonical id used in JSON output
-SECTION_MAP_EN = {
-    "Highlights": "highlights",
-    "General Changes": "general",
-    "New Items": "new_items",
-    "Augment Changes": "augments",
-    "Champion Balance Changes": "champions",
-    "Bug Fixes": "bugfixes",
+# Our locale keys → LoL site URL locale prefixes.
+# zh-cn: global site redirects to a 404; use zh-tw content under zh-cn key
+# for backward-compatibility with existing patch-notes.json consumers.
+LOCALE_PREFIXES: dict[str, str] = {
+    "zh-cn": "zh-tw",
+    "ja-jp": "ja-jp",
+    "ko-kr": "ko-kr",
 }
+
+# h4 sub-section headings inside ARAM: Mayhem → canonical section ids
+MAYHEM_SUBSECTION_MAP: dict[str, str] = {
+    "Champions": "champions",
+    "Augments":  "augments",
+    "Systems":   "general",
+    "Items":     "new_items",
+}
+
+_TAG_RE = re.compile(r"<[^>]+>")
+_WS_RE  = re.compile(r"\s+")
+_PATCH_URL_RE = re.compile(
+    r'href="(/en-us/news/game-updates/league-of-legends-patch-[\w-]+-notes/?)"'
+)
+_PATCH_VER_RE = re.compile(r"patch-(\d+)-(\d+[a-z]?)-notes")
+_ALL_H2_RE    = re.compile(r"<h2[^>]*>(.*?)</h2>", re.DOTALL)
+_H4_BLOCK_RE  = re.compile(r"<h4[^>]*>(.*?)</h4>(.*?)(?=<h4[^>]*>|$)", re.DOTALL)
+_UL_RE        = re.compile(r"<ul[^>]*>(.*?)</ul>", re.DOTALL)
+_LI_RE        = re.compile(r"<li[^>]*>(.*?)</li>", re.DOTALL)
+_STRONG_RE    = re.compile(r"<strong[^>]*>(.*?)</strong>", re.DOTALL)
+_TIME_RE = re.compile(r'<time[^>]+datetime="([^"T]+)')
+_META_DATE_RE = re.compile(
+    r'<meta[^>]+(?:name|property)="(?:article:published_time|date)"[^>]+content="([^"T]+)'
+)
 
 
 # ── HTML helpers ───────────────────────────────────────────────────────────
 
-def fetch(path: str) -> str:
-    url = BASE_URL + path
+def fetch(path_or_url: str) -> str:
+    url = path_or_url if path_or_url.startswith("http") else BASE_URL + path_or_url
     print(f"  Fetching {url} ...")
     req = Request(url, headers=HEADERS)
     with urlopen(req, timeout=30) as resp:
         return resp.read().decode("utf-8", errors="replace")
 
 
-_TAG_RE = re.compile(r"<[^>]+>")
-_WS_RE = re.compile(r"\s+")
-
-
 def strip_tags(s: str) -> str:
     return _WS_RE.sub(" ", html_module.unescape(_TAG_RE.sub(" ", s))).strip()
 
 
-# ── Parser ────────────────────────────────────────────────────────────────
+# ── URL discovery ──────────────────────────────────────────────────────────
 
-# Patch card boundary: <div data-slot="card" ...> ... (next data-slot="card" or end)
-_CARD_RE = re.compile(
-    r'<div data-slot="card"[^>]*>.*?(?=<div data-slot="card"|</main>)',
-    re.DOTALL,
-)
-_TITLE_RE = re.compile(
-    r'data-slot="card-title"[^>]*>\s*(.*?)\s*</div>',
-    re.DOTALL,
-)
-_DATE_RE = re.compile(
-    r'data-slot="card-description"[^>]*>\s*(.*?)\s*</div>',
-    re.DOTALL,
-)
-_PATCH_VERSION_RE = re.compile(r"(\d+\.\d+[a-z]?)")
-
-
-def parse_patches(html: str, locale: str) -> list[dict]:
-    """Parse all patch cards from a /patch-notes page."""
-    patches: list[dict] = []
-    for card_match in _CARD_RE.finditer(html):
-        card = card_match.group(0)
-        title_m = _TITLE_RE.search(card)
-        if not title_m:
-            continue
-        title = strip_tags(title_m.group(1))
-        version_m = _PATCH_VERSION_RE.search(title)
-        if not version_m:
-            continue
-        version = version_m.group(1)
-
-        date_m = _DATE_RE.search(card)
-        released = strip_tags(date_m.group(1)) if date_m else ""
-
-        # Sections live in card-content. Split on h3.
-        content_m = re.search(
-            r'data-slot="card-content"[^>]*>(.*?)(?=</div>\s*</div>\s*</div>\s*$|<div data-slot="card")',
-            card,
-            re.DOTALL,
-        )
-        content = content_m.group(1) if content_m else card
-
-        sections = parse_sections(content)
-        patches.append({
-            "version": version,
-            "title": title,
-            "released": released,
-            "sections": sections,
-        })
-    return patches
+def discover_patch_paths(n: int = SCRAPE_N_PATCHES) -> list[str]:
+    """Return up to n most-recent patch note paths from the news listing."""
+    html = fetch(NEWS_PATH)
+    seen: set[str] = set()
+    paths: list[str] = []
+    for m in _PATCH_URL_RE.finditer(html):
+        p = m.group(1).rstrip("/")
+        if p not in seen:
+            seen.add(p)
+            paths.append(p)
+            if len(paths) >= n:
+                break
+    return paths
 
 
-_SECTION_RE = re.compile(
-    r'<h3[^>]*text-primary[^>]*>(.*?)</h3>(.*?)(?=<h3[^>]*text-primary|$)',
-    re.DOTALL,
-)
+def locale_path(en_path: str, locale_key: str) -> str:
+    prefix = LOCALE_PREFIXES.get(locale_key, "en-us")
+    return re.sub(r"^/en-us/", f"/{prefix}/", en_path)
 
 
-def parse_sections(content_html: str) -> list[dict]:
-    out: list[dict] = []
-    for m in _SECTION_RE.finditer(content_html):
-        section_title = strip_tags(m.group(1))
-        body = m.group(2)
-        section_id = SECTION_MAP_EN.get(section_title)
-        if not section_id:
-            # Locale: section_title is non-English; keyed by position later
-            section_id = section_title
-        changes = parse_changes(body)
-        if not changes:
-            continue
-        out.append({
-            "id": section_id,
-            "title": section_title,
-            "changes": changes,
-        })
-    return out
+# ── Page parsing ───────────────────────────────────────────────────────────
+
+# Known locale translations of "ARAM: Mayhem" used as h2 section headings.
+_ARAM_MAYHEM_H2_TITLES: frozenset[str] = frozenset({
+    "aram: mayhem",
+    "隨機單中：大混戰",      # zh-tw
+    "ランダムミッド：メイヘム",  # ja-jp
+    "aram: 무작위 혼전",      # ko-kr (common form; falls back to EN if absent)
+    "aram: 대혼전",           # ko-kr alt
+})
 
 
-# Subject anchor: either <h4>...</h4> (general/augment) or <a href="/champions/...">name</a>
-_SUBJECT_H4_RE = re.compile(
-    r'<h4[^>]*>(.*?)</h4>(.*?)(?=<h4[^>]*>|$)',
-    re.DOTALL,
-)
-_CHAMPION_BLOCK_RE = re.compile(
-    r'<a[^>]*href="(?:/[a-z-]+)?/champions/([^"]+)"[^>]*>(.*?)</a>(.*?)(?=<a[^>]*href="(?:/[a-z-]+)?/champions/|$)',
-    re.DOTALL,
-)
-_LI_RE = re.compile(r'<li[^>]*>(.*?)</li>', re.DOTALL)
-_BADGE_RE = re.compile(r'data-slot="badge"[^>]*>(.*?)</span>', re.DOTALL)
-_BADGE_STRIP = re.compile(r'<span[^>]*data-slot="badge"[^>]*>.*?</span>', re.DOTALL)
+def _extract_h2_section(html: str, title: str) -> str | None:
+    """Return HTML content between a named <h2> and the next <h2>.
+
+    For 'ARAM: Mayhem', also matches known locale translations so locale
+    pages parse correctly without requiring the English heading.
+    """
+    target = title.lower().strip()
+    use_locale_set = target == "aram: mayhem"
+    h2s = list(_ALL_H2_RE.finditer(html))
+    for i, m in enumerate(h2s):
+        heading = strip_tags(m.group(1)).lower().strip()
+        if heading == target or (use_locale_set and heading in _ARAM_MAYHEM_H2_TITLES):
+            start = m.end()
+            end = h2s[i + 1].start() if i + 1 < len(h2s) else len(html)
+            return html[start:end]
+    return None
 
 
-def parse_changes(body_html: str) -> list[dict]:
-    """Extract flat list of changes from a section body."""
-    # Champion balance section uses <a href="/champions/..."> as subject anchor
-    if 'href="/champions/' in body_html or '/champions/' in body_html:
-        return _parse_champion_changes(body_html)
-    # Other sections: h4 subjects, then flat list
-    h4s = list(_SUBJECT_H4_RE.finditer(body_html))
-    if h4s:
-        return _parse_h4_subjects(h4s)
-    # No h4 subjects → flat list of <li> bullets (Highlights / Bug Fixes)
-    return _parse_flat_bullets(body_html)
+def _resolve_section_id(h4_title: str, subsection_map: dict[str, str]) -> str | None:
+    """Case-insensitive and prefix-tolerant h4 → section id lookup."""
+    lower = h4_title.lower().strip()
+    for k, v in subsection_map.items():
+        if k.lower() == lower:
+            return v
+    # Prefix match: "Augments and Set Changes" → "Augments"
+    for k, v in subsection_map.items():
+        if lower.startswith(k.lower()):
+            return v
+    # Keyword fallback
+    if "champion" in lower:
+        return subsection_map.get("Champions")
+    if "augment" in lower:
+        return subsection_map.get("Augments")
+    if "system" in lower or "general" in lower:
+        return subsection_map.get("Systems")
+    return None
 
 
-def _parse_flat_bullets(body_html: str) -> list[dict]:
-    changes = []
-    for li in _LI_RE.findall(body_html):
-        text = strip_tags(li)
-        if text:
-            changes.append({"subject": "", "text": text})
-    return changes
+def _extract_subject_ul_pairs(body: str) -> list[tuple[str, str]]:
+    """Return (subject_text, ul_html) pairs from an h4 section body.
+
+    Handles two HTML formats used by the official patch notes:
+    - Modern: <p><strong>Subject</strong></p>\\n<ul>...</ul>
+    - Legacy: <strong>Subject</strong>\\n<ul>...</ul>  (no <p> wrapper)
+    """
+    # Modern format: <p><strong>Subject</strong></p> immediately before <ul>
+    modern_re = re.compile(
+        r"<p[^>]*>\s*<strong[^>]*>(.*?)</strong>\s*</p>\s*(<ul[^>]*>.*?</ul>)",
+        re.DOTALL,
+    )
+    pairs = [(strip_tags(m.group(1)), m.group(2)) for m in modern_re.finditer(body)]
+    if pairs:
+        return pairs
+
+    # Legacy format: look backwards from each <ul> to find the subject <strong>.
+    # The subject <strong> is NOT inside a <li> (no </li> between it and the <ul>).
+    for ul_m in _UL_RE.finditer(body):
+        preceding = body[:ul_m.start()]
+        # Walk all <strong> elements in preceding text; keep the last one with
+        # no </li> between it and the <ul> start.
+        subject_m = None
+        for sm in _STRONG_RE.finditer(preceding):
+            tail = preceding[sm.end():]
+            if "</li>" not in tail:
+                subject_m = sm
+        if subject_m:
+            subject = strip_tags(subject_m.group(1))
+            if subject:
+                pairs.append((subject, ul_m.group(0)))
+    return pairs
 
 
-def _parse_h4_subjects(h4_matches) -> list[dict]:
-    changes = []
-    for m in h4_matches:
-        subject = strip_tags(m.group(1))
-        bullets = _LI_RE.findall(m.group(2))
-        if not bullets:
-            # No bullets — emit subject-only entry with whatever inline text remains
-            text = strip_tags(m.group(2))
-            if text:
-                changes.append({"subject": subject, "text": text})
-            continue
-        for li in bullets:
-            text = strip_tags(li)
-            if text:
-                changes.append({"subject": subject, "text": text})
-    return changes
+def _parse_section_html(
+    section_html: str,
+    subsection_map: dict[str, str],
+    *,
+    locale_mode: bool = False,
+) -> list[dict]:
+    """Parse h4-delimited sub-sections into change lists.
+
+    locale_mode=True: skip the subsection_map filter and return ALL h4 blocks in
+    order. Used for non-English pages where h4 titles are translated — the caller
+    (stitch_locales) matches locale sections to EN sections positionally.
+    """
+    sections: list[dict] = []
+    for h4_m in _H4_BLOCK_RE.finditer(section_html):
+        h4_title = strip_tags(h4_m.group(1))
+        if locale_mode:
+            section_id = h4_title  # placeholder; positional stitching ignores it
+        else:
+            section_id = _resolve_section_id(h4_title, subsection_map)
+            if not section_id:
+                continue
+        body = h4_m.group(2)
+        changes: list[dict] = []
+        for subject, ul_html in _extract_subject_ul_pairs(body):
+            for li in _LI_RE.finditer(ul_html):
+                raw = strip_tags(li.group(1))
+                text = re.sub(r"\s*⇒\s*", " ⇒ ", raw)
+                text = re.sub(r"\s+:", ":", text).strip()
+                if not text:
+                    continue
+                ch: dict = {"subject": subject, "text": text}
+                if not locale_mode and section_id == "champions":
+                    ch["subjectSlug"] = re.sub(r"[^a-z0-9-]", "", subject.lower().replace(" ", "-"))
+                changes.append(ch)
+        if changes:
+            sections.append({"id": section_id, "title": h4_title, "changes": changes})
+    return sections
 
 
-def _parse_champion_changes(body_html: str) -> list[dict]:
-    changes = []
-    for m in _CHAMPION_BLOCK_RE.finditer(body_html):
-        slug = m.group(1)
-        champ_name = strip_tags(m.group(2))
-        block = m.group(3)
-        bullets = _LI_RE.findall(block)
-        for li in bullets:
-            badge_m = _BADGE_RE.search(li)
-            badge = strip_tags(badge_m.group(1)) if badge_m else ""
-            rest = _BADGE_STRIP.sub("", li)
-            text = strip_tags(rest)
-            label = f"{badge}: {text}" if badge else text
-            if label:
-                changes.append({
-                    "subject": champ_name,
-                    "subjectSlug": slug,
-                    "text": label,
-                })
-    return changes
+def parse_patch_page(html: str, en_path: str, *, locale_mode: bool = False) -> dict:
+    """Parse one full patch page into our intermediate patch dict.
+
+    locale_mode=True for non-English pages: all h4 sub-sections are returned in
+    order without canonical-ID filtering so stitch_locales can match them
+    positionally to the EN structure.
+    """
+    vm = _PATCH_VER_RE.search(en_path)
+    version = f"{vm.group(1)}.{vm.group(2)}" if vm else "unknown"
+
+    tm = _TIME_RE.search(html) or _META_DATE_RE.search(html)
+    released = tm.group(1).strip() if tm else ""
+
+    sections: list[dict] = []
+
+    mayhem_html = _extract_h2_section(html, "ARAM: Mayhem")
+    if mayhem_html:
+        sections.extend(_parse_section_html(mayhem_html, MAYHEM_SUBSECTION_MAP, locale_mode=locale_mode))
+
+    if not locale_mode:
+        # Also capture generic ARAM section changes not already in Mayhem section.
+        aram_html = _extract_h2_section(html, "ARAM")
+        if aram_html:
+            existing = {s["id"] for s in sections}
+            aram_map = {k: v for k, v in MAYHEM_SUBSECTION_MAP.items() if v not in existing}
+            for sec in _parse_section_html(aram_html, aram_map):
+                sections.append(sec)
+
+    return {"version": version, "title": f"Patch {version} Notes", "released": released, "sections": sections}
 
 
 # ── Classification (cerebras-batch primary, regex fallback) ───────────────
@@ -257,7 +299,6 @@ def classify_fallback(text: str) -> str:
         return "changed"
     increased = avg_r > avg_l
     inverted = bool(_INVERTED_TERMS.search(text))
-    # Cooldown/cost ↑ = nerf; otherwise ↑ = buff
     if inverted:
         return "nerfed" if increased else "buffed"
     return "buffed" if increased else "nerfed"
@@ -292,10 +333,7 @@ def _classify_chunk(chunk: list[dict], llm_ask: Path, timeout: int) -> list[str]
     try:
         result = subprocess.run(
             [str(llm_ask), "cerebras-batch"],
-            input=prompt,
-            capture_output=True,
-            text=True,
-            timeout=timeout,
+            input=prompt, capture_output=True, text=True, timeout=timeout,
         )
     except subprocess.TimeoutExpired:
         print(f"    cerebras-batch timed out on chunk of {len(chunk)}")
@@ -319,14 +357,13 @@ def _classify_chunk(chunk: list[dict], llm_ask: Path, timeout: int) -> list[str]
     kinds = parsed.get("kinds") if isinstance(parsed, dict) else None
     if not isinstance(kinds, list) or len(kinds) != len(chunk):
         got = len(kinds) if isinstance(kinds, list) else "n/a"
-        print(f"    cerebras-batch length mismatch on chunk: got {got}, expected {len(chunk)}")
+        print(f"    cerebras-batch length mismatch: got {got}, expected {len(chunk)}")
         return None
     valid = {"buffed", "nerfed", "changed"}
     return [k if k in valid else "changed" for k in kinds]
 
 
 def classify_batch_via_llm(changes: list[dict], timeout: int = 60) -> list[str] | None:
-    """Call ~/bin/llm-ask cerebras-batch in chunks. Returns None if any chunk fails."""
     if not changes:
         return []
     llm_ask = Path.home() / "bin" / "llm-ask"
@@ -335,10 +372,9 @@ def classify_batch_via_llm(changes: list[dict], timeout: int = 60) -> list[str] 
         return None
     out: list[str] = []
     for i in range(0, len(changes), CHUNK_SIZE):
-        chunk = changes[i:i + CHUNK_SIZE]
+        chunk = changes[i : i + CHUNK_SIZE]
         kinds = _classify_chunk(chunk, llm_ask, timeout)
         if kinds is None:
-            # One retry after a short backoff (Cerebras free tier is bursty).
             time.sleep(2)
             kinds = _classify_chunk(chunk, llm_ask, timeout)
         if kinds is None:
@@ -349,11 +385,7 @@ def classify_batch_via_llm(changes: list[dict], timeout: int = 60) -> list[str] 
 
 
 def classify_patch(patch: dict) -> None:
-    """Mutate patch in place: add `kind` to each change."""
-    flat: list[dict] = []
-    for sec in patch["sections"]:
-        for ch in sec["changes"]:
-            flat.append(ch)
+    flat = [ch for sec in patch["sections"] for ch in sec["changes"]]
     if not flat:
         return
     kinds = classify_batch_via_llm(flat)
@@ -370,10 +402,10 @@ def classify_patch(patch: dict) -> None:
 # ── Locale stitching ──────────────────────────────────────────────────────
 
 def stitch_locales(en_patches: list[dict], by_locale: dict[str, list[dict]]) -> list[dict]:
-    """For each EN patch, attach localized text per change.
+    """Positional stitch of locale text onto classified EN patches.
 
-    Positional stitching with parity check. If section/change counts mismatch
-    for a locale, fall back to EN text for that locale on that patch.
+    If section/change counts mismatch for a locale on a given patch,
+    that locale falls back to EN text for the whole patch.
     """
     en_by_version = {p["version"]: p for p in en_patches}
     locale_lookup: dict[str, dict[str, dict]] = {
@@ -381,11 +413,11 @@ def stitch_locales(en_patches: list[dict], by_locale: dict[str, list[dict]]) -> 
         for loc, patches in by_locale.items()
     }
 
-    out_patches = []
+    out: list[dict] = []
     for version, en_patch in en_by_version.items():
-        merged_sections = []
+        merged_sections: list[dict] = []
         for sec_idx, sec in enumerate(en_patch["sections"]):
-            merged_changes = []
+            merged_changes: list[dict] = []
             for ch_idx, ch in enumerate(sec["changes"]):
                 texts = {"en": ch["text"]}
                 subjects = {"en": ch.get("subject", "")}
@@ -403,7 +435,7 @@ def stitch_locales(en_patches: list[dict], by_locale: dict[str, list[dict]]) -> 
                     loc_ch = loc_sec["changes"][ch_idx]
                     texts[loc] = loc_ch["text"]
                     subjects[loc] = loc_ch.get("subject", "") or ch.get("subject", "")
-                merged = {
+                merged: dict = {
                     "subject": subjects,
                     "text": texts,
                     "kind": ch["kind"],
@@ -411,26 +443,17 @@ def stitch_locales(en_patches: list[dict], by_locale: dict[str, list[dict]]) -> 
                 if "subjectSlug" in ch:
                     merged["subjectSlug"] = ch["subjectSlug"]
                 merged_changes.append(merged)
-            merged_sections.append({
-                "id": sec["id"],
-                "title": sec["title"],
-                "changes": merged_changes,
-            })
-        out_patches.append({
+            merged_sections.append({"id": sec["id"], "title": sec["title"], "changes": merged_changes})
+        out.append({
             "version": en_patch["version"],
             "title": en_patch["title"],
             "released": en_patch["released"],
             "sections": merged_sections,
         })
-    return out_patches
+    return out
 
 
 # ── Augment-name enrichment ───────────────────────────────────────────────
-# arammayhem.com leaves augment subjects in English on every locale page. We
-# already scrape Chinese/Japanese/Korean augment names from CommunityDragon's
-# cherry-augments.json into augments.json, so back-fill the missing locale
-# subjects from there. Champions.json has no localized names, so champion
-# balance subjects stay English (handled separately if/when we add them).
 
 _AUGMENT_LOCALE_FIELDS = {
     "zh-tw": "name_zh_TW",
@@ -441,7 +464,6 @@ _AUGMENT_LOCALE_FIELDS = {
 
 
 def _load_augment_name_map() -> dict[str, dict[str, str]]:
-    """english augment name → {zh-tw, zh-cn, ja-jp, ko-kr} (only present locales)."""
     path = OUT_DIR / "augments.json"
     if not path.exists():
         return {}
@@ -463,10 +485,6 @@ def _load_augment_name_map() -> dict[str, dict[str, str]]:
 
 
 def enrich_augment_subjects(merged_patches: list[dict]) -> int:
-    """For every change in 'augments' sections, look up its English subject in
-    augments.json and write the localized name into the per-locale subject map.
-    Adds a 'zh-tw' key whenever a translation exists. Returns count of subjects
-    enriched (across locales, summed)."""
     name_map = _load_augment_name_map()
     if not name_map:
         return 0
@@ -488,47 +506,133 @@ def enrich_augment_subjects(merged_patches: list[dict]) -> int:
     return hits
 
 
+# ── Write recentChanges back to augments.json ─────────────────────────────
+
+def update_augment_recent_changes(merged_patches: list[dict]) -> None:
+    """For the latest patch, write recentChanges into augments.json.
+
+    Gives augment detail pages same-day accuracy for stat changes even
+    when wikiDescription hasn't been updated by the wiki editors yet.
+    """
+    if not merged_patches:
+        return
+    latest = merged_patches[0]
+    aug_changes = next(
+        (sec["changes"] for sec in latest["sections"] if sec["id"] == "augments"),
+        [],
+    )
+    if not aug_changes:
+        return
+
+    aug_path = OUT_DIR / "augments.json"
+    if not aug_path.exists():
+        return
+
+    data = json.loads(aug_path.read_text("utf-8"))
+    augments: list[dict] = data.get("augments", [])
+    by_name = {a["name"].lower().strip(): a for a in augments}
+
+    applied = 0
+    missing: list[str] = []
+    for change in aug_changes:
+        en_subject = change["subject"].get("en", "").strip()
+        if not en_subject:
+            continue
+        aug = by_name.get(en_subject.lower())
+        en_text = change["text"].get("en", "") if isinstance(change["text"], dict) else change["text"]
+        if aug is not None:
+            existing = aug.get("recentChanges", {})
+            # Accumulate multiple changes in the same patch, avoid duplicates.
+            if existing.get("patch") == latest["version"]:
+                if en_text not in existing["changes"]:
+                    existing["changes"].append(en_text)
+            else:
+                aug["recentChanges"] = {"patch": latest["version"], "changes": [en_text]}
+            applied += 1
+        else:
+            missing.append(en_subject)
+
+    if missing:
+        print(f"  recentChanges: {len(missing)} augments not in augments.json (may be new): {missing[:5]}")
+    if applied > 0:
+        aug_path.write_text(json.dumps(data, indent=2, ensure_ascii=False), encoding="utf-8")
+        print(f"  Updated recentChanges for {applied} augments in augments.json")
+
+
 # ── Main ──────────────────────────────────────────────────────────────────
 
-def main():
+def main() -> None:
     OUT_DIR.mkdir(parents=True, exist_ok=True)
-    print("Scraping arammayhem.com patch notes...")
+    print(f"Discovering patch note URLs from {BASE_URL}{NEWS_PATH} ...")
 
-    by_locale: dict[str, list[dict]] = {}
-    for i, (loc, path) in enumerate(LOCALES):
+    en_paths = discover_patch_paths(SCRAPE_N_PATCHES)
+    if not en_paths:
+        raise SystemExit("No patch note URLs found — aborting.")
+    print(f"  Found {len(en_paths)} patches: {[p.split('/')[-1] for p in en_paths]}")
+
+    # Fetch and parse EN pages
+    print("\nFetching and parsing EN patch pages...")
+    en_patches: list[dict] = []
+    for i, path in enumerate(en_paths):
         if i > 0:
             time.sleep(0.8)
         try:
             html = fetch(path)
         except (URLError, OSError) as e:
-            print(f"  {loc}: skipped ({e})")
+            print(f"  {path}: skipped ({e})")
             continue
-        patches = parse_patches(html, loc)
-        print(f"  {loc}: {len(patches)} patches")
-        by_locale[loc] = patches
+        patch = parse_patch_page(html, path)
+        total = sum(len(s["changes"]) for s in patch["sections"])
+        print(f"  {patch['version']}: {len(patch['sections'])} sections, {total} changes")
+        if not patch["sections"]:
+            print(f"    WARNING: no ARAM: Mayhem content found — check h2 selector")
+        en_patches.append(patch)
 
-    en_patches = by_locale.pop("en", [])
     if not en_patches:
         raise SystemExit("No EN patches parsed — aborting.")
 
+    # Classify
     print("\nClassifying changes (cerebras-batch primary)...")
     for patch in en_patches:
         print(f"  Patch {patch['version']}:")
         classify_patch(patch)
 
+    # Fetch locale pages
+    print("\nFetching locale pages...")
+    by_locale: dict[str, list[dict]] = {}
+    for loc_key in LOCALE_PREFIXES:
+        loc_patches: list[dict] = []
+        for i, en_path in enumerate(en_paths):
+            if i > 0:
+                time.sleep(0.6)
+            lpath = locale_path(en_path, loc_key)
+            try:
+                html = fetch(lpath)
+            except (URLError, OSError) as e:
+                print(f"  {loc_key} {en_path}: skipped ({e})")
+                continue
+            loc_patches.append(parse_patch_page(html, en_path, locale_mode=True))
+        by_locale[loc_key] = loc_patches
+        print(f"  {loc_key}: {len(loc_patches)} patches")
+
+    # Stitch locales
     print("\nStitching locales...")
     merged = stitch_locales(en_patches, by_locale)
 
+    # Enrich augment subject names from augments.json
     print("\nEnriching augment subject names from augments.json...")
     enriched = enrich_augment_subjects(merged)
     print(f"  augment subject translations applied: {enriched}")
 
+    # Write recentChanges back to augments.json
+    print("\nUpdating augments.json recentChanges...")
+    update_augment_recent_changes(merged)
+
     current_patch = merged[0]["version"] if merged else None
-    scraped_at = datetime.now(timezone.utc).isoformat()
     out = {
         "patch": current_patch,
-        "scraped_at": scraped_at,
-        "source": BASE_URL,
+        "scraped_at": datetime.now(timezone.utc).isoformat(),
+        "source": BASE_URL + NEWS_PATH,
         "patches": merged,
     }
 
@@ -536,9 +640,9 @@ def main():
     out_path.write_text(json.dumps(out, indent=2, ensure_ascii=False), encoding="utf-8")
     total_changes = sum(len(s["changes"]) for p in merged for s in p["sections"])
     print(f"\nDone. Wrote {out_path}")
-    print(f"  patches:        {len(merged)}")
-    print(f"  total changes:  {total_changes}")
-    print(f"  current patch:  {current_patch}")
+    print(f"  patches:       {len(merged)}")
+    print(f"  total changes: {total_changes}")
+    print(f"  current patch: {current_patch}")
 
 
 if __name__ == "__main__":

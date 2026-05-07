@@ -251,6 +251,7 @@ def simulate_pool(slug, kit_tags, profile):
 
     has_hard_cc = False
     has_on_hit = False
+    has_dash_tag = False
     total_ap = 0.0
     total_ad = 0.0
     desc_parts = []
@@ -263,16 +264,18 @@ def simulate_pool(slug, kit_tags, profile):
         if cc and cc in HARD_CC: has_hard_cc = True
         for t in (s.get("tags") or []):
             if "Immobiliz" in t: has_hard_cc = True
+            if t in ("Trait_PlayerSelectedDashDirection", "PositiveEffect_Teleport"):
+                has_dash_tag = True
         d = ab.get("description") or ""
         desc_parts.append(d)
     all_desc = " ".join(desc_parts)
-    has_dash = bool(DASH_DESC_RE.search(all_desc))
+    has_dash = has_dash_tag or bool(DASH_DESC_RE.search(all_desc))
     has_spin = bool(SPIN_RE.search(all_desc))
     has_heal_shield = bool(HEAL_SHIELD_RE.search(all_desc))
 
     disabled = set(POOL_RULES.get("disabled", []))
     removed  = set(POOL_RULES.get("lifecycle", {}).get("removed", {}).keys())
-    item_excl = {r["augment"] for r in POOL_RULES.get("item_exclusions", [])}  # always-on simulation
+    # item_exclusions depend on which items the player owns — not applied in a champion-only audit
 
     by_rarity = {"silver":0,"gold":0,"prismatic":0}
     excluded = {}
