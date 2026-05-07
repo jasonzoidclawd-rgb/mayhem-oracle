@@ -23,6 +23,14 @@ function normalizeAugmentKey(slug: string): string {
 }
 import type { AbilityProfile, ChampionBaseStats, ChampionTag, PoolRules } from "../types";
 
+// Resource-eligibility tags (mana / manaless) are handled exclusively by
+// Layer 2 (`isInAugmentPool` → MANA_REQUIRED + heuristic regex). They must
+// NOT participate in Layer 3 tag intersection: `classify_augments.py` emits
+// `mana` / `manaless` on augments, but `classify_champions.py` intentionally
+// does not emit them on champions, so leaving them in here would silently
+// drop every `["mana"]`-only augment from every champion.
+const RESOURCE_TAGS: ReadonlySet<ChampionTag> = new Set(["mana", "manaless"]);
+
 export interface PoolAugmentInput {
   slug: string;
   rarity: "silver" | "gold" | "prismatic";
@@ -93,8 +101,9 @@ export function getChampionAugmentPool<T extends PoolAugmentInput>(args: {
       continue;
     }
 
-    // Layer 3 — tag intersection (Smart Tailoring active matching)
-    const augTags = aug.kit_tags ?? [];
+    // Layer 3 — tag intersection (Smart Tailoring active matching).
+    // Resource tags are stripped first; see RESOURCE_TAGS comment above.
+    const augTags = (aug.kit_tags ?? []).filter((t) => !RESOURCE_TAGS.has(t));
     if (augTags.length > 0) {
       const hasOverlap = augTags.some((t) => championKitTags.includes(t));
       if (!hasOverlap) {
@@ -102,7 +111,7 @@ export function getChampionAugmentPool<T extends PoolAugmentInput>(args: {
         continue;
       }
     }
-    // augTags.length === 0 → universal augment, always passes
+    // augTags.length === 0 (post-filter) → universal augment, always passes
 
     // Layer 4 — item exclusions
     if (blockedByItem.has(normalizedSlug)) {

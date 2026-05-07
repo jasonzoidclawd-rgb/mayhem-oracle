@@ -1,0 +1,195 @@
+import { describe, expect, test } from "vitest";
+import augmentsData from "../../../public/data/augments.json";
+import championsData from "../../../public/data/champions.json";
+import { getChampionAugmentPool } from "../scoring/pool-orchestrator";
+import type { PoolAugmentInput } from "../scoring/pool-orchestrator";
+import type { ChampionTag, PoolRules } from "../types";
+
+const EMPTY_POOL_RULES: PoolRules = {
+  patch: "test",
+  scraped_at: "test",
+  disabled: [],
+  mutually_exclusive: [],
+  item_exclusions: [],
+  ally_exclusions: [],
+  lifecycle: { added: {}, removed: {} },
+};
+
+type Aug = { slug: string; rarity: "silver" | "gold" | "prismatic"; wikiDescription?: string; kit_tags?: ChampionTag[] };
+
+function runPool(opts: {
+  championSlug: string;
+  championKitTags: ChampionTag[];
+  augments: Aug[];
+}) {
+  return getChampionAugmentPool({
+    championSlug: opts.championSlug,
+    augments: opts.augments,
+    championKitTags: opts.championKitTags,
+    poolRules: EMPTY_POOL_RULES,
+  });
+}
+
+describe("pool orchestrator — Layer 3 resource-tag asymmetry", () => {
+  // Regression guard for the bug captured in
+  // docs/champion-augment-pool-claude-codex-debate.md (2026-05-07).
+  // classify_augments.py emits mana/manaless on augments;
+  // classify_champions.py intentionally does NOT emit them on champions
+  // (resource gating happens in Layer 2). Layer 3 must therefore strip
+  // mana/manaless before computing tag overlap, otherwise every
+  // `["mana"]`-only augment is silently excluded from every champion.
+
+  test("a `[\"mana\"]`-only augment is NOT excluded from a champion lacking mana tag", () => {
+    const result = runPool({
+      championSlug: "ezreal", // mana-resource champion (irrelevant; pool tags are explicit)
+      championKitTags: ["ability", "dot"], // intentionally no `mana` — mirrors classify_champions output
+      augments: [
+        {
+          slug: "synthetic-mana-only-augment",
+          rarity: "silver",
+          wikiDescription: "Grants a flat bonus.", // benign description so Layer 2 doesn't filter
+          kit_tags: ["mana"],
+        },
+      ],
+    });
+
+    expect(result.excluded.find((e) => e.slug === "synthetic-mana-only-augment")).toBeUndefined();
+    expect(result.silver.map((a) => a.slug)).toContain("synthetic-mana-only-augment");
+  });
+
+  test("after stripping resource tags, a non-overlapping augment is still excluded by Layer 3", () => {
+    // Verifies the filter only strips resource tags — it does NOT bypass Layer 3
+    // entirely. An augment tagged ["mana", "crit"] facing a champion with
+    // ["ability"] should still be excluded because, after dropping "mana",
+    // remaining ["crit"] has no overlap with ["ability"].
+    const result = runPool({
+      championSlug: "anivia",
+      championKitTags: ["ability"],
+      augments: [
+        {
+          slug: "synthetic-mana-crit-augment",
+          rarity: "gold",
+          wikiDescription: "Grants a flat bonus.",
+          kit_tags: ["mana", "crit"],
+        },
+      ],
+    });
+
+    const excluded = result.excluded.find((e) => e.slug === "synthetic-mana-crit-augment");
+    expect(excluded).toBeDefined();
+    expect(excluded?.reason).toBe("tag-mismatch");
+  });
+
+  test("a `[\"manaless\"]`-only augment is NOT excluded from a manaless champion", () => {
+    // Symmetric guard: classify_augments may also emit `manaless`. The same
+    // asymmetry means a `["manaless"]`-only augment would be excluded from
+    // every champion (no champion has the tag) without the resource-tag strip.
+    const result = runPool({
+      championSlug: "garen", // manaless
+      championKitTags: ["attack", "tank"],
+      augments: [
+        {
+          slug: "synthetic-manaless-augment",
+          rarity: "silver",
+          wikiDescription: "Grants a flat bonus.",
+          kit_tags: ["manaless"],
+        },
+      ],
+    });
+
+    expect(result.excluded.find((e) => e.slug === "synthetic-manaless-augment")).toBeUndefined();
+    expect(result.silver.map((a) => a.slug)).toContain("synthetic-manaless-augment");
+  });
+
+  test("an augment with no kit_tags is universal and passes Layer 3", () => {
+    const result = runPool({
+      championSlug: "ahri",
+      championKitTags: ["ability"],
+      augments: [
+        { slug: "synthetic-universal", rarity: "silver", wikiDescription: "Grants gold.", kit_tags: [] },
+        { slug: "synthetic-universal-undef", rarity: "silver", wikiDescription: "Grants gold." },
+      ],
+    });
+    expect(result.silver.map((a) => a.slug)).toEqual(
+      expect.arrayContaining(["synthetic-universal", "synthetic-universal-undef"]),
+    );
+  });
+
+  test("an augment with overlapping non-resource tag passes Layer 3", () => {
+    const result = runPool({
+      championSlug: "brand",
+      championKitTags: ["ability", "dot"],
+      augments: [
+        {
+          slug: "synthetic-ability-overlap",
+          rarity: "gold",
+          wikiDescription: "Grants AP.",
+          kit_tags: ["ability"],
+        },
+      ],
+    });
+    expect(result.gold.map((a) => a.slug)).toContain("synthetic-ability-overlap");
+  });
+});
+
+// ── Real-data pool behavior tests ─────────────────────────────────────────────
+// Require classify_champions.py + classify_augments.py to have run (kit_tags populated).
+
+describe("pool orchestrator — real-data behavior", () => {
+  const allAugments = augmentsData.augments as unknown as PoolAugmentInput[];
+
+  function getChampionTags(slug: string): ChampionTag[] {
+    const champ = championsData.champions.find((c) => c.slug === slug) as unknown as { kit_tags?: ChampionTag[] };
+    return champ?.kit_tags ?? [];
+  }
+
+  function runRealPool(championSlug: string) {
+    return getChampionAugmentPool({
+      championSlug,
+      augments: allAugments,
+      championKitTags: getChampionTags(championSlug),
+      poolRules: EMPTY_POOL_RULES,
+    });
+  }
+
+  function passedSlugs(result: ReturnType<typeof runRealPool>): string[] {
+    return [...result.silver, ...result.gold, ...result.prismatic].map((a) => a.slug);
+  }
+
+  const MANA_REQUIRED_SLUGS = ["juiced", "mind-to-matter", "overflow", "ominous-pact"];
+
+  test("manaless champion (garen) excludes MANA_REQUIRED augments via Layer 2", () => {
+    const slugs = passedSlugs(runRealPool("garen"));
+    for (const slug of MANA_REQUIRED_SLUGS) {
+      expect(slugs).not.toContain(slug);
+    }
+  });
+
+  test("manaless champion (yasuo) excludes MANA_REQUIRED augments via Layer 2", () => {
+    const slugs = passedSlugs(runRealPool("yasuo"));
+    for (const slug of MANA_REQUIRED_SLUGS) {
+      expect(slugs).not.toContain(slug);
+    }
+  });
+
+  test("mana champion (brand) sees overflow (mana-required, ability-tagged, passes both layers)", () => {
+    // overflow: Layer 2 passes (brand has mana); Layer 3 passes (ability tag overlaps brand's tags).
+    // Verifies Layer 2 resource gate is not over-excluding.
+    expect(passedSlugs(runRealPool("brand"))).toContain("overflow");
+  });
+
+  test("Layer 3 narrows Brand's pool (brand sees fewer augments than total)", () => {
+    // Brand has ["ability","cc","dot","haste"] — augments with no overlapping tags are excluded.
+    const result = runRealPool("brand");
+    expect(result.total).toBeLessThan(allAugments.length);
+  });
+
+  test("Brand's pool and Yasuo's pool are non-identical (Smart Tailoring is champion-specific)", () => {
+    const brandSlugs = new Set(passedSlugs(runRealPool("brand")));
+    const yasuoSlugs = new Set(passedSlugs(runRealPool("yasuo")));
+    const symDiff =
+      [...brandSlugs].filter((s) => !yasuoSlugs.has(s)).length +
+      [...yasuoSlugs].filter((s) => !brandSlugs.has(s)).length;
+    expect(symDiff).toBeGreaterThan(0);
+  });
+});
