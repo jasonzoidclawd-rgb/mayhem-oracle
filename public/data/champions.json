@@ -31,7 +31,13 @@
         "mpGrowth": 21,
         "baseHPRegen": 5.5,
         "hpRegenGrowth": 0.55
-      }
+      },
+      "kit_tags": [
+        "ability",
+        "cc",
+        "dot",
+        "haste"
+      ]
     },
     {
       "slug": "yasuo",
@@ -62,7 +68,15 @@
         "mpGrowth": 0,
         "baseHPRegen": 6.5,
         "hpRegenGrowth": 0.9
-      }
+      },
+      "kit_tags": [
+        "attack",
+        "cc",
+        "crit",
+        "heal_shield",
+        "movement",
+        "on_hit"
+      ]
     },
     {
       "slug": "graves",
@@ -92,7 +106,13 @@
         "mpGrowth": 40,
         "baseHPRegen": 8,
         "hpRegenGrowth": 0.7
-      }
+      },
+      "kit_tags": [
+        "attack",
+        "crit",
+        "movement",
+        "on_hit"
+      ]
     },
     {
       "slug": "vayne",
@@ -123,7 +143,14 @@
         "mpGrowth": 35,
         "baseHPRegen": 3.5,
         "hpRegenGrowth": 0.55
-      }
+      },
+      "kit_tags": [
+        "attack",
+        "cc",
+        "crit",
+        "movement",
+        "on_hit"
+      ]
     },
     {
       "slug": "lillia",
@@ -154,7 +181,14 @@
         "mpGrowth": 50,
         "baseHPRegen": 2.5,
         "hpRegenGrowth": 0.55
-      }
+      },
+      "kit_tags": [
+        "ability",
+        "cc",
+        "dot",
+        "haste",
+        "movement"
+      ]
     },
     {
       "slug": "morgana",
@@ -185,7 +219,15 @@
         "mpGrowth": 60,
         "baseHPRegen": 5.5,
         "hpRegenGrowth": 0.4
-      }
+      },
+      "kit_tags": [
+        "ability",
+        "cc",
+        "dot",
+        "haste",
+        "heal_shield",
+        "movement"
+      ]
     },
     {
       "slug": "jinx",
@@ -215,7 +257,14 @@
         "mpGrowth": 50,
         "baseHPRegen": 3.75,
         "hpRegenGrowth": 0.5
-      }
+      },
+      "kit_tags": [
+        "attack",
+        "cc",
+        "crit",
+        "movement",
+        "on_hit"
+      ]
     },
     {
       "slug": "malzahar",
@@ -245,7 +294,13 @@
         "mpGrowth": 28,
         "baseHPRegen": 6,
         "hpRegenGrowth": 0.6
-      }
+      },
+      "kit_tags": [
+        "ability",
+        "cc",
+        "dot",
+        "haste"
+      ]
     },
     {
       "slug": "fizz",
@@ -276,7 +331,14 @@
         "mpGrowth": 52,
         "baseHPRegen": 8,
         "hpRegenGrowth": 0.7
-      }
+      },
+      "kit_tags": [
+        "attack",
+        "cc",
+        "dot",
+        "movement",
+        "on_hit"
+      ]
     },
     {
       "slug": "sett",
@@ -307,7 +369,15 @@
         "mpGrowth": 0,
         "baseHPRegen": 7,
         "hpRegenGrowth": 0.5
-      }
+      },
+      "kit_tags": [
+        "attack",
+        "cc",
+        "heal_shield",
+        "movement",
+        "on_hit",
+        "tank"
+      ]
     },
     {
       "slug": "aurelionsol",
@@ -337,7 +407,13 @@
         "mpGrowth": 40,
         "baseHPRegen": 5.5,
         "hpRegenGrowth": 0.55
-      }
+      },
+      "kit_tags": [
+        "ability",
+        "cc",
+        "haste",
+        "movement"
+      ]
     },
     {
       "slug": "masteryi",
@@ -368,7 +444,14 @@
         "mpGrowth": 42,
         "baseHPRegen": 7.5,
         "hpRegenGrowth": 0.65
-      }
+      },
+      "kit_tags": [
+        "attack",
+        "crit",
+        "dot",
+        "movement",
+        "on_hit"
+      ]
     },
     {
       "slug": "zed",
@@ -398,7 +481,12 @@
         "mpGrowth": 0,
         "baseHPRegen": 7,
         "hpRegenGrowth": 0.65
-      }
+      },
+      "kit_tags": [
+        "attack",
+        "movement",
+        "on_hit"
+      ]
     },
     {
       "slug": "ashe",
@@ -429,7 +517,13 @@
         "mpGrowth": 35,
         "baseHPRegen": 3.5,
         "hpRegenGrowth": 0.55
-      }
+      },
+      "kit_tags": [
+        "attack",
+        "cc",
+        "crit",
+        "on_hit"
+      ]
     },
     {
       "slug": "drmundo",
@@ -460,7 +554,14 @@
         "mpGrowth": 0,
         "baseHPRegen": 7,
         "hpRegenGrowth": 0.5
-      }
+      },
+      "kit_tags": [
+        "attack",
+        "dot",
+        "heal_shield",
+        "movement",
+        "tank"
+      ]
     },
     {
       "slug": "caitlyn",
@@ -490,7 +591,14 @@
         "mpGrowth": 40,
         "baseHPRegen": 3.5,
         "hpRegenGrowth": 0.55
-      }
+      },
+      "kit_tags": [
+        "attack",
+        "cc",
+        "crit",
+        "movement",
+        "on_hit"
+      ]
     },
     {
       "slug": "karthus",
@@ -520,7 +628,11 @@
         "mpGrowth": 31,
         "baseHPRegen": 6.5,
         "hpRegenGrowth": 0.55
-      }
+      },
+      "kit_tags": [
+        "ability",
+        "haste"
+      ]
     },
     {
       "slug": "seraphine",
@@ -551,7 +663,13 @@
         "mpGrowth": 40,
         "baseHPRegen": 6.5,
         "hpRegenGrowth": 0.6
-      }
+      },
+      "kit_tags": [
+        "ability",
+        "cc",
+        "haste",
+        "heal_shield"
+      ]
     },
     {
       "slug": "twistedfate",
@@ -582,7 +700,15 @@
         "mpGrowth": 39,
         "baseHPRegen": 5.5,
         "hpRegenGrowth": 0.6
-      }
+      },
+      "kit_tags": [
+        "ability",
+        "attack",
+        "cc",
+        "crit",
+        "haste",
+        "movement"
+      ]
     },
     {
       "slug": "lucian",
@@ -613,7 +739,14 @@
         "mpGrowth": 43,
         "baseHPRegen": 3.75,
         "hpRegenGrowth": 0.65
-      }
+      },
+      "kit_tags": [
+        "attack",
+        "crit",
+        "heal_shield",
+        "movement",
+        "on_hit"
+      ]
     },
     {
       "slug": "ryze",
@@ -643,7 +776,13 @@
         "mpGrowth": 70,
         "baseHPRegen": 8,
         "hpRegenGrowth": 0.8
-      }
+      },
+      "kit_tags": [
+        "ability",
+        "cc",
+        "haste",
+        "movement"
+      ]
     },
     {
       "slug": "missfortune",
@@ -674,7 +813,15 @@
         "mpGrowth": 40,
         "baseHPRegen": 3.75,
         "hpRegenGrowth": 0.65
-      }
+      },
+      "kit_tags": [
+        "ability",
+        "attack",
+        "crit",
+        "dot",
+        "haste",
+        "movement"
+      ]
     },
     {
       "slug": "rumble",
@@ -705,7 +852,15 @@
         "mpGrowth": 0,
         "baseHPRegen": 7,
         "hpRegenGrowth": 0.6
-      }
+      },
+      "kit_tags": [
+        "ability",
+        "cc",
+        "dot",
+        "haste",
+        "heal_shield",
+        "on_hit"
+      ]
     },
     {
       "slug": "tristana",
@@ -736,7 +891,14 @@
         "mpGrowth": 32,
         "baseHPRegen": 4,
         "hpRegenGrowth": 0.5
-      }
+      },
+      "kit_tags": [
+        "attack",
+        "cc",
+        "crit",
+        "movement",
+        "on_hit"
+      ]
     },
     {
       "slug": "yone",
@@ -767,7 +929,15 @@
         "mpGrowth": 0,
         "baseHPRegen": 7.5,
         "hpRegenGrowth": 0.75
-      }
+      },
+      "kit_tags": [
+        "attack",
+        "cc",
+        "crit",
+        "heal_shield",
+        "movement",
+        "on_hit"
+      ]
     },
     {
       "slug": "kayn",
@@ -798,7 +968,12 @@
         "mpGrowth": 50,
         "baseHPRegen": 8,
         "hpRegenGrowth": 0.75
-      }
+      },
+      "kit_tags": [
+        "attack",
+        "heal_shield",
+        "movement"
+      ]
     },
     {
       "slug": "hwei",
@@ -829,7 +1004,11 @@
         "mpGrowth": 30,
         "baseHPRegen": 5.5,
         "hpRegenGrowth": 0.55
-      }
+      },
+      "kit_tags": [
+        "ability",
+        "haste"
+      ]
     },
     {
       "slug": "hecarim",
@@ -860,7 +1039,15 @@
         "mpGrowth": 40,
         "baseHPRegen": 7,
         "hpRegenGrowth": 0.75
-      }
+      },
+      "kit_tags": [
+        "attack",
+        "cc",
+        "dot",
+        "movement",
+        "on_hit",
+        "tank"
+      ]
     },
     {
       "slug": "zyra",
@@ -891,7 +1078,12 @@
         "mpGrowth": 25,
         "baseHPRegen": 5.5,
         "hpRegenGrowth": 0.5
-      }
+      },
+      "kit_tags": [
+        "ability",
+        "cc",
+        "haste"
+      ]
     },
     {
       "slug": "yunara",
@@ -921,7 +1113,14 @@
         "mpGrowth": 45,
         "baseHPRegen": 4,
         "hpRegenGrowth": 0.55
-      }
+      },
+      "kit_tags": [
+        "attack",
+        "crit",
+        "dot",
+        "movement",
+        "on_hit"
+      ]
     },
     {
       "slug": "galio",
@@ -952,7 +1151,18 @@
         "mpGrowth": 40,
         "baseHPRegen": 8,
         "hpRegenGrowth": 0.8
-      }
+      },
+      "kit_tags": [
+        "ability",
+        "attack",
+        "cc",
+        "dot",
+        "haste",
+        "heal_shield",
+        "movement",
+        "on_hit",
+        "tank"
+      ]
     },
     {
       "slug": "xayah",
@@ -982,7 +1192,13 @@
         "mpGrowth": 40,
         "baseHPRegen": 3.25,
         "hpRegenGrowth": 0.75
-      }
+      },
+      "kit_tags": [
+        "attack",
+        "cc",
+        "crit",
+        "on_hit"
+      ]
     },
     {
       "slug": "singed",
@@ -1013,7 +1229,14 @@
         "mpGrowth": 45,
         "baseHPRegen": 9.5,
         "hpRegenGrowth": 0.55
-      }
+      },
+      "kit_tags": [
+        "cc",
+        "dot",
+        "haste",
+        "movement",
+        "tank"
+      ]
     },
     {
       "slug": "rell",
@@ -1044,7 +1267,14 @@
         "mpGrowth": 40,
         "baseHPRegen": 7.5,
         "hpRegenGrowth": 0.85
-      }
+      },
+      "kit_tags": [
+        "cc",
+        "heal_shield",
+        "movement",
+        "on_hit",
+        "tank"
+      ]
     },
     {
       "slug": "tahmkench",
@@ -1075,7 +1305,14 @@
         "mpGrowth": 50,
         "baseHPRegen": 6.5,
         "hpRegenGrowth": 0.55
-      }
+      },
+      "kit_tags": [
+        "ability",
+        "cc",
+        "heal_shield",
+        "movement",
+        "tank"
+      ]
     },
     {
       "slug": "kayle",
@@ -1106,7 +1343,15 @@
         "mpGrowth": 50,
         "baseHPRegen": 5,
         "hpRegenGrowth": 0.5
-      }
+      },
+      "kit_tags": [
+        "ability",
+        "attack",
+        "crit",
+        "haste",
+        "heal_shield",
+        "movement"
+      ]
     },
     {
       "slug": "swain",
@@ -1137,7 +1382,14 @@
         "mpGrowth": 29,
         "baseHPRegen": 3,
         "hpRegenGrowth": 0.5
-      }
+      },
+      "kit_tags": [
+        "ability",
+        "cc",
+        "dot",
+        "haste",
+        "heal_shield"
+      ]
     },
     {
       "slug": "twitch",
@@ -1168,7 +1420,13 @@
         "mpGrowth": 40,
         "baseHPRegen": 3.75,
         "hpRegenGrowth": 0.6
-      }
+      },
+      "kit_tags": [
+        "attack",
+        "dot",
+        "movement",
+        "on_hit"
+      ]
     },
     {
       "slug": "ahri",
@@ -1199,7 +1457,14 @@
         "mpGrowth": 25,
         "baseHPRegen": 2.5,
         "hpRegenGrowth": 0.6
-      }
+      },
+      "kit_tags": [
+        "ability",
+        "cc",
+        "haste",
+        "heal_shield",
+        "movement"
+      ]
     },
     {
       "slug": "xerath",
@@ -1230,7 +1495,12 @@
         "mpGrowth": 22,
         "baseHPRegen": 5.5,
         "hpRegenGrowth": 0.55
-      }
+      },
+      "kit_tags": [
+        "ability",
+        "cc",
+        "haste"
+      ]
     },
     {
       "slug": "syndra",
@@ -1260,7 +1530,12 @@
         "mpGrowth": 40,
         "baseHPRegen": 6.5,
         "hpRegenGrowth": 0.6
-      }
+      },
+      "kit_tags": [
+        "ability",
+        "cc",
+        "haste"
+      ]
     },
     {
       "slug": "aurora",
@@ -1291,7 +1566,14 @@
         "mpGrowth": 30,
         "baseHPRegen": 6,
         "hpRegenGrowth": 0.55
-      }
+      },
+      "kit_tags": [
+        "ability",
+        "cc",
+        "haste",
+        "heal_shield",
+        "movement"
+      ]
     },
     {
       "slug": "kaisa",
@@ -1322,7 +1604,14 @@
         "mpGrowth": 40,
         "baseHPRegen": 4,
         "hpRegenGrowth": 0.55
-      }
+      },
+      "kit_tags": [
+        "ability",
+        "attack",
+        "crit",
+        "haste",
+        "movement"
+      ]
     },
     {
       "slug": "corki",
@@ -1353,7 +1642,15 @@
         "mpGrowth": 40,
         "baseHPRegen": 5.5,
         "hpRegenGrowth": 0.55
-      }
+      },
+      "kit_tags": [
+        "ability",
+        "attack",
+        "crit",
+        "dot",
+        "haste",
+        "movement"
+      ]
     },
     {
       "slug": "veigar",
@@ -1383,7 +1680,12 @@
         "mpGrowth": 26,
         "baseHPRegen": 6.5,
         "hpRegenGrowth": 0.6
-      }
+      },
+      "kit_tags": [
+        "ability",
+        "cc",
+        "haste"
+      ]
     },
     {
       "slug": "maokai",
@@ -1414,7 +1716,14 @@
         "mpGrowth": 43,
         "baseHPRegen": 5,
         "hpRegenGrowth": 0.75
-      }
+      },
+      "kit_tags": [
+        "cc",
+        "dot",
+        "heal_shield",
+        "on_hit",
+        "tank"
+      ]
     },
     {
       "slug": "garen",
@@ -1445,7 +1754,14 @@
         "mpGrowth": 0,
         "baseHPRegen": 8,
         "hpRegenGrowth": 0.5
-      }
+      },
+      "kit_tags": [
+        "attack",
+        "dot",
+        "heal_shield",
+        "on_hit",
+        "tank"
+      ]
     },
     {
       "slug": "senna",
@@ -1476,7 +1792,14 @@
         "mpGrowth": 45,
         "baseHPRegen": 3.5,
         "hpRegenGrowth": 0.55
-      }
+      },
+      "kit_tags": [
+        "attack",
+        "cc",
+        "crit",
+        "heal_shield",
+        "movement"
+      ]
     },
     {
       "slug": "tryndamere",
@@ -1507,7 +1830,13 @@
         "mpGrowth": 0,
         "baseHPRegen": 8.5,
         "hpRegenGrowth": 0.9
-      }
+      },
+      "kit_tags": [
+        "attack",
+        "crit",
+        "heal_shield",
+        "movement"
+      ]
     },
     {
       "slug": "ekko",
@@ -1538,7 +1867,14 @@
         "mpGrowth": 70,
         "baseHPRegen": 9,
         "hpRegenGrowth": 0.9
-      }
+      },
+      "kit_tags": [
+        "ability",
+        "cc",
+        "haste",
+        "heal_shield",
+        "movement"
+      ]
     },
     {
       "slug": "sion",
@@ -1569,7 +1905,13 @@
         "mpGrowth": 52,
         "baseHPRegen": 9,
         "hpRegenGrowth": 0.8
-      }
+      },
+      "kit_tags": [
+        "attack",
+        "cc",
+        "heal_shield",
+        "tank"
+      ]
     },
     {
       "slug": "nautilus",
@@ -1600,7 +1942,16 @@
         "mpGrowth": 47,
         "baseHPRegen": 8.5,
         "hpRegenGrowth": 0.55
-      }
+      },
+      "kit_tags": [
+        "ability",
+        "attack",
+        "cc",
+        "dot",
+        "heal_shield",
+        "on_hit",
+        "tank"
+      ]
     },
     {
       "slug": "jhin",
@@ -1631,7 +1982,14 @@
         "mpGrowth": 50,
         "baseHPRegen": 3.75,
         "hpRegenGrowth": 0.55
-      }
+      },
+      "kit_tags": [
+        "ability",
+        "attack",
+        "cc",
+        "crit",
+        "haste"
+      ]
     },
     {
       "slug": "gangplank",
@@ -1661,7 +2019,13 @@
         "mpGrowth": 60,
         "baseHPRegen": 6,
         "hpRegenGrowth": 0.6
-      }
+      },
+      "kit_tags": [
+        "attack",
+        "cc",
+        "dot",
+        "heal_shield"
+      ]
     },
     {
       "slug": "velkoz",
@@ -1692,7 +2056,13 @@
         "mpGrowth": 21,
         "baseHPRegen": 5.5,
         "hpRegenGrowth": 0.55
-      }
+      },
+      "kit_tags": [
+        "ability",
+        "cc",
+        "dot",
+        "haste"
+      ]
     },
     {
       "slug": "briar",
@@ -1723,7 +2093,16 @@
         "mpGrowth": 0,
         "baseHPRegen": 0,
         "hpRegenGrowth": 0
-      }
+      },
+      "kit_tags": [
+        "ability",
+        "attack",
+        "cc",
+        "dot",
+        "heal_shield",
+        "movement",
+        "on_hit"
+      ]
     },
     {
       "slug": "zaahen",
@@ -1754,7 +2133,14 @@
         "mpGrowth": 55,
         "baseHPRegen": 7.5,
         "hpRegenGrowth": 0.8
-      }
+      },
+      "kit_tags": [
+        "attack",
+        "dot",
+        "heal_shield",
+        "movement",
+        "on_hit"
+      ]
     },
     {
       "slug": "gwen",
@@ -1784,7 +2170,13 @@
         "mpGrowth": 40,
         "baseHPRegen": 9,
         "hpRegenGrowth": 0.9
-      }
+      },
+      "kit_tags": [
+        "attack",
+        "heal_shield",
+        "movement",
+        "on_hit"
+      ]
     },
     {
       "slug": "viktor",
@@ -1814,7 +2206,14 @@
         "mpGrowth": 45,
         "baseHPRegen": 8,
         "hpRegenGrowth": 0.65
-      }
+      },
+      "kit_tags": [
+        "ability",
+        "cc",
+        "dot",
+        "haste",
+        "heal_shield"
+      ]
     },
     {
       "slug": "teemo",
@@ -1845,7 +2244,14 @@
         "mpGrowth": 25,
         "baseHPRegen": 5.5,
         "hpRegenGrowth": 0.65
-      }
+      },
+      "kit_tags": [
+        "ability",
+        "attack",
+        "dot",
+        "haste",
+        "movement"
+      ]
     },
     {
       "slug": "jayce",
@@ -1876,7 +2282,14 @@
         "mpGrowth": 45,
         "baseHPRegen": 6,
         "hpRegenGrowth": 0.6
-      }
+      },
+      "kit_tags": [
+        "attack",
+        "cc",
+        "crit",
+        "movement",
+        "on_hit"
+      ]
     },
     {
       "slug": "smolder",
@@ -1907,7 +2320,14 @@
         "mpGrowth": 40,
         "baseHPRegen": 3.75,
         "hpRegenGrowth": 0.6
-      }
+      },
+      "kit_tags": [
+        "ability",
+        "attack",
+        "crit",
+        "dot",
+        "haste"
+      ]
     },
     {
       "slug": "jarvaniv",
@@ -1938,7 +2358,15 @@
         "mpGrowth": 55,
         "baseHPRegen": 8,
         "hpRegenGrowth": 0.7
-      }
+      },
+      "kit_tags": [
+        "attack",
+        "cc",
+        "heal_shield",
+        "movement",
+        "on_hit",
+        "tank"
+      ]
     },
     {
       "slug": "lux",
@@ -1969,7 +2397,12 @@
         "mpGrowth": 23.5,
         "baseHPRegen": 5.5,
         "hpRegenGrowth": 0.55
-      }
+      },
+      "kit_tags": [
+        "ability",
+        "cc",
+        "haste"
+      ]
     },
     {
       "slug": "mel",
@@ -2000,7 +2433,13 @@
         "mpGrowth": 28,
         "baseHPRegen": 6,
         "hpRegenGrowth": 0.55
-      }
+      },
+      "kit_tags": [
+        "ability",
+        "dot",
+        "haste",
+        "heal_shield"
+      ]
     },
     {
       "slug": "xinzhao",
@@ -2031,7 +2470,16 @@
         "mpGrowth": 55,
         "baseHPRegen": 8,
         "hpRegenGrowth": 0.7
-      }
+      },
+      "kit_tags": [
+        "ability",
+        "attack",
+        "cc",
+        "heal_shield",
+        "movement",
+        "on_hit",
+        "tank"
+      ]
     },
     {
       "slug": "alistar",
@@ -2062,7 +2510,14 @@
         "mpGrowth": 40,
         "baseHPRegen": 8.5,
         "hpRegenGrowth": 0.85
-      }
+      },
+      "kit_tags": [
+        "ability",
+        "cc",
+        "heal_shield",
+        "on_hit",
+        "tank"
+      ]
     },
     {
       "slug": "aphelios",
@@ -2092,7 +2547,12 @@
         "mpGrowth": 42,
         "baseHPRegen": 3.25,
         "hpRegenGrowth": 0.55
-      }
+      },
+      "kit_tags": [
+        "attack",
+        "cc",
+        "on_hit"
+      ]
     },
     {
       "slug": "shyvana",
@@ -2123,7 +2583,16 @@
         "mpGrowth": 0,
         "baseHPRegen": 7,
         "hpRegenGrowth": 0.65
-      }
+      },
+      "kit_tags": [
+        "ability",
+        "attack",
+        "dot",
+        "haste",
+        "heal_shield",
+        "movement",
+        "on_hit"
+      ]
     },
     {
       "slug": "sylas",
@@ -2154,7 +2623,15 @@
         "mpGrowth": 70,
         "baseHPRegen": 9,
         "hpRegenGrowth": 0.9
-      }
+      },
+      "kit_tags": [
+        "ability",
+        "attack",
+        "cc",
+        "haste",
+        "heal_shield",
+        "movement"
+      ]
     },
     {
       "slug": "jax",
@@ -2184,7 +2661,13 @@
         "mpGrowth": 52,
         "baseHPRegen": 8.5,
         "hpRegenGrowth": 0.55
-      }
+      },
+      "kit_tags": [
+        "attack",
+        "cc",
+        "movement",
+        "on_hit"
+      ]
     },
     {
       "slug": "kalista",
@@ -2214,7 +2697,13 @@
         "mpGrowth": 45,
         "baseHPRegen": 4,
         "hpRegenGrowth": 0.75
-      }
+      },
+      "kit_tags": [
+        "attack",
+        "crit",
+        "movement",
+        "on_hit"
+      ]
     },
     {
       "slug": "talon",
@@ -2244,7 +2733,14 @@
         "mpGrowth": 37,
         "baseHPRegen": 8.5,
         "hpRegenGrowth": 0.75
-      }
+      },
+      "kit_tags": [
+        "attack",
+        "crit",
+        "dot",
+        "movement",
+        "on_hit"
+      ]
     },
     {
       "slug": "malphite",
@@ -2275,7 +2771,14 @@
         "mpGrowth": 60,
         "baseHPRegen": 7,
         "hpRegenGrowth": 0.55
-      }
+      },
+      "kit_tags": [
+        "ability",
+        "cc",
+        "heal_shield",
+        "movement",
+        "tank"
+      ]
     },
     {
       "slug": "pyke",
@@ -2306,7 +2809,13 @@
         "mpGrowth": 50,
         "baseHPRegen": 7,
         "hpRegenGrowth": 0.5
-      }
+      },
+      "kit_tags": [
+        "ability",
+        "attack",
+        "cc",
+        "movement"
+      ]
     },
     {
       "slug": "zilean",
@@ -2337,7 +2846,13 @@
         "mpGrowth": 50,
         "baseHPRegen": 5.5,
         "hpRegenGrowth": 0.5
-      }
+      },
+      "kit_tags": [
+        "ability",
+        "cc",
+        "haste",
+        "movement"
+      ]
     },
     {
       "slug": "chogath",
@@ -2368,7 +2883,13 @@
         "mpGrowth": 60,
         "baseHPRegen": 9,
         "hpRegenGrowth": 0.85
-      }
+      },
+      "kit_tags": [
+        "ability",
+        "cc",
+        "haste",
+        "tank"
+      ]
     },
     {
       "slug": "pantheon",
@@ -2399,7 +2920,14 @@
         "mpGrowth": 31,
         "baseHPRegen": 6,
         "hpRegenGrowth": 0.65
-      }
+      },
+      "kit_tags": [
+        "ability",
+        "attack",
+        "cc",
+        "heal_shield",
+        "movement"
+      ]
     },
     {
       "slug": "ezreal",
@@ -2430,7 +2958,14 @@
         "mpGrowth": 70,
         "baseHPRegen": 4,
         "hpRegenGrowth": 0.65
-      }
+      },
+      "kit_tags": [
+        "ability",
+        "attack",
+        "crit",
+        "haste",
+        "movement"
+      ]
     },
     {
       "slug": "vladimir",
@@ -2461,7 +2996,13 @@
         "mpGrowth": 0,
         "baseHPRegen": 7,
         "hpRegenGrowth": 0.6
-      }
+      },
+      "kit_tags": [
+        "ability",
+        "haste",
+        "heal_shield",
+        "on_hit"
+      ]
     },
     {
       "slug": "ornn",
@@ -2491,7 +3032,14 @@
         "mpGrowth": 65,
         "baseHPRegen": 9,
         "hpRegenGrowth": 0.9
-      }
+      },
+      "kit_tags": [
+        "attack",
+        "cc",
+        "dot",
+        "movement",
+        "tank"
+      ]
     },
     {
       "slug": "ziggs",
@@ -2521,7 +3069,13 @@
         "mpGrowth": 23.5,
         "baseHPRegen": 6.5,
         "hpRegenGrowth": 0.6
-      }
+      },
+      "kit_tags": [
+        "ability",
+        "cc",
+        "haste",
+        "movement"
+      ]
     },
     {
       "slug": "kindred",
@@ -2551,7 +3105,14 @@
         "mpGrowth": 35,
         "baseHPRegen": 7,
         "hpRegenGrowth": 0.55
-      }
+      },
+      "kit_tags": [
+        "attack",
+        "crit",
+        "heal_shield",
+        "movement",
+        "on_hit"
+      ]
     },
     {
       "slug": "heimerdinger",
@@ -2582,7 +3143,13 @@
         "mpGrowth": 20,
         "baseHPRegen": 7,
         "hpRegenGrowth": 0.55
-      }
+      },
+      "kit_tags": [
+        "ability",
+        "cc",
+        "haste",
+        "movement"
+      ]
     },
     {
       "slug": "fiora",
@@ -2613,7 +3180,15 @@
         "mpGrowth": 60,
         "baseHPRegen": 8.5,
         "hpRegenGrowth": 0.55
-      }
+      },
+      "kit_tags": [
+        "attack",
+        "cc",
+        "crit",
+        "heal_shield",
+        "movement",
+        "on_hit"
+      ]
     },
     {
       "slug": "janna",
@@ -2644,7 +3219,13 @@
         "mpGrowth": 50,
         "baseHPRegen": 5.5,
         "hpRegenGrowth": 0.55
-      }
+      },
+      "kit_tags": [
+        "ability",
+        "cc",
+        "heal_shield",
+        "movement"
+      ]
     },
     {
       "slug": "shen",
@@ -2674,7 +3255,14 @@
         "mpGrowth": 0,
         "baseHPRegen": 8.5,
         "hpRegenGrowth": 0.75
-      }
+      },
+      "kit_tags": [
+        "ability",
+        "cc",
+        "heal_shield",
+        "movement",
+        "tank"
+      ]
     },
     {
       "slug": "leona",
@@ -2705,7 +3293,13 @@
         "mpGrowth": 40,
         "baseHPRegen": 8.5,
         "hpRegenGrowth": 0.85
-      }
+      },
+      "kit_tags": [
+        "cc",
+        "heal_shield",
+        "on_hit",
+        "tank"
+      ]
     },
     {
       "slug": "kogmaw",
@@ -2736,7 +3330,12 @@
         "mpGrowth": 40,
         "baseHPRegen": 3.75,
         "hpRegenGrowth": 0.55
-      }
+      },
+      "kit_tags": [
+        "ability",
+        "attack",
+        "haste"
+      ]
     },
     {
       "slug": "varus",
@@ -2767,7 +3366,15 @@
         "mpGrowth": 40,
         "baseHPRegen": 3.5,
         "hpRegenGrowth": 0.55
-      }
+      },
+      "kit_tags": [
+        "ability",
+        "attack",
+        "cc",
+        "crit",
+        "haste",
+        "heal_shield"
+      ]
     },
     {
       "slug": "mordekaiser",
@@ -2798,7 +3405,15 @@
         "mpGrowth": 0,
         "baseHPRegen": 5,
         "hpRegenGrowth": 0.75
-      }
+      },
+      "kit_tags": [
+        "ability",
+        "attack",
+        "cc",
+        "dot",
+        "haste",
+        "heal_shield"
+      ]
     },
     {
       "slug": "blitzcrank",
@@ -2829,7 +3444,15 @@
         "mpGrowth": 40,
         "baseHPRegen": 7.5,
         "hpRegenGrowth": 0.75
-      }
+      },
+      "kit_tags": [
+        "ability",
+        "attack",
+        "cc",
+        "heal_shield",
+        "on_hit",
+        "tank"
+      ]
     },
     {
       "slug": "darius",
@@ -2860,7 +3483,15 @@
         "mpGrowth": 58,
         "baseHPRegen": 10,
         "hpRegenGrowth": 0.95
-      }
+      },
+      "kit_tags": [
+        "attack",
+        "cc",
+        "dot",
+        "heal_shield",
+        "on_hit",
+        "tank"
+      ]
     },
     {
       "slug": "renata",
@@ -2891,7 +3522,14 @@
         "mpGrowth": 50,
         "baseHPRegen": 5.5,
         "hpRegenGrowth": 0.55
-      }
+      },
+      "kit_tags": [
+        "ability",
+        "cc",
+        "dot",
+        "haste",
+        "heal_shield"
+      ]
     },
     {
       "slug": "riven",
@@ -2922,7 +3560,13 @@
         "mpGrowth": 0,
         "baseHPRegen": 8.5,
         "hpRegenGrowth": 0.5
-      }
+      },
+      "kit_tags": [
+        "attack",
+        "cc",
+        "movement",
+        "on_hit"
+      ]
     },
     {
       "slug": "ambessa",
@@ -2953,7 +3597,14 @@
         "mpGrowth": 0,
         "baseHPRegen": 8.5,
         "hpRegenGrowth": 0.75
-      }
+      },
+      "kit_tags": [
+        "attack",
+        "cc",
+        "heal_shield",
+        "movement",
+        "on_hit"
+      ]
     },
     {
       "slug": "kassadin",
@@ -2984,7 +3635,13 @@
         "mpGrowth": 87,
         "baseHPRegen": 6,
         "hpRegenGrowth": 0.5
-      }
+      },
+      "kit_tags": [
+        "ability",
+        "haste",
+        "heal_shield",
+        "movement"
+      ]
     },
     {
       "slug": "vex",
@@ -3014,7 +3671,14 @@
         "mpGrowth": 32,
         "baseHPRegen": 6.5,
         "hpRegenGrowth": 0.6
-      }
+      },
+      "kit_tags": [
+        "ability",
+        "cc",
+        "haste",
+        "heal_shield",
+        "movement"
+      ]
     },
     {
       "slug": "shaco",
@@ -3044,7 +3708,15 @@
         "mpGrowth": 40,
         "baseHPRegen": 8.5,
         "hpRegenGrowth": 0.55
-      }
+      },
+      "kit_tags": [
+        "attack",
+        "cc",
+        "crit",
+        "dot",
+        "movement",
+        "on_hit"
+      ]
     },
     {
       "slug": "viego",
@@ -3075,7 +3747,14 @@
         "mpGrowth": 0,
         "baseHPRegen": 7,
         "hpRegenGrowth": 0.7
-      }
+      },
+      "kit_tags": [
+        "attack",
+        "cc",
+        "heal_shield",
+        "movement",
+        "on_hit"
+      ]
     },
     {
       "slug": "sivir",
@@ -3105,7 +3784,12 @@
         "mpGrowth": 45,
         "baseHPRegen": 3.25,
         "hpRegenGrowth": 0.55
-      }
+      },
+      "kit_tags": [
+        "attack",
+        "heal_shield",
+        "on_hit"
+      ]
     },
     {
       "slug": "soraka",
@@ -3136,7 +3820,12 @@
         "mpGrowth": 40,
         "baseHPRegen": 2.5,
         "hpRegenGrowth": 0.5
-      }
+      },
+      "kit_tags": [
+        "ability",
+        "cc",
+        "heal_shield"
+      ]
     },
     {
       "slug": "khazix",
@@ -3166,7 +3855,14 @@
         "mpGrowth": 40,
         "baseHPRegen": 7.5,
         "hpRegenGrowth": 0.75
-      }
+      },
+      "kit_tags": [
+        "ability",
+        "attack",
+        "cc",
+        "movement",
+        "on_hit"
+      ]
     },
     {
       "slug": "sejuani",
@@ -3196,7 +3892,14 @@
         "mpGrowth": 40,
         "baseHPRegen": 8.5,
         "hpRegenGrowth": 1
-      }
+      },
+      "kit_tags": [
+        "ability",
+        "cc",
+        "movement",
+        "on_hit",
+        "tank"
+      ]
     },
     {
       "slug": "sona",
@@ -3227,7 +3930,13 @@
         "mpGrowth": 45,
         "baseHPRegen": 5.5,
         "hpRegenGrowth": 0.55
-      }
+      },
+      "kit_tags": [
+        "ability",
+        "cc",
+        "haste",
+        "heal_shield"
+      ]
     },
     {
       "slug": "karma",
@@ -3258,7 +3967,13 @@
         "mpGrowth": 40,
         "baseHPRegen": 5.5,
         "hpRegenGrowth": 0.55
-      }
+      },
+      "kit_tags": [
+        "ability",
+        "cc",
+        "haste",
+        "heal_shield"
+      ]
     },
     {
       "slug": "nocturne",
@@ -3289,7 +4004,15 @@
         "mpGrowth": 35,
         "baseHPRegen": 7,
         "hpRegenGrowth": 0.75
-      }
+      },
+      "kit_tags": [
+        "ability",
+        "attack",
+        "cc",
+        "heal_shield",
+        "movement",
+        "on_hit"
+      ]
     },
     {
       "slug": "nilah",
@@ -3320,7 +4043,15 @@
         "mpGrowth": 35,
         "baseHPRegen": 6,
         "hpRegenGrowth": 0.9
-      }
+      },
+      "kit_tags": [
+        "attack",
+        "cc",
+        "dot",
+        "heal_shield",
+        "movement",
+        "on_hit"
+      ]
     },
     {
       "slug": "thresh",
@@ -3351,7 +4082,13 @@
         "mpGrowth": 44,
         "baseHPRegen": 7,
         "hpRegenGrowth": 0.55
-      }
+      },
+      "kit_tags": [
+        "ability",
+        "cc",
+        "heal_shield",
+        "tank"
+      ]
     },
     {
       "slug": "gragas",
@@ -3382,7 +4119,16 @@
         "mpGrowth": 47,
         "baseHPRegen": 5.5,
         "hpRegenGrowth": 0.5
-      }
+      },
+      "kit_tags": [
+        "ability",
+        "cc",
+        "haste",
+        "heal_shield",
+        "movement",
+        "on_hit",
+        "tank"
+      ]
     },
     {
       "slug": "lissandra",
@@ -3412,7 +4158,14 @@
         "mpGrowth": 30,
         "baseHPRegen": 7,
         "hpRegenGrowth": 0.55
-      }
+      },
+      "kit_tags": [
+        "ability",
+        "cc",
+        "haste",
+        "heal_shield",
+        "movement"
+      ]
     },
     {
       "slug": "orianna",
@@ -3443,7 +4196,13 @@
         "mpGrowth": 25,
         "baseHPRegen": 7,
         "hpRegenGrowth": 0.55
-      }
+      },
+      "kit_tags": [
+        "ability",
+        "cc",
+        "haste",
+        "heal_shield"
+      ]
     },
     {
       "slug": "yuumi",
@@ -3474,7 +4233,13 @@
         "mpGrowth": 45,
         "baseHPRegen": 5,
         "hpRegenGrowth": 0.55
-      }
+      },
+      "kit_tags": [
+        "ability",
+        "dot",
+        "heal_shield",
+        "movement"
+      ]
     },
     {
       "slug": "draven",
@@ -3504,7 +4269,14 @@
         "mpGrowth": 39,
         "baseHPRegen": 3.75,
         "hpRegenGrowth": 0.7
-      }
+      },
+      "kit_tags": [
+        "attack",
+        "cc",
+        "crit",
+        "movement",
+        "on_hit"
+      ]
     },
     {
       "slug": "akshan",
@@ -3535,7 +4307,12 @@
         "mpGrowth": 40,
         "baseHPRegen": 3.75,
         "hpRegenGrowth": 0.65
-      }
+      },
+      "kit_tags": [
+        "attack",
+        "heal_shield",
+        "movement"
+      ]
     },
     {
       "slug": "katarina",
@@ -3566,7 +4343,14 @@
         "mpGrowth": 0,
         "baseHPRegen": 7.5,
         "hpRegenGrowth": 0.7
-      }
+      },
+      "kit_tags": [
+        "ability",
+        "attack",
+        "dot",
+        "haste",
+        "movement"
+      ]
     },
     {
       "slug": "aatrox",
@@ -3596,7 +4380,15 @@
         "mpGrowth": 0,
         "baseHPRegen": 3,
         "hpRegenGrowth": 0.5
-      }
+      },
+      "kit_tags": [
+        "attack",
+        "cc",
+        "heal_shield",
+        "movement",
+        "on_hit",
+        "tank"
+      ]
     },
     {
       "slug": "amumu",
@@ -3627,7 +4419,12 @@
         "mpGrowth": 40,
         "baseHPRegen": 9,
         "hpRegenGrowth": 0.85
-      }
+      },
+      "kit_tags": [
+        "cc",
+        "on_hit",
+        "tank"
+      ]
     },
     {
       "slug": "rengar",
@@ -3658,7 +4455,14 @@
         "mpGrowth": 0,
         "baseHPRegen": 6,
         "hpRegenGrowth": 0.5
-      }
+      },
+      "kit_tags": [
+        "attack",
+        "cc",
+        "heal_shield",
+        "movement",
+        "on_hit"
+      ]
     },
     {
       "slug": "fiddlesticks",
@@ -3689,7 +4493,14 @@
         "mpGrowth": 28,
         "baseHPRegen": 5.5,
         "hpRegenGrowth": 0.6
-      }
+      },
+      "kit_tags": [
+        "ability",
+        "cc",
+        "dot",
+        "haste",
+        "movement"
+      ]
     },
     {
       "slug": "nami",
@@ -3720,7 +4531,13 @@
         "mpGrowth": 43,
         "baseHPRegen": 5.5,
         "hpRegenGrowth": 0.55
-      }
+      },
+      "kit_tags": [
+        "ability",
+        "cc",
+        "heal_shield",
+        "movement"
+      ]
     },
     {
       "slug": "udyr",
@@ -3751,7 +4568,13 @@
         "mpGrowth": 50,
         "baseHPRegen": 6,
         "hpRegenGrowth": 0.75
-      }
+      },
+      "kit_tags": [
+        "cc",
+        "heal_shield",
+        "movement",
+        "tank"
+      ]
     },
     {
       "slug": "illaoi",
@@ -3782,7 +4605,13 @@
         "mpGrowth": 50,
         "baseHPRegen": 9.5,
         "hpRegenGrowth": 0.8
-      }
+      },
+      "kit_tags": [
+        "attack",
+        "heal_shield",
+        "on_hit",
+        "tank"
+      ]
     },
     {
       "slug": "samira",
@@ -3813,7 +4642,13 @@
         "mpGrowth": 38,
         "baseHPRegen": 3.25,
         "hpRegenGrowth": 0.55
-      }
+      },
+      "kit_tags": [
+        "attack",
+        "crit",
+        "movement",
+        "on_hit"
+      ]
     },
     {
       "slug": "leesin",
@@ -3844,7 +4679,14 @@
         "mpGrowth": 0,
         "baseHPRegen": 7.5,
         "hpRegenGrowth": 0.7
-      }
+      },
+      "kit_tags": [
+        "attack",
+        "cc",
+        "heal_shield",
+        "movement",
+        "on_hit"
+      ]
     },
     {
       "slug": "trundle",
@@ -3875,7 +4717,15 @@
         "mpGrowth": 45,
         "baseHPRegen": 6,
         "hpRegenGrowth": 0.75
-      }
+      },
+      "kit_tags": [
+        "attack",
+        "cc",
+        "dot",
+        "heal_shield",
+        "on_hit",
+        "tank"
+      ]
     },
     {
       "slug": "milio",
@@ -3906,7 +4756,12 @@
         "mpGrowth": 43,
         "baseHPRegen": 5,
         "hpRegenGrowth": 0.5
-      }
+      },
+      "kit_tags": [
+        "ability",
+        "dot",
+        "heal_shield"
+      ]
     },
     {
       "slug": "monkeyking",
@@ -3937,7 +4792,16 @@
         "mpGrowth": 65,
         "baseHPRegen": 3.5,
         "hpRegenGrowth": 0.65
-      }
+      },
+      "kit_tags": [
+        "ability",
+        "attack",
+        "cc",
+        "dot",
+        "movement",
+        "on_hit",
+        "tank"
+      ]
     },
     {
       "slug": "diana",
@@ -3968,7 +4832,12 @@
         "mpGrowth": 25,
         "baseHPRegen": 6.5,
         "hpRegenGrowth": 0.85
-      }
+      },
+      "kit_tags": [
+        "ability",
+        "heal_shield",
+        "movement"
+      ]
     },
     {
       "slug": "poppy",
@@ -3999,7 +4868,15 @@
         "mpGrowth": 40,
         "baseHPRegen": 8,
         "hpRegenGrowth": 0.8
-      }
+      },
+      "kit_tags": [
+        "attack",
+        "cc",
+        "dot",
+        "heal_shield",
+        "movement",
+        "tank"
+      ]
     },
     {
       "slug": "naafiri",
@@ -4030,7 +4907,13 @@
         "mpGrowth": 55,
         "baseHPRegen": 6.25,
         "hpRegenGrowth": 0.6
-      }
+      },
+      "kit_tags": [
+        "attack",
+        "dot",
+        "heal_shield",
+        "movement"
+      ]
     },
     {
       "slug": "nidalee",
@@ -4061,7 +4944,14 @@
         "mpGrowth": 45,
         "baseHPRegen": 6,
         "hpRegenGrowth": 0.6
-      }
+      },
+      "kit_tags": [
+        "ability",
+        "attack",
+        "haste",
+        "heal_shield",
+        "movement"
+      ]
     },
     {
       "slug": "taliyah",
@@ -4092,7 +4982,13 @@
         "mpGrowth": 30,
         "baseHPRegen": 6.5,
         "hpRegenGrowth": 0.65
-      }
+      },
+      "kit_tags": [
+        "ability",
+        "cc",
+        "haste",
+        "movement"
+      ]
     },
     {
       "slug": "annie",
@@ -4123,7 +5019,14 @@
         "mpGrowth": 25,
         "baseHPRegen": 5.5,
         "hpRegenGrowth": 0.55
-      }
+      },
+      "kit_tags": [
+        "ability",
+        "cc",
+        "dot",
+        "haste",
+        "heal_shield"
+      ]
     },
     {
       "slug": "lulu",
@@ -4154,7 +5057,14 @@
         "mpGrowth": 55,
         "baseHPRegen": 6,
         "hpRegenGrowth": 0.6
-      }
+      },
+      "kit_tags": [
+        "ability",
+        "cc",
+        "dot",
+        "haste",
+        "heal_shield"
+      ]
     },
     {
       "slug": "zoe",
@@ -4184,7 +5094,13 @@
         "mpGrowth": 25,
         "baseHPRegen": 7.5,
         "hpRegenGrowth": 0.6
-      }
+      },
+      "kit_tags": [
+        "ability",
+        "cc",
+        "haste",
+        "movement"
+      ]
     },
     {
       "slug": "quinn",
@@ -4215,7 +5131,14 @@
         "mpGrowth": 35,
         "baseHPRegen": 5.5,
         "hpRegenGrowth": 0.55
-      }
+      },
+      "kit_tags": [
+        "attack",
+        "cc",
+        "crit",
+        "movement",
+        "on_hit"
+      ]
     },
     {
       "slug": "taric",
@@ -4246,7 +5169,13 @@
         "mpGrowth": 60,
         "baseHPRegen": 6,
         "hpRegenGrowth": 0.5
-      }
+      },
+      "kit_tags": [
+        "cc",
+        "heal_shield",
+        "on_hit",
+        "tank"
+      ]
     },
     {
       "slug": "cassiopeia",
@@ -4276,7 +5205,14 @@
         "mpGrowth": 40,
         "baseHPRegen": 5.5,
         "hpRegenGrowth": 0.5
-      }
+      },
+      "kit_tags": [
+        "ability",
+        "cc",
+        "dot",
+        "haste",
+        "heal_shield"
+      ]
     },
     {
       "slug": "ivern",
@@ -4307,7 +5243,13 @@
         "mpGrowth": 60,
         "baseHPRegen": 7,
         "hpRegenGrowth": 0.85
-      }
+      },
+      "kit_tags": [
+        "ability",
+        "cc",
+        "heal_shield",
+        "movement"
+      ]
     },
     {
       "slug": "volibear",
@@ -4338,7 +5280,15 @@
         "mpGrowth": 70,
         "baseHPRegen": 9,
         "hpRegenGrowth": 0.75
-      }
+      },
+      "kit_tags": [
+        "attack",
+        "cc",
+        "heal_shield",
+        "movement",
+        "on_hit",
+        "tank"
+      ]
     },
     {
       "slug": "nasus",
@@ -4369,7 +5319,13 @@
         "mpGrowth": 62,
         "baseHPRegen": 9,
         "hpRegenGrowth": 0.9
-      }
+      },
+      "kit_tags": [
+        "attack",
+        "dot",
+        "on_hit",
+        "tank"
+      ]
     },
     {
       "slug": "qiyana",
@@ -4399,7 +5355,14 @@
         "mpGrowth": 60,
         "baseHPRegen": 8,
         "hpRegenGrowth": 0.9
-      }
+      },
+      "kit_tags": [
+        "attack",
+        "cc",
+        "dot",
+        "movement",
+        "on_hit"
+      ]
     },
     {
       "slug": "azir",
@@ -4430,7 +5393,15 @@
         "mpGrowth": 40,
         "baseHPRegen": 7,
         "hpRegenGrowth": 0.75
-      }
+      },
+      "kit_tags": [
+        "ability",
+        "attack",
+        "cc",
+        "haste",
+        "heal_shield",
+        "movement"
+      ]
     },
     {
       "slug": "rammus",
@@ -4460,7 +5431,14 @@
         "mpGrowth": 33,
         "baseHPRegen": 8,
         "hpRegenGrowth": 0.55
-      }
+      },
+      "kit_tags": [
+        "ability",
+        "cc",
+        "movement",
+        "on_hit",
+        "tank"
+      ]
     },
     {
       "slug": "urgot",
@@ -4491,7 +5469,15 @@
         "mpGrowth": 45,
         "baseHPRegen": 7.5,
         "hpRegenGrowth": 0.7
-      }
+      },
+      "kit_tags": [
+        "attack",
+        "cc",
+        "heal_shield",
+        "movement",
+        "on_hit",
+        "tank"
+      ]
     },
     {
       "slug": "vi",
@@ -4522,7 +5508,14 @@
         "mpGrowth": 65,
         "baseHPRegen": 10,
         "hpRegenGrowth": 1
-      }
+      },
+      "kit_tags": [
+        "attack",
+        "cc",
+        "heal_shield",
+        "movement",
+        "on_hit"
+      ]
     },
     {
       "slug": "anivia",
@@ -4552,7 +5545,13 @@
         "mpGrowth": 45,
         "baseHPRegen": 5.5,
         "hpRegenGrowth": 0.55
-      }
+      },
+      "kit_tags": [
+        "ability",
+        "cc",
+        "dot",
+        "haste"
+      ]
     },
     {
       "slug": "braum",
@@ -4583,7 +5582,13 @@
         "mpGrowth": 45,
         "baseHPRegen": 8.5,
         "hpRegenGrowth": 1
-      }
+      },
+      "kit_tags": [
+        "cc",
+        "heal_shield",
+        "on_hit",
+        "tank"
+      ]
     },
     {
       "slug": "neeko",
@@ -4614,7 +5619,12 @@
         "mpGrowth": 30,
         "baseHPRegen": 7.5,
         "hpRegenGrowth": 0.75
-      }
+      },
+      "kit_tags": [
+        "ability",
+        "cc",
+        "haste"
+      ]
     },
     {
       "slug": "rakan",
@@ -4644,7 +5654,14 @@
         "mpGrowth": 50,
         "baseHPRegen": 5,
         "hpRegenGrowth": 0.5
-      }
+      },
+      "kit_tags": [
+        "ability",
+        "cc",
+        "haste",
+        "heal_shield",
+        "movement"
+      ]
     },
     {
       "slug": "kennen",
@@ -4674,7 +5691,14 @@
         "mpGrowth": 0,
         "baseHPRegen": 5.5,
         "hpRegenGrowth": 0.65
-      }
+      },
+      "kit_tags": [
+        "ability",
+        "cc",
+        "dot",
+        "haste",
+        "movement"
+      ]
     },
     {
       "slug": "belveth",
@@ -4704,7 +5728,14 @@
         "mpGrowth": 0,
         "baseHPRegen": 6,
         "hpRegenGrowth": 0.6
-      }
+      },
+      "kit_tags": [
+        "ability",
+        "attack",
+        "cc",
+        "movement",
+        "on_hit"
+      ]
     },
     {
       "slug": "nunu",
@@ -4735,7 +5766,15 @@
         "mpGrowth": 42,
         "baseHPRegen": 5,
         "hpRegenGrowth": 0.8
-      }
+      },
+      "kit_tags": [
+        "ability",
+        "cc",
+        "haste",
+        "heal_shield",
+        "on_hit",
+        "tank"
+      ]
     },
     {
       "slug": "leblanc",
@@ -4766,7 +5805,13 @@
         "mpGrowth": 25,
         "baseHPRegen": 7.5,
         "hpRegenGrowth": 0.55
-      }
+      },
+      "kit_tags": [
+        "ability",
+        "cc",
+        "haste",
+        "movement"
+      ]
     },
     {
       "slug": "zac",
@@ -4797,7 +5842,14 @@
         "mpGrowth": 0,
         "baseHPRegen": 5,
         "hpRegenGrowth": 0.5
-      }
+      },
+      "kit_tags": [
+        "attack",
+        "cc",
+        "heal_shield",
+        "movement",
+        "tank"
+      ]
     },
     {
       "slug": "evelynn",
@@ -4828,7 +5880,14 @@
         "mpGrowth": 42,
         "baseHPRegen": 8.5,
         "hpRegenGrowth": 0.75
-      }
+      },
+      "kit_tags": [
+        "ability",
+        "cc",
+        "haste",
+        "heal_shield",
+        "movement"
+      ]
     },
     {
       "slug": "reksai",
@@ -4859,7 +5918,16 @@
         "mpGrowth": 0,
         "baseHPRegen": 2.5,
         "hpRegenGrowth": 0.5
-      }
+      },
+      "kit_tags": [
+        "attack",
+        "cc",
+        "dot",
+        "heal_shield",
+        "movement",
+        "on_hit",
+        "tank"
+      ]
     },
     {
       "slug": "akali",
@@ -4889,7 +5957,14 @@
         "mpGrowth": 0,
         "baseHPRegen": 9,
         "hpRegenGrowth": 0.9
-      }
+      },
+      "kit_tags": [
+        "ability",
+        "attack",
+        "haste",
+        "movement",
+        "on_hit"
+      ]
     },
     {
       "slug": "zeri",
@@ -4919,7 +5994,13 @@
         "mpGrowth": 45,
         "baseHPRegen": 3.25,
         "hpRegenGrowth": 0.7
-      }
+      },
+      "kit_tags": [
+        "attack",
+        "crit",
+        "movement",
+        "on_hit"
+      ]
     },
     {
       "slug": "elise",
@@ -4950,7 +6031,14 @@
         "mpGrowth": 50,
         "baseHPRegen": 5.5,
         "hpRegenGrowth": 0.6
-      }
+      },
+      "kit_tags": [
+        "ability",
+        "cc",
+        "haste",
+        "heal_shield",
+        "movement"
+      ]
     },
     {
       "slug": "renekton",
@@ -4981,7 +6069,16 @@
         "mpGrowth": 0,
         "baseHPRegen": 8,
         "hpRegenGrowth": 0.75
-      }
+      },
+      "kit_tags": [
+        "attack",
+        "cc",
+        "dot",
+        "heal_shield",
+        "movement",
+        "on_hit",
+        "tank"
+      ]
     },
     {
       "slug": "gnar",
@@ -5012,7 +6109,15 @@
         "mpGrowth": 0,
         "baseHPRegen": 4.5,
         "hpRegenGrowth": 1.25
-      }
+      },
+      "kit_tags": [
+        "ability",
+        "attack",
+        "cc",
+        "haste",
+        "movement",
+        "tank"
+      ]
     },
     {
       "slug": "warwick",
@@ -5043,7 +6148,16 @@
         "mpGrowth": 35,
         "baseHPRegen": 4,
         "hpRegenGrowth": 0.75
-      }
+      },
+      "kit_tags": [
+        "ability",
+        "attack",
+        "cc",
+        "heal_shield",
+        "movement",
+        "on_hit",
+        "tank"
+      ]
     },
     {
       "slug": "skarner",
@@ -5074,7 +6188,16 @@
         "mpGrowth": 40,
         "baseHPRegen": 7.5,
         "hpRegenGrowth": 0.75
-      }
+      },
+      "kit_tags": [
+        "attack",
+        "cc",
+        "dot",
+        "heal_shield",
+        "movement",
+        "on_hit",
+        "tank"
+      ]
     },
     {
       "slug": "ksante",
@@ -5105,7 +6228,14 @@
         "mpGrowth": 60,
         "baseHPRegen": 9.5,
         "hpRegenGrowth": 1
-      }
+      },
+      "kit_tags": [
+        "cc",
+        "heal_shield",
+        "movement",
+        "on_hit",
+        "tank"
+      ]
     },
     {
       "slug": "olaf",
@@ -5136,7 +6266,13 @@
         "mpGrowth": 50,
         "baseHPRegen": 6.5,
         "hpRegenGrowth": 0.6
-      }
+      },
+      "kit_tags": [
+        "attack",
+        "heal_shield",
+        "on_hit",
+        "tank"
+      ]
     },
     {
       "slug": "irelia",
@@ -5167,7 +6303,15 @@
         "mpGrowth": 50,
         "baseHPRegen": 3.5,
         "hpRegenGrowth": 0.85
-      }
+      },
+      "kit_tags": [
+        "ability",
+        "attack",
+        "cc",
+        "heal_shield",
+        "movement",
+        "on_hit"
+      ]
     },
     {
       "slug": "camille",
@@ -5198,7 +6342,14 @@
         "mpGrowth": 52,
         "baseHPRegen": 8.5,
         "hpRegenGrowth": 0.8
-      }
+      },
+      "kit_tags": [
+        "attack",
+        "cc",
+        "heal_shield",
+        "movement",
+        "on_hit"
+      ]
     },
     {
       "slug": "yorick",
@@ -5229,7 +6380,14 @@
         "mpGrowth": 60,
         "baseHPRegen": 8,
         "hpRegenGrowth": 0.8
-      }
+      },
+      "kit_tags": [
+        "attack",
+        "heal_shield",
+        "movement",
+        "on_hit",
+        "tank"
+      ]
     },
     {
       "slug": "kled",
@@ -5259,7 +6417,13 @@
         "mpGrowth": 0,
         "baseHPRegen": 6,
         "hpRegenGrowth": 0.75
-      }
+      },
+      "kit_tags": [
+        "attack",
+        "cc",
+        "heal_shield",
+        "movement"
+      ]
     },
     {
       "slug": "bard",
@@ -5290,7 +6454,13 @@
         "mpGrowth": 50,
         "baseHPRegen": 5.5,
         "hpRegenGrowth": 0.55
-      }
+      },
+      "kit_tags": [
+        "ability",
+        "cc",
+        "heal_shield",
+        "movement"
+      ]
     }
   ]
 }
