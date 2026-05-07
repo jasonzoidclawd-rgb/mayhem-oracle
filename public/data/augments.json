@@ -1,6 +1,6 @@
 {
   "patch": "26.8",
-  "scraped_at": "2026-05-06T22:41:19.647438+00:00",
+  "scraped_at": "2026-05-07T05:03:17.910555+00:00",
   "augments": [
     {
       "slug": "back-to-basics",
@@ -12,16 +12,15 @@
       "name_ko": "기본으로 돌아가기",
       "name_zh_TW": "基本功夫",
       "wikiDescription": "Your champion abilities deal 35% increased damage and you gain 70 ability haste and 35% increased healing and shielding from all sources, but your ultimate ability is permanently sealed .",
-      "set": null,
-      "flags": {
-        "system_breaker": false,
-        "lifecycle": "active"
-      },
       "kit_tags": [
         "ability",
         "haste",
         "heal_shield"
-      ]
+      ],
+      "flags": {
+        "system_breaker": false,
+        "lifecycle": "active"
+      }
     },
     {
       "slug": "biggest-snowball-ever",
@@ -34,16 +33,16 @@
       "name_zh_TW": "巨無霸雪球",
       "wikiDescription": "Upgrades your Mark into a massive snowball, empowering it with an increased size radius and the ability to pass through non-champions. The snowball additionally explodes upon impact of the target hit to deal 200 – 350 (based on level) (+ 100% bonus AD) (+ 60% AP) magic damage to all nearby enemies, knock them up for 0. 75 seconds, and slow them by 20% for 2 seconds. Additionally, your Mark's cooldown is reduced equivalent to 100 ability haste. If Mark is not equipped, the summoner spell in the slot not occupied by Flash is replaced with Mark . If you also did not equip Flash , then you will be prompted to replace one of your summoner spells with Mark . Non-champions hit by the snowball are stunned for 1. 25 seconds.",
       "wikiSet": "Snowday",
-      "set": "snowday",
-      "flags": {
-        "system_breaker": false,
-        "lifecycle": "active"
-      },
       "kit_tags": [
         "ability",
         "movement",
         "cc"
-      ]
+      ],
+      "set": "snowday",
+      "flags": {
+        "system_breaker": false,
+        "lifecycle": "active"
+      }
     },
     {
       "slug": "blade-waltz",
@@ -55,17 +54,16 @@
       "name_ko": "검무",
       "name_zh_TW": "劍舞之心",
       "wikiDescription": "Replace a summoner spell with Blade Waltz . Blade Waltz: Blink to the target enemy champion. After 0. 25 seconds, you then blink to the nearest other enemy champion every 0. 25 seconds over the next 1. 25 seconds, blinking up to 5 additional times. Each time you blink to a target, deal 30 – 150 (based on level) (+ 10% bonus AD) (+ 6% AP) physical damage to them and apply on-hit effects at 50% effectiveness, up to a total of 180 – 900 (based on level) (+ 60% bonus AD) (+ 36% AP) . While Blade Waltz is active, you are untargetable and unable to act . This effect will end prematurely if there are no longer any nearby valid targets to blink to. A target can be blinked to more than once if there are no other valid targets in range.",
-      "set": null,
-      "flags": {
-        "system_breaker": false,
-        "lifecycle": "active"
-      },
       "kit_tags": [
         "attack",
         "ability",
         "on_hit",
         "movement"
-      ]
+      ],
+      "flags": {
+        "system_breaker": false,
+        "lifecycle": "active"
+      }
     },
     {
       "slug": "bounce-of-the-poro-king",
@@ -76,16 +74,15 @@
       "name_ja": "ポロキングのバウンド",
       "name_ko": "포로 왕의 바운스",
       "wikiDescription": "Replace a summoner spell with Bounce of the Poro King . Bounce of the Poro King: Transform into the Poro King for 3 seconds, during which you gain 70% damage reduction, 40% bonus movement speed , crowd control immunity , and ghosting , but become unable to declare basic attacks and cast abilities. Upon transformation, you also cleanse yourself of all crowd control . While transformed, you bounce up and down every 1 second, with each bounce dealing 100 – 700 (based on level) physical damage to nearby enemy champions and knocking them back upon landing. An enemy champion can be hit by multiple bounces, but ones beyond the first do not apply the knock back.",
-      "set": null,
-      "flags": {
-        "system_breaker": false,
-        "lifecycle": "active"
-      },
       "kit_tags": [
         "movement",
         "tank",
         "cc"
-      ]
+      ],
+      "flags": {
+        "system_breaker": false,
+        "lifecycle": "active"
+      }
     },
     {
       "slug": "cant-touch-this",
@@ -96,12 +93,11 @@
       "name_ja": "ヤケドするぜ",
       "name_ko": "난공불락",
       "name_zh_TW": "空增幅裝置",
-      "set": null,
+      "kit_tags": [],
       "flags": {
         "system_breaker": false,
         "lifecycle": "active"
-      },
-      "kit_tags": []
+      }
     },
     {
       "slug": "cerberus",
@@ -112,15 +108,14 @@
       "name_ja": "ケルベロス",
       "name_ko": "케르베로스",
       "wikiDescription": "Gain the Hail of Blades and Press the Attack keystone runes. Hail of Blades Bonus attack speed for melee champions increased to 200% from 140%. Bonus attack speed for ranged champions increased to 115% from 100% (ARAM override value). Press the Attack Bonus damage increased to 120 – 360 (based on level) from 40 – 160 (based on level) . Damage amplifier increased to 15% from 8%. New Effect: Bonus damage now scales with 40% AD and 30% AP .",
-      "set": null,
-      "flags": {
-        "system_breaker": false,
-        "lifecycle": "active"
-      },
       "kit_tags": [
         "attack",
         "on_hit"
-      ]
+      ],
+      "flags": {
+        "system_breaker": false,
+        "lifecycle": "active"
+      }
     },
     {
       "slug": "circle-of-death",
@@ -132,15 +127,14 @@
       "name_ko": "죽음의 순환",
       "name_zh_TW": "死亡循環",
       "wikiDescription": "Healing and health regeneration you do causes you to deal 70% of that value in magic damage to the nearest enemy champion within 1000 units.",
-      "set": null,
-      "flags": {
-        "system_breaker": false,
-        "lifecycle": "active"
-      },
       "kit_tags": [
         "heal_shield",
         "dot"
-      ]
+      ],
+      "flags": {
+        "system_breaker": false,
+        "lifecycle": "active"
+      }
     },
     {
       "slug": "clown-college",
@@ -153,17 +147,17 @@
       "name_zh_TW": "小丑學院",
       "wikiDescription": "Gain Shaco's Backstab , Deceive and Hallucinate's explosion. Replace a summoner spell with Deceive . Passive - Backstab: Your basic attacks deal 20 – 35 (based on level) (+ 50% bonus AD) (+ 35% AP) bonus physical damage on-hit when hitting an enemy from behind. Active - Deceive: Become invisible for up to 3 seconds and blink to the target location within 400 units after a 0. 125 -second delay. Your next basic attack while in stealth deals 100 (+ 150% bonus AD) (+ 55% AP) bonus physical damage , increased to 「 155 (+ 232. 5 % bonus AD) (+ 85. 25 % AP) bonus physical damage 」 「 155% damage 」 if Backstab was applied (45 second cooldown). Passive - Hallucinate Death: Upon your death, release an explosion in a 350 radius of your death location, dealing 25% of target's maximum health true damage to enemies within. Additionally, you deploy a box at the location of your death that instantly fears nearby enemies for 1 second. This box does not attack but lasts for 3 seconds.",
       "wikiSet": "Dive Bomb",
-      "set": "dive_bomb",
-      "flags": {
-        "system_breaker": false,
-        "lifecycle": "active"
-      },
       "kit_tags": [
         "attack",
         "ability",
         "on_hit",
         "movement"
-      ]
+      ],
+      "set": "dive_bomb",
+      "flags": {
+        "system_breaker": false,
+        "lifecycle": "active"
+      }
     },
     {
       "slug": "courage-of-the-colossus",
@@ -175,15 +169,14 @@
       "name_ko": "거석상의 용기",
       "name_zh_TW": "巨像勇氣",
       "wikiDescription": "Immobilizing or grounding an enemy champion grants a shield for 3 seconds that absorbs 150 – 450 (based on level) (+ 4% maximum health) damage (5 second cooldown per cast instance ). Shields can stack between multiple triggers of this effect, though not refreshing the duration of previous shields.",
-      "set": null,
-      "flags": {
-        "system_breaker": false,
-        "lifecycle": "active"
-      },
       "kit_tags": [
         "tank",
         "cc"
-      ]
+      ],
+      "flags": {
+        "system_breaker": false,
+        "lifecycle": "active"
+      }
     },
     {
       "slug": "cruelty",
@@ -195,16 +188,15 @@
       "name_ko": "잔혹 행위",
       "name_zh_TW": "殘忍",
       "wikiDescription": "Immobilizing or grounding an enemy champion summons a comet above them that lands at their current location after 1 second, dealing 50 – 150 (based on level) (+ 40% AP) (+ 4% of your maximum health) magic damage to enemies within the area (6 second cooldown per target per cast instance ).",
-      "set": null,
-      "flags": {
-        "system_breaker": false,
-        "lifecycle": "active"
-      },
       "kit_tags": [
         "ability",
         "cc",
         "dot"
-      ]
+      ],
+      "flags": {
+        "system_breaker": false,
+        "lifecycle": "active"
+      }
     },
     {
       "slug": "dashing",
@@ -216,15 +208,14 @@
       "name_ko": "돌진",
       "name_zh_TW": "衝鋒",
       "wikiDescription": "Abilities with dashes or blinks gain 175 ability haste . On Kalista , this augment instead grants her 125% bonus attack speed . [1]",
-      "set": null,
-      "flags": {
-        "system_breaker": false,
-        "lifecycle": "active"
-      },
       "kit_tags": [
         "movement",
         "haste"
-      ]
+      ],
+      "flags": {
+        "system_breaker": false,
+        "lifecycle": "active"
+      }
     },
     {
       "slug": "devil-on-your-shoulder",
@@ -235,17 +226,16 @@
       "name_ja": "肩の上の悪魔",
       "name_ko": "어깨 위의 악마",
       "wikiDescription": "Forge a pact with Little Devil Teemo , who drains 0. 5 % of your current health every second, increased to 5% if there are enemy champions within 1000 units. In return, you deal 20% bonus true damage and your basic attacks and abilities summon a Life Remnant nearby for 5 seconds (0. 75 -second spawn cooldown). You can absorb a Life Remnant by moving over it, healing you for 50 – 150 (based on level) (+ 50% bonus AD) (+ 25% AP) and granting you 15% bonus movement speed .",
-      "set": null,
-      "flags": {
-        "system_breaker": false,
-        "lifecycle": "active"
-      },
       "kit_tags": [
         "attack",
         "ability",
         "heal_shield",
         "dot"
-      ]
+      ],
+      "flags": {
+        "system_breaker": false,
+        "lifecycle": "active"
+      }
     },
     {
       "slug": "draw-your-sword",
@@ -256,17 +246,16 @@
       "name_ja": "剣を構えよ",
       "name_ko": "검을 뽑아라",
       "name_zh_TW": "拔劍吧",
-      "wikiDescription": "Become melee , modifying your attack range to 200 units. Additionally, gain 30% bonus attack damage , 25% bonus attack speed , 30% bonus health , 25% bonus movement speed , and 20% life steal. These bonuses are increased by 0% – 30% (based on champion's default attack range) . This augment is only available for ranged champions. This augment is not offered if the champion has built Runaan's Hurricane .",
-      "flags": {
-        "system_breaker": true,
-        "lifecycle": "active"
-      },
-      "set": null,
+      "wikiDescription": "Become melee , modifying your attack range to 200 units. Additionally, gain 30% bonus attack damage , 25% bonus attack speed , 30% bonus health , 25% bonus movement speed , and 20% life steal. These bonuses are increased by 0% – 30% (based on champion's default attack range) . This augment is only available for ranged champions. This augment is not offered if the champion has built Runaan's Hurricane . Bonus attack range from other augments will still be able to increase your champion's attack range.",
       "kit_tags": [
         "attack",
         "movement",
         "tank"
-      ]
+      ],
+      "flags": {
+        "system_breaker": true,
+        "lifecycle": "active"
+      }
     },
     {
       "slug": "dropkick",
@@ -278,16 +267,15 @@
       "name_ko": "드롭킥",
       "name_zh_TW": "奪命飛踢",
       "wikiDescription": "Your basic attacks and abilities execute enemy champions below 5% (+ 3. 5 % per 100 base AD) (+ 2% per 1000 bonus health) of their maximum health , which causes their corpse to be sent flying away in a line. Upon collision with an enemy champion or terrain, the target's corpse explodes to deal 150 – 500 (based on level) (+ 100% bonus armor) (+ 100% bonus magic resistance) magic damage to nearby enemies. Successful executions heal you for 100 – 300 (based on level) (+ 25% bonus health) . The execution may also be triggered by the explosion and goes through shields .",
-      "set": null,
-      "flags": {
-        "system_breaker": false,
-        "lifecycle": "active"
-      },
       "kit_tags": [
         "attack",
         "ability",
         "cc"
-      ]
+      ],
+      "flags": {
+        "system_breaker": false,
+        "lifecycle": "active"
+      }
     },
     {
       "slug": "droppybara",
@@ -298,15 +286,14 @@
       "name_ja": "ドロッピバラ",
       "name_ko": "카피바라 폭격",
       "wikiDescription": "Replace a summoner spell with Droppybara . Droppybara: Call upon a massive capybara to land down at the target location after 2. 5 seconds, dealing true damage equal to the 30% of the target's maximum health to enemies within a 650 radius. Deals 70% damage to minions. This augment is only offered to up to 1 player on each team for a given game.",
-      "set": null,
-      "flags": {
-        "system_breaker": false,
-        "lifecycle": "active"
-      },
       "kit_tags": [
         "ability",
         "cc"
-      ]
+      ],
+      "flags": {
+        "system_breaker": false,
+        "lifecycle": "active"
+      }
     },
     {
       "slug": "dual-wield",
@@ -318,15 +305,14 @@
       "name_ko": "양손잡이",
       "name_zh_TW": "雙刀流",
       "wikiDescription": "Your basic attacks launch a bolt at the target that fires after a 0. 225 -second delay on-attack , deals 40% of the triggering attack's pre-mitigation damage, and applies on-hit effects at 40% effectiveness. Additionally, increase your total attack speed by 10% .",
-      "set": null,
-      "flags": {
-        "system_breaker": false,
-        "lifecycle": "active"
-      },
       "kit_tags": [
         "attack",
         "on_hit"
-      ]
+      ],
+      "flags": {
+        "system_breaker": false,
+        "lifecycle": "active"
+      }
     },
     {
       "slug": "empowered-by-the-faithful",
@@ -338,16 +324,15 @@
       "name_ko": "신념을 통한 강화",
       "name_zh_TW": "因信得力",
       "wikiDescription": "Granting a heal or shield to an allied champion blesses them for 8 seconds. Whenever a blessed ally damages an enemy champion, you generate a stack of Devotion , stacking up to 50 times. Upon reaching maximum stacks, you unleash a shockwave that deals 50 – 300 (based on level) (+ 750% heal and shield power) magic damage to nearby enemies. Enemy champions damaged below a percentage of their maximum health equal to 25% of your heal and shield power are executed .",
-      "set": null,
-      "flags": {
-        "system_breaker": false,
-        "lifecycle": "active"
-      },
       "kit_tags": [
         "heal_shield",
         "ability",
         "cc"
-      ]
+      ],
+      "flags": {
+        "system_breaker": false,
+        "lifecycle": "active"
+      }
     },
     {
       "slug": "empyrean-promise",
@@ -358,16 +343,15 @@
       "name_ja": "荘厳の天球の約束",
       "name_ko": "창공의 서약",
       "wikiDescription": "Replace a summoner spell with Empyrean Promise's Vigilance active. Additionally, gain 15% heal and shield power . Active - Vigilance: After a 0. 25 -second delay, dash to the current location of the target allied champion and gain a 100 – 250 (based on level) (+ 100% AP) (+ 10% bonus health) shield for 3 seconds. Upon arrival, grant the ally the same shield (20 second cooldown; 2000 range).",
-      "set": null,
-      "flags": {
-        "system_breaker": false,
-        "lifecycle": "active"
-      },
       "kit_tags": [
         "heal_shield",
         "movement",
         "ability"
-      ]
+      ],
+      "flags": {
+        "system_breaker": false,
+        "lifecycle": "active"
+      }
     },
     {
       "slug": "eureka",
@@ -379,15 +363,14 @@
       "name_ko": "유레카",
       "name_zh_TW": "靈光一閃",
       "wikiDescription": "Gain ability haste equal to 30% AP .",
-      "set": null,
-      "flags": {
-        "system_breaker": false,
-        "lifecycle": "active"
-      },
       "kit_tags": [
         "ability",
         "haste"
-      ]
+      ],
+      "flags": {
+        "system_breaker": false,
+        "lifecycle": "active"
+      }
     },
     {
       "slug": "fan-the-hammer",
@@ -400,16 +383,16 @@
       "name_zh_TW": "旋風鎚",
       "wikiDescription": "Your next basic attack in each cardinal direction within 750 range additionally on-attack fires 5 Firecrackers at the target that each deal 8 – 51 (based on level) (+ 14% bonus AD) physical damage , for a total of 40 – 255 (based on level) (+ 70% bonus AD) physical damage (5 second cooldown per direction). Firecrackers' damage is increased by 0% – 50% (based on distance travelled) . Each Firecracker can critically strike for (200% + 30% ) damage and applies on-hit effects at 20% effectiveness.",
       "wikiSet": "Firecracker",
-      "set": "firecracker",
-      "flags": {
-        "system_breaker": false,
-        "lifecycle": "active"
-      },
       "kit_tags": [
         "attack",
         "crit",
         "on_hit"
-      ]
+      ],
+      "set": "firecracker",
+      "flags": {
+        "system_breaker": false,
+        "lifecycle": "active"
+      }
     },
     {
       "slug": "feel-the-burn",
@@ -421,16 +404,15 @@
       "name_ko": "저주의 화염",
       "name_zh_TW": "感受灼燒",
       "wikiDescription": "Replace a summoner spell with Feel the Burn . Feel the Burn: Casts both Exhaust and Ignite on all enemy champions within 800 units, with the former having its slow strength increased to 50% and the latter modified to deal 70 – 410 (based on level) true damage over the duration. This effect counts as a Burn source.",
-      "set": null,
-      "flags": {
-        "system_breaker": false,
-        "lifecycle": "active"
-      },
       "kit_tags": [
         "ability",
         "dot",
         "cc"
-      ]
+      ],
+      "flags": {
+        "system_breaker": false,
+        "lifecycle": "active"
+      }
     },
     {
       "slug": "fey-magic",
@@ -442,15 +424,14 @@
       "name_ko": "요정 마법",
       "name_zh_TW": "妖精魔法",
       "wikiDescription": "Damaging enemies with your ultimate ability polymorphs them into harmless critters for 2 seconds, during which their base movement speed is reduced by 60 , and disarms them for the same duration (15 second cooldown per target).",
-      "set": null,
-      "flags": {
-        "system_breaker": false,
-        "lifecycle": "active"
-      },
       "kit_tags": [
         "ability",
         "cc"
-      ]
+      ],
+      "flags": {
+        "system_breaker": false,
+        "lifecycle": "active"
+      }
     },
     {
       "slug": "final-form",
@@ -462,16 +443,15 @@
       "name_ko": "최종 형태",
       "name_zh_TW": "最終型態",
       "wikiDescription": "Casting your ultimate ability empowers you for 10 seconds, causing you to gain a shield for 50% of your maximum health , 20% omnivamp , and 30% bonus movement speed for the duration (20 second cooldown).",
-      "set": null,
-      "flags": {
-        "system_breaker": false,
-        "lifecycle": "active"
-      },
       "kit_tags": [
         "ability",
         "heal_shield",
         "movement"
-      ]
+      ],
+      "flags": {
+        "system_breaker": false,
+        "lifecycle": "active"
+      }
     },
     {
       "slug": "gash",
@@ -482,16 +462,15 @@
       "name_ja": "深手",
       "name_ko": "깊은 상처",
       "wikiDescription": "Basic attacks on-hit deal ( 20 – 40 / 10 – 20 ) (based on level) (+ ( 25% / 20% ) bonus armor) bonus true damage . Additionally, gain 50% bonus attack speed .",
-      "set": null,
-      "flags": {
-        "system_breaker": false,
-        "lifecycle": "active"
-      },
       "kit_tags": [
         "attack",
         "on_hit",
         "dot"
-      ]
+      ],
+      "flags": {
+        "system_breaker": false,
+        "lifecycle": "active"
+      }
     },
     {
       "slug": "giant-slayer",
@@ -503,15 +482,14 @@
       "name_ko": "거인 학살자",
       "name_zh_TW": "巨人殺手",
       "wikiDescription": "Become tiny, reducing your size by 75% and granting you 20% bonus movement speed . Additionally, deal 10% / 15% / 25% / 30% (based on target's size) bonus damage against enemy champions with greater size than you.",
-      "set": null,
-      "flags": {
-        "system_breaker": false,
-        "lifecycle": "active"
-      },
       "kit_tags": [
         "attack",
         "movement"
-      ]
+      ],
+      "flags": {
+        "system_breaker": false,
+        "lifecycle": "active"
+      }
     },
     {
       "slug": "glass-cannon",
@@ -523,15 +501,14 @@
       "name_ko": "유리 대포",
       "name_zh_TW": "玻璃大砲",
       "wikiDescription": "You gain a health threshold equal to 70% maximum health which cannot be modified nor exceeded by any means. In return, you deal bonus true damage equal to 15% of all of the damage you deal pre-mitigation .",
-      "set": null,
-      "flags": {
-        "system_breaker": false,
-        "lifecycle": "active"
-      },
       "kit_tags": [
         "attack",
         "dot"
-      ]
+      ],
+      "flags": {
+        "system_breaker": false,
+        "lifecycle": "active"
+      }
     },
     {
       "slug": "goldrend",
@@ -544,17 +521,17 @@
       "name_zh_TW": "黃金撕裂",
       "wikiDescription": "Damaging basic attacks or abilities against enemy champions deal 50 – 150 (based on level) (+ 40% bonus AD) (+ 20% AP) bonus magic damage , and grant you 30 and 25% bonus movement speed for 1. 5 seconds (30 second cooldown per champion).",
       "wikiSet": "Make it Rain",
-      "set": "make_it_rain",
-      "flags": {
-        "system_breaker": false,
-        "lifecycle": "active"
-      },
       "kit_tags": [
         "attack",
         "ability",
         "on_hit",
         "movement"
-      ]
+      ],
+      "set": "make_it_rain",
+      "flags": {
+        "system_breaker": false,
+        "lifecycle": "active"
+      }
     },
     {
       "slug": "goliath",
@@ -566,14 +543,13 @@
       "name_ko": "거인",
       "name_zh_TW": "巨人",
       "wikiDescription": "Grants 35% bonus health , 15% adaptive force , and 50% increased size.",
-      "set": null,
+      "kit_tags": [
+        "tank"
+      ],
       "flags": {
         "system_breaker": false,
         "lifecycle": "active"
-      },
-      "kit_tags": [
-        "tank"
-      ]
+      }
     },
     {
       "slug": "hand-of-baron",
@@ -585,12 +561,11 @@
       "name_ko": "남작의 도움",
       "name_zh_TW": "巴龍之爪",
       "wikiDescription": "Gain a modified Hand of Baron , which only grants 25% increased adaptive force and greatly empowers nearby allied minions .",
-      "set": null,
+      "kit_tags": [],
       "flags": {
         "system_breaker": false,
         "lifecycle": "active"
-      },
-      "kit_tags": []
+      }
     },
     {
       "slug": "heads-up-cupcake",
@@ -602,14 +577,14 @@
       "name_ko": "컵케이크 조심해! !",
       "wikiDescription": "Periodically, Cupcakes will fly across the map. Champions can consume a Cupcake by moving within 300 units of it, healing them and their nearby allied champions for 50 – 250 (based on level) (+ 5% – 15% (based on level) missing health) , as well as slowing all targets by 25% for 0. 5 seconds. Cupcakes also grant 50 to the champion who consumed it. Additionally, for every 1000 healing done by Cupcakes , you gain 150 . Healing granted by Cupcakes counts as self-healing .",
       "wikiSet": "Make it Rain",
+      "kit_tags": [
+        "heal_shield"
+      ],
       "set": "make_it_rain",
       "flags": {
         "system_breaker": false,
         "lifecycle": "active"
-      },
-      "kit_tags": [
-        "heal_shield"
-      ]
+      }
     },
     {
       "slug": "holy-snowball",
@@ -621,16 +596,16 @@
       "name_ko": "신성한 눈덩이",
       "wikiDescription": "After using the Dash spell from Mark , you become invulnerable for 1. 5 seconds upon arrival. Additionally, your Mark's cooldown is reduced equivalent to 100 ability haste. If Mark is not equipped, the summoner spell in the slot not occupied by Flash is replaced with Mark . If you also did not equip Flash , then you will be prompted to replace one of your summoner spells with Mark .",
       "wikiSet": "Snowday",
-      "set": "snowday",
-      "flags": {
-        "system_breaker": false,
-        "lifecycle": "active"
-      },
       "kit_tags": [
         "ability",
         "movement",
         "haste"
-      ]
+      ],
+      "set": "snowday",
+      "flags": {
+        "system_breaker": false,
+        "lifecycle": "active"
+      }
     },
     {
       "slug": "im-a-baby-kitty-where-is-mama",
@@ -642,15 +617,15 @@
       "name_ko": "엄마 찾는 아기 고양이 i'm a baby kitty where is mama",
       "wikiDescription": "Bind with the nearest allied champion to you after 2 seconds, forming a tether between you and them (400 radius). While the tether persists, you gain 75% bonus movement speed and 50% heal and shield power . Additionally, gain 37. 5 % bonus movement speed while facing your bound ally within 1500 units. The tether will break when you or your bound ally dies, allowing you to form a new tether.",
       "wikiSet": "Wee Woo Wee Woo",
+      "kit_tags": [
+        "movement",
+        "heal_shield"
+      ],
       "set": "wee_woo",
       "flags": {
         "system_breaker": false,
         "lifecycle": "active"
-      },
-      "kit_tags": [
-        "movement",
-        "heal_shield"
-      ]
+      }
     },
     {
       "slug": "infernal-conduit",
@@ -662,15 +637,14 @@
       "name_ko": "지옥의 전도체",
       "name_zh_TW": "煉獄使者",
       "wikiDescription": "Your ability hits against champions apply a Burn for 3 seconds that deals 「 2 – 20 (based on level) (+ 4. 6 % bonus AD) (+ 2% AP) bonus magic damage per second 」 「 6 – 60 (based on level) (+ 14% bonus AD) (+ 6% AP) bonus magic damage over the duration 」 (1 second cooldown per cast instance ). This Burn stacks infinitely and refreshes with each application. Additionally, all of your Burn effects reduce the cooldowns of all your basic abilities by 0. 08 seconds for each tick of damage they deal to a target. Damage over time effects from all sources except items (unexpected) count as Burn sources for triggering the cooldown reduction. Eligible Augments for Burn : Buff Buddies, Feel the Burn, Firebrand, Grandma's Chili Oil, Holy Fire, Infernal Conduit, Slow Cooker, Tormentor",
-      "set": null,
-      "flags": {
-        "system_breaker": false,
-        "lifecycle": "active"
-      },
       "kit_tags": [
         "ability",
         "dot"
-      ]
+      ],
+      "flags": {
+        "system_breaker": false,
+        "lifecycle": "active"
+      }
     },
     {
       "slug": "infinite-recursion",
@@ -683,14 +657,14 @@
       "name_zh_TW": "無限循環",
       "wikiDescription": "Gain 60 ability haste , increased by 3 each time you score a champion takedown .",
       "wikiSet": "Stackosaurus Rex",
+      "kit_tags": [
+        "haste"
+      ],
       "set": "stackosaurus_rex",
       "flags": {
         "system_breaker": false,
         "lifecycle": "active"
-      },
-      "kit_tags": [
-        "haste"
-      ]
+      }
     },
     {
       "slug": "jeweled-gauntlet",
@@ -702,15 +676,14 @@
       "name_ko": "보석 건틀릿",
       "name_zh_TW": "寶石手套",
       "wikiDescription": "Your abilities can now critically strike for (145% + bonus critical damage ) damage. Additionally, gain 25% (+ 4. 5 % per 100 AP) critical strike chance . If both Jeweled Gauntlet and Vulnerability are equipped, only rolls the critical strike chance of the augment that has the higher critical damage (or either if equal). The interaction between Jeweled Gauntlet and Vulnerability may behave incorrectly with persistent area damage effects. (bug)",
-      "flags": {
-        "system_breaker": true,
-        "lifecycle": "active"
-      },
-      "set": null,
       "kit_tags": [
         "ability",
         "crit"
-      ]
+      ],
+      "flags": {
+        "system_breaker": true,
+        "lifecycle": "active"
+      }
     },
     {
       "slug": "king-me",
@@ -722,12 +695,11 @@
       "name_ko": "나는 왕이다",
       "name_zh_TW": "封我為王",
       "wikiDescription": "Upon entering the enemy team's gate or Catapult for the first time, either of which are located near their spawn , you become Kinged , causing you to gain one random Prismatic-tier augment and the first eligible Legendary item in your inventory to be upgraded with improved stats. The gold value of all upgradeable stats on the item is increased by exactly 1000 . King Me prioritize upgrading the first Legendary item eligible for a upgrade based on its position in the inventory, detecting each slot until an eligible item is found.",
-      "set": null,
+      "kit_tags": [],
       "flags": {
         "system_breaker": false,
         "lifecycle": "active"
-      },
-      "kit_tags": []
+      }
     },
     {
       "slug": "laser-heal",
@@ -738,15 +710,14 @@
       "name_ja": "レーザーヒール",
       "name_ko": "체력 회복 광선",
       "wikiDescription": "Replace a summoner spell with Laser Heal . Laser Heal: Channel for up to 2. 5 seconds to project an energy beam in the target direction, during which you can steer the beam in the direction of the cursor. The beam heals you and allies within for 200 – 550 (based on level) (+ 70% AP) (+ 50% bonus health) and deals 100 – 350 (based on level) (+ 50% AP) magic damage to enemies within, both over the duration. Enemies hit are also slowed by 20%. Laser Heal can be recast during the channel to end it early. Healing granted by the laser counts as self-healing .",
-      "set": null,
-      "flags": {
-        "system_breaker": false,
-        "lifecycle": "active"
-      },
       "kit_tags": [
         "ability",
         "heal_shield"
-      ]
+      ],
+      "flags": {
+        "system_breaker": false,
+        "lifecycle": "active"
+      }
     },
     {
       "slug": "mad-scientist",
@@ -758,17 +729,16 @@
       "name_ko": "미친 과학자",
       "name_zh_TW": "瘋狂科學家",
       "wikiDescription": "Upon acquiring this augment and each time you respawn, gain either 30% adaptive force , 20% bonus health , and 40% increased size or 70 ability haste , 40% bonus movement speed , and 40% reduced size.",
-      "set": null,
-      "flags": {
-        "system_breaker": false,
-        "lifecycle": "active"
-      },
       "kit_tags": [
         "attack",
         "ability",
         "movement",
         "tank"
-      ]
+      ],
+      "flags": {
+        "system_breaker": false,
+        "lifecycle": "active"
+      }
     },
     {
       "slug": "master-of-duality",
@@ -780,17 +750,17 @@
       "name_ko": "결투의 대가",
       "name_zh_TW": "雙修大師",
       "wikiDescription": "Basic attacks on-hit grant 6 – 18 (based on level) ability power and damaging abilities once per cast instance grant 3 – 9 (based on level) bonus attack damage , lasting for 5 seconds, with the duration of both refreshing on subsequent hits, and stacking infinitely.",
-      "flags": {
-        "system_breaker": true,
-        "lifecycle": "active"
-      },
       "wikiSet": "Stackosaurus Rex",
-      "set": "stackosaurus_rex",
       "kit_tags": [
         "attack",
         "ability",
         "on_hit"
-      ]
+      ],
+      "set": "stackosaurus_rex",
+      "flags": {
+        "system_breaker": true,
+        "lifecycle": "active"
+      }
     },
     {
       "slug": "mystic-punch",
@@ -802,15 +772,14 @@
       "name_ko": "신비한 주먹",
       "name_zh_TW": "祕術拳擊",
       "wikiDescription": "Basic attacks on-hit reduce the remaining cooldowns of your abilities by 1. 25 seconds.",
-      "flags": {
-        "system_breaker": true,
-        "lifecycle": "active"
-      },
-      "set": null,
       "kit_tags": [
         "attack",
         "haste"
-      ]
+      ],
+      "flags": {
+        "system_breaker": true,
+        "lifecycle": "active"
+      }
     },
     {
       "slug": "ominous-pact",
@@ -821,16 +790,15 @@
       "name_ja": "不穏な盟約",
       "name_ko": "불길한 서약",
       "wikiDescription": "Your abilities now have a health cost of 5% current health to cast them. In return, you gain ability power based on your missing health , up to 75 – 150 (based on level) at 70% missing health , 0% – 50% (based on missing health) bonus movement speed , and 0% – 20% (based on missing health) omnivamp .",
-      "set": null,
-      "flags": {
-        "system_breaker": false,
-        "lifecycle": "active"
-      },
       "kit_tags": [
         "ability",
         "heal_shield",
         "movement"
-      ]
+      ],
+      "flags": {
+        "system_breaker": false,
+        "lifecycle": "active"
+      }
     },
     {
       "slug": "omni-soul",
@@ -842,12 +810,11 @@
       "name_ko": "전능의 영혼",
       "name_zh_TW": "全能之魂",
       "wikiDescription": "Grants 3 random Dragon Souls .",
-      "set": null,
+      "kit_tags": [],
       "flags": {
         "system_breaker": false,
         "lifecycle": "active"
-      },
-      "kit_tags": []
+      }
     },
     {
       "slug": "orbitallaser",
@@ -858,12 +825,11 @@
       "name_ja": "軌道レーザー",
       "name_ko": "궤도형 레이저",
       "name_zh_TW": "衛星雷射炮",
-      "set": null,
+      "kit_tags": [],
       "flags": {
         "system_breaker": false,
         "lifecycle": "active"
-      },
-      "kit_tags": []
+      }
     },
     {
       "slug": "pandorasbox",
@@ -873,12 +839,11 @@
       "icon": "https://arammayhem.com/augments/PandorasBox_mayhem_augment.webp",
       "name_ja": "パンドラの箱",
       "name_ko": "판도라의 상자",
-      "set": null,
+      "kit_tags": [],
       "flags": {
         "system_breaker": false,
         "lifecycle": "active"
-      },
-      "kit_tags": []
+      }
     },
     {
       "slug": "prom-queen",
@@ -891,15 +856,15 @@
       "name_zh_TW": "舞會皇后",
       "wikiDescription": "Automatically cast a modified version of Rakan's The Quickness , empowering you to break into a captivating sprint for 6 seconds. While empowered, you gain ghosting and 50% bonus movement speed , and enemies you collide with are knocked down and become charmed for 1. 5 seconds (35 second cooldown). A sparkly tiara will descend upon you 2. 5 seconds before the effect activates.",
       "wikiSet": "Fully Automated",
+      "kit_tags": [
+        "movement",
+        "cc"
+      ],
       "set": "fully_automated",
       "flags": {
         "system_breaker": false,
         "lifecycle": "active"
-      },
-      "kit_tags": [
-        "movement",
-        "cc"
-      ]
+      }
     },
     {
       "slug": "protein-shake",
@@ -911,15 +876,14 @@
       "name_ko": "프로틴 음료",
       "name_zh_TW": "蛋白飲",
       "wikiDescription": "Gain 25% (+ 35% per 100 bonus armor) (+ 35% per 100 bonus magic resistance) heal and shield power .",
-      "set": null,
-      "flags": {
-        "system_breaker": false,
-        "lifecycle": "active"
-      },
       "kit_tags": [
         "heal_shield",
         "tank"
-      ]
+      ],
+      "flags": {
+        "system_breaker": false,
+        "lifecycle": "active"
+      }
     },
     {
       "slug": "quantum-computing",
@@ -932,15 +896,15 @@
       "name_zh_TW": "量子計算",
       "wikiDescription": "Automatically cast an improved version of Camille's Tactical Sweep when an enemy champion is within 650 units of you, winding up over 0. 75 seconds to slash in a 650 radius around you. The slash deals 200 – 350 (based on level) (+ 75% bonus AD) (+ 45% AP) physical damage to enemies within the area (30 second cooldown). Enemies hit by the outer edge of the circle take bonus physical damage equal to 10% (+ 2. 5 % per 100 bonus AD) (+ 1. 6 % per 100 AP) (+ 0. 1 % per 100 bonus health) of their maximum health and are slowed by 80% decaying over 2 seconds. Additionally, you are healed for 80% of the bonus post-mitigation damage against enemy champions hit by the outer edge.",
       "wikiSet": "Fully Automated",
+      "kit_tags": [
+        "ability",
+        "attack"
+      ],
       "set": "fully_automated",
       "flags": {
         "system_breaker": false,
         "lifecycle": "active"
-      },
-      "kit_tags": [
-        "ability",
-        "attack"
-      ]
+      }
     },
     {
       "slug": "quest-urfs-champion",
@@ -952,12 +916,11 @@
       "name_ko": "퀘스트: 우르프의 챔피언 quest: urf's champion",
       "name_zh_TW": "任務：阿福英雄",
       "wikiDescription": "Quest: Score 18 champion takedowns . Reward: Upon completing your Quest , you receive The Golden Spatula . If your inventory is full at the time of quest completion, the item will be granted as soon as a slot in the inventory is available.",
-      "set": null,
+      "kit_tags": [],
       "flags": {
         "system_breaker": false,
         "lifecycle": "active"
-      },
-      "kit_tags": []
+      }
     },
     {
       "slug": "quest-wooglets-witchcap",
@@ -969,12 +932,11 @@
       "name_ko": "퀘스트: 우글렛의 마녀 모자 quest: wooglet's witchcap",
       "name_zh_TW": "任務：烏莉特的法帽",
       "wikiDescription": "Gain a Needlessly Large Rod . Quest: Obtain Rabadon's Deathcap and Zhonya's Hourglass . Reward: Upon completing your Quest , convert the items you obtained for the quest into Wooglet's Witchcap .",
-      "set": null,
+      "kit_tags": [],
       "flags": {
         "system_breaker": false,
         "lifecycle": "active"
-      },
-      "kit_tags": []
+      }
     },
     {
       "slug": "red-envelopes",
@@ -987,12 +949,12 @@
       "name_zh_TW": "紅包",
       "wikiDescription": "Red envelopes will now randomly appear around you every 25 – 15 (based on level) seconds. You can pick up these envelopes by moving over them, granting you between 8 – 15 (based on level) and 22 – 46 (based on level) gold , and 100 bonus movement speed for 3 seconds. Additionally, whenever you pick an envelope, you gain one of the following stats by random: 5 bonus attack damage 5 ability power 5 ability haste 5 bonus armor 5 bonus magic resistance 50 bonus health 10% bonus attack speed 5 bonus movement speed 5 Lethality 5 magic penetration",
       "wikiSet": "Make it Rain",
+      "kit_tags": [],
       "set": "make_it_rain",
       "flags": {
         "system_breaker": false,
         "lifecycle": "active"
-      },
-      "kit_tags": []
+      }
     },
     {
       "slug": "scopiest-weapons",
@@ -1004,14 +966,13 @@
       "name_ko": "최상급 조준경 부착",
       "name_zh_TW": "頂狙武器",
       "wikiDescription": "Gain ( 250 / 150 ) bonus attack range.",
-      "set": null,
+      "kit_tags": [
+        "attack"
+      ],
       "flags": {
         "system_breaker": false,
         "lifecycle": "active"
-      },
-      "kit_tags": [
-        "attack"
-      ]
+      }
     },
     {
       "slug": "slow-cooker",
@@ -1023,15 +984,14 @@
       "name_ko": "찜솥",
       "name_zh_TW": "細煮慢燉",
       "wikiDescription": "Surrounds you in flames, causing you to apply a Burn every second to enemy champions within 500 units for 3 seconds that deals magic damage equal to 「 0. 6 6 % of your maximum health per second. 」 「 2% of your maximum health over the duration. 」 This Burn stacks infinitely and refreshes with each application.",
-      "set": null,
-      "flags": {
-        "system_breaker": false,
-        "lifecycle": "active"
-      },
       "kit_tags": [
         "ability",
         "dot"
-      ]
+      ],
+      "flags": {
+        "system_breaker": false,
+        "lifecycle": "active"
+      }
     },
     {
       "slug": "stats-on-stats-on-stats",
@@ -1044,12 +1004,12 @@
       "name_zh_TW": "能力值堆堆堆起來！",
       "wikiDescription": "Gain 4 Stat Anvils , with a higher chance of obtaining Gold and Prismatic tier anvils. Additionally, on the next round of augment selection, you gain an additional reroll per augment slot.",
       "wikiSet": "High Roller",
+      "kit_tags": [],
       "set": "high_roller",
       "flags": {
         "system_breaker": false,
         "lifecycle": "active"
-      },
-      "kit_tags": []
+      }
     },
     {
       "slug": "stuck-in-here-with-me",
@@ -1061,16 +1021,15 @@
       "name_ko": "도망갈 수 없어",
       "name_zh_TW": "隨我同困",
       "wikiDescription": "Casting your ultimate ability grants you an aura for 2 seconds, growing in size over the duration to up to 500 units. After the duration, you taunt all enemies within the aura for 2 seconds and gain 50% damage reduction for the same duration (30 second cooldown). Additionally, gain 30 ultimate haste. Aura is activated once the ultimate's effect starts or has elapsed . On Katarina , this augment will activate at the start of Death Lotus' channel.",
-      "set": null,
-      "flags": {
-        "system_breaker": false,
-        "lifecycle": "active"
-      },
       "kit_tags": [
         "ability",
         "cc",
         "tank"
-      ]
+      ],
+      "flags": {
+        "system_breaker": false,
+        "lifecycle": "active"
+      }
     },
     {
       "slug": "symphony-of-war",
@@ -1082,16 +1041,15 @@
       "name_ko": "전장의 교향곡",
       "name_zh_TW": "戰爭交響曲",
       "wikiDescription": "Gain the Conqueror and Lethal Tempo keystone runes. Conqueror Adaptive force per stack changed to 1. 8 – 3. 3 (based on level) bonus Attack Damage or 3 – 5. 5 (based on level) Ability Power ( Adaptive ). Healing changed to ( 10% / 8% ) of damage dealt. Lethal Tempo Bonus attack speed per stack changed to ( 13% – 18% / 8% – 12% ) (based on level). Maximum bonus attack speed changed to ( 78% – 108% / 48% – 72% ) (based on level). Removed: No longer empowers basic attacks at maximum stacks to fire a bolt that deals bonus adaptive damage. New Effect: At maximum stacks, gain 50 bonus attack range and increase the attack speed cap to 10.",
-      "set": null,
-      "flags": {
-        "system_breaker": false,
-        "lifecycle": "active"
-      },
       "kit_tags": [
         "attack",
         "ability",
         "on_hit"
-      ]
+      ],
+      "flags": {
+        "system_breaker": false,
+        "lifecycle": "active"
+      }
     },
     {
       "slug": "tap-dancer",
@@ -1103,17 +1061,17 @@
       "name_ko": "탭 댄서",
       "name_zh_TW": "輕舞飛揚",
       "wikiDescription": "Basic attacks on-hit against enemy champions and minions grant 10 bonus movement speed , lasting for 5 seconds, refreshing on subsequent triggers, and stacking infinitely. Additionally, gain bonus attack speed equal to 10% total movement speed .",
-      "flags": {
-        "system_breaker": true,
-        "lifecycle": "active"
-      },
       "wikiSet": "Stackosaurus Rex",
-      "set": "stackosaurus_rex",
       "kit_tags": [
         "attack",
         "movement",
         "on_hit"
-      ]
+      ],
+      "set": "stackosaurus_rex",
+      "flags": {
+        "system_breaker": true,
+        "lifecycle": "active"
+      }
     },
     {
       "slug": "transmute-chaos",
@@ -1126,12 +1084,12 @@
       "name_zh_TW": "質變：大混亂",
       "wikiDescription": "Gain two completely random augments, excluding the other two offerings in your current assortment.",
       "wikiSet": "High Roller",
+      "kit_tags": [],
       "set": "high_roller",
       "flags": {
         "system_breaker": false,
         "lifecycle": "active"
-      },
-      "kit_tags": []
+      }
     },
     {
       "slug": "triggered-inferno",
@@ -1142,16 +1100,15 @@
       "name_ja": "巻き起こるインフェルノ",
       "name_ko": "지옥불 난사 발동",
       "wikiDescription": "Your damaging basic attacks and abilities against at least one enemy champion unique from the previous damaging hit made against champions generate a stack of Style for 6 seconds, refreshing on subsequent unique or non-unique hits and stacking up to 6 times. For each stack, gain 4. 25 % / 4. 5 % / 4. 75 % / 5% (based on level) bonus movement speed , up to a maximum of 25. 5 % / 27% / 28. 5 % / 30% (based on level) . Upon reaching maximum Style stacks, you unleash a torrent of shots for 2. 277 seconds , during which you rapidly shoot at nearby enemies over 2. 013 seconds at sporadic times in 0. 2 -second intervals each (up to 10 times per enemy), dealing 20 – 40 (based on level) (+ 40% AD) (+ 25% AP) physical damage with each shot, reduced by 75% against minions . Enemies below 30% of their maximum health are critically struck for 「 double damage 」 「 40 – 80 (based on level) (+ 80% AD) (+ 50% AP) physical damage 」 (15 second cooldown). This effect ends prematurely if you become affected by cast-inhibiting crowd control . Shot damage applies life steal . Style stacks are consumed at the end of the shooting effect.",
-      "set": null,
-      "flags": {
-        "system_breaker": false,
-        "lifecycle": "active"
-      },
       "kit_tags": [
         "attack",
         "ability",
         "movement"
-      ]
+      ],
+      "flags": {
+        "system_breaker": false,
+        "lifecycle": "active"
+      }
     },
     {
       "slug": "trueshotprodigy",
@@ -1162,12 +1119,11 @@
       "name_ja": "トゥルーショットプロディジー",
       "name_ko": "정조준 일격 신동",
       "name_zh_TW": "彈幕神童",
-      "set": null,
+      "kit_tags": [],
       "flags": {
         "system_breaker": false,
         "lifecycle": "active"
-      },
-      "kit_tags": []
+      }
     },
     {
       "slug": "ultimate-awakening",
@@ -1178,15 +1134,14 @@
       "name_ja": "究極の目覚め",
       "name_ko": "궁극의 각성",
       "wikiDescription": "Casting your ultimate ability resets the cooldowns of all your basic abilities and grants you 300 basic ability haste for 15 seconds (20 second cooldown). Additionally, gain 30 ultimate haste.",
-      "set": null,
-      "flags": {
-        "system_breaker": false,
-        "lifecycle": "active"
-      },
       "kit_tags": [
         "ability",
         "haste"
-      ]
+      ],
+      "flags": {
+        "system_breaker": false,
+        "lifecycle": "active"
+      }
     },
     {
       "slug": "ultimate-revolution",
@@ -1198,15 +1153,14 @@
       "name_ko": "궁극기 대변혁",
       "name_zh_TW": "大絕轉盤",
       "wikiDescription": "Casting your ultimate ability resets its cooldown once its effect starts or has elapsed (75 second cooldown, reset upon death).",
-      "set": null,
-      "flags": {
-        "system_breaker": false,
-        "lifecycle": "active"
-      },
       "kit_tags": [
         "ability",
         "haste"
-      ]
+      ],
+      "flags": {
+        "system_breaker": false,
+        "lifecycle": "active"
+      }
     },
     {
       "slug": "upgrade-mikaels-blessing",
@@ -1219,16 +1173,16 @@
       "name_zh_TW": "升級破曉綻放之劍",
       "wikiDescription": "Upgrades Mikael's Blessing , reducing the cooldown of Purify to 45 seconds and empowering its active to instead affect you and all nearby allied champions, cleansing all targets of crowd control (excluding Airborne ), healing them for 150 – 450 (based on level) (+ 50% AP) , and granting them 65% tenacity for 3 seconds. Additionally, you are granted Mikael's Blessing for free. If you already have Mikael's Blessing , gain 2300 instead. If your inventory is full, the item will be granted as soon as a slot in the inventory is available.",
       "wikiSet": "Wee Woo Wee Woo",
-      "set": "wee_woo",
-      "flags": {
-        "system_breaker": false,
-        "lifecycle": "active"
-      },
       "kit_tags": [
         "ability",
         "heal_shield",
         "cc"
-      ]
+      ],
+      "set": "wee_woo",
+      "flags": {
+        "system_breaker": false,
+        "lifecycle": "active"
+      }
     },
     {
       "slug": "void-immolation",
@@ -1238,12 +1192,11 @@
       "icon": "https://arammayhem.com/augments/Void_Immolation_mayhem_augment.webp",
       "name_ja": "クエスト: イカシアの滅亡",
       "name_ko": "퀘스트: 이케시아의 몰락",
-      "set": null,
+      "kit_tags": [],
       "flags": {
         "system_breaker": false,
         "lifecycle": "active"
-      },
-      "kit_tags": []
+      }
     },
     {
       "slug": "void-rift",
@@ -1255,15 +1208,14 @@
       "name_ko": "공허 균열",
       "name_zh_TW": "虛空裂縫",
       "wikiDescription": "Damaging an enemy champion with an ability summons a Void Scar at the location they were damaged for 6 seconds (0. 75 -second cooldown per target). If another Void Scar is summoned within 1250 units, through the same condition, both Void Scars are consumed to create a rift to the void between them that converges over 0. 6 seconds and has a width of 250 units. Enemies within the rift are dealt 100 – 450 (based on level) (+ 5. 5 per 1 Lethality) (+ 5. 5 per 1 flat magic penetration) magic damage and slowed by 99% decaying over 1 second.",
-      "set": null,
-      "flags": {
-        "system_breaker": false,
-        "lifecycle": "active"
-      },
       "kit_tags": [
         "ability",
         "dot"
-      ]
+      ],
+      "flags": {
+        "system_breaker": false,
+        "lifecycle": "active"
+      }
     },
     {
       "slug": "windspeakers-blessing",
@@ -1276,15 +1228,15 @@
       "name_zh_TW": "風語者的祝福",
       "wikiDescription": "Your or allies' heals and shields on yourself, or your heals and shields on allies, grant the target 30 – 60 (based on level) bonus armor and bonus magic resistance for 3 seconds.",
       "wikiSet": "Wee Woo Wee Woo",
+      "kit_tags": [
+        "heal_shield",
+        "tank"
+      ],
       "set": "wee_woo",
       "flags": {
         "system_breaker": false,
         "lifecycle": "active"
-      },
-      "kit_tags": [
-        "heal_shield",
-        "tank"
-      ]
+      }
     },
     {
       "slug": "all-for-you",
@@ -1297,14 +1249,14 @@
       "name_zh_TW": "全部都給你",
       "wikiDescription": "Your heals and shields on allied champions are increased in effectiveness by 30%.",
       "wikiSet": "Wee Woo Wee Woo",
+      "kit_tags": [
+        "heal_shield"
+      ],
       "set": "wee_woo",
       "flags": {
         "system_breaker": false,
         "lifecycle": "active"
-      },
-      "kit_tags": [
-        "heal_shield"
-      ]
+      }
     },
     {
       "slug": "apex-inventor",
@@ -1316,14 +1268,13 @@
       "name_ko": "최첨단 발명가",
       "name_zh_TW": "頂尖發明家",
       "wikiDescription": "Grants 100 item haste , which is equivalent to 50% cooldown reduction for items. Item Cooldowns Items Base Cooldown Reduced Cooldown with Apex Inventor 1",
-      "set": null,
+      "kit_tags": [
+        "haste"
+      ],
       "flags": {
         "system_breaker": false,
         "lifecycle": "active"
-      },
-      "kit_tags": [
-        "haste"
-      ]
+      }
     },
     {
       "slug": "big-brain",
@@ -1335,15 +1286,14 @@
       "name_ko": "전술적 대비",
       "name_zh_TW": "超強大腦",
       "wikiDescription": "Gain a shield that absorbs damage equal to 300% AP and lasts until destroyed. Shield is replenished upon respawn.",
-      "set": null,
-      "flags": {
-        "system_breaker": false,
-        "lifecycle": "active"
-      },
       "kit_tags": [
         "ability",
         "tank"
-      ]
+      ],
+      "flags": {
+        "system_breaker": false,
+        "lifecycle": "active"
+      }
     },
     {
       "slug": "bread-and-butter",
@@ -1355,15 +1305,14 @@
       "name_ko": "빵과 버터",
       "name_zh_TW": "土司和奶油",
       "wikiDescription": "Your champion's first basic ability (Q) gains 100 ability haste .",
-      "set": null,
-      "flags": {
-        "system_breaker": false,
-        "lifecycle": "active"
-      },
       "kit_tags": [
         "ability",
         "haste"
-      ]
+      ],
+      "flags": {
+        "system_breaker": false,
+        "lifecycle": "active"
+      }
     },
     {
       "slug": "bread-and-cheese",
@@ -1375,15 +1324,14 @@
       "name_ko": "빵과 치즈",
       "name_zh_TW": "土司和起司",
       "wikiDescription": "Your champion's third basic ability (E) gains 100 ability haste .",
-      "set": null,
-      "flags": {
-        "system_breaker": false,
-        "lifecycle": "active"
-      },
       "kit_tags": [
         "ability",
         "haste"
-      ]
+      ],
+      "flags": {
+        "system_breaker": false,
+        "lifecycle": "active"
+      }
     },
     {
       "slug": "bread-and-jam",
@@ -1395,15 +1343,14 @@
       "name_ko": "빵과 잼",
       "name_zh_TW": "土司和果醬",
       "wikiDescription": "Your champion's second basic ability (W) gains 100 ability haste .",
-      "set": null,
-      "flags": {
-        "system_breaker": false,
-        "lifecycle": "active"
-      },
       "kit_tags": [
         "ability",
         "haste"
-      ]
+      ],
+      "flags": {
+        "system_breaker": false,
+        "lifecycle": "active"
+      }
     },
     {
       "slug": "celestial-body",
@@ -1415,14 +1362,13 @@
       "name_ko": "천상의 신체",
       "name_zh_TW": "天界之身",
       "wikiDescription": "Gain 1500 bonus health , but reduce your damage output by 10%.",
-      "set": null,
+      "kit_tags": [
+        "tank"
+      ],
       "flags": {
         "system_breaker": false,
         "lifecycle": "active"
-      },
-      "kit_tags": [
-        "tank"
-      ]
+      }
     },
     {
       "slug": "cheating",
@@ -1434,12 +1380,11 @@
       "name_ko": "부정 행위",
       "name_zh_TW": "作弊",
       "wikiDescription": "Your Recall is now functional and is upgraded to Empowered Recall . Completing an Empowered Recall channel enables the shop . Additionally, the spawn platform will now provide healing and resource restoration for you.",
-      "set": null,
+      "kit_tags": [],
       "flags": {
         "system_breaker": false,
         "lifecycle": "active"
-      },
-      "kit_tags": []
+      }
     },
     {
       "slug": "critical-healing",
@@ -1452,15 +1397,15 @@
       "name_zh_TW": "暴擊治療",
       "wikiDescription": "Your heals and shields now have a chance equal to your critical strike chance to increase in effectiveness by 40% (5 second cooldown per cast instance ). Additionally, gain 25% critical strike chance .",
       "wikiSet": "Wee Woo Wee Woo",
+      "kit_tags": [
+        "heal_shield",
+        "crit"
+      ],
       "set": "wee_woo",
       "flags": {
         "system_breaker": false,
         "lifecycle": "active"
-      },
-      "kit_tags": [
-        "heal_shield",
-        "crit"
-      ]
+      }
     },
     {
       "slug": "critical-missile",
@@ -1473,16 +1418,16 @@
       "name_zh_TW": "暴擊沖天炮",
       "wikiDescription": "Critical strikes against enemy champions launch 1 (+ 1 per 33. 33 % critical strike chance) Firecrackers at the target that each deal 20 – 100 (based on level) magic damage (4 second cooldown). Additionally, gain 25% critical strike chance . Critical strikes from Jeweled Gauntlet and Vulnerability will launch Firecrackers .",
       "wikiSet": "Firecracker",
-      "set": "firecracker",
-      "flags": {
-        "system_breaker": false,
-        "lifecycle": "active"
-      },
       "kit_tags": [
         "attack",
         "crit",
         "ability"
-      ]
+      ],
+      "set": "firecracker",
+      "flags": {
+        "system_breaker": false,
+        "lifecycle": "active"
+      }
     },
     {
       "slug": "critical-rhythm",
@@ -1494,15 +1439,14 @@
       "name_ko": "치명적 리듬",
       "name_zh_TW": "暴擊節奏",
       "wikiDescription": "Your critical strikes grant you 6% bonus attack speed for 6 seconds, stacking up to 10 times for a total of 60% . Additionally, gain 25% critical strike chance .",
-      "set": null,
-      "flags": {
-        "system_breaker": false,
-        "lifecycle": "active"
-      },
       "kit_tags": [
         "attack",
         "crit"
-      ]
+      ],
+      "flags": {
+        "system_breaker": false,
+        "lifecycle": "active"
+      }
     },
     {
       "slug": "dawnbringers-resolve",
@@ -1514,15 +1458,14 @@
       "name_ko": "빛의 인도자 결의 dawnbringer's resolve",
       "name_zh_TW": "不朽守衛",
       "wikiDescription": "Upon dropping below 50% maximum health , you are healed for 30% maximum health over 3 seconds (45 second cooldown, reset upon death).",
-      "set": null,
-      "flags": {
-        "system_breaker": false,
-        "lifecycle": "active"
-      },
       "kit_tags": [
         "heal_shield",
         "tank"
-      ]
+      ],
+      "flags": {
+        "system_breaker": false,
+        "lifecycle": "active"
+      }
     },
     {
       "slug": "demons-dance",
@@ -1534,16 +1477,15 @@
       "name_ko": "악마의 춤 demon's dance",
       "name_zh_TW": "不死魔舞",
       "wikiDescription": "Gain the Fleet Footwork and Grasp of the Undying keystone runes. Fleet Footwork Removed: No longer has an effectiveness modifier for ranged or minions. Base heal changed to 10 – 100 (based on level) . Heal bonus AD ratio changed to 30% bonus AD . Heal AP ratio changed to 20% AP . Movement speed changed to 20%. Grasp of the Undying Triggered attack bonus health changed to ( 7 / 4 ) . New Effect: Triggered attack now has a base heal of ( 3 / 1. 2 ) . Triggered attack heal health ratio changed to ( 1. 2 % / 0. 48 % ) maximum health .",
-      "set": null,
-      "flags": {
-        "system_breaker": false,
-        "lifecycle": "active"
-      },
       "kit_tags": [
         "attack",
         "heal_shield",
         "movement"
-      ]
+      ],
+      "flags": {
+        "system_breaker": false,
+        "lifecycle": "active"
+      }
     },
     {
       "slug": "divine-intervention",
@@ -1555,16 +1497,16 @@
       "name_ko": "신성한 중재",
       "wikiDescription": "Automatically cast Taric's Cosmic Radiance , calling down a protective star upon you that descends over 2. 5 seconds. Afterwards, you and all allied champions within 400 units become invulnerable for 2. 5 seconds (35 second cooldown).",
       "wikiSet": "Fully Automated",
-      "set": "fully_automated",
-      "flags": {
-        "system_breaker": false,
-        "lifecycle": "active"
-      },
       "kit_tags": [
         "ability",
         "heal_shield",
         "cc"
-      ]
+      ],
+      "set": "fully_automated",
+      "flags": {
+        "system_breaker": false,
+        "lifecycle": "active"
+      }
     },
     {
       "slug": "donation",
@@ -1577,12 +1519,12 @@
       "name_zh_TW": "斗內",
       "wikiDescription": "Gain 1750 upon acquiring this augment.",
       "wikiSet": "Make it Rain",
+      "kit_tags": [],
       "set": "make_it_rain",
       "flags": {
         "system_breaker": false,
         "lifecycle": "active"
-      },
-      "kit_tags": []
+      }
     },
     {
       "slug": "double-tap",
@@ -1594,16 +1536,15 @@
       "name_ko": "한 발에 두 놈",
       "name_zh_TW": "雙重命中",
       "wikiDescription": "Basic attacks that critically strike apply on-hit effects an additional time. Additionally, gain 25% critical strike chance .",
-      "set": null,
-      "flags": {
-        "system_breaker": false,
-        "lifecycle": "active"
-      },
       "kit_tags": [
         "attack",
         "crit",
         "on_hit"
-      ]
+      ],
+      "flags": {
+        "system_breaker": false,
+        "lifecycle": "active"
+      }
     },
     {
       "slug": "ethereal-weapon",
@@ -1615,15 +1556,14 @@
       "name_ko": "환영 무기",
       "name_zh_TW": "幻影武器",
       "wikiDescription": "Your abilities apply on-hit effects (1 second cooldown per target).",
-      "set": null,
-      "flags": {
-        "system_breaker": false,
-        "lifecycle": "active"
-      },
       "kit_tags": [
         "ability",
         "on_hit"
-      ]
+      ],
+      "flags": {
+        "system_breaker": false,
+        "lifecycle": "active"
+      }
     },
     {
       "slug": "executioner",
@@ -1635,14 +1575,13 @@
       "name_ko": "처형자",
       "name_zh_TW": "處刑者",
       "wikiDescription": "Deal 10% increased damage to enemies below 30% of their maximum health . Scoring a champion takedown resets the cooldown of all your basic abilities.",
-      "set": null,
+      "kit_tags": [
+        "attack"
+      ],
       "flags": {
         "system_breaker": false,
         "lifecycle": "active"
-      },
-      "kit_tags": [
-        "attack"
-      ]
+      }
     },
     {
       "slug": "final-city-transit",
@@ -1654,14 +1593,14 @@
       "name_ko": "최후의 도시 대중교통",
       "wikiDescription": "Upon death, you summon a train over 1 second that launches towards your killer at full speed, travelling in their direction at a global distance and dealing 150 – 750 (based on level) (+ 65% bonus AD) (+ 50% AP) (+ 15% maximum health) physical damage to enemies it passes through. The train is summoned a slight distance away from the front of your killer, based on their facing direction at the time of your death, and launches towards the position they were located at the time of your death.",
       "wikiSet": "Dive Bomb",
+      "kit_tags": [
+        "ability"
+      ],
       "set": "dive_bomb",
       "flags": {
         "system_breaker": false,
         "lifecycle": "active"
-      },
-      "kit_tags": [
-        "ability"
-      ]
+      }
     },
     {
       "slug": "firebrand",
@@ -1673,15 +1612,14 @@
       "name_ko": "화염 낙인",
       "name_zh_TW": "煽風點火",
       "wikiDescription": "Basic attacks apply a Burn for 5 seconds that deals bonus magic damage equal to 「 0. 4 % of the target's maximum health per second. 」 「 2% of the target's maximum health over the duration. 」 This Burn stacks infinitely and refreshes with each application.",
-      "set": null,
-      "flags": {
-        "system_breaker": false,
-        "lifecycle": "active"
-      },
       "kit_tags": [
         "attack",
         "dot"
-      ]
+      ],
+      "flags": {
+        "system_breaker": false,
+        "lifecycle": "active"
+      }
     },
     {
       "slug": "from-beginning-to-end",
@@ -1694,15 +1632,15 @@
       "name_zh_TW": "自始至終",
       "wikiDescription": "Gain the Dark Harvest and First Strike keystone runes. Dark Harvest Base damage changed to 50 – 100 (based on level) . Damage per soul changed to 20. Bonus AD ratio changed to 35% bonus AD . AP ratio changed to 25% AP . Gain 8 bonus souls for selecting this augment as not your first augment. First Strike Base gold increased to 20 from 15 (ARAM override value). Bonus damage increased to 10% from 7%.",
       "wikiSet": "Make it Rain",
+      "kit_tags": [
+        "attack",
+        "ability"
+      ],
       "set": "make_it_rain",
       "flags": {
         "system_breaker": false,
         "lifecycle": "active"
-      },
-      "kit_tags": [
-        "attack",
-        "ability"
-      ]
+      }
     },
     {
       "slug": "get-excited",
@@ -1713,12 +1651,11 @@
       "name_ja": "超エキサイティン！ !",
       "name_ko": "신난다! !",
       "name_zh_TW": "狂躁！",
-      "set": null,
+      "kit_tags": [],
       "flags": {
         "system_breaker": false,
         "lifecycle": "active"
-      },
-      "kit_tags": []
+      }
     },
     {
       "slug": "grandmas-chili-oil",
@@ -1730,15 +1667,14 @@
       "name_ko": "할머니의 고추기름 grandma's chili oil",
       "name_zh_TW": "阿嬤的辣油",
       "wikiDescription": "Your next basic attack or ability hit, or Burn effect, against an enemy champion inflicts them with a Burn that deals 「 100 – 350 (based on level) magic damage over 3 seconds, 」 「 16. 67 – 37. 5 (based on level) magic damage every 0. 25 seconds over 3 seconds, 」 as well as releases a canister of chili from the target that lands to a location near them after 0. 75 seconds (3 second cooldown). Upon landing, the canister shatters to create a pool of Chili Oil at the impact area with a radius of 175 units, lasting for 5 seconds. The pool heals you and allied champions within for 30 – 75 (based on level) upon entering and each second of the pool's lifetime thereafter. While enemies are within the pool, they are dealt 150 magic damage every second. For each unique Burn effect source that you have, up to 10, increase the pool's size by 40 units and its damage per tick by 50 magic damage . The healing per tick is also increased by 25 for each unique Burn effect source that the unit being healed has, up to 10. Healing granted by pools counts as self-healing . This effect can be triggered from only one target at a time. Damage over time effects from sources other than items and augments, such as champion abilities or summoner spells, do not count as Burn sources for Grandma's Chili Oil . Eligible Items for Burn : Blackfire Torch , Hollow Radiance , Liandry's Torment , Malignance , Sunfire Aegis , The Golden Spatula , Void Immolation Void Immolation uniquely counts as 2 Burn sources. Eligible Augments for Burn : Buff Buddies, Feel the Burn, Firebrand, Holy Fire, Infernal Conduit, Slow Cooker, Tormentor Grandma's Chili Oil does not count itself as a Burn effect. The pools of Chili Oil will follow their user in and out of Mordekaiser's Realm of Death but will only be visible in the realm they were generated. (bug)",
-      "set": null,
-      "flags": {
-        "system_breaker": false,
-        "lifecycle": "active"
-      },
       "kit_tags": [
         "ability",
         "dot"
-      ]
+      ],
+      "flags": {
+        "system_breaker": false,
+        "lifecycle": "active"
+      }
     },
     {
       "slug": "growth-spurt",
@@ -1750,15 +1686,14 @@
       "name_ko": "급속 성장",
       "name_zh_TW": "急遽成長",
       "wikiDescription": "Replace a summoner spell with Growth Spurt . Growth Spurt: Enlarge yourself, causing you to knock up enemies within 400 units for 1 second. For the next 7 seconds, you gain 300 (+ 20% maximum health) bonus health and 50% increased size.",
-      "set": null,
-      "flags": {
-        "system_breaker": false,
-        "lifecycle": "active"
-      },
       "kit_tags": [
         "tank",
         "cc"
-      ]
+      ],
+      "flags": {
+        "system_breaker": false,
+        "lifecycle": "active"
+      }
     },
     {
       "slug": "holy-fire",
@@ -1770,15 +1705,14 @@
       "name_ko": "신성한 불길",
       "name_zh_TW": "神聖之火",
       "wikiDescription": "Your heals and shields cause you to fire a missile to the nearest enemy unit within 650 units over 0. 32 seconds, applying a Burn upon arrival that deals magic damage equal to 0. 2 % of the target's maximum health every second over 5 seconds, for a total of 1% (1. 5 -second cooldown). The Burn's per-tick damage increases to up to 0. 8 % of the target's maximum health based on the relative value of the triggering heal or shield against the maximum health of the ally recipient, for a total maximum damage of 4% of the target's maximum health .",
-      "set": null,
-      "flags": {
-        "system_breaker": false,
-        "lifecycle": "active"
-      },
       "kit_tags": [
         "heal_shield",
         "dot"
-      ]
+      ],
+      "flags": {
+        "system_breaker": false,
+        "lifecycle": "active"
+      }
     },
     {
       "slug": "impassable",
@@ -1790,14 +1724,13 @@
       "name_ko": "넘을 수 없는 벽",
       "name_zh_TW": "不可通行",
       "wikiDescription": "Gain the Aftershock and Glacial Augment keystone runes. Aftershock Cooldown reduced to 15 seconds from 20. Glacial Augment Cooldown reduced to 15 seconds from 25.",
-      "set": null,
+      "kit_tags": [
+        "cc"
+      ],
       "flags": {
         "system_breaker": false,
         "lifecycle": "active"
-      },
-      "kit_tags": [
-        "cc"
-      ]
+      }
     },
     {
       "slug": "its-critical",
@@ -1809,14 +1742,13 @@
       "name_ko": "치명적인 공격 it's critical",
       "name_zh_TW": "痛恨一擊",
       "wikiDescription": "Grants 50% critical strike chance .",
-      "set": null,
+      "kit_tags": [
+        "crit"
+      ],
       "flags": {
         "system_breaker": false,
         "lifecycle": "active"
-      },
-      "kit_tags": [
-        "crit"
-      ]
+      }
     },
     {
       "slug": "its-killing-time",
@@ -1828,15 +1760,14 @@
       "name_ko": "처형 시간 it's killing time",
       "name_zh_TW": "殺戮時間",
       "wikiDescription": "Upon casting your ultimate ability, you apply Zed's Death Mark to all enemy champions (8 second cooldown). The mark stores 40% of all post-mitigation damage you deal to the affected target, detonating after 5 seconds to deal true damage equal to the damage stored against them.",
-      "set": null,
-      "flags": {
-        "system_breaker": false,
-        "lifecycle": "active"
-      },
       "kit_tags": [
         "ability",
         "dot"
-      ]
+      ],
+      "flags": {
+        "system_breaker": false,
+        "lifecycle": "active"
+      }
     },
     {
       "slug": "keystone-conjurer",
@@ -1848,14 +1779,13 @@
       "name_ko": "핵심 룬 요술사",
       "name_zh_TW": "符文術士",
       "wikiDescription": "Gain the Arcane Comet and Summon Aery keystone runes. Summon Aery Base damage changed to 30 – 100 (based on level) .",
-      "set": null,
+      "kit_tags": [
+        "ability"
+      ],
       "flags": {
         "system_breaker": false,
         "lifecycle": "active"
-      },
-      "kit_tags": [
-        "ability"
-      ]
+      }
     },
     {
       "slug": "lightning-strikes",
@@ -1867,15 +1797,14 @@
       "name_ko": "벼락",
       "name_zh_TW": "電光石火",
       "wikiDescription": "Increase your bonus attack speed gained from all sources by 20% . While at 1. 75 attack speed or higher, your basic attacks deal 40 bonus magic damage on-hit.",
-      "set": null,
-      "flags": {
-        "system_breaker": false,
-        "lifecycle": "active"
-      },
       "kit_tags": [
         "attack",
         "on_hit"
-      ]
+      ],
+      "flags": {
+        "system_breaker": false,
+        "lifecycle": "active"
+      }
     },
     {
       "slug": "magic-missile",
@@ -1888,15 +1817,15 @@
       "name_zh_TW": "魔法導彈",
       "wikiDescription": "Dealing damage to an enemy champion with an ability fires 3 Firecrackers at them that each deal true damage equal to 0. 3 3 % of the target's maximum health , increased to up to 1% based on distance travelled (maximum damage reached at 1000 units). This effect can only trigger once every 6 seconds from the same cast.",
       "wikiSet": "Firecracker",
+      "kit_tags": [
+        "ability",
+        "dot"
+      ],
       "set": "firecracker",
       "flags": {
         "system_breaker": false,
         "lifecycle": "active"
-      },
-      "kit_tags": [
-        "ability",
-        "dot"
-      ]
+      }
     },
     {
       "slug": "marksmage",
@@ -1908,15 +1837,14 @@
       "name_ko": "마법 명사수",
       "name_zh_TW": "射手法師",
       "wikiDescription": "Basic attacks deal bonus physical damage equal to 75% AP .",
-      "flags": {
-        "system_breaker": true,
-        "lifecycle": "active"
-      },
-      "set": null,
       "kit_tags": [
         "attack",
         "ability"
-      ]
+      ],
+      "flags": {
+        "system_breaker": true,
+        "lifecycle": "active"
+      }
     },
     {
       "slug": "minionmancer",
@@ -1928,12 +1856,11 @@
       "name_ko": "소환술사",
       "name_zh_TW": "士兵術師",
       "wikiDescription": "Your pets deal 40% increased damage as well as gain 40% bonus health and size.",
-      "set": null,
+      "kit_tags": [],
       "flags": {
         "system_breaker": false,
         "lifecycle": "active"
-      },
-      "kit_tags": []
+      }
     },
     {
       "slug": "nightstalking",
@@ -1945,14 +1872,13 @@
       "name_ko": "밤의 추적",
       "name_zh_TW": "終城快車",
       "wikiDescription": "Scoring a takedown against an enemy champion within 3 seconds of damaging them renders you invisible for 1. 5 seconds. Attacking or casting abilites ends the stealth immediately.",
-      "set": null,
+      "kit_tags": [
+        "cc"
+      ],
       "flags": {
         "system_breaker": false,
         "lifecycle": "active"
-      },
-      "kit_tags": [
-        "cc"
-      ]
+      }
     },
     {
       "slug": "ok-boomerang",
@@ -1965,15 +1891,15 @@
       "name_zh_TW": "棒棒回力鏢",
       "wikiDescription": "Automatically cast an improved version of Sivir's Boomerang Blade at the closest nearby enemy champion within 1250 units, dealing 40 – 200 (based on level) (+ 30% bonus AD) (+ 20% AP) adaptive damage to enemies hit (10 second cooldown).",
       "wikiSet": "Fully Automated",
+      "kit_tags": [
+        "attack",
+        "ability"
+      ],
       "set": "fully_automated",
       "flags": {
         "system_breaker": false,
         "lifecycle": "active"
-      },
-      "kit_tags": [
-        "attack",
-        "ability"
-      ]
+      }
     },
     {
       "slug": "outlaws-grit",
@@ -1985,15 +1911,14 @@
       "name_ko": "무법자의 투지 outlaw's grit",
       "name_zh_TW": "俠盜恆毅",
       "wikiDescription": "Dashing or blinking grants 12 bonus armor and bonus magic resistance , stacking up to 5 times for a total of 60 bonus resistances. Stacks are reset every 60 seconds since acquiring the augment.",
-      "set": null,
-      "flags": {
-        "system_breaker": false,
-        "lifecycle": "active"
-      },
       "kit_tags": [
         "tank",
         "movement"
-      ]
+      ],
+      "flags": {
+        "system_breaker": false,
+        "lifecycle": "active"
+      }
     },
     {
       "slug": "overflow",
@@ -2006,15 +1931,15 @@
       "name_zh_TW": "溢流",
       "wikiDescription": "Your abilities' mana costs are doubled, but you also gain 10% (+ 0. 5 % per 100 maximum mana) increased damage as well as self and outgoing healing and shielding .",
       "wikiSet": "Archmage",
+      "kit_tags": [
+        "ability",
+        "mana"
+      ],
       "set": "archmage",
       "flags": {
         "system_breaker": false,
         "lifecycle": "active"
-      },
-      "kit_tags": [
-        "ability",
-        "mana"
-      ]
+      }
     },
     {
       "slug": "perseverance",
@@ -2026,15 +1951,14 @@
       "name_ko": "인내심",
       "name_zh_TW": "剛毅",
       "wikiDescription": "Grants 1000% base health regeneration , increased to 2000% while below 25% maximum health . This augment prevents the user from being offered the Vampirism augment.",
-      "set": null,
-      "flags": {
-        "system_breaker": false,
-        "lifecycle": "active"
-      },
       "kit_tags": [
         "heal_shield",
         "tank"
-      ]
+      ],
+      "flags": {
+        "system_breaker": false,
+        "lifecycle": "active"
+      }
     },
     {
       "slug": "phenomenal-evil",
@@ -2047,14 +1971,14 @@
       "name_zh_TW": "極度邪惡",
       "wikiDescription": "Gain Veigar's Phenomenal Evil Power . Phenomenal Evil Power: Generate a permanent stack of Phenomenal Evil each time you damage an enemy champion with ability damage . This effect cannot trigger more than once every second globally and once every 3 seconds from the same cast instance . For each stack, gain 1 ability power . If this is not your first augment, start with 40 Phenomenal Evil stacks, granting you 40 ability power . The 40 bonus stacks for selecting this augment as not your first augment are given once the first stack is earned.",
       "wikiSet": "Stackosaurus Rex",
+      "kit_tags": [
+        "ability"
+      ],
       "set": "stackosaurus_rex",
       "flags": {
         "system_breaker": false,
         "lifecycle": "active"
-      },
-      "kit_tags": [
-        "ability"
-      ]
+      }
     },
     {
       "slug": "pinball",
@@ -2066,15 +1990,15 @@
       "name_ko": "핀볼",
       "wikiDescription": "Your Mark is empowered to instead throw a pinball, which deals 100 – 500 (based on level) bonus true damage and ricochets off of terrain that it collides with. Each time the pinball ricochets, its remaining travel distance is reset, it increases in radius by 25%, deals 20% increased damage, and reduces Mark's remaining cooldown by 30% of its total. The pinball can ricochet up to 4 times, for a maximum radius increase of 100% and a damage increase of 80%. Additionally, your Mark's cooldown is reduced equivalent to 50 ability haste. If Mark is not equipped, the summoner spell in the slot not occupied by Flash is replaced with Mark . If you also did not equip Flash , then you will be prompted to replace one of your summoner spells with Mark .",
       "wikiSet": "Snowday",
+      "kit_tags": [
+        "ability",
+        "on_hit"
+      ],
       "set": "snowday",
       "flags": {
         "system_breaker": false,
         "lifecycle": "active"
-      },
-      "kit_tags": [
-        "ability",
-        "on_hit"
-      ]
+      }
     },
     {
       "slug": "poro-blaster",
@@ -2085,16 +2009,15 @@
       "name_ja": "ポロブラスター",
       "name_ko": "포로 발사기",
       "wikiDescription": "You summon a Poro alongside yourself every 3. 5 seconds, up to 5 at a time. Damaging an enemy champion with a basic attack or ability, excluding those which apply damage over time , commands all of your Poros to launch themselves at the target, each dealing true damage equal to 3% of the target's maximum health . If triggered while at the maximum number of summoned Poros , the first Poro to hit the target also knocks them up for 0. 5 seconds. This augment is only offered to up to 1 player on each team for a given game.",
-      "set": null,
-      "flags": {
-        "system_breaker": false,
-        "lifecycle": "active"
-      },
       "kit_tags": [
         "attack",
         "ability",
         "dot"
-      ]
+      ],
+      "flags": {
+        "system_breaker": false,
+        "lifecycle": "active"
+      }
     },
     {
       "slug": "quest-steel-your-heart",
@@ -2107,12 +2030,12 @@
       "name_zh_TW": "任務：心鋼起來",
       "wikiDescription": "Quest: Obtain Heartsteel and accumulate over 300 bonus health from Colossal Consumption . Reward: Upon completing your Quest , increase the bonus health gained from Heartsteel's Colossal Consumption by 200%.",
       "wikiSet": "Stackosaurus Rex",
+      "kit_tags": [],
       "set": "stackosaurus_rex",
       "flags": {
         "system_breaker": false,
         "lifecycle": "active"
-      },
-      "kit_tags": []
+      }
     },
     {
       "slug": "rabble-rousing",
@@ -2124,15 +2047,14 @@
       "name_ko": "선동",
       "name_zh_TW": "煽動群眾",
       "wikiDescription": "Casting an ability heals you for 5 – 60 (based on level) (+ 1% maximum health) . Toggled abilities will not trigger this augment as they do not count as ability activations for the purposes of on-cast effects.",
-      "set": null,
-      "flags": {
-        "system_breaker": false,
-        "lifecycle": "active"
-      },
       "kit_tags": [
         "ability",
         "heal_shield"
-      ]
+      ],
+      "flags": {
+        "system_breaker": false,
+        "lifecycle": "active"
+      }
     },
     {
       "slug": "recursion",
@@ -2144,14 +2066,13 @@
       "name_ko": "되풀이",
       "name_zh_TW": "循環利用",
       "wikiDescription": "Grants 60 ability haste .",
-      "set": null,
+      "kit_tags": [
+        "haste"
+      ],
       "flags": {
         "system_breaker": false,
         "lifecycle": "active"
-      },
-      "kit_tags": [
-        "haste"
-      ]
+      }
     },
     {
       "slug": "restless-restoration",
@@ -2163,15 +2084,14 @@
       "name_ko": "끊임없는 회복",
       "name_zh_TW": "回復不休",
       "wikiDescription": "Heal for 0. 2 – 1. 2 (based on level) (+ 0. 01 % maximum health) per 10 units travelled.",
-      "set": null,
-      "flags": {
-        "system_breaker": false,
-        "lifecycle": "active"
-      },
       "kit_tags": [
         "heal_shield",
         "movement"
-      ]
+      ],
+      "flags": {
+        "system_breaker": false,
+        "lifecycle": "active"
+      }
     },
     {
       "slug": "scopier-weapons",
@@ -2183,12 +2103,11 @@
       "name_ko": "상급 조준경 부착",
       "name_zh_TW": "超狙武器",
       "wikiDescription": "Gain ( 200 / 100 ) bonus attack range.",
-      "set": null,
+      "kit_tags": [],
       "flags": {
         "system_breaker": false,
         "lifecycle": "active"
-      },
-      "kit_tags": []
+      }
     },
     {
       "slug": "searing-dawn",
@@ -2200,15 +2119,14 @@
       "name_ko": "타오르는 새벽",
       "name_zh_TW": "灼熱黎明",
       "wikiDescription": "Gain Leona's Sunlight . Sunlight: Your damaging abilities mark enemies, causing them to take 40 – 200 (based on level) bonus magic damage from your ally's next basic attack or ability hit against them (0. 75 -second cooldown per target).",
-      "set": null,
-      "flags": {
-        "system_breaker": false,
-        "lifecycle": "active"
-      },
       "kit_tags": [
         "ability",
         "on_hit"
-      ]
+      ],
+      "flags": {
+        "system_breaker": false,
+        "lifecycle": "active"
+      }
     },
     {
       "slug": "shrink-engine",
@@ -2221,15 +2139,15 @@
       "name_zh_TW": "縮小引擎",
       "wikiDescription": "Scoring a champion takedown generates a stack, stacking infinitely. For each stack, gain 8 ability haste and 1% bonus movement speed , and reduce your size by 4%. Lose 65% of stacks on death. Size reduction is capped at 80% (20 stacks).",
       "wikiSet": "Stackosaurus Rex",
+      "kit_tags": [
+        "haste",
+        "movement"
+      ],
       "set": "stackosaurus_rex",
       "flags": {
         "system_breaker": false,
         "lifecycle": "active"
-      },
-      "kit_tags": [
-        "haste",
-        "movement"
-      ]
+      }
     },
     {
       "slug": "shrink-ray",
@@ -2241,16 +2159,15 @@
       "name_ko": "감쇠 광선",
       "name_zh_TW": "縮小光線",
       "wikiDescription": "Basic attacks on-hit reduce the target's damage dealt by 15% for 3 seconds, refreshing with each hit. Their size is also reduced significantly for the duration.",
-      "set": null,
-      "flags": {
-        "system_breaker": false,
-        "lifecycle": "active"
-      },
       "kit_tags": [
         "attack",
         "on_hit",
         "cc"
-      ]
+      ],
+      "flags": {
+        "system_breaker": false,
+        "lifecycle": "active"
+      }
     },
     {
       "slug": "skilled-sniper",
@@ -2262,15 +2179,14 @@
       "name_ko": "노련한 저격수",
       "name_zh_TW": "老練狙擊手",
       "wikiDescription": "Hitting an enemy champion with a basic ability while located at least 700 units away from them at the time of the hit reduces its current cooldown by 80% of its total cooldown, modified to 65% for damage over time abilities.",
-      "set": null,
-      "flags": {
-        "system_breaker": false,
-        "lifecycle": "active"
-      },
       "kit_tags": [
         "ability",
         "haste"
-      ]
+      ],
+      "flags": {
+        "system_breaker": false,
+        "lifecycle": "active"
+      }
     },
     {
       "slug": "slow-and-steady",
@@ -2282,14 +2198,13 @@
       "name_ko": "천천히, 꾸준히",
       "name_zh_TW": "穩紮穩打",
       "wikiDescription": "Your base attack speed is set to a static amount of 0. 625 and your attack rate no longer benefits from any source of attack speed bonuses. In return, you gain 25 bonus attack damage and convert every 1% bonus attack speed into 1 bonus attack damage .",
+      "kit_tags": [
+        "attack"
+      ],
       "flags": {
         "system_breaker": true,
         "lifecycle": "active"
-      },
-      "set": null,
-      "kit_tags": [
-        "attack"
-      ]
+      }
     },
     {
       "slug": "snowball-roulette",
@@ -2301,15 +2216,15 @@
       "name_ko": "눈덩이 룰렛",
       "wikiDescription": "Hitting an enemy champion with Mark casts a random harmful summoner spell on them, and also casts a random beneficial summoner spell on yourself. Using Dash casts the beneficial summoner spell on yourself again upon arrival. Additionally, your Mark's cooldown is reduced equivalent to 100 ability haste. Harmful summoner spells include Exhaust and Ignite , while beneficial ones consist of Barrier , Clarity , Cleanse , Ghost , and Heal . If Mark is not equipped, the summoner spell in the slot not occupied by Flash is replaced with Mark . If you also did not equip Flash , then you will be prompted to replace one of your summoner spells with Mark .",
       "wikiSet": "Snowday",
+      "kit_tags": [
+        "ability",
+        "cc"
+      ],
       "set": "snowday",
       "flags": {
         "system_breaker": false,
         "lifecycle": "active"
-      },
-      "kit_tags": [
-        "ability",
-        "cc"
-      ]
+      }
     },
     {
       "slug": "snowball-upgrade",
@@ -2322,15 +2237,15 @@
       "name_zh_TW": "雪球升級",
       "wikiDescription": "Your Mark is empowered to hail a snowstorm at the location where the target was hit for 2 seconds, granting sight of the area and dealing 「 200 (+ 200% bonus AD) (+ 120% AP) magic damage 」 「 25 (+ 25% bonus AD) (+ 15% AP) magic damage every 0. 25 seconds 」 to enemies within over the duration, as well as slowing them by 50% (+ 6% per 100 AP) . Additionally, your Mark's cooldown is reduced equivalent to 50 ability haste. If Mark is not equipped, the summoner spell in the slot not occupied by Flash is replaced with Mark . If you also did not equip Flash , then you will be prompted to replace one of your summoner spells with Mark .",
       "wikiSet": "Snowday",
+      "kit_tags": [
+        "ability",
+        "cc"
+      ],
       "set": "snowday",
       "flags": {
         "system_breaker": false,
         "lifecycle": "active"
-      },
-      "kit_tags": [
-        "ability",
-        "cc"
-      ]
+      }
     },
     {
       "slug": "sonata",
@@ -2343,15 +2258,15 @@
       "name_zh_TW": "奏鳴曲",
       "wikiDescription": "Alternate between automatically casting a modified version of Sona's Aria of Perseverance and modified Song of Celerity , with the former being cast first (10 second cooldown). Aria of Perseverance: Heal yourself for 60 (+ 60% AP) and send out a tone to the most wounded allied champion within 1000 units that heals them for the same amount. Additionally, generate an aura that grants you and tagged allied champions a 80 (+ 40% AP) shield for 1. 5 seconds. Song of Celerity: Gain 30% bonus movement speed for 7 seconds. If you take damage during this time, the duration ends prematurely once or if 3 seconds have elapsed. Additionally, generate an aura that grants tagged allied champions 20% bonus movement speed for 3 seconds.",
       "wikiSet": "Fully Automated Wee Woo Wee Woo",
+      "kit_tags": [
+        "ability",
+        "heal_shield"
+      ],
       "set": "fully_automated",
       "flags": {
         "system_breaker": false,
         "lifecycle": "active"
-      },
-      "kit_tags": [
-        "ability",
-        "heal_shield"
-      ]
+      }
     },
     {
       "slug": "soul-eater",
@@ -2364,15 +2279,15 @@
       "name_zh_TW": "食魂者",
       "wikiDescription": "Immobilizing or grounding an enemy champion grants you 20 bonus health , stacking infinitely (5 second cooldown per cast instance ).",
       "wikiSet": "Stackosaurus Rex",
+      "kit_tags": [
+        "tank",
+        "cc"
+      ],
       "set": "stackosaurus_rex",
       "flags": {
         "system_breaker": false,
         "lifecycle": "active"
-      },
-      "kit_tags": [
-        "tank",
-        "cc"
-      ]
+      }
     },
     {
       "slug": "soul-siphon",
@@ -2384,15 +2299,14 @@
       "name_ko": "영혼 흡수",
       "name_zh_TW": "靈魂虹吸",
       "wikiDescription": "Heal for 12% of the post-mitigation damage dealt by your critical strikes . Additionally, gain 25% critical strike chance . Any damage from Critical strikes will heal, including those from non-basic attack sources ( Talon's Noxian Diplomacy , Ashe's Volley , etc).",
-      "set": null,
-      "flags": {
-        "system_breaker": false,
-        "lifecycle": "active"
-      },
       "kit_tags": [
         "crit",
         "heal_shield"
-      ]
+      ],
+      "flags": {
+        "system_breaker": false,
+        "lifecycle": "active"
+      }
     },
     {
       "slug": "spiritual-purification",
@@ -2404,16 +2318,15 @@
       "name_ko": "영혼의 정화",
       "name_zh_TW": "靈魂淨化",
       "wikiDescription": "Scoring a champion takedown causes the area around the slain champion to explode in a 500 unit radius, dealing adaptive damage to enemies within equal to 15% of their current health and leaving behind a zone for 1. 5 seconds that slows enemies within by 60%.",
-      "set": null,
-      "flags": {
-        "system_breaker": false,
-        "lifecycle": "active"
-      },
       "kit_tags": [
         "ability",
         "dot",
         "cc"
-      ]
+      ],
+      "flags": {
+        "system_breaker": false,
+        "lifecycle": "active"
+      }
     },
     {
       "slug": "stats-on-stats",
@@ -2426,12 +2339,12 @@
       "name_zh_TW": "能力值堆起來！",
       "wikiDescription": "Gain 3 Stat Anvils , with a higher chance of obtaining Gold and Prismatic tier anvils.",
       "wikiSet": "High Roller",
+      "kit_tags": [],
       "set": "high_roller",
       "flags": {
         "system_breaker": false,
         "lifecycle": "active"
-      },
-      "kit_tags": []
+      }
     },
     {
       "slug": "tank-engine",
@@ -2442,14 +2355,13 @@
       "name_ja": "タンクエンジン",
       "name_ko": "탱크 엔진",
       "wikiDescription": "Scoring a champion takedown generates a stack, stacking infinitely. For each stack, increase your maximum health and size by 5%. Lose 65% of stacks on death.",
-      "set": null,
+      "kit_tags": [
+        "tank"
+      ],
       "flags": {
         "system_breaker": false,
         "lifecycle": "active"
-      },
-      "kit_tags": [
-        "tank"
-      ]
+      }
     },
     {
       "slug": "thread-the-needle",
@@ -2461,12 +2373,11 @@
       "name_ko": "바늘에 실 끼우기",
       "name_zh_TW": "穿針引線",
       "wikiDescription": "Grants 18% armor penetration and magic penetration .",
-      "set": null,
+      "kit_tags": [],
       "flags": {
         "system_breaker": false,
         "lifecycle": "active"
-      },
-      "kit_tags": []
+      }
     },
     {
       "slug": "transmute-prismatic",
@@ -2479,12 +2390,12 @@
       "name_zh_TW": "質變：稜鏡",
       "wikiDescription": "Gain one random Prismatic augment, excluding the other two offerings in your current assortment.",
       "wikiSet": "High Roller",
+      "kit_tags": [],
       "set": "high_roller",
       "flags": {
         "system_breaker": false,
         "lifecycle": "active"
-      },
-      "kit_tags": []
+      }
     },
     {
       "slug": "twice-thrice",
@@ -2496,15 +2407,14 @@
       "name_ko": "두 배 세 배",
       "name_zh_TW": "二次三次",
       "wikiDescription": "Basic attacks generate a stack, up to 2 times. At 2 stacks, your next basic attack consumes all stacks to apply on-hit effects again at 150% effectiveness.",
-      "set": null,
-      "flags": {
-        "system_breaker": false,
-        "lifecycle": "active"
-      },
       "kit_tags": [
         "attack",
         "on_hit"
-      ]
+      ],
+      "flags": {
+        "system_breaker": false,
+        "lifecycle": "active"
+      }
     },
     {
       "slug": "upgrade-hubris",
@@ -2517,15 +2427,15 @@
       "name_zh_TW": "升級傲慢",
       "wikiDescription": "Upgrades Hubris , empowering Eminence to heal you for 2. 5 % (+ 0. 5 % per stack) maximum health upon being triggered and grant you 10 (+ 5 per stack) bonus movement speed for its duration. Additionally, gain 250 .",
       "wikiSet": "Stackosaurus Rex",
+      "kit_tags": [
+        "heal_shield",
+        "movement"
+      ],
       "set": "stackosaurus_rex",
       "flags": {
         "system_breaker": false,
         "lifecycle": "active"
-      },
-      "kit_tags": [
-        "heal_shield",
-        "movement"
-      ]
+      }
     },
     {
       "slug": "upgrade-infinity-edge",
@@ -2536,15 +2446,14 @@
       "name_ja": "インフィニティ エッジ アップグレード",
       "name_ko": "무한의 대검 업그레이드",
       "wikiDescription": "Upgrades Infinity Edge , empowering it to gain Sword of the Divine's Excoriate . Additionally, gain 500 and 25% critical strike chance . Excoriate: Gain a random amount of bonus critical strike damage that scales up to 50% of your critical strike chance , with the value of this amount changing every 0. 25 seconds.",
-      "set": null,
-      "flags": {
-        "system_breaker": false,
-        "lifecycle": "active"
-      },
       "kit_tags": [
         "attack",
         "crit"
-      ]
+      ],
+      "flags": {
+        "system_breaker": false,
+        "lifecycle": "active"
+      }
     },
     {
       "slug": "upgrade-sheen",
@@ -2556,15 +2465,14 @@
       "name_ko": "광휘의 검 업그레이드",
       "name_zh_TW": "升級閃耀劍",
       "wikiDescription": "Upgrades all Spellblade items, empowering the passive effect to deal additional bonus physical damage equal to 4% of the target's maximum health and heal you for 3. 5 % of your maximum health . Additionally, gain 250 .",
-      "set": null,
-      "flags": {
-        "system_breaker": false,
-        "lifecycle": "active"
-      },
       "kit_tags": [
         "ability",
         "heal_shield"
-      ]
+      ],
+      "flags": {
+        "system_breaker": false,
+        "lifecycle": "active"
+      }
     },
     {
       "slug": "vampirism",
@@ -2575,15 +2483,14 @@
       "name_ja": "吸血鬼信仰",
       "name_ko": "흡혈병",
       "wikiDescription": "You can no longer be healed by allies and your health regeneration is set to 0 . Gain 25% omnivamp . Diadem of Songs' Consonance and Moonstone Renewer's Starlit Grace will specifically not target champions with this augment. This augment prevents the user from being offered the Perseverance augment. This augment is not offered if the champion has built Warmog's Armor .",
-      "set": null,
-      "flags": {
-        "system_breaker": false,
-        "lifecycle": "active"
-      },
       "kit_tags": [
         "heal_shield",
         "dot"
-      ]
+      ],
+      "flags": {
+        "system_breaker": false,
+        "lifecycle": "active"
+      }
     },
     {
       "slug": "vulnerability",
@@ -2595,15 +2502,14 @@
       "name_ko": "취약",
       "name_zh_TW": "見縫插針",
       "wikiDescription": "Damage dealt by items and damage over time effects can now critically strike for (145% + bonus critical damage ) damage (5 second cooldown per cast instance ). Additionally, gain 25% critical strike chance . If both Jeweled Gauntlet and Vulnerability are equipped, only rolls the critical strike chance of the augment that has the higher critical damage (or either if equal). The interaction between Jeweled Gauntlet and Vulnerability may behave incorrectly with persistent area damage effects. (bug)",
-      "flags": {
-        "system_breaker": true,
-        "lifecycle": "active"
-      },
-      "set": null,
       "kit_tags": [
         "crit",
         "dot"
-      ]
+      ],
+      "flags": {
+        "system_breaker": true,
+        "lifecycle": "active"
+      }
     },
     {
       "slug": "with-haste",
@@ -2615,15 +2521,14 @@
       "name_ko": "속행",
       "name_zh_TW": "腳程加速",
       "wikiDescription": "Grants bonus movement speed equal to 70% ability haste .",
-      "set": null,
-      "flags": {
-        "system_breaker": false,
-        "lifecycle": "active"
-      },
       "kit_tags": [
         "movement",
         "haste"
-      ]
+      ],
+      "flags": {
+        "system_breaker": false,
+        "lifecycle": "active"
+      }
     },
     {
       "slug": "adamant",
@@ -2635,15 +2540,14 @@
       "name_ko": "단호함",
       "name_zh_TW": "意志堅定",
       "wikiDescription": "Immobilizing or grounding an enemy champion grants 10 bonus armor and bonus magic resistance for 10 seconds, stacking up to 10 times for a total of 100 bonus resistances, and refreshing on subsequent triggers (5 second cooldown per cast instance ).",
-      "set": null,
-      "flags": {
-        "system_breaker": false,
-        "lifecycle": "active"
-      },
       "kit_tags": [
         "tank",
         "cc"
-      ]
+      ],
+      "flags": {
+        "system_breaker": false,
+        "lifecycle": "active"
+      }
     },
     {
       "slug": "adapt",
@@ -2655,15 +2559,14 @@
       "name_ko": "적응형 능력치",
       "name_zh_TW": "靈活轉換",
       "wikiDescription": "Convert all of your bonus attack damage into ability power at a rate of 1 ability power per 0. 6 bonus attack damage . Additionally, increase your ability power by 15% .",
-      "set": null,
-      "flags": {
-        "system_breaker": false,
-        "lifecycle": "active"
-      },
       "kit_tags": [
         "attack",
         "ability"
-      ]
+      ],
+      "flags": {
+        "system_breaker": false,
+        "lifecycle": "active"
+      }
     },
     {
       "slug": "blunt-force",
@@ -2675,14 +2578,13 @@
       "name_ko": "육중한 힘",
       "name_zh_TW": "蠻力重擊",
       "wikiDescription": "Increases attack damage by 20% .",
-      "set": null,
+      "kit_tags": [
+        "attack"
+      ],
       "flags": {
         "system_breaker": false,
         "lifecycle": "active"
-      },
-      "kit_tags": [
-        "attack"
-      ]
+      }
     },
     {
       "slug": "buff-buddies",
@@ -2695,16 +2597,16 @@
       "name_zh_TW": "增益麻吉",
       "wikiDescription": "Grants the Crest of Cinders and Crest of Insight buffs permanently. Crest of Cinders: Empowers your basic attacks to slow the target by ( 10% / 15% / 25% / 5% / 7. 5 % / 12. 5 % ) (based on level) for 3 seconds and inflict them with a burn for 2 seconds, which deals 8 – 76 (based on level) total true damage over 3 instances over the duration. Each instance deals 2. 67 – 25. 33 (based on level) true damage , with the first instance being applied on-hit and the second and third instances dealt each second over the burn's duration. Subsequent attacks against a burning target will only refresh its duration. While out-of-combat with enemy champions and turrets , you regenerate 「 0. 5 % / 1% / 3% / 9% (based on level) maximum health every 5 seconds. 」 「 0. 05 % / 0. 1 % / 0. 3 % / 0. 9 % (based on level) maximum health every 0. 5 seconds. 」 This effect counts as a Burn source. Crest of Insight: Grants 10 ability haste . If your champion uses mana , restores 「 5. 5 % of maximum mana every 5 seconds; 」 「 0. 55 % of maximum mana every 0. 5 seconds; 」 if your champion uses energy , instead restores 「 5. 5 % of maximum energy every 5 seconds. 」 「 0. 55 % of maximum energy every 0. 5 seconds. 」 The buff is not transferred to the killer when slain.",
       "wikiSet": "Archmage",
-      "set": "archmage",
-      "flags": {
-        "system_breaker": false,
-        "lifecycle": "active"
-      },
       "kit_tags": [
         "attack",
         "dot",
         "cc"
-      ]
+      ],
+      "set": "archmage",
+      "flags": {
+        "system_breaker": false,
+        "lifecycle": "active"
+      }
     },
     {
       "slug": "crack-open-that-egg",
@@ -2716,15 +2618,14 @@
       "name_ko": "알 깨기",
       "name_zh_TW": "敲爆那顆蛋",
       "wikiDescription": "Your shields detonate upon expiration, creating an explosion that deals magic damage equal to 100% of the shield's strength to nearby enemies.",
-      "set": null,
-      "flags": {
-        "system_breaker": false,
-        "lifecycle": "active"
-      },
       "kit_tags": [
         "heal_shield",
         "ability"
-      ]
+      ],
+      "flags": {
+        "system_breaker": false,
+        "lifecycle": "active"
+      }
     },
     {
       "slug": "crit-n-cast",
@@ -2736,15 +2637,14 @@
       "name_ko": "치명적 가속 crit 'n cast",
       "name_zh_TW": "暴擊和施法",
       "wikiDescription": "Gain ability haste equal to 40% of your critical strike chance .",
-      "set": null,
-      "flags": {
-        "system_breaker": false,
-        "lifecycle": "active"
-      },
       "kit_tags": [
         "crit",
         "haste"
-      ]
+      ],
+      "flags": {
+        "system_breaker": false,
+        "lifecycle": "active"
+      }
     },
     {
       "slug": "deft",
@@ -2756,14 +2656,13 @@
       "name_ko": "능수능란",
       "name_zh_TW": "手腳麻利",
       "wikiDescription": "Grants 60% bonus attack speed .",
-      "set": null,
+      "kit_tags": [
+        "attack"
+      ],
       "flags": {
         "system_breaker": false,
         "lifecycle": "active"
-      },
-      "kit_tags": [
-        "attack"
-      ]
+      }
     },
     {
       "slug": "dive-bomber",
@@ -2776,14 +2675,14 @@
       "name_zh_TW": "自爆炸彈客",
       "wikiDescription": "Upon death, you explode to deal true damage equal to 20% of the target's maximum health to enemies within 500 units.",
       "wikiSet": "Dive Bomb",
+      "kit_tags": [
+        "dot"
+      ],
       "set": "dive_bomb",
       "flags": {
         "system_breaker": false,
         "lifecycle": "active"
-      },
-      "kit_tags": [
-        "dot"
-      ]
+      }
     },
     {
       "slug": "dont-blink",
@@ -2795,15 +2694,14 @@
       "name_ko": "속전속결 don't blink",
       "name_zh_TW": "格擋",
       "wikiDescription": "Deal 1% increased damage per 10 movement speed you have more than the target.",
-      "set": null,
-      "flags": {
-        "system_breaker": false,
-        "lifecycle": "active"
-      },
       "kit_tags": [
         "attack",
         "movement"
-      ]
+      ],
+      "flags": {
+        "system_breaker": false,
+        "lifecycle": "active"
+      }
     },
     {
       "slug": "erosion",
@@ -2815,15 +2713,14 @@
       "name_ko": "부식",
       "name_zh_TW": "侵蝕裝甲",
       "wikiDescription": "Each instance of damage dealt to an enemy reduces their armor and magic resistance by 1. 5 % for 4 seconds, stacking up to 20 times for a total of 30% resistances reduction.",
-      "set": null,
-      "flags": {
-        "system_breaker": false,
-        "lifecycle": "active"
-      },
       "kit_tags": [
         "ability",
         "dot"
-      ]
+      ],
+      "flags": {
+        "system_breaker": false,
+        "lifecycle": "active"
+      }
     },
     {
       "slug": "escapade",
@@ -2835,15 +2732,14 @@
       "name_ko": "마법사 (물리)",
       "name_zh_TW": "轉換惡作劇",
       "wikiDescription": "Convert all of your ability power into bonus attack damage at a rate of 1 bonus attack damage per 1. 66 ability power . Additionally, increase your total attack damage by 15% . Does not convert the Ability Power obtained from Riftmaker 's Void Infusion , nor from Archangel's Staff or Seraph's Embrace 's Awe . (bug)",
-      "set": null,
-      "flags": {
-        "system_breaker": false,
-        "lifecycle": "active"
-      },
       "kit_tags": [
         "attack",
         "ability"
-      ]
+      ],
+      "flags": {
+        "system_breaker": false,
+        "lifecycle": "active"
+      }
     },
     {
       "slug": "escape-plan",
@@ -2855,16 +2751,15 @@
       "name_ko": "도주 계획",
       "name_zh_TW": "逃跑計畫",
       "wikiDescription": "Upon dropping below 35% of your maximum health , gain a shield for 65% of your maximum health , 150% bonus movement speed , and reduced size (75 second cooldown). These effects all decay over 5. 5 seconds.",
-      "set": null,
-      "flags": {
-        "system_breaker": false,
-        "lifecycle": "active"
-      },
       "kit_tags": [
         "heal_shield",
         "movement",
         "tank"
-      ]
+      ],
+      "flags": {
+        "system_breaker": false,
+        "lifecycle": "active"
+      }
     },
     {
       "slug": "firefox",
@@ -2876,16 +2771,16 @@
       "name_ko": "불여우",
       "wikiDescription": "Automatically cast a modified version of Ahri's Fox-Fire , gaining 25% bonus movement speed that decays over 2 seconds and conjuring 3 flames that orbit you clockwise for up to 2. 5 seconds at a radius of 150 units. The flames will fly toward the nearest visible enemy champion within 550 units, dealing 35 – 160 (based on level) (+ 25% bonus AD (+ 25% AP) adaptive damage , reduced to 「 10. 5 – 48 (based on level) (+ 7. 5 % bonus AD (+ 7. 5 % AP) 」 「 30% of the original damage 」 for enemies hit by subsequent flames from the same cast (7 second cooldown).",
       "wikiSet": "Fully Automated",
-      "set": "fully_automated",
-      "flags": {
-        "system_breaker": false,
-        "lifecycle": "active"
-      },
       "kit_tags": [
         "ability",
         "movement",
         "dot"
-      ]
+      ],
+      "set": "fully_automated",
+      "flags": {
+        "system_breaker": false,
+        "lifecycle": "active"
+      }
     },
     {
       "slug": "first-aid-kit",
@@ -2898,14 +2793,14 @@
       "name_zh_TW": "急救箱",
       "wikiDescription": "Grants 20% heal and shield power .",
       "wikiSet": "Wee Woo Wee Woo",
+      "kit_tags": [
+        "heal_shield"
+      ],
       "set": "wee_woo",
       "flags": {
         "system_breaker": false,
         "lifecycle": "active"
-      },
-      "kit_tags": [
-        "heal_shield"
-      ]
+      }
     },
     {
       "slug": "flash-2",
@@ -2917,15 +2812,14 @@
       "name_ko": "점멸 2",
       "name_zh_TW": "二次閃現",
       "wikiDescription": "Replace a summoner spell with Flash . Additionally, gain 70 summoner spell haste.",
-      "set": null,
-      "flags": {
-        "system_breaker": false,
-        "lifecycle": "active"
-      },
       "kit_tags": [
         "haste",
         "movement"
-      ]
+      ],
+      "flags": {
+        "system_breaker": false,
+        "lifecycle": "active"
+      }
     },
     {
       "slug": "flashbang",
@@ -2937,16 +2831,15 @@
       "name_ko": "점멸탄",
       "name_zh_TW": "閃光彈",
       "wikiDescription": "Using Flash creates an explosion around the blink location that deals 70 – 240 (based on level) (+ 70% AD) (+ 60% AP) magic damage to nearby enemies and slows them by 35% for 1. 25 seconds. Additionally, the cooldown of your Flash resets upon your death. If Flash is not equipped, you will be prompted to replace one of your summoner spells with Flash .",
-      "set": null,
-      "flags": {
-        "system_breaker": false,
-        "lifecycle": "active"
-      },
       "kit_tags": [
         "ability",
         "cc",
         "movement"
-      ]
+      ],
+      "flags": {
+        "system_breaker": false,
+        "lifecycle": "active"
+      }
     },
     {
       "slug": "frost-wraith",
@@ -2959,15 +2852,15 @@
       "name_zh_TW": "寒霜幽魂",
       "wikiDescription": "Automatically cast a modified version of Lissandra's Ring of Frost , creating a cold pulse around you in 450 radius that roots nearby enemies for 1. 25 seconds (6. 5 second cooldown). This modified ability does not deal damage.",
       "wikiSet": "Fully Automated",
+      "kit_tags": [
+        "ability",
+        "cc"
+      ],
       "set": "fully_automated",
       "flags": {
         "system_breaker": false,
         "lifecycle": "active"
-      },
-      "kit_tags": [
-        "ability",
-        "cc"
-      ]
+      }
     },
     {
       "slug": "goredrink",
@@ -2979,14 +2872,13 @@
       "name_ko": "선혈포식",
       "name_zh_TW": "飲血",
       "wikiDescription": "Gain 15% omnivamp .",
-      "set": null,
+      "kit_tags": [
+        "heal_shield"
+      ],
       "flags": {
         "system_breaker": false,
         "lifecycle": "active"
-      },
-      "kit_tags": [
-        "heal_shield"
-      ]
+      }
     },
     {
       "slug": "guilty-pleasure",
@@ -2998,15 +2890,14 @@
       "name_ko": "죄책감의 쾌락",
       "name_zh_TW": "惡趣味",
       "wikiDescription": "Immobilizing or grounding an enemy champion heals you for 30 – 250 (based on level) (+ 1. 5 % maximum health) (5 second cooldown per cast instance ).",
-      "set": null,
-      "flags": {
-        "system_breaker": false,
-        "lifecycle": "active"
-      },
       "kit_tags": [
         "heal_shield",
         "cc"
-      ]
+      ],
+      "flags": {
+        "system_breaker": false,
+        "lifecycle": "active"
+      }
     },
     {
       "slug": "hat-on-a-hat",
@@ -3018,14 +2909,13 @@
       "name_ko": "모자 겹쳐쓰기",
       "name_zh_TW": "帽上加帽",
       "wikiDescription": "Gain 15 ability power and 8 bonus magic resistance for each headwear item or hat you have in your inventory, reduced to 8 ability power and 4 bonus magic resistance for hats obtained from Cappa Juice and Stat Bonus . Eligible Items: Abyssal Mask , Bloodletter's Curse , Cosmic Drive , Diadem of Songs , Edge of Night , Experimental Hexplate , Fimbulwinter , Haunting Guise , Hollow Radiance , Hubris , Jak'Sho, The Protean , Knight's Vow , Liandry's Torment , Rabadon's Deathcap , Riftmaker , Shurelya's Battlesong , Spectre's Cowl , Whispering Circlet , Wooglet's Witchcap",
-      "set": null,
+      "kit_tags": [
+        "ability"
+      ],
       "flags": {
         "system_breaker": false,
         "lifecycle": "active"
-      },
-      "kit_tags": [
-        "ability"
-      ]
+      }
     },
     {
       "slug": "heavy-hitter",
@@ -3037,15 +2927,14 @@
       "name_ko": "강타자",
       "name_zh_TW": "重型打手",
       "wikiDescription": "Basic attacks deal bonus physical damage equal to 3. 5 % of your maximum health .",
-      "set": null,
-      "flags": {
-        "system_breaker": false,
-        "lifecycle": "active"
-      },
       "kit_tags": [
         "attack",
         "on_hit"
-      ]
+      ],
+      "flags": {
+        "system_breaker": false,
+        "lifecycle": "active"
+      }
     },
     {
       "slug": "hextech-soul",
@@ -3056,12 +2945,11 @@
       "name_ja": "ヘクステック ソウル",
       "name_ko": "마법공학의 영혼",
       "wikiDescription": "Grants the Hextech Dragon Soul , or a different Dragon Soul if you aleady have it.",
-      "set": null,
+      "kit_tags": [],
       "flags": {
         "system_breaker": false,
         "lifecycle": "active"
-      },
-      "kit_tags": []
+      }
     },
     {
       "slug": "homeguard",
@@ -3073,14 +2961,13 @@
       "name_ko": "민병대",
       "name_zh_TW": "守護家園",
       "wikiDescription": "Gain 100% bonus movement speed . This bonus is lost for 6 seconds after taking damage from champions.",
-      "set": null,
+      "kit_tags": [
+        "movement"
+      ],
       "flags": {
         "system_breaker": false,
         "lifecycle": "active"
-      },
-      "kit_tags": [
-        "movement"
-      ]
+      }
     },
     {
       "slug": "ice-cold",
@@ -3092,14 +2979,13 @@
       "name_ko": "차가운 냉기",
       "name_zh_TW": "雪地踱步",
       "wikiDescription": "Your slowing effects reduce the movement speed of targets by an additional 75 .",
-      "set": null,
+      "kit_tags": [
+        "cc"
+      ],
       "flags": {
         "system_breaker": false,
         "lifecycle": "active"
-      },
-      "kit_tags": [
-        "cc"
-      ]
+      }
     },
     {
       "slug": "infernal-soul",
@@ -3111,12 +2997,11 @@
       "name_ko": "지옥불 영혼",
       "name_zh_TW": "煉獄惡靈",
       "wikiDescription": "Grants the Infernal Dragon Soul , or a different Dragon Soul if you aleady have it.",
-      "set": null,
+      "kit_tags": [],
       "flags": {
         "system_breaker": false,
         "lifecycle": "active"
-      },
-      "kit_tags": []
+      }
     },
     {
       "slug": "juiced",
@@ -3129,18 +3014,18 @@
       "name_zh_TW": "強化攻擊",
       "wikiDescription": "Basic attacks on-hit against enemy champions consume 2. 5 % of your maximum mana to deal bonus magic damage equal to 4. 5 % of your maximum mana . This damage can critically strike for (100% + 30% ) bonus damage.",
       "wikiSet": "Archmage",
-      "set": "archmage",
-      "flags": {
-        "system_breaker": false,
-        "lifecycle": "active"
-      },
       "kit_tags": [
         "attack",
         "ability",
         "on_hit",
         "crit",
         "mana"
-      ]
+      ],
+      "set": "archmage",
+      "flags": {
+        "system_breaker": false,
+        "lifecycle": "active"
+      }
     },
     {
       "slug": "kill-secured",
@@ -3151,14 +3036,13 @@
       "name_ja": "キルを確認",
       "name_ko": "확보된 킬",
       "wikiDescription": "Gain 60% bonus movement speed towards enemy champions below 40% of their maximum health .",
-      "set": null,
+      "kit_tags": [
+        "movement"
+      ],
       "flags": {
         "system_breaker": false,
         "lifecycle": "active"
-      },
-      "kit_tags": [
-        "movement"
-      ]
+      }
     },
     {
       "slug": "leg-day",
@@ -3170,14 +3054,13 @@
       "name_ko": "하체 운동의 날",
       "name_zh_TW": "腿部訓練日",
       "wikiDescription": "Gain 50 bonus movement speed and 40% slow resist .",
-      "set": null,
+      "kit_tags": [
+        "movement"
+      ],
       "flags": {
         "system_breaker": false,
         "lifecycle": "active"
-      },
-      "kit_tags": [
-        "movement"
-      ]
+      }
     },
     {
       "slug": "light-em-up",
@@ -3190,16 +3073,16 @@
       "name_zh_TW": "來點顏色",
       "wikiDescription": "Basic attacks generate a stack, up to 4. The fourth stack consumes them all to quickly launch 4 Firecrackers at the target that each deal 11 – 80 (based on level) (+ 35% bonus AD) (+ 19% AP) bonus magic damage on-hit, for a total of 44 – 320 (based on level) (+ 140% bonus AD) (+ 76% AP) .",
       "wikiSet": "Firecracker",
-      "set": "firecracker",
-      "flags": {
-        "system_breaker": false,
-        "lifecycle": "active"
-      },
       "kit_tags": [
         "attack",
         "ability",
         "on_hit"
-      ]
+      ],
+      "set": "firecracker",
+      "flags": {
+        "system_breaker": false,
+        "lifecycle": "active"
+      }
     },
     {
       "slug": "mighty-shield",
@@ -3211,15 +3094,14 @@
       "name_ko": "강력한 방패",
       "name_zh_TW": "巨大盾牌",
       "wikiDescription": "Gain 40 – 100 (based on level) adaptive force for 3 seconds upon gaining a shield (5 second cooldown).",
-      "set": null,
-      "flags": {
-        "system_breaker": false,
-        "lifecycle": "active"
-      },
       "kit_tags": [
         "heal_shield",
         "ability"
-      ]
+      ],
+      "flags": {
+        "system_breaker": false,
+        "lifecycle": "active"
+      }
     },
     {
       "slug": "mind-to-matter",
@@ -3232,15 +3114,15 @@
       "name_zh_TW": "因心成體",
       "wikiDescription": "Grants bonus health equal to 50% maximum mana . Maximum bonus health granted by this effect is capped at 99,999 bonus health .",
       "wikiSet": "Archmage",
+      "kit_tags": [
+        "tank",
+        "mana"
+      ],
       "set": "archmage",
       "flags": {
         "system_breaker": false,
         "lifecycle": "active"
-      },
-      "kit_tags": [
-        "tank",
-        "mana"
-      ]
+      }
     },
     {
       "slug": "mountainsoul",
@@ -3251,12 +3133,11 @@
       "name_ja": "マウンテンソウル",
       "name_ko": "대지의 영혼",
       "name_zh_TW": "高山之魂",
-      "set": null,
+      "kit_tags": [],
       "flags": {
         "system_breaker": false,
         "lifecycle": "active"
-      },
-      "kit_tags": []
+      }
     },
     {
       "slug": "ocean-soul",
@@ -3269,14 +3150,14 @@
       "name_zh_TW": "海洋之魂",
       "wikiDescription": "Grants the Ocean Dragon Soul , which has a modified base heal value of 100, or a different Dragon Soul if you aleady have it.",
       "wikiSet": "Archmage",
+      "kit_tags": [
+        "heal_shield"
+      ],
       "set": "archmage",
       "flags": {
         "system_breaker": false,
         "lifecycle": "active"
-      },
-      "kit_tags": [
-        "heal_shield"
-      ]
+      }
     },
     {
       "slug": "poltergeist",
@@ -3288,15 +3169,14 @@
       "name_ko": "폴터가이스트",
       "name_zh_TW": "守護面紗",
       "wikiDescription": "Replace a summoner spell with Poltergeist . Poltergeist: Casts both Barrier and Ghost on yourself, both lasting 5 seconds and with the former granting a shield for 110 – 440 (based on level) and the latter granting 30% bonus movement speed .",
-      "set": null,
-      "flags": {
-        "system_breaker": false,
-        "lifecycle": "active"
-      },
       "kit_tags": [
         "heal_shield",
         "movement"
-      ]
+      ],
+      "flags": {
+        "system_breaker": false,
+        "lifecycle": "active"
+      }
     },
     {
       "slug": "purist-caster",
@@ -3308,15 +3188,14 @@
       "name_ko": "순수주의자 - 마법사 purist - caster",
       "name_zh_TW": "純粹 - 法師",
       "wikiDescription": "Convert all of your bonus attack speed into ability haste at a rate of 0. 65 ability haste per 1% bonus attack speed . Additionally, your abilities' total cooldowns are reduced by 10%.",
-      "set": null,
-      "flags": {
-        "system_breaker": false,
-        "lifecycle": "active"
-      },
       "kit_tags": [
         "ability",
         "haste"
-      ]
+      ],
+      "flags": {
+        "system_breaker": false,
+        "lifecycle": "active"
+      }
     },
     {
       "slug": "repulsor",
@@ -3328,15 +3207,14 @@
       "name_ko": "반발",
       "name_zh_TW": "反重力裝置",
       "wikiDescription": "Upon dropping below 35% of your maximum health , you knock back all enemies within a 500 radius by 750 units and slow them by 90% for 1. 5 seconds (25 second cooldown, resets upon death).",
-      "set": null,
-      "flags": {
-        "system_breaker": false,
-        "lifecycle": "active"
-      },
       "kit_tags": [
         "tank",
         "cc"
-      ]
+      ],
+      "flags": {
+        "system_breaker": false,
+        "lifecycle": "active"
+      }
     },
     {
       "slug": "scoped-weapons",
@@ -3348,14 +3226,13 @@
       "name_ko": "조준경 부착",
       "name_zh_TW": "狙擊武器",
       "wikiDescription": "Gain ( 75 / 50 ) bonus attack range.",
-      "set": null,
+      "kit_tags": [
+        "attack"
+      ],
       "flags": {
         "system_breaker": false,
         "lifecycle": "active"
-      },
-      "kit_tags": [
-        "attack"
-      ]
+      }
     },
     {
       "slug": "self-destruct",
@@ -3368,15 +3245,15 @@
       "name_zh_TW": "自我毀滅",
       "wikiDescription": "Automatically attach a bomb to yourself that detonates after 5 seconds, creating an explosion that deals true damage equal to 20% of the target's maximum health to enemies within 350 units and knocks them up for 0. 75 seconds (25 second cooldown). The airborne status effect from the knock back does not interrupt channels nor disable abilities , and is not resisted by immunity nor spell shield . (bug)",
       "wikiSet": "Dive Bomb Fully Automated",
+      "kit_tags": [
+        "ability",
+        "dot"
+      ],
       "set": "dive_bomb",
       "flags": {
         "system_breaker": false,
         "lifecycle": "active"
-      },
-      "kit_tags": [
-        "ability",
-        "dot"
-      ]
+      }
     },
     {
       "slug": "shadow-runner",
@@ -3388,14 +3265,13 @@
       "name_ko": "그림자 질주",
       "name_zh_TW": "飛影跑法",
       "wikiDescription": "After dashing , blinking , or exiting stealth , gain 300 bonus movement speed for 2 seconds.",
-      "set": null,
+      "kit_tags": [
+        "movement"
+      ],
       "flags": {
         "system_breaker": false,
         "lifecycle": "active"
-      },
-      "kit_tags": [
-        "movement"
-      ]
+      }
     },
     {
       "slug": "slap-around",
@@ -3408,16 +3284,16 @@
       "name_zh_TW": "痛打一頓",
       "wikiDescription": "Immobilizing or grounding an enemy champion grants you 6 bonus Attack Damage or 10 Ability Power ( Adaptive ), stacking infinitely (5 second cooldown per cast instance ). Lose 50% of stacks on death.",
       "wikiSet": "Stackosaurus Rex",
-      "set": "stackosaurus_rex",
-      "flags": {
-        "system_breaker": false,
-        "lifecycle": "active"
-      },
       "kit_tags": [
         "attack",
         "ability",
         "cc"
-      ]
+      ],
+      "set": "stackosaurus_rex",
+      "flags": {
+        "system_breaker": false,
+        "lifecycle": "active"
+      }
     },
     {
       "slug": "sonic-boom",
@@ -3429,16 +3305,15 @@
       "name_ko": "음속 폭발",
       "name_zh_TW": "餘音震盪",
       "wikiDescription": "Granting a buff , heal , or shield to your ally deals 30 – 150 (based on level) true damage to enemies within 450 units of them and slows targets by 30% for 2 seconds (2 second cooldown).",
-      "set": null,
-      "flags": {
-        "system_breaker": false,
-        "lifecycle": "active"
-      },
       "kit_tags": [
         "ability",
         "heal_shield",
         "cc"
-      ]
+      ],
+      "flags": {
+        "system_breaker": false,
+        "lifecycle": "active"
+      }
     },
     {
       "slug": "speed-demon",
@@ -3450,15 +3325,14 @@
       "name_ko": "질주하는 악마",
       "name_zh_TW": "極限衝鋒",
       "wikiDescription": "Whenever you damage an enemy champion with an ability, gain 200 bonus movement speed decaying over 0. 75 seconds.",
-      "set": null,
-      "flags": {
-        "system_breaker": false,
-        "lifecycle": "active"
-      },
       "kit_tags": [
         "ability",
         "movement"
-      ]
+      ],
+      "flags": {
+        "system_breaker": false,
+        "lifecycle": "active"
+      }
     },
     {
       "slug": "spin-me-right-round",
@@ -3469,15 +3343,14 @@
       "name_ja": "振り回して",
       "name_ko": "빙글빙글",
       "wikiDescription": "Replace a summoner spell with Akshan's Heroic Swing . Heroic Swing - Active: You can activate Heroic Swing three times before the ability goes on cooldown, and you can use the third cast only after 0. 5 seconds of the second cast. An attack or movement command may be inputted to use the second and third casts. First Cast: Fire a hook in the target direction that embeds in the first terrain hit for 2 seconds. Heroic Swing's second cast can be used while the hook is attached. If the hook fails to attach or you become immobilized , grounded , or polymorphed within the duration, Heroic Swing is cancelled and placed on full cooldown. Second Cast: Swing around the terrain in either a clockwise or counterclockwise direction based on the position of the cursor relative to your facing direction , stopping upon colliding with an enemy champion or terrain. While swinging, fire at the nearest visible enemy within 500 units every 0. 231 seconds to deal them 15 – 75 (based on level) (+ 15% AD) × (1 + 0. 3 per 100% bonus attack speed) physical damage and apply on-hit effects for each shot, with on-hit damage reduced to 25% effectiveness. The dash will be interrupted if you are affected by any immobilizing or polymorphing crowd control during the dash. Third Cast: End the swing by jumping to the target location and fire one last shot at a nearby visible enemy. Scoring an enemy champion takedown reduces Heroic Swing's current cooldown to 0. 5 seconds. This augment is currently disabled.",
-      "set": null,
-      "flags": {
-        "system_breaker": false,
-        "lifecycle": "active"
-      },
       "kit_tags": [
         "movement",
         "ability"
-      ]
+      ],
+      "flags": {
+        "system_breaker": false,
+        "lifecycle": "active"
+      }
     },
     {
       "slug": "spin-to-win",
@@ -3489,15 +3362,14 @@
       "name_ko": "승리를 위한 회전",
       "name_zh_TW": "一轉就贏",
       "wikiDescription": "Your spinning abilities deal 30% increased damage and have their cooldown reduced equivalent to 30 ability haste. This note is not fully complete. If you wish to contribute, please do so on Discussion page Eligible Abilities : Ahri's Fox-Fire and Spirit Rush , Amumu's Tantrum , Ambessa's Lacerate , Darius' Decimate , Draven's Spinning Axe , Stand Aside , and Whirling Death , Garen's Judgment , Hecarim's Rampage , Jax's Counter Strike , Katarina's Voracity and Death Lotus , Kayn's Reaping Slash , Lillia's Blooming Blows , Nocturne's Umbra Blades , Rammus' Powerball , Renekton's Cull the Meek , Riven's Broken Wings , Samira's Blade Whirl and Inferno Trigger , Sylas' Petricite Burst , Wukong's Cyclone , Tryndamere's Spinning Slash , Zed's Shadow Slash PENDING FOR TEST: : Akshan's Avengerang and Heroic Swing , Lillia's Watch Out! Eep! and Swirlseed , Poppy's Keeper's Verdict , etc.",
-      "set": null,
-      "flags": {
-        "system_breaker": false,
-        "lifecycle": "active"
-      },
       "kit_tags": [
         "ability",
         "haste"
-      ]
+      ],
+      "flags": {
+        "system_breaker": false,
+        "lifecycle": "active"
+      }
     },
     {
       "slug": "stackosaurusrex",
@@ -3508,12 +3380,12 @@
       "name_ja": "スタックサウルス・レックス",
       "name_ko": "다단 중첩",
       "name_zh_TW": "堆層暴龍",
+      "kit_tags": [],
       "set": "stackosaurus_rex",
       "flags": {
         "system_breaker": false,
         "lifecycle": "active"
-      },
-      "kit_tags": []
+      }
     },
     {
       "slug": "stats",
@@ -3526,12 +3398,12 @@
       "name_zh_TW": "能力值！",
       "wikiDescription": "Gain 2 Stat Anvils .",
       "wikiSet": "High Roller",
+      "kit_tags": [],
       "set": "high_roller",
       "flags": {
         "system_breaker": false,
         "lifecycle": "active"
-      },
-      "kit_tags": []
+      }
     },
     {
       "slug": "swift-and-safe",
@@ -3543,15 +3415,14 @@
       "name_ko": "빠르고 안전하게",
       "name_zh_TW": "又快又穩",
       "wikiDescription": "After dashing or blinking , gain a shield that lasts for 2 seconds and absorbs 65 – 290 (based on level) (+ 65% AD) (+ 26% AP) damage (5 second cooldown).",
-      "set": null,
-      "flags": {
-        "system_breaker": false,
-        "lifecycle": "active"
-      },
       "kit_tags": [
         "movement",
         "heal_shield"
-      ]
+      ],
+      "flags": {
+        "system_breaker": false,
+        "lifecycle": "active"
+      }
     },
     {
       "slug": "tank-it-or-leave-it",
@@ -3563,15 +3434,14 @@
       "name_ko": "확률적 방어",
       "name_zh_TW": "毫髮無傷",
       "wikiDescription": "Gain Critical Defend Chance equal to 100% critical strike chance , up to 50%. Additionally, gain 25% critical strike chance . Critical Defend Chance: Grants you a chance to reduce an instance of damage taken by 20% (5 second cooldown per enemy spell cast instance ).",
-      "set": null,
-      "flags": {
-        "system_breaker": false,
-        "lifecycle": "active"
-      },
       "kit_tags": [
         "tank",
         "crit"
-      ]
+      ],
+      "flags": {
+        "system_breaker": false,
+        "lifecycle": "active"
+      }
     },
     {
       "slug": "the-brutalizer",
@@ -3583,16 +3453,15 @@
       "name_ko": "야수화",
       "name_zh_TW": "兇殘之柄",
       "wikiDescription": "Grants 20 bonus attack damage , 10 ability haste , and 5 lethality .",
-      "set": null,
-      "flags": {
-        "system_breaker": false,
-        "lifecycle": "active"
-      },
       "kit_tags": [
         "attack",
         "ability",
         "haste"
-      ]
+      ],
+      "flags": {
+        "system_breaker": false,
+        "lifecycle": "active"
+      }
     },
     {
       "slug": "tormentor",
@@ -3604,16 +3473,15 @@
       "name_ko": "고문자",
       "name_zh_TW": "烈焰折磨",
       "wikiDescription": "Immobilizing or grounding an enemy champion inflicts them with a Burn for 5 seconds, dealing magic damage equal to 「 0. 8 % of the target's maximum health per second 」 「 4% of the target's maximum health over the duration 」 (5 second cooldown per cast instance ). This Burn stacks infinitely and refreshes with each application.",
-      "set": null,
-      "flags": {
-        "system_breaker": false,
-        "lifecycle": "active"
-      },
       "kit_tags": [
         "ability",
         "dot",
         "cc"
-      ]
+      ],
+      "flags": {
+        "system_breaker": false,
+        "lifecycle": "active"
+      }
     },
     {
       "slug": "twin-fire",
@@ -3626,16 +3494,16 @@
       "name_zh_TW": "雙響炮",
       "wikiDescription": "Damaging abilities against enemy champions launch 1 (+ 1 per 33. 33 % critical strike chance) Firecrackers at the target that each deal 10 – 30 (based on level) (+ 7% bonus AD) (+ 7% AP) magic damage (5 second cooldown). Additionally, gain 15% critical strike chance .",
       "wikiSet": "Firecracker",
-      "set": "firecracker",
-      "flags": {
-        "system_breaker": false,
-        "lifecycle": "active"
-      },
       "kit_tags": [
         "ability",
         "attack",
         "crit"
-      ]
+      ],
+      "set": "firecracker",
+      "flags": {
+        "system_breaker": false,
+        "lifecycle": "active"
+      }
     },
     {
       "slug": "typhoon",
@@ -3648,15 +3516,15 @@
       "name_zh_TW": "颱風",
       "wikiDescription": "Basic attacks launch a Firecracker at a nearby enemy champion that deals 30% AD physical damage and applies on-hit effects.",
       "wikiSet": "Firecracker",
+      "kit_tags": [
+        "attack",
+        "on_hit"
+      ],
       "set": "firecracker",
       "flags": {
         "system_breaker": false,
         "lifecycle": "active"
-      },
-      "kit_tags": [
-        "attack",
-        "on_hit"
-      ]
+      }
     },
     {
       "slug": "ultimate-unstoppable",
@@ -3668,15 +3536,14 @@
       "name_ko": "궁극의 저지 불가",
       "name_zh_TW": "無敵大絕",
       "wikiDescription": "Casting your ultimate ability grants you crowd control immunity for 3 seconds (8 second cooldown).",
-      "set": null,
-      "flags": {
-        "system_breaker": false,
-        "lifecycle": "active"
-      },
       "kit_tags": [
         "ability",
         "cc"
-      ]
+      ],
+      "flags": {
+        "system_breaker": false,
+        "lifecycle": "active"
+      }
     },
     {
       "slug": "upgrade-collector",
@@ -3689,12 +3556,12 @@
       "name_zh_TW": "升級荊棘之甲",
       "wikiDescription": "Upgrades The Collector , empowering Death to have its execution threshold increased by 0. 5 % each time you kill an enemy champion, capped at a threshold of 12.5% of the target's maximum health , and Taxes to generate a further 25 (total 50 ) from kills. Additionally, gain 250 .",
       "wikiSet": "Make it Rain",
+      "kit_tags": [],
       "set": "make_it_rain",
       "flags": {
         "system_breaker": false,
         "lifecycle": "active"
-      },
-      "kit_tags": []
+      }
     },
     {
       "slug": "upgrade-cutlass",
@@ -3705,12 +3572,11 @@
       "name_ja": "カトラス アップグレード",
       "name_ko": "해적검 업그레이드",
       "name_zh_TW": "升級彎刀",
-      "set": null,
+      "kit_tags": [],
       "flags": {
         "system_breaker": false,
         "lifecycle": "active"
-      },
-      "kit_tags": []
+      }
     },
     {
       "slug": "upgrade-immolate",
@@ -3723,14 +3589,14 @@
       "name_zh_TW": "升級獻祭",
       "wikiDescription": "Upgrades Bami's Cinder , Hollow Radiance , Sunfire Aegis , and Void Immolation , empowering Immolate to additionally grant you 12 per tick for each enemy champion afflicted by its effect. Additionally, gain 250 . Clones do not count as valid targets for the effect.",
       "wikiSet": "Make it Rain",
+      "kit_tags": [
+        "dot"
+      ],
       "set": "make_it_rain",
       "flags": {
         "system_breaker": false,
         "lifecycle": "active"
-      },
-      "kit_tags": [
-        "dot"
-      ]
+      }
     },
     {
       "slug": "upgrade-thornmail",
@@ -3741,15 +3607,14 @@
       "name_ja": "ソーンメイル アップグレード",
       "name_ko": "가시 갑옷 업그레이드",
       "wikiDescription": "Upgrades Bramble Vest and Thornmail , empowering Thorns to generate a protective shell around you. The shell is broken by the next enemy champion to use a basic attack on-hit against you, which causes them to take 50 – 250 (based on level) (+ 30% armor) (+ 30% magic resistance) (+ 12% maximum health) magic damage . Shell regenerates after 20 – 5 (based on level) seconds of being out-of-combat with enemy champions.",
-      "set": null,
-      "flags": {
-        "system_breaker": false,
-        "lifecycle": "active"
-      },
       "kit_tags": [
         "tank",
         "on_hit"
-      ]
+      ],
+      "flags": {
+        "system_breaker": false,
+        "lifecycle": "active"
+      }
     },
     {
       "slug": "upgrade-zhonyas",
@@ -3760,15 +3625,14 @@
       "name_ja": "ゾーニャ アップグレード upgrade zhonya's",
       "name_ko": "존야 업그레이드 upgrade zhonya's",
       "wikiDescription": "Upgrades Seeker's Armguard , Wooglet's Witchcap , and Zhonya's Hourglass , empowering Stasis to allow you to move during its active effect. Additionally, the cooldown of Zhonya's Hourglass' Stasis is reduced to 45 seconds.",
-      "set": null,
-      "flags": {
-        "system_breaker": false,
-        "lifecycle": "active"
-      },
       "kit_tags": [
         "ability",
         "haste"
-      ]
+      ],
+      "flags": {
+        "system_breaker": false,
+        "lifecycle": "active"
+      }
     },
     {
       "slug": "weighted-popoffs",
@@ -3780,15 +3644,14 @@
       "name_ko": "중량 폭주",
       "name_zh_TW": "重磅爆發",
       "wikiDescription": "Hitting an enemy champion with an ability generates a stack of Popoff for 6 seconds, stacking up to 6 times. For each stack, your basic abilities' cooldowns progress 2. 5 % faster. At maximum Popoff stacks, this value is doubled, for a total of a 30% faster progression time.",
-      "set": null,
-      "flags": {
-        "system_breaker": false,
-        "lifecycle": "active"
-      },
       "kit_tags": [
         "ability",
         "haste"
-      ]
+      ],
+      "flags": {
+        "system_breaker": false,
+        "lifecycle": "active"
+      }
     },
     {
       "slug": "wind-beneath-blade",
@@ -3800,15 +3663,14 @@
       "name_ko": "칼날 아래 바람",
       "name_zh_TW": "刃下狂風",
       "wikiDescription": "Gain 1. 5 bonus movement speed per 1 Lethality or flat magic penetration , and 5 bonus movement speed per 10% armor penetration or magic penetration .",
-      "set": null,
-      "flags": {
-        "system_breaker": false,
-        "lifecycle": "active"
-      },
       "kit_tags": [
         "movement",
         "ability"
-      ]
+      ],
+      "flags": {
+        "system_breaker": false,
+        "lifecycle": "active"
+      }
     },
     {
       "slug": "witchful-thinking",
@@ -3820,14 +3682,13 @@
       "name_ko": "사악한 정신",
       "name_zh_TW": "女巫思維",
       "wikiDescription": "Grants 20 – 80 (based on level) ability power .",
-      "set": null,
+      "kit_tags": [
+        "ability"
+      ],
       "flags": {
         "system_breaker": false,
         "lifecycle": "active"
-      },
-      "kit_tags": [
-        "ability"
-      ]
+      }
     },
     {
       "slug": "zealot",
@@ -3839,16 +3700,15 @@
       "name_ko": "광신자",
       "name_zh_TW": "狂戰士",
       "wikiDescription": "Gain 35% (+ 5% per 100 AP) bonus attack speed and 25% (+ 5% per 100 AP) critical strike chance .",
-      "set": null,
-      "flags": {
-        "system_breaker": false,
-        "lifecycle": "active"
-      },
       "kit_tags": [
         "attack",
         "crit",
         "ability"
-      ]
+      ],
+      "flags": {
+        "system_breaker": false,
+        "lifecycle": "active"
+      }
     }
   ]
 }
