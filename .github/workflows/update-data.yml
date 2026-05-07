@@ -26,6 +26,17 @@ jobs:
       - name: Install Node deps
         run: npm install
 
+      - name: Snapshot kit_tags
+        run: |
+          python3 - << 'EOF'
+          import json, pathlib
+          data = json.loads(pathlib.Path("public/data/augments.json").read_text())
+          snapshot = {a["slug"]: {k: a[k] for k in ("kit_tags","set","flags") if k in a}
+                      for a in data.get("augments", [])}
+          pathlib.Path("/tmp/aug_snapshot.json").write_text(json.dumps(snapshot))
+          print(f"Snapshotted {sum(1 for v in snapshot.values() if v.get('kit_tags'))} classified augments")
+          EOF
+
       - name: Scrape arammayhem.com
         run: python3 scripts/scrape_arammayhem.py
 
@@ -51,12 +62,38 @@ jobs:
       - name: Generate pool rules
         run: python3 scripts/generate_pool_rules.py
 
+      - name: Restore kit_tags from snapshot
+        run: |
+          python3 - << 'EOF'
+          import json, pathlib
+          snap = json.loads(pathlib.Path("/tmp/aug_snapshot.json").read_text())
+          path = pathlib.Path("public/data/augments.json")
+          data = json.loads(path.read_text())
+          restored = 0
+          for aug in data.get("augments", []):
+              saved = snap.get(aug["slug"])
+              if not saved:
+                  continue
+              if "kit_tags" in saved:
+                  aug["kit_tags"] = saved["kit_tags"]
+              if saved.get("set") and not aug.get("set"):
+                  aug["set"] = saved["set"]
+              if "flags" in saved:
+                  aug.setdefault("flags", {}).update(saved["flags"])
+              restored += 1
+          path.write_text(json.dumps(data, ensure_ascii=False, indent=2))
+          missing = sum(1 for a in data["augments"] if not a.get("kit_tags"))
+          print(f"Restored {restored} augments. Unclassified (new): {missing}")
+          EOF
+
       - name: Classify champions
+        continue-on-error: true
         env:
           GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
         run: python3 scripts/classify_champions.py
 
-      - name: Classify augments
+      - name: Classify augments (new only)
+        continue-on-error: true
         env:
           GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
         run: python3 scripts/classify_augments.py --skip-classified
