@@ -1,5 +1,5 @@
 {
-  "scraped_at": "2026-05-07T05:04:05.549Z",
+  "scraped_at": "2026-05-07T22:55:01.715Z",
   "profiles": {
     "brand": {
       "damageType": "magic",
@@ -8633,7 +8633,8 @@
             ],
             "range": 680,
             "isDot": true,
-            "isAoe": true
+            "isAoe": true,
+            "isOnHit": true
           }
         },
         {
@@ -9902,6 +9903,7 @@
               "Trait_AttackReset",
               "PositiveEffect_EmpowerAttack"
             ],
+            "isAoe": true,
             "isOnHit": true
           }
         },
@@ -9928,8 +9930,7 @@
             ],
             "range": 350,
             "damageType": "magic",
-            "isDot": true,
-            "isOnHit": true
+            "isAoe": true
           }
         },
         {
@@ -9954,9 +9955,9 @@
               8
             ],
             "range": 800,
+            "ccType": "slow",
             "ccDuration": 2,
-            "damageType": "magic",
-            "isOnHit": true
+            "damageType": "magic"
           }
         },
         {
@@ -9980,9 +9981,7 @@
               "Trait_Ultimate",
               "Trait_Transformation",
               "Trait_PlayerSelectedDashDirection"
-            ],
-            "isDot": true,
-            "isOnHit": true
+            ]
           }
         }
       ]
@@ -12928,7 +12927,8 @@
               40
             ],
             "range": 530,
-            "damageType": "magic"
+            "damageType": "magic",
+            "isOnHit": true
           }
         },
         {
@@ -16912,7 +16912,7 @@
           "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/characters/aatrox/hud/icons2d/aatrox_passive.png",
           "description": "Periodically, Aatrox's next basic attack deals bonus magic damage and heals him, based on the target's max health.",
           "stats": {
-            "damageType": "physical",
+            "damageType": "magic",
             "isOnHit": true
           }
         },
@@ -21015,9 +21015,7 @@
               10,
               10,
               10
-            ],
-            "damageType": "magic",
-            "isOnHit": true
+            ]
           }
         },
         {
@@ -21071,8 +21069,7 @@
               40
             ],
             "range": 300,
-            "isAoe": true,
-            "isOnHit": true
+            "isAoe": true
           }
         },
         {
@@ -23039,6 +23036,7 @@
               6
             ],
             "range": 250,
+            "damageType": "true",
             "isAoe": true
           }
         },

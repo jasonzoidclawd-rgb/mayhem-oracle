@@ -1,46 +1,12 @@
 {
   "patch": "26.9",
-  "scraped_at": "2026-05-07T05:08:55.381905+00:00",
-  "item_exclusions": [
-    {
-      "augment": "draw-your-sword",
-      "blocked_by_item": "runaans-hurricane"
-    },
-    {
-      "augment": "vampirism",
-      "blocked_by_item": "warmogs-armor"
-    }
-  ],
-  "mutually_exclusive": [
-    [
-      "perseverance",
-      "vampirism"
-    ]
-  ],
-  "ally_exclusions": [
-    {
-      "source": "diadem-of-songs",
-      "skips_allies_with": "vampirism"
-    },
-    {
-      "source": "moonstone-renewer",
-      "skips_allies_with": "vampirism"
-    }
-  ],
+  "scraped_at": "2026-05-07T22:59:52.284699+00:00",
+  "item_exclusions": [],
+  "mutually_exclusive": [],
+  "ally_exclusions": [],
   "disabled": [],
   "lifecycle": {
-    "added": {
-      "cerberus": "25.24",
-      "earthwake": "25.24",
-      "orbitallaser": "25.24",
-      "pandorasbox": "25.24",
-      "repulsor": "25.23",
-      "self-destruct": "25.23",
-      "snowball-roulette": "25.23",
-      "stackosaurusrex": "25.24",
-      "trueshotprodigy": "25.24",
-      "upgrade-sword-of-blossoming-dawn": "26.5"
-    },
+    "added": {},
     "removed": {}
   }
 }

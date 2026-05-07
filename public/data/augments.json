@@ -1,6 +1,6 @@
 {
   "patch": "26.8",
-  "scraped_at": "2026-05-07T05:03:17.910555+00:00",
+  "scraped_at": "2026-05-07T22:53:39.336173+00:00",
   "augments": [
     {
       "slug": "back-to-basics",
@@ -856,6 +856,12 @@
       "name_zh_TW": "舞會皇后",
       "wikiDescription": "Automatically cast a modified version of Rakan's The Quickness , empowering you to break into a captivating sprint for 6 seconds. While empowered, you gain ghosting and 50% bonus movement speed , and enemies you collide with are knocked down and become charmed for 1. 5 seconds (35 second cooldown). A sparkly tiara will descend upon you 2. 5 seconds before the effect activates.",
       "wikiSet": "Fully Automated",
+      "recentChanges": {
+        "patch": "26.9",
+        "changes": [
+          "Cooldown: 25 seconds ⇒ 35 seconds"
+        ]
+      },
       "kit_tags": [
         "movement",
         "cc"
@@ -864,12 +870,6 @@
       "flags": {
         "system_breaker": false,
         "lifecycle": "active"
-      },
-      "recentChanges": {
-        "patch": "26.9",
-        "changes": [
-          "Cooldown: 25 seconds ⇒ 35 seconds"
-        ]
       }
     },
     {
@@ -1673,14 +1673,6 @@
       "name_ko": "할머니의 고추기름 grandma's chili oil",
       "name_zh_TW": "阿嬤的辣油",
       "wikiDescription": "Your next basic attack or ability hit, or Burn effect, against an enemy champion inflicts them with a Burn that deals 「 100 – 350 (based on level) magic damage over 3 seconds, 」 「 16. 67 – 37. 5 (based on level) magic damage every 0. 25 seconds over 3 seconds, 」 as well as releases a canister of chili from the target that lands to a location near them after 0. 75 seconds (3 second cooldown). Upon landing, the canister shatters to create a pool of Chili Oil at the impact area with a radius of 175 units, lasting for 5 seconds. The pool heals you and allied champions within for 30 – 75 (based on level) upon entering and each second of the pool's lifetime thereafter. While enemies are within the pool, they are dealt 150 magic damage every second. For each unique Burn effect source that you have, up to 10, increase the pool's size by 40 units and its damage per tick by 50 magic damage . The healing per tick is also increased by 25 for each unique Burn effect source that the unit being healed has, up to 10. Healing granted by pools counts as self-healing . This effect can be triggered from only one target at a time. Damage over time effects from sources other than items and augments, such as champion abilities or summoner spells, do not count as Burn sources for Grandma's Chili Oil . Eligible Items for Burn : Blackfire Torch , Hollow Radiance , Liandry's Torment , Malignance , Sunfire Aegis , The Golden Spatula , Void Immolation Void Immolation uniquely counts as 2 Burn sources. Eligible Augments for Burn : Buff Buddies, Feel the Burn, Firebrand, Holy Fire, Infernal Conduit, Slow Cooker, Tormentor Grandma's Chili Oil does not count itself as a Burn effect. The pools of Chili Oil will follow their user in and out of Mordekaiser's Realm of Death but will only be visible in the realm they were generated. (bug)",
-      "kit_tags": [
-        "ability",
-        "dot"
-      ],
-      "flags": {
-        "system_breaker": false,
-        "lifecycle": "active"
-      },
       "recentChanges": {
         "patch": "26.9",
         "changes": [
@@ -1689,6 +1681,14 @@
           "Base Heal per second: 60 - 150 (based on level) ⇒ 30 - 75 (based on level)",
           "Bonus heal per burn source: 50 ⇒ 25"
         ]
+      },
+      "kit_tags": [
+        "ability",
+        "dot"
+      ],
+      "flags": {
+        "system_breaker": false,
+        "lifecycle": "active"
       }
     },
     {
