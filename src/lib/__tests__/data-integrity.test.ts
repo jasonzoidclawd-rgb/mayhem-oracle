@@ -63,4 +63,58 @@ describe("data integrity", () => {
       Math.floor(combosData.combos.length * 0.9),
     );
   });
+
+  // ── kit_tags coverage (added after classify_champions.py + classify_augments.py) ──
+
+  test("all champions have at least one kit_tag", () => {
+    for (const champion of championsData.champions) {
+      const tags = (champion as unknown as { kit_tags?: string[] }).kit_tags;
+      expect(Array.isArray(tags) && tags.length >= 1, `${champion.slug} has no kit_tags`).toBe(true);
+    }
+  });
+
+  test("all augments have kit_tags array defined (null means unclassified)", () => {
+    for (const augment of augmentsData.augments) {
+      const tags = (augment as unknown as { kit_tags?: string[] | null }).kit_tags;
+      expect(Array.isArray(tags), `${augment.slug} kit_tags is not an array`).toBe(true);
+    }
+  });
+
+  test("no champion has mana or manaless kit_tags (resource gating lives in Layer 2)", () => {
+    // classify_champions.py intentionally never emits resource tags.
+    // pool-orchestrator.ts Layer 3 strips them from augments; this asserts the champion side
+    // of that contract — if this breaks, mana-only augments will be wrongly excluded again.
+    for (const champion of championsData.champions) {
+      const tags = (champion as unknown as { kit_tags?: string[] }).kit_tags ?? [];
+      expect(tags).not.toContain("mana");
+      expect(tags).not.toContain("manaless");
+    }
+  });
+
+  test("champion exemplar tags match observed classifier output", () => {
+    const find = (slug: string) => championsData.champions.find((c) => c.slug === slug) as unknown as { kit_tags: string[] };
+
+    const brand = find("brand");
+    expect(brand.kit_tags).toEqual(expect.arrayContaining(["ability", "dot"]));
+
+    const yasuo = find("yasuo");
+    expect(yasuo.kit_tags).toEqual(expect.arrayContaining(["attack", "crit"]));
+
+    const garen = find("garen");
+    expect(garen.kit_tags).toEqual(expect.arrayContaining(["attack", "tank"]));
+    expect(garen.kit_tags).not.toContain("mana");
+    expect(garen.kit_tags).not.toContain("manaless");
+  });
+
+  test("augment exemplar tags and flags match observed classifier output", () => {
+    type ClassifiedAugment = { slug: string; kit_tags: string[]; flags?: { system_breaker?: boolean } };
+    const find = (slug: string) => augmentsData.augments.find((a) => a.slug === slug) as unknown as ClassifiedAugment;
+
+    const overflow = find("overflow");
+    expect(overflow.kit_tags).toEqual(expect.arrayContaining(["ability", "mana"]));
+
+    const jg = find("jeweled-gauntlet");
+    expect(jg.kit_tags).toEqual(expect.arrayContaining(["ability", "crit"]));
+    expect(jg.flags?.system_breaker).toBe(true);
+  });
 });
