@@ -223,9 +223,12 @@ export function evaluateAllSetSynergies(
       }
     }
 
-    // Sort: S+ first, then S, then A
+    // Sort: S+ first, then S, then A; secondary sort by slug for stability
     const order: Record<AffinityTier, number> = { "S+": 0, S: 1, A: 2 };
-    affinities.sort((a, b) => order[a.tier] - order[b.tier]);
+    affinities.sort((a, b) => {
+      const tierDiff = order[a.tier] - order[b.tier];
+      return tierDiff !== 0 ? tierDiff : a.slug.localeCompare(b.slug);
+    });
 
     results.push({
       setName,

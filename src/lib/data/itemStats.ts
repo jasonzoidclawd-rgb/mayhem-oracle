@@ -1,7 +1,7 @@
 import type { ItemStats, DamageProfile, MagicDamageProfile } from "../types";
 
-// Matches: optional "+", number (with optional decimal), optional "%", whitespace, stat name
-const STAT_RE = /^[+]?(\d+(?:\.\d+)?)(%)?\s+(.+)$/i;
+// Matches: optional sign, number (with optional decimal), optional "%", whitespace, stat name
+const STAT_RE = /^([+-]?\d+(?:\.\d+)?)(%)?\s+(.+)$/i;
 
 /**
  * Parse a list of stat-line strings (from wikiStats or parseDescription statLines)

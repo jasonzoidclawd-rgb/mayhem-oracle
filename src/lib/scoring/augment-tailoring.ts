@@ -18,7 +18,7 @@ export type ResourceType = "mana" | "energy" | "none";
 /** Manaless champions (health-cost or resourceless). */
 const MANALESS = new Set([
   "aatrox",
-  "ambessa",
+  // "ambessa" removed — uses energy (moved to ENERGY below)
   "briar",
   "drmundo",
   "garen",
@@ -26,7 +26,7 @@ const MANALESS = new Set([
   "katarina",
   "kled",
   "mordekaiser",
-  "nilah",
+  // "nilah" removed — uses mana
   "reksai",
   "renekton",
   "rengar",
@@ -41,7 +41,7 @@ const MANALESS = new Set([
 ]);
 
 /** Energy champions. */
-const ENERGY = new Set(["akali", "kennen", "leesin", "shen", "zed"]);
+const ENERGY = new Set(["akali", "ambessa", "kennen", "leesin", "shen", "zed"]);
 
 function normalizeChampionSlug(slug: string): string {
   return slug.toLowerCase().replace(/[^a-z0-9]/g, "");
@@ -79,8 +79,11 @@ export interface ChampionPoolProfile {
   hasCritSynergy: boolean;
 }
 
+// Normalized (lowercase, no spaces) hard-CC type values.
+// "knock up" and "knockup" both normalize to "knockup"; "airborne" covers Blitzcrank-style.
 const HARD_CC_TYPES = new Set([
   "stun", "root", "knockup", "charm", "suppress", "fear", "taunt", "immobilize",
+  "ground", "airborne",
 ]);
 
 const DASH_RE = /\bdash(?:es)?\b|\bblink\b|\bleap\b|\blunge\b|\bvault\b|\btumble\b|\broll\b|\brush\b/i;
@@ -114,7 +117,12 @@ export function buildPoolProfile(
 
     for (const ab of abilityProfile.abilities) {
       const s = ab.stats;
-      if (s?.ccType && HARD_CC_TYPES.has(s.ccType)) hasHardCC = true;
+      if (s?.ccType) {
+        // Normalize: lowercase + collapse spaces so "knock up" → "knockup".
+        // Split on comma to handle multi-CC values like "stun, root".
+        const normalized = s.ccType.toLowerCase().replace(/\s+/g, "");
+        if (normalized.split(",").some((cc) => HARD_CC_TYPES.has(cc.trim()))) hasHardCC = true;
+      }
       if (s?.isOnHit) hasOnHit = true;
       if (s?.apRatio) totalApRatio += s.apRatio;
       if (s?.adRatio) totalAdRatio += s.adRatio;

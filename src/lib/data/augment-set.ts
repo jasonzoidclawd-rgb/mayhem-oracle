@@ -12,9 +12,12 @@ export const VALID_AUGMENT_SET_LABELS = new Set([
   "Wee Woo Wee Woo",
 ]);
 
-export function normalizeAugmentSet(set: string | null | undefined, wikiSet?: string | null): string | undefined {
-  const value = set ?? wikiSet;
-  if (!value) return undefined;
+const CANONICAL_SET_MAP: ReadonlyMap<string, string> = new Map(
+  [...VALID_AUGMENT_SET_LABELS].map((label) => [label.toLowerCase().replace(/\s+/g, " "), label]),
+);
 
-  return VALID_AUGMENT_SET_LABELS.has(value) ? value : undefined;
+export function normalizeAugmentSet(set: string | null | undefined, wikiSet?: string | null): string | undefined {
+  const value = (set ?? wikiSet)?.trim().replace(/\s+/g, " ");
+  if (!value) return undefined;
+  return CANONICAL_SET_MAP.get(value.toLowerCase()) ?? undefined;
 }

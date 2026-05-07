@@ -105,9 +105,11 @@ export function stackItemStats(statsList: ItemStats[]): ItemStats {
     combined.magicResist = (combined.magicResist ?? 0) + (s.magicResist ?? 0);
     combined.mana = (combined.mana ?? 0) + (s.mana ?? 0);
     combined.magicPenFlat = (combined.magicPenFlat ?? 0) + (s.magicPenFlat ?? 0);
-    // % pen stacks multiplicatively: 1 - (1-a)(1-b)
-    combined.armorPenPct = 1 - (1 - (combined.armorPenPct ?? 0)) * (1 - (s.armorPenPct ?? 0));
-    combined.magicPenPct = 1 - (1 - (combined.magicPenPct ?? 0)) * (1 - (s.magicPenPct ?? 0));
+    // % pen stacks multiplicatively: 1 - (1-a)(1-b); clamp inputs to [0,1]
+    const armorPen = Math.min(1, Math.max(0, s.armorPenPct ?? 0));
+    const magicPen = Math.min(1, Math.max(0, s.magicPenPct ?? 0));
+    combined.armorPenPct = 1 - (1 - (combined.armorPenPct ?? 0)) * (1 - armorPen);
+    combined.magicPenPct = 1 - (1 - (combined.magicPenPct ?? 0)) * (1 - magicPen);
   }
   return combined;
 }

@@ -103,7 +103,13 @@ export function computeOracleScore(input: OracleScoreInput): OracleScoreResult {
     abilityProfile,
   } = input;
 
-  const rarity = augment.rarity;
+  // Validate rarity — malformed JSON can supply an unknown string, which would make
+  // SET_TIER_BONUS and RARITY_BONUS return undefined and silently corrupt the total.
+  const rawRarity = augment.rarity;
+  const safeRarity: AugmentRarity =
+    rawRarity === "prismatic" || rawRarity === "gold" || rawRarity === "silver"
+      ? rawRarity
+      : "silver";
 
   // Use augment's own win rate as base (not champion WR which is constant per champ).
   // Reject NaN/Infinity from malformed data so they can't propagate into total scores.
@@ -115,8 +121,8 @@ export function computeOracleScore(input: OracleScoreInput): OracleScoreResult {
   const wr = typeof championWinRate === "number" && Number.isFinite(championWinRate) ? championWinRate : 50;
   const championAdj = (wr - 50) * 0.1;
   const championWr = baseScore + championAdj;
-  const setTierBonus = SCORE_WEIGHTS.SET_TIER_BONUS[rarity];
-  const rarityBonus = SCORE_WEIGHTS.RARITY_BONUS[rarity];
+  const setTierBonus = SCORE_WEIGHTS.SET_TIER_BONUS[safeRarity] ?? 0;
+  const rarityBonus = SCORE_WEIGHTS.RARITY_BONUS[safeRarity] ?? 0;
 
   const comboBonus =
     comboTier === "S" ? SCORE_WEIGHTS.STRONG_COMBO_BONUS : 0;

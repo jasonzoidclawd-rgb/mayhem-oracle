@@ -101,6 +101,21 @@ export function getChampionAugmentPool<T extends PoolAugmentInput>(args: {
       continue;
     }
 
+    // Layer 2.5 — resource-tag gate.
+    // kit_tags "manaless" means the augment targets resourceless (no-mana, no-energy) champions.
+    // kit_tags "mana" means the augment targets mana champions.
+    // These must be evaluated BEFORE RESOURCE_TAGS strips them in Layer 3, otherwise a
+    // manaless-tagged augment with no other tags would become universal (empty → pass-all).
+    const rawKitTags = aug.kit_tags ?? [];
+    if (rawKitTags.includes("manaless") && profile.resource !== "none") {
+      excluded.push({ slug, reason: "resource-mismatch" });
+      continue;
+    }
+    if (rawKitTags.includes("mana") && profile.resource !== "mana") {
+      excluded.push({ slug, reason: "resource-mismatch" });
+      continue;
+    }
+
     // Layer 3 — tag intersection (Smart Tailoring active matching).
     // Resource tags are stripped first; see RESOURCE_TAGS comment above.
     const augTags = (aug.kit_tags ?? []).filter((t) => !RESOURCE_TAGS.has(t));

@@ -237,6 +237,22 @@ function normalizeChampionKey(key: string): string {
   return key.toLowerCase().replace(/[^a-z0-9]/g, "");
 }
 
+function normalizeAugmentSlug(slug: string): string {
+  return slug.toLowerCase().replace(/[^a-z0-9]/g, "");
+}
+
+function lookupBySlug<T>(map: Record<string, T> | undefined, slug: string): T | undefined {
+  if (!map) return undefined;
+  const normalized = normalizeAugmentSlug(slug);
+  for (const [k, v] of Object.entries(map)) {
+    if (normalizeAugmentSlug(k) === normalized) return v;
+  }
+  return undefined;
+}
+
+/** Max absolute scoreDelta for curated override rules. */
+const SCORE_DELTA_CLAMP = 30;
+
 function addBreakdownReasons(
   reasons: OfferedRankingReason[],
   breakdown: Partial<Record<string, number>>,
@@ -291,7 +307,7 @@ export function rankOfferedAugments(input: RankOfferedAugmentsInput): OfferedRan
     const augmentSetId = normalizeSetId(augment.set);
     const isDuplicate = duplicateSlugs.has(augment.slug);
     const combo = input.comboMetadataBySlot?.[originalIndex]
-      ?? (isDuplicate ? undefined : input.comboMetadata?.[augment.slug]);
+      ?? (isDuplicate ? undefined : lookupBySlug(input.comboMetadata, augment.slug));
     const oracle = computeOracleScore({
       augment: augment as ScoredAugment,
       championWinRate: input.champion.win_rate ?? input.champion.winRate,
@@ -302,7 +318,7 @@ export function rankOfferedAugments(input: RankOfferedAugmentsInput): OfferedRan
       isSystemBreaker: augment.flags?.system_breaker === true,
     });
     const explicitBreakdown = input.scoreBreakdownsBySlot?.[originalIndex]
-      ?? (isDuplicate ? undefined : input.scoreBreakdowns?.[augment.slug]);
+      ?? (isDuplicate ? undefined : lookupBySlug(input.scoreBreakdowns, augment.slug));
     const reasons: OfferedRankingReason[] = [];
 
     if (augmentSetId && pickedSetIds.includes(augmentSetId)) {
@@ -317,19 +333,19 @@ export function rankOfferedAugments(input: RankOfferedAugmentsInput): OfferedRan
       // accounts for combo/trap/synergy/etc., so adding them again would double-count.
       addBreakdownReasons(reasons, explicitBreakdown);
     }
-    const preferredOverride = championOverrides?.preferredAugments?.[augment.slug];
+    const preferredOverride = lookupBySlug(championOverrides?.preferredAugments, augment.slug);
     if (preferredOverride && Number.isFinite(preferredOverride.scoreDelta)) {
-      adjustedScore += preferredOverride.scoreDelta;
+      adjustedScore += Math.min(SCORE_DELTA_CLAMP, Math.max(-SCORE_DELTA_CLAMP, preferredOverride.scoreDelta));
       reasons.push(reason("champion-mode-override", preferredOverride.source ?? "curated-mode-rule", "high", preferredOverride.ref));
     }
 
-    const trapOverride = championOverrides?.trapAugments?.[augment.slug];
+    const trapOverride = lookupBySlug(championOverrides?.trapAugments, augment.slug);
     if (trapOverride && Number.isFinite(trapOverride.scoreDelta)) {
-      adjustedScore += trapOverride.scoreDelta;
+      adjustedScore += Math.min(SCORE_DELTA_CLAMP, Math.max(-SCORE_DELTA_CLAMP, trapOverride.scoreDelta));
       reasons.push(reason("champion-mode-trap", trapOverride.source ?? "curated-mode-rule", "high", trapOverride.ref));
     }
 
-    for (const signal of input.modeRules?.curatedSignals?.[augment.slug] ?? []) {
+    for (const signal of lookupBySlug(input.modeRules?.curatedSignals, augment.slug) ?? []) {
       reasons.push(reason(signal.code, signal.source, signal.confidence, signal.ref));
     }
 
