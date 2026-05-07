@@ -79,13 +79,14 @@ function detectAugmentProfile(description: string): {
   prefersTank: boolean;
 } {
   const d = description.toLowerCase();
+  // Conversion phrases flip the audience: "become ranged" targets melee, "become melee" targets ranged.
+  const becomeMelee = /\bbecome melee\b/.test(d);
+  const becomeRanged = /\bbecome ranged\b/.test(d);
   return {
     prefersAP:     /magic damage|ability power|\bap\b|spell damage/.test(d),
     prefersAD:     /attack damage|physical damage|\bad\b|attack speed|on-hit|auto-attack/.test(d),
-    // "Become melee" → augment is FOR ranged champions (converts them to melee)
-    prefersRanged: /\branged\b/.test(d) || /\bbecome melee\b/.test(d),
-    // "melee" in general context → melee affinity, BUT NOT "become melee"
-    prefersMelee:  /\bmelee\b/.test(d) && !/\bbecome melee\b/.test(d),
+    prefersRanged: (/\branged\b/.test(d) && !becomeRanged) || becomeMelee,
+    prefersMelee:  (/\bmelee\b/.test(d) && !becomeMelee) || becomeRanged,
     enhancesCC:    /crowd control|immobiliz|stun|root|\bslow\b/.test(d),
     prefersTank:   /bonus health|maximum health|bonus armor|bonus magic resist|increased size/.test(d),
   };
@@ -104,8 +105,12 @@ export function computeOracleScore(input: OracleScoreInput): OracleScoreResult {
 
   const rarity = augment.rarity;
 
-  // Use augment's own win rate as base (not champion WR which is constant per champ)
-  const baseScore = augment.win_rate ?? 50;
+  // Use augment's own win rate as base (not champion WR which is constant per champ).
+  // Reject NaN/Infinity from malformed data so they can't propagate into total scores.
+  const baseScore =
+    typeof augment.win_rate === "number" && Number.isFinite(augment.win_rate)
+      ? augment.win_rate
+      : 50;
   // Champion WR as minor adjustment: +-2 pts max around 50% baseline
   const wr = typeof championWinRate === "number" && Number.isFinite(championWinRate) ? championWinRate : 50;
   const championAdj = (wr - 50) * 0.1;
@@ -133,8 +138,9 @@ export function computeOracleScore(input: OracleScoreInput): OracleScoreResult {
   let ccSynergy = 0;
   let tagMismatch = 0;
 
-  if (abilityProfile && augment.wikiDescription) {
-    const aug = detectAugmentProfile(augment.wikiDescription);
+  const scoringText = `${augment.wikiDescription ?? ""} ${augment.description ?? ""}`.trim();
+  if (abilityProfile && scoringText) {
+    const aug = detectAugmentProfile(scoringText);
 
     // ── Positive synergy: augment matches champion's profile ──
     if (
@@ -167,12 +173,13 @@ export function computeOracleScore(input: OracleScoreInput): OracleScoreResult {
       }
     }
 
-    // Attack type mismatch (augment prefers ranged but champion is melee, etc.)
+    // Attack type mismatch (augment prefers ranged but champion is melee, etc.).
+    // Penalty is negative — use Math.min so an existing damage-type penalty isn't erased back to 0.
     if (
       (aug.prefersRanged && !aug.prefersMelee && abilityProfile.attackType === "melee") ||
       (aug.prefersMelee && !aug.prefersRanged && abilityProfile.attackType === "ranged")
     ) {
-      tagMismatch = Math.max(tagMismatch, SCORE_WEIGHTS.TAG_MISMATCH_PENALTY);
+      tagMismatch = Math.min(tagMismatch, SCORE_WEIGHTS.TAG_MISMATCH_PENALTY);
     }
   }
 

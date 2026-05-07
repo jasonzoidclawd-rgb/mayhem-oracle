@@ -137,12 +137,6 @@ export interface RankOfferedAugmentsInput {
   };
 }
 
-const EXPLICIT_BREAKDOWN_KEYS = new Set<string>([
-  "comboBonus", "trapPenalty", "abilityTypeSynergy", "attackTypeSynergy",
-  "ccSynergy", "tagMismatch", "championWr", "setTierBonus", "sameSetSynergy",
-  "rarityBonus", "systemBreakerBonus",
-]);
-
 function normalizeSetId(setId: string | undefined): string | undefined {
   const normalized = setId?.trim().toLowerCase();
   return normalized || undefined;
@@ -319,21 +313,18 @@ export function rankOfferedAugments(input: RankOfferedAugmentsInput): OfferedRan
 
     let adjustedScore = oracle.total;
     if (explicitBreakdown) {
-      for (const [k, v] of Object.entries(explicitBreakdown)) {
-        if (EXPLICIT_BREAKDOWN_KEYS.has(k) && Number.isFinite(v)) {
-          adjustedScore += v as number;
-        }
-      }
+      // Treat explicit breakdowns as reason metadata only — computeOracleScore already
+      // accounts for combo/trap/synergy/etc., so adding them again would double-count.
       addBreakdownReasons(reasons, explicitBreakdown);
     }
     const preferredOverride = championOverrides?.preferredAugments?.[augment.slug];
-    if (preferredOverride) {
+    if (preferredOverride && Number.isFinite(preferredOverride.scoreDelta)) {
       adjustedScore += preferredOverride.scoreDelta;
       reasons.push(reason("champion-mode-override", preferredOverride.source ?? "curated-mode-rule", "high", preferredOverride.ref));
     }
 
     const trapOverride = championOverrides?.trapAugments?.[augment.slug];
-    if (trapOverride) {
+    if (trapOverride && Number.isFinite(trapOverride.scoreDelta)) {
       adjustedScore += trapOverride.scoreDelta;
       reasons.push(reason("champion-mode-trap", trapOverride.source ?? "curated-mode-rule", "high", trapOverride.ref));
     }
