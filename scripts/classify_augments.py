@@ -13,6 +13,7 @@ Usage:
 
 import argparse
 import json
+import os
 import re
 import sys
 import time
@@ -22,9 +23,9 @@ from pathlib import Path
 # ─── Config ───────────────────────────────────────────────────────────────────
 
 AUGMENTS_PATH = Path(__file__).parent.parent / "public/data/augments.json"
-LITELLM_URL = "http://localhost:4000/v1/chat/completions"
-LITELLM_MODEL = "groq-fast"
-LITELLM_KEY = "sk-litellm-local"
+LITELLM_URL = os.getenv("CLASSIFIER_URL", "https://api.groq.com/openai/v1/chat/completions")
+LITELLM_MODEL = os.getenv("CLASSIFIER_MODEL", "llama-3.3-70b-versatile")
+LITELLM_KEY = os.getenv("GROQ_API_KEY", "sk-litellm-local")
 
 VALID_TAGS = [
     "attack", "ability", "on_hit", "crit", "movement",
@@ -214,6 +215,7 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--dry-run", action="store_true", help="Print first batch prompt and exit")
     parser.add_argument("--batch-size", type=int, default=10, help="Augments per LLM call (default 10)")
+    parser.add_argument("--skip-classified", action="store_true", help="Skip augments that already have kit_tags (CI mode)")
     args = parser.parse_args()
 
     raw = json.loads(AUGMENTS_PATH.read_text(encoding="utf-8"))
@@ -236,7 +238,7 @@ def main():
     print(f"Have set: {sum(1 for a in augments if a.get('set'))}/{total}")
 
     # Phase 2: LLM classification for tags (all augments) and missing sets
-    to_classify = augments  # classify all to ensure quality
+    to_classify = [a for a in augments if not a.get("kit_tags")] if args.skip_classified else augments
 
     batches = [to_classify[i:i + args.batch_size] for i in range(0, len(to_classify), args.batch_size)]
     print(f"Will run {len(batches)} LLM batches of up to {args.batch_size} augments each")

@@ -14,6 +14,7 @@ Usage:
 
 import argparse
 import json
+import os
 import re
 import sys
 import urllib.request
@@ -24,9 +25,9 @@ from pathlib import Path
 
 CHAMPIONS_PATH = Path(__file__).parent.parent / "public/data/champions.json"
 ABILITIES_PATH = Path(__file__).parent.parent / "public/data/abilities.json"
-LITELLM_URL = "http://localhost:4000/v1/chat/completions"
-LITELLM_MODEL = "groq-fast"
-LITELLM_KEY = "sk-litellm-local"
+LITELLM_URL = os.getenv("CLASSIFIER_URL", "https://api.groq.com/openai/v1/chat/completions")
+LITELLM_MODEL = os.getenv("CLASSIFIER_MODEL", "llama-3.3-70b-versatile")
+LITELLM_KEY = os.getenv("GROQ_API_KEY", "sk-litellm-local")
 
 VALID_TAGS = [
     "attack", "ability", "on_hit", "crit", "movement",
