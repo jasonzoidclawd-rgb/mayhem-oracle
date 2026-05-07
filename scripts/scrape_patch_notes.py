@@ -235,7 +235,7 @@ _INVERTED_TERMS = re.compile(
     r"\b(cooldown|recharge|delay|cost|duration\s+to|seconds?\s+to)\b",
     re.IGNORECASE,
 )
-_NERF_HINTS = re.compile(r"\b(no longer|removed|reduced)\b", re.IGNORECASE)
+_NERF_HINTS = re.compile(r"\b(no longer|reduced)\b", re.IGNORECASE)
 _BUFF_HINTS = re.compile(r"\b(now also|additional|increased)\b", re.IGNORECASE)
 
 
