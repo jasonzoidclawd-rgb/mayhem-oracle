@@ -1,6 +1,6 @@
 {
   "patch": "26.8",
-  "scraped_at": "2026-05-08T22:47:28.163124+00:00",
+  "scraped_at": "2026-05-09T22:34:47.289441+00:00",
   "augments": [
     {
       "slug": "back-to-basics",
@@ -3376,7 +3376,7 @@
       "name_ja": "勝利への回転",
       "name_ko": "승리를 위한 회전",
       "name_zh_TW": "一轉就贏",
-      "wikiDescription": "Your spinning abilities deal 30% increased damage and have their cooldown reduced equivalent to 30 ability haste. This note is not fully complete. If you wish to contribute, please do so on Discussion page Eligible Abilities : Ahri's Fox-Fire and Spirit Rush , Amumu's Tantrum , Ambessa's Lacerate , Darius' Decimate , Draven's Spinning Axe , Stand Aside , and Whirling Death , Garen's Judgment , Hecarim's Rampage , Jax's Counter Strike , Katarina's Voracity and Death Lotus , Kayn's Reaping Slash , Lillia's Blooming Blows , Nocturne's Umbra Blades , Rammus' Powerball , Renekton's Cull the Meek , Riven's Broken Wings , Samira's Blade Whirl and Inferno Trigger , Sylas' Petricite Burst , Wukong's Cyclone , Tryndamere's Spinning Slash , Zed's Shadow Slash PENDING FOR TEST: : Akshan's Avengerang and Heroic Swing , Lillia's Watch Out! Eep! and Swirlseed , Poppy's Keeper's Verdict , etc.",
+      "wikiDescription": "Your spinning abilities deal 30% increased damage and have their cooldown reduced equivalent to 30 ability haste. This note is not fully complete. If you wish to contribute, please do so on Discussion page Eligible Abilities : Ahri's Fox-Fire and Spirit Rush , Amumu's Tantrum , Ambessa's Lacerate , Darius' Decimate , Draven's Spinning Axe , Stand Aside , and Whirling Death , Garen's Judgment , Hecarim's Rampage , Jax's Counter Strike , Katarina's Voracity and Death Lotus , Kayn's Reaping Slash , Lillia's Blooming Blows , Nocturne's Umbra Blades , Rammus' Powerball , Renekton's Cull the Meek , Riven's Broken Wings , Samira's Blade Whirl and Inferno Trigger , Sylas' Petricite Burst , Wukong's Cyclone , Tryndamere's Spinning Slash , Xin Zhao's Crescent Guard , Zed's Shadow Slash PENDING FOR TEST: : Akshan's Avengerang and Heroic Swing , Lillia's Watch Out! Eep! and Swirlseed , Poppy's Keeper's Verdict , etc.",
       "kit_tags": [
         "ability",
         "haste"
