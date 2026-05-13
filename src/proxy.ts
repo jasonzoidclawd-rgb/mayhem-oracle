@@ -10,26 +10,27 @@ export default async function proxy(request: NextRequest) {
   const intlResponse = intlMiddleware(request);
   const response = intlResponse ?? NextResponse.next({ request });
 
-  // Attach Supabase session-refresh cookies on top.
-  const supabase = createServerClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-    {
-      cookies: {
-        getAll() {
-          return request.cookies.getAll();
-        },
-        setAll(cookiesToSet) {
-          cookiesToSet.forEach(({ name, value, options }) =>
-            response.cookies.set(name, value, options),
-          );
+  // Refresh session so server components can read the current user.
+  // Skip when Supabase env vars are not yet configured (dev without .env.local).
+  if (process.env.NEXT_PUBLIC_SUPABASE_URL && process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY) {
+    const supabase = createServerClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL,
+      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
+      {
+        cookies: {
+          getAll() {
+            return request.cookies.getAll();
+          },
+          setAll(cookiesToSet) {
+            cookiesToSet.forEach(({ name, value, options }) =>
+              response.cookies.set(name, value, options),
+            );
+          },
         },
       },
-    },
-  );
-
-  // Refresh session so server components can read the current user.
-  await supabase.auth.getUser();
+    );
+    await supabase.auth.getUser();
+  }
 
   return response;
 }

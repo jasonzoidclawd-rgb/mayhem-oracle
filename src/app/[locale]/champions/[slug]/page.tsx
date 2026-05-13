@@ -126,9 +126,14 @@ export default async function ChampionPage({
   setRequestLocale(locale);
   const t = await getTranslations("champion");
 
-  const supabase = await createClient();
-  const { data: { user } } = await supabase.auth.getUser();
-  const isAuthenticated = Boolean(user);
+  const isAuthenticated = await (async () => {
+    if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY) {
+      return false;
+    }
+    const supabase = await createClient();
+    const { data: { user } } = await supabase.auth.getUser();
+    return Boolean(user);
+  })();
 
   const { champions, augments, combos, poolRules, patch, abilities } = await loadData();
 
