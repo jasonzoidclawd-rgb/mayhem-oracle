@@ -1,4 +1,5 @@
 import { getTranslations, setRequestLocale } from "next-intl/server";
+import { createClient } from "@/lib/supabase/server";
 import Image from "next/image";
 import { readFile } from "fs/promises";
 import path from "path";
@@ -124,6 +125,10 @@ export default async function ChampionPage({
   const { locale, slug } = await params;
   setRequestLocale(locale);
   const t = await getTranslations("champion");
+
+  const supabase = await createClient();
+  const { data: { user } } = await supabase.auth.getUser();
+  const isAuthenticated = Boolean(user);
 
   const { champions, augments, combos, poolRules, patch, abilities } = await loadData();
 
@@ -584,6 +589,13 @@ export default async function ChampionPage({
         layers={poolLayers}
         highlights={tailoredHighlights}
         totalAugments={augments.length}
+        gated={!isAuthenticated}
+        signInUrl={`/api/auth/signin?next=/${locale === "en" ? "" : `${locale}/`}champions/${slug}`}
+        gateCopy={!isAuthenticated ? {
+          title: t("poolGateTitle"),
+          description: t("poolGateDescription"),
+          signIn: t("poolGateSignIn"),
+        } : undefined}
       />
 
       {/* ─── Augment Rankings ─── */}
