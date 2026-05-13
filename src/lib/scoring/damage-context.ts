@@ -33,22 +33,40 @@ function hasNegativeContext(description: string, matchIndex: number): boolean {
   return /\b(?:reduc|los[st]|decreas|remov|drain)\b/.test(prefix);
 }
 
+// Returns true when the number at matchIndex is a spaced-out decimal fragment like "4. 5 %"
+// (the wiki sometimes renders "4.5" as "4. 5" with a sentence-break space).
+function isDecimalFragment(description: string, matchIndex: number): boolean {
+  return matchIndex >= 2 && description[matchIndex - 1] === " " && description[matchIndex - 2] === ".";
+}
+
+// Returns true when the stat appears inside a champion-specific exception clause like
+// "On Kalista, this augment instead grants her 125% bonus attack speed".
+function isChampionSpecificClause(description: string, matchIndex: number): boolean {
+  const prefix = description.slice(Math.max(0, matchIndex - 120), matchIndex);
+  return /\bOn [A-Z][a-z]+[, ]/.test(prefix);
+}
+
 export function parseAugmentStatDelta(description: string): Partial<ItemStats> {
   const result: Partial<ItemStats> = {};
 
   const asMatch = description.match(/(\d+(?:\.\d+)?)\s*%[^.]*?attack\s*speed/i);
-  if (asMatch && asMatch.index !== undefined && !hasNegativeContext(description, asMatch.index)) {
-    // No upper clamp: augments like Deft legitimately grant 60%+ attack speed.
+  if (asMatch && asMatch.index !== undefined
+      && !hasNegativeContext(description, asMatch.index)
+      && !isChampionSpecificClause(description, asMatch.index)) {
     result.attackSpeed = Number(asMatch[1]) / 100;
   }
 
   const critChanceMatch = description.match(/(\d+(?:\.\d+)?)\s*%[^.]*?crit(?:ical)?\s*(?:strike\s*)?chance/i);
-  if (critChanceMatch && critChanceMatch.index !== undefined && !hasNegativeContext(description, critChanceMatch.index)) {
+  if (critChanceMatch && critChanceMatch.index !== undefined
+      && !hasNegativeContext(description, critChanceMatch.index)
+      && !isDecimalFragment(description, critChanceMatch.index)) {
     result.critChance = Math.min(1, Number(critChanceMatch[1]) / 100);
   }
 
   const critDmgMatch = description.match(/(\d+(?:\.\d+)?)\s*%[^.]*?crit(?:ical)?\s*(?:strike\s*)?damage/i);
-  if (critDmgMatch && critDmgMatch.index !== undefined && !hasNegativeContext(description, critDmgMatch.index)) {
+  if (critDmgMatch && critDmgMatch.index !== undefined
+      && !hasNegativeContext(description, critDmgMatch.index)
+      && !/bonus\s+crit(?:ical)?(?:\s+strike)?\s+damage/i.test(critDmgMatch[0])) {
     result.critDamage = Number(critDmgMatch[1]) / 100;
   }
 

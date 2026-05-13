@@ -74,6 +74,32 @@ describe("parseAugmentStatDelta", () => {
     expect(result.attackDamage).toBe(15);
     expect(result.attackSpeed).toBeCloseTo(0.10);
   });
+
+  test("does not parse champion-specific attack speed clause", () => {
+    const result = parseAugmentStatDelta(
+      "Abilities with dashes or blinks gain 175 ability haste . On Kalista , this augment instead grants her 125% bonus attack speed .",
+    );
+    expect(result.attackSpeed).toBeUndefined();
+  });
+
+  test("does not parse bonus-critical-damage formula as crit damage grant", () => {
+    const result = parseAugmentStatDelta(
+      "Your abilities can now critically strike for (145% + bonus critical damage ) damage. Additionally, gain 25% (+ 4. 5 % per 100 AP) critical strike chance .",
+    );
+    expect(result.critDamage).toBeUndefined();
+  });
+
+  test("does not parse spaced decimal fragment as crit chance", () => {
+    const result = parseAugmentStatDelta(
+      "Your abilities can now critically strike for (145% + bonus critical damage ) damage. Additionally, gain 25% (+ 4. 5 % per 100 AP) critical strike chance .",
+    );
+    expect(result.critChance).toBeUndefined();
+  });
+
+  test("still parses valid crit damage grant", () => {
+    const result = parseAugmentStatDelta("Gain 20% critical strike damage.");
+    expect(result.critDamage).toBeCloseTo(0.20);
+  });
 });
 
 describe("computeChampionBaseline", () => {
