@@ -1,5 +1,5 @@
 {
-  "scraped_at": "2026-05-12T22:55:03.304Z",
+  "scraped_at": "2026-05-13T23:00:35.532Z",
   "profiles": {
     "brand": {
       "damageType": "magic",
@@ -2105,12 +2105,12 @@
           "stats": {
             "baseDamage": [
               70,
-              95,
-              120,
-              145,
-              170
+              92.5,
+              115,
+              137.5,
+              160
             ],
-            "adRatio": 0.8,
+            "adRatio": 0.7,
             "cooldown": [
               5,
               4.5,
@@ -4376,7 +4376,7 @@
               60,
               75
             ],
-            "totalAdRatio": 0.4,
+            "adRatio": 0.4,
             "cooldown": [
               7,
               6.5,
@@ -4549,11 +4549,11 @@
               7
             ],
             "manaCost": [
+              60,
+              65,
               70,
               75,
-              80,
-              85,
-              90
+              80
             ],
             "range": 825,
             "damageType": "magic",
@@ -4600,13 +4600,13 @@
           "description": "Galio will briefly step back and charge, knocking up the first enemy champion he encounters.",
           "stats": {
             "baseDamage": [
-              90,
-              130,
+              100,
+              135,
               170,
-              210,
-              250
+              205,
+              240
             ],
-            "apRatio": 0.9,
+            "apRatio": 1,
             "cooldown": [
               11,
               10,
@@ -9629,10 +9629,10 @@
             "apRatio": 0.65,
             "cooldown": [
               13,
-              12,
-              11,
-              10,
-              9
+              12.25,
+              11.5,
+              10.75,
+              10
             ],
             "range": 350,
             "damageType": "magic",
@@ -10863,6 +10863,7 @@
             ],
             "range": 900,
             "ccType": "slow",
+            "ccDuration": 1.5,
             "damageType": "magic",
             "isAoe": true
           }
@@ -11291,7 +11292,8 @@
               65
             ],
             "range": 600,
-            "damageType": "magic"
+            "damageType": "magic",
+            "isDot": true
           }
         },
         {
@@ -16154,11 +16156,11 @@
           "description": "Orianna commands her Ball to attach to an allied champion, Shielding them and dealing magic damage to any enemies it passes through on the way. Additionally, the Ball grants additional Armor and Magic Resist to the champion it is attached to.",
           "stats": {
             "baseDamage": [
-              55,
+              60,
               90,
-              125,
-              160,
-              195
+              120,
+              150,
+              180
             ],
             "apRatio": 0.3,
             "cooldown": [
@@ -17953,11 +17955,11 @@
           "stats": {
             "apRatio": 0.8,
             "cooldown": [
-              12,
-              12,
-              12,
-              12,
-              12
+              7,
+              7,
+              7,
+              7,
+              7
             ],
             "manaCost": [
               50
@@ -17977,7 +17979,7 @@
           "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/characters/leesin/hud/icons2d/leesine1.png",
           "description": "Tempest: Lee Sin smashes the ground, sending out a shockwave that deals magic damage and reveals enemy units hit. If Tempest hits an enemy, Lee Sin can cast cripple.Cripple: Lee Sin cripples nearby enemies damaged by Tempest, reducing their Move Speed. Move Speed recovers gradually over the duration.",
           "stats": {
-            "totalAdRatio": 1,
+            "totalAdRatio": 0.9,
             "cooldown": [
               8,
               8,
@@ -20209,8 +20211,8 @@
               3
             ],
             "manaCost": [
-              100,
-              50
+              50,
+              25
             ],
             "range": 700,
             "ccDuration": 3,
@@ -22161,6 +22163,7 @@
             ],
             "range": 150,
             "ccType": "charm",
+            "ccDuration": 1,
             "damageType": "magic",
             "tags": [
               "Trait_Ultimate",
@@ -22220,6 +22223,7 @@
             ],
             "range": 800,
             "ccType": "immobilize",
+            "ccDuration": 0.5,
             "damageType": "magic",
             "tags": [
               "Trait_AttackReset",
@@ -22937,11 +22941,11 @@
           "description": "Burst Fire shoots a burst of 7 rounds that deal attack damage to the first enemy hit. This Ability is treated as an Attack.",
           "stats": {
             "baseDamage": [
-              21,
-              24,
-              27,
+              22,
+              26,
               30,
-              33
+              34,
+              38
             ],
             "adRatio": 1.02,
             "range": 700,

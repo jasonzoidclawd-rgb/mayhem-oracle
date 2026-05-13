@@ -1,6 +1,6 @@
 {
   "patch": "26.10",
-  "scraped_at": "2026-05-13T11:56:16.311893+00:00",
+  "scraped_at": "2026-05-13T23:05:28.932589+00:00",
   "source": "https://www.leagueoflegends.com/en-us/news/game-updates/",
   "patches": [
     {
@@ -26,7 +26,7 @@
                 "ja-jp": "NEW リスポーン時、または70秒ごとにリフレッシュ",
                 "ko-kr": "NEW Refresh on Respawn or every 70 seconds"
               },
-              "kind": "buffed"
+              "kind": "changed"
             },
             {
               "subject": {
@@ -47,16 +47,16 @@
               "subject": {
                 "en": "Outlaw's Grit NEW Stacks now reset based on a 15s duration instead of a fixed timer Stacks show up on buff bar Upgrade Zhonya's",
                 "zh-cn": "俠盜恆毅 [新增] 層數現在會根據15秒時效重置，而非固定計時 層數會顯示在增益欄上 升級中婭",
-                "ja-jp": "無法者の気概 NEW スタックが固定のタイマーではなく、15秒間の持続時間に基づいてリセットされるように変更 バフバーにスタックが表示されるように変更 ゾーニャ アップグレード",
+                "ja-jp": "無法者の気概 NEW スタックが固定のタイマーではなく、15秒間の持続時間に基づいてリセットされるように変更",
                 "ko-kr": "Outlaw's Grit NEW Stacks now reset based on a 15s duration instead of a fixed timer Stacks show up on buff bar Upgrade Zhonya's"
               },
               "text": {
                 "en": "NEW Grants 50% Bonus MS during Stasis",
                 "zh-cn": "[新增] 在凝滯狀態時獲得50%額外跑速",
-                "ja-jp": "NEW 固有時停止中に移動速度が50%増加",
+                "ja-jp": "バフバーにスタックが表示されるように変更",
                 "ko-kr": "NEW Grants 50% Bonus MS during Stasis"
               },
-              "kind": "buffed"
+              "kind": "changed"
             }
           ]
         },
@@ -74,7 +74,7 @@
               "text": {
                 "en": "Damage Dealt: 95% ⇒ 100%",
                 "zh-cn": "造成傷害 ：95% ⇒ 100%",
-                "ja-jp": "与ダメージ ：95% ⇒ 100%",
+                "ja-jp": "与ダメージ：95% ⇒ 100%",
                 "ko-kr": "Damage Dealt: 95% ⇒ 100%"
               },
               "kind": "buffed",
@@ -90,10 +90,10 @@
               "text": {
                 "en": "Damage Taken: 105% ⇒ 100%",
                 "zh-cn": "承受傷害 ：105% ⇒ 100%",
-                "ja-jp": "被ダメージ ：105% ⇒ 100%",
+                "ja-jp": "被ダメージ：105% ⇒ 100%",
                 "ko-kr": "Damage Taken: 105% ⇒ 100%"
               },
-              "kind": "buffed",
+              "kind": "nerfed",
               "subjectSlug": "viktor"
             },
             {
@@ -157,7 +157,7 @@
                 "ja-jp": "NEW ランダムミッドのマップでは、ビクターは5秒ごとに1スタックを獲得する。",
                 "ko-kr": "NEW In ARAM maps, Viktor gains 1 stack every 5 seconds."
               },
-              "kind": "buffed",
+              "kind": "changed",
               "subjectSlug": "viktor"
             }
           ]
@@ -176,10 +176,10 @@
               "text": {
                 "en": "Movement lockout from not taking the canon: 2s ⇒ 0.5s",
                 "zh-cn": "因未使用砲台的移動鎖定 ：2秒 ⇒ 0.5秒",
-                "ja-jp": "大砲に乗らなかったことによる移動不能時間 ：2秒 ⇒ 0.5秒",
+                "ja-jp": "大砲に乗らなかったことによる移動不能時間：2秒 ⇒ 0.5秒",
                 "ko-kr": "Movement lockout from not taking the canon: 2s ⇒ 0.5s"
               },
-              "kind": "buffed"
+              "kind": "nerfed"
             },
             {
               "subject": {
@@ -191,10 +191,10 @@
               "text": {
                 "en": "Movement lockout from landing after taking the canon: removed",
                 "zh-cn": "使用砲台並著陸後的移動鎖定 ：已移除",
-                "ja-jp": "大砲に乗って着地後の移動不能時間 ：削除",
+                "ja-jp": "大砲に乗って着地後の移動不能時間：削除",
                 "ko-kr": "Movement lockout from landing after taking the canon: removed"
               },
-              "kind": "buffed"
+              "kind": "changed"
             }
           ]
         }
@@ -312,7 +312,7 @@
                 "ja-jp": "[削除] チャンピオンに対する通常攻撃が50%のダメージを与えるようになる",
                 "ko-kr": "[REMOVED] Basic attacks against champions now deal 50% damage"
               },
-              "kind": "buffed"
+              "kind": "changed"
             },
             {
               "subject": {
@@ -652,7 +652,7 @@
                 "ja-jp": "ダメージを受けてから増加移動速度が再び付与されるまでの時間：3秒 ⇒ 6秒",
                 "ko-kr": "Time to regain bonus movespeed after taking damage: 3 ⇒ 6 seconds"
               },
-              "kind": "nerfed"
+              "kind": "buffed"
             },
             {
               "subject": {
@@ -668,7 +668,7 @@
                 "ja-jp": "外側のダメージ：200～350（+増加攻撃力の65%）（+魔力の40%） ⇒ （+増加攻撃力の75%）（+魔力の45%）",
                 "ko-kr": "Outer damage: 200 - 350 (+65% bonus AD) (+ 40% AP) ⇒ + (75% Bonus AD) (+ 45% AP)"
               },
-              "kind": "buffed"
+              "kind": "nerfed"
             },
             {
               "subject": {
