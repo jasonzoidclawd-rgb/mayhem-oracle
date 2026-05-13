@@ -291,6 +291,9 @@
     "factorSeenRerolledOffers": "已看過的重抽候選會降低找到更好替代品的信心。",
     "reasonOracleScoreBand": "Oracle 分數評級依目前英雄與候選增強資料計算。",
     "reasonAugmentWinRateAvailable": "此輪評分可使用增強勝率資料。",
-    "reasonAugmentWinRateMissing": "缺少增強勝率資料，因此分數仰賴備用中繼資料。"
+    "reasonAugmentWinRateMissing": "缺少增強勝率資料，因此分數仰賴備用中繼資料。",
+    "baselineLabel": "11級基準",
+    "baselineNote": "對抗 {armor} 護甲，無裝備",
+    "dpsDeltaLabel": "DPS"
   }
 }

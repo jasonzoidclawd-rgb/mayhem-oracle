@@ -291,6 +291,9 @@
     "factorSeenRerolledOffers": "すでに見たリロール候補があるため、より良い代替を引く信頼度が下がります。",
     "reasonOracleScoreBand": "Oracleスコア評価は現在のチャンピオンと提示オーグメントデータに基づきます。",
     "reasonAugmentWinRateAvailable": "このスコア計算ではオーグメント勝率データを利用できます。",
-    "reasonAugmentWinRateMissing": "オーグメント勝率データがないため、代替メタデータに基づいています。"
+    "reasonAugmentWinRateMissing": "オーグメント勝率データがないため、代替メタデータに基づいています。",
+    "baselineLabel": "Lv11ベースライン",
+    "baselineNote": "アーマー{armor}対象、アイテムなし",
+    "dpsDeltaLabel": "DPS"
   }
 }

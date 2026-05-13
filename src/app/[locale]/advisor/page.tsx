@@ -1,7 +1,7 @@
 import { AdvisorClient } from "@/components/advisor/AdvisorClient";
 import { normalizeAugmentSet } from "@/lib/data/augment-set";
 import type { ComboMetadataEntry } from "@/lib/scoring/offered-ranking";
-import type { AbilityProfile } from "@/lib/types";
+import type { AbilityProfile, ChampionBaseStats } from "@/lib/types";
 import { readFile } from "fs/promises";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import path from "path";
@@ -12,6 +12,7 @@ type RawChampion = {
   icon?: string;
   tier?: string;
   win_rate?: number;
+  baseStats?: ChampionBaseStats;
 };
 
 type RawAugment = {
@@ -121,13 +122,14 @@ export default async function AdvisorPage({
     },
     {},
   );
-  const championOptions = champions.map(({ slug, name, icon, tier, win_rate }) => ({
+  const championOptions = champions.map(({ slug, name, icon, tier, win_rate, baseStats }) => ({
     slug,
     name,
     icon,
     tier,
     win_rate,
     abilityProfile: compactAbilityProfile(profiles[slug]),
+    baseStats,
   }));
   const localizedAugmentName = (augment: RawAugment): string => {
     if (locale === "zh-TW") return augment.name_zh_TW ?? augment.name_zh_CN ?? augment.name;
@@ -252,6 +254,9 @@ export default async function AdvisorPage({
             championCount: championOptions.length,
             augmentCount: augmentOptions.length,
           }),
+          baselineLabel: t("baselineLabel"),
+          baselineNote: t("baselineNote", { armor: "{armor}" }),
+          dpsDeltaLabel: t("dpsDeltaLabel"),
         }}
       />
     </div>

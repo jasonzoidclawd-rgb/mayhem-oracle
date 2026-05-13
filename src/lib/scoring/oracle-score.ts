@@ -82,9 +82,16 @@ function detectAugmentProfile(description: string): {
   // Conversion phrases flip the audience: "become ranged" targets melee, "become melee" targets ranged.
   const becomeMelee = /\bbecome melee\b/.test(d);
   const becomeRanged = /\bbecome ranged\b/.test(d);
+  // Stat-conversion augments mention both source and target stats but only benefit one damage type.
+  // Detect direction so we don't double-signal synergy for the source stat.
+  const convertsApToAd = /(?:convert[sd]?|turn[sd]?)\b[^.]*(?:ability\s+power|\bap\b)[^.]*(?:attack\s+damage|\bad\b)/.test(d) ||
+    /(?:ability\s+power|\bap\b)\s+(?:is\s+)?(?:converted|turned)\s+into\s+(?:attack\s+damage|\bad\b)/.test(d);
+  const convertsAdToAp = /(?:convert[sd]?|turn[sd]?)\b[^.]*(?:attack\s+damage|\bad\b)[^.]*(?:ability\s+power|\bap\b)/.test(d) ||
+    /(?:attack\s+damage|\bad\b)\s+(?:is\s+)?(?:converted|turned)\s+into\s+(?:ability\s+power|\bap\b)/.test(d);
   return {
-    prefersAP:     /magic damage|ability power|\bap\b|spell damage/.test(d),
-    prefersAD:     /attack damage|physical damage|\bad\b|attack speed|on-hit|auto-attack/.test(d),
+    // For conversion augments, only signal the output stat so the source stat doesn't inflate synergy.
+    prefersAP:     convertsAdToAp || (!convertsApToAd && /magic damage|ability power|\bap\b|spell damage/.test(d)),
+    prefersAD:     convertsApToAd || (!convertsAdToAp && /attack damage|physical damage|\bad\b|attack speed|on-hit|auto-attack/.test(d)),
     prefersRanged: (/\branged\b/.test(d) && !becomeRanged) || becomeMelee,
     prefersMelee:  (/\bmelee\b/.test(d) && !becomeMelee) || becomeRanged,
     enhancesCC:    /crowd control|immobiliz|stun|root|\bslow\b/.test(d),
@@ -111,6 +118,14 @@ export function computeOracleScore(input: OracleScoreInput): OracleScoreResult {
       ? rawRarity
       : "silver";
 
+  // Validate comboTier — unknown values should produce no combo/trap effect rather than
+  // silently losing the bonus (A/B tiers currently have no bonus, but bad data should not
+  // be indistinguishable from valid A/B input).
+  const safeComboTier: ComboTier | undefined =
+    comboTier === "S" || comboTier === "A" || comboTier === "B" || comboTier === "C"
+      ? comboTier
+      : undefined;
+
   // Use augment's own win rate as base (not champion WR which is constant per champ).
   // Reject NaN/Infinity from malformed data so they can't propagate into total scores.
   const baseScore =
@@ -125,9 +140,9 @@ export function computeOracleScore(input: OracleScoreInput): OracleScoreResult {
   const rarityBonus = SCORE_WEIGHTS.RARITY_BONUS[safeRarity] ?? 0;
 
   const comboBonus =
-    comboTier === "S" ? SCORE_WEIGHTS.STRONG_COMBO_BONUS : 0;
+    safeComboTier === "S" ? SCORE_WEIGHTS.STRONG_COMBO_BONUS : 0;
   const trapPenalty =
-    comboTier === "C" ? SCORE_WEIGHTS.TRAP_PENALTY : 0;
+    safeComboTier === "C" ? SCORE_WEIGHTS.TRAP_PENALTY : 0;
 
   const sameSetSynergy =
     augmentSetId && pickedSetIds.includes(augmentSetId)

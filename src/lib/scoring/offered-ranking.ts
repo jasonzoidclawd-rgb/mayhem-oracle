@@ -8,7 +8,10 @@ import {
   type ComboTier,
   type ScoredAugment,
 } from "./oracle-score";
-import type { AbilityProfile } from "../types";
+import { computeAugmentDamageContext, type AugmentDamageContext } from "./damage-context";
+import type { AbilityProfile, ChampionBaseStats } from "../types";
+
+export type { AugmentDamageContext };
 
 export type RankingStatus = "ranked" | "incomplete-offers";
 export type RankingConfidence = "high" | "medium" | "low";
@@ -49,6 +52,7 @@ export interface RankedOfferedAugment {
   rerollEv?: OfferedRankingRerollEv;
   shopTiming?: OfferedRankingShopTiming;
   flags?: string[];
+  damageContext?: AugmentDamageContext;
 }
 
 export interface OfferedRankingResult {
@@ -81,6 +85,7 @@ export interface RankingChampion {
   win_rate?: number;
   winRate?: number;
   abilityProfile?: AbilityProfile;
+  baseStats?: ChampionBaseStats;
   modeMetadata?: {
     aramMayhem?: {
       preferredTags?: string[];
@@ -279,7 +284,12 @@ function addBreakdownReasons(
 }
 
 export function rankOfferedAugments(input: RankOfferedAugmentsInput): OfferedRankingResult {
-  if (input.offeredAugments.length !== 3) {
+  // ARAM Mayhem always offers exactly 3 augments. If the caller passes more (e.g. from tests
+  // or future UI changes), rank only the first 3 rather than silently returning incomplete-offers.
+  const offeredAugments = input.offeredAugments.length > 3
+    ? input.offeredAugments.slice(0, 3)
+    : input.offeredAugments;
+  if (offeredAugments.length !== 3) {
     return { status: "incomplete-offers", rankings: [] };
   }
 
@@ -287,8 +297,8 @@ export function rankOfferedAugments(input: RankOfferedAugmentsInput): OfferedRan
     .map((augment) => normalizeSetId(augment.set))
     .filter((setId): setId is string => Boolean(setId));
   const duplicateSlugs = new Set(
-    input.offeredAugments
-      .map((augment) => augment.slug)
+    offeredAugments
+      .map((augment) => normalizeAugmentSlug(augment.slug))
       .filter((slug, index, slugs) => slugs.indexOf(slug) !== index),
   );
   const champKey = championKey(input.champion);
@@ -302,10 +312,13 @@ export function rankOfferedAugments(input: RankOfferedAugmentsInput): OfferedRan
   })();
   const qualitativeRerollEv = rerollEv(input);
   const qualitativeShopTiming = shopTiming(input);
+  const damageContextEnabled = Boolean(
+    input.champion.baseStats && input.champion.abilityProfile
+  );
 
-  const ranked = input.offeredAugments.map((augment, originalIndex) => {
+  const ranked = offeredAugments.map((augment, originalIndex) => {
     const augmentSetId = normalizeSetId(augment.set);
-    const isDuplicate = duplicateSlugs.has(augment.slug);
+    const isDuplicate = duplicateSlugs.has(normalizeAugmentSlug(augment.slug));
     const combo = input.comboMetadataBySlot?.[originalIndex]
       ?? (isDuplicate ? undefined : lookupBySlug(input.comboMetadata, augment.slug));
     const oracle = computeOracleScore({
@@ -353,11 +366,19 @@ export function rankOfferedAugments(input: RankOfferedAugmentsInput): OfferedRan
       reasons.push(...inferTextReasons(augment));
     }
 
-    const flags = duplicateSlugs.has(augment.slug) ? ["duplicate-offer"] : undefined;
+    const flags = duplicateSlugs.has(normalizeAugmentSlug(augment.slug)) ? ["duplicate-offer"] : undefined;
     const score = roundScore(adjustedScore);
     const band = scoreBand(score);
     reasons.push(reason("oracle-score-band", "oracle-score", "medium"));
     reasons.push(reason(augment.win_rate === null ? "augment-win-rate-missing" : "augment-win-rate-available", "oracle-score", "medium"));
+
+    const damageContext = damageContextEnabled
+      ? computeAugmentDamageContext(
+          `${augment.wikiDescription ?? ""} ${augment.description ?? ""}`.trim(),
+          input.champion.baseStats!,
+          input.champion.abilityProfile!,
+        )
+      : undefined;
 
     return {
       originalIndex,
@@ -369,6 +390,7 @@ export function rankOfferedAugments(input: RankOfferedAugmentsInput): OfferedRan
       rerollEv: qualitativeRerollEv,
       shopTiming: qualitativeShopTiming,
       flags,
+      damageContext,
     };
   });
 
@@ -390,6 +412,7 @@ export function rankOfferedAugments(input: RankOfferedAugmentsInput): OfferedRan
       rerollEv: ranking.rerollEv,
       shopTiming: ranking.shopTiming,
       flags: ranking.flags,
+      damageContext: ranking.damageContext,
     })),
     rerollEv: qualitativeRerollEv,
   };

@@ -291,6 +291,9 @@
     "factorSeenRerolledOffers": "已看过的重随候选会降低找到更好替代品的信心。",
     "reasonOracleScoreBand": "Oracle 分数评级基于当前英雄与候选强化数据。",
     "reasonAugmentWinRateAvailable": "此轮评分可使用强化胜率数据。",
-    "reasonAugmentWinRateMissing": "缺少强化胜率数据，因此分数依赖备用元数据。"
+    "reasonAugmentWinRateMissing": "缺少强化胜率数据，因此分数依赖备用元数据。",
+    "baselineLabel": "11级基准",
+    "baselineNote": "对抗 {armor} 护甲，无装备",
+    "dpsDeltaLabel": "DPS"
   }
 }

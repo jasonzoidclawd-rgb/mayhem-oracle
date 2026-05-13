@@ -1,205 +1,8 @@
 {
-  "patch": "26.10",
-  "scraped_at": "2026-05-12T22:59:47.170384+00:00",
+  "patch": "26.9",
+  "scraped_at": "2026-05-12T14:11:41.938665+00:00",
   "source": "https://www.leagueoflegends.com/en-us/news/game-updates/",
   "patches": [
-    {
-      "version": "26.10",
-      "title": "Patch 26.10 Notes",
-      "released": "",
-      "sections": [
-        {
-          "id": "augments",
-          "title": "Augments",
-          "changes": [
-            {
-              "subject": {
-                "en": "Big Brain",
-                "zh-cn": "Big Brain",
-                "ja-jp": "頭脳派",
-                "ko-kr": "전술적 대비",
-                "zh-tw": "超強大腦"
-              },
-              "text": {
-                "en": "NEW Refresh on Respawn or every 70 seconds",
-                "zh-cn": "NEW Refresh on Respawn or every 70 seconds",
-                "ja-jp": "NEW リスポーン時、または70秒ごとにリフレッシュ",
-                "ko-kr": "NEW Refresh on Respawn or every 70 seconds"
-              },
-              "kind": "changed"
-            },
-            {
-              "subject": {
-                "en": "Fan the Hammer",
-                "zh-cn": "Fan the Hammer",
-                "ja-jp": "ぐるぐるハンマー",
-                "ko-kr": "Fan the Hammer"
-              },
-              "text": {
-                "en": "No longer triggers on minions",
-                "zh-cn": "No longer triggers on minions",
-                "ja-jp": "ミニオンで発動しないように変更",
-                "ko-kr": "No longer triggers on minions"
-              },
-              "kind": "nerfed"
-            },
-            {
-              "subject": {
-                "en": "Outlaw's Grit NEW Stacks now reset based on a 15s duration instead of a fixed timer Stacks show up on buff bar Upgrade Zhonya's",
-                "zh-cn": "Outlaw's Grit NEW Stacks now reset based on a 15s duration instead of a fixed timer Stacks show up on buff bar Upgrade Zhonya's",
-                "ja-jp": "無法者の気概 NEW スタックが固定のタイマーではなく、15秒間の持続時間に基づいてリセットされるように変更 バフバーにスタックが表示されるように変更 ゾーニャ アップグレード",
-                "ko-kr": "Outlaw's Grit NEW Stacks now reset based on a 15s duration instead of a fixed timer Stacks show up on buff bar Upgrade Zhonya's"
-              },
-              "text": {
-                "en": "NEW Grants 50% Bonus MS during Stasis",
-                "zh-cn": "NEW Grants 50% Bonus MS during Stasis",
-                "ja-jp": "NEW 固有時停止中に移動速度が50%増加",
-                "ko-kr": "NEW Grants 50% Bonus MS during Stasis"
-              },
-              "kind": "changed"
-            }
-          ]
-        },
-        {
-          "id": "champions",
-          "title": "Champions",
-          "changes": [
-            {
-              "subject": {
-                "en": "Viktor",
-                "zh-cn": "Viktor",
-                "ja-jp": "ビクター",
-                "ko-kr": "Viktor"
-              },
-              "text": {
-                "en": "Damage Dealt: 95% ⇒ 100%",
-                "zh-cn": "Damage Dealt: 95% ⇒ 100%",
-                "ja-jp": "与ダメージ ：95% ⇒ 100%",
-                "ko-kr": "Damage Dealt: 95% ⇒ 100%"
-              },
-              "kind": "buffed",
-              "subjectSlug": "viktor"
-            },
-            {
-              "subject": {
-                "en": "Viktor",
-                "zh-cn": "Viktor",
-                "ja-jp": "ビクター",
-                "ko-kr": "Viktor"
-              },
-              "text": {
-                "en": "Damage Taken: 105% ⇒ 100%",
-                "zh-cn": "Damage Taken: 105% ⇒ 100%",
-                "ja-jp": "被ダメージ ：105% ⇒ 100%",
-                "ko-kr": "Damage Taken: 105% ⇒ 100%"
-              },
-              "kind": "nerfed",
-              "subjectSlug": "viktor"
-            },
-            {
-              "subject": {
-                "en": "Viktor",
-                "zh-cn": "Viktor",
-                "ja-jp": "ビクター",
-                "ko-kr": "Viktor"
-              },
-              "text": {
-                "en": "Passive Stacks per Kill",
-                "zh-cn": "Passive Stacks per Kill",
-                "ja-jp": "固有スキル - キルごとのスタック数",
-                "ko-kr": "Passive Stacks per Kill"
-              },
-              "kind": "changed",
-              "subjectSlug": "viktor"
-            },
-            {
-              "subject": {
-                "en": "Viktor",
-                "zh-cn": "Viktor",
-                "ja-jp": "ビクター",
-                "ko-kr": "Viktor"
-              },
-              "text": {
-                "en": "Champion: 20 ⇒ 8",
-                "zh-cn": "Champion: 20 ⇒ 8",
-                "ja-jp": "チャンピオン：20 ⇒ 8",
-                "ko-kr": "Champion: 20 ⇒ 8"
-              },
-              "kind": "nerfed",
-              "subjectSlug": "viktor"
-            },
-            {
-              "subject": {
-                "en": "Viktor",
-                "zh-cn": "Viktor",
-                "ja-jp": "ビクター",
-                "ko-kr": "Viktor"
-              },
-              "text": {
-                "en": "Cannon 10 ⇒ 5",
-                "zh-cn": "Cannon 10 ⇒ 5",
-                "ja-jp": "砲台ミニオン：10 ⇒ 5",
-                "ko-kr": "Cannon 10 ⇒ 5"
-              },
-              "kind": "nerfed",
-              "subjectSlug": "viktor"
-            },
-            {
-              "subject": {
-                "en": "Viktor",
-                "zh-cn": "Viktor",
-                "ja-jp": "ビクター",
-                "ko-kr": "Viktor"
-              },
-              "text": {
-                "en": "NEW In ARAM maps, Viktor gains 1 stack every 5 seconds.",
-                "zh-cn": "NEW In ARAM maps, Viktor gains 1 stack every 5 seconds.",
-                "ja-jp": "NEW ランダムミッドのマップでは、ビクターは5秒ごとに1スタックを獲得する。",
-                "ko-kr": "NEW In ARAM maps, Viktor gains 1 stack every 5 seconds."
-              },
-              "kind": "changed",
-              "subjectSlug": "viktor"
-            }
-          ]
-        },
-        {
-          "id": "general",
-          "title": "System Changes",
-          "changes": [
-            {
-              "subject": {
-                "en": "Bilgewater Cannon QoL",
-                "zh-cn": "Bilgewater Cannon QoL",
-                "ja-jp": "ビルジウォーター - 大砲の使用感の改善",
-                "ko-kr": "Bilgewater Cannon QoL"
-              },
-              "text": {
-                "en": "Movement lockout from not taking the canon: 2s ⇒ 0.5s",
-                "zh-cn": "Movement lockout from not taking the canon: 2s ⇒ 0.5s",
-                "ja-jp": "大砲に乗らなかったことによる移動不能時間 ：2秒 ⇒ 0.5秒",
-                "ko-kr": "Movement lockout from not taking the canon: 2s ⇒ 0.5s"
-              },
-              "kind": "nerfed"
-            },
-            {
-              "subject": {
-                "en": "Bilgewater Cannon QoL",
-                "zh-cn": "Bilgewater Cannon QoL",
-                "ja-jp": "ビルジウォーター - 大砲の使用感の改善",
-                "ko-kr": "Bilgewater Cannon QoL"
-              },
-              "text": {
-                "en": "Movement lockout from landing after taking the canon: removed",
-                "zh-cn": "Movement lockout from landing after taking the canon: removed",
-                "ja-jp": "大砲に乗って着地後の移動不能時間 ：削除",
-                "ko-kr": "Movement lockout from landing after taking the canon: removed"
-              },
-              "kind": "changed"
-            }
-          ]
-        }
-      ]
-    },
     {
       "version": "26.9",
       "title": "Patch 26.9 Notes",
@@ -1372,6 +1175,496 @@
                 "ko-kr": "Dropped Coins each grant 5 gold and can only be picked up by the Augment holder and allied champions."
               },
               "kind": "changed"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "version": "26.5",
+      "title": "Patch 26.5 Notes",
+      "released": "",
+      "sections": [
+        {
+          "id": "augments",
+          "title": "Augments and Set Changes",
+          "changes": [
+            {
+              "subject": {
+                "en": "Upgrade Immolate",
+                "zh-cn": "升級獻祭",
+                "ja-jp": "猛火 アップグレード",
+                "ko-kr": "불사르기 업그레이드",
+                "zh-tw": "升級獻祭"
+              },
+              "text": {
+                "en": "Gold per tick: 10 ⇒ 12",
+                "zh-cn": "每段金錢：10 ⇒ 12",
+                "ja-jp": "判定ごとのゴールド：10 ⇒ 12",
+                "ko-kr": "Gold per tick: 10 ⇒ 12"
+              },
+              "kind": "buffed"
+            },
+            {
+              "subject": {
+                "en": "Slow Cooker",
+                "zh-cn": "細煮慢燉",
+                "ja-jp": "スロウクッカー",
+                "ko-kr": "찜솥",
+                "zh-tw": "細煮慢燉"
+              },
+              "text": {
+                "en": "Damage scaling off max HP: 1.5% ⇒ 2%",
+                "zh-cn": "最大生命的傷害補正：1.5% ⇒ 2%",
+                "ja-jp": "最大体力に応じてダメージが増加：1.5% ⇒ 2%",
+                "ko-kr": "Damage scaling off max HP: 1.5% ⇒ 2%"
+              },
+              "kind": "buffed"
+            },
+            {
+              "subject": {
+                "en": "Celestial Body",
+                "zh-cn": "天界之身",
+                "ja-jp": "聖体",
+                "ko-kr": "천상의 신체",
+                "zh-tw": "天界之身"
+              },
+              "text": {
+                "en": "Max Health Gain: 1250 ⇒ 1500",
+                "zh-cn": "增加最大生命：1250 ⇒ 1500",
+                "ja-jp": "体力回復上限：1250 ⇒ 1500",
+                "ko-kr": "Max Health Gain: 1250 ⇒ 1500"
+              },
+              "kind": "buffed"
+            },
+            {
+              "subject": {
+                "en": "Guilty Pleasure",
+                "zh-cn": "惡趣味",
+                "ja-jp": "罪なる喜び",
+                "ko-kr": "죄책감의 쾌락",
+                "zh-tw": "惡趣味"
+              },
+              "text": {
+                "en": "Heal amount from immobilizing / grounding enemy: 10-150 (+ 1.5% Max HP) ⇒ 30-250 (+ 1.5% Max HP)",
+                "zh-cn": "對敵人施加硬控場或禁錮時的治療量：10-150（+ 1.5%最大生命） ⇒ 30-250（+1.5%最大生命）",
+                "ja-jp": "敵に移動不能効果 / 釘付け効果を与えた際の回復量：10～150（+最大体力の1.5%） ⇒ 30～250（+最大体力の1.5%）",
+                "ko-kr": "Heal amount from immobilizing / grounding enemy: 10-150 (+ 1.5% Max HP) ⇒ 30-250 (+ 1.5% Max HP)"
+              },
+              "kind": "buffed"
+            },
+            {
+              "subject": {
+                "en": "Perseverance",
+                "zh-cn": "剛毅",
+                "ja-jp": "忍耐",
+                "ko-kr": "인내심",
+                "zh-tw": "剛毅"
+              },
+              "text": {
+                "en": "Base regen: 8 Health / sec ⇒ 10 Health / sec",
+                "zh-cn": "基礎回復：每秒8生命 ⇒ 每秒10生命",
+                "ja-jp": "基本自動回復：8 回復/秒 ⇒ 10 回復/秒",
+                "ko-kr": "Base regen: 8 Health / sec ⇒ 10 Health / sec"
+              },
+              "kind": "buffed"
+            },
+            {
+              "subject": {
+                "en": "Perseverance",
+                "zh-cn": "剛毅",
+                "ja-jp": "忍耐",
+                "ko-kr": "인내심",
+                "zh-tw": "剛毅"
+              },
+              "text": {
+                "en": "Low HP regen: 16 Health / sec ⇒ 20 Health / sec",
+                "zh-cn": "低生命回復：每秒16生命 ⇒ 每秒20生命",
+                "ja-jp": "体力が低い場合の自動回復：16 回復/秒 ⇒ 20 回復/秒",
+                "ko-kr": "Low HP regen: 16 Health / sec ⇒ 20 Health / sec"
+              },
+              "kind": "buffed"
+            },
+            {
+              "subject": {
+                "en": "Courage of the Colossus",
+                "zh-cn": "巨像之勇氣",
+                "ja-jp": "巨人の勇気",
+                "ko-kr": "거석상의 용기",
+                "zh-tw": "巨像勇氣"
+              },
+              "text": {
+                "en": "Shield: 100-300 + 4%HP ⇒ 150-450 + 4%HP",
+                "zh-cn": "護盾：100-300 + 4%生命 ⇒ 150-450 + 4%生命",
+                "ja-jp": "シールド量：100～300 + 体力の4% ⇒ 150～450 + 体力の4%",
+                "ko-kr": "Shield: 100-300 + 4%HP ⇒ 150-450 + 4%HP"
+              },
+              "kind": "buffed"
+            },
+            {
+              "subject": {
+                "en": "Adamant",
+                "zh-cn": "意志堅定",
+                "ja-jp": "アダマント",
+                "ko-kr": "단호함",
+                "zh-tw": "意志堅定"
+              },
+              "text": {
+                "en": "MR / armor gained per immobilizing / grounding enemy: 8 ⇒ 10",
+                "zh-cn": "每次對敵人施加硬控場或禁錮時獲得的魔防/物防：8 ⇒ 10",
+                "ja-jp": "移動不能効果 / 釘付け効果を与えた敵1体ごとに増加する魔法防御 / 物理防御:8 ⇒ 10",
+                "ko-kr": "MR / armor gained per immobilizing / grounding enemy: 8 ⇒ 10"
+              },
+              "kind": "buffed"
+            },
+            {
+              "subject": {
+                "en": "Impassable",
+                "zh-cn": "不可通行",
+                "ja-jp": "通行不可",
+                "ko-kr": "넘을 수 없는 벽",
+                "zh-tw": "不可通行"
+              },
+              "text": {
+                "en": "Aftershock and Glacial CD: 15s ⇒ 20s",
+                "zh-cn": "裂地衝擊與冰川冷卻時間：15秒 ⇒ 20秒",
+                "ja-jp": "アフターショックとグレイシャルのクールダウン：15秒 ⇒ 20秒",
+                "ko-kr": "Aftershock and Glacial CD: 15s ⇒ 20s"
+              },
+              "kind": "nerfed"
+            },
+            {
+              "subject": {
+                "en": "Stuck In Here With Me",
+                "zh-cn": "隨我同困",
+                "ja-jp": "一緒に閉じ込められた",
+                "ko-kr": "도망갈 수 없어",
+                "zh-tw": "隨我同困"
+              },
+              "text": {
+                "en": "Post-taunt damage mitigation: 40% ⇒ 50%",
+                "zh-cn": "嘲諷後傷害阻擋量：40% ⇒ 50%",
+                "ja-jp": "挑発後のダメージ軽減率：40% ⇒ 50%",
+                "ko-kr": "Post-taunt damage mitigation: 40% ⇒ 50%"
+              },
+              "kind": "buffed"
+            },
+            {
+              "subject": {
+                "en": "Dropkick",
+                "zh-cn": "奪命飛踢",
+                "ja-jp": "ドロップキック",
+                "ko-kr": "드롭킥",
+                "zh-tw": "奪命飛踢"
+              },
+              "text": {
+                "en": "Execute threshold AD scaling: .03% ⇒ .035%",
+                "zh-cn": "處決門檻物攻補正：0.03% ⇒ 0.035%",
+                "ja-jp": "とどめを刺せる体力値の増加攻撃力反映：0.03% ⇒ 0.035%",
+                "ko-kr": "Execute threshold AD scaling: .03% ⇒ .035%"
+              },
+              "kind": "buffed"
+            },
+            {
+              "subject": {
+                "en": "Dropybara",
+                "zh-cn": "空降水豚",
+                "ja-jp": "ドロッピバラ",
+                "ko-kr": "Dropybara"
+              },
+              "text": {
+                "en": "Cooldown: 75s ⇒ 45s",
+                "zh-cn": "冷卻時間：75秒 ⇒ 45秒",
+                "ja-jp": "クールダウン：75秒 ⇒ 45秒",
+                "ko-kr": "Cooldown: 75s ⇒ 45s"
+              },
+              "kind": "buffed"
+            },
+            {
+              "subject": {
+                "en": "Golden Snowball",
+                "zh-cn": "黃金雪球",
+                "ja-jp": "金の雪玉",
+                "ko-kr": "Golden Snowball"
+              },
+              "text": {
+                "en": "Invulnerability duration: 1s ⇒ 1.5s",
+                "zh-cn": "無敵持續時間：1秒 ⇒ 1.5秒",
+                "ja-jp": "無敵時間：1秒 ⇒ 1.5秒",
+                "ko-kr": "Invulnerability duration: 1s ⇒ 1.5s"
+              },
+              "kind": "buffed"
+            },
+            {
+              "subject": {
+                "en": "Poro King",
+                "zh-cn": "普羅王",
+                "ja-jp": "ポロキング",
+                "ko-kr": "Poro King"
+              },
+              "text": {
+                "en": "Move speed increase: 25% ⇒ 40%",
+                "zh-cn": "提升跑速：25% ⇒ 40%",
+                "ja-jp": "移動速度増加：25% ⇒ 40%",
+                "ko-kr": "Move speed increase: 25% ⇒ 40%"
+              },
+              "kind": "buffed"
+            },
+            {
+              "subject": {
+                "en": "Poro King",
+                "zh-cn": "普羅王",
+                "ja-jp": "ポロキング",
+                "ko-kr": "Poro King"
+              },
+              "text": {
+                "en": "Damage reduction: 85% ⇒ 70%",
+                "zh-cn": "傷害減免：85% ⇒ 70%",
+                "ja-jp": "ダメージ軽減率：85% ⇒ 70%",
+                "ko-kr": "Damage reduction: 85% ⇒ 70%"
+              },
+              "kind": "nerfed"
+            },
+            {
+              "subject": {
+                "en": "Poro King",
+                "zh-cn": "普羅王",
+                "ja-jp": "ポロキング",
+                "ko-kr": "Poro King"
+              },
+              "text": {
+                "en": "Damage: 100-300 + 5% Bonus HP + 100% Bonus AD + 50% Bonus AP ⇒ 100-700",
+                "zh-cn": "傷害：100-300 + 5%額外生命 + 100%額外物攻 + 50%額外魔攻 ⇒ 100-700",
+                "ja-jp": "ダメージ：100～300 + 増加体力の5% + 増加攻撃力の100% + 増加魔力の50% ⇒ 100～700",
+                "ko-kr": "Damage: 100-300 + 5% Bonus HP + 100% Bonus AD + 50% Bonus AP ⇒ 100-700"
+              },
+              "kind": "changed"
+            },
+            {
+              "subject": {
+                "en": "Void Rift",
+                "zh-cn": "虛空裂痕",
+                "ja-jp": "ヴォイドの裂谷",
+                "ko-kr": "공허 균열",
+                "zh-tw": "虛空裂縫"
+              },
+              "text": {
+                "en": "Damage: 75-350 + 450% Lethality + 450% Magic Pen ⇒ 100-450 + 550% Lethality + 550% Magic Pen",
+                "zh-cn": "傷害：75-350 + 450%物理致命 + 450%魔法穿透 ⇒ 100-450 + 550%物理致命 + 550%魔法穿透",
+                "ja-jp": "ダメージ：75～350 + 脅威の450% + 魔法防御貫通の450% ⇒ 100～450 + 脅威の550% + 魔法防御貫通の550%",
+                "ko-kr": "Damage: 75-350 + 450% Lethality + 450% Magic Pen ⇒ 100-450 + 550% Lethality + 550% Magic Pen"
+              },
+              "kind": "buffed"
+            },
+            {
+              "subject": {
+                "en": "Void Rift",
+                "zh-cn": "虛空裂痕",
+                "ja-jp": "ヴォイドの裂谷",
+                "ko-kr": "공허 균열",
+                "zh-tw": "虛空裂縫"
+              },
+              "text": {
+                "en": "Width: 210 ⇒ 250",
+                "zh-cn": "寬度：210 ⇒ 250",
+                "ja-jp": "幅：210 ⇒ 250",
+                "ko-kr": "Width: 210 ⇒ 250"
+              },
+              "kind": "buffed"
+            },
+            {
+              "subject": {
+                "en": "Escape Plan",
+                "zh-cn": "逃跑計畫",
+                "ja-jp": "脱出プラン",
+                "ko-kr": "도주 계획",
+                "zh-tw": "逃跑計畫"
+              },
+              "text": {
+                "en": "Removed CD reset on death",
+                "zh-cn": "死亡時不再重置冷卻時間",
+                "ja-jp": "デス時にクールダウンがリセットされなくなりました",
+                "ko-kr": "Removed CD reset on death"
+              },
+              "kind": "nerfed"
+            },
+            {
+              "subject": {
+                "en": "Critical Missile",
+                "zh-cn": "暴擊沖天炮",
+                "ja-jp": "クリティカルミサイル",
+                "ko-kr": "치명적 미사일",
+                "zh-tw": "暴擊沖天炮"
+              },
+              "text": {
+                "en": "Damage: 11 - 40+7% bonus AD + 10% AP ⇒ 20 - 100 per missile",
+                "zh-cn": "傷害：11 - 40+7%額外物攻 + 10%魔攻 ⇒ 每發飛彈20 - 100",
+                "ja-jp": "ダメージ：11～40 + 増加攻撃力の7% + 魔力の10% ⇒ ミサイル1発につき20～100",
+                "ko-kr": "Damage: 11 - 40+7% bonus AD + 10% AP ⇒ 20 - 100 per missile"
+              },
+              "kind": "changed"
+            },
+            {
+              "subject": {
+                "en": "Upgrade Sword of Blossoming Dawn",
+                "zh-cn": "新 升級破曉綻放之劍",
+                "ja-jp": "花咲く夜明けの剣・改",
+                "ko-kr": "Upgrade Sword of Blossoming Dawn"
+              },
+              "text": {
+                "en": "Gain 100% Attack Speed",
+                "zh-cn": "獲得100%攻速。",
+                "ja-jp": "攻撃速度が100%増加します。",
+                "ko-kr": "Gain 100% Attack Speed"
+              },
+              "kind": "buffed"
+            },
+            {
+              "subject": {
+                "en": "Upgrade Sword of Blossoming Dawn",
+                "zh-cn": "新 升級破曉綻放之劍",
+                "ja-jp": "花咲く夜明けの剣・改",
+                "ko-kr": "Upgrade Sword of Blossoming Dawn"
+              },
+              "text": {
+                "en": "When you have Sword of Blossoming Dawn, your attacks against champions deal 50% damage but increase Sword of Blossoming Dawn’s healing by 250%",
+                "zh-cn": "當你擁有破曉綻放之劍時，對英雄的攻擊只會造成50%傷害，但破曉綻放之劍的治療效果提升250%。",
+                "ja-jp": "「花咲く夜明けの剣」を所持している間、チャンピオンに対する通常攻撃のダメージが50%に減少しますが、「花咲く夜明けの剣」による回復効果が250%増加します。",
+                "ko-kr": "When you have Sword of Blossoming Dawn, your attacks against champions deal 50% damage but increase Sword of Blossoming Dawn’s healing by 250%"
+              },
+              "kind": "changed"
+            },
+            {
+              "subject": {
+                "en": "Wee Woo Wee Woo Set Bonus",
+                "zh-cn": "新 嗚咿嗚咿組合加成",
+                "ja-jp": "うぃ～！おりゃっ！セットボーナス",
+                "ko-kr": "Wee Woo Wee Woo Set Bonus"
+              },
+              "text": {
+                "en": "Set Bonus: Gain Bonus effects towards allies below 50% health",
+                "zh-cn": "組合加成：生命低於50%之友軍獲得額外效果。",
+                "ja-jp": "セットボーナス：体力が50%未満の味方に対して追加効果を獲得します。",
+                "ko-kr": "Set Bonus: Gain Bonus effects towards allies below 50% health"
+              },
+              "kind": "buffed"
+            },
+            {
+              "subject": {
+                "en": "Wee Woo Wee Woo Set Bonus",
+                "zh-cn": "新 嗚咿嗚咿組合加成",
+                "ja-jp": "うぃ～！おりゃっ！セットボーナス",
+                "ko-kr": "Wee Woo Wee Woo Set Bonus"
+              },
+              "text": {
+                "en": "(2) Gain 50% Movement Speed",
+                "zh-cn": "（2）增加50%跑速。",
+                "ja-jp": "（2）移動速度が50%増加します",
+                "ko-kr": "(2) Gain 50% Movement Speed"
+              },
+              "kind": "buffed"
+            },
+            {
+              "subject": {
+                "en": "Wee Woo Wee Woo Set Bonus",
+                "zh-cn": "新 嗚咿嗚咿組合加成",
+                "ja-jp": "うぃ～！おりゃっ！セットボーナス",
+                "ko-kr": "Wee Woo Wee Woo Set Bonus"
+              },
+              "text": {
+                "en": "(3) Your next heal or shield restores 12% of the target’s missing health (10 seconds cooldown)",
+                "zh-cn": "（3）下次治療或護盾會恢復目標12%已失去的生命（冷卻時間10秒）",
+                "ja-jp": "（3）次に行う回復またはシールド効果で、対象の減少体力の12%にあたる体力を回復します（クールダウン10秒）",
+                "ko-kr": "(3) Your next heal or shield restores 12% of the target’s missing health (10 seconds cooldown)"
+              },
+              "kind": "buffed"
+            }
+          ]
+        },
+        {
+          "id": "general",
+          "title": "Systems",
+          "changes": [
+            {
+              "subject": {
+                "en": "Player HUD",
+                "zh-cn": "玩家抬頭顯示介面",
+                "ja-jp": "プレイヤーHUD",
+                "ko-kr": "Player HUD"
+              },
+              "text": {
+                "en": "REMOVED: Removed Augment Set icons from player HUD",
+                "zh-cn": "移除內容：從玩家抬頭顯示介面中移除增幅裝置組合圖示",
+                "ja-jp": "削除：プレイヤーHUDから、オーグメントセットのアイコンを削除しました",
+                "ko-kr": "REMOVED: Removed Augment Set icons from player HUD"
+              },
+              "kind": "changed"
+            },
+            {
+              "subject": {
+                "en": "Structures",
+                "zh-cn": "建築物",
+                "ja-jp": "建造物",
+                "ko-kr": "Structures"
+              },
+              "text": {
+                "en": "Nexus base HP: 5500 ⇒ 3000",
+                "zh-cn": "主堡基礎生命：5500 ⇒ 3000",
+                "ja-jp": "ネクサスの基礎体力：5500 ⇒ 3000",
+                "ko-kr": "Nexus base HP: 5500 ⇒ 3000"
+              },
+              "kind": "nerfed"
+            },
+            {
+              "subject": {
+                "en": "Structures",
+                "zh-cn": "建築物",
+                "ja-jp": "建造物",
+                "ko-kr": "Structures"
+              },
+              "text": {
+                "en": "Nexus Tower base HP: 1800 ⇒ 3000",
+                "zh-cn": "主堡防禦塔基礎生命：1800 ⇒ 3000",
+                "ja-jp": "ネクサスタワーの基本体力：1800 ⇒ 3000",
+                "ko-kr": "Nexus Tower base HP: 1800 ⇒ 3000"
+              },
+              "kind": "buffed"
+            }
+          ]
+        },
+        {
+          "id": "new_items",
+          "title": "Items",
+          "changes": [
+            {
+              "subject": {
+                "en": "Moonstone Renewer",
+                "zh-cn": "月之石再生裝置",
+                "ja-jp": "ムーンストーンの再生",
+                "ko-kr": "Moonstone Renewer"
+              },
+              "text": {
+                "en": "Garlic: Moonstone’s chain healing will not select targets with Vampirism",
+                "zh-cn": "大蒜：月石的連鎖治療不會選擇具有吸血迷信的目標",
+                "ja-jp": "ニンニク：「ムーンストーン」の連鎖回復は、「吸血鬼信仰」効果を受けている対象を選択しません。",
+                "ko-kr": "Garlic: Moonstone’s chain healing will not select targets with Vampirism"
+              },
+              "kind": "nerfed"
+            },
+            {
+              "subject": {
+                "en": "Diadem of Songs",
+                "zh-cn": "歌謠之冠",
+                "ja-jp": "旋律のダイアデム",
+                "ko-kr": "Diadem of Songs"
+              },
+              "text": {
+                "en": "Silver: Diadem’s healing missile will not select targets with Vampirism",
+                "zh-cn": "白銀：頭冠的治癒導彈不會選擇具有吸血迷信的目標",
+                "ja-jp": "シルバー：「ダイアデム」の回復ミサイルは、「吸血鬼信仰」効果を受けている対象を選択しません。",
+                "ko-kr": "Silver: Diadem’s healing missile will not select targets with Vampirism"
+              },
+              "kind": "nerfed"
             }
           ]
         }

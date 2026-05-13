@@ -291,6 +291,9 @@
     "factorSeenRerolledOffers": "Already-seen rerolled offers reduce confidence in finding a better replacement.",
     "reasonOracleScoreBand": "Oracle score band is based on the current champion and offered augment data.",
     "reasonAugmentWinRateAvailable": "Augment win-rate data is available for this scoring pass.",
-    "reasonAugmentWinRateMissing": "Augment win-rate data is missing, so this score relies on fallback metadata."
+    "reasonAugmentWinRateMissing": "Augment win-rate data is missing, so this score relies on fallback metadata.",
+    "baselineLabel": "Lv11 baseline",
+    "baselineNote": "vs {armor} armor, no items",
+    "dpsDeltaLabel": "DPS"
   }
 }

@@ -291,6 +291,9 @@
     "factorSeenRerolledOffers": "이미 본 리롤 제안은 더 나은 대체안을 찾을 신뢰도를 낮춥니다.",
     "reasonOracleScoreBand": "Oracle 점수 등급은 현재 챔피언과 제시된 증강 데이터를 기준으로 합니다.",
     "reasonAugmentWinRateAvailable": "이 점수 계산에는 증강 승률 데이터를 사용할 수 있습니다.",
-    "reasonAugmentWinRateMissing": "증강 승률 데이터가 없어 대체 메타데이터에 의존합니다."
+    "reasonAugmentWinRateMissing": "증강 승률 데이터가 없어 대체 메타데이터에 의존합니다.",
+    "baselineLabel": "Lv11 기준",
+    "baselineNote": "방어력 {armor} 대상, 아이템 없음",
+    "dpsDeltaLabel": "DPS"
   }
 }

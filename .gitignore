@@ -27,3 +27,11 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# swarm / agent tooling
+.claude-flow/
+.swarm/
+ruvector.db
+ruvector.db.lock
+agentdb.rvf
+agentdb.rvf.lock

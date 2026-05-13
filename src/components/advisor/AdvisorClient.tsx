@@ -2,11 +2,13 @@
 
 import { rankOfferedAugments } from "@/lib/scoring/offered-ranking";
 import type {
+  AugmentDamageContext,
   ComboMetadataEntry,
   RankingAugment,
   RankingChampion,
   ScoreBand,
 } from "@/lib/scoring/offered-ranking";
+import { computeChampionBaseline } from "@/lib/scoring/damage-context";
 import { useMemo, useState } from "react";
 
 type AdvisorChampion = RankingChampion & {
@@ -109,6 +111,9 @@ type AdvisorCopy = {
   selectedRerollsLabel: string;
   selectedShopLabel: string;
   dataSummary: string;
+  baselineLabel: string;
+  baselineNote: string;
+  dpsDeltaLabel: string;
 };
 
 type ShopTiming = "available-now" | "delayed-until-shop" | "cheating-recall" | "queued";
@@ -126,6 +131,69 @@ const screenTierKeys: ScreenTier[] = ["silver", "gold", "prismatic"];
 
 function readableCode(code: string): string {
   return code.replace(/-/g, " ");
+}
+
+function ChampionBaselineRow({
+  baseStats,
+  abilityProfile,
+  copy,
+}: {
+  baseStats: NonNullable<RankingChampion["baseStats"]>;
+  abilityProfile: NonNullable<RankingChampion["abilityProfile"]>;
+  copy: Pick<AdvisorCopy, "baselineLabel" | "baselineNote">;
+}) {
+  const baseline = useMemo(
+    () => computeChampionBaseline(baseStats, abilityProfile),
+    [baseStats, abilityProfile],
+  );
+  return (
+    <div className="rounded-md border border-[var(--color-border-default)] bg-[var(--color-bg-secondary)] px-4 py-2 text-xs text-[var(--color-text-muted)]">
+      {copy.baselineLabel} —{" "}
+      <span className="text-[var(--color-text-secondary)]">
+        {baseline.dps.toFixed(0)} DPS · {baseline.totalAD.toFixed(0)} AD · {baseline.attackSpeed.toFixed(2)} AS
+      </span>
+      <span className="ml-2 opacity-60">({copy.baselineNote.replace("{armor}", "100")})</span>
+    </div>
+  );
+}
+
+function DamageContextBadge({
+  ctx,
+  dpsDeltaLabel,
+}: {
+  ctx: AugmentDamageContext;
+  dpsDeltaLabel: string;
+}) {
+  if (!ctx.hasParsableStats || ctx.dpsDeltaPct === 0) return null;
+
+  const positive = ctx.dpsDeltaPct > 0;
+  const badgeClass = positive
+    ? "text-green-400 bg-green-900/30"
+    : "text-red-400 bg-red-900/30";
+  const statPills = Object.entries(ctx.parsedStats)
+    .filter(([, v]) => v !== undefined && v !== 0)
+    .map(([k, v]) => {
+      const pct = ["attackSpeed", "critChance", "critDamage", "armorPenPct"].includes(k);
+      const val = pct ? `${((v as number) * 100).toFixed(0)}%` : String(Math.round(v as number));
+      const label = k === "attackDamage" ? "AD" : k === "attackSpeed" ? "AS" : k === "critChance" ? "Crit" : k === "critDamage" ? "CritDmg" : k === "lethality" ? "Leth" : "ArmPen";
+      return `+${val} ${label}`;
+    });
+
+  return (
+    <div className="mt-1 flex flex-wrap gap-1">
+      <span className={`rounded px-1.5 py-0.5 text-xs font-medium ${badgeClass}`}>
+        {positive ? "+" : ""}{ctx.dpsDeltaPct.toFixed(0)}% {dpsDeltaLabel}
+      </span>
+      {statPills.map((pill) => (
+        <span
+          key={pill}
+          className="rounded bg-[var(--color-bg-primary)] px-1.5 py-0.5 text-xs text-[var(--color-text-muted)]"
+        >
+          {pill}
+        </span>
+      ))}
+    </div>
+  );
 }
 
 function shopStatus(timing: ShopTiming): "open" | "closed" | "unknown" {
@@ -414,6 +482,14 @@ export function AdvisorClient({
         </div>
       </section>
 
+      {selectedChampion?.baseStats && selectedChampion.abilityProfile ? (
+        <ChampionBaselineRow
+          baseStats={selectedChampion.baseStats}
+          abilityProfile={selectedChampion.abilityProfile}
+          copy={copy}
+        />
+      ) : null}
+
       <section className="grid gap-4 md:grid-cols-3">
         <div className="card p-5">
           <h2 className="font-semibold mb-4">{copy.rerollTitle}</h2>
@@ -606,6 +682,9 @@ export function AdvisorClient({
                     <h3 className="mt-1 font-semibold text-[var(--color-text-primary)]">
                       {ranking.augment.name}
                     </h3>
+                    {ranking.damageContext ? (
+                      <DamageContextBadge ctx={ranking.damageContext} dpsDeltaLabel={copy.dpsDeltaLabel} />
+                    ) : null}
                   </div>
                   <div className="text-right text-xs text-[var(--color-text-muted)]">
                     <div>
