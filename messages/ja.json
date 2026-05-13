@@ -180,6 +180,7 @@
     "subtitle": "arammayhem.com のチャンピオン調整、オーグメント変更、システム更新",
     "patchLabel": "パッチ {patch}",
     "currentBadge": "最新",
+    "previewBadge": "プレビュー",
     "releasedOn": "{date} 配信",
     "showOlder": "過去のパッチを表示",
     "hideOlder": "過去のパッチを非表示",

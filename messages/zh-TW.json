@@ -180,6 +180,7 @@
     "subtitle": "來自 arammayhem.com 的英雄平衡、增幅符文與系統更新",
     "patchLabel": "版本 {patch}",
     "currentBadge": "當前",
+    "previewBadge": "預覽",
     "releasedOn": "發布於 {date}",
     "showOlder": "顯示舊版本",
     "hideOlder": "隱藏舊版本",

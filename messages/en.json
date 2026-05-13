@@ -180,6 +180,7 @@
     "subtitle": "Champion balance, augment changes, and system updates from arammayhem.com",
     "patchLabel": "Patch {patch}",
     "currentBadge": "Current",
+    "previewBadge": "Preview",
     "releasedOn": "Released {date}",
     "showOlder": "Show older patches",
     "hideOlder": "Hide older patches",

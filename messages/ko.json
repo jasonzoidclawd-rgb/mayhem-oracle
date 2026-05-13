@@ -180,6 +180,7 @@
     "subtitle": "arammayhem.com의 챔피언 밸런스, 증강 변경 및 시스템 업데이트",
     "patchLabel": "패치 {patch}",
     "currentBadge": "최신",
+    "previewBadge": "미리보기",
     "releasedOn": "{date} 출시",
     "showOlder": "이전 패치 보기",
     "hideOlder": "이전 패치 숨기기",

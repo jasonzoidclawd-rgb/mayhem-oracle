@@ -51,11 +51,18 @@ export async function PatchCard({
           <h2 className="text-xl font-semibold">
             {t("patchLabel", { patch: patch.version })}
           </h2>
-          {isCurrent ? (
-            <span className="inline-flex items-center rounded-full border border-[var(--color-accent)]/40 bg-[var(--color-accent)]/15 px-2 py-0.5 text-xs font-medium text-[var(--color-accent)]">
-              {t("currentBadge")}
-            </span>
-          ) : null}
+          <div className="flex items-center gap-1.5">
+            {isCurrent && !patch.released ? (
+              <span className="inline-flex items-center rounded-full border border-purple-400/40 bg-purple-400/15 px-2 py-0.5 text-xs font-medium text-purple-300">
+                {t("previewBadge")}
+              </span>
+            ) : null}
+            {isCurrent ? (
+              <span className="inline-flex items-center rounded-full border border-[var(--color-accent)]/40 bg-[var(--color-accent)]/15 px-2 py-0.5 text-xs font-medium text-[var(--color-accent)]">
+                {t("currentBadge")}
+              </span>
+            ) : null}
+          </div>
         </div>
         {patch.released ? (
           <p className="mt-1 text-sm text-[var(--color-text-muted)]">
