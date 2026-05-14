@@ -1,6 +1,6 @@
 {
   "patch": "26.9",
-  "scraped_at": "2026-05-13T22:58:26.145923+00:00",
+  "scraped_at": "2026-05-14T22:50:18.908152+00:00",
   "augments": [
     {
       "slug": "back-to-basics",
@@ -246,7 +246,7 @@
       "name_ja": "剣を構えよ",
       "name_ko": "검을 뽑아라",
       "name_zh_TW": "拔劍吧",
-      "wikiDescription": "Become melee , modifying your attack range to 200 units. Additionally, gain 30% bonus attack damage , 25% bonus attack speed , 30% bonus health , 25% bonus movement speed , and 20% life steal. These bonuses are increased by 0% – 30% (based on champion's default attack range) . This augment is only available for ranged champions. This augment is not offered if the champion has built Runaan's Hurricane . Bonus attack range from other augments will still be able to increase your champion's attack range.",
+      "wikiDescription": "Become melee , modifying your attack range to 200 (+ 100% bonus attack range from augments) units. Additionally, gain 30% bonus attack damage , 25% bonus attack speed , 30% bonus health , 25% bonus movement speed , and 20% life steal. These bonuses are increased by 0% – 30% (based on champion's default attack range) . This augment is only available for ranged champions. This augment is not offered if the champion has built Runaan's Hurricane .",
       "kit_tags": [
         "attack",
         "movement",
@@ -381,7 +381,7 @@
       "name_ja": "ぐるぐるハンマー",
       "name_ko": "탄환 세례",
       "name_zh_TW": "旋風鎚",
-      "wikiDescription": "Your next basic attack in each cardinal direction within 750 range additionally on-attack fires 5 Firecrackers at the target that each deal 8 – 51 (based on level) (+ 14% bonus AD) physical damage , for a total of 40 – 255 (based on level) (+ 70% bonus AD) physical damage (5 second cooldown per direction). Firecrackers' damage is increased by 0% – 50% (based on distance travelled) . Each Firecracker can critically strike for (200% + 30% ) damage and applies on-hit effects at 20% effectiveness.",
+      "wikiDescription": "Your next basic attack against an enemy champion in each cardinal direction within 750 range additionally on-attack fires 5 Firecrackers at the target that each deal 8 – 51 (based on level) (+ 14% bonus AD) physical damage , for a total of 40 – 255 (based on level) (+ 70% bonus AD) physical damage (5 second cooldown per direction). Firecrackers' damage is increased by 0% – 50% (based on distance travelled) . Each Firecracker can critically strike for (200% + 30% ) damage and applies on-hit effects at 20% effectiveness.",
       "wikiSet": "Firecracker",
       "recentChanges": {
         "patch": "26.10",
@@ -1291,7 +1291,7 @@
       "name_ja": "頭脳派",
       "name_ko": "전술적 대비",
       "name_zh_TW": "超強大腦",
-      "wikiDescription": "Gain a shield that absorbs damage equal to 300% AP and lasts until destroyed. Shield is replenished upon respawn.",
+      "wikiDescription": "Gain a shield that absorbs damage equal to 300% AP and lasts until destroyed. Shield is replenished upon respawn and every 70 seconds.",
       "recentChanges": {
         "patch": "26.10",
         "changes": [
@@ -1922,7 +1922,7 @@
       "name_ja": "無法者の気概 outlaw's grit",
       "name_ko": "무법자의 투지 outlaw's grit",
       "name_zh_TW": "俠盜恆毅",
-      "wikiDescription": "Dashing or blinking grants 12 bonus armor and bonus magic resistance , stacking up to 5 times for a total of 60 bonus resistances. Stacks are reset every 60 seconds since acquiring the augment.",
+      "wikiDescription": "Dashing or blinking grants 12 bonus armor and bonus magic resistance for 15 seconds, stacking up to 5 times for a total of 60 bonus resistances, and refreshing on subsequent triggers.",
       "kit_tags": [
         "tank",
         "movement"
@@ -3636,7 +3636,7 @@
       "icon": "https://arammayhem.com/augments/Upgrade_Zhonya&#x27;s_mayhem_augment.webp",
       "name_ja": "ゾーニャ アップグレード upgrade zhonya's",
       "name_ko": "존야 업그레이드 upgrade zhonya's",
-      "wikiDescription": "Upgrades Seeker's Armguard , Wooglet's Witchcap , and Zhonya's Hourglass , empowering Stasis to allow you to move during its active effect. Additionally, the cooldown of Zhonya's Hourglass' Stasis is reduced to 45 seconds.",
+      "wikiDescription": "Upgrades Seeker's Armguard , Wooglet's Witchcap , and Zhonya's Hourglass , empowering Stasis to allow you to move during its active effect, during which time you also gain 50% bonus movement speed . Additionally, the cooldown of Zhonya's Hourglass' Stasis is reduced to 45 seconds.",
       "kit_tags": [
         "ability",
         "haste"
