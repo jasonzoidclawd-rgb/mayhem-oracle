@@ -1,6 +1,6 @@
 {
   "patch": "26.9",
-  "scraped_at": "2026-05-14T22:50:18.908152+00:00",
+  "scraped_at": "2026-05-15T22:45:43.314055+00:00",
   "augments": [
     {
       "slug": "back-to-basics",
@@ -1428,7 +1428,7 @@
       "name_ja": "クリティカルミサイル",
       "name_ko": "치명적 미사일",
       "name_zh_TW": "暴擊沖天炮",
-      "wikiDescription": "Critical strikes against enemy champions launch 1 (+ 1 per 33. 33 % critical strike chance) Firecrackers at the target that each deal 20 – 100 (based on level) magic damage (4 second cooldown). Additionally, gain 25% critical strike chance . Critical strikes from Jeweled Gauntlet and Vulnerability will launch Firecrackers .",
+      "wikiDescription": "Critical strikes against enemy champions launch 1 (+ 1 per 33. 33 % critical strike chance) Firecrackers at the target that each deal 20 – 100 (based on level) magic damage . Additionally, gain 25% critical strike chance . Critical strikes from Jeweled Gauntlet and Vulnerability will launch Firecrackers .",
       "wikiSet": "Firecracker",
       "kit_tags": [
         "attack",
@@ -3354,7 +3354,7 @@
       "icon": "https://arammayhem.com/augments/Spin_Me_Right_Round_mayhem_augment.webp",
       "name_ja": "振り回して",
       "name_ko": "빙글빙글",
-      "wikiDescription": "Replace a summoner spell with Akshan's Heroic Swing . Heroic Swing - Active: You can activate Heroic Swing three times before the ability goes on cooldown, and you can use the third cast only after 0. 5 seconds of the second cast. An attack or movement command may be inputted to use the second and third casts. First Cast: Fire a hook in the target direction that embeds in the first terrain hit for 2 seconds. Heroic Swing's second cast can be used while the hook is attached. If the hook fails to attach or you become immobilized , grounded , or polymorphed within the duration, Heroic Swing is cancelled and placed on full cooldown. Second Cast: Swing around the terrain in either a clockwise or counterclockwise direction based on the position of the cursor relative to your facing direction , stopping upon colliding with an enemy champion or terrain. While swinging, fire at the nearest visible enemy within 500 units every 0. 231 seconds to deal them 15 – 75 (based on level) (+ 15% AD) × (1 + 0. 3 per 100% bonus attack speed) physical damage and apply on-hit effects for each shot, with on-hit damage reduced to 25% effectiveness. The dash will be interrupted if you are affected by any immobilizing or polymorphing crowd control during the dash. Third Cast: End the swing by jumping to the target location and fire one last shot at a nearby visible enemy. Scoring an enemy champion takedown reduces Heroic Swing's current cooldown to 0. 5 seconds. This augment is currently disabled.",
+      "wikiDescription": "Replace a summoner spell with Akshan's Heroic Swing . Heroic Swing - Active: You can activate Heroic Swing three times before the ability goes on cooldown, and you can use the third cast only after 0. 5 seconds of the second cast. An attack or movement command may be inputted to use the second and third casts. First Cast: Fire a hook in the target direction that embeds in the first terrain hit for 2 seconds. Heroic Swing's second cast can be used while the hook is attached. If the hook fails to attach or you become immobilized , grounded , or polymorphed within the duration, Heroic Swing is cancelled and placed on full cooldown. Second Cast: Swing around the terrain in either a clockwise or counterclockwise direction based on the position of the cursor relative to your facing direction , stopping upon colliding with an enemy champion or terrain. While swinging, fire at the nearest visible enemy within 500 units every 0. 231 seconds to deal them 15 – 75 (based on level) (+ 15% AD) × (1 + 0. 3 per 100% bonus attack speed) physical damage and apply on-hit effects for each shot, with on-hit damage reduced to 25% effectiveness. The dash will be interrupted if you are affected by any immobilizing or polymorphing crowd control during the dash. Third Cast: End the swing by jumping to the target location and fire one last shot at a nearby visible enemy. Scoring an enemy champion takedown reduces Heroic Swing's current cooldown to 0. 5 seconds.",
       "kit_tags": [
         "movement",
         "ability"
