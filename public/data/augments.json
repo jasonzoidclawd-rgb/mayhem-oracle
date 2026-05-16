@@ -1,6 +1,6 @@
 {
   "patch": "26.9",
-  "scraped_at": "2026-05-15T22:45:43.314055+00:00",
+  "scraped_at": "2026-05-16T22:37:28.918178+00:00",
   "augments": [
     {
       "slug": "back-to-basics",
@@ -31,7 +31,7 @@
       "name_ja": "超特大の雪玉！",
       "name_ko": "데굴데굴 눈덩이!",
       "name_zh_TW": "巨無霸雪球",
-      "wikiDescription": "Upgrades your Mark into a massive snowball, empowering it with an increased size radius and the ability to pass through non-champions. The snowball additionally explodes upon impact of the target hit to deal 200 – 350 (based on level) (+ 100% bonus AD) (+ 60% AP) magic damage to all nearby enemies, knock them up for 0. 75 seconds, and slow them by 20% for 2 seconds. Additionally, your Mark's cooldown is reduced equivalent to 100 ability haste. If Mark is not equipped, the summoner spell in the slot not occupied by Flash is replaced with Mark . If you also did not equip Flash , then you will be prompted to replace one of your summoner spells with Mark . Non-champions hit by the snowball are stunned for 1. 25 seconds.",
+      "wikiDescription": "Upgrades your Mark into a massive snowball, empowering it with an increased size radius and the ability to pass through non-champions. The snowball additionally explodes upon impact of the target hit to deal 200 – 350 (based on level) (+ 100% bonus AD) (+ 60% AP) magic damage to all nearby enemies, knock them up for 0. 75 seconds, and slow them by 20% for 2 seconds. Additionally, your Mark's cooldown is reduced equivalent to 100 ability haste. If Mark is not equipped, you will be prompted to replace one of your summoner spells with Mark . Non-champions hit by the snowball are stunned for 1. 25 seconds.",
       "wikiSet": "Snowday",
       "kit_tags": [
         "ability",
@@ -600,7 +600,7 @@
       "icon": "https://arammayhem.com/augments/Holy_Snowball_mayhem_augment.webp",
       "name_ja": "聖なる雪玉",
       "name_ko": "신성한 눈덩이",
-      "wikiDescription": "After using the Dash spell from Mark , you become invulnerable for 1. 5 seconds upon arrival. Additionally, your Mark's cooldown is reduced equivalent to 100 ability haste. If Mark is not equipped, the summoner spell in the slot not occupied by Flash is replaced with Mark . If you also did not equip Flash , then you will be prompted to replace one of your summoner spells with Mark .",
+      "wikiDescription": "After using the Dash spell from Mark , you become invulnerable for 1. 5 seconds upon arrival. Additionally, your Mark's cooldown is reduced equivalent to 100 ability haste. If Mark is not equipped, you will be prompted to replace one of your summoner spells with Mark .",
       "wikiSet": "Snowday",
       "kit_tags": [
         "ability",
@@ -2000,7 +2000,7 @@
       "icon": "https://arammayhem.com/augments/Pinball_mayhem_augment.webp",
       "name_ja": "ピンボール",
       "name_ko": "핀볼",
-      "wikiDescription": "Your Mark is empowered to instead throw a pinball, which deals 100 – 500 (based on level) bonus true damage and ricochets off of terrain that it collides with. Each time the pinball ricochets, its remaining travel distance is reset, it increases in radius by 25%, deals 20% increased damage, and reduces Mark's remaining cooldown by 30% of its total. The pinball can ricochet up to 4 times, for a maximum radius increase of 100% and a damage increase of 80%. Additionally, your Mark's cooldown is reduced equivalent to 50 ability haste. If Mark is not equipped, the summoner spell in the slot not occupied by Flash is replaced with Mark . If you also did not equip Flash , then you will be prompted to replace one of your summoner spells with Mark .",
+      "wikiDescription": "Your Mark is empowered to instead throw a pinball, which deals 100 – 500 (based on level) bonus true damage and ricochets off of terrain that it collides with. Each time the pinball ricochets, its remaining travel distance is reset, it increases in radius by 25%, deals 20% increased damage, and reduces Mark's remaining cooldown by 30%. The pinball can ricochet up to 4 times, for a maximum radius increase of 100% and a damage increase of 80%. Additionally, your Mark's cooldown is reduced equivalent to 50 ability haste. If Mark is not equipped, you will be prompted to replace one of your summoner spells with Mark .",
       "wikiSet": "Snowday",
       "kit_tags": [
         "ability",
@@ -2226,7 +2226,7 @@
       "icon": "https://arammayhem.com/augments/Snowball_Roulette_mayhem_augment.webp",
       "name_ja": "雪玉ルーレット",
       "name_ko": "눈덩이 룰렛",
-      "wikiDescription": "Hitting an enemy champion with Mark casts a random harmful summoner spell on them, and also casts a random beneficial summoner spell on yourself. Using Dash casts the beneficial summoner spell on yourself again upon arrival. Additionally, your Mark's cooldown is reduced equivalent to 100 ability haste. Harmful summoner spells include Exhaust and Ignite , while beneficial ones consist of Barrier , Clarity , Cleanse , Ghost , and Heal . If Mark is not equipped, the summoner spell in the slot not occupied by Flash is replaced with Mark . If you also did not equip Flash , then you will be prompted to replace one of your summoner spells with Mark .",
+      "wikiDescription": "Hitting an enemy champion with Mark casts a random harmful summoner spell on them, and also casts a random beneficial summoner spell on yourself. Using Dash casts the beneficial summoner spell on yourself again upon arrival. Additionally, your Mark's cooldown is reduced equivalent to 100 ability haste. Harmful summoner spells include Exhaust and Ignite , while beneficial ones consist of Barrier , Clarity , Cleanse , Ghost , and Heal . If Mark is not equipped, you will be prompted to replace one of your summoner spells with Mark .",
       "wikiSet": "Snowday",
       "kit_tags": [
         "ability",
@@ -2247,7 +2247,7 @@
       "name_ja": "雪玉アップグレード",
       "name_ko": "눈덩이 업그레이드",
       "name_zh_TW": "雪球升級",
-      "wikiDescription": "Your Mark is empowered to hail a snowstorm at the location where the target was hit for 2 seconds, granting sight of the area and dealing 「 200 (+ 200% bonus AD) (+ 120% AP) magic damage 」 「 25 (+ 25% bonus AD) (+ 15% AP) magic damage every 0. 25 seconds 」 to enemies within over the duration, as well as slowing them by 50% (+ 6% per 100 AP) . Additionally, your Mark's cooldown is reduced equivalent to 50 ability haste. If Mark is not equipped, the summoner spell in the slot not occupied by Flash is replaced with Mark . If you also did not equip Flash , then you will be prompted to replace one of your summoner spells with Mark .",
+      "wikiDescription": "Your Mark is empowered to hail a snowstorm at the location where the target was hit for 2 seconds, granting sight of the area and dealing 「 200 (+ 200% bonus AD) (+ 120% AP) magic damage 」 「 25 (+ 25% bonus AD) (+ 15% AP) magic damage every 0. 25 seconds 」 to enemies within over the duration, as well as slowing them by 50% (+ 6% per 100 AP) . Additionally, your Mark's cooldown is reduced equivalent to 50 ability haste. If Mark is not equipped, you will be prompted to replace one of your summoner spells with Mark .",
       "wikiSet": "Snowday",
       "kit_tags": [
         "ability",
@@ -3354,7 +3354,7 @@
       "icon": "https://arammayhem.com/augments/Spin_Me_Right_Round_mayhem_augment.webp",
       "name_ja": "振り回して",
       "name_ko": "빙글빙글",
-      "wikiDescription": "Replace a summoner spell with Akshan's Heroic Swing . Heroic Swing - Active: You can activate Heroic Swing three times before the ability goes on cooldown, and you can use the third cast only after 0. 5 seconds of the second cast. An attack or movement command may be inputted to use the second and third casts. First Cast: Fire a hook in the target direction that embeds in the first terrain hit for 2 seconds. Heroic Swing's second cast can be used while the hook is attached. If the hook fails to attach or you become immobilized , grounded , or polymorphed within the duration, Heroic Swing is cancelled and placed on full cooldown. Second Cast: Swing around the terrain in either a clockwise or counterclockwise direction based on the position of the cursor relative to your facing direction , stopping upon colliding with an enemy champion or terrain. While swinging, fire at the nearest visible enemy within 500 units every 0. 231 seconds to deal them 15 – 75 (based on level) (+ 15% AD) × (1 + 0. 3 per 100% bonus attack speed) physical damage and apply on-hit effects for each shot, with on-hit damage reduced to 25% effectiveness. The dash will be interrupted if you are affected by any immobilizing or polymorphing crowd control during the dash. Third Cast: End the swing by jumping to the target location and fire one last shot at a nearby visible enemy. Scoring an enemy champion takedown reduces Heroic Swing's current cooldown to 0. 5 seconds.",
+      "wikiDescription": "Replace a summoner spell with Akshan's Heroic Swing ( 10 second cooldown , starts post-effect). Heroic Swing - Active: You can activate Heroic Swing three times before the ability goes on cooldown, and you can use the third cast only after 0. 5 seconds of the second cast. An attack or movement command may be inputted to use the second and third casts. First Cast: Fire a hook in the target direction that embeds in the first terrain hit for 2 seconds. Heroic Swing's second cast can be used while the hook is attached. If the hook fails to attach or you become immobilized , grounded , or polymorphed within the duration, Heroic Swing is cancelled and placed on full cooldown. Second Cast: Swing around the terrain in either a clockwise or counterclockwise direction based on the position of the cursor relative to your facing direction , stopping upon colliding with an enemy champion or terrain. While swinging, fire at the nearest visible enemy within 500 units every 0. 231 seconds to deal them 15 – 75 (based on level) (+ 15% AD) × (1 + 0. 3 per 100% bonus attack speed) physical damage and apply on-hit effects for each shot, with on-hit damage reduced to 25% effectiveness. The dash will be interrupted if you are affected by any immobilizing or polymorphing crowd control during the dash. Third Cast: End the swing by jumping to the target location and fire one last shot at a nearby visible enemy. Scoring an enemy champion takedown reduces Heroic Swing's current cooldown to 0. 5 seconds.",
       "kit_tags": [
         "movement",
         "ability"
