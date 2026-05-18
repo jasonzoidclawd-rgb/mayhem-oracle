@@ -1,10 +1,10 @@
 {
   "patch": "26.10",
-  "scraped_at": "2026-05-17T22:45:06.517348+00:00",
+  "scraped_at": "2026-05-18T22:51:12.225016+00:00",
   "champions": [
     {
-      "slug": "brand",
-      "name": "Brand",
+      "slug": "brand/",
+      "name": "Brand/",
       "tier": "S+",
       "rank": 1,
       "win_rate": 54.86,
@@ -13,35 +13,11 @@
         "mage",
         "support"
       ],
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/63.png",
-      "baseStats": {
-        "baseHP": 570,
-        "hpGrowth": 105,
-        "baseArmor": 27,
-        "armorGrowth": 4.2,
-        "baseMR": 30,
-        "mrGrowth": 1.3,
-        "baseAD": 57,
-        "adGrowth": 3,
-        "baseAS": 0.681,
-        "asGrowth": 2,
-        "attackRange": 550,
-        "moveSpeed": 340,
-        "baseMP": 469,
-        "mpGrowth": 21,
-        "baseHPRegen": 5.5,
-        "hpRegenGrowth": 0.55
-      },
-      "kit_tags": [
-        "ability",
-        "cc",
-        "dot",
-        "haste"
-      ]
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/63.png"
     },
     {
-      "slug": "graves",
-      "name": "Graves",
+      "slug": "graves/",
+      "name": "Graves/",
       "tier": "S+",
       "rank": 2,
       "win_rate": 53.33,
@@ -49,35 +25,11 @@
       "tags": [
         "marksman"
       ],
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/104.png",
-      "baseStats": {
-        "baseHP": 625,
-        "hpGrowth": 106,
-        "baseArmor": 33,
-        "armorGrowth": 4.6,
-        "baseMR": 30,
-        "mrGrowth": 1.3,
-        "baseAD": 66,
-        "adGrowth": 4,
-        "baseAS": 0.475,
-        "asGrowth": 3,
-        "attackRange": 425,
-        "moveSpeed": 340,
-        "baseMP": 325,
-        "mpGrowth": 40,
-        "baseHPRegen": 8,
-        "hpRegenGrowth": 0.7
-      },
-      "kit_tags": [
-        "attack",
-        "crit",
-        "movement",
-        "on_hit"
-      ]
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/104.png"
     },
     {
-      "slug": "yasuo",
-      "name": "Yasuo",
+      "slug": "yasuo/",
+      "name": "Yasuo/",
       "tier": "S+",
       "rank": 3,
       "win_rate": 56.15,
@@ -86,37 +38,11 @@
         "fighter",
         "assassin"
       ],
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/157.png",
-      "baseStats": {
-        "baseHP": 590,
-        "hpGrowth": 110,
-        "baseArmor": 32,
-        "armorGrowth": 4.6,
-        "baseMR": 32,
-        "mrGrowth": 2.05,
-        "baseAD": 60,
-        "adGrowth": 2.5,
-        "baseAS": 0.697,
-        "asGrowth": 3.5,
-        "attackRange": 175,
-        "moveSpeed": 345,
-        "baseMP": 100,
-        "mpGrowth": 0,
-        "baseHPRegen": 6.5,
-        "hpRegenGrowth": 0.9
-      },
-      "kit_tags": [
-        "attack",
-        "cc",
-        "crit",
-        "heal_shield",
-        "movement",
-        "on_hit"
-      ]
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/157.png"
     },
     {
-      "slug": "vayne",
-      "name": "Vayne",
+      "slug": "vayne/",
+      "name": "Vayne/",
       "tier": "S+",
       "rank": 4,
       "win_rate": 54.98,
@@ -125,36 +51,11 @@
         "marksman",
         "assassin"
       ],
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/67.png",
-      "baseStats": {
-        "baseHP": 550,
-        "hpGrowth": 103,
-        "baseArmor": 23,
-        "armorGrowth": 4.6,
-        "baseMR": 30,
-        "mrGrowth": 1.3,
-        "baseAD": 60,
-        "adGrowth": 2.35,
-        "baseAS": 0.658,
-        "asGrowth": 3.3,
-        "attackRange": 550,
-        "moveSpeed": 330,
-        "baseMP": 232,
-        "mpGrowth": 35,
-        "baseHPRegen": 3.5,
-        "hpRegenGrowth": 0.55
-      },
-      "kit_tags": [
-        "attack",
-        "cc",
-        "crit",
-        "movement",
-        "on_hit"
-      ]
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/67.png"
     },
     {
-      "slug": "lillia",
-      "name": "Lillia",
+      "slug": "lillia/",
+      "name": "Lillia/",
       "tier": "S+",
       "rank": 5,
       "win_rate": 58.78,
@@ -163,36 +64,11 @@
         "fighter",
         "mage"
       ],
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/876.png",
-      "baseStats": {
-        "baseHP": 605,
-        "hpGrowth": 105,
-        "baseArmor": 22,
-        "armorGrowth": 4.5,
-        "baseMR": 32,
-        "mrGrowth": 1.55,
-        "baseAD": 61,
-        "adGrowth": 3.1,
-        "baseAS": 0.625,
-        "asGrowth": 2.7,
-        "attackRange": 325,
-        "moveSpeed": 330,
-        "baseMP": 410,
-        "mpGrowth": 50,
-        "baseHPRegen": 2.5,
-        "hpRegenGrowth": 0.55
-      },
-      "kit_tags": [
-        "ability",
-        "cc",
-        "dot",
-        "haste",
-        "movement"
-      ]
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/876.png"
     },
     {
-      "slug": "morgana",
-      "name": "Morgana",
+      "slug": "morgana/",
+      "name": "Morgana/",
       "tier": "S+",
       "rank": 6,
       "win_rate": 53.7,
@@ -201,37 +77,11 @@
         "support",
         "mage"
       ],
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/25.png",
-      "baseStats": {
-        "baseHP": 630,
-        "hpGrowth": 104,
-        "baseArmor": 25,
-        "armorGrowth": 4.2,
-        "baseMR": 30,
-        "mrGrowth": 1.3,
-        "baseAD": 56,
-        "adGrowth": 3.5,
-        "baseAS": 0.625,
-        "asGrowth": 1.53,
-        "attackRange": 450,
-        "moveSpeed": 335,
-        "baseMP": 340,
-        "mpGrowth": 60,
-        "baseHPRegen": 5.5,
-        "hpRegenGrowth": 0.4
-      },
-      "kit_tags": [
-        "ability",
-        "cc",
-        "dot",
-        "haste",
-        "heal_shield",
-        "movement"
-      ]
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/25.png"
     },
     {
-      "slug": "jinx",
-      "name": "Jinx",
+      "slug": "jinx/",
+      "name": "Jinx/",
       "tier": "S+",
       "rank": 7,
       "win_rate": 53.32,
@@ -239,36 +89,11 @@
       "tags": [
         "marksman"
       ],
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/222.png",
-      "baseStats": {
-        "baseHP": 630,
-        "hpGrowth": 105,
-        "baseArmor": 26,
-        "armorGrowth": 4.2,
-        "baseMR": 30,
-        "mrGrowth": 1.3,
-        "baseAD": 59,
-        "adGrowth": 3.25,
-        "baseAS": 0.625,
-        "asGrowth": 1,
-        "attackRange": 525,
-        "moveSpeed": 325,
-        "baseMP": 260,
-        "mpGrowth": 50,
-        "baseHPRegen": 3.75,
-        "hpRegenGrowth": 0.5
-      },
-      "kit_tags": [
-        "attack",
-        "cc",
-        "crit",
-        "movement",
-        "on_hit"
-      ]
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/222.png"
     },
     {
-      "slug": "malzahar",
-      "name": "Malzahar",
+      "slug": "malzahar/",
+      "name": "Malzahar/",
       "tier": "S",
       "rank": 8,
       "win_rate": 53.6,
@@ -276,35 +101,11 @@
       "tags": [
         "mage"
       ],
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/90.png",
-      "baseStats": {
-        "baseHP": 580,
-        "hpGrowth": 101,
-        "baseArmor": 18,
-        "armorGrowth": 4.7,
-        "baseMR": 30,
-        "mrGrowth": 1.3,
-        "baseAD": 55,
-        "adGrowth": 3,
-        "baseAS": 0.625,
-        "asGrowth": 1.5,
-        "attackRange": 500,
-        "moveSpeed": 335,
-        "baseMP": 375,
-        "mpGrowth": 28,
-        "baseHPRegen": 6,
-        "hpRegenGrowth": 0.6
-      },
-      "kit_tags": [
-        "ability",
-        "cc",
-        "dot",
-        "haste"
-      ]
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/90.png"
     },
     {
-      "slug": "sett",
-      "name": "Sett",
+      "slug": "sett/",
+      "name": "Sett/",
       "tier": "S",
       "rank": 9,
       "win_rate": 51.76,
@@ -313,37 +114,11 @@
         "fighter",
         "tank"
       ],
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/875.png",
-      "baseStats": {
-        "baseHP": 670,
-        "hpGrowth": 114,
-        "baseArmor": 33,
-        "armorGrowth": 4.7,
-        "baseMR": 28,
-        "mrGrowth": 2.05,
-        "baseAD": 60,
-        "adGrowth": 4,
-        "baseAS": 0.625,
-        "asGrowth": 1.75,
-        "attackRange": 125,
-        "moveSpeed": 340,
-        "baseMP": 0,
-        "mpGrowth": 0,
-        "baseHPRegen": 7,
-        "hpRegenGrowth": 0.5
-      },
-      "kit_tags": [
-        "attack",
-        "cc",
-        "heal_shield",
-        "movement",
-        "on_hit",
-        "tank"
-      ]
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/875.png"
     },
     {
-      "slug": "fizz",
-      "name": "Fizz",
+      "slug": "fizz/",
+      "name": "Fizz/",
       "tier": "S",
       "rank": 10,
       "win_rate": 52.77,
@@ -352,36 +127,11 @@
         "assassin",
         "fighter"
       ],
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/105.png",
-      "baseStats": {
-        "baseHP": 640,
-        "hpGrowth": 106,
-        "baseArmor": 26,
-        "armorGrowth": 4.6,
-        "baseMR": 32,
-        "mrGrowth": 2.05,
-        "baseAD": 58,
-        "adGrowth": 3,
-        "baseAS": 0.658,
-        "asGrowth": 3.1,
-        "attackRange": 175,
-        "moveSpeed": 335,
-        "baseMP": 317,
-        "mpGrowth": 52,
-        "baseHPRegen": 8,
-        "hpRegenGrowth": 0.7
-      },
-      "kit_tags": [
-        "attack",
-        "cc",
-        "dot",
-        "movement",
-        "on_hit"
-      ]
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/105.png"
     },
     {
-      "slug": "aurelionsol",
-      "name": "Aurelionsol",
+      "slug": "aurelionsol/",
+      "name": "Aurelionsol/",
       "tier": "S",
       "rank": 11,
       "win_rate": 51.86,
@@ -389,35 +139,11 @@
       "tags": [
         "mage"
       ],
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/136.png",
-      "baseStats": {
-        "baseHP": 600,
-        "hpGrowth": 90,
-        "baseArmor": 22,
-        "armorGrowth": 4,
-        "baseMR": 30,
-        "mrGrowth": 1.3,
-        "baseAD": 58,
-        "adGrowth": 3.2,
-        "baseAS": 0.625,
-        "asGrowth": 1.5,
-        "attackRange": 550,
-        "moveSpeed": 340,
-        "baseMP": 530,
-        "mpGrowth": 40,
-        "baseHPRegen": 5.5,
-        "hpRegenGrowth": 0.55
-      },
-      "kit_tags": [
-        "ability",
-        "cc",
-        "haste",
-        "movement"
-      ]
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/136.png"
     },
     {
-      "slug": "seraphine",
-      "name": "Seraphine",
+      "slug": "seraphine/",
+      "name": "Seraphine/",
       "tier": "S",
       "rank": 12,
       "win_rate": 57.66,
@@ -426,35 +152,11 @@
         "support",
         "mage"
       ],
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/147.png",
-      "baseStats": {
-        "baseHP": 570,
-        "hpGrowth": 95,
-        "baseArmor": 26,
-        "armorGrowth": 4.2,
-        "baseMR": 30,
-        "mrGrowth": 1.3,
-        "baseAD": 50,
-        "adGrowth": 3,
-        "baseAS": 0.669,
-        "asGrowth": 2,
-        "attackRange": 525,
-        "moveSpeed": 330,
-        "baseMP": 360,
-        "mpGrowth": 40,
-        "baseHPRegen": 6.5,
-        "hpRegenGrowth": 0.6
-      },
-      "kit_tags": [
-        "ability",
-        "cc",
-        "haste",
-        "heal_shield"
-      ]
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/147.png"
     },
     {
-      "slug": "caitlyn",
-      "name": "Caitlyn",
+      "slug": "caitlyn/",
+      "name": "Caitlyn/",
       "tier": "S",
       "rank": 13,
       "win_rate": 51.26,
@@ -462,36 +164,11 @@
       "tags": [
         "marksman"
       ],
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/51.png",
-      "baseStats": {
-        "baseHP": 580,
-        "hpGrowth": 107,
-        "baseArmor": 27,
-        "armorGrowth": 4.7,
-        "baseMR": 30,
-        "mrGrowth": 1.3,
-        "baseAD": 62,
-        "adGrowth": 3.8,
-        "baseAS": 0.681,
-        "asGrowth": 4,
-        "attackRange": 650,
-        "moveSpeed": 325,
-        "baseMP": 315,
-        "mpGrowth": 40,
-        "baseHPRegen": 3.5,
-        "hpRegenGrowth": 0.55
-      },
-      "kit_tags": [
-        "attack",
-        "cc",
-        "crit",
-        "movement",
-        "on_hit"
-      ]
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/51.png"
     },
     {
-      "slug": "lucian",
-      "name": "Lucian",
+      "slug": "lucian/",
+      "name": "Lucian/",
       "tier": "S",
       "rank": 14,
       "win_rate": 50.77,
@@ -500,36 +177,11 @@
         "marksman",
         "assassin"
       ],
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/236.png",
-      "baseStats": {
-        "baseHP": 641,
-        "hpGrowth": 100,
-        "baseArmor": 28,
-        "armorGrowth": 4.2,
-        "baseMR": 30,
-        "mrGrowth": 1.3,
-        "baseAD": 60,
-        "adGrowth": 2.5,
-        "baseAS": 0.638,
-        "asGrowth": 2.5,
-        "attackRange": 500,
-        "moveSpeed": 335,
-        "baseMP": 320,
-        "mpGrowth": 43,
-        "baseHPRegen": 3.75,
-        "hpRegenGrowth": 0.65
-      },
-      "kit_tags": [
-        "attack",
-        "crit",
-        "heal_shield",
-        "movement",
-        "on_hit"
-      ]
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/236.png"
     },
     {
-      "slug": "drmundo",
-      "name": "Drmundo",
+      "slug": "drmundo/",
+      "name": "Drmundo/",
       "tier": "S",
       "rank": 15,
       "win_rate": 51.25,
@@ -538,36 +190,11 @@
         "tank",
         "fighter"
       ],
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/36.png",
-      "baseStats": {
-        "baseHP": 640,
-        "hpGrowth": 103,
-        "baseArmor": 32,
-        "armorGrowth": 4.5,
-        "baseMR": 29,
-        "mrGrowth": 2.3,
-        "baseAD": 61,
-        "adGrowth": 2.5,
-        "baseAS": 0.67,
-        "asGrowth": 3.3,
-        "attackRange": 125,
-        "moveSpeed": 345,
-        "baseMP": 0,
-        "mpGrowth": 0,
-        "baseHPRegen": 7,
-        "hpRegenGrowth": 0.5
-      },
-      "kit_tags": [
-        "attack",
-        "dot",
-        "heal_shield",
-        "movement",
-        "tank"
-      ]
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/36.png"
     },
     {
-      "slug": "ryze",
-      "name": "Ryze",
+      "slug": "ryze/",
+      "name": "Ryze/",
       "tier": "S",
       "rank": 16,
       "win_rate": 50.86,
@@ -575,35 +202,11 @@
       "tags": [
         "mage"
       ],
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/13.png",
-      "baseStats": {
-        "baseHP": 645,
-        "hpGrowth": 124,
-        "baseArmor": 22,
-        "armorGrowth": 4.2,
-        "baseMR": 32,
-        "mrGrowth": 1.3,
-        "baseAD": 58,
-        "adGrowth": 3,
-        "baseAS": 0.658,
-        "asGrowth": 2.11,
-        "attackRange": 550,
-        "moveSpeed": 340,
-        "baseMP": 300,
-        "mpGrowth": 70,
-        "baseHPRegen": 8,
-        "hpRegenGrowth": 0.8
-      },
-      "kit_tags": [
-        "ability",
-        "cc",
-        "haste",
-        "movement"
-      ]
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/13.png"
     },
     {
-      "slug": "karthus",
-      "name": "Karthus",
+      "slug": "karthus/",
+      "name": "Karthus/",
       "tier": "S",
       "rank": 17,
       "win_rate": 52.25,
@@ -611,33 +214,11 @@
       "tags": [
         "mage"
       ],
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/30.png",
-      "baseStats": {
-        "baseHP": 620,
-        "hpGrowth": 110,
-        "baseArmor": 21,
-        "armorGrowth": 4.7,
-        "baseMR": 30,
-        "mrGrowth": 1.3,
-        "baseAD": 46,
-        "adGrowth": 3.25,
-        "baseAS": 0.625,
-        "asGrowth": 2.11,
-        "attackRange": 450,
-        "moveSpeed": 335,
-        "baseMP": 467,
-        "mpGrowth": 31,
-        "baseHPRegen": 6.5,
-        "hpRegenGrowth": 0.55
-      },
-      "kit_tags": [
-        "ability",
-        "haste"
-      ]
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/30.png"
     },
     {
-      "slug": "ashe",
-      "name": "Ashe",
+      "slug": "ashe/",
+      "name": "Ashe/",
       "tier": "S",
       "rank": 18,
       "win_rate": 51.27,
@@ -646,35 +227,11 @@
         "marksman",
         "support"
       ],
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/22.png",
-      "baseStats": {
-        "baseHP": 610,
-        "hpGrowth": 101,
-        "baseArmor": 26,
-        "armorGrowth": 4.6,
-        "baseMR": 30,
-        "mrGrowth": 1.3,
-        "baseAD": 59,
-        "adGrowth": 3.5,
-        "baseAS": 0.658,
-        "asGrowth": 3,
-        "attackRange": 600,
-        "moveSpeed": 325,
-        "baseMP": 280,
-        "mpGrowth": 35,
-        "baseHPRegen": 3.5,
-        "hpRegenGrowth": 0.55
-      },
-      "kit_tags": [
-        "attack",
-        "cc",
-        "crit",
-        "on_hit"
-      ]
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/22.png"
     },
     {
-      "slug": "twistedfate",
-      "name": "Twistedfate",
+      "slug": "twistedfate/",
+      "name": "Twistedfate/",
       "tier": "S",
       "rank": 19,
       "win_rate": 52.87,
@@ -683,37 +240,11 @@
         "mage",
         "marksman"
       ],
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/4.png",
-      "baseStats": {
-        "baseHP": 604,
-        "hpGrowth": 108,
-        "baseArmor": 24,
-        "armorGrowth": 4.35,
-        "baseMR": 30,
-        "mrGrowth": 1.3,
-        "baseAD": 52,
-        "adGrowth": 2.5,
-        "baseAS": 0.625,
-        "asGrowth": 2.5,
-        "attackRange": 525,
-        "moveSpeed": 330,
-        "baseMP": 333,
-        "mpGrowth": 39,
-        "baseHPRegen": 5.5,
-        "hpRegenGrowth": 0.6
-      },
-      "kit_tags": [
-        "ability",
-        "attack",
-        "cc",
-        "crit",
-        "haste",
-        "movement"
-      ]
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/4.png"
     },
     {
-      "slug": "missfortune",
-      "name": "Missfortune",
+      "slug": "missfortune/",
+      "name": "Missfortune/",
       "tier": "S",
       "rank": 20,
       "win_rate": 50.26,
@@ -722,37 +253,11 @@
         "marksman",
         "mage"
       ],
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/21.png",
-      "baseStats": {
-        "baseHP": 625,
-        "hpGrowth": 100,
-        "baseArmor": 25,
-        "armorGrowth": 4,
-        "baseMR": 30,
-        "mrGrowth": 1.3,
-        "baseAD": 55,
-        "adGrowth": 2.4,
-        "baseAS": 0.656,
-        "asGrowth": 3,
-        "attackRange": 550,
-        "moveSpeed": 325,
-        "baseMP": 300,
-        "mpGrowth": 40,
-        "baseHPRegen": 3.75,
-        "hpRegenGrowth": 0.65
-      },
-      "kit_tags": [
-        "ability",
-        "attack",
-        "crit",
-        "dot",
-        "haste",
-        "movement"
-      ]
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/21.png"
     },
     {
-      "slug": "masteryi",
-      "name": "Masteryi",
+      "slug": "masteryi/",
+      "name": "Masteryi/",
       "tier": "S",
       "rank": 21,
       "win_rate": 51.61,
@@ -761,36 +266,11 @@
         "fighter",
         "assassin"
       ],
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/11.png",
-      "baseStats": {
-        "baseHP": 640,
-        "hpGrowth": 105,
-        "baseArmor": 33,
-        "armorGrowth": 4.5,
-        "baseMR": 32,
-        "mrGrowth": 2.05,
-        "baseAD": 65,
-        "adGrowth": 2.5,
-        "baseAS": 0.679,
-        "asGrowth": 2.5,
-        "attackRange": 175,
-        "moveSpeed": 355,
-        "baseMP": 251,
-        "mpGrowth": 42,
-        "baseHPRegen": 7.5,
-        "hpRegenGrowth": 0.65
-      },
-      "kit_tags": [
-        "attack",
-        "crit",
-        "dot",
-        "movement",
-        "on_hit"
-      ]
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/11.png"
     },
     {
-      "slug": "zed",
-      "name": "Zed",
+      "slug": "zed/",
+      "name": "Zed/",
       "tier": "S",
       "rank": 22,
       "win_rate": 51.63,
@@ -798,34 +278,11 @@
       "tags": [
         "assassin"
       ],
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/238.png",
-      "baseStats": {
-        "baseHP": 654,
-        "hpGrowth": 99,
-        "baseArmor": 32,
-        "armorGrowth": 4.7,
-        "baseMR": 29,
-        "mrGrowth": 2.05,
-        "baseAD": 63,
-        "adGrowth": 3.4,
-        "baseAS": 0.651,
-        "asGrowth": 3.3,
-        "attackRange": 125,
-        "moveSpeed": 345,
-        "baseMP": 200,
-        "mpGrowth": 0,
-        "baseHPRegen": 7,
-        "hpRegenGrowth": 0.65
-      },
-      "kit_tags": [
-        "attack",
-        "movement",
-        "on_hit"
-      ]
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/238.png"
     },
     {
-      "slug": "yone",
-      "name": "Yone",
+      "slug": "yone/",
+      "name": "Yone/",
       "tier": "S",
       "rank": 23,
       "win_rate": 52.87,
@@ -834,37 +291,11 @@
         "fighter",
         "assassin"
       ],
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/777.png",
-      "baseStats": {
-        "baseHP": 620,
-        "hpGrowth": 105,
-        "baseArmor": 33,
-        "armorGrowth": 4.6,
-        "baseMR": 32,
-        "mrGrowth": 2.05,
-        "baseAD": 62,
-        "adGrowth": 2,
-        "baseAS": 0.625,
-        "asGrowth": 3.5,
-        "attackRange": 175,
-        "moveSpeed": 345,
-        "baseMP": 500,
-        "mpGrowth": 0,
-        "baseHPRegen": 7.5,
-        "hpRegenGrowth": 0.75
-      },
-      "kit_tags": [
-        "attack",
-        "cc",
-        "crit",
-        "heal_shield",
-        "movement",
-        "on_hit"
-      ]
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/777.png"
     },
     {
-      "slug": "tristana",
-      "name": "Tristana",
+      "slug": "tristana/",
+      "name": "Tristana/",
       "tier": "S",
       "rank": 24,
       "win_rate": 51.86,
@@ -873,36 +304,11 @@
         "marksman",
         "assassin"
       ],
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/18.png",
-      "baseStats": {
-        "baseHP": 640,
-        "hpGrowth": 102,
-        "baseArmor": 30,
-        "armorGrowth": 4,
-        "baseMR": 28,
-        "mrGrowth": 1.3,
-        "baseAD": 60,
-        "adGrowth": 2.9,
-        "baseAS": 0.656,
-        "asGrowth": 1.5,
-        "attackRange": 550,
-        "moveSpeed": 325,
-        "baseMP": 300,
-        "mpGrowth": 32,
-        "baseHPRegen": 4,
-        "hpRegenGrowth": 0.5
-      },
-      "kit_tags": [
-        "attack",
-        "cc",
-        "crit",
-        "movement",
-        "on_hit"
-      ]
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/18.png"
     },
     {
-      "slug": "xinzhao",
-      "name": "Xinzhao",
+      "slug": "xinzhao/",
+      "name": "Xinzhao/",
       "tier": "S",
       "rank": 25,
       "win_rate": 51.98,
@@ -911,38 +317,11 @@
         "fighter",
         "tank"
       ],
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/5.png",
-      "baseStats": {
-        "baseHP": 620,
-        "hpGrowth": 106,
-        "baseArmor": 35,
-        "armorGrowth": 4.4,
-        "baseMR": 32,
-        "mrGrowth": 2.05,
-        "baseAD": 63,
-        "adGrowth": 3,
-        "baseAS": 0.645,
-        "asGrowth": 3.5,
-        "attackRange": 175,
-        "moveSpeed": 345,
-        "baseMP": 274,
-        "mpGrowth": 55,
-        "baseHPRegen": 8,
-        "hpRegenGrowth": 0.7
-      },
-      "kit_tags": [
-        "ability",
-        "attack",
-        "cc",
-        "heal_shield",
-        "movement",
-        "on_hit",
-        "tank"
-      ]
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/5.png"
     },
     {
-      "slug": "rumble",
-      "name": "Rumble",
+      "slug": "rumble/",
+      "name": "Rumble/",
       "tier": "S",
       "rank": 26,
       "win_rate": 52.86,
@@ -951,37 +330,11 @@
         "fighter",
         "mage"
       ],
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/68.png",
-      "baseStats": {
-        "baseHP": 640,
-        "hpGrowth": 105,
-        "baseArmor": 36,
-        "armorGrowth": 4.7,
-        "baseMR": 28,
-        "mrGrowth": 1.55,
-        "baseAD": 64,
-        "adGrowth": 3.2,
-        "baseAS": 0.644,
-        "asGrowth": 1.85,
-        "attackRange": 125,
-        "moveSpeed": 345,
-        "baseMP": 150,
-        "mpGrowth": 0,
-        "baseHPRegen": 7,
-        "hpRegenGrowth": 0.6
-      },
-      "kit_tags": [
-        "ability",
-        "cc",
-        "dot",
-        "haste",
-        "heal_shield",
-        "on_hit"
-      ]
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/68.png"
     },
     {
-      "slug": "kayn",
-      "name": "Kayn",
+      "slug": "kayn/",
+      "name": "Kayn/",
       "tier": "A",
       "rank": 27,
       "win_rate": 53.21,
@@ -990,34 +343,11 @@
         "fighter",
         "assassin"
       ],
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/141.png",
-      "baseStats": {
-        "baseHP": 655,
-        "hpGrowth": 103,
-        "baseArmor": 38,
-        "armorGrowth": 4.5,
-        "baseMR": 32,
-        "mrGrowth": 2.05,
-        "baseAD": 68,
-        "adGrowth": 3.3,
-        "baseAS": 0.669,
-        "asGrowth": 2.7,
-        "attackRange": 175,
-        "moveSpeed": 340,
-        "baseMP": 410,
-        "mpGrowth": 50,
-        "baseHPRegen": 8,
-        "hpRegenGrowth": 0.75
-      },
-      "kit_tags": [
-        "attack",
-        "heal_shield",
-        "movement"
-      ]
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/141.png"
     },
     {
-      "slug": "hecarim",
-      "name": "Hecarim",
+      "slug": "hecarim/",
+      "name": "Hecarim/",
       "tier": "A",
       "rank": 28,
       "win_rate": 51.34,
@@ -1026,37 +356,11 @@
         "fighter",
         "tank"
       ],
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/120.png",
-      "baseStats": {
-        "baseHP": 625,
-        "hpGrowth": 106,
-        "baseArmor": 32,
-        "armorGrowth": 5.45,
-        "baseMR": 32,
-        "mrGrowth": 2.05,
-        "baseAD": 66,
-        "adGrowth": 3.7,
-        "baseAS": 0.67,
-        "asGrowth": 2.5,
-        "attackRange": 175,
-        "moveSpeed": 345,
-        "baseMP": 280,
-        "mpGrowth": 40,
-        "baseHPRegen": 7,
-        "hpRegenGrowth": 0.75
-      },
-      "kit_tags": [
-        "attack",
-        "cc",
-        "dot",
-        "movement",
-        "on_hit",
-        "tank"
-      ]
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/120.png"
     },
     {
-      "slug": "xayah",
-      "name": "Xayah",
+      "slug": "xayah/",
+      "name": "Xayah/",
       "tier": "A",
       "rank": 29,
       "win_rate": 53.73,
@@ -1064,35 +368,11 @@
       "tags": [
         "marksman"
       ],
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/498.png",
-      "baseStats": {
-        "baseHP": 630,
-        "hpGrowth": 107,
-        "baseArmor": 25,
-        "armorGrowth": 4.2,
-        "baseMR": 30,
-        "mrGrowth": 1.3,
-        "baseAD": 60,
-        "adGrowth": 3.5,
-        "baseAS": 0.658,
-        "asGrowth": 3.9,
-        "attackRange": 525,
-        "moveSpeed": 330,
-        "baseMP": 340,
-        "mpGrowth": 40,
-        "baseHPRegen": 3.25,
-        "hpRegenGrowth": 0.75
-      },
-      "kit_tags": [
-        "attack",
-        "cc",
-        "crit",
-        "on_hit"
-      ]
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/498.png"
     },
     {
-      "slug": "swain",
-      "name": "Swain",
+      "slug": "swain/",
+      "name": "Swain/",
       "tier": "A",
       "rank": 30,
       "win_rate": 49.82,
@@ -1101,36 +381,11 @@
         "mage",
         "support"
       ],
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/50.png",
-      "baseStats": {
-        "baseHP": 595,
-        "hpGrowth": 99,
-        "baseArmor": 25,
-        "armorGrowth": 4.7,
-        "baseMR": 31,
-        "mrGrowth": 1.55,
-        "baseAD": 58,
-        "adGrowth": 2.7,
-        "baseAS": 0.625,
-        "asGrowth": 2.11,
-        "attackRange": 525,
-        "moveSpeed": 330,
-        "baseMP": 400,
-        "mpGrowth": 29,
-        "baseHPRegen": 3,
-        "hpRegenGrowth": 0.5
-      },
-      "kit_tags": [
-        "ability",
-        "cc",
-        "dot",
-        "haste",
-        "heal_shield"
-      ]
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/50.png"
     },
     {
-      "slug": "galio",
-      "name": "Galio",
+      "slug": "galio/",
+      "name": "Galio/",
       "tier": "A",
       "rank": 31,
       "win_rate": 52.69,
@@ -1139,40 +394,11 @@
         "tank",
         "mage"
       ],
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/3.png",
-      "baseStats": {
-        "baseHP": 600,
-        "hpGrowth": 126,
-        "baseArmor": 24,
-        "armorGrowth": 4.7,
-        "baseMR": 32,
-        "mrGrowth": 2.05,
-        "baseAD": 59,
-        "adGrowth": 3.5,
-        "baseAS": 0.625,
-        "asGrowth": 1.5,
-        "attackRange": 150,
-        "moveSpeed": 340,
-        "baseMP": 410,
-        "mpGrowth": 40,
-        "baseHPRegen": 8,
-        "hpRegenGrowth": 0.8
-      },
-      "kit_tags": [
-        "ability",
-        "attack",
-        "cc",
-        "dot",
-        "haste",
-        "heal_shield",
-        "movement",
-        "on_hit",
-        "tank"
-      ]
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/3.png"
     },
     {
-      "slug": "yunara",
-      "name": "Yunara",
+      "slug": "yunara/",
+      "name": "Yunara/",
       "tier": "A",
       "rank": 32,
       "win_rate": 52.15,
@@ -1180,36 +406,11 @@
       "tags": [
         "marksman"
       ],
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/804.png",
-      "baseStats": {
-        "baseHP": 590,
-        "hpGrowth": 110,
-        "baseArmor": 25,
-        "armorGrowth": 4.4,
-        "baseMR": 30,
-        "mrGrowth": 1.3,
-        "baseAD": 55,
-        "adGrowth": 2.5,
-        "baseAS": 0.65,
-        "asGrowth": 2,
-        "attackRange": 575,
-        "moveSpeed": 325,
-        "baseMP": 275,
-        "mpGrowth": 45,
-        "baseHPRegen": 4,
-        "hpRegenGrowth": 0.55
-      },
-      "kit_tags": [
-        "attack",
-        "crit",
-        "dot",
-        "movement",
-        "on_hit"
-      ]
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/804.png"
     },
     {
-      "slug": "singed",
-      "name": "Singed",
+      "slug": "singed/",
+      "name": "Singed/",
       "tier": "A",
       "rank": 33,
       "win_rate": 51.34,
@@ -1218,36 +419,11 @@
         "tank",
         "mage"
       ],
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/27.png",
-      "baseStats": {
-        "baseHP": 650,
-        "hpGrowth": 96,
-        "baseArmor": 34,
-        "armorGrowth": 4.2,
-        "baseMR": 32,
-        "mrGrowth": 2.05,
-        "baseAD": 63,
-        "adGrowth": 3.4,
-        "baseAS": 0.7,
-        "asGrowth": 1.9,
-        "attackRange": 125,
-        "moveSpeed": 345,
-        "baseMP": 330,
-        "mpGrowth": 45,
-        "baseHPRegen": 9.5,
-        "hpRegenGrowth": 0.55
-      },
-      "kit_tags": [
-        "cc",
-        "dot",
-        "haste",
-        "movement",
-        "tank"
-      ]
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/27.png"
     },
     {
-      "slug": "zyra",
-      "name": "Zyra",
+      "slug": "zyra/",
+      "name": "Zyra/",
       "tier": "A",
       "rank": 34,
       "win_rate": 53.2,
@@ -1256,34 +432,11 @@
         "mage",
         "support"
       ],
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/143.png",
-      "baseStats": {
-        "baseHP": 574,
-        "hpGrowth": 93,
-        "baseArmor": 29,
-        "armorGrowth": 4.2,
-        "baseMR": 30,
-        "mrGrowth": 1.3,
-        "baseAD": 53,
-        "adGrowth": 3.2,
-        "baseAS": 0.681,
-        "asGrowth": 2.11,
-        "attackRange": 575,
-        "moveSpeed": 340,
-        "baseMP": 418,
-        "mpGrowth": 25,
-        "baseHPRegen": 5.5,
-        "hpRegenGrowth": 0.5
-      },
-      "kit_tags": [
-        "ability",
-        "cc",
-        "haste"
-      ]
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/143.png"
     },
     {
-      "slug": "hwei",
-      "name": "Hwei",
+      "slug": "hwei/",
+      "name": "Hwei/",
       "tier": "A",
       "rank": 35,
       "win_rate": 54.12,
@@ -1292,33 +445,11 @@
         "mage",
         "support"
       ],
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/910.png",
-      "baseStats": {
-        "baseHP": 580,
-        "hpGrowth": 109,
-        "baseArmor": 21,
-        "armorGrowth": 4.7,
-        "baseMR": 30,
-        "mrGrowth": 1.3,
-        "baseAD": 54,
-        "adGrowth": 3.3,
-        "baseAS": 0.69,
-        "asGrowth": 2.5,
-        "attackRange": 550,
-        "moveSpeed": 330,
-        "baseMP": 480,
-        "mpGrowth": 30,
-        "baseHPRegen": 5.5,
-        "hpRegenGrowth": 0.55
-      },
-      "kit_tags": [
-        "ability",
-        "haste"
-      ]
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/910.png"
     },
     {
-      "slug": "tahmkench",
-      "name": "Tahmkench",
+      "slug": "tahmkench/",
+      "name": "Tahmkench/",
       "tier": "A",
       "rank": 36,
       "win_rate": 49.62,
@@ -1327,36 +458,11 @@
         "tank",
         "support"
       ],
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/223.png",
-      "baseStats": {
-        "baseHP": 640,
-        "hpGrowth": 103,
-        "baseArmor": 39,
-        "armorGrowth": 4.7,
-        "baseMR": 32,
-        "mrGrowth": 2.05,
-        "baseAD": 56,
-        "adGrowth": 3.2,
-        "baseAS": 0.658,
-        "asGrowth": 2.5,
-        "attackRange": 175,
-        "moveSpeed": 335,
-        "baseMP": 325,
-        "mpGrowth": 50,
-        "baseHPRegen": 6.5,
-        "hpRegenGrowth": 0.55
-      },
-      "kit_tags": [
-        "ability",
-        "cc",
-        "heal_shield",
-        "movement",
-        "tank"
-      ]
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/223.png"
     },
     {
-      "slug": "kayle",
-      "name": "Kayle",
+      "slug": "kayle/",
+      "name": "Kayle/",
       "tier": "A",
       "rank": 37,
       "win_rate": 52.35,
@@ -1365,37 +471,11 @@
         "mage",
         "marksman"
       ],
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/10.png",
-      "baseStats": {
-        "baseHP": 670,
-        "hpGrowth": 92,
-        "baseArmor": 26,
-        "armorGrowth": 4.2,
-        "baseMR": 22,
-        "mrGrowth": 1.3,
-        "baseAD": 50,
-        "adGrowth": 2.5,
-        "baseAS": 0.625,
-        "asGrowth": 1.5,
-        "attackRange": 175,
-        "moveSpeed": 335,
-        "baseMP": 330,
-        "mpGrowth": 50,
-        "baseHPRegen": 5,
-        "hpRegenGrowth": 0.5
-      },
-      "kit_tags": [
-        "ability",
-        "attack",
-        "crit",
-        "haste",
-        "heal_shield",
-        "movement"
-      ]
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/10.png"
     },
     {
-      "slug": "twitch",
-      "name": "Twitch",
+      "slug": "twitch/",
+      "name": "Twitch/",
       "tier": "A",
       "rank": 38,
       "win_rate": 50.63,
@@ -1404,35 +484,11 @@
         "marksman",
         "assassin"
       ],
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/29.png",
-      "baseStats": {
-        "baseHP": 630,
-        "hpGrowth": 98,
-        "baseArmor": 27,
-        "armorGrowth": 4,
-        "baseMR": 30,
-        "mrGrowth": 1.3,
-        "baseAD": 59,
-        "adGrowth": 3,
-        "baseAS": 0.679,
-        "asGrowth": 3,
-        "attackRange": 550,
-        "moveSpeed": 330,
-        "baseMP": 300,
-        "mpGrowth": 40,
-        "baseHPRegen": 3.75,
-        "hpRegenGrowth": 0.6
-      },
-      "kit_tags": [
-        "attack",
-        "dot",
-        "movement",
-        "on_hit"
-      ]
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/29.png"
     },
     {
-      "slug": "rell",
-      "name": "Rell",
+      "slug": "rell/",
+      "name": "Rell/",
       "tier": "A",
       "rank": 39,
       "win_rate": 53.72,
@@ -1441,36 +497,11 @@
         "tank",
         "support"
       ],
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/526.png",
-      "baseStats": {
-        "baseHP": 620,
-        "hpGrowth": 104,
-        "baseArmor": 30,
-        "armorGrowth": 4,
-        "baseMR": 28,
-        "mrGrowth": 1.8,
-        "baseAD": 55,
-        "adGrowth": 3,
-        "baseAS": 0.625,
-        "asGrowth": 2,
-        "attackRange": 175,
-        "moveSpeed": 315,
-        "baseMP": 320,
-        "mpGrowth": 40,
-        "baseHPRegen": 7.5,
-        "hpRegenGrowth": 0.85
-      },
-      "kit_tags": [
-        "cc",
-        "heal_shield",
-        "movement",
-        "on_hit",
-        "tank"
-      ]
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/526.png"
     },
     {
-      "slug": "ahri",
-      "name": "Ahri",
+      "slug": "ahri/",
+      "name": "Ahri/",
       "tier": "A",
       "rank": 40,
       "win_rate": 52.74,
@@ -1479,36 +510,11 @@
         "mage",
         "assassin"
       ],
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/103.png",
-      "baseStats": {
-        "baseHP": 590,
-        "hpGrowth": 104,
-        "baseArmor": 21,
-        "armorGrowth": 4.2,
-        "baseMR": 30,
-        "mrGrowth": 1.3,
-        "baseAD": 53,
-        "adGrowth": 3,
-        "baseAS": 0.668,
-        "asGrowth": 2.2,
-        "attackRange": 550,
-        "moveSpeed": 330,
-        "baseMP": 418,
-        "mpGrowth": 25,
-        "baseHPRegen": 2.5,
-        "hpRegenGrowth": 0.6
-      },
-      "kit_tags": [
-        "ability",
-        "cc",
-        "haste",
-        "heal_shield",
-        "movement"
-      ]
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/103.png"
     },
     {
-      "slug": "xerath",
-      "name": "Xerath",
+      "slug": "xerath/",
+      "name": "Xerath/",
       "tier": "A",
       "rank": 41,
       "win_rate": 51.09,
@@ -1517,34 +523,11 @@
         "mage",
         "support"
       ],
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/101.png",
-      "baseStats": {
-        "baseHP": 596,
-        "hpGrowth": 106,
-        "baseArmor": 22,
-        "armorGrowth": 4.7,
-        "baseMR": 30,
-        "mrGrowth": 1.3,
-        "baseAD": 55,
-        "adGrowth": 3,
-        "baseAS": 0.658,
-        "asGrowth": 1.36,
-        "attackRange": 525,
-        "moveSpeed": 340,
-        "baseMP": 400,
-        "mpGrowth": 22,
-        "baseHPRegen": 5.5,
-        "hpRegenGrowth": 0.55
-      },
-      "kit_tags": [
-        "ability",
-        "cc",
-        "haste"
-      ]
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/101.png"
     },
     {
-      "slug": "kaisa",
-      "name": "Kaisa",
+      "slug": "kaisa/",
+      "name": "Kaisa/",
       "tier": "A",
       "rank": 42,
       "win_rate": 48.61,
@@ -1553,36 +536,11 @@
         "marksman",
         "mage"
       ],
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/145.png",
-      "baseStats": {
-        "baseHP": 640,
-        "hpGrowth": 102,
-        "baseArmor": 25,
-        "armorGrowth": 4.2,
-        "baseMR": 30,
-        "mrGrowth": 1.3,
-        "baseAD": 59,
-        "adGrowth": 2.6,
-        "baseAS": 0.644,
-        "asGrowth": 1.8,
-        "attackRange": 525,
-        "moveSpeed": 335,
-        "baseMP": 345,
-        "mpGrowth": 40,
-        "baseHPRegen": 4,
-        "hpRegenGrowth": 0.55
-      },
-      "kit_tags": [
-        "ability",
-        "attack",
-        "crit",
-        "haste",
-        "movement"
-      ]
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/145.png"
     },
     {
-      "slug": "senna",
-      "name": "Senna",
+      "slug": "senna/",
+      "name": "Senna/",
       "tier": "A",
       "rank": 43,
       "win_rate": 49.43,
@@ -1591,36 +549,11 @@
         "support",
         "marksman"
       ],
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/235.png",
-      "baseStats": {
-        "baseHP": 530,
-        "hpGrowth": 89,
-        "baseArmor": 25,
-        "armorGrowth": 4,
-        "baseMR": 30,
-        "mrGrowth": 1.3,
-        "baseAD": 50,
-        "adGrowth": 0,
-        "baseAS": 0.625,
-        "asGrowth": 2.6,
-        "attackRange": 600,
-        "moveSpeed": 330,
-        "baseMP": 350,
-        "mpGrowth": 45,
-        "baseHPRegen": 3.5,
-        "hpRegenGrowth": 0.55
-      },
-      "kit_tags": [
-        "attack",
-        "cc",
-        "crit",
-        "heal_shield",
-        "movement"
-      ]
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/235.png"
     },
     {
-      "slug": "veigar",
-      "name": "Veigar",
+      "slug": "veigar/",
+      "name": "Veigar/",
       "tier": "A",
       "rank": 44,
       "win_rate": 50.08,
@@ -1628,34 +561,11 @@
       "tags": [
         "mage"
       ],
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/45.png",
-      "baseStats": {
-        "baseHP": 580,
-        "hpGrowth": 108,
-        "baseArmor": 18,
-        "armorGrowth": 5.2,
-        "baseMR": 32,
-        "mrGrowth": 1.3,
-        "baseAD": 52,
-        "adGrowth": 2.7,
-        "baseAS": 0.625,
-        "asGrowth": 2.24,
-        "attackRange": 550,
-        "moveSpeed": 340,
-        "baseMP": 490,
-        "mpGrowth": 26,
-        "baseHPRegen": 6.5,
-        "hpRegenGrowth": 0.6
-      },
-      "kit_tags": [
-        "ability",
-        "cc",
-        "haste"
-      ]
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/45.png"
     },
     {
-      "slug": "aurora",
-      "name": "Aurora",
+      "slug": "aurora/",
+      "name": "Aurora/",
       "tier": "A",
       "rank": 45,
       "win_rate": 51.4,
@@ -1664,36 +574,11 @@
         "mage",
         "assassin"
       ],
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/893.png",
-      "baseStats": {
-        "baseHP": 607,
-        "hpGrowth": 110,
-        "baseArmor": 23,
-        "armorGrowth": 4.5,
-        "baseMR": 32,
-        "mrGrowth": 1.3,
-        "baseAD": 53,
-        "adGrowth": 3,
-        "baseAS": 0.668,
-        "asGrowth": 2,
-        "attackRange": 550,
-        "moveSpeed": 335,
-        "baseMP": 475,
-        "mpGrowth": 30,
-        "baseHPRegen": 6,
-        "hpRegenGrowth": 0.55
-      },
-      "kit_tags": [
-        "ability",
-        "cc",
-        "haste",
-        "heal_shield",
-        "movement"
-      ]
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/893.png"
     },
     {
-      "slug": "syndra",
-      "name": "Syndra",
+      "slug": "syndra/",
+      "name": "Syndra/",
       "tier": "A",
       "rank": 46,
       "win_rate": 51.8,
@@ -1701,34 +586,11 @@
       "tags": [
         "mage"
       ],
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/134.png",
-      "baseStats": {
-        "baseHP": 563,
-        "hpGrowth": 100,
-        "baseArmor": 25,
-        "armorGrowth": 4,
-        "baseMR": 30,
-        "mrGrowth": 1.3,
-        "baseAD": 54,
-        "adGrowth": 2.9,
-        "baseAS": 0.658,
-        "asGrowth": 2,
-        "attackRange": 550,
-        "moveSpeed": 330,
-        "baseMP": 480,
-        "mpGrowth": 40,
-        "baseHPRegen": 6.5,
-        "hpRegenGrowth": 0.6
-      },
-      "kit_tags": [
-        "ability",
-        "cc",
-        "haste"
-      ]
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/134.png"
     },
     {
-      "slug": "corki",
-      "name": "Corki",
+      "slug": "corki/",
+      "name": "Corki/",
       "tier": "A",
       "rank": 47,
       "win_rate": 51.19,
@@ -1737,37 +599,11 @@
         "marksman",
         "mage"
       ],
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/42.png",
-      "baseStats": {
-        "baseHP": 610,
-        "hpGrowth": 100,
-        "baseArmor": 27,
-        "armorGrowth": 4.5,
-        "baseMR": 30,
-        "mrGrowth": 1.3,
-        "baseAD": 52,
-        "adGrowth": 2,
-        "baseAS": 0.644,
-        "asGrowth": 2.8,
-        "attackRange": 550,
-        "moveSpeed": 325,
-        "baseMP": 350,
-        "mpGrowth": 40,
-        "baseHPRegen": 5.5,
-        "hpRegenGrowth": 0.55
-      },
-      "kit_tags": [
-        "ability",
-        "attack",
-        "crit",
-        "dot",
-        "haste",
-        "movement"
-      ]
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/42.png"
     },
     {
-      "slug": "garen",
-      "name": "Garen",
+      "slug": "garen/",
+      "name": "Garen/",
       "tier": "A",
       "rank": 48,
       "win_rate": 48.56,
@@ -1776,36 +612,11 @@
         "fighter",
         "tank"
       ],
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/86.png",
-      "baseStats": {
-        "baseHP": 690,
-        "hpGrowth": 98,
-        "baseArmor": 38,
-        "armorGrowth": 4.2,
-        "baseMR": 32,
-        "mrGrowth": 1.55,
-        "baseAD": 69,
-        "adGrowth": 4.5,
-        "baseAS": 0.625,
-        "asGrowth": 3.65,
-        "attackRange": 175,
-        "moveSpeed": 340,
-        "baseMP": 0,
-        "mpGrowth": 0,
-        "baseHPRegen": 8,
-        "hpRegenGrowth": 0.5
-      },
-      "kit_tags": [
-        "attack",
-        "dot",
-        "heal_shield",
-        "on_hit",
-        "tank"
-      ]
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/86.png"
     },
     {
-      "slug": "maokai",
-      "name": "Maokai",
+      "slug": "maokai/",
+      "name": "Maokai/",
       "tier": "A",
       "rank": 49,
       "win_rate": 50.66,
@@ -1814,36 +625,11 @@
         "tank",
         "support"
       ],
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/57.png",
-      "baseStats": {
-        "baseHP": 665,
-        "hpGrowth": 109,
-        "baseArmor": 35,
-        "armorGrowth": 5.2,
-        "baseMR": 32,
-        "mrGrowth": 2.05,
-        "baseAD": 64,
-        "adGrowth": 3.3,
-        "baseAS": 0.8,
-        "asGrowth": 2.125,
-        "attackRange": 125,
-        "moveSpeed": 335,
-        "baseMP": 375,
-        "mpGrowth": 43,
-        "baseHPRegen": 5,
-        "hpRegenGrowth": 0.75
-      },
-      "kit_tags": [
-        "cc",
-        "dot",
-        "heal_shield",
-        "on_hit",
-        "tank"
-      ]
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/57.png"
     },
     {
-      "slug": "velkoz",
-      "name": "Velkoz",
+      "slug": "velkoz/",
+      "name": "Velkoz/",
       "tier": "A",
       "rank": 50,
       "win_rate": 51.4,
@@ -1852,35 +638,11 @@
         "mage",
         "support"
       ],
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/161.png",
-      "baseStats": {
-        "baseHP": 590,
-        "hpGrowth": 102,
-        "baseArmor": 22,
-        "armorGrowth": 4.7,
-        "baseMR": 30,
-        "mrGrowth": 1.3,
-        "baseAD": 55,
-        "adGrowth": 3.1416,
-        "baseAS": 0.643,
-        "asGrowth": 1.59,
-        "attackRange": 525,
-        "moveSpeed": 340,
-        "baseMP": 469,
-        "mpGrowth": 21,
-        "baseHPRegen": 5.5,
-        "hpRegenGrowth": 0.55
-      },
-      "kit_tags": [
-        "ability",
-        "cc",
-        "dot",
-        "haste"
-      ]
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/161.png"
     },
     {
-      "slug": "tryndamere",
-      "name": "Tryndamere",
+      "slug": "tryndamere/",
+      "name": "Tryndamere/",
       "tier": "A",
       "rank": 51,
       "win_rate": 50.97,
@@ -1889,35 +651,11 @@
         "fighter",
         "assassin"
       ],
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/23.png",
-      "baseStats": {
-        "baseHP": 696,
-        "hpGrowth": 108,
-        "baseArmor": 33,
-        "armorGrowth": 4.8,
-        "baseMR": 32,
-        "mrGrowth": 2.05,
-        "baseAD": 66,
-        "adGrowth": 4.5,
-        "baseAS": 0.67,
-        "asGrowth": 3.4,
-        "attackRange": 175,
-        "moveSpeed": 345,
-        "baseMP": 100,
-        "mpGrowth": 0,
-        "baseHPRegen": 8.5,
-        "hpRegenGrowth": 0.9
-      },
-      "kit_tags": [
-        "attack",
-        "crit",
-        "heal_shield",
-        "movement"
-      ]
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/23.png"
     },
     {
-      "slug": "sion",
-      "name": "Sion",
+      "slug": "sion/",
+      "name": "Sion/",
       "tier": "A",
       "rank": 52,
       "win_rate": 51.72,
@@ -1926,35 +664,11 @@
         "tank",
         "fighter"
       ],
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/14.png",
-      "baseStats": {
-        "baseHP": 655,
-        "hpGrowth": 87,
-        "baseArmor": 36,
-        "armorGrowth": 4.2,
-        "baseMR": 32,
-        "mrGrowth": 2.05,
-        "baseAD": 68,
-        "adGrowth": 4,
-        "baseAS": 0.679,
-        "asGrowth": 1.3,
-        "attackRange": 175,
-        "moveSpeed": 345,
-        "baseMP": 400,
-        "mpGrowth": 52,
-        "baseHPRegen": 9,
-        "hpRegenGrowth": 0.8
-      },
-      "kit_tags": [
-        "attack",
-        "cc",
-        "heal_shield",
-        "tank"
-      ]
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/14.png"
     },
     {
-      "slug": "ekko",
-      "name": "Ekko",
+      "slug": "ekko/",
+      "name": "Ekko/",
       "tier": "B",
       "rank": 53,
       "win_rate": 51.23,
@@ -1963,36 +677,11 @@
         "assassin",
         "mage"
       ],
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/245.png",
-      "baseStats": {
-        "baseHP": 655,
-        "hpGrowth": 99,
-        "baseArmor": 32,
-        "armorGrowth": 4.2,
-        "baseMR": 32,
-        "mrGrowth": 2.05,
-        "baseAD": 58,
-        "adGrowth": 3,
-        "baseAS": 0.688,
-        "asGrowth": 3.3,
-        "attackRange": 125,
-        "moveSpeed": 340,
-        "baseMP": 280,
-        "mpGrowth": 70,
-        "baseHPRegen": 9,
-        "hpRegenGrowth": 0.9
-      },
-      "kit_tags": [
-        "ability",
-        "cc",
-        "haste",
-        "heal_shield",
-        "movement"
-      ]
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/245.png"
     },
     {
-      "slug": "lux",
-      "name": "Lux",
+      "slug": "lux/",
+      "name": "Lux/",
       "tier": "B",
       "rank": 54,
       "win_rate": 49.76,
@@ -2001,34 +690,11 @@
         "mage",
         "support"
       ],
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/99.png",
-      "baseStats": {
-        "baseHP": 580,
-        "hpGrowth": 99,
-        "baseArmor": 21,
-        "armorGrowth": 5.2,
-        "baseMR": 30,
-        "mrGrowth": 1.3,
-        "baseAD": 54,
-        "adGrowth": 3.3,
-        "baseAS": 0.669,
-        "asGrowth": 3,
-        "attackRange": 550,
-        "moveSpeed": 330,
-        "baseMP": 440,
-        "mpGrowth": 23.5,
-        "baseHPRegen": 5.5,
-        "hpRegenGrowth": 0.55
-      },
-      "kit_tags": [
-        "ability",
-        "cc",
-        "haste"
-      ]
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/99.png"
     },
     {
-      "slug": "viktor",
-      "name": "Viktor",
+      "slug": "viktor/",
+      "name": "Viktor/",
       "tier": "B",
       "rank": 55,
       "win_rate": 51.87,
@@ -2036,36 +702,11 @@
       "tags": [
         "mage"
       ],
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/112.png",
-      "baseStats": {
-        "baseHP": 600,
-        "hpGrowth": 100,
-        "baseArmor": 23,
-        "armorGrowth": 4.4,
-        "baseMR": 30,
-        "mrGrowth": 1.3,
-        "baseAD": 53,
-        "adGrowth": 3,
-        "baseAS": 0.658,
-        "asGrowth": 2.11,
-        "attackRange": 525,
-        "moveSpeed": 335,
-        "baseMP": 405,
-        "mpGrowth": 45,
-        "baseHPRegen": 8,
-        "hpRegenGrowth": 0.65
-      },
-      "kit_tags": [
-        "ability",
-        "cc",
-        "dot",
-        "haste",
-        "heal_shield"
-      ]
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/112.png"
     },
     {
-      "slug": "jhin",
-      "name": "Jhin",
+      "slug": "jhin/",
+      "name": "Jhin/",
       "tier": "B",
       "rank": 56,
       "win_rate": 47.96,
@@ -2074,36 +715,11 @@
         "marksman",
         "mage"
       ],
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/202.png",
-      "baseStats": {
-        "baseHP": 655,
-        "hpGrowth": 107,
-        "baseArmor": 24,
-        "armorGrowth": 4.7,
-        "baseMR": 30,
-        "mrGrowth": 1.3,
-        "baseAD": 61,
-        "adGrowth": 4.4,
-        "baseAS": 0.625,
-        "asGrowth": 0,
-        "attackRange": 550,
-        "moveSpeed": 330,
-        "baseMP": 300,
-        "mpGrowth": 50,
-        "baseHPRegen": 3.75,
-        "hpRegenGrowth": 0.55
-      },
-      "kit_tags": [
-        "ability",
-        "attack",
-        "cc",
-        "crit",
-        "haste"
-      ]
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/202.png"
     },
     {
-      "slug": "nautilus",
-      "name": "Nautilus",
+      "slug": "nautilus/",
+      "name": "Nautilus/",
       "tier": "B",
       "rank": 57,
       "win_rate": 49.85,
@@ -2112,38 +728,11 @@
         "tank",
         "support"
       ],
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/111.png",
-      "baseStats": {
-        "baseHP": 646,
-        "hpGrowth": 100,
-        "baseArmor": 39,
-        "armorGrowth": 4.95,
-        "baseMR": 32,
-        "mrGrowth": 2.05,
-        "baseAD": 61,
-        "adGrowth": 3.3,
-        "baseAS": 0.706,
-        "asGrowth": 1,
-        "attackRange": 175,
-        "moveSpeed": 325,
-        "baseMP": 400,
-        "mpGrowth": 47,
-        "baseHPRegen": 8.5,
-        "hpRegenGrowth": 0.55
-      },
-      "kit_tags": [
-        "ability",
-        "attack",
-        "cc",
-        "dot",
-        "heal_shield",
-        "on_hit",
-        "tank"
-      ]
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/111.png"
     },
     {
-      "slug": "zaahen",
-      "name": "Zaahen",
+      "slug": "zaahen/",
+      "name": "Zaahen/",
       "tier": "B",
       "rank": 58,
       "win_rate": 52.88,
@@ -2152,36 +741,11 @@
         "fighter",
         "assassin"
       ],
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/904.png",
-      "baseStats": {
-        "baseHP": 640,
-        "hpGrowth": 114,
-        "baseArmor": 36,
-        "armorGrowth": 5,
-        "baseMR": 32,
-        "mrGrowth": 2.05,
-        "baseAD": 63,
-        "adGrowth": 4,
-        "baseAS": 0.625,
-        "asGrowth": 2.5,
-        "attackRange": 175,
-        "moveSpeed": 345,
-        "baseMP": 350,
-        "mpGrowth": 55,
-        "baseHPRegen": 7.5,
-        "hpRegenGrowth": 0.8
-      },
-      "kit_tags": [
-        "attack",
-        "dot",
-        "heal_shield",
-        "movement",
-        "on_hit"
-      ]
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/904.png"
     },
     {
-      "slug": "gangplank",
-      "name": "Gangplank",
+      "slug": "gangplank/",
+      "name": "Gangplank/",
       "tier": "B",
       "rank": 59,
       "win_rate": 49.21,
@@ -2189,35 +753,11 @@
       "tags": [
         "fighter"
       ],
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/41.png",
-      "baseStats": {
-        "baseHP": 630,
-        "hpGrowth": 114,
-        "baseArmor": 31,
-        "armorGrowth": 4.7,
-        "baseMR": 32,
-        "mrGrowth": 2.05,
-        "baseAD": 64,
-        "adGrowth": 4.2,
-        "baseAS": 0.658,
-        "asGrowth": 3.2,
-        "attackRange": 125,
-        "moveSpeed": 345,
-        "baseMP": 280,
-        "mpGrowth": 60,
-        "baseHPRegen": 6,
-        "hpRegenGrowth": 0.6
-      },
-      "kit_tags": [
-        "attack",
-        "cc",
-        "dot",
-        "heal_shield"
-      ]
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/41.png"
     },
     {
-      "slug": "smolder",
-      "name": "Smolder",
+      "slug": "smolder/",
+      "name": "Smolder/",
       "tier": "B",
       "rank": 60,
       "win_rate": 47.46,
@@ -2226,36 +766,11 @@
         "marksman",
         "mage"
       ],
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/901.png",
-      "baseStats": {
-        "baseHP": 575,
-        "hpGrowth": 100,
-        "baseArmor": 24,
-        "armorGrowth": 4,
-        "baseMR": 30,
-        "mrGrowth": 1.3,
-        "baseAD": 60,
-        "adGrowth": 2.3,
-        "baseAS": 0.638,
-        "asGrowth": 4,
-        "attackRange": 550,
-        "moveSpeed": 330,
-        "baseMP": 300,
-        "mpGrowth": 40,
-        "baseHPRegen": 3.75,
-        "hpRegenGrowth": 0.6
-      },
-      "kit_tags": [
-        "ability",
-        "attack",
-        "crit",
-        "dot",
-        "haste"
-      ]
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/901.png"
     },
     {
-      "slug": "teemo",
-      "name": "Teemo",
+      "slug": "teemo/",
+      "name": "Teemo/",
       "tier": "B",
       "rank": 61,
       "win_rate": 48.89,
@@ -2264,36 +779,11 @@
         "marksman",
         "mage"
       ],
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/17.png",
-      "baseStats": {
-        "baseHP": 615,
-        "hpGrowth": 104,
-        "baseArmor": 24,
-        "armorGrowth": 4.95,
-        "baseMR": 30,
-        "mrGrowth": 1.3,
-        "baseAD": 54,
-        "adGrowth": 3,
-        "baseAS": 0.69,
-        "asGrowth": 3.38,
-        "attackRange": 500,
-        "moveSpeed": 330,
-        "baseMP": 334,
-        "mpGrowth": 25,
-        "baseHPRegen": 5.5,
-        "hpRegenGrowth": 0.65
-      },
-      "kit_tags": [
-        "ability",
-        "attack",
-        "dot",
-        "haste",
-        "movement"
-      ]
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/17.png"
     },
     {
-      "slug": "jarvaniv",
-      "name": "Jarvaniv",
+      "slug": "jarvaniv/",
+      "name": "Jarvaniv/",
       "tier": "B",
       "rank": 62,
       "win_rate": 48.03,
@@ -2302,37 +792,11 @@
         "fighter",
         "tank"
       ],
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/59.png",
-      "baseStats": {
-        "baseHP": 640,
-        "hpGrowth": 104,
-        "baseArmor": 36,
-        "armorGrowth": 4.6,
-        "baseMR": 32,
-        "mrGrowth": 2.05,
-        "baseAD": 64,
-        "adGrowth": 3,
-        "baseAS": 0.658,
-        "asGrowth": 2.5,
-        "attackRange": 175,
-        "moveSpeed": 340,
-        "baseMP": 300,
-        "mpGrowth": 55,
-        "baseHPRegen": 8,
-        "hpRegenGrowth": 0.7
-      },
-      "kit_tags": [
-        "attack",
-        "cc",
-        "heal_shield",
-        "movement",
-        "on_hit",
-        "tank"
-      ]
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/59.png"
     },
     {
-      "slug": "jayce",
-      "name": "Jayce",
+      "slug": "jayce/",
+      "name": "Jayce/",
       "tier": "B",
       "rank": 63,
       "win_rate": 47.15,
@@ -2341,36 +805,11 @@
         "fighter",
         "marksman"
       ],
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/126.png",
-      "baseStats": {
-        "baseHP": 590,
-        "hpGrowth": 109,
-        "baseArmor": 22,
-        "armorGrowth": 5,
-        "baseMR": 30,
-        "mrGrowth": 1.3,
-        "baseAD": 59,
-        "adGrowth": 4.25,
-        "baseAS": 0.658,
-        "asGrowth": 3,
-        "attackRange": 125,
-        "moveSpeed": 335,
-        "baseMP": 375,
-        "mpGrowth": 45,
-        "baseHPRegen": 6,
-        "hpRegenGrowth": 0.6
-      },
-      "kit_tags": [
-        "attack",
-        "cc",
-        "crit",
-        "movement",
-        "on_hit"
-      ]
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/126.png"
     },
     {
-      "slug": "gwen",
-      "name": "Gwen",
+      "slug": "gwen/",
+      "name": "Gwen/",
       "tier": "B",
       "rank": 64,
       "win_rate": 55.82,
@@ -2378,35 +817,11 @@
       "tags": [
         "fighter"
       ],
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/887.png",
-      "baseStats": {
-        "baseHP": 620,
-        "hpGrowth": 115,
-        "baseArmor": 39,
-        "armorGrowth": 4.9,
-        "baseMR": 32,
-        "mrGrowth": 2.05,
-        "baseAD": 63,
-        "adGrowth": 3,
-        "baseAS": 0.69,
-        "asGrowth": 2.25,
-        "attackRange": 150,
-        "moveSpeed": 340,
-        "baseMP": 330,
-        "mpGrowth": 40,
-        "baseHPRegen": 9,
-        "hpRegenGrowth": 0.9
-      },
-      "kit_tags": [
-        "attack",
-        "heal_shield",
-        "movement",
-        "on_hit"
-      ]
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/887.png"
     },
     {
-      "slug": "mel",
-      "name": "Mel",
+      "slug": "mel/",
+      "name": "Mel/",
       "tier": "B",
       "rank": 65,
       "win_rate": 48.18,
@@ -2415,35 +830,11 @@
         "mage",
         "support"
       ],
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/800.png",
-      "baseStats": {
-        "baseHP": 630,
-        "hpGrowth": 99,
-        "baseArmor": 21,
-        "armorGrowth": 5.2,
-        "baseMR": 30,
-        "mrGrowth": 1.3,
-        "baseAD": 54,
-        "adGrowth": 3.3,
-        "baseAS": 0.625,
-        "asGrowth": 2.5,
-        "attackRange": 550,
-        "moveSpeed": 330,
-        "baseMP": 480,
-        "mpGrowth": 28,
-        "baseHPRegen": 6,
-        "hpRegenGrowth": 0.55
-      },
-      "kit_tags": [
-        "ability",
-        "dot",
-        "haste",
-        "heal_shield"
-      ]
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/800.png"
     },
     {
-      "slug": "briar",
-      "name": "Briar",
+      "slug": "briar/",
+      "name": "Briar/",
       "tier": "B",
       "rank": 66,
       "win_rate": 51.72,
@@ -2452,38 +843,11 @@
         "fighter",
         "assassin"
       ],
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/233.png",
-      "baseStats": {
-        "baseHP": 625,
-        "hpGrowth": 95,
-        "baseArmor": 30,
-        "armorGrowth": 4.5,
-        "baseMR": 32,
-        "mrGrowth": 2.05,
-        "baseAD": 60,
-        "adGrowth": 2.5,
-        "baseAS": 0.644,
-        "asGrowth": 2,
-        "attackRange": 125,
-        "moveSpeed": 340,
-        "baseMP": 0,
-        "mpGrowth": 0,
-        "baseHPRegen": 0,
-        "hpRegenGrowth": 0
-      },
-      "kit_tags": [
-        "ability",
-        "attack",
-        "cc",
-        "dot",
-        "heal_shield",
-        "movement",
-        "on_hit"
-      ]
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/233.png"
     },
     {
-      "slug": "chogath",
-      "name": "Chogath",
+      "slug": "chogath/",
+      "name": "Chogath/",
       "tier": "B",
       "rank": 67,
       "win_rate": 48.01,
@@ -2492,35 +856,11 @@
         "tank",
         "mage"
       ],
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/31.png",
-      "baseStats": {
-        "baseHP": 644,
-        "hpGrowth": 94,
-        "baseArmor": 38,
-        "armorGrowth": 4.5,
-        "baseMR": 32,
-        "mrGrowth": 2.05,
-        "baseAD": 69,
-        "adGrowth": 4.2,
-        "baseAS": 0.658,
-        "asGrowth": 1.44,
-        "attackRange": 125,
-        "moveSpeed": 345,
-        "baseMP": 270,
-        "mpGrowth": 60,
-        "baseHPRegen": 9,
-        "hpRegenGrowth": 0.85
-      },
-      "kit_tags": [
-        "ability",
-        "cc",
-        "haste",
-        "tank"
-      ]
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/31.png"
     },
     {
-      "slug": "shyvana",
-      "name": "Shyvana",
+      "slug": "shyvana/",
+      "name": "Shyvana/",
       "tier": "B",
       "rank": 68,
       "win_rate": 51.99,
@@ -2529,37 +869,11 @@
         "fighter",
         "mage"
       ],
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/102.png",
-      "baseStats": {
-        "baseHP": 625,
-        "hpGrowth": 95,
-        "baseArmor": 35,
-        "armorGrowth": 4,
-        "baseMR": 32,
-        "mrGrowth": 2.05,
-        "baseAD": 62,
-        "adGrowth": 3,
-        "baseAS": 0.638,
-        "asGrowth": 2,
-        "attackRange": 150,
-        "moveSpeed": 350,
-        "baseMP": 100,
-        "mpGrowth": 0,
-        "baseHPRegen": 7,
-        "hpRegenGrowth": 0.65
-      },
-      "kit_tags": [
-        "ability",
-        "attack",
-        "haste",
-        "heal_shield",
-        "movement",
-        "on_hit"
-      ]
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/102.png"
     },
     {
-      "slug": "alistar",
-      "name": "Alistar",
+      "slug": "alistar/",
+      "name": "Alistar/",
       "tier": "B",
       "rank": 69,
       "win_rate": 48.75,
@@ -2568,36 +882,11 @@
         "tank",
         "support"
       ],
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/12.png",
-      "baseStats": {
-        "baseHP": 685,
-        "hpGrowth": 120,
-        "baseArmor": 40,
-        "armorGrowth": 4.7,
-        "baseMR": 32,
-        "mrGrowth": 2.05,
-        "baseAD": 62,
-        "adGrowth": 3.75,
-        "baseAS": 0.625,
-        "asGrowth": 2.125,
-        "attackRange": 125,
-        "moveSpeed": 330,
-        "baseMP": 350,
-        "mpGrowth": 40,
-        "baseHPRegen": 8.5,
-        "hpRegenGrowth": 0.85
-      },
-      "kit_tags": [
-        "ability",
-        "cc",
-        "heal_shield",
-        "on_hit",
-        "tank"
-      ]
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/12.png"
     },
     {
-      "slug": "malphite",
-      "name": "Malphite",
+      "slug": "malphite/",
+      "name": "Malphite/",
       "tier": "C",
       "rank": 70,
       "win_rate": 47.54,
@@ -2606,36 +895,11 @@
         "tank",
         "mage"
       ],
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/54.png",
-      "baseStats": {
-        "baseHP": 665,
-        "hpGrowth": 104,
-        "baseArmor": 40,
-        "armorGrowth": 4.95,
-        "baseMR": 28,
-        "mrGrowth": 2.05,
-        "baseAD": 62,
-        "adGrowth": 4,
-        "baseAS": 0.736,
-        "asGrowth": 3.4,
-        "attackRange": 125,
-        "moveSpeed": 335,
-        "baseMP": 280,
-        "mpGrowth": 60,
-        "baseHPRegen": 7,
-        "hpRegenGrowth": 0.55
-      },
-      "kit_tags": [
-        "ability",
-        "cc",
-        "heal_shield",
-        "movement",
-        "tank"
-      ]
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/54.png"
     },
     {
-      "slug": "jax",
-      "name": "Jax",
+      "slug": "jax/",
+      "name": "Jax/",
       "tier": "C",
       "rank": 71,
       "win_rate": 50.33,
@@ -2643,35 +907,11 @@
       "tags": [
         "fighter"
       ],
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/24.png",
-      "baseStats": {
-        "baseHP": 650,
-        "hpGrowth": 103,
-        "baseArmor": 36,
-        "armorGrowth": 4.2,
-        "baseMR": 32,
-        "mrGrowth": 2.05,
-        "baseAD": 68,
-        "adGrowth": 4.25,
-        "baseAS": 0.638,
-        "asGrowth": 3.4,
-        "attackRange": 125,
-        "moveSpeed": 350,
-        "baseMP": 339,
-        "mpGrowth": 52,
-        "baseHPRegen": 8.5,
-        "hpRegenGrowth": 0.55
-      },
-      "kit_tags": [
-        "attack",
-        "cc",
-        "movement",
-        "on_hit"
-      ]
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/24.png"
     },
     {
-      "slug": "sylas",
-      "name": "Sylas",
+      "slug": "sylas/",
+      "name": "Sylas/",
       "tier": "C",
       "rank": 72,
       "win_rate": 48.47,
@@ -2680,37 +920,11 @@
         "mage",
         "assassin"
       ],
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/517.png",
-      "baseStats": {
-        "baseHP": 600,
-        "hpGrowth": 122,
-        "baseArmor": 29,
-        "armorGrowth": 5.2,
-        "baseMR": 32,
-        "mrGrowth": 2.55,
-        "baseAD": 61,
-        "adGrowth": 3,
-        "baseAS": 0.645,
-        "asGrowth": 3.5,
-        "attackRange": 175,
-        "moveSpeed": 340,
-        "baseMP": 400,
-        "mpGrowth": 70,
-        "baseHPRegen": 9,
-        "hpRegenGrowth": 0.9
-      },
-      "kit_tags": [
-        "ability",
-        "attack",
-        "cc",
-        "haste",
-        "heal_shield",
-        "movement"
-      ]
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/517.png"
     },
     {
-      "slug": "aphelios",
-      "name": "Aphelios",
+      "slug": "aphelios/",
+      "name": "Aphelios/",
       "tier": "C",
       "rank": 73,
       "win_rate": 51.1,
@@ -2718,34 +932,11 @@
       "tags": [
         "marksman"
       ],
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/523.png",
-      "baseStats": {
-        "baseHP": 600,
-        "hpGrowth": 102,
-        "baseArmor": 26,
-        "armorGrowth": 4.2,
-        "baseMR": 30,
-        "mrGrowth": 1.3,
-        "baseAD": 55,
-        "adGrowth": 2.3,
-        "baseAS": 0.665,
-        "asGrowth": 2.1,
-        "attackRange": 550,
-        "moveSpeed": 325,
-        "baseMP": 348,
-        "mpGrowth": 42,
-        "baseHPRegen": 3.25,
-        "hpRegenGrowth": 0.55
-      },
-      "kit_tags": [
-        "attack",
-        "cc",
-        "on_hit"
-      ]
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/523.png"
     },
     {
-      "slug": "kalista",
-      "name": "Kalista",
+      "slug": "kalista/",
+      "name": "Kalista/",
       "tier": "C",
       "rank": 74,
       "win_rate": 52.81,
@@ -2753,35 +944,11 @@
       "tags": [
         "marksman"
       ],
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/429.png",
-      "baseStats": {
-        "baseHP": 560,
-        "hpGrowth": 114,
-        "baseArmor": 24,
-        "armorGrowth": 5.2,
-        "baseMR": 30,
-        "mrGrowth": 1.3,
-        "baseAD": 57,
-        "adGrowth": 4.75,
-        "baseAS": 0.694,
-        "asGrowth": 4.5,
-        "attackRange": 525,
-        "moveSpeed": 330,
-        "baseMP": 300,
-        "mpGrowth": 45,
-        "baseHPRegen": 4,
-        "hpRegenGrowth": 0.75
-      },
-      "kit_tags": [
-        "attack",
-        "crit",
-        "movement",
-        "on_hit"
-      ]
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/429.png"
     },
     {
-      "slug": "ziggs",
-      "name": "Ziggs",
+      "slug": "ziggs/",
+      "name": "Ziggs/",
       "tier": "C",
       "rank": 75,
       "win_rate": 49.74,
@@ -2789,35 +956,11 @@
       "tags": [
         "mage"
       ],
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/115.png",
-      "baseStats": {
-        "baseHP": 606,
-        "hpGrowth": 106,
-        "baseArmor": 21,
-        "armorGrowth": 4.7,
-        "baseMR": 30,
-        "mrGrowth": 1.3,
-        "baseAD": 55,
-        "adGrowth": 3.1,
-        "baseAS": 0.656,
-        "asGrowth": 2,
-        "attackRange": 550,
-        "moveSpeed": 325,
-        "baseMP": 480,
-        "mpGrowth": 23.5,
-        "baseHPRegen": 6.5,
-        "hpRegenGrowth": 0.6
-      },
-      "kit_tags": [
-        "ability",
-        "cc",
-        "haste",
-        "movement"
-      ]
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/115.png"
     },
     {
-      "slug": "ornn",
-      "name": "Ornn",
+      "slug": "ornn/",
+      "name": "Ornn/",
       "tier": "C",
       "rank": 76,
       "win_rate": 49.0,
@@ -2825,36 +968,11 @@
       "tags": [
         "tank"
       ],
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/516.png",
-      "baseStats": {
-        "baseHP": 660,
-        "hpGrowth": 109,
-        "baseArmor": 33,
-        "armorGrowth": 5.2,
-        "baseMR": 32,
-        "mrGrowth": 2.05,
-        "baseAD": 69,
-        "adGrowth": 3.5,
-        "baseAS": 0.625,
-        "asGrowth": 2,
-        "attackRange": 175,
-        "moveSpeed": 335,
-        "baseMP": 341,
-        "mpGrowth": 65,
-        "baseHPRegen": 9,
-        "hpRegenGrowth": 0.9
-      },
-      "kit_tags": [
-        "attack",
-        "cc",
-        "dot",
-        "movement",
-        "tank"
-      ]
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/516.png"
     },
     {
-      "slug": "kindred",
-      "name": "Kindred",
+      "slug": "kindred/",
+      "name": "Kindred/",
       "tier": "C",
       "rank": 77,
       "win_rate": 50.74,
@@ -2862,36 +980,11 @@
       "tags": [
         "marksman"
       ],
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/203.png",
-      "baseStats": {
-        "baseHP": 595,
-        "hpGrowth": 104,
-        "baseArmor": 29,
-        "armorGrowth": 4.7,
-        "baseMR": 30,
-        "mrGrowth": 1.3,
-        "baseAD": 65,
-        "adGrowth": 3.25,
-        "baseAS": 0.625,
-        "asGrowth": 3.5,
-        "attackRange": 500,
-        "moveSpeed": 325,
-        "baseMP": 300,
-        "mpGrowth": 35,
-        "baseHPRegen": 7,
-        "hpRegenGrowth": 0.55
-      },
-      "kit_tags": [
-        "attack",
-        "crit",
-        "heal_shield",
-        "movement",
-        "on_hit"
-      ]
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/203.png"
     },
     {
-      "slug": "ezreal",
-      "name": "Ezreal",
+      "slug": "ezreal/",
+      "name": "Ezreal/",
       "tier": "C",
       "rank": 78,
       "win_rate": 46.89,
@@ -2900,36 +993,11 @@
         "marksman",
         "mage"
       ],
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/81.png",
-      "baseStats": {
-        "baseHP": 600,
-        "hpGrowth": 102,
-        "baseArmor": 24,
-        "armorGrowth": 4.2,
-        "baseMR": 30,
-        "mrGrowth": 1.3,
-        "baseAD": 60,
-        "adGrowth": 3.75,
-        "baseAS": 0.625,
-        "asGrowth": 2.5,
-        "attackRange": 550,
-        "moveSpeed": 325,
-        "baseMP": 375,
-        "mpGrowth": 70,
-        "baseHPRegen": 4,
-        "hpRegenGrowth": 0.65
-      },
-      "kit_tags": [
-        "ability",
-        "attack",
-        "crit",
-        "haste",
-        "movement"
-      ]
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/81.png"
     },
     {
-      "slug": "pantheon",
-      "name": "Pantheon",
+      "slug": "pantheon/",
+      "name": "Pantheon/",
       "tier": "C",
       "rank": 79,
       "win_rate": 49.33,
@@ -2938,36 +1006,11 @@
         "fighter",
         "assassin"
       ],
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/80.png",
-      "baseStats": {
-        "baseHP": 650,
-        "hpGrowth": 109,
-        "baseArmor": 40,
-        "armorGrowth": 4.95,
-        "baseMR": 28,
-        "mrGrowth": 2.05,
-        "baseAD": 64,
-        "adGrowth": 3.3,
-        "baseAS": 0.658,
-        "asGrowth": 2.95,
-        "attackRange": 175,
-        "moveSpeed": 345,
-        "baseMP": 317,
-        "mpGrowth": 31,
-        "baseHPRegen": 6,
-        "hpRegenGrowth": 0.65
-      },
-      "kit_tags": [
-        "ability",
-        "attack",
-        "cc",
-        "heal_shield",
-        "movement"
-      ]
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/80.png"
     },
     {
-      "slug": "pyke",
-      "name": "Pyke",
+      "slug": "pyke/",
+      "name": "Pyke/",
       "tier": "C",
       "rank": 80,
       "win_rate": 49.26,
@@ -2976,36 +1019,11 @@
         "support",
         "assassin"
       ],
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/555.png",
-      "baseStats": {
-        "baseHP": 670,
-        "hpGrowth": 110,
-        "baseArmor": 37,
-        "armorGrowth": 4.7,
-        "baseMR": 32,
-        "mrGrowth": 2.05,
-        "baseAD": 62,
-        "adGrowth": 2,
-        "baseAS": 0.667,
-        "asGrowth": 2.5,
-        "attackRange": 150,
-        "moveSpeed": 330,
-        "baseMP": 415,
-        "mpGrowth": 50,
-        "baseHPRegen": 7,
-        "hpRegenGrowth": 0.5
-      },
-      "kit_tags": [
-        "ability",
-        "attack",
-        "cc",
-        "dot",
-        "movement"
-      ]
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/555.png"
     },
     {
-      "slug": "talon",
-      "name": "Talon",
+      "slug": "talon/",
+      "name": "Talon/",
       "tier": "C",
       "rank": 81,
       "win_rate": 49.72,
@@ -3013,36 +1031,11 @@
       "tags": [
         "assassin"
       ],
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/91.png",
-      "baseStats": {
-        "baseHP": 658,
-        "hpGrowth": 109,
-        "baseArmor": 30,
-        "armorGrowth": 4.7,
-        "baseMR": 36,
-        "mrGrowth": 2.05,
-        "baseAD": 68,
-        "adGrowth": 3.1,
-        "baseAS": 0.625,
-        "asGrowth": 2.9,
-        "attackRange": 125,
-        "moveSpeed": 335,
-        "baseMP": 400,
-        "mpGrowth": 37,
-        "baseHPRegen": 8.5,
-        "hpRegenGrowth": 0.75
-      },
-      "kit_tags": [
-        "attack",
-        "crit",
-        "dot",
-        "movement",
-        "on_hit"
-      ]
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/91.png"
     },
     {
-      "slug": "zilean",
-      "name": "Zilean",
+      "slug": "zilean/",
+      "name": "Zilean/",
       "tier": "C",
       "rank": 82,
       "win_rate": 50.62,
@@ -3051,35 +1044,11 @@
         "support",
         "mage"
       ],
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/26.png",
-      "baseStats": {
-        "baseHP": 574,
-        "hpGrowth": 96,
-        "baseArmor": 24,
-        "armorGrowth": 5,
-        "baseMR": 30,
-        "mrGrowth": 1.3,
-        "baseAD": 52,
-        "adGrowth": 3,
-        "baseAS": 0.658,
-        "asGrowth": 2.13,
-        "attackRange": 550,
-        "moveSpeed": 335,
-        "baseMP": 452,
-        "mpGrowth": 50,
-        "baseHPRegen": 5.5,
-        "hpRegenGrowth": 0.5
-      },
-      "kit_tags": [
-        "ability",
-        "cc",
-        "haste",
-        "movement"
-      ]
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/26.png"
     },
     {
-      "slug": "kogmaw",
-      "name": "Kogmaw",
+      "slug": "kogmaw/",
+      "name": "Kogmaw/",
       "tier": "C",
       "rank": 83,
       "win_rate": 49.95,
@@ -3088,34 +1057,11 @@
         "marksman",
         "mage"
       ],
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/96.png",
-      "baseStats": {
-        "baseHP": 635,
-        "hpGrowth": 99,
-        "baseArmor": 24,
-        "armorGrowth": 4.45,
-        "baseMR": 30,
-        "mrGrowth": 1.3,
-        "baseAD": 61,
-        "adGrowth": 3.1,
-        "baseAS": 0.665,
-        "asGrowth": 2.65,
-        "attackRange": 500,
-        "moveSpeed": 330,
-        "baseMP": 325,
-        "mpGrowth": 40,
-        "baseHPRegen": 3.75,
-        "hpRegenGrowth": 0.55
-      },
-      "kit_tags": [
-        "ability",
-        "attack",
-        "haste"
-      ]
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/96.png"
     },
     {
-      "slug": "heimerdinger",
-      "name": "Heimerdinger",
+      "slug": "heimerdinger/",
+      "name": "Heimerdinger/",
       "tier": "C",
       "rank": 84,
       "win_rate": 51.33,
@@ -3124,35 +1070,11 @@
         "mage",
         "support"
       ],
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/74.png",
-      "baseStats": {
-        "baseHP": 558,
-        "hpGrowth": 105,
-        "baseArmor": 19,
-        "armorGrowth": 4.2,
-        "baseMR": 30,
-        "mrGrowth": 1.3,
-        "baseAD": 56,
-        "adGrowth": 2.7,
-        "baseAS": 0.658,
-        "asGrowth": 1.36,
-        "attackRange": 550,
-        "moveSpeed": 340,
-        "baseMP": 385,
-        "mpGrowth": 20,
-        "baseHPRegen": 7,
-        "hpRegenGrowth": 0.55
-      },
-      "kit_tags": [
-        "ability",
-        "cc",
-        "haste",
-        "movement"
-      ]
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/74.png"
     },
     {
-      "slug": "varus",
-      "name": "Varus",
+      "slug": "varus/",
+      "name": "Varus/",
       "tier": "C",
       "rank": 85,
       "win_rate": 46.39,
@@ -3161,37 +1083,11 @@
         "marksman",
         "mage"
       ],
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/110.png",
-      "baseStats": {
-        "baseHP": 600,
-        "hpGrowth": 105,
-        "baseArmor": 24,
-        "armorGrowth": 4,
-        "baseMR": 30,
-        "mrGrowth": 1.3,
-        "baseAD": 59,
-        "adGrowth": 3.4,
-        "baseAS": 0.658,
-        "asGrowth": 3.5,
-        "attackRange": 575,
-        "moveSpeed": 330,
-        "baseMP": 320,
-        "mpGrowth": 40,
-        "baseHPRegen": 3.5,
-        "hpRegenGrowth": 0.55
-      },
-      "kit_tags": [
-        "ability",
-        "attack",
-        "cc",
-        "crit",
-        "haste",
-        "heal_shield"
-      ]
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/110.png"
     },
     {
-      "slug": "leona",
-      "name": "Leona",
+      "slug": "leona/",
+      "name": "Leona/",
       "tier": "C",
       "rank": 86,
       "win_rate": 49.37,
@@ -3200,35 +1096,11 @@
         "tank",
         "support"
       ],
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/89.png",
-      "baseStats": {
-        "baseHP": 646,
-        "hpGrowth": 101,
-        "baseArmor": 43,
-        "armorGrowth": 4.8,
-        "baseMR": 32,
-        "mrGrowth": 2.05,
-        "baseAD": 60,
-        "adGrowth": 3,
-        "baseAS": 0.625,
-        "asGrowth": 2.9,
-        "attackRange": 125,
-        "moveSpeed": 335,
-        "baseMP": 302,
-        "mpGrowth": 40,
-        "baseHPRegen": 8.5,
-        "hpRegenGrowth": 0.85
-      },
-      "kit_tags": [
-        "cc",
-        "heal_shield",
-        "on_hit",
-        "tank"
-      ]
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/89.png"
     },
     {
-      "slug": "shen",
-      "name": "Shen",
+      "slug": "shen/",
+      "name": "Shen/",
       "tier": "C",
       "rank": 87,
       "win_rate": 50.31,
@@ -3236,36 +1108,11 @@
       "tags": [
         "tank"
       ],
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/98.png",
-      "baseStats": {
-        "baseHP": 610,
-        "hpGrowth": 99,
-        "baseArmor": 34,
-        "armorGrowth": 4.2,
-        "baseMR": 32,
-        "mrGrowth": 2.05,
-        "baseAD": 64,
-        "adGrowth": 3,
-        "baseAS": 0.751,
-        "asGrowth": 3,
-        "attackRange": 125,
-        "moveSpeed": 340,
-        "baseMP": 400,
-        "mpGrowth": 0,
-        "baseHPRegen": 8.5,
-        "hpRegenGrowth": 0.75
-      },
-      "kit_tags": [
-        "ability",
-        "cc",
-        "heal_shield",
-        "movement",
-        "tank"
-      ]
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/98.png"
     },
     {
-      "slug": "darius",
-      "name": "Darius",
+      "slug": "darius/",
+      "name": "Darius/",
       "tier": "C",
       "rank": 88,
       "win_rate": 47.43,
@@ -3274,37 +1121,11 @@
         "fighter",
         "tank"
       ],
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/122.png",
-      "baseStats": {
-        "baseHP": 652,
-        "hpGrowth": 114,
-        "baseArmor": 37,
-        "armorGrowth": 5.2,
-        "baseMR": 32,
-        "mrGrowth": 2.05,
-        "baseAD": 64,
-        "adGrowth": 5,
-        "baseAS": 0.625,
-        "asGrowth": 1,
-        "attackRange": 175,
-        "moveSpeed": 340,
-        "baseMP": 263,
-        "mpGrowth": 58,
-        "baseHPRegen": 10,
-        "hpRegenGrowth": 0.95
-      },
-      "kit_tags": [
-        "attack",
-        "cc",
-        "dot",
-        "heal_shield",
-        "on_hit",
-        "tank"
-      ]
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/122.png"
     },
     {
-      "slug": "vladimir",
-      "name": "Vladimir",
+      "slug": "vladimir/",
+      "name": "Vladimir/",
       "tier": "C",
       "rank": 89,
       "win_rate": 48.54,
@@ -3313,35 +1134,11 @@
         "mage",
         "fighter"
       ],
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/8.png",
-      "baseStats": {
-        "baseHP": 600,
-        "hpGrowth": 110,
-        "baseArmor": 24,
-        "armorGrowth": 4.5,
-        "baseMR": 30,
-        "mrGrowth": 1.3,
-        "baseAD": 55,
-        "adGrowth": 3,
-        "baseAS": 0.658,
-        "asGrowth": 2,
-        "attackRange": 450,
-        "moveSpeed": 330,
-        "baseMP": 2,
-        "mpGrowth": 0,
-        "baseHPRegen": 7,
-        "hpRegenGrowth": 0.6
-      },
-      "kit_tags": [
-        "ability",
-        "haste",
-        "heal_shield",
-        "on_hit"
-      ]
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/8.png"
     },
     {
-      "slug": "janna",
-      "name": "Janna",
+      "slug": "janna/",
+      "name": "Janna/",
       "tier": "C",
       "rank": 90,
       "win_rate": 52.79,
@@ -3350,35 +1147,11 @@
         "support",
         "mage"
       ],
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/40.png",
-      "baseStats": {
-        "baseHP": 570,
-        "hpGrowth": 90,
-        "baseArmor": 28,
-        "armorGrowth": 4.5,
-        "baseMR": 30,
-        "mrGrowth": 1.3,
-        "baseAD": 47,
-        "adGrowth": 2.5,
-        "baseAS": 0.625,
-        "asGrowth": 3,
-        "attackRange": 550,
-        "moveSpeed": 325,
-        "baseMP": 360,
-        "mpGrowth": 50,
-        "baseHPRegen": 5.5,
-        "hpRegenGrowth": 0.55
-      },
-      "kit_tags": [
-        "ability",
-        "cc",
-        "heal_shield",
-        "movement"
-      ]
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/40.png"
     },
     {
-      "slug": "renata",
-      "name": "Renata",
+      "slug": "renata/",
+      "name": "Renata/",
       "tier": "C",
       "rank": 91,
       "win_rate": 52.99,
@@ -3387,36 +1160,11 @@
         "support",
         "mage"
       ],
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/888.png",
-      "baseStats": {
-        "baseHP": 545,
-        "hpGrowth": 94,
-        "baseArmor": 27,
-        "armorGrowth": 4.7,
-        "baseMR": 30,
-        "mrGrowth": 1.3,
-        "baseAD": 49,
-        "adGrowth": 3,
-        "baseAS": 0.625,
-        "asGrowth": 2.11,
-        "attackRange": 550,
-        "moveSpeed": 330,
-        "baseMP": 350,
-        "mpGrowth": 50,
-        "baseHPRegen": 5.5,
-        "hpRegenGrowth": 0.55
-      },
-      "kit_tags": [
-        "ability",
-        "cc",
-        "dot",
-        "haste",
-        "heal_shield"
-      ]
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/888.png"
     },
     {
-      "slug": "fiora",
-      "name": "Fiora",
+      "slug": "fiora/",
+      "name": "Fiora/",
       "tier": "C",
       "rank": 92,
       "win_rate": 51.42,
@@ -3425,37 +1173,11 @@
         "fighter",
         "assassin"
       ],
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/114.png",
-      "baseStats": {
-        "baseHP": 620,
-        "hpGrowth": 99,
-        "baseArmor": 33,
-        "armorGrowth": 4.7,
-        "baseMR": 32,
-        "mrGrowth": 2.05,
-        "baseAD": 66,
-        "adGrowth": 3.3,
-        "baseAS": 0.69,
-        "asGrowth": 3.2,
-        "attackRange": 150,
-        "moveSpeed": 345,
-        "baseMP": 300,
-        "mpGrowth": 60,
-        "baseHPRegen": 8.5,
-        "hpRegenGrowth": 0.55
-      },
-      "kit_tags": [
-        "attack",
-        "cc",
-        "crit",
-        "heal_shield",
-        "movement",
-        "on_hit"
-      ]
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/114.png"
     },
     {
-      "slug": "sivir",
-      "name": "Sivir",
+      "slug": "sivir/",
+      "name": "Sivir/",
       "tier": "C",
       "rank": 93,
       "win_rate": 48.4,
@@ -3463,34 +1185,11 @@
       "tags": [
         "marksman"
       ],
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/15.png",
-      "baseStats": {
-        "baseHP": 600,
-        "hpGrowth": 104,
-        "baseArmor": 30,
-        "armorGrowth": 4,
-        "baseMR": 30,
-        "mrGrowth": 1.3,
-        "baseAD": 60,
-        "adGrowth": 2.5,
-        "baseAS": 0.625,
-        "asGrowth": 1.6,
-        "attackRange": 500,
-        "moveSpeed": 335,
-        "baseMP": 340,
-        "mpGrowth": 45,
-        "baseHPRegen": 3.25,
-        "hpRegenGrowth": 0.55
-      },
-      "kit_tags": [
-        "attack",
-        "heal_shield",
-        "on_hit"
-      ]
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/15.png"
     },
     {
-      "slug": "mordekaiser",
-      "name": "Mordekaiser",
+      "slug": "mordekaiser/",
+      "name": "Mordekaiser/",
       "tier": "C",
       "rank": 94,
       "win_rate": 47.26,
@@ -3499,37 +1198,11 @@
         "fighter",
         "mage"
       ],
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/82.png",
-      "baseStats": {
-        "baseHP": 645,
-        "hpGrowth": 104,
-        "baseArmor": 37,
-        "armorGrowth": 4.2,
-        "baseMR": 32,
-        "mrGrowth": 2.05,
-        "baseAD": 61,
-        "adGrowth": 4,
-        "baseAS": 0.625,
-        "asGrowth": 1,
-        "attackRange": 175,
-        "moveSpeed": 335,
-        "baseMP": 100,
-        "mpGrowth": 0,
-        "baseHPRegen": 5,
-        "hpRegenGrowth": 0.75
-      },
-      "kit_tags": [
-        "ability",
-        "attack",
-        "cc",
-        "dot",
-        "haste",
-        "heal_shield"
-      ]
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/82.png"
     },
     {
-      "slug": "viego",
-      "name": "Viego",
+      "slug": "viego/",
+      "name": "Viego/",
       "tier": "C",
       "rank": 95,
       "win_rate": 49.49,
@@ -3538,36 +1211,11 @@
         "fighter",
         "assassin"
       ],
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/234.png",
-      "baseStats": {
-        "baseHP": 630,
-        "hpGrowth": 109,
-        "baseArmor": 34,
-        "armorGrowth": 4.6,
-        "baseMR": 32,
-        "mrGrowth": 2.05,
-        "baseAD": 57,
-        "adGrowth": 3.5,
-        "baseAS": 0.658,
-        "asGrowth": 2.75,
-        "attackRange": 200,
-        "moveSpeed": 345,
-        "baseMP": 10000,
-        "mpGrowth": 0,
-        "baseHPRegen": 7,
-        "hpRegenGrowth": 0.7
-      },
-      "kit_tags": [
-        "attack",
-        "cc",
-        "heal_shield",
-        "movement",
-        "on_hit"
-      ]
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/234.png"
     },
     {
-      "slug": "blitzcrank",
-      "name": "Blitzcrank",
+      "slug": "blitzcrank/",
+      "name": "Blitzcrank/",
       "tier": "C",
       "rank": 96,
       "win_rate": 47.25,
@@ -3576,37 +1224,11 @@
         "tank",
         "support"
       ],
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/53.png",
-      "baseStats": {
-        "baseHP": 600,
-        "hpGrowth": 109,
-        "baseArmor": 37,
-        "armorGrowth": 4.7,
-        "baseMR": 32,
-        "mrGrowth": 2.05,
-        "baseAD": 62,
-        "adGrowth": 3.5,
-        "baseAS": 0.625,
-        "asGrowth": 1.13,
-        "attackRange": 125,
-        "moveSpeed": 325,
-        "baseMP": 267,
-        "mpGrowth": 40,
-        "baseHPRegen": 7.5,
-        "hpRegenGrowth": 0.75
-      },
-      "kit_tags": [
-        "ability",
-        "attack",
-        "cc",
-        "heal_shield",
-        "on_hit",
-        "tank"
-      ]
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/53.png"
     },
     {
-      "slug": "vex",
-      "name": "Vex",
+      "slug": "vex/",
+      "name": "Vex/",
       "tier": "C",
       "rank": 97,
       "win_rate": 51.61,
@@ -3614,36 +1236,11 @@
       "tags": [
         "mage"
       ],
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/711.png",
-      "baseStats": {
-        "baseHP": 590,
-        "hpGrowth": 104,
-        "baseArmor": 23,
-        "armorGrowth": 4.45,
-        "baseMR": 28,
-        "mrGrowth": 1.3,
-        "baseAD": 54,
-        "adGrowth": 2.75,
-        "baseAS": 0.669,
-        "asGrowth": 1,
-        "attackRange": 550,
-        "moveSpeed": 335,
-        "baseMP": 490,
-        "mpGrowth": 32,
-        "baseHPRegen": 6.5,
-        "hpRegenGrowth": 0.6
-      },
-      "kit_tags": [
-        "ability",
-        "cc",
-        "haste",
-        "heal_shield",
-        "movement"
-      ]
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/711.png"
     },
     {
-      "slug": "ambessa",
-      "name": "Ambessa",
+      "slug": "ambessa/",
+      "name": "Ambessa/",
       "tier": "C",
       "rank": 98,
       "win_rate": 49.89,
@@ -3652,36 +1249,11 @@
         "fighter",
         "assassin"
       ],
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/799.png",
-      "baseStats": {
-        "baseHP": 630,
-        "hpGrowth": 110,
-        "baseArmor": 35,
-        "armorGrowth": 4.9,
-        "baseMR": 32,
-        "mrGrowth": 2.05,
-        "baseAD": 63,
-        "adGrowth": 3,
-        "baseAS": 0.625,
-        "asGrowth": 2.5,
-        "attackRange": 125,
-        "moveSpeed": 335,
-        "baseMP": 200,
-        "mpGrowth": 0,
-        "baseHPRegen": 8.5,
-        "hpRegenGrowth": 0.75
-      },
-      "kit_tags": [
-        "attack",
-        "cc",
-        "heal_shield",
-        "movement",
-        "on_hit"
-      ]
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/799.png"
     },
     {
-      "slug": "kassadin",
-      "name": "Kassadin",
+      "slug": "kassadin/",
+      "name": "Kassadin/",
       "tier": "C",
       "rank": 99,
       "win_rate": 50.66,
@@ -3690,35 +1262,11 @@
         "assassin",
         "mage"
       ],
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/38.png",
-      "baseStats": {
-        "baseHP": 646,
-        "hpGrowth": 113,
-        "baseArmor": 21,
-        "armorGrowth": 4,
-        "baseMR": 30,
-        "mrGrowth": 1.3,
-        "baseAD": 59,
-        "adGrowth": 3.9,
-        "baseAS": 0.64,
-        "asGrowth": 3.7,
-        "attackRange": 150,
-        "moveSpeed": 335,
-        "baseMP": 400,
-        "mpGrowth": 87,
-        "baseHPRegen": 6,
-        "hpRegenGrowth": 0.5
-      },
-      "kit_tags": [
-        "ability",
-        "haste",
-        "heal_shield",
-        "movement"
-      ]
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/38.png"
     },
     {
-      "slug": "shaco",
-      "name": "Shaco",
+      "slug": "shaco/",
+      "name": "Shaco/",
       "tier": "C",
       "rank": 100,
       "win_rate": 45.86,
@@ -3726,37 +1274,11 @@
       "tags": [
         "assassin"
       ],
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/35.png",
-      "baseStats": {
-        "baseHP": 630,
-        "hpGrowth": 99,
-        "baseArmor": 30,
-        "armorGrowth": 4,
-        "baseMR": 32,
-        "mrGrowth": 2.05,
-        "baseAD": 63,
-        "adGrowth": 3,
-        "baseAS": 0.694,
-        "asGrowth": 3,
-        "attackRange": 125,
-        "moveSpeed": 345,
-        "baseMP": 297,
-        "mpGrowth": 40,
-        "baseHPRegen": 8.5,
-        "hpRegenGrowth": 0.55
-      },
-      "kit_tags": [
-        "attack",
-        "cc",
-        "crit",
-        "dot",
-        "movement",
-        "on_hit"
-      ]
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/35.png"
     },
     {
-      "slug": "sejuani",
-      "name": "Sejuani",
+      "slug": "sejuani/",
+      "name": "Sejuani/",
       "tier": "C",
       "rank": 101,
       "win_rate": 48.85,
@@ -3764,36 +1286,11 @@
       "tags": [
         "tank"
       ],
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/113.png",
-      "baseStats": {
-        "baseHP": 630,
-        "hpGrowth": 114,
-        "baseArmor": 34,
-        "armorGrowth": 5.45,
-        "baseMR": 32,
-        "mrGrowth": 2.05,
-        "baseAD": 66,
-        "adGrowth": 4,
-        "baseAS": 0.688,
-        "asGrowth": 3.5,
-        "attackRange": 150,
-        "moveSpeed": 340,
-        "baseMP": 400,
-        "mpGrowth": 40,
-        "baseHPRegen": 8.5,
-        "hpRegenGrowth": 1
-      },
-      "kit_tags": [
-        "ability",
-        "cc",
-        "movement",
-        "on_hit",
-        "tank"
-      ]
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/113.png"
     },
     {
-      "slug": "riven",
-      "name": "Riven",
+      "slug": "riven/",
+      "name": "Riven/",
       "tier": "C",
       "rank": 102,
       "win_rate": 49.67,
@@ -3802,35 +1299,11 @@
         "fighter",
         "assassin"
       ],
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/92.png",
-      "baseStats": {
-        "baseHP": 630,
-        "hpGrowth": 100,
-        "baseArmor": 33,
-        "armorGrowth": 4.4,
-        "baseMR": 32,
-        "mrGrowth": 2.05,
-        "baseAD": 64,
-        "adGrowth": 3,
-        "baseAS": 0.625,
-        "asGrowth": 3.5,
-        "attackRange": 125,
-        "moveSpeed": 340,
-        "baseMP": 0,
-        "mpGrowth": 0,
-        "baseHPRegen": 8.5,
-        "hpRegenGrowth": 0.5
-      },
-      "kit_tags": [
-        "attack",
-        "cc",
-        "movement",
-        "on_hit"
-      ]
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/92.png"
     },
     {
-      "slug": "khazix",
-      "name": "Khazix",
+      "slug": "khazix/",
+      "name": "Khazix/",
       "tier": "C",
       "rank": 103,
       "win_rate": 48.14,
@@ -3838,36 +1311,11 @@
       "tags": [
         "assassin"
       ],
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/121.png",
-      "baseStats": {
-        "baseHP": 643,
-        "hpGrowth": 99,
-        "baseArmor": 32,
-        "armorGrowth": 4.2,
-        "baseMR": 32,
-        "mrGrowth": 2.05,
-        "baseAD": 60,
-        "adGrowth": 3.1,
-        "baseAS": 0.668,
-        "asGrowth": 2.7,
-        "attackRange": 125,
-        "moveSpeed": 345,
-        "baseMP": 327,
-        "mpGrowth": 40,
-        "baseHPRegen": 7.5,
-        "hpRegenGrowth": 0.75
-      },
-      "kit_tags": [
-        "ability",
-        "attack",
-        "cc",
-        "movement",
-        "on_hit"
-      ]
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/121.png"
     },
     {
-      "slug": "sona",
-      "name": "Sona",
+      "slug": "sona/",
+      "name": "Sona/",
       "tier": "C",
       "rank": 104,
       "win_rate": 49.96,
@@ -3876,35 +1324,11 @@
         "support",
         "mage"
       ],
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/37.png",
-      "baseStats": {
-        "baseHP": 550,
-        "hpGrowth": 91,
-        "baseArmor": 26,
-        "armorGrowth": 4.2,
-        "baseMR": 30,
-        "mrGrowth": 1.3,
-        "baseAD": 49,
-        "adGrowth": 3,
-        "baseAS": 0.644,
-        "asGrowth": 2.3,
-        "attackRange": 550,
-        "moveSpeed": 325,
-        "baseMP": 340,
-        "mpGrowth": 45,
-        "baseHPRegen": 5.5,
-        "hpRegenGrowth": 0.55
-      },
-      "kit_tags": [
-        "ability",
-        "cc",
-        "haste",
-        "heal_shield"
-      ]
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/37.png"
     },
     {
-      "slug": "soraka",
-      "name": "Soraka",
+      "slug": "soraka/",
+      "name": "Soraka/",
       "tier": "C",
       "rank": 105,
       "win_rate": 49.69,
@@ -3913,34 +1337,11 @@
         "support",
         "mage"
       ],
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/16.png",
-      "baseStats": {
-        "baseHP": 605,
-        "hpGrowth": 88,
-        "baseArmor": 32,
-        "armorGrowth": 5,
-        "baseMR": 30,
-        "mrGrowth": 1.3,
-        "baseAD": 50,
-        "adGrowth": 3,
-        "baseAS": 0.625,
-        "asGrowth": 2.14,
-        "attackRange": 550,
-        "moveSpeed": 325,
-        "baseMP": 425,
-        "mpGrowth": 40,
-        "baseHPRegen": 2.5,
-        "hpRegenGrowth": 0.5
-      },
-      "kit_tags": [
-        "ability",
-        "cc",
-        "heal_shield"
-      ]
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/16.png"
     },
     {
-      "slug": "nilah",
-      "name": "Nilah",
+      "slug": "nilah/",
+      "name": "Nilah/",
       "tier": "C",
       "rank": 106,
       "win_rate": 51.62,
@@ -3949,37 +1350,11 @@
         "fighter",
         "assassin"
       ],
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/895.png",
-      "baseStats": {
-        "baseHP": 570,
-        "hpGrowth": 101,
-        "baseArmor": 27,
-        "armorGrowth": 4.2,
-        "baseMR": 32,
-        "mrGrowth": 2.05,
-        "baseAD": 58,
-        "adGrowth": 2,
-        "baseAS": 0.697,
-        "asGrowth": 1.25,
-        "attackRange": 225,
-        "moveSpeed": 340,
-        "baseMP": 350,
-        "mpGrowth": 35,
-        "baseHPRegen": 6,
-        "hpRegenGrowth": 0.9
-      },
-      "kit_tags": [
-        "attack",
-        "cc",
-        "dot",
-        "heal_shield",
-        "movement",
-        "on_hit"
-      ]
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/895.png"
     },
     {
-      "slug": "nocturne",
-      "name": "Nocturne",
+      "slug": "nocturne/",
+      "name": "Nocturne/",
       "tier": "C",
       "rank": 107,
       "win_rate": 49.58,
@@ -3988,37 +1363,11 @@
         "fighter",
         "assassin"
       ],
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/56.png",
-      "baseStats": {
-        "baseHP": 655,
-        "hpGrowth": 109,
-        "baseArmor": 38,
-        "armorGrowth": 4.2,
-        "baseMR": 32,
-        "mrGrowth": 1.55,
-        "baseAD": 62,
-        "adGrowth": 2.6,
-        "baseAS": 0.721,
-        "asGrowth": 2.7,
-        "attackRange": 125,
-        "moveSpeed": 345,
-        "baseMP": 275,
-        "mpGrowth": 35,
-        "baseHPRegen": 7,
-        "hpRegenGrowth": 0.75
-      },
-      "kit_tags": [
-        "ability",
-        "attack",
-        "cc",
-        "heal_shield",
-        "movement",
-        "on_hit"
-      ]
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/56.png"
     },
     {
-      "slug": "thresh",
-      "name": "Thresh",
+      "slug": "thresh/",
+      "name": "Thresh/",
       "tier": "C",
       "rank": 108,
       "win_rate": 45.91,
@@ -4027,35 +1376,11 @@
         "support",
         "tank"
       ],
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/412.png",
-      "baseStats": {
-        "baseHP": 620,
-        "hpGrowth": 120,
-        "baseArmor": 33,
-        "armorGrowth": 0,
-        "baseMR": 30,
-        "mrGrowth": 1.55,
-        "baseAD": 56,
-        "adGrowth": 2.2,
-        "baseAS": 0.625,
-        "asGrowth": 3.5,
-        "attackRange": 450,
-        "moveSpeed": 330,
-        "baseMP": 274,
-        "mpGrowth": 44,
-        "baseHPRegen": 7,
-        "hpRegenGrowth": 0.55
-      },
-      "kit_tags": [
-        "ability",
-        "cc",
-        "heal_shield",
-        "tank"
-      ]
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/412.png"
     },
     {
-      "slug": "gragas",
-      "name": "Gragas",
+      "slug": "gragas/",
+      "name": "Gragas/",
       "tier": "C",
       "rank": 109,
       "win_rate": 48.5,
@@ -4064,38 +1389,11 @@
         "fighter",
         "mage"
       ],
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/79.png",
-      "baseStats": {
-        "baseHP": 640,
-        "hpGrowth": 115,
-        "baseArmor": 38,
-        "armorGrowth": 5,
-        "baseMR": 32,
-        "mrGrowth": 2.05,
-        "baseAD": 64,
-        "adGrowth": 3.5,
-        "baseAS": 0.675,
-        "asGrowth": 2.05,
-        "attackRange": 125,
-        "moveSpeed": 330,
-        "baseMP": 400,
-        "mpGrowth": 47,
-        "baseHPRegen": 5.5,
-        "hpRegenGrowth": 0.5
-      },
-      "kit_tags": [
-        "ability",
-        "cc",
-        "haste",
-        "heal_shield",
-        "movement",
-        "on_hit",
-        "tank"
-      ]
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/79.png"
     },
     {
-      "slug": "karma",
-      "name": "Karma",
+      "slug": "karma/",
+      "name": "Karma/",
       "tier": "C",
       "rank": 110,
       "win_rate": 48.76,
@@ -4104,35 +1402,11 @@
         "mage",
         "support"
       ],
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/43.png",
-      "baseStats": {
-        "baseHP": 630,
-        "hpGrowth": 109,
-        "baseArmor": 28,
-        "armorGrowth": 5,
-        "baseMR": 30,
-        "mrGrowth": 1.3,
-        "baseAD": 49,
-        "adGrowth": 3.3,
-        "baseAS": 0.625,
-        "asGrowth": 2.3,
-        "attackRange": 525,
-        "moveSpeed": 335,
-        "baseMP": 374,
-        "mpGrowth": 40,
-        "baseHPRegen": 5.5,
-        "hpRegenGrowth": 0.55
-      },
-      "kit_tags": [
-        "ability",
-        "cc",
-        "haste",
-        "heal_shield"
-      ]
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/43.png"
     },
     {
-      "slug": "orianna",
-      "name": "Orianna",
+      "slug": "orianna/",
+      "name": "Orianna/",
       "tier": "C",
       "rank": 111,
       "win_rate": 49.6,
@@ -4141,35 +1415,11 @@
         "mage",
         "support"
       ],
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/61.png",
-      "baseStats": {
-        "baseHP": 585,
-        "hpGrowth": 110,
-        "baseArmor": 20,
-        "armorGrowth": 4.2,
-        "baseMR": 26,
-        "mrGrowth": 1.3,
-        "baseAD": 44,
-        "adGrowth": 2.6,
-        "baseAS": 0.658,
-        "asGrowth": 3.5,
-        "attackRange": 525,
-        "moveSpeed": 325,
-        "baseMP": 418,
-        "mpGrowth": 25,
-        "baseHPRegen": 7,
-        "hpRegenGrowth": 0.55
-      },
-      "kit_tags": [
-        "ability",
-        "cc",
-        "haste",
-        "heal_shield"
-      ]
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/61.png"
     },
     {
-      "slug": "lissandra",
-      "name": "Lissandra",
+      "slug": "lissandra/",
+      "name": "Lissandra/",
       "tier": "C",
       "rank": 112,
       "win_rate": 48.9,
@@ -4177,36 +1427,11 @@
       "tags": [
         "mage"
       ],
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/127.png",
-      "baseStats": {
-        "baseHP": 620,
-        "hpGrowth": 110,
-        "baseArmor": 22,
-        "armorGrowth": 4.2,
-        "baseMR": 30,
-        "mrGrowth": 1.3,
-        "baseAD": 55,
-        "adGrowth": 2.7,
-        "baseAS": 0.656,
-        "asGrowth": 1.5,
-        "attackRange": 550,
-        "moveSpeed": 325,
-        "baseMP": 475,
-        "mpGrowth": 30,
-        "baseHPRegen": 7,
-        "hpRegenGrowth": 0.55
-      },
-      "kit_tags": [
-        "ability",
-        "cc",
-        "haste",
-        "heal_shield",
-        "movement"
-      ]
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/127.png"
     },
     {
-      "slug": "akshan",
-      "name": "Akshan",
+      "slug": "akshan/",
+      "name": "Akshan/",
       "tier": "C",
       "rank": 113,
       "win_rate": 49.7,
@@ -4215,34 +1440,11 @@
         "marksman",
         "assassin"
       ],
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/166.png",
-      "baseStats": {
-        "baseHP": 610,
-        "hpGrowth": 107,
-        "baseArmor": 26,
-        "armorGrowth": 4.7,
-        "baseMR": 30,
-        "mrGrowth": 1.3,
-        "baseAD": 52,
-        "adGrowth": 3,
-        "baseAS": 0.638,
-        "asGrowth": 4,
-        "attackRange": 500,
-        "moveSpeed": 330,
-        "baseMP": 350,
-        "mpGrowth": 40,
-        "baseHPRegen": 3.75,
-        "hpRegenGrowth": 0.65
-      },
-      "kit_tags": [
-        "attack",
-        "heal_shield",
-        "movement"
-      ]
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/166.png"
     },
     {
-      "slug": "draven",
-      "name": "Draven",
+      "slug": "draven/",
+      "name": "Draven/",
       "tier": "C",
       "rank": 114,
       "win_rate": 48.01,
@@ -4250,36 +1452,11 @@
       "tags": [
         "marksman"
       ],
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/119.png",
-      "baseStats": {
-        "baseHP": 675,
-        "hpGrowth": 104,
-        "baseArmor": 29,
-        "armorGrowth": 4.5,
-        "baseMR": 30,
-        "mrGrowth": 1.3,
-        "baseAD": 62,
-        "adGrowth": 3.4,
-        "baseAS": 0.679,
-        "asGrowth": 2.7,
-        "attackRange": 550,
-        "moveSpeed": 330,
-        "baseMP": 361,
-        "mpGrowth": 39,
-        "baseHPRegen": 3.75,
-        "hpRegenGrowth": 0.7
-      },
-      "kit_tags": [
-        "attack",
-        "cc",
-        "crit",
-        "movement",
-        "on_hit"
-      ]
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/119.png"
     },
     {
-      "slug": "amumu",
-      "name": "Amumu",
+      "slug": "amumu/",
+      "name": "Amumu/",
       "tier": "C",
       "rank": 115,
       "win_rate": 48.44,
@@ -4288,34 +1465,11 @@
         "tank",
         "support"
       ],
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/32.png",
-      "baseStats": {
-        "baseHP": 685,
-        "hpGrowth": 94,
-        "baseArmor": 33,
-        "armorGrowth": 4,
-        "baseMR": 32,
-        "mrGrowth": 2.05,
-        "baseAD": 57,
-        "adGrowth": 3.8,
-        "baseAS": 0.736,
-        "asGrowth": 2.18,
-        "attackRange": 125,
-        "moveSpeed": 335,
-        "baseMP": 285,
-        "mpGrowth": 40,
-        "baseHPRegen": 9,
-        "hpRegenGrowth": 0.85
-      },
-      "kit_tags": [
-        "cc",
-        "on_hit",
-        "tank"
-      ]
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/32.png"
     },
     {
-      "slug": "aatrox",
-      "name": "Aatrox",
+      "slug": "aatrox/",
+      "name": "Aatrox/",
       "tier": "C",
       "rank": 116,
       "win_rate": 45.87,
@@ -4323,37 +1477,11 @@
       "tags": [
         "fighter"
       ],
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/266.png",
-      "baseStats": {
-        "baseHP": 650,
-        "hpGrowth": 114,
-        "baseArmor": 38,
-        "armorGrowth": 4.8,
-        "baseMR": 32,
-        "mrGrowth": 2.05,
-        "baseAD": 60,
-        "adGrowth": 5,
-        "baseAS": 0.651,
-        "asGrowth": 2.5,
-        "attackRange": 175,
-        "moveSpeed": 345,
-        "baseMP": 0,
-        "mpGrowth": 0,
-        "baseHPRegen": 3,
-        "hpRegenGrowth": 0.5
-      },
-      "kit_tags": [
-        "attack",
-        "cc",
-        "heal_shield",
-        "movement",
-        "on_hit",
-        "tank"
-      ]
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/266.png"
     },
     {
-      "slug": "fiddlesticks",
-      "name": "Fiddlesticks",
+      "slug": "fiddlesticks/",
+      "name": "Fiddlesticks/",
       "tier": "C",
       "rank": 117,
       "win_rate": 47.63,
@@ -4362,36 +1490,11 @@
         "mage",
         "support"
       ],
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/9.png",
-      "baseStats": {
-        "baseHP": 650,
-        "hpGrowth": 106,
-        "baseArmor": 34,
-        "armorGrowth": 4.7,
-        "baseMR": 30,
-        "mrGrowth": 1.3,
-        "baseAD": 55,
-        "adGrowth": 2.65,
-        "baseAS": 0.625,
-        "asGrowth": 2.11,
-        "attackRange": 480,
-        "moveSpeed": 335,
-        "baseMP": 500,
-        "mpGrowth": 28,
-        "baseHPRegen": 5.5,
-        "hpRegenGrowth": 0.6
-      },
-      "kit_tags": [
-        "ability",
-        "cc",
-        "dot",
-        "haste",
-        "movement"
-      ]
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/9.png"
     },
     {
-      "slug": "illaoi",
-      "name": "Illaoi",
+      "slug": "illaoi/",
+      "name": "Illaoi/",
       "tier": "C",
       "rank": 118,
       "win_rate": 48.45,
@@ -4400,35 +1503,11 @@
         "fighter",
         "tank"
       ],
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/420.png",
-      "baseStats": {
-        "baseHP": 656,
-        "hpGrowth": 115,
-        "baseArmor": 35,
-        "armorGrowth": 5,
-        "baseMR": 32,
-        "mrGrowth": 2.05,
-        "baseAD": 65,
-        "adGrowth": 5,
-        "baseAS": 0.625,
-        "asGrowth": 2.5,
-        "attackRange": 125,
-        "moveSpeed": 350,
-        "baseMP": 350,
-        "mpGrowth": 50,
-        "baseHPRegen": 9.5,
-        "hpRegenGrowth": 0.8
-      },
-      "kit_tags": [
-        "attack",
-        "heal_shield",
-        "on_hit",
-        "tank"
-      ]
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/420.png"
     },
     {
-      "slug": "udyr",
-      "name": "Udyr",
+      "slug": "udyr/",
+      "name": "Udyr/",
       "tier": "C",
       "rank": 119,
       "win_rate": 46.72,
@@ -4437,35 +1516,11 @@
         "fighter",
         "tank"
       ],
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/77.png",
-      "baseStats": {
-        "baseHP": 664,
-        "hpGrowth": 92,
-        "baseArmor": 31,
-        "armorGrowth": 4.7,
-        "baseMR": 32,
-        "mrGrowth": 2.05,
-        "baseAD": 62,
-        "adGrowth": 4,
-        "baseAS": 0.65,
-        "asGrowth": 3,
-        "attackRange": 125,
-        "moveSpeed": 350,
-        "baseMP": 271,
-        "mpGrowth": 50,
-        "baseHPRegen": 6,
-        "hpRegenGrowth": 0.75
-      },
-      "kit_tags": [
-        "cc",
-        "heal_shield",
-        "movement",
-        "tank"
-      ]
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/77.png"
     },
     {
-      "slug": "katarina",
-      "name": "Katarina",
+      "slug": "katarina/",
+      "name": "Katarina/",
       "tier": "C",
       "rank": 120,
       "win_rate": 44.79,
@@ -4474,36 +1529,11 @@
         "assassin",
         "mage"
       ],
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/55.png",
-      "baseStats": {
-        "baseHP": 672,
-        "hpGrowth": 108,
-        "baseArmor": 32,
-        "armorGrowth": 4.7,
-        "baseMR": 32,
-        "mrGrowth": 2.05,
-        "baseAD": 58,
-        "adGrowth": 3.2,
-        "baseAS": 0.658,
-        "asGrowth": 2.74,
-        "attackRange": 125,
-        "moveSpeed": 335,
-        "baseMP": 0,
-        "mpGrowth": 0,
-        "baseHPRegen": 7.5,
-        "hpRegenGrowth": 0.7
-      },
-      "kit_tags": [
-        "ability",
-        "attack",
-        "dot",
-        "haste",
-        "movement"
-      ]
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/55.png"
     },
     {
-      "slug": "nami",
-      "name": "Nami",
+      "slug": "nami/",
+      "name": "Nami/",
       "tier": "C",
       "rank": 121,
       "win_rate": 50.61,
@@ -4512,35 +1542,11 @@
         "support",
         "mage"
       ],
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/267.png",
-      "baseStats": {
-        "baseHP": 560,
-        "hpGrowth": 88,
-        "baseArmor": 29,
-        "armorGrowth": 5.2,
-        "baseMR": 30,
-        "mrGrowth": 1.3,
-        "baseAD": 54,
-        "adGrowth": 3.1,
-        "baseAS": 0.644,
-        "asGrowth": 2.61,
-        "attackRange": 550,
-        "moveSpeed": 335,
-        "baseMP": 365,
-        "mpGrowth": 43,
-        "baseHPRegen": 5.5,
-        "hpRegenGrowth": 0.55
-      },
-      "kit_tags": [
-        "ability",
-        "cc",
-        "heal_shield",
-        "movement"
-      ]
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/267.png"
     },
     {
-      "slug": "samira",
-      "name": "Samira",
+      "slug": "samira/",
+      "name": "Samira/",
       "tier": "C",
       "rank": 122,
       "win_rate": 46.43,
@@ -4549,35 +1555,11 @@
         "marksman",
         "assassin"
       ],
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/360.png",
-      "baseStats": {
-        "baseHP": 630,
-        "hpGrowth": 108,
-        "baseArmor": 26,
-        "armorGrowth": 4.7,
-        "baseMR": 30,
-        "mrGrowth": 1.3,
-        "baseAD": 57,
-        "adGrowth": 3,
-        "baseAS": 0.658,
-        "asGrowth": 3.3,
-        "attackRange": 500,
-        "moveSpeed": 335,
-        "baseMP": 349,
-        "mpGrowth": 38,
-        "baseHPRegen": 3.25,
-        "hpRegenGrowth": 0.55
-      },
-      "kit_tags": [
-        "attack",
-        "crit",
-        "movement",
-        "on_hit"
-      ]
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/360.png"
     },
     {
-      "slug": "leesin",
-      "name": "Leesin",
+      "slug": "leesin/",
+      "name": "Leesin/",
       "tier": "C",
       "rank": 123,
       "win_rate": 44.0,
@@ -4586,36 +1568,11 @@
         "fighter",
         "assassin"
       ],
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/64.png",
-      "baseStats": {
-        "baseHP": 645,
-        "hpGrowth": 108,
-        "baseArmor": 36,
-        "armorGrowth": 4.5,
-        "baseMR": 32,
-        "mrGrowth": 2.05,
-        "baseAD": 66,
-        "adGrowth": 3.7,
-        "baseAS": 0.651,
-        "asGrowth": 3,
-        "attackRange": 125,
-        "moveSpeed": 345,
-        "baseMP": 200,
-        "mpGrowth": 0,
-        "baseHPRegen": 7.5,
-        "hpRegenGrowth": 0.7
-      },
-      "kit_tags": [
-        "attack",
-        "cc",
-        "heal_shield",
-        "movement",
-        "on_hit"
-      ]
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/64.png"
     },
     {
-      "slug": "monkeyking",
-      "name": "Monkeyking",
+      "slug": "monkeyking/",
+      "name": "Monkeyking/",
       "tier": "C",
       "rank": 124,
       "win_rate": 47.42,
@@ -4624,38 +1581,11 @@
         "fighter",
         "tank"
       ],
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/62.png",
-      "baseStats": {
-        "baseHP": 610,
-        "hpGrowth": 99,
-        "baseArmor": 31,
-        "armorGrowth": 4.7,
-        "baseMR": 28,
-        "mrGrowth": 2.05,
-        "baseAD": 66,
-        "adGrowth": 3.5,
-        "baseAS": 0.69,
-        "asGrowth": 3,
-        "attackRange": 175,
-        "moveSpeed": 340,
-        "baseMP": 330,
-        "mpGrowth": 65,
-        "baseHPRegen": 3.5,
-        "hpRegenGrowth": 0.65
-      },
-      "kit_tags": [
-        "ability",
-        "attack",
-        "cc",
-        "dot",
-        "movement",
-        "on_hit",
-        "tank"
-      ]
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/62.png"
     },
     {
-      "slug": "rengar",
-      "name": "Rengar",
+      "slug": "rengar/",
+      "name": "Rengar/",
       "tier": "C",
       "rank": 125,
       "win_rate": 47.9,
@@ -4664,36 +1594,11 @@
         "assassin",
         "fighter"
       ],
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/107.png",
-      "baseStats": {
-        "baseHP": 590,
-        "hpGrowth": 104,
-        "baseArmor": 34,
-        "armorGrowth": 4.2,
-        "baseMR": 32,
-        "mrGrowth": 2.05,
-        "baseAD": 68,
-        "adGrowth": 3,
-        "baseAS": 0.667,
-        "asGrowth": 3,
-        "attackRange": 125,
-        "moveSpeed": 345,
-        "baseMP": 4,
-        "mpGrowth": 0,
-        "baseHPRegen": 6,
-        "hpRegenGrowth": 0.5
-      },
-      "kit_tags": [
-        "attack",
-        "cc",
-        "heal_shield",
-        "movement",
-        "on_hit"
-      ]
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/107.png"
     },
     {
-      "slug": "trundle",
-      "name": "Trundle",
+      "slug": "trundle/",
+      "name": "Trundle/",
       "tier": "C",
       "rank": 126,
       "win_rate": 47.06,
@@ -4702,37 +1607,11 @@
         "fighter",
         "tank"
       ],
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/48.png",
-      "baseStats": {
-        "baseHP": 650,
-        "hpGrowth": 110,
-        "baseArmor": 37,
-        "armorGrowth": 4.5,
-        "baseMR": 32,
-        "mrGrowth": 2.05,
-        "baseAD": 68,
-        "adGrowth": 4.5,
-        "baseAS": 0.67,
-        "asGrowth": 2.9,
-        "attackRange": 175,
-        "moveSpeed": 350,
-        "baseMP": 340,
-        "mpGrowth": 45,
-        "baseHPRegen": 6,
-        "hpRegenGrowth": 0.75
-      },
-      "kit_tags": [
-        "attack",
-        "cc",
-        "dot",
-        "heal_shield",
-        "on_hit",
-        "tank"
-      ]
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/48.png"
     },
     {
-      "slug": "diana",
-      "name": "Diana",
+      "slug": "diana/",
+      "name": "Diana/",
       "tier": "C",
       "rank": 127,
       "win_rate": 47.59,
@@ -4741,34 +1620,11 @@
         "fighter",
         "assassin"
       ],
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/131.png",
-      "baseStats": {
-        "baseHP": 640,
-        "hpGrowth": 109,
-        "baseArmor": 31,
-        "armorGrowth": 4.3,
-        "baseMR": 32,
-        "mrGrowth": 2.05,
-        "baseAD": 57,
-        "adGrowth": 3,
-        "baseAS": 0.625,
-        "asGrowth": 2,
-        "attackRange": 150,
-        "moveSpeed": 345,
-        "baseMP": 375,
-        "mpGrowth": 25,
-        "baseHPRegen": 6.5,
-        "hpRegenGrowth": 0.85
-      },
-      "kit_tags": [
-        "ability",
-        "heal_shield",
-        "movement"
-      ]
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/131.png"
     },
     {
-      "slug": "yuumi",
-      "name": "Yuumi",
+      "slug": "yuumi/",
+      "name": "Yuumi/",
       "tier": "C",
       "rank": 128,
       "win_rate": 49.3,
@@ -4777,35 +1633,11 @@
         "support",
         "mage"
       ],
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/350.png",
-      "baseStats": {
-        "baseHP": 500,
-        "hpGrowth": 69,
-        "baseArmor": 25,
-        "armorGrowth": 4.2,
-        "baseMR": 25,
-        "mrGrowth": 1.1,
-        "baseAD": 49,
-        "adGrowth": 3.1,
-        "baseAS": 0.625,
-        "asGrowth": 1,
-        "attackRange": 425,
-        "moveSpeed": 330,
-        "baseMP": 440,
-        "mpGrowth": 45,
-        "baseHPRegen": 5,
-        "hpRegenGrowth": 0.55
-      },
-      "kit_tags": [
-        "ability",
-        "dot",
-        "heal_shield",
-        "movement"
-      ]
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/350.png"
     },
     {
-      "slug": "poppy",
-      "name": "Poppy",
+      "slug": "poppy/",
+      "name": "Poppy/",
       "tier": "C",
       "rank": 129,
       "win_rate": 48.02,
@@ -4814,37 +1646,11 @@
         "tank",
         "fighter"
       ],
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/78.png",
-      "baseStats": {
-        "baseHP": 610,
-        "hpGrowth": 110,
-        "baseArmor": 35,
-        "armorGrowth": 5,
-        "baseMR": 32,
-        "mrGrowth": 2.05,
-        "baseAD": 60,
-        "adGrowth": 4,
-        "baseAS": 0.658,
-        "asGrowth": 2.5,
-        "attackRange": 125,
-        "moveSpeed": 345,
-        "baseMP": 280,
-        "mpGrowth": 40,
-        "baseHPRegen": 8,
-        "hpRegenGrowth": 0.8
-      },
-      "kit_tags": [
-        "attack",
-        "cc",
-        "dot",
-        "heal_shield",
-        "movement",
-        "tank"
-      ]
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/78.png"
     },
     {
-      "slug": "annie",
-      "name": "Annie",
+      "slug": "annie/",
+      "name": "Annie/",
       "tier": "C",
       "rank": 130,
       "win_rate": 49.3,
@@ -4853,36 +1659,11 @@
         "mage",
         "support"
       ],
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/1.png",
-      "baseStats": {
-        "baseHP": 560,
-        "hpGrowth": 96,
-        "baseArmor": 23,
-        "armorGrowth": 4,
-        "baseMR": 30,
-        "mrGrowth": 1.3,
-        "baseAD": 50,
-        "adGrowth": 2.65,
-        "baseAS": 0.61,
-        "asGrowth": 1.36,
-        "attackRange": 625,
-        "moveSpeed": 335,
-        "baseMP": 418,
-        "mpGrowth": 25,
-        "baseHPRegen": 5.5,
-        "hpRegenGrowth": 0.55
-      },
-      "kit_tags": [
-        "ability",
-        "cc",
-        "dot",
-        "haste",
-        "heal_shield"
-      ]
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/1.png"
     },
     {
-      "slug": "volibear",
-      "name": "Volibear",
+      "slug": "volibear/",
+      "name": "Volibear/",
       "tier": "C",
       "rank": 131,
       "win_rate": 47.78,
@@ -4891,37 +1672,11 @@
         "fighter",
         "tank"
       ],
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/106.png",
-      "baseStats": {
-        "baseHP": 650,
-        "hpGrowth": 104,
-        "baseArmor": 35,
-        "armorGrowth": 5.2,
-        "baseMR": 32,
-        "mrGrowth": 2.05,
-        "baseAD": 65,
-        "adGrowth": 3.5,
-        "baseAS": 0.625,
-        "asGrowth": 2,
-        "attackRange": 150,
-        "moveSpeed": 340,
-        "baseMP": 350,
-        "mpGrowth": 70,
-        "baseHPRegen": 9,
-        "hpRegenGrowth": 0.75
-      },
-      "kit_tags": [
-        "attack",
-        "cc",
-        "heal_shield",
-        "movement",
-        "on_hit",
-        "tank"
-      ]
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/106.png"
     },
     {
-      "slug": "nidalee",
-      "name": "Nidalee",
+      "slug": "nidalee/",
+      "name": "Nidalee/",
       "tier": "C",
       "rank": 132,
       "win_rate": 45.82,
@@ -4930,36 +1685,11 @@
         "assassin",
         "mage"
       ],
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/76.png",
-      "baseStats": {
-        "baseHP": 610,
-        "hpGrowth": 109,
-        "baseArmor": 32,
-        "armorGrowth": 5,
-        "baseMR": 30,
-        "mrGrowth": 1.45,
-        "baseAD": 58,
-        "adGrowth": 3.5,
-        "baseAS": 0.638,
-        "asGrowth": 3.22,
-        "attackRange": 525,
-        "moveSpeed": 335,
-        "baseMP": 295,
-        "mpGrowth": 45,
-        "baseHPRegen": 6,
-        "hpRegenGrowth": 0.6
-      },
-      "kit_tags": [
-        "ability",
-        "attack",
-        "haste",
-        "heal_shield",
-        "movement"
-      ]
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/76.png"
     },
     {
-      "slug": "naafiri",
-      "name": "Naafiri",
+      "slug": "naafiri/",
+      "name": "Naafiri/",
       "tier": "C",
       "rank": 133,
       "win_rate": 47.3,
@@ -4968,35 +1698,11 @@
         "assassin",
         "fighter"
       ],
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/950.png",
-      "baseStats": {
-        "baseHP": 610,
-        "hpGrowth": 105,
-        "baseArmor": 28,
-        "armorGrowth": 4.2,
-        "baseMR": 32,
-        "mrGrowth": 2.05,
-        "baseAD": 55,
-        "adGrowth": 2,
-        "baseAS": 0.663,
-        "asGrowth": 2.1,
-        "attackRange": 125,
-        "moveSpeed": 340,
-        "baseMP": 400,
-        "mpGrowth": 55,
-        "baseHPRegen": 6.25,
-        "hpRegenGrowth": 0.6
-      },
-      "kit_tags": [
-        "attack",
-        "dot",
-        "heal_shield",
-        "movement"
-      ]
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/950.png"
     },
     {
-      "slug": "cassiopeia",
-      "name": "Cassiopeia",
+      "slug": "cassiopeia/",
+      "name": "Cassiopeia/",
       "tier": "C",
       "rank": 134,
       "win_rate": 48.8,
@@ -5004,36 +1710,11 @@
       "tags": [
         "mage"
       ],
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/69.png",
-      "baseStats": {
-        "baseHP": 630,
-        "hpGrowth": 104,
-        "baseArmor": 18,
-        "armorGrowth": 4.7,
-        "baseMR": 32,
-        "mrGrowth": 1.3,
-        "baseAD": 53,
-        "adGrowth": 3,
-        "baseAS": 0.647,
-        "asGrowth": 1.5,
-        "attackRange": 550,
-        "moveSpeed": 335,
-        "baseMP": 480,
-        "mpGrowth": 40,
-        "baseHPRegen": 5.5,
-        "hpRegenGrowth": 0.5
-      },
-      "kit_tags": [
-        "ability",
-        "cc",
-        "dot",
-        "haste",
-        "heal_shield"
-      ]
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/69.png"
     },
     {
-      "slug": "taliyah",
-      "name": "Taliyah",
+      "slug": "taliyah/",
+      "name": "Taliyah/",
       "tier": "C",
       "rank": 135,
       "win_rate": 48.65,
@@ -5042,35 +1723,11 @@
         "mage",
         "support"
       ],
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/163.png",
-      "baseStats": {
-        "baseHP": 550,
-        "hpGrowth": 104,
-        "baseArmor": 18,
-        "armorGrowth": 4.7,
-        "baseMR": 28,
-        "mrGrowth": 1.3,
-        "baseAD": 58,
-        "adGrowth": 3.3,
-        "baseAS": 0.658,
-        "asGrowth": 1.36,
-        "attackRange": 525,
-        "moveSpeed": 330,
-        "baseMP": 470,
-        "mpGrowth": 30,
-        "baseHPRegen": 6.5,
-        "hpRegenGrowth": 0.65
-      },
-      "kit_tags": [
-        "ability",
-        "cc",
-        "haste",
-        "movement"
-      ]
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/163.png"
     },
     {
-      "slug": "milio",
-      "name": "Milio",
+      "slug": "milio/",
+      "name": "Milio/",
       "tier": "C",
       "rank": 136,
       "win_rate": 49.3,
@@ -5079,34 +1736,11 @@
         "support",
         "mage"
       ],
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/902.png",
-      "baseStats": {
-        "baseHP": 560,
-        "hpGrowth": 88,
-        "baseArmor": 26,
-        "armorGrowth": 4.6,
-        "baseMR": 30,
-        "mrGrowth": 1.3,
-        "baseAD": 48,
-        "adGrowth": 3.2,
-        "baseAS": 0.625,
-        "asGrowth": 3,
-        "attackRange": 525,
-        "moveSpeed": 330,
-        "baseMP": 365,
-        "mpGrowth": 43,
-        "baseHPRegen": 5,
-        "hpRegenGrowth": 0.5
-      },
-      "kit_tags": [
-        "ability",
-        "dot",
-        "heal_shield"
-      ]
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/902.png"
     },
     {
-      "slug": "taric",
-      "name": "Taric",
+      "slug": "taric/",
+      "name": "Taric/",
       "tier": "C",
       "rank": 137,
       "win_rate": 49.54,
@@ -5115,35 +1749,11 @@
         "support",
         "tank"
       ],
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/44.png",
-      "baseStats": {
-        "baseHP": 645,
-        "hpGrowth": 99,
-        "baseArmor": 40,
-        "armorGrowth": 4.3,
-        "baseMR": 28,
-        "mrGrowth": 2.05,
-        "baseAD": 55,
-        "adGrowth": 3.5,
-        "baseAS": 0.625,
-        "asGrowth": 2,
-        "attackRange": 150,
-        "moveSpeed": 340,
-        "baseMP": 300,
-        "mpGrowth": 60,
-        "baseHPRegen": 6,
-        "hpRegenGrowth": 0.5
-      },
-      "kit_tags": [
-        "cc",
-        "heal_shield",
-        "on_hit",
-        "tank"
-      ]
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/44.png"
     },
     {
-      "slug": "lulu",
-      "name": "Lulu",
+      "slug": "lulu/",
+      "name": "Lulu/",
       "tier": "C",
       "rank": 138,
       "win_rate": 48.92,
@@ -5152,36 +1762,11 @@
         "support",
         "mage"
       ],
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/117.png",
-      "baseStats": {
-        "baseHP": 565,
-        "hpGrowth": 92,
-        "baseArmor": 26,
-        "armorGrowth": 4.6,
-        "baseMR": 30,
-        "mrGrowth": 1.3,
-        "baseAD": 47,
-        "adGrowth": 2.6,
-        "baseAS": 0.625,
-        "asGrowth": 2.25,
-        "attackRange": 550,
-        "moveSpeed": 330,
-        "baseMP": 350,
-        "mpGrowth": 55,
-        "baseHPRegen": 6,
-        "hpRegenGrowth": 0.6
-      },
-      "kit_tags": [
-        "ability",
-        "cc",
-        "dot",
-        "haste",
-        "heal_shield"
-      ]
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/117.png"
     },
     {
-      "slug": "nasus",
-      "name": "Nasus",
+      "slug": "nasus/",
+      "name": "Nasus/",
       "tier": "C",
       "rank": 139,
       "win_rate": 46.73,
@@ -5190,35 +1775,11 @@
         "fighter",
         "tank"
       ],
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/75.png",
-      "baseStats": {
-        "baseHP": 650,
-        "hpGrowth": 104,
-        "baseArmor": 34,
-        "armorGrowth": 4.7,
-        "baseMR": 32,
-        "mrGrowth": 2.05,
-        "baseAD": 67,
-        "adGrowth": 4,
-        "baseAS": 0.638,
-        "asGrowth": 3.48,
-        "attackRange": 125,
-        "moveSpeed": 350,
-        "baseMP": 326,
-        "mpGrowth": 62,
-        "baseHPRegen": 9,
-        "hpRegenGrowth": 0.9
-      },
-      "kit_tags": [
-        "attack",
-        "dot",
-        "on_hit",
-        "tank"
-      ]
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/75.png"
     },
     {
-      "slug": "quinn",
-      "name": "Quinn",
+      "slug": "quinn/",
+      "name": "Quinn/",
       "tier": "C",
       "rank": 140,
       "win_rate": 48.16,
@@ -5227,36 +1788,11 @@
         "marksman",
         "assassin"
       ],
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/133.png",
-      "baseStats": {
-        "baseHP": 565,
-        "hpGrowth": 107,
-        "baseArmor": 28,
-        "armorGrowth": 4.7,
-        "baseMR": 30,
-        "mrGrowth": 1.3,
-        "baseAD": 59,
-        "adGrowth": 3.2,
-        "baseAS": 0.668,
-        "asGrowth": 3.1,
-        "attackRange": 525,
-        "moveSpeed": 330,
-        "baseMP": 269,
-        "mpGrowth": 35,
-        "baseHPRegen": 5.5,
-        "hpRegenGrowth": 0.55
-      },
-      "kit_tags": [
-        "attack",
-        "cc",
-        "crit",
-        "movement",
-        "on_hit"
-      ]
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/133.png"
     },
     {
-      "slug": "zoe",
-      "name": "Zoe",
+      "slug": "zoe/",
+      "name": "Zoe/",
       "tier": "C",
       "rank": 141,
       "win_rate": 47.48,
@@ -5264,35 +1800,11 @@
       "tags": [
         "mage"
       ],
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/142.png",
-      "baseStats": {
-        "baseHP": 630,
-        "hpGrowth": 106,
-        "baseArmor": 21,
-        "armorGrowth": 4.7,
-        "baseMR": 30,
-        "mrGrowth": 1.3,
-        "baseAD": 58,
-        "adGrowth": 3.3,
-        "baseAS": 0.658,
-        "asGrowth": 2.5,
-        "attackRange": 550,
-        "moveSpeed": 340,
-        "baseMP": 425,
-        "mpGrowth": 25,
-        "baseHPRegen": 7.5,
-        "hpRegenGrowth": 0.6
-      },
-      "kit_tags": [
-        "ability",
-        "cc",
-        "haste",
-        "movement"
-      ]
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/142.png"
     },
     {
-      "slug": "anivia",
-      "name": "Anivia",
+      "slug": "anivia/",
+      "name": "Anivia/",
       "tier": "C",
       "rank": 142,
       "win_rate": 47.06,
@@ -5300,35 +1812,11 @@
       "tags": [
         "mage"
       ],
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/34.png",
-      "baseStats": {
-        "baseHP": 550,
-        "hpGrowth": 92,
-        "baseArmor": 19,
-        "armorGrowth": 4.1,
-        "baseMR": 30,
-        "mrGrowth": 1.3,
-        "baseAD": 51,
-        "adGrowth": 3.2,
-        "baseAS": 0.658,
-        "asGrowth": 1.68,
-        "attackRange": 600,
-        "moveSpeed": 325,
-        "baseMP": 495,
-        "mpGrowth": 45,
-        "baseHPRegen": 5.5,
-        "hpRegenGrowth": 0.55
-      },
-      "kit_tags": [
-        "ability",
-        "cc",
-        "dot",
-        "haste"
-      ]
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/34.png"
     },
     {
-      "slug": "vi",
-      "name": "Vi",
+      "slug": "vi/",
+      "name": "Vi/",
       "tier": "C",
       "rank": 143,
       "win_rate": 47.33,
@@ -5337,36 +1825,11 @@
         "fighter",
         "assassin"
       ],
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/254.png",
-      "baseStats": {
-        "baseHP": 655,
-        "hpGrowth": 105,
-        "baseArmor": 30,
-        "armorGrowth": 4.7,
-        "baseMR": 32,
-        "mrGrowth": 2.05,
-        "baseAD": 63,
-        "adGrowth": 3.5,
-        "baseAS": 0.644,
-        "asGrowth": 2,
-        "attackRange": 125,
-        "moveSpeed": 340,
-        "baseMP": 295,
-        "mpGrowth": 65,
-        "baseHPRegen": 10,
-        "hpRegenGrowth": 1
-      },
-      "kit_tags": [
-        "attack",
-        "cc",
-        "heal_shield",
-        "movement",
-        "on_hit"
-      ]
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/254.png"
     },
     {
-      "slug": "urgot",
-      "name": "Urgot",
+      "slug": "urgot/",
+      "name": "Urgot/",
       "tier": "C",
       "rank": 144,
       "win_rate": 45.46,
@@ -5375,37 +1838,11 @@
         "fighter",
         "tank"
       ],
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/6.png",
-      "baseStats": {
-        "baseHP": 655,
-        "hpGrowth": 102,
-        "baseArmor": 36,
-        "armorGrowth": 5,
-        "baseMR": 32,
-        "mrGrowth": 2.05,
-        "baseAD": 63,
-        "adGrowth": 4,
-        "baseAS": 0.625,
-        "asGrowth": 3.75,
-        "attackRange": 350,
-        "moveSpeed": 330,
-        "baseMP": 340,
-        "mpGrowth": 45,
-        "baseHPRegen": 7.5,
-        "hpRegenGrowth": 0.7
-      },
-      "kit_tags": [
-        "attack",
-        "cc",
-        "heal_shield",
-        "movement",
-        "on_hit",
-        "tank"
-      ]
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/6.png"
     },
     {
-      "slug": "rammus",
-      "name": "Rammus",
+      "slug": "rammus/",
+      "name": "Rammus/",
       "tier": "C",
       "rank": 145,
       "win_rate": 45.92,
@@ -5413,35 +1850,11 @@
       "tags": [
         "tank"
       ],
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/33.png",
-      "baseStats": {
-        "baseHP": 645,
-        "hpGrowth": 100,
-        "baseArmor": 35,
-        "armorGrowth": 4.5,
-        "baseMR": 32,
-        "mrGrowth": 2.05,
-        "baseAD": 65,
-        "adGrowth": 2.75,
-        "baseAS": 0.7,
-        "asGrowth": 2.215,
-        "attackRange": 125,
-        "moveSpeed": 335,
-        "baseMP": 310,
-        "mpGrowth": 33,
-        "baseHPRegen": 8,
-        "hpRegenGrowth": 0.55
-      },
-      "kit_tags": [
-        "ability",
-        "cc",
-        "movement",
-        "tank"
-      ]
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/33.png"
     },
     {
-      "slug": "ivern",
-      "name": "Ivern",
+      "slug": "ivern/",
+      "name": "Ivern/",
       "tier": "C",
       "rank": 146,
       "win_rate": 48.81,
@@ -5450,35 +1863,11 @@
         "support",
         "mage"
       ],
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/427.png",
-      "baseStats": {
-        "baseHP": 630,
-        "hpGrowth": 99,
-        "baseArmor": 27,
-        "armorGrowth": 4.7,
-        "baseMR": 30,
-        "mrGrowth": 1.3,
-        "baseAD": 50,
-        "adGrowth": 3,
-        "baseAS": 0.644,
-        "asGrowth": 3.4,
-        "attackRange": 475,
-        "moveSpeed": 330,
-        "baseMP": 450,
-        "mpGrowth": 60,
-        "baseHPRegen": 7,
-        "hpRegenGrowth": 0.85
-      },
-      "kit_tags": [
-        "ability",
-        "cc",
-        "heal_shield",
-        "movement"
-      ]
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/427.png"
     },
     {
-      "slug": "azir",
-      "name": "Azir",
+      "slug": "azir/",
+      "name": "Azir/",
       "tier": "C",
       "rank": 147,
       "win_rate": 46.58,
@@ -5487,37 +1876,11 @@
         "mage",
         "marksman"
       ],
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/268.png",
-      "baseStats": {
-        "baseHP": 575,
-        "hpGrowth": 108,
-        "baseArmor": 25,
-        "armorGrowth": 5,
-        "baseMR": 30,
-        "mrGrowth": 1.3,
-        "baseAD": 56,
-        "adGrowth": 3.5,
-        "baseAS": 0.625,
-        "asGrowth": 5,
-        "attackRange": 525,
-        "moveSpeed": 330,
-        "baseMP": 320,
-        "mpGrowth": 40,
-        "baseHPRegen": 7,
-        "hpRegenGrowth": 0.75
-      },
-      "kit_tags": [
-        "ability",
-        "attack",
-        "cc",
-        "haste",
-        "heal_shield",
-        "movement"
-      ]
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/268.png"
     },
     {
-      "slug": "braum",
-      "name": "Braum",
+      "slug": "braum/",
+      "name": "Braum/",
       "tier": "C",
       "rank": 148,
       "win_rate": 47.81,
@@ -5526,35 +1889,11 @@
         "tank",
         "support"
       ],
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/201.png",
-      "baseStats": {
-        "baseHP": 610,
-        "hpGrowth": 112,
-        "baseArmor": 35,
-        "armorGrowth": 5,
-        "baseMR": 32,
-        "mrGrowth": 2.05,
-        "baseAD": 55,
-        "adGrowth": 3.2,
-        "baseAS": 0.644,
-        "asGrowth": 3.5,
-        "attackRange": 125,
-        "moveSpeed": 335,
-        "baseMP": 311,
-        "mpGrowth": 45,
-        "baseHPRegen": 8.5,
-        "hpRegenGrowth": 1
-      },
-      "kit_tags": [
-        "cc",
-        "heal_shield",
-        "on_hit",
-        "tank"
-      ]
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/201.png"
     },
     {
-      "slug": "qiyana",
-      "name": "Qiyana",
+      "slug": "qiyana/",
+      "name": "Qiyana/",
       "tier": "C",
       "rank": 149,
       "win_rate": 47.4,
@@ -5562,36 +1901,11 @@
       "tags": [
         "assassin"
       ],
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/246.png",
-      "baseStats": {
-        "baseHP": 590,
-        "hpGrowth": 115,
-        "baseArmor": 31,
-        "armorGrowth": 4.5,
-        "baseMR": 32,
-        "mrGrowth": 2.05,
-        "baseAD": 64,
-        "adGrowth": 3.1,
-        "baseAS": 0.688,
-        "asGrowth": 2.1,
-        "attackRange": 150,
-        "moveSpeed": 335,
-        "baseMP": 375,
-        "mpGrowth": 60,
-        "baseHPRegen": 8,
-        "hpRegenGrowth": 0.9
-      },
-      "kit_tags": [
-        "attack",
-        "cc",
-        "dot",
-        "movement",
-        "on_hit"
-      ]
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/246.png"
     },
     {
-      "slug": "neeko",
-      "name": "Neeko",
+      "slug": "neeko/",
+      "name": "Neeko/",
       "tier": "C",
       "rank": 150,
       "win_rate": 46.63,
@@ -5600,34 +1914,11 @@
         "mage",
         "support"
       ],
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/518.png",
-      "baseStats": {
-        "baseHP": 610,
-        "hpGrowth": 104,
-        "baseArmor": 21,
-        "armorGrowth": 5.2,
-        "baseMR": 30,
-        "mrGrowth": 1.3,
-        "baseAD": 48,
-        "adGrowth": 2.5,
-        "baseAS": 0.625,
-        "asGrowth": 3.5,
-        "attackRange": 550,
-        "moveSpeed": 340,
-        "baseMP": 450,
-        "mpGrowth": 30,
-        "baseHPRegen": 7.5,
-        "hpRegenGrowth": 0.75
-      },
-      "kit_tags": [
-        "ability",
-        "cc",
-        "haste"
-      ]
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/518.png"
     },
     {
-      "slug": "kennen",
-      "name": "Kennen",
+      "slug": "kennen/",
+      "name": "Kennen/",
       "tier": "C",
       "rank": 151,
       "win_rate": 45.72,
@@ -5635,36 +1926,11 @@
       "tags": [
         "mage"
       ],
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/85.png",
-      "baseStats": {
-        "baseHP": 580,
-        "hpGrowth": 98,
-        "baseArmor": 29,
-        "armorGrowth": 4.95,
-        "baseMR": 30,
-        "mrGrowth": 1.3,
-        "baseAD": 48,
-        "adGrowth": 3.75,
-        "baseAS": 0.625,
-        "asGrowth": 3.4,
-        "attackRange": 550,
-        "moveSpeed": 335,
-        "baseMP": 200,
-        "mpGrowth": 0,
-        "baseHPRegen": 5.5,
-        "hpRegenGrowth": 0.65
-      },
-      "kit_tags": [
-        "ability",
-        "cc",
-        "dot",
-        "haste",
-        "movement"
-      ]
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/85.png"
     },
     {
-      "slug": "rakan",
-      "name": "Rakan",
+      "slug": "rakan/",
+      "name": "Rakan/",
       "tier": "C",
       "rank": 152,
       "win_rate": 47.77,
@@ -5672,36 +1938,11 @@
       "tags": [
         "support"
       ],
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/497.png",
-      "baseStats": {
-        "baseHP": 610,
-        "hpGrowth": 99,
-        "baseArmor": 30,
-        "armorGrowth": 4.9,
-        "baseMR": 32,
-        "mrGrowth": 2.05,
-        "baseAD": 62,
-        "adGrowth": 3.5,
-        "baseAS": 0.635,
-        "asGrowth": 3,
-        "attackRange": 300,
-        "moveSpeed": 335,
-        "baseMP": 315,
-        "mpGrowth": 50,
-        "baseHPRegen": 5,
-        "hpRegenGrowth": 0.5
-      },
-      "kit_tags": [
-        "ability",
-        "cc",
-        "haste",
-        "heal_shield",
-        "movement"
-      ]
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/497.png"
     },
     {
-      "slug": "zac",
-      "name": "Zac",
+      "slug": "zac/",
+      "name": "Zac/",
       "tier": "C",
       "rank": 153,
       "win_rate": 44.22,
@@ -5710,36 +1951,11 @@
         "tank",
         "fighter"
       ],
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/154.png",
-      "baseStats": {
-        "baseHP": 685,
-        "hpGrowth": 109,
-        "baseArmor": 33,
-        "armorGrowth": 4.7,
-        "baseMR": 32,
-        "mrGrowth": 2.05,
-        "baseAD": 60,
-        "adGrowth": 3.4,
-        "baseAS": 0.736,
-        "asGrowth": 1.6,
-        "attackRange": 175,
-        "moveSpeed": 340,
-        "baseMP": 0,
-        "mpGrowth": 0,
-        "baseHPRegen": 5,
-        "hpRegenGrowth": 0.5
-      },
-      "kit_tags": [
-        "attack",
-        "cc",
-        "heal_shield",
-        "movement",
-        "tank"
-      ]
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/154.png"
     },
     {
-      "slug": "nunu",
-      "name": "Nunu",
+      "slug": "nunu/",
+      "name": "Nunu/",
       "tier": "C",
       "rank": 154,
       "win_rate": 46.15,
@@ -5748,37 +1964,11 @@
         "tank",
         "mage"
       ],
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/20.png",
-      "baseStats": {
-        "baseHP": 610,
-        "hpGrowth": 90,
-        "baseArmor": 29,
-        "armorGrowth": 4.2,
-        "baseMR": 32,
-        "mrGrowth": 2.05,
-        "baseAD": 61,
-        "adGrowth": 3,
-        "baseAS": 0.625,
-        "asGrowth": 2.25,
-        "attackRange": 125,
-        "moveSpeed": 345,
-        "baseMP": 280,
-        "mpGrowth": 42,
-        "baseHPRegen": 5,
-        "hpRegenGrowth": 0.8
-      },
-      "kit_tags": [
-        "ability",
-        "cc",
-        "haste",
-        "heal_shield",
-        "on_hit",
-        "tank"
-      ]
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/20.png"
     },
     {
-      "slug": "belveth",
-      "name": "Belveth",
+      "slug": "belveth/",
+      "name": "Belveth/",
       "tier": "C",
       "rank": 155,
       "win_rate": 45.85,
@@ -5786,36 +1976,11 @@
       "tags": [
         "fighter"
       ],
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/200.png",
-      "baseStats": {
-        "baseHP": 610,
-        "hpGrowth": 105,
-        "baseArmor": 32,
-        "armorGrowth": 4.7,
-        "baseMR": 32,
-        "mrGrowth": 2.05,
-        "baseAD": 60,
-        "adGrowth": 1.5,
-        "baseAS": 0.85,
-        "asGrowth": 0,
-        "attackRange": 150,
-        "moveSpeed": 340,
-        "baseMP": 60,
-        "mpGrowth": 0,
-        "baseHPRegen": 6,
-        "hpRegenGrowth": 0.6
-      },
-      "kit_tags": [
-        "ability",
-        "attack",
-        "cc",
-        "movement",
-        "on_hit"
-      ]
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/200.png"
     },
     {
-      "slug": "leblanc",
-      "name": "Leblanc",
+      "slug": "leblanc/",
+      "name": "Leblanc/",
       "tier": "C",
       "rank": 156,
       "win_rate": 43.36,
@@ -5824,35 +1989,11 @@
         "assassin",
         "mage"
       ],
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/7.png",
-      "baseStats": {
-        "baseHP": 598,
-        "hpGrowth": 108,
-        "baseArmor": 22,
-        "armorGrowth": 4.2,
-        "baseMR": 30,
-        "mrGrowth": 1.3,
-        "baseAD": 55,
-        "adGrowth": 2.2,
-        "baseAS": 0.658,
-        "asGrowth": 2.35,
-        "attackRange": 525,
-        "moveSpeed": 340,
-        "baseMP": 400,
-        "mpGrowth": 25,
-        "baseHPRegen": 7.5,
-        "hpRegenGrowth": 0.55
-      },
-      "kit_tags": [
-        "ability",
-        "cc",
-        "haste",
-        "movement"
-      ]
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/7.png"
     },
     {
-      "slug": "reksai",
-      "name": "Reksai",
+      "slug": "reksai/",
+      "name": "Reksai/",
       "tier": "C",
       "rank": 157,
       "win_rate": 47.3,
@@ -5861,38 +2002,11 @@
         "fighter",
         "tank"
       ],
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/421.png",
-      "baseStats": {
-        "baseHP": 600,
-        "hpGrowth": 99,
-        "baseArmor": 35,
-        "armorGrowth": 4.5,
-        "baseMR": 32,
-        "mrGrowth": 2.05,
-        "baseAD": 62,
-        "adGrowth": 3,
-        "baseAS": 0.667,
-        "asGrowth": 2,
-        "attackRange": 175,
-        "moveSpeed": 340,
-        "baseMP": 100,
-        "mpGrowth": 0,
-        "baseHPRegen": 2.5,
-        "hpRegenGrowth": 0.5
-      },
-      "kit_tags": [
-        "attack",
-        "cc",
-        "dot",
-        "heal_shield",
-        "movement",
-        "on_hit",
-        "tank"
-      ]
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/421.png"
     },
     {
-      "slug": "renekton",
-      "name": "Renekton",
+      "slug": "renekton/",
+      "name": "Renekton/",
       "tier": "C",
       "rank": 158,
       "win_rate": 44.25,
@@ -5901,38 +2015,11 @@
         "fighter",
         "tank"
       ],
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/58.png",
-      "baseStats": {
-        "baseHP": 660,
-        "hpGrowth": 111,
-        "baseArmor": 35,
-        "armorGrowth": 5.2,
-        "baseMR": 28,
-        "mrGrowth": 2.05,
-        "baseAD": 69,
-        "adGrowth": 4.15,
-        "baseAS": 0.665,
-        "asGrowth": 2.75,
-        "attackRange": 125,
-        "moveSpeed": 345,
-        "baseMP": 100,
-        "mpGrowth": 0,
-        "baseHPRegen": 8,
-        "hpRegenGrowth": 0.75
-      },
-      "kit_tags": [
-        "attack",
-        "cc",
-        "dot",
-        "heal_shield",
-        "movement",
-        "on_hit",
-        "tank"
-      ]
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/58.png"
     },
     {
-      "slug": "akali",
-      "name": "Akali",
+      "slug": "akali/",
+      "name": "Akali/",
       "tier": "C",
       "rank": 159,
       "win_rate": 43.53,
@@ -5940,36 +2027,11 @@
       "tags": [
         "assassin"
       ],
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/84.png",
-      "baseStats": {
-        "baseHP": 600,
-        "hpGrowth": 119,
-        "baseArmor": 23,
-        "armorGrowth": 4.7,
-        "baseMR": 37,
-        "mrGrowth": 2.05,
-        "baseAD": 62,
-        "adGrowth": 3.3,
-        "baseAS": 0.625,
-        "asGrowth": 3.2,
-        "attackRange": 125,
-        "moveSpeed": 345,
-        "baseMP": 200,
-        "mpGrowth": 0,
-        "baseHPRegen": 9,
-        "hpRegenGrowth": 0.9
-      },
-      "kit_tags": [
-        "ability",
-        "attack",
-        "haste",
-        "movement",
-        "on_hit"
-      ]
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/84.png"
     },
     {
-      "slug": "skarner",
-      "name": "Skarner",
+      "slug": "skarner/",
+      "name": "Skarner/",
       "tier": "C",
       "rank": 160,
       "win_rate": 45.99,
@@ -5978,38 +2040,11 @@
         "tank",
         "fighter"
       ],
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/72.png",
-      "baseStats": {
-        "baseHP": 630,
-        "hpGrowth": 110,
-        "baseArmor": 33,
-        "armorGrowth": 4.5,
-        "baseMR": 32,
-        "mrGrowth": 2.05,
-        "baseAD": 63,
-        "adGrowth": 5,
-        "baseAS": 0.625,
-        "asGrowth": 2,
-        "attackRange": 150,
-        "moveSpeed": 335,
-        "baseMP": 320,
-        "mpGrowth": 40,
-        "baseHPRegen": 7.5,
-        "hpRegenGrowth": 0.75
-      },
-      "kit_tags": [
-        "attack",
-        "cc",
-        "dot",
-        "heal_shield",
-        "movement",
-        "on_hit",
-        "tank"
-      ]
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/72.png"
     },
     {
-      "slug": "elise",
-      "name": "Elise",
+      "slug": "elise/",
+      "name": "Elise/",
       "tier": "C",
       "rank": 161,
       "win_rate": 46.19,
@@ -6018,36 +2053,11 @@
         "assassin",
         "mage"
       ],
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/60.png",
-      "baseStats": {
-        "baseHP": 620,
-        "hpGrowth": 109,
-        "baseArmor": 30,
-        "armorGrowth": 4.5,
-        "baseMR": 30,
-        "mrGrowth": 1.3,
-        "baseAD": 55,
-        "adGrowth": 3,
-        "baseAS": 0.625,
-        "asGrowth": 1.75,
-        "attackRange": 550,
-        "moveSpeed": 330,
-        "baseMP": 324,
-        "mpGrowth": 50,
-        "baseHPRegen": 5.5,
-        "hpRegenGrowth": 0.6
-      },
-      "kit_tags": [
-        "ability",
-        "cc",
-        "haste",
-        "heal_shield",
-        "movement"
-      ]
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/60.png"
     },
     {
-      "slug": "zeri",
-      "name": "Zeri",
+      "slug": "zeri/",
+      "name": "Zeri/",
       "tier": "C",
       "rank": 162,
       "win_rate": 42.98,
@@ -6055,35 +2065,11 @@
       "tags": [
         "marksman"
       ],
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/221.png",
-      "baseStats": {
-        "baseHP": 600,
-        "hpGrowth": 110,
-        "baseArmor": 24,
-        "armorGrowth": 4.2,
-        "baseMR": 30,
-        "mrGrowth": 1.3,
-        "baseAD": 56,
-        "adGrowth": 2,
-        "baseAS": 0.658,
-        "asGrowth": 2,
-        "attackRange": 550,
-        "moveSpeed": 330,
-        "baseMP": 250,
-        "mpGrowth": 45,
-        "baseHPRegen": 3.25,
-        "hpRegenGrowth": 0.7
-      },
-      "kit_tags": [
-        "attack",
-        "crit",
-        "movement",
-        "on_hit"
-      ]
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/221.png"
     },
     {
-      "slug": "gnar",
-      "name": "Gnar",
+      "slug": "gnar/",
+      "name": "Gnar/",
       "tier": "C",
       "rank": 163,
       "win_rate": 44.96,
@@ -6092,37 +2078,11 @@
         "fighter",
         "tank"
       ],
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/150.png",
-      "baseStats": {
-        "baseHP": 540,
-        "hpGrowth": 79,
-        "baseArmor": 32,
-        "armorGrowth": 3.7,
-        "baseMR": 30,
-        "mrGrowth": 1.3,
-        "baseAD": 60,
-        "adGrowth": 3.2,
-        "baseAS": 0.625,
-        "asGrowth": 6,
-        "attackRange": 175,
-        "moveSpeed": 335,
-        "baseMP": 100,
-        "mpGrowth": 0,
-        "baseHPRegen": 4.5,
-        "hpRegenGrowth": 1.25
-      },
-      "kit_tags": [
-        "ability",
-        "attack",
-        "cc",
-        "haste",
-        "movement",
-        "tank"
-      ]
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/150.png"
     },
     {
-      "slug": "olaf",
-      "name": "Olaf",
+      "slug": "olaf/",
+      "name": "Olaf/",
       "tier": "C",
       "rank": 164,
       "win_rate": 45.91,
@@ -6131,35 +2091,11 @@
         "fighter",
         "tank"
       ],
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/2.png",
-      "baseStats": {
-        "baseHP": 645,
-        "hpGrowth": 119,
-        "baseArmor": 35,
-        "armorGrowth": 4.2,
-        "baseMR": 32,
-        "mrGrowth": 2.05,
-        "baseAD": 68,
-        "adGrowth": 4.7,
-        "baseAS": 0.72,
-        "asGrowth": 2.7,
-        "attackRange": 125,
-        "moveSpeed": 350,
-        "baseMP": 316,
-        "mpGrowth": 50,
-        "baseHPRegen": 6.5,
-        "hpRegenGrowth": 0.6
-      },
-      "kit_tags": [
-        "attack",
-        "heal_shield",
-        "on_hit",
-        "tank"
-      ]
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/2.png"
     },
     {
-      "slug": "warwick",
-      "name": "Warwick",
+      "slug": "warwick/",
+      "name": "Warwick/",
       "tier": "C",
       "rank": 165,
       "win_rate": 45.39,
@@ -6168,38 +2104,11 @@
         "fighter",
         "tank"
       ],
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/19.png",
-      "baseStats": {
-        "baseHP": 620,
-        "hpGrowth": 99,
-        "baseArmor": 33,
-        "armorGrowth": 4.4,
-        "baseMR": 32,
-        "mrGrowth": 2.05,
-        "baseAD": 65,
-        "adGrowth": 2.5,
-        "baseAS": 0.638,
-        "asGrowth": 2,
-        "attackRange": 125,
-        "moveSpeed": 335,
-        "baseMP": 280,
-        "mpGrowth": 35,
-        "baseHPRegen": 4,
-        "hpRegenGrowth": 0.75
-      },
-      "kit_tags": [
-        "ability",
-        "attack",
-        "cc",
-        "heal_shield",
-        "movement",
-        "on_hit",
-        "tank"
-      ]
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/19.png"
     },
     {
-      "slug": "ksante",
-      "name": "Ksante",
+      "slug": "ksante/",
+      "name": "Ksante/",
       "tier": "C",
       "rank": 166,
       "win_rate": 42.18,
@@ -6208,36 +2117,11 @@
         "tank",
         "fighter"
       ],
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/897.png",
-      "baseStats": {
-        "baseHP": 625,
-        "hpGrowth": 120,
-        "baseArmor": 36,
-        "armorGrowth": 5.2,
-        "baseMR": 30,
-        "mrGrowth": 2.1,
-        "baseAD": 64,
-        "adGrowth": 3.5,
-        "baseAS": 0.688,
-        "asGrowth": 2.5,
-        "attackRange": 150,
-        "moveSpeed": 330,
-        "baseMP": 320,
-        "mpGrowth": 60,
-        "baseHPRegen": 9.5,
-        "hpRegenGrowth": 1
-      },
-      "kit_tags": [
-        "cc",
-        "heal_shield",
-        "movement",
-        "on_hit",
-        "tank"
-      ]
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/897.png"
     },
     {
-      "slug": "irelia",
-      "name": "Irelia",
+      "slug": "irelia/",
+      "name": "Irelia/",
       "tier": "C",
       "rank": 167,
       "win_rate": 43.15,
@@ -6246,37 +2130,11 @@
         "fighter",
         "assassin"
       ],
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/39.png",
-      "baseStats": {
-        "baseHP": 630,
-        "hpGrowth": 115,
-        "baseArmor": 36,
-        "armorGrowth": 4.7,
-        "baseMR": 30,
-        "mrGrowth": 2.05,
-        "baseAD": 65,
-        "adGrowth": 3.5,
-        "baseAS": 0.656,
-        "asGrowth": 2.5,
-        "attackRange": 200,
-        "moveSpeed": 335,
-        "baseMP": 350,
-        "mpGrowth": 50,
-        "baseHPRegen": 3.5,
-        "hpRegenGrowth": 0.85
-      },
-      "kit_tags": [
-        "ability",
-        "attack",
-        "cc",
-        "heal_shield",
-        "movement",
-        "on_hit"
-      ]
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/39.png"
     },
     {
-      "slug": "yorick",
-      "name": "Yorick",
+      "slug": "yorick/",
+      "name": "Yorick/",
       "tier": "C",
       "rank": 168,
       "win_rate": 45.66,
@@ -6285,36 +2143,11 @@
         "fighter",
         "tank"
       ],
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/83.png",
-      "baseStats": {
-        "baseHP": 650,
-        "hpGrowth": 114,
-        "baseArmor": 36,
-        "armorGrowth": 4.5,
-        "baseMR": 32,
-        "mrGrowth": 2.05,
-        "baseAD": 62,
-        "adGrowth": 5,
-        "baseAS": 0.625,
-        "asGrowth": 2,
-        "attackRange": 175,
-        "moveSpeed": 340,
-        "baseMP": 300,
-        "mpGrowth": 60,
-        "baseHPRegen": 8,
-        "hpRegenGrowth": 0.8
-      },
-      "kit_tags": [
-        "attack",
-        "heal_shield",
-        "movement",
-        "on_hit",
-        "tank"
-      ]
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/83.png"
     },
     {
-      "slug": "evelynn",
-      "name": "Evelynn",
+      "slug": "evelynn/",
+      "name": "Evelynn/",
       "tier": "C",
       "rank": 169,
       "win_rate": 45.76,
@@ -6323,36 +2156,11 @@
         "assassin",
         "mage"
       ],
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/28.png",
-      "baseStats": {
-        "baseHP": 642,
-        "hpGrowth": 98,
-        "baseArmor": 37,
-        "armorGrowth": 4.7,
-        "baseMR": 32,
-        "mrGrowth": 2.05,
-        "baseAD": 61,
-        "adGrowth": 3,
-        "baseAS": 0.667,
-        "asGrowth": 2.1,
-        "attackRange": 125,
-        "moveSpeed": 335,
-        "baseMP": 315,
-        "mpGrowth": 42,
-        "baseHPRegen": 8.5,
-        "hpRegenGrowth": 0.75
-      },
-      "kit_tags": [
-        "ability",
-        "cc",
-        "haste",
-        "heal_shield",
-        "movement"
-      ]
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/28.png"
     },
     {
-      "slug": "camille",
-      "name": "Camille",
+      "slug": "camille/",
+      "name": "Camille/",
       "tier": "C",
       "rank": 170,
       "win_rate": 44.18,
@@ -6361,36 +2169,11 @@
         "fighter",
         "assassin"
       ],
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/164.png",
-      "baseStats": {
-        "baseHP": 650,
-        "hpGrowth": 99,
-        "baseArmor": 35,
-        "armorGrowth": 4.5,
-        "baseMR": 32,
-        "mrGrowth": 2.05,
-        "baseAD": 68,
-        "adGrowth": 3.8,
-        "baseAS": 0.644,
-        "asGrowth": 2.5,
-        "attackRange": 125,
-        "moveSpeed": 340,
-        "baseMP": 339,
-        "mpGrowth": 52,
-        "baseHPRegen": 8.5,
-        "hpRegenGrowth": 0.8
-      },
-      "kit_tags": [
-        "attack",
-        "cc",
-        "heal_shield",
-        "movement",
-        "on_hit"
-      ]
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/164.png"
     },
     {
-      "slug": "kled",
-      "name": "Kled",
+      "slug": "kled/",
+      "name": "Kled/",
       "tier": "C",
       "rank": 171,
       "win_rate": 45.44,
@@ -6398,35 +2181,11 @@
       "tags": [
         "fighter"
       ],
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/240.png",
-      "baseStats": {
-        "baseHP": 410,
-        "hpGrowth": 84,
-        "baseArmor": 35,
-        "armorGrowth": 5.2,
-        "baseMR": 28,
-        "mrGrowth": 2.05,
-        "baseAD": 65,
-        "adGrowth": 3.5,
-        "baseAS": 0.625,
-        "asGrowth": 3.5,
-        "attackRange": 125,
-        "moveSpeed": 345,
-        "baseMP": 100,
-        "mpGrowth": 0,
-        "baseHPRegen": 6,
-        "hpRegenGrowth": 0.75
-      },
-      "kit_tags": [
-        "attack",
-        "cc",
-        "heal_shield",
-        "movement"
-      ]
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/240.png"
     },
     {
-      "slug": "bard",
-      "name": "Bard",
+      "slug": "bard/",
+      "name": "Bard/",
       "tier": "C",
       "rank": 172,
       "win_rate": 41.72,
@@ -6435,31 +2194,7 @@
         "support",
         "mage"
       ],
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/432.png",
-      "baseStats": {
-        "baseHP": 630,
-        "hpGrowth": 103,
-        "baseArmor": 34,
-        "armorGrowth": 5,
-        "baseMR": 30,
-        "mrGrowth": 1.3,
-        "baseAD": 52,
-        "adGrowth": 3,
-        "baseAS": 0.658,
-        "asGrowth": 2,
-        "attackRange": 500,
-        "moveSpeed": 335,
-        "baseMP": 350,
-        "mpGrowth": 50,
-        "baseHPRegen": 5.5,
-        "hpRegenGrowth": 0.55
-      },
-      "kit_tags": [
-        "ability",
-        "cc",
-        "heal_shield",
-        "movement"
-      ]
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/432.png"
     }
   ]
 }

@@ -1,6 +1,6 @@
 {
   "patch": "26.10",
-  "scraped_at": "2026-05-17T22:45:06.517348+00:00",
+  "scraped_at": "2026-05-18T22:51:12.225016+00:00",
   "augments": [
     {
       "slug": "back-to-basics",
@@ -2226,7 +2226,7 @@
       "icon": "https://arammayhem.com/augments/Snowball_Roulette_mayhem_augment.webp",
       "name_ja": "雪玉ルーレット",
       "name_ko": "눈덩이 룰렛",
-      "wikiDescription": "Hitting an enemy champion with Mark casts a random harmful summoner spell on them, and also casts a random beneficial summoner spell on yourself. Using Dash casts the beneficial summoner spell on yourself again upon arrival. Additionally, your Mark's cooldown is reduced equivalent to 100 ability haste. Harmful summoner spells include Exhaust and Ignite , while beneficial ones consist of Barrier , Clarity , Cleanse , Ghost , and Heal . If Mark is not equipped, you will be prompted to replace one of your summoner spells with Mark .",
+      "wikiDescription": "Hitting an enemy with Mark casts a random harmful summoner spell on them, and also casts a random beneficial summoner spell on yourself. Using Dash casts the beneficial summoner spell on yourself again upon arrival. Additionally, your Mark's cooldown is reduced equivalent to 100 ability haste. If Mark is not equipped, you will be prompted to replace one of your summoner spells with Mark . Harmful summoner spells: Exhaust and Ignite Beneficial Summoner spells: Barrier , Clarity , Cleanse , Ghost , and Heal Recasting Barrier and Cleanse refreshes the duration. Recasted Heal will heal less since the Recently Healed debuff will be applied on the first. Ghost can be stacked up to a maximum of 5 times (which is possible with Biggest Snowball Ever augment)",
       "wikiSet": "Snowday",
       "kit_tags": [
         "ability",
@@ -2920,7 +2920,7 @@
       "name_ja": "帽子の上に帽子",
       "name_ko": "모자 겹쳐쓰기",
       "name_zh_TW": "帽上加帽",
-      "wikiDescription": "Gain 15 ability power and 8 bonus magic resistance for each headwear item or hat you have in your inventory, reduced to 8 ability power and 4 bonus magic resistance for hats obtained from Cappa Juice and Stat Bonus . Eligible Items: Abyssal Mask , Bloodletter's Curse , Cosmic Drive , Diadem of Songs , Edge of Night , Experimental Hexplate , Fimbulwinter , Haunting Guise , Hollow Radiance , Hubris , Jak'Sho, The Protean , Knight's Vow , Liandry's Torment , Rabadon's Deathcap , Riftmaker , Shurelya's Battlesong , Spectre's Cowl , Whispering Circlet , Wooglet's Witchcap",
+      "wikiDescription": "Gain 15 ability power and 8 bonus magic resistance for each headwear item or hat you have in your inventory, reduced to 8 ability power and 4 bonus magic resistance for hats obtained from Cappa Juice and Stat Bonus . Eligible Epic Items: Haunting Guise , Spectre's Cowl Eligible Legendary Items: Abyssal Mask , Bloodletter's Curse , Cosmic Drive , Diadem of Songs , Edge of Night , Experimental Hexplate , Fimbulwinter , , Hollow Radiance , Hubris , Jak'Sho, The Protean , Knight's Vow , Liandry's Torment , Rabadon's Deathcap , Riftmaker , Shurelya's Battlesong , Whispering Circlet , Wooglet's Witchcap The stats gained for an eligible item is equal to 460 . The stats gained for a stack of Cappa Juice and Stat Bonus is equal to 240 .",
       "kit_tags": [
         "ability"
       ],
