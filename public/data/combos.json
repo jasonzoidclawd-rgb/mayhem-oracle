@@ -1,1626 +1,4002 @@
 {
-  "patch": "26.10",
-  "scraped_at": "2026-05-18T22:51:12.225016+00:00",
+  "patch": "26.11",
+  "scraped_at": "2026-06-01T23:22:15.934651+00:00",
   "combos": [
     {
-      "champion": "shaco",
-      "augment": "executioner",
+      "champion": "vayne",
+      "augment": "Fan The Hammer",
       "tier": "S",
-      "ref": "curated:shaco-executioner"
+      "ref": "curated:vayne-\u9ad8\u9891\u653b\u51fb\u7279\u6548\u4e09\u73af\u6d41"
     },
     {
-      "champion": "shaco",
-      "augment": "clown college",
+      "champion": "brand",
+      "augment": "Infernal Conduit",
       "tier": "S",
-      "ref": "curated:shaco-clown-college"
+      "ref": "curated:brand-\u5bfc\u7ba1\u706b\u7537"
     },
     {
-      "champion": "shaco",
-      "augment": "back to basics",
-      "tier": "A",
-      "ref": "curated:shaco-back-to-basics"
-    },
-    {
-      "champion": "shaco",
-      "augment": "quantum computing",
-      "tier": "A",
-      "ref": "curated:shaco-quantum-computing"
-    },
-    {
-      "champion": "shaco",
-      "augment": "don't blink",
-      "tier": "A",
-      "ref": "curated:shaco-dont-blink"
-    },
-    {
-      "champion": "shaco",
-      "augment": "vampirism",
-      "tier": "A",
-      "ref": "curated:shaco-vampirism"
-    },
-    {
-      "champion": "shaco",
-      "augment": "minionmancer",
-      "tier": "B",
-      "ref": "curated:shaco-minionmancer"
-    },
-    {
-      "champion": "shaco",
-      "augment": "slow and steady",
-      "tier": "C",
-      "ref": "curated:shaco-slow-and-steady"
-    },
-    {
-      "champion": "shaco",
-      "augment": "poro blaster",
-      "tier": "C",
-      "ref": "curated:shaco-poro-blaster"
-    },
-    {
-      "champion": "ryze",
-      "augment": "adapt",
+      "champion": "yasuo",
+      "augment": "Mystic Punch",
       "tier": "S",
-      "ref": "curated:ryze-adapt"
+      "ref": "curated:yasuo-\u79d8\u672f\u51b2\u62f3\u65e0\u9650\u5439\u98ce\u6d41"
     },
     {
-      "champion": "ryze",
-      "augment": "mind to matter",
+      "champion": "gnar",
+      "augment": "Fan The Hammer",
       "tier": "S",
-      "ref": "curated:ryze-mind-to-matter"
+      "ref": "curated:gnar-ap\u7eb3\u5c14\u8fde\u62d4\u7206\u53d1\u6d41"
     },
     {
-      "champion": "ryze",
-      "augment": "goliath",
+      "champion": "brand",
+      "augment": "Infernal Conduit",
       "tier": "S",
-      "ref": "curated:ryze-goliath"
-    },
-    {
-      "champion": "ryze",
-      "augment": "mad scientist",
-      "tier": "S",
-      "ref": "curated:ryze-mad-scientist"
-    },
-    {
-      "champion": "ryze",
-      "augment": "quest: wooglet's witchcap",
-      "tier": "S",
-      "ref": "curated:ryze-quest-wooglets-witchcap"
-    },
-    {
-      "champion": "ryze",
-      "augment": "overflow",
-      "tier": "S",
-      "ref": "curated:ryze-overflow"
-    },
-    {
-      "champion": "ryze",
-      "augment": "tank engine",
-      "tier": "A",
-      "ref": "curated:ryze-tank-engine"
-    },
-    {
-      "champion": "ryze",
-      "augment": "ultimate revolution",
-      "tier": "C",
-      "ref": "curated:ryze-ultimate-revolution"
-    },
-    {
-      "champion": "garen",
-      "augment": "slow and steady",
-      "tier": "S",
-      "ref": "curated:garen-slow-and-steady"
-    },
-    {
-      "champion": "garen",
-      "augment": "blade waltz",
-      "tier": "A",
-      "ref": "curated:garen-blade-waltz"
-    },
-    {
-      "champion": "garen",
-      "augment": "vampirism",
-      "tier": "C",
-      "ref": "curated:garen-vampirism"
-    },
-    {
-      "champion": "garen",
-      "augment": "deft",
-      "tier": "C",
-      "ref": "curated:garen-deft"
-    },
-    {
-      "champion": "garen",
-      "augment": "lightning strikes",
-      "tier": "C",
-      "ref": "curated:garen-lightning-strikes"
-    },
-    {
-      "champion": "garen",
-      "augment": "jeweled gauntlet",
-      "tier": "C",
-      "ref": "curated:garen-jeweled-gauntlet"
-    },
-    {
-      "champion": "katarina",
-      "augment": "slow and steady",
-      "tier": "S",
-      "ref": "curated:katarina-slow-and-steady"
-    },
-    {
-      "champion": "katarina",
-      "augment": "vulnerability",
-      "tier": "S",
-      "ref": "curated:katarina-vulnerability"
-    },
-    {
-      "champion": "katarina",
-      "augment": "ethereal weapon",
-      "tier": "S",
-      "ref": "curated:katarina-ethereal-weapon"
-    },
-    {
-      "champion": "katarina",
-      "augment": "master of duality",
-      "tier": "A",
-      "ref": "curated:katarina-master-of-duality"
-    },
-    {
-      "champion": "katarina",
-      "augment": "deft",
-      "tier": "A",
-      "ref": "curated:katarina-deft"
-    },
-    {
-      "champion": "katarina",
-      "augment": "lightning strikes",
-      "tier": "C",
-      "ref": "curated:katarina-lightning-strikes"
-    },
-    {
-      "champion": "kayle",
-      "augment": "ethereal weapon",
-      "tier": "S",
-      "ref": "curated:kayle-ethereal-weapon"
-    },
-    {
-      "champion": "kayle",
-      "augment": "magic missile",
-      "tier": "S",
-      "ref": "curated:kayle-magic-missile"
-    },
-    {
-      "champion": "kayle",
-      "augment": "marksmage",
-      "tier": "A",
-      "ref": "curated:kayle-marksmage"
-    },
-    {
-      "champion": "kayle",
-      "augment": "infernal conduit",
-      "tier": "B",
-      "ref": "curated:kayle-infernal-conduit"
-    },
-    {
-      "champion": "kayle",
-      "augment": "draw your sword",
-      "tier": "C",
-      "ref": "curated:kayle-draw-your-sword"
-    },
-    {
-      "champion": "samira",
-      "augment": "blade waltz",
-      "tier": "S",
-      "ref": "curated:samira-blade-waltz"
-    },
-    {
-      "champion": "samira",
-      "augment": "clown college",
-      "tier": "S",
-      "ref": "curated:samira-clown-college"
-    },
-    {
-      "champion": "samira",
-      "augment": "draw your sword",
-      "tier": "S",
-      "ref": "curated:samira-draw-your-sword"
-    },
-    {
-      "champion": "samira",
-      "augment": "ethereal weapon",
-      "tier": "S",
-      "ref": "curated:samira-ethereal-weapon"
-    },
-    {
-      "champion": "samira",
-      "augment": "vulnerability",
-      "tier": "C",
-      "ref": "curated:samira-vulnerability"
-    },
-    {
-      "champion": "smolder",
-      "augment": "jeweled gauntlet",
-      "tier": "S",
-      "ref": "curated:smolder-jeweled-gauntlet"
-    },
-    {
-      "champion": "smolder",
-      "augment": "scopiest weapons",
-      "tier": "S",
-      "ref": "curated:smolder-scopiest-weapons"
-    },
-    {
-      "champion": "smolder",
-      "augment": "scopier weapons",
-      "tier": "S",
-      "ref": "curated:smolder-scopier-weapons"
-    },
-    {
-      "champion": "smolder",
-      "augment": "scoped weapons",
-      "tier": "S",
-      "ref": "curated:smolder-scoped-weapons"
-    },
-    {
-      "champion": "smolder",
-      "augment": "draw your sword",
-      "tier": "C",
-      "ref": "curated:smolder-draw-your-sword"
-    },
-    {
-      "champion": "ambessa",
-      "augment": "back to basics",
-      "tier": "S",
-      "ref": "curated:ambessa-back-to-basics"
-    },
-    {
-      "champion": "ambessa",
-      "augment": "rabble rousing",
-      "tier": "S",
-      "ref": "curated:ambessa-rabble-rousing"
-    },
-    {
-      "champion": "ambessa",
-      "augment": "ethereal weapon",
-      "tier": "C",
-      "ref": "curated:ambessa-ethereal-weapon"
-    },
-    {
-      "champion": "ambessa",
-      "augment": "dashing",
-      "tier": "C",
-      "ref": "curated:ambessa-dashing"
-    },
-    {
-      "champion": "aurora",
-      "augment": "ethereal weapon",
-      "tier": "S",
-      "ref": "curated:aurora-ethereal-weapon"
-    },
-    {
-      "champion": "aurora",
-      "augment": "dashing",
-      "tier": "S",
-      "ref": "curated:aurora-dashing"
-    },
-    {
-      "champion": "aurora",
-      "augment": "orbitallaser",
-      "tier": "B",
-      "ref": "curated:aurora-orbitallaser"
-    },
-    {
-      "champion": "aurora",
-      "augment": "snowball upgrade",
-      "tier": "B",
-      "ref": "curated:aurora-snowball-upgrade"
-    },
-    {
-      "champion": "azir",
-      "augment": "magic missile",
-      "tier": "S",
-      "ref": "curated:azir-magic-missile"
-    },
-    {
-      "champion": "azir",
-      "augment": "marksmage",
-      "tier": "S",
-      "ref": "curated:azir-marksmage"
-    },
-    {
-      "champion": "azir",
-      "augment": "minionmancer",
-      "tier": "C",
-      "ref": "curated:azir-minionmancer"
-    },
-    {
-      "champion": "azir",
-      "augment": "scopiest weapons",
-      "tier": "C",
-      "ref": "curated:azir-scopiest-weapons"
-    },
-    {
-      "champion": "fiddlesticks",
-      "augment": "blade waltz",
-      "tier": "S",
-      "ref": "curated:fiddlesticks-blade-waltz"
-    },
-    {
-      "champion": "fiddlesticks",
-      "augment": "clown college",
-      "tier": "A",
-      "ref": "curated:fiddlesticks-clown-college"
-    },
-    {
-      "champion": "fiddlesticks",
-      "augment": "upgrade zhonya's",
-      "tier": "A",
-      "ref": "curated:fiddlesticks-upgrade-zhonyas"
-    },
-    {
-      "champion": "fiddlesticks",
-      "augment": "light 'em up!",
-      "tier": "C",
-      "ref": "curated:fiddlesticks-light-em-up!"
-    },
-    {
-      "champion": "karthus",
-      "augment": "clown college",
-      "tier": "S",
-      "ref": "curated:karthus-clown-college"
-    },
-    {
-      "champion": "karthus",
-      "augment": "ultimate revolution",
-      "tier": "S",
-      "ref": "curated:karthus-ultimate-revolution"
-    },
-    {
-      "champion": "karthus",
-      "augment": "infinite recursion",
-      "tier": "S",
-      "ref": "curated:karthus-infinite-recursion"
-    },
-    {
-      "champion": "karthus",
-      "augment": "eureka",
-      "tier": "A",
-      "ref": "curated:karthus-eureka"
-    },
-    {
-      "champion": "neeko",
-      "augment": "tap dancer",
-      "tier": "B",
-      "ref": "curated:neeko-tap-dancer"
-    },
-    {
-      "champion": "neeko",
-      "augment": "master of duality",
-      "tier": "B",
-      "ref": "curated:neeko-master-of-duality"
-    },
-    {
-      "champion": "neeko",
-      "augment": "from beginning to end",
-      "tier": "C",
-      "ref": "curated:neeko-from-beginning-to-end"
-    },
-    {
-      "champion": "neeko",
-      "augment": "poro blaster",
-      "tier": "C",
-      "ref": "curated:neeko-poro-blaster"
-    },
-    {
-      "champion": "senna",
-      "augment": "dual wield",
-      "tier": "S",
-      "ref": "curated:senna-dual-wield"
-    },
-    {
-      "champion": "senna",
-      "augment": "stackosaurusrex",
-      "tier": "S",
-      "ref": "curated:senna-stackosaurusrex"
-    },
-    {
-      "champion": "senna",
-      "augment": "ethereal weapon",
-      "tier": "A",
-      "ref": "curated:senna-ethereal-weapon"
-    },
-    {
-      "champion": "senna",
-      "augment": "draw your sword",
-      "tier": "A",
-      "ref": "curated:senna-draw-your-sword"
-    },
-    {
-      "champion": "sett",
-      "augment": "clown college",
-      "tier": "S",
-      "ref": "curated:sett-clown-college"
-    },
-    {
-      "champion": "sett",
-      "augment": "jeweled gauntlet",
-      "tier": "S",
-      "ref": "curated:sett-jeweled-gauntlet"
-    },
-    {
-      "champion": "sett",
-      "augment": "back to basics",
-      "tier": "S",
-      "ref": "curated:sett-back-to-basics"
-    },
-    {
-      "champion": "sett",
-      "augment": "quantum computing",
-      "tier": "A",
-      "ref": "curated:sett-quantum-computing"
-    },
-    {
-      "champion": "sylas",
-      "augment": "dashing",
-      "tier": "S",
-      "ref": "curated:sylas-dashing"
-    },
-    {
-      "champion": "sylas",
-      "augment": "marksmage",
-      "tier": "S",
-      "ref": "curated:sylas-marksmage"
-    },
-    {
-      "champion": "sylas",
-      "augment": "ultimate awakening",
-      "tier": "S",
-      "ref": "curated:sylas-ultimate-awakening"
-    },
-    {
-      "champion": "sylas",
-      "augment": "final form",
-      "tier": "A",
-      "ref": "curated:sylas-final-form"
-    },
-    {
-      "champion": "twitch",
-      "augment": "fey magic",
-      "tier": "S",
-      "ref": "curated:twitch-fey-magic"
-    },
-    {
-      "champion": "twitch",
-      "augment": "marksmage",
-      "tier": "A",
-      "ref": "curated:twitch-marksmage"
-    },
-    {
-      "champion": "twitch",
-      "augment": "infernal conduit",
-      "tier": "C",
-      "ref": "curated:twitch-infernal-conduit"
-    },
-    {
-      "champion": "twitch",
-      "augment": "ethereal weapon",
-      "tier": "C",
-      "ref": "curated:twitch-ethereal-weapon"
+      "ref": "curated:brand-infernal-conduit"
     },
     {
       "champion": "vayne",
-      "augment": "dual wield",
-      "tier": "S",
-      "ref": "curated:vayne-dual-wield"
-    },
-    {
-      "champion": "vayne",
-      "augment": "fan the hammer",
+      "augment": "Fan The Hammer",
       "tier": "S",
       "ref": "curated:vayne-fan-the-hammer"
     },
     {
-      "champion": "vayne",
-      "augment": "twice thrice",
+      "champion": "lucian",
+      "augment": "Jeweled Gauntlet",
       "tier": "S",
-      "ref": "curated:vayne-twice-thrice"
+      "ref": "curated:lucian-\u6613\u635f\u6cd5\u7206\u96f7\u9706\u6218\u673a\u6d41"
     },
     {
-      "champion": "vayne",
-      "augment": "ethereal weapon",
-      "tier": "B",
-      "ref": "curated:vayne-ethereal-weapon"
-    },
-    {
-      "champion": "zaahen",
-      "augment": "blade waltz",
+      "champion": "yone",
+      "augment": "Mystic Punch",
       "tier": "S",
-      "ref": "curated:zaahen-blade-waltz"
+      "ref": "curated:yone-\u79d8\u672f\u51b2\u62f3\u65e0\u9650\u5439\u98ce\u6d41"
     },
     {
-      "champion": "zaahen",
-      "augment": "fan the hammer",
-      "tier": "A",
-      "ref": "curated:zaahen-fan-the-hammer"
-    },
-    {
-      "champion": "zaahen",
-      "augment": "orbitallaser",
-      "tier": "A",
-      "ref": "curated:zaahen-orbitallaser"
-    },
-    {
-      "champion": "zaahen",
-      "augment": "snowball upgrade",
-      "tier": "C",
-      "ref": "curated:zaahen-snowball-upgrade"
-    },
-    {
-      "champion": "braum",
-      "augment": "fan the hammer",
-      "tier": "A",
-      "ref": "curated:braum-fan-the-hammer"
-    },
-    {
-      "champion": "braum",
-      "augment": "blade waltz",
-      "tier": "A",
-      "ref": "curated:braum-blade-waltz"
-    },
-    {
-      "champion": "braum",
-      "augment": "typhoon",
-      "tier": "B",
-      "ref": "curated:braum-typhoon"
-    },
-    {
-      "champion": "darius",
-      "augment": "typhoon",
-      "tier": "B",
-      "ref": "curated:darius-typhoon"
-    },
-    {
-      "champion": "darius",
-      "augment": "fan the hammer",
-      "tier": "C",
-      "ref": "curated:darius-fan-the-hammer"
-    },
-    {
-      "champion": "darius",
-      "augment": "blade waltz",
-      "tier": "C",
-      "ref": "curated:darius-blade-waltz"
-    },
-    {
-      "champion": "dr. mundo",
-      "augment": "heavy hitter",
-      "tier": "A",
-      "ref": "curated:drmundo-heavy-hitter"
-    },
-    {
-      "champion": "dr. mundo",
-      "augment": "vampirism",
-      "tier": "C",
-      "ref": "curated:drmundo-vampirism"
-    },
-    {
-      "champion": "dr. mundo",
-      "augment": "protein shake",
-      "tier": "C",
-      "ref": "curated:drmundo-protein-shake"
-    },
-    {
-      "champion": "fizz",
-      "augment": "infernal conduit",
+      "champion": "masteryi",
+      "augment": "Mystic Punch",
       "tier": "S",
-      "ref": "curated:fizz-infernal-conduit"
+      "ref": "curated:masteryi-\u65e0\u9650q\u6d41\u5251\u5723"
     },
     {
-      "champion": "fizz",
-      "augment": "dashing",
+      "champion": "ryze",
+      "augment": "ADAPt",
       "tier": "S",
-      "ref": "curated:fizz-dashing"
+      "ref": "curated:ryze-21\u4ebf\u6cd5\u5f3a\u5c5e\u6027\u5faa\u73af\u6d41"
     },
     {
-      "champion": "fizz",
-      "augment": "fan the hammer",
+      "champion": "missfortune",
+      "augment": "Mind to Matter",
       "tier": "S",
-      "ref": "curated:fizz-fan-the-hammer"
+      "ref": "curated:missfortune-\u5927\u6cd5\u5e08\u66b4\u96e8\u6d41"
     },
     {
-      "champion": "gangplank",
-      "augment": "back to basics",
+      "champion": "aurelionsol",
+      "augment": "Shrink Engine",
       "tier": "S",
-      "ref": "curated:gangplank-back-to-basics"
+      "ref": "curated:aurelionsol-\u53e0\u89d2\u9f99100\u65a9\u6740\u9f99\u738b"
     },
     {
-      "champion": "gangplank",
-      "augment": "don't blink",
+      "champion": "tristana",
+      "augment": "Fan The Hammer",
       "tier": "S",
-      "ref": "curated:gangplank-dont-blink"
-    },
-    {
-      "champion": "gangplank",
-      "augment": "ethereal weapon",
-      "tier": "A",
-      "ref": "curated:gangplank-ethereal-weapon"
+      "ref": "curated:tristana-fan-the-hammer"
     },
     {
       "champion": "graves",
-      "augment": "back to basics",
+      "augment": "Draw Your Sword",
       "tier": "S",
-      "ref": "curated:graves-back-to-basics"
+      "ref": "curated:graves-draw-your-sword"
+    },
+    {
+      "champion": "vayne",
+      "augment": "Dual Wield",
+      "tier": "S",
+      "ref": "curated:vayne-dual-wield"
     },
     {
       "champion": "graves",
-      "augment": "slow and steady",
+      "augment": "Slow And Steady",
       "tier": "S",
       "ref": "curated:graves-slow-and-steady"
     },
     {
       "champion": "graves",
-      "augment": "draw your sword",
+      "augment": "Back To Basics",
       "tier": "S",
-      "ref": "curated:graves-draw-your-sword"
-    },
-    {
-      "champion": "hecarim",
-      "augment": "ultimate awakening",
-      "tier": "S",
-      "ref": "curated:hecarim-ultimate-awakening"
-    },
-    {
-      "champion": "hecarim",
-      "augment": "ethereal weapon",
-      "tier": "S",
-      "ref": "curated:hecarim-ethereal-weapon"
-    },
-    {
-      "champion": "hecarim",
-      "augment": "rabble rousing",
-      "tier": "S",
-      "ref": "curated:hecarim-rabble-rousing"
-    },
-    {
-      "champion": "illaoi",
-      "augment": "blade waltz",
-      "tier": "S",
-      "ref": "curated:illaoi-blade-waltz"
-    },
-    {
-      "champion": "illaoi",
-      "augment": "ethereal weapon",
-      "tier": "A",
-      "ref": "curated:illaoi-ethereal-weapon"
-    },
-    {
-      "champion": "illaoi",
-      "augment": "glass cannon",
-      "tier": "A",
-      "ref": "curated:illaoi-glass-cannon"
-    },
-    {
-      "champion": "kalista",
-      "augment": "dashing",
-      "tier": "S",
-      "ref": "curated:kalista-dashing"
-    },
-    {
-      "champion": "kalista",
-      "augment": "fan the hammer",
-      "tier": "S",
-      "ref": "curated:kalista-fan-the-hammer"
-    },
-    {
-      "champion": "kalista",
-      "augment": "shadow runner",
-      "tier": "A",
-      "ref": "curated:kalista-shadow-runner"
-    },
-    {
-      "champion": "morgana",
-      "augment": "executioner",
-      "tier": "S",
-      "ref": "curated:morgana-executioner"
-    },
-    {
-      "champion": "morgana",
-      "augment": "skilled sniper",
-      "tier": "A",
-      "ref": "curated:morgana-skilled-sniper"
-    },
-    {
-      "champion": "morgana",
-      "augment": "infernal conduit",
-      "tier": "A",
-      "ref": "curated:morgana-infernal-conduit"
-    },
-    {
-      "champion": "rek'sai",
-      "augment": "scopiest weapons",
-      "tier": "B",
-      "ref": "curated:reksai-scopiest-weapons"
-    },
-    {
-      "champion": "rek'sai",
-      "augment": "scopier weapons",
-      "tier": "B",
-      "ref": "curated:reksai-scopier-weapons"
-    },
-    {
-      "champion": "rek'sai",
-      "augment": "scoped weapons",
-      "tier": "B",
-      "ref": "curated:reksai-scoped-weapons"
-    },
-    {
-      "champion": "rengar",
-      "augment": "scopiest weapons",
-      "tier": "S",
-      "ref": "curated:rengar-scopiest-weapons"
-    },
-    {
-      "champion": "rengar",
-      "augment": "scopier weapons",
-      "tier": "S",
-      "ref": "curated:rengar-scopier-weapons"
-    },
-    {
-      "champion": "rengar",
-      "augment": "scoped weapons",
-      "tier": "S",
-      "ref": "curated:rengar-scoped-weapons"
-    },
-    {
-      "champion": "sivir",
-      "augment": "skilled sniper",
-      "tier": "A",
-      "ref": "curated:sivir-skilled-sniper"
-    },
-    {
-      "champion": "sivir",
-      "augment": "vulnerability",
-      "tier": "C",
-      "ref": "curated:sivir-vulnerability"
-    },
-    {
-      "champion": "sivir",
-      "augment": "ethereal weapon",
-      "tier": "C",
-      "ref": "curated:sivir-ethereal-weapon"
-    },
-    {
-      "champion": "udyr",
-      "augment": "jeweled gauntlet",
-      "tier": "S",
-      "ref": "curated:udyr-jeweled-gauntlet"
-    },
-    {
-      "champion": "udyr",
-      "augment": "ethereal weapon",
-      "tier": "A",
-      "ref": "curated:udyr-ethereal-weapon"
-    },
-    {
-      "champion": "udyr",
-      "augment": "scopiest weapons",
-      "tier": "A",
-      "ref": "curated:udyr-scopiest-weapons"
-    },
-    {
-      "champion": "vladimir",
-      "augment": "infernal conduit",
-      "tier": "S",
-      "ref": "curated:vladimir-infernal-conduit"
-    },
-    {
-      "champion": "vladimir",
-      "augment": "bread and jam",
-      "tier": "A",
-      "ref": "curated:vladimir-bread-and-jam"
-    },
-    {
-      "champion": "vladimir",
-      "augment": "recursion",
-      "tier": "A",
-      "ref": "curated:vladimir-recursion"
-    },
-    {
-      "champion": "zeri",
-      "augment": "fey magic",
-      "tier": "A",
-      "ref": "curated:zeri-fey-magic"
-    },
-    {
-      "champion": "zeri",
-      "augment": "upgrade infinity edge",
-      "tier": "A",
-      "ref": "curated:zeri-upgrade-infinity-edge"
-    },
-    {
-      "champion": "zeri",
-      "augment": "slow and steady",
-      "tier": "C",
-      "ref": "curated:zeri-slow-and-steady"
-    },
-    {
-      "champion": "aurelion sol",
-      "augment": "ice cold",
-      "tier": "S",
-      "ref": "curated:aurelionsol-ice-cold"
-    },
-    {
-      "champion": "aurelion sol",
-      "augment": "stackosaurusrex",
-      "tier": "S",
-      "ref": "curated:aurelionsol-stackosaurusrex"
-    },
-    {
-      "champion": "bard",
-      "augment": "orbitallaser",
-      "tier": "S",
-      "ref": "curated:bard-orbitallaser"
-    },
-    {
-      "champion": "bard",
-      "augment": "ethereal weapon",
-      "tier": "C",
-      "ref": "curated:bard-ethereal-weapon"
+      "ref": "curated:graves-back-to-basics"
     },
     {
       "champion": "brand",
-      "augment": "infernal conduit",
-      "tier": "S",
-      "ref": "curated:brand-infernal-conduit"
-    },
-    {
-      "champion": "brand",
-      "augment": "magic missile",
+      "augment": "Magic Missile",
       "tier": "S",
       "ref": "curated:brand-magic-missile"
     },
     {
-      "champion": "briar",
-      "augment": "dashing",
+      "champion": "pantheon",
+      "augment": "Quest: Steel Your Heart",
       "tier": "S",
-      "ref": "curated:briar-dashing"
+      "ref": "curated:pantheon-\u751f\u547d\u503c\u767e\u5206\u6bd4\u4f24\u5bb3\u6d41\u6f58\u68ee"
     },
     {
-      "champion": "briar",
-      "augment": "executioner",
+      "champion": "udyr",
+      "augment": "Ethereal Weapon",
       "tier": "S",
-      "ref": "curated:briar-executioner"
+      "ref": "curated:udyr-ap\u6838\u5f39\u6d41"
     },
     {
-      "champion": "corki",
-      "augment": "jeweled gauntlet",
+      "champion": "udyr",
+      "augment": "Scopiest Weapons",
       "tier": "S",
-      "ref": "curated:corki-jeweled-gauntlet"
+      "ref": "curated:udyr-ad\u4e00\u62f3\u79d2\u4eba\u6d41"
     },
     {
-      "champion": "corki",
-      "augment": "vulnerability",
-      "tier": "A",
-      "ref": "curated:corki-vulnerability"
-    },
-    {
-      "champion": "diana",
-      "augment": "critical healing",
+      "champion": "aurora",
+      "augment": "Ethereal Weapon",
       "tier": "S",
-      "ref": "curated:diana-critical-healing"
+      "ref": "curated:aurora-\u865a\u5e7b\u6b66\u5668\u5154\u5b50"
     },
     {
-      "champion": "diana",
-      "augment": "ethereal weapon",
-      "tier": "A",
-      "ref": "curated:diana-ethereal-weapon"
+      "champion": "varus",
+      "augment": "Ethereal Weapon",
+      "tier": "S",
+      "ref": "curated:varus-ap\u97e6\u9c81\u65af\u4e00\u7bad\u79d2\u4eba\u6d41"
+    },
+    {
+      "champion": "hecarim",
+      "augment": "Ethereal Weapon",
+      "tier": "S",
+      "ref": "curated:hecarim-\u79d8\u672f\u51b2\u62f3\u865a\u5e7b\u6b66\u5668\u7535\u98ce\u6247\u4eba\u9a6c"
+    },
+    {
+      "champion": "fiora",
+      "augment": "Quest: Steel Your Heart",
+      "tier": "S",
+      "ref": "curated:fiora-\u767e\u5206\u767e\u6700\u5927\u751f\u547d\u503c\u771f\u4f24\u5251\u59ec"
+    },
+    {
+      "champion": "fiora",
+      "augment": "Mystic Punch",
+      "tier": "S",
+      "ref": "curated:fiora-\u79d8\u672f\u51b2\u62f3\u65e0\u9650q\u5251\u59ec"
+    },
+    {
+      "champion": "zilean",
+      "augment": "Mind to Matter",
+      "tier": "S",
+      "ref": "curated:zilean-\u5927\u6cd5\u5e08\u65e0\u9650\u70b8\u5f39\u6d41"
+    },
+    {
+      "champion": "jayce",
+      "augment": "Slow And Steady",
+      "tier": "S",
+      "ref": "curated:jayce-\u4e00\u677f\u4e00\u773c\u6770\u65af"
+    },
+    {
+      "champion": "galio",
+      "augment": "Soul Eater",
+      "tier": "S",
+      "ref": "curated:galio-100\u51cf\u4f24\u53e0\u89d2\u9f99\u52a0\u91cc\u5965"
+    },
+    {
+      "champion": "jax",
+      "augment": "Mystic Punch",
+      "tier": "S",
+      "ref": "curated:jax-\u79d8\u672f\u51b2\u62f3\u6b66\u5668"
+    },
+    {
+      "champion": "gangplank",
+      "augment": "Back To Basics",
+      "tier": "S",
+      "ref": "curated:gangplank-\u56de\u5f52\u57fa\u672c\u529f\u8239\u957f"
+    },
+    {
+      "champion": "vladimir",
+      "augment": "Infernal Conduit",
+      "tier": "S",
+      "ref": "curated:vladimir-\u70bc\u72f1\u5bfc\u7ba1\u65e0\u9650w\u6d41"
+    },
+    {
+      "champion": "blitzcrank",
+      "augment": "Ethereal Weapon",
+      "tier": "S",
+      "ref": "curated:blitzcrank-\u865a\u5e7b\u6b66\u5668\u65e0\u9650\u7535\u4eba\u6d41"
+    },
+    {
+      "champion": "tryndamere",
+      "augment": "Circle of Death",
+      "tier": "S",
+      "ref": "curated:tryndamere-\u6b7b\u4ea1\u4e4b\u73afap\u86ee\u738b"
+    },
+    {
+      "champion": "fiddlesticks",
+      "augment": "ADAPt",
+      "tier": "S",
+      "ref": "curated:fiddlesticks-\u4e00q\u79d2\u4eba\u6d41"
+    },
+    {
+      "champion": "gragas",
+      "augment": "ADAPt",
+      "tier": "S",
+      "ref": "curated:gragas-100\u51cf\u4f24\u8089\u6876"
+    },
+    {
+      "champion": "mordekaiser",
+      "augment": "Circle of Death",
+      "tier": "S",
+      "ref": "curated:mordekaiser-\u6b7b\u4ea1\u4e4b\u73af\u86cb\u767d\u7c89\u94c1\u7537"
+    },
+    {
+      "champion": "rell",
+      "augment": "Cruelty",
+      "tier": "S",
+      "ref": "curated:rell-\u6b8b\u5fcd\u5766\u514b\u6d41"
+    },
+    {
+      "champion": "vayne",
+      "augment": "Twice Thrice",
+      "tier": "S",
+      "ref": "curated:vayne-twice-thrice"
+    },
+    {
+      "champion": "lillia",
+      "augment": "Infernal Conduit",
+      "tier": "S",
+      "ref": "curated:lillia-infernal-conduit"
+    },
+    {
+      "champion": "yasuo",
+      "augment": "Swift and Safe",
+      "tier": "S",
+      "ref": "curated:yasuo-swift-and-safe"
+    },
+    {
+      "champion": "morgana",
+      "augment": "Executioner",
+      "tier": "S",
+      "ref": "curated:morgana-executioner"
+    },
+    {
+      "champion": "fizz",
+      "augment": "Fan The Hammer",
+      "tier": "S",
+      "ref": "curated:fizz-fan-the-hammer"
+    },
+    {
+      "champion": "aurelionsol",
+      "augment": "Infernal Conduit",
+      "tier": "S",
+      "ref": "curated:aurelionsol-\u707c\u70e7"
+    },
+    {
+      "champion": "caitlyn",
+      "augment": "Fan The Hammer",
+      "tier": "S",
+      "ref": "curated:caitlyn-\u8fde\u51fb\u98de\u5f39"
+    },
+    {
+      "champion": "ryze",
+      "augment": "Quest: Wooglet's Witchcap",
+      "tier": "S",
+      "ref": "curated:ryze-quest-wooglets-witchcap"
+    },
+    {
+      "champion": "lillia",
+      "augment": "Spin To Win",
+      "tier": "S",
+      "ref": "curated:lillia-spin-to-win"
+    },
+    {
+      "champion": "lillia",
+      "augment": "Don't Blink",
+      "tier": "S",
+      "ref": "curated:lillia-\u552f\u5feb\u4e0d\u7834\u98ce\u7b5d\u6d41"
+    },
+    {
+      "champion": "lillia",
+      "augment": "Devil on Your Shoulder",
+      "tier": "S",
+      "ref": "curated:lillia-\u80a9\u4e0a\u6076\u9b54\u8389\u8389\u5a05"
+    },
+    {
+      "champion": "morgana",
+      "augment": "Ocean Soul",
+      "tier": "S",
+      "ref": "curated:morgana-\u5927\u6cd5\u5e08\u6298\u78e8\u7981\u9522\u6d41"
+    },
+    {
+      "champion": "brand",
+      "augment": "Jeweled Gauntlet",
+      "tier": "S",
+      "ref": "curated:brand-\u6cd5\u7206\u6613\u635f\u7206\u6740\u6d41"
+    },
+    {
+      "champion": "vayne",
+      "augment": "Shadow Runner",
+      "tier": "S",
+      "ref": "curated:vayne-\u4e00\u5200\u6d41"
+    },
+    {
+      "champion": "graves",
+      "augment": "Don't Blink",
+      "tier": "S",
+      "ref": "curated:graves-\u6d3b\u529b\u518d\u751f\u72d9\u51fb\u6d41\u7537\u67aa"
+    },
+    {
+      "champion": "graves",
+      "augment": "Marksmage",
+      "tier": "S",
+      "ref": "curated:graves-\u795e\u5c04\u6cd5\u5e08ap\u7206\u53d1\u6d41"
+    },
+    {
+      "champion": "graves",
+      "augment": "Shrink Engine",
+      "tier": "S",
+      "ref": "curated:graves-\u6ed1\u677f\u67aa"
+    },
+    {
+      "champion": "graves",
+      "augment": "Draw Your Sword",
+      "tier": "S",
+      "ref": "curated:graves-\u4eae\u5251\u72c2\u5984\u6d41"
+    },
+    {
+      "champion": "yasuo",
+      "augment": "Critical Healing",
+      "tier": "S",
+      "ref": "curated:yasuo-\u6bc1\u574f\u4eea\u5f0f\u65e0\u9650\u62a4\u76fe\u6d41"
+    },
+    {
+      "champion": "yasuo",
+      "augment": "Shadow Runner",
+      "tier": "S",
+      "ref": "curated:yasuo-\u5feb\u4e50\u8dd1\u5200\u7537"
+    },
+    {
+      "champion": "graves",
+      "augment": "Marksmage",
+      "tier": "S",
+      "ref": "curated:graves-\u5de6\u811a\u8e29\u53f3\u811a"
+    },
+    {
+      "champion": "graves",
+      "augment": "Marksmage",
+      "tier": "S",
+      "ref": "curated:graves-\u795e\u5c04\u6cd5\u5e08\u7537\u67aa"
+    },
+    {
+      "champion": "vayne",
+      "augment": "Double Tap",
+      "tier": "S",
+      "ref": "curated:vayne-\u53cc\u53d1vn"
+    },
+    {
+      "champion": "brand",
+      "augment": "Void Rift",
+      "tier": "S",
+      "ref": "curated:brand-\u6ee1\u5c4f\u88c2\u9699\u7206\u6740\u6d41"
+    },
+    {
+      "champion": "lillia",
+      "augment": "Void Rift",
+      "tier": "S",
+      "ref": "curated:lillia-\u865a\u7a7a\u88c2\u9699\u95ea\u73b0\u5c0f\u9e7f"
+    },
+    {
+      "champion": "yasuo",
+      "augment": "Mystic Punch",
+      "tier": "S",
+      "ref": "curated:yasuo-\u66b4\u529bqqq"
+    },
+    {
+      "champion": "yasuo",
+      "augment": "Critical Healing",
+      "tier": "S",
+      "ref": "curated:yasuo-critical_healing"
+    },
+    {
+      "champion": "ryze",
+      "augment": "ADAPt",
+      "tier": "S",
+      "ref": "curated:ryze-adapt"
+    },
+    {
+      "champion": "aurelionsol",
+      "augment": "Ice Cold",
+      "tier": "S",
+      "ref": "curated:aurelionsol-ice-cold"
+    },
+    {
+      "champion": "lucian",
+      "augment": "Vulnerability",
+      "tier": "S",
+      "ref": "curated:lucian-vulnerability"
+    },
+    {
+      "champion": "missfortune",
+      "augment": "Skilled Sniper",
+      "tier": "S",
+      "ref": "curated:missfortune-skilled-sniper"
+    },
+    {
+      "champion": "kalista",
+      "augment": "Fan The Hammer",
+      "tier": "S",
+      "ref": "curated:kalista-fan-the-hammer"
+    },
+    {
+      "champion": "ryze",
+      "augment": "Mind to Matter",
+      "tier": "S",
+      "ref": "curated:ryze-mind-to-matter"
+    },
+    {
+      "champion": "lucian",
+      "augment": "Jeweled Gauntlet",
+      "tier": "S",
+      "ref": "curated:lucian-jeweled-gauntlet"
+    },
+    {
+      "champion": "ryze",
+      "augment": "Overflow",
+      "tier": "S",
+      "ref": "curated:ryze-overflow"
+    },
+    {
+      "champion": "malzahar",
+      "augment": "Infernal Conduit",
+      "tier": "S",
+      "ref": "curated:malzahar-infernal-conduit"
+    },
+    {
+      "champion": "masteryi",
+      "augment": "Mystic Punch",
+      "tier": "S",
+      "ref": "curated:masteryi-mystic-punch"
+    },
+    {
+      "champion": "seraphine",
+      "augment": "Slap Around",
+      "tier": "S",
+      "ref": "curated:seraphine-slap-around"
+    },
+    {
+      "champion": "fizz",
+      "augment": "Dashing",
+      "tier": "S",
+      "ref": "curated:fizz-dashing"
+    },
+    {
+      "champion": "yone",
+      "augment": "Critical Healing",
+      "tier": "S",
+      "ref": "curated:yone-critical-healing"
+    },
+    {
+      "champion": "ryze",
+      "augment": "Goliath",
+      "tier": "S",
+      "ref": "curated:ryze-goliath"
+    },
+    {
+      "champion": "karthus",
+      "augment": "Ultimate Revolution",
+      "tier": "S",
+      "ref": "curated:karthus-ultimate-revolution"
+    },
+    {
+      "champion": "rumble",
+      "augment": "Vulnerability",
+      "tier": "S",
+      "ref": "curated:rumble-vulnerability"
+    },
+    {
+      "champion": "sett",
+      "augment": "Clown College",
+      "tier": "S",
+      "ref": "curated:sett-clown-college"
+    },
+    {
+      "champion": "karthus",
+      "augment": "Infinite Recursion",
+      "tier": "S",
+      "ref": "curated:karthus-infinite-recursion"
+    },
+    {
+      "champion": "tristana",
+      "augment": "Draw Your Sword",
+      "tier": "S",
+      "ref": "curated:tristana-draw-your-sword"
+    },
+    {
+      "champion": "aurelionsol",
+      "augment": "StackosaurusRex",
+      "tier": "S",
+      "ref": "curated:aurelionsol-stackosaurusrex"
+    },
+    {
+      "champion": "ryze",
+      "augment": "Mad Scientist",
+      "tier": "S",
+      "ref": "curated:ryze-mad-scientist"
+    },
+    {
+      "champion": "sett",
+      "augment": "Jeweled Gauntlet",
+      "tier": "S",
+      "ref": "curated:sett-jeweled-gauntlet"
     },
     {
       "champion": "ekko",
-      "augment": "fan the hammer",
+      "augment": "Fan The Hammer",
       "tier": "S",
       "ref": "curated:ekko-fan-the-hammer"
     },
     {
       "champion": "ekko",
-      "augment": "ethereal weapon",
+      "augment": "Fan The Hammer",
       "tier": "S",
-      "ref": "curated:ekko-ethereal-weapon"
+      "ref": "curated:ekko-\u8fde\u62e8\u51fb\u9524ea\u77ac\u79d2\u6d41"
     },
     {
-      "champion": "jarvan iv",
-      "augment": "dive bomber",
+      "champion": "vi",
+      "augment": "Fan The Hammer",
       "tier": "S",
-      "ref": "curated:jarvaniv-dive-bomber"
+      "ref": "curated:vi-\u8fde\u62e8\u51fb\u9524\u7a7f\u7532\u6d41"
     },
     {
-      "champion": "jarvan iv",
-      "augment": "clown college",
-      "tier": "A",
-      "ref": "curated:jarvaniv-clown-college"
-    },
-    {
-      "champion": "jayce",
-      "augment": "slow and steady",
+      "champion": "ksante",
+      "augment": "Dashing",
       "tier": "S",
-      "ref": "curated:jayce-slow-and-steady"
+      "ref": "curated:ksante-\u5168\u51ed\u8eab\u6cd5\u594e\u6851\u63d0"
     },
     {
-      "champion": "jayce",
-      "augment": "purist - caster",
+      "champion": "ksante",
+      "augment": "Protein Shake",
       "tier": "S",
-      "ref": "curated:jayce-purist---caster"
+      "ref": "curated:ksante-\u86cb\u767d\u7c89\u594e\u6851\u63d0"
     },
     {
-      "champion": "kayn",
-      "augment": "dashing",
+      "champion": "galio",
+      "augment": "Grandma's Chili Oil",
       "tier": "S",
-      "ref": "curated:kayn-dashing"
+      "ref": "curated:galio-\u8fa3\u6912\u6cb9"
     },
     {
-      "champion": "kayn",
-      "augment": "quantum computing",
-      "tier": "A",
-      "ref": "curated:kayn-quantum-computing"
-    },
-    {
-      "champion": "kindred",
-      "augment": "back to basics",
+      "champion": "kassadin",
+      "augment": "Dashing",
       "tier": "S",
-      "ref": "curated:kindred-back-to-basics"
+      "ref": "curated:kassadin-\u53c8\u8089\u4f24\u5bb3\u53c8\u9ad8"
     },
     {
-      "champion": "kindred",
-      "augment": "stackosaurusrex",
+      "champion": "gragas",
+      "augment": "Grandma's Chili Oil",
       "tier": "S",
-      "ref": "curated:kindred-stackosaurusrex"
+      "ref": "curated:gragas-6\u707c\u70e7\u56db\u5ddd\u9152\u6876"
     },
     {
-      "champion": "leblanc",
-      "augment": "dashing",
-      "tier": "A",
-      "ref": "curated:leblanc-dashing"
-    },
-    {
-      "champion": "leblanc",
-      "augment": "quantum computing",
-      "tier": "A",
-      "ref": "curated:leblanc-quantum-computing"
-    },
-    {
-      "champion": "lillia",
-      "augment": "infernal conduit",
+      "champion": "mordekaiser",
+      "augment": "Grandma's Chili Oil",
       "tier": "S",
-      "ref": "curated:lillia-infernal-conduit"
+      "ref": "curated:mordekaiser-\u6cb9\u817b\u94c1\u7537"
     },
     {
-      "champion": "lillia",
-      "augment": "spin to win",
+      "champion": "corki",
+      "augment": "Critical Missile",
       "tier": "S",
-      "ref": "curated:lillia-spin-to-win"
+      "ref": "curated:corki-\u5168\u5c4f\u98de\u5f39\u6cd5\u4f24\u6d41\u98de\u673a"
     },
     {
-      "champion": "lucian",
-      "augment": "vulnerability",
+      "champion": "fizz",
+      "augment": "Infernal Conduit",
       "tier": "S",
-      "ref": "curated:lucian-vulnerability"
-    },
-    {
-      "champion": "lucian",
-      "augment": "jeweled gauntlet",
-      "tier": "S",
-      "ref": "curated:lucian-jeweled-gauntlet"
-    },
-    {
-      "champion": "malzahar",
-      "augment": "infernal conduit",
-      "tier": "S",
-      "ref": "curated:malzahar-infernal-conduit"
-    },
-    {
-      "champion": "malzahar",
-      "augment": "ethereal weapon",
-      "tier": "A",
-      "ref": "curated:malzahar-ethereal-weapon"
-    },
-    {
-      "champion": "master yi",
-      "augment": "mystic punch",
-      "tier": "S",
-      "ref": "curated:masteryi-mystic-punch"
-    },
-    {
-      "champion": "master yi",
-      "augment": "circle of death",
-      "tier": "B",
-      "ref": "curated:masteryi-circle-of-death"
-    },
-    {
-      "champion": "mel",
-      "augment": "skilled sniper",
-      "tier": "S",
-      "ref": "curated:mel-skilled-sniper"
-    },
-    {
-      "champion": "mel",
-      "augment": "infernal conduit",
-      "tier": "C",
-      "ref": "curated:mel-infernal-conduit"
-    },
-    {
-      "champion": "miss fortune",
-      "augment": "skilled sniper",
-      "tier": "S",
-      "ref": "curated:missfortune-skilled-sniper"
-    },
-    {
-      "champion": "miss fortune",
-      "augment": "quest: wooglet's witchcap",
-      "tier": "S",
-      "ref": "curated:missfortune-quest-wooglets-witchcap"
-    },
-    {
-      "champion": "naafiri",
-      "augment": "infernal conduit",
-      "tier": "S",
-      "ref": "curated:naafiri-infernal-conduit"
-    },
-    {
-      "champion": "naafiri",
-      "augment": "ethereal weapon",
-      "tier": "S",
-      "ref": "curated:naafiri-ethereal-weapon"
-    },
-    {
-      "champion": "nunu &#38; willump",
-      "augment": "circle of death",
-      "tier": "S",
-      "ref": "curated:nunu-circle-of-death"
-    },
-    {
-      "champion": "nunu &#38; willump",
-      "augment": "overflow",
-      "tier": "C",
-      "ref": "curated:nunu-overflow"
-    },
-    {
-      "champion": "pantheon",
-      "augment": "back to basics",
-      "tier": "S",
-      "ref": "curated:pantheon-back-to-basics"
-    },
-    {
-      "champion": "pantheon",
-      "augment": "quest: steel your heart",
-      "tier": "A",
-      "ref": "curated:pantheon-quest-steel-your-heart"
-    },
-    {
-      "champion": "quinn",
-      "augment": "quantum computing",
-      "tier": "S",
-      "ref": "curated:quinn-quantum-computing"
-    },
-    {
-      "champion": "quinn",
-      "augment": "outlaw's grit",
-      "tier": "A",
-      "ref": "curated:quinn-outlaws-grit"
-    },
-    {
-      "champion": "rell",
-      "augment": "cruelty",
-      "tier": "S",
-      "ref": "curated:rell-cruelty"
-    },
-    {
-      "champion": "rell",
-      "augment": "courage of the colossus",
-      "tier": "S",
-      "ref": "curated:rell-courage-of-the-colossus"
-    },
-    {
-      "champion": "renata glasc",
-      "augment": "slap around",
-      "tier": "S",
-      "ref": "curated:renata-slap-around"
-    },
-    {
-      "champion": "renata glasc",
-      "augment": "cruelty",
-      "tier": "S",
-      "ref": "curated:renata-cruelty"
-    },
-    {
-      "champion": "rumble",
-      "augment": "ethereal weapon",
-      "tier": "S",
-      "ref": "curated:rumble-ethereal-weapon"
-    },
-    {
-      "champion": "rumble",
-      "augment": "vulnerability",
-      "tier": "S",
-      "ref": "curated:rumble-vulnerability"
-    },
-    {
-      "champion": "seraphine",
-      "augment": "slap around",
-      "tier": "S",
-      "ref": "curated:seraphine-slap-around"
-    },
-    {
-      "champion": "seraphine",
-      "augment": "mountainsoul",
-      "tier": "B",
-      "ref": "curated:seraphine-mountainsoul"
-    },
-    {
-      "champion": "swain",
-      "augment": "slap around",
-      "tier": "S",
-      "ref": "curated:swain-slap-around"
-    },
-    {
-      "champion": "swain",
-      "augment": "cruelty",
-      "tier": "A",
-      "ref": "curated:swain-cruelty"
-    },
-    {
-      "champion": "syndra",
-      "augment": "executioner",
-      "tier": "S",
-      "ref": "curated:syndra-executioner"
-    },
-    {
-      "champion": "syndra",
-      "augment": "cruelty",
-      "tier": "S",
-      "ref": "curated:syndra-cruelty"
-    },
-    {
-      "champion": "tristana",
-      "augment": "draw your sword",
-      "tier": "S",
-      "ref": "curated:tristana-draw-your-sword"
-    },
-    {
-      "champion": "tristana",
-      "augment": "fan the hammer",
-      "tier": "S",
-      "ref": "curated:tristana-fan-the-hammer"
-    },
-    {
-      "champion": "urgot",
-      "augment": "slow and steady",
-      "tier": "S",
-      "ref": "curated:urgot-slow-and-steady"
-    },
-    {
-      "champion": "urgot",
-      "augment": "blade waltz",
-      "tier": "S",
-      "ref": "curated:urgot-blade-waltz"
-    },
-    {
-      "champion": "veigar",
-      "augment": "eureka",
-      "tier": "S",
-      "ref": "curated:veigar-eureka"
-    },
-    {
-      "champion": "veigar",
-      "augment": "orbitallaser",
-      "tier": "A",
-      "ref": "curated:veigar-orbitallaser"
-    },
-    {
-      "champion": "yasuo",
-      "augment": "swift and safe",
-      "tier": "S",
-      "ref": "curated:yasuo-swift-and-safe"
-    },
-    {
-      "champion": "yasuo",
-      "augment": "shadow runner",
-      "tier": "B",
-      "ref": "curated:yasuo-shadow-runner"
-    },
-    {
-      "champion": "yunara",
-      "augment": "master of duality",
-      "tier": "S",
-      "ref": "curated:yunara-master-of-duality"
-    },
-    {
-      "champion": "yunara",
-      "augment": "tap dancer",
-      "tier": "S",
-      "ref": "curated:yunara-tap-dancer"
-    },
-    {
-      "champion": "zed",
-      "augment": "ethereal weapon",
-      "tier": "A",
-      "ref": "curated:zed-ethereal-weapon"
-    },
-    {
-      "champion": "zed",
-      "augment": "executioner",
-      "tier": "C",
-      "ref": "curated:zed-executioner"
-    },
-    {
-      "champion": "zoe",
-      "augment": "biggest snowball ever",
-      "tier": "A",
-      "ref": "curated:zoe-biggest-snowball-ever"
-    },
-    {
-      "champion": "zoe",
-      "augment": "snowball upgrade",
-      "tier": "A",
-      "ref": "curated:zoe-snowball-upgrade"
-    },
-    {
-      "champion": "aatrox",
-      "augment": "slap around",
-      "tier": "A",
-      "ref": "curated:aatrox-slap-around"
-    },
-    {
-      "champion": "akali",
-      "augment": "scopiest weapons",
-      "tier": "B",
-      "ref": "curated:akali-scopiest-weapons"
+      "ref": "curated:fizz-infernal-conduit"
     },
     {
       "champion": "akshan",
-      "augment": "dual wield",
+      "augment": "Dual Wield",
       "tier": "S",
       "ref": "curated:akshan-dual-wield"
     },
     {
-      "champion": "alistar",
-      "augment": "executioner",
+      "champion": "rumble",
+      "augment": "Ethereal Weapon",
       "tier": "S",
-      "ref": "curated:alistar-executioner"
+      "ref": "curated:rumble-ethereal-weapon"
     },
     {
-      "champion": "amumu",
-      "augment": "ethereal weapon",
+      "champion": "sett",
+      "augment": "Back To Basics",
       "tier": "S",
-      "ref": "curated:amumu-ethereal-weapon"
+      "ref": "curated:sett-back-to-basics"
     },
     {
-      "champion": "annie",
-      "augment": "it's killing time",
-      "tier": "A",
-      "ref": "curated:annie-its-killing-time"
-    },
-    {
-      "champion": "aphelios",
-      "augment": "back to basics",
+      "champion": "karthus",
+      "augment": "Clown College",
       "tier": "S",
-      "ref": "curated:aphelios-back-to-basics"
+      "ref": "curated:karthus-clown-college"
     },
     {
-      "champion": "bel'veth",
-      "augment": "mystic punch",
+      "champion": "missfortune",
+      "augment": "Quest: Wooglet's Witchcap",
       "tier": "S",
-      "ref": "curated:belveth-mystic-punch"
+      "ref": "curated:missfortune-quest-wooglets-witchcap"
     },
     {
-      "champion": "blitzcrank",
-      "augment": "ethereal weapon",
-      "tier": "B",
-      "ref": "curated:blitzcrank-ethereal-weapon"
+      "champion": "lucian",
+      "augment": "Mystic Punch",
+      "tier": "S",
+      "ref": "curated:lucian-\u6ed1\u677f\u5362\u4ed9"
+    },
+    {
+      "champion": "ashe",
+      "augment": "Jeweled Gauntlet",
+      "tier": "S",
+      "ref": "curated:ashe-\u6cd5\u7206ap\u5927\u62db\u6d41\u5bd2\u51b0"
+    },
+    {
+      "champion": "yone",
+      "augment": "Slow And Steady",
+      "tier": "S",
+      "ref": "curated:yone-\u677f\u773c\u66b4\u529b\u6c38\u6069"
+    },
+    {
+      "champion": "yone",
+      "augment": "Critical Healing",
+      "tier": "S",
+      "ref": "curated:yone-\u6bc1\u574f\u4eea\u5f0f\u65e0\u9650\u62a4\u76fe\u6d41"
+    },
+    {
+      "champion": "zed",
+      "augment": "Ethereal Weapon",
+      "tier": "S",
+      "ref": "curated:zed-\u865a\u5e7b\u6b66\u5668\u6d41"
+    },
+    {
+      "champion": "zed",
+      "augment": "Back To Basics",
+      "tier": "S",
+      "ref": "curated:zed-\u56de\u5f52\u57fa\u672c\u529f\u52ab"
+    },
+    {
+      "champion": "xinzhao",
+      "augment": "Master of Duality",
+      "tier": "S",
+      "ref": "curated:xinzhao-\u7269\u6cd5\u7686\u4fee\u65e0\u9650\u56de\u8840\u6d41"
+    },
+    {
+      "champion": "masteryi",
+      "augment": "Executioner",
+      "tier": "S",
+      "ref": "curated:masteryi-\u66b4\u51fb\u6d41\u5251\u5723"
+    },
+    {
+      "champion": "masteryi",
+      "augment": "Dual Wield",
+      "tier": "S",
+      "ref": "curated:masteryi-\u7279\u6548\u6d41"
+    },
+    {
+      "champion": "seraphine",
+      "augment": "Cruelty",
+      "tier": "S",
+      "ref": "curated:seraphine-\u6b8b\u5fcd\u9178\u8fa3\u7c89"
+    },
+    {
+      "champion": "seraphine",
+      "augment": "Slap Around",
+      "tier": "S",
+      "ref": "curated:seraphine-\u6247\u5df4\u638c\u51b0\u6756\u6d41"
+    },
+    {
+      "champion": "rumble",
+      "augment": "Void Rift",
+      "tier": "S",
+      "ref": "curated:rumble-\u865a\u7a7a\u88c2\u9699\u6d41"
+    },
+    {
+      "champion": "rumble",
+      "augment": "Jeweled Gauntlet",
+      "tier": "S",
+      "ref": "curated:rumble-\u6613\u635f\u6cd5\u7206\u6838\u80fd\u70e7\u70e4\u6d41"
+    },
+    {
+      "champion": "karthus",
+      "augment": "Glass Cannon",
+      "tier": "S",
+      "ref": "curated:karthus-\u4e3be\u81ea\u7206\u6d41"
+    },
+    {
+      "champion": "karthus",
+      "augment": "Mind to Matter",
+      "tier": "S",
+      "ref": "curated:karthus-\u5927\u6cd5\u5e08\u6781\u901f\u5927\u62db\u6d41"
+    },
+    {
+      "champion": "karthus",
+      "augment": "Ultimate Revolution",
+      "tier": "S",
+      "ref": "curated:karthus-\u7ec8\u6781\u5237\u65b0\u81ea\u7206\u6d41\u6b7b\u6b4c\u7ec8\u6781\u5237\u65b0bug\u5df2\u4fee\u590d"
+    },
+    {
+      "champion": "karthus",
+      "augment": "Devil on Your Shoulder",
+      "tier": "S",
+      "ref": "curated:karthus-\u80a9\u4e0a\u6076\u9b54\u6b7b\u6b4c"
+    },
+    {
+      "champion": "fizz",
+      "augment": "Void Rift",
+      "tier": "S",
+      "ref": "curated:fizz-\u865a\u7a7a\u88c2\u9699\u6d41"
+    },
+    {
+      "champion": "fizz",
+      "augment": "Infinite Recursion",
+      "tier": "S",
+      "ref": "curated:fizz-\u79d8\u672f\u51b2\u62f3\u65e0\u9650q\u5c0f\u9c7c\u4eba"
+    },
+    {
+      "champion": "fizz",
+      "augment": "Don't Blink",
+      "tier": "S",
+      "ref": "curated:fizz-\u552f\u5feb\u4e0d\u7834\u7206\u53d1\u6d41"
+    },
+    {
+      "champion": "fizz",
+      "augment": "Bread and Cheese",
+      "tier": "S",
+      "ref": "curated:fizz-\u6781\u81f4\u7206\u53d1ap\u6d41"
     },
     {
       "champion": "caitlyn",
-      "augment": "twice thrice",
-      "tier": "C",
-      "ref": "curated:caitlyn-twice-thrice"
+      "augment": "Scopier Weapons",
+      "tier": "S",
+      "ref": "curated:caitlyn-\u671b\u8fdc\u955c\u5973\u8b66"
+    },
+    {
+      "champion": "caitlyn",
+      "augment": "Jeweled Gauntlet",
+      "tier": "S",
+      "ref": "curated:caitlyn-\u6cd5\u7206\u7a7f\u7532\u6d41"
+    },
+    {
+      "champion": "drmundo",
+      "augment": "Tank Engine",
+      "tier": "S",
+      "ref": "curated:drmundo-\u6570\u503c\u602a\u529b\u6d41"
+    },
+    {
+      "champion": "ryze",
+      "augment": "Mind to Matter",
+      "tier": "S",
+      "ref": "curated:ryze-\u6cd5\u672f\u673a\u5173\u67aa\u745e\u5179"
+    },
+    {
+      "champion": "sett",
+      "augment": "Goliath",
+      "tier": "S",
+      "ref": "curated:sett-\u8089\u88c5\u4e00\u62f3\u8d85\u4eba"
+    },
+    {
+      "champion": "missfortune",
+      "augment": "Void Rift",
+      "tier": "S",
+      "ref": "curated:missfortune-\u865a\u7a7a\u88c2\u9699\u6d41"
+    },
+    {
+      "champion": "aurelionsol",
+      "augment": "Void Rift",
+      "tier": "S",
+      "ref": "curated:aurelionsol-\u865a\u7a7a\u88c2\u9699\u6d41"
+    },
+    {
+      "champion": "ryze",
+      "augment": "Void Rift",
+      "tier": "S",
+      "ref": "curated:ryze-\u88c2\u9699\u6210\u795e"
+    },
+    {
+      "champion": "ryze",
+      "augment": "Tank Engine",
+      "tier": "S",
+      "ref": "curated:ryze-\u65e0\u7531\u5fc3"
+    },
+    {
+      "champion": "lucian",
+      "augment": "Clown College",
+      "tier": "S",
+      "ref": "curated:lucian-\u5c0f\u4e11\u5b66\u9662\u9690\u8eab\u626b\u5c04\u6d41"
+    },
+    {
+      "champion": "twistedfate",
+      "augment": "Jeweled Gauntlet",
+      "tier": "S",
+      "ref": "curated:twistedfate-q\u4f24\u5bb3\u6709\u70b9\u75db"
+    },
+    {
+      "champion": "ryze",
+      "augment": "Goliath",
+      "tier": "S",
+      "ref": "curated:ryze-\u5e1d"
+    },
+    {
+      "champion": "xinzhao",
+      "augment": "Mad Scientist",
+      "tier": "S",
+      "ref": "curated:xinzhao-ap\u4e0d\u6b7b\u6d41\u8d75\u4fe1"
+    },
+    {
+      "champion": "xinzhao",
+      "augment": "Mystic Punch",
+      "tier": "S",
+      "ref": "curated:xinzhao-ap\u56de\u8e66\u6781\u8840\u6d41"
+    },
+    {
+      "champion": "fizz",
+      "augment": "Void Rift",
+      "tier": "S",
+      "ref": "curated:fizz-\u865a\u7a7a\u88c2\u9699"
+    },
+    {
+      "champion": "ryze",
+      "augment": "Mind to Matter",
+      "tier": "S",
+      "ref": "curated:ryze-\u5929\u5e1d"
+    },
+    {
+      "champion": "masteryi",
+      "augment": "Upgrade Hubris",
+      "tier": "S",
+      "ref": "curated:masteryi-\u65e0cd-q\u6280\u80fd\u79d2\u4eba\u6d41"
+    },
+    {
+      "champion": "ryze",
+      "augment": "ADAPt",
+      "tier": "S",
+      "ref": "curated:ryze-\u745e\u5929\u5e1d"
+    },
+    {
+      "champion": "ryze",
+      "augment": "escAPADe",
+      "tier": "S",
+      "ref": "curated:ryze-21\u4ebf\u653b\u51fb\u529b\u745e\u5929\u5e1d"
+    },
+    {
+      "champion": "ryze",
+      "augment": "Mind to Matter",
+      "tier": "S",
+      "ref": "curated:ryze-qqq"
+    },
+    {
+      "champion": "masteryi",
+      "augment": "Upgrade Collector",
+      "tier": "S",
+      "ref": "curated:masteryi-\u7a7f\u7532\u7206\u4f24\u6d41js"
+    },
+    {
+      "champion": "ryze",
+      "augment": "Goliath",
+      "tier": "S",
+      "ref": "curated:ryze-0"
+    },
+    {
+      "champion": "ryze",
+      "augment": "Goliath",
+      "tier": "S",
+      "ref": "curated:ryze-\u5047\u620f\u771f\u505a"
+    },
+    {
+      "champion": "karthus",
+      "augment": "Void Rift",
+      "tier": "S",
+      "ref": "curated:karthus-\u865a\u7a7a\u6b7b\u6b4c\u5f3a\u5ea6\u7206\u70b8"
+    },
+    {
+      "champion": "lucian",
+      "augment": "Mystic Punch",
+      "tier": "S",
+      "ref": "curated:lucian-\u79d8\u672f\u51b2\u62f3\u65e0\u9650\u6280\u80fd"
+    },
+    {
+      "champion": "zed",
+      "augment": "Upgrade Collector",
+      "tier": "S",
+      "ref": "curated:zed-\u5438\u8840"
+    },
+    {
+      "champion": "ryze",
+      "augment": "Mind to Matter",
+      "tier": "S",
+      "ref": "curated:ryze-\u53cc"
+    },
+    {
+      "champion": "missfortune",
+      "augment": "Eureka",
+      "tier": "S",
+      "ref": "curated:missfortune-\u65e0\u7ebf\u4e0b\u96e8"
+    },
+    {
+      "champion": "ryze",
+      "augment": "ADAPt",
+      "tier": "S",
+      "ref": "curated:ryze-\u745e\u5929\u5e1d-2"
+    },
+    {
+      "champion": "ryze",
+      "augment": "Quest: Wooglet's Witchcap",
+      "tier": "S",
+      "ref": "curated:ryze-\u771f\u745e\u5929\u5e1d"
+    },
+    {
+      "champion": "masteryi",
+      "augment": "Dual Wield",
+      "tier": "S",
+      "ref": "curated:masteryi-\u5927\u62db\u6d41"
+    },
+    {
+      "champion": "caitlyn",
+      "augment": "Jeweled Gauntlet",
+      "tier": "S",
+      "ref": "curated:caitlyn-\u79d2\u4eba\u6d41"
+    },
+    {
+      "champion": "sett",
+      "augment": "Jeweled Gauntlet",
+      "tier": "S",
+      "ref": "curated:sett-\u53f6\u95ee"
+    },
+    {
+      "champion": "sett",
+      "augment": "Dropkick",
+      "tier": "S",
+      "ref": "curated:sett-\u80fd\u6297\u80fd\u6253\u91cd\u91cf\u7ea7\u6454\u8de4\u624b"
+    },
+    {
+      "champion": "ryze",
+      "augment": "Tank Engine",
+      "tier": "S",
+      "ref": "curated:ryze-\u745e\u5929\u5e1d-3"
+    },
+    {
+      "champion": "masteryi",
+      "augment": "Executioner",
+      "tier": "S",
+      "ref": "curated:masteryi-executioner"
+    },
+    {
+      "champion": "kayle",
+      "augment": "Ethereal Weapon",
+      "tier": "S",
+      "ref": "curated:kayle-ethereal-weapon"
+    },
+    {
+      "champion": "jayce",
+      "augment": "Slow And Steady",
+      "tier": "S",
+      "ref": "curated:jayce-slow-and-steady"
+    },
+    {
+      "champion": "garen",
+      "augment": "Slow And Steady",
+      "tier": "S",
+      "ref": "curated:garen-slow-and-steady"
+    },
+    {
+      "champion": "aurora",
+      "augment": "Ethereal Weapon",
+      "tier": "S",
+      "ref": "curated:aurora-ethereal-weapon"
+    },
+    {
+      "champion": "gangplank",
+      "augment": "Back To Basics",
+      "tier": "S",
+      "ref": "curated:gangplank-back-to-basics"
+    },
+    {
+      "champion": "lux",
+      "augment": "Ethereal Weapon",
+      "tier": "S",
+      "ref": "curated:lux-ethereal-weapon"
+    },
+    {
+      "champion": "hecarim",
+      "augment": "Ethereal Weapon",
+      "tier": "S",
+      "ref": "curated:hecarim-ethereal-weapon"
+    },
+    {
+      "champion": "smolder",
+      "augment": "Jeweled Gauntlet",
+      "tier": "S",
+      "ref": "curated:smolder-jeweled-gauntlet"
+    },
+    {
+      "champion": "yunara",
+      "augment": "Master of Duality",
+      "tier": "S",
+      "ref": "curated:yunara-master-of-duality"
+    },
+    {
+      "champion": "veigar",
+      "augment": "Eureka",
+      "tier": "S",
+      "ref": "curated:veigar-eureka"
+    },
+    {
+      "champion": "yasuo",
+      "augment": "Shadow Runner",
+      "tier": "A",
+      "ref": "curated:yasuo-shadow_runner"
+    },
+    {
+      "champion": "senna",
+      "augment": "Dual Wield",
+      "tier": "S",
+      "ref": "curated:senna-dual-wield"
+    },
+    {
+      "champion": "shaco",
+      "augment": "Executioner",
+      "tier": "S",
+      "ref": "curated:shaco-executioner"
+    },
+    {
+      "champion": "gangplank",
+      "augment": "Don't Blink",
+      "tier": "S",
+      "ref": "curated:gangplank-dont-blink"
+    },
+    {
+      "champion": "aurora",
+      "augment": "Dashing",
+      "tier": "S",
+      "ref": "curated:aurora-dashing"
+    },
+    {
+      "champion": "katarina",
+      "augment": "Slow And Steady",
+      "tier": "S",
+      "ref": "curated:katarina-slow-and-steady"
+    },
+    {
+      "champion": "zac",
+      "augment": "Circle of Death",
+      "tier": "S",
+      "ref": "curated:zac-circle-of-death"
+    },
+    {
+      "champion": "twitch",
+      "augment": "Fey Magic",
+      "tier": "S",
+      "ref": "curated:twitch-fey-magic"
+    },
+    {
+      "champion": "kalista",
+      "augment": "Dashing",
+      "tier": "S",
+      "ref": "curated:kalista-dashing"
+    },
+    {
+      "champion": "jayce",
+      "augment": "Purist - Caster",
+      "tier": "S",
+      "ref": "curated:jayce-purist---caster"
+    },
+    {
+      "champion": "rell",
+      "augment": "Cruelty",
+      "tier": "S",
+      "ref": "curated:rell-cruelty"
+    },
+    {
+      "champion": "smolder",
+      "augment": "Scopiest Weapons",
+      "tier": "S",
+      "ref": "curated:smolder-scopiest-weapons"
+    },
+    {
+      "champion": "urgot",
+      "augment": "Slow And Steady",
+      "tier": "S",
+      "ref": "curated:urgot-slow-and-steady"
+    },
+    {
+      "champion": "swain",
+      "augment": "Slap Around",
+      "tier": "S",
+      "ref": "curated:swain-slap-around"
+    },
+    {
+      "champion": "katarina",
+      "augment": "Vulnerability",
+      "tier": "S",
+      "ref": "curated:katarina-vulnerability"
+    },
+    {
+      "champion": "samira",
+      "augment": "Blade Waltz",
+      "tier": "S",
+      "ref": "curated:samira-blade-waltz"
+    },
+    {
+      "champion": "hecarim",
+      "augment": "Rabble Rousing",
+      "tier": "S",
+      "ref": "curated:hecarim-rabble-rousing"
+    },
+    {
+      "champion": "smolder",
+      "augment": "Scopier Weapons",
+      "tier": "S",
+      "ref": "curated:smolder-scopier-weapons"
+    },
+    {
+      "champion": "smolder",
+      "augment": "Scoped Weapons",
+      "tier": "S",
+      "ref": "curated:smolder-scoped-weapons"
     },
     {
       "champion": "draven",
-      "augment": "spin to win",
+      "augment": "Spin To Win",
       "tier": "S",
       "ref": "curated:draven-spin-to-win"
     },
     {
       "champion": "elise",
-      "augment": "dashing",
+      "augment": "Dashing",
       "tier": "S",
       "ref": "curated:elise-dashing"
     },
     {
-      "champion": "evelynn",
-      "augment": "bread and butter",
+      "champion": "samira",
+      "augment": "Draw Your Sword",
       "tier": "S",
-      "ref": "curated:evelynn-bread-and-butter"
+      "ref": "curated:samira-draw-your-sword"
     },
     {
-      "champion": "ezreal",
-      "augment": "ethereal weapon",
+      "champion": "shaco",
+      "augment": "Clown College",
       "tier": "S",
-      "ref": "curated:ezreal-ethereal-weapon"
+      "ref": "curated:shaco-clown-college"
     },
     {
-      "champion": "fiora",
-      "augment": "blade waltz",
-      "tier": "B",
-      "ref": "curated:fiora-blade-waltz"
-    },
-    {
-      "champion": "galio",
-      "augment": "executioner",
-      "tier": "B",
-      "ref": "curated:galio-executioner"
-    },
-    {
-      "champion": "gnar",
-      "augment": "fan the hammer",
-      "tier": "A",
-      "ref": "curated:gnar-fan-the-hammer"
-    },
-    {
-      "champion": "gragas",
-      "augment": "ethereal weapon",
+      "champion": "zyra",
+      "augment": "Ethereal Weapon",
       "tier": "S",
-      "ref": "curated:gragas-ethereal-weapon"
-    },
-    {
-      "champion": "gwen",
-      "augment": "ethereal weapon",
-      "tier": "S",
-      "ref": "curated:gwen-ethereal-weapon"
-    },
-    {
-      "champion": "heimerdinger",
-      "augment": "it's killing time",
-      "tier": "C",
-      "ref": "curated:heimerdinger-its-killing-time"
-    },
-    {
-      "champion": "hwei",
-      "augment": "cruelty",
-      "tier": "A",
-      "ref": "curated:hwei-cruelty"
-    },
-    {
-      "champion": "janna",
-      "augment": "skilled sniper",
-      "tier": "A",
-      "ref": "curated:janna-skilled-sniper"
-    },
-    {
-      "champion": "jax",
-      "augment": "upgrade sheen",
-      "tier": "S",
-      "ref": "curated:jax-upgrade-sheen"
+      "ref": "curated:zyra-ethereal-weapon"
     },
     {
       "champion": "jhin",
-      "augment": "back to basics",
+      "augment": "Back To Basics",
       "tier": "S",
       "ref": "curated:jhin-back-to-basics"
     },
     {
-      "champion": "kai'sa",
-      "augment": "ethereal weapon",
-      "tier": "S",
-      "ref": "curated:kaisa-ethereal-weapon"
-    },
-    {
-      "champion": "kennen",
-      "augment": "clown college",
-      "tier": "A",
-      "ref": "curated:kennen-clown-college"
-    },
-    {
-      "champion": "k'sante",
-      "augment": "fey magic",
-      "tier": "A",
-      "ref": "curated:ksante-fey-magic"
-    },
-    {
-      "champion": "leona",
-      "augment": "infernal conduit",
-      "tier": "S",
-      "ref": "curated:leona-infernal-conduit"
-    },
-    {
-      "champion": "lissandra",
-      "augment": "don't blink",
-      "tier": "S",
-      "ref": "curated:lissandra-dont-blink"
-    },
-    {
-      "champion": "lux",
-      "augment": "ethereal weapon",
-      "tier": "S",
-      "ref": "curated:lux-ethereal-weapon"
-    },
-    {
-      "champion": "malphite",
-      "augment": "ultimate revolution",
-      "tier": "S",
-      "ref": "curated:malphite-ultimate-revolution"
-    },
-    {
-      "champion": "maokai",
-      "augment": "circle of death",
-      "tier": "S",
-      "ref": "curated:maokai-circle-of-death"
-    },
-    {
-      "champion": "wukong",
-      "augment": "blade waltz",
-      "tier": "S",
-      "ref": "curated:monkeyking-blade-waltz"
-    },
-    {
       "champion": "mordekaiser",
-      "augment": "protein shake",
+      "augment": "Protein Shake",
       "tier": "S",
       "ref": "curated:mordekaiser-protein-shake"
     },
     {
+      "champion": "katarina",
+      "augment": "Ethereal Weapon",
+      "tier": "S",
+      "ref": "curated:katarina-ethereal-weapon"
+    },
+    {
       "champion": "nautilus",
-      "augment": "courage of the colossus",
+      "augment": "Courage of the Colossus",
       "tier": "S",
       "ref": "curated:nautilus-courage-of-the-colossus"
     },
     {
-      "champion": "ornn",
-      "augment": "fey magic",
-      "tier": "S",
-      "ref": "curated:ornn-fey-magic"
-    },
-    {
-      "champion": "pyke",
-      "augment": "dashing",
-      "tier": "C",
-      "ref": "curated:pyke-dashing"
-    },
-    {
-      "champion": "rammus",
-      "augment": "ethereal weapon",
-      "tier": "A",
-      "ref": "curated:rammus-ethereal-weapon"
-    },
-    {
-      "champion": "riven",
-      "augment": "ethereal weapon",
-      "tier": "C",
-      "ref": "curated:riven-ethereal-weapon"
-    },
-    {
-      "champion": "sejuani",
-      "augment": "fan the hammer",
-      "tier": "C",
-      "ref": "curated:sejuani-fan-the-hammer"
-    },
-    {
-      "champion": "shyvana",
-      "augment": "marksmage",
-      "tier": "C",
-      "ref": "curated:shyvana-marksmage"
-    },
-    {
       "champion": "singed",
-      "augment": "infernal conduit",
+      "augment": "Infernal Conduit",
       "tier": "S",
       "ref": "curated:singed-infernal-conduit"
     },
     {
-      "champion": "sion",
-      "augment": "fan the hammer",
-      "tier": "A",
-      "ref": "curated:sion-fan-the-hammer"
-    },
-    {
-      "champion": "skarner",
-      "augment": "blade waltz",
-      "tier": "B",
-      "ref": "curated:skarner-blade-waltz"
-    },
-    {
-      "champion": "tahm kench",
-      "augment": "ethereal weapon",
-      "tier": "C",
-      "ref": "curated:tahmkench-ethereal-weapon"
-    },
-    {
-      "champion": "talon",
-      "augment": "ethereal weapon",
-      "tier": "A",
-      "ref": "curated:talon-ethereal-weapon"
-    },
-    {
-      "champion": "teemo",
-      "augment": "marksmage",
-      "tier": "A",
-      "ref": "curated:teemo-marksmage"
-    },
-    {
-      "champion": "thresh",
-      "augment": "cruelty",
-      "tier": "C",
-      "ref": "curated:thresh-cruelty"
-    },
-    {
-      "champion": "trundle",
-      "augment": "skilled sniper",
-      "tier": "C",
-      "ref": "curated:trundle-skilled-sniper"
-    },
-    {
-      "champion": "tryndamere",
-      "augment": "master of duality",
-      "tier": "A",
-      "ref": "curated:tryndamere-master-of-duality"
-    },
-    {
-      "champion": "twisted fate",
-      "augment": "ethereal weapon",
-      "tier": "C",
-      "ref": "curated:twistedfate-ethereal-weapon"
-    },
-    {
-      "champion": "vi",
-      "augment": "blade waltz",
+      "champion": "sylas",
+      "augment": "Marksmage",
       "tier": "S",
-      "ref": "curated:vi-blade-waltz"
+      "ref": "curated:sylas-marksmage"
+    },
+    {
+      "champion": "kindred",
+      "augment": "StackosaurusRex",
+      "tier": "S",
+      "ref": "curated:kindred-stackosaurusrex"
+    },
+    {
+      "champion": "rengar",
+      "augment": "Scopiest Weapons",
+      "tier": "S",
+      "ref": "curated:rengar-scopiest-weapons"
+    },
+    {
+      "champion": "corki",
+      "augment": "Jeweled Gauntlet",
+      "tier": "S",
+      "ref": "curated:corki-jeweled-gauntlet"
+    },
+    {
+      "champion": "syndra",
+      "augment": "Cruelty",
+      "tier": "S",
+      "ref": "curated:syndra-cruelty"
+    },
+    {
+      "champion": "kayn",
+      "augment": "Dashing",
+      "tier": "S",
+      "ref": "curated:kayn-dashing"
+    },
+    {
+      "champion": "ornn",
+      "augment": "Fey Magic",
+      "tier": "S",
+      "ref": "curated:ornn-fey-magic"
+    },
+    {
+      "champion": "briar",
+      "augment": "Dashing",
+      "tier": "S",
+      "ref": "curated:briar-dashing"
+    },
+    {
+      "champion": "gragas",
+      "augment": "Ethereal Weapon",
+      "tier": "S",
+      "ref": "curated:gragas-ethereal-weapon"
+    },
+    {
+      "champion": "azir",
+      "augment": "Magic Missile",
+      "tier": "S",
+      "ref": "curated:azir-magic-missile"
+    },
+    {
+      "champion": "malphite",
+      "augment": "Ultimate Revolution",
+      "tier": "S",
+      "ref": "curated:malphite-ultimate-revolution"
+    },
+    {
+      "champion": "ekko",
+      "augment": "Ethereal Weapon",
+      "tier": "S",
+      "ref": "curated:ekko-ethereal-weapon"
+    },
+    {
+      "champion": "yunara",
+      "augment": "Tap Dancer",
+      "tier": "S",
+      "ref": "curated:yunara-tap-dancer"
+    },
+    {
+      "champion": "naafiri",
+      "augment": "Infernal Conduit",
+      "tier": "S",
+      "ref": "curated:naafiri-infernal-conduit"
+    },
+    {
+      "champion": "nunu",
+      "augment": "Circle of Death",
+      "tier": "S",
+      "ref": "curated:nunu-circle-of-death"
+    },
+    {
+      "champion": "renata",
+      "augment": "Slap Around",
+      "tier": "S",
+      "ref": "curated:renata-slap-around"
+    },
+    {
+      "champion": "mel",
+      "augment": "Skilled Sniper",
+      "tier": "S",
+      "ref": "curated:mel-skilled-sniper"
+    },
+    {
+      "champion": "sylas",
+      "augment": "Dashing",
+      "tier": "S",
+      "ref": "curated:sylas-dashing"
+    },
+    {
+      "champion": "kindred",
+      "augment": "Back To Basics",
+      "tier": "S",
+      "ref": "curated:kindred-back-to-basics"
     },
     {
       "champion": "viego",
-      "augment": "jeweled gauntlet",
+      "augment": "Jeweled Gauntlet",
       "tier": "S",
       "ref": "curated:viego-jeweled-gauntlet"
     },
     {
-      "champion": "viktor",
-      "augment": "ethereal weapon",
-      "tier": "C",
-      "ref": "curated:viktor-ethereal-weapon"
-    },
-    {
-      "champion": "xin zhao",
-      "augment": "master of duality",
-      "tier": "A",
-      "ref": "curated:xinzhao-master-of-duality"
-    },
-    {
-      "champion": "yone",
-      "augment": "critical healing",
+      "champion": "urgot",
+      "augment": "Blade Waltz",
       "tier": "S",
-      "ref": "curated:yone-critical-healing"
+      "ref": "curated:urgot-blade-waltz"
+    },
+    {
+      "champion": "briar",
+      "augment": "Executioner",
+      "tier": "S",
+      "ref": "curated:briar-executioner"
+    },
+    {
+      "champion": "naafiri",
+      "augment": "Ethereal Weapon",
+      "tier": "S",
+      "ref": "curated:naafiri-ethereal-weapon"
     },
     {
       "champion": "yorick",
-      "augment": "ethereal weapon",
+      "augment": "Ethereal Weapon",
       "tier": "S",
       "ref": "curated:yorick-ethereal-weapon"
     },
     {
+      "champion": "renata",
+      "augment": "Cruelty",
+      "tier": "S",
+      "ref": "curated:renata-cruelty"
+    },
+    {
+      "champion": "diana",
+      "augment": "Critical Healing",
+      "tier": "S",
+      "ref": "curated:diana-critical-healing"
+    },
+    {
+      "champion": "belveth",
+      "augment": "Mystic Punch",
+      "tier": "S",
+      "ref": "curated:belveth-mystic-punch"
+    },
+    {
+      "champion": "syndra",
+      "augment": "Executioner",
+      "tier": "S",
+      "ref": "curated:syndra-executioner"
+    },
+    {
+      "champion": "pantheon",
+      "augment": "Back To Basics",
+      "tier": "S",
+      "ref": "curated:pantheon-back-to-basics"
+    },
+    {
+      "champion": "ambessa",
+      "augment": "Back To Basics",
+      "tier": "S",
+      "ref": "curated:ambessa-back-to-basics"
+    },
+    {
+      "champion": "rengar",
+      "augment": "Scopier Weapons",
+      "tier": "S",
+      "ref": "curated:rengar-scopier-weapons"
+    },
+    {
+      "champion": "rengar",
+      "augment": "Scoped Weapons",
+      "tier": "S",
+      "ref": "curated:rengar-scoped-weapons"
+    },
+    {
+      "champion": "bard",
+      "augment": "OrbitalLaser",
+      "tier": "S",
+      "ref": "curated:bard-orbitallaser"
+    },
+    {
+      "champion": "samira",
+      "augment": "Clown College",
+      "tier": "S",
+      "ref": "curated:samira-clown-college"
+    },
+    {
+      "champion": "amumu",
+      "augment": "Ethereal Weapon",
+      "tier": "S",
+      "ref": "curated:amumu-ethereal-weapon"
+    },
+    {
+      "champion": "rell",
+      "augment": "Courage of the Colossus",
+      "tier": "S",
+      "ref": "curated:rell-courage-of-the-colossus"
+    },
+    {
+      "champion": "ambessa",
+      "augment": "Rabble Rousing",
+      "tier": "S",
+      "ref": "curated:ambessa-rabble-rousing"
+    },
+    {
+      "champion": "lissandra",
+      "augment": "Don't Blink",
+      "tier": "S",
+      "ref": "curated:lissandra-dont-blink"
+    },
+    {
+      "champion": "udyr",
+      "augment": "Jeweled Gauntlet",
+      "tier": "S",
+      "ref": "curated:udyr-jeweled-gauntlet"
+    },
+    {
+      "champion": "jarvaniv",
+      "augment": "Dive Bomber",
+      "tier": "S",
+      "ref": "curated:jarvaniv-dive-bomber"
+    },
+    {
+      "champion": "kayle",
+      "augment": "Magic Missile",
+      "tier": "S",
+      "ref": "curated:kayle-magic-missile"
+    },
+    {
+      "champion": "sylas",
+      "augment": "Ultimate Awakening",
+      "tier": "S",
+      "ref": "curated:sylas-ultimate-awakening"
+    },
+    {
+      "champion": "fiddlesticks",
+      "augment": "Blade Waltz",
+      "tier": "S",
+      "ref": "curated:fiddlesticks-blade-waltz"
+    },
+    {
+      "champion": "jax",
+      "augment": "Upgrade Sheen",
+      "tier": "S",
+      "ref": "curated:jax-upgrade-sheen"
+    },
+    {
+      "champion": "kaisa",
+      "augment": "Ethereal Weapon",
+      "tier": "S",
+      "ref": "curated:kaisa-ethereal-weapon"
+    },
+    {
+      "champion": "hecarim",
+      "augment": "Ultimate Awakening",
+      "tier": "S",
+      "ref": "curated:hecarim-ultimate-awakening"
+    },
+    {
+      "champion": "aphelios",
+      "augment": "Back To Basics",
+      "tier": "S",
+      "ref": "curated:aphelios-back-to-basics"
+    },
+    {
+      "champion": "maokai",
+      "augment": "Circle of Death",
+      "tier": "S",
+      "ref": "curated:maokai-circle-of-death"
+    },
+    {
+      "champion": "ezreal",
+      "augment": "Ethereal Weapon",
+      "tier": "S",
+      "ref": "curated:ezreal-ethereal-weapon"
+    },
+    {
+      "champion": "alistar",
+      "augment": "Executioner",
+      "tier": "S",
+      "ref": "curated:alistar-executioner"
+    },
+    {
+      "champion": "monkeyking",
+      "augment": "Blade Waltz",
+      "tier": "S",
+      "ref": "curated:monkeyking-blade-waltz"
+    },
+    {
+      "champion": "leona",
+      "augment": "Infernal Conduit",
+      "tier": "S",
+      "ref": "curated:leona-infernal-conduit"
+    },
+    {
+      "champion": "illaoi",
+      "augment": "Blade Waltz",
+      "tier": "S",
+      "ref": "curated:illaoi-blade-waltz"
+    },
+    {
+      "champion": "gwen",
+      "augment": "Ethereal Weapon",
+      "tier": "S",
+      "ref": "curated:gwen-ethereal-weapon"
+    },
+    {
+      "champion": "zaahen",
+      "augment": "Blade Waltz",
+      "tier": "S",
+      "ref": "curated:zaahen-blade-waltz"
+    },
+    {
+      "champion": "azir",
+      "augment": "Marksmage",
+      "tier": "S",
+      "ref": "curated:azir-marksmage"
+    },
+    {
+      "champion": "vladimir",
+      "augment": "Infernal Conduit",
+      "tier": "S",
+      "ref": "curated:vladimir-infernal-conduit"
+    },
+    {
+      "champion": "senna",
+      "augment": "StackosaurusRex",
+      "tier": "S",
+      "ref": "curated:senna-stackosaurusrex"
+    },
+    {
+      "champion": "samira",
+      "augment": "Ethereal Weapon",
+      "tier": "S",
+      "ref": "curated:samira-ethereal-weapon"
+    },
+    {
+      "champion": "vi",
+      "augment": "Blade Waltz",
+      "tier": "S",
+      "ref": "curated:vi-blade-waltz"
+    },
+    {
+      "champion": "evelynn",
+      "augment": "Bread And Butter",
+      "tier": "S",
+      "ref": "curated:evelynn-bread-and-butter"
+    },
+    {
+      "champion": "quinn",
+      "augment": "Quantum Computing",
+      "tier": "S",
+      "ref": "curated:quinn-quantum-computing"
+    },
+    {
+      "champion": "neeko",
+      "augment": "Void Rift",
+      "tier": "S",
+      "ref": "curated:neeko-\u865a\u7a7a\u88c2\u9699\u6d41"
+    },
+    {
+      "champion": "neeko",
+      "augment": "Cruelty",
+      "tier": "S",
+      "ref": "curated:neeko-\u6b8b\u5fcd\u59ae\u853b"
+    },
+    {
+      "champion": "volibear",
+      "augment": "Master of Duality",
+      "tier": "S",
+      "ref": "curated:volibear-\u7269\u6cd5\u7686\u4fee\u7269\u8f6c\u6cd5\u72d7\u718a"
+    },
+    {
+      "champion": "volibear",
+      "augment": "Mystic Punch",
+      "tier": "S",
+      "ref": "curated:volibear-\u79d8\u672f\u51b2\u62f3\u72d7\u718a"
+    },
+    {
+      "champion": "yunara",
+      "augment": "Master of Duality",
+      "tier": "S",
+      "ref": "curated:yunara-\u7269\u6cd5\u7686\u4fee\u7279\u6548\u6d41"
+    },
+    {
+      "champion": "yunara",
+      "augment": "Juiced",
+      "tier": "S",
+      "ref": "curated:yunara-\u6ce8\u9b54\u6e85\u5c04\u6d41"
+    },
+    {
+      "champion": "katarina",
+      "augment": "Jeweled Gauntlet",
+      "tier": "S",
+      "ref": "curated:katarina-\u6613\u635f\u6cd5\u7206\u7206\u6740\u6d41"
+    },
+    {
+      "champion": "katarina",
+      "augment": "Triggered Inferno",
+      "tier": "S",
+      "ref": "curated:katarina-\u53cc\u65cb\u8f6c\u6d41\u65e0\u654c\u5361\u7279"
+    },
+    {
+      "champion": "katarina",
+      "augment": "Protein Shake",
+      "tier": "S",
+      "ref": "curated:katarina-\u5409\u7965\u4e4b\u5203\u5361\u7279"
+    },
+    {
+      "champion": "katarina",
+      "augment": "Mystic Punch",
+      "tier": "S",
+      "ref": "curated:katarina-\u79d8\u672f\u51b2\u62f3\u65e0\u9650\u7ec8\u6781\u6280\u80fd\u6d41"
+    },
+    {
+      "champion": "katarina",
+      "augment": "Void Rift",
+      "tier": "S",
+      "ref": "curated:katarina-\u865a\u7a7a\u88c2\u9699\u6d41"
+    },
+    {
+      "champion": "zaahen",
+      "augment": "Scopiest Weapons",
+      "tier": "S",
+      "ref": "curated:zaahen-\u671b\u8fdc\u955c\u66b4\u529b\u6d41"
+    },
+    {
+      "champion": "sion",
+      "augment": "Tank Engine",
+      "tier": "S",
+      "ref": "curated:sion-\u5766\u514b\u6d41"
+    },
+    {
+      "champion": "sion",
+      "augment": "Ultimate Revolution",
+      "tier": "S",
+      "ref": "curated:sion-\u65e0\u9650\u514d\u63a7\u66b4\u51fb\u6d41bug"
+    },
+    {
+      "champion": "soraka",
+      "augment": "Protein Shake",
+      "tier": "S",
+      "ref": "curated:soraka-\u86cb\u767d\u7c89\u6551\u8d4e\u6d41"
+    },
+    {
+      "champion": "qiyana",
+      "augment": "Juiced",
+      "tier": "S",
+      "ref": "curated:qiyana-\u5927\u6cd5\u5e08\u65e0\u9650qw\u6d41"
+    },
+    {
+      "champion": "lux",
+      "augment": "Ethereal Weapon",
+      "tier": "S",
+      "ref": "curated:lux-\u865a\u5e7b\u6b66\u5668\u5149\u8f89"
+    },
+    {
+      "champion": "lux",
+      "augment": "Slap Around",
+      "tier": "S",
+      "ref": "curated:lux-\u53e0\u89d2\u9f99\u5149\u8f89"
+    },
+    {
+      "champion": "udyr",
+      "augment": "Void Rift",
+      "tier": "S",
+      "ref": "curated:udyr-\u865a\u7a7a\u88c2\u9699\u6d41"
+    },
+    {
+      "champion": "irelia",
+      "augment": "Mystic Punch",
+      "tier": "S",
+      "ref": "curated:irelia-\u65e0\u9650q\u5200\u59b9"
+    },
+    {
+      "champion": "aurora",
+      "augment": "Snowball Upgrade",
+      "tier": "S",
+      "ref": "curated:aurora-\u5347\u7ea7\u96ea\u7403\u79d2\u4eba\u6d41162\u7248\u672c\u540e\u5347\u7ea7\u96ea\u7403\u65e0\u6cd5\u591a\u6b21\u89e6\u53d1\u88ab\u52a8"
+    },
+    {
+      "champion": "nami",
+      "augment": "Cruelty",
+      "tier": "S",
+      "ref": "curated:nami-\u6b8b\u5fcd\u5a1c\u7f8e"
+    },
+    {
+      "champion": "heimerdinger",
+      "augment": "Void Rift",
+      "tier": "S",
+      "ref": "curated:heimerdinger-\u865a\u7a7a\u88c2\u9699\u6d41"
+    },
+    {
+      "champion": "karma",
+      "augment": "I'm a Baby Kitty Where is Mama",
+      "tier": "S",
+      "ref": "curated:karma-\u62a4\u76fe\u6d41"
+    },
+    {
+      "champion": "karma",
+      "augment": "Jeweled Gauntlet",
+      "tier": "S",
+      "ref": "curated:karma-\u6838\u5f39\u6d41"
+    },
+    {
+      "champion": "viktor",
+      "augment": "Void Rift",
+      "tier": "S",
+      "ref": "curated:viktor-\u865a\u7a7a\u88c2\u9699\u6d41"
+    },
+    {
+      "champion": "ornn",
+      "augment": "Fey Magic",
+      "tier": "S",
+      "ref": "curated:ornn-\u7cbe\u602a\u9b54\u6cd5ap\u6d41"
+    },
+    {
+      "champion": "trundle",
+      "augment": "Slap Around",
+      "tier": "S",
+      "ref": "curated:trundle-\u4e00r\u5438\u6b7b\u4eba"
+    },
+    {
+      "champion": "rakan",
+      "augment": "Cruelty",
+      "tier": "S",
+      "ref": "curated:rakan-\u6b8b\u5fcd\u6d1b"
+    },
+    {
+      "champion": "hwei",
+      "augment": "Cruelty",
+      "tier": "S",
+      "ref": "curated:hwei-\u6b8b\u5fcd\u805a\u602a\u6d41"
+    },
+    {
+      "champion": "hwei",
+      "augment": "Void Rift",
+      "tier": "S",
+      "ref": "curated:hwei-\u865a\u7a7a\u88c2\u9699\u6d41"
+    },
+    {
+      "champion": "garen",
+      "augment": "Blade Waltz",
+      "tier": "S",
+      "ref": "curated:garen-\u534e\u5c14\u5179\u8584\u7eb1\u6d41"
+    },
+    {
+      "champion": "jarvaniv",
+      "augment": "Dive Bomber",
+      "tier": "S",
+      "ref": "curated:jarvaniv-\u6ce5\u5934\u8f66\u81ea\u7206\u6d41"
+    },
+    {
+      "champion": "shaco",
+      "augment": "Clown College",
+      "tier": "S",
+      "ref": "curated:shaco-ad\u7a7f\u7532\u81ea\u7206\u6d41"
+    },
+    {
+      "champion": "hecarim",
+      "augment": "Critical Healing",
+      "tier": "S",
+      "ref": "curated:hecarim-\u65e0\u9650\u62a4\u76fe\u514d\u4f24\u6d41"
+    },
+    {
+      "champion": "hecarim",
+      "augment": "Back To Basics",
+      "tier": "S",
+      "ref": "curated:hecarim-\u56de\u5f52\u57fa\u672c\u529f\u4eba\u9a6c"
+    },
+    {
+      "champion": "hecarim",
+      "augment": "Triggered Inferno",
+      "tier": "S",
+      "ref": "curated:hecarim-\u6273\u673a\u70bc\u72f1\u79d2\u53e0s\u6d41\u4eba\u9a6c"
+    },
+    {
+      "champion": "hecarim",
+      "augment": "Devil on Your Shoulder",
+      "tier": "S",
+      "ref": "curated:hecarim-\u80a9\u4e0a\u6076\u9b54\u4eba\u9a6c"
+    },
+    {
+      "champion": "maokai",
+      "augment": "Courage of the Colossus",
+      "tier": "S",
+      "ref": "curated:maokai-\u5de8\u50cf\u5927\u6811"
+    },
+    {
+      "champion": "maokai",
+      "augment": "Void Rift",
+      "tier": "S",
+      "ref": "curated:maokai-\u865a\u7a7a\u88c2\u9699\u6d41"
+    },
+    {
+      "champion": "maokai",
+      "augment": "Protein Shake",
+      "tier": "S",
+      "ref": "curated:maokai-\u86cb\u767d\u7c89\u5927\u6811"
+    },
+    {
+      "champion": "rammus",
+      "augment": "Upgrade Thornmail",
+      "tier": "S",
+      "ref": "curated:rammus-\u5347\u7ea7\u53cd\u7532\u7403\u7403\u4f60\u6765\u6253\u6211\u5427"
+    },
+    {
+      "champion": "ezreal",
+      "augment": "Juiced",
+      "tier": "S",
+      "ref": "curated:ezreal-\u4e09\u5c42\u6ce8\u9b54ez"
+    },
+    {
+      "champion": "ezreal",
+      "augment": "Purist - Caster",
+      "tier": "S",
+      "ref": "curated:ezreal-\u7eaf\u7cb9\u672f\u58eb\u5168\u5c4f\u5927\u62db\u65e0\u9650\u6280\u80fd\u6d41"
+    },
+    {
+      "champion": "urgot",
+      "augment": "Draw Your Sword",
+      "tier": "S",
+      "ref": "curated:urgot-\u7a7f\u7532\u5e1d\u738b\u87f9"
+    },
+    {
+      "champion": "ekko",
+      "augment": "Ethereal Weapon",
+      "tier": "S",
+      "ref": "curated:ekko-\u865a\u5e7b\u6b66\u5668\u827e\u514b"
+    },
+    {
+      "champion": "ekko",
+      "augment": "Void Rift",
+      "tier": "S",
+      "ref": "curated:ekko-\u865a\u7a7a\u88c2\u9699\u6d41"
+    },
+    {
+      "champion": "ekko",
+      "augment": "Eureka",
+      "tier": "S",
+      "ref": "curated:ekko-\u6ee1cd\u65e0\u9650\u706b\u529b\u827e\u514b"
+    },
+    {
+      "champion": "bard",
+      "augment": "Droppybara",
+      "tier": "S",
+      "ref": "curated:bard-\u8f68\u9053\u70ae\u5df4\u5fb7"
+    },
+    {
+      "champion": "bard",
+      "augment": "Void Rift",
+      "tier": "S",
+      "ref": "curated:bard-\u865a\u7a7a\u88c2\u9699\u5df4\u5fb7"
+    },
+    {
+      "champion": "aatrox",
+      "augment": "Protein Shake",
+      "tier": "S",
+      "ref": "curated:aatrox-\u86cb\u767d\u7c89\u534a\u8089\u6218\u58eb\u6d41"
+    },
+    {
+      "champion": "syndra",
+      "augment": "Jeweled Gauntlet",
+      "tier": "S",
+      "ref": "curated:syndra-\u6cd5\u7206\u8f9b\u5fb7\u62c9"
+    },
+    {
+      "champion": "syndra",
+      "augment": "Slap Around",
+      "tier": "S",
+      "ref": "curated:syndra-\u6247\u5df4\u638c\u53e0\u89d2\u9f99\u8f9b\u5fb7\u62c9"
+    },
+    {
+      "champion": "shen",
+      "augment": "Back To Basics",
+      "tier": "S",
+      "ref": "curated:shen-\u5766\u514b\u6740\u624b\u614e"
+    },
+    {
+      "champion": "zoe",
+      "augment": "Snowball Upgrade",
+      "tier": "S",
+      "ref": "curated:zoe-\u96ea\u7403\u6d41\u4f50\u4f0a"
+    },
+    {
+      "champion": "kled",
+      "augment": "Slow And Steady",
+      "tier": "S",
+      "ref": "curated:kled-\u4e00\u677f\u4e00\u773c\u6ce5\u5934\u8f66\u514b\u70c8"
+    },
+    {
+      "champion": "kled",
+      "augment": "Heavy Hitter",
+      "tier": "S",
+      "ref": "curated:kled-\u8840\u725b\u6d41100\u7269\u4f24\u514b\u70c8"
+    },
+    {
+      "champion": "leona",
+      "augment": "Cruelty",
+      "tier": "S",
+      "ref": "curated:leona-\u6b8b\u5fcd\u65e5\u5973"
+    },
+    {
+      "champion": "kayle",
+      "augment": "Void Rift",
+      "tier": "S",
+      "ref": "curated:kayle-\u865a\u7a7a\u88c2\u9699\u6d41"
+    },
+    {
+      "champion": "kayle",
+      "augment": "Master of Duality",
+      "tier": "S",
+      "ref": "curated:kayle-\u7269\u6cd5\u7686\u4fee\u53e0\u5c42\u6d41\u5929\u4f7f"
+    },
+    {
+      "champion": "jax",
+      "augment": "Soul Eater",
+      "tier": "S",
+      "ref": "curated:jax-\u53e0\u89d2\u9f99\u7a76\u6781\u6570\u503c\u6d41"
+    },
+    {
+      "champion": "jax",
+      "augment": "Upgrade Sheen",
+      "tier": "S",
+      "ref": "curated:jax-\u6838\u5f39\u7206\u6740\u6d41ap\u6b66\u5668"
+    },
+    {
+      "champion": "nocturne",
+      "augment": "Quantum Computing",
+      "tier": "S",
+      "ref": "curated:nocturne-\u7a7f\u7532\u7206\u53d1\u79d2\u6740\u6d41"
+    },
+    {
+      "champion": "nocturne",
+      "augment": "Dive Bomber",
+      "tier": "S",
+      "ref": "curated:nocturne-\u81ea\u7206\u6d41"
+    },
+    {
+      "champion": "nasus",
+      "augment": "Shrink Engine",
+      "tier": "S",
+      "ref": "curated:nasus-\u53e0\u89d2\u9f99\u72d7\u5934"
+    },
+    {
+      "champion": "tahmkench",
+      "augment": "Tank Engine",
+      "tier": "S",
+      "ref": "curated:tahmkench-\u767e\u5206\u6bd4\u589e\u4f24\u8089\u5766\u6d41"
+    },
+    {
+      "champion": "tahmkench",
+      "augment": "Quest: Steel Your Heart",
+      "tier": "S",
+      "ref": "curated:tahmkench-\u6cd5\u5766\u86e4\u87c6"
+    },
+    {
+      "champion": "mel",
+      "augment": "Void Rift",
+      "tier": "S",
+      "ref": "curated:mel-\u865a\u7a7a\u88c2\u9699\u6d41"
+    },
+    {
+      "champion": "mel",
+      "augment": "Vulnerability",
+      "tier": "S",
+      "ref": "curated:mel-\u6613\u635f\u6cd5\u7206\u79d2\u4eba\u6d41"
+    },
+    {
+      "champion": "illaoi",
+      "augment": "Ethereal Weapon",
+      "tier": "S",
+      "ref": "curated:illaoi-\u865a\u5e7b\u6b66\u5668\u89e6\u624b\u5988"
+    },
+    {
+      "champion": "gangplank",
+      "augment": "Mystic Punch",
+      "tier": "S",
+      "ref": "curated:gangplank-qq\u8239\u957f"
+    },
+    {
+      "champion": "gangplank",
+      "augment": "Don't Blink",
+      "tier": "S",
+      "ref": "curated:gangplank-\u552f\u5feb\u4e0d\u7834\u589e\u4f24\u6d41"
+    },
+    {
+      "champion": "senna",
+      "augment": "Master of Duality",
+      "tier": "S",
+      "ref": "curated:senna-\u98d3\u98ce\u7269\u6cd5\u7686\u4fee\u6d41"
+    },
+    {
+      "champion": "nautilus",
+      "augment": "Protein Shake",
+      "tier": "S",
+      "ref": "curated:nautilus-\u86cb\u767d\u7c89\u6cf0\u5766"
+    },
+    {
+      "champion": "singed",
+      "augment": "Devil on Your Shoulder",
+      "tier": "S",
+      "ref": "curated:singed-\u80a9\u4e0a\u6076\u9b54\u70bc\u91d1"
+    },
+    {
+      "champion": "singed",
+      "augment": "Ethereal Weapon",
+      "tier": "S",
+      "ref": "curated:singed-\u865a\u5e7b\u6b66\u5668\u8e22\u8e0f\u821e\u70bc\u91d1"
+    },
+    {
+      "champion": "renata",
+      "augment": "Quest: Wooglet's Witchcap",
+      "tier": "S",
+      "ref": "curated:renata-ap\u70c8\u5a1c\u5854"
+    },
+    {
+      "champion": "smolder",
+      "augment": "Mystic Punch",
+      "tier": "S",
+      "ref": "curated:smolder-\u79d8\u672f\u51b2\u62f3\u5c0f\u706b\u9f99"
+    },
+    {
+      "champion": "ziggs",
+      "augment": "Infinite Recursion",
+      "tier": "S",
+      "ref": "curated:ziggs-\u65e0\u9650\u706b\u529b\u70b8\u5f39\u4eba"
+    },
+    {
+      "champion": "alistar",
+      "augment": "Infinite Recursion",
+      "tier": "S",
+      "ref": "curated:alistar-\u5927\u6cd5\u5e08\u65e0\u9650\u51fb\u98de\u725b"
+    },
+    {
+      "champion": "alistar",
+      "augment": "Executioner",
+      "tier": "S",
+      "ref": "curated:alistar-ap\u6838\u5f39\u725b"
+    },
+    {
+      "champion": "alistar",
+      "augment": "Courage of the Colossus",
+      "tier": "S",
+      "ref": "curated:alistar-\u5de8\u50cf\u725b\u5934"
+    },
+    {
+      "champion": "briar",
+      "augment": "Upgrade Infinity Edge",
+      "tier": "S",
+      "ref": "curated:briar-\u66b4\u51fb\u6d41\u8d1d\u857e\u4e9a"
+    },
+    {
+      "champion": "nidalee",
+      "augment": "Biggest Snowball Ever",
+      "tier": "S",
+      "ref": "curated:nidalee-\u96ea\u7403\u6d41\u8c79\u5973"
+    },
+    {
+      "champion": "vladimir",
+      "augment": "Void Rift",
+      "tier": "S",
+      "ref": "curated:vladimir-\u865a\u7a7a\u88c2\u9699\u5438\u8840\u9b3c"
+    },
+    {
+      "champion": "vladimir",
+      "augment": "Circle of Death",
+      "tier": "S",
+      "ref": "curated:vladimir-\u6b7b\u4ea1\u4e4b\u73af\u6d41"
+    },
+    {
+      "champion": "sona",
+      "augment": "Jeweled Gauntlet",
+      "tier": "S",
+      "ref": "curated:sona-\u6728\u5df2\u6210\u821fqa\u79d2\u4eba\u6d41"
+    },
+    {
+      "champion": "zac",
+      "augment": "Circle of Death",
+      "tier": "S",
+      "ref": "curated:zac-\u6b7b\u4ea1\u4e4b\u73af\u86cb\u767d\u7c89\u624e\u514b"
+    },
+    {
+      "champion": "zac",
+      "augment": "Protein Shake",
+      "tier": "S",
+      "ref": "curated:zac-\u86cb\u767d\u7c89\u6781\u901f\u56de\u590d\u6d41"
+    },
+    {
+      "champion": "evelynn",
+      "augment": "Void Rift",
+      "tier": "S",
+      "ref": "curated:evelynn-\u865a\u7a7a\u88c2\u9699\u5be1\u5987"
+    },
+    {
+      "champion": "naafiri",
+      "augment": "Triggered Inferno",
+      "tier": "S",
+      "ref": "curated:naafiri-\u70bc\u72f1\u6273\u673a\u7eb3\u4e9a\u83f2\u5229"
+    },
+    {
+      "champion": "naafiri",
+      "augment": "Ethereal Weapon",
+      "tier": "S",
+      "ref": "curated:naafiri-\u865a\u5e7b\u6b66\u5668\u72d7"
+    },
+    {
+      "champion": "diana",
+      "augment": "Purist - Caster",
+      "tier": "S",
+      "ref": "curated:diana-\u6708\u4e0b\u65e0\u9650\u8fde\u7206\u53d1\u6d41"
+    },
+    {
+      "champion": "vi",
+      "augment": "Dashing",
+      "tier": "S",
+      "ref": "curated:vi-\u6781\u81f4\u7206\u53d1\u7a7f\u7532\u6d41"
+    },
+    {
+      "champion": "viego",
+      "augment": "Jeweled Gauntlet",
+      "tier": "S",
+      "ref": "curated:viego-\u7206\u7a7f\u6d41\u4f5b\u8036\u6208"
+    },
+    {
+      "champion": "warwick",
+      "augment": "Circle of Death",
+      "tier": "S",
+      "ref": "curated:warwick-ap\u6b7b\u4ea1\u4e4b\u73af\u6d41"
+    },
+    {
+      "champion": "zeri",
+      "augment": "Rabble Rousing",
+      "tier": "S",
+      "ref": "curated:zeri-\u53e4\u5f0f\u4f73\u917f\u534a\u8089\u6d41"
+    },
+    {
+      "champion": "akali",
+      "augment": "Void Rift",
+      "tier": "S",
+      "ref": "curated:akali-\u865a\u7a7a\u88c2\u9699\u6d41"
+    },
+    {
+      "champion": "akali",
+      "augment": "Zealot",
+      "tier": "S",
+      "ref": "curated:akali-\u7269\u8f6c\u6cd5\u677f\u773c\u963f\u5361\u4e3d"
+    },
+    {
+      "champion": "corki",
+      "augment": "Jeweled Gauntlet",
+      "tier": "S",
+      "ref": "curated:corki-717\u500d\u7206\u4f24\u6301\u7eed\u6d41"
+    },
+    {
+      "champion": "corki",
+      "augment": "Triggered Inferno",
+      "tier": "S",
+      "ref": "curated:corki-\u81ea\u7206\u79d2s\u6d41\u98de\u673a"
+    },
+    {
+      "champion": "zyra",
+      "augment": "Void Rift",
+      "tier": "S",
+      "ref": "curated:zyra-\u865a\u7a7a\u88c2\u9699\u6d41"
+    },
+    {
+      "champion": "draven",
+      "augment": "Jeweled Gauntlet",
+      "tier": "S",
+      "ref": "curated:draven-\u6cd5\u7206\u5927\u62db\u6d41\u5fb7\u83b1\u6587"
+    },
+    {
+      "champion": "blitzcrank",
+      "augment": "Upgrade Infinity Edge",
+      "tier": "S",
+      "ref": "curated:blitzcrank-e\u62f3\u8d85\u4eba\u4e00\u5200\u6d41"
+    },
+    {
+      "champion": "kaisa",
+      "augment": "Mystic Punch",
+      "tier": "S",
+      "ref": "curated:kaisa-\u79d8\u672f\u51b2\u62f3\u65e0\u9650q"
+    },
+    {
+      "champion": "kaisa",
+      "augment": "Ethereal Weapon",
+      "tier": "S",
+      "ref": "curated:kaisa-\u865a\u5e7b\u6b66\u5668\u5f15\u7206\u6d41ap\u5361\u838e"
+    },
+    {
+      "champion": "belveth",
+      "augment": "Slow And Steady",
+      "tier": "S",
+      "ref": "curated:belveth-\u4e00\u677f\u4e00\u773c\u7206\u53d1\u6d41"
+    },
+    {
+      "champion": "belveth",
+      "augment": "Tap Dancer",
+      "tier": "S",
+      "ref": "curated:belveth-\u53e0\u89d2\u9f99\u6781\u81f4\u653b\u901f\u6d41"
+    },
+    {
+      "champion": "belveth",
+      "augment": "Mystic Punch",
+      "tier": "S",
+      "ref": "curated:belveth-\u79d8\u672f\u51b2\u62f3\u98a0\u52fa\u6d41"
+    },
+    {
+      "champion": "chogath",
+      "augment": "Quest: Steel Your Heart",
+      "tier": "S",
+      "ref": "curated:chogath-\u7269\u8f6c\u6cd5\u5927\u866b\u5b50"
+    },
+    {
+      "champion": "chogath",
+      "augment": "Tank Engine",
+      "tier": "S",
+      "ref": "curated:chogath-\u5766\u514b\u6d41"
+    },
+    {
+      "champion": "chogath",
+      "augment": "Shrink Engine",
+      "tier": "S",
+      "ref": "curated:chogath-\u7f29\u5c0f\u5f15\u64ce\u6781\u81f4\u53e0\u5c42\u6d41"
+    },
+    {
+      "champion": "khazix",
+      "augment": "Upgrade Hubris",
+      "tier": "S",
+      "ref": "curated:khazix-\u8d70\u5730\u87b3\u8782"
+    },
+    {
+      "champion": "kassadin",
+      "augment": "Void Rift",
+      "tier": "S",
+      "ref": "curated:kassadin-\u865a\u7a7a\u88c2\u9699\u6d41\u865a\u7a7a\u88c2\u9699"
+    },
+    {
+      "champion": "kassadin",
+      "augment": "Don't Blink",
+      "tier": "S",
+      "ref": "curated:kassadin-\u552f\u5feb\u4e0d\u7834\u6838\u5f39\u6d41"
+    },
+    {
+      "champion": "tryndamere",
+      "augment": "Scopier Weapons",
+      "tier": "S",
+      "ref": "curated:tryndamere-\u66b4\u51fb\u6d41"
+    },
+    {
+      "champion": "tryndamere",
+      "augment": "Master of Duality",
+      "tier": "S",
+      "ref": "curated:tryndamere-\u7269\u6cd5\u7686\u4feeq\u5976\u6d41"
+    },
+    {
+      "champion": "elise",
+      "augment": "Jeweled Gauntlet",
+      "tier": "S",
+      "ref": "curated:elise-\u6b66\u9b42\u771f\u8eab\u7206\u6740\u6d41"
+    },
+    {
+      "champion": "pyke",
+      "augment": "Goliath",
+      "tier": "S",
+      "ref": "curated:pyke-\u6b4c\u5229\u4e9a\u5de8\u4eba\u6d3e\u514b"
+    },
+    {
+      "champion": "sylas",
+      "augment": "Juiced",
+      "tier": "S",
+      "ref": "curated:sylas-\u6ce8\u9b54ad\u6d41"
+    },
+    {
+      "champion": "sylas",
+      "augment": "Purist - Caster",
+      "tier": "S",
+      "ref": "curated:sylas-\u65e0\u9650\u706b\u529b\u6280\u80fd\u6d41"
+    },
+    {
+      "champion": "darius",
+      "augment": "Jeweled Gauntlet",
+      "tier": "S",
+      "ref": "curated:darius-\u6cd5\u7206\u8bfa\u624b"
+    },
+    {
+      "champion": "darius",
+      "augment": "Back To Basics",
+      "tier": "S",
+      "ref": "curated:darius-\u56de\u5f52\u57fa\u672c\u529f\u4e00\u5200\u6d41\u8bfa\u624b"
+    },
+    {
+      "champion": "teemo",
+      "augment": "Mystic Punch",
+      "tier": "S",
+      "ref": "curated:teemo-\u79d8\u672f\u51b2\u62f3\u65e0\u9650\u81f4\u76f2\u6d41"
+    },
+    {
+      "champion": "teemo",
+      "augment": "Eureka",
+      "tier": "S",
+      "ref": "curated:teemo-\u5168\u56fe\u8611\u83c7\u6d41"
+    },
+    {
+      "champion": "fiddlesticks",
+      "augment": "Void Rift",
+      "tier": "S",
+      "ref": "curated:fiddlesticks-\u865a\u7a7a\u88c2\u9699\u6d41"
+    },
+    {
+      "champion": "xayah",
+      "augment": "Upgrade Infinity Edge",
+      "tier": "S",
+      "ref": "curated:xayah-\u66b4\u51fb\u6d41"
+    },
+    {
+      "champion": "veigar",
+      "augment": "Marksmage",
+      "tier": "S",
+      "ref": "curated:veigar-\u795e\u5c04\u5c0f\u6cd5\u5e08"
+    },
+    {
+      "champion": "veigar",
+      "augment": "Infinite Recursion",
+      "tier": "S",
+      "ref": "curated:veigar-\u6781\u81f4cd\u65e0\u9650e"
+    },
+    {
+      "champion": "veigar",
+      "augment": "Phenomenal Evil",
+      "tier": "S",
+      "ref": "curated:veigar-\u8d85\u51e1\u90aa\u6076\u6781\u81f4\u8f93\u51fa\u6d41\u5c0f\u6cd5"
+    },
+    {
+      "champion": "ambessa",
+      "augment": "Clown College",
+      "tier": "S",
+      "ref": "curated:ambessa-\u81ea\u7206\u7a7f\u7532\u6d41"
+    },
+    {
+      "champion": "ambessa",
+      "augment": "Jeweled Gauntlet",
+      "tier": "S",
+      "ref": "curated:ambessa-\u72c2\u5984\u9965\u6e34\u6b7b\u821e\u6d41"
+    },
+    {
+      "champion": "nunu",
+      "augment": "Circle of Death",
+      "tier": "S",
+      "ref": "curated:nunu-\u6b7b\u4ea1\u4e4b\u73af\u5766\u514b\u6d41"
+    },
+    {
+      "champion": "cassiopeia",
+      "augment": "Cruelty",
+      "tier": "S",
+      "ref": "curated:cassiopeia-\u6b8b\u5fcd\u7f1a\u5730\u6d41"
+    },
+    {
+      "champion": "annie",
+      "augment": "It's Killing Time",
+      "tier": "S",
+      "ref": "curated:annie-\u5f71\u6d41\u4e4b\u718a\u5b89\u59ae"
+    },
+    {
+      "champion": "shyvana",
+      "augment": "Ultimate Awakening",
+      "tier": "S",
+      "ref": "curated:shyvana-\u7ec8\u6781\u5524\u9192ap\u9f99\u5973"
+    },
+    {
+      "champion": "vladimir",
+      "augment": "ADAPt",
+      "tier": "S",
+      "ref": "curated:vladimir-\u5de6\u811a\u8e29\u53f3\u811a\u4e07\u6cd5\u5f3a\u5438\u8840\u9b3c"
+    },
+    {
+      "champion": "blitzcrank",
+      "augment": "Mind to Matter",
+      "tier": "S",
+      "ref": "curated:blitzcrank-\u65e0\u9650\u6269\u80f8\u8fd0\u52a8\u673a\u5668\u4eba"
+    },
+    {
+      "champion": "tahmkench",
+      "augment": "Goliath",
+      "tier": "S",
+      "ref": "curated:tahmkench-\u4e22\u5b50\u6d41"
+    },
+    {
+      "champion": "hecarim",
+      "augment": "Overflow",
+      "tier": "S",
+      "ref": "curated:hecarim-\u98de\u8eab\u8e22\u5927\u6cd5\u5e08\u4eba\u9a6c"
+    },
+    {
+      "champion": "vladimir",
+      "augment": "Ethereal Weapon",
+      "tier": "S",
+      "ref": "curated:vladimir-\u65e0cd"
+    },
+    {
+      "champion": "quinn",
+      "augment": "Poro Blaster",
+      "tier": "S",
+      "ref": "curated:quinn-\u5e73a\u88ab\u52a8\u6709\u70b9\u75db"
+    },
+    {
+      "champion": "ekko",
+      "augment": "Jeweled Gauntlet",
+      "tier": "S",
+      "ref": "curated:ekko-e\u8106\u76ae\u53ef\u80fd\u6709\u70b9\u75db"
+    },
+    {
+      "champion": "senna",
+      "augment": "Master of Duality",
+      "tier": "S",
+      "ref": "curated:senna-\u5e73a\u6709\u70b9\u75db"
+    },
+    {
       "champion": "yuumi",
-      "augment": "circle of death",
+      "augment": "Circle of Death",
+      "tier": "S",
+      "ref": "curated:yuumi-\u732b\u54aa\u62ff\u5230\u8fd9\u5957\u5fc5\u987bs\u5f3a\u5ea6"
+    },
+    {
+      "champion": "shaco",
+      "augment": "Clown College",
+      "tier": "S",
+      "ref": "curated:shaco-\u81ea\u7528ad\u8584\u7eb1\u6d41"
+    },
+    {
+      "champion": "thresh",
+      "augment": "Quest: Steel Your Heart",
+      "tier": "S",
+      "ref": "curated:thresh-\u9524\u77f3\u8f7b\u677e500\u62a4\u7532"
+    },
+    {
+      "champion": "rengar",
+      "augment": "Vampirism",
+      "tier": "S",
+      "ref": "curated:rengar-\u843d\u5730\u79d2"
+    },
+    {
+      "champion": "galio",
+      "augment": "Biggest Snowball Ever",
+      "tier": "S",
+      "ref": "curated:galio-\u96ea\u7403\u4eba"
+    },
+    {
+      "champion": "twitch",
+      "augment": "Tap Dancer",
+      "tier": "S",
+      "ref": "curated:twitch-\u6253\u4e22\u5b50"
+    },
+    {
+      "champion": "blitzcrank",
+      "augment": "Mystic Punch",
+      "tier": "S",
+      "ref": "curated:blitzcrank-\u65e0\u9650e\u98de\u5929\u673a\u5668\u4eba"
+    },
+    {
+      "champion": "mordekaiser",
+      "augment": "Holy Fire",
+      "tier": "S",
+      "ref": "curated:mordekaiser-\u4e1a\u706b"
+    },
+    {
+      "champion": "yunara",
+      "augment": "Critical Missile",
+      "tier": "S",
+      "ref": "curated:yunara-\u65e0\u6613\u635f\u4e07\u5251\u5f52\u5b97"
+    },
+    {
+      "champion": "soraka",
+      "augment": "Tank Engine",
+      "tier": "S",
+      "ref": "curated:soraka-g\u5976\u5927\u6cd5\u5e08"
+    },
+    {
+      "champion": "senna",
+      "augment": "Protein Shake",
+      "tier": "S",
+      "ref": "curated:senna-\u56de\u8840\u6d41\u8d5b\u5a1c"
+    },
+    {
+      "champion": "leesin",
+      "augment": "Crack Open That Egg",
+      "tier": "S",
+      "ref": "curated:leesin-\u7838\u5f00\u90a3\u4e2a\u86cbw\u8d34\u819c\u6d41"
+    },
+    {
+      "champion": "briar",
+      "augment": "Mystic Punch",
+      "tier": "S",
+      "ref": "curated:briar-\u6ee1\u7206\u6218\u58eb"
+    },
+    {
+      "champion": "garen",
+      "augment": "Slow And Steady",
+      "tier": "S",
+      "ref": "curated:garen-\u86cb\u767d\u4e00\u677f\u4e00\u773c\u76d6\u4f26"
+    },
+    {
+      "champion": "rammus",
+      "augment": "Protein Shake",
+      "tier": "S",
+      "ref": "curated:rammus-\u86cb\u767d\u7c89\u653b\u901f5\u9f99\u9f9f"
+    },
+    {
+      "champion": "aatrox",
+      "augment": "Jeweled Gauntlet",
+      "tier": "S",
+      "ref": "curated:aatrox-\u73e0\u5149\u4f1a\u5fc3\u8840\u9b54\u6d41"
+    },
+    {
+      "champion": "milio",
+      "augment": "Eureka",
+      "tier": "S",
+      "ref": "curated:milio-ap\u7c73\u5229\u6b27"
+    },
+    {
+      "champion": "malphite",
+      "augment": "Eureka",
+      "tier": "S",
+      "ref": "curated:malphite-\u5927\u62db\u6d41"
+    },
+    {
+      "champion": "singed",
+      "augment": "Slap Around",
+      "tier": "S",
+      "ref": "curated:singed-\u8eb2\u4e24\u6ce2\u5c31\u4e0a\u4e07\u8840\u7684\u51e0\u5343\u6cd5\u5f3a\u7684\u70bc\u91d1"
+    },
+    {
+      "champion": "lux",
+      "augment": "Eureka",
+      "tier": "S",
+      "ref": "curated:lux-\u7206\u6740\u6d41"
+    },
+    {
+      "champion": "jarvaniv",
+      "augment": "Tank Engine",
+      "tier": "S",
+      "ref": "curated:jarvaniv-\u4e07\u8840\u7687\u5b50"
+    },
+    {
+      "champion": "varus",
+      "augment": "ADAPt",
+      "tier": "S",
+      "ref": "curated:varus-\u7269\u8f6c\u6cd5\u653b\u901f\u6cd5\u5f3a\u7206\u6740\u6d41\u97e6\u9c81\u65af"
+    },
+    {
+      "champion": "singed",
+      "augment": "Shrink Engine",
+      "tier": "S",
+      "ref": "curated:singed-\u8089\u5230\u53d1\u660f"
+    },
+    {
+      "champion": "anivia",
+      "augment": "Fey Magic",
+      "tier": "S",
+      "ref": "curated:anivia-\u7cbe\u602a\u9b54\u6cd5\u5927\u62db\u63a7\u5236\u6d41"
+    },
+    {
+      "champion": "shaco",
+      "augment": "Bread And Jam",
+      "tier": "S",
+      "ref": "curated:shaco-ap\u76d2\u5b50\u6298\u78e8\u6d41"
+    },
+    {
+      "champion": "galio",
+      "augment": "Cruelty",
+      "tier": "S",
+      "ref": "curated:galio-\u63a7\u5236\u7206\u53d1\u6d41"
+    },
+    {
+      "champion": "ekko",
+      "augment": "Executioner",
+      "tier": "S",
+      "ref": "curated:ekko-\u5927\u62db\u6e38\u9f99"
+    },
+    {
+      "champion": "warwick",
+      "augment": "Quantum Computing",
+      "tier": "S",
+      "ref": "curated:warwick-\u91cf\u5b50"
+    },
+    {
+      "champion": "pantheon",
+      "augment": "Ethereal Weapon",
+      "tier": "S",
+      "ref": "curated:pantheon-\u65e0\u9650\u706b\u529b\u6f58\u68ee"
+    },
+    {
+      "champion": "yunara",
+      "augment": "Double Tap",
+      "tier": "S",
+      "ref": "curated:yunara-\u53cc\u53d1\u5feb\u5c04\u723d\u98de\u7f16\u5236"
+    },
+    {
+      "champion": "vladimir",
+      "augment": "Goliath",
+      "tier": "S",
+      "ref": "curated:vladimir-\u5168\u5458\u5fc3\u4e4b\u94a2"
+    },
+    {
+      "champion": "hecarim",
+      "augment": "Shrink Engine",
+      "tier": "S",
+      "ref": "curated:hecarim-\u968f\u7f18\u6d77\u514b\u65af\u723d\u5c40"
+    },
+    {
+      "champion": "vladimir",
+      "augment": "Purist - Caster",
+      "tier": "S",
+      "ref": "curated:vladimir-\u65e0\u9650w"
+    },
+    {
+      "champion": "blitzcrank",
+      "augment": "Final City Transit",
+      "tier": "S",
+      "ref": "curated:blitzcrank-\u81ea\u7206\u673a\u5668\u4eba"
+    },
+    {
+      "champion": "hecarim",
+      "augment": "Ultimate Awakening",
+      "tier": "S",
+      "ref": "curated:hecarim-\u7ec8\u6781\u5524\u9192\u4eba\u9a6c"
+    },
+    {
+      "champion": "singed",
+      "augment": "Dropkick",
+      "tier": "S",
+      "ref": "curated:singed-\u98de\u8eab\u8e22\u70bc\u91d1"
+    },
+    {
+      "champion": "rengar",
+      "augment": "Scopier Weapons",
+      "tier": "S",
+      "ref": "curated:rengar-\u8df3\u7684\u66f4\u8fdc\u98de\u7684\u66f4\u9ad8"
+    },
+    {
+      "champion": "tryndamere",
+      "augment": "Giant Slayer",
+      "tier": "S",
+      "ref": "curated:tryndamere-\u7a7f\u7532\u7206\u6740"
+    },
+    {
+      "champion": "garen",
+      "augment": "Void Immolation",
+      "tier": "S",
+      "ref": "curated:garen-\u65e0\u654c\u65e0\u8111\u51b2"
+    },
+    {
+      "champion": "zeri",
+      "augment": "Giant Slayer",
+      "tier": "S",
+      "ref": "curated:zeri-\u901a\u7528"
+    },
+    {
+      "champion": "rell",
+      "augment": "Goliath",
+      "tier": "S",
+      "ref": "curated:rell-kkk"
+    },
+    {
+      "champion": "urgot",
+      "augment": "Quest: Steel Your Heart",
+      "tier": "S",
+      "ref": "curated:urgot-\u731b\u731b\u5e72"
+    },
+    {
+      "champion": "ekko",
+      "augment": "Blade Waltz",
+      "tier": "S",
+      "ref": "curated:ekko-\u5229\u5203\u534e\u5c14\u5179w\u9644\u4f24\u6d41"
+    },
+    {
+      "champion": "galio",
+      "augment": "Magic Missile",
+      "tier": "S",
+      "ref": "curated:galio-\u6210\u8272"
+    },
+    {
+      "champion": "irelia",
+      "augment": "Jeweled Gauntlet",
+      "tier": "S",
+      "ref": "curated:irelia-ap\u5200\u59b9"
+    },
+    {
+      "champion": "trundle",
+      "augment": "Slap Around",
+      "tier": "S",
+      "ref": "curated:trundle-\u5927\u62db\u6d41"
+    },
+    {
+      "champion": "volibear",
+      "augment": "Rabble Rousing",
+      "tier": "S",
+      "ref": "curated:volibear-\u7ad9\u64b8\u65e0\u654c\u6d41\u72d7\u7237"
+    },
+    {
+      "champion": "garen",
+      "augment": "Double Tap",
+      "tier": "S",
+      "ref": "curated:garen-\u66b4\u51fb\u7279\u6548\u65e0\u9650e"
+    },
+    {
+      "champion": "jayce",
+      "augment": "Jeweled Gauntlet",
+      "tier": "S",
+      "ref": "curated:jayce-\u611f\u53d7\u96f7\u9706\u5427"
+    },
+    {
+      "champion": "garen",
+      "augment": "Bounce of the Poro King",
+      "tier": "S",
+      "ref": "curated:garen-\u65e0\u654c\u5927\u76d6\u4f26"
+    },
+    {
+      "champion": "shyvana",
+      "augment": "Double Tap",
+      "tier": "S",
+      "ref": "curated:shyvana-\u66b4\u51fb\u7279\u6548\u6d41"
+    },
+    {
+      "champion": "maokai",
+      "augment": "Protein Shake",
+      "tier": "S",
+      "ref": "curated:maokai-\u751f\u547d\u4e4b\u6811"
+    },
+    {
+      "champion": "katarina",
+      "augment": "Protein Shake",
+      "tier": "S",
+      "ref": "curated:katarina-\u86cb\u767d\u7c89\u677f\u773c\u82b1\u5251\u6d41"
+    },
+    {
+      "champion": "garen",
+      "augment": "Transmute: Prismatic",
+      "tier": "S",
+      "ref": "curated:garen-\u953b\u4f53\u9640\u87ba\u6d41"
+    },
+    {
+      "champion": "briar",
+      "augment": "Upgrade Collector",
+      "tier": "S",
+      "ref": "curated:briar-\u5343\u91cc\u8ffd\u6740\u8d1d\u857e\u4e9a"
+    },
+    {
+      "champion": "alistar",
+      "augment": "Quest: Steel Your Heart",
+      "tier": "S",
+      "ref": "curated:alistar-\u725b\u9b54\u738b"
+    },
+    {
+      "champion": "ezreal",
+      "augment": "From Beginning To End",
+      "tier": "S",
+      "ref": "curated:ezreal-\u589e\u4f24\u6d41"
+    },
+    {
+      "champion": "gwen",
+      "augment": "Marksmage",
+      "tier": "S",
+      "ref": "curated:gwen-\u795e\u5c04\u6cd5\u5e08\u5438\u8840\u526a\u5200\u59b9"
+    },
+    {
+      "champion": "ziggs",
+      "augment": "Cheating",
+      "tier": "S",
+      "ref": "curated:ziggs-\u6247\u5df4\u638c\u56de\u5bb6\u6d41"
+    },
+    {
+      "champion": "yorick",
+      "augment": "Executioner",
+      "tier": "S",
+      "ref": "curated:yorick-\u6398\u5893\u56f0\u4eba\u5403\u7a7a\u6295"
+    },
+    {
+      "champion": "rell",
+      "augment": "Courage of the Colossus",
+      "tier": "S",
+      "ref": "curated:rell-\u5de8\u50cf\u6076\u8da3\u5473\u62a4\u76fe\u56de\u8840\u6d41"
+    },
+    {
+      "champion": "ezreal",
+      "augment": "Draw Your Sword",
+      "tier": "S",
+      "ref": "curated:ezreal-\u624b\u611f\u597d"
+    },
+    {
+      "champion": "talon",
+      "augment": "Transmute: Chaos",
+      "tier": "S",
+      "ref": "curated:talon-\u534a\u8840\u79d2\u6740\u6709\u59cb\u6709\u7ec8bug"
+    },
+    {
+      "champion": "udyr",
+      "augment": "Clown College",
+      "tier": "S",
+      "ref": "curated:udyr-\u5766\u514b\u6740\u624b"
+    },
+    {
+      "champion": "fiddlesticks",
+      "augment": "Quest: Wooglet's Witchcap",
+      "tier": "S",
+      "ref": "curated:fiddlesticks-1q\u79d2\u4eba\u6d4120"
+    },
+    {
+      "champion": "trundle",
+      "augment": "Cruelty",
+      "tier": "S",
+      "ref": "curated:trundle-\u67f1\u5929\u5e1d"
+    },
+    {
+      "champion": "amumu",
+      "augment": "Phenomenal Evil",
+      "tier": "S",
+      "ref": "curated:amumu-\u4e00\u6253\u4e94"
+    },
+    {
+      "champion": "draven",
+      "augment": "Jeweled Gauntlet",
+      "tier": "S",
+      "ref": "curated:draven-\u4e00\u5200\u6d41"
+    },
+    {
+      "champion": "tryndamere",
+      "augment": "Dual Wield",
+      "tier": "S",
+      "ref": "curated:tryndamere-\u65e0\u654c\u6d41"
+    },
+    {
+      "champion": "katarina",
+      "augment": "Void Rift",
+      "tier": "S",
+      "ref": "curated:katarina-\u6495\u88c2"
+    },
+    {
+      "champion": "pantheon",
+      "augment": "Vulnerability",
+      "tier": "S",
+      "ref": "curated:pantheon-\u7206\u6740\u6d41\u6f58\u68ee"
+    },
+    {
+      "champion": "aphelios",
+      "augment": "Draw Your Sword",
+      "tier": "S",
+      "ref": "curated:aphelios-\u4eae\u5251\u6708\u7537-2"
+    },
+    {
+      "champion": "azir",
+      "augment": "ADAPt",
+      "tier": "S",
+      "ref": "curated:azir-\u9b54\u6cd5"
+    },
+    {
+      "champion": "trundle",
+      "augment": "Scopiest Weapons",
+      "tier": "S",
+      "ref": "curated:trundle-\u5c0f\u51b0\u68cd"
+    },
+    {
+      "champion": "trundle",
+      "augment": "Scopier Weapons",
+      "tier": "S",
+      "ref": "curated:trundle-\u5c0f\u51b0\u68cd-2"
+    },
+    {
+      "champion": "trundle",
+      "augment": "Purist - Caster",
+      "tier": "S",
+      "ref": "curated:trundle-\u67f1\u5929\u5e1d-2"
+    },
+    {
+      "champion": "garen",
+      "augment": "Slow And Steady",
+      "tier": "S",
+      "ref": "curated:garen-\u53cc\u6297-\u5343\u653b\u76d6\u4f26"
+    },
+    {
+      "champion": "katarina",
+      "augment": "Slow And Steady",
+      "tier": "S",
+      "ref": "curated:katarina-\u901a\u7528\u7b26\u6587"
+    },
+    {
+      "champion": "kaisa",
+      "augment": "Critical Healing",
+      "tier": "S",
+      "ref": "curated:kaisa-\u96f7\u9706\u6218\u673a\u5361\u838e"
+    },
+    {
+      "champion": "hecarim",
+      "augment": "Jeweled Gauntlet",
+      "tier": "S",
+      "ref": "curated:hecarim-\u6cd5\u66b4\u65e0\u654c\u7535\u98ce\u6247"
+    },
+    {
+      "champion": "soraka",
+      "augment": "Empowered By The Faithful",
+      "tier": "S",
+      "ref": "curated:soraka-\u5b66\u533b\u6551\u4e0d\u4e86\u732a\u961f\u53cb"
+    },
+    {
+      "champion": "shyvana",
+      "augment": "Ethereal Weapon",
+      "tier": "S",
+      "ref": "curated:shyvana-\u865a\u5e7b\u5de8\u4e5d\u9f99\u5973"
+    },
+    {
+      "champion": "rammus",
+      "augment": "Gash",
+      "tier": "S",
+      "ref": "curated:rammus-\u865a\u5e7b\u6b66\u5668\u9f99\u9f9f\u5168\u81ea\u52a8\u53e0\u94a2"
+    },
+    {
+      "champion": "swain",
+      "augment": "Dropkick",
+      "tier": "S",
+      "ref": "curated:swain-\u4e4c\u9e26\u5927\u5e1d"
+    },
+    {
+      "champion": "urgot",
+      "augment": "Tap Dancer",
+      "tier": "S",
+      "ref": "curated:urgot-\u901f\u5ea6\u4e0e\u6fc0\u60c5"
+    },
+    {
+      "champion": "kayn",
+      "augment": "Jeweled Gauntlet",
+      "tier": "S",
+      "ref": "curated:kayn-jeweled_gauntlet"
+    },
+    {
+      "champion": "jax",
+      "augment": "Gash",
+      "tier": "S",
+      "ref": "curated:jax-gash"
+    },
+    {
+      "champion": "hecarim",
+      "augment": "Devil on Your Shoulder",
+      "tier": "S",
+      "ref": "curated:hecarim-devil_on_your_shoulder"
+    },
+    {
+      "champion": "tryndamere",
+      "augment": "Ultimate Revolution",
+      "tier": "S",
+      "ref": "curated:tryndamere-ultimate_revolution"
+    },
+    {
+      "champion": "morgana",
+      "augment": "Skilled Sniper",
+      "tier": "A",
+      "ref": "curated:morgana-skilled-sniper"
+    },
+    {
+      "champion": "morgana",
+      "augment": "Infernal Conduit",
+      "tier": "A",
+      "ref": "curated:morgana-infernal-conduit"
+    },
+    {
+      "champion": "lillia",
+      "augment": "Ethereal Weapon",
+      "tier": "A",
+      "ref": "curated:lillia-\u5fc3\u4e4b\u94a2\u865a\u5e7b\u6b66\u5668\u6d41"
+    },
+    {
+      "champion": "lillia",
+      "augment": "ADAPt",
+      "tier": "A",
+      "ref": "curated:lillia-\u6714\u6781\u4e4b\u77db\u7269\u8f6c\u6cd5\u6d41"
+    },
+    {
+      "champion": "morgana",
+      "augment": "Ice Cold",
+      "tier": "A",
+      "ref": "curated:morgana-\u591a\u529f\u80fd\u83ab\u7518\u5a1c"
+    },
+    {
+      "champion": "vayne",
+      "augment": "Tank It Or Leave It",
+      "tier": "A",
+      "ref": "curated:vayne-\u66b4\u51fb\u6d41"
+    },
+    {
+      "champion": "graves",
+      "augment": "Marksmage",
+      "tier": "A",
+      "ref": "curated:graves-\u5929\u6e56"
+    },
+    {
+      "champion": "vayne",
+      "augment": "Protein Shake",
+      "tier": "A",
+      "ref": "curated:vayne-\u653b\u901f\u6cbb\u7597"
+    },
+    {
+      "champion": "yasuo",
+      "augment": "Courage of the Colossus",
+      "tier": "A",
+      "ref": "curated:yasuo-\u8089\u5230\u7206\u70b8-\u4ec5\u4f9b\u5a31\u4e50"
+    },
+    {
+      "champion": "drmundo",
+      "augment": "Heavy Hitter",
+      "tier": "A",
+      "ref": "curated:drmundo-heavy-hitter"
+    },
+    {
+      "champion": "fiddlesticks",
+      "augment": "Upgrade Zhonya's",
+      "tier": "A",
+      "ref": "curated:fiddlesticks-upgrade-zhonyas"
+    },
+    {
+      "champion": "zed",
+      "augment": "Ethereal Weapon",
+      "tier": "A",
+      "ref": "curated:zed-ethereal-weapon"
+    },
+    {
+      "champion": "braum",
+      "augment": "Fan The Hammer",
+      "tier": "A",
+      "ref": "curated:braum-fan-the-hammer"
+    },
+    {
+      "champion": "xinzhao",
+      "augment": "Master of Duality",
+      "tier": "A",
+      "ref": "curated:xinzhao-master-of-duality"
+    },
+    {
+      "champion": "karthus",
+      "augment": "Eureka",
+      "tier": "A",
+      "ref": "curated:karthus-eureka"
+    },
+    {
+      "champion": "malzahar",
+      "augment": "Ethereal Weapon",
+      "tier": "A",
+      "ref": "curated:malzahar-ethereal-weapon"
+    },
+    {
+      "champion": "gnar",
+      "augment": "Fan The Hammer",
+      "tier": "A",
+      "ref": "curated:gnar-fan-the-hammer"
+    },
+    {
+      "champion": "sion",
+      "augment": "Fan The Hammer",
+      "tier": "A",
+      "ref": "curated:sion-fan-the-hammer"
+    },
+    {
+      "champion": "zaahen",
+      "augment": "Fan The Hammer",
+      "tier": "A",
+      "ref": "curated:zaahen-fan-the-hammer"
+    },
+    {
+      "champion": "quinn",
+      "augment": "Outlaw's Grit",
+      "tier": "A",
+      "ref": "curated:quinn-outlaws-grit"
+    },
+    {
+      "champion": "kalista",
+      "augment": "Jeweled Gauntlet",
+      "tier": "A",
+      "ref": "curated:kalista-\u6cd5\u7206ap\u6ed1\u677f\u978b"
+    },
+    {
+      "champion": "tahmkench",
+      "augment": "Fan The Hammer",
+      "tier": "A",
+      "ref": "curated:tahmkench-\u8fde\u62e8\u51fb\u9524ap\u6d41"
+    },
+    {
+      "champion": "rammus",
+      "augment": "Grandma's Chili Oil",
+      "tier": "A",
+      "ref": "curated:rammus-\u9f99\u9f9f\u8fa3\u6912\u6cb9\u53cd\u7532\u4e0d\u6b7b\u6218\u795e"
+    },
+    {
+      "champion": "ryze",
+      "augment": "Tank Engine",
+      "tier": "A",
+      "ref": "curated:ryze-tank-engine"
+    },
+    {
+      "champion": "sett",
+      "augment": "Quantum Computing",
+      "tier": "A",
+      "ref": "curated:sett-quantum-computing"
+    },
+    {
+      "champion": "lucian",
+      "augment": "Bread And Jam",
+      "tier": "A",
+      "ref": "curated:lucian-ap\u6d88\u8017\u6d41"
+    },
+    {
+      "champion": "ashe",
+      "augment": "Infinite Recursion",
+      "tier": "A",
+      "ref": "curated:ashe-\u65e0\u9650\u5927\u62db\u6d41"
+    },
+    {
+      "champion": "fizz",
+      "augment": "Quest: Steel Your Heart",
+      "tier": "A",
+      "ref": "curated:fizz-\u5766\u514b\u7c98\u4eba\u6d41"
+    },
+    {
+      "champion": "drmundo",
+      "augment": "Vulnerability",
+      "tier": "A",
+      "ref": "curated:drmundo-\u6613\u635f\u8089\u88c5\u66b4\u51fb\u6d41"
+    },
+    {
+      "champion": "missfortune",
+      "augment": "Eureka",
+      "tier": "A",
+      "ref": "curated:missfortune-ap\u5973\u67aa"
+    },
+    {
+      "champion": "aurelionsol",
+      "augment": "Mind to Matter",
+      "tier": "A",
+      "ref": "curated:aurelionsol-q\u6280\u80fd\u65e0\u9650\u5237\u65b0\u6d41\u5927\u6cd5\u5e08bug"
+    },
+    {
+      "champion": "yuumi",
+      "augment": "Circle of Death",
       "tier": "A",
       "ref": "curated:yuumi-circle-of-death"
     },
     {
-      "champion": "zac",
-      "augment": "circle of death",
-      "tier": "S",
-      "ref": "curated:zac-circle-of-death"
+      "champion": "garen",
+      "augment": "Blade Waltz",
+      "tier": "A",
+      "ref": "curated:garen-blade-waltz"
     },
     {
-      "champion": "zyra",
-      "augment": "ethereal weapon",
-      "tier": "S",
-      "ref": "curated:zyra-ethereal-weapon"
+      "champion": "illaoi",
+      "augment": "Ethereal Weapon",
+      "tier": "A",
+      "ref": "curated:illaoi-ethereal-weapon"
+    },
+    {
+      "champion": "katarina",
+      "augment": "Master of Duality",
+      "tier": "A",
+      "ref": "curated:katarina-master-of-duality"
+    },
+    {
+      "champion": "zoe",
+      "augment": "Biggest Snowball Ever",
+      "tier": "A",
+      "ref": "curated:zoe-biggest-snowball-ever"
+    },
+    {
+      "champion": "kayle",
+      "augment": "Marksmage",
+      "tier": "A",
+      "ref": "curated:kayle-marksmage"
+    },
+    {
+      "champion": "swain",
+      "augment": "Cruelty",
+      "tier": "A",
+      "ref": "curated:swain-cruelty"
+    },
+    {
+      "champion": "aatrox",
+      "augment": "Slap Around",
+      "tier": "A",
+      "ref": "curated:aatrox-slap-around"
+    },
+    {
+      "champion": "rammus",
+      "augment": "Ethereal Weapon",
+      "tier": "A",
+      "ref": "curated:rammus-ethereal-weapon"
+    },
+    {
+      "champion": "jarvaniv",
+      "augment": "Clown College",
+      "tier": "A",
+      "ref": "curated:jarvaniv-clown-college"
+    },
+    {
+      "champion": "hwei",
+      "augment": "Cruelty",
+      "tier": "A",
+      "ref": "curated:hwei-cruelty"
+    },
+    {
+      "champion": "sivir",
+      "augment": "Skilled Sniper",
+      "tier": "A",
+      "ref": "curated:sivir-skilled-sniper"
+    },
+    {
+      "champion": "senna",
+      "augment": "Ethereal Weapon",
+      "tier": "A",
+      "ref": "curated:senna-ethereal-weapon"
+    },
+    {
+      "champion": "corki",
+      "augment": "Vulnerability",
+      "tier": "A",
+      "ref": "curated:corki-vulnerability"
+    },
+    {
+      "champion": "kennen",
+      "augment": "Clown College",
+      "tier": "A",
+      "ref": "curated:kennen-clown-college"
+    },
+    {
+      "champion": "katarina",
+      "augment": "Deft",
+      "tier": "A",
+      "ref": "curated:katarina-deft"
+    },
+    {
+      "champion": "udyr",
+      "augment": "Ethereal Weapon",
+      "tier": "A",
+      "ref": "curated:udyr-ethereal-weapon"
+    },
+    {
+      "champion": "kalista",
+      "augment": "Shadow Runner",
+      "tier": "A",
+      "ref": "curated:kalista-shadow-runner"
+    },
+    {
+      "champion": "udyr",
+      "augment": "Scopiest Weapons",
+      "tier": "A",
+      "ref": "curated:udyr-scopiest-weapons"
+    },
+    {
+      "champion": "zoe",
+      "augment": "Snowball Upgrade",
+      "tier": "A",
+      "ref": "curated:zoe-snowball-upgrade"
+    },
+    {
+      "champion": "zeri",
+      "augment": "Upgrade Infinity Edge",
+      "tier": "A",
+      "ref": "curated:zeri-upgrade-infinity-edge"
+    },
+    {
+      "champion": "leblanc",
+      "augment": "Quantum Computing",
+      "tier": "A",
+      "ref": "curated:leblanc-quantum-computing"
+    },
+    {
+      "champion": "kayn",
+      "augment": "Quantum Computing",
+      "tier": "A",
+      "ref": "curated:kayn-quantum-computing"
+    },
+    {
+      "champion": "fiddlesticks",
+      "augment": "Clown College",
+      "tier": "A",
+      "ref": "curated:fiddlesticks-clown-college"
+    },
+    {
+      "champion": "diana",
+      "augment": "Ethereal Weapon",
+      "tier": "A",
+      "ref": "curated:diana-ethereal-weapon"
+    },
+    {
+      "champion": "shaco",
+      "augment": "Back To Basics",
+      "tier": "A",
+      "ref": "curated:shaco-back-to-basics"
+    },
+    {
+      "champion": "teemo",
+      "augment": "Marksmage",
+      "tier": "A",
+      "ref": "curated:teemo-marksmage"
+    },
+    {
+      "champion": "twitch",
+      "augment": "Marksmage",
+      "tier": "A",
+      "ref": "curated:twitch-marksmage"
+    },
+    {
+      "champion": "sylas",
+      "augment": "Final Form",
+      "tier": "A",
+      "ref": "curated:sylas-final-form"
+    },
+    {
+      "champion": "talon",
+      "augment": "Ethereal Weapon",
+      "tier": "A",
+      "ref": "curated:talon-ethereal-weapon"
+    },
+    {
+      "champion": "illaoi",
+      "augment": "Glass Cannon",
+      "tier": "A",
+      "ref": "curated:illaoi-glass-cannon"
+    },
+    {
+      "champion": "zeri",
+      "augment": "Fey Magic",
+      "tier": "A",
+      "ref": "curated:zeri-fey-magic"
+    },
+    {
+      "champion": "annie",
+      "augment": "It's Killing Time",
+      "tier": "A",
+      "ref": "curated:annie-its-killing-time"
+    },
+    {
+      "champion": "leblanc",
+      "augment": "Dashing",
+      "tier": "A",
+      "ref": "curated:leblanc-dashing"
+    },
+    {
+      "champion": "ksante",
+      "augment": "Fey Magic",
+      "tier": "A",
+      "ref": "curated:ksante-fey-magic"
+    },
+    {
+      "champion": "braum",
+      "augment": "Blade Waltz",
+      "tier": "A",
+      "ref": "curated:braum-blade-waltz"
+    },
+    {
+      "champion": "veigar",
+      "augment": "OrbitalLaser",
+      "tier": "A",
+      "ref": "curated:veigar-orbitallaser"
+    },
+    {
+      "champion": "gangplank",
+      "augment": "Ethereal Weapon",
+      "tier": "A",
+      "ref": "curated:gangplank-ethereal-weapon"
+    },
+    {
+      "champion": "tryndamere",
+      "augment": "Master of Duality",
+      "tier": "A",
+      "ref": "curated:tryndamere-master-of-duality"
+    },
+    {
+      "champion": "pantheon",
+      "augment": "Quest: Steel Your Heart",
+      "tier": "A",
+      "ref": "curated:pantheon-quest-steel-your-heart"
+    },
+    {
+      "champion": "shaco",
+      "augment": "Quantum Computing",
+      "tier": "A",
+      "ref": "curated:shaco-quantum-computing"
+    },
+    {
+      "champion": "shaco",
+      "augment": "Don't Blink",
+      "tier": "A",
+      "ref": "curated:shaco-dont-blink"
+    },
+    {
+      "champion": "shaco",
+      "augment": "Vampirism",
+      "tier": "A",
+      "ref": "curated:shaco-vampirism"
+    },
+    {
+      "champion": "vladimir",
+      "augment": "Bread And Jam",
+      "tier": "A",
+      "ref": "curated:vladimir-bread-and-jam"
+    },
+    {
+      "champion": "vladimir",
+      "augment": "Recursion",
+      "tier": "A",
+      "ref": "curated:vladimir-recursion"
+    },
+    {
+      "champion": "zaahen",
+      "augment": "OrbitalLaser",
+      "tier": "A",
+      "ref": "curated:zaahen-orbitallaser"
+    },
+    {
+      "champion": "janna",
+      "augment": "Skilled Sniper",
+      "tier": "A",
+      "ref": "curated:janna-skilled-sniper"
+    },
+    {
+      "champion": "senna",
+      "augment": "Draw Your Sword",
+      "tier": "A",
+      "ref": "curated:senna-draw-your-sword"
+    },
+    {
+      "champion": "pantheon",
+      "augment": "Quantum Computing",
+      "tier": "A",
+      "ref": "curated:pantheon-\u7206\u6740\u6d41\u6f58\u68ee\u91cf\u5b50\u8ba1\u7b97\u56de\u5f52\u57fa\u672c\u529f\u88c1\u51b3\u4f7f"
+    },
+    {
+      "champion": "zaahen",
+      "augment": "Ultimate Revolution",
+      "tier": "A",
+      "ref": "curated:zaahen-\u56e2\u6218\u4e09\u8fde\u5927\u62db\u6d41bug"
+    },
+    {
+      "champion": "sion",
+      "augment": "Back To Basics",
+      "tier": "A",
+      "ref": "curated:sion-\u57fa\u672c\u529f\u585e\u6069"
+    },
+    {
+      "champion": "rengar",
+      "augment": "Circle of Death",
+      "tier": "A",
+      "ref": "curated:rengar-\u6b7b\u4ea1\u4e4b\u73afbug\u6d41"
+    },
+    {
+      "champion": "udyr",
+      "augment": "Quest: Steel Your Heart",
+      "tier": "A",
+      "ref": "curated:udyr-\u5fc3\u4e4b\u94a2\u53cc\u4fee\u6d41"
+    },
+    {
+      "champion": "trundle",
+      "augment": "Infinite Recursion",
+      "tier": "A",
+      "ref": "curated:trundle-\u65e0\u9650\u67f1\u5b50\u6d41\u5de8\u9b54"
+    },
+    {
+      "champion": "sivir",
+      "augment": "Erosion",
+      "tier": "A",
+      "ref": "curated:sivir-\u6700\u56e2\u961f\u7684\u5e0c\u7ef4\u5c14"
+    },
+    {
+      "champion": "zilean",
+      "augment": "Ultimate Revolution",
+      "tier": "A",
+      "ref": "curated:zilean-\u5957\u5a03\u6c38\u751f\u6d41bug"
+    },
+    {
+      "champion": "nocturne",
+      "augment": "Quantum Computing",
+      "tier": "A",
+      "ref": "curated:nocturne-\u534a\u8089\u653b\u901f\u6218\u58eb\u6d41"
+    },
+    {
+      "champion": "senna",
+      "augment": "Scoped Weapons",
+      "tier": "A",
+      "ref": "curated:senna-\u671b\u8fdc\u955c\u8d5b\u7eb3"
+    },
+    {
+      "champion": "smolder",
+      "augment": "Jeweled Gauntlet",
+      "tier": "A",
+      "ref": "curated:smolder-\u66b4\u51fb\u6d41\u5c0f\u706b\u9f99"
+    },
+    {
+      "champion": "kennen",
+      "augment": "ADAPt",
+      "tier": "A",
+      "ref": "curated:kennen-\u7269\u8f6c\u6cd5\u51ef\u5357"
+    },
+    {
+      "champion": "twitch",
+      "augment": "Magic Missile",
+      "tier": "A",
+      "ref": "curated:twitch-\u80f6\u7c98\u6298\u78e8\u6d41"
+    },
+    {
+      "champion": "ivern",
+      "augment": "Protein Shake",
+      "tier": "A",
+      "ref": "curated:ivern-\u86cb\u767d\u7c89\u82b1\u5251\u5976\u76fe\u6d41\u5c0f\u83ca"
+    },
+    {
+      "champion": "blitzcrank",
+      "augment": "Clown College",
+      "tier": "A",
+      "ref": "curated:blitzcrank-ap\u6838\u5f39\u6d41"
+    },
+    {
+      "champion": "blitzcrank",
+      "augment": "Executioner",
+      "tier": "A",
+      "ref": "curated:blitzcrank-\u88c1\u51b3\u4f7f\u6293\u5a03\u5a03\u673a"
+    },
+    {
+      "champion": "janna",
+      "augment": "Circle of Death",
+      "tier": "A",
+      "ref": "curated:janna-\u6b7b\u4ea1\u4e4b\u73af\u98ce\u5973"
+    },
+    {
+      "champion": "thresh",
+      "augment": "Marksmage",
+      "tier": "A",
+      "ref": "curated:thresh-\u795e\u5c04\u6cd5\u5e08\u653b\u901f\u6d41"
+    },
+    {
+      "champion": "pyke",
+      "augment": "Shrink Engine",
+      "tier": "A",
+      "ref": "curated:pyke-\u53e0\u53e0\u4e50\u6d3e\u514b"
+    },
+    {
+      "champion": "volibear",
+      "augment": "Deft",
+      "tier": "A",
+      "ref": "curated:volibear-\u5c11\u524d\u6392\u7535\u5200\u73a9\u6cd5"
+    },
+    {
+      "champion": "leblanc",
+      "augment": "Buff Buddies",
+      "tier": "A",
+      "ref": "curated:leblanc-\u5927\u6cd5\u5e08\u6eda\u952e\u76d8\u6d41"
+    },
+    {
+      "champion": "kaisa",
+      "augment": "Marksmage",
+      "tier": "A",
+      "ref": "curated:kaisa-\u7269\u6cd5\u53cc\u4fee\u6d41"
+    },
+    {
+      "champion": "lissandra",
+      "augment": "Void Rift",
+      "tier": "A",
+      "ref": "curated:lissandra-\u771f\u865a\u7a7a\u5973\u5deb\u6d41"
+    },
+    {
+      "champion": "mel",
+      "augment": "Executioner",
+      "tier": "A",
+      "ref": "curated:mel-\u88c1\u51b3\u6885\u5c14"
+    },
+    {
+      "champion": "amumu",
+      "augment": "Goliath",
+      "tier": "A",
+      "ref": "curated:amumu-\u653b\u9632\u7686\u5907"
+    },
+    {
+      "champion": "yasuo",
+      "augment": "Shadow Runner",
+      "tier": "B",
+      "ref": "curated:yasuo-shadow-runner"
+    },
+    {
+      "champion": "vayne",
+      "augment": "Ethereal Weapon",
+      "tier": "B",
+      "ref": "curated:vayne-ethereal-weapon"
+    },
+    {
+      "champion": "seraphine",
+      "augment": "MountainSoul",
+      "tier": "B",
+      "ref": "curated:seraphine-mountainsoul"
+    },
+    {
+      "champion": "masteryi",
+      "augment": "Circle of Death",
+      "tier": "B",
+      "ref": "curated:masteryi-circle-of-death"
+    },
+    {
+      "champion": "masteryi",
+      "augment": "Celestial Body",
+      "tier": "B",
+      "ref": "curated:masteryi-\u5ff5\u7ecf\u6d41\u5251\u5723\u7eaf\u6076\u5fc3\u5a31\u4e50\u73a9\u6cd5\u4e3b\u6253\u4e00\u4e2a\u6740\u4e0d\u6b7b"
+    },
+    {
+      "champion": "shaco",
+      "augment": "Minionmancer",
+      "tier": "B",
+      "ref": "curated:shaco-minionmancer"
+    },
+    {
+      "champion": "blitzcrank",
+      "augment": "Ethereal Weapon",
+      "tier": "B",
+      "ref": "curated:blitzcrank-ethereal-weapon"
+    },
+    {
+      "champion": "darius",
+      "augment": "Typhoon",
+      "tier": "B",
+      "ref": "curated:darius-typhoon"
+    },
+    {
+      "champion": "neeko",
+      "augment": "Master of Duality",
+      "tier": "B",
+      "ref": "curated:neeko-master-of-duality"
+    },
+    {
+      "champion": "neeko",
+      "augment": "Tap Dancer",
+      "tier": "B",
+      "ref": "curated:neeko-tap-dancer"
+    },
+    {
+      "champion": "reksai",
+      "augment": "Scopiest Weapons",
+      "tier": "B",
+      "ref": "curated:reksai-scopiest-weapons"
+    },
+    {
+      "champion": "kayle",
+      "augment": "Infernal Conduit",
+      "tier": "B",
+      "ref": "curated:kayle-infernal-conduit"
+    },
+    {
+      "champion": "aurora",
+      "augment": "OrbitalLaser",
+      "tier": "B",
+      "ref": "curated:aurora-orbitallaser"
+    },
+    {
+      "champion": "aurora",
+      "augment": "Snowball Upgrade",
+      "tier": "B",
+      "ref": "curated:aurora-snowball-upgrade"
+    },
+    {
+      "champion": "galio",
+      "augment": "Executioner",
+      "tier": "B",
+      "ref": "curated:galio-executioner"
+    },
+    {
+      "champion": "fiora",
+      "augment": "Blade Waltz",
+      "tier": "B",
+      "ref": "curated:fiora-blade-waltz"
+    },
+    {
+      "champion": "braum",
+      "augment": "Typhoon",
+      "tier": "B",
+      "ref": "curated:braum-typhoon"
+    },
+    {
+      "champion": "reksai",
+      "augment": "Scopier Weapons",
+      "tier": "B",
+      "ref": "curated:reksai-scopier-weapons"
+    },
+    {
+      "champion": "reksai",
+      "augment": "Scoped Weapons",
+      "tier": "B",
+      "ref": "curated:reksai-scoped-weapons"
+    },
+    {
+      "champion": "skarner",
+      "augment": "Blade Waltz",
+      "tier": "B",
+      "ref": "curated:skarner-blade-waltz"
+    },
+    {
+      "champion": "akali",
+      "augment": "Scopiest Weapons",
+      "tier": "B",
+      "ref": "curated:akali-scopiest-weapons"
+    },
+    {
+      "champion": "anivia",
+      "augment": "Skilled Sniper",
+      "tier": "B",
+      "ref": "curated:anivia-\u4e3bw\u51b0\u5899\u6d41"
+    },
+    {
+      "champion": "sejuani",
+      "augment": "Jeweled Gauntlet",
+      "tier": "B",
+      "ref": "curated:sejuani-\u6838\u5f39\u732a\u59b9"
+    },
+    {
+      "champion": "yuumi",
+      "augment": "Circle of Death",
+      "tier": "B",
+      "ref": "curated:yuumi-\u6b7b\u4ea1\u4e4b\u73af\u732b"
+    },
+    {
+      "champion": "aphelios",
+      "augment": "Draw Your Sword",
+      "tier": "B",
+      "ref": "curated:aphelios-\u4eae\u5251-\u5927\u62db\u7a7f\u7532\u6d41"
+    },
+    {
+      "champion": "darius",
+      "augment": "Fan The Hammer",
+      "tier": "C",
+      "ref": "curated:darius-fan-the-hammer"
+    },
+    {
+      "champion": "drmundo",
+      "augment": "Protein Shake",
+      "tier": "C",
+      "ref": "curated:drmundo-protein-shake"
+    },
+    {
+      "champion": "drmundo",
+      "augment": "Vampirism",
+      "tier": "C",
+      "ref": "curated:drmundo-vampirism"
+    },
+    {
+      "champion": "sejuani",
+      "augment": "Fan The Hammer",
+      "tier": "C",
+      "ref": "curated:sejuani-fan-the-hammer"
+    },
+    {
+      "champion": "ryze",
+      "augment": "Ultimate Revolution",
+      "tier": "C",
+      "ref": "curated:ryze-ultimate-revolution"
+    },
+    {
+      "champion": "caitlyn",
+      "augment": "Twice Thrice",
+      "tier": "C",
+      "ref": "curated:caitlyn-twice-thrice"
+    },
+    {
+      "champion": "twistedfate",
+      "augment": "Ethereal Weapon",
+      "tier": "C",
+      "ref": "curated:twistedfate-ethereal-weapon"
+    },
+    {
+      "champion": "zed",
+      "augment": "Executioner",
+      "tier": "C",
+      "ref": "curated:zed-executioner"
+    },
+    {
+      "champion": "smolder",
+      "augment": "Draw Your Sword",
+      "tier": "C",
+      "ref": "curated:smolder-draw-your-sword"
+    },
+    {
+      "champion": "garen",
+      "augment": "Vampirism",
+      "tier": "C",
+      "ref": "curated:garen-vampirism"
+    },
+    {
+      "champion": "ambessa",
+      "augment": "Ethereal Weapon",
+      "tier": "C",
+      "ref": "curated:ambessa-ethereal-weapon"
+    },
+    {
+      "champion": "ambessa",
+      "augment": "Dashing",
+      "tier": "C",
+      "ref": "curated:ambessa-dashing"
+    },
+    {
+      "champion": "riven",
+      "augment": "Ethereal Weapon",
+      "tier": "C",
+      "ref": "curated:riven-ethereal-weapon"
+    },
+    {
+      "champion": "tahmkench",
+      "augment": "Ethereal Weapon",
+      "tier": "C",
+      "ref": "curated:tahmkench-ethereal-weapon"
+    },
+    {
+      "champion": "shyvana",
+      "augment": "Marksmage",
+      "tier": "C",
+      "ref": "curated:shyvana-marksmage"
+    },
+    {
+      "champion": "thresh",
+      "augment": "Cruelty",
+      "tier": "C",
+      "ref": "curated:thresh-cruelty"
+    },
+    {
+      "champion": "zeri",
+      "augment": "Slow And Steady",
+      "tier": "C",
+      "ref": "curated:zeri-slow-and-steady"
+    },
+    {
+      "champion": "sivir",
+      "augment": "Ethereal Weapon",
+      "tier": "C",
+      "ref": "curated:sivir-ethereal-weapon"
+    },
+    {
+      "champion": "garen",
+      "augment": "Lightning Strikes",
+      "tier": "C",
+      "ref": "curated:garen-lightning-strikes"
+    },
+    {
+      "champion": "bard",
+      "augment": "Ethereal Weapon",
+      "tier": "C",
+      "ref": "curated:bard-ethereal-weapon"
+    },
+    {
+      "champion": "garen",
+      "augment": "Jeweled Gauntlet",
+      "tier": "C",
+      "ref": "curated:garen-jeweled-gauntlet"
+    },
+    {
+      "champion": "garen",
+      "augment": "Deft",
+      "tier": "C",
+      "ref": "curated:garen-deft"
+    },
+    {
+      "champion": "twitch",
+      "augment": "Infernal Conduit",
+      "tier": "C",
+      "ref": "curated:twitch-infernal-conduit"
+    },
+    {
+      "champion": "sivir",
+      "augment": "Vulnerability",
+      "tier": "C",
+      "ref": "curated:sivir-vulnerability"
+    },
+    {
+      "champion": "nunu",
+      "augment": "Overflow",
+      "tier": "C",
+      "ref": "curated:nunu-overflow"
+    },
+    {
+      "champion": "azir",
+      "augment": "Minionmancer",
+      "tier": "C",
+      "ref": "curated:azir-minionmancer"
+    },
+    {
+      "champion": "azir",
+      "augment": "Scopiest Weapons",
+      "tier": "C",
+      "ref": "curated:azir-scopiest-weapons"
+    },
+    {
+      "champion": "samira",
+      "augment": "Vulnerability",
+      "tier": "C",
+      "ref": "curated:samira-vulnerability"
+    },
+    {
+      "champion": "darius",
+      "augment": "Blade Waltz",
+      "tier": "C",
+      "ref": "curated:darius-blade-waltz"
+    },
+    {
+      "champion": "twitch",
+      "augment": "Ethereal Weapon",
+      "tier": "C",
+      "ref": "curated:twitch-ethereal-weapon"
+    },
+    {
+      "champion": "viktor",
+      "augment": "Ethereal Weapon",
+      "tier": "C",
+      "ref": "curated:viktor-ethereal-weapon"
+    },
+    {
+      "champion": "heimerdinger",
+      "augment": "It's Killing Time",
+      "tier": "C",
+      "ref": "curated:heimerdinger-its-killing-time"
+    },
+    {
+      "champion": "neeko",
+      "augment": "From Beginning To End",
+      "tier": "C",
+      "ref": "curated:neeko-from-beginning-to-end"
+    },
+    {
+      "champion": "shaco",
+      "augment": "Slow And Steady",
+      "tier": "C",
+      "ref": "curated:shaco-slow-and-steady"
+    },
+    {
+      "champion": "shaco",
+      "augment": "Poro Blaster",
+      "tier": "C",
+      "ref": "curated:shaco-poro-blaster"
+    },
+    {
+      "champion": "zaahen",
+      "augment": "Snowball Upgrade",
+      "tier": "C",
+      "ref": "curated:zaahen-snowball-upgrade"
+    },
+    {
+      "champion": "mel",
+      "augment": "Infernal Conduit",
+      "tier": "C",
+      "ref": "curated:mel-infernal-conduit"
+    },
+    {
+      "champion": "pyke",
+      "augment": "Dashing",
+      "tier": "C",
+      "ref": "curated:pyke-dashing"
+    },
+    {
+      "champion": "fiddlesticks",
+      "augment": "Light 'em Up!",
+      "tier": "C",
+      "ref": "curated:fiddlesticks-light-em-up!"
+    },
+    {
+      "champion": "katarina",
+      "augment": "Lightning Strikes",
+      "tier": "C",
+      "ref": "curated:katarina-lightning-strikes"
+    },
+    {
+      "champion": "trundle",
+      "augment": "Skilled Sniper",
+      "tier": "C",
+      "ref": "curated:trundle-skilled-sniper"
+    },
+    {
+      "champion": "kayle",
+      "augment": "Draw Your Sword",
+      "tier": "C",
+      "ref": "curated:kayle-draw-your-sword"
+    },
+    {
+      "champion": "neeko",
+      "augment": "Poro Blaster",
+      "tier": "C",
+      "ref": "curated:neeko-poro-blaster"
     }
   ]
 }
