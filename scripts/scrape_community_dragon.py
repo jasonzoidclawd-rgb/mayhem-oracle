@@ -133,8 +133,8 @@ def strip_tags(html: str) -> str:
 
 
 def normalize(s: str) -> str:
-    """Lowercase + remove hyphens/spaces/apostrophes for fuzzy name matching."""
-    return re.sub(r"[-\s'.']", "", s).lower()
+    """Lowercase + remove punctuation for fuzzy name matching."""
+    return re.sub(r"[^a-z0-9]", "", s.lower())
 
 
 def map_damage_type(raw: str) -> str:

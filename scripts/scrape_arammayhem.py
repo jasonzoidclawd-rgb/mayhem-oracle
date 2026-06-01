@@ -51,6 +51,19 @@ def unescape(s: str) -> str:
     return html_module.unescape(s).strip()
 
 
+def normalize_path_slug(s: str) -> str:
+    return unescape(s).strip("/")
+
+
+def normalize_combo_tier(tier: str) -> str:
+    return tier.rstrip("+")
+
+
+def slug_from_href(href: str) -> str | None:
+    m = re.search(r"/(?:build|champions)/([^/?#]+)", href)
+    return normalize_path_slug(m.group(1)) if m else None
+
+
 # ── Tier List ──────────────────────────────────────────────────────────────
 
 def parse_tier_list(html: str) -> list[dict]:
@@ -69,14 +82,14 @@ def parse_tier_list(html: str) -> list[dict]:
 
         # Find all champion cards in this section
         card_pattern = re.compile(
-            r'href="/champions/([^"]+)"[^>]*class="champion-card[^"]*"'
+            r'href="/(?:champions|build)/([^"]+)"[^>]*class="champion-card[^"]*"'
             r'\s+data-search="([^"]+)"\s+data-tags="([^"]*)"\s+title="([^"]*)"'
             r'.*?<img src="([^"]+)"',
             re.DOTALL,
         )
 
         for card in card_pattern.finditer(section_html):
-            slug = card.group(1)
+            slug = normalize_path_slug(card.group(1))
             search_text = card.group(2)
             tags = [t.strip() for t in card.group(3).split(",") if t.strip()]
             title = unescape(card.group(4))
@@ -147,6 +160,51 @@ def parse_augments(html: str) -> list[dict]:
 def parse_combos(html: str) -> list[dict]:
     combos = []
 
+    manifest_m = re.search(r'data-combo-manifest-url="([^"]+)"', html)
+    if manifest_m:
+        manifest = json.loads(fetch(unescape(manifest_m.group(1))))
+        for card in manifest.get("cards", []):
+            champion = slug_from_href(card.get("championHref", "")) or card.get("championId")
+            augment = card.get("augmentName") or card.get("augmentId")
+            combo_ref = card.get("comboRef")
+            tier = card.get("tier")
+            if not (champion and augment and combo_ref and tier):
+                continue
+
+            combos.append({
+                "champion": champion,
+                "augment": unescape(augment),
+                "tier": normalize_combo_tier(tier),
+                "ref": unescape(combo_ref),
+            })
+        if combos:
+            return combos
+
+    article_pattern = re.compile(
+        r'<article\s+class="combo-card[^"]*"\s+'
+        r'data-tier="([^"]+)"\s+'
+        r'data-champion-id="([^"]+)"'
+        r'.*?data-combo-ref="([^"]+)"'
+        r'.*?</article>',
+        re.DOTALL,
+    )
+
+    for m in article_pattern.finditer(html):
+        block = m.group(0)
+        augment_m = re.search(r'<img[^>]+alt="([^"]+)"', block)
+        if not augment_m:
+            continue
+
+        combos.append({
+            "champion": unescape(m.group(2)),
+            "augment": unescape(augment_m.group(1)),
+            "tier": normalize_combo_tier(m.group(1)),
+            "ref": unescape(m.group(3)),
+        })
+
+    if combos:
+        return combos
+
     # <div class="combo-card ..." data-tier="S" data-champion="shaco"
     #      data-augment="executioner" data-combo-ref="curated:shaco-executioner">
     card_pattern = re.compile(
@@ -160,7 +218,7 @@ def parse_combos(html: str) -> list[dict]:
 
     seen = set()
     for m in card_pattern.finditer(html):
-        tier = m.group(1)
+        tier = normalize_combo_tier(m.group(1))
         champion = m.group(2)
         augment = m.group(3)
         combo_ref = m.group(4)
