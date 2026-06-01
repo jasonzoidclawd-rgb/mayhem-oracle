@@ -7,7 +7,7 @@
  *   Armor penetration        — https://wiki.leagueoflegends.com/en-us/Armor_penetration
  *   Lethality                — https://wiki.leagueoflegends.com/en-us/Lethality (1:1 since v14.1)
  */
-import { setRequestLocale } from "next-intl/server";
+import { getTranslations, setRequestLocale } from "next-intl/server";
 import { readFile } from "fs/promises";
 import path from "path";
 import type { Item, ChampionBaseStats, AbilityProfile } from "@/lib/types";
@@ -139,19 +139,6 @@ function tagAugment(aug: Augment): AugmentTag[] {
   return tags;
 }
 
-const TAG_LABEL: Record<AugmentTag, string> = {
-  CRIT:         "Crit",
-  AD:           "Attack Damage",
-  AP:           "Ability Power",
-  ATTACK_SPEED: "Attack Speed",
-  ON_HIT:       "On-Hit",
-  LETHALITY:    "Lethality",
-  MAGIC_PEN:    "Magic Pen",
-  OMNIVAMP:     "Omnivamp",
-  DMG_AMP:      "Dmg Amp",
-  TRUE_DMG:     "True Dmg",
-};
-
 const TAG_STYLE: Record<AugmentTag, string> = {
   CRIT:         "bg-amber-400/15 text-amber-300 border-amber-400/30",
   AD:           "bg-red-400/15 text-red-300 border-red-400/30",
@@ -163,6 +150,20 @@ const TAG_STYLE: Record<AugmentTag, string> = {
   OMNIVAMP:     "bg-rose-400/15 text-rose-300 border-rose-400/30",
   DMG_AMP:      "bg-yellow-400/15 text-yellow-300 border-yellow-400/30",
   TRUE_DMG:     "bg-white/10 text-white/80 border-white/20",
+};
+
+
+const TAG_MESSAGE_KEY: Record<AugmentTag, string> = {
+  CRIT:         "tagCrit",
+  AD:           "tagAD",
+  AP:           "tagAP",
+  ATTACK_SPEED: "tagAttackSpeed",
+  ON_HIT:       "tagOnHit",
+  LETHALITY:    "tagLethality",
+  MAGIC_PEN:    "tagMagicPen",
+  OMNIVAMP:     "tagOmnivamp",
+  DMG_AMP:      "tagDmgAmp",
+  TRUE_DMG:     "tagTrueDmg",
 };
 
 const RARITY_STYLE: Record<string, string> = {
@@ -183,6 +184,7 @@ export default async function DamageSimPage({
 }) {
   const { locale } = await params;
   setRequestLocale(locale);
+  const t = await getTranslations("damageSim");
 
   const [allItems, augments, calcChampions] = await Promise.all([
     loadItems(),
@@ -351,89 +353,89 @@ export default async function DamageSimPage({
 
       {/* ─── Header ─── */}
       <div>
-        <h1 className="text-3xl font-bold">Damage Calculator</h1>
+        <h1 className="text-3xl font-bold">{t("title")}</h1>
         <p className="text-sm text-[var(--color-text-muted)] mt-1">
-          Formula reference · ARAM Mayhem · vs {TARGET_ARMOR} armor / {TARGET_MR} MR baseline
+          {t("subtitle", { armor: TARGET_ARMOR, mr: TARGET_MR })}
         </p>
       </div>
 
       {/* ─── Interactive Calculator ─── */}
       <section>
-        <SectionHeading>Build Calculator</SectionHeading>
+        <SectionHeading>{t("buildCalculator")}</SectionHeading>
         <DamageCalculator champions={calcChampions} items={calcItems} />
       </section>
 
       {/* ─── Formula Reference ─── */}
       <section>
-        <SectionHeading>Formula Reference</SectionHeading>
+        <SectionHeading>{t("formulaReference")}</SectionHeading>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
 
-          <FormulaCard title="Physical Damage Pipeline" source="wiki.leagueoflegends.com/en-us/Damage">
-            <FormulaLine label="Pre-mitigation" formula="Base AD × crit_multiplier" />
-            <FormulaLine label="Armor mitigation" formula="damage × 100 / (100 + effectiveArmor)" />
-            <FormulaLine label="Effective armor" formula="(targetArmor × (1 − %pen)) − lethality" note="min 0" />
+          <FormulaCard title={t("physicalDamagePipeline")} source="wiki.leagueoflegends.com/en-us/Damage">
+            <FormulaLine label={t("preMitigation")} formula="Base AD × crit_multiplier" />
+            <FormulaLine label={t("armorMitigation")} formula="damage × 100 / (100 + effectiveArmor)" />
+            <FormulaLine label={t("effectiveArmor")} formula="(targetArmor × (1 − %pen)) − lethality" note={t("noteMin0")} />
           </FormulaCard>
 
-          <FormulaCard title="Magic Damage Pipeline" source="wiki.leagueoflegends.com/en-us/Damage">
-            <FormulaLine label="Pre-mitigation" formula="AP × ability_ratio" note="ratio varies per spell" />
-            <FormulaLine label="MR mitigation" formula="damage × 100 / (100 + effectiveMR)" />
-            <FormulaLine label="Effective MR" formula="(targetMR × (1 − %magic pen)) − flat magic pen" note="min 0" />
+          <FormulaCard title={t("magicDamagePipeline")} source="wiki.leagueoflegends.com/en-us/Damage">
+            <FormulaLine label={t("preMitigation")} formula="AP × ability_ratio" note={t("noteRatioVaries")} />
+            <FormulaLine label={t("mrMitigation")} formula="damage × 100 / (100 + effectiveMR)" />
+            <FormulaLine label={t("effectiveMr")} formula="(targetMR × (1 − %magic pen)) − flat magic pen" note={t("noteMin0")} />
           </FormulaCard>
 
-          <FormulaCard title="Critical Strike" source="wiki.leagueoflegends.com/en-us/Critical_strike">
-            <FormulaLine label="Auto-attack crit" formula="2.0 + Σ bonus_crit_damage" note="base 200% since v26.01" />
-            <FormulaLine label="Ability crit" formula="1.45 + Σ bonus_crit_damage" note="Jeweled Gauntlet / Vulnerability" />
-            <FormulaLine label="Bonus crit stacking" formula="additive between items/augments" />
-            <FormulaLine label="Average auto damage" formula="AD × (1 + critChance × (critMod − 1))" />
-            <FormulaLine label="Crit chance cap" formula="100%" />
+          <FormulaCard title={t("criticalStrike")} source="wiki.leagueoflegends.com/en-us/Critical_strike">
+            <FormulaLine label={t("autoAttackCrit")} formula="2.0 + Σ bonus_crit_damage" note={t("noteBase200")} />
+            <FormulaLine label={t("abilityCrit")} formula="1.45 + Σ bonus_crit_damage" note={t("noteJeweled")} />
+            <FormulaLine label={t("bonusCritStacking")} formula={t("noteCritAdditive")} />
+            <FormulaLine label={t("averageAutoDamage")} formula="AD × (1 + critChance × (critMod − 1))" />
+            <FormulaLine label={t("critChanceCap")} formula="100%" />
           </FormulaCard>
 
-          <FormulaCard title="Damage Amplification" source="wiki.leagueoflegends.com/en-us/Damage">
-            <FormulaLine label="Stacking rule" formula="multiplicative between all sources" />
-            <FormulaLine label="Formula" formula="total = base × Π (1 + amp_i)" />
-            <FormulaLine label="Example" formula="20% + 20% = 1.20 × 1.20 = 1.44×" note="not 1.40×" />
+          <FormulaCard title={t("damageAmplification")} source="wiki.leagueoflegends.com/en-us/Damage">
+            <FormulaLine label={t("stackingRule")} formula={t("stackingRuleFormula")} />
+            <FormulaLine label={t("formula")} formula="total = base × Π (1 + amp_i)" />
+            <FormulaLine label={t("example")} formula="20% + 20% = 1.20 × 1.20 = 1.44×" note={t("noteNot140")} />
             <div className="mt-1 space-y-1 text-xs text-[var(--color-text-muted)]">
-              <p><span className="text-amber-300">Giant Slayer</span> — scales with target bonus HP (&gt;1750)</p>
-              <p><span className="text-amber-300">Infernal Might</span> — flat AP additive with items, not a multiplier</p>
+              <p><span className="text-amber-300">Giant Slayer</span> — {t("giantSlayerAmp")}</p>
+              <p><span className="text-amber-300">Infernal Might</span> — {t("infernalMightAmp")}</p>
             </div>
           </FormulaCard>
 
-          <FormulaCard title="Armor Penetration Order" source="wiki.leagueoflegends.com/en-us/Armor_penetration">
+          <FormulaCard title={t("armorPenetrationOrder")} source="wiki.leagueoflegends.com/en-us/Armor_penetration">
             <PenOrderList items={[
-              ["1", "Flat armor reduction", "from abilities (can go below 0)"],
-              ["2", "% armor reduction", "e.g. Black Cleaver — stacks multiplicatively"],
-              ["3", "% armor penetration", "e.g. Lord Dominik's — multiplicative"],
-              ["4", "Lethality (flat pen)", "1:1 since v14.1, applied last — min 0"],
+              ["1", t("flatArmorReduction"), t("flatArmorReductionNote")],
+              ["2", t("percentArmorReduction"), t("percentArmorReductionNote")],
+              ["3", t("percentArmorPenetration"), t("percentArmorPenetrationNote")],
+              ["4", t("lethalityFlatPen"), t("lethalityFlatPenNote")],
             ]} />
           </FormulaCard>
 
-          <FormulaCard title="Magic Penetration Order" source="wiki.leagueoflegends.com/en-us/Magic_penetration">
+          <FormulaCard title={t("magicPenetrationOrder")} source="wiki.leagueoflegends.com/en-us/Magic_penetration">
             <PenOrderList items={[
-              ["1", "Flat MR reduction", "from abilities (can go below 0)"],
-              ["2", "% MR reduction", "stacks multiplicatively between sources"],
-              ["3", "% magic penetration", "e.g. Cryptbloom — multiplicative"],
-              ["4", "Flat magic penetration", "e.g. Sorcerer's Shoes — applied last, min 0"],
+              ["1", t("flatMrReduction"), t("flatMrReductionNote")],
+              ["2", t("percentMrReduction"), t("percentMrReductionNote")],
+              ["3", t("percentMagicPenetration"), t("percentMagicPenetrationNote")],
+              ["4", t("flatMagicPenetration"), t("flatMagicPenetrationNote")],
             ]} />
             <p className="text-[10px] text-[var(--color-text-muted)] mt-2 border-t border-[var(--color-border-default)] pt-2">
-              <span className="text-[var(--color-text-secondary)]">Healing:</span>{" "}
-              Life steal → basic attacks only. Omnivamp → all damage (33% for AoE/periodic).
+              <span className="text-[var(--color-text-secondary)]">{t("healing")}:</span>{" "}
+              {t("healingNote")}
             </p>
           </FormulaCard>
 
-          <FormulaCard title="Damage Types" source="wiki.leagueoflegends.com/en-us/Damage">
+          <FormulaCard title={t("damageTypes")} source="wiki.leagueoflegends.com/en-us/Damage">
             <div className="space-y-1.5 text-sm text-[var(--color-text-secondary)]">
-              <p><span className="text-red-300 font-medium">Physical</span> — mitigated by armor</p>
-              <p><span className="text-blue-300 font-medium">Magic</span> — mitigated by magic resistance</p>
-              <p><span className="text-white/80 font-medium">True</span> — bypasses all resistances; still blocked by shields &amp; invulnerability</p>
-              <p><span className="text-purple-300 font-medium">Raw</span> — bypasses resistances AND shields; only blocked by invulnerability</p>
+              <p><span className="text-red-300 font-medium">{t("physical")}</span> — {t("physicalDamageTypeNote")}</p>
+              <p><span className="text-blue-300 font-medium">{t("magic")}</span> — {t("magicDamageTypeNote")}</p>
+              <p><span className="text-white/80 font-medium">{t("trueDamage")}</span> — {t("trueDamageTypeNote")}</p>
+              <p><span className="text-purple-300 font-medium">{t("rawDamage")}</span> — {t("rawDamageTypeNote")}</p>
             </div>
           </FormulaCard>
 
-          <FormulaCard title="Special Interactions" source="wiki.leagueoflegends.com/en-us/Damage">
+          <FormulaCard title={t("specialInteractions")} source="wiki.leagueoflegends.com/en-us/Damage">
             <div className="space-y-2 text-sm text-[var(--color-text-secondary)]">
-              <p><span className="text-amber-300 font-medium">Jeweled Gauntlet / Vulnerability</span> — abilities crit at 145% base (not 200%). Bonus crit damage additive on top.</p>
-              <p><span className="text-amber-300 font-medium">True damage</span> — unaffected by pen or reduction; damage amp DOES apply.</p>
-              <p><span className="text-amber-300 font-medium">Giant Slayer</span> — bonus damage vs high-HP targets; multiplicative with other amp.</p>
+              <p><span className="text-amber-300 font-medium">Jeweled Gauntlet / Vulnerability</span> — {t("jeweledInteractionNote")}</p>
+              <p><span className="text-amber-300 font-medium">{t("trueDamage")}</span> — {t("trueDamageInteractionNote")}</p>
+              <p><span className="text-amber-300 font-medium">Giant Slayer</span> — {t("giantSlayerInteractionNote")}</p>
             </div>
           </FormulaCard>
 
@@ -442,18 +444,18 @@ export default async function DamageSimPage({
 
       {/* ─── Augment Interaction Labels ─── */}
       <section>
-        <SectionHeading>Augment Interactions by Type</SectionHeading>
+        <SectionHeading>{t("augmentInteractionsTitle")}</SectionHeading>
         <p className="text-xs text-[var(--color-text-muted)] mb-4">
-          Parsed from augment descriptions · {tagged.length} augments have damage-relevant effects · sorted by win rate within tier
+          {t("augmentInteractionsSubtitle", { count: tagged.length })}
         </p>
         <div className="space-y-6">
           {TAG_ORDER.filter((tag) => byTag[tag]?.length).map((tag) => (
             <div key={tag}>
               <h3 className="text-xs font-bold uppercase tracking-widest text-[var(--color-text-muted)] mb-2.5 flex items-center gap-2">
                 <span className={`px-2 py-0.5 rounded border text-[10px] ${TAG_STYLE[tag]}`}>
-                  {TAG_LABEL[tag]}
+                  {t(TAG_MESSAGE_KEY[tag])}
                 </span>
-                <span>{byTag[tag]!.length} augments</span>
+                <span>{t("augmentCount", { count: byTag[tag]!.length })}</span>
               </h3>
               <div className="space-y-1.5">
                 {byTag[tag]!.map((aug) => (
@@ -470,9 +472,9 @@ export default async function DamageSimPage({
                       </span>
                     </div>
                     <div className="flex flex-wrap gap-1 shrink-0">
-                      {aug.tags.map((t) => (
-                        <span key={t} className={`text-[10px] px-1.5 py-0.5 rounded border ${TAG_STYLE[t]}`}>
-                          {TAG_LABEL[t]}
+                      {aug.tags.map((tagKey) => (
+                        <span key={tagKey} className={`text-[10px] px-1.5 py-0.5 rounded border ${TAG_STYLE[tagKey]}`}>
+                          {t(TAG_MESSAGE_KEY[tagKey])}
                         </span>
                       ))}
                     </div>

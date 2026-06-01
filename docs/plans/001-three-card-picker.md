@@ -6,7 +6,7 @@ Goal: Build the first MVP slice of an ARAM Mayhem draft/advisor workflow: select
 
 Architecture: Add a small route-level feature using existing static JSON data and existing scoring utilities. Keep runtime logic local/client-side after server data load, but keep client payloads as slim as practical. Include bounded qualitative reroll EV and manual shop-availability timing; do not introduce a database, OCR, overlay integration, account system, or exhaustive/probabilistic reroll simulation in this slice.
 
-Tech Stack: Next.js 15 App Router, TypeScript, React 19, Tailwind CSS v4, next-intl, static JSON from `public/data/`.
+Tech Stack: Next.js 16 App Router, TypeScript, React 19, Tailwind CSS v4, next-intl, static JSON from `public/data/`.
 
 ## Success Criteria
 

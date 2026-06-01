@@ -18,7 +18,7 @@ Primary positioning:
 
 ### 2.1 Mayhem Oracle project findings
 
-The local Mayhem Oracle project is a Next.js 15 PWA using TypeScript, React 19, Tailwind CSS v4, and next-intl. It uses static JSON data under public/data and appears to be designed for Vercel-style static deployment.
+The local Mayhem Oracle project is a Next.js 16 PWA using TypeScript, React 19, Tailwind CSS v4, and next-intl. It uses static JSON data under public/data and appears to be designed for Vercel-style static deployment.
 
 Observed user-facing routes:
 

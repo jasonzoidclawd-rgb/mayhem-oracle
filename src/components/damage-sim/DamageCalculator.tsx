@@ -2,6 +2,7 @@
 
 import { useState, useMemo, useRef, useEffect } from "react";
 import Image from "next/image";
+import { useTranslations } from "next-intl";
 import type { ChampionBaseStats, ItemStats } from "@/lib/types";
 import {
   statsAtLevel,
@@ -61,6 +62,8 @@ export default function DamageCalculator({
   champions: CalcChampion[];
   items: CalcItem[];
 }) {
+  const t = useTranslations("damageSim");
+
   // Attacker state
   const [attackerSlug, setAttackerSlug] = useState("");
   const [attackerLevel, setAttackerLevel] = useState(DEFAULT_LEVEL);
@@ -125,7 +128,7 @@ export default function DamageCalculator({
       {/* ─── Champion Panels ─── */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
         <ChampionPanel
-          label="Attacker"
+          label={t("attacker")}
           champions={champions}
           onSelect={setAttackerSlug}
           level={attackerLevel}
@@ -135,7 +138,7 @@ export default function DamageCalculator({
           combined={combined}
         />
         <ChampionPanel
-          label="Target"
+          label={t("target")}
           champions={champions}
           onSelect={setTargetSlug}
           level={targetLevel}
@@ -150,7 +153,7 @@ export default function DamageCalculator({
         <div className="rounded-xl border border-[var(--color-border-default)] bg-[var(--color-bg-card)]/40 overflow-hidden">
           <div className="px-4 py-2.5 border-b border-[var(--color-border-default)] bg-[var(--color-bg-card)]/60">
             <span className="text-[10px] uppercase tracking-widest text-[var(--color-text-muted)] font-semibold">
-              Abilities
+              {t("abilities")}
             </span>
           </div>
           <div className="flex border-b border-[var(--color-border-default)]">
@@ -186,7 +189,7 @@ export default function DamageCalculator({
                 <h4 className="text-sm font-semibold text-[var(--color-text-primary)] mb-1">
                   {ab.name}
                   <span className="ml-2 text-[10px] text-[var(--color-text-muted)] font-normal uppercase">
-                    {ab.key === "passive" ? "Innate" : ab.key}
+                    {ab.key === "passive" ? t("innate") : ab.key}
                   </span>
                 </h4>
                 <p className="text-xs text-[var(--color-text-secondary)] leading-relaxed">
@@ -202,19 +205,19 @@ export default function DamageCalculator({
       <div className="rounded-xl border border-[var(--color-border-default)] bg-[var(--color-bg-card)]/40 p-4">
         <div className="flex items-center justify-between mb-3">
           <span className="text-[10px] uppercase tracking-widest text-[var(--color-text-muted)] font-semibold">
-            Item Build
+            {t("itemBuild")}
           </span>
           {selectedItems.length > 0 && (
             <div className="flex flex-wrap gap-x-3 gap-y-0.5 text-[10px] text-[var(--color-text-muted)]">
-              {stackedStats.attackDamage ? <span className={STAT_COLORS.ad}>+{stackedStats.attackDamage} AD</span> : null}
-              {stackedStats.abilityPower ? <span className={STAT_COLORS.ap}>+{stackedStats.abilityPower} AP</span> : null}
-              {stackedStats.critChance ? <span className={STAT_COLORS.ad}>+{(stackedStats.critChance * 100).toFixed(0)}% Crit</span> : null}
-              {stackedStats.critDamage ? <span className={STAT_COLORS.ad}>+{(stackedStats.critDamage * 100).toFixed(0)}% CritDmg</span> : null}
-              {stackedStats.lethality ? <span className={STAT_COLORS.physical}>+{stackedStats.lethality} Leth</span> : null}
-              {stackedStats.armorPenPct ? <span className={STAT_COLORS.physical}>{(stackedStats.armorPenPct * 100).toFixed(0)}% ArPen</span> : null}
-              {stackedStats.attackSpeed ? <span className={STAT_COLORS.as}>+{(stackedStats.attackSpeed * 100).toFixed(0)}% AS</span> : null}
-              {stackedStats.magicPenFlat ? <span className={STAT_COLORS.magic}>+{stackedStats.magicPenFlat} MPen</span> : null}
-              {stackedStats.magicPenPct ? <span className={STAT_COLORS.magic}>{(stackedStats.magicPenPct * 100).toFixed(0)}% MPen</span> : null}
+              {stackedStats.attackDamage ? <span className={STAT_COLORS.ad}>+{stackedStats.attackDamage} {t("itemStatAD")}</span> : null}
+              {stackedStats.abilityPower ? <span className={STAT_COLORS.ap}>+{stackedStats.abilityPower} {t("itemStatAP")}</span> : null}
+              {stackedStats.critChance ? <span className={STAT_COLORS.ad}>+{(stackedStats.critChance * 100).toFixed(0)}% {t("itemStatCrit")}</span> : null}
+              {stackedStats.critDamage ? <span className={STAT_COLORS.ad}>+{(stackedStats.critDamage * 100).toFixed(0)}% {t("itemStatCritDmg")}</span> : null}
+              {stackedStats.lethality ? <span className={STAT_COLORS.physical}>+{stackedStats.lethality} {t("itemStatLethality")}</span> : null}
+              {stackedStats.armorPenPct ? <span className={STAT_COLORS.physical}>{(stackedStats.armorPenPct * 100).toFixed(0)}% {t("itemStatArmorPen")}</span> : null}
+              {stackedStats.attackSpeed ? <span className={STAT_COLORS.as}>+{(stackedStats.attackSpeed * 100).toFixed(0)}% {t("itemStatAS")}</span> : null}
+              {stackedStats.magicPenFlat ? <span className={STAT_COLORS.magic}>+{stackedStats.magicPenFlat} {t("itemStatMPen")}</span> : null}
+              {stackedStats.magicPenPct ? <span className={STAT_COLORS.magic}>{(stackedStats.magicPenPct * 100).toFixed(0)}% {t("itemStatMPen")}</span> : null}
             </div>
           )}
         </div>
@@ -234,40 +237,40 @@ export default function DamageCalculator({
       {/* ─── Damage Output ─── */}
       {combined && damage && (
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <DamageCard title="Physical Damage" accent={STAT_COLORS.physical}>
-            <StatLine label="Total AD" value={combined.totalAD.toFixed(1)} color={STAT_COLORS.ad} />
+          <DamageCard title={t("physicalDamage")} accent={STAT_COLORS.physical}>
+            <StatLine label={t("totalAD")} value={combined.totalAD.toFixed(1)} color={STAT_COLORS.ad} />
             <StatLine
               label={`Armor ${damage.targetArmor.toFixed(0)} → ${damage.effectiveArmor.toFixed(1)}`}
               value={`${(damage.armorMult * 100).toFixed(1)}%`}
               small
             />
             <div className="border-t border-[var(--color-border-default)] my-1.5" />
-            <StatLine label="Auto" value={damage.autoPhys.toFixed(1)} bold color={STAT_COLORS.ad} />
+            <StatLine label={t("auto")} value={damage.autoPhys.toFixed(1)} bold color={STAT_COLORS.ad} />
             {combined.critChance > 0 && (
               <>
                 <StatLine
-                  label={`Crit (${(damage.critMult * 100).toFixed(0)}%)`}
+                  label={`${t("crit")} (${(damage.critMult * 100).toFixed(0)}%)`}
                   value={damage.critAutoPhys.toFixed(1)}
                   bold
                   color="text-amber-400"
                 />
                 <StatLine
-                  label={`Avg (${(combined.critChance * 100).toFixed(0)}% crit)`}
+                  label={t("avgCrit", { critChance: (combined.critChance * 100).toFixed(0) })}
                   value={damage.avgAutoPhys.toFixed(1)}
                   bold
                 />
               </>
             )}
             <StatLine
-              label={`DPS (${combined.attackSpeed.toFixed(2)} AS)`}
+              label={t("dps", { attackSpeed: combined.attackSpeed.toFixed(2) })}
               value={damage.dps.toFixed(0)}
               bold
               color="text-[var(--color-neon-primary)]"
             />
           </DamageCard>
 
-          <DamageCard title="Magic Damage" accent={STAT_COLORS.magic}>
-            <StatLine label="Total AP" value={combined.totalAP.toFixed(1)} color={STAT_COLORS.ap} />
+          <DamageCard title={t("magicDamage")} accent={STAT_COLORS.magic}>
+            <StatLine label={t("totalAP")} value={combined.totalAP.toFixed(1)} color={STAT_COLORS.ap} />
             <StatLine
               label={`MR ${damage.targetMR.toFixed(0)} → ${damage.effectiveMR.toFixed(1)}`}
               value={`${(damage.mrMult * 100).toFixed(1)}%`}
@@ -275,40 +278,40 @@ export default function DamageCalculator({
             />
             <div className="border-t border-[var(--color-border-default)] my-1.5" />
             <StatLine
-              label="Magic multiplier"
+              label={t("magicMultiplier")}
               value={`×${damage.mrMult.toFixed(3)}`}
               bold
               color={STAT_COLORS.magic}
             />
             <p className="text-[10px] text-[var(--color-text-muted)] mt-2">
-              Spell damage = base + (ratio × AP) × {(damage.mrMult * 100).toFixed(1)}%
+              {t("spellDamageFormula", { multiplier: (damage.mrMult * 100).toFixed(1) })}
             </p>
           </DamageCard>
 
-          <DamageCard title="Sustain & Utility" accent="text-rose-300">
+          <DamageCard title={t("sustainUtility")} accent="text-rose-300">
             {combined.lifeSteal > 0 && (
               <StatLine
-                label={`Life steal (${(combined.lifeSteal * 100).toFixed(0)}%)`}
-                value={`${(damage.avgAutoPhys * combined.lifeSteal).toFixed(1)}/auto`}
+                label={`${t("lifeSteal")} (${(combined.lifeSteal * 100).toFixed(0)}%)`}
+                value={`${(damage.avgAutoPhys * combined.lifeSteal).toFixed(1)}${t("perAuto")}`}
                 color="text-rose-300"
               />
             )}
             {combined.omnivamp > 0 && (
               <StatLine
-                label={`Omnivamp (${(combined.omnivamp * 100).toFixed(0)}%)`}
-                value={`${(damage.avgAutoPhys * combined.omnivamp).toFixed(1)}/auto`}
+                label={`${t("omnivamp")} (${(combined.omnivamp * 100).toFixed(0)}%)`}
+                value={`${(damage.avgAutoPhys * combined.omnivamp).toFixed(1)}${t("perAuto")}`}
                 color="text-rose-300"
               />
             )}
-            <StatLine label="Attack speed" value={`${combined.attackSpeed.toFixed(3)}/s`} color={STAT_COLORS.as} />
+            <StatLine label={t("attackSpeed")} value={`${combined.attackSpeed.toFixed(3)}/s`} color={STAT_COLORS.as} />
             {combined.critChance > 0 && (
               <StatLine
-                label="Crit chance"
+                label={t("critChance")}
                 value={`${(Math.min(1, combined.critChance) * 100).toFixed(0)}%`}
               />
             )}
             {!combined.lifeSteal && !combined.omnivamp && !combined.critChance && (
-              <p className="text-xs text-[var(--color-text-muted)]">No sustain stats</p>
+              <p className="text-xs text-[var(--color-text-muted)]">{t("noSustainStats")}</p>
             )}
           </DamageCard>
         </div>
@@ -316,7 +319,7 @@ export default function DamageCalculator({
 
       {!attacker && !target && (
         <p className="text-sm text-[var(--color-text-muted)] text-center py-6">
-          Select an attacker and target to calculate damage
+          {t("selectParticipantsPrompt")}
         </p>
       )}
     </div>
@@ -344,6 +347,7 @@ function ChampionPanel({
   stats: ChampionStatsAtLevel | null;
   combined?: { totalAD: number; totalAP: number; attackSpeed: number } | null;
 }) {
+  const t = useTranslations("damageSim");
   const [search, setSearch] = useState("");
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
@@ -370,7 +374,7 @@ function ChampionPanel({
           {label}
         </span>
         <div className="flex items-center gap-2 text-[10px] text-[var(--color-text-muted)]">
-          <span>Lv</span>
+          <span>{t("levelAbbr")}</span>
           <input
             type="range"
             min={1}
@@ -420,7 +424,7 @@ function ChampionPanel({
                     onSelect("");
                   }
                 }}
-                placeholder="Select champion..."
+                placeholder={t("selectChampionPlaceholder")}
                 className="w-full px-2 py-1 rounded border border-[var(--color-border-default)] bg-[var(--color-bg-card)] text-sm text-[var(--color-text-primary)] placeholder:text-[var(--color-text-muted)]"
               />
               {open && (
@@ -445,7 +449,7 @@ function ChampionPanel({
                       />
                       <span>{c.name}</span>
                       <span className="ml-auto text-[10px] text-[var(--color-text-muted)]">
-                        {c.attackType} · {c.damageType}
+                        {t(c.attackType)} · {t(c.damageType)}
                       </span>
                     </button>
                   ))}
@@ -463,13 +467,13 @@ function ChampionPanel({
                     ? "border-blue-400/30 text-blue-300 bg-blue-400/10"
                     : "border-purple-400/30 text-purple-300 bg-purple-400/10"
                 }`}>
-                  {champion.damageType}
+                  {t(champion.damageType)}
                 </span>
                 <span className="text-[10px] px-1.5 py-0.5 rounded border border-[var(--color-border-default)] text-[var(--color-text-muted)]">
-                  {champion.attackType}
+                  {t(champion.attackType)}
                 </span>
                 <span className="text-[10px] px-1.5 py-0.5 rounded border border-[var(--color-border-default)] text-[var(--color-text-muted)]">
-                  {champion.baseStats.attackRange} range
+                  {champion.baseStats.attackRange} {t("range")}
                 </span>
               </div>
             )}
@@ -533,6 +537,7 @@ function ItemSlot({
   chosenIds: (number | null)[];
   onSelect: (id: number | null) => void;
 }) {
+  const t = useTranslations("damageSim");
   const [open, setOpen] = useState(false);
   const [search, setSearch] = useState("");
   const ref = useRef<HTMLDivElement>(null);
@@ -586,7 +591,7 @@ function ItemSlot({
             autoFocus
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            placeholder="Search item..."
+            placeholder={t("searchItemPlaceholder")}
             className="w-full px-2 py-1.5 border-b border-[var(--color-border-default)] bg-transparent text-sm text-[var(--color-text-primary)] placeholder:text-[var(--color-text-muted)] outline-none"
           />
           {filtered.map((it) => (

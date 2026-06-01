@@ -13,53 +13,40 @@ const MAYHEM_TAG_STYLES: Record<string, string> = {
   "quest-reward": "rarity-gold",
 };
 
-// Internal category ID → translation key in items namespace (for filter chips)
-const CATEGORY_LABEL_KEY: Record<string, string> = {
-  Damage:      "catDamage",
-  SpellDamage: "catSpellDamage",
-  Health:      "catHealth",
-  Armor:       "catArmor",
-  MagicResist: "catMagicResist",
-  AttackSpeed: "catAttackSpeed",
-  Mana:        "catMana",
-  LifeSteal:   "catLifeSteal",
-  Boots:       "catBoots",
-};
-
-// Friendly display names for all raw Riot API category IDs
-export const CATEGORY_DISPLAY_NAME: Record<string, string> = {
-  Damage:            "Attack Damage",
-  SpellDamage:       "Ability Power",
-  Health:            "Health",
-  Armor:             "Armor",
-  MagicResist:       "Magic Resist",
-  SpellBlock:        "Magic Resist",   // legacy API alias
-  AttackSpeed:       "Attack Speed",
-  Mana:              "Mana",
-  LifeSteal:         "Life Steal",
-  Boots:             "Boots",
-  CriticalStrike:    "Crit Strike",
-  AbilityHaste:      "Ability Haste",
-  CooldownReduction: "Ability Haste",  // legacy API alias
-  HealthRegen:       "Health Regen",
-  ManaRegen:         "Mana Regen",
-  MagicPenetration:  "Magic Pen",
-  ArmorPenetration:  "Armor Pen",
-  NonbootsMovement:  "Move Speed",
-  SpellVamp:         "Omnivamp",
-  OnHit:             "On-Hit",
-  Active:            "Active",
-  Aura:              "Aura",
-  GoldPer:           "Gold Income",
-  Tenacity:          "Tenacity",
-  Slow:              "Slow",
-  Vision:            "Vision",
-  Stealth:           "Stealth",
-  Bilgewater:        "Bilgewater",
-  Consumable:        "Consumable",
-  Trinket:           "Trinket",
-  Jungle:            "Jungle",
-  Lane:              "Lane",
+// Internal category ID → translation key in items namespace (for filter chips and badges)
+export const CATEGORY_LABEL_KEY: Record<string, string> = {
+  Damage:            "catDamage",
+  SpellDamage:       "catSpellDamage",
+  Health:            "catHealth",
+  Armor:             "catArmor",
+  MagicResist:       "catMagicResist",
+  SpellBlock:        "catMagicResist",   // legacy API alias
+  AttackSpeed:       "catAttackSpeed",
+  Mana:              "catMana",
+  LifeSteal:         "catLifeSteal",
+  Boots:             "catBoots",
+  CriticalStrike:    "catCriticalStrike",
+  AbilityHaste:      "catAbilityHaste",
+  CooldownReduction: "catAbilityHaste",  // legacy API alias
+  HealthRegen:       "catHealthRegen",
+  ManaRegen:         "catManaRegen",
+  MagicPenetration:  "catMagicPenetration",
+  ArmorPenetration:  "catArmorPenetration",
+  NonbootsMovement:  "catNonbootsMovement",
+  SpellVamp:         "catSpellVamp",
+  OnHit:             "catOnHit",
+  Active:            "catActive",
+  Aura:              "catAura",
+  GoldPer:           "catGoldPer",
+  Tenacity:          "catTenacity",
+  Slow:              "catSlow",
+  Vision:            "catVision",
+  Stealth:           "catStealth",
+  Bilgewater:        "catBilgewater",
+  Consumable:        "catConsumable",
+  Trinket:           "catTrinket",
+  Jungle:            "catJungle",
+  Lane:              "catLane",
 };
 
 // Some filters cover multiple legacy API names (SpellBlock = MagicResist, etc.)
@@ -433,6 +420,7 @@ function AllItemsTab({
 }
 
 function CatalogItemCard({ item }: { item: Item }) {
+  const t = useTranslations("items");
   const ident = itemIdentifier(item);
 
   const tooltipContent = item.description
@@ -451,11 +439,14 @@ function CatalogItemCard({ item }: { item: Item }) {
       <div className="flex-1 min-w-0">
         <div className="text-sm font-medium truncate">{item.name}</div>
         <div className="text-xs text-amber-400/80 mt-0.5">
-          {item.cost.toLocaleString()} g
+          {item.cost.toLocaleString()} {t("goldUnit")}
         </div>
         {item.categories && item.categories.length > 0 && (
           <div className="flex gap-1 mt-1 flex-wrap">
-            {[...new Set(item.categories.map((c) => CATEGORY_DISPLAY_NAME[c] ?? c))].slice(0, 3).map((label) => (
+            {[...new Set(item.categories.map((c) => {
+              const key = CATEGORY_LABEL_KEY[c];
+              return key ? t(key) : c;
+            }))].slice(0, 3).map((label) => (
               <span key={label} className="text-[9px] px-1 py-0.5 rounded border border-[var(--color-border-default)] text-[var(--color-text-muted)]">
                 {label}
               </span>

@@ -82,7 +82,7 @@ mayhem-oracle/
 
 ## Tech stack
 
-- **Next.js 15** — App Router, SSR, static generation
+- **Next.js 16** — App Router, SSR, static generation
 - **TypeScript** — Type safety everywhere
 - **Tailwind CSS v4** — Utility-first styling
 - **next-intl** — i18n with 5 locales

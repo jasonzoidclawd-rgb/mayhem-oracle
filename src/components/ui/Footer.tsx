@@ -29,7 +29,7 @@ export async function Footer() {
             </span>
             {patch && (
               <span className="rounded-md border border-[var(--color-border-default)] bg-[var(--color-bg-card)] px-2 py-0.5 text-xs">
-                Patch {patch}
+                {t("patchLabel", { patch })}
               </span>
             )}
             <a

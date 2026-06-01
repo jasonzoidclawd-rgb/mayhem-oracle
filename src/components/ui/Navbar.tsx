@@ -16,6 +16,7 @@ const LOCALE_LABELS: Record<Locale, string> = {
 const NAV_ITEMS = [
   { href: "/advisor", key: "advisor" },
   { href: "/tier-list", key: "tierList" },
+  { href: "/champions", key: "champions" },
   { href: "/augments", key: "augments" },
   { href: "/items", key: "items" },
   { href: "/damage-sim", key: "damageSim" },
@@ -84,7 +85,7 @@ export function Navbar() {
           <button
             className="sm:hidden text-[var(--color-text-secondary)]"
             onClick={() => setMenuOpen(!menuOpen)}
-            aria-label="Toggle menu"
+            aria-label={t("toggleMenu")}
           >
             <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
               {menuOpen ? (

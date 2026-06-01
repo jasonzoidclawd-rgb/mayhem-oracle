@@ -7,36 +7,43 @@ import { Link } from "@/i18n/navigation";
 import { routing } from "@/i18n/routing";
 import type { Item } from "@/lib/types";
 
-// Friendly display names for raw Riot API category identifiers
-const CATEGORY_DISPLAY_NAME: Record<string, string> = {
-  Damage:            "Attack Damage",
-  SpellDamage:       "Ability Power",
-  Health:            "Health",
-  Armor:             "Armor",
-  MagicResist:       "Magic Resist",
-  SpellBlock:        "Magic Resist",
-  AttackSpeed:       "Attack Speed",
-  Mana:              "Mana",
-  LifeSteal:         "Life Steal",
-  Boots:             "Boots",
-  CriticalStrike:    "Crit Strike",
-  AbilityHaste:      "Ability Haste",
-  CooldownReduction: "Ability Haste",
-  HealthRegen:       "Health Regen",
-  ManaRegen:         "Mana Regen",
-  MagicPenetration:  "Magic Pen",
-  ArmorPenetration:  "Armor Pen",
-  NonbootsMovement:  "Move Speed",
-  SpellVamp:         "Omnivamp",
-  OnHit:             "On-Hit",
-  Active:            "Active",
-  Aura:              "Aura",
-  GoldPer:           "Gold Income",
-  Tenacity:          "Tenacity",
-  Slow:              "Slow",
-  Vision:            "Vision",
-  Stealth:           "Stealth",
+// Raw Riot API category identifier → translation key in items namespace.
+const CATEGORY_LABEL_KEY: Record<string, string> = {
+  Damage:            "catDamage",
+  SpellDamage:       "catSpellDamage",
+  Health:            "catHealth",
+  Armor:             "catArmor",
+  MagicResist:       "catMagicResist",
+  SpellBlock:        "catMagicResist",
+  AttackSpeed:       "catAttackSpeed",
+  Mana:              "catMana",
+  LifeSteal:         "catLifeSteal",
+  Boots:             "catBoots",
+  CriticalStrike:    "catCriticalStrike",
+  AbilityHaste:      "catAbilityHaste",
+  CooldownReduction: "catAbilityHaste",
+  HealthRegen:       "catHealthRegen",
+  ManaRegen:         "catManaRegen",
+  MagicPenetration:  "catMagicPenetration",
+  ArmorPenetration:  "catArmorPenetration",
+  NonbootsMovement:  "catNonbootsMovement",
+  SpellVamp:         "catSpellVamp",
+  OnHit:             "catOnHit",
+  Active:            "catActive",
+  Aura:              "catAura",
+  GoldPer:           "catGoldPer",
+  Tenacity:          "catTenacity",
+  Slow:              "catSlow",
+  Vision:            "catVision",
+  Stealth:           "catStealth",
+  Bilgewater:        "catBilgewater",
+  Consumable:        "catConsumable",
+  Trinket:           "catTrinket",
+  Jungle:            "catJungle",
+  Lane:              "catLane",
 };
+
+const HIDDEN_CATEGORY_IDS = new Set(["Lane", "Bilgewater", "Trinket", "Consumable", "Jungle"]);
 
 // ─── Types ───────────────────────────────────────────────────────────────────
 
@@ -228,10 +235,17 @@ export default async function ItemDetailPage({
   const hasCleanStats = !!(item.stats && item.stats.trim());
   const { statLines, effectBlocks } = parseDescription(item.description ?? "");
 
-  // Deduplicate category labels (SpellBlock and MagicResist both → "Magic Resist")
+  // Deduplicate category labels (SpellBlock and MagicResist both share the same localized label)
   const categoryLabels = [
-    ...new Set((item.categories ?? []).map((c) => CATEGORY_DISPLAY_NAME[c] ?? c)),
-  ].filter((l) => !["Lane", "Bilgewater", "Trinket", "Consumable", "Jungle"].includes(l));
+    ...new Set(
+      (item.categories ?? [])
+        .filter((c) => !HIDDEN_CATEGORY_IDS.has(c))
+        .map((c) => {
+          const key = CATEGORY_LABEL_KEY[c];
+          return key ? t(key) : c;
+        }),
+    ),
+  ];
 
   const mayhemTagLabel: Record<string, string> = {
     exclusive:      t("exclusive"),

@@ -2,7 +2,7 @@
 
 ## What is this?
 A PWA (Progressive Web App) serving as an ARAM Mayhem decision engine for League of Legends.
-Built with Next.js 15 (App Router), TypeScript, Tailwind CSS v4, and next-intl for i18n.
+Built with Next.js 16 (App Router), TypeScript, Tailwind CSS v4, and next-intl for i18n.
 
 ## Key architecture decisions
 - **PWA over native**: $0 budget means no Apple Dev account ($99/yr). PWA gives iOS (Add to Home Screen) + Windows (browser + MS Store) for free.

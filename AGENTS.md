@@ -4,7 +4,7 @@ Project operating rules for AI agents working in this repository.
 
 ## Project Context
 
-This is a Next.js 15 PWA for League of Legends ARAM Mayhem.
+This is a Next.js 16 PWA for League of Legends ARAM Mayhem.
 
 Stack:
 - Next.js App Router

@@ -211,7 +211,7 @@ export function AugmentsClient({
               return (
                 <SetCard
                   key={name}
-                  synergy={{ setName: name, description: "Hybrid set", topChampions: [] }}
+                  synergy={{ setName: name, description: t("hybridSet"), topChampions: [] }}
                   augments={setAugs}
                   avgWinRate={avgWr}
                   locale={locale}
@@ -286,6 +286,7 @@ export function AugmentsClient({
 // ─── Game Notes ─────────────────────────────────────────────────────────────
 
 function GameNotes() {
+  const t = useTranslations("augments");
   const [open, setOpen] = useState(false);
 
   return (
@@ -294,8 +295,8 @@ function GameNotes() {
         onClick={() => setOpen(!open)}
         className="w-full px-5 py-3 flex items-center gap-3 text-left hover:bg-white/[0.02] transition-colors"
       >
-        <span className="text-base font-bold">Game Notes &amp; Interactions</span>
-        <span className="text-[var(--color-text-muted)] text-xs">wiki-sourced mechanics</span>
+        <span className="text-base font-bold">{t("gameNotesTitle")}</span>
+        <span className="text-[var(--color-text-muted)] text-xs">{t("gameNotesSubtitle")}</span>
         <span className="ml-auto text-[var(--color-text-muted)] text-xl">{open ? "−" : "+"}</span>
       </button>
 
@@ -440,6 +441,7 @@ function AugmentTooltip({
   displayName: string;
   score: number;
 }) {
+  const t = useTranslations("augments");
   const desc = aug.wikiDescription ?? aug.description;
   return (
     <div className="max-w-xs">
@@ -466,8 +468,8 @@ function AugmentTooltip({
         </div>
       )}
       <div className="text-xs mt-2 text-white/50">
-        {aug.win_rate !== null ? `${aug.win_rate?.toFixed(1)}% WR` : ""}{" "}
-        · Oracle {score}
+        {aug.win_rate !== null ? `${aug.win_rate?.toFixed(1)}% ${t("winRateAbbr")}` : ""}{" "}
+        · {t("oracleLabel")} {score}
       </div>
     </div>
   );
@@ -486,6 +488,7 @@ function SetCard({
   avgWinRate: number;
   locale: string;
 }) {
+  const t = useTranslations("augments");
   const [expanded, setExpanded] = useState(true);
 
   const tierGroups = useMemo(() => {
@@ -507,10 +510,10 @@ function SetCard({
           <div className="flex items-center gap-3">
             <h2 className="text-lg font-bold">{synergy.setName}</h2>
             <span className="text-xs text-[var(--color-text-muted)] bg-[var(--color-bg-card)] px-2 py-0.5 rounded">
-              {augments.length} augments
+              {t("augmentCount", { count: augments.length })}
             </span>
             <span className="text-xs text-green-400">
-              {avgWinRate.toFixed(1)}% avg WR
+              {t("averageWinRate", { winRate: avgWinRate.toFixed(1) })}
             </span>
           </div>
           <p className="text-sm text-[var(--color-text-secondary)] mt-1">
@@ -553,7 +556,7 @@ function SetCard({
                       <div className="text-xs font-medium truncate max-w-[120px] flex items-center gap-1">
                         {displayName}
                         {aug.notes && aug.notes.length > 0 && (
-                          <span className="text-amber-400 text-[9px]" title="Has special notes">*</span>
+                          <span className="text-amber-400 text-[9px]" title={t("hasSpecialNotes")}>*</span>
                         )}
                       </div>
                       <div className="flex gap-2 text-[10px] text-[var(--color-text-muted)]">
@@ -586,10 +589,10 @@ function SetCard({
                       </span>
                       <span className="text-xs text-[var(--color-text-muted)]">
                         {tier === "S+"
-                          ? "Godlike"
+                          ? t("tierGodlike")
                           : tier === "S"
-                            ? "Strong"
-                            : "Good"}
+                            ? t("tierStrong")
+                            : t("tierGood")}
                       </span>
                     </div>
                     <div className="flex flex-wrap gap-1.5">
@@ -628,6 +631,7 @@ function StandaloneSection({
   augments: ScoredAugment[];
   locale: string;
 }) {
+  const t = useTranslations("augments");
   const standalone = useMemo(
     () =>
       augments
@@ -642,13 +646,13 @@ function StandaloneSection({
     <div className="glass-card border border-[var(--color-border-default)] overflow-hidden">
       <div className="px-5 py-4">
         <div className="flex items-center gap-3">
-          <h2 className="text-lg font-bold">Standalone Augments</h2>
+          <h2 className="text-lg font-bold">{t("standaloneTitle")}</h2>
           <span className="text-xs text-[var(--color-text-muted)] bg-[var(--color-bg-card)] px-2 py-0.5 rounded">
-            {standalone.length} augments
+            {t("augmentCount", { count: standalone.length })}
           </span>
         </div>
         <p className="text-sm text-[var(--color-text-secondary)] mt-1">
-          Augments not part of any set — evaluated individually
+          {t("standaloneSubtitle")}
         </p>
       </div>
       <div className="px-5 pb-5">
@@ -678,6 +682,7 @@ function AugmentCard({
   locale: string;
   rarityLabel: string;
 }) {
+  const t = useTranslations("augments");
   const rarity = augment.rarity as keyof typeof RARITY_STYLES;
   const styles = RARITY_STYLES[rarity];
   const score = baselineOracleScore(augment);
@@ -715,7 +720,7 @@ function AugmentCard({
           {rarityLabel}
         </span>
         <div className="flex justify-between w-full text-[10px] text-[var(--color-text-muted)] mt-auto">
-          <span>{wr !== null ? `${wr.toFixed(1)}% WR` : "—"}</span>
+          <span>{wr !== null ? `${wr.toFixed(1)}% ${t("winRateAbbr")}` : "—"}</span>
           <span className={`font-bold ${SCORE_COLOR(score)}`}>{score}</span>
         </div>
       </div>

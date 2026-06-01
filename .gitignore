@@ -35,3 +35,7 @@ ruvector.db
 ruvector.db.lock
 agentdb.rvf
 agentdb.rvf.lock
+.claude/
+claude-flow.config.json
+.claude/
+claude-flow.config.json
