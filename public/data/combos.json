@@ -1,6 +1,6 @@
 {
   "patch": "26.11",
-  "scraped_at": "2026-06-01T23:22:15.934651+00:00",
+  "scraped_at": "2026-06-02T23:28:16.509041+00:00",
   "combos": [
     {
       "champion": "vayne",
@@ -75,6 +75,12 @@
       "ref": "curated:aurelionsol-\u53e0\u89d2\u9f99100\u65a9\u6740\u9f99\u738b"
     },
     {
+      "champion": "graves",
+      "augment": "Back To Basics",
+      "tier": "S",
+      "ref": "curated:graves-back-to-basics"
+    },
+    {
       "champion": "tristana",
       "augment": "Fan The Hammer",
       "tier": "S",
@@ -97,12 +103,6 @@
       "augment": "Slow And Steady",
       "tier": "S",
       "ref": "curated:graves-slow-and-steady"
-    },
-    {
-      "champion": "graves",
-      "augment": "Back To Basics",
-      "tier": "S",
-      "ref": "curated:graves-back-to-basics"
     },
     {
       "champion": "brand",
@@ -231,10 +231,22 @@
       "ref": "curated:rell-\u6b8b\u5fcd\u5766\u514b\u6d41"
     },
     {
+      "champion": "lucian",
+      "augment": "Vulnerability",
+      "tier": "S",
+      "ref": "curated:lucian-vulnerability"
+    },
+    {
       "champion": "vayne",
       "augment": "Twice Thrice",
       "tier": "S",
       "ref": "curated:vayne-twice-thrice"
+    },
+    {
+      "champion": "lucian",
+      "augment": "Jeweled Gauntlet",
+      "tier": "S",
+      "ref": "curated:lucian-jeweled-gauntlet"
     },
     {
       "champion": "lillia",
@@ -405,12 +417,6 @@
       "ref": "curated:aurelionsol-ice-cold"
     },
     {
-      "champion": "lucian",
-      "augment": "Vulnerability",
-      "tier": "S",
-      "ref": "curated:lucian-vulnerability"
-    },
-    {
       "champion": "missfortune",
       "augment": "Skilled Sniper",
       "tier": "S",
@@ -429,16 +435,22 @@
       "ref": "curated:ryze-mind-to-matter"
     },
     {
-      "champion": "lucian",
-      "augment": "Jeweled Gauntlet",
-      "tier": "S",
-      "ref": "curated:lucian-jeweled-gauntlet"
-    },
-    {
       "champion": "ryze",
       "augment": "Overflow",
       "tier": "S",
       "ref": "curated:ryze-overflow"
+    },
+    {
+      "champion": "lucian",
+      "augment": "Mystic Punch",
+      "tier": "S",
+      "ref": "curated:lucian-\u6ed1\u677f\u5362\u4ed9"
+    },
+    {
+      "champion": "lucian",
+      "augment": "Mystic Punch",
+      "tier": "S",
+      "ref": "curated:lucian-\u79d8\u672f\u51b2\u62f3\u65e0\u9650\u6280\u80fd"
     },
     {
       "champion": "malzahar",
@@ -591,6 +603,12 @@
       "ref": "curated:fizz-infernal-conduit"
     },
     {
+      "champion": "yunara",
+      "augment": "Master of Duality",
+      "tier": "S",
+      "ref": "curated:yunara-master-of-duality"
+    },
+    {
       "champion": "akshan",
       "augment": "Dual Wield",
       "tier": "S",
@@ -619,12 +637,6 @@
       "augment": "Quest: Wooglet's Witchcap",
       "tier": "S",
       "ref": "curated:missfortune-quest-wooglets-witchcap"
-    },
-    {
-      "champion": "lucian",
-      "augment": "Mystic Punch",
-      "tier": "S",
-      "ref": "curated:lucian-\u6ed1\u677f\u5362\u4ed9"
     },
     {
       "champion": "ashe",
@@ -891,12 +903,6 @@
       "ref": "curated:karthus-\u865a\u7a7a\u6b7b\u6b4c\u5f3a\u5ea6\u7206\u70b8"
     },
     {
-      "champion": "lucian",
-      "augment": "Mystic Punch",
-      "tier": "S",
-      "ref": "curated:lucian-\u79d8\u672f\u51b2\u62f3\u65e0\u9650\u6280\u80fd"
-    },
-    {
       "champion": "zed",
       "augment": "Upgrade Collector",
       "tier": "S",
@@ -963,6 +969,18 @@
       "ref": "curated:masteryi-executioner"
     },
     {
+      "champion": "yunara",
+      "augment": "Tap Dancer",
+      "tier": "S",
+      "ref": "curated:yunara-tap-dancer"
+    },
+    {
+      "champion": "amumu",
+      "augment": "Ethereal Weapon",
+      "tier": "S",
+      "ref": "curated:amumu-ethereal-weapon"
+    },
+    {
       "champion": "kayle",
       "augment": "Ethereal Weapon",
       "tier": "S",
@@ -987,6 +1005,12 @@
       "ref": "curated:aurora-ethereal-weapon"
     },
     {
+      "champion": "morgana",
+      "augment": "Skilled Sniper",
+      "tier": "A",
+      "ref": "curated:morgana-skilled-sniper"
+    },
+    {
       "champion": "gangplank",
       "augment": "Back To Basics",
       "tier": "S",
@@ -1009,12 +1033,6 @@
       "augment": "Jeweled Gauntlet",
       "tier": "S",
       "ref": "curated:smolder-jeweled-gauntlet"
-    },
-    {
-      "champion": "yunara",
-      "augment": "Master of Duality",
-      "tier": "S",
-      "ref": "curated:yunara-master-of-duality"
     },
     {
       "champion": "veigar",
@@ -1045,6 +1063,24 @@
       "augment": "Don't Blink",
       "tier": "S",
       "ref": "curated:gangplank-dont-blink"
+    },
+    {
+      "champion": "yunara",
+      "augment": "Juiced",
+      "tier": "S",
+      "ref": "curated:yunara-\u6ce8\u9b54\u6e85\u5c04\u6d41"
+    },
+    {
+      "champion": "maokai",
+      "augment": "Courage of the Colossus",
+      "tier": "S",
+      "ref": "curated:maokai-\u5de8\u50cf\u5927\u6811"
+    },
+    {
+      "champion": "milio",
+      "augment": "Eureka",
+      "tier": "S",
+      "ref": "curated:milio-ap\u7c73\u5229\u6b27"
     },
     {
       "champion": "aurora",
@@ -1269,12 +1305,6 @@
       "ref": "curated:ekko-ethereal-weapon"
     },
     {
-      "champion": "yunara",
-      "augment": "Tap Dancer",
-      "tier": "S",
-      "ref": "curated:yunara-tap-dancer"
-    },
-    {
       "champion": "naafiri",
       "augment": "Infernal Conduit",
       "tier": "S",
@@ -1399,12 +1429,6 @@
       "augment": "Clown College",
       "tier": "S",
       "ref": "curated:samira-clown-college"
-    },
-    {
-      "champion": "amumu",
-      "augment": "Ethereal Weapon",
-      "tier": "S",
-      "ref": "curated:amumu-ethereal-weapon"
     },
     {
       "champion": "rell",
@@ -1599,12 +1623,6 @@
       "ref": "curated:yunara-\u7269\u6cd5\u7686\u4fee\u7279\u6548\u6d41"
     },
     {
-      "champion": "yunara",
-      "augment": "Juiced",
-      "tier": "S",
-      "ref": "curated:yunara-\u6ce8\u9b54\u6e85\u5c04\u6d41"
-    },
-    {
       "champion": "katarina",
       "augment": "Jeweled Gauntlet",
       "tier": "S",
@@ -1795,12 +1813,6 @@
       "augment": "Devil on Your Shoulder",
       "tier": "S",
       "ref": "curated:hecarim-\u80a9\u4e0a\u6076\u9b54\u4eba\u9a6c"
-    },
-    {
-      "champion": "maokai",
-      "augment": "Courage of the Colossus",
-      "tier": "S",
-      "ref": "curated:maokai-\u5de8\u50cf\u5927\u6811"
     },
     {
       "champion": "maokai",
@@ -2529,12 +2541,6 @@
       "ref": "curated:aatrox-\u73e0\u5149\u4f1a\u5fc3\u8840\u9b54\u6d41"
     },
     {
-      "champion": "milio",
-      "augment": "Eureka",
-      "tier": "S",
-      "ref": "curated:milio-ap\u7c73\u5229\u6b27"
-    },
-    {
       "champion": "malphite",
       "augment": "Eureka",
       "tier": "S",
@@ -2968,15 +2974,15 @@
     },
     {
       "champion": "morgana",
-      "augment": "Skilled Sniper",
-      "tier": "A",
-      "ref": "curated:morgana-skilled-sniper"
-    },
-    {
-      "champion": "morgana",
       "augment": "Infernal Conduit",
       "tier": "A",
       "ref": "curated:morgana-infernal-conduit"
+    },
+    {
+      "champion": "drmundo",
+      "augment": "Heavy Hitter",
+      "tier": "A",
+      "ref": "curated:drmundo-heavy-hitter"
     },
     {
       "champion": "lillia",
@@ -3019,12 +3025,6 @@
       "augment": "Courage of the Colossus",
       "tier": "A",
       "ref": "curated:yasuo-\u8089\u5230\u7206\u70b8-\u4ec5\u4f9b\u5a31\u4e50"
-    },
-    {
-      "champion": "drmundo",
-      "augment": "Heavy Hitter",
-      "tier": "A",
-      "ref": "curated:drmundo-heavy-hitter"
     },
     {
       "champion": "fiddlesticks",
@@ -3153,6 +3153,12 @@
       "ref": "curated:aurelionsol-q\u6280\u80fd\u65e0\u9650\u5237\u65b0\u6d41\u5927\u6cd5\u5e08bug"
     },
     {
+      "champion": "senna",
+      "augment": "Ethereal Weapon",
+      "tier": "A",
+      "ref": "curated:senna-ethereal-weapon"
+    },
+    {
       "champion": "yuumi",
       "augment": "Circle of Death",
       "tier": "A",
@@ -3223,12 +3229,6 @@
       "augment": "Skilled Sniper",
       "tier": "A",
       "ref": "curated:sivir-skilled-sniper"
-    },
-    {
-      "champion": "senna",
-      "augment": "Ethereal Weapon",
-      "tier": "A",
-      "ref": "curated:senna-ethereal-weapon"
     },
     {
       "champion": "corki",
@@ -3741,16 +3741,16 @@
       "ref": "curated:aphelios-\u4eae\u5251-\u5927\u62db\u7a7f\u7532\u6d41"
     },
     {
-      "champion": "darius",
-      "augment": "Fan The Hammer",
-      "tier": "C",
-      "ref": "curated:darius-fan-the-hammer"
-    },
-    {
       "champion": "drmundo",
       "augment": "Protein Shake",
       "tier": "C",
       "ref": "curated:drmundo-protein-shake"
+    },
+    {
+      "champion": "darius",
+      "augment": "Fan The Hammer",
+      "tier": "C",
+      "ref": "curated:darius-fan-the-hammer"
     },
     {
       "champion": "drmundo",
