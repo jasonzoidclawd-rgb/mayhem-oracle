@@ -25,6 +25,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 from urllib.request import urlopen, Request
 from urllib.error import URLError
+from urllib.parse import urljoin
 
 BASE_URL = "https://arammayhem.com"
 HEADERS = {
@@ -39,8 +40,12 @@ HEADERS = {
 OUT_DIR = Path(__file__).parent.parent / "public" / "data"
 
 
+def resolve_url(path: str) -> str:
+    return path if path.startswith(("http://", "https://")) else urljoin(BASE_URL, path)
+
+
 def fetch(path: str) -> str:
-    url = BASE_URL + path
+    url = resolve_url(path)
     print(f"  Fetching {url} ...")
     req = Request(url, headers=HEADERS)
     with urlopen(req, timeout=30) as resp:
@@ -57,6 +62,10 @@ def normalize_path_slug(s: str) -> str:
 
 def normalize_combo_tier(tier: str) -> str:
     return tier.rstrip("+")
+
+
+def normalize_lookup_key(value: str) -> str:
+    return re.sub(r"[^a-z0-9]+", "", value.lower())
 
 
 def slug_from_href(href: str) -> str | None:
@@ -140,9 +149,9 @@ def parse_augments(html: str) -> list[dict]:
         if not (slug_m and rarity_m and img_m):
             continue
 
-        icon = img_m.group(1)
+        icon = unescape(img_m.group(1))
         if icon.startswith("/"):
-            icon = BASE_URL + icon
+            icon = resolve_url(icon)
 
         augments.append({
             "slug": slug_m.group(1),
@@ -155,7 +164,68 @@ def parse_augments(html: str) -> list[dict]:
     return augments
 
 
+def parse_locale_augment_names(html: str, locale_code: str) -> dict[str, str]:
+    names: dict[str, str] = {}
+    card_starts = [
+        m.start()
+        for m in re.finditer(
+            rf'href="/{re.escape(locale_code)}/augments/[^"]+"\s+class="augment-card',
+            html,
+        )
+    ]
+
+    for i, start in enumerate(card_starts):
+        end = card_starts[i + 1] if i + 1 < len(card_starts) else start + 2000
+        block = html[start:end]
+
+        slug_m = re.search(rf'href="/{re.escape(locale_code)}/augments/([^"]+)"', block)
+        if not slug_m:
+            continue
+
+        img_m = re.search(r"<img\b[^>]*>", block)
+        alt_m = re.search(r'alt="([^"]+)"', img_m.group(0)) if img_m else None
+        if alt_m:
+            names[normalize_path_slug(slug_m.group(1))] = unescape(alt_m.group(1))
+            continue
+
+        data_name_m = re.search(r'data-name="([^"]+)"', block)
+        if data_name_m:
+            slug = normalize_path_slug(slug_m.group(1))
+            english_part = slug.replace("-", " ")
+            localized = re.sub(
+                rf"\s+{re.escape(english_part)}\s*$",
+                "",
+                unescape(data_name_m.group(1)),
+                flags=re.IGNORECASE,
+            ).strip()
+            if localized:
+                names[slug] = localized
+
+    return names
+
+
 # ── Combos ─────────────────────────────────────────────────────────────────
+
+TIER_STRENGTH = {"S": 4, "A": 3, "B": 2, "C": 1}
+
+
+def dedupe_combos(combos: list[dict]) -> list[dict]:
+    order: list[tuple[str, str]] = []
+    by_pair: dict[tuple[str, str], dict] = {}
+
+    for combo in combos:
+        key = (normalize_lookup_key(combo["champion"]), normalize_lookup_key(combo["augment"]))
+        if key not in by_pair:
+            by_pair[key] = combo
+            order.append(key)
+            continue
+
+        current = by_pair[key]
+        if TIER_STRENGTH.get(combo["tier"], 0) > TIER_STRENGTH.get(current["tier"], 0):
+            by_pair[key] = combo
+
+    return [by_pair[key] for key in order]
+
 
 def parse_combos(html: str) -> list[dict]:
     combos = []
@@ -178,7 +248,7 @@ def parse_combos(html: str) -> list[dict]:
                 "ref": unescape(combo_ref),
             })
         if combos:
-            return combos
+            return dedupe_combos(combos)
 
     article_pattern = re.compile(
         r'<article\s+class="combo-card[^"]*"\s+'
@@ -203,7 +273,7 @@ def parse_combos(html: str) -> list[dict]:
         })
 
     if combos:
-        return combos
+        return dedupe_combos(combos)
 
     # <div class="combo-card ..." data-tier="S" data-champion="shaco"
     #      data-augment="executioner" data-combo-ref="curated:shaco-executioner">
@@ -234,7 +304,7 @@ def parse_combos(html: str) -> list[dict]:
             "ref": combo_ref,
         })
 
-    return combos
+    return dedupe_combos(combos)
 
 
 # ── Atomic write ──────────────────────────────────────────────────────────
@@ -243,7 +313,7 @@ def atomic_write(path: Path, data: dict) -> None:
     fd, tmp = tempfile.mkstemp(dir=path.parent, prefix=".tmp")
     try:
         with os.fdopen(fd, "w", encoding="utf-8") as f:
-            json.dump(data, f, indent=2)
+            json.dump(data, f, ensure_ascii=False, indent=2)
         os.replace(tmp, path)
     except Exception:
         try:
@@ -285,11 +355,12 @@ def main():
     print("\n[3/5] Augment locale names")
     by_slug = {a["slug"]: a for a in augments}
     locale_configs = [
-        ("zh-cn", "name_zh_CN", r'data-name="([^"]+)"\s+data-name-en="([^"]+)"', True),
-        ("ja-jp", "name_ja", None, False),
-        ("ko-kr", "name_ko", None, False),
+        ("zh-cn", "name_zh_CN"),
+        ("zh-tw", "name_zh_TW"),
+        ("ja-jp", "name_ja"),
+        ("ko-kr", "name_ko"),
     ]
-    for locale_code, field, pattern, has_en_attr in locale_configs:
+    for locale_code, field in locale_configs:
         time.sleep(0.8)
         try:
             locale_html = fetch(f"/{locale_code}/augments/")
@@ -297,26 +368,10 @@ def main():
             print(f"  {locale_code}: skipped ({e})")
             continue
         matched = 0
-        if has_en_attr and pattern:
-            # zh-cn: data-name="珠光护手" data-name-en="jeweled gauntlet"
-            for loc_name, en_name in re.findall(pattern, locale_html):
-                slug = re.sub(r"[^a-z0-9]+", "-", en_name.lower()).strip("-")
-                if slug in by_slug:
-                    by_slug[slug][field] = unescape(loc_name)
-                    matched += 1
-        else:
-            # ja/ko: href="/ja-jp/augments/{slug}" ... data-name="{localized} {en}"
-            for slug, combined in re.findall(
-                rf'href="/{locale_code}/augments/([^"]+)"\s+class="augment-card[^"]*"\s+data-name="([^"]+)"',
-                locale_html,
-            ):
-                if slug not in by_slug:
-                    continue
-                en_part = slug.replace("-", " ")
-                localized = re.sub(re.escape(en_part), "", combined, flags=re.IGNORECASE).strip()
-                if localized:
-                    by_slug[slug][field] = unescape(localized)
-                    matched += 1
+        for slug, loc_name in parse_locale_augment_names(locale_html, locale_code).items():
+            if slug in by_slug:
+                by_slug[slug][field] = loc_name
+                matched += 1
         print(f"  {locale_code}: {matched} names")
 
     # Traditional Chinese names from CommunityDragon
@@ -348,7 +403,7 @@ def main():
         for aug in augments:
             key = _norm(aug["slug"])
             name = zh_tw_lookup.get(key) or zh_tw_lookup.get(_norm(aug["name"]))
-            if name:
+            if name and not aug.get("name_zh_TW"):
                 aug["name_zh_TW"] = name
                 zh_tw_matched += 1
         print(f"  → {zh_tw_matched} Traditional Chinese names")

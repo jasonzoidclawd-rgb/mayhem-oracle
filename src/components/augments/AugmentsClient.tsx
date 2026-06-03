@@ -9,7 +9,8 @@ import type { AffinityTier, SetSynergyResult, ChampSetAffinity } from "@/lib/sco
 
 // ─── Constants ───────────────────────────────────────────────────────────────
 
-type Rarity = "all" | "prismatic" | "gold" | "silver";
+type AugmentRarity = "prismatic" | "gold" | "silver";
+type Rarity = "all" | AugmentRarity;
 type ViewMode = "sets" | "grid";
 
 const RARITY_STYLES = {
@@ -111,11 +112,14 @@ export function AugmentsClient({
     [augments],
   );
 
-  const rarityLabel: Record<Rarity, string> = {
-    all: t("all"),
+  const rarityLabels: Record<AugmentRarity, string> = {
     prismatic: tChamp("prismatic"),
     gold: tChamp("gold"),
     silver: tChamp("silver"),
+  };
+  const rarityLabel: Record<Rarity, string> = {
+    all: t("all"),
+    ...rarityLabels,
   };
 
   // Filter augments by rarity (shared across both views)
@@ -194,13 +198,14 @@ export function AugmentsClient({
             return (
               <SetCard
                 key={syn.setName}
-                synergy={syn}
-                augments={setAugs}
-                avgWinRate={avgWr}
-                locale={locale}
-              />
-            );
-          })}
+                  synergy={syn}
+                  augments={setAugs}
+                  avgWinRate={avgWr}
+                  locale={locale}
+                  rarityLabels={rarityLabels}
+                />
+              );
+            })}
 
           {/* Sets without synergy data (hybrid sets) */}
           {Object.entries(filteredBySet)
@@ -215,12 +220,17 @@ export function AugmentsClient({
                   augments={setAugs}
                   avgWinRate={avgWr}
                   locale={locale}
+                  rarityLabels={rarityLabels}
                 />
               );
             })}
 
           {/* Standalone augments (no set) */}
-          <StandaloneSection augments={rarityFiltered} locale={locale} />
+          <StandaloneSection
+            augments={rarityFiltered}
+            locale={locale}
+            rarityLabels={rarityLabels}
+          />
         </div>
       ) : (
         /* ─── GRID VIEW ─── */
@@ -482,11 +492,13 @@ function SetCard({
   augments,
   avgWinRate,
   locale,
+  rarityLabels,
 }: {
   synergy: SetSynergyResult;
   augments: ScoredAugment[];
   avgWinRate: number;
   locale: string;
+  rarityLabels: Record<AugmentRarity, string>;
 }) {
   const t = useTranslations("augments");
   const [expanded, setExpanded] = useState(true);
@@ -561,7 +573,7 @@ function SetCard({
                       </div>
                       <div className="flex gap-2 text-[10px] text-[var(--color-text-muted)]">
                         <span className={styles.badge.split(" ")[0]}>
-                          {aug.rarity}
+                          {rarityLabels[aug.rarity]}
                         </span>
                         <span className={SCORE_COLOR(score)}>{score}</span>
                       </div>
@@ -627,9 +639,11 @@ function SetCard({
 function StandaloneSection({
   augments,
   locale,
+  rarityLabels,
 }: {
   augments: ScoredAugment[];
   locale: string;
+  rarityLabels: Record<AugmentRarity, string>;
 }) {
   const t = useTranslations("augments");
   const standalone = useMemo(
@@ -662,7 +676,7 @@ function StandaloneSection({
               key={aug.slug}
               augment={aug}
               locale={locale}
-              rarityLabel={aug.rarity}
+              rarityLabel={rarityLabels[aug.rarity]}
             />
           ))}
         </div>

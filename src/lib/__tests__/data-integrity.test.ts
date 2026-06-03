@@ -22,11 +22,34 @@ describe("data integrity", () => {
     }
   });
 
+  test("combo rows are unique per champion and augment", () => {
+    const pairs = combosData.combos.map((combo) => `${combo.champion}:${combo.augment}`);
+
+    expect(new Set(pairs).size).toBe(pairs.length);
+  });
+
   test("wiki set labels are known augment set names", () => {
     for (const augment of augmentsData.augments) {
       if ("wikiSet" in augment && augment.wikiSet) {
         expect(VALID_AUGMENT_SET_LABELS.has(augment.wikiSet)).toBe(true);
       }
+    }
+  });
+
+  test("all augments expose the fields rendered by the augments page", () => {
+    const validRarities = new Set(["prismatic", "gold", "silver"]);
+
+    for (const augment of augmentsData.augments) {
+      expect(augment.slug, `${augment.name} missing slug`).toBeTruthy();
+      expect(augment.name, `${augment.slug} missing English name`).toBeTruthy();
+      expect(validRarities.has(augment.rarity), `${augment.slug} has invalid rarity`).toBe(true);
+      expect(augment.icon, `${augment.slug} missing icon`).toBeTruthy();
+      expect(augment.icon, `${augment.slug} icon contains an HTML entity`).not.toMatch(/&[a-zA-Z0-9#]+;/);
+      expect(() => new URL(augment.icon), `${augment.slug} icon is not a valid URL`).not.toThrow();
+      expect(augment.name_zh_TW, `${augment.slug} missing zh-TW name`).toBeTruthy();
+      expect(augment.name_zh_CN, `${augment.slug} missing zh-CN name`).toBeTruthy();
+      expect(augment.name_ja, `${augment.slug} missing ja name`).toBeTruthy();
+      expect(augment.name_ko, `${augment.slug} missing ko name`).toBeTruthy();
     }
   });
 

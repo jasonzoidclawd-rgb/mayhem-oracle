@@ -228,7 +228,11 @@ def main():
 
     # Phase 1: deterministic fields
     for aug in augments:
-        aug["set"] = aug.get("set") or normalize_set(aug.get("wikiSet"))
+        normalized_set = normalize_set(aug.get("wikiSet"))
+        if aug.get("set") or normalized_set:
+            aug["set"] = aug.get("set") or normalized_set
+        else:
+            aug.pop("set", None)
         aug.setdefault("flags", {})
         aug["flags"]["system_breaker"] = aug["slug"] in SYSTEM_BREAKERS
         aug["flags"]["lifecycle"] = aug["flags"].get("lifecycle", "active")
@@ -271,7 +275,12 @@ def main():
             [build_input_block(a) for a in batch], indent=2
         )
         print(f"  Batch {i+1}/{len(batches)}: {slugs[0]}…{slugs[-1]}", end="", flush=True)
-        raw_resp = call_groq(prompt)
+        try:
+            raw_resp = call_groq(prompt)
+        except Exception as e:
+            print(f" ✗ LLM call failed: {e}")
+            failed_batches.append(i + 1)
+            continue
         try:
             parsed = parse_llm_json(raw_resp)
             results.update(parsed)

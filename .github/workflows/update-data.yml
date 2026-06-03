@@ -93,10 +93,9 @@ jobs:
         run: python3 scripts/classify_champions.py
 
       - name: Classify augments (new only)
-        continue-on-error: true
         env:
           GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
-        run: python3 scripts/classify_augments.py --skip-classified
+        run: python3 scripts/classify_augments.py --skip-classified --allow-partial
 
       - name: Commit and push
         run: |
