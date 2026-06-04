@@ -25,18 +25,6 @@ const ALL_SET_NAMES = [
   "High Roller",
 ];
 
-const SET_ID_TO_NAME: Record<string, string> = {
-  archmage: "Archmage",
-  dive_bomb: "Dive Bomb",
-  firecracker: "Firecracker",
-  fully_automated: "Fully Automated",
-  high_roller: "High Roller",
-  make_it_rain: "Make it Rain",
-  snowday: "Snowday",
-  stackosaurus_rex: "Stackosaurus Rex",
-  wee_woo: "Wee Woo Wee Woo",
-};
-
 // ─── Math ───
 
 /** Binomial coefficient C(n, k) */
@@ -110,12 +98,8 @@ export interface SetPath {
  * Parse the `set` field from augments.json into individual set names.
  * e.g. "Dive Bomb Fully Automated" -> ["Dive Bomb", "Fully Automated"]
  */
-export function parseSets(setField: string | undefined): string[] {
+function parseSets(setField: string | undefined): string[] {
   if (!setField) return [];
-  const normalizedId = setField.trim().toLowerCase().replace(/[-\s]+/g, "_");
-  const setName = SET_ID_TO_NAME[normalizedId];
-  if (setName) return [setName];
-
   const result: string[] = [];
   let remaining = setField;
 
@@ -131,7 +115,7 @@ export function parseSets(setField: string | undefined): string[] {
   return result;
 }
 
-export function scoreToTier(score: number): "S" | "A" | "B" | "C" {
+function scoreToTier(score: number): "S" | "A" | "B" | "C" {
   if (score >= 75) return "S";
   if (score >= 65) return "A";
   if (score >= 55) return "B";

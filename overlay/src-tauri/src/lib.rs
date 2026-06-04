@@ -1,8 +1,7 @@
-use image::GenericImageView;
 use serde::{Deserialize, Serialize};
-use std::io::Write;
 use std::path::PathBuf;
 use sysinfo::System;
+use image::GenericImageView;
 
 #[cfg(target_os = "macos")]
 #[macro_use]
@@ -30,7 +29,9 @@ pub struct LivePlayerData {
 fn find_lockfile_path() -> Option<PathBuf> {
     #[cfg(target_os = "macos")]
     {
-        let paths = ["/Applications/League of Legends.app/Contents/LoL/lockfile"];
+        let paths = [
+            "/Applications/League of Legends.app/Contents/LoL/lockfile",
+        ];
         for p in &paths {
             let path = PathBuf::from(p);
             if path.exists() {
@@ -113,10 +114,7 @@ fn detect_league_client() -> bool {
 async fn get_game_phase() -> Option<String> {
     let path = find_lockfile_path()?;
     let credentials = parse_lockfile(&path)?;
-    let url = format!(
-        "https://127.0.0.1:{}/lol-gameflow/v1/gameflow-phase",
-        credentials.port
-    );
+    let url = format!("https://127.0.0.1:{}/lol-gameflow/v1/gameflow-phase", credentials.port);
     let client = reqwest::Client::builder()
         .danger_accept_invalid_certs(true)
         .build()
@@ -151,13 +149,15 @@ async fn get_live_player_data() -> Option<LivePlayerData> {
         .await
         .ok()?;
 
-    let summoner_name = active
-        .get("riotId")
+    let summoner_name = active.get("riotId")
         .or_else(|| active.get("summonerName"))
         .and_then(|v| v.as_str())?
         .to_string();
 
-    let level = active.get("level").and_then(|v| v.as_u64()).unwrap_or(1) as u32;
+    let level = active
+        .get("level")
+        .and_then(|v| v.as_u64())
+        .unwrap_or(1) as u32;
 
     // Get player list to find champion
     let players: Vec<serde_json::Value> = client
@@ -178,20 +178,14 @@ async fn get_live_player_data() -> Option<LivePlayerData> {
 
     // Prefer rawChampionName (always English internal ID like "Varus")
     // Fall back to championName (may be localized like "法洛士")
-    let champion = me
-        .get("rawChampionName")
+    let champion = me.get("rawChampionName")
         .and_then(|v| v.as_str())
         .map(|s| {
             // rawChampionName format: "game_character_displayname_Varus"
             // Strip the prefix to get just the champion name
             s.rsplit('_').next().unwrap_or(s).to_string()
         })
-        .unwrap_or_else(|| {
-            me.get("championName")
-                .and_then(|v| v.as_str())
-                .unwrap_or("")
-                .to_string()
-        });
+        .unwrap_or_else(|| me.get("championName").and_then(|v| v.as_str()).unwrap_or("").to_string());
     let is_dead = me.get("isDead").and_then(|v| v.as_bool()).unwrap_or(false);
 
     // Get game data for time and mode
@@ -234,49 +228,10 @@ pub struct CardRegion {
     pub h: f64,
 }
 
-const CARD_NAME_REGIONS: [[CardRegion; 2]; 3] = [
-    [
-        CardRegion {
-            x: 0.245,
-            y: 0.378,
-            w: 0.125,
-            h: 0.045,
-        },
-        CardRegion {
-            x: 0.255,
-            y: 0.382,
-            w: 0.1,
-            h: 0.033,
-        },
-    ],
-    [
-        CardRegion {
-            x: 0.437,
-            y: 0.378,
-            w: 0.125,
-            h: 0.045,
-        },
-        CardRegion {
-            x: 0.45,
-            y: 0.382,
-            w: 0.1,
-            h: 0.033,
-        },
-    ],
-    [
-        CardRegion {
-            x: 0.631,
-            y: 0.378,
-            w: 0.125,
-            h: 0.045,
-        },
-        CardRegion {
-            x: 0.645,
-            y: 0.382,
-            w: 0.1,
-            h: 0.033,
-        },
-    ],
+const CARD_NAME_REGIONS: [CardRegion; 3] = [
+    CardRegion { x: 0.248, y: 0.365, w: 0.115, h: 0.04 },
+    CardRegion { x: 0.442, y: 0.365, w: 0.115, h: 0.04 },
+    CardRegion { x: 0.636, y: 0.365, w: 0.115, h: 0.04 },
 ];
 
 #[derive(Serialize, Deserialize, Clone, Debug)]
@@ -284,9 +239,6 @@ pub struct DetectedAugment {
     pub text: String,
     pub region_index: usize,
 }
-
-#[cfg(target_os = "macos")]
-const OVERLAY_WINDOW_LEVEL: i64 = i32::MAX as i64 - 8;
 
 // ─── OCR Commands ───────────────────────────────────────────────────────────
 
@@ -297,27 +249,6 @@ fn check_tesseract() -> bool {
         .output()
         .map(|o| o.status.success())
         .unwrap_or(false)
-}
-
-fn preferred_tesseract_languages() -> String {
-    let installed = std::process::Command::new("tesseract")
-        .arg("--list-langs")
-        .output()
-        .ok()
-        .and_then(|output| String::from_utf8(output.stdout).ok())
-        .unwrap_or_default();
-    let installed: std::collections::HashSet<&str> = installed.lines().map(str::trim).collect();
-    let preferred = ["eng", "chi_tra", "chi_sim", "jpn", "kor"];
-    let langs: Vec<&str> = preferred
-        .into_iter()
-        .filter(|lang| installed.contains(lang))
-        .collect();
-
-    if langs.is_empty() {
-        "chi_tra".to_string()
-    } else {
-        langs.join("+")
-    }
 }
 
 #[tauri::command]
@@ -333,9 +264,7 @@ fn check_screen_capture_available() -> bool {
 }
 
 #[tauri::command]
-async fn detect_augment_names(
-    known_names: Option<Vec<String>>,
-) -> Result<Vec<DetectedAugment>, String> {
+async fn detect_augment_names() -> Result<Vec<DetectedAugment>, String> {
     if !is_league_foreground() {
         return Err("League of Legends is not the foreground application".to_string());
     }
@@ -343,92 +272,57 @@ async fn detect_augment_names(
     // Capture the primary screen
     let screens = xcap::Monitor::all().map_err(|e| format!("Failed to list monitors: {}", e))?;
     let monitor = screens.into_iter().next().ok_or("No monitor found")?;
-    let screenshot = monitor
-        .capture_image()
-        .map_err(|e| format!("Capture failed: {}", e))?;
+    let screenshot = monitor.capture_image().map_err(|e| format!("Capture failed: {}", e))?;
 
     let screen_w = screenshot.width() as f64;
     let screen_h = screenshot.height() as f64;
-    let ocr_languages = preferred_tesseract_languages();
 
     let mut results = Vec::new();
-    let mut user_words_file = None;
 
-    if let Some(names) = known_names {
-        if !names.is_empty() {
-            let mut file = tempfile::Builder::new()
-                .prefix("mayhem_ocr_words_")
-                .suffix(".txt")
-                .tempfile()
-                .map_err(|e| format!("User words file failed: {}", e))?;
+    for (i, region) in CARD_NAME_REGIONS.iter().enumerate() {
+        // Convert fractional coordinates to pixels
+        let px = (region.x * screen_w) as u32;
+        let py = (region.y * screen_h) as u32;
+        let pw = (region.w * screen_w) as u32;
+        let ph = (region.h * screen_h) as u32;
 
-            for name in names {
-                let trimmed = name.trim();
-                if !trimmed.is_empty() {
-                    writeln!(file, "{}", trimmed)
-                        .map_err(|e| format!("User words write failed: {}", e))?;
-                }
-            }
-
-            user_words_file = Some(file);
+        // Bounds check
+        if px + pw > screenshot.width() || py + ph > screenshot.height() {
+            continue;
         }
-    }
 
-    for (i, regions) in CARD_NAME_REGIONS.iter().enumerate() {
-        for region in regions {
-            // Convert fractional coordinates to pixels
-            let px = (region.x * screen_w) as u32;
-            let py = (region.y * screen_h) as u32;
-            let pw = (region.w * screen_w) as u32;
-            let ph = (region.h * screen_h) as u32;
+        // Crop to the card name region
+        let cropped = screenshot.view(px, py, pw, ph).to_image();
 
-            // Bounds check
-            if px + pw > screenshot.width() || py + ph > screenshot.height() {
-                continue;
-            }
+        // Write to a securely-created temp file for tesseract.
+        let tmp_file = tempfile::Builder::new()
+            .prefix("mayhem_ocr_")
+            .suffix(".png")
+            .tempfile()
+            .map_err(|e| format!("Temp file failed: {}", e))?;
+        cropped.save(tmp_file.path()).map_err(|e| format!("Save failed: {}", e))?;
 
-            // Crop to the card name region
-            let cropped = screenshot.view(px, py, pw, ph).to_image();
+        // Run tesseract with chi_tra (Traditional Chinese)
+        let output = std::process::Command::new("tesseract")
+            .arg(tmp_file.path())
+            .arg("stdout")
+            .arg("-l")
+            .arg("chi_tra")
+            .arg("--psm")
+            .arg("7")  // single text line
+            .output()
+            .map_err(|e| format!("Tesseract failed: {}", e))?;
 
-            // Write to a securely-created temp file for tesseract.
-            let tmp_file = tempfile::Builder::new()
-                .prefix("mayhem_ocr_")
-                .suffix(".png")
-                .tempfile()
-                .map_err(|e| format!("Temp file failed: {}", e))?;
-            cropped
-                .save(tmp_file.path())
-                .map_err(|e| format!("Save failed: {}", e))?;
+        let text = String::from_utf8_lossy(&output.stdout)
+            .trim()
+            .replace(' ', "")
+            .replace('\n', "");
 
-            // Run Tesseract with every supported LoL locale language pack installed locally.
-            let mut command = std::process::Command::new("tesseract");
-            command
-                .arg(tmp_file.path())
-                .arg("stdout")
-                .arg("-l")
-                .arg(&ocr_languages)
-                .arg("--psm")
-                .arg("7"); // single text line
-
-            if let Some(file) = &user_words_file {
-                command.arg("--user-words").arg(file.path());
-            }
-
-            let output = command
-                .output()
-                .map_err(|e| format!("Tesseract failed: {}", e))?;
-
-            let text = String::from_utf8_lossy(&output.stdout)
-                .trim()
-                .replace(' ', "")
-                .replace('\n', "");
-
-            if !text.is_empty() {
-                results.push(DetectedAugment {
-                    text,
-                    region_index: i,
-                });
-            }
+        if !text.is_empty() {
+            results.push(DetectedAugment {
+                text,
+                region_index: i,
+            });
         }
     }
 
@@ -544,13 +438,11 @@ fn is_league_foreground() -> bool {
         if ptr.is_null() {
             return false;
         }
-        let s = CStr::from_ptr(ptr).to_str().unwrap_or("").to_lowercase();
-        s.replace(' ', "").contains("leagueoflegends")
+        let s = CStr::from_ptr(ptr).to_str().unwrap_or("");
+        s.contains("LeagueofLegends") || s.contains("riotgames")
     }
     #[cfg(not(target_os = "macos"))]
-    {
-        true
-    }
+    { true }
 }
 
 /// Open macOS System Settings → Privacy → Screen Recording
@@ -632,10 +524,9 @@ pub fn run() {
                     let frame: cocoa::foundation::NSRect = msg_send![main_screen, frame];
                     ns_win.setFrame_display_(frame, cocoa::base::YES);
 
-                    // League's fullscreen game surfaces can sit near the top of the
-                    // CGWindow stack (observed at i32::MAX - 18). Keep this overlay
-                    // above that layer while the React focus gate controls visibility.
-                    ns_win.setLevel_(OVERLAY_WINDOW_LEVEL);
+                    // kCGAssistiveTechHighWindowLevel = 1500; above screen saver (1000)
+                    // and most game windows, keeps overlay on top in borderless windowed mode
+                    ns_win.setLevel_(1500);
                     ns_win.setCollectionBehavior_(
                         NSWindowCollectionBehavior::NSWindowCollectionBehaviorCanJoinAllSpaces
                             | NSWindowCollectionBehavior::NSWindowCollectionBehaviorStationary
@@ -659,7 +550,7 @@ pub fn run() {
                                 unsafe {
                                     use cocoa::appkit::NSWindow;
                                     let ns_win = ptr as cocoa::base::id;
-                                    ns_win.setLevel_(OVERLAY_WINDOW_LEVEL);
+                                    ns_win.setLevel_(1500);
                                     let _: () = objc::msg_send![ns_win, orderFrontRegardless];
                                 }
                             }
