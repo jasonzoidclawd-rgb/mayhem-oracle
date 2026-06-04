@@ -14,6 +14,7 @@ import type {
   SetPath,
   ComboTier,
 } from "./scoring";
+import { addAugmentAliases, matchAugment } from "./augmentSelection";
 import "./App.css";
 
 // ─── Types ───
@@ -106,54 +107,6 @@ async function loadJson<T>(path: string): Promise<T> {
     throw new Error(`Failed to load ${path}: ${response.status}`);
   }
   return response.json() as Promise<T>;
-}
-
-// ─── Fuzzy matching ───
-
-function levenshtein(a: string, b: string): number {
-  const m = a.length, n = b.length;
-  const dp: number[][] = Array.from({ length: m + 1 }, () => Array(n + 1).fill(0));
-  for (let i = 0; i <= m; i++) dp[i][0] = i;
-  for (let j = 0; j <= n; j++) dp[0][j] = j;
-  for (let i = 1; i <= m; i++) {
-    for (let j = 1; j <= n; j++) {
-      dp[i][j] = a[i - 1] === b[j - 1]
-        ? dp[i - 1][j - 1]
-        : 1 + Math.min(dp[i - 1][j], dp[i][j - 1], dp[i - 1][j - 1]);
-    }
-  }
-  return dp[m][n];
-}
-
-function matchAugment(
-  ocrText: string,
-  lookup: Map<string, PoolAugment>,
-): PoolAugment | null {
-  if (!ocrText) return null;
-  const cleaned = ocrText.replace(/\s/g, "");
-
-  // Exact match
-  const exact = lookup.get(cleaned);
-  if (exact) return exact;
-
-  // Substring match
-  for (const [name, aug] of lookup) {
-    if (cleaned.includes(name) || name.includes(cleaned)) return aug;
-  }
-
-  // Levenshtein fuzzy match (threshold: 30% of shorter string length)
-  let bestMatch: PoolAugment | null = null;
-  let bestDist = Infinity;
-  for (const [name, aug] of lookup) {
-    const dist = levenshtein(cleaned, name);
-    const threshold = Math.ceil(Math.min(cleaned.length, name.length) * 0.3);
-    if (dist <= threshold && dist < bestDist) {
-      bestDist = dist;
-      bestMatch = aug;
-    }
-  }
-
-  return bestMatch;
 }
 
 // ─── App ───
@@ -317,6 +270,7 @@ function App() {
       for (const aug of poolData[tier].augments) {
         if (aug.name_zh_TW) map.set(aug.name_zh_TW, aug);
         map.set(aug.name, aug);
+        addAugmentAliases(map, aug);
       }
     }
     return map;
