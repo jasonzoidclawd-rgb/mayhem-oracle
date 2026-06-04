@@ -4,6 +4,7 @@ import {
   buildChampionPool,
   calculateSetPaths,
 } from "./scoring";
+import { buildOverlayAugmentLookup, matchAugmentName } from "./scoring/offer-lookup";
 import type {
   AbilityProfile,
   ChampionBaseStats,
@@ -40,7 +41,10 @@ interface MatchedCard {
 interface OverlayAugment {
   slug: string;
   name: string;
+  name_zh_CN?: string;
   name_zh_TW?: string;
+  name_ja?: string;
+  name_ko?: string;
   rarity: "silver" | "gold" | "prismatic";
   win_rate: number | null;
   icon: string;
@@ -106,54 +110,6 @@ async function loadJson<T>(path: string): Promise<T> {
     throw new Error(`Failed to load ${path}: ${response.status}`);
   }
   return response.json() as Promise<T>;
-}
-
-// ─── Fuzzy matching ───
-
-function levenshtein(a: string, b: string): number {
-  const m = a.length, n = b.length;
-  const dp: number[][] = Array.from({ length: m + 1 }, () => Array(n + 1).fill(0));
-  for (let i = 0; i <= m; i++) dp[i][0] = i;
-  for (let j = 0; j <= n; j++) dp[0][j] = j;
-  for (let i = 1; i <= m; i++) {
-    for (let j = 1; j <= n; j++) {
-      dp[i][j] = a[i - 1] === b[j - 1]
-        ? dp[i - 1][j - 1]
-        : 1 + Math.min(dp[i - 1][j], dp[i][j - 1], dp[i - 1][j - 1]);
-    }
-  }
-  return dp[m][n];
-}
-
-function matchAugment(
-  ocrText: string,
-  lookup: Map<string, PoolAugment>,
-): PoolAugment | null {
-  if (!ocrText) return null;
-  const cleaned = ocrText.replace(/\s/g, "");
-
-  // Exact match
-  const exact = lookup.get(cleaned);
-  if (exact) return exact;
-
-  // Substring match
-  for (const [name, aug] of lookup) {
-    if (cleaned.includes(name) || name.includes(cleaned)) return aug;
-  }
-
-  // Levenshtein fuzzy match (threshold: 30% of shorter string length)
-  let bestMatch: PoolAugment | null = null;
-  let bestDist = Infinity;
-  for (const [name, aug] of lookup) {
-    const dist = levenshtein(cleaned, name);
-    const threshold = Math.ceil(Math.min(cleaned.length, name.length) * 0.3);
-    if (dist <= threshold && dist < bestDist) {
-      bestDist = dist;
-      bestMatch = aug;
-    }
-  }
-
-  return bestMatch;
 }
 
 // ─── App ───
@@ -275,6 +231,19 @@ function App() {
     [championSlugByName],
   );
 
+  const comboBySlug = useMemo(() => {
+    if (!championSlug || !overlayData) return new Map<string, ComboTier>();
+
+    return new Map<string, ComboTier>(
+      overlayData.combos
+        .filter((combo) => combo.champion === championSlug)
+        .map((combo) => [
+          combo.augmentSlug ?? combo.augment.replace(/ /g, "-"),
+          combo.tier as ComboTier,
+        ]),
+    );
+  }, [championSlug, overlayData]);
+
   // Build champion pool
   const poolData = useMemo((): ChampionPoolBreakdown | null => {
     if (!championSlug || !overlayData) return null;
@@ -286,13 +255,6 @@ function App() {
     if (abilityProfileState === undefined) return null;
 
     const abilityProfile = abilityProfileState ?? undefined;
-    const champCombos = overlayData.combos.filter((c) => c.champion === championSlug);
-    const comboBySlug = new Map<string, ComboTier>(
-      champCombos.map((c) => [
-        c.augmentSlug ?? c.augment.replace(/ /g, "-"),
-        c.tier as ComboTier,
-      ]),
-    );
 
     return buildChampionPool(
       championSlug,
@@ -307,20 +269,41 @@ function App() {
       comboBySlug,
       overlayData.poolRules,
     );
-  }, [abilityProfiles, championSlug, overlayData]);
+  }, [abilityProfiles, championSlug, comboBySlug, overlayData]);
 
-  // Build zh-TW name lookup for OCR matching
+  // Build all-name lookup for OCR matching. Champion-pool scores override fallback
+  // scores, but real in-game offers outside the predicted pool still match.
   const nameLookup = useMemo(() => {
-    if (!poolData) return new Map<string, PoolAugment>();
-    const map = new Map<string, PoolAugment>();
-    for (const tier of ["silver", "gold", "prismatic"] as const) {
-      for (const aug of poolData[tier].augments) {
-        if (aug.name_zh_TW) map.set(aug.name_zh_TW, aug);
-        map.set(aug.name, aug);
-      }
-    }
-    return map;
-  }, [poolData]);
+    if (!championSlug || !overlayData) return new Map<string, PoolAugment>();
+
+    const champ = overlayData.champions.find((c) => c.slug === championSlug);
+    if (!champ) return new Map<string, PoolAugment>();
+
+    const abilityProfileState = abilityProfiles[championSlug];
+    if (abilityProfileState === undefined) return new Map<string, PoolAugment>();
+
+    return buildOverlayAugmentLookup({
+      allAugments: overlayData.augments,
+      championWinRate: champ.win_rate,
+      comboTiers: comboBySlug,
+      poolData,
+      abilityProfile: abilityProfileState ?? undefined,
+    });
+  }, [abilityProfiles, championSlug, comboBySlug, overlayData, poolData]);
+
+  const ocrKnownNames = useMemo(() => {
+    if (!overlayData) return [];
+
+    return overlayData.augments.flatMap((augment) =>
+      [
+        augment.name,
+        augment.name_zh_TW,
+        augment.name_zh_CN,
+        augment.name_ja,
+        augment.name_ko,
+      ].filter((name): name is string => Boolean(name)),
+    );
+  }, [overlayData]);
 
   // Current round
   const currentRound = (() => {
@@ -355,11 +338,13 @@ function App() {
   const runOcr = useCallback(async () => {
     if (!nameLookup.size) return;
     try {
-      const detected = await invoke<DetectedAugment[]>("detect_augment_names");
+      const detected = await invoke<DetectedAugment[]>("detect_augment_names", {
+        knownNames: ocrKnownNames,
+      });
 
       const matched: MatchedCard[] = [];
       for (const det of detected) {
-        const aug = matchAugment(det.text, nameLookup);
+        const aug = matchAugmentName(det.text, nameLookup);
         if (aug) {
           matched.push({
             augment: aug,
@@ -373,7 +358,7 @@ function App() {
     } catch {
       // OCR not available or failed
     }
-  }, [nameLookup]);
+  }, [nameLookup, ocrKnownNames]);
 
   useEffect(() => {
     runOcrRef.current = runOcr;
