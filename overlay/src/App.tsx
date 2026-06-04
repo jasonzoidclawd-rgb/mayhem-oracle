@@ -9,6 +9,7 @@ import {
   matchDetectedAugmentOffers,
   type MatchedDetectedAugment,
 } from "./scoring/offer-lookup";
+import { shouldAcceptOcrResult } from "./overlay-state";
 import type {
   AbilityProfile,
   ChampionBaseStats,
@@ -123,8 +124,11 @@ function App() {
   const [matchedCards, setMatchedCards] = useState<MatchedCard[]>([]);
   const [, setOcrActive] = useState(false);
   const ocrIntervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const ocrActiveRef = useRef(false);
+  const ocrRunIdRef = useRef(0);
   const [showStartupTip, setShowStartupTip] = useState(true);
   const [leagueFocused, setLeagueFocused] = useState(false);
+  const leagueFocusedRef = useRef(false);
   const [overlayData, setOverlayData] = useState<OverlayData | null>(null);
   const [abilityProfiles, setAbilityProfiles] = useState<Record<string, AbilityProfile | null>>({});
   const [dataError, setDataError] = useState<string | null>(null);
@@ -336,15 +340,31 @@ function App() {
 
   // OCR detection
   const runOcr = useCallback(async () => {
-    if (!nameLookup.size) return;
+    if (!nameLookup.size) {
+      setMatchedCards([]);
+      return;
+    }
+
+    const startedRunId = ocrRunIdRef.current;
     try {
       const detected = await invoke<DetectedAugment[]>("detect_augment_names", {
         knownNames: ocrKnownNames,
       });
 
+      if (!shouldAcceptOcrResult({
+        startedRunId,
+        currentRunId: ocrRunIdRef.current,
+        ocrActive: ocrActiveRef.current,
+        leagueFocused: leagueFocusedRef.current,
+      })) {
+        return;
+      }
+
       setMatchedCards(matchDetectedAugmentOffers(detected, nameLookup));
     } catch {
-      setMatchedCards([]);
+      if (startedRunId === ocrRunIdRef.current) {
+        setMatchedCards([]);
+      }
     }
   }, [nameLookup, ocrKnownNames]);
 
@@ -355,6 +375,9 @@ function App() {
   // Start/stop OCR polling
   const startOcr = useCallback(() => {
     if (ocrIntervalRef.current) return;
+    if (!leagueFocusedRef.current) return;
+    ocrActiveRef.current = true;
+    ocrRunIdRef.current += 1;
     setOcrActive(true);
     void runOcrRef.current(); // immediate first run
     ocrIntervalRef.current = setInterval(() => {
@@ -367,6 +390,8 @@ function App() {
       clearInterval(ocrIntervalRef.current);
       ocrIntervalRef.current = null;
     }
+    ocrActiveRef.current = false;
+    ocrRunIdRef.current += 1;
     setOcrActive(false);
     setMatchedCards([]);
   }, []);
@@ -376,13 +401,16 @@ function App() {
     let leagueIsFocused = leagueFocused;
     try {
       leagueIsFocused = await invoke<boolean>("is_league_foreground");
+      leagueFocusedRef.current = leagueIsFocused;
       setLeagueFocused(leagueIsFocused);
       if (!leagueIsFocused) {
-        setMatchedCards([]);
         stopOcr();
       }
     } catch {
-      // macOS only — default to showing on other platforms
+      leagueIsFocused = false;
+      leagueFocusedRef.current = false;
+      setLeagueFocused(false);
+      stopOcr();
     }
 
     try {
