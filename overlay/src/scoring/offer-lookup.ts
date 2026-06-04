@@ -10,6 +10,17 @@ import type { AbilityProfile } from "./types";
 
 export type OverlayAugmentLookup = Map<string, PoolAugment>;
 
+export interface DetectedAugmentText {
+  text: string;
+  region_index: number;
+}
+
+export interface MatchedDetectedAugment {
+  augment: PoolAugment;
+  regionIndex: number;
+  ocrText: string;
+}
+
 function levenshtein(a: string, b: string): number {
   const m = a.length;
   const n = b.length;
@@ -168,4 +179,26 @@ export function matchAugmentName(
   }
 
   return bestMatch;
+}
+
+export function matchDetectedAugmentOffers(
+  detected: DetectedAugmentText[],
+  lookup: OverlayAugmentLookup,
+): MatchedDetectedAugment[] {
+  const matchedByRegion = new Map<number, MatchedDetectedAugment>();
+
+  for (const det of detected) {
+    if (matchedByRegion.has(det.region_index)) continue;
+
+    const augment = matchAugmentName(det.text, lookup);
+    if (!augment) continue;
+
+    matchedByRegion.set(det.region_index, {
+      augment,
+      regionIndex: det.region_index,
+      ocrText: det.text,
+    });
+  }
+
+  return [...matchedByRegion.values()].sort((a, b) => a.regionIndex - b.regionIndex);
 }

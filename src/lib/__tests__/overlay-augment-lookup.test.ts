@@ -3,7 +3,11 @@ import augmentsData from "../../../public/data/augments.json";
 import abilitiesData from "../../../public/data/abilities.json";
 import championsData from "../../../public/data/champions.json";
 import combosData from "../../../public/data/combos.json";
-import { buildOverlayAugmentLookup, matchAugmentName } from "../../../overlay/src/scoring/offer-lookup";
+import {
+  buildOverlayAugmentLookup,
+  matchAugmentName,
+  matchDetectedAugmentOffers,
+} from "../../../overlay/src/scoring/offer-lookup";
 import { buildChampionPool, parseSets } from "../../../overlay/src/scoring/probability";
 import type { ComboTier, ScoredAugment } from "../../../overlay/src/scoring/oracle-score";
 import type { AbilityProfile } from "../../../overlay/src/scoring/types";
@@ -75,6 +79,28 @@ describe("overlay augment lookup", () => {
         ).toBe(augment.slug);
       }
     }
+  });
+
+  test("uses later OCR candidates for the same card when the first crop misses", () => {
+    const lookup = buildOverlayAugmentLookup({
+      allAugments: augmentsData.augments as ScoredAugment[],
+      poolData: null,
+    });
+
+    const matched = matchDetectedAugmentOffers(
+      [
+        { region_index: 0, text: "not an augment" },
+        { region_index: 0, text: "殺共時間" },
+        { region_index: 1, text: "射程強化改造" },
+        { region_index: 1, text: "Scopier Weapons" },
+      ],
+      lookup,
+    );
+
+    expect(matched.map((card) => [card.regionIndex, card.augment.slug])).toEqual([
+      [0, "its-killing-time"],
+      [1, "scoped-weapons"],
+    ]);
   });
 
   test("parses generated set ids used by current augment data", () => {

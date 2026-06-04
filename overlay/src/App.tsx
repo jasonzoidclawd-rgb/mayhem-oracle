@@ -4,7 +4,11 @@ import {
   buildChampionPool,
   calculateSetPaths,
 } from "./scoring";
-import { buildOverlayAugmentLookup, matchAugmentName } from "./scoring/offer-lookup";
+import {
+  buildOverlayAugmentLookup,
+  matchDetectedAugmentOffers,
+  type MatchedDetectedAugment,
+} from "./scoring/offer-lookup";
 import type {
   AbilityProfile,
   ChampionBaseStats,
@@ -32,11 +36,7 @@ interface DetectedAugment {
   region_index: number;
 }
 
-interface MatchedCard {
-  augment: PoolAugment;
-  regionIndex: number;
-  ocrText: string;
-}
+type MatchedCard = MatchedDetectedAugment;
 
 interface OverlayAugment {
   slug: string;
@@ -342,19 +342,7 @@ function App() {
         knownNames: ocrKnownNames,
       });
 
-      const matched: MatchedCard[] = [];
-      for (const det of detected) {
-        const aug = matchAugmentName(det.text, nameLookup);
-        if (aug) {
-          matched.push({
-            augment: aug,
-            regionIndex: det.region_index,
-            ocrText: det.text,
-          });
-        }
-      }
-
-      setMatchedCards(matched);
+      setMatchedCards(matchDetectedAugmentOffers(detected, nameLookup));
     } catch {
       setMatchedCards([]);
     }

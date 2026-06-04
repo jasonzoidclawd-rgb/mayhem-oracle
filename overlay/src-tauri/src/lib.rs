@@ -234,25 +234,49 @@ pub struct CardRegion {
     pub h: f64,
 }
 
-const CARD_NAME_REGIONS: [CardRegion; 3] = [
-    CardRegion {
-        x: 0.248,
-        y: 0.365,
-        w: 0.115,
-        h: 0.04,
-    },
-    CardRegion {
-        x: 0.442,
-        y: 0.365,
-        w: 0.115,
-        h: 0.04,
-    },
-    CardRegion {
-        x: 0.636,
-        y: 0.365,
-        w: 0.115,
-        h: 0.04,
-    },
+const CARD_NAME_REGIONS: [[CardRegion; 2]; 3] = [
+    [
+        CardRegion {
+            x: 0.245,
+            y: 0.378,
+            w: 0.125,
+            h: 0.045,
+        },
+        CardRegion {
+            x: 0.255,
+            y: 0.382,
+            w: 0.1,
+            h: 0.033,
+        },
+    ],
+    [
+        CardRegion {
+            x: 0.437,
+            y: 0.378,
+            w: 0.125,
+            h: 0.045,
+        },
+        CardRegion {
+            x: 0.45,
+            y: 0.382,
+            w: 0.1,
+            h: 0.033,
+        },
+    ],
+    [
+        CardRegion {
+            x: 0.631,
+            y: 0.378,
+            w: 0.125,
+            h: 0.045,
+        },
+        CardRegion {
+            x: 0.645,
+            y: 0.382,
+            w: 0.1,
+            h: 0.033,
+        },
+    ],
 ];
 
 #[derive(Serialize, Deserialize, Clone, Debug)]
@@ -347,59 +371,61 @@ async fn detect_augment_names(
         }
     }
 
-    for (i, region) in CARD_NAME_REGIONS.iter().enumerate() {
-        // Convert fractional coordinates to pixels
-        let px = (region.x * screen_w) as u32;
-        let py = (region.y * screen_h) as u32;
-        let pw = (region.w * screen_w) as u32;
-        let ph = (region.h * screen_h) as u32;
+    for (i, regions) in CARD_NAME_REGIONS.iter().enumerate() {
+        for region in regions {
+            // Convert fractional coordinates to pixels
+            let px = (region.x * screen_w) as u32;
+            let py = (region.y * screen_h) as u32;
+            let pw = (region.w * screen_w) as u32;
+            let ph = (region.h * screen_h) as u32;
 
-        // Bounds check
-        if px + pw > screenshot.width() || py + ph > screenshot.height() {
-            continue;
-        }
+            // Bounds check
+            if px + pw > screenshot.width() || py + ph > screenshot.height() {
+                continue;
+            }
 
-        // Crop to the card name region
-        let cropped = screenshot.view(px, py, pw, ph).to_image();
+            // Crop to the card name region
+            let cropped = screenshot.view(px, py, pw, ph).to_image();
 
-        // Write to a securely-created temp file for tesseract.
-        let tmp_file = tempfile::Builder::new()
-            .prefix("mayhem_ocr_")
-            .suffix(".png")
-            .tempfile()
-            .map_err(|e| format!("Temp file failed: {}", e))?;
-        cropped
-            .save(tmp_file.path())
-            .map_err(|e| format!("Save failed: {}", e))?;
+            // Write to a securely-created temp file for tesseract.
+            let tmp_file = tempfile::Builder::new()
+                .prefix("mayhem_ocr_")
+                .suffix(".png")
+                .tempfile()
+                .map_err(|e| format!("Temp file failed: {}", e))?;
+            cropped
+                .save(tmp_file.path())
+                .map_err(|e| format!("Save failed: {}", e))?;
 
-        // Run Tesseract with every supported LoL locale language pack installed locally.
-        let mut command = std::process::Command::new("tesseract");
-        command
-            .arg(tmp_file.path())
-            .arg("stdout")
-            .arg("-l")
-            .arg(&ocr_languages)
-            .arg("--psm")
-            .arg("7"); // single text line
+            // Run Tesseract with every supported LoL locale language pack installed locally.
+            let mut command = std::process::Command::new("tesseract");
+            command
+                .arg(tmp_file.path())
+                .arg("stdout")
+                .arg("-l")
+                .arg(&ocr_languages)
+                .arg("--psm")
+                .arg("7"); // single text line
 
-        if let Some(file) = &user_words_file {
-            command.arg("--user-words").arg(file.path());
-        }
+            if let Some(file) = &user_words_file {
+                command.arg("--user-words").arg(file.path());
+            }
 
-        let output = command
-            .output()
-            .map_err(|e| format!("Tesseract failed: {}", e))?;
+            let output = command
+                .output()
+                .map_err(|e| format!("Tesseract failed: {}", e))?;
 
-        let text = String::from_utf8_lossy(&output.stdout)
-            .trim()
-            .replace(' ', "")
-            .replace('\n', "");
+            let text = String::from_utf8_lossy(&output.stdout)
+                .trim()
+                .replace(' ', "")
+                .replace('\n', "");
 
-        if !text.is_empty() {
-            results.push(DetectedAugment {
-                text,
-                region_index: i,
-            });
+            if !text.is_empty() {
+                results.push(DetectedAugment {
+                    text,
+                    region_index: i,
+                });
+            }
         }
     }
 
