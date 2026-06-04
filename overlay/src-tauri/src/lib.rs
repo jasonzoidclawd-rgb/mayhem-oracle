@@ -285,6 +285,9 @@ pub struct DetectedAugment {
     pub region_index: usize,
 }
 
+#[cfg(target_os = "macos")]
+const OVERLAY_WINDOW_LEVEL: i64 = i32::MAX as i64 - 8;
+
 // ─── OCR Commands ───────────────────────────────────────────────────────────
 
 #[tauri::command]
@@ -629,9 +632,10 @@ pub fn run() {
                     let frame: cocoa::foundation::NSRect = msg_send![main_screen, frame];
                     ns_win.setFrame_display_(frame, cocoa::base::YES);
 
-                    // kCGAssistiveTechHighWindowLevel = 1500; above screen saver (1000)
-                    // and most game windows, keeps overlay on top in borderless windowed mode
-                    ns_win.setLevel_(1500);
+                    // League's fullscreen game surfaces can sit near the top of the
+                    // CGWindow stack (observed at i32::MAX - 18). Keep this overlay
+                    // above that layer while the React focus gate controls visibility.
+                    ns_win.setLevel_(OVERLAY_WINDOW_LEVEL);
                     ns_win.setCollectionBehavior_(
                         NSWindowCollectionBehavior::NSWindowCollectionBehaviorCanJoinAllSpaces
                             | NSWindowCollectionBehavior::NSWindowCollectionBehaviorStationary
@@ -655,7 +659,7 @@ pub fn run() {
                                 unsafe {
                                     use cocoa::appkit::NSWindow;
                                     let ns_win = ptr as cocoa::base::id;
-                                    ns_win.setLevel_(1500);
+                                    ns_win.setLevel_(OVERLAY_WINDOW_LEVEL);
                                     let _: () = objc::msg_send![ns_win, orderFrontRegardless];
                                 }
                             }
