@@ -515,8 +515,8 @@ fn is_league_foreground() -> bool {
         if ptr.is_null() {
             return false;
         }
-        let s = CStr::from_ptr(ptr).to_str().unwrap_or("");
-        s.contains("LeagueofLegends") || s.contains("riotgames")
+        let s = CStr::from_ptr(ptr).to_str().unwrap_or("").to_lowercase();
+        s.replace(' ', "").contains("leagueoflegends")
     }
     #[cfg(not(target_os = "macos"))]
     {

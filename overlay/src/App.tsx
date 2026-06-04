@@ -124,7 +124,7 @@ function App() {
   const [, setOcrActive] = useState(false);
   const ocrIntervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const [showStartupTip, setShowStartupTip] = useState(true);
-  const [leagueFocused, setLeagueFocused] = useState(true);
+  const [leagueFocused, setLeagueFocused] = useState(false);
   const [overlayData, setOverlayData] = useState<OverlayData | null>(null);
   const [abilityProfiles, setAbilityProfiles] = useState<Record<string, AbilityProfile | null>>({});
   const [dataError, setDataError] = useState<string | null>(null);
@@ -356,7 +356,7 @@ function App() {
 
       setMatchedCards(matched);
     } catch {
-      // OCR not available or failed
+      setMatchedCards([]);
     }
   }, [nameLookup, ocrKnownNames]);
 
@@ -385,9 +385,14 @@ function App() {
 
   // Main polling loop
   const poll = useCallback(async () => {
+    let leagueIsFocused = leagueFocused;
     try {
-      const focused = await invoke<boolean>("is_league_foreground");
-      setLeagueFocused(focused);
+      leagueIsFocused = await invoke<boolean>("is_league_foreground");
+      setLeagueFocused(leagueIsFocused);
+      if (!leagueIsFocused) {
+        setMatchedCards([]);
+        stopOcr();
+      }
     } catch {
       // macOS only — default to showing on other platforms
     }
@@ -416,17 +421,12 @@ function App() {
           .reverse()
           .find((threshold) => data.level >= threshold && threshold > lastAugmentLevel);
 
-        // Augment selection trigger:
-        // Level 3 (round 1): at spawn (no death required)
-        // Level 7, 11, 15: must be dead
-        const shouldShowSelection =
-          augmentLevel !== undefined &&
-          (augmentLevel === 3 || data.is_dead);
+        const shouldShowSelection = augmentLevel !== undefined;
 
         if (shouldShowSelection) {
           setLastAugmentLevel(augmentLevel);
           setPhase("augment_selection");
-          startOcr();
+          if (leagueIsFocused) startOcr();
         } else if (phase === "augment_selection") {
           // Round 1 (level 3): player never dies, exit once they level past 3
           // Rounds 2-4 (level 7/11/15): exit as soon as they respawn
@@ -437,6 +437,8 @@ function App() {
           if (doneSelecting) {
             setPhase("in_game");
             stopOcr();
+          } else if (leagueIsFocused) {
+            startOcr();
           }
         } else {
           setPhase("in_game");
@@ -464,7 +466,7 @@ function App() {
     } catch {
       setPhase("idle");
     }
-  }, [champNameToSlug, championSlug, lastAugmentLevel, phase, startOcr, stopOcr]);
+  }, [champNameToSlug, championSlug, lastAugmentLevel, leagueFocused, phase, startOcr, stopOcr]);
 
   useEffect(() => {
     const intervalId = setInterval(() => {
