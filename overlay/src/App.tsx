@@ -4,6 +4,7 @@ import {
   buildChampionPool,
   calculateSetPaths,
 } from "./scoring";
+import { buildOverlayAugmentLookup, matchAugmentName } from "./scoring/offer-lookup";
 import type {
   AbilityProfile,
   ChampionBaseStats,
@@ -14,11 +15,6 @@ import type {
   SetPath,
   ComboTier,
 } from "./scoring";
-import {
-  addAugmentAliases,
-  matchAugment,
-  shouldStartAugmentSelection,
-} from "./augmentSelection";
 import "./App.css";
 
 // ─── Types ───
@@ -45,7 +41,10 @@ interface MatchedCard {
 interface OverlayAugment {
   slug: string;
   name: string;
+  name_zh_CN?: string;
   name_zh_TW?: string;
+  name_ja?: string;
+  name_ko?: string;
   rarity: "silver" | "gold" | "prismatic";
   win_rate: number | null;
   icon: string;
@@ -125,7 +124,7 @@ function App() {
   const [, setOcrActive] = useState(false);
   const ocrIntervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const [showStartupTip, setShowStartupTip] = useState(true);
-  const [leagueFocused, setLeagueFocused] = useState(true);
+  const [leagueFocused, setLeagueFocused] = useState(false);
   const [overlayData, setOverlayData] = useState<OverlayData | null>(null);
   const [abilityProfiles, setAbilityProfiles] = useState<Record<string, AbilityProfile | null>>({});
   const [dataError, setDataError] = useState<string | null>(null);
@@ -232,6 +231,19 @@ function App() {
     [championSlugByName],
   );
 
+  const comboBySlug = useMemo(() => {
+    if (!championSlug || !overlayData) return new Map<string, ComboTier>();
+
+    return new Map<string, ComboTier>(
+      overlayData.combos
+        .filter((combo) => combo.champion === championSlug)
+        .map((combo) => [
+          combo.augmentSlug ?? combo.augment.replace(/ /g, "-"),
+          combo.tier as ComboTier,
+        ]),
+    );
+  }, [championSlug, overlayData]);
+
   // Build champion pool
   const poolData = useMemo((): ChampionPoolBreakdown | null => {
     if (!championSlug || !overlayData) return null;
@@ -243,13 +255,6 @@ function App() {
     if (abilityProfileState === undefined) return null;
 
     const abilityProfile = abilityProfileState ?? undefined;
-    const champCombos = overlayData.combos.filter((c) => c.champion === championSlug);
-    const comboBySlug = new Map<string, ComboTier>(
-      champCombos.map((c) => [
-        c.augmentSlug ?? c.augment.replace(/ /g, "-"),
-        c.tier as ComboTier,
-      ]),
-    );
 
     return buildChampionPool(
       championSlug,
@@ -264,21 +269,41 @@ function App() {
       comboBySlug,
       overlayData.poolRules,
     );
-  }, [abilityProfiles, championSlug, overlayData]);
+  }, [abilityProfiles, championSlug, comboBySlug, overlayData]);
 
-  // Build zh-TW name lookup for OCR matching
+  // Build all-name lookup for OCR matching. Champion-pool scores override fallback
+  // scores, but real in-game offers outside the predicted pool still match.
   const nameLookup = useMemo(() => {
-    if (!poolData) return new Map<string, PoolAugment>();
-    const map = new Map<string, PoolAugment>();
-    for (const tier of ["silver", "gold", "prismatic"] as const) {
-      for (const aug of poolData[tier].augments) {
-        if (aug.name_zh_TW) map.set(aug.name_zh_TW, aug);
-        map.set(aug.name, aug);
-        addAugmentAliases(map, aug);
-      }
-    }
-    return map;
-  }, [poolData]);
+    if (!championSlug || !overlayData) return new Map<string, PoolAugment>();
+
+    const champ = overlayData.champions.find((c) => c.slug === championSlug);
+    if (!champ) return new Map<string, PoolAugment>();
+
+    const abilityProfileState = abilityProfiles[championSlug];
+    if (abilityProfileState === undefined) return new Map<string, PoolAugment>();
+
+    return buildOverlayAugmentLookup({
+      allAugments: overlayData.augments,
+      championWinRate: champ.win_rate,
+      comboTiers: comboBySlug,
+      poolData,
+      abilityProfile: abilityProfileState ?? undefined,
+    });
+  }, [abilityProfiles, championSlug, comboBySlug, overlayData, poolData]);
+
+  const ocrKnownNames = useMemo(() => {
+    if (!overlayData) return [];
+
+    return overlayData.augments.flatMap((augment) =>
+      [
+        augment.name,
+        augment.name_zh_TW,
+        augment.name_zh_CN,
+        augment.name_ja,
+        augment.name_ko,
+      ].filter((name): name is string => Boolean(name)),
+    );
+  }, [overlayData]);
 
   // Current round
   const currentRound = (() => {
@@ -313,11 +338,13 @@ function App() {
   const runOcr = useCallback(async () => {
     if (!nameLookup.size) return;
     try {
-      const detected = await invoke<DetectedAugment[]>("detect_augment_names");
+      const detected = await invoke<DetectedAugment[]>("detect_augment_names", {
+        knownNames: ocrKnownNames,
+      });
 
       const matched: MatchedCard[] = [];
       for (const det of detected) {
-        const aug = matchAugment(det.text, nameLookup);
+        const aug = matchAugmentName(det.text, nameLookup);
         if (aug) {
           matched.push({
             augment: aug,
@@ -329,9 +356,9 @@ function App() {
 
       setMatchedCards(matched);
     } catch {
-      // OCR not available or failed
+      setMatchedCards([]);
     }
-  }, [nameLookup]);
+  }, [nameLookup, ocrKnownNames]);
 
   useEffect(() => {
     runOcrRef.current = runOcr;
@@ -358,9 +385,14 @@ function App() {
 
   // Main polling loop
   const poll = useCallback(async () => {
+    let leagueIsFocused = leagueFocused;
     try {
-      const focused = await invoke<boolean>("is_league_foreground");
-      setLeagueFocused(focused);
+      leagueIsFocused = await invoke<boolean>("is_league_foreground");
+      setLeagueFocused(leagueIsFocused);
+      if (!leagueIsFocused) {
+        setMatchedCards([]);
+        stopOcr();
+      }
     } catch {
       // macOS only — default to showing on other platforms
     }
@@ -389,12 +421,12 @@ function App() {
           .reverse()
           .find((threshold) => data.level >= threshold && threshold > lastAugmentLevel);
 
-        const shouldShowSelection = shouldStartAugmentSelection({ augmentLevel });
+        const shouldShowSelection = augmentLevel !== undefined;
 
-        if (shouldShowSelection && augmentLevel !== undefined) {
+        if (shouldShowSelection) {
           setLastAugmentLevel(augmentLevel);
           setPhase("augment_selection");
-          startOcr();
+          if (leagueIsFocused) startOcr();
         } else if (phase === "augment_selection") {
           // Round 1 (level 3): player never dies, exit once they level past 3
           // Rounds 2-4 (level 7/11/15): exit as soon as they respawn
@@ -405,6 +437,8 @@ function App() {
           if (doneSelecting) {
             setPhase("in_game");
             stopOcr();
+          } else if (leagueIsFocused) {
+            startOcr();
           }
         } else {
           setPhase("in_game");
@@ -432,7 +466,7 @@ function App() {
     } catch {
       setPhase("idle");
     }
-  }, [champNameToSlug, championSlug, lastAugmentLevel, phase, startOcr, stopOcr]);
+  }, [champNameToSlug, championSlug, lastAugmentLevel, leagueFocused, phase, startOcr, stopOcr]);
 
   useEffect(() => {
     const intervalId = setInterval(() => {
