@@ -603,9 +603,9 @@ pub fn run() {
                     let frame: cocoa::foundation::NSRect = msg_send![main_screen, frame];
                     ns_win.setFrame_display_(frame, cocoa::base::YES);
 
-                    // kCGAssistiveTechHighWindowLevel = 1500; above screen saver (1000)
-                    // and most game windows, keeps overlay on top in borderless windowed mode
-                    ns_win.setLevel_(1500);
+                    // 2147483639 = INT32_MAX - 8; 10 above League fullscreen level (2147483629)
+                    // Required for true macOS fullscreen — borderless windowed only needs 1500
+                    ns_win.setLevel_(2147483639);
                     ns_win.setCollectionBehavior_(
                         NSWindowCollectionBehavior::NSWindowCollectionBehaviorCanJoinAllSpaces
                             | NSWindowCollectionBehavior::NSWindowCollectionBehaviorStationary
@@ -629,7 +629,7 @@ pub fn run() {
                                 unsafe {
                                     use cocoa::appkit::NSWindow;
                                     let ns_win = ptr as cocoa::base::id;
-                                    ns_win.setLevel_(1500);
+                                    ns_win.setLevel_(2147483639);
                                     let _: () = objc::msg_send![ns_win, orderFrontRegardless];
                                 }
                             }
