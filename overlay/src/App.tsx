@@ -14,7 +14,11 @@ import type {
   SetPath,
   ComboTier,
 } from "./scoring";
-import { addAugmentAliases, matchAugment } from "./augmentSelection";
+import {
+  addAugmentAliases,
+  matchAugment,
+  shouldStartAugmentSelection,
+} from "./augmentSelection";
 import "./App.css";
 
 // ─── Types ───
@@ -385,14 +389,9 @@ function App() {
           .reverse()
           .find((threshold) => data.level >= threshold && threshold > lastAugmentLevel);
 
-        // Augment selection trigger:
-        // Level 3 (round 1): at spawn (no death required)
-        // Level 7, 11, 15: must be dead
-        const shouldShowSelection =
-          augmentLevel !== undefined &&
-          (augmentLevel === 3 || data.is_dead);
+        const shouldShowSelection = shouldStartAugmentSelection({ augmentLevel });
 
-        if (shouldShowSelection) {
+        if (shouldShowSelection && augmentLevel !== undefined) {
           setLastAugmentLevel(augmentLevel);
           setPhase("augment_selection");
           startOcr();

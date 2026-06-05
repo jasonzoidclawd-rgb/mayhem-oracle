@@ -2,6 +2,7 @@ import { describe, expect, test } from "vitest";
 import {
   addAugmentAliases,
   matchAugment,
+  shouldStartAugmentSelection,
 } from "../../../overlay/src/augmentSelection";
 import type { PoolAugment } from "../../../overlay/src/scoring";
 
@@ -21,6 +22,17 @@ function augment(slug: string, name: string, name_zh_TW: string): PoolAugment {
 }
 
 describe("overlay augment selection matching", () => {
+  test("starts any newly reached augment threshold without requiring death state", () => {
+    expect(shouldStartAugmentSelection({ augmentLevel: 3 })).toBe(true);
+    expect(shouldStartAugmentSelection({ augmentLevel: 7 })).toBe(true);
+    expect(shouldStartAugmentSelection({ augmentLevel: 11 })).toBe(true);
+    expect(shouldStartAugmentSelection({ augmentLevel: 15 })).toBe(true);
+  });
+
+  test("does not start when no new augment threshold was reached", () => {
+    expect(shouldStartAugmentSelection({ augmentLevel: undefined })).toBe(false);
+  });
+
   test("matches Steel Your Heart OCR aliases", () => {
     const steelHeart = augment(
       "quest-steel-your-heart",

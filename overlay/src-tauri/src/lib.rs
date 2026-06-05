@@ -439,10 +439,30 @@ fn is_league_foreground() -> bool {
             return false;
         }
         let s = CStr::from_ptr(ptr).to_str().unwrap_or("");
-        s.contains("LeagueofLegends") || s.contains("riotgames")
+        if is_league_identifier(s) {
+            return true;
+        }
+
+        let app_name: cocoa::base::id = objc::msg_send![frontmost, localizedName];
+        if app_name.is_null() {
+            return false;
+        }
+        let ptr = cocoa::foundation::NSString::UTF8String(app_name);
+        if ptr.is_null() {
+            return false;
+        }
+        let s = CStr::from_ptr(ptr).to_str().unwrap_or("");
+        is_league_identifier(s)
     }
     #[cfg(not(target_os = "macos"))]
     { true }
+}
+
+fn is_league_identifier(value: &str) -> bool {
+    value
+        .to_lowercase()
+        .replace(' ', "")
+        .contains("leagueoflegends")
 }
 
 /// Open macOS System Settings → Privacy → Screen Recording
@@ -563,4 +583,22 @@ pub fn run() {
         })
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
+}
+
+#[cfg(test)]
+mod tests {
+    use super::is_league_identifier;
+
+    #[test]
+    fn league_identifier_matches_spaced_macos_name() {
+        assert!(is_league_identifier("League of Legends"));
+        assert!(is_league_identifier("com.riotgames.LeagueOfLegends.Game"));
+        assert!(is_league_identifier("leagueoflegends"));
+    }
+
+    #[test]
+    fn league_identifier_does_not_match_generic_riot_client() {
+        assert!(!is_league_identifier("Riot Client"));
+        assert!(!is_league_identifier("com.riotgames.RiotClient"));
+    }
 }
