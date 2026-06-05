@@ -1,6 +1,6 @@
 {
   "patch": "26.11",
-  "scraped_at": "2026-06-04T23:01:58.802234+00:00",
+  "scraped_at": "2026-06-05T22:59:28.621622+00:00",
   "combos": [
     {
       "champion": "vayne",
@@ -63,10 +63,40 @@
       "ref": "curated:aurelionsol-叠角龙100斩杀龙王"
     },
     {
+      "champion": "vayne",
+      "augment": "Dual Wield",
+      "tier": "S",
+      "ref": "curated:vayne-dual-wield"
+    },
+    {
+      "champion": "graves",
+      "augment": "Slow And Steady",
+      "tier": "S",
+      "ref": "curated:graves-slow-and-steady"
+    },
+    {
       "champion": "graves",
       "augment": "Back To Basics",
       "tier": "S",
       "ref": "curated:graves-back-to-basics"
+    },
+    {
+      "champion": "vayne",
+      "augment": "Twice Thrice",
+      "tier": "S",
+      "ref": "curated:vayne-twice-thrice"
+    },
+    {
+      "champion": "yasuo",
+      "augment": "Swift and Safe",
+      "tier": "S",
+      "ref": "curated:yasuo-swift-and-safe"
+    },
+    {
+      "champion": "morgana",
+      "augment": "Executioner",
+      "tier": "S",
+      "ref": "curated:morgana-executioner"
     },
     {
       "champion": "tristana",
@@ -85,18 +115,6 @@
       "augment": "Vulnerability",
       "tier": "S",
       "ref": "curated:lucian-vulnerability"
-    },
-    {
-      "champion": "vayne",
-      "augment": "Dual Wield",
-      "tier": "S",
-      "ref": "curated:vayne-dual-wield"
-    },
-    {
-      "champion": "graves",
-      "augment": "Slow And Steady",
-      "tier": "S",
-      "ref": "curated:graves-slow-and-steady"
     },
     {
       "champion": "brand",
@@ -225,10 +243,10 @@
       "ref": "curated:rell-残忍坦克流"
     },
     {
-      "champion": "vayne",
-      "augment": "Twice Thrice",
+      "champion": "yasuo",
+      "augment": "Critical Healing",
       "tier": "S",
-      "ref": "curated:vayne-twice-thrice"
+      "ref": "curated:yasuo-毁坏仪式无限护盾流"
     },
     {
       "champion": "lillia",
@@ -237,16 +255,22 @@
       "ref": "curated:lillia-infernal-conduit"
     },
     {
-      "champion": "yasuo",
-      "augment": "Swift and Safe",
+      "champion": "malzahar",
+      "augment": "Infernal Conduit",
       "tier": "S",
-      "ref": "curated:yasuo-swift-and-safe"
+      "ref": "curated:malzahar-infernal-conduit"
     },
     {
-      "champion": "morgana",
-      "augment": "Executioner",
+      "champion": "fizz",
+      "augment": "Dashing",
       "tier": "S",
-      "ref": "curated:morgana-executioner"
+      "ref": "curated:fizz-dashing"
+    },
+    {
+      "champion": "yone",
+      "augment": "Critical Healing",
+      "tier": "S",
+      "ref": "curated:yone-critical-healing"
     },
     {
       "champion": "fizz",
@@ -267,22 +291,22 @@
       "ref": "curated:caitlyn-连击飞弹"
     },
     {
-      "champion": "fizz",
-      "augment": "Dashing",
+      "champion": "rumble",
+      "augment": "Vulnerability",
       "tier": "S",
-      "ref": "curated:fizz-dashing"
+      "ref": "curated:rumble-vulnerability"
+    },
+    {
+      "champion": "aurelionsol",
+      "augment": "Ice Cold",
+      "tier": "S",
+      "ref": "curated:aurelionsol-ice-cold"
     },
     {
       "champion": "ryze",
       "augment": "Quest: Wooglet's Witchcap",
       "tier": "S",
       "ref": "curated:ryze-quest-wooglets-witchcap"
-    },
-    {
-      "champion": "rumble",
-      "augment": "Vulnerability",
-      "tier": "S",
-      "ref": "curated:rumble-vulnerability"
     },
     {
       "champion": "lillia",
@@ -340,12 +364,6 @@
     },
     {
       "champion": "yasuo",
-      "augment": "Critical Healing",
-      "tier": "S",
-      "ref": "curated:yasuo-毁坏仪式无限护盾流"
-    },
-    {
-      "champion": "yasuo",
       "augment": "Shadow Runner",
       "tier": "S",
       "ref": "curated:yasuo-快乐跑刀男"
@@ -375,10 +393,10 @@
       "ref": "curated:sett-clown-college"
     },
     {
-      "champion": "aurelionsol",
-      "augment": "Ice Cold",
+      "champion": "ryze",
+      "augment": "Mad Scientist",
       "tier": "S",
-      "ref": "curated:aurelionsol-ice-cold"
+      "ref": "curated:ryze-mad-scientist"
     },
     {
       "champion": "missfortune",
@@ -411,22 +429,16 @@
       "ref": "curated:lucian-滑板卢仙"
     },
     {
-      "champion": "malzahar",
-      "augment": "Infernal Conduit",
+      "champion": "xinzhao",
+      "augment": "Master of Duality",
       "tier": "S",
-      "ref": "curated:malzahar-infernal-conduit"
+      "ref": "curated:xinzhao-物法皆修无限回血流"
     },
     {
       "champion": "seraphine",
       "augment": "Slap Around",
       "tier": "S",
       "ref": "curated:seraphine-slap-around"
-    },
-    {
-      "champion": "yone",
-      "augment": "Critical Healing",
-      "tier": "S",
-      "ref": "curated:yone-critical-healing"
     },
     {
       "champion": "ryze",
@@ -471,10 +483,10 @@
       "ref": "curated:aurelionsol-stackosaurusrex"
     },
     {
-      "champion": "ryze",
-      "augment": "Mad Scientist",
+      "champion": "amumu",
+      "augment": "Ethereal Weapon",
       "tier": "S",
-      "ref": "curated:ryze-mad-scientist"
+      "ref": "curated:amumu-ethereal-weapon"
     },
     {
       "champion": "sett",
@@ -543,10 +555,16 @@
       "ref": "curated:fizz-infernal-conduit"
     },
     {
-      "champion": "amumu",
-      "augment": "Ethereal Weapon",
+      "champion": "corki",
+      "augment": "Jeweled Gauntlet",
       "tier": "S",
-      "ref": "curated:amumu-ethereal-weapon"
+      "ref": "curated:corki-jeweled-gauntlet"
+    },
+    {
+      "champion": "smolder",
+      "augment": "Jeweled Gauntlet",
+      "tier": "S",
+      "ref": "curated:smolder-jeweled-gauntlet"
     },
     {
       "champion": "yunara",
@@ -571,6 +589,12 @@
       "augment": "Ethereal Weapon",
       "tier": "S",
       "ref": "curated:kayle-ethereal-weapon"
+    },
+    {
+      "champion": "twitch",
+      "augment": "Fey Magic",
+      "tier": "S",
+      "ref": "curated:twitch-fey-magic"
     },
     {
       "champion": "kalista",
@@ -613,12 +637,6 @@
       "augment": "Back To Basics",
       "tier": "S",
       "ref": "curated:zed-回归基本功劫"
-    },
-    {
-      "champion": "xinzhao",
-      "augment": "Master of Duality",
-      "tier": "S",
-      "ref": "curated:xinzhao-物法皆修无限回血流"
     },
     {
       "champion": "masteryi",
@@ -807,10 +825,28 @@
       "ref": "curated:sett-能抗能打重量级摔跤手"
     },
     {
+      "champion": "katarina",
+      "augment": "Vulnerability",
+      "tier": "S",
+      "ref": "curated:katarina-vulnerability"
+    },
+    {
       "champion": "samira",
       "augment": "Blade Waltz",
       "tier": "S",
       "ref": "curated:samira-blade-waltz"
+    },
+    {
+      "champion": "elise",
+      "augment": "Dashing",
+      "tier": "S",
+      "ref": "curated:elise-dashing"
+    },
+    {
+      "champion": "mordekaiser",
+      "augment": "Protein Shake",
+      "tier": "S",
+      "ref": "curated:mordekaiser-protein-shake"
     },
     {
       "champion": "singed",
@@ -819,16 +855,16 @@
       "ref": "curated:singed-infernal-conduit"
     },
     {
-      "champion": "corki",
-      "augment": "Jeweled Gauntlet",
-      "tier": "S",
-      "ref": "curated:corki-jeweled-gauntlet"
-    },
-    {
       "champion": "yunara",
       "augment": "Tap Dancer",
       "tier": "S",
       "ref": "curated:yunara-tap-dancer"
+    },
+    {
+      "champion": "mel",
+      "augment": "Skilled Sniper",
+      "tier": "S",
+      "ref": "curated:mel-skilled-sniper"
     },
     {
       "champion": "viego",
@@ -853,12 +889,6 @@
       "augment": "Ethereal Weapon",
       "tier": "S",
       "ref": "curated:lux-ethereal-weapon"
-    },
-    {
-      "champion": "smolder",
-      "augment": "Jeweled Gauntlet",
-      "tier": "S",
-      "ref": "curated:smolder-jeweled-gauntlet"
     },
     {
       "champion": "senna",
@@ -891,10 +921,52 @@
       "ref": "curated:maokai-巨像大树"
     },
     {
+      "champion": "aatrox",
+      "augment": "Protein Shake",
+      "tier": "S",
+      "ref": "curated:aatrox-蛋白粉半肉战士流"
+    },
+    {
+      "champion": "warwick",
+      "augment": "Circle of Death",
+      "tier": "S",
+      "ref": "curated:warwick-ap死亡之环流"
+    },
+    {
+      "champion": "veigar",
+      "augment": "Marksmage",
+      "tier": "S",
+      "ref": "curated:veigar-神射小法师"
+    },
+    {
       "champion": "milio",
       "augment": "Eureka",
       "tier": "S",
       "ref": "curated:milio-ap米利欧"
+    },
+    {
+      "champion": "yunara",
+      "augment": "Double Tap",
+      "tier": "S",
+      "ref": "curated:yunara-双发快射爽飞编制"
+    },
+    {
+      "champion": "hecarim",
+      "augment": "Ultimate Awakening",
+      "tier": "S",
+      "ref": "curated:hecarim-终极唤醒人马"
+    },
+    {
+      "champion": "ezreal",
+      "augment": "Draw Your Sword",
+      "tier": "S",
+      "ref": "curated:ezreal-手感好"
+    },
+    {
+      "champion": "pantheon",
+      "augment": "Vulnerability",
+      "tier": "S",
+      "ref": "curated:pantheon-爆杀流潘森"
     },
     {
       "champion": "aurora",
@@ -913,12 +985,6 @@
       "augment": "Circle of Death",
       "tier": "S",
       "ref": "curated:zac-circle-of-death"
-    },
-    {
-      "champion": "twitch",
-      "augment": "Fey Magic",
-      "tier": "S",
-      "ref": "curated:twitch-fey-magic"
     },
     {
       "champion": "jayce",
@@ -945,12 +1011,6 @@
       "ref": "curated:swain-slap-around"
     },
     {
-      "champion": "katarina",
-      "augment": "Vulnerability",
-      "tier": "S",
-      "ref": "curated:katarina-vulnerability"
-    },
-    {
       "champion": "hecarim",
       "augment": "Rabble Rousing",
       "tier": "S",
@@ -975,12 +1035,6 @@
       "ref": "curated:draven-spin-to-win"
     },
     {
-      "champion": "elise",
-      "augment": "Dashing",
-      "tier": "S",
-      "ref": "curated:elise-dashing"
-    },
-    {
       "champion": "samira",
       "augment": "Draw Your Sword",
       "tier": "S",
@@ -1003,12 +1057,6 @@
       "augment": "Back To Basics",
       "tier": "S",
       "ref": "curated:jhin-back-to-basics"
-    },
-    {
-      "champion": "mordekaiser",
-      "augment": "Protein Shake",
-      "tier": "S",
-      "ref": "curated:mordekaiser-protein-shake"
     },
     {
       "champion": "katarina",
@@ -1111,12 +1159,6 @@
       "augment": "Slap Around",
       "tier": "S",
       "ref": "curated:renata-slap-around"
-    },
-    {
-      "champion": "mel",
-      "augment": "Skilled Sniper",
-      "tier": "S",
-      "ref": "curated:mel-skilled-sniper"
     },
     {
       "champion": "sylas",
@@ -1273,12 +1315,6 @@
       "augment": "Ethereal Weapon",
       "tier": "S",
       "ref": "curated:kaisa-ethereal-weapon"
-    },
-    {
-      "champion": "hecarim",
-      "augment": "Ultimate Awakening",
-      "tier": "S",
-      "ref": "curated:hecarim-ultimate-awakening"
     },
     {
       "champion": "aphelios",
@@ -1617,12 +1653,6 @@
       "ref": "curated:bard-虚空裂隙巴德"
     },
     {
-      "champion": "aatrox",
-      "augment": "Protein Shake",
-      "tier": "S",
-      "ref": "curated:aatrox-蛋白粉半肉战士流"
-    },
-    {
       "champion": "syndra",
       "augment": "Jeweled Gauntlet",
       "tier": "S",
@@ -1851,12 +1881,6 @@
       "ref": "curated:vi-极致爆发穿甲流"
     },
     {
-      "champion": "warwick",
-      "augment": "Circle of Death",
-      "tier": "S",
-      "ref": "curated:warwick-ap死亡之环流"
-    },
-    {
       "champion": "zeri",
       "augment": "Rabble Rousing",
       "tier": "S",
@@ -2023,12 +2047,6 @@
       "augment": "Upgrade Infinity Edge",
       "tier": "S",
       "ref": "curated:xayah-暴击流"
-    },
-    {
-      "champion": "veigar",
-      "augment": "Marksmage",
-      "tier": "S",
-      "ref": "curated:veigar-神射小法师"
     },
     {
       "champion": "veigar",
@@ -2271,12 +2289,6 @@
       "ref": "curated:pantheon-无限火力潘森"
     },
     {
-      "champion": "yunara",
-      "augment": "Double Tap",
-      "tier": "S",
-      "ref": "curated:yunara-双发快射爽飞编制"
-    },
-    {
       "champion": "vladimir",
       "augment": "Goliath",
       "tier": "S",
@@ -2427,12 +2439,6 @@
       "ref": "curated:yorick-掘墓困人吃空投"
     },
     {
-      "champion": "ezreal",
-      "augment": "Draw Your Sword",
-      "tier": "S",
-      "ref": "curated:ezreal-手感好"
-    },
-    {
       "champion": "talon",
       "augment": "Transmute: Chaos",
       "tier": "S",
@@ -2467,12 +2473,6 @@
       "augment": "Dual Wield",
       "tier": "S",
       "ref": "curated:tryndamere-无敌流"
-    },
-    {
-      "champion": "pantheon",
-      "augment": "Vulnerability",
-      "tier": "S",
-      "ref": "curated:pantheon-爆杀流潘森"
     },
     {
       "champion": "aphelios",
@@ -3249,6 +3249,18 @@
       "ref": "curated:zed-executioner"
     },
     {
+      "champion": "twitch",
+      "augment": "Infernal Conduit",
+      "tier": "C",
+      "ref": "curated:twitch-infernal-conduit"
+    },
+    {
+      "champion": "twitch",
+      "augment": "Ethereal Weapon",
+      "tier": "C",
+      "ref": "curated:twitch-ethereal-weapon"
+    },
+    {
       "champion": "smolder",
       "augment": "Draw Your Sword",
       "tier": "C",
@@ -3333,12 +3345,6 @@
       "ref": "curated:garen-deft"
     },
     {
-      "champion": "twitch",
-      "augment": "Infernal Conduit",
-      "tier": "C",
-      "ref": "curated:twitch-infernal-conduit"
-    },
-    {
       "champion": "sivir",
       "augment": "Vulnerability",
       "tier": "C",
@@ -3367,12 +3373,6 @@
       "augment": "Vulnerability",
       "tier": "C",
       "ref": "curated:samira-vulnerability"
-    },
-    {
-      "champion": "twitch",
-      "augment": "Ethereal Weapon",
-      "tier": "C",
-      "ref": "curated:twitch-ethereal-weapon"
     },
     {
       "champion": "viktor",
