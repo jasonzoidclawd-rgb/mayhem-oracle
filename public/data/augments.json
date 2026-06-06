@@ -1,6 +1,6 @@
 {
   "patch": "26.11",
-  "scraped_at": "2026-06-06T22:56:13.987731+00:00",
+  "scraped_at": "2026-06-06T23:05:12.538045+00:00",
   "augments": [
     {
       "slug": "back-to-basics",
@@ -3929,6 +3929,23 @@
         "crit",
         "ability"
       ],
+      "flags": {
+        "system_breaker": false,
+        "lifecycle": "active"
+      }
+    },
+    {
+      "slug": "re-energize",
+      "name": "ReEnergize",
+      "rarity": "silver",
+      "win_rate": null,
+      "icon": "https://opgg-static.akamaized.net/meta/images/lol/latest/aram-augment/MobiusCoil_large.png",
+      "name_zh_CN": "活力再生",
+      "name_zh_TW": "活力補給",
+      "name_ja": "エネルギー再充填",
+      "name_ko": "재충전",
+      "wikiDescription": "Changing targets fully refunds your Energized Attack charge. Energized Attacks deal bonus magic damage equal to 10% of the target's current health.",
+      "kit_tags": [],
       "flags": {
         "system_breaker": false,
         "lifecycle": "active"

@@ -29,6 +29,37 @@ function levenshtein(a: string, b: string): number {
   return dp[m][n];
 }
 
+function isHanText(value: string): boolean {
+  return /^\p{Script=Han}+$/u.test(value);
+}
+
+function matchCjkTitlePrefix(
+  cleaned: string,
+  lookup: OverlayAugmentLookup,
+): PoolAugment | null {
+  if (!isHanText(cleaned)) return null;
+
+  let bestMatch: PoolAugment | null = null;
+  let bestDistance = Infinity;
+  let ambiguous = false;
+
+  for (const [name, augment] of lookup) {
+    if (name.length < 4 || cleaned.length < name.length || !isHanText(name)) continue;
+    const distance = levenshtein(cleaned.slice(0, name.length), name);
+    if (distance > 1) continue;
+
+    if (distance < bestDistance) {
+      bestMatch = augment;
+      bestDistance = distance;
+      ambiguous = false;
+    } else if (distance === bestDistance && bestMatch?.slug !== augment.slug) {
+      ambiguous = true;
+    }
+  }
+
+  return ambiguous ? null : bestMatch;
+}
+
 export function normalizeAugmentNameForLookup(value: string): string {
   return value
     .normalize("NFKC")
@@ -155,6 +186,9 @@ export function matchAugmentName(
       return augment;
     }
   }
+
+  const cjkTitleMatch = matchCjkTitlePrefix(cleaned, lookup);
+  if (cjkTitleMatch) return cjkTitleMatch;
 
   let bestMatch: PoolAugment | null = null;
   let bestDist = Infinity;

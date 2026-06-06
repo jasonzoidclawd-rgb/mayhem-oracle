@@ -17,7 +17,7 @@ from typing import Dict, Iterable, List, Optional, Tuple
 from PIL import Image
 
 
-TESSERACT_PASSES = ((2, "11"),)
+TESSERACT_PASSES = ((2, "11"), (2, "6"))
 CROP_RE = re.compile(r"^region_(.+)_([123])\.png$")
 AUGMENT_NAME_FIELDS = ("name", "name_zh_TW", "name_zh_CN", "name_ja", "name_ko")
 AUGMENT_OCR_ALIASES = {

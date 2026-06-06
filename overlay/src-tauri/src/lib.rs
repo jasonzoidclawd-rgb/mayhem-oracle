@@ -361,28 +361,34 @@ fn run_tesseract(
         .save(tmp_file.path())
         .map_err(|e| format!("Save failed: {}", e))?;
 
-    let mut command = std::process::Command::new("tesseract");
-    command
-        .arg(tmp_file.path())
-        .arg("stdout")
-        .arg("-l")
-        .arg(ocr_languages)
-        .arg("--psm")
-        .arg("11");
+    let mut texts = Vec::new();
+    for psm in ["11", "6"] {
+        let mut command = std::process::Command::new("tesseract");
+        command
+            .arg(tmp_file.path())
+            .arg("stdout")
+            .arg("-l")
+            .arg(&ocr_languages)
+            .arg("--psm")
+            .arg(psm);
 
-    if let Some(file) = user_words_path {
-        command.arg("--user-words").arg(file.as_ref().as_os_str());
+        if let Some(file) = &user_words_path {
+            command.arg("--user-words").arg(file.as_ref().as_os_str());
+        }
+
+        let output = command
+            .output()
+            .map_err(|e| format!("Tesseract failed: {}", e))?;
+
+        let text = String::from_utf8_lossy(&output.stdout)
+            .trim()
+            .replace(' ', "")
+            .replace('\n', "");
+        if !text.is_empty() && !texts.contains(&text) {
+            texts.push(text);
+        }
     }
-
-    let output = command
-        .output()
-        .map_err(|e| format!("Tesseract failed: {}", e))?;
-
-    let text = String::from_utf8_lossy(&output.stdout)
-        .trim()
-        .replace(' ', "")
-        .replace('\n', "");
-
+    let text = texts.join("");
     Ok((!text.is_empty()).then_some(DetectedAugment {
         text,
         region_index: idx,
