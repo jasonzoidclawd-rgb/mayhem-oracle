@@ -8,6 +8,35 @@ export function shouldStartAugmentSelection({
   return augmentLevel !== undefined;
 }
 
+export function shouldEndAugmentSelectionForLevel({
+  playerLevel,
+  lastAugmentLevel,
+}: {
+  playerLevel: number;
+  lastAugmentLevel: number;
+}): boolean {
+  return lastAugmentLevel > 0 && playerLevel > lastAugmentLevel;
+}
+
+export function advanceOcrSelection(
+  state: { hasSeenCards: boolean; emptyPasses: number },
+  detectedCardCount: number,
+) {
+  if (detectedCardCount > 0) {
+    return { hasSeenCards: true, emptyPasses: 0, shouldStop: false };
+  }
+  if (!state.hasSeenCards) {
+    return { ...state, shouldStop: false };
+  }
+
+  const emptyPasses = state.emptyPasses + 1;
+  return {
+    hasSeenCards: true,
+    emptyPasses,
+    shouldStop: emptyPasses >= 2,
+  };
+}
+
 function levenshtein(a: string, b: string): number {
   const m = a.length, n = b.length;
   const dp: number[][] = Array.from({ length: m + 1 }, () => Array(n + 1).fill(0));

@@ -1,7 +1,9 @@
 import { describe, expect, test } from "vitest";
 import {
+  advanceOcrSelection,
   addAugmentAliases,
   matchAugment,
+  shouldEndAugmentSelectionForLevel,
   shouldStartAugmentSelection,
 } from "../../../overlay/src/augmentSelection";
 import type { PoolAugment } from "../../../overlay/src/scoring";
@@ -31,6 +33,33 @@ describe("overlay augment selection matching", () => {
 
   test("does not start when no new augment threshold was reached", () => {
     expect(shouldStartAugmentSelection({ augmentLevel: undefined })).toBe(false);
+  });
+
+  test("keeps level 7 selection active until the player advances past level 7", () => {
+    expect(shouldEndAugmentSelectionForLevel({
+      playerLevel: 7,
+      lastAugmentLevel: 7,
+    })).toBe(false);
+    expect(shouldEndAugmentSelectionForLevel({
+      playerLevel: 8,
+      lastAugmentLevel: 7,
+    })).toBe(true);
+  });
+
+  test("ends selection only after raw card text disappears for two consecutive OCR passes", () => {
+    const seen = advanceOcrSelection(
+      { hasSeenCards: false, emptyPasses: 0 },
+      3,
+    );
+    const rerollGap = advanceOcrSelection(seen, 0);
+    const newCards = advanceOcrSelection(rerollGap, 3);
+    const firstEmpty = advanceOcrSelection(newCards, 0);
+    const secondEmpty = advanceOcrSelection(firstEmpty, 0);
+
+    expect(rerollGap.shouldStop).toBe(false);
+    expect(newCards.emptyPasses).toBe(0);
+    expect(firstEmpty.shouldStop).toBe(false);
+    expect(secondEmpty.shouldStop).toBe(true);
   });
 
   test("matches Steel Your Heart OCR aliases", () => {

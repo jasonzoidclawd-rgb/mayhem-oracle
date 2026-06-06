@@ -5,6 +5,10 @@ import {
   calculateSetPaths,
 } from "./scoring";
 import { buildOverlayAugmentLookup, matchAugmentName } from "./scoring/offer-lookup";
+import {
+  advanceOcrSelection,
+  shouldEndAugmentSelectionForLevel,
+} from "./augmentSelection";
 import type {
   AbilityProfile,
   ChampionBaseStats,
@@ -118,20 +122,29 @@ function App() {
   const [phase, setPhase] = useState<Phase>("idle");
   const [playerData, setPlayerData] = useState<LivePlayerData | null>(null);
   const [championSlug, setChampionSlug] = useState<string | null>(null);
-  const [lastAugmentLevel, setLastAugmentLevel] = useState(0);
   const [pickedAugments, setPickedAugments] = useState<string[]>([]);
   const [matchedCards, setMatchedCards] = useState<MatchedCard[]>([]);
   const [, setOcrActive] = useState(false);
+  const phaseRef = useRef<Phase>("idle");
+  const lastAugmentLevelRef = useRef(0);
   const ocrTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const ocrActiveRef = useRef(false);
   const ocrRunIdRef = useRef(0);
+  const ocrHasSeenCardsRef = useRef(false);
+  const ocrEmptyPassesRef = useRef(0);
+  const ocrSelectionCompletedRef = useRef(false);
   const [showStartupTip, setShowStartupTip] = useState(true);
   const [leagueFocused, setLeagueFocused] = useState(false);
   const [overlayData, setOverlayData] = useState<OverlayData | null>(null);
   const [abilityProfiles, setAbilityProfiles] = useState<Record<string, AbilityProfile | null>>({});
   const [dataError, setDataError] = useState<string | null>(null);
-  const runOcrRef = useRef<() => Promise<void>>(async () => {});
+  const runOcrRef = useRef<(runId: number) => Promise<void>>(async () => {});
   const lastGameTimeRef = useRef<number | null>(null);
+
+  const updatePhase = useCallback((nextPhase: Phase) => {
+    phaseRef.current = nextPhase;
+    setPhase(nextPhase);
+  }, []);
 
   useEffect(() => {
     let cancelled = false;
@@ -336,13 +349,33 @@ function App() {
     [setPaths],
   );
 
+  const stopOcr = useCallback(() => {
+    ocrActiveRef.current = false;
+    ocrRunIdRef.current += 1;
+    ocrHasSeenCardsRef.current = false;
+    ocrEmptyPassesRef.current = 0;
+    if (ocrTimeoutRef.current) {
+      clearTimeout(ocrTimeoutRef.current);
+      ocrTimeoutRef.current = null;
+    }
+    setOcrActive(false);
+    setMatchedCards([]);
+  }, []);
+
   // OCR detection
-  const runOcr = useCallback(async () => {
-    if (!nameLookup.size) return;
+  const runOcr = useCallback(async (runId: number) => {
+    if (
+      !nameLookup.size ||
+      !ocrActiveRef.current ||
+      ocrRunIdRef.current !== runId
+    ) return;
+
     try {
       const detected = await invoke<DetectedAugment[]>("detect_augment_names", {
         knownNames: ocrKnownNames,
       });
+
+      if (!ocrActiveRef.current || ocrRunIdRef.current !== runId) return;
 
       const matched: MatchedCard[] = [];
       for (const det of detected) {
@@ -356,11 +389,28 @@ function App() {
         }
       }
 
+      const nextSelection = advanceOcrSelection(
+        {
+          hasSeenCards: ocrHasSeenCardsRef.current,
+          emptyPasses: ocrEmptyPassesRef.current,
+        },
+        detected.length,
+      );
+      ocrHasSeenCardsRef.current = nextSelection.hasSeenCards;
+      ocrEmptyPassesRef.current = nextSelection.emptyPasses;
       setMatchedCards(matched);
+
+      if (nextSelection.shouldStop) {
+        ocrSelectionCompletedRef.current = true;
+        updatePhase("in_game");
+        stopOcr();
+      }
     } catch {
-      setMatchedCards([]);
+      if (ocrActiveRef.current && ocrRunIdRef.current === runId) {
+        setMatchedCards([]);
+      }
     }
-  }, [nameLookup, ocrKnownNames]);
+  }, [nameLookup, ocrKnownNames, stopOcr, updatePhase]);
 
   useEffect(() => {
     runOcrRef.current = runOcr;
@@ -368,7 +418,7 @@ function App() {
 
   const scheduleNextOcr = useCallback(function scheduleNextOcr(runId: number) {
     ocrTimeoutRef.current = setTimeout(async () => {
-      await runOcrRef.current();
+      await runOcrRef.current(runId);
       if (ocrActiveRef.current && ocrRunIdRef.current === runId) {
         scheduleNextOcr(runId);
       }
@@ -379,20 +429,11 @@ function App() {
   const startOcr = useCallback(() => {
     if (ocrActiveRef.current) return;
     ocrActiveRef.current = true;
+    ocrHasSeenCardsRef.current = false;
+    ocrEmptyPassesRef.current = 0;
     setOcrActive(true);
     scheduleNextOcr(++ocrRunIdRef.current);
   }, [scheduleNextOcr]);
-
-  const stopOcr = useCallback(() => {
-    ocrActiveRef.current = false;
-    ocrRunIdRef.current += 1;
-    if (ocrTimeoutRef.current) {
-      clearTimeout(ocrTimeoutRef.current);
-      ocrTimeoutRef.current = null;
-    }
-    setOcrActive(false);
-    setMatchedCards([]);
-  }, []);
 
   // Main polling loop
   const poll = useCallback(async () => {
@@ -413,7 +454,8 @@ function App() {
       if (data) {
         const lastGameTime = lastGameTimeRef.current;
         if (lastGameTime !== null && data.game_time + 5 < lastGameTime) {
-          setLastAugmentLevel(0);
+          ocrSelectionCompletedRef.current = true;
+          lastAugmentLevelRef.current = 0;
           setPickedAugments([]);
           setMatchedCards([]);
           stopOcr();
@@ -422,37 +464,46 @@ function App() {
         setPlayerData(data);
         const slug = champNameToSlug(data.champion);
         if (slug !== championSlug) {
+          ocrSelectionCompletedRef.current = true;
           setChampionSlug(slug);
-          setLastAugmentLevel(0);
+          lastAugmentLevelRef.current = 0;
           setPickedAugments([]);
           stopOcr();
         }
 
         const augmentLevel = [...AUGMENT_LEVELS]
           .reverse()
-          .find((threshold) => data.level >= threshold && threshold > lastAugmentLevel);
+          .find((threshold) =>
+            data.level >= threshold && threshold > lastAugmentLevelRef.current
+          );
 
         const shouldShowSelection = augmentLevel !== undefined;
 
         if (shouldShowSelection) {
-          setLastAugmentLevel(augmentLevel);
-          setPhase("augment_selection");
+          ocrSelectionCompletedRef.current = false;
+          lastAugmentLevelRef.current = augmentLevel;
+          updatePhase("augment_selection");
           if (leagueIsFocused) startOcr();
-        } else if (phase === "augment_selection") {
-          // Round 1 (level 3): player never dies, exit once they level past 3
-          // Rounds 2-4 (level 7/11/15): exit as soon as they respawn
-          const pickedAtLevel3 = lastAugmentLevel === 3;
-          const doneSelecting = pickedAtLevel3
-            ? data.level > 3
-            : !data.is_dead;
+        } else if (phaseRef.current === "augment_selection") {
+          if (ocrSelectionCompletedRef.current) {
+            updatePhase("in_game");
+            stopOcr();
+            return;
+          }
+
+          const doneSelecting = shouldEndAugmentSelectionForLevel({
+            playerLevel: data.level,
+            lastAugmentLevel: lastAugmentLevelRef.current,
+          });
           if (doneSelecting) {
-            setPhase("in_game");
+            ocrSelectionCompletedRef.current = true;
+            updatePhase("in_game");
             stopOcr();
           } else if (leagueIsFocused) {
             startOcr();
           }
         } else {
-          setPhase("in_game");
+          updatePhase("in_game");
         }
         return;
       }
@@ -462,22 +513,23 @@ function App() {
 
     try {
       const clientFound = await invoke<boolean>("detect_league_client");
+      ocrSelectionCompletedRef.current = true;
       setPlayerData(null);
       setChampionSlug(null);
-      setLastAugmentLevel(0);
+      lastAugmentLevelRef.current = 0;
       setPickedAugments([]);
       setMatchedCards([]);
       lastGameTimeRef.current = null;
       stopOcr();
       if (clientFound) {
-        setPhase("client_found");
+        updatePhase("client_found");
       } else {
-        setPhase("idle");
+        updatePhase("idle");
       }
     } catch {
-      setPhase("idle");
+      updatePhase("idle");
     }
-  }, [champNameToSlug, championSlug, lastAugmentLevel, leagueFocused, phase, startOcr, stopOcr]);
+  }, [champNameToSlug, championSlug, leagueFocused, startOcr, stopOcr, updatePhase]);
 
   useEffect(() => {
     const intervalId = setInterval(() => {
