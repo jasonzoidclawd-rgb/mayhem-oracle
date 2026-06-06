@@ -287,12 +287,12 @@ fn preferred_tesseract_languages() -> String {
         .processes()
         .values()
         .filter(|process| {
-            process
+            let name = process
                 .name()
                 .to_string_lossy()
                 .to_lowercase()
-                .replace(' ', "")
-                .contains("leagueoflegends")
+                .replace(' ', "");
+            name.contains("leagueoflegends") || name.contains("leagueclient")
         })
         .flat_map(|process| process.cmd())
         .map(|arg| arg.to_string_lossy())
