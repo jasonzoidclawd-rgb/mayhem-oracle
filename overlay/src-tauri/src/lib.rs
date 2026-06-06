@@ -236,22 +236,22 @@ pub struct CardRegion {
 
 const CARD_NAME_REGIONS: [CardRegion; 3] = [
     CardRegion {
-        x: 0.248,
-        y: 0.365,
-        w: 0.115,
-        h: 0.04,
+        x: 0.219,
+        y: 0.347,
+        w: 0.172,
+        h: 0.083,
     },
     CardRegion {
-        x: 0.442,
-        y: 0.365,
-        w: 0.115,
-        h: 0.04,
+        x: 0.414,
+        y: 0.347,
+        w: 0.172,
+        h: 0.083,
     },
     CardRegion {
-        x: 0.636,
-        y: 0.365,
-        w: 0.115,
-        h: 0.04,
+        x: 0.609,
+        y: 0.347,
+        w: 0.172,
+        h: 0.083,
     },
 ];
 
@@ -280,6 +280,39 @@ fn preferred_tesseract_languages() -> String {
         .and_then(|output| String::from_utf8(output.stdout).ok())
         .unwrap_or_default();
     let installed: std::collections::HashSet<&str> = installed.lines().map(str::trim).collect();
+
+    let sys = System::new_all();
+    let game_locale = sys
+        .processes()
+        .values()
+        .filter(|process| {
+            process
+                .name()
+                .to_string_lossy()
+                .to_lowercase()
+                .replace(' ', "")
+                .contains("leagueoflegends")
+        })
+        .flat_map(|process| process.cmd())
+        .map(|arg| arg.to_string_lossy())
+        .find_map(|arg| {
+            arg.strip_prefix("-Locale=")
+                .or_else(|| arg.strip_prefix("--locale="))
+                .map(str::to_string)
+        });
+
+    let locale_language = game_locale.as_deref().and_then(|locale| match locale {
+        locale if locale.starts_with("zh_TW") => Some("chi_tra"),
+        locale if locale.starts_with("zh_CN") => Some("chi_sim"),
+        locale if locale.starts_with("ja_") => Some("jpn"),
+        locale if locale.starts_with("ko_") => Some("kor"),
+        locale if locale.starts_with("en_") => Some("eng"),
+        _ => None,
+    });
+    if let Some(language) = locale_language.filter(|language| installed.contains(language)) {
+        return language.to_string();
+    }
+
     let preferred = ["eng", "chi_tra", "chi_sim", "jpn", "kor"];
     let langs: Vec<&str> = preferred
         .into_iter()
@@ -361,6 +394,12 @@ async fn detect_augment_names(
 
         // Crop to the card name region
         let cropped = screenshot.view(px, py, pw, ph).to_image();
+        let scaled = image::imageops::resize(
+            &cropped,
+            cropped.width() * 2,
+            cropped.height() * 2,
+            image::imageops::FilterType::Lanczos3,
+        );
 
         // Write to a securely-created temp file for tesseract.
         let tmp_file = tempfile::Builder::new()
@@ -368,7 +407,7 @@ async fn detect_augment_names(
             .suffix(".png")
             .tempfile()
             .map_err(|e| format!("Temp file failed: {}", e))?;
-        cropped
+        scaled
             .save(tmp_file.path())
             .map_err(|e| format!("Save failed: {}", e))?;
 
@@ -380,7 +419,7 @@ async fn detect_augment_names(
             .arg("-l")
             .arg(&ocr_languages)
             .arg("--psm")
-            .arg("7"); // single text line
+            .arg("11"); // sparse text; tolerates the wider title crop
 
         if let Some(file) = &user_words_file {
             command.arg("--user-words").arg(file.path());
