@@ -122,7 +122,9 @@ function App() {
   const [pickedAugments, setPickedAugments] = useState<string[]>([]);
   const [matchedCards, setMatchedCards] = useState<MatchedCard[]>([]);
   const [, setOcrActive] = useState(false);
-  const ocrIntervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const ocrTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const ocrActiveRef = useRef(false);
+  const ocrRunIdRef = useRef(0);
   const [showStartupTip, setShowStartupTip] = useState(true);
   const [leagueFocused, setLeagueFocused] = useState(false);
   const [overlayData, setOverlayData] = useState<OverlayData | null>(null);
@@ -364,20 +366,29 @@ function App() {
     runOcrRef.current = runOcr;
   }, [runOcr]);
 
-  // Start/stop OCR polling
-  const startOcr = useCallback(() => {
-    if (ocrIntervalRef.current) return;
-    setOcrActive(true);
-    void runOcrRef.current(); // immediate first run
-    ocrIntervalRef.current = setInterval(() => {
-      void runOcrRef.current();
-    }, 3000);
+  const scheduleNextOcr = useCallback(function scheduleNextOcr(runId: number) {
+    ocrTimeoutRef.current = setTimeout(async () => {
+      await runOcrRef.current();
+      if (ocrActiveRef.current && ocrRunIdRef.current === runId) {
+        scheduleNextOcr(runId);
+      }
+    }, 20);
   }, []);
 
+  // Start/stop OCR polling
+  const startOcr = useCallback(() => {
+    if (ocrActiveRef.current) return;
+    ocrActiveRef.current = true;
+    setOcrActive(true);
+    scheduleNextOcr(++ocrRunIdRef.current);
+  }, [scheduleNextOcr]);
+
   const stopOcr = useCallback(() => {
-    if (ocrIntervalRef.current) {
-      clearInterval(ocrIntervalRef.current);
-      ocrIntervalRef.current = null;
+    ocrActiveRef.current = false;
+    ocrRunIdRef.current += 1;
+    if (ocrTimeoutRef.current) {
+      clearTimeout(ocrTimeoutRef.current);
+      ocrTimeoutRef.current = null;
     }
     setOcrActive(false);
     setMatchedCards([]);
@@ -484,7 +495,9 @@ function App() {
   // Cleanup OCR on unmount
   useEffect(() => {
     return () => {
-      if (ocrIntervalRef.current) clearInterval(ocrIntervalRef.current);
+      ocrActiveRef.current = false;
+      ocrRunIdRef.current += 1;
+      if (ocrTimeoutRef.current) clearTimeout(ocrTimeoutRef.current);
     };
   }, []);
 

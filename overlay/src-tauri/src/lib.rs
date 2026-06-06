@@ -2,6 +2,7 @@ use image::GenericImageView;
 use serde::{Deserialize, Serialize};
 use std::io::Write;
 use std::path::PathBuf;
+use std::sync::Arc;
 use sysinfo::System;
 
 #[cfg(target_os = "macos")]
@@ -338,6 +339,56 @@ fn check_screen_capture_available() -> bool {
     monitor.capture_image().is_ok()
 }
 
+fn run_tesseract(
+    crop: image::DynamicImage,
+    idx: usize,
+    ocr_languages: String,
+    user_words_path: Option<Arc<tempfile::TempPath>>,
+) -> Result<Option<DetectedAugment>, String> {
+    let scaled = image::imageops::resize(
+        &crop,
+        crop.width() * 2,
+        crop.height() * 2,
+        image::imageops::FilterType::Lanczos3,
+    );
+
+    let tmp_file = tempfile::Builder::new()
+        .prefix("mayhem_ocr_")
+        .suffix(".png")
+        .tempfile()
+        .map_err(|e| format!("Temp file failed: {}", e))?;
+    scaled
+        .save(tmp_file.path())
+        .map_err(|e| format!("Save failed: {}", e))?;
+
+    let mut command = std::process::Command::new("tesseract");
+    command
+        .arg(tmp_file.path())
+        .arg("stdout")
+        .arg("-l")
+        .arg(ocr_languages)
+        .arg("--psm")
+        .arg("11");
+
+    if let Some(file) = user_words_path {
+        command.arg("--user-words").arg(file.as_ref().as_os_str());
+    }
+
+    let output = command
+        .output()
+        .map_err(|e| format!("Tesseract failed: {}", e))?;
+
+    let text = String::from_utf8_lossy(&output.stdout)
+        .trim()
+        .replace(' ', "")
+        .replace('\n', "");
+
+    Ok((!text.is_empty()).then_some(DetectedAugment {
+        text,
+        region_index: idx,
+    }))
+}
+
 #[tauri::command]
 async fn detect_augment_names(
     known_names: Option<Vec<String>>,
@@ -357,7 +408,6 @@ async fn detect_augment_names(
     let screen_h = screenshot.height() as f64;
     let ocr_languages = preferred_tesseract_languages();
 
-    let mut results = Vec::new();
     let mut user_words_file = None;
 
     if let Some(names) = known_names {
@@ -376,10 +426,13 @@ async fn detect_augment_names(
                 }
             }
 
-            user_words_file = Some(file);
+            file.flush()
+                .map_err(|e| format!("User words flush failed: {}", e))?;
+            user_words_file = Some(Arc::new(file.into_temp_path()));
         }
     }
 
+    let mut handles = Vec::with_capacity(CARD_NAME_REGIONS.len());
     for (i, region) in CARD_NAME_REGIONS.iter().enumerate() {
         // Convert fractional coordinates to pixels
         let px = (region.x * screen_w) as u32;
@@ -393,55 +446,23 @@ async fn detect_augment_names(
         }
 
         // Crop to the card name region
-        let cropped = screenshot.view(px, py, pw, ph).to_image();
-        let scaled = image::imageops::resize(
-            &cropped,
-            cropped.width() * 2,
-            cropped.height() * 2,
-            image::imageops::FilterType::Lanczos3,
-        );
-
-        // Write to a securely-created temp file for tesseract.
-        let tmp_file = tempfile::Builder::new()
-            .prefix("mayhem_ocr_")
-            .suffix(".png")
-            .tempfile()
-            .map_err(|e| format!("Temp file failed: {}", e))?;
-        scaled
-            .save(tmp_file.path())
-            .map_err(|e| format!("Save failed: {}", e))?;
-
-        // Run Tesseract with every supported LoL locale language pack installed locally.
-        let mut command = std::process::Command::new("tesseract");
-        command
-            .arg(tmp_file.path())
-            .arg("stdout")
-            .arg("-l")
-            .arg(&ocr_languages)
-            .arg("--psm")
-            .arg("11"); // sparse text; tolerates the wider title crop
-
-        if let Some(file) = &user_words_file {
-            command.arg("--user-words").arg(file.path());
-        }
-
-        let output = command
-            .output()
-            .map_err(|e| format!("Tesseract failed: {}", e))?;
-
-        let text = String::from_utf8_lossy(&output.stdout)
-            .trim()
-            .replace(' ', "")
-            .replace('\n', "");
-
-        if !text.is_empty() {
-            results.push(DetectedAugment {
-                text,
-                region_index: i,
-            });
-        }
+        let crop = image::DynamicImage::ImageRgba8(screenshot.view(px, py, pw, ph).to_image());
+        let languages = ocr_languages.clone();
+        let words = user_words_file.clone();
+        handles.push(tokio::task::spawn_blocking(move || {
+            run_tesseract(crop, i, languages, words)
+        }));
     }
 
+    let mut results = Vec::with_capacity(handles.len());
+    for handle in handles {
+        match handle.await {
+            Ok(Ok(Some(result))) => results.push(result),
+            Ok(Ok(None)) => {}
+            Ok(Err(error)) => return Err(error),
+            Err(error) => return Err(format!("OCR worker failed: {}", error)),
+        }
+    }
     Ok(results)
 }
 
@@ -677,6 +698,13 @@ pub fn run() {
                 });
 
             }
+
+            std::thread::spawn(|| {
+                let _ = std::process::Command::new("tesseract")
+                    .arg("--list-langs")
+                    .output();
+            });
+
             Ok(())
         })
         .run(tauri::generate_context!())
