@@ -116,12 +116,12 @@ def is_likely_cjk_ocr_match(raw_text: str, target_name: str) -> bool:
     ):
         return True
 
-    if len(ocr) >= len(target):
-        max_distance = max(1, int(len(target) * 0.2))
-        return any(
-            levenshtein(ocr[start:start + len(target)], target) <= max_distance
-            for start in range(0, len(ocr) - len(target) + 1)
-        )
+    for window_size in range(max(1, len(target) - 1), min(len(ocr), len(target) + 1) + 1):
+        if any(
+            levenshtein(ocr[start:start + window_size], target) <= 1
+            for start in range(0, len(ocr) - window_size + 1)
+        ):
+            return True
 
     return False
 

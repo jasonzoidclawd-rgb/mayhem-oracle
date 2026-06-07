@@ -33,19 +33,37 @@ function isHanText(value: string): boolean {
   return /^\p{Script=Han}+$/u.test(value);
 }
 
-function matchCjkTitlePrefix(
+function hanOnly(value: string): string {
+  return value.match(/\p{Script=Han}/gu)?.join("") ?? "";
+}
+
+function matchCjkTextWindow(
   cleaned: string,
   lookup: OverlayAugmentLookup,
 ): PoolAugment | null {
-  if (!isHanText(cleaned)) return null;
+  const cleanedHan = hanOnly(cleaned);
+  if (cleanedHan.length < 3) return null;
 
   let bestMatch: PoolAugment | null = null;
   let bestDistance = Infinity;
   let ambiguous = false;
 
   for (const [name, augment] of lookup) {
-    if (name.length < 4 || cleaned.length < name.length || !isHanText(name)) continue;
-    const distance = levenshtein(cleaned.slice(0, name.length), name);
+    if (name.length < 4 || !isHanText(name)) continue;
+
+    let distance = Infinity;
+    const minWindowLength = Math.max(1, name.length - 1);
+    const maxWindowLength = Math.min(cleanedHan.length, name.length + 1);
+
+    for (let windowLength = minWindowLength; windowLength <= maxWindowLength; windowLength++) {
+      for (let start = 0; start <= cleanedHan.length - windowLength; start++) {
+        distance = Math.min(
+          distance,
+          levenshtein(cleanedHan.slice(start, start + windowLength), name),
+        );
+      }
+    }
+
     if (distance > 1) continue;
 
     if (distance < bestDistance) {
@@ -187,7 +205,7 @@ export function matchAugmentName(
     }
   }
 
-  const cjkTitleMatch = matchCjkTitlePrefix(cleaned, lookup);
+  const cjkTitleMatch = matchCjkTextWindow(cleaned, lookup);
   if (cjkTitleMatch) return cjkTitleMatch;
 
   let bestMatch: PoolAugment | null = null;
