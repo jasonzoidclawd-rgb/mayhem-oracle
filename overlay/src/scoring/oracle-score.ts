@@ -7,12 +7,19 @@
  * score = champion_wr + set_tier_bonus + combo_bonus + trap_penalty
  *       + same_set_synergy + rarity_bonus + system_breaker_bonus
  *       + ability_type_synergy + attack_type_synergy + cc_synergy
+ *       + mechanical_interaction
  */
 
 import { SCORE_WEIGHTS, type AbilityProfile, type ChampionTag } from "./types";
 
 export type AugmentRarity = "prismatic" | "gold" | "silver";
 export type ComboTier = "S" | "A" | "B" | "C";
+export type MechanicalInteractionType = "synergy" | "trap";
+
+export interface MechanicalInteractionScoreSignal {
+  type: MechanicalInteractionType;
+  strength: 1 | 2 | 3;
+}
 
 export interface ScoredAugment {
   slug: string;
@@ -50,6 +57,8 @@ export interface OracleScoreInput {
   isSystemBreaker?: boolean;
   /** Champion ability profile from CommunityDragon */
   abilityProfile?: AbilityProfile;
+  /** Strongest structured champion-kit interaction for this augment */
+  mechanicalInteraction?: MechanicalInteractionScoreSignal;
 }
 
 export interface OracleScoreResult {
@@ -66,6 +75,7 @@ export interface OracleScoreResult {
     attackTypeSynergy: number;
     ccSynergy: number;
     tagMismatch: number;
+    mechanicalInteraction: number;
   };
 }
 
@@ -108,6 +118,7 @@ export function computeOracleScore(input: OracleScoreInput): OracleScoreResult {
     augmentSetId,
     isSystemBreaker = false,
     abilityProfile,
+    mechanicalInteraction: interactionSignal,
   } = input;
 
   // Validate rarity — malformed JSON can supply an unknown string, which would make
@@ -152,6 +163,18 @@ export function computeOracleScore(input: OracleScoreInput): OracleScoreResult {
   const systemBreakerBonus = isSystemBreaker
     ? SCORE_WEIGHTS.SYSTEM_BREAKER_BONUS
     : 0;
+  const interactionStrength =
+    interactionSignal?.strength === 1 ||
+    interactionSignal?.strength === 2 ||
+    interactionSignal?.strength === 3
+      ? interactionSignal.strength
+      : 0;
+  const mechanicalInteraction =
+    interactionSignal?.type === "synergy"
+      ? interactionStrength * SCORE_WEIGHTS.MECHANICAL_INTERACTION_PER_STRENGTH
+      : interactionSignal?.type === "trap"
+        ? -interactionStrength * SCORE_WEIGHTS.MECHANICAL_INTERACTION_PER_STRENGTH
+        : 0;
 
   // ���─ Ability profile synergy bonuses ──
   let abilityTypeSynergy = 0;
@@ -216,6 +239,7 @@ export function computeOracleScore(input: OracleScoreInput): OracleScoreResult {
     attackTypeSynergy,
     ccSynergy,
     tagMismatch,
+    mechanicalInteraction,
   };
 
   const total = Object.values(breakdown).reduce((a, b) => a + b, 0);

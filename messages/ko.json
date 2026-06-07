@@ -313,6 +313,8 @@
     "reasonChampionModeOverride": "챔피언별 모드 보정",
     "reasonChampionModeTrap": "챔피언별 함정 보정",
     "reasonTextInferredCrowdControl": "증강 텍스트에서 추론한 군중 제어 시너지",
+    "reasonMechanicalSynergy": "구조화된 챔피언 스킬셋 시너지",
+    "reasonMechanicalTrap": "구조화된 챔피언 스킬셋 함정",
     "factorGoldenUpgrade": "황금 리롤로 현재 티어를 벗어날 수 있음",
     "factorSameTierReroll": "일반 리롤은 같은 화면 티어를 탐색",
     "factorIncompletePoolData": "풀 데이터가 불완전함",

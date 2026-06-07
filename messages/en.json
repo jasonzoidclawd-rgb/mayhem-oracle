@@ -313,6 +313,8 @@
     "reasonChampionModeOverride": "Champion-specific mode override",
     "reasonChampionModeTrap": "Champion-specific trap override",
     "reasonTextInferredCrowdControl": "Inferred crowd-control synergy from augment text",
+    "reasonMechanicalSynergy": "Structured champion-kit synergy",
+    "reasonMechanicalTrap": "Structured champion-kit trap",
     "factorGoldenUpgrade": "Golden Reroll can upgrade out of this tier",
     "factorSameTierReroll": "Normal reroll searches the same screen tier",
     "factorIncompletePoolData": "Pool data is incomplete",

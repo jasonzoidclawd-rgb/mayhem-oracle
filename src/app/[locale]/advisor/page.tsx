@@ -51,14 +51,20 @@ type ChampionData = { champions: RawChampion[] };
 type AugmentData = { augments: RawAugment[] };
 type ComboData = { combos: RawCombo[] };
 
-function compactAbilityProfile(profile: AbilityProfile | undefined) {
+function compactAbilityProfile(profile: AbilityProfile | undefined): AbilityProfile | undefined {
   if (!profile) return undefined;
 
   return {
     damageType: profile.damageType,
     attackType: profile.attackType,
     playstyle: profile.playstyle,
-    abilities: [],
+    abilities: profile.abilities.map(({ key, description, stats }) => ({
+      key,
+      name: "",
+      icon: "",
+      description,
+      stats,
+    })),
   };
 }
 
@@ -224,6 +230,8 @@ export default async function AdvisorPage({
           reasonChampionModeOverride: t("reasonChampionModeOverride"),
           reasonChampionModeTrap: t("reasonChampionModeTrap"),
           reasonTextInferredCrowdControl: t("reasonTextInferredCrowdControl"),
+          reasonMechanicalSynergy: t("reasonMechanicalSynergy"),
+          reasonMechanicalTrap: t("reasonMechanicalTrap"),
           reasonOracleScoreBand: t("reasonOracleScoreBand"),
           reasonAugmentWinRateAvailable: t("reasonAugmentWinRateAvailable"),
           reasonAugmentWinRateMissing: t("reasonAugmentWinRateMissing"),

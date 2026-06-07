@@ -38,6 +38,7 @@ describe("overlay oracle scoring parity", () => {
       },
       championWinRate: 56,
       abilityProfile: physicalProfile,
+      mechanicalInteraction: { type: "synergy", strength: 3 },
     });
   });
 

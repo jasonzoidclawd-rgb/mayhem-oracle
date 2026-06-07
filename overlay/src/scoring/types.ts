@@ -312,6 +312,8 @@ export const SCORE_WEIGHTS = {
   CC_SYNERGY: 4,            // CC-enhancing augment + champion crowdControl >= 4
   // Mismatch penalty (applied as negative) — augment clearly doesn't fit champion
   TAG_MISMATCH_PENALTY: -8,
+  // Strongest structured champion-kit interaction only; strength is 1-3.
+  MECHANICAL_INTERACTION_PER_STRENGTH: 3,
 } as const;
 
 // ─── Augment Selection Constants ───

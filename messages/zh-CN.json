@@ -313,6 +313,8 @@
     "reasonChampionModeOverride": "英雄专属模式修正",
     "reasonChampionModeTrap": "英雄专属陷阱修正",
     "reasonTextInferredCrowdControl": "从强化文本推断控制协同",
+    "reasonMechanicalSynergy": "结构化英雄技能组协同",
+    "reasonMechanicalTrap": "结构化英雄技能组陷阱",
     "factorGoldenUpgrade": "黄金重随可跳出当前阶级",
     "factorSameTierReroll": "普通重随只搜索同一界面阶级",
     "factorIncompletePoolData": "池数据不完整",

@@ -73,6 +73,24 @@ describe("computeOracleScore", () => {
     expect(result.breakdown.abilityTypeSynergy).toBe(0);
     expect(result.breakdown.attackTypeSynergy).toBe(0);
   });
+
+  test("applies one bounded structured mechanical interaction signal", () => {
+    const synergy = computeOracleScore({
+      augment: baseAugment,
+      mechanicalInteraction: { type: "synergy", strength: 3 },
+    });
+    const trap = computeOracleScore({
+      augment: baseAugment,
+      mechanicalInteraction: { type: "trap", strength: 2 },
+    });
+
+    expect(synergy.breakdown.mechanicalInteraction).toBe(
+      SCORE_WEIGHTS.MECHANICAL_INTERACTION_PER_STRENGTH * 3,
+    );
+    expect(trap.breakdown.mechanicalInteraction).toBe(
+      -SCORE_WEIGHTS.MECHANICAL_INTERACTION_PER_STRENGTH * 2,
+    );
+  });
 });
 
 describe("baselineOracleScore", () => {

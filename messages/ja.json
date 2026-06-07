@@ -313,6 +313,8 @@
     "reasonChampionModeOverride": "チャンピオン別モード補正",
     "reasonChampionModeTrap": "チャンピオン別罠補正",
     "reasonTextInferredCrowdControl": "オーグメント文面から推定した行動妨害シナジー",
+    "reasonMechanicalSynergy": "構造化されたチャンピオンキットのシナジー",
+    "reasonMechanicalTrap": "構造化されたチャンピオンキットの罠",
     "factorGoldenUpgrade": "ゴールデンリロールで現在ティアから上振れ可能",
     "factorSameTierReroll": "通常リロールは同じ画面ティアを探す",
     "factorIncompletePoolData": "プールデータが不完全",

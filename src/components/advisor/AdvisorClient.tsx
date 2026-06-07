@@ -84,6 +84,8 @@ type AdvisorCopy = {
   reasonChampionModeOverride: string;
   reasonChampionModeTrap: string;
   reasonTextInferredCrowdControl: string;
+  reasonMechanicalSynergy: string;
+  reasonMechanicalTrap: string;
   reasonOracleScoreBand: string;
   reasonAugmentWinRateAvailable: string;
   reasonAugmentWinRateMissing: string;
@@ -296,6 +298,8 @@ export function AdvisorClient({
     "champion-mode-override": copy.reasonChampionModeOverride,
     "champion-mode-trap": copy.reasonChampionModeTrap,
     "text-inferred-crowd-control-synergy": copy.reasonTextInferredCrowdControl,
+    "mechanical-synergy": copy.reasonMechanicalSynergy,
+    "mechanical-trap": copy.reasonMechanicalTrap,
     "oracle-score-band": copy.reasonOracleScoreBand,
     "augment-win-rate-available": copy.reasonAugmentWinRateAvailable,
     "augment-win-rate-missing": copy.reasonAugmentWinRateMissing,

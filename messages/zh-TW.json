@@ -313,6 +313,8 @@
     "reasonChampionModeOverride": "英雄專屬模式修正",
     "reasonChampionModeTrap": "英雄專屬陷阱修正",
     "reasonTextInferredCrowdControl": "從增強文字推斷控場協同",
+    "reasonMechanicalSynergy": "結構化英雄技能組協同",
+    "reasonMechanicalTrap": "結構化英雄技能組陷阱",
     "factorGoldenUpgrade": "黃金重抽可跳出目前階級",
     "factorSameTierReroll": "一般重抽只搜尋同一畫面階級",
     "factorIncompletePoolData": "池資料不完整",

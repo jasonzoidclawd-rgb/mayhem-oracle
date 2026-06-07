@@ -8,6 +8,11 @@ import {
   type ComboTier,
   type ScoredAugment,
 } from "./oracle-score";
+import {
+  analyzeInteractions,
+  type AugmentMechanic,
+  type MechanicalInteraction,
+} from "./augment-interactions";
 import { computeAugmentDamageContext, type AugmentDamageContext } from "./damage-context";
 import type { AbilityProfile, ChampionBaseStats } from "../types";
 
@@ -20,7 +25,8 @@ export type RankingReasonSource =
   | "augment-set-metadata"
   | "combo-table"
   | "curated-mode-rule"
-  | "augment-description-inference";
+  | "augment-description-inference"
+  | "mechanical-interaction-analysis";
 
 export interface OfferedRankingReason {
   code: string;
@@ -258,6 +264,17 @@ function lookupBySlug<T>(map: Record<string, T> | undefined, slug: string): T | 
 /** Max absolute scoreDelta for curated override rules. */
 const SCORE_DELTA_CLAMP = 30;
 
+// These mechanics are already represented by computeOracleScore's broad
+// damage-type, attack-type, CC, and mismatch components.
+const ORACLE_PROFILE_MECHANICS: ReadonlySet<AugmentMechanic> = new Set([
+  "ON_HIT",
+  "ATTACK_SPEED",
+  "MELEE_CONVERT",
+  "AD_SCALING",
+  "AP_SCALING",
+  "IMMOBILIZE_TRIGGER",
+]);
+
 function addBreakdownReasons(
   reasons: OfferedRankingReason[],
   breakdown: Partial<Record<string, number>>,
@@ -281,6 +298,41 @@ function addBreakdownReasons(
   if ((breakdown.tagMismatch ?? 0) < 0) {
     reasons.push(reason("tag-mismatch", "oracle-score", "medium"));
   }
+}
+
+function strongestInteractionsBySlug(input: RankOfferedAugmentsInput, offeredAugments: RankingAugment[]): Map<string, MechanicalInteraction> {
+  const { abilityProfile, baseStats } = input.champion;
+  if (!abilityProfile || !baseStats || abilityProfile.abilities.length === 0) {
+    return new Map();
+  }
+
+  const strongest = new Map<string, MechanicalInteraction>();
+  for (const interaction of analyzeInteractions(
+    {
+      slug: input.champion.slug ?? input.champion.id ?? input.champion.name,
+      name: input.champion.name,
+      abilityProfile,
+      baseStats,
+    },
+    offeredAugments.map((augment) => ({
+      slug: augment.slug,
+      name: augment.name,
+      description: augment.description ?? "",
+      wikiDescription: augment.wikiDescription,
+    })),
+  )) {
+    if (ORACLE_PROFILE_MECHANICS.has(interaction.mechanic)) {
+      continue;
+    }
+
+    const key = normalizeAugmentSlug(interaction.augmentSlug);
+    const existing = strongest.get(key);
+    if (!existing || interaction.strength > existing.strength) {
+      strongest.set(key, interaction);
+    }
+  }
+
+  return strongest;
 }
 
 export function rankOfferedAugments(input: RankOfferedAugmentsInput): OfferedRankingResult {
@@ -315,12 +367,14 @@ export function rankOfferedAugments(input: RankOfferedAugmentsInput): OfferedRan
   const damageContextEnabled = Boolean(
     input.champion.baseStats && input.champion.abilityProfile
   );
+  const mechanicalInteractions = strongestInteractionsBySlug(input, offeredAugments);
 
   const ranked = offeredAugments.map((augment, originalIndex) => {
     const augmentSetId = normalizeSetId(augment.set);
     const isDuplicate = duplicateSlugs.has(normalizeAugmentSlug(augment.slug));
     const combo = input.comboMetadataBySlot?.[originalIndex]
       ?? (isDuplicate ? undefined : lookupBySlug(input.comboMetadata, augment.slug));
+    const mechanicalInteraction = mechanicalInteractions.get(normalizeAugmentSlug(augment.slug));
     const oracle = computeOracleScore({
       augment: augment as ScoredAugment,
       championWinRate: input.champion.win_rate ?? input.champion.winRate,
@@ -329,6 +383,7 @@ export function rankOfferedAugments(input: RankOfferedAugmentsInput): OfferedRan
       augmentSetId,
       abilityProfile: input.champion.abilityProfile,
       isSystemBreaker: augment.flags?.system_breaker === true,
+      mechanicalInteraction,
     });
     const explicitBreakdown = input.scoreBreakdownsBySlot?.[originalIndex]
       ?? (isDuplicate ? undefined : lookupBySlug(input.scoreBreakdowns, augment.slug));
@@ -339,6 +394,14 @@ export function rankOfferedAugments(input: RankOfferedAugmentsInput): OfferedRan
     }
 
     addBreakdownReasons(reasons, oracle.breakdown, combo);
+    if (mechanicalInteraction && oracle.breakdown.mechanicalInteraction !== 0) {
+      reasons.push(reason(
+        mechanicalInteraction.type === "synergy" ? "mechanical-synergy" : "mechanical-trap",
+        "mechanical-interaction-analysis",
+        "medium",
+        mechanicalInteraction.mechanic,
+      ));
+    }
 
     let adjustedScore = oracle.total;
     if (explicitBreakdown) {

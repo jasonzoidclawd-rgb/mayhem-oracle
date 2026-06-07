@@ -72,6 +72,61 @@ const champion = {
   },
 } satisfies TestChampion;
 
+const interactionChampion = {
+  ...champion,
+  baseStats: {
+    baseHP: 600,
+    hpGrowth: 100,
+    baseArmor: 30,
+    armorGrowth: 4,
+    baseMR: 30,
+    mrGrowth: 1.3,
+    baseAD: 60,
+    adGrowth: 3,
+    baseAS: 0.65,
+    asGrowth: 3,
+    attackRange: 550,
+    moveSpeed: 335,
+    baseMP: 0,
+    mpGrowth: 0,
+    baseHPRegen: 6,
+    hpRegenGrowth: 0.6,
+  },
+  abilityProfile: {
+    ...champion.abilityProfile,
+    abilities: [
+      {
+        key: "Q" as const,
+        name: "Spark",
+        icon: "q.png",
+        description: "Fires a spell.",
+        stats: { apRatio: 0.8, cooldown: [4], damageType: "magic" as const },
+      },
+      {
+        key: "W" as const,
+        name: "Field",
+        icon: "w.png",
+        description: "Burns enemies over time.",
+        stats: { apRatio: 0.7, cooldown: [8], damageType: "magic" as const, isDot: true, isAoe: true },
+      },
+      {
+        key: "E" as const,
+        name: "Root",
+        icon: "e.png",
+        description: "Roots an enemy.",
+        stats: { apRatio: 0.5, cooldown: [10], damageType: "magic" as const, ccType: "root" },
+      },
+      {
+        key: "R" as const,
+        name: "Nova",
+        icon: "r.png",
+        description: "Large explosion.",
+        stats: { apRatio: 1, cooldown: [80], damageType: "magic" as const, baseDamage: [150, 250, 350] },
+      },
+    ],
+  },
+};
+
 const reasonCodes = (ranking: { reasons: Array<{ code: string }> }) =>
   ranking.reasons.map((reason) => reason.code);
 
@@ -450,5 +505,63 @@ describe("rankOfferedAugments", () => {
       "oracle-score-band",
       "augment-win-rate-missing",
     ]);
+  });
+
+  test("structured mechanical interactions affect both ranking score and explanation provenance", () => {
+    const result = rankOfferedAugments({
+      champion: interactionChampion,
+      offeredAugments: [
+        makeAugment({
+          slug: "ability-crit",
+          win_rate: 50,
+          wikiDescription: "Your abilities can critically strike.",
+        }),
+        makeAugment({ slug: "neutral", win_rate: 50 }),
+        makeAugment({
+          slug: "mana-scaling-trap",
+          win_rate: 50,
+          wikiDescription: "Gain power based on your maximum mana.",
+        }),
+      ],
+      ownedAugments: [],
+    });
+
+    expect(result.status).toBe("ranked");
+    expect(result.rankings.map((ranking) => ranking.augment.slug)).toEqual([
+      "ability-crit",
+      "neutral",
+      "mana-scaling-trap",
+    ]);
+
+    const synergy = result.rankings[0];
+    const trap = result.rankings[2];
+    expect(reasonByCode(synergy, "mechanical-synergy")).toMatchObject({
+      source: "mechanical-interaction-analysis",
+      confidence: "medium",
+      ref: "ABILITY_CRIT",
+    });
+    expect(reasonByCode(trap, "mechanical-trap")).toMatchObject({
+      source: "mechanical-interaction-analysis",
+      confidence: "medium",
+      ref: "MANA_SCALING",
+    });
+    expect(synergy.score).toBeGreaterThan(result.rankings[1].score);
+    expect(trap.score).toBeLessThan(result.rankings[1].score);
+  });
+
+  test("does not double-count mechanical signals already represented by Oracle profile scoring", () => {
+    const result = rankOfferedAugments({
+      champion: interactionChampion,
+      offeredAugments: [
+        makeAugment({ slug: "attack-speed", win_rate: 50, wikiDescription: "Gain 60% attack speed." }),
+        makeAugment({ slug: "neutral-a", win_rate: 50 }),
+        makeAugment({ slug: "neutral-b", win_rate: 50 }),
+      ],
+      ownedAugments: [],
+    });
+
+    const attackSpeed = result.rankings.find((ranking) => ranking.augment.slug === "attack-speed");
+    expect(reasonCodes(attackSpeed!)).toContain("tag-mismatch");
+    expect(reasonCodes(attackSpeed!)).not.toContain("mechanical-trap");
   });
 });
