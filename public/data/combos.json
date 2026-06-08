@@ -1,6 +1,6 @@
 {
   "patch": "26.11",
-  "scraped_at": "2026-06-07T22:55:52.715455+00:00",
+  "scraped_at": "2026-06-08T23:08:40.386100+00:00",
   "combos": [
     {
       "champion": "vayne",
@@ -25,6 +25,12 @@
       "augment": "Fan The Hammer",
       "tier": "S",
       "ref": "curated:gnar-ap纳尔连拔爆发流"
+    },
+    {
+      "champion": "graves",
+      "augment": "Back To Basics",
+      "tier": "S",
+      "ref": "curated:graves-back-to-basics"
     },
     {
       "champion": "lucian",
@@ -75,16 +81,10 @@
       "ref": "curated:graves-slow-and-steady"
     },
     {
-      "champion": "graves",
-      "augment": "Back To Basics",
+      "champion": "tristana",
+      "augment": "Fan The Hammer",
       "tier": "S",
-      "ref": "curated:graves-back-to-basics"
-    },
-    {
-      "champion": "vayne",
-      "augment": "Twice Thrice",
-      "tier": "S",
-      "ref": "curated:vayne-twice-thrice"
+      "ref": "curated:tristana-fan-the-hammer"
     },
     {
       "champion": "yasuo",
@@ -99,16 +99,22 @@
       "ref": "curated:morgana-executioner"
     },
     {
-      "champion": "tristana",
-      "augment": "Fan The Hammer",
+      "champion": "brand",
+      "augment": "Magic Missile",
       "tier": "S",
-      "ref": "curated:tristana-fan-the-hammer"
+      "ref": "curated:brand-magic-missile"
     },
     {
-      "champion": "graves",
-      "augment": "Draw Your Sword",
+      "champion": "vayne",
+      "augment": "Twice Thrice",
       "tier": "S",
-      "ref": "curated:graves-draw-your-sword"
+      "ref": "curated:vayne-twice-thrice"
+    },
+    {
+      "champion": "yasuo",
+      "augment": "Critical Healing",
+      "tier": "S",
+      "ref": "curated:yasuo-毁坏仪式无限护盾流"
     },
     {
       "champion": "lucian",
@@ -117,10 +123,16 @@
       "ref": "curated:lucian-vulnerability"
     },
     {
-      "champion": "brand",
-      "augment": "Magic Missile",
+      "champion": "graves",
+      "augment": "Draw Your Sword",
       "tier": "S",
-      "ref": "curated:brand-magic-missile"
+      "ref": "curated:graves-draw-your-sword"
+    },
+    {
+      "champion": "malzahar",
+      "augment": "Infernal Conduit",
+      "tier": "S",
+      "ref": "curated:malzahar-infernal-conduit"
     },
     {
       "champion": "pantheon",
@@ -243,22 +255,10 @@
       "ref": "curated:rell-残忍坦克流"
     },
     {
-      "champion": "yasuo",
-      "augment": "Critical Healing",
-      "tier": "S",
-      "ref": "curated:yasuo-毁坏仪式无限护盾流"
-    },
-    {
       "champion": "lillia",
       "augment": "Infernal Conduit",
       "tier": "S",
       "ref": "curated:lillia-infernal-conduit"
-    },
-    {
-      "champion": "malzahar",
-      "augment": "Infernal Conduit",
-      "tier": "S",
-      "ref": "curated:malzahar-infernal-conduit"
     },
     {
       "champion": "fizz",
@@ -303,10 +303,22 @@
       "ref": "curated:aurelionsol-ice-cold"
     },
     {
+      "champion": "missfortune",
+      "augment": "Skilled Sniper",
+      "tier": "S",
+      "ref": "curated:missfortune-skilled-sniper"
+    },
+    {
       "champion": "ryze",
       "augment": "Quest: Wooglet's Witchcap",
       "tier": "S",
       "ref": "curated:ryze-quest-wooglets-witchcap"
+    },
+    {
+      "champion": "xinzhao",
+      "augment": "Master of Duality",
+      "tier": "S",
+      "ref": "curated:xinzhao-物法皆修无限回血流"
     },
     {
       "champion": "lillia",
@@ -393,16 +405,16 @@
       "ref": "curated:sett-clown-college"
     },
     {
+      "champion": "tristana",
+      "augment": "Draw Your Sword",
+      "tier": "S",
+      "ref": "curated:tristana-draw-your-sword"
+    },
+    {
       "champion": "ryze",
       "augment": "Mad Scientist",
       "tier": "S",
       "ref": "curated:ryze-mad-scientist"
-    },
-    {
-      "champion": "missfortune",
-      "augment": "Skilled Sniper",
-      "tier": "S",
-      "ref": "curated:missfortune-skilled-sniper"
     },
     {
       "champion": "kalista",
@@ -427,12 +439,6 @@
       "augment": "Mystic Punch",
       "tier": "S",
       "ref": "curated:lucian-滑板卢仙"
-    },
-    {
-      "champion": "xinzhao",
-      "augment": "Master of Duality",
-      "tier": "S",
-      "ref": "curated:xinzhao-物法皆修无限回血流"
     },
     {
       "champion": "seraphine",
@@ -471,12 +477,6 @@
       "ref": "curated:karthus-infinite-recursion"
     },
     {
-      "champion": "tristana",
-      "augment": "Draw Your Sword",
-      "tier": "S",
-      "ref": "curated:tristana-draw-your-sword"
-    },
-    {
       "champion": "aurelionsol",
       "augment": "StackosaurusRex",
       "tier": "S",
@@ -493,6 +493,12 @@
       "augment": "Jeweled Gauntlet",
       "tier": "S",
       "ref": "curated:sett-jeweled-gauntlet"
+    },
+    {
+      "champion": "katarina",
+      "augment": "Vulnerability",
+      "tier": "S",
+      "ref": "curated:katarina-vulnerability"
     },
     {
       "champion": "ekko",
@@ -555,6 +561,12 @@
       "ref": "curated:fizz-infernal-conduit"
     },
     {
+      "champion": "singed",
+      "augment": "Infernal Conduit",
+      "tier": "S",
+      "ref": "curated:singed-infernal-conduit"
+    },
+    {
       "champion": "corki",
       "augment": "Jeweled Gauntlet",
       "tier": "S",
@@ -585,6 +597,12 @@
       "ref": "curated:akshan-dual-wield"
     },
     {
+      "champion": "senna",
+      "augment": "Dual Wield",
+      "tier": "S",
+      "ref": "curated:senna-dual-wield"
+    },
+    {
       "champion": "kayle",
       "augment": "Ethereal Weapon",
       "tier": "S",
@@ -601,6 +619,12 @@
       "augment": "Dashing",
       "tier": "S",
       "ref": "curated:kalista-dashing"
+    },
+    {
+      "champion": "jayce",
+      "augment": "Purist - Caster",
+      "tier": "S",
+      "ref": "curated:jayce-purist---caster"
     },
     {
       "champion": "karthus",
@@ -825,12 +849,6 @@
       "ref": "curated:sett-能抗能打重量级摔跤手"
     },
     {
-      "champion": "katarina",
-      "augment": "Vulnerability",
-      "tier": "S",
-      "ref": "curated:katarina-vulnerability"
-    },
-    {
       "champion": "samira",
       "augment": "Blade Waltz",
       "tier": "S",
@@ -843,16 +861,16 @@
       "ref": "curated:elise-dashing"
     },
     {
+      "champion": "jhin",
+      "augment": "Back To Basics",
+      "tier": "S",
+      "ref": "curated:jhin-back-to-basics"
+    },
+    {
       "champion": "mordekaiser",
       "augment": "Protein Shake",
       "tier": "S",
       "ref": "curated:mordekaiser-protein-shake"
-    },
-    {
-      "champion": "singed",
-      "augment": "Infernal Conduit",
-      "tier": "S",
-      "ref": "curated:singed-infernal-conduit"
     },
     {
       "champion": "yunara",
@@ -873,6 +891,18 @@
       "ref": "curated:viego-jeweled-gauntlet"
     },
     {
+      "champion": "yorick",
+      "augment": "Ethereal Weapon",
+      "tier": "S",
+      "ref": "curated:yorick-ethereal-weapon"
+    },
+    {
+      "champion": "udyr",
+      "augment": "Jeweled Gauntlet",
+      "tier": "S",
+      "ref": "curated:udyr-jeweled-gauntlet"
+    },
+    {
       "champion": "garen",
       "augment": "Slow And Steady",
       "tier": "S",
@@ -889,12 +919,6 @@
       "augment": "Ethereal Weapon",
       "tier": "S",
       "ref": "curated:lux-ethereal-weapon"
-    },
-    {
-      "champion": "senna",
-      "augment": "Dual Wield",
-      "tier": "S",
-      "ref": "curated:senna-dual-wield"
     },
     {
       "champion": "shaco",
@@ -915,6 +939,12 @@
       "ref": "curated:yunara-注魔溅射流"
     },
     {
+      "champion": "katarina",
+      "augment": "Triggered Inferno",
+      "tier": "S",
+      "ref": "curated:katarina-双旋转流无敌卡特"
+    },
+    {
       "champion": "maokai",
       "augment": "Courage of the Colossus",
       "tier": "S",
@@ -927,10 +957,22 @@
       "ref": "curated:aatrox-蛋白粉半肉战士流"
     },
     {
+      "champion": "diana",
+      "augment": "Purist - Caster",
+      "tier": "S",
+      "ref": "curated:diana-月下无限连爆发流"
+    },
+    {
       "champion": "warwick",
       "augment": "Circle of Death",
       "tier": "S",
       "ref": "curated:warwick-ap死亡之环流"
+    },
+    {
+      "champion": "blitzcrank",
+      "augment": "Upgrade Infinity Edge",
+      "tier": "S",
+      "ref": "curated:blitzcrank-e拳超人一刀流"
     },
     {
       "champion": "veigar",
@@ -985,12 +1027,6 @@
       "augment": "Circle of Death",
       "tier": "S",
       "ref": "curated:zac-circle-of-death"
-    },
-    {
-      "champion": "jayce",
-      "augment": "Purist - Caster",
-      "tier": "S",
-      "ref": "curated:jayce-purist---caster"
     },
     {
       "champion": "smolder",
@@ -1051,12 +1087,6 @@
       "augment": "Ethereal Weapon",
       "tier": "S",
       "ref": "curated:zyra-ethereal-weapon"
-    },
-    {
-      "champion": "jhin",
-      "augment": "Back To Basics",
-      "tier": "S",
-      "ref": "curated:jhin-back-to-basics"
     },
     {
       "champion": "katarina",
@@ -1191,12 +1221,6 @@
       "ref": "curated:naafiri-ethereal-weapon"
     },
     {
-      "champion": "yorick",
-      "augment": "Ethereal Weapon",
-      "tier": "S",
-      "ref": "curated:yorick-ethereal-weapon"
-    },
-    {
       "champion": "renata",
       "augment": "Cruelty",
       "tier": "S",
@@ -1273,12 +1297,6 @@
       "augment": "Don't Blink",
       "tier": "S",
       "ref": "curated:lissandra-dont-blink"
-    },
-    {
-      "champion": "udyr",
-      "augment": "Jeweled Gauntlet",
-      "tier": "S",
-      "ref": "curated:udyr-jeweled-gauntlet"
     },
     {
       "champion": "jarvaniv",
@@ -1429,12 +1447,6 @@
       "augment": "Jeweled Gauntlet",
       "tier": "S",
       "ref": "curated:katarina-易损法爆爆杀流"
-    },
-    {
-      "champion": "katarina",
-      "augment": "Triggered Inferno",
-      "tier": "S",
-      "ref": "curated:katarina-双旋转流无敌卡特"
     },
     {
       "champion": "katarina",
@@ -1869,12 +1881,6 @@
       "ref": "curated:naafiri-炼狱扳机纳亚菲利"
     },
     {
-      "champion": "diana",
-      "augment": "Purist - Caster",
-      "tier": "S",
-      "ref": "curated:diana-月下无限连爆发流"
-    },
-    {
       "champion": "vi",
       "augment": "Dashing",
       "tier": "S",
@@ -1915,12 +1921,6 @@
       "augment": "Jeweled Gauntlet",
       "tier": "S",
       "ref": "curated:draven-法爆大招流德莱文"
-    },
-    {
-      "champion": "blitzcrank",
-      "augment": "Upgrade Infinity Edge",
-      "tier": "S",
-      "ref": "curated:blitzcrank-e拳超人一刀流"
     },
     {
       "champion": "kaisa",
@@ -2613,6 +2613,12 @@
       "ref": "curated:yasuo-肉到爆炸-仅供娱乐"
     },
     {
+      "champion": "malzahar",
+      "augment": "Ethereal Weapon",
+      "tier": "A",
+      "ref": "curated:malzahar-ethereal-weapon"
+    },
+    {
       "champion": "fiddlesticks",
       "augment": "Upgrade Zhonya's",
       "tier": "A",
@@ -2629,12 +2635,6 @@
       "augment": "Eureka",
       "tier": "A",
       "ref": "curated:karthus-eureka"
-    },
-    {
-      "champion": "malzahar",
-      "augment": "Ethereal Weapon",
-      "tier": "A",
-      "ref": "curated:malzahar-ethereal-weapon"
     },
     {
       "champion": "sion",
@@ -2713,6 +2713,12 @@
       "augment": "Ethereal Weapon",
       "tier": "A",
       "ref": "curated:senna-ethereal-weapon"
+    },
+    {
+      "champion": "ivern",
+      "augment": "Protein Shake",
+      "tier": "A",
+      "ref": "curated:ivern-蛋白粉花剑奶盾流小菊"
     },
     {
       "champion": "katarina",
@@ -3003,12 +3009,6 @@
       "ref": "curated:twitch-胶粘折磨流"
     },
     {
-      "champion": "ivern",
-      "augment": "Protein Shake",
-      "tier": "A",
-      "ref": "curated:ivern-蛋白粉花剑奶盾流小菊"
-    },
-    {
       "champion": "blitzcrank",
       "augment": "Clown College",
       "tier": "A",
@@ -3099,6 +3099,12 @@
       "ref": "curated:masteryi-念经流剑圣纯恶心娱乐玩法主打一个杀不死"
     },
     {
+      "champion": "neeko",
+      "augment": "Tap Dancer",
+      "tier": "B",
+      "ref": "curated:neeko-tap-dancer"
+    },
+    {
       "champion": "shaco",
       "augment": "Minionmancer",
       "tier": "B",
@@ -3115,12 +3121,6 @@
       "augment": "Master of Duality",
       "tier": "B",
       "ref": "curated:neeko-master-of-duality"
-    },
-    {
-      "champion": "neeko",
-      "augment": "Tap Dancer",
-      "tier": "B",
-      "ref": "curated:neeko-tap-dancer"
     },
     {
       "champion": "reksai",
