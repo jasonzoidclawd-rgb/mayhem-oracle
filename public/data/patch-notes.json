@@ -1,8 +1,972 @@
 {
-  "patch": "26.11",
-  "scraped_at": "2026-06-08T23:16:07.520717+00:00",
+  "patch": "26.12",
+  "scraped_at": "2026-06-09T23:19:13.269657+00:00",
   "source": "https://www.leagueoflegends.com/en-us/news/game-updates/",
   "patches": [
+    {
+      "version": "26.12",
+      "title": "Patch 26.12 Notes",
+      "released": "",
+      "sections": [
+        {
+          "id": "augments",
+          "title": "New Augments",
+          "changes": [
+            {
+              "subject": {
+                "en": "Silver Augments",
+                "zh-cn": "銀級增幅裝置",
+                "ja-jp": "シルバーオーグメント",
+                "ko-kr": "Silver Augments"
+              },
+              "text": {
+                "en": "Adaptive Ward",
+                "zh-cn": "適性之護",
+                "ja-jp": "アダプティブワード",
+                "ko-kr": "Adaptive Ward"
+              },
+              "kind": "changed"
+            },
+            {
+              "subject": {
+                "en": "Silver Augments",
+                "zh-cn": "銀級增幅裝置",
+                "ja-jp": "シルバーオーグメント",
+                "ko-kr": "Silver Augments"
+              },
+              "text": {
+                "en": "Don't Change the Channel",
+                "zh-cn": "別轉台",
+                "ja-jp": "チャンネルはそのまま",
+                "ko-kr": "Don't Change the Channel"
+              },
+              "kind": "changed"
+            },
+            {
+              "subject": {
+                "en": "Silver Augments",
+                "zh-cn": "銀級增幅裝置",
+                "ja-jp": "シルバーオーグメント",
+                "ko-kr": "Silver Augments"
+              },
+              "text": {
+                "en": "Double Defense",
+                "zh-cn": "雙重防禦",
+                "ja-jp": "ダブルディフェンス",
+                "ko-kr": "Double Defense"
+              },
+              "kind": "changed"
+            },
+            {
+              "subject": {
+                "en": "Silver Augments",
+                "zh-cn": "銀級增幅裝置",
+                "ja-jp": "シルバーオーグメント",
+                "ko-kr": "Silver Augments"
+              },
+              "text": {
+                "en": "Forged By The Master",
+                "zh-cn": "大師鑄造",
+                "ja-jp": "マスターに鍛えられて",
+                "ko-kr": "Forged By The Master"
+              },
+              "kind": "changed"
+            },
+            {
+              "subject": {
+                "en": "Silver Augments",
+                "zh-cn": "銀級增幅裝置",
+                "ja-jp": "シルバーオーグメント",
+                "ko-kr": "Silver Augments"
+              },
+              "text": {
+                "en": "It's Go Time",
+                "zh-cn": "該出手了",
+                "ja-jp": "始まるぞ",
+                "ko-kr": "It's Go Time"
+              },
+              "kind": "changed"
+            },
+            {
+              "subject": {
+                "en": "Silver Augments",
+                "zh-cn": "銀級增幅裝置",
+                "ja-jp": "シルバーオーグメント",
+                "ko-kr": "Silver Augments"
+              },
+              "text": {
+                "en": "Pursuit of Power",
+                "zh-cn": "追求力量",
+                "ja-jp": "力の追求",
+                "ko-kr": "Pursuit of Power"
+              },
+              "kind": "changed"
+            },
+            {
+              "subject": {
+                "en": "Silver Augments",
+                "zh-cn": "銀級增幅裝置",
+                "ja-jp": "シルバーオーグメント",
+                "ko-kr": "Silver Augments"
+              },
+              "text": {
+                "en": "Quest: Support Main",
+                "zh-cn": "任務：專精輔助",
+                "ja-jp": "クエスト：サポートメイン",
+                "ko-kr": "Quest: Support Main"
+              },
+              "kind": "changed"
+            },
+            {
+              "subject": {
+                "en": "Silver Augments",
+                "zh-cn": "銀級增幅裝置",
+                "ja-jp": "シルバーオーグメント",
+                "ko-kr": "Silver Augments"
+              },
+              "text": {
+                "en": "Siphon",
+                "zh-cn": "虹吸",
+                "ja-jp": "サイフォン",
+                "ko-kr": "Siphon"
+              },
+              "kind": "changed"
+            },
+            {
+              "subject": {
+                "en": "Silver Augments",
+                "zh-cn": "銀級增幅裝置",
+                "ja-jp": "シルバーオーグメント",
+                "ko-kr": "Silver Augments"
+              },
+              "text": {
+                "en": "Snowday",
+                "zh-cn": "降雪之日",
+                "ja-jp": "スノーデイ",
+                "ko-kr": "Snowday"
+              },
+              "kind": "changed"
+            },
+            {
+              "subject": {
+                "en": "Silver Augments",
+                "zh-cn": "銀級增幅裝置",
+                "ja-jp": "シルバーオーグメント",
+                "ko-kr": "Silver Augments"
+              },
+              "text": {
+                "en": "Stackosaurus Rex",
+                "zh-cn": "堆層暴龍",
+                "ja-jp": "スタックサウルス・レックス",
+                "ko-kr": "Stackosaurus Rex"
+              },
+              "kind": "changed"
+            },
+            {
+              "subject": {
+                "en": "Silver Augments",
+                "zh-cn": "銀級增幅裝置",
+                "ja-jp": "シルバーオーグメント",
+                "ko-kr": "Silver Augments"
+              },
+              "text": {
+                "en": "Stay Resolute",
+                "zh-cn": "果斷",
+                "ja-jp": "固い決意",
+                "ko-kr": "Stay Resolute"
+              },
+              "kind": "changed"
+            },
+            {
+              "subject": {
+                "en": "Silver Augments",
+                "zh-cn": "銀級增幅裝置",
+                "ja-jp": "シルバーオーグメント",
+                "ko-kr": "Silver Augments"
+              },
+              "text": {
+                "en": "Trusty Weapon",
+                "zh-cn": "可靠武器",
+                "ja-jp": "頼れる武器",
+                "ko-kr": "Trusty Weapon"
+              },
+              "kind": "changed"
+            },
+            {
+              "subject": {
+                "en": "Gold Augments",
+                "zh-cn": "金級增幅裝置",
+                "ja-jp": "ゴールドオーグメント",
+                "ko-kr": "Gold Augments"
+              },
+              "text": {
+                "en": "Archmage",
+                "zh-cn": "大法師",
+                "ja-jp": "魔帝",
+                "ko-kr": "Archmage"
+              },
+              "kind": "changed"
+            },
+            {
+              "subject": {
+                "en": "Gold Augments",
+                "zh-cn": "金級增幅裝置",
+                "ja-jp": "ゴールドオーグメント",
+                "ko-kr": "Gold Augments"
+              },
+              "text": {
+                "en": "BONK!",
+                "zh-cn": "一棒入魂！",
+                "ja-jp": "ボカッ！",
+                "ko-kr": "BONK!"
+              },
+              "kind": "changed"
+            },
+            {
+              "subject": {
+                "en": "Gold Augments",
+                "zh-cn": "金級增幅裝置",
+                "ja-jp": "ゴールドオーグメント",
+                "ko-kr": "Gold Augments"
+              },
+              "text": {
+                "en": "Combusting Interest",
+                "zh-cn": "燃燒利息",
+                "ja-jp": "燃える利回り",
+                "ko-kr": "Combusting Interest"
+              },
+              "kind": "changed"
+            },
+            {
+              "subject": {
+                "en": "Gold Augments",
+                "zh-cn": "金級增幅裝置",
+                "ja-jp": "ゴールドオーグメント",
+                "ko-kr": "Gold Augments"
+              },
+              "text": {
+                "en": "Endless Decimation",
+                "zh-cn": "無盡屠滅",
+                "ja-jp": "終わりなき殲滅",
+                "ko-kr": "Endless Decimation"
+              },
+              "kind": "changed"
+            },
+            {
+              "subject": {
+                "en": "Gold Augments",
+                "zh-cn": "金級增幅裝置",
+                "ja-jp": "ゴールドオーグメント",
+                "ko-kr": "Gold Augments"
+              },
+              "text": {
+                "en": "From Downtown",
+                "zh-cn": "超遠射擊",
+                "ja-jp": "ロングシュート",
+                "ko-kr": "From Downtown"
+              },
+              "kind": "changed"
+            },
+            {
+              "subject": {
+                "en": "Gold Augments",
+                "zh-cn": "金級增幅裝置",
+                "ja-jp": "ゴールドオーグメント",
+                "ko-kr": "Gold Augments"
+              },
+              "text": {
+                "en": "Hide on Bush",
+                "zh-cn": "躲草叢",
+                "ja-jp": "Hide on Bush",
+                "ko-kr": "Hide on Bush"
+              },
+              "kind": "changed"
+            },
+            {
+              "subject": {
+                "en": "Gold Augments",
+                "zh-cn": "金級增幅裝置",
+                "ja-jp": "ゴールドオーグメント",
+                "ko-kr": "Gold Augments"
+              },
+              "text": {
+                "en": "Lil' Extra Help",
+                "zh-cn": "小小助力",
+                "ja-jp": "ちょこっとヘルプ",
+                "ko-kr": "Lil' Extra Help"
+              },
+              "kind": "changed"
+            },
+            {
+              "subject": {
+                "en": "Gold Augments",
+                "zh-cn": "金級增幅裝置",
+                "ja-jp": "ゴールドオーグメント",
+                "ko-kr": "Gold Augments"
+              },
+              "text": {
+                "en": "Mercy's Strike",
+                "zh-cn": "慈悲之擊",
+                "ja-jp": "慈悲の一撃",
+                "ko-kr": "Mercy's Strike"
+              },
+              "kind": "changed"
+            },
+            {
+              "subject": {
+                "en": "Gold Augments",
+                "zh-cn": "金級增幅裝置",
+                "ja-jp": "ゴールドオーグメント",
+                "ko-kr": "Gold Augments"
+              },
+              "text": {
+                "en": "Nature is Healing",
+                "zh-cn": "自然治療",
+                "ja-jp": "大自然が回復している",
+                "ko-kr": "Nature is Healing"
+              },
+              "kind": "changed"
+            },
+            {
+              "subject": {
+                "en": "Gold Augments",
+                "zh-cn": "金級增幅裝置",
+                "ja-jp": "ゴールドオーグメント",
+                "ko-kr": "Gold Augments"
+              },
+              "text": {
+                "en": "Our Healing",
+                "zh-cn": "共享治療",
+                "ja-jp": "みんなの回復",
+                "ko-kr": "Our Healing"
+              },
+              "kind": "changed"
+            },
+            {
+              "subject": {
+                "en": "Gold Augments",
+                "zh-cn": "金級增幅裝置",
+                "ja-jp": "ゴールドオーグメント",
+                "ko-kr": "Gold Augments"
+              },
+              "text": {
+                "en": "Overextender",
+                "zh-cn": "過度延伸",
+                "ja-jp": "深追いしすぎ",
+                "ko-kr": "Overextender"
+              },
+              "kind": "changed"
+            },
+            {
+              "subject": {
+                "en": "Gold Augments",
+                "zh-cn": "金級增幅裝置",
+                "ja-jp": "ゴールドオーグメント",
+                "ko-kr": "Gold Augments"
+              },
+              "text": {
+                "en": "Pat On The Back",
+                "zh-cn": "拍拍鼓勵",
+                "ja-jp": "よくやった",
+                "ko-kr": "Pat On The Back"
+              },
+              "kind": "changed"
+            },
+            {
+              "subject": {
+                "en": "Gold Augments",
+                "zh-cn": "金級增幅裝置",
+                "ja-jp": "ゴールドオーグメント",
+                "ko-kr": "Gold Augments"
+              },
+              "text": {
+                "en": "Porcupine",
+                "zh-cn": "豪豬",
+                "ja-jp": "ヤマアラシ",
+                "ko-kr": "Porcupine"
+              },
+              "kind": "changed"
+            },
+            {
+              "subject": {
+                "en": "Gold Augments",
+                "zh-cn": "金級增幅裝置",
+                "ja-jp": "ゴールドオーグメント",
+                "ko-kr": "Gold Augments"
+              },
+              "text": {
+                "en": "Pressure Cooker",
+                "zh-cn": "壓力鍋",
+                "ja-jp": "圧力鍋",
+                "ko-kr": "Pressure Cooker"
+              },
+              "kind": "changed"
+            },
+            {
+              "subject": {
+                "en": "Gold Augments",
+                "zh-cn": "金級增幅裝置",
+                "ja-jp": "ゴールドオーグメント",
+                "ko-kr": "Gold Augments"
+              },
+              "text": {
+                "en": "Pursuit of Haste",
+                "zh-cn": "疾速追擊",
+                "ja-jp": "素早さの追求",
+                "ko-kr": "Pursuit of Haste"
+              },
+              "kind": "changed"
+            },
+            {
+              "subject": {
+                "en": "Gold Augments",
+                "zh-cn": "金級增幅裝置",
+                "ja-jp": "ゴールドオーグメント",
+                "ko-kr": "Gold Augments"
+              },
+              "text": {
+                "en": "Ravenous Bind",
+                "zh-cn": "貪婪束縛",
+                "ja-jp": "貪欲な束縛",
+                "ko-kr": "Ravenous Bind"
+              },
+              "kind": "changed"
+            },
+            {
+              "subject": {
+                "en": "Gold Augments",
+                "zh-cn": "金級增幅裝置",
+                "ja-jp": "ゴールドオーグメント",
+                "ko-kr": "Gold Augments"
+              },
+              "text": {
+                "en": "Rejuvenation",
+                "zh-cn": "回春",
+                "ja-jp": "再生",
+                "ko-kr": "Rejuvenation"
+              },
+              "kind": "changed"
+            },
+            {
+              "subject": {
+                "en": "Gold Augments",
+                "zh-cn": "金級增幅裝置",
+                "ja-jp": "ゴールドオーグメント",
+                "ko-kr": "Gold Augments"
+              },
+              "text": {
+                "en": "Shark Bait",
+                "zh-cn": "鯊魚誘餌",
+                "ja-jp": "サメのエサ",
+                "ko-kr": "Shark Bait"
+              },
+              "kind": "changed"
+            },
+            {
+              "subject": {
+                "en": "Gold Augments",
+                "zh-cn": "金級增幅裝置",
+                "ja-jp": "ゴールドオーグメント",
+                "ko-kr": "Gold Augments"
+              },
+              "text": {
+                "en": "Shark Tempest",
+                "zh-cn": "鯊魚風暴",
+                "ja-jp": "シャークテンペスト",
+                "ko-kr": "Shark Tempest"
+              },
+              "kind": "changed"
+            },
+            {
+              "subject": {
+                "en": "Gold Augments",
+                "zh-cn": "金級增幅裝置",
+                "ja-jp": "ゴールドオーグメント",
+                "ko-kr": "Gold Augments"
+              },
+              "text": {
+                "en": "Snowblast",
+                "zh-cn": "雪爆",
+                "ja-jp": "スノーブラスト",
+                "ko-kr": "Snowblast"
+              },
+              "kind": "changed"
+            },
+            {
+              "subject": {
+                "en": "Gold Augments",
+                "zh-cn": "金級增幅裝置",
+                "ja-jp": "ゴールドオーグメント",
+                "ko-kr": "Gold Augments"
+              },
+              "text": {
+                "en": "Terrain'd",
+                "zh-cn": "劃地為王",
+                "ja-jp": "地形でドン",
+                "ko-kr": "Terrain'd"
+              },
+              "kind": "changed"
+            },
+            {
+              "subject": {
+                "en": "Gold Augments",
+                "zh-cn": "金級增幅裝置",
+                "ja-jp": "ゴールドオーグメント",
+                "ko-kr": "Gold Augments"
+              },
+              "text": {
+                "en": "Tooth Fairy",
+                "zh-cn": "牙仙",
+                "ja-jp": "歯の妖精",
+                "ko-kr": "Tooth Fairy"
+              },
+              "kind": "changed"
+            },
+            {
+              "subject": {
+                "en": "Gold Augments",
+                "zh-cn": "金級增幅裝置",
+                "ja-jp": "ゴールドオーグメント",
+                "ko-kr": "Gold Augments"
+              },
+              "text": {
+                "en": "Void Dash",
+                "zh-cn": "虛空衝刺",
+                "ja-jp": "ヴォイドダッシュ",
+                "ko-kr": "Void Dash"
+              },
+              "kind": "changed"
+            },
+            {
+              "subject": {
+                "en": "Gold Augments",
+                "zh-cn": "金級增幅裝置",
+                "ja-jp": "ゴールドオーグメント",
+                "ko-kr": "Gold Augments"
+              },
+              "text": {
+                "en": "Warlock Juicebox",
+                "zh-cn": "術士果汁盒",
+                "ja-jp": "大魔導師のジュースボックス",
+                "ko-kr": "Warlock Juicebox"
+              },
+              "kind": "changed"
+            },
+            {
+              "subject": {
+                "en": "Gold Augments",
+                "zh-cn": "金級增幅裝置",
+                "ja-jp": "ゴールドオーグメント",
+                "ko-kr": "Gold Augments"
+              },
+              "text": {
+                "en": "Wee Woo Wee Woo",
+                "zh-cn": "嗚咿嗚咿",
+                "ja-jp": "うぃ～！おりゃっ！",
+                "ko-kr": "Wee Woo Wee Woo"
+              },
+              "kind": "changed"
+            },
+            {
+              "subject": {
+                "en": "Gold Augments",
+                "zh-cn": "金級增幅裝置",
+                "ja-jp": "ゴールドオーグメント",
+                "ko-kr": "Gold Augments"
+              },
+              "text": {
+                "en": "Yowch, My Coins!",
+                "zh-cn": "哎呀，我的金幣！",
+                "ja-jp": "あいたっ、私のコイン！",
+                "ko-kr": "Yowch, My Coins!"
+              },
+              "kind": "changed"
+            },
+            {
+              "subject": {
+                "en": "Prismatic Augments",
+                "zh-cn": "稜鏡增幅裝置",
+                "ja-jp": "プリズムオーグメント",
+                "ko-kr": "Prismatic Augments"
+              },
+              "text": {
+                "en": "Chain Reaction",
+                "zh-cn": "連鎖反應",
+                "ja-jp": "連鎖反応",
+                "ko-kr": "Chain Reaction"
+              },
+              "kind": "changed"
+            },
+            {
+              "subject": {
+                "en": "Prismatic Augments",
+                "zh-cn": "稜鏡增幅裝置",
+                "ja-jp": "プリズムオーグメント",
+                "ko-kr": "Prismatic Augments"
+              },
+              "text": {
+                "en": "Dimension Shift",
+                "zh-cn": "次元轉移",
+                "ja-jp": "ディメンションシフト",
+                "ko-kr": "Dimension Shift"
+              },
+              "kind": "changed"
+            },
+            {
+              "subject": {
+                "en": "Prismatic Augments",
+                "zh-cn": "稜鏡增幅裝置",
+                "ja-jp": "プリズムオーグメント",
+                "ko-kr": "Prismatic Augments"
+              },
+              "text": {
+                "en": "DropBear",
+                "zh-cn": "天降戰熊",
+                "ja-jp": "ドロップベア",
+                "ko-kr": "DropBear"
+              },
+              "kind": "changed"
+            },
+            {
+              "subject": {
+                "en": "Prismatic Augments",
+                "zh-cn": "稜鏡增幅裝置",
+                "ja-jp": "プリズムオーグメント",
+                "ko-kr": "Prismatic Augments"
+              },
+              "text": {
+                "en": "Echo Cast",
+                "zh-cn": "共鳴施放",
+                "ja-jp": "エコー キャスト",
+                "ko-kr": "Echo Cast"
+              },
+              "kind": "changed"
+            },
+            {
+              "subject": {
+                "en": "Prismatic Augments",
+                "zh-cn": "稜鏡增幅裝置",
+                "ja-jp": "プリズムオーグメント",
+                "ko-kr": "Prismatic Augments"
+              },
+              "text": {
+                "en": "En Passant",
+                "zh-cn": "吃過路兵",
+                "ja-jp": "アンパッサン",
+                "ko-kr": "En Passant"
+              },
+              "kind": "changed"
+            },
+            {
+              "subject": {
+                "en": "Prismatic Augments",
+                "zh-cn": "稜鏡增幅裝置",
+                "ja-jp": "プリズムオーグメント",
+                "ko-kr": "Prismatic Augments"
+              },
+              "text": {
+                "en": "Hellbent",
+                "zh-cn": "陰魂不散",
+                "ja-jp": "ヘルベント",
+                "ko-kr": "Hellbent"
+              },
+              "kind": "changed"
+            },
+            {
+              "subject": {
+                "en": "Prismatic Augments",
+                "zh-cn": "稜鏡增幅裝置",
+                "ja-jp": "プリズムオーグメント",
+                "ko-kr": "Prismatic Augments"
+              },
+              "text": {
+                "en": "High Roller",
+                "zh-cn": "豪氣賭客",
+                "ja-jp": "ギャンブラー",
+                "ko-kr": "High Roller"
+              },
+              "kind": "changed"
+            },
+            {
+              "subject": {
+                "en": "Prismatic Augments",
+                "zh-cn": "稜鏡增幅裝置",
+                "ja-jp": "プリズムオーグメント",
+                "ko-kr": "Prismatic Augments"
+              },
+              "text": {
+                "en": "Multishot",
+                "zh-cn": "多重射擊",
+                "ja-jp": "マルチショット",
+                "ko-kr": "Multishot"
+              },
+              "kind": "changed"
+            },
+            {
+              "subject": {
+                "en": "Prismatic Augments",
+                "zh-cn": "稜鏡增幅裝置",
+                "ja-jp": "プリズムオーグメント",
+                "ko-kr": "Prismatic Augments"
+              },
+              "text": {
+                "en": "One Trick Pony",
+                "zh-cn": "絕活玩家",
+                "ja-jp": "ワントリック ポニー",
+                "ko-kr": "One Trick Pony"
+              },
+              "kind": "changed"
+            },
+            {
+              "subject": {
+                "en": "Prismatic Augments",
+                "zh-cn": "稜鏡增幅裝置",
+                "ja-jp": "プリズムオーグメント",
+                "ko-kr": "Prismatic Augments"
+              },
+              "text": {
+                "en": "Overloaded",
+                "zh-cn": "輸出超負荷",
+                "ja-jp": "オーバーロード",
+                "ko-kr": "Overloaded"
+              },
+              "kind": "changed"
+            },
+            {
+              "subject": {
+                "en": "Prismatic Augments",
+                "zh-cn": "稜鏡增幅裝置",
+                "ja-jp": "プリズムオーグメント",
+                "ko-kr": "Prismatic Augments"
+              },
+              "text": {
+                "en": "Pin Cushion",
+                "zh-cn": "針插",
+                "ja-jp": "針山",
+                "ko-kr": "Pin Cushion"
+              },
+              "kind": "changed"
+            },
+            {
+              "subject": {
+                "en": "Prismatic Augments",
+                "zh-cn": "稜鏡增幅裝置",
+                "ja-jp": "プリズムオーグメント",
+                "ko-kr": "Prismatic Augments"
+              },
+              "text": {
+                "en": "Poro Stampede",
+                "zh-cn": "普羅衝鋒",
+                "ja-jp": "ポロの大群",
+                "ko-kr": "Poro Stampede"
+              },
+              "kind": "changed"
+            },
+            {
+              "subject": {
+                "en": "Prismatic Augments",
+                "zh-cn": "稜鏡增幅裝置",
+                "ja-jp": "プリズムオーグメント",
+                "ko-kr": "Prismatic Augments"
+              },
+              "text": {
+                "en": "Quickstep",
+                "zh-cn": "快步移動",
+                "ja-jp": "クイックステップ",
+                "ko-kr": "Quickstep"
+              },
+              "kind": "changed"
+            },
+            {
+              "subject": {
+                "en": "Prismatic Augments",
+                "zh-cn": "稜鏡增幅裝置",
+                "ja-jp": "プリズムオーグメント",
+                "ko-kr": "Prismatic Augments"
+              },
+              "text": {
+                "en": "Rite of Ascension",
+                "zh-cn": "昇華儀式",
+                "ja-jp": "超越の儀式",
+                "ko-kr": "Rite of Ascension"
+              },
+              "kind": "changed"
+            },
+            {
+              "subject": {
+                "en": "Prismatic Augments",
+                "zh-cn": "稜鏡增幅裝置",
+                "ja-jp": "プリズムオーグメント",
+                "ko-kr": "Prismatic Augments"
+              },
+              "text": {
+                "en": "Spellsplit",
+                "zh-cn": "法術雙生",
+                "ja-jp": "スペルスプリット",
+                "ko-kr": "Spellsplit"
+              },
+              "kind": "changed"
+            },
+            {
+              "subject": {
+                "en": "Prismatic Augments",
+                "zh-cn": "稜鏡增幅裝置",
+                "ja-jp": "プリズムオーグメント",
+                "ko-kr": "Prismatic Augments"
+              },
+              "text": {
+                "en": "Spirit Bomb",
+                "zh-cn": "靈魂炸彈",
+                "ja-jp": "スピリットボム",
+                "ko-kr": "Spirit Bomb"
+              },
+              "kind": "changed"
+            },
+            {
+              "subject": {
+                "en": "Prismatic Augments",
+                "zh-cn": "稜鏡增幅裝置",
+                "ja-jp": "プリズムオーグメント",
+                "ko-kr": "Prismatic Augments"
+              },
+              "text": {
+                "en": "Squishy Slappy Grab",
+                "zh-cn": "伸縮手掌黏黏樂",
+                "ja-jp": "スクイッシースラッピーグラブ",
+                "ko-kr": "Squishy Slappy Grab"
+              },
+              "kind": "changed"
+            },
+            {
+              "subject": {
+                "en": "Prismatic Augments",
+                "zh-cn": "稜鏡增幅裝置",
+                "ja-jp": "プリズムオーグメント",
+                "ko-kr": "Prismatic Augments"
+              },
+              "text": {
+                "en": "Surge Field",
+                "zh-cn": "高能量場域",
+                "ja-jp": "サージフィールド",
+                "ko-kr": "Surge Field"
+              },
+              "kind": "changed"
+            },
+            {
+              "subject": {
+                "en": "Prismatic Augments",
+                "zh-cn": "稜鏡增幅裝置",
+                "ja-jp": "プリズムオーグメント",
+                "ko-kr": "Prismatic Augments"
+              },
+              "text": {
+                "en": "Terror",
+                "zh-cn": "恐懼",
+                "ja-jp": "「恐怖」",
+                "ko-kr": "Terror"
+              },
+              "kind": "changed"
+            },
+            {
+              "subject": {
+                "en": "Prismatic Augments",
+                "zh-cn": "稜鏡增幅裝置",
+                "ja-jp": "プリズムオーグメント",
+                "ko-kr": "Prismatic Augments"
+              },
+              "text": {
+                "en": "Titan's Resolve",
+                "zh-cn": "泰坦的決意",
+                "ja-jp": "巨人の誓い",
+                "ko-kr": "Titan's Resolve"
+              },
+              "kind": "changed"
+            },
+            {
+              "subject": {
+                "en": "Prismatic Augments",
+                "zh-cn": "稜鏡增幅裝置",
+                "ja-jp": "プリズムオーグメント",
+                "ko-kr": "Prismatic Augments"
+              },
+              "text": {
+                "en": "Tripleshot",
+                "zh-cn": "三連射",
+                "ja-jp": "トリプルショット",
+                "ko-kr": "Tripleshot"
+              },
+              "kind": "changed"
+            }
+          ]
+        },
+        {
+          "id": "augments",
+          "title": "Augment Adjustments",
+          "changes": [
+            {
+              "subject": {
+                "en": "Blade Waltz Will now attempt to re-target the initial target for the final attack so player will be able to land near the initial target Draw Your Sword",
+                "zh-cn": "華爾茲劍舞 現在會嘗試將最終攻擊重新鎖定初始目標，讓玩家能夠在初始目標附近著陸 拔劍吧",
+                "ja-jp": "ブレードワルツ プレイヤーが最終的に最初の対象の近くで終われるように、最後の攻撃で最初の対象に再度対象指定を試みるようになりました 剣を構えよ",
+                "ko-kr": "Blade Waltz Will now attempt to re-target the initial target for the final attack so player will be able to land near the initial target Draw Your Sword"
+              },
+              "text": {
+                "en": "AD: 30% bonus increased up to 30% based on Attack Range (500-650) ⇒ 24% bonus increased up to 100% based on Attack Range (500-650)",
+                "zh-cn": "物攻：30%加成，依攻擊距離（500-650）提升至最多30% ⇒ 24%加成，隨攻擊距離（500-650）提升至最多100%",
+                "ja-jp": "攻撃力：30%増加、射程（500～650）に応じて最大30%まで増加 ⇒ 24%増加、射程（500～650）に応じて最大100%まで増加",
+                "ko-kr": "AD: 30% bonus increased up to 30% based on Attack Range (500-650) ⇒ 24% bonus increased up to 100% based on Attack Range (500-650)"
+              },
+              "kind": "buffed"
+            },
+            {
+              "subject": {
+                "en": "Blade Waltz Will now attempt to re-target the initial target for the final attack so player will be able to land near the initial target Draw Your Sword",
+                "zh-cn": "華爾茲劍舞 現在會嘗試將最終攻擊重新鎖定初始目標，讓玩家能夠在初始目標附近著陸 拔劍吧",
+                "ja-jp": "ブレードワルツ プレイヤーが最終的に最初の対象の近くで終われるように、最後の攻撃で最初の対象に再度対象指定を試みるようになりました 剣を構えよ",
+                "ko-kr": "Blade Waltz Will now attempt to re-target the initial target for the final attack so player will be able to land near the initial target Draw Your Sword"
+              },
+              "text": {
+                "en": "AS: 25% bonus increased up to 30% based on Attack Range (500-650) ⇒ 20% bonus increased up to 100% based on Attack Range (500-650)",
+                "zh-cn": "攻速：25%額外提升，依攻擊距離（500-650）最高提升至30% ⇒ 20%額外提升（依攻擊距離500-650最高提升至100%）",
+                "ja-jp": "攻撃速度：25%増加、射程（500～650）に応じて最大30%まで増加 ⇒ 20%増加、射程（500～650）に応じて最大100%まで増加",
+                "ko-kr": "AS: 25% bonus increased up to 30% based on Attack Range (500-650) ⇒ 20% bonus increased up to 100% based on Attack Range (500-650)"
+              },
+              "kind": "buffed"
+            },
+            {
+              "subject": {
+                "en": "Blade Waltz Will now attempt to re-target the initial target for the final attack so player will be able to land near the initial target Draw Your Sword",
+                "zh-cn": "華爾茲劍舞 現在會嘗試將最終攻擊重新鎖定初始目標，讓玩家能夠在初始目標附近著陸 拔劍吧",
+                "ja-jp": "ブレードワルツ プレイヤーが最終的に最初の対象の近くで終われるように、最後の攻撃で最初の対象に再度対象指定を試みるようになりました 剣を構えよ",
+                "ko-kr": "Blade Waltz Will now attempt to re-target the initial target for the final attack so player will be able to land near the initial target Draw Your Sword"
+              },
+              "text": {
+                "en": "HP: 30% bonus increased up to 30% based on Attack Range (500-650) ⇒ 24% bonus increased up to 100% based on Attack Range (500-650)",
+                "zh-cn": "生命：30%加成，依攻擊距離（500-650）提升至最多30% ⇒ 24%加成，隨攻擊距離（500-650）提升至最多100%",
+                "ja-jp": "体力：30%増加、射程（500～650）に応じて最大30%まで増加 ⇒ 24%増加、射程（500～650）に応じて最大100%まで増加",
+                "ko-kr": "HP: 30% bonus increased up to 30% based on Attack Range (500-650) ⇒ 24% bonus increased up to 100% based on Attack Range (500-650)"
+              },
+              "kind": "buffed"
+            },
+            {
+              "subject": {
+                "en": "Blade Waltz Will now attempt to re-target the initial target for the final attack so player will be able to land near the initial target Draw Your Sword",
+                "zh-cn": "華爾茲劍舞 現在會嘗試將最終攻擊重新鎖定初始目標，讓玩家能夠在初始目標附近著陸 拔劍吧",
+                "ja-jp": "ブレードワルツ プレイヤーが最終的に最初の対象の近くで終われるように、最後の攻撃で最初の対象に再度対象指定を試みるようになりました 剣を構えよ",
+                "ko-kr": "Blade Waltz Will now attempt to re-target the initial target for the final attack so player will be able to land near the initial target Draw Your Sword"
+              },
+              "text": {
+                "en": "MS: 25% bonus increased up to 30% based on Attack Range (500-650) ⇒ 20% bonus increased up to 100% based on Attack Range (500-650)",
+                "zh-cn": "跑速25%額外提升，依攻擊距離（500-650）最高提升至30% ⇒ 20%額外提升（依攻擊距離500-650最高提升至100%）",
+                "ja-jp": "移動速度：25%増加、射程（500～650）に応じて最大30%まで増加 ⇒ 20%増加、射程（500～650）に応じて最大100%まで増加",
+                "ko-kr": "MS: 25% bonus increased up to 30% based on Attack Range (500-650) ⇒ 20% bonus increased up to 100% based on Attack Range (500-650)"
+              },
+              "kind": "buffed"
+            }
+          ]
+        }
+      ]
+    },
     {
       "version": "26.11",
       "title": "Patch 26.11 Notes",

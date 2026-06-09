@@ -1,6 +1,6 @@
 {
   "patch": "26.11",
-  "scraped_at": "2026-06-08T23:08:40.386100+00:00",
+  "scraped_at": "2026-06-09T23:13:05.305200+00:00",
   "combos": [
     {
       "champion": "vayne",
@@ -31,6 +31,12 @@
       "augment": "Back To Basics",
       "tier": "S",
       "ref": "curated:graves-back-to-basics"
+    },
+    {
+      "champion": "vayne",
+      "augment": "Dual Wield",
+      "tier": "S",
+      "ref": "curated:vayne-dual-wield"
     },
     {
       "champion": "lucian",
@@ -69,28 +75,22 @@
       "ref": "curated:aurelionsol-叠角龙100斩杀龙王"
     },
     {
-      "champion": "vayne",
-      "augment": "Dual Wield",
-      "tier": "S",
-      "ref": "curated:vayne-dual-wield"
-    },
-    {
       "champion": "graves",
       "augment": "Slow And Steady",
       "tier": "S",
       "ref": "curated:graves-slow-and-steady"
     },
     {
-      "champion": "tristana",
-      "augment": "Fan The Hammer",
-      "tier": "S",
-      "ref": "curated:tristana-fan-the-hammer"
-    },
-    {
       "champion": "yasuo",
       "augment": "Swift and Safe",
       "tier": "S",
       "ref": "curated:yasuo-swift-and-safe"
+    },
+    {
+      "champion": "tristana",
+      "augment": "Fan The Hammer",
+      "tier": "S",
+      "ref": "curated:tristana-fan-the-hammer"
     },
     {
       "champion": "morgana",
@@ -417,6 +417,12 @@
       "ref": "curated:ryze-mad-scientist"
     },
     {
+      "champion": "sett",
+      "augment": "Jeweled Gauntlet",
+      "tier": "S",
+      "ref": "curated:sett-jeweled-gauntlet"
+    },
+    {
       "champion": "kalista",
       "augment": "Fan The Hammer",
       "tier": "S",
@@ -477,6 +483,12 @@
       "ref": "curated:karthus-infinite-recursion"
     },
     {
+      "champion": "senna",
+      "augment": "Dual Wield",
+      "tier": "S",
+      "ref": "curated:senna-dual-wield"
+    },
+    {
       "champion": "aurelionsol",
       "augment": "StackosaurusRex",
       "tier": "S",
@@ -489,10 +501,10 @@
       "ref": "curated:amumu-ethereal-weapon"
     },
     {
-      "champion": "sett",
-      "augment": "Jeweled Gauntlet",
+      "champion": "kayle",
+      "augment": "Ethereal Weapon",
       "tier": "S",
-      "ref": "curated:sett-jeweled-gauntlet"
+      "ref": "curated:kayle-ethereal-weapon"
     },
     {
       "champion": "katarina",
@@ -573,6 +585,12 @@
       "ref": "curated:corki-jeweled-gauntlet"
     },
     {
+      "champion": "garen",
+      "augment": "Slow And Steady",
+      "tier": "S",
+      "ref": "curated:garen-slow-and-steady"
+    },
+    {
       "champion": "smolder",
       "augment": "Jeweled Gauntlet",
       "tier": "S",
@@ -595,18 +613,6 @@
       "augment": "Dual Wield",
       "tier": "S",
       "ref": "curated:akshan-dual-wield"
-    },
-    {
-      "champion": "senna",
-      "augment": "Dual Wield",
-      "tier": "S",
-      "ref": "curated:senna-dual-wield"
-    },
-    {
-      "champion": "kayle",
-      "augment": "Ethereal Weapon",
-      "tier": "S",
-      "ref": "curated:kayle-ethereal-weapon"
     },
     {
       "champion": "twitch",
@@ -861,6 +867,12 @@
       "ref": "curated:elise-dashing"
     },
     {
+      "champion": "blitzcrank",
+      "augment": "Upgrade Infinity Edge",
+      "tier": "S",
+      "ref": "curated:blitzcrank-e拳超人一刀流"
+    },
+    {
       "champion": "jhin",
       "augment": "Back To Basics",
       "tier": "S",
@@ -871,6 +883,12 @@
       "augment": "Protein Shake",
       "tier": "S",
       "ref": "curated:mordekaiser-protein-shake"
+    },
+    {
+      "champion": "ekko",
+      "augment": "Ethereal Weapon",
+      "tier": "S",
+      "ref": "curated:ekko-ethereal-weapon"
     },
     {
       "champion": "yunara",
@@ -897,16 +915,16 @@
       "ref": "curated:yorick-ethereal-weapon"
     },
     {
+      "champion": "bard",
+      "augment": "OrbitalLaser",
+      "tier": "S",
+      "ref": "curated:bard-orbitallaser"
+    },
+    {
       "champion": "udyr",
       "augment": "Jeweled Gauntlet",
       "tier": "S",
       "ref": "curated:udyr-jeweled-gauntlet"
-    },
-    {
-      "champion": "garen",
-      "augment": "Slow And Steady",
-      "tier": "S",
-      "ref": "curated:garen-slow-and-steady"
     },
     {
       "champion": "morgana",
@@ -969,16 +987,16 @@
       "ref": "curated:warwick-ap死亡之环流"
     },
     {
-      "champion": "blitzcrank",
-      "augment": "Upgrade Infinity Edge",
-      "tier": "S",
-      "ref": "curated:blitzcrank-e拳超人一刀流"
-    },
-    {
       "champion": "veigar",
       "augment": "Marksmage",
       "tier": "S",
       "ref": "curated:veigar-神射小法师"
+    },
+    {
+      "champion": "veigar",
+      "augment": "Infinite Recursion",
+      "tier": "S",
+      "ref": "curated:veigar-极致cd无限e"
     },
     {
       "champion": "milio",
@@ -1167,12 +1185,6 @@
       "ref": "curated:malphite-ultimate-revolution"
     },
     {
-      "champion": "ekko",
-      "augment": "Ethereal Weapon",
-      "tier": "S",
-      "ref": "curated:ekko-ethereal-weapon"
-    },
-    {
       "champion": "naafiri",
       "augment": "Infernal Conduit",
       "tier": "S",
@@ -1267,12 +1279,6 @@
       "augment": "Scoped Weapons",
       "tier": "S",
       "ref": "curated:rengar-scoped-weapons"
-    },
-    {
-      "champion": "bard",
-      "augment": "OrbitalLaser",
-      "tier": "S",
-      "ref": "curated:bard-orbitallaser"
     },
     {
       "champion": "samira",
@@ -2047,12 +2053,6 @@
       "augment": "Upgrade Infinity Edge",
       "tier": "S",
       "ref": "curated:xayah-暴击流"
-    },
-    {
-      "champion": "veigar",
-      "augment": "Infinite Recursion",
-      "tier": "S",
-      "ref": "curated:veigar-极致cd无限e"
     },
     {
       "champion": "veigar",
@@ -3219,6 +3219,12 @@
       "ref": "curated:sejuani-fan-the-hammer"
     },
     {
+      "champion": "smolder",
+      "augment": "Draw Your Sword",
+      "tier": "C",
+      "ref": "curated:smolder-draw-your-sword"
+    },
+    {
       "champion": "darius",
       "augment": "Blade Waltz",
       "tier": "C",
@@ -3259,12 +3265,6 @@
       "augment": "Ethereal Weapon",
       "tier": "C",
       "ref": "curated:twitch-ethereal-weapon"
-    },
-    {
-      "champion": "smolder",
-      "augment": "Draw Your Sword",
-      "tier": "C",
-      "ref": "curated:smolder-draw-your-sword"
     },
     {
       "champion": "garen",
