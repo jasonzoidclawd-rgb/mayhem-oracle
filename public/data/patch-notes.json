@@ -1,6 +1,6 @@
 {
   "patch": "26.12",
-  "scraped_at": "2026-06-09T23:19:13.269657+00:00",
+  "scraped_at": "2026-06-10T23:27:23.104179+00:00",
   "source": "https://www.leagueoflegends.com/en-us/news/game-updates/",
   "patches": [
     {
@@ -1758,89 +1758,6 @@
                 "ko-kr": "Healing towards allies will not be affected by Howling Abyss Buff's heal cut"
               },
               "kind": "changed"
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "version": "26.7",
-      "title": "Patch 26.7 Notes",
-      "released": "",
-      "sections": [
-        {
-          "id": "augments",
-          "title": "Augments",
-          "changes": [
-            {
-              "subject": {
-                "en": "Poro Blaster",
-                "zh-cn": "魄罗爆破手",
-                "ja-jp": "ポロブラスター",
-                "ko-kr": "포로 발사기",
-                "zh-tw": "普羅能量炮"
-              },
-              "text": {
-                "en": "NEW Knocks back enemies once only when you have 5 poros.",
-                "zh-cn": "全新 當你擁有5隻普羅時，僅會擊退敵軍一次。",
-                "ja-jp": "NEW ポロが5匹いるときに、一度だけ敵をノックバックさせる。",
-                "ko-kr": "NEW Knocks back enemies once only when you have 5 poros."
-              },
-              "kind": "changed"
-            },
-            {
-              "subject": {
-                "en": "Poro Blaster",
-                "zh-cn": "魄罗爆破手",
-                "ja-jp": "ポロブラスター",
-                "ko-kr": "포로 발사기",
-                "zh-tw": "普羅能量炮"
-              },
-              "text": {
-                "en": "Poro respawn time: 5s ⇒ 3.5s",
-                "zh-cn": "普羅重生時間：5秒 ⇒ 3.5秒",
-                "ja-jp": "ポロの復活時間：5秒 ⇒ 3.5秒",
-                "ko-kr": "Poro respawn time: 5s ⇒ 3.5s"
-              },
-              "kind": "nerfed"
-            },
-            {
-              "subject": {
-                "en": "Void Rift",
-                "zh-cn": "虚空裂隙",
-                "ja-jp": "ヴォイドの裂谷",
-                "ko-kr": "공허 균열",
-                "zh-tw": "虛空裂縫"
-              },
-              "text": {
-                "en": "Added 0.75 second cooldown per target.",
-                "zh-cn": "Added 0.75 second cooldown per target.",
-                "ja-jp": "対象ごとに0.75秒のクールダウンを追加。",
-                "ko-kr": "Added 0.75 second cooldown per target."
-              },
-              "kind": "changed"
-            }
-          ]
-        },
-        {
-          "id": "champions",
-          "title": "Champions",
-          "changes": [
-            {
-              "subject": {
-                "en": "Shyvana",
-                "zh-cn": "希瓦娜",
-                "ja-jp": "シヴァーナ",
-                "ko-kr": "Shyvana"
-              },
-              "text": {
-                "en": "Fury Generation: 1.25 ⇒ 2.5",
-                "zh-cn": "怒氣生成時間：1.25 ⇒ 2.5",
-                "ja-jp": "フューリー生成：1.25 ⇒ 2.5",
-                "ko-kr": "Fury Generation: 1.25 ⇒ 2.5"
-              },
-              "kind": "buffed",
-              "subjectSlug": "shyvana"
             }
           ]
         }

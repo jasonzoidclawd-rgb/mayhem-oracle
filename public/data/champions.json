@@ -1,6 +1,6 @@
 {
   "patch": "26.11",
-  "scraped_at": "2026-06-09T23:13:05.305200+00:00",
+  "scraped_at": "2026-06-10T23:19:42.210625+00:00",
   "champions": [
     {
       "slug": "brand",
@@ -1986,8 +1986,7 @@
         "attack",
         "cc",
         "crit",
-        "movement",
-        "on_hit"
+        "movement"
       ]
     },
     {
@@ -2474,6 +2473,7 @@
       },
       "kit_tags": [
         "attack",
+        "cc",
         "dot",
         "heal_shield",
         "movement",
@@ -2694,6 +2694,7 @@
       },
       "kit_tags": [
         "ability",
+        "cc",
         "dot",
         "haste",
         "heal_shield"
@@ -3219,6 +3220,7 @@
       },
       "kit_tags": [
         "attack",
+        "cc",
         "heal_shield",
         "on_hit"
       ]
@@ -6231,7 +6233,8 @@
         "attack",
         "cc",
         "heal_shield",
-        "movement"
+        "movement",
+        "on_hit"
       ]
     },
     {
@@ -6266,6 +6269,7 @@
       },
       "kit_tags": [
         "attack",
+        "cc",
         "heal_shield",
         "on_hit",
         "tank"
@@ -6303,7 +6307,6 @@
       },
       "kit_tags": [
         "attack",
-        "cc",
         "heal_shield",
         "movement",
         "on_hit",
