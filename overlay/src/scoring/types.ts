@@ -322,6 +322,10 @@ export const SCORE_WEIGHTS = {
   TAG_MISMATCH_PENALTY: -8,
   // Strongest structured champion-kit interaction only; strength is 1-3.
   MECHANICAL_INTERACTION_PER_STRENGTH: 3,
+  // 26.12 ability/quest augment fit; strength is -3..3.
+  // HYPOTHESIS weight — validate against live win rates once 26.12 telemetry
+  // lands (plan §3); change here and in the web twin together.
+  ABILITY_AUGMENT_FIT_PER_STRENGTH: 3,
 } as const;
 
 // ─── Augment Selection Constants ───

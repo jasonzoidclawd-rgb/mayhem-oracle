@@ -1,3 +1,4 @@
+import { abilityAugmentFit } from "./ability-augment-fit";
 import { computeOracleScore, type ComboTier, type ScoredAugment } from "./oracle-score";
 import {
   parseSets,
@@ -140,6 +141,10 @@ function fallbackScoredAugment(args: {
     comboTier,
     abilityProfile,
     isSystemBreaker: augment.flags?.system_breaker === true,
+    abilityAugmentFit: abilityAugmentFit(
+      { slug: augment.slug, type: augment.type, wikiDescription: augment.wikiDescription },
+      abilityProfile,
+    ),
   });
 
   return {

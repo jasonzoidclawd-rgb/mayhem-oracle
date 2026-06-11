@@ -24,6 +24,7 @@ export interface MechanicalInteractionScoreSignal {
 export interface ScoredAugment {
   slug: string;
   name: string;
+  type?: "ability" | "quest" | "standalone";
   name_zh_CN?: string;
   name_zh_TW?: string;
   name_ja?: string;
@@ -55,6 +56,8 @@ export interface OracleScoreInput {
   abilityProfile?: AbilityProfile;
   /** Strongest structured champion-kit interaction for this augment */
   mechanicalInteraction?: MechanicalInteractionScoreSignal;
+  /** 26.12 ability/quest augment fit signal (see ability-augment-fit.ts) */
+  abilityAugmentFit?: { strength: number };
 }
 
 export interface OracleScoreResult {
@@ -71,6 +74,7 @@ export interface OracleScoreResult {
     ccSynergy: number;
     tagMismatch: number;
     mechanicalInteraction: number;
+    abilityAugmentFit: number;
   };
 }
 
@@ -112,6 +116,7 @@ export function computeOracleScore(input: OracleScoreInput): OracleScoreResult {
     isSystemBreaker = false,
     abilityProfile,
     mechanicalInteraction: interactionSignal,
+    abilityAugmentFit: fitSignal,
   } = input;
 
   // Validate rarity — malformed JSON can supply an unknown string, which would make
@@ -163,6 +168,13 @@ export function computeOracleScore(input: OracleScoreInput): OracleScoreResult {
       : interactionSignal?.type === "trap"
         ? -interactionStrength * SCORE_WEIGHTS.MECHANICAL_INTERACTION_PER_STRENGTH
         : 0;
+
+  const rawFitStrength = fitSignal?.strength ?? 0;
+  const fitStrength = Number.isFinite(rawFitStrength)
+    ? Math.max(-3, Math.min(3, Math.trunc(rawFitStrength)))
+    : 0;
+  const abilityAugmentFit =
+    fitStrength * SCORE_WEIGHTS.ABILITY_AUGMENT_FIT_PER_STRENGTH;
 
   // ���─ Ability profile synergy bonuses ──
   let abilityTypeSynergy = 0;
@@ -227,6 +239,7 @@ export function computeOracleScore(input: OracleScoreInput): OracleScoreResult {
     ccSynergy,
     tagMismatch,
     mechanicalInteraction,
+    abilityAugmentFit,
   };
 
   const total = Object.values(breakdown).reduce((a, b) => a + b, 0);

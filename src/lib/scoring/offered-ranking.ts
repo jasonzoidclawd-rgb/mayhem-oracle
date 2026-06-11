@@ -8,6 +8,7 @@ import {
   type ComboTier,
   type ScoredAugment,
 } from "./oracle-score";
+import { abilityAugmentFit } from "./ability-augment-fit";
 import {
   analyzeInteractions,
   type AugmentMechanic,
@@ -70,6 +71,7 @@ export interface RankingAugment {
   slug: string;
   name: string;
   rarity: AugmentRarity;
+  type?: "ability" | "quest" | "standalone";
   win_rate: number | null;
   icon: string;
   set?: string;
@@ -292,6 +294,12 @@ function addBreakdownReasons(
   if ((breakdown.tagMismatch ?? 0) < 0) {
     reasons.push(reason("tag-mismatch", "oracle-score", "medium"));
   }
+  if ((breakdown.abilityAugmentFit ?? 0) > 0) {
+    reasons.push(reason("ability-augment-fit", "oracle-score", "medium"));
+  }
+  if ((breakdown.abilityAugmentFit ?? 0) < 0) {
+    reasons.push(reason("ability-augment-misfit", "oracle-score", "medium"));
+  }
 }
 
 function strongestInteractionsBySlug(input: RankOfferedAugmentsInput, offeredAugments: RankingAugment[]): Map<string, MechanicalInteraction> {
@@ -365,6 +373,14 @@ export function rankOfferedAugments(input: RankOfferedAugmentsInput): OfferedRan
     const combo = input.comboMetadataBySlot?.[originalIndex]
       ?? (isDuplicate ? undefined : lookupBySlug(input.comboMetadata, augment.slug));
     const mechanicalInteraction = mechanicalInteractions.get(normalizeAugmentSlug(augment.slug));
+    const fitSignal = abilityAugmentFit(
+      {
+        slug: augment.slug,
+        type: augment.type,
+        wikiDescription: augment.wikiDescription ?? augment.description,
+      },
+      input.champion.abilityProfile,
+    );
     const oracle = computeOracleScore({
       augment: augment as ScoredAugment,
       championWinRate: input.champion.win_rate ?? input.champion.winRate,
@@ -372,6 +388,7 @@ export function rankOfferedAugments(input: RankOfferedAugmentsInput): OfferedRan
       abilityProfile: input.champion.abilityProfile,
       isSystemBreaker: augment.flags?.system_breaker === true,
       mechanicalInteraction,
+      abilityAugmentFit: fitSignal,
     });
     const explicitBreakdown = input.scoreBreakdownsBySlot?.[originalIndex]
       ?? (isDuplicate ? undefined : lookupBySlug(input.scoreBreakdowns, augment.slug));
