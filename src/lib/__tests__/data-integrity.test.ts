@@ -71,6 +71,22 @@ describe("data integrity", () => {
     }
   });
 
+  test("26.12 breaker re-verification: slow-and-steady removed, other seven live", () => {
+    // Session 4 empirical check against the 26.12 DELETED list. slow-and-steady
+    // keeps its breaker flag (historical truth); lifecycle gates it out of pools.
+    // Curation note: stackosaurusrex was evaluated and rejected — "% more stacks"
+    // is a quantitative amplifier, not a mechanics rewrite.
+    const find = (slug: string) => augmentsData.augments.find((a) => a.slug === slug);
+
+    expect(find("slow-and-steady")?.flags.lifecycle).toBe("removed");
+    for (const slug of [
+      "draw-your-sword", "jeweled-gauntlet", "master-of-duality",
+      "mystic-punch", "tap-dancer", "marksmage", "vulnerability",
+    ]) {
+      expect(find(slug)?.flags.lifecycle, `${slug} expected active in 26.12`).toBe("active");
+    }
+  });
+
   test("normalized combo resolution covers most curated combos", () => {
     let resolved = 0;
 

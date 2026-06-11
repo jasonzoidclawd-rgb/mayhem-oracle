@@ -1,6 +1,7 @@
 import { describe, expect, test } from "vitest";
 import augmentsData from "../../../public/data/augments.json";
 import championsData from "../../../public/data/champions.json";
+import poolRulesData from "../../../public/data/pool-rules.json";
 import { getChampionAugmentPool } from "../scoring/pool-orchestrator";
 import type { PoolAugmentInput } from "../scoring/pool-orchestrator";
 import type { ChampionTag, PoolRules } from "../types";
@@ -191,5 +192,30 @@ describe("pool orchestrator — real-data behavior", () => {
       [...brandSlugs].filter((s) => !yasuoSlugs.has(s)).length +
       [...yasuoSlugs].filter((s) => !brandSlugs.has(s)).length;
     expect(symDiff).toBeGreaterThan(0);
+  });
+});
+
+// ── 26.12 lifecycle wiring (Session 4) ───────────────────────────────────────
+// Uses the REAL generated pool-rules.json: scraped flags.lifecycle must reach
+// Layer 1 so removed augments are verifiably excluded end-to-end.
+
+describe("pool orchestrator — 26.12 lifecycle wiring", () => {
+  test("26.12-removed augments are excluded with reason `removed` under real pool rules", () => {
+    const removed = augmentsData.augments
+      .filter((a) => a.flags.lifecycle === "removed")
+      .slice(0, 5);
+    expect(removed.length).toBe(5);
+
+    const result = getChampionAugmentPool({
+      championSlug: "garen",
+      augments: removed as unknown as PoolAugmentInput[],
+      championKitTags: ["attack", "tank"] as ChampionTag[],
+      poolRules: poolRulesData as unknown as PoolRules,
+    });
+
+    for (const aug of removed) {
+      const exclusion = result.excluded.find((e) => e.slug === aug.slug);
+      expect(exclusion?.reason, `${aug.slug} should be excluded as removed`).toBe("removed");
+    }
   });
 });
