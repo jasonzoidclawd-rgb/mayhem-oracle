@@ -39,6 +39,15 @@ interface AbilityStats {
   isOnHit?: boolean;
   maxRank?: number;
   tags?: string[]; // e.g. Trait_ImmobilizingCCSpell, Trait_Ultimate
+  // 26.12 ability-augment fit flags (set only when true)
+  projectile?: boolean;
+  knockback?: boolean;
+  knockup?: boolean;
+  recast?: boolean;
+  heal?: boolean;
+  shield?: boolean;
+  dash?: boolean;
+  longRange?: boolean;
 }
 
 interface SpellCalcPart {
@@ -537,6 +546,57 @@ async function main() {
         ) {
           stats.isOnHit = true;
         }
+      }
+
+      // 26.12 ability-augment fit flags — bin spell traits first (high precision),
+      // narrow description fallback second. missileSpeed is NOT a signal: internal
+      // vfx missiles exist on non-skillshots (garen E/R, alistar Q).
+      const tagStr = (spell?.mSpellTags ?? []).join(" ");
+      if (
+        tagStr.includes("Trait_Ranged_StopsFirstHit") ||
+        tagStr.includes("Trait_Ranged_Piercing") ||
+        ((spell?.missileSpeed ?? 0) > 0 &&
+          (spell?.mLineWidth ?? 0) > 0 &&
+          (stats.range ?? 0) >= 450) ||
+        /\b(skillshot|projectile|missile|rocket|arrow|bolt)\b/i.test(desc)
+      ) {
+        stats.projectile = true;
+      }
+      if (
+        stats.ccType === "knockup" ||
+        /knock(?:s|ed)?[- ]?up|airborne|into the air/i.test(desc)
+      ) {
+        stats.knockup = true;
+      }
+      if (
+        tagStr.includes("Trait_KnockBack") ||
+        /knock(?:s|ed|ing)?[- ]?(?:back|away|aside)/i.test(desc)
+      ) {
+        stats.knockback = true;
+      }
+      if (
+        tagStr.includes("Trait_RecastOrReplaceSpell") ||
+        /recast|reactivat/i.test(desc)
+      ) {
+        stats.recast = true;
+      }
+      if (
+        tagStr.includes("Trait_ActiveHeal") ||
+        /\bheals?\b|\bhealing\b|restor(?:e|es|ing)\s+(?:\d|health)|regenerat/i.test(desc)
+      ) {
+        stats.heal = true;
+      }
+      if (tagStr.includes("Trait_Shield") || /\bshields?\b|\bshielding\b/i.test(desc)) {
+        stats.shield = true;
+      }
+      if (
+        tagStr.includes("Trait_PlayerSelectedDashDirection") ||
+        /\b(dash(?:es)?|leaps?|lunges?|blinks?|vaults?)\b/i.test(desc)
+      ) {
+        stats.dash = true;
+      }
+      if ((stats.range ?? 0) >= 900) {
+        stats.longRange = true;
       }
 
       // Merge stats into existing ability

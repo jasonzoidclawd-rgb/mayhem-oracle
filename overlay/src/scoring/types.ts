@@ -136,6 +136,15 @@ export interface AbilityStats {
   isDot?: boolean;
   isOnHit?: boolean;
   tags?: string[];           // e.g. Trait_ImmobilizingCCSpell
+  // 26.12 ability-augment fit flags (set only when true)
+  projectile?: boolean;
+  knockback?: boolean;
+  knockup?: boolean;
+  recast?: boolean;
+  heal?: boolean;
+  shield?: boolean;
+  dash?: boolean;
+  longRange?: boolean;
 }
 
 export interface AbilityEntry {
