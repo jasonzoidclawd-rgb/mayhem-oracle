@@ -245,6 +245,40 @@ def load_existing_rows(filename: str, key: str) -> dict[str, dict]:
     return {row["slug"]: row for row in data.get(key, []) if row.get("slug")}
 
 
+def fetch_missing_descriptions(augments: list[dict]) -> int:
+    """Live tooltip from /augments/<slug>/ for rows the LoL wiki has not covered yet."""
+    missing = [
+        a for a in augments
+        if not a.get("wikiDescription") and a["flags"]["lifecycle"] != "removed"
+    ]
+    filled = 0
+    for aug in missing:
+        time.sleep(0.5)
+        try:
+            page = fetch(f"/augments/{aug['slug']}/")
+        except Exception as e:
+            print(f"  {aug['slug']}: skipped ({e})")
+            continue
+        island = re.search(
+            r'component-url="[^"]*AugmentDescription[^"]*"[^>]*props="([^"]+)"',
+            page,
+        )
+        if not island:
+            continue
+        try:
+            props = json.loads(unescape(island.group(1)))
+            raw_desc = props["description"][1]
+        except (ValueError, KeyError, IndexError, TypeError):
+            continue
+        text = re.sub(r"<br\s*/?>", " ", unescape(raw_desc))
+        text = re.sub(r"<[^>]+>", "", text)
+        text = re.sub(r"\s+", " ", text).strip()
+        if text:
+            aug["wikiDescription"] = text
+            filled += 1
+    return filled
+
+
 # ── Combos ─────────────────────────────────────────────────────────────────
 
 TIER_STRENGTH = {"S": 4, "A": 3, "B": 2, "C": 1}
@@ -388,13 +422,13 @@ def main():
     print("Scraping arammayhem.com...")
 
     # Tier list
-    print("\n[1/6] Champion tier list")
+    print("\n[1/7] Champion tier list")
     tier_html = fetch("/tier-list/")
     champions = parse_tier_list(tier_html)
     print(f"  → {len(champions)} champions")
 
     # Augments
-    print("\n[2/6] Augments")
+    print("\n[2/7] Augments")
     time.sleep(1)
     aug_html = fetch("/augments/")
     augments = parse_augments(aug_html)
@@ -402,7 +436,7 @@ def main():
     print(f"  → {len(augments)} augments, patch {patch}")
 
     # Augment locale names
-    print("\n[3/6] Augment locale names")
+    print("\n[3/7] Augment locale names")
     by_slug = {a["slug"]: a for a in augments}
     locale_configs = [
         ("zh-cn", "name_zh_CN"),
@@ -425,7 +459,7 @@ def main():
         print(f"  {locale_code}: {matched} names")
 
     # Traditional Chinese names from CommunityDragon
-    print("\n[4/6] Traditional Chinese augment names")
+    print("\n[4/7] Traditional Chinese augment names")
     try:
         zh_tw_url = (
             "https://raw.communitydragon.org/latest/plugins/"
@@ -461,7 +495,7 @@ def main():
         print(f"  Skipped: {e}")
 
     # Augment types (26.12 ability/quest classes)
-    print("\n[5/6] Augment types")
+    print("\n[5/7] Augment types")
     membership = fetch_type_membership()
     print(f"  → {len(membership)} class-page members")
 
@@ -473,9 +507,6 @@ def main():
         lifecycle = aug.pop("lifecycle")
         old = existing_augments.get(slug, {})
         merged = {**old, **aug}
-        merged["type"] = membership.get(slug) or (
-            "quest" if slug.startswith("quest-") else "standalone"
-        )
         old_flags = old.get("flags") or {}
         merged["flags"] = {
             "system_breaker": bool(old_flags.get("system_breaker", False)),
@@ -489,8 +520,25 @@ def main():
         old = existing_champions.get(champ["slug"], {})
         champions[i] = {**old, **champ}
 
+    # Live tooltips for augments without a wiki description yet
+    print("\n[6/7] Augment descriptions (gap fill from detail pages)")
+    filled = fetch_missing_descriptions(augments)
+    print(f"  → {filled} descriptions fetched")
+
+    # Augment classes: curated subpage membership ∪ Riot's "your chosen ability"
+    # tooltip token — the subpages list only highlighted examples (6 of 24).
+    for aug in augments:
+        slug = aug["slug"]
+        desc = (aug.get("wikiDescription") or "").lower()
+        if membership.get(slug) == "ability" or "your chosen ability" in desc:
+            aug["type"] = "ability"
+        elif membership.get(slug) == "quest" or slug.startswith("quest-"):
+            aug["type"] = "quest"
+        else:
+            aug["type"] = "standalone"
+
     # Combos
-    print("\n[6/6] Combos")
+    print("\n[7/7] Combos")
     time.sleep(1)
     combo_html = fetch("/combo/")
     combos = parse_combos(combo_html)

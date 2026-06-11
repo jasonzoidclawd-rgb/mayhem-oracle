@@ -32,11 +32,6 @@ VALID_TAGS = [
     "haste", "tank", "heal_shield", "dot", "cc", "mana", "manaless",
 ]
 
-VALID_SETS = [
-    "archmage", "dive_bomb", "firecracker", "fully_automated",
-    "high_roller", "make_it_rain", "snowday", "stackosaurus_rex", "wee_woo",
-]
-
 # Qualitative change augments — transcend tier, rewrite mechanics
 SYSTEM_BREAKERS = {
     "jeweled-gauntlet",    # abilities can now crit
@@ -72,64 +67,77 @@ FEW_SHOT = [
         "name": "Jeweled Gauntlet",
         "rarity": "prismatic",
         "wikiDescription": "Your abilities can now critically strike for (145% + bonus critical damage) damage. Additionally, gain 25% (+ 4.5% per 100 AP) critical strike chance.",
-        "result": {"kit_tags": ["ability", "crit"], "set": None},
+        "result": {"kit_tags": ["ability", "crit"]},
     },
     {
         "slug": "fan-the-hammer",
         "name": "Fan the Hammer",
         "rarity": "gold",
         "wikiDescription": "Basic attacks fire three projectiles, each dealing 30% physical damage. The extra projectiles can critically strike.",
-        "result": {"kit_tags": ["attack", "crit", "on_hit"], "set": "firecracker"},
+        "result": {"kit_tags": ["attack", "crit", "on_hit"]},
     },
     {
         "slug": "windspeakers-blessing",
         "name": "Windspeaker's Blessing",
         "rarity": "gold",
         "wikiDescription": "Your heals and shields on allies are 30% stronger. Shielded allies gain 10% movement speed.",
-        "result": {"kit_tags": ["heal_shield"], "set": "wee_woo"},
+        "result": {"kit_tags": ["heal_shield"]},
     },
     {
         "slug": "overflow",
         "name": "Overflow",
         "rarity": "gold",
         "wikiDescription": "Your maximum mana is increased by 20%. When you reach maximum mana, the excess flows into damage on your next ability.",
-        "result": {"kit_tags": ["ability", "mana"], "set": "archmage"},
+        "result": {"kit_tags": ["ability", "mana"]},
     },
     {
         "slug": "biggest-snowball-ever",
         "name": "Biggest Snowball Ever!",
         "rarity": "prismatic",
         "wikiDescription": "Gain a Snowball that can be rolled around the map. The snowball grows larger as it rolls and deals damage when it hits an enemy champion.",
-        "result": {"kit_tags": ["movement", "cc"], "set": "snowday"},
+        "result": {"kit_tags": ["movement", "cc"]},
     },
     {
         "slug": "red-envelopes",
         "name": "Red Envelopes",
         "rarity": "prismatic",
         "wikiDescription": "Red envelopes will randomly appear around you every 25 – 15 seconds. Pick them up by walking over them, granting 8–46 gold.",
-        "result": {"kit_tags": [], "set": "make_it_rain"},
+        "result": {"kit_tags": []},
     },
     {
         "slug": "absorb-life",
         "name": "Absorb Life",
         "rarity": "silver",
         "wikiDescription": "Kills restore 8 / 14 / 20 (based on augment tier) (+3% AP) health.",
-        "result": {"kit_tags": ["ability", "heal_shield"], "set": None},
+        "result": {"kit_tags": ["ability", "heal_shield"]},
     },
     {
         "slug": "goliath",
         "name": "Goliath",
         "rarity": "prismatic",
         "wikiDescription": "Grants 35% bonus health, 15% adaptive force, and 50% increased size.",
-        "result": {"kit_tags": ["tank"], "set": None},
+        "result": {"kit_tags": ["tank"]},
+    },
+    {
+        "slug": "multishot",
+        "name": "Multishot",
+        "rarity": "prismatic",
+        "wikiDescription": "QUEST: Hit enemy Champions with your chosen ability the required number of times. REWARD: Fire additional missiles per Quest Level.",
+        "result": {"kit_tags": ["ability"]},
+    },
+    {
+        "slug": "tooth-fairy",
+        "name": "Tooth Fairy",
+        "rarity": "gold",
+        "wikiDescription": "Bursting enemies drops Teeth. Picking up Teeth grants you permanent Lethality and Magic Penetration.",
+        "result": {"kit_tags": ["ability", "attack"]},
     },
 ]
 
 SYSTEM_PROMPT = f"""You are classifying ARAM Mayhem augments for a League of Legends decision engine.
 
-For each augment, output ONLY valid JSON with these fields:
+For each augment, output ONLY valid JSON with this field:
   "kit_tags": array of 0–4 tags from {VALID_TAGS}
-  "set": one of {VALID_SETS} or null
 
 kit_tags rules:
 - "ability" — augment buffs/scales with AP or spells
@@ -149,7 +157,6 @@ kit_tags rules:
 Few-shot examples (slug → result):
 {json.dumps({e['slug']: e['result'] for e in FEW_SHOT}, indent=2)}
 
-When set is already provided in the input, keep it in your output unchanged.
 Output a JSON object keyed by slug. No markdown, no explanation."""
 
 
@@ -301,9 +308,8 @@ def main():
         # Validate and apply kit_tags
         raw_tags = classification.get("kit_tags", [])
         aug["kit_tags"] = [t for t in raw_tags if t in VALID_TAGS]
-        # Apply set only if not already known from wikiSet (trust wikiSet over LLM)
-        if not aug.get("set") and classification.get("set") in VALID_SETS:
-            aug["set"] = classification["set"]
+        # 26.12 removed augment sets — set is historical metadata, sourced from
+        # wikiSet normalization only; LLM set output is never applied.
         applied += 1
 
     print(f"\nApplied classifications to {applied}/{total} augments")

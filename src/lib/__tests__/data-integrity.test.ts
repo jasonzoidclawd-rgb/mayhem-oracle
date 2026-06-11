@@ -150,6 +150,31 @@ describe("data integrity", () => {
     expect(removed.length).toBeGreaterThanOrEqual(30);
   });
 
+  test("live augments carry valid kit_tags and added coverage is >= 80%", () => {
+    const validTags = new Set([
+      "attack", "ability", "on_hit", "crit", "movement",
+      "haste", "tank", "heal_shield", "dot", "cc", "mana", "manaless",
+    ]);
+
+    for (const augment of augmentsData.augments) {
+      if (augment.flags.lifecycle === "removed") continue;
+      const tags = (augment as { kit_tags?: string[] }).kit_tags;
+      expect(Array.isArray(tags), `${augment.slug} kit_tags missing`).toBe(true);
+      for (const tag of tags ?? []) {
+        expect(validTags.has(tag), `${augment.slug} has invalid tag ${tag}`).toBe(true);
+      }
+    }
+
+    const added = augmentsData.augments.filter((a) => a.flags.lifecycle === "added");
+    const tagged = added.filter(
+      (a) => ((a as { kit_tags?: string[] }).kit_tags ?? []).length >= 1,
+    );
+    expect(
+      tagged.length,
+      `only ${tagged.length}/${added.length} added augments classified`,
+    ).toBeGreaterThanOrEqual(Math.ceil(added.length * 0.8));
+  });
+
   test("augment exemplar tags and flags match observed classifier output", () => {
     type ClassifiedAugment = { slug: string; kit_tags: string[]; flags?: { system_breaker?: boolean } };
     const find = (slug: string) => augmentsData.augments.find((a) => a.slug === slug) as unknown as ClassifiedAugment;

@@ -1,6 +1,6 @@
 {
   "patch": "26.12",
-  "scraped_at": "2026-06-11T11:49:40.908815+00:00",
+  "scraped_at": "2026-06-11T12:22:05.428233+00:00",
   "augments": [
     {
       "slug": "back-to-basics",
@@ -103,12 +103,16 @@
       "name_zh_TW": "無法掌握",
       "name_ja": "ヤケドするぜ",
       "name_ko": "난공불락",
-      "kit_tags": [],
+      "kit_tags": [
+        "ability",
+        "tank"
+      ],
       "flags": {
         "system_breaker": false,
         "lifecycle": "active"
       },
-      "type": "standalone"
+      "type": "standalone",
+      "wikiDescription": "Casting your ultimate grants you invulnerability for 2 seconds (8 second cooldown)."
     },
     {
       "slug": "cerberus",
@@ -146,7 +150,11 @@
         "system_breaker": false,
         "lifecycle": "added"
       },
-      "kit_tags": []
+      "kit_tags": [
+        "ability",
+        "cc"
+      ],
+      "wikiDescription": "If a target Knocked Back by your chosen ability hits another champion, they are Knocked Up and dealt damage. When colliding with terrain, the Knock Up duration is extended and they are dealt bonus damage."
     },
     {
       "slug": "circle-of-death",
@@ -296,7 +304,11 @@
         "system_breaker": false,
         "lifecycle": "added"
       },
-      "kit_tags": []
+      "kit_tags": [
+        "ability",
+        "cc"
+      ],
+      "wikiDescription": "Gain the When the Darkness Comes Summoner Spell. Create a zone that transports everyone inside of it to another dimension."
     },
     {
       "slug": "draw-your-sword",
@@ -335,7 +347,10 @@
         "system_breaker": false,
         "lifecycle": "added"
       },
-      "kit_tags": []
+      "kit_tags": [
+        "ability"
+      ],
+      "wikiDescription": "On death, a giant Tibbers with all your augments falls from the sky and damages nearby enemies."
     },
     {
       "slug": "dropkick",
@@ -416,7 +431,10 @@
         "system_breaker": false,
         "lifecycle": "added"
       },
-      "kit_tags": []
+      "kit_tags": [
+        "ability"
+      ],
+      "wikiDescription": "Casting your chosen ability sends a clone toward your mouse position and recasts it."
     },
     {
       "slug": "empowered-by-the-faithful",
@@ -477,7 +495,13 @@
         "system_breaker": false,
         "lifecycle": "added"
       },
-      "kit_tags": []
+      "kit_tags": [
+        "attack",
+        "ability",
+        "on_hit",
+        "heal_shield"
+      ],
+      "wikiDescription": "Periodically identify Vitals on enemy champions. Hitting them with Attacks or Abilities deals max Health true damage, restores Health, and grants Movement Speed. These effects can stack."
     },
     {
       "slug": "eureka",
@@ -709,7 +733,10 @@
       "name_ja": "バロンの牙",
       "name_ko": "남작의 도움",
       "wikiDescription": "Gain a modified Hand of Baron , which only grants 25% increased adaptive force and greatly empowers nearby allied minions .",
-      "kit_tags": [],
+      "kit_tags": [
+        "attack",
+        "ability"
+      ],
       "flags": {
         "system_breaker": false,
         "lifecycle": "active"
@@ -753,7 +780,12 @@
         "system_breaker": false,
         "lifecycle": "added"
       },
-      "kit_tags": []
+      "kit_tags": [
+        "attack",
+        "ability",
+        "heal_shield"
+      ],
+      "wikiDescription": "Damaging enemy champions with Attacks or Abilities grants stacks. At max stacks, you revive empowered upon death."
     },
     {
       "slug": "high-roller",
@@ -770,7 +802,8 @@
         "system_breaker": false,
         "lifecycle": "added"
       },
-      "kit_tags": []
+      "kit_tags": [],
+      "wikiDescription": "Nearby enemies have a chance to drop Stat Anvils on death."
     },
     {
       "slug": "holy-snowball",
@@ -984,7 +1017,10 @@
         "system_breaker": false,
         "lifecycle": "added"
       },
-      "kit_tags": []
+      "kit_tags": [
+        "ability"
+      ],
+      "wikiDescription": "QUEST: Hit enemy Champions with your chosen ability the required number of times. REWARD: Fire additional missiles per Quest Level."
     },
     {
       "slug": "mystery-augment",
@@ -1001,7 +1037,12 @@
         "system_breaker": false,
         "lifecycle": "removed"
       },
-      "kit_tags": []
+      "kit_tags": [
+        "ability",
+        "heal_shield",
+        "dot"
+      ],
+      "wikiDescription": "Your Enemy Missing pings will cause you to launch a missile at the pinged location, exploding upon arrival to deal 100 – 400 (based on level) (+ 10% of target's missing health) magic damage to enemies struck, and heal allied champions within for 50 – 200 (based on level) (+ 10% of target's missing health) . While equipped with this augment, the player can only use up to 3 Enemy Missing pings each within 6 seconds at most. This incurs a separate cooldown from the global one, sending an alert to the player that reads: You must wait before issuing more pings of that type. Otherwise, the global ping cooldown is incurred as normal. The heal is not affected by the -50% outgoing healing penalty from the ARAM global champion buff ."
     },
     {
       "slug": "mystic-punch",
@@ -1079,7 +1120,8 @@
         "system_breaker": false,
         "lifecycle": "added"
       },
-      "kit_tags": []
+      "kit_tags": [],
+      "wikiDescription": "Added to ARAM Mayhem in Patch 26.12. Riot lists this augment in the official patch notes; its full client tooltip is not exposed in the current 16.12 augment file yet."
     },
     {
       "slug": "orbitallaser",
@@ -1091,12 +1133,16 @@
       "name_zh_TW": "衛星雷射炮",
       "name_ja": "軌道レーザー",
       "name_ko": "궤도형 레이저",
-      "kit_tags": [],
+      "kit_tags": [
+        "ability",
+        "dot"
+      ],
       "flags": {
         "system_breaker": false,
         "lifecycle": "active"
       },
-      "type": "standalone"
+      "type": "standalone",
+      "wikiDescription": "Replaces the summoner spell in the slot not occupied by [stat:spell]Flash[/stat] with [i][stat:spell]Orbital Laser[/stat][/i].[br/][br/][b]Orbital Laser:[/b] Call upon an orbital laser to fire down on the target location after 2.5 seconds, immediately dealing [stat:truedmg]true damage[/stat] equal to the [stat:health]25% of the target's [b]maximum[/b] health[/stat] then [stat:damage] every 0.5 seconds over 3 seconds to enemies within a 550 radius, up to a total of [stat:damage]magic damage. Deals 70% damage to [stat:cc]Minions[/stat].[br/][br/]This augment is only offered to up to 1 player on each team for a given game."
     },
     {
       "slug": "overloaded",
@@ -1108,12 +1154,16 @@
       "name_zh_TW": "輸出超負荷",
       "name_ja": "オーバーロード",
       "name_ko": "과충전",
-      "type": "standalone",
+      "type": "ability",
       "flags": {
         "system_breaker": false,
         "lifecycle": "added"
       },
-      "kit_tags": []
+      "kit_tags": [
+        "ability",
+        "haste"
+      ],
+      "wikiDescription": "Using another Ability resets the cooldown of your chosen ability."
     },
     {
       "slug": "pandorasbox",
@@ -1130,7 +1180,8 @@
         "system_breaker": false,
         "lifecycle": "active"
       },
-      "type": "standalone"
+      "type": "standalone",
+      "wikiDescription": "Your current augments transform into an equal number of completely random Prismatic ones."
     },
     {
       "slug": "pin-cushion",
@@ -1142,12 +1193,18 @@
       "name_zh_TW": "針插",
       "name_ja": "針山",
       "name_ko": "바늘꽂이",
-      "type": "standalone",
+      "type": "ability",
       "flags": {
         "system_breaker": false,
         "lifecycle": "added"
       },
-      "kit_tags": []
+      "kit_tags": [
+        "attack",
+        "ability",
+        "on_hit",
+        "movement"
+      ],
+      "wikiDescription": "Attacks during your chosen ability apply Marks that explode at the end of its duration, dealing damage and granting Move Speed."
     },
     {
       "slug": "poro-stampede",
@@ -1164,7 +1221,11 @@
         "system_breaker": false,
         "lifecycle": "added"
       },
-      "kit_tags": []
+      "kit_tags": [
+        "ability",
+        "movement"
+      ],
+      "wikiDescription": "QUEST: Gather Poro Snax and feed the required number of Poros. REWARD: Gain the Poro Charge Summoner Spell, which launches waves of Poros at the enemy team. Additional waves unlock per Quest Level. \"Oho! Look how charming they are!\" — Poro Herder"
     },
     {
       "slug": "prom-queen",
@@ -1279,12 +1340,15 @@
       "name_zh_TW": "快步移動",
       "name_ja": "クイックステップ",
       "name_ko": "날쌘걸음",
-      "type": "standalone",
+      "type": "ability",
       "flags": {
         "system_breaker": false,
         "lifecycle": "added"
       },
-      "kit_tags": []
+      "kit_tags": [
+        "movement"
+      ],
+      "wikiDescription": "When you use your chosen ability, dash towards your cursor."
     },
     {
       "slug": "red-envelopes",
@@ -1321,7 +1385,11 @@
         "system_breaker": false,
         "lifecycle": "added"
       },
-      "kit_tags": []
+      "kit_tags": [
+        "movement",
+        "haste"
+      ],
+      "wikiDescription": "On takedown, enemy champions leave behind their Essence. Attacking the Essence grants movement speed and resets basic ability cooldowns."
     },
     {
       "slug": "scopiest-weapons",
@@ -1379,7 +1447,10 @@
         "system_breaker": false,
         "lifecycle": "added"
       },
-      "kit_tags": []
+      "kit_tags": [
+        "ability"
+      ],
+      "wikiDescription": "Your chosen ability missile splits into two on hit, at max Range, or when Recast."
     },
     {
       "slug": "spirit-bomb",
@@ -1396,7 +1467,10 @@
         "system_breaker": false,
         "lifecycle": "added"
       },
-      "kit_tags": []
+      "kit_tags": [
+        "heal_shield"
+      ],
+      "wikiDescription": "Healing and Shielding allied champions builds up a Spirit Bomb. At max stacks, toss the bomb onto lowest Health ally to heal and shield them and nearby allies."
     },
     {
       "slug": "squishy-slappy-grab",
@@ -1413,7 +1487,10 @@
         "system_breaker": false,
         "lifecycle": "added"
       },
-      "kit_tags": []
+      "kit_tags": [
+        "cc"
+      ],
+      "wikiDescription": "Occasionally send out squishy, slappy hands towards all nearby enemy champions, tethering them. Your next attack will pull in all tethered enemies."
     },
     {
       "slug": "stats-on-stats-on-stats",
@@ -1472,7 +1549,12 @@
         "system_breaker": false,
         "lifecycle": "added"
       },
-      "kit_tags": []
+      "kit_tags": [
+        "ability",
+        "haste",
+        "movement"
+      ],
+      "wikiDescription": "On Ultimate cast, spawn a Zone that grants Ability Haste and Movement Speed. While inside, it fires missiles that deal the required number of% of your damage."
     },
     {
       "slug": "symphony-of-war",
@@ -1530,12 +1612,16 @@
       "name_zh_TW": "恐懼",
       "name_ja": "恐怖",
       "name_ko": "공포",
-      "type": "standalone",
+      "type": "ability",
       "flags": {
         "system_breaker": false,
         "lifecycle": "added"
       },
-      "kit_tags": []
+      "kit_tags": [
+        "ability",
+        "cc"
+      ],
+      "wikiDescription": "Whenever you cast your chosen ability, Fear enemies around you."
     },
     {
       "slug": "titans-resolve",
@@ -1552,7 +1638,10 @@
         "system_breaker": false,
         "lifecycle": "added"
       },
-      "kit_tags": []
+      "kit_tags": [
+        "tank"
+      ],
+      "wikiDescription": "Gain stacks when taking or dealing damage. For every the required number of stacks, gain Adaptive Force, Armor, Magic Resist, Size, and Tenacity."
     },
     {
       "slug": "transmute-chaos",
@@ -1611,7 +1700,10 @@
         "system_breaker": false,
         "lifecycle": "added"
       },
-      "kit_tags": []
+      "kit_tags": [
+        "ability"
+      ],
+      "wikiDescription": "Your chosen ability targets 2 additional enemies in front of you."
     },
     {
       "slug": "trueshotprodigy",
@@ -1706,12 +1798,16 @@
       "name_zh_TW": "任務：伊卡西亞殞落",
       "name_ja": "クエスト: イカシアの滅亡",
       "name_ko": "퀘스트: 이케시아의 몰락",
-      "kit_tags": [],
+      "kit_tags": [
+        "ability",
+        "dot"
+      ],
       "flags": {
         "system_breaker": false,
         "lifecycle": "active"
       },
-      "type": "standalone"
+      "type": "standalone",
+      "wikiDescription": "Quest: Icathia's Fall - Immediately: Gain a Bami's Cinder and you can purchase 2 Immolate Items. Requirement: Possess Sunfire Aegis and Hollow Radiance. Reward: These Items combine into Void Immolation."
     },
     {
       "slug": "void-rift",
@@ -1814,7 +1910,11 @@
         "system_breaker": false,
         "lifecycle": "added"
       },
-      "kit_tags": []
+      "kit_tags": [
+        "ability",
+        "mana"
+      ],
+      "wikiDescription": "Casting a spell refunds another random spell's cost by the required number of% of the original spell's Cooldown."
     },
     {
       "slug": "big-brain",
@@ -1847,12 +1947,16 @@
       "name_zh_TW": "一棒入魂！",
       "name_ja": "ボカッ！",
       "name_ko": "꽁!",
-      "type": "standalone",
+      "type": "ability",
       "flags": {
         "system_breaker": false,
         "lifecycle": "added"
       },
-      "kit_tags": []
+      "kit_tags": [
+        "ability",
+        "attack"
+      ],
+      "wikiDescription": "Attacks and Abilities empowered by your chosen ability deal additional damage to the target and nearby enemies."
     },
     {
       "slug": "bread-and-butter",
@@ -1970,7 +2074,10 @@
         "system_breaker": false,
         "lifecycle": "added"
       },
-      "kit_tags": []
+      "kit_tags": [
+        "dot"
+      ],
+      "wikiDescription": "Burns and damage over time applied to champions generates gold."
     },
     {
       "slug": "critical-healing",
@@ -2164,7 +2271,12 @@
         "system_breaker": false,
         "lifecycle": "added"
       },
-      "kit_tags": []
+      "kit_tags": [
+        "ability",
+        "on_hit",
+        "heal_shield"
+      ],
+      "wikiDescription": "While in combat, Autocast a circular axe that deals physical damage. Enemies on the outer edge take additional damage and heal you."
     },
     {
       "slug": "ethereal-weapon",
@@ -2288,7 +2400,10 @@
         "system_breaker": false,
         "lifecycle": "added"
       },
-      "kit_tags": []
+      "kit_tags": [
+        "ability"
+      ],
+      "wikiDescription": "QUEST: Snipe the required number of enemy champions with abilities REWARD: Send a meteor at Sniped enemy champions, dealing Magic damage in an area around them"
     },
     {
       "slug": "get-excited",
@@ -2300,12 +2415,16 @@
       "name_zh_TW": "狂躁！",
       "name_ja": "超エキサイティン！",
       "name_ko": "신난다!",
-      "kit_tags": [],
+      "kit_tags": [
+        "movement",
+        "attack"
+      ],
       "flags": {
         "system_breaker": false,
         "lifecycle": "active"
       },
-      "type": "standalone"
+      "type": "standalone",
+      "wikiDescription": "Scoring a champion takedown grants you [stat:ms]100% [b]bonus[/b] movement speed[/stat] and [stat:as]15% [b]total[/b] attack speed[/stat] for 4 seconds."
     },
     {
       "slug": "grandmas-chili-oil",
@@ -2364,7 +2483,10 @@
         "system_breaker": false,
         "lifecycle": "added"
       },
-      "kit_tags": []
+      "kit_tags": [
+        "ability"
+      ],
+      "wikiDescription": "After entering Brush, deal the required number of% more damage for the required number of seconds. Remain in the Brush to refresh the effect."
     },
     {
       "slug": "holy-fire",
@@ -2499,12 +2621,15 @@
       "name_zh_TW": "小小助力",
       "name_ja": "ちょこっとヘルプ",
       "name_ko": "작은 도움",
-      "type": "standalone",
+      "type": "ability",
       "flags": {
         "system_breaker": false,
         "lifecycle": "added"
       },
-      "kit_tags": []
+      "kit_tags": [
+        "attack"
+      ],
+      "wikiDescription": "Gain the required number of Attack Range and the required number of Attack Speed during your chosen ability duration."
     },
     {
       "slug": "magic-missile",
@@ -2560,12 +2685,16 @@
       "name_zh_TW": "慈悲之擊",
       "name_ja": "慈悲の一撃",
       "name_ko": "자비의 일격",
-      "type": "standalone",
+      "type": "ability",
       "flags": {
         "system_breaker": false,
         "lifecycle": "added"
       },
-      "kit_tags": []
+      "kit_tags": [
+        "ability",
+        "attack"
+      ],
+      "wikiDescription": "After using your chosen ability, your next basic attack gains attack range, attack speed and deals bonus max Health magic damage."
     },
     {
       "slug": "minionmancer",
@@ -2600,7 +2729,10 @@
         "system_breaker": false,
         "lifecycle": "added"
       },
-      "kit_tags": []
+      "kit_tags": [
+        "heal_shield"
+      ],
+      "wikiDescription": "Standing in Brush regenerates the required number of max Health per second."
     },
     {
       "slug": "nightstalking",
@@ -2660,7 +2792,10 @@
         "system_breaker": false,
         "lifecycle": "added"
       },
-      "kit_tags": []
+      "kit_tags": [
+        "heal_shield"
+      ],
+      "wikiDescription": "Whenever someone heals around you, you heal the required number of% of their own healing. Doubled from Enemy healing."
     },
     {
       "slug": "outlaws-grit",
@@ -2698,7 +2833,11 @@
         "system_breaker": false,
         "lifecycle": "added"
       },
-      "kit_tags": []
+      "kit_tags": [
+        "ability",
+        "movement"
+      ],
+      "wikiDescription": "Recall to enter your Cannon Launcher. It has significantly increased range, travel speed, and damage."
     },
     {
       "slug": "overflow",
@@ -2738,7 +2877,11 @@
         "system_breaker": false,
         "lifecycle": "added"
       },
-      "kit_tags": []
+      "kit_tags": [
+        "heal_shield",
+        "movement"
+      ],
+      "wikiDescription": "Allies encourage you when you walk past, granting you a Shield and Movement Speed."
     },
     {
       "slug": "perseverance",
@@ -2821,7 +2964,11 @@
         "system_breaker": false,
         "lifecycle": "added"
       },
-      "kit_tags": []
+      "kit_tags": [
+        "dot",
+        "cc"
+      ],
+      "wikiDescription": "Taking damage from champions builds up a burst of needles that fly out of you, dealing damage and slowing nearby enemies."
     },
     {
       "slug": "poro-blaster",
@@ -2860,7 +3007,11 @@
         "system_breaker": false,
         "lifecycle": "added"
       },
-      "kit_tags": []
+      "kit_tags": [
+        "dot",
+        "tank"
+      ],
+      "wikiDescription": "Every second, apply a stacking Burn to nearby enemy champions, scaling with your max Health. QUEST: Deal Burn damage to enemy Champions. REWARD: Size and damage increase per Quest Level."
     },
     {
       "slug": "pursuit-of-haste",
@@ -2872,12 +3023,15 @@
       "name_zh_TW": "疾速追擊",
       "name_ja": "素早さの追求",
       "name_ko": "가속 추구",
-      "type": "standalone",
+      "type": "ability",
       "flags": {
         "system_breaker": false,
         "lifecycle": "added"
       },
-      "kit_tags": []
+      "kit_tags": [
+        "haste"
+      ],
+      "wikiDescription": "QUEST: Hit enemy champions with your chosen ability the required number of times. REWARD: Gain Ability Haste on your chosen ability per Quest Level up to the required number of."
     },
     {
       "slug": "quest-steel-your-heart",
@@ -2891,7 +3045,9 @@
       "name_ko": "퀘스트: 강철 같은 심장",
       "wikiDescription": "Quest: Obtain Heartsteel and accumulate over 300 bonus health from Colossal Consumption . Reward: Upon completing your Quest , increase the bonus health gained from Heartsteel's Colossal Consumption by 200%.",
       "wikiSet": "Stackosaurus Rex",
-      "kit_tags": [],
+      "kit_tags": [
+        "tank"
+      ],
       "set": "stackosaurus_rex",
       "flags": {
         "system_breaker": false,
@@ -2930,12 +3086,17 @@
       "name_zh_TW": "貪婪束縛",
       "name_ja": "貪欲な束縛",
       "name_ko": "굶주린 속박",
-      "type": "standalone",
+      "type": "ability",
       "flags": {
         "system_breaker": false,
         "lifecycle": "added"
       },
-      "kit_tags": []
+      "kit_tags": [
+        "ability",
+        "heal_shield",
+        "cc"
+      ],
+      "wikiDescription": "Immobilizing or Grounding enemy champions with your chosen ability deals extra damage and heals you."
     },
     {
       "slug": "recursion",
@@ -2967,12 +3128,16 @@
       "name_zh_TW": "回春",
       "name_ja": "再生",
       "name_ko": "원기 회복",
-      "type": "standalone",
+      "type": "ability",
       "flags": {
         "system_breaker": false,
         "lifecycle": "added"
       },
-      "kit_tags": []
+      "kit_tags": [
+        "ability",
+        "heal_shield"
+      ],
+      "wikiDescription": "Using your chosen ability restores Health."
     },
     {
       "slug": "restless-restoration",
@@ -3006,7 +3171,9 @@
       "name_ja": "改造スコープ装着",
       "name_ko": "상급 조준경 부착",
       "wikiDescription": "Gain ( 200 / 100 ) bonus attack range.",
-      "kit_tags": [],
+      "kit_tags": [
+        "attack"
+      ],
       "flags": {
         "system_breaker": false,
         "lifecycle": "active"
@@ -3049,7 +3216,11 @@
         "system_breaker": false,
         "lifecycle": "added"
       },
-      "kit_tags": []
+      "kit_tags": [
+        "cc",
+        "dot"
+      ],
+      "wikiDescription": "A few seconds after death, a shark chomps all nearby enemies. You can move after death to aim the shark attack."
     },
     {
       "slug": "shark-tempest",
@@ -3066,7 +3237,11 @@
         "system_breaker": false,
         "lifecycle": "added"
       },
-      "kit_tags": []
+      "kit_tags": [
+        "cc",
+        "dot"
+      ],
+      "wikiDescription": "Sharks circle your Snowball, slowing and damaging nearby enemies. When your Snowball hits a Champion, they become trapped in a shark storm!"
     },
     {
       "slug": "shrink-engine",
@@ -3215,7 +3390,11 @@
         "system_breaker": false,
         "lifecycle": "added"
       },
-      "kit_tags": []
+      "kit_tags": [
+        "ability",
+        "cc"
+      ],
+      "wikiDescription": "Recasting Snowball deals increased damage, Knocks Up the target, and Knocks Back nearby enemies."
     },
     {
       "slug": "sonata",
@@ -3356,12 +3535,16 @@
       "name_zh_TW": "劃地為王",
       "name_ja": "地形でドン",
       "name_ko": "지형 생성됨",
-      "type": "standalone",
+      "type": "ability",
       "flags": {
         "system_breaker": false,
         "lifecycle": "added"
       },
-      "kit_tags": []
+      "kit_tags": [
+        "ability",
+        "dot"
+      ],
+      "wikiDescription": "Your chosen ability deals damage in an area around it."
     },
     {
       "slug": "thread-the-needle",
@@ -3396,7 +3579,11 @@
         "system_breaker": false,
         "lifecycle": "added"
       },
-      "kit_tags": []
+      "kit_tags": [
+        "ability",
+        "attack"
+      ],
+      "wikiDescription": "Bursting enemies drops Teeth. Picking up Teeth grants you permanent Lethality and Magic Penetration."
     },
     {
       "slug": "trailblazer",
@@ -3552,12 +3739,18 @@
       "name_zh_TW": "虛空衝刺",
       "name_ja": "ヴォイドダッシュ",
       "name_ko": "공허 돌진",
-      "type": "standalone",
+      "type": "ability",
       "flags": {
         "system_breaker": false,
         "lifecycle": "added"
       },
-      "kit_tags": []
+      "kit_tags": [
+        "ability",
+        "movement",
+        "cc",
+        "dot"
+      ],
+      "wikiDescription": "Dashing with your chosen ability spawns a Void Zone that Slows enemy champions and deals magic damage."
     },
     {
       "slug": "vulnerability",
@@ -3595,7 +3788,10 @@
         "system_breaker": false,
         "lifecycle": "added"
       },
-      "kit_tags": []
+      "kit_tags": [
+        "heal_shield"
+      ],
+      "wikiDescription": "Gain the required number of Omnivamp."
     },
     {
       "slug": "wee-woo-wee-woo",
@@ -3612,7 +3808,11 @@
         "system_breaker": false,
         "lifecycle": "added"
       },
-      "kit_tags": []
+      "kit_tags": [
+        "heal_shield",
+        "movement"
+      ],
+      "wikiDescription": "When moving towards allies with low Health, gain Movement Speed. Your Healing and Shielding are greater based on how low your target's Health is."
     },
     {
       "slug": "with-haste",
@@ -3650,7 +3850,8 @@
         "system_breaker": false,
         "lifecycle": "added"
       },
-      "kit_tags": []
+      "kit_tags": [],
+      "wikiDescription": "On takedown, enemy champions drop coins nearby, which you and your allies can collect. Each is worth the required number of gold."
     },
     {
       "slug": "adamant",
@@ -3704,12 +3905,16 @@
       "name_zh_TW": "適性之護",
       "name_ja": "アダプティブワード",
       "name_ko": "적응형 와드",
-      "type": "standalone",
+      "type": "ability",
       "flags": {
         "system_breaker": false,
         "lifecycle": "added"
       },
-      "kit_tags": []
+      "kit_tags": [
+        "tank",
+        "ability"
+      ],
+      "wikiDescription": "Striking an enemy champion with your chosen ability grants you the required number of Armor or Magic Resist based on their damage type for the required number of seconds. This effect can stack."
     },
     {
       "slug": "blunt-force",
@@ -3875,7 +4080,10 @@
         "system_breaker": false,
         "lifecycle": "added"
       },
-      "kit_tags": []
+      "kit_tags": [
+        "heal_shield"
+      ],
+      "wikiDescription": "Gain a Shield for every second you spend Channeling."
     },
     {
       "slug": "double-defense",
@@ -3887,12 +4095,16 @@
       "name_zh_TW": "雙重防禦",
       "name_ja": "ダブルディフェンス",
       "name_ko": "2연속 방어",
-      "type": "standalone",
+      "type": "ability",
       "flags": {
         "system_breaker": false,
         "lifecycle": "added"
       },
-      "kit_tags": []
+      "kit_tags": [
+        "heal_shield",
+        "ability"
+      ],
+      "wikiDescription": "Shields granted from your chosen ability are stronger and scaling with target's missing Health."
     },
     {
       "slug": "erosion",
@@ -4062,7 +4274,8 @@
         "system_breaker": false,
         "lifecycle": "added"
       },
-      "kit_tags": []
+      "kit_tags": [],
+      "wikiDescription": "Increase your Item and Augment damage by the required number of."
     },
     {
       "slug": "frost-wraith",
@@ -4255,12 +4468,16 @@
       "name_zh_TW": "該出手了",
       "name_ja": "始まるぞ",
       "name_ko": "출발할 시간",
-      "type": "standalone",
+      "type": "ability",
       "flags": {
         "system_breaker": false,
         "lifecycle": "added"
       },
-      "kit_tags": []
+      "kit_tags": [
+        "movement",
+        "ability"
+      ],
+      "wikiDescription": "Activating your chosen ability grants you Movement Speed for its duration."
     },
     {
       "slug": "juiced",
@@ -4411,7 +4628,8 @@
         "system_breaker": false,
         "lifecycle": "active"
       },
-      "type": "standalone"
+      "type": "standalone",
+      "wikiDescription": "Grants the [stat:buff]Mountain Dragon Soul[/stat], or a different [stat:buff]Dragon Soul[/stat] if one is already obtained."
     },
     {
       "slug": "ocean-soul",
@@ -4487,12 +4705,15 @@
       "name_zh_TW": "追求力量",
       "name_ja": "力の追求",
       "name_ko": "위력 추구",
-      "type": "standalone",
+      "type": "ability",
       "flags": {
         "system_breaker": false,
         "lifecycle": "added"
       },
-      "kit_tags": []
+      "kit_tags": [
+        "ability"
+      ],
+      "wikiDescription": "QUEST: Hit enemy champions with your chosen ability the required number of times. REWARD: Permanently increase your chosen ability damage."
     },
     {
       "slug": "repulsor",
@@ -4593,7 +4814,11 @@
         "system_breaker": false,
         "lifecycle": "added"
       },
-      "kit_tags": []
+      "kit_tags": [
+        "ability",
+        "heal_shield"
+      ],
+      "wikiDescription": "Damaging enemy champions with your chosen ability heals you."
     },
     {
       "slug": "slap-around",
@@ -4634,7 +4859,11 @@
         "system_breaker": false,
         "lifecycle": "added"
       },
-      "kit_tags": []
+      "kit_tags": [
+        "ability",
+        "haste"
+      ],
+      "wikiDescription": "Gain 100 Ability Haste on your Snowball. It deals additional magic damage when hitting an enemy. If you don't have one, gain a Snowball."
     },
     {
       "slug": "sonic-boom",
@@ -4737,7 +4966,8 @@
         "system_breaker": false,
         "lifecycle": "added"
       },
-      "type": "standalone"
+      "type": "standalone",
+      "wikiDescription": "When you gain permanent Stacks of an Ability, Augment, or Item gain the required number of% more!"
     },
     {
       "slug": "stats",
@@ -4769,12 +4999,16 @@
       "name_zh_TW": "果斷",
       "name_ja": "固い決意",
       "name_ko": "확고한 의지로",
-      "type": "standalone",
+      "type": "ability",
       "flags": {
         "system_breaker": false,
         "lifecycle": "added"
       },
-      "kit_tags": []
+      "kit_tags": [
+        "ability",
+        "tank"
+      ],
+      "wikiDescription": "When your chosen ability damages enemy champions, gain the required number of Armor and Magic Resistance."
     },
     {
       "slug": "support-main",
@@ -4791,7 +5025,11 @@
         "system_breaker": false,
         "lifecycle": "added"
       },
-      "kit_tags": []
+      "kit_tags": [
+        "heal_shield",
+        "dot"
+      ],
+      "wikiDescription": "QUEST: Heal allied champions for the required number of Health. REWARD: Any healing you provide now also Heals Over Time after the initial heal."
     },
     {
       "slug": "swift-and-safe",
@@ -4889,12 +5127,15 @@
       "name_zh_TW": "可靠武器",
       "name_ja": "頼れる武器",
       "name_ko": "믿음직한 무기",
-      "type": "standalone",
+      "type": "ability",
       "flags": {
         "system_breaker": false,
         "lifecycle": "added"
       },
-      "kit_tags": []
+      "kit_tags": [
+        "ability"
+      ],
+      "wikiDescription": "Striking enemy champions with your chosen ability forges a bond of Friendship. your chosen ability gains temporarily increased damage based on your level of Friendship."
     },
     {
       "slug": "twin-fire",
