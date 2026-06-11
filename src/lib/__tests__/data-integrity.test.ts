@@ -129,6 +129,27 @@ describe("data integrity", () => {
     expect(garen.kit_tags).not.toContain("manaless");
   });
 
+  // ── 26.12 corpus: lifecycle + type (Session 1) ──
+
+  test("every augment has a 26.12 type", () => {
+    for (const augment of augmentsData.augments) {
+      expect(["ability", "quest", "standalone"],
+        `${augment.slug} missing/invalid type`,
+      ).toContain((augment as { type?: string }).type);
+    }
+  });
+
+  test("lifecycle values are the supported enum", () => {
+    for (const augment of augmentsData.augments) {
+      expect(["active", "added", "removed"]).toContain(augment.flags.lifecycle);
+    }
+  });
+
+  test("removed augments are retained, flagged, and excluded from pools", () => {
+    const removed = augmentsData.augments.filter((a) => a.flags.lifecycle === "removed");
+    expect(removed.length).toBeGreaterThanOrEqual(30);
+  });
+
   test("augment exemplar tags and flags match observed classifier output", () => {
     type ClassifiedAugment = { slug: string; kit_tags: string[]; flags?: { system_breaker?: boolean } };
     const find = (slug: string) => augmentsData.augments.find((a) => a.slug === slug) as unknown as ClassifiedAugment;

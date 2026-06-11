@@ -1,6 +1,6 @@
 {
-  "patch": "26.11",
-  "scraped_at": "2026-06-11T23:15:49.855951+00:00",
+  "patch": "26.12",
+  "scraped_at": "2026-06-11T11:49:40.908815+00:00",
   "augments": [
     {
       "slug": "back-to-basics",
@@ -21,7 +21,8 @@
       "flags": {
         "system_breaker": false,
         "lifecycle": "active"
-      }
+      },
+      "type": "standalone"
     },
     {
       "slug": "biggest-snowball-ever",
@@ -44,7 +45,8 @@
       "flags": {
         "system_breaker": false,
         "lifecycle": "active"
-      }
+      },
+      "type": "standalone"
     },
     {
       "slug": "blade-waltz",
@@ -66,7 +68,8 @@
       "flags": {
         "system_breaker": false,
         "lifecycle": "active"
-      }
+      },
+      "type": "standalone"
     },
     {
       "slug": "bounce-of-the-poro-king",
@@ -86,8 +89,9 @@
       ],
       "flags": {
         "system_breaker": false,
-        "lifecycle": "active"
-      }
+        "lifecycle": "removed"
+      },
+      "type": "standalone"
     },
     {
       "slug": "cant-touch-this",
@@ -103,7 +107,8 @@
       "flags": {
         "system_breaker": false,
         "lifecycle": "active"
-      }
+      },
+      "type": "standalone"
     },
     {
       "slug": "cerberus",
@@ -122,8 +127,9 @@
       ],
       "flags": {
         "system_breaker": false,
-        "lifecycle": "active"
-      }
+        "lifecycle": "removed"
+      },
+      "type": "standalone"
     },
     {
       "slug": "chain-reaction",
@@ -135,9 +141,10 @@
       "name_zh_TW": "連鎖反應",
       "name_ja": "連鎖反応",
       "name_ko": "연쇄 반응",
+      "type": "ability",
       "flags": {
         "system_breaker": false,
-        "lifecycle": "active"
+        "lifecycle": "added"
       },
       "kit_tags": []
     },
@@ -159,7 +166,8 @@
       "flags": {
         "system_breaker": false,
         "lifecycle": "active"
-      }
+      },
+      "type": "standalone"
     },
     {
       "slug": "clown-college",
@@ -183,7 +191,8 @@
       "flags": {
         "system_breaker": false,
         "lifecycle": "active"
-      }
+      },
+      "type": "standalone"
     },
     {
       "slug": "courage-of-the-colossus",
@@ -203,7 +212,8 @@
       "flags": {
         "system_breaker": false,
         "lifecycle": "active"
-      }
+      },
+      "type": "standalone"
     },
     {
       "slug": "cruelty",
@@ -224,7 +234,8 @@
       "flags": {
         "system_breaker": false,
         "lifecycle": "active"
-      }
+      },
+      "type": "standalone"
     },
     {
       "slug": "dashing",
@@ -244,7 +255,8 @@
       "flags": {
         "system_breaker": false,
         "lifecycle": "active"
-      }
+      },
+      "type": "standalone"
     },
     {
       "slug": "devil-on-your-shoulder",
@@ -266,7 +278,8 @@
       "flags": {
         "system_breaker": false,
         "lifecycle": "active"
-      }
+      },
+      "type": "standalone"
     },
     {
       "slug": "dimension-shift",
@@ -278,9 +291,10 @@
       "name_zh_TW": "次元轉移",
       "name_ja": "ディメンションシフト",
       "name_ko": "차원 이동",
+      "type": "standalone",
       "flags": {
         "system_breaker": false,
-        "lifecycle": "active"
+        "lifecycle": "added"
       },
       "kit_tags": []
     },
@@ -303,7 +317,8 @@
       "flags": {
         "system_breaker": true,
         "lifecycle": "active"
-      }
+      },
+      "type": "standalone"
     },
     {
       "slug": "dropbear",
@@ -315,9 +330,10 @@
       "name_zh_TW": "天降戰熊",
       "name_ja": "ドロップベア",
       "name_ko": "곰 투하",
+      "type": "standalone",
       "flags": {
         "system_breaker": false,
-        "lifecycle": "active"
+        "lifecycle": "added"
       },
       "kit_tags": []
     },
@@ -340,7 +356,8 @@
       "flags": {
         "system_breaker": false,
         "lifecycle": "active"
-      }
+      },
+      "type": "standalone"
     },
     {
       "slug": "droppybara",
@@ -360,7 +377,8 @@
       "flags": {
         "system_breaker": false,
         "lifecycle": "active"
-      }
+      },
+      "type": "standalone"
     },
     {
       "slug": "dual-wield",
@@ -380,7 +398,8 @@
       "flags": {
         "system_breaker": false,
         "lifecycle": "active"
-      }
+      },
+      "type": "standalone"
     },
     {
       "slug": "echo-cast",
@@ -392,9 +411,10 @@
       "name_zh_TW": "共鳴施放",
       "name_ja": "エコー キャスト",
       "name_ko": "메아리 시전",
+      "type": "ability",
       "flags": {
         "system_breaker": false,
-        "lifecycle": "active"
+        "lifecycle": "added"
       },
       "kit_tags": []
     },
@@ -417,7 +437,8 @@
       "flags": {
         "system_breaker": false,
         "lifecycle": "active"
-      }
+      },
+      "type": "standalone"
     },
     {
       "slug": "empyrean-promise",
@@ -438,7 +459,8 @@
       "flags": {
         "system_breaker": false,
         "lifecycle": "active"
-      }
+      },
+      "type": "standalone"
     },
     {
       "slug": "en-passant",
@@ -450,9 +472,10 @@
       "name_zh_TW": "吃過路兵",
       "name_ja": "アンパッサン",
       "name_ko": "앙파상",
+      "type": "standalone",
       "flags": {
         "system_breaker": false,
-        "lifecycle": "active"
+        "lifecycle": "added"
       },
       "kit_tags": []
     },
@@ -474,7 +497,8 @@
       "flags": {
         "system_breaker": false,
         "lifecycle": "active"
-      }
+      },
+      "type": "standalone"
     },
     {
       "slug": "fan-the-hammer",
@@ -497,7 +521,8 @@
       "flags": {
         "system_breaker": false,
         "lifecycle": "active"
-      }
+      },
+      "type": "standalone"
     },
     {
       "slug": "feel-the-burn",
@@ -517,8 +542,9 @@
       ],
       "flags": {
         "system_breaker": false,
-        "lifecycle": "active"
-      }
+        "lifecycle": "removed"
+      },
+      "type": "standalone"
     },
     {
       "slug": "fey-magic",
@@ -538,7 +564,8 @@
       "flags": {
         "system_breaker": false,
         "lifecycle": "active"
-      }
+      },
+      "type": "standalone"
     },
     {
       "slug": "final-form",
@@ -559,7 +586,8 @@
       "flags": {
         "system_breaker": false,
         "lifecycle": "active"
-      }
+      },
+      "type": "standalone"
     },
     {
       "slug": "gash",
@@ -579,8 +607,9 @@
       ],
       "flags": {
         "system_breaker": false,
-        "lifecycle": "active"
-      }
+        "lifecycle": "removed"
+      },
+      "type": "standalone"
     },
     {
       "slug": "giant-slayer",
@@ -600,7 +629,8 @@
       "flags": {
         "system_breaker": false,
         "lifecycle": "active"
-      }
+      },
+      "type": "standalone"
     },
     {
       "slug": "glass-cannon",
@@ -620,7 +650,8 @@
       "flags": {
         "system_breaker": false,
         "lifecycle": "active"
-      }
+      },
+      "type": "standalone"
     },
     {
       "slug": "goldrend",
@@ -644,7 +675,8 @@
       "flags": {
         "system_breaker": false,
         "lifecycle": "active"
-      }
+      },
+      "type": "standalone"
     },
     {
       "slug": "goliath",
@@ -663,7 +695,8 @@
       "flags": {
         "system_breaker": false,
         "lifecycle": "active"
-      }
+      },
+      "type": "standalone"
     },
     {
       "slug": "hand-of-baron",
@@ -680,7 +713,8 @@
       "flags": {
         "system_breaker": false,
         "lifecycle": "active"
-      }
+      },
+      "type": "standalone"
     },
     {
       "slug": "heads-up-cupcake",
@@ -700,8 +734,9 @@
       "set": "make_it_rain",
       "flags": {
         "system_breaker": false,
-        "lifecycle": "active"
-      }
+        "lifecycle": "removed"
+      },
+      "type": "standalone"
     },
     {
       "slug": "hellbent",
@@ -713,9 +748,10 @@
       "name_zh_TW": "陰魂不散",
       "name_ja": "ヘルベント",
       "name_ko": "열의",
+      "type": "standalone",
       "flags": {
         "system_breaker": false,
-        "lifecycle": "active"
+        "lifecycle": "added"
       },
       "kit_tags": []
     },
@@ -729,9 +765,10 @@
       "name_zh_TW": "豪氣賭客",
       "name_ja": "ギャンブラー",
       "name_ko": "도박꾼",
+      "type": "standalone",
       "flags": {
         "system_breaker": false,
-        "lifecycle": "active"
+        "lifecycle": "added"
       },
       "kit_tags": []
     },
@@ -756,7 +793,8 @@
       "flags": {
         "system_breaker": false,
         "lifecycle": "active"
-      }
+      },
+      "type": "standalone"
     },
     {
       "slug": "im-a-baby-kitty-where-is-mama",
@@ -777,8 +815,9 @@
       "set": "wee_woo",
       "flags": {
         "system_breaker": false,
-        "lifecycle": "active"
-      }
+        "lifecycle": "removed"
+      },
+      "type": "standalone"
     },
     {
       "slug": "infernal-conduit",
@@ -798,7 +837,8 @@
       "flags": {
         "system_breaker": false,
         "lifecycle": "active"
-      }
+      },
+      "type": "standalone"
     },
     {
       "slug": "infinite-recursion",
@@ -819,7 +859,8 @@
       "flags": {
         "system_breaker": false,
         "lifecycle": "active"
-      }
+      },
+      "type": "standalone"
     },
     {
       "slug": "jeweled-gauntlet",
@@ -839,7 +880,8 @@
       "flags": {
         "system_breaker": true,
         "lifecycle": "active"
-      }
+      },
+      "type": "standalone"
     },
     {
       "slug": "king-me",
@@ -856,7 +898,8 @@
       "flags": {
         "system_breaker": false,
         "lifecycle": "active"
-      }
+      },
+      "type": "standalone"
     },
     {
       "slug": "laser-heal",
@@ -875,8 +918,9 @@
       ],
       "flags": {
         "system_breaker": false,
-        "lifecycle": "active"
-      }
+        "lifecycle": "removed"
+      },
+      "type": "standalone"
     },
     {
       "slug": "mad-scientist",
@@ -898,7 +942,8 @@
       "flags": {
         "system_breaker": false,
         "lifecycle": "active"
-      }
+      },
+      "type": "standalone"
     },
     {
       "slug": "master-of-duality",
@@ -921,7 +966,8 @@
       "flags": {
         "system_breaker": true,
         "lifecycle": "active"
-      }
+      },
+      "type": "standalone"
     },
     {
       "slug": "multishot",
@@ -933,9 +979,10 @@
       "name_zh_TW": "多重射擊",
       "name_ja": "マルチショット",
       "name_ko": "다중 공격",
+      "type": "ability",
       "flags": {
         "system_breaker": false,
-        "lifecycle": "active"
+        "lifecycle": "added"
       },
       "kit_tags": []
     },
@@ -949,10 +996,10 @@
       "name_zh_TW": "？？？",
       "name_ja": "???",
       "name_ko": "???",
-      "wikiDescription": "Your Enemy Missing pings will cause you to launch a missile at the pinged location, exploding upon arrival to deal 100 – 400 (based on level) (+ 10% of target's missing health) magic damage to enemies struck, and heal allied champions within for 50 – 200 (based on level) (+ 10% of target's missing health) . While equipped with this augment, the player can only use up to 3 Enemy Missing pings each within 6 seconds at most. This incurs a separate cooldown from the global one, sending an alert to the player that reads: You must wait before issuing more pings of that type. Otherwise, the global ping cooldown is incurred as normal. The heal is not affected by the -50% outgoing healing penalty from the ARAM global champion buff .",
+      "type": "standalone",
       "flags": {
         "system_breaker": false,
-        "lifecycle": "active"
+        "lifecycle": "removed"
       },
       "kit_tags": []
     },
@@ -974,7 +1021,8 @@
       "flags": {
         "system_breaker": true,
         "lifecycle": "active"
-      }
+      },
+      "type": "standalone"
     },
     {
       "slug": "ominous-pact",
@@ -995,7 +1043,8 @@
       "flags": {
         "system_breaker": false,
         "lifecycle": "active"
-      }
+      },
+      "type": "standalone"
     },
     {
       "slug": "omni-soul",
@@ -1012,7 +1061,8 @@
       "flags": {
         "system_breaker": false,
         "lifecycle": "active"
-      }
+      },
+      "type": "standalone"
     },
     {
       "slug": "one-trick-pony",
@@ -1024,9 +1074,10 @@
       "name_zh_TW": "絕活玩家",
       "name_ja": "ワントリック ポニー",
       "name_ko": "특기 빼면 시체",
+      "type": "standalone",
       "flags": {
         "system_breaker": false,
-        "lifecycle": "active"
+        "lifecycle": "added"
       },
       "kit_tags": []
     },
@@ -1044,7 +1095,8 @@
       "flags": {
         "system_breaker": false,
         "lifecycle": "active"
-      }
+      },
+      "type": "standalone"
     },
     {
       "slug": "overloaded",
@@ -1056,9 +1108,10 @@
       "name_zh_TW": "輸出超負荷",
       "name_ja": "オーバーロード",
       "name_ko": "과충전",
+      "type": "standalone",
       "flags": {
         "system_breaker": false,
-        "lifecycle": "active"
+        "lifecycle": "added"
       },
       "kit_tags": []
     },
@@ -1076,7 +1129,8 @@
       "flags": {
         "system_breaker": false,
         "lifecycle": "active"
-      }
+      },
+      "type": "standalone"
     },
     {
       "slug": "pin-cushion",
@@ -1088,9 +1142,10 @@
       "name_zh_TW": "針插",
       "name_ja": "針山",
       "name_ko": "바늘꽂이",
+      "type": "standalone",
       "flags": {
         "system_breaker": false,
-        "lifecycle": "active"
+        "lifecycle": "added"
       },
       "kit_tags": []
     },
@@ -1104,9 +1159,10 @@
       "name_zh_TW": "普羅衝鋒",
       "name_ja": "ポロの大群",
       "name_ko": "포로 쇄도",
+      "type": "quest",
       "flags": {
         "system_breaker": false,
-        "lifecycle": "active"
+        "lifecycle": "added"
       },
       "kit_tags": []
     },
@@ -1130,7 +1186,8 @@
       "flags": {
         "system_breaker": false,
         "lifecycle": "active"
-      }
+      },
+      "type": "standalone"
     },
     {
       "slug": "protein-shake",
@@ -1150,7 +1207,8 @@
       "flags": {
         "system_breaker": false,
         "lifecycle": "active"
-      }
+      },
+      "type": "standalone"
     },
     {
       "slug": "quantum-computing",
@@ -1172,7 +1230,8 @@
       "flags": {
         "system_breaker": false,
         "lifecycle": "active"
-      }
+      },
+      "type": "standalone"
     },
     {
       "slug": "quest-urfs-champion",
@@ -1189,7 +1248,8 @@
       "flags": {
         "system_breaker": false,
         "lifecycle": "active"
-      }
+      },
+      "type": "quest"
     },
     {
       "slug": "quest-wooglets-witchcap",
@@ -1206,7 +1266,8 @@
       "flags": {
         "system_breaker": false,
         "lifecycle": "active"
-      }
+      },
+      "type": "quest"
     },
     {
       "slug": "quickstep",
@@ -1218,9 +1279,10 @@
       "name_zh_TW": "快步移動",
       "name_ja": "クイックステップ",
       "name_ko": "날쌘걸음",
+      "type": "standalone",
       "flags": {
         "system_breaker": false,
-        "lifecycle": "active"
+        "lifecycle": "added"
       },
       "kit_tags": []
     },
@@ -1240,8 +1302,9 @@
       "set": "make_it_rain",
       "flags": {
         "system_breaker": false,
-        "lifecycle": "active"
-      }
+        "lifecycle": "removed"
+      },
+      "type": "standalone"
     },
     {
       "slug": "rite-of-ascension",
@@ -1253,9 +1316,10 @@
       "name_zh_TW": "昇華儀式",
       "name_ja": "超越の儀式",
       "name_ko": "초월 의식",
+      "type": "standalone",
       "flags": {
         "system_breaker": false,
-        "lifecycle": "active"
+        "lifecycle": "added"
       },
       "kit_tags": []
     },
@@ -1276,7 +1340,8 @@
       "flags": {
         "system_breaker": false,
         "lifecycle": "active"
-      }
+      },
+      "type": "standalone"
     },
     {
       "slug": "slow-cooker",
@@ -1296,7 +1361,8 @@
       "flags": {
         "system_breaker": false,
         "lifecycle": "active"
-      }
+      },
+      "type": "standalone"
     },
     {
       "slug": "spell-split",
@@ -1308,9 +1374,10 @@
       "name_zh_TW": "法術迸裂",
       "name_ja": "スペルスプリット",
       "name_ko": "주문 분산",
+      "type": "ability",
       "flags": {
         "system_breaker": false,
-        "lifecycle": "active"
+        "lifecycle": "added"
       },
       "kit_tags": []
     },
@@ -1324,9 +1391,10 @@
       "name_zh_TW": "靈魂炸彈",
       "name_ja": "スピリットボム",
       "name_ko": "영혼 폭탄",
+      "type": "standalone",
       "flags": {
         "system_breaker": false,
-        "lifecycle": "active"
+        "lifecycle": "added"
       },
       "kit_tags": []
     },
@@ -1340,9 +1408,10 @@
       "name_zh_TW": "伸縮手掌黏黏樂",
       "name_ja": "スクイッシースラッピーグラブ",
       "name_ko": "말랑 찰싹 손",
+      "type": "standalone",
       "flags": {
         "system_breaker": false,
-        "lifecycle": "active"
+        "lifecycle": "added"
       },
       "kit_tags": []
     },
@@ -1363,7 +1432,8 @@
       "flags": {
         "system_breaker": false,
         "lifecycle": "active"
-      }
+      },
+      "type": "standalone"
     },
     {
       "slug": "stuck-in-here-with-me",
@@ -1384,7 +1454,8 @@
       "flags": {
         "system_breaker": false,
         "lifecycle": "active"
-      }
+      },
+      "type": "standalone"
     },
     {
       "slug": "surge-field",
@@ -1396,9 +1467,10 @@
       "name_zh_TW": "高能量場域",
       "name_ja": "サージフィールド",
       "name_ko": "방출 역장",
+      "type": "standalone",
       "flags": {
         "system_breaker": false,
-        "lifecycle": "active"
+        "lifecycle": "added"
       },
       "kit_tags": []
     },
@@ -1421,7 +1493,8 @@
       "flags": {
         "system_breaker": false,
         "lifecycle": "active"
-      }
+      },
+      "type": "standalone"
     },
     {
       "slug": "tap-dancer",
@@ -1444,7 +1517,8 @@
       "flags": {
         "system_breaker": true,
         "lifecycle": "active"
-      }
+      },
+      "type": "standalone"
     },
     {
       "slug": "terror",
@@ -1456,9 +1530,10 @@
       "name_zh_TW": "恐懼",
       "name_ja": "恐怖",
       "name_ko": "공포",
+      "type": "standalone",
       "flags": {
         "system_breaker": false,
-        "lifecycle": "active"
+        "lifecycle": "added"
       },
       "kit_tags": []
     },
@@ -1472,9 +1547,10 @@
       "name_zh_TW": "泰坦的決意",
       "name_ja": "巨人の誓い",
       "name_ko": "거인의 결의",
+      "type": "standalone",
       "flags": {
         "system_breaker": false,
-        "lifecycle": "active"
+        "lifecycle": "added"
       },
       "kit_tags": []
     },
@@ -1495,7 +1571,8 @@
       "flags": {
         "system_breaker": false,
         "lifecycle": "active"
-      }
+      },
+      "type": "standalone"
     },
     {
       "slug": "triggered-inferno",
@@ -1516,7 +1593,8 @@
       "flags": {
         "system_breaker": false,
         "lifecycle": "active"
-      }
+      },
+      "type": "standalone"
     },
     {
       "slug": "tripleshot",
@@ -1528,9 +1606,10 @@
       "name_zh_TW": "三連射",
       "name_ja": "トリプルショット",
       "name_ko": "3연발",
+      "type": "ability",
       "flags": {
         "system_breaker": false,
-        "lifecycle": "active"
+        "lifecycle": "added"
       },
       "kit_tags": []
     },
@@ -1547,8 +1626,9 @@
       "kit_tags": [],
       "flags": {
         "system_breaker": false,
-        "lifecycle": "active"
-      }
+        "lifecycle": "removed"
+      },
+      "type": "standalone"
     },
     {
       "slug": "ultimate-awakening",
@@ -1568,7 +1648,8 @@
       "flags": {
         "system_breaker": false,
         "lifecycle": "active"
-      }
+      },
+      "type": "standalone"
     },
     {
       "slug": "ultimate-revolution",
@@ -1588,7 +1669,8 @@
       "flags": {
         "system_breaker": false,
         "lifecycle": "active"
-      }
+      },
+      "type": "standalone"
     },
     {
       "slug": "upgrade-mikaels-blessing",
@@ -1610,8 +1692,9 @@
       "set": "wee_woo",
       "flags": {
         "system_breaker": false,
-        "lifecycle": "active"
-      }
+        "lifecycle": "removed"
+      },
+      "type": "standalone"
     },
     {
       "slug": "void-immolation",
@@ -1627,7 +1710,8 @@
       "flags": {
         "system_breaker": false,
         "lifecycle": "active"
-      }
+      },
+      "type": "standalone"
     },
     {
       "slug": "void-rift",
@@ -1646,8 +1730,9 @@
       ],
       "flags": {
         "system_breaker": false,
-        "lifecycle": "active"
-      }
+        "lifecycle": "removed"
+      },
+      "type": "standalone"
     },
     {
       "slug": "windspeakers-blessing",
@@ -1669,7 +1754,8 @@
       "flags": {
         "system_breaker": false,
         "lifecycle": "active"
-      }
+      },
+      "type": "standalone"
     },
     {
       "slug": "all-for-you",
@@ -1690,7 +1776,8 @@
       "flags": {
         "system_breaker": false,
         "lifecycle": "active"
-      }
+      },
+      "type": "standalone"
     },
     {
       "slug": "apex-inventor",
@@ -1709,7 +1796,8 @@
       "flags": {
         "system_breaker": false,
         "lifecycle": "active"
-      }
+      },
+      "type": "standalone"
     },
     {
       "slug": "archmage",
@@ -1721,9 +1809,10 @@
       "name_zh_TW": "大法師",
       "name_ja": "魔帝",
       "name_ko": "대마법사",
+      "type": "standalone",
       "flags": {
         "system_breaker": false,
-        "lifecycle": "active"
+        "lifecycle": "added"
       },
       "kit_tags": []
     },
@@ -1745,7 +1834,8 @@
       "flags": {
         "system_breaker": false,
         "lifecycle": "active"
-      }
+      },
+      "type": "standalone"
     },
     {
       "slug": "bonk",
@@ -1757,9 +1847,10 @@
       "name_zh_TW": "一棒入魂！",
       "name_ja": "ボカッ！",
       "name_ko": "꽁!",
+      "type": "standalone",
       "flags": {
         "system_breaker": false,
-        "lifecycle": "active"
+        "lifecycle": "added"
       },
       "kit_tags": []
     },
@@ -1781,7 +1872,8 @@
       "flags": {
         "system_breaker": false,
         "lifecycle": "active"
-      }
+      },
+      "type": "standalone"
     },
     {
       "slug": "bread-and-cheese",
@@ -1801,7 +1893,8 @@
       "flags": {
         "system_breaker": false,
         "lifecycle": "active"
-      }
+      },
+      "type": "standalone"
     },
     {
       "slug": "bread-and-jam",
@@ -1821,7 +1914,8 @@
       "flags": {
         "system_breaker": false,
         "lifecycle": "active"
-      }
+      },
+      "type": "standalone"
     },
     {
       "slug": "celestial-body",
@@ -1840,7 +1934,8 @@
       "flags": {
         "system_breaker": false,
         "lifecycle": "active"
-      }
+      },
+      "type": "standalone"
     },
     {
       "slug": "cheating",
@@ -1856,8 +1951,9 @@
       "kit_tags": [],
       "flags": {
         "system_breaker": false,
-        "lifecycle": "active"
-      }
+        "lifecycle": "removed"
+      },
+      "type": "standalone"
     },
     {
       "slug": "combusting-interest",
@@ -1869,9 +1965,10 @@
       "name_zh_TW": "燃燒利息",
       "name_ja": "燃える利回り",
       "name_ko": "타오르는 이자",
+      "type": "standalone",
       "flags": {
         "system_breaker": false,
-        "lifecycle": "active"
+        "lifecycle": "added"
       },
       "kit_tags": []
     },
@@ -1895,7 +1992,8 @@
       "flags": {
         "system_breaker": false,
         "lifecycle": "active"
-      }
+      },
+      "type": "standalone"
     },
     {
       "slug": "critical-missile",
@@ -1918,7 +2016,8 @@
       "flags": {
         "system_breaker": false,
         "lifecycle": "active"
-      }
+      },
+      "type": "standalone"
     },
     {
       "slug": "critical-rhythm",
@@ -1938,7 +2037,8 @@
       "flags": {
         "system_breaker": false,
         "lifecycle": "active"
-      }
+      },
+      "type": "standalone"
     },
     {
       "slug": "dawnbringers-resolve",
@@ -1958,7 +2058,8 @@
       "flags": {
         "system_breaker": false,
         "lifecycle": "active"
-      }
+      },
+      "type": "standalone"
     },
     {
       "slug": "demons-dance",
@@ -1978,8 +2079,9 @@
       ],
       "flags": {
         "system_breaker": false,
-        "lifecycle": "active"
-      }
+        "lifecycle": "removed"
+      },
+      "type": "standalone"
     },
     {
       "slug": "divine-intervention",
@@ -2002,7 +2104,8 @@
       "flags": {
         "system_breaker": false,
         "lifecycle": "active"
-      }
+      },
+      "type": "standalone"
     },
     {
       "slug": "donation",
@@ -2021,7 +2124,8 @@
       "flags": {
         "system_breaker": false,
         "lifecycle": "active"
-      }
+      },
+      "type": "standalone"
     },
     {
       "slug": "double-tap",
@@ -2042,7 +2146,8 @@
       "flags": {
         "system_breaker": false,
         "lifecycle": "active"
-      }
+      },
+      "type": "standalone"
     },
     {
       "slug": "endless-decimation",
@@ -2054,9 +2159,10 @@
       "name_zh_TW": "無盡屠滅",
       "name_ja": "終わりなき殲滅",
       "name_ko": "끝없는 학살",
+      "type": "standalone",
       "flags": {
         "system_breaker": false,
-        "lifecycle": "active"
+        "lifecycle": "added"
       },
       "kit_tags": []
     },
@@ -2078,7 +2184,8 @@
       "flags": {
         "system_breaker": false,
         "lifecycle": "active"
-      }
+      },
+      "type": "standalone"
     },
     {
       "slug": "executioner",
@@ -2096,8 +2203,9 @@
       ],
       "flags": {
         "system_breaker": false,
-        "lifecycle": "active"
-      }
+        "lifecycle": "removed"
+      },
+      "type": "standalone"
     },
     {
       "slug": "final-city-transit",
@@ -2118,7 +2226,8 @@
       "flags": {
         "system_breaker": false,
         "lifecycle": "active"
-      }
+      },
+      "type": "standalone"
     },
     {
       "slug": "firebrand",
@@ -2138,7 +2247,8 @@
       "flags": {
         "system_breaker": false,
         "lifecycle": "active"
-      }
+      },
+      "type": "standalone"
     },
     {
       "slug": "from-beginning-to-end",
@@ -2160,7 +2270,8 @@
       "flags": {
         "system_breaker": false,
         "lifecycle": "active"
-      }
+      },
+      "type": "standalone"
     },
     {
       "slug": "from-downtown",
@@ -2172,9 +2283,10 @@
       "name_zh_TW": "超遠射擊",
       "name_ja": "ロングシュート",
       "name_ko": "로켓 배송",
+      "type": "quest",
       "flags": {
         "system_breaker": false,
-        "lifecycle": "active"
+        "lifecycle": "added"
       },
       "kit_tags": []
     },
@@ -2192,7 +2304,8 @@
       "flags": {
         "system_breaker": false,
         "lifecycle": "active"
-      }
+      },
+      "type": "standalone"
     },
     {
       "slug": "grandmas-chili-oil",
@@ -2211,8 +2324,9 @@
       ],
       "flags": {
         "system_breaker": false,
-        "lifecycle": "active"
-      }
+        "lifecycle": "removed"
+      },
+      "type": "standalone"
     },
     {
       "slug": "growth-spurt",
@@ -2232,7 +2346,8 @@
       "flags": {
         "system_breaker": false,
         "lifecycle": "active"
-      }
+      },
+      "type": "standalone"
     },
     {
       "slug": "hide-on-bush",
@@ -2244,9 +2359,10 @@
       "name_zh_TW": "躲草叢",
       "name_ja": "Hide on Bush",
       "name_ko": "Hide on bush",
+      "type": "standalone",
       "flags": {
         "system_breaker": false,
-        "lifecycle": "active"
+        "lifecycle": "added"
       },
       "kit_tags": []
     },
@@ -2267,8 +2383,9 @@
       ],
       "flags": {
         "system_breaker": false,
-        "lifecycle": "active"
-      }
+        "lifecycle": "removed"
+      },
+      "type": "standalone"
     },
     {
       "slug": "impassable",
@@ -2287,7 +2404,8 @@
       "flags": {
         "system_breaker": false,
         "lifecycle": "active"
-      }
+      },
+      "type": "standalone"
     },
     {
       "slug": "its-critical",
@@ -2306,7 +2424,8 @@
       "flags": {
         "system_breaker": false,
         "lifecycle": "active"
-      }
+      },
+      "type": "standalone"
     },
     {
       "slug": "its-killing-time",
@@ -2326,7 +2445,8 @@
       "flags": {
         "system_breaker": false,
         "lifecycle": "active"
-      }
+      },
+      "type": "standalone"
     },
     {
       "slug": "keystone-conjurer",
@@ -2344,8 +2464,9 @@
       ],
       "flags": {
         "system_breaker": false,
-        "lifecycle": "active"
-      }
+        "lifecycle": "removed"
+      },
+      "type": "standalone"
     },
     {
       "slug": "lightning-strikes",
@@ -2364,8 +2485,9 @@
       ],
       "flags": {
         "system_breaker": false,
-        "lifecycle": "active"
-      }
+        "lifecycle": "removed"
+      },
+      "type": "standalone"
     },
     {
       "slug": "lil-extra-help",
@@ -2377,9 +2499,10 @@
       "name_zh_TW": "小小助力",
       "name_ja": "ちょこっとヘルプ",
       "name_ko": "작은 도움",
+      "type": "standalone",
       "flags": {
         "system_breaker": false,
-        "lifecycle": "active"
+        "lifecycle": "added"
       },
       "kit_tags": []
     },
@@ -2403,7 +2526,8 @@
       "flags": {
         "system_breaker": false,
         "lifecycle": "active"
-      }
+      },
+      "type": "standalone"
     },
     {
       "slug": "marksmage",
@@ -2423,7 +2547,8 @@
       "flags": {
         "system_breaker": true,
         "lifecycle": "active"
-      }
+      },
+      "type": "standalone"
     },
     {
       "slug": "mercys-strike",
@@ -2435,9 +2560,10 @@
       "name_zh_TW": "慈悲之擊",
       "name_ja": "慈悲の一撃",
       "name_ko": "자비의 일격",
+      "type": "standalone",
       "flags": {
         "system_breaker": false,
-        "lifecycle": "active"
+        "lifecycle": "added"
       },
       "kit_tags": []
     },
@@ -2456,7 +2582,8 @@
       "flags": {
         "system_breaker": false,
         "lifecycle": "active"
-      }
+      },
+      "type": "standalone"
     },
     {
       "slug": "nature-is-healing",
@@ -2468,9 +2595,10 @@
       "name_zh_TW": "自然治療",
       "name_ja": "大自然が回復している",
       "name_ko": "자연의 회복",
+      "type": "standalone",
       "flags": {
         "system_breaker": false,
-        "lifecycle": "active"
+        "lifecycle": "added"
       },
       "kit_tags": []
     },
@@ -2491,7 +2619,8 @@
       "flags": {
         "system_breaker": false,
         "lifecycle": "active"
-      }
+      },
+      "type": "standalone"
     },
     {
       "slug": "ok-boomerang",
@@ -2513,7 +2642,8 @@
       "flags": {
         "system_breaker": false,
         "lifecycle": "active"
-      }
+      },
+      "type": "standalone"
     },
     {
       "slug": "our-healing",
@@ -2525,9 +2655,10 @@
       "name_zh_TW": "共享治療",
       "name_ja": "みんなの回復",
       "name_ko": "우리의 치유",
+      "type": "standalone",
       "flags": {
         "system_breaker": false,
-        "lifecycle": "active"
+        "lifecycle": "added"
       },
       "kit_tags": []
     },
@@ -2549,7 +2680,8 @@
       "flags": {
         "system_breaker": false,
         "lifecycle": "active"
-      }
+      },
+      "type": "standalone"
     },
     {
       "slug": "overextender",
@@ -2561,9 +2693,10 @@
       "name_zh_TW": "過度延伸",
       "name_ja": "深追いしすぎ",
       "name_ko": "무리한 진입",
+      "type": "standalone",
       "flags": {
         "system_breaker": false,
-        "lifecycle": "active"
+        "lifecycle": "added"
       },
       "kit_tags": []
     },
@@ -2587,7 +2720,8 @@
       "flags": {
         "system_breaker": false,
         "lifecycle": "active"
-      }
+      },
+      "type": "standalone"
     },
     {
       "slug": "pat-on-the-back",
@@ -2599,9 +2733,10 @@
       "name_zh_TW": "拍拍鼓勵",
       "name_ja": "よくやった",
       "name_ko": "격려하기",
+      "type": "standalone",
       "flags": {
         "system_breaker": false,
-        "lifecycle": "active"
+        "lifecycle": "added"
       },
       "kit_tags": []
     },
@@ -2623,7 +2758,8 @@
       "flags": {
         "system_breaker": false,
         "lifecycle": "active"
-      }
+      },
+      "type": "standalone"
     },
     {
       "slug": "phenomenal-evil",
@@ -2644,7 +2780,8 @@
       "flags": {
         "system_breaker": false,
         "lifecycle": "active"
-      }
+      },
+      "type": "standalone"
     },
     {
       "slug": "pinball",
@@ -2666,7 +2803,8 @@
       "flags": {
         "system_breaker": false,
         "lifecycle": "active"
-      }
+      },
+      "type": "standalone"
     },
     {
       "slug": "porcupine",
@@ -2678,9 +2816,10 @@
       "name_zh_TW": "豪豬",
       "name_ja": "ヤマアラシ",
       "name_ko": "고슴도치",
+      "type": "standalone",
       "flags": {
         "system_breaker": false,
-        "lifecycle": "active"
+        "lifecycle": "added"
       },
       "kit_tags": []
     },
@@ -2702,8 +2841,9 @@
       ],
       "flags": {
         "system_breaker": false,
-        "lifecycle": "active"
-      }
+        "lifecycle": "removed"
+      },
+      "type": "standalone"
     },
     {
       "slug": "pressure-cooker",
@@ -2715,9 +2855,10 @@
       "name_zh_TW": "壓力火鍋",
       "name_ja": "圧力鍋",
       "name_ko": "압력솥",
+      "type": "quest",
       "flags": {
         "system_breaker": false,
-        "lifecycle": "active"
+        "lifecycle": "added"
       },
       "kit_tags": []
     },
@@ -2731,9 +2872,10 @@
       "name_zh_TW": "疾速追擊",
       "name_ja": "素早さの追求",
       "name_ko": "가속 추구",
+      "type": "standalone",
       "flags": {
         "system_breaker": false,
-        "lifecycle": "active"
+        "lifecycle": "added"
       },
       "kit_tags": []
     },
@@ -2754,7 +2896,8 @@
       "flags": {
         "system_breaker": false,
         "lifecycle": "active"
-      }
+      },
+      "type": "quest"
     },
     {
       "slug": "rabble-rousing",
@@ -2773,8 +2916,9 @@
       ],
       "flags": {
         "system_breaker": false,
-        "lifecycle": "active"
-      }
+        "lifecycle": "removed"
+      },
+      "type": "standalone"
     },
     {
       "slug": "ravenous-bind",
@@ -2786,9 +2930,10 @@
       "name_zh_TW": "貪婪束縛",
       "name_ja": "貪欲な束縛",
       "name_ko": "굶주린 속박",
+      "type": "standalone",
       "flags": {
         "system_breaker": false,
-        "lifecycle": "active"
+        "lifecycle": "added"
       },
       "kit_tags": []
     },
@@ -2809,7 +2954,8 @@
       "flags": {
         "system_breaker": false,
         "lifecycle": "active"
-      }
+      },
+      "type": "standalone"
     },
     {
       "slug": "rejuvenation",
@@ -2821,9 +2967,10 @@
       "name_zh_TW": "回春",
       "name_ja": "再生",
       "name_ko": "원기 회복",
+      "type": "standalone",
       "flags": {
         "system_breaker": false,
-        "lifecycle": "active"
+        "lifecycle": "added"
       },
       "kit_tags": []
     },
@@ -2844,8 +2991,9 @@
       ],
       "flags": {
         "system_breaker": false,
-        "lifecycle": "active"
-      }
+        "lifecycle": "removed"
+      },
+      "type": "standalone"
     },
     {
       "slug": "scopier-weapons",
@@ -2862,7 +3010,8 @@
       "flags": {
         "system_breaker": false,
         "lifecycle": "active"
-      }
+      },
+      "type": "standalone"
     },
     {
       "slug": "searing-dawn",
@@ -2882,7 +3031,8 @@
       "flags": {
         "system_breaker": false,
         "lifecycle": "active"
-      }
+      },
+      "type": "standalone"
     },
     {
       "slug": "shark-bait",
@@ -2894,9 +3044,10 @@
       "name_zh_TW": "鯊魚誘餌",
       "name_ja": "サメのエサ",
       "name_ko": "상어 미끼",
+      "type": "standalone",
       "flags": {
         "system_breaker": false,
-        "lifecycle": "active"
+        "lifecycle": "added"
       },
       "kit_tags": []
     },
@@ -2910,9 +3061,10 @@
       "name_zh_TW": "鯊魚風暴",
       "name_ja": "シャークテンペスト",
       "name_ko": "상어 폭풍",
+      "type": "standalone",
       "flags": {
         "system_breaker": false,
-        "lifecycle": "active"
+        "lifecycle": "added"
       },
       "kit_tags": []
     },
@@ -2936,7 +3088,8 @@
       "flags": {
         "system_breaker": false,
         "lifecycle": "active"
-      }
+      },
+      "type": "standalone"
     },
     {
       "slug": "shrink-ray",
@@ -2957,7 +3110,8 @@
       "flags": {
         "system_breaker": false,
         "lifecycle": "active"
-      }
+      },
+      "type": "standalone"
     },
     {
       "slug": "skilled-sniper",
@@ -2977,7 +3131,8 @@
       "flags": {
         "system_breaker": false,
         "lifecycle": "active"
-      }
+      },
+      "type": "standalone"
     },
     {
       "slug": "slow-and-steady",
@@ -2995,8 +3150,9 @@
       ],
       "flags": {
         "system_breaker": true,
-        "lifecycle": "active"
-      }
+        "lifecycle": "removed"
+      },
+      "type": "standalone"
     },
     {
       "slug": "snowball-roulette",
@@ -3017,8 +3173,9 @@
       "set": "snowday",
       "flags": {
         "system_breaker": false,
-        "lifecycle": "active"
-      }
+        "lifecycle": "removed"
+      },
+      "type": "standalone"
     },
     {
       "slug": "snowball-upgrade",
@@ -3040,7 +3197,8 @@
       "flags": {
         "system_breaker": false,
         "lifecycle": "active"
-      }
+      },
+      "type": "standalone"
     },
     {
       "slug": "snowblast",
@@ -3052,9 +3210,10 @@
       "name_zh_TW": "雪爆",
       "name_ja": "スノーブラスト",
       "name_ko": "눈 폭발",
+      "type": "standalone",
       "flags": {
         "system_breaker": false,
-        "lifecycle": "active"
+        "lifecycle": "added"
       },
       "kit_tags": []
     },
@@ -3078,7 +3237,8 @@
       "flags": {
         "system_breaker": false,
         "lifecycle": "active"
-      }
+      },
+      "type": "standalone"
     },
     {
       "slug": "soul-eater",
@@ -3100,7 +3260,8 @@
       "flags": {
         "system_breaker": false,
         "lifecycle": "active"
-      }
+      },
+      "type": "standalone"
     },
     {
       "slug": "soul-siphon",
@@ -3120,7 +3281,8 @@
       "flags": {
         "system_breaker": false,
         "lifecycle": "active"
-      }
+      },
+      "type": "standalone"
     },
     {
       "slug": "spiritual-purification",
@@ -3141,7 +3303,8 @@
       "flags": {
         "system_breaker": false,
         "lifecycle": "active"
-      }
+      },
+      "type": "standalone"
     },
     {
       "slug": "stats-on-stats",
@@ -3160,7 +3323,8 @@
       "flags": {
         "system_breaker": false,
         "lifecycle": "active"
-      }
+      },
+      "type": "standalone"
     },
     {
       "slug": "tank-engine",
@@ -3179,7 +3343,8 @@
       "flags": {
         "system_breaker": false,
         "lifecycle": "active"
-      }
+      },
+      "type": "standalone"
     },
     {
       "slug": "terraind",
@@ -3191,9 +3356,10 @@
       "name_zh_TW": "劃地為王",
       "name_ja": "地形でドン",
       "name_ko": "지형 생성됨",
+      "type": "standalone",
       "flags": {
         "system_breaker": false,
-        "lifecycle": "active"
+        "lifecycle": "added"
       },
       "kit_tags": []
     },
@@ -3212,7 +3378,8 @@
       "flags": {
         "system_breaker": false,
         "lifecycle": "active"
-      }
+      },
+      "type": "standalone"
     },
     {
       "slug": "tooth-fairy",
@@ -3224,9 +3391,10 @@
       "name_zh_TW": "牙仙",
       "name_ja": "歯の妖精",
       "name_ko": "이빨 요정",
+      "type": "quest",
       "flags": {
         "system_breaker": false,
-        "lifecycle": "active"
+        "lifecycle": "added"
       },
       "kit_tags": []
     },
@@ -3240,9 +3408,10 @@
       "name_zh_TW": "開拓者",
       "name_ja": "先駆者",
       "name_ko": "개척자",
+      "type": "standalone",
       "flags": {
         "system_breaker": false,
-        "lifecycle": "active"
+        "lifecycle": "removed"
       },
       "kit_tags": []
     },
@@ -3263,7 +3432,8 @@
       "flags": {
         "system_breaker": false,
         "lifecycle": "active"
-      }
+      },
+      "type": "standalone"
     },
     {
       "slug": "twice-thrice",
@@ -3282,8 +3452,9 @@
       ],
       "flags": {
         "system_breaker": false,
-        "lifecycle": "active"
-      }
+        "lifecycle": "removed"
+      },
+      "type": "standalone"
     },
     {
       "slug": "upgrade-hubris",
@@ -3304,8 +3475,9 @@
       "set": "stackosaurus_rex",
       "flags": {
         "system_breaker": false,
-        "lifecycle": "active"
-      }
+        "lifecycle": "removed"
+      },
+      "type": "standalone"
     },
     {
       "slug": "upgrade-infinity-edge",
@@ -3325,7 +3497,8 @@
       "flags": {
         "system_breaker": false,
         "lifecycle": "active"
-      }
+      },
+      "type": "standalone"
     },
     {
       "slug": "upgrade-sheen",
@@ -3345,7 +3518,8 @@
       "flags": {
         "system_breaker": false,
         "lifecycle": "active"
-      }
+      },
+      "type": "standalone"
     },
     {
       "slug": "vampirism",
@@ -3365,7 +3539,8 @@
       "flags": {
         "system_breaker": false,
         "lifecycle": "active"
-      }
+      },
+      "type": "standalone"
     },
     {
       "slug": "void-dash",
@@ -3377,9 +3552,10 @@
       "name_zh_TW": "虛空衝刺",
       "name_ja": "ヴォイドダッシュ",
       "name_ko": "공허 돌진",
+      "type": "standalone",
       "flags": {
         "system_breaker": false,
-        "lifecycle": "active"
+        "lifecycle": "added"
       },
       "kit_tags": []
     },
@@ -3401,7 +3577,8 @@
       "flags": {
         "system_breaker": true,
         "lifecycle": "active"
-      }
+      },
+      "type": "standalone"
     },
     {
       "slug": "warlock-juicebox",
@@ -3413,9 +3590,10 @@
       "name_zh_TW": "術士果汁盒",
       "name_ja": "大魔導師のジュースボックス",
       "name_ko": "마도사의 주스 상자",
+      "type": "standalone",
       "flags": {
         "system_breaker": false,
-        "lifecycle": "active"
+        "lifecycle": "added"
       },
       "kit_tags": []
     },
@@ -3429,9 +3607,10 @@
       "name_zh_TW": "嗚咿嗚咿",
       "name_ja": "うぃ～！おりゃっ！",
       "name_ko": "삐뽀삐뽀",
+      "type": "standalone",
       "flags": {
         "system_breaker": false,
-        "lifecycle": "active"
+        "lifecycle": "added"
       },
       "kit_tags": []
     },
@@ -3453,7 +3632,8 @@
       "flags": {
         "system_breaker": false,
         "lifecycle": "active"
-      }
+      },
+      "type": "standalone"
     },
     {
       "slug": "yowch-my-coins",
@@ -3465,9 +3645,10 @@
       "name_zh_TW": "哎呀，我的金幣！",
       "name_ja": "あいたっ、私のコイン！",
       "name_ko": "으악, 내 동전!",
+      "type": "standalone",
       "flags": {
         "system_breaker": false,
-        "lifecycle": "active"
+        "lifecycle": "added"
       },
       "kit_tags": []
     },
@@ -3489,7 +3670,8 @@
       "flags": {
         "system_breaker": false,
         "lifecycle": "active"
-      }
+      },
+      "type": "standalone"
     },
     {
       "slug": "adapt",
@@ -3509,7 +3691,8 @@
       "flags": {
         "system_breaker": false,
         "lifecycle": "active"
-      }
+      },
+      "type": "standalone"
     },
     {
       "slug": "adaptive-ward",
@@ -3521,9 +3704,10 @@
       "name_zh_TW": "適性之護",
       "name_ja": "アダプティブワード",
       "name_ko": "적응형 와드",
+      "type": "standalone",
       "flags": {
         "system_breaker": false,
-        "lifecycle": "active"
+        "lifecycle": "added"
       },
       "kit_tags": []
     },
@@ -3544,7 +3728,8 @@
       "flags": {
         "system_breaker": false,
         "lifecycle": "active"
-      }
+      },
+      "type": "standalone"
     },
     {
       "slug": "buff-buddies",
@@ -3566,8 +3751,9 @@
       "set": "archmage",
       "flags": {
         "system_breaker": false,
-        "lifecycle": "active"
-      }
+        "lifecycle": "removed"
+      },
+      "type": "standalone"
     },
     {
       "slug": "crack-open-that-egg",
@@ -3586,8 +3772,9 @@
       ],
       "flags": {
         "system_breaker": false,
-        "lifecycle": "active"
-      }
+        "lifecycle": "removed"
+      },
+      "type": "standalone"
     },
     {
       "slug": "crit-n-cast",
@@ -3607,7 +3794,8 @@
       "flags": {
         "system_breaker": false,
         "lifecycle": "active"
-      }
+      },
+      "type": "standalone"
     },
     {
       "slug": "deft",
@@ -3626,7 +3814,8 @@
       "flags": {
         "system_breaker": false,
         "lifecycle": "active"
-      }
+      },
+      "type": "standalone"
     },
     {
       "slug": "dive-bomber",
@@ -3647,7 +3836,8 @@
       "flags": {
         "system_breaker": false,
         "lifecycle": "active"
-      }
+      },
+      "type": "standalone"
     },
     {
       "slug": "dont-blink",
@@ -3667,7 +3857,8 @@
       "flags": {
         "system_breaker": false,
         "lifecycle": "active"
-      }
+      },
+      "type": "standalone"
     },
     {
       "slug": "dont-change-the-channel",
@@ -3679,9 +3870,10 @@
       "name_zh_TW": "別轉台",
       "name_ja": "チャンネルはそのまま",
       "name_ko": "채널 고정",
+      "type": "standalone",
       "flags": {
         "system_breaker": false,
-        "lifecycle": "active"
+        "lifecycle": "added"
       },
       "kit_tags": []
     },
@@ -3695,9 +3887,10 @@
       "name_zh_TW": "雙重防禦",
       "name_ja": "ダブルディフェンス",
       "name_ko": "2연속 방어",
+      "type": "standalone",
       "flags": {
         "system_breaker": false,
-        "lifecycle": "active"
+        "lifecycle": "added"
       },
       "kit_tags": []
     },
@@ -3719,7 +3912,8 @@
       "flags": {
         "system_breaker": false,
         "lifecycle": "active"
-      }
+      },
+      "type": "standalone"
     },
     {
       "slug": "escapade",
@@ -3739,7 +3933,8 @@
       "flags": {
         "system_breaker": false,
         "lifecycle": "active"
-      }
+      },
+      "type": "standalone"
     },
     {
       "slug": "escape-plan",
@@ -3760,7 +3955,8 @@
       "flags": {
         "system_breaker": false,
         "lifecycle": "active"
-      }
+      },
+      "type": "standalone"
     },
     {
       "slug": "firefox",
@@ -3783,7 +3979,8 @@
       "flags": {
         "system_breaker": false,
         "lifecycle": "active"
-      }
+      },
+      "type": "standalone"
     },
     {
       "slug": "first-aid-kit",
@@ -3804,7 +4001,8 @@
       "flags": {
         "system_breaker": false,
         "lifecycle": "active"
-      }
+      },
+      "type": "standalone"
     },
     {
       "slug": "flash-2",
@@ -3824,7 +4022,8 @@
       "flags": {
         "system_breaker": false,
         "lifecycle": "active"
-      }
+      },
+      "type": "standalone"
     },
     {
       "slug": "flashbang",
@@ -3845,7 +4044,8 @@
       "flags": {
         "system_breaker": false,
         "lifecycle": "active"
-      }
+      },
+      "type": "standalone"
     },
     {
       "slug": "forged-by-the-master",
@@ -3857,9 +4057,10 @@
       "name_zh_TW": "大師鑄造",
       "name_ja": "マスターに鍛えられて",
       "name_ko": "장인의 솜씨",
+      "type": "standalone",
       "flags": {
         "system_breaker": false,
-        "lifecycle": "active"
+        "lifecycle": "added"
       },
       "kit_tags": []
     },
@@ -3882,8 +4083,9 @@
       "set": "fully_automated",
       "flags": {
         "system_breaker": false,
-        "lifecycle": "active"
-      }
+        "lifecycle": "removed"
+      },
+      "type": "standalone"
     },
     {
       "slug": "goredrink",
@@ -3902,7 +4104,8 @@
       "flags": {
         "system_breaker": false,
         "lifecycle": "active"
-      }
+      },
+      "type": "standalone"
     },
     {
       "slug": "guilty-pleasure",
@@ -3922,7 +4125,8 @@
       "flags": {
         "system_breaker": false,
         "lifecycle": "active"
-      }
+      },
+      "type": "standalone"
     },
     {
       "slug": "hat-on-a-hat",
@@ -3940,8 +4144,9 @@
       ],
       "flags": {
         "system_breaker": false,
-        "lifecycle": "active"
-      }
+        "lifecycle": "removed"
+      },
+      "type": "standalone"
     },
     {
       "slug": "heavy-hitter",
@@ -3961,7 +4166,8 @@
       "flags": {
         "system_breaker": false,
         "lifecycle": "active"
-      }
+      },
+      "type": "standalone"
     },
     {
       "slug": "hextech-soul",
@@ -3978,7 +4184,8 @@
       "flags": {
         "system_breaker": false,
         "lifecycle": "active"
-      }
+      },
+      "type": "standalone"
     },
     {
       "slug": "homeguard",
@@ -3997,7 +4204,8 @@
       "flags": {
         "system_breaker": false,
         "lifecycle": "active"
-      }
+      },
+      "type": "standalone"
     },
     {
       "slug": "ice-cold",
@@ -4016,7 +4224,8 @@
       "flags": {
         "system_breaker": false,
         "lifecycle": "active"
-      }
+      },
+      "type": "standalone"
     },
     {
       "slug": "infernal-soul",
@@ -4033,7 +4242,8 @@
       "flags": {
         "system_breaker": false,
         "lifecycle": "active"
-      }
+      },
+      "type": "standalone"
     },
     {
       "slug": "its-go-time",
@@ -4045,9 +4255,10 @@
       "name_zh_TW": "該出手了",
       "name_ja": "始まるぞ",
       "name_ko": "출발할 시간",
+      "type": "standalone",
       "flags": {
         "system_breaker": false,
-        "lifecycle": "active"
+        "lifecycle": "added"
       },
       "kit_tags": []
     },
@@ -4074,7 +4285,8 @@
       "flags": {
         "system_breaker": false,
         "lifecycle": "active"
-      }
+      },
+      "type": "standalone"
     },
     {
       "slug": "kill-secured",
@@ -4093,7 +4305,8 @@
       "flags": {
         "system_breaker": false,
         "lifecycle": "active"
-      }
+      },
+      "type": "standalone"
     },
     {
       "slug": "leg-day",
@@ -4112,7 +4325,8 @@
       "flags": {
         "system_breaker": false,
         "lifecycle": "active"
-      }
+      },
+      "type": "standalone"
     },
     {
       "slug": "light-em-up",
@@ -4135,7 +4349,8 @@
       "flags": {
         "system_breaker": false,
         "lifecycle": "active"
-      }
+      },
+      "type": "standalone"
     },
     {
       "slug": "mighty-shield",
@@ -4155,7 +4370,8 @@
       "flags": {
         "system_breaker": false,
         "lifecycle": "active"
-      }
+      },
+      "type": "standalone"
     },
     {
       "slug": "mind-to-matter",
@@ -4177,7 +4393,8 @@
       "flags": {
         "system_breaker": false,
         "lifecycle": "active"
-      }
+      },
+      "type": "standalone"
     },
     {
       "slug": "mountainsoul",
@@ -4193,7 +4410,8 @@
       "flags": {
         "system_breaker": false,
         "lifecycle": "active"
-      }
+      },
+      "type": "standalone"
     },
     {
       "slug": "ocean-soul",
@@ -4214,7 +4432,8 @@
       "flags": {
         "system_breaker": false,
         "lifecycle": "active"
-      }
+      },
+      "type": "standalone"
     },
     {
       "slug": "poltergeist",
@@ -4234,7 +4453,8 @@
       "flags": {
         "system_breaker": false,
         "lifecycle": "active"
-      }
+      },
+      "type": "standalone"
     },
     {
       "slug": "purist-caster",
@@ -4254,7 +4474,8 @@
       "flags": {
         "system_breaker": false,
         "lifecycle": "active"
-      }
+      },
+      "type": "standalone"
     },
     {
       "slug": "pursuit-of-power",
@@ -4266,9 +4487,10 @@
       "name_zh_TW": "追求力量",
       "name_ja": "力の追求",
       "name_ko": "위력 추구",
+      "type": "standalone",
       "flags": {
         "system_breaker": false,
-        "lifecycle": "active"
+        "lifecycle": "added"
       },
       "kit_tags": []
     },
@@ -4289,8 +4511,9 @@
       ],
       "flags": {
         "system_breaker": false,
-        "lifecycle": "active"
-      }
+        "lifecycle": "removed"
+      },
+      "type": "standalone"
     },
     {
       "slug": "scoped-weapons",
@@ -4309,7 +4532,8 @@
       "flags": {
         "system_breaker": false,
         "lifecycle": "active"
-      }
+      },
+      "type": "standalone"
     },
     {
       "slug": "self-destruct",
@@ -4330,8 +4554,9 @@
       "set": "dive_bomb",
       "flags": {
         "system_breaker": false,
-        "lifecycle": "active"
-      }
+        "lifecycle": "removed"
+      },
+      "type": "standalone"
     },
     {
       "slug": "shadow-runner",
@@ -4350,7 +4575,8 @@
       "flags": {
         "system_breaker": false,
         "lifecycle": "active"
-      }
+      },
+      "type": "standalone"
     },
     {
       "slug": "siphon",
@@ -4362,9 +4588,10 @@
       "name_zh_TW": "虹吸",
       "name_ja": "サイフォン",
       "name_ko": "흡수",
+      "type": "ability",
       "flags": {
         "system_breaker": false,
-        "lifecycle": "active"
+        "lifecycle": "added"
       },
       "kit_tags": []
     },
@@ -4389,7 +4616,8 @@
       "flags": {
         "system_breaker": false,
         "lifecycle": "active"
-      }
+      },
+      "type": "standalone"
     },
     {
       "slug": "snowday",
@@ -4401,9 +4629,10 @@
       "name_zh_TW": "降雪之日",
       "name_ja": "スノーデイ",
       "name_ko": "눈 오는 날",
+      "type": "standalone",
       "flags": {
         "system_breaker": false,
-        "lifecycle": "active"
+        "lifecycle": "added"
       },
       "kit_tags": []
     },
@@ -4426,7 +4655,8 @@
       "flags": {
         "system_breaker": false,
         "lifecycle": "active"
-      }
+      },
+      "type": "standalone"
     },
     {
       "slug": "speed-demon",
@@ -4445,8 +4675,9 @@
       ],
       "flags": {
         "system_breaker": false,
-        "lifecycle": "active"
-      }
+        "lifecycle": "removed"
+      },
+      "type": "standalone"
     },
     {
       "slug": "spin-me-right-round",
@@ -4466,7 +4697,8 @@
       "flags": {
         "system_breaker": false,
         "lifecycle": "active"
-      }
+      },
+      "type": "standalone"
     },
     {
       "slug": "spin-to-win",
@@ -4486,7 +4718,8 @@
       "flags": {
         "system_breaker": false,
         "lifecycle": "active"
-      }
+      },
+      "type": "standalone"
     },
     {
       "slug": "stackosaurusrex",
@@ -4502,8 +4735,9 @@
       "set": "stackosaurus_rex",
       "flags": {
         "system_breaker": false,
-        "lifecycle": "active"
-      }
+        "lifecycle": "added"
+      },
+      "type": "standalone"
     },
     {
       "slug": "stats",
@@ -4522,7 +4756,8 @@
       "flags": {
         "system_breaker": false,
         "lifecycle": "active"
-      }
+      },
+      "type": "standalone"
     },
     {
       "slug": "stay-resolute",
@@ -4534,9 +4769,10 @@
       "name_zh_TW": "果斷",
       "name_ja": "固い決意",
       "name_ko": "확고한 의지로",
+      "type": "standalone",
       "flags": {
         "system_breaker": false,
-        "lifecycle": "active"
+        "lifecycle": "added"
       },
       "kit_tags": []
     },
@@ -4550,9 +4786,10 @@
       "name_zh_TW": "任務：專精輔助",
       "name_ja": "クエスト：サポートメイン",
       "name_ko": "퀘스트: 서포터 주력",
+      "type": "quest",
       "flags": {
         "system_breaker": false,
-        "lifecycle": "active"
+        "lifecycle": "added"
       },
       "kit_tags": []
     },
@@ -4574,7 +4811,8 @@
       "flags": {
         "system_breaker": false,
         "lifecycle": "active"
-      }
+      },
+      "type": "standalone"
     },
     {
       "slug": "tank-it-or-leave-it",
@@ -4594,7 +4832,8 @@
       "flags": {
         "system_breaker": false,
         "lifecycle": "active"
-      }
+      },
+      "type": "standalone"
     },
     {
       "slug": "the-brutalizer",
@@ -4614,8 +4853,9 @@
       ],
       "flags": {
         "system_breaker": false,
-        "lifecycle": "active"
-      }
+        "lifecycle": "removed"
+      },
+      "type": "standalone"
     },
     {
       "slug": "tormentor",
@@ -4635,8 +4875,9 @@
       ],
       "flags": {
         "system_breaker": false,
-        "lifecycle": "active"
-      }
+        "lifecycle": "removed"
+      },
+      "type": "standalone"
     },
     {
       "slug": "trusty-weapon",
@@ -4648,9 +4889,10 @@
       "name_zh_TW": "可靠武器",
       "name_ja": "頼れる武器",
       "name_ko": "믿음직한 무기",
+      "type": "standalone",
       "flags": {
         "system_breaker": false,
-        "lifecycle": "active"
+        "lifecycle": "added"
       },
       "kit_tags": []
     },
@@ -4675,7 +4917,8 @@
       "flags": {
         "system_breaker": false,
         "lifecycle": "active"
-      }
+      },
+      "type": "standalone"
     },
     {
       "slug": "typhoon",
@@ -4697,7 +4940,8 @@
       "flags": {
         "system_breaker": false,
         "lifecycle": "active"
-      }
+      },
+      "type": "standalone"
     },
     {
       "slug": "ultimate-unstoppable",
@@ -4717,7 +4961,8 @@
       "flags": {
         "system_breaker": false,
         "lifecycle": "active"
-      }
+      },
+      "type": "standalone"
     },
     {
       "slug": "upgrade-collector",
@@ -4736,7 +4981,8 @@
       "flags": {
         "system_breaker": false,
         "lifecycle": "active"
-      }
+      },
+      "type": "standalone"
     },
     {
       "slug": "upgrade-cutlass",
@@ -4751,8 +4997,9 @@
       "kit_tags": [],
       "flags": {
         "system_breaker": false,
-        "lifecycle": "active"
-      }
+        "lifecycle": "removed"
+      },
+      "type": "standalone"
     },
     {
       "slug": "upgrade-immolate",
@@ -4773,7 +5020,8 @@
       "flags": {
         "system_breaker": false,
         "lifecycle": "active"
-      }
+      },
+      "type": "standalone"
     },
     {
       "slug": "upgrade-thornmail",
@@ -4792,8 +5040,9 @@
       ],
       "flags": {
         "system_breaker": false,
-        "lifecycle": "active"
-      }
+        "lifecycle": "removed"
+      },
+      "type": "standalone"
     },
     {
       "slug": "upgrade-zhonyas",
@@ -4813,7 +5062,8 @@
       "flags": {
         "system_breaker": false,
         "lifecycle": "active"
-      }
+      },
+      "type": "standalone"
     },
     {
       "slug": "weighted-popoffs",
@@ -4832,8 +5082,9 @@
       ],
       "flags": {
         "system_breaker": false,
-        "lifecycle": "active"
-      }
+        "lifecycle": "removed"
+      },
+      "type": "standalone"
     },
     {
       "slug": "wind-beneath-blade",
@@ -4852,8 +5103,9 @@
       ],
       "flags": {
         "system_breaker": false,
-        "lifecycle": "active"
-      }
+        "lifecycle": "removed"
+      },
+      "type": "standalone"
     },
     {
       "slug": "witchful-thinking",
@@ -4872,7 +5124,8 @@
       "flags": {
         "system_breaker": false,
         "lifecycle": "active"
-      }
+      },
+      "type": "standalone"
     },
     {
       "slug": "zealot",
@@ -4893,7 +5146,8 @@
       "flags": {
         "system_breaker": false,
         "lifecycle": "active"
-      }
+      },
+      "type": "standalone"
     }
   ]
 }
