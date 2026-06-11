@@ -722,8 +722,8 @@ function AugmentRow({
           </div>
           {/* Score breakdown pills — hidden on mobile for compact view */}
           <div className="hidden sm:flex gap-1.5 mt-0.5 flex-wrap">
-            {breakdown.setTierBonus > 0 && (
-              <ScorePill label={pillLabels.set} value={breakdown.setTierBonus} />
+            {breakdown.tierBonus > 0 && (
+              <ScorePill label={pillLabels.set} value={breakdown.tierBonus} />
             )}
             {breakdown.comboBonus > 0 && (
               <ScorePill label={pillLabels.combo} value={breakdown.comboBonus} positive />

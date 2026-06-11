@@ -355,7 +355,7 @@ export interface PoolRules {
 // ─── Oracle Score algorithm constants ───
 // Ported from oracle_ghost.py scoring system
 export const SCORE_WEIGHTS = {
-  SET_TIER_BONUS: { prismatic: 14, gold: 10, silver: 6 },
+  TIER_BONUS: { prismatic: 14, gold: 10, silver: 6 },
   STRONG_COMBO_BONUS: 12,
   TRAP_PENALTY: -15,
   RARITY_BONUS: { prismatic: 3, gold: 1, silver: 0 },

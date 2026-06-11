@@ -61,7 +61,7 @@ export interface OracleScoreResult {
   total: number;
   breakdown: {
     championWr: number;
-    setTierBonus: number;
+    tierBonus: number;
     comboBonus: number;
     trapPenalty: number;
     rarityBonus: number;
@@ -115,7 +115,7 @@ export function computeOracleScore(input: OracleScoreInput): OracleScoreResult {
   } = input;
 
   // Validate rarity — malformed JSON can supply an unknown string, which would make
-  // SET_TIER_BONUS and RARITY_BONUS return undefined and silently corrupt the total.
+  // TIER_BONUS and RARITY_BONUS return undefined and silently corrupt the total.
   const rawRarity = augment.rarity;
   const safeRarity: AugmentRarity =
     rawRarity === "prismatic" || rawRarity === "gold" || rawRarity === "silver"
@@ -140,7 +140,7 @@ export function computeOracleScore(input: OracleScoreInput): OracleScoreResult {
   const wr = typeof championWinRate === "number" && Number.isFinite(championWinRate) ? championWinRate : 50;
   const championAdj = (wr - 50) * 0.1;
   const championWr = baseScore + championAdj;
-  const setTierBonus = SCORE_WEIGHTS.SET_TIER_BONUS[safeRarity] ?? 0;
+  const tierBonus = SCORE_WEIGHTS.TIER_BONUS[safeRarity] ?? 0;
   const rarityBonus = SCORE_WEIGHTS.RARITY_BONUS[safeRarity] ?? 0;
 
   const comboBonus =
@@ -217,7 +217,7 @@ export function computeOracleScore(input: OracleScoreInput): OracleScoreResult {
 
   const breakdown = {
     championWr,
-    setTierBonus,
+    tierBonus,
     comboBonus,
     trapPenalty,
     rarityBonus,

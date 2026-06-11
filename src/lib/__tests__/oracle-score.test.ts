@@ -48,6 +48,9 @@ describe("computeOracleScore", () => {
     });
 
     expect(result.breakdown.comboBonus).toBe(SCORE_WEIGHTS.STRONG_COMBO_BONUS);
+    // 26.12: "set tier" meant selection-screen tier — renamed to tierBonus.
+    expect(result.breakdown.tierBonus).toBe(10);
+    expect(result.breakdown).not.toHaveProperty("setTierBonus");
     // 26.12 removed augment sets — the dimension is deleted, not zeroed.
     expect(result.breakdown).not.toHaveProperty("sameSetSynergy");
     expect(result.breakdown.systemBreakerBonus).toBe(SCORE_WEIGHTS.SYSTEM_BREAKER_BONUS);
