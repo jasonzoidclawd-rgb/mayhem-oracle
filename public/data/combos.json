@@ -1,6 +1,6 @@
 {
   "patch": "26.11",
-  "scraped_at": "2026-06-10T23:19:42.210625+00:00",
+  "scraped_at": "2026-06-11T23:15:49.855951+00:00",
   "combos": [
     {
       "champion": "vayne",
@@ -273,6 +273,12 @@
       "ref": "curated:yone-critical-healing"
     },
     {
+      "champion": "ryze",
+      "augment": "Quest: Wooglet's Witchcap",
+      "tier": "S",
+      "ref": "curated:ryze-quest-wooglets-witchcap"
+    },
+    {
       "champion": "fizz",
       "augment": "Fan The Hammer",
       "tier": "S",
@@ -297,6 +303,12 @@
       "ref": "curated:rumble-vulnerability"
     },
     {
+      "champion": "xinzhao",
+      "augment": "Master of Duality",
+      "tier": "S",
+      "ref": "curated:xinzhao-物法皆修无限回血流"
+    },
+    {
       "champion": "aurelionsol",
       "augment": "Ice Cold",
       "tier": "S",
@@ -307,18 +319,6 @@
       "augment": "Skilled Sniper",
       "tier": "S",
       "ref": "curated:missfortune-skilled-sniper"
-    },
-    {
-      "champion": "ryze",
-      "augment": "Quest: Wooglet's Witchcap",
-      "tier": "S",
-      "ref": "curated:ryze-quest-wooglets-witchcap"
-    },
-    {
-      "champion": "xinzhao",
-      "augment": "Master of Duality",
-      "tier": "S",
-      "ref": "curated:xinzhao-物法皆修无限回血流"
     },
     {
       "champion": "lillia",
@@ -447,6 +447,12 @@
       "ref": "curated:lucian-滑板卢仙"
     },
     {
+      "champion": "masteryi",
+      "augment": "Executioner",
+      "tier": "S",
+      "ref": "curated:masteryi-executioner"
+    },
+    {
       "champion": "seraphine",
       "augment": "Slap Around",
       "tier": "S",
@@ -490,7 +496,7 @@
     },
     {
       "champion": "aurelionsol",
-      "augment": "StackosaurusRex",
+      "augment": "Stackosaurus Rex",
       "tier": "S",
       "ref": "curated:aurelionsol-stackosaurusrex"
     },
@@ -667,12 +673,6 @@
       "augment": "Back To Basics",
       "tier": "S",
       "ref": "curated:zed-回归基本功劫"
-    },
-    {
-      "champion": "masteryi",
-      "augment": "Executioner",
-      "tier": "S",
-      "ref": "curated:masteryi-暴击流剑圣"
     },
     {
       "champion": "masteryi",
@@ -883,6 +883,12 @@
       "augment": "Protein Shake",
       "tier": "S",
       "ref": "curated:mordekaiser-protein-shake"
+    },
+    {
+      "champion": "katarina",
+      "augment": "Ethereal Weapon",
+      "tier": "S",
+      "ref": "curated:katarina-ethereal-weapon"
     },
     {
       "champion": "ekko",
@@ -1107,12 +1113,6 @@
       "ref": "curated:zyra-ethereal-weapon"
     },
     {
-      "champion": "katarina",
-      "augment": "Ethereal Weapon",
-      "tier": "S",
-      "ref": "curated:katarina-ethereal-weapon"
-    },
-    {
       "champion": "nautilus",
       "augment": "Courage of the Colossus",
       "tier": "S",
@@ -1126,7 +1126,7 @@
     },
     {
       "champion": "kindred",
-      "augment": "StackosaurusRex",
+      "augment": "Stackosaurus Rex",
       "tier": "S",
       "ref": "curated:kindred-stackosaurusrex"
     },
@@ -1396,7 +1396,7 @@
     },
     {
       "champion": "senna",
-      "augment": "StackosaurusRex",
+      "augment": "Stackosaurus Rex",
       "tier": "S",
       "ref": "curated:senna-stackosaurusrex"
     },
@@ -2565,6 +2565,12 @@
       "ref": "curated:tryndamere-ultimate_revolution"
     },
     {
+      "champion": "vayne",
+      "augment": "Protein Shake",
+      "tier": "A",
+      "ref": "curated:vayne-攻速治疗"
+    },
+    {
       "champion": "morgana",
       "augment": "Infernal Conduit",
       "tier": "A",
@@ -2575,6 +2581,12 @@
       "augment": "Heavy Hitter",
       "tier": "A",
       "ref": "curated:drmundo-heavy-hitter"
+    },
+    {
+      "champion": "malzahar",
+      "augment": "Ethereal Weapon",
+      "tier": "A",
+      "ref": "curated:malzahar-ethereal-weapon"
     },
     {
       "champion": "lillia",
@@ -2601,22 +2613,10 @@
       "ref": "curated:vayne-暴击流"
     },
     {
-      "champion": "vayne",
-      "augment": "Protein Shake",
-      "tier": "A",
-      "ref": "curated:vayne-攻速治疗"
-    },
-    {
       "champion": "yasuo",
       "augment": "Courage of the Colossus",
       "tier": "A",
       "ref": "curated:yasuo-肉到爆炸-仅供娱乐"
-    },
-    {
-      "champion": "malzahar",
-      "augment": "Ethereal Weapon",
-      "tier": "A",
-      "ref": "curated:malzahar-ethereal-weapon"
     },
     {
       "champion": "fiddlesticks",
