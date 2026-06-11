@@ -358,7 +358,6 @@ export const SCORE_WEIGHTS = {
   SET_TIER_BONUS: { prismatic: 14, gold: 10, silver: 6 },
   STRONG_COMBO_BONUS: 12,
   TRAP_PENALTY: -15,
-  SAME_SET_SYNERGY: 2,
   RARITY_BONUS: { prismatic: 3, gold: 1, silver: 0 },
   // Qualitative change augments (質變增幅) get a special multiplier
   // because they rewrite champion mechanics, not just boost numbers.

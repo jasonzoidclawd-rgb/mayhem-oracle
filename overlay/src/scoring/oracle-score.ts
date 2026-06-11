@@ -5,7 +5,7 @@
  * and the augments already picked in earlier rounds.
  *
  * score = champion_wr + set_tier_bonus + combo_bonus + trap_penalty
- *       + same_set_synergy + rarity_bonus + system_breaker_bonus
+ *       + rarity_bonus + system_breaker_bonus
  *       + ability_type_synergy + attack_type_synergy + cc_synergy
  *       + mechanical_interaction
  */
@@ -49,10 +49,6 @@ export interface OracleScoreInput {
   championWinRate?: number;
   /** Combo tier for this augment × champion pair, if known */
   comboTier?: ComboTier;
-  /** Augment set IDs already picked (for same-set synergy bonus) */
-  pickedSetIds?: string[];
-  /** Set ID of this augment, if it belongs to one */
-  augmentSetId?: string;
   /** Whether this augment is a system breaker (qualitative change / 質變增幅) */
   isSystemBreaker?: boolean;
   /** Champion ability profile from CommunityDragon */
@@ -68,7 +64,6 @@ export interface OracleScoreResult {
     setTierBonus: number;
     comboBonus: number;
     trapPenalty: number;
-    sameSetSynergy: number;
     rarityBonus: number;
     systemBreakerBonus: number;
     abilityTypeSynergy: number;
@@ -114,8 +109,6 @@ export function computeOracleScore(input: OracleScoreInput): OracleScoreResult {
     augment,
     championWinRate,
     comboTier,
-    pickedSetIds = [],
-    augmentSetId,
     isSystemBreaker = false,
     abilityProfile,
     mechanicalInteraction: interactionSignal,
@@ -154,11 +147,6 @@ export function computeOracleScore(input: OracleScoreInput): OracleScoreResult {
     safeComboTier === "S" ? SCORE_WEIGHTS.STRONG_COMBO_BONUS : 0;
   const trapPenalty =
     safeComboTier === "C" ? SCORE_WEIGHTS.TRAP_PENALTY : 0;
-
-  const sameSetSynergy =
-    augmentSetId && pickedSetIds.includes(augmentSetId)
-      ? SCORE_WEIGHTS.SAME_SET_SYNERGY
-      : 0;
 
   const systemBreakerBonus = isSystemBreaker
     ? SCORE_WEIGHTS.SYSTEM_BREAKER_BONUS
@@ -232,7 +220,6 @@ export function computeOracleScore(input: OracleScoreInput): OracleScoreResult {
     setTierBonus,
     comboBonus,
     trapPenalty,
-    sameSetSynergy,
     rarityBonus,
     systemBreakerBonus,
     abilityTypeSynergy,
