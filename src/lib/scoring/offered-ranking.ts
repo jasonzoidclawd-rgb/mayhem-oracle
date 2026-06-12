@@ -8,6 +8,7 @@ import {
   type ComboTier,
   type ScoredAugment,
 } from "./oracle-score";
+import { abilityAugmentFit } from "./ability-augment-fit";
 import {
   analyzeInteractions,
   type AugmentMechanic,
@@ -22,7 +23,6 @@ export type RankingStatus = "ranked" | "incomplete-offers";
 export type RankingConfidence = "high" | "medium" | "low";
 export type RankingReasonSource =
   | "oracle-score"
-  | "augment-set-metadata"
   | "combo-table"
   | "curated-mode-rule"
   | "augment-description-inference"
@@ -71,6 +71,7 @@ export interface RankingAugment {
   slug: string;
   name: string;
   rarity: AugmentRarity;
+  type?: "ability" | "quest" | "standalone";
   win_rate: number | null;
   icon: string;
   set?: string;
@@ -146,11 +147,6 @@ export interface RankOfferedAugmentsInput {
   shopAvailability?: {
     status: "open" | "closed" | "unknown" | string;
   };
-}
-
-function normalizeSetId(setId: string | undefined): string | undefined {
-  const normalized = setId?.trim().toLowerCase();
-  return normalized || undefined;
 }
 
 function roundScore(score: number): number {
@@ -298,6 +294,12 @@ function addBreakdownReasons(
   if ((breakdown.tagMismatch ?? 0) < 0) {
     reasons.push(reason("tag-mismatch", "oracle-score", "medium"));
   }
+  if ((breakdown.abilityAugmentFit ?? 0) > 0) {
+    reasons.push(reason("ability-augment-fit", "oracle-score", "medium"));
+  }
+  if ((breakdown.abilityAugmentFit ?? 0) < 0) {
+    reasons.push(reason("ability-augment-misfit", "oracle-score", "medium"));
+  }
 }
 
 function strongestInteractionsBySlug(input: RankOfferedAugmentsInput, offeredAugments: RankingAugment[]): Map<string, MechanicalInteraction> {
@@ -345,9 +347,6 @@ export function rankOfferedAugments(input: RankOfferedAugmentsInput): OfferedRan
     return { status: "incomplete-offers", rankings: [] };
   }
 
-  const pickedSetIds = (input.ownedAugments ?? [])
-    .map((augment) => normalizeSetId(augment.set))
-    .filter((setId): setId is string => Boolean(setId));
   const duplicateSlugs = new Set(
     offeredAugments
       .map((augment) => normalizeAugmentSlug(augment.slug))
@@ -370,28 +369,30 @@ export function rankOfferedAugments(input: RankOfferedAugmentsInput): OfferedRan
   const mechanicalInteractions = strongestInteractionsBySlug(input, offeredAugments);
 
   const ranked = offeredAugments.map((augment, originalIndex) => {
-    const augmentSetId = normalizeSetId(augment.set);
     const isDuplicate = duplicateSlugs.has(normalizeAugmentSlug(augment.slug));
     const combo = input.comboMetadataBySlot?.[originalIndex]
       ?? (isDuplicate ? undefined : lookupBySlug(input.comboMetadata, augment.slug));
     const mechanicalInteraction = mechanicalInteractions.get(normalizeAugmentSlug(augment.slug));
+    const fitSignal = abilityAugmentFit(
+      {
+        slug: augment.slug,
+        type: augment.type,
+        wikiDescription: augment.wikiDescription ?? augment.description,
+      },
+      input.champion.abilityProfile,
+    );
     const oracle = computeOracleScore({
       augment: augment as ScoredAugment,
       championWinRate: input.champion.win_rate ?? input.champion.winRate,
       comboTier: combo?.tier,
-      pickedSetIds,
-      augmentSetId,
       abilityProfile: input.champion.abilityProfile,
       isSystemBreaker: augment.flags?.system_breaker === true,
       mechanicalInteraction,
+      abilityAugmentFit: fitSignal,
     });
     const explicitBreakdown = input.scoreBreakdownsBySlot?.[originalIndex]
       ?? (isDuplicate ? undefined : lookupBySlug(input.scoreBreakdowns, augment.slug));
     const reasons: OfferedRankingReason[] = [];
-
-    if (augmentSetId && pickedSetIds.includes(augmentSetId)) {
-      reasons.push(reason("same-set-2-piece-progress", "augment-set-metadata", "high"));
-    }
 
     addBreakdownReasons(reasons, oracle.breakdown, combo);
     if (mechanicalInteraction && oracle.breakdown.mechanicalInteraction !== 0) {

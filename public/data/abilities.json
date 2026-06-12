@@ -1,5 +1,5 @@
 {
-  "scraped_at": "2026-06-11T23:17:45.740Z",
+  "scraped_at": "2026-06-11T12:46:27.230Z",
   "profiles": {
     "brand": {
       "damageType": "magic",
@@ -63,7 +63,9 @@
               "Trait_Ranged_StopsFirstHit",
               "Trait_Low_Damage"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "projectile": true,
+            "longRange": true
           }
         },
         {
@@ -102,7 +104,8 @@
               "Trait_Target_Area",
               "Trait_AoE"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "longRange": true
           }
         },
         {
@@ -199,7 +202,8 @@
           "description": "Yasuo's Critical Strike Chance is increased. Additionally, Yasuo builds toward a shield whenever he is moving. The shield triggers when he takes damage from a champion or monster.",
           "stats": {
             "apRatio": 0.65,
-            "damageType": "magic"
+            "damageType": "magic",
+            "shield": true
           }
         },
         {
@@ -236,7 +240,10 @@
               "Trait_AoE"
             ],
             "isAoe": true,
-            "isOnHit": true
+            "isOnHit": true,
+            "projectile": true,
+            "knockup": true,
+            "recast": true
           }
         },
         {
@@ -294,7 +301,8 @@
               "PositiveEffect_MoveBlock",
               "Trait_DamageAbility",
               "Trait_Low_Damage"
-            ]
+            ],
+            "dash": true
           }
         },
         {
@@ -330,7 +338,10 @@
               "Trait_SignatureSpell",
               "Trait_AoE"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "knockup": true,
+            "dash": true,
+            "longRange": true
           }
         }
       ]
@@ -351,7 +362,9 @@
           "name": "Soul Siphon",
           "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/characters/morgana/hud/icons2d/fallenangel_empathize.png",
           "description": "Morgana drains spirit from her enemies, healing as she deals damage to champions, large minions, and medium and larger jungler monsters.",
-          "stats": {}
+          "stats": {
+            "heal": true
+          }
         },
         {
           "key": "Q",
@@ -376,7 +389,9 @@
               "Trait_DamageAbility",
               "Trait_SignatureSpell"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "projectile": true,
+            "longRange": true
           }
         },
         {
@@ -416,7 +431,8 @@
               "Trait_AoE"
             ],
             "isDot": true,
-            "isAoe": true
+            "isAoe": true,
+            "longRange": true
           }
         },
         {
@@ -443,7 +459,8 @@
               "Trait_Shield",
               "Trait_CCImmune"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "shield": true
           }
         },
         {
@@ -496,7 +513,9 @@
           "name": "Goes Where He Pleases",
           "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/characters/drmundo/hud/icons2d/drmundo_p.png",
           "description": "Dr. Mundo resists the first Immobilizing effect that hits him, instead losing Health and dropping a chemical cannister nearby. Dr. Mundo can pick it up by walking over it, restoring Health and reducing this Ability's Cooldown.Dr. Mundo also has significantly increased Health regeneration.",
-          "stats": {}
+          "stats": {
+            "heal": true
+          }
         },
         {
           "key": "Q",
@@ -520,7 +539,10 @@
               "Trait_SignatureSpell",
               "Trait_Ranged_StopsFirstHit"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "projectile": true,
+            "heal": true,
+            "longRange": true
           }
         },
         {
@@ -553,7 +575,9 @@
               "Trait_Low_Damage",
               "Trait_AoE"
             ],
-            "isDot": true
+            "isDot": true,
+            "recast": true,
+            "heal": true
           }
         },
         {
@@ -605,7 +629,8 @@
               "Trait_ActiveHeal",
               "Trait_AttackBuff_Duration"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "heal": true
           }
         }
       ]
@@ -626,7 +651,9 @@
           "name": "New Destiny",
           "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/characters/graves/hud/icons2d/gravesp.png",
           "description": "Graves' shotgun has some unique properties. He must reload when he runs out of ammo. Attacks fire 4 bullets, which cannot pass through units. Non-champions struck by multiple bullets are knocked back.",
-          "stats": {}
+          "stats": {
+            "knockback": true
+          }
         },
         {
           "key": "Q",
@@ -659,7 +686,8 @@
               "Trait_SignatureSpell",
               "Trait_AoE"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "longRange": true
           }
         },
         {
@@ -698,7 +726,8 @@
               "Trait_Low_Damage",
               "Trait_AoE"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "longRange": true
           }
         },
         {
@@ -730,7 +759,8 @@
               "Trait_PlayerSelectedDashDirection"
             ],
             "isAoe": true,
-            "isOnHit": true
+            "isOnHit": true,
+            "dash": true
           }
         },
         {
@@ -766,7 +796,9 @@
               "Trait_DamageAbility",
               "Trait_AoE"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "projectile": true,
+            "longRange": true
           }
         }
       ]
@@ -788,7 +820,8 @@
           "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/characters/xinzhao/hud/icons2d/xinzhaoreworkp.png",
           "description": "Every third attack deals bonus damage and heals Xin Zhao.",
           "stats": {
-            "isAoe": true
+            "isAoe": true,
+            "heal": true
           }
         },
         {
@@ -825,7 +858,8 @@
               "Trait_DamageAbility",
               "Trait_Strike"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "knockup": true
           }
         },
         {
@@ -869,7 +903,10 @@
               "Trait_Melee_SmallWindup",
               "Trait_AoE"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "projectile": true,
+            "heal": true,
+            "longRange": true
           }
         },
         {
@@ -944,7 +981,9 @@
               "Trait_Melee_SmallWindup",
               "Trait_AoE"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "knockup": true,
+            "knockback": true
           }
         }
       ]
@@ -966,7 +1005,8 @@
           "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/characters/vayne/hud/icons2d/vayne_p.png",
           "description": "Vayne ruthlessly hunts evil-doers, gaining Move Speed when moving toward nearby enemy champions.",
           "stats": {
-            "range": 2000
+            "range": 2000,
+            "longRange": true
           }
         },
         {
@@ -1000,7 +1040,8 @@
               "PositiveEffect_EmpowerAttack"
             ],
             "isAoe": true,
-            "isOnHit": true
+            "isOnHit": true,
+            "dash": true
           }
         },
         {
@@ -1015,7 +1056,8 @@
             "tags": [
               "Trait_PassiveSlot"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "projectile": true
           }
         },
         {
@@ -1045,7 +1087,9 @@
               "Trait_KnockBack",
               "Trait_Low_Damage"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "projectile": true,
+            "knockback": true
           }
         },
         {
@@ -1119,7 +1163,9 @@
               "Trait_AoE"
             ],
             "isAoe": true,
-            "isOnHit": true
+            "isOnHit": true,
+            "projectile": true,
+            "recast": true
           }
         },
         {
@@ -1152,7 +1198,9 @@
               "Trait_SignatureSpell",
               "Trait_Ranged_StopsFirstHit"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "projectile": true,
+            "longRange": true
           }
         },
         {
@@ -1183,7 +1231,8 @@
               "Trait_Low_Damage",
               "Trait_AoE"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "longRange": true
           }
         },
         {
@@ -1217,7 +1266,9 @@
               "Trait_RecastOrReplaceSpell",
               "Trait_AoE"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "projectile": true,
+            "recast": true
           }
         }
       ]
@@ -1299,7 +1350,8 @@
               "Trait_DamageAbility",
               "Trait_AoE"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "dash": true
           }
         },
         {
@@ -1329,7 +1381,8 @@
               "Trait_Low_Damage",
               "Trait_AoE"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "projectile": true
           }
         },
         {
@@ -1358,7 +1411,8 @@
               "Trait_DamageAbility",
               "Trait_AoE"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "longRange": true
           }
         }
       ]
@@ -1380,7 +1434,8 @@
           "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/characters/sett/hud/icons2d/sett_p.png",
           "description": "Sett's basic attacks alternate between left and right punch. Right punch is slightly stronger and faster. Sett also hates losing, gaining additional health regeneration based off of his missing health.",
           "stats": {
-            "isOnHit": true
+            "isOnHit": true,
+            "heal": true
           }
         },
         {
@@ -1441,7 +1496,8 @@
               "Trait_Melee_BigWindup",
               "Trait_AoE"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "shield": true
           }
         },
         {
@@ -1569,7 +1625,9 @@
               "Trait_Ranged_Piercing",
               "Trait_AoE"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "projectile": true,
+            "longRange": true
           }
         },
         {
@@ -1644,7 +1702,8 @@
               "Trait_Ranged_StopsFirstHit",
               "Trait_Low_Damage"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "projectile": true
           }
         },
         {
@@ -1680,7 +1739,8 @@
               "Trait_ChannelSpell",
               "Trait_DamageAbility"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "longRange": true
           }
         }
       ]
@@ -1733,7 +1793,8 @@
               "Trait_DoT",
               "Trait_Ranged_StopsFirstHit",
               "Trait_AoE"
-            ]
+            ],
+            "projectile": true
           }
         },
         {
@@ -1762,7 +1823,10 @@
               "Trait_PlayerSelectedDashDirection",
               "Trait_RecastOrReplaceSpell"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "recast": true,
+            "dash": true,
+            "longRange": true
           }
         },
         {
@@ -1837,7 +1901,8 @@
               "Trait_Target_Area",
               "Trait_AoE"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "longRange": true
           }
         }
       ]
@@ -1921,7 +1986,8 @@
             "tags": [
               "Trait_AoE"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "longRange": true
           }
         },
         {
@@ -1962,7 +2028,9 @@
               "Trait_Low_Damage",
               "Trait_AoE"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "projectile": true,
+            "recast": true
           }
         },
         {
@@ -2060,7 +2128,8 @@
               "Trait_Low_Damage",
               "Trait_AoE"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "longRange": true
           }
         },
         {
@@ -2299,7 +2368,8 @@
               "Trait_AoE"
             ],
             "isDot": true,
-            "isAoe": true
+            "isAoe": true,
+            "longRange": true
           }
         },
         {
@@ -2395,7 +2465,8 @@
               "Trait_Target_Directional",
               "Trait_Melee_SmallWindup",
               "Trait_AoE"
-            ]
+            ],
+            "projectile": true
           }
         },
         {
@@ -2428,7 +2499,9 @@
               "Trait_DamageAbility",
               "Trait_Low_Damage",
               "Trait_AoE"
-            ]
+            ],
+            "projectile": true,
+            "longRange": true
           }
         },
         {
@@ -2464,7 +2537,8 @@
               "PositiveEffect_MoveBlock",
               "Trait_AttackReset",
               "Trait_PlayerSelectedDashDirection"
-            ]
+            ],
+            "dash": true
           }
         },
         {
@@ -2498,7 +2572,8 @@
               "Trait_DamageAbility",
               "Trait_DoT",
               "Trait_AoE"
-            ]
+            ],
+            "longRange": true
           }
         }
       ]
@@ -2560,7 +2635,11 @@
               "Trait_AoE"
             ],
             "isAoe": true,
-            "isOnHit": true
+            "isOnHit": true,
+            "projectile": true,
+            "knockup": true,
+            "recast": true,
+            "dash": true
           }
         },
         {
@@ -2592,7 +2671,8 @@
               "Trait_Melee_SmallWindup",
               "Trait_AoE"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "shield": true
           }
         },
         {
@@ -2613,7 +2693,9 @@
             "tags": [
               "Trait_PlayerSelectedDashDirection",
               "Trait_RecastOrReplaceSpell"
-            ]
+            ],
+            "recast": true,
+            "dash": true
           }
         },
         {
@@ -2650,7 +2732,11 @@
               "Trait_KnockBack",
               "Trait_AoE"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "projectile": true,
+            "knockback": true,
+            "dash": true,
+            "longRange": true
           }
         }
       ]
@@ -2714,7 +2800,8 @@
               "Trait_DoT",
               "Trait_AoE"
             ],
-            "isDot": true
+            "isDot": true,
+            "projectile": true
           }
         },
         {
@@ -2754,7 +2841,8 @@
               "Trait_SignatureSpell",
               "Trait_Low_Damage",
               "Trait_AoE"
-            ]
+            ],
+            "recast": true
           }
         },
         {
@@ -2791,7 +2879,9 @@
               "Trait_PlayerSelectedDashDirection",
               "Trait_DamageAbility"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "knockup": true,
+            "dash": true
           }
         },
         {
@@ -2832,7 +2922,10 @@
               "Trait_Shield",
               "Trait_AoE"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "knockup": true,
+            "shield": true,
+            "longRange": true
           }
         }
       ]
@@ -2891,7 +2984,8 @@
               "Trait_Ranged_Piercing",
               "Trait_AoE"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "projectile": true
           }
         },
         {
@@ -2935,7 +3029,8 @@
               "Trait_AoE"
             ],
             "isAoe": true,
-            "isOnHit": true
+            "isOnHit": true,
+            "recast": true
           }
         },
         {
@@ -2996,7 +3091,9 @@
               "Trait_Ultimate",
               "Trait_RecastOrReplaceSpell"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "recast": true,
+            "longRange": true
           }
         }
       ]
@@ -3020,7 +3117,8 @@
           "stats": {
             "range": 1500,
             "damageType": "magic",
-            "isOnHit": true
+            "isOnHit": true,
+            "longRange": true
           }
         },
         {
@@ -3057,7 +3155,8 @@
               "Trait_Target_Directional",
               "Trait_Melee_SmallWindup",
               "Trait_AoE"
-            ]
+            ],
+            "shield": true
           }
         },
         {
@@ -3089,7 +3188,10 @@
               "Trait_Shield",
               "Trait_SignatureSpell",
               "Trait_AoE"
-            ]
+            ],
+            "knockup": true,
+            "shield": true,
+            "dash": true
           }
         },
         {
@@ -3113,7 +3215,8 @@
             "tags": [
               "PositiveEffect_Boon"
             ],
-            "isOnHit": true
+            "isOnHit": true,
+            "longRange": true
           }
         },
         {
@@ -3218,7 +3321,9 @@
               "Trait_DamageAbility",
               "Trait_SignatureSpell",
               "Trait_Ranged_StopsFirstHit"
-            ]
+            ],
+            "projectile": true,
+            "longRange": true
           }
         },
         {
@@ -3329,7 +3434,8 @@
               "Trait_Ultimate",
               "PositiveEffect_Teleport"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "longRange": true
           }
         }
       ]
@@ -3357,7 +3463,8 @@
               2,
               2,
               2
-            ]
+            ],
+            "heal": true
           }
         },
         {
@@ -3392,7 +3499,8 @@
               "Trait_DamageAbility",
               "Trait_SignatureSpell",
               "Trait_AoE"
-            ]
+            ],
+            "dash": true
           }
         },
         {
@@ -3460,7 +3568,8 @@
             "tags": [
               "PositiveEffect_MoveBlock",
               "Trait_ActiveHeal"
-            ]
+            ],
+            "heal": true
           }
         },
         {
@@ -3497,7 +3606,9 @@
               "Trait_RecastOrReplaceSpell",
               "Trait_ActiveHeal",
               "Trait_AoE"
-            ]
+            ],
+            "recast": true,
+            "heal": true
           }
         }
       ]
@@ -3584,7 +3695,8 @@
               "Trait_Parry"
             ],
             "isDot": true,
-            "isAoe": true
+            "isAoe": true,
+            "heal": true
           }
         },
         {
@@ -3714,7 +3826,9 @@
               "Trait_AoE"
             ],
             "isDot": true,
-            "isAoe": true
+            "isAoe": true,
+            "projectile": true,
+            "longRange": true
           }
         },
         {
@@ -3735,7 +3849,8 @@
             ],
             "tags": [
               "PositiveEffect_Boon"
-            ]
+            ],
+            "dash": true
           }
         },
         {
@@ -3824,7 +3939,8 @@
               "Trait_SignatureSpell",
               "Trait_AoE"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "longRange": true
           }
         },
         {
@@ -3856,7 +3972,9 @@
               "Trait_ActiveHeal",
               "Trait_Shield",
               "Trait_AoE"
-            ]
+            ],
+            "heal": true,
+            "shield": true
           }
         },
         {
@@ -3892,7 +4010,9 @@
               "Trait_DamageAbility",
               "Trait_Ranged_Piercing",
               "Trait_AoE"
-            ]
+            ],
+            "projectile": true,
+            "longRange": true
           }
         },
         {
@@ -3988,7 +4108,10 @@
               "Trait_DamageAbility",
               "Trait_ActiveHeal",
               "Trait_SignatureSpell"
-            ]
+            ],
+            "projectile": true,
+            "heal": true,
+            "longRange": true
           }
         },
         {
@@ -4031,7 +4154,11 @@
               "Trait_Target_Area",
               "Trait_Ranged_StopsFirstHit"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "projectile": true,
+            "knockup": true,
+            "dash": true,
+            "longRange": true
           }
         },
         {
@@ -4051,7 +4178,10 @@
             "tags": [
               "PositiveEffect_Boon",
               "Trait_Shield"
-            ]
+            ],
+            "heal": true,
+            "shield": true,
+            "longRange": true
           }
         },
         {
@@ -4078,7 +4208,8 @@
               "Trait_ImmobilizingCCSpell",
               "Trait_DamageAbility",
               "Trait_Shield"
-            ]
+            ],
+            "shield": true
           }
         }
       ]
@@ -4170,7 +4301,8 @@
               "Trait_AoE"
             ],
             "isDot": true,
-            "isAoe": true
+            "isAoe": true,
+            "heal": true
           }
         },
         {
@@ -4207,7 +4339,9 @@
               "Trait_Strike"
             ],
             "isAoe": true,
-            "isOnHit": true
+            "isOnHit": true,
+            "knockup": true,
+            "knockback": true
           }
         },
         {
@@ -4246,7 +4380,8 @@
               "Trait_DamageAbility",
               "Trait_AoE"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "dash": true
           }
         }
       ]
@@ -4304,7 +4439,8 @@
               "Trait_AoE"
             ],
             "isDot": true,
-            "isAoe": true
+            "isAoe": true,
+            "projectile": true
           }
         },
         {
@@ -4334,7 +4470,8 @@
             "tags": [
               "Trait_Shield"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "shield": true
           }
         },
         {
@@ -4367,7 +4504,8 @@
               "Trait_Ammo",
               "Trait_Ranged_StopsFirstHit"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "projectile": true
           }
         },
         {
@@ -4401,7 +4539,9 @@
               "Trait_AoE"
             ],
             "isDot": true,
-            "isAoe": true
+            "isAoe": true,
+            "projectile": true,
+            "longRange": true
           }
         }
       ]
@@ -4455,7 +4595,8 @@
               110,
               120
             ],
-            "damageType": "magic"
+            "damageType": "magic",
+            "projectile": true
           }
         },
         {
@@ -4553,7 +4694,8 @@
               "Trait_Ultimate",
               "Trait_DoT"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "longRange": true
           }
         }
       ]
@@ -4607,7 +4749,9 @@
               "Trait_Ranged_Piercing",
               "Trait_Low_Damage",
               "Trait_AoE"
-            ]
+            ],
+            "projectile": true,
+            "longRange": true
           }
         },
         {
@@ -4638,7 +4782,9 @@
               "Trait_ActiveHeal",
               "Trait_AttackBuff_Duration"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "heal": true,
+            "longRange": true
           }
         },
         {
@@ -4697,7 +4843,8 @@
               "Trait_Immune",
               "Trait_AoE"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "longRange": true
           }
         }
       ]
@@ -4719,7 +4866,9 @@
           "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/characters/swain/hud/icons2d/swain_p.png",
           "description": "Swain's ravens collect Soul Fragments that heal him and permanently increase his maximum health.",
           "stats": {
-            "range": 1150
+            "range": 1150,
+            "heal": true,
+            "longRange": true
           }
         },
         {
@@ -4758,7 +4907,8 @@
               "Trait_Ranged_Piercing",
               "Trait_AoE"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "projectile": true
           }
         },
         {
@@ -4799,7 +4949,8 @@
               "Trait_Ranged_Zone",
               "Trait_AoE"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "longRange": true
           }
         },
         {
@@ -4831,7 +4982,8 @@
               "Trait_Low_Damage",
               "Trait_AoE"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "projectile": true
           }
         },
         {
@@ -4864,7 +5016,9 @@
               "Trait_AoE"
             ],
             "isDot": true,
-            "isAoe": true
+            "isAoe": true,
+            "recast": true,
+            "heal": true
           }
         }
       ]
@@ -4953,7 +5107,9 @@
               "Trait_Ranged_StopsFirstHit",
               "Trait_AoE"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "projectile": true,
+            "longRange": true
           }
         },
         {
@@ -5019,7 +5175,8 @@
               "Trait_DamageAbility",
               "Trait_AoE"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "projectile": true
           }
         }
       ]
@@ -5086,7 +5243,9 @@
               "Trait_Target_Directional",
               "Trait_Ranged_Piercing",
               "Trait_AoE"
-            ]
+            ],
+            "projectile": true,
+            "heal": true
           }
         },
         {
@@ -5128,7 +5287,9 @@
               "Trait_Low_Damage",
               "Trait_AoE"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "projectile": true,
+            "longRange": true
           }
         },
         {
@@ -5185,7 +5346,9 @@
               "Trait_Melee_BigWindup",
               "Trait_AoE"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "projectile": true,
+            "shield": true
           }
         }
       ]
@@ -5227,7 +5390,8 @@
             ],
             "range": 1200,
             "damageType": "magic",
-            "isAoe": true
+            "isAoe": true,
+            "longRange": true
           }
         },
         {
@@ -5262,7 +5426,8 @@
               "Trait_SignatureSpell",
               "Trait_AoE"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "projectile": true
           }
         },
         {
@@ -5327,7 +5492,9 @@
               "Trait_Ranged_Piercing",
               "Trait_AoE"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "projectile": true,
+            "longRange": true
           }
         },
         {
@@ -5365,7 +5532,8 @@
               "Trait_Target_Area",
               "Trait_AoE"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "knockup": true
           }
         }
       ]
@@ -5419,7 +5587,8 @@
               "Trait_AoE"
             ],
             "isDot": true,
-            "isAoe": true
+            "isAoe": true,
+            "recast": true
           }
         },
         {
@@ -5449,7 +5618,8 @@
               "Trait_Ranged_Zone",
               "Trait_AoE"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "longRange": true
           }
         },
         {
@@ -5490,7 +5660,9 @@
               "Trait_KnockBack",
               "Trait_Low_Damage"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "knockup": true,
+            "knockback": true
           }
         },
         {
@@ -5515,7 +5687,8 @@
               "Trait_ActiveHeal"
             ],
             "isDot": true,
-            "isAoe": true
+            "isAoe": true,
+            "heal": true
           }
         }
       ]
@@ -5538,7 +5711,8 @@
           "description": "After killing 9 minions or monsters, Ahri heals.After taking down an enemy champion, Ahri heals for a greater amount.",
           "stats": {
             "apRatio": 0.3,
-            "damageType": "magic"
+            "damageType": "magic",
+            "heal": true
           }
         },
         {
@@ -5578,7 +5752,9 @@
               "Trait_Melee_SmallWindup",
               "Trait_AoE"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "projectile": true,
+            "longRange": true
           }
         },
         {
@@ -5648,7 +5824,9 @@
               "Trait_DamageAbility",
               "Trait_Ranged_StopsFirstHit"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "projectile": true,
+            "longRange": true
           }
         },
         {
@@ -5683,7 +5861,9 @@
               "Trait_Ammo",
               "Trait_AoE"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "recast": true,
+            "dash": true
           }
         }
       ]
@@ -5704,7 +5884,9 @@
           "name": "Glory in Death",
           "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/characters/sion/hud/icons2d/sion_passive1.png",
           "description": "After being killed, Sion will temporarily reanimate with rapidly decaying Health. His attacks become very rapid, heal him, and deal bonus damage based on his target's maximum Health.",
-          "stats": {}
+          "stats": {
+            "heal": true
+          }
         },
         {
           "key": "Q",
@@ -5740,7 +5922,8 @@
               "Trait_Melee_BigWindup",
               "Trait_AoE"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "knockup": true
           }
         },
         {
@@ -5780,7 +5963,9 @@
               "Trait_Low_Damage",
               "Trait_AoE"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "recast": true,
+            "shield": true
           }
         },
         {
@@ -5820,7 +6005,8 @@
               "Trait_Low_Damage",
               "Trait_AoE"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "knockback": true
           }
         },
         {
@@ -5854,7 +6040,11 @@
               "Trait_RecastOrReplaceSpell",
               "Trait_AoE"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "projectile": true,
+            "knockup": true,
+            "recast": true,
+            "longRange": true
           }
         }
       ]
@@ -5913,7 +6103,8 @@
               "Trait_SignatureSpell",
               "Trait_AoE"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "projectile": true
           }
         },
         {
@@ -5952,7 +6143,9 @@
               "Trait_Ranged_StopsFirstHit"
             ],
             "isAoe": true,
-            "isOnHit": true
+            "isOnHit": true,
+            "projectile": true,
+            "longRange": true
           }
         },
         {
@@ -6014,7 +6207,10 @@
               "Trait_AttackReset",
               "Trait_Shield"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "shield": true,
+            "dash": true,
+            "longRange": true
           }
         }
       ]
@@ -6076,7 +6272,8 @@
               "Trait_Ranged_Piercing",
               "Trait_AoE"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "projectile": true
           }
         },
         {
@@ -6116,7 +6313,8 @@
               "Trait_Target_Area",
               "Trait_AoE"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "longRange": true
           }
         },
         {
@@ -6157,7 +6355,9 @@
               "Trait_Ranged_StopsFirstHit",
               "Trait_Low_Damage"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "projectile": true,
+            "longRange": true
           }
         },
         {
@@ -6194,7 +6394,9 @@
               "Trait_DamageAbility",
               "Trait_RecastOrReplaceSpell",
               "Trait_AoE"
-            ]
+            ],
+            "recast": true,
+            "longRange": true
           }
         }
       ]
@@ -6216,7 +6418,8 @@
           "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/characters/maokai/hud/icons2d/maokai_passive.png",
           "description": "Maokai's basic attack also heals him and deals additional damage on a moderate cooldown. Each time Maokai casts a spell or is struck by an enemy's spell, this cooldown is reduced.",
           "stats": {
-            "isOnHit": true
+            "isOnHit": true,
+            "heal": true
           }
         },
         {
@@ -6253,7 +6456,10 @@
               "Trait_KnockBack",
               "Trait_AoE"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "projectile": true,
+            "knockup": true,
+            "knockback": true
           }
         },
         {
@@ -6290,7 +6496,8 @@
               "Trait_DamageAbility",
               "Trait_Untargetable"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "projectile": true
           }
         },
         {
@@ -6331,7 +6538,9 @@
               "Trait_AoE"
             ],
             "isDot": true,
-            "isAoe": true
+            "isAoe": true,
+            "projectile": true,
+            "longRange": true
           }
         },
         {
@@ -6368,7 +6577,8 @@
               "Trait_DamageAbility",
               "Trait_AoE"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "longRange": true
           }
         }
       ]
@@ -6426,7 +6636,9 @@
               "Trait_SignatureSpell",
               "Trait_AoE"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "projectile": true,
+            "longRange": true
           }
         },
         {
@@ -6456,7 +6668,8 @@
               "Trait_DamageAbility",
               "Trait_AoE"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "longRange": true
           }
         },
         {
@@ -6586,7 +6799,8 @@
               "Trait_Shield",
               "PositiveEffect_EmpowerAttack"
             ],
-            "isOnHit": true
+            "isOnHit": true,
+            "shield": true
           }
         },
         {
@@ -6650,7 +6864,8 @@
               "Trait_SignatureSpell",
               "Trait_AoE"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "projectile": true
           }
         },
         {
@@ -6715,7 +6930,8 @@
               6
             ],
             "range": 1000,
-            "isOnHit": true
+            "isOnHit": true,
+            "longRange": true
           }
         },
         {
@@ -6785,7 +7001,8 @@
               "Trait_AttackBuff_Duration",
               "Trait_SignatureSpell"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "longRange": true
           }
         },
         {
@@ -6821,7 +7038,8 @@
               "Trait_ImmobilizingCCSpell",
               "Trait_DamageAbility",
               "Trait_AoE"
-            ]
+            ],
+            "longRange": true
           }
         },
         {
@@ -6856,7 +7074,9 @@
               "Trait_Untargetable",
               "Trait_AoE"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "knockup": true,
+            "dash": true
           }
         }
       ]
@@ -6926,7 +7146,8 @@
               "Trait_Strike",
               "Trait_Low_Damage"
             ],
-            "isOnHit": true
+            "isOnHit": true,
+            "dash": true
           }
         },
         {
@@ -7013,7 +7234,10 @@
               "Trait_SignatureSpell",
               "Trait_AoE"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "knockup": true,
+            "recast": true,
+            "dash": true
           }
         },
         {
@@ -7043,7 +7267,10 @@
               "Trait_DamageAbility",
               "Trait_AoE"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "projectile": true,
+            "knockup": true,
+            "longRange": true
           }
         }
       ]
@@ -7105,7 +7332,9 @@
               "Trait_Ranged_Piercing",
               "Trait_AoE"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "projectile": true,
+            "longRange": true
           }
         },
         {
@@ -7142,7 +7371,10 @@
               "Trait_PlayerSelectedDashDirection",
               "Trait_RecastOrReplaceSpell"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "projectile": true,
+            "recast": true,
+            "dash": true
           }
         },
         {
@@ -7203,7 +7435,9 @@
               "Trait_ProjectileDestruction",
               "Trait_Strike"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "recast": true,
+            "dash": true
           }
         }
       ]
@@ -7308,7 +7542,9 @@
               "Trait_AoE"
             ],
             "isDot": true,
-            "isAoe": true
+            "isAoe": true,
+            "projectile": true,
+            "dash": true
           }
         },
         {
@@ -7385,7 +7621,9 @@
               "Trait_Ranged_StopsFirstHit",
               "Trait_AoE"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "projectile": true,
+            "longRange": true
           }
         }
       ]
@@ -7426,7 +7664,8 @@
             "tags": [
               "Trait_ActiveHeal"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "heal": true
           }
         },
         {
@@ -7471,7 +7710,9 @@
               "Trait_SignatureSpell",
               "Trait_AoE"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "projectile": true,
+            "dash": true
           }
         },
         {
@@ -7601,7 +7842,9 @@
               "Trait_RecastOrReplaceSpell",
               "Trait_Low_Damage",
               "Trait_AoE"
-            ]
+            ],
+            "recast": true,
+            "longRange": true
           }
         },
         {
@@ -7640,7 +7883,9 @@
               "Trait_Low_Damage",
               "Trait_AoE"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "projectile": true,
+            "knockback": true
           }
         },
         {
@@ -7733,7 +7978,10 @@
               "Trait_AoE"
             ],
             "isAoe": true,
-            "isOnHit": true
+            "isOnHit": true,
+            "projectile": true,
+            "recast": true,
+            "longRange": true
           }
         },
         {
@@ -7773,7 +8021,9 @@
               "Trait_Low_Damage",
               "Trait_AoE"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "projectile": true,
+            "longRange": true
           }
         },
         {
@@ -7816,7 +8066,9 @@
               "Trait_Ranged_Zone",
               "Trait_AoE"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "knockup": true,
+            "knockback": true
           }
         },
         {
@@ -7855,7 +8107,8 @@
               "Trait_AoE"
             ],
             "isDot": true,
-            "isAoe": true
+            "isAoe": true,
+            "longRange": true
           }
         }
       ]
@@ -7883,7 +8136,8 @@
               0.009999999776482582,
               0.009999999776482582,
               0.009999999776482582
-            ]
+            ],
+            "heal": true
           }
         },
         {
@@ -7918,7 +8172,10 @@
               "Trait_Ranged_Piercing",
               "Trait_AoE"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "projectile": true,
+            "recast": true,
+            "longRange": true
           }
         },
         {
@@ -7942,7 +8199,8 @@
               "Trait_PlayerSelectedDashDirection",
               "Trait_Invisibility"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "dash": true
           }
         },
         {
@@ -7979,7 +8237,8 @@
               "Trait_Ranged_Piercing",
               "Trait_Melee_SmallWindup",
               "Trait_AoE"
-            ]
+            ],
+            "projectile": true
           }
         },
         {
@@ -8016,7 +8275,8 @@
               "Trait_Ranged_Zone",
               "Trait_AoE"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "dash": true
           }
         }
       ]
@@ -8169,7 +8429,8 @@
               "Trait_AoE"
             ],
             "isDot": true,
-            "isAoe": true
+            "isAoe": true,
+            "projectile": true
           }
         }
       ]
@@ -8228,7 +8489,8 @@
               "Trait_AoE"
             ],
             "isDot": true,
-            "isAoe": true
+            "isAoe": true,
+            "projectile": true
           }
         },
         {
@@ -8267,7 +8529,9 @@
               "Trait_Ranged_Piercing",
               "Trait_AoE"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "projectile": true,
+            "longRange": true
           }
         },
         {
@@ -8300,7 +8564,8 @@
               "Trait_Low_Damage",
               "Trait_AoE"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "projectile": true
           }
         },
         {
@@ -8338,7 +8603,9 @@
               "Trait_ActiveHeal",
               "Trait_AoE"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "heal": true,
+            "longRange": true
           }
         }
       ]
@@ -8427,7 +8694,9 @@
               "Trait_DamageAbility",
               "Trait_AoE"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "dash": true,
+            "longRange": true
           }
         },
         {
@@ -8503,7 +8772,9 @@
               "Trait_DamageAbility",
               "Trait_KnockBack"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "knockup": true,
+            "knockback": true
           }
         }
       ]
@@ -8585,7 +8856,8 @@
               "Trait_Target_Area",
               "Trait_AoE"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "longRange": true
           }
         },
         {
@@ -8624,7 +8896,8 @@
               "Trait_AoE"
             ],
             "isDot": true,
-            "isAoe": true
+            "isAoe": true,
+            "longRange": true
           }
         },
         {
@@ -8653,7 +8926,8 @@
               "Trait_AttackBuff_Duration",
               "Trait_AoE"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "longRange": true
           }
         }
       ]
@@ -8674,7 +8948,9 @@
           "name": "Perseverance",
           "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/characters/garen/hud/icons2d/garen_passive.png",
           "description": "If Garen has not recently been struck by damage or enemy abilities, he regenerates a percentage of his total health each second.",
-          "stats": {}
+          "stats": {
+            "heal": true
+          }
         },
         {
           "key": "Q",
@@ -8729,7 +9005,8 @@
               "Trait_Parry",
               "Trait_AttackBuff_Duration"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "shield": true
           }
         },
         {
@@ -8844,7 +9121,9 @@
               "Trait_Low_Damage",
               "Trait_AoE"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "projectile": true,
+            "longRange": true
           }
         },
         {
@@ -8882,7 +9161,10 @@
               "Trait_Shield",
               "Trait_AoE"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "projectile": true,
+            "shield": true,
+            "longRange": true
           }
         },
         {
@@ -8923,7 +9205,9 @@
               "Trait_SignatureSpell",
               "Trait_AoE"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "recast": true,
+            "longRange": true
           }
         },
         {
@@ -8951,7 +9235,9 @@
               "Trait_Ranged_Piercing",
               "Trait_AoE"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "projectile": true,
+            "longRange": true
           }
         }
       ]
@@ -9010,7 +9296,8 @@
               "Trait_SignatureSpell",
               "Trait_AoE"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "projectile": true
           }
         },
         {
@@ -9052,7 +9339,9 @@
               "Trait_Low_Damage"
             ],
             "isAoe": true,
-            "isOnHit": true
+            "isOnHit": true,
+            "projectile": true,
+            "longRange": true
           }
         },
         {
@@ -9091,7 +9380,8 @@
               "Trait_Low_Damage",
               "Trait_AoE"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "projectile": true
           }
         },
         {
@@ -9188,7 +9478,9 @@
               "Trait_AoE"
             ],
             "isAoe": true,
-            "isOnHit": true
+            "isOnHit": true,
+            "projectile": true,
+            "longRange": true
           }
         },
         {
@@ -9230,7 +9522,9 @@
               "Trait_AoE"
             ],
             "isAoe": true,
-            "isOnHit": true
+            "isOnHit": true,
+            "shield": true,
+            "longRange": true
           }
         },
         {
@@ -9270,7 +9564,8 @@
               "Trait_DamageAbility",
               "Trait_Strike"
             ],
-            "isOnHit": true
+            "isOnHit": true,
+            "dash": true
           }
         },
         {
@@ -9302,7 +9597,8 @@
               "Trait_Untargetable",
               "Trait_AoE"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "heal": true
           }
         }
       ]
@@ -9365,7 +9661,9 @@
               "Trait_DamageAbility",
               "Trait_SignatureSpell"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "projectile": true,
+            "longRange": true
           }
         },
         {
@@ -9396,7 +9694,8 @@
               "Trait_AoE"
             ],
             "isDot": true,
-            "isAoe": true
+            "isAoe": true,
+            "shield": true
           }
         },
         {
@@ -9460,7 +9759,8 @@
               "Trait_DamageAbility",
               "Trait_AoE"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "knockup": true
           }
         }
       ]
@@ -9526,7 +9826,8 @@
               "Trait_Low_Damage",
               "Trait_AoE"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "projectile": true
           }
         },
         {
@@ -9605,7 +9906,9 @@
               "Trait_SignatureSpell",
               "Trait_AoE"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "knockup": true,
+            "dash": true
           }
         },
         {
@@ -9643,7 +9946,10 @@
               "Trait_RecastOrReplaceSpell",
               "Trait_AoE"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "knockup": true,
+            "recast": true,
+            "longRange": true
           }
         }
       ]
@@ -9708,7 +10014,9 @@
               "Trait_Melee_SmallWindup",
               "Trait_AoE"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "projectile": true,
+            "knockup": true
           }
         },
         {
@@ -9742,7 +10050,8 @@
               "Trait_Shield",
               "Trait_AoE"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "shield": true
           }
         },
         {
@@ -9816,7 +10125,9 @@
               "Trait_CreateTerrain",
               "Trait_AoE"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "recast": true,
+            "dash": true
           }
         }
       ]
@@ -9844,7 +10155,8 @@
               11,
               11,
               11
-            ]
+            ],
+            "shield": true
           }
         },
         {
@@ -9948,7 +10260,8 @@
               "Trait_DamageAbility",
               "Trait_Low_Damage",
               "Trait_AoE"
-            ]
+            ],
+            "dash": true
           }
         },
         {
@@ -9973,7 +10286,8 @@
               "PositiveEffect_Boon",
               "Trait_Shield",
               "Trait_CreateClone"
-            ]
+            ],
+            "shield": true
           }
         }
       ]
@@ -10031,7 +10345,8 @@
               "Trait_AoE"
             ],
             "isAoe": true,
-            "isOnHit": true
+            "isOnHit": true,
+            "dash": true
           }
         },
         {
@@ -10088,7 +10403,10 @@
               "Trait_DamageAbility",
               "Trait_KnockBack"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "projectile": true,
+            "knockup": true,
+            "knockback": true
           }
         },
         {
@@ -10113,7 +10431,8 @@
               "Trait_RecastOrReplaceSpell",
               "Trait_Melee_SmallWindup"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "recast": true
           }
         }
       ]
@@ -10180,7 +10499,9 @@
               "Trait_AoE",
               "Trait_AoE"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "knockup": true,
+            "longRange": true
           }
         },
         {
@@ -10356,7 +10677,8 @@
               "Trait_DamageAbility",
               "Trait_SignatureSpell",
               "Trait_AoE"
-            ]
+            ],
+            "dash": true
           }
         },
         {
@@ -10392,7 +10714,8 @@
               "Trait_AoE"
             ],
             "isAoe": true,
-            "isOnHit": true
+            "isOnHit": true,
+            "heal": true
           }
         },
         {
@@ -10459,7 +10782,8 @@
               "Trait_Ranged_Zone",
               "Trait_AoE"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "heal": true
           }
         }
       ]
@@ -10525,7 +10849,10 @@
               "Trait_SignatureSpell"
             ],
             "isAoe": true,
-            "isOnHit": true
+            "isOnHit": true,
+            "knockup": true,
+            "recast": true,
+            "heal": true
           }
         },
         {
@@ -10562,7 +10889,8 @@
               "Trait_Low_Damage",
               "Trait_AoE"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "projectile": true
           }
         },
         {
@@ -10590,7 +10918,8 @@
               "Trait_Low_Damage",
               "Trait_AoE"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "dash": true
           }
         },
         {
@@ -10622,7 +10951,9 @@
               "Trait_Melee_BigWindup",
               "Trait_AoE"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "heal": true,
+            "dash": true
           }
         }
       ]
@@ -10699,7 +11030,8 @@
               "Trait_Ranged_StopsFirstHit",
               "Trait_AoE"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "projectile": true
           }
         },
         {
@@ -10737,7 +11069,11 @@
               "Trait_Target_Area",
               "Trait_AoE"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "knockup": true,
+            "knockback": true,
+            "recast": true,
+            "longRange": true
           }
         },
         {
@@ -10778,7 +11114,8 @@
               "Trait_Low_Damage",
               "Trait_AoE"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "longRange": true
           }
         },
         {
@@ -10816,7 +11153,8 @@
               "Trait_AoE",
               "Trait_Melee_BigWindup"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "longRange": true
           }
         }
       ]
@@ -10919,7 +11257,9 @@
               "Trait_Ranged_StopsFirstHit",
               "Trait_AoE"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "projectile": true,
+            "longRange": true
           }
         },
         {
@@ -10956,7 +11296,9 @@
               "Trait_Target_Area",
               "Trait_AoE"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "projectile": true,
+            "longRange": true
           }
         },
         {
@@ -10992,7 +11334,8 @@
               "Trait_DamageAbility",
               "Trait_RecastOrReplaceSpell"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "recast": true
           }
         }
       ]
@@ -11056,7 +11399,8 @@
               "Trait_Strike"
             ],
             "isAoe": true,
-            "isOnHit": true
+            "isOnHit": true,
+            "shield": true
           }
         },
         {
@@ -11091,7 +11435,8 @@
               "Trait_AoE",
               "Trait_DamageAbility"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "shield": true
           }
         },
         {
@@ -11131,7 +11476,9 @@
               "Trait_DamageAbility",
               "Trait_SignatureSpell"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "projectile": true,
+            "dash": true
           }
         },
         {
@@ -11171,7 +11518,8 @@
               "Trait_Target_Area",
               "Trait_AoE"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "longRange": true
           }
         }
       ]
@@ -11227,7 +11575,9 @@
               "Trait_Ranged_StopsFirstHit",
               "Trait_Low_Damage"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "projectile": true,
+            "longRange": true
           }
         },
         {
@@ -11296,7 +11646,9 @@
               "Trait_Ranged_Zone",
               "Trait_AoE"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "projectile": true,
+            "longRange": true
           }
         },
         {
@@ -11325,7 +11677,8 @@
               "Trait_Target_Area",
               "Trait_AoE"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "longRange": true
           }
         }
       ]
@@ -11374,7 +11727,8 @@
               "Trait_DamageAbility",
               "Trait_Strike"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "dash": true
           }
         },
         {
@@ -11448,7 +11802,8 @@
               "Trait_AttackBuff_Duration",
               "Trait_AoE"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "recast": true
           }
         },
         {
@@ -11539,7 +11894,8 @@
               "Trait_Target_Area",
               "Trait_AoE"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "longRange": true
           }
         },
         {
@@ -11575,7 +11931,8 @@
               "Trait_Shield",
               "Trait_ProjectileDestruction",
               "Trait_Immune"
-            ]
+            ],
+            "shield": true
           }
         },
         {
@@ -11618,7 +11975,9 @@
               "Trait_ImmobilizingCCSpell"
             ],
             "isDot": true,
-            "isAoe": true
+            "isAoe": true,
+            "projectile": true,
+            "longRange": true
           }
         },
         {
@@ -11714,7 +12073,10 @@
               "Trait_Ranged_Piercing",
               "Trait_AoE"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "projectile": true,
+            "recast": true,
+            "longRange": true
           }
         },
         {
@@ -11740,7 +12102,8 @@
             "range": 750,
             "damageType": "magic",
             "isAoe": true,
-            "isOnHit": true
+            "isOnHit": true,
+            "projectile": true
           }
         },
         {
@@ -11774,7 +12137,9 @@
               "Trait_DamageAbility",
               "Trait_AoE"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "heal": true,
+            "longRange": true
           }
         },
         {
@@ -11811,7 +12176,9 @@
               "Trait_DamageAbility",
               "Trait_AoE"
             ],
-            "isOnHit": true
+            "isOnHit": true,
+            "projectile": true,
+            "longRange": true
           }
         }
       ]
@@ -11863,7 +12230,8 @@
               "Trait_AoE"
             ],
             "isAoe": true,
-            "isOnHit": true
+            "isOnHit": true,
+            "recast": true
           }
         },
         {
@@ -11896,7 +12264,9 @@
               "Trait_Low_Damage",
               "Trait_AoE"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "heal": true,
+            "shield": true
           }
         },
         {
@@ -11929,7 +12299,8 @@
               "Trait_Ranged_StopsFirstHit",
               "Trait_Ranged_Piercing",
               "Trait_AoE"
-            ]
+            ],
+            "projectile": true
           }
         },
         {
@@ -11954,7 +12325,9 @@
               "Trait_Transformation",
               "Trait_DamageAbility",
               "Trait_AoE"
-            ]
+            ],
+            "dash": true,
+            "longRange": true
           }
         }
       ]
@@ -12013,7 +12386,9 @@
             "tags": [
               "Trait_SwapsIntoImmobilizingCCAbility"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "projectile": true,
+            "longRange": true
           }
         },
         {
@@ -12044,7 +12419,8 @@
           "description": "Aphelios has no third ability. This slot shows the next weapon Alune will give him. Weapon order begins fixed but may change over game time -- when a weapon is out of ammo it goes to the end of the order.",
           "stats": {
             "range": 1000,
-            "isAoe": true
+            "isAoe": true,
+            "longRange": true
           }
         },
         {
@@ -12078,7 +12454,9 @@
               "Trait_Ultimate",
               "Trait_DamageAbility"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "projectile": true,
+            "longRange": true
           }
         }
       ]
@@ -12256,7 +12634,11 @@
               "Trait_DamageAbility",
               "Trait_AoE"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "projectile": true,
+            "knockup": true,
+            "dash": true,
+            "longRange": true
           }
         }
       ]
@@ -12352,7 +12734,8 @@
             "tags": [
               "SpecialCase_StasisLocked",
               "Trait_ActiveHeal"
-            ]
+            ],
+            "heal": true
           }
         },
         {
@@ -12379,7 +12762,8 @@
               "Trait_Target_Area",
               "Trait_AoE"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "longRange": true
           }
         },
         {
@@ -12437,7 +12821,8 @@
           "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/characters/gwen/hud/icons2d/gwen_passive.png",
           "description": "Gwen's attacks deal bonus magic damage based on the targets health. She heals for a portion of the damage dealt to champions by this effect.",
           "stats": {
-            "damageType": "magic"
+            "damageType": "magic",
+            "heal": true
           }
         },
         {
@@ -12533,7 +12918,8 @@
               "Trait_AttackBuff_Duration"
             ],
             "isAoe": true,
-            "isOnHit": true
+            "isOnHit": true,
+            "dash": true
           }
         },
         {
@@ -12570,7 +12956,10 @@
               "Trait_Ranged_Piercing",
               "Trait_AoE"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "projectile": true,
+            "recast": true,
+            "longRange": true
           }
         }
       ]
@@ -12603,7 +12992,9 @@
             "tags": [
               "PositiveEffect_Boon"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "heal": true,
+            "longRange": true
           }
         },
         {
@@ -12644,7 +13035,8 @@
               "Trait_SignatureSpell",
               "Trait_AoE"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "knockup": true
           }
         },
         {
@@ -12685,7 +13077,9 @@
               "Trait_DamageAbility",
               "Trait_KnockBack"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "knockup": true,
+            "knockback": true
           }
         },
         {
@@ -12813,7 +13207,9 @@
               "Trait_SignatureSpell",
               "Trait_Ranged_StopsFirstHit"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "projectile": true,
+            "longRange": true
           }
         },
         {
@@ -12846,7 +13242,9 @@
             "tags": [
               "Trait_Ranged_StopsFirstHit"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "projectile": true,
+            "longRange": true
           }
         },
         {
@@ -12882,7 +13280,9 @@
               "Trait_DamageAbility",
               "Trait_Low_Damage"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "projectile": true,
+            "dash": true
           }
         },
         {
@@ -12982,7 +13382,8 @@
               "Trait_Ranged_Zone",
               "Trait_AoE"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "longRange": true
           }
         },
         {
@@ -13073,7 +13474,9 @@
               "PositiveEffect_Boon",
               "Trait_ActiveHeal"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "heal": true,
+            "longRange": true
           }
         }
       ]
@@ -13097,7 +13500,8 @@
           "stats": {
             "totalAdRatio": 0.1,
             "damageType": "physical",
-            "isDot": true
+            "isDot": true,
+            "heal": true
           }
         },
         {
@@ -13133,7 +13537,8 @@
               "Trait_DamageAbility",
               "Trait_Strike",
               "Trait_Low_Damage"
-            ]
+            ],
+            "dash": true
           }
         },
         {
@@ -13165,7 +13570,10 @@
               "Trait_AoE"
             ],
             "isAoe": true,
-            "isOnHit": true
+            "isOnHit": true,
+            "recast": true,
+            "heal": true,
+            "dash": true
           }
         },
         {
@@ -13203,7 +13611,9 @@
               "Trait_Target_Directional",
               "Trait_Melee_BigWindup",
               "Trait_AoE"
-            ]
+            ],
+            "knockback": true,
+            "heal": true
           }
         },
         {
@@ -13301,7 +13711,9 @@
               "Trait_DamageAbility",
               "Trait_AoE"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "knockup": true,
+            "dash": true
           }
         },
         {
@@ -13339,7 +13751,8 @@
               "Trait_Target_Directional",
               "Trait_Ranged_Piercing",
               "Trait_AoE"
-            ]
+            ],
+            "projectile": true
           }
         },
         {
@@ -13413,7 +13826,9 @@
               "Trait_AoE"
             ],
             "isAoe": true,
-            "isOnHit": true
+            "isOnHit": true,
+            "projectile": true,
+            "longRange": true
           }
         }
       ]
@@ -13471,7 +13886,8 @@
               "Trait_Melee_SmallWindup",
               "Trait_AoE"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "projectile": true
           }
         },
         {
@@ -13501,7 +13917,8 @@
               "Trait_DamageAbility",
               "Trait_Strike"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "dash": true
           }
         },
         {
@@ -13539,7 +13956,9 @@
               "Trait_Low_Damage",
               "Trait_AoE"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "recast": true,
+            "shield": true
           }
         },
         {
@@ -13573,7 +13992,10 @@
               "Trait_DamageAbility",
               "Trait_AoE"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "knockup": true,
+            "dash": true,
+            "longRange": true
           }
         }
       ]
@@ -13655,7 +14077,8 @@
               "Trait_AoE"
             ],
             "isDot": true,
-            "isAoe": true
+            "isAoe": true,
+            "heal": true
           }
         },
         {
@@ -13694,7 +14117,8 @@
               "Trait_Low_Damage",
               "Trait_AoE"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "projectile": true
           }
         },
         {
@@ -13793,7 +14217,9 @@
               "Trait_Ranged_Piercing",
               "Trait_AoE"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "projectile": true,
+            "longRange": true
           }
         },
         {
@@ -13881,7 +14307,8 @@
               "Trait_AttackBuff_Duration",
               "Trait_AoE"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "longRange": true
           }
         }
       ]
@@ -13943,7 +14370,8 @@
               "Trait_SignatureSpell",
               "Trait_Melee_BigWindup",
               "Trait_AoE"
-            ]
+            ],
+            "heal": true
           }
         },
         {
@@ -14057,7 +14485,8 @@
               "PositiveEffect_MoveBlock",
               "Trait_DamageAbility"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "dash": true
           }
         }
       ]
@@ -14119,7 +14548,8 @@
               "Trait_DamageAbility",
               "Trait_AoE"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "projectile": true
           }
         },
         {
@@ -14151,7 +14581,9 @@
               "Trait_SignatureSpell",
               "Trait_Strike"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "heal": true,
+            "dash": true
           }
         },
         {
@@ -14183,7 +14615,10 @@
               "Trait_Ranged_StopsFirstHit",
               "Trait_Low_Damage"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "projectile": true,
+            "recast": true,
+            "dash": true
           }
         },
         {
@@ -14207,7 +14642,9 @@
               "Trait_Ultimate",
               "Trait_AttackReset"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "projectile": true,
+            "longRange": true
           }
         }
       ]
@@ -14235,7 +14672,9 @@
             "damageType": "magic",
             "tags": [
               "Trait_ImmobilizingCCSpell"
-            ]
+            ],
+            "dash": true,
+            "longRange": true
           }
         },
         {
@@ -14274,7 +14713,9 @@
               "Trait_SignatureSpell",
               "Trait_Ranged_Piercing",
               "Trait_AoE"
-            ]
+            ],
+            "projectile": true,
+            "longRange": true
           }
         },
         {
@@ -14309,7 +14750,8 @@
               "Trait_Low_Damage",
               "Trait_AoE"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "shield": true
           }
         },
         {
@@ -14349,7 +14791,8 @@
               "Trait_Target_Area",
               "Trait_AoE"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "projectile": true
           }
         },
         {
@@ -14383,7 +14826,11 @@
               "Trait_DamageAbility",
               "Trait_CCImmune",
               "PositiveEffect_MoveBlock"
-            ]
+            ],
+            "projectile": true,
+            "recast": true,
+            "dash": true,
+            "longRange": true
           }
         }
       ]
@@ -14413,7 +14860,8 @@
               14
             ],
             "adRatio": 8,
-            "damageType": "physical"
+            "damageType": "physical",
+            "heal": true
           }
         },
         {
@@ -14455,7 +14903,9 @@
               "Trait_SignatureSpell",
               "Trait_Target_Directional",
               "Trait_Ranged_StopsFirstHit"
-            ]
+            ],
+            "projectile": true,
+            "recast": true
           }
         },
         {
@@ -14525,7 +14975,8 @@
               "Trait_DamageAbility",
               "Trait_Melee_SmallWindup",
               "Trait_AoE"
-            ]
+            ],
+            "dash": true
           }
         },
         {
@@ -14551,7 +15002,8 @@
               "Trait_Ultimate",
               "Trait_DamageAbility",
               "Trait_AoE"
-            ]
+            ],
+            "dash": true
           }
         }
       ]
@@ -14579,7 +15031,8 @@
             "tags": [
               "Trait_Immune",
               "Trait_ProjectileDestruction"
-            ]
+            ],
+            "heal": true
           }
         },
         {
@@ -14607,7 +15060,9 @@
               "Trait_AoE"
             ],
             "isAoe": true,
-            "isOnHit": true
+            "isOnHit": true,
+            "projectile": true,
+            "heal": true
           }
         },
         {
@@ -14636,7 +15091,8 @@
               "Trait_ChannelSpell",
               "Trait_Ranged_StopsFirstHit",
               "Trait_Low_Damage"
-            ]
+            ],
+            "projectile": true
           }
         },
         {
@@ -14656,7 +15112,8 @@
             "tags": [
               "Trait_Camouflage"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "projectile": true
           }
         },
         {
@@ -14686,7 +15143,9 @@
               "Trait_CCImmune",
               "Trait_AoE"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "knockup": true,
+            "knockback": true
           }
         }
       ]
@@ -14708,7 +15167,9 @@
           "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/characters/fiora/hud/icons2d/fiora_p.png",
           "description": "Fiora has revealed a Vital on this Champion. If she hits the Vital, she restores Health and gains Move Speed.",
           "stats": {
-            "range": 1100
+            "range": 1100,
+            "heal": true,
+            "longRange": true
           }
         },
         {
@@ -14737,7 +15198,8 @@
               "Trait_SignatureSpell"
             ],
             "isAoe": true,
-            "isOnHit": true
+            "isOnHit": true,
+            "dash": true
           }
         },
         {
@@ -14833,7 +15295,8 @@
               "Trait_DamageAbility",
               "Trait_ActiveHeal"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "heal": true
           }
         }
       ]
@@ -14893,7 +15356,8 @@
               "Trait_DamageAbility",
               "Trait_Invisibility"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "dash": true
           }
         },
         {
@@ -15076,7 +15540,8 @@
               "Trait_ActiveHeal",
               "Trait_SignatureSpell"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "heal": true
           }
         },
         {
@@ -15111,7 +15576,8 @@
               "Trait_Low_Damage",
               "Trait_AoE"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "heal": true
           }
         },
         {
@@ -15144,7 +15610,8 @@
               "Trait_AoE",
               "Trait_Melee_BigWindup"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "projectile": true
           }
         },
         {
@@ -15177,7 +15644,9 @@
               "Trait_AoE"
             ],
             "isAoe": true,
-            "isOnHit": true
+            "isOnHit": true,
+            "projectile": true,
+            "heal": true
           }
         }
       ]
@@ -15237,7 +15706,8 @@
               "Trait_Shield",
               "Trait_Low_Damage"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "shield": true
           }
         },
         {
@@ -15351,7 +15821,8 @@
               "Trait_DamageAbility",
               "Trait_AoE"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "dash": true
           }
         }
       ]
@@ -15374,7 +15845,8 @@
           "description": "Entering an attack or movement command while casting an ability will cause Ambessa to dash a short distance once the ability is cast, granting her next attack bonus range, damage, and attack speed, and refunding energy.",
           "stats": {
             "range": 350,
-            "isOnHit": true
+            "isOnHit": true,
+            "dash": true
           }
         },
         {
@@ -15402,7 +15874,9 @@
               "Trait_Melee_SmallWindup",
               "Trait_AoE"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "projectile": true,
+            "recast": true
           }
         },
         {
@@ -15439,7 +15913,8 @@
               "Trait_Low_Damage",
               "Trait_AoE"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "shield": true
           }
         },
         {
@@ -15467,7 +15942,8 @@
               "Trait_DamageAbility",
               "Trait_AoE"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "dash": true
           }
         },
         {
@@ -15495,7 +15971,9 @@
               "Trait_DamageAbility",
               "Trait_CCImmune"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "dash": true,
+            "longRange": true
           }
         }
       ]
@@ -15573,7 +16051,10 @@
               "Trait_RecastOrReplaceSpell",
               "Trait_ActiveHeal",
               "Trait_Shield"
-            ]
+            ],
+            "recast": true,
+            "heal": true,
+            "shield": true
           }
         },
         {
@@ -15622,7 +16103,8 @@
               "Trait_ImmobilizingCCSpell",
               "Trait_ActiveHeal"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "heal": true
           }
         }
       ]
@@ -15687,7 +16169,9 @@
               "Trait_ActiveHeal",
               "Trait_Strike"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "heal": true,
+            "dash": true
           }
         },
         {
@@ -15729,7 +16213,8 @@
               "Trait_Melee_SmallWindup",
               "Trait_AoE"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "projectile": true
           }
         },
         {
@@ -15751,7 +16236,8 @@
             "tags": [
               "PositiveEffect_MoveBlock",
               "Trait_NoCooldown"
-            ]
+            ],
+            "dash": true
           }
         },
         {
@@ -15837,7 +16323,10 @@
               "Trait_Low_Damage",
               "Trait_AoE"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "projectile": true,
+            "recast": true,
+            "longRange": true
           }
         },
         {
@@ -15899,7 +16388,9 @@
               "Trait_Ranged_Piercing",
               "Trait_AoE"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "projectile": true,
+            "shield": true
           }
         },
         {
@@ -15926,7 +16417,9 @@
               "Trait_Ranged_Piercing",
               "Trait_AoE"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "projectile": true,
+            "longRange": true
           }
         }
       ]
@@ -15947,7 +16440,9 @@
           "name": "Dirty Fighting",
           "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/characters/akshan/hud/icons2d/akshan_p.png",
           "description": "Every three hits from Akshan's Attacks and Abilities deals bonus damage and grants him a Shield if the target was a champion.When Akshan Attacks, he fires an additional Attack for reduced damage. If he cancels the additional Attack, he instead gains Move Speed.",
-          "stats": {}
+          "stats": {
+            "shield": true
+          }
         },
         {
           "key": "Q",
@@ -15984,7 +16479,8 @@
               "Trait_Ranged_Piercing",
               "Trait_Low_Damage",
               "Trait_AoE"
-            ]
+            ],
+            "projectile": true
           }
         },
         {
@@ -16009,7 +16505,8 @@
             "range": 5500,
             "tags": [
               "Trait_Camouflage"
-            ]
+            ],
+            "longRange": true
           }
         },
         {
@@ -16043,7 +16540,8 @@
               "Trait_DamageAbility",
               "Trait_RecastOrReplaceSpell",
               "Trait_SignatureSpell"
-            ]
+            ],
+            "recast": true
           }
         },
         {
@@ -16068,7 +16566,9 @@
               "Trait_DamageAbility",
               "Trait_ChannelSpell",
               "Trait_Ranged_StopsFirstHit"
-            ]
+            ],
+            "projectile": true,
+            "longRange": true
           }
         }
       ]
@@ -16096,7 +16596,8 @@
               0.3499999940395355,
               0.3499999940395355,
               0.3499999940395355
-            ]
+            ],
+            "shield": true
           }
         },
         {
@@ -16132,7 +16633,9 @@
               "Trait_SignatureSpell",
               "Trait_Ranged_StopsFirstHit"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "projectile": true,
+            "longRange": true
           }
         },
         {
@@ -16228,7 +16731,8 @@
               "Trait_DamageAbility",
               "Trait_AoE"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "shield": true
           }
         }
       ]
@@ -16252,7 +16756,8 @@
           "stats": {
             "range": 1200,
             "damageType": "magic",
-            "isOnHit": true
+            "isOnHit": true,
+            "longRange": true
           }
         },
         {
@@ -16286,7 +16791,12 @@
               "Trait_Ranged_Piercing",
               "Trait_AoE"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "projectile": true,
+            "knockup": true,
+            "knockback": true,
+            "recast": true,
+            "longRange": true
           }
         },
         {
@@ -16353,7 +16863,8 @@
               "PositiveEffect_Boon",
               "Trait_Shield"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "shield": true
           }
         },
         {
@@ -16393,7 +16904,9 @@
               "Trait_ActiveHeal",
               "Trait_AoE"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "knockback": true,
+            "heal": true
           }
         }
       ]
@@ -16416,7 +16929,8 @@
           "description": "Illaoi and the Vessels she creates spawn Tentacles on nearby impassible terrain. Tentacles swing at spirits, Vessels, and victims of Illaoi's Harsh lesson. Tentacles deal physical damage to enemies hit, and will heal Illaoi if they damage a champion.",
           "stats": {
             "damageType": "physical",
-            "isAoe": true
+            "isAoe": true,
+            "heal": true
           }
         },
         {
@@ -16483,7 +16997,8 @@
               "Trait_DamageAbility",
               "Trait_Strike"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "dash": true
           }
         },
         {
@@ -16518,7 +17033,8 @@
             "tags": [
               "Trait_DamageAbility"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "longRange": true
           }
         },
         {
@@ -16584,7 +17100,8 @@
               20,
               20,
               20
-            ]
+            ],
+            "heal": true
           }
         },
         {
@@ -16651,7 +17168,8 @@
               "Trait_CreateClone",
               "Trait_SignatureSpell",
               "Trait_Low_Damage"
-            ]
+            ],
+            "dash": true
           }
         },
         {
@@ -16691,7 +17209,8 @@
               "Trait_Low_Damage",
               "Trait_AoE"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "dash": true
           }
         },
         {
@@ -16725,7 +17244,9 @@
               "Trait_AoE"
             ],
             "isDot": true,
-            "isAoe": true
+            "isAoe": true,
+            "knockup": true,
+            "recast": true
           }
         }
       ]
@@ -16787,7 +17308,9 @@
               "Trait_Ammo",
               "Trait_Ranged_StopsFirstHit"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "projectile": true,
+            "longRange": true
           }
         },
         {
@@ -16823,7 +17346,8 @@
               "Trait_Low_Damage",
               "Trait_AoE"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "recast": true
           }
         },
         {
@@ -16916,7 +17440,8 @@
               12,
               12,
               12
-            ]
+            ],
+            "heal": true
           }
         },
         {
@@ -16954,7 +17479,9 @@
               "Trait_Target_Area",
               "Trait_AoE"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "projectile": true,
+            "recast": true
           }
         },
         {
@@ -17029,7 +17556,8 @@
               "Trait_DamageAbility",
               "Trait_AoE"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "dash": true
           }
         },
         {
@@ -17066,7 +17594,11 @@
               "Trait_KnockBack",
               "Trait_AoE"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "projectile": true,
+            "knockup": true,
+            "knockback": true,
+            "longRange": true
           }
         }
       ]
@@ -17124,7 +17656,10 @@
               "Trait_Melee_SmallWindup",
               "Trait_AoE"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "knockup": true,
+            "knockback": true,
+            "recast": true
           }
         },
         {
@@ -17189,7 +17724,9 @@
               "Trait_PlayerSelectedDashDirection",
               "Trait_Shield"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "shield": true,
+            "dash": true
           }
         },
         {
@@ -17222,7 +17759,8 @@
               "Trait_AttackBuff_Duration",
               "Trait_AoE"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "recast": true
           }
         }
       ]
@@ -17279,7 +17817,10 @@
               "Trait_SignatureSpell",
               "Trait_Ranged_StopsFirstHit"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "projectile": true,
+            "recast": true,
+            "longRange": true
           }
         },
         {
@@ -17316,7 +17857,10 @@
               "Trait_Target_Area",
               "Trait_AoE"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "shield": true,
+            "dash": true,
+            "longRange": true
           }
         },
         {
@@ -17357,7 +17901,9 @@
               "Trait_Melee_SmallWindup",
               "Trait_AoE"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "knockup": true,
+            "knockback": true
           }
         },
         {
@@ -17414,7 +17960,9 @@
           "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/characters/samira/hud/icons2d/samirap.png",
           "description": "Samira builds a combo by hitting attacks or abilities unique from the previous hit. Samira's attacks in melee range deal additional magic damage. Samira's attacks against enemies affected by Immobilizing effects will dash her to her attack range. If the enemy is Knocked Up, she also keeps them Knocked Up briefly.",
           "stats": {
-            "damageType": "magic"
+            "damageType": "magic",
+            "knockup": true,
+            "dash": true
           }
         },
         {
@@ -17449,7 +17997,10 @@
               "Trait_SignatureSpell",
               "Trait_Ranged_StopsFirstHit",
               "Trait_AoE"
-            ]
+            ],
+            "projectile": true,
+            "recast": true,
+            "longRange": true
           }
         },
         {
@@ -17517,7 +18068,8 @@
               "Trait_AttackReset",
               "Trait_DamageAbility",
               "Trait_Low_Damage"
-            ]
+            ],
+            "dash": true
           }
         },
         {
@@ -17606,7 +18158,8 @@
               "Trait_Ranged_Zone",
               "Trait_AoE"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "projectile": true
           }
         },
         {
@@ -17682,7 +18235,10 @@
               "Trait_Low_Damage",
               "Trait_AoE"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "projectile": true,
+            "shield": true,
+            "longRange": true
           }
         },
         {
@@ -17734,7 +18290,10 @@
           "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/characters/nilah/hud/icons2d/nilahp.png",
           "description": "Nilah gains increased experience from last-hitting minions along with the ability to enhance and share nearby healing and shielding from her allies.",
           "stats": {
-            "range": 1000
+            "range": 1000,
+            "heal": true,
+            "shield": true,
+            "longRange": true
           }
         },
         {
@@ -17772,7 +18331,9 @@
               "Trait_Strike",
               "Trait_SignatureSpell",
               "Trait_AoE"
-            ]
+            ],
+            "heal": true,
+            "shield": true
           }
         },
         {
@@ -17837,7 +18398,8 @@
               "Trait_DamageAbility",
               "Trait_Ammo",
               "Trait_Low_Damage"
-            ]
+            ],
+            "dash": true
           }
         },
         {
@@ -17870,7 +18432,9 @@
               "Trait_AoE"
             ],
             "isDot": true,
-            "isAoe": true
+            "isAoe": true,
+            "heal": true,
+            "shield": true
           }
         }
       ]
@@ -17934,7 +18498,8 @@
               "Trait_SignatureSpell",
               "Trait_AoE"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "projectile": true
           }
         },
         {
@@ -18010,7 +18575,11 @@
               "Trait_RecastOrReplaceSpell",
               "Trait_AoE"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "projectile": true,
+            "recast": true,
+            "dash": true,
+            "longRange": true
           }
         },
         {
@@ -18052,7 +18621,8 @@
               "Trait_Immune",
               "Trait_AoE"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "heal": true
           }
         }
       ]
@@ -18074,7 +18644,8 @@
           "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/characters/kalista/hud/icons2d/kalista_passive.png",
           "description": "Enter a movement command while winding up Kalista's basic attack or Pierce to lunge a short distance when she launches her attack.",
           "stats": {
-            "isOnHit": true
+            "isOnHit": true,
+            "dash": true
           }
         },
         {
@@ -18113,7 +18684,9 @@
               "Trait_Ranged_Piercing",
               "Trait_AoE"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "projectile": true,
+            "longRange": true
           }
         },
         {
@@ -18140,7 +18713,8 @@
             "tags": [
               "Trait_Ammo"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "longRange": true
           }
         },
         {
@@ -18170,7 +18744,8 @@
               "Trait_SignatureSpell",
               "Trait_AoE"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "longRange": true
           }
         },
         {
@@ -18200,7 +18775,9 @@
             "tags": [
               "Trait_Ultimate"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "dash": true,
+            "longRange": true
           }
         }
       ]
@@ -18221,7 +18798,9 @@
           "name": "Bridge Between",
           "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/characters/udyr/hud/icons2d/udyr_p.png",
           "description": "Udyr has four basic Abilities that swap between Stances and can Recast an Ability to renew it with Ultimate benefits. Additionally, after using an Ability, Udyr's next two Attacks gain Attack Speed.",
-          "stats": {}
+          "stats": {
+            "recast": true
+          }
         },
         {
           "key": "Q",
@@ -18253,7 +18832,8 @@
               "Trait_DamageAbility",
               "Trait_AoE"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "recast": true
           }
         },
         {
@@ -18279,7 +18859,10 @@
             "tags": [
               "Trait_ActiveHeal",
               "Trait_Shield"
-            ]
+            ],
+            "recast": true,
+            "heal": true,
+            "shield": true
           }
         },
         {
@@ -18306,7 +18889,8 @@
             "tags": [
               "Trait_ImmobilizingCCSpell"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "recast": true
           }
         },
         {
@@ -18342,7 +18926,8 @@
               "Trait_Ranged_Zone",
               "Trait_AoE"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "recast": true
           }
         }
       ]
@@ -18420,7 +19005,9 @@
               "Trait_AoE"
             ],
             "isAoe": true,
-            "isOnHit": true
+            "isOnHit": true,
+            "projectile": true,
+            "longRange": true
           }
         },
         {
@@ -18461,7 +19048,9 @@
               "Trait_ActiveHeal",
               "Trait_Low_Damage"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "projectile": true,
+            "heal": true
           }
         },
         {
@@ -18490,7 +19079,8 @@
               "Trait_Shield",
               "Trait_AoE"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "shield": true
           }
         },
         {
@@ -18515,7 +19105,8 @@
               "Trait_Transformation",
               "Trait_Upgrade"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "longRange": true
           }
         }
       ]
@@ -18618,7 +19209,10 @@
               "Trait_Ranged_StopsFirstHit",
               "Trait_AoE"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "projectile": true,
+            "heal": true,
+            "longRange": true
           }
         },
         {
@@ -18654,7 +19248,8 @@
               "Trait_Low_Damage",
               "Trait_AoE"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "dash": true
           }
         },
         {
@@ -18679,7 +19274,8 @@
               "Trait_AttackBuff_Duration",
               "Trait_Invisibility"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "recast": true
           }
         }
       ]
@@ -18710,7 +19306,8 @@
               12
             ],
             "damageType": "physical",
-            "isOnHit": true
+            "isOnHit": true,
+            "heal": true
           }
         },
         {
@@ -18750,7 +19347,9 @@
               "Trait_Low_Damage",
               "Trait_AoE"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "projectile": true,
+            "longRange": true
           }
         },
         {
@@ -18860,7 +19459,9 @@
               "Trait_DamageAbility",
               "Trait_RecastOrReplaceSpell"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "recast": true,
+            "longRange": true
           }
         }
       ]
@@ -18883,7 +19484,8 @@
           "description": "Periodically, Aatrox's next basic attack deals bonus magic damage and heals him, based on the target's max health.",
           "stats": {
             "damageType": "magic",
-            "isOnHit": true
+            "isOnHit": true,
+            "heal": true
           }
         },
         {
@@ -18919,7 +19521,8 @@
               "Trait_Melee_BigWindup",
               "Trait_AoE"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "recast": true
           }
         },
         {
@@ -18953,7 +19556,8 @@
               "Trait_Ranged_StopsFirstHit",
               "Trait_Low_Damage"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "projectile": true
           }
         },
         {
@@ -18975,7 +19579,9 @@
               "Trait_AttackReset",
               "Trait_PlayerSelectedDashDirection"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "heal": true,
+            "dash": true
           }
         },
         {
@@ -18996,7 +19602,8 @@
               "Trait_Ultimate",
               "Trait_AttackBuff_Duration"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "heal": true
           }
         }
       ]
@@ -19049,7 +19656,8 @@
               "Trait_DamageAbility"
             ],
             "isAoe": true,
-            "isOnHit": true
+            "isOnHit": true,
+            "knockup": true
           }
         },
         {
@@ -19086,7 +19694,8 @@
               "Trait_AttackBuff_Duration",
               "Trait_SignatureSpell"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "longRange": true
           }
         },
         {
@@ -19123,7 +19732,11 @@
               "Trait_Low_Damage",
               "Trait_AoE"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "projectile": true,
+            "knockup": true,
+            "knockback": true,
+            "longRange": true
           }
         },
         {
@@ -19155,7 +19768,8 @@
               "Trait_RecastOrReplaceSpell",
               "Trait_AoE"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "recast": true
           }
         }
       ]
@@ -19240,7 +19854,10 @@
               "Trait_ActiveHeal",
               "Trait_AoE"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "heal": true,
+            "shield": true,
+            "longRange": true
           }
         },
         {
@@ -19302,7 +19919,9 @@
               "Trait_Ranged_Piercing",
               "Trait_AoE"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "projectile": true,
+            "longRange": true
           }
         }
       ]
@@ -19323,7 +19942,9 @@
           "name": "Iron Ambassador",
           "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/characters/poppy/hud/icons2d/poppy_passive.png",
           "description": "Poppy throws her buckler that bounces off the target. Poppy can pick it up to gain a temporary shield.",
-          "stats": {}
+          "stats": {
+            "shield": true
+          }
         },
         {
           "key": "Q",
@@ -19397,7 +20018,8 @@
               "Trait_ImmobilizingCCSpell",
               "Trait_AttackBuff_Duration",
               "Trait_AoE"
-            ]
+            ],
+            "dash": true
           }
         },
         {
@@ -19435,7 +20057,9 @@
               "Trait_KnockBack",
               "Trait_Low_Damage",
               "Trait_AoE"
-            ]
+            ],
+            "knockback": true,
+            "dash": true
           }
         },
         {
@@ -19476,7 +20100,9 @@
               "Trait_ChannelSpell",
               "Trait_AoE"
             ],
-            "isDot": true
+            "isDot": true,
+            "knockup": true,
+            "knockback": true
           }
         }
       ]
@@ -19498,7 +20124,8 @@
           "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/characters/soraka/hud/icons2d/soraka_passive.png",
           "description": "Soraka runs faster towards nearby low health allies.",
           "stats": {
-            "range": 2500
+            "range": 2500,
+            "longRange": true
           }
         },
         {
@@ -19538,7 +20165,8 @@
               "Trait_ActiveHeal",
               "Trait_AoE"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "heal": true
           }
         },
         {
@@ -19569,7 +20197,8 @@
               "Trait_ActiveHeal",
               "Trait_SignatureSpell"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "heal": true
           }
         },
         {
@@ -19611,7 +20240,8 @@
               "Trait_Target_Area",
               "Trait_AoE"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "longRange": true
           }
         },
         {
@@ -19640,7 +20270,8 @@
               "Trait_ActiveHeal",
               "Trait_AoE"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "heal": true
           }
         }
       ]
@@ -19698,7 +20329,8 @@
               "Trait_Low_Damage",
               "Trait_AoE"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "projectile": true
           }
         },
         {
@@ -19720,7 +20352,8 @@
               13,
               12,
               11
-            ]
+            ],
+            "knockup": true
           }
         },
         {
@@ -19751,7 +20384,8 @@
               "PositiveEffect_Teleport",
               "Trait_DamageAbility"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "dash": true
           }
         },
         {
@@ -19878,7 +20512,8 @@
               "Trait_SignatureSpell"
             ],
             "isAoe": true,
-            "isOnHit": true
+            "isOnHit": true,
+            "heal": true
           }
         },
         {
@@ -19914,7 +20549,10 @@
               "Trait_Shield",
               "Trait_AoE"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "projectile": true,
+            "shield": true,
+            "longRange": true
           }
         },
         {
@@ -19952,7 +20590,8 @@
               "Trait_Melee_BigWindup",
               "Trait_AoE"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "dash": true
           }
         }
       ]
@@ -20016,7 +20655,9 @@
               "Trait_DamageAbility",
               "Trait_SignatureSpell",
               "Trait_AoE"
-            ]
+            ],
+            "projectile": true,
+            "longRange": true
           }
         },
         {
@@ -20056,7 +20697,8 @@
               "Trait_Low_Damage",
               "Trait_AoE"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "shield": true
           }
         },
         {
@@ -20093,7 +20735,8 @@
               "PositiveEffect_MoveBlock",
               "Trait_DamageAbility"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "dash": true
           }
         },
         {
@@ -20257,7 +20900,8 @@
               "Trait_SignatureSpell"
             ],
             "isDot": true,
-            "isAoe": true
+            "isAoe": true,
+            "heal": true
           }
         },
         {
@@ -20353,7 +20997,11 @@
               "Trait_SignatureSpell",
               "Trait_Ranged_StopsFirstHit"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "projectile": true,
+            "recast": true,
+            "dash": true,
+            "longRange": true
           }
         },
         {
@@ -20382,7 +21030,9 @@
               "Trait_RecastOrReplaceSpell",
               "Trait_AttackBuff_Duration"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "recast": true,
+            "shield": true
           }
         },
         {
@@ -20413,7 +21063,8 @@
               "Trait_Low_Damage",
               "Trait_AoE"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "recast": true
           }
         },
         {
@@ -20447,7 +21098,9 @@
               "Trait_KnockBack",
               "Trait_AoE"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "knockup": true,
+            "knockback": true
           }
         }
       ]
@@ -20572,7 +21225,8 @@
               "Trait_Shield",
               "Trait_Target_Directional",
               "Trait_AoE"
-            ]
+            ],
+            "shield": true
           }
         },
         {
@@ -20696,7 +21350,8 @@
               "Trait_ActiveHeal",
               "Trait_SignatureSpell",
               "Trait_AoE"
-            ]
+            ],
+            "heal": true
           }
         },
         {
@@ -20775,7 +21430,10 @@
               "Trait_DamageAbility",
               "Trait_AoE"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "projectile": true,
+            "knockup": true,
+            "longRange": true
           }
         }
       ]
@@ -20835,7 +21493,10 @@
               "Trait_AoE"
             ],
             "isAoe": true,
-            "isOnHit": true
+            "isOnHit": true,
+            "projectile": true,
+            "knockback": true,
+            "longRange": true
           }
         },
         {
@@ -20866,7 +21527,9 @@
               "Trait_SignatureSpell",
               "Trait_AoE"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "recast": true,
+            "heal": true
           }
         },
         {
@@ -20897,7 +21560,8 @@
               "Trait_Shield",
               "Trait_Ammo"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "shield": true
           }
         },
         {
@@ -20927,7 +21591,8 @@
               "Trait_ActiveHeal",
               "Trait_AoE"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "heal": true
           }
         }
       ]
@@ -20991,7 +21656,9 @@
               "Trait_Ranged_StopsFirstHit",
               "Trait_AoE"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "projectile": true,
+            "longRange": true
           }
         },
         {
@@ -21020,7 +21687,8 @@
             "tags": [
               "Trait_AoE"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "longRange": true
           }
         },
         {
@@ -21058,7 +21726,9 @@
               "Trait_KnockBack",
               "Trait_SignatureSpell"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "knockback": true,
+            "dash": true
           }
         },
         {
@@ -21095,7 +21765,8 @@
               "Trait_DamageAbility",
               "Trait_AoE"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "projectile": true
           }
         }
       ]
@@ -21155,7 +21826,9 @@
               "Trait_SignatureSpell",
               "Trait_Ranged_StopsFirstHit",
               "Trait_AoE"
-            ]
+            ],
+            "projectile": true,
+            "longRange": true
           }
         },
         {
@@ -21196,7 +21869,9 @@
               "Trait_Low_Damage",
               "Trait_AoE"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "knockback": true,
+            "longRange": true
           }
         },
         {
@@ -21233,7 +21908,9 @@
               "Trait_Ranged_Zone",
               "Trait_Low_Damage",
               "Trait_AoE"
-            ]
+            ],
+            "dash": true,
+            "longRange": true
           }
         },
         {
@@ -21266,7 +21943,10 @@
               "Trait_ImmobilizingCCSpell",
               "Trait_RecastOrReplaceSpell",
               "Trait_CreateTerrain"
-            ]
+            ],
+            "projectile": true,
+            "recast": true,
+            "longRange": true
           }
         }
       ]
@@ -21331,7 +22011,8 @@
               "Trait_SignatureSpell",
               "Trait_Ammo"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "heal": true
           }
         },
         {
@@ -21364,7 +22045,9 @@
               "PositiveEffect_Boon",
               "Trait_Shield"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "projectile": true,
+            "shield": true
           }
         },
         {
@@ -21399,7 +22082,8 @@
               "Trait_ImmobilizingCCSpell",
               "Trait_DamageAbility",
               "Trait_AoE"
-            ]
+            ],
+            "projectile": true
           }
         },
         {
@@ -21450,7 +22134,9 @@
             "range": 1400,
             "tags": [
               "Trait_AttackBuff_Duration"
-            ]
+            ],
+            "heal": true,
+            "longRange": true
           }
         },
         {
@@ -21512,7 +22198,8 @@
               "Trait_ActiveHeal",
               "Trait_Target_Area"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "heal": true
           }
         },
         {
@@ -21547,7 +22234,9 @@
               "Trait_Ranged_Zone",
               "Trait_AoE"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "knockback": true,
+            "longRange": true
           }
         },
         {
@@ -21575,7 +22264,8 @@
               "Trait_AttackBuff_Duration"
             ],
             "isDot": true,
-            "isAoe": true
+            "isAoe": true,
+            "heal": true
           }
         }
       ]
@@ -21597,7 +22287,8 @@
           "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/characters/rengar/hud/icons2d/rengar_p.png",
           "description": "While in Brush, Rengar leaps at his target with his basic attack.Rengar generates Ferocity whenever he casts an ability. At Max Ferocity, his next ability is empowered.Killing enemy champions awards trophies on Rengar's Bonetooth Necklace, granting bonus attack damage.",
           "stats": {
-            "isOnHit": true
+            "isOnHit": true,
+            "dash": true
           }
         },
         {
@@ -21631,7 +22322,8 @@
               "Trait_SignatureSpell"
             ],
             "isAoe": true,
-            "isOnHit": true
+            "isOnHit": true,
+            "projectile": true
           }
         },
         {
@@ -21666,7 +22358,8 @@
               "Trait_Low_Damage",
               "Trait_AoE"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "heal": true
           }
         },
         {
@@ -21698,7 +22391,9 @@
               "Trait_SwapsIntoImmobilizingCCAbility",
               "Trait_DamageAbility",
               "Trait_Low_Damage"
-            ]
+            ],
+            "projectile": true,
+            "longRange": true
           }
         },
         {
@@ -21724,7 +22419,9 @@
               "PositiveEffect_EmpowerAttack",
               "PositiveEffect_MoveBlock"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "dash": true,
+            "longRange": true
           }
         }
       ]
@@ -21746,7 +22443,8 @@
           "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/characters/nidalee/hud/icons2d/nidalee_passive.png",
           "description": "Moving through brush increases Nidalee's Move Speed by 10% for 2 seconds, increased to 30% toward visible enemy champions within 1400 range.Hitting champions or monsters with Javelin Toss or Bushwhack triggers a Hunt, granting True Sight of them for 4 seconds. During this time, Nidalee gains 10% Move Speed (increased to 30% toward the Hunted target) and her Takedown and Pounce are enhanced against them.",
           "stats": {
-            "range": 1400
+            "range": 1400,
+            "longRange": true
           }
         },
         {
@@ -21785,7 +22483,9 @@
               "Trait_Ranged_StopsFirstHit"
             ],
             "isAoe": true,
-            "isOnHit": true
+            "isOnHit": true,
+            "projectile": true,
+            "longRange": true
           }
         },
         {
@@ -21826,7 +22526,8 @@
               "Trait_Target_Area",
               "Trait_Low_Damage"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "longRange": true
           }
         },
         {
@@ -21856,7 +22557,9 @@
               "PositiveEffect_Boon",
               "Trait_ActiveHeal"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "heal": true,
+            "longRange": true
           }
         },
         {
@@ -21888,7 +22591,8 @@
               "Trait_Ultimate",
               "Trait_RecastOrReplaceSpell"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "recast": true
           }
         }
       ]
@@ -22050,7 +22754,8 @@
           "stats": {
             "tags": [
               "PositiveEffect_Boon"
-            ]
+            ],
+            "heal": true
           }
         },
         {
@@ -22084,7 +22789,9 @@
               "Trait_ChannelSpell"
             ],
             "isDot": true,
-            "isOnHit": true
+            "isOnHit": true,
+            "projectile": true,
+            "recast": true
           }
         },
         {
@@ -22098,7 +22805,11 @@
               "Trait_RecastOrReplaceSpell",
               "Trait_SignatureSpell"
             ],
-            "isOnHit": true
+            "isOnHit": true,
+            "recast": true,
+            "heal": true,
+            "shield": true,
+            "dash": true
           }
         },
         {
@@ -22119,7 +22830,8 @@
             "tags": [
               "PositiveEffect_Boon",
               "Trait_Shield"
-            ]
+            ],
+            "shield": true
           }
         },
         {
@@ -22159,7 +22871,10 @@
               "Trait_Low_Damage",
               "Trait_AoE"
             ],
-            "isDot": true
+            "isDot": true,
+            "heal": true,
+            "shield": true,
+            "longRange": true
           }
         }
       ]
@@ -22223,7 +22938,10 @@
               "Trait_Ranged_Piercing",
               "Trait_AoE"
             ],
-            "isDot": true
+            "isDot": true,
+            "projectile": true,
+            "dash": true,
+            "longRange": true
           }
         },
         {
@@ -22248,7 +22966,8 @@
               "Trait_Ultimate",
               "Trait_Shield",
               "Trait_Untargetable"
-            ]
+            ],
+            "shield": true
           }
         },
         {
@@ -22283,7 +23002,9 @@
               "Trait_DamageAbility",
               "Trait_AoE"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "heal": true,
+            "dash": true
           }
         },
         {
@@ -22310,7 +23031,9 @@
           "name": "Blast Shield",
           "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/characters/vi/hud/icons2d/vipassive.png",
           "description": "Vi charges a shield over time. The shield can be activated by hitting an enemy with an ability.",
-          "stats": {}
+          "stats": {
+            "shield": true
+          }
         },
         {
           "key": "Q",
@@ -22355,7 +23078,11 @@
               "Trait_Strike",
               "Trait_Melee_BigWindup"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "knockup": true,
+            "knockback": true,
+            "recast": true,
+            "dash": true
           }
         },
         {
@@ -22373,7 +23100,8 @@
               "Trait_NoCooldown",
               "Trait_Low_Damage"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "projectile": true
           }
         },
         {
@@ -22452,7 +23180,9 @@
               "Trait_ImmobilizingCCSpell",
               "Trait_AoE"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "knockup": true,
+            "knockback": true
           }
         }
       ]
@@ -22549,7 +23279,8 @@
               "Trait_SignatureSpell",
               "Trait_AoE"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "projectile": true
           }
         },
         {
@@ -22594,7 +23325,11 @@
               "Trait_Shield",
               "Trait_Low_Damage"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "projectile": true,
+            "knockback": true,
+            "shield": true,
+            "dash": true
           }
         },
         {
@@ -22633,7 +23368,10 @@
               "Trait_AoE"
             ],
             "isAoe": true,
-            "isOnHit": true
+            "isOnHit": true,
+            "projectile": true,
+            "recast": true,
+            "longRange": true
           }
         }
       ]
@@ -22704,7 +23442,9 @@
               "Trait_Ranged_StopsFirstHit",
               "Trait_AoE"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "projectile": true,
+            "recast": true
           }
         },
         {
@@ -22735,7 +23475,9 @@
               "Trait_Low_Damage",
               "Trait_AoE",
               "Trait_PassiveSlot"
-            ]
+            ],
+            "projectile": true,
+            "longRange": true
           }
         },
         {
@@ -22772,7 +23514,8 @@
               "Trait_Ranged_StopsFirstHit",
               "Trait_Low_Damage"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "projectile": true
           }
         },
         {
@@ -22804,7 +23547,8 @@
               "PositiveEffect_Teleport",
               "Trait_PlayerSelectedDashDirection"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "dash": true
           }
         }
       ]
@@ -22870,7 +23614,8 @@
               "Trait_SignatureSpell",
               "Trait_AoE"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "knockback": true
           }
         },
         {
@@ -22894,7 +23639,8 @@
               "Trait_RecastOrReplaceSpell",
               "Trait_AoE"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "recast": true
           }
         },
         {
@@ -22953,7 +23699,9 @@
               "Trait_Low_Damage",
               "Trait_AoE"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "knockup": true,
+            "dash": true
           }
         }
       ]
@@ -23022,7 +23770,8 @@
               "Trait_DamageAbility",
               "Trait_Ranged_Piercing",
               "Trait_AoE"
-            ]
+            ],
+            "projectile": true
           }
         },
         {
@@ -23092,7 +23841,10 @@
               "PositiveEffect_MoveBlock",
               "Trait_Shield",
               "Trait_AoE"
-            ]
+            ],
+            "shield": true,
+            "dash": true,
+            "longRange": true
           }
         },
         {
@@ -23130,7 +23882,9 @@
               "Trait_DamageAbility",
               "Trait_CreateTerrain",
               "Trait_AoE"
-            ]
+            ],
+            "knockup": true,
+            "knockback": true
           }
         }
       ]
@@ -23197,7 +23951,10 @@
               "Trait_DamageAbility",
               "Trait_Ranged_StopsFirstHit"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "projectile": true,
+            "shield": true,
+            "longRange": true
           }
         },
         {
@@ -23230,7 +23987,8 @@
               "PositiveEffect_MoveBlock",
               "PositiveEffect_Boon"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "dash": true
           }
         },
         {
@@ -23266,7 +24024,8 @@
               "Trait_Parry",
               "Trait_SignatureSpell"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "shield": true
           }
         },
         {
@@ -23303,7 +24062,10 @@
               "Trait_DamageAbility",
               "Trait_AoE"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "projectile": true,
+            "knockup": true,
+            "longRange": true
           }
         }
       ]
@@ -23366,7 +24128,10 @@
               "Trait_Low_Damage",
               "Trait_AoE"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "projectile": true,
+            "recast": true,
+            "longRange": true
           }
         },
         {
@@ -23396,7 +24161,8 @@
             "tags": [
               "Trait_CreateTerrain"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "longRange": true
           }
         },
         {
@@ -23464,7 +24230,8 @@
               "Trait_AoE"
             ],
             "isDot": true,
-            "isAoe": true
+            "isAoe": true,
+            "projectile": true
           }
         }
       ]
@@ -23528,7 +24295,9 @@
               "Trait_AoE"
             ],
             "isDot": true,
-            "isAoe": true
+            "isAoe": true,
+            "projectile": true,
+            "longRange": true
           }
         },
         {
@@ -23602,7 +24371,8 @@
               "Trait_Shield",
               "Trait_Low_Damage"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "shield": true
           }
         },
         {
@@ -23633,7 +24403,9 @@
               "Trait_AttackBuff_Duration",
               "Trait_AoE"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "knockup": true,
+            "longRange": true
           }
         }
       ]
@@ -23709,7 +24481,9 @@
               "Trait_AttackBuff_Duration",
               "Trait_Invisibility",
               "Trait_CreateClone"
-            ]
+            ],
+            "recast": true,
+            "longRange": true
           }
         },
         {
@@ -23742,7 +24516,9 @@
               "Trait_DamageAbility",
               "Trait_Ranged_Piercing",
               "Trait_Low_Damage"
-            ]
+            ],
+            "projectile": true,
+            "longRange": true
           }
         },
         {
@@ -23771,7 +24547,9 @@
               "Trait_ImmobilizingCCSpell",
               "Trait_DamageAbility"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "knockup": true,
+            "dash": true
           }
         }
       ]
@@ -23838,7 +24616,8 @@
               "Trait_Melee_SmallWindup",
               "Trait_AoE"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "projectile": true
           }
         },
         {
@@ -23875,7 +24654,9 @@
             "tags": [
               "PositiveEffect_MoveBlock"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "dash": true,
+            "longRange": true
           }
         },
         {
@@ -23913,7 +24694,8 @@
               "Trait_DamageAbility",
               "Trait_Low_Damage"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "dash": true
           }
         },
         {
@@ -23951,7 +24733,9 @@
               "Trait_KnockBack",
               "Trait_AoE"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "knockback": true,
+            "longRange": true
           }
         }
       ]
@@ -24015,7 +24799,8 @@
             "damageType": "magic",
             "tags": [
               "Trait_DamageAbility"
-            ]
+            ],
+            "heal": true
           }
         },
         {
@@ -24059,7 +24844,11 @@
               "Trait_Ranged_StopsFirstHit",
               "Trait_AoE"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "projectile": true,
+            "knockup": true,
+            "recast": true,
+            "longRange": true
           }
         },
         {
@@ -24100,7 +24889,9 @@
               "Trait_RecastOrReplaceSpell",
               "Trait_AoE"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "projectile": true,
+            "recast": true
           }
         },
         {
@@ -24139,7 +24930,8 @@
               "Trait_Shield",
               "Trait_AoE"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "shield": true
           }
         }
       ]
@@ -24203,7 +24995,9 @@
               "Trait_SignatureSpell",
               "Trait_Ranged_StopsFirstHit"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "projectile": true,
+            "longRange": true
           }
         },
         {
@@ -24358,7 +25152,10 @@
               "Trait_Low_Damage",
               "Trait_AoE"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "projectile": true,
+            "recast": true,
+            "longRange": true
           }
         },
         {
@@ -24391,7 +25188,8 @@
               "Trait_PassiveSlot",
               "Trait_RecastOrReplaceSpell"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "recast": true
           }
         },
         {
@@ -24418,7 +25216,9 @@
               "Trait_RecastOrReplaceSpell",
               "Trait_Low_Damage"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "recast": true,
+            "dash": true
           }
         },
         {
@@ -24452,7 +25252,8 @@
               "Trait_KnockBack",
               "Trait_AoE"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "knockback": true
           }
         }
       ]
@@ -24499,7 +25300,8 @@
               "Trait_Target_Directional",
               "Trait_Melee_SmallWindup",
               "Trait_AoE"
-            ]
+            ],
+            "dash": true
           }
         },
         {
@@ -24535,7 +25337,8 @@
               "Trait_Melee_SmallWindup",
               "Trait_Low_Damage",
               "Trait_AoE"
-            ]
+            ],
+            "knockup": true
           }
         },
         {
@@ -24559,7 +25362,8 @@
               "Trait_DoT",
               "Trait_Parry",
               "Trait_AoE"
-            ]
+            ],
+            "heal": true
           }
         },
         {
@@ -24617,7 +25421,8 @@
               10,
               10,
               10
-            ]
+            ],
+            "heal": true
           }
         },
         {
@@ -24684,7 +25489,10 @@
             ],
             "isDot": true,
             "isAoe": true,
-            "isOnHit": true
+            "isOnHit": true,
+            "knockup": true,
+            "recast": true,
+            "longRange": true
           }
         },
         {
@@ -24744,7 +25552,9 @@
               "PositiveEffect_MoveBlock",
               "Trait_DamageAbility"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "dash": true,
+            "longRange": true
           }
         }
       ]
@@ -24767,7 +25577,8 @@
           "description": "Human Form: When Elise's abilities hit an enemy, she gains a dormant Spiderling.Spider Form: Basic attacks deal bonus magic damage and restore health to Elise.",
           "stats": {
             "damageType": "magic",
-            "isOnHit": true
+            "isOnHit": true,
+            "heal": true
           }
         },
         {
@@ -24803,7 +25614,8 @@
             "tags": [
               "Trait_DamageAbility"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "dash": true
           }
         },
         {
@@ -24841,7 +25653,9 @@
               "Trait_SignatureSpell",
               "Trait_AoE"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "projectile": true,
+            "longRange": true
           }
         },
         {
@@ -24878,7 +25692,11 @@
               "Trait_Ranged_StopsFirstHit",
               "Trait_Low_Damage"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "projectile": true,
+            "knockup": true,
+            "heal": true,
+            "longRange": true
           }
         },
         {
@@ -24909,7 +25727,8 @@
               "Trait_Ultimate",
               "Trait_RecastOrReplaceSpell"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "recast": true
           }
         }
       ]
@@ -24975,7 +25794,10 @@
               "Trait_SignatureSpell",
               "Trait_Ranged_StopsFirstHit"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "projectile": true,
+            "dash": true,
+            "longRange": true
           }
         },
         {
@@ -25010,7 +25832,8 @@
               "Trait_Target_Area",
               "Trait_Low_Damage"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "longRange": true
           }
         },
         {
@@ -25047,7 +25870,8 @@
               "Trait_Shield",
               "Trait_AoE"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "shield": true
           }
         },
         {
@@ -25187,7 +26011,9 @@
               "Trait_Melee_SmallWindup",
               "Trait_AoE"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "recast": true,
+            "dash": true
           }
         },
         {
@@ -25224,7 +26050,9 @@
               "Trait_Ranged_StopsFirstHit",
               "Trait_Low_Damage"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "projectile": true,
+            "longRange": true
           }
         },
         {
@@ -25272,7 +26100,8 @@
           "description": "Rakan periodically gains a shield.",
           "stats": {
             "apRatio": 0.95,
-            "damageType": "magic"
+            "damageType": "magic",
+            "shield": true
           }
         },
         {
@@ -25307,7 +26136,9 @@
               "Trait_ActiveHeal",
               "Trait_Ranged_StopsFirstHit"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "projectile": true,
+            "heal": true
           }
         },
         {
@@ -25351,7 +26182,9 @@
               "Trait_Target_Area",
               "Trait_AoE"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "knockup": true,
+            "dash": true
           }
         },
         {
@@ -25383,7 +26216,10 @@
               "Trait_RecastOrReplaceSpell",
               "Trait_Shield"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "projectile": true,
+            "recast": true,
+            "shield": true
           }
         },
         {
@@ -25476,7 +26312,8 @@
               "Trait_SignatureSpell",
               "Trait_Ranged_StopsFirstHit",
               "Trait_AoE"
-            ]
+            ],
+            "projectile": true
           }
         },
         {
@@ -25516,7 +26353,8 @@
               "Trait_Shield",
               "Trait_Low_Damage",
               "Trait_AoE"
-            ]
+            ],
+            "shield": true
           }
         },
         {
@@ -25553,7 +26391,8 @@
             "tags": [
               "Trait_DamageAbility",
               "Trait_Low_Damage"
-            ]
+            ],
+            "longRange": true
           }
         },
         {
@@ -25617,7 +26456,8 @@
               300,
               300,
               300
-            ]
+            ],
+            "heal": true
           }
         },
         {
@@ -25655,7 +26495,9 @@
               "Trait_Ranged_StopsFirstHit",
               "Trait_Low_Damage",
               "Trait_AoE"
-            ]
+            ],
+            "projectile": true,
+            "recast": true
           }
         },
         {
@@ -25754,7 +26596,9 @@
               "Trait_KnockBack",
               "Trait_AoE"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "knockup": true,
+            "knockback": true
           }
         }
       ]
@@ -25808,7 +26652,8 @@
               "Trait_SignatureSpell",
               "Trait_AoE"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "heal": true
           }
         },
         {
@@ -25842,7 +26687,8 @@
               "Trait_DamageAbility",
               "Trait_Strike"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "shield": true
           }
         },
         {
@@ -25875,7 +26721,9 @@
               "Trait_Low_Damage",
               "Trait_AoE"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "projectile": true,
+            "dash": true
           }
         },
         {
@@ -25953,7 +26801,8 @@
               "Trait_DamageAbility",
               "Trait_SignatureSpell",
               "Trait_Ranged_StopsFirstHit"
-            ]
+            ],
+            "projectile": true
           }
         },
         {
@@ -25989,7 +26838,9 @@
               "Trait_Melee_SmallWindup",
               "Trait_AoE"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "projectile": true,
+            "longRange": true
           }
         },
         {
@@ -26020,7 +26871,8 @@
               "Trait_PlayerSelectedDashDirection",
               "Trait_AttackBuff_Duration"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "dash": true
           }
         },
         {
@@ -26073,7 +26925,8 @@
             "apRatio": 0.1,
             "adRatio": 0.15,
             "damageType": "magic",
-            "isOnHit": true
+            "isOnHit": true,
+            "heal": true
           }
         },
         {
@@ -26113,7 +26966,9 @@
               "Trait_Strike",
               "Trait_SignatureSpell"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "heal": true,
+            "dash": true
           }
         },
         {
@@ -26145,7 +27000,8 @@
             "tags": [
               "Trait_AttackBuff_Duration"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "longRange": true
           }
         },
         {
@@ -26181,7 +27037,8 @@
               "Trait_Parry",
               "Trait_AttackBuff_Duration",
               "Trait_AoE"
-            ]
+            ],
+            "recast": true
           }
         },
         {
@@ -26218,7 +27075,9 @@
               "Trait_DamageAbility",
               "Trait_ActiveHeal"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "heal": true,
+            "dash": true
           }
         }
       ]
@@ -26241,7 +27100,8 @@
           "description": "When out of combat, Evelynn enters Demon Shade. Demon Shade heals Evelynn when she is low on health and grants Camouflage after level 6.",
           "stats": {
             "apRatio": 2.5,
-            "damageType": "magic"
+            "damageType": "magic",
+            "heal": true
           }
         },
         {
@@ -26279,7 +27139,9 @@
               "Trait_RecastOrReplaceSpell",
               "Trait_SignatureSpell",
               "Trait_AoE"
-            ]
+            ],
+            "projectile": true,
+            "recast": true
           }
         },
         {
@@ -26317,7 +27179,9 @@
             "tags": [
               "Trait_ImmobilizingCCSpell"
             ],
-            "isOnHit": true
+            "isOnHit": true,
+            "projectile": true,
+            "longRange": true
           }
         },
         {
@@ -26461,7 +27325,8 @@
               "Trait_SignatureSpell",
               "Trait_AoE"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "projectile": true
           }
         },
         {
@@ -26527,7 +27392,10 @@
               "Trait_RecastOrReplaceSpell",
               "Trait_Ranged_StopsFirstHit"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "projectile": true,
+            "recast": true,
+            "dash": true
           }
         },
         {
@@ -26562,7 +27430,10 @@
               "Trait_Ranged_Piercing",
               "Trait_AoE"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "projectile": true,
+            "recast": true,
+            "dash": true
           }
         }
       ]
@@ -26615,7 +27486,10 @@
               "Trait_DamageAbility",
               "Trait_SignatureSpell",
               "Trait_Ranged_StopsFirstHit"
-            ]
+            ],
+            "projectile": true,
+            "knockup": true,
+            "knockback": true
           }
         },
         {
@@ -26678,7 +27552,9 @@
               "Trait_RecastOrReplaceSpell",
               "Trait_Low_Damage",
               "Trait_AoE"
-            ]
+            ],
+            "recast": true,
+            "dash": true
           }
         },
         {
@@ -26707,7 +27583,10 @@
               "Trait_Shield",
               "Trait_Ranged_Zone",
               "Trait_AoE"
-            ]
+            ],
+            "knockback": true,
+            "shield": true,
+            "longRange": true
           }
         }
       ]
@@ -26768,7 +27647,9 @@
               "Trait_Target_Area",
               "Trait_AoE"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "projectile": true,
+            "longRange": true
           }
         },
         {
@@ -26795,7 +27676,8 @@
               "Trait_AttackBuff_Duration",
               "Trait_Strike"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "shield": true
           }
         },
         {
@@ -26906,7 +27788,8 @@
               "Trait_Strike",
               "Trait_SignatureSpell"
             ],
-            "isOnHit": true
+            "isOnHit": true,
+            "heal": true
           }
         },
         {
@@ -27041,7 +27924,8 @@
               "Trait_AoE"
             ],
             "isAoe": true,
-            "isOnHit": true
+            "isOnHit": true,
+            "recast": true
           }
         },
         {
@@ -27087,7 +27971,10 @@
               "Trait_Melee_BigWindup",
               "Trait_AoE"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "projectile": true,
+            "knockback": true,
+            "dash": true
           }
         },
         {
@@ -27117,7 +28004,9 @@
               "Trait_PlayerSelectedDashDirection",
               "Trait_Shield"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "shield": true,
+            "dash": true
           }
         },
         {
@@ -27154,7 +28043,11 @@
               "Trait_KnockBack",
               "Trait_CCImmune"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "knockup": true,
+            "knockback": true,
+            "heal": true,
+            "dash": true
           }
         }
       ]
@@ -27218,7 +28111,9 @@
               "Trait_ActiveHeal",
               "Trait_Strike",
               "Trait_SignatureSpell"
-            ]
+            ],
+            "heal": true,
+            "dash": true
           }
         },
         {
@@ -27254,7 +28149,8 @@
               "Trait_Low_Damage",
               "Trait_AoE"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "recast": true
           }
         },
         {
@@ -27291,7 +28187,8 @@
               "Trait_RecastOrReplaceSpell",
               "Trait_Low_Damage",
               "Trait_AoE"
-            ]
+            ],
+            "recast": true
           }
         },
         {
@@ -27326,7 +28223,9 @@
               "Trait_AoE"
             ],
             "isAoe": true,
-            "isOnHit": true
+            "isOnHit": true,
+            "projectile": true,
+            "longRange": true
           }
         }
       ]
@@ -27348,7 +28247,8 @@
           "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/characters/camille/hud/icons2d/camille_passive.png",
           "description": "Basic attacks on champions grant a shield equal to a percentage of Camille's maximum health against their damage type (Physical or Magic) for a brief duration.",
           "stats": {
-            "isOnHit": true
+            "isOnHit": true,
+            "shield": true
           }
         },
         {
@@ -27375,7 +28275,8 @@
               "Trait_Strike"
             ],
             "isAoe": true,
-            "isOnHit": true
+            "isOnHit": true,
+            "recast": true
           }
         },
         {
@@ -27415,7 +28316,9 @@
               "Trait_Melee_SmallWindup",
               "Trait_Low_Damage",
               "Trait_AoE"
-            ]
+            ],
+            "projectile": true,
+            "heal": true
           }
         },
         {
@@ -27452,7 +28355,9 @@
               "Trait_DamageAbility",
               "Trait_RecastOrReplaceSpell",
               "Trait_SignatureSpell"
-            ]
+            ],
+            "knockup": true,
+            "recast": true
           }
         },
         {
@@ -27483,7 +28388,9 @@
               "Trait_AoE"
             ],
             "isAoe": true,
-            "isOnHit": true
+            "isOnHit": true,
+            "knockback": true,
+            "dash": true
           }
         }
       ]
@@ -27551,7 +28458,8 @@
               "Trait_ImmobilizingCCSpell",
               "Trait_DamageAbility",
               "Trait_SignatureSpell"
-            ]
+            ],
+            "projectile": true
           }
         },
         {
@@ -27579,7 +28487,8 @@
               "Trait_ActiveHeal",
               "Trait_Ammo"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "heal": true
           }
         },
         {
@@ -27608,7 +28517,8 @@
             ],
             "range": 900,
             "damageType": "magic",
-            "isAoe": true
+            "isAoe": true,
+            "longRange": true
           }
         },
         {
@@ -27636,7 +28546,8 @@
               "Trait_ImmobilizingCCSpell",
               "Trait_AoE"
             ],
-            "isAoe": true
+            "isAoe": true,
+            "longRange": true
           }
         }
       ]

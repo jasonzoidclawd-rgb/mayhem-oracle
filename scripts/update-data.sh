@@ -76,7 +76,8 @@ for aug in data.get("augments", []):
     if saved.get("set") and not aug.get("set"):
         aug["set"] = saved["set"]
     if "flags" in saved:
-        aug.setdefault("flags", {}).update(saved["flags"])
+        saved_flags = {k: v for k, v in saved["flags"].items() if k != "lifecycle"}
+        aug.setdefault("flags", {}).update(saved_flags)
     restored += 1
 path.write_text(json.dumps(data, ensure_ascii=False, indent=2), encoding="utf-8")
 missing = sum(1 for a in data["augments"] if not a.get("kit_tags"))

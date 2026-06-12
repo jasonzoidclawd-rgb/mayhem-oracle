@@ -225,7 +225,7 @@ The scoring algorithm should have a **qualitative multiplier** for these:
 | Map                  | Small circular arenas | Howling Abyss / Butcher's Bridge / Koeshin's Crossing |
 | Team size            | 2                   | 5                       |
 | Win condition        | HP elimination       | Destroy Nexus           |
-| Augment sets         | No                  | **Yes** (9 named sets)  |
+| Augment sets         | No                  | Removed in 26.12 (historical: 9 named sets) |
 | Augment selection    | Between rounds       | On shop-enable (dead or at spawn) |
 | Runes                | Enabled             | **Disabled** (some keystones via augments) |
 | Summoner spells      | Selectable          | Flash mandatory, Exhaust disabled |
@@ -233,7 +233,11 @@ The scoring algorithm should have a **qualitative multiplier** for these:
 | Reroll style         | Different            | 3-slot independent reroll |
 | 5th augment slot     | N/A                 | **Yes** (via select special augments) |
 
-### Augment Sets (9 Named Sets, Patch 26.3+)
+### Historical (pre-26.12): Augment Sets (9 Named Sets, Patch 26.3–26.11)
+
+**Removed in 26.12** — Riot removed the Trait/Set system entirely ("homogenized
+builds"). Former set effects return as standalone augments. Set labels survive
+in the data as historical metadata only and must never affect scores.
 
 Official sets with escalating bonuses at 2-4 augments collected:
 
@@ -249,13 +253,14 @@ Official sets with escalating bonuses at 2-4 augments collected:
 | Autocast          | Autocast cooldown scaling with ability haste                |
 | Wee Woo Wee Woo   | Support/frontline bonuses for allies below 50% HP           |
 
-Set bonus tiers scale at 2, 3, and 4 augments from the same set.
+Set bonus tiers scaled at 2, 3, and 4 augments from the same set (historical).
+
+**Bread Sandwich (historical, pre-26.12)**: acquiring all three "Bread"
+augments (Bread and Butter, Bread and Cheese, Bread and Jam) granted a hidden
+"Bread Sandwich" buff: **250 ultimate haste** and **50 ability haste on each
+basic ability**. Re-verify against live 26.12 before citing.
 
 ### Hidden Combos (Official Wiki)
-
-**Bread Sandwich**: Acquiring all three "Bread" augments (Bread and Butter,
-Bread and Cheese, Bread and Jam) grants a hidden buff called "Bread Sandwich"
-that gives **250 ultimate haste** and **50 ability haste on each basic ability**.
 
 **Burn Stacking**: When a Burn stack is inflicted, all different Burn sources
 stack the first source's effect and credit damage to the first source's owner.
@@ -288,7 +293,23 @@ the original. Transmuted augments state this in their title.
 
 ---
 
-## 8. Urgot W Interactions (Verified)
+## 8. Patch 26.12 — Structural Changes (live since 2026-06-09)
+
+- **Traits / Augment Sets removed.** No active set bonuses; named set
+  progression is gone. Historical set labels remain in scraped data.
+- **New augment classes:** Ability Augments (significantly enhance one ability;
+  the player chooses which; Riot pool-gates them: "You'll only ever receive
+  Ability Augments that are usable for your champion") and Quest Augments
+  (repeatable objective → reward). Corpus turnover: 40 removed, 59 added (live
+  badge counts; official notes said 41/57).
+- **Selection mechanics unchanged:** official notes are silent on rounds /
+  slots / rerolls / tier sync / Golden Reroll — rounds at levels 3/7/11/15,
+  3 slots, 1 independent reroll per slot presumed intact. See "26.12 Live
+  Verification Gate" below for the pending in-game confirmation checklist.
+
+---
+
+## 9. Urgot W Interactions (Verified)
 
 Included as reference since this was the test case in the Gemini session.
 
@@ -321,3 +342,30 @@ attack (CAN crit, benefits from AS items) → re-activate W. High skill ceiling.
 - [ ] Verify "item influence on smart tailoring" claim
 - [ ] Map all augment set memberships
 - [ ] Calculate N_tailored per champion archetype from actual pool data
+
+---
+
+## 26.12 Live Verification Gate (Session 12 — pending first live game)
+
+OCR benchmark re-run 2026-06-12 under regenerated 26.12 data: 100% (16/16
+labeled crops, avg 221 ms). The corpus contains only pre-26.12 card names —
+no newly added augment crop exists yet, because corpus crops come from real
+selection-screen screenshots. Hold the phase-2 tag until both gates pass:
+
+1. Corpus refresh: screenshot selection rounds showing NEW 26.12 augments
+   (ideally an Ability and a Quest augment), label them in
+   `overlay/corpus/ground_truth.json`, run `scripts/build_ocr_corpus.py`,
+   then `scripts/benchmark_ocr.py` — recognition must stay >= the pre-26.12
+   rate (100%).
+2. Live checklist (one game, overlay running):
+   - [ ] Rounds trigger at levels 3 / 7 / 11 / 15
+   - [ ] 3 cards per round; 1 independent reroll per slot
+   - [ ] Tier sync holds across players
+   - [ ] NEW chip + EV annotation render on badges (no set paths)
+   - [ ] A NEW 26.12 augment name OCR-matches with the correct badge
+   - [ ] Ability Augment pick flow: note whether the player chooses the
+         ability in-game (record for fit-model refinement)
+
+Any drift in rounds/slots/rerolls/tier-sync means CARD_NAME_REGIONS in
+`overlay/src-tauri/src/lib.rs` may need a Rust rebuild — tag first, release
+build, and verify the binary timestamp (`cargo check` alone is insufficient).

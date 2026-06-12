@@ -5,7 +5,7 @@
  * and the augments already picked in earlier rounds.
  *
  * score = champion_wr + set_tier_bonus + combo_bonus + trap_penalty
- *       + same_set_synergy + rarity_bonus + system_breaker_bonus
+ *       + rarity_bonus + system_breaker_bonus
  *       + ability_type_synergy + attack_type_synergy + cc_synergy
  *       + mechanical_interaction
  */
@@ -24,6 +24,7 @@ export interface MechanicalInteractionScoreSignal {
 export interface ScoredAugment {
   slug: string;
   name: string;
+  type?: "ability" | "quest" | "standalone";
   name_zh_CN?: string;
   name_zh_TW?: string;
   name_ja?: string;
@@ -49,26 +50,23 @@ export interface OracleScoreInput {
   championWinRate?: number;
   /** Combo tier for this augment × champion pair, if known */
   comboTier?: ComboTier;
-  /** Augment set IDs already picked (for same-set synergy bonus) */
-  pickedSetIds?: string[];
-  /** Set ID of this augment, if it belongs to one */
-  augmentSetId?: string;
   /** Whether this augment is a system breaker (qualitative change / 質變增幅) */
   isSystemBreaker?: boolean;
   /** Champion ability profile from CommunityDragon */
   abilityProfile?: AbilityProfile;
   /** Strongest structured champion-kit interaction for this augment */
   mechanicalInteraction?: MechanicalInteractionScoreSignal;
+  /** 26.12 ability/quest augment fit signal (see ability-augment-fit.ts) */
+  abilityAugmentFit?: { strength: number };
 }
 
 export interface OracleScoreResult {
   total: number;
   breakdown: {
     championWr: number;
-    setTierBonus: number;
+    tierBonus: number;
     comboBonus: number;
     trapPenalty: number;
-    sameSetSynergy: number;
     rarityBonus: number;
     systemBreakerBonus: number;
     abilityTypeSynergy: number;
@@ -76,6 +74,7 @@ export interface OracleScoreResult {
     ccSynergy: number;
     tagMismatch: number;
     mechanicalInteraction: number;
+    abilityAugmentFit: number;
   };
 }
 
@@ -114,15 +113,14 @@ export function computeOracleScore(input: OracleScoreInput): OracleScoreResult {
     augment,
     championWinRate,
     comboTier,
-    pickedSetIds = [],
-    augmentSetId,
     isSystemBreaker = false,
     abilityProfile,
     mechanicalInteraction: interactionSignal,
+    abilityAugmentFit: fitSignal,
   } = input;
 
   // Validate rarity — malformed JSON can supply an unknown string, which would make
-  // SET_TIER_BONUS and RARITY_BONUS return undefined and silently corrupt the total.
+  // TIER_BONUS and RARITY_BONUS return undefined and silently corrupt the total.
   const rawRarity = augment.rarity;
   const safeRarity: AugmentRarity =
     rawRarity === "prismatic" || rawRarity === "gold" || rawRarity === "silver"
@@ -139,26 +137,28 @@ export function computeOracleScore(input: OracleScoreInput): OracleScoreResult {
 
   // Use augment's own win rate as base (not champion WR which is constant per champ).
   // Reject NaN/Infinity from malformed data so they can't propagate into total scores.
+  // 26.12 preview neutrality: newly added augments launch without telemetry —
+  // their 0/null win_rate means "no data", not "loses every game".
+  const isPreviewWinRate =
+    augment.flags?.lifecycle === "added" &&
+    (augment.win_rate === 0 || augment.win_rate === null);
   const baseScore =
-    typeof augment.win_rate === "number" && Number.isFinite(augment.win_rate)
+    !isPreviewWinRate &&
+    typeof augment.win_rate === "number" &&
+    Number.isFinite(augment.win_rate)
       ? augment.win_rate
       : 50;
   // Champion WR as minor adjustment: +-2 pts max around 50% baseline
   const wr = typeof championWinRate === "number" && Number.isFinite(championWinRate) ? championWinRate : 50;
   const championAdj = (wr - 50) * 0.1;
   const championWr = baseScore + championAdj;
-  const setTierBonus = SCORE_WEIGHTS.SET_TIER_BONUS[safeRarity] ?? 0;
+  const tierBonus = SCORE_WEIGHTS.TIER_BONUS[safeRarity] ?? 0;
   const rarityBonus = SCORE_WEIGHTS.RARITY_BONUS[safeRarity] ?? 0;
 
   const comboBonus =
     safeComboTier === "S" ? SCORE_WEIGHTS.STRONG_COMBO_BONUS : 0;
   const trapPenalty =
     safeComboTier === "C" ? SCORE_WEIGHTS.TRAP_PENALTY : 0;
-
-  const sameSetSynergy =
-    augmentSetId && pickedSetIds.includes(augmentSetId)
-      ? SCORE_WEIGHTS.SAME_SET_SYNERGY
-      : 0;
 
   const systemBreakerBonus = isSystemBreaker
     ? SCORE_WEIGHTS.SYSTEM_BREAKER_BONUS
@@ -175,6 +175,13 @@ export function computeOracleScore(input: OracleScoreInput): OracleScoreResult {
       : interactionSignal?.type === "trap"
         ? -interactionStrength * SCORE_WEIGHTS.MECHANICAL_INTERACTION_PER_STRENGTH
         : 0;
+
+  const rawFitStrength = fitSignal?.strength ?? 0;
+  const fitStrength = Number.isFinite(rawFitStrength)
+    ? Math.max(-3, Math.min(3, Math.trunc(rawFitStrength)))
+    : 0;
+  const abilityAugmentFit =
+    fitStrength * SCORE_WEIGHTS.ABILITY_AUGMENT_FIT_PER_STRENGTH;
 
   // ���─ Ability profile synergy bonuses ──
   let abilityTypeSynergy = 0;
@@ -229,10 +236,9 @@ export function computeOracleScore(input: OracleScoreInput): OracleScoreResult {
 
   const breakdown = {
     championWr,
-    setTierBonus,
+    tierBonus,
     comboBonus,
     trapPenalty,
-    sameSetSynergy,
     rarityBonus,
     systemBreakerBonus,
     abilityTypeSynergy,
@@ -240,6 +246,7 @@ export function computeOracleScore(input: OracleScoreInput): OracleScoreResult {
     ccSynergy,
     tagMismatch,
     mechanicalInteraction,
+    abilityAugmentFit,
   };
 
   const total = Object.values(breakdown).reduce((a, b) => a + b, 0);

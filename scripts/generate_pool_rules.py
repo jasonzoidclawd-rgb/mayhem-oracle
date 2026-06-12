@@ -227,6 +227,17 @@ def main():
 
     rules = extract_rules(patches, aug_map, item_map)
 
+    # 26.12+: scraped flags.lifecycle (live arammayhem badges) is the authoritative
+    # lifecycle source; patch-note regexes remain as fallback for older patches.
+    for aug in augments:
+        lifecycle = (aug.get("flags") or {}).get("lifecycle")
+        if lifecycle == "removed":
+            rules["lifecycle"]["removed"].setdefault(aug["slug"], current_patch)
+        elif lifecycle == "added":
+            rules["lifecycle"]["added"].setdefault(aug["slug"], current_patch)
+    rules["lifecycle"]["added"] = dict(sorted(rules["lifecycle"]["added"].items()))
+    rules["lifecycle"]["removed"] = dict(sorted(rules["lifecycle"]["removed"].items()))
+
     output = {
         "patch":      current_patch,
         "scraped_at": scraped_at,

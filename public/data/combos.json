@@ -1,6 +1,6 @@
 {
-  "patch": "26.11",
-  "scraped_at": "2026-06-11T23:15:49.855951+00:00",
+  "patch": "26.12",
+  "scraped_at": "2026-06-12T06:38:58.545223+00:00",
   "combos": [
     {
       "champion": "vayne",
@@ -27,16 +27,16 @@
       "ref": "curated:gnar-ap纳尔连拔爆发流"
     },
     {
-      "champion": "graves",
-      "augment": "Back To Basics",
-      "tier": "S",
-      "ref": "curated:graves-back-to-basics"
-    },
-    {
       "champion": "vayne",
       "augment": "Dual Wield",
       "tier": "S",
       "ref": "curated:vayne-dual-wield"
+    },
+    {
+      "champion": "graves",
+      "augment": "Back To Basics",
+      "tier": "S",
+      "ref": "curated:graves-back-to-basics"
     },
     {
       "champion": "lucian",
@@ -489,6 +489,12 @@
       "ref": "curated:karthus-infinite-recursion"
     },
     {
+      "champion": "yunara",
+      "augment": "Master of Duality",
+      "tier": "S",
+      "ref": "curated:yunara-master-of-duality"
+    },
+    {
       "champion": "senna",
       "augment": "Dual Wield",
       "tier": "S",
@@ -579,6 +585,12 @@
       "ref": "curated:fizz-infernal-conduit"
     },
     {
+      "champion": "katarina",
+      "augment": "Ethereal Weapon",
+      "tier": "S",
+      "ref": "curated:katarina-ethereal-weapon"
+    },
+    {
       "champion": "singed",
       "augment": "Infernal Conduit",
       "tier": "S",
@@ -601,12 +613,6 @@
       "augment": "Jeweled Gauntlet",
       "tier": "S",
       "ref": "curated:smolder-jeweled-gauntlet"
-    },
-    {
-      "champion": "yunara",
-      "augment": "Master of Duality",
-      "tier": "S",
-      "ref": "curated:yunara-master-of-duality"
     },
     {
       "champion": "veigar",
@@ -885,12 +891,6 @@
       "ref": "curated:mordekaiser-protein-shake"
     },
     {
-      "champion": "katarina",
-      "augment": "Ethereal Weapon",
-      "tier": "S",
-      "ref": "curated:katarina-ethereal-weapon"
-    },
-    {
       "champion": "ekko",
       "augment": "Ethereal Weapon",
       "tier": "S",
@@ -969,6 +969,12 @@
       "ref": "curated:katarina-双旋转流无敌卡特"
     },
     {
+      "champion": "trundle",
+      "augment": "Slap Around",
+      "tier": "S",
+      "ref": "curated:trundle-一r吸死人"
+    },
+    {
       "champion": "maokai",
       "augment": "Courage of the Colossus",
       "tier": "S",
@@ -1003,6 +1009,12 @@
       "augment": "Infinite Recursion",
       "tier": "S",
       "ref": "curated:veigar-极致cd无限e"
+    },
+    {
+      "champion": "shyvana",
+      "augment": "Ultimate Awakening",
+      "tier": "S",
+      "ref": "curated:shyvana-终极唤醒ap龙女"
     },
     {
       "champion": "milio",
@@ -1557,12 +1569,6 @@
       "ref": "curated:viktor-虚空裂隙流"
     },
     {
-      "champion": "trundle",
-      "augment": "Slap Around",
-      "tier": "S",
-      "ref": "curated:trundle-一r吸死人"
-    },
-    {
       "champion": "rakan",
       "augment": "Cruelty",
       "tier": "S",
@@ -2083,12 +2089,6 @@
       "augment": "It's Killing Time",
       "tier": "S",
       "ref": "curated:annie-影流之熊安妮"
-    },
-    {
-      "champion": "shyvana",
-      "augment": "Ultimate Awakening",
-      "tier": "S",
-      "ref": "curated:shyvana-终极唤醒ap龙女"
     },
     {
       "champion": "vladimir",

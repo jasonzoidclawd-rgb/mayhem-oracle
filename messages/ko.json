@@ -113,7 +113,6 @@
     "trapsAvoid": "함정 — 피해야 할",
     "patchLabel": "패치 {patch}",
     "overallRank": "전체 #{rank}",
-    "pillSet": "세트",
     "pillCombo": "콤보",
     "pillTrap": "함정",
     "pillRarity": "희귀",
@@ -123,22 +122,19 @@
     "pillMismatch": "불일치",
     "magicDamage": "마법 피해",
     "physicalDamage": "물리 피해",
-    "mixedDamage": "혼합 피해"
+    "mixedDamage": "혼합 피해",
+    "pillTier": "티어"
   },
   "augments": {
     "title": "증강",
     "subtitle": "{count}개 증강 · 패치 {patch} · 오라클 점수순",
     "search": "이름, 세트, 효과 검색...",
-    "allSets": "전체 세트",
     "sortScore": "정렬: 오라클 점수",
     "sortWinRate": "정렬: 승률",
     "sortName": "정렬: 이름",
     "all": "전체",
     "noResults": "조건에 맞는 증강이 없습니다.",
     "showing": "{count} / {total}개 증강 표시",
-    "viewSets": "증강 세트",
-    "viewAll": "전체 증강",
-    "hybridSet": "하이브리드 세트",
     "augmentCount": "증강 {count}개",
     "averageWinRate": "평균 승률 {winRate}%",
     "hasSpecialNotes": "특수 참고 있음",
@@ -147,10 +143,12 @@
     "tierGodlike": "최상급",
     "tierStrong": "강력",
     "tierGood": "좋음",
-    "standaloneTitle": "독립 증강",
-    "standaloneSubtitle": "어떤 세트에도 속하지 않는 증강 — 개별 평가",
     "gameNotesTitle": "게임 참고 및 상호작용",
-    "gameNotesSubtitle": "위키 기반 메커니즘"
+    "gameNotesSubtitle": "위키 기반 메커니즘",
+    "badgeNew": "신규",
+    "badgeRemoved": "제거됨",
+    "badgeAbility": "스킬",
+    "badgeQuest": "퀘스트"
   },
   "items": {
     "title": "ARAM 메이헴 아이템",
@@ -309,7 +307,6 @@
     "reasonAttackTypeSynergy": "챔피언 공격 패턴과 일치",
     "reasonCrowdControlSynergy": "군중 제어 시너지",
     "reasonTagMismatch": "태그 불일치 위험",
-    "reasonSameSetProgress": "보유 증강 세트 진행",
     "reasonChampionModeOverride": "챔피언별 모드 보정",
     "reasonChampionModeTrap": "챔피언별 함정 보정",
     "reasonTextInferredCrowdControl": "증강 텍스트에서 추론한 군중 제어 시너지",
@@ -336,7 +333,9 @@
     "reasonAugmentWinRateMissing": "증강 승률 데이터가 없어 대체 메타데이터에 의존합니다.",
     "baselineLabel": "Lv11 기준",
     "baselineNote": "방어력 {armor} 대상, 아이템 없음",
-    "dpsDeltaLabel": "DPS"
+    "dpsDeltaLabel": "DPS",
+    "reasonAbilityAugmentFit": "이 챔피언의 스킬과 잘 맞음",
+    "reasonAbilityAugmentMisfit": "활용할 스킬이 없음"
   },
   "damageSim": {
     "title": "피해 계산기",

@@ -13,7 +13,6 @@ function augment(slug: string, name: string, name_zh_TW: string): PoolAugment {
     slug,
     name,
     name_zh_TW,
-    sets: [],
     win_rate: 50,
     score: 50,
     tier: "B",

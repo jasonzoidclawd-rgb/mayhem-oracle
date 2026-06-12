@@ -2,40 +2,15 @@
  * Probability Engine — the mathematical backbone of Mayhem Oracle
  *
  * Builds each champion's tailored augment pool, computes hypergeometric odds
- * of seeing specific augments per round, and plans set completion paths
- * across the 4 augment selection rounds.
+ * of seeing specific augments per round, and annotates picks with expected
+ * value across the 4 augment selection rounds.
  */
 
+import { abilityAugmentFit } from "./ability-augment-fit";
 import { computeOracleScore } from "./oracle-score";
 import { getChampionAugmentPool } from "./pool-orchestrator";
 import type { AbilityProfile, ChampionBaseStats, ChampionTag, PoolRules } from "./types";
 import type { ScoredAugment, ComboTier, AugmentRarity } from "./oracle-score";
-
-// ─── Constants ───
-
-const ALL_SET_NAMES = [
-  "Stackosaurus Rex",
-  "Firecracker",
-  "Snowday",
-  "Wee Woo Wee Woo",
-  "Archmage",
-  "Fully Automated",
-  "Dive Bomb",
-  "Make it Rain",
-  "High Roller",
-];
-
-const SET_ID_TO_NAME: Record<string, string> = {
-  archmage: "Archmage",
-  dive_bomb: "Dive Bomb",
-  firecracker: "Firecracker",
-  fully_automated: "Fully Automated",
-  high_roller: "High Roller",
-  make_it_rain: "Make it Rain",
-  snowday: "Snowday",
-  stackosaurus_rex: "Stackosaurus Rex",
-  wee_woo: "Wee Woo Wee Woo",
-};
 
 // ─── Math ───
 
@@ -75,7 +50,7 @@ export interface PoolAugment {
   slug: string;
   name: string;
   name_zh_TW?: string;
-  sets: string[];
+  lifecycle?: string;
   win_rate: number;
   score: number;
   tier: "S" | "A" | "B" | "C";
@@ -95,47 +70,33 @@ export interface ChampionPoolBreakdown {
   prismatic: TierPool;
 }
 
-export interface SetPath {
-  setName: string;
-  piecesInPool: { silver: number; gold: number; prismatic: number };
-  currentPieces: number;
-  piecesNeeded: number;
-  /** P(completing set) by end of remaining round 1, 2, ... */
-  completionProbByRound: number[];
-}
-
-// ─── Set parsing ───
-
-/**
- * Parse the `set` field from augments.json into individual set names.
- * e.g. "Dive Bomb Fully Automated" -> ["Dive Bomb", "Fully Automated"]
- */
-export function parseSets(setField: string | undefined): string[] {
-  if (!setField) return [];
-  const normalizedId = setField.trim().toLowerCase().replace(/[-\s]+/g, "_");
-  const setName = SET_ID_TO_NAME[normalizedId];
-  if (setName) return [setName];
-
-  const result: string[] = [];
-  let remaining = setField;
-
-  // Match longer names first to avoid partial matches
-  const sorted = [...ALL_SET_NAMES].sort((a, b) => b.length - a.length);
-  for (const name of sorted) {
-    if (remaining.includes(name)) {
-      result.push(name);
-      remaining = remaining.replace(name, "").trim();
-    }
-  }
-
-  return result;
-}
+// ─── Tiers & EV ───
 
 export function scoreToTier(score: number): "S" | "A" | "B" | "C" {
   if (score >= 75) return "S";
   if (score >= 65) return "A";
   if (score >= 55) return "B";
   return "C";
+}
+
+/**
+ * Round weight — HYPOTHESIS (plan §3): later rounds lock in less-correctable
+ * picks. Validate against live 26.12 win rates before trusting the values.
+ */
+export const ROUND_WEIGHT: Record<1 | 2 | 3 | 4, number> = {
+  1: 1.0,
+  2: 1.0,
+  3: 1.1,
+  4: 1.2,
+};
+
+/** EV annotation = score × draw probability × round weight. */
+export function expectedValue(
+  score: number,
+  probability: number,
+  round: 1 | 2 | 3 | 4,
+): number {
+  return score * probability * (ROUND_WEIGHT[round] ?? 1);
 }
 
 // ─── Pool construction ───
@@ -186,13 +147,17 @@ export function buildChampionPool(
         comboTier,
         abilityProfile,
         isSystemBreaker: aug.flags?.system_breaker === true,
+        abilityAugmentFit: abilityAugmentFit(
+          { slug: aug.slug, type: aug.type, wikiDescription: aug.wikiDescription },
+          abilityProfile,
+        ),
       });
 
     byRarity[aug.rarity].push({
       slug: aug.slug,
       name: aug.name,
       name_zh_TW: aug.name_zh_TW,
-      sets: parseSets(aug.set),
+      lifecycle: aug.flags?.lifecycle,
       win_rate: aug.win_rate ?? 50,
       score: result.total,
       tier: scoreToTier(result.total),
@@ -220,106 +185,4 @@ export function buildChampionPool(
       augments: byRarity.prismatic,
     },
   };
-}
-
-// ─── Set path planning ───
-
-/**
- * Calculate set completion paths across remaining rounds.
- *
- * Since we don't know future round tiers, we average the per-tier
- * probability of seeing a set piece equally across all 3 tiers.
- */
-export function calculateSetPaths(
-  pool: ChampionPoolBreakdown,
-  pickedAugments: string[],
-  remainingRounds: number,
-): SetPath[] {
-  const allAugs = [
-    ...pool.silver.augments,
-    ...pool.gold.augments,
-    ...pool.prismatic.augments,
-  ];
-
-  const paths: SetPath[] = [];
-
-  for (const setName of ALL_SET_NAMES) {
-    const piecesInPool = {
-      silver: pool.silver.augments.filter((a) => a.sets.includes(setName))
-        .length,
-      gold: pool.gold.augments.filter((a) => a.sets.includes(setName)).length,
-      prismatic: pool.prismatic.augments.filter((a) =>
-        a.sets.includes(setName),
-      ).length,
-    };
-
-    const totalInPool =
-      piecesInPool.silver + piecesInPool.gold + piecesInPool.prismatic;
-    if (totalInPool === 0) continue;
-
-    const currentPieces = pickedAugments.filter((slug) => {
-      const aug = allAugs.find((a) => a.slug === slug);
-      return aug?.sets.includes(setName);
-    }).length;
-
-    const piecesNeeded = Math.max(0, 2 - currentPieces);
-
-    if (piecesNeeded === 0) {
-      paths.push({
-        setName,
-        piecesInPool,
-        currentPieces,
-        piecesNeeded: 0,
-        completionProbByRound: Array(remainingRounds).fill(1),
-      });
-      continue;
-    }
-
-    // P(seeing >=1 set piece this round), averaged across tiers (with reroll)
-    const probPerRound =
-      (1 / 3) *
-      (probabilityOfTarget(pool.silver.total, piecesInPool.silver, 6) +
-        probabilityOfTarget(pool.gold.total, piecesInPool.gold, 6) +
-        probabilityOfTarget(pool.prismatic.total, piecesInPool.prismatic, 6));
-
-    const completionProbByRound: number[] = [];
-
-    for (let r = 1; r <= remainingRounds; r++) {
-      if (r < piecesNeeded) {
-        completionProbByRound.push(0);
-        continue;
-      }
-
-      if (piecesNeeded === 1) {
-        completionProbByRound.push(1 - Math.pow(1 - probPerRound, r));
-      } else {
-        // P(>=k successes in r trials) via binomial CDF complement
-        let pLessThanK = 0;
-        for (let i = 0; i < piecesNeeded; i++) {
-          pLessThanK +=
-            combinations(r, i) *
-            Math.pow(probPerRound, i) *
-            Math.pow(1 - probPerRound, r - i);
-        }
-        completionProbByRound.push(Math.max(0, 1 - pLessThanK));
-      }
-    }
-
-    paths.push({
-      setName,
-      piecesInPool,
-      currentPieces,
-      piecesNeeded,
-      completionProbByRound,
-    });
-  }
-
-  // Most achievable paths first
-  paths.sort((a, b) => {
-    const aProb = a.completionProbByRound[0] ?? 0;
-    const bProb = b.completionProbByRound[0] ?? 0;
-    return bProb - aProb;
-  });
-
-  return paths;
 }

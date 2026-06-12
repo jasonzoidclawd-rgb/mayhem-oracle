@@ -38,24 +38,28 @@ const meleeMagicProfile: AbilityProfile = {
 };
 
 describe("computeOracleScore", () => {
-  test("applies combo, set, system-breaker, and profile bonuses", () => {
+  test("applies combo, tier, system-breaker, and profile bonuses (no set dimension)", () => {
     const result = computeOracleScore({
       augment: baseAugment,
       championWinRate: 56,
       comboTier: "S",
-      pickedSetIds: ["alpha"],
-      augmentSetId: "alpha",
       isSystemBreaker: true,
       abilityProfile: rangedPhysicalProfile,
     });
 
     expect(result.breakdown.comboBonus).toBe(SCORE_WEIGHTS.STRONG_COMBO_BONUS);
-    expect(result.breakdown.sameSetSynergy).toBe(SCORE_WEIGHTS.SAME_SET_SYNERGY);
+    // 26.12: "set tier" meant selection-screen tier — renamed to tierBonus.
+    expect(result.breakdown.tierBonus).toBe(10);
+    expect(result.breakdown).not.toHaveProperty("setTierBonus");
+    // 26.12 removed augment sets — the dimension is deleted, not zeroed.
+    expect(result.breakdown).not.toHaveProperty("sameSetSynergy");
     expect(result.breakdown.systemBreakerBonus).toBe(SCORE_WEIGHTS.SYSTEM_BREAKER_BONUS);
     expect(result.breakdown.abilityTypeSynergy).toBe(SCORE_WEIGHTS.ABILITY_TYPE_SYNERGY);
     expect(result.breakdown.attackTypeSynergy).toBe(SCORE_WEIGHTS.ATTACK_TYPE_SYNERGY);
     expect(result.breakdown.ccSynergy).toBe(SCORE_WEIGHTS.CC_SYNERGY);
     expect(result.breakdown.tagMismatch).toBe(0);
+    // 54.2 base + 0.6 champion adj + 10 tier + 1 rarity + 12 combo + 20 breaker + 6 + 4 + 4
+    expect(result.total).toBeCloseTo(111.8, 5);
   });
 
   test("applies trap and mismatch penalties for a bad champion fit", () => {
@@ -90,6 +94,27 @@ describe("computeOracleScore", () => {
     expect(trap.breakdown.mechanicalInteraction).toBe(
       -SCORE_WEIGHTS.MECHANICAL_INTERACTION_PER_STRENGTH * 2,
     );
+  });
+});
+
+describe("26.12 preview win-rate neutrality", () => {
+  test("added augment with no telemetry scores from a neutral 50 base", () => {
+    const added = computeOracleScore({
+      augment: { ...baseAugment, win_rate: 0, flags: { system_breaker: false, lifecycle: "added" } },
+    });
+    expect(added.breakdown.championWr).toBe(50);
+
+    const addedNull = computeOracleScore({
+      augment: { ...baseAugment, win_rate: null, flags: { system_breaker: false, lifecycle: "added" } },
+    });
+    expect(addedNull.breakdown.championWr).toBe(50);
+  });
+
+  test("an active augment with a real 0.0 win rate is unchanged", () => {
+    const activeZero = computeOracleScore({
+      augment: { ...baseAugment, win_rate: 0, flags: { system_breaker: false, lifecycle: "active" } },
+    });
+    expect(activeZero.breakdown.championWr).toBe(0);
   });
 });
 

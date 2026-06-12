@@ -220,8 +220,8 @@ describe("rankOfferedAugments", () => {
     expect(result.rankings.map((ranking) => ranking.augment.slug)).toEqual(["alpha", "middle", "zeta"]);
   });
 
-  test("owned augments contribute a normalized two-piece same-set progress explanation when concrete set data exists", () => {
-    const result = rankOfferedAugments({
+  test("historical set metadata contributes no reason and no score effect (26.12: sets removed)", () => {
+    const withSet = rankOfferedAugments({
       champion,
       offeredAugments: [
         makeAugment({ slug: "archmage-finisher", win_rate: 53, set: "archmage" }),
@@ -231,15 +231,11 @@ describe("rankOfferedAugments", () => {
       ownedAugments: [makeAugment({ slug: "archmage-owned", set: "Archmage" })],
     });
 
-    expect(result.status).toBe("ranked");
-    const archmage = result.rankings.find((ranking) => ranking.augment.slug === "archmage-finisher");
+    expect(withSet.status).toBe("ranked");
+    const archmage = withSet.rankings.find((ranking) => ranking.augment.slug === "archmage-finisher");
     expect(archmage).toBeDefined();
-    expect(reasonByCode(archmage!, "same-set-2-piece-progress")).toMatchObject({
-      source: "augment-set-metadata",
-      confidence: "high",
-    });
-    expect(reasonByCode(archmage!, "same-set-3-piece-threshold")).toBeUndefined();
-    expect(reasonByCode(archmage!, "same-set-4-piece-threshold")).toBeUndefined();
+    expect(reasonByCode(archmage!, "same-set-2-piece-progress")).toBeUndefined();
+    expect(archmage!.reasons.every((r) => r.source !== "augment-set-metadata")).toBe(true);
   });
 
   test("qualitative reroll EV distinguishes same-tier normal reroll from Golden Reroll upgrade opportunity", () => {

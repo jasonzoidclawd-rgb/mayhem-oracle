@@ -1,59 +1,82 @@
-# CLAUDE.md — Mayhem Oracle Project Context
+# Mayhem Oracle — Project Context
 
-## What is this?
-A PWA (Progressive Web App) serving as an ARAM Mayhem decision engine for League of Legends.
-Built with Next.js 16 (App Router), TypeScript, Tailwind CSS v4, and next-intl for i18n.
+ARAM Mayhem decision engine: Next.js 16 PWA (App Router, TypeScript, Tailwind
+v4, next-intl) + optional Tauri overlay in `overlay/`. $0 architecture: static
+JSON in `public/data/`, daily GitHub Actions scrape, Vercel deploy-on-push.
 
-## Key architecture decisions
-- **PWA over native**: $0 budget means no Apple Dev account ($99/yr). PWA gives iOS (Add to Home Screen) + Windows (browser + MS Store) for free.
-- **Static JSON data**: Scraped data lives as JSON in `public/data/`. GitHub Actions cron updates daily, Vercel auto-deploys.
-- **next-intl with locale prefix routing**: URLs like `/zh-TW/tier-list`, `/ja/champions/brand`. Default locale (en) has no prefix.
-- **Server Components by default**: Pages use `getTranslations()` server-side. Only interactive components (filters, search, language switcher) are Client Components.
+## Live State
 
-## Locale codes
-en, zh-TW, zh-CN, ja, ko
+Maintained by `scripts/update-state.sh` (post-commit hook via
+`scripts/install-hooks.sh`); do not hand-edit this block.
 
-## Oracle Score algorithm (from oracle_ghost.py)
-`score = champion_wr + set_tier_bonus + combo_bonus + trap_penalty + same_set_synergy + rarity_bonus + system_breaker_bonus`
-- Set tier: prismatic +14, gold +10, silver +6
-- Strong combo: +12
-- Trap penalty: -15
-- Same-set synergy: +2
-- Rarity: prismatic +3, gold +1, silver +0
-- System breaker (質變增幅): +20
+<!-- STATE:START -->
+- Patch: `26.12`
+- Augments: `255`
+- Tests passing: `110`
+- Cross-parity budget: `0` divergent champions
+- Last tag: `26.12-phase3-complete`
+<!-- STATE:END -->
 
-## Augment Selection Mechanics (VERIFIED)
-See GAME_MECHANICS.md for full detail. Key rules:
-- 4 rounds at levels 3, 7, 11, 15
-- Round 1: no death required. Rounds 2-4: must be dead to open UI.
-- **3 slots per round, each slot has 1 independent reroll** → max 6 unique augments viewable
-- **Tier sync**: all 10 players see same tier per round
-- Round 1 is NOT always Silver — Prismatic at start is possible
-- **Golden Reroll** (from progression track): only way to break tier sync
-- **Smart Tailoring**: pool filtered by champion tags (role, damage type, resource)
-- **Qualitative Change augments**: system breakers that transcend tier color
-- Probability formula: P(target) = k / N_tailored
+## Operating Principles
 
-## Data sources
-- arammayhem.com: RSC wire format (HTML-entity-encoded JSON, no __NEXT_DATA__)
-- CommunityDragon: CDN for champion icons, item images
-- LoL-Patch-Change GitHub repo: Bilingual EN/CN patch diff JSON
-- apexlol.info: Combo synergy/trap ratings (SS-D scale)
+- First principles: inspect current data/behavior before choosing a fix; the
+  repo is the source of truth — don't restate what it can tell you.
+- Spend tokens on uncertainty and verification, not derivable facts.
+- Smallest change that meets an observable success criterion; red test first.
+- Compound: leave tags, tests, fresh state, and a one-line handoff behind.
 
-## Important quirks
-- arammayhem.com uses React Server Components wire format — not standard HTML tables or JSON API
-- Riot has NOT made ARAM Mayhem data available through their API
-- ZH_REV dictionary maps 80+ Chinese augment names to English for OCR matching (from oracle_ghost.py)
+## Contracts
 
-## Dev commands
+- Locales en / zh-TW / zh-CN / ja / ko: every user-facing string lives in all
+  five `messages/*.json` (key parity is test-enforced). Internal locale-routed
+  links use `@/i18n/navigation`, not `next/link`.
+- 26.12 removed augment sets/traits. Historical `set` labels never affect
+  scoring. Augment classes: `type` = ability / quest / standalone.
+- Web ↔ overlay scoring parity: the cross-parity suite at budget 0 IS the
+  contract (`src/lib/__tests__/cross-parity.test.ts`). Scoring twins in
+  `src/lib/scoring/` and `overlay/src/scoring/` differ only by their types
+  import path — edit both sides together.
+- `public/data/` is generated — never hand-edit. `scripts/update-data.sh`
+  owns the snapshot/restore of curated fields.
+- Overlay work is compliance-sensitive: no game automation, hidden-information
+  access, or client injection without explicit review.
+
+## Verification
+
 ```bash
-npm run dev      # localhost:3000
-npm run build    # production build
-npm run lint     # ESLint
+npm test
+npx eslint src scripts
+npm run build
+(cd overlay && npm run build)
 ```
 
-## Cowork Notes (2026-04-25)
-- Use `@/i18n/navigation` for internal app links in locale-routed UI. Avoid `next/link` in app components unless you explicitly want to bypass locale handling.
-- On champion pages, render combo chips from `resolveChampionCombos(...).augmentSlug`; do not re-slugify combo names with ad-hoc string replacement.
-- Keep the web app TypeScript boundary scoped to the Next app. `tsconfig.json` excludes `overlay/`, `packages/`, and `scripts/` so unrelated workspace issues do not break `npm run build`.
-- Shared scoring logic currently exists in both `src/lib/*` and `packages/scoring/src/*`. If you change one side, mirror the change or dedupe the implementation before the two copies drift.
+(Bare `npm run lint` also crawls `.worktrees/*/.next` noise — scope it.)
+Rust changes additionally need a release build plus a binary timestamp check;
+`cargo check` alone is insufficient:
+
+```bash
+cd overlay && npx tauri build 2>&1 | tail -5
+stat -f "%Sm %N" src-tauri/target/release/mayhem-oracle-overlay
+```
+
+rtk caveat: when command output is verification evidence, use absolute tool
+paths (`/usr/bin/diff`, `/usr/bin/grep`, `/usr/bin/wc`) — the rtk shell hook
+has returned wrong results for bare `diff` / `ls` / `find`.
+
+## Data Pipeline
+
+`npm run update-data` (daily cron 22:00 UTC): snapshot curated fields → scrape
+arammayhem + CDragon + DDragon + wiki → restore → classify (deterministic
+fallback keeps no-key CI reproducible; optional Groq/LiteLLM enrichment uses
+`CLASSIFIER_URL` / `CLASSIFIER_MODEL`) → breaker validation gate → generate
+pool rules. Ownership: `flags.lifecycle` is
+scraper-owned (live NEW/DELETED badges), `kit_tags` classifier-owned,
+system breakers a curated list enforced in three places (classifier,
+update-data step gate, data-integrity test).
+
+## Pointers
+
+- `AGENTS.md` — agent operating rules · `CO_WORKFLOW.md` — Claude/Codex handoffs
+- `GAME_MECHANICS.md` — selection mechanics, 26.12 changes, live-gate checklist
+- 26.12 rebuild ledger: phase tags `26.12-phase<N>-complete`, prompt at
+  `docs/plans/patch-26.12-scoring-engine-rebuild-plan-prompt.md`

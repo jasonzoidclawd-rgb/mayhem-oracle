@@ -5,13 +5,11 @@ import Image from "next/image";
 import { useTranslations } from "next-intl";
 import { baselineOracleScore, type ScoredAugment } from "@/lib/scoring/oracle-score";
 import { Tooltip } from "@/components/ui/Tooltip";
-import type { AffinityTier, SetSynergyResult, ChampSetAffinity } from "@/lib/scoring/set-synergy";
 
 // ─── Constants ───────────────────────────────────────────────────────────────
 
 type AugmentRarity = "prismatic" | "gold" | "silver";
 type Rarity = "all" | AugmentRarity;
-type ViewMode = "sets" | "grid";
 
 const RARITY_STYLES = {
   prismatic: {
@@ -35,12 +33,6 @@ const SCORE_COLOR = (score: number) => {
   return "text-slate-400";
 };
 
-const TIER_STYLE: Record<AffinityTier, { bg: string; text: string }> = {
-  "S+": { bg: "bg-red-500/20 border-red-400/40", text: "text-red-300" },
-  S: { bg: "bg-orange-500/15 border-orange-400/30", text: "text-orange-300" },
-  A: { bg: "bg-blue-500/15 border-blue-400/30", text: "text-blue-300" },
-};
-
 // ─── Helpers ─────────────────────────────────────────────────────────────────
 
 function localizedName(aug: ScoredAugment, locale: string): string {
@@ -56,32 +48,20 @@ function localizedName(aug: ScoredAugment, locale: string): string {
 export function AugmentsClient({
   augments,
   locale = "en",
-  setSynergies = [],
 }: {
   augments: ScoredAugment[];
   locale?: string;
-  setSynergies?: SetSynergyResult[];
 }) {
   const t = useTranslations("augments");
   const tChamp = useTranslations("champion");
 
-  const [viewMode, setViewMode] = useState<ViewMode>("sets");
   const [activeRarity, setActiveRarity] = useState<Rarity>("all");
-  const [activeSet, setActiveSet] = useState<string>("all");
   const [search, setSearch] = useState("");
   const [sortBy, setSortBy] = useState<"score" | "winrate" | "name">("score");
 
-  // Collect unique set names for grid filter
-  const sets = useMemo(() => {
-    const names = new Set(augments.map((a) => a.set).filter(Boolean) as string[]);
-    return ["all", ...Array.from(names).sort()];
-  }, [augments]);
-
-  // Grid view filtering
   const filtered = useMemo(() => {
     return augments.filter((a) => {
       const rarityMatch = activeRarity === "all" || a.rarity === activeRarity;
-      const setMatch = activeSet === "all" || a.set === activeSet;
       const displayName = localizedName(a, locale);
       const q = search.toLowerCase();
       const searchMatch =
@@ -90,9 +70,9 @@ export function AugmentsClient({
         a.name.toLowerCase().includes(q) ||
         (a.set ?? "").toLowerCase().includes(q) ||
         (a.wikiDescription ?? a.description ?? "").toLowerCase().includes(q);
-      return rarityMatch && setMatch && searchMatch;
+      return rarityMatch && searchMatch;
     });
-  }, [augments, activeRarity, activeSet, search, locale]);
+  }, [augments, activeRarity, search, locale]);
 
   const sorted = useMemo(() => {
     return [...filtered].sort((a, b) => {
@@ -122,52 +102,13 @@ export function AugmentsClient({
     ...rarityLabels,
   };
 
-  // Filter augments by rarity (shared across both views)
-  const rarityFiltered = useMemo(() => {
-    if (activeRarity === "all") return augments;
-    return augments.filter((a) => a.rarity === activeRarity);
-  }, [augments, activeRarity]);
-
-  // Group rarity-filtered augments by set
-  const filteredBySet = useMemo(() => {
-    const map: Record<string, ScoredAugment[]> = {};
-    for (const a of rarityFiltered) {
-      if (a.set) {
-        if (!map[a.set]) map[a.set] = [];
-        map[a.set].push(a);
-      }
-    }
-    return map;
-  }, [rarityFiltered]);
-
   return (
     <div>
       {/* ─── Game Notes (collapsible) ─── */}
       <GameNotes />
 
-      {/* ─── View Toggle + Rarity Tabs ─── */}
+      {/* ─── Rarity Tabs ─── */}
       <div className="flex flex-wrap items-center gap-2 mb-6">
-        <button
-          onClick={() => setViewMode("sets")}
-          className={`px-4 py-2 rounded-lg text-sm font-medium transition-all border ${
-            viewMode === "sets"
-              ? "bg-[var(--color-neon-primary)]/15 text-[var(--color-neon-primary)] border-[var(--color-neon-primary)]/40"
-              : "bg-[var(--color-bg-card)] text-[var(--color-text-secondary)] border-[var(--color-border-default)]"
-          }`}
-        >
-          {t("viewSets")}
-        </button>
-        <button
-          onClick={() => setViewMode("grid")}
-          className={`px-4 py-2 rounded-lg text-sm font-medium transition-all border ${
-            viewMode === "grid"
-              ? "bg-[var(--color-neon-primary)]/15 text-[var(--color-neon-primary)] border-[var(--color-neon-primary)]/40"
-              : "bg-[var(--color-bg-card)] text-[var(--color-text-secondary)] border-[var(--color-border-default)]"
-          }`}
-        >
-          {t("viewAll")}
-        </button>
-        <span className="w-px h-6 bg-[var(--color-border-default)] mx-1" />
         {(["all", "prismatic", "gold", "silver"] as Rarity[]).map((r) => (
           <button
             key={r}
@@ -186,109 +127,47 @@ export function AugmentsClient({
         ))}
       </div>
 
-      {viewMode === "sets" ? (
-        /* ─── SET VIEW ─── */
-        <div className="space-y-6">
-          {/* Sets with synergy data */}
-          {setSynergies.map((syn) => {
-            const setAugs = filteredBySet[syn.setName] ?? [];
-            if (setAugs.length === 0) return null;
-            const avgWr =
-              setAugs.reduce((s, a) => s + (a.win_rate ?? 0), 0) / setAugs.length;
-            return (
-              <SetCard
-                key={syn.setName}
-                  synergy={syn}
-                  augments={setAugs}
-                  avgWinRate={avgWr}
-                  locale={locale}
-                  rarityLabels={rarityLabels}
-                />
-              );
-            })}
+      {/* ─── Controls ─── */}
+      <div className="flex flex-col sm:flex-row gap-3 mb-6">
+        <input
+          type="search"
+          placeholder={t("search")}
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          className="flex-1 max-w-xs px-4 py-2 rounded-lg border border-[var(--color-border-default)] bg-[var(--color-bg-card)] text-sm focus:outline-none focus:border-[var(--color-neon-primary)]/50"
+        />
+        <select
+          value={sortBy}
+          onChange={(e) => setSortBy(e.target.value as typeof sortBy)}
+          className="px-3 py-2 rounded-lg border border-[var(--color-border-default)] bg-[var(--color-bg-card)] text-sm focus:outline-none"
+        >
+          <option value="score">{t("sortScore")}</option>
+          <option value="winrate">{t("sortWinRate")}</option>
+          <option value="name">{t("sortName")}</option>
+        </select>
+      </div>
 
-          {/* Sets without synergy data (hybrid sets) */}
-          {Object.entries(filteredBySet)
-            .filter(([name]) => !setSynergies.some((s) => s.setName === name))
-            .map(([name, setAugs]) => {
-              const avgWr =
-                setAugs.reduce((s, a) => s + (a.win_rate ?? 0), 0) / setAugs.length;
-              return (
-                <SetCard
-                  key={name}
-                  synergy={{ setName: name, description: t("hybridSet"), topChampions: [] }}
-                  augments={setAugs}
-                  avgWinRate={avgWr}
-                  locale={locale}
-                  rarityLabels={rarityLabels}
-                />
-              );
-            })}
-
-          {/* Standalone augments (no set) */}
-          <StandaloneSection
-            augments={rarityFiltered}
+      {/* ─── Grid ─── */}
+      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3">
+        {sorted.map((aug) => (
+          <AugmentCard
+            key={aug.slug}
+            augment={aug}
             locale={locale}
-            rarityLabels={rarityLabels}
+            rarityLabel={rarityLabel[aug.rarity]}
           />
-        </div>
-      ) : (
-        /* ─── GRID VIEW ─── */
-        <div>
-          {/* Controls */}
-          <div className="flex flex-col sm:flex-row gap-3 mb-6">
-            <input
-              type="search"
-              placeholder={t("search")}
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              className="flex-1 max-w-xs px-4 py-2 rounded-lg border border-[var(--color-border-default)] bg-[var(--color-bg-card)] text-sm focus:outline-none focus:border-[var(--color-neon-primary)]/50"
-            />
-            <select
-              value={activeSet}
-              onChange={(e) => setActiveSet(e.target.value)}
-              className="px-3 py-2 rounded-lg border border-[var(--color-border-default)] bg-[var(--color-bg-card)] text-sm focus:outline-none"
-            >
-              {sets.map((s) => (
-                <option key={s} value={s}>
-                  {s === "all" ? t("allSets") : s}
-                </option>
-              ))}
-            </select>
-            <select
-              value={sortBy}
-              onChange={(e) => setSortBy(e.target.value as typeof sortBy)}
-              className="px-3 py-2 rounded-lg border border-[var(--color-border-default)] bg-[var(--color-bg-card)] text-sm focus:outline-none"
-            >
-              <option value="score">{t("sortScore")}</option>
-              <option value="winrate">{t("sortWinRate")}</option>
-              <option value="name">{t("sortName")}</option>
-            </select>
-          </div>
+        ))}
+      </div>
 
-          {/* Grid */}
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3">
-            {sorted.map((aug) => (
-              <AugmentCard
-                key={aug.slug}
-                augment={aug}
-                locale={locale}
-                rarityLabel={rarityLabel[aug.rarity]}
-              />
-            ))}
-          </div>
-
-          {sorted.length === 0 && (
-            <p className="text-center text-[var(--color-text-muted)] py-16">
-              {t("noResults")}
-            </p>
-          )}
-
-          <p className="text-xs text-[var(--color-text-muted)] mt-8 text-center">
-            {t("showing", { count: sorted.length, total: augments.length })}
-          </p>
-        </div>
+      {sorted.length === 0 && (
+        <p className="text-center text-[var(--color-text-muted)] py-16">
+          {t("noResults")}
+        </p>
       )}
+
+      <p className="text-xs text-[var(--color-text-muted)] mt-8 text-center">
+        {t("showing", { count: sorted.length, total: augments.length })}
+      </p>
     </div>
   );
 }
@@ -485,206 +364,6 @@ function AugmentTooltip({
   );
 }
 
-// ─── Set Card ────────────────────────────────────────────────────────────────
-
-function SetCard({
-  synergy,
-  augments,
-  avgWinRate,
-  locale,
-  rarityLabels,
-}: {
-  synergy: SetSynergyResult;
-  augments: ScoredAugment[];
-  avgWinRate: number;
-  locale: string;
-  rarityLabels: Record<AugmentRarity, string>;
-}) {
-  const t = useTranslations("augments");
-  const [expanded, setExpanded] = useState(true);
-
-  const tierGroups = useMemo(() => {
-    const groups: Record<AffinityTier, ChampSetAffinity[]> = { "S+": [], S: [], A: [] };
-    for (const c of synergy.topChampions) {
-      groups[c.tier].push(c);
-    }
-    return groups;
-  }, [synergy.topChampions]);
-
-  return (
-    <div className="glass-card border border-[var(--color-border-default)] overflow-hidden">
-      {/* Header */}
-      <button
-        onClick={() => setExpanded(!expanded)}
-        className="w-full px-5 py-4 flex items-center gap-4 text-left hover:bg-white/[0.02] transition-colors"
-      >
-        <div className="flex-1 min-w-0">
-          <div className="flex items-center gap-3">
-            <h2 className="text-lg font-bold">{synergy.setName}</h2>
-            <span className="text-xs text-[var(--color-text-muted)] bg-[var(--color-bg-card)] px-2 py-0.5 rounded">
-              {t("augmentCount", { count: augments.length })}
-            </span>
-            <span className="text-xs text-green-400">
-              {t("averageWinRate", { winRate: avgWinRate.toFixed(1) })}
-            </span>
-          </div>
-          <p className="text-sm text-[var(--color-text-secondary)] mt-1">
-            {synergy.description}
-          </p>
-        </div>
-        <span className="text-[var(--color-text-muted)] text-xl shrink-0">
-          {expanded ? "−" : "+"}
-        </span>
-      </button>
-
-      {expanded && (
-        <div className="px-5 pb-5 space-y-4">
-          {/* Augments row */}
-          <div className="flex flex-wrap gap-2">
-            {augments.map((aug) => {
-              const rarity = aug.rarity as keyof typeof RARITY_STYLES;
-              const styles = RARITY_STYLES[rarity];
-              const displayName = localizedName(aug, locale);
-              const score = baselineOracleScore(aug);
-              return (
-                <Tooltip
-                  key={aug.slug}
-                  content={<AugmentTooltip aug={aug} displayName={displayName} score={score} />}
-                >
-                  <div
-                    className={`flex items-center gap-2 px-2 py-1.5 rounded-lg border ${styles.glow} border-[var(--color-border-default)] bg-[var(--color-bg-card)] cursor-default transition-all`}
-                  >
-                    <div className="relative w-8 h-8 rounded overflow-hidden shrink-0">
-                      <Image
-                        src={aug.icon}
-                        alt={aug.name}
-                        fill
-                        className="object-contain"
-                        sizes="32px"
-                        unoptimized
-                      />
-                    </div>
-                    <div className="min-w-0">
-                      <div className="text-xs font-medium truncate max-w-[120px] flex items-center gap-1">
-                        {displayName}
-                        {aug.notes && aug.notes.length > 0 && (
-                          <span className="text-amber-400 text-[9px]" title={t("hasSpecialNotes")}>*</span>
-                        )}
-                      </div>
-                      <div className="flex gap-2 text-[10px] text-[var(--color-text-muted)]">
-                        <span className={styles.badge.split(" ")[0]}>
-                          {rarityLabels[aug.rarity]}
-                        </span>
-                        <span className={SCORE_COLOR(score)}>{score}</span>
-                      </div>
-                    </div>
-                  </div>
-                </Tooltip>
-              );
-            })}
-          </div>
-
-          {/* Champion Synergies */}
-          {synergy.topChampions.length > 0 && (
-            <div className="space-y-3">
-              {(["S+", "S", "A"] as AffinityTier[]).map((tier) => {
-                const champs = tierGroups[tier];
-                if (champs.length === 0) return null;
-                const style = TIER_STYLE[tier];
-                return (
-                  <div key={tier}>
-                    <div className="flex items-center gap-2 mb-2">
-                      <span
-                        className={`text-xs font-bold px-2 py-0.5 rounded border ${style.bg} ${style.text}`}
-                      >
-                        {tier}
-                      </span>
-                      <span className="text-xs text-[var(--color-text-muted)]">
-                        {tier === "S+"
-                          ? t("tierGodlike")
-                          : tier === "S"
-                            ? t("tierStrong")
-                            : t("tierGood")}
-                      </span>
-                    </div>
-                    <div className="flex flex-wrap gap-1.5">
-                      {champs.map((c) => (
-                        <Tooltip key={c.slug} content={`${c.name} — ${c.reason}`}>
-                          <div className="relative w-8 h-8 rounded-full overflow-hidden border border-[var(--color-border-default)] cursor-default hover:border-[var(--color-neon-primary)]/50 transition-colors">
-                            <Image
-                              src={c.icon}
-                              alt={c.name}
-                              fill
-                              className="object-cover"
-                              sizes="32px"
-                              unoptimized
-                            />
-                          </div>
-                        </Tooltip>
-                      ))}
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-          )}
-        </div>
-      )}
-    </div>
-  );
-}
-
-// ─── Standalone Augments Section ─────────────────────────────────────────────
-
-function StandaloneSection({
-  augments,
-  locale,
-  rarityLabels,
-}: {
-  augments: ScoredAugment[];
-  locale: string;
-  rarityLabels: Record<AugmentRarity, string>;
-}) {
-  const t = useTranslations("augments");
-  const standalone = useMemo(
-    () =>
-      augments
-        .filter((a) => !a.set)
-        .sort((a, b) => baselineOracleScore(b) - baselineOracleScore(a)),
-    [augments],
-  );
-
-  if (standalone.length === 0) return null;
-
-  return (
-    <div className="glass-card border border-[var(--color-border-default)] overflow-hidden">
-      <div className="px-5 py-4">
-        <div className="flex items-center gap-3">
-          <h2 className="text-lg font-bold">{t("standaloneTitle")}</h2>
-          <span className="text-xs text-[var(--color-text-muted)] bg-[var(--color-bg-card)] px-2 py-0.5 rounded">
-            {t("augmentCount", { count: standalone.length })}
-          </span>
-        </div>
-        <p className="text-sm text-[var(--color-text-secondary)] mt-1">
-          {t("standaloneSubtitle")}
-        </p>
-      </div>
-      <div className="px-5 pb-5">
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3">
-          {standalone.map((aug) => (
-            <AugmentCard
-              key={aug.slug}
-              augment={aug}
-              locale={locale}
-              rarityLabel={rarityLabels[aug.rarity]}
-            />
-          ))}
-        </div>
-      </div>
-    </div>
-  );
-}
-
 // ─── Augment Card ────────────────────────────────────────────────────────────
 
 function AugmentCard({
@@ -721,13 +400,28 @@ function AugmentCard({
         <span className="text-xs font-medium text-center leading-tight line-clamp-2 w-full">
           {displayName}
         </span>
-        {augment.set ? (
-          <span className="text-[9px] text-[var(--color-text-muted)] text-center leading-tight truncate w-full italic">
-            {augment.set}
-          </span>
-        ) : (
-          <span className="text-[9px] invisible">—</span>
-        )}
+        <div className="flex flex-wrap justify-center gap-1 min-h-[14px]">
+          {augment.flags?.lifecycle === "added" && (
+            <span className="text-[9px] font-bold px-1 py-px rounded bg-green-500/20 text-green-300 border border-green-400/40">
+              {t("badgeNew")}
+            </span>
+          )}
+          {augment.flags?.lifecycle === "removed" && (
+            <span className="text-[9px] font-bold px-1 py-px rounded bg-red-500/20 text-red-300 border border-red-400/40">
+              {t("badgeRemoved")}
+            </span>
+          )}
+          {augment.type === "ability" && (
+            <span className="text-[9px] font-bold px-1 py-px rounded bg-sky-500/15 text-sky-300 border border-sky-400/30">
+              {t("badgeAbility")}
+            </span>
+          )}
+          {augment.type === "quest" && (
+            <span className="text-[9px] font-bold px-1 py-px rounded bg-violet-500/15 text-violet-300 border border-violet-400/30">
+              {t("badgeQuest")}
+            </span>
+          )}
+        </div>
         <span
           className={`text-[10px] font-bold px-1.5 py-0.5 rounded border ${styles.badge}`}
         >

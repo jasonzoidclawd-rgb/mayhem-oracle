@@ -113,7 +113,6 @@
     "trapsAvoid": "陷阱 — 避免選擇",
     "patchLabel": "版本 {patch}",
     "overallRank": "總排名 #{rank}",
-    "pillSet": "套組",
     "pillCombo": "組合",
     "pillTrap": "陷阱",
     "pillRarity": "稀有",
@@ -123,22 +122,19 @@
     "pillMismatch": "不匹配",
     "magicDamage": "魔法傷害",
     "physicalDamage": "物理傷害",
-    "mixedDamage": "混合傷害"
+    "mixedDamage": "混合傷害",
+    "pillTier": "階級"
   },
   "augments": {
     "title": "增強",
     "subtitle": "{count} 個增強 · 版本 {patch} · 依神諭評分排序",
     "search": "搜尋名稱、套組或效果...",
-    "allSets": "全部套組",
     "sortScore": "排序：神諭評分",
     "sortWinRate": "排序：勝率",
     "sortName": "排序：名稱",
     "all": "全部",
     "noResults": "沒有符合篩選條件的增強。",
     "showing": "顯示 {count} / {total} 個增強",
-    "viewSets": "增強套組",
-    "viewAll": "所有增強",
-    "hybridSet": "混合套組",
     "augmentCount": "{count} 個增幅裝置",
     "averageWinRate": "平均勝率 {winRate}%",
     "hasSpecialNotes": "有特殊備註",
@@ -147,10 +143,12 @@
     "tierGodlike": "神級",
     "tierStrong": "強勢",
     "tierGood": "良好",
-    "standaloneTitle": "獨立增幅裝置",
-    "standaloneSubtitle": "不屬於任何套組的增幅裝置 — 逐一評估",
     "gameNotesTitle": "遊戲備註與互動",
-    "gameNotesSubtitle": "來自 Wiki 的機制"
+    "gameNotesSubtitle": "來自 Wiki 的機制",
+    "badgeNew": "新增",
+    "badgeRemoved": "已移除",
+    "badgeAbility": "技能",
+    "badgeQuest": "任務"
   },
   "items": {
     "title": "ARAM 大亂鬥裝備",
@@ -309,7 +307,6 @@
     "reasonAttackTypeSynergy": "符合英雄攻擊模式",
     "reasonCrowdControlSynergy": "控場協同",
     "reasonTagMismatch": "標籤不合風險",
-    "reasonSameSetProgress": "推進已持有增強套組",
     "reasonChampionModeOverride": "英雄專屬模式修正",
     "reasonChampionModeTrap": "英雄專屬陷阱修正",
     "reasonTextInferredCrowdControl": "從增強文字推斷控場協同",
@@ -336,7 +333,9 @@
     "reasonAugmentWinRateMissing": "缺少增強勝率資料，因此分數仰賴備用中繼資料。",
     "baselineLabel": "11級基準",
     "baselineNote": "對抗 {armor} 護甲，無裝備",
-    "dpsDeltaLabel": "DPS"
+    "dpsDeltaLabel": "DPS",
+    "reasonAbilityAugmentFit": "與此英雄的技能高度契合",
+    "reasonAbilityAugmentMisfit": "此英雄沒有適合的技能"
   },
   "damageSim": {
     "title": "傷害計算器",

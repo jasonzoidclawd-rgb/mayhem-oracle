@@ -136,6 +136,15 @@ export interface AbilityStats {
   isDot?: boolean;
   isOnHit?: boolean;
   tags?: string[];           // e.g. Trait_ImmobilizingCCSpell
+  // 26.12 ability-augment fit flags (set only when true)
+  projectile?: boolean;
+  knockback?: boolean;
+  knockup?: boolean;
+  recast?: boolean;
+  heal?: boolean;
+  shield?: boolean;
+  dash?: boolean;
+  longRange?: boolean;
 }
 
 export interface AbilityEntry {
@@ -298,10 +307,9 @@ export interface PoolRules {
 // ─── Oracle Score algorithm constants ───
 // Ported from oracle_ghost.py scoring system
 export const SCORE_WEIGHTS = {
-  SET_TIER_BONUS: { prismatic: 14, gold: 10, silver: 6 },
+  TIER_BONUS: { prismatic: 14, gold: 10, silver: 6 },
   STRONG_COMBO_BONUS: 12,
   TRAP_PENALTY: -15,
-  SAME_SET_SYNERGY: 2,
   RARITY_BONUS: { prismatic: 3, gold: 1, silver: 0 },
   // Qualitative change augments (質變增幅) get a special multiplier
   // because they rewrite champion mechanics, not just boost numbers.
@@ -314,6 +322,10 @@ export const SCORE_WEIGHTS = {
   TAG_MISMATCH_PENALTY: -8,
   // Strongest structured champion-kit interaction only; strength is 1-3.
   MECHANICAL_INTERACTION_PER_STRENGTH: 3,
+  // 26.12 ability/quest augment fit; strength is -3..3.
+  // HYPOTHESIS weight — validate against live win rates once 26.12 telemetry
+  // lands (plan §3); change both twins together.
+  ABILITY_AUGMENT_FIT_PER_STRENGTH: 3,
 } as const;
 
 // ─── Augment Selection Constants ───

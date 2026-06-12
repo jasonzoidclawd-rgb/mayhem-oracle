@@ -80,7 +80,8 @@ type AdvisorCopy = {
   reasonAttackTypeSynergy: string;
   reasonCrowdControlSynergy: string;
   reasonTagMismatch: string;
-  reasonSameSetProgress: string;
+  reasonAbilityAugmentFit: string;
+  reasonAbilityAugmentMisfit: string;
   reasonChampionModeOverride: string;
   reasonChampionModeTrap: string;
   reasonTextInferredCrowdControl: string;
@@ -294,7 +295,8 @@ export function AdvisorClient({
     "attack-type-synergy": copy.reasonAttackTypeSynergy,
     "crowd-control-synergy": copy.reasonCrowdControlSynergy,
     "tag-mismatch": copy.reasonTagMismatch,
-    "same-set-2-piece-progress": copy.reasonSameSetProgress,
+    "ability-augment-fit": copy.reasonAbilityAugmentFit,
+    "ability-augment-misfit": copy.reasonAbilityAugmentMisfit,
     "champion-mode-override": copy.reasonChampionModeOverride,
     "champion-mode-trap": copy.reasonChampionModeTrap,
     "text-inferred-crowd-control-synergy": copy.reasonTextInferredCrowdControl,

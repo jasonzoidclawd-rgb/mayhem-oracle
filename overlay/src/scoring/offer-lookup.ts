@@ -1,6 +1,6 @@
+import { abilityAugmentFit } from "./ability-augment-fit";
 import { computeOracleScore, type ComboTier, type ScoredAugment } from "./oracle-score";
 import {
-  parseSets,
   probabilityOfTarget,
   scoreToTier,
   type ChampionPoolBreakdown,
@@ -121,11 +121,6 @@ function rarityCounts(augments: ScoredAugment[]): Record<ScoredAugment["rarity"]
   );
 }
 
-function setsForAugment(augment: ScoredAugment): string[] {
-  const fromGeneratedSet = parseSets(augment.set);
-  return fromGeneratedSet.length > 0 ? fromGeneratedSet : parseSets(augment.wikiSet);
-}
-
 function fallbackScoredAugment(args: {
   augment: ScoredAugment;
   championWinRate?: number | null;
@@ -140,13 +135,17 @@ function fallbackScoredAugment(args: {
     comboTier,
     abilityProfile,
     isSystemBreaker: augment.flags?.system_breaker === true,
+    abilityAugmentFit: abilityAugmentFit(
+      { slug: augment.slug, type: augment.type, wikiDescription: augment.wikiDescription },
+      abilityProfile,
+    ),
   });
 
   return {
     slug: augment.slug,
     name: augment.name,
     name_zh_TW: augment.name_zh_TW,
-    sets: setsForAugment(augment),
+    lifecycle: augment.flags?.lifecycle,
     win_rate: augment.win_rate ?? 50,
     score: result.total,
     tier: scoreToTier(result.total),

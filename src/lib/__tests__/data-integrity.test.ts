@@ -71,6 +71,26 @@ describe("data integrity", () => {
     }
   });
 
+  test("26.12 breaker re-verification: three breakers retired, five live", () => {
+    // Empirical record against live arammayhem curation (data-availability,
+    // 2026-06-12 page redesign): slow-and-steady, jeweled-gauntlet, and
+    // vulnerability are retired in 26.12. All eight keep their breaker flag
+    // (historical truth); lifecycle gates retired ones out of pools.
+    // Curation note: stackosaurusrex was evaluated and rejected as a ninth
+    // breaker — "% more stacks" is a quantitative amplifier, not a rewrite.
+    const find = (slug: string) => augmentsData.augments.find((a) => a.slug === slug);
+
+    for (const slug of ["slow-and-steady", "jeweled-gauntlet", "vulnerability"]) {
+      expect(find(slug)?.flags.lifecycle, `${slug} expected removed in 26.12`).toBe("removed");
+    }
+    for (const slug of [
+      "draw-your-sword", "master-of-duality",
+      "mystic-punch", "tap-dancer", "marksmage",
+    ]) {
+      expect(find(slug)?.flags.lifecycle, `${slug} expected active in 26.12`).toBe("active");
+    }
+  });
+
   test("normalized combo resolution covers most curated combos", () => {
     let resolved = 0;
 
@@ -127,6 +147,52 @@ describe("data integrity", () => {
     expect(garen.kit_tags).toEqual(expect.arrayContaining(["attack", "tank"]));
     expect(garen.kit_tags).not.toContain("mana");
     expect(garen.kit_tags).not.toContain("manaless");
+  });
+
+  // ── 26.12 corpus: lifecycle + type (Session 1) ──
+
+  test("every augment has a 26.12 type", () => {
+    for (const augment of augmentsData.augments) {
+      expect(["ability", "quest", "standalone"],
+        `${augment.slug} missing/invalid type`,
+      ).toContain((augment as { type?: string }).type);
+    }
+  });
+
+  test("lifecycle values are the supported enum", () => {
+    for (const augment of augmentsData.augments) {
+      expect(["active", "added", "removed"]).toContain(augment.flags.lifecycle);
+    }
+  });
+
+  test("removed augments are retained, flagged, and excluded from pools", () => {
+    const removed = augmentsData.augments.filter((a) => a.flags.lifecycle === "removed");
+    expect(removed.length).toBeGreaterThanOrEqual(30);
+  });
+
+  test("live augments carry valid kit_tags and added coverage is >= 80%", () => {
+    const validTags = new Set([
+      "attack", "ability", "on_hit", "crit", "movement",
+      "haste", "tank", "heal_shield", "dot", "cc", "mana", "manaless",
+    ]);
+
+    for (const augment of augmentsData.augments) {
+      if (augment.flags.lifecycle === "removed") continue;
+      const tags = (augment as { kit_tags?: string[] }).kit_tags;
+      expect(Array.isArray(tags), `${augment.slug} kit_tags missing`).toBe(true);
+      for (const tag of tags ?? []) {
+        expect(validTags.has(tag), `${augment.slug} has invalid tag ${tag}`).toBe(true);
+      }
+    }
+
+    const added = augmentsData.augments.filter((a) => a.flags.lifecycle === "added");
+    const tagged = added.filter(
+      (a) => ((a as { kit_tags?: string[] }).kit_tags ?? []).length >= 1,
+    );
+    expect(
+      tagged.length,
+      `only ${tagged.length}/${added.length} added augments classified`,
+    ).toBeGreaterThanOrEqual(Math.ceil(added.length * 0.8));
   });
 
   test("augment exemplar tags and flags match observed classifier output", () => {

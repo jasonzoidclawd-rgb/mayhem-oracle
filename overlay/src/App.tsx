@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback, useMemo, useRef } from "react";
 import { invoke } from "@tauri-apps/api/core";
 import {
   buildChampionPool,
-  calculateSetPaths,
+  expectedValue,
 } from "./scoring";
 import { buildOverlayAugmentLookup, matchAugmentName } from "./scoring/offer-lookup";
 import {
@@ -16,7 +16,6 @@ import type {
   ChampionTag,
   PoolAugment,
   PoolRules,
-  SetPath,
   ComboTier,
 } from "./scoring";
 import "./App.css";
@@ -332,23 +331,6 @@ function App() {
     return null;
   })();
 
-  // Set paths
-  const setPaths = useMemo((): SetPath[] => {
-    if (!poolData || !currentRound) return [];
-    const remaining = 4 - currentRound.round;
-    if (remaining <= 0) return [];
-    return calculateSetPaths(poolData, pickedAugments, remaining);
-  }, [poolData, currentRound, pickedAugments]);
-
-  // Get set path for a specific augment
-  const getSetPath = useCallback(
-    (aug: PoolAugment): SetPath | null => {
-      if (aug.sets.length === 0) return null;
-      return setPaths.find((p) => aug.sets.includes(p.setName)) ?? null;
-    },
-    [setPaths],
-  );
-
   const stopOcr = useCallback(() => {
     ocrActiveRef.current = false;
     ocrRunIdRef.current += 1;
@@ -576,26 +558,20 @@ function App() {
           {matchedCards.map((card) => {
             const pos = BADGE_POSITIONS[card.regionIndex];
             if (!pos) return null;
-            const setPath = getSetPath(card.augment);
+            const round = (currentRound?.round ?? 1) as 1 | 2 | 3 | 4;
+            const ev = expectedValue(
+              card.augment.score,
+              card.augment.probabilityWithReroll,
+              round,
+            );
             return (
               <div
                 className={`badge badge-${card.augment.tier}`}
                 key={card.augment.slug}
                 style={{ left: pos.left, top: pos.top }}
               >
-                {setPath && setPath.piecesNeeded > 0 && (
-                  <div className="badge-set">
-                    <span className="badge-set-name">{setPath.setName}</span>
-                    <span className="badge-set-prob">
-                      {setPath.currentPieces}/{setPath.currentPieces + setPath.piecesNeeded}
-                      {" · "}
-                      {Math.round(
-                        (setPath.completionProbByRound[
-                          setPath.completionProbByRound.length - 1
-                        ] ?? 0) * 100,
-                      )}%
-                    </span>
-                  </div>
+                {card.augment.lifecycle === "added" && (
+                  <span className="badge-new">NEW</span>
                 )}
                 <span className="badge-label">Oracle</span>
                 <span className={`badge-tier tier-${card.augment.tier}`}>
@@ -607,6 +583,7 @@ function App() {
                 <span className="badge-prob">
                   P:{Math.round(card.augment.probabilityWithReroll * 100)}%
                 </span>
+                <span className="badge-ev">EV:{Math.round(ev)}</span>
               </div>
             );
           })}

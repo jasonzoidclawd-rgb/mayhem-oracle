@@ -12,6 +12,7 @@
  *   4. Item exclusions: drop augments blocked by currently-owned items
  */
 
+import { abilityAugmentFit } from "./ability-augment-fit";
 import { buildPoolProfile, isInAugmentPool } from "./augment-tailoring";
 
 function normalizeItemKey(key: string): string {
@@ -34,6 +35,7 @@ const RESOURCE_TAGS: ReadonlySet<ChampionTag> = new Set(["mana", "manaless"]);
 export interface PoolAugmentInput {
   slug: string;
   rarity: "silver" | "gold" | "prismatic";
+  type?: "ability" | "quest" | "standalone";
   wikiDescription?: string;
   kit_tags?: ChampionTag[];
 }
@@ -99,6 +101,19 @@ export function getChampionAugmentPool<T extends PoolAugmentInput>(args: {
     if (!isInAugmentPool({ slug, description: aug.wikiDescription ?? "" }, profile)) {
       excluded.push({ slug, reason: "hard-exclusion" });
       continue;
+    }
+
+    // Layer 2.6 — 26.12 ability-augment usability gate (mirrors Riot's
+    // "usable for your champion" pool rule).
+    if (aug.type === "ability") {
+      const fit = abilityAugmentFit(
+        { slug, type: aug.type, wikiDescription: aug.wikiDescription },
+        abilityProfile,
+      );
+      if (fit && fit.strength < 0) {
+        excluded.push({ slug, reason: "ability-ineligible" });
+        continue;
+      }
     }
 
     // Layer 2.5 — resource-tag gate.
