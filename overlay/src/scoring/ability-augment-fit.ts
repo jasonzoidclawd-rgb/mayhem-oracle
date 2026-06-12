@@ -121,6 +121,7 @@ export function abilityAugmentFit(
 
   // Generic damage-ability rules are weak signals — every kit has damage spells.
   const generic = !rule.needsAny && !rule.needsAll;
-  const strength = generic ? 1 : eligible.length >= 2 ? 3 : 2;
+  const hasBasicMatch = eligible.some((ability) => ability.key !== "R");
+  const strength = generic ? 1 : hasBasicMatch ? 3 : 2;
   return { strength, eligibleKeys: eligible.map((a) => a.key) };
 }

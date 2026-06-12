@@ -60,6 +60,18 @@ describe("abilityAugmentFit", () => {
     expect(abilityAugmentFit(chainReaction, alistarProfile)?.strength).toBeGreaterThanOrEqual(2);
   });
 
+  test("rates an eligible basic ability above an ultimate-only match", () => {
+    const basicProjectile = profileWith([
+      { key: "Q", stats: { projectile: true } },
+    ]);
+    const ultimateProjectile = profileWith([
+      { key: "R", stats: { projectile: true } },
+    ]);
+
+    expect(abilityAugmentFit(spellSplit, basicProjectile)?.strength).toBe(3);
+    expect(abilityAugmentFit(spellSplit, ultimateProjectile)?.strength).toBe(2);
+  });
+
   test("Spell Split is a trap-fit for a projectile-less melee kit", () => {
     const fit = abilityAugmentFit(spellSplit, garenProfile);
     expect(fit).toBeDefined();
