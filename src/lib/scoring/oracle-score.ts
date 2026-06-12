@@ -137,8 +137,15 @@ export function computeOracleScore(input: OracleScoreInput): OracleScoreResult {
 
   // Use augment's own win rate as base (not champion WR which is constant per champ).
   // Reject NaN/Infinity from malformed data so they can't propagate into total scores.
+  // 26.12 preview neutrality: newly added augments launch without telemetry —
+  // their 0/null win_rate means "no data", not "loses every game".
+  const isPreviewWinRate =
+    augment.flags?.lifecycle === "added" &&
+    (augment.win_rate === 0 || augment.win_rate === null);
   const baseScore =
-    typeof augment.win_rate === "number" && Number.isFinite(augment.win_rate)
+    !isPreviewWinRate &&
+    typeof augment.win_rate === "number" &&
+    Number.isFinite(augment.win_rate)
       ? augment.win_rate
       : 50;
   // Champion WR as minor adjustment: +-2 pts max around 50% baseline

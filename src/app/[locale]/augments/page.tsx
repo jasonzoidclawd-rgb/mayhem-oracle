@@ -3,9 +3,7 @@ import { AugmentsClient } from "@/components/augments/AugmentsClient";
 import { normalizeAugmentSet } from "@/lib/data/augment-set";
 import { readFile } from "fs/promises";
 import path from "path";
-import { evaluateAllSetSynergies, type SetSynergyResult } from "@/lib/scoring/set-synergy";
 import type { ScoredAugment } from "@/lib/scoring/oracle-score";
-import type { AbilityProfile, ChampionBaseStats } from "@/lib/types";
 
 export default async function AugmentsPage({
   params,
@@ -17,27 +15,13 @@ export default async function AugmentsPage({
   const t = await getTranslations("augments");
 
   const dataDir = path.join(process.cwd(), "public", "data");
-  const [augRaw, champRaw, abilRaw] = await Promise.all([
-    readFile(path.join(dataDir, "augments.json"), "utf-8"),
-    readFile(path.join(dataDir, "champions.json"), "utf-8"),
-    readFile(path.join(dataDir, "abilities.json"), "utf-8"),
-  ]);
+  const augRaw = await readFile(path.join(dataDir, "augments.json"), "utf-8");
 
   const { augments, patch } = JSON.parse(augRaw);
-  const { champions } = JSON.parse(champRaw);
-  const { profiles } = JSON.parse(abilRaw) as { profiles: Record<string, AbilityProfile> };
   const normalizedAugments = (augments as Array<ScoredAugment & { wikiSet?: string | null }>).map((augment) => ({
     ...augment,
     set: normalizeAugmentSet(augment.set, augment.wikiSet),
   }));
-
-  // Compute set-champion synergies
-  const champInputs = (champions as {
-    slug: string; name: string; icon: string;
-    tags: string[]; baseStats: ChampionBaseStats;
-  }[]).filter((c) => c.baseStats && profiles[c.slug]);
-
-  const setSynergies: SetSynergyResult[] = evaluateAllSetSynergies(champInputs, profiles);
 
   return (
     <div className="py-8">
@@ -47,11 +31,7 @@ export default async function AugmentsPage({
           {t("subtitle", { count: augments.length, patch })}
         </p>
       </header>
-      <AugmentsClient
-        augments={normalizedAugments}
-        locale={locale}
-        setSynergies={setSynergies}
-      />
+      <AugmentsClient augments={normalizedAugments} locale={locale} />
     </div>
   );
 }

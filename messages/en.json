@@ -113,7 +113,6 @@
     "trapsAvoid": "Traps — Avoid",
     "patchLabel": "Patch {patch}",
     "overallRank": "#{rank} overall",
-    "pillSet": "set",
     "pillCombo": "combo",
     "pillTrap": "trap",
     "pillRarity": "rarity",
@@ -123,22 +122,19 @@
     "pillMismatch": "mismatch",
     "magicDamage": "Magic Damage",
     "physicalDamage": "Physical Damage",
-    "mixedDamage": "Mixed Damage"
+    "mixedDamage": "Mixed Damage",
+    "pillTier": "tier"
   },
   "augments": {
     "title": "Augments",
     "subtitle": "{count} augments · Patch {patch} · sorted by Oracle Score",
     "search": "Search name, set, or effect...",
-    "allSets": "All Sets",
     "sortScore": "Sort: Oracle Score",
     "sortWinRate": "Sort: Win Rate",
     "sortName": "Sort: Name",
     "all": "All",
     "noResults": "No augments match your filters.",
     "showing": "Showing {count} of {total} augments",
-    "viewSets": "Augment Sets",
-    "viewAll": "All Augments",
-    "hybridSet": "Hybrid set",
     "augmentCount": "{count} augments",
     "averageWinRate": "{winRate}% avg WR",
     "hasSpecialNotes": "Has special notes",
@@ -147,10 +143,12 @@
     "tierGodlike": "Godlike",
     "tierStrong": "Strong",
     "tierGood": "Good",
-    "standaloneTitle": "Standalone Augments",
-    "standaloneSubtitle": "Augments not part of any set — evaluated individually",
     "gameNotesTitle": "Game Notes & Interactions",
-    "gameNotesSubtitle": "wiki-sourced mechanics"
+    "gameNotesSubtitle": "wiki-sourced mechanics",
+    "badgeNew": "NEW",
+    "badgeRemoved": "REMOVED",
+    "badgeAbility": "Ability",
+    "badgeQuest": "Quest"
   },
   "items": {
     "title": "ARAM Mayhem Items",
@@ -309,7 +307,6 @@
     "reasonAttackTypeSynergy": "Matches champion attack pattern",
     "reasonCrowdControlSynergy": "Crowd-control synergy",
     "reasonTagMismatch": "Tag mismatch risk",
-    "reasonSameSetProgress": "Progresses an owned augment set",
     "reasonChampionModeOverride": "Champion-specific mode override",
     "reasonChampionModeTrap": "Champion-specific trap override",
     "reasonTextInferredCrowdControl": "Inferred crowd-control synergy from augment text",
@@ -336,7 +333,9 @@
     "reasonAugmentWinRateMissing": "Augment win-rate data is missing, so this score relies on fallback metadata.",
     "baselineLabel": "Lv11 baseline",
     "baselineNote": "vs {armor} armor, no items",
-    "dpsDeltaLabel": "DPS"
+    "dpsDeltaLabel": "DPS",
+    "reasonAbilityAugmentFit": "Strong fit for an ability in this kit",
+    "reasonAbilityAugmentMisfit": "No ability in this kit uses it well"
   },
   "damageSim": {
     "title": "Damage Calculator",

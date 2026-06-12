@@ -113,7 +113,6 @@
     "trapsAvoid": "トラップ — 避けるべき",
     "patchLabel": "パッチ {patch}",
     "overallRank": "総合 #{rank}",
-    "pillSet": "セット",
     "pillCombo": "コンボ",
     "pillTrap": "トラップ",
     "pillRarity": "レア",
@@ -123,22 +122,19 @@
     "pillMismatch": "不一致",
     "magicDamage": "魔法ダメージ",
     "physicalDamage": "物理ダメージ",
-    "mixedDamage": "混合ダメージ"
+    "mixedDamage": "混合ダメージ",
+    "pillTier": "ティア"
   },
   "augments": {
     "title": "オーグメント",
     "subtitle": "{count} 個のオーグメント · パッチ {patch} · オラクルスコア順",
     "search": "名前、セット、効果で検索...",
-    "allSets": "全セット",
     "sortScore": "並び替え：オラクルスコア",
     "sortWinRate": "並び替え：勝率",
     "sortName": "並び替え：名前",
     "all": "すべて",
     "noResults": "条件に合うオーグメントがありません。",
     "showing": "{count} / {total} 個のオーグメントを表示",
-    "viewSets": "セット一覧",
-    "viewAll": "全オーグメント",
-    "hybridSet": "ハイブリッドセット",
     "augmentCount": "{count}個のオーグメント",
     "averageWinRate": "平均勝率 {winRate}%",
     "hasSpecialNotes": "特記事項あり",
@@ -147,10 +143,12 @@
     "tierGodlike": "神級",
     "tierStrong": "強力",
     "tierGood": "良好",
-    "standaloneTitle": "単独オーグメント",
-    "standaloneSubtitle": "セットに属さないオーグメント — 個別に評価",
     "gameNotesTitle": "ゲームメモと相互作用",
-    "gameNotesSubtitle": "Wiki 由来のメカニクス"
+    "gameNotesSubtitle": "Wiki 由来のメカニクス",
+    "badgeNew": "新規",
+    "badgeRemoved": "削除済み",
+    "badgeAbility": "アビリティ",
+    "badgeQuest": "クエスト"
   },
   "items": {
     "title": "ARAMメイヘム アイテム",
@@ -309,7 +307,6 @@
     "reasonAttackTypeSynergy": "チャンピオンの攻撃パターンに合う",
     "reasonCrowdControlSynergy": "行動妨害シナジー",
     "reasonTagMismatch": "タグ不一致リスク",
-    "reasonSameSetProgress": "所持オーグメントセットを進める",
     "reasonChampionModeOverride": "チャンピオン別モード補正",
     "reasonChampionModeTrap": "チャンピオン別罠補正",
     "reasonTextInferredCrowdControl": "オーグメント文面から推定した行動妨害シナジー",
@@ -336,7 +333,9 @@
     "reasonAugmentWinRateMissing": "オーグメント勝率データがないため、代替メタデータに基づいています。",
     "baselineLabel": "Lv11ベースライン",
     "baselineNote": "アーマー{armor}対象、アイテムなし",
-    "dpsDeltaLabel": "DPS"
+    "dpsDeltaLabel": "DPS",
+    "reasonAbilityAugmentFit": "このキットのアビリティと相性が良い",
+    "reasonAbilityAugmentMisfit": "活かせるアビリティがない"
   },
   "damageSim": {
     "title": "ダメージ計算機",

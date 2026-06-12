@@ -97,6 +97,27 @@ describe("computeOracleScore", () => {
   });
 });
 
+describe("26.12 preview win-rate neutrality", () => {
+  test("added augment with no telemetry scores from a neutral 50 base", () => {
+    const added = computeOracleScore({
+      augment: { ...baseAugment, win_rate: 0, flags: { system_breaker: false, lifecycle: "added" } },
+    });
+    expect(added.breakdown.championWr).toBe(50);
+
+    const addedNull = computeOracleScore({
+      augment: { ...baseAugment, win_rate: null, flags: { system_breaker: false, lifecycle: "added" } },
+    });
+    expect(addedNull.breakdown.championWr).toBe(50);
+  });
+
+  test("an active augment with a real 0.0 win rate is unchanged", () => {
+    const activeZero = computeOracleScore({
+      augment: { ...baseAugment, win_rate: 0, flags: { system_breaker: false, lifecycle: "active" } },
+    });
+    expect(activeZero.breakdown.championWr).toBe(0);
+  });
+});
+
 describe("baselineOracleScore", () => {
   test("rounds to one decimal place", () => {
     const score = baselineOracleScore({

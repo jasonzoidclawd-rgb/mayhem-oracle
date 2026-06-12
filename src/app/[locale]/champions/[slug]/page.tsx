@@ -59,7 +59,7 @@ interface ComboData {
 }
 
 type PillLabels = {
-  set: string;
+  tier: string;
   combo: string;
   trap: string;
   rarity: string;
@@ -309,7 +309,7 @@ export default async function ChampionPage({
 
   // Pre-compute translated pill labels
   const pillLabels: PillLabels = {
-    set:      t("pillSet"),
+    tier:     t("pillTier"),
     combo:    t("pillCombo"),
     trap:     t("pillTrap"),
     rarity:   t("pillRarity"),
@@ -723,7 +723,7 @@ function AugmentRow({
           {/* Score breakdown pills — hidden on mobile for compact view */}
           <div className="hidden sm:flex gap-1.5 mt-0.5 flex-wrap">
             {breakdown.tierBonus > 0 && (
-              <ScorePill label={pillLabels.set} value={breakdown.tierBonus} />
+              <ScorePill label={pillLabels.tier} value={breakdown.tierBonus} />
             )}
             {breakdown.comboBonus > 0 && (
               <ScorePill label={pillLabels.combo} value={breakdown.comboBonus} positive />

@@ -8,7 +8,6 @@ export type { ChampionPoolProfile, AugmentPoolInput, ResourceType } from "./augm
 export { analyzeInteractions, analyzeKit } from "./augment-interactions";
 export type { MechanicalInteraction, AugmentMechanic, KitAnalysis } from "./augment-interactions";
 
-export { evaluateAllSetSynergies } from "./set-synergy";
 
 export { probabilityOfTarget, buildChampionPool, calculateSetPaths } from "./probability";
 export type { PoolAugment, TierPool, ChampionPoolBreakdown, SetPath } from "./probability";
