@@ -321,3 +321,30 @@ attack (CAN crit, benefits from AS items) → re-activate W. High skill ceiling.
 - [ ] Verify "item influence on smart tailoring" claim
 - [ ] Map all augment set memberships
 - [ ] Calculate N_tailored per champion archetype from actual pool data
+
+---
+
+## 26.12 Live Verification Gate (Session 12 — pending first live game)
+
+OCR benchmark re-run 2026-06-12 under regenerated 26.12 data: 100% (16/16
+labeled crops, avg 221 ms). The corpus contains only pre-26.12 card names —
+no newly added augment crop exists yet, because corpus crops come from real
+selection-screen screenshots. Hold the phase-2 tag until both gates pass:
+
+1. Corpus refresh: screenshot selection rounds showing NEW 26.12 augments
+   (ideally an Ability and a Quest augment), label them in
+   `overlay/corpus/ground_truth.json`, run `scripts/build_ocr_corpus.py`,
+   then `scripts/benchmark_ocr.py` — recognition must stay >= the pre-26.12
+   rate (100%).
+2. Live checklist (one game, overlay running):
+   - [ ] Rounds trigger at levels 3 / 7 / 11 / 15
+   - [ ] 3 cards per round; 1 independent reroll per slot
+   - [ ] Tier sync holds across players
+   - [ ] NEW chip + EV annotation render on badges (no set paths)
+   - [ ] A NEW 26.12 augment name OCR-matches with the correct badge
+   - [ ] Ability Augment pick flow: note whether the player chooses the
+         ability in-game (record for fit-model refinement)
+
+Any drift in rounds/slots/rerolls/tier-sync means CARD_NAME_REGIONS in
+`overlay/src-tauri/src/lib.rs` may need a Rust rebuild — tag first, release
+build, and verify the binary timestamp (`cargo check` alone is insufficient).
