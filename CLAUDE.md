@@ -14,7 +14,7 @@ Maintained by `scripts/update-state.sh` (post-commit hook via
 - Augments: `255`
 - Tests passing: `109`
 - Cross-parity budget: `0` divergent champions
-- Last tag: `26.12-phase1-complete`
+- Last tag: `26.12-phase3-complete`
 <!-- STATE:END -->
 
 ## Operating Principles
