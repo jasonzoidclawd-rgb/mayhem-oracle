@@ -220,13 +220,13 @@ git commit -m "docs: record membership platform baseline"
 
 ### Task 1.1: Add Red Contract and Grade Tests
 
-- [ ] Write failing tests that prove:
+- [x] Write failing tests that prove:
   - only same-rarity eligible augments form the comparison pool
   - three visible offers can all be `average` or `weak`
   - hard-incompatible augments are always `weak` and carry warnings
   - competitive and exploration modes can rank the same eligible augments differently
   - Patch 26.12 decisions contain no Trait/Set bonus
-- [ ] Use these grade bands over descending same-pool percentile:
+- [x] Use these grade bands over descending same-pool percentile:
 
 ```ts
 export const GRADE_BANDS = {
@@ -238,7 +238,7 @@ export const GRADE_BANDS = {
 } as const;
 ```
 
-- [ ] Run:
+- [x] Run:
 
 ```bash
 npx vitest run src/lib/__tests__/decision-engine.test.ts
