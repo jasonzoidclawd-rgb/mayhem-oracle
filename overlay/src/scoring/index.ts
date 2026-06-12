@@ -9,8 +9,8 @@ export { analyzeInteractions, analyzeKit } from "./augment-interactions";
 export type { MechanicalInteraction, AugmentMechanic, KitAnalysis } from "./augment-interactions";
 
 
-export { probabilityOfTarget, buildChampionPool, calculateSetPaths } from "./probability";
-export type { PoolAugment, TierPool, ChampionPoolBreakdown, SetPath } from "./probability";
+export { probabilityOfTarget, buildChampionPool, expectedValue, ROUND_WEIGHT } from "./probability";
+export type { PoolAugment, TierPool, ChampionPoolBreakdown } from "./probability";
 
 export { getChampionAugmentPool } from "./pool-orchestrator";
 export type { PoolAugmentInput, PoolOutput } from "./pool-orchestrator";
