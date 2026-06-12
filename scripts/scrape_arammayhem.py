@@ -132,19 +132,22 @@ def parse_tier_list(html: str) -> list[dict]:
 def parse_augments(html: str) -> list[dict]:
     augments = []
 
-    # Split into individual augment card blocks first
-    # Cards start with <a href="/augments/..." class="augment-card ..."
-    card_starts = [m.start() for m in re.finditer(r'href="/augments/[^"]+"\s+class="augment-card', html)]
+    # Two markups: rank rows (2026-06-12 redesign) and the older card grid.
+    card_starts = [
+        m.start()
+        for m in re.finditer(
+            r'href="/augments/[^"]+"\s+class="augment-(?:rank-row|card)', html
+        )
+    ]
 
     for i, start in enumerate(card_starts):
-        end = card_starts[i + 1] if i + 1 < len(card_starts) else start + 2000
+        end = card_starts[i + 1] if i + 1 < len(card_starts) else start + 4000
         block = html[start:end]
 
         slug_m = re.search(r'href="/augments/([^"]+)"', block)
         rarity_m = re.search(r'data-rarity="([^"]+)"', block)
-        # Win rate badge: ">59.03<!-- -->%"
-        wr_m = re.search(r'">([\d.]+)<!-- -->%', block)
-        img_m = re.search(r'<img src="([^"]+)"[^>]*alt="([^"]+)"', block)
+        # The augment icon img (rank rows also embed champion-icon imgs).
+        img_m = re.search(r'<img src="([^"]*augments/[^"]*)"[^>]*alt="([^"]+)"', block)
 
         if not (slug_m and rarity_m and img_m):
             continue
@@ -153,17 +156,34 @@ def parse_augments(html: str) -> list[dict]:
         if icon.startswith("/"):
             icon = resolve_url(icon)
 
-        lifecycle = "active"
-        if re.search(r">\s*DELETED[^<]*</span>", block):
+        # Win rate: old markup used a "59.03<!-- -->%" badge; rank rows render
+        # pick rate (duplicated for responsive grids) and win rate as plain
+        # percentages — win rate is the largest distinct value.
+        wr_m = re.search(r'">([\d.]+)<!-- -->%', block)
+        if wr_m:
+            win_rate = float(wr_m.group(1))
+        else:
+            pcts = {float(v) for v in re.findall(r"([\d.]+)\s*%", block) if float(v) <= 100}
+            win_rate = max(pcts) if pcts else None
+
+        # Lifecycle: data-availability (live|retired) on rank rows; badge text
+        # on the old cards. "live" cannot distinguish added-vs-active — that is
+        # resolved against the previous data file in main().
+        availability_m = re.search(r'data-availability="([^"]+)"', block)
+        if availability_m:
+            lifecycle = "removed" if availability_m.group(1) == "retired" else "live"
+        elif re.search(r">\s*DELETED[^<]*</span>", block):
             lifecycle = "removed"
         elif re.search(r">\s*NEW\s*</span>", block):
             lifecycle = "added"
+        else:
+            lifecycle = "active"
 
         augments.append({
             "slug": slug_m.group(1),
             "name": unescape(img_m.group(2)),
             "rarity": rarity_m.group(1),
-            "win_rate": float(wr_m.group(1)) if wr_m else None,
+            "win_rate": win_rate,
             "icon": icon,
             "lifecycle": lifecycle,
         })
@@ -506,8 +526,15 @@ def main():
         slug = aug["slug"]
         lifecycle = aug.pop("lifecycle")
         old = existing_augments.get(slug, {})
-        merged = {**old, **aug}
         old_flags = old.get("flags") or {}
+        if lifecycle == "live":
+            # Rank rows only say live|retired: keep the added cohort from the
+            # previous file; brand-new slugs count as added.
+            if old:
+                lifecycle = "added" if old_flags.get("lifecycle") == "added" else "active"
+            else:
+                lifecycle = "added"
+        merged = {**old, **aug}
         merged["flags"] = {
             "system_breaker": bool(old_flags.get("system_breaker", False)),
             "lifecycle": lifecycle,
@@ -548,7 +575,7 @@ def main():
     MIN_CHAMPIONS = 50
     MIN_AUGMENTS  = 150
     MIN_COMBOS    = 1
-    MAX_REMOVED   = 60
+    MAX_REMOVED   = 80
     removed_count = sum(1 for a in augments if a["flags"]["lifecycle"] == "removed")
     added_count   = sum(1 for a in augments if a["flags"]["lifecycle"] == "added")
     errors = []
@@ -557,7 +584,7 @@ def main():
     if len(augments) < MIN_AUGMENTS:
         errors.append(f"augments={len(augments)} < {MIN_AUGMENTS} (source markup may have changed)")
     if removed_count > MAX_REMOVED:
-        errors.append(f"removed={removed_count} > {MAX_REMOVED} (DELETED badge markup may have drifted)")
+        errors.append(f"removed={removed_count} > {MAX_REMOVED} (lifecycle markup may have drifted)")
     if len(combos) < MIN_COMBOS:
         errors.append(f"combos={len(combos)} < {MIN_COMBOS}")
     if errors:

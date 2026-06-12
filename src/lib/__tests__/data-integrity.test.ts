@@ -71,17 +71,21 @@ describe("data integrity", () => {
     }
   });
 
-  test("26.12 breaker re-verification: slow-and-steady removed, other seven live", () => {
-    // Session 4 empirical check against the 26.12 DELETED list. slow-and-steady
-    // keeps its breaker flag (historical truth); lifecycle gates it out of pools.
-    // Curation note: stackosaurusrex was evaluated and rejected — "% more stacks"
-    // is a quantitative amplifier, not a mechanics rewrite.
+  test("26.12 breaker re-verification: three breakers retired, five live", () => {
+    // Empirical record against live arammayhem curation (data-availability,
+    // 2026-06-12 page redesign): slow-and-steady, jeweled-gauntlet, and
+    // vulnerability are retired in 26.12. All eight keep their breaker flag
+    // (historical truth); lifecycle gates retired ones out of pools.
+    // Curation note: stackosaurusrex was evaluated and rejected as a ninth
+    // breaker — "% more stacks" is a quantitative amplifier, not a rewrite.
     const find = (slug: string) => augmentsData.augments.find((a) => a.slug === slug);
 
-    expect(find("slow-and-steady")?.flags.lifecycle).toBe("removed");
+    for (const slug of ["slow-and-steady", "jeweled-gauntlet", "vulnerability"]) {
+      expect(find(slug)?.flags.lifecycle, `${slug} expected removed in 26.12`).toBe("removed");
+    }
     for (const slug of [
-      "draw-your-sword", "jeweled-gauntlet", "master-of-duality",
-      "mystic-punch", "tap-dancer", "marksmage", "vulnerability",
+      "draw-your-sword", "master-of-duality",
+      "mystic-punch", "tap-dancer", "marksmage",
     ]) {
       expect(find(slug)?.flags.lifecycle, `${slug} expected active in 26.12`).toBe("active");
     }
