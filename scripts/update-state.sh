@@ -4,10 +4,30 @@
 set -euo pipefail
 cd "$(dirname "$0")/.."
 
+REPORT=$(mktemp)
+trap 'rm -f "$REPORT"' EXIT
+
+if ! ./node_modules/.bin/vitest run --reporter=json > "$REPORT"; then
+  echo "Refusing to update state from a failed test run" >&2
+  exit 1
+fi
+
 PATCH=$(python3 -c "import json; print(json.load(open('public/data/meta.json'))['patch'])")
 AUGMENTS=$(python3 -c "import json; print(len(json.load(open('public/data/augments.json'))['augments']))")
-TESTS=$(./node_modules/.bin/vitest run --reporter=json 2>/dev/null \
-  | python3 -c "import json,sys; print(json.load(sys.stdin)['numPassedTests'])" 2>/dev/null || echo "unknown")
+TESTS=$(python3 - "$REPORT" <<'PY'
+import json
+import sys
+
+text = open(sys.argv[1], encoding="utf-8").read()
+start = text.find("{")
+if start == -1:
+    raise SystemExit("Vitest JSON report was not found")
+report = json.loads(text[start:])
+if not report.get("success") or report.get("numFailedTests") != 0:
+    raise SystemExit("Refusing to update state from a failed test run")
+print(report["numPassedTests"])
+PY
+)
 PARITY=$(/usr/bin/grep -o 'PARITY_BUDGET = [0-9]*' src/lib/__tests__/cross-parity.test.ts | /usr/bin/grep -o '[0-9]*$')
 LAST_TAG=$(git describe --tags --abbrev=0 2>/dev/null || echo "none")
 
