@@ -12,7 +12,7 @@ Maintained by `scripts/update-state.sh` (post-commit hook via
 <!-- STATE:START -->
 - Patch: `26.12`
 - Augments: `255`
-- Tests passing: `109`
+- Tests passing: `110`
 - Cross-parity budget: `0` divergent champions
 - Last tag: `26.12-phase3-complete`
 <!-- STATE:END -->
@@ -66,9 +66,10 @@ has returned wrong results for bare `diff` / `ls` / `find`.
 ## Data Pipeline
 
 `npm run update-data` (daily cron 22:00 UTC): snapshot curated fields → scrape
-arammayhem + CDragon + DDragon + wiki → restore → classify (Groq; the local
-LiteLLM proxy works via `CLASSIFIER_URL` / `CLASSIFIER_MODEL`) → breaker
-validation gate → generate pool rules. Ownership: `flags.lifecycle` is
+arammayhem + CDragon + DDragon + wiki → restore → classify (deterministic
+fallback keeps no-key CI reproducible; optional Groq/LiteLLM enrichment uses
+`CLASSIFIER_URL` / `CLASSIFIER_MODEL`) → breaker validation gate → generate
+pool rules. Ownership: `flags.lifecycle` is
 scraper-owned (live NEW/DELETED badges), `kit_tags` classifier-owned,
 system breakers a curated list enforced in three places (classifier,
 update-data step gate, data-integrity test).

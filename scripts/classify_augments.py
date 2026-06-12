@@ -11,6 +11,8 @@ Usage:
   python3 scripts/classify_augments.py [--dry-run] [--batch-size N]
 """
 
+from __future__ import annotations
+
 import argparse
 import json
 import os
@@ -23,8 +25,9 @@ from pathlib import Path
 # ─── Config ───────────────────────────────────────────────────────────────────
 
 AUGMENTS_PATH = Path(__file__).parent.parent / "public/data/augments.json"
-LITELLM_URL = os.getenv("CLASSIFIER_URL", "https://api.groq.com/openai/v1/chat/completions")
-LITELLM_MODEL = os.getenv("CLASSIFIER_MODEL", "llama-3.3-70b-versatile")
+# `or` (not getenv defaults): a set-but-empty env var must still fall back.
+LITELLM_URL = os.getenv("CLASSIFIER_URL") or "https://api.groq.com/openai/v1/chat/completions"
+LITELLM_MODEL = os.getenv("CLASSIFIER_MODEL") or "llama-3.3-70b-versatile"
 LITELLM_KEY = os.getenv("GROQ_API_KEY", "sk-litellm-local")
 
 VALID_TAGS = [
@@ -216,6 +219,73 @@ def build_input_block(aug: dict) -> dict:
     }
 
 
+TAG_PATTERNS = {
+    "attack": re.compile(r"\bbasic attacks?\b|\bnext attack\b|\battack will\b|\battack speed\b|\battack damage\b|\bon-hit\b", re.I),
+    "ability": re.compile(r"\b(?:chosen|your) ability\b|\babilities\b|\bspells?\b|\bcasting\b|\bability power\b", re.I),
+    "on_hit": re.compile(r"\bon-hit\b|\bbasic attacks? (?:apply|trigger|fire|deal)\b", re.I),
+    "crit": re.compile(r"\bcrit(?:ical)?(?:ly)?(?: strikes?| chance| damage)?\b", re.I),
+    "movement": re.compile(r"\bmovement speed\b|\bmove speed\b|\bdash(?:es|ing)?\b|\bblink\b|\bteleport\b", re.I),
+    "haste": re.compile(r"\bability haste\b|\bhaste\b|\bcooldowns?\b", re.I),
+    "tank": re.compile(r"\barmor\b|\bmagic resist\b|\bmaximum health\b|\bbonus health\b|\bdamage reduction\b|\breduced damage\b", re.I),
+    "heal_shield": re.compile(r"\bheal(?:s|ed|ing)?\b|\bshield(?:s|ed|ing)?\b|\bomnivamp\b", re.I),
+    "dot": re.compile(r"\bburn(?:s|ed|ing)?\b|\bbleed(?:s|ing)?\b|\bpoison(?:s|ed)?\b|\bdamage over time\b", re.I),
+    "cc": re.compile(r"\bstun(?:s|ned)?\b|\bknock(?:s|ed)? (?:up|back)\b|\bslow(?:s|ed|ing)?\b|\broot(?:s|ed)?\b|\bfear(?:s|ed)?\b|\bcharm(?:s|ed)?\b|\bimmobiliz", re.I),
+    "mana": re.compile(r"\bmana\b", re.I),
+    "manaless": re.compile(r"\bmanaless\b|\bwithout mana\b", re.I),
+}
+
+CURATED_FALLBACK_TAGS = {
+    example["slug"]: example["result"]["kit_tags"]
+    for example in FEW_SHOT
+}
+
+
+def has_valid_tags(aug: dict) -> bool:
+    return bool([tag for tag in (aug.get("kit_tags") or []) if tag in VALID_TAGS])
+
+
+def derive_deterministic_tags(aug: dict) -> list[str]:
+    text = f"{aug.get('name', '')} {aug.get('wikiDescription', '')}"
+    tags = list(CURATED_FALLBACK_TAGS.get(aug.get("slug"), []))
+    tags.extend(
+        tag
+        for tag in VALID_TAGS
+        if tag not in tags and TAG_PATTERNS[tag].search(text)
+    )
+    if aug.get("type") == "ability" and "ability" not in tags:
+        tags.insert(0, "ability")
+    return tags[:4]
+
+
+def apply_deterministic_fallback(augments: list[dict]) -> int:
+    applied = 0
+    for aug in augments:
+        if aug.get("flags", {}).get("lifecycle") != "added" or has_valid_tags(aug):
+            continue
+        aug["kit_tags"] = derive_deterministic_tags(aug)
+        if has_valid_tags(aug):
+            applied += 1
+    return applied
+
+
+def should_use_llm(groq_key: str, classifier_url: str) -> bool:
+    return bool(groq_key) or not classifier_url.startswith("https://api.groq.com/")
+
+
+def validate_added_coverage(augments: list[dict], minimum: float = 0.8) -> tuple[int, int]:
+    added = [
+        aug
+        for aug in augments
+        if aug.get("flags", {}).get("lifecycle") == "added"
+    ]
+    tagged = sum(1 for aug in added if has_valid_tags(aug))
+    if added and tagged / len(added) < minimum:
+        raise RuntimeError(
+            f"Added augment tag coverage {tagged}/{len(added)} is below {minimum:.0%}"
+        )
+    return tagged, len(added)
+
+
 # ─── Main ──────────────────────────────────────────────────────────────────────
 
 def main():
@@ -223,7 +293,7 @@ def main():
     parser.add_argument("--dry-run", action="store_true", help="Print first batch prompt and exit")
     parser.add_argument("--batch-size", type=int, default=10, help="Augments per LLM call (default 10)")
     parser.add_argument("--skip-classified", action="store_true", help="Skip augments that already have kit_tags (CI mode)")
-    parser.add_argument("--allow-partial", action="store_true", help="Write output even if batches fail or coverage is low")
+    parser.add_argument("--allow-partial", action="store_true", help="Write output even if LLM batches fail")
     args = parser.parse_args()
 
     raw = json.loads(AUGMENTS_PATH.read_text(encoding="utf-8"))
@@ -245,6 +315,8 @@ def main():
         aug["flags"]["lifecycle"] = aug["flags"].get("lifecycle", "active")
         aug.setdefault("kit_tags", aug.get("tags", []))
 
+    deterministic = apply_deterministic_fallback(augments)
+    print(f"Deterministic fallback classified: {deterministic}")
     already_tagged = sum(1 for a in augments if a.get("kit_tags"))
     print(f"Already have kit_tags: {already_tagged}/{total}")
     print(f"Have set: {sum(1 for a in augments if a.get('set'))}/{total}")
@@ -252,10 +324,7 @@ def main():
     # Phase 2: LLM classification for tags (all augments) and missing sets
     # When skipping classified augments, validate existing tags — augments with only
     # unknown/legacy tags are treated as needing reclassification.
-    def _has_valid_tags(aug: dict) -> bool:
-        return bool([t for t in (aug.get("kit_tags") or []) if t in VALID_TAGS])
-
-    to_classify = [a for a in augments if not _has_valid_tags(a)] if args.skip_classified else augments
+    to_classify = [a for a in augments if not has_valid_tags(a)] if args.skip_classified else augments
 
     batches = [to_classify[i:i + args.batch_size] for i in range(0, len(to_classify), args.batch_size)]
     print(f"Will run {len(batches)} LLM batches of up to {args.batch_size} augments each")
@@ -273,6 +342,16 @@ def main():
         print("\nUser message:")
         print(prompt[:800])
         return
+
+    if batches and not should_use_llm(os.getenv("GROQ_API_KEY", ""), LITELLM_URL):
+        if not args.allow_partial:
+            print(
+                "\n✗ GROQ_API_KEY is not set and unresolved augments remain. "
+                "Pass --allow-partial to keep deterministic classifications."
+            )
+            sys.exit(1)
+        print("GROQ_API_KEY is not set; keeping deterministic classifications for unresolved augments")
+        batches = []
 
     results: dict[str, dict] = {}
     failed_batches: list[int] = []
@@ -313,9 +392,15 @@ def main():
         applied += 1
 
     print(f"\nApplied classifications to {applied}/{total} augments")
-    final_tagged = sum(1 for a in augments if _has_valid_tags(a))
+    final_tagged = sum(1 for a in augments if has_valid_tags(a))
     print(f"Final kit_tags coverage: {final_tagged}/{total}")
     print(f"Final set coverage: {sum(1 for a in augments if a.get('set'))}/{total}")
+    try:
+        added_tagged, added_total = validate_added_coverage(augments)
+    except RuntimeError as error:
+        print(f"\n✗ {error}")
+        sys.exit(1)
+    print(f"Added augment tag coverage: {added_tagged}/{added_total}")
 
     if failed_batches and not args.allow_partial:
         print(f"\n✗ {len(failed_batches)} batch(es) failed (batch numbers: {failed_batches}). Pass --allow-partial to write anyway.")
