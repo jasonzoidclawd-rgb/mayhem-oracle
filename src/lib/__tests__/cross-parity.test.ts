@@ -27,7 +27,7 @@ import type { AbilityProfile, ChampionTag, PoolRules } from "../types";
  * missing the Layer 2.5 resource-tag gate, the Layer 3 RESOURCE_TAGS strip, and
  * tailoring normalization fixes). Session 11 ports the fixes and flips this to 0.
  */
-const PARITY_BUDGET = 12;
+const PARITY_BUDGET = 0;
 
 type ChampionRow = {
   slug: string;
