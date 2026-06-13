@@ -6,3 +6,5 @@
 - Open questions: Claude M2 should replace legacy public Advisor/champion decision surfaces; this branch only adds two locale-page null-compatibility guards so sanitized catalogs build without exposing augment telemetry.
 - Session: 2026-06-13T08:18:30+08:00 - Tasks 1.1-1.4 and final local verification complete; push and completion sentinel pending.
 - Session: 2026-06-13T08:20:22+08:00 - Push blocked by network sandbox (`Could not resolve host: github.com`); local M1 complete, completion sentinel intentionally withheld.
+- Session: 2026-06-13T08:30:00+08:00 - Claude Code (scribe): landed the temp-repo commits onto the real branch via fetch + fast-forward (Codex sandbox had blocked the shared git index and network). Independently re-verified: npm test 127/127, eslint clean, web + overlay builds green, fixtures present, plan checkboxes ticked. The two locale-page null-guards are accepted as a recorded deviation per coordination rules. Branch pushed to origin by Claude.
+M1 COMPLETE
