@@ -1,0 +1,46 @@
+name: Ingest telemetry
+
+# Nightly: load stored R2 batches into BigQuery and finalize trial credits.
+# Claude-owned (M3B). Separate from the data-update cron. No-ops cleanly when
+# there are no stored batches.
+on:
+  schedule:
+    - cron: "23 3 * * *" # 03:23 UTC daily (off-peak, non-:00)
+  workflow_dispatch: {}
+
+concurrency:
+  group: ingest-telemetry
+  cancel-in-progress: false
+
+jobs:
+  ingest:
+    runs-on: ubuntu-latest
+    # Skip on forks / when secrets are absent so the workflow never fails red
+    # before the user has provisioned R2 + BigQuery.
+    if: ${{ github.repository_owner == 'jasonzoidclawd-rgb' }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+      - run: npm ci
+      - name: Load telemetry into BigQuery
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+          R2_ACCOUNT_ID: ${{ secrets.R2_ACCOUNT_ID }}
+          R2_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
+          R2_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+          R2_BUCKET: ${{ secrets.R2_BUCKET }}
+          GCP_PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
+          GOOGLE_APPLICATION_CREDENTIALS_JSON: ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS_JSON }}
+          CURRENT_PATCH: "26.12"
+        run: |
+          if [ -z "$SUPABASE_URL" ] || [ -z "$GCP_PROJECT_ID" ]; then
+            echo "Telemetry secrets not configured — skipping (no-op)."
+            exit 0
+          fi
+          printf '%s' "$GOOGLE_APPLICATION_CREDENTIALS_JSON" > /tmp/gcp-sa.json
+          export GOOGLE_APPLICATION_CREDENTIALS=/tmp/gcp-sa.json
+          npx tsx scripts/telemetry/load_bigquery.ts

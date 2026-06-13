@@ -30,6 +30,7 @@
     "@types/react-dom": "^19.1.0",
     "eslint": "^9.39.4",
     "eslint-config-next": "^16.2.2",
+    "google-auth-library": "^10.7.0",
     "postcss": "^8.5.0",
     "tailwindcss": "^4.1.0",
     "typescript": "^5.8.0",

@@ -530,16 +530,16 @@ git commit -m "feat(collector): add de-identified Mayhem match exporter"
 
 ### Task 3B.2: Load Long-Term Events into BigQuery
 
-- [ ] Nightly GitHub workflow reads unprocessed R2 batches and writes:
+- [x] Nightly GitHub workflow reads unprocessed R2 batches and writes:
   - `matches`
   - `participants`
   - `contributor_round_choices`
   - `quality_quarantine`
-- [ ] Quarantine matches shorter than eight minutes, invalid patch/schema records, and ambiguous OCR round data.
-- [ ] Grant three trial-game credits exactly once per Google-account-plus-device combination when a valid referral code is redeemed.
-- [ ] Reserve one credit when a trial user starts a game, consume it only after the game exceeds eight minutes, and release the reservation when the game ends before eight minutes.
-- [ ] Finalize the reserved credit from an accepted contributor-owned telemetry match with the same `gameHash`; expire abandoned reservations after 24 hours without granting an active lease.
-- [ ] While a trial-game lease is active, allow member decision APIs and overlay recommendations for that game only.
+- [x] Quarantine matches shorter than eight minutes, invalid patch/schema records, and ambiguous OCR round data.
+- [x] Grant three trial-game credits exactly once per Google-account-plus-device combination when a valid referral code is redeemed.
+- [x] Reserve one credit when a trial user starts a game, consume it only after the game exceeds eight minutes, and release the reservation when the game ends before eight minutes.
+- [x] Finalize the reserved credit from an accepted contributor-owned telemetry match with the same `gameHash`; expire abandoned reservations after 24 hours without granting an active lease.
+- [x] While a trial-game lease is active, allow member decision APIs and overlay recommendations for that game only.
 
 ### Task 3B.3: Launch AdSense on Public Reference Pages
 
