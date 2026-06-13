@@ -123,7 +123,8 @@ LOCK TABLE model_releases IN EXCLUSIVE MODE;
 
 DO $$
 BEGIN
-  IF NOT EXISTS (
+  IF (SELECT count(*) FROM model_releases WHERE status = 'active') <> 1
+    OR NOT EXISTS (
     SELECT 1 FROM model_releases
     WHERE model_version = {sql_literal(previous["model_version"])}
       AND status = {sql_literal(previous["from"])}

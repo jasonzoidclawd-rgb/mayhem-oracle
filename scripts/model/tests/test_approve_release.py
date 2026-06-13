@@ -98,6 +98,10 @@ class ApproveReleaseTests(unittest.TestCase):
         self.assertIn("BEGIN;", sql)
         self.assertIn("COMMIT;", sql)
         self.assertEqual(sql.count("SET status = 'active'"), 1)
+        active_count_guard = sql.index(
+            "IF (SELECT count(*) FROM model_releases WHERE status = 'active') <> 1"
+        )
+        self.assertLess(active_count_guard, sql.index("UPDATE model_releases"))
 
     def test_rollback_restores_prior_active_release(self):
         rollback_config = {"modelVersion": "decision-v1", "priorClamp": [42, 62]}
