@@ -572,6 +572,10 @@ git commit -m "feat(platform): add telemetry ingestion referral and ads"
 
 **Dependency:** BigQuery schemas and model-release table
 
+> Scaffold status: signing, packaging, manual approval SQL, rollback, and
+> candidate CI are complete without telemetry data. Calibration/export/evaluation
+> and immutable R2 publication remain deferred until `BQ SCHEMAS FROZEN`.
+
 **Files:**
 - Create: `scripts/model/export_training_data.py`
 - Create: `scripts/model/calibrate.py`
@@ -591,10 +595,10 @@ git commit -m "feat(platform): add telemetry ingestion referral and ads"
   - competitive and exploration ranking stability
   - trap-warning regressions
   - parity fixture results
-- [ ] Require manual approval before release.
-- [ ] Sign model packages with Ed25519. Store the private key only in deployment secrets; embed the public key in the overlay.
+- [x] Require manual approval before release.
+- [x] Sign model packages with Ed25519. Store the private key only in deployment secrets; embed the public key in the overlay.
 - [ ] Publish immutable model packages to R2 and update `model_releases` only after approval.
-- [ ] Keep the previous model immediately available for rollback.
+- [x] Keep the previous model immediately available for rollback.
 - [ ] Commit:
 
 ```bash
