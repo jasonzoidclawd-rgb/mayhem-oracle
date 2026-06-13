@@ -452,5 +452,34 @@
     "jeweledInteractionNote": "abilities crit at 145% base (not 200%). Bonus crit damage additive on top.",
     "trueDamageInteractionNote": "unaffected by pen or reduction; damage amp DOES apply.",
     "giantSlayerInteractionNote": "bonus damage vs high-HP targets; multiplicative with other amp."
+  },
+  "grades": {
+    "hot": "激アツ",
+    "strong": "強い",
+    "steady": "安定",
+    "average": "普通",
+    "weak": "微妙"
+  },
+  "membership": {
+    "title": "メンバーシップ",
+    "subtitle": "あなたの Oracle 権限と意思決定履歴。",
+    "signInPrompt": "サインインしてメンバーシップを表示します。",
+    "statusTitle": "ステータス",
+    "statusActiveMember": "有効なメンバー",
+    "statusActiveTrial": "トライアル中",
+    "statusInactive": "有効な権限なし",
+    "expiresLabel": "有効期限",
+    "noExpiry": "無期限",
+    "redeemTitle": "コードを引き換える",
+    "redeemPlaceholder": "MAYHEM-XXXX-XXXX",
+    "redeemButton": "引き換え",
+    "redeemSuccess": "引き換えました。",
+    "redeemError": "このコードは引き換えできません。",
+    "historyTitle": "意思決定履歴",
+    "historyEmpty": "まだ記録がありません。",
+    "lockedTitle": "メンバー限定",
+    "lockedBody": "Advisor と完全な増幅プールはメンバー機能です。",
+    "lockedCta": "メンバーシップを見る",
+    "navAccount": "アカウント"
   }
 }

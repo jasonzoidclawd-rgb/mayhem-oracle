@@ -452,5 +452,34 @@
     "jeweledInteractionNote": "abilities crit at 145% base (not 200%). Bonus crit damage additive on top.",
     "trueDamageInteractionNote": "unaffected by pen or reduction; damage amp DOES apply.",
     "giantSlayerInteractionNote": "bonus damage vs high-HP targets; multiplicative with other amp."
+  },
+  "grades": {
+    "hot": "핫",
+    "strong": "강함",
+    "steady": "안정",
+    "average": "보통",
+    "weak": "약함"
+  },
+  "membership": {
+    "title": "멤버십",
+    "subtitle": "내 Oracle 이용 권한과 결정 기록.",
+    "signInPrompt": "로그인하여 멤버십을 확인하세요.",
+    "statusTitle": "상태",
+    "statusActiveMember": "활성 멤버",
+    "statusActiveTrial": "체험 이용",
+    "statusInactive": "활성 권한 없음",
+    "expiresLabel": "만료",
+    "noExpiry": "무기한",
+    "redeemTitle": "코드 사용",
+    "redeemPlaceholder": "MAYHEM-XXXX-XXXX",
+    "redeemButton": "사용하기",
+    "redeemSuccess": "사용 완료.",
+    "redeemError": "코드를 사용할 수 없습니다.",
+    "historyTitle": "결정 기록",
+    "historyEmpty": "아직 기록이 없습니다.",
+    "lockedTitle": "멤버 전용",
+    "lockedBody": "어드바이저와 전체 증강 풀은 멤버 기능입니다.",
+    "lockedCta": "멤버십 보기",
+    "navAccount": "계정"
   }
 }

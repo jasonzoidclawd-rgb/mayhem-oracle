@@ -452,5 +452,34 @@
     "jeweledInteractionNote": "abilities crit at 145% base (not 200%). Bonus crit damage additive on top.",
     "trueDamageInteractionNote": "unaffected by pen or reduction; damage amp DOES apply.",
     "giantSlayerInteractionNote": "bonus damage vs high-HP targets; multiplicative with other amp."
+  },
+  "grades": {
+    "hot": "夯",
+    "strong": "强",
+    "steady": "稳",
+    "average": "普",
+    "weak": "拉"
+  },
+  "membership": {
+    "title": "会员",
+    "subtitle": "你的 Oracle 权限与决策记录。",
+    "signInPrompt": "登录以查看你的会员状态。",
+    "statusTitle": "状态",
+    "statusActiveMember": "有效会员",
+    "statusActiveTrial": "体验中",
+    "statusInactive": "尚无有效权限",
+    "expiresLabel": "到期",
+    "noExpiry": "无期限",
+    "redeemTitle": "兑换邀请码",
+    "redeemPlaceholder": "MAYHEM-XXXX-XXXX",
+    "redeemButton": "兑换",
+    "redeemSuccess": "已兑换。",
+    "redeemError": "无法兑换此邀请码。",
+    "historyTitle": "决策记录",
+    "historyEmpty": "尚无决策记录。",
+    "lockedTitle": "会员专属",
+    "lockedBody": "Advisor 与完整增幅池为会员功能。",
+    "lockedCta": "前往会员页",
+    "navAccount": "账号"
   }
 }

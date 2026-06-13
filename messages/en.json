@@ -452,5 +452,34 @@
     "jeweledInteractionNote": "abilities crit at 145% base (not 200%). Bonus crit damage additive on top.",
     "trueDamageInteractionNote": "unaffected by pen or reduction; damage amp DOES apply.",
     "giantSlayerInteractionNote": "bonus damage vs high-HP targets; multiplicative with other amp."
+  },
+  "grades": {
+    "hot": "Hot",
+    "strong": "Strong",
+    "steady": "Steady",
+    "average": "Average",
+    "weak": "Weak"
+  },
+  "membership": {
+    "title": "Membership",
+    "subtitle": "Your Oracle access and decision history.",
+    "signInPrompt": "Sign in to view your membership.",
+    "statusTitle": "Status",
+    "statusActiveMember": "Active member",
+    "statusActiveTrial": "Trial access",
+    "statusInactive": "No active access",
+    "expiresLabel": "Expires",
+    "noExpiry": "No expiry",
+    "redeemTitle": "Redeem a code",
+    "redeemPlaceholder": "MAYHEM-XXXX-XXXX",
+    "redeemButton": "Redeem",
+    "redeemSuccess": "Code redeemed.",
+    "redeemError": "Could not redeem that code.",
+    "historyTitle": "Decision history",
+    "historyEmpty": "No decisions recorded yet.",
+    "lockedTitle": "Members only",
+    "lockedBody": "The Advisor and full augment pools are part of membership.",
+    "lockedCta": "View membership",
+    "navAccount": "Account"
   }
 }
