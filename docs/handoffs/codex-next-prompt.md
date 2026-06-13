@@ -1,75 +1,71 @@
-# Codex dispatch — current assignment: Milestone 4 (signing/packaging/governance HALF only)
+# Codex dispatch — current assignment: Milestone 4 calibration half (now UNBLOCKED)
 
 You are Codex, co-implementing the Mayhem Oracle membership platform.
 Contract: `docs/superpowers/plans/2026-06-13-claude-codex-split-implementation.md`.
 Working agreement: `docs/superpowers/plans/2026-06-13-claude-codex-split-strategy.md`.
-Status: M0, M1, and **M3A are COMPLETE** (`docs/handoffs/m3a-codex.md` ends
-`M3A COMPLETE`; collector + sanitizer + gzip batch fixture all landed).
+Status: M0, M1, M3A, and the **M4 signing/packaging/governance scaffold are
+COMPLETE** (`docs/handoffs/m4-codex.md` ends `M4 SCAFFOLD COMPLETE`).
+Claude has now **frozen the BigQuery schema** — `docs/handoffs/m3b-claude.md`
+ends `BQ SCHEMAS FROZEN`, schema at `scripts/telemetry/bigquery-schema.sql`,
+contract test `src/lib/__tests__/telemetry-schema.test.ts`. Calibration is
+unblocked.
 
 FIRST, before any work:
-- If `docs/handoffs/m4-codex.md` exists here and its last line is
-  `M4 SCAFFOLD COMPLETE`, print "M4 scaffold already complete" and exit.
-- You are in the worktree `.worktrees/lcu-collector` but now on branch
-  **`codex/model-overlay`** (the M4+M5 branch, created from the collector tip).
-  Verify with `git -C . rev-parse --abbrev-ref HEAD` → must print
-  `codex/model-overlay`. If not, run `git switch codex/model-overlay`. Never
-  switch to main, never commit to main, never touch the main checkout.
-- `node_modules` are present (shared worktree). Python stdlib + `cryptography`
-  may be needed for Ed25519; if `cryptography` import fails in your sandbox,
-  use the stdlib-only path (`hashlib` for sha256 + a vendored pure-Python
-  Ed25519, OR shell out to `openssl`), and record the choice in the handoff.
+- If `docs/handoffs/m4-codex.md` ends with `M4 CALIBRATION COMPLETE`, print
+  "M4 calibration already complete" and exit.
+- Confirm `git -C . rev-parse --abbrev-ref HEAD` → `codex/model-overlay`. Never
+  touch main or the main checkout. node_modules are present.
+- Confirm the schema is on this branch: `scripts/telemetry/bigquery-schema.sql`
+  must exist. If absent, stop and record "schema missing" in the handoff.
 
-SCOPE — this dispatch is the DATA-INDEPENDENT HALF of Milestone 4 only.
-Build the model packaging, signing, release-governance, and CI scaffold that
-needs NO BigQuery data. DEFER the calibration scripts that consume telemetry
-(`export_training_data.py`, `calibrate.py`, `evaluate.py`) — they are blocked
-on Claude's Milestone 3B BigQuery schemas. Claude will append a line to
-`docs/handoffs/m3b-claude.md` reading `BQ SCHEMAS FROZEN` when that unblocks;
-do not start the calibration scripts until then.
+TASK: build the data-dependent half of Milestone 4 — the calibration pipeline.
+There is NO real telemetry yet, so build every script to run against a LOCAL
+FIXTURE that mirrors the four BigQuery tables (NDJSON or CSV under
+`scripts/model/fixtures/`), with the BigQuery client behind a thin data-source
+interface so production swaps the source without touching calibration logic.
 
-DO build now (Task 4, scaffold subset):
-- `scripts/model/package_model.py` — assemble a model package from the current
-  versioned engine config (`src/lib/decision/model-config.ts` values mirrored
-  into a JSON the overlay can load) + `public/`-free metadata; emit a
-  `ModelManifest` (shape frozen in `src/lib/contracts/model.ts`:
-  modelVersion, engineVersion, dataVersion, createdAt, configSha256,
-  signature) and a `model-<version>.tar.gz`.
-- `scripts/model/sign_model.py` — Ed25519 sign/verify. Private key only from a
-  `MAYHEM_MODEL_SIGNING_KEY` env/secret (never committed); print the public key
-  for embedding in the overlay. `configSha256` = sha256 of the canonical config
-  JSON; `signature` = Ed25519 over the manifest's canonical bytes.
-- `scripts/model/approve_release.py` — given a built+signed package, write a
-  `model_releases` row payload (columns: model_version, engine_version,
-  data_version, config_sha256, signature, package_url, status in
-  candidate|active|rolled-back, approved_by). Manual approval gate: refuses
-  unless `--approve` is passed; flips exactly one release to `active` and the
-  previous active to its prior state for rollback. Output the SQL/JSON payload;
-  do NOT write to Supabase (that is Claude's service-role API surface) — just
-  emit the payload + a `.sql` file.
-- `.github/workflows/build-model-candidate.yml` — CI that builds + signs a
-  CANDIDATE package on demand (workflow_dispatch), uploads the artifact, and
-  never auto-promotes to active (governance: human approval required).
-- `scripts/model/tests/**` — pin: sign→verify round-trips; a tampered config
-  fails verification; approve_release refuses without `--approve`; rollback
-  restores the prior active release; manifest matches the frozen contract shape.
+Build:
+- `scripts/model/export_training_data.py` — read the four tables (fixture
+  source now; BigQuery later) and emit a training dataset. Export ONLY approved
+  fields from the frozen schema. Exclude `quality_quarantine` rows and any
+  match under 480 seconds.
+- `scripts/model/calibrate.py` — produce a CANDIDATE model config (same shape
+  package_model.py already consumes):
+  - round effects ONLY from `contributor_round_choices` (the round-ordered signal)
+  - final augment/item/champion associations + outcomes ONLY from
+    `participants` (snowball final-state has no round order — do not invent it)
+  - deterministic; emit the same config bytes for the same input.
+- `scripts/model/evaluate.py` — candidate report: sample counts by
+  patch/champion/augment/round, calibration deltas vs the active model,
+  competitive vs exploration ranking stability, trap-warning regressions,
+  and parity-fixture results. Require manual approval before release (wire to
+  the existing `approve_release.py`; never auto-promote).
+- Extend `scripts/model/tests/**`: calibration is deterministic; quarantined and
+  sub-eight-minute rows are excluded; round effects derive only from
+  contributor data; a known fixture yields an expected candidate config.
 
-Verify in this worktree: `python3 -m pytest scripts/model/tests` (or unittest
-if pytest absent), `npm test` still green (127+), `./node_modules/.bin/eslint
-src scripts` clean. One commit per logical unit with `[M4]` markers; tick the
-plan's Milestone 4 checkboxes that are in scope (leave calibration boxes
-unticked with a note).
+Honor the plan's governance: candidate → manual approval → sign → version →
+rollback-able. No model auto-publishes learned weights.
 
-RESUME PROTOCOL: re-runs on a schedule. Each run inspect `git -C . log
---oneline -10` and continue from the first incomplete in-scope item. Append one
-session line to `docs/handoffs/m4-codex.md` (create on first run). Commit in
-this worktree; if `git push` is sandbox-blocked, record "push pending" — Claude
-scribes pushes when no codex process is live. If a usage limit interrupts,
-stop; the next run resumes.
+Verify in this worktree (homebrew openssl must be on PATH for Ed25519):
+`PATH=/opt/homebrew/bin:$PATH python3 -m unittest discover -s scripts/model/tests`,
+`npm test` green, `./node_modules/.bin/eslint src scripts` clean. One commit per
+logical unit with `[M4]` markers; tick the Milestone 4 calibration checkboxes.
 
-DEFINITION OF DONE (scaffold): all in-scope items built + tested green;
-`docs/handoffs/m4-codex.md` written per strategy §3 (commit, fixtures: a sample
-signed manifest + public key under `docs/handoffs/fixtures/m4/`, the deferred
-calibration list, verification output); everything committed. End that file
+KNOWN ISSUE to fix while here: `sign_model.py` calls bare `openssl`, which is
+LibreSSL (no Ed25519) on default macOS PATH — tests only pass with homebrew
+openssl first. Make it robust: resolve an OpenSSL 3.x binary explicitly
+(`shutil.which` preferring `/opt/homebrew/bin/openssl`), or switch to the
+`cryptography` library if importable. Record the choice.
+
+RESUME PROTOCOL: re-runs on a schedule; continue from the first incomplete
+item, append a session line to `docs/handoffs/m4-codex.md`. Commit here; if
+`git push` is sandbox-blocked, record "push pending" — Claude scribes. If a
+usage limit interrupts, stop; next run resumes.
+
+DEFINITION OF DONE: calibration scripts built + tested green against fixtures;
+a sample candidate config + evaluation report under
+`docs/handoffs/fixtures/m4/`; `docs/handoffs/m4-codex.md` updated. End that file
 with the literal last line:
 
-M4 SCAFFOLD COMPLETE
+M4 CALIBRATION COMPLETE
