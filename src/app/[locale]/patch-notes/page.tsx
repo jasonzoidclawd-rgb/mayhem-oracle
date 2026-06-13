@@ -1,3 +1,4 @@
+import { AdSlot } from "@/components/ads/AdSlot";
 import { readFile } from "fs/promises";
 import path from "path";
 import { getTranslations, setRequestLocale } from "next-intl/server";
@@ -38,6 +39,7 @@ export default async function PatchNotesPage({
           {data?.patch ? ` · ${t("patchLabel", { patch: data.patch })}` : ""}
         </p>
       </header>
+      <AdSlot slot="public-patch-notes" />
       {data ? (
         <PatchNotesView data={data} locale={locale} />
       ) : (

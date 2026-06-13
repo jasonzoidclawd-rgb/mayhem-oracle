@@ -6,6 +6,7 @@ import { notFound } from "next/navigation";
 import { routing, isSupportedLocale } from "@/i18n/routing";
 import { Navbar } from "@/components/ui/Navbar";
 import { NavigationProgress } from "@/components/ui/NavigationProgress";
+import { ConsentManager } from "@/components/ads/ConsentManager";
 import { Footer } from "@/components/ui/Footer";
 import "@/styles/globals.css";
 
@@ -64,6 +65,7 @@ export default async function LocaleLayout({
 
   // Load all messages for client components
   const messages = await getMessages();
+  const tm = await getTranslations({ locale, namespace: "membership" });
 
   return (
     <html lang={locale} className="dark">
@@ -75,6 +77,15 @@ export default async function LocaleLayout({
             {children}
           </main>
           <Footer />
+          <ConsentManager
+            copy={{
+              title: tm("consentTitle"),
+              body: tm("consentBody"),
+              accept: tm("consentAccept"),
+              decline: tm("consentDecline"),
+              privacyLink: tm("privacyLink"),
+            }}
+          />
         </NextIntlClientProvider>
       </body>
     </html>

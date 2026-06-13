@@ -530,6 +530,15 @@
     "matrixLoading": "불러오는 중…",
     "matrixError": "매트릭스를 불러올 수 없습니다.",
     "matrixRoundN": "라운드",
-    "matrixTopPick": "최적"
+    "matrixTopPick": "최적",
+    "consentTitle": "개인정보 및 광고",
+    "consentBody": "공개 페이지에서 Google AdSense를 사용합니다. 맞춤형 광고를 허용할까요?",
+    "consentAccept": "허용",
+    "consentDecline": "거부",
+    "privacyLink": "개인정보",
+    "privacyTitle": "개인정보 및 데이터 사용",
+    "privacyAds": "공개 페이지에는 동의 선택에 따라 Google AdSense 광고가 표시될 수 있습니다.",
+    "privacyCollector": "선택적 데스크톱 수집기는 Riot ID·이름·채팅을 제외한 비식별 대전 데이터만 업로드합니다.",
+    "privacyRetention": "원본 업로드는 30일 후 삭제되며, 비식별 집계만 장기 보관합니다."
   }
 }

@@ -530,6 +530,15 @@
     "matrixLoading": "Loading…",
     "matrixError": "Could not load the matrix.",
     "matrixRoundN": "Round",
-    "matrixTopPick": "Top pick"
+    "matrixTopPick": "Top pick",
+    "consentTitle": "Privacy & ads",
+    "consentBody": "We use Google AdSense on public pages. Allow personalized ads?",
+    "consentAccept": "Allow",
+    "consentDecline": "Decline",
+    "privacyLink": "Privacy",
+    "privacyTitle": "Privacy & data use",
+    "privacyAds": "Public pages may show Google AdSense ads, gated behind your consent choice.",
+    "privacyCollector": "The optional desktop collector uploads only de-identified match data — never your Riot ID, name, or chat.",
+    "privacyRetention": "Raw uploads are deleted after 30 days; only de-identified aggregates are kept long-term."
   }
 }

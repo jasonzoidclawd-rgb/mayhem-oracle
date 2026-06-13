@@ -530,6 +530,15 @@
     "matrixLoading": "載入中…",
     "matrixError": "無法載入矩陣。",
     "matrixRoundN": "回合",
-    "matrixTopPick": "最佳"
+    "matrixTopPick": "最佳",
+    "consentTitle": "隱私與廣告",
+    "consentBody": "我們在公開頁面使用 Google AdSense。允許個人化廣告嗎？",
+    "consentAccept": "允許",
+    "consentDecline": "拒絕",
+    "privacyLink": "隱私權",
+    "privacyTitle": "隱私與資料使用",
+    "privacyAds": "公開頁面可能顯示 Google AdSense 廣告，並依你的同意選擇決定。",
+    "privacyCollector": "選用的桌面採集器只上傳去識別化的對局資料，絕不含你的 Riot ID、名稱或聊天。",
+    "privacyRetention": "原始上傳於 30 天後刪除；僅長期保留去識別化的彙整資料。"
   }
 }

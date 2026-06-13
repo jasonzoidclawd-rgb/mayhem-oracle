@@ -543,11 +543,11 @@ git commit -m "feat(collector): add de-identified Mayhem match exporter"
 
 ### Task 3B.3: Launch AdSense on Public Reference Pages
 
-- [ ] Add Google AdSense and consent management to public reference pages only.
-- [ ] Never render ads on Advisor, account, admin, authentication, or member decision sections.
-- [ ] Reserve mobile-safe ad-slot height to prevent layout shift.
-- [ ] Add privacy/data-use copy describing AdSense, collector consent, R2 30-day retention, and BigQuery long-term de-identified data.
-- [ ] Verify no ad script loads before required consent in applicable regions.
+- [x] Add Google AdSense and consent management to public reference pages only.
+- [x] Never render ads on Advisor, account, admin, authentication, or member decision sections.
+- [x] Reserve mobile-safe ad-slot height to prevent layout shift.
+- [x] Add privacy/data-use copy describing AdSense, collector consent, R2 30-day retention, and BigQuery long-term de-identified data.
+- [x] Verify no ad script loads before required consent in applicable regions.
 
 ### Task 3B.4: Verify and Commit
 
