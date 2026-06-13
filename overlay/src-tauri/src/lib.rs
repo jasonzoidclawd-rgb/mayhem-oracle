@@ -5,6 +5,9 @@ use std::path::PathBuf;
 use std::sync::Arc;
 use sysinfo::System;
 
+mod collector;
+mod sanitize;
+
 #[cfg(target_os = "macos")]
 #[macro_use]
 extern crate objc;

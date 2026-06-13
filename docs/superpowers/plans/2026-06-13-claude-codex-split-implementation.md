@@ -455,11 +455,11 @@ git commit -m "feat(web): add member decision platform"
 
 ### Task 3A.1: Add Red Sanitization Tests
 
-- [ ] Create fixtures containing Riot IDs, PUUIDs, names, chat-like strings, unrelated queue IDs, and valid Mayhem match detail.
-- [ ] Prove sanitizer output contains only `SafeMatchExport` fields.
-- [ ] Prove participant slots are random per match and cannot track a player across matches.
-- [ ] Prove non-2400 queues are rejected.
-- [ ] Prove the 100-match daily limit and active-game pause behavior.
+- [x] Create fixtures containing Riot IDs, PUUIDs, names, chat-like strings, unrelated queue IDs, and valid Mayhem match detail.
+- [x] Prove sanitizer output contains only `SafeMatchExport` fields.
+- [x] Prove participant slots are random per match and cannot track a player across matches.
+- [x] Prove non-2400 queues are rejected.
+- [x] Prove the 100-match daily limit and active-game pause behavior.
 
 ### Task 3A.2: Implement Collector
 
