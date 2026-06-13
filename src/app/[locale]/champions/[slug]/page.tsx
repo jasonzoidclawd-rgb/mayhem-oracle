@@ -1,5 +1,6 @@
 import { getTranslations, setRequestLocale } from "next-intl/server";
-import { createClient } from "@/lib/supabase/server";
+import { requireActiveEntitlement } from "@/lib/entitlements/server";
+import { MembershipGate } from "@/components/membership/MembershipGate";
 import Image from "next/image";
 import { readFile } from "fs/promises";
 import path from "path";
@@ -130,13 +131,16 @@ export default async function ChampionPage({
   const tm = await getTranslations("membership");
   const tg = await getTranslations("grades");
 
-  const isAuthenticated = await (async () => {
+  // Member decision content (pool construction, scored rankings) is gated on an
+  // active entitlement — not merely being signed in. A logged-in non-member
+  // must not receive server-rendered scores or breakdowns.
+  const { isAuthenticated, isMember } = await (async () => {
     if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY) {
-      return false;
+      return { isAuthenticated: false, isMember: false };
     }
-    const supabase = await createClient();
-    const { data: { user } } = await supabase.auth.getUser();
-    return Boolean(user);
+    const gate = await requireActiveEntitlement();
+    if (gate.ok) return { isAuthenticated: true, isMember: true };
+    return { isAuthenticated: gate.reason !== "unauthenticated", isMember: false };
   })();
 
   const { champions, augments, combos, poolRules, patch, abilities } = await loadData();
@@ -598,13 +602,17 @@ export default async function ChampionPage({
         layers={poolLayers}
         highlights={tailoredHighlights}
         totalAugments={augments.length}
-        gated={!isAuthenticated}
-        signInUrl={`/api/auth/signin?next=/${locale === "en" ? "" : `${locale}/`}champions/${slug}`}
-        gateCopy={!isAuthenticated ? {
+        gated={!isMember}
+        signInUrl={isAuthenticated ? `/${locale}/account` : `/api/auth/signin?next=/${locale === "en" ? "" : `${locale}/`}champions/${slug}`}
+        gateCopy={!isMember ? (isAuthenticated ? {
+          title: tm("lockedTitle"),
+          description: tm("lockedBody"),
+          signIn: tm("lockedCta"),
+        } : {
           title: t("poolGateTitle"),
           description: t("poolGateDescription"),
           signIn: t("poolGateSignIn"),
-        } : undefined}
+        }) : undefined}
       />
 
       <section className="glass-card p-4">
@@ -637,31 +645,39 @@ export default async function ChampionPage({
         />
       </section>
 
-      {/* ─── Augment Rankings ─── */}
+      {/* ─── Augment Rankings (member-gated: scores + breakdowns) ─── */}
       <section className="glass-card p-4">
         <h2 className="text-sm font-bold mb-1 border-l-2 border-[var(--color-neon-primary)] pl-2">
           {t("augments")} — {t("oracleRanked")}
         </h2>
-        <p className="text-[10px] text-[var(--color-text-muted)] mb-3 pl-3">
-          <span className="font-medium text-[var(--color-text-primary)]">N={pool.total}</span>
-          <span> / {augments.length} total</span>
-          {poolProfile.resource !== "mana" && <span> · {poolProfile.resource === "none" ? "manaless" : poolProfile.resource}</span>}
-          {abilityProfile && <span> · {abilityProfile.attackType}</span>}
-        </p>
+        {isMember ? (
+          <>
+            <p className="text-[10px] text-[var(--color-text-muted)] mb-3 pl-3">
+              <span className="font-medium text-[var(--color-text-primary)]">N={pool.total}</span>
+              <span> / {augments.length} total</span>
+              {poolProfile.resource !== "mana" && <span> · {poolProfile.resource === "none" ? "manaless" : poolProfile.resource}</span>}
+              {abilityProfile && <span> · {abilityProfile.attackType}</span>}
+            </p>
 
-        <div className="space-y-1.5">
-          {topAugments.map(({ aug, score, breakdown, comboTier }, i) => (
-            <AugmentRow
-              key={aug.slug}
-              rank={i + 1}
-              aug={aug}
-              score={score}
-              breakdown={breakdown}
-              comboTier={comboTier}
-              pillLabels={pillLabels}
-            />
-          ))}
-        </div>
+            <div className="space-y-1.5">
+              {topAugments.map(({ aug, score, breakdown, comboTier }, i) => (
+                <AugmentRow
+                  key={aug.slug}
+                  rank={i + 1}
+                  aug={aug}
+                  score={score}
+                  breakdown={breakdown}
+                  comboTier={comboTier}
+                  pillLabels={pillLabels}
+                />
+              ))}
+            </div>
+          </>
+        ) : (
+          <div className="mt-3">
+            <MembershipGate title={tm("lockedTitle")} body={tm("lockedBody")} cta={tm("lockedCta")} />
+          </div>
+        )}
       </section>
     </div>
   );
