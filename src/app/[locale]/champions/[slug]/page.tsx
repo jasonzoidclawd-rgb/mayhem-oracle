@@ -751,7 +751,7 @@ function AugmentRow({
 
         {/* Win rate — hidden on mobile */}
         <span className="hidden sm:inline text-xs text-[var(--color-text-muted)] shrink-0">
-          {aug.win_rate !== null ? `${aug.win_rate.toFixed(1)}%` : "—"}
+          {aug.win_rate != null ? `${aug.win_rate.toFixed(1)}%` : "—"}
         </span>
 
         {/* Oracle Score */}

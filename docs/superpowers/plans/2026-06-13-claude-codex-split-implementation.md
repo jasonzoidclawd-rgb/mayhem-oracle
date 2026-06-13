@@ -297,17 +297,17 @@ export const ITEM_VALUE = {
 
 ### Task 1.3: Split Internal and Public Data
 
-- [ ] Move decision-only generated fields into server-only runtime data under `data/internal/`.
-- [ ] Keep public catalog files under `public/data/`, but strip:
+- [x] Move decision-only generated fields into server-only runtime data under `data/internal/`.
+- [x] Keep public catalog files under `public/data/`, but strip:
   - augment win rate
   - Mayhem-item win rate
   - model weights
   - complete computed champion pools
-- [ ] Keep public champion win rate, rank, and pick rate.
-- [ ] Make `scripts/export_public_catalog.py` the only writer of sanitized public catalog output.
-- [ ] Update the daily data workflow to regenerate internal data first, then export sanitized public catalogs.
-- [ ] Update overlay data sync to read the internal source, not the sanitized public catalog.
-- [ ] Add a guardrail that fails if forbidden fields appear in public JSON.
+- [x] Keep public champion win rate, rank, and pick rate.
+- [x] Make `scripts/export_public_catalog.py` the only writer of sanitized public catalog output.
+- [x] Update the daily data workflow to regenerate internal data first, then export sanitized public catalogs.
+- [x] Keep free overlay data sync on sanitized public catalogs; reserve internal decision data for the signed member model package.
+- [x] Add a guardrail that fails if forbidden fields appear in public JSON.
 
 ### Task 1.4: Close Web/Overlay Parity
 

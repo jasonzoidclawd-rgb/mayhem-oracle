@@ -2,7 +2,7 @@
 """
 classify_champions.py — Derive champion kit_tags from AbilityProfile data.
 
-Extends public/data/champions.json in-place with:
+Extends data/internal/champions.json in-place with:
   kit_tags: ChampionTag[]  — mirrors the 12-value enum in types.ts
 
 Derivation is deterministic from abilities.json profiles.
@@ -21,10 +21,12 @@ import urllib.request
 import time
 from pathlib import Path
 
+from data_paths import INTERNAL_DATA_DIR
+
 # ─── Config ───────────────────────────────────────────────────────────────────
 
-CHAMPIONS_PATH = Path(__file__).parent.parent / "public/data/champions.json"
-ABILITIES_PATH = Path(__file__).parent.parent / "public/data/abilities.json"
+CHAMPIONS_PATH = INTERNAL_DATA_DIR / "champions.json"
+ABILITIES_PATH = INTERNAL_DATA_DIR / "abilities.json"
 LITELLM_URL = os.getenv("CLASSIFIER_URL", "https://api.groq.com/openai/v1/chat/completions")
 LITELLM_MODEL = os.getenv("CLASSIFIER_MODEL", "llama-3.3-70b-versatile")
 LITELLM_KEY = os.getenv("GROQ_API_KEY", "sk-litellm-local")
