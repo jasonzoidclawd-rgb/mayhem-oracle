@@ -2,7 +2,7 @@
 Mayhem Oracle — Champion Base Stats Scraper
 ============================================
 Fetches champion base stats + per-level growth from Riot Data Dragon,
-then merges them into public/data/champions.json.
+then merges them into data/internal/champions.json.
 
 Usage:
     python scripts/scrape_base_stats.py
@@ -15,8 +15,10 @@ import json
 from pathlib import Path
 from urllib.request import urlopen, Request
 
+from data_paths import INTERNAL_DATA_DIR
+
 HEADERS = {"User-Agent": "Mozilla/5.0 (Mayhem-Oracle-Scraper/1.0)"}
-OUT = Path(__file__).parent.parent / "public" / "data" / "champions.json"
+OUT = INTERNAL_DATA_DIR / "champions.json"
 
 # DDragon broke attackdamageperlevel in v16.5.1 (returns 0 for all champions).
 # Use v16.4.1 for AD growth, latest version for everything else.

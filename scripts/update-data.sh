@@ -10,20 +10,23 @@ set -euo pipefail
 
 cd "$(dirname "$0")/.."
 
-META=public/data/meta.json
+DATA_DIR=data/internal
+export MAYHEM_DATA_DIR="$DATA_DIR"
+META=$DATA_DIR/meta.json
+mkdir -p "$DATA_DIR"
 OLD_PATCH=$(python3 -c "import json; print(json.load(open('$META'))['patch'])" 2>/dev/null || echo "unknown")
 AUGMENT_SNAPSHOT=$(mktemp -t mayhem-augment-snapshot.XXXXXX)
 trap 'rm -f "$AUGMENT_SNAPSHOT"' EXIT
 
 step() { printf "\n\033[1;36m▶ %s\033[0m\n" "$1"; }
 
-step "1/11  snapshot augment classifications"
+step "1/12  snapshot augment classifications"
 AUGMENT_SNAPSHOT="$AUGMENT_SNAPSHOT" python3 - <<'PY'
 import json
 import os
 from pathlib import Path
 
-path = Path("public/data/augments.json")
+path = Path(os.environ["MAYHEM_DATA_DIR"]) / "augments.json"
 data = json.loads(path.read_text(encoding="utf-8"))
 snapshot = {
     a["slug"]: {k: a[k] for k in ("kit_tags", "set", "flags") if k in a}
@@ -36,35 +39,35 @@ Path(os.environ["AUGMENT_SNAPSHOT"]).write_text(
 print(f"Snapshotted {sum(1 for v in snapshot.values() if v.get('kit_tags'))} classified augments")
 PY
 
-step "2/11  arammayhem.com  →  champions/augments/combos/meta"
+step "2/12  arammayhem.com  →  internal champions/augments/combos/meta"
 python3 scripts/scrape_arammayhem.py
 
-step "3/11  CommunityDragon  →  abilities/items"
+step "3/12  CommunityDragon  →  internal abilities/items"
 python3 scripts/scrape_community_dragon.py
 
-step "4/11  Data Dragon base stats  →  champions.json (enrich)"
+step "4/12  Data Dragon base stats  →  internal champions.json (enrich)"
 python3 scripts/scrape_base_stats.py
 
-step "5/11  CommunityDragon ability stats  →  abilities.json (enrich)"
+step "5/12  CommunityDragon ability stats  →  internal abilities.json (enrich)"
 npx --yes tsx scripts/scrape_ability_stats.ts
 
-step "6/11  LoL Wiki augment descriptions  →  augments.json (enrich)"
+step "6/12  LoL Wiki augment descriptions  →  internal augments.json (enrich)"
 python3 scripts/scrape_wiki_augments.py
 
-step "7/11  LoL Wiki item passives  →  items.json (enrich)"
+step "7/12  LoL Wiki item passives  →  internal items.json (enrich)"
 python3 scripts/enrich_wiki.py
 
-step "8/11  arammayhem.com /patch-notes  →  patch-notes.json"
+step "8/12  patch notes  →  internal patch-notes.json"
 python3 scripts/scrape_patch_notes.py
 
-step "9/11  restore augment classifications"
+step "9/12  restore augment classifications"
 AUGMENT_SNAPSHOT="$AUGMENT_SNAPSHOT" python3 - <<'PY'
 import json
 import os
 from pathlib import Path
 
 snapshot = json.loads(Path(os.environ["AUGMENT_SNAPSHOT"]).read_text(encoding="utf-8"))
-path = Path("public/data/augments.json")
+path = Path(os.environ["MAYHEM_DATA_DIR"]) / "augments.json"
 data = json.loads(path.read_text(encoding="utf-8"))
 restored = 0
 for aug in data.get("augments", []):
@@ -84,14 +87,14 @@ missing = sum(1 for a in data["augments"] if not a.get("kit_tags"))
 print(f"Restored {restored} augments. Unclassified or universal: {missing}")
 PY
 
-step "10/11  classify champions/augments  →  kit_tags"
+step "10/12  classify internal champions/augments  →  kit_tags"
 python3 scripts/classify_champions.py
 python3 scripts/classify_augments.py --skip-classified --allow-partial
 python3 - <<'PY'
 import json
 from pathlib import Path
 
-data_dir = Path("public/data")
+data_dir = Path("data/internal")
 champions = json.loads((data_dir / "champions.json").read_text())["champions"]
 augments = json.loads((data_dir / "augments.json").read_text())["augments"]
 
@@ -116,8 +119,11 @@ if champion_tagged == 0 or augment_tagged == 0 or missing_breakers:
     )
 PY
 
-step "11/11  generate pool rules  →  pool-rules.json"
+step "11/12  generate internal pool rules  →  pool-rules.json"
 python3 scripts/generate_pool_rules.py
+
+step "12/12  export sanitized public catalogs"
+python3 scripts/export_public_catalog.py
 
 NEW_PATCH=$(python3 -c "import json; print(json.load(open('$META'))['patch'])")
 
@@ -125,4 +131,4 @@ NEW_PATCH=$(python3 -c "import json; print(json.load(open('$META'))['patch'])")
 rm -rf .next
 
 printf "\n\033[1;32m✓ Data refresh complete: %s → %s\033[0m\n" "$OLD_PATCH" "$NEW_PATCH"
-printf "  Next: review 'git diff public/data/', run 'npm run build', commit.\n"
+printf "  Next: review 'git diff data/internal public/data/', run 'npm run build', commit.\n"

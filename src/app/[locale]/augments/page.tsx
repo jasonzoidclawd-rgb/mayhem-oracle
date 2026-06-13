@@ -20,6 +20,7 @@ export default async function AugmentsPage({
   const { augments, patch } = JSON.parse(augRaw);
   const normalizedAugments = (augments as Array<ScoredAugment & { wikiSet?: string | null }>).map((augment) => ({
     ...augment,
+    win_rate: augment.win_rate ?? null,
     set: normalizeAugmentSet(augment.set, augment.wikiSet),
   }));
 

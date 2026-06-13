@@ -7,7 +7,7 @@ Fetches ARAM: Mayhem patch notes from the official League of Legends site
 Significantly more timely than wiki-sourced data — the official page is
 published on patch day, while the wiki can lag by several days.
 
-After scraping, also writes recentChanges to public/data/augments.json
+After scraping, also writes recentChanges to data/internal/augments.json
 so augment detail pages reflect same-day stat updates even if
 wikiDescription hasn't caught up yet.
 
@@ -15,8 +15,8 @@ Usage:
     python3 scripts/scrape_patch_notes.py
 
 Output:
-    public/data/patch-notes.json   – structured change feed
-    public/data/augments.json       – recentChanges field updated in-place
+    data/internal/patch-notes.json   – structured change feed
+    data/internal/augments.json      – recentChanges field updated in-place
 """
 
 from __future__ import annotations
@@ -29,6 +29,8 @@ from datetime import datetime, timezone
 from pathlib import Path
 from urllib.error import URLError
 from urllib.request import Request, urlopen
+
+from data_paths import INTERNAL_DATA_DIR
 
 BASE_URL = "https://www.leagueoflegends.com"
 NEWS_PATH = "/en-us/news/game-updates/"
@@ -43,7 +45,7 @@ HEADERS = {
     "Accept": "text/html,application/xhtml+xml",
     "Accept-Language": "en-US,en;q=0.9",
 }
-OUT_DIR = Path(__file__).parent.parent / "public" / "data"
+OUT_DIR = INTERNAL_DATA_DIR
 
 # Our locale keys → LoL site URL locale prefixes.
 # zh-cn: global site redirects to a 404; use zh-tw content under zh-cn key

@@ -2,7 +2,7 @@
 """
 generate_pool_rules.py — Extract patch-sensitive pool-shaping rules from patch-notes.json.
 
-Reads public/data/patch-notes.json (all patches) and accumulates rules that affect
+Reads data/internal/patch-notes.json (all patches) and accumulates rules that affect
 champion augment pool composition:
   - item_exclusions: augment not offered if player owns specific item
   - mutually_exclusive: augment pairs that can never both be offered
@@ -10,7 +10,7 @@ champion augment pool composition:
   - disabled: augments explicitly removed from pool
   - lifecycle: augments added or removed per patch
 
-Writes: public/data/pool-rules.json (current-patch snapshot)
+Writes: data/internal/pool-rules.json (current-patch snapshot)
 
 Usage:
   python3 scripts/generate_pool_rules.py [--dry-run]
@@ -21,7 +21,9 @@ import json
 import re
 from pathlib import Path
 
-DATA_DIR = Path(__file__).parent.parent / "public" / "data"
+from data_paths import INTERNAL_DATA_DIR
+
+DATA_DIR = INTERNAL_DATA_DIR
 PATCH_NOTES_PATH = DATA_DIR / "patch-notes.json"
 AUGMENTS_PATH    = DATA_DIR / "augments.json"
 ITEMS_PATH       = DATA_DIR / "items.json"

@@ -83,7 +83,6 @@ function compactAugment(augment) {
     icon: augment.icon,
     name_zh_TW: augment.name_zh_TW,
     rarity: augment.rarity,
-    win_rate: augment.win_rate,
     wikiDescription: augment.wikiDescription,
     set: normalizeAugmentSet(augment.set, augment.wikiSet),
     wikiSet: augment.wikiSet,

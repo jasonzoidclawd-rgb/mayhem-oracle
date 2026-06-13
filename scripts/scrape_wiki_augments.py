@@ -2,7 +2,7 @@
 Mayhem Oracle — Wiki Augment Scraper
 =====================================
 Fetches augment descriptions from wiki.leagueoflegends.com/en-us/ARAM:_Mayhem/Augments
-and enriches public/data/augments.json with wiki-sourced descriptions.
+and enriches data/internal/augments.json with wiki-sourced descriptions.
 
 Uses curl for HTTP (wiki blocks Python urllib redirects).
 
@@ -18,7 +18,9 @@ import subprocess
 from pathlib import Path
 from urllib.parse import urlencode
 
-OUT = Path(__file__).parent.parent / "public" / "data" / "augments.json"
+from data_paths import INTERNAL_DATA_DIR
+
+OUT = INTERNAL_DATA_DIR / "augments.json"
 
 WIKI_API = "https://wiki.leagueoflegends.com/api.php"
 VALID_WIKI_SETS = {

@@ -11,9 +11,9 @@
  */
 
 import { readFileSync, writeFileSync } from "fs";
-import { join } from "path";
+import { join, resolve } from "path";
 
-const DATA_DIR = join(__dirname, "..", "public", "data");
+const DATA_DIR = resolve(__dirname, "..", process.env.MAYHEM_DATA_DIR ?? "data/internal");
 const ABILITIES_PATH = join(DATA_DIR, "abilities.json");
 const CHAMPIONS_PATH = join(DATA_DIR, "champions.json");
 

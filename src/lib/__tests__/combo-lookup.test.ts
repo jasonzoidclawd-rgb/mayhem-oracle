@@ -1,6 +1,6 @@
 import { describe, expect, test } from "vitest";
-import augmentsData from "../../../public/data/augments.json";
-import combosData from "../../../public/data/combos.json";
+import augmentsData from "../../../data/internal/augments.json";
+import combosData from "../../../data/internal/combos.json";
 import { buildComboTierLookup, normalizeLookupKey } from "../data/combo-lookup";
 
 describe("normalizeLookupKey", () => {
