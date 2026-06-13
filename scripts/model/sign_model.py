@@ -8,6 +8,7 @@ import base64
 import hashlib
 import json
 import os
+import shutil
 import subprocess
 import tempfile
 from pathlib import Path
@@ -63,10 +64,37 @@ def signing_key_from_env() -> str:
     return decoded
 
 
+def resolve_openssl() -> str:
+    candidates = [
+        "/opt/homebrew/bin/openssl",
+        "/usr/local/bin/openssl",
+        shutil.which("openssl"),
+    ]
+    checked = set()
+    for candidate in candidates:
+        if not candidate or candidate in checked:
+            continue
+        checked.add(candidate)
+        if candidate.startswith("/") and not Path(candidate).is_file():
+            continue
+        try:
+            result = subprocess.run(
+                [candidate, "version"],
+                check=False,
+                capture_output=True,
+                text=True,
+            )
+        except FileNotFoundError:
+            continue
+        if result.returncode == 0 and result.stdout.startswith("OpenSSL 3."):
+            return candidate
+    raise RuntimeError("OpenSSL 3.x is required for Ed25519 signing")
+
+
 def _run_openssl(args: list[str], *, input_bytes: bytes | None = None) -> bytes:
     try:
         result = subprocess.run(
-            ["openssl", *args],
+            [resolve_openssl(), *args],
             input=input_bytes,
             check=True,
             capture_output=True,

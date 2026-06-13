@@ -2,6 +2,7 @@
 
 import json
 import os
+import shutil
 import subprocess
 import sys
 import tempfile
@@ -18,14 +19,15 @@ import sign_model
 def generate_key_pair(directory: Path) -> tuple[str, str]:
     private_key = directory / "private.pem"
     public_key = directory / "public.pem"
+    openssl = sign_model.resolve_openssl()
     subprocess.run(
-        ["openssl", "genpkey", "-algorithm", "Ed25519", "-out", private_key],
+        [openssl, "genpkey", "-algorithm", "Ed25519", "-out", private_key],
         check=True,
         capture_output=True,
         text=True,
     )
     subprocess.run(
-        ["openssl", "pkey", "-in", private_key, "-pubout", "-out", public_key],
+        [openssl, "pkey", "-in", private_key, "-pubout", "-out", public_key],
         check=True,
         capture_output=True,
         text=True,
@@ -97,6 +99,25 @@ class SignModelTests(unittest.TestCase):
 
         self.assertEqual(left, right)
         self.assertEqual(json.loads(left), {"a": {"y": 0, "z": 1}, "b": 2})
+
+    def test_resolves_homebrew_openssl_3_before_path_libressl(self):
+        homebrew = "/opt/homebrew/bin/openssl"
+        path_openssl = shutil.which("openssl")
+        self.assertIsNotNone(path_openssl)
+
+        with patch("sign_model.shutil.which", return_value=path_openssl):
+            resolved = sign_model.resolve_openssl()
+
+        self.assertEqual(resolved, homebrew)
+        self.assertIn(
+            "OpenSSL 3.",
+            subprocess.run(
+                [resolved, "version"],
+                check=True,
+                capture_output=True,
+                text=True,
+            ).stdout,
+        )
 
 
 if __name__ == "__main__":
