@@ -311,13 +311,13 @@ export const ITEM_VALUE = {
 
 ### Task 1.4: Close Web/Overlay Parity
 
-- [ ] Mirror any still-duplicated scoring changes in overlay scoring modules.
-- [ ] Extend parity tests to compare:
+- [x] Mirror any still-duplicated scoring changes in overlay scoring modules.
+- [x] Extend parity tests to compare:
   - eligible pool
   - score and grade
   - conditional probability
   - warnings and reasons
-- [ ] Run:
+- [x] Run:
 
 ```bash
 npx vitest run src/lib/__tests__/decision-engine.test.ts src/lib/__tests__/public-data-boundary.test.ts src/lib/__tests__/cross-parity.test.ts src/lib/__tests__/overlay-scoring-parity.test.ts
@@ -327,7 +327,7 @@ npm run build
 (cd overlay && npm run build)
 ```
 
-- [ ] Commit:
+- [x] Commit:
 
 ```bash
 git add src/lib/contracts src/lib/decision src/lib/data/internal-loader.ts src/lib/scoring src/lib/__tests__ overlay/src/scoring overlay/scripts scripts .github/workflows/update-data.yml data public/data

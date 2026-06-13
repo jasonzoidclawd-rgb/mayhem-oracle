@@ -1,7 +1,12 @@
 import { describe, expect, test } from "vitest";
 import { computeOracleScore as computeWebScore, type OracleScoreInput as WebScoreInput, type ScoredAugment as WebScoredAugment } from "../scoring/oracle-score";
 import { computeOracleScore as computeOverlayScore } from "../../../overlay/src/scoring/oracle-score";
-import type { AbilityProfile } from "../types";
+import { evaluateDecision as evaluateWebDecision, type DecisionEngineData } from "../decision/evaluate";
+import { DEFAULT_MODEL_CONFIG as WEB_MODEL_CONFIG } from "../decision/model-config";
+import { evaluateDecision as evaluateOverlayDecision } from "../../../overlay/src/decision/evaluate";
+import { DEFAULT_MODEL_CONFIG as OVERLAY_MODEL_CONFIG } from "../../../overlay/src/decision/model-config";
+import type { DecisionContext } from "../contracts/decision";
+import type { AbilityProfile, PoolRules } from "../types";
 
 const physicalProfile: AbilityProfile = {
   damageType: "physical",
@@ -55,6 +60,125 @@ describe("overlay oracle scoring parity", () => {
       championWinRate: Number.POSITIVE_INFINITY,
       comboTier: "SS" as WebScoreInput["comboTier"],
       abilityProfile: magicProfile,
+    });
+  });
+});
+
+const EMPTY_POOL_RULES: PoolRules = {
+  patch: "26.12",
+  scraped_at: "test",
+  disabled: [],
+  mutually_exclusive: [["owned", "blocked-by-owned"]],
+  item_exclusions: [],
+  ally_exclusions: [],
+  lifecycle: { added: {}, removed: {} },
+};
+
+const decisionData: DecisionEngineData = {
+  champion: {
+    slug: "garen",
+    winRate: 50,
+    kitTags: ["ability", "tank"],
+    abilityProfile: magicProfile,
+  },
+  augments: [
+    {
+      slug: "reliable",
+      name: "Reliable",
+      rarity: "gold",
+      win_rate: 62,
+      icon: "reliable.png",
+      kit_tags: [],
+      flags: { lifecycle: "active", system_breaker: false },
+    },
+    {
+      slug: "high-ceiling",
+      name: "High Ceiling",
+      rarity: "gold",
+      win_rate: 50,
+      icon: "high-ceiling.png",
+      kit_tags: [],
+      flags: { lifecycle: "active", system_breaker: true },
+    },
+    {
+      slug: "owned",
+      name: "Owned",
+      rarity: "gold",
+      win_rate: 55,
+      icon: "owned.png",
+      kit_tags: [],
+      flags: { lifecycle: "active", system_breaker: false },
+    },
+    {
+      slug: "blocked-by-owned",
+      name: "Blocked by Owned",
+      rarity: "gold",
+      win_rate: 60,
+      icon: "blocked.png",
+      kit_tags: [],
+      flags: { lifecycle: "active", system_breaker: false },
+    },
+    {
+      slug: "overflow",
+      name: "Overflow",
+      rarity: "gold",
+      win_rate: 70,
+      icon: "overflow.png",
+      wikiDescription: "Double mana costs for bonus damage.",
+      kit_tags: ["mana"],
+      flags: { lifecycle: "active", system_breaker: false },
+    },
+  ],
+  poolRules: EMPTY_POOL_RULES,
+  mechanicalInteractions: {
+    "high-ceiling": { type: "synergy", strength: 3 },
+  },
+};
+
+function expectOverlayDecisionToMatchWeb(context: DecisionContext) {
+  const web = evaluateWebDecision(context, decisionData, WEB_MODEL_CONFIG);
+  const overlay = evaluateOverlayDecision(
+    context,
+    decisionData as Parameters<typeof evaluateOverlayDecision>[1],
+    OVERLAY_MODEL_CONFIG,
+  );
+
+  expect(overlay).toEqual(web);
+}
+
+describe("overlay unified decision parity", () => {
+  const baseContext: DecisionContext = {
+    championSlug: "garen",
+    round: 2,
+    screenRarity: "gold",
+    mode: "competitive",
+    ownedAugmentSlugs: [],
+    currentItemIds: [],
+    plannedItemIds: [],
+    rerollsRemaining: 1,
+    goldenRerollAvailable: false,
+  };
+
+  test("matches eligible pool, scores, grades, probabilities, warnings, and reasons", () => {
+    expectOverlayDecisionToMatchWeb(baseContext);
+    expectOverlayDecisionToMatchWeb({ ...baseContext, mode: "exploration" });
+  });
+
+  test("matches residual exclusions and hard-incompatible offered warnings", () => {
+    expectOverlayDecisionToMatchWeb({
+      ...baseContext,
+      ownedAugmentSlugs: ["owned"],
+      seenOfferSlugs: ["reliable"],
+      offeredAugmentSlugs: ["blocked-by-owned", "overflow", "high-ceiling"],
+    });
+  });
+
+  test("matches Golden Reroll stance without adding normal draws", () => {
+    expectOverlayDecisionToMatchWeb({
+      ...baseContext,
+      goldenRerollAvailable: true,
+      rerollsRemaining: 0,
+      offeredAugmentSlugs: ["overflow", "reliable", "high-ceiling"],
     });
   });
 });
