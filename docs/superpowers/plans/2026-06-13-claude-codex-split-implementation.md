@@ -364,7 +364,7 @@ git commit -m "feat(decision): add unified round-aware decision engine"
 
 ### Task 2.1: Add Membership Schema and RLS
 
-- [ ] Add tables:
+- [x] Add tables:
   - `profiles`
   - `entitlements`
   - `invite_codes`
@@ -374,17 +374,17 @@ git commit -m "feat(decision): add unified round-aware decision engine"
   - `decision_feedback`
   - `model_releases`
   - `referral_progress`
-- [ ] Store invite codes as hashes, not plaintext.
-- [ ] Give invite codes a fixed kind:
+- [x] Store invite codes as hashes, not plaintext.
+- [x] Give invite codes a fixed kind:
   - `member` grants a dated manual entitlement
   - `trial` grants three game credits exactly once per Google-account-plus-device combination
-- [ ] Use `auth.users.id` as the account key.
-- [ ] Use `app_metadata.role = 'admin'` for administrator authorization.
-- [ ] RLS rules:
+- [x] Use `auth.users.id` as the account key.
+- [x] Use `app_metadata.role = 'admin'` for administrator authorization.
+- [x] RLS rules:
   - users can read their own profile, entitlement, devices, sessions, feedback, and referral progress
   - users cannot grant or extend entitlements
   - only service-role/admin routes can create invite codes, update entitlements, and publish model releases
-- [ ] Add tests proving free users cannot access member rows or grant themselves access.
+- [x] Add tests proving free users cannot access member rows or grant themselves access.
 
 ### Task 2.2: Protect Decision APIs
 
