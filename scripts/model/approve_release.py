@@ -25,7 +25,7 @@ RELEASE_FIELDS = (
 
 def read_package(package_path: Path, public_key: str) -> tuple[dict, dict]:
     with tarfile.open(package_path, "r:gz") as archive:
-        if set(archive.getnames()) != {"manifest.json", "model-config.json"}:
+        if sorted(archive.getnames()) != ["manifest.json", "model-config.json"]:
             raise ValueError("model package must contain only manifest.json and model-config.json")
         manifest_file = archive.extractfile("manifest.json")
         config_file = archive.extractfile("model-config.json")
@@ -120,6 +120,17 @@ def render_sql(payload: dict) -> str:
     )
     return f"""BEGIN;
 LOCK TABLE model_releases IN EXCLUSIVE MODE;
+
+DO $$
+BEGIN
+  IF NOT EXISTS (
+    SELECT 1 FROM model_releases
+    WHERE model_version = {sql_literal(previous["model_version"])}
+      AND status = {sql_literal(previous["from"])}
+  ) THEN
+    RAISE EXCEPTION 'recorded active model release changed before approval';
+  END IF;
+END $$;
 
 UPDATE model_releases
 SET status = {sql_literal(previous["to"])}
