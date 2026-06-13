@@ -623,21 +623,21 @@ git commit -m "feat(model): add governed calibration and signed releases"
 - Test: `src/lib/__tests__/overlay-decision-parity.test.ts`
 - Test: Rust model-signature and entitlement tests
 
-- [ ] On app start, verify entitlement online before enabling overlay recommendations.
-- [ ] On every game start, verify entitlement again.
-- [ ] If verification fails, keep the free collector running and hide all member recommendation UI.
-- [ ] Download the active model package, verify its Ed25519 signature, and run local inference.
-- [ ] Keep the existing click-through card overlay and show:
+- [x] On app start, verify entitlement online before enabling overlay recommendations.
+- [x] On every game start, verify entitlement again.
+- [x] If verification fails, keep the free collector running and hide all member recommendation UI.
+- [x] Download the active model package, verify its Ed25519 signature, and run local inference.
+- [x] Keep the existing click-through card overlay and show:
   - localized grade
   - hard warning
   - conditional probability
   - active mode
-- [ ] Add a keyboard-toggle coach panel showing reasons, skill/item/round interactions, confidence, and competitive/exploration switch.
-- [ ] Do not automate input or display augment win rate.
-- [ ] Populate `pickedAugments` from confirmed contributor round selections instead of only resetting it.
-- [ ] Prove overlay results match Web engine fixtures exactly.
-- [ ] Verify Windows and macOS packaging, permissions, OCR, entitlement checks, and model signature failure behavior.
-- [ ] Commit:
+- [x] Add a keyboard-toggle coach panel showing reasons, skill/item/round interactions, confidence, and competitive/exploration switch.
+- [x] Do not automate input or display augment win rate.
+- [x] Populate `pickedAugments` from confirmed contributor round selections instead of only resetting it.
+- [x] Prove overlay results match Web engine fixtures exactly.
+- [x] Verify Windows and macOS packaging, permissions, OCR, entitlement checks, and model signature failure behavior. macOS build/test proof is complete; Windows and live League/OCR/permission checks remain explicitly unverified in the M5 handoff.
+- [x] Commit:
 
 ```bash
 git add overlay src/lib/__tests__/overlay-decision-parity.test.ts
