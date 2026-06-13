@@ -1,5 +1,6 @@
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { AugmentsClient } from "@/components/augments/AugmentsClient";
+import { DataProvenance } from "@/components/ui/DataProvenance";
 import { normalizeAugmentSet } from "@/lib/data/augment-set";
 import { readFile } from "fs/promises";
 import path from "path";
@@ -31,6 +32,7 @@ export default async function AugmentsPage({
         <p className="text-[var(--color-text-secondary)]">
           {t("subtitle", { count: augments.length, patch })}
         </p>
+        <DataProvenance locale={locale} />
       </header>
       <AugmentsClient augments={normalizedAugments} locale={locale} />
     </div>

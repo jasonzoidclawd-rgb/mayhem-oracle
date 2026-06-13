@@ -230,6 +230,20 @@
       "augments": "オーグメント変更",
       "champions": "チャンピオン調整",
       "bugfixes": "バグ修正"
+    },
+    "hotfix": {
+      "title": "サーバーサイドホットフィックス",
+      "subtitle": "ライブゲームデータから検出——Riotが完全なパッチノートなしで適用した変更。",
+      "detected": "{date} に検出",
+      "added": "オーグメントプールに追加",
+      "removed": "オーグメントプールから削除",
+      "rarity": "レアリティ変更：{from} → {to}",
+      "effect": "効果を更新",
+      "rarities": {
+        "silver": "シルバー",
+        "gold": "ゴールド",
+        "prismatic": "プリズム"
+      }
     }
   },
   "common": {
@@ -239,7 +253,9 @@
     "retry": "再試行",
     "dataSource": "データソース：arammayhem.com",
     "notAffiliated": "Riot Gamesとは無関係です",
-    "patchLabel": "パッチ {patch}"
+    "patchLabel": "パッチ {patch}",
+    "lastUpdated": "更新日 {date}",
+    "methodology": "ティアとランキングは現在のパッチの勝率データに基づいています。ピック率の低い項目は統計的に信頼性が低くなります。"
   },
   "advisor": {
     "title": "メイヘムアドバイザー",

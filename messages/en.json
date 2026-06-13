@@ -230,6 +230,20 @@
       "augments": "Augment Changes",
       "champions": "Champion Balance",
       "bugfixes": "Bug Fixes"
+    },
+    "hotfix": {
+      "title": "Server-Side Hotfixes",
+      "subtitle": "Detected from live game data — changes Riot shipped without full patch notes.",
+      "detected": "Detected {date}",
+      "added": "Added to the augment pool",
+      "removed": "Removed from the augment pool",
+      "rarity": "Rarity changed: {from} → {to}",
+      "effect": "Effect updated",
+      "rarities": {
+        "silver": "Silver",
+        "gold": "Gold",
+        "prismatic": "Prismatic"
+      }
     }
   },
   "common": {
@@ -239,7 +253,9 @@
     "retry": "Retry",
     "dataSource": "Data sourced from arammayhem.com",
     "notAffiliated": "Not affiliated with Riot Games",
-    "patchLabel": "Patch {patch}"
+    "patchLabel": "Patch {patch}",
+    "lastUpdated": "Updated {date}",
+    "methodology": "Tiers and rankings are derived from win-rate data for the current patch. Low pick-rate entries are statistically less reliable."
   },
   "advisor": {
     "title": "Mayhem Advisor",

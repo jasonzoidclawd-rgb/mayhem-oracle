@@ -23,6 +23,8 @@ import {
   type TailoredHighlight,
 } from "@/components/champions/PoolConstructionSection";
 import type { DecisionGrade } from "@/lib/contracts/decision";
+import { JsonLd } from "@/components/seo/JsonLd";
+import { SITE_URL } from "@/lib/site";
 
 // ─── Types ───────────────────────────────────────────────────────────────────
 
@@ -336,8 +338,35 @@ export default async function ChampionPage({
     ["utility",      t("playstyleUtility")],
   ];
 
+  const topCombos = strongCombos
+    .map((c) => augmentBySlug.get(c.augmentSlug)?.name ?? c.augment)
+    .filter(Boolean)
+    .slice(0, 8);
+  const championJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    headline: `${champ.name} ARAM Mayhem — Tier ${champ.tier}, Augments & Combos (Patch ${patch})`,
+    about: { "@type": "Thing", name: `${champ.name} (League of Legends ARAM Mayhem)` },
+    inLanguage: locale,
+    url: `${SITE_URL}${locale === "en" ? "" : `/${locale}`}/champions/${champ.slug}`,
+    image: champ.icon,
+    keywords: [
+      "ARAM Mayhem",
+      champ.name,
+      `Tier ${champ.tier}`,
+      ...(champ.kit_tags ?? []),
+      ...topCombos,
+    ],
+    description:
+      `${champ.name} is Tier ${champ.tier} in ARAM Mayhem (patch ${patch})` +
+      (champWr ? ` with a ${champWr.toFixed(1)}% win rate` : "") +
+      (champ.pick_rate ? ` and ${champ.pick_rate.toFixed(1)}% pick rate` : "") +
+      (topCombos.length ? `. Strongest augment combos: ${topCombos.join(", ")}.` : "."),
+  };
+
   return (
     <div className="py-4 sm:py-8 max-w-4xl">
+      <JsonLd data={championJsonLd} />
       {/* ─── Header ─── */}
       <div className="flex items-center gap-3 sm:gap-5 mb-4 sm:mb-6">
         <div className="relative w-14 h-14 sm:w-20 sm:h-20 rounded-full overflow-hidden border-2 border-[var(--color-neon-primary)]/40 shrink-0">

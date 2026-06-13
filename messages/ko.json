@@ -230,6 +230,20 @@
       "augments": "증강 변경",
       "champions": "챔피언 밸런스",
       "bugfixes": "버그 수정"
+    },
+    "hotfix": {
+      "title": "서버 사이드 핫픽스",
+      "subtitle": "라이브 게임 데이터에서 감지 — Riot이 전체 패치 노트 없이 적용한 변경 사항.",
+      "detected": "{date} 감지",
+      "added": "증강 풀에 추가",
+      "removed": "증강 풀에서 제거",
+      "rarity": "등급 변경: {from} → {to}",
+      "effect": "효과 업데이트",
+      "rarities": {
+        "silver": "실버",
+        "gold": "골드",
+        "prismatic": "프리즘"
+      }
     }
   },
   "common": {
@@ -239,7 +253,9 @@
     "retry": "재시도",
     "dataSource": "데이터 출처: arammayhem.com",
     "notAffiliated": "Riot Games와 무관합니다",
-    "patchLabel": "패치 {patch}"
+    "patchLabel": "패치 {patch}",
+    "lastUpdated": "업데이트 {date}",
+    "methodology": "티어와 순위는 현재 패치의 승률 데이터를 기반으로 합니다. 픽률이 낮은 항목은 통계적으로 신뢰도가 낮습니다."
   },
   "advisor": {
     "title": "메이헴 어드바이저",

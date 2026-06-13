@@ -230,6 +230,20 @@
       "augments": "强化符文调整",
       "champions": "英雄平衡",
       "bugfixes": "Bug 修复"
+    },
+    "hotfix": {
+      "title": "服务器即时修正",
+      "subtitle": "从游戏实时数据检测——Riot 未随完整更新公告发布的变更。",
+      "detected": "检测于 {date}",
+      "added": "加入增幅装置池",
+      "removed": "自增幅装置池移除",
+      "rarity": "稀有度变更：{from} → {to}",
+      "effect": "效果已更新",
+      "rarities": {
+        "silver": "白银",
+        "gold": "黄金",
+        "prismatic": "棱彩"
+      }
     }
   },
   "common": {
@@ -239,7 +253,9 @@
     "retry": "重试",
     "dataSource": "数据来源：arammayhem.com",
     "notAffiliated": "与拳头游戏无关联",
-    "patchLabel": "版本 {patch}"
+    "patchLabel": "版本 {patch}",
+    "lastUpdated": "更新于 {date}",
+    "methodology": "段位与排名基于当前版本的胜率数据得出。选取率较低的条目在统计上可靠性较低。"
   },
   "advisor": {
     "title": "大乱斗顾问",

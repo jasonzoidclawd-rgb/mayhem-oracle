@@ -60,6 +60,12 @@ python3 scripts/enrich_wiki.py
 step "8/12  patch notes  →  internal patch-notes.json"
 python3 scripts/scrape_patch_notes.py
 
+# Numbered patch notes miss server-side hotfixes ("不停機更新"). CommunityDragon
+# mirrors live game data first-hand; diffing its Mayhem augment snapshot detects
+# hotfixes (changes at an unchanged patch number).
+step "8b/12 CommunityDragon  →  Mayhem augment snapshot + hotfix detection"
+python3 scripts/scrape_mayhem_augments_cdragon.py
+
 step "9/12  restore augment classifications"
 AUGMENT_SNAPSHOT="$AUGMENT_SNAPSHOT" python3 - <<'PY'
 import json

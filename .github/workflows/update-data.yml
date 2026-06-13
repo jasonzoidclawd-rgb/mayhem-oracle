@@ -10,6 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: write
+      issues: write
 
     steps:
       - uses: actions/checkout@v4
@@ -41,3 +42,21 @@ jobs:
           git push
 
       # Vercel auto-deploys on push via GitHub integration — no explicit step needed
+
+      - name: Notify on failure
+        if: failure()
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: |
+          # Surface silent scrape decay: reuse a single open issue rather than spamming.
+          gh label create data-staleness --color D93F0B --description "Automated data refresh failed" 2>/dev/null || true
+          existing=$(gh issue list --label data-staleness --state open --limit 1 --json number --jq '.[0].number')
+          if [ -n "$existing" ]; then
+            gh issue comment "$existing" --body "Data update run failed again: $RUN_URL"
+          else
+            gh issue create \
+              --title "Data update workflow failed — data may be going stale" \
+              --label data-staleness \
+              --body "The daily \`update-data\` run failed, so \`public/data/\` was not refreshed. Investigate before the published patch data drifts. Run: $RUN_URL"
+          fi

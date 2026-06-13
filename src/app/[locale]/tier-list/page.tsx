@@ -1,5 +1,6 @@
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { TierListClient } from "@/components/tier-list/TierListClient";
+import { DataProvenance } from "@/components/ui/DataProvenance";
 import { readFile } from "fs/promises";
 import path from "path";
 
@@ -23,6 +24,7 @@ export default async function TierListPage({
         <p className="text-[var(--color-text-secondary)] mt-1">
           {t("subtitle")} · {t("patchLabel", { patch })}
         </p>
+        <DataProvenance locale={locale} />
       </header>
       <TierListClient champions={champions} />
     </div>
