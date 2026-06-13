@@ -195,6 +195,13 @@ impl CollectorState {
         }
     }
 
+    fn consented_and_resumed(&self) -> bool {
+        self.settings
+            .lock()
+            .map(|settings| settings.consent == Some(true) && !settings.paused)
+            .unwrap_or(false)
+    }
+
     fn update_settings(&self, update: impl FnOnce(&mut CollectorSettings)) -> Result<(), String> {
         let mut settings = self
             .settings
@@ -219,6 +226,17 @@ impl CollectorState {
         let bytes = serde_json::to_vec(&*settings).map_err(|error| error.to_string())?;
         std::fs::write(&self.settings_path, bytes).map_err(|error| error.to_string())?;
         Ok(true)
+    }
+
+    fn release_export_slot(&self) -> Result<(), String> {
+        let mut settings = self
+            .settings
+            .lock()
+            .map_err(|_| "collector settings mutex poisoned".to_string())?;
+        settings.refresh_day();
+        settings.exported_today = settings.exported_today.saturating_sub(1);
+        let bytes = serde_json::to_vec(&*settings).map_err(|error| error.to_string())?;
+        std::fs::write(&self.settings_path, bytes).map_err(|error| error.to_string())
     }
 
     fn set_error(&self, error: Option<String>) {
@@ -294,6 +312,19 @@ pub fn resolve_selected_augment(offered: &[String], final_augments: &[String]) -
         .filter(|augment| final_augments.contains(augment))
         .collect::<Vec<_>>();
     (matching.len() == 1).then(|| matching[0].clone())
+}
+
+fn normalize_offers(offered_augment_slugs: Vec<String>) -> Result<Vec<String>, String> {
+    let mut offered = offered_augment_slugs
+        .into_iter()
+        .filter(|augment| !augment.is_empty())
+        .collect::<Vec<_>>();
+    offered.sort();
+    offered.dedup();
+    if offered.len() != 3 {
+        return Err("exactly three distinct offered augments are required".to_string());
+    }
+    Ok(offered)
 }
 
 fn contributor_final_augments(detail: &serde_json::Value, contributor_puuid: &str) -> Vec<String> {
@@ -402,6 +433,9 @@ fn today() -> String {
 
 async fn collect_one(state: &CollectorState, client: &LcuClient) -> Result<(), String> {
     let mut runtime = state.runtime.lock().await;
+    if !state.consented_and_resumed() || active_game_now(state, client).await? {
+        return Ok(());
+    }
     if runtime.contributor_puuid.is_none() {
         let puuid = client.current_puuid().await?;
         runtime.contributor_puuid = Some(puuid.clone());
@@ -410,6 +444,10 @@ async fn collect_one(state: &CollectorState, client: &LcuClient) -> Result<(), S
 
     if let Some(work) = runtime.match_frontier.pop_front() {
         let detail = client.match_detail(&work.game_id).await?;
+        if !state.consented_and_resumed() || active_game_now(state, client).await? {
+            runtime.match_frontier.push_front(work);
+            return Ok(());
+        }
         let participant_puuids = extract_participant_puuids(&detail);
         let contributor_rounds = match (work.source, &runtime.contributor_puuid) {
             (MatchSource::OwnedHistory, Some(puuid)) => {
@@ -418,10 +456,18 @@ async fn collect_one(state: &CollectorState, client: &LcuClient) -> Result<(), S
             _ => None,
         };
         let safe = sanitize_match(&detail, work.source, contributor_rounds.clone())?;
+        if !state.consented_and_resumed() || active_game_now(state, client).await? {
+            runtime.match_frontier.push_front(work);
+            return Ok(());
+        }
         if !state.reserve_export_slot()? {
             return Ok(());
         }
-        state.queue.enqueue_batch(&[safe])?;
+        if let Err(error) = state.queue.enqueue_batch(&[safe]) {
+            runtime.match_frontier.push_front(work);
+            state.release_export_slot()?;
+            return Err(error);
+        }
         for puuid in participant_puuids {
             runtime.enqueue_history(puuid, MatchSource::Snowball);
         }
@@ -433,11 +479,21 @@ async fn collect_one(state: &CollectorState, client: &LcuClient) -> Result<(), S
 
     if let Some(work) = runtime.history_frontier.pop_front() {
         let history = client.recent_history(&work.puuid).await?;
+        if !state.consented_and_resumed() || active_game_now(state, client).await? {
+            runtime.history_frontier.push_front(work);
+            return Ok(());
+        }
         for game_id in extract_mayhem_match_ids(&history) {
             runtime.enqueue_match(game_id, work.source);
         }
     }
     Ok(())
+}
+
+async fn active_game_now(state: &CollectorState, client: &LcuClient) -> Result<bool, String> {
+    let active = client.gameflow_phase().await? == GameflowPhase::InProgress;
+    state.active_game.store(active, Ordering::Relaxed);
+    Ok(active)
 }
 
 #[tauri::command]
@@ -470,18 +526,13 @@ pub async fn record_contributor_round(
     offered_augment_slugs: Vec<String>,
     ocr_confidence: f64,
 ) -> Result<(), String> {
+    if !state.consented_and_resumed() {
+        return Err("collector consent is required and collection must be resumed".to_string());
+    }
     if !(1..=4).contains(&round) {
         return Err("round must be between 1 and 4".to_string());
     }
-    let mut offered = offered_augment_slugs
-        .into_iter()
-        .filter(|augment| !augment.is_empty())
-        .collect::<Vec<_>>();
-    offered.sort();
-    offered.dedup();
-    if offered.is_empty() {
-        return Err("at least one offered augment is required".to_string());
-    }
+    let offered = normalize_offers(offered_augment_slugs)?;
     let mut runtime = state.runtime.lock().await;
     runtime.captured_rounds.insert(
         round,
@@ -540,7 +591,12 @@ pub async fn collector_tick(state: State<'_, CollectorState>) -> Result<Collecto
             }
         }
 
-        if policy.may_collect(phase) {
+        let collection_phase = client.gameflow_phase().await?;
+        state.active_game.store(
+            collection_phase == GameflowPhase::InProgress,
+            Ordering::Relaxed,
+        );
+        if policy.may_collect(collection_phase) {
             collect_one(&state, &client).await?;
         }
         Ok::<(), String>(())
@@ -658,6 +714,42 @@ mod tests {
             assert!(state.reserve_export_slot().unwrap());
         }
         assert!(!state.reserve_export_slot().unwrap());
+        state.release_export_slot().unwrap();
+        assert!(state.reserve_export_slot().unwrap());
         assert_eq!(state.status().exported_today, DAILY_EXPORT_LIMIT);
+    }
+
+    #[test]
+    fn classifies_all_active_gameflow_phases_as_blocking() {
+        for phase in [
+            "ChampSelect",
+            "GameStart",
+            "InProgress",
+            "Reconnect",
+            "WaitingForStats",
+            "PreEndOfGame",
+        ] {
+            assert_eq!(GameflowPhase::from_lcu(phase), GameflowPhase::InProgress);
+        }
+        for phase in ["None", "Lobby", "Matchmaking", "ReadyCheck", "EndOfGame"] {
+            assert_eq!(GameflowPhase::from_lcu(phase), GameflowPhase::None);
+        }
+    }
+
+    #[test]
+    fn contributor_round_requires_three_distinct_offers() {
+        assert!(normalize_offers(vec![
+            "deathtouch".to_string(),
+            "big-brain".to_string(),
+            "mad-scientist".to_string(),
+        ])
+        .is_ok());
+        assert!(normalize_offers(vec![
+            "deathtouch".to_string(),
+            "deathtouch".to_string(),
+            "deathtouch".to_string(),
+        ])
+        .is_err());
+        assert!(normalize_offers(vec!["deathtouch".to_string()]).is_err());
     }
 }

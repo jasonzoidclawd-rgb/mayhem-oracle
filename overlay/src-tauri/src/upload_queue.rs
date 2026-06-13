@@ -45,10 +45,6 @@ impl UploadQueue {
         Ok(path)
     }
 
-    pub fn directory(&self) -> &Path {
-        &self.directory
-    }
-
     pub fn queued_count(&self) -> usize {
         self.batch_paths().map(|paths| paths.len()).unwrap_or(0)
     }
@@ -90,7 +86,10 @@ impl UploadQueue {
         device_token: &str,
         now_epoch_seconds: i64,
     ) -> Result<usize, String> {
-        let client = reqwest::Client::new();
+        let client = reqwest::Client::builder()
+            .timeout(std::time::Duration::from_secs(15))
+            .build()
+            .map_err(|error| error.to_string())?;
         let mut uploaded = 0;
         for path in self.due_batches(now_epoch_seconds)? {
             let body = std::fs::read(&path).map_err(|error| error.to_string())?;

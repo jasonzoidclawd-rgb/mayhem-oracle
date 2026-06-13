@@ -146,6 +146,7 @@ function App() {
   const lastRecordedRoundRef = useRef("");
   const [collectorStatus, setCollectorStatus] = useState<CollectorSnapshot | null>(null);
   const collectorEnabled = collectorStatus?.consent === "accepted";
+  const collectorCaptureEnabled = collectorEnabled && !collectorStatus?.paused;
 
   const updatePhase = useCallback((nextPhase: Phase) => {
     phaseRef.current = nextPhase;
@@ -389,7 +390,14 @@ function App() {
       ocrHasSeenCardsRef.current = nextSelection.hasSeenCards;
       ocrEmptyPassesRef.current = nextSelection.emptyPasses;
       setMatchedCards(matched);
-      if (matched.length === 3 && playerData) {
+      const distinctRegions = new Set(matched.map((card) => card.regionIndex));
+      const distinctSlugs = new Set(matched.map((card) => card.augment.slug));
+      if (
+        collectorCaptureEnabled &&
+        distinctRegions.size === 3 &&
+        distinctSlugs.size === 3 &&
+        playerData
+      ) {
         const round = AUGMENT_LEVELS.reduce(
           (current, level, index) => (playerData.level >= level ? index + 1 : current),
           0,
@@ -418,7 +426,7 @@ function App() {
         setMatchedCards([]);
       }
     }
-  }, [nameLookup, ocrKnownNames, playerData, stopOcr, updatePhase]);
+  }, [collectorCaptureEnabled, nameLookup, ocrKnownNames, playerData, stopOcr, updatePhase]);
 
   useEffect(() => {
     runOcrRef.current = runOcr;

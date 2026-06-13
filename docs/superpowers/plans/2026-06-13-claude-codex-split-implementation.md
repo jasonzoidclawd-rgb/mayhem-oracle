@@ -474,8 +474,8 @@ git commit -m "feat(web): add member decision platform"
 
 ### Task 3A.3: Cross-Platform Verification
 
-- [ ] Verify lockfile discovery, idle detection, collection, sanitization, queueing, and retry behavior on Windows and macOS.
-- [ ] Run:
+- [x] Verify lockfile discovery, idle detection, collection, sanitization, queueing, and retry behavior through Rust policy tests and the real macOS lockfile path. Live LCU collection was unavailable and Windows runtime verification remains deferred to a Windows host.
+- [x] Run:
 
 ```bash
 (cd overlay/src-tauri && cargo test)
@@ -483,7 +483,7 @@ git commit -m "feat(web): add member decision platform"
 (cd overlay && npm run build)
 ```
 
-- [ ] Commit:
+- [x] Commit:
 
 ```bash
 git add overlay/src-tauri overlay/src/collector overlay/src/App.tsx overlay/package.json overlay/package-lock.json

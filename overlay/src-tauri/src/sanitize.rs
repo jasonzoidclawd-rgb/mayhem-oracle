@@ -30,7 +30,7 @@ pub struct SafeParticipant {
     pub team: u16,
     pub champion_slug: String,
     pub augment_slugs: Vec<String>,
-    pub item_ids: Vec<u64>,
+    pub item_ids: Vec<String>,
     pub won: bool,
     pub stats: SafeStats,
 }
@@ -180,19 +180,19 @@ fn string_array(value: Option<&serde_json::Value>) -> Vec<String> {
         .collect()
 }
 
-fn item_ids(raw: &serde_json::Value, stats: &serde_json::Value) -> Vec<u64> {
+fn item_ids(raw: &serde_json::Value, stats: &serde_json::Value) -> Vec<String> {
     if let Some(items) = raw.get("itemIds").and_then(serde_json::Value::as_array) {
         return items
             .iter()
-            .filter_map(serde_json::Value::as_u64)
-            .filter(|item| *item != 0)
+            .filter_map(value_as_string)
+            .filter(|item| item != "0")
             .collect();
     }
 
     (0..=6)
         .filter_map(|index| stats.get(format!("item{index}")))
-        .filter_map(serde_json::Value::as_u64)
-        .filter(|item| *item != 0)
+        .filter_map(value_as_string)
+        .filter(|item| item != "0")
         .collect()
 }
 
@@ -268,7 +268,7 @@ mod tests {
                 "team": 100,
                 "championSlug": "aatrox",
                 "augmentSlugs": ["deathtouch", "mad-scientist"],
-                "itemIds": [3071, 3111],
+                "itemIds": ["3071", "3111"],
                 "won": true,
                 "stats": {
                     "kills": 12,
