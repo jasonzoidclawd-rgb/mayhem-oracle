@@ -42,6 +42,13 @@ def load_current_model_config() -> dict:
     return json.loads(result.stdout)
 
 
+def load_model_config(path: Path) -> dict:
+    config = json.loads(path.read_text(encoding="utf-8"))
+    if not isinstance(config, dict):
+        raise ValueError("model config must be a JSON object")
+    return config
+
+
 def _add_bytes(archive: tarfile.TarFile, name: str, contents: bytes) -> None:
     info = tarfile.TarInfo(name)
     info.size = len(contents)
@@ -94,6 +101,7 @@ def build_model_package(
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--config", type=Path)
     parser.add_argument("--engine-version", required=True)
     parser.add_argument("--data-version", required=True)
     parser.add_argument(
@@ -107,7 +115,7 @@ def parse_args() -> argparse.Namespace:
 def main() -> None:
     args = parse_args()
     package_path = build_model_package(
-        config=load_current_model_config(),
+        config=load_model_config(args.config) if args.config else load_current_model_config(),
         engine_version=args.engine_version,
         data_version=args.data_version,
         created_at=args.created_at,

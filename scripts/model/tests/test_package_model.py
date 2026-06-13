@@ -35,6 +35,14 @@ class PackageModelTests(unittest.TestCase):
         self.assertEqual(config["priorClamp"], [42, 62])
         self.assertEqual(config["roundValue"]["scaling"]["4"], -6)
 
+    def test_loads_explicit_candidate_config_for_signing(self):
+        path = MODEL_DIR / "fixtures" / "expected-candidate-config.json"
+
+        config = package_model.load_model_config(path)
+
+        self.assertEqual(config["modelVersion"], "decision-v2-fixture")
+        self.assertEqual(config["priorClamp"], [40, 64])
+
     def test_package_contains_only_signed_manifest_and_canonical_config(self):
         config = {"modelVersion": "decision-v1", "priorClamp": [42, 62]}
         with patch.dict(os.environ, {"MAYHEM_MODEL_SIGNING_KEY": self.private_key}):
