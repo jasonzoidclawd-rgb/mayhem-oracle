@@ -29,3 +29,15 @@ BQ SCHEMAS FROZEN
 ## M6 integration notes (env fragility, non-blocking)
 - M4 model scripts use modern syntax (`dict | None`, PEP 604) → need Python 3.10+. Pass under cron/CI (homebrew 3.14, GH Actions 3.11+); FAIL on macOS system python 3.9. CI must pin python>=3.11.
 - sign_model resolves OpenSSL 3 explicitly (Codex fixed 742dc74) — macOS default LibreSSL lacks Ed25519.
+
+## M3B COMPLETE (2026-06-13)
+- Commit tip: claude/web-membership-platform @ 522ef7c (M2 + M3B).
+- 3B.1 device link + ingestion: device_codes/telemetry_batches/ingested_games tables + finalize_trial_credit; parseBatch server-side allowlist re-validation (rejects identity fields anywhere); device/code+link+telemetry/upload routes (DI, Bearer token, 5MB cap, dedup, 422 on leak); R2 via aws4fetch.
+- 3B.2 BigQuery: transformBatch (quarantine short/wrong-patch/ambiguous-OCR); load_bigquery.ts (CI-only) streams R2→BQ idempotently + finalizes trial credits + expires >24h reservations; ingest-telemetry.yml nightly, no-ops without secrets.
+- 3B.3 ads: consent-gated AdSense (NEXT_PUBLIC_ADS_ENABLED off by default); ConsentManager + AdSlot via useSyncExternalStore; privacy page; one AdSlot on public patch-notes only.
+- Verification: 226 vitest tests, tsc + eslint + web build all clean.
+- New deps: aws4fetch (runtime, R2, server-only), google-auth-library (devDep, BQ loader CI-only).
+- DEPLOY-TIME items the USER must provision (none block code/M6): Supabase service-role key, R2 bucket+keys, GCP BigQuery project+SA, AdSense client id, and the HOSTING DECISION (hosting-spike.md — Vercel Hobby forbids ads; recommend Cloudflare Pages when ads worth enabling).
+- Contract deltas since freeze: NONE (telemetry tables are the frozen BQ schema; SafeMatchExport unchanged).
+
+M3B COMPLETE
