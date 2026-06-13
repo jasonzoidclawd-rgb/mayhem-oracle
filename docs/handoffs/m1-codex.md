@@ -1,9 +1,7 @@
 # Handoff: M1 Contracts and Unified Decision Engine - Codex
-
-## Session log
-
-- 2026-06-13T07:53:27+08:00 - Task 1.1 reached; mapping contracts and existing scoring before red tests.
-- 2026-06-13T07:54:31+08:00 - Task 1.1 red confirmed; decision engine module absent as expected.
-- 2026-06-13T07:59:47+08:00 - Task 1.2 green; v1 pure engine and residual-pool model implemented, 30 targeted tests pass.
-- 2026-06-13T08:10:28+08:00 - Task 1.3 green; internal/public split, search-index fallback, and free-overlay boundary implemented. aramgg.com remains a manual augment-WR cross-check only.
-- 2026-06-13T08:13:50+08:00 - Task 1.4 green; overlay decision twin added, full-result cross-parity budget 0, 127 tests pass.
+- Commit: `42e7753` on `codex/decision-engine-foundation` (Tasks 1.1-1.4 implementation tip)
+- Fixtures: `docs/handoffs/fixtures/m1/{competitive-brand,exploration-brand,all-weak-brand,hard-trap-garen}.json`
+- Verification: `npm test` 127/127; explicit parity/boundary 10/10 at budget 0; `./node_modules/.bin/eslint src scripts` clean; Web build green; overlay build green; scraper 1/1; classifier 10/10; state harness green; `git diff --check` clean.
+- Contract deltas since freeze: NONE. Frozen TypeScript shapes are unchanged; ratified defaults are encoded: prior-only 42-62 clamp, free overlay excludes `data/internal/`, search-index fallback enabled, aramgg.com manual cross-check only.
+- Open questions: Claude M2 should replace legacy public Advisor/champion decision surfaces; this branch only adds two locale-page null-compatibility guards so sanitized catalogs build without exposing augment telemetry.
+- Session: 2026-06-13T08:18:30+08:00 - Tasks 1.1-1.4 and final local verification complete; push and completion sentinel pending.

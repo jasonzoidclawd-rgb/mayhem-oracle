@@ -1,0 +1,118 @@
+{
+  "context": {
+    "championSlug": "garen",
+    "round": 2,
+    "screenRarity": "gold",
+    "mode": "competitive",
+    "ownedAugmentSlugs": [],
+    "currentItemIds": [],
+    "plannedItemIds": [],
+    "rerollsRemaining": 1,
+    "goldenRerollAvailable": false,
+    "offeredAugmentSlugs": [
+      "overflow",
+      "transmute-prismatic",
+      "mercys-strike"
+    ]
+  },
+  "result": {
+    "modelVersion": "decision-v1",
+    "context": {
+      "championSlug": "garen",
+      "round": 2,
+      "screenRarity": "gold",
+      "mode": "competitive",
+      "ownedAugmentSlugs": [],
+      "currentItemIds": [],
+      "plannedItemIds": [],
+      "rerollsRemaining": 1,
+      "goldenRerollAvailable": false,
+      "offeredAugmentSlugs": [
+        "overflow",
+        "transmute-prismatic",
+        "mercys-strike"
+      ]
+    },
+    "poolSize": 46,
+    "candidates": [
+      {
+        "augmentSlug": "transmute-prismatic",
+        "grade": "hot",
+        "score": 92.481,
+        "percentile": 0,
+        "probability": {
+          "initialThree": 0.065,
+          "withNormalRerolls": 0.087
+        },
+        "warnings": [],
+        "reasons": [
+          "reliability:high-confidence",
+          "synergy:combo"
+        ],
+        "confidence": "high",
+        "breakdown": {
+          "reliability": 67.068,
+          "synergy": 12,
+          "novelty": 0,
+          "penalties": 0,
+          "roundValue": 0
+        }
+      },
+      {
+        "augmentSlug": "mercys-strike",
+        "grade": "hot",
+        "score": 79.11,
+        "percentile": 0.022,
+        "probability": {
+          "initialThree": 0.065,
+          "withNormalRerolls": 0.087
+        },
+        "warnings": [],
+        "reasons": [
+          "reliability:bounded-confidence",
+          "synergy:ability-fit",
+          "round:value-positive"
+        ],
+        "confidence": "medium",
+        "breakdown": {
+          "reliability": 52.592,
+          "synergy": 15,
+          "novelty": 0,
+          "penalties": 0,
+          "roundValue": 1
+        }
+      },
+      {
+        "augmentSlug": "overflow",
+        "grade": "weak",
+        "score": 64.182,
+        "percentile": 1,
+        "probability": {
+          "initialThree": 0,
+          "withNormalRerolls": 0
+        },
+        "warnings": [
+          "hard-incompatible",
+          "excluded:hard-exclusion"
+        ],
+        "reasons": [
+          "reliability:high-confidence"
+        ],
+        "confidence": "high",
+        "breakdown": {
+          "reliability": 53.485,
+          "synergy": 0,
+          "novelty": 0,
+          "penalties": 0,
+          "roundValue": 0
+        }
+      }
+    ],
+    "reroll": {
+      "stance": "keep",
+      "reasons": [
+        "best-offer-worth-keeping"
+      ]
+    }
+  }
+}
