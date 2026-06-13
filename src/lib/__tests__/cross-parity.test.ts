@@ -1,8 +1,8 @@
 import { describe, expect, test } from "vitest";
-import abilitiesData from "../../../public/data/abilities.json";
-import augmentsData from "../../../public/data/augments.json";
-import championsData from "../../../public/data/champions.json";
-import poolRulesData from "../../../public/data/pool-rules.json";
+import abilitiesData from "../../../data/internal/abilities.json";
+import augmentsData from "../../../data/internal/augments.json";
+import championsData from "../../../data/internal/champions.json";
+import poolRulesData from "../../../data/internal/pool-rules.json";
 import {
   getChampionAugmentPool as webPool,
   type PoolAugmentInput as WebPoolAugment,
@@ -19,7 +19,7 @@ import type { AbilityProfile, ChampionTag, PoolRules } from "../types";
 /**
  * Cross-parity harness (plan Session 5).
  *
- * Feeds IDENTICAL inputs — the web `public/data/*.json` files — to both the web
+ * Feeds IDENTICAL inputs — the full `data/internal/*.json` files — to both the web
  * and overlay scoring stacks, so this suite isolates CODE drift from overlay
  * data staleness (data sync freshness is Session 11's separate check).
  *

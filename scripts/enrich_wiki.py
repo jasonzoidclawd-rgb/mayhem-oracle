@@ -2,7 +2,7 @@
 Mayhem Oracle — LoL Wiki Enrichment Script
 ==========================================
 Fetches passive/active effect text and gameplay notes from the LoL wiki
-and merges them into public/data/items.json.
+and merges them into data/internal/items.json.
 
 KEY DESIGN RULE:
     wikiStats are NEVER stored.  The LoL wiki always reflects standard-mode
@@ -22,7 +22,7 @@ Usage:
     --force     Re-fetch items that already have wikiPassives (refresh stale data)
 
 Output:
-    Updates public/data/items.json in-place.
+    Updates data/internal/items.json in-place.
     Strips any existing wikiStats from all items.
     Adds/updates wikiPassives and wikiNotes for each Mayhem item.
 
@@ -42,7 +42,9 @@ from urllib.request import urlopen, Request
 from urllib.error import HTTPError, URLError
 from html.parser import HTMLParser
 
-DATA_FILE = Path(__file__).parent.parent / "public" / "data" / "items.json"
+from data_paths import INTERNAL_DATA_DIR
+
+DATA_FILE = INTERNAL_DATA_DIR / "items.json"
 WIKI_API  = "https://wiki.leagueoflegends.com/api.php"
 HEADERS   = {"User-Agent": "MayhemOracleBot/1.0 (https://github.com/mayhem-oracle)"}
 

@@ -7,8 +7,8 @@ Usage:
     python scripts/scrape_community_dragon.py
 
 Output files:
-    public/data/abilities.json  — champion P/Q/W/E/R with playstyle info
-    public/data/items.json      — item catalog + Mayhem-exclusive items
+    data/internal/abilities.json  — champion P/Q/W/E/R with playstyle info
+    data/internal/items.json      — item catalog + Mayhem-exclusive items
 """
 
 from __future__ import annotations
@@ -20,12 +20,14 @@ from pathlib import Path
 from urllib.request import urlopen, Request
 from urllib.error import URLError
 
+from data_paths import INTERNAL_DATA_DIR
+
 CDN_BASE = (
     "https://raw.communitydragon.org/latest/plugins/"
     "rcp-be-lol-game-data/global/default/"
 )
 HEADERS = {"User-Agent": "Mozilla/5.0 (Mayhem-Oracle-Scraper/1.0)"}
-OUT_DIR = Path(__file__).parent.parent / "public" / "data"
+OUT_DIR = INTERNAL_DATA_DIR
 
 
 # ── Mayhem-exclusive item data (from wiki.leagueoflegends.com/en-us/ARAM:_Mayhem) ──

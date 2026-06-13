@@ -1,7 +1,7 @@
 import { describe, expect, test } from "vitest";
-import augmentsData from "../../../public/data/augments.json";
-import championsData from "../../../public/data/champions.json";
-import combosData from "../../../public/data/combos.json";
+import augmentsData from "../../../data/internal/augments.json";
+import championsData from "../../../data/internal/champions.json";
+import combosData from "../../../data/internal/combos.json";
 import { VALID_AUGMENT_SET_LABELS } from "../data/augment-set";
 import { buildComboTierLookup } from "../data/combo-lookup";
 

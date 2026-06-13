@@ -1,7 +1,7 @@
 import { describe, expect, test } from "vitest";
-import augmentsData from "../../../public/data/augments.json";
-import championsData from "../../../public/data/champions.json";
-import poolRulesData from "../../../public/data/pool-rules.json";
+import augmentsData from "../../../data/internal/augments.json";
+import championsData from "../../../data/internal/champions.json";
+import poolRulesData from "../../../data/internal/pool-rules.json";
 import { getChampionAugmentPool } from "../scoring/pool-orchestrator";
 import type { PoolAugmentInput } from "../scoring/pool-orchestrator";
 import type { ChampionTag, PoolRules } from "../types";
