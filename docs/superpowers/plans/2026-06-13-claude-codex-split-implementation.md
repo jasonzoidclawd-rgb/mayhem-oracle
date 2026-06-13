@@ -388,17 +388,17 @@ git commit -m "feat(decision): add unified round-aware decision engine"
 
 ### Task 2.2: Protect Decision APIs
 
-- [ ] Implement `requireActiveEntitlement()` and use it in both decision routes.
-- [ ] `POST /api/decision/evaluate` accepts `DecisionContext`, calls the frozen pure engine, records the model version and decision session, and returns the full `DecisionResult`.
-- [ ] `POST /api/decision/champion-matrix` returns all four rounds grouped by rarity for one champion and one mode.
-- [ ] `GET /api/overlay/bootstrap` verifies entitlement or an active trial-game lease and returns the active model manifest, immutable package URL, signature, and expiry.
-- [ ] `POST /api/overlay/game-session` reserves a trial credit at game start and returns a game-scoped lease. Active members receive a lease without consuming credits.
-- [ ] Return:
+- [x] Implement `requireActiveEntitlement()` and use it in both decision routes.
+- [x] `POST /api/decision/evaluate` accepts `DecisionContext`, calls the frozen pure engine, records the model version and decision session, and returns the full `DecisionResult`.
+- [x] `POST /api/decision/champion-matrix` returns all four rounds grouped by rarity for one champion and one mode.
+- [x] `GET /api/overlay/bootstrap` verifies entitlement or an active trial-game lease and returns the active model manifest, immutable package URL, signature, and expiry.
+- [x] `POST /api/overlay/game-session` reserves a trial credit at game start and returns a game-scoped lease. Active members receive a lease without consuming credits.
+- [x] Return:
   - `401` when unauthenticated
   - `403` when authenticated without an active entitlement
   - `400` for invalid contexts
-- [ ] Do not add a public arbitrary-decision endpoint. Public demos must use curated static examples.
-- [ ] Add request rate limiting keyed by authenticated user.
+- [x] Do not add a public arbitrary-decision endpoint. Public demos must use curated static examples.
+- [x] Add request rate limiting keyed by authenticated user.
 
 ### Task 2.3: Build the Member Web Experience
 
