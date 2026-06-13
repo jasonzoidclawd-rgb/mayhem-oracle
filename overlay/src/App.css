@@ -140,6 +140,79 @@ html, body, #root {
   font-size: 11px;
 }
 
+/* ─── Free collector ─── */
+.collector-panel,
+.collector-consent {
+  position: fixed;
+  z-index: 300;
+  color: #cbd5e1;
+  background: rgba(8, 12, 20, 0.96);
+  border: 1px solid rgba(100, 116, 139, 0.35);
+  border-radius: 10px;
+  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.35);
+  pointer-events: auto;
+}
+
+.collector-panel {
+  right: 12px;
+  bottom: 12px;
+  width: 220px;
+  padding: 12px;
+  display: grid;
+  gap: 8px;
+  font-size: 11px;
+}
+
+.collector-consent {
+  top: 50%;
+  left: 50%;
+  width: min(420px, calc(100vw - 32px));
+  padding: 22px;
+  transform: translate(-50%, -50%);
+  display: grid;
+  gap: 12px;
+  font-size: 13px;
+  line-height: 1.45;
+}
+
+.collector-consent strong,
+.collector-panel strong {
+  color: #f8fafc;
+}
+
+.collector-heading,
+.collector-progress,
+.collector-actions {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.collector-heading span,
+.collector-progress {
+  color: #94a3b8;
+}
+
+.collector-error {
+  color: #fca5a5;
+}
+
+.collector-panel button,
+.collector-consent button {
+  border: 1px solid rgba(56, 189, 248, 0.5);
+  border-radius: 6px;
+  padding: 6px 10px;
+  color: #e0f2fe;
+  background: rgba(14, 116, 144, 0.45);
+  cursor: pointer;
+}
+
+.collector-consent button.secondary {
+  color: #cbd5e1;
+  background: rgba(51, 65, 85, 0.55);
+  border-color: rgba(148, 163, 184, 0.35);
+}
+
 /* ─── Startup Tip ─── */
 .startup-tip {
   position: fixed;

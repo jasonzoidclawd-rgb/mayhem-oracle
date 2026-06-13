@@ -1,4 +1,5 @@
 use serde::{Deserialize, Serialize};
+use sha2::{Digest, Sha256};
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
 #[serde(rename_all = "camelCase")]
@@ -54,11 +55,162 @@ pub struct ContributorRound {
 }
 
 pub fn sanitize_match(
-    _raw: &serde_json::Value,
-    _source: MatchSource,
-    _contributor_rounds: Option<Vec<ContributorRound>>,
+    raw: &serde_json::Value,
+    source: MatchSource,
+    contributor_rounds: Option<Vec<ContributorRound>>,
 ) -> Result<SafeMatchExport, String> {
-    Err("sanitizer not implemented".to_string())
+    let queue_id = raw
+        .get("queueId")
+        .and_then(serde_json::Value::as_u64)
+        .ok_or("match is missing queueId")?;
+    if queue_id != 2400 {
+        return Err(format!("unsupported queueId {queue_id}"));
+    }
+
+    let game_id = raw
+        .get("gameId")
+        .and_then(value_as_string)
+        .ok_or("match is missing gameId")?;
+    let game_hash = hex::encode(Sha256::digest(game_id.as_bytes()));
+    let patch = raw
+        .get("gameVersion")
+        .and_then(serde_json::Value::as_str)
+        .and_then(patch_from_version)
+        .ok_or("match is missing a valid gameVersion")?;
+    let duration_seconds = raw
+        .get("gameDuration")
+        .and_then(serde_json::Value::as_u64)
+        .ok_or("match is missing gameDuration")?;
+    let participants = raw
+        .get("participants")
+        .and_then(serde_json::Value::as_array)
+        .ok_or("match is missing participants")?
+        .iter()
+        .map(sanitize_participant)
+        .collect::<Result<Vec<_>, _>>()?;
+
+    Ok(SafeMatchExport {
+        schema_version: 1,
+        game_hash,
+        patch,
+        queue_id: 2400,
+        duration_seconds,
+        collected_at: chrono::Utc::now().to_rfc3339(),
+        source,
+        participants,
+        contributor_rounds,
+    })
+}
+
+fn sanitize_participant(raw: &serde_json::Value) -> Result<SafeParticipant, String> {
+    let team = raw
+        .get("teamId")
+        .and_then(serde_json::Value::as_u64)
+        .ok_or("participant is missing teamId")?;
+    if team != 100 && team != 200 {
+        return Err(format!("unsupported participant team {team}"));
+    }
+
+    let champion_slug = raw
+        .get("championSlug")
+        .or_else(|| raw.get("championName"))
+        .and_then(serde_json::Value::as_str)
+        .map(slugify)
+        .filter(|value| !value.is_empty())
+        .ok_or("participant is missing champion")?;
+    let stats = raw.get("stats").ok_or("participant is missing stats")?;
+
+    Ok(SafeParticipant {
+        slot: random_slot(),
+        team: team as u16,
+        champion_slug,
+        augment_slugs: string_array(raw.get("augmentSlugs").or_else(|| raw.get("augments"))),
+        item_ids: item_ids(raw, stats),
+        won: stats
+            .get("win")
+            .and_then(serde_json::Value::as_bool)
+            .unwrap_or(false),
+        stats: SafeStats {
+            kills: u64_field(stats, "kills"),
+            deaths: u64_field(stats, "deaths"),
+            assists: u64_field(stats, "assists"),
+            damage_to_champions: u64_field(stats, "totalDamageDealtToChampions"),
+        },
+    })
+}
+
+fn value_as_string(value: &serde_json::Value) -> Option<String> {
+    value
+        .as_str()
+        .map(str::to_string)
+        .or_else(|| value.as_u64().map(|number| number.to_string()))
+}
+
+fn patch_from_version(version: &str) -> Option<String> {
+    let mut parts = version.split('.');
+    Some(format!("{}.{}", parts.next()?, parts.next()?))
+}
+
+fn slugify(value: &str) -> String {
+    value
+        .chars()
+        .flat_map(char::to_lowercase)
+        .map(|character| {
+            if character.is_ascii_alphanumeric() {
+                character
+            } else {
+                '-'
+            }
+        })
+        .collect::<String>()
+        .split('-')
+        .filter(|part| !part.is_empty())
+        .collect::<Vec<_>>()
+        .join("-")
+}
+
+fn string_array(value: Option<&serde_json::Value>) -> Vec<String> {
+    value
+        .and_then(serde_json::Value::as_array)
+        .into_iter()
+        .flatten()
+        .filter_map(serde_json::Value::as_str)
+        .map(slugify)
+        .filter(|value| !value.is_empty())
+        .collect()
+}
+
+fn item_ids(raw: &serde_json::Value, stats: &serde_json::Value) -> Vec<u64> {
+    if let Some(items) = raw.get("itemIds").and_then(serde_json::Value::as_array) {
+        return items
+            .iter()
+            .filter_map(serde_json::Value::as_u64)
+            .filter(|item| *item != 0)
+            .collect();
+    }
+
+    (0..=6)
+        .filter_map(|index| stats.get(format!("item{index}")))
+        .filter_map(serde_json::Value::as_u64)
+        .filter(|item| *item != 0)
+        .collect()
+}
+
+fn u64_field(value: &serde_json::Value, field: &str) -> u64 {
+    value
+        .get(field)
+        .and_then(serde_json::Value::as_u64)
+        .unwrap_or(0)
+}
+
+fn random_slot() -> String {
+    use rand::Rng;
+
+    const ALPHABET: &[u8] = b"abcdefghijkmnopqrstuvwxyz";
+    let mut rng = rand::thread_rng();
+    (0..16)
+        .map(|_| ALPHABET[rng.gen_range(0..ALPHABET.len())] as char)
+        .collect()
 }
 
 #[cfg(test)]
@@ -76,7 +228,12 @@ mod tests {
         let serialized = serde_json::to_value(safe).unwrap();
 
         assert_eq!(
-            serialized.as_object().unwrap().keys().cloned().collect::<Vec<_>>(),
+            serialized
+                .as_object()
+                .unwrap()
+                .keys()
+                .cloned()
+                .collect::<Vec<_>>(),
             vec![
                 "collectedAt",
                 "durationSeconds",
@@ -98,7 +255,10 @@ mod tests {
             "chat",
             "Forbidden",
         ] {
-            assert!(!text.contains(forbidden), "found forbidden field/value: {forbidden}");
+            assert!(
+                !text.contains(forbidden),
+                "found forbidden field/value: {forbidden}"
+            );
         }
 
         assert_eq!(

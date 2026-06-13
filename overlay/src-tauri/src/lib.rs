@@ -7,6 +7,7 @@ use sysinfo::System;
 
 mod collector;
 mod sanitize;
+mod upload_queue;
 
 #[cfg(target_os = "macos")]
 #[macro_use]
@@ -621,8 +622,19 @@ pub fn run() {
             set_click_through,
             open_screen_recording_settings,
             is_league_foreground,
+            collector::get_collector_status,
+            collector::set_collector_consent,
+            collector::set_collector_paused,
+            collector::record_contributor_round,
+            collector::collector_tick,
         ])
         .setup(|app| {
+            use tauri::Manager;
+
+            let collector_state = collector::CollectorState::new(app.path().app_data_dir()?)
+                .map_err(std::io::Error::other)?;
+            app.manage(collector_state);
+
             // ─── System Tray Icon ──────────────────────────────────────
             {
                 use tauri::menu::{Menu, MenuItem};

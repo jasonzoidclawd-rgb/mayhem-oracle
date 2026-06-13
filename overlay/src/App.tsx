@@ -9,6 +9,10 @@ import {
   advanceOcrSelection,
   shouldEndAugmentSelectionForLevel,
 } from "./augmentSelection";
+import {
+  CollectorStatus,
+  type CollectorSnapshot,
+} from "./collector/CollectorStatus";
 import type {
   AbilityProfile,
   ChampionBaseStats,
@@ -139,6 +143,9 @@ function App() {
   const [dataError, setDataError] = useState<string | null>(null);
   const runOcrRef = useRef<(runId: number) => Promise<void>>(async () => {});
   const lastGameTimeRef = useRef<number | null>(null);
+  const lastRecordedRoundRef = useRef("");
+  const [collectorStatus, setCollectorStatus] = useState<CollectorSnapshot | null>(null);
+  const collectorEnabled = collectorStatus?.consent === "accepted";
 
   const updatePhase = useCallback((nextPhase: Phase) => {
     phaseRef.current = nextPhase;
@@ -212,10 +219,11 @@ function App() {
     return () => clearTimeout(tipTimer);
   }, []);
 
-  // Fullscreen overlay must always be click-through
+  // Keep in-game guidance click-through, but allow consent and collector controls outside games.
   useEffect(() => {
-    invoke("set_click_through", { ignore: true });
-  }, []);
+    const activeOverlay = phase === "in_game" || phase === "augment_selection";
+    invoke("set_click_through", { ignore: collectorEnabled && activeOverlay });
+  }, [collectorEnabled, phase]);
 
   const championSlugByName = useMemo(() => {
     const map = new Map<string, string>();
@@ -381,6 +389,24 @@ function App() {
       ocrHasSeenCardsRef.current = nextSelection.hasSeenCards;
       ocrEmptyPassesRef.current = nextSelection.emptyPasses;
       setMatchedCards(matched);
+      if (matched.length === 3 && playerData) {
+        const round = AUGMENT_LEVELS.reduce(
+          (current, level, index) => (playerData.level >= level ? index + 1 : current),
+          0,
+        );
+        const offeredAugmentSlugs = matched
+          .map((card) => card.augment.slug)
+          .sort();
+        const roundKey = `${round}:${offeredAugmentSlugs.join(",")}`;
+        if (round > 0 && roundKey !== lastRecordedRoundRef.current) {
+          lastRecordedRoundRef.current = roundKey;
+          void invoke("record_contributor_round", {
+            round,
+            offeredAugmentSlugs,
+            ocrConfidence: matched.length / 3,
+          });
+        }
+      }
 
       if (nextSelection.shouldStop) {
         ocrSelectionCompletedRef.current = true;
@@ -392,7 +418,7 @@ function App() {
         setMatchedCards([]);
       }
     }
-  }, [nameLookup, ocrKnownNames, stopOcr, updatePhase]);
+  }, [nameLookup, ocrKnownNames, playerData, stopOcr, updatePhase]);
 
   useEffect(() => {
     runOcrRef.current = runOcr;
@@ -419,6 +445,12 @@ function App() {
 
   // Main polling loop
   const poll = useCallback(async () => {
+    if (!collectorEnabled) {
+      stopOcr();
+      updatePhase("idle");
+      return;
+    }
+
     let leagueIsFocused = leagueFocused;
     try {
       leagueIsFocused = await invoke<boolean>("is_league_foreground");
@@ -440,6 +472,7 @@ function App() {
           lastAugmentLevelRef.current = 0;
           setPickedAugments([]);
           setMatchedCards([]);
+          lastRecordedRoundRef.current = "";
           stopOcr();
         }
         lastGameTimeRef.current = data.game_time;
@@ -502,6 +535,7 @@ function App() {
       setPickedAugments([]);
       setMatchedCards([]);
       lastGameTimeRef.current = null;
+      lastRecordedRoundRef.current = "";
       stopOcr();
       if (clientFound) {
         updatePhase("client_found");
@@ -511,7 +545,7 @@ function App() {
     } catch {
       updatePhase("idle");
     }
-  }, [champNameToSlug, championSlug, leagueFocused, startOcr, stopOcr, updatePhase]);
+  }, [champNameToSlug, championSlug, collectorEnabled, leagueFocused, startOcr, stopOcr, updatePhase]);
 
   useEffect(() => {
     const intervalId = setInterval(() => {
@@ -540,7 +574,7 @@ function App() {
   return (
     <div className="overlay-root">
       {/* Status dot */}
-      <div
+      {collectorEnabled && <div
         className={`status-dot ${
           phase === "augment_selection"
             ? "status-ocr"
@@ -550,10 +584,10 @@ function App() {
                 ? "status-waiting"
                 : "status-disconnected"
         }`}
-      />
+      />}
 
       {/* Badges overlaid on augment cards during selection */}
-      {phase === "augment_selection" && matchedCards.length > 0 && leagueFocused && (
+      {collectorEnabled && phase === "augment_selection" && matchedCards.length > 0 && leagueFocused && (
         <>
           {matchedCards.map((card) => {
             const pos = BADGE_POSITIONS[card.regionIndex];
@@ -591,7 +625,7 @@ function App() {
       )}
 
       {/* Minimal HUD when in-game but not selecting */}
-      {phase === "in_game" && championSlug && leagueFocused && (
+      {collectorEnabled && phase === "in_game" && championSlug && leagueFocused && (
         <div className="hud">
           <span className="champion-tag">
             {playerData?.champion ?? championSlug}
@@ -604,18 +638,18 @@ function App() {
       )}
 
       {/* Idle / waiting */}
-      {phase === "idle" && (
+      {collectorEnabled && phase === "idle" && (
         <div className="idle-panel">Waiting for League client...</div>
       )}
-      {phase === "client_found" && (
+      {collectorEnabled && phase === "client_found" && (
         <div className="idle-panel">Client found — waiting for game...</div>
       )}
-      {dataError && (
+      {collectorEnabled && dataError && (
         <div className="idle-panel">Overlay data failed to load: {dataError}</div>
       )}
 
       {/* Startup tip — auto-dismisses after 6s */}
-      {showStartupTip && (
+      {collectorEnabled && showStartupTip && (
         <div className="startup-tip">
           <img src="/icon.png" alt="" className="startup-icon" />
           <div className="startup-tip-text">
@@ -625,6 +659,7 @@ function App() {
           </div>
         </div>
       )}
+      <CollectorStatus onStatus={setCollectorStatus} />
     </div>
   );
 }

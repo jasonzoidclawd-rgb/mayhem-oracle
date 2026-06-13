@@ -1,9 +1,33 @@
+use std::collections::{BTreeMap, HashSet, VecDeque};
+use std::path::PathBuf;
+use std::sync::{
+    atomic::{AtomicBool, Ordering},
+    Mutex,
+};
+
+use serde::{Deserialize, Serialize};
+use tauri::State;
+
+use crate::sanitize::{sanitize_match, ContributorRound, MatchSource};
+use crate::upload_queue::UploadQueue;
+use crate::{find_lockfile_path, parse_lockfile, LeagueClientCredentials};
+
 pub const DAILY_EXPORT_LIMIT: u16 = 100;
 
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
 pub enum GameflowPhase {
     None,
     InProgress,
+}
+
+impl GameflowPhase {
+    fn from_lcu(value: &str) -> Self {
+        match value {
+            "ChampSelect" | "GameStart" | "InProgress" | "Reconnect" | "WaitingForStats"
+            | "PreEndOfGame" => Self::InProgress,
+            _ => Self::None,
+        }
+    }
 }
 
 #[derive(Clone, Copy, Debug)]
@@ -14,9 +38,516 @@ pub struct CollectionPolicy {
 }
 
 impl CollectionPolicy {
-    pub fn may_collect(&self, _phase: GameflowPhase) -> bool {
-        false
+    pub fn may_collect(&self, phase: GameflowPhase) -> bool {
+        self.consented
+            && !self.paused
+            && self.exported_today < DAILY_EXPORT_LIMIT
+            && phase != GameflowPhase::InProgress
     }
+}
+
+#[derive(Clone, Debug, Deserialize, Serialize)]
+#[serde(rename_all = "camelCase")]
+struct CollectorSettings {
+    consent: Option<bool>,
+    paused: bool,
+    export_date: String,
+    exported_today: u16,
+}
+
+impl Default for CollectorSettings {
+    fn default() -> Self {
+        Self {
+            consent: None,
+            paused: false,
+            export_date: today(),
+            exported_today: 0,
+        }
+    }
+}
+
+impl CollectorSettings {
+    fn refresh_day(&mut self) {
+        let today = today();
+        if self.export_date != today {
+            self.export_date = today;
+            self.exported_today = 0;
+        }
+    }
+
+    fn policy(&self) -> CollectionPolicy {
+        CollectionPolicy {
+            consented: self.consent == Some(true),
+            paused: self.paused,
+            exported_today: self.exported_today,
+        }
+    }
+}
+
+#[derive(Clone, Debug, Serialize)]
+#[serde(rename_all = "camelCase")]
+pub struct CollectorStatus {
+    consent: &'static str,
+    paused: bool,
+    active_game: bool,
+    exported_today: u16,
+    daily_limit: u16,
+    queued_batches: usize,
+    last_error: Option<String>,
+}
+
+#[derive(Clone, Debug)]
+struct CapturedRound {
+    round: u8,
+    offered_augment_slugs: Vec<String>,
+    ocr_confidence: f64,
+    captured_at_epoch_ms: i64,
+}
+
+#[derive(Clone, Debug)]
+struct HistoryWork {
+    puuid: String,
+    source: MatchSource,
+}
+
+#[derive(Clone, Debug)]
+struct MatchWork {
+    game_id: String,
+    source: MatchSource,
+}
+
+#[derive(Default)]
+struct CollectorRuntime {
+    contributor_puuid: Option<String>,
+    history_frontier: VecDeque<HistoryWork>,
+    match_frontier: VecDeque<MatchWork>,
+    seen_puuids: HashSet<String>,
+    seen_games: HashSet<String>,
+    captured_rounds: BTreeMap<u8, CapturedRound>,
+}
+
+impl CollectorRuntime {
+    fn enqueue_history(&mut self, puuid: String, source: MatchSource) {
+        if self.seen_puuids.insert(puuid.clone()) {
+            self.history_frontier
+                .push_back(HistoryWork { puuid, source });
+        }
+    }
+
+    fn enqueue_match(&mut self, game_id: String, source: MatchSource) {
+        if self.seen_games.insert(game_id.clone()) {
+            self.match_frontier.push_back(MatchWork { game_id, source });
+        }
+    }
+}
+
+pub struct CollectorState {
+    settings_path: PathBuf,
+    settings: Mutex<CollectorSettings>,
+    runtime: tokio::sync::Mutex<CollectorRuntime>,
+    queue: UploadQueue,
+    active_game: AtomicBool,
+    last_error: Mutex<Option<String>>,
+}
+
+impl CollectorState {
+    pub fn new(data_directory: PathBuf) -> Result<Self, String> {
+        std::fs::create_dir_all(&data_directory).map_err(|error| error.to_string())?;
+        let settings_path = data_directory.join("collector-settings.json");
+        let settings = std::fs::read(&settings_path)
+            .ok()
+            .and_then(|bytes| serde_json::from_slice(&bytes).ok())
+            .unwrap_or_default();
+        let queue = UploadQueue::new(data_directory.join("telemetry-queue"))?;
+
+        Ok(Self {
+            settings_path,
+            settings: Mutex::new(settings),
+            runtime: tokio::sync::Mutex::new(CollectorRuntime::default()),
+            queue,
+            active_game: AtomicBool::new(false),
+            last_error: Mutex::new(None),
+        })
+    }
+
+    fn status(&self) -> CollectorStatus {
+        let mut settings = self
+            .settings
+            .lock()
+            .expect("collector settings mutex poisoned");
+        settings.refresh_day();
+        CollectorStatus {
+            consent: match settings.consent {
+                None => "pending",
+                Some(true) => "accepted",
+                Some(false) => "declined",
+            },
+            paused: settings.paused,
+            active_game: self.active_game.load(Ordering::Relaxed),
+            exported_today: settings.exported_today,
+            daily_limit: DAILY_EXPORT_LIMIT,
+            queued_batches: self.queue.queued_count(),
+            last_error: self
+                .last_error
+                .lock()
+                .expect("collector error mutex poisoned")
+                .clone(),
+        }
+    }
+
+    fn update_settings(&self, update: impl FnOnce(&mut CollectorSettings)) -> Result<(), String> {
+        let mut settings = self
+            .settings
+            .lock()
+            .map_err(|_| "collector settings mutex poisoned".to_string())?;
+        settings.refresh_day();
+        update(&mut settings);
+        let bytes = serde_json::to_vec(&*settings).map_err(|error| error.to_string())?;
+        std::fs::write(&self.settings_path, bytes).map_err(|error| error.to_string())
+    }
+
+    fn reserve_export_slot(&self) -> Result<bool, String> {
+        let mut settings = self
+            .settings
+            .lock()
+            .map_err(|_| "collector settings mutex poisoned".to_string())?;
+        settings.refresh_day();
+        if settings.exported_today >= DAILY_EXPORT_LIMIT {
+            return Ok(false);
+        }
+        settings.exported_today += 1;
+        let bytes = serde_json::to_vec(&*settings).map_err(|error| error.to_string())?;
+        std::fs::write(&self.settings_path, bytes).map_err(|error| error.to_string())?;
+        Ok(true)
+    }
+
+    fn set_error(&self, error: Option<String>) {
+        if let Ok(mut last_error) = self.last_error.lock() {
+            *last_error = error;
+        }
+    }
+}
+
+struct LcuClient {
+    credentials: LeagueClientCredentials,
+    client: reqwest::Client,
+}
+
+impl LcuClient {
+    fn new(credentials: LeagueClientCredentials) -> Result<Self, String> {
+        Ok(Self {
+            credentials,
+            client: reqwest::Client::builder()
+                .danger_accept_invalid_certs(true)
+                .build()
+                .map_err(|error| error.to_string())?,
+        })
+    }
+
+    async fn get_json(&self, path: &str) -> Result<serde_json::Value, String> {
+        self.client
+            .get(format!(
+                "https://127.0.0.1:{}{}",
+                self.credentials.port, path
+            ))
+            .basic_auth("riot", Some(&self.credentials.auth_token))
+            .send()
+            .await
+            .map_err(|error| error.to_string())?
+            .error_for_status()
+            .map_err(|error| error.to_string())?
+            .json()
+            .await
+            .map_err(|error| error.to_string())
+    }
+
+    async fn gameflow_phase(&self) -> Result<GameflowPhase, String> {
+        let phase = self.get_json("/lol-gameflow/v1/gameflow-phase").await?;
+        Ok(GameflowPhase::from_lcu(phase.as_str().unwrap_or("None")))
+    }
+
+    async fn current_puuid(&self) -> Result<String, String> {
+        self.get_json("/lol-summoner/v1/current-summoner")
+            .await?
+            .get("puuid")
+            .and_then(serde_json::Value::as_str)
+            .map(str::to_string)
+            .ok_or("current summoner is missing puuid".to_string())
+    }
+
+    async fn recent_history(&self, puuid: &str) -> Result<serde_json::Value, String> {
+        self.get_json(&format!(
+            "/lol-match-history/v1/products/lol/{puuid}/matches?begIndex=0&endIndex=20"
+        ))
+        .await
+    }
+
+    async fn match_detail(&self, game_id: &str) -> Result<serde_json::Value, String> {
+        self.get_json(&format!("/lol-match-history/v1/games/{game_id}"))
+            .await
+    }
+}
+
+pub fn resolve_selected_augment(offered: &[String], final_augments: &[String]) -> Option<String> {
+    let matching = offered
+        .iter()
+        .filter(|augment| final_augments.contains(augment))
+        .collect::<Vec<_>>();
+    (matching.len() == 1).then(|| matching[0].clone())
+}
+
+fn contributor_final_augments(detail: &serde_json::Value, contributor_puuid: &str) -> Vec<String> {
+    let participant_id = detail
+        .get("participantIdentities")
+        .and_then(serde_json::Value::as_array)
+        .into_iter()
+        .flatten()
+        .find(|identity| identity_puuid(identity) == Some(contributor_puuid))
+        .and_then(|identity| identity.get("participantId"))
+        .and_then(serde_json::Value::as_u64);
+
+    detail
+        .get("participants")
+        .and_then(serde_json::Value::as_array)
+        .into_iter()
+        .flatten()
+        .find(|participant| {
+            participant
+                .get("participantId")
+                .and_then(serde_json::Value::as_u64)
+                == participant_id
+        })
+        .and_then(|participant| {
+            participant
+                .get("augmentSlugs")
+                .or_else(|| participant.get("augments"))
+        })
+        .and_then(serde_json::Value::as_array)
+        .into_iter()
+        .flatten()
+        .filter_map(serde_json::Value::as_str)
+        .map(str::to_string)
+        .collect()
+}
+
+fn contributor_rounds_for_match(
+    detail: &serde_json::Value,
+    contributor_puuid: &str,
+    captured_rounds: &BTreeMap<u8, CapturedRound>,
+) -> Option<Vec<ContributorRound>> {
+    let start = detail.get("gameCreation")?.as_i64()?;
+    let duration_ms = detail.get("gameDuration")?.as_i64()?.saturating_mul(1_000);
+    let end = start.saturating_add(duration_ms);
+    let final_augments = contributor_final_augments(detail, contributor_puuid);
+    let rounds = captured_rounds
+        .values()
+        .filter(|round| (start..=end).contains(&round.captured_at_epoch_ms))
+        .map(|round| ContributorRound {
+            round: round.round,
+            offered_augment_slugs: round.offered_augment_slugs.clone(),
+            selected_augment_slug: resolve_selected_augment(
+                &round.offered_augment_slugs,
+                &final_augments,
+            ),
+            ocr_confidence: round.ocr_confidence,
+        })
+        .collect::<Vec<_>>();
+    (!rounds.is_empty()).then_some(rounds)
+}
+
+pub fn extract_mayhem_match_ids(history: &serde_json::Value) -> Vec<String> {
+    history
+        .pointer("/games/games")
+        .or_else(|| history.get("games"))
+        .and_then(serde_json::Value::as_array)
+        .into_iter()
+        .flatten()
+        .filter(|game| {
+            game.get("queueId")
+                .and_then(serde_json::Value::as_u64)
+                .map(|queue| queue == 2400)
+                .unwrap_or(false)
+        })
+        .filter_map(|game| game.get("gameId"))
+        .filter_map(|game_id| {
+            game_id
+                .as_str()
+                .map(str::to_string)
+                .or_else(|| game_id.as_u64().map(|value| value.to_string()))
+        })
+        .collect()
+}
+
+pub fn extract_participant_puuids(detail: &serde_json::Value) -> Vec<String> {
+    detail
+        .get("participantIdentities")
+        .and_then(serde_json::Value::as_array)
+        .into_iter()
+        .flatten()
+        .filter_map(identity_puuid)
+        .map(str::to_string)
+        .collect()
+}
+
+fn identity_puuid(identity: &serde_json::Value) -> Option<&str> {
+    identity
+        .get("puuid")
+        .or_else(|| identity.pointer("/player/puuid"))
+        .and_then(serde_json::Value::as_str)
+}
+
+fn today() -> String {
+    chrono::Utc::now().date_naive().to_string()
+}
+
+async fn collect_one(state: &CollectorState, client: &LcuClient) -> Result<(), String> {
+    let mut runtime = state.runtime.lock().await;
+    if runtime.contributor_puuid.is_none() {
+        let puuid = client.current_puuid().await?;
+        runtime.contributor_puuid = Some(puuid.clone());
+        runtime.enqueue_history(puuid, MatchSource::OwnedHistory);
+    }
+
+    if let Some(work) = runtime.match_frontier.pop_front() {
+        let detail = client.match_detail(&work.game_id).await?;
+        let participant_puuids = extract_participant_puuids(&detail);
+        let contributor_rounds = match (work.source, &runtime.contributor_puuid) {
+            (MatchSource::OwnedHistory, Some(puuid)) => {
+                contributor_rounds_for_match(&detail, puuid, &runtime.captured_rounds)
+            }
+            _ => None,
+        };
+        let safe = sanitize_match(&detail, work.source, contributor_rounds.clone())?;
+        if !state.reserve_export_slot()? {
+            return Ok(());
+        }
+        state.queue.enqueue_batch(&[safe])?;
+        for puuid in participant_puuids {
+            runtime.enqueue_history(puuid, MatchSource::Snowball);
+        }
+        if contributor_rounds.is_some() {
+            runtime.captured_rounds.clear();
+        }
+        return Ok(());
+    }
+
+    if let Some(work) = runtime.history_frontier.pop_front() {
+        let history = client.recent_history(&work.puuid).await?;
+        for game_id in extract_mayhem_match_ids(&history) {
+            runtime.enqueue_match(game_id, work.source);
+        }
+    }
+    Ok(())
+}
+
+#[tauri::command]
+pub fn get_collector_status(state: State<'_, CollectorState>) -> CollectorStatus {
+    state.status()
+}
+
+#[tauri::command]
+pub fn set_collector_consent(
+    state: State<'_, CollectorState>,
+    accepted: bool,
+) -> Result<CollectorStatus, String> {
+    state.update_settings(|settings| settings.consent = Some(accepted))?;
+    Ok(state.status())
+}
+
+#[tauri::command]
+pub fn set_collector_paused(
+    state: State<'_, CollectorState>,
+    paused: bool,
+) -> Result<CollectorStatus, String> {
+    state.update_settings(|settings| settings.paused = paused)?;
+    Ok(state.status())
+}
+
+#[tauri::command]
+pub async fn record_contributor_round(
+    state: State<'_, CollectorState>,
+    round: u8,
+    offered_augment_slugs: Vec<String>,
+    ocr_confidence: f64,
+) -> Result<(), String> {
+    if !(1..=4).contains(&round) {
+        return Err("round must be between 1 and 4".to_string());
+    }
+    let mut offered = offered_augment_slugs
+        .into_iter()
+        .filter(|augment| !augment.is_empty())
+        .collect::<Vec<_>>();
+    offered.sort();
+    offered.dedup();
+    if offered.is_empty() {
+        return Err("at least one offered augment is required".to_string());
+    }
+    let mut runtime = state.runtime.lock().await;
+    runtime.captured_rounds.insert(
+        round,
+        CapturedRound {
+            round,
+            offered_augment_slugs: offered,
+            ocr_confidence: ocr_confidence.clamp(0.0, 1.0),
+            captured_at_epoch_ms: chrono::Utc::now().timestamp_millis(),
+        },
+    );
+    Ok(())
+}
+
+#[tauri::command]
+pub async fn collector_tick(state: State<'_, CollectorState>) -> Result<CollectorStatus, String> {
+    let consented = state
+        .settings
+        .lock()
+        .map(|settings| settings.consent == Some(true))
+        .unwrap_or(false);
+    if !consented {
+        state.active_game.store(false, Ordering::Relaxed);
+        state.set_error(None);
+        return Ok(state.status());
+    }
+
+    let Some(credentials) = find_lockfile_path().and_then(|path| parse_lockfile(&path)) else {
+        state.active_game.store(false, Ordering::Relaxed);
+        state.set_error(None);
+        return Ok(state.status());
+    };
+    let result = async {
+        let client = LcuClient::new(credentials)?;
+        let phase = client.gameflow_phase().await?;
+        state
+            .active_game
+            .store(phase == GameflowPhase::InProgress, Ordering::Relaxed);
+
+        let policy = {
+            let mut settings = state
+                .settings
+                .lock()
+                .map_err(|_| "collector settings mutex poisoned".to_string())?;
+            settings.refresh_day();
+            settings.policy()
+        };
+        if !policy.paused && phase != GameflowPhase::InProgress {
+            if let (Ok(endpoint), Ok(token)) = (
+                std::env::var("MAYHEM_TELEMETRY_ENDPOINT"),
+                std::env::var("MAYHEM_DEVICE_TOKEN"),
+            ) {
+                state
+                    .queue
+                    .upload_due(&endpoint, &token, chrono::Utc::now().timestamp())
+                    .await?;
+            }
+        }
+
+        if policy.may_collect(phase) {
+            collect_one(&state, &client).await?;
+        }
+        Ok::<(), String>(())
+    }
+    .await;
+    state.set_error(result.err());
+    Ok(state.status())
 }
 
 #[cfg(test)]
@@ -54,5 +585,79 @@ mod tests {
         };
 
         assert!(!policy.may_collect(GameflowPhase::InProgress));
+    }
+
+    #[test]
+    fn consent_and_manual_pause_are_blocking() {
+        let declined = CollectionPolicy {
+            consented: false,
+            paused: false,
+            exported_today: 0,
+        };
+        let paused = CollectionPolicy {
+            consented: true,
+            paused: true,
+            exported_today: 0,
+        };
+
+        assert!(!declined.may_collect(GameflowPhase::None));
+        assert!(!paused.may_collect(GameflowPhase::None));
+    }
+
+    #[test]
+    fn resolves_selected_augment_only_when_unambiguous() {
+        let offered = vec![
+            "deathtouch".to_string(),
+            "big-brain".to_string(),
+            "mad-scientist".to_string(),
+        ];
+
+        assert_eq!(
+            resolve_selected_augment(&offered, &["deathtouch".to_string()]),
+            Some("deathtouch".to_string())
+        );
+        assert_eq!(
+            resolve_selected_augment(
+                &offered,
+                &["deathtouch".to_string(), "big-brain".to_string()]
+            ),
+            None
+        );
+        assert_eq!(
+            resolve_selected_augment(&offered, &["unrelated".to_string()]),
+            None
+        );
+    }
+
+    #[test]
+    fn extracts_only_mayhem_matches_and_snowball_participants() {
+        let detail: serde_json::Value =
+            serde_json::from_str(include_str!("../fixtures/lcu_match_2400.json")).unwrap();
+        let history = serde_json::json!({
+            "games": {
+                "games": [
+                    { "gameId": 991240001, "queueId": 2400 },
+                    { "gameId": 991420001, "queueId": 420 }
+                ]
+            }
+        });
+
+        assert_eq!(extract_mayhem_match_ids(&history), vec!["991240001"]);
+        assert_eq!(
+            extract_participant_puuids(&detail),
+            vec!["forbidden-puuid-1", "forbidden-puuid-2"]
+        );
+    }
+
+    #[test]
+    fn reserves_at_most_one_hundred_export_slots_per_day() {
+        let temp = tempfile::tempdir().unwrap();
+        let state = CollectorState::new(temp.path().to_path_buf()).unwrap();
+
+        for _ in 0..DAILY_EXPORT_LIMIT {
+            assert!(state.reserve_export_slot().unwrap());
+        }
+        assert!(!state.reserve_export_slot().unwrap());
+        assert_eq!(state.status().exported_today, DAILY_EXPORT_LIMIT);
     }
 }

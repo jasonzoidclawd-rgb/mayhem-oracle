@@ -463,14 +463,14 @@ git commit -m "feat(web): add member decision platform"
 
 ### Task 3A.2: Implement Collector
 
-- [ ] Add first-run blocking consent stored locally.
-- [ ] Poll LCU gameflow and never snowball while a game is active.
-- [ ] Start from contributor-owned recent Mayhem matches, then snowball locally through match participants until the daily 100-export limit.
-- [ ] Sanitize before writing to the upload queue.
-- [ ] Keep full LCU responses in memory only; never persist or upload them.
-- [ ] Capture contributor round offers from OCR. Mark a selected round only when the selected final augment can be matched unambiguously; otherwise omit `selectedAugmentSlug`.
-- [ ] Add pause/resume/progress controls to the free collector UI.
-- [ ] Queue compressed batches locally and retry with exponential backoff.
+- [x] Add first-run blocking consent stored locally.
+- [x] Poll LCU gameflow and never snowball while a game is active.
+- [x] Start from contributor-owned recent Mayhem matches, then snowball locally through match participants until the daily 100-export limit.
+- [x] Sanitize before writing to the upload queue.
+- [x] Keep full LCU responses in memory only; never persist or upload them.
+- [x] Capture contributor round offers from OCR. Mark a selected round only when the selected final augment can be matched unambiguously; otherwise omit `selectedAugmentSlug`.
+- [x] Add pause/resume/progress controls to the free collector UI.
+- [x] Queue compressed batches locally and retry with exponential backoff.
 
 ### Task 3A.3: Cross-Platform Verification
 
