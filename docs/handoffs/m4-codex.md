@@ -11,3 +11,5 @@
 - Session: 2026-06-13T11:39:00+08:00 - Final review added a red-tested pre-mutation single-active SQL guard; all gates rerun.
 
 M4 SCAFFOLD COMPLETE
+
+- Session: 2026-06-13T14:26:02+08:00 - Resumed M4 calibration after confirming `codex/model-overlay`, frozen BigQuery schema presence, and incomplete calibration guard.
