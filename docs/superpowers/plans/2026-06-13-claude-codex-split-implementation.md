@@ -572,9 +572,9 @@ git commit -m "feat(platform): add telemetry ingestion referral and ads"
 
 **Dependency:** BigQuery schemas and model-release table
 
-> Scaffold status: signing, packaging, manual approval SQL, rollback, and
-> candidate CI are complete without telemetry data. Calibration/export/evaluation
-> and immutable R2 publication remain deferred until `BQ SCHEMAS FROZEN`.
+> Signing, packaging, manual approval SQL, rollback, candidate CI, and
+> fixture-backed calibration/export/evaluation are complete. Immutable R2
+> publication remains deferred to the service-role integration.
 
 **Files:**
 - Create: `scripts/model/export_training_data.py`
@@ -585,11 +585,11 @@ git commit -m "feat(platform): add telemetry ingestion referral and ads"
 - Create: `scripts/model/tests/**`
 - Create: `.github/workflows/build-model-candidate.yml`
 
-- [ ] Export only approved BigQuery fields.
-- [ ] Use contributor round choices to calibrate round effects.
-- [ ] Use snowball final-state data only for final augment/item/champion associations and outcomes.
-- [ ] Exclude quarantined and sub-eight-minute matches.
-- [ ] Produce a candidate report containing:
+- [x] Export only approved BigQuery fields.
+- [x] Use contributor round choices to calibrate round effects.
+- [x] Use snowball final-state data only for final augment/item/champion associations and outcomes.
+- [x] Exclude quarantined and sub-eight-minute matches.
+- [x] Produce a candidate report containing:
   - sample counts by patch/champion/augment/round
   - calibration changes from the active model
   - competitive and exploration ranking stability
@@ -599,7 +599,7 @@ git commit -m "feat(platform): add telemetry ingestion referral and ads"
 - [x] Sign model packages with Ed25519. Store the private key only in deployment secrets; embed the public key in the overlay.
 - [ ] Publish immutable model packages to R2 and update `model_releases` only after approval.
 - [x] Keep the previous model immediately available for rollback.
-- [ ] Commit:
+- [x] Commit:
 
 ```bash
 git add scripts/model .github/workflows/build-model-candidate.yml
