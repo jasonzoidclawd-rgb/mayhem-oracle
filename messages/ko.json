@@ -480,6 +480,16 @@
     "lockedTitle": "멤버 전용",
     "lockedBody": "어드바이저와 전체 증강 풀은 멤버 기능입니다.",
     "lockedCta": "멤버십 보기",
-    "navAccount": "계정"
+    "navAccount": "계정",
+    "adminTitle": "관리자",
+    "adminOnly": "관리자 전용.",
+    "invitesTitle": "초대 코드",
+    "createMemberInvite": "멤버 코드 생성",
+    "createTrialInvite": "체험 코드 생성",
+    "newCodeLabel": "새 코드 (지금 복사하세요 — 한 번만 표시)",
+    "durationDaysLabel": "기간 (일, 비우면 무기한)",
+    "entitlementsTitle": "권한",
+    "revoke": "취소",
+    "actionFailed": "작업에 실패했습니다."
   }
 }

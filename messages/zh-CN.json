@@ -480,6 +480,16 @@
     "lockedTitle": "会员专属",
     "lockedBody": "Advisor 与完整增幅池为会员功能。",
     "lockedCta": "前往会员页",
-    "navAccount": "账号"
+    "navAccount": "账号",
+    "adminTitle": "管理",
+    "adminOnly": "仅限管理员。",
+    "invitesTitle": "邀请码",
+    "createMemberInvite": "建立会员码",
+    "createTrialInvite": "建立体验码",
+    "newCodeLabel": "新邀请码（请立即复制，仅显示一次）",
+    "durationDaysLabel": "期限（天，留空＝无期限）",
+    "entitlementsTitle": "权限",
+    "revoke": "撤销",
+    "actionFailed": "操作失败。"
   }
 }

@@ -480,6 +480,16 @@
     "lockedTitle": "Members only",
     "lockedBody": "The Advisor and full augment pools are part of membership.",
     "lockedCta": "View membership",
-    "navAccount": "Account"
+    "navAccount": "Account",
+    "adminTitle": "Admin",
+    "adminOnly": "Administrators only.",
+    "invitesTitle": "Invite codes",
+    "createMemberInvite": "Create member code",
+    "createTrialInvite": "Create trial code",
+    "newCodeLabel": "New code (copy now — shown once)",
+    "durationDaysLabel": "Duration (days, blank = no expiry)",
+    "entitlementsTitle": "Entitlements",
+    "revoke": "Revoke",
+    "actionFailed": "Action failed."
   }
 }

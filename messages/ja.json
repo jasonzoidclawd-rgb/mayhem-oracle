@@ -480,6 +480,16 @@
     "lockedTitle": "メンバー限定",
     "lockedBody": "Advisor と完全な増幅プールはメンバー機能です。",
     "lockedCta": "メンバーシップを見る",
-    "navAccount": "アカウント"
+    "navAccount": "アカウント",
+    "adminTitle": "管理",
+    "adminOnly": "管理者専用。",
+    "invitesTitle": "招待コード",
+    "createMemberInvite": "メンバーコード作成",
+    "createTrialInvite": "トライアルコード作成",
+    "newCodeLabel": "新しいコード（今すぐコピー — 一度のみ表示）",
+    "durationDaysLabel": "期間（日、空欄＝無期限）",
+    "entitlementsTitle": "権限",
+    "revoke": "取り消し",
+    "actionFailed": "操作に失敗しました。"
   }
 }

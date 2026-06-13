@@ -480,6 +480,16 @@
     "lockedTitle": "會員專屬",
     "lockedBody": "Advisor 與完整增幅池為會員功能。",
     "lockedCta": "前往會員頁",
-    "navAccount": "帳號"
+    "navAccount": "帳號",
+    "adminTitle": "管理",
+    "adminOnly": "僅限管理員。",
+    "invitesTitle": "邀請碼",
+    "createMemberInvite": "建立會員碼",
+    "createTrialInvite": "建立體驗碼",
+    "newCodeLabel": "新邀請碼（請立即複製，僅顯示一次）",
+    "durationDaysLabel": "期限（天，留空＝無期限）",
+    "entitlementsTitle": "權限",
+    "revoke": "撤銷",
+    "actionFailed": "操作失敗。"
   }
 }
