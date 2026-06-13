@@ -12,9 +12,14 @@ import {
   computeOracleScore as webScore,
   type OracleScoreInput as WebScoreInput,
 } from "../scoring/oracle-score";
+import { evaluateDecision as webDecision, type DecisionEngineData } from "../decision/evaluate";
+import { DEFAULT_MODEL_CONFIG as webModelConfig } from "../decision/model-config";
 import { getChampionAugmentPool as overlayPool } from "../../../overlay/src/scoring/pool-orchestrator";
 import { computeOracleScore as overlayScore } from "../../../overlay/src/scoring/oracle-score";
-import type { AbilityProfile, ChampionTag, PoolRules } from "../types";
+import { evaluateDecision as overlayDecision } from "../../../overlay/src/decision/evaluate";
+import { DEFAULT_MODEL_CONFIG as overlayModelConfig } from "../../../overlay/src/decision/model-config";
+import type { DecisionContext } from "../contracts/decision";
+import type { AbilityProfile, ChampionBaseStats, ChampionTag, PoolRules } from "../types";
 
 /**
  * Cross-parity harness (plan Session 5).
@@ -33,6 +38,7 @@ type ChampionRow = {
   slug: string;
   win_rate?: number | null;
   kit_tags?: ChampionTag[];
+  baseStats?: ChampionBaseStats;
 };
 
 type ScorableAugment = WebPoolAugment & {
@@ -123,6 +129,38 @@ export function measureDivergence(): ChampionDivergence[] {
         reasons.push(`score:${aug.slug} web=${webTotal} overlay=${overlayTotal}`);
         if (reasons.length >= 6) break;
       }
+    }
+
+    const context: DecisionContext = {
+      championSlug: champ.slug,
+      round: 2,
+      screenRarity: "gold",
+      mode: "competitive",
+      ownedAugmentSlugs: [],
+      currentItemIds: [],
+      plannedItemIds: [],
+      rerollsRemaining: 1,
+      goldenRerollAvailable: false,
+    };
+    const decisionData: DecisionEngineData = {
+      champion: {
+        slug: champ.slug,
+        winRate: champ.win_rate,
+        kitTags: championKitTags,
+        abilityProfile,
+        baseStats: champ.baseStats,
+      },
+      augments: augments as DecisionEngineData["augments"],
+      poolRules,
+    };
+    const webDecisionResult = webDecision(context, decisionData, webModelConfig);
+    const overlayDecisionResult = overlayDecision(
+      context,
+      decisionData as Parameters<typeof overlayDecision>[1],
+      overlayModelConfig,
+    );
+    if (JSON.stringify(webDecisionResult) !== JSON.stringify(overlayDecisionResult)) {
+      reasons.push("decision-result mismatch");
     }
 
     if (reasons.length > 0) {
