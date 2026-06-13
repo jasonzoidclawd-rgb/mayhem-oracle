@@ -413,7 +413,7 @@ git commit -m "feat(decision): add unified round-aware decision engine"
   - three offers
   - normal and Golden Reroll state
 - [ ] Render grade, probability, hard warnings, reasons, confidence, and reroll stance.
-- [ ] Make the champion page member section a four-round by three-rarity matrix using the same API.
+- [x] Make the champion page member section a four-round by three-rarity matrix using the same API.
 - [ ] Add account page for entitlement, invite redemption, device status, history, and feedback.
 - [ ] Add admin page for invite-code creation, entitlement grant/revoke, and model-release status.
 - [ ] Keep full pool data and weights out of unauthenticated/non-member server responses and client bundles.

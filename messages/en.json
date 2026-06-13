@@ -524,6 +524,12 @@
     "advStanceReroll": "Reroll",
     "advStanceGolden": "Use Golden Reroll",
     "advNeedOffers": "Select at least one offered augment.",
-    "advSignIn": "Sign in to use the Advisor."
+    "advSignIn": "Sign in to use the Advisor.",
+    "matrixTitle": "Round matrix",
+    "matrixSubtitle": "Best picks by round and rarity.",
+    "matrixLoading": "Loading…",
+    "matrixError": "Could not load the matrix.",
+    "matrixRoundN": "Round",
+    "matrixTopPick": "Top pick"
   }
 }

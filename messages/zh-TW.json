@@ -524,6 +524,12 @@
     "advStanceReroll": "建議重抽",
     "advStanceGolden": "使用黃金重抽",
     "advNeedOffers": "請至少選擇一張提供的增幅。",
-    "advSignIn": "登入以使用顧問。"
+    "advSignIn": "登入以使用顧問。",
+    "matrixTitle": "回合矩陣",
+    "matrixSubtitle": "各回合與稀有度的最佳選擇。",
+    "matrixLoading": "載入中…",
+    "matrixError": "無法載入矩陣。",
+    "matrixRoundN": "回合",
+    "matrixTopPick": "最佳"
   }
 }

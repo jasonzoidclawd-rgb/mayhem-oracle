@@ -524,6 +524,12 @@
     "advStanceReroll": "リロール推奨",
     "advStanceGolden": "ゴールデンリロール推奨",
     "advNeedOffers": "提示された増幅を1枚以上選んでください。",
-    "advSignIn": "サインインしてアドバイザーを使用します。"
+    "advSignIn": "サインインしてアドバイザーを使用します。",
+    "matrixTitle": "ラウンドマトリクス",
+    "matrixSubtitle": "ラウンドとレアリティ別の最適な選択。",
+    "matrixLoading": "読み込み中…",
+    "matrixError": "マトリクスを読み込めませんでした。",
+    "matrixRoundN": "ラウンド",
+    "matrixTopPick": "最適"
   }
 }

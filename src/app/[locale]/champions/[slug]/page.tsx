@@ -13,6 +13,7 @@ import { analyzeInteractions, type MechanicalInteraction, type AugmentMechanic }
 import { normalizeAugmentSet } from "@/lib/data/augment-set";
 import { buildComboTierLookup, resolveChampionCombos } from "@/lib/data/combo-lookup";
 import { routing } from "@/i18n/routing";
+import { ChampionMatrixClient } from "@/components/champions/ChampionMatrixClient";
 import {
   PoolConstructionSection,
   type PoolLayer,
@@ -20,6 +21,7 @@ import {
   type PoolRaritySummary,
   type TailoredHighlight,
 } from "@/components/champions/PoolConstructionSection";
+import type { DecisionGrade } from "@/lib/contracts/decision";
 
 // ─── Types ───────────────────────────────────────────────────────────────────
 
@@ -125,6 +127,8 @@ export default async function ChampionPage({
   const { locale, slug } = await params;
   setRequestLocale(locale);
   const t = await getTranslations("champion");
+  const tm = await getTranslations("membership");
+  const tg = await getTranslations("grades");
 
   const isAuthenticated = await (async () => {
     if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY) {
@@ -602,6 +606,36 @@ export default async function ChampionPage({
           signIn: t("poolGateSignIn"),
         } : undefined}
       />
+
+      <section className="glass-card p-4">
+        <ChampionMatrixClient
+          championSlug={champ.slug}
+          augmentNames={Object.fromEntries(augments.map((a) => [a.slug, a.name]))}
+          copy={{
+            title: tm("matrixTitle"),
+            subtitle: tm("matrixSubtitle"),
+            loading: tm("matrixLoading"),
+            error: tm("matrixError"),
+            round: tm("matrixRoundN"),
+            topPick: tm("matrixTopPick"),
+            modeCompetitive: tm("advModeCompetitive"),
+            modeExploration: tm("advModeExploration"),
+            raritySilver: tm("advRaritySilver"),
+            rarityGold: tm("advRarityGold"),
+            rarityPrismatic: tm("advRarityPrismatic"),
+            gradeLabels: {
+              hot: tg("hot"),
+              strong: tg("strong"),
+              steady: tg("steady"),
+              average: tg("average"),
+              weak: tg("weak"),
+            } as Record<DecisionGrade, string>,
+            lockedTitle: tm("lockedTitle"),
+            lockedBody: tm("lockedBody"),
+            lockedCta: tm("lockedCta"),
+          }}
+        />
+      </section>
 
       {/* ─── Augment Rankings ─── */}
       <section className="glass-card p-4">
