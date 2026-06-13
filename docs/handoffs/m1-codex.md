@@ -4,3 +4,4 @@
 
 - 2026-06-13T07:53:27+08:00 - Task 1.1 reached; mapping contracts and existing scoring before red tests.
 - 2026-06-13T07:54:31+08:00 - Task 1.1 red confirmed; decision engine module absent as expected.
+- 2026-06-13T07:59:47+08:00 - Task 1.2 green; v1 pure engine and residual-pool model implemented, 30 targeted tests pass.
