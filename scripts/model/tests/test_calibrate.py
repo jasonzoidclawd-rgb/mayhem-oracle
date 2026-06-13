@@ -78,6 +78,13 @@ class CalibrateTests(unittest.TestCase):
             {key: value for key, value in baseline.items() if key != "roundValue"},
         )
 
+    def test_refuses_to_calibrate_without_participant_outcomes(self):
+        empty = copy.deepcopy(self.training)
+        empty["participants"] = []
+
+        with self.assertRaisesRegex(ValueError, "participants"):
+            self.candidate(empty)
+
 
 if __name__ == "__main__":
     unittest.main()

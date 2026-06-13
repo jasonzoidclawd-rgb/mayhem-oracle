@@ -157,12 +157,15 @@ def calibrate_config(
     model_version: str,
     augment_archetypes: dict[str, str],
 ) -> dict:
+    participants = training.get("participants", [])
+    if not participants:
+        raise ValueError("training data must include participants with outcomes")
     candidate = copy.deepcopy(active)
     candidate["modelVersion"] = model_version
-    calibrate_final_state(candidate, training["participants"])
+    calibrate_final_state(candidate, participants)
     calibrate_round_effects(
         candidate,
-        training["contributor_round_choices"],
+        training.get("contributor_round_choices", []),
         augment_archetypes,
     )
     return candidate
