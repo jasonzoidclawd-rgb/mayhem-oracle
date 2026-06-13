@@ -1,61 +1,75 @@
-# Codex dispatch — current assignment: Milestone 3A (LCU collector and safe export)
+# Codex dispatch — current assignment: Milestone 4 (signing/packaging/governance HALF only)
 
 You are Codex, co-implementing the Mayhem Oracle membership platform.
 Contract: `docs/superpowers/plans/2026-06-13-claude-codex-split-implementation.md`.
 Working agreement: `docs/superpowers/plans/2026-06-13-claude-codex-split-strategy.md`.
-Status: M0 and **M1 are COMPLETE** (see `docs/handoffs/platform-baseline.md` and
-`docs/handoffs/m1-codex.md`; frozen contracts incl. `SafeMatchExport` live in
-`src/lib/contracts/telemetry.ts`; all branches carry the M1 commits; 127 tests).
+Status: M0, M1, and **M3A are COMPLETE** (`docs/handoffs/m3a-codex.md` ends
+`M3A COMPLETE`; collector + sanitizer + gzip batch fixture all landed).
 
 FIRST, before any work:
-- If `docs/handoffs/m3a-codex.md` exists here and its last line is
-  `M3A COMPLETE`, print "M3A already complete" and exit with no changes.
-- You are in the worktree `.worktrees/lcu-collector` on branch
-  `codex/lcu-collector`. Verify with `git status`. Never switch branches,
-  never commit to main, never touch the main checkout or other worktrees.
-- `node_modules` are pre-installed (root and overlay/). Cargo deps may need
-  network your sandbox lacks: prefer std-lib and already-cached crates; if a
-  new crate is essential, record it in the handoff log and continue with what
-  compiles — Claude prefetches on its next wake.
+- If `docs/handoffs/m4-codex.md` exists here and its last line is
+  `M4 SCAFFOLD COMPLETE`, print "M4 scaffold already complete" and exit.
+- You are in the worktree `.worktrees/lcu-collector` but now on branch
+  **`codex/model-overlay`** (the M4+M5 branch, created from the collector tip).
+  Verify with `git -C . rev-parse --abbrev-ref HEAD` → must print
+  `codex/model-overlay`. If not, run `git switch codex/model-overlay`. Never
+  switch to main, never commit to main, never touch the main checkout.
+- `node_modules` are present (shared worktree). Python stdlib + `cryptography`
+  may be needed for Ed25519; if `cryptography` import fails in your sandbox,
+  use the stdlib-only path (`hashlib` for sha256 + a vendored pure-Python
+  Ed25519, OR shell out to `openssl`), and record the choice in the handoff.
 
-Hard boundaries (Claude Code owns these — do not edit): `supabase/**`,
-`src/lib/entitlements/**`, `src/app/api/**`, `src/components/**` (web),
-`messages/*.json`, root `package.json`/`package-lock.json`. Do not edit
-`src/lib/decision/**` or `src/lib/contracts/**` either — they are frozen M1
-output; contract changes need a written both-agent note per coordination
-rules. Never hand-edit `public/data/**`; never touch
-`public/data/patch-notes.json`.
+SCOPE — this dispatch is the DATA-INDEPENDENT HALF of Milestone 4 only.
+Build the model packaging, signing, release-governance, and CI scaffold that
+needs NO BigQuery data. DEFER the calibration scripts that consume telemetry
+(`export_training_data.py`, `calibrate.py`, `evaluate.py`) — they are blocked
+on Claude's Milestone 3B BigQuery schemas. Claude will append a line to
+`docs/handoffs/m3b-claude.md` reading `BQ SCHEMAS FROZEN` when that unblocks;
+do not start the calibration scripts until then.
 
-TASK: Execute Milestone 3A exactly per the plan — Task 3A.1 (red sanitization
-tests: identity-field stripping, per-match random slots, non-2400 rejection,
-100/day cap, active-game pause), Task 3A.2 (collector: blocking first-run
-consent, gameflow-aware snowball from owned matches, sanitize-before-queue,
-full LCU responses in memory only, OCR round capture with unambiguous-match
-rule, pause/resume/progress UI, compressed batches with backoff), Task 3A.3
-(verification). Red tests first. One commit per task with `[M3A]` markers.
-Tick the plan checkboxes in this worktree as you go.
+DO build now (Task 4, scaffold subset):
+- `scripts/model/package_model.py` — assemble a model package from the current
+  versioned engine config (`src/lib/decision/model-config.ts` values mirrored
+  into a JSON the overlay can load) + `public/`-free metadata; emit a
+  `ModelManifest` (shape frozen in `src/lib/contracts/model.ts`:
+  modelVersion, engineVersion, dataVersion, createdAt, configSha256,
+  signature) and a `model-<version>.tar.gz`.
+- `scripts/model/sign_model.py` — Ed25519 sign/verify. Private key only from a
+  `MAYHEM_MODEL_SIGNING_KEY` env/secret (never committed); print the public key
+  for embedding in the overlay. `configSha256` = sha256 of the canonical config
+  JSON; `signature` = Ed25519 over the manifest's canonical bytes.
+- `scripts/model/approve_release.py` — given a built+signed package, write a
+  `model_releases` row payload (columns: model_version, engine_version,
+  data_version, config_sha256, signature, package_url, status in
+  candidate|active|rolled-back, approved_by). Manual approval gate: refuses
+  unless `--approve` is passed; flips exactly one release to `active` and the
+  previous active to its prior state for rollback. Output the SQL/JSON payload;
+  do NOT write to Supabase (that is Claude's service-role API surface) — just
+  emit the payload + a `.sql` file.
+- `.github/workflows/build-model-candidate.yml` — CI that builds + signs a
+  CANDIDATE package on demand (workflow_dispatch), uploads the artifact, and
+  never auto-promotes to active (governance: human approval required).
+- `scripts/model/tests/**` — pin: sign→verify round-trips; a tampered config
+  fails verification; approve_release refuses without `--approve`; rollback
+  restores the prior active release; manifest matches the frozen contract shape.
 
-Platform note: this machine is macOS — verify the macOS path for real
-(`cargo test`, `cargo check`, overlay build). For Windows, keep the existing
-lockfile-path handling working, gate platform-specific code behind cfg, and
-record what remains Windows-unverified in the handoff (Claude/user runs the
-Windows pass later); do not claim Windows verification you cannot perform.
+Verify in this worktree: `python3 -m pytest scripts/model/tests` (or unittest
+if pytest absent), `npm test` still green (127+), `./node_modules/.bin/eslint
+src scripts` clean. One commit per logical unit with `[M4]` markers; tick the
+plan's Milestone 4 checkboxes that are in scope (leave calibration boxes
+unticked with a note).
 
-RESUME PROTOCOL: this prompt re-runs on a schedule. Each run: inspect
-`git log --oneline -10` and the plan checkboxes, continue from the first
-unchecked M3A task, append one session line to `docs/handoffs/m3a-codex.md`
-(create on first run). Commit directly in this worktree — the shared git dir
-is writable for you now; if git still fails, fall back to a temp clone under
-/private/tmp (clone this worktree, commit there) and say so in the log. If
-`git push` is blocked by the sandbox, just record "push pending" — Claude
-pushes on its wakes. If a usage limit interrupts, stop; the next run resumes.
+RESUME PROTOCOL: re-runs on a schedule. Each run inspect `git -C . log
+--oneline -10` and continue from the first incomplete in-scope item. Append one
+session line to `docs/handoffs/m4-codex.md` (create on first run). Commit in
+this worktree; if `git push` is sandbox-blocked, record "push pending" — Claude
+scribes pushes when no codex process is live. If a usage limit interrupts,
+stop; the next run resumes.
 
-DEFINITION OF DONE: Tasks 3A.1–3A.3 checkboxes ticked; in this worktree:
-`(cd overlay/src-tauri && cargo test)` green, `(cd overlay/src-tauri && cargo
-check)` green, `(cd overlay && npm run build)` green, `npm test` still green
-(127+), sanitizer test evidence + a sample compressed batch fixture written to
-`docs/handoffs/fixtures/m3a/`; full handoff in `docs/handoffs/m3a-codex.md`
-per strategy §3 (commit, fixtures, upload headers, schema version, retry
-semantics); everything committed. End the file with the literal last line:
+DEFINITION OF DONE (scaffold): all in-scope items built + tested green;
+`docs/handoffs/m4-codex.md` written per strategy §3 (commit, fixtures: a sample
+signed manifest + public key under `docs/handoffs/fixtures/m4/`, the deferred
+calibration list, verification output); everything committed. End that file
+with the literal last line:
 
-M3A COMPLETE
+M4 SCAFFOLD COMPLETE
