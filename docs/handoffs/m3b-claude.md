@@ -25,3 +25,7 @@ This file also carries the unblock signal Codex's M4 dispatch waits on.
   calibration half unblocks. Cherry-picked onto `codex/model-overlay`.
 
 BQ SCHEMAS FROZEN
+
+## M6 integration notes (env fragility, non-blocking)
+- M4 model scripts use modern syntax (`dict | None`, PEP 604) → need Python 3.10+. Pass under cron/CI (homebrew 3.14, GH Actions 3.11+); FAIL on macOS system python 3.9. CI must pin python>=3.11.
+- sign_model resolves OpenSSL 3 explicitly (Codex fixed 742dc74) — macOS default LibreSSL lacks Ed25519.
