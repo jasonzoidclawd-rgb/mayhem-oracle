@@ -100,6 +100,7 @@ pub struct CollectorStatus {
 struct CapturedRound {
     round: u8,
     offered_augment_slugs: Vec<String>,
+    selected_augment_slug: Option<String>,
     ocr_confidence: f64,
     captured_at_epoch_ms: i64,
 }
@@ -376,10 +377,9 @@ fn contributor_rounds_for_match(
         .map(|round| ContributorRound {
             round: round.round,
             offered_augment_slugs: round.offered_augment_slugs.clone(),
-            selected_augment_slug: resolve_selected_augment(
-                &round.offered_augment_slugs,
-                &final_augments,
-            ),
+            selected_augment_slug: round.selected_augment_slug.clone().or_else(|| {
+                resolve_selected_augment(&round.offered_augment_slugs, &final_augments)
+            }),
             ocr_confidence: round.ocr_confidence,
         })
         .collect::<Vec<_>>();
@@ -539,11 +539,43 @@ pub async fn record_contributor_round(
         CapturedRound {
             round,
             offered_augment_slugs: offered,
+            selected_augment_slug: None,
             ocr_confidence: ocr_confidence.clamp(0.0, 1.0),
             captured_at_epoch_ms: chrono::Utc::now().timestamp_millis(),
         },
     );
     Ok(())
+}
+
+fn confirm_captured_round(
+    rounds: &mut BTreeMap<u8, CapturedRound>,
+    round: u8,
+    selected_augment_slug: String,
+) -> Result<(), String> {
+    let captured = rounds
+        .get_mut(&round)
+        .ok_or("captured contributor round not found".to_string())?;
+    if !captured.offered_augment_slugs.contains(&selected_augment_slug) {
+        return Err("selected augment was not in the captured offer".to_string());
+    }
+    captured.selected_augment_slug = Some(selected_augment_slug);
+    Ok(())
+}
+
+#[tauri::command]
+pub async fn confirm_contributor_round_selection(
+    state: State<'_, CollectorState>,
+    round: u8,
+    selected_augment_slug: String,
+) -> Result<(), String> {
+    if !state.consented_and_resumed() {
+        return Err("collector consent is required and collection must be resumed".to_string());
+    }
+    confirm_captured_round(
+        &mut state.runtime.lock().await.captured_rounds,
+        round,
+        selected_augment_slug,
+    )
 }
 
 #[tauri::command]
@@ -751,5 +783,30 @@ mod tests {
         ])
         .is_err());
         assert!(normalize_offers(vec!["deathtouch".to_string()]).is_err());
+    }
+
+    #[test]
+    fn confirms_only_a_selection_from_the_captured_offer() {
+        let mut rounds = BTreeMap::from([(
+            2,
+            CapturedRound {
+                round: 2,
+                offered_augment_slugs: vec![
+                    "deathtouch".to_string(),
+                    "big-brain".to_string(),
+                    "mad-scientist".to_string(),
+                ],
+                selected_augment_slug: None,
+                ocr_confidence: 1.0,
+                captured_at_epoch_ms: 1,
+            },
+        )]);
+
+        assert!(confirm_captured_round(&mut rounds, 2, "unrelated".to_string()).is_err());
+        confirm_captured_round(&mut rounds, 2, "big-brain".to_string()).unwrap();
+        assert_eq!(
+            rounds.get(&2).and_then(|round| round.selected_augment_slug.as_deref()),
+            Some("big-brain")
+        );
     }
 }

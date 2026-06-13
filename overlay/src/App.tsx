@@ -2,7 +2,6 @@ import { useState, useEffect, useCallback, useMemo, useRef } from "react";
 import { invoke } from "@tauri-apps/api/core";
 import {
   buildChampionPool,
-  expectedValue,
 } from "./scoring";
 import { buildOverlayAugmentLookup, matchAugmentName } from "./scoring/offer-lookup";
 import {
@@ -22,6 +21,22 @@ import type {
   PoolRules,
   ComboTier,
 } from "./scoring";
+import type {
+  DecisionMode,
+  DecisionResult,
+} from "./contracts/decision";
+import type { DecisionEngineData } from "./decision/evaluate";
+import {
+  bootstrapMember,
+  disabledMember,
+  memberRecommendationsVisible,
+  shouldVerifyGameStart,
+  verifyMemberGameStart,
+  type MemberSnapshot,
+} from "./auth/member";
+import { CoachPanel } from "./components/CoachPanel";
+import { GRADE_TOKENS, runLocalInference } from "./model/inference";
+import { confirmPickedAugment, localizedGrade } from "./model/presentation";
 import "./App.css";
 
 // ─── Types ───
@@ -145,8 +160,17 @@ function App() {
   const lastGameTimeRef = useRef<number | null>(null);
   const lastRecordedRoundRef = useRef("");
   const [collectorStatus, setCollectorStatus] = useState<CollectorSnapshot | null>(null);
+  const [memberSnapshot, setMemberSnapshot] = useState<MemberSnapshot | null>(null);
+  const [mode, setMode] = useState<DecisionMode>("competitive");
+  const [coachOpen, setCoachOpen] = useState(false);
+  const activeGameHashRef = useRef<string | null>(null);
+  const memberBootstrapCompleteRef = useRef(false);
   const collectorEnabled = collectorStatus?.consent === "accepted";
   const collectorCaptureEnabled = collectorEnabled && !collectorStatus?.paused;
+  const memberEnabled = memberRecommendationsVisible(
+    collectorEnabled,
+    memberSnapshot,
+  );
 
   const updatePhase = useCallback((nextPhase: Phase) => {
     phaseRef.current = nextPhase;
@@ -181,6 +205,26 @@ function App() {
       }
     })();
 
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  useEffect(() => {
+    let cancelled = false;
+    void bootstrapMember()
+      .then((snapshot) => {
+        memberBootstrapCompleteRef.current = true;
+        if (!cancelled) setMemberSnapshot(snapshot);
+      })
+      .catch((error) => {
+        memberBootstrapCompleteRef.current = true;
+        if (!cancelled) {
+          setMemberSnapshot(
+            disabledMember(error instanceof Error ? error.message : "member-bootstrap-failed"),
+          );
+        }
+      });
     return () => {
       cancelled = true;
     };
@@ -223,8 +267,10 @@ function App() {
   // Keep in-game guidance click-through, but allow consent and collector controls outside games.
   useEffect(() => {
     const activeOverlay = phase === "in_game" || phase === "augment_selection";
-    invoke("set_click_through", { ignore: collectorEnabled && activeOverlay });
-  }, [collectorEnabled, phase]);
+    invoke("set_click_through", {
+      ignore: collectorEnabled && activeOverlay && !coachOpen,
+    });
+  }, [coachOpen, collectorEnabled, phase]);
 
   const championSlugByName = useMemo(() => {
     const map = new Map<string, string>();
@@ -314,6 +360,25 @@ function App() {
     });
   }, [abilityProfiles, championSlug, comboBySlug, overlayData, poolData]);
 
+  const decisionData = useMemo((): DecisionEngineData | null => {
+    if (!championSlug || !overlayData) return null;
+    const champion = overlayData.champions.find((entry) => entry.slug === championSlug);
+    const abilityProfileState = abilityProfiles[championSlug];
+    if (!champion || abilityProfileState === undefined) return null;
+    return {
+      champion: {
+        slug: champion.slug,
+        winRate: champion.win_rate,
+        kitTags: champion.kit_tags ?? [],
+        abilityProfile: abilityProfileState ?? undefined,
+        baseStats: champion.baseStats,
+      },
+      augments: overlayData.augments as DecisionEngineData["augments"],
+      poolRules: overlayData.poolRules,
+      comboTiers: Object.fromEntries(comboBySlug),
+    };
+  }, [abilityProfiles, championSlug, comboBySlug, overlayData]);
+
   const ocrKnownNames = useMemo(() => {
     if (!overlayData) return [];
 
@@ -339,6 +404,43 @@ function App() {
     }
     return null;
   })();
+
+  const decisionResult = useMemo((): DecisionResult | null => {
+    if (
+      !memberEnabled ||
+      !memberSnapshot?.modelConfig ||
+      !decisionData ||
+      !currentRound ||
+      matchedCards.length === 0
+    ) {
+      return null;
+    }
+    const screenRarity = matchedCards[0].augment.rarity;
+    return runLocalInference(
+      {
+        championSlug: decisionData.champion.slug,
+        round: currentRound.round as 1 | 2 | 3 | 4,
+        screenRarity,
+        mode,
+        ownedAugmentSlugs: pickedAugments,
+        currentItemIds: [],
+        plannedItemIds: [],
+        offeredAugmentSlugs: matchedCards.map((card) => card.augment.slug),
+        rerollsRemaining: 1,
+        goldenRerollAvailable: false,
+      },
+      decisionData,
+      memberSnapshot.modelConfig,
+    );
+  }, [
+    currentRound,
+    decisionData,
+    matchedCards,
+    memberEnabled,
+    memberSnapshot,
+    mode,
+    pickedAugments,
+  ]);
 
   const stopOcr = useCallback(() => {
     ocrActiveRef.current = false;
@@ -474,6 +576,22 @@ function App() {
     try {
       const data = await invoke<LivePlayerData | null>("get_live_player_data");
       if (data) {
+        const gameHash = await invoke<string | null>("get_game_hash").catch(() => null);
+        if (!gameHash) {
+          setMemberSnapshot(disabledMember("game-hash-unavailable"));
+        } else if (
+          memberBootstrapCompleteRef.current &&
+          shouldVerifyGameStart(activeGameHashRef.current, gameHash)
+        ) {
+          activeGameHashRef.current = gameHash;
+          setMemberSnapshot(disabledMember("game-session-verification-pending"));
+          const snapshot = await verifyMemberGameStart(gameHash).catch((error) =>
+            disabledMember(
+              error instanceof Error ? error.message : "game-session-verification-failed",
+            ),
+          );
+          setMemberSnapshot(snapshot);
+        }
         const lastGameTime = lastGameTimeRef.current;
         if (lastGameTime !== null && data.game_time + 5 < lastGameTime) {
           ocrSelectionCompletedRef.current = true;
@@ -544,6 +662,7 @@ function App() {
       setMatchedCards([]);
       lastGameTimeRef.current = null;
       lastRecordedRoundRef.current = "";
+      activeGameHashRef.current = null;
       stopOcr();
       if (clientFound) {
         updatePhase("client_found");
@@ -554,6 +673,45 @@ function App() {
       updatePhase("idle");
     }
   }, [champNameToSlug, championSlug, collectorEnabled, leagueFocused, startOcr, stopOcr, updatePhase]);
+
+  useEffect(() => {
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.repeat) return;
+      if (event.key.toLowerCase() === "c" && memberEnabled) {
+        setCoachOpen((open) => !open);
+        return;
+      }
+      if (event.key === "Escape") {
+        setCoachOpen(false);
+        return;
+      }
+      const regionIndex = Number(event.key) - 1;
+      if (
+        !memberEnabled ||
+        phase !== "augment_selection" ||
+        !Number.isInteger(regionIndex) ||
+        regionIndex < 0 ||
+        regionIndex > 2
+      ) {
+        return;
+      }
+      const offered = [...matchedCards]
+        .sort((left, right) => left.regionIndex - right.regionIndex)
+        .map((card) => card.augment.slug);
+      setPickedAugments((current) =>
+        confirmPickedAugment(current, offered, regionIndex),
+      );
+      const selectedAugmentSlug = offered[regionIndex];
+      if (selectedAugmentSlug && currentRound) {
+        void invoke("confirm_contributor_round_selection", {
+          round: currentRound.round,
+          selectedAugmentSlug,
+        });
+      }
+    };
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
+  }, [currentRound, matchedCards, memberEnabled, phase]);
 
   useEffect(() => {
     const intervalId = setInterval(() => {
@@ -595,37 +753,35 @@ function App() {
       />}
 
       {/* Badges overlaid on augment cards during selection */}
-      {collectorEnabled && phase === "augment_selection" && matchedCards.length > 0 && leagueFocused && (
+      {memberEnabled && phase === "augment_selection" && matchedCards.length > 0 && leagueFocused && decisionResult && (
         <>
           {matchedCards.map((card) => {
             const pos = BADGE_POSITIONS[card.regionIndex];
             if (!pos) return null;
-            const round = (currentRound?.round ?? 1) as 1 | 2 | 3 | 4;
-            const ev = expectedValue(
-              card.augment.score,
-              card.augment.probabilityWithReroll,
-              round,
+            const candidate = decisionResult.candidates.find(
+              (entry) => entry.augmentSlug === card.augment.slug,
             );
+            if (!candidate) return null;
+            const grade = GRADE_TOKENS[candidate.grade];
             return (
               <div
-                className={`badge badge-${card.augment.tier}`}
+                className={`badge badge-grade-${candidate.grade}`}
                 key={card.augment.slug}
-                style={{ left: pos.left, top: pos.top }}
+                style={{ left: pos.left, top: pos.top, borderColor: grade.color }}
               >
                 {card.augment.lifecycle === "added" && (
                   <span className="badge-new">NEW</span>
                 )}
-                <span className="badge-label">Oracle</span>
-                <span className={`badge-tier tier-${card.augment.tier}`}>
-                  {card.augment.tier}
-                </span>
-                <span className="badge-score">
-                  {Math.round(card.augment.score)}
+                <span className="badge-label">{mode}</span>
+                <span className="badge-grade" style={{ color: grade.color }}>
+                  {localizedGrade(candidate.grade, navigator.language)}
                 </span>
                 <span className="badge-prob">
-                  P:{Math.round(card.augment.probabilityWithReroll * 100)}%
+                  P:{Math.round(candidate.probability.withNormalRerolls * 100)}%
                 </span>
-                <span className="badge-ev">EV:{Math.round(ev)}</span>
+                {candidate.warnings.includes("hard-incompatible") && (
+                  <strong className="badge-warning">Hard warning</strong>
+                )}
               </div>
             );
           })}
@@ -633,7 +789,7 @@ function App() {
       )}
 
       {/* Minimal HUD when in-game but not selecting */}
-      {collectorEnabled && phase === "in_game" && championSlug && leagueFocused && (
+      {memberEnabled && phase === "in_game" && championSlug && leagueFocused && (
         <div className="hud">
           <span className="champion-tag">
             {playerData?.champion ?? championSlug}
@@ -655,6 +811,9 @@ function App() {
       {collectorEnabled && dataError && (
         <div className="idle-panel">Overlay data failed to load: {dataError}</div>
       )}
+      {collectorEnabled && memberSnapshot?.error && (
+        <div className="member-error">Member coach unavailable: {memberSnapshot.error}</div>
+      )}
 
       {/* Startup tip — auto-dismisses after 6s */}
       {collectorEnabled && showStartupTip && (
@@ -667,6 +826,12 @@ function App() {
           </div>
         </div>
       )}
+      <CoachPanel
+        open={memberEnabled && coachOpen}
+        result={decisionResult}
+        mode={mode}
+        onModeChange={setMode}
+      />
       <CollectorStatus onStatus={setCollectorStatus} />
     </div>
   );
