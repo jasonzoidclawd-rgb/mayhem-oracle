@@ -513,20 +513,20 @@ git commit -m "feat(collector): add de-identified Mayhem match exporter"
 
 ### Task 3B.1: Build Device Linking and Upload Ingestion
 
-- [ ] Device-code flow:
+- [x] Device-code flow:
   - collector requests a short-lived code
   - signed-in website user approves the code
   - server stores a revocable device token hash
-- [ ] Upload endpoint requirements:
+- [x] Upload endpoint requirements:
   - authenticated device token
   - compressed batch maximum 5 MB
   - schema version `1`
   - queue `2400`
   - server re-validates the allowlist
   - duplicate `gameHash` values are accepted idempotently but not stored twice
-- [ ] Write accepted compressed batches to R2 using a date/device partition.
-- [ ] Store only batch metadata and ingestion status in Supabase.
-- [ ] Configure R2 lifecycle deletion after 30 days.
+- [x] Write accepted compressed batches to R2 using a date/device partition.
+- [x] Store only batch metadata and ingestion status in Supabase.
+- [x] Configure R2 lifecycle deletion after 30 days.
 
 ### Task 3B.2: Load Long-Term Events into BigQuery
 
