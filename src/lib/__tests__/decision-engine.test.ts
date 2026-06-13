@@ -238,4 +238,99 @@ describe("evaluateDecision contract", () => {
       );
     }
   });
+
+  test("clamps the rarity prior without clamping the observed win rate", () => {
+    const result = evaluateDecision(
+      {
+        ...BASE_CONTEXT,
+        offeredAugmentSlugs: ["observed-above-clamp"],
+      },
+      data([
+        augment("observed-above-clamp", 80),
+        augment("high-peer-1", 100),
+        augment("high-peer-2", 100),
+      ]),
+      DEFAULT_MODEL_CONFIG,
+    );
+
+    expect(result.candidates[0].breakdown.reliability).toBe(77);
+  });
+
+  test("excludes owned, mutually-exclusive, and already-seen augments from the residual pool", () => {
+    const result = evaluateDecision(
+      {
+        ...BASE_CONTEXT,
+        ownedAugmentSlugs: ["owned"],
+        seenOfferSlugs: ["seen"],
+      },
+      data(
+        [
+          augment("owned", 60),
+          augment("blocked-by-owned", 59),
+          augment("seen", 58),
+          augment("residual", 57),
+        ],
+        {
+          poolRules: {
+            ...EMPTY_POOL_RULES,
+            mutually_exclusive: [["owned", "blocked-by-owned"]],
+          },
+        },
+      ),
+      DEFAULT_MODEL_CONFIG,
+    );
+
+    expect(result.poolSize).toBe(1);
+    expect(result.candidates.map((candidate) => candidate.augmentSlug)).toEqual([
+      "residual",
+    ]);
+  });
+
+  test("returns bounded residual-pool probabilities without exposing augment win rate", () => {
+    const result = evaluateDecision(
+      {
+        ...BASE_CONTEXT,
+        offeredAugmentSlugs: ["a"],
+      },
+      data([
+        augment("a", 56),
+        augment("b", 55),
+        augment("c", 54),
+        augment("d", 53),
+      ]),
+      DEFAULT_MODEL_CONFIG,
+    );
+    const candidate = result.candidates[0];
+
+    expect(candidate.probability).toEqual({
+      initialThree: 0.75,
+      withNormalRerolls: 1,
+    });
+    expect(candidate).not.toHaveProperty("win_rate");
+    expect(candidate).not.toHaveProperty("winRate");
+  });
+
+  test("treats Golden Reroll as a separate stance, not extra normal draws", () => {
+    const result = evaluateDecision(
+      {
+        ...BASE_CONTEXT,
+        goldenRerollAvailable: true,
+        rerollsRemaining: 0,
+        offeredAugmentSlugs: ["weak"],
+      },
+      data([
+        augment("best", 60),
+        augment("middle", 55),
+        augment("weak", 45),
+        augment("other", 50),
+      ]),
+      DEFAULT_MODEL_CONFIG,
+    );
+
+    expect(result.reroll.stance).toBe("golden-reroll");
+    expect(result.reroll.reasons).toContain("golden-reroll-separate-pool");
+    expect(result.candidates[0].probability.withNormalRerolls).toBe(
+      result.candidates[0].probability.initialThree,
+    );
+  });
 });

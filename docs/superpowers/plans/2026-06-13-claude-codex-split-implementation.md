@@ -248,26 +248,27 @@ Expected: FAIL because the unified decision engine does not exist.
 
 ### Task 1.2: Implement the v1 Decision Model
 
-- [ ] Implement the pure `evaluateDecision(context, data, modelConfig): DecisionResult` boundary.
-- [ ] Keep observed augment telemetry internal and bounded. Never return augment win rate from the decision contract.
-- [ ] Replace direct augment-win-rate scoring with deterministic shrinkage:
+- [x] Implement the pure `evaluateDecision(context, data, modelConfig): DecisionResult` boundary.
+- [x] Keep observed augment telemetry internal and bounded. Never return augment win rate from the decision contract.
+- [x] Replace direct augment-win-rate scoring with deterministic shrinkage:
 
 ```ts
 const confidence =
   augment.win_rate == null ? 0 :
   augment.flags?.lifecycle === "added" ? 0.35 :
   0.75;
-const observed = Math.max(42, Math.min(62, augment.win_rate ?? rarityPrior));
-const baseQuality = confidence * observed + (1 - confidence) * rarityPrior;
+const boundedPrior = Math.max(42, Math.min(62, rarityPrior));
+const observed = augment.win_rate ?? boundedPrior;
+const baseQuality = confidence * observed + (1 - confidence) * boundedPrior;
 ```
 
-- [ ] Compute `rarityPrior` as the median non-null win rate of active augments in the same rarity.
-- [ ] Group signals without double-counting:
+- [x] Compute `rarityPrior` as the median non-null win rate of active augments in the same rarity.
+- [x] Group signals without double-counting:
   - `reliability`: shrunk base quality and telemetry confidence
   - `synergy`: combo, mechanical interaction, ability fit, and item synergy
   - `novelty`: system-breaker and high-ceiling positive interaction signals
   - `penalties`: hard conflicts, traps, and mismatches
-- [ ] Use the existing Oracle dimensions as inputs, remove dead Trait/Set effects, and add versioned v1 modifiers:
+- [x] Use the existing Oracle dimensions as inputs, remove dead Trait/Set effects, and add versioned v1 modifiers:
 
 ```ts
 export const ROUND_VALUE = {
@@ -290,9 +291,9 @@ export const ITEM_VALUE = {
 } as const;
 ```
 
-- [ ] Calculate initial-three and normal-reroll probabilities from the residual same-rarity pool. Exclude removed/disabled augments, hard-ineligible augments, owned augments, mutually exclusive augments, and already-seen offers.
-- [ ] Treat Golden Reroll as a separate stance and explanation, never as normal same-rarity probability.
-- [ ] Return deterministic reason codes and warnings generated from the same signals used in scoring.
+- [x] Calculate initial-three and normal-reroll probabilities from the residual same-rarity pool. Exclude removed/disabled augments, hard-ineligible augments, owned augments, mutually exclusive augments, and already-seen offers.
+- [x] Treat Golden Reroll as a separate stance and explanation, never as normal same-rarity probability.
+- [x] Return deterministic reason codes and warnings generated from the same signals used in scoring.
 
 ### Task 1.3: Split Internal and Public Data
 
