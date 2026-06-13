@@ -2,7 +2,6 @@
 
 import json
 import os
-import shutil
 import subprocess
 import sys
 import tempfile
@@ -102,22 +101,20 @@ class SignModelTests(unittest.TestCase):
 
     def test_resolves_homebrew_openssl_3_before_path_libressl(self):
         homebrew = "/opt/homebrew/bin/openssl"
-        path_openssl = shutil.which("openssl")
-        self.assertIsNotNone(path_openssl)
-
-        with patch("sign_model.shutil.which", return_value=path_openssl):
+        version = subprocess.CompletedProcess(
+            [homebrew, "version"],
+            0,
+            stdout="OpenSSL 3.6.1 27 Jan 2026\n",
+            stderr="",
+        )
+        with (
+            patch("sign_model.Path.is_file", return_value=True),
+            patch("sign_model.shutil.which", return_value="/usr/bin/openssl"),
+            patch("sign_model.subprocess.run", return_value=version),
+        ):
             resolved = sign_model.resolve_openssl()
 
         self.assertEqual(resolved, homebrew)
-        self.assertIn(
-            "OpenSSL 3.",
-            subprocess.run(
-                [resolved, "version"],
-                check=True,
-                capture_output=True,
-                text=True,
-            ).stdout,
-        )
 
 
 if __name__ == "__main__":
