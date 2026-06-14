@@ -1,6 +1,6 @@
 {
   "patch": "26.12",
-  "scraped_at": "2026-06-11T14:00:57.964606+00:00",
+  "scraped_at": "2026-06-13T14:00:52.409727+00:00",
   "source": "https://www.leagueoflegends.com/en-us/news/game-updates/",
   "patches": [
     {
@@ -1637,7 +1637,7 @@
                 "zh-cn": "家园卫士",
                 "ja-jp": "ホームガード",
                 "ko-kr": "민병대",
-                "zh-tw": "溫泉加速"
+                "zh-tw": "守護家園"
               },
               "text": {
                 "en": "Time to regain bonus movespeed after taking damage: 3 ⇒ 6 seconds",

@@ -76,6 +76,11 @@ def export_public_catalog(
         public_dir / "items.json",
         forbidden_telemetry,
     )
+    write_sanitized_json(
+        internal_dir / "patch-notes.json",
+        public_dir / "patch-notes.json",
+        forbidden_telemetry,
+    )
 
     combos = read_json(internal_dir / "combos.json")
     combos["combos"] = []
@@ -85,6 +90,11 @@ def export_public_catalog(
     for field in ("disabled", "mutually_exclusive", "item_exclusions", "ally_exclusions"):
         pool_rules[field] = []
     write_json(public_dir / "pool-rules.json", pool_rules)
+
+    # Hotfix feed (public-safe: localized names, rarity, change type only).
+    hotfixes = internal_dir / "mayhem-hotfixes.json"
+    if hotfixes.exists():
+        copy_json(hotfixes, public_dir / "mayhem-hotfixes.json")
 
 
 def main() -> None:
