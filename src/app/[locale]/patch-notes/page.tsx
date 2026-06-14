@@ -3,6 +3,7 @@ import { readFile } from "fs/promises";
 import path from "path";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { PatchNotesView } from "@/components/patch-notes/PatchNotesView";
+import { HotfixNotes } from "@/components/patch-notes/HotfixNotes";
 import type { PatchNotesData } from "@/lib/types";
 
 async function loadPatchNotes(): Promise<PatchNotesData | null> {
@@ -40,6 +41,7 @@ export default async function PatchNotesPage({
         </p>
       </header>
       <AdSlot slot="public-patch-notes" />
+      <HotfixNotes locale={locale} />
       {data ? (
         <PatchNotesView data={data} locale={locale} />
       ) : (
