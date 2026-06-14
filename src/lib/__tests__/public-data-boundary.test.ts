@@ -40,7 +40,9 @@ describe("public data boundary", () => {
   });
 
   test("does not publish decision-only combos, rules, weights, pools, or item telemetry", () => {
-    const publicCombos = readJson("public/data/combos.json") as { combos: unknown[] };
+    const publicCombos = readJson("public/data/combos.json") as {
+      combos: Array<Record<string, unknown>>;
+    };
     const publicPoolRules = readJson("public/data/pool-rules.json") as {
       disabled: unknown[];
       mutually_exclusive: unknown[];
@@ -59,7 +61,26 @@ describe("public data boundary", () => {
       "championPools",
     ]);
 
-    expect(publicCombos.combos).toEqual([]);
+    // Freemium teaser: a small slice of S-tier "strong combos" is published
+    // (names + tier only) for SEO/AI-citability and as a conversion hook. The
+    // full combo set, traps (C-tier), oracle scores, and the curated internal
+    // `ref` stay member-only.
+    const teaser = publicCombos.combos;
+    expect(teaser.length).toBeGreaterThan(0);
+    // only the headline S-tier strong combos are teased — never traps or A/B
+    expect(teaser.every((combo) => combo.tier === "S")).toBe(true);
+    // exactly champion/augment/tier are exposed — no `ref` leak, no telemetry
+    for (const combo of teaser) {
+      expect(Object.keys(combo).sort()).toEqual(["augment", "champion", "tier"]);
+    }
+    // at most 3 teased per champion — a hook, not the full pool
+    const perChampion = new Map<string, number>();
+    for (const combo of teaser) {
+      const key = String(combo.champion);
+      perChampion.set(key, (perChampion.get(key) ?? 0) + 1);
+    }
+    expect([...perChampion.values()].every((count) => count <= 3)).toBe(true);
+
     expect(publicPoolRules.disabled).toEqual([]);
     expect(publicPoolRules.mutually_exclusive).toEqual([]);
     expect(publicPoolRules.item_exclusions).toEqual([]);

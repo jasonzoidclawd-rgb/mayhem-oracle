@@ -52,6 +52,32 @@ def strip_keys(value, forbidden: set[str]):
     return value
 
 
+PUBLIC_COMBO_TIERS = {"S"}
+MAX_TEASER_PER_CHAMPION = 3
+
+
+def build_combo_teaser(combos: list[dict]) -> list[dict]:
+    """Top S-tier combos per champion, names + tier only (no internal ref)."""
+    teaser: list[dict] = []
+    per_champion: dict[str, int] = {}
+    for combo in combos:
+        if combo.get("tier") not in PUBLIC_COMBO_TIERS:
+            continue
+        champion = combo.get("champion")
+        augment = combo.get("augment")
+        if not (champion and augment):
+            continue
+        if per_champion.get(champion, 0) >= MAX_TEASER_PER_CHAMPION:
+            continue
+        per_champion[champion] = per_champion.get(champion, 0) + 1
+        teaser.append({
+            "champion": champion,
+            "augment": augment,
+            "tier": combo["tier"],
+        })
+    return teaser
+
+
 def export_public_catalog(
     internal_dir: Path = INTERNAL_DATA_DIR,
     public_dir: Path = PUBLIC_DATA_DIR,
@@ -82,8 +108,12 @@ def export_public_catalog(
         forbidden_telemetry,
     )
 
+    # Freemium combo teaser: publish a small slice of the headline S-tier
+    # "strong combos" (champion/augment/tier only) for SEO + AI-citability and
+    # as a conversion hook. The full 575-combo set, C-tier traps, oracle scores,
+    # and the curated internal `ref` stay member-only.
     combos = read_json(internal_dir / "combos.json")
-    combos["combos"] = []
+    combos["combos"] = build_combo_teaser(combos.get("combos", []))
     write_json(public_dir / "combos.json", combos)
 
     pool_rules = read_json(internal_dir / "pool-rules.json")
