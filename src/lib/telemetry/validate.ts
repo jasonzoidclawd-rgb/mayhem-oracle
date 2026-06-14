@@ -76,6 +76,9 @@ function parseParticipant(raw: unknown): SafeMatchExport["participants"][number]
 function parseContributorRounds(raw: unknown): SafeMatchExport["contributorRounds"] | null {
   if (raw === undefined) return undefined;
   if (!Array.isArray(raw)) return null;
+  // A real Mayhem game has at most 4 rounds; cap length to prevent a single
+  // upload inflating BqRoundRow output (amplification/DoS surface).
+  if (raw.length > 8) return null;
   const rounds: NonNullable<SafeMatchExport["contributorRounds"]> = [];
   for (const entry of raw) {
     if (!entry || typeof entry !== "object") return null;
