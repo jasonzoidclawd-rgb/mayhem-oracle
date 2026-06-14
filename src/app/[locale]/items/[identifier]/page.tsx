@@ -6,6 +6,7 @@ import { notFound } from "next/navigation";
 import { Link } from "@/i18n/navigation";
 import { routing } from "@/i18n/routing";
 import type { Item } from "@/lib/types";
+import { localizedName } from "@/lib/i18n/localized-name";
 
 // Raw Riot API category identifier → translation key in items namespace.
 const CATEGORY_LABEL_KEY: Record<string, string> = {
@@ -212,6 +213,7 @@ export default async function ItemDetailPage({
   const data = await loadItemsData();
   const item = findItem(data, identifier);
   if (!item) notFound();
+  const itemName = localizedName(item, locale);
 
   const nameToItem = buildNameToItemMap(data.items);
 
@@ -285,7 +287,7 @@ export default async function ItemDetailPage({
           <div className="relative w-20 h-20 rounded-xl overflow-hidden border-2 border-[var(--color-border-hover)] shrink-0 bg-[var(--color-bg-card)]">
             <Image
               src={item.icon}
-              alt={item.name}
+              alt={itemName}
               fill
               className="object-contain p-1"
               sizes="80px"
@@ -295,7 +297,7 @@ export default async function ItemDetailPage({
         )}
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-3 flex-wrap">
-            <h1 className="text-3xl font-bold">{item.name}</h1>
+            <h1 className="text-3xl font-bold">{itemName}</h1>
             {effectiveTag && (
               <span
                 className={`text-xs font-semibold px-2.5 py-1 rounded-md border ${MAYHEM_TAG_STYLES[effectiveTag]}`}

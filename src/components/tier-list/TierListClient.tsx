@@ -1,9 +1,10 @@
 "use client";
 
 import { useState, useMemo } from "react";
-import { useTranslations } from "next-intl";
+import { useTranslations, useLocale } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import Image from "next/image";
+import { localizedName } from "@/lib/i18n/localized-name";
 
 // ─── Types ───────────────────────────────────────────────────────────────────
 
@@ -19,6 +20,10 @@ export interface ChampionData {
   pick_rate: number | null;
   tags: string[];
   icon: string;
+  name_zh_TW?: string;
+  name_zh_CN?: string;
+  name_ja?: string;
+  name_ko?: string;
 }
 
 // ─── Constants ───────────────────────────────────────────────────────────────
@@ -59,17 +64,21 @@ const ALL_ROLES: Role[] = ["all", "assassin", "fighter", "mage", "marksman", "su
 export function TierListClient({ champions }: { champions: ChampionData[] }) {
   const t = useTranslations("tierList");
   const tCommon = useTranslations("common");
+  const locale = useLocale();
   const [activeRole, setActiveRole] = useState<Role>("all");
   const [search, setSearch] = useState("");
 
   const filtered = useMemo(() => {
+    const q = search.toLowerCase();
     return champions.filter((c) => {
       const roleMatch = activeRole === "all" || c.tags.includes(activeRole);
       const searchMatch =
-        !search || c.name.toLowerCase().includes(search.toLowerCase());
+        !q ||
+        c.name.toLowerCase().includes(q) ||
+        localizedName(c, locale).toLowerCase().includes(q);
       return roleMatch && searchMatch;
     });
-  }, [champions, activeRole, search]);
+  }, [champions, activeRole, search, locale]);
 
   const grouped = useMemo(() => {
     const groups: Partial<Record<Tier, ChampionData[]>> = {};
@@ -148,6 +157,8 @@ export function TierListClient({ champions }: { champions: ChampionData[] }) {
 // ─── Champion Card ────────────────────────────────────────────────────────────
 
 function ChampionCard({ champion }: { champion: ChampionData }) {
+  const locale = useLocale();
+  const name = localizedName(champion, locale);
   const wr = champion.win_rate ?? 0;
   const wrColor =
     wr >= 53
@@ -162,7 +173,7 @@ function ChampionCard({ champion }: { champion: ChampionData }) {
         <div className="relative w-14 h-14 rounded-lg overflow-hidden border border-[var(--color-border-default)] group-hover:border-[var(--color-neon-primary)]/50 transition-colors">
           <Image
             src={champion.icon}
-            alt={champion.name}
+            alt={name}
             fill
             className="object-cover"
             sizes="56px"
@@ -174,7 +185,7 @@ function ChampionCard({ champion }: { champion: ChampionData }) {
         </span>
 
         <span className="text-[10px] text-[var(--color-text-secondary)] text-center leading-tight w-full truncate group-hover:text-[var(--color-text-primary)] transition-colors">
-          {champion.name}
+          {name}
         </span>
       </div>
     </Link>

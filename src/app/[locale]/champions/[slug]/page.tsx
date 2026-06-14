@@ -12,6 +12,7 @@ import { buildPoolProfile } from "@/lib/scoring/augment-tailoring";
 import { getChampionAugmentPool } from "@/lib/scoring/pool-orchestrator";
 import { analyzeInteractions, type MechanicalInteraction, type AugmentMechanic } from "@/lib/scoring/augment-interactions";
 import { normalizeAugmentSet } from "@/lib/data/augment-set";
+import { localizedName } from "@/lib/i18n/localized-name";
 import { buildComboTierLookup, resolveChampionCombos } from "@/lib/data/combo-lookup";
 import { routing } from "@/i18n/routing";
 import { ChampionMatrixClient } from "@/components/champions/ChampionMatrixClient";
@@ -149,6 +150,7 @@ export default async function ChampionPage({
 
   const champ = champions.find((c) => c.slug === slug);
   if (!champ) notFound();
+  const champName = localizedName(champ, locale);
 
   const champWr = champ.win_rate ?? 50;
   const abilityProfile: AbilityProfile | undefined = abilities[slug];
@@ -372,7 +374,7 @@ export default async function ChampionPage({
         <div className="relative w-14 h-14 sm:w-20 sm:h-20 rounded-full overflow-hidden border-2 border-[var(--color-neon-primary)]/40 shrink-0">
           <Image
             src={champ.icon}
-            alt={champ.name}
+            alt={champName}
             fill
             className="object-cover"
             sizes="(max-width: 640px) 56px, 80px"
@@ -380,7 +382,7 @@ export default async function ChampionPage({
         </div>
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-2 sm:gap-3">
-            <h1 className="text-xl sm:text-3xl font-bold truncate">{champ.name}</h1>
+            <h1 className="text-xl sm:text-3xl font-bold truncate">{champName}</h1>
             {champ.rank && (
               <span className="text-sm sm:text-base text-[var(--color-text-muted)] font-medium shrink-0">
                 {champ.rank}/{champions.length}

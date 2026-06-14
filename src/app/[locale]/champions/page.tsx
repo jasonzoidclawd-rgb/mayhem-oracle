@@ -6,6 +6,10 @@ import { ChampionsIndex } from "@/components/champions/ChampionsIndex";
 export type ChampionEntry = {
   slug: string;
   name: string;
+  name_zh_TW?: string;
+  name_zh_CN?: string;
+  name_ja?: string;
+  name_ko?: string;
   title?: string;
   tier: string;
   rank: number;

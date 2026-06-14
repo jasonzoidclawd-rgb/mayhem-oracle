@@ -250,6 +250,10 @@ export interface Item {
   /** Present on mayhemExclusive items; absent on catalog items (id >= 200 000) */
   slug?: string;
   name: string;
+  name_zh_TW?: string;
+  name_zh_CN?: string;
+  name_ja?: string;
+  name_ko?: string;
   cost: number;
   description: string;
   icon: string;

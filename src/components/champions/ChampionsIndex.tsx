@@ -1,9 +1,11 @@
 "use client";
 
 import { useState, useMemo } from "react";
+import { useLocale } from "next-intl";
 import Image from "next/image";
 import { Link } from "@/i18n/navigation";
 import type { ChampionEntry } from "@/app/[locale]/champions/page";
+import { localizedName } from "@/lib/i18n/localized-name";
 
 // ─── Constants ───────────────────────────────────────────────────────────────
 
@@ -66,6 +68,7 @@ export function ChampionsIndex({
 }: {
   champions: ChampionEntry[];
 }) {
+  const locale = useLocale();
   const [view, setView] = useState<ViewMode>("grid");
   const [search, setSearch] = useState("");
   const [activeClass, setActiveClass] = useState<string>("all");
@@ -88,6 +91,7 @@ export function ChampionsIndex({
       const nameMatch =
         !search ||
         c.name.toLowerCase().includes(q) ||
+        localizedName(c, locale).toLowerCase().includes(q) ||
         (c.title ?? "").toLowerCase().includes(q) ||
         c.tags.some((t) => t.toLowerCase().includes(q)) ||
         (c.classes ?? []).some((cl) => cl.toLowerCase().includes(q));
@@ -95,7 +99,7 @@ export function ChampionsIndex({
         activeClass === "all" || (c.classes ?? []).includes(activeClass);
       return nameMatch && classMatch;
     });
-  }, [champions, search, activeClass]);
+  }, [champions, search, activeClass, locale]);
 
   // Sort
   const sorted = useMemo(() => {
@@ -290,14 +294,14 @@ export function ChampionsIndex({
                       >
                         <Image
                           src={c.icon}
-                          alt={c.name}
+                          alt={localizedName(c, locale)}
                           width={28}
                           height={28}
                           className="rounded shrink-0"
                           unoptimized
                         />
                         <div className="min-w-0">
-                          <div className="text-sm font-medium truncate">{c.name}</div>
+                          <div className="text-sm font-medium truncate">{localizedName(c, locale)}</div>
                           {c.title && (
                             <div className="text-[10px] text-[var(--color-text-muted)] truncate">
                               {c.title}
@@ -365,6 +369,8 @@ function ChampionCard({
 }: {
   champion: ChampionEntry;
 }) {
+  const locale = useLocale();
+  const name = localizedName(c, locale);
   return (
     <Link
       href={`/champions/${c.slug}`}
@@ -373,7 +379,7 @@ function ChampionCard({
       <div className="relative">
         <Image
           src={c.icon}
-          alt={c.name}
+          alt={name}
           width={56}
           height={56}
           className="rounded-lg border border-[var(--color-border-default)] group-hover:border-[var(--color-neon-primary)]/50 transition-colors"
@@ -390,7 +396,7 @@ function ChampionCard({
 
       <div className="text-center w-full min-w-0">
         <div className="text-xs font-bold truncate group-hover:text-[var(--color-text-primary)] transition-colors">
-          {c.name}
+          {name}
         </div>
         {c.title && (
           <div className="text-[9px] text-[var(--color-text-muted)] truncate leading-tight">
