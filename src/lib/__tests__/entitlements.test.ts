@@ -190,9 +190,9 @@ describe("hashInviteCode", () => {
     expect(hashInviteCode("MAYHEM-2026")).toBe(a);
   });
 
-  test("trims surrounding whitespace but stays case-sensitive", () => {
+  test("normalizes whitespace and case so a valid code redeems regardless of typing", () => {
     expect(hashInviteCode("  MAYHEM-2026 ")).toBe(hashInviteCode("MAYHEM-2026"));
-    expect(hashInviteCode("mayhem-2026")).not.toBe(hashInviteCode("MAYHEM-2026"));
+    expect(hashInviteCode("mayhem-2026")).toBe(hashInviteCode("MAYHEM-2026"));
   });
 });
 

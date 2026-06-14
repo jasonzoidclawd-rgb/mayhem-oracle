@@ -59,5 +59,5 @@ export function pickActiveEntitlement(
 
 /** Invite codes are stored server-side only as this digest. */
 export function hashInviteCode(code: string): string {
-  return createHash("sha256").update(code.trim()).digest("hex");
+  return createHash("sha256").update(code.trim().toUpperCase()).digest("hex");
 }
