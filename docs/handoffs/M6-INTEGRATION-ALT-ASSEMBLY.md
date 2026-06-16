@@ -153,3 +153,41 @@ before the real run.
 
 Same gate as before: **merge to `main` is the human decision**, after the
 security/privacy + Riot review. Do not automate it.
+
+## Execution record (2026-06-16) — B was run
+
+Built branch **`integration/m6`** (pushed). Web HEAD had stopped moving
+(`9157a3c`, 2026-06-15, local==origin), so it was taken as the final snapshot.
+
+What actually happened was *simpler* than the plan feared. Verifying "what does
+taking web drop from codex" on all 6 shared-differing files showed **web is a
+strict superset** of codex on every one:
+
+- `update-data.sh`, `update-data.yml`, `export_public_catalog.py`, `augments/page.tsx`
+  — web already absorbed M1's internal→public split and added more on top.
+- `champions/[slug]/page.tsx` + `public-data-boundary.test.ts` — the only
+  codex-only content web lacks is the **client-side augment rankings + login
+  gate web deliberately removed** to close the paywall (no public augment
+  win-rates, per Riot policy). Keeping web is *required*, not just convenient.
+
+So the pipeline-combine and data-regen phases were **no-ops** — the integration
+reduced to **Phase 1 alone**: place the 48 Codex-exclusive files
+(M3A collector + M4 model pipeline + M5 overlay coach). Codex added **zero** npm
+deps. Then Phase 5 stitched ancestry.
+
+Commits: `8475472` (assemble) → `f56773a` (`merge -s ours codex/model-overlay`,
+parents `8475472 7c4f0dd`, tree unchanged). Zero conflict markers; the 48 placed
+files are byte-identical to the codex tip.
+
+**Verified here:** `vitest run` → **234/234 pass, 25 files** (web's 226 + the new
+`overlay-decision-parity` suite's 8). The parity suite needs `overlay/node_modules`
+on the resolution path (it pulls `@tauri-apps/api` via `overlay/src/auth/member.ts`);
+CI must `cd overlay && npm install` before the root suite, or it fails to load.
+
+**Deferred to CI** (cross-language, as designed): `cargo test` / `tauri build`
+for the Rust M3A+M5 (needs homebrew OpenSSL), `python3 -m unittest` for M4
+(needs ≥3.11), `npm run build` + `(cd overlay && npm run build)`. `eslint`/Next
+build unchanged from web's green state (only one root-`src` file was added: the
+parity test).
+
+Branch stops before `main`. Security/privacy + Riot review remain the human gate.
