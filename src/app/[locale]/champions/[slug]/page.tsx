@@ -12,7 +12,7 @@ import { buildPoolProfile } from "@/lib/scoring/augment-tailoring";
 import { getChampionAugmentPool } from "@/lib/scoring/pool-orchestrator";
 import { analyzeInteractions, type MechanicalInteraction, type AugmentMechanic } from "@/lib/scoring/augment-interactions";
 import { normalizeAugmentSet } from "@/lib/data/augment-set";
-import { localizedName } from "@/lib/i18n/localized-name";
+import { localizedDescription, localizedName } from "@/lib/i18n/localized-name";
 import { buildComboTierLookup, resolveChampionCombos } from "@/lib/data/combo-lookup";
 import { routing } from "@/i18n/routing";
 import { ChampionMatrixClient } from "@/components/champions/ChampionMatrixClient";
@@ -585,33 +585,44 @@ export default async function ChampionPage({
 
           {/* Ability list — compact cards */}
           <div className="space-y-2">
-            {abilityProfile.abilities.map((ability) => (
-              <div key={ability.key} className="flex items-start gap-2.5 px-2 py-2 rounded-lg border border-[var(--color-border-default)]/50 bg-[var(--color-bg-card)]/30">
-                <div className="shrink-0 flex flex-col items-center gap-0.5">
-                  <div className="relative w-8 h-8 sm:w-10 sm:h-10 rounded-lg overflow-hidden border border-[var(--color-border-default)]">
-                    <Image
-                      src={ability.icon}
-                      alt={ability.name}
-                      fill
-                      className="object-contain"
-                      sizes="(max-width: 640px) 32px, 40px"
-                      unoptimized
-                    />
+            {abilityProfile.abilities.map((ability) => {
+              const abilityName = localizedName(ability, locale);
+              // Prefer a real localized description; for English (or when no
+              // translation exists) fall back to the richer wiki text.
+              const localizedDesc = localizedDescription(ability, locale);
+              const abilityDescription =
+                localizedDesc !== ability.description
+                  ? localizedDesc
+                  : ability.wikiDescription ?? ability.description;
+
+              return (
+                <div key={ability.key} className="flex items-start gap-2.5 px-2 py-2 rounded-lg border border-[var(--color-border-default)]/50 bg-[var(--color-bg-card)]/30">
+                  <div className="shrink-0 flex flex-col items-center gap-0.5">
+                    <div className="relative w-8 h-8 sm:w-10 sm:h-10 rounded-lg overflow-hidden border border-[var(--color-border-default)]">
+                      <Image
+                        src={ability.icon}
+                        alt={abilityName}
+                        fill
+                        className="object-contain"
+                        sizes="(max-width: 640px) 32px, 40px"
+                        unoptimized
+                      />
+                    </div>
+                    <span className="text-[9px] font-bold text-[var(--color-text-muted)] uppercase">
+                      {ability.key}
+                    </span>
                   </div>
-                  <span className="text-[9px] font-bold text-[var(--color-text-muted)] uppercase">
-                    {ability.key}
-                  </span>
+                  <div className="flex-1 min-w-0">
+                    <span className="text-xs sm:text-sm font-semibold">{abilityName}</span>
+                    <WikiAbilityStats ability={ability} />
+                    {!ability.cooldown && ability.stats && <AbilityStatLine stats={ability.stats} />}
+                    <p className="text-[11px] text-[var(--color-text-secondary)] mt-1 leading-relaxed line-clamp-2 sm:line-clamp-none">
+                      {abilityDescription}
+                    </p>
+                  </div>
                 </div>
-                <div className="flex-1 min-w-0">
-                  <span className="text-xs sm:text-sm font-semibold">{ability.name}</span>
-                  <WikiAbilityStats ability={ability} />
-                  {!ability.cooldown && ability.stats && <AbilityStatLine stats={ability.stats} />}
-                  <p className="text-[11px] text-[var(--color-text-secondary)] mt-1 leading-relaxed line-clamp-2 sm:line-clamp-none">
-                    {ability.wikiDescription ?? ability.description}
-                  </p>
-                </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </section>
       )}

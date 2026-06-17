@@ -187,8 +187,16 @@ export interface AbilityStats {
 export interface AbilityEntry {
   key: "passive" | "Q" | "W" | "E" | "R";
   name: string;
+  name_zh_TW?: string;
+  name_zh_CN?: string;
+  name_ja?: string;
+  name_ko?: string;
   icon: string;
   description: string;
+  description_zh_TW?: string;
+  description_zh_CN?: string;
+  description_ja?: string;
+  description_ko?: string;
   stats?: AbilityStats;
   // Wiki-sourced detailed fields
   wikiDescription?: string;

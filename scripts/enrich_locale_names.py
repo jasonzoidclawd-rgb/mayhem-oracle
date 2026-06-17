@@ -1,27 +1,30 @@
 """
-Mayhem Oracle — localized champion & item names from Data Dragon
-================================================================
+Mayhem Oracle — localized champion, ability & item names from Data Dragon
+========================================================================
 The augments pipeline carries localized names (name_zh_TW/…), so the augments
-page renders in every locale. Champions and items only had English `name`, so
-the tier-list, champion, and item pages showed English regardless of the chosen
-locale. Data Dragon publishes per-locale champion/item data; this enriches the
-internal champions.json and items.json in place with name_<locale> fields using
-the same convention as augments.
+page renders in every locale. Champions, abilities, and items only had English
+`name`, so the tier-list, champion, and item pages showed English regardless of
+the chosen locale. Data Dragon publishes per-locale champion/ability/item data;
+this enriches the internal generated files in place with name_<locale> fields
+using the same convention as augments.
 
 Champions are matched to Data Dragon by the numeric key embedded in their icon
-URL (…/champion-icons/<key>.png). Items are matched by numeric id. Records with
-no Data Dragon match (e.g. Mayhem-exclusive items) keep English only.
+URL (…/champion-icons/<key>.png). Abilities are matched by champion slug plus
+ability key. Items are matched by numeric id. Records with no Data Dragon match
+(e.g. Mayhem-exclusive items) keep English only.
 
 Usage:
     python3 scripts/enrich_locale_names.py
 
 Output (in place):
     data/internal/champions.json   – name_zh_TW / name_zh_CN / name_ja / name_ko
+    data/internal/abilities.json   – localized ability names/descriptions
     data/internal/items.json       – same, for catalog items
 """
 
 from __future__ import annotations
 
+import html as html_module
 import json
 import re
 from urllib.request import Request, urlopen
@@ -35,7 +38,20 @@ HEADERS = {"User-Agent": "MayhemOracle/1.0 (data pipeline)"}
 LOCALES = {"zh_TW": "name_zh_TW", "zh_CN": "name_zh_CN",
            "ja_JP": "name_ja", "ko_KR": "name_ko"}
 
+# Data Dragon locale → our field suffix (for abilities: name_<suffix> / description_<suffix>).
+LOCALE_SUFFIX = {"zh_TW": "zh_TW", "zh_CN": "zh_CN", "ja_JP": "ja", "ko_KR": "ko"}
+
+# Our ability key → index into Data Dragon's spells[] (passive is separate).
+SPELL_INDEX = {"Q": 0, "W": 1, "E": 2, "R": 3}
+
 _ICON_KEY_RE = re.compile(r"/(\d+)\.png$")
+_TAG_RE = re.compile(r"<[^>]+>")
+_WS_RE = re.compile(r"\s+")
+
+
+def clean(text: str) -> str:
+    """Strip Data Dragon's inline HTML/markup to match our plain ability text."""
+    return _WS_RE.sub(" ", html_module.unescape(_TAG_RE.sub(" ", text or ""))).strip()
 
 
 def fetch_json(url: str) -> dict:
@@ -81,6 +97,42 @@ def champion_key(rec: dict) -> str | None:
     return m.group(1) if m else None
 
 
+def champion_abilities(version: str, dd_locale: str) -> dict[str, dict]:
+    """Data Dragon champion key → {ability key → {name, description}} (localized)."""
+    data = fetch_json(f"{DDRAGON}/cdn/{version}/data/{dd_locale}/championFull.json")["data"]
+    out: dict[str, dict] = {}
+    for champ in data.values():
+        abilities = {"passive": {"name": champ["passive"]["name"],
+                                 "description": clean(champ["passive"]["description"])}}
+        for ability_key, idx in SPELL_INDEX.items():
+            spell = champ["spells"][idx]
+            abilities[ability_key] = {"name": spell["name"],
+                                      "description": clean(spell["description"])}
+        out[champ["key"]] = abilities
+    return out
+
+
+def enrich_abilities(profiles: dict, slug_to_key: dict[str, str],
+                     ability_maps: dict[str, dict[str, dict]]) -> int:
+    enriched = 0
+    for slug, profile in profiles.items():
+        key = slug_to_key.get(slug)
+        if not key:
+            continue
+        hit = False
+        for ability in profile.get("abilities", []):
+            for dd_locale, suffix in LOCALE_SUFFIX.items():
+                loc_ability = ability_maps[dd_locale].get(key, {}).get(ability["key"])
+                if not loc_ability:
+                    continue
+                ability[f"name_{suffix}"] = loc_ability["name"]
+                if loc_ability["description"]:
+                    ability[f"description_{suffix}"] = loc_ability["description"]
+                hit = True
+        enriched += hit
+    return enriched
+
+
 def main() -> None:
     version = latest_version()
     print(f"  Data Dragon version: {version}")
@@ -93,6 +145,21 @@ def main() -> None:
     n = enrich(champs["champions"], champion_key, champ_maps)
     champ_path.write_text(json.dumps(champs, ensure_ascii=False, indent=2), encoding="utf-8")
     print(f"  champions.json: localized {n}/{len(champs['champions'])}")
+
+    ability_maps = {loc: champion_abilities(version, loc) for loc in LOCALE_SUFFIX}
+    slug_to_key = {
+        champ["slug"]: key
+        for champ in champs["champions"]
+        if (key := champion_key(champ))
+    }
+    abilities_path = INTERNAL_DATA_DIR / "abilities.json"
+    abilities = json.loads(abilities_path.read_text(encoding="utf-8"))
+    n = enrich_abilities(abilities["profiles"], slug_to_key, ability_maps)
+    abilities_path.write_text(
+        json.dumps(abilities, ensure_ascii=False, indent=2),
+        encoding="utf-8",
+    )
+    print(f"  abilities.json: localized {n}/{len(abilities['profiles'])} profiles")
 
     item_path = INTERNAL_DATA_DIR / "items.json"
     items = json.loads(item_path.read_text(encoding="utf-8"))

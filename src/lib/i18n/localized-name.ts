@@ -6,6 +6,14 @@ export interface LocalizedNameRecord {
   name_ko?: string;
 }
 
+export interface LocalizedDescriptionRecord {
+  description: string;
+  description_zh_TW?: string;
+  description_zh_CN?: string;
+  description_ja?: string;
+  description_ko?: string;
+}
+
 /**
  * Pick the localized display name for a champion/item/augment record, falling
  * back to the English `name`. Localized fields are populated by the augments
@@ -23,5 +31,20 @@ export function localizedName(record: LocalizedNameRecord, locale: string): stri
       return record.name_ko || record.name;
     default:
       return record.name;
+  }
+}
+
+export function localizedDescription(record: LocalizedDescriptionRecord, locale: string): string {
+  switch (locale) {
+    case "zh-TW":
+      return record.description_zh_TW || record.description;
+    case "zh-CN":
+      return record.description_zh_CN || record.description;
+    case "ja":
+      return record.description_ja || record.description;
+    case "ko":
+      return record.description_ko || record.description;
+    default:
+      return record.description;
   }
 }

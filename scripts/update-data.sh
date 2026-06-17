@@ -57,7 +57,7 @@ python3 scripts/scrape_wiki_augments.py
 step "7/12  LoL Wiki item passives  →  internal items.json (enrich)"
 python3 scripts/enrich_wiki.py
 
-step "7b/12 Data Dragon  →  localized champion & item names (enrich)"
+step "7b/12 Data Dragon  →  localized champion, ability & item names (enrich)"
 python3 scripts/enrich_locale_names.py
 
 step "8/12  patch notes  →  internal patch-notes.json"
