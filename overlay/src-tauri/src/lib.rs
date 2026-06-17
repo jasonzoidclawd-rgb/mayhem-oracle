@@ -5,6 +5,11 @@ use std::path::PathBuf;
 use std::sync::Arc;
 use sysinfo::System;
 
+mod collector;
+pub mod member;
+mod sanitize;
+mod upload_queue;
+
 #[cfg(target_os = "macos")]
 #[macro_use]
 extern crate objc;
@@ -133,6 +138,38 @@ async fn get_game_phase() -> Option<String> {
     let text = resp.text().await.ok()?;
     // Response is a JSON string like "InProgress"
     serde_json::from_str::<String>(&text).ok()
+}
+
+#[tauri::command]
+async fn get_game_hash() -> Option<String> {
+    let path = find_lockfile_path()?;
+    let credentials = parse_lockfile(&path)?;
+    let url = format!(
+        "https://127.0.0.1:{}/lol-gameflow/v1/session",
+        credentials.port
+    );
+    let session: serde_json::Value = reqwest::Client::builder()
+        .danger_accept_invalid_certs(true)
+        .build()
+        .ok()?
+        .get(url)
+        .basic_auth("riot", Some(&credentials.auth_token))
+        .send()
+        .await
+        .ok()?
+        .json()
+        .await
+        .ok()?;
+    let game_id = session
+        .pointer("/gameData/gameId")
+        .or_else(|| session.get("gameId"))
+        .and_then(|value| {
+            value
+                .as_str()
+                .map(str::to_string)
+                .or_else(|| value.as_u64().map(|number| number.to_string()))
+        })?;
+    Some(member::hash_game_id(&game_id))
 }
 
 #[tauri::command]
@@ -609,6 +646,7 @@ pub fn run() {
         .invoke_handler(tauri::generate_handler![
             detect_league_client,
             get_game_phase,
+            get_game_hash,
             get_live_player_data,
             check_tesseract,
             check_screen_capture_available,
@@ -618,8 +656,25 @@ pub fn run() {
             set_click_through,
             open_screen_recording_settings,
             is_league_foreground,
+            collector::get_collector_status,
+            collector::set_collector_consent,
+            collector::set_collector_paused,
+            collector::record_contributor_round,
+            collector::confirm_contributor_round_selection,
+            collector::collector_tick,
+            member::member_bootstrap,
+            member::member_game_start,
         ])
         .setup(|app| {
+            use tauri::Manager;
+
+            let collector_state = collector::CollectorState::new(app.path().app_data_dir()?)
+                .map_err(std::io::Error::other)?;
+            app.manage(collector_state);
+            let member_state = member::MemberState::new(app.path().app_data_dir()?.join("member-models"))
+                .map_err(std::io::Error::other)?;
+            app.manage(member_state);
+
             // ─── System Tray Icon ──────────────────────────────────────
             {
                 use tauri::menu::{Menu, MenuItem};

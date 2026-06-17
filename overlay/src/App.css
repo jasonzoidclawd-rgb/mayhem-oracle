@@ -75,6 +75,21 @@ html, body, #root {
   font-weight: 500;
 }
 
+.badge-grade {
+  font-size: 18px;
+  font-weight: 900;
+  line-height: 1.1;
+  text-shadow: 0 0 16px currentColor;
+}
+
+.badge-warning,
+.coach-warning {
+  color: #fb7185;
+  font-size: 9px;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
 /* ─── 26.12 annotations ─── */
 .badge-new {
   font-size: 8px;
@@ -138,6 +153,167 @@ html, body, #root {
   padding: 10px 18px;
   color: #64748b;
   font-size: 11px;
+}
+
+.member-error {
+  position: fixed;
+  top: 8px;
+  left: 8px;
+  max-width: 320px;
+  color: #fda4af;
+  font-size: 10px;
+  background: rgba(8, 12, 20, 0.88);
+  border: 1px solid rgba(251, 113, 133, 0.35);
+  border-radius: 6px;
+  padding: 5px 8px;
+}
+
+/* ─── Member coach ─── */
+.coach-panel {
+  position: fixed;
+  top: 50%;
+  right: 18px;
+  width: min(380px, calc(100vw - 36px));
+  max-height: calc(100vh - 36px);
+  overflow: auto;
+  transform: translateY(-50%);
+  z-index: 400;
+  display: grid;
+  gap: 10px;
+  padding: 14px;
+  color: #cbd5e1;
+  font-size: 11px;
+  background: rgba(8, 12, 20, 0.97);
+  border: 1px solid rgba(56, 189, 248, 0.35);
+  border-radius: 12px;
+  box-shadow: 0 18px 48px rgba(0, 0, 0, 0.45);
+  pointer-events: auto;
+}
+
+.coach-panel header,
+.coach-rank,
+.coach-mode {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.coach-panel header div,
+.coach-candidate {
+  display: grid;
+  gap: 4px;
+}
+
+.coach-panel header span,
+.coach-hint,
+.coach-candidate > span {
+  color: #94a3b8;
+}
+
+.coach-panel kbd {
+  padding: 2px 6px;
+  color: #e0f2fe;
+  background: #1e293b;
+  border: 1px solid #475569;
+  border-radius: 4px;
+}
+
+.coach-mode button {
+  flex: 1;
+  border: 1px solid rgba(148, 163, 184, 0.3);
+  border-radius: 6px;
+  padding: 6px;
+  color: #94a3b8;
+  background: rgba(30, 41, 59, 0.6);
+  cursor: pointer;
+  text-transform: capitalize;
+}
+
+.coach-mode button.active {
+  color: #e0f2fe;
+  border-color: rgba(56, 189, 248, 0.65);
+  background: rgba(14, 116, 144, 0.5);
+}
+
+.coach-candidate {
+  padding: 9px;
+  background: rgba(15, 23, 42, 0.7);
+  border: 1px solid rgba(100, 116, 139, 0.24);
+  border-radius: 8px;
+}
+
+/* ─── Free collector ─── */
+.collector-panel,
+.collector-consent {
+  position: fixed;
+  z-index: 300;
+  color: #cbd5e1;
+  background: rgba(8, 12, 20, 0.96);
+  border: 1px solid rgba(100, 116, 139, 0.35);
+  border-radius: 10px;
+  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.35);
+  pointer-events: auto;
+}
+
+.collector-panel {
+  right: 12px;
+  bottom: 12px;
+  width: 220px;
+  padding: 12px;
+  display: grid;
+  gap: 8px;
+  font-size: 11px;
+}
+
+.collector-consent {
+  top: 50%;
+  left: 50%;
+  width: min(420px, calc(100vw - 32px));
+  padding: 22px;
+  transform: translate(-50%, -50%);
+  display: grid;
+  gap: 12px;
+  font-size: 13px;
+  line-height: 1.45;
+}
+
+.collector-consent strong,
+.collector-panel strong {
+  color: #f8fafc;
+}
+
+.collector-heading,
+.collector-progress,
+.collector-actions {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.collector-heading span,
+.collector-progress {
+  color: #94a3b8;
+}
+
+.collector-error {
+  color: #fca5a5;
+}
+
+.collector-panel button,
+.collector-consent button {
+  border: 1px solid rgba(56, 189, 248, 0.5);
+  border-radius: 6px;
+  padding: 6px 10px;
+  color: #e0f2fe;
+  background: rgba(14, 116, 144, 0.45);
+  cursor: pointer;
+}
+
+.collector-consent button.secondary {
+  color: #cbd5e1;
+  background: rgba(51, 65, 85, 0.55);
+  border-color: rgba(148, 163, 184, 0.35);
 }
 
 /* ─── Startup Tip ─── */

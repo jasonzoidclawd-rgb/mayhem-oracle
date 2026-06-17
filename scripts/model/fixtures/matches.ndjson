@@ -1,0 +1,5 @@
+{"game_hash":"good-snowball","schema_version":1,"patch":"26.12","queue_id":2400,"duration_seconds":600,"source":"snowball","collected_at":"2026-06-13T00:00:00Z","ingested_at":"2026-06-13T00:05:00Z","unapproved":"drop-me"}
+{"game_hash":"good-owned","schema_version":1,"patch":"26.12","queue_id":2400,"duration_seconds":900,"source":"owned-history","collected_at":"2026-06-13T01:00:00Z","ingested_at":"2026-06-13T01:05:00Z"}
+{"game_hash":"good-second","schema_version":1,"patch":"26.13","queue_id":2400,"duration_seconds":800,"source":"owned-history","collected_at":"2026-06-13T02:00:00Z","ingested_at":"2026-06-13T02:05:00Z"}
+{"game_hash":"short-match","schema_version":1,"patch":"26.12","queue_id":2400,"duration_seconds":479,"source":"snowball","collected_at":"2026-06-13T03:00:00Z","ingested_at":"2026-06-13T03:05:00Z"}
+{"game_hash":"quarantined-match","schema_version":1,"patch":"26.12","queue_id":2400,"duration_seconds":700,"source":"snowball","collected_at":"2026-06-13T04:00:00Z","ingested_at":"2026-06-13T04:05:00Z"}

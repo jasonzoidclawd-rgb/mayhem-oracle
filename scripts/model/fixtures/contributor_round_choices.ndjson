@@ -1,0 +1,10 @@
+{"game_hash":"good-owned","round":1,"offered_augment_slugs":["magic-missile","from-downtown","overflow"],"selected_augment_slug":"from-downtown","ocr_confidence":0.99,"patch":"26.12","ingested_at":"2026-06-13T01:05:00Z"}
+{"game_hash":"good-owned","round":2,"offered_augment_slugs":["mercys-strike","marksmage","overflow"],"selected_augment_slug":"mercys-strike","ocr_confidence":0.98,"patch":"26.12","ingested_at":"2026-06-13T01:05:00Z"}
+{"game_hash":"good-owned","round":3,"offered_augment_slugs":["magic-missile","marksmage","overflow"],"selected_augment_slug":"magic-missile","ocr_confidence":0.97,"patch":"26.12","ingested_at":"2026-06-13T01:05:00Z"}
+{"game_hash":"good-owned","round":4,"offered_augment_slugs":["transmute-prismatic","marksmage","overflow"],"selected_augment_slug":"marksmage","ocr_confidence":0.96,"patch":"26.12","ingested_at":"2026-06-13T01:05:00Z"}
+{"game_hash":"good-second","round":1,"offered_augment_slugs":["from-downtown","marksmage","overflow"],"selected_augment_slug":"from-downtown","ocr_confidence":0.95,"patch":"26.13","ingested_at":"2026-06-13T02:05:00Z"}
+{"game_hash":"good-second","round":2,"offered_augment_slugs":["mercys-strike","marksmage","overflow"],"selected_augment_slug":"mercys-strike","ocr_confidence":0.94,"patch":"26.13","ingested_at":"2026-06-13T02:05:00Z"}
+{"game_hash":"good-second","round":3,"offered_augment_slugs":["mercys-strike","marksmage","overflow"],"selected_augment_slug":"mercys-strike","ocr_confidence":0.93,"patch":"26.13","ingested_at":"2026-06-13T02:05:00Z"}
+{"game_hash":"good-second","round":4,"offered_augment_slugs":["transmute-prismatic","marksmage","overflow"],"selected_augment_slug":"transmute-prismatic","ocr_confidence":0.92,"patch":"26.13","ingested_at":"2026-06-13T02:05:00Z"}
+{"game_hash":"short-match","round":1,"offered_augment_slugs":["overflow"],"selected_augment_slug":"overflow","ocr_confidence":1.0,"patch":"26.12","ingested_at":"2026-06-13T03:05:00Z"}
+{"game_hash":"quarantined-match","round":1,"offered_augment_slugs":["overflow"],"selected_augment_slug":"overflow","ocr_confidence":1.0,"patch":"26.12","ingested_at":"2026-06-13T04:05:00Z"}
