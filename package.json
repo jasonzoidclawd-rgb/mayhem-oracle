@@ -21,7 +21,8 @@
     "react-dom": "^19.1.0"
   },
   "overrides": {
-    "postcss": "$postcss"
+    "postcss": "$postcss",
+    "@swc/helpers": "0.5.23"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4.1.0",
