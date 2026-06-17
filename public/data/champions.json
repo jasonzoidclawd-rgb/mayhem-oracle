@@ -1,6 +1,6 @@
 {
   "patch": "26.12",
-  "scraped_at": "2026-06-12T06:38:58.545223+00:00",
+  "scraped_at": "2026-06-16T23:18:29.664600+00:00",
   "champions": [
     {
       "slug": "brand",
@@ -37,11 +37,7 @@
         "cc",
         "dot",
         "haste"
-      ],
-      "name_zh_TW": "布蘭德",
-      "name_zh_CN": "复仇焰魂",
-      "name_ja": "ブランド",
-      "name_ko": "브랜드"
+      ]
     },
     {
       "slug": "yasuo",
@@ -80,11 +76,7 @@
         "heal_shield",
         "movement",
         "on_hit"
-      ],
-      "name_zh_TW": "犽宿",
-      "name_zh_CN": "疾风剑豪",
-      "name_ja": "ヤスオ",
-      "name_ko": "야스오"
+      ]
     },
     {
       "slug": "morgana",
@@ -123,11 +115,7 @@
         "haste",
         "heal_shield",
         "movement"
-      ],
-      "name_zh_TW": "魔甘娜",
-      "name_zh_CN": "堕落天使",
-      "name_ja": "モルガナ",
-      "name_ko": "모르가나"
+      ]
     },
     {
       "slug": "drmundo",
@@ -165,11 +153,7 @@
         "heal_shield",
         "movement",
         "tank"
-      ],
-      "name_zh_TW": "蒙多醫生",
-      "name_zh_CN": "祖安狂人",
-      "name_ja": "ドクター・ムンド",
-      "name_ko": "문도 박사"
+      ]
     },
     {
       "slug": "graves",
@@ -205,11 +189,7 @@
         "crit",
         "movement",
         "on_hit"
-      ],
-      "name_zh_TW": "葛雷夫",
-      "name_zh_CN": "法外狂徒",
-      "name_ja": "グレイブス",
-      "name_ko": "그레이브즈"
+      ]
     },
     {
       "slug": "xinzhao",
@@ -249,11 +229,7 @@
         "movement",
         "on_hit",
         "tank"
-      ],
-      "name_zh_TW": "趙信",
-      "name_zh_CN": "德邦总管",
-      "name_ja": "シン・ジャオ",
-      "name_ko": "신 짜오"
+      ]
     },
     {
       "slug": "jinx",
@@ -290,11 +266,7 @@
         "crit",
         "movement",
         "on_hit"
-      ],
-      "name_zh_TW": "吉茵珂絲",
-      "name_zh_CN": "暴走萝莉",
-      "name_ja": "ジンクス",
-      "name_ko": "징크스"
+      ]
     },
     {
       "slug": "vayne",
@@ -332,11 +304,7 @@
         "crit",
         "movement",
         "on_hit"
-      ],
-      "name_zh_TW": "汎",
-      "name_zh_CN": "暗夜猎手",
-      "name_ja": "ヴェイン",
-      "name_ko": "베인"
+      ]
     },
     {
       "slug": "lillia",
@@ -374,11 +342,7 @@
         "dot",
         "haste",
         "movement"
-      ],
-      "name_zh_TW": "莉莉亞",
-      "name_zh_CN": "含羞蓓蕾",
-      "name_ja": "リリア",
-      "name_ko": "릴리아"
+      ]
     },
     {
       "slug": "sett",
@@ -417,11 +381,7 @@
         "movement",
         "on_hit",
         "tank"
-      ],
-      "name_zh_TW": "賽特",
-      "name_zh_CN": "腕豪",
-      "name_ja": "セト",
-      "name_ko": "세트"
+      ]
     },
     {
       "slug": "caitlyn",
@@ -458,11 +418,7 @@
         "crit",
         "movement",
         "on_hit"
-      ],
-      "name_zh_TW": "凱特琳",
-      "name_zh_CN": "皮城女警",
-      "name_ja": "ケイトリン",
-      "name_ko": "케이틀린"
+      ]
     },
     {
       "slug": "aurelionsol",
@@ -498,11 +454,7 @@
         "cc",
         "haste",
         "movement"
-      ],
-      "name_zh_TW": "翱銳龍獸",
-      "name_zh_CN": "铸星龙王",
-      "name_ja": "オレリオン・ソル",
-      "name_ko": "아우렐리온 솔"
+      ]
     },
     {
       "slug": "karthus",
@@ -536,11 +488,7 @@
       "kit_tags": [
         "ability",
         "haste"
-      ],
-      "name_zh_TW": "卡爾瑟斯",
-      "name_zh_CN": "死亡颂唱者",
-      "name_ja": "カーサス",
-      "name_ko": "카서스"
+      ]
     },
     {
       "slug": "malzahar",
@@ -576,11 +524,7 @@
         "cc",
         "dot",
         "haste"
-      ],
-      "name_zh_TW": "馬爾札哈",
-      "name_zh_CN": "虚空先知",
-      "name_ja": "マルザハール",
-      "name_ko": "말자하"
+      ]
     },
     {
       "slug": "missfortune",
@@ -619,11 +563,7 @@
         "dot",
         "haste",
         "movement"
-      ],
-      "name_zh_TW": "好運姐",
-      "name_zh_CN": "赏金猎人",
-      "name_ja": "ミス・フォーチュン",
-      "name_ko": "미스 포츈"
+      ]
     },
     {
       "slug": "lucian",
@@ -661,11 +601,7 @@
         "heal_shield",
         "movement",
         "on_hit"
-      ],
-      "name_zh_TW": "路西恩",
-      "name_zh_CN": "圣枪游侠",
-      "name_ja": "ルシアン",
-      "name_ko": "루시안"
+      ]
     },
     {
       "slug": "yone",
@@ -704,11 +640,7 @@
         "heal_shield",
         "movement",
         "on_hit"
-      ],
-      "name_zh_TW": "犽凝",
-      "name_zh_CN": "封魔剑魂",
-      "name_ja": "ヨネ",
-      "name_ko": "요네"
+      ]
     },
     {
       "slug": "ryze",
@@ -744,11 +676,7 @@
         "cc",
         "haste",
         "movement"
-      ],
-      "name_zh_TW": "雷茲",
-      "name_zh_CN": "符文法师",
-      "name_ja": "ライズ",
-      "name_ko": "라이즈"
+      ]
     },
     {
       "slug": "twistedfate",
@@ -787,11 +715,7 @@
         "crit",
         "haste",
         "movement"
-      ],
-      "name_zh_TW": "逆命",
-      "name_zh_CN": "卡牌大师",
-      "name_ja": "ツイステッド・フェイト",
-      "name_ko": "트위스티드 페이트"
+      ]
     },
     {
       "slug": "rell",
@@ -829,11 +753,7 @@
         "movement",
         "on_hit",
         "tank"
-      ],
-      "name_zh_TW": "銳兒",
-      "name_zh_CN": "镕铁少女",
-      "name_ja": "レル",
-      "name_ko": "렐"
+      ]
     },
     {
       "slug": "galio",
@@ -875,11 +795,7 @@
         "movement",
         "on_hit",
         "tank"
-      ],
-      "name_zh_TW": "加里歐",
-      "name_zh_CN": "正义巨像",
-      "name_ja": "ガリオ",
-      "name_ko": "갈리오"
+      ]
     },
     {
       "slug": "kayn",
@@ -915,11 +831,7 @@
         "attack",
         "heal_shield",
         "movement"
-      ],
-      "name_zh_TW": "慨影",
-      "name_zh_CN": "影流之镰",
-      "name_ja": "ケイン",
-      "name_ko": "케인"
+      ]
     },
     {
       "slug": "masteryi",
@@ -957,11 +869,7 @@
         "dot",
         "movement",
         "on_hit"
-      ],
-      "name_zh_TW": "易大師",
-      "name_zh_CN": "无极剑圣",
-      "name_ja": "マスター・イー",
-      "name_ko": "마스터 이"
+      ]
     },
     {
       "slug": "yunara",
@@ -998,11 +906,7 @@
         "dot",
         "movement",
         "on_hit"
-      ],
-      "name_zh_TW": "尤娜拉",
-      "name_zh_CN": "不破之誓",
-      "name_ja": "ユナラ",
-      "name_ko": "유나라"
+      ]
     },
     {
       "slug": "seraphine",
@@ -1039,11 +943,7 @@
         "cc",
         "haste",
         "heal_shield"
-      ],
-      "name_zh_TW": "瑟菈紛",
-      "name_zh_CN": "星籁歌姬",
-      "name_ja": "セラフィーン",
-      "name_ko": "세라핀"
+      ]
     },
     {
       "slug": "tahmkench",
@@ -1081,11 +981,7 @@
         "heal_shield",
         "movement",
         "tank"
-      ],
-      "name_zh_TW": "貪啃奇",
-      "name_zh_CN": "河流之王",
-      "name_ja": "タム・ケンチ",
-      "name_ko": "탐 켄치"
+      ]
     },
     {
       "slug": "hecarim",
@@ -1124,11 +1020,7 @@
         "movement",
         "on_hit",
         "tank"
-      ],
-      "name_zh_TW": "赫克林",
-      "name_zh_CN": "战争之影",
-      "name_ja": "ヘカリム",
-      "name_ko": "헤카림"
+      ]
     },
     {
       "slug": "rumble",
@@ -1167,11 +1059,7 @@
         "haste",
         "heal_shield",
         "on_hit"
-      ],
-      "name_zh_TW": "藍寶",
-      "name_zh_CN": "机械公敌",
-      "name_ja": "ランブル",
-      "name_ko": "럼블"
+      ]
     },
     {
       "slug": "kayle",
@@ -1210,11 +1098,7 @@
         "haste",
         "heal_shield",
         "movement"
-      ],
-      "name_zh_TW": "凱爾",
-      "name_zh_CN": "正义天使",
-      "name_ja": "ケイル",
-      "name_ko": "케일"
+      ]
     },
     {
       "slug": "hwei",
@@ -1249,11 +1133,7 @@
       "kit_tags": [
         "ability",
         "haste"
-      ],
-      "name_zh_TW": "赫威",
-      "name_zh_CN": "异画师",
-      "name_ja": "フェイ",
-      "name_ko": "흐웨이"
+      ]
     },
     {
       "slug": "swain",
@@ -1291,11 +1171,7 @@
         "dot",
         "haste",
         "heal_shield"
-      ],
-      "name_zh_TW": "斯溫",
-      "name_zh_CN": "诺克萨斯统领",
-      "name_ja": "スウェイン",
-      "name_ko": "스웨인"
+      ]
     },
     {
       "slug": "ashe",
@@ -1332,11 +1208,7 @@
         "cc",
         "crit",
         "on_hit"
-      ],
-      "name_zh_TW": "艾希",
-      "name_zh_CN": "寒冰射手",
-      "name_ja": "アッシュ",
-      "name_ko": "애쉬"
+      ]
     },
     {
       "slug": "senna",
@@ -1374,11 +1246,7 @@
         "crit",
         "heal_shield",
         "movement"
-      ],
-      "name_zh_TW": "姍娜",
-      "name_zh_CN": "涤魂圣枪",
-      "name_ja": "セナ",
-      "name_ko": "세나"
+      ]
     },
     {
       "slug": "zyra",
@@ -1414,11 +1282,7 @@
         "ability",
         "cc",
         "haste"
-      ],
-      "name_zh_TW": "枷蘿",
-      "name_zh_CN": "荆棘之兴",
-      "name_ja": "ザイラ",
-      "name_ko": "자이라"
+      ]
     },
     {
       "slug": "singed",
@@ -1456,11 +1320,7 @@
         "haste",
         "movement",
         "tank"
-      ],
-      "name_zh_TW": "辛吉德",
-      "name_zh_CN": "炼金术士",
-      "name_ja": "シンジド",
-      "name_ko": "신지드"
+      ]
     },
     {
       "slug": "ahri",
@@ -1498,11 +1358,7 @@
         "haste",
         "heal_shield",
         "movement"
-      ],
-      "name_zh_TW": "阿璃",
-      "name_zh_CN": "九尾妖狐",
-      "name_ja": "アーリ",
-      "name_ko": "아리"
+      ]
     },
     {
       "slug": "xerath",
@@ -1538,11 +1394,7 @@
         "ability",
         "cc",
         "haste"
-      ],
-      "name_zh_TW": "齊勒斯",
-      "name_zh_CN": "远古巫灵",
-      "name_ja": "ゼラス",
-      "name_ko": "제라스"
+      ]
     },
     {
       "slug": "kaisa",
@@ -1580,11 +1432,7 @@
         "crit",
         "haste",
         "movement"
-      ],
-      "name_zh_TW": "凱莎",
-      "name_zh_CN": "虚空之女",
-      "name_ja": "カイ＝サ",
-      "name_ko": "카이사"
+      ]
     },
     {
       "slug": "sion",
@@ -1621,11 +1469,7 @@
         "cc",
         "heal_shield",
         "tank"
-      ],
-      "name_zh_TW": "賽恩",
-      "name_zh_CN": "亡灵战神",
-      "name_ja": "サイオン",
-      "name_ko": "사이온"
+      ]
     },
     {
       "slug": "veigar",
@@ -1660,11 +1504,7 @@
         "ability",
         "cc",
         "haste"
-      ],
-      "name_zh_TW": "維迦",
-      "name_zh_CN": "邪恶小法师",
-      "name_ja": "ベイガー",
-      "name_ko": "베이가"
+      ]
     },
     {
       "slug": "maokai",
@@ -1702,11 +1542,7 @@
         "heal_shield",
         "on_hit",
         "tank"
-      ],
-      "name_zh_TW": "茂凱",
-      "name_zh_CN": "扭曲树精",
-      "name_ja": "マオカイ",
-      "name_ko": "마오카이"
+      ]
     },
     {
       "slug": "viktor",
@@ -1743,11 +1579,7 @@
         "dot",
         "haste",
         "heal_shield"
-      ],
-      "name_zh_TW": "維克特",
-      "name_zh_CN": "奥术先驱",
-      "name_ja": "ビクター",
-      "name_ko": "빅토르"
+      ]
     },
     {
       "slug": "xayah",
@@ -1783,11 +1615,7 @@
         "cc",
         "crit",
         "on_hit"
-      ],
-      "name_zh_TW": "剎雅",
-      "name_zh_CN": "逆羽",
-      "name_ja": "ザヤ",
-      "name_ko": "자야"
+      ]
     },
     {
       "slug": "fizz",
@@ -1825,11 +1653,7 @@
         "dot",
         "movement",
         "on_hit"
-      ],
-      "name_zh_TW": "飛斯",
-      "name_zh_CN": "潮汐海灵",
-      "name_ja": "フィズ",
-      "name_ko": "피즈"
+      ]
     },
     {
       "slug": "corki",
@@ -1868,11 +1692,7 @@
         "dot",
         "haste",
         "movement"
-      ],
-      "name_zh_TW": "庫奇",
-      "name_zh_CN": "英勇投弹手",
-      "name_ja": "コーキ",
-      "name_ko": "코르키"
+      ]
     },
     {
       "slug": "zed",
@@ -1907,11 +1727,7 @@
         "attack",
         "movement",
         "on_hit"
-      ],
-      "name_zh_TW": "劫",
-      "name_zh_CN": "影流之主",
-      "name_ja": "ゼド",
-      "name_ko": "제드"
+      ]
     },
     {
       "slug": "teemo",
@@ -1949,11 +1765,7 @@
         "dot",
         "haste",
         "movement"
-      ],
-      "name_zh_TW": "提摩",
-      "name_zh_CN": "迅捷斥候",
-      "name_ja": "ティーモ",
-      "name_ko": "티모"
+      ]
     },
     {
       "slug": "tryndamere",
@@ -1990,11 +1802,7 @@
         "crit",
         "heal_shield",
         "movement"
-      ],
-      "name_zh_TW": "泰達米爾",
-      "name_zh_CN": "蛮族之王",
-      "name_ja": "トリンダメア",
-      "name_ko": "트린다미어"
+      ]
     },
     {
       "slug": "syndra",
@@ -2029,11 +1837,7 @@
         "ability",
         "cc",
         "haste"
-      ],
-      "name_zh_TW": "星朵拉",
-      "name_zh_CN": "暗黑元首",
-      "name_ja": "シンドラ",
-      "name_ko": "신드라"
+      ]
     },
     {
       "slug": "velkoz",
@@ -2070,11 +1874,7 @@
         "cc",
         "dot",
         "haste"
-      ],
-      "name_zh_TW": "威寇茲",
-      "name_zh_CN": "虚空之眼",
-      "name_ja": "ヴェル＝コズ",
-      "name_ko": "벨코즈"
+      ]
     },
     {
       "slug": "smolder",
@@ -2112,11 +1912,7 @@
         "crit",
         "dot",
         "haste"
-      ],
-      "name_zh_TW": "史矛德",
-      "name_zh_CN": "炽炎雏龙",
-      "name_ja": "スモルダー",
-      "name_ko": "스몰더"
+      ]
     },
     {
       "slug": "aurora",
@@ -2154,11 +1950,7 @@
         "haste",
         "heal_shield",
         "movement"
-      ],
-      "name_zh_TW": "歐羅拉",
-      "name_zh_CN": "双界灵兔",
-      "name_ja": "オーロラ",
-      "name_ko": "오로라"
+      ]
     },
     {
       "slug": "twitch",
@@ -2195,11 +1987,7 @@
         "dot",
         "movement",
         "on_hit"
-      ],
-      "name_zh_TW": "圖奇",
-      "name_zh_CN": "瘟疫之源",
-      "name_ja": "トゥイッチ",
-      "name_ko": "트위치"
+      ]
     },
     {
       "slug": "tristana",
@@ -2236,11 +2024,7 @@
         "cc",
         "crit",
         "movement"
-      ],
-      "name_zh_TW": "崔絲塔娜",
-      "name_zh_CN": "麦林炮手",
-      "name_ja": "トリスターナ",
-      "name_ko": "트리스타나"
+      ]
     },
     {
       "slug": "lux",
@@ -2276,11 +2060,7 @@
         "ability",
         "cc",
         "haste"
-      ],
-      "name_zh_TW": "拉克絲",
-      "name_zh_CN": "光辉女郎",
-      "name_ja": "ラックス",
-      "name_ko": "럭스"
+      ]
     },
     {
       "slug": "garen",
@@ -2318,11 +2098,7 @@
         "heal_shield",
         "on_hit",
         "tank"
-      ],
-      "name_zh_TW": "蓋倫",
-      "name_zh_CN": "德玛西亚之力",
-      "name_ja": "ガレン",
-      "name_ko": "가렌"
+      ]
     },
     {
       "slug": "jhin",
@@ -2360,11 +2136,7 @@
         "cc",
         "crit",
         "haste"
-      ],
-      "name_zh_TW": "燼",
-      "name_zh_CN": "戏命师",
-      "name_ja": "ジン",
-      "name_ko": "진"
+      ]
     },
     {
       "slug": "ekko",
@@ -2402,11 +2174,7 @@
         "haste",
         "heal_shield",
         "movement"
-      ],
-      "name_zh_TW": "艾克",
-      "name_zh_CN": "时间刺客",
-      "name_ja": "エコー",
-      "name_ko": "에코"
+      ]
     },
     {
       "slug": "nautilus",
@@ -2446,11 +2214,7 @@
         "heal_shield",
         "on_hit",
         "tank"
-      ],
-      "name_zh_TW": "納帝魯斯",
-      "name_zh_CN": "深海泰坦",
-      "name_ja": "ノーチラス",
-      "name_ko": "노틸러스"
+      ]
     },
     {
       "slug": "ornn",
@@ -2487,11 +2251,7 @@
         "dot",
         "movement",
         "tank"
-      ],
-      "name_zh_TW": "鄂爾",
-      "name_zh_CN": "山隐之焰",
-      "name_ja": "オーン",
-      "name_ko": "오른"
+      ]
     },
     {
       "slug": "shen",
@@ -2528,11 +2288,7 @@
         "heal_shield",
         "movement",
         "tank"
-      ],
-      "name_zh_TW": "慎",
-      "name_zh_CN": "暮光之眼",
-      "name_ja": "シェン",
-      "name_ko": "쉔"
+      ]
     },
     {
       "slug": "jarvaniv",
@@ -2571,11 +2327,7 @@
         "movement",
         "on_hit",
         "tank"
-      ],
-      "name_zh_TW": "嘉文四世",
-      "name_zh_CN": "德玛西亚皇子",
-      "name_ja": "ジャーヴァンⅣ",
-      "name_ko": "자르반 4세"
+      ]
     },
     {
       "slug": "jayce",
@@ -2613,11 +2365,7 @@
         "crit",
         "movement",
         "on_hit"
-      ],
-      "name_zh_TW": "杰西",
-      "name_zh_CN": "未来守护者",
-      "name_ja": "ジェイス",
-      "name_ko": "제이스"
+      ]
     },
     {
       "slug": "chogath",
@@ -2654,11 +2402,7 @@
         "cc",
         "haste",
         "tank"
-      ],
-      "name_zh_TW": "科加斯",
-      "name_zh_CN": "虚空恐惧",
-      "name_ja": "チョ＝ガス",
-      "name_ko": "초가스"
+      ]
     },
     {
       "slug": "kindred",
@@ -2695,11 +2439,7 @@
         "heal_shield",
         "movement",
         "on_hit"
-      ],
-      "name_zh_TW": "鏡爪",
-      "name_zh_CN": "永猎双子",
-      "name_ja": "キンドレッド",
-      "name_ko": "킨드레드"
+      ]
     },
     {
       "slug": "heimerdinger",
@@ -2736,11 +2476,7 @@
         "cc",
         "haste",
         "movement"
-      ],
-      "name_zh_TW": "漢默丁格",
-      "name_zh_CN": "大发明家",
-      "name_ja": "ハイマーディンガー",
-      "name_ko": "하이머딩거"
+      ]
     },
     {
       "slug": "zaahen",
@@ -2779,11 +2515,7 @@
         "heal_shield",
         "movement",
         "on_hit"
-      ],
-      "name_zh_TW": "薩亨",
-      "name_zh_CN": "不落魔锋",
-      "name_ja": "ザーヘン",
-      "name_ko": "자헨"
+      ]
     },
     {
       "slug": "leona",
@@ -2820,11 +2552,7 @@
         "heal_shield",
         "on_hit",
         "tank"
-      ],
-      "name_zh_TW": "雷歐娜",
-      "name_zh_CN": "曙光女神",
-      "name_ja": "レオナ",
-      "name_ko": "레오나"
+      ]
     },
     {
       "slug": "ziggs",
@@ -2860,11 +2588,7 @@
         "cc",
         "haste",
         "movement"
-      ],
-      "name_zh_TW": "希格斯",
-      "name_zh_CN": "爆破鬼才",
-      "name_ja": "ジグス",
-      "name_ko": "직스"
+      ]
     },
     {
       "slug": "jax",
@@ -2900,11 +2624,7 @@
         "cc",
         "movement",
         "on_hit"
-      ],
-      "name_zh_TW": "賈克斯",
-      "name_zh_CN": "武器大师",
-      "name_ja": "ジャックス",
-      "name_ko": "잭스"
+      ]
     },
     {
       "slug": "kogmaw",
@@ -2940,11 +2660,7 @@
         "ability",
         "attack",
         "haste"
-      ],
-      "name_zh_TW": "寇格魔",
-      "name_zh_CN": "深渊巨口",
-      "name_ja": "コグ＝マウ",
-      "name_ko": "코그모"
+      ]
     },
     {
       "slug": "mel",
@@ -2982,11 +2698,7 @@
         "dot",
         "haste",
         "heal_shield"
-      ],
-      "name_zh_TW": "梅爾",
-      "name_zh_CN": "流光镜影",
-      "name_ja": "メル",
-      "name_ko": "멜"
+      ]
     },
     {
       "slug": "varus",
@@ -3025,11 +2737,7 @@
         "crit",
         "haste",
         "heal_shield"
-      ],
-      "name_zh_TW": "法洛士",
-      "name_zh_CN": "惩戒之箭",
-      "name_ja": "ヴァルス",
-      "name_ko": "바루스"
+      ]
     },
     {
       "slug": "shyvana",
@@ -3068,11 +2776,7 @@
         "heal_shield",
         "movement",
         "on_hit"
-      ],
-      "name_zh_TW": "希瓦娜",
-      "name_zh_CN": "龙血武姬",
-      "name_ja": "シヴァーナ",
-      "name_ko": "쉬바나"
+      ]
     },
     {
       "slug": "gangplank",
@@ -3108,11 +2812,7 @@
         "cc",
         "dot",
         "heal_shield"
-      ],
-      "name_zh_TW": "剛普朗克",
-      "name_zh_CN": "海洋之灾",
-      "name_ja": "ガングプランク",
-      "name_ko": "갱플랭크"
+      ]
     },
     {
       "slug": "malphite",
@@ -3150,11 +2850,7 @@
         "heal_shield",
         "movement",
         "tank"
-      ],
-      "name_zh_TW": "墨菲特",
-      "name_zh_CN": "熔岩巨兽",
-      "name_ja": "マルファイト",
-      "name_ko": "말파이트"
+      ]
     },
     {
       "slug": "aphelios",
@@ -3189,11 +2885,7 @@
         "attack",
         "cc",
         "on_hit"
-      ],
-      "name_zh_TW": "亞菲利歐",
-      "name_zh_CN": "残月之肃",
-      "name_ja": "アフェリオス",
-      "name_ko": "아펠리오스"
+      ]
     },
     {
       "slug": "gwen",
@@ -3229,11 +2921,7 @@
         "heal_shield",
         "movement",
         "on_hit"
-      ],
-      "name_zh_TW": "關",
-      "name_zh_CN": "灵罗娃娃",
-      "name_ja": "グウェン",
-      "name_ko": "그웬"
+      ]
     },
     {
       "slug": "alistar",
@@ -3271,11 +2959,7 @@
         "heal_shield",
         "on_hit",
         "tank"
-      ],
-      "name_zh_TW": "亞歷斯塔",
-      "name_zh_CN": "牛头酋长",
-      "name_ja": "アリスター",
-      "name_ko": "알리스타"
+      ]
     },
     {
       "slug": "ezreal",
@@ -3313,11 +2997,7 @@
         "crit",
         "haste",
         "movement"
-      ],
-      "name_zh_TW": "伊澤瑞爾",
-      "name_zh_CN": "探险家",
-      "name_ja": "エズリアル",
-      "name_ko": "이즈리얼"
+      ]
     },
     {
       "slug": "sejuani",
@@ -3354,11 +3034,7 @@
         "movement",
         "on_hit",
         "tank"
-      ],
-      "name_zh_TW": "史瓦妮",
-      "name_zh_CN": "北地之怒",
-      "name_ja": "セジュアニ",
-      "name_ko": "세주아니"
+      ]
     },
     {
       "slug": "zilean",
@@ -3395,11 +3071,7 @@
         "cc",
         "haste",
         "movement"
-      ],
-      "name_zh_TW": "極靈",
-      "name_zh_CN": "时光守护者",
-      "name_ja": "ジリアン",
-      "name_ko": "질리언"
+      ]
     },
     {
       "slug": "briar",
@@ -3439,11 +3111,7 @@
         "heal_shield",
         "movement",
         "on_hit"
-      ],
-      "name_zh_TW": "布蕾爾",
-      "name_zh_CN": "狂厄蔷薇",
-      "name_ja": "ブライアー",
-      "name_ko": "브라이어"
+      ]
     },
     {
       "slug": "fiddlesticks",
@@ -3481,11 +3149,7 @@
         "dot",
         "haste",
         "movement"
-      ],
-      "name_zh_TW": "費德提克",
-      "name_zh_CN": "远古恐惧",
-      "name_ja": "フィドルスティックス",
-      "name_ko": "피들스틱"
+      ]
     },
     {
       "slug": "sivir",
@@ -3521,11 +3185,7 @@
         "cc",
         "heal_shield",
         "on_hit"
-      ],
-      "name_zh_TW": "希維爾",
-      "name_zh_CN": "战争女神",
-      "name_ja": "シヴィア",
-      "name_ko": "시비르"
+      ]
     },
     {
       "slug": "pantheon",
@@ -3563,11 +3223,7 @@
         "cc",
         "heal_shield",
         "movement"
-      ],
-      "name_zh_TW": "潘森",
-      "name_zh_CN": "不屈之枪",
-      "name_ja": "パンテオン",
-      "name_ko": "판테온"
+      ]
     },
     {
       "slug": "darius",
@@ -3606,11 +3262,7 @@
         "heal_shield",
         "on_hit",
         "tank"
-      ],
-      "name_zh_TW": "達瑞斯",
-      "name_zh_CN": "诺克萨斯之手",
-      "name_ja": "ダリウス",
-      "name_ko": "다리우스"
+      ]
     },
     {
       "slug": "sylas",
@@ -3649,11 +3301,7 @@
         "haste",
         "heal_shield",
         "movement"
-      ],
-      "name_zh_TW": "賽勒斯",
-      "name_zh_CN": "解脱者",
-      "name_ja": "サイラス",
-      "name_ko": "사일러스"
+      ]
     },
     {
       "slug": "vex",
@@ -3690,11 +3338,7 @@
         "haste",
         "heal_shield",
         "movement"
-      ],
-      "name_zh_TW": "薇可絲",
-      "name_zh_CN": "愁云使者",
-      "name_ja": "ヴェックス",
-      "name_ko": "벡스"
+      ]
     },
     {
       "slug": "viego",
@@ -3732,11 +3376,7 @@
         "heal_shield",
         "movement",
         "on_hit"
-      ],
-      "name_zh_TW": "維爾戈",
-      "name_zh_CN": "破败之王",
-      "name_ja": "ヴィエゴ",
-      "name_ko": "비에고"
+      ]
     },
     {
       "slug": "pyke",
@@ -3774,11 +3414,7 @@
         "cc",
         "dot",
         "movement"
-      ],
-      "name_zh_TW": "派克",
-      "name_zh_CN": "血港鬼影",
-      "name_ja": "パイク",
-      "name_ko": "파이크"
+      ]
     },
     {
       "slug": "fiora",
@@ -3817,11 +3453,7 @@
         "heal_shield",
         "movement",
         "on_hit"
-      ],
-      "name_zh_TW": "菲歐拉",
-      "name_zh_CN": "无双剑姬",
-      "name_ja": "フィオラ",
-      "name_ko": "피오라"
+      ]
     },
     {
       "slug": "shaco",
@@ -3859,11 +3491,7 @@
         "dot",
         "movement",
         "on_hit"
-      ],
-      "name_zh_TW": "薩科",
-      "name_zh_CN": "恶魔小丑",
-      "name_ja": "シャコ",
-      "name_ko": "샤코"
+      ]
     },
     {
       "slug": "vladimir",
@@ -3900,11 +3528,7 @@
         "haste",
         "heal_shield",
         "on_hit"
-      ],
-      "name_zh_TW": "弗拉迪米爾",
-      "name_zh_CN": "猩红收割者",
-      "name_ja": "ブラッドミア",
-      "name_ko": "블라디미르"
+      ]
     },
     {
       "slug": "kassadin",
@@ -3941,11 +3565,7 @@
         "haste",
         "heal_shield",
         "movement"
-      ],
-      "name_zh_TW": "卡薩丁",
-      "name_zh_CN": "虚空行者",
-      "name_ja": "カサディン",
-      "name_ko": "카사딘"
+      ]
     },
     {
       "slug": "talon",
@@ -3982,11 +3602,7 @@
         "dot",
         "movement",
         "on_hit"
-      ],
-      "name_zh_TW": "塔隆",
-      "name_zh_CN": "刀锋之影",
-      "name_ja": "タロン",
-      "name_ko": "탈론"
+      ]
     },
     {
       "slug": "ambessa",
@@ -4024,11 +3640,7 @@
         "heal_shield",
         "movement",
         "on_hit"
-      ],
-      "name_zh_TW": "安比薩",
-      "name_zh_CN": "铁血狼母",
-      "name_ja": "アンベッサ",
-      "name_ko": "암베사"
+      ]
     },
     {
       "slug": "mordekaiser",
@@ -4067,11 +3679,7 @@
         "dot",
         "haste",
         "heal_shield"
-      ],
-      "name_zh_TW": "魔鬥凱薩",
-      "name_zh_CN": "铁铠冥魂",
-      "name_ja": "モルデカイザー",
-      "name_ko": "모데카이저"
+      ]
     },
     {
       "slug": "renata",
@@ -4109,11 +3717,7 @@
         "dot",
         "haste",
         "heal_shield"
-      ],
-      "name_zh_TW": "睿娜妲‧格萊斯克",
-      "name_zh_CN": "炼金男爵",
-      "name_ja": "レナータ・グラスク",
-      "name_ko": "레나타 글라스크"
+      ]
     },
     {
       "slug": "akshan",
@@ -4149,11 +3753,7 @@
         "attack",
         "heal_shield",
         "movement"
-      ],
-      "name_zh_TW": "埃可尚",
-      "name_zh_CN": "影哨",
-      "name_ja": "アクシャン",
-      "name_ko": "아크샨"
+      ]
     },
     {
       "slug": "janna",
@@ -4190,11 +3790,7 @@
         "cc",
         "heal_shield",
         "movement"
-      ],
-      "name_zh_TW": "珍娜",
-      "name_zh_CN": "风暴之怒",
-      "name_ja": "ジャンナ",
-      "name_ko": "잔나"
+      ]
     },
     {
       "slug": "blitzcrank",
@@ -4233,11 +3829,7 @@
         "heal_shield",
         "on_hit",
         "tank"
-      ],
-      "name_zh_TW": "布里茨",
-      "name_zh_CN": "蒸汽机器人",
-      "name_ja": "ブリッツクランク",
-      "name_ko": "블리츠크랭크"
+      ]
     },
     {
       "slug": "illaoi",
@@ -4274,11 +3866,7 @@
         "heal_shield",
         "on_hit",
         "tank"
-      ],
-      "name_zh_TW": "伊羅旖",
-      "name_zh_CN": "海兽祭司",
-      "name_ja": "イラオイ",
-      "name_ko": "일라오이"
+      ]
     },
     {
       "slug": "monkeyking",
@@ -4318,11 +3906,7 @@
         "movement",
         "on_hit",
         "tank"
-      ],
-      "name_zh_TW": "悟空",
-      "name_zh_CN": "齐天大圣",
-      "name_ja": "ウーコン",
-      "name_ko": "오공"
+      ]
     },
     {
       "slug": "thresh",
@@ -4359,11 +3943,7 @@
         "cc",
         "heal_shield",
         "tank"
-      ],
-      "name_zh_TW": "瑟雷西",
-      "name_zh_CN": "魂锁典狱长",
-      "name_ja": "スレッシュ",
-      "name_ko": "쓰레쉬"
+      ]
     },
     {
       "slug": "amumu",
@@ -4399,11 +3979,7 @@
         "cc",
         "on_hit",
         "tank"
-      ],
-      "name_zh_TW": "阿姆姆",
-      "name_zh_CN": "殇之木乃伊",
-      "name_ja": "アムム",
-      "name_ko": "아무무"
+      ]
     },
     {
       "slug": "riven",
@@ -4440,11 +4016,7 @@
         "cc",
         "movement",
         "on_hit"
-      ],
-      "name_zh_TW": "雷玟",
-      "name_zh_CN": "放逐之刃",
-      "name_ja": "リヴェン",
-      "name_ko": "리븐"
+      ]
     },
     {
       "slug": "samira",
@@ -4481,11 +4053,7 @@
         "crit",
         "movement",
         "on_hit"
-      ],
-      "name_zh_TW": "煞蜜拉",
-      "name_zh_CN": "沙漠玫瑰",
-      "name_ja": "サミーラ",
-      "name_ko": "사미라"
+      ]
     },
     {
       "slug": "gragas",
@@ -4525,11 +4093,7 @@
         "movement",
         "on_hit",
         "tank"
-      ],
-      "name_zh_TW": "古拉格斯",
-      "name_zh_CN": "酒桶",
-      "name_ja": "グラガス",
-      "name_ko": "그라가스"
+      ]
     },
     {
       "slug": "orianna",
@@ -4566,11 +4130,7 @@
         "cc",
         "haste",
         "heal_shield"
-      ],
-      "name_zh_TW": "奧莉安娜",
-      "name_zh_CN": "发条魔灵",
-      "name_ja": "オリアナ",
-      "name_ko": "오리아나"
+      ]
     },
     {
       "slug": "kalista",
@@ -4606,11 +4166,7 @@
         "crit",
         "movement",
         "on_hit"
-      ],
-      "name_zh_TW": "克黎思妲",
-      "name_zh_CN": "复仇之矛",
-      "name_ja": "カリスタ",
-      "name_ko": "칼리스타"
+      ]
     },
     {
       "slug": "nilah",
@@ -4649,11 +4205,7 @@
         "heal_shield",
         "movement",
         "on_hit"
-      ],
-      "name_zh_TW": "淣菈",
-      "name_zh_CN": "不羁之悦",
-      "name_ja": "ニーラ",
-      "name_ko": "닐라"
+      ]
     },
     {
       "slug": "lissandra",
@@ -4690,11 +4242,7 @@
         "haste",
         "heal_shield",
         "movement"
-      ],
-      "name_zh_TW": "麗珊卓",
-      "name_zh_CN": "冰霜女巫",
-      "name_ja": "リサンドラ",
-      "name_ko": "리산드라"
+      ]
     },
     {
       "slug": "udyr",
@@ -4731,11 +4279,7 @@
         "heal_shield",
         "movement",
         "tank"
-      ],
-      "name_zh_TW": "烏迪爾",
-      "name_zh_CN": "兽灵行者",
-      "name_ja": "ウディア",
-      "name_ko": "우디르"
+      ]
     },
     {
       "slug": "karma",
@@ -4772,11 +4316,7 @@
         "cc",
         "haste",
         "heal_shield"
-      ],
-      "name_zh_TW": "卡瑪",
-      "name_zh_CN": "天启者",
-      "name_ja": "カルマ",
-      "name_ko": "카르마"
+      ]
     },
     {
       "slug": "nocturne",
@@ -4815,11 +4355,7 @@
         "heal_shield",
         "movement",
         "on_hit"
-      ],
-      "name_zh_TW": "夜曲",
-      "name_zh_CN": "永恒梦魇",
-      "name_ja": "ノクターン",
-      "name_ko": "녹턴"
+      ]
     },
     {
       "slug": "aatrox",
@@ -4857,11 +4393,7 @@
         "movement",
         "on_hit",
         "tank"
-      ],
-      "name_zh_TW": "厄薩斯",
-      "name_zh_CN": "暗裔剑魔",
-      "name_ja": "エイトロックス",
-      "name_ko": "아트록스"
+      ]
     },
     {
       "slug": "khazix",
@@ -4898,11 +4430,7 @@
         "cc",
         "movement",
         "on_hit"
-      ],
-      "name_zh_TW": "卡力斯",
-      "name_zh_CN": "虚空掠夺者",
-      "name_ja": "カ＝ジックス",
-      "name_ko": "카직스"
+      ]
     },
     {
       "slug": "draven",
@@ -4939,11 +4467,7 @@
         "crit",
         "movement",
         "on_hit"
-      ],
-      "name_zh_TW": "達瑞文",
-      "name_zh_CN": "荣耀行刑官",
-      "name_ja": "ドレイヴン",
-      "name_ko": "드레이븐"
+      ]
     },
     {
       "slug": "poppy",
@@ -4982,11 +4506,7 @@
         "heal_shield",
         "movement",
         "tank"
-      ],
-      "name_zh_TW": "波比",
-      "name_zh_CN": "圣锤之毅",
-      "name_ja": "ポッピー",
-      "name_ko": "뽀삐"
+      ]
     },
     {
       "slug": "sona",
@@ -5023,11 +4543,7 @@
         "cc",
         "haste",
         "heal_shield"
-      ],
-      "name_zh_TW": "索娜",
-      "name_zh_CN": "琴瑟仙女",
-      "name_ja": "ソナ",
-      "name_ko": "소나"
+      ]
     },
     {
       "slug": "soraka",
@@ -5063,11 +4579,7 @@
         "ability",
         "cc",
         "heal_shield"
-      ],
-      "name_zh_TW": "索拉卡",
-      "name_zh_CN": "众星之子",
-      "name_ja": "ソラカ",
-      "name_ko": "소라카"
+      ]
     },
     {
       "slug": "katarina",
@@ -5105,11 +4617,7 @@
         "dot",
         "haste",
         "movement"
-      ],
-      "name_zh_TW": "卡特蓮娜",
-      "name_zh_CN": "不祥之刃",
-      "name_ja": "カタリナ",
-      "name_ko": "카타리나"
+      ]
     },
     {
       "slug": "diana",
@@ -5145,11 +4653,7 @@
         "ability",
         "heal_shield",
         "movement"
-      ],
-      "name_zh_TW": "黛安娜",
-      "name_zh_CN": "皎月女神",
-      "name_ja": "ダイアナ",
-      "name_ko": "다이애나"
+      ]
     },
     {
       "slug": "volibear",
@@ -5188,11 +4692,7 @@
         "movement",
         "on_hit",
         "tank"
-      ],
-      "name_zh_TW": "弗力貝爾",
-      "name_zh_CN": "不灭狂雷",
-      "name_ja": "ボリベア",
-      "name_ko": "볼리베어"
+      ]
     },
     {
       "slug": "cassiopeia",
@@ -5229,11 +4729,7 @@
         "dot",
         "haste",
         "heal_shield"
-      ],
-      "name_zh_TW": "卡莎碧雅",
-      "name_zh_CN": "魔蛇之拥",
-      "name_ja": "カシオペア",
-      "name_ko": "카시오페아"
+      ]
     },
     {
       "slug": "leesin",
@@ -5271,11 +4767,7 @@
         "heal_shield",
         "movement",
         "on_hit"
-      ],
-      "name_zh_TW": "李星",
-      "name_zh_CN": "盲僧",
-      "name_ja": "リー・シン",
-      "name_ko": "리 신"
+      ]
     },
     {
       "slug": "annie",
@@ -5313,11 +4805,7 @@
         "dot",
         "haste",
         "heal_shield"
-      ],
-      "name_zh_TW": "安妮",
-      "name_zh_CN": "黑暗之女",
-      "name_ja": "アニー",
-      "name_ko": "애니"
+      ]
     },
     {
       "slug": "nami",
@@ -5354,11 +4842,7 @@
         "cc",
         "heal_shield",
         "movement"
-      ],
-      "name_zh_TW": "娜米",
-      "name_zh_CN": "唤潮鲛姬",
-      "name_ja": "ナミ",
-      "name_ko": "나미"
+      ]
     },
     {
       "slug": "milio",
@@ -5394,11 +4878,7 @@
         "ability",
         "dot",
         "heal_shield"
-      ],
-      "name_zh_TW": "米里歐",
-      "name_zh_CN": "明烛",
-      "name_ja": "ミリオ",
-      "name_ko": "밀리오"
+      ]
     },
     {
       "slug": "quinn",
@@ -5436,11 +4916,7 @@
         "crit",
         "movement",
         "on_hit"
-      ],
-      "name_zh_TW": "葵恩",
-      "name_zh_CN": "德玛西亚之翼",
-      "name_ja": "クイン",
-      "name_ko": "퀸"
+      ]
     },
     {
       "slug": "taliyah",
@@ -5477,11 +4953,7 @@
         "cc",
         "haste",
         "movement"
-      ],
-      "name_zh_TW": "塔莉雅",
-      "name_zh_CN": "岩雀",
-      "name_ja": "タリヤ",
-      "name_ko": "탈리야"
+      ]
     },
     {
       "slug": "trundle",
@@ -5520,11 +4992,7 @@
         "heal_shield",
         "on_hit",
         "tank"
-      ],
-      "name_zh_TW": "特朗德",
-      "name_zh_CN": "巨魔之王",
-      "name_ja": "トランドル",
-      "name_ko": "트런들"
+      ]
     },
     {
       "slug": "taric",
@@ -5561,11 +5029,7 @@
         "heal_shield",
         "on_hit",
         "tank"
-      ],
-      "name_zh_TW": "塔里克",
-      "name_zh_CN": "瓦洛兰之盾",
-      "name_ja": "タリック",
-      "name_ko": "타릭"
+      ]
     },
     {
       "slug": "rengar",
@@ -5603,11 +5067,7 @@
         "heal_shield",
         "movement",
         "on_hit"
-      ],
-      "name_zh_TW": "雷葛爾",
-      "name_zh_CN": "傲之追猎者",
-      "name_ja": "レンガー",
-      "name_ko": "렝가"
+      ]
     },
     {
       "slug": "nidalee",
@@ -5645,11 +5105,7 @@
         "haste",
         "heal_shield",
         "movement"
-      ],
-      "name_zh_TW": "奈德麗",
-      "name_zh_CN": "狂野女猎手",
-      "name_ja": "ニダリー",
-      "name_ko": "니달리"
+      ]
     },
     {
       "slug": "nasus",
@@ -5686,11 +5142,7 @@
         "dot",
         "on_hit",
         "tank"
-      ],
-      "name_zh_TW": "納瑟斯",
-      "name_zh_CN": "沙漠死神",
-      "name_ja": "ナサス",
-      "name_ko": "나서스"
+      ]
     },
     {
       "slug": "yuumi",
@@ -5727,11 +5179,7 @@
         "dot",
         "heal_shield",
         "movement"
-      ],
-      "name_zh_TW": "悠咪",
-      "name_zh_CN": "魔法猫咪",
-      "name_ja": "ユーミ",
-      "name_ko": "유미"
+      ]
     },
     {
       "slug": "naafiri",
@@ -5768,11 +5216,7 @@
         "dot",
         "heal_shield",
         "movement"
-      ],
-      "name_zh_TW": "娜菲芮",
-      "name_zh_CN": "百裂冥犬",
-      "name_ja": "ナフィーリ",
-      "name_ko": "나피리"
+      ]
     },
     {
       "slug": "vi",
@@ -5810,11 +5254,7 @@
         "heal_shield",
         "movement",
         "on_hit"
-      ],
-      "name_zh_TW": "菲艾",
-      "name_zh_CN": "皮城执法官",
-      "name_ja": "ヴァイ",
-      "name_ko": "바이"
+      ]
     },
     {
       "slug": "urgot",
@@ -5853,11 +5293,7 @@
         "movement",
         "on_hit",
         "tank"
-      ],
-      "name_zh_TW": "烏爾加特",
-      "name_zh_CN": "无畏战车",
-      "name_ja": "アーゴット",
-      "name_ko": "우르곳"
+      ]
     },
     {
       "slug": "zoe",
@@ -5893,11 +5329,7 @@
         "cc",
         "haste",
         "movement"
-      ],
-      "name_zh_TW": "柔依",
-      "name_zh_CN": "暮光星灵",
-      "name_ja": "ゾーイ",
-      "name_ko": "조이"
+      ]
     },
     {
       "slug": "rammus",
@@ -5933,11 +5365,7 @@
         "cc",
         "movement",
         "tank"
-      ],
-      "name_zh_TW": "拉姆斯",
-      "name_zh_CN": "披甲龙龟",
-      "name_ja": "ラムス",
-      "name_ko": "람머스"
+      ]
     },
     {
       "slug": "azir",
@@ -5976,11 +5404,7 @@
         "haste",
         "heal_shield",
         "movement"
-      ],
-      "name_zh_TW": "阿祈爾",
-      "name_zh_CN": "沙漠皇帝",
-      "name_ja": "アジール",
-      "name_ko": "아지르"
+      ]
     },
     {
       "slug": "braum",
@@ -6017,11 +5441,7 @@
         "heal_shield",
         "on_hit",
         "tank"
-      ],
-      "name_zh_TW": "布郎姆",
-      "name_zh_CN": "弗雷尔卓德之心",
-      "name_ja": "ブラウム",
-      "name_ko": "브라움"
+      ]
     },
     {
       "slug": "lulu",
@@ -6059,11 +5479,7 @@
         "dot",
         "haste",
         "heal_shield"
-      ],
-      "name_zh_TW": "露璐",
-      "name_zh_CN": "仙灵女巫",
-      "name_ja": "ルル",
-      "name_ko": "룰루"
+      ]
     },
     {
       "slug": "anivia",
@@ -6099,11 +5515,7 @@
         "cc",
         "dot",
         "haste"
-      ],
-      "name_zh_TW": "艾妮維亞",
-      "name_zh_CN": "冰晶凤凰",
-      "name_ja": "アニビア",
-      "name_ko": "애니비아"
+      ]
     },
     {
       "slug": "neeko",
@@ -6139,11 +5551,7 @@
         "ability",
         "cc",
         "haste"
-      ],
-      "name_zh_TW": "妮可",
-      "name_zh_CN": "万花通灵",
-      "name_ja": "ニーコ",
-      "name_ko": "니코"
+      ]
     },
     {
       "slug": "qiyana",
@@ -6180,11 +5588,7 @@
         "dot",
         "movement",
         "on_hit"
-      ],
-      "name_zh_TW": "姬亞娜",
-      "name_zh_CN": "元素女皇",
-      "name_ja": "キヤナ",
-      "name_ko": "키아나"
+      ]
     },
     {
       "slug": "nunu",
@@ -6223,11 +5627,7 @@
         "heal_shield",
         "on_hit",
         "tank"
-      ],
-      "name_zh_TW": "努努和威朗普",
-      "name_zh_CN": "雪原双子",
-      "name_ja": "ヌヌ＆ウィルンプ",
-      "name_ko": "누누와 윌럼프"
+      ]
     },
     {
       "slug": "gnar",
@@ -6266,11 +5666,7 @@
         "haste",
         "movement",
         "tank"
-      ],
-      "name_zh_TW": "吶兒",
-      "name_zh_CN": "迷失之牙",
-      "name_ja": "ナー",
-      "name_ko": "나르"
+      ]
     },
     {
       "slug": "kennen",
@@ -6307,11 +5703,7 @@
         "dot",
         "haste",
         "movement"
-      ],
-      "name_zh_TW": "凱能",
-      "name_zh_CN": "狂暴之心",
-      "name_ja": "ケネン",
-      "name_ko": "케넨"
+      ]
     },
     {
       "slug": "belveth",
@@ -6348,11 +5740,7 @@
         "cc",
         "movement",
         "on_hit"
-      ],
-      "name_zh_TW": "貝爾薇斯",
-      "name_zh_CN": "虚空女皇",
-      "name_ja": "ベル＝ヴェス",
-      "name_ko": "벨베스"
+      ]
     },
     {
       "slug": "reksai",
@@ -6392,11 +5780,7 @@
         "movement",
         "on_hit",
         "tank"
-      ],
-      "name_zh_TW": "雷珂煞",
-      "name_zh_CN": "虚空遁地兽",
-      "name_ja": "レク＝サイ",
-      "name_ko": "렉사이"
+      ]
     },
     {
       "slug": "ivern",
@@ -6433,11 +5817,7 @@
         "cc",
         "heal_shield",
         "movement"
-      ],
-      "name_zh_TW": "埃爾文",
-      "name_zh_CN": "翠神",
-      "name_ja": "アイバーン",
-      "name_ko": "아이번"
+      ]
     },
     {
       "slug": "elise",
@@ -6475,11 +5855,7 @@
         "haste",
         "heal_shield",
         "movement"
-      ],
-      "name_zh_TW": "伊莉絲",
-      "name_zh_CN": "蜘蛛女皇",
-      "name_ja": "エリス",
-      "name_ko": "엘리스"
+      ]
     },
     {
       "slug": "skarner",
@@ -6519,11 +5895,7 @@
         "movement",
         "on_hit",
         "tank"
-      ],
-      "name_zh_TW": "史加納",
-      "name_zh_CN": "上古领主",
-      "name_ja": "スカーナー",
-      "name_ko": "스카너"
+      ]
     },
     {
       "slug": "leblanc",
@@ -6560,11 +5932,7 @@
         "cc",
         "haste",
         "movement"
-      ],
-      "name_zh_TW": "勒布朗",
-      "name_zh_CN": "诡术妖姬",
-      "name_ja": "ルブラン",
-      "name_ko": "르블랑"
+      ]
     },
     {
       "slug": "zac",
@@ -6602,11 +5970,7 @@
         "heal_shield",
         "movement",
         "tank"
-      ],
-      "name_zh_TW": "札克",
-      "name_zh_CN": "生化魔人",
-      "name_ja": "ザック",
-      "name_ko": "자크"
+      ]
     },
     {
       "slug": "rakan",
@@ -6643,11 +6007,7 @@
         "haste",
         "heal_shield",
         "movement"
-      ],
-      "name_zh_TW": "銳空",
-      "name_zh_CN": "幻翎",
-      "name_ja": "ラカン",
-      "name_ko": "라칸"
+      ]
     },
     {
       "slug": "warwick",
@@ -6687,11 +6047,7 @@
         "movement",
         "on_hit",
         "tank"
-      ],
-      "name_zh_TW": "沃維克",
-      "name_zh_CN": "祖安怒兽",
-      "name_ja": "ワーウィック",
-      "name_ko": "워윅"
+      ]
     },
     {
       "slug": "renekton",
@@ -6731,11 +6087,7 @@
         "movement",
         "on_hit",
         "tank"
-      ],
-      "name_zh_TW": "雷尼克頓",
-      "name_zh_CN": "荒漠屠夫",
-      "name_ja": "レネクトン",
-      "name_ko": "레넥톤"
+      ]
     },
     {
       "slug": "zeri",
@@ -6771,11 +6123,7 @@
         "crit",
         "movement",
         "on_hit"
-      ],
-      "name_zh_TW": "婕莉",
-      "name_zh_CN": "祖安花火",
-      "name_ja": "ゼリ",
-      "name_ko": "제리"
+      ]
     },
     {
       "slug": "evelynn",
@@ -6813,11 +6161,7 @@
         "haste",
         "heal_shield",
         "movement"
-      ],
-      "name_zh_TW": "伊芙琳",
-      "name_zh_CN": "痛苦之拥",
-      "name_ja": "イブリン",
-      "name_ko": "이블린"
+      ]
     },
     {
       "slug": "akali",
@@ -6854,11 +6198,7 @@
         "haste",
         "movement",
         "on_hit"
-      ],
-      "name_zh_TW": "阿卡莉",
-      "name_zh_CN": "离群之刺",
-      "name_ja": "アカリ",
-      "name_ko": "아칼리"
+      ]
     },
     {
       "slug": "olaf",
@@ -6896,11 +6236,7 @@
         "heal_shield",
         "on_hit",
         "tank"
-      ],
-      "name_zh_TW": "歐拉夫",
-      "name_zh_CN": "狂战士",
-      "name_ja": "オラフ",
-      "name_ko": "올라프"
+      ]
     },
     {
       "slug": "kled",
@@ -6937,11 +6273,7 @@
         "heal_shield",
         "movement",
         "on_hit"
-      ],
-      "name_zh_TW": "克雷德",
-      "name_zh_CN": "暴怒骑士",
-      "name_ja": "クレッド",
-      "name_ko": "클레드"
+      ]
     },
     {
       "slug": "yorick",
@@ -6979,11 +6311,7 @@
         "movement",
         "on_hit",
         "tank"
-      ],
-      "name_zh_TW": "約瑞科",
-      "name_zh_CN": "牧魂人",
-      "name_ja": "ヨリック",
-      "name_ko": "요릭"
+      ]
     },
     {
       "slug": "ksante",
@@ -7021,11 +6349,7 @@
         "movement",
         "on_hit",
         "tank"
-      ],
-      "name_zh_TW": "卡桑帝",
-      "name_zh_CN": "纳祖芒荣耀",
-      "name_ja": "カ・サンテ",
-      "name_ko": "크산테"
+      ]
     },
     {
       "slug": "irelia",
@@ -7064,11 +6388,7 @@
         "heal_shield",
         "movement",
         "on_hit"
-      ],
-      "name_zh_TW": "伊瑞莉雅",
-      "name_zh_CN": "刀锋舞者",
-      "name_ja": "イレリア",
-      "name_ko": "이렐리아"
+      ]
     },
     {
       "slug": "camille",
@@ -7106,11 +6426,7 @@
         "heal_shield",
         "movement",
         "on_hit"
-      ],
-      "name_zh_TW": "卡蜜兒",
-      "name_zh_CN": "青钢影",
-      "name_ja": "カミール",
-      "name_ko": "카밀"
+      ]
     },
     {
       "slug": "bard",
@@ -7147,11 +6463,7 @@
         "cc",
         "heal_shield",
         "movement"
-      ],
-      "name_zh_TW": "巴德",
-      "name_zh_CN": "星界游神",
-      "name_ja": "バード",
-      "name_ko": "바드"
+      ]
     }
   ]
 }
