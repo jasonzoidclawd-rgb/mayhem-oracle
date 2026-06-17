@@ -1,6 +1,6 @@
 {
   "patch": "26.12",
-  "scraped_at": "2026-06-16T23:24:47.861338+00:00",
+  "scraped_at": "2026-06-17T23:24:31.804982+00:00",
   "item_exclusions": [],
   "mutually_exclusive": [],
   "ally_exclusions": [],
@@ -39,7 +39,6 @@
       "poro-stampede": "26.12",
       "pressure-cooker": "26.12",
       "pursuit-of-haste": "26.12",
-      "pursuit-of-power": "26.12",
       "quickstep": "26.12",
       "ravenous-bind": "26.12",
       "rejuvenation": "26.12",
@@ -103,6 +102,7 @@
       "orbitallaser": "26.12",
       "perseverance": "26.12",
       "poro-blaster": "26.12",
+      "pursuit-of-power": "26.12",
       "quantum-computing": "26.12",
       "rabble-rousing": "26.12",
       "red-envelopes": "26.12",
