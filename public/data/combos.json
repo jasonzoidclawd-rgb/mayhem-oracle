@@ -1,6 +1,6 @@
 {
   "patch": "26.12",
-  "scraped_at": "2026-06-17T23:17:24.471671+00:00",
+  "scraped_at": "2026-06-18T23:29:08.534945+00:00",
   "combos": [
     {
       "champion": "vayne",
@@ -39,6 +39,12 @@
       "ref": "curated:graves-back-to-basics"
     },
     {
+      "champion": "graves",
+      "augment": "Slow And Steady",
+      "tier": "S",
+      "ref": "curated:graves-slow-and-steady"
+    },
+    {
       "champion": "lucian",
       "augment": "Jeweled Gauntlet",
       "tier": "S",
@@ -73,12 +79,6 @@
       "augment": "Shrink Engine",
       "tier": "S",
       "ref": "curated:aurelionsol-叠角龙100斩杀龙王"
-    },
-    {
-      "champion": "graves",
-      "augment": "Slow And Steady",
-      "tier": "S",
-      "ref": "curated:graves-slow-and-steady"
     },
     {
       "champion": "yasuo",
@@ -117,12 +117,6 @@
       "ref": "curated:brand-magic-missile"
     },
     {
-      "champion": "vayne",
-      "augment": "Twice Thrice",
-      "tier": "S",
-      "ref": "curated:vayne-twice-thrice"
-    },
-    {
       "champion": "morgana",
       "augment": "Executioner",
       "tier": "S",
@@ -133,12 +127,6 @@
       "augment": "Critical Healing",
       "tier": "S",
       "ref": "curated:yasuo-毁坏仪式无限护盾流"
-    },
-    {
-      "champion": "malzahar",
-      "augment": "Infernal Conduit",
-      "tier": "S",
-      "ref": "curated:malzahar-infernal-conduit"
     },
     {
       "champion": "pantheon",
@@ -249,10 +237,22 @@
       "ref": "curated:rell-残忍坦克流"
     },
     {
+      "champion": "vayne",
+      "augment": "Twice Thrice",
+      "tier": "S",
+      "ref": "curated:vayne-twice-thrice"
+    },
+    {
       "champion": "lillia",
       "augment": "Infernal Conduit",
       "tier": "S",
       "ref": "curated:lillia-infernal-conduit"
+    },
+    {
+      "champion": "malzahar",
+      "augment": "Infernal Conduit",
+      "tier": "S",
+      "ref": "curated:malzahar-infernal-conduit"
     },
     {
       "champion": "fizz",
@@ -277,6 +277,12 @@
       "augment": "Vulnerability",
       "tier": "S",
       "ref": "curated:lucian-vulnerability"
+    },
+    {
+      "champion": "karthus",
+      "augment": "Infinite Recursion",
+      "tier": "S",
+      "ref": "curated:karthus-infinite-recursion"
     },
     {
       "champion": "missfortune",
@@ -313,12 +319,6 @@
       "augment": "Master of Duality",
       "tier": "S",
       "ref": "curated:xinzhao-物法皆修无限回血流"
-    },
-    {
-      "champion": "rumble",
-      "augment": "Vulnerability",
-      "tier": "S",
-      "ref": "curated:rumble-vulnerability"
     },
     {
       "champion": "lillia",
@@ -399,12 +399,6 @@
       "ref": "curated:lillia-虚空裂隙闪现小鹿"
     },
     {
-      "champion": "karthus",
-      "augment": "Infinite Recursion",
-      "tier": "S",
-      "ref": "curated:karthus-infinite-recursion"
-    },
-    {
       "champion": "tristana",
       "augment": "Draw Your Sword",
       "tier": "S",
@@ -469,6 +463,12 @@
       "augment": "Ethereal Weapon",
       "tier": "S",
       "ref": "curated:amumu-ethereal-weapon"
+    },
+    {
+      "champion": "rumble",
+      "augment": "Vulnerability",
+      "tier": "S",
+      "ref": "curated:rumble-vulnerability"
     },
     {
       "champion": "ryze",
@@ -609,10 +609,10 @@
       "ref": "curated:lux-ethereal-weapon"
     },
     {
-      "champion": "smolder",
-      "augment": "Jeweled Gauntlet",
+      "champion": "akshan",
+      "augment": "Dual Wield",
       "tier": "S",
-      "ref": "curated:smolder-jeweled-gauntlet"
+      "ref": "curated:akshan-dual-wield"
     },
     {
       "champion": "gangplank",
@@ -933,16 +933,16 @@
       "ref": "curated:udyr-jeweled-gauntlet"
     },
     {
+      "champion": "smolder",
+      "augment": "Jeweled Gauntlet",
+      "tier": "S",
+      "ref": "curated:smolder-jeweled-gauntlet"
+    },
+    {
       "champion": "veigar",
       "augment": "Eureka",
       "tier": "S",
       "ref": "curated:veigar-eureka"
-    },
-    {
-      "champion": "akshan",
-      "augment": "Dual Wield",
-      "tier": "S",
-      "ref": "curated:akshan-dual-wield"
     },
     {
       "champion": "shaco",
@@ -1023,12 +1023,6 @@
       "ref": "curated:jarvaniv-万血皇子"
     },
     {
-      "champion": "yunara",
-      "augment": "Double Tap",
-      "tier": "S",
-      "ref": "curated:yunara-双发快射爽飞编制"
-    },
-    {
       "champion": "hecarim",
       "augment": "Ultimate Awakening",
       "tier": "S",
@@ -1039,18 +1033,6 @@
       "augment": "Magic Missile",
       "tier": "S",
       "ref": "curated:galio-成色"
-    },
-    {
-      "champion": "ezreal",
-      "augment": "Draw Your Sword",
-      "tier": "S",
-      "ref": "curated:ezreal-手感好"
-    },
-    {
-      "champion": "pantheon",
-      "augment": "Vulnerability",
-      "tier": "S",
-      "ref": "curated:pantheon-爆杀流潘森"
     },
     {
       "champion": "aurora",
@@ -1375,6 +1357,24 @@
       "augment": "Eureka",
       "tier": "S",
       "ref": "curated:milio-ap米利欧"
+    },
+    {
+      "champion": "yunara",
+      "augment": "Double Tap",
+      "tier": "S",
+      "ref": "curated:yunara-双发快射爽飞编制"
+    },
+    {
+      "champion": "ezreal",
+      "augment": "Draw Your Sword",
+      "tier": "S",
+      "ref": "curated:ezreal-手感好"
+    },
+    {
+      "champion": "pantheon",
+      "augment": "Vulnerability",
+      "tier": "S",
+      "ref": "curated:pantheon-爆杀流潘森"
     },
     {
       "champion": "jax",
@@ -3267,6 +3267,12 @@
       "ref": "curated:twitch-ethereal-weapon"
     },
     {
+      "champion": "heimerdinger",
+      "augment": "It's Killing Time",
+      "tier": "C",
+      "ref": "curated:heimerdinger-its-killing-time"
+    },
+    {
       "champion": "shaco",
       "augment": "Poro Blaster",
       "tier": "C",
@@ -3385,12 +3391,6 @@
       "augment": "Ethereal Weapon",
       "tier": "C",
       "ref": "curated:viktor-ethereal-weapon"
-    },
-    {
-      "champion": "heimerdinger",
-      "augment": "It's Killing Time",
-      "tier": "C",
-      "ref": "curated:heimerdinger-its-killing-time"
     },
     {
       "champion": "neeko",

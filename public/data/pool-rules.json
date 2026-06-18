@@ -1,6 +1,6 @@
 {
   "patch": "26.12",
-  "scraped_at": "2026-06-17T23:24:31.804982+00:00",
+  "scraped_at": "2026-06-18T23:35:37.672279+00:00",
   "item_exclusions": [],
   "mutually_exclusive": [],
   "ally_exclusions": [],
@@ -33,7 +33,6 @@
       "our-healing": "26.12",
       "overextender": "26.12",
       "overloaded": "26.12",
-      "pat-on-the-back": "26.12",
       "pin-cushion": "26.12",
       "porcupine": "26.12",
       "poro-stampede": "26.12",
@@ -100,6 +99,7 @@
       "lightning-strikes": "26.12",
       "mystery-augment": "26.12",
       "orbitallaser": "26.12",
+      "pat-on-the-back": "26.12",
       "perseverance": "26.12",
       "poro-blaster": "26.12",
       "pursuit-of-power": "26.12",
