@@ -1,0 +1,115 @@
+{
+  "context": {
+    "championSlug": "brand",
+    "round": 2,
+    "screenRarity": "gold",
+    "mode": "competitive",
+    "ownedAugmentSlugs": [],
+    "currentItemIds": [],
+    "plannedItemIds": [],
+    "rerollsRemaining": 1,
+    "goldenRerollAvailable": false,
+    "offeredAugmentSlugs": [
+      "from-downtown",
+      "transmute-prismatic",
+      "magic-missile"
+    ]
+  },
+  "result": {
+    "modelVersion": "decision-v1",
+    "context": {
+      "championSlug": "brand",
+      "round": 2,
+      "screenRarity": "gold",
+      "mode": "competitive",
+      "ownedAugmentSlugs": [],
+      "currentItemIds": [],
+      "plannedItemIds": [],
+      "rerollsRemaining": 1,
+      "goldenRerollAvailable": false,
+      "offeredAugmentSlugs": [
+        "from-downtown",
+        "transmute-prismatic",
+        "magic-missile"
+      ]
+    },
+    "poolSize": 49,
+    "candidates": [
+      {
+        "augmentSlug": "from-downtown",
+        "grade": "hot",
+        "score": 82.001,
+        "percentile": 0,
+        "probability": {
+          "initialThree": 0.061,
+          "withNormalRerolls": 0.082
+        },
+        "warnings": [],
+        "reasons": [
+          "reliability:bounded-confidence",
+          "synergy:ability-fit",
+          "round:value-positive"
+        ],
+        "confidence": "medium",
+        "breakdown": {
+          "reliability": 53.334,
+          "synergy": 15,
+          "novelty": 0,
+          "penalties": 0,
+          "roundValue": 3
+        }
+      },
+      {
+        "augmentSlug": "transmute-prismatic",
+        "grade": "hot",
+        "score": 80.481,
+        "percentile": 0.021,
+        "probability": {
+          "initialThree": 0.061,
+          "withNormalRerolls": 0.082
+        },
+        "warnings": [],
+        "reasons": [
+          "reliability:high-confidence"
+        ],
+        "confidence": "high",
+        "breakdown": {
+          "reliability": 67.068,
+          "synergy": 0,
+          "novelty": 0,
+          "penalties": 0,
+          "roundValue": 0
+        }
+      },
+      {
+        "augmentSlug": "magic-missile",
+        "grade": "hot",
+        "score": 80.205,
+        "percentile": 0.042,
+        "probability": {
+          "initialThree": 0.061,
+          "withNormalRerolls": 0.082
+        },
+        "warnings": [],
+        "reasons": [
+          "reliability:high-confidence",
+          "synergy:combo"
+        ],
+        "confidence": "high",
+        "breakdown": {
+          "reliability": 56.838,
+          "synergy": 12,
+          "novelty": 0,
+          "penalties": 0,
+          "roundValue": 0
+        }
+      }
+    ],
+    "reroll": {
+      "stance": "keep",
+      "reasons": [
+        "best-offer-worth-keeping"
+      ]
+    }
+  }
+}

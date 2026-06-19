@@ -13,6 +13,9 @@ export type Tier = "god" | "strong" | "good" | "average" | "weak";
 
 export type AugmentRarity = "prismatic" | "gold" | "silver";
 
+/** 26.12 augment classes — ability/quest augments get dedicated scoring treatment. */
+export type AugmentType = "ability" | "quest" | "standalone";
+
 export interface Champion {
   id: string;           // e.g. "brand", "drmundo"
   name: string;         // English canonical name
@@ -79,6 +82,7 @@ export interface Augment {
   nameJa?: string;
   nameKo?: string;
   rarity: AugmentRarity;
+  type?: AugmentType;
   globalWinRate: number;
   description: string;
   setId?: string;           // augment set this belongs to

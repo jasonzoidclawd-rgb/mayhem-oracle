@@ -2,10 +2,11 @@
 
 import Image from "next/image";
 import { useState, useMemo } from "react";
-import { useTranslations } from "next-intl";
+import { useTranslations, useLocale } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import type { Item } from "@/lib/types";
 import { Tooltip } from "@/components/ui/Tooltip";
+import { localizedName } from "@/lib/i18n/localized-name";
 
 const MAYHEM_TAG_STYLES: Record<string, string> = {
   exclusive:      "rarity-prismatic",
@@ -154,6 +155,7 @@ export function ItemsClient({
   items: Item[];
 }) {
   const t = useTranslations("items");
+  const locale = useLocale();
   const [tab, setTab] = useState<"mayhem" | "all">(
     mayhemExclusive.length > 0 ? "mayhem" : "all"
   );
@@ -164,14 +166,18 @@ export function ItemsClient({
     let list = items;
     if (search.trim()) {
       const q = search.toLowerCase();
-      list = list.filter((item) => item.name.toLowerCase().includes(q));
+      list = list.filter(
+        (item) =>
+          item.name.toLowerCase().includes(q) ||
+          localizedName(item, locale).toLowerCase().includes(q),
+      );
     }
     if (category !== "All") {
       const aliases = FILTER_ALIASES[category] ?? [category];
       list = list.filter((item) => item.categories?.some((c) => aliases.includes(c)));
     }
     return list;
-  }, [items, search, category]);
+  }, [items, search, category, locale]);
 
   return (
     <div>
@@ -254,6 +260,8 @@ function MayhemExclusiveTab({ items }: { items: Item[] }) {
 }
 
 function MayhemItemCard({ item, tagLabel }: { item: Item; tagLabel: string }) {
+  const locale = useLocale();
+  const name = localizedName(item, locale);
   const t = useTranslations("items");
   const tagStyle = MAYHEM_TAG_STYLES[item.mayhemTag ?? "exclusive"];
   const ident = itemIdentifier(item);
@@ -263,14 +271,14 @@ function MayhemItemCard({ item, tagLabel }: { item: Item; tagLabel: string }) {
       <div className="flex items-start gap-3">
         {item.icon ? (
           <div className="relative w-12 h-12 rounded-lg overflow-hidden shrink-0 border border-[var(--color-border-default)]">
-            <Image src={item.icon} alt={item.name} fill className="object-contain" sizes="48px" unoptimized />
+            <Image src={item.icon} alt={name} fill className="object-contain" sizes="48px" unoptimized />
           </div>
         ) : (
           <div className="w-12 h-12 rounded-lg shrink-0 bg-[var(--color-bg-card)] border border-[var(--color-border-default)] flex items-center justify-center text-[var(--color-text-muted)] text-xs">?</div>
         )}
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-2 flex-wrap">
-            <span className="font-semibold text-sm leading-tight">{item.name}</span>
+            <span className="font-semibold text-sm leading-tight">{name}</span>
             <span className={`text-[10px] font-medium px-1.5 py-0.5 rounded border ${tagStyle}`}>{tagLabel}</span>
           </div>
           {item.cost > 0 && (
@@ -421,6 +429,8 @@ function AllItemsTab({
 
 function CatalogItemCard({ item }: { item: Item }) {
   const t = useTranslations("items");
+  const locale = useLocale();
+  const name = localizedName(item, locale);
   const ident = itemIdentifier(item);
 
   const tooltipContent = item.description
@@ -431,13 +441,13 @@ function CatalogItemCard({ item }: { item: Item }) {
     <div className="flex items-start gap-3 p-3 rounded-lg border border-[var(--color-border-default)] bg-[var(--color-bg-card)]/40 hover:border-[var(--color-border-hover)] transition-colors cursor-pointer">
       {item.icon ? (
         <div className="relative w-10 h-10 rounded shrink-0">
-          <Image src={item.icon} alt={item.name} fill className="object-contain" sizes="40px" unoptimized />
+          <Image src={item.icon} alt={name} fill className="object-contain" sizes="40px" unoptimized />
         </div>
       ) : (
         <div className="w-10 h-10 rounded shrink-0 bg-[var(--color-bg-card)] border border-[var(--color-border-default)]" />
       )}
       <div className="flex-1 min-w-0">
-        <div className="text-sm font-medium truncate">{item.name}</div>
+        <div className="text-sm font-medium truncate">{name}</div>
         <div className="text-xs text-amber-400/80 mt-0.5">
           {item.cost.toLocaleString()} {t("goldUnit")}
         </div>

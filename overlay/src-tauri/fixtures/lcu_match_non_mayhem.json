@@ -1,0 +1,29 @@
+{
+  "gameId": 991420001,
+  "queueId": 420,
+  "gameDuration": 1800,
+  "gameVersion": "26.12.123.4567",
+  "participants": [
+    {
+      "participantId": 1,
+      "teamId": 100,
+      "championName": "Aatrox",
+      "stats": {
+        "win": true,
+        "kills": 5,
+        "deaths": 2,
+        "assists": 9,
+        "totalDamageDealtToChampions": 20000
+      }
+    }
+  ],
+  "participantIdentities": [
+    {
+      "participantId": 1,
+      "puuid": "forbidden-ranked-puuid",
+      "player": {
+        "summonerName": "Forbidden Ranked Name"
+      }
+    }
+  ]
+}

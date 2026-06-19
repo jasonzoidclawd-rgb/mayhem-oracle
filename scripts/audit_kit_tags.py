@@ -3,10 +3,10 @@
 audit_kit_tags.py — Per-champion audit of current vs proposed kit_tags.
 
 Reads:
-  public/data/abilities.json
-  public/data/champions.json
-  public/data/augments.json
-  public/data/pool-rules.json
+  data/internal/abilities.json
+  data/internal/champions.json
+  data/internal/augments.json
+  data/internal/pool-rules.json
 
 Writes nothing. Prints:
   - per-champion: current tags, proposed tags, removed/added
@@ -18,11 +18,13 @@ import json
 import re
 from pathlib import Path
 
+from data_paths import INTERNAL_DATA_DIR
+
 ROOT = Path(__file__).parent.parent
-ABILITIES = json.loads((ROOT / "public/data/abilities.json").read_text("utf-8"))
-CHAMPIONS = json.loads((ROOT / "public/data/champions.json").read_text("utf-8"))["champions"]
-AUGMENTS  = json.loads((ROOT / "public/data/augments.json").read_text("utf-8"))["augments"]
-POOL_RULES = json.loads((ROOT / "public/data/pool-rules.json").read_text("utf-8"))
+ABILITIES = json.loads((INTERNAL_DATA_DIR / "abilities.json").read_text("utf-8"))
+CHAMPIONS = json.loads((INTERNAL_DATA_DIR / "champions.json").read_text("utf-8"))["champions"]
+AUGMENTS  = json.loads((INTERNAL_DATA_DIR / "augments.json").read_text("utf-8"))["augments"]
+POOL_RULES = json.loads((INTERNAL_DATA_DIR / "pool-rules.json").read_text("utf-8"))
 
 PROFILES = ABILITIES["profiles"]
 

@@ -1,0 +1,1767 @@
+{
+  "patch": "26.12",
+  "scraped_at": "2026-06-13T14:00:52.409727+00:00",
+  "source": "https://www.leagueoflegends.com/en-us/news/game-updates/",
+  "patches": [
+    {
+      "version": "26.12",
+      "title": "Patch 26.12 Notes",
+      "released": "",
+      "sections": [
+        {
+          "id": "augments",
+          "title": "New Augments",
+          "changes": [
+            {
+              "subject": {
+                "en": "Silver Augments",
+                "zh-cn": "銀級增幅裝置",
+                "ja-jp": "シルバーオーグメント",
+                "ko-kr": "Silver Augments"
+              },
+              "text": {
+                "en": "Adaptive Ward",
+                "zh-cn": "適性之護",
+                "ja-jp": "アダプティブワード",
+                "ko-kr": "Adaptive Ward"
+              },
+              "kind": "changed"
+            },
+            {
+              "subject": {
+                "en": "Silver Augments",
+                "zh-cn": "銀級增幅裝置",
+                "ja-jp": "シルバーオーグメント",
+                "ko-kr": "Silver Augments"
+              },
+              "text": {
+                "en": "Don't Change the Channel",
+                "zh-cn": "別轉台",
+                "ja-jp": "チャンネルはそのまま",
+                "ko-kr": "Don't Change the Channel"
+              },
+              "kind": "changed"
+            },
+            {
+              "subject": {
+                "en": "Silver Augments",
+                "zh-cn": "銀級增幅裝置",
+                "ja-jp": "シルバーオーグメント",
+                "ko-kr": "Silver Augments"
+              },
+              "text": {
+                "en": "Double Defense",
+                "zh-cn": "雙重防禦",
+                "ja-jp": "ダブルディフェンス",
+                "ko-kr": "Double Defense"
+              },
+              "kind": "changed"
+            },
+            {
+              "subject": {
+                "en": "Silver Augments",
+                "zh-cn": "銀級增幅裝置",
+                "ja-jp": "シルバーオーグメント",
+                "ko-kr": "Silver Augments"
+              },
+              "text": {
+                "en": "Forged By The Master",
+                "zh-cn": "大師鑄造",
+                "ja-jp": "マスターに鍛えられて",
+                "ko-kr": "Forged By The Master"
+              },
+              "kind": "changed"
+            },
+            {
+              "subject": {
+                "en": "Silver Augments",
+                "zh-cn": "銀級增幅裝置",
+                "ja-jp": "シルバーオーグメント",
+                "ko-kr": "Silver Augments"
+              },
+              "text": {
+                "en": "It's Go Time",
+                "zh-cn": "該出手了",
+                "ja-jp": "始まるぞ",
+                "ko-kr": "It's Go Time"
+              },
+              "kind": "changed"
+            },
+            {
+              "subject": {
+                "en": "Silver Augments",
+                "zh-cn": "銀級增幅裝置",
+                "ja-jp": "シルバーオーグメント",
+                "ko-kr": "Silver Augments"
+              },
+              "text": {
+                "en": "Pursuit of Power",
+                "zh-cn": "追求力量",
+                "ja-jp": "力の追求",
+                "ko-kr": "Pursuit of Power"
+              },
+              "kind": "changed"
+            },
+            {
+              "subject": {
+                "en": "Silver Augments",
+                "zh-cn": "銀級增幅裝置",
+                "ja-jp": "シルバーオーグメント",
+                "ko-kr": "Silver Augments"
+              },
+              "text": {
+                "en": "Quest: Support Main",
+                "zh-cn": "任務：專精輔助",
+                "ja-jp": "クエスト：サポートメイン",
+                "ko-kr": "Quest: Support Main"
+              },
+              "kind": "changed"
+            },
+            {
+              "subject": {
+                "en": "Silver Augments",
+                "zh-cn": "銀級增幅裝置",
+                "ja-jp": "シルバーオーグメント",
+                "ko-kr": "Silver Augments"
+              },
+              "text": {
+                "en": "Siphon",
+                "zh-cn": "虹吸",
+                "ja-jp": "サイフォン",
+                "ko-kr": "Siphon"
+              },
+              "kind": "changed"
+            },
+            {
+              "subject": {
+                "en": "Silver Augments",
+                "zh-cn": "銀級增幅裝置",
+                "ja-jp": "シルバーオーグメント",
+                "ko-kr": "Silver Augments"
+              },
+              "text": {
+                "en": "Snowday",
+                "zh-cn": "降雪之日",
+                "ja-jp": "スノーデイ",
+                "ko-kr": "Snowday"
+              },
+              "kind": "changed"
+            },
+            {
+              "subject": {
+                "en": "Silver Augments",
+                "zh-cn": "銀級增幅裝置",
+                "ja-jp": "シルバーオーグメント",
+                "ko-kr": "Silver Augments"
+              },
+              "text": {
+                "en": "Stackosaurus Rex",
+                "zh-cn": "堆層暴龍",
+                "ja-jp": "スタックサウルス・レックス",
+                "ko-kr": "Stackosaurus Rex"
+              },
+              "kind": "changed"
+            },
+            {
+              "subject": {
+                "en": "Silver Augments",
+                "zh-cn": "銀級增幅裝置",
+                "ja-jp": "シルバーオーグメント",
+                "ko-kr": "Silver Augments"
+              },
+              "text": {
+                "en": "Stay Resolute",
+                "zh-cn": "果斷",
+                "ja-jp": "固い決意",
+                "ko-kr": "Stay Resolute"
+              },
+              "kind": "changed"
+            },
+            {
+              "subject": {
+                "en": "Silver Augments",
+                "zh-cn": "銀級增幅裝置",
+                "ja-jp": "シルバーオーグメント",
+                "ko-kr": "Silver Augments"
+              },
+              "text": {
+                "en": "Trusty Weapon",
+                "zh-cn": "可靠武器",
+                "ja-jp": "頼れる武器",
+                "ko-kr": "Trusty Weapon"
+              },
+              "kind": "changed"
+            },
+            {
+              "subject": {
+                "en": "Gold Augments",
+                "zh-cn": "金級增幅裝置",
+                "ja-jp": "ゴールドオーグメント",
+                "ko-kr": "Gold Augments"
+              },
+              "text": {
+                "en": "Archmage",
+                "zh-cn": "大法師",
+                "ja-jp": "魔帝",
+                "ko-kr": "Archmage"
+              },
+              "kind": "changed"
+            },
+            {
+              "subject": {
+                "en": "Gold Augments",
+                "zh-cn": "金級增幅裝置",
+                "ja-jp": "ゴールドオーグメント",
+                "ko-kr": "Gold Augments"
+              },
+              "text": {
+                "en": "BONK!",
+                "zh-cn": "一棒入魂！",
+                "ja-jp": "ボカッ！",
+                "ko-kr": "BONK!"
+              },
+              "kind": "changed"
+            },
+            {
+              "subject": {
+                "en": "Gold Augments",
+                "zh-cn": "金級增幅裝置",
+                "ja-jp": "ゴールドオーグメント",
+                "ko-kr": "Gold Augments"
+              },
+              "text": {
+                "en": "Combusting Interest",
+                "zh-cn": "燃燒利息",
+                "ja-jp": "燃える利回り",
+                "ko-kr": "Combusting Interest"
+              },
+              "kind": "changed"
+            },
+            {
+              "subject": {
+                "en": "Gold Augments",
+                "zh-cn": "金級增幅裝置",
+                "ja-jp": "ゴールドオーグメント",
+                "ko-kr": "Gold Augments"
+              },
+              "text": {
+                "en": "Endless Decimation",
+                "zh-cn": "無盡屠滅",
+                "ja-jp": "終わりなき殲滅",
+                "ko-kr": "Endless Decimation"
+              },
+              "kind": "changed"
+            },
+            {
+              "subject": {
+                "en": "Gold Augments",
+                "zh-cn": "金級增幅裝置",
+                "ja-jp": "ゴールドオーグメント",
+                "ko-kr": "Gold Augments"
+              },
+              "text": {
+                "en": "From Downtown",
+                "zh-cn": "超遠射擊",
+                "ja-jp": "ロングシュート",
+                "ko-kr": "From Downtown"
+              },
+              "kind": "changed"
+            },
+            {
+              "subject": {
+                "en": "Gold Augments",
+                "zh-cn": "金級增幅裝置",
+                "ja-jp": "ゴールドオーグメント",
+                "ko-kr": "Gold Augments"
+              },
+              "text": {
+                "en": "Hide on Bush",
+                "zh-cn": "躲草叢",
+                "ja-jp": "Hide on Bush",
+                "ko-kr": "Hide on Bush"
+              },
+              "kind": "changed"
+            },
+            {
+              "subject": {
+                "en": "Gold Augments",
+                "zh-cn": "金級增幅裝置",
+                "ja-jp": "ゴールドオーグメント",
+                "ko-kr": "Gold Augments"
+              },
+              "text": {
+                "en": "Lil' Extra Help",
+                "zh-cn": "小小助力",
+                "ja-jp": "ちょこっとヘルプ",
+                "ko-kr": "Lil' Extra Help"
+              },
+              "kind": "changed"
+            },
+            {
+              "subject": {
+                "en": "Gold Augments",
+                "zh-cn": "金級增幅裝置",
+                "ja-jp": "ゴールドオーグメント",
+                "ko-kr": "Gold Augments"
+              },
+              "text": {
+                "en": "Mercy's Strike",
+                "zh-cn": "慈悲之擊",
+                "ja-jp": "慈悲の一撃",
+                "ko-kr": "Mercy's Strike"
+              },
+              "kind": "changed"
+            },
+            {
+              "subject": {
+                "en": "Gold Augments",
+                "zh-cn": "金級增幅裝置",
+                "ja-jp": "ゴールドオーグメント",
+                "ko-kr": "Gold Augments"
+              },
+              "text": {
+                "en": "Nature is Healing",
+                "zh-cn": "自然治療",
+                "ja-jp": "大自然が回復している",
+                "ko-kr": "Nature is Healing"
+              },
+              "kind": "changed"
+            },
+            {
+              "subject": {
+                "en": "Gold Augments",
+                "zh-cn": "金級增幅裝置",
+                "ja-jp": "ゴールドオーグメント",
+                "ko-kr": "Gold Augments"
+              },
+              "text": {
+                "en": "Our Healing",
+                "zh-cn": "共享治療",
+                "ja-jp": "みんなの回復",
+                "ko-kr": "Our Healing"
+              },
+              "kind": "changed"
+            },
+            {
+              "subject": {
+                "en": "Gold Augments",
+                "zh-cn": "金級增幅裝置",
+                "ja-jp": "ゴールドオーグメント",
+                "ko-kr": "Gold Augments"
+              },
+              "text": {
+                "en": "Overextender",
+                "zh-cn": "過度延伸",
+                "ja-jp": "深追いしすぎ",
+                "ko-kr": "Overextender"
+              },
+              "kind": "changed"
+            },
+            {
+              "subject": {
+                "en": "Gold Augments",
+                "zh-cn": "金級增幅裝置",
+                "ja-jp": "ゴールドオーグメント",
+                "ko-kr": "Gold Augments"
+              },
+              "text": {
+                "en": "Pat On The Back",
+                "zh-cn": "拍拍鼓勵",
+                "ja-jp": "よくやった",
+                "ko-kr": "Pat On The Back"
+              },
+              "kind": "changed"
+            },
+            {
+              "subject": {
+                "en": "Gold Augments",
+                "zh-cn": "金級增幅裝置",
+                "ja-jp": "ゴールドオーグメント",
+                "ko-kr": "Gold Augments"
+              },
+              "text": {
+                "en": "Porcupine",
+                "zh-cn": "豪豬",
+                "ja-jp": "ヤマアラシ",
+                "ko-kr": "Porcupine"
+              },
+              "kind": "changed"
+            },
+            {
+              "subject": {
+                "en": "Gold Augments",
+                "zh-cn": "金級增幅裝置",
+                "ja-jp": "ゴールドオーグメント",
+                "ko-kr": "Gold Augments"
+              },
+              "text": {
+                "en": "Pressure Cooker",
+                "zh-cn": "壓力鍋",
+                "ja-jp": "圧力鍋",
+                "ko-kr": "Pressure Cooker"
+              },
+              "kind": "changed"
+            },
+            {
+              "subject": {
+                "en": "Gold Augments",
+                "zh-cn": "金級增幅裝置",
+                "ja-jp": "ゴールドオーグメント",
+                "ko-kr": "Gold Augments"
+              },
+              "text": {
+                "en": "Pursuit of Haste",
+                "zh-cn": "疾速追擊",
+                "ja-jp": "素早さの追求",
+                "ko-kr": "Pursuit of Haste"
+              },
+              "kind": "changed"
+            },
+            {
+              "subject": {
+                "en": "Gold Augments",
+                "zh-cn": "金級增幅裝置",
+                "ja-jp": "ゴールドオーグメント",
+                "ko-kr": "Gold Augments"
+              },
+              "text": {
+                "en": "Ravenous Bind",
+                "zh-cn": "貪婪束縛",
+                "ja-jp": "貪欲な束縛",
+                "ko-kr": "Ravenous Bind"
+              },
+              "kind": "changed"
+            },
+            {
+              "subject": {
+                "en": "Gold Augments",
+                "zh-cn": "金級增幅裝置",
+                "ja-jp": "ゴールドオーグメント",
+                "ko-kr": "Gold Augments"
+              },
+              "text": {
+                "en": "Rejuvenation",
+                "zh-cn": "回春",
+                "ja-jp": "再生",
+                "ko-kr": "Rejuvenation"
+              },
+              "kind": "changed"
+            },
+            {
+              "subject": {
+                "en": "Gold Augments",
+                "zh-cn": "金級增幅裝置",
+                "ja-jp": "ゴールドオーグメント",
+                "ko-kr": "Gold Augments"
+              },
+              "text": {
+                "en": "Shark Bait",
+                "zh-cn": "鯊魚誘餌",
+                "ja-jp": "サメのエサ",
+                "ko-kr": "Shark Bait"
+              },
+              "kind": "changed"
+            },
+            {
+              "subject": {
+                "en": "Gold Augments",
+                "zh-cn": "金級增幅裝置",
+                "ja-jp": "ゴールドオーグメント",
+                "ko-kr": "Gold Augments"
+              },
+              "text": {
+                "en": "Shark Tempest",
+                "zh-cn": "鯊魚風暴",
+                "ja-jp": "シャークテンペスト",
+                "ko-kr": "Shark Tempest"
+              },
+              "kind": "changed"
+            },
+            {
+              "subject": {
+                "en": "Gold Augments",
+                "zh-cn": "金級增幅裝置",
+                "ja-jp": "ゴールドオーグメント",
+                "ko-kr": "Gold Augments"
+              },
+              "text": {
+                "en": "Snowblast",
+                "zh-cn": "雪爆",
+                "ja-jp": "スノーブラスト",
+                "ko-kr": "Snowblast"
+              },
+              "kind": "changed"
+            },
+            {
+              "subject": {
+                "en": "Gold Augments",
+                "zh-cn": "金級增幅裝置",
+                "ja-jp": "ゴールドオーグメント",
+                "ko-kr": "Gold Augments"
+              },
+              "text": {
+                "en": "Terrain'd",
+                "zh-cn": "劃地為王",
+                "ja-jp": "地形でドン",
+                "ko-kr": "Terrain'd"
+              },
+              "kind": "changed"
+            },
+            {
+              "subject": {
+                "en": "Gold Augments",
+                "zh-cn": "金級增幅裝置",
+                "ja-jp": "ゴールドオーグメント",
+                "ko-kr": "Gold Augments"
+              },
+              "text": {
+                "en": "Tooth Fairy",
+                "zh-cn": "牙仙",
+                "ja-jp": "歯の妖精",
+                "ko-kr": "Tooth Fairy"
+              },
+              "kind": "changed"
+            },
+            {
+              "subject": {
+                "en": "Gold Augments",
+                "zh-cn": "金級增幅裝置",
+                "ja-jp": "ゴールドオーグメント",
+                "ko-kr": "Gold Augments"
+              },
+              "text": {
+                "en": "Void Dash",
+                "zh-cn": "虛空衝刺",
+                "ja-jp": "ヴォイドダッシュ",
+                "ko-kr": "Void Dash"
+              },
+              "kind": "changed"
+            },
+            {
+              "subject": {
+                "en": "Gold Augments",
+                "zh-cn": "金級增幅裝置",
+                "ja-jp": "ゴールドオーグメント",
+                "ko-kr": "Gold Augments"
+              },
+              "text": {
+                "en": "Warlock Juicebox",
+                "zh-cn": "術士果汁盒",
+                "ja-jp": "大魔導師のジュースボックス",
+                "ko-kr": "Warlock Juicebox"
+              },
+              "kind": "changed"
+            },
+            {
+              "subject": {
+                "en": "Gold Augments",
+                "zh-cn": "金級增幅裝置",
+                "ja-jp": "ゴールドオーグメント",
+                "ko-kr": "Gold Augments"
+              },
+              "text": {
+                "en": "Wee Woo Wee Woo",
+                "zh-cn": "嗚咿嗚咿",
+                "ja-jp": "うぃ～！おりゃっ！",
+                "ko-kr": "Wee Woo Wee Woo"
+              },
+              "kind": "changed"
+            },
+            {
+              "subject": {
+                "en": "Gold Augments",
+                "zh-cn": "金級增幅裝置",
+                "ja-jp": "ゴールドオーグメント",
+                "ko-kr": "Gold Augments"
+              },
+              "text": {
+                "en": "Yowch, My Coins!",
+                "zh-cn": "哎呀，我的金幣！",
+                "ja-jp": "あいたっ、私のコイン！",
+                "ko-kr": "Yowch, My Coins!"
+              },
+              "kind": "changed"
+            },
+            {
+              "subject": {
+                "en": "Prismatic Augments",
+                "zh-cn": "稜鏡增幅裝置",
+                "ja-jp": "プリズムオーグメント",
+                "ko-kr": "Prismatic Augments"
+              },
+              "text": {
+                "en": "Chain Reaction",
+                "zh-cn": "連鎖反應",
+                "ja-jp": "連鎖反応",
+                "ko-kr": "Chain Reaction"
+              },
+              "kind": "changed"
+            },
+            {
+              "subject": {
+                "en": "Prismatic Augments",
+                "zh-cn": "稜鏡增幅裝置",
+                "ja-jp": "プリズムオーグメント",
+                "ko-kr": "Prismatic Augments"
+              },
+              "text": {
+                "en": "Dimension Shift",
+                "zh-cn": "次元轉移",
+                "ja-jp": "ディメンションシフト",
+                "ko-kr": "Dimension Shift"
+              },
+              "kind": "changed"
+            },
+            {
+              "subject": {
+                "en": "Prismatic Augments",
+                "zh-cn": "稜鏡增幅裝置",
+                "ja-jp": "プリズムオーグメント",
+                "ko-kr": "Prismatic Augments"
+              },
+              "text": {
+                "en": "DropBear",
+                "zh-cn": "天降戰熊",
+                "ja-jp": "ドロップベア",
+                "ko-kr": "DropBear"
+              },
+              "kind": "changed"
+            },
+            {
+              "subject": {
+                "en": "Prismatic Augments",
+                "zh-cn": "稜鏡增幅裝置",
+                "ja-jp": "プリズムオーグメント",
+                "ko-kr": "Prismatic Augments"
+              },
+              "text": {
+                "en": "Echo Cast",
+                "zh-cn": "共鳴施放",
+                "ja-jp": "エコー キャスト",
+                "ko-kr": "Echo Cast"
+              },
+              "kind": "changed"
+            },
+            {
+              "subject": {
+                "en": "Prismatic Augments",
+                "zh-cn": "稜鏡增幅裝置",
+                "ja-jp": "プリズムオーグメント",
+                "ko-kr": "Prismatic Augments"
+              },
+              "text": {
+                "en": "En Passant",
+                "zh-cn": "吃過路兵",
+                "ja-jp": "アンパッサン",
+                "ko-kr": "En Passant"
+              },
+              "kind": "changed"
+            },
+            {
+              "subject": {
+                "en": "Prismatic Augments",
+                "zh-cn": "稜鏡增幅裝置",
+                "ja-jp": "プリズムオーグメント",
+                "ko-kr": "Prismatic Augments"
+              },
+              "text": {
+                "en": "Hellbent",
+                "zh-cn": "陰魂不散",
+                "ja-jp": "ヘルベント",
+                "ko-kr": "Hellbent"
+              },
+              "kind": "changed"
+            },
+            {
+              "subject": {
+                "en": "Prismatic Augments",
+                "zh-cn": "稜鏡增幅裝置",
+                "ja-jp": "プリズムオーグメント",
+                "ko-kr": "Prismatic Augments"
+              },
+              "text": {
+                "en": "High Roller",
+                "zh-cn": "豪氣賭客",
+                "ja-jp": "ギャンブラー",
+                "ko-kr": "High Roller"
+              },
+              "kind": "changed"
+            },
+            {
+              "subject": {
+                "en": "Prismatic Augments",
+                "zh-cn": "稜鏡增幅裝置",
+                "ja-jp": "プリズムオーグメント",
+                "ko-kr": "Prismatic Augments"
+              },
+              "text": {
+                "en": "Multishot",
+                "zh-cn": "多重射擊",
+                "ja-jp": "マルチショット",
+                "ko-kr": "Multishot"
+              },
+              "kind": "changed"
+            },
+            {
+              "subject": {
+                "en": "Prismatic Augments",
+                "zh-cn": "稜鏡增幅裝置",
+                "ja-jp": "プリズムオーグメント",
+                "ko-kr": "Prismatic Augments"
+              },
+              "text": {
+                "en": "One Trick Pony",
+                "zh-cn": "絕活玩家",
+                "ja-jp": "ワントリック ポニー",
+                "ko-kr": "One Trick Pony"
+              },
+              "kind": "changed"
+            },
+            {
+              "subject": {
+                "en": "Prismatic Augments",
+                "zh-cn": "稜鏡增幅裝置",
+                "ja-jp": "プリズムオーグメント",
+                "ko-kr": "Prismatic Augments"
+              },
+              "text": {
+                "en": "Overloaded",
+                "zh-cn": "輸出超負荷",
+                "ja-jp": "オーバーロード",
+                "ko-kr": "Overloaded"
+              },
+              "kind": "changed"
+            },
+            {
+              "subject": {
+                "en": "Prismatic Augments",
+                "zh-cn": "稜鏡增幅裝置",
+                "ja-jp": "プリズムオーグメント",
+                "ko-kr": "Prismatic Augments"
+              },
+              "text": {
+                "en": "Pin Cushion",
+                "zh-cn": "針插",
+                "ja-jp": "針山",
+                "ko-kr": "Pin Cushion"
+              },
+              "kind": "changed"
+            },
+            {
+              "subject": {
+                "en": "Prismatic Augments",
+                "zh-cn": "稜鏡增幅裝置",
+                "ja-jp": "プリズムオーグメント",
+                "ko-kr": "Prismatic Augments"
+              },
+              "text": {
+                "en": "Poro Stampede",
+                "zh-cn": "普羅衝鋒",
+                "ja-jp": "ポロの大群",
+                "ko-kr": "Poro Stampede"
+              },
+              "kind": "changed"
+            },
+            {
+              "subject": {
+                "en": "Prismatic Augments",
+                "zh-cn": "稜鏡增幅裝置",
+                "ja-jp": "プリズムオーグメント",
+                "ko-kr": "Prismatic Augments"
+              },
+              "text": {
+                "en": "Quickstep",
+                "zh-cn": "快步移動",
+                "ja-jp": "クイックステップ",
+                "ko-kr": "Quickstep"
+              },
+              "kind": "changed"
+            },
+            {
+              "subject": {
+                "en": "Prismatic Augments",
+                "zh-cn": "稜鏡增幅裝置",
+                "ja-jp": "プリズムオーグメント",
+                "ko-kr": "Prismatic Augments"
+              },
+              "text": {
+                "en": "Rite of Ascension",
+                "zh-cn": "昇華儀式",
+                "ja-jp": "超越の儀式",
+                "ko-kr": "Rite of Ascension"
+              },
+              "kind": "changed"
+            },
+            {
+              "subject": {
+                "en": "Prismatic Augments",
+                "zh-cn": "稜鏡增幅裝置",
+                "ja-jp": "プリズムオーグメント",
+                "ko-kr": "Prismatic Augments"
+              },
+              "text": {
+                "en": "Spellsplit",
+                "zh-cn": "法術雙生",
+                "ja-jp": "スペルスプリット",
+                "ko-kr": "Spellsplit"
+              },
+              "kind": "changed"
+            },
+            {
+              "subject": {
+                "en": "Prismatic Augments",
+                "zh-cn": "稜鏡增幅裝置",
+                "ja-jp": "プリズムオーグメント",
+                "ko-kr": "Prismatic Augments"
+              },
+              "text": {
+                "en": "Spirit Bomb",
+                "zh-cn": "靈魂炸彈",
+                "ja-jp": "スピリットボム",
+                "ko-kr": "Spirit Bomb"
+              },
+              "kind": "changed"
+            },
+            {
+              "subject": {
+                "en": "Prismatic Augments",
+                "zh-cn": "稜鏡增幅裝置",
+                "ja-jp": "プリズムオーグメント",
+                "ko-kr": "Prismatic Augments"
+              },
+              "text": {
+                "en": "Squishy Slappy Grab",
+                "zh-cn": "伸縮手掌黏黏樂",
+                "ja-jp": "スクイッシースラッピーグラブ",
+                "ko-kr": "Squishy Slappy Grab"
+              },
+              "kind": "changed"
+            },
+            {
+              "subject": {
+                "en": "Prismatic Augments",
+                "zh-cn": "稜鏡增幅裝置",
+                "ja-jp": "プリズムオーグメント",
+                "ko-kr": "Prismatic Augments"
+              },
+              "text": {
+                "en": "Surge Field",
+                "zh-cn": "高能量場域",
+                "ja-jp": "サージフィールド",
+                "ko-kr": "Surge Field"
+              },
+              "kind": "changed"
+            },
+            {
+              "subject": {
+                "en": "Prismatic Augments",
+                "zh-cn": "稜鏡增幅裝置",
+                "ja-jp": "プリズムオーグメント",
+                "ko-kr": "Prismatic Augments"
+              },
+              "text": {
+                "en": "Terror",
+                "zh-cn": "恐懼",
+                "ja-jp": "「恐怖」",
+                "ko-kr": "Terror"
+              },
+              "kind": "changed"
+            },
+            {
+              "subject": {
+                "en": "Prismatic Augments",
+                "zh-cn": "稜鏡增幅裝置",
+                "ja-jp": "プリズムオーグメント",
+                "ko-kr": "Prismatic Augments"
+              },
+              "text": {
+                "en": "Titan's Resolve",
+                "zh-cn": "泰坦的決意",
+                "ja-jp": "巨人の誓い",
+                "ko-kr": "Titan's Resolve"
+              },
+              "kind": "changed"
+            },
+            {
+              "subject": {
+                "en": "Prismatic Augments",
+                "zh-cn": "稜鏡增幅裝置",
+                "ja-jp": "プリズムオーグメント",
+                "ko-kr": "Prismatic Augments"
+              },
+              "text": {
+                "en": "Tripleshot",
+                "zh-cn": "三連射",
+                "ja-jp": "トリプルショット",
+                "ko-kr": "Tripleshot"
+              },
+              "kind": "changed"
+            }
+          ]
+        },
+        {
+          "id": "augments",
+          "title": "Augment Adjustments",
+          "changes": [
+            {
+              "subject": {
+                "en": "Blade Waltz Will now attempt to re-target the initial target for the final attack so player will be able to land near the initial target Draw Your Sword",
+                "zh-cn": "華爾茲劍舞 現在會嘗試將最終攻擊重新鎖定初始目標，讓玩家能夠在初始目標附近著陸 拔劍吧",
+                "ja-jp": "ブレードワルツ プレイヤーが最終的に最初の対象の近くで終われるように、最後の攻撃で最初の対象に再度対象指定を試みるようになりました 剣を構えよ",
+                "ko-kr": "Blade Waltz Will now attempt to re-target the initial target for the final attack so player will be able to land near the initial target Draw Your Sword"
+              },
+              "text": {
+                "en": "AD: 30% bonus increased up to 30% based on Attack Range (500-650) ⇒ 24% bonus increased up to 100% based on Attack Range (500-650)",
+                "zh-cn": "物攻：30%加成，依攻擊距離（500-650）提升至最多30% ⇒ 24%加成，隨攻擊距離（500-650）提升至最多100%",
+                "ja-jp": "攻撃力：30%増加、射程（500～650）に応じて最大30%まで増加 ⇒ 24%増加、射程（500～650）に応じて最大100%まで増加",
+                "ko-kr": "AD: 30% bonus increased up to 30% based on Attack Range (500-650) ⇒ 24% bonus increased up to 100% based on Attack Range (500-650)"
+              },
+              "kind": "buffed"
+            },
+            {
+              "subject": {
+                "en": "Blade Waltz Will now attempt to re-target the initial target for the final attack so player will be able to land near the initial target Draw Your Sword",
+                "zh-cn": "華爾茲劍舞 現在會嘗試將最終攻擊重新鎖定初始目標，讓玩家能夠在初始目標附近著陸 拔劍吧",
+                "ja-jp": "ブレードワルツ プレイヤーが最終的に最初の対象の近くで終われるように、最後の攻撃で最初の対象に再度対象指定を試みるようになりました 剣を構えよ",
+                "ko-kr": "Blade Waltz Will now attempt to re-target the initial target for the final attack so player will be able to land near the initial target Draw Your Sword"
+              },
+              "text": {
+                "en": "AS: 25% bonus increased up to 30% based on Attack Range (500-650) ⇒ 20% bonus increased up to 100% based on Attack Range (500-650)",
+                "zh-cn": "攻速：25%額外提升，依攻擊距離（500-650）最高提升至30% ⇒ 20%額外提升（依攻擊距離500-650最高提升至100%）",
+                "ja-jp": "攻撃速度：25%増加、射程（500～650）に応じて最大30%まで増加 ⇒ 20%増加、射程（500～650）に応じて最大100%まで増加",
+                "ko-kr": "AS: 25% bonus increased up to 30% based on Attack Range (500-650) ⇒ 20% bonus increased up to 100% based on Attack Range (500-650)"
+              },
+              "kind": "buffed"
+            },
+            {
+              "subject": {
+                "en": "Blade Waltz Will now attempt to re-target the initial target for the final attack so player will be able to land near the initial target Draw Your Sword",
+                "zh-cn": "華爾茲劍舞 現在會嘗試將最終攻擊重新鎖定初始目標，讓玩家能夠在初始目標附近著陸 拔劍吧",
+                "ja-jp": "ブレードワルツ プレイヤーが最終的に最初の対象の近くで終われるように、最後の攻撃で最初の対象に再度対象指定を試みるようになりました 剣を構えよ",
+                "ko-kr": "Blade Waltz Will now attempt to re-target the initial target for the final attack so player will be able to land near the initial target Draw Your Sword"
+              },
+              "text": {
+                "en": "HP: 30% bonus increased up to 30% based on Attack Range (500-650) ⇒ 24% bonus increased up to 100% based on Attack Range (500-650)",
+                "zh-cn": "生命：30%加成，依攻擊距離（500-650）提升至最多30% ⇒ 24%加成，隨攻擊距離（500-650）提升至最多100%",
+                "ja-jp": "体力：30%増加、射程（500～650）に応じて最大30%まで増加 ⇒ 24%増加、射程（500～650）に応じて最大100%まで増加",
+                "ko-kr": "HP: 30% bonus increased up to 30% based on Attack Range (500-650) ⇒ 24% bonus increased up to 100% based on Attack Range (500-650)"
+              },
+              "kind": "buffed"
+            },
+            {
+              "subject": {
+                "en": "Blade Waltz Will now attempt to re-target the initial target for the final attack so player will be able to land near the initial target Draw Your Sword",
+                "zh-cn": "華爾茲劍舞 現在會嘗試將最終攻擊重新鎖定初始目標，讓玩家能夠在初始目標附近著陸 拔劍吧",
+                "ja-jp": "ブレードワルツ プレイヤーが最終的に最初の対象の近くで終われるように、最後の攻撃で最初の対象に再度対象指定を試みるようになりました 剣を構えよ",
+                "ko-kr": "Blade Waltz Will now attempt to re-target the initial target for the final attack so player will be able to land near the initial target Draw Your Sword"
+              },
+              "text": {
+                "en": "MS: 25% bonus increased up to 30% based on Attack Range (500-650) ⇒ 20% bonus increased up to 100% based on Attack Range (500-650)",
+                "zh-cn": "跑速25%額外提升，依攻擊距離（500-650）最高提升至30% ⇒ 20%額外提升（依攻擊距離500-650最高提升至100%）",
+                "ja-jp": "移動速度：25%増加、射程（500～650）に応じて最大30%まで増加 ⇒ 20%増加、射程（500～650）に応じて最大100%まで増加",
+                "ko-kr": "MS: 25% bonus increased up to 30% based on Attack Range (500-650) ⇒ 20% bonus increased up to 100% based on Attack Range (500-650)"
+              },
+              "kind": "buffed"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "version": "26.11",
+      "title": "Patch 26.11 Notes",
+      "released": "",
+      "sections": [
+        {
+          "id": "champions",
+          "title": "Champions",
+          "changes": [
+            {
+              "subject": {
+                "en": "Gwen",
+                "zh-cn": "關",
+                "ja-jp": "グウェン",
+                "ko-kr": "Gwen"
+              },
+              "text": {
+                "en": "Damage Dealt: 102% ⇒ 100%",
+                "zh-cn": "造成傷害 ：102% ⇒ 100%",
+                "ja-jp": "与ダメージ ：102% ⇒ 100%",
+                "ko-kr": "Damage Dealt: 102% ⇒ 100%"
+              },
+              "kind": "nerfed",
+              "subjectSlug": "gwen"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "version": "26.10",
+      "title": "Patch 26.10 Notes",
+      "released": "",
+      "sections": [
+        {
+          "id": "augments",
+          "title": "Augments",
+          "changes": [
+            {
+              "subject": {
+                "en": "Big Brain",
+                "zh-cn": "超强大脑",
+                "ja-jp": "頭脳派",
+                "ko-kr": "전술적 대비",
+                "zh-tw": "超強大腦"
+              },
+              "text": {
+                "en": "NEW Refresh on Respawn or every 70 seconds",
+                "zh-cn": "[新增] 重生時刷新，或每70秒刷新",
+                "ja-jp": "NEW リスポーン時、または70秒ごとにリフレッシュ",
+                "ko-kr": "NEW Refresh on Respawn or every 70 seconds"
+              },
+              "kind": "changed"
+            },
+            {
+              "subject": {
+                "en": "Fan the Hammer",
+                "zh-cn": "旋風鎚",
+                "ja-jp": "ぐるぐるハンマー",
+                "ko-kr": "Fan the Hammer"
+              },
+              "text": {
+                "en": "No longer triggers on minions",
+                "zh-cn": "不再對士兵觸發",
+                "ja-jp": "ミニオンで発動しないように変更",
+                "ko-kr": "No longer triggers on minions"
+              },
+              "kind": "nerfed"
+            },
+            {
+              "subject": {
+                "en": "Outlaw's Grit NEW Stacks now reset based on a 15s duration instead of a fixed timer Stacks show up on buff bar Upgrade Zhonya's",
+                "zh-cn": "俠盜恆毅 [新增] 層數現在會根據15秒時效重置，而非固定計時 層數會顯示在增益欄上 升級中婭",
+                "ja-jp": "無法者の気概 NEW スタックが固定のタイマーではなく、15秒間の持続時間に基づいてリセットされるように変更",
+                "ko-kr": "Outlaw's Grit NEW Stacks now reset based on a 15s duration instead of a fixed timer Stacks show up on buff bar Upgrade Zhonya's"
+              },
+              "text": {
+                "en": "NEW Grants 50% Bonus MS during Stasis",
+                "zh-cn": "[新增] 在凝滯狀態時獲得50%額外跑速",
+                "ja-jp": "バフバーにスタックが表示されるように変更",
+                "ko-kr": "NEW Grants 50% Bonus MS during Stasis"
+              },
+              "kind": "changed"
+            }
+          ]
+        },
+        {
+          "id": "champions",
+          "title": "Champions",
+          "changes": [
+            {
+              "subject": {
+                "en": "Viktor",
+                "zh-cn": "維克特",
+                "ja-jp": "ビクター",
+                "ko-kr": "Viktor"
+              },
+              "text": {
+                "en": "Damage Dealt: 95% ⇒ 100%",
+                "zh-cn": "造成傷害 ：95% ⇒ 100%",
+                "ja-jp": "与ダメージ：95% ⇒ 100%",
+                "ko-kr": "Damage Dealt: 95% ⇒ 100%"
+              },
+              "kind": "buffed",
+              "subjectSlug": "viktor"
+            },
+            {
+              "subject": {
+                "en": "Viktor",
+                "zh-cn": "維克特",
+                "ja-jp": "ビクター",
+                "ko-kr": "Viktor"
+              },
+              "text": {
+                "en": "Damage Taken: 105% ⇒ 100%",
+                "zh-cn": "承受傷害 ：105% ⇒ 100%",
+                "ja-jp": "被ダメージ：105% ⇒ 100%",
+                "ko-kr": "Damage Taken: 105% ⇒ 100%"
+              },
+              "kind": "nerfed",
+              "subjectSlug": "viktor"
+            },
+            {
+              "subject": {
+                "en": "Viktor",
+                "zh-cn": "維克特",
+                "ja-jp": "ビクター",
+                "ko-kr": "Viktor"
+              },
+              "text": {
+                "en": "Passive Stacks per Kill",
+                "zh-cn": "每次擊殺獲得的被動層數",
+                "ja-jp": "固有スキル - キルごとのスタック数",
+                "ko-kr": "Passive Stacks per Kill"
+              },
+              "kind": "changed",
+              "subjectSlug": "viktor"
+            },
+            {
+              "subject": {
+                "en": "Viktor",
+                "zh-cn": "維克特",
+                "ja-jp": "ビクター",
+                "ko-kr": "Viktor"
+              },
+              "text": {
+                "en": "Champion: 20 ⇒ 8",
+                "zh-cn": "英雄：20 ⇒ 8",
+                "ja-jp": "チャンピオン：20 ⇒ 8",
+                "ko-kr": "Champion: 20 ⇒ 8"
+              },
+              "kind": "nerfed",
+              "subjectSlug": "viktor"
+            },
+            {
+              "subject": {
+                "en": "Viktor",
+                "zh-cn": "維克特",
+                "ja-jp": "ビクター",
+                "ko-kr": "Viktor"
+              },
+              "text": {
+                "en": "Cannon 10 ⇒ 5",
+                "zh-cn": "砲台：10 ⇒ 5",
+                "ja-jp": "砲台ミニオン：10 ⇒ 5",
+                "ko-kr": "Cannon 10 ⇒ 5"
+              },
+              "kind": "nerfed",
+              "subjectSlug": "viktor"
+            },
+            {
+              "subject": {
+                "en": "Viktor",
+                "zh-cn": "維克特",
+                "ja-jp": "ビクター",
+                "ko-kr": "Viktor"
+              },
+              "text": {
+                "en": "NEW In ARAM maps, Viktor gains 1 stack every 5 seconds.",
+                "zh-cn": "[新增] 在隨機單中地圖中，維克特每5秒獲得1層。",
+                "ja-jp": "NEW ランダムミッドのマップでは、ビクターは5秒ごとに1スタックを獲得する。",
+                "ko-kr": "NEW In ARAM maps, Viktor gains 1 stack every 5 seconds."
+              },
+              "kind": "changed",
+              "subjectSlug": "viktor"
+            }
+          ]
+        },
+        {
+          "id": "general",
+          "title": "System Changes",
+          "changes": [
+            {
+              "subject": {
+                "en": "Bilgewater Cannon QoL",
+                "zh-cn": "比爾吉沃特大砲體驗改善",
+                "ja-jp": "ビルジウォーター - 大砲の使用感の改善",
+                "ko-kr": "Bilgewater Cannon QoL"
+              },
+              "text": {
+                "en": "Movement lockout from not taking the canon: 2s ⇒ 0.5s",
+                "zh-cn": "因未使用砲台的移動鎖定 ：2秒 ⇒ 0.5秒",
+                "ja-jp": "大砲に乗らなかったことによる移動不能時間：2秒 ⇒ 0.5秒",
+                "ko-kr": "Movement lockout from not taking the canon: 2s ⇒ 0.5s"
+              },
+              "kind": "nerfed"
+            },
+            {
+              "subject": {
+                "en": "Bilgewater Cannon QoL",
+                "zh-cn": "比爾吉沃特大砲體驗改善",
+                "ja-jp": "ビルジウォーター - 大砲の使用感の改善",
+                "ko-kr": "Bilgewater Cannon QoL"
+              },
+              "text": {
+                "en": "Movement lockout from landing after taking the canon: removed",
+                "zh-cn": "使用砲台並著陸後的移動鎖定 ：已移除",
+                "ja-jp": "大砲に乗って着地後の移動不能時間：削除",
+                "ko-kr": "Movement lockout from landing after taking the canon: removed"
+              },
+              "kind": "changed"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "version": "26.9",
+      "title": "Patch 26.9 Notes",
+      "released": "",
+      "sections": [
+        {
+          "id": "champions",
+          "title": "Champions",
+          "changes": [
+            {
+              "subject": {
+                "en": "Bard",
+                "zh-cn": "巴德",
+                "ja-jp": "バード",
+                "ko-kr": "Bard"
+              },
+              "text": {
+                "en": "Caretaker's Shrine W Move Speed: 20 / 22.5 / 25 / 27.5 / 30% (+ 6% per 100 AP) ⇒ 25 / 27.5 / 30 / 32.5 / 35% (+ 7.5% per 100 AP)",
+                "zh-cn": "守望神龕（W）跑速：20 / 22.5 / 25 / 27.5 / 30%（每100魔攻+6%） ⇒ 25 / 27.5 / 30 / 32.5 / 35%（每100魔攻+7.5%） 守望神龕（W）彈藥冷卻時間：10 ⇒ 8",
+                "ja-jp": "回復の遺物（W） - 移動速度 ：20 / 22.5 / 25 / 27.5 / 30%（+魔力100ごとに6%） ⇒ 25 / 27.5 / 30 / 32.5 / 35%（+魔力100ごとに7.5%）",
+                "ko-kr": "Caretaker's Shrine W Move Speed: 20 / 22.5 / 25 / 27.5 / 30% (+ 6% per 100 AP) ⇒ 25 / 27.5 / 30 / 32.5 / 35% (+ 7.5% per 100 AP)"
+              },
+              "kind": "buffed",
+              "subjectSlug": "bard"
+            },
+            {
+              "subject": {
+                "en": "Bard",
+                "zh-cn": "鄂爾",
+                "ja-jp": "バード",
+                "ko-kr": "Bard"
+              },
+              "text": {
+                "en": "Caretaker's Shrine W Ammo Cooldown: 10 ⇒ 8",
+                "zh-cn": "活火爐（P）冷卻時間：120秒 ⇒ 90 - 10秒（取決於等級）",
+                "ja-jp": "回復の遺物（W） - クールダウン ：10秒 ⇒ 8秒",
+                "ko-kr": "Caretaker's Shrine W Ammo Cooldown: 10 ⇒ 8"
+              },
+              "kind": "buffed",
+              "subjectSlug": "bard"
+            },
+            {
+              "subject": {
+                "en": "Ornn",
+                "zh-cn": "Ornn",
+                "ja-jp": "オーン",
+                "ko-kr": "Ornn"
+              },
+              "text": {
+                "en": "Living Forge P Cooldown: 120 seconds ⇒ 90 - 10 seconds (based on level)",
+                "zh-cn": "Living Forge P Cooldown: 120 seconds ⇒ 90 - 10 seconds (based on level)",
+                "ja-jp": "歩く鍛冶場（P） - クールダウン ：120秒 ⇒ 90～10秒（チャンピオンレベルに応じて）",
+                "ko-kr": "Living Forge P Cooldown: 120 seconds ⇒ 90 - 10 seconds (based on level)"
+              },
+              "kind": "buffed",
+              "subjectSlug": "ornn"
+            }
+          ]
+        },
+        {
+          "id": "general",
+          "title": "Systems",
+          "changes": [
+            {
+              "subject": {
+                "en": "Health Relic",
+                "zh-cn": "補包",
+                "ja-jp": "生命の遺宝",
+                "ko-kr": "Health Relic"
+              },
+              "text": {
+                "en": "[UNCHANGED] 8% Missing Health / Mana on Pickup",
+                "zh-cn": "[不變] 撿起時恢復8%已損失生命或魔力",
+                "ja-jp": "[変更なし] 取得時に減少体力/マナの8%を回復",
+                "ko-kr": "[UNCHANGED] 8% Missing Health / Mana on Pickup"
+              },
+              "kind": "changed"
+            },
+            {
+              "subject": {
+                "en": "Health Relic",
+                "zh-cn": "補包",
+                "ja-jp": "生命の遺宝",
+                "ko-kr": "Health Relic"
+              },
+              "text": {
+                "en": "AOE Effect - Missing Health and Mana: 16% ⇒ 22%",
+                "zh-cn": "範圍效果 - 已損失生命與魔力 ：16% ⇒ 22%",
+                "ja-jp": "範囲効果 - 減少体力とマナ ：16% ⇒ 22%",
+                "ko-kr": "AOE Effect - Missing Health and Mana: 16% ⇒ 22%"
+              },
+              "kind": "buffed"
+            }
+          ]
+        },
+        {
+          "id": "augments",
+          "title": "Augments",
+          "changes": [
+            {
+              "subject": {
+                "en": "Upgrade Sword of Blossoming Dawn",
+                "zh-cn": "升級破曉綻放之劍",
+                "ja-jp": "花咲く夜明けの剣 アップグレード",
+                "ko-kr": "Upgrade Sword of Blossoming Dawn"
+              },
+              "text": {
+                "en": "[REMOVED] Basic attacks against champions now deal 50% damage",
+                "zh-cn": "[移除] 對英雄的普攻現在只造成50%傷害",
+                "ja-jp": "[削除] チャンピオンに対する通常攻撃が50%のダメージを与えるようになる",
+                "ko-kr": "[REMOVED] Basic attacks against champions now deal 50% damage"
+              },
+              "kind": "changed"
+            },
+            {
+              "subject": {
+                "en": "Prom Queen",
+                "zh-cn": "舞会女王",
+                "ja-jp": "プロムクイーン",
+                "ko-kr": "퀸카",
+                "zh-tw": "舞會皇后"
+              },
+              "text": {
+                "en": "Cooldown: 25 seconds ⇒ 35 seconds",
+                "zh-cn": "冷卻時間 ：25秒 ⇒ 35秒",
+                "ja-jp": "クールダウン ：25秒 ⇒ 35秒",
+                "ko-kr": "Cooldown: 25 seconds ⇒ 35 seconds"
+              },
+              "kind": "nerfed"
+            },
+            {
+              "subject": {
+                "en": "Grandma's Chili Oil",
+                "zh-cn": "祖母的辣椒油",
+                "ja-jp": "おばあちゃんのラー油",
+                "ko-kr": "할머니의 고추기름",
+                "zh-tw": "阿嬤的辣油"
+              },
+              "text": {
+                "en": "Base Damage per second:100 ⇒ 150",
+                "zh-cn": "每秒基礎傷害 ：100 ⇒ 150",
+                "ja-jp": "毎秒基本ダメージ ：100 ⇒ 150",
+                "ko-kr": "Base Damage per second:100 ⇒ 150"
+              },
+              "kind": "buffed"
+            },
+            {
+              "subject": {
+                "en": "Grandma's Chili Oil",
+                "zh-cn": "祖母的辣椒油",
+                "ja-jp": "おばあちゃんのラー油",
+                "ko-kr": "할머니의 고추기름",
+                "zh-tw": "阿嬤的辣油"
+              },
+              "text": {
+                "en": "Bonus Damage per burn source: 60 ⇒ 50",
+                "zh-cn": "每個燃燒來源額外傷害 ：60 ⇒ 50",
+                "ja-jp": "炎上発生源ごとの追加ダメージ ：60 ⇒ 50",
+                "ko-kr": "Bonus Damage per burn source: 60 ⇒ 50"
+              },
+              "kind": "nerfed"
+            },
+            {
+              "subject": {
+                "en": "Grandma's Chili Oil",
+                "zh-cn": "祖母的辣椒油",
+                "ja-jp": "おばあちゃんのラー油",
+                "ko-kr": "할머니의 고추기름",
+                "zh-tw": "阿嬤的辣油"
+              },
+              "text": {
+                "en": "Base Heal per second: 60 - 150 (based on level) ⇒ 30 - 75 (based on level)",
+                "zh-cn": "每秒基礎治療 ：60 - 150（取決於等級） ⇒ 30 - 75（取決於等級）",
+                "ja-jp": "基本毎秒体力回復量 ：60～150（チャンピオンレベルに応じて） ⇒ 30～75（チャンピオンレベルに応じて）",
+                "ko-kr": "Base Heal per second: 60 - 150 (based on level) ⇒ 30 - 75 (based on level)"
+              },
+              "kind": "nerfed"
+            },
+            {
+              "subject": {
+                "en": "Grandma's Chili Oil",
+                "zh-cn": "祖母的辣椒油",
+                "ja-jp": "おばあちゃんのラー油",
+                "ko-kr": "할머니의 고추기름",
+                "zh-tw": "阿嬤的辣油"
+              },
+              "text": {
+                "en": "Bonus heal per burn source: 50 ⇒ 25",
+                "zh-cn": "每個燃燒來源額外治療 ：50 ⇒ 25",
+                "ja-jp": "炎上発生源ごとの追加体力回復量 ：50 ⇒ 25",
+                "ko-kr": "Bonus heal per burn source: 50 ⇒ 25"
+              },
+              "kind": "nerfed"
+            }
+          ]
+        },
+        {
+          "id": "new_items",
+          "title": "Items",
+          "changes": [
+            {
+              "subject": {
+                "en": "Hubris",
+                "zh-cn": "Hubris",
+                "ja-jp": "Hubris",
+                "ko-kr": "Hubris"
+              },
+              "text": {
+                "en": "Attack Damage: 60 ⇒ 55",
+                "zh-cn": "Attack Damage: 60 ⇒ 55",
+                "ja-jp": "Attack Damage: 60 ⇒ 55",
+                "ko-kr": "Attack Damage: 60 ⇒ 55"
+              },
+              "kind": "nerfed"
+            },
+            {
+              "subject": {
+                "en": "Hubris",
+                "zh-cn": "Hubris",
+                "ja-jp": "Hubris",
+                "ko-kr": "Hubris"
+              },
+              "text": {
+                "en": "Ability Haste: 15 ⇒ 10",
+                "zh-cn": "Ability Haste: 15 ⇒ 10",
+                "ja-jp": "Ability Haste: 15 ⇒ 10",
+                "ko-kr": "Ability Haste: 15 ⇒ 10"
+              },
+              "kind": "nerfed"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "version": "26.8",
+      "title": "Patch 26.8 Notes",
+      "released": "",
+      "sections": [
+        {
+          "id": "champions",
+          "title": "Champions",
+          "changes": [
+            {
+              "subject": {
+                "en": "Mel",
+                "zh-cn": "梅爾",
+                "ja-jp": "メル",
+                "ko-kr": "Mel"
+              },
+              "text": {
+                "en": "Rebuttal W Cooldown: 35 / 32 / 29 / 26 / 23 ⇒ 45 / 44 / 43 / 42 / 41",
+                "zh-cn": "叱返金身（W）冷卻時間 35 / 32 / 29 / 26 / 23 ⇒ 45 / 44 / 43 / 42 / 41",
+                "ja-jp": "「反駁（W）」のクールダウン ：35 / 32 / 29 / 26 / 23 ⇒ 45 / 44 / 43 / 42 / 41",
+                "ko-kr": "Rebuttal W Cooldown: 35 / 32 / 29 / 26 / 23 ⇒ 45 / 44 / 43 / 42 / 41"
+              },
+              "kind": "nerfed",
+              "subjectSlug": "mel"
+            }
+          ]
+        },
+        {
+          "id": "new_items",
+          "title": "Items",
+          "changes": [
+            {
+              "subject": {
+                "en": "Immortal Shieldbow",
+                "zh-cn": "不朽盾弓",
+                "ja-jp": "イモータル シールドボウ",
+                "ko-kr": "Immortal Shieldbow"
+              },
+              "text": {
+                "en": "Cooldown: 75 ⇒ 60 seconds",
+                "zh-cn": "冷卻時間：75秒 ⇒ 60秒",
+                "ja-jp": "クールダウン：75秒 ⇒ 60秒",
+                "ko-kr": "Cooldown: 75 ⇒ 60 seconds"
+              },
+              "kind": "buffed"
+            },
+            {
+              "subject": {
+                "en": "Locket of the Iron Solari",
+                "zh-cn": "日輪的加冕",
+                "ja-jp": "ソラリのロケット",
+                "ko-kr": "Locket of the Iron Solari"
+              },
+              "text": {
+                "en": "Cooldown: 90 ⇒ 75 seconds",
+                "zh-cn": "冷卻時間：90秒 ⇒ 75秒",
+                "ja-jp": "クールダウン：90秒 ⇒ 75秒",
+                "ko-kr": "Cooldown: 90 ⇒ 75 seconds"
+              },
+              "kind": "buffed"
+            },
+            {
+              "subject": {
+                "en": "Maw of Malmortius",
+                "zh-cn": "魔提斯深淵",
+                "ja-jp": "マルモティウスの胃袋",
+                "ko-kr": "Maw of Malmortius"
+              },
+              "text": {
+                "en": "Cooldown: 75 ⇒ 60 seconds",
+                "zh-cn": "冷卻時間：75秒 ⇒ 60秒",
+                "ja-jp": "クールダウン：75秒 ⇒ 60秒",
+                "ko-kr": "Cooldown: 75 ⇒ 60 seconds"
+              },
+              "kind": "buffed"
+            },
+            {
+              "subject": {
+                "en": "Protoplasm Harness",
+                "zh-cn": "原質馭帶",
+                "ja-jp": "プロトプラズム ハーネス",
+                "ko-kr": "Protoplasm Harness"
+              },
+              "text": {
+                "en": "Cooldown: 90 ⇒ 60 seconds",
+                "zh-cn": "冷卻時間：90秒 ⇒ 60秒",
+                "ja-jp": "クールダウン：90秒 ⇒ 60秒",
+                "ko-kr": "Cooldown: 90 ⇒ 60 seconds"
+              },
+              "kind": "buffed"
+            },
+            {
+              "subject": {
+                "en": "Randuin's Omen",
+                "zh-cn": "蘭頓之兆",
+                "ja-jp": "ランデュイン オーメン",
+                "ko-kr": "Randuin's Omen"
+              },
+              "text": {
+                "en": "Cooldown: 90 ⇒ 60 seconds",
+                "zh-cn": "冷卻時間：90秒 ⇒ 60秒",
+                "ja-jp": "クールダウン：90秒 ⇒ 60秒",
+                "ko-kr": "Cooldown: 90 ⇒ 60 seconds"
+              },
+              "kind": "buffed"
+            },
+            {
+              "subject": {
+                "en": "Shurelya's Battlesong",
+                "zh-cn": "蘇瑞亞的戰歌",
+                "ja-jp": "シュレリアの戦歌",
+                "ko-kr": "Shurelya's Battlesong"
+              },
+              "text": {
+                "en": "Cooldown: 75 ⇒ 60 seconds",
+                "zh-cn": "冷卻時間：75秒 ⇒ 60秒",
+                "ja-jp": "クールダウン：75秒 ⇒ 60秒",
+                "ko-kr": "Cooldown: 75 ⇒ 60 seconds"
+              },
+              "kind": "buffed"
+            },
+            {
+              "subject": {
+                "en": "Sterak's Gage",
+                "zh-cn": "史特拉克手套",
+                "ja-jp": "ステラックの篭手",
+                "ko-kr": "Sterak's Gage"
+              },
+              "text": {
+                "en": "Cooldown: 75 ⇒ 60 seconds",
+                "zh-cn": "冷卻時間：75秒 ⇒ 60秒",
+                "ja-jp": "クールダウン：75秒 ⇒ 60秒",
+                "ko-kr": "Cooldown: 75 ⇒ 60 seconds"
+              },
+              "kind": "buffed"
+            }
+          ]
+        },
+        {
+          "id": "augments",
+          "title": "Augments",
+          "changes": [
+            {
+              "subject": {
+                "en": "Fan the Hammer",
+                "zh-cn": "旋風鎚",
+                "ja-jp": "ぐるぐるハンマー",
+                "ko-kr": "Fan the Hammer"
+              },
+              "text": {
+                "en": "Per Missile Damage: 10 - 52.5 (+ 15% bonus AD) ⇒ 8 - 51 (+ 14% bonus AD)",
+                "zh-cn": "每發箭矢傷害 ：10 - 52.5（+15%額外物攻） ⇒ 8 - 51（+14%額外物攻）",
+                "ja-jp": "ミサイルごとのダメージ ：10～52.5（+増加攻撃力の15%） ⇒ 8～51（+増加攻撃力の14%）",
+                "ko-kr": "Per Missile Damage: 10 - 52.5 (+ 15% bonus AD) ⇒ 8 - 51 (+ 14% bonus AD)"
+              },
+              "kind": "nerfed"
+            },
+            {
+              "subject": {
+                "en": "Giant Slayer",
+                "zh-cn": "巨人杀手",
+                "ja-jp": "ジャイアント スレイヤー",
+                "ko-kr": "거인 학살자",
+                "zh-tw": "巨人殺手"
+              },
+              "text": {
+                "en": "Movement Speed: 30% ⇒ 20%",
+                "zh-cn": "不再治療友方士兵。",
+                "ja-jp": "移動速度：30% ⇒ 20%",
+                "ko-kr": "Movement Speed: 30% ⇒ 20%"
+              },
+              "kind": "nerfed"
+            },
+            {
+              "subject": {
+                "en": "Grandma's Chili Oil",
+                "zh-cn": "祖母的辣椒油",
+                "ja-jp": "おばあちゃんのラー油",
+                "ko-kr": "할머니의 고추기름",
+                "zh-tw": "阿嬤的辣油"
+              },
+              "text": {
+                "en": "Will no longer heal allied minions.",
+                "zh-cn": "18% ⇒ 15%",
+                "ja-jp": "味方ミニオンの体力を回復しなくなりました。",
+                "ko-kr": "Will no longer heal allied minions."
+              },
+              "kind": "nerfed"
+            },
+            {
+              "subject": {
+                "en": "Movement Speed Stat Anvil",
+                "zh-cn": "溫泉加速",
+                "ja-jp": "移動速度のステータスの金床",
+                "ko-kr": "Movement Speed Stat Anvil"
+              },
+              "text": {
+                "en": "18% ⇒ 15%",
+                "zh-cn": "受到傷害後恢復額外跑速的時間：3秒 ⇒ 6秒",
+                "ja-jp": "+18% ⇒ +15%",
+                "ko-kr": "18% ⇒ 15%"
+              },
+              "kind": "nerfed"
+            },
+            {
+              "subject": {
+                "en": "Homeguard",
+                "zh-cn": "家园卫士",
+                "ja-jp": "ホームガード",
+                "ko-kr": "민병대",
+                "zh-tw": "守護家園"
+              },
+              "text": {
+                "en": "Time to regain bonus movespeed after taking damage: 3 ⇒ 6 seconds",
+                "zh-cn": "外圍傷害：200 - 350（+65%額外物攻）（+40%魔攻） ⇒ （+75%額外物攻）（+45%魔攻）",
+                "ja-jp": "ダメージを受けてから増加移動速度が再び付与されるまでの時間：3秒 ⇒ 6秒",
+                "ko-kr": "Time to regain bonus movespeed after taking damage: 3 ⇒ 6 seconds"
+              },
+              "kind": "buffed"
+            },
+            {
+              "subject": {
+                "en": "Quantum Computing",
+                "zh-cn": "量子计算",
+                "ja-jp": "量子演算",
+                "ko-kr": "양자 연산",
+                "zh-tw": "量子計算"
+              },
+              "text": {
+                "en": "Outer damage: 200 - 350 (+65% bonus AD) (+ 40% AP) ⇒ + (75% Bonus AD) (+ 45% AP)",
+                "zh-cn": "基礎傷害不變",
+                "ja-jp": "外側のダメージ：200～350（+増加攻撃力の65%）（+魔力の40%） ⇒ （+増加攻撃力の75%）（+魔力の45%）",
+                "ko-kr": "Outer damage: 200 - 350 (+65% bonus AD) (+ 40% AP) ⇒ + (75% Bonus AD) (+ 45% AP)"
+              },
+              "kind": "nerfed"
+            },
+            {
+              "subject": {
+                "en": "Quantum Computing",
+                "zh-cn": "量子计算",
+                "ja-jp": "量子演算",
+                "ko-kr": "양자 연산",
+                "zh-tw": "量子計算"
+              },
+              "text": {
+                "en": "No base damage change",
+                "zh-cn": "拾取後獲得跑速：150 ⇒ 100",
+                "ja-jp": "基本ダメージに変更はありません。",
+                "ko-kr": "No base damage change"
+              },
+              "kind": "changed"
+            },
+            {
+              "subject": {
+                "en": "Red Envelopes",
+                "zh-cn": "红包",
+                "ja-jp": "紅いお年玉袋",
+                "ko-kr": "붉은 봉투",
+                "zh-tw": "紅包"
+              },
+              "text": {
+                "en": "Movement Speed from pickup: 150 ⇒ 100",
+                "zh-cn": "跑速持續時間：4秒 ⇒ 3秒",
+                "ja-jp": "拾うことで増加する移動速度：150 ⇒ 100",
+                "ko-kr": "Movement Speed from pickup: 150 ⇒ 100"
+              },
+              "kind": "nerfed"
+            },
+            {
+              "subject": {
+                "en": "Red Envelopes",
+                "zh-cn": "红包",
+                "ja-jp": "紅いお年玉袋",
+                "ko-kr": "붉은 봉투",
+                "zh-tw": "紅包"
+              },
+              "text": {
+                "en": "Movement Speed duration: 4 ⇒ 3 seconds",
+                "zh-cn": "技能加速帶來的跑速：100% ⇒ 70%",
+                "ja-jp": "移動速度増加時間：4秒 ⇒ 3秒",
+                "ko-kr": "Movement Speed duration: 4 ⇒ 3 seconds"
+              },
+              "kind": "nerfed"
+            },
+            {
+              "subject": {
+                "en": "With Haste",
+                "zh-cn": "急急小子",
+                "ja-jp": "大急ぎ",
+                "ko-kr": "속행",
+                "zh-tw": "腳程加速"
+              },
+              "text": {
+                "en": "Movement Speed from Ability Haste: 100% ⇒ 70%",
+                "zh-cn": "？？？（敵人失去行蹤信號）",
+                "ja-jp": "スキルヘイストによる移動速度：100% ⇒ 70%",
+                "ko-kr": "Movement Speed from Ability Haste: 100% ⇒ 70%"
+              },
+              "kind": "nerfed"
+            },
+            {
+              "subject": {
+                "en": "With Haste",
+                "zh-cn": "急急小子",
+                "ja-jp": "大急ぎ",
+                "ko-kr": "속행",
+                "zh-tw": "腳程加速"
+              },
+              "text": {
+                "en": "??? (Missing Ping)",
+                "zh-cn": "對友軍的治療不會受到咆嘯深淵增益效果的治療削減影響",
+                "ja-jp": "？？？（敵を見失った！ピン）",
+                "ko-kr": "??? (Missing Ping)"
+              },
+              "kind": "changed"
+            },
+            {
+              "subject": {
+                "en": "With Haste",
+                "zh-cn": "急急小子",
+                "ja-jp": "大急ぎ",
+                "ko-kr": "속행",
+                "zh-tw": "腳程加速"
+              },
+              "text": {
+                "en": "Healing towards allies will not be affected by Howling Abyss Buff's heal cut",
+                "zh-cn": "Healing towards allies will not be affected by Howling Abyss Buff's heal cut",
+                "ja-jp": "味方への体力回復効果が「ハウリングアビス」のバフによる回復低下効果を受けなくなりました。",
+                "ko-kr": "Healing towards allies will not be affected by Howling Abyss Buff's heal cut"
+              },
+              "kind": "changed"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

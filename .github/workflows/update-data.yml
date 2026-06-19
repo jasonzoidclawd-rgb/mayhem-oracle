@@ -10,6 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: write
+      issues: write
 
     steps:
       - uses: actions/checkout@v4
@@ -26,84 +27,36 @@ jobs:
       - name: Install Node deps
         run: npm install
 
-      - name: Snapshot kit_tags
-        run: |
-          python3 - << 'EOF'
-          import json, pathlib
-          data = json.loads(pathlib.Path("public/data/augments.json").read_text())
-          snapshot = {a["slug"]: {k: a[k] for k in ("kit_tags","set","flags") if k in a}
-                      for a in data.get("augments", [])}
-          pathlib.Path("/tmp/aug_snapshot.json").write_text(json.dumps(snapshot))
-          print(f"Snapshotted {sum(1 for v in snapshot.values() if v.get('kit_tags'))} classified augments")
-          EOF
-
-      - name: Scrape arammayhem.com
-        run: python3 scripts/scrape_arammayhem.py
-
-      - name: Scrape CommunityDragon
-        run: python3 scripts/scrape_community_dragon.py
-
-      - name: Scrape base stats
-        run: python3 scripts/scrape_base_stats.py
-
-      - name: Scrape ability stats
-        run: npx tsx scripts/scrape_ability_stats.ts
-
-      - name: Scrape wiki augments
-        run: python3 scripts/scrape_wiki_augments.py
-
-      - name: Enrich wiki items
-        run: python3 scripts/enrich_wiki.py
-
-      - name: Scrape patch notes
-        run: python3 scripts/scrape_patch_notes.py
-        # LLM proxy unavailable in CI — falls back to arrow-direction heuristic
-
-      - name: Generate pool rules
-        run: python3 scripts/generate_pool_rules.py
-
-      - name: Restore kit_tags from snapshot
-        run: |
-          python3 - << 'EOF'
-          import json, pathlib
-          snap = json.loads(pathlib.Path("/tmp/aug_snapshot.json").read_text())
-          path = pathlib.Path("public/data/augments.json")
-          data = json.loads(path.read_text())
-          restored = 0
-          for aug in data.get("augments", []):
-              saved = snap.get(aug["slug"])
-              if not saved:
-                  continue
-              if "kit_tags" in saved:
-                  aug["kit_tags"] = saved["kit_tags"]
-              if saved.get("set") and not aug.get("set"):
-                  aug["set"] = saved["set"]
-              if "flags" in saved:
-                  aug.setdefault("flags", {}).update(saved["flags"])
-              restored += 1
-          path.write_text(json.dumps(data, ensure_ascii=False, indent=2))
-          missing = sum(1 for a in data["augments"] if not a.get("kit_tags"))
-          print(f"Restored {restored} augments. Unclassified (new): {missing}")
-          EOF
-
-      - name: Classify champions
-        continue-on-error: true
+      - name: Regenerate internal data and export public catalogs
         env:
           GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
-        run: python3 scripts/classify_champions.py
-
-      - name: Classify augments (new only)
-        env:
-          GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
-        run: python3 scripts/classify_augments.py --skip-classified --allow-partial
+        run: ./scripts/update-data.sh
 
       - name: Commit and push
         run: |
           git config user.name  "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add public/data/
+          git add data/internal public/data ':!public/data/patch-notes.json'
           git diff --cached --quiet && echo "No data changes" && exit 0
           git commit -m "data: auto-update $(date -u +%Y-%m-%d)"
           git push
 
       # Vercel auto-deploys on push via GitHub integration — no explicit step needed
+
+      - name: Notify on failure
+        if: failure()
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: |
+          # Surface silent scrape decay: reuse a single open issue rather than spamming.
+          gh label create data-staleness --color D93F0B --description "Automated data refresh failed" 2>/dev/null || true
+          existing=$(gh issue list --label data-staleness --state open --limit 1 --json number --jq '.[0].number')
+          if [ -n "$existing" ]; then
+            gh issue comment "$existing" --body "Data update run failed again: $RUN_URL"
+          else
+            gh issue create \
+              --title "Data update workflow failed — data may be going stale" \
+              --label data-staleness \
+              --body "The daily \`update-data\` run failed, so \`public/data/\` was not refreshed. Investigate before the published patch data drifts. Run: $RUN_URL"
+          fi

@@ -220,13 +220,13 @@ git commit -m "docs: record membership platform baseline"
 
 ### Task 1.1: Add Red Contract and Grade Tests
 
-- [ ] Write failing tests that prove:
+- [x] Write failing tests that prove:
   - only same-rarity eligible augments form the comparison pool
   - three visible offers can all be `average` or `weak`
   - hard-incompatible augments are always `weak` and carry warnings
   - competitive and exploration modes can rank the same eligible augments differently
   - Patch 26.12 decisions contain no Trait/Set bonus
-- [ ] Use these grade bands over descending same-pool percentile:
+- [x] Use these grade bands over descending same-pool percentile:
 
 ```ts
 export const GRADE_BANDS = {
@@ -238,7 +238,7 @@ export const GRADE_BANDS = {
 } as const;
 ```
 
-- [ ] Run:
+- [x] Run:
 
 ```bash
 npx vitest run src/lib/__tests__/decision-engine.test.ts
@@ -248,26 +248,27 @@ Expected: FAIL because the unified decision engine does not exist.
 
 ### Task 1.2: Implement the v1 Decision Model
 
-- [ ] Implement the pure `evaluateDecision(context, data, modelConfig): DecisionResult` boundary.
-- [ ] Keep observed augment telemetry internal and bounded. Never return augment win rate from the decision contract.
-- [ ] Replace direct augment-win-rate scoring with deterministic shrinkage:
+- [x] Implement the pure `evaluateDecision(context, data, modelConfig): DecisionResult` boundary.
+- [x] Keep observed augment telemetry internal and bounded. Never return augment win rate from the decision contract.
+- [x] Replace direct augment-win-rate scoring with deterministic shrinkage:
 
 ```ts
 const confidence =
   augment.win_rate == null ? 0 :
   augment.flags?.lifecycle === "added" ? 0.35 :
   0.75;
-const observed = Math.max(42, Math.min(62, augment.win_rate ?? rarityPrior));
-const baseQuality = confidence * observed + (1 - confidence) * rarityPrior;
+const boundedPrior = Math.max(42, Math.min(62, rarityPrior));
+const observed = augment.win_rate ?? boundedPrior;
+const baseQuality = confidence * observed + (1 - confidence) * boundedPrior;
 ```
 
-- [ ] Compute `rarityPrior` as the median non-null win rate of active augments in the same rarity.
-- [ ] Group signals without double-counting:
+- [x] Compute `rarityPrior` as the median non-null win rate of active augments in the same rarity.
+- [x] Group signals without double-counting:
   - `reliability`: shrunk base quality and telemetry confidence
   - `synergy`: combo, mechanical interaction, ability fit, and item synergy
   - `novelty`: system-breaker and high-ceiling positive interaction signals
   - `penalties`: hard conflicts, traps, and mismatches
-- [ ] Use the existing Oracle dimensions as inputs, remove dead Trait/Set effects, and add versioned v1 modifiers:
+- [x] Use the existing Oracle dimensions as inputs, remove dead Trait/Set effects, and add versioned v1 modifiers:
 
 ```ts
 export const ROUND_VALUE = {
@@ -290,33 +291,33 @@ export const ITEM_VALUE = {
 } as const;
 ```
 
-- [ ] Calculate initial-three and normal-reroll probabilities from the residual same-rarity pool. Exclude removed/disabled augments, hard-ineligible augments, owned augments, mutually exclusive augments, and already-seen offers.
-- [ ] Treat Golden Reroll as a separate stance and explanation, never as normal same-rarity probability.
-- [ ] Return deterministic reason codes and warnings generated from the same signals used in scoring.
+- [x] Calculate initial-three and normal-reroll probabilities from the residual same-rarity pool. Exclude removed/disabled augments, hard-ineligible augments, owned augments, mutually exclusive augments, and already-seen offers.
+- [x] Treat Golden Reroll as a separate stance and explanation, never as normal same-rarity probability.
+- [x] Return deterministic reason codes and warnings generated from the same signals used in scoring.
 
 ### Task 1.3: Split Internal and Public Data
 
-- [ ] Move decision-only generated fields into server-only runtime data under `data/internal/`.
-- [ ] Keep public catalog files under `public/data/`, but strip:
+- [x] Move decision-only generated fields into server-only runtime data under `data/internal/`.
+- [x] Keep public catalog files under `public/data/`, but strip:
   - augment win rate
   - Mayhem-item win rate
   - model weights
   - complete computed champion pools
-- [ ] Keep public champion win rate, rank, and pick rate.
-- [ ] Make `scripts/export_public_catalog.py` the only writer of sanitized public catalog output.
-- [ ] Update the daily data workflow to regenerate internal data first, then export sanitized public catalogs.
-- [ ] Update overlay data sync to read the internal source, not the sanitized public catalog.
-- [ ] Add a guardrail that fails if forbidden fields appear in public JSON.
+- [x] Keep public champion win rate, rank, and pick rate.
+- [x] Make `scripts/export_public_catalog.py` the only writer of sanitized public catalog output.
+- [x] Update the daily data workflow to regenerate internal data first, then export sanitized public catalogs.
+- [x] Keep free overlay data sync on sanitized public catalogs; reserve internal decision data for the signed member model package.
+- [x] Add a guardrail that fails if forbidden fields appear in public JSON.
 
 ### Task 1.4: Close Web/Overlay Parity
 
-- [ ] Mirror any still-duplicated scoring changes in overlay scoring modules.
-- [ ] Extend parity tests to compare:
+- [x] Mirror any still-duplicated scoring changes in overlay scoring modules.
+- [x] Extend parity tests to compare:
   - eligible pool
   - score and grade
   - conditional probability
   - warnings and reasons
-- [ ] Run:
+- [x] Run:
 
 ```bash
 npx vitest run src/lib/__tests__/decision-engine.test.ts src/lib/__tests__/public-data-boundary.test.ts src/lib/__tests__/cross-parity.test.ts src/lib/__tests__/overlay-scoring-parity.test.ts
@@ -326,7 +327,7 @@ npm run build
 (cd overlay && npm run build)
 ```
 
-- [ ] Commit:
+- [x] Commit:
 
 ```bash
 git add src/lib/contracts src/lib/decision src/lib/data/internal-loader.ts src/lib/scoring src/lib/__tests__ overlay/src/scoring overlay/scripts scripts .github/workflows/update-data.yml data public/data
@@ -363,7 +364,7 @@ git commit -m "feat(decision): add unified round-aware decision engine"
 
 ### Task 2.1: Add Membership Schema and RLS
 
-- [ ] Add tables:
+- [x] Add tables:
   - `profiles`
   - `entitlements`
   - `invite_codes`
@@ -373,31 +374,31 @@ git commit -m "feat(decision): add unified round-aware decision engine"
   - `decision_feedback`
   - `model_releases`
   - `referral_progress`
-- [ ] Store invite codes as hashes, not plaintext.
-- [ ] Give invite codes a fixed kind:
+- [x] Store invite codes as hashes, not plaintext.
+- [x] Give invite codes a fixed kind:
   - `member` grants a dated manual entitlement
   - `trial` grants three game credits exactly once per Google-account-plus-device combination
-- [ ] Use `auth.users.id` as the account key.
-- [ ] Use `app_metadata.role = 'admin'` for administrator authorization.
-- [ ] RLS rules:
+- [x] Use `auth.users.id` as the account key.
+- [x] Use `app_metadata.role = 'admin'` for administrator authorization.
+- [x] RLS rules:
   - users can read their own profile, entitlement, devices, sessions, feedback, and referral progress
   - users cannot grant or extend entitlements
   - only service-role/admin routes can create invite codes, update entitlements, and publish model releases
-- [ ] Add tests proving free users cannot access member rows or grant themselves access.
+- [x] Add tests proving free users cannot access member rows or grant themselves access.
 
 ### Task 2.2: Protect Decision APIs
 
-- [ ] Implement `requireActiveEntitlement()` and use it in both decision routes.
-- [ ] `POST /api/decision/evaluate` accepts `DecisionContext`, calls the frozen pure engine, records the model version and decision session, and returns the full `DecisionResult`.
-- [ ] `POST /api/decision/champion-matrix` returns all four rounds grouped by rarity for one champion and one mode.
-- [ ] `GET /api/overlay/bootstrap` verifies entitlement or an active trial-game lease and returns the active model manifest, immutable package URL, signature, and expiry.
-- [ ] `POST /api/overlay/game-session` reserves a trial credit at game start and returns a game-scoped lease. Active members receive a lease without consuming credits.
-- [ ] Return:
+- [x] Implement `requireActiveEntitlement()` and use it in both decision routes.
+- [x] `POST /api/decision/evaluate` accepts `DecisionContext`, calls the frozen pure engine, records the model version and decision session, and returns the full `DecisionResult`.
+- [x] `POST /api/decision/champion-matrix` returns all four rounds grouped by rarity for one champion and one mode.
+- [x] `GET /api/overlay/bootstrap` verifies entitlement or an active trial-game lease and returns the active model manifest, immutable package URL, signature, and expiry.
+- [x] `POST /api/overlay/game-session` reserves a trial credit at game start and returns a game-scoped lease. Active members receive a lease without consuming credits.
+- [x] Return:
   - `401` when unauthenticated
   - `403` when authenticated without an active entitlement
   - `400` for invalid contexts
-- [ ] Do not add a public arbitrary-decision endpoint. Public demos must use curated static examples.
-- [ ] Add request rate limiting keyed by authenticated user.
+- [x] Do not add a public arbitrary-decision endpoint. Public demos must use curated static examples.
+- [x] Add request rate limiting keyed by authenticated user.
 
 ### Task 2.3: Build the Member Web Experience
 
@@ -412,7 +413,7 @@ git commit -m "feat(decision): add unified round-aware decision engine"
   - three offers
   - normal and Golden Reroll state
 - [ ] Render grade, probability, hard warnings, reasons, confidence, and reroll stance.
-- [ ] Make the champion page member section a four-round by three-rarity matrix using the same API.
+- [x] Make the champion page member section a four-round by three-rarity matrix using the same API.
 - [ ] Add account page for entitlement, invite redemption, device status, history, and feedback.
 - [ ] Add admin page for invite-code creation, entitlement grant/revoke, and model-release status.
 - [ ] Keep full pool data and weights out of unauthenticated/non-member server responses and client bundles.
@@ -512,41 +513,41 @@ git commit -m "feat(collector): add de-identified Mayhem match exporter"
 
 ### Task 3B.1: Build Device Linking and Upload Ingestion
 
-- [ ] Device-code flow:
+- [x] Device-code flow:
   - collector requests a short-lived code
   - signed-in website user approves the code
   - server stores a revocable device token hash
-- [ ] Upload endpoint requirements:
+- [x] Upload endpoint requirements:
   - authenticated device token
   - compressed batch maximum 5 MB
   - schema version `1`
   - queue `2400`
   - server re-validates the allowlist
   - duplicate `gameHash` values are accepted idempotently but not stored twice
-- [ ] Write accepted compressed batches to R2 using a date/device partition.
-- [ ] Store only batch metadata and ingestion status in Supabase.
-- [ ] Configure R2 lifecycle deletion after 30 days.
+- [x] Write accepted compressed batches to R2 using a date/device partition.
+- [x] Store only batch metadata and ingestion status in Supabase.
+- [x] Configure R2 lifecycle deletion after 30 days.
 
 ### Task 3B.2: Load Long-Term Events into BigQuery
 
-- [ ] Nightly GitHub workflow reads unprocessed R2 batches and writes:
+- [x] Nightly GitHub workflow reads unprocessed R2 batches and writes:
   - `matches`
   - `participants`
   - `contributor_round_choices`
   - `quality_quarantine`
-- [ ] Quarantine matches shorter than eight minutes, invalid patch/schema records, and ambiguous OCR round data.
-- [ ] Grant three trial-game credits exactly once per Google-account-plus-device combination when a valid referral code is redeemed.
-- [ ] Reserve one credit when a trial user starts a game, consume it only after the game exceeds eight minutes, and release the reservation when the game ends before eight minutes.
-- [ ] Finalize the reserved credit from an accepted contributor-owned telemetry match with the same `gameHash`; expire abandoned reservations after 24 hours without granting an active lease.
-- [ ] While a trial-game lease is active, allow member decision APIs and overlay recommendations for that game only.
+- [x] Quarantine matches shorter than eight minutes, invalid patch/schema records, and ambiguous OCR round data.
+- [x] Grant three trial-game credits exactly once per Google-account-plus-device combination when a valid referral code is redeemed.
+- [x] Reserve one credit when a trial user starts a game, consume it only after the game exceeds eight minutes, and release the reservation when the game ends before eight minutes.
+- [x] Finalize the reserved credit from an accepted contributor-owned telemetry match with the same `gameHash`; expire abandoned reservations after 24 hours without granting an active lease.
+- [x] While a trial-game lease is active, allow member decision APIs and overlay recommendations for that game only.
 
 ### Task 3B.3: Launch AdSense on Public Reference Pages
 
-- [ ] Add Google AdSense and consent management to public reference pages only.
-- [ ] Never render ads on Advisor, account, admin, authentication, or member decision sections.
-- [ ] Reserve mobile-safe ad-slot height to prevent layout shift.
-- [ ] Add privacy/data-use copy describing AdSense, collector consent, R2 30-day retention, and BigQuery long-term de-identified data.
-- [ ] Verify no ad script loads before required consent in applicable regions.
+- [x] Add Google AdSense and consent management to public reference pages only.
+- [x] Never render ads on Advisor, account, admin, authentication, or member decision sections.
+- [x] Reserve mobile-safe ad-slot height to prevent layout shift.
+- [x] Add privacy/data-use copy describing AdSense, collector consent, R2 30-day retention, and BigQuery long-term de-identified data.
+- [x] Verify no ad script loads before required consent in applicable regions.
 
 ### Task 3B.4: Verify and Commit
 

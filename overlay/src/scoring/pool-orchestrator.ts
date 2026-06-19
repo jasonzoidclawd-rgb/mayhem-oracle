@@ -56,6 +56,8 @@ export function getChampionAugmentPool<T extends PoolAugmentInput>(args: {
   championKitTags: ChampionTag[];
   poolRules: PoolRules;
   ownedItems?: string[];
+  ownedAugments?: string[];
+  seenOffers?: string[];
 }): PoolOutput<T> {
   const {
     championSlug,
@@ -65,6 +67,8 @@ export function getChampionAugmentPool<T extends PoolAugmentInput>(args: {
     championKitTags,
     poolRules,
     ownedItems = [],
+    ownedAugments = [],
+    seenOffers = [],
   } = args;
 
   const profile = buildPoolProfile(championSlug, abilityProfile, baseStats);
@@ -72,10 +76,21 @@ export function getChampionAugmentPool<T extends PoolAugmentInput>(args: {
   const disabledSet = new Set(poolRules.disabled.map(normalizeAugmentKey));
   const removedSet  = new Set(Object.keys(poolRules.lifecycle.removed).map(normalizeAugmentKey));
   const normalizedOwnedItems = new Set(ownedItems.map(normalizeItemKey));
+  const normalizedOwnedAugments = new Set(ownedAugments.map(normalizeAugmentKey));
+  const normalizedSeenOffers = new Set(seenOffers.map(normalizeAugmentKey));
   const blockedByItem = new Set(
     poolRules.item_exclusions
       .filter((r) => normalizedOwnedItems.has(normalizeItemKey(r.blocked_by_item)))
       .map((r) => normalizeAugmentKey(r.augment)),
+  );
+  const blockedByOwnedAugment = new Set(
+    poolRules.mutually_exclusive.flatMap(([left, right]) => {
+      const normalizedLeft = normalizeAugmentKey(left);
+      const normalizedRight = normalizeAugmentKey(right);
+      if (normalizedOwnedAugments.has(normalizedLeft)) return [normalizedRight];
+      if (normalizedOwnedAugments.has(normalizedRight)) return [normalizedLeft];
+      return [];
+    }),
   );
 
   const silver:    T[] = [];
@@ -94,6 +109,18 @@ export function getChampionAugmentPool<T extends PoolAugmentInput>(args: {
     }
     if (removedSet.has(normalizedSlug)) {
       excluded.push({ slug, reason: "removed" });
+      continue;
+    }
+    if (normalizedOwnedAugments.has(normalizedSlug)) {
+      excluded.push({ slug, reason: "owned" });
+      continue;
+    }
+    if (blockedByOwnedAugment.has(normalizedSlug)) {
+      excluded.push({ slug, reason: "mutually-exclusive" });
+      continue;
+    }
+    if (normalizedSeenOffers.has(normalizedSlug)) {
+      excluded.push({ slug, reason: "seen-offer" });
       continue;
     }
 

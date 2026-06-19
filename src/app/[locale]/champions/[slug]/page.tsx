@@ -1,5 +1,6 @@
 import { getTranslations, setRequestLocale } from "next-intl/server";
-import { createClient } from "@/lib/supabase/server";
+import { requireActiveEntitlement } from "@/lib/entitlements/server";
+import { MembershipGate } from "@/components/membership/MembershipGate";
 import Image from "next/image";
 import { readFile } from "fs/promises";
 import path from "path";
@@ -11,8 +12,10 @@ import { buildPoolProfile } from "@/lib/scoring/augment-tailoring";
 import { getChampionAugmentPool } from "@/lib/scoring/pool-orchestrator";
 import { analyzeInteractions, type MechanicalInteraction, type AugmentMechanic } from "@/lib/scoring/augment-interactions";
 import { normalizeAugmentSet } from "@/lib/data/augment-set";
+import { localizedDescription, localizedName } from "@/lib/i18n/localized-name";
 import { buildComboTierLookup, resolveChampionCombos } from "@/lib/data/combo-lookup";
 import { routing } from "@/i18n/routing";
+import { ChampionMatrixClient } from "@/components/champions/ChampionMatrixClient";
 import {
   PoolConstructionSection,
   type PoolLayer,
@@ -20,6 +23,9 @@ import {
   type PoolRaritySummary,
   type TailoredHighlight,
 } from "@/components/champions/PoolConstructionSection";
+import type { DecisionGrade } from "@/lib/contracts/decision";
+import { JsonLd } from "@/components/seo/JsonLd";
+import { SITE_URL } from "@/lib/site";
 
 // ─── Types ───────────────────────────────────────────────────────────────────
 
@@ -125,20 +131,26 @@ export default async function ChampionPage({
   const { locale, slug } = await params;
   setRequestLocale(locale);
   const t = await getTranslations("champion");
+  const tm = await getTranslations("membership");
+  const tg = await getTranslations("grades");
 
-  const isAuthenticated = await (async () => {
+  // Member decision content (pool construction, scored rankings) is gated on an
+  // active entitlement — not merely being signed in. A logged-in non-member
+  // must not receive server-rendered scores or breakdowns.
+  const { isAuthenticated, isMember } = await (async () => {
     if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY) {
-      return false;
+      return { isAuthenticated: false, isMember: false };
     }
-    const supabase = await createClient();
-    const { data: { user } } = await supabase.auth.getUser();
-    return Boolean(user);
+    const gate = await requireActiveEntitlement();
+    if (gate.ok) return { isAuthenticated: true, isMember: true };
+    return { isAuthenticated: gate.reason !== "unauthenticated", isMember: false };
   })();
 
   const { champions, augments, combos, poolRules, patch, abilities } = await loadData();
 
   const champ = champions.find((c) => c.slug === slug);
   if (!champ) notFound();
+  const champName = localizedName(champ, locale);
 
   const champWr = champ.win_rate ?? 50;
   const abilityProfile: AbilityProfile | undefined = abilities[slug];
@@ -328,14 +340,41 @@ export default async function ChampionPage({
     ["utility",      t("playstyleUtility")],
   ];
 
+  const topCombos = strongCombos
+    .map((c) => augmentBySlug.get(c.augmentSlug)?.name ?? c.augment)
+    .filter(Boolean)
+    .slice(0, 8);
+  const championJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    headline: `${champ.name} ARAM Mayhem — Tier ${champ.tier}, Augments & Combos (Patch ${patch})`,
+    about: { "@type": "Thing", name: `${champ.name} (League of Legends ARAM Mayhem)` },
+    inLanguage: locale,
+    url: `${SITE_URL}${locale === "en" ? "" : `/${locale}`}/champions/${champ.slug}`,
+    image: champ.icon,
+    keywords: [
+      "ARAM Mayhem",
+      champ.name,
+      `Tier ${champ.tier}`,
+      ...(champ.kit_tags ?? []),
+      ...topCombos,
+    ],
+    description:
+      `${champ.name} is Tier ${champ.tier} in ARAM Mayhem (patch ${patch})` +
+      (champWr ? ` with a ${champWr.toFixed(1)}% win rate` : "") +
+      (champ.pick_rate ? ` and ${champ.pick_rate.toFixed(1)}% pick rate` : "") +
+      (topCombos.length ? `. Strongest augment combos: ${topCombos.join(", ")}.` : "."),
+  };
+
   return (
     <div className="py-4 sm:py-8 max-w-4xl">
+      <JsonLd data={championJsonLd} />
       {/* ─── Header ─── */}
       <div className="flex items-center gap-3 sm:gap-5 mb-4 sm:mb-6">
         <div className="relative w-14 h-14 sm:w-20 sm:h-20 rounded-full overflow-hidden border-2 border-[var(--color-neon-primary)]/40 shrink-0">
           <Image
             src={champ.icon}
-            alt={champ.name}
+            alt={champName}
             fill
             className="object-cover"
             sizes="(max-width: 640px) 56px, 80px"
@@ -343,7 +382,7 @@ export default async function ChampionPage({
         </div>
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-2 sm:gap-3">
-            <h1 className="text-xl sm:text-3xl font-bold truncate">{champ.name}</h1>
+            <h1 className="text-xl sm:text-3xl font-bold truncate">{champName}</h1>
             {champ.rank && (
               <span className="text-sm sm:text-base text-[var(--color-text-muted)] font-medium shrink-0">
                 {champ.rank}/{champions.length}
@@ -546,33 +585,44 @@ export default async function ChampionPage({
 
           {/* Ability list — compact cards */}
           <div className="space-y-2">
-            {abilityProfile.abilities.map((ability) => (
-              <div key={ability.key} className="flex items-start gap-2.5 px-2 py-2 rounded-lg border border-[var(--color-border-default)]/50 bg-[var(--color-bg-card)]/30">
-                <div className="shrink-0 flex flex-col items-center gap-0.5">
-                  <div className="relative w-8 h-8 sm:w-10 sm:h-10 rounded-lg overflow-hidden border border-[var(--color-border-default)]">
-                    <Image
-                      src={ability.icon}
-                      alt={ability.name}
-                      fill
-                      className="object-contain"
-                      sizes="(max-width: 640px) 32px, 40px"
-                      unoptimized
-                    />
+            {abilityProfile.abilities.map((ability) => {
+              const abilityName = localizedName(ability, locale);
+              // Prefer a real localized description; for English (or when no
+              // translation exists) fall back to the richer wiki text.
+              const localizedDesc = localizedDescription(ability, locale);
+              const abilityDescription =
+                localizedDesc !== ability.description
+                  ? localizedDesc
+                  : ability.wikiDescription ?? ability.description;
+
+              return (
+                <div key={ability.key} className="flex items-start gap-2.5 px-2 py-2 rounded-lg border border-[var(--color-border-default)]/50 bg-[var(--color-bg-card)]/30">
+                  <div className="shrink-0 flex flex-col items-center gap-0.5">
+                    <div className="relative w-8 h-8 sm:w-10 sm:h-10 rounded-lg overflow-hidden border border-[var(--color-border-default)]">
+                      <Image
+                        src={ability.icon}
+                        alt={abilityName}
+                        fill
+                        className="object-contain"
+                        sizes="(max-width: 640px) 32px, 40px"
+                        unoptimized
+                      />
+                    </div>
+                    <span className="text-[9px] font-bold text-[var(--color-text-muted)] uppercase">
+                      {ability.key}
+                    </span>
                   </div>
-                  <span className="text-[9px] font-bold text-[var(--color-text-muted)] uppercase">
-                    {ability.key}
-                  </span>
+                  <div className="flex-1 min-w-0">
+                    <span className="text-xs sm:text-sm font-semibold">{abilityName}</span>
+                    <WikiAbilityStats ability={ability} />
+                    {!ability.cooldown && ability.stats && <AbilityStatLine stats={ability.stats} />}
+                    <p className="text-[11px] text-[var(--color-text-secondary)] mt-1 leading-relaxed line-clamp-2 sm:line-clamp-none">
+                      {abilityDescription}
+                    </p>
+                  </div>
                 </div>
-                <div className="flex-1 min-w-0">
-                  <span className="text-xs sm:text-sm font-semibold">{ability.name}</span>
-                  <WikiAbilityStats ability={ability} />
-                  {!ability.cooldown && ability.stats && <AbilityStatLine stats={ability.stats} />}
-                  <p className="text-[11px] text-[var(--color-text-secondary)] mt-1 leading-relaxed line-clamp-2 sm:line-clamp-none">
-                    {ability.wikiDescription ?? ability.description}
-                  </p>
-                </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </section>
       )}
@@ -594,40 +644,82 @@ export default async function ChampionPage({
         layers={poolLayers}
         highlights={tailoredHighlights}
         totalAugments={augments.length}
-        gated={!isAuthenticated}
-        signInUrl={`/api/auth/signin?next=/${locale === "en" ? "" : `${locale}/`}champions/${slug}`}
-        gateCopy={!isAuthenticated ? {
+        gated={!isMember}
+        signInUrl={isAuthenticated ? `/${locale}/account` : `/api/auth/signin?next=/${locale === "en" ? "" : `${locale}/`}champions/${slug}`}
+        gateCopy={!isMember ? (isAuthenticated ? {
+          title: tm("lockedTitle"),
+          description: tm("lockedBody"),
+          signIn: tm("lockedCta"),
+        } : {
           title: t("poolGateTitle"),
           description: t("poolGateDescription"),
           signIn: t("poolGateSignIn"),
-        } : undefined}
+        }) : undefined}
       />
 
-      {/* ─── Augment Rankings ─── */}
+      <section className="glass-card p-4">
+        <ChampionMatrixClient
+          championSlug={champ.slug}
+          augmentNames={Object.fromEntries(augments.map((a) => [a.slug, a.name]))}
+          copy={{
+            title: tm("matrixTitle"),
+            subtitle: tm("matrixSubtitle"),
+            loading: tm("matrixLoading"),
+            error: tm("matrixError"),
+            round: tm("matrixRoundN"),
+            topPick: tm("matrixTopPick"),
+            modeCompetitive: tm("advModeCompetitive"),
+            modeExploration: tm("advModeExploration"),
+            raritySilver: tm("advRaritySilver"),
+            rarityGold: tm("advRarityGold"),
+            rarityPrismatic: tm("advRarityPrismatic"),
+            gradeLabels: {
+              hot: tg("hot"),
+              strong: tg("strong"),
+              steady: tg("steady"),
+              average: tg("average"),
+              weak: tg("weak"),
+            } as Record<DecisionGrade, string>,
+            lockedTitle: tm("lockedTitle"),
+            lockedBody: tm("lockedBody"),
+            lockedCta: tm("lockedCta"),
+          }}
+        />
+      </section>
+
+      {/* ─── Augment Rankings (member-gated: scores + breakdowns) ─── */}
       <section className="glass-card p-4">
         <h2 className="text-sm font-bold mb-1 border-l-2 border-[var(--color-neon-primary)] pl-2">
           {t("augments")} — {t("oracleRanked")}
         </h2>
-        <p className="text-[10px] text-[var(--color-text-muted)] mb-3 pl-3">
-          <span className="font-medium text-[var(--color-text-primary)]">N={pool.total}</span>
-          <span> / {augments.length} total</span>
-          {poolProfile.resource !== "mana" && <span> · {poolProfile.resource === "none" ? "manaless" : poolProfile.resource}</span>}
-          {abilityProfile && <span> · {abilityProfile.attackType}</span>}
-        </p>
+        {isMember ? (
+          <>
+            <p className="text-[10px] text-[var(--color-text-muted)] mb-3 pl-3">
+              <span className="font-medium text-[var(--color-text-primary)]">N={pool.total}</span>
+              <span> / {augments.length} total</span>
+              {poolProfile.resource !== "mana" && <span> · {poolProfile.resource === "none" ? "manaless" : poolProfile.resource}</span>}
+              {abilityProfile && <span> · {abilityProfile.attackType}</span>}
+            </p>
 
-        <div className="space-y-1.5">
-          {topAugments.map(({ aug, score, breakdown, comboTier }, i) => (
-            <AugmentRow
-              key={aug.slug}
-              rank={i + 1}
-              aug={aug}
-              score={score}
-              breakdown={breakdown}
-              comboTier={comboTier}
-              pillLabels={pillLabels}
-            />
-          ))}
-        </div>
+            <div className="space-y-1.5">
+              {topAugments.map(({ aug, score, breakdown, comboTier }, i) => (
+                <AugmentRow
+                  key={aug.slug}
+                  rank={i + 1}
+                  aug={aug}
+                  score={score}
+                  breakdown={breakdown}
+                  comboTier={comboTier}
+                  pillLabels={pillLabels}
+                />
+              ))}
+            </div>
+          </>
+        ) : (
+          <div className="mt-3">
+            <MembershipGate title={tm("lockedTitle")} body={tm("lockedBody")} cta={tm("lockedCta")} />
+          </div>
+        )}
       </section>
     </div>
   );
@@ -751,7 +843,7 @@ function AugmentRow({
 
         {/* Win rate — hidden on mobile */}
         <span className="hidden sm:inline text-xs text-[var(--color-text-muted)] shrink-0">
-          {aug.win_rate !== null ? `${aug.win_rate.toFixed(1)}%` : "—"}
+          {aug.win_rate != null ? `${aug.win_rate.toFixed(1)}%` : "—"}
         </span>
 
         {/* Oracle Score */}

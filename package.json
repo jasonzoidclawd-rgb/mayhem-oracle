@@ -14,21 +14,25 @@
   "dependencies": {
     "@supabase/ssr": "^0.10.3",
     "@supabase/supabase-js": "^2.105.4",
+    "aws4fetch": "^1.0.20",
     "next": "^16.2.4",
     "next-intl": "^4.1.0",
     "react": "^19.1.0",
     "react-dom": "^19.1.0"
   },
   "overrides": {
-    "postcss": "$postcss"
+    "postcss": "$postcss",
+    "@swc/helpers": "0.5.23"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4.1.0",
+    "@tauri-apps/api": "^2.11.0",
     "@types/node": "^22.0.0",
     "@types/react": "^19.1.0",
     "@types/react-dom": "^19.1.0",
     "eslint": "^9.39.4",
     "eslint-config-next": "^16.2.2",
+    "google-auth-library": "^10.7.0",
     "postcss": "^8.5.0",
     "tailwindcss": "^4.1.0",
     "typescript": "^5.8.0",

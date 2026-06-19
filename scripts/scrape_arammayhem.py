@@ -2,16 +2,16 @@
 Mayhem Oracle — arammayhem.com Scraper
 =======================================
 Fetches champion tier list, augments, and combos from arammayhem.com.
-Outputs static JSON to public/data/ for use by the Next.js app.
+Outputs full generated JSON to data/internal/ for decision runtime use.
 
 Usage:
     python scripts/scrape_arammayhem.py
 
 Output files:
-    public/data/champions.json   — tier list with win rates
-    public/data/augments.json    — augment catalog with rarities
-    public/data/combos.json      — champion × augment synergies
-    public/data/meta.json        — patch version + scrape timestamp
+    data/internal/champions.json   — tier list with win rates
+    data/internal/augments.json    — augment catalog with rarities
+    data/internal/combos.json      — champion × augment synergies
+    data/internal/meta.json        — patch version + scrape timestamp
 """
 
 from __future__ import annotations
@@ -27,6 +27,8 @@ from urllib.request import urlopen, Request
 from urllib.error import URLError
 from urllib.parse import urljoin
 
+from data_paths import INTERNAL_DATA_DIR
+
 BASE_URL = "https://arammayhem.com"
 HEADERS = {
     "User-Agent": (
@@ -37,7 +39,7 @@ HEADERS = {
     "Accept": "text/html,application/xhtml+xml",
     "Accept-Language": "en-US,en;q=0.9",
 }
-OUT_DIR = Path(__file__).parent.parent / "public" / "data"
+OUT_DIR = INTERNAL_DATA_DIR
 
 
 def resolve_url(path: str) -> str:
@@ -66,6 +68,11 @@ def normalize_combo_tier(tier: str) -> str:
 
 def normalize_lookup_key(value: str) -> str:
     return re.sub(r"[^a-z0-9]+", "", value.lower())
+
+
+def slugify_search_name(value: str) -> str:
+    value = unescape(value).lower().replace("'", "").replace("’", "")
+    return re.sub(r"[^a-z0-9]+", "-", value).strip("-")
 
 
 def slug_from_href(href: str) -> str | None:
@@ -304,6 +311,92 @@ def fetch_missing_descriptions(augments: list[dict]) -> int:
 TIER_STRENGTH = {"S": 4, "A": 3, "B": 2, "C": 1}
 
 
+def parse_search_index(data: dict) -> tuple[list[dict], list[dict]]:
+    """Parse the stable search-index fallback for champion stats and combos."""
+    champions = []
+    champion_slug_by_id = {}
+    for rank, row in enumerate(data.get("champions", []), start=1):
+        name = (row.get("name") or {}).get("en") or row.get("id") or row.get("championId")
+        if not name:
+            continue
+        slug = slugify_search_name(name)
+        champion_id = row.get("championId") or row.get("id") or name
+        champion_slug_by_id[normalize_lookup_key(champion_id)] = slug
+        win_rate = row.get("winRate")
+        try:
+            parsed_win_rate = float(str(win_rate).rstrip("%"))
+        except (TypeError, ValueError):
+            parsed_win_rate = None
+        champions.append({
+            "slug": slug,
+            "name": unescape(name),
+            "tier": row.get("tier"),
+            "rank": rank,
+            "win_rate": parsed_win_rate,
+            "pick_rate": None,
+            "tags": [],
+            "icon": resolve_url(row.get("icon") or ""),
+        })
+
+    augment_name_by_id = {}
+    for row in data.get("augments", []):
+        augment_id = row.get("id")
+        name = (row.get("name") or {}).get("en")
+        if augment_id and name:
+            augment_name_by_id[normalize_lookup_key(augment_id)] = unescape(name)
+
+    combos = []
+    for row in data.get("combos", []):
+        champion_id = row.get("championId")
+        champion = champion_slug_by_id.get(normalize_lookup_key(champion_id or ""))
+        tier = normalize_combo_tier(str(row.get("tier") or ""))
+        combo_ref = row.get("slug")
+        if not (champion and tier in TIER_STRENGTH and combo_ref):
+            continue
+        for augment_id in row.get("augmentIds", []):
+            augment = augment_name_by_id.get(normalize_lookup_key(str(augment_id)))
+            if augment:
+                combos.append({
+                    "champion": champion,
+                    "augment": augment,
+                    "tier": tier,
+                    "ref": f"search-index:{combo_ref}",
+                })
+    return champions, dedupe_combos(combos)
+
+
+def merge_champion_sources(primary: list[dict], fallback: list[dict]) -> list[dict]:
+    fallback_by_slug = {row["slug"]: row for row in fallback}
+    merged = []
+    seen = set()
+    for row in primary:
+        fallback_row = fallback_by_slug.get(row["slug"], {})
+        merged.append({
+            **fallback_row,
+            **row,
+            "tier": row.get("tier") or fallback_row.get("tier"),
+            "win_rate": row.get("win_rate") if row.get("win_rate") is not None else fallback_row.get("win_rate"),
+        })
+        seen.add(row["slug"])
+    merged.extend(row for row in fallback if row["slug"] not in seen)
+    return merged
+
+
+def merge_combo_sources(primary: list[dict], fallback: list[dict]) -> list[dict]:
+    primary_pairs = {
+        (normalize_lookup_key(row["champion"]), normalize_lookup_key(row["augment"]))
+        for row in primary
+    }
+    return dedupe_combos([
+        *primary,
+        *[
+            row for row in fallback
+            if (normalize_lookup_key(row["champion"]), normalize_lookup_key(row["augment"]))
+            not in primary_pairs
+        ],
+    ])
+
+
 def dedupe_combos(combos: list[dict]) -> list[dict]:
     order: list[tuple[str, str]] = []
     by_pair: dict[tuple[str, str], dict] = {}
@@ -441,22 +534,35 @@ def main():
 
     print("Scraping arammayhem.com...")
 
+    # Stable search index fallback
+    print("\n[1/8] Search index fallback")
+    search_patch = None
+    search_champions: list[dict] = []
+    search_combos: list[dict] = []
+    try:
+        search_index = json.loads(fetch("/search-index.json"))
+        search_patch = search_index.get("patch")
+        search_champions, search_combos = parse_search_index(search_index)
+        print(f"  → {len(search_champions)} champions, {len(search_combos)} combos")
+    except Exception as e:
+        print(f"  Skipped: {e}")
+
     # Tier list
-    print("\n[1/7] Champion tier list")
+    print("\n[2/8] Champion tier list")
     tier_html = fetch("/tier-list/")
-    champions = parse_tier_list(tier_html)
+    champions = merge_champion_sources(parse_tier_list(tier_html), search_champions)
     print(f"  → {len(champions)} champions")
 
     # Augments
-    print("\n[2/7] Augments")
+    print("\n[3/8] Augments")
     time.sleep(1)
     aug_html = fetch("/augments/")
     augments = parse_augments(aug_html)
-    patch = extract_patch(tier_html, aug_html)
+    patch = extract_patch(tier_html, aug_html) or search_patch
     print(f"  → {len(augments)} augments, patch {patch}")
 
     # Augment locale names
-    print("\n[3/7] Augment locale names")
+    print("\n[4/8] Augment locale names")
     by_slug = {a["slug"]: a for a in augments}
     locale_configs = [
         ("zh-cn", "name_zh_CN"),
@@ -479,7 +585,7 @@ def main():
         print(f"  {locale_code}: {matched} names")
 
     # Traditional Chinese names from CommunityDragon
-    print("\n[4/7] Traditional Chinese augment names")
+    print("\n[5/8] Traditional Chinese augment names")
     try:
         zh_tw_url = (
             "https://raw.communitydragon.org/latest/plugins/"
@@ -515,7 +621,7 @@ def main():
         print(f"  Skipped: {e}")
 
     # Augment types (26.12 ability/quest classes)
-    print("\n[5/7] Augment types")
+    print("\n[6/8] Augment types")
     membership = fetch_type_membership()
     print(f"  → {len(membership)} class-page members")
 
@@ -548,7 +654,7 @@ def main():
         champions[i] = {**old, **champ}
 
     # Live tooltips for augments without a wiki description yet
-    print("\n[6/7] Augment descriptions (gap fill from detail pages)")
+    print("\n[7/8] Augment descriptions (gap fill from detail pages)")
     filled = fetch_missing_descriptions(augments)
     print(f"  → {filled} descriptions fetched")
 
@@ -565,10 +671,10 @@ def main():
             aug["type"] = "standalone"
 
     # Combos
-    print("\n[7/7] Combos")
+    print("\n[8/8] Combos")
     time.sleep(1)
     combo_html = fetch("/combo/")
-    combos = parse_combos(combo_html)
+    combos = merge_combo_sources(parse_combos(combo_html), search_combos)
     print(f"  → {len(combos)} combos")
 
     # Sanity checks — abort before touching existing data if counts look wrong

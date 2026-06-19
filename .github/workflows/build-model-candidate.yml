@@ -1,0 +1,74 @@
+name: Build Model Candidate
+
+on:
+  workflow_dispatch:
+    inputs:
+      engine_version:
+        description: Version of the decision engine consuming this model
+        required: true
+        default: decision-engine-v1
+      data_version:
+        description: Data or patch version represented by this model
+        required: true
+        default: "26.12"
+
+permissions:
+  contents: read
+
+jobs:
+  build-candidate:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v5.0.1
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v5.0.0
+        with:
+          node-version: "22"
+
+      - name: Test model release scaffold
+        run: python3 -m unittest discover -s scripts/model/tests -v
+
+      - name: Build and evaluate fixture-backed candidate
+        env:
+          MODEL_VERSION: decision-${{ inputs.data_version }}-${{ github.run_id }}
+        run: |
+          python3 scripts/model/export_training_data.py
+          python3 scripts/model/calibrate.py --model-version "${MODEL_VERSION}"
+          python3 scripts/model/evaluate.py
+
+      - name: Build signed candidate package
+        env:
+          MAYHEM_MODEL_SIGNING_KEY: ${{ secrets.MAYHEM_MODEL_SIGNING_KEY }}
+          ENGINE_VERSION: ${{ inputs.engine_version }}
+          DATA_VERSION: ${{ inputs.data_version }}
+        run: |
+          python3 scripts/model/package_model.py \
+            --config scripts/model/dist/candidate-model-config.json \
+            --engine-version "${ENGINE_VERSION}" \
+            --data-version "${DATA_VERSION}"
+          python3 scripts/model/sign_model.py public-key \
+            > scripts/model/dist/model-public-key.txt
+
+      - name: Verify signed candidate package
+        run: |
+          mkdir -p "${RUNNER_TEMP}/model-candidate"
+          tar -xzf scripts/model/dist/model-*.tar.gz \
+            -C "${RUNNER_TEMP}/model-candidate"
+          python3 scripts/model/sign_model.py verify \
+            --manifest "${RUNNER_TEMP}/model-candidate/manifest.json" \
+            --config "${RUNNER_TEMP}/model-candidate/model-config.json" \
+            --public-key scripts/model/dist/model-public-key.txt
+
+      - name: Upload candidate artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: model-candidate-${{ github.run_id }}
+          path: scripts/model/dist/
+          if-no-files-found: error
+          retention-days: 30
+
+      # Promotion is intentionally absent. A human must run approve_release.py
+      # with --approve and apply its SQL through the Claude-owned service surface.

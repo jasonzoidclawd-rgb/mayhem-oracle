@@ -1,8 +1,8 @@
 import { describe, expect, test } from "vitest";
-import abilitiesData from "../../../public/data/abilities.json";
-import augmentsData from "../../../public/data/augments.json";
-import championsData from "../../../public/data/champions.json";
-import poolRulesData from "../../../public/data/pool-rules.json";
+import abilitiesData from "../../../data/internal/abilities.json";
+import augmentsData from "../../../data/internal/augments.json";
+import championsData from "../../../data/internal/champions.json";
+import poolRulesData from "../../../data/internal/pool-rules.json";
 import {
   getChampionAugmentPool as webPool,
   type PoolAugmentInput as WebPoolAugment,
@@ -12,14 +12,19 @@ import {
   computeOracleScore as webScore,
   type OracleScoreInput as WebScoreInput,
 } from "../scoring/oracle-score";
+import { evaluateDecision as webDecision, type DecisionEngineData } from "../decision/evaluate";
+import { DEFAULT_MODEL_CONFIG as webModelConfig } from "../decision/model-config";
 import { getChampionAugmentPool as overlayPool } from "../../../overlay/src/scoring/pool-orchestrator";
 import { computeOracleScore as overlayScore } from "../../../overlay/src/scoring/oracle-score";
-import type { AbilityProfile, ChampionTag, PoolRules } from "../types";
+import { evaluateDecision as overlayDecision } from "../../../overlay/src/decision/evaluate";
+import { DEFAULT_MODEL_CONFIG as overlayModelConfig } from "../../../overlay/src/decision/model-config";
+import type { DecisionContext } from "../contracts/decision";
+import type { AbilityProfile, ChampionBaseStats, ChampionTag, PoolRules } from "../types";
 
 /**
  * Cross-parity harness (plan Session 5).
  *
- * Feeds IDENTICAL inputs — the web `public/data/*.json` files — to both the web
+ * Feeds IDENTICAL inputs — the full `data/internal/*.json` files — to both the web
  * and overlay scoring stacks, so this suite isolates CODE drift from overlay
  * data staleness (data sync freshness is Session 11's separate check).
  *
@@ -33,6 +38,7 @@ type ChampionRow = {
   slug: string;
   win_rate?: number | null;
   kit_tags?: ChampionTag[];
+  baseStats?: ChampionBaseStats;
 };
 
 type ScorableAugment = WebPoolAugment & {
@@ -123,6 +129,38 @@ export function measureDivergence(): ChampionDivergence[] {
         reasons.push(`score:${aug.slug} web=${webTotal} overlay=${overlayTotal}`);
         if (reasons.length >= 6) break;
       }
+    }
+
+    const context: DecisionContext = {
+      championSlug: champ.slug,
+      round: 2,
+      screenRarity: "gold",
+      mode: "competitive",
+      ownedAugmentSlugs: [],
+      currentItemIds: [],
+      plannedItemIds: [],
+      rerollsRemaining: 1,
+      goldenRerollAvailable: false,
+    };
+    const decisionData: DecisionEngineData = {
+      champion: {
+        slug: champ.slug,
+        winRate: champ.win_rate,
+        kitTags: championKitTags,
+        abilityProfile,
+        baseStats: champ.baseStats,
+      },
+      augments: augments as DecisionEngineData["augments"],
+      poolRules,
+    };
+    const webDecisionResult = webDecision(context, decisionData, webModelConfig);
+    const overlayDecisionResult = overlayDecision(
+      context,
+      decisionData as Parameters<typeof overlayDecision>[1],
+      overlayModelConfig,
+    );
+    if (JSON.stringify(webDecisionResult) !== JSON.stringify(overlayDecisionResult)) {
+      reasons.push("decision-result mismatch");
     }
 
     if (reasons.length > 0) {

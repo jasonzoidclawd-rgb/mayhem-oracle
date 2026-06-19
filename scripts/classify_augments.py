@@ -2,7 +2,7 @@
 """
 classify_augments.py — Augment tag/set/flags classifier via groq-fast (Llama 3.3 70B)
 
-Extends public/data/augments.json in-place with:
+Extends data/internal/augments.json in-place with:
   kit_tags: ChampionTag[]  — which kit properties the augment synergizes with
   set: AugmentSet | null   — one of the 9 Hextech Augment Synergies
   flags: { system_breaker, lifecycle }
@@ -22,9 +22,11 @@ import time
 import urllib.request
 from pathlib import Path
 
+from data_paths import INTERNAL_DATA_DIR
+
 # ─── Config ───────────────────────────────────────────────────────────────────
 
-AUGMENTS_PATH = Path(__file__).parent.parent / "public/data/augments.json"
+AUGMENTS_PATH = INTERNAL_DATA_DIR / "augments.json"
 # `or` (not getenv defaults): a set-but-empty env var must still fall back.
 LITELLM_URL = os.getenv("CLASSIFIER_URL") or "https://api.groq.com/openai/v1/chat/completions"
 LITELLM_MODEL = os.getenv("CLASSIFIER_MODEL") or "llama-3.3-70b-versatile"

@@ -1,0 +1,62 @@
+{
+  "gameId": 991240001,
+  "queueId": 2400,
+  "gameDuration": 1265,
+  "gameVersion": "26.12.123.4567",
+  "gameCreation": 1781300000000,
+  "chat": "never upload this",
+  "participants": [
+    {
+      "participantId": 1,
+      "teamId": 100,
+      "championName": "Aatrox",
+      "augmentSlugs": ["deathtouch", "mad-scientist"],
+      "stats": {
+        "win": true,
+        "kills": 12,
+        "deaths": 7,
+        "assists": 18,
+        "totalDamageDealtToChampions": 34567,
+        "item0": 3071,
+        "item1": 3111,
+        "item2": 0
+      },
+      "summonerName": "Forbidden Summoner"
+    },
+    {
+      "participantId": 2,
+      "teamId": 200,
+      "championName": "Brand",
+      "augmentSlugs": ["big-brain"],
+      "stats": {
+        "win": false,
+        "kills": 8,
+        "deaths": 11,
+        "assists": 14,
+        "totalDamageDealtToChampions": 29876,
+        "item0": 6655,
+        "item1": 3020
+      }
+    }
+  ],
+  "participantIdentities": [
+    {
+      "participantId": 1,
+      "puuid": "forbidden-puuid-1",
+      "player": {
+        "summonerName": "Forbidden Summoner",
+        "riotIdGameName": "Forbidden Riot",
+        "riotIdTagline": "CHAT"
+      }
+    },
+    {
+      "participantId": 2,
+      "puuid": "forbidden-puuid-2",
+      "player": {
+        "summonerName": "Other Forbidden Summoner",
+        "riotIdGameName": "Other Forbidden Riot",
+        "riotIdTagline": "NAME"
+      }
+    }
+  ]
+}
