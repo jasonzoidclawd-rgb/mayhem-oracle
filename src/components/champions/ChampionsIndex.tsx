@@ -151,26 +151,22 @@ export function ChampionsIndex({
       <div className="space-y-3 mb-6">
         {/* Row 1: View toggle + search + sort */}
         <div className="flex flex-wrap items-center gap-2">
-          <button
-            onClick={() => setView("grid")}
-            className={`px-3 py-1.5 rounded-lg text-sm font-medium border transition-all ${
-              view === "grid"
-                ? "bg-[var(--color-neon-primary)]/15 text-[var(--color-neon-primary)] border-[var(--color-neon-primary)]/40"
-                : "bg-[var(--color-bg-card)] text-[var(--color-text-secondary)] border-[var(--color-border-default)]"
-            }`}
-          >
-            {t("viewGrid")}
-          </button>
-          <button
-            onClick={() => setView("table")}
-            className={`px-3 py-1.5 rounded-lg text-sm font-medium border transition-all ${
-              view === "table"
-                ? "bg-[var(--color-neon-primary)]/15 text-[var(--color-neon-primary)] border-[var(--color-neon-primary)]/40"
-                : "bg-[var(--color-bg-card)] text-[var(--color-text-secondary)] border-[var(--color-border-default)]"
-            }`}
-          >
-            {t("viewTable")}
-          </button>
+          <div className="segmented">
+            <button
+              onClick={() => setView("grid")}
+              aria-pressed={view === "grid"}
+              className={`seg-item ${view === "grid" ? "seg-item-active" : ""}`}
+            >
+              {t("viewGrid")}
+            </button>
+            <button
+              onClick={() => setView("table")}
+              aria-pressed={view === "table"}
+              className={`seg-item ${view === "table" ? "seg-item-active" : ""}`}
+            >
+              {t("viewTable")}
+            </button>
+          </div>
           <span className="w-px h-6 bg-[var(--color-border-default)] mx-1" />
           <input
             type="search"
