@@ -6,7 +6,7 @@ import { fileURLToPath } from "node:url";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const overlayRoot = path.resolve(__dirname, "..");
-const sourceRoot = path.resolve(overlayRoot, "..", "public", "data");
+const sourceRoot = path.resolve(overlayRoot, "..", "data", "internal");
 const targetRoot = path.resolve(overlayRoot, "public", "data");
 const abilityTargetRoot = path.join(targetRoot, "abilities");
 const validAugmentSetLabels = new Set([
@@ -81,9 +81,16 @@ function compactAugment(augment) {
     slug: augment.slug,
     name: augment.name,
     icon: augment.icon,
+    name_zh_CN: augment.name_zh_CN,
     name_zh_TW: augment.name_zh_TW,
+    name_ja: augment.name_ja,
+    name_ko: augment.name_ko,
     rarity: augment.rarity,
+    win_rate: augment.win_rate,
+    type: augment.type,
+    description: augment.description,
     wikiDescription: augment.wikiDescription,
+    notes: augment.notes,
     set: normalizeAugmentSet(augment.set, augment.wikiSet),
     wikiSet: augment.wikiSet,
     kit_tags: augment.kit_tags,

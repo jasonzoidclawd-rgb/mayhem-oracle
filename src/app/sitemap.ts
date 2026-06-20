@@ -18,7 +18,10 @@ const STATIC_PATHS = [
   "/patch-notes",
   "/advisor",
   "/damage-sim",
+  "/membership",
   "/privacy",
+  "/terms",
+  "/contact",
 ] as const;
 
 async function championSlugs(): Promise<string[]> {
@@ -33,13 +36,32 @@ async function championSlugs(): Promise<string[]> {
   }
 }
 
+async function itemIdentifiers(): Promise<string[]> {
+  try {
+    const file = path.join(process.cwd(), "public", "data", "items.json");
+    const data = JSON.parse(await readFile(file, "utf-8")) as {
+      mayhemExclusive?: { slug: string }[];
+      items?: { id?: number | null }[];
+    };
+    return [
+      ...(data.mayhemExclusive ?? []).map((item) => item.slug),
+      ...(data.items ?? [])
+        .filter((item) => item.id != null)
+        .map((item) => String(item.id)),
+    ];
+  } catch {
+    return [];
+  }
+}
+
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const lastModified = new Date();
-  const slugs = await championSlugs();
+  const [slugs, itemIds] = await Promise.all([championSlugs(), itemIdentifiers()]);
 
   const paths: string[] = [
     ...STATIC_PATHS,
     ...slugs.map((slug) => `/champions/${slug}`),
+    ...itemIds.map((identifier) => `/items/${identifier}`),
   ];
 
   return paths.flatMap((p) =>

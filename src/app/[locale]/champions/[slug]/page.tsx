@@ -5,17 +5,21 @@ import Image from "next/image";
 import { readFile } from "fs/promises";
 import path from "path";
 import { notFound } from "next/navigation";
-import { computeOracleScore, type ScoredAugment, type ComboTier } from "@/lib/scoring/oracle-score";
-import type { AbilityProfile, AbilityEntry, AbilityStats, ChampionBaseStats, ChampionTag, PoolRules } from "@/lib/types";
+import { computeOracleScore, type ComboTier } from "@/lib/scoring/oracle-score";
+import type { AbilityProfile, AbilityEntry, AbilityStats, ChampionBaseStats } from "@/lib/types";
 import { Tooltip } from "@/components/ui/Tooltip";
 import { buildPoolProfile } from "@/lib/scoring/augment-tailoring";
 import { getChampionAugmentPool } from "@/lib/scoring/pool-orchestrator";
 import { analyzeInteractions, type MechanicalInteraction, type AugmentMechanic } from "@/lib/scoring/augment-interactions";
-import { normalizeAugmentSet } from "@/lib/data/augment-set";
 import { localizedDescription, localizedName } from "@/lib/i18n/localized-name";
 import { buildComboTierLookup, resolveChampionCombos } from "@/lib/data/combo-lookup";
 import { routing } from "@/i18n/routing";
 import { ChampionMatrixClient } from "@/components/champions/ChampionMatrixClient";
+import {
+  loadChampionDetailData,
+  type ChampionDetailAugment,
+  type ChampionDetailChampion,
+} from "@/lib/champions/detail-data";
 import {
   PoolConstructionSection,
   type PoolLayer,
@@ -27,42 +31,8 @@ import type { DecisionGrade } from "@/lib/contracts/decision";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { SITE_URL } from "@/lib/site";
 
-// ─── Types ───────────────────────────────────────────────────────────────────
-
-interface ChampionData {
-  slug: string;
-  name: string;
-  title?: string;
-  tier: string;
-  rank: number | null;
-  win_rate: number | null;
-  pick_rate: number | null;
-  tags: string[];
-  classes?: string[];
-  last_changed?: string;
-  icon: string;
-  baseStats?: ChampionBaseStats;
-  kit_tags?: ChampionTag[];
-}
-
-interface AugmentData extends ScoredAugment {
-  slug: string;
-  name: string;
-  rarity: "prismatic" | "gold" | "silver";
-  win_rate: number | null;
-  icon: string;
-  set?: string;
-  wikiSet?: string;
-  wikiDescription?: string;
-  kit_tags?: ChampionTag[];
-}
-
-interface ComboData {
-  champion: string;
-  augment: string;
-  tier: string;
-  ref: string;
-}
+type ChampionData = ChampionDetailChampion;
+type AugmentData = ChampionDetailAugment;
 
 type PillLabels = {
   tier: string;
@@ -87,38 +57,6 @@ export async function generateStaticParams() {
   return routing.locales.flatMap((locale) =>
     champions.map((c) => ({ locale, slug: c.slug }))
   );
-}
-
-// ─── Data loading ─────────────────────────────────────────────────────────────
-
-async function loadData() {
-  const base = path.join(process.cwd(), "public", "data");
-  const [champsRaw, augsRaw, combosRaw, poolRulesRaw] = await Promise.all([
-    readFile(path.join(base, "champions.json"), "utf-8"),
-    readFile(path.join(base, "augments.json"), "utf-8"),
-    readFile(path.join(base, "combos.json"), "utf-8"),
-    readFile(path.join(base, "pool-rules.json"), "utf-8"),
-  ]);
-
-  let abilitiesData: Record<string, AbilityProfile> = {};
-  try {
-    const abilitiesRaw = await readFile(path.join(base, "abilities.json"), "utf-8");
-    abilitiesData = JSON.parse(abilitiesRaw).profiles ?? {};
-  } catch {
-    // abilities.json not yet generated — ability section will be hidden
-  }
-
-  return {
-    champions: JSON.parse(champsRaw).champions as ChampionData[],
-    augments: (JSON.parse(augsRaw).augments as AugmentData[]).map((augment) => ({
-      ...augment,
-      set: normalizeAugmentSet(augment.set, augment.wikiSet),
-    })),
-    combos: JSON.parse(combosRaw).combos as ComboData[],
-    poolRules: JSON.parse(poolRulesRaw) as PoolRules,
-    patch: JSON.parse(champsRaw).patch as string,
-    abilities: abilitiesData,
-  };
 }
 
 // ─── Page ─────────────────────────────────────────────────────────────────────
@@ -146,56 +84,64 @@ export default async function ChampionPage({
     return { isAuthenticated: gate.reason !== "unauthenticated", isMember: false };
   })();
 
-  const { champions, augments, combos, poolRules, patch, abilities } = await loadData();
+  const publicData = await loadChampionDetailData("public");
+  const memberData = isMember ? await loadChampionDetailData("member") : null;
+  const activeData = memberData ?? publicData;
+  const { champions, patch } = publicData;
+  const { augments, combos, poolRules, abilities } = activeData;
 
   const champ = champions.find((c) => c.slug === slug);
   if (!champ) notFound();
+  const activeChamp = activeData.champions.find((c) => c.slug === slug) ?? champ;
   const champName = localizedName(champ, locale);
 
-  const champWr = champ.win_rate ?? 50;
+  const champWr = activeChamp.win_rate ?? champ.win_rate ?? 50;
   const abilityProfile: AbilityProfile | undefined = abilities[slug];
 
   // Build combo lookup for this champion: augment-slug → tier
   const champCombos = resolveChampionCombos(slug, combos, augments);
-  const comboBySlug = buildComboTierLookup(slug, combos, augments);
+  const comboBySlug = isMember
+    ? buildComboTierLookup(slug, combos, augments)
+    : new Map<string, ComboTier>();
   const augmentBySlug = new Map(augments.map((augment) => [augment.slug, augment]));
 
-  // ── Smart Tailoring: filter augment pool ──
-  const poolProfile = buildPoolProfile(slug, abilityProfile, champ.baseStats);
-  const pool = getChampionAugmentPool({
-    championSlug: slug,
-    augments,
-    abilityProfile,
-    baseStats: champ.baseStats,
-    championKitTags: champ.kit_tags ?? [],
-    poolRules,
-  });
-  const poolAugments = [...pool.silver, ...pool.gold, ...pool.prismatic];
+  const poolProfile = buildPoolProfile(slug, abilityProfile, activeChamp.baseStats);
+  const pool = isMember
+    ? getChampionAugmentPool({
+        championSlug: slug,
+        augments,
+        abilityProfile,
+        baseStats: activeChamp.baseStats,
+        championKitTags: activeChamp.kit_tags ?? [],
+        poolRules,
+      })
+    : null;
+  const poolAugments = pool ? [...pool.silver, ...pool.gold, ...pool.prismatic] : [];
 
-  // Score filtered augments for this champion
-  const scoredAugments = poolAugments.map((aug) => {
-    const comboTier = comboBySlug.get(aug.slug);
-    const result = computeOracleScore({
-      augment: aug,
-      championWinRate: champWr,
-      comboTier,
-      abilityProfile,
-      isSystemBreaker: aug.flags?.system_breaker === true,
-    });
-    return { aug, score: result.total, breakdown: result.breakdown, comboTier };
-  });
+  const scoredAugments = poolAugments
+    .map((aug) => {
+      const comboTier = comboBySlug.get(aug.slug);
+      const result = computeOracleScore({
+        augment: aug,
+        championWinRate: champWr,
+        comboTier,
+        abilityProfile,
+        isSystemBreaker: aug.flags?.system_breaker === true,
+      });
+      return { aug, score: result.total, breakdown: result.breakdown, comboTier };
+    })
+    .sort((a, b) => b.score - a.score);
 
-  // Sort by Oracle Score descending
-  scoredAugments.sort((a, b) => b.score - a.score);
-
-  const excludedByReason = pool.excluded.reduce<Record<string, number>>((accumulator, entry) => {
-    accumulator[entry.reason] = (accumulator[entry.reason] ?? 0) + 1;
-    return accumulator;
-  }, {});
+  const excludedByReason = pool
+    ? pool.excluded.reduce<Record<string, number>>((accumulator, entry) => {
+        accumulator[entry.reason] = (accumulator[entry.reason] ?? 0) + 1;
+        return accumulator;
+      }, {})
+    : {};
   const countExcluded = (...reasons: string[]) =>
     reasons.reduce((total, reason) => total + (excludedByReason[reason] ?? 0), 0);
 
-  let poolLayerRemainder = augments.length;
+  let poolLayerRemainder = pool?.total ?? augments.length;
   const poolLayers: PoolLayer[] = [
     {
       key: "source",
@@ -210,30 +156,32 @@ export default async function ChampionPage({
     poolLayers.push({ key, label, detail, kept: poolLayerRemainder, removed });
   };
 
-  appendPoolLayer(
-    "lifecycle",
-    t("poolStepLifecycle"),
-    t("poolStepLifecycleDetail"),
-    countExcluded("disabled", "removed"),
-  );
-  appendPoolLayer(
-    "hard",
-    t("poolStepHard"),
-    t("poolStepHardDetail"),
-    countExcluded("hard-exclusion"),
-  );
-  appendPoolLayer(
-    "tags",
-    t("poolStepTags"),
-    t("poolStepTagsDetail"),
-    countExcluded("tag-mismatch"),
-  );
-  appendPoolLayer(
-    "items",
-    t("poolStepItems"),
-    t("poolStepItemsDetail"),
-    countExcluded("item-exclusion"),
-  );
+  if (pool) {
+    appendPoolLayer(
+      "lifecycle",
+      t("poolStepLifecycle"),
+      t("poolStepLifecycleDetail"),
+      countExcluded("disabled", "removed"),
+    );
+    appendPoolLayer(
+      "hard",
+      t("poolStepHard"),
+      t("poolStepHardDetail"),
+      countExcluded("hard-exclusion"),
+    );
+    appendPoolLayer(
+      "tags",
+      t("poolStepTags"),
+      t("poolStepTagsDetail"),
+      countExcluded("tag-mismatch"),
+    );
+    appendPoolLayer(
+      "items",
+      t("poolStepItems"),
+      t("poolStepItemsDetail"),
+      countExcluded("item-exclusion"),
+    );
+  }
 
   // Pre-compute translated damage/attack type labels
   const damageTypeLabel: Record<string, string> = {
@@ -271,9 +219,21 @@ export default async function ChampionPage({
   ];
 
   const poolRaritySummary: PoolRaritySummary[] = [
-    { key: "silver", label: t("silver"), count: pool.silver.length },
-    { key: "gold", label: t("gold"), count: pool.gold.length },
-    { key: "prismatic", label: t("prismatic"), count: pool.prismatic.length },
+    {
+      key: "silver",
+      label: t("silver"),
+      count: pool?.silver.length ?? augments.filter((augment) => augment.rarity === "silver").length,
+    },
+    {
+      key: "gold",
+      label: t("gold"),
+      count: pool?.gold.length ?? augments.filter((augment) => augment.rarity === "gold").length,
+    },
+    {
+      key: "prismatic",
+      label: t("prismatic"),
+      count: pool?.prismatic.length ?? augments.filter((augment) => augment.rarity === "prismatic").length,
+    },
   ];
 
   const tailoredHighlights: TailoredHighlight[] = scoredAugments.slice(0, 6).map(({ aug, score, comboTier }) => ({
@@ -289,12 +249,12 @@ export default async function ChampionPage({
   let mechanicalSynergies: MechanicalInteraction[] = [];
   let mechanicalTraps: MechanicalInteraction[] = [];
 
-  if (abilityProfile && champ.baseStats) {
+  if (isMember && abilityProfile && activeChamp.baseStats) {
     const allInteractions = analyzeInteractions(
       {
-        name: champ.name,
-        slug: champ.slug,
-        baseStats: champ.baseStats,
+        name: activeChamp.name,
+        slug: activeChamp.slug,
+        baseStats: activeChamp.baseStats,
         abilityProfile,
       },
       poolAugments.map((a) => ({
@@ -339,6 +299,27 @@ export default async function ChampionPage({
     ["mobility",     t("playstyleMobility")],
     ["utility",      t("playstyleUtility")],
   ];
+  const baseStatsCopy = {
+    title: t("baseStatsTitle"),
+    stat: t("baseStatsStat"),
+    base: t("baseStatsBase"),
+    growth: t("baseStatsGrowth"),
+    at18: t("baseStatsAt18"),
+    rows: {
+      health: t("statHealth"),
+      mana: t("statMana"),
+      hpRegen: t("statHpRegen"),
+      mpRegen: t("statMpRegen"),
+      armor: t("statArmor"),
+      magicResist: t("statMagicResist"),
+      attackDamage: t("statAttackDamage"),
+      attackSpeed: t("statAttackSpeed"),
+      attackSpeedGrowth: t("statAttackSpeedGrowth"),
+      attackRange: t("statAttackRange"),
+      moveSpeed: t("statMoveSpeed"),
+      missileSpeed: t("statMissileSpeed"),
+    },
+  };
 
   const topCombos = strongCombos
     .map((c) => augmentBySlug.get(c.augmentSlug)?.name ?? c.augment)
@@ -392,10 +373,10 @@ export default async function ChampionPage({
           </div>
           <div className="flex items-center gap-3 mt-1 text-sm text-[var(--color-text-secondary)]">
             <span className="font-bold text-[var(--color-wr-high)]">
-              {champWr.toFixed(1)}% WR
+              {champWr.toFixed(1)}% {t("winRateAbbr")}
             </span>
             {champ.pick_rate && (
-              <span className="text-xs">{champ.pick_rate.toFixed(1)}% PR</span>
+              <span className="text-xs">{champ.pick_rate.toFixed(1)}% {t("pickRateAbbr")}</span>
             )}
             <span className="text-[10px] text-[var(--color-text-muted)]">{t("patchLabel", { patch })}</span>
           </div>
@@ -504,21 +485,26 @@ export default async function ChampionPage({
 
       {/* ─── Base Stats ─── */}
       {champ.baseStats && (
-        <BaseStatsTable stats={champ.baseStats} />
+        <BaseStatsTable stats={champ.baseStats} copy={baseStatsCopy} />
       )}
 
       {/* ─── Mechanical Interactions ─── */}
       {(mechanicalSynergies.length > 0 || mechanicalTraps.length > 0) && (
         <section className="glass-card p-4 mb-3 sm:mb-6">
-          <h2 className="text-sm font-bold mb-1 border-l-2 border-[var(--color-neon-primary)] pl-2">Mechanical Analysis</h2>
+          <h2 className="text-sm font-bold mb-1 border-l-2 border-[var(--color-neon-primary)] pl-2">
+            {t("mechanicalAnalysis")}
+          </h2>
           <p className="text-[10px] text-[var(--color-text-muted)] mb-3 pl-3">
-            {mechanicalSynergies.length} synergies · {mechanicalTraps.length} traps
+            {t("mechanicalCounts", {
+              synergies: mechanicalSynergies.length,
+              traps: mechanicalTraps.length,
+            })}
           </p>
 
           {mechanicalSynergies.length > 0 && (
             <div className="mb-3">
               <h3 className="text-xs font-semibold text-green-400 mb-1.5 border-l-2 border-green-400/50 pl-2">
-                Synergies
+                {t("mechanicalSynergies")}
               </h3>
               <div className="space-y-1">
                 {mechanicalSynergies.map((ix, i) => (
@@ -531,7 +517,7 @@ export default async function ChampionPage({
           {mechanicalTraps.length > 0 && (
             <div>
               <h3 className="text-xs font-semibold text-red-400 mb-1.5 border-l-2 border-red-400/50 pl-2">
-                Traps
+                {t("mechanicalTraps")}
               </h3>
               <div className="space-y-1">
                 {mechanicalTraps.map((ix, i) => (
@@ -631,7 +617,7 @@ export default async function ChampionPage({
         title={t("poolConstruction")}
         subtitle={t("poolConstructionSubtitle", {
           name: champ.name,
-          kept: pool.total,
+          kept: pool?.total ?? augments.length,
           total: augments.length,
         })}
         rarityTitle={t("poolRarityMix")}
@@ -658,33 +644,37 @@ export default async function ChampionPage({
       />
 
       <section className="glass-card p-4">
-        <ChampionMatrixClient
-          championSlug={champ.slug}
-          augmentNames={Object.fromEntries(augments.map((a) => [a.slug, a.name]))}
-          copy={{
-            title: tm("matrixTitle"),
-            subtitle: tm("matrixSubtitle"),
-            loading: tm("matrixLoading"),
-            error: tm("matrixError"),
-            round: tm("matrixRoundN"),
-            topPick: tm("matrixTopPick"),
-            modeCompetitive: tm("advModeCompetitive"),
-            modeExploration: tm("advModeExploration"),
-            raritySilver: tm("advRaritySilver"),
-            rarityGold: tm("advRarityGold"),
-            rarityPrismatic: tm("advRarityPrismatic"),
-            gradeLabels: {
-              hot: tg("hot"),
-              strong: tg("strong"),
-              steady: tg("steady"),
-              average: tg("average"),
-              weak: tg("weak"),
-            } as Record<DecisionGrade, string>,
-            lockedTitle: tm("lockedTitle"),
-            lockedBody: tm("lockedBody"),
-            lockedCta: tm("lockedCta"),
-          }}
-        />
+        {isMember ? (
+          <ChampionMatrixClient
+            championSlug={champ.slug}
+            augmentNames={Object.fromEntries(augments.map((a) => [a.slug, a.name]))}
+            copy={{
+              title: tm("matrixTitle"),
+              subtitle: tm("matrixSubtitle"),
+              loading: tm("matrixLoading"),
+              error: tm("matrixError"),
+              round: tm("matrixRoundN"),
+              topPick: tm("matrixTopPick"),
+              modeCompetitive: tm("advModeCompetitive"),
+              modeExploration: tm("advModeExploration"),
+              raritySilver: tm("advRaritySilver"),
+              rarityGold: tm("advRarityGold"),
+              rarityPrismatic: tm("advRarityPrismatic"),
+              gradeLabels: {
+                hot: tg("hot"),
+                strong: tg("strong"),
+                steady: tg("steady"),
+                average: tg("average"),
+                weak: tg("weak"),
+              } as Record<DecisionGrade, string>,
+              lockedTitle: tm("lockedTitle"),
+              lockedBody: tm("lockedBody"),
+              lockedCta: tm("lockedCta"),
+            }}
+          />
+        ) : (
+          <MembershipGate title={tm("lockedTitle")} body={tm("lockedBody")} cta={tm("lockedCta")} />
+        )}
       </section>
 
       {/* ─── Augment Rankings (member-gated: scores + breakdowns) ─── */}
@@ -695,10 +685,21 @@ export default async function ChampionPage({
         {isMember ? (
           <>
             <p className="text-[10px] text-[var(--color-text-muted)] mb-3 pl-3">
-              <span className="font-medium text-[var(--color-text-primary)]">N={pool.total}</span>
+              <span className="font-medium text-[var(--color-text-primary)]">N={pool?.total ?? 0}</span>
               <span> / {augments.length} total</span>
-              {poolProfile.resource !== "mana" && <span> · {poolProfile.resource === "none" ? "manaless" : poolProfile.resource}</span>}
-              {abilityProfile && <span> · {abilityProfile.attackType}</span>}
+              {poolProfile.resource !== "mana" && (
+                <span>
+                  {" · "}
+                  {poolProfile.resource === "none"
+                    ? t("resourceNone")
+                    : poolProfile.resource === "energy"
+                      ? t("resourceEnergy")
+                      : t("resourceMana")}
+                </span>
+              )}
+              {abilityProfile && (
+                <span> · {attackTypeLabel[abilityProfile.attackType] ?? abilityProfile.attackType}</span>
+              )}
             </p>
 
             <div className="space-y-1.5">
@@ -1130,7 +1131,7 @@ function statAtLevel(base: number, growth: number, level: number): number {
 }
 
 type StatRow = {
-  label: string;
+  label: keyof BaseStatsCopy["rows"];
   base: keyof ChampionBaseStats;
   growth?: keyof ChampionBaseStats;
   decimals?: number;
@@ -1138,22 +1139,50 @@ type StatRow = {
   flat?: boolean; // no growth formula, just show base
 };
 
+type BaseStatsCopy = {
+  title: string;
+  stat: string;
+  base: string;
+  growth: string;
+  at18: string;
+  rows: {
+    health: string;
+    mana: string;
+    hpRegen: string;
+    mpRegen: string;
+    armor: string;
+    magicResist: string;
+    attackDamage: string;
+    attackSpeed: string;
+    attackSpeedGrowth: string;
+    attackRange: string;
+    moveSpeed: string;
+    missileSpeed: string;
+  };
+};
+
 const STAT_ROWS: StatRow[] = [
-  { label: "Health",        base: "baseHP",      growth: "hpGrowth" },
-  { label: "Mana",          base: "baseMP",      growth: "mpGrowth" },
-  { label: "HP Regen /5",   base: "baseHPRegen", growth: "hpRegenGrowth", decimals: 1 },
-  { label: "MP Regen /5",   base: "baseMPRegen", growth: "mpRegenGrowth", decimals: 1 },
-  { label: "Armor",         base: "baseArmor",   growth: "armorGrowth", decimals: 1 },
-  { label: "Magic Resist",  base: "baseMR",      growth: "mrGrowth", decimals: 1 },
-  { label: "Attack Damage",  base: "baseAD",     growth: "adGrowth", decimals: 1 },
-  { label: "Attack Speed",  base: "baseAS",      decimals: 3 },
-  { label: "AS Growth",     base: "asGrowth",    decimals: 1, isPercent: true, flat: true },
-  { label: "Attack Range",  base: "attackRange",  flat: true },
-  { label: "Move Speed",    base: "moveSpeed",    flat: true },
-  { label: "Missile Speed", base: "missileSpeed", flat: true },
+  { label: "health", base: "baseHP", growth: "hpGrowth" },
+  { label: "mana", base: "baseMP", growth: "mpGrowth" },
+  { label: "hpRegen", base: "baseHPRegen", growth: "hpRegenGrowth", decimals: 1 },
+  { label: "mpRegen", base: "baseMPRegen", growth: "mpRegenGrowth", decimals: 1 },
+  { label: "armor", base: "baseArmor", growth: "armorGrowth", decimals: 1 },
+  { label: "magicResist", base: "baseMR", growth: "mrGrowth", decimals: 1 },
+  { label: "attackDamage", base: "baseAD", growth: "adGrowth", decimals: 1 },
+  { label: "attackSpeed", base: "baseAS", decimals: 3 },
+  { label: "attackSpeedGrowth", base: "asGrowth", decimals: 1, isPercent: true, flat: true },
+  { label: "attackRange", base: "attackRange", flat: true },
+  { label: "moveSpeed", base: "moveSpeed", flat: true },
+  { label: "missileSpeed", base: "missileSpeed", flat: true },
 ];
 
-function BaseStatsTable({ stats }: { stats: ChampionBaseStats }) {
+function BaseStatsTable({
+  stats,
+  copy,
+}: {
+  stats: ChampionBaseStats;
+  copy: BaseStatsCopy;
+}) {
   const rows = STAT_ROWS.filter((row) => {
     const val = stats[row.base];
     return val != null && val !== 0;
@@ -1162,16 +1191,16 @@ function BaseStatsTable({ stats }: { stats: ChampionBaseStats }) {
   return (
     <section className="glass-card p-4 mb-3 sm:mb-6">
       <h2 className="text-sm font-bold mb-3 border-l-2 border-[var(--color-neon-primary)] pl-2">
-        Base Stats
+        {copy.title}
       </h2>
       <div className="overflow-x-auto rounded-lg">
         <table className="w-full text-xs sm:text-sm">
           <thead>
             <tr className="border-b border-[var(--color-border-default)]">
-              <th className="text-left text-[9px] sm:text-[10px] font-medium text-[var(--color-text-muted)] uppercase tracking-wide px-2 sm:px-3 py-1.5">Stat</th>
-              <th className="text-right text-[9px] sm:text-[10px] font-medium text-[var(--color-text-muted)] uppercase tracking-wide px-2 sm:px-3 py-1.5">Base</th>
-              <th className="text-right text-[9px] sm:text-[10px] font-medium text-[var(--color-text-muted)] uppercase tracking-wide px-2 sm:px-3 py-1.5">+/lvl</th>
-              <th className="text-right text-[9px] sm:text-[10px] font-medium text-[var(--color-neon-primary)]/70 uppercase tracking-wide px-2 sm:px-3 py-1.5">@18</th>
+              <th className="text-left text-[9px] sm:text-[10px] font-medium text-[var(--color-text-muted)] uppercase tracking-wide px-2 sm:px-3 py-1.5">{copy.stat}</th>
+              <th className="text-right text-[9px] sm:text-[10px] font-medium text-[var(--color-text-muted)] uppercase tracking-wide px-2 sm:px-3 py-1.5">{copy.base}</th>
+              <th className="text-right text-[9px] sm:text-[10px] font-medium text-[var(--color-text-muted)] uppercase tracking-wide px-2 sm:px-3 py-1.5">{copy.growth}</th>
+              <th className="text-right text-[9px] sm:text-[10px] font-medium text-[var(--color-neon-primary)]/70 uppercase tracking-wide px-2 sm:px-3 py-1.5">{copy.at18}</th>
             </tr>
           </thead>
           <tbody>
@@ -1190,7 +1219,7 @@ function BaseStatsTable({ stats }: { stats: ChampionBaseStats }) {
                   key={row.label}
                   className="border-b border-[var(--color-border-default)]/30 last:border-0"
                 >
-                  <td className="px-2 sm:px-3 py-1 text-[11px] sm:text-xs text-[var(--color-text-secondary)]">{row.label}</td>
+                  <td className="px-2 sm:px-3 py-1 text-[11px] sm:text-xs text-[var(--color-text-secondary)]">{copy.rows[row.label]}</td>
                   <td className="px-2 sm:px-3 py-1 text-right tabular-nums font-medium">
                     {base.toFixed(dec)}{row.isPercent ? "%" : ""}
                   </td>

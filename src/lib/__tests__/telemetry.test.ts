@@ -1,3 +1,5 @@
+import { readFileSync } from "node:fs";
+import path from "node:path";
 import { describe, expect, test } from "vitest";
 import { parseBatch } from "../telemetry/validate";
 import {
@@ -178,6 +180,25 @@ describe("telemetry upload handler", () => {
     const response = await handleTelemetryUpload(request, deps());
     expect(response.status).toBe(413);
   });
+
+  test("streams uploads through the byte cap instead of using unbounded request.text()", async () => {
+    const payload = JSON.stringify([validMatch()]);
+    const request = {
+      headers: new Headers({ authorization: "Bearer good-token" }),
+      body: new ReadableStream<Uint8Array>({
+        start(controller) {
+          controller.enqueue(new TextEncoder().encode(payload));
+          controller.close();
+        },
+      }),
+      text: async () => {
+        throw new Error("unbounded text read");
+      },
+    } as unknown as Request;
+
+    const response = await handleTelemetryUpload(request, deps());
+    expect(response.status).toBe(200);
+  });
 });
 
 describe("device code + link handlers", () => {
@@ -230,5 +251,21 @@ describe("device code + link handlers", () => {
     });
     const response = await handleDeviceLink(request, deps());
     expect(response.status).toBe(400);
+  });
+});
+
+describe("telemetry dependency wiring", () => {
+  test("device code claims are conditional and clean up lost races", () => {
+    const source = readFileSync(
+      path.join(process.cwd(), "src/lib/api/telemetry-deps.ts"),
+      "utf-8",
+    );
+
+    expect(source).toMatch(
+      /\.update\(\{ status: "claimed"[\s\S]*?\.eq\("id", codeRow\.id\)[\s\S]*?\.eq\("status", "pending"\)/,
+    );
+    expect(source).toMatch(
+      /\.from\("devices"\)[\s\S]*?\.delete\(\)[\s\S]*?\.eq\("id", device\.id\)/,
+    );
   });
 });
