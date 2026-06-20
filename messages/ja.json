@@ -26,7 +26,21 @@
     "championsTracked": "追跡チャンピオン数",
     "augmentsScored": "スコア付きオーグメント数",
     "patchVersion": "現在のパッチ",
-    "lastUpdated": "最終更新"
+    "lastUpdated": "最終更新",
+    "featuresTitle": "ARAM メイヘムに必要なすべて",
+    "featuresSubtitle": "メタをひと目で把握することから、毎ラウンドの判断まで。",
+    "feat1Title": "ティアリスト",
+    "feat1Body": "今どの英雄が伸びているか — 現行パッチでランク付け。",
+    "feat2Title": "オーグメントとプール",
+    "feat2Body": "すべてのオーグメントに Oracle スコア、さらに英雄ごとのプール。",
+    "feat3Title": "ダメージシミュレーター",
+    "feat3Body": "正確なメイヘムの計算式でビルドとオーグメントの相互作用を再現。",
+    "feat4Title": "アドバイザー",
+    "feat4Body": "3つの候補をリアルタイムで採点 — あなたの英雄とラウンドに合わせて。",
+    "feat4Tag": "メンバー",
+    "ctaBandTitle": "もっと賢くドラフトしませんか？",
+    "ctaBandBody": "無料ツールはメタをランク付け。アドバイザーは目の前の候補を採点します。",
+    "ctaBandButton": "メンバーシップを見る"
   },
   "tierList": {
     "title": "ARAMメイヘム ティアリスト",

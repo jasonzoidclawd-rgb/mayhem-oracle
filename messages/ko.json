@@ -26,7 +26,21 @@
     "championsTracked": "추적 챔피언 수",
     "augmentsScored": "점수 부여 증강 수",
     "patchVersion": "현재 패치",
-    "lastUpdated": "마지막 업데이트"
+    "lastUpdated": "마지막 업데이트",
+    "featuresTitle": "ARAM 메이헴에 필요한 모든 것",
+    "featuresSubtitle": "메타를 한눈에 파악하는 것부터 매 라운드의 선택까지.",
+    "feat1Title": "티어 리스트",
+    "feat1Body": "어떤 챔피언이 떠오르는지 — 현재 패치 기준으로 순위를 매깁니다.",
+    "feat2Title": "증강과 풀",
+    "feat2Body": "모든 증강에 Oracle 점수, 그리고 챔피언별 풀까지.",
+    "feat3Title": "데미지 시뮬레이터",
+    "feat3Body": "정확한 메이헴 공식으로 빌드와 증강 상호작용을 모델링합니다.",
+    "feat4Title": "어드바이저",
+    "feat4Body": "세 가지 후보를 실시간 채점 — 당신의 챔피언과 라운드에 맞춰서.",
+    "feat4Tag": "멤버",
+    "ctaBandTitle": "더 똑똑하게 드래프트할 준비 되셨나요?",
+    "ctaBandBody": "무료 도구는 메타의 순위를 매기고, 어드바이저는 눈앞의 후보를 채점합니다.",
+    "ctaBandButton": "멤버십 살펴보기"
   },
   "tierList": {
     "title": "ARAM 메이헴 티어 리스트",

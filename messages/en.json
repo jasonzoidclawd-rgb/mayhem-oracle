@@ -88,7 +88,21 @@
     "championsTracked": "Champions Tracked",
     "augmentsScored": "Augments Scored",
     "patchVersion": "Current Patch",
-    "lastUpdated": "Last Updated"
+    "lastUpdated": "Last Updated",
+    "featuresTitle": "Everything you need for ARAM Mayhem",
+    "featuresSubtitle": "From the meta at a glance to the call you make every round.",
+    "feat1Title": "Tier List",
+    "feat1Body": "See which champions are climbing — ranked for the live patch.",
+    "feat2Title": "Augments & Pools",
+    "feat2Body": "Every augment with Oracle scores, plus champion-specific pools.",
+    "feat3Title": "Damage Simulator",
+    "feat3Body": "Model builds and augment interactions with exact ARAM formulas.",
+    "feat4Title": "The Advisor",
+    "feat4Body": "Score your three offers in real time — tailored to your champion and round.",
+    "feat4Tag": "Members",
+    "ctaBandTitle": "Ready to draft smarter?",
+    "ctaBandBody": "The free tools rank the meta. The Advisor scores the offers right in front of you.",
+    "ctaBandButton": "Explore membership"
   },
   "tierList": {
     "title": "ARAM Mayhem Tier List",

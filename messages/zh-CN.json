@@ -26,7 +26,21 @@
     "championsTracked": "追踪英雄数",
     "augmentsScored": "强化评分数",
     "patchVersion": "当前版本",
-    "lastUpdated": "最后更新"
+    "lastUpdated": "最后更新",
+    "featuresTitle": "ARAM 大乱斗所需的一切",
+    "featuresSubtitle": "从一眼掌握版本走向，到你每一回合做出的抉择。",
+    "feat1Title": "强度排名",
+    "feat1Body": "看看哪些英雄正在崛起 — 依当前版本排名。",
+    "feat2Title": "强化与增幅池",
+    "feat2Body": "每个强化都附 Oracle 评分，并提供英雄专属增幅池。",
+    "feat3Title": "伤害模拟",
+    "feat3Body": "以精确的大乱斗公式模拟出装与强化交互。",
+    "feat4Title": "顾问",
+    "feat4Body": "实时为你的三个选项评分 — 依你的英雄与回合量身打造。",
+    "feat4Tag": "会员",
+    "ctaBandTitle": "准备好做出更聪明的选择了吗？",
+    "ctaBandBody": "免费工具为当前版本排名；顾问则为你眼前的选项评分。",
+    "ctaBandButton": "了解会员"
   },
   "tierList": {
     "title": "ARAM 大乱斗强度排名",
