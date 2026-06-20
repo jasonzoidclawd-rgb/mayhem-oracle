@@ -57,11 +57,13 @@ export async function generateMetadata({
       description,
       url: localizedUrl("/", locale),
       locale,
+      images: [{ url: "/og.png", width: 1200, height: 630, alt: "Mayhem Oracle" }],
     },
     twitter: {
       card: "summary_large_image",
       title,
       description,
+      images: ["/og.png"],
     },
     robots: {
       index: true,
