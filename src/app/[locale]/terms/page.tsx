@@ -8,32 +8,36 @@ import {
   localizedUrl,
 } from "@/lib/site";
 
+// NOTE FOR OPERATOR: this is a concise, plain-language template. Before
+// commercial launch, have it reviewed and complete it with your legal entity,
+// governing jurisdiction, and a monitored contact address (CONTACT_EMAIL).
+
 export async function generateMetadata({
   params,
 }: {
   params: Promise<{ locale: string }>;
 }): Promise<Metadata> {
   const { locale } = await params;
-  const t = await getTranslations({ locale, namespace: "privacy" });
+  const t = await getTranslations({ locale, namespace: "terms" });
   return {
     title: t("title"),
     alternates: {
-      canonical: localizedUrl("/privacy", locale),
-      languages: languageAlternates("/privacy"),
+      canonical: localizedUrl("/terms", locale),
+      languages: languageAlternates("/terms"),
     },
   };
 }
 
-const SECTIONS = [1, 2, 3, 4, 5, 6, 7, 8] as const;
+const SECTIONS = [1, 2, 3, 4, 5, 6, 7, 8, 9] as const;
 
-export default async function PrivacyPage({
+export default async function TermsPage({
   params,
 }: {
   params: Promise<{ locale: string }>;
 }) {
   const { locale } = await params;
   setRequestLocale(locale);
-  const t = await getTranslations("privacy");
+  const t = await getTranslations("terms");
   const date = new Intl.DateTimeFormat(locale, { dateStyle: "long" }).format(
     new Date(LEGAL_LAST_UPDATED),
   );

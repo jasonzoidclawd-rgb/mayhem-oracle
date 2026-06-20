@@ -49,8 +49,12 @@
 body {
   background-color: var(--color-bg-primary);
   color: var(--color-text-primary);
-  font-family: "Inter", system-ui, -apple-system, sans-serif;
+  font-family: var(--font-inter), system-ui, -apple-system, "PingFang TC",
+    "PingFang SC", "Microsoft JhengHei", "Microsoft YaHei", "Hiragino Sans",
+    "Noto Sans CJK TC", "Noto Sans CJK SC", "Noto Sans CJK JP", "Noto Sans CJK KR",
+    sans-serif;
   -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
 }
 
 /* ─── Glassmorphism card utility ─── */
