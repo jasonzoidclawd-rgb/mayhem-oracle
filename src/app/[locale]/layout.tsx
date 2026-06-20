@@ -20,6 +20,8 @@ const inter = Inter({
   variable: "--font-inter",
 });
 
+export const dynamicParams = false;
+
 // Generate static params for all locales (enables static rendering)
 export function generateStaticParams() {
   return routing.locales.map((locale) => ({ locale }));

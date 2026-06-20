@@ -24,11 +24,11 @@ import { routing, type Locale } from "@/i18n/routing";
 
 /**
  * Builds an absolute URL for a path under a given locale, honoring next-intl's
- * always-prefixed locale policy.
+ * `as-needed` prefix policy (default locale has no prefix).
  */
 export function localizedUrl(path: string, locale: Locale = routing.defaultLocale): string {
   const clean = path === "/" ? "" : path.replace(/^(?!\/)/, "/");
-  const prefix = `/${locale}`;
+  const prefix = locale === routing.defaultLocale ? "" : `/${locale}`;
   return `${SITE_URL}${prefix}${clean}`;
 }
 
