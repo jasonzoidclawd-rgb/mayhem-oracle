@@ -1,0 +1,41 @@
+{
+  "events": [
+    {
+      "detected_at": "2026-06-20T18:56:38.048204+00:00",
+      "patch": "26.12",
+      "date": "2026-06-20",
+      "changes": [
+        {
+          "slug": "archmage",
+          "names": {
+            "en": "Archmage",
+            "zh-TW": "大法師",
+            "zh-CN": "大法师",
+            "ja": "魔帝",
+            "ko": "대마법사"
+          },
+          "rarity": "prismatic",
+          "type": "rarity",
+          "fromRarity": "gold",
+          "toRarity": "prismatic"
+        },
+        {
+          "slug": "quickstep",
+          "names": {
+            "en": "Quickstep",
+            "zh-TW": "快步移動",
+            "zh-CN": "快步",
+            "ja": "クイックステップ",
+            "ko": "날쌘걸음"
+          },
+          "rarity": "gold",
+          "type": "rarity",
+          "fromRarity": "prismatic",
+          "toRarity": "gold"
+        }
+      ]
+    }
+  ],
+  "patch": "26.12",
+  "generated_at": "2026-06-20T18:56:38.048204+00:00"
+}

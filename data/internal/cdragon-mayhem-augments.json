@@ -1,6 +1,6 @@
 {
   "patch": "26.12",
-  "fetched_at": "2026-06-13T17:12:34.055373+00:00",
+  "fetched_at": "2026-06-20T18:56:38.048204+00:00",
   "source": "https://raw.communitydragon.org/latest",
   "augments": [
     {
@@ -56,7 +56,7 @@
         "ko": "대마법사"
       },
       "slug": "archmage",
-      "rarity": "gold",
+      "rarity": "prismatic",
       "tooltip": ""
     },
     {
@@ -1432,7 +1432,7 @@
         "ko": "날쌘걸음"
       },
       "slug": "quickstep",
-      "rarity": "prismatic",
+      "rarity": "gold",
       "tooltip": ""
     },
     {
