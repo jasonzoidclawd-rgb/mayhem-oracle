@@ -202,6 +202,22 @@
     "mixedDamage": "Mixed Damage",
     "pillTier": "tier"
   },
+  "championsIndex": {
+    "viewGrid": "Grid",
+    "viewTable": "Stats Table",
+    "searchPlaceholder": "Search name, title, class...",
+    "sortWinRate": "Win Rate",
+    "sortTier": "Tier",
+    "sortName": "Name",
+    "sortHp": "HP @ Lv{level}",
+    "sortAd": "AD @ Lv{level}",
+    "sortBaseAs": "Base AS",
+    "sortRange": "Range",
+    "sortMs": "Move Speed",
+    "levelAbbr": "Lv",
+    "allClasses": "All",
+    "statsFooter": "{count} / {total} champions · Stats from wiki.leagueoflegends.com · Level scaling uses the official growth formula"
+  },
   "augments": {
     "title": "Augments",
     "subtitle": "{count} augments · Patch {patch} · sorted by Oracle Score",

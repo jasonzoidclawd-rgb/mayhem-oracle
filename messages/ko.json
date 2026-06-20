@@ -689,5 +689,21 @@
     "faq3A": "Mayhem Oracle은 공개 데이터와 사용자가 직접 입력한 내용을 사용합니다. 게임을 자동화하거나 숨겨진 정보에 접근하지 않으며 Riot Games와 무관합니다.",
     "faq4Q": "취소할 수 있나요?",
     "faq4A": "체험 및 초대 이용권은 자동으로 만료됩니다 — 취소할 필요가 없습니다. 계정 데이터 삭제는 문의 페이지에서 언제든 요청할 수 있습니다."
+  },
+  "championsIndex": {
+    "viewGrid": "그리드",
+    "viewTable": "스탯 표",
+    "searchPlaceholder": "이름·칭호·클래스 검색…",
+    "sortWinRate": "승률",
+    "sortTier": "티어",
+    "sortName": "이름",
+    "sortHp": "HP @ Lv{level}",
+    "sortAd": "AD @ Lv{level}",
+    "sortBaseAs": "기본 AS",
+    "sortRange": "사거리",
+    "sortMs": "이동 속도",
+    "levelAbbr": "Lv",
+    "allClasses": "전체",
+    "statsFooter": "{count} / {total}명의 챔피언 · 데이터 출처: wiki.leagueoflegends.com · 레벨 성장은 공식 공식을 사용"
   }
 }

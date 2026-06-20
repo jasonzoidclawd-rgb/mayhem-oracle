@@ -689,5 +689,21 @@
     "faq3A": "Mayhem Oracle は公開データとあなた自身の手入力を使用します。ゲームの自動化や隠し情報へのアクセスは行わず、Riot Games とは関係ありません。",
     "faq4Q": "解約できますか？",
     "faq4A": "トライアルと招待アクセスは自動的に期限切れになります — 解約は不要です。アカウントデータの削除はお問い合わせページからいつでも請求できます。"
+  },
+  "championsIndex": {
+    "viewGrid": "グリッド",
+    "viewTable": "データ表",
+    "searchPlaceholder": "名前・称号・クラスで検索…",
+    "sortWinRate": "勝率",
+    "sortTier": "ティア",
+    "sortName": "名前",
+    "sortHp": "HP @ Lv{level}",
+    "sortAd": "AD @ Lv{level}",
+    "sortBaseAs": "基礎AS",
+    "sortRange": "射程",
+    "sortMs": "移動速度",
+    "levelAbbr": "Lv",
+    "allClasses": "すべて",
+    "statsFooter": "{count} / {total} 体の英雄 · データ元：wiki.leagueoflegends.com · レベル成長は公式の計算式を使用"
   }
 }

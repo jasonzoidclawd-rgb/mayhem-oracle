@@ -689,5 +689,21 @@
     "faq3A": "Mayhem Oracle 使用公开数据与你自行输入的内容，不会自动化游戏操作或访问隐藏信息，也与 Riot Games 无关联。",
     "faq4Q": "可以取消吗？",
     "faq4A": "试用与邀请权限会自动到期 — 无需取消。你可随时在\"联系我们\"页面要求删除账号数据。"
+  },
+  "championsIndex": {
+    "viewGrid": "网格",
+    "viewTable": "数据表",
+    "searchPlaceholder": "搜索名称、称号、职业…",
+    "sortWinRate": "胜率",
+    "sortTier": "分级",
+    "sortName": "名称",
+    "sortHp": "生命值 @ {level} 级",
+    "sortAd": "攻击力 @ {level} 级",
+    "sortBaseAs": "基础攻速",
+    "sortRange": "攻击距离",
+    "sortMs": "移动速度",
+    "levelAbbr": "等级",
+    "allClasses": "全部",
+    "statsFooter": "{count} / {total} 位英雄 · 数据来自 wiki.leagueoflegends.com · 等级成长采用官方公式"
   }
 }

@@ -689,5 +689,21 @@
     "faq3A": "Mayhem Oracle 使用公開資料與你自行輸入的內容，不會自動化遊戲操作或存取隱藏資訊，亦與 Riot Games 無關聯。",
     "faq4Q": "可以取消嗎？",
     "faq4A": "試用與邀請權限會自動到期 — 無需取消。你可隨時在「聯絡我們」頁面要求刪除帳號資料。"
+  },
+  "championsIndex": {
+    "viewGrid": "網格",
+    "viewTable": "數據表",
+    "searchPlaceholder": "搜尋名稱、稱號、職業…",
+    "sortWinRate": "勝率",
+    "sortTier": "分級",
+    "sortName": "名稱",
+    "sortHp": "生命值 @ {level} 級",
+    "sortAd": "攻擊力 @ {level} 級",
+    "sortBaseAs": "基礎攻速",
+    "sortRange": "攻擊距離",
+    "sortMs": "移動速度",
+    "levelAbbr": "等級",
+    "allClasses": "全部",
+    "statsFooter": "{count} / {total} 位英雄 · 數據來自 wiki.leagueoflegends.com · 等級成長採用官方公式"
   }
 }
