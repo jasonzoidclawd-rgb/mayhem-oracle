@@ -2,7 +2,7 @@ import { readFile } from "node:fs/promises";
 import path from "node:path";
 import { describe, expect, test } from "vitest";
 import type { DecisionContext, DecisionResult } from "../contracts/decision";
-import { loadInternalDecisionData } from "../data/internal-loader";
+import type { DecisionEngineData } from "../decision/evaluate";
 import {
   GRADE_TOKENS,
   runLocalInference,
@@ -24,22 +24,35 @@ const FIXTURE_NAMES = [
   "hard-trap-garen",
 ] as const;
 
+type M1DecisionDataSnapshot = {
+  source: {
+    commit: string;
+    files: string[];
+    champions: string[];
+    purpose: string;
+  };
+  champions: Record<string, DecisionEngineData>;
+};
+
 async function readJson<T>(relativePath: string): Promise<T> {
   return JSON.parse(
     await readFile(path.join(process.cwd(), relativePath), "utf-8"),
   ) as T;
 }
 
+function fixtureData(
+  snapshot: M1DecisionDataSnapshot,
+  context: DecisionContext,
+): DecisionEngineData {
+  const data = snapshot.champions[context.championSlug];
+  if (!data) {
+    throw new Error(`No M1 decision data snapshot for ${context.championSlug}`);
+  }
+  return data;
+}
+
 describe("member overlay decision parity", () => {
-  // DEFERRED TO CODEX (overlay/contract domain): these 4 fixtures pin decision
-  // results frozen from M1-era data but load LIVE internal data, so they break on
-  // every daily data refresh (the cron resumes after fix/data-pipeline-hotfix-
-  // freshness). Verified BENIGN: web `evaluateDecision` == overlay
-  // `runLocalInference` on current data for all 4, and the budget-0 cross-parity
-  // suite still guards web↔overlay code drift — so this is stale golden-masters,
-  // not a parity break. Re-anchor (regen from web in update-data.sh / pin a frozen
-  // data snapshot / assert the web==overlay invariant) then unskip.
-  test.skip.each(FIXTURE_NAMES)(
+  test.each(FIXTURE_NAMES)(
     "matches the frozen web result for %s",
     async (fixtureName) => {
       const fixture = await readJson<{
@@ -49,13 +62,44 @@ describe("member overlay decision parity", () => {
       const modelConfig = await readJson<DecisionModelConfig>(
         "docs/handoffs/fixtures/m4/model-config.json",
       );
-      const data = await loadInternalDecisionData(fixture.context.championSlug);
+      const snapshot = await readJson<M1DecisionDataSnapshot>(
+        "docs/handoffs/fixtures/m1/decision-data-snapshot.json",
+      );
+      const data = fixtureData(snapshot, fixture.context);
 
       expect(runLocalInference(fixture.context, data, modelConfig)).toEqual(
         fixture.result,
       );
     },
   );
+
+  test("keeps golden-master fixtures independent from daily data refreshes", async () => {
+    const fixture = await readJson<{
+      context: DecisionContext;
+      result: DecisionResult;
+    }>("docs/handoffs/fixtures/m1/competitive-brand.json");
+    const modelConfig = await readJson<DecisionModelConfig>(
+      "docs/handoffs/fixtures/m4/model-config.json",
+    );
+    const snapshot = await readJson<M1DecisionDataSnapshot>(
+      "docs/handoffs/fixtures/m1/decision-data-snapshot.json",
+    );
+    const frozenData = fixtureData(snapshot, fixture.context);
+    const refreshedData = structuredClone(frozenData);
+    const firstOffer = refreshedData.augments.find(
+      (augment) => augment.slug === fixture.context.offeredAugmentSlugs[0],
+    );
+    if (!firstOffer) throw new Error("Fixture offer missing from M1 snapshot");
+
+    firstOffer.win_rate = 0;
+
+    expect(runLocalInference(fixture.context, frozenData, modelConfig)).toEqual(
+      fixture.result,
+    );
+    expect(
+      runLocalInference(fixture.context, refreshedData, modelConfig),
+    ).not.toEqual(fixture.result);
+  });
 
   test("uses the frozen web grade colors and warns only on weak", () => {
     expect(GRADE_TOKENS).toEqual({
