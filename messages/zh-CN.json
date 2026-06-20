@@ -13,7 +13,8 @@
     "damageSim": "伤害模拟",
     "patchNotes": "版本更新",
     "language": "语言",
-    "toggleMenu": "切换菜单"
+    "toggleMenu": "切换菜单",
+    "account": "账号"
   },
   "home": {
     "hero": "大乱斗神谕",
@@ -479,7 +480,7 @@
   "membership": {
     "title": "会员",
     "subtitle": "你的 Oracle 权限与决策记录。",
-    "signInPrompt": "登录以查看你的会员状态。",
+    "signInPrompt": "登录以跟踪你的会员状态与保存的决策，或查看会员包含哪些功能。",
     "statusTitle": "状态",
     "statusActiveMember": "有效会员",
     "statusActiveTrial": "体验中",
@@ -494,8 +495,8 @@
     "historyTitle": "决策记录",
     "historyEmpty": "尚无决策记录。",
     "lockedTitle": "会员专属",
-    "lockedBody": "Advisor 与完整增幅池为会员功能。",
-    "lockedCta": "前往会员页",
+    "lockedBody": "顾问会实时为你的三个强化选项评分 — 依你的英雄、回合与重骰情况。此为会员功能。",
+    "lockedCta": "查看包含内容",
     "navAccount": "账号",
     "adminTitle": "管理",
     "adminOnly": "仅限管理员。",
@@ -555,7 +556,8 @@
     "privacyTitle": "隐私与数据使用",
     "privacyAds": "公开页面可能显示 Google AdSense 广告，并依你的同意选择决定。",
     "privacyCollector": "可选的桌面采集器只上传去识别化的对局数据，绝不含你的 Riot ID、名称或聊天。",
-    "privacyRetention": "原始上传于 30 天后删除；仅长期保留去识别化的汇总数据。"
+    "privacyRetention": "原始上传于 30 天后删除；仅长期保留去识别化的汇总数据。",
+    "signInCta": "使用 Google 登录"
   },
   "footer": {
     "tagline": "你的 ARAM 大乱斗决策引擎。",
@@ -624,5 +626,54 @@
     "s7Body": "可在同意横幅中拒绝个性化广告，或联系我们以访问或删除你的数据。",
     "s8Title": "联系方式",
     "s8Body": "有隐私问题？请来信 {email}。"
+  },
+  "members": {
+    "eyebrow": "会员",
+    "title": "解锁大乱斗顾问",
+    "subtitle": "免费工具为当前版本排名；会员则为你的实际对局评分 — 每一个强化选项、每一回合，并依你的英雄量身打造。",
+    "ctaStart": "开始使用",
+    "ctaInvite": "申请邀请",
+    "compareTitle": "包含内容",
+    "freeTitle": "免费",
+    "freePrice": "永久免费，无需账号",
+    "freeFeatures": [
+      "英雄强度排名",
+      "英雄与强化浏览",
+      "装备数据与伤害模拟",
+      "版本更新与实时热修"
+    ],
+    "memberTitle": "会员",
+    "memberPrice": "邀请与试用权限",
+    "memberBadge": "会员专属",
+    "memberFeatures": [
+      "包含免费版所有功能",
+      "顾问 — 实时为你的三个选项评分",
+      "完整的英雄专属强化池",
+      "逐回合的重骰建议",
+      "保存决策记录"
+    ],
+    "howTitle": "获取方式",
+    "howSubtitle": "早期测试期间，Mayhem Oracle 采用邀请制。",
+    "step1Title": "登录",
+    "step1Body": "使用 Google 登录 — 无需记忆密码。",
+    "step2Title": "兑换邀请码",
+    "step2Body": "输入邀请码或试用码即可开通会员。",
+    "step3Title": "打开顾问",
+    "step3Body": "每一回合都能为你的选项评分，网页与悬浮窗均可使用。",
+    "signInCta": "使用 Google 登录",
+    "signedInNote": "你已登录。兑换邀请码或试用码即可开通会员。",
+    "activeNote": "你的会员资格已激活。",
+    "inviteTitle": "还没有邀请码？",
+    "inviteBody": "我们正逐步开放玩家加入。来信给我们，有名额时就会发送邀请。",
+    "inviteCta": "申请邀请",
+    "faqTitle": "常见问题",
+    "faq1Q": "会员费用是多少？",
+    "faq1A": "在早期测试期间，会员通过邀请码与试用码开通。在推出任何付费方案前，我们会清楚公告价格。",
+    "faq2Q": "与免费工具有什么不同？",
+    "faq2A": "免费工具呈现整体版本走向；顾问则为你实际拿到的强化选项评分 — 依你的英雄、回合与重骰 — 也就是你在游戏中真正面对的抉择。",
+    "faq3Q": "这符合 Riot 的规范吗？",
+    "faq3A": "Mayhem Oracle 使用公开数据与你自行输入的内容，不会自动化游戏操作或访问隐藏信息，也与 Riot Games 无关联。",
+    "faq4Q": "可以取消吗？",
+    "faq4A": "试用与邀请权限会自动到期 — 无需取消。你可随时在\"联系我们\"页面要求删除账号数据。"
   }
 }

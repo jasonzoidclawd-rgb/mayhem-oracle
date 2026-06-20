@@ -13,7 +13,8 @@
     "damageSim": "피해 시뮬",
     "patchNotes": "패치 노트",
     "language": "언어",
-    "toggleMenu": "메뉴 전환"
+    "toggleMenu": "메뉴 전환",
+    "account": "계정"
   },
   "home": {
     "hero": "메이헴 오라클",
@@ -479,7 +480,7 @@
   "membership": {
     "title": "멤버십",
     "subtitle": "내 Oracle 이용 권한과 결정 기록.",
-    "signInPrompt": "로그인하여 멤버십을 확인하세요.",
+    "signInPrompt": "로그인하여 멤버십과 저장된 의사결정을 확인하거나, 멤버십에 무엇이 포함되는지 살펴보세요.",
     "statusTitle": "상태",
     "statusActiveMember": "활성 멤버",
     "statusActiveTrial": "체험 이용",
@@ -494,8 +495,8 @@
     "historyTitle": "결정 기록",
     "historyEmpty": "아직 기록이 없습니다.",
     "lockedTitle": "멤버 전용",
-    "lockedBody": "어드바이저와 전체 증강 풀은 멤버 기능입니다.",
-    "lockedCta": "멤버십 보기",
+    "lockedBody": "어드바이저는 세 가지 증강 후보를 챔피언·라운드·리롤에 맞춰 실시간으로 점수화합니다. 멤버 기능입니다.",
+    "lockedCta": "포함 내용 보기",
     "navAccount": "계정",
     "adminTitle": "관리자",
     "adminOnly": "관리자 전용.",
@@ -555,7 +556,8 @@
     "privacyTitle": "개인정보 및 데이터 사용",
     "privacyAds": "공개 페이지에는 동의 선택에 따라 Google AdSense 광고가 표시될 수 있습니다.",
     "privacyCollector": "선택적 데스크톱 수집기는 Riot ID·이름·채팅을 제외한 비식별 대전 데이터만 업로드합니다.",
-    "privacyRetention": "원본 업로드는 30일 후 삭제되며, 비식별 집계만 장기 보관합니다."
+    "privacyRetention": "원본 업로드는 30일 후 삭제되며, 비식별 집계만 장기 보관합니다.",
+    "signInCta": "Google로 로그인"
   },
   "footer": {
     "tagline": "ARAM 메이헴 의사결정 엔진.",
@@ -624,5 +626,54 @@
     "s7Body": "동의 배너에서 맞춤 광고를 거부하거나, 문의를 통해 데이터 열람 또는 삭제를 요청할 수 있습니다.",
     "s8Title": "문의",
     "s8Body": "개인정보 관련 질문은 {email}로 연락 주세요."
+  },
+  "members": {
+    "eyebrow": "멤버십",
+    "title": "메이헴 어드바이저 잠금 해제",
+    "subtitle": "무료 도구는 메타의 순위를 매기고, 멤버십은 당신의 실제 게임을 채점합니다 — 모든 증강 후보, 매 라운드, 당신의 챔피언에 맞춰서.",
+    "ctaStart": "시작하기",
+    "ctaInvite": "초대 요청",
+    "compareTitle": "포함 내용",
+    "freeTitle": "무료",
+    "freePrice": "항상 무료, 계정 불필요",
+    "freeFeatures": [
+      "챔피언 티어 리스트",
+      "챔피언 및 증강 둘러보기",
+      "아이템 데이터 및 데미지 시뮬레이터",
+      "패치 노트 및 실시간 핫픽스"
+    ],
+    "memberTitle": "멤버",
+    "memberPrice": "초대 및 체험 이용권",
+    "memberBadge": "멤버 전용",
+    "memberFeatures": [
+      "무료 버전의 모든 기능",
+      "어드바이저 — 세 가지 후보를 실시간 채점",
+      "챔피언별 전체 증강 풀",
+      "라운드별 리롤 가이드",
+      "의사결정 기록 저장"
+    ],
+    "howTitle": "이용 방법",
+    "howSubtitle": "얼리 액세스 기간 동안 Mayhem Oracle은 초대제로 운영됩니다.",
+    "step1Title": "로그인",
+    "step1Body": "Google로 로그인 — 비밀번호 관리가 필요 없습니다.",
+    "step2Title": "코드 사용",
+    "step2Body": "초대 코드나 체험 코드를 입력해 멤버십을 활성화하세요.",
+    "step3Title": "어드바이저 열기",
+    "step3Body": "매 라운드 후보를 채점하세요. 웹과 오버레이 모두에서 사용할 수 있습니다.",
+    "signInCta": "Google로 로그인",
+    "signedInNote": "로그인되었습니다. 초대 코드나 체험 코드를 사용해 멤버십을 활성화하세요.",
+    "activeNote": "멤버십이 활성화되어 있습니다.",
+    "inviteTitle": "코드가 없으신가요?",
+    "inviteBody": "플레이어를 순차적으로 모시고 있습니다. 이메일을 보내 주시면 자리가 생길 때 초대를 보내 드립니다.",
+    "inviteCta": "초대 요청",
+    "faqTitle": "자주 묻는 질문",
+    "faq1Q": "멤버십 비용은 얼마인가요?",
+    "faq1A": "얼리 액세스 기간에는 초대 코드와 체험 코드로 멤버십이 부여됩니다. 유료 플랜을 시작하기 전에 가격을 명확히 안내하겠습니다.",
+    "faq2Q": "무료 도구와 무엇이 다른가요?",
+    "faq2A": "무료 도구는 전체 메타를 보여 줍니다. 어드바이저는 실제로 제시된 증강을 — 당신의 챔피언, 라운드, 리롤에 맞춰 — 채점합니다. 게임에서 실제로 마주하는 선택입니다.",
+    "faq3Q": "Riot 규정에 어긋나지 않나요?",
+    "faq3A": "Mayhem Oracle은 공개 데이터와 사용자가 직접 입력한 내용을 사용합니다. 게임을 자동화하거나 숨겨진 정보에 접근하지 않으며 Riot Games와 무관합니다.",
+    "faq4Q": "취소할 수 있나요?",
+    "faq4A": "체험 및 초대 이용권은 자동으로 만료됩니다 — 취소할 필요가 없습니다. 계정 데이터 삭제는 문의 페이지에서 언제든 요청할 수 있습니다."
   }
 }
