@@ -28,6 +28,7 @@ from urllib.error import URLError
 from urllib.parse import urljoin
 
 from data_paths import INTERNAL_DATA_DIR
+from champion_slug_aliases import canonical_champion_slug
 
 BASE_URL = "https://arammayhem.com"
 HEADERS = {
@@ -105,7 +106,10 @@ def parse_tier_list(html: str) -> list[dict]:
         )
 
         for card in card_pattern.finditer(section_html):
-            slug = normalize_path_slug(card.group(1))
+            # Canonicalise to the Riot internal slug so the champion joins to its
+            # CommunityDragon ability profile / base stats / pool / URL regardless
+            # of whether arammayhem serves the display slug (e.g. wukong→monkeyking).
+            slug = canonical_champion_slug(normalize_path_slug(card.group(1)))
             search_text = card.group(2)
             tags = [t.strip() for t in card.group(3).split(",") if t.strip()]
             title = unescape(card.group(4))
@@ -319,7 +323,10 @@ def parse_search_index(data: dict) -> tuple[list[dict], list[dict]]:
         name = (row.get("name") or {}).get("en") or row.get("id") or row.get("championId")
         if not name:
             continue
-        slug = slugify_search_name(name)
+        # search-index slugs come from the display name (e.g. "Wukong",
+        # "Nunu & Willump"), so canonicalise to the Riot internal slug to keep
+        # the champion + combo joins stable downstream.
+        slug = canonical_champion_slug(slugify_search_name(name))
         champion_id = row.get("championId") or row.get("id") or name
         champion_slug_by_id[normalize_lookup_key(champion_id)] = slug
         win_rate = row.get("winRate")
@@ -422,7 +429,9 @@ def parse_combos(html: str) -> list[dict]:
     if manifest_m:
         manifest = json.loads(fetch(unescape(manifest_m.group(1))))
         for card in manifest.get("cards", []):
-            champion = slug_from_href(card.get("championHref", "")) or card.get("championId")
+            champion = canonical_champion_slug(
+                slug_from_href(card.get("championHref", "")) or card.get("championId") or ""
+            )
             augment = card.get("augmentName") or card.get("augmentId")
             combo_ref = card.get("comboRef")
             tier = card.get("tier")
@@ -454,7 +463,7 @@ def parse_combos(html: str) -> list[dict]:
             continue
 
         combos.append({
-            "champion": unescape(m.group(2)),
+            "champion": canonical_champion_slug(unescape(m.group(2))),
             "augment": unescape(augment_m.group(1)),
             "tier": normalize_combo_tier(m.group(1)),
             "ref": unescape(m.group(3)),
@@ -477,7 +486,7 @@ def parse_combos(html: str) -> list[dict]:
     seen = set()
     for m in card_pattern.finditer(html):
         tier = normalize_combo_tier(m.group(1))
-        champion = m.group(2)
+        champion = canonical_champion_slug(m.group(2))
         augment = m.group(3)
         combo_ref = m.group(4)
         key = (champion, augment)

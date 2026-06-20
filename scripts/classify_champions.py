@@ -22,6 +22,7 @@ import time
 from pathlib import Path
 
 from data_paths import INTERNAL_DATA_DIR
+from champion_slug_aliases import canonical_champion_slug
 
 # ─── Config ───────────────────────────────────────────────────────────────────
 
@@ -276,7 +277,11 @@ def main():
     needs_llm = []
     for champ in champions:
         slug     = champ["slug"]
-        profile  = profiles.get(slug, {})
+        # Defensive: if a champion record still carries a display slug, resolve
+        # its ability profile via the canonical alias so deterministic derivation
+        # works without an LLM (the scraper now canonicalises at ingestion, but a
+        # stale champions.json shouldn't re-trigger the freeze).
+        profile  = profiles.get(slug) or profiles.get(canonical_champion_slug(slug), {})
         riot_tags = champ.get("tags", [])
         kit_tags = derive_kit_tags(slug, profile, riot_tags)
         champ["kit_tags"] = kit_tags

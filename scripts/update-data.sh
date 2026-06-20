@@ -97,7 +97,11 @@ print(f"Restored {restored} augments. Unclassified or universal: {missing}")
 PY
 
 step "10/12  classify internal champions/augments  →  kit_tags"
-python3 scripts/classify_champions.py
+# --allow-partial: a handful of champions that fail deterministic derivation (and
+# can't reach the optional LLM in CI) must NOT abort the whole refresh — an
+# untagged champion degrades to a universal augment pool, which is far better
+# than freezing all data (and blocking hotfix propagation). Mirrors augments.
+python3 scripts/classify_champions.py --allow-partial
 python3 scripts/classify_augments.py --skip-classified --allow-partial
 python3 - <<'PY'
 import json
