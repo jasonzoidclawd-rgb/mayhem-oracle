@@ -5,6 +5,7 @@ import { RedeemForm } from "@/components/membership/AccountClient";
 import { pickActiveEntitlement, type EntitlementRow } from "@/lib/entitlements/core";
 import { createClient } from "@/lib/supabase/server";
 import { CONTACT_EMAIL, languageAlternates, localizedUrl } from "@/lib/site";
+import type { Locale } from "@/i18n/routing";
 
 export async function generateMetadata({
   params,
@@ -17,7 +18,7 @@ export async function generateMetadata({
     title: t("title"),
     description: t("subtitle"),
     alternates: {
-      canonical: localizedUrl("/membership", locale),
+      canonical: localizedUrl("/membership", locale as Locale),
       languages: languageAlternates("/membership"),
     },
   };

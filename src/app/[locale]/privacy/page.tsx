@@ -7,6 +7,7 @@ import {
   languageAlternates,
   localizedUrl,
 } from "@/lib/site";
+import type { Locale } from "@/i18n/routing";
 
 export async function generateMetadata({
   params,
@@ -18,7 +19,7 @@ export async function generateMetadata({
   return {
     title: t("title"),
     alternates: {
-      canonical: localizedUrl("/privacy", locale),
+      canonical: localizedUrl("/privacy", locale as Locale),
       languages: languageAlternates("/privacy"),
     },
   };

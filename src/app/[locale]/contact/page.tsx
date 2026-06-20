@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { LegalArticle, LegalSection } from "@/components/legal/LegalArticle";
 import { CONTACT_EMAIL, languageAlternates, localizedUrl } from "@/lib/site";
+import type { Locale } from "@/i18n/routing";
 
 export async function generateMetadata({
   params,
@@ -13,7 +14,7 @@ export async function generateMetadata({
   return {
     title: t("title"),
     alternates: {
-      canonical: localizedUrl("/contact", locale),
+      canonical: localizedUrl("/contact", locale as Locale),
       languages: languageAlternates("/contact"),
     },
   };

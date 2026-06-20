@@ -7,6 +7,7 @@ import {
   languageAlternates,
   localizedUrl,
 } from "@/lib/site";
+import type { Locale } from "@/i18n/routing";
 
 // NOTE FOR OPERATOR: this is a concise, plain-language template. Before
 // commercial launch, have it reviewed and complete it with your legal entity,
@@ -22,7 +23,7 @@ export async function generateMetadata({
   return {
     title: t("title"),
     alternates: {
-      canonical: localizedUrl("/terms", locale),
+      canonical: localizedUrl("/terms", locale as Locale),
       languages: languageAlternates("/terms"),
     },
   };
