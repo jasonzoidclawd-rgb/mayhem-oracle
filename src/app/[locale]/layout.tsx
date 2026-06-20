@@ -1,4 +1,5 @@
 import type { Metadata, Viewport } from "next";
+import { Inter } from "next/font/google";
 import { NextIntlClientProvider } from "next-intl";
 import { getMessages, getTranslations } from "next-intl/server";
 import { setRequestLocale } from "next-intl/server";
@@ -10,6 +11,14 @@ import { NavigationProgress } from "@/components/ui/NavigationProgress";
 import { ConsentManager } from "@/components/ads/ConsentManager";
 import { Footer } from "@/components/ui/Footer";
 import "@/styles/globals.css";
+
+// Latin UI font. CJK locales fall through to the platform CJK stack defined in
+// globals.css (PingFang / JhengHei / Noto Sans CJK), so we don't ship CJK webfonts.
+const inter = Inter({
+  subsets: ["latin"],
+  display: "swap",
+  variable: "--font-inter",
+});
 
 export const dynamicParams = false;
 
@@ -50,11 +59,13 @@ export async function generateMetadata({
       description,
       url: localizedUrl("/", locale),
       locale,
+      images: [{ url: "/og.png", width: 1200, height: 630, alt: "Mayhem Oracle" }],
     },
     twitter: {
       card: "summary_large_image",
       title,
       description,
+      images: ["/og.png"],
     },
     robots: {
       index: true,
@@ -109,7 +120,7 @@ export default async function LocaleLayout({
   };
 
   return (
-    <html lang={locale} className="dark">
+    <html lang={locale} className={`dark ${inter.variable}`}>
       <body className="min-h-screen bg-[var(--color-bg-primary)] text-[var(--color-text-primary)]">
         <script
           type="application/ld+json"

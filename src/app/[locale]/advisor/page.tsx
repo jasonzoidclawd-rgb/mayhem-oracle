@@ -3,10 +3,33 @@ import {
   type AdvisorAugmentOption,
   type AdvisorChampionOption,
 } from "@/components/advisor/AdvisorMemberClient";
+import { MembershipGate } from "@/components/membership/MembershipGate";
 import type { DecisionGrade } from "@/lib/contracts/decision";
-import { readFile } from "fs/promises";
+import { loadPublicJson } from "@/lib/data/public-loader";
+import { pickActiveEntitlement, type EntitlementRow } from "@/lib/entitlements/core";
+import { createClient } from "@/lib/supabase/server";
 import { getTranslations, setRequestLocale } from "next-intl/server";
-import path from "path";
+
+// Resolve membership server-side so non-members never receive the member tool
+// (or the picker catalog). The client keeps its own 401/403 fallback for
+// entitlements that lapse mid-session.
+async function readAdvisorAccess(): Promise<{ active: boolean; signedIn: boolean }> {
+  try {
+    const supabase = await createClient();
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+    if (!user) return { active: false, signedIn: false };
+    const { data } = await supabase
+      .from("entitlements")
+      .select("kind,status,starts_at,expires_at")
+      .eq("user_id", user.id);
+    const verdict = pickActiveEntitlement((data as EntitlementRow[]) ?? [], new Date());
+    return { active: verdict.active, signedIn: true };
+  } catch {
+    return { active: false, signedIn: false };
+  }
+}
 
 type RawChampion = { slug: string; name: string; icon?: string };
 type RawAugment = {
@@ -34,14 +57,26 @@ export default async function AdvisorPage({
   const t = await getTranslations("membership");
   const tg = await getTranslations("grades");
 
-  const dataDir = path.join(process.cwd(), "public", "data");
-  const [championsRaw, augmentsRaw] = await Promise.all([
-    readFile(path.join(dataDir, "champions.json"), "utf-8"),
-    readFile(path.join(dataDir, "augments.json"), "utf-8"),
-  ]);
+  // Gate the member tool. Non-members get an upsell instead of the live form.
+  const { active, signedIn } = await readAdvisorAccess();
+  if (!active) {
+    return (
+      <div className="mx-auto flex max-w-md flex-col items-center gap-5 py-16">
+        <MembershipGate title={t("lockedTitle")} body={t("lockedBody")} cta={t("lockedCta")} />
+        {!signedIn ? (
+          <a
+            href={`/api/auth/signin?next=/${locale}/advisor`}
+            className="text-sm text-amber-300 transition hover:underline"
+          >
+            {t("signInCta")}
+          </a>
+        ) : null}
+      </div>
+    );
+  }
 
-  const { champions } = JSON.parse(championsRaw) as { champions: RawChampion[] };
-  const { augments } = JSON.parse(augmentsRaw) as { augments: RawAugment[] };
+  const { champions } = loadPublicJson<{ champions: RawChampion[] }>("champions.json");
+  const { augments } = loadPublicJson<{ augments: RawAugment[] }>("augments.json");
 
   const localizedName = (augment: RawAugment): string => {
     if (locale === "zh-TW") return augment.name_zh_TW ?? augment.name_zh_CN ?? augment.name;

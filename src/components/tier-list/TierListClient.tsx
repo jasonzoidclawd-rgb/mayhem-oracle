@@ -100,17 +100,13 @@ export function TierListClient({ champions }: { champions: ChampionData[] }) {
       />
 
       {/* ─── Role filter tabs ─── */}
-      <div className="flex flex-wrap gap-2 mb-8">
+      <div className="segmented mb-8">
         {ALL_ROLES.map((role) => (
           <button
             key={role}
             onClick={() => setActiveRole(role)}
-            className={`px-4 py-2 rounded-lg text-sm font-medium transition-all
-              ${
-                activeRole === role
-                  ? "bg-[var(--color-neon-primary)]/15 text-[var(--color-neon-primary)] border border-[var(--color-neon-primary)]/40"
-                  : "bg-[var(--color-bg-card)] text-[var(--color-text-secondary)] border border-[var(--color-border-default)] hover:border-[var(--color-border-hover)]"
-              }`}
+            aria-pressed={activeRole === role}
+            className={`seg-item ${activeRole === role ? "seg-item-active" : ""}`}
           >
             <span className="mr-1.5">{ROLE_ICONS[role]}</span>
             {t(`filters.${role}`)}

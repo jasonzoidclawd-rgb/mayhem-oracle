@@ -65,8 +65,21 @@ export function Navbar() {
           })}
         </div>
 
-        {/* Language switcher + mobile menu toggle */}
+        {/* Account + language switcher + mobile menu toggle */}
         <div className="flex items-center gap-3">
+          <Link
+            href="/account"
+            aria-label={t("account")}
+            title={t("account")}
+            className={`hidden h-8 w-8 items-center justify-center rounded-full border transition-colors sm:flex
+              ${pathname.startsWith("/account") || pathname.startsWith("/membership")
+                ? "border-[var(--color-neon-primary)] text-[var(--color-neon-primary)]"
+                : "border-[var(--color-border-default)] text-[var(--color-text-secondary)] hover:border-[var(--color-border-hover)] hover:text-[var(--color-text-primary)]"}`}
+          >
+            <svg width="16" height="16" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+              <path d="M10 10a3.5 3.5 0 100-7 3.5 3.5 0 000 7zm0 1.5c-3 0-6 1.6-6 4.2 0 .5.4.8.9.8h10.2c.5 0 .9-.3.9-.8 0-2.6-3-4.2-6-4.2z" />
+            </svg>
+          </Link>
           <select
             value={locale}
             onChange={(e) => switchLocale(e.target.value)}
@@ -119,6 +132,18 @@ export function Navbar() {
               </Link>
             );
           })}
+          <Link
+            href="/account"
+            aria-current={
+              pathname.startsWith("/account") || pathname.startsWith("/membership")
+                ? "page"
+                : undefined
+            }
+            className="mt-1 block border-t border-[var(--color-border-default)] pt-3 text-sm text-[var(--color-neon-primary)]"
+            onClick={() => setMenuOpen(false)}
+          >
+            {t("account")}
+          </Link>
         </div>
       )}
     </nav>

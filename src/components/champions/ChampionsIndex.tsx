@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useMemo } from "react";
-import { useLocale } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import Image from "next/image";
 import { Link } from "@/i18n/navigation";
 import type { ChampionEntry } from "@/app/[locale]/champions/page";
@@ -69,6 +69,7 @@ export function ChampionsIndex({
   champions: ChampionEntry[];
 }) {
   const locale = useLocale();
+  const t = useTranslations("championsIndex");
   const [view, setView] = useState<ViewMode>("grid");
   const [search, setSearch] = useState("");
   const [activeClass, setActiveClass] = useState<string>("all");
@@ -150,30 +151,26 @@ export function ChampionsIndex({
       <div className="space-y-3 mb-6">
         {/* Row 1: View toggle + search + sort */}
         <div className="flex flex-wrap items-center gap-2">
-          <button
-            onClick={() => setView("grid")}
-            className={`px-3 py-1.5 rounded-lg text-sm font-medium border transition-all ${
-              view === "grid"
-                ? "bg-[var(--color-neon-primary)]/15 text-[var(--color-neon-primary)] border-[var(--color-neon-primary)]/40"
-                : "bg-[var(--color-bg-card)] text-[var(--color-text-secondary)] border-[var(--color-border-default)]"
-            }`}
-          >
-            Grid
-          </button>
-          <button
-            onClick={() => setView("table")}
-            className={`px-3 py-1.5 rounded-lg text-sm font-medium border transition-all ${
-              view === "table"
-                ? "bg-[var(--color-neon-primary)]/15 text-[var(--color-neon-primary)] border-[var(--color-neon-primary)]/40"
-                : "bg-[var(--color-bg-card)] text-[var(--color-text-secondary)] border-[var(--color-border-default)]"
-            }`}
-          >
-            Stats Table
-          </button>
+          <div className="segmented">
+            <button
+              onClick={() => setView("grid")}
+              aria-pressed={view === "grid"}
+              className={`seg-item ${view === "grid" ? "seg-item-active" : ""}`}
+            >
+              {t("viewGrid")}
+            </button>
+            <button
+              onClick={() => setView("table")}
+              aria-pressed={view === "table"}
+              className={`seg-item ${view === "table" ? "seg-item-active" : ""}`}
+            >
+              {t("viewTable")}
+            </button>
+          </div>
           <span className="w-px h-6 bg-[var(--color-border-default)] mx-1" />
           <input
             type="search"
-            placeholder="Search name, title, class..."
+            placeholder={t("searchPlaceholder")}
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             className="flex-1 min-w-0 sm:min-w-[180px] sm:max-w-xs px-3 py-1.5 rounded-lg border border-[var(--color-border-default)] bg-[var(--color-bg-card)] text-sm focus:outline-none focus:border-[var(--color-neon-primary)]/50"
@@ -183,18 +180,18 @@ export function ChampionsIndex({
             onChange={(e) => setSortBy(e.target.value as SortKey)}
             className="px-3 py-1.5 rounded-lg border border-[var(--color-border-default)] bg-[var(--color-bg-card)] text-sm"
           >
-            <option value="winrate">Win Rate</option>
-            <option value="tier">Tier</option>
-            <option value="name">Name</option>
-            <option value="hp">HP @ Lv{level}</option>
-            <option value="ad">AD @ Lv{level}</option>
-            <option value="as">Base AS</option>
-            <option value="range">Range</option>
-            <option value="ms">Move Speed</option>
+            <option value="winrate">{t("sortWinRate")}</option>
+            <option value="tier">{t("sortTier")}</option>
+            <option value="name">{t("sortName")}</option>
+            <option value="hp">{t("sortHp", { level })}</option>
+            <option value="ad">{t("sortAd", { level })}</option>
+            <option value="as">{t("sortBaseAs")}</option>
+            <option value="range">{t("sortRange")}</option>
+            <option value="ms">{t("sortMs")}</option>
           </select>
           {(sortBy === "hp" || sortBy === "ad") && (
             <div className="flex items-center gap-1.5 text-xs text-[var(--color-text-muted)]">
-              <span>Lv</span>
+              <span>{t("levelAbbr")}</span>
               <input
                 type="range"
                 min={1}
@@ -222,7 +219,7 @@ export function ChampionsIndex({
                   : "bg-[var(--color-bg-card)] text-[var(--color-text-muted)] border-[var(--color-border-default)]"
               }`}
             >
-              {cl === "all" ? "All" : cl}
+              {cl === "all" ? t("allClasses") : cl}
               <span className="ml-1 opacity-50">{classCounts[cl] ?? 0}</span>
             </button>
           ))}
@@ -355,8 +352,7 @@ export function ChampionsIndex({
       )}
 
       <p className="text-xs text-[var(--color-text-muted)] mt-6 text-center">
-        {sorted.length} / {champions.length} champions ·
-        Stats source: wiki.leagueoflegends.com · Level scaling uses official growth formula
+        {t("statsFooter", { count: sorted.length, total: champions.length })}
       </p>
     </div>
   );

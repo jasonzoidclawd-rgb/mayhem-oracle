@@ -19,7 +19,7 @@ export function MembershipGate({ title, body, cta }: MembershipGateProps) {
       </span>
       <p className="text-balance text-sm text-white/70">{body}</p>
       <Link
-        href="/account"
+        href="/membership"
         className="rounded-lg bg-amber-400/90 px-5 py-2.5 font-semibold text-black transition hover:bg-amber-300"
       >
         {cta}

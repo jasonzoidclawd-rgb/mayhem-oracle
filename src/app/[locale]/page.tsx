@@ -1,7 +1,6 @@
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
-import { readFile } from "fs/promises";
-import path from "path";
+import { loadPublicJson } from "@/lib/data/public-loader";
 
 export default async function HomePage({
   params,
@@ -12,15 +11,9 @@ export default async function HomePage({
   setRequestLocale(locale);
   const t = await getTranslations("home");
 
-  const dataDir = path.join(process.cwd(), "public", "data");
-  const [champRaw, augRaw, metaRaw] = await Promise.all([
-    readFile(path.join(dataDir, "champions.json"), "utf-8"),
-    readFile(path.join(dataDir, "augments.json"), "utf-8"),
-    readFile(path.join(dataDir, "meta.json"), "utf-8"),
-  ]);
-  const { champions, patch } = JSON.parse(champRaw);
-  const { augments } = JSON.parse(augRaw);
-  const { scraped_at } = JSON.parse(metaRaw) as { scraped_at?: string };
+  const { champions, patch } = loadPublicJson<{ champions: unknown[]; patch: string }>("champions.json");
+  const { augments } = loadPublicJson<{ augments: unknown[] }>("augments.json");
+  const { scraped_at } = loadPublicJson<{ scraped_at?: string }>("meta.json");
   const champCount = (champions as unknown[]).length;
   const augCount = (augments as unknown[]).length;
   const patchLabel = (patch as string).replace(/\.$/, "");
@@ -77,7 +70,90 @@ export default async function HomePage({
           <StatCard label={t("lastUpdated")} value={lastUpdatedLabel} />
         </div>
       </section>
+
+      {/* ─── Feature Highlights ─── */}
+      <section className="w-full max-w-5xl">
+        <div className="text-center mb-8">
+          <h2 className="text-2xl sm:text-3xl font-bold tracking-tight">{t("featuresTitle")}</h2>
+          <p className="mt-2 text-[var(--color-text-muted)]">{t("featuresSubtitle")}</p>
+        </div>
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          <FeatureCard
+            href="/tier-list"
+            icon="🏆"
+            title={t("feat1Title")}
+            body={t("feat1Body")}
+          />
+          <FeatureCard
+            href="/augments"
+            icon="✨"
+            title={t("feat2Title")}
+            body={t("feat2Body")}
+          />
+          <FeatureCard
+            href="/damage-sim"
+            icon="🧮"
+            title={t("feat3Title")}
+            body={t("feat3Body")}
+          />
+          <FeatureCard
+            href="/membership"
+            icon="🔮"
+            title={t("feat4Title")}
+            body={t("feat4Body")}
+            tag={t("feat4Tag")}
+          />
+        </div>
+      </section>
+
+      {/* ─── Members CTA band ─── */}
+      <section className="w-full max-w-4xl">
+        <div className="flex flex-col items-center gap-4 rounded-2xl border border-amber-400/25 bg-gradient-to-b from-amber-400/[0.06] to-transparent px-6 py-10 text-center sm:px-10">
+          <h2 className="text-2xl font-bold tracking-tight">{t("ctaBandTitle")}</h2>
+          <p className="max-w-xl text-[var(--color-text-secondary)]">{t("ctaBandBody")}</p>
+          <Link
+            href="/membership"
+            className="mt-2 rounded-lg bg-amber-400/90 px-6 py-3 font-semibold text-black transition hover:bg-amber-300"
+          >
+            {t("ctaBandButton")}
+          </Link>
+        </div>
+      </section>
     </div>
+  );
+}
+
+function FeatureCard({
+  href,
+  icon,
+  title,
+  body,
+  tag,
+}: {
+  href: string;
+  icon: string;
+  title: string;
+  body: string;
+  tag?: string;
+}) {
+  return (
+    <Link
+      href={href}
+      className="glass-card group flex flex-col gap-2 p-5 text-left transition hover:-translate-y-0.5"
+    >
+      <div className="flex items-center justify-between">
+        <span className="text-2xl" aria-hidden="true">
+          {icon}
+        </span>
+        {tag ? (
+          <span className="rounded-full border border-amber-400/40 bg-amber-400/10 px-2 py-0.5 text-[10px] font-medium uppercase tracking-widest text-amber-300">
+            {tag}
+          </span>
+        ) : null}
+      </div>
+      <h3 className="font-semibold text-[var(--color-text-primary)]">{title}</h3>
+      <p className="text-sm leading-relaxed text-[var(--color-text-secondary)]">{body}</p>
+    </Link>
   );
 }
 

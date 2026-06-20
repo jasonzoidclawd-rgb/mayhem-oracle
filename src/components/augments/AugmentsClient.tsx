@@ -57,7 +57,7 @@ export function AugmentsClient({
 
   const [activeRarity, setActiveRarity] = useState<Rarity>("all");
   const [search, setSearch] = useState("");
-  const [sortBy, setSortBy] = useState<"score" | "winrate" | "name">("score");
+  const [sortBy, setSortBy] = useState<"score" | "name">("score");
 
   const filtered = useMemo(() => {
     return augments.filter((a) => {
@@ -77,7 +77,6 @@ export function AugmentsClient({
   const sorted = useMemo(() => {
     return [...filtered].sort((a, b) => {
       if (sortBy === "score") return baselineOracleScore(b) - baselineOracleScore(a);
-      if (sortBy === "winrate") return (b.win_rate ?? 0) - (a.win_rate ?? 0);
       return a.name.localeCompare(b.name);
     });
   }, [filtered, sortBy]);
@@ -142,7 +141,6 @@ export function AugmentsClient({
           className="px-3 py-2 rounded-lg border border-[var(--color-border-default)] bg-[var(--color-bg-card)] text-sm focus:outline-none"
         >
           <option value="score">{t("sortScore")}</option>
-          <option value="winrate">{t("sortWinRate")}</option>
           <option value="name">{t("sortName")}</option>
         </select>
       </div>
@@ -357,8 +355,7 @@ function AugmentTooltip({
         </div>
       )}
       <div className="text-xs mt-2 text-white/50">
-        {aug.win_rate !== null ? `${aug.win_rate?.toFixed(1)}% ${t("winRateAbbr")}` : ""}{" "}
-        · {t("oracleLabel")} {score}
+        {t("oracleLabel")} {score}
       </div>
     </div>
   );
@@ -379,7 +376,6 @@ function AugmentCard({
   const rarity = augment.rarity as keyof typeof RARITY_STYLES;
   const styles = RARITY_STYLES[rarity];
   const score = baselineOracleScore(augment);
-  const wr = augment.win_rate;
   const displayName = localizedName(augment, locale);
 
   return (
@@ -427,8 +423,8 @@ function AugmentCard({
         >
           {rarityLabel}
         </span>
-        <div className="flex justify-between w-full text-[10px] text-[var(--color-text-muted)] mt-auto">
-          <span>{wr !== null ? `${wr.toFixed(1)}% ${t("winRateAbbr")}` : "—"}</span>
+        <div className="flex items-center justify-center gap-1.5 w-full text-[10px] text-[var(--color-text-muted)] mt-auto">
+          <span className="uppercase tracking-wide">{t("oracleLabel")}</span>
           <span className={`font-bold ${SCORE_COLOR(score)}`}>{score}</span>
         </div>
       </div>
