@@ -1,6 +1,6 @@
 {
   "patch": "26.12",
-  "scraped_at": "2026-06-21T07:09:08.391787+00:00",
+  "scraped_at": "2026-06-21T23:02:20.343430+00:00",
   "generated_from": "internal-pool-mechanics",
   "combos": [
     {
@@ -35,17 +35,17 @@
     },
     {
       "champion": "akali",
+      "augment": "From Downtown",
+      "tier": "S"
+    },
+    {
+      "champion": "akali",
       "augment": "Infernal Conduit",
       "tier": "S"
     },
     {
       "champion": "akali",
       "augment": "Jeweled Gauntlet",
-      "tier": "S"
-    },
-    {
-      "champion": "akali",
-      "augment": "Master of Duality",
       "tier": "S"
     },
     {
@@ -145,17 +145,17 @@
     },
     {
       "champion": "aurelionsol",
+      "augment": "From Downtown",
+      "tier": "S"
+    },
+    {
+      "champion": "aurelionsol",
       "augment": "Infernal Conduit",
       "tier": "S"
     },
     {
       "champion": "aurelionsol",
       "augment": "Jeweled Gauntlet",
-      "tier": "S"
-    },
-    {
-      "champion": "aurelionsol",
-      "augment": "Master of Duality",
       "tier": "S"
     },
     {
@@ -185,7 +185,7 @@
     },
     {
       "champion": "azir",
-      "augment": "Infernal Conduit",
+      "augment": "From Downtown",
       "tier": "S"
     },
     {
@@ -215,7 +215,7 @@
     },
     {
       "champion": "belveth",
-      "augment": "Infernal Conduit",
+      "augment": "From Downtown",
       "tier": "S"
     },
     {
@@ -295,17 +295,17 @@
     },
     {
       "champion": "cassiopeia",
-      "augment": "Combusting Interest",
-      "tier": "S"
-    },
-    {
-      "champion": "cassiopeia",
       "augment": "Double Defense",
       "tier": "S"
     },
     {
       "champion": "cassiopeia",
       "augment": "Firebrand",
+      "tier": "S"
+    },
+    {
+      "champion": "cassiopeia",
+      "augment": "From Downtown",
       "tier": "S"
     },
     {
@@ -320,11 +320,6 @@
     },
     {
       "champion": "corki",
-      "augment": "Combusting Interest",
-      "tier": "S"
-    },
-    {
-      "champion": "corki",
       "augment": "Firebrand",
       "tier": "S"
     },
@@ -334,8 +329,8 @@
       "tier": "S"
     },
     {
-      "champion": "darius",
-      "augment": "Combusting Interest",
+      "champion": "corki",
+      "augment": "Jeweled Gauntlet",
       "tier": "S"
     },
     {
@@ -346,6 +341,11 @@
     {
       "champion": "darius",
       "augment": "Firebrand",
+      "tier": "S"
+    },
+    {
+      "champion": "darius",
+      "augment": "Infernal Conduit",
       "tier": "S"
     },
     {
@@ -445,17 +445,17 @@
     },
     {
       "champion": "fiddlesticks",
-      "augment": "Combusting Interest",
-      "tier": "S"
-    },
-    {
-      "champion": "fiddlesticks",
       "augment": "Double Defense",
       "tier": "S"
     },
     {
       "champion": "fiddlesticks",
       "augment": "Firebrand",
+      "tier": "S"
+    },
+    {
+      "champion": "fiddlesticks",
+      "augment": "Infernal Conduit",
       "tier": "S"
     },
     {
@@ -995,17 +995,17 @@
     },
     {
       "champion": "malzahar",
-      "augment": "Combusting Interest",
-      "tier": "S"
-    },
-    {
-      "champion": "malzahar",
       "augment": "Infernal Conduit",
       "tier": "S"
     },
     {
       "champion": "malzahar",
       "augment": "Jeweled Gauntlet",
+      "tier": "S"
+    },
+    {
+      "champion": "malzahar",
+      "augment": "Pressure Cooker",
       "tier": "S"
     },
     {
@@ -1140,17 +1140,17 @@
     },
     {
       "champion": "nasus",
-      "augment": "Combusting Interest",
-      "tier": "S"
-    },
-    {
-      "champion": "nasus",
       "augment": "Firebrand",
       "tier": "S"
     },
     {
       "champion": "nasus",
       "augment": "Infernal Conduit",
+      "tier": "S"
+    },
+    {
+      "champion": "nasus",
+      "augment": "Pressure Cooker",
       "tier": "S"
     },
     {
@@ -1455,17 +1455,17 @@
     },
     {
       "champion": "rumble",
-      "augment": "Combusting Interest",
-      "tier": "S"
-    },
-    {
-      "champion": "rumble",
       "augment": "Double Defense",
       "tier": "S"
     },
     {
       "champion": "rumble",
       "augment": "Firebrand",
+      "tier": "S"
+    },
+    {
+      "champion": "rumble",
+      "augment": "Infernal Conduit",
       "tier": "S"
     },
     {
@@ -1550,12 +1550,12 @@
     },
     {
       "champion": "shaco",
-      "augment": "Combusting Interest",
+      "augment": "Deft",
       "tier": "S"
     },
     {
       "champion": "shaco",
-      "augment": "Deft",
+      "augment": "Dual Wield",
       "tier": "S"
     },
     {
@@ -1585,12 +1585,12 @@
     },
     {
       "champion": "singed",
-      "augment": "Combusting Interest",
+      "augment": "Firebrand",
       "tier": "S"
     },
     {
       "champion": "singed",
-      "augment": "Firebrand",
+      "augment": "Infernal Conduit",
       "tier": "S"
     },
     {
@@ -1770,17 +1770,17 @@
     },
     {
       "champion": "teemo",
-      "augment": "Combusting Interest",
-      "tier": "S"
-    },
-    {
-      "champion": "teemo",
       "augment": "Firebrand",
       "tier": "S"
     },
     {
       "champion": "teemo",
       "augment": "Infernal Conduit",
+      "tier": "S"
+    },
+    {
+      "champion": "teemo",
+      "augment": "Jeweled Gauntlet",
       "tier": "S"
     },
     {

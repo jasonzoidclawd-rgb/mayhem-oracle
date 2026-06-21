@@ -1,5 +1,5 @@
 {
-  "scraped_at": "2026-06-21T07:10:32.468176+00:00",
+  "scraped_at": "2026-06-21T23:02:36.404412+00:00",
   "mayhemExclusive": [
     {
       "slug": "atmas-reckoning",
@@ -5941,7 +5941,7 @@
       "wikiPassives": [
         {
           "label": "Unique - The Path Between:",
-          "text": "If you have at least 130 bonus attack damage and 180 ability power, enter either the Material World or the Spirit World, determined randomly, at the start of the combat phase in each round:• Material World: Increase your attack damage by 25% and gain 50% – 150% (based on level) bonus attack speed.• Spirit World: Increase your ability power by 25% and gain 30 – 120 (based on level) ability haste."
+          "text": "If you have at least 130 bonus attack damage and 180 ability power, enter either the Material World or the Spirit World, determined randomly, at the start of the combat phase in each round:Material World: Increase your attack damage by 25% and gain 50% – 150% (based on level) bonus attack speed.Spirit World: Increase your ability power by 25% and gain 30 – 120 (based on level) ability haste."
         }
       ],
       "wikiNotes": [],
