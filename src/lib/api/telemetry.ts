@@ -26,6 +26,40 @@ function json(body: unknown, status: number): Response {
   return Response.json(body, { status });
 }
 
+async function readTextWithLimit(
+  request: Request,
+): Promise<{ ok: true; text: string } | { ok: false; status: number; error: string }> {
+  const declaredHeader = request.headers.get("content-length");
+  const declaredLength = declaredHeader ? Number(declaredHeader) : 0;
+  if (Number.isFinite(declaredLength) && declaredLength > MAX_BODY_BYTES) {
+    return { ok: false, status: 413, error: "batch too large" };
+  }
+
+  if (!request.body) return { ok: true, text: "" };
+
+  const reader = request.body.getReader();
+  const decoder = new TextDecoder();
+  let bytes = 0;
+  let text = "";
+
+  try {
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+      bytes += value.byteLength;
+      if (bytes > MAX_BODY_BYTES) {
+        await reader.cancel();
+        return { ok: false, status: 413, error: "batch too large" };
+      }
+      text += decoder.decode(value, { stream: true });
+    }
+    text += decoder.decode();
+    return { ok: true, text };
+  } catch {
+    return { ok: false, status: 400, error: "invalid request body" };
+  }
+}
+
 export async function handleDeviceCode(request: Request, deps: TelemetryDeps): Promise<Response> {
   let body: unknown;
   try {
@@ -66,15 +100,12 @@ export async function handleTelemetryUpload(request: Request, deps: TelemetryDep
   const device = token ? await deps.resolveDeviceToken(token) : null;
   if (!device) return json({ error: "unauthenticated device" }, 401);
 
-  const declaredLength = Number(request.headers.get("content-length") ?? "0");
-  if (declaredLength > MAX_BODY_BYTES) return json({ error: "batch too large" }, 413);
-
-  const text = await request.text();
-  if (text.length > MAX_BODY_BYTES) return json({ error: "batch too large" }, 413);
+  const body = await readTextWithLimit(request);
+  if (!body.ok) return json({ error: body.error }, body.status);
 
   let raw: unknown;
   try {
-    raw = JSON.parse(text);
+    raw = JSON.parse(body.text);
   } catch {
     return json({ error: "invalid JSON body" }, 400);
   }

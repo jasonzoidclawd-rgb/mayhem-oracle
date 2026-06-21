@@ -109,10 +109,17 @@ export function createTelemetryDeps(): TelemetryDeps {
         .single();
       if (!device) return null;
 
-      await service
+      const { data: claimedCode } = await service
         .from("device_codes")
         .update({ status: "claimed", claimed_by: userId, device_id: device.id })
-        .eq("id", codeRow.id);
+        .eq("id", codeRow.id)
+        .eq("status", "pending")
+        .select("id")
+        .maybeSingle();
+      if (!claimedCode) {
+        await service.from("devices").delete().eq("id", device.id);
+        return null;
+      }
 
       return { deviceToken };
     },

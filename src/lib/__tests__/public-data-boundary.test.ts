@@ -102,14 +102,20 @@ describe("public data boundary", () => {
     }
   });
 
-  test("free overlay sync never reads or embeds data/internal", () => {
+  test("member overlay sync is a separate package and does not loosen website public catalogs", () => {
     const syncSource = readFileSync(
       path.join(ROOT, "overlay/scripts/sync-data.mjs"),
       "utf-8",
     );
+    const publicAugments = readJson("public/data/augments.json") as {
+      augments: Array<Record<string, unknown>>;
+    };
+    const publicCombos = readJson("public/data/combos.json") as {
+      combos: Array<Record<string, unknown>>;
+    };
 
-    expect(syncSource).not.toContain("data/internal");
-    expect(syncSource).not.toContain('"internal"');
-    expect(syncSource).not.toContain("win_rate: augment.win_rate");
+    expect(syncSource).toContain('"data", "internal"');
+    expect(publicAugments.augments.every((augment) => !("win_rate" in augment))).toBe(true);
+    expect(publicCombos.combos.every((combo) => combo.tier === "S")).toBe(true);
   });
 });
