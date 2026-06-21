@@ -14,41 +14,50 @@ describe("normalizeLookupKey", () => {
 });
 
 describe("buildComboTierLookup", () => {
-  test("resolves curated combos despite punctuation drift", () => {
+  test("resolves generated combos through their stored augment slug", () => {
     const lookup = buildComboTierLookup(
-      "shaco",
-      combosData.combos,
+      "brand",
+      [
+        {
+          champion: "brand",
+          augment: "external display name can drift",
+          augmentSlug: "quest-wooglets-witchcap",
+          tier: "S",
+        },
+      ],
       augmentsData.augments,
     );
 
-    expect(lookup.get("dont-blink")).toBe("A");
+    expect(lookup.get("quest-wooglets-witchcap")).toBe("S");
   });
 
-  test("resolves champion and augment name normalization together", () => {
+  test("keeps the legacy champion and augment name normalization fallback", () => {
     const lookup = buildComboTierLookup(
-      "aurelionsol",
-      combosData.combos,
+      "aurelion-sol",
+      [
+        {
+          champion: "Aurelion Sol",
+          augment: "Quest: Wooglet's Witchcap",
+          tier: "A",
+        },
+      ],
       augmentsData.augments,
     );
 
-    expect(lookup.get("ice-cold")).toBe("S");
+    expect(lookup.get("quest-wooglets-witchcap")).toBe("A");
   });
 
-  test("recovers more combos than the old naive join", () => {
-    const naiveCount = combosData.combos.filter((combo) =>
-      augmentsData.augments.some(
-        (augment) =>
-          combo.champion === "shaco" &&
-          augment.slug === combo.augment.replace(/ /g, "-"),
-      ),
-    ).length;
-
+  test("resolves current generated data for champion detail consumers", () => {
+    const generated = combosData.combos.find(
+      (combo) => combo.champion === "brand" && combo.tier === "S",
+    );
+    expect(generated?.augmentSlug).toBeTruthy();
     const lookup = buildComboTierLookup(
-      "shaco",
+      "brand",
       combosData.combos,
       augmentsData.augments,
     );
 
-    expect(lookup.size).toBeGreaterThan(naiveCount);
+    expect(lookup.get(generated!.augmentSlug)).toBe(generated!.tier);
   });
 });

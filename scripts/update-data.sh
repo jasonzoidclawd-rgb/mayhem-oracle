@@ -135,6 +135,9 @@ PY
 step "11/12  generate internal pool rules  →  pool-rules.json"
 python3 scripts/generate_pool_rules.py
 
+step "11b/12 generate current internal combos  →  combos.json"
+npx --yes tsx scripts/generate_internal_combos.ts
+
 step "12/12  export sanitized public catalogs"
 python3 scripts/export_public_catalog.py
 
