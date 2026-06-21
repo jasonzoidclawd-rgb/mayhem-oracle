@@ -1,6 +1,6 @@
 {
   "patch": "26.12",
-  "scraped_at": "2026-06-20T22:59:10.079527+00:00",
+  "scraped_at": "2026-06-21T07:09:08.391787+00:00",
   "combos": [
     {
       "champion": "vayne",
@@ -3453,19 +3453,19 @@
       "ref": "curated:neeko-poro-blaster"
     },
     {
-      "champion": "xin-zhao",
+      "champion": "xinzhao",
       "augment": "Quest: Wooglet's Witchcap",
       "tier": "S",
       "ref": "search-index:xinzhao-ap回蹦极血流"
     },
     {
-      "champion": "xin-zhao",
+      "champion": "xinzhao",
       "augment": "Critical Healing",
       "tier": "S",
       "ref": "search-index:xinzhao-ap回蹦极血流"
     },
     {
-      "champion": "xin-zhao",
+      "champion": "xinzhao",
       "augment": "Typhoon",
       "tier": "S",
       "ref": "search-index:xinzhao-ap回蹦极血流"
@@ -3519,7 +3519,7 @@
       "ref": "search-index:mordekaiser-业火"
     },
     {
-      "champion": "master-yi",
+      "champion": "masteryi",
       "augment": "Infinite Recursion",
       "tier": "S",
       "ref": "search-index:masteryi-无cd-q技能秒人流"
@@ -3585,7 +3585,7 @@
       "ref": "search-index:galio-辣椒油"
     },
     {
-      "champion": "lee-sin",
+      "champion": "leesin",
       "augment": "Critical Healing",
       "tier": "S",
       "ref": "search-index:leesin-砸开那个蛋w贴膜流"
@@ -3693,19 +3693,19 @@
       "ref": "search-index:lux-爆杀流"
     },
     {
-      "champion": "jarvan-iv",
+      "champion": "jarvaniv",
       "augment": "Quest: Steel Your Heart",
       "tier": "S",
       "ref": "search-index:jarvaniv-万血皇子"
     },
     {
-      "champion": "jarvan-iv",
+      "champion": "jarvaniv",
       "augment": "Apex Inventor",
       "tier": "S",
       "ref": "search-index:jarvaniv-万血皇子"
     },
     {
-      "champion": "jarvan-iv",
+      "champion": "jarvaniv",
       "augment": "Heavy Hitter",
       "tier": "S",
       "ref": "search-index:jarvaniv-万血皇子"
@@ -3729,13 +3729,13 @@
       "ref": "search-index:varus-物转法攻速法强爆杀流韦鲁斯"
     },
     {
-      "champion": "master-yi",
+      "champion": "masteryi",
       "augment": "Cerberus",
       "tier": "S",
       "ref": "search-index:masteryi-穿甲爆伤流js"
     },
     {
-      "champion": "master-yi",
+      "champion": "masteryi",
       "augment": "Vampirism",
       "tier": "S",
       "ref": "search-index:masteryi-穿甲爆伤流js"
@@ -3819,13 +3819,13 @@
       "ref": "search-index:ekko-大招游龙"
     },
     {
-      "champion": "master-yi",
+      "champion": "masteryi",
       "augment": "First-Aid Kit",
       "tier": "B",
       "ref": "search-index:masteryi-念经流剑圣纯恶心娱乐玩法主打一个杀不死"
     },
     {
-      "champion": "master-yi",
+      "champion": "masteryi",
       "augment": "Cheating",
       "tier": "B",
       "ref": "search-index:masteryi-念经流剑圣纯恶心娱乐玩法主打一个杀不死"
@@ -4203,19 +4203,19 @@
       "ref": "search-index:brand-满屏裂隙爆杀流"
     },
     {
-      "champion": "miss-fortune",
+      "champion": "missfortune",
       "augment": "Overflow",
       "tier": "S",
       "ref": "search-index:missfortune-无线下雨"
     },
     {
-      "champion": "miss-fortune",
+      "champion": "missfortune",
       "augment": "Buff Buddies",
       "tier": "S",
       "ref": "search-index:missfortune-无线下雨"
     },
     {
-      "champion": "miss-fortune",
+      "champion": "missfortune",
       "augment": "Speed Demon",
       "tier": "S",
       "ref": "search-index:missfortune-无线下雨"
@@ -4491,19 +4491,19 @@
       "ref": "search-index:tryndamere-无敌流"
     },
     {
-      "champion": "master-yi",
+      "champion": "masteryi",
       "augment": "Symphony of War",
       "tier": "S",
       "ref": "search-index:masteryi-大招流"
     },
     {
-      "champion": "master-yi",
+      "champion": "masteryi",
       "augment": "Final Form",
       "tier": "S",
       "ref": "search-index:masteryi-大招流"
     },
     {
-      "champion": "master-yi",
+      "champion": "masteryi",
       "augment": "Devil on Your Shoulder",
       "tier": "S",
       "ref": "search-index:masteryi-大招流"
@@ -4815,7 +4815,7 @@
       "ref": "search-index:yasuo-shadow_runner"
     },
     {
-      "champion": "master-yi",
+      "champion": "masteryi",
       "augment": "Twice Thrice",
       "tier": "S",
       "ref": "search-index:masteryi-executioner"
@@ -5541,49 +5541,49 @@
       "ref": "search-index:garen-华尔兹薄纱流"
     },
     {
-      "champion": "jarvan-iv",
+      "champion": "jarvaniv",
       "augment": "Final City Transit",
       "tier": "S",
       "ref": "search-index:jarvaniv-泥头车自爆流"
     },
     {
-      "champion": "jarvan-iv",
+      "champion": "jarvaniv",
       "augment": "Self Destruct",
       "tier": "S",
       "ref": "search-index:jarvaniv-泥头车自爆流"
     },
     {
-      "champion": "jarvan-iv",
+      "champion": "jarvaniv",
       "augment": "Donation",
       "tier": "S",
       "ref": "search-index:jarvaniv-泥头车自爆流"
     },
     {
-      "champion": "jarvan-iv",
+      "champion": "jarvaniv",
       "augment": "From Beginning To End",
       "tier": "S",
       "ref": "search-index:jarvaniv-泥头车自爆流"
     },
     {
-      "champion": "xin-zhao",
+      "champion": "xinzhao",
       "augment": "Protein Shake",
       "tier": "S",
       "ref": "search-index:xinzhao-物法皆修无限回血流"
     },
     {
-      "champion": "xin-zhao",
+      "champion": "xinzhao",
       "augment": "Zealot",
       "tier": "S",
       "ref": "search-index:xinzhao-物法皆修无限回血流"
     },
     {
-      "champion": "xin-zhao",
+      "champion": "xinzhao",
       "augment": "Goliath",
       "tier": "S",
       "ref": "search-index:xinzhao-物法皆修无限回血流"
     },
     {
-      "champion": "xin-zhao",
+      "champion": "xinzhao",
       "augment": "Tap Dancer",
       "tier": "S",
       "ref": "search-index:xinzhao-物法皆修无限回血流"
@@ -5769,37 +5769,37 @@
       "ref": "search-index:fiora-秘术冲拳无限q剑姬"
     },
     {
-      "champion": "master-yi",
+      "champion": "masteryi",
       "augment": "Double Tap",
       "tier": "S",
       "ref": "search-index:masteryi-暴击流剑圣"
     },
     {
-      "champion": "master-yi",
+      "champion": "masteryi",
       "augment": "Upgrade Infinity Edge",
       "tier": "S",
       "ref": "search-index:masteryi-暴击流剑圣"
     },
     {
-      "champion": "master-yi",
+      "champion": "masteryi",
       "augment": "Dashing",
       "tier": "S",
       "ref": "search-index:masteryi-无限q流剑圣"
     },
     {
-      "champion": "master-yi",
+      "champion": "masteryi",
       "augment": "Recursion",
       "tier": "S",
       "ref": "search-index:masteryi-无限q流剑圣"
     },
     {
-      "champion": "master-yi",
+      "champion": "masteryi",
       "augment": "Bread And Butter",
       "tier": "S",
       "ref": "search-index:masteryi-无限q流剑圣"
     },
     {
-      "champion": "master-yi",
+      "champion": "masteryi",
       "augment": "Gash",
       "tier": "S",
       "ref": "search-index:masteryi-特效流"
@@ -6297,19 +6297,19 @@
       "ref": "search-index:nasus-叠角龙狗头"
     },
     {
-      "champion": "tahm-kench",
+      "champion": "tahmkench",
       "augment": "Mad Scientist",
       "tier": "A",
       "ref": "search-index:tahmkench-连拨击锤ap流"
     },
     {
-      "champion": "tahm-kench",
+      "champion": "tahmkench",
       "augment": "Eureka",
       "tier": "A",
       "ref": "search-index:tahmkench-连拨击锤ap流"
     },
     {
-      "champion": "tahm-kench",
+      "champion": "tahmkench",
       "augment": "Dropkick",
       "tier": "S",
       "ref": "search-index:tahmkench-百分比增伤肉坦流"
@@ -6909,25 +6909,25 @@
       "ref": "search-index:warwick-ap死亡之环流"
     },
     {
-      "champion": "dr-mundo",
+      "champion": "drmundo",
       "augment": "Slow Cooker",
       "tier": "A",
       "ref": "search-index:drmundo-易损肉装暴击流"
     },
     {
-      "champion": "dr-mundo",
+      "champion": "drmundo",
       "augment": "Dropkick",
       "tier": "S",
       "ref": "search-index:drmundo-数值怪力流"
     },
     {
-      "champion": "dr-mundo",
+      "champion": "drmundo",
       "augment": "Quest: Steel Your Heart",
       "tier": "S",
       "ref": "search-index:drmundo-数值怪力流"
     },
     {
-      "champion": "dr-mundo",
+      "champion": "drmundo",
       "augment": "Goliath",
       "tier": "S",
       "ref": "search-index:drmundo-数值怪力流"
@@ -7341,43 +7341,43 @@
       "ref": "search-index:darius-回归基本功一刀流诺手"
     },
     {
-      "champion": "miss-fortune",
+      "champion": "missfortune",
       "augment": "Don't Blink",
       "tier": "S",
       "ref": "search-index:missfortune-虚空裂隙流"
     },
     {
-      "champion": "miss-fortune",
+      "champion": "missfortune",
       "augment": "Ocean Soul",
       "tier": "S",
       "ref": "search-index:missfortune-大法师暴雨流"
     },
     {
-      "champion": "miss-fortune",
+      "champion": "missfortune",
       "augment": "Infinite Recursion",
       "tier": "S",
       "ref": "search-index:missfortune-大法师暴雨流"
     },
     {
-      "champion": "miss-fortune",
+      "champion": "missfortune",
       "augment": "Shrink Engine",
       "tier": "S",
       "ref": "search-index:missfortune-大法师暴雨流"
     },
     {
-      "champion": "miss-fortune",
+      "champion": "missfortune",
       "augment": "Ice Cold",
       "tier": "S",
       "ref": "search-index:missfortune-大法师暴雨流"
     },
     {
-      "champion": "miss-fortune",
+      "champion": "missfortune",
       "augment": "Magic Missile",
       "tier": "A",
       "ref": "search-index:missfortune-ap女枪"
     },
     {
-      "champion": "miss-fortune",
+      "champion": "missfortune",
       "augment": "Bread and Cheese",
       "tier": "A",
       "ref": "search-index:missfortune-ap女枪"
@@ -7653,31 +7653,31 @@
       "ref": "search-index:mordekaiser-死亡之环蛋白粉铁男"
     },
     {
-      "champion": "aurelion-sol",
+      "champion": "aurelionsol",
       "augment": "Don't Blink",
       "tier": "S",
       "ref": "search-index:aurelionsol-虚空裂隙流"
     },
     {
-      "champion": "aurelion-sol",
+      "champion": "aurelionsol",
       "augment": "Phenomenal Evil",
       "tier": "S",
       "ref": "search-index:aurelionsol-叠角龙100斩杀龙王"
     },
     {
-      "champion": "aurelion-sol",
+      "champion": "aurelionsol",
       "augment": "Infinite Recursion",
       "tier": "S",
       "ref": "search-index:aurelionsol-叠角龙100斩杀龙王"
     },
     {
-      "champion": "aurelion-sol",
+      "champion": "aurelionsol",
       "augment": "Recursion",
       "tier": "S",
       "ref": "search-index:aurelionsol-叠角龙100斩杀龙王"
     },
     {
-      "champion": "aurelion-sol",
+      "champion": "aurelionsol",
       "augment": "Ocean Soul",
       "tier": "A",
       "ref": "search-index:aurelionsol-q技能无限刷新流大法师bug"
@@ -7851,7 +7851,7 @@
       "ref": "search-index:blitzcrank-无限扩胸运动机器人"
     },
     {
-      "champion": "tahm-kench",
+      "champion": "tahmkench",
       "augment": "ADAPt",
       "tier": "S",
       "ref": "search-index:tahmkench-丢子流"
@@ -7869,13 +7869,13 @@
       "ref": "search-index:hecarim-飞身踢大法师人马"
     },
     {
-      "champion": "aurelion-sol",
+      "champion": "aurelionsol",
       "augment": "Grandma's Chili Oil",
       "tier": "S",
       "ref": "search-index:aurelionsol-灼烧"
     },
     {
-      "champion": "aurelion-sol",
+      "champion": "aurelionsol",
       "augment": "Bread and Cheese",
       "tier": "S",
       "ref": "search-index:aurelionsol-灼烧"
@@ -7899,19 +7899,19 @@
       "ref": "search-index:vladimir-无cd"
     },
     {
-      "champion": "twisted-fate",
+      "champion": "twistedfate",
       "augment": "Giant Slayer",
       "tier": "S",
       "ref": "search-index:twistedfate-q伤害有点痛"
     },
     {
-      "champion": "twisted-fate",
+      "champion": "twistedfate",
       "augment": "Executioner",
       "tier": "S",
       "ref": "search-index:twistedfate-q伤害有点痛"
     },
     {
-      "champion": "twisted-fate",
+      "champion": "twistedfate",
       "augment": "Magic Missile",
       "tier": "S",
       "ref": "search-index:twistedfate-q伤害有点痛"
@@ -7953,13 +7953,13 @@
       "ref": "search-index:senna-平a有点痛"
     },
     {
-      "champion": "xin-zhao",
+      "champion": "xinzhao",
       "augment": "Back To Basics",
       "tier": "S",
       "ref": "search-index:xinzhao-ap不死流赵信"
     },
     {
-      "champion": "xin-zhao",
+      "champion": "xinzhao",
       "augment": "Dual Wield",
       "tier": "S",
       "ref": "search-index:xinzhao-ap不死流赵信"

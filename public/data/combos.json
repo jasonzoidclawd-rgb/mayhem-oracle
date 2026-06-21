@@ -1,6 +1,6 @@
 {
   "patch": "26.12",
-  "scraped_at": "2026-06-20T22:59:10.079527+00:00",
+  "scraped_at": "2026-06-21T07:09:08.391787+00:00",
   "combos": [
     {
       "champion": "vayne",
@@ -1658,32 +1658,12 @@
       "tier": "S"
     },
     {
-      "champion": "xin-zhao",
-      "augment": "Quest: Wooglet's Witchcap",
-      "tier": "S"
-    },
-    {
-      "champion": "xin-zhao",
-      "augment": "Critical Healing",
-      "tier": "S"
-    },
-    {
-      "champion": "xin-zhao",
-      "augment": "Typhoon",
-      "tier": "S"
-    },
-    {
       "champion": "twitch",
       "augment": "Dual Wield",
       "tier": "S"
     },
     {
-      "champion": "master-yi",
-      "augment": "Infinite Recursion",
-      "tier": "S"
-    },
-    {
-      "champion": "lee-sin",
+      "champion": "leesin",
       "augment": "Critical Healing",
       "tier": "S"
     },
@@ -1708,33 +1688,13 @@
       "tier": "S"
     },
     {
-      "champion": "jarvan-iv",
+      "champion": "jarvaniv",
       "augment": "Quest: Steel Your Heart",
-      "tier": "S"
-    },
-    {
-      "champion": "jarvan-iv",
-      "augment": "Apex Inventor",
-      "tier": "S"
-    },
-    {
-      "champion": "jarvan-iv",
-      "augment": "Heavy Hitter",
       "tier": "S"
     },
     {
       "champion": "varus",
       "augment": "Master of Duality",
-      "tier": "S"
-    },
-    {
-      "champion": "master-yi",
-      "augment": "Cerberus",
-      "tier": "S"
-    },
-    {
-      "champion": "master-yi",
-      "augment": "Vampirism",
       "tier": "S"
     },
     {
@@ -1760,21 +1720,6 @@
     {
       "champion": "irelia",
       "augment": "Eureka",
-      "tier": "S"
-    },
-    {
-      "champion": "miss-fortune",
-      "augment": "Overflow",
-      "tier": "S"
-    },
-    {
-      "champion": "miss-fortune",
-      "augment": "Buff Buddies",
-      "tier": "S"
-    },
-    {
-      "champion": "miss-fortune",
-      "augment": "Speed Demon",
       "tier": "S"
     },
     {
@@ -1973,11 +1918,6 @@
       "tier": "S"
     },
     {
-      "champion": "tahm-kench",
-      "augment": "Dropkick",
-      "tier": "S"
-    },
-    {
       "champion": "illaoi",
       "augment": "Quest: Steel Your Heart",
       "tier": "S"
@@ -2023,18 +1963,13 @@
       "tier": "S"
     },
     {
-      "champion": "dr-mundo",
+      "champion": "drmundo",
       "augment": "Dropkick",
       "tier": "S"
     },
     {
-      "champion": "dr-mundo",
+      "champion": "drmundo",
       "augment": "Quest: Steel Your Heart",
-      "tier": "S"
-    },
-    {
-      "champion": "dr-mundo",
-      "augment": "Goliath",
       "tier": "S"
     },
     {
@@ -2103,21 +2038,6 @@
       "tier": "S"
     },
     {
-      "champion": "aurelion-sol",
-      "augment": "Don't Blink",
-      "tier": "S"
-    },
-    {
-      "champion": "aurelion-sol",
-      "augment": "Phenomenal Evil",
-      "tier": "S"
-    },
-    {
-      "champion": "aurelion-sol",
-      "augment": "Infinite Recursion",
-      "tier": "S"
-    },
-    {
       "champion": "nunu",
       "augment": "Critical Healing",
       "tier": "S"
@@ -2138,23 +2058,13 @@
       "tier": "S"
     },
     {
-      "champion": "tahm-kench",
-      "augment": "ADAPt",
-      "tier": "S"
-    },
-    {
-      "champion": "twisted-fate",
+      "champion": "twistedfate",
       "augment": "Giant Slayer",
       "tier": "S"
     },
     {
-      "champion": "twisted-fate",
+      "champion": "twistedfate",
       "augment": "Executioner",
-      "tier": "S"
-    },
-    {
-      "champion": "twisted-fate",
-      "augment": "Magic Missile",
       "tier": "S"
     },
     {
