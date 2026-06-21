@@ -32,10 +32,25 @@
           "type": "rarity",
           "fromRarity": "prismatic",
           "toRarity": "gold"
+        },
+        {
+          "slug": "jeweled-gauntlet",
+          "names": {
+            "en": "Jeweled Gauntlet",
+            "zh-TW": "寶石手套",
+            "zh-CN": "珠光护手",
+            "ja": "ジュエル ガントレット",
+            "ko": "보석 건틀릿"
+          },
+          "rarity": "prismatic",
+          "type": "mechanism",
+          "status": "bug_mechanism",
+          "label": "BUG/MECHANISM",
+          "source": "player-observed-live-game"
         }
       ]
     }
   ],
   "patch": "26.12",
-  "generated_at": "2026-06-20T18:56:38.048204+00:00"
+  "generated_at": "2026-06-21T11:37:31.698964+00:00"
 }

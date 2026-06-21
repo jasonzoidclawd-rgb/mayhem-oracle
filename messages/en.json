@@ -264,7 +264,8 @@
     "badgeNew": "NEW",
     "badgeRemoved": "REMOVED",
     "badgeAbility": "Ability",
-    "badgeQuest": "Quest"
+    "badgeQuest": "Quest",
+    "badgeMechanism": "BUG/MECHANISM"
   },
   "items": {
     "title": "ARAM Mayhem Items",
@@ -337,7 +338,8 @@
     "kinds": {
       "buffed": "BUFFED",
       "nerfed": "NERFED",
-      "changed": "CHANGED"
+      "changed": "CHANGED",
+      "mechanism": "MECHANISM"
     },
     "sections": {
       "highlights": "Highlights",
@@ -355,6 +357,7 @@
       "removed": "Removed from the augment pool",
       "rarity": "Rarity changed: {from} → {to}",
       "effect": "Effect updated",
+      "mechanism": "Observed live mechanism / bug-mechanism",
       "rarities": {
         "silver": "Silver",
         "gold": "Gold",

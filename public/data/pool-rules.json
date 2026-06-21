@@ -132,5 +132,17 @@
       "wind-beneath-blade": "26.12",
       "zealot": "26.12"
     }
+  },
+  "availability_overrides": {
+    "observed_live": {
+      "jeweled-gauntlet": {
+        "status": "bug_mechanism",
+        "label": "BUG/MECHANISM",
+        "observed_at": "2026-06-20",
+        "source": "player-observed-live-game",
+        "score_weight": "high",
+        "remove_when": "Remove this override only when Riot patch notes, Riot-authored hotfix data, or a verified live-game check explicitly confirms the augment is unavailable."
+      }
+    }
   }
 }

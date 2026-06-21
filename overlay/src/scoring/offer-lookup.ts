@@ -167,7 +167,12 @@ export function buildOverlayAugmentLookup(args: {
   const counts = rarityCounts(args.allAugments);
 
   for (const augment of args.allAugments) {
-    if (augment.flags?.lifecycle === "removed") continue;
+    if (
+      augment.flags?.lifecycle === "removed" &&
+      augment.flags?.availability_override !== "bug_mechanism"
+    ) {
+      continue;
+    }
 
     const scored = poolBySlug.get(augment.slug) ?? fallbackScoredAugment({
       augment,

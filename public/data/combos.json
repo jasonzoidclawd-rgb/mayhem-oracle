@@ -25,12 +25,12 @@
     },
     {
       "champion": "ahri",
-      "augment": "Multishot",
+      "augment": "Jeweled Gauntlet",
       "tier": "S"
     },
     {
       "champion": "ahri",
-      "augment": "Spellsplit",
+      "augment": "Multishot",
       "tier": "S"
     },
     {
@@ -40,12 +40,12 @@
     },
     {
       "champion": "akali",
-      "augment": "Master of Duality",
+      "augment": "Jeweled Gauntlet",
       "tier": "S"
     },
     {
       "champion": "akali",
-      "augment": "Multishot",
+      "augment": "Master of Duality",
       "tier": "S"
     },
     {
@@ -105,7 +105,7 @@
     },
     {
       "champion": "anivia",
-      "augment": "Master of Duality",
+      "augment": "Jeweled Gauntlet",
       "tier": "S"
     },
     {
@@ -139,8 +139,18 @@
       "tier": "S"
     },
     {
+      "champion": "ashe",
+      "augment": "Jeweled Gauntlet",
+      "tier": "S"
+    },
+    {
       "champion": "aurelionsol",
       "augment": "Infernal Conduit",
+      "tier": "S"
+    },
+    {
+      "champion": "aurelionsol",
+      "augment": "Jeweled Gauntlet",
       "tier": "S"
     },
     {
@@ -149,23 +159,18 @@
       "tier": "S"
     },
     {
-      "champion": "aurelionsol",
-      "augment": "Multishot",
-      "tier": "S"
-    },
-    {
       "champion": "aurora",
       "augment": "From Downtown",
       "tier": "S"
     },
     {
       "champion": "aurora",
-      "augment": "Multishot",
+      "augment": "Jeweled Gauntlet",
       "tier": "S"
     },
     {
       "champion": "aurora",
-      "augment": "Spellsplit",
+      "augment": "Multishot",
       "tier": "S"
     },
     {
@@ -186,6 +191,11 @@
     {
       "champion": "bard",
       "augment": "Double Defense",
+      "tier": "S"
+    },
+    {
+      "champion": "bard",
+      "augment": "Jeweled Gauntlet",
       "tier": "S"
     },
     {
@@ -194,11 +204,6 @@
       "tier": "S"
     },
     {
-      "champion": "bard",
-      "augment": "Multishot",
-      "tier": "S"
-    },
-    {
       "champion": "belveth",
       "augment": "Chain Reaction",
       "tier": "S"
@@ -220,12 +225,12 @@
     },
     {
       "champion": "blitzcrank",
-      "augment": "Multishot",
+      "augment": "Jeweled Gauntlet",
       "tier": "S"
     },
     {
       "champion": "blitzcrank",
-      "augment": "Spellsplit",
+      "augment": "Multishot",
       "tier": "S"
     },
     {
@@ -235,12 +240,12 @@
     },
     {
       "champion": "brand",
-      "augment": "Multishot",
+      "augment": "Jeweled Gauntlet",
       "tier": "S"
     },
     {
       "champion": "brand",
-      "augment": "Spellsplit",
+      "augment": "Multishot",
       "tier": "S"
     },
     {
@@ -309,6 +314,11 @@
       "tier": "S"
     },
     {
+      "champion": "chogath",
+      "augment": "Jeweled Gauntlet",
+      "tier": "S"
+    },
+    {
       "champion": "corki",
       "augment": "Combusting Interest",
       "tier": "S"
@@ -350,7 +360,7 @@
     },
     {
       "champion": "diana",
-      "augment": "Mercy's Strike",
+      "augment": "Jeweled Gauntlet",
       "tier": "S"
     },
     {
@@ -385,7 +395,7 @@
     },
     {
       "champion": "ekko",
-      "augment": "Mercy's Strike",
+      "augment": "Jeweled Gauntlet",
       "tier": "S"
     },
     {
@@ -520,12 +530,17 @@
     },
     {
       "champion": "gnar",
-      "augment": "Multishot",
+      "augment": "Jeweled Gauntlet",
       "tier": "S"
     },
     {
       "champion": "gnar",
-      "augment": "Spellsplit",
+      "augment": "Multishot",
+      "tier": "S"
+    },
+    {
+      "champion": "gragas",
+      "augment": "Jeweled Gauntlet",
       "tier": "S"
     },
     {
@@ -536,11 +551,6 @@
     {
       "champion": "gragas",
       "augment": "Spellsplit",
-      "tier": "S"
-    },
-    {
-      "champion": "gragas",
-      "augment": "Tripleshot",
       "tier": "S"
     },
     {
@@ -570,7 +580,12 @@
     },
     {
       "champion": "heimerdinger",
-      "augment": "Multishot",
+      "augment": "Jeweled Gauntlet",
+      "tier": "S"
+    },
+    {
+      "champion": "hwei",
+      "augment": "Jeweled Gauntlet",
       "tier": "S"
     },
     {
@@ -581,11 +596,6 @@
     {
       "champion": "hwei",
       "augment": "Spellsplit",
-      "tier": "S"
-    },
-    {
-      "champion": "hwei",
-      "augment": "Tripleshot",
       "tier": "S"
     },
     {
@@ -630,7 +640,7 @@
     },
     {
       "champion": "ivern",
-      "augment": "Mercy's Strike",
+      "augment": "Jeweled Gauntlet",
       "tier": "S"
     },
     {
@@ -666,6 +676,11 @@
     {
       "champion": "jayce",
       "augment": "Chain Reaction",
+      "tier": "S"
+    },
+    {
+      "champion": "jayce",
+      "augment": "Jeweled Gauntlet",
       "tier": "S"
     },
     {
@@ -710,7 +725,12 @@
     },
     {
       "champion": "karma",
-      "augment": "Mercy's Strike",
+      "augment": "Jeweled Gauntlet",
+      "tier": "S"
+    },
+    {
+      "champion": "karthus",
+      "augment": "Jeweled Gauntlet",
       "tier": "S"
     },
     {
@@ -724,23 +744,18 @@
       "tier": "S"
     },
     {
-      "champion": "karthus",
-      "augment": "Tripleshot",
-      "tier": "S"
-    },
-    {
       "champion": "kassadin",
       "augment": "Double Defense",
       "tier": "S"
     },
     {
       "champion": "kassadin",
-      "augment": "Mercy's Strike",
+      "augment": "Jeweled Gauntlet",
       "tier": "S"
     },
     {
       "champion": "kassadin",
-      "augment": "Ravenous Bind",
+      "augment": "Mercy's Strike",
       "tier": "S"
     },
     {
@@ -750,12 +765,12 @@
     },
     {
       "champion": "katarina",
-      "augment": "Multishot",
+      "augment": "Jeweled Gauntlet",
       "tier": "S"
     },
     {
       "champion": "katarina",
-      "augment": "Spellsplit",
+      "augment": "Multishot",
       "tier": "S"
     },
     {
@@ -770,7 +785,7 @@
     },
     {
       "champion": "kayle",
-      "augment": "Mercy's Strike",
+      "augment": "Jeweled Gauntlet",
       "tier": "S"
     },
     {
@@ -795,12 +810,12 @@
     },
     {
       "champion": "kennen",
-      "augment": "Multishot",
+      "augment": "Jeweled Gauntlet",
       "tier": "S"
     },
     {
       "champion": "kennen",
-      "augment": "Spellsplit",
+      "augment": "Multishot",
       "tier": "S"
     },
     {
@@ -845,12 +860,12 @@
     },
     {
       "champion": "kogmaw",
-      "augment": "Multishot",
+      "augment": "Jeweled Gauntlet",
       "tier": "S"
     },
     {
       "champion": "kogmaw",
-      "augment": "Spellsplit",
+      "augment": "Multishot",
       "tier": "S"
     },
     {
@@ -875,12 +890,12 @@
     },
     {
       "champion": "leblanc",
-      "augment": "Multishot",
+      "augment": "Jeweled Gauntlet",
       "tier": "S"
     },
     {
       "champion": "leblanc",
-      "augment": "Spellsplit",
+      "augment": "Multishot",
       "tier": "S"
     },
     {
@@ -915,17 +930,17 @@
     },
     {
       "champion": "lillia",
+      "augment": "Jeweled Gauntlet",
+      "tier": "S"
+    },
+    {
+      "champion": "lillia",
       "augment": "Multishot",
       "tier": "S"
     },
     {
       "champion": "lillia",
       "augment": "Spellsplit",
-      "tier": "S"
-    },
-    {
-      "champion": "lillia",
-      "augment": "Tripleshot",
       "tier": "S"
     },
     {
@@ -935,12 +950,12 @@
     },
     {
       "champion": "lissandra",
-      "augment": "Multishot",
+      "augment": "Jeweled Gauntlet",
       "tier": "S"
     },
     {
       "champion": "lissandra",
-      "augment": "Spellsplit",
+      "augment": "Multishot",
       "tier": "S"
     },
     {
@@ -955,7 +970,7 @@
     },
     {
       "champion": "lulu",
-      "augment": "Mercy's Strike",
+      "augment": "Jeweled Gauntlet",
       "tier": "S"
     },
     {
@@ -970,7 +985,12 @@
     },
     {
       "champion": "lux",
-      "augment": "Mercy's Strike",
+      "augment": "Jeweled Gauntlet",
+      "tier": "S"
+    },
+    {
+      "champion": "malphite",
+      "augment": "Jeweled Gauntlet",
       "tier": "S"
     },
     {
@@ -985,7 +1005,7 @@
     },
     {
       "champion": "malzahar",
-      "augment": "Pressure Cooker",
+      "augment": "Jeweled Gauntlet",
       "tier": "S"
     },
     {
@@ -1049,6 +1069,16 @@
       "tier": "S"
     },
     {
+      "champion": "missfortune",
+      "augment": "Jeweled Gauntlet",
+      "tier": "S"
+    },
+    {
+      "champion": "monkeyking",
+      "augment": "Jeweled Gauntlet",
+      "tier": "S"
+    },
+    {
       "champion": "mordekaiser",
       "augment": "Double Defense",
       "tier": "S"
@@ -1075,7 +1105,7 @@
     },
     {
       "champion": "morgana",
-      "augment": "Mercy's Strike",
+      "augment": "Jeweled Gauntlet",
       "tier": "S"
     },
     {
@@ -1100,12 +1130,12 @@
     },
     {
       "champion": "nami",
-      "augment": "Mercy's Strike",
+      "augment": "Jeweled Gauntlet",
       "tier": "S"
     },
     {
       "champion": "nami",
-      "augment": "Ravenous Bind",
+      "augment": "Mercy's Strike",
       "tier": "S"
     },
     {
@@ -1135,7 +1165,7 @@
     },
     {
       "champion": "nautilus",
-      "augment": "Mercy's Strike",
+      "augment": "Jeweled Gauntlet",
       "tier": "S"
     },
     {
@@ -1145,12 +1175,12 @@
     },
     {
       "champion": "neeko",
-      "augment": "Multishot",
+      "augment": "Jeweled Gauntlet",
       "tier": "S"
     },
     {
       "champion": "neeko",
-      "augment": "Spellsplit",
+      "augment": "Multishot",
       "tier": "S"
     },
     {
@@ -1165,7 +1195,7 @@
     },
     {
       "champion": "nidalee",
-      "augment": "Mercy's Strike",
+      "augment": "Jeweled Gauntlet",
       "tier": "S"
     },
     {
@@ -1240,7 +1270,7 @@
     },
     {
       "champion": "orianna",
-      "augment": "Mercy's Strike",
+      "augment": "Jeweled Gauntlet",
       "tier": "S"
     },
     {
@@ -1255,12 +1285,12 @@
     },
     {
       "champion": "pantheon",
-      "augment": "Mercy's Strike",
+      "augment": "Jeweled Gauntlet",
       "tier": "S"
     },
     {
       "champion": "pantheon",
-      "augment": "Multishot",
+      "augment": "Mercy's Strike",
       "tier": "S"
     },
     {
@@ -1280,6 +1310,11 @@
     },
     {
       "champion": "pyke",
+      "augment": "Jeweled Gauntlet",
+      "tier": "S"
+    },
+    {
+      "champion": "pyke",
       "augment": "Multishot",
       "tier": "S"
     },
@@ -1289,13 +1324,13 @@
       "tier": "S"
     },
     {
-      "champion": "pyke",
-      "augment": "Tripleshot",
+      "champion": "quinn",
+      "augment": "Chain Reaction",
       "tier": "S"
     },
     {
       "champion": "quinn",
-      "augment": "Chain Reaction",
+      "augment": "Jeweled Gauntlet",
       "tier": "S"
     },
     {
@@ -1310,7 +1345,7 @@
     },
     {
       "champion": "rakan",
-      "augment": "Mercy's Strike",
+      "augment": "Jeweled Gauntlet",
       "tier": "S"
     },
     {
@@ -1370,7 +1405,7 @@
     },
     {
       "champion": "renata",
-      "augment": "Mercy's Strike",
+      "augment": "Jeweled Gauntlet",
       "tier": "S"
     },
     {
@@ -1524,18 +1559,23 @@
       "tier": "S"
     },
     {
+      "champion": "shen",
+      "augment": "Jeweled Gauntlet",
+      "tier": "S"
+    },
+    {
       "champion": "shyvana",
       "augment": "Double Defense",
       "tier": "S"
     },
     {
       "champion": "shyvana",
-      "augment": "Mercy's Strike",
+      "augment": "Jeweled Gauntlet",
       "tier": "S"
     },
     {
       "champion": "shyvana",
-      "augment": "Multishot",
+      "augment": "Mercy's Strike",
       "tier": "S"
     },
     {
@@ -1590,12 +1630,12 @@
     },
     {
       "champion": "smolder",
-      "augment": "Multishot",
+      "augment": "Jeweled Gauntlet",
       "tier": "S"
     },
     {
       "champion": "smolder",
-      "augment": "Spellsplit",
+      "augment": "Multishot",
       "tier": "S"
     },
     {
@@ -1605,12 +1645,12 @@
     },
     {
       "champion": "sona",
-      "augment": "Mercy's Strike",
+      "augment": "Jeweled Gauntlet",
       "tier": "S"
     },
     {
       "champion": "sona",
-      "augment": "Ravenous Bind",
+      "augment": "Mercy's Strike",
       "tier": "S"
     },
     {
@@ -1620,12 +1660,17 @@
     },
     {
       "champion": "soraka",
-      "augment": "Mercy's Strike",
+      "augment": "Jeweled Gauntlet",
       "tier": "S"
     },
     {
       "champion": "soraka",
-      "augment": "Ravenous Bind",
+      "augment": "Mercy's Strike",
+      "tier": "S"
+    },
+    {
+      "champion": "swain",
+      "augment": "Jeweled Gauntlet",
       "tier": "S"
     },
     {
@@ -1639,23 +1684,18 @@
       "tier": "S"
     },
     {
-      "champion": "swain",
-      "augment": "Tripleshot",
-      "tier": "S"
-    },
-    {
       "champion": "sylas",
       "augment": "Double Defense",
       "tier": "S"
     },
     {
       "champion": "sylas",
-      "augment": "Mercy's Strike",
+      "augment": "Jeweled Gauntlet",
       "tier": "S"
     },
     {
       "champion": "sylas",
-      "augment": "Multishot",
+      "augment": "Mercy's Strike",
       "tier": "S"
     },
     {
@@ -1665,12 +1705,12 @@
     },
     {
       "champion": "syndra",
-      "augment": "Multishot",
+      "augment": "Jeweled Gauntlet",
       "tier": "S"
     },
     {
       "champion": "syndra",
-      "augment": "Spellsplit",
+      "augment": "Multishot",
       "tier": "S"
     },
     {
@@ -1701,6 +1741,11 @@
     {
       "champion": "taliyah",
       "augment": "Cruelty",
+      "tier": "S"
+    },
+    {
+      "champion": "talon",
+      "augment": "Jeweled Gauntlet",
       "tier": "S"
     },
     {
@@ -1754,6 +1799,11 @@
       "tier": "S"
     },
     {
+      "champion": "tristana",
+      "augment": "Jeweled Gauntlet",
+      "tier": "S"
+    },
+    {
       "champion": "trundle",
       "augment": "Chain Reaction",
       "tier": "S"
@@ -1775,12 +1825,12 @@
     },
     {
       "champion": "tryndamere",
-      "augment": "Mercy's Strike",
+      "augment": "Jeweled Gauntlet",
       "tier": "S"
     },
     {
       "champion": "tryndamere",
-      "augment": "Ravenous Bind",
+      "augment": "Mercy's Strike",
       "tier": "S"
     },
     {
@@ -1855,12 +1905,12 @@
     },
     {
       "champion": "veigar",
-      "augment": "Multishot",
+      "augment": "Jeweled Gauntlet",
       "tier": "S"
     },
     {
       "champion": "veigar",
-      "augment": "Spellsplit",
+      "augment": "Multishot",
       "tier": "S"
     },
     {
@@ -1930,12 +1980,12 @@
     },
     {
       "champion": "viktor",
-      "augment": "Mercy's Strike",
+      "augment": "Jeweled Gauntlet",
       "tier": "S"
     },
     {
       "champion": "viktor",
-      "augment": "Multishot",
+      "augment": "Mercy's Strike",
       "tier": "S"
     },
     {
@@ -1945,12 +1995,12 @@
     },
     {
       "champion": "vladimir",
-      "augment": "Mercy's Strike",
+      "augment": "Jeweled Gauntlet",
       "tier": "S"
     },
     {
       "champion": "vladimir",
-      "augment": "Multishot",
+      "augment": "Mercy's Strike",
       "tier": "S"
     },
     {
@@ -1975,12 +2025,12 @@
     },
     {
       "champion": "warwick",
-      "augment": "Mercy's Strike",
+      "augment": "Jeweled Gauntlet",
       "tier": "S"
     },
     {
       "champion": "warwick",
-      "augment": "Ravenous Bind",
+      "augment": "Mercy's Strike",
       "tier": "S"
     },
     {
@@ -1990,12 +2040,12 @@
     },
     {
       "champion": "xerath",
-      "augment": "Multishot",
+      "augment": "Jeweled Gauntlet",
       "tier": "S"
     },
     {
       "champion": "xerath",
-      "augment": "Spellsplit",
+      "augment": "Multishot",
       "tier": "S"
     },
     {
@@ -2059,6 +2109,11 @@
       "tier": "S"
     },
     {
+      "champion": "yunara",
+      "augment": "Jeweled Gauntlet",
+      "tier": "S"
+    },
+    {
       "champion": "yuumi",
       "augment": "Back To Basics",
       "tier": "S"
@@ -2110,12 +2165,17 @@
     },
     {
       "champion": "ziggs",
-      "augment": "Multishot",
+      "augment": "Jeweled Gauntlet",
       "tier": "S"
     },
     {
       "champion": "ziggs",
-      "augment": "Spellsplit",
+      "augment": "Multishot",
+      "tier": "S"
+    },
+    {
+      "champion": "zilean",
+      "augment": "Jeweled Gauntlet",
       "tier": "S"
     },
     {
@@ -2125,12 +2185,12 @@
     },
     {
       "champion": "zoe",
-      "augment": "Multishot",
+      "augment": "Jeweled Gauntlet",
       "tier": "S"
     },
     {
       "champion": "zoe",
-      "augment": "Spellsplit",
+      "augment": "Multishot",
       "tier": "S"
     },
     {
@@ -2140,12 +2200,12 @@
     },
     {
       "champion": "zyra",
-      "augment": "Multishot",
+      "augment": "Jeweled Gauntlet",
       "tier": "S"
     },
     {
       "champion": "zyra",
-      "augment": "Spellsplit",
+      "augment": "Multishot",
       "tier": "S"
     }
   ]

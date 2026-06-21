@@ -7,6 +7,8 @@ const STYLES: Record<ChangeKind, string> = {
     "bg-rose-500/15 text-rose-300 border-rose-500/30",
   changed:
     "bg-slate-500/15 text-slate-300 border-slate-500/30",
+  mechanism:
+    "bg-amber-500/15 text-amber-300 border-amber-500/35",
 };
 
 export function ChangeBadge({ kind, label }: { kind: ChangeKind; label: string }) {

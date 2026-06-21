@@ -186,7 +186,8 @@
     "badgeNew": "新增",
     "badgeRemoved": "已移除",
     "badgeAbility": "技能",
-    "badgeQuest": "任务"
+    "badgeQuest": "任务",
+    "badgeMechanism": "BUG/机制"
   },
   "items": {
     "title": "ARAM 大乱斗装备",
@@ -259,7 +260,8 @@
     "kinds": {
       "buffed": "增强",
       "nerfed": "削弱",
-      "changed": "调整"
+      "changed": "调整",
+      "mechanism": "机制"
     },
     "sections": {
       "highlights": "重点",
@@ -277,6 +279,7 @@
       "removed": "自增幅装置池移除",
       "rarity": "稀有度变更：{from} → {to}",
       "effect": "效果已更新",
+      "mechanism": "实战可见机制 / 疑似 Bug 机制",
       "rarities": {
         "silver": "白银",
         "gold": "黄金",

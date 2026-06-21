@@ -4317,7 +4317,11 @@
       ],
       "flags": {
         "system_breaker": true,
-        "lifecycle": "removed"
+        "lifecycle": "removed",
+        "availability_override": "bug_mechanism",
+        "availability_label": "BUG/MECHANISM",
+        "availability_source": "player-observed-live-game",
+        "availability_observed_at": "2026-06-20"
       },
       "type": "standalone"
     },

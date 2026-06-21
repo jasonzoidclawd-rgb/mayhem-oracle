@@ -41,6 +41,7 @@ export interface ScoredAugment {
   flags?: {
     system_breaker?: boolean;
     lifecycle?: string;
+    availability_override?: "bug_mechanism";
   };
 }
 

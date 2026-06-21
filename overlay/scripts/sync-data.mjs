@@ -99,7 +99,7 @@ function compactAugment(augment) {
 }
 
 function compactCombo(combo, augmentSlugByKey) {
-  const augmentSlug = augmentSlugByKey.get(normalizeLookupKey(combo.augment));
+  const augmentSlug = combo.augmentSlug ?? augmentSlugByKey.get(normalizeLookupKey(combo.augment));
 
   return {
     champion: combo.champion,

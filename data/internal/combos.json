@@ -362,6 +362,13 @@
     },
     {
       "champion": "ahri",
+      "augment": "Jeweled Gauntlet",
+      "augmentSlug": "jeweled-gauntlet",
+      "tier": "S",
+      "ref": "mechanical:ability_crit"
+    },
+    {
+      "champion": "ahri",
       "augment": "Multishot",
       "augmentSlug": "multishot",
       "tier": "S",
@@ -842,6 +849,13 @@
       "augmentSlug": "infernal-conduit",
       "tier": "S",
       "ref": "mechanical:on_cast"
+    },
+    {
+      "champion": "akali",
+      "augment": "Jeweled Gauntlet",
+      "augmentSlug": "jeweled-gauntlet",
+      "tier": "S",
+      "ref": "mechanical:ability_crit"
     },
     {
       "champion": "akali",
@@ -1356,6 +1370,13 @@
     },
     {
       "champion": "alistar",
+      "augment": "Jeweled Gauntlet",
+      "augmentSlug": "jeweled-gauntlet",
+      "tier": "S",
+      "ref": "mechanical:ability_crit"
+    },
+    {
+      "champion": "alistar",
       "augment": "Slap Around",
       "augmentSlug": "slap-around",
       "tier": "S",
@@ -2133,6 +2154,13 @@
     },
     {
       "champion": "anivia",
+      "augment": "Jeweled Gauntlet",
+      "augmentSlug": "jeweled-gauntlet",
+      "tier": "S",
+      "ref": "mechanical:ability_crit"
+    },
+    {
+      "champion": "anivia",
       "augment": "Master of Duality",
       "augmentSlug": "master-of-duality",
       "tier": "S",
@@ -2410,6 +2438,13 @@
       "augmentSlug": "infinite-recursion",
       "tier": "S",
       "ref": "mechanical:ability_haste"
+    },
+    {
+      "champion": "annie",
+      "augment": "Jeweled Gauntlet",
+      "augmentSlug": "jeweled-gauntlet",
+      "tier": "S",
+      "ref": "mechanical:ability_crit"
     },
     {
       "champion": "annie",
@@ -2973,6 +3008,13 @@
     },
     {
       "champion": "ashe",
+      "augment": "Jeweled Gauntlet",
+      "augmentSlug": "jeweled-gauntlet",
+      "tier": "S",
+      "ref": "mechanical:ability_crit"
+    },
+    {
+      "champion": "ashe",
       "augment": "Dropkick",
       "augmentSlug": "dropkick",
       "tier": "A",
@@ -3082,6 +3124,13 @@
       "augmentSlug": "infernal-conduit",
       "tier": "S",
       "ref": "mechanical:on_cast"
+    },
+    {
+      "champion": "aurelionsol",
+      "augment": "Jeweled Gauntlet",
+      "augmentSlug": "jeweled-gauntlet",
+      "tier": "S",
+      "ref": "mechanical:ability_crit"
     },
     {
       "champion": "aurelionsol",
@@ -3250,6 +3299,13 @@
       "augmentSlug": "from-downtown",
       "tier": "S",
       "ref": "ability-fit:Q"
+    },
+    {
+      "champion": "aurora",
+      "augment": "Jeweled Gauntlet",
+      "augmentSlug": "jeweled-gauntlet",
+      "tier": "S",
+      "ref": "mechanical:ability_crit"
     },
     {
       "champion": "aurora",
@@ -3799,6 +3855,13 @@
     },
     {
       "champion": "azir",
+      "augment": "Jeweled Gauntlet",
+      "augmentSlug": "jeweled-gauntlet",
+      "tier": "B",
+      "ref": "mechanical:ability_crit"
+    },
+    {
+      "champion": "azir",
       "augment": "Lil' Extra Help",
       "augmentSlug": "lil-extra-help",
       "tier": "B",
@@ -3901,6 +3964,13 @@
       "augmentSlug": "double-defense",
       "tier": "S",
       "ref": "ability-fit:W"
+    },
+    {
+      "champion": "bard",
+      "augment": "Jeweled Gauntlet",
+      "augmentSlug": "jeweled-gauntlet",
+      "tier": "S",
+      "ref": "mechanical:ability_crit"
     },
     {
       "champion": "bard",
@@ -4272,6 +4342,13 @@
       "augmentSlug": "infernal-conduit",
       "tier": "S",
       "ref": "mechanical:on_cast"
+    },
+    {
+      "champion": "belveth",
+      "augment": "Jeweled Gauntlet",
+      "augmentSlug": "jeweled-gauntlet",
+      "tier": "S",
+      "ref": "mechanical:ability_crit"
     },
     {
       "champion": "belveth",
@@ -4667,6 +4744,13 @@
     },
     {
       "champion": "blitzcrank",
+      "augment": "Jeweled Gauntlet",
+      "augmentSlug": "jeweled-gauntlet",
+      "tier": "S",
+      "ref": "mechanical:ability_crit"
+    },
+    {
+      "champion": "blitzcrank",
       "augment": "Multishot",
       "augmentSlug": "multishot",
       "tier": "S",
@@ -4944,6 +5028,13 @@
       "augmentSlug": "from-downtown",
       "tier": "S",
       "ref": "ability-fit:Q"
+    },
+    {
+      "champion": "brand",
+      "augment": "Jeweled Gauntlet",
+      "augmentSlug": "jeweled-gauntlet",
+      "tier": "S",
+      "ref": "mechanical:ability_crit"
     },
     {
       "champion": "brand",
@@ -5427,6 +5518,13 @@
       "augmentSlug": "double-defense",
       "tier": "S",
       "ref": "ability-fit:W/E"
+    },
+    {
+      "champion": "briar",
+      "augment": "Jeweled Gauntlet",
+      "augmentSlug": "jeweled-gauntlet",
+      "tier": "S",
+      "ref": "mechanical:ability_crit"
     },
     {
       "champion": "briar",
@@ -6389,6 +6487,13 @@
     },
     {
       "champion": "cassiopeia",
+      "augment": "Jeweled Gauntlet",
+      "augmentSlug": "jeweled-gauntlet",
+      "tier": "S",
+      "ref": "mechanical:ability_crit"
+    },
+    {
+      "champion": "cassiopeia",
       "augment": "Master of Duality",
       "augmentSlug": "master-of-duality",
       "tier": "S",
@@ -6596,6 +6701,13 @@
       "augmentSlug": "chain-reaction",
       "tier": "S",
       "ref": "ability-fit:Q"
+    },
+    {
+      "champion": "chogath",
+      "augment": "Jeweled Gauntlet",
+      "augmentSlug": "jeweled-gauntlet",
+      "tier": "S",
+      "ref": "mechanical:ability_crit"
     },
     {
       "champion": "chogath",
@@ -7016,6 +7128,13 @@
       "augmentSlug": "infernal-conduit",
       "tier": "S",
       "ref": "mechanical:dot_synergy"
+    },
+    {
+      "champion": "corki",
+      "augment": "Jeweled Gauntlet",
+      "augmentSlug": "jeweled-gauntlet",
+      "tier": "S",
+      "ref": "mechanical:ability_crit"
     },
     {
       "champion": "corki",
@@ -7667,6 +7786,13 @@
       "augmentSlug": "from-downtown",
       "tier": "S",
       "ref": "ability-fit:Q"
+    },
+    {
+      "champion": "diana",
+      "augment": "Jeweled Gauntlet",
+      "augmentSlug": "jeweled-gauntlet",
+      "tier": "S",
+      "ref": "mechanical:ability_crit"
     },
     {
       "champion": "diana",
@@ -8468,6 +8594,13 @@
     },
     {
       "champion": "ekko",
+      "augment": "Jeweled Gauntlet",
+      "augmentSlug": "jeweled-gauntlet",
+      "tier": "S",
+      "ref": "mechanical:ability_crit"
+    },
+    {
+      "champion": "ekko",
       "augment": "Mercy's Strike",
       "augmentSlug": "mercys-strike",
       "tier": "S",
@@ -8829,6 +8962,13 @@
       "augmentSlug": "from-downtown",
       "tier": "S",
       "ref": "ability-fit:W/E"
+    },
+    {
+      "champion": "elise",
+      "augment": "Jeweled Gauntlet",
+      "augmentSlug": "jeweled-gauntlet",
+      "tier": "S",
+      "ref": "mechanical:ability_crit"
     },
     {
       "champion": "elise",
@@ -9438,6 +9578,13 @@
       "augmentSlug": "infinite-recursion",
       "tier": "A",
       "ref": "mechanical:ability_haste"
+    },
+    {
+      "champion": "evelynn",
+      "augment": "Jeweled Gauntlet",
+      "augmentSlug": "jeweled-gauntlet",
+      "tier": "A",
+      "ref": "mechanical:ability_crit"
     },
     {
       "champion": "evelynn",
@@ -10099,6 +10246,13 @@
     },
     {
       "champion": "fiddlesticks",
+      "augment": "Jeweled Gauntlet",
+      "augmentSlug": "jeweled-gauntlet",
+      "tier": "S",
+      "ref": "mechanical:ability_crit"
+    },
+    {
+      "champion": "fiddlesticks",
       "augment": "Mercy's Strike",
       "augmentSlug": "mercys-strike",
       "tier": "S",
@@ -10376,6 +10530,13 @@
       "augmentSlug": "heavy-hitter",
       "tier": "S",
       "ref": "mechanical:on_hit"
+    },
+    {
+      "champion": "fiora",
+      "augment": "Jeweled Gauntlet",
+      "augmentSlug": "jeweled-gauntlet",
+      "tier": "S",
+      "ref": "mechanical:ability_crit"
     },
     {
       "champion": "fiora",
@@ -10866,6 +11027,13 @@
       "augmentSlug": "cruelty",
       "tier": "S",
       "ref": "mechanical:immobilize_trigger"
+    },
+    {
+      "champion": "galio",
+      "augment": "Jeweled Gauntlet",
+      "augmentSlug": "jeweled-gauntlet",
+      "tier": "S",
+      "ref": "mechanical:ability_crit"
     },
     {
       "champion": "galio",
@@ -11702,6 +11870,13 @@
     },
     {
       "champion": "gnar",
+      "augment": "Jeweled Gauntlet",
+      "augmentSlug": "jeweled-gauntlet",
+      "tier": "S",
+      "ref": "mechanical:ability_crit"
+    },
+    {
+      "champion": "gnar",
       "augment": "Multishot",
       "augmentSlug": "multishot",
       "tier": "S",
@@ -12028,6 +12203,13 @@
       "augmentSlug": "typhoon",
       "tier": "B",
       "ref": "mechanical:on_hit"
+    },
+    {
+      "champion": "gragas",
+      "augment": "Jeweled Gauntlet",
+      "augmentSlug": "jeweled-gauntlet",
+      "tier": "S",
+      "ref": "mechanical:ability_crit"
     },
     {
       "champion": "gragas",
@@ -13263,6 +13445,13 @@
     },
     {
       "champion": "heimerdinger",
+      "augment": "Jeweled Gauntlet",
+      "augmentSlug": "jeweled-gauntlet",
+      "tier": "S",
+      "ref": "mechanical:ability_crit"
+    },
+    {
+      "champion": "heimerdinger",
       "augment": "Multishot",
       "augmentSlug": "multishot",
       "tier": "S",
@@ -13673,6 +13862,13 @@
       "augmentSlug": "upgrade-sheen",
       "tier": "C",
       "ref": "mechanical:ad_scaling"
+    },
+    {
+      "champion": "hwei",
+      "augment": "Jeweled Gauntlet",
+      "augmentSlug": "jeweled-gauntlet",
+      "tier": "S",
+      "ref": "mechanical:ability_crit"
     },
     {
       "champion": "hwei",
@@ -14215,6 +14411,13 @@
     },
     {
       "champion": "irelia",
+      "augment": "Jeweled Gauntlet",
+      "augmentSlug": "jeweled-gauntlet",
+      "tier": "S",
+      "ref": "mechanical:ability_crit"
+    },
+    {
+      "champion": "irelia",
       "augment": "Juiced",
       "augmentSlug": "juiced",
       "tier": "S",
@@ -14569,6 +14772,13 @@
       "augmentSlug": "from-downtown",
       "tier": "S",
       "ref": "ability-fit:Q"
+    },
+    {
+      "champion": "ivern",
+      "augment": "Jeweled Gauntlet",
+      "augmentSlug": "jeweled-gauntlet",
+      "tier": "S",
+      "ref": "mechanical:ability_crit"
     },
     {
       "champion": "ivern",
@@ -14975,6 +15185,13 @@
       "augmentSlug": "from-downtown",
       "tier": "S",
       "ref": "ability-fit:Q"
+    },
+    {
+      "champion": "janna",
+      "augment": "Jeweled Gauntlet",
+      "augmentSlug": "jeweled-gauntlet",
+      "tier": "S",
+      "ref": "mechanical:ability_crit"
     },
     {
       "champion": "janna",
@@ -15773,6 +15990,13 @@
       "augmentSlug": "chain-reaction",
       "tier": "S",
       "ref": "ability-fit:E"
+    },
+    {
+      "champion": "jayce",
+      "augment": "Jeweled Gauntlet",
+      "augmentSlug": "jeweled-gauntlet",
+      "tier": "S",
+      "ref": "mechanical:ability_crit"
     },
     {
       "champion": "jayce",
@@ -16686,6 +16910,13 @@
     },
     {
       "champion": "kaisa",
+      "augment": "Jeweled Gauntlet",
+      "augmentSlug": "jeweled-gauntlet",
+      "tier": "S",
+      "ref": "mechanical:ability_crit"
+    },
+    {
+      "champion": "kaisa",
       "augment": "Juiced",
       "augmentSlug": "juiced",
       "tier": "S",
@@ -17281,6 +17512,13 @@
     },
     {
       "champion": "karma",
+      "augment": "Jeweled Gauntlet",
+      "augmentSlug": "jeweled-gauntlet",
+      "tier": "S",
+      "ref": "mechanical:ability_crit"
+    },
+    {
+      "champion": "karma",
       "augment": "Mercy's Strike",
       "augmentSlug": "mercys-strike",
       "tier": "S",
@@ -17523,6 +17761,13 @@
       "augmentSlug": "warlock-juicebox",
       "tier": "B",
       "ref": "mechanical:lifesteal"
+    },
+    {
+      "champion": "karthus",
+      "augment": "Jeweled Gauntlet",
+      "augmentSlug": "jeweled-gauntlet",
+      "tier": "S",
+      "ref": "mechanical:ability_crit"
     },
     {
       "champion": "karthus",
@@ -17796,6 +18041,13 @@
       "augmentSlug": "double-defense",
       "tier": "S",
       "ref": "ability-fit:Q"
+    },
+    {
+      "champion": "kassadin",
+      "augment": "Jeweled Gauntlet",
+      "augmentSlug": "jeweled-gauntlet",
+      "tier": "S",
+      "ref": "mechanical:ability_crit"
     },
     {
       "champion": "kassadin",
@@ -18097,6 +18349,13 @@
       "augmentSlug": "chain-reaction",
       "tier": "S",
       "ref": "ability-fit:W"
+    },
+    {
+      "champion": "katarina",
+      "augment": "Jeweled Gauntlet",
+      "augmentSlug": "jeweled-gauntlet",
+      "tier": "S",
+      "ref": "mechanical:ability_crit"
     },
     {
       "champion": "katarina",
@@ -18307,6 +18566,13 @@
       "augmentSlug": "from-downtown",
       "tier": "S",
       "ref": "ability-fit:Q"
+    },
+    {
+      "champion": "kayle",
+      "augment": "Jeweled Gauntlet",
+      "augmentSlug": "jeweled-gauntlet",
+      "tier": "S",
+      "ref": "mechanical:ability_crit"
     },
     {
       "champion": "kayle",
@@ -18870,6 +19136,13 @@
     },
     {
       "champion": "kennen",
+      "augment": "Jeweled Gauntlet",
+      "augmentSlug": "jeweled-gauntlet",
+      "tier": "S",
+      "ref": "mechanical:ability_crit"
+    },
+    {
+      "champion": "kennen",
       "augment": "Multishot",
       "augmentSlug": "multishot",
       "tier": "S",
@@ -19343,6 +19616,13 @@
       "augmentSlug": "infernal-conduit",
       "tier": "S",
       "ref": "mechanical:on_cast"
+    },
+    {
+      "champion": "khazix",
+      "augment": "Jeweled Gauntlet",
+      "augmentSlug": "jeweled-gauntlet",
+      "tier": "S",
+      "ref": "mechanical:ability_crit"
     },
     {
       "champion": "khazix",
@@ -20284,6 +20564,13 @@
     },
     {
       "champion": "kogmaw",
+      "augment": "Jeweled Gauntlet",
+      "augmentSlug": "jeweled-gauntlet",
+      "tier": "S",
+      "ref": "mechanical:ability_crit"
+    },
+    {
+      "champion": "kogmaw",
       "augment": "Multishot",
       "augmentSlug": "multishot",
       "tier": "S",
@@ -20792,6 +21079,13 @@
       "augmentSlug": "from-downtown",
       "tier": "S",
       "ref": "ability-fit:E"
+    },
+    {
+      "champion": "leblanc",
+      "augment": "Jeweled Gauntlet",
+      "augmentSlug": "jeweled-gauntlet",
+      "tier": "S",
+      "ref": "mechanical:ability_crit"
     },
     {
       "champion": "leblanc",
@@ -21656,6 +21950,13 @@
     },
     {
       "champion": "lillia",
+      "augment": "Jeweled Gauntlet",
+      "augmentSlug": "jeweled-gauntlet",
+      "tier": "S",
+      "ref": "mechanical:ability_crit"
+    },
+    {
+      "champion": "lillia",
       "augment": "Multishot",
       "augmentSlug": "multishot",
       "tier": "S",
@@ -21996,6 +22297,13 @@
       "augmentSlug": "from-downtown",
       "tier": "S",
       "ref": "ability-fit:E"
+    },
+    {
+      "champion": "lissandra",
+      "augment": "Jeweled Gauntlet",
+      "augmentSlug": "jeweled-gauntlet",
+      "tier": "S",
+      "ref": "mechanical:ability_crit"
     },
     {
       "champion": "lissandra",
@@ -22454,6 +22762,13 @@
     },
     {
       "champion": "lucian",
+      "augment": "Jeweled Gauntlet",
+      "augmentSlug": "jeweled-gauntlet",
+      "tier": "A",
+      "ref": "mechanical:ability_crit"
+    },
+    {
+      "champion": "lucian",
       "augment": "Juiced",
       "augmentSlug": "juiced",
       "tier": "A",
@@ -22633,6 +22948,13 @@
       "augmentSlug": "from-downtown",
       "tier": "S",
       "ref": "ability-fit:Q"
+    },
+    {
+      "champion": "lulu",
+      "augment": "Jeweled Gauntlet",
+      "augmentSlug": "jeweled-gauntlet",
+      "tier": "S",
+      "ref": "mechanical:ability_crit"
     },
     {
       "champion": "lulu",
@@ -23007,6 +23329,13 @@
     },
     {
       "champion": "lux",
+      "augment": "Jeweled Gauntlet",
+      "augmentSlug": "jeweled-gauntlet",
+      "tier": "S",
+      "ref": "mechanical:ability_crit"
+    },
+    {
+      "champion": "lux",
       "augment": "Mercy's Strike",
       "augmentSlug": "mercys-strike",
       "tier": "S",
@@ -23326,6 +23655,13 @@
       "augmentSlug": "upgrade-sheen",
       "tier": "C",
       "ref": "mechanical:ad_scaling"
+    },
+    {
+      "champion": "malphite",
+      "augment": "Jeweled Gauntlet",
+      "augmentSlug": "jeweled-gauntlet",
+      "tier": "S",
+      "ref": "mechanical:ability_crit"
     },
     {
       "champion": "malphite",
@@ -23760,6 +24096,13 @@
       "augmentSlug": "infernal-conduit",
       "tier": "S",
       "ref": "mechanical:dot_synergy"
+    },
+    {
+      "champion": "malzahar",
+      "augment": "Jeweled Gauntlet",
+      "augmentSlug": "jeweled-gauntlet",
+      "tier": "S",
+      "ref": "mechanical:ability_crit"
     },
     {
       "champion": "malzahar",
@@ -24449,6 +24792,13 @@
     },
     {
       "champion": "masteryi",
+      "augment": "Jeweled Gauntlet",
+      "augmentSlug": "jeweled-gauntlet",
+      "tier": "S",
+      "ref": "mechanical:ability_crit"
+    },
+    {
+      "champion": "masteryi",
       "augment": "Juiced",
       "augmentSlug": "juiced",
       "tier": "S",
@@ -24799,6 +25149,13 @@
     },
     {
       "champion": "mel",
+      "augment": "Jeweled Gauntlet",
+      "augmentSlug": "jeweled-gauntlet",
+      "tier": "B",
+      "ref": "mechanical:ability_crit"
+    },
+    {
+      "champion": "mel",
       "augment": "Ominous Pact",
       "augmentSlug": "ominous-pact",
       "tier": "B",
@@ -24908,6 +25265,13 @@
       "augmentSlug": "from-downtown",
       "tier": "S",
       "ref": "ability-fit:Q"
+    },
+    {
+      "champion": "milio",
+      "augment": "Jeweled Gauntlet",
+      "augmentSlug": "jeweled-gauntlet",
+      "tier": "S",
+      "ref": "mechanical:ability_crit"
     },
     {
       "champion": "milio",
@@ -25230,6 +25594,13 @@
       "augmentSlug": "upgrade-sheen",
       "tier": "C",
       "ref": "mechanical:ad_scaling"
+    },
+    {
+      "champion": "missfortune",
+      "augment": "Jeweled Gauntlet",
+      "augmentSlug": "jeweled-gauntlet",
+      "tier": "S",
+      "ref": "mechanical:ability_crit"
     },
     {
       "champion": "missfortune",
@@ -25559,6 +25930,13 @@
       "augmentSlug": "from-downtown",
       "tier": "C",
       "ref": "ability-fit:none"
+    },
+    {
+      "champion": "monkeyking",
+      "augment": "Jeweled Gauntlet",
+      "augmentSlug": "jeweled-gauntlet",
+      "tier": "S",
+      "ref": "mechanical:ability_crit"
     },
     {
       "champion": "monkeyking",
@@ -26115,6 +26493,13 @@
     },
     {
       "champion": "mordekaiser",
+      "augment": "Jeweled Gauntlet",
+      "augmentSlug": "jeweled-gauntlet",
+      "tier": "B",
+      "ref": "mechanical:ability_crit"
+    },
+    {
+      "champion": "mordekaiser",
       "augment": "Lil' Extra Help",
       "augmentSlug": "lil-extra-help",
       "tier": "B",
@@ -26196,6 +26581,13 @@
       "augmentSlug": "from-downtown",
       "tier": "S",
       "ref": "ability-fit:Q"
+    },
+    {
+      "champion": "morgana",
+      "augment": "Jeweled Gauntlet",
+      "augmentSlug": "jeweled-gauntlet",
+      "tier": "S",
+      "ref": "mechanical:ability_crit"
     },
     {
       "champion": "morgana",
@@ -26920,6 +27312,13 @@
     },
     {
       "champion": "nami",
+      "augment": "Jeweled Gauntlet",
+      "augmentSlug": "jeweled-gauntlet",
+      "tier": "S",
+      "ref": "mechanical:ability_crit"
+    },
+    {
+      "champion": "nami",
       "augment": "Mercy's Strike",
       "augmentSlug": "mercys-strike",
       "tier": "S",
@@ -27498,6 +27897,13 @@
       "augmentSlug": "from-downtown",
       "tier": "S",
       "ref": "ability-fit:Q"
+    },
+    {
+      "champion": "nautilus",
+      "augment": "Jeweled Gauntlet",
+      "augmentSlug": "jeweled-gauntlet",
+      "tier": "S",
+      "ref": "mechanical:ability_crit"
     },
     {
       "champion": "nautilus",
@@ -27977,6 +28383,13 @@
     },
     {
       "champion": "neeko",
+      "augment": "Jeweled Gauntlet",
+      "augmentSlug": "jeweled-gauntlet",
+      "tier": "S",
+      "ref": "mechanical:ability_crit"
+    },
+    {
+      "champion": "neeko",
       "augment": "Multishot",
       "augmentSlug": "multishot",
       "tier": "S",
@@ -28282,6 +28695,13 @@
       "augmentSlug": "from-downtown",
       "tier": "S",
       "ref": "ability-fit:Q"
+    },
+    {
+      "champion": "nidalee",
+      "augment": "Jeweled Gauntlet",
+      "augmentSlug": "jeweled-gauntlet",
+      "tier": "S",
+      "ref": "mechanical:ability_crit"
     },
     {
       "champion": "nidalee",
@@ -29307,6 +29727,13 @@
     },
     {
       "champion": "nunu",
+      "augment": "Jeweled Gauntlet",
+      "augmentSlug": "jeweled-gauntlet",
+      "tier": "S",
+      "ref": "mechanical:ability_crit"
+    },
+    {
+      "champion": "nunu",
       "augment": "Mercy's Strike",
       "augmentSlug": "mercys-strike",
       "tier": "S",
@@ -30007,6 +30434,13 @@
     },
     {
       "champion": "orianna",
+      "augment": "Jeweled Gauntlet",
+      "augmentSlug": "jeweled-gauntlet",
+      "tier": "S",
+      "ref": "mechanical:ability_crit"
+    },
+    {
+      "champion": "orianna",
       "augment": "Mercy's Strike",
       "augmentSlug": "mercys-strike",
       "tier": "S",
@@ -30620,6 +31054,13 @@
       "augmentSlug": "double-defense",
       "tier": "S",
       "ref": "ability-fit:E"
+    },
+    {
+      "champion": "pantheon",
+      "augment": "Jeweled Gauntlet",
+      "augmentSlug": "jeweled-gauntlet",
+      "tier": "S",
+      "ref": "mechanical:ability_crit"
     },
     {
       "champion": "pantheon",
@@ -31411,6 +31852,13 @@
       "augmentSlug": "twin-fire",
       "tier": "C",
       "ref": "mechanical:on_cast"
+    },
+    {
+      "champion": "pyke",
+      "augment": "Jeweled Gauntlet",
+      "augmentSlug": "jeweled-gauntlet",
+      "tier": "S",
+      "ref": "mechanical:ability_crit"
     },
     {
       "champion": "pyke",
@@ -32177,6 +32625,13 @@
     },
     {
       "champion": "quinn",
+      "augment": "Jeweled Gauntlet",
+      "augmentSlug": "jeweled-gauntlet",
+      "tier": "S",
+      "ref": "mechanical:ability_crit"
+    },
+    {
+      "champion": "quinn",
       "augment": "Blade Waltz",
       "augmentSlug": "blade-waltz",
       "tier": "A",
@@ -32475,6 +32930,13 @@
       "augmentSlug": "double-defense",
       "tier": "S",
       "ref": "ability-fit:Q/E"
+    },
+    {
+      "champion": "rakan",
+      "augment": "Jeweled Gauntlet",
+      "augmentSlug": "jeweled-gauntlet",
+      "tier": "S",
+      "ref": "mechanical:ability_crit"
     },
     {
       "champion": "rakan",
@@ -32888,6 +33350,13 @@
       "augmentSlug": "cruelty",
       "tier": "S",
       "ref": "mechanical:immobilize_trigger"
+    },
+    {
+      "champion": "rammus",
+      "augment": "Jeweled Gauntlet",
+      "augmentSlug": "jeweled-gauntlet",
+      "tier": "S",
+      "ref": "mechanical:ability_crit"
     },
     {
       "champion": "rammus",
@@ -33735,6 +34204,13 @@
       "augmentSlug": "from-downtown",
       "tier": "S",
       "ref": "ability-fit:Q/R"
+    },
+    {
+      "champion": "renata",
+      "augment": "Jeweled Gauntlet",
+      "augmentSlug": "jeweled-gauntlet",
+      "tier": "S",
+      "ref": "mechanical:ability_crit"
     },
     {
       "champion": "renata",
@@ -34970,6 +35446,13 @@
     },
     {
       "champion": "rumble",
+      "augment": "Jeweled Gauntlet",
+      "augmentSlug": "jeweled-gauntlet",
+      "tier": "S",
+      "ref": "mechanical:ability_crit"
+    },
+    {
+      "champion": "rumble",
       "augment": "Mercy's Strike",
       "augmentSlug": "mercys-strike",
       "tier": "S",
@@ -35471,6 +35954,13 @@
       "augmentSlug": "infinite-recursion",
       "tier": "S",
       "ref": "mechanical:ability_haste"
+    },
+    {
+      "champion": "ryze",
+      "augment": "Jeweled Gauntlet",
+      "augmentSlug": "jeweled-gauntlet",
+      "tier": "S",
+      "ref": "mechanical:ability_crit"
     },
     {
       "champion": "ryze",
@@ -36055,6 +36545,13 @@
     },
     {
       "champion": "samira",
+      "augment": "Jeweled Gauntlet",
+      "augmentSlug": "jeweled-gauntlet",
+      "tier": "C",
+      "ref": "mechanical:ability_crit"
+    },
+    {
+      "champion": "samira",
       "augment": "Light 'em Up!",
       "augmentSlug": "light-em-up",
       "tier": "C",
@@ -36129,6 +36626,13 @@
       "augmentSlug": "infernal-conduit",
       "tier": "S",
       "ref": "mechanical:on_cast"
+    },
+    {
+      "champion": "sejuani",
+      "augment": "Jeweled Gauntlet",
+      "augmentSlug": "jeweled-gauntlet",
+      "tier": "S",
+      "ref": "mechanical:ability_crit"
     },
     {
       "champion": "sejuani",
@@ -36993,6 +37497,13 @@
     },
     {
       "champion": "seraphine",
+      "augment": "Jeweled Gauntlet",
+      "augmentSlug": "jeweled-gauntlet",
+      "tier": "B",
+      "ref": "mechanical:ability_crit"
+    },
+    {
+      "champion": "seraphine",
       "augment": "Overloaded",
       "augmentSlug": "overloaded",
       "tier": "B",
@@ -37448,6 +37959,13 @@
     },
     {
       "champion": "shaco",
+      "augment": "Jeweled Gauntlet",
+      "augmentSlug": "jeweled-gauntlet",
+      "tier": "S",
+      "ref": "mechanical:ability_crit"
+    },
+    {
+      "champion": "shaco",
       "augment": "Juiced",
       "augmentSlug": "juiced",
       "tier": "S",
@@ -37648,6 +38166,13 @@
       "augmentSlug": "terror",
       "tier": "B",
       "ref": "ability-fit:Q/W/E/R"
+    },
+    {
+      "champion": "shen",
+      "augment": "Jeweled Gauntlet",
+      "augmentSlug": "jeweled-gauntlet",
+      "tier": "S",
+      "ref": "mechanical:ability_crit"
     },
     {
       "champion": "shen",
@@ -38033,6 +38558,13 @@
       "augmentSlug": "double-defense",
       "tier": "S",
       "ref": "ability-fit:W"
+    },
+    {
+      "champion": "shyvana",
+      "augment": "Jeweled Gauntlet",
+      "augmentSlug": "jeweled-gauntlet",
+      "tier": "S",
+      "ref": "mechanical:ability_crit"
     },
     {
       "champion": "shyvana",
@@ -39345,6 +39877,13 @@
     },
     {
       "champion": "smolder",
+      "augment": "Jeweled Gauntlet",
+      "augmentSlug": "jeweled-gauntlet",
+      "tier": "S",
+      "ref": "mechanical:ability_crit"
+    },
+    {
+      "champion": "smolder",
       "augment": "Multishot",
       "augmentSlug": "multishot",
       "tier": "S",
@@ -39723,6 +40262,13 @@
     },
     {
       "champion": "sona",
+      "augment": "Jeweled Gauntlet",
+      "augmentSlug": "jeweled-gauntlet",
+      "tier": "S",
+      "ref": "mechanical:ability_crit"
+    },
+    {
+      "champion": "sona",
       "augment": "Mercy's Strike",
       "augmentSlug": "mercys-strike",
       "tier": "S",
@@ -39979,6 +40525,13 @@
       "augmentSlug": "double-defense",
       "tier": "S",
       "ref": "ability-fit:Q/W/R"
+    },
+    {
+      "champion": "soraka",
+      "augment": "Jeweled Gauntlet",
+      "augmentSlug": "jeweled-gauntlet",
+      "tier": "S",
+      "ref": "mechanical:ability_crit"
     },
     {
       "champion": "soraka",
@@ -40290,6 +40843,13 @@
     },
     {
       "champion": "swain",
+      "augment": "Jeweled Gauntlet",
+      "augmentSlug": "jeweled-gauntlet",
+      "tier": "S",
+      "ref": "mechanical:ability_crit"
+    },
+    {
+      "champion": "swain",
       "augment": "Multishot",
       "augmentSlug": "multishot",
       "tier": "S",
@@ -40546,6 +41106,13 @@
       "augmentSlug": "double-defense",
       "tier": "S",
       "ref": "ability-fit:W"
+    },
+    {
+      "champion": "sylas",
+      "augment": "Jeweled Gauntlet",
+      "augmentSlug": "jeweled-gauntlet",
+      "tier": "S",
+      "ref": "mechanical:ability_crit"
     },
     {
       "champion": "sylas",
@@ -40990,6 +41557,13 @@
     },
     {
       "champion": "syndra",
+      "augment": "Jeweled Gauntlet",
+      "augmentSlug": "jeweled-gauntlet",
+      "tier": "S",
+      "ref": "mechanical:ability_crit"
+    },
+    {
+      "champion": "syndra",
       "augment": "Multishot",
       "augmentSlug": "multishot",
       "tier": "S",
@@ -41330,6 +41904,13 @@
       "augmentSlug": "infernal-conduit",
       "tier": "S",
       "ref": "mechanical:on_cast"
+    },
+    {
+      "champion": "tahmkench",
+      "augment": "Jeweled Gauntlet",
+      "augmentSlug": "jeweled-gauntlet",
+      "tier": "S",
+      "ref": "mechanical:ability_crit"
     },
     {
       "champion": "tahmkench",
@@ -41830,6 +42411,13 @@
     },
     {
       "champion": "taliyah",
+      "augment": "Jeweled Gauntlet",
+      "augmentSlug": "jeweled-gauntlet",
+      "tier": "B",
+      "ref": "mechanical:ability_crit"
+    },
+    {
+      "champion": "taliyah",
       "augment": "Overloaded",
       "augmentSlug": "overloaded",
       "tier": "B",
@@ -41883,6 +42471,13 @@
       "augmentSlug": "trusty-weapon",
       "tier": "B",
       "ref": "ability-fit:Q/W/E/R"
+    },
+    {
+      "champion": "talon",
+      "augment": "Jeweled Gauntlet",
+      "augmentSlug": "jeweled-gauntlet",
+      "tier": "S",
+      "ref": "mechanical:ability_crit"
     },
     {
       "champion": "talon",
@@ -42334,6 +42929,13 @@
     },
     {
       "champion": "teemo",
+      "augment": "Jeweled Gauntlet",
+      "augmentSlug": "jeweled-gauntlet",
+      "tier": "S",
+      "ref": "mechanical:ability_crit"
+    },
+    {
+      "champion": "teemo",
       "augment": "Pressure Cooker",
       "augmentSlug": "pressure-cooker",
       "tier": "S",
@@ -42562,6 +43164,13 @@
       "augmentSlug": "from-downtown",
       "tier": "S",
       "ref": "ability-fit:Q"
+    },
+    {
+      "champion": "thresh",
+      "augment": "Jeweled Gauntlet",
+      "augmentSlug": "jeweled-gauntlet",
+      "tier": "S",
+      "ref": "mechanical:ability_crit"
     },
     {
       "champion": "thresh",
@@ -42926,6 +43535,13 @@
       "augmentSlug": "warlock-juicebox",
       "tier": "C",
       "ref": "mechanical:lifesteal"
+    },
+    {
+      "champion": "tristana",
+      "augment": "Jeweled Gauntlet",
+      "augmentSlug": "jeweled-gauntlet",
+      "tier": "S",
+      "ref": "mechanical:ability_crit"
     },
     {
       "champion": "tristana",
@@ -43524,6 +44140,13 @@
     },
     {
       "champion": "tryndamere",
+      "augment": "Jeweled Gauntlet",
+      "augmentSlug": "jeweled-gauntlet",
+      "tier": "S",
+      "ref": "mechanical:ability_crit"
+    },
+    {
+      "champion": "tryndamere",
       "augment": "Mercy's Strike",
       "augmentSlug": "mercys-strike",
       "tier": "S",
@@ -43801,6 +44424,13 @@
       "augmentSlug": "infinite-recursion",
       "tier": "S",
       "ref": "mechanical:ability_haste"
+    },
+    {
+      "champion": "twistedfate",
+      "augment": "Jeweled Gauntlet",
+      "augmentSlug": "jeweled-gauntlet",
+      "tier": "S",
+      "ref": "mechanical:ability_crit"
     },
     {
       "champion": "twistedfate",
@@ -45715,6 +46345,13 @@
     },
     {
       "champion": "veigar",
+      "augment": "Jeweled Gauntlet",
+      "augmentSlug": "jeweled-gauntlet",
+      "tier": "S",
+      "ref": "mechanical:ability_crit"
+    },
+    {
+      "champion": "veigar",
       "augment": "Multishot",
       "augmentSlug": "multishot",
       "tier": "S",
@@ -46083,6 +46720,13 @@
       "augmentSlug": "infinite-recursion",
       "tier": "S",
       "ref": "mechanical:ability_haste"
+    },
+    {
+      "champion": "velkoz",
+      "augment": "Jeweled Gauntlet",
+      "augmentSlug": "jeweled-gauntlet",
+      "tier": "S",
+      "ref": "mechanical:ability_crit"
     },
     {
       "champion": "velkoz",
@@ -46569,6 +47213,13 @@
     },
     {
       "champion": "vex",
+      "augment": "Jeweled Gauntlet",
+      "augmentSlug": "jeweled-gauntlet",
+      "tier": "A",
+      "ref": "mechanical:ability_crit"
+    },
+    {
+      "champion": "vex",
       "augment": "Juiced",
       "augmentSlug": "juiced",
       "tier": "A",
@@ -47542,6 +48193,13 @@
     },
     {
       "champion": "viktor",
+      "augment": "Jeweled Gauntlet",
+      "augmentSlug": "jeweled-gauntlet",
+      "tier": "S",
+      "ref": "mechanical:ability_crit"
+    },
+    {
+      "champion": "viktor",
       "augment": "Mercy's Strike",
       "augmentSlug": "mercys-strike",
       "tier": "S",
@@ -47826,6 +48484,13 @@
       "augmentSlug": "double-defense",
       "tier": "S",
       "ref": "ability-fit:Q/W/R"
+    },
+    {
+      "champion": "vladimir",
+      "augment": "Jeweled Gauntlet",
+      "augmentSlug": "jeweled-gauntlet",
+      "tier": "S",
+      "ref": "mechanical:ability_crit"
     },
     {
       "champion": "vladimir",
@@ -48470,6 +49135,13 @@
       "augmentSlug": "double-defense",
       "tier": "S",
       "ref": "ability-fit:Q/R"
+    },
+    {
+      "champion": "warwick",
+      "augment": "Jeweled Gauntlet",
+      "augmentSlug": "jeweled-gauntlet",
+      "tier": "S",
+      "ref": "mechanical:ability_crit"
     },
     {
       "champion": "warwick",
@@ -48949,6 +49621,13 @@
     },
     {
       "champion": "xerath",
+      "augment": "Jeweled Gauntlet",
+      "augmentSlug": "jeweled-gauntlet",
+      "tier": "S",
+      "ref": "mechanical:ability_crit"
+    },
+    {
+      "champion": "xerath",
       "augment": "Multishot",
       "augmentSlug": "multishot",
       "tier": "S",
@@ -49261,6 +49940,13 @@
       "augmentSlug": "from-downtown",
       "tier": "S",
       "ref": "ability-fit:W"
+    },
+    {
+      "champion": "xinzhao",
+      "augment": "Jeweled Gauntlet",
+      "augmentSlug": "jeweled-gauntlet",
+      "tier": "S",
+      "ref": "mechanical:ability_crit"
     },
     {
       "champion": "xinzhao",
@@ -50615,6 +51301,13 @@
     },
     {
       "champion": "yunara",
+      "augment": "Jeweled Gauntlet",
+      "augmentSlug": "jeweled-gauntlet",
+      "tier": "S",
+      "ref": "mechanical:ability_crit"
+    },
+    {
+      "champion": "yunara",
       "augment": "Biggest Snowball Ever",
       "augmentSlug": "biggest-snowball-ever",
       "tier": "A",
@@ -51025,6 +51718,13 @@
       "augmentSlug": "infernal-conduit",
       "tier": "S",
       "ref": "mechanical:dot_synergy"
+    },
+    {
+      "champion": "yuumi",
+      "augment": "Jeweled Gauntlet",
+      "augmentSlug": "jeweled-gauntlet",
+      "tier": "S",
+      "ref": "mechanical:ability_crit"
     },
     {
       "champion": "yuumi",
@@ -52512,6 +53212,13 @@
     },
     {
       "champion": "ziggs",
+      "augment": "Jeweled Gauntlet",
+      "augmentSlug": "jeweled-gauntlet",
+      "tier": "S",
+      "ref": "mechanical:ability_crit"
+    },
+    {
+      "champion": "ziggs",
       "augment": "Multishot",
       "augmentSlug": "multishot",
       "tier": "S",
@@ -52824,6 +53531,13 @@
       "augmentSlug": "upgrade-sheen",
       "tier": "C",
       "ref": "mechanical:ad_scaling"
+    },
+    {
+      "champion": "zilean",
+      "augment": "Jeweled Gauntlet",
+      "augmentSlug": "jeweled-gauntlet",
+      "tier": "S",
+      "ref": "mechanical:ability_crit"
     },
     {
       "champion": "zilean",
@@ -53160,6 +53874,13 @@
       "augmentSlug": "from-downtown",
       "tier": "S",
       "ref": "ability-fit:W"
+    },
+    {
+      "champion": "zoe",
+      "augment": "Jeweled Gauntlet",
+      "augmentSlug": "jeweled-gauntlet",
+      "tier": "S",
+      "ref": "mechanical:ability_crit"
     },
     {
       "champion": "zoe",
@@ -53517,6 +54238,13 @@
       "augmentSlug": "from-downtown",
       "tier": "S",
       "ref": "ability-fit:E"
+    },
+    {
+      "champion": "zyra",
+      "augment": "Jeweled Gauntlet",
+      "augmentSlug": "jeweled-gauntlet",
+      "tier": "S",
+      "ref": "mechanical:ability_crit"
     },
     {
       "champion": "zyra",

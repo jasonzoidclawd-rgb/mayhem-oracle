@@ -407,6 +407,11 @@ function AugmentCard({
               {t("badgeRemoved")}
             </span>
           )}
+          {augment.flags?.availability_override === "bug_mechanism" && (
+            <span className="text-[9px] font-bold px-1 py-px rounded bg-amber-500/20 text-amber-300 border border-amber-400/40">
+              {t("badgeMechanism")}
+            </span>
+          )}
           {augment.type === "ability" && (
             <span className="text-[9px] font-bold px-1 py-px rounded bg-sky-500/15 text-sky-300 border border-sky-400/30">
               {t("badgeAbility")}

@@ -90,15 +90,23 @@ function rarityPrior(
 ): number {
   const disabled = new Set(data.poolRules.disabled.map(normalize));
   const removed = new Set(Object.keys(data.poolRules.lifecycle.removed).map(normalize));
+  const observedLive = new Set(
+    Object.keys(data.poolRules.availability_overrides?.observed_live ?? {}).map(normalize),
+  );
   const observed = data.augments
     .filter(
-      (augment) =>
-        augment.rarity === context.screenRarity &&
-        !disabled.has(normalize(augment.slug)) &&
-        !removed.has(normalize(augment.slug)) &&
-        augment.flags?.lifecycle !== "removed" &&
-        typeof augment.win_rate === "number" &&
-        Number.isFinite(augment.win_rate),
+      (augment) => {
+        const slug = normalize(augment.slug);
+        const isObservedLive = observedLive.has(slug);
+        return (
+          augment.rarity === context.screenRarity &&
+          !disabled.has(slug) &&
+          (!removed.has(slug) || isObservedLive) &&
+          (augment.flags?.lifecycle !== "removed" || isObservedLive) &&
+          typeof augment.win_rate === "number" &&
+          Number.isFinite(augment.win_rate)
+        );
+      },
     )
     .map((augment) => augment.win_rate as number);
   const [minimum, maximum] = modelConfig.priorClamp;

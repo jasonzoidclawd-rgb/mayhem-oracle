@@ -202,6 +202,7 @@ describe("pool orchestrator — real-data behavior", () => {
 describe("pool orchestrator — 26.12 lifecycle wiring", () => {
   test("26.12-removed augments are excluded with reason `removed` under real pool rules", () => {
     const removed = augmentsData.augments
+      .filter((a) => a.slug !== "jeweled-gauntlet")
       .filter((a) => a.flags.lifecycle === "removed")
       .slice(0, 5);
     expect(removed.length).toBe(5);
@@ -217,5 +218,20 @@ describe("pool orchestrator — 26.12 lifecycle wiring", () => {
       const exclusion = result.excluded.find((e) => e.slug === aug.slug);
       expect(exclusion?.reason, `${aug.slug} should be excluded as removed`).toBe("removed");
     }
+  });
+
+  test("observed-live mechanism overrides stale removed lifecycle for Jeweled Gauntlet", () => {
+    const jeweled = augmentsData.augments.find((a) => a.slug === "jeweled-gauntlet");
+    expect(jeweled?.flags.lifecycle).toBe("removed");
+
+    const result = getChampionAugmentPool({
+      championSlug: "brand",
+      augments: [jeweled] as unknown as PoolAugmentInput[],
+      championKitTags: ["ability", "dot", "cc"] as ChampionTag[],
+      poolRules: poolRulesData as unknown as PoolRules,
+    });
+
+    expect(result.excluded.find((e) => e.slug === "jeweled-gauntlet")).toBeUndefined();
+    expect(result.prismatic.map((a) => a.slug)).toContain("jeweled-gauntlet");
   });
 });

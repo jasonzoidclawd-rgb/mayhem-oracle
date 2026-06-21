@@ -75,6 +75,9 @@ export function getChampionAugmentPool<T extends PoolAugmentInput>(args: {
 
   const disabledSet = new Set(poolRules.disabled.map(normalizeAugmentKey));
   const removedSet  = new Set(Object.keys(poolRules.lifecycle.removed).map(normalizeAugmentKey));
+  const observedLiveSet = new Set(
+    Object.keys(poolRules.availability_overrides?.observed_live ?? {}).map(normalizeAugmentKey),
+  );
   const normalizedOwnedItems = new Set(ownedItems.map(normalizeItemKey));
   const normalizedOwnedAugments = new Set(ownedAugments.map(normalizeAugmentKey));
   const normalizedSeenOffers = new Set(seenOffers.map(normalizeAugmentKey));
@@ -107,7 +110,7 @@ export function getChampionAugmentPool<T extends PoolAugmentInput>(args: {
       excluded.push({ slug, reason: "disabled" });
       continue;
     }
-    if (removedSet.has(normalizedSlug)) {
+    if (removedSet.has(normalizedSlug) && !observedLiveSet.has(normalizedSlug)) {
       excluded.push({ slug, reason: "removed" });
       continue;
     }

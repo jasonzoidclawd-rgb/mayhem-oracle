@@ -186,7 +186,8 @@
     "badgeNew": "新增",
     "badgeRemoved": "已移除",
     "badgeAbility": "技能",
-    "badgeQuest": "任務"
+    "badgeQuest": "任務",
+    "badgeMechanism": "BUG/機制"
   },
   "items": {
     "title": "ARAM 大亂鬥裝備",
@@ -259,7 +260,8 @@
     "kinds": {
       "buffed": "增強",
       "nerfed": "削弱",
-      "changed": "調整"
+      "changed": "調整",
+      "mechanism": "機制"
     },
     "sections": {
       "highlights": "重點",
@@ -277,6 +279,7 @@
       "removed": "自增幅裝置池移除",
       "rarity": "稀有度變更：{from} → {to}",
       "effect": "效果已更新",
+      "mechanism": "實戰可見機制 / 疑似 Bug 機制",
       "rarities": {
         "silver": "白銀",
         "gold": "黃金",

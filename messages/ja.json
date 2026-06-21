@@ -186,7 +186,8 @@
     "badgeNew": "新規",
     "badgeRemoved": "削除済み",
     "badgeAbility": "アビリティ",
-    "badgeQuest": "クエスト"
+    "badgeQuest": "クエスト",
+    "badgeMechanism": "BUG/メカニクス"
   },
   "items": {
     "title": "ARAMメイヘム アイテム",
@@ -259,7 +260,8 @@
     "kinds": {
       "buffed": "強化",
       "nerfed": "弱体化",
-      "changed": "調整"
+      "changed": "調整",
+      "mechanism": "メカニクス"
     },
     "sections": {
       "highlights": "ハイライト",
@@ -277,6 +279,7 @@
       "removed": "オーグメントプールから削除",
       "rarity": "レアリティ変更：{from} → {to}",
       "effect": "効果を更新",
+      "mechanism": "実戦で確認されたメカニクス / 不具合由来の可能性",
       "rarities": {
         "silver": "シルバー",
         "gold": "ゴールド",
