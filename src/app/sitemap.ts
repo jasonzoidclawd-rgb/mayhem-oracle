@@ -3,7 +3,6 @@ import { readFile } from "fs/promises";
 import path from "path";
 import { localizedUrl, languageAlternates } from "@/lib/site";
 import { routing } from "@/i18n/routing";
-import { activeItems } from "@/lib/items/availability";
 
 /**
  * Public, indexable routes (account/admin are excluded — see robots.ts).
@@ -41,12 +40,12 @@ async function itemIdentifiers(): Promise<string[]> {
   try {
     const file = path.join(process.cwd(), "public", "data", "items.json");
     const data = JSON.parse(await readFile(file, "utf-8")) as {
-      mayhemExclusive?: { slug: string; flags?: { lifecycle?: "active" | "removed" } }[];
-      items?: { id?: number | null; flags?: { lifecycle?: "active" | "removed" } }[];
+      mayhemExclusive?: { slug: string }[];
+      items?: { id?: number | null }[];
     };
     return [
-      ...activeItems(data.mayhemExclusive ?? []).map((item) => item.slug),
-      ...activeItems(data.items ?? [])
+      ...(data.mayhemExclusive ?? []).map((item) => item.slug),
+      ...(data.items ?? [])
         .filter((item) => item.id != null)
         .map((item) => String(item.id)),
     ];

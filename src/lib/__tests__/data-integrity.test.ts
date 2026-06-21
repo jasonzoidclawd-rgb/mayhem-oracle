@@ -3,7 +3,6 @@ import augmentsData from "../../../data/internal/augments.json";
 import cdragonMayhemAugments from "../../../data/internal/cdragon-mayhem-augments.json";
 import championsData from "../../../data/internal/champions.json";
 import combosData from "../../../data/internal/combos.json";
-import itemsData from "../../../data/internal/items.json";
 import poolRules from "../../../data/internal/pool-rules.json";
 import { VALID_AUGMENT_SET_LABELS } from "../data/augment-set";
 import { buildComboTierLookup } from "../data/combo-lookup";
@@ -162,15 +161,26 @@ describe("data integrity", () => {
     }
   });
 
-  test("observed removed live items are flagged out of active item surfaces", () => {
-    const mayhemItems = [
-      ...itemsData.mayhemExclusive,
-      ...itemsData.items,
-    ] as Array<{ slug?: string; name: string; flags?: { lifecycle?: string } }>;
-    const sword = mayhemItems.find((item) => item.slug === "sword-of-blossoming-dawn");
+  test("Upgrade Sword of Blossoming Dawn stays disabled and out of computed pools", () => {
+    const upgradeSword = augmentsData.augments.find(
+      (augment) => augment.slug === "upgrade-sword-of-blossoming-dawn",
+    );
+    const upgradeMikaels = augmentsData.augments.find(
+      (augment) => augment.slug === "upgrade-mikaels-blessing",
+    );
 
-    expect(sword, "Sword of Blossoming Dawn should stay in historical data").toBeTruthy();
-    expect(sword?.flags?.lifecycle).toBe("removed");
+    expect(upgradeSword, "removed augment tombstone should exist for OCR/history").toBeTruthy();
+    expect(upgradeSword?.flags.lifecycle).toBe("removed");
+    expect(upgradeSword?.name_zh_TW).toBe("升級：破曉綻放之劍");
+    expect(upgradeMikaels?.name_zh_TW).not.toBe("升級：破曉綻放之劍");
+    expect(poolRules.lifecycle.removed["upgrade-sword-of-blossoming-dawn"]).toBe("26.12");
+
+    for (const combo of combosData.combos) {
+      expect(
+        combo.augmentSlug,
+        `${combo.champion}:${combo.augment} should not use removed upgrade sword`,
+      ).not.toBe("upgrade-sword-of-blossoming-dawn");
+    }
   });
 
   test("normalized combo resolution covers most curated combos", () => {

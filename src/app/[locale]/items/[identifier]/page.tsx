@@ -7,7 +7,6 @@ import { Link } from "@/i18n/navigation";
 import { routing } from "@/i18n/routing";
 import type { Item } from "@/lib/types";
 import { localizedName } from "@/lib/i18n/localized-name";
-import { activeItems, isRemovedItem } from "@/lib/items/availability";
 
 // Raw Riot API category identifier → translation key in items namespace.
 const CATEGORY_LABEL_KEY: Record<string, string> = {
@@ -69,12 +68,9 @@ async function loadItemsData(): Promise<ItemsData> {
 
 function findItem(data: ItemsData, identifier: string): Item | undefined {
   const mayhemItem = data.mayhemExclusive.find((i) => i.slug === identifier);
-  if (mayhemItem) return isRemovedItem(mayhemItem) ? undefined : mayhemItem;
+  if (mayhemItem) return mayhemItem;
   const id = parseInt(identifier, 10);
-  if (!isNaN(id)) {
-    const item = data.items.find((i) => i.id === id);
-    return item && !isRemovedItem(item) ? item : undefined;
-  }
+  if (!isNaN(id)) return data.items.find((i) => i.id === id);
   return undefined;
 }
 
@@ -166,11 +162,11 @@ export async function generateStaticParams() {
   try {
     const data = await loadItemsData();
     return routing.locales.flatMap((locale) => [
-      ...activeItems(data.mayhemExclusive).map((item) => ({
+      ...data.mayhemExclusive.map((item) => ({
         locale,
         identifier: item.slug,
       })),
-      ...activeItems(data.items)
+      ...data.items
         .filter((item) => item.id != null)
         .map((item) => ({
           locale,

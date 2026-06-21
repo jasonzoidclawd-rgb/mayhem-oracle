@@ -272,13 +272,6 @@ export interface Item {
   /** Item quality tier from the LoL wiki Item list page */
   tier?: ItemTier;
   mayhemTag?: "exclusive" | "modified" | "quest-reward";
-  flags?: {
-    lifecycle?: "active" | "removed";
-    availability_source?: string;
-    availability_observed_at?: string;
-    availability_reason?: string;
-    availability_remove_when?: string;
-  };
   /** @deprecated stripped by enrich_wiki.py — wiki shows standard-mode values, not Mayhem values */
   wikiStats?: string[];
   /** Passive/active blocks from the LoL wiki */

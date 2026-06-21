@@ -355,7 +355,6 @@
       "detected": "Detected {date}",
       "added": "Added to the augment pool",
       "removed": "Removed from the augment pool",
-      "itemRemoved": "Removed from the current item pool",
       "rarity": "Adjusted",
       "effect": "Effect updated",
       "mechanism": "Observed live mechanism / bug-mechanism",

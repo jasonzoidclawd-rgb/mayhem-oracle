@@ -1,26 +1,6 @@
 {
   "events": [
     {
-      "detected_at": "2026-06-21T00:00:00+00:00",
-      "patch": "26.12",
-      "date": "2026-06-21",
-      "changes": [
-        {
-          "entity": "item",
-          "slug": "sword-of-blossoming-dawn",
-          "names": {
-            "en": "Sword of Blossoming Dawn",
-            "zh-TW": "Sword of Blossoming Dawn",
-            "zh-CN": "Sword of Blossoming Dawn",
-            "ja": "Sword of Blossoming Dawn",
-            "ko": "Sword of Blossoming Dawn"
-          },
-          "type": "removed",
-          "source": "player-observed-live-game"
-        }
-      ]
-    },
-    {
       "detected_at": "2026-06-20T18:56:38.048204+00:00",
       "patch": "26.12",
       "date": "2026-06-20",
@@ -72,5 +52,5 @@
     }
   ],
   "patch": "26.12",
-  "generated_at": "2026-06-21T12:11:05.511464+00:00"
+  "generated_at": "2026-06-21T11:37:31.698964+00:00"
 }
