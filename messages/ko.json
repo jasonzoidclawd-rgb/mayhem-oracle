@@ -186,7 +186,8 @@
     "badgeNew": "신규",
     "badgeRemoved": "제거됨",
     "badgeAbility": "스킬",
-    "badgeQuest": "퀘스트"
+    "badgeQuest": "퀘스트",
+    "badgeMechanism": "BUG/메커니즘"
   },
   "items": {
     "title": "ARAM 메이헴 아이템",
@@ -259,7 +260,8 @@
     "kinds": {
       "buffed": "강화",
       "nerfed": "약화",
-      "changed": "조정"
+      "changed": "조정",
+      "mechanism": "메커니즘"
     },
     "sections": {
       "highlights": "주요 변경",
@@ -277,6 +279,7 @@
       "removed": "증강 풀에서 제거",
       "rarity": "등급 변경: {from} → {to}",
       "effect": "효과 업데이트",
+      "mechanism": "실전에서 확인된 메커니즘 / 버그성 메커니즘",
       "rarities": {
         "silver": "실버",
         "gold": "골드",

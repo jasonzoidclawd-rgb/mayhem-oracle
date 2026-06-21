@@ -135,6 +135,9 @@ PY
 step "11/12  generate internal pool rules  →  pool-rules.json"
 python3 scripts/generate_pool_rules.py
 
+step "11a/12 apply observed live mechanism overrides"
+python3 scripts/apply_live_mechanism_overrides.py
+
 step "11b/12 generate current internal combos  →  combos.json"
 npx --yes tsx scripts/generate_internal_combos.ts
 

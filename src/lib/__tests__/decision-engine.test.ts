@@ -107,6 +107,50 @@ describe("decision grade contract", () => {
 });
 
 describe("evaluateDecision contract", () => {
+  test("observed-live mechanism augments are ranked instead of hard-excluded as removed", () => {
+    const jeweled = augment("jeweled-gauntlet", 56, {
+      rarity: "gold",
+      kitTags: ["ability"],
+      systemBreaker: true,
+    });
+    jeweled.flags.lifecycle = "removed";
+    const poolRules = {
+      ...EMPTY_POOL_RULES,
+      lifecycle: { added: {}, removed: { "jeweled-gauntlet": "26.12" } },
+      availability_overrides: {
+        observed_live: {
+          "jeweled-gauntlet": {
+            status: "bug_mechanism",
+            observed_at: "2026-06-20",
+            source: "player-observed-live-game",
+            label: "BUG/MECHANISM",
+          },
+        },
+      },
+    } as unknown as PoolRules;
+
+    const result = evaluateDecision(
+      {
+        ...BASE_CONTEXT,
+        offeredAugmentSlugs: ["jeweled-gauntlet"],
+      },
+      data([
+        jeweled,
+        augment("gold-baseline", 50, { kitTags: ["ability"] }),
+      ], { poolRules }),
+      DEFAULT_MODEL_CONFIG,
+    );
+
+    expect(result.poolSize).toBe(2);
+    expect(result.candidates[0]).toMatchObject({
+      augmentSlug: "jeweled-gauntlet",
+      confidence: "high",
+    });
+    expect(result.candidates[0].warnings).not.toContain("hard-incompatible");
+    expect(result.candidates[0].warnings).not.toContain("excluded:removed");
+    expect(result.candidates[0].reasons).toContain("novelty:system-breaker");
+  });
+
   test("only same-rarity eligible augments form the comparison pool", () => {
     const result = evaluateDecision(
       BASE_CONTEXT,

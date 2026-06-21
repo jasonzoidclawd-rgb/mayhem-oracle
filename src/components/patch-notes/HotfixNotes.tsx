@@ -4,7 +4,7 @@ import path from "path";
 import { ChangeBadge } from "./ChangeBadge";
 import type { ChangeKind } from "@/lib/types";
 
-type HotfixType = "added" | "removed" | "rarity" | "effect";
+type HotfixType = "added" | "removed" | "rarity" | "effect" | "mechanism";
 
 interface HotfixChange {
   slug: string;
@@ -27,6 +27,7 @@ const TYPE_KIND: Record<HotfixType, ChangeKind> = {
   removed: "nerfed",
   rarity: "changed",
   effect: "changed",
+  mechanism: "mechanism",
 };
 
 async function loadHotfixes(): Promise<HotfixEvent[]> {

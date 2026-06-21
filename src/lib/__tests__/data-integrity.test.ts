@@ -43,17 +43,25 @@ describe("data integrity", () => {
     const augmentBySlug = new Map(augmentsData.augments.map((augment) => [augment.slug, augment]));
     const augmentByName = new Map(augmentsData.augments.map((augment) => [augment.name, augment]));
     const disabled = new Set(poolRules.disabled);
+    const observedLive = new Set(
+      Object.keys(
+        (poolRules as unknown as {
+          availability_overrides?: { observed_live?: Record<string, unknown> };
+        }).availability_overrides?.observed_live ?? {},
+      ),
+    );
 
     for (const combo of combosData.combos) {
       const augment = "augmentSlug" in combo && typeof combo.augmentSlug === "string"
         ? augmentBySlug.get(combo.augmentSlug)
         : augmentByName.get(combo.augment);
+      const isObservedLive = augment ? observedLive.has(augment.slug) : false;
 
       expect(augment, `${combo.champion}:${combo.augment} missing augment`).toBeTruthy();
       expect(
-        augment?.flags?.lifecycle,
+        augment?.flags?.lifecycle === "removed" && !isObservedLive,
         `${combo.champion}:${combo.augment} references removed augment`,
-      ).not.toBe("removed");
+      ).toBe(false);
       expect(
         disabled.has(augment?.slug ?? "") || disabled.has(augment?.name ?? ""),
         `${combo.champion}:${combo.augment} references disabled augment`,
@@ -122,6 +130,24 @@ describe("data integrity", () => {
     ]) {
       expect(find(slug)?.flags.lifecycle, `${slug} expected active in 26.12`).toBe("active");
     }
+  });
+
+  test("Jeweled Gauntlet keeps a visible observed-live mechanism override", () => {
+    const jeweled = augmentsData.augments.find((a) => a.slug === "jeweled-gauntlet") as
+      | { flags?: { lifecycle?: string; availability_override?: string } }
+      | undefined;
+    const rules = poolRules as unknown as {
+      availability_overrides?: {
+        observed_live?: Record<string, { status?: string; label?: string }>;
+      };
+    };
+
+    expect(jeweled?.flags?.lifecycle).toBe("removed");
+    expect(jeweled?.flags?.availability_override).toBe("bug_mechanism");
+    expect(rules.availability_overrides?.observed_live?.["jeweled-gauntlet"]).toMatchObject({
+      status: "bug_mechanism",
+      label: "BUG/MECHANISM",
+    });
   });
 
   test("normalized combo resolution covers most curated combos", () => {

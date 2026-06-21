@@ -306,6 +306,16 @@ export interface PoolRules {
   item_exclusions: PoolItemExclusion[];
   ally_exclusions: PoolAllyExclusion[];
   lifecycle: { added: Record<string, string>; removed: Record<string, string> };
+  availability_overrides?: {
+    observed_live?: Record<string, {
+      status: "bug_mechanism";
+      label: string;
+      observed_at: string;
+      source: string;
+      score_weight?: "high" | "medium" | "low";
+      remove_when?: string;
+    }>;
+  };
 }
 
 // ─── Oracle Score algorithm constants ───
