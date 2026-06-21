@@ -373,19 +373,24 @@ def parse_search_index(data: dict) -> tuple[list[dict], list[dict]]:
 
 
 def merge_champion_sources(primary: list[dict], fallback: list[dict]) -> list[dict]:
-    fallback_by_slug = {row["slug"]: row for row in fallback}
+    fallback_by_slug = {
+        canonical_champion_slug(row["slug"]): {**row, "slug": canonical_champion_slug(row["slug"])}
+        for row in fallback
+    }
     merged = []
     seen = set()
     for row in primary:
-        fallback_row = fallback_by_slug.get(row["slug"], {})
+        slug = canonical_champion_slug(row["slug"])
+        row = {**row, "slug": slug}
+        fallback_row = fallback_by_slug.get(slug, {})
         merged.append({
             **fallback_row,
             **row,
             "tier": row.get("tier") or fallback_row.get("tier"),
             "win_rate": row.get("win_rate") if row.get("win_rate") is not None else fallback_row.get("win_rate"),
         })
-        seen.add(row["slug"])
-    merged.extend(row for row in fallback if row["slug"] not in seen)
+        seen.add(slug)
+    merged.extend(row for row in fallback_by_slug.values() if row["slug"] not in seen)
     return merged
 
 

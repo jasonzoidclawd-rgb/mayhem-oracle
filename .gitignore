@@ -39,6 +39,7 @@ agentdb.rvf.lock
 claude-flow.config.json
 .claude/
 claude-flow.config.json
+.superpowers/
 
 # Python
 __pycache__/

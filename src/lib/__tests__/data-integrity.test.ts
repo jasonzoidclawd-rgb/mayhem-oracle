@@ -14,6 +14,16 @@ describe("data integrity", () => {
     expect(new Set(augmentSlugs).size).toBe(augmentSlugs.length);
   });
 
+  test("localized champion names are unique in the public index locales", () => {
+    for (const field of ["name_zh_TW", "name_zh_CN", "name_ja", "name_ko"] as const) {
+      const names = championsData.champions
+        .map((champion) => champion[field])
+        .filter((name): name is string => Boolean(name));
+
+      expect(new Set(names).size, `${field} contains duplicate champion names`).toBe(names.length);
+    }
+  });
+
   test("combo tiers stay within the supported set", () => {
     const validTiers = new Set(["S", "A", "B", "C"]);
 

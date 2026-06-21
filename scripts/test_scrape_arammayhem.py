@@ -2,7 +2,7 @@
 
 import unittest
 
-from scrape_arammayhem import parse_search_index
+from scrape_arammayhem import merge_champion_sources, parse_search_index
 
 
 class SearchIndexParserTests(unittest.TestCase):
@@ -45,6 +45,34 @@ class SearchIndexParserTests(unittest.TestCase):
             "tier": "S",
             "ref": "search-index:brand-infernal-conduit",
         }])
+
+    def test_display_slug_aliases_merge_into_canonical_champion_rows(self):
+        primary = [{
+            "slug": "drmundo",
+            "name": "Drmundo",
+            "tier": "S+",
+            "rank": 4,
+            "win_rate": 54.34,
+            "pick_rate": 1.2,
+            "tags": ["tank"],
+            "icon": "/champions/36.png",
+        }]
+        fallback = [{
+            "slug": "dr-mundo",
+            "name": "Dr. Mundo",
+            "tier": "S+",
+            "rank": 29,
+            "win_rate": 54.34,
+            "pick_rate": None,
+            "tags": [],
+            "icon": "/champions/36.png",
+        }]
+
+        merged = merge_champion_sources(primary, fallback)
+
+        self.assertEqual(len(merged), 1)
+        self.assertEqual(merged[0]["slug"], "drmundo")
+        self.assertEqual(merged[0]["rank"], 4)
 
 
 if __name__ == "__main__":
