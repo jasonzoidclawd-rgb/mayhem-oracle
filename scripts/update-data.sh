@@ -69,6 +69,12 @@ python3 scripts/scrape_patch_notes.py
 step "8b/12 CommunityDragon  →  Mayhem augment snapshot + hotfix detection"
 python3 scripts/scrape_mayhem_augments_cdragon.py
 
+step "8c/12 CommunityDragon hotfix snapshot  →  internal augments.json"
+python3 scripts/apply_cdragon_mayhem_augments.py
+
+step "8d/12 patch-note removed augment tombstones  →  internal augments.json"
+python3 scripts/apply_removed_augment_tombstones.py
+
 step "9/12  restore augment classifications"
 AUGMENT_SNAPSHOT="$AUGMENT_SNAPSHOT" python3 - <<'PY'
 import json

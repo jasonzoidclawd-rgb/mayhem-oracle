@@ -1,5 +1,6 @@
 import { describe, expect, test } from "vitest";
 import augmentsData from "../../../data/internal/augments.json";
+import cdragonMayhemAugments from "../../../data/internal/cdragon-mayhem-augments.json";
 import championsData from "../../../data/internal/champions.json";
 import combosData from "../../../data/internal/combos.json";
 import poolRules from "../../../data/internal/pool-rules.json";
@@ -148,6 +149,38 @@ describe("data integrity", () => {
       status: "bug_mechanism",
       label: "BUG/MECHANISM",
     });
+  });
+
+  test("CommunityDragon Mayhem rarity snapshot reaches engine augment data", () => {
+    const bySlug = new Map(augmentsData.augments.map((augment) => [augment.slug, augment]));
+
+    for (const source of cdragonMayhemAugments.augments) {
+      const augment = bySlug.get(source.slug);
+      if (!augment) continue;
+      expect(augment.rarity, `${source.slug} rarity should match CDragon`).toBe(source.rarity);
+    }
+  });
+
+  test("Upgrade Sword of Blossoming Dawn stays disabled and out of computed pools", () => {
+    const upgradeSword = augmentsData.augments.find(
+      (augment) => augment.slug === "upgrade-sword-of-blossoming-dawn",
+    );
+    const upgradeMikaels = augmentsData.augments.find(
+      (augment) => augment.slug === "upgrade-mikaels-blessing",
+    );
+
+    expect(upgradeSword, "removed augment tombstone should exist for OCR/history").toBeTruthy();
+    expect(upgradeSword?.flags.lifecycle).toBe("removed");
+    expect(upgradeSword?.name_zh_TW).toBe("升級：破曉綻放之劍");
+    expect(upgradeMikaels?.name_zh_TW).not.toBe("升級：破曉綻放之劍");
+    expect(poolRules.lifecycle.removed["upgrade-sword-of-blossoming-dawn"]).toBe("26.12");
+
+    for (const combo of combosData.combos) {
+      expect(
+        combo.augmentSlug,
+        `${combo.champion}:${combo.augment} should not use removed upgrade sword`,
+      ).not.toBe("upgrade-sword-of-blossoming-dawn");
+    }
   });
 
   test("normalized combo resolution covers most curated combos", () => {

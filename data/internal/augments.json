@@ -1190,7 +1190,7 @@
     {
       "slug": "archmage",
       "name": "Archmage",
-      "rarity": "gold",
+      "rarity": "prismatic",
       "win_rate": 53.32,
       "icon": "https://arammayhem.com/augments/Archmage_mayhem_augment.webp",
       "name_zh_CN": "大法师",
@@ -3039,7 +3039,7 @@
       "slug": "spiritual-purification",
       "name": "Spiritual Purification",
       "rarity": "gold",
-      "win_rate": 48.0,
+      "win_rate": 48,
       "icon": "https://arammayhem.com/augments/Spiritual_Purification_mayhem_augment.webp",
       "name_zh_CN": "心灵净化",
       "name_zh_TW": "靈魂淨化",
@@ -3610,7 +3610,7 @@
     {
       "slug": "terror",
       "name": "Terror",
-      "rarity": "prismatic",
+      "rarity": "gold",
       "win_rate": 46.04,
       "icon": "https://arammayhem.com/augments/Terror_mayhem_augment.webp",
       "name_zh_CN": "惊惧",
@@ -3805,7 +3805,7 @@
     {
       "slug": "quickstep",
       "name": "Quickstep",
-      "rarity": "prismatic",
+      "rarity": "gold",
       "win_rate": 44.83,
       "icon": "https://arammayhem.com/augments/Quickstep_mayhem_augment.webp",
       "name_zh_CN": "快步",
@@ -5214,7 +5214,7 @@
       "win_rate": null,
       "icon": "https://arammayhem.com/augments/Upgrade_Mikael's_Blessing_mayhem_augment.webp",
       "name_zh_CN": "升级：米凯尔的祝福",
-      "name_zh_TW": "升級破曉綻放之劍",
+      "name_zh_TW": "升級：米凱爾的祝福",
       "name_ja": "ミカエルの祝福 アップグレード",
       "name_ko": "미카엘의 축복 업그레이드",
       "wikiDescription": "Upgrades Mikael's Blessing , reducing the cooldown of Purify to 45 seconds and empowering its active to instead affect you and all nearby allied champions, cleansing all targets of crowd control (excluding Airborne ), healing them for 150 – 450 (based on level) (+ 50% AP) , and granting them 65% tenacity for 3 seconds. Additionally, you are granted Mikael's Blessing for free. If you already have Mikael's Blessing , gain 2300 instead. If your inventory is full, the item will be granted as soon as a slot in the inventory is available.",
@@ -5395,6 +5395,28 @@
         "attack",
         "crit",
         "ability"
+      ],
+      "flags": {
+        "system_breaker": false,
+        "lifecycle": "removed"
+      },
+      "type": "standalone"
+    },
+    {
+      "slug": "upgrade-sword-of-blossoming-dawn",
+      "name": "Upgrade Sword of Blossoming Dawn",
+      "rarity": "prismatic",
+      "win_rate": null,
+      "icon": "https://arammayhem.com/augments/Upgrade_Sword_of_Blossoming_Dawn_mayhem_augment.webp",
+      "name_zh_CN": "升级：破晓绽放之剑",
+      "name_zh_TW": "升級：破曉綻放之劍",
+      "name_ja": "花咲く夜明けの剣 アップグレード",
+      "name_ko": "Upgrade Sword of Blossoming Dawn",
+      "wikiDescription": "Gain 100% Attack Speed. When you have Sword of Blossoming Dawn, your attacks against champions deal 50% damage but increase Sword of Blossoming Dawn's healing by 250%.",
+      "kit_tags": [
+        "attack",
+        "on_hit",
+        "heal_shield"
       ],
       "flags": {
         "system_breaker": false,
