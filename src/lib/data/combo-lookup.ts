@@ -3,6 +3,7 @@ import type { ComboTier } from "../scoring/oracle-score";
 export interface ComboLookupEntry {
   champion: string;
   augment: string;
+  augmentSlug?: string;
   tier: string;
 }
 
@@ -55,7 +56,7 @@ export function buildComboTierLookup(
     if (normalizeLookupKey(combo.champion) !== championKey) continue;
     if (!VALID_COMBO_TIERS.has(combo.tier)) continue;
 
-    const augmentSlug = augmentSlugByKey.get(normalizeLookupKey(combo.augment));
+    const augmentSlug = combo.augmentSlug ?? augmentSlugByKey.get(normalizeLookupKey(combo.augment));
     if (!augmentSlug) continue;
 
     comboBySlug.set(augmentSlug, combo.tier as ComboTier);
@@ -77,7 +78,7 @@ export function resolveChampionCombos(
   for (const combo of combos) {
     if (normalizeLookupKey(combo.champion) !== championKey) continue;
 
-    const augmentSlug = augmentSlugByKey.get(normalizeLookupKey(combo.augment));
+    const augmentSlug = combo.augmentSlug ?? augmentSlugByKey.get(normalizeLookupKey(combo.augment));
     if (!augmentSlug) continue;
 
     resolved.push({ ...combo, augmentSlug });

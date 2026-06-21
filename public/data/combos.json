@@ -1,590 +1,671 @@
 {
   "patch": "26.12",
   "scraped_at": "2026-06-21T07:09:08.391787+00:00",
+  "generated_from": "internal-pool-mechanics",
   "combos": [
     {
-      "champion": "vayne",
-      "augment": "Fan The Hammer",
+      "champion": "aatrox",
+      "augment": "Double Defense",
       "tier": "S"
     },
     {
-      "champion": "brand",
+      "champion": "aatrox",
+      "augment": "Mercy's Strike",
+      "tier": "S"
+    },
+    {
+      "champion": "aatrox",
+      "augment": "Ravenous Bind",
+      "tier": "S"
+    },
+    {
+      "champion": "ahri",
+      "augment": "From Downtown",
+      "tier": "S"
+    },
+    {
+      "champion": "ahri",
+      "augment": "Multishot",
+      "tier": "S"
+    },
+    {
+      "champion": "ahri",
+      "augment": "Spellsplit",
+      "tier": "S"
+    },
+    {
+      "champion": "akali",
       "augment": "Infernal Conduit",
       "tier": "S"
     },
     {
-      "champion": "yasuo",
-      "augment": "Mystic Punch",
-      "tier": "S"
-    },
-    {
-      "champion": "vayne",
-      "augment": "Dual Wield",
-      "tier": "S"
-    },
-    {
-      "champion": "graves",
-      "augment": "Back To Basics",
-      "tier": "S"
-    },
-    {
-      "champion": "gnar",
-      "augment": "Fan The Hammer",
-      "tier": "S"
-    },
-    {
-      "champion": "graves",
-      "augment": "Slow And Steady",
-      "tier": "S"
-    },
-    {
-      "champion": "lucian",
-      "augment": "Jeweled Gauntlet",
-      "tier": "S"
-    },
-    {
-      "champion": "yone",
-      "augment": "Mystic Punch",
-      "tier": "S"
-    },
-    {
-      "champion": "masteryi",
-      "augment": "Mystic Punch",
-      "tier": "S"
-    },
-    {
-      "champion": "ryze",
-      "augment": "ADAPt",
-      "tier": "S"
-    },
-    {
-      "champion": "missfortune",
-      "augment": "Mind to Matter",
-      "tier": "S"
-    },
-    {
-      "champion": "aurelionsol",
-      "augment": "Shrink Engine",
-      "tier": "S"
-    },
-    {
-      "champion": "tristana",
-      "augment": "Fan The Hammer",
-      "tier": "S"
-    },
-    {
-      "champion": "graves",
-      "augment": "Draw Your Sword",
-      "tier": "S"
-    },
-    {
-      "champion": "yasuo",
-      "augment": "Swift and Safe",
-      "tier": "S"
-    },
-    {
-      "champion": "galio",
-      "augment": "Soul Eater",
-      "tier": "S"
-    },
-    {
-      "champion": "blitzcrank",
-      "augment": "Ethereal Weapon",
-      "tier": "S"
-    },
-    {
-      "champion": "brand",
-      "augment": "Magic Missile",
-      "tier": "S"
-    },
-    {
-      "champion": "lucian",
-      "augment": "Vulnerability",
-      "tier": "S"
-    },
-    {
-      "champion": "morgana",
-      "augment": "Executioner",
-      "tier": "S"
-    },
-    {
-      "champion": "yasuo",
-      "augment": "Critical Healing",
-      "tier": "S"
-    },
-    {
-      "champion": "pantheon",
-      "augment": "Quest: Steel Your Heart",
-      "tier": "S"
-    },
-    {
-      "champion": "udyr",
-      "augment": "Ethereal Weapon",
-      "tier": "S"
-    },
-    {
-      "champion": "udyr",
-      "augment": "Scopiest Weapons",
-      "tier": "S"
-    },
-    {
-      "champion": "aurora",
-      "augment": "Ethereal Weapon",
-      "tier": "S"
-    },
-    {
-      "champion": "varus",
-      "augment": "Ethereal Weapon",
-      "tier": "S"
-    },
-    {
-      "champion": "hecarim",
-      "augment": "Ethereal Weapon",
-      "tier": "S"
-    },
-    {
-      "champion": "fiora",
-      "augment": "Quest: Steel Your Heart",
-      "tier": "S"
-    },
-    {
-      "champion": "fiora",
-      "augment": "Mystic Punch",
-      "tier": "S"
-    },
-    {
-      "champion": "zilean",
-      "augment": "Mind to Matter",
-      "tier": "S"
-    },
-    {
-      "champion": "jayce",
-      "augment": "Slow And Steady",
-      "tier": "S"
-    },
-    {
-      "champion": "jax",
-      "augment": "Mystic Punch",
-      "tier": "S"
-    },
-    {
-      "champion": "gangplank",
-      "augment": "Back To Basics",
-      "tier": "S"
-    },
-    {
-      "champion": "vladimir",
-      "augment": "Infernal Conduit",
-      "tier": "S"
-    },
-    {
-      "champion": "tryndamere",
-      "augment": "Circle of Death",
-      "tier": "S"
-    },
-    {
-      "champion": "fiddlesticks",
-      "augment": "ADAPt",
-      "tier": "S"
-    },
-    {
-      "champion": "gragas",
-      "augment": "ADAPt",
-      "tier": "S"
-    },
-    {
-      "champion": "mordekaiser",
-      "augment": "Circle of Death",
-      "tier": "S"
-    },
-    {
-      "champion": "rell",
-      "augment": "Cruelty",
-      "tier": "S"
-    },
-    {
-      "champion": "vayne",
-      "augment": "Twice Thrice",
-      "tier": "S"
-    },
-    {
-      "champion": "lillia",
-      "augment": "Infernal Conduit",
-      "tier": "S"
-    },
-    {
-      "champion": "xinzhao",
+      "champion": "akali",
       "augment": "Master of Duality",
       "tier": "S"
     },
     {
-      "champion": "fizz",
-      "augment": "Fan The Hammer",
+      "champion": "akali",
+      "augment": "Multishot",
       "tier": "S"
     },
     {
-      "champion": "aurelionsol",
-      "augment": "Infernal Conduit",
+      "champion": "alistar",
+      "augment": "Chain Reaction",
       "tier": "S"
     },
     {
-      "champion": "caitlyn",
-      "augment": "Fan The Hammer",
+      "champion": "alistar",
+      "augment": "Courage of the Colossus",
       "tier": "S"
     },
     {
-      "champion": "karthus",
-      "augment": "Infinite Recursion",
+      "champion": "alistar",
+      "augment": "Cruelty",
       "tier": "S"
     },
     {
-      "champion": "missfortune",
-      "augment": "Skilled Sniper",
+      "champion": "ambessa",
+      "augment": "Double Defense",
       "tier": "S"
     },
     {
-      "champion": "sett",
-      "augment": "Jeweled Gauntlet",
+      "champion": "ambessa",
+      "augment": "Mercy's Strike",
       "tier": "S"
     },
     {
-      "champion": "ryze",
-      "augment": "Overflow",
-      "tier": "S"
-    },
-    {
-      "champion": "malzahar",
-      "augment": "Infernal Conduit",
-      "tier": "S"
-    },
-    {
-      "champion": "fizz",
-      "augment": "Dashing",
-      "tier": "S"
-    },
-    {
-      "champion": "seraphine",
-      "augment": "Slap Around",
-      "tier": "S"
-    },
-    {
-      "champion": "ryze",
-      "augment": "Quest: Wooglet's Witchcap",
-      "tier": "S"
-    },
-    {
-      "champion": "lillia",
-      "augment": "Spin To Win",
-      "tier": "S"
-    },
-    {
-      "champion": "lillia",
-      "augment": "Don't Blink",
-      "tier": "S"
-    },
-    {
-      "champion": "morgana",
-      "augment": "Ocean Soul",
-      "tier": "S"
-    },
-    {
-      "champion": "brand",
-      "augment": "Jeweled Gauntlet",
-      "tier": "S"
-    },
-    {
-      "champion": "ksante",
-      "augment": "Protein Shake",
-      "tier": "S"
-    },
-    {
-      "champion": "tristana",
-      "augment": "Draw Your Sword",
-      "tier": "S"
-    },
-    {
-      "champion": "fizz",
-      "augment": "Infernal Conduit",
-      "tier": "S"
-    },
-    {
-      "champion": "aurelionsol",
-      "augment": "Ice Cold",
+      "champion": "ambessa",
+      "augment": "Ravenous Bind",
       "tier": "S"
     },
     {
       "champion": "amumu",
-      "augment": "Ethereal Weapon",
+      "augment": "Biggest Snowball Ever",
       "tier": "S"
     },
     {
-      "champion": "lucian",
-      "augment": "Mystic Punch",
-      "tier": "S"
-    },
-    {
-      "champion": "kalista",
-      "augment": "Fan The Hammer",
-      "tier": "S"
-    },
-    {
-      "champion": "caitlyn",
-      "augment": "Scopier Weapons",
-      "tier": "S"
-    },
-    {
-      "champion": "masteryi",
-      "augment": "Executioner",
-      "tier": "S"
-    },
-    {
-      "champion": "yone",
-      "augment": "Critical Healing",
-      "tier": "S"
-    },
-    {
-      "champion": "rumble",
-      "augment": "Vulnerability",
-      "tier": "S"
-    },
-    {
-      "champion": "karthus",
-      "augment": "Ultimate Revolution",
-      "tier": "S"
-    },
-    {
-      "champion": "katarina",
-      "augment": "Ethereal Weapon",
-      "tier": "S"
-    },
-    {
-      "champion": "sett",
-      "augment": "Clown College",
-      "tier": "S"
-    },
-    {
-      "champion": "blitzcrank",
-      "augment": "Upgrade Infinity Edge",
-      "tier": "S"
-    },
-    {
-      "champion": "senna",
-      "augment": "Dual Wield",
-      "tier": "S"
-    },
-    {
-      "champion": "kayle",
-      "augment": "Ethereal Weapon",
-      "tier": "S"
-    },
-    {
-      "champion": "katarina",
-      "augment": "Vulnerability",
-      "tier": "S"
-    },
-    {
-      "champion": "zyra",
-      "augment": "Ethereal Weapon",
-      "tier": "S"
-    },
-    {
-      "champion": "ekko",
-      "augment": "Fan The Hammer",
-      "tier": "S"
-    },
-    {
-      "champion": "vi",
-      "augment": "Fan The Hammer",
-      "tier": "S"
-    },
-    {
-      "champion": "ksante",
-      "augment": "Dashing",
-      "tier": "S"
-    },
-    {
-      "champion": "galio",
-      "augment": "Grandma's Chili Oil",
-      "tier": "S"
-    },
-    {
-      "champion": "kassadin",
-      "augment": "Dashing",
-      "tier": "S"
-    },
-    {
-      "champion": "gragas",
-      "augment": "Grandma's Chili Oil",
-      "tier": "S"
-    },
-    {
-      "champion": "mordekaiser",
-      "augment": "Grandma's Chili Oil",
-      "tier": "S"
-    },
-    {
-      "champion": "corki",
-      "augment": "Critical Missile",
-      "tier": "S"
-    },
-    {
-      "champion": "gragas",
-      "augment": "Ethereal Weapon",
-      "tier": "S"
-    },
-    {
-      "champion": "garen",
-      "augment": "Slow And Steady",
-      "tier": "S"
-    },
-    {
-      "champion": "naafiri",
-      "augment": "Ethereal Weapon",
-      "tier": "S"
-    },
-    {
-      "champion": "yunara",
-      "augment": "Master of Duality",
-      "tier": "S"
-    },
-    {
-      "champion": "lux",
-      "augment": "Ethereal Weapon",
-      "tier": "S"
-    },
-    {
-      "champion": "veigar",
-      "augment": "Eureka",
-      "tier": "S"
-    },
-    {
-      "champion": "akshan",
-      "augment": "Dual Wield",
-      "tier": "S"
-    },
-    {
-      "champion": "gangplank",
-      "augment": "Don't Blink",
-      "tier": "S"
-    },
-    {
-      "champion": "twitch",
-      "augment": "Fey Magic",
-      "tier": "S"
-    },
-    {
-      "champion": "kalista",
-      "augment": "Dashing",
-      "tier": "S"
-    },
-    {
-      "champion": "jayce",
-      "augment": "Purist - Caster",
-      "tier": "S"
-    },
-    {
-      "champion": "rumble",
-      "augment": "Ethereal Weapon",
-      "tier": "S"
-    },
-    {
-      "champion": "sett",
-      "augment": "Back To Basics",
-      "tier": "S"
-    },
-    {
-      "champion": "karthus",
-      "augment": "Clown College",
-      "tier": "S"
-    },
-    {
-      "champion": "missfortune",
-      "augment": "Quest: Wooglet's Witchcap",
-      "tier": "S"
-    },
-    {
-      "champion": "ashe",
-      "augment": "Jeweled Gauntlet",
-      "tier": "S"
-    },
-    {
-      "champion": "yone",
-      "augment": "Slow And Steady",
-      "tier": "S"
-    },
-    {
-      "champion": "zed",
-      "augment": "Ethereal Weapon",
-      "tier": "S"
-    },
-    {
-      "champion": "zed",
-      "augment": "Back To Basics",
-      "tier": "S"
-    },
-    {
-      "champion": "masteryi",
-      "augment": "Dual Wield",
-      "tier": "S"
-    },
-    {
-      "champion": "seraphine",
-      "augment": "Cruelty",
-      "tier": "S"
-    },
-    {
-      "champion": "rumble",
-      "augment": "Void Rift",
-      "tier": "S"
-    },
-    {
-      "champion": "caitlyn",
-      "augment": "Jeweled Gauntlet",
-      "tier": "S"
-    },
-    {
-      "champion": "drmundo",
-      "augment": "Tank Engine",
-      "tier": "S"
-    },
-    {
-      "champion": "twistedfate",
-      "augment": "Jeweled Gauntlet",
-      "tier": "S"
-    },
-    {
-      "champion": "xinzhao",
+      "champion": "amumu",
       "augment": "Mad Scientist",
       "tier": "S"
     },
     {
-      "champion": "xinzhao",
-      "augment": "Mystic Punch",
+      "champion": "amumu",
+      "augment": "Master of Duality",
       "tier": "S"
     },
     {
-      "champion": "zed",
-      "augment": "Upgrade Collector",
+      "champion": "anivia",
+      "augment": "From Downtown",
       "tier": "S"
     },
     {
-      "champion": "mordekaiser",
-      "augment": "Protein Shake",
+      "champion": "anivia",
+      "augment": "Infernal Conduit",
+      "tier": "S"
+    },
+    {
+      "champion": "anivia",
+      "augment": "Master of Duality",
+      "tier": "S"
+    },
+    {
+      "champion": "annie",
+      "augment": "Back To Basics",
+      "tier": "S"
+    },
+    {
+      "champion": "annie",
+      "augment": "Biggest Snowball Ever",
+      "tier": "S"
+    },
+    {
+      "champion": "annie",
+      "augment": "Bread And Butter",
+      "tier": "S"
+    },
+    {
+      "champion": "aphelios",
+      "augment": "Blade Waltz",
+      "tier": "S"
+    },
+    {
+      "champion": "aphelios",
+      "augment": "Deft",
+      "tier": "S"
+    },
+    {
+      "champion": "aphelios",
+      "augment": "Draw Your Sword",
+      "tier": "S"
+    },
+    {
+      "champion": "aurelionsol",
+      "augment": "Infernal Conduit",
+      "tier": "S"
+    },
+    {
+      "champion": "aurelionsol",
+      "augment": "Master of Duality",
+      "tier": "S"
+    },
+    {
+      "champion": "aurelionsol",
+      "augment": "Multishot",
+      "tier": "S"
+    },
+    {
+      "champion": "aurora",
+      "augment": "From Downtown",
+      "tier": "S"
+    },
+    {
+      "champion": "aurora",
+      "augment": "Multishot",
+      "tier": "S"
+    },
+    {
+      "champion": "aurora",
+      "augment": "Spellsplit",
+      "tier": "S"
+    },
+    {
+      "champion": "azir",
+      "augment": "Chain Reaction",
+      "tier": "S"
+    },
+    {
+      "champion": "azir",
+      "augment": "Double Defense",
+      "tier": "S"
+    },
+    {
+      "champion": "azir",
+      "augment": "Infernal Conduit",
+      "tier": "S"
+    },
+    {
+      "champion": "bard",
+      "augment": "Double Defense",
+      "tier": "S"
+    },
+    {
+      "champion": "bard",
+      "augment": "Mercy's Strike",
+      "tier": "S"
+    },
+    {
+      "champion": "bard",
+      "augment": "Multishot",
+      "tier": "S"
+    },
+    {
+      "champion": "belveth",
+      "augment": "Chain Reaction",
+      "tier": "S"
+    },
+    {
+      "champion": "belveth",
+      "augment": "Double Defense",
+      "tier": "S"
+    },
+    {
+      "champion": "belveth",
+      "augment": "Infernal Conduit",
+      "tier": "S"
+    },
+    {
+      "champion": "blitzcrank",
+      "augment": "From Downtown",
+      "tier": "S"
+    },
+    {
+      "champion": "blitzcrank",
+      "augment": "Multishot",
+      "tier": "S"
+    },
+    {
+      "champion": "blitzcrank",
+      "augment": "Spellsplit",
+      "tier": "S"
+    },
+    {
+      "champion": "brand",
+      "augment": "From Downtown",
+      "tier": "S"
+    },
+    {
+      "champion": "brand",
+      "augment": "Multishot",
+      "tier": "S"
+    },
+    {
+      "champion": "brand",
+      "augment": "Spellsplit",
+      "tier": "S"
+    },
+    {
+      "champion": "braum",
+      "augment": "Double Defense",
+      "tier": "S"
+    },
+    {
+      "champion": "braum",
+      "augment": "Ravenous Bind",
+      "tier": "S"
+    },
+    {
+      "champion": "braum",
+      "augment": "Rejuvenation",
+      "tier": "S"
+    },
+    {
+      "champion": "briar",
+      "augment": "Chain Reaction",
+      "tier": "S"
+    },
+    {
+      "champion": "briar",
+      "augment": "Courage of the Colossus",
+      "tier": "S"
+    },
+    {
+      "champion": "briar",
+      "augment": "Cruelty",
+      "tier": "S"
+    },
+    {
+      "champion": "camille",
+      "augment": "Blade Waltz",
+      "tier": "S"
+    },
+    {
+      "champion": "camille",
+      "augment": "Chain Reaction",
+      "tier": "S"
+    },
+    {
+      "champion": "camille",
+      "augment": "Dashing",
+      "tier": "S"
+    },
+    {
+      "champion": "cassiopeia",
+      "augment": "Combusting Interest",
+      "tier": "S"
+    },
+    {
+      "champion": "cassiopeia",
+      "augment": "Double Defense",
+      "tier": "S"
+    },
+    {
+      "champion": "cassiopeia",
+      "augment": "Firebrand",
+      "tier": "S"
+    },
+    {
+      "champion": "chogath",
+      "augment": "Chain Reaction",
       "tier": "S"
     },
     {
       "champion": "corki",
-      "augment": "Jeweled Gauntlet",
+      "augment": "Combusting Interest",
       "tier": "S"
     },
     {
-      "champion": "vladimir",
-      "augment": "Ethereal Weapon",
+      "champion": "corki",
+      "augment": "Firebrand",
       "tier": "S"
     },
     {
-      "champion": "singed",
+      "champion": "corki",
       "augment": "Infernal Conduit",
+      "tier": "S"
+    },
+    {
+      "champion": "darius",
+      "augment": "Combusting Interest",
+      "tier": "S"
+    },
+    {
+      "champion": "darius",
+      "augment": "Double Defense",
+      "tier": "S"
+    },
+    {
+      "champion": "darius",
+      "augment": "Firebrand",
+      "tier": "S"
+    },
+    {
+      "champion": "diana",
+      "augment": "Double Defense",
+      "tier": "S"
+    },
+    {
+      "champion": "diana",
+      "augment": "From Downtown",
+      "tier": "S"
+    },
+    {
+      "champion": "diana",
+      "augment": "Mercy's Strike",
+      "tier": "S"
+    },
+    {
+      "champion": "draven",
+      "augment": "Chain Reaction",
+      "tier": "S"
+    },
+    {
+      "champion": "drmundo",
+      "augment": "Double Defense",
+      "tier": "S"
+    },
+    {
+      "champion": "drmundo",
+      "augment": "Infernal Conduit",
+      "tier": "S"
+    },
+    {
+      "champion": "drmundo",
+      "augment": "Master of Duality",
+      "tier": "S"
+    },
+    {
+      "champion": "ekko",
+      "augment": "Double Defense",
+      "tier": "S"
+    },
+    {
+      "champion": "ekko",
+      "augment": "From Downtown",
+      "tier": "S"
+    },
+    {
+      "champion": "ekko",
+      "augment": "Mercy's Strike",
+      "tier": "S"
+    },
+    {
+      "champion": "elise",
+      "augment": "Chain Reaction",
+      "tier": "S"
+    },
+    {
+      "champion": "elise",
+      "augment": "Double Defense",
+      "tier": "S"
+    },
+    {
+      "champion": "elise",
+      "augment": "From Downtown",
+      "tier": "S"
+    },
+    {
+      "champion": "evelynn",
+      "augment": "From Downtown",
+      "tier": "S"
+    },
+    {
+      "champion": "evelynn",
+      "augment": "Infernal Conduit",
+      "tier": "S"
+    },
+    {
+      "champion": "evelynn",
+      "augment": "Master of Duality",
+      "tier": "S"
+    },
+    {
+      "champion": "ezreal",
+      "augment": "From Downtown",
+      "tier": "S"
+    },
+    {
+      "champion": "ezreal",
+      "augment": "Multishot",
+      "tier": "S"
+    },
+    {
+      "champion": "ezreal",
+      "augment": "Spellsplit",
+      "tier": "S"
+    },
+    {
+      "champion": "fiddlesticks",
+      "augment": "Combusting Interest",
+      "tier": "S"
+    },
+    {
+      "champion": "fiddlesticks",
+      "augment": "Double Defense",
+      "tier": "S"
+    },
+    {
+      "champion": "fiddlesticks",
+      "augment": "Firebrand",
+      "tier": "S"
+    },
+    {
+      "champion": "fiora",
+      "augment": "Blade Waltz",
+      "tier": "S"
+    },
+    {
+      "champion": "fiora",
+      "augment": "Deft",
+      "tier": "S"
+    },
+    {
+      "champion": "fiora",
+      "augment": "Dual Wield",
+      "tier": "S"
+    },
+    {
+      "champion": "fizz",
+      "augment": "Chain Reaction",
+      "tier": "S"
+    },
+    {
+      "champion": "galio",
+      "augment": "Chain Reaction",
+      "tier": "S"
+    },
+    {
+      "champion": "galio",
+      "augment": "Courage of the Colossus",
+      "tier": "S"
+    },
+    {
+      "champion": "galio",
+      "augment": "Cruelty",
+      "tier": "S"
+    },
+    {
+      "champion": "gangplank",
+      "augment": "Double Defense",
+      "tier": "S"
+    },
+    {
+      "champion": "gangplank",
+      "augment": "Mercy's Strike",
+      "tier": "S"
+    },
+    {
+      "champion": "gangplank",
+      "augment": "Ravenous Bind",
+      "tier": "S"
+    },
+    {
+      "champion": "garen",
+      "augment": "Double Defense",
+      "tier": "S"
+    },
+    {
+      "champion": "garen",
+      "augment": "Mercy's Strike",
+      "tier": "S"
+    },
+    {
+      "champion": "garen",
+      "augment": "Ravenous Bind",
+      "tier": "S"
+    },
+    {
+      "champion": "gnar",
+      "augment": "From Downtown",
+      "tier": "S"
+    },
+    {
+      "champion": "gnar",
+      "augment": "Multishot",
+      "tier": "S"
+    },
+    {
+      "champion": "gnar",
+      "augment": "Spellsplit",
+      "tier": "S"
+    },
+    {
+      "champion": "gragas",
+      "augment": "Multishot",
+      "tier": "S"
+    },
+    {
+      "champion": "gragas",
+      "augment": "Spellsplit",
+      "tier": "S"
+    },
+    {
+      "champion": "gragas",
+      "augment": "Tripleshot",
+      "tier": "S"
+    },
+    {
+      "champion": "hecarim",
+      "augment": "Chain Reaction",
+      "tier": "S"
+    },
+    {
+      "champion": "hecarim",
+      "augment": "Infernal Conduit",
+      "tier": "S"
+    },
+    {
+      "champion": "hecarim",
+      "augment": "Master of Duality",
+      "tier": "S"
+    },
+    {
+      "champion": "heimerdinger",
+      "augment": "From Downtown",
+      "tier": "S"
+    },
+    {
+      "champion": "heimerdinger",
+      "augment": "Infernal Conduit",
+      "tier": "S"
+    },
+    {
+      "champion": "heimerdinger",
+      "augment": "Multishot",
+      "tier": "S"
+    },
+    {
+      "champion": "hwei",
+      "augment": "Multishot",
+      "tier": "S"
+    },
+    {
+      "champion": "hwei",
+      "augment": "Spellsplit",
+      "tier": "S"
+    },
+    {
+      "champion": "hwei",
+      "augment": "Tripleshot",
+      "tier": "S"
+    },
+    {
+      "champion": "illaoi",
+      "augment": "Master of Duality",
+      "tier": "S"
+    },
+    {
+      "champion": "illaoi",
+      "augment": "Searing Dawn",
+      "tier": "S"
+    },
+    {
+      "champion": "illaoi",
+      "augment": "Stay Resolute",
+      "tier": "S"
+    },
+    {
+      "champion": "irelia",
+      "augment": "Blade Waltz",
+      "tier": "S"
+    },
+    {
+      "champion": "irelia",
+      "augment": "Dashing",
+      "tier": "S"
+    },
+    {
+      "champion": "irelia",
+      "augment": "Deft",
+      "tier": "S"
+    },
+    {
+      "champion": "ivern",
+      "augment": "Double Defense",
+      "tier": "S"
+    },
+    {
+      "champion": "ivern",
+      "augment": "From Downtown",
+      "tier": "S"
+    },
+    {
+      "champion": "ivern",
+      "augment": "Mercy's Strike",
+      "tier": "S"
+    },
+    {
+      "champion": "janna",
+      "augment": "Chain Reaction",
+      "tier": "S"
+    },
+    {
+      "champion": "janna",
+      "augment": "Double Defense",
+      "tier": "S"
+    },
+    {
+      "champion": "janna",
+      "augment": "From Downtown",
+      "tier": "S"
+    },
+    {
+      "champion": "jarvaniv",
+      "augment": "Chain Reaction",
+      "tier": "S"
+    },
+    {
+      "champion": "jarvaniv",
+      "augment": "Double Defense",
+      "tier": "S"
+    },
+    {
+      "champion": "jarvaniv",
+      "augment": "Mercy's Strike",
+      "tier": "S"
+    },
+    {
+      "champion": "jayce",
+      "augment": "Chain Reaction",
       "tier": "S"
     },
     {
@@ -593,1498 +674,1478 @@
       "tier": "S"
     },
     {
-      "champion": "kindred",
-      "augment": "Stackosaurus Rex",
-      "tier": "S"
-    },
-    {
-      "champion": "briar",
-      "augment": "Dashing",
-      "tier": "S"
-    },
-    {
-      "champion": "ekko",
-      "augment": "Ethereal Weapon",
-      "tier": "S"
-    },
-    {
-      "champion": "naafiri",
-      "augment": "Infernal Conduit",
-      "tier": "S"
-    },
-    {
-      "champion": "nunu",
-      "augment": "Circle of Death",
-      "tier": "S"
-    },
-    {
-      "champion": "syndra",
-      "augment": "Executioner",
-      "tier": "S"
-    },
-    {
-      "champion": "bard",
-      "augment": "OrbitalLaser",
-      "tier": "S"
-    },
-    {
-      "champion": "udyr",
-      "augment": "Jeweled Gauntlet",
-      "tier": "S"
-    },
-    {
-      "champion": "smolder",
-      "augment": "Jeweled Gauntlet",
-      "tier": "S"
-    },
-    {
-      "champion": "shaco",
-      "augment": "Executioner",
-      "tier": "S"
-    },
-    {
-      "champion": "katarina",
-      "augment": "Triggered Inferno",
-      "tier": "S"
-    },
-    {
-      "champion": "trundle",
-      "augment": "Slap Around",
-      "tier": "S"
-    },
-    {
-      "champion": "maokai",
-      "augment": "Void Rift",
-      "tier": "S"
-    },
-    {
-      "champion": "nidalee",
+      "champion": "jhin",
       "augment": "Biggest Snowball Ever",
       "tier": "S"
     },
     {
-      "champion": "diana",
-      "augment": "Purist - Caster",
-      "tier": "S"
-    },
-    {
-      "champion": "akali",
-      "augment": "Void Rift",
-      "tier": "S"
-    },
-    {
-      "champion": "zyra",
-      "augment": "Void Rift",
-      "tier": "S"
-    },
-    {
-      "champion": "veigar",
-      "augment": "Infinite Recursion",
-      "tier": "S"
-    },
-    {
-      "champion": "shyvana",
-      "augment": "Ultimate Awakening",
-      "tier": "S"
-    },
-    {
-      "champion": "senna",
-      "augment": "Master of Duality",
-      "tier": "S"
-    },
-    {
-      "champion": "jarvaniv",
-      "augment": "Tank Engine",
-      "tier": "S"
-    },
-    {
-      "champion": "garen",
-      "augment": "Void Immolation",
-      "tier": "S"
-    },
-    {
-      "champion": "galio",
-      "augment": "Magic Missile",
-      "tier": "S"
-    },
-    {
-      "champion": "amumu",
-      "augment": "Phenomenal Evil",
-      "tier": "S"
-    },
-    {
-      "champion": "aurora",
-      "augment": "Dashing",
-      "tier": "S"
-    },
-    {
-      "champion": "zac",
-      "augment": "Circle of Death",
-      "tier": "S"
-    },
-    {
-      "champion": "smolder",
-      "augment": "Scopiest Weapons",
-      "tier": "S"
-    },
-    {
-      "champion": "urgot",
-      "augment": "Slow And Steady",
-      "tier": "S"
-    },
-    {
-      "champion": "swain",
-      "augment": "Slap Around",
-      "tier": "S"
-    },
-    {
-      "champion": "samira",
-      "augment": "Blade Waltz",
-      "tier": "S"
-    },
-    {
-      "champion": "elise",
-      "augment": "Dashing",
-      "tier": "S"
-    },
-    {
-      "champion": "hecarim",
-      "augment": "Rabble Rousing",
-      "tier": "S"
-    },
-    {
-      "champion": "smolder",
-      "augment": "Scopier Weapons",
-      "tier": "S"
-    },
-    {
-      "champion": "draven",
-      "augment": "Spin To Win",
-      "tier": "S"
-    },
-    {
-      "champion": "samira",
-      "augment": "Draw Your Sword",
-      "tier": "S"
-    },
-    {
-      "champion": "shaco",
-      "augment": "Clown College",
-      "tier": "S"
-    },
-    {
-      "champion": "nautilus",
-      "augment": "Courage of the Colossus",
-      "tier": "S"
-    },
-    {
-      "champion": "sylas",
-      "augment": "Marksmage",
-      "tier": "S"
-    },
-    {
-      "champion": "maokai",
-      "augment": "Circle of Death",
-      "tier": "S"
-    },
-    {
-      "champion": "rengar",
-      "augment": "Scopiest Weapons",
-      "tier": "S"
-    },
-    {
-      "champion": "monkeyking",
-      "augment": "Blade Waltz",
-      "tier": "S"
-    },
-    {
-      "champion": "syndra",
-      "augment": "Cruelty",
-      "tier": "S"
-    },
-    {
-      "champion": "kayn",
-      "augment": "Dashing",
-      "tier": "S"
-    },
-    {
-      "champion": "ornn",
-      "augment": "Fey Magic",
-      "tier": "S"
-    },
-    {
-      "champion": "yunara",
-      "augment": "Tap Dancer",
-      "tier": "S"
-    },
-    {
-      "champion": "azir",
-      "augment": "Magic Missile",
-      "tier": "S"
-    },
-    {
-      "champion": "malphite",
-      "augment": "Ultimate Revolution",
-      "tier": "S"
-    },
-    {
-      "champion": "mel",
-      "augment": "Skilled Sniper",
-      "tier": "S"
-    },
-    {
-      "champion": "viego",
-      "augment": "Jeweled Gauntlet",
-      "tier": "S"
-    },
-    {
-      "champion": "yorick",
-      "augment": "Ethereal Weapon",
-      "tier": "S"
-    },
-    {
-      "champion": "renata",
-      "augment": "Slap Around",
-      "tier": "S"
-    },
-    {
-      "champion": "sylas",
-      "augment": "Dashing",
-      "tier": "S"
-    },
-    {
-      "champion": "kindred",
-      "augment": "Back To Basics",
-      "tier": "S"
-    },
-    {
-      "champion": "urgot",
-      "augment": "Blade Waltz",
-      "tier": "S"
-    },
-    {
-      "champion": "briar",
-      "augment": "Executioner",
-      "tier": "S"
-    },
-    {
-      "champion": "renata",
-      "augment": "Cruelty",
-      "tier": "S"
-    },
-    {
-      "champion": "diana",
-      "augment": "Critical Healing",
-      "tier": "S"
-    },
-    {
-      "champion": "belveth",
-      "augment": "Mystic Punch",
-      "tier": "S"
-    },
-    {
-      "champion": "pantheon",
-      "augment": "Back To Basics",
-      "tier": "S"
-    },
-    {
-      "champion": "ambessa",
-      "augment": "Back To Basics",
-      "tier": "S"
-    },
-    {
-      "champion": "rengar",
-      "augment": "Scopier Weapons",
-      "tier": "S"
-    },
-    {
-      "champion": "rengar",
-      "augment": "Scoped Weapons",
-      "tier": "S"
-    },
-    {
-      "champion": "samira",
-      "augment": "Clown College",
-      "tier": "S"
-    },
-    {
-      "champion": "rell",
-      "augment": "Courage of the Colossus",
-      "tier": "S"
-    },
-    {
-      "champion": "ambessa",
-      "augment": "Rabble Rousing",
-      "tier": "S"
-    },
-    {
-      "champion": "lissandra",
-      "augment": "Don't Blink",
-      "tier": "S"
-    },
-    {
-      "champion": "jarvaniv",
-      "augment": "Dive Bomber",
-      "tier": "S"
-    },
-    {
-      "champion": "kayle",
-      "augment": "Magic Missile",
-      "tier": "S"
-    },
-    {
-      "champion": "sylas",
-      "augment": "Ultimate Awakening",
-      "tier": "S"
-    },
-    {
-      "champion": "fiddlesticks",
-      "augment": "Blade Waltz",
-      "tier": "S"
-    },
-    {
-      "champion": "yunara",
-      "augment": "Juiced",
-      "tier": "S"
-    },
-    {
-      "champion": "maokai",
-      "augment": "Courage of the Colossus",
-      "tier": "S"
-    },
-    {
-      "champion": "aatrox",
-      "augment": "Protein Shake",
-      "tier": "S"
-    },
-    {
-      "champion": "warwick",
-      "augment": "Circle of Death",
-      "tier": "S"
-    },
-    {
-      "champion": "veigar",
-      "augment": "Marksmage",
-      "tier": "S"
-    },
-    {
-      "champion": "milio",
-      "augment": "Eureka",
-      "tier": "S"
-    },
-    {
-      "champion": "hecarim",
-      "augment": "Ultimate Awakening",
-      "tier": "S"
-    },
-    {
-      "champion": "ezreal",
-      "augment": "Draw Your Sword",
-      "tier": "S"
-    },
-    {
-      "champion": "pantheon",
-      "augment": "Vulnerability",
-      "tier": "S"
-    },
-    {
-      "champion": "jax",
-      "augment": "Upgrade Sheen",
-      "tier": "S"
-    },
-    {
-      "champion": "kaisa",
-      "augment": "Ethereal Weapon",
-      "tier": "S"
-    },
-    {
-      "champion": "aphelios",
-      "augment": "Back To Basics",
-      "tier": "S"
-    },
-    {
-      "champion": "ezreal",
-      "augment": "Ethereal Weapon",
-      "tier": "S"
-    },
-    {
-      "champion": "alistar",
-      "augment": "Executioner",
-      "tier": "S"
-    },
-    {
-      "champion": "leona",
-      "augment": "Infernal Conduit",
-      "tier": "S"
-    },
-    {
-      "champion": "illaoi",
-      "augment": "Blade Waltz",
-      "tier": "S"
-    },
-    {
-      "champion": "gwen",
-      "augment": "Ethereal Weapon",
-      "tier": "S"
-    },
-    {
-      "champion": "zaahen",
-      "augment": "Blade Waltz",
-      "tier": "S"
-    },
-    {
-      "champion": "azir",
-      "augment": "Marksmage",
-      "tier": "S"
-    },
-    {
-      "champion": "senna",
-      "augment": "Stackosaurus Rex",
-      "tier": "S"
-    },
-    {
-      "champion": "vi",
-      "augment": "Blade Waltz",
-      "tier": "S"
-    },
-    {
-      "champion": "evelynn",
+      "champion": "jhin",
       "augment": "Bread And Butter",
       "tier": "S"
     },
     {
-      "champion": "quinn",
-      "augment": "Quantum Computing",
-      "tier": "S"
-    },
-    {
-      "champion": "neeko",
-      "augment": "Void Rift",
-      "tier": "S"
-    },
-    {
-      "champion": "neeko",
-      "augment": "Cruelty",
-      "tier": "S"
-    },
-    {
-      "champion": "volibear",
-      "augment": "Master of Duality",
-      "tier": "S"
-    },
-    {
-      "champion": "volibear",
-      "augment": "Mystic Punch",
-      "tier": "S"
-    },
-    {
-      "champion": "zaahen",
-      "augment": "Scopiest Weapons",
-      "tier": "S"
-    },
-    {
-      "champion": "sion",
-      "augment": "Tank Engine",
-      "tier": "S"
-    },
-    {
-      "champion": "sion",
-      "augment": "Ultimate Revolution",
-      "tier": "S"
-    },
-    {
-      "champion": "soraka",
-      "augment": "Protein Shake",
-      "tier": "S"
-    },
-    {
-      "champion": "qiyana",
-      "augment": "Juiced",
-      "tier": "S"
-    },
-    {
-      "champion": "lux",
-      "augment": "Slap Around",
-      "tier": "S"
-    },
-    {
-      "champion": "irelia",
-      "augment": "Mystic Punch",
-      "tier": "S"
-    },
-    {
-      "champion": "aurora",
-      "augment": "Snowball Upgrade",
-      "tier": "S"
-    },
-    {
-      "champion": "nami",
-      "augment": "Cruelty",
-      "tier": "S"
-    },
-    {
-      "champion": "heimerdinger",
-      "augment": "Void Rift",
-      "tier": "S"
-    },
-    {
-      "champion": "karma",
-      "augment": "I'm a Baby Kitty Where is Mama",
-      "tier": "S"
-    },
-    {
-      "champion": "karma",
-      "augment": "Jeweled Gauntlet",
-      "tier": "S"
-    },
-    {
-      "champion": "viktor",
-      "augment": "Void Rift",
-      "tier": "S"
-    },
-    {
-      "champion": "rakan",
-      "augment": "Cruelty",
-      "tier": "S"
-    },
-    {
-      "champion": "hwei",
-      "augment": "Cruelty",
-      "tier": "S"
-    },
-    {
-      "champion": "hwei",
-      "augment": "Void Rift",
-      "tier": "S"
-    },
-    {
-      "champion": "garen",
+      "champion": "kaisa",
       "augment": "Blade Waltz",
       "tier": "S"
     },
     {
-      "champion": "rammus",
-      "augment": "Upgrade Thornmail",
-      "tier": "S"
-    },
-    {
-      "champion": "ezreal",
-      "augment": "Juiced",
-      "tier": "S"
-    },
-    {
-      "champion": "urgot",
-      "augment": "Draw Your Sword",
-      "tier": "S"
-    },
-    {
-      "champion": "ekko",
-      "augment": "Void Rift",
-      "tier": "S"
-    },
-    {
-      "champion": "bard",
-      "augment": "Droppybara",
-      "tier": "S"
-    },
-    {
-      "champion": "bard",
-      "augment": "Void Rift",
-      "tier": "S"
-    },
-    {
-      "champion": "syndra",
-      "augment": "Jeweled Gauntlet",
-      "tier": "S"
-    },
-    {
-      "champion": "shen",
-      "augment": "Back To Basics",
-      "tier": "S"
-    },
-    {
-      "champion": "zoe",
-      "augment": "Snowball Upgrade",
-      "tier": "S"
-    },
-    {
-      "champion": "kled",
-      "augment": "Slow And Steady",
-      "tier": "S"
-    },
-    {
-      "champion": "kled",
-      "augment": "Heavy Hitter",
-      "tier": "S"
-    },
-    {
-      "champion": "leona",
-      "augment": "Cruelty",
-      "tier": "S"
-    },
-    {
-      "champion": "kayle",
-      "augment": "Void Rift",
-      "tier": "S"
-    },
-    {
-      "champion": "jax",
-      "augment": "Soul Eater",
-      "tier": "S"
-    },
-    {
-      "champion": "nocturne",
-      "augment": "Quantum Computing",
-      "tier": "S"
-    },
-    {
-      "champion": "nocturne",
-      "augment": "Dive Bomber",
-      "tier": "S"
-    },
-    {
-      "champion": "nasus",
-      "augment": "Shrink Engine",
-      "tier": "S"
-    },
-    {
-      "champion": "tahmkench",
-      "augment": "Tank Engine",
-      "tier": "S"
-    },
-    {
-      "champion": "tahmkench",
-      "augment": "Quest: Steel Your Heart",
-      "tier": "S"
-    },
-    {
-      "champion": "mel",
-      "augment": "Void Rift",
-      "tier": "S"
-    },
-    {
-      "champion": "mel",
-      "augment": "Vulnerability",
-      "tier": "S"
-    },
-    {
-      "champion": "illaoi",
-      "augment": "Ethereal Weapon",
-      "tier": "S"
-    },
-    {
-      "champion": "gangplank",
-      "augment": "Mystic Punch",
-      "tier": "S"
-    },
-    {
-      "champion": "nautilus",
-      "augment": "Protein Shake",
-      "tier": "S"
-    },
-    {
-      "champion": "singed",
-      "augment": "Devil on Your Shoulder",
-      "tier": "S"
-    },
-    {
-      "champion": "singed",
-      "augment": "Ethereal Weapon",
-      "tier": "S"
-    },
-    {
-      "champion": "renata",
-      "augment": "Quest: Wooglet's Witchcap",
-      "tier": "S"
-    },
-    {
-      "champion": "ziggs",
-      "augment": "Infinite Recursion",
-      "tier": "S"
-    },
-    {
-      "champion": "alistar",
-      "augment": "Infinite Recursion",
-      "tier": "S"
-    },
-    {
-      "champion": "alistar",
-      "augment": "Courage of the Colossus",
-      "tier": "S"
-    },
-    {
-      "champion": "briar",
-      "augment": "Upgrade Infinity Edge",
-      "tier": "S"
-    },
-    {
-      "champion": "vladimir",
-      "augment": "Void Rift",
-      "tier": "S"
-    },
-    {
-      "champion": "sona",
-      "augment": "Jeweled Gauntlet",
-      "tier": "S"
-    },
-    {
-      "champion": "zac",
-      "augment": "Protein Shake",
-      "tier": "S"
-    },
-    {
-      "champion": "evelynn",
-      "augment": "Void Rift",
-      "tier": "S"
-    },
-    {
-      "champion": "naafiri",
-      "augment": "Triggered Inferno",
-      "tier": "S"
-    },
-    {
-      "champion": "vi",
+      "champion": "kaisa",
       "augment": "Dashing",
-      "tier": "S"
-    },
-    {
-      "champion": "zeri",
-      "augment": "Rabble Rousing",
-      "tier": "S"
-    },
-    {
-      "champion": "akali",
-      "augment": "Zealot",
-      "tier": "S"
-    },
-    {
-      "champion": "corki",
-      "augment": "Triggered Inferno",
-      "tier": "S"
-    },
-    {
-      "champion": "draven",
-      "augment": "Jeweled Gauntlet",
       "tier": "S"
     },
     {
       "champion": "kaisa",
-      "augment": "Mystic Punch",
-      "tier": "S"
-    },
-    {
-      "champion": "belveth",
-      "augment": "Slow And Steady",
-      "tier": "S"
-    },
-    {
-      "champion": "belveth",
-      "augment": "Tap Dancer",
-      "tier": "S"
-    },
-    {
-      "champion": "chogath",
-      "augment": "Quest: Steel Your Heart",
-      "tier": "S"
-    },
-    {
-      "champion": "chogath",
-      "augment": "Tank Engine",
-      "tier": "S"
-    },
-    {
-      "champion": "chogath",
-      "augment": "Shrink Engine",
-      "tier": "S"
-    },
-    {
-      "champion": "khazix",
-      "augment": "Upgrade Hubris",
-      "tier": "S"
-    },
-    {
-      "champion": "kassadin",
-      "augment": "Void Rift",
-      "tier": "S"
-    },
-    {
-      "champion": "kassadin",
-      "augment": "Don't Blink",
-      "tier": "S"
-    },
-    {
-      "champion": "tryndamere",
-      "augment": "Scopier Weapons",
-      "tier": "S"
-    },
-    {
-      "champion": "tryndamere",
-      "augment": "Master of Duality",
-      "tier": "S"
-    },
-    {
-      "champion": "elise",
-      "augment": "Jeweled Gauntlet",
-      "tier": "S"
-    },
-    {
-      "champion": "pyke",
-      "augment": "Goliath",
-      "tier": "S"
-    },
-    {
-      "champion": "darius",
-      "augment": "Jeweled Gauntlet",
-      "tier": "S"
-    },
-    {
-      "champion": "darius",
-      "augment": "Back To Basics",
-      "tier": "S"
-    },
-    {
-      "champion": "teemo",
-      "augment": "Mystic Punch",
-      "tier": "S"
-    },
-    {
-      "champion": "teemo",
-      "augment": "Eureka",
-      "tier": "S"
-    },
-    {
-      "champion": "fiddlesticks",
-      "augment": "Void Rift",
-      "tier": "S"
-    },
-    {
-      "champion": "xayah",
-      "augment": "Upgrade Infinity Edge",
-      "tier": "S"
-    },
-    {
-      "champion": "ambessa",
-      "augment": "Clown College",
-      "tier": "S"
-    },
-    {
-      "champion": "cassiopeia",
-      "augment": "Cruelty",
-      "tier": "S"
-    },
-    {
-      "champion": "annie",
-      "augment": "It's Killing Time",
-      "tier": "S"
-    },
-    {
-      "champion": "blitzcrank",
-      "augment": "Mind to Matter",
-      "tier": "S"
-    },
-    {
-      "champion": "tahmkench",
-      "augment": "Goliath",
-      "tier": "S"
-    },
-    {
-      "champion": "quinn",
-      "augment": "Poro Blaster",
-      "tier": "S"
-    },
-    {
-      "champion": "yuumi",
-      "augment": "Circle of Death",
-      "tier": "S"
-    },
-    {
-      "champion": "thresh",
-      "augment": "Quest: Steel Your Heart",
-      "tier": "S"
-    },
-    {
-      "champion": "twitch",
-      "augment": "Tap Dancer",
-      "tier": "S"
-    },
-    {
-      "champion": "soraka",
-      "augment": "Tank Engine",
-      "tier": "S"
-    },
-    {
-      "champion": "leesin",
-      "augment": "Crack Open That Egg",
-      "tier": "S"
-    },
-    {
-      "champion": "rammus",
-      "augment": "Protein Shake",
-      "tier": "S"
-    },
-    {
-      "champion": "aatrox",
-      "augment": "Jeweled Gauntlet",
-      "tier": "S"
-    },
-    {
-      "champion": "malphite",
-      "augment": "Eureka",
-      "tier": "S"
-    },
-    {
-      "champion": "lux",
-      "augment": "Eureka",
-      "tier": "S"
-    },
-    {
-      "champion": "varus",
-      "augment": "ADAPt",
-      "tier": "S"
-    },
-    {
-      "champion": "anivia",
-      "augment": "Fey Magic",
-      "tier": "S"
-    },
-    {
-      "champion": "shaco",
-      "augment": "Bread And Jam",
-      "tier": "S"
-    },
-    {
-      "champion": "warwick",
-      "augment": "Quantum Computing",
-      "tier": "S"
-    },
-    {
-      "champion": "zeri",
-      "augment": "Giant Slayer",
-      "tier": "S"
-    },
-    {
-      "champion": "rell",
-      "augment": "Goliath",
-      "tier": "S"
-    },
-    {
-      "champion": "irelia",
-      "augment": "Jeweled Gauntlet",
-      "tier": "S"
-    },
-    {
-      "champion": "volibear",
-      "augment": "Rabble Rousing",
-      "tier": "S"
-    },
-    {
-      "champion": "jayce",
-      "augment": "Jeweled Gauntlet",
-      "tier": "S"
-    },
-    {
-      "champion": "shyvana",
-      "augment": "Double Tap",
-      "tier": "S"
-    },
-    {
-      "champion": "gwen",
-      "augment": "Marksmage",
-      "tier": "S"
-    },
-    {
-      "champion": "ziggs",
-      "augment": "Cheating",
-      "tier": "S"
-    },
-    {
-      "champion": "yorick",
-      "augment": "Executioner",
-      "tier": "S"
-    },
-    {
-      "champion": "talon",
-      "augment": "Transmute: Chaos",
-      "tier": "S"
-    },
-    {
-      "champion": "trundle",
-      "augment": "Cruelty",
-      "tier": "S"
-    },
-    {
-      "champion": "aphelios",
-      "augment": "Draw Your Sword",
-      "tier": "S"
-    },
-    {
-      "champion": "azir",
-      "augment": "ADAPt",
-      "tier": "S"
-    },
-    {
-      "champion": "trundle",
-      "augment": "Scopiest Weapons",
-      "tier": "S"
-    },
-    {
-      "champion": "kaisa",
-      "augment": "Critical Healing",
-      "tier": "S"
-    },
-    {
-      "champion": "soraka",
-      "augment": "Empowered By The Faithful",
-      "tier": "S"
-    },
-    {
-      "champion": "shyvana",
-      "augment": "Ethereal Weapon",
-      "tier": "S"
-    },
-    {
-      "champion": "rammus",
-      "augment": "Gash",
-      "tier": "S"
-    },
-    {
-      "champion": "swain",
-      "augment": "Dropkick",
-      "tier": "S"
-    },
-    {
-      "champion": "kayn",
-      "augment": "Jeweled Gauntlet",
-      "tier": "S"
-    },
-    {
-      "champion": "twitch",
-      "augment": "Dual Wield",
-      "tier": "S"
-    },
-    {
-      "champion": "leesin",
-      "augment": "Critical Healing",
-      "tier": "S"
-    },
-    {
-      "champion": "aatrox",
-      "augment": "Critical Healing",
-      "tier": "S"
-    },
-    {
-      "champion": "milio",
-      "augment": "Jeweled Gauntlet",
-      "tier": "S"
-    },
-    {
-      "champion": "milio",
-      "augment": "Cruelty",
-      "tier": "S"
-    },
-    {
-      "champion": "malphite",
-      "augment": "Dashing",
-      "tier": "S"
-    },
-    {
-      "champion": "jarvaniv",
-      "augment": "Quest: Steel Your Heart",
-      "tier": "S"
-    },
-    {
-      "champion": "varus",
-      "augment": "Master of Duality",
-      "tier": "S"
-    },
-    {
-      "champion": "anivia",
-      "augment": "Magic Missile",
-      "tier": "S"
-    },
-    {
-      "champion": "anivia",
-      "augment": "It's Killing Time",
-      "tier": "S"
-    },
-    {
-      "champion": "warwick",
-      "augment": "Get Excited!",
-      "tier": "S"
-    },
-    {
-      "champion": "zeri",
-      "augment": "Jeweled Gauntlet",
-      "tier": "S"
-    },
-    {
-      "champion": "irelia",
-      "augment": "Eureka",
-      "tier": "S"
-    },
-    {
-      "champion": "gwen",
-      "augment": "Giant Slayer",
-      "tier": "S"
-    },
-    {
-      "champion": "ziggs",
-      "augment": "ADAPt",
-      "tier": "S"
-    },
-    {
-      "champion": "yorick",
-      "augment": "Droppybara",
-      "tier": "S"
-    },
-    {
-      "champion": "talon",
-      "augment": "From Beginning To End",
-      "tier": "S"
-    },
-    {
-      "champion": "talon",
-      "augment": "Shadow Runner",
-      "tier": "S"
-    },
-    {
-      "champion": "amumu",
-      "augment": "Tank Engine",
-      "tier": "S"
-    },
-    {
-      "champion": "draven",
-      "augment": "Clown College",
-      "tier": "S"
-    },
-    {
-      "champion": "swain",
-      "augment": "Tank Engine",
-      "tier": "S"
-    },
-    {
-      "champion": "kayn",
-      "augment": "Shadow Runner",
-      "tier": "S"
-    },
-    {
-      "champion": "neeko",
-      "augment": "Don't Blink",
-      "tier": "S"
-    },
-    {
-      "champion": "zaahen",
-      "augment": "Scopier Weapons",
-      "tier": "S"
-    },
-    {
-      "champion": "sion",
-      "augment": "Quest: Steel Your Heart",
-      "tier": "S"
-    },
-    {
-      "champion": "qiyana",
-      "augment": "Ocean Soul",
-      "tier": "S"
-    },
-    {
-      "champion": "qiyana",
-      "augment": "Dashing",
-      "tier": "S"
-    },
-    {
-      "champion": "nami",
-      "augment": "Slap Around",
-      "tier": "S"
-    },
-    {
-      "champion": "nami",
-      "augment": "Shrink Engine",
-      "tier": "S"
-    },
-    {
-      "champion": "morgana",
-      "augment": "Mind to Matter",
-      "tier": "S"
-    },
-    {
-      "champion": "heimerdinger",
-      "augment": "Don't Blink",
-      "tier": "S"
-    },
-    {
-      "champion": "heimerdinger",
-      "augment": "Minionmancer",
+      "augment": "Deft",
       "tier": "S"
     },
     {
       "champion": "karma",
-      "augment": "First-Aid Kit",
+      "augment": "Double Defense",
       "tier": "S"
     },
     {
-      "champion": "viktor",
-      "augment": "Don't Blink",
+      "champion": "karma",
+      "augment": "From Downtown",
       "tier": "S"
     },
     {
-      "champion": "ashe",
-      "augment": "From Beginning To End",
+      "champion": "karma",
+      "augment": "Mercy's Strike",
       "tier": "S"
     },
     {
-      "champion": "ashe",
-      "augment": "Shrink Engine",
+      "champion": "karthus",
+      "augment": "Multishot",
       "tier": "S"
     },
     {
-      "champion": "ornn",
-      "augment": "Infinite Recursion",
+      "champion": "karthus",
+      "augment": "Spellsplit",
       "tier": "S"
     },
     {
-      "champion": "ornn",
-      "augment": "Shrink Engine",
+      "champion": "karthus",
+      "augment": "Tripleshot",
       "tier": "S"
     },
     {
-      "champion": "hwei",
-      "augment": "Phenomenal Evil",
+      "champion": "kassadin",
+      "augment": "Double Defense",
       "tier": "S"
     },
     {
-      "champion": "fiora",
-      "augment": "Tank Engine",
+      "champion": "kassadin",
+      "augment": "Mercy's Strike",
       "tier": "S"
     },
     {
-      "champion": "zilean",
-      "augment": "Ocean Soul",
+      "champion": "kassadin",
+      "augment": "Ravenous Bind",
       "tier": "S"
     },
     {
-      "champion": "zilean",
-      "augment": "Buff Buddies",
+      "champion": "katarina",
+      "augment": "Chain Reaction",
       "tier": "S"
     },
     {
-      "champion": "seraphine",
-      "augment": "Shrink Engine",
+      "champion": "katarina",
+      "augment": "Multishot",
       "tier": "S"
     },
     {
-      "champion": "shen",
-      "augment": "Goliath",
+      "champion": "katarina",
+      "augment": "Spellsplit",
       "tier": "S"
     },
     {
-      "champion": "shen",
-      "augment": "Dropkick",
+      "champion": "kayle",
+      "augment": "Double Defense",
       "tier": "S"
     },
     {
-      "champion": "zoe",
-      "augment": "Holy Snowball",
+      "champion": "kayle",
+      "augment": "From Downtown",
       "tier": "S"
     },
     {
-      "champion": "zoe",
-      "augment": "Snowball Roulette",
+      "champion": "kayle",
+      "augment": "Mercy's Strike",
+      "tier": "S"
+    },
+    {
+      "champion": "kayn",
+      "augment": "Double Defense",
+      "tier": "S"
+    },
+    {
+      "champion": "kayn",
+      "augment": "Mercy's Strike",
+      "tier": "S"
+    },
+    {
+      "champion": "kayn",
+      "augment": "Ravenous Bind",
+      "tier": "S"
+    },
+    {
+      "champion": "kennen",
+      "augment": "From Downtown",
+      "tier": "S"
+    },
+    {
+      "champion": "kennen",
+      "augment": "Multishot",
+      "tier": "S"
+    },
+    {
+      "champion": "kennen",
+      "augment": "Spellsplit",
+      "tier": "S"
+    },
+    {
+      "champion": "khazix",
+      "augment": "Blade Waltz",
+      "tier": "S"
+    },
+    {
+      "champion": "khazix",
+      "augment": "Dashing",
+      "tier": "S"
+    },
+    {
+      "champion": "khazix",
+      "augment": "Deft",
+      "tier": "S"
+    },
+    {
+      "champion": "kindred",
+      "augment": "Blade Waltz",
+      "tier": "S"
+    },
+    {
+      "champion": "kindred",
+      "augment": "Deft",
+      "tier": "S"
+    },
+    {
+      "champion": "kindred",
+      "augment": "Double Defense",
       "tier": "S"
     },
     {
       "champion": "kled",
-      "augment": "Blunt Force",
+      "augment": "Chain Reaction",
       "tier": "S"
     },
     {
-      "champion": "leona",
-      "augment": "Quest: Steel Your Heart",
+      "champion": "kogmaw",
+      "augment": "From Downtown",
       "tier": "S"
     },
     {
-      "champion": "nocturne",
-      "augment": "Feel the Burn",
+      "champion": "kogmaw",
+      "augment": "Multishot",
       "tier": "S"
     },
     {
-      "champion": "nasus",
-      "augment": "Quest: Steel Your Heart",
-      "tier": "S"
-    },
-    {
-      "champion": "nasus",
-      "augment": "Infinite Recursion",
-      "tier": "S"
-    },
-    {
-      "champion": "illaoi",
-      "augment": "Quest: Steel Your Heart",
-      "tier": "S"
-    },
-    {
-      "champion": "nautilus",
-      "augment": "Soul Eater",
-      "tier": "S"
-    },
-    {
-      "champion": "nidalee",
-      "augment": "Snowball Upgrade",
-      "tier": "S"
-    },
-    {
-      "champion": "nidalee",
-      "augment": "Pinball",
-      "tier": "S"
-    },
-    {
-      "champion": "sona",
-      "augment": "ADAPt",
-      "tier": "S"
-    },
-    {
-      "champion": "zac",
-      "augment": "First-Aid Kit",
-      "tier": "S"
-    },
-    {
-      "champion": "evelynn",
-      "augment": "Recursion",
-      "tier": "S"
-    },
-    {
-      "champion": "viego",
-      "augment": "Upgrade Infinity Edge",
-      "tier": "S"
-    },
-    {
-      "champion": "viego",
-      "augment": "Scopier Weapons",
-      "tier": "S"
-    },
-    {
-      "champion": "drmundo",
-      "augment": "Dropkick",
-      "tier": "S"
-    },
-    {
-      "champion": "drmundo",
-      "augment": "Quest: Steel Your Heart",
-      "tier": "S"
-    },
-    {
-      "champion": "akali",
-      "augment": "Slow And Steady",
+      "champion": "kogmaw",
+      "augment": "Spellsplit",
       "tier": "S"
     },
     {
       "champion": "ksante",
-      "augment": "Outlaw's Grit",
+      "augment": "Blade Waltz",
       "tier": "S"
     },
     {
-      "champion": "zyra",
-      "augment": "Don't Blink",
+      "champion": "ksante",
+      "augment": "Chain Reaction",
       "tier": "S"
     },
     {
-      "champion": "khazix",
-      "augment": "Shrink Engine",
+      "champion": "ksante",
+      "augment": "Courage of the Colossus",
       "tier": "S"
     },
     {
-      "champion": "khazix",
-      "augment": "Final Form",
+      "champion": "leblanc",
+      "augment": "From Downtown",
       "tier": "S"
     },
     {
-      "champion": "elise",
-      "augment": "Phenomenal Evil",
+      "champion": "leblanc",
+      "augment": "Multishot",
+      "tier": "S"
+    },
+    {
+      "champion": "leblanc",
+      "augment": "Spellsplit",
+      "tier": "S"
+    },
+    {
+      "champion": "leesin",
+      "augment": "Double Defense",
+      "tier": "S"
+    },
+    {
+      "champion": "leesin",
+      "augment": "Mercy's Strike",
+      "tier": "S"
+    },
+    {
+      "champion": "leesin",
+      "augment": "Ravenous Bind",
+      "tier": "S"
+    },
+    {
+      "champion": "leona",
+      "augment": "Courage of the Colossus",
+      "tier": "S"
+    },
+    {
+      "champion": "leona",
+      "augment": "Cruelty",
+      "tier": "S"
+    },
+    {
+      "champion": "leona",
+      "augment": "Double Defense",
+      "tier": "S"
+    },
+    {
+      "champion": "lillia",
+      "augment": "Multishot",
+      "tier": "S"
+    },
+    {
+      "champion": "lillia",
+      "augment": "Spellsplit",
+      "tier": "S"
+    },
+    {
+      "champion": "lillia",
+      "augment": "Tripleshot",
+      "tier": "S"
+    },
+    {
+      "champion": "lissandra",
+      "augment": "From Downtown",
+      "tier": "S"
+    },
+    {
+      "champion": "lissandra",
+      "augment": "Multishot",
+      "tier": "S"
+    },
+    {
+      "champion": "lissandra",
+      "augment": "Spellsplit",
+      "tier": "S"
+    },
+    {
+      "champion": "lulu",
+      "augment": "Double Defense",
+      "tier": "S"
+    },
+    {
+      "champion": "lulu",
+      "augment": "From Downtown",
+      "tier": "S"
+    },
+    {
+      "champion": "lulu",
+      "augment": "Mercy's Strike",
+      "tier": "S"
+    },
+    {
+      "champion": "lux",
+      "augment": "Double Defense",
+      "tier": "S"
+    },
+    {
+      "champion": "lux",
+      "augment": "From Downtown",
+      "tier": "S"
+    },
+    {
+      "champion": "lux",
+      "augment": "Mercy's Strike",
+      "tier": "S"
+    },
+    {
+      "champion": "malzahar",
+      "augment": "Combusting Interest",
+      "tier": "S"
+    },
+    {
+      "champion": "malzahar",
+      "augment": "Infernal Conduit",
+      "tier": "S"
+    },
+    {
+      "champion": "malzahar",
+      "augment": "Pressure Cooker",
+      "tier": "S"
+    },
+    {
+      "champion": "maokai",
+      "augment": "Chain Reaction",
+      "tier": "S"
+    },
+    {
+      "champion": "maokai",
+      "augment": "Courage of the Colossus",
+      "tier": "S"
+    },
+    {
+      "champion": "maokai",
+      "augment": "Cruelty",
+      "tier": "S"
+    },
+    {
+      "champion": "masteryi",
+      "augment": "Blade Waltz",
+      "tier": "S"
+    },
+    {
+      "champion": "masteryi",
+      "augment": "Deft",
+      "tier": "S"
+    },
+    {
+      "champion": "masteryi",
+      "augment": "Dual Wield",
+      "tier": "S"
+    },
+    {
+      "champion": "mel",
+      "augment": "Double Defense",
+      "tier": "S"
+    },
+    {
+      "champion": "mel",
+      "augment": "From Downtown",
+      "tier": "S"
+    },
+    {
+      "champion": "mel",
+      "augment": "Mercy's Strike",
+      "tier": "S"
+    },
+    {
+      "champion": "milio",
+      "augment": "Chain Reaction",
+      "tier": "S"
+    },
+    {
+      "champion": "milio",
+      "augment": "Double Defense",
+      "tier": "S"
+    },
+    {
+      "champion": "milio",
+      "augment": "From Downtown",
+      "tier": "S"
+    },
+    {
+      "champion": "mordekaiser",
+      "augment": "Double Defense",
+      "tier": "S"
+    },
+    {
+      "champion": "mordekaiser",
+      "augment": "Mercy's Strike",
+      "tier": "S"
+    },
+    {
+      "champion": "mordekaiser",
+      "augment": "Ravenous Bind",
+      "tier": "S"
+    },
+    {
+      "champion": "morgana",
+      "augment": "Double Defense",
+      "tier": "S"
+    },
+    {
+      "champion": "morgana",
+      "augment": "From Downtown",
+      "tier": "S"
+    },
+    {
+      "champion": "morgana",
+      "augment": "Mercy's Strike",
+      "tier": "S"
+    },
+    {
+      "champion": "naafiri",
+      "augment": "Double Defense",
+      "tier": "S"
+    },
+    {
+      "champion": "naafiri",
+      "augment": "Mercy's Strike",
+      "tier": "S"
+    },
+    {
+      "champion": "naafiri",
+      "augment": "Ravenous Bind",
+      "tier": "S"
+    },
+    {
+      "champion": "nami",
+      "augment": "Double Defense",
+      "tier": "S"
+    },
+    {
+      "champion": "nami",
+      "augment": "Mercy's Strike",
+      "tier": "S"
+    },
+    {
+      "champion": "nami",
+      "augment": "Ravenous Bind",
+      "tier": "S"
+    },
+    {
+      "champion": "nasus",
+      "augment": "Combusting Interest",
+      "tier": "S"
+    },
+    {
+      "champion": "nasus",
+      "augment": "Firebrand",
+      "tier": "S"
+    },
+    {
+      "champion": "nasus",
+      "augment": "Infernal Conduit",
+      "tier": "S"
+    },
+    {
+      "champion": "nautilus",
+      "augment": "Double Defense",
+      "tier": "S"
+    },
+    {
+      "champion": "nautilus",
+      "augment": "From Downtown",
+      "tier": "S"
+    },
+    {
+      "champion": "nautilus",
+      "augment": "Mercy's Strike",
+      "tier": "S"
+    },
+    {
+      "champion": "neeko",
+      "augment": "From Downtown",
+      "tier": "S"
+    },
+    {
+      "champion": "neeko",
+      "augment": "Multishot",
+      "tier": "S"
+    },
+    {
+      "champion": "neeko",
+      "augment": "Spellsplit",
+      "tier": "S"
+    },
+    {
+      "champion": "nidalee",
+      "augment": "Double Defense",
+      "tier": "S"
+    },
+    {
+      "champion": "nidalee",
+      "augment": "From Downtown",
+      "tier": "S"
+    },
+    {
+      "champion": "nidalee",
+      "augment": "Mercy's Strike",
+      "tier": "S"
+    },
+    {
+      "champion": "nilah",
+      "augment": "Double Defense",
+      "tier": "S"
+    },
+    {
+      "champion": "nilah",
+      "augment": "Infernal Conduit",
+      "tier": "S"
+    },
+    {
+      "champion": "nilah",
+      "augment": "Master of Duality",
+      "tier": "S"
+    },
+    {
+      "champion": "nocturne",
+      "augment": "From Downtown",
+      "tier": "S"
+    },
+    {
+      "champion": "nocturne",
+      "augment": "Multishot",
+      "tier": "S"
+    },
+    {
+      "champion": "nocturne",
+      "augment": "Spellsplit",
+      "tier": "S"
+    },
+    {
+      "champion": "nunu",
+      "augment": "Chain Reaction",
+      "tier": "S"
+    },
+    {
+      "champion": "nunu",
+      "augment": "Double Defense",
+      "tier": "S"
+    },
+    {
+      "champion": "nunu",
+      "augment": "From Downtown",
+      "tier": "S"
+    },
+    {
+      "champion": "olaf",
+      "augment": "Double Defense",
+      "tier": "S"
+    },
+    {
+      "champion": "olaf",
+      "augment": "Mercy's Strike",
+      "tier": "S"
+    },
+    {
+      "champion": "olaf",
+      "augment": "Ravenous Bind",
+      "tier": "S"
+    },
+    {
+      "champion": "orianna",
+      "augment": "Double Defense",
+      "tier": "S"
+    },
+    {
+      "champion": "orianna",
+      "augment": "From Downtown",
+      "tier": "S"
+    },
+    {
+      "champion": "orianna",
+      "augment": "Mercy's Strike",
+      "tier": "S"
+    },
+    {
+      "champion": "ornn",
+      "augment": "Chain Reaction",
+      "tier": "S"
+    },
+    {
+      "champion": "pantheon",
+      "augment": "Double Defense",
+      "tier": "S"
+    },
+    {
+      "champion": "pantheon",
+      "augment": "Mercy's Strike",
+      "tier": "S"
+    },
+    {
+      "champion": "pantheon",
+      "augment": "Multishot",
+      "tier": "S"
+    },
+    {
+      "champion": "poppy",
+      "augment": "Chain Reaction",
+      "tier": "S"
+    },
+    {
+      "champion": "poppy",
+      "augment": "Courage of the Colossus",
+      "tier": "S"
+    },
+    {
+      "champion": "poppy",
+      "augment": "Cruelty",
       "tier": "S"
     },
     {
       "champion": "pyke",
-      "augment": "Mad Scientist",
+      "augment": "Multishot",
       "tier": "S"
     },
     {
-      "champion": "darius",
-      "augment": "Upgrade Infinity Edge",
+      "champion": "pyke",
+      "augment": "Spellsplit",
       "tier": "S"
     },
     {
-      "champion": "teemo",
-      "augment": "Dual Wield",
-      "tier": "S"
-    },
-    {
-      "champion": "gnar",
-      "augment": "Dual Wield",
-      "tier": "S"
-    },
-    {
-      "champion": "gnar",
-      "augment": "Twice Thrice",
-      "tier": "S"
-    },
-    {
-      "champion": "xayah",
-      "augment": "Upgrade Collector",
-      "tier": "S"
-    },
-    {
-      "champion": "xayah",
-      "augment": "Soul Siphon",
-      "tier": "S"
-    },
-    {
-      "champion": "nunu",
-      "augment": "Critical Healing",
-      "tier": "S"
-    },
-    {
-      "champion": "nunu",
-      "augment": "Heavy Hitter",
-      "tier": "S"
-    },
-    {
-      "champion": "annie",
-      "augment": "Eureka",
-      "tier": "S"
-    },
-    {
-      "champion": "annie",
-      "augment": "Infinite Recursion",
-      "tier": "S"
-    },
-    {
-      "champion": "twistedfate",
-      "augment": "Giant Slayer",
-      "tier": "S"
-    },
-    {
-      "champion": "twistedfate",
-      "augment": "Executioner",
+      "champion": "pyke",
+      "augment": "Tripleshot",
       "tier": "S"
     },
     {
       "champion": "quinn",
-      "augment": "Dual Wield",
+      "augment": "Chain Reaction",
+      "tier": "S"
+    },
+    {
+      "champion": "rakan",
+      "augment": "Chain Reaction",
+      "tier": "S"
+    },
+    {
+      "champion": "rakan",
+      "augment": "Double Defense",
+      "tier": "S"
+    },
+    {
+      "champion": "rakan",
+      "augment": "Mercy's Strike",
+      "tier": "S"
+    },
+    {
+      "champion": "rammus",
+      "augment": "Chain Reaction",
+      "tier": "S"
+    },
+    {
+      "champion": "rammus",
+      "augment": "Courage of the Colossus",
+      "tier": "S"
+    },
+    {
+      "champion": "rammus",
+      "augment": "Cruelty",
+      "tier": "S"
+    },
+    {
+      "champion": "reksai",
+      "augment": "Back To Basics",
+      "tier": "S"
+    },
+    {
+      "champion": "reksai",
+      "augment": "Biggest Snowball Ever",
+      "tier": "S"
+    },
+    {
+      "champion": "reksai",
+      "augment": "Blade Waltz",
+      "tier": "S"
+    },
+    {
+      "champion": "rell",
+      "augment": "Chain Reaction",
+      "tier": "S"
+    },
+    {
+      "champion": "rell",
+      "augment": "Courage of the Colossus",
+      "tier": "S"
+    },
+    {
+      "champion": "rell",
+      "augment": "Cruelty",
+      "tier": "S"
+    },
+    {
+      "champion": "renata",
+      "augment": "Double Defense",
+      "tier": "S"
+    },
+    {
+      "champion": "renata",
+      "augment": "From Downtown",
+      "tier": "S"
+    },
+    {
+      "champion": "renata",
+      "augment": "Mercy's Strike",
+      "tier": "S"
+    },
+    {
+      "champion": "renekton",
+      "augment": "Double Defense",
+      "tier": "S"
+    },
+    {
+      "champion": "renekton",
+      "augment": "Mercy's Strike",
+      "tier": "S"
+    },
+    {
+      "champion": "renekton",
+      "augment": "Ravenous Bind",
+      "tier": "S"
+    },
+    {
+      "champion": "rengar",
+      "augment": "Blade Waltz",
+      "tier": "S"
+    },
+    {
+      "champion": "rengar",
+      "augment": "Dashing",
+      "tier": "S"
+    },
+    {
+      "champion": "rengar",
+      "augment": "Deft",
+      "tier": "S"
+    },
+    {
+      "champion": "riven",
+      "augment": "Chain Reaction",
+      "tier": "S"
+    },
+    {
+      "champion": "riven",
+      "augment": "Mercy's Strike",
+      "tier": "S"
+    },
+    {
+      "champion": "riven",
+      "augment": "Ravenous Bind",
+      "tier": "S"
+    },
+    {
+      "champion": "rumble",
+      "augment": "Combusting Interest",
+      "tier": "S"
+    },
+    {
+      "champion": "rumble",
+      "augment": "Double Defense",
+      "tier": "S"
+    },
+    {
+      "champion": "rumble",
+      "augment": "Firebrand",
+      "tier": "S"
+    },
+    {
+      "champion": "ryze",
+      "augment": "Back To Basics",
+      "tier": "S"
+    },
+    {
+      "champion": "ryze",
+      "augment": "Biggest Snowball Ever",
+      "tier": "S"
+    },
+    {
+      "champion": "ryze",
+      "augment": "Bread And Butter",
+      "tier": "S"
+    },
+    {
+      "champion": "sejuani",
+      "augment": "Chain Reaction",
+      "tier": "S"
+    },
+    {
+      "champion": "sejuani",
+      "augment": "Courage of the Colossus",
+      "tier": "S"
+    },
+    {
+      "champion": "sejuani",
+      "augment": "Cruelty",
+      "tier": "S"
+    },
+    {
+      "champion": "senna",
+      "augment": "Double Defense",
+      "tier": "S"
+    },
+    {
+      "champion": "senna",
+      "augment": "Mercy's Strike",
+      "tier": "S"
+    },
+    {
+      "champion": "senna",
+      "augment": "Ravenous Bind",
+      "tier": "S"
+    },
+    {
+      "champion": "seraphine",
+      "augment": "Double Defense",
+      "tier": "S"
+    },
+    {
+      "champion": "seraphine",
+      "augment": "From Downtown",
+      "tier": "S"
+    },
+    {
+      "champion": "seraphine",
+      "augment": "Mercy's Strike",
+      "tier": "S"
+    },
+    {
+      "champion": "sett",
+      "augment": "Double Defense",
+      "tier": "S"
+    },
+    {
+      "champion": "sett",
+      "augment": "Mercy's Strike",
+      "tier": "S"
+    },
+    {
+      "champion": "sett",
+      "augment": "Ravenous Bind",
+      "tier": "S"
+    },
+    {
+      "champion": "shaco",
+      "augment": "Blade Waltz",
+      "tier": "S"
+    },
+    {
+      "champion": "shaco",
+      "augment": "Combusting Interest",
+      "tier": "S"
+    },
+    {
+      "champion": "shaco",
+      "augment": "Deft",
+      "tier": "S"
+    },
+    {
+      "champion": "shyvana",
+      "augment": "Double Defense",
+      "tier": "S"
+    },
+    {
+      "champion": "shyvana",
+      "augment": "Mercy's Strike",
+      "tier": "S"
+    },
+    {
+      "champion": "shyvana",
+      "augment": "Multishot",
+      "tier": "S"
+    },
+    {
+      "champion": "singed",
+      "augment": "Chain Reaction",
+      "tier": "S"
+    },
+    {
+      "champion": "singed",
+      "augment": "Combusting Interest",
+      "tier": "S"
+    },
+    {
+      "champion": "singed",
+      "augment": "Firebrand",
+      "tier": "S"
+    },
+    {
+      "champion": "sion",
+      "augment": "Chain Reaction",
+      "tier": "S"
+    },
+    {
+      "champion": "sion",
+      "augment": "Double Defense",
+      "tier": "S"
+    },
+    {
+      "champion": "sion",
+      "augment": "Mercy's Strike",
+      "tier": "S"
+    },
+    {
+      "champion": "skarner",
+      "augment": "Double Defense",
+      "tier": "S"
+    },
+    {
+      "champion": "skarner",
+      "augment": "Mercy's Strike",
+      "tier": "S"
+    },
+    {
+      "champion": "skarner",
+      "augment": "Ravenous Bind",
+      "tier": "S"
+    },
+    {
+      "champion": "smolder",
+      "augment": "From Downtown",
+      "tier": "S"
+    },
+    {
+      "champion": "smolder",
+      "augment": "Multishot",
+      "tier": "S"
+    },
+    {
+      "champion": "smolder",
+      "augment": "Spellsplit",
+      "tier": "S"
+    },
+    {
+      "champion": "sona",
+      "augment": "Double Defense",
+      "tier": "S"
+    },
+    {
+      "champion": "sona",
+      "augment": "Mercy's Strike",
+      "tier": "S"
+    },
+    {
+      "champion": "sona",
+      "augment": "Ravenous Bind",
+      "tier": "S"
+    },
+    {
+      "champion": "soraka",
+      "augment": "Double Defense",
+      "tier": "S"
+    },
+    {
+      "champion": "soraka",
+      "augment": "Mercy's Strike",
+      "tier": "S"
+    },
+    {
+      "champion": "soraka",
+      "augment": "Ravenous Bind",
+      "tier": "S"
+    },
+    {
+      "champion": "swain",
+      "augment": "Multishot",
+      "tier": "S"
+    },
+    {
+      "champion": "swain",
+      "augment": "Spellsplit",
+      "tier": "S"
+    },
+    {
+      "champion": "swain",
+      "augment": "Tripleshot",
+      "tier": "S"
+    },
+    {
+      "champion": "sylas",
+      "augment": "Double Defense",
+      "tier": "S"
+    },
+    {
+      "champion": "sylas",
+      "augment": "Mercy's Strike",
+      "tier": "S"
+    },
+    {
+      "champion": "sylas",
+      "augment": "Multishot",
+      "tier": "S"
+    },
+    {
+      "champion": "syndra",
+      "augment": "Chain Reaction",
+      "tier": "S"
+    },
+    {
+      "champion": "syndra",
+      "augment": "Multishot",
+      "tier": "S"
+    },
+    {
+      "champion": "syndra",
+      "augment": "Spellsplit",
+      "tier": "S"
+    },
+    {
+      "champion": "tahmkench",
+      "augment": "Chain Reaction",
+      "tier": "S"
+    },
+    {
+      "champion": "tahmkench",
+      "augment": "Courage of the Colossus",
+      "tier": "S"
+    },
+    {
+      "champion": "tahmkench",
+      "augment": "Cruelty",
+      "tier": "S"
+    },
+    {
+      "champion": "taliyah",
+      "augment": "Chain Reaction",
+      "tier": "S"
+    },
+    {
+      "champion": "taliyah",
+      "augment": "Courage of the Colossus",
+      "tier": "S"
+    },
+    {
+      "champion": "taliyah",
+      "augment": "Cruelty",
+      "tier": "S"
+    },
+    {
+      "champion": "talon",
+      "augment": "Mercy's Strike",
+      "tier": "S"
+    },
+    {
+      "champion": "taric",
+      "augment": "Double Defense",
+      "tier": "S"
+    },
+    {
+      "champion": "taric",
+      "augment": "Master of Duality",
+      "tier": "S"
+    },
+    {
+      "champion": "taric",
+      "augment": "Ravenous Bind",
+      "tier": "S"
+    },
+    {
+      "champion": "teemo",
+      "augment": "Combusting Interest",
+      "tier": "S"
+    },
+    {
+      "champion": "teemo",
+      "augment": "Firebrand",
+      "tier": "S"
+    },
+    {
+      "champion": "teemo",
+      "augment": "Infernal Conduit",
+      "tier": "S"
+    },
+    {
+      "champion": "thresh",
+      "augment": "Chain Reaction",
+      "tier": "S"
+    },
+    {
+      "champion": "thresh",
+      "augment": "Double Defense",
+      "tier": "S"
+    },
+    {
+      "champion": "thresh",
+      "augment": "From Downtown",
+      "tier": "S"
+    },
+    {
+      "champion": "trundle",
+      "augment": "Chain Reaction",
+      "tier": "S"
+    },
+    {
+      "champion": "trundle",
+      "augment": "Double Defense",
+      "tier": "S"
+    },
+    {
+      "champion": "trundle",
+      "augment": "Infernal Conduit",
+      "tier": "S"
+    },
+    {
+      "champion": "tryndamere",
+      "augment": "Double Defense",
+      "tier": "S"
+    },
+    {
+      "champion": "tryndamere",
+      "augment": "Mercy's Strike",
+      "tier": "S"
+    },
+    {
+      "champion": "tryndamere",
+      "augment": "Ravenous Bind",
+      "tier": "S"
+    },
+    {
+      "champion": "twistedfate",
+      "augment": "Back To Basics",
+      "tier": "S"
+    },
+    {
+      "champion": "twistedfate",
+      "augment": "Biggest Snowball Ever",
+      "tier": "S"
+    },
+    {
+      "champion": "twistedfate",
+      "augment": "Bread And Butter",
+      "tier": "S"
+    },
+    {
+      "champion": "udyr",
+      "augment": "Double Defense",
+      "tier": "S"
+    },
+    {
+      "champion": "udyr",
+      "augment": "Ravenous Bind",
+      "tier": "S"
+    },
+    {
+      "champion": "udyr",
+      "augment": "Rejuvenation",
+      "tier": "S"
+    },
+    {
+      "champion": "urgot",
+      "augment": "Blade Waltz",
+      "tier": "S"
+    },
+    {
+      "champion": "urgot",
+      "augment": "Chain Reaction",
+      "tier": "S"
+    },
+    {
+      "champion": "urgot",
+      "augment": "Deft",
+      "tier": "S"
+    },
+    {
+      "champion": "varus",
+      "augment": "Blade Waltz",
+      "tier": "S"
+    },
+    {
+      "champion": "varus",
+      "augment": "Deft",
+      "tier": "S"
+    },
+    {
+      "champion": "varus",
+      "augment": "Double Defense",
+      "tier": "S"
+    },
+    {
+      "champion": "vayne",
+      "augment": "Chain Reaction",
+      "tier": "S"
+    },
+    {
+      "champion": "veigar",
+      "augment": "From Downtown",
+      "tier": "S"
+    },
+    {
+      "champion": "veigar",
+      "augment": "Multishot",
+      "tier": "S"
+    },
+    {
+      "champion": "veigar",
+      "augment": "Spellsplit",
+      "tier": "S"
+    },
+    {
+      "champion": "velkoz",
+      "augment": "Back To Basics",
+      "tier": "S"
+    },
+    {
+      "champion": "velkoz",
+      "augment": "Biggest Snowball Ever",
+      "tier": "S"
+    },
+    {
+      "champion": "velkoz",
+      "augment": "Bread And Butter",
+      "tier": "S"
+    },
+    {
+      "champion": "vex",
+      "augment": "Double Defense",
+      "tier": "S"
+    },
+    {
+      "champion": "vex",
+      "augment": "From Downtown",
+      "tier": "S"
+    },
+    {
+      "champion": "vex",
+      "augment": "Mercy's Strike",
+      "tier": "S"
+    },
+    {
+      "champion": "vi",
+      "augment": "Back To Basics",
+      "tier": "S"
+    },
+    {
+      "champion": "vi",
+      "augment": "Biggest Snowball Ever",
+      "tier": "S"
+    },
+    {
+      "champion": "vi",
+      "augment": "Chain Reaction",
+      "tier": "S"
+    },
+    {
+      "champion": "viego",
+      "augment": "Double Defense",
+      "tier": "S"
+    },
+    {
+      "champion": "viego",
+      "augment": "Mercy's Strike",
+      "tier": "S"
+    },
+    {
+      "champion": "viego",
+      "augment": "Ravenous Bind",
+      "tier": "S"
+    },
+    {
+      "champion": "viktor",
+      "augment": "Double Defense",
+      "tier": "S"
+    },
+    {
+      "champion": "viktor",
+      "augment": "Mercy's Strike",
+      "tier": "S"
+    },
+    {
+      "champion": "viktor",
+      "augment": "Multishot",
+      "tier": "S"
+    },
+    {
+      "champion": "vladimir",
+      "augment": "Double Defense",
+      "tier": "S"
+    },
+    {
+      "champion": "vladimir",
+      "augment": "Mercy's Strike",
+      "tier": "S"
+    },
+    {
+      "champion": "vladimir",
+      "augment": "Multishot",
+      "tier": "S"
+    },
+    {
+      "champion": "volibear",
+      "augment": "Double Defense",
+      "tier": "S"
+    },
+    {
+      "champion": "volibear",
+      "augment": "Mercy's Strike",
+      "tier": "S"
+    },
+    {
+      "champion": "volibear",
+      "augment": "Ravenous Bind",
+      "tier": "S"
+    },
+    {
+      "champion": "warwick",
+      "augment": "Double Defense",
+      "tier": "S"
+    },
+    {
+      "champion": "warwick",
+      "augment": "Mercy's Strike",
+      "tier": "S"
+    },
+    {
+      "champion": "warwick",
+      "augment": "Ravenous Bind",
+      "tier": "S"
+    },
+    {
+      "champion": "xerath",
+      "augment": "From Downtown",
+      "tier": "S"
+    },
+    {
+      "champion": "xerath",
+      "augment": "Multishot",
+      "tier": "S"
+    },
+    {
+      "champion": "xerath",
+      "augment": "Spellsplit",
+      "tier": "S"
+    },
+    {
+      "champion": "xinzhao",
+      "augment": "Chain Reaction",
+      "tier": "S"
+    },
+    {
+      "champion": "xinzhao",
+      "augment": "Double Defense",
+      "tier": "S"
+    },
+    {
+      "champion": "xinzhao",
+      "augment": "From Downtown",
+      "tier": "S"
+    },
+    {
+      "champion": "yasuo",
+      "augment": "Chain Reaction",
+      "tier": "S"
+    },
+    {
+      "champion": "yasuo",
+      "augment": "Master of Duality",
+      "tier": "S"
+    },
+    {
+      "champion": "yasuo",
+      "augment": "Searing Dawn",
+      "tier": "S"
+    },
+    {
+      "champion": "yone",
+      "augment": "Chain Reaction",
+      "tier": "S"
+    },
+    {
+      "champion": "yone",
+      "augment": "Double Defense",
+      "tier": "S"
+    },
+    {
+      "champion": "yone",
+      "augment": "Master of Duality",
+      "tier": "S"
+    },
+    {
+      "champion": "yorick",
+      "augment": "Double Defense",
+      "tier": "S"
+    },
+    {
+      "champion": "yorick",
+      "augment": "Mercy's Strike",
+      "tier": "S"
+    },
+    {
+      "champion": "yorick",
+      "augment": "Ravenous Bind",
       "tier": "S"
     },
     {
       "champion": "yuumi",
-      "augment": "Tank Engine",
+      "augment": "Back To Basics",
       "tier": "S"
     },
     {
-      "champion": "thresh",
-      "augment": "Shrink Engine",
+      "champion": "yuumi",
+      "augment": "Biggest Snowball Ever",
       "tier": "S"
     },
     {
-      "champion": "thresh",
-      "augment": "Soul Eater",
+      "champion": "yuumi",
+      "augment": "Bread And Butter",
+      "tier": "S"
+    },
+    {
+      "champion": "zaahen",
+      "augment": "Chain Reaction",
+      "tier": "S"
+    },
+    {
+      "champion": "zaahen",
+      "augment": "Double Defense",
+      "tier": "S"
+    },
+    {
+      "champion": "zaahen",
+      "augment": "Mercy's Strike",
+      "tier": "S"
+    },
+    {
+      "champion": "zac",
+      "augment": "Courage of the Colossus",
+      "tier": "S"
+    },
+    {
+      "champion": "zac",
+      "augment": "Cruelty",
+      "tier": "S"
+    },
+    {
+      "champion": "zac",
+      "augment": "Slap Around",
+      "tier": "S"
+    },
+    {
+      "champion": "ziggs",
+      "augment": "Chain Reaction",
+      "tier": "S"
+    },
+    {
+      "champion": "ziggs",
+      "augment": "Multishot",
+      "tier": "S"
+    },
+    {
+      "champion": "ziggs",
+      "augment": "Spellsplit",
+      "tier": "S"
+    },
+    {
+      "champion": "zoe",
+      "augment": "From Downtown",
+      "tier": "S"
+    },
+    {
+      "champion": "zoe",
+      "augment": "Multishot",
+      "tier": "S"
+    },
+    {
+      "champion": "zoe",
+      "augment": "Spellsplit",
+      "tier": "S"
+    },
+    {
+      "champion": "zyra",
+      "augment": "From Downtown",
+      "tier": "S"
+    },
+    {
+      "champion": "zyra",
+      "augment": "Multishot",
+      "tier": "S"
+    },
+    {
+      "champion": "zyra",
+      "augment": "Spellsplit",
       "tier": "S"
     }
   ]

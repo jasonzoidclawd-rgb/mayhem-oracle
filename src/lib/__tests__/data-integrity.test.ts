@@ -2,6 +2,7 @@ import { describe, expect, test } from "vitest";
 import augmentsData from "../../../data/internal/augments.json";
 import championsData from "../../../data/internal/champions.json";
 import combosData from "../../../data/internal/combos.json";
+import poolRules from "../../../data/internal/pool-rules.json";
 import { VALID_AUGMENT_SET_LABELS } from "../data/augment-set";
 import { buildComboTierLookup } from "../data/combo-lookup";
 
@@ -36,6 +37,28 @@ describe("data integrity", () => {
     const pairs = combosData.combos.map((combo) => `${combo.champion}:${combo.augment}`);
 
     expect(new Set(pairs).size).toBe(pairs.length);
+  });
+
+  test("combo rows only reference currently offerable augments", () => {
+    const augmentBySlug = new Map(augmentsData.augments.map((augment) => [augment.slug, augment]));
+    const augmentByName = new Map(augmentsData.augments.map((augment) => [augment.name, augment]));
+    const disabled = new Set(poolRules.disabled);
+
+    for (const combo of combosData.combos) {
+      const augment = "augmentSlug" in combo && typeof combo.augmentSlug === "string"
+        ? augmentBySlug.get(combo.augmentSlug)
+        : augmentByName.get(combo.augment);
+
+      expect(augment, `${combo.champion}:${combo.augment} missing augment`).toBeTruthy();
+      expect(
+        augment?.flags?.lifecycle,
+        `${combo.champion}:${combo.augment} references removed augment`,
+      ).not.toBe("removed");
+      expect(
+        disabled.has(augment?.slug ?? "") || disabled.has(augment?.name ?? ""),
+        `${combo.champion}:${combo.augment} references disabled augment`,
+      ).toBe(false);
+    }
   });
 
   test("wiki set labels are known augment set names", () => {
