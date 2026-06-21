@@ -277,6 +277,7 @@
       "detected": "{date} 감지",
       "added": "증강 풀에 추가",
       "removed": "증강 풀에서 제거",
+      "itemRemoved": "현재 아이템 풀에서 제거",
       "rarity": "조정",
       "effect": "효과 업데이트",
       "mechanism": "실전에서 확인된 메커니즘 / 버그성 메커니즘",

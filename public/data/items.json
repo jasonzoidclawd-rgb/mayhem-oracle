@@ -84,7 +84,14 @@
       ],
       "wikiNotes": [
         "On ARAM: Mayhem where outgoing heals are reduced by 50%, Peppermint would heal 7.5 – 22.5 (based on level) (+ 5% bonus AD) (+ 3.5% AP) instead."
-      ]
+      ],
+      "flags": {
+        "lifecycle": "removed",
+        "availability_source": "player-observed-live-game",
+        "availability_observed_at": "2026-06-21",
+        "availability_reason": "Reported unavailable in a live ARAM Mayhem game while third-party item pages still list it.",
+        "availability_remove_when": "Remove this override only when Riot-authored hotfix data, CommunityDragon item data, arammayhem item data, or a verified live-game check confirms the item is available again."
+      }
     },
     {
       "slug": "the-golden-spatula",

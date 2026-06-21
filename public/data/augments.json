@@ -1134,7 +1134,7 @@
     {
       "slug": "archmage",
       "name": "Archmage",
-      "rarity": "gold",
+      "rarity": "prismatic",
       "icon": "https://arammayhem.com/augments/Archmage_mayhem_augment.webp",
       "name_zh_CN": "大法师",
       "name_zh_TW": "大法師",
@@ -3439,7 +3439,7 @@
     {
       "slug": "terror",
       "name": "Terror",
-      "rarity": "prismatic",
+      "rarity": "gold",
       "icon": "https://arammayhem.com/augments/Terror_mayhem_augment.webp",
       "name_zh_CN": "惊惧",
       "name_zh_TW": "恐懼",
@@ -3625,7 +3625,7 @@
     {
       "slug": "quickstep",
       "name": "Quickstep",
-      "rarity": "prismatic",
+      "rarity": "gold",
       "icon": "https://arammayhem.com/augments/Quickstep_mayhem_augment.webp",
       "name_zh_CN": "快步",
       "name_zh_TW": "快步移動",

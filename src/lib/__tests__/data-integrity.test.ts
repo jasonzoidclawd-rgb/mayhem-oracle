@@ -1,7 +1,9 @@
 import { describe, expect, test } from "vitest";
 import augmentsData from "../../../data/internal/augments.json";
+import cdragonMayhemAugments from "../../../data/internal/cdragon-mayhem-augments.json";
 import championsData from "../../../data/internal/champions.json";
 import combosData from "../../../data/internal/combos.json";
+import itemsData from "../../../data/internal/items.json";
 import poolRules from "../../../data/internal/pool-rules.json";
 import { VALID_AUGMENT_SET_LABELS } from "../data/augment-set";
 import { buildComboTierLookup } from "../data/combo-lookup";
@@ -148,6 +150,27 @@ describe("data integrity", () => {
       status: "bug_mechanism",
       label: "BUG/MECHANISM",
     });
+  });
+
+  test("CommunityDragon Mayhem rarity snapshot reaches engine augment data", () => {
+    const bySlug = new Map(augmentsData.augments.map((augment) => [augment.slug, augment]));
+
+    for (const source of cdragonMayhemAugments.augments) {
+      const augment = bySlug.get(source.slug);
+      if (!augment) continue;
+      expect(augment.rarity, `${source.slug} rarity should match CDragon`).toBe(source.rarity);
+    }
+  });
+
+  test("observed removed live items are flagged out of active item surfaces", () => {
+    const mayhemItems = [
+      ...itemsData.mayhemExclusive,
+      ...itemsData.items,
+    ] as Array<{ slug?: string; name: string; flags?: { lifecycle?: string } }>;
+    const sword = mayhemItems.find((item) => item.slug === "sword-of-blossoming-dawn");
+
+    expect(sword, "Sword of Blossoming Dawn should stay in historical data").toBeTruthy();
+    expect(sword?.flags?.lifecycle).toBe("removed");
   });
 
   test("normalized combo resolution covers most curated combos", () => {

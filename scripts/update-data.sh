@@ -69,6 +69,9 @@ python3 scripts/scrape_patch_notes.py
 step "8b/12 CommunityDragon  →  Mayhem augment snapshot + hotfix detection"
 python3 scripts/scrape_mayhem_augments_cdragon.py
 
+step "8c/12 CommunityDragon hotfix snapshot  →  internal augments.json"
+python3 scripts/apply_cdragon_mayhem_augments.py
+
 step "9/12  restore augment classifications"
 AUGMENT_SNAPSHOT="$AUGMENT_SNAPSHOT" python3 - <<'PY'
 import json
@@ -138,7 +141,10 @@ python3 scripts/generate_pool_rules.py
 step "11a/12 apply observed live mechanism overrides"
 python3 scripts/apply_live_mechanism_overrides.py
 
-step "11b/12 generate current internal combos  →  combos.json"
+step "11b/12 apply observed live item availability overrides"
+python3 scripts/apply_live_item_overrides.py
+
+step "11c/12 generate current internal combos  →  combos.json"
 npx --yes tsx scripts/generate_internal_combos.ts
 
 step "12/12  export sanitized public catalogs"

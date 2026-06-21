@@ -1190,7 +1190,7 @@
     {
       "slug": "archmage",
       "name": "Archmage",
-      "rarity": "gold",
+      "rarity": "prismatic",
       "win_rate": 53.32,
       "icon": "https://arammayhem.com/augments/Archmage_mayhem_augment.webp",
       "name_zh_CN": "大法师",
@@ -3039,7 +3039,7 @@
       "slug": "spiritual-purification",
       "name": "Spiritual Purification",
       "rarity": "gold",
-      "win_rate": 48.0,
+      "win_rate": 48,
       "icon": "https://arammayhem.com/augments/Spiritual_Purification_mayhem_augment.webp",
       "name_zh_CN": "心灵净化",
       "name_zh_TW": "靈魂淨化",
@@ -3610,7 +3610,7 @@
     {
       "slug": "terror",
       "name": "Terror",
-      "rarity": "prismatic",
+      "rarity": "gold",
       "win_rate": 46.04,
       "icon": "https://arammayhem.com/augments/Terror_mayhem_augment.webp",
       "name_zh_CN": "惊惧",
@@ -3805,7 +3805,7 @@
     {
       "slug": "quickstep",
       "name": "Quickstep",
-      "rarity": "prismatic",
+      "rarity": "gold",
       "win_rate": 44.83,
       "icon": "https://arammayhem.com/augments/Quickstep_mayhem_augment.webp",
       "name_zh_CN": "快步",

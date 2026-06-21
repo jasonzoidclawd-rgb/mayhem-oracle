@@ -277,6 +277,7 @@
       "detected": "检测于 {date}",
       "added": "加入增幅装置池",
       "removed": "自增幅装置池移除",
+      "itemRemoved": "自当前装备池移除",
       "rarity": "调整",
       "effect": "效果已更新",
       "mechanism": "实战可见机制 / 疑似 Bug 机制",

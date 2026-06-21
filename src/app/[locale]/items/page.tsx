@@ -3,6 +3,7 @@ import { readFile } from "fs/promises";
 import path from "path";
 import { ItemsClient } from "@/components/items/ItemsClient";
 import type { Item } from "@/lib/types";
+import { activeItems } from "@/lib/items/availability";
 
 interface ItemsData {
   scraped_at: string;
@@ -49,7 +50,8 @@ export default async function ItemsPage({
   //
   const processedItems = data
     ? (() => {
-        const allIds = new Set(data.items.map((i) => i.id));
+        const activeCatalog = activeItems(data.items);
+        const allIds = new Set(activeCatalog.map((i) => i.id));
 
         // Names of items already shown in the Mayhem-exclusive tab (case-insensitive)
         const exclNames = new Set(
@@ -58,13 +60,13 @@ export default async function ItemsPage({
 
         // Base IDs hidden because a Mayhem-modified counterpart (id + 220 000) exists
         const hiddenBaseIds = new Set(
-          data.items
+            activeCatalog
             .filter((i) => i.id != null && i.id >= 200_000 && allIds.has(i.id - 220_000))
             .map((i) => i.id! - 220_000),
         );
 
         // Pass 1: remove duplicates-of-exclusive and hidden-base items; auto-tag
-        const candidates: Item[] = data.items
+        const candidates: Item[] = activeCatalog
           .filter((i) => {
             if (exclNames.has(i.name.toLowerCase())) return false;           // rule B
             if (i.id != null && i.id < 200_000 && hiddenBaseIds.has(i.id))  // rule A
@@ -98,7 +100,7 @@ export default async function ItemsPage({
 
       {data ? (
         <ItemsClient
-          mayhemExclusive={data.mayhemExclusive}
+          mayhemExclusive={activeItems(data.mayhemExclusive)}
           items={processedItems}
         />
       ) : (

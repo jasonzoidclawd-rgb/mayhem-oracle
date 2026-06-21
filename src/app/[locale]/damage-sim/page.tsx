@@ -11,6 +11,7 @@ import { getTranslations, setRequestLocale } from "next-intl/server";
 import { readFile } from "fs/promises";
 import path from "path";
 import type { Item, ChampionBaseStats, AbilityProfile } from "@/lib/types";
+import { activeItems } from "@/lib/items/availability";
 import { parseItemStats, computeDamageProfile, computeMagicDamageProfile } from "@/lib/data/itemStats";
 import DamageCalculator, { type CalcChampion, type CalcItem } from "@/components/damage-sim/DamageCalculator";
 
@@ -19,7 +20,7 @@ import DamageCalculator, { type CalcChampion, type CalcItem } from "@/components
 async function loadItems(): Promise<Item[]> {
   const f = path.join(process.cwd(), "public", "data", "items.json");
   const d = JSON.parse(await readFile(f, "utf-8"));
-  return [...(d.mayhemExclusive ?? []), ...(d.items ?? [])];
+  return activeItems([...(d.mayhemExclusive ?? []), ...(d.items ?? [])]);
 }
 
 async function loadAugments(): Promise<Augment[]> {

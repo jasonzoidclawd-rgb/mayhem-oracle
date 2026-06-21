@@ -7,6 +7,7 @@ import type { ChangeKind } from "@/lib/types";
 type HotfixType = "added" | "removed" | "rarity" | "effect" | "mechanism";
 
 interface HotfixChange {
+  entity?: "augment" | "item";
   slug: string;
   names: Record<string, string>;
   rarity?: string | null;
@@ -70,10 +71,14 @@ export async function HotfixNotes({ locale }: { locale: string }) {
             <ul className="space-y-2 px-5 py-4">
               {event.changes.map((c, idx) => {
                 const name = c.names[locale] ?? c.names.en ?? c.slug;
+                const messageKey =
+                  c.entity === "item" && c.type === "removed"
+                    ? "hotfix.itemRemoved"
+                    : (`hotfix.${c.type}` as "hotfix.added");
                 const detail =
                   c.type === "rarity"
                     ? t("hotfix.rarity")
-                    : t(`hotfix.${c.type}` as "hotfix.added");
+                    : t(messageKey as "hotfix.added");
                 return (
                   <li
                     key={`${c.slug}-${idx}`}
@@ -81,7 +86,7 @@ export async function HotfixNotes({ locale }: { locale: string }) {
                   >
                     <ChangeBadge
                       kind={TYPE_KIND[c.type]}
-                      label={t(`hotfix.${c.type}` as "hotfix.added")}
+                      label={t(messageKey as "hotfix.added")}
                     />
                     <div className="min-w-0 flex-1 text-sm">
                       <div className="font-medium text-[var(--color-text-primary)]">

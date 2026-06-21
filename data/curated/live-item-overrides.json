@@ -1,0 +1,12 @@
+{
+  "overrides": [
+    {
+      "slug": "sword-of-blossoming-dawn",
+      "status": "removed",
+      "observed_at": "2026-06-21",
+      "source": "player-observed-live-game",
+      "reason": "Reported unavailable in a live ARAM Mayhem game while third-party item pages still list it.",
+      "remove_when": "Remove this override only when Riot-authored hotfix data, CommunityDragon item data, arammayhem item data, or a verified live-game check confirms the item is available again."
+    }
+  ]
+}
