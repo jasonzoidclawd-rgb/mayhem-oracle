@@ -277,7 +277,7 @@
       "detected": "偵測於 {date}",
       "added": "加入增幅裝置池",
       "removed": "自增幅裝置池移除",
-      "rarity": "稀有度變更：{from} → {to}",
+      "rarity": "調整",
       "effect": "效果已更新",
       "mechanism": "實戰可見機制 / 疑似 Bug 機制",
       "rarities": {

@@ -47,9 +47,6 @@ export async function HotfixNotes({ locale }: { locale: string }) {
   const events = await loadHotfixes();
   if (!events.length) return null;
 
-  const rarityLabel = (r?: string | null) =>
-    r ? t(`hotfix.rarities.${r}` as `hotfix.rarities.${string}`) : "";
-
   return (
     <section className="mb-8">
       <div className="mb-3">
@@ -75,10 +72,7 @@ export async function HotfixNotes({ locale }: { locale: string }) {
                 const name = c.names[locale] ?? c.names.en ?? c.slug;
                 const detail =
                   c.type === "rarity"
-                    ? t("hotfix.rarity", {
-                        from: rarityLabel(c.fromRarity),
-                        to: rarityLabel(c.toRarity),
-                      })
+                    ? t("hotfix.rarity")
                     : t(`hotfix.${c.type}` as "hotfix.added");
                 return (
                   <li
