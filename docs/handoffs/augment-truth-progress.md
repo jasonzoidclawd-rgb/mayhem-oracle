@@ -261,3 +261,47 @@ Commands run:
 | `npx eslint src scripts` | PASS (exit 0, no output) |
 | `npm run build` | PASS (Next.js build completed) |
 | `(cd overlay && npm run build)` | SKIPPED; Step 2 did not touch overlay code or overlay data-sync inputs |
+
+## Step 3 — Demote arammayhem to win_rate feed (codex)
+
+Date: 2026-06-23 (Asia/Taipei)
+
+Changed:
+
+- Added `scripts/augment_winrate_feed.py`, the isolated internal win-rate feed builder.
+- Added `data/internal/augment-winrate-feed.json`, keyed by CDragon `augmentNameId`.
+- Refactored `scripts/scrape_arammayhem.py` so the augment path parses only `{sourceKey, win_rate}` rows and writes only `augment-winrate-feed.json`.
+- Updated the arammayhem update-data step label to `champions/augment win-rate feed/combos/meta`.
+- Added deterministic tests proving the arammayhem augment path does not emit definition/lifecycle fields and has no `augments.json` write path.
+
+Win-rate feed coverage:
+
+| Measure | Count |
+| --- | ---: |
+| arammayhem source rows from Step 1 reports | 185 |
+| CDragon `augmentId`s with `win_rate` | 123 |
+| CDragon base-catalog `augmentId`s | 170 |
+| Missing `win_rate` / later null | 47 |
+| Unmatched arammayhem rows, report-only | 62 |
+| Source rows without a parsed `win_rate` | 0 |
+
+Boundary confirmations:
+
+- `data/internal/augments.json` was not modified; `/usr/bin/diff` against HEAD produced no output.
+- `public/data/**`, pool rules, scoring twins, `messages/*`, and `data/internal/augment-base-catalog.json` were not modified.
+- arammayhem no longer creates augment rows or sets augment `name`, `rarity`, `icon`, locale names, effect text, lifecycle, availability, type, flags, or pool/scoring fields.
+- Champion, combo, and meta scraping remains in `scripts/scrape_arammayhem.py`: `champions.json`, `combos.json`, and `meta.json` are still written by the script. Only the augment definition write was removed.
+
+Commands run:
+
+| Command | Result |
+| --- | --- |
+| `python3 scripts/test_scrape_arammayhem.py` | PASS (5 tests) |
+| `python3 scripts/augment_winrate_feed.py` | PASS; wrote 123 win rates, 47 missing, 62 unmatched |
+| `python3 scripts/test_augment_identity_resolver.py` | PASS (4 tests) |
+| feed forbidden-field sanity check | PASS; no augment definition/lifecycle keys in `augment-winrate-feed.json` |
+| `/usr/bin/diff -u <(git show HEAD:data/internal/augments.json) data/internal/augments.json` | PASS; no output |
+| `npm test` | PASS (27 files, 250 tests) |
+| `npx eslint src scripts` | PASS (exit 0, no output) |
+| `npm run build` | PASS (Next.js build completed) |
+| `(cd overlay && npm run build)` | SKIPPED; Step 3 did not touch overlay code or overlay data-sync inputs |

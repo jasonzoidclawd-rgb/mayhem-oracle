@@ -2,16 +2,16 @@
 Mayhem Oracle — arammayhem.com Scraper
 =======================================
 Fetches champion tier list, augments, and combos from arammayhem.com.
-Outputs full generated JSON to data/internal/ for decision runtime use.
+Outputs generated JSON to data/internal/ for decision runtime use.
 
 Usage:
     python scripts/scrape_arammayhem.py
 
 Output files:
-    data/internal/champions.json   — tier list with win rates
-    data/internal/augments.json    — augment catalog with rarities
-    data/internal/combos.json      — champion × augment synergies
-    data/internal/meta.json        — patch version + scrape timestamp
+    data/internal/champions.json            — tier list with win rates
+    data/internal/augment-winrate-feed.json — augment win rates keyed by CDragon augmentNameId
+    data/internal/combos.json               — champion × augment synergies
+    data/internal/meta.json                 — patch version + scrape timestamp
 """
 
 from __future__ import annotations
@@ -24,9 +24,15 @@ import html as html_module
 from datetime import datetime, timezone
 from pathlib import Path
 from urllib.request import urlopen, Request
-from urllib.error import URLError
 from urllib.parse import urljoin
 
+from augment_winrate_feed import (
+    BASE_CATALOG_PATH,
+    IDENTITY_MAP_PATH,
+    WIN_RATE_FEED_PATH,
+    build_arammayhem_win_rate_feed,
+    load_json,
+)
 from data_paths import INTERNAL_DATA_DIR
 from champion_slug_aliases import canonical_champion_slug
 
@@ -138,10 +144,10 @@ def parse_tier_list(html: str) -> list[dict]:
     return champions
 
 
-# ── Augments ───────────────────────────────────────────────────────────────
+# ── Augment win-rate feed ─────────────────────────────────────────────────
 
 def parse_augments(html: str) -> list[dict]:
-    augments = []
+    rows = []
 
     # Two markups: rank rows (2026-06-12 redesign) and the older card grid.
     card_starts = [
@@ -156,16 +162,8 @@ def parse_augments(html: str) -> list[dict]:
         block = html[start:end]
 
         slug_m = re.search(r'href="/augments/([^"]+)"', block)
-        rarity_m = re.search(r'data-rarity="([^"]+)"', block)
-        # The augment icon img (rank rows also embed champion-icon imgs).
-        img_m = re.search(r'<img src="([^"]*augments/[^"]*)"[^>]*alt="([^"]+)"', block)
-
-        if not (slug_m and rarity_m and img_m):
+        if not slug_m:
             continue
-
-        icon = unescape(img_m.group(1))
-        if icon.startswith("/"):
-            icon = resolve_url(icon)
 
         # Win rate: old markup used a "59.03<!-- -->%" badge; rank rows render
         # pick rate (duplicated for responsive grids) and win rate as plain
@@ -177,91 +175,12 @@ def parse_augments(html: str) -> list[dict]:
             pcts = {float(v) for v in re.findall(r"([\d.]+)\s*%", block) if float(v) <= 100}
             win_rate = max(pcts) if pcts else None
 
-        # Lifecycle: data-availability (live|retired) on rank rows; badge text
-        # on the old cards. "live" cannot distinguish added-vs-active — that is
-        # resolved against the previous data file in main().
-        availability_m = re.search(r'data-availability="([^"]+)"', block)
-        if availability_m:
-            lifecycle = "removed" if availability_m.group(1) == "retired" else "live"
-        elif re.search(r">\s*DELETED[^<]*</span>", block):
-            lifecycle = "removed"
-        elif re.search(r">\s*NEW\s*</span>", block):
-            lifecycle = "added"
-        else:
-            lifecycle = "active"
-
-        augments.append({
-            "slug": slug_m.group(1),
-            "name": unescape(img_m.group(2)),
-            "rarity": rarity_m.group(1),
+        rows.append({
+            "sourceKey": normalize_path_slug(slug_m.group(1)),
             "win_rate": win_rate,
-            "icon": icon,
-            "lifecycle": lifecycle,
         })
 
-    return augments
-
-
-def parse_locale_augment_names(html: str, locale_code: str) -> dict[str, str]:
-    names: dict[str, str] = {}
-    card_starts = [
-        m.start()
-        for m in re.finditer(
-            rf'href="/{re.escape(locale_code)}/augments/[^"]+"\s+class="augment-card',
-            html,
-        )
-    ]
-
-    for i, start in enumerate(card_starts):
-        end = card_starts[i + 1] if i + 1 < len(card_starts) else start + 2000
-        block = html[start:end]
-
-        slug_m = re.search(rf'href="/{re.escape(locale_code)}/augments/([^"]+)"', block)
-        if not slug_m:
-            continue
-
-        img_m = re.search(r"<img\b[^>]*>", block)
-        alt_m = re.search(r'alt="([^"]+)"', img_m.group(0)) if img_m else None
-        if alt_m:
-            names[normalize_path_slug(slug_m.group(1))] = unescape(alt_m.group(1))
-            continue
-
-        data_name_m = re.search(r'data-name="([^"]+)"', block)
-        if data_name_m:
-            slug = normalize_path_slug(slug_m.group(1))
-            english_part = slug.replace("-", " ")
-            localized = re.sub(
-                rf"\s+{re.escape(english_part)}\s*$",
-                "",
-                unescape(data_name_m.group(1)),
-                flags=re.IGNORECASE,
-            ).strip()
-            if localized:
-                names[slug] = localized
-
-    return names
-
-
-# ── Augment types (26.12 ability/quest classes) ───────────────────────────
-
-TYPE_INDEX_PAGES = (
-    ("/ability-augments/", "ability"),
-    ("/quest-augments/", "quest"),
-)
-
-
-def fetch_type_membership() -> dict[str, str]:
-    """Slug → "ability" | "quest" from the dedicated class subpages."""
-    membership: dict[str, str] = {}
-    for path, augment_type in TYPE_INDEX_PAGES:
-        try:
-            page_html = fetch(path)
-        except Exception as e:
-            print(f"  {path}: skipped ({e})")
-            continue
-        for m in re.finditer(rf'href="{re.escape(path)}([^/"#?]+)/?"', page_html):
-            membership[normalize_path_slug(m.group(1))] = augment_type
-    return membership
+    return rows
 
 
 def load_existing_rows(filename: str, key: str) -> dict[str, dict]:
@@ -274,40 +193,6 @@ def load_existing_rows(filename: str, key: str) -> dict[str, dict]:
     except (OSError, json.JSONDecodeError):
         return {}
     return {row["slug"]: row for row in data.get(key, []) if row.get("slug")}
-
-
-def fetch_missing_descriptions(augments: list[dict]) -> int:
-    """Live tooltip from /augments/<slug>/ for rows the LoL wiki has not covered yet."""
-    missing = [
-        a for a in augments
-        if not a.get("wikiDescription") and a["flags"]["lifecycle"] != "removed"
-    ]
-    filled = 0
-    for aug in missing:
-        time.sleep(0.5)
-        try:
-            page = fetch(f"/augments/{aug['slug']}/")
-        except Exception as e:
-            print(f"  {aug['slug']}: skipped ({e})")
-            continue
-        island = re.search(
-            r'component-url="[^"]*AugmentDescription[^"]*"[^>]*props="([^"]+)"',
-            page,
-        )
-        if not island:
-            continue
-        try:
-            props = json.loads(unescape(island.group(1)))
-            raw_desc = props["description"][1]
-        except (ValueError, KeyError, IndexError, TypeError):
-            continue
-        text = re.sub(r"<br\s*/?>", " ", unescape(raw_desc))
-        text = re.sub(r"<[^>]+>", "", text)
-        text = re.sub(r"\s+", " ", text).strip()
-        if text:
-            aug["wikiDescription"] = text
-            filled += 1
-    return filled
 
 
 # ── Combos ─────────────────────────────────────────────────────────────────
@@ -567,125 +452,21 @@ def main():
     champions = merge_champion_sources(parse_tier_list(tier_html), search_champions)
     print(f"  → {len(champions)} champions")
 
-    # Augments
-    print("\n[3/8] Augments")
+    # Augment win rates
+    print("\n[3/5] Augment win rates")
     time.sleep(1)
     aug_html = fetch("/augments/")
-    augments = parse_augments(aug_html)
+    augment_win_rate_rows = parse_augments(aug_html)
     patch = extract_patch(tier_html, aug_html) or search_patch
-    print(f"  → {len(augments)} augments, patch {patch}")
-
-    # Augment locale names
-    print("\n[4/8] Augment locale names")
-    by_slug = {a["slug"]: a for a in augments}
-    locale_configs = [
-        ("zh-cn", "name_zh_CN"),
-        ("zh-tw", "name_zh_TW"),
-        ("ja-jp", "name_ja"),
-        ("ko-kr", "name_ko"),
-    ]
-    for locale_code, field in locale_configs:
-        time.sleep(0.8)
-        try:
-            locale_html = fetch(f"/{locale_code}/augments/")
-        except Exception as e:
-            print(f"  {locale_code}: skipped ({e})")
-            continue
-        matched = 0
-        for slug, loc_name in parse_locale_augment_names(locale_html, locale_code).items():
-            if slug in by_slug:
-                by_slug[slug][field] = loc_name
-                matched += 1
-        print(f"  {locale_code}: {matched} names")
-
-    # Traditional Chinese names from CommunityDragon
-    print("\n[5/8] Traditional Chinese augment names")
-    try:
-        zh_tw_url = (
-            "https://raw.communitydragon.org/latest/plugins/"
-            "rcp-be-lol-game-data/global/zh_tw/v1/cherry-augments.json"
-        )
-        req = __import__("urllib.request", fromlist=["Request"]).Request(
-            zh_tw_url, headers={"User-Agent": "Mozilla/5.0"}
-        )
-        import urllib.request as _ur
-        with _ur.urlopen(req, timeout=30) as r:
-            import json as _json
-            zh_tw_data = _json.load(r)
-
-        def _norm(s: str) -> str:
-            return re.sub(r"[^a-z]", "", s.lower())
-
-        zh_tw_lookup = {}
-        for entry in zh_tw_data:
-            if not entry.get("nameTRA"):
-                continue
-            stem = entry["augmentSmallIconPath"].split("/")[-1].replace("_small.png", "")
-            zh_tw_lookup[_norm(stem)] = entry["nameTRA"]
-
-        zh_tw_matched = 0
-        for aug in augments:
-            key = _norm(aug["slug"])
-            name = zh_tw_lookup.get(key) or zh_tw_lookup.get(_norm(aug["name"]))
-            if name and not aug.get("name_zh_TW"):
-                aug["name_zh_TW"] = name
-                zh_tw_matched += 1
-        print(f"  → {zh_tw_matched} Traditional Chinese names")
-    except Exception as e:
-        print(f"  Skipped: {e}")
-
-    # Augment types (26.12 ability/quest classes)
-    print("\n[6/8] Augment types")
-    membership = fetch_type_membership()
-    print(f"  → {len(membership)} class-page members")
-
-    # Carry curated/enriched fields over from the previous data files so a
-    # standalone scrape run never destroys classifier/wiki/base-stat output.
-    existing_augments = load_existing_rows("augments.json", "augments")
-    for i, aug in enumerate(augments):
-        slug = aug["slug"]
-        lifecycle = aug.pop("lifecycle")
-        old = existing_augments.get(slug, {})
-        old_flags = old.get("flags") or {}
-        if lifecycle == "live":
-            # Rank rows only say live|retired: keep the added cohort from the
-            # previous file; brand-new slugs count as added.
-            if old:
-                lifecycle = "added" if old_flags.get("lifecycle") == "added" else "active"
-            else:
-                lifecycle = "added"
-        merged = {**old, **aug}
-        merged["flags"] = {
-            "system_breaker": bool(old_flags.get("system_breaker", False)),
-            "lifecycle": lifecycle,
-        }
-        merged.setdefault("kit_tags", [])
-        augments[i] = merged
+    print(f"  → {len(augment_win_rate_rows)} source rows, patch {patch}")
 
     existing_champions = load_existing_rows("champions.json", "champions")
     for i, champ in enumerate(champions):
         old = existing_champions.get(champ["slug"], {})
         champions[i] = {**old, **champ}
 
-    # Live tooltips for augments without a wiki description yet
-    print("\n[7/8] Augment descriptions (gap fill from detail pages)")
-    filled = fetch_missing_descriptions(augments)
-    print(f"  → {filled} descriptions fetched")
-
-    # Augment classes: curated subpage membership ∪ Riot's "your chosen ability"
-    # tooltip token — the subpages list only highlighted examples (6 of 24).
-    for aug in augments:
-        slug = aug["slug"]
-        desc = (aug.get("wikiDescription") or "").lower()
-        if membership.get(slug) == "ability" or "your chosen ability" in desc:
-            aug["type"] = "ability"
-        elif membership.get(slug) == "quest" or slug.startswith("quest-"):
-            aug["type"] = "quest"
-        else:
-            aug["type"] = "standalone"
-
     # Combos
-    print("\n[8/8] Combos")
+    print("\n[4/5] Combos")
     time.sleep(1)
     combo_html = fetch("/combo/")
     combos = merge_combo_sources(parse_combos(combo_html), search_combos)
@@ -693,18 +474,10 @@ def main():
 
     # Sanity checks — abort before touching existing data if counts look wrong
     MIN_CHAMPIONS = 50
-    MIN_AUGMENTS  = 150
     MIN_COMBOS    = 1
-    MAX_REMOVED   = 80
-    removed_count = sum(1 for a in augments if a["flags"]["lifecycle"] == "removed")
-    added_count   = sum(1 for a in augments if a["flags"]["lifecycle"] == "added")
     errors = []
     if len(champions) < MIN_CHAMPIONS:
         errors.append(f"champions={len(champions)} < {MIN_CHAMPIONS} (source markup may have changed)")
-    if len(augments) < MIN_AUGMENTS:
-        errors.append(f"augments={len(augments)} < {MIN_AUGMENTS} (source markup may have changed)")
-    if removed_count > MAX_REMOVED:
-        errors.append(f"removed={removed_count} > {MAX_REMOVED} (lifecycle markup may have drifted)")
     if len(combos) < MIN_COMBOS:
         errors.append(f"combos={len(combos)} < {MIN_COMBOS}")
     if errors:
@@ -715,11 +488,18 @@ def main():
     # Atomic writes — each file is written to a temp then renamed so partial
     # failures never leave a truncated JSON on disk.
     scraped_at = datetime.now(timezone.utc).isoformat()
+    identity_map = load_json(IDENTITY_MAP_PATH)
+    base_catalog = load_json(BASE_CATALOG_PATH) if BASE_CATALOG_PATH.exists() else None
+    win_rate_feed = build_arammayhem_win_rate_feed(
+        rows=augment_win_rate_rows,
+        identity_map=identity_map,
+        base_catalog=base_catalog,
+        generated_at=scraped_at,
+    )
 
     atomic_write(OUT_DIR / "champions.json",
                  {"patch": patch, "scraped_at": scraped_at, "champions": champions})
-    atomic_write(OUT_DIR / "augments.json",
-                 {"patch": patch, "scraped_at": scraped_at, "augments": augments})
+    atomic_write(WIN_RATE_FEED_PATH, win_rate_feed)
     atomic_write(OUT_DIR / "combos.json",
                  {"patch": patch, "scraped_at": scraped_at, "combos": combos})
     atomic_write(OUT_DIR / "meta.json",
@@ -727,7 +507,8 @@ def main():
 
     print(f"\nDone. Files written to {OUT_DIR}/")
     print(f"  champions.json  ({len(champions)} entries)")
-    print(f"  augments.json   ({len(augments)} entries: {added_count} added, {removed_count} removed)")
+    print(f"  {WIN_RATE_FEED_PATH.name}  ({win_rate_feed['counts']['matchedAugmentIds']} win rates; "
+          f"{win_rate_feed['counts']['unmatchedSourceRows']} unmatched)")
     print(f"  combos.json     ({len(combos)} entries)")
     print(f"  meta.json")
 

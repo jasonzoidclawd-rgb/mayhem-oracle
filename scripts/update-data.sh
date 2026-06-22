@@ -39,7 +39,7 @@ Path(os.environ["AUGMENT_SNAPSHOT"]).write_text(
 print(f"Snapshotted {sum(1 for v in snapshot.values() if v.get('kit_tags'))} classified augments")
 PY
 
-step "2/12  arammayhem.com  →  internal champions/augments/combos/meta"
+step "2/12  arammayhem.com  →  internal champions/augment win-rate feed/combos/meta"
 python3 scripts/scrape_arammayhem.py
 
 step "3/12  CommunityDragon  →  internal abilities/items"
