@@ -1,14 +1,14 @@
 {
   "patch": "26.12",
-  "scraped_at": "2026-06-21T23:02:20.343430+00:00",
+  "scraped_at": "2026-06-22T23:13:09.286747+00:00",
   "champions": [
     {
       "slug": "brand",
       "name": "Brand",
       "tier": "S+",
       "rank": 1,
-      "win_rate": 55.96,
-      "pick_rate": 14.81,
+      "win_rate": 55.93,
+      "pick_rate": 15.07,
       "tags": [
         "mage",
         "support"
@@ -48,8 +48,8 @@
       "name": "Sett",
       "tier": "S+",
       "rank": 2,
-      "win_rate": 55.93,
-      "pick_rate": 12.0,
+      "win_rate": 55.89,
+      "pick_rate": 12.2,
       "tags": [
         "fighter",
         "tank"
@@ -87,12 +87,52 @@
       "name_ko": "세트"
     },
     {
+      "slug": "graves",
+      "name": "Graves",
+      "tier": "S+",
+      "rank": 3,
+      "win_rate": 54.9,
+      "pick_rate": 11.94,
+      "tags": [
+        "marksman"
+      ],
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/104.png",
+      "baseStats": {
+        "baseHP": 625,
+        "hpGrowth": 106,
+        "baseArmor": 33,
+        "armorGrowth": 4.6,
+        "baseMR": 30,
+        "mrGrowth": 1.3,
+        "baseAD": 66,
+        "adGrowth": 4,
+        "baseAS": 0.475,
+        "asGrowth": 3,
+        "attackRange": 425,
+        "moveSpeed": 340,
+        "baseMP": 325,
+        "mpGrowth": 40,
+        "baseHPRegen": 8,
+        "hpRegenGrowth": 0.7
+      },
+      "kit_tags": [
+        "attack",
+        "crit",
+        "movement",
+        "on_hit"
+      ],
+      "name_zh_TW": "葛雷夫",
+      "name_zh_CN": "法外狂徒",
+      "name_ja": "グレイブス",
+      "name_ko": "그레이브즈"
+    },
+    {
       "slug": "drmundo",
       "name": "Drmundo",
       "tier": "S+",
-      "rank": 3,
-      "win_rate": 54.3,
-      "pick_rate": 12.4,
+      "rank": 4,
+      "win_rate": 54.26,
+      "pick_rate": 12.68,
       "tags": [
         "tank",
         "fighter"
@@ -129,52 +169,12 @@
       "name_ko": "문도 박사"
     },
     {
-      "slug": "graves",
-      "name": "Graves",
-      "tier": "S+",
-      "rank": 4,
-      "win_rate": 54.83,
-      "pick_rate": 11.85,
-      "tags": [
-        "marksman"
-      ],
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/104.png",
-      "baseStats": {
-        "baseHP": 625,
-        "hpGrowth": 106,
-        "baseArmor": 33,
-        "armorGrowth": 4.6,
-        "baseMR": 30,
-        "mrGrowth": 1.3,
-        "baseAD": 66,
-        "adGrowth": 4,
-        "baseAS": 0.475,
-        "asGrowth": 3,
-        "attackRange": 425,
-        "moveSpeed": 340,
-        "baseMP": 325,
-        "mpGrowth": 40,
-        "baseHPRegen": 8,
-        "hpRegenGrowth": 0.7
-      },
-      "kit_tags": [
-        "attack",
-        "crit",
-        "movement",
-        "on_hit"
-      ],
-      "name_zh_TW": "葛雷夫",
-      "name_zh_CN": "法外狂徒",
-      "name_ja": "グレイブス",
-      "name_ko": "그레이브즈"
-    },
-    {
       "slug": "vayne",
       "name": "Vayne",
       "tier": "S+",
       "rank": 5,
-      "win_rate": 55.99,
-      "pick_rate": 10.6,
+      "win_rate": 56.25,
+      "pick_rate": 10.73,
       "tags": [
         "marksman",
         "assassin"
@@ -215,8 +215,8 @@
       "name": "Yasuo",
       "tier": "S+",
       "rank": 6,
-      "win_rate": 55.31,
-      "pick_rate": 10.88,
+      "win_rate": 55.25,
+      "pick_rate": 10.95,
       "tags": [
         "fighter",
         "assassin"
@@ -254,12 +254,94 @@
       "name_ko": "야스오"
     },
     {
-      "slug": "missfortune",
-      "name": "Missfortune",
+      "slug": "lillia",
+      "name": "Lillia",
       "tier": "S+",
       "rank": 7,
-      "win_rate": 52.07,
-      "pick_rate": 14.76,
+      "win_rate": 58.81,
+      "pick_rate": 9.5,
+      "tags": [
+        "fighter",
+        "mage"
+      ],
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/876.png",
+      "baseStats": {
+        "baseHP": 605,
+        "hpGrowth": 105,
+        "baseArmor": 22,
+        "armorGrowth": 4.5,
+        "baseMR": 32,
+        "mrGrowth": 1.55,
+        "baseAD": 61,
+        "adGrowth": 3.1,
+        "baseAS": 0.625,
+        "asGrowth": 2.7,
+        "attackRange": 325,
+        "moveSpeed": 330,
+        "baseMP": 410,
+        "mpGrowth": 50,
+        "baseHPRegen": 2.5,
+        "hpRegenGrowth": 0.55
+      },
+      "kit_tags": [
+        "ability",
+        "cc",
+        "dot",
+        "haste",
+        "movement"
+      ],
+      "name_zh_TW": "莉莉亞",
+      "name_zh_CN": "含羞蓓蕾",
+      "name_ja": "リリア",
+      "name_ko": "릴리아"
+    },
+    {
+      "slug": "aurelionsol",
+      "name": "Aurelionsol",
+      "tier": "S",
+      "rank": 8,
+      "win_rate": 53.72,
+      "pick_rate": 11.24,
+      "tags": [
+        "mage"
+      ],
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/136.png",
+      "baseStats": {
+        "baseHP": 600,
+        "hpGrowth": 90,
+        "baseArmor": 22,
+        "armorGrowth": 4,
+        "baseMR": 30,
+        "mrGrowth": 1.3,
+        "baseAD": 58,
+        "adGrowth": 3.2,
+        "baseAS": 0.625,
+        "asGrowth": 1.5,
+        "attackRange": 550,
+        "moveSpeed": 340,
+        "baseMP": 530,
+        "mpGrowth": 40,
+        "baseHPRegen": 5.5,
+        "hpRegenGrowth": 0.55
+      },
+      "kit_tags": [
+        "ability",
+        "cc",
+        "haste",
+        "movement"
+      ],
+      "name_zh_TW": "翱銳龍獸",
+      "name_zh_CN": "铸星龙王",
+      "name_ja": "オレリオン・ソル",
+      "name_ko": "아우렐리온 솔"
+    },
+    {
+      "slug": "missfortune",
+      "name": "Missfortune",
+      "tier": "S",
+      "rank": 9,
+      "win_rate": 51.96,
+      "pick_rate": 15.02,
       "tags": [
         "marksman",
         "mage"
@@ -297,94 +379,12 @@
       "name_ko": "미스 포츈"
     },
     {
-      "slug": "aurelionsol",
-      "name": "Aurelionsol",
-      "tier": "S",
-      "rank": 8,
-      "win_rate": 53.7,
-      "pick_rate": 11.08,
-      "tags": [
-        "mage"
-      ],
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/136.png",
-      "baseStats": {
-        "baseHP": 600,
-        "hpGrowth": 90,
-        "baseArmor": 22,
-        "armorGrowth": 4,
-        "baseMR": 30,
-        "mrGrowth": 1.3,
-        "baseAD": 58,
-        "adGrowth": 3.2,
-        "baseAS": 0.625,
-        "asGrowth": 1.5,
-        "attackRange": 550,
-        "moveSpeed": 340,
-        "baseMP": 530,
-        "mpGrowth": 40,
-        "baseHPRegen": 5.5,
-        "hpRegenGrowth": 0.55
-      },
-      "kit_tags": [
-        "ability",
-        "cc",
-        "haste",
-        "movement"
-      ],
-      "name_zh_TW": "翱銳龍獸",
-      "name_zh_CN": "铸星龙王",
-      "name_ja": "オレリオン・ソル",
-      "name_ko": "아우렐리온 솔"
-    },
-    {
-      "slug": "lillia",
-      "name": "Lillia",
-      "tier": "S",
-      "rank": 9,
-      "win_rate": 58.89,
-      "pick_rate": 9.41,
-      "tags": [
-        "fighter",
-        "mage"
-      ],
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/876.png",
-      "baseStats": {
-        "baseHP": 605,
-        "hpGrowth": 105,
-        "baseArmor": 22,
-        "armorGrowth": 4.5,
-        "baseMR": 32,
-        "mrGrowth": 1.55,
-        "baseAD": 61,
-        "adGrowth": 3.1,
-        "baseAS": 0.625,
-        "asGrowth": 2.7,
-        "attackRange": 325,
-        "moveSpeed": 330,
-        "baseMP": 410,
-        "mpGrowth": 50,
-        "baseHPRegen": 2.5,
-        "hpRegenGrowth": 0.55
-      },
-      "kit_tags": [
-        "ability",
-        "cc",
-        "dot",
-        "haste",
-        "movement"
-      ],
-      "name_zh_TW": "莉莉亞",
-      "name_zh_CN": "含羞蓓蕾",
-      "name_ja": "リリア",
-      "name_ko": "릴리아"
-    },
-    {
       "slug": "ryze",
       "name": "Ryze",
       "tier": "S",
       "rank": 10,
-      "win_rate": 53.13,
-      "pick_rate": 11.61,
+      "win_rate": 53.15,
+      "pick_rate": 11.71,
       "tags": [
         "mage"
       ],
@@ -419,55 +419,12 @@
       "name_ko": "라이즈"
     },
     {
-      "slug": "morgana",
-      "name": "Morgana",
-      "tier": "S",
-      "rank": 11,
-      "win_rate": 53.19,
-      "pick_rate": 10.75,
-      "tags": [
-        "support",
-        "mage"
-      ],
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/25.png",
-      "baseStats": {
-        "baseHP": 630,
-        "hpGrowth": 104,
-        "baseArmor": 25,
-        "armorGrowth": 4.2,
-        "baseMR": 30,
-        "mrGrowth": 1.3,
-        "baseAD": 56,
-        "adGrowth": 3.5,
-        "baseAS": 0.625,
-        "asGrowth": 1.53,
-        "attackRange": 450,
-        "moveSpeed": 335,
-        "baseMP": 340,
-        "mpGrowth": 60,
-        "baseHPRegen": 5.5,
-        "hpRegenGrowth": 0.4
-      },
-      "kit_tags": [
-        "ability",
-        "cc",
-        "dot",
-        "haste",
-        "heal_shield",
-        "movement"
-      ],
-      "name_zh_TW": "魔甘娜",
-      "name_zh_CN": "堕落天使",
-      "name_ja": "モルガナ",
-      "name_ko": "모르가나"
-    },
-    {
       "slug": "sion",
       "name": "Sion",
       "tier": "S",
-      "rank": 12,
-      "win_rate": 58.89,
-      "pick_rate": 8.78,
+      "rank": 11,
+      "win_rate": 58.81,
+      "pick_rate": 9.08,
       "tags": [
         "tank",
         "fighter"
@@ -506,9 +463,9 @@
       "slug": "caitlyn",
       "name": "Caitlyn",
       "tier": "S",
-      "rank": 13,
-      "win_rate": 52.03,
-      "pick_rate": 11.6,
+      "rank": 12,
+      "win_rate": 52.15,
+      "pick_rate": 11.71,
       "tags": [
         "marksman"
       ],
@@ -544,12 +501,55 @@
       "name_ko": "케이틀린"
     },
     {
+      "slug": "morgana",
+      "name": "Morgana",
+      "tier": "S",
+      "rank": 13,
+      "win_rate": 53.12,
+      "pick_rate": 10.82,
+      "tags": [
+        "support",
+        "mage"
+      ],
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/25.png",
+      "baseStats": {
+        "baseHP": 630,
+        "hpGrowth": 104,
+        "baseArmor": 25,
+        "armorGrowth": 4.2,
+        "baseMR": 30,
+        "mrGrowth": 1.3,
+        "baseAD": 56,
+        "adGrowth": 3.5,
+        "baseAS": 0.625,
+        "asGrowth": 1.53,
+        "attackRange": 450,
+        "moveSpeed": 335,
+        "baseMP": 340,
+        "mpGrowth": 60,
+        "baseHPRegen": 5.5,
+        "hpRegenGrowth": 0.4
+      },
+      "kit_tags": [
+        "ability",
+        "cc",
+        "dot",
+        "haste",
+        "heal_shield",
+        "movement"
+      ],
+      "name_zh_TW": "魔甘娜",
+      "name_zh_CN": "堕落天使",
+      "name_ja": "モルガナ",
+      "name_ko": "모르가나"
+    },
+    {
       "slug": "tahmkench",
       "name": "Tahmkench",
       "tier": "S",
       "rank": 14,
-      "win_rate": 51.95,
-      "pick_rate": 11.52,
+      "win_rate": 51.89,
+      "pick_rate": 11.71,
       "tags": [
         "tank",
         "support"
@@ -586,53 +586,12 @@
       "name_ko": "탐 켄치"
     },
     {
-      "slug": "jinx",
-      "name": "Jinx",
-      "tier": "S",
-      "rank": 15,
-      "win_rate": 53.85,
-      "pick_rate": 9.34,
-      "tags": [
-        "marksman"
-      ],
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/222.png",
-      "baseStats": {
-        "baseHP": 630,
-        "hpGrowth": 105,
-        "baseArmor": 26,
-        "armorGrowth": 4.2,
-        "baseMR": 30,
-        "mrGrowth": 1.3,
-        "baseAD": 59,
-        "adGrowth": 3.25,
-        "baseAS": 0.625,
-        "asGrowth": 1,
-        "attackRange": 525,
-        "moveSpeed": 325,
-        "baseMP": 260,
-        "mpGrowth": 50,
-        "baseHPRegen": 3.75,
-        "hpRegenGrowth": 0.5
-      },
-      "kit_tags": [
-        "attack",
-        "cc",
-        "crit",
-        "movement",
-        "on_hit"
-      ],
-      "name_zh_TW": "吉茵珂絲",
-      "name_zh_CN": "暴走萝莉",
-      "name_ja": "ジンクス",
-      "name_ko": "징크스"
-    },
-    {
       "slug": "lucian",
       "name": "Lucian",
       "tier": "S",
-      "rank": 16,
-      "win_rate": 50.51,
-      "pick_rate": 13.14,
+      "rank": 15,
+      "win_rate": 50.91,
+      "pick_rate": 13.26,
       "tags": [
         "marksman",
         "assassin"
@@ -669,12 +628,95 @@
       "name_ko": "루시안"
     },
     {
+      "slug": "jinx",
+      "name": "Jinx",
+      "tier": "S",
+      "rank": 16,
+      "win_rate": 54.02,
+      "pick_rate": 9.41,
+      "tags": [
+        "marksman"
+      ],
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/222.png",
+      "baseStats": {
+        "baseHP": 630,
+        "hpGrowth": 105,
+        "baseArmor": 26,
+        "armorGrowth": 4.2,
+        "baseMR": 30,
+        "mrGrowth": 1.3,
+        "baseAD": 59,
+        "adGrowth": 3.25,
+        "baseAS": 0.625,
+        "asGrowth": 1,
+        "attackRange": 525,
+        "moveSpeed": 325,
+        "baseMP": 260,
+        "mpGrowth": 50,
+        "baseHPRegen": 3.75,
+        "hpRegenGrowth": 0.5
+      },
+      "kit_tags": [
+        "attack",
+        "cc",
+        "crit",
+        "movement",
+        "on_hit"
+      ],
+      "name_zh_TW": "吉茵珂絲",
+      "name_zh_CN": "暴走萝莉",
+      "name_ja": "ジンクス",
+      "name_ko": "징크스"
+    },
+    {
+      "slug": "rell",
+      "name": "Rell",
+      "tier": "S",
+      "rank": 17,
+      "win_rate": 56.39,
+      "pick_rate": 6.72,
+      "tags": [
+        "tank",
+        "support"
+      ],
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/526.png",
+      "baseStats": {
+        "baseHP": 620,
+        "hpGrowth": 104,
+        "baseArmor": 30,
+        "armorGrowth": 4,
+        "baseMR": 28,
+        "mrGrowth": 1.8,
+        "baseAD": 55,
+        "adGrowth": 3,
+        "baseAS": 0.625,
+        "asGrowth": 2,
+        "attackRange": 175,
+        "moveSpeed": 315,
+        "baseMP": 320,
+        "mpGrowth": 40,
+        "baseHPRegen": 7.5,
+        "hpRegenGrowth": 0.85
+      },
+      "kit_tags": [
+        "cc",
+        "heal_shield",
+        "movement",
+        "on_hit",
+        "tank"
+      ],
+      "name_zh_TW": "銳兒",
+      "name_zh_CN": "镕铁少女",
+      "name_ja": "レル",
+      "name_ko": "렐"
+    },
+    {
       "slug": "twistedfate",
       "name": "Twistedfate",
       "tier": "S",
-      "rank": 17,
-      "win_rate": 54.41,
-      "pick_rate": 7.58,
+      "rank": 18,
+      "win_rate": 54.3,
+      "pick_rate": 7.56,
       "tags": [
         "mage",
         "marksman"
@@ -712,54 +754,12 @@
       "name_ko": "트위스티드 페이트"
     },
     {
-      "slug": "rell",
-      "name": "Rell",
-      "tier": "S",
-      "rank": 18,
-      "win_rate": 56.43,
-      "pick_rate": 6.64,
-      "tags": [
-        "tank",
-        "support"
-      ],
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/526.png",
-      "baseStats": {
-        "baseHP": 620,
-        "hpGrowth": 104,
-        "baseArmor": 30,
-        "armorGrowth": 4,
-        "baseMR": 28,
-        "mrGrowth": 1.8,
-        "baseAD": 55,
-        "adGrowth": 3,
-        "baseAS": 0.625,
-        "asGrowth": 2,
-        "attackRange": 175,
-        "moveSpeed": 315,
-        "baseMP": 320,
-        "mpGrowth": 40,
-        "baseHPRegen": 7.5,
-        "hpRegenGrowth": 0.85
-      },
-      "kit_tags": [
-        "cc",
-        "heal_shield",
-        "movement",
-        "on_hit",
-        "tank"
-      ],
-      "name_zh_TW": "銳兒",
-      "name_zh_CN": "镕铁少女",
-      "name_ja": "レル",
-      "name_ko": "렐"
-    },
-    {
       "slug": "teemo",
       "name": "Teemo",
       "tier": "S",
       "rank": 19,
-      "win_rate": 51.01,
-      "pick_rate": 10.42,
+      "win_rate": 50.97,
+      "pick_rate": 10.53,
       "tags": [
         "marksman",
         "mage"
@@ -800,8 +800,8 @@
       "name": "Masteryi",
       "tier": "S",
       "rank": 20,
-      "win_rate": 51.54,
-      "pick_rate": 9.68,
+      "win_rate": 51.66,
+      "pick_rate": 9.71,
       "tags": [
         "fighter",
         "assassin"
@@ -842,8 +842,8 @@
       "name": "Kayle",
       "tier": "S",
       "rank": 21,
-      "win_rate": 55.96,
-      "pick_rate": 6.57,
+      "win_rate": 55.92,
+      "pick_rate": 6.56,
       "tags": [
         "mage",
         "marksman"
@@ -885,8 +885,8 @@
       "name": "Seraphine",
       "tier": "S",
       "rank": 22,
-      "win_rate": 56.56,
-      "pick_rate": 6.25,
+      "win_rate": 56.52,
+      "pick_rate": 6.24,
       "tags": [
         "support",
         "mage"
@@ -922,89 +922,11 @@
       "name_ko": "세라핀"
     },
     {
-      "slug": "karthus",
-      "name": "Karthus",
-      "tier": "S",
-      "rank": 23,
-      "win_rate": 50.58,
-      "pick_rate": 10.19,
-      "tags": [
-        "mage"
-      ],
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/30.png",
-      "baseStats": {
-        "baseHP": 620,
-        "hpGrowth": 110,
-        "baseArmor": 21,
-        "armorGrowth": 4.7,
-        "baseMR": 30,
-        "mrGrowth": 1.3,
-        "baseAD": 46,
-        "adGrowth": 3.25,
-        "baseAS": 0.625,
-        "asGrowth": 2.11,
-        "attackRange": 450,
-        "moveSpeed": 335,
-        "baseMP": 467,
-        "mpGrowth": 31,
-        "baseHPRegen": 6.5,
-        "hpRegenGrowth": 0.55
-      },
-      "kit_tags": [
-        "ability",
-        "haste"
-      ],
-      "name_zh_TW": "卡爾瑟斯",
-      "name_zh_CN": "死亡颂唱者",
-      "name_ja": "カーサス",
-      "name_ko": "카서스"
-    },
-    {
-      "slug": "kayn",
-      "name": "Kayn",
-      "tier": "S",
-      "rank": 24,
-      "win_rate": 54.25,
-      "pick_rate": 6.7,
-      "tags": [
-        "fighter",
-        "assassin"
-      ],
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/141.png",
-      "baseStats": {
-        "baseHP": 655,
-        "hpGrowth": 103,
-        "baseArmor": 38,
-        "armorGrowth": 4.5,
-        "baseMR": 32,
-        "mrGrowth": 2.05,
-        "baseAD": 68,
-        "adGrowth": 3.3,
-        "baseAS": 0.669,
-        "asGrowth": 2.7,
-        "attackRange": 175,
-        "moveSpeed": 340,
-        "baseMP": 410,
-        "mpGrowth": 50,
-        "baseHPRegen": 8,
-        "hpRegenGrowth": 0.75
-      },
-      "kit_tags": [
-        "attack",
-        "heal_shield",
-        "movement"
-      ],
-      "name_zh_TW": "慨影",
-      "name_zh_CN": "影流之镰",
-      "name_ja": "ケイン",
-      "name_ko": "케인"
-    },
-    {
       "slug": "malzahar",
       "name": "Malzahar",
       "tier": "S",
-      "rank": 25,
-      "win_rate": 53.26,
+      "rank": 23,
+      "win_rate": 53.23,
       "pick_rate": 7.58,
       "tags": [
         "mage"
@@ -1043,9 +965,9 @@
       "slug": "yone",
       "name": "Yone",
       "tier": "S",
-      "rank": 26,
-      "win_rate": 53.59,
-      "pick_rate": 7.25,
+      "rank": 24,
+      "win_rate": 53.72,
+      "pick_rate": 7.23,
       "tags": [
         "fighter",
         "assassin"
@@ -1085,10 +1007,10 @@
     {
       "slug": "galio",
       "name": "Galio",
-      "tier": "A",
-      "rank": 27,
-      "win_rate": 52.1,
-      "pick_rate": 8.2,
+      "tier": "S",
+      "rank": 25,
+      "win_rate": 52.05,
+      "pick_rate": 8.29,
       "tags": [
         "tank",
         "mage"
@@ -1129,12 +1051,90 @@
       "name_ko": "갈리오"
     },
     {
+      "slug": "kayn",
+      "name": "Kayn",
+      "tier": "S",
+      "rank": 26,
+      "win_rate": 54.18,
+      "pick_rate": 6.71,
+      "tags": [
+        "fighter",
+        "assassin"
+      ],
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/141.png",
+      "baseStats": {
+        "baseHP": 655,
+        "hpGrowth": 103,
+        "baseArmor": 38,
+        "armorGrowth": 4.5,
+        "baseMR": 32,
+        "mrGrowth": 2.05,
+        "baseAD": 68,
+        "adGrowth": 3.3,
+        "baseAS": 0.669,
+        "asGrowth": 2.7,
+        "attackRange": 175,
+        "moveSpeed": 340,
+        "baseMP": 410,
+        "mpGrowth": 50,
+        "baseHPRegen": 8,
+        "hpRegenGrowth": 0.75
+      },
+      "kit_tags": [
+        "attack",
+        "heal_shield",
+        "movement"
+      ],
+      "name_zh_TW": "慨影",
+      "name_zh_CN": "影流之镰",
+      "name_ja": "ケイン",
+      "name_ko": "케인"
+    },
+    {
+      "slug": "karthus",
+      "name": "Karthus",
+      "tier": "A",
+      "rank": 27,
+      "win_rate": 50.48,
+      "pick_rate": 10.3,
+      "tags": [
+        "mage"
+      ],
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/30.png",
+      "baseStats": {
+        "baseHP": 620,
+        "hpGrowth": 110,
+        "baseArmor": 21,
+        "armorGrowth": 4.7,
+        "baseMR": 30,
+        "mrGrowth": 1.3,
+        "baseAD": 46,
+        "adGrowth": 3.25,
+        "baseAS": 0.625,
+        "asGrowth": 2.11,
+        "attackRange": 450,
+        "moveSpeed": 335,
+        "baseMP": 467,
+        "mpGrowth": 31,
+        "baseHPRegen": 6.5,
+        "hpRegenGrowth": 0.55
+      },
+      "kit_tags": [
+        "ability",
+        "haste"
+      ],
+      "name_zh_TW": "卡爾瑟斯",
+      "name_zh_CN": "死亡颂唱者",
+      "name_ja": "カーサス",
+      "name_ko": "카서스"
+    },
+    {
       "slug": "kaisa",
       "name": "Kaisa",
       "tier": "A",
       "rank": 28,
-      "win_rate": 49.84,
-      "pick_rate": 12.36,
+      "win_rate": 49.76,
+      "pick_rate": 12.51,
       "tags": [
         "marksman",
         "mage"
@@ -1175,8 +1175,8 @@
       "name": "Hwei",
       "tier": "A",
       "rank": 29,
-      "win_rate": 54.77,
-      "pick_rate": 6.15,
+      "win_rate": 54.73,
+      "pick_rate": 6.09,
       "tags": [
         "mage",
         "support"
@@ -1214,8 +1214,8 @@
       "name": "Hecarim",
       "tier": "A",
       "rank": 30,
-      "win_rate": 50.24,
-      "pick_rate": 10.11,
+      "win_rate": 50.01,
+      "pick_rate": 10.14,
       "tags": [
         "fighter",
         "tank"
@@ -1253,54 +1253,12 @@
       "name_ko": "헤카림"
     },
     {
-      "slug": "maokai",
-      "name": "Maokai",
-      "tier": "A",
-      "rank": 31,
-      "win_rate": 50.59,
-      "pick_rate": 9.29,
-      "tags": [
-        "tank",
-        "support"
-      ],
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/57.png",
-      "baseStats": {
-        "baseHP": 665,
-        "hpGrowth": 109,
-        "baseArmor": 35,
-        "armorGrowth": 5.2,
-        "baseMR": 32,
-        "mrGrowth": 2.05,
-        "baseAD": 64,
-        "adGrowth": 3.3,
-        "baseAS": 0.8,
-        "asGrowth": 2.125,
-        "attackRange": 125,
-        "moveSpeed": 335,
-        "baseMP": 375,
-        "mpGrowth": 43,
-        "baseHPRegen": 5,
-        "hpRegenGrowth": 0.75
-      },
-      "kit_tags": [
-        "cc",
-        "dot",
-        "heal_shield",
-        "on_hit",
-        "tank"
-      ],
-      "name_zh_TW": "茂凱",
-      "name_zh_CN": "扭曲树精",
-      "name_ja": "マオカイ",
-      "name_ko": "마오카이"
-    },
-    {
       "slug": "trundle",
       "name": "Trundle",
       "tier": "A",
-      "rank": 32,
+      "rank": 31,
       "win_rate": 50.76,
-      "pick_rate": 8.63,
+      "pick_rate": 8.91,
       "tags": [
         "fighter",
         "tank"
@@ -1338,56 +1296,54 @@
       "name_ko": "트런들"
     },
     {
-      "slug": "xinzhao",
-      "name": "Xinzhao",
+      "slug": "maokai",
+      "name": "Maokai",
       "tier": "A",
-      "rank": 33,
-      "win_rate": 50.56,
-      "pick_rate": 8.97,
+      "rank": 32,
+      "win_rate": 50.5,
+      "pick_rate": 9.38,
       "tags": [
-        "fighter",
-        "tank"
+        "tank",
+        "support"
       ],
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/5.png",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/57.png",
       "baseStats": {
-        "baseHP": 620,
-        "hpGrowth": 106,
+        "baseHP": 665,
+        "hpGrowth": 109,
         "baseArmor": 35,
-        "armorGrowth": 4.4,
+        "armorGrowth": 5.2,
         "baseMR": 32,
         "mrGrowth": 2.05,
-        "baseAD": 63,
-        "adGrowth": 3,
-        "baseAS": 0.645,
-        "asGrowth": 3.5,
-        "attackRange": 175,
-        "moveSpeed": 345,
-        "baseMP": 274,
-        "mpGrowth": 55,
-        "baseHPRegen": 8,
-        "hpRegenGrowth": 0.7
+        "baseAD": 64,
+        "adGrowth": 3.3,
+        "baseAS": 0.8,
+        "asGrowth": 2.125,
+        "attackRange": 125,
+        "moveSpeed": 335,
+        "baseMP": 375,
+        "mpGrowth": 43,
+        "baseHPRegen": 5,
+        "hpRegenGrowth": 0.75
       },
       "kit_tags": [
-        "ability",
-        "attack",
         "cc",
+        "dot",
         "heal_shield",
-        "movement",
         "on_hit",
         "tank"
       ],
-      "name_zh_TW": "趙信",
-      "name_zh_CN": "德邦总管",
-      "name_ja": "シン・ジャオ",
-      "name_ko": "신 짜오"
+      "name_zh_TW": "茂凱",
+      "name_zh_CN": "扭曲树精",
+      "name_ja": "マオカイ",
+      "name_ko": "마오카이"
     },
     {
       "slug": "senna",
       "name": "Senna",
       "tier": "A",
-      "rank": 34,
-      "win_rate": 50.01,
-      "pick_rate": 9.99,
+      "rank": 33,
+      "win_rate": 49.96,
+      "pick_rate": 10.02,
       "tags": [
         "support",
         "marksman"
@@ -1427,9 +1383,9 @@
       "slug": "ornn",
       "name": "Ornn",
       "tier": "A",
-      "rank": 35,
-      "win_rate": 51.72,
-      "pick_rate": 6.59,
+      "rank": 34,
+      "win_rate": 51.67,
+      "pick_rate": 6.68,
       "tags": [
         "tank"
       ],
@@ -1468,9 +1424,9 @@
       "slug": "illaoi",
       "name": "Illaoi",
       "tier": "A",
-      "rank": 36,
-      "win_rate": 53.12,
-      "pick_rate": 5.87,
+      "rank": 35,
+      "win_rate": 53.07,
+      "pick_rate": 5.92,
       "tags": [
         "fighter",
         "tank"
@@ -1506,12 +1462,56 @@
       "name_ko": "일라오이"
     },
     {
+      "slug": "xinzhao",
+      "name": "Xinzhao",
+      "tier": "A",
+      "rank": 36,
+      "win_rate": 50.47,
+      "pick_rate": 8.9,
+      "tags": [
+        "fighter",
+        "tank"
+      ],
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/5.png",
+      "baseStats": {
+        "baseHP": 620,
+        "hpGrowth": 106,
+        "baseArmor": 35,
+        "armorGrowth": 4.4,
+        "baseMR": 32,
+        "mrGrowth": 2.05,
+        "baseAD": 63,
+        "adGrowth": 3,
+        "baseAS": 0.645,
+        "asGrowth": 3.5,
+        "attackRange": 175,
+        "moveSpeed": 345,
+        "baseMP": 274,
+        "mpGrowth": 55,
+        "baseHPRegen": 8,
+        "hpRegenGrowth": 0.7
+      },
+      "kit_tags": [
+        "ability",
+        "attack",
+        "cc",
+        "heal_shield",
+        "movement",
+        "on_hit",
+        "tank"
+      ],
+      "name_zh_TW": "趙信",
+      "name_zh_CN": "德邦总管",
+      "name_ja": "シン・ジャオ",
+      "name_ko": "신 짜오"
+    },
+    {
       "slug": "shen",
       "name": "Shen",
       "tier": "A",
       "rank": 37,
       "win_rate": 54.21,
-      "pick_rate": 5.49,
+      "pick_rate": 5.56,
       "tags": [
         "tank"
       ],
@@ -1551,8 +1551,8 @@
       "name": "Nautilus",
       "tier": "A",
       "rank": 38,
-      "win_rate": 50.52,
-      "pick_rate": 8.12,
+      "win_rate": 50.49,
+      "pick_rate": 8.24,
       "tags": [
         "tank",
         "support"
@@ -1591,137 +1591,12 @@
       "name_ko": "노틸러스"
     },
     {
-      "slug": "zilean",
-      "name": "Zilean",
-      "tier": "A",
-      "rank": 39,
-      "win_rate": 53.62,
-      "pick_rate": 5.52,
-      "tags": [
-        "support",
-        "mage"
-      ],
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/26.png",
-      "baseStats": {
-        "baseHP": 574,
-        "hpGrowth": 96,
-        "baseArmor": 24,
-        "armorGrowth": 5,
-        "baseMR": 30,
-        "mrGrowth": 1.3,
-        "baseAD": 52,
-        "adGrowth": 3,
-        "baseAS": 0.658,
-        "asGrowth": 2.13,
-        "attackRange": 550,
-        "moveSpeed": 335,
-        "baseMP": 452,
-        "mpGrowth": 50,
-        "baseHPRegen": 5.5,
-        "hpRegenGrowth": 0.5
-      },
-      "kit_tags": [
-        "ability",
-        "cc",
-        "haste",
-        "movement"
-      ],
-      "name_zh_TW": "極靈",
-      "name_zh_CN": "时光守护者",
-      "name_ja": "ジリアン",
-      "name_ko": "질리언"
-    },
-    {
-      "slug": "jhin",
-      "name": "Jhin",
-      "tier": "A",
-      "rank": 40,
-      "win_rate": 48.78,
-      "pick_rate": 11.14,
-      "tags": [
-        "marksman",
-        "mage"
-      ],
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/202.png",
-      "baseStats": {
-        "baseHP": 655,
-        "hpGrowth": 107,
-        "baseArmor": 24,
-        "armorGrowth": 4.7,
-        "baseMR": 30,
-        "mrGrowth": 1.3,
-        "baseAD": 61,
-        "adGrowth": 4.4,
-        "baseAS": 0.625,
-        "asGrowth": 0,
-        "attackRange": 550,
-        "moveSpeed": 330,
-        "baseMP": 300,
-        "mpGrowth": 50,
-        "baseHPRegen": 3.75,
-        "hpRegenGrowth": 0.55
-      },
-      "kit_tags": [
-        "ability",
-        "attack",
-        "cc",
-        "crit",
-        "haste"
-      ],
-      "name_zh_TW": "燼",
-      "name_zh_CN": "戏命师",
-      "name_ja": "ジン",
-      "name_ko": "진"
-    },
-    {
-      "slug": "smolder",
-      "name": "Smolder",
-      "tier": "A",
-      "rank": 41,
-      "win_rate": 48.51,
-      "pick_rate": 11.67,
-      "tags": [
-        "marksman",
-        "mage"
-      ],
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/901.png",
-      "baseStats": {
-        "baseHP": 575,
-        "hpGrowth": 100,
-        "baseArmor": 24,
-        "armorGrowth": 4,
-        "baseMR": 30,
-        "mrGrowth": 1.3,
-        "baseAD": 58,
-        "adGrowth": 2.3,
-        "baseAS": 0.638,
-        "asGrowth": 4,
-        "attackRange": 550,
-        "moveSpeed": 330,
-        "baseMP": 300,
-        "mpGrowth": 40,
-        "baseHPRegen": 3.75,
-        "hpRegenGrowth": 0.6
-      },
-      "kit_tags": [
-        "ability",
-        "attack",
-        "crit",
-        "dot",
-        "haste"
-      ],
-      "name_zh_TW": "史矛德",
-      "name_zh_CN": "炽炎雏龙",
-      "name_ja": "スモルダー",
-      "name_ko": "스몰더"
-    },
-    {
       "slug": "aurora",
       "name": "Aurora",
       "tier": "A",
-      "rank": 42,
-      "win_rate": 54.24,
-      "pick_rate": 4.83,
+      "rank": 39,
+      "win_rate": 54.3,
+      "pick_rate": 4.88,
       "tags": [
         "mage",
         "assassin"
@@ -1758,12 +1633,178 @@
       "name_ko": "오로라"
     },
     {
+      "slug": "smolder",
+      "name": "Smolder",
+      "tier": "A",
+      "rank": 40,
+      "win_rate": 48.56,
+      "pick_rate": 11.77,
+      "tags": [
+        "marksman",
+        "mage"
+      ],
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/901.png",
+      "baseStats": {
+        "baseHP": 575,
+        "hpGrowth": 100,
+        "baseArmor": 24,
+        "armorGrowth": 4,
+        "baseMR": 30,
+        "mrGrowth": 1.3,
+        "baseAD": 58,
+        "adGrowth": 2.3,
+        "baseAS": 0.638,
+        "asGrowth": 4,
+        "attackRange": 550,
+        "moveSpeed": 330,
+        "baseMP": 300,
+        "mpGrowth": 40,
+        "baseHPRegen": 3.75,
+        "hpRegenGrowth": 0.6
+      },
+      "kit_tags": [
+        "ability",
+        "attack",
+        "crit",
+        "dot",
+        "haste"
+      ],
+      "name_zh_TW": "史矛德",
+      "name_zh_CN": "炽炎雏龙",
+      "name_ja": "スモルダー",
+      "name_ko": "스몰더"
+    },
+    {
+      "slug": "zilean",
+      "name": "Zilean",
+      "tier": "A",
+      "rank": 41,
+      "win_rate": 53.58,
+      "pick_rate": 5.45,
+      "tags": [
+        "support",
+        "mage"
+      ],
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/26.png",
+      "baseStats": {
+        "baseHP": 574,
+        "hpGrowth": 96,
+        "baseArmor": 24,
+        "armorGrowth": 5,
+        "baseMR": 30,
+        "mrGrowth": 1.3,
+        "baseAD": 52,
+        "adGrowth": 3,
+        "baseAS": 0.658,
+        "asGrowth": 2.13,
+        "attackRange": 550,
+        "moveSpeed": 335,
+        "baseMP": 452,
+        "mpGrowth": 50,
+        "baseHPRegen": 5.5,
+        "hpRegenGrowth": 0.5
+      },
+      "kit_tags": [
+        "ability",
+        "cc",
+        "haste",
+        "movement"
+      ],
+      "name_zh_TW": "極靈",
+      "name_zh_CN": "时光守护者",
+      "name_ja": "ジリアン",
+      "name_ko": "질리언"
+    },
+    {
+      "slug": "ashe",
+      "name": "Ashe",
+      "tier": "A",
+      "rank": 42,
+      "win_rate": 47.91,
+      "pick_rate": 13.13,
+      "tags": [
+        "marksman",
+        "support"
+      ],
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/22.png",
+      "baseStats": {
+        "baseHP": 610,
+        "hpGrowth": 101,
+        "baseArmor": 26,
+        "armorGrowth": 4.6,
+        "baseMR": 30,
+        "mrGrowth": 1.3,
+        "baseAD": 59,
+        "adGrowth": 3.5,
+        "baseAS": 0.658,
+        "asGrowth": 3,
+        "attackRange": 600,
+        "moveSpeed": 325,
+        "baseMP": 280,
+        "mpGrowth": 35,
+        "baseHPRegen": 3.5,
+        "hpRegenGrowth": 0.55
+      },
+      "kit_tags": [
+        "attack",
+        "cc",
+        "crit",
+        "on_hit"
+      ],
+      "name_zh_TW": "艾希",
+      "name_zh_CN": "寒冰射手",
+      "name_ja": "アッシュ",
+      "name_ko": "애쉬"
+    },
+    {
+      "slug": "jhin",
+      "name": "Jhin",
+      "tier": "A",
+      "rank": 43,
+      "win_rate": 48.71,
+      "pick_rate": 11.2,
+      "tags": [
+        "marksman",
+        "mage"
+      ],
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/202.png",
+      "baseStats": {
+        "baseHP": 655,
+        "hpGrowth": 107,
+        "baseArmor": 24,
+        "armorGrowth": 4.7,
+        "baseMR": 30,
+        "mrGrowth": 1.3,
+        "baseAD": 61,
+        "adGrowth": 4.4,
+        "baseAS": 0.625,
+        "asGrowth": 0,
+        "attackRange": 550,
+        "moveSpeed": 330,
+        "baseMP": 300,
+        "mpGrowth": 50,
+        "baseHPRegen": 3.75,
+        "hpRegenGrowth": 0.55
+      },
+      "kit_tags": [
+        "ability",
+        "attack",
+        "cc",
+        "crit",
+        "haste"
+      ],
+      "name_zh_TW": "燼",
+      "name_zh_CN": "戏命师",
+      "name_ja": "ジン",
+      "name_ko": "진"
+    },
+    {
       "slug": "velkoz",
       "name": "Velkoz",
       "tier": "A",
-      "rank": 43,
-      "win_rate": 50.56,
-      "pick_rate": 6.93,
+      "rank": 44,
+      "win_rate": 50.51,
+      "pick_rate": 6.85,
       "tags": [
         "mage",
         "support"
@@ -1802,9 +1843,9 @@
       "slug": "ekko",
       "name": "Ekko",
       "tier": "A",
-      "rank": 44,
-      "win_rate": 53.52,
-      "pick_rate": 5.25,
+      "rank": 45,
+      "win_rate": 53.48,
+      "pick_rate": 5.21,
       "tags": [
         "assassin",
         "mage"
@@ -1841,53 +1882,94 @@
       "name_ko": "에코"
     },
     {
-      "slug": "ashe",
-      "name": "Ashe",
+      "slug": "sejuani",
+      "name": "Sejuani",
       "tier": "A",
-      "rank": 45,
-      "win_rate": 47.89,
-      "pick_rate": 12.94,
+      "rank": 46,
+      "win_rate": 50.71,
+      "pick_rate": 6.27,
       "tags": [
-        "marksman",
-        "support"
+        "tank"
       ],
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/22.png",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/113.png",
       "baseStats": {
-        "baseHP": 610,
-        "hpGrowth": 101,
-        "baseArmor": 26,
-        "armorGrowth": 4.6,
-        "baseMR": 30,
-        "mrGrowth": 1.3,
-        "baseAD": 59,
-        "adGrowth": 3.5,
-        "baseAS": 0.658,
-        "asGrowth": 3,
-        "attackRange": 600,
-        "moveSpeed": 325,
-        "baseMP": 280,
-        "mpGrowth": 35,
-        "baseHPRegen": 3.5,
-        "hpRegenGrowth": 0.55
+        "baseHP": 630,
+        "hpGrowth": 114,
+        "baseArmor": 34,
+        "armorGrowth": 5.45,
+        "baseMR": 32,
+        "mrGrowth": 2.05,
+        "baseAD": 66,
+        "adGrowth": 4,
+        "baseAS": 0.688,
+        "asGrowth": 3.5,
+        "attackRange": 150,
+        "moveSpeed": 340,
+        "baseMP": 400,
+        "mpGrowth": 40,
+        "baseHPRegen": 8.5,
+        "hpRegenGrowth": 1
       },
       "kit_tags": [
-        "attack",
+        "ability",
         "cc",
-        "crit",
-        "on_hit"
+        "movement",
+        "on_hit",
+        "tank"
       ],
-      "name_zh_TW": "艾希",
-      "name_zh_CN": "寒冰射手",
-      "name_ja": "アッシュ",
-      "name_ko": "애쉬"
+      "name_zh_TW": "史瓦妮",
+      "name_zh_CN": "北地之怒",
+      "name_ja": "セジュアニ",
+      "name_ko": "세주아니"
+    },
+    {
+      "slug": "leona",
+      "name": "Leona",
+      "tier": "A",
+      "rank": 47,
+      "win_rate": 50.45,
+      "pick_rate": 6.96,
+      "tags": [
+        "tank",
+        "support"
+      ],
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/89.png",
+      "baseStats": {
+        "baseHP": 646,
+        "hpGrowth": 101,
+        "baseArmor": 43,
+        "armorGrowth": 4.8,
+        "baseMR": 32,
+        "mrGrowth": 2.05,
+        "baseAD": 60,
+        "adGrowth": 3,
+        "baseAS": 0.625,
+        "asGrowth": 2.9,
+        "attackRange": 125,
+        "moveSpeed": 335,
+        "baseMP": 302,
+        "mpGrowth": 40,
+        "baseHPRegen": 8.5,
+        "hpRegenGrowth": 0.85
+      },
+      "kit_tags": [
+        "cc",
+        "heal_shield",
+        "on_hit",
+        "tank"
+      ],
+      "name_zh_TW": "雷歐娜",
+      "name_zh_CN": "曙光女神",
+      "name_ja": "レオナ",
+      "name_ko": "레오나"
     },
     {
       "slug": "singed",
       "name": "Singed",
       "tier": "A",
-      "rank": 46,
-      "win_rate": 50.18,
-      "pick_rate": 7.47,
+      "rank": 48,
+      "win_rate": 49.99,
+      "pick_rate": 7.48,
       "tags": [
         "tank",
         "mage"
@@ -1924,133 +2006,12 @@
       "name_ko": "신지드"
     },
     {
-      "slug": "sejuani",
-      "name": "Sejuani",
-      "tier": "A",
-      "rank": 47,
-      "win_rate": 50.67,
-      "pick_rate": 6.24,
-      "tags": [
-        "tank"
-      ],
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/113.png",
-      "baseStats": {
-        "baseHP": 630,
-        "hpGrowth": 114,
-        "baseArmor": 34,
-        "armorGrowth": 5.45,
-        "baseMR": 32,
-        "mrGrowth": 2.05,
-        "baseAD": 66,
-        "adGrowth": 4,
-        "baseAS": 0.688,
-        "asGrowth": 3.5,
-        "attackRange": 150,
-        "moveSpeed": 340,
-        "baseMP": 400,
-        "mpGrowth": 40,
-        "baseHPRegen": 8.5,
-        "hpRegenGrowth": 1
-      },
-      "kit_tags": [
-        "ability",
-        "cc",
-        "movement",
-        "on_hit",
-        "tank"
-      ],
-      "name_zh_TW": "史瓦妮",
-      "name_zh_CN": "北地之怒",
-      "name_ja": "セジュアニ",
-      "name_ko": "세주아니"
-    },
-    {
-      "slug": "veigar",
-      "name": "Veigar",
-      "tier": "A",
-      "rank": 48,
-      "win_rate": 49.83,
-      "pick_rate": 8.34,
-      "tags": [
-        "mage"
-      ],
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/45.png",
-      "baseStats": {
-        "baseHP": 580,
-        "hpGrowth": 108,
-        "baseArmor": 18,
-        "armorGrowth": 5.2,
-        "baseMR": 32,
-        "mrGrowth": 1.3,
-        "baseAD": 52,
-        "adGrowth": 2.7,
-        "baseAS": 0.625,
-        "asGrowth": 2.24,
-        "attackRange": 550,
-        "moveSpeed": 340,
-        "baseMP": 490,
-        "mpGrowth": 26,
-        "baseHPRegen": 6.5,
-        "hpRegenGrowth": 0.6
-      },
-      "kit_tags": [
-        "ability",
-        "cc",
-        "haste"
-      ],
-      "name_zh_TW": "維迦",
-      "name_zh_CN": "邪恶小法师",
-      "name_ja": "ベイガー",
-      "name_ko": "베이가"
-    },
-    {
-      "slug": "leona",
-      "name": "Leona",
-      "tier": "A",
-      "rank": 49,
-      "win_rate": 50.36,
-      "pick_rate": 6.87,
-      "tags": [
-        "tank",
-        "support"
-      ],
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/89.png",
-      "baseStats": {
-        "baseHP": 646,
-        "hpGrowth": 101,
-        "baseArmor": 43,
-        "armorGrowth": 4.8,
-        "baseMR": 32,
-        "mrGrowth": 2.05,
-        "baseAD": 60,
-        "adGrowth": 3,
-        "baseAS": 0.625,
-        "asGrowth": 2.9,
-        "attackRange": 125,
-        "moveSpeed": 335,
-        "baseMP": 302,
-        "mpGrowth": 40,
-        "baseHPRegen": 8.5,
-        "hpRegenGrowth": 0.85
-      },
-      "kit_tags": [
-        "cc",
-        "heal_shield",
-        "on_hit",
-        "tank"
-      ],
-      "name_zh_TW": "雷歐娜",
-      "name_zh_CN": "曙光女神",
-      "name_ja": "レオナ",
-      "name_ko": "레오나"
-    },
-    {
       "slug": "ahri",
       "name": "Ahri",
       "tier": "A",
-      "rank": 50,
-      "win_rate": 51.39,
-      "pick_rate": 5.79,
+      "rank": 49,
+      "win_rate": 51.32,
+      "pick_rate": 5.68,
       "tags": [
         "mage",
         "assassin"
@@ -2087,12 +2048,51 @@
       "name_ko": "아리"
     },
     {
+      "slug": "veigar",
+      "name": "Veigar",
+      "tier": "A",
+      "rank": 50,
+      "win_rate": 49.74,
+      "pick_rate": 8.27,
+      "tags": [
+        "mage"
+      ],
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/45.png",
+      "baseStats": {
+        "baseHP": 580,
+        "hpGrowth": 108,
+        "baseArmor": 18,
+        "armorGrowth": 5.2,
+        "baseMR": 32,
+        "mrGrowth": 1.3,
+        "baseAD": 52,
+        "adGrowth": 2.7,
+        "baseAS": 0.625,
+        "asGrowth": 2.24,
+        "attackRange": 550,
+        "moveSpeed": 340,
+        "baseMP": 490,
+        "mpGrowth": 26,
+        "baseHPRegen": 6.5,
+        "hpRegenGrowth": 0.6
+      },
+      "kit_tags": [
+        "ability",
+        "cc",
+        "haste"
+      ],
+      "name_zh_TW": "維迦",
+      "name_zh_CN": "邪恶小法师",
+      "name_ja": "ベイガー",
+      "name_ko": "베이가"
+    },
+    {
       "slug": "syndra",
       "name": "Syndra",
       "tier": "A",
       "rank": 51,
-      "win_rate": 50.7,
-      "pick_rate": 5.95,
+      "win_rate": 50.71,
+      "pick_rate": 5.88,
       "tags": [
         "mage"
       ],
@@ -2130,8 +2130,8 @@
       "name": "Viktor",
       "tier": "A",
       "rank": 52,
-      "win_rate": 52.61,
-      "pick_rate": 4.7,
+      "win_rate": 52.59,
+      "pick_rate": 4.61,
       "tags": [
         "mage"
       ],
@@ -2171,8 +2171,8 @@
       "name": "Xayah",
       "tier": "B",
       "rank": 53,
-      "win_rate": 50.57,
-      "pick_rate": 6.0,
+      "win_rate": 50.63,
+      "pick_rate": 5.88,
       "tags": [
         "marksman"
       ],
@@ -2207,12 +2207,52 @@
       "name_ko": "자야"
     },
     {
+      "slug": "zyra",
+      "name": "Zyra",
+      "tier": "B",
+      "rank": 54,
+      "win_rate": 51.27,
+      "pick_rate": 5.59,
+      "tags": [
+        "mage",
+        "support"
+      ],
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/143.png",
+      "baseStats": {
+        "baseHP": 574,
+        "hpGrowth": 93,
+        "baseArmor": 29,
+        "armorGrowth": 4.2,
+        "baseMR": 30,
+        "mrGrowth": 1.3,
+        "baseAD": 53,
+        "adGrowth": 3.2,
+        "baseAS": 0.681,
+        "asGrowth": 2.11,
+        "attackRange": 575,
+        "moveSpeed": 340,
+        "baseMP": 418,
+        "mpGrowth": 25,
+        "baseHPRegen": 5.5,
+        "hpRegenGrowth": 0.5
+      },
+      "kit_tags": [
+        "ability",
+        "cc",
+        "haste"
+      ],
+      "name_zh_TW": "枷蘿",
+      "name_zh_CN": "荆棘之兴",
+      "name_ja": "ザイラ",
+      "name_ko": "자이라"
+    },
+    {
       "slug": "chogath",
       "name": "Chogath",
       "tier": "B",
-      "rank": 54,
-      "win_rate": 48.36,
-      "pick_rate": 9.83,
+      "rank": 55,
+      "win_rate": 48.21,
+      "pick_rate": 9.89,
       "tags": [
         "tank",
         "mage"
@@ -2251,9 +2291,9 @@
       "slug": "nasus",
       "name": "Nasus",
       "tier": "B",
-      "rank": 55,
-      "win_rate": 50.82,
-      "pick_rate": 5.76,
+      "rank": 56,
+      "win_rate": 50.67,
+      "pick_rate": 5.84,
       "tags": [
         "fighter",
         "tank"
@@ -2292,9 +2332,9 @@
       "slug": "rumble",
       "name": "Rumble",
       "tier": "B",
-      "rank": 56,
-      "win_rate": 51.07,
-      "pick_rate": 5.68,
+      "rank": 57,
+      "win_rate": 50.97,
+      "pick_rate": 5.64,
       "tags": [
         "fighter",
         "mage"
@@ -2332,52 +2372,12 @@
       "name_ko": "럼블"
     },
     {
-      "slug": "zyra",
-      "name": "Zyra",
-      "tier": "B",
-      "rank": 57,
-      "win_rate": 51.31,
-      "pick_rate": 5.59,
-      "tags": [
-        "mage",
-        "support"
-      ],
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/143.png",
-      "baseStats": {
-        "baseHP": 574,
-        "hpGrowth": 93,
-        "baseArmor": 29,
-        "armorGrowth": 4.2,
-        "baseMR": 30,
-        "mrGrowth": 1.3,
-        "baseAD": 53,
-        "adGrowth": 3.2,
-        "baseAS": 0.681,
-        "asGrowth": 2.11,
-        "attackRange": 575,
-        "moveSpeed": 340,
-        "baseMP": 418,
-        "mpGrowth": 25,
-        "baseHPRegen": 5.5,
-        "hpRegenGrowth": 0.5
-      },
-      "kit_tags": [
-        "ability",
-        "cc",
-        "haste"
-      ],
-      "name_zh_TW": "枷蘿",
-      "name_zh_CN": "荆棘之兴",
-      "name_ja": "ザイラ",
-      "name_ko": "자이라"
-    },
-    {
       "slug": "alistar",
       "name": "Alistar",
       "tier": "B",
       "rank": 58,
-      "win_rate": 49.85,
-      "pick_rate": 7.16,
+      "win_rate": 49.87,
+      "pick_rate": 7.22,
       "tags": [
         "tank",
         "support"
@@ -2414,54 +2414,12 @@
       "name_ko": "알리스타"
     },
     {
-      "slug": "ezreal",
-      "name": "Ezreal",
-      "tier": "B",
-      "rank": 59,
-      "win_rate": 47.83,
-      "pick_rate": 10.63,
-      "tags": [
-        "marksman",
-        "mage"
-      ],
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/81.png",
-      "baseStats": {
-        "baseHP": 600,
-        "hpGrowth": 102,
-        "baseArmor": 24,
-        "armorGrowth": 4.2,
-        "baseMR": 30,
-        "mrGrowth": 1.3,
-        "baseAD": 60,
-        "adGrowth": 3.75,
-        "baseAS": 0.625,
-        "asGrowth": 2.5,
-        "attackRange": 550,
-        "moveSpeed": 325,
-        "baseMP": 375,
-        "mpGrowth": 70,
-        "baseHPRegen": 4,
-        "hpRegenGrowth": 0.65
-      },
-      "kit_tags": [
-        "ability",
-        "attack",
-        "crit",
-        "haste",
-        "movement"
-      ],
-      "name_zh_TW": "伊澤瑞爾",
-      "name_zh_CN": "探险家",
-      "name_ja": "エズリアル",
-      "name_ko": "이즈리얼"
-    },
-    {
       "slug": "gwen",
       "name": "Gwen",
       "tier": "B",
-      "rank": 60,
-      "win_rate": 55.01,
-      "pick_rate": 3.32,
+      "rank": 59,
+      "win_rate": 54.97,
+      "pick_rate": 3.28,
       "tags": [
         "fighter"
       ],
@@ -2496,12 +2454,93 @@
       "name_ko": "그웬"
     },
     {
+      "slug": "lux",
+      "name": "Lux",
+      "tier": "B",
+      "rank": 60,
+      "win_rate": 49.75,
+      "pick_rate": 7.03,
+      "tags": [
+        "mage",
+        "support"
+      ],
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/99.png",
+      "baseStats": {
+        "baseHP": 580,
+        "hpGrowth": 99,
+        "baseArmor": 21,
+        "armorGrowth": 5.2,
+        "baseMR": 30,
+        "mrGrowth": 1.3,
+        "baseAD": 54,
+        "adGrowth": 3.3,
+        "baseAS": 0.669,
+        "asGrowth": 3,
+        "attackRange": 550,
+        "moveSpeed": 330,
+        "baseMP": 440,
+        "mpGrowth": 23.5,
+        "baseHPRegen": 5.5,
+        "hpRegenGrowth": 0.55
+      },
+      "kit_tags": [
+        "ability",
+        "cc",
+        "haste"
+      ],
+      "name_zh_TW": "拉克絲",
+      "name_zh_CN": "光辉女郎",
+      "name_ja": "ラックス",
+      "name_ko": "럭스"
+    },
+    {
+      "slug": "yunara",
+      "name": "Yunara",
+      "tier": "B",
+      "rank": 61,
+      "win_rate": 50.81,
+      "pick_rate": 5.58,
+      "tags": [
+        "marksman"
+      ],
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/804.png",
+      "baseStats": {
+        "baseHP": 590,
+        "hpGrowth": 110,
+        "baseArmor": 25,
+        "armorGrowth": 4.4,
+        "baseMR": 30,
+        "mrGrowth": 1.3,
+        "baseAD": 55,
+        "adGrowth": 2.5,
+        "baseAS": 0.65,
+        "asGrowth": 2,
+        "attackRange": 575,
+        "moveSpeed": 325,
+        "baseMP": 275,
+        "mpGrowth": 45,
+        "baseHPRegen": 4,
+        "hpRegenGrowth": 0.55
+      },
+      "kit_tags": [
+        "attack",
+        "crit",
+        "dot",
+        "movement",
+        "on_hit"
+      ],
+      "name_zh_TW": "尤娜拉",
+      "name_zh_CN": "不破之誓",
+      "name_ja": "ユナラ",
+      "name_ko": "유나라"
+    },
+    {
       "slug": "fizz",
       "name": "Fizz",
       "tier": "B",
-      "rank": 61,
-      "win_rate": 48.82,
-      "pick_rate": 8.93,
+      "rank": 62,
+      "win_rate": 48.83,
+      "pick_rate": 8.89,
       "tags": [
         "assassin",
         "fighter"
@@ -2538,94 +2577,53 @@
       "name_ko": "피즈"
     },
     {
-      "slug": "fiora",
-      "name": "Fiora",
-      "tier": "B",
-      "rank": 62,
-      "win_rate": 53.95,
-      "pick_rate": 3.73,
-      "tags": [
-        "fighter",
-        "assassin"
-      ],
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/114.png",
-      "baseStats": {
-        "baseHP": 620,
-        "hpGrowth": 99,
-        "baseArmor": 33,
-        "armorGrowth": 4.7,
-        "baseMR": 32,
-        "mrGrowth": 2.05,
-        "baseAD": 66,
-        "adGrowth": 3.3,
-        "baseAS": 0.69,
-        "asGrowth": 3.2,
-        "attackRange": 150,
-        "moveSpeed": 345,
-        "baseMP": 300,
-        "mpGrowth": 60,
-        "baseHPRegen": 8.5,
-        "hpRegenGrowth": 0.55
-      },
-      "kit_tags": [
-        "attack",
-        "cc",
-        "crit",
-        "heal_shield",
-        "movement",
-        "on_hit"
-      ],
-      "name_zh_TW": "菲歐拉",
-      "name_zh_CN": "无双剑姬",
-      "name_ja": "フィオラ",
-      "name_ko": "피오라"
-    },
-    {
-      "slug": "lux",
-      "name": "Lux",
+      "slug": "ezreal",
+      "name": "Ezreal",
       "tier": "B",
       "rank": 63,
-      "win_rate": 49.8,
-      "pick_rate": 7.13,
+      "win_rate": 47.69,
+      "pick_rate": 10.65,
       "tags": [
-        "mage",
-        "support"
+        "marksman",
+        "mage"
       ],
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/99.png",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/81.png",
       "baseStats": {
-        "baseHP": 580,
-        "hpGrowth": 99,
-        "baseArmor": 21,
-        "armorGrowth": 5.2,
+        "baseHP": 600,
+        "hpGrowth": 102,
+        "baseArmor": 24,
+        "armorGrowth": 4.2,
         "baseMR": 30,
         "mrGrowth": 1.3,
-        "baseAD": 54,
-        "adGrowth": 3.3,
-        "baseAS": 0.669,
-        "asGrowth": 3,
+        "baseAD": 60,
+        "adGrowth": 3.75,
+        "baseAS": 0.625,
+        "asGrowth": 2.5,
         "attackRange": 550,
-        "moveSpeed": 330,
-        "baseMP": 440,
-        "mpGrowth": 23.5,
-        "baseHPRegen": 5.5,
-        "hpRegenGrowth": 0.55
+        "moveSpeed": 325,
+        "baseMP": 375,
+        "mpGrowth": 70,
+        "baseHPRegen": 4,
+        "hpRegenGrowth": 0.65
       },
       "kit_tags": [
         "ability",
-        "cc",
-        "haste"
+        "attack",
+        "crit",
+        "haste",
+        "movement"
       ],
-      "name_zh_TW": "拉克絲",
-      "name_zh_CN": "光辉女郎",
-      "name_ja": "ラックス",
-      "name_ko": "럭스"
+      "name_zh_TW": "伊澤瑞爾",
+      "name_zh_CN": "探险家",
+      "name_ja": "エズリアル",
+      "name_ko": "이즈리얼"
     },
     {
       "slug": "garen",
       "name": "Garen",
       "tier": "B",
       "rank": 64,
-      "win_rate": 48.08,
+      "win_rate": 48.05,
       "pick_rate": 9.57,
       "tags": [
         "fighter",
@@ -2663,11 +2661,54 @@
       "name_ko": "가렌"
     },
     {
+      "slug": "fiora",
+      "name": "Fiora",
+      "tier": "B",
+      "rank": 65,
+      "win_rate": 53.75,
+      "pick_rate": 3.68,
+      "tags": [
+        "fighter",
+        "assassin"
+      ],
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/114.png",
+      "baseStats": {
+        "baseHP": 620,
+        "hpGrowth": 99,
+        "baseArmor": 33,
+        "armorGrowth": 4.7,
+        "baseMR": 32,
+        "mrGrowth": 2.05,
+        "baseAD": 66,
+        "adGrowth": 3.3,
+        "baseAS": 0.69,
+        "asGrowth": 3.2,
+        "attackRange": 150,
+        "moveSpeed": 345,
+        "baseMP": 300,
+        "mpGrowth": 60,
+        "baseHPRegen": 8.5,
+        "hpRegenGrowth": 0.55
+      },
+      "kit_tags": [
+        "attack",
+        "cc",
+        "crit",
+        "heal_shield",
+        "movement",
+        "on_hit"
+      ],
+      "name_zh_TW": "菲歐拉",
+      "name_zh_CN": "无双剑姬",
+      "name_ja": "フィオラ",
+      "name_ko": "피오라"
+    },
+    {
       "slug": "varus",
       "name": "Varus",
       "tier": "B",
-      "rank": 65,
-      "win_rate": 48.77,
+      "rank": 66,
+      "win_rate": 48.75,
       "pick_rate": 8.37,
       "tags": [
         "marksman",
@@ -2706,12 +2747,54 @@
       "name_ko": "바루스"
     },
     {
+      "slug": "malphite",
+      "name": "Malphite",
+      "tier": "B",
+      "rank": 67,
+      "win_rate": 47.73,
+      "pick_rate": 9.85,
+      "tags": [
+        "tank",
+        "mage"
+      ],
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/54.png",
+      "baseStats": {
+        "baseHP": 665,
+        "hpGrowth": 104,
+        "baseArmor": 40,
+        "armorGrowth": 4.95,
+        "baseMR": 28,
+        "mrGrowth": 2.05,
+        "baseAD": 62,
+        "adGrowth": 4,
+        "baseAS": 0.736,
+        "asGrowth": 3.4,
+        "attackRange": 125,
+        "moveSpeed": 335,
+        "baseMP": 280,
+        "mpGrowth": 60,
+        "baseHPRegen": 7,
+        "hpRegenGrowth": 0.55
+      },
+      "kit_tags": [
+        "ability",
+        "cc",
+        "heal_shield",
+        "movement",
+        "tank"
+      ],
+      "name_zh_TW": "墨菲特",
+      "name_zh_CN": "熔岩巨兽",
+      "name_ja": "マルファイト",
+      "name_ko": "말파이트"
+    },
+    {
       "slug": "heimerdinger",
       "name": "Heimerdinger",
       "tier": "B",
-      "rank": 66,
-      "win_rate": 51.4,
-      "pick_rate": 4.41,
+      "rank": 68,
+      "win_rate": 51.32,
+      "pick_rate": 4.33,
       "tags": [
         "mage",
         "support"
@@ -2747,12 +2830,133 @@
       "name_ko": "하이머딩거"
     },
     {
+      "slug": "soraka",
+      "name": "Soraka",
+      "tier": "B",
+      "rank": 69,
+      "win_rate": 52.84,
+      "pick_rate": 3.81,
+      "tags": [
+        "support",
+        "mage"
+      ],
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/16.png",
+      "baseStats": {
+        "baseHP": 605,
+        "hpGrowth": 88,
+        "baseArmor": 32,
+        "armorGrowth": 5,
+        "baseMR": 30,
+        "mrGrowth": 1.3,
+        "baseAD": 50,
+        "adGrowth": 3,
+        "baseAS": 0.625,
+        "asGrowth": 2.14,
+        "attackRange": 550,
+        "moveSpeed": 325,
+        "baseMP": 425,
+        "mpGrowth": 40,
+        "baseHPRegen": 2.5,
+        "hpRegenGrowth": 0.5
+      },
+      "kit_tags": [
+        "ability",
+        "cc",
+        "heal_shield"
+      ],
+      "name_zh_TW": "索拉卡",
+      "name_zh_CN": "众星之子",
+      "name_ja": "ソラカ",
+      "name_ko": "소라카"
+    },
+    {
+      "slug": "tristana",
+      "name": "Tristana",
+      "tier": "C",
+      "rank": 70,
+      "win_rate": 48.85,
+      "pick_rate": 7.78,
+      "tags": [
+        "marksman",
+        "assassin"
+      ],
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/18.png",
+      "baseStats": {
+        "baseHP": 640,
+        "hpGrowth": 102,
+        "baseArmor": 30,
+        "armorGrowth": 4,
+        "baseMR": 28,
+        "mrGrowth": 1.3,
+        "baseAD": 60,
+        "adGrowth": 2.9,
+        "baseAS": 0.656,
+        "asGrowth": 1.5,
+        "attackRange": 550,
+        "moveSpeed": 325,
+        "baseMP": 300,
+        "mpGrowth": 32,
+        "baseHPRegen": 4,
+        "hpRegenGrowth": 0.5
+      },
+      "kit_tags": [
+        "attack",
+        "cc",
+        "crit",
+        "movement"
+      ],
+      "name_zh_TW": "崔絲塔娜",
+      "name_zh_CN": "麦林炮手",
+      "name_ja": "トリスターナ",
+      "name_ko": "트리스타나"
+    },
+    {
+      "slug": "kogmaw",
+      "name": "Kogmaw",
+      "tier": "C",
+      "rank": 71,
+      "win_rate": 51.13,
+      "pick_rate": 4.31,
+      "tags": [
+        "marksman",
+        "mage"
+      ],
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/96.png",
+      "baseStats": {
+        "baseHP": 635,
+        "hpGrowth": 99,
+        "baseArmor": 24,
+        "armorGrowth": 4.45,
+        "baseMR": 30,
+        "mrGrowth": 1.3,
+        "baseAD": 61,
+        "adGrowth": 3.1,
+        "baseAS": 0.665,
+        "asGrowth": 2.65,
+        "attackRange": 500,
+        "moveSpeed": 330,
+        "baseMP": 325,
+        "mpGrowth": 40,
+        "baseHPRegen": 3.75,
+        "hpRegenGrowth": 0.55
+      },
+      "kit_tags": [
+        "ability",
+        "attack",
+        "haste"
+      ],
+      "name_zh_TW": "寇格魔",
+      "name_zh_CN": "深渊巨口",
+      "name_ja": "コグ＝マウ",
+      "name_ko": "코그모"
+    },
+    {
       "slug": "shyvana",
       "name": "Shyvana",
-      "tier": "B",
-      "rank": 67,
-      "win_rate": 51.84,
-      "pick_rate": 4.12,
+      "tier": "C",
+      "rank": 72,
+      "win_rate": 51.66,
+      "pick_rate": 4.06,
       "tags": [
         "fighter",
         "mage"
@@ -2790,94 +2994,134 @@
       "name_ko": "쉬바나"
     },
     {
-      "slug": "soraka",
-      "name": "Soraka",
-      "tier": "B",
-      "rank": 68,
-      "win_rate": 52.76,
-      "pick_rate": 3.75,
+      "slug": "aphelios",
+      "name": "Aphelios",
+      "tier": "C",
+      "rank": 73,
+      "win_rate": 52.68,
+      "pick_rate": 3.71,
       "tags": [
-        "support",
-        "mage"
+        "marksman"
       ],
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/16.png",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/523.png",
       "baseStats": {
-        "baseHP": 605,
-        "hpGrowth": 88,
-        "baseArmor": 32,
-        "armorGrowth": 5,
+        "baseHP": 600,
+        "hpGrowth": 102,
+        "baseArmor": 26,
+        "armorGrowth": 4.2,
         "baseMR": 30,
         "mrGrowth": 1.3,
-        "baseAD": 50,
-        "adGrowth": 3,
-        "baseAS": 0.625,
-        "asGrowth": 2.14,
+        "baseAD": 55,
+        "adGrowth": 2.3,
+        "baseAS": 0.665,
+        "asGrowth": 2.1,
         "attackRange": 550,
         "moveSpeed": 325,
-        "baseMP": 425,
-        "mpGrowth": 40,
-        "baseHPRegen": 2.5,
+        "baseMP": 348,
+        "mpGrowth": 42,
+        "baseHPRegen": 3.25,
+        "hpRegenGrowth": 0.55
+      },
+      "kit_tags": [
+        "attack",
+        "cc",
+        "on_hit"
+      ],
+      "name_zh_TW": "亞菲利歐",
+      "name_zh_CN": "残月之肃",
+      "name_ja": "アフェリオス",
+      "name_ko": "아펠리오스"
+    },
+    {
+      "slug": "swain",
+      "name": "Swain",
+      "tier": "C",
+      "rank": 74,
+      "win_rate": 45.96,
+      "pick_rate": 11.88,
+      "tags": [
+        "mage",
+        "support"
+      ],
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/50.png",
+      "baseStats": {
+        "baseHP": 595,
+        "hpGrowth": 99,
+        "baseArmor": 25,
+        "armorGrowth": 4.7,
+        "baseMR": 31,
+        "mrGrowth": 1.55,
+        "baseAD": 58,
+        "adGrowth": 2.7,
+        "baseAS": 0.625,
+        "asGrowth": 2.11,
+        "attackRange": 525,
+        "moveSpeed": 330,
+        "baseMP": 400,
+        "mpGrowth": 29,
+        "baseHPRegen": 3,
         "hpRegenGrowth": 0.5
       },
       "kit_tags": [
         "ability",
         "cc",
+        "dot",
+        "haste",
         "heal_shield"
       ],
-      "name_zh_TW": "索拉卡",
-      "name_zh_CN": "众星之子",
-      "name_ja": "ソラカ",
-      "name_ko": "소라카"
+      "name_zh_TW": "斯溫",
+      "name_zh_CN": "诺克萨斯统领",
+      "name_ja": "スウェイン",
+      "name_ko": "스웨인"
     },
     {
-      "slug": "malphite",
-      "name": "Malphite",
-      "tier": "B",
-      "rank": 69,
-      "win_rate": 47.71,
-      "pick_rate": 9.81,
+      "slug": "twitch",
+      "name": "Twitch",
+      "tier": "C",
+      "rank": 75,
+      "win_rate": 47.72,
+      "pick_rate": 9.45,
       "tags": [
-        "tank",
-        "mage"
+        "marksman",
+        "assassin"
       ],
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/54.png",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/29.png",
       "baseStats": {
-        "baseHP": 665,
-        "hpGrowth": 104,
-        "baseArmor": 40,
-        "armorGrowth": 4.95,
-        "baseMR": 28,
-        "mrGrowth": 2.05,
-        "baseAD": 62,
-        "adGrowth": 4,
-        "baseAS": 0.736,
-        "asGrowth": 3.4,
-        "attackRange": 125,
-        "moveSpeed": 335,
-        "baseMP": 280,
-        "mpGrowth": 60,
-        "baseHPRegen": 7,
-        "hpRegenGrowth": 0.55
+        "baseHP": 630,
+        "hpGrowth": 98,
+        "baseArmor": 27,
+        "armorGrowth": 4,
+        "baseMR": 30,
+        "mrGrowth": 1.3,
+        "baseAD": 59,
+        "adGrowth": 3,
+        "baseAS": 0.679,
+        "asGrowth": 3,
+        "attackRange": 550,
+        "moveSpeed": 330,
+        "baseMP": 300,
+        "mpGrowth": 40,
+        "baseHPRegen": 3.75,
+        "hpRegenGrowth": 0.6
       },
       "kit_tags": [
-        "ability",
-        "cc",
-        "heal_shield",
+        "attack",
+        "dot",
         "movement",
-        "tank"
+        "on_hit"
       ],
-      "name_zh_TW": "墨菲特",
-      "name_zh_CN": "熔岩巨兽",
-      "name_ja": "マルファイト",
-      "name_ko": "말파이트"
+      "name_zh_TW": "圖奇",
+      "name_zh_CN": "瘟疫之源",
+      "name_ja": "トゥイッチ",
+      "name_ko": "트위치"
     },
     {
       "slug": "mordekaiser",
       "name": "Mordekaiser",
       "tier": "C",
-      "rank": 70,
-      "win_rate": 48.0,
-      "pick_rate": 9.08,
+      "rank": 76,
+      "win_rate": 47.87,
+      "pick_rate": 9.12,
       "tags": [
         "fighter",
         "mage"
@@ -2915,135 +3159,12 @@
       "name_ko": "모데카이저"
     },
     {
-      "slug": "swain",
-      "name": "Swain",
-      "tier": "C",
-      "rank": 71,
-      "win_rate": 46.19,
-      "pick_rate": 11.82,
-      "tags": [
-        "mage",
-        "support"
-      ],
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/50.png",
-      "baseStats": {
-        "baseHP": 595,
-        "hpGrowth": 99,
-        "baseArmor": 25,
-        "armorGrowth": 4.7,
-        "baseMR": 31,
-        "mrGrowth": 1.55,
-        "baseAD": 58,
-        "adGrowth": 2.7,
-        "baseAS": 0.625,
-        "asGrowth": 2.11,
-        "attackRange": 525,
-        "moveSpeed": 330,
-        "baseMP": 400,
-        "mpGrowth": 29,
-        "baseHPRegen": 3,
-        "hpRegenGrowth": 0.5
-      },
-      "kit_tags": [
-        "ability",
-        "cc",
-        "dot",
-        "haste",
-        "heal_shield"
-      ],
-      "name_zh_TW": "斯溫",
-      "name_zh_CN": "诺克萨斯统领",
-      "name_ja": "スウェイン",
-      "name_ko": "스웨인"
-    },
-    {
-      "slug": "yunara",
-      "name": "Yunara",
-      "tier": "C",
-      "rank": 72,
-      "win_rate": 50.49,
-      "pick_rate": 5.59,
-      "tags": [
-        "marksman"
-      ],
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/804.png",
-      "baseStats": {
-        "baseHP": 590,
-        "hpGrowth": 110,
-        "baseArmor": 25,
-        "armorGrowth": 4.4,
-        "baseMR": 30,
-        "mrGrowth": 1.3,
-        "baseAD": 55,
-        "adGrowth": 2.5,
-        "baseAS": 0.65,
-        "asGrowth": 2,
-        "attackRange": 575,
-        "moveSpeed": 325,
-        "baseMP": 275,
-        "mpGrowth": 45,
-        "baseHPRegen": 4,
-        "hpRegenGrowth": 0.55
-      },
-      "kit_tags": [
-        "attack",
-        "crit",
-        "dot",
-        "movement",
-        "on_hit"
-      ],
-      "name_zh_TW": "尤娜拉",
-      "name_zh_CN": "不破之誓",
-      "name_ja": "ユナラ",
-      "name_ko": "유나라"
-    },
-    {
-      "slug": "kogmaw",
-      "name": "Kogmaw",
-      "tier": "C",
-      "rank": 73,
-      "win_rate": 51.16,
-      "pick_rate": 4.35,
-      "tags": [
-        "marksman",
-        "mage"
-      ],
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/96.png",
-      "baseStats": {
-        "baseHP": 635,
-        "hpGrowth": 99,
-        "baseArmor": 24,
-        "armorGrowth": 4.45,
-        "baseMR": 30,
-        "mrGrowth": 1.3,
-        "baseAD": 61,
-        "adGrowth": 3.1,
-        "baseAS": 0.665,
-        "asGrowth": 2.65,
-        "attackRange": 500,
-        "moveSpeed": 330,
-        "baseMP": 325,
-        "mpGrowth": 40,
-        "baseHPRegen": 3.75,
-        "hpRegenGrowth": 0.55
-      },
-      "kit_tags": [
-        "ability",
-        "attack",
-        "haste"
-      ],
-      "name_zh_TW": "寇格魔",
-      "name_zh_CN": "深渊巨口",
-      "name_ja": "コグ＝マウ",
-      "name_ko": "코그모"
-    },
-    {
       "slug": "xerath",
       "name": "Xerath",
       "tier": "C",
-      "rank": 74,
-      "win_rate": 48.99,
-      "pick_rate": 7.56,
+      "rank": 77,
+      "win_rate": 48.97,
+      "pick_rate": 7.46,
       "tags": [
         "mage",
         "support"
@@ -3078,175 +3199,12 @@
       "name_ko": "제라스"
     },
     {
-      "slug": "aphelios",
-      "name": "Aphelios",
-      "tier": "C",
-      "rank": 75,
-      "win_rate": 52.59,
-      "pick_rate": 3.72,
-      "tags": [
-        "marksman"
-      ],
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/523.png",
-      "baseStats": {
-        "baseHP": 600,
-        "hpGrowth": 102,
-        "baseArmor": 26,
-        "armorGrowth": 4.2,
-        "baseMR": 30,
-        "mrGrowth": 1.3,
-        "baseAD": 55,
-        "adGrowth": 2.3,
-        "baseAS": 0.665,
-        "asGrowth": 2.1,
-        "attackRange": 550,
-        "moveSpeed": 325,
-        "baseMP": 348,
-        "mpGrowth": 42,
-        "baseHPRegen": 3.25,
-        "hpRegenGrowth": 0.55
-      },
-      "kit_tags": [
-        "attack",
-        "cc",
-        "on_hit"
-      ],
-      "name_zh_TW": "亞菲利歐",
-      "name_zh_CN": "残月之肃",
-      "name_ja": "アフェリオス",
-      "name_ko": "아펠리오스"
-    },
-    {
-      "slug": "mel",
-      "name": "Mel",
-      "tier": "C",
-      "rank": 76,
-      "win_rate": 47.41,
-      "pick_rate": 9.99,
-      "tags": [
-        "mage",
-        "support"
-      ],
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/800.png",
-      "baseStats": {
-        "baseHP": 630,
-        "hpGrowth": 99,
-        "baseArmor": 21,
-        "armorGrowth": 5.2,
-        "baseMR": 30,
-        "mrGrowth": 1.3,
-        "baseAD": 54,
-        "adGrowth": 3.3,
-        "baseAS": 0.625,
-        "asGrowth": 2.5,
-        "attackRange": 550,
-        "moveSpeed": 330,
-        "baseMP": 480,
-        "mpGrowth": 28,
-        "baseHPRegen": 6,
-        "hpRegenGrowth": 0.55
-      },
-      "kit_tags": [
-        "ability",
-        "cc",
-        "dot",
-        "haste",
-        "heal_shield"
-      ],
-      "name_zh_TW": "梅爾",
-      "name_zh_CN": "流光镜影",
-      "name_ja": "メル",
-      "name_ko": "멜"
-    },
-    {
-      "slug": "tristana",
-      "name": "Tristana",
-      "tier": "C",
-      "rank": 77,
-      "win_rate": 48.71,
-      "pick_rate": 7.74,
-      "tags": [
-        "marksman",
-        "assassin"
-      ],
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/18.png",
-      "baseStats": {
-        "baseHP": 640,
-        "hpGrowth": 102,
-        "baseArmor": 30,
-        "armorGrowth": 4,
-        "baseMR": 28,
-        "mrGrowth": 1.3,
-        "baseAD": 60,
-        "adGrowth": 2.9,
-        "baseAS": 0.656,
-        "asGrowth": 1.5,
-        "attackRange": 550,
-        "moveSpeed": 325,
-        "baseMP": 300,
-        "mpGrowth": 32,
-        "baseHPRegen": 4,
-        "hpRegenGrowth": 0.5
-      },
-      "kit_tags": [
-        "attack",
-        "cc",
-        "crit",
-        "movement"
-      ],
-      "name_zh_TW": "崔絲塔娜",
-      "name_zh_CN": "麦林炮手",
-      "name_ja": "トリスターナ",
-      "name_ko": "트리스타나"
-    },
-    {
-      "slug": "twitch",
-      "name": "Twitch",
-      "tier": "C",
-      "rank": 78,
-      "win_rate": 47.56,
-      "pick_rate": 9.42,
-      "tags": [
-        "marksman",
-        "assassin"
-      ],
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/29.png",
-      "baseStats": {
-        "baseHP": 630,
-        "hpGrowth": 98,
-        "baseArmor": 27,
-        "armorGrowth": 4,
-        "baseMR": 30,
-        "mrGrowth": 1.3,
-        "baseAD": 59,
-        "adGrowth": 3,
-        "baseAS": 0.679,
-        "asGrowth": 3,
-        "attackRange": 550,
-        "moveSpeed": 330,
-        "baseMP": 300,
-        "mpGrowth": 40,
-        "baseHPRegen": 3.75,
-        "hpRegenGrowth": 0.6
-      },
-      "kit_tags": [
-        "attack",
-        "dot",
-        "movement",
-        "on_hit"
-      ],
-      "name_zh_TW": "圖奇",
-      "name_zh_CN": "瘟疫之源",
-      "name_ja": "トゥイッチ",
-      "name_ko": "트위치"
-    },
-    {
       "slug": "jarvaniv",
       "name": "Jarvaniv",
       "tier": "C",
-      "rank": 79,
-      "win_rate": 47.44,
-      "pick_rate": 9.46,
+      "rank": 78,
+      "win_rate": 47.42,
+      "pick_rate": 9.62,
       "tags": [
         "fighter",
         "tank"
@@ -3284,52 +3242,54 @@
       "name_ko": "자르반 4세"
     },
     {
-      "slug": "jax",
-      "name": "Jax",
+      "slug": "mel",
+      "name": "Mel",
       "tier": "C",
-      "rank": 80,
-      "win_rate": 50.39,
-      "pick_rate": 5.24,
+      "rank": 79,
+      "win_rate": 47.33,
+      "pick_rate": 9.95,
       "tags": [
-        "fighter"
+        "mage",
+        "support"
       ],
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/24.png",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/800.png",
       "baseStats": {
-        "baseHP": 650,
-        "hpGrowth": 103,
-        "baseArmor": 36,
-        "armorGrowth": 4.2,
-        "baseMR": 32,
-        "mrGrowth": 2.05,
-        "baseAD": 68,
-        "adGrowth": 4.25,
-        "baseAS": 0.638,
-        "asGrowth": 3.4,
-        "attackRange": 125,
-        "moveSpeed": 350,
-        "baseMP": 339,
-        "mpGrowth": 52,
-        "baseHPRegen": 8.5,
+        "baseHP": 630,
+        "hpGrowth": 99,
+        "baseArmor": 21,
+        "armorGrowth": 5.2,
+        "baseMR": 30,
+        "mrGrowth": 1.3,
+        "baseAD": 54,
+        "adGrowth": 3.3,
+        "baseAS": 0.625,
+        "asGrowth": 2.5,
+        "attackRange": 550,
+        "moveSpeed": 330,
+        "baseMP": 480,
+        "mpGrowth": 28,
+        "baseHPRegen": 6,
         "hpRegenGrowth": 0.55
       },
       "kit_tags": [
-        "attack",
+        "ability",
         "cc",
-        "movement",
-        "on_hit"
+        "dot",
+        "haste",
+        "heal_shield"
       ],
-      "name_zh_TW": "賈克斯",
-      "name_zh_CN": "武器大师",
-      "name_ja": "ジャックス",
-      "name_ko": "잭스"
+      "name_zh_TW": "梅爾",
+      "name_zh_CN": "流光镜影",
+      "name_ja": "メル",
+      "name_ko": "멜"
     },
     {
       "slug": "gangplank",
       "name": "Gangplank",
       "tier": "C",
-      "rank": 81,
-      "win_rate": 49.11,
-      "pick_rate": 6.32,
+      "rank": 80,
+      "win_rate": 49.06,
+      "pick_rate": 6.33,
       "tags": [
         "fighter"
       ],
@@ -3364,55 +3324,12 @@
       "name_ko": "갱플랭크"
     },
     {
-      "slug": "sylas",
-      "name": "Sylas",
-      "tier": "C",
-      "rank": 82,
-      "win_rate": 47.89,
-      "pick_rate": 8.31,
-      "tags": [
-        "mage",
-        "assassin"
-      ],
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/517.png",
-      "baseStats": {
-        "baseHP": 600,
-        "hpGrowth": 122,
-        "baseArmor": 29,
-        "armorGrowth": 5.2,
-        "baseMR": 32,
-        "mrGrowth": 2.55,
-        "baseAD": 61,
-        "adGrowth": 3,
-        "baseAS": 0.645,
-        "asGrowth": 3.5,
-        "attackRange": 175,
-        "moveSpeed": 340,
-        "baseMP": 400,
-        "mpGrowth": 70,
-        "baseHPRegen": 9,
-        "hpRegenGrowth": 0.9
-      },
-      "kit_tags": [
-        "ability",
-        "attack",
-        "cc",
-        "haste",
-        "heal_shield",
-        "movement"
-      ],
-      "name_zh_TW": "賽勒斯",
-      "name_zh_CN": "解脱者",
-      "name_ja": "サイラス",
-      "name_ko": "사일러스"
-    },
-    {
       "slug": "corki",
       "name": "Corki",
       "tier": "C",
-      "rank": 83,
-      "win_rate": 49.78,
-      "pick_rate": 5.69,
+      "rank": 81,
+      "win_rate": 49.82,
+      "pick_rate": 5.72,
       "tags": [
         "marksman",
         "mage"
@@ -3450,12 +3367,136 @@
       "name_ko": "코르키"
     },
     {
+      "slug": "jax",
+      "name": "Jax",
+      "tier": "C",
+      "rank": 82,
+      "win_rate": 50.28,
+      "pick_rate": 5.19,
+      "tags": [
+        "fighter"
+      ],
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/24.png",
+      "baseStats": {
+        "baseHP": 650,
+        "hpGrowth": 103,
+        "baseArmor": 36,
+        "armorGrowth": 4.2,
+        "baseMR": 32,
+        "mrGrowth": 2.05,
+        "baseAD": 68,
+        "adGrowth": 4.25,
+        "baseAS": 0.638,
+        "asGrowth": 3.4,
+        "attackRange": 125,
+        "moveSpeed": 350,
+        "baseMP": 339,
+        "mpGrowth": 52,
+        "baseHPRegen": 8.5,
+        "hpRegenGrowth": 0.55
+      },
+      "kit_tags": [
+        "attack",
+        "cc",
+        "movement",
+        "on_hit"
+      ],
+      "name_zh_TW": "賈克斯",
+      "name_zh_CN": "武器大师",
+      "name_ja": "ジャックス",
+      "name_ko": "잭스"
+    },
+    {
+      "slug": "sylas",
+      "name": "Sylas",
+      "tier": "C",
+      "rank": 83,
+      "win_rate": 47.76,
+      "pick_rate": 8.26,
+      "tags": [
+        "mage",
+        "assassin"
+      ],
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/517.png",
+      "baseStats": {
+        "baseHP": 600,
+        "hpGrowth": 122,
+        "baseArmor": 29,
+        "armorGrowth": 5.2,
+        "baseMR": 32,
+        "mrGrowth": 2.55,
+        "baseAD": 61,
+        "adGrowth": 3,
+        "baseAS": 0.645,
+        "asGrowth": 3.5,
+        "attackRange": 175,
+        "moveSpeed": 340,
+        "baseMP": 400,
+        "mpGrowth": 70,
+        "baseHPRegen": 9,
+        "hpRegenGrowth": 0.9
+      },
+      "kit_tags": [
+        "ability",
+        "attack",
+        "cc",
+        "haste",
+        "heal_shield",
+        "movement"
+      ],
+      "name_zh_TW": "賽勒斯",
+      "name_zh_CN": "解脱者",
+      "name_ja": "サイラス",
+      "name_ko": "사일러스"
+    },
+    {
+      "slug": "samira",
+      "name": "Samira",
+      "tier": "C",
+      "rank": 84,
+      "win_rate": 50.15,
+      "pick_rate": 4.63,
+      "tags": [
+        "marksman",
+        "assassin"
+      ],
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/360.png",
+      "baseStats": {
+        "baseHP": 630,
+        "hpGrowth": 108,
+        "baseArmor": 26,
+        "armorGrowth": 4.7,
+        "baseMR": 30,
+        "mrGrowth": 1.3,
+        "baseAD": 57,
+        "adGrowth": 3,
+        "baseAS": 0.658,
+        "asGrowth": 3.3,
+        "attackRange": 500,
+        "moveSpeed": 335,
+        "baseMP": 349,
+        "mpGrowth": 38,
+        "baseHPRegen": 3.25,
+        "hpRegenGrowth": 0.55
+      },
+      "kit_tags": [
+        "attack",
+        "crit",
+        "movement",
+        "on_hit"
+      ],
+      "name_zh_TW": "煞蜜拉",
+      "name_zh_CN": "沙漠玫瑰",
+      "name_ja": "サミーラ",
+      "name_ko": "사미라"
+    },
+    {
       "slug": "zaahen",
       "name": "Zaahen",
       "tier": "C",
-      "rank": 84,
-      "win_rate": 51.68,
-      "pick_rate": 3.3,
+      "rank": 85,
+      "win_rate": 51.54,
+      "pick_rate": 3.24,
       "tags": [
         "fighter",
         "assassin"
@@ -3493,93 +3534,12 @@
       "name_ko": "자헨"
     },
     {
-      "slug": "ziggs",
-      "name": "Ziggs",
-      "tier": "C",
-      "rank": 85,
-      "win_rate": 49.18,
-      "pick_rate": 5.87,
-      "tags": [
-        "mage"
-      ],
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/115.png",
-      "baseStats": {
-        "baseHP": 606,
-        "hpGrowth": 106,
-        "baseArmor": 21,
-        "armorGrowth": 4.7,
-        "baseMR": 30,
-        "mrGrowth": 1.3,
-        "baseAD": 55,
-        "adGrowth": 3.1,
-        "baseAS": 0.656,
-        "asGrowth": 2,
-        "attackRange": 550,
-        "moveSpeed": 325,
-        "baseMP": 480,
-        "mpGrowth": 23.5,
-        "baseHPRegen": 6.5,
-        "hpRegenGrowth": 0.6
-      },
-      "kit_tags": [
-        "ability",
-        "cc",
-        "haste",
-        "movement"
-      ],
-      "name_zh_TW": "希格斯",
-      "name_zh_CN": "爆破鬼才",
-      "name_ja": "ジグス",
-      "name_ko": "직스"
-    },
-    {
-      "slug": "samira",
-      "name": "Samira",
-      "tier": "C",
-      "rank": 86,
-      "win_rate": 50.09,
-      "pick_rate": 4.66,
-      "tags": [
-        "marksman",
-        "assassin"
-      ],
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/360.png",
-      "baseStats": {
-        "baseHP": 630,
-        "hpGrowth": 108,
-        "baseArmor": 26,
-        "armorGrowth": 4.7,
-        "baseMR": 30,
-        "mrGrowth": 1.3,
-        "baseAD": 57,
-        "adGrowth": 3,
-        "baseAS": 0.658,
-        "asGrowth": 3.3,
-        "attackRange": 500,
-        "moveSpeed": 335,
-        "baseMP": 349,
-        "mpGrowth": 38,
-        "baseHPRegen": 3.25,
-        "hpRegenGrowth": 0.55
-      },
-      "kit_tags": [
-        "attack",
-        "crit",
-        "movement",
-        "on_hit"
-      ],
-      "name_zh_TW": "煞蜜拉",
-      "name_zh_CN": "沙漠玫瑰",
-      "name_ja": "サミーラ",
-      "name_ko": "사미라"
-    },
-    {
       "slug": "sona",
       "name": "Sona",
       "tier": "C",
-      "rank": 87,
-      "win_rate": 51.75,
-      "pick_rate": 3.02,
+      "rank": 86,
+      "win_rate": 51.81,
+      "pick_rate": 3.06,
       "tags": [
         "support",
         "mage"
@@ -3615,55 +3575,95 @@
       "name_ko": "소나"
     },
     {
-      "slug": "volibear",
-      "name": "Volibear",
+      "slug": "ziggs",
+      "name": "Ziggs",
+      "tier": "C",
+      "rank": 87,
+      "win_rate": 49.13,
+      "pick_rate": 5.78,
+      "tags": [
+        "mage"
+      ],
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/115.png",
+      "baseStats": {
+        "baseHP": 606,
+        "hpGrowth": 106,
+        "baseArmor": 21,
+        "armorGrowth": 4.7,
+        "baseMR": 30,
+        "mrGrowth": 1.3,
+        "baseAD": 55,
+        "adGrowth": 3.1,
+        "baseAS": 0.656,
+        "asGrowth": 2,
+        "attackRange": 550,
+        "moveSpeed": 325,
+        "baseMP": 480,
+        "mpGrowth": 23.5,
+        "baseHPRegen": 6.5,
+        "hpRegenGrowth": 0.6
+      },
+      "kit_tags": [
+        "ability",
+        "cc",
+        "haste",
+        "movement"
+      ],
+      "name_zh_TW": "希格斯",
+      "name_zh_CN": "爆破鬼才",
+      "name_ja": "ジグス",
+      "name_ko": "직스"
+    },
+    {
+      "slug": "poppy",
+      "name": "Poppy",
       "tier": "C",
       "rank": 88,
       "win_rate": 50.16,
-      "pick_rate": 4.13,
+      "pick_rate": 4.15,
       "tags": [
-        "fighter",
-        "tank"
+        "tank",
+        "fighter"
       ],
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/106.png",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/78.png",
       "baseStats": {
-        "baseHP": 650,
-        "hpGrowth": 104,
+        "baseHP": 610,
+        "hpGrowth": 110,
         "baseArmor": 35,
-        "armorGrowth": 5.2,
+        "armorGrowth": 5,
         "baseMR": 32,
         "mrGrowth": 2.05,
-        "baseAD": 65,
-        "adGrowth": 3.5,
-        "baseAS": 0.625,
-        "asGrowth": 2,
-        "attackRange": 150,
-        "moveSpeed": 340,
-        "baseMP": 350,
-        "mpGrowth": 70,
-        "baseHPRegen": 9,
-        "hpRegenGrowth": 0.75
+        "baseAD": 60,
+        "adGrowth": 4,
+        "baseAS": 0.658,
+        "asGrowth": 2.5,
+        "attackRange": 125,
+        "moveSpeed": 345,
+        "baseMP": 280,
+        "mpGrowth": 40,
+        "baseHPRegen": 8,
+        "hpRegenGrowth": 0.8
       },
       "kit_tags": [
         "attack",
         "cc",
+        "dot",
         "heal_shield",
         "movement",
-        "on_hit",
         "tank"
       ],
-      "name_zh_TW": "弗力貝爾",
-      "name_zh_CN": "不灭狂雷",
-      "name_ja": "ボリベア",
-      "name_ko": "볼리베어"
+      "name_zh_TW": "波比",
+      "name_zh_CN": "圣锤之毅",
+      "name_ja": "ポッピー",
+      "name_ko": "뽀삐"
     },
     {
       "slug": "kindred",
       "name": "Kindred",
       "tier": "C",
       "rank": 89,
-      "win_rate": 50.33,
-      "pick_rate": 4.04,
+      "win_rate": 50.48,
+      "pick_rate": 3.99,
       "tags": [
         "marksman"
       ],
@@ -3703,8 +3703,8 @@
       "name": "Amumu",
       "tier": "C",
       "rank": 90,
-      "win_rate": 49.45,
-      "pick_rate": 5.3,
+      "win_rate": 49.42,
+      "pick_rate": 5.36,
       "tags": [
         "tank",
         "support"
@@ -3739,55 +3739,95 @@
       "name_ko": "아무무"
     },
     {
-      "slug": "poppy",
-      "name": "Poppy",
+      "slug": "volibear",
+      "name": "Volibear",
       "tier": "C",
       "rank": 91,
-      "win_rate": 50.13,
-      "pick_rate": 4.12,
+      "win_rate": 49.94,
+      "pick_rate": 4.18,
       "tags": [
-        "tank",
-        "fighter"
+        "fighter",
+        "tank"
       ],
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/78.png",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/106.png",
       "baseStats": {
-        "baseHP": 610,
-        "hpGrowth": 110,
+        "baseHP": 650,
+        "hpGrowth": 104,
         "baseArmor": 35,
-        "armorGrowth": 5,
+        "armorGrowth": 5.2,
         "baseMR": 32,
         "mrGrowth": 2.05,
-        "baseAD": 60,
-        "adGrowth": 4,
-        "baseAS": 0.658,
-        "asGrowth": 2.5,
-        "attackRange": 125,
-        "moveSpeed": 345,
-        "baseMP": 280,
-        "mpGrowth": 40,
-        "baseHPRegen": 8,
-        "hpRegenGrowth": 0.8
+        "baseAD": 65,
+        "adGrowth": 3.5,
+        "baseAS": 0.625,
+        "asGrowth": 2,
+        "attackRange": 150,
+        "moveSpeed": 340,
+        "baseMP": 350,
+        "mpGrowth": 70,
+        "baseHPRegen": 9,
+        "hpRegenGrowth": 0.75
       },
       "kit_tags": [
         "attack",
         "cc",
-        "dot",
         "heal_shield",
         "movement",
+        "on_hit",
         "tank"
       ],
-      "name_zh_TW": "波比",
-      "name_zh_CN": "圣锤之毅",
-      "name_ja": "ポッピー",
-      "name_ko": "뽀삐"
+      "name_zh_TW": "弗力貝爾",
+      "name_zh_CN": "不灭狂雷",
+      "name_ja": "ボリベア",
+      "name_ko": "볼리베어"
+    },
+    {
+      "slug": "sivir",
+      "name": "Sivir",
+      "tier": "C",
+      "rank": 92,
+      "win_rate": 48.73,
+      "pick_rate": 5.77,
+      "tags": [
+        "marksman"
+      ],
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/15.png",
+      "baseStats": {
+        "baseHP": 600,
+        "hpGrowth": 104,
+        "baseArmor": 30,
+        "armorGrowth": 4,
+        "baseMR": 30,
+        "mrGrowth": 1.3,
+        "baseAD": 60,
+        "adGrowth": 2.5,
+        "baseAS": 0.625,
+        "asGrowth": 1.6,
+        "attackRange": 500,
+        "moveSpeed": 335,
+        "baseMP": 340,
+        "mpGrowth": 45,
+        "baseHPRegen": 3.25,
+        "hpRegenGrowth": 0.55
+      },
+      "kit_tags": [
+        "attack",
+        "cc",
+        "heal_shield",
+        "on_hit"
+      ],
+      "name_zh_TW": "希維爾",
+      "name_zh_CN": "战争女神",
+      "name_ja": "シヴィア",
+      "name_ko": "시비르"
     },
     {
       "slug": "monkeyking",
       "name": "Monkeyking",
       "tier": "C",
-      "rank": 92,
-      "win_rate": 49.26,
-      "pick_rate": 5.28,
+      "rank": 93,
+      "win_rate": 49.16,
+      "pick_rate": 5.23,
       "tags": [
         "fighter",
         "tank"
@@ -3826,52 +3866,94 @@
       "name_ko": "오공"
     },
     {
-      "slug": "sivir",
-      "name": "Sivir",
+      "slug": "vladimir",
+      "name": "Vladimir",
       "tier": "C",
-      "rank": 93,
-      "win_rate": 48.67,
-      "pick_rate": 5.83,
+      "rank": 94,
+      "win_rate": 47.89,
+      "pick_rate": 6.06,
       "tags": [
-        "marksman"
+        "mage",
+        "fighter"
       ],
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/15.png",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/8.png",
       "baseStats": {
         "baseHP": 600,
-        "hpGrowth": 104,
-        "baseArmor": 30,
-        "armorGrowth": 4,
+        "hpGrowth": 110,
+        "baseArmor": 24,
+        "armorGrowth": 4.5,
         "baseMR": 30,
         "mrGrowth": 1.3,
-        "baseAD": 60,
-        "adGrowth": 2.5,
-        "baseAS": 0.625,
-        "asGrowth": 1.6,
-        "attackRange": 500,
-        "moveSpeed": 335,
-        "baseMP": 340,
-        "mpGrowth": 45,
-        "baseHPRegen": 3.25,
-        "hpRegenGrowth": 0.55
+        "baseAD": 55,
+        "adGrowth": 3,
+        "baseAS": 0.658,
+        "asGrowth": 2,
+        "attackRange": 450,
+        "moveSpeed": 330,
+        "baseMP": 2,
+        "mpGrowth": 0,
+        "baseHPRegen": 7,
+        "hpRegenGrowth": 0.6
       },
       "kit_tags": [
-        "attack",
-        "cc",
+        "ability",
+        "haste",
         "heal_shield",
         "on_hit"
       ],
-      "name_zh_TW": "希維爾",
-      "name_zh_CN": "战争女神",
-      "name_ja": "シヴィア",
-      "name_ko": "시비르"
+      "name_zh_TW": "弗拉迪米爾",
+      "name_zh_CN": "猩红收割者",
+      "name_ja": "ブラッドミア",
+      "name_ko": "블라디미르"
+    },
+    {
+      "slug": "yuumi",
+      "name": "Yuumi",
+      "tier": "C",
+      "rank": 95,
+      "win_rate": 50.51,
+      "pick_rate": 3.16,
+      "tags": [
+        "support",
+        "mage"
+      ],
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/350.png",
+      "baseStats": {
+        "baseHP": 500,
+        "hpGrowth": 69,
+        "baseArmor": 25,
+        "armorGrowth": 4.2,
+        "baseMR": 25,
+        "mrGrowth": 1.1,
+        "baseAD": 49,
+        "adGrowth": 3.1,
+        "baseAS": 0.625,
+        "asGrowth": 1,
+        "attackRange": 425,
+        "moveSpeed": 330,
+        "baseMP": 440,
+        "mpGrowth": 45,
+        "baseHPRegen": 5,
+        "hpRegenGrowth": 0.55
+      },
+      "kit_tags": [
+        "ability",
+        "dot",
+        "heal_shield",
+        "movement"
+      ],
+      "name_zh_TW": "悠咪",
+      "name_zh_CN": "魔法猫咪",
+      "name_ja": "ユーミ",
+      "name_ko": "유미"
     },
     {
       "slug": "jayce",
       "name": "Jayce",
       "tier": "C",
-      "rank": 94,
-      "win_rate": 44.55,
-      "pick_rate": 10.15,
+      "rank": 96,
+      "win_rate": 44.5,
+      "pick_rate": 10.0,
       "tags": [
         "fighter",
         "marksman"
@@ -3908,53 +3990,12 @@
       "name_ko": "제이스"
     },
     {
-      "slug": "vladimir",
-      "name": "Vladimir",
-      "tier": "C",
-      "rank": 95,
-      "win_rate": 47.96,
-      "pick_rate": 6.1,
-      "tags": [
-        "mage",
-        "fighter"
-      ],
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/8.png",
-      "baseStats": {
-        "baseHP": 600,
-        "hpGrowth": 110,
-        "baseArmor": 24,
-        "armorGrowth": 4.5,
-        "baseMR": 30,
-        "mrGrowth": 1.3,
-        "baseAD": 55,
-        "adGrowth": 3,
-        "baseAS": 0.658,
-        "asGrowth": 2,
-        "attackRange": 450,
-        "moveSpeed": 330,
-        "baseMP": 2,
-        "mpGrowth": 0,
-        "baseHPRegen": 7,
-        "hpRegenGrowth": 0.6
-      },
-      "kit_tags": [
-        "ability",
-        "haste",
-        "heal_shield",
-        "on_hit"
-      ],
-      "name_zh_TW": "弗拉迪米爾",
-      "name_zh_CN": "猩红收割者",
-      "name_ja": "ブラッドミア",
-      "name_ko": "블라디미르"
-    },
-    {
       "slug": "janna",
       "name": "Janna",
       "tier": "C",
-      "rank": 96,
-      "win_rate": 51.36,
-      "pick_rate": 2.43,
+      "rank": 97,
+      "win_rate": 51.45,
+      "pick_rate": 2.41,
       "tags": [
         "support",
         "mage"
@@ -3993,9 +4034,9 @@
       "slug": "zed",
       "name": "Zed",
       "tier": "C",
-      "rank": 97,
-      "win_rate": 45.64,
-      "pick_rate": 8.81,
+      "rank": 98,
+      "win_rate": 45.68,
+      "pick_rate": 8.79,
       "tags": [
         "assassin"
       ],
@@ -4032,9 +4073,9 @@
       "slug": "tryndamere",
       "name": "Tryndamere",
       "tier": "C",
-      "rank": 98,
-      "win_rate": 48.22,
-      "pick_rate": 5.68,
+      "rank": 99,
+      "win_rate": 48.21,
+      "pick_rate": 5.67,
       "tags": [
         "fighter",
         "assassin"
@@ -4070,52 +4111,136 @@
       "name_ko": "트린다미어"
     },
     {
-      "slug": "yuumi",
-      "name": "Yuumi",
+      "slug": "kassadin",
+      "name": "Kassadin",
       "tier": "C",
-      "rank": 99,
-      "win_rate": 50.34,
-      "pick_rate": 3.18,
+      "rank": 100,
+      "win_rate": 50.04,
+      "pick_rate": 3.23,
       "tags": [
-        "support",
+        "assassin",
         "mage"
       ],
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/350.png",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/38.png",
       "baseStats": {
-        "baseHP": 500,
-        "hpGrowth": 69,
-        "baseArmor": 25,
-        "armorGrowth": 4.2,
-        "baseMR": 25,
-        "mrGrowth": 1.1,
-        "baseAD": 49,
-        "adGrowth": 3.1,
-        "baseAS": 0.625,
-        "asGrowth": 1,
-        "attackRange": 425,
-        "moveSpeed": 330,
-        "baseMP": 440,
-        "mpGrowth": 45,
-        "baseHPRegen": 5,
-        "hpRegenGrowth": 0.55
+        "baseHP": 646,
+        "hpGrowth": 113,
+        "baseArmor": 21,
+        "armorGrowth": 4,
+        "baseMR": 30,
+        "mrGrowth": 1.3,
+        "baseAD": 59,
+        "adGrowth": 3.9,
+        "baseAS": 0.64,
+        "asGrowth": 3.7,
+        "attackRange": 150,
+        "moveSpeed": 335,
+        "baseMP": 400,
+        "mpGrowth": 87,
+        "baseHPRegen": 6,
+        "hpRegenGrowth": 0.5
       },
       "kit_tags": [
         "ability",
-        "dot",
+        "haste",
         "heal_shield",
         "movement"
       ],
-      "name_zh_TW": "悠咪",
-      "name_zh_CN": "魔法猫咪",
-      "name_ja": "ユーミ",
-      "name_ko": "유미"
+      "name_zh_TW": "卡薩丁",
+      "name_zh_CN": "虚空行者",
+      "name_ja": "カサディン",
+      "name_ko": "카사딘"
+    },
+    {
+      "slug": "katarina",
+      "name": "Katarina",
+      "tier": "C",
+      "rank": 101,
+      "win_rate": 47.13,
+      "pick_rate": 6.3,
+      "tags": [
+        "assassin",
+        "mage"
+      ],
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/55.png",
+      "baseStats": {
+        "baseHP": 672,
+        "hpGrowth": 108,
+        "baseArmor": 32,
+        "armorGrowth": 4.7,
+        "baseMR": 32,
+        "mrGrowth": 2.05,
+        "baseAD": 58,
+        "adGrowth": 3.2,
+        "baseAS": 0.658,
+        "asGrowth": 2.74,
+        "attackRange": 125,
+        "moveSpeed": 335,
+        "baseMP": 0,
+        "mpGrowth": 0,
+        "baseHPRegen": 7.5,
+        "hpRegenGrowth": 0.7
+      },
+      "kit_tags": [
+        "ability",
+        "attack",
+        "dot",
+        "haste",
+        "movement"
+      ],
+      "name_zh_TW": "卡特蓮娜",
+      "name_zh_CN": "不祥之刃",
+      "name_ja": "カタリナ",
+      "name_ko": "카타리나"
+    },
+    {
+      "slug": "shaco",
+      "name": "Shaco",
+      "tier": "C",
+      "rank": 102,
+      "win_rate": 44.66,
+      "pick_rate": 9.02,
+      "tags": [
+        "assassin"
+      ],
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/35.png",
+      "baseStats": {
+        "baseHP": 630,
+        "hpGrowth": 99,
+        "baseArmor": 30,
+        "armorGrowth": 4,
+        "baseMR": 32,
+        "mrGrowth": 2.05,
+        "baseAD": 63,
+        "adGrowth": 3,
+        "baseAS": 0.694,
+        "asGrowth": 3,
+        "attackRange": 125,
+        "moveSpeed": 345,
+        "baseMP": 297,
+        "mpGrowth": 40,
+        "baseHPRegen": 8.5,
+        "hpRegenGrowth": 0.55
+      },
+      "kit_tags": [
+        "attack",
+        "cc",
+        "crit",
+        "dot",
+        "movement",
+        "on_hit"
+      ],
+      "name_zh_TW": "薩科",
+      "name_zh_CN": "恶魔小丑",
+      "name_ja": "シャコ",
+      "name_ko": "샤코"
     },
     {
       "slug": "darius",
       "name": "Darius",
       "tier": "C",
-      "rank": 100,
-      "win_rate": 45.74,
+      "rank": 103,
+      "win_rate": 45.53,
       "pick_rate": 8.31,
       "tags": [
         "fighter",
@@ -4154,95 +4279,12 @@
       "name_ko": "다리우스"
     },
     {
-      "slug": "katarina",
-      "name": "Katarina",
-      "tier": "C",
-      "rank": 101,
-      "win_rate": 47.11,
-      "pick_rate": 6.37,
-      "tags": [
-        "assassin",
-        "mage"
-      ],
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/55.png",
-      "baseStats": {
-        "baseHP": 672,
-        "hpGrowth": 108,
-        "baseArmor": 32,
-        "armorGrowth": 4.7,
-        "baseMR": 32,
-        "mrGrowth": 2.05,
-        "baseAD": 58,
-        "adGrowth": 3.2,
-        "baseAS": 0.658,
-        "asGrowth": 2.74,
-        "attackRange": 125,
-        "moveSpeed": 335,
-        "baseMP": 0,
-        "mpGrowth": 0,
-        "baseHPRegen": 7.5,
-        "hpRegenGrowth": 0.7
-      },
-      "kit_tags": [
-        "ability",
-        "attack",
-        "dot",
-        "haste",
-        "movement"
-      ],
-      "name_zh_TW": "卡特蓮娜",
-      "name_zh_CN": "不祥之刃",
-      "name_ja": "カタリナ",
-      "name_ko": "카타리나"
-    },
-    {
-      "slug": "kassadin",
-      "name": "Kassadin",
-      "tier": "C",
-      "rank": 102,
-      "win_rate": 50.02,
-      "pick_rate": 3.35,
-      "tags": [
-        "assassin",
-        "mage"
-      ],
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/38.png",
-      "baseStats": {
-        "baseHP": 646,
-        "hpGrowth": 113,
-        "baseArmor": 21,
-        "armorGrowth": 4,
-        "baseMR": 30,
-        "mrGrowth": 1.3,
-        "baseAD": 59,
-        "adGrowth": 3.9,
-        "baseAS": 0.64,
-        "asGrowth": 3.7,
-        "attackRange": 150,
-        "moveSpeed": 335,
-        "baseMP": 400,
-        "mpGrowth": 87,
-        "baseHPRegen": 6,
-        "hpRegenGrowth": 0.5
-      },
-      "kit_tags": [
-        "ability",
-        "haste",
-        "heal_shield",
-        "movement"
-      ],
-      "name_zh_TW": "卡薩丁",
-      "name_zh_CN": "虚空行者",
-      "name_ja": "カサディン",
-      "name_ko": "카사딘"
-    },
-    {
       "slug": "fiddlesticks",
       "name": "Fiddlesticks",
       "tier": "C",
-      "rank": 103,
-      "win_rate": 49.05,
-      "pick_rate": 4.2,
+      "rank": 104,
+      "win_rate": 48.99,
+      "pick_rate": 4.14,
       "tags": [
         "mage",
         "support"
@@ -4279,54 +4321,54 @@
       "name_ko": "피들스틱"
     },
     {
-      "slug": "shaco",
-      "name": "Shaco",
+      "slug": "renata",
+      "name": "Renata",
       "tier": "C",
-      "rank": 104,
-      "win_rate": 44.69,
-      "pick_rate": 9.02,
+      "rank": 105,
+      "win_rate": 51.88,
+      "pick_rate": 1.35,
       "tags": [
-        "assassin"
+        "support",
+        "mage"
       ],
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/35.png",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/888.png",
       "baseStats": {
-        "baseHP": 630,
-        "hpGrowth": 99,
-        "baseArmor": 30,
-        "armorGrowth": 4,
-        "baseMR": 32,
-        "mrGrowth": 2.05,
-        "baseAD": 63,
+        "baseHP": 545,
+        "hpGrowth": 94,
+        "baseArmor": 27,
+        "armorGrowth": 4.7,
+        "baseMR": 30,
+        "mrGrowth": 1.3,
+        "baseAD": 49,
         "adGrowth": 3,
-        "baseAS": 0.694,
-        "asGrowth": 3,
-        "attackRange": 125,
-        "moveSpeed": 345,
-        "baseMP": 297,
-        "mpGrowth": 40,
-        "baseHPRegen": 8.5,
+        "baseAS": 0.625,
+        "asGrowth": 2.11,
+        "attackRange": 550,
+        "moveSpeed": 330,
+        "baseMP": 350,
+        "mpGrowth": 50,
+        "baseHPRegen": 5.5,
         "hpRegenGrowth": 0.55
       },
       "kit_tags": [
-        "attack",
+        "ability",
         "cc",
-        "crit",
         "dot",
-        "movement",
-        "on_hit"
+        "haste",
+        "heal_shield"
       ],
-      "name_zh_TW": "薩科",
-      "name_zh_CN": "恶魔小丑",
-      "name_ja": "シャコ",
-      "name_ko": "샤코"
+      "name_zh_TW": "睿娜妲‧格萊斯克",
+      "name_zh_CN": "炼金男爵",
+      "name_ja": "レナータ・グラスク",
+      "name_ko": "레나타 글라스크"
     },
     {
       "slug": "blitzcrank",
       "name": "Blitzcrank",
       "tier": "C",
-      "rank": 105,
-      "win_rate": 43.73,
-      "pick_rate": 9.5,
+      "rank": 106,
+      "win_rate": 43.68,
+      "pick_rate": 9.42,
       "tags": [
         "tank",
         "support"
@@ -4364,54 +4406,12 @@
       "name_ko": "블리츠크랭크"
     },
     {
-      "slug": "renata",
-      "name": "Renata",
-      "tier": "C",
-      "rank": 106,
-      "win_rate": 51.8,
-      "pick_rate": 1.37,
-      "tags": [
-        "support",
-        "mage"
-      ],
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/888.png",
-      "baseStats": {
-        "baseHP": 545,
-        "hpGrowth": 94,
-        "baseArmor": 27,
-        "armorGrowth": 4.7,
-        "baseMR": 30,
-        "mrGrowth": 1.3,
-        "baseAD": 49,
-        "adGrowth": 3,
-        "baseAS": 0.625,
-        "asGrowth": 2.11,
-        "attackRange": 550,
-        "moveSpeed": 330,
-        "baseMP": 350,
-        "mpGrowth": 50,
-        "baseHPRegen": 5.5,
-        "hpRegenGrowth": 0.55
-      },
-      "kit_tags": [
-        "ability",
-        "cc",
-        "dot",
-        "haste",
-        "heal_shield"
-      ],
-      "name_zh_TW": "睿娜妲‧格萊斯克",
-      "name_zh_CN": "炼金男爵",
-      "name_ja": "レナータ・グラスク",
-      "name_ko": "레나타 글라스크"
-    },
-    {
       "slug": "ambessa",
       "name": "Ambessa",
       "tier": "C",
       "rank": 107,
-      "win_rate": 49.33,
-      "pick_rate": 3.68,
+      "win_rate": 49.25,
+      "pick_rate": 3.62,
       "tags": [
         "fighter",
         "assassin"
@@ -4452,8 +4452,8 @@
       "name": "Viego",
       "tier": "C",
       "rank": 108,
-      "win_rate": 48.15,
-      "pick_rate": 4.18,
+      "win_rate": 48.3,
+      "pick_rate": 4.13,
       "tags": [
         "fighter",
         "assassin"
@@ -4490,12 +4490,52 @@
       "name_ko": "비에고"
     },
     {
+      "slug": "rammus",
+      "name": "Rammus",
+      "tier": "C",
+      "rank": 109,
+      "win_rate": 48.0,
+      "pick_rate": 4.27,
+      "tags": [
+        "tank"
+      ],
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/33.png",
+      "baseStats": {
+        "baseHP": 645,
+        "hpGrowth": 100,
+        "baseArmor": 35,
+        "armorGrowth": 4.5,
+        "baseMR": 32,
+        "mrGrowth": 2.05,
+        "baseAD": 65,
+        "adGrowth": 2.75,
+        "baseAS": 0.7,
+        "asGrowth": 2.215,
+        "attackRange": 125,
+        "moveSpeed": 335,
+        "baseMP": 310,
+        "mpGrowth": 33,
+        "baseHPRegen": 8,
+        "hpRegenGrowth": 0.55
+      },
+      "kit_tags": [
+        "ability",
+        "cc",
+        "movement",
+        "tank"
+      ],
+      "name_zh_TW": "拉姆斯",
+      "name_zh_CN": "披甲龙龟",
+      "name_ja": "ラムス",
+      "name_ko": "람머스"
+    },
+    {
       "slug": "draven",
       "name": "Draven",
       "tier": "C",
-      "rank": 109,
-      "win_rate": 48.76,
-      "pick_rate": 3.92,
+      "rank": 110,
+      "win_rate": 48.73,
+      "pick_rate": 3.89,
       "tags": [
         "marksman"
       ],
@@ -4531,52 +4571,12 @@
       "name_ko": "드레이븐"
     },
     {
-      "slug": "rammus",
-      "name": "Rammus",
-      "tier": "C",
-      "rank": 110,
-      "win_rate": 47.97,
-      "pick_rate": 4.3,
-      "tags": [
-        "tank"
-      ],
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/33.png",
-      "baseStats": {
-        "baseHP": 645,
-        "hpGrowth": 100,
-        "baseArmor": 35,
-        "armorGrowth": 4.5,
-        "baseMR": 32,
-        "mrGrowth": 2.05,
-        "baseAD": 65,
-        "adGrowth": 2.75,
-        "baseAS": 0.7,
-        "asGrowth": 2.215,
-        "attackRange": 125,
-        "moveSpeed": 335,
-        "baseMP": 310,
-        "mpGrowth": 33,
-        "baseHPRegen": 8,
-        "hpRegenGrowth": 0.55
-      },
-      "kit_tags": [
-        "ability",
-        "cc",
-        "movement",
-        "tank"
-      ],
-      "name_zh_TW": "拉姆斯",
-      "name_zh_CN": "披甲龙龟",
-      "name_ja": "ラムス",
-      "name_ko": "람머스"
-    },
-    {
       "slug": "vex",
       "name": "Vex",
       "tier": "C",
       "rank": 111,
-      "win_rate": 49.33,
-      "pick_rate": 3.08,
+      "win_rate": 49.34,
+      "pick_rate": 2.95,
       "tags": [
         "mage"
       ],
@@ -4616,8 +4616,8 @@
       "name": "Briar",
       "tier": "C",
       "rank": 112,
-      "win_rate": 49.69,
-      "pick_rate": 2.77,
+      "win_rate": 49.6,
+      "pick_rate": 2.72,
       "tags": [
         "fighter",
         "assassin"
@@ -4660,8 +4660,8 @@
       "name": "Thresh",
       "tier": "C",
       "rank": 113,
-      "win_rate": 43.51,
-      "pick_rate": 8.07,
+      "win_rate": 43.45,
+      "pick_rate": 8.05,
       "tags": [
         "support",
         "tank"
@@ -4697,12 +4697,53 @@
       "name_ko": "쓰레쉬"
     },
     {
+      "slug": "karma",
+      "name": "Karma",
+      "tier": "C",
+      "rank": 114,
+      "win_rate": 48.14,
+      "pick_rate": 3.88,
+      "tags": [
+        "mage",
+        "support"
+      ],
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/43.png",
+      "baseStats": {
+        "baseHP": 630,
+        "hpGrowth": 109,
+        "baseArmor": 28,
+        "armorGrowth": 5,
+        "baseMR": 30,
+        "mrGrowth": 1.3,
+        "baseAD": 49,
+        "adGrowth": 3.3,
+        "baseAS": 0.625,
+        "asGrowth": 2.3,
+        "attackRange": 525,
+        "moveSpeed": 335,
+        "baseMP": 374,
+        "mpGrowth": 40,
+        "baseHPRegen": 5.5,
+        "hpRegenGrowth": 0.55
+      },
+      "kit_tags": [
+        "ability",
+        "cc",
+        "haste",
+        "heal_shield"
+      ],
+      "name_zh_TW": "卡瑪",
+      "name_zh_CN": "天启者",
+      "name_ja": "カルマ",
+      "name_ko": "카르마"
+    },
+    {
       "slug": "pyke",
       "name": "Pyke",
       "tier": "C",
-      "rank": 114,
-      "win_rate": 45.92,
-      "pick_rate": 5.86,
+      "rank": 115,
+      "win_rate": 45.81,
+      "pick_rate": 5.81,
       "tags": [
         "support",
         "assassin"
@@ -4739,53 +4780,92 @@
       "name_ko": "파이크"
     },
     {
-      "slug": "karma",
-      "name": "Karma",
+      "slug": "kalista",
+      "name": "Kalista",
       "tier": "C",
-      "rank": 115,
-      "win_rate": 48.1,
-      "pick_rate": 3.94,
+      "rank": 116,
+      "win_rate": 49.99,
+      "pick_rate": 2.24,
       "tags": [
-        "mage",
-        "support"
+        "marksman"
       ],
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/43.png",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/429.png",
       "baseStats": {
-        "baseHP": 630,
-        "hpGrowth": 109,
-        "baseArmor": 28,
-        "armorGrowth": 5,
+        "baseHP": 560,
+        "hpGrowth": 114,
+        "baseArmor": 24,
+        "armorGrowth": 5.2,
         "baseMR": 30,
         "mrGrowth": 1.3,
-        "baseAD": 49,
-        "adGrowth": 3.3,
-        "baseAS": 0.625,
-        "asGrowth": 2.3,
+        "baseAD": 57,
+        "adGrowth": 4.75,
+        "baseAS": 0.694,
+        "asGrowth": 4.5,
         "attackRange": 525,
-        "moveSpeed": 335,
-        "baseMP": 374,
-        "mpGrowth": 40,
-        "baseHPRegen": 5.5,
-        "hpRegenGrowth": 0.55
+        "moveSpeed": 330,
+        "baseMP": 300,
+        "mpGrowth": 45,
+        "baseHPRegen": 4,
+        "hpRegenGrowth": 0.75
       },
       "kit_tags": [
-        "ability",
-        "cc",
-        "haste",
-        "heal_shield"
+        "attack",
+        "crit",
+        "movement",
+        "on_hit"
       ],
-      "name_zh_TW": "卡瑪",
-      "name_zh_CN": "天启者",
-      "name_ja": "カルマ",
-      "name_ko": "카르마"
+      "name_zh_TW": "克黎思妲",
+      "name_zh_CN": "复仇之矛",
+      "name_ja": "カリスタ",
+      "name_ko": "칼리스타"
+    },
+    {
+      "slug": "akshan",
+      "name": "Akshan",
+      "tier": "C",
+      "rank": 117,
+      "win_rate": 49.43,
+      "pick_rate": 2.63,
+      "tags": [
+        "marksman",
+        "assassin"
+      ],
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/166.png",
+      "baseStats": {
+        "baseHP": 610,
+        "hpGrowth": 107,
+        "baseArmor": 26,
+        "armorGrowth": 4.7,
+        "baseMR": 30,
+        "mrGrowth": 1.3,
+        "baseAD": 52,
+        "adGrowth": 3,
+        "baseAS": 0.638,
+        "asGrowth": 4,
+        "attackRange": 500,
+        "moveSpeed": 330,
+        "baseMP": 350,
+        "mpGrowth": 40,
+        "baseHPRegen": 3.75,
+        "hpRegenGrowth": 0.65
+      },
+      "kit_tags": [
+        "attack",
+        "heal_shield",
+        "movement"
+      ],
+      "name_zh_TW": "埃可尚",
+      "name_zh_CN": "影哨",
+      "name_ja": "アクシャン",
+      "name_ko": "아크샨"
     },
     {
       "slug": "udyr",
       "name": "Udyr",
       "tier": "C",
-      "rank": 116,
-      "win_rate": 47.12,
-      "pick_rate": 5.07,
+      "rank": 118,
+      "win_rate": 47.04,
+      "pick_rate": 5.06,
       "tags": [
         "fighter",
         "tank"
@@ -4821,52 +4901,12 @@
       "name_ko": "우디르"
     },
     {
-      "slug": "kalista",
-      "name": "Kalista",
-      "tier": "C",
-      "rank": 117,
-      "win_rate": 49.96,
-      "pick_rate": 2.28,
-      "tags": [
-        "marksman"
-      ],
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/429.png",
-      "baseStats": {
-        "baseHP": 560,
-        "hpGrowth": 114,
-        "baseArmor": 24,
-        "armorGrowth": 5.2,
-        "baseMR": 30,
-        "mrGrowth": 1.3,
-        "baseAD": 57,
-        "adGrowth": 4.75,
-        "baseAS": 0.694,
-        "asGrowth": 4.5,
-        "attackRange": 525,
-        "moveSpeed": 330,
-        "baseMP": 300,
-        "mpGrowth": 45,
-        "baseHPRegen": 4,
-        "hpRegenGrowth": 0.75
-      },
-      "kit_tags": [
-        "attack",
-        "crit",
-        "movement",
-        "on_hit"
-      ],
-      "name_zh_TW": "克黎思妲",
-      "name_zh_CN": "复仇之矛",
-      "name_ja": "カリスタ",
-      "name_ko": "칼리스타"
-    },
-    {
       "slug": "aatrox",
       "name": "Aatrox",
       "tier": "C",
-      "rank": 118,
-      "win_rate": 44.6,
-      "pick_rate": 6.28,
+      "rank": 119,
+      "win_rate": 44.53,
+      "pick_rate": 6.22,
       "tags": [
         "fighter"
       ],
@@ -4903,52 +4943,53 @@
       "name_ko": "아트록스"
     },
     {
-      "slug": "akshan",
-      "name": "Akshan",
+      "slug": "nami",
+      "name": "Nami",
       "tier": "C",
-      "rank": 119,
-      "win_rate": 49.11,
-      "pick_rate": 2.65,
+      "rank": 120,
+      "win_rate": 49.94,
+      "pick_rate": 1.8,
       "tags": [
-        "marksman",
-        "assassin"
+        "support",
+        "mage"
       ],
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/166.png",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/267.png",
       "baseStats": {
-        "baseHP": 610,
-        "hpGrowth": 107,
-        "baseArmor": 26,
-        "armorGrowth": 4.7,
+        "baseHP": 560,
+        "hpGrowth": 88,
+        "baseArmor": 29,
+        "armorGrowth": 5.2,
         "baseMR": 30,
         "mrGrowth": 1.3,
-        "baseAD": 52,
-        "adGrowth": 3,
-        "baseAS": 0.638,
-        "asGrowth": 4,
-        "attackRange": 500,
-        "moveSpeed": 330,
-        "baseMP": 350,
-        "mpGrowth": 40,
-        "baseHPRegen": 3.75,
-        "hpRegenGrowth": 0.65
+        "baseAD": 54,
+        "adGrowth": 3.1,
+        "baseAS": 0.644,
+        "asGrowth": 2.61,
+        "attackRange": 550,
+        "moveSpeed": 335,
+        "baseMP": 365,
+        "mpGrowth": 43,
+        "baseHPRegen": 5.5,
+        "hpRegenGrowth": 0.55
       },
       "kit_tags": [
-        "attack",
+        "ability",
+        "cc",
         "heal_shield",
         "movement"
       ],
-      "name_zh_TW": "埃可尚",
-      "name_zh_CN": "影哨",
-      "name_ja": "アクシャン",
-      "name_ko": "아크샨"
+      "name_zh_TW": "娜米",
+      "name_zh_CN": "唤潮鲛姬",
+      "name_ja": "ナミ",
+      "name_ko": "나미"
     },
     {
       "slug": "gragas",
       "name": "Gragas",
       "tier": "C",
-      "rank": 120,
-      "win_rate": 47.47,
-      "pick_rate": 3.96,
+      "rank": 121,
+      "win_rate": 47.39,
+      "pick_rate": 3.94,
       "tags": [
         "fighter",
         "mage"
@@ -4987,95 +5028,52 @@
       "name_ko": "그라가스"
     },
     {
-      "slug": "nami",
-      "name": "Nami",
+      "slug": "milio",
+      "name": "Milio",
       "tier": "C",
-      "rank": 121,
-      "win_rate": 49.9,
-      "pick_rate": 1.81,
+      "rank": 122,
+      "win_rate": 49.74,
+      "pick_rate": 2.05,
       "tags": [
         "support",
         "mage"
       ],
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/267.png",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/902.png",
       "baseStats": {
         "baseHP": 560,
         "hpGrowth": 88,
-        "baseArmor": 29,
-        "armorGrowth": 5.2,
+        "baseArmor": 26,
+        "armorGrowth": 4.6,
         "baseMR": 30,
         "mrGrowth": 1.3,
-        "baseAD": 54,
-        "adGrowth": 3.1,
-        "baseAS": 0.644,
-        "asGrowth": 2.61,
-        "attackRange": 550,
-        "moveSpeed": 335,
+        "baseAD": 48,
+        "adGrowth": 3.2,
+        "baseAS": 0.625,
+        "asGrowth": 3,
+        "attackRange": 525,
+        "moveSpeed": 330,
         "baseMP": 365,
         "mpGrowth": 43,
-        "baseHPRegen": 5.5,
-        "hpRegenGrowth": 0.55
+        "baseHPRegen": 5,
+        "hpRegenGrowth": 0.5
       },
       "kit_tags": [
         "ability",
-        "cc",
-        "heal_shield",
-        "movement"
+        "dot",
+        "heal_shield"
       ],
-      "name_zh_TW": "娜米",
-      "name_zh_CN": "唤潮鲛姬",
-      "name_ja": "ナミ",
-      "name_ko": "나미"
-    },
-    {
-      "slug": "pantheon",
-      "name": "Pantheon",
-      "tier": "C",
-      "rank": 122,
-      "win_rate": 45.79,
-      "pick_rate": 5.44,
-      "tags": [
-        "fighter",
-        "assassin"
-      ],
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/80.png",
-      "baseStats": {
-        "baseHP": 650,
-        "hpGrowth": 109,
-        "baseArmor": 40,
-        "armorGrowth": 4.95,
-        "baseMR": 28,
-        "mrGrowth": 2.05,
-        "baseAD": 64,
-        "adGrowth": 3.3,
-        "baseAS": 0.658,
-        "asGrowth": 2.95,
-        "attackRange": 175,
-        "moveSpeed": 345,
-        "baseMP": 317,
-        "mpGrowth": 31,
-        "baseHPRegen": 6,
-        "hpRegenGrowth": 0.65
-      },
-      "kit_tags": [
-        "ability",
-        "attack",
-        "cc",
-        "heal_shield",
-        "movement"
-      ],
-      "name_zh_TW": "潘森",
-      "name_zh_CN": "不屈之枪",
-      "name_ja": "パンテオン",
-      "name_ko": "판테온"
+      "name_zh_TW": "米里歐",
+      "name_zh_CN": "明烛",
+      "name_ja": "ミリオ",
+      "name_ko": "밀리오"
     },
     {
       "slug": "nidalee",
       "name": "Nidalee",
       "tier": "C",
       "rank": 123,
-      "win_rate": 44.34,
-      "pick_rate": 5.9,
+      "win_rate": 44.23,
+      "pick_rate": 5.87,
       "tags": [
         "assassin",
         "mage"
@@ -5112,11 +5110,53 @@
       "name_ko": "니달리"
     },
     {
+      "slug": "pantheon",
+      "name": "Pantheon",
+      "tier": "C",
+      "rank": 124,
+      "win_rate": 45.67,
+      "pick_rate": 5.38,
+      "tags": [
+        "fighter",
+        "assassin"
+      ],
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/80.png",
+      "baseStats": {
+        "baseHP": 650,
+        "hpGrowth": 109,
+        "baseArmor": 40,
+        "armorGrowth": 4.95,
+        "baseMR": 28,
+        "mrGrowth": 2.05,
+        "baseAD": 64,
+        "adGrowth": 3.3,
+        "baseAS": 0.658,
+        "asGrowth": 2.95,
+        "attackRange": 175,
+        "moveSpeed": 345,
+        "baseMP": 317,
+        "mpGrowth": 31,
+        "baseHPRegen": 6,
+        "hpRegenGrowth": 0.65
+      },
+      "kit_tags": [
+        "ability",
+        "attack",
+        "cc",
+        "heal_shield",
+        "movement"
+      ],
+      "name_zh_TW": "潘森",
+      "name_zh_CN": "不屈之枪",
+      "name_ja": "パンテオン",
+      "name_ko": "판테온"
+    },
+    {
       "slug": "taric",
       "name": "Taric",
       "tier": "C",
-      "rank": 124,
-      "win_rate": 50.05,
+      "rank": 125,
+      "win_rate": 49.97,
       "pick_rate": 1.32,
       "tags": [
         "support",
@@ -5156,9 +5196,9 @@
       "slug": "orianna",
       "name": "Orianna",
       "tier": "C",
-      "rank": 125,
-      "win_rate": 48.38,
-      "pick_rate": 2.77,
+      "rank": 126,
+      "win_rate": 48.36,
+      "pick_rate": 2.71,
       "tags": [
         "mage",
         "support"
@@ -5194,52 +5234,12 @@
       "name_ko": "오리아나"
     },
     {
-      "slug": "milio",
-      "name": "Milio",
-      "tier": "C",
-      "rank": 126,
-      "win_rate": 49.69,
-      "pick_rate": 2.05,
-      "tags": [
-        "support",
-        "mage"
-      ],
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/902.png",
-      "baseStats": {
-        "baseHP": 560,
-        "hpGrowth": 88,
-        "baseArmor": 26,
-        "armorGrowth": 4.6,
-        "baseMR": 30,
-        "mrGrowth": 1.3,
-        "baseAD": 48,
-        "adGrowth": 3.2,
-        "baseAS": 0.625,
-        "asGrowth": 3,
-        "attackRange": 525,
-        "moveSpeed": 330,
-        "baseMP": 365,
-        "mpGrowth": 43,
-        "baseHPRegen": 5,
-        "hpRegenGrowth": 0.5
-      },
-      "kit_tags": [
-        "ability",
-        "dot",
-        "heal_shield"
-      ],
-      "name_zh_TW": "米里歐",
-      "name_zh_CN": "明烛",
-      "name_ja": "ミリオ",
-      "name_ko": "밀리오"
-    },
-    {
       "slug": "leesin",
       "name": "Leesin",
       "tier": "C",
       "rank": 127,
-      "win_rate": 40.47,
-      "pick_rate": 6.22,
+      "win_rate": 40.42,
+      "pick_rate": 6.17,
       "tags": [
         "fighter",
         "assassin"
@@ -5280,8 +5280,8 @@
       "name": "Azir",
       "tier": "C",
       "rank": 128,
-      "win_rate": 48.39,
-      "pick_rate": 2.41,
+      "win_rate": 48.43,
+      "pick_rate": 2.37,
       "tags": [
         "mage",
         "marksman"
@@ -5319,94 +5319,11 @@
       "name_ko": "아지르"
     },
     {
-      "slug": "diana",
-      "name": "Diana",
-      "tier": "C",
-      "rank": 129,
-      "win_rate": 45.81,
-      "pick_rate": 4.17,
-      "tags": [
-        "fighter",
-        "assassin"
-      ],
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/131.png",
-      "baseStats": {
-        "baseHP": 640,
-        "hpGrowth": 109,
-        "baseArmor": 31,
-        "armorGrowth": 4.3,
-        "baseMR": 32,
-        "mrGrowth": 2.05,
-        "baseAD": 57,
-        "adGrowth": 3,
-        "baseAS": 0.625,
-        "asGrowth": 2,
-        "attackRange": 150,
-        "moveSpeed": 345,
-        "baseMP": 375,
-        "mpGrowth": 25,
-        "baseHPRegen": 6.5,
-        "hpRegenGrowth": 0.85
-      },
-      "kit_tags": [
-        "ability",
-        "heal_shield",
-        "movement"
-      ],
-      "name_zh_TW": "黛安娜",
-      "name_zh_CN": "皎月女神",
-      "name_ja": "ダイアナ",
-      "name_ko": "다이애나"
-    },
-    {
-      "slug": "urgot",
-      "name": "Urgot",
-      "tier": "C",
-      "rank": 130,
-      "win_rate": 46.9,
-      "pick_rate": 3.71,
-      "tags": [
-        "fighter",
-        "tank"
-      ],
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/6.png",
-      "baseStats": {
-        "baseHP": 655,
-        "hpGrowth": 102,
-        "baseArmor": 36,
-        "armorGrowth": 5,
-        "baseMR": 32,
-        "mrGrowth": 2.05,
-        "baseAD": 63,
-        "adGrowth": 4,
-        "baseAS": 0.625,
-        "asGrowth": 3.75,
-        "attackRange": 350,
-        "moveSpeed": 330,
-        "baseMP": 340,
-        "mpGrowth": 45,
-        "baseHPRegen": 7.5,
-        "hpRegenGrowth": 0.7
-      },
-      "kit_tags": [
-        "attack",
-        "cc",
-        "heal_shield",
-        "movement",
-        "on_hit",
-        "tank"
-      ],
-      "name_zh_TW": "烏爾加特",
-      "name_zh_CN": "无畏战车",
-      "name_ja": "アーゴット",
-      "name_ko": "우르곳"
-    },
-    {
       "slug": "skarner",
       "name": "Skarner",
       "tier": "C",
-      "rank": 131,
-      "win_rate": 49.09,
+      "rank": 129,
+      "win_rate": 49.0,
       "pick_rate": 1.85,
       "tags": [
         "tank",
@@ -5446,53 +5363,12 @@
       "name_ko": "스카너"
     },
     {
-      "slug": "riven",
-      "name": "Riven",
-      "tier": "C",
-      "rank": 132,
-      "win_rate": 47.51,
-      "pick_rate": 3.03,
-      "tags": [
-        "fighter",
-        "assassin"
-      ],
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/92.png",
-      "baseStats": {
-        "baseHP": 630,
-        "hpGrowth": 100,
-        "baseArmor": 33,
-        "armorGrowth": 4.4,
-        "baseMR": 32,
-        "mrGrowth": 2.05,
-        "baseAD": 64,
-        "adGrowth": 3,
-        "baseAS": 0.625,
-        "asGrowth": 3.5,
-        "attackRange": 125,
-        "moveSpeed": 340,
-        "baseMP": 0,
-        "mpGrowth": 0,
-        "baseHPRegen": 8.5,
-        "hpRegenGrowth": 0.5
-      },
-      "kit_tags": [
-        "attack",
-        "cc",
-        "movement",
-        "on_hit"
-      ],
-      "name_zh_TW": "雷玟",
-      "name_zh_CN": "放逐之刃",
-      "name_ja": "リヴェン",
-      "name_ko": "리븐"
-    },
-    {
       "slug": "lulu",
       "name": "Lulu",
       "tier": "C",
-      "rank": 133,
-      "win_rate": 49.02,
-      "pick_rate": 1.55,
+      "rank": 130,
+      "win_rate": 49.19,
+      "pick_rate": 1.54,
       "tags": [
         "support",
         "mage"
@@ -5529,12 +5405,136 @@
       "name_ko": "룰루"
     },
     {
+      "slug": "diana",
+      "name": "Diana",
+      "tier": "C",
+      "rank": 131,
+      "win_rate": 45.76,
+      "pick_rate": 4.07,
+      "tags": [
+        "fighter",
+        "assassin"
+      ],
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/131.png",
+      "baseStats": {
+        "baseHP": 640,
+        "hpGrowth": 109,
+        "baseArmor": 31,
+        "armorGrowth": 4.3,
+        "baseMR": 32,
+        "mrGrowth": 2.05,
+        "baseAD": 57,
+        "adGrowth": 3,
+        "baseAS": 0.625,
+        "asGrowth": 2,
+        "attackRange": 150,
+        "moveSpeed": 345,
+        "baseMP": 375,
+        "mpGrowth": 25,
+        "baseHPRegen": 6.5,
+        "hpRegenGrowth": 0.85
+      },
+      "kit_tags": [
+        "ability",
+        "heal_shield",
+        "movement"
+      ],
+      "name_zh_TW": "黛安娜",
+      "name_zh_CN": "皎月女神",
+      "name_ja": "ダイアナ",
+      "name_ko": "다이애나"
+    },
+    {
+      "slug": "urgot",
+      "name": "Urgot",
+      "tier": "C",
+      "rank": 132,
+      "win_rate": 46.69,
+      "pick_rate": 3.67,
+      "tags": [
+        "fighter",
+        "tank"
+      ],
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/6.png",
+      "baseStats": {
+        "baseHP": 655,
+        "hpGrowth": 102,
+        "baseArmor": 36,
+        "armorGrowth": 5,
+        "baseMR": 32,
+        "mrGrowth": 2.05,
+        "baseAD": 63,
+        "adGrowth": 4,
+        "baseAS": 0.625,
+        "asGrowth": 3.75,
+        "attackRange": 350,
+        "moveSpeed": 330,
+        "baseMP": 340,
+        "mpGrowth": 45,
+        "baseHPRegen": 7.5,
+        "hpRegenGrowth": 0.7
+      },
+      "kit_tags": [
+        "attack",
+        "cc",
+        "heal_shield",
+        "movement",
+        "on_hit",
+        "tank"
+      ],
+      "name_zh_TW": "烏爾加特",
+      "name_zh_CN": "无畏战车",
+      "name_ja": "アーゴット",
+      "name_ko": "우르곳"
+    },
+    {
+      "slug": "riven",
+      "name": "Riven",
+      "tier": "C",
+      "rank": 133,
+      "win_rate": 47.4,
+      "pick_rate": 2.95,
+      "tags": [
+        "fighter",
+        "assassin"
+      ],
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/92.png",
+      "baseStats": {
+        "baseHP": 630,
+        "hpGrowth": 100,
+        "baseArmor": 33,
+        "armorGrowth": 4.4,
+        "baseMR": 32,
+        "mrGrowth": 2.05,
+        "baseAD": 64,
+        "adGrowth": 3,
+        "baseAS": 0.625,
+        "asGrowth": 3.5,
+        "attackRange": 125,
+        "moveSpeed": 340,
+        "baseMP": 0,
+        "mpGrowth": 0,
+        "baseHPRegen": 8.5,
+        "hpRegenGrowth": 0.5
+      },
+      "kit_tags": [
+        "attack",
+        "cc",
+        "movement",
+        "on_hit"
+      ],
+      "name_zh_TW": "雷玟",
+      "name_zh_CN": "放逐之刃",
+      "name_ja": "リヴェン",
+      "name_ko": "리븐"
+    },
+    {
       "slug": "ivern",
       "name": "Ivern",
       "tier": "C",
       "rank": 134,
-      "win_rate": 49.56,
-      "pick_rate": 0.63,
+      "win_rate": 49.66,
+      "pick_rate": 0.62,
       "tags": [
         "support",
         "mage"
@@ -5574,8 +5574,8 @@
       "name": "Talon",
       "tier": "C",
       "rank": 135,
-      "win_rate": 45.88,
-      "pick_rate": 3.81,
+      "win_rate": 45.82,
+      "pick_rate": 3.76,
       "tags": [
         "assassin"
       ],
@@ -5615,8 +5615,8 @@
       "name": "Cassiopeia",
       "tier": "C",
       "rank": 136,
-      "win_rate": 46.86,
-      "pick_rate": 3.12,
+      "win_rate": 46.88,
+      "pick_rate": 3.0,
       "tags": [
         "mage"
       ],
@@ -5656,8 +5656,8 @@
       "name": "Khazix",
       "tier": "C",
       "rank": 137,
-      "win_rate": 44.13,
-      "pick_rate": 4.67,
+      "win_rate": 44.07,
+      "pick_rate": 4.57,
       "tags": [
         "assassin"
       ],
@@ -5693,95 +5693,12 @@
       "name_ko": "카직스"
     },
     {
-      "slug": "lissandra",
-      "name": "Lissandra",
-      "tier": "C",
-      "rank": 138,
-      "win_rate": 46.19,
-      "pick_rate": 3.1,
-      "tags": [
-        "mage"
-      ],
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/127.png",
-      "baseStats": {
-        "baseHP": 620,
-        "hpGrowth": 110,
-        "baseArmor": 22,
-        "armorGrowth": 4.2,
-        "baseMR": 30,
-        "mrGrowth": 1.3,
-        "baseAD": 55,
-        "adGrowth": 2.7,
-        "baseAS": 0.656,
-        "asGrowth": 1.5,
-        "attackRange": 550,
-        "moveSpeed": 325,
-        "baseMP": 475,
-        "mpGrowth": 30,
-        "baseHPRegen": 7,
-        "hpRegenGrowth": 0.55
-      },
-      "kit_tags": [
-        "ability",
-        "cc",
-        "haste",
-        "heal_shield",
-        "movement"
-      ],
-      "name_zh_TW": "麗珊卓",
-      "name_zh_CN": "冰霜女巫",
-      "name_ja": "リサンドラ",
-      "name_ko": "리산드라"
-    },
-    {
-      "slug": "vi",
-      "name": "Vi",
-      "tier": "C",
-      "rank": 139,
-      "win_rate": 47.38,
-      "pick_rate": 2.64,
-      "tags": [
-        "fighter",
-        "assassin"
-      ],
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/254.png",
-      "baseStats": {
-        "baseHP": 655,
-        "hpGrowth": 105,
-        "baseArmor": 30,
-        "armorGrowth": 4.7,
-        "baseMR": 32,
-        "mrGrowth": 2.05,
-        "baseAD": 63,
-        "adGrowth": 3.5,
-        "baseAS": 0.644,
-        "asGrowth": 2,
-        "attackRange": 125,
-        "moveSpeed": 340,
-        "baseMP": 295,
-        "mpGrowth": 65,
-        "baseHPRegen": 10,
-        "hpRegenGrowth": 1
-      },
-      "kit_tags": [
-        "attack",
-        "cc",
-        "heal_shield",
-        "movement",
-        "on_hit"
-      ],
-      "name_zh_TW": "菲艾",
-      "name_zh_CN": "皮城执法官",
-      "name_ja": "ヴァイ",
-      "name_ko": "바이"
-    },
-    {
       "slug": "taliyah",
       "name": "Taliyah",
       "tier": "C",
-      "rank": 140,
-      "win_rate": 47.8,
-      "pick_rate": 2.32,
+      "rank": 138,
+      "win_rate": 47.79,
+      "pick_rate": 2.25,
       "tags": [
         "mage",
         "support"
@@ -5820,8 +5737,8 @@
       "slug": "zac",
       "name": "Zac",
       "tier": "C",
-      "rank": 141,
-      "win_rate": 45.15,
+      "rank": 139,
+      "win_rate": 45.19,
       "pick_rate": 3.96,
       "tags": [
         "tank",
@@ -5859,12 +5776,95 @@
       "name_ko": "자크"
     },
     {
+      "slug": "lissandra",
+      "name": "Lissandra",
+      "tier": "C",
+      "rank": 140,
+      "win_rate": 46.19,
+      "pick_rate": 3.02,
+      "tags": [
+        "mage"
+      ],
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/127.png",
+      "baseStats": {
+        "baseHP": 620,
+        "hpGrowth": 110,
+        "baseArmor": 22,
+        "armorGrowth": 4.2,
+        "baseMR": 30,
+        "mrGrowth": 1.3,
+        "baseAD": 55,
+        "adGrowth": 2.7,
+        "baseAS": 0.656,
+        "asGrowth": 1.5,
+        "attackRange": 550,
+        "moveSpeed": 325,
+        "baseMP": 475,
+        "mpGrowth": 30,
+        "baseHPRegen": 7,
+        "hpRegenGrowth": 0.55
+      },
+      "kit_tags": [
+        "ability",
+        "cc",
+        "haste",
+        "heal_shield",
+        "movement"
+      ],
+      "name_zh_TW": "麗珊卓",
+      "name_zh_CN": "冰霜女巫",
+      "name_ja": "リサンドラ",
+      "name_ko": "리산드라"
+    },
+    {
+      "slug": "vi",
+      "name": "Vi",
+      "tier": "C",
+      "rank": 141,
+      "win_rate": 47.37,
+      "pick_rate": 2.58,
+      "tags": [
+        "fighter",
+        "assassin"
+      ],
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/254.png",
+      "baseStats": {
+        "baseHP": 655,
+        "hpGrowth": 105,
+        "baseArmor": 30,
+        "armorGrowth": 4.7,
+        "baseMR": 32,
+        "mrGrowth": 2.05,
+        "baseAD": 63,
+        "adGrowth": 3.5,
+        "baseAS": 0.644,
+        "asGrowth": 2,
+        "attackRange": 125,
+        "moveSpeed": 340,
+        "baseMP": 295,
+        "mpGrowth": 65,
+        "baseHPRegen": 10,
+        "hpRegenGrowth": 1
+      },
+      "kit_tags": [
+        "attack",
+        "cc",
+        "heal_shield",
+        "movement",
+        "on_hit"
+      ],
+      "name_zh_TW": "菲艾",
+      "name_zh_CN": "皮城执法官",
+      "name_ja": "ヴァイ",
+      "name_ko": "바이"
+    },
+    {
       "slug": "nocturne",
       "name": "Nocturne",
       "tier": "C",
       "rank": 142,
-      "win_rate": 46.54,
-      "pick_rate": 2.77,
+      "win_rate": 46.49,
+      "pick_rate": 2.74,
       "tags": [
         "fighter",
         "assassin"
@@ -5907,7 +5907,7 @@
       "tier": "C",
       "rank": 143,
       "win_rate": 47.71,
-      "pick_rate": 2.07,
+      "pick_rate": 2.03,
       "tags": [
         "fighter",
         "tank"
@@ -5945,11 +5945,53 @@
       "name_ko": "나르"
     },
     {
+      "slug": "rengar",
+      "name": "Rengar",
+      "tier": "C",
+      "rank": 144,
+      "win_rate": 45.58,
+      "pick_rate": 3.24,
+      "tags": [
+        "assassin",
+        "fighter"
+      ],
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/107.png",
+      "baseStats": {
+        "baseHP": 590,
+        "hpGrowth": 104,
+        "baseArmor": 34,
+        "armorGrowth": 4.2,
+        "baseMR": 32,
+        "mrGrowth": 2.05,
+        "baseAD": 68,
+        "adGrowth": 3,
+        "baseAS": 0.667,
+        "asGrowth": 3,
+        "attackRange": 125,
+        "moveSpeed": 345,
+        "baseMP": 4,
+        "mpGrowth": 0,
+        "baseHPRegen": 6,
+        "hpRegenGrowth": 0.5
+      },
+      "kit_tags": [
+        "attack",
+        "cc",
+        "heal_shield",
+        "movement",
+        "on_hit"
+      ],
+      "name_zh_TW": "雷葛爾",
+      "name_zh_CN": "傲之追猎者",
+      "name_ja": "レンガー",
+      "name_ko": "렝가"
+    },
+    {
       "slug": "anivia",
       "name": "Anivia",
       "tier": "C",
-      "rank": 144,
-      "win_rate": 46.01,
+      "rank": 145,
+      "win_rate": 45.94,
       "pick_rate": 2.67,
       "tags": [
         "mage"
@@ -5988,9 +6030,9 @@
       "slug": "naafiri",
       "name": "Naafiri",
       "tier": "C",
-      "rank": 145,
-      "win_rate": 44.03,
-      "pick_rate": 3.92,
+      "rank": 146,
+      "win_rate": 43.97,
+      "pick_rate": 3.84,
       "tags": [
         "assassin",
         "fighter"
@@ -6026,54 +6068,12 @@
       "name_ko": "나피리"
     },
     {
-      "slug": "rengar",
-      "name": "Rengar",
-      "tier": "C",
-      "rank": 146,
-      "win_rate": 45.54,
-      "pick_rate": 3.28,
-      "tags": [
-        "assassin",
-        "fighter"
-      ],
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/107.png",
-      "baseStats": {
-        "baseHP": 590,
-        "hpGrowth": 104,
-        "baseArmor": 34,
-        "armorGrowth": 4.2,
-        "baseMR": 32,
-        "mrGrowth": 2.05,
-        "baseAD": 68,
-        "adGrowth": 3,
-        "baseAS": 0.667,
-        "asGrowth": 3,
-        "attackRange": 125,
-        "moveSpeed": 345,
-        "baseMP": 4,
-        "mpGrowth": 0,
-        "baseHPRegen": 6,
-        "hpRegenGrowth": 0.5
-      },
-      "kit_tags": [
-        "attack",
-        "cc",
-        "heal_shield",
-        "movement",
-        "on_hit"
-      ],
-      "name_zh_TW": "雷葛爾",
-      "name_zh_CN": "傲之追猎者",
-      "name_ja": "レンガー",
-      "name_ko": "렝가"
-    },
-    {
       "slug": "annie",
       "name": "Annie",
       "tier": "C",
       "rank": 147,
-      "win_rate": 46.9,
-      "pick_rate": 2.21,
+      "win_rate": 46.85,
+      "pick_rate": 2.14,
       "tags": [
         "mage",
         "support"
@@ -6114,8 +6114,8 @@
       "name": "Zeri",
       "tier": "C",
       "rank": 148,
-      "win_rate": 47.23,
-      "pick_rate": 1.88,
+      "win_rate": 47.35,
+      "pick_rate": 1.85,
       "tags": [
         "marksman"
       ],
@@ -6154,7 +6154,7 @@
       "name": "Braum",
       "tier": "C",
       "rank": 149,
-      "win_rate": 46.41,
+      "win_rate": 46.45,
       "pick_rate": 2.24,
       "tags": [
         "tank",
@@ -6191,12 +6191,137 @@
       "name_ko": "브라움"
     },
     {
+      "slug": "zoe",
+      "name": "Zoe",
+      "tier": "C",
+      "rank": 150,
+      "win_rate": 45.87,
+      "pick_rate": 2.33,
+      "tags": [
+        "mage"
+      ],
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/142.png",
+      "baseStats": {
+        "baseHP": 630,
+        "hpGrowth": 106,
+        "baseArmor": 21,
+        "armorGrowth": 4.7,
+        "baseMR": 30,
+        "mrGrowth": 1.3,
+        "baseAD": 58,
+        "adGrowth": 3.3,
+        "baseAS": 0.658,
+        "asGrowth": 2.5,
+        "attackRange": 550,
+        "moveSpeed": 340,
+        "baseMP": 425,
+        "mpGrowth": 25,
+        "baseHPRegen": 7.5,
+        "hpRegenGrowth": 0.6
+      },
+      "kit_tags": [
+        "ability",
+        "cc",
+        "haste",
+        "movement"
+      ],
+      "name_zh_TW": "柔依",
+      "name_zh_CN": "暮光星灵",
+      "name_ja": "ゾーイ",
+      "name_ko": "조이"
+    },
+    {
+      "slug": "ksante",
+      "name": "Ksante",
+      "tier": "C",
+      "rank": 151,
+      "win_rate": 42.42,
+      "pick_rate": 3.69,
+      "tags": [
+        "tank",
+        "fighter"
+      ],
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/897.png",
+      "baseStats": {
+        "baseHP": 625,
+        "hpGrowth": 120,
+        "baseArmor": 36,
+        "armorGrowth": 5.2,
+        "baseMR": 30,
+        "mrGrowth": 2.1,
+        "baseAD": 64,
+        "adGrowth": 3.5,
+        "baseAS": 0.688,
+        "asGrowth": 2.5,
+        "attackRange": 150,
+        "moveSpeed": 330,
+        "baseMP": 320,
+        "mpGrowth": 60,
+        "baseHPRegen": 9.5,
+        "hpRegenGrowth": 1
+      },
+      "kit_tags": [
+        "cc",
+        "heal_shield",
+        "movement",
+        "on_hit",
+        "tank"
+      ],
+      "name_zh_TW": "卡桑帝",
+      "name_zh_CN": "纳祖芒荣耀",
+      "name_ja": "カ・サンテ",
+      "name_ko": "크산테"
+    },
+    {
+      "slug": "nunu",
+      "name": "Nunu",
+      "tier": "C",
+      "rank": 152,
+      "win_rate": 45.09,
+      "pick_rate": 2.87,
+      "tags": [
+        "tank",
+        "mage"
+      ],
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/20.png",
+      "baseStats": {
+        "baseHP": 610,
+        "hpGrowth": 90,
+        "baseArmor": 29,
+        "armorGrowth": 4.2,
+        "baseMR": 32,
+        "mrGrowth": 2.05,
+        "baseAD": 61,
+        "adGrowth": 3,
+        "baseAS": 0.625,
+        "asGrowth": 2.25,
+        "attackRange": 125,
+        "moveSpeed": 345,
+        "baseMP": 280,
+        "mpGrowth": 42,
+        "baseHPRegen": 5,
+        "hpRegenGrowth": 0.8
+      },
+      "kit_tags": [
+        "ability",
+        "cc",
+        "haste",
+        "heal_shield",
+        "on_hit",
+        "tank"
+      ],
+      "name_zh_TW": "努努和威朗普",
+      "name_zh_CN": "雪原双子",
+      "name_ja": "ヌヌ＆ウィルンプ",
+      "name_ko": "누누와 윌럼프"
+    },
+    {
       "slug": "reksai",
       "name": "Reksai",
       "tier": "C",
-      "rank": 150,
-      "win_rate": 47.83,
-      "pick_rate": 0.9,
+      "rank": 153,
+      "win_rate": 47.72,
+      "pick_rate": 0.88,
       "tags": [
         "fighter",
         "tank"
@@ -6235,137 +6360,12 @@
       "name_ko": "렉사이"
     },
     {
-      "slug": "nunu",
-      "name": "Nunu",
-      "tier": "C",
-      "rank": 151,
-      "win_rate": 45.16,
-      "pick_rate": 2.93,
-      "tags": [
-        "tank",
-        "mage"
-      ],
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/20.png",
-      "baseStats": {
-        "baseHP": 610,
-        "hpGrowth": 90,
-        "baseArmor": 29,
-        "armorGrowth": 4.2,
-        "baseMR": 32,
-        "mrGrowth": 2.05,
-        "baseAD": 61,
-        "adGrowth": 3,
-        "baseAS": 0.625,
-        "asGrowth": 2.25,
-        "attackRange": 125,
-        "moveSpeed": 345,
-        "baseMP": 280,
-        "mpGrowth": 42,
-        "baseHPRegen": 5,
-        "hpRegenGrowth": 0.8
-      },
-      "kit_tags": [
-        "ability",
-        "cc",
-        "haste",
-        "heal_shield",
-        "on_hit",
-        "tank"
-      ],
-      "name_zh_TW": "努努和威朗普",
-      "name_zh_CN": "雪原双子",
-      "name_ja": "ヌヌ＆ウィルンプ",
-      "name_ko": "누누와 윌럼프"
-    },
-    {
-      "slug": "zoe",
-      "name": "Zoe",
-      "tier": "C",
-      "rank": 152,
-      "win_rate": 45.9,
-      "pick_rate": 2.39,
-      "tags": [
-        "mage"
-      ],
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/142.png",
-      "baseStats": {
-        "baseHP": 630,
-        "hpGrowth": 106,
-        "baseArmor": 21,
-        "armorGrowth": 4.7,
-        "baseMR": 30,
-        "mrGrowth": 1.3,
-        "baseAD": 58,
-        "adGrowth": 3.3,
-        "baseAS": 0.658,
-        "asGrowth": 2.5,
-        "attackRange": 550,
-        "moveSpeed": 340,
-        "baseMP": 425,
-        "mpGrowth": 25,
-        "baseHPRegen": 7.5,
-        "hpRegenGrowth": 0.6
-      },
-      "kit_tags": [
-        "ability",
-        "cc",
-        "haste",
-        "movement"
-      ],
-      "name_zh_TW": "柔依",
-      "name_zh_CN": "暮光星灵",
-      "name_ja": "ゾーイ",
-      "name_ko": "조이"
-    },
-    {
-      "slug": "ksante",
-      "name": "Ksante",
-      "tier": "C",
-      "rank": 153,
-      "win_rate": 42.45,
-      "pick_rate": 3.7,
-      "tags": [
-        "tank",
-        "fighter"
-      ],
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/897.png",
-      "baseStats": {
-        "baseHP": 625,
-        "hpGrowth": 120,
-        "baseArmor": 36,
-        "armorGrowth": 5.2,
-        "baseMR": 30,
-        "mrGrowth": 2.1,
-        "baseAD": 64,
-        "adGrowth": 3.5,
-        "baseAS": 0.688,
-        "asGrowth": 2.5,
-        "attackRange": 150,
-        "moveSpeed": 330,
-        "baseMP": 320,
-        "mpGrowth": 60,
-        "baseHPRegen": 9.5,
-        "hpRegenGrowth": 1
-      },
-      "kit_tags": [
-        "cc",
-        "heal_shield",
-        "movement",
-        "on_hit",
-        "tank"
-      ],
-      "name_zh_TW": "卡桑帝",
-      "name_zh_CN": "纳祖芒荣耀",
-      "name_ja": "カ・サンテ",
-      "name_ko": "크산테"
-    },
-    {
       "slug": "kled",
       "name": "Kled",
       "tier": "C",
       "rank": 154,
-      "win_rate": 47.44,
-      "pick_rate": 1.01,
+      "win_rate": 47.46,
+      "pick_rate": 0.97,
       "tags": [
         "fighter"
       ],
@@ -6401,56 +6401,12 @@
       "name_ko": "클레드"
     },
     {
-      "slug": "warwick",
-      "name": "Warwick",
-      "tier": "C",
-      "rank": 155,
-      "win_rate": 45.21,
-      "pick_rate": 2.44,
-      "tags": [
-        "fighter",
-        "tank"
-      ],
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/19.png",
-      "baseStats": {
-        "baseHP": 620,
-        "hpGrowth": 99,
-        "baseArmor": 33,
-        "armorGrowth": 4.4,
-        "baseMR": 32,
-        "mrGrowth": 2.05,
-        "baseAD": 65,
-        "adGrowth": 2.5,
-        "baseAS": 0.638,
-        "asGrowth": 2,
-        "attackRange": 125,
-        "moveSpeed": 335,
-        "baseMP": 280,
-        "mpGrowth": 35,
-        "baseHPRegen": 4,
-        "hpRegenGrowth": 0.75
-      },
-      "kit_tags": [
-        "ability",
-        "attack",
-        "cc",
-        "heal_shield",
-        "movement",
-        "on_hit",
-        "tank"
-      ],
-      "name_zh_TW": "沃維克",
-      "name_zh_CN": "祖安怒兽",
-      "name_ja": "ワーウィック",
-      "name_ko": "워윅"
-    },
-    {
       "slug": "belveth",
       "name": "Belveth",
       "tier": "C",
-      "rank": 156,
-      "win_rate": 45.61,
-      "pick_rate": 2.41,
+      "rank": 155,
+      "win_rate": 45.67,
+      "pick_rate": 2.37,
       "tags": [
         "fighter"
       ],
@@ -6489,9 +6445,9 @@
       "slug": "rakan",
       "name": "Rakan",
       "tier": "C",
-      "rank": 157,
-      "win_rate": 46.2,
-      "pick_rate": 1.77,
+      "rank": 156,
+      "win_rate": 46.26,
+      "pick_rate": 1.71,
       "tags": [
         "support"
       ],
@@ -6530,9 +6486,9 @@
       "slug": "nilah",
       "name": "Nilah",
       "tier": "C",
-      "rank": 158,
-      "win_rate": 46.72,
-      "pick_rate": 1.38,
+      "rank": 157,
+      "win_rate": 46.83,
+      "pick_rate": 1.35,
       "tags": [
         "fighter",
         "assassin"
@@ -6570,52 +6526,56 @@
       "name_ko": "닐라"
     },
     {
-      "slug": "neeko",
-      "name": "Neeko",
+      "slug": "warwick",
+      "name": "Warwick",
       "tier": "C",
-      "rank": 159,
-      "win_rate": 45.64,
-      "pick_rate": 2.3,
+      "rank": 158,
+      "win_rate": 45.12,
+      "pick_rate": 2.39,
       "tags": [
-        "mage",
-        "support"
+        "fighter",
+        "tank"
       ],
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/518.png",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/19.png",
       "baseStats": {
-        "baseHP": 610,
-        "hpGrowth": 104,
-        "baseArmor": 21,
-        "armorGrowth": 5.2,
-        "baseMR": 30,
-        "mrGrowth": 1.3,
-        "baseAD": 48,
+        "baseHP": 620,
+        "hpGrowth": 99,
+        "baseArmor": 33,
+        "armorGrowth": 4.4,
+        "baseMR": 32,
+        "mrGrowth": 2.05,
+        "baseAD": 65,
         "adGrowth": 2.5,
-        "baseAS": 0.625,
-        "asGrowth": 3.5,
-        "attackRange": 550,
-        "moveSpeed": 340,
-        "baseMP": 450,
-        "mpGrowth": 30,
-        "baseHPRegen": 7.5,
+        "baseAS": 0.638,
+        "asGrowth": 2,
+        "attackRange": 125,
+        "moveSpeed": 335,
+        "baseMP": 280,
+        "mpGrowth": 35,
+        "baseHPRegen": 4,
         "hpRegenGrowth": 0.75
       },
       "kit_tags": [
         "ability",
+        "attack",
         "cc",
-        "haste"
+        "heal_shield",
+        "movement",
+        "on_hit",
+        "tank"
       ],
-      "name_zh_TW": "妮可",
-      "name_zh_CN": "万花通灵",
-      "name_ja": "ニーコ",
-      "name_ko": "니코"
+      "name_zh_TW": "沃維克",
+      "name_zh_CN": "祖安怒兽",
+      "name_ja": "ワーウィック",
+      "name_ko": "워윅"
     },
     {
       "slug": "quinn",
       "name": "Quinn",
       "tier": "C",
-      "rank": 160,
-      "win_rate": 45.65,
-      "pick_rate": 2.15,
+      "rank": 159,
+      "win_rate": 45.8,
+      "pick_rate": 2.1,
       "tags": [
         "marksman",
         "assassin"
@@ -6652,12 +6612,52 @@
       "name_ko": "퀸"
     },
     {
+      "slug": "neeko",
+      "name": "Neeko",
+      "tier": "C",
+      "rank": 160,
+      "win_rate": 45.63,
+      "pick_rate": 2.25,
+      "tags": [
+        "mage",
+        "support"
+      ],
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/518.png",
+      "baseStats": {
+        "baseHP": 610,
+        "hpGrowth": 104,
+        "baseArmor": 21,
+        "armorGrowth": 5.2,
+        "baseMR": 30,
+        "mrGrowth": 1.3,
+        "baseAD": 48,
+        "adGrowth": 2.5,
+        "baseAS": 0.625,
+        "asGrowth": 3.5,
+        "attackRange": 550,
+        "moveSpeed": 340,
+        "baseMP": 450,
+        "mpGrowth": 30,
+        "baseHPRegen": 7.5,
+        "hpRegenGrowth": 0.75
+      },
+      "kit_tags": [
+        "ability",
+        "cc",
+        "haste"
+      ],
+      "name_zh_TW": "妮可",
+      "name_zh_CN": "万花通灵",
+      "name_ja": "ニーコ",
+      "name_ko": "니코"
+    },
+    {
       "slug": "olaf",
       "name": "Olaf",
       "tier": "C",
       "rank": 161,
-      "win_rate": 46.18,
-      "pick_rate": 1.37,
+      "win_rate": 46.07,
+      "pick_rate": 1.34,
       "tags": [
         "fighter",
         "tank"
@@ -6698,8 +6698,8 @@
       "name": "Leblanc",
       "tier": "C",
       "rank": 162,
-      "win_rate": 41.98,
-      "pick_rate": 2.99,
+      "win_rate": 41.94,
+      "pick_rate": 2.92,
       "tags": [
         "assassin",
         "mage"
@@ -6740,7 +6740,7 @@
       "tier": "C",
       "rank": 163,
       "win_rate": 43.85,
-      "pick_rate": 2.64,
+      "pick_rate": 2.6,
       "tags": [
         "assassin"
       ],
@@ -6780,8 +6780,8 @@
       "name": "Renekton",
       "tier": "C",
       "rank": 164,
-      "win_rate": 44.02,
-      "pick_rate": 2.51,
+      "win_rate": 43.91,
+      "pick_rate": 2.45,
       "tags": [
         "fighter",
         "tank"
@@ -6824,8 +6824,8 @@
       "name": "Kennen",
       "tier": "C",
       "rank": 165,
-      "win_rate": 44.28,
-      "pick_rate": 2.36,
+      "win_rate": 44.23,
+      "pick_rate": 2.34,
       "tags": [
         "mage"
       ],
@@ -6865,8 +6865,8 @@
       "name": "Yorick",
       "tier": "C",
       "rank": 166,
-      "win_rate": 45.81,
-      "pick_rate": 1.04,
+      "win_rate": 45.69,
+      "pick_rate": 1.02,
       "tags": [
         "fighter",
         "tank"
@@ -6907,8 +6907,8 @@
       "name": "Elise",
       "tier": "C",
       "rank": 167,
-      "win_rate": 45.55,
-      "pick_rate": 0.91,
+      "win_rate": 45.58,
+      "pick_rate": 0.89,
       "tags": [
         "assassin",
         "mage"
@@ -6949,8 +6949,8 @@
       "name": "Akali",
       "tier": "C",
       "rank": 168,
-      "win_rate": 42.04,
-      "pick_rate": 2.15,
+      "win_rate": 41.99,
+      "pick_rate": 2.11,
       "tags": [
         "assassin"
       ],
@@ -6990,8 +6990,8 @@
       "name": "Irelia",
       "tier": "C",
       "rank": 169,
-      "win_rate": 43.68,
-      "pick_rate": 1.71,
+      "win_rate": 43.61,
+      "pick_rate": 1.64,
       "tags": [
         "fighter",
         "assassin"
@@ -7033,8 +7033,8 @@
       "name": "Evelynn",
       "tier": "C",
       "rank": 170,
-      "win_rate": 44.81,
-      "pick_rate": 0.63,
+      "win_rate": 44.82,
+      "pick_rate": 0.62,
       "tags": [
         "assassin",
         "mage"
@@ -7075,8 +7075,8 @@
       "name": "Camille",
       "tier": "C",
       "rank": 171,
-      "win_rate": 43.44,
-      "pick_rate": 1.07,
+      "win_rate": 43.29,
+      "pick_rate": 1.04,
       "tags": [
         "fighter",
         "assassin"
@@ -7117,7 +7117,7 @@
       "name": "Bard",
       "tier": "C",
       "rank": 172,
-      "win_rate": 41.22,
+      "win_rate": 41.1,
       "pick_rate": 0.79,
       "tags": [
         "support",

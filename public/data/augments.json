@@ -1,6 +1,6 @@
 {
   "patch": "26.12",
-  "scraped_at": "2026-06-21T23:02:20.343430+00:00",
+  "scraped_at": "2026-06-22T23:13:09.286747+00:00",
   "augments": [
     {
       "slug": "tank-engine",
@@ -83,6 +83,27 @@
       "type": "standalone"
     },
     {
+      "slug": "infinite-recursion",
+      "name": "Infinite Recursion",
+      "rarity": "prismatic",
+      "icon": "https://arammayhem.com/augments/Infinite_Recursion_mayhem_augment.webp",
+      "name_zh_CN": "无限循环往复",
+      "name_zh_TW": "無限循環",
+      "name_ja": "無限再帰",
+      "name_ko": "무한 반복",
+      "wikiDescription": "Gain 60 ability haste , increased by 3 each time you score a champion takedown .",
+      "wikiSet": "Stackosaurus Rex",
+      "kit_tags": [
+        "haste"
+      ],
+      "set": "stackosaurus_rex",
+      "flags": {
+        "system_breaker": false,
+        "lifecycle": "active"
+      },
+      "type": "standalone"
+    },
+    {
       "slug": "draw-your-sword",
       "name": "Draw Your Sword",
       "rarity": "prismatic",
@@ -104,20 +125,20 @@
       "type": "standalone"
     },
     {
-      "slug": "infinite-recursion",
-      "name": "Infinite Recursion",
+      "slug": "dropkick",
+      "name": "Dropkick",
       "rarity": "prismatic",
-      "icon": "https://arammayhem.com/augments/Infinite_Recursion_mayhem_augment.webp",
-      "name_zh_CN": "无限循环往复",
-      "name_zh_TW": "無限循環",
-      "name_ja": "無限再帰",
-      "name_ko": "무한 반복",
-      "wikiDescription": "Gain 60 ability haste , increased by 3 each time you score a champion takedown .",
-      "wikiSet": "Stackosaurus Rex",
+      "icon": "https://arammayhem.com/augments/Dropkick_mayhem_augment.webp",
+      "name_zh_CN": "飞身踢",
+      "name_zh_TW": "奪命飛踢",
+      "name_ja": "ドロップキック",
+      "name_ko": "드롭킥",
+      "wikiDescription": "Your basic attacks and abilities execute enemy champions below 5% (+ 3. 5 % per 100 base AD) (+ 2% per 1000 bonus health) of their maximum health , which causes their corpse to be sent flying away in a line. Upon collision with an enemy champion or terrain, the target's corpse explodes to deal 150 – 500 (based on level) (+ 100% bonus armor) (+ 100% bonus magic resistance) magic damage to nearby enemies. Successful executions heal you for 100 – 300 (based on level) (+ 25% bonus health) . The execution may also be triggered by the explosion and goes through shields .",
       "kit_tags": [
-        "haste"
+        "attack",
+        "ability",
+        "cc"
       ],
-      "set": "stackosaurus_rex",
       "flags": {
         "system_breaker": false,
         "lifecycle": "active"
@@ -142,27 +163,6 @@
         "heal_shield"
       ],
       "wikiDescription": "Gain 10% (+ 3% per 100 AP) omnivamp ."
-    },
-    {
-      "slug": "dropkick",
-      "name": "Dropkick",
-      "rarity": "prismatic",
-      "icon": "https://arammayhem.com/augments/Dropkick_mayhem_augment.webp",
-      "name_zh_CN": "飞身踢",
-      "name_zh_TW": "奪命飛踢",
-      "name_ja": "ドロップキック",
-      "name_ko": "드롭킥",
-      "wikiDescription": "Your basic attacks and abilities execute enemy champions below 5% (+ 3. 5 % per 100 base AD) (+ 2% per 1000 bonus health) of their maximum health , which causes their corpse to be sent flying away in a line. Upon collision with an enemy champion or terrain, the target's corpse explodes to deal 150 – 500 (based on level) (+ 100% bonus armor) (+ 100% bonus magic resistance) magic damage to nearby enemies. Successful executions heal you for 100 – 300 (based on level) (+ 25% bonus health) . The execution may also be triggered by the explosion and goes through shields .",
-      "kit_tags": [
-        "attack",
-        "ability",
-        "cc"
-      ],
-      "flags": {
-        "system_breaker": false,
-        "lifecycle": "active"
-      },
-      "type": "standalone"
     },
     {
       "slug": "phenomenal-evil",
@@ -206,26 +206,6 @@
       "wikiDescription": "Quest: Icathia's Fall - Immediately: Gain a Bami's Cinder and you can purchase 2 Immolate Items. Requirement: Possess Sunfire Aegis and Hollow Radiance. Reward: These Items combine into Void Immolation."
     },
     {
-      "slug": "pressure-cooker",
-      "name": "Pressure Cooker",
-      "rarity": "gold",
-      "icon": "https://arammayhem.com/augments/Pressure_Cooker_mayhem_augment.webp",
-      "name_zh_CN": "高压锅",
-      "name_zh_TW": "壓力火鍋",
-      "name_ja": "圧力鍋",
-      "name_ko": "압력솥",
-      "type": "quest",
-      "flags": {
-        "system_breaker": false,
-        "lifecycle": "added"
-      },
-      "kit_tags": [
-        "dot",
-        "tank"
-      ],
-      "wikiDescription": "Every second, apply a stacking Burn to nearby enemy champions, scaling with your max Health. QUEST: Deal Burn damage to enemy Champions. REWARD: Size and damage increase per Quest Level."
-    },
-    {
       "slug": "goliath",
       "name": "Goliath",
       "rarity": "prismatic",
@@ -243,6 +223,26 @@
         "lifecycle": "active"
       },
       "type": "standalone"
+    },
+    {
+      "slug": "pressure-cooker",
+      "name": "Pressure Cooker",
+      "rarity": "gold",
+      "icon": "https://arammayhem.com/augments/Pressure_Cooker_mayhem_augment.webp",
+      "name_zh_CN": "高压锅",
+      "name_zh_TW": "壓力火鍋",
+      "name_ja": "圧力鍋",
+      "name_ko": "압력솥",
+      "type": "quest",
+      "flags": {
+        "system_breaker": false,
+        "lifecycle": "added"
+      },
+      "kit_tags": [
+        "dot",
+        "tank"
+      ],
+      "wikiDescription": "Surrounds you in flames, causing you to apply a Burn every second to enemy champions within 300 units for 3 seconds that deals magic damage equal to 「 0. 6 6 % of your maximum health per second. 」 「 2% of your maximum health over the duration. 」 This Burn stacks infinitely and refreshes with each application. Additionally, you are assigned with quests that require you to deal a certain amount of damage with the Burn effect against enemy champions. There are three quest tiers, and each completed tier grants you a reward that improves Pressure Cooker's effect. Tier Quest Reward 1"
     },
     {
       "slug": "combusting-interest",
@@ -272,7 +272,7 @@
       "name_zh_TW": "魔法導彈",
       "name_ja": "マジックミサイル",
       "name_ko": "마법 미사일",
-      "wikiDescription": "Dealing damage to an enemy champion with an ability fires 3 Firecrackers at them that each deal true damage equal to 0. 3 3 % of the target's maximum health , increased to up to 1% based on distance travelled (maximum damage reached at 1000 units). This effect can only trigger once every 6 seconds from the same cast.",
+      "wikiDescription": "Dealing damage to an enemy champion with an ability fires 3 missiles at them that each deal true damage equal to 0. 3 3 % of the target's maximum health , increased to up to 1% based on distance travelled (maximum damage reached at 1000 units). This effect can only trigger once every 6 seconds from the same cast.",
       "wikiSet": "Firecracker",
       "kit_tags": [
         "ability",
@@ -334,7 +334,7 @@
       "name_zh_TW": "煉獄使者",
       "name_ja": "獄炎路",
       "name_ko": "지옥의 전도체",
-      "wikiDescription": "Your ability hits against champions apply a Burn for 3 seconds that deals 「 2 – 20 (based on level) (+ 4. 6 % bonus AD) (+ 2% AP) bonus magic damage per second 」 「 6 – 60 (based on level) (+ 14% bonus AD) (+ 6% AP) bonus magic damage over the duration 」 (1 second cooldown per cast instance ). This Burn stacks infinitely and refreshes with each application. Additionally, all of your Burn effects reduce the cooldowns of all your basic abilities by 0. 08 seconds for each tick of damage they deal to a target. Damage over time effects from all sources except items (unexpected) count as Burn sources for triggering the cooldown reduction. Eligible Augments for Burn : Buff Buddies, Firebrand, Grandma's Chili Oil, Holy Fire, Infernal Conduit, Slow Cooker|",
+      "wikiDescription": "Your ability hits against champions apply a Burn for 3 seconds that deals 「 2 – 20 (based on level) (+ 4. 6 % bonus AD) (+ 2% AP) bonus magic damage per second 」 「 6 – 60 (based on level) (+ 14% bonus AD) (+ 6% AP) bonus magic damage over the duration 」 (1 second cooldown per cast instance ). This Burn stacks infinitely and refreshes with each application. Additionally, all of your Burn effects reduce the cooldowns of all your basic abilities by 0. 08 seconds for each tick of damage they deal to a target. Damage over time effects from all sources except items (unexpected) count as Burn sources for triggering the cooldown reduction. Eligible Augments for Burn : Buff Buddies, Firebrand, Grandma's Chili Oil, Holy Fire, Infernal Conduit, Slow Cooker",
       "kit_tags": [
         "ability",
         "dot"
@@ -625,25 +625,6 @@
       "type": "standalone"
     },
     {
-      "slug": "spirit-bomb",
-      "name": "Spirit Bomb",
-      "rarity": "prismatic",
-      "icon": "https://arammayhem.com/augments/Spirit_Bomb_mayhem_augment.webp",
-      "name_zh_CN": "灵魄炸弹",
-      "name_zh_TW": "靈魂炸彈",
-      "name_ja": "スピリットボム",
-      "name_ko": "영혼 폭탄",
-      "type": "standalone",
-      "flags": {
-        "system_breaker": false,
-        "lifecycle": "added"
-      },
-      "kit_tags": [
-        "heal_shield"
-      ],
-      "wikiDescription": "Healing and Shielding allied champions builds up a Spirit Bomb. At max stacks, toss the bomb onto lowest Health ally to heal and shield them and nearby allies."
-    },
-    {
       "slug": "back-to-basics",
       "name": "Back To Basics",
       "rarity": "prismatic",
@@ -699,27 +680,26 @@
         "heal_shield",
         "movement"
       ],
-      "wikiDescription": "When moving towards allies with low Health, gain Movement Speed. Your Healing and Shielding are greater based on how low your target's Health is."
+      "wikiDescription": "Gain 0% – 50% (based on target ally's missing health) bonus movement speed while facing toward nearby allied champions, lingering for 2 seconds after no longer facing them. Your heals and shields are also increased by 0% – 50% (based on target's missing health) ."
     },
     {
-      "slug": "mystic-punch",
-      "name": "Mystic Punch",
+      "slug": "spirit-bomb",
+      "name": "Spirit Bomb",
       "rarity": "prismatic",
-      "icon": "https://arammayhem.com/augments/Mystic_Punch_mayhem_augment.webp",
-      "name_zh_CN": "秘术冲拳",
-      "name_zh_TW": "祕術拳擊",
-      "name_ja": "神秘の鉄拳",
-      "name_ko": "신비한 주먹",
-      "wikiDescription": "Basic attacks on-hit reduce the remaining cooldowns of your abilities by 1. 25 seconds.",
-      "kit_tags": [
-        "attack",
-        "haste"
-      ],
+      "icon": "https://arammayhem.com/augments/Spirit_Bomb_mayhem_augment.webp",
+      "name_zh_CN": "灵魄炸弹",
+      "name_zh_TW": "靈魂炸彈",
+      "name_ja": "スピリットボム",
+      "name_ko": "영혼 폭탄",
+      "type": "standalone",
       "flags": {
-        "system_breaker": true,
-        "lifecycle": "active"
+        "system_breaker": false,
+        "lifecycle": "added"
       },
-      "type": "standalone"
+      "kit_tags": [
+        "heal_shield"
+      ],
+      "wikiDescription": "Your healing and shielding on yourself or allies builds up a Spirit Bomb on top of you. Once you have healed and shielded a combined total of 200 – 2000 (based on level) , you toss the Spirit Bomb onto the most wounded allied champion over 1. 1 seconds. Upon impact, the Spirit Bomb explodes in a 475 radius to heal allied champions within the area for 5% – 15% (based on level) (+ 3% per 100 AP) of their missing health and grants them a shield for 2 seconds that absorbs damage equal to 10% – 25% (based on level) (+ 2% per 100 AP) of their current health . Healing and shielding from this effect do not count toward the Spirit Bomb's trigger condition. The toss range for the Spirit Bomb is global; it will target the lowest-health ally on the map."
     },
     {
       "slug": "upgrade-collector",
@@ -760,6 +740,26 @@
       "type": "standalone"
     },
     {
+      "slug": "mystic-punch",
+      "name": "Mystic Punch",
+      "rarity": "prismatic",
+      "icon": "https://arammayhem.com/augments/Mystic_Punch_mayhem_augment.webp",
+      "name_zh_CN": "秘术冲拳",
+      "name_zh_TW": "祕術拳擊",
+      "name_ja": "神秘の鉄拳",
+      "name_ko": "신비한 주먹",
+      "wikiDescription": "Basic attacks on-hit reduce the remaining cooldowns of your abilities by 1. 25 seconds.",
+      "kit_tags": [
+        "attack",
+        "haste"
+      ],
+      "flags": {
+        "system_breaker": true,
+        "lifecycle": "active"
+      },
+      "type": "standalone"
+    },
+    {
       "slug": "ice-cold",
       "name": "Ice Cold",
       "rarity": "silver",
@@ -777,25 +777,6 @@
         "lifecycle": "active"
       },
       "type": "standalone"
-    },
-    {
-      "slug": "pursuit-of-haste",
-      "name": "Pursuit of Haste",
-      "rarity": "gold",
-      "icon": "https://arammayhem.com/augments/Pursuit_of_Haste_mayhem_augment.webp",
-      "name_zh_CN": "急速之追求",
-      "name_zh_TW": "疾速追擊",
-      "name_ja": "素早さの追求",
-      "name_ko": "가속 추구",
-      "type": "ability",
-      "flags": {
-        "system_breaker": false,
-        "lifecycle": "added"
-      },
-      "kit_tags": [
-        "haste"
-      ],
-      "wikiDescription": "QUEST: Hit enemy champions with your chosen ability the required number of times. REWARD: Gain Ability Haste on your chosen ability per Quest Level up to the required number of."
     },
     {
       "slug": "sonata",
@@ -818,6 +799,45 @@
         "lifecycle": "active"
       },
       "type": "standalone"
+    },
+    {
+      "slug": "tooth-fairy",
+      "name": "Tooth Fairy",
+      "rarity": "gold",
+      "icon": "https://arammayhem.com/augments/Tooth_Fairy_mayhem_augment.webp",
+      "name_zh_CN": "牙仙子",
+      "name_zh_TW": "牙仙",
+      "name_ja": "歯の妖精",
+      "name_ko": "이빨 요정",
+      "type": "quest",
+      "flags": {
+        "system_breaker": false,
+        "lifecycle": "added"
+      },
+      "kit_tags": [
+        "ability",
+        "attack"
+      ],
+      "wikiDescription": "When you deal damage to an enemy champion equal to or more than 25% of their maximum health within 2. 5 seconds, they drop a Tooth on the ground (4 second cooldown per target). You can pick up this Tooth by moving over it, granting you a Dental Records stack. For each stack, you gain 4 lethality and flat magic penetration ."
+    },
+    {
+      "slug": "pursuit-of-haste",
+      "name": "Pursuit of Haste",
+      "rarity": "gold",
+      "icon": "https://arammayhem.com/augments/Pursuit_of_Haste_mayhem_augment.webp",
+      "name_zh_CN": "急速之追求",
+      "name_zh_TW": "疾速追擊",
+      "name_ja": "素早さの追求",
+      "name_ko": "가속 추구",
+      "type": "ability",
+      "flags": {
+        "system_breaker": false,
+        "lifecycle": "added"
+      },
+      "kit_tags": [
+        "haste"
+      ],
+      "wikiDescription": "QUEST: Hit enemy champions with your chosen ability the required number of times. REWARD: Gain Ability Haste on your chosen ability per Quest Level up to the required number of."
     },
     {
       "slug": "slap-around",
@@ -860,83 +880,6 @@
       "type": "quest"
     },
     {
-      "slug": "tooth-fairy",
-      "name": "Tooth Fairy",
-      "rarity": "gold",
-      "icon": "https://arammayhem.com/augments/Tooth_Fairy_mayhem_augment.webp",
-      "name_zh_CN": "牙仙子",
-      "name_zh_TW": "牙仙",
-      "name_ja": "歯の妖精",
-      "name_ko": "이빨 요정",
-      "type": "quest",
-      "flags": {
-        "system_breaker": false,
-        "lifecycle": "added"
-      },
-      "kit_tags": [
-        "ability",
-        "attack"
-      ],
-      "wikiDescription": "When you deal damage to an enemy champion equal to or more than 25% of their maximum health within 2. 5 seconds, they drop a Tooth on the ground (4 second cooldown per target). You can pick up this Tooth by moving over it, granting you a Dental Records stack. For each stack, you gain 4 lethality and flat magic penetration ."
-    },
-    {
-      "slug": "forged-by-the-master",
-      "name": "Forged By The Master",
-      "rarity": "silver",
-      "icon": "https://arammayhem.com/augments/Forged_By_The_Master_mayhem_augment.webp",
-      "name_zh_CN": "大师铸就",
-      "name_zh_TW": "大師鑄造",
-      "name_ja": "マスターに鍛えられて",
-      "name_ko": "장인의 솜씨",
-      "type": "standalone",
-      "flags": {
-        "system_breaker": false,
-        "lifecycle": "added"
-      },
-      "kit_tags": [],
-      "wikiDescription": "Increases the damage dealt by your item effects and augments by 45%."
-    },
-    {
-      "slug": "witchful-thinking",
-      "name": "Witchful Thinking",
-      "rarity": "silver",
-      "icon": "https://arammayhem.com/augments/Witchful_Thinking_mayhem_augment.webp",
-      "name_zh_CN": "巫师式思考",
-      "name_zh_TW": "女巫思維",
-      "name_ja": "魔法的思考",
-      "name_ko": "사악한 정신",
-      "wikiDescription": "Grants 20 – 80 (based on level) ability power .",
-      "kit_tags": [
-        "ability"
-      ],
-      "flags": {
-        "system_breaker": false,
-        "lifecycle": "active"
-      },
-      "type": "standalone"
-    },
-    {
-      "slug": "escape-plan",
-      "name": "Escape Plan",
-      "rarity": "silver",
-      "icon": "https://arammayhem.com/augments/Escape_Plan_mayhem_augment.webp",
-      "name_zh_CN": "逃跑计划",
-      "name_zh_TW": "逃跑計畫",
-      "name_ja": "脱出プラン",
-      "name_ko": "도주 계획",
-      "wikiDescription": "Upon dropping below 35% of your maximum health , gain a shield for 65% of your maximum health , 150% bonus movement speed , and reduced size (75 second cooldown). These effects all decay over 5. 5 seconds.",
-      "kit_tags": [
-        "heal_shield",
-        "movement",
-        "tank"
-      ],
-      "flags": {
-        "system_breaker": false,
-        "lifecycle": "active"
-      },
-      "type": "standalone"
-    },
-    {
       "slug": "fan-the-hammer",
       "name": "Fan The Hammer",
       "rarity": "prismatic",
@@ -960,6 +903,42 @@
       "type": "standalone"
     },
     {
+      "slug": "witchful-thinking",
+      "name": "Witchful Thinking",
+      "rarity": "silver",
+      "icon": "https://arammayhem.com/augments/Witchful_Thinking_mayhem_augment.webp",
+      "name_zh_CN": "巫师式思考",
+      "name_zh_TW": "女巫思維",
+      "name_ja": "魔法的思考",
+      "name_ko": "사악한 정신",
+      "wikiDescription": "Grants 20 – 80 (based on level) ability power .",
+      "kit_tags": [
+        "ability"
+      ],
+      "flags": {
+        "system_breaker": false,
+        "lifecycle": "active"
+      },
+      "type": "standalone"
+    },
+    {
+      "slug": "forged-by-the-master",
+      "name": "Forged By The Master",
+      "rarity": "silver",
+      "icon": "https://arammayhem.com/augments/Forged_By_The_Master_mayhem_augment.webp",
+      "name_zh_CN": "大师铸就",
+      "name_zh_TW": "大師鑄造",
+      "name_ja": "マスターに鍛えられて",
+      "name_ko": "장인의 솜씨",
+      "type": "standalone",
+      "flags": {
+        "system_breaker": false,
+        "lifecycle": "added"
+      },
+      "kit_tags": [],
+      "wikiDescription": "Increases the damage dealt by your item effects and augments by 45%."
+    },
+    {
       "slug": "skilled-sniper",
       "name": "Skilled Sniper",
       "rarity": "gold",
@@ -972,6 +951,27 @@
       "kit_tags": [
         "ability",
         "haste"
+      ],
+      "flags": {
+        "system_breaker": false,
+        "lifecycle": "active"
+      },
+      "type": "standalone"
+    },
+    {
+      "slug": "escape-plan",
+      "name": "Escape Plan",
+      "rarity": "silver",
+      "icon": "https://arammayhem.com/augments/Escape_Plan_mayhem_augment.webp",
+      "name_zh_CN": "逃跑计划",
+      "name_zh_TW": "逃跑計畫",
+      "name_ja": "脱出プラン",
+      "name_ko": "도주 계획",
+      "wikiDescription": "Upon dropping below 35% of your maximum health , gain a shield for 65% of your maximum health , 150% bonus movement speed , and reduced size (75 second cooldown). These effects all decay over 5. 5 seconds.",
+      "kit_tags": [
+        "heal_shield",
+        "movement",
+        "tank"
       ],
       "flags": {
         "system_breaker": false,
@@ -1003,28 +1003,6 @@
       "type": "standalone"
     },
     {
-      "slug": "shrink-engine",
-      "name": "Shrink Engine",
-      "rarity": "gold",
-      "icon": "https://arammayhem.com/augments/Shrink_Engine_mayhem_augment.webp",
-      "name_zh_CN": "缩小引擎",
-      "name_zh_TW": "縮小引擎",
-      "name_ja": "縮小エンジン",
-      "name_ko": "축소 엔진",
-      "wikiDescription": "Scoring a champion takedown generates a stack, stacking infinitely. For each stack, gain 8 ability haste and 1% bonus movement speed , and reduce your size by 4%. Lose 65% of stacks on death. Size reduction is capped at 80% (20 stacks).",
-      "wikiSet": "Stackosaurus Rex",
-      "kit_tags": [
-        "haste",
-        "movement"
-      ],
-      "set": "stackosaurus_rex",
-      "flags": {
-        "system_breaker": false,
-        "lifecycle": "active"
-      },
-      "type": "standalone"
-    },
-    {
       "slug": "mind-to-matter",
       "name": "Mind to Matter",
       "rarity": "silver",
@@ -1047,21 +1025,21 @@
       "type": "standalone"
     },
     {
-      "slug": "mad-scientist",
-      "name": "Mad Scientist",
-      "rarity": "prismatic",
-      "icon": "https://arammayhem.com/augments/Mad_Scientist_mayhem_augment.webp",
-      "name_zh_CN": "科学狂人",
-      "name_zh_TW": "瘋狂科學家",
-      "name_ja": "狂気の化学者",
-      "name_ko": "미친 과학자",
-      "wikiDescription": "Upon acquiring this augment and each time you respawn, gain either 30% adaptive force , 20% bonus health , and 40% increased size or 70 ability haste , 40% bonus movement speed , and 40% reduced size.",
+      "slug": "shrink-engine",
+      "name": "Shrink Engine",
+      "rarity": "gold",
+      "icon": "https://arammayhem.com/augments/Shrink_Engine_mayhem_augment.webp",
+      "name_zh_CN": "缩小引擎",
+      "name_zh_TW": "縮小引擎",
+      "name_ja": "縮小エンジン",
+      "name_ko": "축소 엔진",
+      "wikiDescription": "Scoring a champion takedown generates a stack, stacking infinitely. For each stack, gain 8 ability haste and 1% bonus movement speed , and reduce your size by 4%. Lose 65% of stacks on death. Size reduction is capped at 80% (20 stacks).",
+      "wikiSet": "Stackosaurus Rex",
       "kit_tags": [
-        "attack",
-        "ability",
-        "movement",
-        "tank"
+        "haste",
+        "movement"
       ],
+      "set": "stackosaurus_rex",
       "flags": {
         "system_breaker": false,
         "lifecycle": "active"
@@ -1132,6 +1110,28 @@
       "type": "standalone"
     },
     {
+      "slug": "mad-scientist",
+      "name": "Mad Scientist",
+      "rarity": "prismatic",
+      "icon": "https://arammayhem.com/augments/Mad_Scientist_mayhem_augment.webp",
+      "name_zh_CN": "科学狂人",
+      "name_zh_TW": "瘋狂科學家",
+      "name_ja": "狂気の化学者",
+      "name_ko": "미친 과학자",
+      "wikiDescription": "Upon acquiring this augment and each time you respawn, gain either 30% adaptive force , 20% bonus health , and 40% increased size or 70 ability haste , 40% bonus movement speed , and 40% reduced size.",
+      "kit_tags": [
+        "attack",
+        "ability",
+        "movement",
+        "tank"
+      ],
+      "flags": {
+        "system_breaker": false,
+        "lifecycle": "active"
+      },
+      "type": "standalone"
+    },
+    {
       "slug": "archmage",
       "name": "Archmage",
       "rarity": "prismatic",
@@ -1150,25 +1150,6 @@
         "mana"
       ],
       "wikiDescription": "Whenever you cast an ability, refund the cooldown of another, randomly selected ability by 30% of the casted ability's cooldown."
-    },
-    {
-      "slug": "scopiest-weapons",
-      "name": "Scopiest Weapons",
-      "rarity": "prismatic",
-      "icon": "https://arammayhem.com/augments/Scopiest_Weapons_mayhem_augment.webp",
-      "name_zh_CN": "最万用的瞄准镜",
-      "name_zh_TW": "頂狙武器",
-      "name_ja": "超改造スコープ装着",
-      "name_ko": "최상급 조준경 부착",
-      "wikiDescription": "Gain ( 250 / 150 ) bonus attack range.",
-      "kit_tags": [
-        "attack"
-      ],
-      "flags": {
-        "system_breaker": false,
-        "lifecycle": "active"
-      },
-      "type": "standalone"
     },
     {
       "slug": "with-haste",
@@ -1191,23 +1172,23 @@
       "type": "standalone"
     },
     {
-      "slug": "lil-extra-help",
-      "name": "Lil' Extra Help",
-      "rarity": "gold",
-      "icon": "https://arammayhem.com/augments/Lil_Extra_Help_mayhem_augment.webp",
-      "name_zh_CN": "小小的额外帮助",
-      "name_zh_TW": "小小助力",
-      "name_ja": "ちょこっとヘルプ",
-      "name_ko": "작은 도움",
-      "type": "ability",
-      "flags": {
-        "system_breaker": false,
-        "lifecycle": "added"
-      },
+      "slug": "scopiest-weapons",
+      "name": "Scopiest Weapons",
+      "rarity": "prismatic",
+      "icon": "https://arammayhem.com/augments/Scopiest_Weapons_mayhem_augment.webp",
+      "name_zh_CN": "最万用的瞄准镜",
+      "name_zh_TW": "頂狙武器",
+      "name_ja": "超改造スコープ装着",
+      "name_ko": "최상급 조준경 부착",
+      "wikiDescription": "Gain ( 250 / 150 ) bonus attack range.",
       "kit_tags": [
         "attack"
       ],
-      "wikiDescription": "Gain the required number of Attack Range and the required number of Attack Speed during your chosen ability duration."
+      "flags": {
+        "system_breaker": false,
+        "lifecycle": "active"
+      },
+      "type": "standalone"
     },
     {
       "slug": "donation",
@@ -1248,44 +1229,43 @@
       "type": "standalone"
     },
     {
-      "slug": "swift-and-safe",
-      "name": "Swift and Safe",
-      "rarity": "silver",
-      "icon": "https://arammayhem.com/augments/Swift_and_Safe_mayhem_augment.webp",
-      "name_zh_CN": "快中求稳",
-      "name_zh_TW": "又快又穩",
-      "name_ja": "迅速に安全に",
-      "name_ko": "빠르고 안전하게",
-      "wikiDescription": "After dashing or blinking , gain a shield that lasts for 2 seconds and absorbs 65 – 290 (based on level) (+ 65% AD) (+ 26% AP) damage (5 second cooldown).",
-      "kit_tags": [
-        "movement",
-        "heal_shield"
-      ],
-      "flags": {
-        "system_breaker": false,
-        "lifecycle": "active"
-      },
-      "type": "standalone"
-    },
-    {
-      "slug": "siphon",
-      "name": "Siphon",
-      "rarity": "silver",
-      "icon": "https://arammayhem.com/augments/Siphon_mayhem_augment.webp",
-      "name_zh_CN": "虹吸",
-      "name_zh_TW": "虹吸",
-      "name_ja": "サイフォン",
-      "name_ko": "흡수",
+      "slug": "lil-extra-help",
+      "name": "Lil' Extra Help",
+      "rarity": "gold",
+      "icon": "https://arammayhem.com/augments/Lil_Extra_Help_mayhem_augment.webp",
+      "name_zh_CN": "小小的额外帮助",
+      "name_zh_TW": "小小助力",
+      "name_ja": "ちょこっとヘルプ",
+      "name_ko": "작은 도움",
       "type": "ability",
       "flags": {
         "system_breaker": false,
         "lifecycle": "added"
       },
       "kit_tags": [
-        "ability",
-        "heal_shield"
+        "attack"
       ],
-      "wikiDescription": "Upgrades one of your champion's abilities , empowering the ability to heal you for 30% of its post-mitigation damage dealt to enemy champions."
+      "wikiDescription": "Upgrades one of your champion's abilities that has an effect which empowers your basic attacks for a duration, further enhancing the attacks by granting you ( 150 / 100 ) bonus attack range and ( 75% / 40% ) bonus attack speed while the effect is active."
+    },
+    {
+      "slug": "terraind",
+      "name": "Terrain'd",
+      "rarity": "gold",
+      "icon": "https://arammayhem.com/augments/Terrain_d_mayhem_augment.webp",
+      "name_zh_CN": "地形专家",
+      "name_zh_TW": "劃地為王",
+      "name_ja": "地形でドン",
+      "name_ko": "지형 생성됨",
+      "type": "standalone",
+      "flags": {
+        "system_breaker": false,
+        "lifecycle": "added"
+      },
+      "kit_tags": [
+        "ability",
+        "dot"
+      ],
+      "wikiDescription": "Upgrades one of your champion's abilities that spawns terrain , empowering the ability's generated terrain to deal 20 – 180 (based on level) (+ 20% AP) magic damage to nearby enemies. This damage is increased 「 by 200% 」 「 to 60 – 540 (based on level) (+ 60% AP) 」 if the ability is an ultimate. The damage dealt by this augment counts as area damage , thus it is able to trigger spell effects ."
     },
     {
       "slug": "outlaws-grit",
@@ -1308,21 +1288,19 @@
       "type": "standalone"
     },
     {
-      "slug": "soul-eater",
-      "name": "Soul Eater",
-      "rarity": "gold",
-      "icon": "https://arammayhem.com/augments/Soul_Eater_mayhem_augment.webp",
-      "name_zh_CN": "吞噬灵魂",
-      "name_zh_TW": "食魂者",
-      "name_ja": "ソウルイーター",
-      "name_ko": "영혼의 포식자",
-      "wikiDescription": "Immobilizing or grounding an enemy champion grants you 20 bonus health , stacking infinitely (5 second cooldown per cast instance ).",
-      "wikiSet": "Stackosaurus Rex",
+      "slug": "swift-and-safe",
+      "name": "Swift and Safe",
+      "rarity": "silver",
+      "icon": "https://arammayhem.com/augments/Swift_and_Safe_mayhem_augment.webp",
+      "name_zh_CN": "快中求稳",
+      "name_zh_TW": "又快又穩",
+      "name_ja": "迅速に安全に",
+      "name_ko": "빠르고 안전하게",
+      "wikiDescription": "After dashing or blinking , gain a shield that lasts for 2 seconds and absorbs 65 – 290 (based on level) (+ 65% AD) (+ 26% AP) damage (5 second cooldown).",
       "kit_tags": [
-        "tank",
-        "cc"
+        "movement",
+        "heal_shield"
       ],
-      "set": "stackosaurus_rex",
       "flags": {
         "system_breaker": false,
         "lifecycle": "active"
@@ -1347,67 +1325,6 @@
       "set": "firecracker",
       "flags": {
         "system_breaker": false,
-        "lifecycle": "active"
-      },
-      "type": "standalone"
-    },
-    {
-      "slug": "final-form",
-      "name": "Final Form",
-      "rarity": "prismatic",
-      "icon": "https://arammayhem.com/augments/Final_Form_mayhem_augment.webp",
-      "name_zh_CN": "最终形态",
-      "name_zh_TW": "最終型態",
-      "name_ja": "最終形態",
-      "name_ko": "최종 형태",
-      "wikiDescription": "Casting your ultimate ability empowers you for 10 seconds, causing you to gain a shield for 50% of your maximum health , 20% omnivamp , and 30% bonus movement speed for the duration (20 second cooldown).",
-      "kit_tags": [
-        "ability",
-        "heal_shield",
-        "movement"
-      ],
-      "flags": {
-        "system_breaker": false,
-        "lifecycle": "active"
-      },
-      "type": "standalone"
-    },
-    {
-      "slug": "terraind",
-      "name": "Terrain'd",
-      "rarity": "gold",
-      "icon": "https://arammayhem.com/augments/Terrain_d_mayhem_augment.webp",
-      "name_zh_CN": "地形专家",
-      "name_zh_TW": "劃地為王",
-      "name_ja": "地形でドン",
-      "name_ko": "지형 생성됨",
-      "type": "ability",
-      "flags": {
-        "system_breaker": false,
-        "lifecycle": "added"
-      },
-      "kit_tags": [
-        "ability",
-        "dot"
-      ],
-      "wikiDescription": "Upgrades one of your champion's abilities that spawns terrain , empowering the ability's generated terrain to deal 20 – 180 (based on level) (+ 20% AP) magic damage to nearby enemies. This damage is increased 「 by 200% 」 「 to 60 – 540 (based on level) (+ 60% AP) 」 if the ability is an ultimate. The damage dealt by this augment counts as area damage , thus it is able to trigger spell effects ."
-    },
-    {
-      "slug": "marksmage",
-      "name": "Marksmage",
-      "rarity": "gold",
-      "icon": "https://arammayhem.com/augments/Marksmage_mayhem_augment.webp",
-      "name_zh_CN": "神射法师",
-      "name_zh_TW": "射手法師",
-      "name_ja": "マークスメイジ",
-      "name_ko": "마법 명사수",
-      "wikiDescription": "Basic attacks deal bonus physical damage equal to 75% AP .",
-      "kit_tags": [
-        "attack",
-        "ability"
-      ],
-      "flags": {
-        "system_breaker": true,
         "lifecycle": "active"
       },
       "type": "standalone"
@@ -1452,21 +1369,84 @@
       "type": "standalone"
     },
     {
-      "slug": "big-brain",
-      "name": "Big Brain",
+      "slug": "soul-eater",
+      "name": "Soul Eater",
       "rarity": "gold",
-      "icon": "https://arammayhem.com/augments/Big_Brain_mayhem_augment.webp",
-      "name_zh_CN": "超强大脑",
-      "name_zh_TW": "超強大腦",
-      "name_ja": "頭脳派",
-      "name_ko": "전술적 대비",
-      "wikiDescription": "Gain a shield that absorbs damage equal to 300% AP and lasts until destroyed. Shield is replenished upon respawn and every 70 seconds.",
+      "icon": "https://arammayhem.com/augments/Soul_Eater_mayhem_augment.webp",
+      "name_zh_CN": "吞噬灵魂",
+      "name_zh_TW": "食魂者",
+      "name_ja": "ソウルイーター",
+      "name_ko": "영혼의 포식자",
+      "wikiDescription": "Immobilizing or grounding an enemy champion grants you 20 bonus health , stacking infinitely (5 second cooldown per cast instance ).",
+      "wikiSet": "Stackosaurus Rex",
+      "kit_tags": [
+        "tank",
+        "cc"
+      ],
+      "set": "stackosaurus_rex",
+      "flags": {
+        "system_breaker": false,
+        "lifecycle": "active"
+      },
+      "type": "standalone"
+    },
+    {
+      "slug": "siphon",
+      "name": "Siphon",
+      "rarity": "silver",
+      "icon": "https://arammayhem.com/augments/Siphon_mayhem_augment.webp",
+      "name_zh_CN": "虹吸",
+      "name_zh_TW": "虹吸",
+      "name_ja": "サイフォン",
+      "name_ko": "흡수",
+      "type": "ability",
+      "flags": {
+        "system_breaker": false,
+        "lifecycle": "added"
+      },
       "kit_tags": [
         "ability",
-        "tank"
+        "heal_shield"
+      ],
+      "wikiDescription": "Upgrades one of your champion's abilities , empowering the ability to heal you for 30% of its post-mitigation damage dealt to enemy champions."
+    },
+    {
+      "slug": "final-form",
+      "name": "Final Form",
+      "rarity": "prismatic",
+      "icon": "https://arammayhem.com/augments/Final_Form_mayhem_augment.webp",
+      "name_zh_CN": "最终形态",
+      "name_zh_TW": "最終型態",
+      "name_ja": "最終形態",
+      "name_ko": "최종 형태",
+      "wikiDescription": "Casting your ultimate ability empowers you for 10 seconds, causing you to gain a shield for 50% of your maximum health , 20% omnivamp , and 30% bonus movement speed for the duration (20 second cooldown).",
+      "kit_tags": [
+        "ability",
+        "heal_shield",
+        "movement"
       ],
       "flags": {
         "system_breaker": false,
+        "lifecycle": "active"
+      },
+      "type": "standalone"
+    },
+    {
+      "slug": "marksmage",
+      "name": "Marksmage",
+      "rarity": "gold",
+      "icon": "https://arammayhem.com/augments/Marksmage_mayhem_augment.webp",
+      "name_zh_CN": "神射法师",
+      "name_zh_TW": "射手法師",
+      "name_ja": "マークスメイジ",
+      "name_ko": "마법 명사수",
+      "wikiDescription": "Basic attacks deal bonus physical damage equal to 75% AP .",
+      "kit_tags": [
+        "attack",
+        "ability"
+      ],
+      "flags": {
+        "system_breaker": true,
         "lifecycle": "active"
       },
       "type": "standalone"
@@ -1483,6 +1463,26 @@
       "wikiDescription": "Grants 60 ability haste .",
       "kit_tags": [
         "haste"
+      ],
+      "flags": {
+        "system_breaker": false,
+        "lifecycle": "active"
+      },
+      "type": "standalone"
+    },
+    {
+      "slug": "big-brain",
+      "name": "Big Brain",
+      "rarity": "gold",
+      "icon": "https://arammayhem.com/augments/Big_Brain_mayhem_augment.webp",
+      "name_zh_CN": "超强大脑",
+      "name_zh_TW": "超強大腦",
+      "name_ja": "頭脳派",
+      "name_ko": "전술적 대비",
+      "wikiDescription": "Gain a shield that absorbs damage equal to 300% AP and lasts until destroyed. Shield is replenished upon respawn and every 70 seconds.",
+      "kit_tags": [
+        "ability",
+        "tank"
       ],
       "flags": {
         "system_breaker": false,
@@ -1512,45 +1512,6 @@
       "type": "standalone"
     },
     {
-      "slug": "purist-caster",
-      "name": "Purist - Caster",
-      "rarity": "silver",
-      "icon": "https://arammayhem.com/augments/Purist_-_Caster_mayhem_augment.webp",
-      "name_zh_CN": "纯粹主义者 - 术师",
-      "name_zh_TW": "純粹 - 法師",
-      "name_ja": "純粋なるキャスター",
-      "name_ko": "순수주의자 - 마법사",
-      "wikiDescription": "Convert all of your bonus attack speed into ability haste at a rate of 0. 65 ability haste per 1% bonus attack speed . Additionally, your abilities' total cooldowns are reduced by 10%.",
-      "kit_tags": [
-        "ability",
-        "haste"
-      ],
-      "flags": {
-        "system_breaker": false,
-        "lifecycle": "active"
-      },
-      "type": "standalone"
-    },
-    {
-      "slug": "from-downtown",
-      "name": "From Downtown",
-      "rarity": "gold",
-      "icon": "https://arammayhem.com/augments/From_Downtown_mayhem_augment.webp",
-      "name_zh_CN": "狙神飞星",
-      "name_zh_TW": "超遠射擊",
-      "name_ja": "ロングシュート",
-      "name_ko": "로켓 배송",
-      "type": "quest",
-      "flags": {
-        "system_breaker": false,
-        "lifecycle": "added"
-      },
-      "kit_tags": [
-        "ability"
-      ],
-      "wikiDescription": "Quest: Hit enemy champions with abilities while located at least 700 units away from them (at the time of the hit) 15 times (counts up to 1 hit per champion per cast instance ). Reward: Upon completing your Quest , hitting enemy champions with abilities while located at least 700 units away from them at the time of the hit fires a meteor to their current location, which upon landing deals 75 – 200 (based on level) (+ 50% bonus AD) (+ 20% AP) magic damage to enemies within the area (8 second cooldown per target per cast instance ). The meteor's damage and radius are increased based on your distance to the target at the time of the ability hit, increasing its damage by 0% – 230% and setting its radius to 120 – 1366. 88 units. Maximum meteor damage is 172. 5 – 460 (based on level) (+ 115% bonus AD) (+ 46% AP) ."
-    },
-    {
       "slug": "stats-on-stats",
       "name": "Stats on Stats!",
       "rarity": "gold",
@@ -1570,18 +1531,18 @@
       "type": "standalone"
     },
     {
-      "slug": "erosion",
-      "name": "Erosion",
+      "slug": "purist-caster",
+      "name": "Purist - Caster",
       "rarity": "silver",
-      "icon": "https://arammayhem.com/augments/Erosion_mayhem_augment.webp",
-      "name_zh_CN": "侵蚀",
-      "name_zh_TW": "侵蝕裝甲",
-      "name_ja": "浸食",
-      "name_ko": "부식",
-      "wikiDescription": "Each instance of damage dealt to an enemy reduces their armor and magic resistance by 1. 5 % for 4 seconds, stacking up to 20 times for a total of 30% resistances reduction.",
+      "icon": "https://arammayhem.com/augments/Purist_-_Caster_mayhem_augment.webp",
+      "name_zh_CN": "纯粹主义者 - 术师",
+      "name_zh_TW": "純粹 - 法師",
+      "name_ja": "純粋なるキャスター",
+      "name_ko": "순수주의자 - 마법사",
+      "wikiDescription": "Convert all of your bonus attack speed into ability haste at a rate of 0. 65 ability haste per 1% bonus attack speed . Additionally, your abilities' total cooldowns are reduced by 10%.",
       "kit_tags": [
         "ability",
-        "dot"
+        "haste"
       ],
       "flags": {
         "system_breaker": false,
@@ -1610,15 +1571,35 @@
       "wikiDescription": "Attacks and Abilities empowered by your chosen ability deal additional damage to the target and nearby enemies."
     },
     {
-      "slug": "dropbear",
-      "name": "DropBear",
-      "rarity": "prismatic",
-      "icon": "https://arammayhem.com/augments/DropBear_mayhem_augment.webp",
-      "name_zh_CN": "空投熊",
-      "name_zh_TW": "天降戰熊",
-      "name_ja": "ドロップベア",
-      "name_ko": "곰 투하",
-      "type": "standalone",
+      "slug": "erosion",
+      "name": "Erosion",
+      "rarity": "silver",
+      "icon": "https://arammayhem.com/augments/Erosion_mayhem_augment.webp",
+      "name_zh_CN": "侵蚀",
+      "name_zh_TW": "侵蝕裝甲",
+      "name_ja": "浸食",
+      "name_ko": "부식",
+      "wikiDescription": "Each instance of damage dealt to an enemy reduces their armor and magic resistance by 1. 5 % for 4 seconds, stacking up to 20 times for a total of 30% resistances reduction.",
+      "kit_tags": [
+        "ability",
+        "dot"
+      ],
+      "flags": {
+        "system_breaker": false,
+        "lifecycle": "active"
+      },
+      "type": "standalone"
+    },
+    {
+      "slug": "from-downtown",
+      "name": "From Downtown",
+      "rarity": "gold",
+      "icon": "https://arammayhem.com/augments/From_Downtown_mayhem_augment.webp",
+      "name_zh_CN": "狙神飞星",
+      "name_zh_TW": "超遠射擊",
+      "name_ja": "ロングシュート",
+      "name_ko": "로켓 배송",
+      "type": "quest",
       "flags": {
         "system_breaker": false,
         "lifecycle": "added"
@@ -1626,48 +1607,7 @@
       "kit_tags": [
         "ability"
       ],
-      "wikiDescription": "On death, a giant Tibbers with all your augments falls from the sky and damages nearby enemies."
-    },
-    {
-      "slug": "dawnbringers-resolve",
-      "name": "Dawnbringer's Resolve",
-      "rarity": "gold",
-      "icon": "https://arammayhem.com/augments/Dawnbringer's_Resolve_mayhem_augment.webp",
-      "name_zh_CN": "黎明使者的坚决",
-      "name_zh_TW": "不朽守衛",
-      "name_ja": "ドーンブリンガーの誓い",
-      "name_ko": "빛의 인도자 결의",
-      "wikiDescription": "Upon dropping below 50% maximum health , you are healed for 30% maximum health over 3 seconds (45 second cooldown, reset upon death).",
-      "kit_tags": [
-        "heal_shield",
-        "tank"
-      ],
-      "flags": {
-        "system_breaker": false,
-        "lifecycle": "active"
-      },
-      "type": "standalone"
-    },
-    {
-      "slug": "sonic-boom",
-      "name": "Sonic Boom",
-      "rarity": "silver",
-      "icon": "https://arammayhem.com/augments/Sonic_Boom_mayhem_augment.webp",
-      "name_zh_CN": "天音爆",
-      "name_zh_TW": "餘音震盪",
-      "name_ja": "ソニックブーム",
-      "name_ko": "음속 폭발",
-      "wikiDescription": "Granting a buff , heal , or shield to your ally deals 30 – 150 (based on level) true damage to enemies within 450 units of them and slows targets by 30% for 2 seconds (2 second cooldown).",
-      "kit_tags": [
-        "ability",
-        "heal_shield",
-        "cc"
-      ],
-      "flags": {
-        "system_breaker": false,
-        "lifecycle": "active"
-      },
-      "type": "standalone"
+      "wikiDescription": "Quest: Hit enemy champions with abilities while located at least 700 units away from them (at the time of the hit) 15 times (counts up to 1 hit per champion per cast instance ). Reward: Upon completing your Quest , hitting enemy champions with abilities while located at least 700 units away from them at the time of the hit fires a meteor to their current location, which upon landing deals 75 – 200 (based on level) (+ 50% bonus AD) (+ 20% AP) magic damage to enemies within the area (8 second cooldown per target per cast instance ). The meteor's damage and radius are increased based on your distance to the target at the time of the ability hit, increasing its damage by 0% – 230% and setting its radius to 120 – 1366. 88 units. Maximum meteor damage is 172. 5 – 460 (based on level) (+ 115% bonus AD) (+ 46% AP) ."
     },
     {
       "slug": "stay-resolute",
@@ -1701,6 +1641,47 @@
       "wikiDescription": "Gain 50 bonus movement speed and 40% slow resist .",
       "kit_tags": [
         "movement"
+      ],
+      "flags": {
+        "system_breaker": false,
+        "lifecycle": "active"
+      },
+      "type": "standalone"
+    },
+    {
+      "slug": "sonic-boom",
+      "name": "Sonic Boom",
+      "rarity": "silver",
+      "icon": "https://arammayhem.com/augments/Sonic_Boom_mayhem_augment.webp",
+      "name_zh_CN": "天音爆",
+      "name_zh_TW": "餘音震盪",
+      "name_ja": "ソニックブーム",
+      "name_ko": "음속 폭발",
+      "wikiDescription": "Granting a buff , heal , or shield to your ally deals 30 – 150 (based on level) true damage to enemies within 450 units of them and slows targets by 30% for 2 seconds (2 second cooldown).",
+      "kit_tags": [
+        "ability",
+        "heal_shield",
+        "cc"
+      ],
+      "flags": {
+        "system_breaker": false,
+        "lifecycle": "active"
+      },
+      "type": "standalone"
+    },
+    {
+      "slug": "dawnbringers-resolve",
+      "name": "Dawnbringer's Resolve",
+      "rarity": "gold",
+      "icon": "https://arammayhem.com/augments/Dawnbringer's_Resolve_mayhem_augment.webp",
+      "name_zh_CN": "黎明使者的坚决",
+      "name_zh_TW": "不朽守衛",
+      "name_ja": "ドーンブリンガーの誓い",
+      "name_ko": "빛의 인도자 결의",
+      "wikiDescription": "Upon dropping below 50% maximum health , you are healed for 30% maximum health over 3 seconds (45 second cooldown, reset upon death).",
+      "kit_tags": [
+        "heal_shield",
+        "tank"
       ],
       "flags": {
         "system_breaker": false,
@@ -1754,6 +1735,25 @@
       "type": "standalone"
     },
     {
+      "slug": "dropbear",
+      "name": "DropBear",
+      "rarity": "prismatic",
+      "icon": "https://arammayhem.com/augments/DropBear_mayhem_augment.webp",
+      "name_zh_CN": "空投熊",
+      "name_zh_TW": "天降戰熊",
+      "name_ja": "ドロップベア",
+      "name_ko": "곰 투하",
+      "type": "standalone",
+      "flags": {
+        "system_breaker": false,
+        "lifecycle": "added"
+      },
+      "kit_tags": [
+        "ability"
+      ],
+      "wikiDescription": "Upon death, you summon Tibbers who drops from above and lands onto the location of your death over 0. 5 seconds. Upon landing, he deals 250 – 750 (based on level) (+ 100% AP) (+ 2 per 1 flat magic penetration) (+ 5 per 1% magic penetration) magic damage to nearby enemies and stuns them for 1. 5 seconds. Tibbers then chases after and targets the enemy champion that killed you, attacking them once he is in range. Tibbers has all of your augments and lasts for up to 8 – 20 (based on level) seconds. He gains 80% – 100% (based on level) bonus attack speed and deals 25 – 150 (based on level) (+ 50% AP) magic damage every second to enemies within 350 units of him. His stats are: 1500 – 6000 (based on level) (+ 15% maximum health) (+ 150% AP) health (rapidly decays over his lifetime) 50 – 300 (based on level) (+ 75% AD) magic damage (basic attack damage) 1. 00 attack speed 150 attack range 50 armor 50 magic resistance 200 – 300 (based on level) (+ 20% movement speed) movement speed"
+    },
+    {
       "slug": "from-beginning-to-end",
       "name": "From Beginning To End",
       "rarity": "gold",
@@ -1769,6 +1769,43 @@
         "ability"
       ],
       "set": "make_it_rain",
+      "flags": {
+        "system_breaker": false,
+        "lifecycle": "active"
+      },
+      "type": "standalone"
+    },
+    {
+      "slug": "hand-of-baron",
+      "name": "Hand of Baron",
+      "rarity": "prismatic",
+      "icon": "https://arammayhem.com/augments/Hand_of_Baron_mayhem_augment.webp",
+      "name_zh_CN": "男爵之手",
+      "name_zh_TW": "巴龍之爪",
+      "name_ja": "バロンの牙",
+      "name_ko": "남작의 도움",
+      "wikiDescription": "Gain a modified Hand of Baron , which only grants 25% increased adaptive force and greatly empowers nearby allied minions .",
+      "kit_tags": [
+        "attack",
+        "ability"
+      ],
+      "flags": {
+        "system_breaker": false,
+        "lifecycle": "active"
+      },
+      "type": "standalone"
+    },
+    {
+      "slug": "omni-soul",
+      "name": "Omni Soul",
+      "rarity": "prismatic",
+      "icon": "https://arammayhem.com/augments/Omni_Soul_mayhem_augment.webp",
+      "name_zh_CN": "全能龙魂",
+      "name_zh_TW": "全能之魂",
+      "name_ja": "オムニソウル",
+      "name_ko": "전능의 영혼",
+      "wikiDescription": "Grants 3 random Dragon Souls .",
+      "kit_tags": [],
       "flags": {
         "system_breaker": false,
         "lifecycle": "active"
@@ -1796,18 +1833,58 @@
       "wikiDescription": "Scoring a champion takedown grants you [stat:ms]100% [b]bonus[/b] movement speed[/stat] and [stat:as]15% [b]total[/b] attack speed[/stat] for 4 seconds."
     },
     {
-      "slug": "hand-of-baron",
-      "name": "Hand of Baron",
-      "rarity": "prismatic",
-      "icon": "https://arammayhem.com/augments/Hand_of_Baron_mayhem_augment.webp",
-      "name_zh_CN": "男爵之手",
-      "name_zh_TW": "巴龍之爪",
-      "name_ja": "バロンの牙",
-      "name_ko": "남작의 도움",
-      "wikiDescription": "Gain a modified Hand of Baron , which only grants 25% increased adaptive force and greatly empowers nearby allied minions .",
+      "slug": "all-for-you",
+      "name": "All For You",
+      "rarity": "gold",
+      "icon": "https://arammayhem.com/augments/All_For_You_mayhem_augment.webp",
+      "name_zh_CN": "全心为你",
+      "name_zh_TW": "全部都給你",
+      "name_ja": "キミのためさ",
+      "name_ko": "너만을 위해",
+      "wikiDescription": "Your heals and shields on allied champions are increased in effectiveness by 30%.",
+      "wikiSet": "Wee Woo Wee Woo",
       "kit_tags": [
-        "attack",
-        "ability"
+        "heal_shield"
+      ],
+      "set": "wee_woo",
+      "flags": {
+        "system_breaker": false,
+        "lifecycle": "active"
+      },
+      "type": "standalone"
+    },
+    {
+      "slug": "dont-change-the-channel",
+      "name": "Don't Change the Channel",
+      "rarity": "silver",
+      "icon": "https://arammayhem.com/augments/Don_t_Change_the_Channel_mayhem_augment.webp",
+      "name_zh_CN": "别停止引导",
+      "name_zh_TW": "別轉台",
+      "name_ja": "チャンネルはそのまま",
+      "name_ko": "채널 고정",
+      "type": "standalone",
+      "flags": {
+        "system_breaker": false,
+        "lifecycle": "added"
+      },
+      "kit_tags": [
+        "heal_shield"
+      ],
+      "wikiDescription": "Gain a Shield for every second you spend Channeling."
+    },
+    {
+      "slug": "spin-to-win",
+      "name": "Spin To Win",
+      "rarity": "silver",
+      "icon": "https://arammayhem.com/augments/Spin_To_Win_mayhem_augment.webp",
+      "name_zh_CN": "旋转至胜",
+      "name_zh_TW": "一轉就贏",
+      "name_ja": "勝利への回転",
+      "name_ko": "승리를 위한 회전",
+      "wikiDescription": "Your spinning abilities deal 30% increased damage and have their cooldown reduced equivalent to 30 ability haste. This note is not fully complete. If you wish to contribute, please do so on Discussion page Eligible Abilities : Ahri's Fox-Fire and Spirit Rush , Amumu's Tantrum , Ambessa's Lacerate , Darius' Decimate , Draven's Spinning Axe , Stand Aside , and Whirling Death , Garen's Judgment , Hecarim's Rampage , Jax's Counter Strike , Katarina's Voracity and Death Lotus , Kayn's Reaping Slash , Lillia's Blooming Blows , Nocturne's Umbra Blades , Rammus' Powerball , Renekton's Cull the Meek , Riven's Broken Wings , Samira's Blade Whirl and Inferno Trigger , Sylas' Petricite Burst , Wukong's Cyclone , Tryndamere's Spinning Slash , Xin Zhao's Crescent Guard , Zed's Shadow Slash PENDING FOR TEST: : Akshan's Avengerang and Heroic Swing , Lillia's Watch Out! Eep! and Swirlseed , Poppy's Keeper's Verdict , etc.",
+      "kit_tags": [
+        "ability",
+        "haste"
       ],
       "flags": {
         "system_breaker": false,
@@ -1853,101 +1930,24 @@
       "type": "standalone"
     },
     {
-      "slug": "all-for-you",
-      "name": "All For You",
-      "rarity": "gold",
-      "icon": "https://arammayhem.com/augments/All_For_You_mayhem_augment.webp",
-      "name_zh_CN": "全心为你",
-      "name_zh_TW": "全部都給你",
-      "name_ja": "キミのためさ",
-      "name_ko": "너만을 위해",
-      "wikiDescription": "Your heals and shields on allied champions are increased in effectiveness by 30%.",
-      "wikiSet": "Wee Woo Wee Woo",
-      "kit_tags": [
-        "heal_shield"
-      ],
-      "set": "wee_woo",
-      "flags": {
-        "system_breaker": false,
-        "lifecycle": "active"
-      },
-      "type": "standalone"
-    },
-    {
-      "slug": "omni-soul",
-      "name": "Omni Soul",
-      "rarity": "prismatic",
-      "icon": "https://arammayhem.com/augments/Omni_Soul_mayhem_augment.webp",
-      "name_zh_CN": "全能龙魂",
-      "name_zh_TW": "全能之魂",
-      "name_ja": "オムニソウル",
-      "name_ko": "전능의 영혼",
-      "wikiDescription": "Grants 3 random Dragon Souls .",
-      "kit_tags": [],
-      "flags": {
-        "system_breaker": false,
-        "lifecycle": "active"
-      },
-      "type": "standalone"
-    },
-    {
-      "slug": "spin-to-win",
-      "name": "Spin To Win",
+      "slug": "its-go-time",
+      "name": "It's Go Time",
       "rarity": "silver",
-      "icon": "https://arammayhem.com/augments/Spin_To_Win_mayhem_augment.webp",
-      "name_zh_CN": "旋转至胜",
-      "name_zh_TW": "一轉就贏",
-      "name_ja": "勝利への回転",
-      "name_ko": "승리를 위한 회전",
-      "wikiDescription": "Your spinning abilities deal 30% increased damage and have their cooldown reduced equivalent to 30 ability haste. This note is not fully complete. If you wish to contribute, please do so on Discussion page Eligible Abilities : Ahri's Fox-Fire and Spirit Rush , Amumu's Tantrum , Ambessa's Lacerate , Darius' Decimate , Draven's Spinning Axe , Stand Aside , and Whirling Death , Garen's Judgment , Hecarim's Rampage , Jax's Counter Strike , Katarina's Voracity and Death Lotus , Kayn's Reaping Slash , Lillia's Blooming Blows , Nocturne's Umbra Blades , Rammus' Powerball , Renekton's Cull the Meek , Riven's Broken Wings , Samira's Blade Whirl and Inferno Trigger , Sylas' Petricite Burst , Wukong's Cyclone , Tryndamere's Spinning Slash , Xin Zhao's Crescent Guard , Zed's Shadow Slash PENDING FOR TEST: : Akshan's Avengerang and Heroic Swing , Lillia's Watch Out! Eep! and Swirlseed , Poppy's Keeper's Verdict , etc.",
-      "kit_tags": [
-        "ability",
-        "haste"
-      ],
-      "flags": {
-        "system_breaker": false,
-        "lifecycle": "active"
-      },
-      "type": "standalone"
-    },
-    {
-      "slug": "dont-change-the-channel",
-      "name": "Don't Change the Channel",
-      "rarity": "silver",
-      "icon": "https://arammayhem.com/augments/Don_t_Change_the_Channel_mayhem_augment.webp",
-      "name_zh_CN": "别停止引导",
-      "name_zh_TW": "別轉台",
-      "name_ja": "チャンネルはそのまま",
-      "name_ko": "채널 고정",
-      "type": "standalone",
+      "icon": "https://arammayhem.com/augments/It_s_Go_Time_mayhem_augment.webp",
+      "name_zh_CN": "前进时间到",
+      "name_zh_TW": "該出手了",
+      "name_ja": "始まるぞ",
+      "name_ko": "출발할 시간",
+      "type": "ability",
       "flags": {
         "system_breaker": false,
         "lifecycle": "added"
       },
       "kit_tags": [
-        "heal_shield"
+        "movement",
+        "ability"
       ],
-      "wikiDescription": "Gain a Shield for every second you spend Channeling."
-    },
-    {
-      "slug": "dont-blink",
-      "name": "Don't Blink",
-      "rarity": "silver",
-      "icon": "https://arammayhem.com/augments/Don't_Blink_mayhem_augment.webp",
-      "name_zh_CN": "唯快不破",
-      "name_zh_TW": "格擋",
-      "name_ja": "瞬きより速く",
-      "name_ko": "속전속결",
-      "wikiDescription": "Deal 1% increased damage per 10 movement speed you have more than the target.",
-      "kit_tags": [
-        "attack",
-        "movement"
-      ],
-      "flags": {
-        "system_breaker": false,
-        "lifecycle": "active"
-      },
-      "type": "standalone"
+      "wikiDescription": "Upgrades one of your champion's abilities that has a duration-based effect, empowering the ability to grant 25% – 45% (based on level) bonus movement speed for the effect's duration."
     },
     {
       "slug": "biggest-snowball-ever",
@@ -1993,43 +1993,24 @@
       "wikiDescription": "Recall to enter your Cannon Launcher. It has significantly increased range, travel speed, and damage."
     },
     {
-      "slug": "its-go-time",
-      "name": "It's Go Time",
+      "slug": "dont-blink",
+      "name": "Don't Blink",
       "rarity": "silver",
-      "icon": "https://arammayhem.com/augments/It_s_Go_Time_mayhem_augment.webp",
-      "name_zh_CN": "前进时间到",
-      "name_zh_TW": "該出手了",
-      "name_ja": "始まるぞ",
-      "name_ko": "출발할 시간",
-      "type": "ability",
+      "icon": "https://arammayhem.com/augments/Don't_Blink_mayhem_augment.webp",
+      "name_zh_CN": "唯快不破",
+      "name_zh_TW": "格擋",
+      "name_ja": "瞬きより速く",
+      "name_ko": "속전속결",
+      "wikiDescription": "Deal 1% increased damage per 10 movement speed you have more than the target.",
+      "kit_tags": [
+        "attack",
+        "movement"
+      ],
       "flags": {
         "system_breaker": false,
-        "lifecycle": "added"
+        "lifecycle": "active"
       },
-      "kit_tags": [
-        "movement",
-        "ability"
-      ],
-      "wikiDescription": "Activating your chosen ability grants you Movement Speed for its duration."
-    },
-    {
-      "slug": "trusty-weapon",
-      "name": "Trusty Weapon",
-      "rarity": "silver",
-      "icon": "https://arammayhem.com/augments/Trusty_Weapon_mayhem_augment.webp",
-      "name_zh_CN": "可靠武器",
-      "name_zh_TW": "可靠武器",
-      "name_ja": "頼れる武器",
-      "name_ko": "믿음직한 무기",
-      "type": "ability",
-      "flags": {
-        "system_breaker": false,
-        "lifecycle": "added"
-      },
-      "kit_tags": [
-        "ability"
-      ],
-      "wikiDescription": "Striking enemy champions with your chosen ability forges a bond of Friendship. your chosen ability gains temporarily increased damage based on your level of Friendship."
+      "type": "standalone"
     },
     {
       "slug": "minionmancer",
@@ -2051,25 +2032,24 @@
       "type": "standalone"
     },
     {
-      "slug": "ravenous-bind",
-      "name": "Ravenous Bind",
-      "rarity": "gold",
-      "icon": "https://arammayhem.com/augments/Ravenous_Bind_mayhem_augment.webp",
-      "name_zh_CN": "贪欲束缚",
-      "name_zh_TW": "貪婪束縛",
-      "name_ja": "貪欲な束縛",
-      "name_ko": "굶주린 속박",
-      "type": "ability",
+      "slug": "dashing",
+      "name": "Dashing",
+      "rarity": "prismatic",
+      "icon": "https://arammayhem.com/augments/Dashing_mayhem_augment.webp",
+      "name_zh_CN": "全凭身法",
+      "name_zh_TW": "衝鋒",
+      "name_ja": "疾走",
+      "name_ko": "돌진",
+      "wikiDescription": "Abilities with dashes or blinks gain 175 ability haste . On Kalista , this augment instead grants her 125% bonus attack speed . [1]",
+      "kit_tags": [
+        "movement",
+        "haste"
+      ],
       "flags": {
         "system_breaker": false,
-        "lifecycle": "added"
+        "lifecycle": "active"
       },
-      "kit_tags": [
-        "ability",
-        "heal_shield",
-        "cc"
-      ],
-      "wikiDescription": "Upgrades one of your champion's abilities that has a immobilizing or grounding effect, empowering the ability's application of the crowd control to deal 15 – 90 (based on level) (+ 10% AP) (+ 0. 5 % of your maximum health) magic damage to affected targets and heal you for 50 – 200 (based on level) (+ 5% AP) (+ 10% bonus health) . The heal is increased by up to 50% based on how long the ability's cooldown is."
+      "type": "standalone"
     },
     {
       "slug": "transmute-chaos",
@@ -2091,35 +2071,122 @@
       "type": "standalone"
     },
     {
-      "slug": "quest-urfs-champion",
-      "name": "Quest: Urf's Champion",
+      "slug": "ravenous-bind",
+      "name": "Ravenous Bind",
+      "rarity": "gold",
+      "icon": "https://arammayhem.com/augments/Ravenous_Bind_mayhem_augment.webp",
+      "name_zh_CN": "贪欲束缚",
+      "name_zh_TW": "貪婪束縛",
+      "name_ja": "貪欲な束縛",
+      "name_ko": "굶주린 속박",
+      "type": "standalone",
+      "flags": {
+        "system_breaker": false,
+        "lifecycle": "added"
+      },
+      "kit_tags": [
+        "ability",
+        "heal_shield",
+        "cc"
+      ],
+      "wikiDescription": "Upgrades one of your champion's abilities that has a immobilizing or grounding effect, empowering the ability to deal 15 – 90 (based on level) (+ 10% AP) (+ 0. 5 % of your maximum health) magic damage to affected targets and heal you for 50 – 200 (based on level) (+ 5% AP) (+ 10% bonus health) . The heal is increased by up to 50% based on how long the ability's cooldown is."
+    },
+    {
+      "slug": "en-passant",
+      "name": "En Passant",
       "rarity": "prismatic",
-      "icon": "https://arammayhem.com/augments/Quest:_Urf's_Champion_mayhem_augment.webp",
-      "name_zh_CN": "任务：海牛阿福的勇士",
-      "name_zh_TW": "任務：阿福英雄",
-      "name_ja": "クエスト: アーフのチャンピオン",
-      "name_ko": "퀘스트: 우르프의 챔피언",
-      "wikiDescription": "Quest: Score 18 champion takedowns . Reward: Upon completing your Quest , you receive The Golden Spatula . If your inventory is full at the time of quest completion, the item will be granted as soon as a slot in the inventory is available.",
-      "kit_tags": [],
+      "icon": "https://arammayhem.com/augments/En_Passant_mayhem_augment.webp",
+      "name_zh_CN": "吃过路兵",
+      "name_zh_TW": "吃過路兵",
+      "name_ja": "アンパッサン",
+      "name_ko": "앙파상",
+      "type": "standalone",
+      "flags": {
+        "system_breaker": false,
+        "lifecycle": "added"
+      },
+      "kit_tags": [
+        "attack",
+        "ability",
+        "on_hit",
+        "heal_shield"
+      ],
+      "wikiDescription": "You can now identify the Vitals of enemy champions within 2000 units , marked as an arc around them and pointing towards a specific direction. Dealing damage to a target with a basic attack or ability while you are facing in the direction of their exposed Vital will consume it, dealing bonus true damage equal to 6% (+ 1. 5 % per En Passant stack) of the target's maximum health , healing you for 50 – 200 (based on level) (+ 5% missing health) , and granting you 50% (+ 5% per En Passant stack) bonus movement speed that decays over 2 seconds. Consuming a target's Vital also grants you an En Passant stack for 8 seconds, refreshing on subsequent Vital triggers and stacking up a number of times. Each En Passant stack increases the consumed Vital damage and bonus movement speed . Vitals on targets become exposed instantly once you are within range and remain exposed until you die. Once a target's Vital is consumed, you identify a new Vital on them pointing in a different direction from the previous after 4 seconds."
+    },
+    {
+      "slug": "trusty-weapon",
+      "name": "Trusty Weapon",
+      "rarity": "silver",
+      "icon": "https://arammayhem.com/augments/Trusty_Weapon_mayhem_augment.webp",
+      "name_zh_CN": "可靠武器",
+      "name_zh_TW": "可靠武器",
+      "name_ja": "頼れる武器",
+      "name_ko": "믿음직한 무기",
+      "type": "ability",
+      "flags": {
+        "system_breaker": false,
+        "lifecycle": "added"
+      },
+      "kit_tags": [
+        "ability"
+      ],
+      "wikiDescription": "Striking enemy champions with your chosen ability forges a bond of Friendship. your chosen ability gains temporarily increased damage based on your level of Friendship."
+    },
+    {
+      "slug": "cruelty",
+      "name": "Cruelty",
+      "rarity": "prismatic",
+      "icon": "https://arammayhem.com/augments/Cruelty_mayhem_augment.webp",
+      "name_zh_CN": "残忍",
+      "name_zh_TW": "殘忍",
+      "name_ja": "冷酷な一撃",
+      "name_ko": "잔혹 행위",
+      "wikiDescription": "Immobilizing or grounding an enemy champion summons a comet above them that lands at their current location after 1 second, dealing 50 – 150 (based on level) (+ 40% AP) (+ 4% of your maximum health) magic damage to enemies within the area (6 second cooldown per target per cast instance ).",
+      "kit_tags": [
+        "ability",
+        "cc",
+        "dot"
+      ],
       "flags": {
         "system_breaker": false,
         "lifecycle": "active"
       },
-      "type": "quest"
+      "type": "standalone"
     },
     {
-      "slug": "dashing",
-      "name": "Dashing",
-      "rarity": "prismatic",
-      "icon": "https://arammayhem.com/augments/Dashing_mayhem_augment.webp",
-      "name_zh_CN": "全凭身法",
-      "name_zh_TW": "衝鋒",
-      "name_ja": "疾走",
-      "name_ko": "돌진",
-      "wikiDescription": "Abilities with dashes or blinks gain 175 ability haste . On Kalista , this augment instead grants her 125% bonus attack speed . [1]",
+      "slug": "bread-and-cheese",
+      "name": "Bread and Cheese",
+      "rarity": "gold",
+      "icon": "https://arammayhem.com/augments/Bread_and_Cheese_mayhem_augment.webp",
+      "name_zh_CN": "面包和奶酪",
+      "name_zh_TW": "土司和起司",
+      "name_ja": "パンとチーズ",
+      "name_ko": "빵과 치즈",
+      "wikiDescription": "Your champion's third basic ability (E) gains 100 ability haste .",
       "kit_tags": [
-        "movement",
+        "ability",
         "haste"
+      ],
+      "flags": {
+        "system_breaker": false,
+        "lifecycle": "active"
+      },
+      "type": "standalone"
+    },
+    {
+      "slug": "empowered-by-the-faithful",
+      "name": "Empowered By The Faithful",
+      "rarity": "prismatic",
+      "icon": "https://arammayhem.com/augments/Empowered_By_The_Faithful_mayhem_augment.webp",
+      "name_zh_CN": "信念者的强化",
+      "name_zh_TW": "因信得力",
+      "name_ja": "信ずる者の加護",
+      "name_ko": "신념을 통한 강화",
+      "wikiDescription": "Granting a heal or shield to an allied champion blesses them for 8 seconds. Whenever a blessed ally damages an enemy champion, you generate a stack of Devotion , stacking up to 50 times. Upon reaching maximum stacks, you unleash a shockwave that deals 50 – 300 (based on level) (+ 750% heal and shield power) magic damage to nearby enemies. Enemy champions damaged below a percentage of their maximum health equal to 25% of your heal and shield power are executed .",
+      "kit_tags": [
+        "heal_shield",
+        "ability",
+        "cc"
       ],
       "flags": {
         "system_breaker": false,
@@ -2152,111 +2219,6 @@
       "type": "standalone"
     },
     {
-      "slug": "bread-and-cheese",
-      "name": "Bread and Cheese",
-      "rarity": "gold",
-      "icon": "https://arammayhem.com/augments/Bread_and_Cheese_mayhem_augment.webp",
-      "name_zh_CN": "面包和奶酪",
-      "name_zh_TW": "土司和起司",
-      "name_ja": "パンとチーズ",
-      "name_ko": "빵과 치즈",
-      "wikiDescription": "Your champion's third basic ability (E) gains 100 ability haste .",
-      "kit_tags": [
-        "ability",
-        "haste"
-      ],
-      "flags": {
-        "system_breaker": false,
-        "lifecycle": "active"
-      },
-      "type": "standalone"
-    },
-    {
-      "slug": "en-passant",
-      "name": "En Passant",
-      "rarity": "prismatic",
-      "icon": "https://arammayhem.com/augments/En_Passant_mayhem_augment.webp",
-      "name_zh_CN": "吃过路兵",
-      "name_zh_TW": "吃過路兵",
-      "name_ja": "アンパッサン",
-      "name_ko": "앙파상",
-      "type": "standalone",
-      "flags": {
-        "system_breaker": false,
-        "lifecycle": "added"
-      },
-      "kit_tags": [
-        "attack",
-        "ability",
-        "on_hit",
-        "heal_shield"
-      ],
-      "wikiDescription": "Periodically identify Vitals on enemy champions. Hitting them with Attacks or Abilities deals max Health true damage, restores Health, and grants Movement Speed. These effects can stack."
-    },
-    {
-      "slug": "master-of-duality",
-      "name": "Master of Duality",
-      "rarity": "prismatic",
-      "icon": "https://arammayhem.com/augments/Master_of_Duality_mayhem_augment.webp",
-      "name_zh_CN": "物法皆修",
-      "name_zh_TW": "雙修大師",
-      "name_ja": "文武両道",
-      "name_ko": "결투의 대가",
-      "wikiDescription": "Basic attacks on-hit grant 6 – 18 (based on level) ability power and damaging abilities once per cast instance grant 3 – 9 (based on level) bonus attack damage , lasting for 5 seconds, with the duration of both refreshing on subsequent hits, and stacking infinitely.",
-      "wikiSet": "Stackosaurus Rex",
-      "kit_tags": [
-        "attack",
-        "ability",
-        "on_hit"
-      ],
-      "set": "stackosaurus_rex",
-      "flags": {
-        "system_breaker": true,
-        "lifecycle": "active"
-      },
-      "type": "standalone"
-    },
-    {
-      "slug": "cruelty",
-      "name": "Cruelty",
-      "rarity": "prismatic",
-      "icon": "https://arammayhem.com/augments/Cruelty_mayhem_augment.webp",
-      "name_zh_CN": "残忍",
-      "name_zh_TW": "殘忍",
-      "name_ja": "冷酷な一撃",
-      "name_ko": "잔혹 행위",
-      "wikiDescription": "Immobilizing or grounding an enemy champion summons a comet above them that lands at their current location after 1 second, dealing 50 – 150 (based on level) (+ 40% AP) (+ 4% of your maximum health) magic damage to enemies within the area (6 second cooldown per target per cast instance ).",
-      "kit_tags": [
-        "ability",
-        "cc",
-        "dot"
-      ],
-      "flags": {
-        "system_breaker": false,
-        "lifecycle": "active"
-      },
-      "type": "standalone"
-    },
-    {
-      "slug": "apex-inventor",
-      "name": "Apex Inventor",
-      "rarity": "gold",
-      "icon": "https://arammayhem.com/augments/Apex_Inventor_mayhem_augment.webp",
-      "name_zh_CN": "尖端发明家",
-      "name_zh_TW": "頂尖發明家",
-      "name_ja": "至高の発明家",
-      "name_ko": "최첨단 발명가",
-      "wikiDescription": "Grants 100 item haste , which is equivalent to 50% cooldown reduction for items. Item Cooldowns Items Base Cooldown Reduced Cooldown with Apex Inventor 1",
-      "kit_tags": [
-        "haste"
-      ],
-      "flags": {
-        "system_breaker": false,
-        "lifecycle": "active"
-      },
-      "type": "standalone"
-    },
-    {
       "slug": "its-killing-time",
       "name": "It's Killing Time",
       "rarity": "gold",
@@ -2269,27 +2231,6 @@
       "kit_tags": [
         "ability",
         "dot"
-      ],
-      "flags": {
-        "system_breaker": false,
-        "lifecycle": "active"
-      },
-      "type": "standalone"
-    },
-    {
-      "slug": "empowered-by-the-faithful",
-      "name": "Empowered By The Faithful",
-      "rarity": "prismatic",
-      "icon": "https://arammayhem.com/augments/Empowered_By_The_Faithful_mayhem_augment.webp",
-      "name_zh_CN": "信念者的强化",
-      "name_zh_TW": "因信得力",
-      "name_ja": "信ずる者の加護",
-      "name_ko": "신념을 통한 강화",
-      "wikiDescription": "Granting a heal or shield to an allied champion blesses them for 8 seconds. Whenever a blessed ally damages an enemy champion, you generate a stack of Devotion , stacking up to 50 times. Upon reaching maximum stacks, you unleash a shockwave that deals 50 – 300 (based on level) (+ 750% heal and shield power) magic damage to nearby enemies. Enemy champions damaged below a percentage of their maximum health equal to 25% of your heal and shield power are executed .",
-      "kit_tags": [
-        "heal_shield",
-        "ability",
-        "cc"
       ],
       "flags": {
         "system_breaker": false,
@@ -2319,6 +2260,29 @@
       "wikiDescription": "Automatically cast an improved version of Darius' Decimate , winding up over 1. 25 seconds to slash in a 460 radius around you. The slash deals 100 – 400 (based on level) (+ 60% AD) (+ 40% AP) physical damage to enemies within the area (8 second cooldown). Enemies within the 240 inner radius of the slash take 「 50% damage. 」 「 50 – 200 (based on level) (+ 30% AD) (+ 20% AP) physical damage . 」 Additionally, for each enemy champion hit along the outer edge, you heal for 15% of your missing health and the cooldown of this effect is reduced by 10%, down to a minimum of 3 seconds."
     },
     {
+      "slug": "master-of-duality",
+      "name": "Master of Duality",
+      "rarity": "prismatic",
+      "icon": "https://arammayhem.com/augments/Master_of_Duality_mayhem_augment.webp",
+      "name_zh_CN": "物法皆修",
+      "name_zh_TW": "雙修大師",
+      "name_ja": "文武両道",
+      "name_ko": "결투의 대가",
+      "wikiDescription": "Basic attacks on-hit grant 6 – 18 (based on level) ability power and damaging abilities once per cast instance grant 3 – 9 (based on level) bonus attack damage , lasting for 5 seconds, with the duration of both refreshing on subsequent hits, and stacking infinitely.",
+      "wikiSet": "Stackosaurus Rex",
+      "kit_tags": [
+        "attack",
+        "ability",
+        "on_hit"
+      ],
+      "set": "stackosaurus_rex",
+      "flags": {
+        "system_breaker": true,
+        "lifecycle": "active"
+      },
+      "type": "standalone"
+    },
+    {
       "slug": "hextech-soul",
       "name": "Hextech Soul",
       "rarity": "silver",
@@ -2329,6 +2293,26 @@
       "name_ko": "마법공학의 영혼",
       "wikiDescription": "Grants the Hextech Dragon Soul , or a different Dragon Soul if you aleady have it.",
       "kit_tags": [],
+      "flags": {
+        "system_breaker": false,
+        "lifecycle": "active"
+      },
+      "type": "standalone"
+    },
+    {
+      "slug": "courage-of-the-colossus",
+      "name": "Courage of the Colossus",
+      "rarity": "prismatic",
+      "icon": "https://arammayhem.com/augments/Courage_of_the_Colossus_mayhem_augment.webp",
+      "name_zh_CN": "巨像的勇气",
+      "name_zh_TW": "巨像勇氣",
+      "name_ja": "巨人の勇気",
+      "name_ko": "거석상의 용기",
+      "wikiDescription": "Immobilizing or grounding an enemy champion grants a shield for 3 seconds that absorbs 150 – 450 (based on level) (+ 4% maximum health) damage (5 second cooldown per cast instance ). Shields can stack between multiple triggers of this effect, though not refreshing the duration of previous shields.",
+      "kit_tags": [
+        "tank",
+        "cc"
+      ],
       "flags": {
         "system_breaker": false,
         "lifecycle": "active"
@@ -2355,35 +2339,54 @@
       "type": "standalone"
     },
     {
-      "slug": "yowch-my-coins",
-      "name": "Yowch, My Coins!",
-      "rarity": "gold",
-      "icon": "https://arammayhem.com/augments/Yowch_My_Coins_mayhem_augment.webp",
-      "name_zh_CN": "哎哟，我的硬币！",
-      "name_zh_TW": "哎呀，我的金幣！",
-      "name_ja": "あいたっ、私のコイン！",
-      "name_ko": "으악, 내 동전!",
-      "type": "standalone",
+      "slug": "quest-urfs-champion",
+      "name": "Quest: Urf's Champion",
+      "rarity": "prismatic",
+      "icon": "https://arammayhem.com/augments/Quest:_Urf's_Champion_mayhem_augment.webp",
+      "name_zh_CN": "任务：海牛阿福的勇士",
+      "name_zh_TW": "任務：阿福英雄",
+      "name_ja": "クエスト: アーフのチャンピオン",
+      "name_ko": "퀘스트: 우르프의 챔피언",
+      "wikiDescription": "Quest: Score 18 champion takedowns . Reward: Upon completing your Quest , you receive The Golden Spatula . If your inventory is full at the time of quest completion, the item will be granted as soon as a slot in the inventory is available.",
+      "kit_tags": [],
+      "flags": {
+        "system_breaker": false,
+        "lifecycle": "active"
+      },
+      "type": "quest"
+    },
+    {
+      "slug": "double-defense",
+      "name": "Double Defense",
+      "rarity": "silver",
+      "icon": "https://arammayhem.com/augments/Double_Defense_mayhem_augment.webp",
+      "name_zh_CN": "双重防御",
+      "name_zh_TW": "雙重防禦",
+      "name_ja": "ダブルディフェンス",
+      "name_ko": "2연속 방어",
+      "type": "ability",
       "flags": {
         "system_breaker": false,
         "lifecycle": "added"
       },
-      "kit_tags": [],
-      "wikiDescription": "On takedown, enemy champions drop coins nearby, which you and your allies can collect. Each is worth the required number of gold."
+      "kit_tags": [
+        "heal_shield",
+        "ability"
+      ],
+      "wikiDescription": "Shields granted from your chosen ability are stronger and scaling with target's missing Health."
     },
     {
-      "slug": "courage-of-the-colossus",
-      "name": "Courage of the Colossus",
-      "rarity": "prismatic",
-      "icon": "https://arammayhem.com/augments/Courage_of_the_Colossus_mayhem_augment.webp",
-      "name_zh_CN": "巨像的勇气",
-      "name_zh_TW": "巨像勇氣",
-      "name_ja": "巨人の勇気",
-      "name_ko": "거석상의 용기",
-      "wikiDescription": "Immobilizing or grounding an enemy champion grants a shield for 3 seconds that absorbs 150 – 450 (based on level) (+ 4% maximum health) damage (5 second cooldown per cast instance ). Shields can stack between multiple triggers of this effect, though not refreshing the duration of previous shields.",
+      "slug": "apex-inventor",
+      "name": "Apex Inventor",
+      "rarity": "gold",
+      "icon": "https://arammayhem.com/augments/Apex_Inventor_mayhem_augment.webp",
+      "name_zh_CN": "尖端发明家",
+      "name_zh_TW": "頂尖發明家",
+      "name_ja": "至高の発明家",
+      "name_ko": "최첨단 발명가",
+      "wikiDescription": "Grants 100 item haste , which is equivalent to 50% cooldown reduction for items. Item Cooldowns Items Base Cooldown Reduced Cooldown with Apex Inventor 1",
       "kit_tags": [
-        "tank",
-        "cc"
+        "haste"
       ],
       "flags": {
         "system_breaker": false,
@@ -2412,64 +2415,21 @@
       "type": "standalone"
     },
     {
-      "slug": "adaptive-ward",
-      "name": "Adaptive Ward",
-      "rarity": "silver",
-      "icon": "https://arammayhem.com/augments/Adaptive_Ward_mayhem_augment.webp",
-      "name_zh_CN": "自适应防护",
-      "name_zh_TW": "適性之護",
-      "name_ja": "アダプティブワード",
-      "name_ko": "적응형 와드",
-      "type": "ability",
+      "slug": "yowch-my-coins",
+      "name": "Yowch, My Coins!",
+      "rarity": "gold",
+      "icon": "https://arammayhem.com/augments/Yowch_My_Coins_mayhem_augment.webp",
+      "name_zh_CN": "哎哟，我的硬币！",
+      "name_zh_TW": "哎呀，我的金幣！",
+      "name_ja": "あいたっ、私のコイン！",
+      "name_ko": "으악, 내 동전!",
+      "type": "standalone",
       "flags": {
         "system_breaker": false,
         "lifecycle": "added"
       },
-      "kit_tags": [
-        "tank",
-        "ability"
-      ],
-      "wikiDescription": "Upgrades one of your champion's abilities , empowering the ability to grant you 5 – 10 (based on level) bonus armor or bonus magic resistance for 6 seconds when it hits an enemy champion (4 second cooldown). This effect can stack up to a number of times. The resistance type granted is based on the target's adaptive type ( bonus armor for physical adaptive type and bonus magic resistance for magic adaptive type)."
-    },
-    {
-      "slug": "double-defense",
-      "name": "Double Defense",
-      "rarity": "silver",
-      "icon": "https://arammayhem.com/augments/Double_Defense_mayhem_augment.webp",
-      "name_zh_CN": "双重防御",
-      "name_zh_TW": "雙重防禦",
-      "name_ja": "ダブルディフェンス",
-      "name_ko": "2연속 방어",
-      "type": "ability",
-      "flags": {
-        "system_breaker": false,
-        "lifecycle": "added"
-      },
-      "kit_tags": [
-        "heal_shield",
-        "ability"
-      ],
-      "wikiDescription": "Shields granted from your chosen ability are stronger and scaling with target's missing Health."
-    },
-    {
-      "slug": "overloaded",
-      "name": "Overloaded",
-      "rarity": "prismatic",
-      "icon": "https://arammayhem.com/augments/Overloaded_mayhem_augment.webp",
-      "name_zh_CN": "超负荷",
-      "name_zh_TW": "輸出超負荷",
-      "name_ja": "オーバーロード",
-      "name_ko": "과충전",
-      "type": "ability",
-      "flags": {
-        "system_breaker": false,
-        "lifecycle": "added"
-      },
-      "kit_tags": [
-        "ability",
-        "haste"
-      ],
-      "wikiDescription": "Using another Ability resets the cooldown of your chosen ability."
+      "kit_tags": [],
+      "wikiDescription": "Enemy champions that you score a takedown against drop 6 – 10 (based on level) coins, with each coin landing 500 units away from the location of their death and lasting 10 seconds. You or allied champions can collect the coins by moving over them, granting 15 for each coin collected."
     },
     {
       "slug": "bread-and-butter",
@@ -2513,6 +2473,83 @@
       "type": "standalone"
     },
     {
+      "slug": "adaptive-ward",
+      "name": "Adaptive Ward",
+      "rarity": "silver",
+      "icon": "https://arammayhem.com/augments/Adaptive_Ward_mayhem_augment.webp",
+      "name_zh_CN": "自适应防护",
+      "name_zh_TW": "適性之護",
+      "name_ja": "アダプティブワード",
+      "name_ko": "적응형 와드",
+      "type": "standalone",
+      "flags": {
+        "system_breaker": false,
+        "lifecycle": "added"
+      },
+      "kit_tags": [
+        "tank",
+        "ability"
+      ],
+      "wikiDescription": "Upgrades one of your champion's abilities , empowering the ability to grant you 5 – 10 (based on level) bonus armor or bonus magic resistance for 6 seconds when it hits an enemy champion (4 second cooldown). This effect can stack up to a number of times. The resistance type granted is based on the target's adaptive type : bonus armor for physical and bonus magic resistance for magic ."
+    },
+    {
+      "slug": "mercys-strike",
+      "name": "Mercy's Strike",
+      "rarity": "gold",
+      "icon": "https://arammayhem.com/augments/Mercy_s_Strike_mayhem_augment.webp",
+      "name_zh_CN": "仁慈打击",
+      "name_zh_TW": "慈悲之擊",
+      "name_ja": "慈悲の一撃",
+      "name_ko": "자비의 일격",
+      "type": "standalone",
+      "flags": {
+        "system_breaker": false,
+        "lifecycle": "added"
+      },
+      "kit_tags": [
+        "ability",
+        "attack"
+      ],
+      "wikiDescription": "Upgrades one of your champion's abilities , empowering the ability's cast to enhance your next basic attack within a duration. The enhanced attack has 300 bonus range, gains 75% bonus attack speed , and deals bonus magic damage equal to 3% (+ 2% per 10% heal and shield power) of the target's maximum health ."
+    },
+    {
+      "slug": "overloaded",
+      "name": "Overloaded",
+      "rarity": "prismatic",
+      "icon": "https://arammayhem.com/augments/Overloaded_mayhem_augment.webp",
+      "name_zh_CN": "超负荷",
+      "name_zh_TW": "輸出超負荷",
+      "name_ja": "オーバーロード",
+      "name_ko": "과충전",
+      "type": "ability",
+      "flags": {
+        "system_breaker": false,
+        "lifecycle": "added"
+      },
+      "kit_tags": [
+        "ability",
+        "haste"
+      ],
+      "wikiDescription": "Using another Ability resets the cooldown of your chosen ability."
+    },
+    {
+      "slug": "infernal-soul",
+      "name": "Infernal Soul",
+      "rarity": "silver",
+      "icon": "https://arammayhem.com/augments/Infernal_Soul_mayhem_augment.webp",
+      "name_zh_CN": "炼狱龙魂",
+      "name_zh_TW": "煉獄惡靈",
+      "name_ja": "インファーナルソウル",
+      "name_ko": "지옥불 영혼",
+      "wikiDescription": "Grants the Infernal Dragon Soul , or a different Dragon Soul if you aleady have it.",
+      "kit_tags": [],
+      "flags": {
+        "system_breaker": false,
+        "lifecycle": "active"
+      },
+      "type": "standalone"
+    },
+    {
       "slug": "flashbang",
       "name": "Flashbang",
       "rarity": "silver",
@@ -2532,26 +2569,6 @@
         "lifecycle": "active"
       },
       "type": "standalone"
-    },
-    {
-      "slug": "mercys-strike",
-      "name": "Mercy's Strike",
-      "rarity": "gold",
-      "icon": "https://arammayhem.com/augments/Mercy_s_Strike_mayhem_augment.webp",
-      "name_zh_CN": "仁慈打击",
-      "name_zh_TW": "慈悲之擊",
-      "name_ja": "慈悲の一撃",
-      "name_ko": "자비의 일격",
-      "type": "ability",
-      "flags": {
-        "system_breaker": false,
-        "lifecycle": "added"
-      },
-      "kit_tags": [
-        "ability",
-        "attack"
-      ],
-      "wikiDescription": "Upgrades one of your champion's abilities , empowering the ability's cast to enhance your next basic attack within a duration. The enhanced attack has 300 bonus range, gains 75% bonus attack speed , and deals bonus magic damage equal to 3% (+ 2% per 10% heal and shield power) of the target's maximum health ."
     },
     {
       "slug": "ok-boomerang",
@@ -2576,54 +2593,18 @@
       "type": "standalone"
     },
     {
-      "slug": "infernal-soul",
-      "name": "Infernal Soul",
-      "rarity": "silver",
-      "icon": "https://arammayhem.com/augments/Infernal_Soul_mayhem_augment.webp",
-      "name_zh_CN": "炼狱龙魂",
-      "name_zh_TW": "煉獄惡靈",
-      "name_ja": "インファーナルソウル",
-      "name_ko": "지옥불 영혼",
-      "wikiDescription": "Grants the Infernal Dragon Soul , or a different Dragon Soul if you aleady have it.",
-      "kit_tags": [],
-      "flags": {
-        "system_breaker": false,
-        "lifecycle": "active"
-      },
-      "type": "standalone"
-    },
-    {
-      "slug": "stats-on-stats-on-stats",
-      "name": "Stats on Stats on Stats!",
-      "rarity": "prismatic",
-      "icon": "https://arammayhem.com/augments/Stats_on_Stats_on_Stats!_mayhem_augment.webp",
-      "name_zh_CN": "属性叠属性叠属性！",
-      "name_zh_TW": "能力值堆堆堆起來！",
-      "name_ja": "ステータス上のステータス上のステータス！",
-      "name_ko": "능력치 더하기 능력치 더하기 능력치!",
-      "wikiDescription": "Gain 4 Stat Anvils , with a higher chance of obtaining Gold and Prismatic tier anvils. Additionally, on the next round of augment selection, you gain an additional reroll per augment slot.",
-      "wikiSet": "High Roller",
-      "kit_tags": [],
-      "set": "high_roller",
-      "flags": {
-        "system_breaker": false,
-        "lifecycle": "active"
-      },
-      "type": "standalone"
-    },
-    {
-      "slug": "circle-of-death",
-      "name": "Circle of Death",
-      "rarity": "prismatic",
-      "icon": "https://arammayhem.com/augments/Circle_of_Death_mayhem_augment.webp",
-      "name_zh_CN": "死亡之环",
-      "name_zh_TW": "死亡循環",
-      "name_ja": "死者の集い",
-      "name_ko": "죽음의 순환",
-      "wikiDescription": "Healing and health regeneration you do causes you to deal 70% of that value in magic damage to the nearest enemy champion within 1000 units.",
+      "slug": "bread-and-jam",
+      "name": "Bread And Jam",
+      "rarity": "gold",
+      "icon": "https://arammayhem.com/augments/Bread_And_Jam_mayhem_augment.webp",
+      "name_zh_CN": "面包和果酱",
+      "name_zh_TW": "土司和果醬",
+      "name_ja": "パンとジャム",
+      "name_ko": "빵과 잼",
+      "wikiDescription": "Your champion's second basic ability (W) gains 100 ability haste .",
       "kit_tags": [
-        "heal_shield",
-        "dot"
+        "ability",
+        "haste"
       ],
       "flags": {
         "system_breaker": false,
@@ -2645,6 +2626,25 @@
         "attack",
         "ability"
       ],
+      "flags": {
+        "system_breaker": false,
+        "lifecycle": "active"
+      },
+      "type": "standalone"
+    },
+    {
+      "slug": "stats-on-stats-on-stats",
+      "name": "Stats on Stats on Stats!",
+      "rarity": "prismatic",
+      "icon": "https://arammayhem.com/augments/Stats_on_Stats_on_Stats!_mayhem_augment.webp",
+      "name_zh_CN": "属性叠属性叠属性！",
+      "name_zh_TW": "能力值堆堆堆起來！",
+      "name_ja": "ステータス上のステータス上のステータス！",
+      "name_ko": "능력치 더하기 능력치 더하기 능력치!",
+      "wikiDescription": "Gain 4 Stat Anvils , with a higher chance of obtaining Gold and Prismatic tier anvils. Additionally, on the next round of augment selection, you gain an additional reroll per augment slot.",
+      "wikiSet": "High Roller",
+      "kit_tags": [],
+      "set": "high_roller",
       "flags": {
         "system_breaker": false,
         "lifecycle": "active"
@@ -2675,26 +2675,6 @@
       "type": "standalone"
     },
     {
-      "slug": "bread-and-jam",
-      "name": "Bread And Jam",
-      "rarity": "gold",
-      "icon": "https://arammayhem.com/augments/Bread_And_Jam_mayhem_augment.webp",
-      "name_zh_CN": "面包和果酱",
-      "name_zh_TW": "土司和果醬",
-      "name_ja": "パンとジャム",
-      "name_ko": "빵과 잼",
-      "wikiDescription": "Your champion's second basic ability (W) gains 100 ability haste .",
-      "kit_tags": [
-        "ability",
-        "haste"
-      ],
-      "flags": {
-        "system_breaker": false,
-        "lifecycle": "active"
-      },
-      "type": "standalone"
-    },
-    {
       "slug": "searing-dawn",
       "name": "Searing Dawn",
       "rarity": "gold",
@@ -2707,6 +2687,66 @@
       "kit_tags": [
         "ability",
         "on_hit"
+      ],
+      "flags": {
+        "system_breaker": false,
+        "lifecycle": "active"
+      },
+      "type": "standalone"
+    },
+    {
+      "slug": "ultimate-revolution",
+      "name": "Ultimate Revolution",
+      "rarity": "prismatic",
+      "icon": "https://arammayhem.com/augments/Ultimate_Revolution_mayhem_augment.webp",
+      "name_zh_CN": "终极刷新",
+      "name_zh_TW": "大絕轉盤",
+      "name_ja": "究極進化",
+      "name_ko": "궁극기 대변혁",
+      "wikiDescription": "Casting your ultimate ability resets its cooldown once its effect starts or has elapsed (75 second cooldown, reset upon death).",
+      "kit_tags": [
+        "ability",
+        "haste"
+      ],
+      "flags": {
+        "system_breaker": false,
+        "lifecycle": "active"
+      },
+      "type": "standalone"
+    },
+    {
+      "slug": "circle-of-death",
+      "name": "Circle of Death",
+      "rarity": "prismatic",
+      "icon": "https://arammayhem.com/augments/Circle_of_Death_mayhem_augment.webp",
+      "name_zh_CN": "死亡之环",
+      "name_zh_TW": "死亡循環",
+      "name_ja": "死者の集い",
+      "name_ko": "죽음의 순환",
+      "wikiDescription": "Healing and health regeneration you do causes you to deal 70% of that value in magic damage to the nearest enemy champion within 1000 units.",
+      "kit_tags": [
+        "heal_shield",
+        "dot"
+      ],
+      "flags": {
+        "system_breaker": false,
+        "lifecycle": "active"
+      },
+      "type": "standalone"
+    },
+    {
+      "slug": "firebrand",
+      "name": "Firebrand",
+      "rarity": "gold",
+      "icon": "https://arammayhem.com/augments/Firebrand_mayhem_augment.webp",
+      "name_zh_CN": "火上浇油",
+      "name_zh_TW": "煽風點火",
+      "name_ja": "火付け役",
+      "name_ko": "화염 낙인",
+      "wikiDescription": "Basic attacks apply a Burn for 5 seconds that deals bonus magic damage equal to 「 0. 4 % of the target's maximum health per second. 」 「 2% of the target's maximum health over the duration. 」 This Burn stacks infinitely and refreshes with each application.",
+      "kit_tags": [
+        "attack",
+        "dot"
       ],
       "flags": {
         "system_breaker": false,
@@ -2736,59 +2776,20 @@
       "type": "standalone"
     },
     {
-      "slug": "shark-bait",
-      "name": "Shark Bait",
-      "rarity": "gold",
-      "icon": "https://arammayhem.com/augments/Shark_Bait_mayhem_augment.webp",
-      "name_zh_CN": "鲨鱼诱饵",
-      "name_zh_TW": "鯊魚誘餌",
-      "name_ja": "サメのエサ",
-      "name_ko": "상어 미끼",
-      "type": "standalone",
-      "flags": {
-        "system_breaker": false,
-        "lifecycle": "added"
-      },
+      "slug": "dive-bomber",
+      "name": "Dive Bomber",
+      "rarity": "silver",
+      "icon": "https://arammayhem.com/augments/Dive_Bomber_mayhem_augment.webp",
+      "name_zh_CN": "俯冲轰炸",
+      "name_zh_TW": "自爆炸彈客",
+      "name_ja": "急降下爆撃",
+      "name_ko": "폭격기",
+      "wikiDescription": "Upon death, you explode to deal true damage equal to 20% of the target's maximum health to enemies within 500 units.",
+      "wikiSet": "Dive Bomb",
       "kit_tags": [
-        "cc",
         "dot"
       ],
-      "wikiDescription": "Upon taking fatal damage , you become a Shark Bait , causing you to enter a zombie state for 3. 5 seconds, during which your movement speed is set to a static 400 , you gain ghosting , and enemies within 400 units of you are slowed by 40%. At the end of the duration, a massive shark emerges from beneath you that lets out a powerful chomp (400 radius), dealing 80 – 300 (based on level) (+ 20% of target's missing health) magic damage to all enemies within the area and knocking them up for 1 second. While under the zombie state, you are able to move and become invulnerable , untargetable , and immune to crowd control , but you are also rendered unable to declare basic attacks , cast abilities , use summoner spells , and activate items ."
-    },
-    {
-      "slug": "ultimate-revolution",
-      "name": "Ultimate Revolution",
-      "rarity": "prismatic",
-      "icon": "https://arammayhem.com/augments/Ultimate_Revolution_mayhem_augment.webp",
-      "name_zh_CN": "终极刷新",
-      "name_zh_TW": "大絕轉盤",
-      "name_ja": "究極進化",
-      "name_ko": "궁극기 대변혁",
-      "wikiDescription": "Casting your ultimate ability resets its cooldown once its effect starts or has elapsed (75 second cooldown, reset upon death).",
-      "kit_tags": [
-        "ability",
-        "haste"
-      ],
-      "flags": {
-        "system_breaker": false,
-        "lifecycle": "active"
-      },
-      "type": "standalone"
-    },
-    {
-      "slug": "firebrand",
-      "name": "Firebrand",
-      "rarity": "gold",
-      "icon": "https://arammayhem.com/augments/Firebrand_mayhem_augment.webp",
-      "name_zh_CN": "火上浇油",
-      "name_zh_TW": "煽風點火",
-      "name_ja": "火付け役",
-      "name_ko": "화염 낙인",
-      "wikiDescription": "Basic attacks apply a Burn for 5 seconds that deals bonus magic damage equal to 「 0. 4 % of the target's maximum health per second. 」 「 2% of the target's maximum health over the duration. 」 This Burn stacks infinitely and refreshes with each application.",
-      "kit_tags": [
-        "attack",
-        "dot"
-      ],
+      "set": "dive_bomb",
       "flags": {
         "system_breaker": false,
         "lifecycle": "active"
@@ -2816,25 +2817,24 @@
       "type": "standalone"
     },
     {
-      "slug": "dive-bomber",
-      "name": "Dive Bomber",
-      "rarity": "silver",
-      "icon": "https://arammayhem.com/augments/Dive_Bomber_mayhem_augment.webp",
-      "name_zh_CN": "俯冲轰炸",
-      "name_zh_TW": "自爆炸彈客",
-      "name_ja": "急降下爆撃",
-      "name_ko": "폭격기",
-      "wikiDescription": "Upon death, you explode to deal true damage equal to 20% of the target's maximum health to enemies within 500 units.",
-      "wikiSet": "Dive Bomb",
-      "kit_tags": [
-        "dot"
-      ],
-      "set": "dive_bomb",
+      "slug": "shark-bait",
+      "name": "Shark Bait",
+      "rarity": "gold",
+      "icon": "https://arammayhem.com/augments/Shark_Bait_mayhem_augment.webp",
+      "name_zh_CN": "鲨鱼诱饵",
+      "name_zh_TW": "鯊魚誘餌",
+      "name_ja": "サメのエサ",
+      "name_ko": "상어 미끼",
+      "type": "standalone",
       "flags": {
         "system_breaker": false,
-        "lifecycle": "active"
+        "lifecycle": "added"
       },
-      "type": "standalone"
+      "kit_tags": [
+        "cc",
+        "dot"
+      ],
+      "wikiDescription": "Upon taking fatal damage , you become a Shark Bait , causing you to enter a zombie state for 3. 5 seconds, during which your movement speed is set to a static 400 , you gain ghosting , and enemies within 400 units of you are slowed by 40%. At the end of the duration, a massive shark emerges from beneath you that lets out a powerful chomp (400 radius), dealing 80 – 300 (based on level) (+ 20% of target's missing health) magic damage to all enemies within the area and knocking them up for 1 second. While under the zombie state, you are able to move and become invulnerable , untargetable , and immune to crowd control , but you are also rendered unable to declare basic attacks , cast abilities , use summoner spells , and activate items ."
     },
     {
       "slug": "fey-magic",
@@ -2893,6 +2893,26 @@
       "wikiDescription": "Standing in Brush regenerates the required number of max Health per second."
     },
     {
+      "slug": "poltergeist",
+      "name": "Poltergeist",
+      "rarity": "silver",
+      "icon": "https://arammayhem.com/augments/Poltergeist_mayhem_augment.webp",
+      "name_zh_CN": "吵闹鬼",
+      "name_zh_TW": "守護面紗",
+      "name_ja": "ポルターガイスト",
+      "name_ko": "폴터가이스트",
+      "wikiDescription": "Replace a summoner spell with Poltergeist . Poltergeist: Casts both Barrier and Ghost on yourself, both lasting 5 seconds and with the former granting a shield for 110 – 440 (based on level) and the latter granting 30% bonus movement speed .",
+      "kit_tags": [
+        "heal_shield",
+        "movement"
+      ],
+      "flags": {
+        "system_breaker": false,
+        "lifecycle": "active"
+      },
+      "type": "standalone"
+    },
+    {
       "slug": "spiritual-purification",
       "name": "Spiritual Purification",
       "rarity": "gold",
@@ -2906,26 +2926,6 @@
         "ability",
         "dot",
         "cc"
-      ],
-      "flags": {
-        "system_breaker": false,
-        "lifecycle": "active"
-      },
-      "type": "standalone"
-    },
-    {
-      "slug": "poltergeist",
-      "name": "Poltergeist",
-      "rarity": "silver",
-      "icon": "https://arammayhem.com/augments/Poltergeist_mayhem_augment.webp",
-      "name_zh_CN": "吵闹鬼",
-      "name_zh_TW": "守護面紗",
-      "name_ja": "ポルターガイスト",
-      "name_ko": "폴터가이스트",
-      "wikiDescription": "Replace a summoner spell with Poltergeist . Poltergeist: Casts both Barrier and Ghost on yourself, both lasting 5 seconds and with the former granting a shield for 110 – 440 (based on level) and the latter granting 30% bonus movement speed .",
-      "kit_tags": [
-        "heal_shield",
-        "movement"
       ],
       "flags": {
         "system_breaker": false,
@@ -2975,25 +2975,6 @@
       "type": "standalone"
     },
     {
-      "slug": "nightstalking",
-      "name": "Nightstalking",
-      "rarity": "gold",
-      "icon": "https://arammayhem.com/augments/Nightstalking_mayhem_augment.webp",
-      "name_zh_CN": "夜狩",
-      "name_zh_TW": "終城快車",
-      "name_ja": "ナイトストーク",
-      "name_ko": "밤의 추적",
-      "wikiDescription": "Scoring a takedown against an enemy champion within 3 seconds of damaging them renders you invisible for 1. 5 seconds. Attacking or casting abilites ends the stealth immediately.",
-      "kit_tags": [
-        "cc"
-      ],
-      "flags": {
-        "system_breaker": false,
-        "lifecycle": "active"
-      },
-      "type": "standalone"
-    },
-    {
       "slug": "juiced",
       "name": "Juiced",
       "rarity": "silver",
@@ -3019,25 +3000,23 @@
       "type": "standalone"
     },
     {
-      "slug": "hellbent",
-      "name": "Hellbent",
-      "rarity": "prismatic",
-      "icon": "https://arammayhem.com/augments/Hellbent_mayhem_augment.webp",
-      "name_zh_CN": "濒死悟道",
-      "name_zh_TW": "陰魂不散",
-      "name_ja": "ヘルベント",
-      "name_ko": "열의",
-      "type": "standalone",
+      "slug": "nightstalking",
+      "name": "Nightstalking",
+      "rarity": "gold",
+      "icon": "https://arammayhem.com/augments/Nightstalking_mayhem_augment.webp",
+      "name_zh_CN": "夜狩",
+      "name_zh_TW": "終城快車",
+      "name_ja": "ナイトストーク",
+      "name_ko": "밤의 추적",
+      "wikiDescription": "Scoring a takedown against an enemy champion within 3 seconds of damaging them renders you invisible for 1. 5 seconds. Attacking or casting abilites ends the stealth immediately.",
+      "kit_tags": [
+        "cc"
+      ],
       "flags": {
         "system_breaker": false,
-        "lifecycle": "added"
+        "lifecycle": "active"
       },
-      "kit_tags": [
-        "attack",
-        "ability",
-        "heal_shield"
-      ],
-      "wikiDescription": "Damaging enemy champions with Attacks or Abilities grants stacks. At max stacks, you revive empowered upon death."
+      "type": "standalone"
     },
     {
       "slug": "tripleshot",
@@ -3056,7 +3035,48 @@
       "kit_tags": [
         "ability"
       ],
-      "wikiDescription": "Your chosen ability targets 2 additional enemies in front of you."
+      "wikiDescription": "Upgrades one of your champion's abilities that is unit-targeted and fires a missile, empowering the ability to fire its missiles at two additional enemies in front of you. Subsequent hits from the same cast against the same enemy deal 30% damage."
+    },
+    {
+      "slug": "protein-shake",
+      "name": "Protein Shake",
+      "rarity": "prismatic",
+      "icon": "https://arammayhem.com/augments/Protein_Shake_mayhem_augment.webp",
+      "name_zh_CN": "蛋白粉奶昔",
+      "name_zh_TW": "蛋白飲",
+      "name_ja": "プロテインシェイク",
+      "name_ko": "프로틴 음료",
+      "wikiDescription": "Gain 25% (+ 35% per 100 bonus armor) (+ 35% per 100 bonus magic resistance) heal and shield power .",
+      "kit_tags": [
+        "heal_shield",
+        "tank"
+      ],
+      "flags": {
+        "system_breaker": false,
+        "lifecycle": "active"
+      },
+      "type": "standalone"
+    },
+    {
+      "slug": "hellbent",
+      "name": "Hellbent",
+      "rarity": "prismatic",
+      "icon": "https://arammayhem.com/augments/Hellbent_mayhem_augment.webp",
+      "name_zh_CN": "濒死悟道",
+      "name_zh_TW": "陰魂不散",
+      "name_ja": "ヘルベント",
+      "name_ko": "열의",
+      "type": "standalone",
+      "flags": {
+        "system_breaker": false,
+        "lifecycle": "added"
+      },
+      "kit_tags": [
+        "attack",
+        "ability",
+        "heal_shield"
+      ],
+      "wikiDescription": "Generate a stack of Revivemaxxing for each enemy champion you hit with basic attacks or abilities, lasting for 6 seconds, refreshing on subsequent hits, and stacking up to 10 times. At maximum stacks, you become Hellbent . Hellbent: Upon taking lethal damage , you enter resurrection for 4 seconds, during which you are invulnerable , untargetable , and unable to act . Afterwards, you revive with 35% – 75% (based on level) of your maximum health (120 second cooldown). Additionally, you become empowered for the next 15 seconds, granting you 15 – 120 (based on level) bonus Attack Damage or 25 – 200 (based on level) Ability Power ( Adaptive ), 20% – 40% (based on level) bonus movement speed while facing toward nearby enemy champions, and 15% – 30% (based on level) omnivamp for the duration."
     },
     {
       "slug": "empyrean-promise",
@@ -3072,6 +3092,25 @@
         "heal_shield",
         "movement",
         "ability"
+      ],
+      "flags": {
+        "system_breaker": false,
+        "lifecycle": "active"
+      },
+      "type": "standalone"
+    },
+    {
+      "slug": "kill-secured",
+      "name": "Kill Secured",
+      "rarity": "silver",
+      "icon": "https://arammayhem.com/augments/Kill_Secured_mayhem_augment.webp",
+      "name_zh_CN": "杀意翻涌",
+      "name_zh_TW": "收頭好手",
+      "name_ja": "キルを確認",
+      "name_ko": "확보된 킬",
+      "wikiDescription": "Gain 60% bonus movement speed towards enemy champions below 40% of their maximum health .",
+      "kit_tags": [
+        "movement"
       ],
       "flags": {
         "system_breaker": false,
@@ -3098,45 +3137,6 @@
         "cc"
       ],
       "wikiDescription": "Taking damage from champions builds up a burst of needles that fly out of you, dealing damage and slowing nearby enemies."
-    },
-    {
-      "slug": "kill-secured",
-      "name": "Kill Secured",
-      "rarity": "silver",
-      "icon": "https://arammayhem.com/augments/Kill_Secured_mayhem_augment.webp",
-      "name_zh_CN": "杀意翻涌",
-      "name_zh_TW": "收頭好手",
-      "name_ja": "キルを確認",
-      "name_ko": "확보된 킬",
-      "wikiDescription": "Gain 60% bonus movement speed towards enemy champions below 40% of their maximum health .",
-      "kit_tags": [
-        "movement"
-      ],
-      "flags": {
-        "system_breaker": false,
-        "lifecycle": "active"
-      },
-      "type": "standalone"
-    },
-    {
-      "slug": "protein-shake",
-      "name": "Protein Shake",
-      "rarity": "prismatic",
-      "icon": "https://arammayhem.com/augments/Protein_Shake_mayhem_augment.webp",
-      "name_zh_CN": "蛋白粉奶昔",
-      "name_zh_TW": "蛋白飲",
-      "name_ja": "プロテインシェイク",
-      "name_ko": "프로틴 음료",
-      "wikiDescription": "Gain 25% (+ 35% per 100 bonus armor) (+ 35% per 100 bonus magic resistance) heal and shield power .",
-      "kit_tags": [
-        "heal_shield",
-        "tank"
-      ],
-      "flags": {
-        "system_breaker": false,
-        "lifecycle": "active"
-      },
-      "type": "standalone"
     },
     {
       "slug": "stuck-in-here-with-me",
@@ -3198,21 +3198,19 @@
       "wikiDescription": "Your chosen ability missile splits into two on hit, at max Range, or when Recast."
     },
     {
-      "slug": "prom-queen",
-      "name": "Prom Queen",
-      "rarity": "prismatic",
-      "icon": "https://arammayhem.com/augments/Prom_Queen_mayhem_augment.webp",
-      "name_zh_CN": "舞会女王",
-      "name_zh_TW": "舞會皇后",
-      "name_ja": "プロムクイーン",
-      "name_ko": "퀸카",
-      "wikiDescription": "Automatically cast a modified version of Rakan's The Quickness , empowering you to break into a captivating sprint for 6 seconds. While empowered, you gain ghosting and 50% bonus movement speed , and enemies you collide with are knocked down and become charmed for 1. 5 seconds (35 second cooldown). A sparkly tiara will descend upon you 2. 5 seconds before the effect activates.",
-      "wikiSet": "Fully Automated",
+      "slug": "flash-2",
+      "name": "Flash 2",
+      "rarity": "silver",
+      "icon": "https://arammayhem.com/augments/Flash_2_mayhem_augment.webp",
+      "name_zh_CN": "闪闪现现",
+      "name_zh_TW": "二次閃現",
+      "name_ja": "フラッシュ2",
+      "name_ko": "점멸 2",
+      "wikiDescription": "Replace a summoner spell with Flash . Additionally, gain 70 summoner spell haste.",
       "kit_tags": [
-        "movement",
-        "cc"
+        "haste",
+        "movement"
       ],
-      "set": "fully_automated",
       "flags": {
         "system_breaker": false,
         "lifecycle": "active"
@@ -3240,24 +3238,26 @@
       "wikiDescription": "Sharks circle your Snowball, slowing and damaging nearby enemies. When your Snowball hits a Champion, they become trapped in a shark storm!"
     },
     {
-      "slug": "cant-touch-this",
-      "name": "Cant Touch This",
+      "slug": "prom-queen",
+      "name": "Prom Queen",
       "rarity": "prismatic",
-      "icon": "https://arammayhem.com/augments/Cant_Touch_This_mayhem_augment.webp",
-      "name_zh_CN": "你摸不到",
-      "name_zh_TW": "空增幅裝置",
-      "name_ja": "ヤケドするぜ",
-      "name_ko": "난공불락",
+      "icon": "https://arammayhem.com/augments/Prom_Queen_mayhem_augment.webp",
+      "name_zh_CN": "舞会女王",
+      "name_zh_TW": "舞會皇后",
+      "name_ja": "プロムクイーン",
+      "name_ko": "퀸카",
+      "wikiDescription": "Automatically cast a modified version of Rakan's The Quickness , empowering you to break into a captivating sprint for 6 seconds. While empowered, you gain ghosting and 50% bonus movement speed , and enemies you collide with are knocked down and become charmed for 1. 5 seconds (35 second cooldown). A sparkly tiara will descend upon you 2. 5 seconds before the effect activates.",
+      "wikiSet": "Fully Automated",
       "kit_tags": [
-        "ability",
-        "tank"
+        "movement",
+        "cc"
       ],
+      "set": "fully_automated",
       "flags": {
         "system_breaker": false,
         "lifecycle": "active"
       },
-      "type": "standalone",
-      "wikiDescription": "Casting your ultimate grants you invulnerability for 2 seconds (8 second cooldown)."
+      "type": "standalone"
     },
     {
       "slug": "pandorasbox",
@@ -3275,45 +3275,6 @@
       },
       "type": "standalone",
       "wikiDescription": "Your current augments transform into an equal number of completely random Prismatic ones."
-    },
-    {
-      "slug": "hide-on-bush",
-      "name": "Hide on Bush",
-      "rarity": "gold",
-      "icon": "https://arammayhem.com/augments/Hide_on_Bush_mayhem_augment.webp",
-      "name_zh_CN": "藏身草丛",
-      "name_zh_TW": "躲草叢",
-      "name_ja": "Hide on Bush",
-      "name_ko": "Hide on bush",
-      "type": "standalone",
-      "flags": {
-        "system_breaker": false,
-        "lifecycle": "added"
-      },
-      "kit_tags": [
-        "ability"
-      ],
-      "wikiDescription": "After entering Brush, deal the required number of% more damage for the required number of seconds. Remain in the Brush to refresh the effect."
-    },
-    {
-      "slug": "rite-of-ascension",
-      "name": "Rite of Ascension",
-      "rarity": "prismatic",
-      "icon": "https://arammayhem.com/augments/Rite_of_Ascension_mayhem_augment.webp",
-      "name_zh_CN": "飞升仪式",
-      "name_zh_TW": "昇華儀式",
-      "name_ja": "超越の儀式",
-      "name_ko": "초월 의식",
-      "type": "standalone",
-      "flags": {
-        "system_breaker": false,
-        "lifecycle": "added"
-      },
-      "kit_tags": [
-        "movement",
-        "haste"
-      ],
-      "wikiDescription": "Scoring a takedown against an enemy champion within 3 seconds of damaging them causes them to leave behind their Essence for 8 seconds. You can basic attack the Essence to consume it: causing you to blink to its location after winding up for 1 second, during which you are untargetable (except to turrets ), displacement immune , and unable to act . Upon consumption of the Essence , you gain 100% bonus movement speed decaying over 2 seconds, heal yourself for 75 – 300 (based on level) (+ 50% bonus AD) (+ 25% AP) , and reset the cooldowns of your basic abilities. The heal is increased by 0% – 100% (based on missing health at the time of consumption) , for a maximum heal of 150 – 600 (based on level) (+ 100% bonus AD) (+ 50% AP) ."
     },
     {
       "slug": "triggered-inferno",
@@ -3337,6 +3298,45 @@
       "type": "standalone"
     },
     {
+      "slug": "hide-on-bush",
+      "name": "Hide on Bush",
+      "rarity": "gold",
+      "icon": "https://arammayhem.com/augments/Hide_on_Bush_mayhem_augment.webp",
+      "name_zh_CN": "藏身草丛",
+      "name_zh_TW": "躲草叢",
+      "name_ja": "Hide on Bush",
+      "name_ko": "Hide on bush",
+      "type": "standalone",
+      "flags": {
+        "system_breaker": false,
+        "lifecycle": "added"
+      },
+      "kit_tags": [
+        "ability"
+      ],
+      "wikiDescription": "While in brush , you deal 20% increased damage. This effect lingers for 2 seconds after leaving brush."
+    },
+    {
+      "slug": "cant-touch-this",
+      "name": "Cant Touch This",
+      "rarity": "prismatic",
+      "icon": "https://arammayhem.com/augments/Cant_Touch_This_mayhem_augment.webp",
+      "name_zh_CN": "你摸不到",
+      "name_zh_TW": "空增幅裝置",
+      "name_ja": "ヤケドするぜ",
+      "name_ko": "난공불락",
+      "kit_tags": [
+        "ability",
+        "tank"
+      ],
+      "flags": {
+        "system_breaker": false,
+        "lifecycle": "active"
+      },
+      "type": "standalone",
+      "wikiDescription": "Casting your ultimate grants you invulnerability for 2 seconds (8 second cooldown)."
+    },
+    {
       "slug": "snowday",
       "name": "Snowday",
       "rarity": "silver",
@@ -3354,7 +3354,27 @@
         "ability",
         "haste"
       ],
-      "wikiDescription": "Gain 100 Ability Haste on your Snowball. It deals additional magic damage when hitting an enemy. If you don't have one, gain a Snowball."
+      "wikiDescription": "Your Mark deals bonus magic damage equal to 100% of its damage and has its cooldown reduced equivalent to 100 ability haste. If Mark is not equipped, you will be prompted to replace one of your summoner spells with Mark ."
+    },
+    {
+      "slug": "rite-of-ascension",
+      "name": "Rite of Ascension",
+      "rarity": "prismatic",
+      "icon": "https://arammayhem.com/augments/Rite_of_Ascension_mayhem_augment.webp",
+      "name_zh_CN": "飞升仪式",
+      "name_zh_TW": "昇華儀式",
+      "name_ja": "超越の儀式",
+      "name_ko": "초월 의식",
+      "type": "standalone",
+      "flags": {
+        "system_breaker": false,
+        "lifecycle": "added"
+      },
+      "kit_tags": [
+        "movement",
+        "haste"
+      ],
+      "wikiDescription": "Scoring a takedown against an enemy champion within 3 seconds of damaging them causes them to leave behind their Essence for 8 seconds. You can basic attack the Essence to consume it: causing you to blink to its location after winding up for 1 second, during which you are untargetable (except to turrets ), displacement immune , and unable to act . Upon consumption of the Essence , you gain 100% bonus movement speed decaying over 2 seconds, heal yourself for 75 – 300 (based on level) (+ 50% bonus AD) (+ 25% AP) , and reset the cooldowns of your basic abilities. The heal is increased by 0% – 100% (based on your missing health) , for a maximum heal of 150 – 600 (based on level) (+ 100% bonus AD) (+ 50% AP) ."
     },
     {
       "slug": "shrink-ray",
@@ -3370,26 +3390,6 @@
         "attack",
         "on_hit",
         "cc"
-      ],
-      "flags": {
-        "system_breaker": false,
-        "lifecycle": "active"
-      },
-      "type": "standalone"
-    },
-    {
-      "slug": "flash-2",
-      "name": "Flash 2",
-      "rarity": "silver",
-      "icon": "https://arammayhem.com/augments/Flash_2_mayhem_augment.webp",
-      "name_zh_CN": "闪闪现现",
-      "name_zh_TW": "二次閃現",
-      "name_ja": "フラッシュ2",
-      "name_ko": "점멸 2",
-      "wikiDescription": "Replace a summoner spell with Flash . Additionally, gain 70 summoner spell haste.",
-      "kit_tags": [
-        "haste",
-        "movement"
       ],
       "flags": {
         "system_breaker": false,
@@ -3454,48 +3454,7 @@
         "ability",
         "cc"
       ],
-      "wikiDescription": "Whenever you cast your chosen ability, Fear enemies around you."
-    },
-    {
-      "slug": "pin-cushion",
-      "name": "Pin Cushion",
-      "rarity": "prismatic",
-      "icon": "https://arammayhem.com/augments/Pin_Cushion_mayhem_augment.webp",
-      "name_zh_CN": "针插垫",
-      "name_zh_TW": "豪豬",
-      "name_ja": "針山",
-      "name_ko": "바늘꽂이",
-      "type": "ability",
-      "flags": {
-        "system_breaker": false,
-        "lifecycle": "added"
-      },
-      "kit_tags": [
-        "attack",
-        "ability",
-        "on_hit",
-        "movement"
-      ],
-      "wikiDescription": "Upgrades one of your champion's abilities that has a duration-based effect, empowering it to cause basic attacks during the ability's effect to apply stacks against enemy champions. At the end of the ability's duration, the stacks on all targets are consumed to grant you 10 bonus movement speed per stack consumed and deal 20 – 60 (based on level) physical damage to each affected target."
-    },
-    {
-      "slug": "multishot",
-      "name": "Multishot",
-      "rarity": "prismatic",
-      "icon": "https://arammayhem.com/augments/Multishot_mayhem_augment.webp",
-      "name_zh_CN": "多重射击",
-      "name_zh_TW": "多重射擊",
-      "name_ja": "マルチショット",
-      "name_ko": "다중 공격",
-      "type": "ability",
-      "flags": {
-        "system_breaker": false,
-        "lifecycle": "added"
-      },
-      "kit_tags": [
-        "ability"
-      ],
-      "wikiDescription": "QUEST: Hit enemy Champions with your chosen ability the required number of times. REWARD: Fire additional missiles per Quest Level."
+      "wikiDescription": "Upgrades one of your champion's abilities , empowering the ability's cast to fear all enemies within 450 units of you for 1. 75 seconds (30 second cooldown)."
     },
     {
       "slug": "titans-resolve",
@@ -3514,7 +3473,7 @@
       "kit_tags": [
         "tank"
       ],
-      "wikiDescription": "Gain stacks when taking or dealing damage. For every the required number of stacks, gain Adaptive Force, Armor, Magic Resist, Size, and Tenacity."
+      "wikiDescription": "You generate a stack of Juggernauting for each instance of damage you deal or take (excluding damage over time ), lasting for 6 seconds and refreshing on subsequent damage dealt or taken. For every 10 stacks of Juggernauting , you gain 15 – 30 (based on level) bonus Attack Damage or 25 – 50 (based on level) Ability Power ( Adaptive ), 4 – 8 (based on level) bonus armor and bonus magic resistance , 10% increased size, and 8% tenacity . Stacks expire one by one when the duration ends, with the decay rate being faster the more stacks you have."
     },
     {
       "slug": "pinball",
@@ -3537,6 +3496,47 @@
         "lifecycle": "active"
       },
       "type": "standalone"
+    },
+    {
+      "slug": "multishot",
+      "name": "Multishot",
+      "rarity": "prismatic",
+      "icon": "https://arammayhem.com/augments/Multishot_mayhem_augment.webp",
+      "name_zh_CN": "多重射击",
+      "name_zh_TW": "多重射擊",
+      "name_ja": "マルチショット",
+      "name_ko": "다중 공격",
+      "type": "ability",
+      "flags": {
+        "system_breaker": false,
+        "lifecycle": "added"
+      },
+      "kit_tags": [
+        "ability"
+      ],
+      "wikiDescription": "Assigns quests that require you to hit enemy champions with a specific ability's missile a number of times (counts up to 1 hit per champion per cast instance ). There are six quest tiers, and each completed tier rewards you with an additional missile fired on the ability's cast. The reward effect also modifies the ability to fire all of its missiles in a cone. Subsequent missile hits from the same cast against the same enemy deal 30% damage. Tier Quest Reward 1"
+    },
+    {
+      "slug": "pin-cushion",
+      "name": "Pin Cushion",
+      "rarity": "prismatic",
+      "icon": "https://arammayhem.com/augments/Pin_Cushion_mayhem_augment.webp",
+      "name_zh_CN": "针插垫",
+      "name_zh_TW": "豪豬",
+      "name_ja": "針山",
+      "name_ko": "바늘꽂이",
+      "type": "standalone",
+      "flags": {
+        "system_breaker": false,
+        "lifecycle": "added"
+      },
+      "kit_tags": [
+        "attack",
+        "ability",
+        "on_hit",
+        "movement"
+      ],
+      "wikiDescription": "Upgrades one of your champion's abilities that has a duration-based effect, empowering it to cause basic attacks during the ability's effect to apply stacks against enemy champions. At the end of the ability's duration, the stacks on all targets are consumed to grant you 10 bonus movement speed per stack consumed and deal 20 – 60 (based on level) physical damage to each affected target."
     },
     {
       "slug": "snowblast",
@@ -3579,6 +3579,27 @@
       "type": "standalone"
     },
     {
+      "slug": "surge-field",
+      "name": "Surge Field",
+      "rarity": "prismatic",
+      "icon": "https://arammayhem.com/augments/Surge_Field_mayhem_augment.webp",
+      "name_zh_CN": "电涌力场",
+      "name_zh_TW": "高能量場域",
+      "name_ja": "サージフィールド",
+      "name_ko": "방출 역장",
+      "type": "standalone",
+      "flags": {
+        "system_breaker": false,
+        "lifecycle": "added"
+      },
+      "kit_tags": [
+        "ability",
+        "haste",
+        "movement"
+      ],
+      "wikiDescription": "On Ultimate cast, spawn a Zone that grants Ability Haste and Movement Speed. While inside, it fires missiles that deal the required number of% of your damage."
+    },
+    {
       "slug": "holy-snowball",
       "name": "Holy Snowball",
       "rarity": "prismatic",
@@ -3619,27 +3640,6 @@
         "movement"
       ],
       "wikiDescription": "When you use your chosen ability, dash towards your cursor."
-    },
-    {
-      "slug": "surge-field",
-      "name": "Surge Field",
-      "rarity": "prismatic",
-      "icon": "https://arammayhem.com/augments/Surge_Field_mayhem_augment.webp",
-      "name_zh_CN": "电涌力场",
-      "name_zh_TW": "高能量場域",
-      "name_ja": "サージフィールド",
-      "name_ko": "방출 역장",
-      "type": "standalone",
-      "flags": {
-        "system_breaker": false,
-        "lifecycle": "added"
-      },
-      "kit_tags": [
-        "ability",
-        "haste",
-        "movement"
-      ],
-      "wikiDescription": "On Ultimate cast, spawn a Zone that grants Ability Haste and Movement Speed. While inside, it fires missiles that deal the required number of% of your damage."
     },
     {
       "slug": "glass-cannon",
@@ -3719,7 +3719,7 @@
         "ability",
         "movement"
       ],
-      "wikiDescription": "Poro-Snax will now randomly appear around you every 35 – 20 (based on level) seconds. You can pick up Poro-Snax by moving over them, granting you a Poro-Snax charge. Additionally, you remove the 2 charge limit of Poro-Snax . Feeding a Poro with a Poro-Snax generates a permanent stack of Poro Love . At 5 stacks, you unlock the An icon representing Poro Charge Poro Charge summoner spell and are prompted to replace one of your summoner spells with it. File:Poro Charge.png Poro Charge:"
+      "wikiDescription": "Poro-Snaxes will now randomly appear around you every 35 – 20 (based on level) seconds. You can pick up a Poro-Snax by moving over it, granting you a Poro-Snax charge. Poro-Snaxes will not spawn while you are at the maximum number of Poro-Snax charges (2). Feeding a Poro with a Poro-Snax generates a stack of Poro Love . At 5 stacks, you are granted the Poro Charge summoner spell and are prompted to replace one of your summoner spells with it. You are then assigned with quests that require you to reach a certain amount of Poro Love stacks. There are nine quest tiers, and each completed tier rewards you with an additional Poro wave for Poro Charge . Poro Charge: After a 1-second delay, you unleash a stampede of Poros , summoning a phalanx of 5 Poros that charge forward in the target direction. Enemies hit by the charge are dealt 50 – 100 (based on level) (+ 20 per Poro Love stack) physical damage , reduced to 15% against minions , and slowed by 85% for 2 seconds. Each Poro stops upon colliding with an enemy champion. Fire additional waves of Poros based on the number of Poro Love stacks you have. Each subsequent wave is fired 0. 75 seconds after the previous one. Enemy champions take 50% damage from subsequent waves that hit them. Tier Quest Reward 1"
     },
     {
       "slug": "mystery-augment",
@@ -3938,7 +3938,7 @@
       "name_zh_TW": "暴擊沖天炮",
       "name_ja": "クリティカルミサイル",
       "name_ko": "치명적 미사일",
-      "wikiDescription": "Critical strikes against enemy champions launch 1 (+ 1 per 33. 33 % critical strike chance) missile at the target that each deal 20 – 100 (based on level) magic damage . Additionally, gain 25% critical strike chance . Critical strikes from Jeweled Gauntlet and Vulnerability will launch missiles.",
+      "wikiDescription": "Critical strikes against enemy champions launch 1 (+ 1 per 33. 33 % critical strike chance) missiles at the target that each deal 20 – 100 (based on level) magic damage . Additionally, gain 25% critical strike chance . Critical strikes from Jeweled Gauntlet and Vulnerability will launch missiles.",
       "wikiSet": "Firecracker",
       "kit_tags": [
         "attack",
@@ -4045,7 +4045,7 @@
       "name_zh_TW": "空降水豚",
       "name_ja": "ドロッピバラ",
       "name_ko": "카피바라 폭격",
-      "wikiDescription": "Replace a summoner spell with Droppybara . Droppybara: Call upon a massive capybara to land down at the target location after 2. 5 seconds, dealing true damage equal to the 30% of the target's maximum health to enemies within a 650 radius. Deals 70% damage to minions. This augment is only offered to up to 1 player on each team for a given game.",
+      "wikiDescription": "Replace a summoner spell with Droppybara . Droppybara: Call upon a massive capybara to land down at the target location after 2. 5 seconds, dealing true damage equal to the 30% of the target's maximum health to enemies within a 650 radius. Deals 70% damage to minions. This augment is only offered to up to 1 player on each team for a given game. This augment is currently disabled.",
       "kit_tags": [
         "ability",
         "cc"
@@ -4491,7 +4491,7 @@
       "name_zh_TW": "追求力量",
       "name_ja": "力の追求",
       "name_ko": "위력 추구",
-      "type": "ability",
+      "type": "standalone",
       "flags": {
         "system_breaker": false,
         "lifecycle": "removed"
@@ -4734,7 +4734,7 @@
       "name_zh_TW": "雪球升級",
       "name_ja": "雪玉アップグレード",
       "name_ko": "눈덩이 업그레이드",
-      "wikiDescription": "Your Mark is empowered to hail a snowstorm at the location where the target was hit for 2 seconds, granting sight of the area and dealing 「 200 (+ 200% bonus AD) (+ 120% AP) magic damage 」 「 25 (+ 25% bonus AD) (+ 15% AP) magic damage every 0. 25 seconds 」 to enemies within over the duration, as well as slowing them by 50% (+ 6% per 100 AP) . Additionally, your Mark's cooldown is reduced equivalent to 50 ability haste. If Mark is not equipped, you will be prompted to replace one of your summoner spells with Mark .",
+      "wikiDescription": "Your Mark is empowered to hail a snowstorm at the location where the target was hit for 2 seconds, granting sight of the area and dealing 「 200 (+ 200% bonus AD) (+ 120% AP) magic damage 」 「 25 (+ 25% bonus AD) (+ 15% AP) magic damage every 0. 25 seconds 」 to enemies within over the duration, as well as slowing them by 50% (+ 6% per 100 AP) . Additionally, your Mark's cooldown is reduced equivalent to 50 ability haste. If Mark is not equipped, you will be prompted to replace one of your summoner spells with Mark . This augment is currently disabled.",
       "wikiSet": "Snowday",
       "kit_tags": [
         "ability",
@@ -4804,7 +4804,7 @@
       "kit_tags": [
         "cc"
       ],
-      "wikiDescription": "Occasionally send out squishy, slappy hands towards all nearby enemy champions, tethering them. Your next attack will pull in all tethered enemies."
+      "wikiDescription": "When an enemy champion is within 450 units of you, you send out Squishy Slappy Hands that latch onto all nearby enemy champions within 800 units after a 1. 5 -second delay, forming a tether between yourself and each target for 4 seconds (45 second cooldown). While the tethers persist (950 tether radius), your next basic attack is empowered to pull all tethered enemies toward you, dealing 30 – 100 (based on level) (+ 10% bonus health) magic damage to affected targets and stunning them for 0. 25 seconds. Targets are pulled over 450 units, reduced to 350 for those farther away from you. Additionally, you gain a 25 – 75 (based on level) (+ 50% bonus armor) (+ 50% bonus magic resistance) shield for each pulled enemy."
     },
     {
       "slug": "tank-it-or-leave-it",
@@ -5013,7 +5013,7 @@
       "name_zh_TW": "吸血迷信",
       "name_ja": "吸血鬼信仰",
       "name_ko": "흡혈병",
-      "wikiDescription": "You can no longer be healed by allies and your health regeneration is set to 0 . Gain 25% omnivamp . Diadem of Songs' Consonance and Moonstone Renewer's Starlit Grace will specifically not target champions with this augment. This augment prevents the user from being offered the Perseverance augment. This augment is not offered if the champion has built Warmog's Armor .",
+      "wikiDescription": "You can no longer be healed by allies and your health regeneration is set to 0 . Gain 25% omnivamp . This augment is currently disabled. Diadem of Songs' Consonance and Moonstone Renewer's Starlit Grace will specifically not target champions with this augment. This augment prevents the user from being offered the Perseverance augment. This augment is not offered if the champion has built Warmog's Armor .",
       "kit_tags": [
         "heal_shield",
         "dot"
@@ -5033,7 +5033,7 @@
       "name_zh_TW": "虛空衝刺",
       "name_ja": "ヴォイドダッシュ",
       "name_ko": "공허 돌진",
-      "type": "ability",
+      "type": "standalone",
       "flags": {
         "system_breaker": false,
         "lifecycle": "removed"

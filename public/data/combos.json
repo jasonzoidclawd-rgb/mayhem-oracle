@@ -1,6 +1,6 @@
 {
   "patch": "26.12",
-  "scraped_at": "2026-06-21T23:02:20.343430+00:00",
+  "scraped_at": "2026-06-22T23:13:09.286747+00:00",
   "generated_from": "internal-pool-mechanics",
   "combos": [
     {
@@ -10,12 +10,7 @@
     },
     {
       "champion": "aatrox",
-      "augment": "Mercy's Strike",
-      "tier": "S"
-    },
-    {
-      "champion": "aatrox",
-      "augment": "Ravenous Bind",
+      "augment": "Rejuvenation",
       "tier": "S"
     },
     {
@@ -70,12 +65,7 @@
     },
     {
       "champion": "ambessa",
-      "augment": "Mercy's Strike",
-      "tier": "S"
-    },
-    {
-      "champion": "ambessa",
-      "augment": "Ravenous Bind",
+      "augment": "Rejuvenation",
       "tier": "S"
     },
     {
@@ -200,7 +190,7 @@
     },
     {
       "champion": "bard",
-      "augment": "Mercy's Strike",
+      "augment": "Multishot",
       "tier": "S"
     },
     {
@@ -251,11 +241,6 @@
     {
       "champion": "braum",
       "augment": "Double Defense",
-      "tier": "S"
-    },
-    {
-      "champion": "braum",
-      "augment": "Ravenous Bind",
       "tier": "S"
     },
     {
@@ -500,12 +485,7 @@
     },
     {
       "champion": "gangplank",
-      "augment": "Mercy's Strike",
-      "tier": "S"
-    },
-    {
-      "champion": "gangplank",
-      "augment": "Ravenous Bind",
+      "augment": "Rejuvenation",
       "tier": "S"
     },
     {
@@ -515,12 +495,7 @@
     },
     {
       "champion": "garen",
-      "augment": "Mercy's Strike",
-      "tier": "S"
-    },
-    {
-      "champion": "garen",
-      "augment": "Ravenous Bind",
+      "augment": "Rejuvenation",
       "tier": "S"
     },
     {
@@ -670,7 +645,7 @@
     },
     {
       "champion": "jarvaniv",
-      "augment": "Mercy's Strike",
+      "augment": "Rejuvenation",
       "tier": "S"
     },
     {
@@ -755,7 +730,7 @@
     },
     {
       "champion": "kassadin",
-      "augment": "Mercy's Strike",
+      "augment": "Rejuvenation",
       "tier": "S"
     },
     {
@@ -795,12 +770,7 @@
     },
     {
       "champion": "kayn",
-      "augment": "Mercy's Strike",
-      "tier": "S"
-    },
-    {
-      "champion": "kayn",
-      "augment": "Ravenous Bind",
+      "augment": "Rejuvenation",
       "tier": "S"
     },
     {
@@ -905,12 +875,7 @@
     },
     {
       "champion": "leesin",
-      "augment": "Mercy's Strike",
-      "tier": "S"
-    },
-    {
-      "champion": "leesin",
-      "augment": "Ravenous Bind",
+      "augment": "Rejuvenation",
       "tier": "S"
     },
     {
@@ -1050,7 +1015,7 @@
     },
     {
       "champion": "mel",
-      "augment": "Mercy's Strike",
+      "augment": "Multishot",
       "tier": "S"
     },
     {
@@ -1085,12 +1050,7 @@
     },
     {
       "champion": "mordekaiser",
-      "augment": "Mercy's Strike",
-      "tier": "S"
-    },
-    {
-      "champion": "mordekaiser",
-      "augment": "Ravenous Bind",
+      "augment": "Rejuvenation",
       "tier": "S"
     },
     {
@@ -1115,12 +1075,7 @@
     },
     {
       "champion": "naafiri",
-      "augment": "Mercy's Strike",
-      "tier": "S"
-    },
-    {
-      "champion": "naafiri",
-      "augment": "Ravenous Bind",
+      "augment": "Rejuvenation",
       "tier": "S"
     },
     {
@@ -1135,7 +1090,7 @@
     },
     {
       "champion": "nami",
-      "augment": "Mercy's Strike",
+      "augment": "Rejuvenation",
       "tier": "S"
     },
     {
@@ -1250,12 +1205,7 @@
     },
     {
       "champion": "olaf",
-      "augment": "Mercy's Strike",
-      "tier": "S"
-    },
-    {
-      "champion": "olaf",
-      "augment": "Ravenous Bind",
+      "augment": "Rejuvenation",
       "tier": "S"
     },
     {
@@ -1290,7 +1240,7 @@
     },
     {
       "champion": "pantheon",
-      "augment": "Mercy's Strike",
+      "augment": "Multishot",
       "tier": "S"
     },
     {
@@ -1415,12 +1365,7 @@
     },
     {
       "champion": "renekton",
-      "augment": "Mercy's Strike",
-      "tier": "S"
-    },
-    {
-      "champion": "renekton",
-      "augment": "Ravenous Bind",
+      "augment": "Rejuvenation",
       "tier": "S"
     },
     {
@@ -1441,16 +1386,6 @@
     {
       "champion": "riven",
       "augment": "Chain Reaction",
-      "tier": "S"
-    },
-    {
-      "champion": "riven",
-      "augment": "Mercy's Strike",
-      "tier": "S"
-    },
-    {
-      "champion": "riven",
-      "augment": "Ravenous Bind",
       "tier": "S"
     },
     {
@@ -1505,12 +1440,7 @@
     },
     {
       "champion": "senna",
-      "augment": "Mercy's Strike",
-      "tier": "S"
-    },
-    {
-      "champion": "senna",
-      "augment": "Ravenous Bind",
+      "augment": "Rejuvenation",
       "tier": "S"
     },
     {
@@ -1525,7 +1455,7 @@
     },
     {
       "champion": "seraphine",
-      "augment": "Mercy's Strike",
+      "augment": "Multishot",
       "tier": "S"
     },
     {
@@ -1535,12 +1465,7 @@
     },
     {
       "champion": "sett",
-      "augment": "Mercy's Strike",
-      "tier": "S"
-    },
-    {
-      "champion": "sett",
-      "augment": "Ravenous Bind",
+      "augment": "Rejuvenation",
       "tier": "S"
     },
     {
@@ -1575,7 +1500,7 @@
     },
     {
       "champion": "shyvana",
-      "augment": "Mercy's Strike",
+      "augment": "Multishot",
       "tier": "S"
     },
     {
@@ -1605,7 +1530,7 @@
     },
     {
       "champion": "sion",
-      "augment": "Mercy's Strike",
+      "augment": "Rejuvenation",
       "tier": "S"
     },
     {
@@ -1615,12 +1540,7 @@
     },
     {
       "champion": "skarner",
-      "augment": "Mercy's Strike",
-      "tier": "S"
-    },
-    {
-      "champion": "skarner",
-      "augment": "Ravenous Bind",
+      "augment": "Rejuvenation",
       "tier": "S"
     },
     {
@@ -1650,7 +1570,7 @@
     },
     {
       "champion": "sona",
-      "augment": "Mercy's Strike",
+      "augment": "Rejuvenation",
       "tier": "S"
     },
     {
@@ -1665,7 +1585,7 @@
     },
     {
       "champion": "soraka",
-      "augment": "Mercy's Strike",
+      "augment": "Rejuvenation",
       "tier": "S"
     },
     {
@@ -1695,7 +1615,7 @@
     },
     {
       "champion": "sylas",
-      "augment": "Mercy's Strike",
+      "augment": "Multishot",
       "tier": "S"
     },
     {
@@ -1749,11 +1669,6 @@
       "tier": "S"
     },
     {
-      "champion": "talon",
-      "augment": "Mercy's Strike",
-      "tier": "S"
-    },
-    {
       "champion": "taric",
       "augment": "Double Defense",
       "tier": "S"
@@ -1765,7 +1680,7 @@
     },
     {
       "champion": "taric",
-      "augment": "Ravenous Bind",
+      "augment": "Rejuvenation",
       "tier": "S"
     },
     {
@@ -1830,7 +1745,7 @@
     },
     {
       "champion": "tryndamere",
-      "augment": "Mercy's Strike",
+      "augment": "Rejuvenation",
       "tier": "S"
     },
     {
@@ -1851,11 +1766,6 @@
     {
       "champion": "udyr",
       "augment": "Double Defense",
-      "tier": "S"
-    },
-    {
-      "champion": "udyr",
-      "augment": "Ravenous Bind",
       "tier": "S"
     },
     {
@@ -1940,7 +1850,7 @@
     },
     {
       "champion": "vex",
-      "augment": "Mercy's Strike",
+      "augment": "Multishot",
       "tier": "S"
     },
     {
@@ -1965,12 +1875,7 @@
     },
     {
       "champion": "viego",
-      "augment": "Mercy's Strike",
-      "tier": "S"
-    },
-    {
-      "champion": "viego",
-      "augment": "Ravenous Bind",
+      "augment": "Rejuvenation",
       "tier": "S"
     },
     {
@@ -1985,7 +1890,7 @@
     },
     {
       "champion": "viktor",
-      "augment": "Mercy's Strike",
+      "augment": "Multishot",
       "tier": "S"
     },
     {
@@ -2000,7 +1905,7 @@
     },
     {
       "champion": "vladimir",
-      "augment": "Mercy's Strike",
+      "augment": "Multishot",
       "tier": "S"
     },
     {
@@ -2010,12 +1915,7 @@
     },
     {
       "champion": "volibear",
-      "augment": "Mercy's Strike",
-      "tier": "S"
-    },
-    {
-      "champion": "volibear",
-      "augment": "Ravenous Bind",
+      "augment": "Rejuvenation",
       "tier": "S"
     },
     {
@@ -2030,7 +1930,7 @@
     },
     {
       "champion": "warwick",
-      "augment": "Mercy's Strike",
+      "augment": "Rejuvenation",
       "tier": "S"
     },
     {
@@ -2100,12 +2000,7 @@
     },
     {
       "champion": "yorick",
-      "augment": "Mercy's Strike",
-      "tier": "S"
-    },
-    {
-      "champion": "yorick",
-      "augment": "Ravenous Bind",
+      "augment": "Rejuvenation",
       "tier": "S"
     },
     {
@@ -2140,7 +2035,7 @@
     },
     {
       "champion": "zaahen",
-      "augment": "Mercy's Strike",
+      "augment": "Rejuvenation",
       "tier": "S"
     },
     {
@@ -2155,7 +2050,7 @@
     },
     {
       "champion": "zac",
-      "augment": "Slap Around",
+      "augment": "Ravenous Bind",
       "tier": "S"
     },
     {
