@@ -1,7 +1,8 @@
 # Augment Data Re-sourcing — Phase 1: CDragon-Canonical Truth
 
 > **Spec for Codex `/goal` execution, with a Claude verification gate after every step.**
-> Status: **APPROVED** (brainstormed & approved 2026-06-22). This is **Phase 1 of 4**.
+> Status: **APPROVED** (brainstormed 2026-06-22; revised same day per Codex spec-review —
+> registry ≠ live availability, Wiki Notes captured in P1). This is **Phase 1 of 4**.
 > Branch: `feat/augment-truth-resourcing`. Owner: **Codex implements; Claude gates each step.**
 > Run: open this repo in Codex, `/goal` against §6 + §7 below, execute steps **in order**, stop at each Claude gate.
 
@@ -9,11 +10,13 @@
 
 ## 1. Goal (one sentence)
 
-Make the live game (CommunityDragon) the **canonical source of truth** for augment
-identity, existence, rarity, icons, locale names, effect text, and exact numbers;
-**demote arammayhem to an isolated `win_rate`-only feed**; keep the LoL Wiki as the
-readable-effect/Notes source — so our augment data matches the live game **up to any
-hotfix** and is no longer founded on a competitor's scrape.
+Make the live game (CommunityDragon) the **canonical source for augment identity and
+definition** — rarity, exact numbers, icons, locale names, effect text — and resolve each
+augment's **live availability as an explicit, multi-signal status** (Wiki Notes + Tencent
+patch notes + CDragon registry + later our own telemetry) rather than trusting any single
+roster. **Demote arammayhem to an isolated `win_rate`-only feed.** Keep the LoL Wiki as the
+readable-effect **and Notes** source (captured now, not deferred) — so our data matches the
+live game **up to any hotfix** and **never mistakes registry-presence for in-game availability**.
 
 ---
 
@@ -48,9 +51,10 @@ Matching our `data/internal/augments.json` (256) against CDragon's Mayhem roster
 - **Slug join is broken** — only **125/256** match by slug, because CDragon slugifies
   differently (`adapt` ↔ `a-d-a-pt`, `back-to-basics` ↔ `backto-basics`).
 - **By normalized name: 163 match.**
-- **93 augments are in our data but NOT in the live game**: 25 legitimately removed (tombstones),
-  but **36 `lifecycle=added` + 32 `lifecycle=active`** that CDragon doesn't have — naming variants
-  plus the arammayhem inflation/staleness we no longer trust.
+- **93 augments are in our data but NOT in CDragon's registry**: 25 legitimately removed
+  (tombstones), but **36 `lifecycle=added` + 32 `lifecycle=active`** that CDragon doesn't have —
+  naming variants plus the arammayhem inflation/staleness we no longer trust. (Conversely, registry
+  presence alone does **not** prove an augment is live — see §2.7.)
 - **7 are in CDragon but missing from us** — ≥3 are `Quest:`-prefix naming mismatches
   (we store `Quest: Steel Your Heart`, CDragon `Steel Your Heart`).
 
@@ -84,41 +88,65 @@ That category taxonomy is **not** in CDragon's structured data (looks editorial)
 gold-standard for the Phase 2 audit**, and the **source for an optional official `category` field
 in Phase 3**. Not a pipeline source (point-in-time prose, won't auto-update next patch).
 
+### 2.7 Registry presence ≠ live availability (the load-bearing distinction)
+An augment existing in CDragon's **registry** (`cherry-augments.json` / arena data) proves it is
+**defined in the game files** — *not* that it is currently **rollable in live Mayhem**. The registry
+carries datamined / unreleased / disabled augments, and a hotfix can disable a live augment while it
+lingers in the registry. So **registry-presence must never directly set `lifecycle=active`** — that
+would repeat the very mistake (trusting a roster as truth) we are removing from arammayhem.
+**Definition** is CDragon-canonical; **availability** is a *resolved* status from multiple signals
+(Wiki Notes, the Tencent patch page, CDragon registry, and later our own telemetry), with
+contradictions surfaced, never silently decided.
+
 ---
 
 ## 3. Authority model (decided)
 
+**Definition and availability are different questions with different sources.**
+
 | Field | Canonical source |
 |---|---|
 | `augmentId` (identity) | **CDragon** `augmentNameId` |
-| existence (active set) | **CDragon** roster |
 | `rarity` | **CDragon** |
 | `icon` | **CDragon** (`iconLarge`/`iconSmall` asset URL) |
 | locale names (`name_*`) | **CDragon** per-locale |
 | exact numbers (`dataValues`/`calculations`) | **CDragon** |
 | canonical effect tooltip | **CDragon** |
 | readable display effect text (`wikiDescription`) | **Wiki** |
+| gameplay **Notes / availability notes** | **Wiki** (captured in P1, internal) |
+| **`availability.status`** (is it live?) | **RESOLVED** from Wiki Notes + Tencent + CDragon registry + (later) telemetry — *not* any single roster |
 | `win_rate` | **arammayhem** — isolated feed; telemetry later |
 | official validation / `category` | **Tencent 26.12** (reference; category optional P3) |
 
-**Precedence on conflict:** CDragon wins existence/rarity. Wiki-only augments are **flagged for
-review, never auto-added or dropped**. arammayhem provenance is permitted for **`win_rate` only** —
-nothing else.
+**`availability.status`** ∈ `confirmed_live` · `candidate_registry_present` · `disabled` · `removed` ·
+`conflict` (+ future `observed_live` / `observed_bug_mechanism` from telemetry). Resolution order:
+1. patch-notes / tombstone says removed → **removed**;
+2. else a source marks it disabled and none says live → **disabled**;
+3. else registry-present **and** Wiki/Tencent corroborates live → **confirmed_live**;
+4. else registry-present only, no corroboration → **candidate_registry_present** (the safe default — **not** `active`);
+5. else sources contradict → **conflict** (surfaced for Claude / P2, never silently resolved).
+Store the raw per-source signals in `availability.signals` so every resolution is auditable.
+
+**Precedence:** CDragon wins **definition** (identity / rarity / numbers / icons / names / tooltip).
+**Availability is resolved, never inherited from a roster.** Wiki-only augments are **flagged, never
+auto-added or dropped**. arammayhem provenance is permitted for **`win_rate` only** — nothing else.
 
 ---
 
 ## 4. Scope
 
-**In scope (Phase 1):** re-source identity/existence/rarity/icons/locale-names/effect-text/numbers
-to CDragon (+ wiki for display text); isolate arammayhem → `win_rate` feed; produce a reconciliation
-report; add guard tests; integrate into the pipeline; preserve no-key reproducibility and the
-public-data boundary.
+**In scope (Phase 1):** re-source identity + **definition** (rarity / icons / locale-names / effect-text /
+numbers) to CDragon; **capture the Wiki Notes + availability notes + source timestamps (internal)** and
+**resolve `availability.status` from multiple signals** (§3); isolate arammayhem → `win_rate` feed;
+produce a reconciliation + availability-conflict report; add guard tests; integrate into the pipeline;
+preserve no-key reproducibility and the public-data boundary.
 
 **Out of scope (future phases, each its own spec→plan):**
-- **P2 Reconcile & guard** — audit the flagged divergences against Tencent 26.12 + wiki, correct
-  them, lock alignment so it can't drift.
-- **P3 Richness** — surface gameplay Notes/interactions, "currently disabled" status, and the
-  exact numeric values (already captured in P1) into schema/UI; optional official `category` field.
+- **P2 Reconcile & guard** — work the contradiction/conflict report: audit flagged divergences against
+  Tencent 26.12 + wiki, resolve `conflict` availability, correct them, lock alignment so it can't drift.
+- **P3 Richness (UI/presentation of already-captured data)** — *render* the gameplay Notes/interactions,
+  availability status, and exact numbers (all captured internally in P1) into the augment pages; optional
+  official `category` field. **P1 lands the data; P3 surfaces it.**
 - **P4 Presentation** — render augment pages in the wiki's clean format.
 - **Win-rate independence** (telemetry M3A/M3B activation) — separate initiative, gated on members.
 
@@ -127,20 +155,31 @@ public-data boundary.
 ## 5. Target schema (`data/internal/augments.json`)
 
 - **Add** `augmentId` — CDragon `augmentNameId` (canonical join key). Keep `slug` (URLs / back-compat).
-- `rarity` ← CDragon. `icon` ← CDragon canonical asset URL (replaces arammayhem URL).
-  `name_zh_CN/zh_TW/ja/ko` ← CDragon per-locale. `wikiDescription` ← wiki, keyed by `augmentId`.
+- **Definition (CDragon):** `rarity`; `icon` ← CDragon canonical asset URL (replaces arammayhem URL);
+  `name_zh_CN/zh_TW/ja/ko` ← CDragon per-locale; raw `dataValues`/`calculations` (internal; surfaced P3);
+  canonical tooltip.
+- **Display + Notes (Wiki, keyed by `augmentId`, internal):** `wikiDescription` (readable effect) **plus,
+  captured now:** `wikiNotes` (the page's Notes/interactions — the section you pointed at),
+  `wikiAvailabilityNotes` (e.g. "currently disabled"), and a `wikiFetchedAt` timestamp.
+- **Availability (resolved, not inherited):** `availability.status` (§3 enum) + `availability.signals`
+  (raw per-source: `cdragon_registry` / `wiki` / `tencent` / `telemetry`). **`flags.lifecycle` is derived
+  from `availability.status`** (e.g. `removed`→tombstone) and remains the public-facing lifecycle field —
+  but it is **never set directly from registry presence**. Existing removed-augment tombstones preserved.
 - `win_rate` ← arammayhem feed (**may be null**; null is valid and handled by scoring).
-- **Capture now, surface in P3:** raw `dataValues`/`calculations` (internal only).
-- `flags.lifecycle` existence reflects CDragon roster (`active` iff in CDragon; else
-  `removed`/history). Existing removed-augment tombstones preserved.
-- Optional `provenance` map (per-field source) to make the guard test (§6 Step 6) trivial and seed P2.
-- **Public export unchanged:** `public/data/augments.json` still carries **no `win_rate`**, no
-  internal telemetry — `export_public_catalog.py` sanitization and `public-data-boundary.test.ts`
-  stay green.
+- `provenance` map (per-field source) — makes the Step 6 guard test trivial and seeds P2.
+- **Public export unchanged:** `public/data/augments.json` still carries **no `win_rate`**; the new
+  internal-only fields (`wikiNotes`, `availability.signals`, `provenance`, `dataValues`) are **not
+  exported** — `export_public_catalog.py` sanitization and `public-data-boundary.test.ts` stay green.
 
 ---
 
 ## 6. Execution plan — goal-driven steps
+
+**Precondition — clean tree.** Codex must run on a **clean working tree**: a dedicated worktree, or
+after Claude has classified/committed/stashed the root checkout's dirty + untracked files. The current
+root checkout is **not** clean (`CLAUDE.md`, `data/internal/patch-notes.json`, `scripts/state.json`,
+`docs/handoffs/codex-next-prompt.md`, plus untracked `docs/audits/`, `prototype/`, …). **Do not sweep
+these into the Step 0 baseline** — Claude resolves tree hygiene before kickoff.
 
 Codex executes **in order**. Each step: **commit → stop at the Claude gate** (post verification
 evidence to `docs/handoffs/augment-truth-progress.md`) → proceed only on Claude approval.
@@ -154,9 +193,10 @@ reports (the `CLAUDE.md` STATE figure is auto-maintained and may lag — trust t
 `augmentNameId` as the key; a normalized-name matcher (lowercase, strip non-alphanumerics, strip
 `Quest:` prefix); a small **hand-maintained alias table** for exceptions; emit an **unmatched
 report**. Add `augmentId` plumbing to the schema.
-*Success:* resolver maps the full CDragon roster ↔ wiki ↔ arammayhem; unmatched list produced;
-unit tests for the resolver. *Claude gate:* **Claude reviews the unmatched list and signs off on
-every alias-table entry** (data-truth decision).
+*Success:* resolver maps **CDragon ↔ Wiki/Tencent** (the primary identity/definition axis); arammayhem
+is attached **best-effort for win_rate only and must NOT block** the resolver (unmapped win rates just
+go null); unmatched + contradiction lists produced; unit tests for the resolver. *Claude gate:* **Claude
+reviews the unmatched list and signs off on every alias-table entry** (data-truth decision).
 
 **Step 2 — CDragon authoritative base (rich endpoint).** Extend/replace the CDragon scrape to pull
 from `cdragon/arena/en_us.json` (+ per-locale) **and** `cherry-augments.json`: `augmentId`, name,
@@ -173,21 +213,30 @@ module** shaped so a telemetry feed can replace it later.
 *Success:* arammayhem code path can no longer create augments or set name/rarity/icon; win_rate
 attaches onto the base; coverage reported. *Claude gate.*
 
-**Step 4 — Wiki = effect-text feed keyed to augmentId.** Rekey `scrape_wiki_augments.py` /
-`enrich_wiki.py` to attach wiki display effect text by resolved `augmentId`; flag wiki-only augments.
-*Success:* `wikiDescription` attached by `augmentId`; wiki-only augments flagged (not added). *Claude gate.*
+**Step 4 — Wiki feed: effect text + Notes + availability (keyed to augmentId).** Rekey
+`scrape_wiki_augments.py` / `enrich_wiki.py` to attach, by resolved `augmentId` (all internal):
+`wikiDescription` (readable effect), **`wikiNotes`** (the page's Notes/interactions — the `#Notes`
+section you pointed at), **`wikiAvailabilityNotes`** (e.g. "currently disabled"), and `wikiFetchedAt`.
+Emit a **contradiction report** (wiki vs CDragon/Tencent on existence / rarity / availability). Flag
+wiki-only augments.
+*Success:* effect text + Notes + availability notes + timestamp attached by `augmentId`; contradiction
+report produced; wiki-only augments flagged (not added). *Claude gate.*
 
-**Step 5 — Assemble-catalog step + precedence.** New assemble step composes `augments.json` from
-base + feeds with the §3 per-field precedence. Existence = CDragon roster; non-live → history /
-tombstone (reuse `flags.lifecycle` + `apply_removed_augment_tombstones.py`); removed tombstones
-preserved.
-*Success:* `augments.json` rebuilt; active ≈ 170; tombstones preserved; **no field except `win_rate`
-has arammayhem provenance**. *Claude gate.*
+**Step 5 — Assemble-catalog step + resolved availability.** New assemble step composes `augments.json`
+from base + feeds with the §3 per-field precedence. **Definition** comes from CDragon;
+**`availability.status` is resolved** per §3 from the signals (registry presence alone is only
+`candidate_registry_present` until Wiki/Tencent corroborate live); `flags.lifecycle` is **derived from**
+`availability.status`; removed tombstones preserved (`apply_removed_augment_tombstones.py`).
+*Success:* `augments.json` rebuilt; **every augment carries `availability.status` + `availability.signals`**;
+by-status counts (live / candidate / disabled / removed / conflict) computed; tombstones preserved; **no
+field except `win_rate` has arammayhem provenance**. *Claude gate.*
 
-**Step 6 — Guard tests + reconciliation report.** Add a guard test: every active augment resolves to
-a CDragon `augmentId`; `rarity` equals CDragon's; **no arammayhem provenance except `win_rate`**;
-active count tracks the roster. Emit the **reconciliation report** artifact (unmatched/flagged) for P2.
-*Success:* new tests + full suite green; report written. *Claude gate.*
+**Step 6 — Guard tests + reconciliation report.** Add a guard test: every augment resolves to a CDragon
+`augmentId`; `rarity` equals CDragon's; **no arammayhem provenance except `win_rate`**; **registry presence
+alone is never `confirmed_live`** (presence-only ⇒ `candidate_registry_present`); every augment has a valid
+`availability.status`. Emit the **reconciliation report** (unmatched, wiki-only, and **availability
+conflicts**) plus the by-status counts — **reconciled and reported, not pinned to any target number**.
+*Success:* new tests + full suite green; report + by-status counts written. *Claude gate.*
 
 **Step 7 — Pipeline integration + reproducibility.** Wire the new order into `update-data.sh`;
 ensure **no-key deterministic CI reproducibility**; CDragon fetch failure → keep last committed base,
@@ -195,29 +244,34 @@ abort the rebuild (don't emit partial/empty); public-data boundary intact.
 *Success:* a full `update-data` run reproduces; `npm test` green; `export_public_catalog.py` +
 boundary test green. *Claude gate.*
 
-**Step 8 — Final verification + handoff.** Full gate (`npm test`, `eslint`, `npm run build`,
-overlay build). Update `CLAUDE.md` STATE (augment count change ~256→~170 active). Write the P1→P2
-handoff note.
-*Success:* whole gate green; STATE updated; handoff written. *Claude gate:* **Claude independently
-re-verifies and performs any push** (main remains the human gate).
+**Step 8 — Final verification + handoff.** Full gate (`npm test`, `eslint`, `npm run build`, overlay
+build). Refresh the `CLAUDE.md` STATE block **by running `scripts/update-state.sh` (the post-commit hook)
+— never hand-edit the STATE block**. Write the P1→P2 handoff note (incl. the availability by-status counts
++ the conflicts P2 must resolve).
+*Success:* whole gate green; STATE refreshed via script; handoff written. *Claude gate:* **Claude
+independently re-verifies and performs any push** (main remains the human gate).
 
 ---
 
 ## 7. Definition of done (the `/goal` success criteria)
 
-- [ ] Every **active** augment has an `augmentId` resolving to a CDragon `augmentNameId`.
-- [ ] `rarity`, `icon`, locale names, and exact numbers have **CDragon provenance for 100%** of
-      active augments; display effect text comes from the **wiki**; **`win_rate` is the only
-      arammayhem-sourced field**.
+- [ ] Every augment has an `augmentId` resolving to a CDragon `augmentNameId`.
+- [ ] **Definition** (`rarity`, `icon`, locale names, exact numbers, tooltip) has **CDragon provenance for
+      100%** of augments; display effect text + Notes come from the **wiki**; **`win_rate` is the only
+      arammayhem-sourced field** (enforced by a test).
 - [ ] The arammayhem code path **cannot create augments or set rarity/name/icon** — enforced by a test.
-- [ ] Active augment count tracks the CDragon roster (~170); non-live augments are tombstoned/history;
-      previously-removed tombstones preserved.
-- [ ] A reconciliation report lists **all** unmatched/flagged augments (input to Phase 2).
+- [ ] **Every augment has a resolved `availability.status` + `availability.signals`**; **registry-presence
+      alone never yields `confirmed_live`**; by-status counts (live / candidate / disabled / removed /
+      conflict) are **reconciled and reported** (not matched to a target number); `flags.lifecycle` is
+      derived from `availability.status`; previously-removed tombstones preserved.
+- [ ] Wiki Notes + availability notes + source timestamps captured (internal); contradictions and
+      unmatched / wiki-only augments listed in the reconciliation report (input to Phase 2).
 - [ ] Full gate green: `npm test` (Step 0 baseline + new guard tests, all passing), `npx eslint src scripts`,
       `npm run build`, `(cd overlay && npm run build)`; `public-data-boundary` test green;
       no-key deterministic CI reproducibility intact.
-- [ ] `CLAUDE.md` STATE augment count updated.
-- [ ] **No regression to the public-data boundary** — `public/data/augments.json` still has no `win_rate`.
+- [ ] `CLAUDE.md` STATE refreshed **via `scripts/update-state.sh`**, not hand-edited.
+- [ ] **No regression to the public-data boundary** — `public/data/augments.json` still has no `win_rate`,
+      and internal-only fields (Notes, availability signals, provenance, dataValues) are not exported.
 
 ---
 
@@ -247,6 +301,8 @@ re-verifies and performs any push** (main remains the human gate).
 - **Stay in lane:** do not touch `supabase/**`, `src/app/api/**`, `overlay/**` runtime, or web
   membership components beyond what consumes the catalog. Decision/scoring logic
   (`src/lib/decision/**`, the scoring twins) is unchanged except for reading the new fields.
+- **Registry ≠ live:** CDragon registry presence is **definition only**; it must never directly set
+  `lifecycle=active` / `confirmed_live`. Availability is always the resolved multi-signal status (§3).
 - **Never guess identity:** an unmatched augment is **flagged**, never assigned a guessed id.
 - **Tooling hazards:** the rtk shell hook can falsify `diff`/`ls`/`find` — use `/usr/bin/` absolute
   paths for verification evidence. Bash CWD persists across calls — use `git -C` / absolute paths.
@@ -263,11 +319,12 @@ npx eslint src scripts
 npm run build
 (cd overlay && npm run build)
 
-# augment count + win_rate coverage + provenance spot-check
+# augment counts + augmentId + win_rate coverage + availability breakdown
 node -e "const a=require('./data/internal/augments.json').augments; \
-  const active=a.filter(x=>(x.flags?.lifecycle)!=='removed'); \
-  console.log('active=',active.length,'with augmentId=',active.filter(x=>x.augmentId).length, \
-  'win_rate=',a.filter(x=>typeof x.win_rate==='number').length)"
+  const by={}; for(const x of a){const s=x.availability?.status||'(none)'; by[s]=(by[s]||0)+1;} \
+  console.log('total=',a.length,'with augmentId=',a.filter(x=>x.augmentId).length, \
+  'win_rate=',a.filter(x=>typeof x.win_rate==='number').length); \
+  console.log('availability:',JSON.stringify(by))"
 
 # guard: nothing but win_rate is arammayhem-sourced  (Step 6 test encodes this)
 # reconciliation report (Step 6 artifact)
