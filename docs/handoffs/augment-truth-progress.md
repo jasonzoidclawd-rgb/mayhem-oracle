@@ -371,3 +371,50 @@ Commands run:
 | `npx eslint src scripts` | PASS (exit 0, no output) |
 | `npm run build` | PASS (Next.js build completed) |
 | `(cd overlay && npm run build)` | SKIPPED; Step 4 did not touch overlay code or overlay data-sync inputs |
+
+## Step 5 — Assemble-catalog step + resolved availability (codex)
+
+Date: 2026-06-23 (Asia/Taipei)
+
+Built:
+
+- `scripts/assemble_augments.py` — deterministic Step 5 assembler. It reads the committed CDragon base catalog, wiki feed, arammayhem win-rate feed, Step 1 identity map, and the pre-Step-5 internal catalog, then writes `data/internal/augments.json`.
+- `scripts/test_assemble_augments.py` — focused resolver/assembler tests covering registry-only candidate status, wiki-disabled status, `ARAM_MissingPingAugment` placeholder handling, confirmed-live resolution, removed/tombstone precedence, field precedence, and preserved curated/classifier fields.
+
+Rebuilt `data/internal/augments.json`:
+
+| Measure | Count |
+| --- | ---: |
+| Rows | 260 |
+| `confirmed_live` | 127 |
+| `candidate_registry_present` | 1 |
+| `disabled` | 4 |
+| `removed` | 64 |
+| `conflict` | 64 |
+| `win_rate` numeric coverage | 123 |
+
+Availability notes:
+
+- `confirmed_live` requires CDragon registry presence plus wiki live corroboration; audit found 0 `confirmed_live` rows missing those signals.
+- Registry-only placeholder `ARAM_MissingPingAugment` is `candidate_registry_present`, not `confirmed_live`.
+- The four wiki "currently disabled" rows resolve to `disabled`: `clown-college` / `ARAM_ClownCollege`, `devil-on-your-shoulder` / `ARAM_LittleDevil`, `perseverance` / `ARAM_Perseverance`, `quantum-computing` / `ARAM_QuantumComputing`.
+- `conflict` rows are preserved legacy internal rows with no CDragon registry resolution and no removed tombstone signal; they are surfaced for Claude/Phase 2 review rather than silently promoted to live.
+
+Preservation:
+
+- Existing rows preserved: 256 / 256 old slugs still present.
+- `kit_tags` preserved for 256 / 256 old rows; all 260 rows now carry a `kit_tags` array. The 4 new CDragon-only rows have empty `kit_tags` for the later classifier step.
+- `flags.system_breaker` preserved for 256 / 256 old rows; total system breakers remain 8.
+- `type` preserved for 256 / 256 old rows; output type counts are ability 24, quest 8, standalone 228.
+- Existing non-lifecycle flags are carried forward; `flags.lifecycle` is derived from `availability.status` using the existing `active` / `added` / `removed` vocabulary.
+
+Commands run:
+
+| Command | Result |
+| --- | --- |
+| `python3 scripts/test_assemble_augments.py` | PASS (6 tests) |
+| `python3 scripts/assemble_augments.py --existing /private/tmp/augment-truth-pre-step5-augments.json` | PASS; wrote 260 rows; availability counts 127 / 1 / 4 / 64 / 64; win_rate 123 |
+| `npm test` | PASS (27 files, 250 tests) |
+| `npx eslint src scripts` | PASS (exit 0, no output) |
+| `npm run build` | PASS (Next.js build completed) |
+| `(cd overlay && npm run build)` | PASS (overlay sync-data, tsc, and Vite build completed) |
