@@ -477,3 +477,57 @@ Commands run:
 | `npx eslint src scripts` | PASS (exit 0, no output) |
 | `npm run build` | PASS (Next.js build completed) |
 | `(cd overlay && npm run build)` | SKIPPED; rev2 did not touch overlay code or overlay data-sync inputs. |
+
+## Step 6 — Guard tests + reconciliation report (codex)
+
+Date: 2026-06-23 (Asia/Taipei)
+
+Added:
+
+- `src/__tests__/augment-authority-model.test.ts` — deterministic Vitest guard over committed Step 2/3/4/5 artifacts and `data/internal/augments.json`.
+- `data/internal/augment-reconciliation-report.json` — consolidated Phase 2 / Step 7 worklist.
+
+Guard coverage:
+
+- Provenance: arammayhem provenance is allowed only at `provenance.win_rate`.
+- Identity: `confirmed_live`, `candidate_registry_present`, and `disabled` rows require a CDragon `augmentId`, and their rarity must match `data/internal/augment-base-catalog.json`.
+- Registry is not live: `confirmed_live` requires CDragon registry presence plus wiki/tencent/telemetry live corroboration; `definitionPlaceholder` / `???` rows cannot be `confirmed_live`.
+- Availability validity: every row uses one of `confirmed_live`, `candidate_registry_present`, `disabled`, `removed`, `unverified_legacy`, or `conflict`; non-live statuses plus placeholder rows cannot carry `flags.lifecycle=active|added`.
+- Win-rate isolation: `win_rate` is `number|null`, has arammayhem provenance, and numeric CDragon-keyed values match `data/internal/augment-winrate-feed.json`.
+- Report alignment: the reconciliation report's by-status counts, curated-breaker statuses, unverified-legacy list, conflict list, and Step 7 backlog stay aligned with committed artifacts.
+
+Reconciliation report summary:
+
+| Section | Count / content |
+| --- | --- |
+| Availability by status | `confirmed_live=139`, `candidate_registry_present=28`, `disabled=4`, `removed=25`, `unverified_legacy=64`, `conflict=0` |
+| Unmatched by source | CDragon 4; internal augments 89; wiki 88; arammayhem win-rate 62 |
+| Wiki-only augments | 82 |
+| Genuine availability conflicts | 0 |
+| Curated breaker reconciliation | `jeweled-gauntlet` now `confirmed_live`; `vulnerability` now `confirmed_live`; `slow-and-steady` now `candidate_registry_present` and flagged stale breaker. Each carries signals and the note: "old retirement was arammayhem-sourced; overridden by CDragon+wiki truth per human ruling". |
+| `unverified_legacy` worklist | 64 rows for Phase 2 confirmation before final tombstoning |
+| Step 7 backlog | Regenerate combos against the new availability model; regenerate pool-rules against the new availability model; evaluate `scripts/apply_live_mechanism_overrides.py` as an `observed_live` / `observed_bug_mechanism` resolver signal. |
+
+Known Step-7-deferred `npm test` failures only:
+
+- `src/lib/__tests__/data-integrity.test.ts` > `data integrity` > `combo rows only reference currently offerable augments`
+  - Why: combos still reference rows now resolved non-live under the new availability model; combo data needs regeneration instead of old lifecycle assertions.
+- `src/lib/__tests__/data-integrity.test.ts` > `data integrity` > `26.12 breaker re-verification: three breakers retired, five live`
+  - Why: the test encodes the old arammayhem-sourced lifecycle by expecting `slow-and-steady`, `jeweled-gauntlet`, and `vulnerability` to be removed.
+- `src/lib/__tests__/data-integrity.test.ts` > `data integrity` > `Jeweled Gauntlet keeps a visible observed-live mechanism override`
+  - Why: the test expects the old removed-plus-observed-live override model, but CDragon+wiki now resolves `jeweled-gauntlet` as `confirmed_live`.
+- `src/lib/__tests__/pool-orchestrator.test.ts` > `pool orchestrator — 26.12 lifecycle wiring` > "26.12-removed augments are excluded with reason `removed` under real pool rules"
+  - Why: pool expectations still encode old removed lifecycle assumptions for legacy rows now resolved through `unverified_legacy` / availability status.
+- `src/lib/__tests__/pool-orchestrator.test.ts` > `pool orchestrator — 26.12 lifecycle wiring` > `observed-live mechanism overrides stale removed lifecycle for Jeweled Gauntlet`
+  - Why: the test expects Jeweled Gauntlet to remain removed and be rescued by observed-live; the new resolver makes it `confirmed_live` directly.
+
+Commands run:
+
+| Command | Result |
+| --- | --- |
+| `npm test -- src/__tests__/augment-authority-model.test.ts` before report | RED as expected; report artifact missing |
+| `npm test -- src/__tests__/augment-authority-model.test.ts` after report | PASS (1 file, 6 tests) |
+| `npm test` | FAIL only the 5 known Step-7-deferred downstream tests above; 26 files passed, 2 files failed, 251 / 256 tests passed. NO NEW failures introduced. |
+| `npx eslint src scripts` | PASS (exit 0, no output) |
+| `npm run build` | PASS (Next.js build completed) |
+| `(cd overlay && npm run build)` | SKIPPED; Step 6 did not touch overlay code or overlay data-sync inputs. |

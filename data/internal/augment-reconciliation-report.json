@@ -1,0 +1,5780 @@
+{
+  "schemaVersion": 1,
+  "phase": "Phase 2 / Step 7 worklist",
+  "generatedFromCommittedArtifacts": true,
+  "deterministic": true,
+  "inputs": {
+    "augments": "data/internal/augments.json",
+    "cdragonBaseCatalog": "data/internal/augment-base-catalog.json",
+    "identityUnmatchedReport": "data/internal/augment-identity-unmatched-report.json",
+    "wikiFeed": "data/internal/augment-wiki-feed.json",
+    "wikiOnlyReport": "data/internal/augment-wiki-only-report.json",
+    "wikiContradictionsReport": "data/internal/augment-wiki-contradictions-report.json",
+    "winrateFeed": "data/internal/augment-winrate-feed.json"
+  },
+  "sourceCounts": {
+    "augments": 260,
+    "cdragonBaseCatalogAugments": 170,
+    "wikiFeedAugments": 142,
+    "winrateFeedMatchedAugmentIds": 123
+  },
+  "availability": {
+    "validStatuses": [
+      "confirmed_live",
+      "candidate_registry_present",
+      "disabled",
+      "removed",
+      "unverified_legacy",
+      "conflict"
+    ],
+    "byStatus": {
+      "confirmed_live": 139,
+      "candidate_registry_present": 28,
+      "disabled": 4,
+      "removed": 25,
+      "unverified_legacy": 64,
+      "conflict": 0
+    },
+    "conflicts": [],
+    "conflictCount": 0,
+    "notes": [
+      "confirmed_live requires CDragon registry presence plus wiki/tencent/telemetry live corroboration.",
+      "candidate_registry_present is registry presence without live corroboration and is not promoted to confirmed_live.",
+      "conflict is reserved for current availability-source disagreement; stale legacy tombstones overridden by CDragon+wiki live evidence are reported in curatedBreakerReconciliation."
+    ]
+  },
+  "unmatched": {
+    "identityKey": "CDragon augmentNameId",
+    "counts": {
+      "cdragon": 4,
+      "internal_augments": 89,
+      "wiki": 88,
+      "arammayhem_win_rate": 62
+    },
+    "sources": {
+      "cdragon": [
+        {
+          "augmentNameId": "ARAM_Earthwake",
+          "name": "Earthwake",
+          "slug": "earthwake",
+          "rarity": "prismatic"
+        },
+        {
+          "augmentNameId": "ARAM_Flashy",
+          "name": "Flashy",
+          "slug": "flashy",
+          "rarity": "gold"
+        },
+        {
+          "augmentNameId": "ARAM_MissingPingAugment",
+          "name": "???",
+          "slug": "missing-ping-augment",
+          "rarity": "prismatic"
+        },
+        {
+          "augmentNameId": "ARAM_TransmuteGold",
+          "name": "Transmute: Gold",
+          "slug": "transmute-gold",
+          "rarity": "silver"
+        }
+      ],
+      "internal_augments": [
+        {
+          "sourceKey": "infinite-recursion",
+          "name": "Infinite Recursion",
+          "slug": "infinite-recursion",
+          "rarity": "prismatic",
+          "lifecycle": "active",
+          "status": "unmatched",
+          "hasWikiDescription": true
+        },
+        {
+          "sourceKey": "warlock-juicebox",
+          "name": "Warlock Juicebox",
+          "slug": "warlock-juicebox",
+          "rarity": "gold",
+          "lifecycle": "added",
+          "status": "unmatched",
+          "hasWikiDescription": true
+        },
+        {
+          "sourceKey": "pressure-cooker",
+          "name": "Pressure Cooker",
+          "slug": "pressure-cooker",
+          "rarity": "gold",
+          "lifecycle": "added",
+          "status": "unmatched",
+          "hasWikiDescription": true
+        },
+        {
+          "sourceKey": "combusting-interest",
+          "name": "Combusting Interest",
+          "slug": "combusting-interest",
+          "rarity": "gold",
+          "lifecycle": "added",
+          "status": "unmatched",
+          "hasWikiDescription": true
+        },
+        {
+          "sourceKey": "twin-fire",
+          "name": "Twin Fire",
+          "slug": "twin-fire",
+          "rarity": "silver",
+          "lifecycle": "active",
+          "status": "unmatched",
+          "hasWikiDescription": true
+        },
+        {
+          "sourceKey": "sonata",
+          "name": "Sonata",
+          "slug": "sonata",
+          "rarity": "gold",
+          "lifecycle": "active",
+          "status": "unmatched",
+          "hasWikiDescription": true
+        },
+        {
+          "sourceKey": "forged-by-the-master",
+          "name": "Forged By The Master",
+          "slug": "forged-by-the-master",
+          "rarity": "silver",
+          "lifecycle": "added",
+          "status": "unmatched",
+          "hasWikiDescription": true
+        },
+        {
+          "sourceKey": "escape-plan",
+          "name": "Escape Plan",
+          "slug": "escape-plan",
+          "rarity": "silver",
+          "lifecycle": "active",
+          "status": "unmatched",
+          "hasWikiDescription": true
+        },
+        {
+          "sourceKey": "shrink-engine",
+          "name": "Shrink Engine",
+          "slug": "shrink-engine",
+          "rarity": "gold",
+          "lifecycle": "active",
+          "status": "unmatched",
+          "hasWikiDescription": true
+        },
+        {
+          "sourceKey": "tooth-fairy",
+          "name": "Tooth Fairy",
+          "slug": "tooth-fairy",
+          "rarity": "gold",
+          "lifecycle": "added",
+          "status": "unmatched",
+          "hasWikiDescription": true
+        },
+        {
+          "sourceKey": "growth-spurt",
+          "name": "Growth Spurt",
+          "slug": "growth-spurt",
+          "rarity": "gold",
+          "lifecycle": "active",
+          "status": "unmatched",
+          "hasWikiDescription": true
+        },
+        {
+          "sourceKey": "lil-extra-help",
+          "name": "Lil' Extra Help",
+          "slug": "lil-extra-help",
+          "rarity": "gold",
+          "lifecycle": "added",
+          "status": "unmatched",
+          "hasWikiDescription": true
+        },
+        {
+          "sourceKey": "donation",
+          "name": "Donation",
+          "slug": "donation",
+          "rarity": "gold",
+          "lifecycle": "active",
+          "status": "unmatched",
+          "hasWikiDescription": true
+        },
+        {
+          "sourceKey": "swift-and-safe",
+          "name": "Swift and Safe",
+          "slug": "swift-and-safe",
+          "rarity": "silver",
+          "lifecycle": "active",
+          "status": "unmatched",
+          "hasWikiDescription": true
+        },
+        {
+          "sourceKey": "soul-eater",
+          "name": "Soul Eater",
+          "slug": "soul-eater",
+          "rarity": "gold",
+          "lifecycle": "active",
+          "status": "unmatched",
+          "hasWikiDescription": true
+        },
+        {
+          "sourceKey": "final-form",
+          "name": "Final Form",
+          "slug": "final-form",
+          "rarity": "prismatic",
+          "lifecycle": "active",
+          "status": "unmatched",
+          "hasWikiDescription": true
+        },
+        {
+          "sourceKey": "terraind",
+          "name": "Terrain'd",
+          "slug": "terraind",
+          "rarity": "gold",
+          "lifecycle": "added",
+          "status": "unmatched",
+          "hasWikiDescription": true
+        },
+        {
+          "sourceKey": "bonk",
+          "name": "BONK!",
+          "slug": "bonk",
+          "rarity": "gold",
+          "lifecycle": "added",
+          "status": "unmatched",
+          "hasWikiDescription": true
+        },
+        {
+          "sourceKey": "stay-resolute",
+          "name": "Stay Resolute",
+          "slug": "stay-resolute",
+          "rarity": "silver",
+          "lifecycle": "added",
+          "status": "unmatched",
+          "hasWikiDescription": true
+        },
+        {
+          "sourceKey": "hand-of-baron",
+          "name": "Hand of Baron",
+          "slug": "hand-of-baron",
+          "rarity": "prismatic",
+          "lifecycle": "active",
+          "status": "unmatched",
+          "hasWikiDescription": true
+        },
+        {
+          "sourceKey": "king-me",
+          "name": "King Me",
+          "slug": "king-me",
+          "rarity": "prismatic",
+          "lifecycle": "active",
+          "status": "unmatched",
+          "hasWikiDescription": true
+        },
+        {
+          "sourceKey": "biggest-snowball-ever",
+          "name": "Biggest Snowball Ever",
+          "slug": "biggest-snowball-ever",
+          "rarity": "prismatic",
+          "lifecycle": "active",
+          "status": "unmatched",
+          "hasWikiDescription": true
+        },
+        {
+          "sourceKey": "dont-change-the-channel",
+          "name": "Don't Change the Channel",
+          "slug": "dont-change-the-channel",
+          "rarity": "silver",
+          "lifecycle": "added",
+          "status": "unmatched",
+          "hasWikiDescription": true
+        },
+        {
+          "sourceKey": "overextender",
+          "name": "Overextender",
+          "slug": "overextender",
+          "rarity": "gold",
+          "lifecycle": "added",
+          "status": "unmatched",
+          "hasWikiDescription": true
+        },
+        {
+          "sourceKey": "its-go-time",
+          "name": "It's Go Time",
+          "slug": "its-go-time",
+          "rarity": "silver",
+          "lifecycle": "added",
+          "status": "unmatched",
+          "hasWikiDescription": true
+        },
+        {
+          "sourceKey": "trusty-weapon",
+          "name": "Trusty Weapon",
+          "slug": "trusty-weapon",
+          "rarity": "silver",
+          "lifecycle": "added",
+          "status": "unmatched",
+          "hasWikiDescription": true
+        },
+        {
+          "sourceKey": "ravenous-bind",
+          "name": "Ravenous Bind",
+          "slug": "ravenous-bind",
+          "rarity": "gold",
+          "lifecycle": "added",
+          "status": "unmatched",
+          "hasWikiDescription": true
+        },
+        {
+          "sourceKey": "goldrend",
+          "name": "Goldrend",
+          "slug": "goldrend",
+          "rarity": "prismatic",
+          "lifecycle": "active",
+          "status": "unmatched",
+          "hasWikiDescription": true
+        },
+        {
+          "sourceKey": "hextech-soul",
+          "name": "Hextech Soul",
+          "slug": "hextech-soul",
+          "rarity": "silver",
+          "lifecycle": "active",
+          "status": "unmatched",
+          "hasWikiDescription": true
+        },
+        {
+          "sourceKey": "endless-decimation",
+          "name": "Endless Decimation",
+          "slug": "endless-decimation",
+          "rarity": "gold",
+          "lifecycle": "added",
+          "status": "unmatched",
+          "hasWikiDescription": true
+        },
+        {
+          "sourceKey": "ultimate-awakening",
+          "name": "Ultimate Awakening",
+          "slug": "ultimate-awakening",
+          "rarity": "prismatic",
+          "lifecycle": "active",
+          "status": "unmatched",
+          "hasWikiDescription": true
+        },
+        {
+          "sourceKey": "overloaded",
+          "name": "Overloaded",
+          "slug": "overloaded",
+          "rarity": "prismatic",
+          "lifecycle": "added",
+          "status": "unmatched",
+          "hasWikiDescription": true
+        },
+        {
+          "sourceKey": "adaptive-ward",
+          "name": "Adaptive Ward",
+          "slug": "adaptive-ward",
+          "rarity": "silver",
+          "lifecycle": "added",
+          "status": "unmatched",
+          "hasWikiDescription": true
+        },
+        {
+          "sourceKey": "ominous-pact",
+          "name": "Ominous Pact",
+          "slug": "ominous-pact",
+          "rarity": "prismatic",
+          "lifecycle": "active",
+          "status": "unmatched",
+          "hasWikiDescription": true
+        },
+        {
+          "sourceKey": "double-defense",
+          "name": "Double Defense",
+          "slug": "double-defense",
+          "rarity": "silver",
+          "lifecycle": "added",
+          "status": "unmatched",
+          "hasWikiDescription": true
+        },
+        {
+          "sourceKey": "mercys-strike",
+          "name": "Mercy's Strike",
+          "slug": "mercys-strike",
+          "rarity": "gold",
+          "lifecycle": "added",
+          "status": "unmatched",
+          "hasWikiDescription": true
+        },
+        {
+          "sourceKey": "shark-bait",
+          "name": "Shark Bait",
+          "slug": "shark-bait",
+          "rarity": "gold",
+          "lifecycle": "added",
+          "status": "unmatched",
+          "hasWikiDescription": true
+        },
+        {
+          "sourceKey": "nature-is-healing",
+          "name": "Nature is Healing",
+          "slug": "nature-is-healing",
+          "rarity": "gold",
+          "lifecycle": "added",
+          "status": "unmatched",
+          "hasWikiDescription": true
+        },
+        {
+          "sourceKey": "poltergeist",
+          "name": "Poltergeist",
+          "slug": "poltergeist",
+          "rarity": "silver",
+          "lifecycle": "active",
+          "status": "unmatched",
+          "hasWikiDescription": true
+        },
+        {
+          "sourceKey": "nightstalking",
+          "name": "Nightstalking",
+          "slug": "nightstalking",
+          "rarity": "gold",
+          "lifecycle": "active",
+          "status": "unmatched",
+          "hasWikiDescription": true
+        },
+        {
+          "sourceKey": "tripleshot",
+          "name": "Tripleshot",
+          "slug": "tripleshot",
+          "rarity": "prismatic",
+          "lifecycle": "added",
+          "status": "unmatched",
+          "hasWikiDescription": true
+        },
+        {
+          "sourceKey": "empyrean-promise",
+          "name": "Empyrean Promise",
+          "slug": "empyrean-promise",
+          "rarity": "prismatic",
+          "lifecycle": "active",
+          "status": "unmatched",
+          "hasWikiDescription": true
+        },
+        {
+          "sourceKey": "kill-secured",
+          "name": "Kill Secured",
+          "slug": "kill-secured",
+          "rarity": "silver",
+          "lifecycle": "active",
+          "status": "unmatched",
+          "hasWikiDescription": true
+        },
+        {
+          "sourceKey": "porcupine",
+          "name": "Porcupine",
+          "slug": "porcupine",
+          "rarity": "gold",
+          "lifecycle": "added",
+          "status": "unmatched",
+          "hasWikiDescription": true
+        },
+        {
+          "sourceKey": "echo-cast",
+          "name": "Echo Cast",
+          "slug": "echo-cast",
+          "rarity": "prismatic",
+          "lifecycle": "added",
+          "status": "unmatched",
+          "hasWikiDescription": true
+        },
+        {
+          "sourceKey": "spell-split",
+          "name": "Spellsplit",
+          "slug": "spell-split",
+          "rarity": "prismatic",
+          "lifecycle": "added",
+          "status": "unmatched",
+          "hasWikiDescription": true
+        },
+        {
+          "sourceKey": "shark-tempest",
+          "name": "Shark Tempest",
+          "slug": "shark-tempest",
+          "rarity": "gold",
+          "lifecycle": "added",
+          "status": "unmatched",
+          "hasWikiDescription": true
+        },
+        {
+          "sourceKey": "flash-2",
+          "name": "Flash 2",
+          "slug": "flash-2",
+          "rarity": "silver",
+          "lifecycle": "active",
+          "status": "unmatched",
+          "hasWikiDescription": true
+        },
+        {
+          "sourceKey": "hide-on-bush",
+          "name": "Hide on Bush",
+          "slug": "hide-on-bush",
+          "rarity": "gold",
+          "lifecycle": "added",
+          "status": "unmatched",
+          "hasWikiDescription": true
+        },
+        {
+          "sourceKey": "prom-queen",
+          "name": "Prom Queen",
+          "slug": "prom-queen",
+          "rarity": "prismatic",
+          "lifecycle": "active",
+          "status": "unmatched",
+          "hasWikiDescription": true
+        },
+        {
+          "sourceKey": "our-healing",
+          "name": "Our Healing",
+          "slug": "our-healing",
+          "rarity": "gold",
+          "lifecycle": "added",
+          "status": "unmatched",
+          "hasWikiDescription": true
+        },
+        {
+          "sourceKey": "mighty-shield",
+          "name": "Mighty Shield",
+          "slug": "mighty-shield",
+          "rarity": "silver",
+          "lifecycle": "active",
+          "status": "unmatched",
+          "hasWikiDescription": true
+        },
+        {
+          "sourceKey": "pin-cushion",
+          "name": "Pin Cushion",
+          "slug": "pin-cushion",
+          "rarity": "prismatic",
+          "lifecycle": "added",
+          "status": "unmatched",
+          "hasWikiDescription": true
+        },
+        {
+          "sourceKey": "pinball",
+          "name": "Pinball",
+          "slug": "pinball",
+          "rarity": "gold",
+          "lifecycle": "active",
+          "status": "unmatched",
+          "hasWikiDescription": true
+        },
+        {
+          "sourceKey": "snowblast",
+          "name": "Snowblast",
+          "slug": "snowblast",
+          "rarity": "gold",
+          "lifecycle": "added",
+          "status": "unmatched",
+          "hasWikiDescription": true
+        },
+        {
+          "sourceKey": "spin-me-right-round",
+          "name": "Spin Me Right Round",
+          "slug": "spin-me-right-round",
+          "rarity": "silver",
+          "lifecycle": "active",
+          "status": "unmatched",
+          "hasWikiDescription": true
+        },
+        {
+          "sourceKey": "surge-field",
+          "name": "Surge Field",
+          "slug": "surge-field",
+          "rarity": "prismatic",
+          "lifecycle": "added",
+          "status": "unmatched",
+          "hasWikiDescription": true
+        },
+        {
+          "sourceKey": "holy-snowball",
+          "name": "Holy Snowball",
+          "slug": "holy-snowball",
+          "rarity": "prismatic",
+          "lifecycle": "active",
+          "status": "unmatched",
+          "hasWikiDescription": true
+        },
+        {
+          "sourceKey": "glass-cannon",
+          "name": "Glass Cannon",
+          "slug": "glass-cannon",
+          "rarity": "prismatic",
+          "lifecycle": "active",
+          "status": "unmatched",
+          "hasWikiDescription": true
+        },
+        {
+          "sourceKey": "chain-reaction",
+          "name": "Chain Reaction",
+          "slug": "chain-reaction",
+          "rarity": "prismatic",
+          "lifecycle": "added",
+          "status": "unmatched",
+          "hasWikiDescription": true
+        },
+        {
+          "sourceKey": "dimension-shift",
+          "name": "Dimension Shift",
+          "slug": "dimension-shift",
+          "rarity": "prismatic",
+          "lifecycle": "added",
+          "status": "unmatched",
+          "hasWikiDescription": true
+        },
+        {
+          "sourceKey": "poro-stampede",
+          "name": "Poro Stampede",
+          "slug": "poro-stampede",
+          "rarity": "prismatic",
+          "lifecycle": "added",
+          "status": "unmatched",
+          "hasWikiDescription": true
+        },
+        {
+          "sourceKey": "mystery-augment",
+          "name": "???",
+          "slug": "mystery-augment",
+          "rarity": "prismatic",
+          "lifecycle": "removed",
+          "status": "unmatched",
+          "hasWikiDescription": true
+        },
+        {
+          "sourceKey": "adamant",
+          "name": "Adamant",
+          "slug": "adamant",
+          "rarity": "silver",
+          "lifecycle": "removed",
+          "status": "unmatched",
+          "hasWikiDescription": true
+        },
+        {
+          "sourceKey": "crit-n-cast",
+          "name": "Crit 'n Cast",
+          "slug": "crit-n-cast",
+          "rarity": "silver",
+          "lifecycle": "removed",
+          "status": "unmatched",
+          "hasWikiDescription": true
+        },
+        {
+          "sourceKey": "critical-missile",
+          "name": "Critical Missile",
+          "slug": "critical-missile",
+          "rarity": "gold",
+          "lifecycle": "removed",
+          "status": "unmatched",
+          "hasWikiDescription": true
+        },
+        {
+          "sourceKey": "critical-rhythm",
+          "name": "Critical Rhythm",
+          "slug": "critical-rhythm",
+          "rarity": "gold",
+          "lifecycle": "removed",
+          "status": "unmatched",
+          "hasWikiDescription": true
+        },
+        {
+          "sourceKey": "droppybara",
+          "name": "Droppybara",
+          "slug": "droppybara",
+          "rarity": "prismatic",
+          "lifecycle": "removed",
+          "status": "unmatched",
+          "hasWikiDescription": true
+        },
+        {
+          "sourceKey": "final-city-transit",
+          "name": "Final City Transit",
+          "slug": "final-city-transit",
+          "rarity": "gold",
+          "lifecycle": "removed",
+          "status": "unmatched",
+          "hasWikiDescription": true
+        },
+        {
+          "sourceKey": "gash",
+          "name": "Gash",
+          "slug": "gash",
+          "rarity": "prismatic",
+          "lifecycle": "removed",
+          "status": "unmatched",
+          "hasWikiDescription": true
+        },
+        {
+          "sourceKey": "grandmas-chili-oil",
+          "name": "Grandma's Chili Oil",
+          "slug": "grandmas-chili-oil",
+          "rarity": "gold",
+          "lifecycle": "removed",
+          "status": "unmatched",
+          "hasWikiDescription": true
+        },
+        {
+          "sourceKey": "hat-on-a-hat",
+          "name": "Hat on a Hat",
+          "slug": "hat-on-a-hat",
+          "rarity": "silver",
+          "lifecycle": "removed",
+          "status": "unmatched",
+          "hasWikiDescription": true
+        },
+        {
+          "sourceKey": "im-a-baby-kitty-where-is-mama",
+          "name": "I'm a Baby Kitty Where is Mama",
+          "slug": "im-a-baby-kitty-where-is-mama",
+          "rarity": "prismatic",
+          "lifecycle": "removed",
+          "status": "unmatched",
+          "hasWikiDescription": true
+        },
+        {
+          "sourceKey": "laser-heal",
+          "name": "Laser Heal",
+          "slug": "laser-heal",
+          "rarity": "prismatic",
+          "lifecycle": "removed",
+          "status": "unmatched",
+          "hasWikiDescription": true
+        },
+        {
+          "sourceKey": "one-trick-pony",
+          "name": "One Trick Pony",
+          "slug": "one-trick-pony",
+          "rarity": "prismatic",
+          "lifecycle": "added",
+          "status": "unmatched",
+          "hasWikiDescription": true
+        },
+        {
+          "sourceKey": "pat-on-the-back",
+          "name": "Pat On The Back",
+          "slug": "pat-on-the-back",
+          "rarity": "gold",
+          "lifecycle": "removed",
+          "status": "unmatched",
+          "hasWikiDescription": true
+        },
+        {
+          "sourceKey": "pursuit-of-power",
+          "name": "Pursuit of Power",
+          "slug": "pursuit-of-power",
+          "rarity": "silver",
+          "lifecycle": "removed",
+          "status": "unmatched",
+          "hasWikiDescription": true
+        },
+        {
+          "sourceKey": "support-main",
+          "name": "Quest: Support Main",
+          "slug": "support-main",
+          "rarity": "silver",
+          "lifecycle": "removed",
+          "status": "unmatched",
+          "hasWikiDescription": true
+        },
+        {
+          "sourceKey": "red-envelopes",
+          "name": "Red Envelopes",
+          "slug": "red-envelopes",
+          "rarity": "prismatic",
+          "lifecycle": "removed",
+          "status": "unmatched",
+          "hasWikiDescription": true
+        },
+        {
+          "sourceKey": "snowball-roulette",
+          "name": "Snowball Roulette",
+          "slug": "snowball-roulette",
+          "rarity": "gold",
+          "lifecycle": "removed",
+          "status": "unmatched",
+          "hasWikiDescription": true
+        },
+        {
+          "sourceKey": "snowball-upgrade",
+          "name": "Snowball Upgrade",
+          "slug": "snowball-upgrade",
+          "rarity": "gold",
+          "lifecycle": "removed",
+          "status": "unmatched",
+          "hasWikiDescription": true
+        },
+        {
+          "sourceKey": "squishy-slappy-grab",
+          "name": "Squishy Slappy Grab",
+          "slug": "squishy-slappy-grab",
+          "rarity": "prismatic",
+          "lifecycle": "added",
+          "status": "unmatched",
+          "hasWikiDescription": true
+        },
+        {
+          "sourceKey": "trailblazer",
+          "name": "Trailblazer",
+          "slug": "trailblazer",
+          "rarity": "gold",
+          "lifecycle": "removed",
+          "status": "unmatched",
+          "hasWikiDescription": false
+        },
+        {
+          "sourceKey": "upgrade-mikaels-blessing",
+          "name": "Upgrade Mikael's Blessing",
+          "slug": "upgrade-mikaels-blessing",
+          "rarity": "prismatic",
+          "lifecycle": "removed",
+          "status": "unmatched",
+          "hasWikiDescription": true
+        },
+        {
+          "sourceKey": "upgrade-thornmail",
+          "name": "Upgrade Thornmail",
+          "slug": "upgrade-thornmail",
+          "rarity": "silver",
+          "lifecycle": "removed",
+          "status": "unmatched",
+          "hasWikiDescription": true
+        },
+        {
+          "sourceKey": "vampirism",
+          "name": "Vampirism",
+          "slug": "vampirism",
+          "rarity": "gold",
+          "lifecycle": "removed",
+          "status": "unmatched",
+          "hasWikiDescription": true
+        },
+        {
+          "sourceKey": "void-dash",
+          "name": "Void Dash",
+          "slug": "void-dash",
+          "rarity": "gold",
+          "lifecycle": "removed",
+          "status": "unmatched",
+          "hasWikiDescription": true
+        },
+        {
+          "sourceKey": "wind-beneath-blade",
+          "name": "Wind Beneath Blade",
+          "slug": "wind-beneath-blade",
+          "rarity": "silver",
+          "lifecycle": "removed",
+          "status": "unmatched",
+          "hasWikiDescription": true
+        },
+        {
+          "sourceKey": "upgrade-sword-of-blossoming-dawn",
+          "name": "Upgrade Sword of Blossoming Dawn",
+          "slug": "upgrade-sword-of-blossoming-dawn",
+          "rarity": "prismatic",
+          "lifecycle": "removed",
+          "status": "unmatched",
+          "hasWikiDescription": true
+        }
+      ],
+      "wiki": [
+        {
+          "sourceKey": "Infinite Recursion",
+          "name": "Infinite Recursion",
+          "status": "unmatched",
+          "hasWikiDescription": true
+        },
+        {
+          "sourceKey": "Warlock Juicebox",
+          "name": "Warlock Juicebox",
+          "status": "unmatched",
+          "hasWikiDescription": true
+        },
+        {
+          "sourceKey": "Pressure Cooker",
+          "name": "Pressure Cooker",
+          "status": "unmatched",
+          "hasWikiDescription": true
+        },
+        {
+          "sourceKey": "Combusting Interest",
+          "name": "Combusting Interest",
+          "status": "unmatched",
+          "hasWikiDescription": true
+        },
+        {
+          "sourceKey": "Twin Fire",
+          "name": "Twin Fire",
+          "status": "unmatched",
+          "hasWikiDescription": true
+        },
+        {
+          "sourceKey": "Sonata",
+          "name": "Sonata",
+          "status": "unmatched",
+          "hasWikiDescription": true
+        },
+        {
+          "sourceKey": "Forged By The Master",
+          "name": "Forged By The Master",
+          "status": "unmatched",
+          "hasWikiDescription": true
+        },
+        {
+          "sourceKey": "Escape Plan",
+          "name": "Escape Plan",
+          "status": "unmatched",
+          "hasWikiDescription": true
+        },
+        {
+          "sourceKey": "Shrink Engine",
+          "name": "Shrink Engine",
+          "status": "unmatched",
+          "hasWikiDescription": true
+        },
+        {
+          "sourceKey": "Tooth Fairy",
+          "name": "Tooth Fairy",
+          "status": "unmatched",
+          "hasWikiDescription": true
+        },
+        {
+          "sourceKey": "Growth Spurt",
+          "name": "Growth Spurt",
+          "status": "unmatched",
+          "hasWikiDescription": true
+        },
+        {
+          "sourceKey": "Lil' Extra Help",
+          "name": "Lil' Extra Help",
+          "status": "unmatched",
+          "hasWikiDescription": true
+        },
+        {
+          "sourceKey": "Donation",
+          "name": "Donation",
+          "status": "unmatched",
+          "hasWikiDescription": true
+        },
+        {
+          "sourceKey": "Swift and Safe",
+          "name": "Swift and Safe",
+          "status": "unmatched",
+          "hasWikiDescription": true
+        },
+        {
+          "sourceKey": "Soul Eater",
+          "name": "Soul Eater",
+          "status": "unmatched",
+          "hasWikiDescription": true
+        },
+        {
+          "sourceKey": "Final Form",
+          "name": "Final Form",
+          "status": "unmatched",
+          "hasWikiDescription": true
+        },
+        {
+          "sourceKey": "Terrain'd",
+          "name": "Terrain'd",
+          "status": "unmatched",
+          "hasWikiDescription": true
+        },
+        {
+          "sourceKey": "BONK!",
+          "name": "BONK!",
+          "status": "unmatched",
+          "hasWikiDescription": true
+        },
+        {
+          "sourceKey": "Stay Resolute",
+          "name": "Stay Resolute",
+          "status": "unmatched",
+          "hasWikiDescription": true
+        },
+        {
+          "sourceKey": "Hand of Baron",
+          "name": "Hand of Baron",
+          "status": "unmatched",
+          "hasWikiDescription": true
+        },
+        {
+          "sourceKey": "King Me",
+          "name": "King Me",
+          "status": "unmatched",
+          "hasWikiDescription": true
+        },
+        {
+          "sourceKey": "Biggest Snowball Ever",
+          "name": "Biggest Snowball Ever",
+          "status": "unmatched",
+          "hasWikiDescription": true
+        },
+        {
+          "sourceKey": "Don't Change the Channel",
+          "name": "Don't Change the Channel",
+          "status": "unmatched",
+          "hasWikiDescription": true
+        },
+        {
+          "sourceKey": "Overextender",
+          "name": "Overextender",
+          "status": "unmatched",
+          "hasWikiDescription": true
+        },
+        {
+          "sourceKey": "It's Go Time",
+          "name": "It's Go Time",
+          "status": "unmatched",
+          "hasWikiDescription": true
+        },
+        {
+          "sourceKey": "Trusty Weapon",
+          "name": "Trusty Weapon",
+          "status": "unmatched",
+          "hasWikiDescription": true
+        },
+        {
+          "sourceKey": "Ravenous Bind",
+          "name": "Ravenous Bind",
+          "status": "unmatched",
+          "hasWikiDescription": true
+        },
+        {
+          "sourceKey": "Goldrend",
+          "name": "Goldrend",
+          "status": "unmatched",
+          "hasWikiDescription": true
+        },
+        {
+          "sourceKey": "Hextech Soul",
+          "name": "Hextech Soul",
+          "status": "unmatched",
+          "hasWikiDescription": true
+        },
+        {
+          "sourceKey": "Endless Decimation",
+          "name": "Endless Decimation",
+          "status": "unmatched",
+          "hasWikiDescription": true
+        },
+        {
+          "sourceKey": "Ultimate Awakening",
+          "name": "Ultimate Awakening",
+          "status": "unmatched",
+          "hasWikiDescription": true
+        },
+        {
+          "sourceKey": "Overloaded",
+          "name": "Overloaded",
+          "status": "unmatched",
+          "hasWikiDescription": true
+        },
+        {
+          "sourceKey": "Adaptive Ward",
+          "name": "Adaptive Ward",
+          "status": "unmatched",
+          "hasWikiDescription": true
+        },
+        {
+          "sourceKey": "Ominous Pact",
+          "name": "Ominous Pact",
+          "status": "unmatched",
+          "hasWikiDescription": true
+        },
+        {
+          "sourceKey": "Double Defense",
+          "name": "Double Defense",
+          "status": "unmatched",
+          "hasWikiDescription": true
+        },
+        {
+          "sourceKey": "Mercy's Strike",
+          "name": "Mercy's Strike",
+          "status": "unmatched",
+          "hasWikiDescription": true
+        },
+        {
+          "sourceKey": "Shark Bait",
+          "name": "Shark Bait",
+          "status": "unmatched",
+          "hasWikiDescription": true
+        },
+        {
+          "sourceKey": "Nature is Healing",
+          "name": "Nature is Healing",
+          "status": "unmatched",
+          "hasWikiDescription": true
+        },
+        {
+          "sourceKey": "Poltergeist",
+          "name": "Poltergeist",
+          "status": "unmatched",
+          "hasWikiDescription": true
+        },
+        {
+          "sourceKey": "Nightstalking",
+          "name": "Nightstalking",
+          "status": "unmatched",
+          "hasWikiDescription": true
+        },
+        {
+          "sourceKey": "Tripleshot",
+          "name": "Tripleshot",
+          "status": "unmatched",
+          "hasWikiDescription": true
+        },
+        {
+          "sourceKey": "Empyrean Promise",
+          "name": "Empyrean Promise",
+          "status": "unmatched",
+          "hasWikiDescription": true
+        },
+        {
+          "sourceKey": "Kill Secured",
+          "name": "Kill Secured",
+          "status": "unmatched",
+          "hasWikiDescription": true
+        },
+        {
+          "sourceKey": "Porcupine",
+          "name": "Porcupine",
+          "status": "unmatched",
+          "hasWikiDescription": true
+        },
+        {
+          "sourceKey": "Echo Cast",
+          "name": "Echo Cast",
+          "status": "unmatched",
+          "hasWikiDescription": true
+        },
+        {
+          "sourceKey": "Spellsplit",
+          "name": "Spellsplit",
+          "status": "unmatched",
+          "hasWikiDescription": true
+        },
+        {
+          "sourceKey": "Shark Tempest",
+          "name": "Shark Tempest",
+          "status": "unmatched",
+          "hasWikiDescription": true
+        },
+        {
+          "sourceKey": "Flash 2",
+          "name": "Flash 2",
+          "status": "unmatched",
+          "hasWikiDescription": true
+        },
+        {
+          "sourceKey": "Hide on Bush",
+          "name": "Hide on Bush",
+          "status": "unmatched",
+          "hasWikiDescription": true
+        },
+        {
+          "sourceKey": "Prom Queen",
+          "name": "Prom Queen",
+          "status": "unmatched",
+          "hasWikiDescription": true
+        },
+        {
+          "sourceKey": "Our Healing",
+          "name": "Our Healing",
+          "status": "unmatched",
+          "hasWikiDescription": true
+        },
+        {
+          "sourceKey": "Mighty Shield",
+          "name": "Mighty Shield",
+          "status": "unmatched",
+          "hasWikiDescription": true
+        },
+        {
+          "sourceKey": "Pin Cushion",
+          "name": "Pin Cushion",
+          "status": "unmatched",
+          "hasWikiDescription": true
+        },
+        {
+          "sourceKey": "Pinball",
+          "name": "Pinball",
+          "status": "unmatched",
+          "hasWikiDescription": true
+        },
+        {
+          "sourceKey": "Snowblast",
+          "name": "Snowblast",
+          "status": "unmatched",
+          "hasWikiDescription": true
+        },
+        {
+          "sourceKey": "Spin Me Right Round",
+          "name": "Spin Me Right Round",
+          "status": "unmatched",
+          "hasWikiDescription": true
+        },
+        {
+          "sourceKey": "Surge Field",
+          "name": "Surge Field",
+          "status": "unmatched",
+          "hasWikiDescription": true
+        },
+        {
+          "sourceKey": "Holy Snowball",
+          "name": "Holy Snowball",
+          "status": "unmatched",
+          "hasWikiDescription": true
+        },
+        {
+          "sourceKey": "Glass Cannon",
+          "name": "Glass Cannon",
+          "status": "unmatched",
+          "hasWikiDescription": true
+        },
+        {
+          "sourceKey": "Chain Reaction",
+          "name": "Chain Reaction",
+          "status": "unmatched",
+          "hasWikiDescription": true
+        },
+        {
+          "sourceKey": "Dimension Shift",
+          "name": "Dimension Shift",
+          "status": "unmatched",
+          "hasWikiDescription": true
+        },
+        {
+          "sourceKey": "Poro Stampede",
+          "name": "Poro Stampede",
+          "status": "unmatched",
+          "hasWikiDescription": true
+        },
+        {
+          "sourceKey": "???",
+          "name": "???",
+          "status": "unmatched",
+          "hasWikiDescription": true
+        },
+        {
+          "sourceKey": "Adamant",
+          "name": "Adamant",
+          "status": "unmatched",
+          "hasWikiDescription": true
+        },
+        {
+          "sourceKey": "Crit 'n Cast",
+          "name": "Crit 'n Cast",
+          "status": "unmatched",
+          "hasWikiDescription": true
+        },
+        {
+          "sourceKey": "Critical Missile",
+          "name": "Critical Missile",
+          "status": "unmatched",
+          "hasWikiDescription": true
+        },
+        {
+          "sourceKey": "Critical Rhythm",
+          "name": "Critical Rhythm",
+          "status": "unmatched",
+          "hasWikiDescription": true
+        },
+        {
+          "sourceKey": "Droppybara",
+          "name": "Droppybara",
+          "status": "unmatched",
+          "hasWikiDescription": true
+        },
+        {
+          "sourceKey": "Final City Transit",
+          "name": "Final City Transit",
+          "status": "unmatched",
+          "hasWikiDescription": true
+        },
+        {
+          "sourceKey": "Gash",
+          "name": "Gash",
+          "status": "unmatched",
+          "hasWikiDescription": true
+        },
+        {
+          "sourceKey": "Grandma's Chili Oil",
+          "name": "Grandma's Chili Oil",
+          "status": "unmatched",
+          "hasWikiDescription": true
+        },
+        {
+          "sourceKey": "Hat on a Hat",
+          "name": "Hat on a Hat",
+          "status": "unmatched",
+          "hasWikiDescription": true
+        },
+        {
+          "sourceKey": "I'm a Baby Kitty Where is Mama",
+          "name": "I'm a Baby Kitty Where is Mama",
+          "status": "unmatched",
+          "hasWikiDescription": true
+        },
+        {
+          "sourceKey": "Laser Heal",
+          "name": "Laser Heal",
+          "status": "unmatched",
+          "hasWikiDescription": true
+        },
+        {
+          "sourceKey": "One Trick Pony",
+          "name": "One Trick Pony",
+          "status": "unmatched",
+          "hasWikiDescription": true
+        },
+        {
+          "sourceKey": "Pat On The Back",
+          "name": "Pat On The Back",
+          "status": "unmatched",
+          "hasWikiDescription": true
+        },
+        {
+          "sourceKey": "Pursuit of Power",
+          "name": "Pursuit of Power",
+          "status": "unmatched",
+          "hasWikiDescription": true
+        },
+        {
+          "sourceKey": "Quest: Support Main",
+          "name": "Quest: Support Main",
+          "status": "unmatched",
+          "hasWikiDescription": true
+        },
+        {
+          "sourceKey": "Red Envelopes",
+          "name": "Red Envelopes",
+          "status": "unmatched",
+          "hasWikiDescription": true
+        },
+        {
+          "sourceKey": "Snowball Roulette",
+          "name": "Snowball Roulette",
+          "status": "unmatched",
+          "hasWikiDescription": true
+        },
+        {
+          "sourceKey": "Snowball Upgrade",
+          "name": "Snowball Upgrade",
+          "status": "unmatched",
+          "hasWikiDescription": true
+        },
+        {
+          "sourceKey": "Squishy Slappy Grab",
+          "name": "Squishy Slappy Grab",
+          "status": "unmatched",
+          "hasWikiDescription": true
+        },
+        {
+          "sourceKey": "Upgrade Mikael's Blessing",
+          "name": "Upgrade Mikael's Blessing",
+          "status": "unmatched",
+          "hasWikiDescription": true
+        },
+        {
+          "sourceKey": "Upgrade Thornmail",
+          "name": "Upgrade Thornmail",
+          "status": "unmatched",
+          "hasWikiDescription": true
+        },
+        {
+          "sourceKey": "Vampirism",
+          "name": "Vampirism",
+          "status": "unmatched",
+          "hasWikiDescription": true
+        },
+        {
+          "sourceKey": "Void Dash",
+          "name": "Void Dash",
+          "status": "unmatched",
+          "hasWikiDescription": true
+        },
+        {
+          "sourceKey": "Wind Beneath Blade",
+          "name": "Wind Beneath Blade",
+          "status": "unmatched",
+          "hasWikiDescription": true
+        },
+        {
+          "sourceKey": "Upgrade Sword of Blossoming Dawn",
+          "name": "Upgrade Sword of Blossoming Dawn",
+          "status": "unmatched",
+          "hasWikiDescription": true
+        }
+      ],
+      "arammayhem_win_rate": [
+        {
+          "sourceKey": "infinite-recursion",
+          "name": "Infinite Recursion",
+          "slug": "infinite-recursion",
+          "status": "unmatched"
+        },
+        {
+          "sourceKey": "warlock-juicebox",
+          "name": "Warlock Juicebox",
+          "slug": "warlock-juicebox",
+          "status": "unmatched"
+        },
+        {
+          "sourceKey": "pressure-cooker",
+          "name": "Pressure Cooker",
+          "slug": "pressure-cooker",
+          "status": "unmatched"
+        },
+        {
+          "sourceKey": "combusting-interest",
+          "name": "Combusting Interest",
+          "slug": "combusting-interest",
+          "status": "unmatched"
+        },
+        {
+          "sourceKey": "twin-fire",
+          "name": "Twin Fire",
+          "slug": "twin-fire",
+          "status": "unmatched"
+        },
+        {
+          "sourceKey": "sonata",
+          "name": "Sonata",
+          "slug": "sonata",
+          "status": "unmatched"
+        },
+        {
+          "sourceKey": "forged-by-the-master",
+          "name": "Forged By The Master",
+          "slug": "forged-by-the-master",
+          "status": "unmatched"
+        },
+        {
+          "sourceKey": "escape-plan",
+          "name": "Escape Plan",
+          "slug": "escape-plan",
+          "status": "unmatched"
+        },
+        {
+          "sourceKey": "shrink-engine",
+          "name": "Shrink Engine",
+          "slug": "shrink-engine",
+          "status": "unmatched"
+        },
+        {
+          "sourceKey": "tooth-fairy",
+          "name": "Tooth Fairy",
+          "slug": "tooth-fairy",
+          "status": "unmatched"
+        },
+        {
+          "sourceKey": "growth-spurt",
+          "name": "Growth Spurt",
+          "slug": "growth-spurt",
+          "status": "unmatched"
+        },
+        {
+          "sourceKey": "lil-extra-help",
+          "name": "Lil' Extra Help",
+          "slug": "lil-extra-help",
+          "status": "unmatched"
+        },
+        {
+          "sourceKey": "donation",
+          "name": "Donation",
+          "slug": "donation",
+          "status": "unmatched"
+        },
+        {
+          "sourceKey": "swift-and-safe",
+          "name": "Swift and Safe",
+          "slug": "swift-and-safe",
+          "status": "unmatched"
+        },
+        {
+          "sourceKey": "soul-eater",
+          "name": "Soul Eater",
+          "slug": "soul-eater",
+          "status": "unmatched"
+        },
+        {
+          "sourceKey": "final-form",
+          "name": "Final Form",
+          "slug": "final-form",
+          "status": "unmatched"
+        },
+        {
+          "sourceKey": "terraind",
+          "name": "Terrain'd",
+          "slug": "terraind",
+          "status": "unmatched"
+        },
+        {
+          "sourceKey": "bonk",
+          "name": "BONK!",
+          "slug": "bonk",
+          "status": "unmatched"
+        },
+        {
+          "sourceKey": "stay-resolute",
+          "name": "Stay Resolute",
+          "slug": "stay-resolute",
+          "status": "unmatched"
+        },
+        {
+          "sourceKey": "hand-of-baron",
+          "name": "Hand of Baron",
+          "slug": "hand-of-baron",
+          "status": "unmatched"
+        },
+        {
+          "sourceKey": "king-me",
+          "name": "King Me",
+          "slug": "king-me",
+          "status": "unmatched"
+        },
+        {
+          "sourceKey": "biggest-snowball-ever",
+          "name": "Biggest Snowball Ever",
+          "slug": "biggest-snowball-ever",
+          "status": "unmatched"
+        },
+        {
+          "sourceKey": "dont-change-the-channel",
+          "name": "Don't Change the Channel",
+          "slug": "dont-change-the-channel",
+          "status": "unmatched"
+        },
+        {
+          "sourceKey": "overextender",
+          "name": "Overextender",
+          "slug": "overextender",
+          "status": "unmatched"
+        },
+        {
+          "sourceKey": "its-go-time",
+          "name": "It's Go Time",
+          "slug": "its-go-time",
+          "status": "unmatched"
+        },
+        {
+          "sourceKey": "trusty-weapon",
+          "name": "Trusty Weapon",
+          "slug": "trusty-weapon",
+          "status": "unmatched"
+        },
+        {
+          "sourceKey": "ravenous-bind",
+          "name": "Ravenous Bind",
+          "slug": "ravenous-bind",
+          "status": "unmatched"
+        },
+        {
+          "sourceKey": "goldrend",
+          "name": "Goldrend",
+          "slug": "goldrend",
+          "status": "unmatched"
+        },
+        {
+          "sourceKey": "hextech-soul",
+          "name": "Hextech Soul",
+          "slug": "hextech-soul",
+          "status": "unmatched"
+        },
+        {
+          "sourceKey": "endless-decimation",
+          "name": "Endless Decimation",
+          "slug": "endless-decimation",
+          "status": "unmatched"
+        },
+        {
+          "sourceKey": "ultimate-awakening",
+          "name": "Ultimate Awakening",
+          "slug": "ultimate-awakening",
+          "status": "unmatched"
+        },
+        {
+          "sourceKey": "overloaded",
+          "name": "Overloaded",
+          "slug": "overloaded",
+          "status": "unmatched"
+        },
+        {
+          "sourceKey": "adaptive-ward",
+          "name": "Adaptive Ward",
+          "slug": "adaptive-ward",
+          "status": "unmatched"
+        },
+        {
+          "sourceKey": "ominous-pact",
+          "name": "Ominous Pact",
+          "slug": "ominous-pact",
+          "status": "unmatched"
+        },
+        {
+          "sourceKey": "double-defense",
+          "name": "Double Defense",
+          "slug": "double-defense",
+          "status": "unmatched"
+        },
+        {
+          "sourceKey": "mercys-strike",
+          "name": "Mercy's Strike",
+          "slug": "mercys-strike",
+          "status": "unmatched"
+        },
+        {
+          "sourceKey": "shark-bait",
+          "name": "Shark Bait",
+          "slug": "shark-bait",
+          "status": "unmatched"
+        },
+        {
+          "sourceKey": "nature-is-healing",
+          "name": "Nature is Healing",
+          "slug": "nature-is-healing",
+          "status": "unmatched"
+        },
+        {
+          "sourceKey": "poltergeist",
+          "name": "Poltergeist",
+          "slug": "poltergeist",
+          "status": "unmatched"
+        },
+        {
+          "sourceKey": "nightstalking",
+          "name": "Nightstalking",
+          "slug": "nightstalking",
+          "status": "unmatched"
+        },
+        {
+          "sourceKey": "tripleshot",
+          "name": "Tripleshot",
+          "slug": "tripleshot",
+          "status": "unmatched"
+        },
+        {
+          "sourceKey": "empyrean-promise",
+          "name": "Empyrean Promise",
+          "slug": "empyrean-promise",
+          "status": "unmatched"
+        },
+        {
+          "sourceKey": "kill-secured",
+          "name": "Kill Secured",
+          "slug": "kill-secured",
+          "status": "unmatched"
+        },
+        {
+          "sourceKey": "porcupine",
+          "name": "Porcupine",
+          "slug": "porcupine",
+          "status": "unmatched"
+        },
+        {
+          "sourceKey": "echo-cast",
+          "name": "Echo Cast",
+          "slug": "echo-cast",
+          "status": "unmatched"
+        },
+        {
+          "sourceKey": "spell-split",
+          "name": "Spellsplit",
+          "slug": "spell-split",
+          "status": "unmatched"
+        },
+        {
+          "sourceKey": "shark-tempest",
+          "name": "Shark Tempest",
+          "slug": "shark-tempest",
+          "status": "unmatched"
+        },
+        {
+          "sourceKey": "flash-2",
+          "name": "Flash 2",
+          "slug": "flash-2",
+          "status": "unmatched"
+        },
+        {
+          "sourceKey": "hide-on-bush",
+          "name": "Hide on Bush",
+          "slug": "hide-on-bush",
+          "status": "unmatched"
+        },
+        {
+          "sourceKey": "prom-queen",
+          "name": "Prom Queen",
+          "slug": "prom-queen",
+          "status": "unmatched"
+        },
+        {
+          "sourceKey": "our-healing",
+          "name": "Our Healing",
+          "slug": "our-healing",
+          "status": "unmatched"
+        },
+        {
+          "sourceKey": "mighty-shield",
+          "name": "Mighty Shield",
+          "slug": "mighty-shield",
+          "status": "unmatched"
+        },
+        {
+          "sourceKey": "pin-cushion",
+          "name": "Pin Cushion",
+          "slug": "pin-cushion",
+          "status": "unmatched"
+        },
+        {
+          "sourceKey": "pinball",
+          "name": "Pinball",
+          "slug": "pinball",
+          "status": "unmatched"
+        },
+        {
+          "sourceKey": "snowblast",
+          "name": "Snowblast",
+          "slug": "snowblast",
+          "status": "unmatched"
+        },
+        {
+          "sourceKey": "spin-me-right-round",
+          "name": "Spin Me Right Round",
+          "slug": "spin-me-right-round",
+          "status": "unmatched"
+        },
+        {
+          "sourceKey": "surge-field",
+          "name": "Surge Field",
+          "slug": "surge-field",
+          "status": "unmatched"
+        },
+        {
+          "sourceKey": "holy-snowball",
+          "name": "Holy Snowball",
+          "slug": "holy-snowball",
+          "status": "unmatched"
+        },
+        {
+          "sourceKey": "glass-cannon",
+          "name": "Glass Cannon",
+          "slug": "glass-cannon",
+          "status": "unmatched"
+        },
+        {
+          "sourceKey": "chain-reaction",
+          "name": "Chain Reaction",
+          "slug": "chain-reaction",
+          "status": "unmatched"
+        },
+        {
+          "sourceKey": "dimension-shift",
+          "name": "Dimension Shift",
+          "slug": "dimension-shift",
+          "status": "unmatched"
+        },
+        {
+          "sourceKey": "poro-stampede",
+          "name": "Poro Stampede",
+          "slug": "poro-stampede",
+          "status": "unmatched"
+        }
+      ]
+    }
+  },
+  "wikiOnly": {
+    "count": 82,
+    "sourceUrl": "https://wiki.leagueoflegends.com/en-us/ARAM:_Mayhem/Augments",
+    "augments": [
+      {
+        "sourceKey": "Adamant",
+        "name": "Adamant",
+        "wikiRarity": "silver",
+        "status": "unmatched"
+      },
+      {
+        "sourceKey": "Adaptive Ward",
+        "name": "Adaptive Ward",
+        "wikiRarity": "silver",
+        "status": "unmatched"
+      },
+      {
+        "sourceKey": "BONK!",
+        "name": "BONK!",
+        "wikiRarity": "silver",
+        "status": "unmatched"
+      },
+      {
+        "sourceKey": "Biggest Snowball Ever",
+        "name": "Biggest Snowball Ever",
+        "wikiRarity": "prismatic",
+        "status": "unmatched"
+      },
+      {
+        "sourceKey": "Bolstered",
+        "name": "Bolstered",
+        "wikiRarity": "silver",
+        "status": "unmatched"
+      },
+      {
+        "sourceKey": "Chain Reaction",
+        "name": "Chain Reaction",
+        "wikiRarity": "prismatic",
+        "status": "unmatched"
+      },
+      {
+        "sourceKey": "Combusting Interest",
+        "name": "Combusting Interest",
+        "wikiRarity": "gold",
+        "status": "unmatched"
+      },
+      {
+        "sourceKey": "Crit 'n Cast",
+        "name": "Crit 'n Cast",
+        "wikiRarity": "silver",
+        "status": "unmatched"
+      },
+      {
+        "sourceKey": "Critical Missile",
+        "name": "Critical Missile",
+        "wikiRarity": "gold",
+        "status": "unmatched"
+      },
+      {
+        "sourceKey": "Critical Rhythm",
+        "name": "Critical Rhythm",
+        "wikiRarity": "gold",
+        "status": "unmatched"
+      },
+      {
+        "sourceKey": "Dimension Shift",
+        "name": "Dimension Shift",
+        "wikiRarity": "prismatic",
+        "status": "unmatched"
+      },
+      {
+        "sourceKey": "Don't Change the Channel",
+        "name": "Don't Change the Channel",
+        "wikiRarity": "silver",
+        "status": "unmatched"
+      },
+      {
+        "sourceKey": "Donation",
+        "name": "Donation",
+        "wikiRarity": "gold",
+        "status": "unmatched"
+      },
+      {
+        "sourceKey": "Double Strike",
+        "name": "Double Strike",
+        "wikiRarity": "silver",
+        "status": "unmatched"
+      },
+      {
+        "sourceKey": "Droppybara",
+        "name": "Droppybara",
+        "wikiRarity": "prismatic",
+        "status": "unmatched"
+      },
+      {
+        "sourceKey": "Echo Cast",
+        "name": "Echo Cast",
+        "wikiRarity": "prismatic",
+        "status": "unmatched"
+      },
+      {
+        "sourceKey": "Empyrean Promise",
+        "name": "Empyrean Promise",
+        "wikiRarity": "prismatic",
+        "status": "unmatched"
+      },
+      {
+        "sourceKey": "Endless Decimation",
+        "name": "Endless Decimation",
+        "wikiRarity": "gold",
+        "status": "unmatched"
+      },
+      {
+        "sourceKey": "Escape Plan",
+        "name": "Escape Plan",
+        "wikiRarity": "silver",
+        "status": "unmatched"
+      },
+      {
+        "sourceKey": "Final City Transit",
+        "name": "Final City Transit",
+        "wikiRarity": "gold",
+        "status": "unmatched"
+      },
+      {
+        "sourceKey": "Final Form",
+        "name": "Final Form",
+        "wikiRarity": "prismatic",
+        "status": "unmatched"
+      },
+      {
+        "sourceKey": "Flash 2",
+        "name": "Flash 2",
+        "wikiRarity": "silver",
+        "status": "unmatched"
+      },
+      {
+        "sourceKey": "Forged By The Master",
+        "name": "Forged By The Master",
+        "wikiRarity": "silver",
+        "status": "unmatched"
+      },
+      {
+        "sourceKey": "Glass Cannon",
+        "name": "Glass Cannon",
+        "wikiRarity": "prismatic",
+        "status": "unmatched"
+      },
+      {
+        "sourceKey": "Goldrend",
+        "name": "Goldrend",
+        "wikiRarity": "prismatic",
+        "status": "unmatched"
+      },
+      {
+        "sourceKey": "Growth Spurt",
+        "name": "Growth Spurt",
+        "wikiRarity": "gold",
+        "status": "unmatched"
+      },
+      {
+        "sourceKey": "Hand of Baron",
+        "name": "Hand of Baron",
+        "wikiRarity": "prismatic",
+        "status": "unmatched"
+      },
+      {
+        "sourceKey": "Hextech Soul",
+        "name": "Hextech Soul",
+        "wikiRarity": "silver",
+        "status": "unmatched"
+      },
+      {
+        "sourceKey": "Hide on Bush",
+        "name": "Hide on Bush",
+        "wikiRarity": "gold",
+        "status": "unmatched"
+      },
+      {
+        "sourceKey": "Holy Snowball",
+        "name": "Holy Snowball",
+        "wikiRarity": "prismatic",
+        "status": "unmatched"
+      },
+      {
+        "sourceKey": "Infinite Recursion",
+        "name": "Infinite Recursion",
+        "wikiRarity": "prismatic",
+        "status": "unmatched"
+      },
+      {
+        "sourceKey": "It's Go Time",
+        "name": "It's Go Time",
+        "wikiRarity": "silver",
+        "status": "unmatched"
+      },
+      {
+        "sourceKey": "Kill Secured",
+        "name": "Kill Secured",
+        "wikiRarity": "silver",
+        "status": "unmatched"
+      },
+      {
+        "sourceKey": "King Me",
+        "name": "King Me",
+        "wikiRarity": "prismatic",
+        "status": "unmatched"
+      },
+      {
+        "sourceKey": "Lil' Extra Help",
+        "name": "Lil' Extra Help",
+        "wikiRarity": "gold",
+        "status": "unmatched"
+      },
+      {
+        "sourceKey": "Mercy's Strike",
+        "name": "Mercy's Strike",
+        "wikiRarity": "gold",
+        "status": "unmatched"
+      },
+      {
+        "sourceKey": "Mighty Shield",
+        "name": "Mighty Shield",
+        "wikiRarity": "silver",
+        "status": "unmatched"
+      },
+      {
+        "sourceKey": "Nature is Healing",
+        "name": "Nature is Healing",
+        "wikiRarity": "gold",
+        "status": "unmatched"
+      },
+      {
+        "sourceKey": "Nightstalking",
+        "name": "Nightstalking",
+        "wikiRarity": "gold",
+        "status": "unmatched"
+      },
+      {
+        "sourceKey": "Ominous Pact",
+        "name": "Ominous Pact",
+        "wikiRarity": "prismatic",
+        "status": "unmatched"
+      },
+      {
+        "sourceKey": "Our Healing",
+        "name": "Our Healing",
+        "wikiRarity": "gold",
+        "status": "unmatched"
+      },
+      {
+        "sourceKey": "Overextender",
+        "name": "Overextender",
+        "wikiRarity": "gold",
+        "status": "unmatched"
+      },
+      {
+        "sourceKey": "Overloaded",
+        "name": "Overloaded",
+        "wikiRarity": "prismatic",
+        "status": "unmatched"
+      },
+      {
+        "sourceKey": "Pat On The Back",
+        "name": "Pat On The Back",
+        "wikiRarity": "gold",
+        "status": "unmatched"
+      },
+      {
+        "sourceKey": "Pin Cushion",
+        "name": "Pin Cushion",
+        "wikiRarity": "prismatic",
+        "status": "unmatched"
+      },
+      {
+        "sourceKey": "Pinball",
+        "name": "Pinball",
+        "wikiRarity": "gold",
+        "status": "unmatched"
+      },
+      {
+        "sourceKey": "Poltergeist",
+        "name": "Poltergeist",
+        "wikiRarity": "silver",
+        "status": "unmatched"
+      },
+      {
+        "sourceKey": "Porcupine",
+        "name": "Porcupine",
+        "wikiRarity": "gold",
+        "status": "unmatched"
+      },
+      {
+        "sourceKey": "Poro Stampede",
+        "name": "Poro Stampede",
+        "wikiRarity": "prismatic",
+        "status": "unmatched"
+      },
+      {
+        "sourceKey": "Pressure Cooker",
+        "name": "Pressure Cooker",
+        "wikiRarity": "gold",
+        "status": "unmatched"
+      },
+      {
+        "sourceKey": "Prom Queen",
+        "name": "Prom Queen",
+        "wikiRarity": "prismatic",
+        "status": "unmatched"
+      },
+      {
+        "sourceKey": "Pursuit of Power",
+        "name": "Pursuit of Power",
+        "wikiRarity": "gold",
+        "status": "unmatched"
+      },
+      {
+        "sourceKey": "Quest: Sneakerhead",
+        "name": "Quest: Sneakerhead",
+        "wikiRarity": "prismatic",
+        "status": "unmatched"
+      },
+      {
+        "sourceKey": "Ravenous Bind",
+        "name": "Ravenous Bind",
+        "wikiRarity": "gold",
+        "status": "unmatched"
+      },
+      {
+        "sourceKey": "ReEnergize",
+        "name": "ReEnergize",
+        "wikiRarity": "silver",
+        "status": "unmatched"
+      },
+      {
+        "sourceKey": "Shark Bait",
+        "name": "Shark Bait",
+        "wikiRarity": "gold",
+        "status": "unmatched"
+      },
+      {
+        "sourceKey": "Shark Tempest",
+        "name": "Shark Tempest",
+        "wikiRarity": "gold",
+        "status": "unmatched"
+      },
+      {
+        "sourceKey": "Shrink Engine",
+        "name": "Shrink Engine",
+        "wikiRarity": "gold",
+        "status": "unmatched"
+      },
+      {
+        "sourceKey": "Snap Back",
+        "name": "Snap Back",
+        "wikiRarity": "gold",
+        "status": "unmatched"
+      },
+      {
+        "sourceKey": "Snowball Upgrade",
+        "name": "Snowball Upgrade",
+        "wikiRarity": "gold",
+        "status": "unmatched"
+      },
+      {
+        "sourceKey": "Snowblast",
+        "name": "Snowblast",
+        "wikiRarity": "gold",
+        "status": "unmatched"
+      },
+      {
+        "sourceKey": "Sonata",
+        "name": "Sonata",
+        "wikiRarity": "gold",
+        "status": "unmatched"
+      },
+      {
+        "sourceKey": "Soul Eater",
+        "name": "Soul Eater",
+        "wikiRarity": "gold",
+        "status": "unmatched"
+      },
+      {
+        "sourceKey": "Spell Split",
+        "name": "Spell Split",
+        "wikiRarity": "prismatic",
+        "status": "unmatched"
+      },
+      {
+        "sourceKey": "Spin Me Right Round",
+        "name": "Spin Me Right Round",
+        "wikiRarity": "silver",
+        "status": "unmatched"
+      },
+      {
+        "sourceKey": "Squishy Slappy Grab",
+        "name": "Squishy Slappy Grab",
+        "wikiRarity": "prismatic",
+        "status": "unmatched"
+      },
+      {
+        "sourceKey": "Stay Resolute",
+        "name": "Stay Resolute",
+        "wikiRarity": "silver",
+        "status": "unmatched"
+      },
+      {
+        "sourceKey": "Surge Field",
+        "name": "Surge Field",
+        "wikiRarity": "prismatic",
+        "status": "unmatched"
+      },
+      {
+        "sourceKey": "Swift and Safe",
+        "name": "Swift and Safe",
+        "wikiRarity": "silver",
+        "status": "unmatched"
+      },
+      {
+        "sourceKey": "Terrain'd",
+        "name": "Terrain'd",
+        "wikiRarity": "gold",
+        "status": "unmatched"
+      },
+      {
+        "sourceKey": "Tooth Fairy",
+        "name": "Tooth Fairy",
+        "wikiRarity": "gold",
+        "status": "unmatched"
+      },
+      {
+        "sourceKey": "Tripleshot",
+        "name": "Tripleshot",
+        "wikiRarity": "prismatic",
+        "status": "unmatched"
+      },
+      {
+        "sourceKey": "Trusty Weapon",
+        "name": "Trusty Weapon",
+        "wikiRarity": "silver",
+        "status": "unmatched"
+      },
+      {
+        "sourceKey": "Twin Fire",
+        "name": "Twin Fire",
+        "wikiRarity": "silver",
+        "status": "unmatched"
+      },
+      {
+        "sourceKey": "Ult Bot",
+        "name": "Ult Bot",
+        "wikiRarity": "prismatic",
+        "status": "unmatched"
+      },
+      {
+        "sourceKey": "Ultimate Awakening",
+        "name": "Ultimate Awakening",
+        "wikiRarity": "prismatic",
+        "status": "unmatched"
+      },
+      {
+        "sourceKey": "Upgrade Sword of Blossoming Dawn",
+        "name": "Upgrade Sword of Blossoming Dawn",
+        "wikiRarity": "prismatic",
+        "status": "unmatched"
+      },
+      {
+        "sourceKey": "Vampirism",
+        "name": "Vampirism",
+        "wikiRarity": "gold",
+        "status": "unmatched"
+      },
+      {
+        "sourceKey": "Veil of Warding",
+        "name": "Veil of Warding",
+        "wikiRarity": "silver",
+        "status": "unmatched"
+      },
+      {
+        "sourceKey": "Virtuous Cycle",
+        "name": "Virtuous Cycle",
+        "wikiRarity": "silver",
+        "status": "unmatched"
+      },
+      {
+        "sourceKey": "Void Dash",
+        "name": "Void Dash",
+        "wikiRarity": "gold",
+        "status": "unmatched"
+      },
+      {
+        "sourceKey": "Warlock Juicebox",
+        "name": "Warlock Juicebox",
+        "wikiRarity": "gold",
+        "status": "unmatched"
+      }
+    ]
+  },
+  "wikiContradictions": {
+    "counts": {
+      "existence": 110,
+      "rarity": 1,
+      "availability": 6
+    },
+    "rarity": [
+      {
+        "source": "lol_wiki",
+        "augmentId": "ARAM_Terror",
+        "name": "Terror",
+        "wikiRarity": "silver",
+        "cdragonRarity": "gold",
+        "note": "CDragon remains rarity authority; this report is evidence only."
+      }
+    ],
+    "availability": [
+      {
+        "source": "lol_wiki",
+        "augmentId": "ARAM_ClownCollege",
+        "name": "Clown College",
+        "signal": "wiki_availability_note_with_cdragon_registry_presence",
+        "wikiAvailabilityNotes": [
+          "This augment is currently disabled."
+        ],
+        "note": "Registry presence is definition only; Step 4 records wiki evidence and does not resolve availability."
+      },
+      {
+        "source": "lol_wiki",
+        "augmentId": "ARAM_LittleDevil",
+        "name": "Devil on Your Shoulder",
+        "signal": "wiki_availability_note_with_cdragon_registry_presence",
+        "wikiAvailabilityNotes": [
+          "This augment is currently disabled."
+        ],
+        "note": "Registry presence is definition only; Step 4 records wiki evidence and does not resolve availability."
+      },
+      {
+        "source": "lol_wiki",
+        "augmentId": "ARAM_DrawYourSword",
+        "name": "Draw Your Sword",
+        "signal": "wiki_availability_note_with_cdragon_registry_presence",
+        "wikiAvailabilityNotes": [
+          "This augment is only available for ranged champions.",
+          "This augment is not offered if the champion has built Runaan's Hurricane."
+        ],
+        "note": "Registry presence is definition only; Step 4 records wiki evidence and does not resolve availability."
+      },
+      {
+        "source": "lol_wiki",
+        "augmentId": "ARAM_Earthwake",
+        "name": "Earthwake",
+        "signal": "wiki_availability_note_with_cdragon_registry_presence",
+        "wikiAvailabilityNotes": [
+          "This augment is only offered to up to 2 players on each team for a given game."
+        ],
+        "note": "Registry presence is definition only; Step 4 records wiki evidence and does not resolve availability."
+      },
+      {
+        "source": "lol_wiki",
+        "augmentId": "ARAM_Perseverance",
+        "name": "Perseverance",
+        "signal": "wiki_availability_note_with_cdragon_registry_presence",
+        "wikiAvailabilityNotes": [
+          "This augment is currently disabled.",
+          "This augment prevents the user from being offered the Vampirism augment."
+        ],
+        "note": "Registry presence is definition only; Step 4 records wiki evidence and does not resolve availability."
+      },
+      {
+        "source": "lol_wiki",
+        "augmentId": "ARAM_QuantumComputing",
+        "name": "Quantum Computing",
+        "signal": "wiki_availability_note_with_cdragon_registry_presence",
+        "wikiAvailabilityNotes": [
+          "This augment is currently disabled."
+        ],
+        "note": "Registry presence is definition only; Step 4 records wiki evidence and does not resolve availability."
+      }
+    ]
+  },
+  "curatedBreakerReconciliation": [
+    {
+      "slug": "jeweled-gauntlet",
+      "augmentId": "ARAM_JeweledGauntlet",
+      "name": "Jeweled Gauntlet",
+      "availability": {
+        "status": "confirmed_live",
+        "signals": {
+          "cdragon_registry": {
+            "present": true,
+            "augmentId": "ARAM_JeweledGauntlet",
+            "definitionPlaceholder": false
+          },
+          "wiki": {
+            "present": true,
+            "status": "live",
+            "availabilityNotes": [],
+            "hasDescription": true,
+            "hasNotes": false,
+            "wikiFetchedAt": "2026-06-22T17:54:33+00:00"
+          },
+          "tencent": {
+            "status": null
+          },
+          "telemetry": {
+            "status": null
+          },
+          "patch_notes": {
+            "removed": false
+          },
+          "tombstone": {
+            "removed": true
+          },
+          "existing_catalog": {
+            "slug": "jeweled-gauntlet",
+            "lifecycle": "removed"
+          },
+          "resolution": {
+            "liveSources": [
+              "wiki"
+            ],
+            "disabledSources": [],
+            "removedSources": [
+              "tombstone"
+            ]
+          }
+        }
+      },
+      "flags": {
+        "lifecycle": "active",
+        "system_breaker": true
+      },
+      "staleBreakerFlag": false,
+      "note": "old retirement was arammayhem-sourced; overridden by CDragon+wiki truth per human ruling"
+    },
+    {
+      "slug": "vulnerability",
+      "augmentId": "ARAM_Vulnerability",
+      "name": "Vulnerability",
+      "availability": {
+        "status": "confirmed_live",
+        "signals": {
+          "cdragon_registry": {
+            "present": true,
+            "augmentId": "ARAM_Vulnerability",
+            "definitionPlaceholder": false
+          },
+          "wiki": {
+            "present": true,
+            "status": "live",
+            "availabilityNotes": [],
+            "hasDescription": true,
+            "hasNotes": false,
+            "wikiFetchedAt": "2026-06-22T17:54:33+00:00"
+          },
+          "tencent": {
+            "status": null
+          },
+          "telemetry": {
+            "status": null
+          },
+          "patch_notes": {
+            "removed": false
+          },
+          "tombstone": {
+            "removed": true
+          },
+          "existing_catalog": {
+            "slug": "vulnerability",
+            "lifecycle": "removed"
+          },
+          "resolution": {
+            "liveSources": [
+              "wiki"
+            ],
+            "disabledSources": [],
+            "removedSources": [
+              "tombstone"
+            ]
+          }
+        }
+      },
+      "flags": {
+        "lifecycle": "active",
+        "system_breaker": true
+      },
+      "staleBreakerFlag": false,
+      "note": "old retirement was arammayhem-sourced; overridden by CDragon+wiki truth per human ruling"
+    },
+    {
+      "slug": "slow-and-steady",
+      "augmentId": "ARAM_SlowAndSteady",
+      "name": "Slow And Steady",
+      "availability": {
+        "status": "candidate_registry_present",
+        "signals": {
+          "cdragon_registry": {
+            "present": true,
+            "augmentId": "ARAM_SlowAndSteady",
+            "definitionPlaceholder": false
+          },
+          "wiki": {
+            "present": false,
+            "status": "absent",
+            "availabilityNotes": [],
+            "hasDescription": false,
+            "hasNotes": false,
+            "wikiFetchedAt": null
+          },
+          "tencent": {
+            "status": null
+          },
+          "telemetry": {
+            "status": null
+          },
+          "patch_notes": {
+            "removed": false
+          },
+          "tombstone": {
+            "removed": true
+          },
+          "existing_catalog": {
+            "slug": "slow-and-steady",
+            "lifecycle": "removed"
+          },
+          "resolution": {
+            "liveSources": [],
+            "disabledSources": [],
+            "removedSources": [
+              "tombstone"
+            ]
+          }
+        }
+      },
+      "flags": {
+        "lifecycle": "added",
+        "system_breaker": true
+      },
+      "staleBreakerFlag": true,
+      "note": "old retirement was arammayhem-sourced; overridden by CDragon+wiki truth per human ruling"
+    }
+  ],
+  "unverifiedLegacy": {
+    "count": 64,
+    "purpose": "Phase 2 confirmation before final tombstoning.",
+    "augments": [
+      {
+        "slug": "infinite-recursion",
+        "augmentId": null,
+        "name": "Infinite Recursion",
+        "rarity": "prismatic",
+        "previousLifecycle": "active",
+        "availability": {
+          "status": "unverified_legacy",
+          "signals": {
+            "cdragon_registry": {
+              "present": false,
+              "augmentId": null,
+              "definitionPlaceholder": false
+            },
+            "wiki": {
+              "present": false,
+              "status": "absent",
+              "availabilityNotes": [],
+              "hasDescription": false,
+              "hasNotes": false,
+              "wikiFetchedAt": null
+            },
+            "tencent": {
+              "status": null
+            },
+            "telemetry": {
+              "status": null
+            },
+            "patch_notes": {
+              "removed": false
+            },
+            "tombstone": {
+              "removed": false
+            },
+            "existing_catalog": {
+              "slug": "infinite-recursion",
+              "lifecycle": "active"
+            },
+            "resolution": {
+              "liveSources": [],
+              "disabledSources": [],
+              "removedSources": []
+            }
+          }
+        },
+        "flags": {
+          "lifecycle": "removed",
+          "system_breaker": false
+        }
+      },
+      {
+        "slug": "warlock-juicebox",
+        "augmentId": null,
+        "name": "Warlock Juicebox",
+        "rarity": "gold",
+        "previousLifecycle": "added",
+        "availability": {
+          "status": "unverified_legacy",
+          "signals": {
+            "cdragon_registry": {
+              "present": false,
+              "augmentId": null,
+              "definitionPlaceholder": false
+            },
+            "wiki": {
+              "present": false,
+              "status": "absent",
+              "availabilityNotes": [],
+              "hasDescription": false,
+              "hasNotes": false,
+              "wikiFetchedAt": null
+            },
+            "tencent": {
+              "status": null
+            },
+            "telemetry": {
+              "status": null
+            },
+            "patch_notes": {
+              "removed": false
+            },
+            "tombstone": {
+              "removed": false
+            },
+            "existing_catalog": {
+              "slug": "warlock-juicebox",
+              "lifecycle": "added"
+            },
+            "resolution": {
+              "liveSources": [],
+              "disabledSources": [],
+              "removedSources": []
+            }
+          }
+        },
+        "flags": {
+          "lifecycle": "removed",
+          "system_breaker": false
+        }
+      },
+      {
+        "slug": "pressure-cooker",
+        "augmentId": null,
+        "name": "Pressure Cooker",
+        "rarity": "gold",
+        "previousLifecycle": "added",
+        "availability": {
+          "status": "unverified_legacy",
+          "signals": {
+            "cdragon_registry": {
+              "present": false,
+              "augmentId": null,
+              "definitionPlaceholder": false
+            },
+            "wiki": {
+              "present": false,
+              "status": "absent",
+              "availabilityNotes": [],
+              "hasDescription": false,
+              "hasNotes": false,
+              "wikiFetchedAt": null
+            },
+            "tencent": {
+              "status": null
+            },
+            "telemetry": {
+              "status": null
+            },
+            "patch_notes": {
+              "removed": false
+            },
+            "tombstone": {
+              "removed": false
+            },
+            "existing_catalog": {
+              "slug": "pressure-cooker",
+              "lifecycle": "added"
+            },
+            "resolution": {
+              "liveSources": [],
+              "disabledSources": [],
+              "removedSources": []
+            }
+          }
+        },
+        "flags": {
+          "lifecycle": "removed",
+          "system_breaker": false
+        }
+      },
+      {
+        "slug": "combusting-interest",
+        "augmentId": null,
+        "name": "Combusting Interest",
+        "rarity": "gold",
+        "previousLifecycle": "added",
+        "availability": {
+          "status": "unverified_legacy",
+          "signals": {
+            "cdragon_registry": {
+              "present": false,
+              "augmentId": null,
+              "definitionPlaceholder": false
+            },
+            "wiki": {
+              "present": false,
+              "status": "absent",
+              "availabilityNotes": [],
+              "hasDescription": false,
+              "hasNotes": false,
+              "wikiFetchedAt": null
+            },
+            "tencent": {
+              "status": null
+            },
+            "telemetry": {
+              "status": null
+            },
+            "patch_notes": {
+              "removed": false
+            },
+            "tombstone": {
+              "removed": false
+            },
+            "existing_catalog": {
+              "slug": "combusting-interest",
+              "lifecycle": "added"
+            },
+            "resolution": {
+              "liveSources": [],
+              "disabledSources": [],
+              "removedSources": []
+            }
+          }
+        },
+        "flags": {
+          "lifecycle": "removed",
+          "system_breaker": false
+        }
+      },
+      {
+        "slug": "twin-fire",
+        "augmentId": null,
+        "name": "Twin Fire",
+        "rarity": "silver",
+        "previousLifecycle": "active",
+        "availability": {
+          "status": "unverified_legacy",
+          "signals": {
+            "cdragon_registry": {
+              "present": false,
+              "augmentId": null,
+              "definitionPlaceholder": false
+            },
+            "wiki": {
+              "present": false,
+              "status": "absent",
+              "availabilityNotes": [],
+              "hasDescription": false,
+              "hasNotes": false,
+              "wikiFetchedAt": null
+            },
+            "tencent": {
+              "status": null
+            },
+            "telemetry": {
+              "status": null
+            },
+            "patch_notes": {
+              "removed": false
+            },
+            "tombstone": {
+              "removed": false
+            },
+            "existing_catalog": {
+              "slug": "twin-fire",
+              "lifecycle": "active"
+            },
+            "resolution": {
+              "liveSources": [],
+              "disabledSources": [],
+              "removedSources": []
+            }
+          }
+        },
+        "flags": {
+          "lifecycle": "removed",
+          "system_breaker": false
+        }
+      },
+      {
+        "slug": "sonata",
+        "augmentId": null,
+        "name": "Sonata",
+        "rarity": "gold",
+        "previousLifecycle": "active",
+        "availability": {
+          "status": "unverified_legacy",
+          "signals": {
+            "cdragon_registry": {
+              "present": false,
+              "augmentId": null,
+              "definitionPlaceholder": false
+            },
+            "wiki": {
+              "present": false,
+              "status": "absent",
+              "availabilityNotes": [],
+              "hasDescription": false,
+              "hasNotes": false,
+              "wikiFetchedAt": null
+            },
+            "tencent": {
+              "status": null
+            },
+            "telemetry": {
+              "status": null
+            },
+            "patch_notes": {
+              "removed": false
+            },
+            "tombstone": {
+              "removed": false
+            },
+            "existing_catalog": {
+              "slug": "sonata",
+              "lifecycle": "active"
+            },
+            "resolution": {
+              "liveSources": [],
+              "disabledSources": [],
+              "removedSources": []
+            }
+          }
+        },
+        "flags": {
+          "lifecycle": "removed",
+          "system_breaker": false
+        }
+      },
+      {
+        "slug": "forged-by-the-master",
+        "augmentId": null,
+        "name": "Forged By The Master",
+        "rarity": "silver",
+        "previousLifecycle": "added",
+        "availability": {
+          "status": "unverified_legacy",
+          "signals": {
+            "cdragon_registry": {
+              "present": false,
+              "augmentId": null,
+              "definitionPlaceholder": false
+            },
+            "wiki": {
+              "present": false,
+              "status": "absent",
+              "availabilityNotes": [],
+              "hasDescription": false,
+              "hasNotes": false,
+              "wikiFetchedAt": null
+            },
+            "tencent": {
+              "status": null
+            },
+            "telemetry": {
+              "status": null
+            },
+            "patch_notes": {
+              "removed": false
+            },
+            "tombstone": {
+              "removed": false
+            },
+            "existing_catalog": {
+              "slug": "forged-by-the-master",
+              "lifecycle": "added"
+            },
+            "resolution": {
+              "liveSources": [],
+              "disabledSources": [],
+              "removedSources": []
+            }
+          }
+        },
+        "flags": {
+          "lifecycle": "removed",
+          "system_breaker": false
+        }
+      },
+      {
+        "slug": "escape-plan",
+        "augmentId": null,
+        "name": "Escape Plan",
+        "rarity": "silver",
+        "previousLifecycle": "active",
+        "availability": {
+          "status": "unverified_legacy",
+          "signals": {
+            "cdragon_registry": {
+              "present": false,
+              "augmentId": null,
+              "definitionPlaceholder": false
+            },
+            "wiki": {
+              "present": false,
+              "status": "absent",
+              "availabilityNotes": [],
+              "hasDescription": false,
+              "hasNotes": false,
+              "wikiFetchedAt": null
+            },
+            "tencent": {
+              "status": null
+            },
+            "telemetry": {
+              "status": null
+            },
+            "patch_notes": {
+              "removed": false
+            },
+            "tombstone": {
+              "removed": false
+            },
+            "existing_catalog": {
+              "slug": "escape-plan",
+              "lifecycle": "active"
+            },
+            "resolution": {
+              "liveSources": [],
+              "disabledSources": [],
+              "removedSources": []
+            }
+          }
+        },
+        "flags": {
+          "lifecycle": "removed",
+          "system_breaker": false
+        }
+      },
+      {
+        "slug": "shrink-engine",
+        "augmentId": null,
+        "name": "Shrink Engine",
+        "rarity": "gold",
+        "previousLifecycle": "active",
+        "availability": {
+          "status": "unverified_legacy",
+          "signals": {
+            "cdragon_registry": {
+              "present": false,
+              "augmentId": null,
+              "definitionPlaceholder": false
+            },
+            "wiki": {
+              "present": false,
+              "status": "absent",
+              "availabilityNotes": [],
+              "hasDescription": false,
+              "hasNotes": false,
+              "wikiFetchedAt": null
+            },
+            "tencent": {
+              "status": null
+            },
+            "telemetry": {
+              "status": null
+            },
+            "patch_notes": {
+              "removed": false
+            },
+            "tombstone": {
+              "removed": false
+            },
+            "existing_catalog": {
+              "slug": "shrink-engine",
+              "lifecycle": "active"
+            },
+            "resolution": {
+              "liveSources": [],
+              "disabledSources": [],
+              "removedSources": []
+            }
+          }
+        },
+        "flags": {
+          "lifecycle": "removed",
+          "system_breaker": false
+        }
+      },
+      {
+        "slug": "tooth-fairy",
+        "augmentId": null,
+        "name": "Tooth Fairy",
+        "rarity": "gold",
+        "previousLifecycle": "added",
+        "availability": {
+          "status": "unverified_legacy",
+          "signals": {
+            "cdragon_registry": {
+              "present": false,
+              "augmentId": null,
+              "definitionPlaceholder": false
+            },
+            "wiki": {
+              "present": false,
+              "status": "absent",
+              "availabilityNotes": [],
+              "hasDescription": false,
+              "hasNotes": false,
+              "wikiFetchedAt": null
+            },
+            "tencent": {
+              "status": null
+            },
+            "telemetry": {
+              "status": null
+            },
+            "patch_notes": {
+              "removed": false
+            },
+            "tombstone": {
+              "removed": false
+            },
+            "existing_catalog": {
+              "slug": "tooth-fairy",
+              "lifecycle": "added"
+            },
+            "resolution": {
+              "liveSources": [],
+              "disabledSources": [],
+              "removedSources": []
+            }
+          }
+        },
+        "flags": {
+          "lifecycle": "removed",
+          "system_breaker": false
+        }
+      },
+      {
+        "slug": "growth-spurt",
+        "augmentId": null,
+        "name": "Growth Spurt",
+        "rarity": "gold",
+        "previousLifecycle": "active",
+        "availability": {
+          "status": "unverified_legacy",
+          "signals": {
+            "cdragon_registry": {
+              "present": false,
+              "augmentId": null,
+              "definitionPlaceholder": false
+            },
+            "wiki": {
+              "present": false,
+              "status": "absent",
+              "availabilityNotes": [],
+              "hasDescription": false,
+              "hasNotes": false,
+              "wikiFetchedAt": null
+            },
+            "tencent": {
+              "status": null
+            },
+            "telemetry": {
+              "status": null
+            },
+            "patch_notes": {
+              "removed": false
+            },
+            "tombstone": {
+              "removed": false
+            },
+            "existing_catalog": {
+              "slug": "growth-spurt",
+              "lifecycle": "active"
+            },
+            "resolution": {
+              "liveSources": [],
+              "disabledSources": [],
+              "removedSources": []
+            }
+          }
+        },
+        "flags": {
+          "lifecycle": "removed",
+          "system_breaker": false
+        }
+      },
+      {
+        "slug": "lil-extra-help",
+        "augmentId": null,
+        "name": "Lil' Extra Help",
+        "rarity": "gold",
+        "previousLifecycle": "added",
+        "availability": {
+          "status": "unverified_legacy",
+          "signals": {
+            "cdragon_registry": {
+              "present": false,
+              "augmentId": null,
+              "definitionPlaceholder": false
+            },
+            "wiki": {
+              "present": false,
+              "status": "absent",
+              "availabilityNotes": [],
+              "hasDescription": false,
+              "hasNotes": false,
+              "wikiFetchedAt": null
+            },
+            "tencent": {
+              "status": null
+            },
+            "telemetry": {
+              "status": null
+            },
+            "patch_notes": {
+              "removed": false
+            },
+            "tombstone": {
+              "removed": false
+            },
+            "existing_catalog": {
+              "slug": "lil-extra-help",
+              "lifecycle": "added"
+            },
+            "resolution": {
+              "liveSources": [],
+              "disabledSources": [],
+              "removedSources": []
+            }
+          }
+        },
+        "flags": {
+          "lifecycle": "removed",
+          "system_breaker": false
+        }
+      },
+      {
+        "slug": "donation",
+        "augmentId": null,
+        "name": "Donation",
+        "rarity": "gold",
+        "previousLifecycle": "active",
+        "availability": {
+          "status": "unverified_legacy",
+          "signals": {
+            "cdragon_registry": {
+              "present": false,
+              "augmentId": null,
+              "definitionPlaceholder": false
+            },
+            "wiki": {
+              "present": false,
+              "status": "absent",
+              "availabilityNotes": [],
+              "hasDescription": false,
+              "hasNotes": false,
+              "wikiFetchedAt": null
+            },
+            "tencent": {
+              "status": null
+            },
+            "telemetry": {
+              "status": null
+            },
+            "patch_notes": {
+              "removed": false
+            },
+            "tombstone": {
+              "removed": false
+            },
+            "existing_catalog": {
+              "slug": "donation",
+              "lifecycle": "active"
+            },
+            "resolution": {
+              "liveSources": [],
+              "disabledSources": [],
+              "removedSources": []
+            }
+          }
+        },
+        "flags": {
+          "lifecycle": "removed",
+          "system_breaker": false
+        }
+      },
+      {
+        "slug": "swift-and-safe",
+        "augmentId": null,
+        "name": "Swift and Safe",
+        "rarity": "silver",
+        "previousLifecycle": "active",
+        "availability": {
+          "status": "unverified_legacy",
+          "signals": {
+            "cdragon_registry": {
+              "present": false,
+              "augmentId": null,
+              "definitionPlaceholder": false
+            },
+            "wiki": {
+              "present": false,
+              "status": "absent",
+              "availabilityNotes": [],
+              "hasDescription": false,
+              "hasNotes": false,
+              "wikiFetchedAt": null
+            },
+            "tencent": {
+              "status": null
+            },
+            "telemetry": {
+              "status": null
+            },
+            "patch_notes": {
+              "removed": false
+            },
+            "tombstone": {
+              "removed": false
+            },
+            "existing_catalog": {
+              "slug": "swift-and-safe",
+              "lifecycle": "active"
+            },
+            "resolution": {
+              "liveSources": [],
+              "disabledSources": [],
+              "removedSources": []
+            }
+          }
+        },
+        "flags": {
+          "lifecycle": "removed",
+          "system_breaker": false
+        }
+      },
+      {
+        "slug": "soul-eater",
+        "augmentId": null,
+        "name": "Soul Eater",
+        "rarity": "gold",
+        "previousLifecycle": "active",
+        "availability": {
+          "status": "unverified_legacy",
+          "signals": {
+            "cdragon_registry": {
+              "present": false,
+              "augmentId": null,
+              "definitionPlaceholder": false
+            },
+            "wiki": {
+              "present": false,
+              "status": "absent",
+              "availabilityNotes": [],
+              "hasDescription": false,
+              "hasNotes": false,
+              "wikiFetchedAt": null
+            },
+            "tencent": {
+              "status": null
+            },
+            "telemetry": {
+              "status": null
+            },
+            "patch_notes": {
+              "removed": false
+            },
+            "tombstone": {
+              "removed": false
+            },
+            "existing_catalog": {
+              "slug": "soul-eater",
+              "lifecycle": "active"
+            },
+            "resolution": {
+              "liveSources": [],
+              "disabledSources": [],
+              "removedSources": []
+            }
+          }
+        },
+        "flags": {
+          "lifecycle": "removed",
+          "system_breaker": false
+        }
+      },
+      {
+        "slug": "final-form",
+        "augmentId": null,
+        "name": "Final Form",
+        "rarity": "prismatic",
+        "previousLifecycle": "active",
+        "availability": {
+          "status": "unverified_legacy",
+          "signals": {
+            "cdragon_registry": {
+              "present": false,
+              "augmentId": null,
+              "definitionPlaceholder": false
+            },
+            "wiki": {
+              "present": false,
+              "status": "absent",
+              "availabilityNotes": [],
+              "hasDescription": false,
+              "hasNotes": false,
+              "wikiFetchedAt": null
+            },
+            "tencent": {
+              "status": null
+            },
+            "telemetry": {
+              "status": null
+            },
+            "patch_notes": {
+              "removed": false
+            },
+            "tombstone": {
+              "removed": false
+            },
+            "existing_catalog": {
+              "slug": "final-form",
+              "lifecycle": "active"
+            },
+            "resolution": {
+              "liveSources": [],
+              "disabledSources": [],
+              "removedSources": []
+            }
+          }
+        },
+        "flags": {
+          "lifecycle": "removed",
+          "system_breaker": false
+        }
+      },
+      {
+        "slug": "terraind",
+        "augmentId": null,
+        "name": "Terrain'd",
+        "rarity": "gold",
+        "previousLifecycle": "added",
+        "availability": {
+          "status": "unverified_legacy",
+          "signals": {
+            "cdragon_registry": {
+              "present": false,
+              "augmentId": null,
+              "definitionPlaceholder": false
+            },
+            "wiki": {
+              "present": false,
+              "status": "absent",
+              "availabilityNotes": [],
+              "hasDescription": false,
+              "hasNotes": false,
+              "wikiFetchedAt": null
+            },
+            "tencent": {
+              "status": null
+            },
+            "telemetry": {
+              "status": null
+            },
+            "patch_notes": {
+              "removed": false
+            },
+            "tombstone": {
+              "removed": false
+            },
+            "existing_catalog": {
+              "slug": "terraind",
+              "lifecycle": "added"
+            },
+            "resolution": {
+              "liveSources": [],
+              "disabledSources": [],
+              "removedSources": []
+            }
+          }
+        },
+        "flags": {
+          "lifecycle": "removed",
+          "system_breaker": false
+        }
+      },
+      {
+        "slug": "bonk",
+        "augmentId": null,
+        "name": "BONK!",
+        "rarity": "gold",
+        "previousLifecycle": "added",
+        "availability": {
+          "status": "unverified_legacy",
+          "signals": {
+            "cdragon_registry": {
+              "present": false,
+              "augmentId": null,
+              "definitionPlaceholder": false
+            },
+            "wiki": {
+              "present": false,
+              "status": "absent",
+              "availabilityNotes": [],
+              "hasDescription": false,
+              "hasNotes": false,
+              "wikiFetchedAt": null
+            },
+            "tencent": {
+              "status": null
+            },
+            "telemetry": {
+              "status": null
+            },
+            "patch_notes": {
+              "removed": false
+            },
+            "tombstone": {
+              "removed": false
+            },
+            "existing_catalog": {
+              "slug": "bonk",
+              "lifecycle": "added"
+            },
+            "resolution": {
+              "liveSources": [],
+              "disabledSources": [],
+              "removedSources": []
+            }
+          }
+        },
+        "flags": {
+          "lifecycle": "removed",
+          "system_breaker": false
+        }
+      },
+      {
+        "slug": "stay-resolute",
+        "augmentId": null,
+        "name": "Stay Resolute",
+        "rarity": "silver",
+        "previousLifecycle": "added",
+        "availability": {
+          "status": "unverified_legacy",
+          "signals": {
+            "cdragon_registry": {
+              "present": false,
+              "augmentId": null,
+              "definitionPlaceholder": false
+            },
+            "wiki": {
+              "present": false,
+              "status": "absent",
+              "availabilityNotes": [],
+              "hasDescription": false,
+              "hasNotes": false,
+              "wikiFetchedAt": null
+            },
+            "tencent": {
+              "status": null
+            },
+            "telemetry": {
+              "status": null
+            },
+            "patch_notes": {
+              "removed": false
+            },
+            "tombstone": {
+              "removed": false
+            },
+            "existing_catalog": {
+              "slug": "stay-resolute",
+              "lifecycle": "added"
+            },
+            "resolution": {
+              "liveSources": [],
+              "disabledSources": [],
+              "removedSources": []
+            }
+          }
+        },
+        "flags": {
+          "lifecycle": "removed",
+          "system_breaker": false
+        }
+      },
+      {
+        "slug": "hand-of-baron",
+        "augmentId": null,
+        "name": "Hand of Baron",
+        "rarity": "prismatic",
+        "previousLifecycle": "active",
+        "availability": {
+          "status": "unverified_legacy",
+          "signals": {
+            "cdragon_registry": {
+              "present": false,
+              "augmentId": null,
+              "definitionPlaceholder": false
+            },
+            "wiki": {
+              "present": false,
+              "status": "absent",
+              "availabilityNotes": [],
+              "hasDescription": false,
+              "hasNotes": false,
+              "wikiFetchedAt": null
+            },
+            "tencent": {
+              "status": null
+            },
+            "telemetry": {
+              "status": null
+            },
+            "patch_notes": {
+              "removed": false
+            },
+            "tombstone": {
+              "removed": false
+            },
+            "existing_catalog": {
+              "slug": "hand-of-baron",
+              "lifecycle": "active"
+            },
+            "resolution": {
+              "liveSources": [],
+              "disabledSources": [],
+              "removedSources": []
+            }
+          }
+        },
+        "flags": {
+          "lifecycle": "removed",
+          "system_breaker": false
+        }
+      },
+      {
+        "slug": "king-me",
+        "augmentId": null,
+        "name": "King Me",
+        "rarity": "prismatic",
+        "previousLifecycle": "active",
+        "availability": {
+          "status": "unverified_legacy",
+          "signals": {
+            "cdragon_registry": {
+              "present": false,
+              "augmentId": null,
+              "definitionPlaceholder": false
+            },
+            "wiki": {
+              "present": false,
+              "status": "absent",
+              "availabilityNotes": [],
+              "hasDescription": false,
+              "hasNotes": false,
+              "wikiFetchedAt": null
+            },
+            "tencent": {
+              "status": null
+            },
+            "telemetry": {
+              "status": null
+            },
+            "patch_notes": {
+              "removed": false
+            },
+            "tombstone": {
+              "removed": false
+            },
+            "existing_catalog": {
+              "slug": "king-me",
+              "lifecycle": "active"
+            },
+            "resolution": {
+              "liveSources": [],
+              "disabledSources": [],
+              "removedSources": []
+            }
+          }
+        },
+        "flags": {
+          "lifecycle": "removed",
+          "system_breaker": false
+        }
+      },
+      {
+        "slug": "biggest-snowball-ever",
+        "augmentId": null,
+        "name": "Biggest Snowball Ever",
+        "rarity": "prismatic",
+        "previousLifecycle": "active",
+        "availability": {
+          "status": "unverified_legacy",
+          "signals": {
+            "cdragon_registry": {
+              "present": false,
+              "augmentId": null,
+              "definitionPlaceholder": false
+            },
+            "wiki": {
+              "present": false,
+              "status": "absent",
+              "availabilityNotes": [],
+              "hasDescription": false,
+              "hasNotes": false,
+              "wikiFetchedAt": null
+            },
+            "tencent": {
+              "status": null
+            },
+            "telemetry": {
+              "status": null
+            },
+            "patch_notes": {
+              "removed": false
+            },
+            "tombstone": {
+              "removed": false
+            },
+            "existing_catalog": {
+              "slug": "biggest-snowball-ever",
+              "lifecycle": "active"
+            },
+            "resolution": {
+              "liveSources": [],
+              "disabledSources": [],
+              "removedSources": []
+            }
+          }
+        },
+        "flags": {
+          "lifecycle": "removed",
+          "system_breaker": false
+        }
+      },
+      {
+        "slug": "dont-change-the-channel",
+        "augmentId": null,
+        "name": "Don't Change the Channel",
+        "rarity": "silver",
+        "previousLifecycle": "added",
+        "availability": {
+          "status": "unverified_legacy",
+          "signals": {
+            "cdragon_registry": {
+              "present": false,
+              "augmentId": null,
+              "definitionPlaceholder": false
+            },
+            "wiki": {
+              "present": false,
+              "status": "absent",
+              "availabilityNotes": [],
+              "hasDescription": false,
+              "hasNotes": false,
+              "wikiFetchedAt": null
+            },
+            "tencent": {
+              "status": null
+            },
+            "telemetry": {
+              "status": null
+            },
+            "patch_notes": {
+              "removed": false
+            },
+            "tombstone": {
+              "removed": false
+            },
+            "existing_catalog": {
+              "slug": "dont-change-the-channel",
+              "lifecycle": "added"
+            },
+            "resolution": {
+              "liveSources": [],
+              "disabledSources": [],
+              "removedSources": []
+            }
+          }
+        },
+        "flags": {
+          "lifecycle": "removed",
+          "system_breaker": false
+        }
+      },
+      {
+        "slug": "overextender",
+        "augmentId": null,
+        "name": "Overextender",
+        "rarity": "gold",
+        "previousLifecycle": "added",
+        "availability": {
+          "status": "unverified_legacy",
+          "signals": {
+            "cdragon_registry": {
+              "present": false,
+              "augmentId": null,
+              "definitionPlaceholder": false
+            },
+            "wiki": {
+              "present": false,
+              "status": "absent",
+              "availabilityNotes": [],
+              "hasDescription": false,
+              "hasNotes": false,
+              "wikiFetchedAt": null
+            },
+            "tencent": {
+              "status": null
+            },
+            "telemetry": {
+              "status": null
+            },
+            "patch_notes": {
+              "removed": false
+            },
+            "tombstone": {
+              "removed": false
+            },
+            "existing_catalog": {
+              "slug": "overextender",
+              "lifecycle": "added"
+            },
+            "resolution": {
+              "liveSources": [],
+              "disabledSources": [],
+              "removedSources": []
+            }
+          }
+        },
+        "flags": {
+          "lifecycle": "removed",
+          "system_breaker": false
+        }
+      },
+      {
+        "slug": "its-go-time",
+        "augmentId": null,
+        "name": "It's Go Time",
+        "rarity": "silver",
+        "previousLifecycle": "added",
+        "availability": {
+          "status": "unverified_legacy",
+          "signals": {
+            "cdragon_registry": {
+              "present": false,
+              "augmentId": null,
+              "definitionPlaceholder": false
+            },
+            "wiki": {
+              "present": false,
+              "status": "absent",
+              "availabilityNotes": [],
+              "hasDescription": false,
+              "hasNotes": false,
+              "wikiFetchedAt": null
+            },
+            "tencent": {
+              "status": null
+            },
+            "telemetry": {
+              "status": null
+            },
+            "patch_notes": {
+              "removed": false
+            },
+            "tombstone": {
+              "removed": false
+            },
+            "existing_catalog": {
+              "slug": "its-go-time",
+              "lifecycle": "added"
+            },
+            "resolution": {
+              "liveSources": [],
+              "disabledSources": [],
+              "removedSources": []
+            }
+          }
+        },
+        "flags": {
+          "lifecycle": "removed",
+          "system_breaker": false
+        }
+      },
+      {
+        "slug": "trusty-weapon",
+        "augmentId": null,
+        "name": "Trusty Weapon",
+        "rarity": "silver",
+        "previousLifecycle": "added",
+        "availability": {
+          "status": "unverified_legacy",
+          "signals": {
+            "cdragon_registry": {
+              "present": false,
+              "augmentId": null,
+              "definitionPlaceholder": false
+            },
+            "wiki": {
+              "present": false,
+              "status": "absent",
+              "availabilityNotes": [],
+              "hasDescription": false,
+              "hasNotes": false,
+              "wikiFetchedAt": null
+            },
+            "tencent": {
+              "status": null
+            },
+            "telemetry": {
+              "status": null
+            },
+            "patch_notes": {
+              "removed": false
+            },
+            "tombstone": {
+              "removed": false
+            },
+            "existing_catalog": {
+              "slug": "trusty-weapon",
+              "lifecycle": "added"
+            },
+            "resolution": {
+              "liveSources": [],
+              "disabledSources": [],
+              "removedSources": []
+            }
+          }
+        },
+        "flags": {
+          "lifecycle": "removed",
+          "system_breaker": false
+        }
+      },
+      {
+        "slug": "ravenous-bind",
+        "augmentId": null,
+        "name": "Ravenous Bind",
+        "rarity": "gold",
+        "previousLifecycle": "added",
+        "availability": {
+          "status": "unverified_legacy",
+          "signals": {
+            "cdragon_registry": {
+              "present": false,
+              "augmentId": null,
+              "definitionPlaceholder": false
+            },
+            "wiki": {
+              "present": false,
+              "status": "absent",
+              "availabilityNotes": [],
+              "hasDescription": false,
+              "hasNotes": false,
+              "wikiFetchedAt": null
+            },
+            "tencent": {
+              "status": null
+            },
+            "telemetry": {
+              "status": null
+            },
+            "patch_notes": {
+              "removed": false
+            },
+            "tombstone": {
+              "removed": false
+            },
+            "existing_catalog": {
+              "slug": "ravenous-bind",
+              "lifecycle": "added"
+            },
+            "resolution": {
+              "liveSources": [],
+              "disabledSources": [],
+              "removedSources": []
+            }
+          }
+        },
+        "flags": {
+          "lifecycle": "removed",
+          "system_breaker": false
+        }
+      },
+      {
+        "slug": "goldrend",
+        "augmentId": null,
+        "name": "Goldrend",
+        "rarity": "prismatic",
+        "previousLifecycle": "active",
+        "availability": {
+          "status": "unverified_legacy",
+          "signals": {
+            "cdragon_registry": {
+              "present": false,
+              "augmentId": null,
+              "definitionPlaceholder": false
+            },
+            "wiki": {
+              "present": false,
+              "status": "absent",
+              "availabilityNotes": [],
+              "hasDescription": false,
+              "hasNotes": false,
+              "wikiFetchedAt": null
+            },
+            "tencent": {
+              "status": null
+            },
+            "telemetry": {
+              "status": null
+            },
+            "patch_notes": {
+              "removed": false
+            },
+            "tombstone": {
+              "removed": false
+            },
+            "existing_catalog": {
+              "slug": "goldrend",
+              "lifecycle": "active"
+            },
+            "resolution": {
+              "liveSources": [],
+              "disabledSources": [],
+              "removedSources": []
+            }
+          }
+        },
+        "flags": {
+          "lifecycle": "removed",
+          "system_breaker": false
+        }
+      },
+      {
+        "slug": "hextech-soul",
+        "augmentId": null,
+        "name": "Hextech Soul",
+        "rarity": "silver",
+        "previousLifecycle": "active",
+        "availability": {
+          "status": "unverified_legacy",
+          "signals": {
+            "cdragon_registry": {
+              "present": false,
+              "augmentId": null,
+              "definitionPlaceholder": false
+            },
+            "wiki": {
+              "present": false,
+              "status": "absent",
+              "availabilityNotes": [],
+              "hasDescription": false,
+              "hasNotes": false,
+              "wikiFetchedAt": null
+            },
+            "tencent": {
+              "status": null
+            },
+            "telemetry": {
+              "status": null
+            },
+            "patch_notes": {
+              "removed": false
+            },
+            "tombstone": {
+              "removed": false
+            },
+            "existing_catalog": {
+              "slug": "hextech-soul",
+              "lifecycle": "active"
+            },
+            "resolution": {
+              "liveSources": [],
+              "disabledSources": [],
+              "removedSources": []
+            }
+          }
+        },
+        "flags": {
+          "lifecycle": "removed",
+          "system_breaker": false
+        }
+      },
+      {
+        "slug": "endless-decimation",
+        "augmentId": null,
+        "name": "Endless Decimation",
+        "rarity": "gold",
+        "previousLifecycle": "added",
+        "availability": {
+          "status": "unverified_legacy",
+          "signals": {
+            "cdragon_registry": {
+              "present": false,
+              "augmentId": null,
+              "definitionPlaceholder": false
+            },
+            "wiki": {
+              "present": false,
+              "status": "absent",
+              "availabilityNotes": [],
+              "hasDescription": false,
+              "hasNotes": false,
+              "wikiFetchedAt": null
+            },
+            "tencent": {
+              "status": null
+            },
+            "telemetry": {
+              "status": null
+            },
+            "patch_notes": {
+              "removed": false
+            },
+            "tombstone": {
+              "removed": false
+            },
+            "existing_catalog": {
+              "slug": "endless-decimation",
+              "lifecycle": "added"
+            },
+            "resolution": {
+              "liveSources": [],
+              "disabledSources": [],
+              "removedSources": []
+            }
+          }
+        },
+        "flags": {
+          "lifecycle": "removed",
+          "system_breaker": false
+        }
+      },
+      {
+        "slug": "ultimate-awakening",
+        "augmentId": null,
+        "name": "Ultimate Awakening",
+        "rarity": "prismatic",
+        "previousLifecycle": "active",
+        "availability": {
+          "status": "unverified_legacy",
+          "signals": {
+            "cdragon_registry": {
+              "present": false,
+              "augmentId": null,
+              "definitionPlaceholder": false
+            },
+            "wiki": {
+              "present": false,
+              "status": "absent",
+              "availabilityNotes": [],
+              "hasDescription": false,
+              "hasNotes": false,
+              "wikiFetchedAt": null
+            },
+            "tencent": {
+              "status": null
+            },
+            "telemetry": {
+              "status": null
+            },
+            "patch_notes": {
+              "removed": false
+            },
+            "tombstone": {
+              "removed": false
+            },
+            "existing_catalog": {
+              "slug": "ultimate-awakening",
+              "lifecycle": "active"
+            },
+            "resolution": {
+              "liveSources": [],
+              "disabledSources": [],
+              "removedSources": []
+            }
+          }
+        },
+        "flags": {
+          "lifecycle": "removed",
+          "system_breaker": false
+        }
+      },
+      {
+        "slug": "overloaded",
+        "augmentId": null,
+        "name": "Overloaded",
+        "rarity": "prismatic",
+        "previousLifecycle": "added",
+        "availability": {
+          "status": "unverified_legacy",
+          "signals": {
+            "cdragon_registry": {
+              "present": false,
+              "augmentId": null,
+              "definitionPlaceholder": false
+            },
+            "wiki": {
+              "present": false,
+              "status": "absent",
+              "availabilityNotes": [],
+              "hasDescription": false,
+              "hasNotes": false,
+              "wikiFetchedAt": null
+            },
+            "tencent": {
+              "status": null
+            },
+            "telemetry": {
+              "status": null
+            },
+            "patch_notes": {
+              "removed": false
+            },
+            "tombstone": {
+              "removed": false
+            },
+            "existing_catalog": {
+              "slug": "overloaded",
+              "lifecycle": "added"
+            },
+            "resolution": {
+              "liveSources": [],
+              "disabledSources": [],
+              "removedSources": []
+            }
+          }
+        },
+        "flags": {
+          "lifecycle": "removed",
+          "system_breaker": false
+        }
+      },
+      {
+        "slug": "adaptive-ward",
+        "augmentId": null,
+        "name": "Adaptive Ward",
+        "rarity": "silver",
+        "previousLifecycle": "added",
+        "availability": {
+          "status": "unverified_legacy",
+          "signals": {
+            "cdragon_registry": {
+              "present": false,
+              "augmentId": null,
+              "definitionPlaceholder": false
+            },
+            "wiki": {
+              "present": false,
+              "status": "absent",
+              "availabilityNotes": [],
+              "hasDescription": false,
+              "hasNotes": false,
+              "wikiFetchedAt": null
+            },
+            "tencent": {
+              "status": null
+            },
+            "telemetry": {
+              "status": null
+            },
+            "patch_notes": {
+              "removed": false
+            },
+            "tombstone": {
+              "removed": false
+            },
+            "existing_catalog": {
+              "slug": "adaptive-ward",
+              "lifecycle": "added"
+            },
+            "resolution": {
+              "liveSources": [],
+              "disabledSources": [],
+              "removedSources": []
+            }
+          }
+        },
+        "flags": {
+          "lifecycle": "removed",
+          "system_breaker": false
+        }
+      },
+      {
+        "slug": "ominous-pact",
+        "augmentId": null,
+        "name": "Ominous Pact",
+        "rarity": "prismatic",
+        "previousLifecycle": "active",
+        "availability": {
+          "status": "unverified_legacy",
+          "signals": {
+            "cdragon_registry": {
+              "present": false,
+              "augmentId": null,
+              "definitionPlaceholder": false
+            },
+            "wiki": {
+              "present": false,
+              "status": "absent",
+              "availabilityNotes": [],
+              "hasDescription": false,
+              "hasNotes": false,
+              "wikiFetchedAt": null
+            },
+            "tencent": {
+              "status": null
+            },
+            "telemetry": {
+              "status": null
+            },
+            "patch_notes": {
+              "removed": false
+            },
+            "tombstone": {
+              "removed": false
+            },
+            "existing_catalog": {
+              "slug": "ominous-pact",
+              "lifecycle": "active"
+            },
+            "resolution": {
+              "liveSources": [],
+              "disabledSources": [],
+              "removedSources": []
+            }
+          }
+        },
+        "flags": {
+          "lifecycle": "removed",
+          "system_breaker": false
+        }
+      },
+      {
+        "slug": "double-defense",
+        "augmentId": null,
+        "name": "Double Defense",
+        "rarity": "silver",
+        "previousLifecycle": "added",
+        "availability": {
+          "status": "unverified_legacy",
+          "signals": {
+            "cdragon_registry": {
+              "present": false,
+              "augmentId": null,
+              "definitionPlaceholder": false
+            },
+            "wiki": {
+              "present": false,
+              "status": "absent",
+              "availabilityNotes": [],
+              "hasDescription": false,
+              "hasNotes": false,
+              "wikiFetchedAt": null
+            },
+            "tencent": {
+              "status": null
+            },
+            "telemetry": {
+              "status": null
+            },
+            "patch_notes": {
+              "removed": false
+            },
+            "tombstone": {
+              "removed": false
+            },
+            "existing_catalog": {
+              "slug": "double-defense",
+              "lifecycle": "added"
+            },
+            "resolution": {
+              "liveSources": [],
+              "disabledSources": [],
+              "removedSources": []
+            }
+          }
+        },
+        "flags": {
+          "lifecycle": "removed",
+          "system_breaker": false
+        }
+      },
+      {
+        "slug": "mercys-strike",
+        "augmentId": null,
+        "name": "Mercy's Strike",
+        "rarity": "gold",
+        "previousLifecycle": "added",
+        "availability": {
+          "status": "unverified_legacy",
+          "signals": {
+            "cdragon_registry": {
+              "present": false,
+              "augmentId": null,
+              "definitionPlaceholder": false
+            },
+            "wiki": {
+              "present": false,
+              "status": "absent",
+              "availabilityNotes": [],
+              "hasDescription": false,
+              "hasNotes": false,
+              "wikiFetchedAt": null
+            },
+            "tencent": {
+              "status": null
+            },
+            "telemetry": {
+              "status": null
+            },
+            "patch_notes": {
+              "removed": false
+            },
+            "tombstone": {
+              "removed": false
+            },
+            "existing_catalog": {
+              "slug": "mercys-strike",
+              "lifecycle": "added"
+            },
+            "resolution": {
+              "liveSources": [],
+              "disabledSources": [],
+              "removedSources": []
+            }
+          }
+        },
+        "flags": {
+          "lifecycle": "removed",
+          "system_breaker": false
+        }
+      },
+      {
+        "slug": "shark-bait",
+        "augmentId": null,
+        "name": "Shark Bait",
+        "rarity": "gold",
+        "previousLifecycle": "added",
+        "availability": {
+          "status": "unverified_legacy",
+          "signals": {
+            "cdragon_registry": {
+              "present": false,
+              "augmentId": null,
+              "definitionPlaceholder": false
+            },
+            "wiki": {
+              "present": false,
+              "status": "absent",
+              "availabilityNotes": [],
+              "hasDescription": false,
+              "hasNotes": false,
+              "wikiFetchedAt": null
+            },
+            "tencent": {
+              "status": null
+            },
+            "telemetry": {
+              "status": null
+            },
+            "patch_notes": {
+              "removed": false
+            },
+            "tombstone": {
+              "removed": false
+            },
+            "existing_catalog": {
+              "slug": "shark-bait",
+              "lifecycle": "added"
+            },
+            "resolution": {
+              "liveSources": [],
+              "disabledSources": [],
+              "removedSources": []
+            }
+          }
+        },
+        "flags": {
+          "lifecycle": "removed",
+          "system_breaker": false
+        }
+      },
+      {
+        "slug": "nature-is-healing",
+        "augmentId": null,
+        "name": "Nature is Healing",
+        "rarity": "gold",
+        "previousLifecycle": "added",
+        "availability": {
+          "status": "unverified_legacy",
+          "signals": {
+            "cdragon_registry": {
+              "present": false,
+              "augmentId": null,
+              "definitionPlaceholder": false
+            },
+            "wiki": {
+              "present": false,
+              "status": "absent",
+              "availabilityNotes": [],
+              "hasDescription": false,
+              "hasNotes": false,
+              "wikiFetchedAt": null
+            },
+            "tencent": {
+              "status": null
+            },
+            "telemetry": {
+              "status": null
+            },
+            "patch_notes": {
+              "removed": false
+            },
+            "tombstone": {
+              "removed": false
+            },
+            "existing_catalog": {
+              "slug": "nature-is-healing",
+              "lifecycle": "added"
+            },
+            "resolution": {
+              "liveSources": [],
+              "disabledSources": [],
+              "removedSources": []
+            }
+          }
+        },
+        "flags": {
+          "lifecycle": "removed",
+          "system_breaker": false
+        }
+      },
+      {
+        "slug": "poltergeist",
+        "augmentId": null,
+        "name": "Poltergeist",
+        "rarity": "silver",
+        "previousLifecycle": "active",
+        "availability": {
+          "status": "unverified_legacy",
+          "signals": {
+            "cdragon_registry": {
+              "present": false,
+              "augmentId": null,
+              "definitionPlaceholder": false
+            },
+            "wiki": {
+              "present": false,
+              "status": "absent",
+              "availabilityNotes": [],
+              "hasDescription": false,
+              "hasNotes": false,
+              "wikiFetchedAt": null
+            },
+            "tencent": {
+              "status": null
+            },
+            "telemetry": {
+              "status": null
+            },
+            "patch_notes": {
+              "removed": false
+            },
+            "tombstone": {
+              "removed": false
+            },
+            "existing_catalog": {
+              "slug": "poltergeist",
+              "lifecycle": "active"
+            },
+            "resolution": {
+              "liveSources": [],
+              "disabledSources": [],
+              "removedSources": []
+            }
+          }
+        },
+        "flags": {
+          "lifecycle": "removed",
+          "system_breaker": false
+        }
+      },
+      {
+        "slug": "nightstalking",
+        "augmentId": null,
+        "name": "Nightstalking",
+        "rarity": "gold",
+        "previousLifecycle": "active",
+        "availability": {
+          "status": "unverified_legacy",
+          "signals": {
+            "cdragon_registry": {
+              "present": false,
+              "augmentId": null,
+              "definitionPlaceholder": false
+            },
+            "wiki": {
+              "present": false,
+              "status": "absent",
+              "availabilityNotes": [],
+              "hasDescription": false,
+              "hasNotes": false,
+              "wikiFetchedAt": null
+            },
+            "tencent": {
+              "status": null
+            },
+            "telemetry": {
+              "status": null
+            },
+            "patch_notes": {
+              "removed": false
+            },
+            "tombstone": {
+              "removed": false
+            },
+            "existing_catalog": {
+              "slug": "nightstalking",
+              "lifecycle": "active"
+            },
+            "resolution": {
+              "liveSources": [],
+              "disabledSources": [],
+              "removedSources": []
+            }
+          }
+        },
+        "flags": {
+          "lifecycle": "removed",
+          "system_breaker": false
+        }
+      },
+      {
+        "slug": "tripleshot",
+        "augmentId": null,
+        "name": "Tripleshot",
+        "rarity": "prismatic",
+        "previousLifecycle": "added",
+        "availability": {
+          "status": "unverified_legacy",
+          "signals": {
+            "cdragon_registry": {
+              "present": false,
+              "augmentId": null,
+              "definitionPlaceholder": false
+            },
+            "wiki": {
+              "present": false,
+              "status": "absent",
+              "availabilityNotes": [],
+              "hasDescription": false,
+              "hasNotes": false,
+              "wikiFetchedAt": null
+            },
+            "tencent": {
+              "status": null
+            },
+            "telemetry": {
+              "status": null
+            },
+            "patch_notes": {
+              "removed": false
+            },
+            "tombstone": {
+              "removed": false
+            },
+            "existing_catalog": {
+              "slug": "tripleshot",
+              "lifecycle": "added"
+            },
+            "resolution": {
+              "liveSources": [],
+              "disabledSources": [],
+              "removedSources": []
+            }
+          }
+        },
+        "flags": {
+          "lifecycle": "removed",
+          "system_breaker": false
+        }
+      },
+      {
+        "slug": "empyrean-promise",
+        "augmentId": null,
+        "name": "Empyrean Promise",
+        "rarity": "prismatic",
+        "previousLifecycle": "active",
+        "availability": {
+          "status": "unverified_legacy",
+          "signals": {
+            "cdragon_registry": {
+              "present": false,
+              "augmentId": null,
+              "definitionPlaceholder": false
+            },
+            "wiki": {
+              "present": false,
+              "status": "absent",
+              "availabilityNotes": [],
+              "hasDescription": false,
+              "hasNotes": false,
+              "wikiFetchedAt": null
+            },
+            "tencent": {
+              "status": null
+            },
+            "telemetry": {
+              "status": null
+            },
+            "patch_notes": {
+              "removed": false
+            },
+            "tombstone": {
+              "removed": false
+            },
+            "existing_catalog": {
+              "slug": "empyrean-promise",
+              "lifecycle": "active"
+            },
+            "resolution": {
+              "liveSources": [],
+              "disabledSources": [],
+              "removedSources": []
+            }
+          }
+        },
+        "flags": {
+          "lifecycle": "removed",
+          "system_breaker": false
+        }
+      },
+      {
+        "slug": "kill-secured",
+        "augmentId": null,
+        "name": "Kill Secured",
+        "rarity": "silver",
+        "previousLifecycle": "active",
+        "availability": {
+          "status": "unverified_legacy",
+          "signals": {
+            "cdragon_registry": {
+              "present": false,
+              "augmentId": null,
+              "definitionPlaceholder": false
+            },
+            "wiki": {
+              "present": false,
+              "status": "absent",
+              "availabilityNotes": [],
+              "hasDescription": false,
+              "hasNotes": false,
+              "wikiFetchedAt": null
+            },
+            "tencent": {
+              "status": null
+            },
+            "telemetry": {
+              "status": null
+            },
+            "patch_notes": {
+              "removed": false
+            },
+            "tombstone": {
+              "removed": false
+            },
+            "existing_catalog": {
+              "slug": "kill-secured",
+              "lifecycle": "active"
+            },
+            "resolution": {
+              "liveSources": [],
+              "disabledSources": [],
+              "removedSources": []
+            }
+          }
+        },
+        "flags": {
+          "lifecycle": "removed",
+          "system_breaker": false
+        }
+      },
+      {
+        "slug": "porcupine",
+        "augmentId": null,
+        "name": "Porcupine",
+        "rarity": "gold",
+        "previousLifecycle": "added",
+        "availability": {
+          "status": "unverified_legacy",
+          "signals": {
+            "cdragon_registry": {
+              "present": false,
+              "augmentId": null,
+              "definitionPlaceholder": false
+            },
+            "wiki": {
+              "present": false,
+              "status": "absent",
+              "availabilityNotes": [],
+              "hasDescription": false,
+              "hasNotes": false,
+              "wikiFetchedAt": null
+            },
+            "tencent": {
+              "status": null
+            },
+            "telemetry": {
+              "status": null
+            },
+            "patch_notes": {
+              "removed": false
+            },
+            "tombstone": {
+              "removed": false
+            },
+            "existing_catalog": {
+              "slug": "porcupine",
+              "lifecycle": "added"
+            },
+            "resolution": {
+              "liveSources": [],
+              "disabledSources": [],
+              "removedSources": []
+            }
+          }
+        },
+        "flags": {
+          "lifecycle": "removed",
+          "system_breaker": false
+        }
+      },
+      {
+        "slug": "echo-cast",
+        "augmentId": null,
+        "name": "Echo Cast",
+        "rarity": "prismatic",
+        "previousLifecycle": "added",
+        "availability": {
+          "status": "unverified_legacy",
+          "signals": {
+            "cdragon_registry": {
+              "present": false,
+              "augmentId": null,
+              "definitionPlaceholder": false
+            },
+            "wiki": {
+              "present": false,
+              "status": "absent",
+              "availabilityNotes": [],
+              "hasDescription": false,
+              "hasNotes": false,
+              "wikiFetchedAt": null
+            },
+            "tencent": {
+              "status": null
+            },
+            "telemetry": {
+              "status": null
+            },
+            "patch_notes": {
+              "removed": false
+            },
+            "tombstone": {
+              "removed": false
+            },
+            "existing_catalog": {
+              "slug": "echo-cast",
+              "lifecycle": "added"
+            },
+            "resolution": {
+              "liveSources": [],
+              "disabledSources": [],
+              "removedSources": []
+            }
+          }
+        },
+        "flags": {
+          "lifecycle": "removed",
+          "system_breaker": false
+        }
+      },
+      {
+        "slug": "spell-split",
+        "augmentId": null,
+        "name": "Spellsplit",
+        "rarity": "prismatic",
+        "previousLifecycle": "added",
+        "availability": {
+          "status": "unverified_legacy",
+          "signals": {
+            "cdragon_registry": {
+              "present": false,
+              "augmentId": null,
+              "definitionPlaceholder": false
+            },
+            "wiki": {
+              "present": false,
+              "status": "absent",
+              "availabilityNotes": [],
+              "hasDescription": false,
+              "hasNotes": false,
+              "wikiFetchedAt": null
+            },
+            "tencent": {
+              "status": null
+            },
+            "telemetry": {
+              "status": null
+            },
+            "patch_notes": {
+              "removed": false
+            },
+            "tombstone": {
+              "removed": false
+            },
+            "existing_catalog": {
+              "slug": "spell-split",
+              "lifecycle": "added"
+            },
+            "resolution": {
+              "liveSources": [],
+              "disabledSources": [],
+              "removedSources": []
+            }
+          }
+        },
+        "flags": {
+          "lifecycle": "removed",
+          "system_breaker": false
+        }
+      },
+      {
+        "slug": "shark-tempest",
+        "augmentId": null,
+        "name": "Shark Tempest",
+        "rarity": "gold",
+        "previousLifecycle": "added",
+        "availability": {
+          "status": "unverified_legacy",
+          "signals": {
+            "cdragon_registry": {
+              "present": false,
+              "augmentId": null,
+              "definitionPlaceholder": false
+            },
+            "wiki": {
+              "present": false,
+              "status": "absent",
+              "availabilityNotes": [],
+              "hasDescription": false,
+              "hasNotes": false,
+              "wikiFetchedAt": null
+            },
+            "tencent": {
+              "status": null
+            },
+            "telemetry": {
+              "status": null
+            },
+            "patch_notes": {
+              "removed": false
+            },
+            "tombstone": {
+              "removed": false
+            },
+            "existing_catalog": {
+              "slug": "shark-tempest",
+              "lifecycle": "added"
+            },
+            "resolution": {
+              "liveSources": [],
+              "disabledSources": [],
+              "removedSources": []
+            }
+          }
+        },
+        "flags": {
+          "lifecycle": "removed",
+          "system_breaker": false
+        }
+      },
+      {
+        "slug": "flash-2",
+        "augmentId": null,
+        "name": "Flash 2",
+        "rarity": "silver",
+        "previousLifecycle": "active",
+        "availability": {
+          "status": "unverified_legacy",
+          "signals": {
+            "cdragon_registry": {
+              "present": false,
+              "augmentId": null,
+              "definitionPlaceholder": false
+            },
+            "wiki": {
+              "present": false,
+              "status": "absent",
+              "availabilityNotes": [],
+              "hasDescription": false,
+              "hasNotes": false,
+              "wikiFetchedAt": null
+            },
+            "tencent": {
+              "status": null
+            },
+            "telemetry": {
+              "status": null
+            },
+            "patch_notes": {
+              "removed": false
+            },
+            "tombstone": {
+              "removed": false
+            },
+            "existing_catalog": {
+              "slug": "flash-2",
+              "lifecycle": "active"
+            },
+            "resolution": {
+              "liveSources": [],
+              "disabledSources": [],
+              "removedSources": []
+            }
+          }
+        },
+        "flags": {
+          "lifecycle": "removed",
+          "system_breaker": false
+        }
+      },
+      {
+        "slug": "hide-on-bush",
+        "augmentId": null,
+        "name": "Hide on Bush",
+        "rarity": "gold",
+        "previousLifecycle": "added",
+        "availability": {
+          "status": "unverified_legacy",
+          "signals": {
+            "cdragon_registry": {
+              "present": false,
+              "augmentId": null,
+              "definitionPlaceholder": false
+            },
+            "wiki": {
+              "present": false,
+              "status": "absent",
+              "availabilityNotes": [],
+              "hasDescription": false,
+              "hasNotes": false,
+              "wikiFetchedAt": null
+            },
+            "tencent": {
+              "status": null
+            },
+            "telemetry": {
+              "status": null
+            },
+            "patch_notes": {
+              "removed": false
+            },
+            "tombstone": {
+              "removed": false
+            },
+            "existing_catalog": {
+              "slug": "hide-on-bush",
+              "lifecycle": "added"
+            },
+            "resolution": {
+              "liveSources": [],
+              "disabledSources": [],
+              "removedSources": []
+            }
+          }
+        },
+        "flags": {
+          "lifecycle": "removed",
+          "system_breaker": false
+        }
+      },
+      {
+        "slug": "prom-queen",
+        "augmentId": null,
+        "name": "Prom Queen",
+        "rarity": "prismatic",
+        "previousLifecycle": "active",
+        "availability": {
+          "status": "unverified_legacy",
+          "signals": {
+            "cdragon_registry": {
+              "present": false,
+              "augmentId": null,
+              "definitionPlaceholder": false
+            },
+            "wiki": {
+              "present": false,
+              "status": "absent",
+              "availabilityNotes": [],
+              "hasDescription": false,
+              "hasNotes": false,
+              "wikiFetchedAt": null
+            },
+            "tencent": {
+              "status": null
+            },
+            "telemetry": {
+              "status": null
+            },
+            "patch_notes": {
+              "removed": false
+            },
+            "tombstone": {
+              "removed": false
+            },
+            "existing_catalog": {
+              "slug": "prom-queen",
+              "lifecycle": "active"
+            },
+            "resolution": {
+              "liveSources": [],
+              "disabledSources": [],
+              "removedSources": []
+            }
+          }
+        },
+        "flags": {
+          "lifecycle": "removed",
+          "system_breaker": false
+        }
+      },
+      {
+        "slug": "our-healing",
+        "augmentId": null,
+        "name": "Our Healing",
+        "rarity": "gold",
+        "previousLifecycle": "added",
+        "availability": {
+          "status": "unverified_legacy",
+          "signals": {
+            "cdragon_registry": {
+              "present": false,
+              "augmentId": null,
+              "definitionPlaceholder": false
+            },
+            "wiki": {
+              "present": false,
+              "status": "absent",
+              "availabilityNotes": [],
+              "hasDescription": false,
+              "hasNotes": false,
+              "wikiFetchedAt": null
+            },
+            "tencent": {
+              "status": null
+            },
+            "telemetry": {
+              "status": null
+            },
+            "patch_notes": {
+              "removed": false
+            },
+            "tombstone": {
+              "removed": false
+            },
+            "existing_catalog": {
+              "slug": "our-healing",
+              "lifecycle": "added"
+            },
+            "resolution": {
+              "liveSources": [],
+              "disabledSources": [],
+              "removedSources": []
+            }
+          }
+        },
+        "flags": {
+          "lifecycle": "removed",
+          "system_breaker": false
+        }
+      },
+      {
+        "slug": "mighty-shield",
+        "augmentId": null,
+        "name": "Mighty Shield",
+        "rarity": "silver",
+        "previousLifecycle": "active",
+        "availability": {
+          "status": "unverified_legacy",
+          "signals": {
+            "cdragon_registry": {
+              "present": false,
+              "augmentId": null,
+              "definitionPlaceholder": false
+            },
+            "wiki": {
+              "present": false,
+              "status": "absent",
+              "availabilityNotes": [],
+              "hasDescription": false,
+              "hasNotes": false,
+              "wikiFetchedAt": null
+            },
+            "tencent": {
+              "status": null
+            },
+            "telemetry": {
+              "status": null
+            },
+            "patch_notes": {
+              "removed": false
+            },
+            "tombstone": {
+              "removed": false
+            },
+            "existing_catalog": {
+              "slug": "mighty-shield",
+              "lifecycle": "active"
+            },
+            "resolution": {
+              "liveSources": [],
+              "disabledSources": [],
+              "removedSources": []
+            }
+          }
+        },
+        "flags": {
+          "lifecycle": "removed",
+          "system_breaker": false
+        }
+      },
+      {
+        "slug": "pin-cushion",
+        "augmentId": null,
+        "name": "Pin Cushion",
+        "rarity": "prismatic",
+        "previousLifecycle": "added",
+        "availability": {
+          "status": "unverified_legacy",
+          "signals": {
+            "cdragon_registry": {
+              "present": false,
+              "augmentId": null,
+              "definitionPlaceholder": false
+            },
+            "wiki": {
+              "present": false,
+              "status": "absent",
+              "availabilityNotes": [],
+              "hasDescription": false,
+              "hasNotes": false,
+              "wikiFetchedAt": null
+            },
+            "tencent": {
+              "status": null
+            },
+            "telemetry": {
+              "status": null
+            },
+            "patch_notes": {
+              "removed": false
+            },
+            "tombstone": {
+              "removed": false
+            },
+            "existing_catalog": {
+              "slug": "pin-cushion",
+              "lifecycle": "added"
+            },
+            "resolution": {
+              "liveSources": [],
+              "disabledSources": [],
+              "removedSources": []
+            }
+          }
+        },
+        "flags": {
+          "lifecycle": "removed",
+          "system_breaker": false
+        }
+      },
+      {
+        "slug": "pinball",
+        "augmentId": null,
+        "name": "Pinball",
+        "rarity": "gold",
+        "previousLifecycle": "active",
+        "availability": {
+          "status": "unverified_legacy",
+          "signals": {
+            "cdragon_registry": {
+              "present": false,
+              "augmentId": null,
+              "definitionPlaceholder": false
+            },
+            "wiki": {
+              "present": false,
+              "status": "absent",
+              "availabilityNotes": [],
+              "hasDescription": false,
+              "hasNotes": false,
+              "wikiFetchedAt": null
+            },
+            "tencent": {
+              "status": null
+            },
+            "telemetry": {
+              "status": null
+            },
+            "patch_notes": {
+              "removed": false
+            },
+            "tombstone": {
+              "removed": false
+            },
+            "existing_catalog": {
+              "slug": "pinball",
+              "lifecycle": "active"
+            },
+            "resolution": {
+              "liveSources": [],
+              "disabledSources": [],
+              "removedSources": []
+            }
+          }
+        },
+        "flags": {
+          "lifecycle": "removed",
+          "system_breaker": false
+        }
+      },
+      {
+        "slug": "snowblast",
+        "augmentId": null,
+        "name": "Snowblast",
+        "rarity": "gold",
+        "previousLifecycle": "added",
+        "availability": {
+          "status": "unverified_legacy",
+          "signals": {
+            "cdragon_registry": {
+              "present": false,
+              "augmentId": null,
+              "definitionPlaceholder": false
+            },
+            "wiki": {
+              "present": false,
+              "status": "absent",
+              "availabilityNotes": [],
+              "hasDescription": false,
+              "hasNotes": false,
+              "wikiFetchedAt": null
+            },
+            "tencent": {
+              "status": null
+            },
+            "telemetry": {
+              "status": null
+            },
+            "patch_notes": {
+              "removed": false
+            },
+            "tombstone": {
+              "removed": false
+            },
+            "existing_catalog": {
+              "slug": "snowblast",
+              "lifecycle": "added"
+            },
+            "resolution": {
+              "liveSources": [],
+              "disabledSources": [],
+              "removedSources": []
+            }
+          }
+        },
+        "flags": {
+          "lifecycle": "removed",
+          "system_breaker": false
+        }
+      },
+      {
+        "slug": "spin-me-right-round",
+        "augmentId": null,
+        "name": "Spin Me Right Round",
+        "rarity": "silver",
+        "previousLifecycle": "active",
+        "availability": {
+          "status": "unverified_legacy",
+          "signals": {
+            "cdragon_registry": {
+              "present": false,
+              "augmentId": null,
+              "definitionPlaceholder": false
+            },
+            "wiki": {
+              "present": false,
+              "status": "absent",
+              "availabilityNotes": [],
+              "hasDescription": false,
+              "hasNotes": false,
+              "wikiFetchedAt": null
+            },
+            "tencent": {
+              "status": null
+            },
+            "telemetry": {
+              "status": null
+            },
+            "patch_notes": {
+              "removed": false
+            },
+            "tombstone": {
+              "removed": false
+            },
+            "existing_catalog": {
+              "slug": "spin-me-right-round",
+              "lifecycle": "active"
+            },
+            "resolution": {
+              "liveSources": [],
+              "disabledSources": [],
+              "removedSources": []
+            }
+          }
+        },
+        "flags": {
+          "lifecycle": "removed",
+          "system_breaker": false
+        }
+      },
+      {
+        "slug": "surge-field",
+        "augmentId": null,
+        "name": "Surge Field",
+        "rarity": "prismatic",
+        "previousLifecycle": "added",
+        "availability": {
+          "status": "unverified_legacy",
+          "signals": {
+            "cdragon_registry": {
+              "present": false,
+              "augmentId": null,
+              "definitionPlaceholder": false
+            },
+            "wiki": {
+              "present": false,
+              "status": "absent",
+              "availabilityNotes": [],
+              "hasDescription": false,
+              "hasNotes": false,
+              "wikiFetchedAt": null
+            },
+            "tencent": {
+              "status": null
+            },
+            "telemetry": {
+              "status": null
+            },
+            "patch_notes": {
+              "removed": false
+            },
+            "tombstone": {
+              "removed": false
+            },
+            "existing_catalog": {
+              "slug": "surge-field",
+              "lifecycle": "added"
+            },
+            "resolution": {
+              "liveSources": [],
+              "disabledSources": [],
+              "removedSources": []
+            }
+          }
+        },
+        "flags": {
+          "lifecycle": "removed",
+          "system_breaker": false
+        }
+      },
+      {
+        "slug": "holy-snowball",
+        "augmentId": null,
+        "name": "Holy Snowball",
+        "rarity": "prismatic",
+        "previousLifecycle": "active",
+        "availability": {
+          "status": "unverified_legacy",
+          "signals": {
+            "cdragon_registry": {
+              "present": false,
+              "augmentId": null,
+              "definitionPlaceholder": false
+            },
+            "wiki": {
+              "present": false,
+              "status": "absent",
+              "availabilityNotes": [],
+              "hasDescription": false,
+              "hasNotes": false,
+              "wikiFetchedAt": null
+            },
+            "tencent": {
+              "status": null
+            },
+            "telemetry": {
+              "status": null
+            },
+            "patch_notes": {
+              "removed": false
+            },
+            "tombstone": {
+              "removed": false
+            },
+            "existing_catalog": {
+              "slug": "holy-snowball",
+              "lifecycle": "active"
+            },
+            "resolution": {
+              "liveSources": [],
+              "disabledSources": [],
+              "removedSources": []
+            }
+          }
+        },
+        "flags": {
+          "lifecycle": "removed",
+          "system_breaker": false
+        }
+      },
+      {
+        "slug": "glass-cannon",
+        "augmentId": null,
+        "name": "Glass Cannon",
+        "rarity": "prismatic",
+        "previousLifecycle": "active",
+        "availability": {
+          "status": "unverified_legacy",
+          "signals": {
+            "cdragon_registry": {
+              "present": false,
+              "augmentId": null,
+              "definitionPlaceholder": false
+            },
+            "wiki": {
+              "present": false,
+              "status": "absent",
+              "availabilityNotes": [],
+              "hasDescription": false,
+              "hasNotes": false,
+              "wikiFetchedAt": null
+            },
+            "tencent": {
+              "status": null
+            },
+            "telemetry": {
+              "status": null
+            },
+            "patch_notes": {
+              "removed": false
+            },
+            "tombstone": {
+              "removed": false
+            },
+            "existing_catalog": {
+              "slug": "glass-cannon",
+              "lifecycle": "active"
+            },
+            "resolution": {
+              "liveSources": [],
+              "disabledSources": [],
+              "removedSources": []
+            }
+          }
+        },
+        "flags": {
+          "lifecycle": "removed",
+          "system_breaker": false
+        }
+      },
+      {
+        "slug": "chain-reaction",
+        "augmentId": null,
+        "name": "Chain Reaction",
+        "rarity": "prismatic",
+        "previousLifecycle": "added",
+        "availability": {
+          "status": "unverified_legacy",
+          "signals": {
+            "cdragon_registry": {
+              "present": false,
+              "augmentId": null,
+              "definitionPlaceholder": false
+            },
+            "wiki": {
+              "present": false,
+              "status": "absent",
+              "availabilityNotes": [],
+              "hasDescription": false,
+              "hasNotes": false,
+              "wikiFetchedAt": null
+            },
+            "tencent": {
+              "status": null
+            },
+            "telemetry": {
+              "status": null
+            },
+            "patch_notes": {
+              "removed": false
+            },
+            "tombstone": {
+              "removed": false
+            },
+            "existing_catalog": {
+              "slug": "chain-reaction",
+              "lifecycle": "added"
+            },
+            "resolution": {
+              "liveSources": [],
+              "disabledSources": [],
+              "removedSources": []
+            }
+          }
+        },
+        "flags": {
+          "lifecycle": "removed",
+          "system_breaker": false
+        }
+      },
+      {
+        "slug": "dimension-shift",
+        "augmentId": null,
+        "name": "Dimension Shift",
+        "rarity": "prismatic",
+        "previousLifecycle": "added",
+        "availability": {
+          "status": "unverified_legacy",
+          "signals": {
+            "cdragon_registry": {
+              "present": false,
+              "augmentId": null,
+              "definitionPlaceholder": false
+            },
+            "wiki": {
+              "present": false,
+              "status": "absent",
+              "availabilityNotes": [],
+              "hasDescription": false,
+              "hasNotes": false,
+              "wikiFetchedAt": null
+            },
+            "tencent": {
+              "status": null
+            },
+            "telemetry": {
+              "status": null
+            },
+            "patch_notes": {
+              "removed": false
+            },
+            "tombstone": {
+              "removed": false
+            },
+            "existing_catalog": {
+              "slug": "dimension-shift",
+              "lifecycle": "added"
+            },
+            "resolution": {
+              "liveSources": [],
+              "disabledSources": [],
+              "removedSources": []
+            }
+          }
+        },
+        "flags": {
+          "lifecycle": "removed",
+          "system_breaker": false
+        }
+      },
+      {
+        "slug": "poro-stampede",
+        "augmentId": null,
+        "name": "Poro Stampede",
+        "rarity": "prismatic",
+        "previousLifecycle": "added",
+        "availability": {
+          "status": "unverified_legacy",
+          "signals": {
+            "cdragon_registry": {
+              "present": false,
+              "augmentId": null,
+              "definitionPlaceholder": false
+            },
+            "wiki": {
+              "present": false,
+              "status": "absent",
+              "availabilityNotes": [],
+              "hasDescription": false,
+              "hasNotes": false,
+              "wikiFetchedAt": null
+            },
+            "tencent": {
+              "status": null
+            },
+            "telemetry": {
+              "status": null
+            },
+            "patch_notes": {
+              "removed": false
+            },
+            "tombstone": {
+              "removed": false
+            },
+            "existing_catalog": {
+              "slug": "poro-stampede",
+              "lifecycle": "added"
+            },
+            "resolution": {
+              "liveSources": [],
+              "disabledSources": [],
+              "removedSources": []
+            }
+          }
+        },
+        "flags": {
+          "lifecycle": "removed",
+          "system_breaker": false
+        }
+      },
+      {
+        "slug": "one-trick-pony",
+        "augmentId": null,
+        "name": "One Trick Pony",
+        "rarity": "prismatic",
+        "previousLifecycle": "added",
+        "availability": {
+          "status": "unverified_legacy",
+          "signals": {
+            "cdragon_registry": {
+              "present": false,
+              "augmentId": null,
+              "definitionPlaceholder": false
+            },
+            "wiki": {
+              "present": false,
+              "status": "absent",
+              "availabilityNotes": [],
+              "hasDescription": false,
+              "hasNotes": false,
+              "wikiFetchedAt": null
+            },
+            "tencent": {
+              "status": null
+            },
+            "telemetry": {
+              "status": null
+            },
+            "patch_notes": {
+              "removed": false
+            },
+            "tombstone": {
+              "removed": false
+            },
+            "existing_catalog": {
+              "slug": "one-trick-pony",
+              "lifecycle": "added"
+            },
+            "resolution": {
+              "liveSources": [],
+              "disabledSources": [],
+              "removedSources": []
+            }
+          }
+        },
+        "flags": {
+          "lifecycle": "removed",
+          "system_breaker": false
+        }
+      },
+      {
+        "slug": "squishy-slappy-grab",
+        "augmentId": null,
+        "name": "Squishy Slappy Grab",
+        "rarity": "prismatic",
+        "previousLifecycle": "added",
+        "availability": {
+          "status": "unverified_legacy",
+          "signals": {
+            "cdragon_registry": {
+              "present": false,
+              "augmentId": null,
+              "definitionPlaceholder": false
+            },
+            "wiki": {
+              "present": false,
+              "status": "absent",
+              "availabilityNotes": [],
+              "hasDescription": false,
+              "hasNotes": false,
+              "wikiFetchedAt": null
+            },
+            "tencent": {
+              "status": null
+            },
+            "telemetry": {
+              "status": null
+            },
+            "patch_notes": {
+              "removed": false
+            },
+            "tombstone": {
+              "removed": false
+            },
+            "existing_catalog": {
+              "slug": "squishy-slappy-grab",
+              "lifecycle": "added"
+            },
+            "resolution": {
+              "liveSources": [],
+              "disabledSources": [],
+              "removedSources": []
+            }
+          }
+        },
+        "flags": {
+          "lifecycle": "removed",
+          "system_breaker": false
+        }
+      }
+    ]
+  },
+  "step7Backlog": {
+    "knownFailingTests": [
+      {
+        "file": "src/lib/__tests__/data-integrity.test.ts",
+        "test": "combo rows only reference currently offerable augments",
+        "why": "combos still reference rows now resolved non-live under the new availability model; combo data needs regeneration instead of old lifecycle assertions."
+      },
+      {
+        "file": "src/lib/__tests__/data-integrity.test.ts",
+        "test": "26.12 breaker re-verification: three breakers retired, five live",
+        "why": "test encodes the old arammayhem-sourced lifecycle by expecting slow-and-steady, jeweled-gauntlet, and vulnerability to be removed."
+      },
+      {
+        "file": "src/lib/__tests__/data-integrity.test.ts",
+        "test": "Jeweled Gauntlet keeps a visible observed-live mechanism override",
+        "why": "test expects the old removed-plus-observed-live override model, but CDragon+wiki now resolves jeweled-gauntlet as confirmed_live."
+      },
+      {
+        "file": "src/lib/__tests__/pool-orchestrator.test.ts",
+        "test": "26.12-removed augments are excluded with reason `removed` under real pool rules",
+        "why": "pool expectations still encode old removed lifecycle assumptions for legacy rows now resolved through unverified_legacy / availability status."
+      },
+      {
+        "file": "src/lib/__tests__/pool-orchestrator.test.ts",
+        "test": "observed-live mechanism overrides stale removed lifecycle for Jeweled Gauntlet",
+        "why": "test expects Jeweled Gauntlet to remain removed and be rescued by observed-live; the new resolver makes it confirmed_live directly."
+      }
+    ],
+    "workItems": [
+      {
+        "item": "Regenerate combos against the new availability model.",
+        "reason": "Current combo rows still reference old lifecycle assumptions and fail the data-integrity offerability guard."
+      },
+      {
+        "item": "Regenerate pool-rules against the new availability model.",
+        "reason": "Pool exclusions should consume resolved availability instead of arammayhem-sourced retired assumptions."
+      },
+      {
+        "item": "Evaluate scripts/apply_live_mechanism_overrides.py as an observed_live resolver signal.",
+        "reason": "The existing observed-live mechanism should become a resolver signal for the spec future observed_live / observed_bug_mechanism path instead of a downstream override crutch."
+      }
+    ]
+  }
+}
