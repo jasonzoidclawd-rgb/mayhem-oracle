@@ -108,7 +108,6 @@ def export_public_catalog(
         "provenance",
         "dataValues",
         "calculations",
-        "wikiNotes",
         "wikiAvailabilityNotes",
         "wikiFetchedAt",
         "cdragon",
@@ -120,10 +119,11 @@ def export_public_catalog(
         "definitionPlaceholder",
         "legacyCatalogRow",
     }
+    forbidden_augment_telemetry = forbidden_telemetry | {"wikiNotes"}
     write_sanitized_json(
         internal_dir / "augments.json",
         public_dir / "augments.json",
-        forbidden_telemetry,
+        forbidden_augment_telemetry,
     )
     write_sanitized_json(
         internal_dir / "items.json",

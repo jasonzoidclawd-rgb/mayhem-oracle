@@ -52,9 +52,11 @@ describe("public data boundary", () => {
       availability?: unknown;
       availability_overrides?: unknown;
     };
-    const publicItems = readJson("public/data/items.json");
+    const publicItems = readJson("public/data/items.json") as {
+      items: Array<Record<string, unknown>>;
+    };
     const publicAugments = readJson("public/data/augments.json");
-    const forbiddenKeys = new Set([
+    const forbiddenTelemetry = [
       "win_rate",
       "winRate",
       "oracleScore",
@@ -67,7 +69,6 @@ describe("public data boundary", () => {
       "provenance",
       "dataValues",
       "calculations",
-      "wikiNotes",
       "wikiAvailabilityNotes",
       "wikiFetchedAt",
       "cdragon",
@@ -78,7 +79,9 @@ describe("public data boundary", () => {
       "effectTextByLocale",
       "definitionPlaceholder",
       "legacyCatalogRow",
-    ]);
+    ];
+    const forbiddenItemKeys = new Set(forbiddenTelemetry);
+    const forbiddenAugmentKeys = new Set([...forbiddenTelemetry, "wikiNotes"]);
 
     // Freemium teaser: a small slice of S-tier "strong combos" is published
     // (names + tier only) for SEO/AI-citability and as a conversion hook. The
@@ -107,8 +110,13 @@ describe("public data boundary", () => {
     expect(publicPoolRules.lifecycle).toEqual({ added: {}, removed: {} });
     expect(publicPoolRules.availability).toBeUndefined();
     expect(publicPoolRules.availability_overrides).toBeUndefined();
-    expect(collectForbiddenKeys(publicItems, forbiddenKeys)).toEqual([]);
-    expect(collectForbiddenKeys(publicAugments, forbiddenKeys)).toEqual([]);
+    expect(collectForbiddenKeys(publicItems, forbiddenItemKeys)).toEqual([]);
+    expect(collectForbiddenKeys(publicAugments, forbiddenAugmentKeys)).toEqual([]);
+    expect(
+      publicItems.items.filter((item) =>
+        Array.isArray(item.wikiNotes) && item.wikiNotes.length > 0
+      ).length,
+    ).toBeGreaterThan(0);
   });
 
   test("keeps champion rank, win rate, and pick rate public", () => {

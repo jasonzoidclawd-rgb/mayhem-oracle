@@ -261,7 +261,7 @@ describe("augment authority model guards", () => {
     expect(reconciliationReport.unverifiedLegacy.augments.map((entry) => entry.slug).sort()).toEqual(
       unverifiedLegacySlugs,
     );
-    expect(reconciliationReport.step7Backlog.knownFailingTests).toHaveLength(5);
-    expect(reconciliationReport.step7Backlog.workItems).toHaveLength(3);
+    expect(reconciliationReport.step7Backlog.knownFailingTests).toEqual([]);
+    expect(reconciliationReport.step7Backlog.workItems).toEqual([]);
   });
 });

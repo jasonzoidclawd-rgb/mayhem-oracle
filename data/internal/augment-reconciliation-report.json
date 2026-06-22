@@ -5735,46 +5735,7 @@
     ]
   },
   "step7Backlog": {
-    "knownFailingTests": [
-      {
-        "file": "src/lib/__tests__/data-integrity.test.ts",
-        "test": "combo rows only reference currently offerable augments",
-        "why": "combos still reference rows now resolved non-live under the new availability model; combo data needs regeneration instead of old lifecycle assertions."
-      },
-      {
-        "file": "src/lib/__tests__/data-integrity.test.ts",
-        "test": "26.12 breaker re-verification: three breakers retired, five live",
-        "why": "test encodes the old arammayhem-sourced lifecycle by expecting slow-and-steady, jeweled-gauntlet, and vulnerability to be removed."
-      },
-      {
-        "file": "src/lib/__tests__/data-integrity.test.ts",
-        "test": "Jeweled Gauntlet keeps a visible observed-live mechanism override",
-        "why": "test expects the old removed-plus-observed-live override model, but CDragon+wiki now resolves jeweled-gauntlet as confirmed_live."
-      },
-      {
-        "file": "src/lib/__tests__/pool-orchestrator.test.ts",
-        "test": "26.12-removed augments are excluded with reason `removed` under real pool rules",
-        "why": "pool expectations still encode old removed lifecycle assumptions for legacy rows now resolved through unverified_legacy / availability status."
-      },
-      {
-        "file": "src/lib/__tests__/pool-orchestrator.test.ts",
-        "test": "observed-live mechanism overrides stale removed lifecycle for Jeweled Gauntlet",
-        "why": "test expects Jeweled Gauntlet to remain removed and be rescued by observed-live; the new resolver makes it confirmed_live directly."
-      }
-    ],
-    "workItems": [
-      {
-        "item": "Regenerate combos against the new availability model.",
-        "reason": "Current combo rows still reference old lifecycle assumptions and fail the data-integrity offerability guard."
-      },
-      {
-        "item": "Regenerate pool-rules against the new availability model.",
-        "reason": "Pool exclusions should consume resolved availability instead of arammayhem-sourced retired assumptions."
-      },
-      {
-        "item": "Evaluate scripts/apply_live_mechanism_overrides.py as an observed_live resolver signal.",
-        "reason": "The existing observed-live mechanism should become a resolver signal for the spec future observed_live / observed_bug_mechanism path instead of a downstream override crutch."
-      }
-    ]
+    "knownFailingTests": [],
+    "workItems": []
   }
 }
