@@ -1,0 +1,3477 @@
+{
+  "identity_key": "CDragon augmentNameId",
+  "counts": {
+    "cdragon": 4,
+    "internal_augments": 89,
+    "wiki": 88,
+    "arammayhem_win_rate": 62
+  },
+  "sources": {
+    "cdragon": [
+      {
+        "augmentNameId": "ARAM_Earthwake",
+        "name": "Earthwake",
+        "slug": "earthwake",
+        "rarity": "prismatic"
+      },
+      {
+        "augmentNameId": "ARAM_Flashy",
+        "name": "Flashy",
+        "slug": "flashy",
+        "rarity": "gold"
+      },
+      {
+        "augmentNameId": "ARAM_MissingPingAugment",
+        "name": "???",
+        "slug": "missing-ping-augment",
+        "rarity": "prismatic"
+      },
+      {
+        "augmentNameId": "ARAM_TransmuteGold",
+        "name": "Transmute: Gold",
+        "slug": "transmute-gold",
+        "rarity": "silver"
+      }
+    ],
+    "internal_augments": [
+      {
+        "sourceKey": "infinite-recursion",
+        "name": "Infinite Recursion",
+        "status": "unmatched",
+        "tokens": [
+          {
+            "field": "name",
+            "value": "Infinite Recursion",
+            "token": "infiniterecursion"
+          }
+        ],
+        "slug": "infinite-recursion",
+        "rarity": "prismatic",
+        "lifecycle": "active",
+        "hasWikiDescription": true
+      },
+      {
+        "sourceKey": "warlock-juicebox",
+        "name": "Warlock Juicebox",
+        "status": "unmatched",
+        "tokens": [
+          {
+            "field": "name",
+            "value": "Warlock Juicebox",
+            "token": "warlockjuicebox"
+          }
+        ],
+        "slug": "warlock-juicebox",
+        "rarity": "gold",
+        "lifecycle": "added",
+        "hasWikiDescription": true
+      },
+      {
+        "sourceKey": "pressure-cooker",
+        "name": "Pressure Cooker",
+        "status": "unmatched",
+        "tokens": [
+          {
+            "field": "name",
+            "value": "Pressure Cooker",
+            "token": "pressurecooker"
+          }
+        ],
+        "slug": "pressure-cooker",
+        "rarity": "gold",
+        "lifecycle": "added",
+        "hasWikiDescription": true
+      },
+      {
+        "sourceKey": "combusting-interest",
+        "name": "Combusting Interest",
+        "status": "unmatched",
+        "tokens": [
+          {
+            "field": "name",
+            "value": "Combusting Interest",
+            "token": "combustinginterest"
+          }
+        ],
+        "slug": "combusting-interest",
+        "rarity": "gold",
+        "lifecycle": "added",
+        "hasWikiDescription": true
+      },
+      {
+        "sourceKey": "twin-fire",
+        "name": "Twin Fire",
+        "status": "unmatched",
+        "tokens": [
+          {
+            "field": "name",
+            "value": "Twin Fire",
+            "token": "twinfire"
+          }
+        ],
+        "slug": "twin-fire",
+        "rarity": "silver",
+        "lifecycle": "active",
+        "hasWikiDescription": true
+      },
+      {
+        "sourceKey": "sonata",
+        "name": "Sonata",
+        "status": "unmatched",
+        "tokens": [
+          {
+            "field": "name",
+            "value": "Sonata",
+            "token": "sonata"
+          }
+        ],
+        "slug": "sonata",
+        "rarity": "gold",
+        "lifecycle": "active",
+        "hasWikiDescription": true
+      },
+      {
+        "sourceKey": "forged-by-the-master",
+        "name": "Forged By The Master",
+        "status": "unmatched",
+        "tokens": [
+          {
+            "field": "name",
+            "value": "Forged By The Master",
+            "token": "forgedbythemaster"
+          }
+        ],
+        "slug": "forged-by-the-master",
+        "rarity": "silver",
+        "lifecycle": "added",
+        "hasWikiDescription": true
+      },
+      {
+        "sourceKey": "escape-plan",
+        "name": "Escape Plan",
+        "status": "unmatched",
+        "tokens": [
+          {
+            "field": "name",
+            "value": "Escape Plan",
+            "token": "escapeplan"
+          }
+        ],
+        "slug": "escape-plan",
+        "rarity": "silver",
+        "lifecycle": "active",
+        "hasWikiDescription": true
+      },
+      {
+        "sourceKey": "shrink-engine",
+        "name": "Shrink Engine",
+        "status": "unmatched",
+        "tokens": [
+          {
+            "field": "name",
+            "value": "Shrink Engine",
+            "token": "shrinkengine"
+          }
+        ],
+        "slug": "shrink-engine",
+        "rarity": "gold",
+        "lifecycle": "active",
+        "hasWikiDescription": true
+      },
+      {
+        "sourceKey": "tooth-fairy",
+        "name": "Tooth Fairy",
+        "status": "unmatched",
+        "tokens": [
+          {
+            "field": "name",
+            "value": "Tooth Fairy",
+            "token": "toothfairy"
+          }
+        ],
+        "slug": "tooth-fairy",
+        "rarity": "gold",
+        "lifecycle": "added",
+        "hasWikiDescription": true
+      },
+      {
+        "sourceKey": "growth-spurt",
+        "name": "Growth Spurt",
+        "status": "unmatched",
+        "tokens": [
+          {
+            "field": "name",
+            "value": "Growth Spurt",
+            "token": "growthspurt"
+          }
+        ],
+        "slug": "growth-spurt",
+        "rarity": "gold",
+        "lifecycle": "active",
+        "hasWikiDescription": true
+      },
+      {
+        "sourceKey": "lil-extra-help",
+        "name": "Lil' Extra Help",
+        "status": "unmatched",
+        "tokens": [
+          {
+            "field": "name",
+            "value": "Lil' Extra Help",
+            "token": "lilextrahelp"
+          }
+        ],
+        "slug": "lil-extra-help",
+        "rarity": "gold",
+        "lifecycle": "added",
+        "hasWikiDescription": true
+      },
+      {
+        "sourceKey": "donation",
+        "name": "Donation",
+        "status": "unmatched",
+        "tokens": [
+          {
+            "field": "name",
+            "value": "Donation",
+            "token": "donation"
+          }
+        ],
+        "slug": "donation",
+        "rarity": "gold",
+        "lifecycle": "active",
+        "hasWikiDescription": true
+      },
+      {
+        "sourceKey": "swift-and-safe",
+        "name": "Swift and Safe",
+        "status": "unmatched",
+        "tokens": [
+          {
+            "field": "name",
+            "value": "Swift and Safe",
+            "token": "swiftandsafe"
+          }
+        ],
+        "slug": "swift-and-safe",
+        "rarity": "silver",
+        "lifecycle": "active",
+        "hasWikiDescription": true
+      },
+      {
+        "sourceKey": "soul-eater",
+        "name": "Soul Eater",
+        "status": "unmatched",
+        "tokens": [
+          {
+            "field": "name",
+            "value": "Soul Eater",
+            "token": "souleater"
+          }
+        ],
+        "slug": "soul-eater",
+        "rarity": "gold",
+        "lifecycle": "active",
+        "hasWikiDescription": true
+      },
+      {
+        "sourceKey": "final-form",
+        "name": "Final Form",
+        "status": "unmatched",
+        "tokens": [
+          {
+            "field": "name",
+            "value": "Final Form",
+            "token": "finalform"
+          }
+        ],
+        "slug": "final-form",
+        "rarity": "prismatic",
+        "lifecycle": "active",
+        "hasWikiDescription": true
+      },
+      {
+        "sourceKey": "terraind",
+        "name": "Terrain'd",
+        "status": "unmatched",
+        "tokens": [
+          {
+            "field": "name",
+            "value": "Terrain'd",
+            "token": "terraind"
+          }
+        ],
+        "slug": "terraind",
+        "rarity": "gold",
+        "lifecycle": "added",
+        "hasWikiDescription": true
+      },
+      {
+        "sourceKey": "bonk",
+        "name": "BONK!",
+        "status": "unmatched",
+        "tokens": [
+          {
+            "field": "name",
+            "value": "BONK!",
+            "token": "bonk"
+          }
+        ],
+        "slug": "bonk",
+        "rarity": "gold",
+        "lifecycle": "added",
+        "hasWikiDescription": true
+      },
+      {
+        "sourceKey": "stay-resolute",
+        "name": "Stay Resolute",
+        "status": "unmatched",
+        "tokens": [
+          {
+            "field": "name",
+            "value": "Stay Resolute",
+            "token": "stayresolute"
+          }
+        ],
+        "slug": "stay-resolute",
+        "rarity": "silver",
+        "lifecycle": "added",
+        "hasWikiDescription": true
+      },
+      {
+        "sourceKey": "hand-of-baron",
+        "name": "Hand of Baron",
+        "status": "unmatched",
+        "tokens": [
+          {
+            "field": "name",
+            "value": "Hand of Baron",
+            "token": "handofbaron"
+          }
+        ],
+        "slug": "hand-of-baron",
+        "rarity": "prismatic",
+        "lifecycle": "active",
+        "hasWikiDescription": true
+      },
+      {
+        "sourceKey": "king-me",
+        "name": "King Me",
+        "status": "unmatched",
+        "tokens": [
+          {
+            "field": "name",
+            "value": "King Me",
+            "token": "kingme"
+          }
+        ],
+        "slug": "king-me",
+        "rarity": "prismatic",
+        "lifecycle": "active",
+        "hasWikiDescription": true
+      },
+      {
+        "sourceKey": "biggest-snowball-ever",
+        "name": "Biggest Snowball Ever",
+        "status": "unmatched",
+        "tokens": [
+          {
+            "field": "name",
+            "value": "Biggest Snowball Ever",
+            "token": "biggestsnowballever"
+          }
+        ],
+        "slug": "biggest-snowball-ever",
+        "rarity": "prismatic",
+        "lifecycle": "active",
+        "hasWikiDescription": true
+      },
+      {
+        "sourceKey": "dont-change-the-channel",
+        "name": "Don't Change the Channel",
+        "status": "unmatched",
+        "tokens": [
+          {
+            "field": "name",
+            "value": "Don't Change the Channel",
+            "token": "dontchangethechannel"
+          }
+        ],
+        "slug": "dont-change-the-channel",
+        "rarity": "silver",
+        "lifecycle": "added",
+        "hasWikiDescription": true
+      },
+      {
+        "sourceKey": "overextender",
+        "name": "Overextender",
+        "status": "unmatched",
+        "tokens": [
+          {
+            "field": "name",
+            "value": "Overextender",
+            "token": "overextender"
+          }
+        ],
+        "slug": "overextender",
+        "rarity": "gold",
+        "lifecycle": "added",
+        "hasWikiDescription": true
+      },
+      {
+        "sourceKey": "its-go-time",
+        "name": "It's Go Time",
+        "status": "unmatched",
+        "tokens": [
+          {
+            "field": "name",
+            "value": "It's Go Time",
+            "token": "itsgotime"
+          }
+        ],
+        "slug": "its-go-time",
+        "rarity": "silver",
+        "lifecycle": "added",
+        "hasWikiDescription": true
+      },
+      {
+        "sourceKey": "trusty-weapon",
+        "name": "Trusty Weapon",
+        "status": "unmatched",
+        "tokens": [
+          {
+            "field": "name",
+            "value": "Trusty Weapon",
+            "token": "trustyweapon"
+          }
+        ],
+        "slug": "trusty-weapon",
+        "rarity": "silver",
+        "lifecycle": "added",
+        "hasWikiDescription": true
+      },
+      {
+        "sourceKey": "ravenous-bind",
+        "name": "Ravenous Bind",
+        "status": "unmatched",
+        "tokens": [
+          {
+            "field": "name",
+            "value": "Ravenous Bind",
+            "token": "ravenousbind"
+          }
+        ],
+        "slug": "ravenous-bind",
+        "rarity": "gold",
+        "lifecycle": "added",
+        "hasWikiDescription": true
+      },
+      {
+        "sourceKey": "goldrend",
+        "name": "Goldrend",
+        "status": "unmatched",
+        "tokens": [
+          {
+            "field": "name",
+            "value": "Goldrend",
+            "token": "goldrend"
+          }
+        ],
+        "slug": "goldrend",
+        "rarity": "prismatic",
+        "lifecycle": "active",
+        "hasWikiDescription": true
+      },
+      {
+        "sourceKey": "hextech-soul",
+        "name": "Hextech Soul",
+        "status": "unmatched",
+        "tokens": [
+          {
+            "field": "name",
+            "value": "Hextech Soul",
+            "token": "hextechsoul"
+          }
+        ],
+        "slug": "hextech-soul",
+        "rarity": "silver",
+        "lifecycle": "active",
+        "hasWikiDescription": true
+      },
+      {
+        "sourceKey": "endless-decimation",
+        "name": "Endless Decimation",
+        "status": "unmatched",
+        "tokens": [
+          {
+            "field": "name",
+            "value": "Endless Decimation",
+            "token": "endlessdecimation"
+          }
+        ],
+        "slug": "endless-decimation",
+        "rarity": "gold",
+        "lifecycle": "added",
+        "hasWikiDescription": true
+      },
+      {
+        "sourceKey": "ultimate-awakening",
+        "name": "Ultimate Awakening",
+        "status": "unmatched",
+        "tokens": [
+          {
+            "field": "name",
+            "value": "Ultimate Awakening",
+            "token": "ultimateawakening"
+          }
+        ],
+        "slug": "ultimate-awakening",
+        "rarity": "prismatic",
+        "lifecycle": "active",
+        "hasWikiDescription": true
+      },
+      {
+        "sourceKey": "overloaded",
+        "name": "Overloaded",
+        "status": "unmatched",
+        "tokens": [
+          {
+            "field": "name",
+            "value": "Overloaded",
+            "token": "overloaded"
+          }
+        ],
+        "slug": "overloaded",
+        "rarity": "prismatic",
+        "lifecycle": "added",
+        "hasWikiDescription": true
+      },
+      {
+        "sourceKey": "adaptive-ward",
+        "name": "Adaptive Ward",
+        "status": "unmatched",
+        "tokens": [
+          {
+            "field": "name",
+            "value": "Adaptive Ward",
+            "token": "adaptiveward"
+          }
+        ],
+        "slug": "adaptive-ward",
+        "rarity": "silver",
+        "lifecycle": "added",
+        "hasWikiDescription": true
+      },
+      {
+        "sourceKey": "ominous-pact",
+        "name": "Ominous Pact",
+        "status": "unmatched",
+        "tokens": [
+          {
+            "field": "name",
+            "value": "Ominous Pact",
+            "token": "ominouspact"
+          }
+        ],
+        "slug": "ominous-pact",
+        "rarity": "prismatic",
+        "lifecycle": "active",
+        "hasWikiDescription": true
+      },
+      {
+        "sourceKey": "double-defense",
+        "name": "Double Defense",
+        "status": "unmatched",
+        "tokens": [
+          {
+            "field": "name",
+            "value": "Double Defense",
+            "token": "doubledefense"
+          }
+        ],
+        "slug": "double-defense",
+        "rarity": "silver",
+        "lifecycle": "added",
+        "hasWikiDescription": true
+      },
+      {
+        "sourceKey": "mercys-strike",
+        "name": "Mercy's Strike",
+        "status": "unmatched",
+        "tokens": [
+          {
+            "field": "name",
+            "value": "Mercy's Strike",
+            "token": "mercysstrike"
+          }
+        ],
+        "slug": "mercys-strike",
+        "rarity": "gold",
+        "lifecycle": "added",
+        "hasWikiDescription": true
+      },
+      {
+        "sourceKey": "shark-bait",
+        "name": "Shark Bait",
+        "status": "unmatched",
+        "tokens": [
+          {
+            "field": "name",
+            "value": "Shark Bait",
+            "token": "sharkbait"
+          }
+        ],
+        "slug": "shark-bait",
+        "rarity": "gold",
+        "lifecycle": "added",
+        "hasWikiDescription": true
+      },
+      {
+        "sourceKey": "nature-is-healing",
+        "name": "Nature is Healing",
+        "status": "unmatched",
+        "tokens": [
+          {
+            "field": "name",
+            "value": "Nature is Healing",
+            "token": "natureishealing"
+          }
+        ],
+        "slug": "nature-is-healing",
+        "rarity": "gold",
+        "lifecycle": "added",
+        "hasWikiDescription": true
+      },
+      {
+        "sourceKey": "poltergeist",
+        "name": "Poltergeist",
+        "status": "unmatched",
+        "tokens": [
+          {
+            "field": "name",
+            "value": "Poltergeist",
+            "token": "poltergeist"
+          }
+        ],
+        "slug": "poltergeist",
+        "rarity": "silver",
+        "lifecycle": "active",
+        "hasWikiDescription": true
+      },
+      {
+        "sourceKey": "nightstalking",
+        "name": "Nightstalking",
+        "status": "unmatched",
+        "tokens": [
+          {
+            "field": "name",
+            "value": "Nightstalking",
+            "token": "nightstalking"
+          }
+        ],
+        "slug": "nightstalking",
+        "rarity": "gold",
+        "lifecycle": "active",
+        "hasWikiDescription": true
+      },
+      {
+        "sourceKey": "tripleshot",
+        "name": "Tripleshot",
+        "status": "unmatched",
+        "tokens": [
+          {
+            "field": "name",
+            "value": "Tripleshot",
+            "token": "tripleshot"
+          }
+        ],
+        "slug": "tripleshot",
+        "rarity": "prismatic",
+        "lifecycle": "added",
+        "hasWikiDescription": true
+      },
+      {
+        "sourceKey": "empyrean-promise",
+        "name": "Empyrean Promise",
+        "status": "unmatched",
+        "tokens": [
+          {
+            "field": "name",
+            "value": "Empyrean Promise",
+            "token": "empyreanpromise"
+          }
+        ],
+        "slug": "empyrean-promise",
+        "rarity": "prismatic",
+        "lifecycle": "active",
+        "hasWikiDescription": true
+      },
+      {
+        "sourceKey": "kill-secured",
+        "name": "Kill Secured",
+        "status": "unmatched",
+        "tokens": [
+          {
+            "field": "name",
+            "value": "Kill Secured",
+            "token": "killsecured"
+          }
+        ],
+        "slug": "kill-secured",
+        "rarity": "silver",
+        "lifecycle": "active",
+        "hasWikiDescription": true
+      },
+      {
+        "sourceKey": "porcupine",
+        "name": "Porcupine",
+        "status": "unmatched",
+        "tokens": [
+          {
+            "field": "name",
+            "value": "Porcupine",
+            "token": "porcupine"
+          }
+        ],
+        "slug": "porcupine",
+        "rarity": "gold",
+        "lifecycle": "added",
+        "hasWikiDescription": true
+      },
+      {
+        "sourceKey": "echo-cast",
+        "name": "Echo Cast",
+        "status": "unmatched",
+        "tokens": [
+          {
+            "field": "name",
+            "value": "Echo Cast",
+            "token": "echocast"
+          }
+        ],
+        "slug": "echo-cast",
+        "rarity": "prismatic",
+        "lifecycle": "added",
+        "hasWikiDescription": true
+      },
+      {
+        "sourceKey": "spell-split",
+        "name": "Spellsplit",
+        "status": "unmatched",
+        "tokens": [
+          {
+            "field": "name",
+            "value": "Spellsplit",
+            "token": "spellsplit"
+          }
+        ],
+        "slug": "spell-split",
+        "rarity": "prismatic",
+        "lifecycle": "added",
+        "hasWikiDescription": true
+      },
+      {
+        "sourceKey": "shark-tempest",
+        "name": "Shark Tempest",
+        "status": "unmatched",
+        "tokens": [
+          {
+            "field": "name",
+            "value": "Shark Tempest",
+            "token": "sharktempest"
+          }
+        ],
+        "slug": "shark-tempest",
+        "rarity": "gold",
+        "lifecycle": "added",
+        "hasWikiDescription": true
+      },
+      {
+        "sourceKey": "flash-2",
+        "name": "Flash 2",
+        "status": "unmatched",
+        "tokens": [
+          {
+            "field": "name",
+            "value": "Flash 2",
+            "token": "flash2"
+          }
+        ],
+        "slug": "flash-2",
+        "rarity": "silver",
+        "lifecycle": "active",
+        "hasWikiDescription": true
+      },
+      {
+        "sourceKey": "hide-on-bush",
+        "name": "Hide on Bush",
+        "status": "unmatched",
+        "tokens": [
+          {
+            "field": "name",
+            "value": "Hide on Bush",
+            "token": "hideonbush"
+          }
+        ],
+        "slug": "hide-on-bush",
+        "rarity": "gold",
+        "lifecycle": "added",
+        "hasWikiDescription": true
+      },
+      {
+        "sourceKey": "prom-queen",
+        "name": "Prom Queen",
+        "status": "unmatched",
+        "tokens": [
+          {
+            "field": "name",
+            "value": "Prom Queen",
+            "token": "promqueen"
+          }
+        ],
+        "slug": "prom-queen",
+        "rarity": "prismatic",
+        "lifecycle": "active",
+        "hasWikiDescription": true
+      },
+      {
+        "sourceKey": "our-healing",
+        "name": "Our Healing",
+        "status": "unmatched",
+        "tokens": [
+          {
+            "field": "name",
+            "value": "Our Healing",
+            "token": "ourhealing"
+          }
+        ],
+        "slug": "our-healing",
+        "rarity": "gold",
+        "lifecycle": "added",
+        "hasWikiDescription": true
+      },
+      {
+        "sourceKey": "mighty-shield",
+        "name": "Mighty Shield",
+        "status": "unmatched",
+        "tokens": [
+          {
+            "field": "name",
+            "value": "Mighty Shield",
+            "token": "mightyshield"
+          }
+        ],
+        "slug": "mighty-shield",
+        "rarity": "silver",
+        "lifecycle": "active",
+        "hasWikiDescription": true
+      },
+      {
+        "sourceKey": "pin-cushion",
+        "name": "Pin Cushion",
+        "status": "unmatched",
+        "tokens": [
+          {
+            "field": "name",
+            "value": "Pin Cushion",
+            "token": "pincushion"
+          }
+        ],
+        "slug": "pin-cushion",
+        "rarity": "prismatic",
+        "lifecycle": "added",
+        "hasWikiDescription": true
+      },
+      {
+        "sourceKey": "pinball",
+        "name": "Pinball",
+        "status": "unmatched",
+        "tokens": [
+          {
+            "field": "name",
+            "value": "Pinball",
+            "token": "pinball"
+          }
+        ],
+        "slug": "pinball",
+        "rarity": "gold",
+        "lifecycle": "active",
+        "hasWikiDescription": true
+      },
+      {
+        "sourceKey": "snowblast",
+        "name": "Snowblast",
+        "status": "unmatched",
+        "tokens": [
+          {
+            "field": "name",
+            "value": "Snowblast",
+            "token": "snowblast"
+          }
+        ],
+        "slug": "snowblast",
+        "rarity": "gold",
+        "lifecycle": "added",
+        "hasWikiDescription": true
+      },
+      {
+        "sourceKey": "spin-me-right-round",
+        "name": "Spin Me Right Round",
+        "status": "unmatched",
+        "tokens": [
+          {
+            "field": "name",
+            "value": "Spin Me Right Round",
+            "token": "spinmerightround"
+          }
+        ],
+        "slug": "spin-me-right-round",
+        "rarity": "silver",
+        "lifecycle": "active",
+        "hasWikiDescription": true
+      },
+      {
+        "sourceKey": "surge-field",
+        "name": "Surge Field",
+        "status": "unmatched",
+        "tokens": [
+          {
+            "field": "name",
+            "value": "Surge Field",
+            "token": "surgefield"
+          }
+        ],
+        "slug": "surge-field",
+        "rarity": "prismatic",
+        "lifecycle": "added",
+        "hasWikiDescription": true
+      },
+      {
+        "sourceKey": "holy-snowball",
+        "name": "Holy Snowball",
+        "status": "unmatched",
+        "tokens": [
+          {
+            "field": "name",
+            "value": "Holy Snowball",
+            "token": "holysnowball"
+          }
+        ],
+        "slug": "holy-snowball",
+        "rarity": "prismatic",
+        "lifecycle": "active",
+        "hasWikiDescription": true
+      },
+      {
+        "sourceKey": "glass-cannon",
+        "name": "Glass Cannon",
+        "status": "unmatched",
+        "tokens": [
+          {
+            "field": "name",
+            "value": "Glass Cannon",
+            "token": "glasscannon"
+          }
+        ],
+        "slug": "glass-cannon",
+        "rarity": "prismatic",
+        "lifecycle": "active",
+        "hasWikiDescription": true
+      },
+      {
+        "sourceKey": "chain-reaction",
+        "name": "Chain Reaction",
+        "status": "unmatched",
+        "tokens": [
+          {
+            "field": "name",
+            "value": "Chain Reaction",
+            "token": "chainreaction"
+          }
+        ],
+        "slug": "chain-reaction",
+        "rarity": "prismatic",
+        "lifecycle": "added",
+        "hasWikiDescription": true
+      },
+      {
+        "sourceKey": "dimension-shift",
+        "name": "Dimension Shift",
+        "status": "unmatched",
+        "tokens": [
+          {
+            "field": "name",
+            "value": "Dimension Shift",
+            "token": "dimensionshift"
+          }
+        ],
+        "slug": "dimension-shift",
+        "rarity": "prismatic",
+        "lifecycle": "added",
+        "hasWikiDescription": true
+      },
+      {
+        "sourceKey": "poro-stampede",
+        "name": "Poro Stampede",
+        "status": "unmatched",
+        "tokens": [
+          {
+            "field": "name",
+            "value": "Poro Stampede",
+            "token": "porostampede"
+          }
+        ],
+        "slug": "poro-stampede",
+        "rarity": "prismatic",
+        "lifecycle": "added",
+        "hasWikiDescription": true
+      },
+      {
+        "sourceKey": "mystery-augment",
+        "name": "???",
+        "status": "unmatched",
+        "tokens": [
+          {
+            "field": "slug",
+            "value": "mystery-augment",
+            "token": "mysteryaugment"
+          }
+        ],
+        "slug": "mystery-augment",
+        "rarity": "prismatic",
+        "lifecycle": "removed",
+        "hasWikiDescription": true
+      },
+      {
+        "sourceKey": "adamant",
+        "name": "Adamant",
+        "status": "unmatched",
+        "tokens": [
+          {
+            "field": "name",
+            "value": "Adamant",
+            "token": "adamant"
+          }
+        ],
+        "slug": "adamant",
+        "rarity": "silver",
+        "lifecycle": "removed",
+        "hasWikiDescription": true
+      },
+      {
+        "sourceKey": "crit-n-cast",
+        "name": "Crit 'n Cast",
+        "status": "unmatched",
+        "tokens": [
+          {
+            "field": "name",
+            "value": "Crit 'n Cast",
+            "token": "critncast"
+          }
+        ],
+        "slug": "crit-n-cast",
+        "rarity": "silver",
+        "lifecycle": "removed",
+        "hasWikiDescription": true
+      },
+      {
+        "sourceKey": "critical-missile",
+        "name": "Critical Missile",
+        "status": "unmatched",
+        "tokens": [
+          {
+            "field": "name",
+            "value": "Critical Missile",
+            "token": "criticalmissile"
+          }
+        ],
+        "slug": "critical-missile",
+        "rarity": "gold",
+        "lifecycle": "removed",
+        "hasWikiDescription": true
+      },
+      {
+        "sourceKey": "critical-rhythm",
+        "name": "Critical Rhythm",
+        "status": "unmatched",
+        "tokens": [
+          {
+            "field": "name",
+            "value": "Critical Rhythm",
+            "token": "criticalrhythm"
+          }
+        ],
+        "slug": "critical-rhythm",
+        "rarity": "gold",
+        "lifecycle": "removed",
+        "hasWikiDescription": true
+      },
+      {
+        "sourceKey": "droppybara",
+        "name": "Droppybara",
+        "status": "unmatched",
+        "tokens": [
+          {
+            "field": "name",
+            "value": "Droppybara",
+            "token": "droppybara"
+          }
+        ],
+        "slug": "droppybara",
+        "rarity": "prismatic",
+        "lifecycle": "removed",
+        "hasWikiDescription": true
+      },
+      {
+        "sourceKey": "final-city-transit",
+        "name": "Final City Transit",
+        "status": "unmatched",
+        "tokens": [
+          {
+            "field": "name",
+            "value": "Final City Transit",
+            "token": "finalcitytransit"
+          }
+        ],
+        "slug": "final-city-transit",
+        "rarity": "gold",
+        "lifecycle": "removed",
+        "hasWikiDescription": true
+      },
+      {
+        "sourceKey": "gash",
+        "name": "Gash",
+        "status": "unmatched",
+        "tokens": [
+          {
+            "field": "name",
+            "value": "Gash",
+            "token": "gash"
+          }
+        ],
+        "slug": "gash",
+        "rarity": "prismatic",
+        "lifecycle": "removed",
+        "hasWikiDescription": true
+      },
+      {
+        "sourceKey": "grandmas-chili-oil",
+        "name": "Grandma's Chili Oil",
+        "status": "unmatched",
+        "tokens": [
+          {
+            "field": "name",
+            "value": "Grandma's Chili Oil",
+            "token": "grandmaschilioil"
+          }
+        ],
+        "slug": "grandmas-chili-oil",
+        "rarity": "gold",
+        "lifecycle": "removed",
+        "hasWikiDescription": true
+      },
+      {
+        "sourceKey": "hat-on-a-hat",
+        "name": "Hat on a Hat",
+        "status": "unmatched",
+        "tokens": [
+          {
+            "field": "name",
+            "value": "Hat on a Hat",
+            "token": "hatonahat"
+          }
+        ],
+        "slug": "hat-on-a-hat",
+        "rarity": "silver",
+        "lifecycle": "removed",
+        "hasWikiDescription": true
+      },
+      {
+        "sourceKey": "im-a-baby-kitty-where-is-mama",
+        "name": "I'm a Baby Kitty Where is Mama",
+        "status": "unmatched",
+        "tokens": [
+          {
+            "field": "name",
+            "value": "I'm a Baby Kitty Where is Mama",
+            "token": "imababykittywhereismama"
+          }
+        ],
+        "slug": "im-a-baby-kitty-where-is-mama",
+        "rarity": "prismatic",
+        "lifecycle": "removed",
+        "hasWikiDescription": true
+      },
+      {
+        "sourceKey": "laser-heal",
+        "name": "Laser Heal",
+        "status": "unmatched",
+        "tokens": [
+          {
+            "field": "name",
+            "value": "Laser Heal",
+            "token": "laserheal"
+          }
+        ],
+        "slug": "laser-heal",
+        "rarity": "prismatic",
+        "lifecycle": "removed",
+        "hasWikiDescription": true
+      },
+      {
+        "sourceKey": "one-trick-pony",
+        "name": "One Trick Pony",
+        "status": "unmatched",
+        "tokens": [
+          {
+            "field": "name",
+            "value": "One Trick Pony",
+            "token": "onetrickpony"
+          }
+        ],
+        "slug": "one-trick-pony",
+        "rarity": "prismatic",
+        "lifecycle": "added",
+        "hasWikiDescription": true
+      },
+      {
+        "sourceKey": "pat-on-the-back",
+        "name": "Pat On The Back",
+        "status": "unmatched",
+        "tokens": [
+          {
+            "field": "name",
+            "value": "Pat On The Back",
+            "token": "patontheback"
+          }
+        ],
+        "slug": "pat-on-the-back",
+        "rarity": "gold",
+        "lifecycle": "removed",
+        "hasWikiDescription": true
+      },
+      {
+        "sourceKey": "pursuit-of-power",
+        "name": "Pursuit of Power",
+        "status": "unmatched",
+        "tokens": [
+          {
+            "field": "name",
+            "value": "Pursuit of Power",
+            "token": "pursuitofpower"
+          }
+        ],
+        "slug": "pursuit-of-power",
+        "rarity": "silver",
+        "lifecycle": "removed",
+        "hasWikiDescription": true
+      },
+      {
+        "sourceKey": "support-main",
+        "name": "Quest: Support Main",
+        "status": "unmatched",
+        "tokens": [
+          {
+            "field": "name",
+            "value": "Quest: Support Main",
+            "token": "supportmain"
+          }
+        ],
+        "slug": "support-main",
+        "rarity": "silver",
+        "lifecycle": "removed",
+        "hasWikiDescription": true
+      },
+      {
+        "sourceKey": "red-envelopes",
+        "name": "Red Envelopes",
+        "status": "unmatched",
+        "tokens": [
+          {
+            "field": "name",
+            "value": "Red Envelopes",
+            "token": "redenvelopes"
+          }
+        ],
+        "slug": "red-envelopes",
+        "rarity": "prismatic",
+        "lifecycle": "removed",
+        "hasWikiDescription": true
+      },
+      {
+        "sourceKey": "snowball-roulette",
+        "name": "Snowball Roulette",
+        "status": "unmatched",
+        "tokens": [
+          {
+            "field": "name",
+            "value": "Snowball Roulette",
+            "token": "snowballroulette"
+          }
+        ],
+        "slug": "snowball-roulette",
+        "rarity": "gold",
+        "lifecycle": "removed",
+        "hasWikiDescription": true
+      },
+      {
+        "sourceKey": "snowball-upgrade",
+        "name": "Snowball Upgrade",
+        "status": "unmatched",
+        "tokens": [
+          {
+            "field": "name",
+            "value": "Snowball Upgrade",
+            "token": "snowballupgrade"
+          }
+        ],
+        "slug": "snowball-upgrade",
+        "rarity": "gold",
+        "lifecycle": "removed",
+        "hasWikiDescription": true
+      },
+      {
+        "sourceKey": "squishy-slappy-grab",
+        "name": "Squishy Slappy Grab",
+        "status": "unmatched",
+        "tokens": [
+          {
+            "field": "name",
+            "value": "Squishy Slappy Grab",
+            "token": "squishyslappygrab"
+          }
+        ],
+        "slug": "squishy-slappy-grab",
+        "rarity": "prismatic",
+        "lifecycle": "added",
+        "hasWikiDescription": true
+      },
+      {
+        "sourceKey": "trailblazer",
+        "name": "Trailblazer",
+        "status": "unmatched",
+        "tokens": [
+          {
+            "field": "name",
+            "value": "Trailblazer",
+            "token": "trailblazer"
+          }
+        ],
+        "slug": "trailblazer",
+        "rarity": "gold",
+        "lifecycle": "removed",
+        "hasWikiDescription": false
+      },
+      {
+        "sourceKey": "upgrade-mikaels-blessing",
+        "name": "Upgrade Mikael's Blessing",
+        "status": "unmatched",
+        "tokens": [
+          {
+            "field": "name",
+            "value": "Upgrade Mikael's Blessing",
+            "token": "upgrademikaelsblessing"
+          }
+        ],
+        "slug": "upgrade-mikaels-blessing",
+        "rarity": "prismatic",
+        "lifecycle": "removed",
+        "hasWikiDescription": true
+      },
+      {
+        "sourceKey": "upgrade-thornmail",
+        "name": "Upgrade Thornmail",
+        "status": "unmatched",
+        "tokens": [
+          {
+            "field": "name",
+            "value": "Upgrade Thornmail",
+            "token": "upgradethornmail"
+          }
+        ],
+        "slug": "upgrade-thornmail",
+        "rarity": "silver",
+        "lifecycle": "removed",
+        "hasWikiDescription": true
+      },
+      {
+        "sourceKey": "vampirism",
+        "name": "Vampirism",
+        "status": "unmatched",
+        "tokens": [
+          {
+            "field": "name",
+            "value": "Vampirism",
+            "token": "vampirism"
+          }
+        ],
+        "slug": "vampirism",
+        "rarity": "gold",
+        "lifecycle": "removed",
+        "hasWikiDescription": true
+      },
+      {
+        "sourceKey": "void-dash",
+        "name": "Void Dash",
+        "status": "unmatched",
+        "tokens": [
+          {
+            "field": "name",
+            "value": "Void Dash",
+            "token": "voiddash"
+          }
+        ],
+        "slug": "void-dash",
+        "rarity": "gold",
+        "lifecycle": "removed",
+        "hasWikiDescription": true
+      },
+      {
+        "sourceKey": "wind-beneath-blade",
+        "name": "Wind Beneath Blade",
+        "status": "unmatched",
+        "tokens": [
+          {
+            "field": "name",
+            "value": "Wind Beneath Blade",
+            "token": "windbeneathblade"
+          }
+        ],
+        "slug": "wind-beneath-blade",
+        "rarity": "silver",
+        "lifecycle": "removed",
+        "hasWikiDescription": true
+      },
+      {
+        "sourceKey": "upgrade-sword-of-blossoming-dawn",
+        "name": "Upgrade Sword of Blossoming Dawn",
+        "status": "unmatched",
+        "tokens": [
+          {
+            "field": "name",
+            "value": "Upgrade Sword of Blossoming Dawn",
+            "token": "upgradeswordofblossomingdawn"
+          }
+        ],
+        "slug": "upgrade-sword-of-blossoming-dawn",
+        "rarity": "prismatic",
+        "lifecycle": "removed",
+        "hasWikiDescription": true
+      }
+    ],
+    "wiki": [
+      {
+        "sourceKey": "Infinite Recursion",
+        "name": "Infinite Recursion",
+        "status": "unmatched",
+        "tokens": [
+          {
+            "field": "name",
+            "value": "Infinite Recursion",
+            "token": "infiniterecursion"
+          }
+        ],
+        "hasWikiDescription": true
+      },
+      {
+        "sourceKey": "Warlock Juicebox",
+        "name": "Warlock Juicebox",
+        "status": "unmatched",
+        "tokens": [
+          {
+            "field": "name",
+            "value": "Warlock Juicebox",
+            "token": "warlockjuicebox"
+          }
+        ],
+        "hasWikiDescription": true
+      },
+      {
+        "sourceKey": "Pressure Cooker",
+        "name": "Pressure Cooker",
+        "status": "unmatched",
+        "tokens": [
+          {
+            "field": "name",
+            "value": "Pressure Cooker",
+            "token": "pressurecooker"
+          }
+        ],
+        "hasWikiDescription": true
+      },
+      {
+        "sourceKey": "Combusting Interest",
+        "name": "Combusting Interest",
+        "status": "unmatched",
+        "tokens": [
+          {
+            "field": "name",
+            "value": "Combusting Interest",
+            "token": "combustinginterest"
+          }
+        ],
+        "hasWikiDescription": true
+      },
+      {
+        "sourceKey": "Twin Fire",
+        "name": "Twin Fire",
+        "status": "unmatched",
+        "tokens": [
+          {
+            "field": "name",
+            "value": "Twin Fire",
+            "token": "twinfire"
+          }
+        ],
+        "hasWikiDescription": true
+      },
+      {
+        "sourceKey": "Sonata",
+        "name": "Sonata",
+        "status": "unmatched",
+        "tokens": [
+          {
+            "field": "name",
+            "value": "Sonata",
+            "token": "sonata"
+          }
+        ],
+        "hasWikiDescription": true
+      },
+      {
+        "sourceKey": "Forged By The Master",
+        "name": "Forged By The Master",
+        "status": "unmatched",
+        "tokens": [
+          {
+            "field": "name",
+            "value": "Forged By The Master",
+            "token": "forgedbythemaster"
+          }
+        ],
+        "hasWikiDescription": true
+      },
+      {
+        "sourceKey": "Escape Plan",
+        "name": "Escape Plan",
+        "status": "unmatched",
+        "tokens": [
+          {
+            "field": "name",
+            "value": "Escape Plan",
+            "token": "escapeplan"
+          }
+        ],
+        "hasWikiDescription": true
+      },
+      {
+        "sourceKey": "Shrink Engine",
+        "name": "Shrink Engine",
+        "status": "unmatched",
+        "tokens": [
+          {
+            "field": "name",
+            "value": "Shrink Engine",
+            "token": "shrinkengine"
+          }
+        ],
+        "hasWikiDescription": true
+      },
+      {
+        "sourceKey": "Tooth Fairy",
+        "name": "Tooth Fairy",
+        "status": "unmatched",
+        "tokens": [
+          {
+            "field": "name",
+            "value": "Tooth Fairy",
+            "token": "toothfairy"
+          }
+        ],
+        "hasWikiDescription": true
+      },
+      {
+        "sourceKey": "Growth Spurt",
+        "name": "Growth Spurt",
+        "status": "unmatched",
+        "tokens": [
+          {
+            "field": "name",
+            "value": "Growth Spurt",
+            "token": "growthspurt"
+          }
+        ],
+        "hasWikiDescription": true
+      },
+      {
+        "sourceKey": "Lil' Extra Help",
+        "name": "Lil' Extra Help",
+        "status": "unmatched",
+        "tokens": [
+          {
+            "field": "name",
+            "value": "Lil' Extra Help",
+            "token": "lilextrahelp"
+          }
+        ],
+        "hasWikiDescription": true
+      },
+      {
+        "sourceKey": "Donation",
+        "name": "Donation",
+        "status": "unmatched",
+        "tokens": [
+          {
+            "field": "name",
+            "value": "Donation",
+            "token": "donation"
+          }
+        ],
+        "hasWikiDescription": true
+      },
+      {
+        "sourceKey": "Swift and Safe",
+        "name": "Swift and Safe",
+        "status": "unmatched",
+        "tokens": [
+          {
+            "field": "name",
+            "value": "Swift and Safe",
+            "token": "swiftandsafe"
+          }
+        ],
+        "hasWikiDescription": true
+      },
+      {
+        "sourceKey": "Soul Eater",
+        "name": "Soul Eater",
+        "status": "unmatched",
+        "tokens": [
+          {
+            "field": "name",
+            "value": "Soul Eater",
+            "token": "souleater"
+          }
+        ],
+        "hasWikiDescription": true
+      },
+      {
+        "sourceKey": "Final Form",
+        "name": "Final Form",
+        "status": "unmatched",
+        "tokens": [
+          {
+            "field": "name",
+            "value": "Final Form",
+            "token": "finalform"
+          }
+        ],
+        "hasWikiDescription": true
+      },
+      {
+        "sourceKey": "Terrain'd",
+        "name": "Terrain'd",
+        "status": "unmatched",
+        "tokens": [
+          {
+            "field": "name",
+            "value": "Terrain'd",
+            "token": "terraind"
+          }
+        ],
+        "hasWikiDescription": true
+      },
+      {
+        "sourceKey": "BONK!",
+        "name": "BONK!",
+        "status": "unmatched",
+        "tokens": [
+          {
+            "field": "name",
+            "value": "BONK!",
+            "token": "bonk"
+          }
+        ],
+        "hasWikiDescription": true
+      },
+      {
+        "sourceKey": "Stay Resolute",
+        "name": "Stay Resolute",
+        "status": "unmatched",
+        "tokens": [
+          {
+            "field": "name",
+            "value": "Stay Resolute",
+            "token": "stayresolute"
+          }
+        ],
+        "hasWikiDescription": true
+      },
+      {
+        "sourceKey": "Hand of Baron",
+        "name": "Hand of Baron",
+        "status": "unmatched",
+        "tokens": [
+          {
+            "field": "name",
+            "value": "Hand of Baron",
+            "token": "handofbaron"
+          }
+        ],
+        "hasWikiDescription": true
+      },
+      {
+        "sourceKey": "King Me",
+        "name": "King Me",
+        "status": "unmatched",
+        "tokens": [
+          {
+            "field": "name",
+            "value": "King Me",
+            "token": "kingme"
+          }
+        ],
+        "hasWikiDescription": true
+      },
+      {
+        "sourceKey": "Biggest Snowball Ever",
+        "name": "Biggest Snowball Ever",
+        "status": "unmatched",
+        "tokens": [
+          {
+            "field": "name",
+            "value": "Biggest Snowball Ever",
+            "token": "biggestsnowballever"
+          }
+        ],
+        "hasWikiDescription": true
+      },
+      {
+        "sourceKey": "Don't Change the Channel",
+        "name": "Don't Change the Channel",
+        "status": "unmatched",
+        "tokens": [
+          {
+            "field": "name",
+            "value": "Don't Change the Channel",
+            "token": "dontchangethechannel"
+          }
+        ],
+        "hasWikiDescription": true
+      },
+      {
+        "sourceKey": "Overextender",
+        "name": "Overextender",
+        "status": "unmatched",
+        "tokens": [
+          {
+            "field": "name",
+            "value": "Overextender",
+            "token": "overextender"
+          }
+        ],
+        "hasWikiDescription": true
+      },
+      {
+        "sourceKey": "It's Go Time",
+        "name": "It's Go Time",
+        "status": "unmatched",
+        "tokens": [
+          {
+            "field": "name",
+            "value": "It's Go Time",
+            "token": "itsgotime"
+          }
+        ],
+        "hasWikiDescription": true
+      },
+      {
+        "sourceKey": "Trusty Weapon",
+        "name": "Trusty Weapon",
+        "status": "unmatched",
+        "tokens": [
+          {
+            "field": "name",
+            "value": "Trusty Weapon",
+            "token": "trustyweapon"
+          }
+        ],
+        "hasWikiDescription": true
+      },
+      {
+        "sourceKey": "Ravenous Bind",
+        "name": "Ravenous Bind",
+        "status": "unmatched",
+        "tokens": [
+          {
+            "field": "name",
+            "value": "Ravenous Bind",
+            "token": "ravenousbind"
+          }
+        ],
+        "hasWikiDescription": true
+      },
+      {
+        "sourceKey": "Goldrend",
+        "name": "Goldrend",
+        "status": "unmatched",
+        "tokens": [
+          {
+            "field": "name",
+            "value": "Goldrend",
+            "token": "goldrend"
+          }
+        ],
+        "hasWikiDescription": true
+      },
+      {
+        "sourceKey": "Hextech Soul",
+        "name": "Hextech Soul",
+        "status": "unmatched",
+        "tokens": [
+          {
+            "field": "name",
+            "value": "Hextech Soul",
+            "token": "hextechsoul"
+          }
+        ],
+        "hasWikiDescription": true
+      },
+      {
+        "sourceKey": "Endless Decimation",
+        "name": "Endless Decimation",
+        "status": "unmatched",
+        "tokens": [
+          {
+            "field": "name",
+            "value": "Endless Decimation",
+            "token": "endlessdecimation"
+          }
+        ],
+        "hasWikiDescription": true
+      },
+      {
+        "sourceKey": "Ultimate Awakening",
+        "name": "Ultimate Awakening",
+        "status": "unmatched",
+        "tokens": [
+          {
+            "field": "name",
+            "value": "Ultimate Awakening",
+            "token": "ultimateawakening"
+          }
+        ],
+        "hasWikiDescription": true
+      },
+      {
+        "sourceKey": "Overloaded",
+        "name": "Overloaded",
+        "status": "unmatched",
+        "tokens": [
+          {
+            "field": "name",
+            "value": "Overloaded",
+            "token": "overloaded"
+          }
+        ],
+        "hasWikiDescription": true
+      },
+      {
+        "sourceKey": "Adaptive Ward",
+        "name": "Adaptive Ward",
+        "status": "unmatched",
+        "tokens": [
+          {
+            "field": "name",
+            "value": "Adaptive Ward",
+            "token": "adaptiveward"
+          }
+        ],
+        "hasWikiDescription": true
+      },
+      {
+        "sourceKey": "Ominous Pact",
+        "name": "Ominous Pact",
+        "status": "unmatched",
+        "tokens": [
+          {
+            "field": "name",
+            "value": "Ominous Pact",
+            "token": "ominouspact"
+          }
+        ],
+        "hasWikiDescription": true
+      },
+      {
+        "sourceKey": "Double Defense",
+        "name": "Double Defense",
+        "status": "unmatched",
+        "tokens": [
+          {
+            "field": "name",
+            "value": "Double Defense",
+            "token": "doubledefense"
+          }
+        ],
+        "hasWikiDescription": true
+      },
+      {
+        "sourceKey": "Mercy's Strike",
+        "name": "Mercy's Strike",
+        "status": "unmatched",
+        "tokens": [
+          {
+            "field": "name",
+            "value": "Mercy's Strike",
+            "token": "mercysstrike"
+          }
+        ],
+        "hasWikiDescription": true
+      },
+      {
+        "sourceKey": "Shark Bait",
+        "name": "Shark Bait",
+        "status": "unmatched",
+        "tokens": [
+          {
+            "field": "name",
+            "value": "Shark Bait",
+            "token": "sharkbait"
+          }
+        ],
+        "hasWikiDescription": true
+      },
+      {
+        "sourceKey": "Nature is Healing",
+        "name": "Nature is Healing",
+        "status": "unmatched",
+        "tokens": [
+          {
+            "field": "name",
+            "value": "Nature is Healing",
+            "token": "natureishealing"
+          }
+        ],
+        "hasWikiDescription": true
+      },
+      {
+        "sourceKey": "Poltergeist",
+        "name": "Poltergeist",
+        "status": "unmatched",
+        "tokens": [
+          {
+            "field": "name",
+            "value": "Poltergeist",
+            "token": "poltergeist"
+          }
+        ],
+        "hasWikiDescription": true
+      },
+      {
+        "sourceKey": "Nightstalking",
+        "name": "Nightstalking",
+        "status": "unmatched",
+        "tokens": [
+          {
+            "field": "name",
+            "value": "Nightstalking",
+            "token": "nightstalking"
+          }
+        ],
+        "hasWikiDescription": true
+      },
+      {
+        "sourceKey": "Tripleshot",
+        "name": "Tripleshot",
+        "status": "unmatched",
+        "tokens": [
+          {
+            "field": "name",
+            "value": "Tripleshot",
+            "token": "tripleshot"
+          }
+        ],
+        "hasWikiDescription": true
+      },
+      {
+        "sourceKey": "Empyrean Promise",
+        "name": "Empyrean Promise",
+        "status": "unmatched",
+        "tokens": [
+          {
+            "field": "name",
+            "value": "Empyrean Promise",
+            "token": "empyreanpromise"
+          }
+        ],
+        "hasWikiDescription": true
+      },
+      {
+        "sourceKey": "Kill Secured",
+        "name": "Kill Secured",
+        "status": "unmatched",
+        "tokens": [
+          {
+            "field": "name",
+            "value": "Kill Secured",
+            "token": "killsecured"
+          }
+        ],
+        "hasWikiDescription": true
+      },
+      {
+        "sourceKey": "Porcupine",
+        "name": "Porcupine",
+        "status": "unmatched",
+        "tokens": [
+          {
+            "field": "name",
+            "value": "Porcupine",
+            "token": "porcupine"
+          }
+        ],
+        "hasWikiDescription": true
+      },
+      {
+        "sourceKey": "Echo Cast",
+        "name": "Echo Cast",
+        "status": "unmatched",
+        "tokens": [
+          {
+            "field": "name",
+            "value": "Echo Cast",
+            "token": "echocast"
+          }
+        ],
+        "hasWikiDescription": true
+      },
+      {
+        "sourceKey": "Spellsplit",
+        "name": "Spellsplit",
+        "status": "unmatched",
+        "tokens": [
+          {
+            "field": "name",
+            "value": "Spellsplit",
+            "token": "spellsplit"
+          }
+        ],
+        "hasWikiDescription": true
+      },
+      {
+        "sourceKey": "Shark Tempest",
+        "name": "Shark Tempest",
+        "status": "unmatched",
+        "tokens": [
+          {
+            "field": "name",
+            "value": "Shark Tempest",
+            "token": "sharktempest"
+          }
+        ],
+        "hasWikiDescription": true
+      },
+      {
+        "sourceKey": "Flash 2",
+        "name": "Flash 2",
+        "status": "unmatched",
+        "tokens": [
+          {
+            "field": "name",
+            "value": "Flash 2",
+            "token": "flash2"
+          }
+        ],
+        "hasWikiDescription": true
+      },
+      {
+        "sourceKey": "Hide on Bush",
+        "name": "Hide on Bush",
+        "status": "unmatched",
+        "tokens": [
+          {
+            "field": "name",
+            "value": "Hide on Bush",
+            "token": "hideonbush"
+          }
+        ],
+        "hasWikiDescription": true
+      },
+      {
+        "sourceKey": "Prom Queen",
+        "name": "Prom Queen",
+        "status": "unmatched",
+        "tokens": [
+          {
+            "field": "name",
+            "value": "Prom Queen",
+            "token": "promqueen"
+          }
+        ],
+        "hasWikiDescription": true
+      },
+      {
+        "sourceKey": "Our Healing",
+        "name": "Our Healing",
+        "status": "unmatched",
+        "tokens": [
+          {
+            "field": "name",
+            "value": "Our Healing",
+            "token": "ourhealing"
+          }
+        ],
+        "hasWikiDescription": true
+      },
+      {
+        "sourceKey": "Mighty Shield",
+        "name": "Mighty Shield",
+        "status": "unmatched",
+        "tokens": [
+          {
+            "field": "name",
+            "value": "Mighty Shield",
+            "token": "mightyshield"
+          }
+        ],
+        "hasWikiDescription": true
+      },
+      {
+        "sourceKey": "Pin Cushion",
+        "name": "Pin Cushion",
+        "status": "unmatched",
+        "tokens": [
+          {
+            "field": "name",
+            "value": "Pin Cushion",
+            "token": "pincushion"
+          }
+        ],
+        "hasWikiDescription": true
+      },
+      {
+        "sourceKey": "Pinball",
+        "name": "Pinball",
+        "status": "unmatched",
+        "tokens": [
+          {
+            "field": "name",
+            "value": "Pinball",
+            "token": "pinball"
+          }
+        ],
+        "hasWikiDescription": true
+      },
+      {
+        "sourceKey": "Snowblast",
+        "name": "Snowblast",
+        "status": "unmatched",
+        "tokens": [
+          {
+            "field": "name",
+            "value": "Snowblast",
+            "token": "snowblast"
+          }
+        ],
+        "hasWikiDescription": true
+      },
+      {
+        "sourceKey": "Spin Me Right Round",
+        "name": "Spin Me Right Round",
+        "status": "unmatched",
+        "tokens": [
+          {
+            "field": "name",
+            "value": "Spin Me Right Round",
+            "token": "spinmerightround"
+          }
+        ],
+        "hasWikiDescription": true
+      },
+      {
+        "sourceKey": "Surge Field",
+        "name": "Surge Field",
+        "status": "unmatched",
+        "tokens": [
+          {
+            "field": "name",
+            "value": "Surge Field",
+            "token": "surgefield"
+          }
+        ],
+        "hasWikiDescription": true
+      },
+      {
+        "sourceKey": "Holy Snowball",
+        "name": "Holy Snowball",
+        "status": "unmatched",
+        "tokens": [
+          {
+            "field": "name",
+            "value": "Holy Snowball",
+            "token": "holysnowball"
+          }
+        ],
+        "hasWikiDescription": true
+      },
+      {
+        "sourceKey": "Glass Cannon",
+        "name": "Glass Cannon",
+        "status": "unmatched",
+        "tokens": [
+          {
+            "field": "name",
+            "value": "Glass Cannon",
+            "token": "glasscannon"
+          }
+        ],
+        "hasWikiDescription": true
+      },
+      {
+        "sourceKey": "Chain Reaction",
+        "name": "Chain Reaction",
+        "status": "unmatched",
+        "tokens": [
+          {
+            "field": "name",
+            "value": "Chain Reaction",
+            "token": "chainreaction"
+          }
+        ],
+        "hasWikiDescription": true
+      },
+      {
+        "sourceKey": "Dimension Shift",
+        "name": "Dimension Shift",
+        "status": "unmatched",
+        "tokens": [
+          {
+            "field": "name",
+            "value": "Dimension Shift",
+            "token": "dimensionshift"
+          }
+        ],
+        "hasWikiDescription": true
+      },
+      {
+        "sourceKey": "Poro Stampede",
+        "name": "Poro Stampede",
+        "status": "unmatched",
+        "tokens": [
+          {
+            "field": "name",
+            "value": "Poro Stampede",
+            "token": "porostampede"
+          }
+        ],
+        "hasWikiDescription": true
+      },
+      {
+        "sourceKey": "???",
+        "name": "???",
+        "status": "unmatched",
+        "tokens": [],
+        "hasWikiDescription": true
+      },
+      {
+        "sourceKey": "Adamant",
+        "name": "Adamant",
+        "status": "unmatched",
+        "tokens": [
+          {
+            "field": "name",
+            "value": "Adamant",
+            "token": "adamant"
+          }
+        ],
+        "hasWikiDescription": true
+      },
+      {
+        "sourceKey": "Crit 'n Cast",
+        "name": "Crit 'n Cast",
+        "status": "unmatched",
+        "tokens": [
+          {
+            "field": "name",
+            "value": "Crit 'n Cast",
+            "token": "critncast"
+          }
+        ],
+        "hasWikiDescription": true
+      },
+      {
+        "sourceKey": "Critical Missile",
+        "name": "Critical Missile",
+        "status": "unmatched",
+        "tokens": [
+          {
+            "field": "name",
+            "value": "Critical Missile",
+            "token": "criticalmissile"
+          }
+        ],
+        "hasWikiDescription": true
+      },
+      {
+        "sourceKey": "Critical Rhythm",
+        "name": "Critical Rhythm",
+        "status": "unmatched",
+        "tokens": [
+          {
+            "field": "name",
+            "value": "Critical Rhythm",
+            "token": "criticalrhythm"
+          }
+        ],
+        "hasWikiDescription": true
+      },
+      {
+        "sourceKey": "Droppybara",
+        "name": "Droppybara",
+        "status": "unmatched",
+        "tokens": [
+          {
+            "field": "name",
+            "value": "Droppybara",
+            "token": "droppybara"
+          }
+        ],
+        "hasWikiDescription": true
+      },
+      {
+        "sourceKey": "Final City Transit",
+        "name": "Final City Transit",
+        "status": "unmatched",
+        "tokens": [
+          {
+            "field": "name",
+            "value": "Final City Transit",
+            "token": "finalcitytransit"
+          }
+        ],
+        "hasWikiDescription": true
+      },
+      {
+        "sourceKey": "Gash",
+        "name": "Gash",
+        "status": "unmatched",
+        "tokens": [
+          {
+            "field": "name",
+            "value": "Gash",
+            "token": "gash"
+          }
+        ],
+        "hasWikiDescription": true
+      },
+      {
+        "sourceKey": "Grandma's Chili Oil",
+        "name": "Grandma's Chili Oil",
+        "status": "unmatched",
+        "tokens": [
+          {
+            "field": "name",
+            "value": "Grandma's Chili Oil",
+            "token": "grandmaschilioil"
+          }
+        ],
+        "hasWikiDescription": true
+      },
+      {
+        "sourceKey": "Hat on a Hat",
+        "name": "Hat on a Hat",
+        "status": "unmatched",
+        "tokens": [
+          {
+            "field": "name",
+            "value": "Hat on a Hat",
+            "token": "hatonahat"
+          }
+        ],
+        "hasWikiDescription": true
+      },
+      {
+        "sourceKey": "I'm a Baby Kitty Where is Mama",
+        "name": "I'm a Baby Kitty Where is Mama",
+        "status": "unmatched",
+        "tokens": [
+          {
+            "field": "name",
+            "value": "I'm a Baby Kitty Where is Mama",
+            "token": "imababykittywhereismama"
+          }
+        ],
+        "hasWikiDescription": true
+      },
+      {
+        "sourceKey": "Laser Heal",
+        "name": "Laser Heal",
+        "status": "unmatched",
+        "tokens": [
+          {
+            "field": "name",
+            "value": "Laser Heal",
+            "token": "laserheal"
+          }
+        ],
+        "hasWikiDescription": true
+      },
+      {
+        "sourceKey": "One Trick Pony",
+        "name": "One Trick Pony",
+        "status": "unmatched",
+        "tokens": [
+          {
+            "field": "name",
+            "value": "One Trick Pony",
+            "token": "onetrickpony"
+          }
+        ],
+        "hasWikiDescription": true
+      },
+      {
+        "sourceKey": "Pat On The Back",
+        "name": "Pat On The Back",
+        "status": "unmatched",
+        "tokens": [
+          {
+            "field": "name",
+            "value": "Pat On The Back",
+            "token": "patontheback"
+          }
+        ],
+        "hasWikiDescription": true
+      },
+      {
+        "sourceKey": "Pursuit of Power",
+        "name": "Pursuit of Power",
+        "status": "unmatched",
+        "tokens": [
+          {
+            "field": "name",
+            "value": "Pursuit of Power",
+            "token": "pursuitofpower"
+          }
+        ],
+        "hasWikiDescription": true
+      },
+      {
+        "sourceKey": "Quest: Support Main",
+        "name": "Quest: Support Main",
+        "status": "unmatched",
+        "tokens": [
+          {
+            "field": "name",
+            "value": "Quest: Support Main",
+            "token": "supportmain"
+          }
+        ],
+        "hasWikiDescription": true
+      },
+      {
+        "sourceKey": "Red Envelopes",
+        "name": "Red Envelopes",
+        "status": "unmatched",
+        "tokens": [
+          {
+            "field": "name",
+            "value": "Red Envelopes",
+            "token": "redenvelopes"
+          }
+        ],
+        "hasWikiDescription": true
+      },
+      {
+        "sourceKey": "Snowball Roulette",
+        "name": "Snowball Roulette",
+        "status": "unmatched",
+        "tokens": [
+          {
+            "field": "name",
+            "value": "Snowball Roulette",
+            "token": "snowballroulette"
+          }
+        ],
+        "hasWikiDescription": true
+      },
+      {
+        "sourceKey": "Snowball Upgrade",
+        "name": "Snowball Upgrade",
+        "status": "unmatched",
+        "tokens": [
+          {
+            "field": "name",
+            "value": "Snowball Upgrade",
+            "token": "snowballupgrade"
+          }
+        ],
+        "hasWikiDescription": true
+      },
+      {
+        "sourceKey": "Squishy Slappy Grab",
+        "name": "Squishy Slappy Grab",
+        "status": "unmatched",
+        "tokens": [
+          {
+            "field": "name",
+            "value": "Squishy Slappy Grab",
+            "token": "squishyslappygrab"
+          }
+        ],
+        "hasWikiDescription": true
+      },
+      {
+        "sourceKey": "Upgrade Mikael's Blessing",
+        "name": "Upgrade Mikael's Blessing",
+        "status": "unmatched",
+        "tokens": [
+          {
+            "field": "name",
+            "value": "Upgrade Mikael's Blessing",
+            "token": "upgrademikaelsblessing"
+          }
+        ],
+        "hasWikiDescription": true
+      },
+      {
+        "sourceKey": "Upgrade Thornmail",
+        "name": "Upgrade Thornmail",
+        "status": "unmatched",
+        "tokens": [
+          {
+            "field": "name",
+            "value": "Upgrade Thornmail",
+            "token": "upgradethornmail"
+          }
+        ],
+        "hasWikiDescription": true
+      },
+      {
+        "sourceKey": "Vampirism",
+        "name": "Vampirism",
+        "status": "unmatched",
+        "tokens": [
+          {
+            "field": "name",
+            "value": "Vampirism",
+            "token": "vampirism"
+          }
+        ],
+        "hasWikiDescription": true
+      },
+      {
+        "sourceKey": "Void Dash",
+        "name": "Void Dash",
+        "status": "unmatched",
+        "tokens": [
+          {
+            "field": "name",
+            "value": "Void Dash",
+            "token": "voiddash"
+          }
+        ],
+        "hasWikiDescription": true
+      },
+      {
+        "sourceKey": "Wind Beneath Blade",
+        "name": "Wind Beneath Blade",
+        "status": "unmatched",
+        "tokens": [
+          {
+            "field": "name",
+            "value": "Wind Beneath Blade",
+            "token": "windbeneathblade"
+          }
+        ],
+        "hasWikiDescription": true
+      },
+      {
+        "sourceKey": "Upgrade Sword of Blossoming Dawn",
+        "name": "Upgrade Sword of Blossoming Dawn",
+        "status": "unmatched",
+        "tokens": [
+          {
+            "field": "name",
+            "value": "Upgrade Sword of Blossoming Dawn",
+            "token": "upgradeswordofblossomingdawn"
+          }
+        ],
+        "hasWikiDescription": true
+      }
+    ],
+    "arammayhem_win_rate": [
+      {
+        "sourceKey": "infinite-recursion",
+        "name": "Infinite Recursion",
+        "status": "unmatched",
+        "tokens": [
+          {
+            "field": "name",
+            "value": "Infinite Recursion",
+            "token": "infiniterecursion"
+          }
+        ],
+        "slug": "infinite-recursion",
+        "win_rate": 61.6
+      },
+      {
+        "sourceKey": "warlock-juicebox",
+        "name": "Warlock Juicebox",
+        "status": "unmatched",
+        "tokens": [
+          {
+            "field": "name",
+            "value": "Warlock Juicebox",
+            "token": "warlockjuicebox"
+          }
+        ],
+        "slug": "warlock-juicebox",
+        "win_rate": 61.19
+      },
+      {
+        "sourceKey": "pressure-cooker",
+        "name": "Pressure Cooker",
+        "status": "unmatched",
+        "tokens": [
+          {
+            "field": "name",
+            "value": "Pressure Cooker",
+            "token": "pressurecooker"
+          }
+        ],
+        "slug": "pressure-cooker",
+        "win_rate": 60.2
+      },
+      {
+        "sourceKey": "combusting-interest",
+        "name": "Combusting Interest",
+        "status": "unmatched",
+        "tokens": [
+          {
+            "field": "name",
+            "value": "Combusting Interest",
+            "token": "combustinginterest"
+          }
+        ],
+        "slug": "combusting-interest",
+        "win_rate": 59.56
+      },
+      {
+        "sourceKey": "twin-fire",
+        "name": "Twin Fire",
+        "status": "unmatched",
+        "tokens": [
+          {
+            "field": "name",
+            "value": "Twin Fire",
+            "token": "twinfire"
+          }
+        ],
+        "slug": "twin-fire",
+        "win_rate": 56.34
+      },
+      {
+        "sourceKey": "sonata",
+        "name": "Sonata",
+        "status": "unmatched",
+        "tokens": [
+          {
+            "field": "name",
+            "value": "Sonata",
+            "token": "sonata"
+          }
+        ],
+        "slug": "sonata",
+        "win_rate": 54.71
+      },
+      {
+        "sourceKey": "forged-by-the-master",
+        "name": "Forged By The Master",
+        "status": "unmatched",
+        "tokens": [
+          {
+            "field": "name",
+            "value": "Forged By The Master",
+            "token": "forgedbythemaster"
+          }
+        ],
+        "slug": "forged-by-the-master",
+        "win_rate": 54.25
+      },
+      {
+        "sourceKey": "escape-plan",
+        "name": "Escape Plan",
+        "status": "unmatched",
+        "tokens": [
+          {
+            "field": "name",
+            "value": "Escape Plan",
+            "token": "escapeplan"
+          }
+        ],
+        "slug": "escape-plan",
+        "win_rate": 54.18
+      },
+      {
+        "sourceKey": "shrink-engine",
+        "name": "Shrink Engine",
+        "status": "unmatched",
+        "tokens": [
+          {
+            "field": "name",
+            "value": "Shrink Engine",
+            "token": "shrinkengine"
+          }
+        ],
+        "slug": "shrink-engine",
+        "win_rate": 53.81
+      },
+      {
+        "sourceKey": "tooth-fairy",
+        "name": "Tooth Fairy",
+        "status": "unmatched",
+        "tokens": [
+          {
+            "field": "name",
+            "value": "Tooth Fairy",
+            "token": "toothfairy"
+          }
+        ],
+        "slug": "tooth-fairy",
+        "win_rate": 53.69
+      },
+      {
+        "sourceKey": "growth-spurt",
+        "name": "Growth Spurt",
+        "status": "unmatched",
+        "tokens": [
+          {
+            "field": "name",
+            "value": "Growth Spurt",
+            "token": "growthspurt"
+          }
+        ],
+        "slug": "growth-spurt",
+        "win_rate": 53.63
+      },
+      {
+        "sourceKey": "lil-extra-help",
+        "name": "Lil' Extra Help",
+        "status": "unmatched",
+        "tokens": [
+          {
+            "field": "name",
+            "value": "Lil' Extra Help",
+            "token": "lilextrahelp"
+          }
+        ],
+        "slug": "lil-extra-help",
+        "win_rate": 53.31
+      },
+      {
+        "sourceKey": "donation",
+        "name": "Donation",
+        "status": "unmatched",
+        "tokens": [
+          {
+            "field": "name",
+            "value": "Donation",
+            "token": "donation"
+          }
+        ],
+        "slug": "donation",
+        "win_rate": 53.03
+      },
+      {
+        "sourceKey": "swift-and-safe",
+        "name": "Swift and Safe",
+        "status": "unmatched",
+        "tokens": [
+          {
+            "field": "name",
+            "value": "Swift and Safe",
+            "token": "swiftandsafe"
+          }
+        ],
+        "slug": "swift-and-safe",
+        "win_rate": 52.81
+      },
+      {
+        "sourceKey": "soul-eater",
+        "name": "Soul Eater",
+        "status": "unmatched",
+        "tokens": [
+          {
+            "field": "name",
+            "value": "Soul Eater",
+            "token": "souleater"
+          }
+        ],
+        "slug": "soul-eater",
+        "win_rate": 52.78
+      },
+      {
+        "sourceKey": "final-form",
+        "name": "Final Form",
+        "status": "unmatched",
+        "tokens": [
+          {
+            "field": "name",
+            "value": "Final Form",
+            "token": "finalform"
+          }
+        ],
+        "slug": "final-form",
+        "win_rate": 52.66
+      },
+      {
+        "sourceKey": "terraind",
+        "name": "Terrain'd",
+        "status": "unmatched",
+        "tokens": [
+          {
+            "field": "name",
+            "value": "Terrain'd",
+            "token": "terraind"
+          }
+        ],
+        "slug": "terraind",
+        "win_rate": 52.42
+      },
+      {
+        "sourceKey": "bonk",
+        "name": "BONK!",
+        "status": "unmatched",
+        "tokens": [
+          {
+            "field": "name",
+            "value": "BONK!",
+            "token": "bonk"
+          }
+        ],
+        "slug": "bonk",
+        "win_rate": 52.15
+      },
+      {
+        "sourceKey": "stay-resolute",
+        "name": "Stay Resolute",
+        "status": "unmatched",
+        "tokens": [
+          {
+            "field": "name",
+            "value": "Stay Resolute",
+            "token": "stayresolute"
+          }
+        ],
+        "slug": "stay-resolute",
+        "win_rate": 52.04
+      },
+      {
+        "sourceKey": "hand-of-baron",
+        "name": "Hand of Baron",
+        "status": "unmatched",
+        "tokens": [
+          {
+            "field": "name",
+            "value": "Hand of Baron",
+            "token": "handofbaron"
+          }
+        ],
+        "slug": "hand-of-baron",
+        "win_rate": 51.68
+      },
+      {
+        "sourceKey": "king-me",
+        "name": "King Me",
+        "status": "unmatched",
+        "tokens": [
+          {
+            "field": "name",
+            "value": "King Me",
+            "token": "kingme"
+          }
+        ],
+        "slug": "king-me",
+        "win_rate": 51.33
+      },
+      {
+        "sourceKey": "biggest-snowball-ever",
+        "name": "Biggest Snowball Ever",
+        "status": "unmatched",
+        "tokens": [
+          {
+            "field": "name",
+            "value": "Biggest Snowball Ever",
+            "token": "biggestsnowballever"
+          }
+        ],
+        "slug": "biggest-snowball-ever",
+        "win_rate": 51.27
+      },
+      {
+        "sourceKey": "dont-change-the-channel",
+        "name": "Don't Change the Channel",
+        "status": "unmatched",
+        "tokens": [
+          {
+            "field": "name",
+            "value": "Don't Change the Channel",
+            "token": "dontchangethechannel"
+          }
+        ],
+        "slug": "dont-change-the-channel",
+        "win_rate": 50.94
+      },
+      {
+        "sourceKey": "overextender",
+        "name": "Overextender",
+        "status": "unmatched",
+        "tokens": [
+          {
+            "field": "name",
+            "value": "Overextender",
+            "token": "overextender"
+          }
+        ],
+        "slug": "overextender",
+        "win_rate": 50.73
+      },
+      {
+        "sourceKey": "its-go-time",
+        "name": "It's Go Time",
+        "status": "unmatched",
+        "tokens": [
+          {
+            "field": "name",
+            "value": "It's Go Time",
+            "token": "itsgotime"
+          }
+        ],
+        "slug": "its-go-time",
+        "win_rate": 50.71
+      },
+      {
+        "sourceKey": "trusty-weapon",
+        "name": "Trusty Weapon",
+        "status": "unmatched",
+        "tokens": [
+          {
+            "field": "name",
+            "value": "Trusty Weapon",
+            "token": "trustyweapon"
+          }
+        ],
+        "slug": "trusty-weapon",
+        "win_rate": 50.71
+      },
+      {
+        "sourceKey": "ravenous-bind",
+        "name": "Ravenous Bind",
+        "status": "unmatched",
+        "tokens": [
+          {
+            "field": "name",
+            "value": "Ravenous Bind",
+            "token": "ravenousbind"
+          }
+        ],
+        "slug": "ravenous-bind",
+        "win_rate": 50.65
+      },
+      {
+        "sourceKey": "goldrend",
+        "name": "Goldrend",
+        "status": "unmatched",
+        "tokens": [
+          {
+            "field": "name",
+            "value": "Goldrend",
+            "token": "goldrend"
+          }
+        ],
+        "slug": "goldrend",
+        "win_rate": 50.06
+      },
+      {
+        "sourceKey": "hextech-soul",
+        "name": "Hextech Soul",
+        "status": "unmatched",
+        "tokens": [
+          {
+            "field": "name",
+            "value": "Hextech Soul",
+            "token": "hextechsoul"
+          }
+        ],
+        "slug": "hextech-soul",
+        "win_rate": 49.59
+      },
+      {
+        "sourceKey": "endless-decimation",
+        "name": "Endless Decimation",
+        "status": "unmatched",
+        "tokens": [
+          {
+            "field": "name",
+            "value": "Endless Decimation",
+            "token": "endlessdecimation"
+          }
+        ],
+        "slug": "endless-decimation",
+        "win_rate": 49.55
+      },
+      {
+        "sourceKey": "ultimate-awakening",
+        "name": "Ultimate Awakening",
+        "status": "unmatched",
+        "tokens": [
+          {
+            "field": "name",
+            "value": "Ultimate Awakening",
+            "token": "ultimateawakening"
+          }
+        ],
+        "slug": "ultimate-awakening",
+        "win_rate": 49.54
+      },
+      {
+        "sourceKey": "overloaded",
+        "name": "Overloaded",
+        "status": "unmatched",
+        "tokens": [
+          {
+            "field": "name",
+            "value": "Overloaded",
+            "token": "overloaded"
+          }
+        ],
+        "slug": "overloaded",
+        "win_rate": 49.5
+      },
+      {
+        "sourceKey": "adaptive-ward",
+        "name": "Adaptive Ward",
+        "status": "unmatched",
+        "tokens": [
+          {
+            "field": "name",
+            "value": "Adaptive Ward",
+            "token": "adaptiveward"
+          }
+        ],
+        "slug": "adaptive-ward",
+        "win_rate": 49.5
+      },
+      {
+        "sourceKey": "ominous-pact",
+        "name": "Ominous Pact",
+        "status": "unmatched",
+        "tokens": [
+          {
+            "field": "name",
+            "value": "Ominous Pact",
+            "token": "ominouspact"
+          }
+        ],
+        "slug": "ominous-pact",
+        "win_rate": 49.45
+      },
+      {
+        "sourceKey": "double-defense",
+        "name": "Double Defense",
+        "status": "unmatched",
+        "tokens": [
+          {
+            "field": "name",
+            "value": "Double Defense",
+            "token": "doubledefense"
+          }
+        ],
+        "slug": "double-defense",
+        "win_rate": 49.26
+      },
+      {
+        "sourceKey": "mercys-strike",
+        "name": "Mercy's Strike",
+        "status": "unmatched",
+        "tokens": [
+          {
+            "field": "name",
+            "value": "Mercy's Strike",
+            "token": "mercysstrike"
+          }
+        ],
+        "slug": "mercys-strike",
+        "win_rate": 49.01
+      },
+      {
+        "sourceKey": "shark-bait",
+        "name": "Shark Bait",
+        "status": "unmatched",
+        "tokens": [
+          {
+            "field": "name",
+            "value": "Shark Bait",
+            "token": "sharkbait"
+          }
+        ],
+        "slug": "shark-bait",
+        "win_rate": 48.75
+      },
+      {
+        "sourceKey": "nature-is-healing",
+        "name": "Nature is Healing",
+        "status": "unmatched",
+        "tokens": [
+          {
+            "field": "name",
+            "value": "Nature is Healing",
+            "token": "natureishealing"
+          }
+        ],
+        "slug": "nature-is-healing",
+        "win_rate": 48.24
+      },
+      {
+        "sourceKey": "poltergeist",
+        "name": "Poltergeist",
+        "status": "unmatched",
+        "tokens": [
+          {
+            "field": "name",
+            "value": "Poltergeist",
+            "token": "poltergeist"
+          }
+        ],
+        "slug": "poltergeist",
+        "win_rate": 48.02
+      },
+      {
+        "sourceKey": "nightstalking",
+        "name": "Nightstalking",
+        "status": "unmatched",
+        "tokens": [
+          {
+            "field": "name",
+            "value": "Nightstalking",
+            "token": "nightstalking"
+          }
+        ],
+        "slug": "nightstalking",
+        "win_rate": 47.96
+      },
+      {
+        "sourceKey": "tripleshot",
+        "name": "Tripleshot",
+        "status": "unmatched",
+        "tokens": [
+          {
+            "field": "name",
+            "value": "Tripleshot",
+            "token": "tripleshot"
+          }
+        ],
+        "slug": "tripleshot",
+        "win_rate": 47.66
+      },
+      {
+        "sourceKey": "empyrean-promise",
+        "name": "Empyrean Promise",
+        "status": "unmatched",
+        "tokens": [
+          {
+            "field": "name",
+            "value": "Empyrean Promise",
+            "token": "empyreanpromise"
+          }
+        ],
+        "slug": "empyrean-promise",
+        "win_rate": 47.44
+      },
+      {
+        "sourceKey": "kill-secured",
+        "name": "Kill Secured",
+        "status": "unmatched",
+        "tokens": [
+          {
+            "field": "name",
+            "value": "Kill Secured",
+            "token": "killsecured"
+          }
+        ],
+        "slug": "kill-secured",
+        "win_rate": 47.29
+      },
+      {
+        "sourceKey": "porcupine",
+        "name": "Porcupine",
+        "status": "unmatched",
+        "tokens": [
+          {
+            "field": "name",
+            "value": "Porcupine",
+            "token": "porcupine"
+          }
+        ],
+        "slug": "porcupine",
+        "win_rate": 47.2
+      },
+      {
+        "sourceKey": "echo-cast",
+        "name": "Echo Cast",
+        "status": "unmatched",
+        "tokens": [
+          {
+            "field": "name",
+            "value": "Echo Cast",
+            "token": "echocast"
+          }
+        ],
+        "slug": "echo-cast",
+        "win_rate": 47.06
+      },
+      {
+        "sourceKey": "spell-split",
+        "name": "Spellsplit",
+        "status": "unmatched",
+        "tokens": [
+          {
+            "field": "name",
+            "value": "Spellsplit",
+            "token": "spellsplit"
+          }
+        ],
+        "slug": "spell-split",
+        "win_rate": 47.04
+      },
+      {
+        "sourceKey": "shark-tempest",
+        "name": "Shark Tempest",
+        "status": "unmatched",
+        "tokens": [
+          {
+            "field": "name",
+            "value": "Shark Tempest",
+            "token": "sharktempest"
+          }
+        ],
+        "slug": "shark-tempest",
+        "win_rate": 47.03
+      },
+      {
+        "sourceKey": "flash-2",
+        "name": "Flash 2",
+        "status": "unmatched",
+        "tokens": [
+          {
+            "field": "name",
+            "value": "Flash 2",
+            "token": "flash2"
+          }
+        ],
+        "slug": "flash-2",
+        "win_rate": 46.75
+      },
+      {
+        "sourceKey": "hide-on-bush",
+        "name": "Hide on Bush",
+        "status": "unmatched",
+        "tokens": [
+          {
+            "field": "name",
+            "value": "Hide on Bush",
+            "token": "hideonbush"
+          }
+        ],
+        "slug": "hide-on-bush",
+        "win_rate": 46.58
+      },
+      {
+        "sourceKey": "prom-queen",
+        "name": "Prom Queen",
+        "status": "unmatched",
+        "tokens": [
+          {
+            "field": "name",
+            "value": "Prom Queen",
+            "token": "promqueen"
+          }
+        ],
+        "slug": "prom-queen",
+        "win_rate": 46.29
+      },
+      {
+        "sourceKey": "our-healing",
+        "name": "Our Healing",
+        "status": "unmatched",
+        "tokens": [
+          {
+            "field": "name",
+            "value": "Our Healing",
+            "token": "ourhealing"
+          }
+        ],
+        "slug": "our-healing",
+        "win_rate": 46.2
+      },
+      {
+        "sourceKey": "mighty-shield",
+        "name": "Mighty Shield",
+        "status": "unmatched",
+        "tokens": [
+          {
+            "field": "name",
+            "value": "Mighty Shield",
+            "token": "mightyshield"
+          }
+        ],
+        "slug": "mighty-shield",
+        "win_rate": 46.08
+      },
+      {
+        "sourceKey": "pin-cushion",
+        "name": "Pin Cushion",
+        "status": "unmatched",
+        "tokens": [
+          {
+            "field": "name",
+            "value": "Pin Cushion",
+            "token": "pincushion"
+          }
+        ],
+        "slug": "pin-cushion",
+        "win_rate": 45.88
+      },
+      {
+        "sourceKey": "pinball",
+        "name": "Pinball",
+        "status": "unmatched",
+        "tokens": [
+          {
+            "field": "name",
+            "value": "Pinball",
+            "token": "pinball"
+          }
+        ],
+        "slug": "pinball",
+        "win_rate": 45.86
+      },
+      {
+        "sourceKey": "snowblast",
+        "name": "Snowblast",
+        "status": "unmatched",
+        "tokens": [
+          {
+            "field": "name",
+            "value": "Snowblast",
+            "token": "snowblast"
+          }
+        ],
+        "slug": "snowblast",
+        "win_rate": 45.58
+      },
+      {
+        "sourceKey": "spin-me-right-round",
+        "name": "Spin Me Right Round",
+        "status": "unmatched",
+        "tokens": [
+          {
+            "field": "name",
+            "value": "Spin Me Right Round",
+            "token": "spinmerightround"
+          }
+        ],
+        "slug": "spin-me-right-round",
+        "win_rate": 45.17
+      },
+      {
+        "sourceKey": "surge-field",
+        "name": "Surge Field",
+        "status": "unmatched",
+        "tokens": [
+          {
+            "field": "name",
+            "value": "Surge Field",
+            "token": "surgefield"
+          }
+        ],
+        "slug": "surge-field",
+        "win_rate": 45.08
+      },
+      {
+        "sourceKey": "holy-snowball",
+        "name": "Holy Snowball",
+        "status": "unmatched",
+        "tokens": [
+          {
+            "field": "name",
+            "value": "Holy Snowball",
+            "token": "holysnowball"
+          }
+        ],
+        "slug": "holy-snowball",
+        "win_rate": 45.01
+      },
+      {
+        "sourceKey": "glass-cannon",
+        "name": "Glass Cannon",
+        "status": "unmatched",
+        "tokens": [
+          {
+            "field": "name",
+            "value": "Glass Cannon",
+            "token": "glasscannon"
+          }
+        ],
+        "slug": "glass-cannon",
+        "win_rate": 43.61
+      },
+      {
+        "sourceKey": "chain-reaction",
+        "name": "Chain Reaction",
+        "status": "unmatched",
+        "tokens": [
+          {
+            "field": "name",
+            "value": "Chain Reaction",
+            "token": "chainreaction"
+          }
+        ],
+        "slug": "chain-reaction",
+        "win_rate": 43.07
+      },
+      {
+        "sourceKey": "dimension-shift",
+        "name": "Dimension Shift",
+        "status": "unmatched",
+        "tokens": [
+          {
+            "field": "name",
+            "value": "Dimension Shift",
+            "token": "dimensionshift"
+          }
+        ],
+        "slug": "dimension-shift",
+        "win_rate": 41.29
+      },
+      {
+        "sourceKey": "poro-stampede",
+        "name": "Poro Stampede",
+        "status": "unmatched",
+        "tokens": [
+          {
+            "field": "name",
+            "value": "Poro Stampede",
+            "token": "porostampede"
+          }
+        ],
+        "slug": "poro-stampede",
+        "win_rate": 39.82
+      }
+    ]
+  },
+  "notes": [
+    "arammayhem_win_rate is best-effort only; unmatched rows do not block identity resolution.",
+    "CDragon registry presence is definition only, not live availability."
+  ]
+}

@@ -1,0 +1,21 @@
+{
+  "version": 1,
+  "description": "Manual identity exceptions for Step 1 resolver. Keep this table minimal; each entry requires Claude review.",
+  "normalization": "lowercase, strip non-alphanumerics, strip leading Quest: prefix",
+  "aliases": [
+    {
+      "augmentNameId": "ARAM_Quest_VoidImmolation",
+      "aliases": [
+        "Void Immolation",
+        "void-immolation"
+      ],
+      "applies_to": [
+        "internal_augments",
+        "wiki",
+        "arammayhem_win_rate"
+      ],
+      "reason": "The committed internal/wiki-facing row is named for the rewarded item, while CDragon's canonical augment display name is Icathia's Fall.",
+      "review_note": "Do not use this alias as availability evidence; it only maps identity to CDragon augmentNameId."
+    }
+  ]
+}

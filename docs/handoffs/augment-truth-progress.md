@@ -145,3 +145,58 @@ dist/assets/index-Co2yRIf3.css    5.37 kB │ gzip:  1.69 kB
 dist/assets/index-wPHe38uk.js   227.63 kB │ gzip: 72.96 kB
 ✓ built in 361ms
 ```
+
+## Step 1 — Canonical identity + resolver (codex)
+
+Date: 2026-06-22 (Asia/Taipei)
+
+Built:
+
+- `scripts/augment_identity_resolver.py` — deterministic CDragon `augmentNameId` resolver.
+- `scripts/test_augment_identity_resolver.py` — focused Python unit tests for normalization, aliasing, unmatched rows, and contradiction reporting.
+- `data/internal/augment-identity-aliases.json` — hand-maintained alias table for Claude review.
+- `data/internal/augment-identity-map.json` — emitted `{augmentId -> source matches}` mapping artifact.
+- `data/internal/augment-identity-unmatched-report.json` — unresolved rows by source.
+- `data/internal/augment-identity-contradictions-report.json` — report-only identity/existence/rarity/availability disagreements.
+
+Matcher:
+
+- Canonical key is CDragon `augmentNameId`.
+- Normalization lowercases, strips non-alphanumerics, and strips a leading `Quest:` prefix.
+- CDragon index uses `nameId`/`augmentNameId`, the `ARAM_`-stripped nameId, `name`, `slug`, and locale `names`.
+- Existing internal rows resolve by normalized `name` + `slug`.
+- Wiki rows are deterministically derived from committed internal rows with `wikiDescription` and resolve by normalized `name`.
+- `arammayhem_win_rate` rows are best-effort only; unmatched rows are reported and do not block.
+- Aliases apply only after direct normalized matching fails.
+
+Alias table:
+
+- Entry count: 1
+- `ARAM_Quest_VoidImmolation` aliases: `Void Immolation`, `void-immolation`
+  - Reason: the committed internal/wiki-facing row is named for the rewarded item, while CDragon's canonical augment display name is `Icathia's Fall`.
+  - Review note: identity only; not availability evidence.
+
+Report counts:
+
+| Report | Counts |
+| --- | --- |
+| Mapping | CDragon 170; mapped augmentIds 166; source matches: internal 167, wiki 165, arammayhem_win_rate 123 |
+| Unmatched | CDragon 4; internal_augments 89; wiki 88; arammayhem_win_rate 62 |
+| Contradictions | identity 3; existence 181; rarity 0; availability 107 |
+
+Important report notes:
+
+- CDragon registry presence remains definition/identity only; Step 1 does not set live availability or lifecycle.
+- `wiki_availability` and independent `wiki_rarity` are marked unavailable in the contradiction report because the committed Step 0 inputs contain `wikiDescription` but no independent wiki availability-notes or wiki-rarity snapshot.
+- Tencent prose was not parsed in Step 1; the contradiction report focuses on CDragon vs committed wiki/internal signals.
+
+Commands run:
+
+| Command | Result |
+| --- | --- |
+| `python3 scripts/test_augment_identity_resolver.py` | PASS (4 tests) |
+| `python3 scripts/augment_identity_resolver.py --check` | PASS; mapped 166 augmentIds; unmatched CDragon 4 / internal 89 / wiki 88 / arammayhem 62 |
+| `npm test` | PASS (27 files, 250 tests) |
+| `npx eslint src scripts` | PASS (exit 0, no output) |
+| `npm run build` | PASS (Next.js build completed) |
+| `(cd overlay && npm run build)` | SKIPPED; Step 1 did not touch overlay code or overlay data-sync inputs |
