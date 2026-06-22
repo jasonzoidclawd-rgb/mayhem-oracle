@@ -200,3 +200,64 @@ Commands run:
 | `npx eslint src scripts` | PASS (exit 0, no output) |
 | `npm run build` | PASS (Next.js build completed) |
 | `(cd overlay && npm run build)` | SKIPPED; Step 1 did not touch overlay code or overlay data-sync inputs |
+
+## Step 2 — CDragon authoritative base (codex)
+
+Date: 2026-06-23 (Asia/Taipei)
+
+Built:
+
+- `scripts/scrape_mayhem_augments_cdragon.py` — added pure Step 2 base-catalog assembly plus `--base-catalog-only`.
+- `scripts/test_augment_base_catalog.py` — deterministic unit test for rich arena rows, stringtable bridge rows, kiwi-over-cherry preference, localized effect text, and the `???` placeholder row.
+- `data/internal/augment-base-catalog.json` — new CDragon-sourced base definition artifact.
+
+Sources used:
+
+- Roster / identity / rarity / roster small icon: `https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/cherry-augments.json`
+- Rich arena fields: `https://raw.communitydragon.org/latest/cdragon/arena/{en_us,zh_cn,zh_tw,ja_jp,ko_kr}.json`
+- Localized names/effect text stringtables: `https://raw.communitydragon.org/latest/game/{en_us,zh_cn,zh_tw,ja_jp,ko_kr}/data/menu/en_us/lol.stringtable.json`
+
+Base-catalog count:
+
+- CDragon Mayhem registry rows: 170
+- Rich arena-endpoint matches with `arenaApiName`: 119
+- Registry/stringtable rows without rich arena `dataValues` / `calculations` in the fetched endpoint: 51
+- Definition placeholders: 1
+
+Field coverage:
+
+| Field | Coverage |
+| --- | --- |
+| `icon.small` | 170 / 170 |
+| `icon.large` | 119 / 170 |
+| `dataValues` | 119 / 170 |
+| `calculations` | 45 / 170 |
+| English `effectText.tooltip` | 162 / 170 |
+| all five locale names (`en`, `zh_cn`, `zh_tw`, `ja`, `ko`) | 170 / 170 |
+| all five localized tooltips | 162 / 170 |
+
+Special rows:
+
+- `ARAM_MissingPingAugment` is present as a CDragon registry-placeholder definition row: `name` is `???`, `definitionPlaceholder: true`, no `arenaApiName`, no effect text, no `dataValues`, and no availability field.
+- `ARAM_Earthwake` is present as a definition row only: `arenaApiName: Earthwake`, rarity `prismatic`, rich icons, effect text, 7 `dataValues`, 1 calculation, and no availability field.
+- `ARAM_Flashy` is present as a definition row only: `arenaApiName: Flashy`, rarity `gold`, rich icons, effect text, 6 `dataValues`, 1 calculation, and no availability field.
+- `ARAM_TransmuteGold` is present as a definition row only: `arenaApiName: TransmuteGold`, rarity `silver`, rich icons, effect text, 1 `dataValues` entry, 0 calculations, and no availability field.
+
+Boundary checks:
+
+- The base catalog does not contain `availability`, `confirmed_live`, `flags`, `lifecycle`, or `win_rate` keys.
+- `data/internal/augments.json`, `public/data/**`, pool rules, combos, champions, scoring twins, overlay code, and `messages/*` were not modified.
+- The post-commit state hook refreshed `CLAUDE.md` / `scripts/state.json` to the verified 256 augments / 250 tests state; no manual state edit was made.
+
+Commands run:
+
+| Command | Result |
+| --- | --- |
+| `python3 scripts/test_augment_base_catalog.py` | PASS (1 test) |
+| `python3 scripts/test_augment_identity_resolver.py` | PASS (4 tests) |
+| key-level base-catalog sanity check | PASS; 170 rows, all five locale names, no forbidden availability/scoring keys |
+| `python3 scripts/scrape_mayhem_augments_cdragon.py --base-catalog-only` | PASS; wrote 170 rows; 119 rich endpoint matches; 162 with English tooltip |
+| `npm test` | PASS (27 files, 250 tests) |
+| `npx eslint src scripts` | PASS (exit 0, no output) |
+| `npm run build` | PASS (Next.js build completed) |
+| `(cd overlay && npm run build)` | SKIPPED; Step 2 did not touch overlay code or overlay data-sync inputs |
