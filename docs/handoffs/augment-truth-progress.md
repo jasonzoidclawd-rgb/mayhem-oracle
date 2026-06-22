@@ -584,3 +584,31 @@ Commands run:
 | `python3 scripts/export_public_catalog.py` | PASS |
 | `npm test -- src/lib/__tests__/public-data-boundary.test.ts` | PASS (1 file, 4 tests) |
 | `(cd overlay && npm run build)` | PASS (sync-data, `tsc`, and Vite build completed) |
+
+## Step 8 — Final verification + handoff (codex)
+
+Date: 2026-06-23 (Asia/Taipei)
+
+Final status:
+
+- P1 handoff written to `docs/handoffs/augment-truth-p1-p2-handoff.md`.
+- `scripts/update-state.sh` run as required; state reports `patch=26.12`, `augments=260`, `tests=257`, `parity=0`, `tag=26.12-phase3-complete`.
+- Availability counts: `confirmed_live=139`, `candidate_registry_present=28`, `disabled=4`, `removed=25`, `unverified_legacy=64`, `conflict=0`.
+- Offerable remains exactly `confirmed_live`.
+- `upgrade-sword-of-blossoming-dawn` is `removed` and non-offerable.
+- Public item `wikiNotes` remain public for item pages; public augment `wikiNotes` and internal signals remain hidden.
+- `graphify-out/` and `codex-step7-prompt.txt` were left uncommitted and untouched.
+
+Commands run:
+
+| Command | Result |
+| --- | --- |
+| `npm test` | PASS (28 files, 257 tests) |
+| `npx eslint src scripts` | PASS (exit 0, no output) |
+| `npm run build` | PASS (Next.js build completed, 3321 static pages) |
+| `(cd overlay && npm run build)` | PASS (sync-data, `tsc`, and Vite build completed) |
+| `scripts/update-state.sh` | PASS (`patch=26.12 augments=260 tests=257 parity=0 tag=26.12-phase3-complete`) |
+| targeted public-boundary check | PASS (`publicItemWikiNotes=171`, item forbidden hits 0, augment forbidden hits 0) |
+| targeted combo/pool check | PASS (5622 combos, 0 non-`confirmed_live` combo refs) |
+
+P1 COMPLETE — awaiting Claude independent verification and human push gate.
