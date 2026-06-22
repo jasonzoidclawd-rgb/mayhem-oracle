@@ -298,24 +298,26 @@ export interface PoolAllyExclusion {
   skips_allies_with: string;
 }
 
+export type AugmentAvailabilityStatus =
+  | "confirmed_live"
+  | "candidate_registry_present"
+  | "disabled"
+  | "removed"
+  | "unverified_legacy"
+  | "conflict";
+
 export interface PoolRules {
   patch: string;
   scraped_at: string;
+  availability?: {
+    offerable?: Record<string, AugmentAvailabilityStatus>;
+    non_offerable?: Record<string, AugmentAvailabilityStatus | "placeholder">;
+  };
   disabled: string[];
   mutually_exclusive: [string, string][];
   item_exclusions: PoolItemExclusion[];
   ally_exclusions: PoolAllyExclusion[];
   lifecycle: { added: Record<string, string>; removed: Record<string, string> };
-  availability_overrides?: {
-    observed_live?: Record<string, {
-      status: "bug_mechanism";
-      label: string;
-      observed_at: string;
-      source: string;
-      score_weight?: "high" | "medium" | "low";
-      remove_when?: string;
-    }>;
-  };
 }
 
 // ─── Oracle Score algorithm constants ───

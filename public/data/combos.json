@@ -1,13 +1,8 @@
 {
   "patch": "26.12",
-  "scraped_at": "2026-06-22T23:13:09.286747+00:00",
+  "scraped_at": "2026-06-22T21:43:41.138992+00:00",
   "generated_from": "internal-pool-mechanics",
   "combos": [
-    {
-      "champion": "aatrox",
-      "augment": "Double Defense",
-      "tier": "S"
-    },
     {
       "champion": "aatrox",
       "augment": "Rejuvenation",
@@ -45,11 +40,6 @@
     },
     {
       "champion": "alistar",
-      "augment": "Chain Reaction",
-      "tier": "S"
-    },
-    {
-      "champion": "alistar",
       "augment": "Courage of the Colossus",
       "tier": "S"
     },
@@ -59,18 +49,13 @@
       "tier": "S"
     },
     {
-      "champion": "ambessa",
-      "augment": "Double Defense",
+      "champion": "alistar",
+      "augment": "Guilty Pleasure",
       "tier": "S"
     },
     {
       "champion": "ambessa",
       "augment": "Rejuvenation",
-      "tier": "S"
-    },
-    {
-      "champion": "amumu",
-      "augment": "Biggest Snowball Ever",
       "tier": "S"
     },
     {
@@ -84,6 +69,11 @@
       "tier": "S"
     },
     {
+      "champion": "amumu",
+      "augment": "Searing Dawn",
+      "tier": "S"
+    },
+    {
       "champion": "anivia",
       "augment": "From Downtown",
       "tier": "S"
@@ -105,12 +95,12 @@
     },
     {
       "champion": "annie",
-      "augment": "Biggest Snowball Ever",
+      "augment": "Bread And Butter",
       "tier": "S"
     },
     {
       "champion": "annie",
-      "augment": "Bread And Butter",
+      "augment": "Bread and Cheese",
       "tier": "S"
     },
     {
@@ -125,7 +115,7 @@
     },
     {
       "champion": "aphelios",
-      "augment": "Draw Your Sword",
+      "augment": "Double Tap",
       "tier": "S"
     },
     {
@@ -134,6 +124,11 @@
       "tier": "S"
     },
     {
+      "champion": "ashe",
+      "augment": "Vulnerability",
+      "tier": "S"
+    },
+    {
       "champion": "aurelionsol",
       "augment": "From Downtown",
       "tier": "S"
@@ -165,22 +160,17 @@
     },
     {
       "champion": "azir",
-      "augment": "Chain Reaction",
+      "augment": "From Downtown",
       "tier": "S"
     },
     {
       "champion": "azir",
-      "augment": "Double Defense",
+      "augment": "Infernal Conduit",
       "tier": "S"
     },
     {
       "champion": "azir",
-      "augment": "From Downtown",
-      "tier": "S"
-    },
-    {
-      "champion": "bard",
-      "augment": "Double Defense",
+      "augment": "Master of Duality",
       "tier": "S"
     },
     {
@@ -194,18 +184,23 @@
       "tier": "S"
     },
     {
-      "champion": "belveth",
-      "augment": "Chain Reaction",
-      "tier": "S"
-    },
-    {
-      "champion": "belveth",
-      "augment": "Double Defense",
+      "champion": "bard",
+      "augment": "Rejuvenation",
       "tier": "S"
     },
     {
       "champion": "belveth",
       "augment": "From Downtown",
+      "tier": "S"
+    },
+    {
+      "champion": "belveth",
+      "augment": "Infernal Conduit",
+      "tier": "S"
+    },
+    {
+      "champion": "belveth",
+      "augment": "Jeweled Gauntlet",
       "tier": "S"
     },
     {
@@ -236,21 +231,11 @@
     {
       "champion": "brand",
       "augment": "Multishot",
-      "tier": "S"
-    },
-    {
-      "champion": "braum",
-      "augment": "Double Defense",
       "tier": "S"
     },
     {
       "champion": "braum",
       "augment": "Rejuvenation",
-      "tier": "S"
-    },
-    {
-      "champion": "briar",
-      "augment": "Chain Reaction",
       "tier": "S"
     },
     {
@@ -264,13 +249,13 @@
       "tier": "S"
     },
     {
-      "champion": "camille",
-      "augment": "Blade Waltz",
+      "champion": "briar",
+      "augment": "Guilty Pleasure",
       "tier": "S"
     },
     {
       "champion": "camille",
-      "augment": "Chain Reaction",
+      "augment": "Blade Waltz",
       "tier": "S"
     },
     {
@@ -279,8 +264,8 @@
       "tier": "S"
     },
     {
-      "champion": "cassiopeia",
-      "augment": "Double Defense",
+      "champion": "camille",
+      "augment": "Deft",
       "tier": "S"
     },
     {
@@ -294,8 +279,8 @@
       "tier": "S"
     },
     {
-      "champion": "chogath",
-      "augment": "Chain Reaction",
+      "champion": "cassiopeia",
+      "augment": "Icathia's Fall",
       "tier": "S"
     },
     {
@@ -310,17 +295,12 @@
     },
     {
       "champion": "corki",
-      "augment": "Infernal Conduit",
+      "augment": "Icathia's Fall",
       "tier": "S"
     },
     {
       "champion": "corki",
-      "augment": "Jeweled Gauntlet",
-      "tier": "S"
-    },
-    {
-      "champion": "darius",
-      "augment": "Double Defense",
+      "augment": "Infernal Conduit",
       "tier": "S"
     },
     {
@@ -330,12 +310,12 @@
     },
     {
       "champion": "darius",
-      "augment": "Infernal Conduit",
+      "augment": "Icathia's Fall",
       "tier": "S"
     },
     {
-      "champion": "diana",
-      "augment": "Double Defense",
+      "champion": "darius",
+      "augment": "Infernal Conduit",
       "tier": "S"
     },
     {
@@ -349,13 +329,8 @@
       "tier": "S"
     },
     {
-      "champion": "draven",
-      "augment": "Chain Reaction",
-      "tier": "S"
-    },
-    {
-      "champion": "drmundo",
-      "augment": "Double Defense",
+      "champion": "diana",
+      "augment": "Multishot",
       "tier": "S"
     },
     {
@@ -369,8 +344,8 @@
       "tier": "S"
     },
     {
-      "champion": "ekko",
-      "augment": "Double Defense",
+      "champion": "drmundo",
+      "augment": "Rejuvenation",
       "tier": "S"
     },
     {
@@ -384,18 +359,23 @@
       "tier": "S"
     },
     {
-      "champion": "elise",
-      "augment": "Chain Reaction",
-      "tier": "S"
-    },
-    {
-      "champion": "elise",
-      "augment": "Double Defense",
+      "champion": "ekko",
+      "augment": "Multishot",
       "tier": "S"
     },
     {
       "champion": "elise",
       "augment": "From Downtown",
+      "tier": "S"
+    },
+    {
+      "champion": "elise",
+      "augment": "Jeweled Gauntlet",
+      "tier": "S"
+    },
+    {
+      "champion": "elise",
+      "augment": "Multishot",
       "tier": "S"
     },
     {
@@ -424,18 +404,13 @@
       "tier": "S"
     },
     {
-      "champion": "ezreal",
-      "augment": "Spellsplit",
-      "tier": "S"
-    },
-    {
-      "champion": "fiddlesticks",
-      "augment": "Double Defense",
-      "tier": "S"
-    },
-    {
       "champion": "fiddlesticks",
       "augment": "Firebrand",
+      "tier": "S"
+    },
+    {
+      "champion": "fiddlesticks",
+      "augment": "Icathia's Fall",
       "tier": "S"
     },
     {
@@ -455,17 +430,12 @@
     },
     {
       "champion": "fiora",
-      "augment": "Dual Wield",
+      "augment": "Double Tap",
       "tier": "S"
     },
     {
       "champion": "fizz",
-      "augment": "Chain Reaction",
-      "tier": "S"
-    },
-    {
-      "champion": "galio",
-      "augment": "Chain Reaction",
+      "augment": "Vulnerability",
       "tier": "S"
     },
     {
@@ -479,8 +449,8 @@
       "tier": "S"
     },
     {
-      "champion": "gangplank",
-      "augment": "Double Defense",
+      "champion": "galio",
+      "augment": "Guilty Pleasure",
       "tier": "S"
     },
     {
@@ -490,12 +460,12 @@
     },
     {
       "champion": "garen",
-      "augment": "Double Defense",
+      "augment": "Rejuvenation",
       "tier": "S"
     },
     {
       "champion": "garen",
-      "augment": "Rejuvenation",
+      "augment": "Vulnerability",
       "tier": "S"
     },
     {
@@ -521,16 +491,6 @@
     {
       "champion": "gragas",
       "augment": "Multishot",
-      "tier": "S"
-    },
-    {
-      "champion": "gragas",
-      "augment": "Spellsplit",
-      "tier": "S"
-    },
-    {
-      "champion": "hecarim",
-      "augment": "Chain Reaction",
       "tier": "S"
     },
     {
@@ -544,6 +504,11 @@
       "tier": "S"
     },
     {
+      "champion": "hecarim",
+      "augment": "Searing Dawn",
+      "tier": "S"
+    },
+    {
       "champion": "heimerdinger",
       "augment": "From Downtown",
       "tier": "S"
@@ -566,11 +531,6 @@
     {
       "champion": "hwei",
       "augment": "Multishot",
-      "tier": "S"
-    },
-    {
-      "champion": "hwei",
-      "augment": "Spellsplit",
       "tier": "S"
     },
     {
@@ -585,7 +545,7 @@
     },
     {
       "champion": "illaoi",
-      "augment": "Stay Resolute",
+      "augment": "Tank It Or Leave It",
       "tier": "S"
     },
     {
@@ -605,11 +565,6 @@
     },
     {
       "champion": "ivern",
-      "augment": "Double Defense",
-      "tier": "S"
-    },
-    {
-      "champion": "ivern",
       "augment": "From Downtown",
       "tier": "S"
     },
@@ -619,13 +574,8 @@
       "tier": "S"
     },
     {
-      "champion": "janna",
-      "augment": "Chain Reaction",
-      "tier": "S"
-    },
-    {
-      "champion": "janna",
-      "augment": "Double Defense",
+      "champion": "ivern",
+      "augment": "Multishot",
       "tier": "S"
     },
     {
@@ -634,13 +584,13 @@
       "tier": "S"
     },
     {
-      "champion": "jarvaniv",
-      "augment": "Chain Reaction",
+      "champion": "janna",
+      "augment": "Jeweled Gauntlet",
       "tier": "S"
     },
     {
-      "champion": "jarvaniv",
-      "augment": "Double Defense",
+      "champion": "janna",
+      "augment": "Multishot",
       "tier": "S"
     },
     {
@@ -650,12 +600,12 @@
     },
     {
       "champion": "jayce",
-      "augment": "Chain Reaction",
+      "augment": "Jeweled Gauntlet",
       "tier": "S"
     },
     {
       "champion": "jayce",
-      "augment": "Jeweled Gauntlet",
+      "augment": "Vulnerability",
       "tier": "S"
     },
     {
@@ -665,15 +615,15 @@
     },
     {
       "champion": "jhin",
-      "augment": "Biggest Snowball Ever",
-      "tier": "S"
-    },
-    {
-      "champion": "jhin",
       "augment": "Bread And Butter",
       "tier": "S"
     },
     {
+      "champion": "jhin",
+      "augment": "Bread and Cheese",
+      "tier": "S"
+    },
+    {
       "champion": "kaisa",
       "augment": "Blade Waltz",
       "tier": "S"
@@ -690,17 +640,17 @@
     },
     {
       "champion": "karma",
-      "augment": "Double Defense",
-      "tier": "S"
-    },
-    {
-      "champion": "karma",
       "augment": "From Downtown",
       "tier": "S"
     },
     {
       "champion": "karma",
       "augment": "Jeweled Gauntlet",
+      "tier": "S"
+    },
+    {
+      "champion": "karma",
+      "augment": "Multishot",
       "tier": "S"
     },
     {
@@ -711,16 +661,6 @@
     {
       "champion": "karthus",
       "augment": "Multishot",
-      "tier": "S"
-    },
-    {
-      "champion": "karthus",
-      "augment": "Spellsplit",
-      "tier": "S"
-    },
-    {
-      "champion": "kassadin",
-      "augment": "Double Defense",
       "tier": "S"
     },
     {
@@ -735,11 +675,6 @@
     },
     {
       "champion": "katarina",
-      "augment": "Chain Reaction",
-      "tier": "S"
-    },
-    {
-      "champion": "katarina",
       "augment": "Jeweled Gauntlet",
       "tier": "S"
     },
@@ -749,8 +684,8 @@
       "tier": "S"
     },
     {
-      "champion": "kayle",
-      "augment": "Double Defense",
+      "champion": "katarina",
+      "augment": "Vulnerability",
       "tier": "S"
     },
     {
@@ -764,8 +699,8 @@
       "tier": "S"
     },
     {
-      "champion": "kayn",
-      "augment": "Double Defense",
+      "champion": "kayle",
+      "augment": "Multishot",
       "tier": "S"
     },
     {
@@ -815,12 +750,7 @@
     },
     {
       "champion": "kindred",
-      "augment": "Double Defense",
-      "tier": "S"
-    },
-    {
-      "champion": "kled",
-      "augment": "Chain Reaction",
+      "augment": "Double Tap",
       "tier": "S"
     },
     {
@@ -841,11 +771,6 @@
     {
       "champion": "ksante",
       "augment": "Blade Waltz",
-      "tier": "S"
-    },
-    {
-      "champion": "ksante",
-      "augment": "Chain Reaction",
       "tier": "S"
     },
     {
@@ -854,6 +779,11 @@
       "tier": "S"
     },
     {
+      "champion": "ksante",
+      "augment": "Cruelty",
+      "tier": "S"
+    },
+    {
       "champion": "leblanc",
       "augment": "From Downtown",
       "tier": "S"
@@ -866,11 +796,6 @@
     {
       "champion": "leblanc",
       "augment": "Multishot",
-      "tier": "S"
-    },
-    {
-      "champion": "leesin",
-      "augment": "Double Defense",
       "tier": "S"
     },
     {
@@ -890,7 +815,7 @@
     },
     {
       "champion": "leona",
-      "augment": "Double Defense",
+      "augment": "Guilty Pleasure",
       "tier": "S"
     },
     {
@@ -905,7 +830,7 @@
     },
     {
       "champion": "lillia",
-      "augment": "Spellsplit",
+      "augment": "Vulnerability",
       "tier": "S"
     },
     {
@@ -925,11 +850,6 @@
     },
     {
       "champion": "lulu",
-      "augment": "Double Defense",
-      "tier": "S"
-    },
-    {
-      "champion": "lulu",
       "augment": "From Downtown",
       "tier": "S"
     },
@@ -939,8 +859,8 @@
       "tier": "S"
     },
     {
-      "champion": "lux",
-      "augment": "Double Defense",
+      "champion": "lulu",
+      "augment": "Multishot",
       "tier": "S"
     },
     {
@@ -951,6 +871,11 @@
     {
       "champion": "lux",
       "augment": "Jeweled Gauntlet",
+      "tier": "S"
+    },
+    {
+      "champion": "lux",
+      "augment": "Multishot",
       "tier": "S"
     },
     {
@@ -960,22 +885,17 @@
     },
     {
       "champion": "malzahar",
+      "augment": "Icathia's Fall",
+      "tier": "S"
+    },
+    {
+      "champion": "malzahar",
       "augment": "Infernal Conduit",
       "tier": "S"
     },
     {
       "champion": "malzahar",
       "augment": "Jeweled Gauntlet",
-      "tier": "S"
-    },
-    {
-      "champion": "malzahar",
-      "augment": "Pressure Cooker",
-      "tier": "S"
-    },
-    {
-      "champion": "maokai",
-      "augment": "Chain Reaction",
       "tier": "S"
     },
     {
@@ -986,6 +906,11 @@
     {
       "champion": "maokai",
       "augment": "Cruelty",
+      "tier": "S"
+    },
+    {
+      "champion": "maokai",
+      "augment": "Guilty Pleasure",
       "tier": "S"
     },
     {
@@ -1000,12 +925,7 @@
     },
     {
       "champion": "masteryi",
-      "augment": "Dual Wield",
-      "tier": "S"
-    },
-    {
-      "champion": "mel",
-      "augment": "Double Defense",
+      "augment": "Double Tap",
       "tier": "S"
     },
     {
@@ -1019,18 +939,23 @@
       "tier": "S"
     },
     {
-      "champion": "milio",
-      "augment": "Chain Reaction",
-      "tier": "S"
-    },
-    {
-      "champion": "milio",
-      "augment": "Double Defense",
+      "champion": "mel",
+      "augment": "Rejuvenation",
       "tier": "S"
     },
     {
       "champion": "milio",
       "augment": "From Downtown",
+      "tier": "S"
+    },
+    {
+      "champion": "milio",
+      "augment": "Jeweled Gauntlet",
+      "tier": "S"
+    },
+    {
+      "champion": "milio",
+      "augment": "Multishot",
       "tier": "S"
     },
     {
@@ -1039,23 +964,23 @@
       "tier": "S"
     },
     {
+      "champion": "missfortune",
+      "augment": "Vulnerability",
+      "tier": "S"
+    },
+    {
       "champion": "monkeyking",
       "augment": "Jeweled Gauntlet",
       "tier": "S"
     },
     {
-      "champion": "mordekaiser",
-      "augment": "Double Defense",
+      "champion": "monkeyking",
+      "augment": "Vulnerability",
       "tier": "S"
     },
     {
       "champion": "mordekaiser",
       "augment": "Rejuvenation",
-      "tier": "S"
-    },
-    {
-      "champion": "morgana",
-      "augment": "Double Defense",
       "tier": "S"
     },
     {
@@ -1069,8 +994,8 @@
       "tier": "S"
     },
     {
-      "champion": "naafiri",
-      "augment": "Double Defense",
+      "champion": "morgana",
+      "augment": "Multishot",
       "tier": "S"
     },
     {
@@ -1079,8 +1004,8 @@
       "tier": "S"
     },
     {
-      "champion": "nami",
-      "augment": "Double Defense",
+      "champion": "naafiri",
+      "augment": "Vulnerability",
       "tier": "S"
     },
     {
@@ -1100,17 +1025,12 @@
     },
     {
       "champion": "nasus",
-      "augment": "Infernal Conduit",
+      "augment": "Icathia's Fall",
       "tier": "S"
     },
     {
       "champion": "nasus",
-      "augment": "Pressure Cooker",
-      "tier": "S"
-    },
-    {
-      "champion": "nautilus",
-      "augment": "Double Defense",
+      "augment": "Infernal Conduit",
       "tier": "S"
     },
     {
@@ -1121,6 +1041,11 @@
     {
       "champion": "nautilus",
       "augment": "Jeweled Gauntlet",
+      "tier": "S"
+    },
+    {
+      "champion": "nautilus",
+      "augment": "Multishot",
       "tier": "S"
     },
     {
@@ -1140,11 +1065,6 @@
     },
     {
       "champion": "nidalee",
-      "augment": "Double Defense",
-      "tier": "S"
-    },
-    {
-      "champion": "nidalee",
       "augment": "From Downtown",
       "tier": "S"
     },
@@ -1154,8 +1074,8 @@
       "tier": "S"
     },
     {
-      "champion": "nilah",
-      "augment": "Double Defense",
+      "champion": "nidalee",
+      "augment": "Multishot",
       "tier": "S"
     },
     {
@@ -1169,6 +1089,11 @@
       "tier": "S"
     },
     {
+      "champion": "nilah",
+      "augment": "Rejuvenation",
+      "tier": "S"
+    },
+    {
       "champion": "nocturne",
       "augment": "From Downtown",
       "tier": "S"
@@ -1179,28 +1104,18 @@
       "tier": "S"
     },
     {
-      "champion": "nocturne",
-      "augment": "Spellsplit",
-      "tier": "S"
-    },
-    {
-      "champion": "nunu",
-      "augment": "Chain Reaction",
-      "tier": "S"
-    },
-    {
-      "champion": "nunu",
-      "augment": "Double Defense",
-      "tier": "S"
-    },
-    {
       "champion": "nunu",
       "augment": "From Downtown",
       "tier": "S"
     },
     {
-      "champion": "olaf",
-      "augment": "Double Defense",
+      "champion": "nunu",
+      "augment": "Jeweled Gauntlet",
+      "tier": "S"
+    },
+    {
+      "champion": "nunu",
+      "augment": "Multishot",
       "tier": "S"
     },
     {
@@ -1210,11 +1125,6 @@
     },
     {
       "champion": "orianna",
-      "augment": "Double Defense",
-      "tier": "S"
-    },
-    {
-      "champion": "orianna",
       "augment": "From Downtown",
       "tier": "S"
     },
@@ -1224,13 +1134,13 @@
       "tier": "S"
     },
     {
+      "champion": "orianna",
+      "augment": "Multishot",
+      "tier": "S"
+    },
+    {
       "champion": "ornn",
-      "augment": "Chain Reaction",
-      "tier": "S"
-    },
-    {
-      "champion": "pantheon",
-      "augment": "Double Defense",
+      "augment": "Vulnerability",
       "tier": "S"
     },
     {
@@ -1244,8 +1154,8 @@
       "tier": "S"
     },
     {
-      "champion": "poppy",
-      "augment": "Chain Reaction",
+      "champion": "pantheon",
+      "augment": "Rejuvenation",
       "tier": "S"
     },
     {
@@ -1256,6 +1166,11 @@
     {
       "champion": "poppy",
       "augment": "Cruelty",
+      "tier": "S"
+    },
+    {
+      "champion": "poppy",
+      "augment": "Guilty Pleasure",
       "tier": "S"
     },
     {
@@ -1270,12 +1185,12 @@
     },
     {
       "champion": "pyke",
-      "augment": "Spellsplit",
+      "augment": "Vulnerability",
       "tier": "S"
     },
     {
-      "champion": "quinn",
-      "augment": "Chain Reaction",
+      "champion": "qiyana",
+      "augment": "Vulnerability",
       "tier": "S"
     },
     {
@@ -1284,13 +1199,8 @@
       "tier": "S"
     },
     {
-      "champion": "rakan",
-      "augment": "Chain Reaction",
-      "tier": "S"
-    },
-    {
-      "champion": "rakan",
-      "augment": "Double Defense",
+      "champion": "quinn",
+      "augment": "Vulnerability",
       "tier": "S"
     },
     {
@@ -1299,8 +1209,13 @@
       "tier": "S"
     },
     {
-      "champion": "rammus",
-      "augment": "Chain Reaction",
+      "champion": "rakan",
+      "augment": "Multishot",
+      "tier": "S"
+    },
+    {
+      "champion": "rakan",
+      "augment": "Rejuvenation",
       "tier": "S"
     },
     {
@@ -1311,6 +1226,11 @@
     {
       "champion": "rammus",
       "augment": "Cruelty",
+      "tier": "S"
+    },
+    {
+      "champion": "rammus",
+      "augment": "Guilty Pleasure",
       "tier": "S"
     },
     {
@@ -1320,17 +1240,12 @@
     },
     {
       "champion": "reksai",
-      "augment": "Biggest Snowball Ever",
-      "tier": "S"
-    },
-    {
-      "champion": "reksai",
       "augment": "Blade Waltz",
       "tier": "S"
     },
     {
-      "champion": "rell",
-      "augment": "Chain Reaction",
+      "champion": "reksai",
+      "augment": "Dashing",
       "tier": "S"
     },
     {
@@ -1344,8 +1259,8 @@
       "tier": "S"
     },
     {
-      "champion": "renata",
-      "augment": "Double Defense",
+      "champion": "rell",
+      "augment": "Guilty Pleasure",
       "tier": "S"
     },
     {
@@ -1359,13 +1274,18 @@
       "tier": "S"
     },
     {
-      "champion": "renekton",
-      "augment": "Double Defense",
+      "champion": "renata",
+      "augment": "Multishot",
       "tier": "S"
     },
     {
       "champion": "renekton",
       "augment": "Rejuvenation",
+      "tier": "S"
+    },
+    {
+      "champion": "renekton",
+      "augment": "Vulnerability",
       "tier": "S"
     },
     {
@@ -1384,18 +1304,13 @@
       "tier": "S"
     },
     {
-      "champion": "riven",
-      "augment": "Chain Reaction",
-      "tier": "S"
-    },
-    {
-      "champion": "rumble",
-      "augment": "Double Defense",
-      "tier": "S"
-    },
-    {
       "champion": "rumble",
       "augment": "Firebrand",
+      "tier": "S"
+    },
+    {
+      "champion": "rumble",
+      "augment": "Icathia's Fall",
       "tier": "S"
     },
     {
@@ -1410,17 +1325,12 @@
     },
     {
       "champion": "ryze",
-      "augment": "Biggest Snowball Ever",
-      "tier": "S"
-    },
-    {
-      "champion": "ryze",
       "augment": "Bread And Butter",
       "tier": "S"
     },
     {
-      "champion": "sejuani",
-      "augment": "Chain Reaction",
+      "champion": "ryze",
+      "augment": "Bread and Cheese",
       "tier": "S"
     },
     {
@@ -1434,18 +1344,13 @@
       "tier": "S"
     },
     {
-      "champion": "senna",
-      "augment": "Double Defense",
+      "champion": "sejuani",
+      "augment": "From Downtown",
       "tier": "S"
     },
     {
       "champion": "senna",
       "augment": "Rejuvenation",
-      "tier": "S"
-    },
-    {
-      "champion": "seraphine",
-      "augment": "Double Defense",
       "tier": "S"
     },
     {
@@ -1459,8 +1364,8 @@
       "tier": "S"
     },
     {
-      "champion": "sett",
-      "augment": "Double Defense",
+      "champion": "seraphine",
+      "augment": "Rejuvenation",
       "tier": "S"
     },
     {
@@ -1480,17 +1385,12 @@
     },
     {
       "champion": "shaco",
-      "augment": "Dual Wield",
+      "augment": "Double Tap",
       "tier": "S"
     },
     {
       "champion": "shen",
       "augment": "Jeweled Gauntlet",
-      "tier": "S"
-    },
-    {
-      "champion": "shyvana",
-      "augment": "Double Defense",
       "tier": "S"
     },
     {
@@ -1504,8 +1404,8 @@
       "tier": "S"
     },
     {
-      "champion": "singed",
-      "augment": "Chain Reaction",
+      "champion": "shyvana",
+      "augment": "Rejuvenation",
       "tier": "S"
     },
     {
@@ -1515,32 +1415,27 @@
     },
     {
       "champion": "singed",
+      "augment": "Icathia's Fall",
+      "tier": "S"
+    },
+    {
+      "champion": "singed",
       "augment": "Infernal Conduit",
       "tier": "S"
     },
     {
       "champion": "sion",
-      "augment": "Chain Reaction",
-      "tier": "S"
-    },
-    {
-      "champion": "sion",
-      "augment": "Double Defense",
-      "tier": "S"
-    },
-    {
-      "champion": "sion",
       "augment": "Rejuvenation",
       "tier": "S"
     },
     {
       "champion": "skarner",
-      "augment": "Double Defense",
+      "augment": "Rejuvenation",
       "tier": "S"
     },
     {
       "champion": "skarner",
-      "augment": "Rejuvenation",
+      "augment": "Vulnerability",
       "tier": "S"
     },
     {
@@ -1560,22 +1455,12 @@
     },
     {
       "champion": "sona",
-      "augment": "Double Defense",
-      "tier": "S"
-    },
-    {
-      "champion": "sona",
       "augment": "Jeweled Gauntlet",
       "tier": "S"
     },
     {
       "champion": "sona",
       "augment": "Rejuvenation",
-      "tier": "S"
-    },
-    {
-      "champion": "soraka",
-      "augment": "Double Defense",
       "tier": "S"
     },
     {
@@ -1600,12 +1485,7 @@
     },
     {
       "champion": "swain",
-      "augment": "Spellsplit",
-      "tier": "S"
-    },
-    {
-      "champion": "sylas",
-      "augment": "Double Defense",
+      "augment": "Vulnerability",
       "tier": "S"
     },
     {
@@ -1619,8 +1499,8 @@
       "tier": "S"
     },
     {
-      "champion": "syndra",
-      "augment": "Chain Reaction",
+      "champion": "sylas",
+      "augment": "Rejuvenation",
       "tier": "S"
     },
     {
@@ -1635,11 +1515,6 @@
     },
     {
       "champion": "tahmkench",
-      "augment": "Chain Reaction",
-      "tier": "S"
-    },
-    {
-      "champion": "tahmkench",
       "augment": "Courage of the Colossus",
       "tier": "S"
     },
@@ -1649,8 +1524,8 @@
       "tier": "S"
     },
     {
-      "champion": "taliyah",
-      "augment": "Chain Reaction",
+      "champion": "tahmkench",
+      "augment": "From Downtown",
       "tier": "S"
     },
     {
@@ -1661,6 +1536,11 @@
     {
       "champion": "taliyah",
       "augment": "Cruelty",
+      "tier": "S"
+    },
+    {
+      "champion": "taliyah",
+      "augment": "From Downtown",
       "tier": "S"
     },
     {
@@ -1669,8 +1549,8 @@
       "tier": "S"
     },
     {
-      "champion": "taric",
-      "augment": "Double Defense",
+      "champion": "talon",
+      "augment": "Vulnerability",
       "tier": "S"
     },
     {
@@ -1684,8 +1564,18 @@
       "tier": "S"
     },
     {
+      "champion": "taric",
+      "augment": "Searing Dawn",
+      "tier": "S"
+    },
+    {
       "champion": "teemo",
       "augment": "Firebrand",
+      "tier": "S"
+    },
+    {
+      "champion": "teemo",
+      "augment": "Icathia's Fall",
       "tier": "S"
     },
     {
@@ -1694,23 +1584,18 @@
       "tier": "S"
     },
     {
-      "champion": "teemo",
+      "champion": "thresh",
+      "augment": "From Downtown",
+      "tier": "S"
+    },
+    {
+      "champion": "thresh",
       "augment": "Jeweled Gauntlet",
       "tier": "S"
     },
     {
       "champion": "thresh",
-      "augment": "Chain Reaction",
-      "tier": "S"
-    },
-    {
-      "champion": "thresh",
-      "augment": "Double Defense",
-      "tier": "S"
-    },
-    {
-      "champion": "thresh",
-      "augment": "From Downtown",
+      "augment": "Multishot",
       "tier": "S"
     },
     {
@@ -1719,13 +1604,8 @@
       "tier": "S"
     },
     {
-      "champion": "trundle",
-      "augment": "Chain Reaction",
-      "tier": "S"
-    },
-    {
-      "champion": "trundle",
-      "augment": "Double Defense",
+      "champion": "tristana",
+      "augment": "Vulnerability",
       "tier": "S"
     },
     {
@@ -1734,8 +1614,13 @@
       "tier": "S"
     },
     {
-      "champion": "tryndamere",
-      "augment": "Double Defense",
+      "champion": "trundle",
+      "augment": "Master of Duality",
+      "tier": "S"
+    },
+    {
+      "champion": "trundle",
+      "augment": "Rejuvenation",
       "tier": "S"
     },
     {
@@ -1749,13 +1634,13 @@
       "tier": "S"
     },
     {
-      "champion": "twistedfate",
-      "augment": "Back To Basics",
+      "champion": "tryndamere",
+      "augment": "Vulnerability",
       "tier": "S"
     },
     {
       "champion": "twistedfate",
-      "augment": "Biggest Snowball Ever",
+      "augment": "Back To Basics",
       "tier": "S"
     },
     {
@@ -1764,8 +1649,13 @@
       "tier": "S"
     },
     {
-      "champion": "udyr",
-      "augment": "Double Defense",
+      "champion": "twistedfate",
+      "augment": "Bread and Cheese",
+      "tier": "S"
+    },
+    {
+      "champion": "twitch",
+      "augment": "Vulnerability",
       "tier": "S"
     },
     {
@@ -1780,12 +1670,12 @@
     },
     {
       "champion": "urgot",
-      "augment": "Chain Reaction",
+      "augment": "Deft",
       "tier": "S"
     },
     {
       "champion": "urgot",
-      "augment": "Deft",
+      "augment": "Double Tap",
       "tier": "S"
     },
     {
@@ -1800,12 +1690,7 @@
     },
     {
       "champion": "varus",
-      "augment": "Double Defense",
-      "tier": "S"
-    },
-    {
-      "champion": "vayne",
-      "augment": "Chain Reaction",
+      "augment": "Double Tap",
       "tier": "S"
     },
     {
@@ -1826,11 +1711,6 @@
     {
       "champion": "velkoz",
       "augment": "Back To Basics",
-      "tier": "S"
-    },
-    {
-      "champion": "velkoz",
-      "augment": "Biggest Snowball Ever",
       "tier": "S"
     },
     {
@@ -1839,8 +1719,8 @@
       "tier": "S"
     },
     {
-      "champion": "vex",
-      "augment": "Double Defense",
+      "champion": "velkoz",
+      "augment": "Bread and Cheese",
       "tier": "S"
     },
     {
@@ -1851,6 +1731,11 @@
     {
       "champion": "vex",
       "augment": "Multishot",
+      "tier": "S"
+    },
+    {
+      "champion": "vex",
+      "augment": "Rejuvenation",
       "tier": "S"
     },
     {
@@ -1860,27 +1745,17 @@
     },
     {
       "champion": "vi",
-      "augment": "Biggest Snowball Ever",
+      "augment": "Dashing",
       "tier": "S"
     },
     {
       "champion": "vi",
-      "augment": "Chain Reaction",
-      "tier": "S"
-    },
-    {
-      "champion": "viego",
-      "augment": "Double Defense",
+      "augment": "Mad Scientist",
       "tier": "S"
     },
     {
       "champion": "viego",
       "augment": "Rejuvenation",
-      "tier": "S"
-    },
-    {
-      "champion": "viktor",
-      "augment": "Double Defense",
       "tier": "S"
     },
     {
@@ -1894,8 +1769,8 @@
       "tier": "S"
     },
     {
-      "champion": "vladimir",
-      "augment": "Double Defense",
+      "champion": "viktor",
+      "augment": "Rejuvenation",
       "tier": "S"
     },
     {
@@ -1909,18 +1784,13 @@
       "tier": "S"
     },
     {
-      "champion": "volibear",
-      "augment": "Double Defense",
+      "champion": "vladimir",
+      "augment": "Rejuvenation",
       "tier": "S"
     },
     {
       "champion": "volibear",
       "augment": "Rejuvenation",
-      "tier": "S"
-    },
-    {
-      "champion": "warwick",
-      "augment": "Double Defense",
       "tier": "S"
     },
     {
@@ -1950,22 +1820,17 @@
     },
     {
       "champion": "xinzhao",
-      "augment": "Chain Reaction",
-      "tier": "S"
-    },
-    {
-      "champion": "xinzhao",
-      "augment": "Double Defense",
-      "tier": "S"
-    },
-    {
-      "champion": "xinzhao",
       "augment": "From Downtown",
       "tier": "S"
     },
     {
-      "champion": "yasuo",
-      "augment": "Chain Reaction",
+      "champion": "xinzhao",
+      "augment": "Jeweled Gauntlet",
+      "tier": "S"
+    },
+    {
+      "champion": "xinzhao",
+      "augment": "Multishot",
       "tier": "S"
     },
     {
@@ -1979,13 +1844,8 @@
       "tier": "S"
     },
     {
-      "champion": "yone",
-      "augment": "Chain Reaction",
-      "tier": "S"
-    },
-    {
-      "champion": "yone",
-      "augment": "Double Defense",
+      "champion": "yasuo",
+      "augment": "Tank It Or Leave It",
       "tier": "S"
     },
     {
@@ -1994,8 +1854,13 @@
       "tier": "S"
     },
     {
-      "champion": "yorick",
-      "augment": "Double Defense",
+      "champion": "yone",
+      "augment": "Rejuvenation",
+      "tier": "S"
+    },
+    {
+      "champion": "yone",
+      "augment": "Searing Dawn",
       "tier": "S"
     },
     {
@@ -2009,13 +1874,13 @@
       "tier": "S"
     },
     {
-      "champion": "yuumi",
-      "augment": "Back To Basics",
+      "champion": "yunara",
+      "augment": "Vulnerability",
       "tier": "S"
     },
     {
       "champion": "yuumi",
-      "augment": "Biggest Snowball Ever",
+      "augment": "Back To Basics",
       "tier": "S"
     },
     {
@@ -2024,18 +1889,18 @@
       "tier": "S"
     },
     {
-      "champion": "zaahen",
-      "augment": "Chain Reaction",
-      "tier": "S"
-    },
-    {
-      "champion": "zaahen",
-      "augment": "Double Defense",
+      "champion": "yuumi",
+      "augment": "Bread and Cheese",
       "tier": "S"
     },
     {
       "champion": "zaahen",
       "augment": "Rejuvenation",
+      "tier": "S"
+    },
+    {
+      "champion": "zaahen",
+      "augment": "Vulnerability",
       "tier": "S"
     },
     {
@@ -2050,12 +1915,7 @@
     },
     {
       "champion": "zac",
-      "augment": "Ravenous Bind",
-      "tier": "S"
-    },
-    {
-      "champion": "ziggs",
-      "augment": "Chain Reaction",
+      "augment": "Guilty Pleasure",
       "tier": "S"
     },
     {

@@ -531,3 +531,56 @@ Commands run:
 | `npx eslint src scripts` | PASS (exit 0, no output) |
 | `npm run build` | PASS (Next.js build completed) |
 | `(cd overlay && npm run build)` | SKIPPED; Step 6 did not touch overlay code or overlay data-sync inputs. |
+
+## Step 7 — Pipeline integration + reconciliation (codex)
+
+Date: 2026-06-23 (Asia/Taipei)
+
+Pipeline wiring:
+
+- `scripts/update-data.sh` now runs the augment truth path in this order before assemble: CDragon base catalog -> wiki augment feed -> arammayhem champion/win-rate feed -> patch notes / CDragon hotfix snapshot -> tombstones -> `scripts/assemble_augments.py`.
+- CDragon base fetch runs via `scripts/scrape_mayhem_augments_cdragon.py --base-catalog-only` before downstream augment mutation. If that fetch fails, `update-data.sh` prints an abort message and exits before assemble/pool/combo regeneration. The base catalog writer fetches all inputs before writing, so a failed CDragon fetch keeps the last committed base/artifacts rather than emitting a partial catalog.
+- `scripts/assemble_augments.py` is now idempotent for reruns from an already-assembled catalog: derived `flags.lifecycle=removed` is not treated as tombstone evidence, and existing CDragon rows with `augmentId` remain registry-backed even before an identity-map alias exists.
+
+Offerable invariant:
+
+- Offerable is exactly `availability.status=confirmed_live`.
+- Current counts after a no-key full refresh: `confirmed_live=139`, `candidate_registry_present=28`, `disabled=4`, `removed=25`, `unverified_legacy=64`, `conflict=0`.
+- `flags.lifecycle` now matches the invariant: `active=139`, `removed=121`, `added=0`.
+- `data/internal/pool-rules.json` carries `availability.offerable=139` and `availability.non_offerable=121`; there is no `availability_overrides` block.
+- `data/internal/combos.json` has 5622 rows and 0 rows referencing non-offerable augments.
+
+Consumer/test reconciliation:
+
+- `data-integrity`: combo rows now assert `availability.status === "confirmed_live"`; the 26.12 breaker test now records Jeweled Gauntlet and Vulnerability as confirmed live, Slow and Steady as candidate/non-offerable, and legacy-only rows as `unverified_legacy`.
+- `pool-orchestrator`: Layer 1 reads resolved availability first and excludes non-offerable rows with exact reasons such as `candidate_registry_present`, `disabled`, `removed`, and `unverified_legacy`.
+- `decision-engine`: rarity priors and offered candidate evaluation no longer use observed-live rescue rules; confirmed-live augments rank directly.
+- Step 6 authority guard was tightened, not weakened: `candidate_registry_present` is now explicitly non-live for lifecycle consistency.
+- Overlay scoring twins were updated with the same pool and decision predicate to preserve cross-parity.
+
+Observed-live handling:
+
+- Retired the downstream observed-live override path rather than wiring it as a resolver signal in Step 7.
+- Deleted `scripts/apply_live_mechanism_overrides.py` and `data/curated/live-mechanism-overrides.json`.
+- Removed generated Jeweled Gauntlet override flags and pool-rule overrides; `jeweled-gauntlet` is `confirmed_live` directly from CDragon+wiki.
+- Added hotfix-feed cleanup/filtering so old `bug_mechanism` mechanism events do not remain in internal/public generated hotfix data.
+- Backlog: if observed-live returns, it should feed the resolver as a Phase 2 / Step 8 signal, not as a downstream pool override.
+
+Public boundary:
+
+- `scripts/export_public_catalog.py` strips internal augment fields from public data, including `win_rate`, `provenance`, `availability`, `signals`, `dataValues`, `calculations`, `wikiNotes`, `wikiAvailabilityNotes`, `wikiFetchedAt`, CDragon internals, and legacy catalog markers.
+- Public pool rules now publish empty lifecycle/rule maps and no availability map.
+- Boundary check after export: 0 forbidden internal keys in public augments, items, pool rules, and hotfixes.
+
+Commands run:
+
+| Command | Result |
+| --- | --- |
+| `python3 scripts/test_assemble_augments.py` | PASS (11 tests) |
+| `env -u CLASSIFIER_URL -u CLASSIFIER_MODEL -u GROQ_API_KEY npm_config_cache=/private/tmp/mayhem-npm-cache npm run update-data` | PASS; no API key; deterministic fallback kept unresolved augment classifications; final counts 139 / 28 / 4 / 25 / 64 / 0 |
+| `npm test` | PASS (28 files, 257 tests) |
+| `npx eslint src scripts` | PASS (exit 0, no output) |
+| `npm run build` | PASS (Next.js build completed) |
+| `python3 scripts/export_public_catalog.py` | PASS |
+| `npm test -- src/lib/__tests__/public-data-boundary.test.ts` | PASS (1 file, 4 tests) |
+| `(cd overlay && npm run build)` | PASS (sync-data, `tsc`, and Vite build completed) |

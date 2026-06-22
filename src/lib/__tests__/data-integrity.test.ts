@@ -43,30 +43,17 @@ describe("data integrity", () => {
   test("combo rows only reference currently offerable augments", () => {
     const augmentBySlug = new Map(augmentsData.augments.map((augment) => [augment.slug, augment]));
     const augmentByName = new Map(augmentsData.augments.map((augment) => [augment.name, augment]));
-    const disabled = new Set(poolRules.disabled);
-    const observedLive = new Set(
-      Object.keys(
-        (poolRules as unknown as {
-          availability_overrides?: { observed_live?: Record<string, unknown> };
-        }).availability_overrides?.observed_live ?? {},
-      ),
-    );
 
     for (const combo of combosData.combos) {
       const augment = "augmentSlug" in combo && typeof combo.augmentSlug === "string"
         ? augmentBySlug.get(combo.augmentSlug)
         : augmentByName.get(combo.augment);
-      const isObservedLive = augment ? observedLive.has(augment.slug) : false;
 
       expect(augment, `${combo.champion}:${combo.augment} missing augment`).toBeTruthy();
       expect(
-        augment?.flags?.lifecycle === "removed" && !isObservedLive,
-        `${combo.champion}:${combo.augment} references removed augment`,
-      ).toBe(false);
-      expect(
-        disabled.has(augment?.slug ?? "") || disabled.has(augment?.name ?? ""),
-        `${combo.champion}:${combo.augment} references disabled augment`,
-      ).toBe(false);
+        augment?.availability?.status,
+        `${combo.champion}:${combo.augment} references non-offerable augment`,
+      ).toBe("confirmed_live");
     }
   });
 
@@ -113,42 +100,56 @@ describe("data integrity", () => {
     }
   });
 
-  test("26.12 breaker re-verification: three breakers retired, five live", () => {
-    // Empirical record against live arammayhem curation (data-availability,
-    // 2026-06-12 page redesign): slow-and-steady, jeweled-gauntlet, and
-    // vulnerability are retired in 26.12. All eight keep their breaker flag
-    // (historical truth); lifecycle gates retired ones out of pools.
+  test("26.12 breaker re-verification follows resolved availability truth", () => {
+    // CDragon+wiki is now the availability truth. Jeweled Gauntlet and
+    // Vulnerability are confirmed live; Slow and Steady is registry-only and
+    // therefore non-offerable. All eight keep their historical breaker flag.
     // Curation note: stackosaurusrex was evaluated and rejected as a ninth
     // breaker — "% more stacks" is a quantitative amplifier, not a rewrite.
     const find = (slug: string) => augmentsData.augments.find((a) => a.slug === slug);
 
-    for (const slug of ["slow-and-steady", "jeweled-gauntlet", "vulnerability"]) {
-      expect(find(slug)?.flags.lifecycle, `${slug} expected removed in 26.12`).toBe("removed");
+    for (const slug of ["jeweled-gauntlet", "vulnerability"]) {
+      const augment = find(slug);
+      expect(augment?.availability?.status, `${slug} expected confirmed live`).toBe("confirmed_live");
+      expect(augment?.flags.lifecycle, `${slug} expected active lifecycle`).toBe("active");
+      expect(augment?.flags.system_breaker, `${slug} keeps breaker flag`).toBe(true);
     }
+
+    const slowAndSteady = find("slow-and-steady");
+    expect(slowAndSteady?.availability?.status).toBe("candidate_registry_present");
+    expect(slowAndSteady?.flags.lifecycle).toBe("removed");
+    expect(slowAndSteady?.flags.system_breaker).toBe(true);
+
     for (const slug of [
       "draw-your-sword", "master-of-duality",
       "mystic-punch", "tap-dancer", "marksmage",
     ]) {
-      expect(find(slug)?.flags.lifecycle, `${slug} expected active in 26.12`).toBe("active");
+      const augment = find(slug);
+      expect(augment?.availability?.status, `${slug} expected confirmed live`).toBe("confirmed_live");
+      expect(augment?.flags.lifecycle, `${slug} expected active in 26.12`).toBe("active");
+      expect(augment?.flags.system_breaker, `${slug} keeps breaker flag`).toBe(true);
     }
   });
 
-  test("Jeweled Gauntlet keeps a visible observed-live mechanism override", () => {
+  test("Jeweled Gauntlet is live directly and has no downstream observed-live override", () => {
     const jeweled = augmentsData.augments.find((a) => a.slug === "jeweled-gauntlet") as
-      | { flags?: { lifecycle?: string; availability_override?: string } }
+      | { availability?: { status?: string }; flags?: { lifecycle?: string; availability_override?: string } }
       | undefined;
     const rules = poolRules as unknown as {
-      availability_overrides?: {
-        observed_live?: Record<string, { status?: string; label?: string }>;
-      };
+      availability_overrides?: unknown;
     };
 
-    expect(jeweled?.flags?.lifecycle).toBe("removed");
-    expect(jeweled?.flags?.availability_override).toBe("bug_mechanism");
-    expect(rules.availability_overrides?.observed_live?.["jeweled-gauntlet"]).toMatchObject({
-      status: "bug_mechanism",
-      label: "BUG/MECHANISM",
-    });
+    expect(jeweled?.availability?.status).toBe("confirmed_live");
+    expect(jeweled?.flags?.lifecycle).toBe("active");
+    expect(jeweled?.flags?.availability_override).toBeUndefined();
+    expect(rules.availability_overrides).toBeUndefined();
+  });
+
+  test("legacy-only rows are unverified legacy and non-offerable", () => {
+    const legacy = augmentsData.augments.find((augment) => augment.slug === "infinite-recursion");
+
+    expect(legacy?.availability?.status).toBe("unverified_legacy");
+    expect(legacy?.flags.lifecycle).toBe("removed");
   });
 
   test("CommunityDragon Mayhem rarity snapshot reaches engine augment data", () => {

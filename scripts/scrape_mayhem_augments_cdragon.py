@@ -615,6 +615,36 @@ def load_json(path: Path) -> dict | None:
         return None
 
 
+def retire_observed_mechanism_events() -> None:
+    """Remove retired downstream observed-live events from the hotfix feed."""
+
+    hotfixes = load_json(HOTFIX_PATH)
+    if not hotfixes:
+        return
+
+    changed = False
+    events = []
+    for event in hotfixes.get("events", []):
+        changes = [
+            change for change in event.get("changes", [])
+            if change.get("type") != "mechanism" and change.get("status") != "bug_mechanism"
+        ]
+        if len(changes) != len(event.get("changes", [])):
+            changed = True
+        if changes:
+            events.append({**event, "changes": changes})
+
+    if not changed:
+        return
+
+    hotfixes["events"] = events
+    HOTFIX_PATH.write_text(
+        json.dumps(hotfixes, ensure_ascii=False, indent=2) + "\n",
+        encoding="utf-8",
+    )
+    print("  Retired observed-live mechanism events from mayhem-hotfixes.json")
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument(
@@ -682,6 +712,8 @@ def main() -> None:
 
     if args.base_catalog:
         write_base_catalog()
+
+    retire_observed_mechanism_events()
 
 
 if __name__ == "__main__":

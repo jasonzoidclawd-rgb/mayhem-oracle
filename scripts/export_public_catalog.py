@@ -78,6 +78,18 @@ def build_combo_teaser(combos: list[dict]) -> list[dict]:
     return teaser
 
 
+def build_public_hotfixes(hotfixes: dict) -> dict:
+    events = []
+    for event in hotfixes.get("events", []):
+        changes = [
+            change for change in event.get("changes", [])
+            if change.get("type") != "mechanism" and change.get("status") != "bug_mechanism"
+        ]
+        if changes:
+            events.append({**event, "changes": changes})
+    return {**hotfixes, "events": events}
+
+
 def export_public_catalog(
     internal_dir: Path = INTERNAL_DATA_DIR,
     public_dir: Path = PUBLIC_DATA_DIR,
@@ -91,6 +103,22 @@ def export_public_catalog(
         "oracleScore",
         "modelWeights",
         "scoreBreakdown",
+        "availability",
+        "signals",
+        "provenance",
+        "dataValues",
+        "calculations",
+        "wikiNotes",
+        "wikiAvailabilityNotes",
+        "wikiFetchedAt",
+        "cdragon",
+        "cdragonIcon",
+        "cdragonRarity",
+        "canonicalTooltip",
+        "effectText",
+        "effectTextByLocale",
+        "definitionPlaceholder",
+        "legacyCatalogRow",
     }
     write_sanitized_json(
         internal_dir / "augments.json",
@@ -119,12 +147,15 @@ def export_public_catalog(
     pool_rules = read_json(internal_dir / "pool-rules.json")
     for field in ("disabled", "mutually_exclusive", "item_exclusions", "ally_exclusions"):
         pool_rules[field] = []
+    pool_rules["lifecycle"] = {"added": {}, "removed": {}}
+    pool_rules.pop("availability", None)
+    pool_rules.pop("availability_overrides", None)
     write_json(public_dir / "pool-rules.json", pool_rules)
 
     # Hotfix feed (public-safe: localized names, rarity, change type only).
     hotfixes = internal_dir / "mayhem-hotfixes.json"
     if hotfixes.exists():
-        copy_json(hotfixes, public_dir / "mayhem-hotfixes.json")
+        write_json(public_dir / "mayhem-hotfixes.json", build_public_hotfixes(read_json(hotfixes)))
 
 
 def main() -> None:

@@ -50,6 +50,7 @@ function augment(
     wikiDescription?: string;
     set?: string;
     wikiSet?: string;
+    availabilityStatus?: string;
   } = {},
 ) {
   return {
@@ -62,6 +63,7 @@ function augment(
     kit_tags: options.kitTags ?? [],
     set: options.set,
     wikiSet: options.wikiSet,
+    availability: options.availabilityStatus ? { status: options.availabilityStatus } : undefined,
     flags: {
       lifecycle: "active",
       system_breaker: options.systemBreaker ?? false,
@@ -107,27 +109,13 @@ describe("decision grade contract", () => {
 });
 
 describe("evaluateDecision contract", () => {
-  test("observed-live mechanism augments are ranked instead of hard-excluded as removed", () => {
+  test("confirmed-live system breaker augments are ranked without an observed-live override", () => {
     const jeweled = augment("jeweled-gauntlet", 56, {
       rarity: "gold",
       kitTags: ["ability"],
       systemBreaker: true,
+      availabilityStatus: "confirmed_live",
     });
-    jeweled.flags.lifecycle = "removed";
-    const poolRules = {
-      ...EMPTY_POOL_RULES,
-      lifecycle: { added: {}, removed: { "jeweled-gauntlet": "26.12" } },
-      availability_overrides: {
-        observed_live: {
-          "jeweled-gauntlet": {
-            status: "bug_mechanism",
-            observed_at: "2026-06-20",
-            source: "player-observed-live-game",
-            label: "BUG/MECHANISM",
-          },
-        },
-      },
-    } as unknown as PoolRules;
 
     const result = evaluateDecision(
       {
@@ -137,7 +125,7 @@ describe("evaluateDecision contract", () => {
       data([
         jeweled,
         augment("gold-baseline", 50, { kitTags: ["ability"] }),
-      ], { poolRules }),
+      ]),
       DEFAULT_MODEL_CONFIG,
     );
 

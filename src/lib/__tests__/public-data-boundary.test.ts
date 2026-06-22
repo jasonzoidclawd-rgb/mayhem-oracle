@@ -48,6 +48,9 @@ describe("public data boundary", () => {
       mutually_exclusive: unknown[];
       item_exclusions: unknown[];
       ally_exclusions: unknown[];
+      lifecycle?: { added?: Record<string, unknown>; removed?: Record<string, unknown> };
+      availability?: unknown;
+      availability_overrides?: unknown;
     };
     const publicItems = readJson("public/data/items.json");
     const publicAugments = readJson("public/data/augments.json");
@@ -59,6 +62,22 @@ describe("public data boundary", () => {
       "scoreBreakdown",
       "computedPool",
       "championPools",
+      "availability",
+      "signals",
+      "provenance",
+      "dataValues",
+      "calculations",
+      "wikiNotes",
+      "wikiAvailabilityNotes",
+      "wikiFetchedAt",
+      "cdragon",
+      "cdragonIcon",
+      "cdragonRarity",
+      "canonicalTooltip",
+      "effectText",
+      "effectTextByLocale",
+      "definitionPlaceholder",
+      "legacyCatalogRow",
     ]);
 
     // Freemium teaser: a small slice of S-tier "strong combos" is published
@@ -85,6 +104,9 @@ describe("public data boundary", () => {
     expect(publicPoolRules.mutually_exclusive).toEqual([]);
     expect(publicPoolRules.item_exclusions).toEqual([]);
     expect(publicPoolRules.ally_exclusions).toEqual([]);
+    expect(publicPoolRules.lifecycle).toEqual({ added: {}, removed: {} });
+    expect(publicPoolRules.availability).toBeUndefined();
+    expect(publicPoolRules.availability_overrides).toBeUndefined();
     expect(collectForbiddenKeys(publicItems, forbiddenKeys)).toEqual([]);
     expect(collectForbiddenKeys(publicAugments, forbiddenKeys)).toEqual([]);
   });

@@ -20,7 +20,7 @@ trap 'rm -f "$AUGMENT_SNAPSHOT"' EXIT
 
 step() { printf "\n\033[1;36m▶ %s\033[0m\n" "$1"; }
 
-step "1/12  snapshot augment classifications"
+step "1/15  snapshot augment classifications"
 AUGMENT_SNAPSHOT="$AUGMENT_SNAPSHOT" python3 - <<'PY'
 import json
 import os
@@ -39,43 +39,49 @@ Path(os.environ["AUGMENT_SNAPSHOT"]).write_text(
 print(f"Snapshotted {sum(1 for v in snapshot.values() if v.get('kit_tags'))} classified augments")
 PY
 
-step "2/12  arammayhem.com  →  internal champions/augment win-rate feed/combos/meta"
+step "2/15  CommunityDragon  →  authoritative augment base catalog"
+if ! python3 scripts/scrape_mayhem_augments_cdragon.py --base-catalog-only; then
+  printf "\n\033[1;31m✗ CDragon augment base fetch failed; keeping committed augment artifacts and aborting rebuild.\033[0m\n" >&2
+  exit 1
+fi
+
+step "3/15  LoL Wiki augment feed  →  internal augment-wiki-feed/reports"
+python3 scripts/augment_wiki_feed.py
+
+step "4/15  arammayhem.com  →  internal champions/augment win-rate feed/combos/meta"
 python3 scripts/scrape_arammayhem.py
 
-step "3/12  CommunityDragon  →  internal abilities/items"
+step "5/15  CommunityDragon  →  internal abilities/items"
 python3 scripts/scrape_community_dragon.py
 
-step "4/12  Data Dragon base stats  →  internal champions.json (enrich)"
+step "6/15  Data Dragon base stats  →  internal champions.json (enrich)"
 python3 scripts/scrape_base_stats.py
 
-step "5/12  CommunityDragon ability stats  →  internal abilities.json (enrich)"
+step "7/15  CommunityDragon ability stats  →  internal abilities.json (enrich)"
 npx --yes tsx scripts/scrape_ability_stats.ts
 
-step "6/12  LoL Wiki augment descriptions  →  internal augments.json (enrich)"
-python3 scripts/scrape_wiki_augments.py
-
-step "7/12  LoL Wiki item passives  →  internal items.json (enrich)"
+step "8/15  LoL Wiki item passives  →  internal items.json (enrich)"
 python3 scripts/enrich_wiki.py
 
-step "7b/12 Data Dragon  →  localized champion, ability & item names (enrich)"
+step "8b/15 Data Dragon  →  localized champion, ability & item names (enrich)"
 python3 scripts/enrich_locale_names.py
 
-step "8/12  patch notes  →  internal patch-notes.json"
+step "9/15  patch notes  →  internal patch-notes.json"
 python3 scripts/scrape_patch_notes.py
 
 # Numbered patch notes miss server-side hotfixes ("不停機更新"). CommunityDragon
 # mirrors live game data first-hand; diffing its Mayhem augment snapshot detects
 # hotfixes (changes at an unchanged patch number).
-step "8b/12 CommunityDragon  →  Mayhem augment snapshot + hotfix detection"
+step "10/15 CommunityDragon  →  Mayhem augment snapshot + hotfix detection"
 python3 scripts/scrape_mayhem_augments_cdragon.py
 
-step "8c/12 CommunityDragon hotfix snapshot  →  internal augments.json"
-python3 scripts/apply_cdragon_mayhem_augments.py
-
-step "8d/12 patch-note removed augment tombstones  →  internal augments.json"
+step "11/15 patch-note removed augment tombstones  →  augment resolver input"
 python3 scripts/apply_removed_augment_tombstones.py
 
-step "9/12  restore augment classifications"
+step "12/15 assemble augments.json  →  resolved availability"
+python3 scripts/assemble_augments.py
+
+step "13/15  restore augment classifications"
 AUGMENT_SNAPSHOT="$AUGMENT_SNAPSHOT" python3 - <<'PY'
 import json
 import os
@@ -94,7 +100,16 @@ for aug in data.get("augments", []):
     if saved.get("set") and not aug.get("set"):
         aug["set"] = saved["set"]
     if "flags" in saved:
-        saved_flags = {k: v for k, v in saved["flags"].items() if k != "lifecycle"}
+        saved_flags = {
+            k: v for k, v in saved["flags"].items()
+            if k not in {
+                "lifecycle",
+                "availability_override",
+                "availability_label",
+                "availability_source",
+                "availability_observed_at",
+            }
+        }
         aug.setdefault("flags", {}).update(saved_flags)
     restored += 1
 path.write_text(json.dumps(data, ensure_ascii=False, indent=2), encoding="utf-8")
@@ -102,7 +117,7 @@ missing = sum(1 for a in data["augments"] if not a.get("kit_tags"))
 print(f"Restored {restored} augments. Unclassified or universal: {missing}")
 PY
 
-step "10/12  classify internal champions/augments  →  kit_tags"
+step "14/15  classify internal champions/augments  →  kit_tags"
 # --allow-partial: a handful of champions that fail deterministic derivation (and
 # can't reach the optional LLM in CI) must NOT abort the whole refresh — an
 # untagged champion degrades to a universal augment pool, which is far better
@@ -138,16 +153,13 @@ if champion_tagged == 0 or augment_tagged == 0 or missing_breakers:
     )
 PY
 
-step "11/12  generate internal pool rules  →  pool-rules.json"
+step "14b/15  generate internal pool rules  →  pool-rules.json"
 python3 scripts/generate_pool_rules.py
 
-step "11a/12 apply observed live mechanism overrides"
-python3 scripts/apply_live_mechanism_overrides.py
-
-step "11b/12 generate current internal combos  →  combos.json"
+step "14c/15 generate current internal combos  →  combos.json"
 npx --yes tsx scripts/generate_internal_combos.ts
 
-step "12/12  export sanitized public catalogs"
+step "15/15  export sanitized public catalogs"
 python3 scripts/export_public_catalog.py
 
 NEW_PATCH=$(python3 -c "import json; print(json.load(open('$META'))['patch'])")

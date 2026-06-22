@@ -64,7 +64,7 @@ class AvailabilityResolverTests(unittest.TestCase):
         )
 
         self.assertEqual(availability["status"], "candidate_registry_present")
-        self.assertEqual(lifecycle_for_availability(availability["status"]), "added")
+        self.assertEqual(lifecycle_for_availability(availability["status"]), "removed")
         self.assertTrue(availability["signals"]["cdragon_registry"]["present"])
         self.assertFalse(availability["signals"]["wiki"]["present"])
 
@@ -166,6 +166,90 @@ class AvailabilityResolverTests(unittest.TestCase):
         self.assertEqual(availability["signals"]["wiki"]["status"], "live")
         self.assertEqual(availability["signals"]["tencent"]["status"], "removed")
 
+    def test_derived_removed_lifecycle_is_not_tombstone_evidence_on_rerun(self):
+        existing = {
+            "patch": "26.12",
+            "scraped_at": "old",
+            "augments": [
+                {
+                    "slug": "legacy-only",
+                    "name": "Legacy Only",
+                    "rarity": "gold",
+                    "win_rate": None,
+                    "icon": "https://example.test/legacy.png",
+                    "name_zh_CN": "legacy zh-CN",
+                    "name_zh_TW": "legacy zh-TW",
+                    "name_ja": "legacy ja",
+                    "name_ko": "legacy ko",
+                    "kit_tags": [],
+                    "flags": {"system_breaker": False, "lifecycle": "removed"},
+                    "availability": {
+                        "status": "unverified_legacy",
+                        "signals": {
+                            "tombstone": {"removed": False},
+                        },
+                    },
+                    "type": "standalone",
+                }
+            ],
+        }
+
+        output = assemble_catalog(
+            existing_catalog=existing,
+            base_catalog={"generated_at": "2026-06-23T00:00:00+00:00", "augments": []},
+            wiki_feed={"augments": {}},
+            winrate_feed={"win_rates": {}},
+            identity_map={"mappings": []},
+        )
+
+        row = output["augments"][0]
+        self.assertEqual(row["availability"]["status"], "unverified_legacy")
+        self.assertFalse(row["availability"]["signals"]["tombstone"]["removed"])
+        self.assertEqual(row["flags"]["lifecycle"], "removed")
+
+    def test_existing_cdragon_row_without_identity_mapping_stays_registry_backed_on_rerun(self):
+        existing = {
+            "patch": "26.12",
+            "scraped_at": "old",
+            "augments": [
+                {
+                    "augmentId": "ARAM_Earthwake",
+                    "slug": "earthwake",
+                    "name": "Earthwake",
+                    "rarity": "prismatic",
+                    "win_rate": None,
+                    "icon": "https://example.test/earthwake.png",
+                    "name_zh_CN": "earthwake zh-CN",
+                    "name_zh_TW": "earthwake zh-TW",
+                    "name_ja": "earthwake ja",
+                    "name_ko": "earthwake ko",
+                    "kit_tags": [],
+                    "flags": {"system_breaker": False, "lifecycle": "active"},
+                    "availability": {"status": "confirmed_live", "signals": {"tombstone": {"removed": False}}},
+                    "type": "standalone",
+                }
+            ],
+        }
+        base_catalog = {
+            "generated_at": "2026-06-23T00:00:00+00:00",
+            "augments": [base_row("ARAM_Earthwake", "Earthwake")],
+        }
+        wiki_feed = {"augments": {"ARAM_Earthwake": {"wikiDescription": "A current wiki row."}}}
+
+        output = assemble_catalog(
+            existing_catalog=existing,
+            base_catalog=base_catalog,
+            wiki_feed=wiki_feed,
+            winrate_feed={"win_rates": {}},
+            identity_map={"mappings": []},
+        )
+
+        row = output["augments"][0]
+        self.assertEqual(row["augmentId"], "ARAM_Earthwake")
+        self.assertEqual(row["availability"]["status"], "confirmed_live")
+        self.assertEqual(row["flags"]["lifecycle"], "active")
+        self.assertFalse(row.get("legacyCatalogRow", False))
+
 
 class AssembleCatalogTests(unittest.TestCase):
     def test_assembles_with_source_precedence_and_preserved_curated_fields(self):
@@ -189,6 +273,9 @@ class AssembleCatalogTests(unittest.TestCase):
                         "system_breaker": True,
                         "lifecycle": "active",
                         "availability_override": "bug_mechanism",
+                        "availability_label": "BUG/MECHANISM",
+                        "availability_source": "player-observed-live-game",
+                        "availability_observed_at": "2026-06-20",
                     },
                     "type": "standalone",
                 }
@@ -243,7 +330,10 @@ class AssembleCatalogTests(unittest.TestCase):
         self.assertEqual(row["win_rate"], 55.5)
         self.assertEqual(row["kit_tags"], ["ability"])
         self.assertTrue(row["flags"]["system_breaker"])
-        self.assertEqual(row["flags"]["availability_override"], "bug_mechanism")
+        self.assertNotIn("availability_override", row["flags"])
+        self.assertNotIn("availability_label", row["flags"])
+        self.assertNotIn("availability_source", row["flags"])
+        self.assertNotIn("availability_observed_at", row["flags"])
         self.assertEqual(row["type"], "standalone")
         self.assertEqual(row["availability"]["status"], "confirmed_live")
         self.assertEqual(row["flags"]["lifecycle"], "active")

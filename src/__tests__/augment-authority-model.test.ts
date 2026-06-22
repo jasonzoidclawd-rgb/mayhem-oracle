@@ -18,8 +18,14 @@ const CDRAGON_REQUIRED_STATUSES = new Set([
   "candidate_registry_present",
   "disabled",
 ]);
-const NON_LIVE_STATUSES = new Set(["disabled", "removed", "unverified_legacy", "conflict"]);
-const LIVE_LIFECYCLES = new Set(["active", "added"]);
+const NON_LIVE_STATUSES = new Set([
+  "candidate_registry_present",
+  "disabled",
+  "removed",
+  "unverified_legacy",
+  "conflict",
+]);
+const OFFERABLE_LIFECYCLE = "active";
 const LIVE_SIGNAL_STATUSES = new Set(["live", "observed_live", "observed_bug_mechanism"]);
 
 type AvailabilityStatus = (typeof VALID_AVAILABILITY_STATUSES)[number];
@@ -195,17 +201,21 @@ describe("augment authority model guards", () => {
       const status = augment.availability?.status;
       return validStatusSet.has(status ?? "") ? [] : [`${augment.slug}:${status ?? "(missing)"}`];
     });
-    const nonLiveLifecycleViolations = augments.flatMap((augment) => {
+    const lifecycleViolations = augments.flatMap((augment) => {
       const status = augment.availability?.status;
       const placeholder = augment.definitionPlaceholder || augment.name === "???";
       const nonLive = NON_LIVE_STATUSES.has(status ?? "") || placeholder;
-      return nonLive && LIVE_LIFECYCLES.has(augment.flags?.lifecycle ?? "")
-        ? [`${augment.slug}:${status ?? "(missing)"}:${augment.flags?.lifecycle ?? "(missing)"}`]
-        : [];
+      if (status === "confirmed_live" && augment.flags?.lifecycle !== OFFERABLE_LIFECYCLE) {
+        return [`${augment.slug}:confirmed_live:${augment.flags?.lifecycle ?? "(missing)"}`];
+      }
+      if (nonLive && augment.flags?.lifecycle !== "removed") {
+        return [`${augment.slug}:${status ?? "(missing)"}:${augment.flags?.lifecycle ?? "(missing)"}`];
+      }
+      return [];
     });
 
     expect(invalidStatuses).toEqual([]);
-    expect(nonLiveLifecycleViolations).toEqual([]);
+    expect(lifecycleViolations).toEqual([]);
   });
 
   test("keeps win_rate isolated to the arammayhem feed and allows nulls", () => {

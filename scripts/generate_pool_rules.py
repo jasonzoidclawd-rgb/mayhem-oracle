@@ -7,7 +7,7 @@ champion augment pool composition:
   - item_exclusions: augment not offered if player owns specific item
   - mutually_exclusive: augment pairs that can never both be offered
   - ally_exclusions: chain-heal/buff sources that skip targets with specific augment
-  - disabled: augments explicitly removed from pool
+  - disabled / availability: augments explicitly non-offerable under resolved availability
   - lifecycle: augments added or removed per patch
 
 Writes: data/internal/pool-rules.json (current-patch snapshot)
@@ -229,20 +229,43 @@ def main():
 
     rules = extract_rules(patches, aug_map, item_map)
 
-    # 26.12+: scraped flags.lifecycle (live arammayhem badges) is the authoritative
-    # lifecycle source; patch-note regexes remain as fallback for older patches.
+    # 26.12+: resolved availability is the offerability source. The legacy
+    # lifecycle map remains as a compatibility fallback for older consumers, but
+    # the availability map carries the exact non-offerable reason.
+    disabled = set(rules["disabled"])
+    offerable: dict[str, str] = {}
+    non_offerable: dict[str, str] = {}
     for aug in augments:
+        slug = aug["slug"]
+        status = ((aug.get("availability") or {}).get("status") or "").strip()
+        if status == "confirmed_live":
+            offerable[slug] = status
+        elif status:
+            non_offerable[slug] = status
+            if status == "disabled":
+                disabled.add(slug)
+            rules["lifecycle"]["removed"].setdefault(slug, current_patch)
+        elif aug.get("name") == "???":
+            non_offerable[slug] = "placeholder"
+            rules["lifecycle"]["removed"].setdefault(slug, current_patch)
+
         lifecycle = (aug.get("flags") or {}).get("lifecycle")
         if lifecycle == "removed":
-            rules["lifecycle"]["removed"].setdefault(aug["slug"], current_patch)
+            rules["lifecycle"]["removed"].setdefault(slug, current_patch)
         elif lifecycle == "added":
-            rules["lifecycle"]["added"].setdefault(aug["slug"], current_patch)
+            rules["lifecycle"]["added"].setdefault(slug, current_patch)
+    rules["disabled"] = sorted(disabled)
     rules["lifecycle"]["added"] = dict(sorted(rules["lifecycle"]["added"].items()))
     rules["lifecycle"]["removed"] = dict(sorted(rules["lifecycle"]["removed"].items()))
+    availability = {
+        "offerable": dict(sorted(offerable.items())),
+        "non_offerable": dict(sorted(non_offerable.items())),
+    }
 
     output = {
         "patch":      current_patch,
         "scraped_at": scraped_at,
+        "availability": availability,
         **rules,
     }
 
@@ -252,6 +275,8 @@ def main():
     print(f"  ally_exclusions:    {len(rules['ally_exclusions'])}")
     print(f"  disabled:           {len(rules['disabled'])}")
     print(f"  lifecycle.added:    {len(rules['lifecycle']['added'])}")
+    print(f"  availability.offerable:     {len(availability['offerable'])}")
+    print(f"  availability.non_offerable: {len(availability['non_offerable'])}")
 
     print("\nItem exclusions:")
     for r in rules["item_exclusions"]:

@@ -40,8 +40,6 @@ AVAILABILITY_STATUSES = {
     "removed",
     "unverified_legacy",
     "conflict",
-    "observed_live",
-    "observed_bug_mechanism",
 }
 
 AVAILABILITY_STATUS_ORDER = [
@@ -229,10 +227,8 @@ def lifecycle_for_availability(status: str, *, definition_placeholder: bool = Fa
 
     if status not in AVAILABILITY_STATUSES:
         raise ValueError(f"Unsupported availability.status: {status}")
-    if status in {"confirmed_live", "observed_live", "observed_bug_mechanism"}:
+    if status == "confirmed_live":
         return "active"
-    if status == "candidate_registry_present" and not definition_placeholder:
-        return "added"
     if status in {"removed", "disabled", "unverified_legacy", "conflict", "candidate_registry_present"}:
         return "removed"
     raise ValueError(f"Unsupported availability.status: {status}")
@@ -284,7 +280,14 @@ def removed_patch_note_slugs(patch_notes: dict) -> set[str]:
 
 def preserved_flags(existing_row: dict | None, lifecycle: str) -> dict:
     existing_flags = copy.deepcopy((existing_row or {}).get("flags") or {})
-    existing_flags.pop("lifecycle", None)
+    for key in (
+        "lifecycle",
+        "availability_override",
+        "availability_label",
+        "availability_source",
+        "availability_observed_at",
+    ):
+        existing_flags.pop(key, None)
     existing_flags["system_breaker"] = bool(existing_flags.get("system_breaker"))
     existing_flags["lifecycle"] = lifecycle
     return existing_flags
@@ -295,7 +298,14 @@ def existing_removed_is_tombstone(existing_row: dict | None, slug: str, removed_
 
     if slug in removed_slugs:
         return True
-    if not existing_row or existing_row.get("flags", {}).get("lifecycle") != "removed":
+    if not existing_row:
+        return False
+    existing_availability = existing_row.get("availability") if isinstance(existing_row.get("availability"), dict) else None
+    existing_signals = existing_availability.get("signals") if isinstance(existing_availability, dict) else None
+    existing_tombstone = existing_signals.get("tombstone") if isinstance(existing_signals, dict) else None
+    if isinstance(existing_tombstone, dict) and isinstance(existing_tombstone.get("removed"), bool):
+        return existing_tombstone["removed"]
+    if existing_row.get("flags", {}).get("lifecycle") != "removed":
         return False
     notes = (wiki_row or {}).get("wikiAvailabilityNotes") or []
     return not currently_disabled(notes if isinstance(notes, list) else [])
@@ -433,9 +443,19 @@ def assemble_catalog(
 
     for existing_row in existing_catalog.get("augments", []):
         slug = existing_row.get("slug") or slugify(existing_row.get("name", ""))
-        augment_id = slug_to_augment_id.get(slug)
+        mapped_augment_id = slug_to_augment_id.get(slug)
+        existing_augment_id = existing_row.get("augmentId")
+        augment_id = mapped_augment_id
+        if not augment_id and existing_augment_id in base_by_id:
+            augment_id = existing_augment_id
         base = base_by_id.get(augment_id) if augment_id else None
-        is_primary = bool(base and primary_slug_by_id.get(augment_id) == slug)
+        primary_slug = primary_slug_by_id.get(augment_id) if augment_id else None
+        is_primary = bool(
+            base and (
+                primary_slug == slug or
+                (primary_slug is None and existing_augment_id == augment_id)
+            )
+        )
         wiki_row = wiki_by_id.get(augment_id) if augment_id else None
         has_win_rate = bool(augment_id in win_rates)
         win_rate = win_rates.get(augment_id) if augment_id else None

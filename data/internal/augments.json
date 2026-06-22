@@ -1,6 +1,6 @@
 {
   "patch": "26.12",
-  "scraped_at": "2026-06-22T16:29:17.869170+00:00",
+  "scraped_at": "2026-06-22T21:43:35.300206+00:00",
   "schemaVersion": "augment-truth-step5",
   "sources": {
     "definition": "data/internal/augment-base-catalog.json",
@@ -112,8 +112,8 @@
       "definitionPlaceholder": false,
       "wikiNotes": [],
       "wikiAvailabilityNotes": [],
-      "wikiFetchedAt": "2026-06-22T17:54:33+00:00",
-      "win_rate": 67.13,
+      "wikiFetchedAt": "2026-06-22T21:43:36+00:00",
+      "win_rate": 67.29,
       "kit_tags": [
         "tank"
       ],
@@ -136,7 +136,7 @@
             "availabilityNotes": [],
             "hasDescription": true,
             "hasNotes": false,
-            "wikiFetchedAt": "2026-06-22T17:54:33+00:00"
+            "wikiFetchedAt": "2026-06-22T21:43:36+00:00"
           },
           "tencent": {
             "status": null
@@ -238,7 +238,7 @@
       "augmentId": "ARAM_Quest_SteelYourHeart",
       "slug": "quest-steel-your-heart",
       "name": "Steel Your Heart",
-      "displayName": "Quest: Steel Your Heart",
+      "displayName": "Steel Your Heart",
       "rarity": "gold",
       "cdragonRarity": "gold",
       "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/quest_steelyourheart_large.png",
@@ -323,8 +323,8 @@
       "definitionPlaceholder": false,
       "wikiNotes": [],
       "wikiAvailabilityNotes": [],
-      "wikiFetchedAt": "2026-06-22T17:54:33+00:00",
-      "win_rate": 63.34,
+      "wikiFetchedAt": "2026-06-22T21:43:36+00:00",
+      "win_rate": 63.31,
       "kit_tags": [
         "tank"
       ],
@@ -347,7 +347,7 @@
             "availabilityNotes": [],
             "hasDescription": true,
             "hasNotes": false,
-            "wikiFetchedAt": "2026-06-22T17:54:33+00:00"
+            "wikiFetchedAt": "2026-06-22T21:43:36+00:00"
           },
           "tencent": {
             "status": null
@@ -537,8 +537,8 @@
       "definitionPlaceholder": false,
       "wikiNotes": [],
       "wikiAvailabilityNotes": [],
-      "wikiFetchedAt": "2026-06-22T17:54:33+00:00",
-      "win_rate": 63.29,
+      "wikiFetchedAt": "2026-06-22T21:43:36+00:00",
+      "win_rate": 63.46,
       "kit_tags": [
         "attack",
         "on_hit"
@@ -562,7 +562,7 @@
             "availabilityNotes": [],
             "hasDescription": true,
             "hasNotes": false,
-            "wikiFetchedAt": "2026-06-22T17:54:33+00:00"
+            "wikiFetchedAt": "2026-06-22T21:43:36+00:00"
           },
           "tencent": {
             "status": null
@@ -712,8 +712,8 @@
       "definitionPlaceholder": false,
       "wikiNotes": [],
       "wikiAvailabilityNotes": [],
-      "wikiFetchedAt": "2026-06-22T17:54:33+00:00",
-      "win_rate": 63.09,
+      "wikiFetchedAt": "2026-06-22T21:43:36+00:00",
+      "win_rate": 62.77,
       "kit_tags": [
         "attack",
         "crit"
@@ -737,7 +737,7 @@
             "availabilityNotes": [],
             "hasDescription": true,
             "hasNotes": false,
-            "wikiFetchedAt": "2026-06-22T17:54:33+00:00"
+            "wikiFetchedAt": "2026-06-22T21:43:36+00:00"
           },
           "tencent": {
             "status": null
@@ -982,8 +982,8 @@
         "This augment is only available for ranged champions.",
         "This augment is not offered if the champion has built Runaan's Hurricane."
       ],
-      "wikiFetchedAt": "2026-06-22T17:54:33+00:00",
-      "win_rate": 61.67,
+      "wikiFetchedAt": "2026-06-22T21:43:36+00:00",
+      "win_rate": 61.47,
       "kit_tags": [
         "attack",
         "movement",
@@ -1011,7 +1011,7 @@
             ],
             "hasDescription": true,
             "hasNotes": false,
-            "wikiFetchedAt": "2026-06-22T17:54:33+00:00"
+            "wikiFetchedAt": "2026-06-22T21:43:36+00:00"
           },
           "tencent": {
             "status": null
@@ -1160,7 +1160,7 @@
           },
           "existing_catalog": {
             "slug": "infinite-recursion",
-            "lifecycle": "active"
+            "lifecycle": "removed"
           },
           "resolution": {
             "liveSources": [],
@@ -1233,7 +1233,7 @@
           },
           "existing_catalog": {
             "slug": "warlock-juicebox",
-            "lifecycle": "added"
+            "lifecycle": "removed"
           },
           "resolution": {
             "liveSources": [],
@@ -1309,8 +1309,8 @@
       "definitionPlaceholder": false,
       "wikiNotes": [],
       "wikiAvailabilityNotes": [],
-      "wikiFetchedAt": "2026-06-22T17:54:33+00:00",
-      "win_rate": 60.88,
+      "wikiFetchedAt": "2026-06-22T21:43:36+00:00",
+      "win_rate": 61.08,
       "kit_tags": [
         "attack",
         "ability",
@@ -1335,7 +1335,7 @@
             "availabilityNotes": [],
             "hasDescription": true,
             "hasNotes": false,
-            "wikiFetchedAt": "2026-06-22T17:54:33+00:00"
+            "wikiFetchedAt": "2026-06-22T21:43:36+00:00"
           },
           "tencent": {
             "status": null
@@ -1549,8 +1549,8 @@
       "definitionPlaceholder": false,
       "wikiNotes": [],
       "wikiAvailabilityNotes": [],
-      "wikiFetchedAt": "2026-06-22T17:54:33+00:00",
-      "win_rate": 60.79,
+      "wikiFetchedAt": "2026-06-22T21:43:36+00:00",
+      "win_rate": 60.54,
       "kit_tags": [
         "ability"
       ],
@@ -1573,7 +1573,7 @@
             "availabilityNotes": [],
             "hasDescription": true,
             "hasNotes": false,
-            "wikiFetchedAt": "2026-06-22T17:54:33+00:00"
+            "wikiFetchedAt": "2026-06-22T21:43:36+00:00"
           },
           "tencent": {
             "status": null
@@ -1721,7 +1721,7 @@
           },
           "existing_catalog": {
             "slug": "pressure-cooker",
-            "lifecycle": "added"
+            "lifecycle": "removed"
           },
           "resolution": {
             "liveSources": [],
@@ -1749,7 +1749,7 @@
       "augmentId": "ARAM_Quest_VoidImmolation",
       "slug": "void-immolation",
       "name": "Icathia's Fall",
-      "displayName": "Void Immolation",
+      "displayName": "Icathia's Fall",
       "rarity": "prismatic",
       "cdragonRarity": "prismatic",
       "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/kiwi/augments/icons/quest_voidimmolation_small.png",
@@ -1797,8 +1797,8 @@
       "definitionPlaceholder": false,
       "wikiNotes": [],
       "wikiAvailabilityNotes": [],
-      "wikiFetchedAt": "2026-06-22T17:54:33+00:00",
-      "win_rate": 60.2,
+      "wikiFetchedAt": "2026-06-22T21:43:36+00:00",
+      "win_rate": 60.27,
       "kit_tags": [
         "ability",
         "dot"
@@ -1822,7 +1822,7 @@
             "availabilityNotes": [],
             "hasDescription": true,
             "hasNotes": false,
-            "wikiFetchedAt": "2026-06-22T17:54:33+00:00"
+            "wikiFetchedAt": "2026-06-22T21:43:36+00:00"
           },
           "tencent": {
             "status": null
@@ -2028,8 +2028,8 @@
       "definitionPlaceholder": false,
       "wikiNotes": [],
       "wikiAvailabilityNotes": [],
-      "wikiFetchedAt": "2026-06-22T17:54:33+00:00",
-      "win_rate": 60.03,
+      "wikiFetchedAt": "2026-06-22T21:43:36+00:00",
+      "win_rate": 60.16,
       "kit_tags": [
         "tank"
       ],
@@ -2052,7 +2052,7 @@
             "availabilityNotes": [],
             "hasDescription": true,
             "hasNotes": false,
-            "wikiFetchedAt": "2026-06-22T17:54:33+00:00"
+            "wikiFetchedAt": "2026-06-22T21:43:36+00:00"
           },
           "tencent": {
             "status": null
@@ -2199,7 +2199,7 @@
           },
           "existing_catalog": {
             "slug": "combusting-interest",
-            "lifecycle": "added"
+            "lifecycle": "removed"
           },
           "resolution": {
             "liveSources": [],
@@ -2348,8 +2348,8 @@
       "definitionPlaceholder": false,
       "wikiNotes": [],
       "wikiAvailabilityNotes": [],
-      "wikiFetchedAt": "2026-06-22T17:54:33+00:00",
-      "win_rate": 59.36,
+      "wikiFetchedAt": "2026-06-22T21:43:36+00:00",
+      "win_rate": 59.33,
       "kit_tags": [
         "ability",
         "dot"
@@ -2373,7 +2373,7 @@
             "availabilityNotes": [],
             "hasDescription": true,
             "hasNotes": false,
-            "wikiFetchedAt": "2026-06-22T17:54:33+00:00"
+            "wikiFetchedAt": "2026-06-22T21:43:36+00:00"
           },
           "tencent": {
             "status": null
@@ -2552,8 +2552,8 @@
       "definitionPlaceholder": false,
       "wikiNotes": [],
       "wikiAvailabilityNotes": [],
-      "wikiFetchedAt": "2026-06-22T17:54:33+00:00",
-      "win_rate": 59.16,
+      "wikiFetchedAt": "2026-06-22T21:43:36+00:00",
+      "win_rate": 59.0,
       "kit_tags": [
         "ability",
         "haste"
@@ -2577,7 +2577,7 @@
             "availabilityNotes": [],
             "hasDescription": true,
             "hasNotes": false,
-            "wikiFetchedAt": "2026-06-22T17:54:33+00:00"
+            "wikiFetchedAt": "2026-06-22T21:43:36+00:00"
           },
           "tencent": {
             "status": null
@@ -2793,8 +2793,8 @@
       "definitionPlaceholder": false,
       "wikiNotes": [],
       "wikiAvailabilityNotes": [],
-      "wikiFetchedAt": "2026-06-22T17:54:33+00:00",
-      "win_rate": 58.84,
+      "wikiFetchedAt": "2026-06-22T21:43:36+00:00",
+      "win_rate": 58.93,
       "kit_tags": [
         "attack",
         "on_hit"
@@ -2818,7 +2818,7 @@
             "availabilityNotes": [],
             "hasDescription": true,
             "hasNotes": false,
-            "wikiFetchedAt": "2026-06-22T17:54:33+00:00"
+            "wikiFetchedAt": "2026-06-22T21:43:36+00:00"
           },
           "tencent": {
             "status": null
@@ -3052,8 +3052,8 @@
       "definitionPlaceholder": false,
       "wikiNotes": [],
       "wikiAvailabilityNotes": [],
-      "wikiFetchedAt": "2026-06-22T17:54:33+00:00",
-      "win_rate": 58.78,
+      "wikiFetchedAt": "2026-06-22T21:43:36+00:00",
+      "win_rate": 58.81,
       "kit_tags": [
         "ability",
         "dot"
@@ -3077,7 +3077,7 @@
             "availabilityNotes": [],
             "hasDescription": true,
             "hasNotes": false,
-            "wikiFetchedAt": "2026-06-22T17:54:33+00:00"
+            "wikiFetchedAt": "2026-06-22T21:43:36+00:00"
           },
           "tencent": {
             "status": null
@@ -3227,8 +3227,8 @@
       "definitionPlaceholder": false,
       "wikiNotes": [],
       "wikiAvailabilityNotes": [],
-      "wikiFetchedAt": "2026-06-22T17:54:33+00:00",
-      "win_rate": 58.07,
+      "wikiFetchedAt": "2026-06-22T21:43:36+00:00",
+      "win_rate": 58.2,
       "kit_tags": [
         "dot"
       ],
@@ -3251,7 +3251,7 @@
             "availabilityNotes": [],
             "hasDescription": true,
             "hasNotes": false,
-            "wikiFetchedAt": "2026-06-22T17:54:33+00:00"
+            "wikiFetchedAt": "2026-06-22T21:43:36+00:00"
           },
           "tencent": {
             "status": null
@@ -3420,8 +3420,8 @@
       "definitionPlaceholder": false,
       "wikiNotes": [],
       "wikiAvailabilityNotes": [],
-      "wikiFetchedAt": "2026-06-22T17:54:33+00:00",
-      "win_rate": 57.89,
+      "wikiFetchedAt": "2026-06-22T21:43:36+00:00",
+      "win_rate": 57.81,
       "kit_tags": [
         "heal_shield"
       ],
@@ -3444,7 +3444,7 @@
             "availabilityNotes": [],
             "hasDescription": true,
             "hasNotes": false,
-            "wikiFetchedAt": "2026-06-22T17:54:33+00:00"
+            "wikiFetchedAt": "2026-06-22T21:43:36+00:00"
           },
           "tencent": {
             "status": null
@@ -3613,8 +3613,8 @@
       "definitionPlaceholder": false,
       "wikiNotes": [],
       "wikiAvailabilityNotes": [],
-      "wikiFetchedAt": "2026-06-22T17:54:33+00:00",
-      "win_rate": 57.65,
+      "wikiFetchedAt": "2026-06-22T21:43:36+00:00",
+      "win_rate": 57.67,
       "kit_tags": [
         "attack"
       ],
@@ -3637,7 +3637,7 @@
             "availabilityNotes": [],
             "hasDescription": true,
             "hasNotes": false,
-            "wikiFetchedAt": "2026-06-22T17:54:33+00:00"
+            "wikiFetchedAt": "2026-06-22T21:43:36+00:00"
           },
           "tencent": {
             "status": null
@@ -3851,8 +3851,8 @@
       "definitionPlaceholder": false,
       "wikiNotes": [],
       "wikiAvailabilityNotes": [],
-      "wikiFetchedAt": "2026-06-22T17:54:33+00:00",
-      "win_rate": 57.65,
+      "wikiFetchedAt": "2026-06-22T21:43:36+00:00",
+      "win_rate": 57.56,
       "kit_tags": [
         "attack",
         "movement"
@@ -3876,7 +3876,7 @@
             "availabilityNotes": [],
             "hasDescription": true,
             "hasNotes": false,
-            "wikiFetchedAt": "2026-06-22T17:54:33+00:00"
+            "wikiFetchedAt": "2026-06-22T21:43:36+00:00"
           },
           "tencent": {
             "status": null
@@ -4045,8 +4045,8 @@
       "definitionPlaceholder": false,
       "wikiNotes": [],
       "wikiAvailabilityNotes": [],
-      "wikiFetchedAt": "2026-06-22T17:54:33+00:00",
-      "win_rate": 57.3,
+      "wikiFetchedAt": "2026-06-22T21:43:36+00:00",
+      "win_rate": 57.29,
       "kit_tags": [
         "attack"
       ],
@@ -4069,7 +4069,7 @@
             "availabilityNotes": [],
             "hasDescription": true,
             "hasNotes": false,
-            "wikiFetchedAt": "2026-06-22T17:54:33+00:00"
+            "wikiFetchedAt": "2026-06-22T21:43:36+00:00"
           },
           "tencent": {
             "status": null
@@ -4229,8 +4229,8 @@
       "definitionPlaceholder": false,
       "wikiNotes": [],
       "wikiAvailabilityNotes": [],
-      "wikiFetchedAt": "2026-06-22T17:54:33+00:00",
-      "win_rate": 57.13,
+      "wikiFetchedAt": "2026-06-22T21:43:36+00:00",
+      "win_rate": 56.86,
       "kit_tags": [],
       "flags": {
         "system_breaker": false,
@@ -4251,7 +4251,7 @@
             "availabilityNotes": [],
             "hasDescription": true,
             "hasNotes": false,
-            "wikiFetchedAt": "2026-06-22T17:54:33+00:00"
+            "wikiFetchedAt": "2026-06-22T21:43:36+00:00"
           },
           "tencent": {
             "status": null
@@ -4429,8 +4429,8 @@
       "definitionPlaceholder": false,
       "wikiNotes": [],
       "wikiAvailabilityNotes": [],
-      "wikiFetchedAt": "2026-06-22T17:54:33+00:00",
-      "win_rate": 57.06,
+      "wikiFetchedAt": "2026-06-22T21:43:36+00:00",
+      "win_rate": 57.14,
       "kit_tags": [
         "ability",
         "on_hit"
@@ -4454,7 +4454,7 @@
             "availabilityNotes": [],
             "hasDescription": true,
             "hasNotes": false,
-            "wikiFetchedAt": "2026-06-22T17:54:33+00:00"
+            "wikiFetchedAt": "2026-06-22T21:43:36+00:00"
           },
           "tencent": {
             "status": null
@@ -4632,8 +4632,8 @@
       "definitionPlaceholder": false,
       "wikiNotes": [],
       "wikiAvailabilityNotes": [],
-      "wikiFetchedAt": "2026-06-22T17:54:33+00:00",
-      "win_rate": 57.04,
+      "wikiFetchedAt": "2026-06-22T21:43:36+00:00",
+      "win_rate": 57.23,
       "kit_tags": [
         "tank"
       ],
@@ -4656,7 +4656,7 @@
             "availabilityNotes": [],
             "hasDescription": true,
             "hasNotes": false,
-            "wikiFetchedAt": "2026-06-22T17:54:33+00:00"
+            "wikiFetchedAt": "2026-06-22T21:43:36+00:00"
           },
           "tencent": {
             "status": null
@@ -4806,8 +4806,8 @@
       "definitionPlaceholder": false,
       "wikiNotes": [],
       "wikiAvailabilityNotes": [],
-      "wikiFetchedAt": "2026-06-22T17:54:33+00:00",
-      "win_rate": 56.9,
+      "wikiFetchedAt": "2026-06-22T21:43:36+00:00",
+      "win_rate": 56.78,
       "kit_tags": [
         "attack"
       ],
@@ -4830,7 +4830,7 @@
             "availabilityNotes": [],
             "hasDescription": true,
             "hasNotes": false,
-            "wikiFetchedAt": "2026-06-22T17:54:33+00:00"
+            "wikiFetchedAt": "2026-06-22T21:43:36+00:00"
           },
           "tencent": {
             "status": null
@@ -4999,8 +4999,8 @@
       "definitionPlaceholder": false,
       "wikiNotes": [],
       "wikiAvailabilityNotes": [],
-      "wikiFetchedAt": "2026-06-22T17:54:33+00:00",
-      "win_rate": 56.47,
+      "wikiFetchedAt": "2026-06-22T21:43:36+00:00",
+      "win_rate": 56.6,
       "kit_tags": [],
       "flags": {
         "system_breaker": false,
@@ -5021,7 +5021,7 @@
             "availabilityNotes": [],
             "hasDescription": true,
             "hasNotes": false,
-            "wikiFetchedAt": "2026-06-22T17:54:33+00:00"
+            "wikiFetchedAt": "2026-06-22T21:43:36+00:00"
           },
           "tencent": {
             "status": null
@@ -5037,7 +5037,7 @@
           },
           "existing_catalog": {
             "slug": "stackosaurusrex",
-            "lifecycle": "added"
+            "lifecycle": "active"
           },
           "resolution": {
             "liveSources": [
@@ -5172,7 +5172,7 @@
           },
           "existing_catalog": {
             "slug": "twin-fire",
-            "lifecycle": "active"
+            "lifecycle": "removed"
           },
           "resolution": {
             "liveSources": [],
@@ -5248,8 +5248,8 @@
       "definitionPlaceholder": false,
       "wikiNotes": [],
       "wikiAvailabilityNotes": [],
-      "wikiFetchedAt": "2026-06-22T17:54:33+00:00",
-      "win_rate": 56.1,
+      "wikiFetchedAt": "2026-06-22T21:43:36+00:00",
+      "win_rate": 55.37,
       "kit_tags": [
         "heal_shield"
       ],
@@ -5272,7 +5272,7 @@
             "availabilityNotes": [],
             "hasDescription": true,
             "hasNotes": false,
-            "wikiFetchedAt": "2026-06-22T17:54:33+00:00"
+            "wikiFetchedAt": "2026-06-22T21:43:36+00:00"
           },
           "tencent": {
             "status": null
@@ -5288,7 +5288,7 @@
           },
           "existing_catalog": {
             "slug": "spirit-bomb",
-            "lifecycle": "added"
+            "lifecycle": "active"
           },
           "resolution": {
             "liveSources": [
@@ -5432,8 +5432,8 @@
       "definitionPlaceholder": false,
       "wikiNotes": [],
       "wikiAvailabilityNotes": [],
-      "wikiFetchedAt": "2026-06-22T17:54:33+00:00",
-      "win_rate": 56.04,
+      "wikiFetchedAt": "2026-06-22T21:43:36+00:00",
+      "win_rate": 56.0,
       "kit_tags": [
         "heal_shield"
       ],
@@ -5456,7 +5456,7 @@
             "availabilityNotes": [],
             "hasDescription": true,
             "hasNotes": false,
-            "wikiFetchedAt": "2026-06-22T17:54:33+00:00"
+            "wikiFetchedAt": "2026-06-22T21:43:36+00:00"
           },
           "tencent": {
             "status": null
@@ -5653,8 +5653,8 @@
       "definitionPlaceholder": false,
       "wikiNotes": [],
       "wikiAvailabilityNotes": [],
-      "wikiFetchedAt": "2026-06-22T17:54:33+00:00",
-      "win_rate": 55.96,
+      "wikiFetchedAt": "2026-06-22T21:43:36+00:00",
+      "win_rate": 55.88,
       "kit_tags": [
         "attack",
         "ability"
@@ -5678,7 +5678,7 @@
             "availabilityNotes": [],
             "hasDescription": true,
             "hasNotes": false,
-            "wikiFetchedAt": "2026-06-22T17:54:33+00:00"
+            "wikiFetchedAt": "2026-06-22T21:43:36+00:00"
           },
           "tencent": {
             "status": null
@@ -5892,8 +5892,8 @@
       "definitionPlaceholder": false,
       "wikiNotes": [],
       "wikiAvailabilityNotes": [],
-      "wikiFetchedAt": "2026-06-22T17:54:33+00:00",
-      "win_rate": 55.75,
+      "wikiFetchedAt": "2026-06-22T21:43:36+00:00",
+      "win_rate": 55.64,
       "kit_tags": [
         "ability",
         "haste",
@@ -5918,7 +5918,7 @@
             "availabilityNotes": [],
             "hasDescription": true,
             "hasNotes": false,
-            "wikiFetchedAt": "2026-06-22T17:54:33+00:00"
+            "wikiFetchedAt": "2026-06-22T21:43:36+00:00"
           },
           "tencent": {
             "status": null
@@ -6068,8 +6068,8 @@
       "definitionPlaceholder": false,
       "wikiNotes": [],
       "wikiAvailabilityNotes": [],
-      "wikiFetchedAt": "2026-06-22T17:54:33+00:00",
-      "win_rate": 55.67,
+      "wikiFetchedAt": "2026-06-22T21:43:36+00:00",
+      "win_rate": 55.8,
       "kit_tags": [
         "heal_shield",
         "tank"
@@ -6093,7 +6093,7 @@
             "availabilityNotes": [],
             "hasDescription": true,
             "hasNotes": false,
-            "wikiFetchedAt": "2026-06-22T17:54:33+00:00"
+            "wikiFetchedAt": "2026-06-22T21:43:36+00:00"
           },
           "tencent": {
             "status": null
@@ -6243,8 +6243,8 @@
       "definitionPlaceholder": false,
       "wikiNotes": [],
       "wikiAvailabilityNotes": [],
-      "wikiFetchedAt": "2026-06-22T17:54:33+00:00",
-      "win_rate": 55.56,
+      "wikiFetchedAt": "2026-06-22T21:43:36+00:00",
+      "win_rate": 55.54,
       "kit_tags": [],
       "flags": {
         "system_breaker": false,
@@ -6265,7 +6265,7 @@
             "availabilityNotes": [],
             "hasDescription": true,
             "hasNotes": false,
-            "wikiFetchedAt": "2026-06-22T17:54:33+00:00"
+            "wikiFetchedAt": "2026-06-22T21:43:36+00:00"
           },
           "tencent": {
             "status": null
@@ -6281,7 +6281,7 @@
           },
           "existing_catalog": {
             "slug": "high-roller",
-            "lifecycle": "added"
+            "lifecycle": "active"
           },
           "resolution": {
             "liveSources": [
@@ -6415,8 +6415,8 @@
       "definitionPlaceholder": false,
       "wikiNotes": [],
       "wikiAvailabilityNotes": [],
-      "wikiFetchedAt": "2026-06-22T17:54:33+00:00",
-      "win_rate": 55.35,
+      "wikiFetchedAt": "2026-06-22T21:43:36+00:00",
+      "win_rate": 55.47,
       "kit_tags": [
         "heal_shield",
         "movement"
@@ -6440,7 +6440,7 @@
             "availabilityNotes": [],
             "hasDescription": true,
             "hasNotes": false,
-            "wikiFetchedAt": "2026-06-22T17:54:33+00:00"
+            "wikiFetchedAt": "2026-06-22T21:43:36+00:00"
           },
           "tencent": {
             "status": null
@@ -6456,7 +6456,7 @@
           },
           "existing_catalog": {
             "slug": "wee-woo-wee-woo",
-            "lifecycle": "added"
+            "lifecycle": "active"
           },
           "resolution": {
             "liveSources": [
@@ -6618,8 +6618,8 @@
       "definitionPlaceholder": false,
       "wikiNotes": [],
       "wikiAvailabilityNotes": [],
-      "wikiFetchedAt": "2026-06-22T17:54:33+00:00",
-      "win_rate": 55.21,
+      "wikiFetchedAt": "2026-06-22T21:43:36+00:00",
+      "win_rate": 55.02,
       "kit_tags": [
         "attack",
         "haste"
@@ -6643,7 +6643,7 @@
             "availabilityNotes": [],
             "hasDescription": true,
             "hasNotes": false,
-            "wikiFetchedAt": "2026-06-22T17:54:33+00:00"
+            "wikiFetchedAt": "2026-06-22T21:43:36+00:00"
           },
           "tencent": {
             "status": null
@@ -6793,8 +6793,8 @@
       "definitionPlaceholder": false,
       "wikiNotes": [],
       "wikiAvailabilityNotes": [],
-      "wikiFetchedAt": "2026-06-22T17:54:33+00:00",
-      "win_rate": 55.18,
+      "wikiFetchedAt": "2026-06-22T21:43:36+00:00",
+      "win_rate": 54.53,
       "kit_tags": [
         "haste"
       ],
@@ -6817,7 +6817,7 @@
             "availabilityNotes": [],
             "hasDescription": true,
             "hasNotes": false,
-            "wikiFetchedAt": "2026-06-22T17:54:33+00:00"
+            "wikiFetchedAt": "2026-06-22T21:43:36+00:00"
           },
           "tencent": {
             "status": null
@@ -6833,7 +6833,7 @@
           },
           "existing_catalog": {
             "slug": "pursuit-of-haste",
-            "lifecycle": "added"
+            "lifecycle": "active"
           },
           "resolution": {
             "liveSources": [
@@ -6913,7 +6913,7 @@
       "name_zh_TW": "Pursuit of Haste",
       "name_ja": "Pursuit of Haste",
       "name_ko": "Pursuit of Haste",
-      "wikiDescription": "Assigns quests that require you to hit enemy champions with a specific ability a number of times (counts up to 1 hit per champion per cast instance). There are two quest tiers, and completing each tier rewards you with ability haste on the ability.",
+      "wikiDescription": "Assigns quests that require you to hit enemy champions with a specific ability a number of times (counts up to 1 hit per champion per cast instance). There are two quest tiers, and each completed tier rewards you with ability haste on the ability.",
       "wikiRarity": "gold"
     },
     {
@@ -6968,8 +6968,8 @@
       "definitionPlaceholder": false,
       "wikiNotes": [],
       "wikiAvailabilityNotes": [],
-      "wikiFetchedAt": "2026-06-22T17:54:33+00:00",
-      "win_rate": 55.15,
+      "wikiFetchedAt": "2026-06-22T21:43:36+00:00",
+      "win_rate": 55.06,
       "kit_tags": [],
       "flags": {
         "system_breaker": false,
@@ -6990,7 +6990,7 @@
             "availabilityNotes": [],
             "hasDescription": true,
             "hasNotes": false,
-            "wikiFetchedAt": "2026-06-22T17:54:33+00:00"
+            "wikiFetchedAt": "2026-06-22T21:43:36+00:00"
           },
           "tencent": {
             "status": null
@@ -7168,7 +7168,7 @@
       "definitionPlaceholder": false,
       "wikiNotes": [],
       "wikiAvailabilityNotes": [],
-      "wikiFetchedAt": "2026-06-22T17:54:33+00:00",
+      "wikiFetchedAt": "2026-06-22T21:43:36+00:00",
       "win_rate": 55.03,
       "kit_tags": [
         "movement"
@@ -7192,7 +7192,7 @@
             "availabilityNotes": [],
             "hasDescription": true,
             "hasNotes": false,
-            "wikiFetchedAt": "2026-06-22T17:54:33+00:00"
+            "wikiFetchedAt": "2026-06-22T21:43:36+00:00"
           },
           "tencent": {
             "status": null
@@ -7361,8 +7361,8 @@
       "definitionPlaceholder": false,
       "wikiNotes": [],
       "wikiAvailabilityNotes": [],
-      "wikiFetchedAt": "2026-06-22T17:54:33+00:00",
-      "win_rate": 54.91,
+      "wikiFetchedAt": "2026-06-22T21:43:36+00:00",
+      "win_rate": 54.99,
       "kit_tags": [
         "cc"
       ],
@@ -7385,7 +7385,7 @@
             "availabilityNotes": [],
             "hasDescription": true,
             "hasNotes": false,
-            "wikiFetchedAt": "2026-06-22T17:54:33+00:00"
+            "wikiFetchedAt": "2026-06-22T21:43:36+00:00"
           },
           "tencent": {
             "status": null
@@ -7535,7 +7535,7 @@
           },
           "existing_catalog": {
             "slug": "sonata",
-            "lifecycle": "active"
+            "lifecycle": "removed"
           },
           "resolution": {
             "liveSources": [],
@@ -7639,8 +7639,8 @@
       "definitionPlaceholder": false,
       "wikiNotes": [],
       "wikiAvailabilityNotes": [],
-      "wikiFetchedAt": "2026-06-22T17:54:33+00:00",
-      "win_rate": 54.64,
+      "wikiFetchedAt": "2026-06-22T21:43:36+00:00",
+      "win_rate": 54.51,
       "kit_tags": [
         "attack",
         "ability",
@@ -7665,7 +7665,7 @@
             "availabilityNotes": [],
             "hasDescription": true,
             "hasNotes": false,
-            "wikiFetchedAt": "2026-06-22T17:54:33+00:00"
+            "wikiFetchedAt": "2026-06-22T21:43:36+00:00"
           },
           "tencent": {
             "status": null
@@ -7767,7 +7767,7 @@
       "augmentId": "ARAM_Quest_WoogletsWitchcap",
       "slug": "quest-wooglets-witchcap",
       "name": "Wooglet's Witchcap",
-      "displayName": "Quest: Wooglet's Witchcap",
+      "displayName": "Wooglet's Witchcap",
       "rarity": "prismatic",
       "cdragonRarity": "prismatic",
       "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/quest_woogletswitchcap_large.png",
@@ -7825,8 +7825,8 @@
       "definitionPlaceholder": false,
       "wikiNotes": [],
       "wikiAvailabilityNotes": [],
-      "wikiFetchedAt": "2026-06-22T17:54:33+00:00",
-      "win_rate": 54.62,
+      "wikiFetchedAt": "2026-06-22T21:43:36+00:00",
+      "win_rate": 54.44,
       "kit_tags": [],
       "flags": {
         "system_breaker": false,
@@ -7847,7 +7847,7 @@
             "availabilityNotes": [],
             "hasDescription": true,
             "hasNotes": false,
-            "wikiFetchedAt": "2026-06-22T17:54:33+00:00"
+            "wikiFetchedAt": "2026-06-22T21:43:36+00:00"
           },
           "tencent": {
             "status": null
@@ -8017,8 +8017,8 @@
       "definitionPlaceholder": false,
       "wikiNotes": [],
       "wikiAvailabilityNotes": [],
-      "wikiFetchedAt": "2026-06-22T17:54:33+00:00",
-      "win_rate": 54.47,
+      "wikiFetchedAt": "2026-06-22T21:43:36+00:00",
+      "win_rate": 54.32,
       "kit_tags": [
         "ability"
       ],
@@ -8041,7 +8041,7 @@
             "availabilityNotes": [],
             "hasDescription": true,
             "hasNotes": false,
-            "wikiFetchedAt": "2026-06-22T17:54:33+00:00"
+            "wikiFetchedAt": "2026-06-22T21:43:36+00:00"
           },
           "tencent": {
             "status": null
@@ -8228,8 +8228,8 @@
       "definitionPlaceholder": false,
       "wikiNotes": [],
       "wikiAvailabilityNotes": [],
-      "wikiFetchedAt": "2026-06-22T17:54:33+00:00",
-      "win_rate": 54.29,
+      "wikiFetchedAt": "2026-06-22T21:43:36+00:00",
+      "win_rate": 54.14,
       "kit_tags": [
         "ability",
         "haste"
@@ -8253,7 +8253,7 @@
             "availabilityNotes": [],
             "hasDescription": true,
             "hasNotes": false,
-            "wikiFetchedAt": "2026-06-22T17:54:33+00:00"
+            "wikiFetchedAt": "2026-06-22T21:43:36+00:00"
           },
           "tencent": {
             "status": null
@@ -8398,7 +8398,7 @@
           },
           "existing_catalog": {
             "slug": "forged-by-the-master",
-            "lifecycle": "added"
+            "lifecycle": "removed"
           },
           "resolution": {
             "liveSources": [],
@@ -8546,8 +8546,8 @@
       "definitionPlaceholder": false,
       "wikiNotes": [],
       "wikiAvailabilityNotes": [],
-      "wikiFetchedAt": "2026-06-22T17:54:33+00:00",
-      "win_rate": 54.24,
+      "wikiFetchedAt": "2026-06-22T21:43:36+00:00",
+      "win_rate": 54.42,
       "kit_tags": [
         "attack",
         "crit",
@@ -8572,7 +8572,7 @@
             "availabilityNotes": [],
             "hasDescription": true,
             "hasNotes": false,
-            "wikiFetchedAt": "2026-06-22T17:54:33+00:00"
+            "wikiFetchedAt": "2026-06-22T21:43:36+00:00"
           },
           "tencent": {
             "status": null
@@ -8721,7 +8721,7 @@
           },
           "existing_catalog": {
             "slug": "escape-plan",
-            "lifecycle": "active"
+            "lifecycle": "removed"
           },
           "resolution": {
             "liveSources": [],
@@ -8839,8 +8839,8 @@
       "definitionPlaceholder": false,
       "wikiNotes": [],
       "wikiAvailabilityNotes": [],
-      "wikiFetchedAt": "2026-06-22T17:54:33+00:00",
-      "win_rate": 53.89,
+      "wikiFetchedAt": "2026-06-22T21:43:36+00:00",
+      "win_rate": 53.72,
       "kit_tags": [
         "tank",
         "mana"
@@ -8864,7 +8864,7 @@
             "availabilityNotes": [],
             "hasDescription": true,
             "hasNotes": false,
-            "wikiFetchedAt": "2026-06-22T17:54:33+00:00"
+            "wikiFetchedAt": "2026-06-22T21:43:36+00:00"
           },
           "tencent": {
             "status": null
@@ -9054,8 +9054,8 @@
       "definitionPlaceholder": false,
       "wikiNotes": [],
       "wikiAvailabilityNotes": [],
-      "wikiFetchedAt": "2026-06-22T17:54:33+00:00",
-      "win_rate": 53.83,
+      "wikiFetchedAt": "2026-06-22T21:43:36+00:00",
+      "win_rate": 53.77,
       "kit_tags": [
         "attack",
         "movement",
@@ -9080,7 +9080,7 @@
             "availabilityNotes": [],
             "hasDescription": true,
             "hasNotes": false,
-            "wikiFetchedAt": "2026-06-22T17:54:33+00:00"
+            "wikiFetchedAt": "2026-06-22T21:43:36+00:00"
           },
           "tencent": {
             "status": null
@@ -9230,7 +9230,7 @@
           },
           "existing_catalog": {
             "slug": "shrink-engine",
-            "lifecycle": "active"
+            "lifecycle": "removed"
           },
           "resolution": {
             "liveSources": [],
@@ -9304,7 +9304,7 @@
           },
           "existing_catalog": {
             "slug": "tooth-fairy",
-            "lifecycle": "added"
+            "lifecycle": "removed"
           },
           "resolution": {
             "liveSources": [],
@@ -9378,7 +9378,7 @@
           },
           "existing_catalog": {
             "slug": "growth-spurt",
-            "lifecycle": "active"
+            "lifecycle": "removed"
           },
           "resolution": {
             "liveSources": [],
@@ -9502,8 +9502,8 @@
       "definitionPlaceholder": false,
       "wikiNotes": [],
       "wikiAvailabilityNotes": [],
-      "wikiFetchedAt": "2026-06-22T17:54:33+00:00",
-      "win_rate": 53.52,
+      "wikiFetchedAt": "2026-06-22T21:43:36+00:00",
+      "win_rate": 53.37,
       "kit_tags": [
         "attack",
         "ability"
@@ -9527,7 +9527,7 @@
             "availabilityNotes": [],
             "hasDescription": true,
             "hasNotes": false,
-            "wikiFetchedAt": "2026-06-22T17:54:33+00:00"
+            "wikiFetchedAt": "2026-06-22T21:43:36+00:00"
           },
           "tencent": {
             "status": null
@@ -9741,8 +9741,8 @@
       "definitionPlaceholder": false,
       "wikiNotes": [],
       "wikiAvailabilityNotes": [],
-      "wikiFetchedAt": "2026-06-22T17:54:33+00:00",
-      "win_rate": 53.47,
+      "wikiFetchedAt": "2026-06-22T21:43:36+00:00",
+      "win_rate": 53.35,
       "kit_tags": [
         "attack",
         "ability",
@@ -9768,7 +9768,7 @@
             "availabilityNotes": [],
             "hasDescription": true,
             "hasNotes": false,
-            "wikiFetchedAt": "2026-06-22T17:54:33+00:00"
+            "wikiFetchedAt": "2026-06-22T21:43:36+00:00"
           },
           "tencent": {
             "status": null
@@ -9870,7 +9870,7 @@
       "augmentId": "ARAM_LightemUp",
       "slug": "light-em-up",
       "name": "Light 'Em Up!",
-      "displayName": "Light 'em Up!",
+      "displayName": "Light 'Em Up!",
       "rarity": "silver",
       "cdragonRarity": "silver",
       "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/lightemup_large.png",
@@ -9995,8 +9995,8 @@
       "definitionPlaceholder": false,
       "wikiNotes": [],
       "wikiAvailabilityNotes": [],
-      "wikiFetchedAt": "2026-06-22T17:54:33+00:00",
-      "win_rate": 53.45,
+      "wikiFetchedAt": "2026-06-22T21:43:36+00:00",
+      "win_rate": 53.5,
       "kit_tags": [
         "attack",
         "ability",
@@ -10021,7 +10021,7 @@
             "availabilityNotes": [],
             "hasDescription": true,
             "hasNotes": false,
-            "wikiFetchedAt": "2026-06-22T17:54:33+00:00"
+            "wikiFetchedAt": "2026-06-22T21:43:36+00:00"
           },
           "tencent": {
             "status": null
@@ -10171,8 +10171,8 @@
       "definitionPlaceholder": false,
       "wikiNotes": [],
       "wikiAvailabilityNotes": [],
-      "wikiFetchedAt": "2026-06-22T17:54:33+00:00",
-      "win_rate": 53.32,
+      "wikiFetchedAt": "2026-06-22T21:43:36+00:00",
+      "win_rate": 53.23,
       "kit_tags": [
         "ability",
         "mana"
@@ -10196,7 +10196,7 @@
             "availabilityNotes": [],
             "hasDescription": true,
             "hasNotes": false,
-            "wikiFetchedAt": "2026-06-22T17:54:33+00:00"
+            "wikiFetchedAt": "2026-06-22T21:43:36+00:00"
           },
           "tencent": {
             "status": null
@@ -10212,7 +10212,7 @@
           },
           "existing_catalog": {
             "slug": "archmage",
-            "lifecycle": "added"
+            "lifecycle": "active"
           },
           "resolution": {
             "liveSources": [
@@ -10343,7 +10343,7 @@
           },
           "existing_catalog": {
             "slug": "lil-extra-help",
-            "lifecycle": "added"
+            "lifecycle": "removed"
           },
           "resolution": {
             "liveSources": [],
@@ -10449,8 +10449,8 @@
       "definitionPlaceholder": false,
       "wikiNotes": [],
       "wikiAvailabilityNotes": [],
-      "wikiFetchedAt": "2026-06-22T17:54:33+00:00",
-      "win_rate": 53.27,
+      "wikiFetchedAt": "2026-06-22T21:43:36+00:00",
+      "win_rate": 53.2,
       "kit_tags": [
         "movement",
         "haste"
@@ -10474,7 +10474,7 @@
             "availabilityNotes": [],
             "hasDescription": true,
             "hasNotes": false,
-            "wikiFetchedAt": "2026-06-22T17:54:33+00:00"
+            "wikiFetchedAt": "2026-06-22T21:43:36+00:00"
           },
           "tencent": {
             "status": null
@@ -10668,7 +10668,7 @@
       "definitionPlaceholder": false,
       "wikiNotes": [],
       "wikiAvailabilityNotes": [],
-      "wikiFetchedAt": "2026-06-22T17:54:33+00:00",
+      "wikiFetchedAt": "2026-06-22T21:43:36+00:00",
       "win_rate": 53.14,
       "kit_tags": [
         "attack"
@@ -10692,7 +10692,7 @@
             "availabilityNotes": [],
             "hasDescription": true,
             "hasNotes": false,
-            "wikiFetchedAt": "2026-06-22T17:54:33+00:00"
+            "wikiFetchedAt": "2026-06-22T21:43:36+00:00"
           },
           "tencent": {
             "status": null
@@ -10839,7 +10839,7 @@
           },
           "existing_catalog": {
             "slug": "donation",
-            "lifecycle": "active"
+            "lifecycle": "removed"
           },
           "resolution": {
             "liveSources": [],
@@ -10915,8 +10915,8 @@
       "definitionPlaceholder": false,
       "wikiNotes": [],
       "wikiAvailabilityNotes": [],
-      "wikiFetchedAt": "2026-06-22T17:54:33+00:00",
-      "win_rate": 52.98,
+      "wikiFetchedAt": "2026-06-22T21:43:36+00:00",
+      "win_rate": 52.57,
       "kit_tags": [
         "ability",
         "heal_shield"
@@ -10940,7 +10940,7 @@
             "availabilityNotes": [],
             "hasDescription": true,
             "hasNotes": false,
-            "wikiFetchedAt": "2026-06-22T17:54:33+00:00"
+            "wikiFetchedAt": "2026-06-22T21:43:36+00:00"
           },
           "tencent": {
             "status": null
@@ -10956,7 +10956,7 @@
           },
           "existing_catalog": {
             "slug": "siphon",
-            "lifecycle": "added"
+            "lifecycle": "active"
           },
           "resolution": {
             "liveSources": [
@@ -11156,8 +11156,8 @@
       "definitionPlaceholder": false,
       "wikiNotes": [],
       "wikiAvailabilityNotes": [],
-      "wikiFetchedAt": "2026-06-22T17:54:33+00:00",
-      "win_rate": 52.92,
+      "wikiFetchedAt": "2026-06-22T21:43:36+00:00",
+      "win_rate": 52.78,
       "kit_tags": [
         "tank",
         "movement"
@@ -11181,7 +11181,7 @@
             "availabilityNotes": [],
             "hasDescription": true,
             "hasNotes": false,
-            "wikiFetchedAt": "2026-06-22T17:54:33+00:00"
+            "wikiFetchedAt": "2026-06-22T21:43:36+00:00"
           },
           "tencent": {
             "status": null
@@ -11331,8 +11331,8 @@
       "definitionPlaceholder": false,
       "wikiNotes": [],
       "wikiAvailabilityNotes": [],
-      "wikiFetchedAt": "2026-06-22T17:54:33+00:00",
-      "win_rate": 52.9,
+      "wikiFetchedAt": "2026-06-22T21:43:36+00:00",
+      "win_rate": 52.93,
       "kit_tags": [
         "attack"
       ],
@@ -11355,7 +11355,7 @@
             "availabilityNotes": [],
             "hasDescription": true,
             "hasNotes": false,
-            "wikiFetchedAt": "2026-06-22T17:54:33+00:00"
+            "wikiFetchedAt": "2026-06-22T21:43:36+00:00"
           },
           "tencent": {
             "status": null
@@ -11503,7 +11503,7 @@
           },
           "existing_catalog": {
             "slug": "swift-and-safe",
-            "lifecycle": "active"
+            "lifecycle": "removed"
           },
           "resolution": {
             "liveSources": [],
@@ -11579,7 +11579,7 @@
           },
           "existing_catalog": {
             "slug": "soul-eater",
-            "lifecycle": "active"
+            "lifecycle": "removed"
           },
           "resolution": {
             "liveSources": [],
@@ -11683,8 +11683,8 @@
       "definitionPlaceholder": false,
       "wikiNotes": [],
       "wikiAvailabilityNotes": [],
-      "wikiFetchedAt": "2026-06-22T17:54:33+00:00",
-      "win_rate": 52.73,
+      "wikiFetchedAt": "2026-06-22T21:43:36+00:00",
+      "win_rate": 52.64,
       "kit_tags": [
         "movement"
       ],
@@ -11707,7 +11707,7 @@
             "availabilityNotes": [],
             "hasDescription": true,
             "hasNotes": false,
-            "wikiFetchedAt": "2026-06-22T17:54:33+00:00"
+            "wikiFetchedAt": "2026-06-22T21:43:36+00:00"
           },
           "tencent": {
             "status": null
@@ -11886,8 +11886,8 @@
       "definitionPlaceholder": false,
       "wikiNotes": [],
       "wikiAvailabilityNotes": [],
-      "wikiFetchedAt": "2026-06-22T17:54:33+00:00",
-      "win_rate": 52.67,
+      "wikiFetchedAt": "2026-06-22T21:43:36+00:00",
+      "win_rate": 52.53,
       "kit_tags": [
         "attack",
         "ability"
@@ -11911,7 +11911,7 @@
             "availabilityNotes": [],
             "hasDescription": true,
             "hasNotes": false,
-            "wikiFetchedAt": "2026-06-22T17:54:33+00:00"
+            "wikiFetchedAt": "2026-06-22T21:43:36+00:00"
           },
           "tencent": {
             "status": null
@@ -12060,7 +12060,7 @@
           },
           "existing_catalog": {
             "slug": "final-form",
-            "lifecycle": "active"
+            "lifecycle": "removed"
           },
           "resolution": {
             "liveSources": [],
@@ -12166,8 +12166,8 @@
       "definitionPlaceholder": false,
       "wikiNotes": [],
       "wikiAvailabilityNotes": [],
-      "wikiFetchedAt": "2026-06-22T17:54:33+00:00",
-      "win_rate": 52.64,
+      "wikiFetchedAt": "2026-06-22T21:43:36+00:00",
+      "win_rate": 52.67,
       "kit_tags": [
         "attack",
         "on_hit"
@@ -12191,7 +12191,7 @@
             "availabilityNotes": [],
             "hasDescription": true,
             "hasNotes": false,
-            "wikiFetchedAt": "2026-06-22T17:54:33+00:00"
+            "wikiFetchedAt": "2026-06-22T21:43:36+00:00"
           },
           "tencent": {
             "status": null
@@ -12397,8 +12397,8 @@
       "definitionPlaceholder": false,
       "wikiNotes": [],
       "wikiAvailabilityNotes": [],
-      "wikiFetchedAt": "2026-06-22T17:54:33+00:00",
-      "win_rate": 52.6,
+      "wikiFetchedAt": "2026-06-22T21:43:36+00:00",
+      "win_rate": 52.42,
       "kit_tags": [
         "ability",
         "tank"
@@ -12422,7 +12422,7 @@
             "availabilityNotes": [],
             "hasDescription": true,
             "hasNotes": false,
-            "wikiFetchedAt": "2026-06-22T17:54:33+00:00"
+            "wikiFetchedAt": "2026-06-22T21:43:36+00:00"
           },
           "tencent": {
             "status": null
@@ -12572,8 +12572,8 @@
       "definitionPlaceholder": false,
       "wikiNotes": [],
       "wikiAvailabilityNotes": [],
-      "wikiFetchedAt": "2026-06-22T17:54:33+00:00",
-      "win_rate": 52.57,
+      "wikiFetchedAt": "2026-06-22T21:43:36+00:00",
+      "win_rate": 52.61,
       "kit_tags": [
         "ability",
         "haste"
@@ -12597,7 +12597,7 @@
             "availabilityNotes": [],
             "hasDescription": true,
             "hasNotes": false,
-            "wikiFetchedAt": "2026-06-22T17:54:33+00:00"
+            "wikiFetchedAt": "2026-06-22T21:43:36+00:00"
           },
           "tencent": {
             "status": null
@@ -12746,7 +12746,7 @@
           },
           "existing_catalog": {
             "slug": "terraind",
-            "lifecycle": "added"
+            "lifecycle": "removed"
           },
           "resolution": {
             "liveSources": [],
@@ -12841,8 +12841,8 @@
       "definitionPlaceholder": false,
       "wikiNotes": [],
       "wikiAvailabilityNotes": [],
-      "wikiFetchedAt": "2026-06-22T17:54:33+00:00",
-      "win_rate": 52.4,
+      "wikiFetchedAt": "2026-06-22T21:43:36+00:00",
+      "win_rate": 52.44,
       "kit_tags": [
         "haste"
       ],
@@ -12865,7 +12865,7 @@
             "availabilityNotes": [],
             "hasDescription": true,
             "hasNotes": false,
-            "wikiFetchedAt": "2026-06-22T17:54:33+00:00"
+            "wikiFetchedAt": "2026-06-22T21:43:36+00:00"
           },
           "tencent": {
             "status": null
@@ -13015,8 +13015,8 @@
       "definitionPlaceholder": false,
       "wikiNotes": [],
       "wikiAvailabilityNotes": [],
-      "wikiFetchedAt": "2026-06-22T17:54:33+00:00",
-      "win_rate": 52.36,
+      "wikiFetchedAt": "2026-06-22T21:43:36+00:00",
+      "win_rate": 52.11,
       "kit_tags": [
         "ability"
       ],
@@ -13039,7 +13039,7 @@
             "availabilityNotes": [],
             "hasDescription": true,
             "hasNotes": false,
-            "wikiFetchedAt": "2026-06-22T17:54:33+00:00"
+            "wikiFetchedAt": "2026-06-22T21:43:36+00:00"
           },
           "tencent": {
             "status": null
@@ -13055,7 +13055,7 @@
           },
           "existing_catalog": {
             "slug": "from-downtown",
-            "lifecycle": "added"
+            "lifecycle": "active"
           },
           "resolution": {
             "liveSources": [
@@ -13218,8 +13218,8 @@
       "definitionPlaceholder": false,
       "wikiNotes": [],
       "wikiAvailabilityNotes": [],
-      "wikiFetchedAt": "2026-06-22T17:54:33+00:00",
-      "win_rate": 52.28,
+      "wikiFetchedAt": "2026-06-22T21:43:36+00:00",
+      "win_rate": 52.24,
       "kit_tags": [],
       "flags": {
         "system_breaker": false,
@@ -13240,7 +13240,7 @@
             "availabilityNotes": [],
             "hasDescription": true,
             "hasNotes": false,
-            "wikiFetchedAt": "2026-06-22T17:54:33+00:00"
+            "wikiFetchedAt": "2026-06-22T21:43:36+00:00"
           },
           "tencent": {
             "status": null
@@ -13390,8 +13390,8 @@
       "definitionPlaceholder": false,
       "wikiNotes": [],
       "wikiAvailabilityNotes": [],
-      "wikiFetchedAt": "2026-06-22T17:54:33+00:00",
-      "win_rate": 52.26,
+      "wikiFetchedAt": "2026-06-22T21:43:36+00:00",
+      "win_rate": 51.72,
       "kit_tags": [
         "ability"
       ],
@@ -13414,7 +13414,7 @@
             "availabilityNotes": [],
             "hasDescription": true,
             "hasNotes": false,
-            "wikiFetchedAt": "2026-06-22T17:54:33+00:00"
+            "wikiFetchedAt": "2026-06-22T21:43:36+00:00"
           },
           "tencent": {
             "status": null
@@ -13430,7 +13430,7 @@
           },
           "existing_catalog": {
             "slug": "dropbear",
-            "lifecycle": "added"
+            "lifecycle": "active"
           },
           "resolution": {
             "liveSources": [
@@ -13509,7 +13509,7 @@
       "name_zh_TW": "天降戰熊",
       "name_ja": "ドロップベア",
       "name_ko": "곰 투하",
-      "wikiDescription": "Upon death, you summon Tibbers who drops from above and lands onto the location of your death over 0.5 seconds. Upon landing, he deals 250 – 750 (based on level) (+ 100% AP) (+ 2 per 1 flat magic penetration) (+ 5 per 1% magic penetration) magic damage to nearby enemies and stuns them for 1.5 seconds. Tibbers then chases after and targets the enemy champion that killed you, attacking them once he is in range. Tibbers has all of your augments and deals 25 – 150 (based on level) (+ 50% AP) magic damage every second to enemies within a 350 radius of him. His stats are: 1500 – 6000 (based on level) (+ 15% maximum health) (+ 150% AP) health (rapidly decays over his lifetime) 50 – 300 (based on level) (+ 75% AD) magic damage (basic attack damage) 0.650 (+ 30% attack speed) attack speed 150 attack range 200 – 300 (based on level) (+ 20% movement speed) movement speed",
+      "wikiDescription": "Upon death, you summon Tibbers who drops from above and lands onto the location of your death over 0.5 seconds. Upon landing, he deals 250 – 750 (based on level) (+ 100% AP) (+ 2 per 1 flat magic penetration) (+ 5 per 1% magic penetration) magic damage to nearby enemies and stuns them for 1.5 seconds. Tibbers then chases after and targets the enemy champion that killed you, attacking them once he is in range. Tibbers has all of your augments and lasts for up to 8 – 20 (based on level) seconds. He gains 80% – 100% (based on level) bonus attack speed and deals 25 – 150 (based on level) (+ 50% AP) magic damage every second to enemies within 350 units of him. His stats are: 1500 – 6000 (based on level) (+ 15% maximum health) (+ 150% AP) health (rapidly decays over his lifetime) 50 – 300 (based on level) (+ 75% AD) magic damage (basic attack damage) 1.00 attack speed 150 attack range 50 armor 50 magic resistance 200 – 300 (based on level) (+ 20% movement speed) movement speed",
       "wikiRarity": "prismatic"
     },
     {
@@ -13564,8 +13564,8 @@
       "definitionPlaceholder": false,
       "wikiNotes": [],
       "wikiAvailabilityNotes": [],
-      "wikiFetchedAt": "2026-06-22T17:54:33+00:00",
-      "win_rate": 52.19,
+      "wikiFetchedAt": "2026-06-22T21:43:36+00:00",
+      "win_rate": 52.22,
       "kit_tags": [
         "ability",
         "haste"
@@ -13589,7 +13589,7 @@
             "availabilityNotes": [],
             "hasDescription": true,
             "hasNotes": false,
-            "wikiFetchedAt": "2026-06-22T17:54:33+00:00"
+            "wikiFetchedAt": "2026-06-22T21:43:36+00:00"
           },
           "tencent": {
             "status": null
@@ -13758,8 +13758,8 @@
       "definitionPlaceholder": false,
       "wikiNotes": [],
       "wikiAvailabilityNotes": [],
-      "wikiFetchedAt": "2026-06-22T17:54:33+00:00",
-      "win_rate": 52.16,
+      "wikiFetchedAt": "2026-06-22T21:43:36+00:00",
+      "win_rate": 52.36,
       "kit_tags": [
         "heal_shield"
       ],
@@ -13782,7 +13782,7 @@
             "availabilityNotes": [],
             "hasDescription": true,
             "hasNotes": false,
-            "wikiFetchedAt": "2026-06-22T17:54:33+00:00"
+            "wikiFetchedAt": "2026-06-22T21:43:36+00:00"
           },
           "tencent": {
             "status": null
@@ -13930,7 +13930,7 @@
           },
           "existing_catalog": {
             "slug": "bonk",
-            "lifecycle": "added"
+            "lifecycle": "removed"
           },
           "resolution": {
             "liveSources": [],
@@ -13958,7 +13958,7 @@
       "augmentId": "ARAM_SonicBoom",
       "slug": "sonic-boom",
       "name": "Buffing, <healing>healing</healing>, or <shield>Shielding</shield> your ally deals <trueDamage>@Damage@ true damage</trueDamage> and <status>Slows enemies surrounding them</status> by @SlowAmount*-100@% for 2 seconds (@ProcCooldown@ seconds Cooldown).<br><br>Damage Dealt: @f2@",
-      "displayName": "Sonic Boom",
+      "displayName": "Buffing, <healing>healing</healing>, or <shield>Shielding</shield> your ally deals <trueDamage>@Damage@ true damage</trueDamage> and <status>Slows enemies surrounding them</status> by @SlowAmount*-100@% for 2 seconds (@ProcCooldown@ seconds Cooldown).<br><br>Damage Dealt: @f2@",
       "rarity": "silver",
       "cdragonRarity": "silver",
       "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/sonicboom_large.png",
@@ -14063,8 +14063,8 @@
       "definitionPlaceholder": false,
       "wikiNotes": [],
       "wikiAvailabilityNotes": [],
-      "wikiFetchedAt": "2026-06-22T17:54:33+00:00",
-      "win_rate": 52.12,
+      "wikiFetchedAt": "2026-06-22T21:43:36+00:00",
+      "win_rate": 52.0,
       "kit_tags": [
         "ability",
         "heal_shield",
@@ -14089,7 +14089,7 @@
             "availabilityNotes": [],
             "hasDescription": true,
             "hasNotes": false,
-            "wikiFetchedAt": "2026-06-22T17:54:33+00:00"
+            "wikiFetchedAt": "2026-06-22T21:43:36+00:00"
           },
           "tencent": {
             "status": null
@@ -14297,8 +14297,8 @@
       "definitionPlaceholder": false,
       "wikiNotes": [],
       "wikiAvailabilityNotes": [],
-      "wikiFetchedAt": "2026-06-22T17:54:33+00:00",
-      "win_rate": 52.06,
+      "wikiFetchedAt": "2026-06-22T21:43:36+00:00",
+      "win_rate": 51.99,
       "kit_tags": [
         "heal_shield",
         "tank"
@@ -14322,7 +14322,7 @@
             "availabilityNotes": [],
             "hasDescription": true,
             "hasNotes": false,
-            "wikiFetchedAt": "2026-06-22T17:54:33+00:00"
+            "wikiFetchedAt": "2026-06-22T21:43:36+00:00"
           },
           "tencent": {
             "status": null
@@ -14470,7 +14470,7 @@
           },
           "existing_catalog": {
             "slug": "stay-resolute",
-            "lifecycle": "added"
+            "lifecycle": "removed"
           },
           "resolution": {
             "liveSources": [],
@@ -14574,8 +14574,8 @@
       "definitionPlaceholder": false,
       "wikiNotes": [],
       "wikiAvailabilityNotes": [],
-      "wikiFetchedAt": "2026-06-22T17:54:33+00:00",
-      "win_rate": 51.94,
+      "wikiFetchedAt": "2026-06-22T21:43:36+00:00",
+      "win_rate": 52.04,
       "kit_tags": [
         "movement"
       ],
@@ -14598,7 +14598,7 @@
             "availabilityNotes": [],
             "hasDescription": true,
             "hasNotes": false,
-            "wikiFetchedAt": "2026-06-22T17:54:33+00:00"
+            "wikiFetchedAt": "2026-06-22T21:43:36+00:00"
           },
           "tencent": {
             "status": null
@@ -14813,8 +14813,8 @@
       "definitionPlaceholder": false,
       "wikiNotes": [],
       "wikiAvailabilityNotes": [],
-      "wikiFetchedAt": "2026-06-22T17:54:33+00:00",
-      "win_rate": 51.85,
+      "wikiFetchedAt": "2026-06-22T21:43:36+00:00",
+      "win_rate": 51.91,
       "kit_tags": [
         "ability",
         "mana"
@@ -14838,7 +14838,7 @@
             "availabilityNotes": [],
             "hasDescription": true,
             "hasNotes": false,
-            "wikiFetchedAt": "2026-06-22T17:54:33+00:00"
+            "wikiFetchedAt": "2026-06-22T21:43:36+00:00"
           },
           "tencent": {
             "status": null
@@ -15050,8 +15050,8 @@
       "definitionPlaceholder": false,
       "wikiNotes": [],
       "wikiAvailabilityNotes": [],
-      "wikiFetchedAt": "2026-06-22T17:54:33+00:00",
-      "win_rate": 51.82,
+      "wikiFetchedAt": "2026-06-22T21:43:36+00:00",
+      "win_rate": 52.21,
       "kit_tags": [
         "ability",
         "dot"
@@ -15075,7 +15075,7 @@
             "availabilityNotes": [],
             "hasDescription": true,
             "hasNotes": false,
-            "wikiFetchedAt": "2026-06-22T17:54:33+00:00"
+            "wikiFetchedAt": "2026-06-22T21:43:36+00:00"
           },
           "tencent": {
             "status": null
@@ -15382,8 +15382,8 @@
       "definitionPlaceholder": false,
       "wikiNotes": [],
       "wikiAvailabilityNotes": [],
-      "wikiFetchedAt": "2026-06-22T17:54:33+00:00",
-      "win_rate": 51.79,
+      "wikiFetchedAt": "2026-06-22T21:43:36+00:00",
+      "win_rate": 51.77,
       "kit_tags": [
         "ability",
         "movement",
@@ -15408,7 +15408,7 @@
             "availabilityNotes": [],
             "hasDescription": true,
             "hasNotes": false,
-            "wikiFetchedAt": "2026-06-22T17:54:33+00:00"
+            "wikiFetchedAt": "2026-06-22T21:43:36+00:00"
           },
           "tencent": {
             "status": null
@@ -15556,7 +15556,7 @@
           },
           "existing_catalog": {
             "slug": "hand-of-baron",
-            "lifecycle": "active"
+            "lifecycle": "removed"
           },
           "resolution": {
             "liveSources": [],
@@ -15859,8 +15859,8 @@
       "definitionPlaceholder": false,
       "wikiNotes": [],
       "wikiAvailabilityNotes": [],
-      "wikiFetchedAt": "2026-06-22T17:54:33+00:00",
-      "win_rate": 51.62,
+      "wikiFetchedAt": "2026-06-22T21:43:36+00:00",
+      "win_rate": 51.56,
       "kit_tags": [
         "attack",
         "ability"
@@ -15884,7 +15884,7 @@
             "availabilityNotes": [],
             "hasDescription": true,
             "hasNotes": false,
-            "wikiFetchedAt": "2026-06-22T17:54:33+00:00"
+            "wikiFetchedAt": "2026-06-22T21:43:36+00:00"
           },
           "tencent": {
             "status": null
@@ -16034,8 +16034,8 @@
       "definitionPlaceholder": false,
       "wikiNotes": [],
       "wikiAvailabilityNotes": [],
-      "wikiFetchedAt": "2026-06-22T17:54:33+00:00",
-      "win_rate": 51.48,
+      "wikiFetchedAt": "2026-06-22T21:43:36+00:00",
+      "win_rate": 51.36,
       "kit_tags": [
         "movement",
         "attack"
@@ -16059,7 +16059,7 @@
             "availabilityNotes": [],
             "hasDescription": true,
             "hasNotes": false,
-            "wikiFetchedAt": "2026-06-22T17:54:33+00:00"
+            "wikiFetchedAt": "2026-06-22T21:43:36+00:00"
           },
           "tencent": {
             "status": null
@@ -16209,8 +16209,8 @@
       "definitionPlaceholder": false,
       "wikiNotes": [],
       "wikiAvailabilityNotes": [],
-      "wikiFetchedAt": "2026-06-22T17:54:33+00:00",
-      "win_rate": 51.39,
+      "wikiFetchedAt": "2026-06-22T21:43:36+00:00",
+      "win_rate": 50.99,
       "kit_tags": [
         "ability",
         "heal_shield"
@@ -16234,7 +16234,7 @@
             "availabilityNotes": [],
             "hasDescription": true,
             "hasNotes": false,
-            "wikiFetchedAt": "2026-06-22T17:54:33+00:00"
+            "wikiFetchedAt": "2026-06-22T21:43:36+00:00"
           },
           "tencent": {
             "status": null
@@ -16379,7 +16379,7 @@
           },
           "existing_catalog": {
             "slug": "king-me",
-            "lifecycle": "active"
+            "lifecycle": "removed"
           },
           "resolution": {
             "liveSources": [],
@@ -16483,8 +16483,8 @@
       "definitionPlaceholder": false,
       "wikiNotes": [],
       "wikiAvailabilityNotes": [],
-      "wikiFetchedAt": "2026-06-22T17:54:33+00:00",
-      "win_rate": 51.29,
+      "wikiFetchedAt": "2026-06-22T21:43:36+00:00",
+      "win_rate": 51.09,
       "kit_tags": [
         "ability",
         "haste"
@@ -16508,7 +16508,7 @@
             "availabilityNotes": [],
             "hasDescription": true,
             "hasNotes": false,
-            "wikiFetchedAt": "2026-06-22T17:54:33+00:00"
+            "wikiFetchedAt": "2026-06-22T21:43:36+00:00"
           },
           "tencent": {
             "status": null
@@ -16659,7 +16659,7 @@
           },
           "existing_catalog": {
             "slug": "biggest-snowball-ever",
-            "lifecycle": "active"
+            "lifecycle": "removed"
           },
           "resolution": {
             "liveSources": [],
@@ -16754,8 +16754,8 @@
       "definitionPlaceholder": false,
       "wikiNotes": [],
       "wikiAvailabilityNotes": [],
-      "wikiFetchedAt": "2026-06-22T17:54:33+00:00",
-      "win_rate": 51.27,
+      "wikiFetchedAt": "2026-06-22T21:43:36+00:00",
+      "win_rate": 51.43,
       "kit_tags": [],
       "flags": {
         "system_breaker": false,
@@ -16776,7 +16776,7 @@
             "availabilityNotes": [],
             "hasDescription": true,
             "hasNotes": false,
-            "wikiFetchedAt": "2026-06-22T17:54:33+00:00"
+            "wikiFetchedAt": "2026-06-22T21:43:36+00:00"
           },
           "tencent": {
             "status": null
@@ -16945,8 +16945,8 @@
       "definitionPlaceholder": false,
       "wikiNotes": [],
       "wikiAvailabilityNotes": [],
-      "wikiFetchedAt": "2026-06-22T17:54:33+00:00",
-      "win_rate": 51.11,
+      "wikiFetchedAt": "2026-06-22T21:43:36+00:00",
+      "win_rate": 51.28,
       "kit_tags": [
         "heal_shield"
       ],
@@ -16969,7 +16969,7 @@
             "availabilityNotes": [],
             "hasDescription": true,
             "hasNotes": false,
-            "wikiFetchedAt": "2026-06-22T17:54:33+00:00"
+            "wikiFetchedAt": "2026-06-22T21:43:36+00:00"
           },
           "tencent": {
             "status": null
@@ -17116,7 +17116,7 @@
           },
           "existing_catalog": {
             "slug": "dont-change-the-channel",
-            "lifecycle": "added"
+            "lifecycle": "removed"
           },
           "resolution": {
             "liveSources": [],
@@ -17211,8 +17211,8 @@
       "definitionPlaceholder": false,
       "wikiNotes": [],
       "wikiAvailabilityNotes": [],
-      "wikiFetchedAt": "2026-06-22T17:54:33+00:00",
-      "win_rate": 50.92,
+      "wikiFetchedAt": "2026-06-22T21:43:36+00:00",
+      "win_rate": 50.53,
       "kit_tags": [
         "attack",
         "movement"
@@ -17236,7 +17236,7 @@
             "availabilityNotes": [],
             "hasDescription": true,
             "hasNotes": false,
-            "wikiFetchedAt": "2026-06-22T17:54:33+00:00"
+            "wikiFetchedAt": "2026-06-22T21:43:36+00:00"
           },
           "tencent": {
             "status": null
@@ -17384,7 +17384,7 @@
           },
           "existing_catalog": {
             "slug": "overextender",
-            "lifecycle": "added"
+            "lifecycle": "removed"
           },
           "resolution": {
             "liveSources": [],
@@ -17458,7 +17458,7 @@
           },
           "existing_catalog": {
             "slug": "its-go-time",
-            "lifecycle": "added"
+            "lifecycle": "removed"
           },
           "resolution": {
             "liveSources": [],
@@ -17531,7 +17531,7 @@
           },
           "existing_catalog": {
             "slug": "trusty-weapon",
-            "lifecycle": "added"
+            "lifecycle": "removed"
           },
           "resolution": {
             "liveSources": [],
@@ -17644,8 +17644,8 @@
       "definitionPlaceholder": false,
       "wikiNotes": [],
       "wikiAvailabilityNotes": [],
-      "wikiFetchedAt": "2026-06-22T17:54:33+00:00",
-      "win_rate": 50.67,
+      "wikiFetchedAt": "2026-06-22T21:43:36+00:00",
+      "win_rate": 50.29,
       "kit_tags": [
         "ability"
       ],
@@ -17668,7 +17668,7 @@
             "availabilityNotes": [],
             "hasDescription": true,
             "hasNotes": false,
-            "wikiFetchedAt": "2026-06-22T17:54:33+00:00"
+            "wikiFetchedAt": "2026-06-22T21:43:36+00:00"
           },
           "tencent": {
             "status": null
@@ -17817,7 +17817,7 @@
           },
           "existing_catalog": {
             "slug": "ravenous-bind",
-            "lifecycle": "added"
+            "lifecycle": "removed"
           },
           "resolution": {
             "liveSources": [],
@@ -17930,8 +17930,8 @@
       "definitionPlaceholder": false,
       "wikiNotes": [],
       "wikiAvailabilityNotes": [],
-      "wikiFetchedAt": "2026-06-22T17:54:33+00:00",
-      "win_rate": 50.25,
+      "wikiFetchedAt": "2026-06-22T21:43:36+00:00",
+      "win_rate": 50.27,
       "kit_tags": [
         "movement",
         "haste"
@@ -17955,7 +17955,7 @@
             "availabilityNotes": [],
             "hasDescription": true,
             "hasNotes": false,
-            "wikiFetchedAt": "2026-06-22T17:54:33+00:00"
+            "wikiFetchedAt": "2026-06-22T21:43:36+00:00"
           },
           "tencent": {
             "status": null
@@ -18160,8 +18160,8 @@
       "definitionPlaceholder": false,
       "wikiNotes": [],
       "wikiAvailabilityNotes": [],
-      "wikiFetchedAt": "2026-06-22T17:54:33+00:00",
-      "win_rate": 50.19,
+      "wikiFetchedAt": "2026-06-22T21:43:36+00:00",
+      "win_rate": 50.26,
       "kit_tags": [],
       "flags": {
         "system_breaker": false,
@@ -18182,7 +18182,7 @@
             "availabilityNotes": [],
             "hasDescription": true,
             "hasNotes": false,
-            "wikiFetchedAt": "2026-06-22T17:54:33+00:00"
+            "wikiFetchedAt": "2026-06-22T21:43:36+00:00"
           },
           "tencent": {
             "status": null
@@ -18332,8 +18332,8 @@
       "definitionPlaceholder": false,
       "wikiNotes": [],
       "wikiAvailabilityNotes": [],
-      "wikiFetchedAt": "2026-06-22T17:54:33+00:00",
-      "win_rate": 50.18,
+      "wikiFetchedAt": "2026-06-22T21:43:36+00:00",
+      "win_rate": 50.2,
       "kit_tags": [
         "attack",
         "ability",
@@ -18359,7 +18359,7 @@
             "availabilityNotes": [],
             "hasDescription": true,
             "hasNotes": false,
-            "wikiFetchedAt": "2026-06-22T17:54:33+00:00"
+            "wikiFetchedAt": "2026-06-22T21:43:36+00:00"
           },
           "tencent": {
             "status": null
@@ -18375,7 +18375,7 @@
           },
           "existing_catalog": {
             "slug": "en-passant",
-            "lifecycle": "added"
+            "lifecycle": "active"
           },
           "resolution": {
             "liveSources": [
@@ -18549,8 +18549,8 @@
         "If a champion acquires all three \"Bread\" augments ( Bread and Butter, Bread and Cheese, Bread and Jam), they gain a buff called Bread Sandwich that grants them 250 ultimate haste and an additional 50 ability haste on each basic ability."
       ],
       "wikiAvailabilityNotes": [],
-      "wikiFetchedAt": "2026-06-22T17:54:33+00:00",
-      "win_rate": 50.06,
+      "wikiFetchedAt": "2026-06-22T21:43:36+00:00",
+      "win_rate": 49.88,
       "kit_tags": [
         "ability",
         "haste"
@@ -18574,7 +18574,7 @@
             "availabilityNotes": [],
             "hasDescription": true,
             "hasNotes": true,
-            "wikiFetchedAt": "2026-06-22T17:54:33+00:00"
+            "wikiFetchedAt": "2026-06-22T21:43:36+00:00"
           },
           "tencent": {
             "status": null
@@ -18726,7 +18726,7 @@
           },
           "existing_catalog": {
             "slug": "goldrend",
-            "lifecycle": "active"
+            "lifecycle": "removed"
           },
           "resolution": {
             "liveSources": [],
@@ -18857,8 +18857,8 @@
       "definitionPlaceholder": false,
       "wikiNotes": [],
       "wikiAvailabilityNotes": [],
-      "wikiFetchedAt": "2026-06-22T17:54:33+00:00",
-      "win_rate": 49.85,
+      "wikiFetchedAt": "2026-06-22T21:43:36+00:00",
+      "win_rate": 49.78,
       "kit_tags": [
         "ability",
         "dot"
@@ -18882,7 +18882,7 @@
             "availabilityNotes": [],
             "hasDescription": true,
             "hasNotes": false,
-            "wikiFetchedAt": "2026-06-22T17:54:33+00:00"
+            "wikiFetchedAt": "2026-06-22T21:43:36+00:00"
           },
           "tencent": {
             "status": null
@@ -18984,7 +18984,7 @@
       "augmentId": "ARAM_Quest_UrfsChampion",
       "slug": "quest-urfs-champion",
       "name": "Urf's Champion",
-      "displayName": "Quest: Urf's Champion",
+      "displayName": "Urf's Champion",
       "rarity": "prismatic",
       "cdragonRarity": "prismatic",
       "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/quest_urfschampion_large.png",
@@ -19060,8 +19060,8 @@
       "definitionPlaceholder": false,
       "wikiNotes": [],
       "wikiAvailabilityNotes": [],
-      "wikiFetchedAt": "2026-06-22T17:54:33+00:00",
-      "win_rate": 49.84,
+      "wikiFetchedAt": "2026-06-22T21:43:36+00:00",
+      "win_rate": 49.66,
       "kit_tags": [],
       "flags": {
         "system_breaker": false,
@@ -19082,7 +19082,7 @@
             "availabilityNotes": [],
             "hasDescription": true,
             "hasNotes": false,
-            "wikiFetchedAt": "2026-06-22T17:54:33+00:00"
+            "wikiFetchedAt": "2026-06-22T21:43:36+00:00"
           },
           "tencent": {
             "status": null
@@ -19261,8 +19261,8 @@
       "definitionPlaceholder": false,
       "wikiNotes": [],
       "wikiAvailabilityNotes": [],
-      "wikiFetchedAt": "2026-06-22T17:54:33+00:00",
-      "win_rate": 49.81,
+      "wikiFetchedAt": "2026-06-22T21:43:36+00:00",
+      "win_rate": 49.57,
       "kit_tags": [
         "haste"
       ],
@@ -19285,7 +19285,7 @@
             "availabilityNotes": [],
             "hasDescription": true,
             "hasNotes": false,
-            "wikiFetchedAt": "2026-06-22T17:54:33+00:00"
+            "wikiFetchedAt": "2026-06-22T21:43:36+00:00"
           },
           "tencent": {
             "status": null
@@ -19435,8 +19435,8 @@
       "definitionPlaceholder": false,
       "wikiNotes": [],
       "wikiAvailabilityNotes": [],
-      "wikiFetchedAt": "2026-06-22T17:54:33+00:00",
-      "win_rate": 49.79,
+      "wikiFetchedAt": "2026-06-22T21:43:36+00:00",
+      "win_rate": 49.89,
       "kit_tags": [
         "ability",
         "cc",
@@ -19461,7 +19461,7 @@
             "availabilityNotes": [],
             "hasDescription": true,
             "hasNotes": false,
-            "wikiFetchedAt": "2026-06-22T17:54:33+00:00"
+            "wikiFetchedAt": "2026-06-22T21:43:36+00:00"
           },
           "tencent": {
             "status": null
@@ -19642,8 +19642,8 @@
       "definitionPlaceholder": false,
       "wikiNotes": [],
       "wikiAvailabilityNotes": [],
-      "wikiFetchedAt": "2026-06-22T17:54:33+00:00",
-      "win_rate": 49.79,
+      "wikiFetchedAt": "2026-06-22T21:43:36+00:00",
+      "win_rate": 49.73,
       "kit_tags": [
         "attack",
         "ability",
@@ -19668,7 +19668,7 @@
             "availabilityNotes": [],
             "hasDescription": true,
             "hasNotes": false,
-            "wikiFetchedAt": "2026-06-22T17:54:33+00:00"
+            "wikiFetchedAt": "2026-06-22T21:43:36+00:00"
           },
           "tencent": {
             "status": null
@@ -19818,8 +19818,8 @@
       "definitionPlaceholder": false,
       "wikiNotes": [],
       "wikiAvailabilityNotes": [],
-      "wikiFetchedAt": "2026-06-22T17:54:33+00:00",
-      "win_rate": 49.66,
+      "wikiFetchedAt": "2026-06-22T21:43:36+00:00",
+      "win_rate": 49.79,
       "kit_tags": [
         "heal_shield",
         "ability",
@@ -19844,7 +19844,7 @@
             "availabilityNotes": [],
             "hasDescription": true,
             "hasNotes": false,
-            "wikiFetchedAt": "2026-06-22T17:54:33+00:00"
+            "wikiFetchedAt": "2026-06-22T21:43:36+00:00"
           },
           "tencent": {
             "status": null
@@ -20071,8 +20071,8 @@
       "definitionPlaceholder": false,
       "wikiNotes": [],
       "wikiAvailabilityNotes": [],
-      "wikiFetchedAt": "2026-06-22T17:54:33+00:00",
-      "win_rate": 49.6,
+      "wikiFetchedAt": "2026-06-22T21:43:36+00:00",
+      "win_rate": 49.71,
       "kit_tags": [
         "tank",
         "cc"
@@ -20096,7 +20096,7 @@
             "availabilityNotes": [],
             "hasDescription": true,
             "hasNotes": false,
-            "wikiFetchedAt": "2026-06-22T17:54:33+00:00"
+            "wikiFetchedAt": "2026-06-22T21:43:36+00:00"
           },
           "tencent": {
             "status": null
@@ -20241,7 +20241,7 @@
           },
           "existing_catalog": {
             "slug": "hextech-soul",
-            "lifecycle": "active"
+            "lifecycle": "removed"
           },
           "resolution": {
             "liveSources": [],
@@ -20317,8 +20317,8 @@
       "definitionPlaceholder": false,
       "wikiNotes": [],
       "wikiAvailabilityNotes": [],
-      "wikiFetchedAt": "2026-06-22T17:54:33+00:00",
-      "win_rate": 49.57,
+      "wikiFetchedAt": "2026-06-22T21:43:36+00:00",
+      "win_rate": 49.45,
       "kit_tags": [],
       "flags": {
         "system_breaker": false,
@@ -20339,7 +20339,7 @@
             "availabilityNotes": [],
             "hasDescription": true,
             "hasNotes": false,
-            "wikiFetchedAt": "2026-06-22T17:54:33+00:00"
+            "wikiFetchedAt": "2026-06-22T21:43:36+00:00"
           },
           "tencent": {
             "status": null
@@ -20355,7 +20355,7 @@
           },
           "existing_catalog": {
             "slug": "yowch-my-coins",
-            "lifecycle": "added"
+            "lifecycle": "active"
           },
           "resolution": {
             "liveSources": [
@@ -20488,7 +20488,7 @@
           },
           "existing_catalog": {
             "slug": "endless-decimation",
-            "lifecycle": "added"
+            "lifecycle": "removed"
           },
           "resolution": {
             "liveSources": [],
@@ -20562,7 +20562,7 @@
           },
           "existing_catalog": {
             "slug": "ultimate-awakening",
-            "lifecycle": "active"
+            "lifecycle": "removed"
           },
           "resolution": {
             "liveSources": [],
@@ -20636,7 +20636,7 @@
           },
           "existing_catalog": {
             "slug": "overloaded",
-            "lifecycle": "added"
+            "lifecycle": "removed"
           },
           "resolution": {
             "liveSources": [],
@@ -20710,7 +20710,7 @@
           },
           "existing_catalog": {
             "slug": "adaptive-ward",
-            "lifecycle": "added"
+            "lifecycle": "removed"
           },
           "resolution": {
             "liveSources": [],
@@ -20814,8 +20814,8 @@
       "definitionPlaceholder": false,
       "wikiNotes": [],
       "wikiAvailabilityNotes": [],
-      "wikiFetchedAt": "2026-06-22T17:54:33+00:00",
-      "win_rate": 49.49,
+      "wikiFetchedAt": "2026-06-22T21:43:36+00:00",
+      "win_rate": 49.66,
       "kit_tags": [],
       "flags": {
         "system_breaker": false,
@@ -20836,7 +20836,7 @@
             "availabilityNotes": [],
             "hasDescription": true,
             "hasNotes": false,
-            "wikiFetchedAt": "2026-06-22T17:54:33+00:00"
+            "wikiFetchedAt": "2026-06-22T21:43:36+00:00"
           },
           "tencent": {
             "status": null
@@ -21025,8 +21025,8 @@
         "If a champion acquires all three \"Bread\" augments ( Bread and Butter, Bread and Cheese, Bread and Jam), they gain a buff called Bread Sandwich that grants them 250 ultimate haste and an additional 50 ability haste on each basic ability."
       ],
       "wikiAvailabilityNotes": [],
-      "wikiFetchedAt": "2026-06-22T17:54:33+00:00",
-      "win_rate": 49.45,
+      "wikiFetchedAt": "2026-06-22T21:43:36+00:00",
+      "win_rate": 49.37,
       "kit_tags": [
         "ability",
         "haste"
@@ -21050,7 +21050,7 @@
             "availabilityNotes": [],
             "hasDescription": true,
             "hasNotes": true,
-            "wikiFetchedAt": "2026-06-22T17:54:33+00:00"
+            "wikiFetchedAt": "2026-06-22T21:43:36+00:00"
           },
           "tencent": {
             "status": null
@@ -21199,7 +21199,7 @@
           },
           "existing_catalog": {
             "slug": "ominous-pact",
-            "lifecycle": "active"
+            "lifecycle": "removed"
           },
           "resolution": {
             "liveSources": [],
@@ -21285,8 +21285,8 @@
       "definitionPlaceholder": false,
       "wikiNotes": [],
       "wikiAvailabilityNotes": [],
-      "wikiFetchedAt": "2026-06-22T17:54:33+00:00",
-      "win_rate": 49.32,
+      "wikiFetchedAt": "2026-06-22T21:43:36+00:00",
+      "win_rate": 49.27,
       "kit_tags": [],
       "flags": {
         "system_breaker": false,
@@ -21307,7 +21307,7 @@
             "availabilityNotes": [],
             "hasDescription": true,
             "hasNotes": false,
-            "wikiFetchedAt": "2026-06-22T17:54:33+00:00"
+            "wikiFetchedAt": "2026-06-22T21:43:36+00:00"
           },
           "tencent": {
             "status": null
@@ -21455,7 +21455,7 @@
           },
           "existing_catalog": {
             "slug": "double-defense",
-            "lifecycle": "added"
+            "lifecycle": "removed"
           },
           "resolution": {
             "liveSources": [],
@@ -21559,8 +21559,8 @@
       "definitionPlaceholder": false,
       "wikiNotes": [],
       "wikiAvailabilityNotes": [],
-      "wikiFetchedAt": "2026-06-22T17:54:33+00:00",
-      "win_rate": 49.23,
+      "wikiFetchedAt": "2026-06-22T21:43:36+00:00",
+      "win_rate": 48.96,
       "kit_tags": [],
       "flags": {
         "system_breaker": false,
@@ -21581,7 +21581,7 @@
             "availabilityNotes": [],
             "hasDescription": true,
             "hasNotes": false,
-            "wikiFetchedAt": "2026-06-22T17:54:33+00:00"
+            "wikiFetchedAt": "2026-06-22T21:43:36+00:00"
           },
           "tencent": {
             "status": null
@@ -21816,8 +21816,8 @@
       "definitionPlaceholder": false,
       "wikiNotes": [],
       "wikiAvailabilityNotes": [],
-      "wikiFetchedAt": "2026-06-22T17:54:33+00:00",
-      "win_rate": 49.15,
+      "wikiFetchedAt": "2026-06-22T21:43:36+00:00",
+      "win_rate": 49.05,
       "kit_tags": [
         "attack",
         "ability"
@@ -21841,7 +21841,7 @@
             "availabilityNotes": [],
             "hasDescription": true,
             "hasNotes": false,
-            "wikiFetchedAt": "2026-06-22T17:54:33+00:00"
+            "wikiFetchedAt": "2026-06-22T21:43:36+00:00"
           },
           "tencent": {
             "status": null
@@ -21989,7 +21989,7 @@
           },
           "existing_catalog": {
             "slug": "mercys-strike",
-            "lifecycle": "added"
+            "lifecycle": "removed"
           },
           "resolution": {
             "liveSources": [],
@@ -22093,8 +22093,8 @@
       "definitionPlaceholder": false,
       "wikiNotes": [],
       "wikiAvailabilityNotes": [],
-      "wikiFetchedAt": "2026-06-22T17:54:33+00:00",
-      "win_rate": 48.95,
+      "wikiFetchedAt": "2026-06-22T21:43:36+00:00",
+      "win_rate": 48.64,
       "kit_tags": [
         "heal_shield",
         "dot"
@@ -22118,7 +22118,7 @@
             "availabilityNotes": [],
             "hasDescription": true,
             "hasNotes": false,
-            "wikiFetchedAt": "2026-06-22T17:54:33+00:00"
+            "wikiFetchedAt": "2026-06-22T21:43:36+00:00"
           },
           "tencent": {
             "status": null
@@ -22307,8 +22307,8 @@
         "If a champion acquires all three \"Bread\" augments ( Bread and Butter, Bread and Cheese, Bread and Jam), they gain a buff called Bread Sandwich that grants them 250 ultimate haste and an additional 50 ability haste on each basic ability."
       ],
       "wikiAvailabilityNotes": [],
-      "wikiFetchedAt": "2026-06-22T17:54:33+00:00",
-      "win_rate": 48.94,
+      "wikiFetchedAt": "2026-06-22T21:43:36+00:00",
+      "win_rate": 48.97,
       "kit_tags": [
         "ability",
         "haste"
@@ -22332,7 +22332,7 @@
             "availabilityNotes": [],
             "hasDescription": true,
             "hasNotes": true,
-            "wikiFetchedAt": "2026-06-22T17:54:33+00:00"
+            "wikiFetchedAt": "2026-06-22T21:43:36+00:00"
           },
           "tencent": {
             "status": null
@@ -22501,8 +22501,8 @@
       "definitionPlaceholder": false,
       "wikiNotes": [],
       "wikiAvailabilityNotes": [],
-      "wikiFetchedAt": "2026-06-22T17:54:33+00:00",
-      "win_rate": 48.88,
+      "wikiFetchedAt": "2026-06-22T21:43:36+00:00",
+      "win_rate": 48.96,
       "kit_tags": [
         "attack",
         "ability"
@@ -22526,7 +22526,7 @@
             "availabilityNotes": [],
             "hasDescription": true,
             "hasNotes": false,
-            "wikiFetchedAt": "2026-06-22T17:54:33+00:00"
+            "wikiFetchedAt": "2026-06-22T21:43:36+00:00"
           },
           "tencent": {
             "status": null
@@ -22715,8 +22715,8 @@
       "definitionPlaceholder": false,
       "wikiNotes": [],
       "wikiAvailabilityNotes": [],
-      "wikiFetchedAt": "2026-06-22T17:54:33+00:00",
-      "win_rate": 48.78,
+      "wikiFetchedAt": "2026-06-22T21:43:36+00:00",
+      "win_rate": 48.82,
       "kit_tags": [
         "ability",
         "on_hit"
@@ -22740,7 +22740,7 @@
             "availabilityNotes": [],
             "hasDescription": true,
             "hasNotes": false,
-            "wikiFetchedAt": "2026-06-22T17:54:33+00:00"
+            "wikiFetchedAt": "2026-06-22T21:43:36+00:00"
           },
           "tencent": {
             "status": null
@@ -22888,7 +22888,7 @@
           },
           "existing_catalog": {
             "slug": "shark-bait",
-            "lifecycle": "added"
+            "lifecycle": "removed"
           },
           "resolution": {
             "liveSources": [],
@@ -23028,8 +23028,8 @@
       "definitionPlaceholder": false,
       "wikiNotes": [],
       "wikiAvailabilityNotes": [],
-      "wikiFetchedAt": "2026-06-22T17:54:33+00:00",
-      "win_rate": 48.74,
+      "wikiFetchedAt": "2026-06-22T21:43:36+00:00",
+      "win_rate": 48.86,
       "kit_tags": [
         "ability",
         "heal_shield",
@@ -23054,7 +23054,7 @@
             "availabilityNotes": [],
             "hasDescription": true,
             "hasNotes": false,
-            "wikiFetchedAt": "2026-06-22T17:54:33+00:00"
+            "wikiFetchedAt": "2026-06-22T21:43:36+00:00"
           },
           "tencent": {
             "status": null
@@ -23419,8 +23419,8 @@
       "definitionPlaceholder": false,
       "wikiNotes": [],
       "wikiAvailabilityNotes": [],
-      "wikiFetchedAt": "2026-06-22T17:54:33+00:00",
-      "win_rate": 48.73,
+      "wikiFetchedAt": "2026-06-22T21:43:36+00:00",
+      "win_rate": 48.58,
       "kit_tags": [
         "attack",
         "ability",
@@ -23445,7 +23445,7 @@
             "availabilityNotes": [],
             "hasDescription": true,
             "hasNotes": false,
-            "wikiFetchedAt": "2026-06-22T17:54:33+00:00"
+            "wikiFetchedAt": "2026-06-22T21:43:36+00:00"
           },
           "tencent": {
             "status": null
@@ -23605,8 +23605,8 @@
       "definitionPlaceholder": false,
       "wikiNotes": [],
       "wikiAvailabilityNotes": [],
-      "wikiFetchedAt": "2026-06-22T17:54:33+00:00",
-      "win_rate": 48.65,
+      "wikiFetchedAt": "2026-06-22T21:43:36+00:00",
+      "win_rate": 48.73,
       "kit_tags": [
         "ability",
         "haste"
@@ -23630,7 +23630,7 @@
             "availabilityNotes": [],
             "hasDescription": true,
             "hasNotes": false,
-            "wikiFetchedAt": "2026-06-22T17:54:33+00:00"
+            "wikiFetchedAt": "2026-06-22T21:43:36+00:00"
           },
           "tencent": {
             "status": null
@@ -23817,8 +23817,8 @@
       "definitionPlaceholder": false,
       "wikiNotes": [],
       "wikiAvailabilityNotes": [],
-      "wikiFetchedAt": "2026-06-22T17:54:33+00:00",
-      "win_rate": 48.64,
+      "wikiFetchedAt": "2026-06-22T21:43:36+00:00",
+      "win_rate": 48.6,
       "kit_tags": [
         "attack",
         "dot"
@@ -23842,7 +23842,7 @@
             "availabilityNotes": [],
             "hasDescription": true,
             "hasNotes": false,
-            "wikiFetchedAt": "2026-06-22T17:54:33+00:00"
+            "wikiFetchedAt": "2026-06-22T21:43:36+00:00"
           },
           "tencent": {
             "status": null
@@ -24020,8 +24020,8 @@
       "definitionPlaceholder": false,
       "wikiNotes": [],
       "wikiAvailabilityNotes": [],
-      "wikiFetchedAt": "2026-06-22T17:54:33+00:00",
-      "win_rate": 48.58,
+      "wikiFetchedAt": "2026-06-22T21:43:36+00:00",
+      "win_rate": 48.52,
       "kit_tags": [
         "ability",
         "cc"
@@ -24045,7 +24045,7 @@
             "availabilityNotes": [],
             "hasDescription": true,
             "hasNotes": false,
-            "wikiFetchedAt": "2026-06-22T17:54:33+00:00"
+            "wikiFetchedAt": "2026-06-22T21:43:36+00:00"
           },
           "tencent": {
             "status": null
@@ -24223,8 +24223,8 @@
       "definitionPlaceholder": false,
       "wikiNotes": [],
       "wikiAvailabilityNotes": [],
-      "wikiFetchedAt": "2026-06-22T17:54:33+00:00",
-      "win_rate": 48.42,
+      "wikiFetchedAt": "2026-06-22T21:43:36+00:00",
+      "win_rate": 48.54,
       "kit_tags": [
         "dot"
       ],
@@ -24247,7 +24247,7 @@
             "availabilityNotes": [],
             "hasDescription": true,
             "hasNotes": false,
-            "wikiFetchedAt": "2026-06-22T17:54:33+00:00"
+            "wikiFetchedAt": "2026-06-22T21:43:36+00:00"
           },
           "tencent": {
             "status": null
@@ -24349,7 +24349,7 @@
       "augmentId": "ARAM_MountainSoul",
       "slug": "mountainsoul",
       "name": "Mountain Soul",
-      "displayName": "MountainSoul",
+      "displayName": "Mountain Soul",
       "rarity": "silver",
       "cdragonRarity": "silver",
       "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/mountainsoul_large.png",
@@ -24407,8 +24407,8 @@
       "definitionPlaceholder": false,
       "wikiNotes": [],
       "wikiAvailabilityNotes": [],
-      "wikiFetchedAt": "2026-06-22T17:54:33+00:00",
-      "win_rate": 48.33,
+      "wikiFetchedAt": "2026-06-22T21:43:36+00:00",
+      "win_rate": 48.26,
       "kit_tags": [],
       "flags": {
         "system_breaker": false,
@@ -24429,7 +24429,7 @@
             "availabilityNotes": [],
             "hasDescription": true,
             "hasNotes": false,
-            "wikiFetchedAt": "2026-06-22T17:54:33+00:00"
+            "wikiFetchedAt": "2026-06-22T21:43:36+00:00"
           },
           "tencent": {
             "status": null
@@ -24616,8 +24616,8 @@
       "definitionPlaceholder": false,
       "wikiNotes": [],
       "wikiAvailabilityNotes": [],
-      "wikiFetchedAt": "2026-06-22T17:54:33+00:00",
-      "win_rate": 48.29,
+      "wikiFetchedAt": "2026-06-22T21:43:36+00:00",
+      "win_rate": 48.34,
       "kit_tags": [
         "ability",
         "cc"
@@ -24641,7 +24641,7 @@
             "availabilityNotes": [],
             "hasDescription": true,
             "hasNotes": false,
-            "wikiFetchedAt": "2026-06-22T17:54:33+00:00"
+            "wikiFetchedAt": "2026-06-22T21:43:36+00:00"
           },
           "tencent": {
             "status": null
@@ -24788,7 +24788,7 @@
           },
           "existing_catalog": {
             "slug": "nature-is-healing",
-            "lifecycle": "added"
+            "lifecycle": "removed"
           },
           "resolution": {
             "liveSources": [],
@@ -24862,7 +24862,7 @@
           },
           "existing_catalog": {
             "slug": "poltergeist",
-            "lifecycle": "active"
+            "lifecycle": "removed"
           },
           "resolution": {
             "liveSources": [],
@@ -24938,8 +24938,8 @@
       "definitionPlaceholder": false,
       "wikiNotes": [],
       "wikiAvailabilityNotes": [],
-      "wikiFetchedAt": "2026-06-22T17:54:33+00:00",
-      "win_rate": 48.0,
+      "wikiFetchedAt": "2026-06-22T21:43:36+00:00",
+      "win_rate": 47.94,
       "kit_tags": [
         "ability",
         "dot",
@@ -24964,7 +24964,7 @@
             "availabilityNotes": [],
             "hasDescription": true,
             "hasNotes": false,
-            "wikiFetchedAt": "2026-06-22T17:54:33+00:00"
+            "wikiFetchedAt": "2026-06-22T21:43:36+00:00"
           },
           "tencent": {
             "status": null
@@ -25353,8 +25353,8 @@
       "definitionPlaceholder": false,
       "wikiNotes": [],
       "wikiAvailabilityNotes": [],
-      "wikiFetchedAt": "2026-06-22T17:54:33+00:00",
-      "win_rate": 47.97,
+      "wikiFetchedAt": "2026-06-22T21:43:36+00:00",
+      "win_rate": 47.89,
       "kit_tags": [
         "cc"
       ],
@@ -25377,7 +25377,7 @@
             "availabilityNotes": [],
             "hasDescription": true,
             "hasNotes": false,
-            "wikiFetchedAt": "2026-06-22T17:54:33+00:00"
+            "wikiFetchedAt": "2026-06-22T21:43:36+00:00"
           },
           "tencent": {
             "status": null
@@ -25524,7 +25524,7 @@
           },
           "existing_catalog": {
             "slug": "nightstalking",
-            "lifecycle": "active"
+            "lifecycle": "removed"
           },
           "resolution": {
             "liveSources": [],
@@ -25704,8 +25704,8 @@
       "definitionPlaceholder": false,
       "wikiNotes": [],
       "wikiAvailabilityNotes": [],
-      "wikiFetchedAt": "2026-06-22T17:54:33+00:00",
-      "win_rate": 47.85,
+      "wikiFetchedAt": "2026-06-22T21:43:36+00:00",
+      "win_rate": 47.9,
       "kit_tags": [
         "attack",
         "ability",
@@ -25731,7 +25731,7 @@
             "availabilityNotes": [],
             "hasDescription": true,
             "hasNotes": false,
-            "wikiFetchedAt": "2026-06-22T17:54:33+00:00"
+            "wikiFetchedAt": "2026-06-22T21:43:36+00:00"
           },
           "tencent": {
             "status": null
@@ -25881,8 +25881,8 @@
       "definitionPlaceholder": false,
       "wikiNotes": [],
       "wikiAvailabilityNotes": [],
-      "wikiFetchedAt": "2026-06-22T17:54:33+00:00",
-      "win_rate": 47.84,
+      "wikiFetchedAt": "2026-06-22T21:43:36+00:00",
+      "win_rate": 47.87,
       "kit_tags": [
         "attack",
         "ability",
@@ -25909,7 +25909,7 @@
             "availabilityNotes": [],
             "hasDescription": true,
             "hasNotes": false,
-            "wikiFetchedAt": "2026-06-22T17:54:33+00:00"
+            "wikiFetchedAt": "2026-06-22T21:43:36+00:00"
           },
           "tencent": {
             "status": null
@@ -26056,7 +26056,7 @@
           },
           "existing_catalog": {
             "slug": "tripleshot",
-            "lifecycle": "added"
+            "lifecycle": "removed"
           },
           "resolution": {
             "liveSources": [],
@@ -26132,8 +26132,8 @@
       "definitionPlaceholder": false,
       "wikiNotes": [],
       "wikiAvailabilityNotes": [],
-      "wikiFetchedAt": "2026-06-22T17:54:33+00:00",
-      "win_rate": 47.66,
+      "wikiFetchedAt": "2026-06-22T21:43:36+00:00",
+      "win_rate": 47.57,
       "kit_tags": [
         "heal_shield",
         "tank"
@@ -26157,7 +26157,7 @@
             "availabilityNotes": [],
             "hasDescription": true,
             "hasNotes": false,
-            "wikiFetchedAt": "2026-06-22T17:54:33+00:00"
+            "wikiFetchedAt": "2026-06-22T21:43:36+00:00"
           },
           "tencent": {
             "status": null
@@ -26307,8 +26307,8 @@
       "definitionPlaceholder": false,
       "wikiNotes": [],
       "wikiAvailabilityNotes": [],
-      "wikiFetchedAt": "2026-06-22T17:54:33+00:00",
-      "win_rate": 47.59,
+      "wikiFetchedAt": "2026-06-22T21:43:36+00:00",
+      "win_rate": 47.55,
       "kit_tags": [
         "attack",
         "ability",
@@ -26333,7 +26333,7 @@
             "availabilityNotes": [],
             "hasDescription": true,
             "hasNotes": false,
-            "wikiFetchedAt": "2026-06-22T17:54:33+00:00"
+            "wikiFetchedAt": "2026-06-22T21:43:36+00:00"
           },
           "tencent": {
             "status": null
@@ -26349,7 +26349,7 @@
           },
           "existing_catalog": {
             "slug": "hellbent",
-            "lifecycle": "added"
+            "lifecycle": "active"
           },
           "resolution": {
             "liveSources": [
@@ -26483,8 +26483,8 @@
       "definitionPlaceholder": false,
       "wikiNotes": [],
       "wikiAvailabilityNotes": [],
-      "wikiFetchedAt": "2026-06-22T17:54:33+00:00",
-      "win_rate": 47.47,
+      "wikiFetchedAt": "2026-06-22T21:43:36+00:00",
+      "win_rate": 49.26,
       "kit_tags": [
         "ability",
         "cc",
@@ -26509,7 +26509,7 @@
             "availabilityNotes": [],
             "hasDescription": true,
             "hasNotes": false,
-            "wikiFetchedAt": "2026-06-22T17:54:33+00:00"
+            "wikiFetchedAt": "2026-06-22T21:43:36+00:00"
           },
           "tencent": {
             "status": null
@@ -26658,7 +26658,7 @@
           },
           "existing_catalog": {
             "slug": "empyrean-promise",
-            "lifecycle": "active"
+            "lifecycle": "removed"
           },
           "resolution": {
             "liveSources": [],
@@ -26731,7 +26731,7 @@
           },
           "existing_catalog": {
             "slug": "kill-secured",
-            "lifecycle": "active"
+            "lifecycle": "removed"
           },
           "resolution": {
             "liveSources": [],
@@ -26805,7 +26805,7 @@
           },
           "existing_catalog": {
             "slug": "porcupine",
-            "lifecycle": "added"
+            "lifecycle": "removed"
           },
           "resolution": {
             "liveSources": [],
@@ -26881,8 +26881,8 @@
       "definitionPlaceholder": false,
       "wikiNotes": [],
       "wikiAvailabilityNotes": [],
-      "wikiFetchedAt": "2026-06-22T17:54:33+00:00",
-      "win_rate": 47.14,
+      "wikiFetchedAt": "2026-06-22T21:43:36+00:00",
+      "win_rate": 47.11,
       "kit_tags": [
         "ability",
         "cc",
@@ -26907,7 +26907,7 @@
             "availabilityNotes": [],
             "hasDescription": true,
             "hasNotes": false,
-            "wikiFetchedAt": "2026-06-22T17:54:33+00:00"
+            "wikiFetchedAt": "2026-06-22T21:43:36+00:00"
           },
           "tencent": {
             "status": null
@@ -27054,7 +27054,7 @@
           },
           "existing_catalog": {
             "slug": "echo-cast",
-            "lifecycle": "added"
+            "lifecycle": "removed"
           },
           "resolution": {
             "liveSources": [],
@@ -27127,7 +27127,7 @@
           },
           "existing_catalog": {
             "slug": "spell-split",
-            "lifecycle": "added"
+            "lifecycle": "removed"
           },
           "resolution": {
             "liveSources": [],
@@ -27201,7 +27201,7 @@
           },
           "existing_catalog": {
             "slug": "shark-tempest",
-            "lifecycle": "added"
+            "lifecycle": "removed"
           },
           "resolution": {
             "liveSources": [],
@@ -27275,7 +27275,7 @@
           },
           "existing_catalog": {
             "slug": "flash-2",
-            "lifecycle": "active"
+            "lifecycle": "removed"
           },
           "resolution": {
             "liveSources": [],
@@ -27351,8 +27351,8 @@
       "definitionPlaceholder": false,
       "wikiNotes": [],
       "wikiAvailabilityNotes": [],
-      "wikiFetchedAt": "2026-06-22T17:54:33+00:00",
-      "win_rate": 46.6,
+      "wikiFetchedAt": "2026-06-22T21:43:36+00:00",
+      "win_rate": 46.48,
       "kit_tags": [
         "attack",
         "ability",
@@ -27377,7 +27377,7 @@
             "availabilityNotes": [],
             "hasDescription": true,
             "hasNotes": false,
-            "wikiFetchedAt": "2026-06-22T17:54:33+00:00"
+            "wikiFetchedAt": "2026-06-22T21:43:36+00:00"
           },
           "tencent": {
             "status": null
@@ -27525,7 +27525,7 @@
           },
           "existing_catalog": {
             "slug": "hide-on-bush",
-            "lifecycle": "added"
+            "lifecycle": "removed"
           },
           "resolution": {
             "liveSources": [],
@@ -27553,7 +27553,7 @@
       "augmentId": "ARAM_CantTouchThis",
       "slug": "cant-touch-this",
       "name": "Can't Touch This",
-      "displayName": "Cant Touch This",
+      "displayName": "Can't Touch This",
       "rarity": "prismatic",
       "cdragonRarity": "prismatic",
       "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/canttouchthis_large.png",
@@ -27629,8 +27629,8 @@
       "definitionPlaceholder": false,
       "wikiNotes": [],
       "wikiAvailabilityNotes": [],
-      "wikiFetchedAt": "2026-06-22T17:54:33+00:00",
-      "win_rate": 46.53,
+      "wikiFetchedAt": "2026-06-22T21:43:36+00:00",
+      "win_rate": 46.46,
       "kit_tags": [
         "ability",
         "tank"
@@ -27654,7 +27654,7 @@
             "availabilityNotes": [],
             "hasDescription": true,
             "hasNotes": false,
-            "wikiFetchedAt": "2026-06-22T17:54:33+00:00"
+            "wikiFetchedAt": "2026-06-22T21:43:36+00:00"
           },
           "tencent": {
             "status": null
@@ -27756,7 +27756,7 @@
       "augmentId": "ARAM_PandorasBox",
       "slug": "pandorasbox",
       "name": "Pandora's Box",
-      "displayName": "PandorasBox",
+      "displayName": "Pandora's Box",
       "rarity": "prismatic",
       "cdragonRarity": "prismatic",
       "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/pandoras_box_large.png",
@@ -27814,8 +27814,8 @@
       "definitionPlaceholder": false,
       "wikiNotes": [],
       "wikiAvailabilityNotes": [],
-      "wikiFetchedAt": "2026-06-22T17:54:33+00:00",
-      "win_rate": 46.48,
+      "wikiFetchedAt": "2026-06-22T21:43:36+00:00",
+      "win_rate": 46.59,
       "kit_tags": [],
       "flags": {
         "system_breaker": false,
@@ -27836,7 +27836,7 @@
             "availabilityNotes": [],
             "hasDescription": true,
             "hasNotes": false,
-            "wikiFetchedAt": "2026-06-22T17:54:33+00:00"
+            "wikiFetchedAt": "2026-06-22T21:43:36+00:00"
           },
           "tencent": {
             "status": null
@@ -27986,8 +27986,8 @@
       "definitionPlaceholder": false,
       "wikiNotes": [],
       "wikiAvailabilityNotes": [],
-      "wikiFetchedAt": "2026-06-22T17:54:33+00:00",
-      "win_rate": 46.45,
+      "wikiFetchedAt": "2026-06-22T21:43:36+00:00",
+      "win_rate": 46.27,
       "kit_tags": [
         "movement",
         "haste"
@@ -28011,7 +28011,7 @@
             "availabilityNotes": [],
             "hasDescription": true,
             "hasNotes": false,
-            "wikiFetchedAt": "2026-06-22T17:54:33+00:00"
+            "wikiFetchedAt": "2026-06-22T21:43:36+00:00"
           },
           "tencent": {
             "status": null
@@ -28027,7 +28027,7 @@
           },
           "existing_catalog": {
             "slug": "rite-of-ascension",
-            "lifecycle": "added"
+            "lifecycle": "active"
           },
           "resolution": {
             "liveSources": [
@@ -28162,8 +28162,8 @@
       "definitionPlaceholder": false,
       "wikiNotes": [],
       "wikiAvailabilityNotes": [],
-      "wikiFetchedAt": "2026-06-22T17:54:33+00:00",
-      "win_rate": 46.39,
+      "wikiFetchedAt": "2026-06-22T21:43:36+00:00",
+      "win_rate": 46.44,
       "kit_tags": [
         "ability",
         "haste"
@@ -28187,7 +28187,7 @@
             "availabilityNotes": [],
             "hasDescription": true,
             "hasNotes": false,
-            "wikiFetchedAt": "2026-06-22T17:54:33+00:00"
+            "wikiFetchedAt": "2026-06-22T21:43:36+00:00"
           },
           "tencent": {
             "status": null
@@ -28203,7 +28203,7 @@
           },
           "existing_catalog": {
             "slug": "snowday",
-            "lifecycle": "added"
+            "lifecycle": "active"
           },
           "resolution": {
             "liveSources": [
@@ -28401,8 +28401,8 @@
       "definitionPlaceholder": false,
       "wikiNotes": [],
       "wikiAvailabilityNotes": [],
-      "wikiFetchedAt": "2026-06-22T17:54:33+00:00",
-      "win_rate": 46.31,
+      "wikiFetchedAt": "2026-06-22T21:43:36+00:00",
+      "win_rate": 46.25,
       "kit_tags": [
         "attack",
         "on_hit",
@@ -28427,7 +28427,7 @@
             "availabilityNotes": [],
             "hasDescription": true,
             "hasNotes": false,
-            "wikiFetchedAt": "2026-06-22T17:54:33+00:00"
+            "wikiFetchedAt": "2026-06-22T21:43:36+00:00"
           },
           "tencent": {
             "status": null
@@ -28577,7 +28577,7 @@
           },
           "existing_catalog": {
             "slug": "prom-queen",
-            "lifecycle": "active"
+            "lifecycle": "removed"
           },
           "resolution": {
             "liveSources": [],
@@ -28650,7 +28650,7 @@
           },
           "existing_catalog": {
             "slug": "our-healing",
-            "lifecycle": "added"
+            "lifecycle": "removed"
           },
           "resolution": {
             "liveSources": [],
@@ -28724,7 +28724,7 @@
           },
           "existing_catalog": {
             "slug": "mighty-shield",
-            "lifecycle": "active"
+            "lifecycle": "removed"
           },
           "resolution": {
             "liveSources": [],
@@ -28800,8 +28800,8 @@
       "definitionPlaceholder": false,
       "wikiNotes": [],
       "wikiAvailabilityNotes": [],
-      "wikiFetchedAt": "2026-06-22T17:54:33+00:00",
-      "win_rate": 46.04,
+      "wikiFetchedAt": "2026-06-22T21:43:36+00:00",
+      "win_rate": 45.85,
       "kit_tags": [
         "ability",
         "cc"
@@ -28825,7 +28825,7 @@
             "availabilityNotes": [],
             "hasDescription": true,
             "hasNotes": false,
-            "wikiFetchedAt": "2026-06-22T17:54:33+00:00"
+            "wikiFetchedAt": "2026-06-22T21:43:36+00:00"
           },
           "tencent": {
             "status": null
@@ -28841,7 +28841,7 @@
           },
           "existing_catalog": {
             "slug": "terror",
-            "lifecycle": "added"
+            "lifecycle": "active"
           },
           "resolution": {
             "liveSources": [
@@ -28975,7 +28975,7 @@
           },
           "existing_catalog": {
             "slug": "pin-cushion",
-            "lifecycle": "added"
+            "lifecycle": "removed"
           },
           "resolution": {
             "liveSources": [],
@@ -29051,7 +29051,7 @@
           },
           "existing_catalog": {
             "slug": "pinball",
-            "lifecycle": "active"
+            "lifecycle": "removed"
           },
           "resolution": {
             "liveSources": [],
@@ -29127,8 +29127,8 @@
       "definitionPlaceholder": false,
       "wikiNotes": [],
       "wikiAvailabilityNotes": [],
-      "wikiFetchedAt": "2026-06-22T17:54:33+00:00",
-      "win_rate": 45.72,
+      "wikiFetchedAt": "2026-06-22T21:43:36+00:00",
+      "win_rate": 45.83,
       "kit_tags": [
         "tank"
       ],
@@ -29151,7 +29151,7 @@
             "availabilityNotes": [],
             "hasDescription": true,
             "hasNotes": false,
-            "wikiFetchedAt": "2026-06-22T17:54:33+00:00"
+            "wikiFetchedAt": "2026-06-22T21:43:36+00:00"
           },
           "tencent": {
             "status": null
@@ -29167,7 +29167,7 @@
           },
           "existing_catalog": {
             "slug": "titans-resolve",
-            "lifecycle": "added"
+            "lifecycle": "active"
           },
           "resolution": {
             "liveSources": [
@@ -29302,8 +29302,8 @@
       "definitionPlaceholder": false,
       "wikiNotes": [],
       "wikiAvailabilityNotes": [],
-      "wikiFetchedAt": "2026-06-22T17:54:33+00:00",
-      "win_rate": 45.65,
+      "wikiFetchedAt": "2026-06-22T21:43:36+00:00",
+      "win_rate": 45.59,
       "kit_tags": [
         "ability"
       ],
@@ -29326,7 +29326,7 @@
             "availabilityNotes": [],
             "hasDescription": true,
             "hasNotes": false,
-            "wikiFetchedAt": "2026-06-22T17:54:33+00:00"
+            "wikiFetchedAt": "2026-06-22T21:43:36+00:00"
           },
           "tencent": {
             "status": null
@@ -29342,7 +29342,7 @@
           },
           "existing_catalog": {
             "slug": "multishot",
-            "lifecycle": "added"
+            "lifecycle": "active"
           },
           "resolution": {
             "liveSources": [
@@ -29421,7 +29421,7 @@
       "name_zh_TW": "多重射擊",
       "name_ja": "マルチショット",
       "name_ko": "다중 공격",
-      "wikiDescription": "Assigns quests that require you to hit enemy champions with a specific ability's missile a number of times (counts up to 1 hit per champion per cast instance). There are six quest tiers, and completing each tier rewards you with an additional missile fired on the ability's cast. The reward effect also modifies the ability to fire all of its missiles in a cone. Subsequent missile hits from the same cast against the same enemy deal 30% damage.",
+      "wikiDescription": "Assigns quests that require you to hit enemy champions with a specific ability's missile a number of times (counts up to 1 hit per champion per cast instance). There are six quest tiers, and each completed tier rewards you with an additional missile fired on the ability's cast. The reward effect also modifies the ability to fire all of its missiles in a cone. Subsequent missile hits from the same cast against the same enemy deal 30% damage.",
       "wikiRarity": "prismatic"
     },
     {
@@ -29474,7 +29474,7 @@
           },
           "existing_catalog": {
             "slug": "snowblast",
-            "lifecycle": "added"
+            "lifecycle": "removed"
           },
           "resolution": {
             "liveSources": [],
@@ -29548,7 +29548,7 @@
           },
           "existing_catalog": {
             "slug": "spin-me-right-round",
-            "lifecycle": "active"
+            "lifecycle": "removed"
           },
           "resolution": {
             "liveSources": [],
@@ -29623,7 +29623,7 @@
           },
           "existing_catalog": {
             "slug": "surge-field",
-            "lifecycle": "added"
+            "lifecycle": "removed"
           },
           "resolution": {
             "liveSources": [],
@@ -29700,7 +29700,7 @@
           },
           "existing_catalog": {
             "slug": "holy-snowball",
-            "lifecycle": "active"
+            "lifecycle": "removed"
           },
           "resolution": {
             "liveSources": [],
@@ -29776,8 +29776,8 @@
       "definitionPlaceholder": false,
       "wikiNotes": [],
       "wikiAvailabilityNotes": [],
-      "wikiFetchedAt": "2026-06-22T17:54:33+00:00",
-      "win_rate": 44.83,
+      "wikiFetchedAt": "2026-06-22T21:43:36+00:00",
+      "win_rate": 44.57,
       "kit_tags": [
         "movement"
       ],
@@ -29800,7 +29800,7 @@
             "availabilityNotes": [],
             "hasDescription": true,
             "hasNotes": false,
-            "wikiFetchedAt": "2026-06-22T17:54:33+00:00"
+            "wikiFetchedAt": "2026-06-22T21:43:36+00:00"
           },
           "tencent": {
             "status": null
@@ -29816,7 +29816,7 @@
           },
           "existing_catalog": {
             "slug": "quickstep",
-            "lifecycle": "added"
+            "lifecycle": "active"
           },
           "resolution": {
             "liveSources": [
@@ -29948,7 +29948,7 @@
           },
           "existing_catalog": {
             "slug": "glass-cannon",
-            "lifecycle": "active"
+            "lifecycle": "removed"
           },
           "resolution": {
             "liveSources": [],
@@ -30022,7 +30022,7 @@
           },
           "existing_catalog": {
             "slug": "chain-reaction",
-            "lifecycle": "added"
+            "lifecycle": "removed"
           },
           "resolution": {
             "liveSources": [],
@@ -30096,7 +30096,7 @@
           },
           "existing_catalog": {
             "slug": "dimension-shift",
-            "lifecycle": "added"
+            "lifecycle": "removed"
           },
           "resolution": {
             "liveSources": [],
@@ -30170,7 +30170,7 @@
           },
           "existing_catalog": {
             "slug": "poro-stampede",
-            "lifecycle": "added"
+            "lifecycle": "removed"
           },
           "resolution": {
             "liveSources": [],
@@ -30408,7 +30408,7 @@
       ],
       "flags": {
         "system_breaker": false,
-        "lifecycle": "added"
+        "lifecycle": "removed"
       },
       "type": "standalone",
       "availability": {
@@ -30593,7 +30593,7 @@
       ],
       "flags": {
         "system_breaker": false,
-        "lifecycle": "added"
+        "lifecycle": "removed"
       },
       "type": "standalone",
       "availability": {
@@ -30931,7 +30931,7 @@
       ],
       "flags": {
         "system_breaker": false,
-        "lifecycle": "added"
+        "lifecycle": "removed"
       },
       "type": "standalone",
       "availability": {
@@ -31101,7 +31101,7 @@
       "kit_tags": [],
       "flags": {
         "system_breaker": false,
-        "lifecycle": "added"
+        "lifecycle": "removed"
       },
       "type": "standalone",
       "availability": {
@@ -31413,7 +31413,7 @@
       "wikiAvailabilityNotes": [
         "This augment is currently disabled."
       ],
-      "wikiFetchedAt": "2026-06-22T17:54:33+00:00",
+      "wikiFetchedAt": "2026-06-22T21:43:36+00:00",
       "win_rate": null,
       "kit_tags": [
         "attack",
@@ -31442,7 +31442,7 @@
             ],
             "hasDescription": true,
             "hasNotes": false,
-            "wikiFetchedAt": "2026-06-22T17:54:33+00:00"
+            "wikiFetchedAt": "2026-06-22T21:43:36+00:00"
           },
           "tencent": {
             "status": null
@@ -31600,7 +31600,7 @@
       ],
       "flags": {
         "system_breaker": false,
-        "lifecycle": "added"
+        "lifecycle": "removed"
       },
       "type": "standalone",
       "availability": {
@@ -31913,7 +31913,7 @@
       "definitionPlaceholder": false,
       "wikiNotes": [],
       "wikiAvailabilityNotes": [],
-      "wikiFetchedAt": "2026-06-22T17:54:33+00:00",
+      "wikiFetchedAt": "2026-06-22T21:43:36+00:00",
       "win_rate": null,
       "kit_tags": [
         "heal_shield",
@@ -31938,7 +31938,7 @@
             "availabilityNotes": [],
             "hasDescription": true,
             "hasNotes": false,
-            "wikiFetchedAt": "2026-06-22T17:54:33+00:00"
+            "wikiFetchedAt": "2026-06-22T21:43:36+00:00"
           },
           "tencent": {
             "status": null
@@ -31954,7 +31954,7 @@
           },
           "existing_catalog": {
             "slug": "critical-healing",
-            "lifecycle": "removed"
+            "lifecycle": "active"
           },
           "resolution": {
             "liveSources": [
@@ -32400,7 +32400,7 @@
       ],
       "flags": {
         "system_breaker": false,
-        "lifecycle": "added"
+        "lifecycle": "removed"
       },
       "type": "standalone",
       "availability": {
@@ -32567,7 +32567,7 @@
       "wikiAvailabilityNotes": [
         "This augment is currently disabled."
       ],
-      "wikiFetchedAt": "2026-06-22T17:54:33+00:00",
+      "wikiFetchedAt": "2026-06-22T21:43:36+00:00",
       "win_rate": null,
       "kit_tags": [
         "attack",
@@ -32596,7 +32596,7 @@
             ],
             "hasDescription": true,
             "hasNotes": false,
-            "wikiFetchedAt": "2026-06-22T17:54:33+00:00"
+            "wikiFetchedAt": "2026-06-22T21:43:36+00:00"
           },
           "tencent": {
             "status": null
@@ -32747,7 +32747,7 @@
       "definitionPlaceholder": false,
       "wikiNotes": [],
       "wikiAvailabilityNotes": [],
-      "wikiFetchedAt": "2026-06-22T17:54:33+00:00",
+      "wikiFetchedAt": "2026-06-22T21:43:36+00:00",
       "win_rate": null,
       "kit_tags": [
         "attack",
@@ -32773,7 +32773,7 @@
             "availabilityNotes": [],
             "hasDescription": true,
             "hasNotes": false,
-            "wikiFetchedAt": "2026-06-22T17:54:33+00:00"
+            "wikiFetchedAt": "2026-06-22T21:43:36+00:00"
           },
           "tencent": {
             "status": null
@@ -32789,7 +32789,7 @@
           },
           "existing_catalog": {
             "slug": "double-tap",
-            "lifecycle": "removed"
+            "lifecycle": "active"
           },
           "resolution": {
             "liveSources": [
@@ -33036,7 +33036,7 @@
       ],
       "flags": {
         "system_breaker": false,
-        "lifecycle": "added"
+        "lifecycle": "removed"
       },
       "type": "standalone",
       "availability": {
@@ -33321,7 +33321,7 @@
       ],
       "flags": {
         "system_breaker": false,
-        "lifecycle": "added"
+        "lifecycle": "removed"
       },
       "type": "standalone",
       "availability": {
@@ -33608,7 +33608,7 @@
       ],
       "flags": {
         "system_breaker": false,
-        "lifecycle": "added"
+        "lifecycle": "removed"
       },
       "type": "standalone",
       "availability": {
@@ -33970,7 +33970,7 @@
       "definitionPlaceholder": false,
       "wikiNotes": [],
       "wikiAvailabilityNotes": [],
-      "wikiFetchedAt": "2026-06-22T17:54:33+00:00",
+      "wikiFetchedAt": "2026-06-22T21:43:36+00:00",
       "win_rate": null,
       "kit_tags": [
         "heal_shield",
@@ -33995,7 +33995,7 @@
             "availabilityNotes": [],
             "hasDescription": true,
             "hasNotes": false,
-            "wikiFetchedAt": "2026-06-22T17:54:33+00:00"
+            "wikiFetchedAt": "2026-06-22T21:43:36+00:00"
           },
           "tencent": {
             "status": null
@@ -34011,7 +34011,7 @@
           },
           "existing_catalog": {
             "slug": "guilty-pleasure",
-            "lifecycle": "removed"
+            "lifecycle": "active"
           },
           "resolution": {
             "liveSources": [
@@ -34229,7 +34229,7 @@
       ],
       "flags": {
         "system_breaker": false,
-        "lifecycle": "added"
+        "lifecycle": "removed"
       },
       "type": "standalone",
       "availability": {
@@ -34477,7 +34477,7 @@
       ],
       "flags": {
         "system_breaker": false,
-        "lifecycle": "added"
+        "lifecycle": "removed"
       },
       "type": "standalone",
       "availability": {
@@ -34748,7 +34748,7 @@
       "definitionPlaceholder": false,
       "wikiNotes": [],
       "wikiAvailabilityNotes": [],
-      "wikiFetchedAt": "2026-06-22T17:54:33+00:00",
+      "wikiFetchedAt": "2026-06-22T21:43:36+00:00",
       "win_rate": null,
       "kit_tags": [
         "crit"
@@ -34772,7 +34772,7 @@
             "availabilityNotes": [],
             "hasDescription": true,
             "hasNotes": false,
-            "wikiFetchedAt": "2026-06-22T17:54:33+00:00"
+            "wikiFetchedAt": "2026-06-22T21:43:36+00:00"
           },
           "tencent": {
             "status": null
@@ -34788,7 +34788,7 @@
           },
           "existing_catalog": {
             "slug": "its-critical",
-            "lifecycle": "removed"
+            "lifecycle": "active"
           },
           "resolution": {
             "liveSources": [
@@ -34976,7 +34976,7 @@
       "definitionPlaceholder": false,
       "wikiNotes": [],
       "wikiAvailabilityNotes": [],
-      "wikiFetchedAt": "2026-06-22T17:54:33+00:00",
+      "wikiFetchedAt": "2026-06-22T21:43:36+00:00",
       "win_rate": null,
       "kit_tags": [
         "ability",
@@ -34984,10 +34984,6 @@
       ],
       "flags": {
         "system_breaker": true,
-        "availability_override": "bug_mechanism",
-        "availability_label": "BUG/MECHANISM",
-        "availability_source": "player-observed-live-game",
-        "availability_observed_at": "2026-06-20",
         "lifecycle": "active"
       },
       "type": "standalone",
@@ -35005,7 +35001,7 @@
             "availabilityNotes": [],
             "hasDescription": true,
             "hasNotes": false,
-            "wikiFetchedAt": "2026-06-22T17:54:33+00:00"
+            "wikiFetchedAt": "2026-06-22T21:43:36+00:00"
           },
           "tencent": {
             "status": null
@@ -35021,7 +35017,7 @@
           },
           "existing_catalog": {
             "slug": "jeweled-gauntlet",
-            "lifecycle": "removed"
+            "lifecycle": "active"
           },
           "resolution": {
             "liveSources": [
@@ -35309,7 +35305,7 @@
       ],
       "flags": {
         "system_breaker": false,
-        "lifecycle": "added"
+        "lifecycle": "removed"
       },
       "type": "standalone",
       "availability": {
@@ -35604,7 +35600,7 @@
       ],
       "flags": {
         "system_breaker": false,
-        "lifecycle": "added"
+        "lifecycle": "removed"
       },
       "type": "standalone",
       "availability": {
@@ -35764,7 +35760,7 @@
           },
           "existing_catalog": {
             "slug": "one-trick-pony",
-            "lifecycle": "added"
+            "lifecycle": "removed"
           },
           "resolution": {
             "liveSources": [],
@@ -35792,7 +35788,7 @@
       "augmentId": "ARAM_OrbitalLaser_Active",
       "slug": "orbitallaser",
       "name": "Orbital Laser",
-      "displayName": "OrbitalLaser",
+      "displayName": "Orbital Laser",
       "rarity": "prismatic",
       "cdragonRarity": "prismatic",
       "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/orbitallaser_large.png",
@@ -35939,7 +35935,7 @@
       ],
       "flags": {
         "system_breaker": false,
-        "lifecycle": "added"
+        "lifecycle": "removed"
       },
       "type": "standalone",
       "availability": {
@@ -36221,7 +36217,7 @@
         "This augment is currently disabled.",
         "This augment prevents the user from being offered the Vampirism augment."
       ],
-      "wikiFetchedAt": "2026-06-22T17:54:33+00:00",
+      "wikiFetchedAt": "2026-06-22T21:43:36+00:00",
       "win_rate": null,
       "kit_tags": [
         "heal_shield",
@@ -36249,7 +36245,7 @@
             ],
             "hasDescription": true,
             "hasNotes": false,
-            "wikiFetchedAt": "2026-06-22T17:54:33+00:00"
+            "wikiFetchedAt": "2026-06-22T21:43:36+00:00"
           },
           "tencent": {
             "status": null
@@ -36408,7 +36404,7 @@
       ],
       "flags": {
         "system_breaker": false,
-        "lifecycle": "added"
+        "lifecycle": "removed"
       },
       "type": "standalone",
       "availability": {
@@ -36906,7 +36902,7 @@
       "wikiAvailabilityNotes": [
         "This augment is currently disabled."
       ],
-      "wikiFetchedAt": "2026-06-22T17:54:33+00:00",
+      "wikiFetchedAt": "2026-06-22T21:43:36+00:00",
       "win_rate": null,
       "kit_tags": [
         "ability",
@@ -36933,7 +36929,7 @@
             ],
             "hasDescription": true,
             "hasNotes": false,
-            "wikiFetchedAt": "2026-06-22T17:54:33+00:00"
+            "wikiFetchedAt": "2026-06-22T21:43:36+00:00"
           },
           "tencent": {
             "status": null
@@ -37142,7 +37138,7 @@
             "availabilityNotes": [],
             "hasDescription": true,
             "hasNotes": false,
-            "wikiFetchedAt": "2026-06-22T17:54:33+00:00"
+            "wikiFetchedAt": "2026-06-22T21:43:36+00:00"
           },
           "tencent": {
             "status": null
@@ -37158,7 +37154,7 @@
           },
           "existing_catalog": {
             "slug": "rabble-rousing",
-            "lifecycle": "removed"
+            "lifecycle": "active"
           },
           "resolution": {
             "liveSources": [
@@ -37185,7 +37181,7 @@
       },
       "wikiNotes": [],
       "wikiAvailabilityNotes": [],
-      "wikiFetchedAt": "2026-06-22T17:54:33+00:00"
+      "wikiFetchedAt": "2026-06-22T21:43:36+00:00"
     },
     {
       "slug": "red-envelopes",
@@ -37349,7 +37345,7 @@
       "definitionPlaceholder": false,
       "wikiNotes": [],
       "wikiAvailabilityNotes": [],
-      "wikiFetchedAt": "2026-06-22T17:54:33+00:00",
+      "wikiFetchedAt": "2026-06-22T21:43:36+00:00",
       "win_rate": null,
       "kit_tags": [
         "ability",
@@ -37374,7 +37370,7 @@
             "availabilityNotes": [],
             "hasDescription": true,
             "hasNotes": false,
-            "wikiFetchedAt": "2026-06-22T17:54:33+00:00"
+            "wikiFetchedAt": "2026-06-22T21:43:36+00:00"
           },
           "tencent": {
             "status": null
@@ -37390,7 +37386,7 @@
           },
           "existing_catalog": {
             "slug": "rejuvenation",
-            "lifecycle": "added"
+            "lifecycle": "active"
           },
           "resolution": {
             "liveSources": [
@@ -37579,7 +37575,7 @@
       ],
       "flags": {
         "system_breaker": false,
-        "lifecycle": "added"
+        "lifecycle": "removed"
       },
       "type": "standalone",
       "availability": {
@@ -37787,7 +37783,7 @@
       ],
       "flags": {
         "system_breaker": false,
-        "lifecycle": "added"
+        "lifecycle": "removed"
       },
       "type": "standalone",
       "availability": {
@@ -38006,7 +38002,7 @@
       ],
       "flags": {
         "system_breaker": false,
-        "lifecycle": "added"
+        "lifecycle": "removed"
       },
       "type": "standalone",
       "availability": {
@@ -38230,7 +38226,7 @@
       ],
       "flags": {
         "system_breaker": true,
-        "lifecycle": "added"
+        "lifecycle": "removed"
       },
       "type": "standalone",
       "availability": {
@@ -38453,7 +38449,7 @@
         "When a Burn stack has been inflicted to an enemy, all different Burn sources will stack the 1st source's effect and credit the damage to the 1st source's owner (e.g. Tormentor inflicted 1st will be stacked by Slow Cooker)"
       ],
       "wikiAvailabilityNotes": [],
-      "wikiFetchedAt": "2026-06-22T17:54:33+00:00",
+      "wikiFetchedAt": "2026-06-22T21:43:36+00:00",
       "win_rate": null,
       "kit_tags": [
         "ability",
@@ -38478,7 +38474,7 @@
             "availabilityNotes": [],
             "hasDescription": false,
             "hasNotes": true,
-            "wikiFetchedAt": "2026-06-22T17:54:33+00:00"
+            "wikiFetchedAt": "2026-06-22T21:43:36+00:00"
           },
           "tencent": {
             "status": null
@@ -38494,7 +38490,7 @@
           },
           "existing_catalog": {
             "slug": "slow-cooker",
-            "lifecycle": "removed"
+            "lifecycle": "active"
           },
           "resolution": {
             "liveSources": [
@@ -38812,7 +38808,7 @@
       "definitionPlaceholder": false,
       "wikiNotes": [],
       "wikiAvailabilityNotes": [],
-      "wikiFetchedAt": "2026-06-22T17:54:33+00:00",
+      "wikiFetchedAt": "2026-06-22T21:43:36+00:00",
       "win_rate": null,
       "kit_tags": [
         "crit",
@@ -38837,7 +38833,7 @@
             "availabilityNotes": [],
             "hasDescription": true,
             "hasNotes": false,
-            "wikiFetchedAt": "2026-06-22T17:54:33+00:00"
+            "wikiFetchedAt": "2026-06-22T21:43:36+00:00"
           },
           "tencent": {
             "status": null
@@ -38853,7 +38849,7 @@
           },
           "existing_catalog": {
             "slug": "soul-siphon",
-            "lifecycle": "removed"
+            "lifecycle": "active"
           },
           "resolution": {
             "liveSources": [
@@ -38997,7 +38993,7 @@
       ],
       "flags": {
         "system_breaker": false,
-        "lifecycle": "added"
+        "lifecycle": "removed"
       },
       "type": "standalone",
       "availability": {
@@ -39159,7 +39155,7 @@
           },
           "existing_catalog": {
             "slug": "squishy-slappy-grab",
-            "lifecycle": "added"
+            "lifecycle": "removed"
           },
           "resolution": {
             "liveSources": [],
@@ -39298,7 +39294,7 @@
       "definitionPlaceholder": false,
       "wikiNotes": [],
       "wikiAvailabilityNotes": [],
-      "wikiFetchedAt": "2026-06-22T17:54:33+00:00",
+      "wikiFetchedAt": "2026-06-22T21:43:36+00:00",
       "win_rate": null,
       "kit_tags": [
         "tank",
@@ -39323,7 +39319,7 @@
             "availabilityNotes": [],
             "hasDescription": true,
             "hasNotes": false,
-            "wikiFetchedAt": "2026-06-22T17:54:33+00:00"
+            "wikiFetchedAt": "2026-06-22T21:43:36+00:00"
           },
           "tencent": {
             "status": null
@@ -39339,7 +39335,7 @@
           },
           "existing_catalog": {
             "slug": "tank-it-or-leave-it",
-            "lifecycle": "removed"
+            "lifecycle": "active"
           },
           "resolution": {
             "liveSources": [
@@ -39521,7 +39517,7 @@
       ],
       "flags": {
         "system_breaker": false,
-        "lifecycle": "added"
+        "lifecycle": "removed"
       },
       "type": "standalone",
       "availability": {
@@ -39725,7 +39721,7 @@
         "When a Burn stack has been inflicted to an enemy, all different Burn sources will stack the 1st source's effect and credit the damage to the 1st source's owner (e.g. Tormentor inflicted 1st will be stacked by Slow Cooker)"
       ],
       "wikiAvailabilityNotes": [],
-      "wikiFetchedAt": "2026-06-22T17:54:33+00:00",
+      "wikiFetchedAt": "2026-06-22T21:43:36+00:00",
       "win_rate": null,
       "kit_tags": [
         "ability",
@@ -39751,7 +39747,7 @@
             "availabilityNotes": [],
             "hasDescription": false,
             "hasNotes": true,
-            "wikiFetchedAt": "2026-06-22T17:54:33+00:00"
+            "wikiFetchedAt": "2026-06-22T21:43:36+00:00"
           },
           "tencent": {
             "status": null
@@ -39767,7 +39763,7 @@
           },
           "existing_catalog": {
             "slug": "tormentor",
-            "lifecycle": "removed"
+            "lifecycle": "active"
           },
           "resolution": {
             "liveSources": [
@@ -39925,7 +39921,7 @@
       "augmentId": "ARAM_TrueshotProdigy",
       "slug": "trueshotprodigy",
       "name": "Trueshot Prodigy",
-      "displayName": "TrueshotProdigy",
+      "displayName": "Trueshot Prodigy",
       "rarity": "prismatic",
       "cdragonRarity": "prismatic",
       "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/trueshotprodigy_large.png",
@@ -40048,7 +40044,7 @@
       ],
       "flags": {
         "system_breaker": false,
-        "lifecycle": "added"
+        "lifecycle": "removed"
       },
       "type": "standalone",
       "availability": {
@@ -40240,7 +40236,7 @@
       ],
       "flags": {
         "system_breaker": false,
-        "lifecycle": "added"
+        "lifecycle": "removed"
       },
       "type": "standalone",
       "availability": {
@@ -40410,7 +40406,7 @@
       "kit_tags": [],
       "flags": {
         "system_breaker": false,
-        "lifecycle": "added"
+        "lifecycle": "removed"
       },
       "type": "standalone",
       "availability": {
@@ -40583,7 +40579,7 @@
       ],
       "flags": {
         "system_breaker": false,
-        "lifecycle": "added"
+        "lifecycle": "removed"
       },
       "type": "standalone",
       "availability": {
@@ -41065,7 +41061,7 @@
       ],
       "flags": {
         "system_breaker": false,
-        "lifecycle": "added"
+        "lifecycle": "removed"
       },
       "type": "standalone",
       "availability": {
@@ -41267,7 +41263,7 @@
       "definitionPlaceholder": false,
       "wikiNotes": [],
       "wikiAvailabilityNotes": [],
-      "wikiFetchedAt": "2026-06-22T17:54:33+00:00",
+      "wikiFetchedAt": "2026-06-22T21:43:36+00:00",
       "win_rate": null,
       "kit_tags": [
         "crit",
@@ -41292,7 +41288,7 @@
             "availabilityNotes": [],
             "hasDescription": true,
             "hasNotes": false,
-            "wikiFetchedAt": "2026-06-22T17:54:33+00:00"
+            "wikiFetchedAt": "2026-06-22T21:43:36+00:00"
           },
           "tencent": {
             "status": null
@@ -41308,7 +41304,7 @@
           },
           "existing_catalog": {
             "slug": "vulnerability",
-            "lifecycle": "removed"
+            "lifecycle": "active"
           },
           "resolution": {
             "liveSources": [
@@ -41452,7 +41448,7 @@
       ],
       "flags": {
         "system_breaker": false,
-        "lifecycle": "added"
+        "lifecycle": "removed"
       },
       "type": "standalone",
       "availability": {
@@ -41693,7 +41689,7 @@
       "definitionPlaceholder": false,
       "wikiNotes": [],
       "wikiAvailabilityNotes": [],
-      "wikiFetchedAt": "2026-06-22T17:54:33+00:00",
+      "wikiFetchedAt": "2026-06-22T21:43:36+00:00",
       "win_rate": null,
       "kit_tags": [
         "attack",
@@ -41719,7 +41715,7 @@
             "availabilityNotes": [],
             "hasDescription": true,
             "hasNotes": false,
-            "wikiFetchedAt": "2026-06-22T17:54:33+00:00"
+            "wikiFetchedAt": "2026-06-22T21:43:36+00:00"
           },
           "tencent": {
             "status": null
@@ -41735,7 +41731,7 @@
           },
           "existing_catalog": {
             "slug": "zealot",
-            "lifecycle": "removed"
+            "lifecycle": "active"
           },
           "resolution": {
             "liveSources": [
@@ -42036,7 +42032,7 @@
       "wikiAvailabilityNotes": [
         "This augment is only offered to up to 2 players on each team for a given game."
       ],
-      "wikiFetchedAt": "2026-06-22T17:54:33+00:00",
+      "wikiFetchedAt": "2026-06-22T21:43:36+00:00",
       "win_rate": null,
       "kit_tags": [],
       "flags": {
@@ -42060,7 +42056,7 @@
             ],
             "hasDescription": true,
             "hasNotes": false,
-            "wikiFetchedAt": "2026-06-22T17:54:33+00:00"
+            "wikiFetchedAt": "2026-06-22T21:43:36+00:00"
           },
           "tencent": {
             "status": null
@@ -42076,7 +42072,7 @@
           },
           "existing_catalog": {
             "slug": "earthwake",
-            "lifecycle": null
+            "lifecycle": "active"
           },
           "resolution": {
             "liveSources": [
@@ -42146,10 +42142,10 @@
         "wikiNotes": "wiki:augment-wiki-feed",
         "wikiAvailabilityNotes": "wiki:augment-wiki-feed",
         "win_rate": "arammayhem:augment-winrate-feed:null",
-        "kit_tags": "new:empty-unclassified",
-        "flags.system_breaker": "new:false",
+        "kit_tags": "existing:data/internal/augments.json",
+        "flags.system_breaker": "existing:data/internal/augments.json",
         "flags.lifecycle": "derived:availability.status",
-        "type": "new:standalone-default"
+        "type": "existing:data/internal/augments.json"
       },
       "name_zh_CN": "大地苏醒",
       "name_zh_TW": "大地覺醒",
@@ -42285,7 +42281,7 @@
       "definitionPlaceholder": false,
       "wikiNotes": [],
       "wikiAvailabilityNotes": [],
-      "wikiFetchedAt": "2026-06-22T17:54:33+00:00",
+      "wikiFetchedAt": "2026-06-22T21:43:36+00:00",
       "win_rate": null,
       "kit_tags": [],
       "flags": {
@@ -42307,7 +42303,7 @@
             "availabilityNotes": [],
             "hasDescription": true,
             "hasNotes": false,
-            "wikiFetchedAt": "2026-06-22T17:54:33+00:00"
+            "wikiFetchedAt": "2026-06-22T21:43:36+00:00"
           },
           "tencent": {
             "status": null
@@ -42323,7 +42319,7 @@
           },
           "existing_catalog": {
             "slug": "flashy",
-            "lifecycle": null
+            "lifecycle": "active"
           },
           "resolution": {
             "liveSources": [
@@ -42393,10 +42389,10 @@
         "wikiNotes": "wiki:augment-wiki-feed",
         "wikiAvailabilityNotes": "wiki:augment-wiki-feed",
         "win_rate": "arammayhem:augment-winrate-feed:null",
-        "kit_tags": "new:empty-unclassified",
-        "flags.system_breaker": "new:false",
+        "kit_tags": "existing:data/internal/augments.json",
+        "flags.system_breaker": "existing:data/internal/augments.json",
         "flags.lifecycle": "derived:availability.status",
-        "type": "new:standalone-default"
+        "type": "existing:data/internal/augments.json"
       },
       "name_zh_CN": "闪现向前",
       "name_zh_TW": "閃光俠",
@@ -42495,7 +42491,7 @@
           },
           "existing_catalog": {
             "slug": "missing-ping-augment",
-            "lifecycle": null
+            "lifecycle": "removed"
           },
           "resolution": {
             "liveSources": [],
@@ -42563,10 +42559,10 @@
         "wikiNotes": "",
         "wikiAvailabilityNotes": "",
         "win_rate": "arammayhem:augment-winrate-feed:null",
-        "kit_tags": "new:empty-unclassified",
-        "flags.system_breaker": "new:false",
+        "kit_tags": "existing:data/internal/augments.json",
+        "flags.system_breaker": "existing:data/internal/augments.json",
         "flags.lifecycle": "derived:availability.status",
-        "type": "new:standalone-default"
+        "type": "existing:data/internal/augments.json"
       },
       "name_zh_CN": "？？？",
       "name_zh_TW": "？？？",
@@ -42635,7 +42631,7 @@
       "definitionPlaceholder": false,
       "wikiNotes": [],
       "wikiAvailabilityNotes": [],
-      "wikiFetchedAt": "2026-06-22T17:54:33+00:00",
+      "wikiFetchedAt": "2026-06-22T21:43:36+00:00",
       "win_rate": null,
       "kit_tags": [],
       "flags": {
@@ -42657,7 +42653,7 @@
             "availabilityNotes": [],
             "hasDescription": true,
             "hasNotes": false,
-            "wikiFetchedAt": "2026-06-22T17:54:33+00:00"
+            "wikiFetchedAt": "2026-06-22T21:43:36+00:00"
           },
           "tencent": {
             "status": null
@@ -42673,7 +42669,7 @@
           },
           "existing_catalog": {
             "slug": "transmute-gold",
-            "lifecycle": null
+            "lifecycle": "active"
           },
           "resolution": {
             "liveSources": [
@@ -42743,10 +42739,10 @@
         "wikiNotes": "wiki:augment-wiki-feed",
         "wikiAvailabilityNotes": "wiki:augment-wiki-feed",
         "win_rate": "arammayhem:augment-winrate-feed:null",
-        "kit_tags": "new:empty-unclassified",
-        "flags.system_breaker": "new:false",
+        "kit_tags": "existing:data/internal/augments.json",
+        "flags.system_breaker": "existing:data/internal/augments.json",
         "flags.lifecycle": "derived:availability.status",
-        "type": "new:standalone-default"
+        "type": "existing:data/internal/augments.json"
       },
       "name_zh_CN": "质变：黄金阶",
       "name_zh_TW": "質變：金級",

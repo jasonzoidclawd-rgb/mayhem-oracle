@@ -38,10 +38,10 @@ export interface ScoredAugment {
   wikiDescription?: string;
   notes?: string[];
   kit_tags?: ChampionTag[];
+  availability?: { status?: string };
   flags?: {
     system_breaker?: boolean;
     lifecycle?: string;
-    availability_override?: "bug_mechanism";
   };
 }
 

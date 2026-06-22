@@ -5,7 +5,7 @@
  * can actually see in Smart Tailoring, grouped by rarity tier.
  *
  * Composition order:
- *   1. Drop disabled and lifecycle.removed augments
+ *   1. Drop non-offerable augments by resolved availability
  *   2. Hard-exclusion gate via isInAugmentPool (attack type, mana, CC, dash, etc.)
  *   3. Tag intersection: keep augments whose kit_tags overlap champion's kit_tags
  *      (augments with no tags are universal — shown to everyone)
@@ -31,6 +31,27 @@ import type { AbilityProfile, ChampionBaseStats, ChampionTag, PoolRules } from "
 // does not emit them on champions, so leaving them in here would silently
 // drop every `["mana"]`-only augment from every champion.
 const RESOURCE_TAGS: ReadonlySet<ChampionTag> = new Set(["mana", "manaless"]);
+const OFFERABLE_STATUS = "confirmed_live";
+
+function resolvedAvailabilityStatus(
+  poolRules: PoolRules,
+  normalizedSlug: string,
+  augmentStatus?: string,
+): string | undefined {
+  if (augmentStatus) return augmentStatus;
+  for (const [slug, status] of Object.entries(poolRules.availability?.non_offerable ?? {})) {
+    if (normalizeAugmentKey(slug) === normalizedSlug) return status;
+  }
+  for (const [slug, status] of Object.entries(poolRules.availability?.offerable ?? {})) {
+    if (normalizeAugmentKey(slug) === normalizedSlug) return status;
+  }
+  return undefined;
+}
+
+function nonOfferableReason(status: string | undefined): string | undefined {
+  if (!status || status === OFFERABLE_STATUS) return undefined;
+  return status;
+}
 
 export interface PoolAugmentInput {
   slug: string;
@@ -38,6 +59,7 @@ export interface PoolAugmentInput {
   type?: "ability" | "quest" | "standalone";
   wikiDescription?: string;
   kit_tags?: ChampionTag[];
+  availability?: { status?: string };
 }
 
 export interface PoolOutput<T extends PoolAugmentInput = PoolAugmentInput> {
@@ -75,9 +97,6 @@ export function getChampionAugmentPool<T extends PoolAugmentInput>(args: {
 
   const disabledSet = new Set(poolRules.disabled.map(normalizeAugmentKey));
   const removedSet  = new Set(Object.keys(poolRules.lifecycle.removed).map(normalizeAugmentKey));
-  const observedLiveSet = new Set(
-    Object.keys(poolRules.availability_overrides?.observed_live ?? {}).map(normalizeAugmentKey),
-  );
   const normalizedOwnedItems = new Set(ownedItems.map(normalizeItemKey));
   const normalizedOwnedAugments = new Set(ownedAugments.map(normalizeAugmentKey));
   const normalizedSeenOffers = new Set(seenOffers.map(normalizeAugmentKey));
@@ -105,12 +124,23 @@ export function getChampionAugmentPool<T extends PoolAugmentInput>(args: {
     const slug = aug.slug;
     const normalizedSlug = normalizeAugmentKey(slug);
 
-    // Layer 1 — lifecycle / disabled
-    if (disabledSet.has(normalizedSlug)) {
+    // Layer 1 — resolved availability. Legacy disabled/lifecycle maps are a
+    // fallback for older fixtures that do not carry availability.status.
+    const availabilityStatus = resolvedAvailabilityStatus(
+      poolRules,
+      normalizedSlug,
+      aug.availability?.status,
+    );
+    const availabilityReason = nonOfferableReason(availabilityStatus);
+    if (availabilityReason) {
+      excluded.push({ slug, reason: availabilityReason });
+      continue;
+    }
+    if (!availabilityStatus && disabledSet.has(normalizedSlug)) {
       excluded.push({ slug, reason: "disabled" });
       continue;
     }
-    if (removedSet.has(normalizedSlug) && !observedLiveSet.has(normalizedSlug)) {
+    if (!availabilityStatus && removedSet.has(normalizedSlug)) {
       excluded.push({ slug, reason: "removed" });
       continue;
     }
