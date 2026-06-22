@@ -38,10 +38,20 @@ AVAILABILITY_STATUSES = {
     "candidate_registry_present",
     "disabled",
     "removed",
+    "unverified_legacy",
     "conflict",
     "observed_live",
     "observed_bug_mechanism",
 }
+
+AVAILABILITY_STATUS_ORDER = [
+    "confirmed_live",
+    "candidate_registry_present",
+    "disabled",
+    "removed",
+    "unverified_legacy",
+    "conflict",
+]
 
 LOCALE_FIELDS = {
     "zh_cn": "name_zh_CN",
@@ -151,11 +161,12 @@ def resolve_availability(
     live_sources: list[str] = []
     disabled_sources: list[str] = []
     removed_sources: list[str] = []
+    stale_removed_sources: list[str] = []
 
     if tombstone_removed:
-        removed_sources.append("tombstone")
+        stale_removed_sources.append("tombstone")
     if patch_removed:
-        removed_sources.append("patch_notes")
+        stale_removed_sources.append("patch_notes")
     if wiki["status"] == "disabled":
         disabled_sources.append("wiki")
     elif wiki["status"] == "live":
@@ -173,18 +184,24 @@ def resolve_availability(
     elif telemetry_status in {"live", "observed_live", "observed_bug_mechanism"}:
         live_sources.append("telemetry")
 
-    if removed_sources:
-        status = "removed"
+    if definition_placeholder:
+        status = "candidate_registry_present"
+    elif (disabled_sources or removed_sources) and live_sources:
+        status = "conflict"
     elif disabled_sources and not live_sources:
         status = "disabled"
-    elif disabled_sources and live_sources:
-        status = "conflict"
-    elif cdragon_present and live_sources:
+    elif removed_sources and not live_sources:
+        status = "removed"
+    elif cdragon_present and wiki["status"] == "live":
         status = "confirmed_live"
     elif cdragon_present:
         status = "candidate_registry_present"
-    else:
+    elif wiki["status"] == "live":
         status = "conflict"
+    elif stale_removed_sources:
+        status = "removed"
+    else:
+        status = "unverified_legacy"
 
     signals = {
         "cdragon_registry": {
@@ -201,22 +218,24 @@ def resolve_availability(
         "resolution": {
             "liveSources": live_sources,
             "disabledSources": disabled_sources,
-            "removedSources": removed_sources,
+            "removedSources": removed_sources + stale_removed_sources,
         },
     }
     return {"status": status, "signals": signals}
 
 
-def lifecycle_for_availability(status: str) -> str:
+def lifecycle_for_availability(status: str, *, definition_placeholder: bool = False) -> str:
     """Map resolved availability to the existing lifecycle vocabulary."""
 
     if status not in AVAILABILITY_STATUSES:
         raise ValueError(f"Unsupported availability.status: {status}")
     if status in {"confirmed_live", "observed_live", "observed_bug_mechanism"}:
         return "active"
-    if status in {"removed", "disabled"}:
+    if status == "candidate_registry_present" and not definition_placeholder:
+        return "added"
+    if status in {"removed", "disabled", "unverified_legacy", "conflict", "candidate_registry_present"}:
         return "removed"
-    return "added"
+    raise ValueError(f"Unsupported availability.status: {status}")
 
 
 def build_identity_indexes(identity_map: dict) -> tuple[dict[str, str], dict[str, str]]:
@@ -307,7 +326,10 @@ def build_cdragon_row(
     availability: dict,
 ) -> dict:
     names = base.get("names") if isinstance(base.get("names"), dict) else {}
-    lifecycle = lifecycle_for_availability(availability["status"])
+    lifecycle = lifecycle_for_availability(
+        availability["status"],
+        definition_placeholder=bool(base.get("definitionPlaceholder")),
+    )
     row = {
         "augmentId": base["augmentId"],
         "slug": slug,
@@ -354,7 +376,13 @@ def build_legacy_row(
     has_win_rate: bool,
     availability: dict,
 ) -> dict:
-    lifecycle = lifecycle_for_availability(availability["status"])
+    definition_placeholder = bool(
+        ((availability.get("signals") or {}).get("cdragon_registry") or {}).get("definitionPlaceholder")
+    )
+    lifecycle = lifecycle_for_availability(
+        availability["status"],
+        definition_placeholder=definition_placeholder,
+    )
     row = copy.deepcopy(existing_row)
     if augment_id:
         row["augmentId"] = augment_id
@@ -499,13 +527,7 @@ def assemble_catalog(
         },
         "counts": {
             "augments": len(rows),
-            "availability": {status: status_counts.get(status, 0) for status in [
-                "confirmed_live",
-                "candidate_registry_present",
-                "disabled",
-                "removed",
-                "conflict",
-            ]},
+            "availability": {status: status_counts.get(status, 0) for status in AVAILABILITY_STATUS_ORDER},
             "winRateCoverage": sum(1 for row in rows if isinstance(row.get("win_rate"), (int, float))),
         },
         "augments": rows,
@@ -543,6 +565,7 @@ def main() -> None:
         f"candidate_registry_present={counts['candidate_registry_present']} "
         f"disabled={counts['disabled']} "
         f"removed={counts['removed']} "
+        f"unverified_legacy={counts['unverified_legacy']} "
         f"conflict={counts['conflict']} "
         f"win_rate={output['counts']['winRateCoverage']}"
     )

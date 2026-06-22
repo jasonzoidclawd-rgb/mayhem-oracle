@@ -11,11 +11,12 @@
   "counts": {
     "augments": 260,
     "availability": {
-      "confirmed_live": 127,
-      "candidate_registry_present": 1,
+      "confirmed_live": 139,
+      "candidate_registry_present": 28,
       "disabled": 4,
-      "removed": 64,
-      "conflict": 64
+      "removed": 25,
+      "unverified_legacy": 64,
+      "conflict": 0
     },
     "winRateCoverage": 123
   },
@@ -1126,11 +1127,11 @@
       "set": "stackosaurus_rex",
       "flags": {
         "system_breaker": false,
-        "lifecycle": "added"
+        "lifecycle": "removed"
       },
       "type": "standalone",
       "availability": {
-        "status": "conflict",
+        "status": "unverified_legacy",
         "signals": {
           "cdragon_registry": {
             "present": false,
@@ -1196,14 +1197,14 @@
       "type": "standalone",
       "flags": {
         "system_breaker": false,
-        "lifecycle": "added"
+        "lifecycle": "removed"
       },
       "kit_tags": [
         "heal_shield"
       ],
       "wikiDescription": "Gain the required number of Omnivamp.",
       "availability": {
-        "status": "conflict",
+        "status": "unverified_legacy",
         "signals": {
           "cdragon_registry": {
             "present": false,
@@ -1683,7 +1684,7 @@
       "type": "quest",
       "flags": {
         "system_breaker": false,
-        "lifecycle": "added"
+        "lifecycle": "removed"
       },
       "kit_tags": [
         "dot",
@@ -1691,7 +1692,7 @@
       ],
       "wikiDescription": "Every second, apply a stacking Burn to nearby enemy champions, scaling with your max Health. QUEST: Deal Burn damage to enemy Champions. REWARD: Size and damage increase per Quest Level.",
       "availability": {
-        "status": "conflict",
+        "status": "unverified_legacy",
         "signals": {
           "cdragon_registry": {
             "present": false,
@@ -2162,14 +2163,14 @@
       "type": "standalone",
       "flags": {
         "system_breaker": false,
-        "lifecycle": "added"
+        "lifecycle": "removed"
       },
       "kit_tags": [
         "dot"
       ],
       "wikiDescription": "Burns and damage over time applied to champions generates gold.",
       "availability": {
-        "status": "conflict",
+        "status": "unverified_legacy",
         "signals": {
           "cdragon_registry": {
             "present": false,
@@ -5138,11 +5139,11 @@
       "set": "firecracker",
       "flags": {
         "system_breaker": false,
-        "lifecycle": "added"
+        "lifecycle": "removed"
       },
       "type": "standalone",
       "availability": {
-        "status": "conflict",
+        "status": "unverified_legacy",
         "signals": {
           "cdragon_registry": {
             "present": false,
@@ -7501,11 +7502,11 @@
       "set": "fully_automated",
       "flags": {
         "system_breaker": false,
-        "lifecycle": "added"
+        "lifecycle": "removed"
       },
       "type": "standalone",
       "availability": {
-        "status": "conflict",
+        "status": "unverified_legacy",
         "signals": {
           "cdragon_registry": {
             "present": false,
@@ -8363,12 +8364,12 @@
       "type": "standalone",
       "flags": {
         "system_breaker": false,
-        "lifecycle": "added"
+        "lifecycle": "removed"
       },
       "kit_tags": [],
       "wikiDescription": "Increase your Item and Augment damage by the required number of.",
       "availability": {
-        "status": "conflict",
+        "status": "unverified_legacy",
         "signals": {
           "cdragon_registry": {
             "present": false,
@@ -8687,11 +8688,11 @@
       ],
       "flags": {
         "system_breaker": false,
-        "lifecycle": "added"
+        "lifecycle": "removed"
       },
       "type": "standalone",
       "availability": {
-        "status": "conflict",
+        "status": "unverified_legacy",
         "signals": {
           "cdragon_registry": {
             "present": false,
@@ -9196,11 +9197,11 @@
       "set": "stackosaurus_rex",
       "flags": {
         "system_breaker": false,
-        "lifecycle": "added"
+        "lifecycle": "removed"
       },
       "type": "standalone",
       "availability": {
-        "status": "conflict",
+        "status": "unverified_legacy",
         "signals": {
           "cdragon_registry": {
             "present": false,
@@ -9266,7 +9267,7 @@
       "type": "quest",
       "flags": {
         "system_breaker": false,
-        "lifecycle": "added"
+        "lifecycle": "removed"
       },
       "kit_tags": [
         "ability",
@@ -9274,7 +9275,7 @@
       ],
       "wikiDescription": "Bursting enemies drops Teeth. Picking up Teeth grants you permanent Lethality and Magic Penetration.",
       "availability": {
-        "status": "conflict",
+        "status": "unverified_legacy",
         "signals": {
           "cdragon_registry": {
             "present": false,
@@ -9344,11 +9345,11 @@
       ],
       "flags": {
         "system_breaker": false,
-        "lifecycle": "added"
+        "lifecycle": "removed"
       },
       "type": "standalone",
       "availability": {
-        "status": "conflict",
+        "status": "unverified_legacy",
         "signals": {
           "cdragon_registry": {
             "present": false,
@@ -10306,14 +10307,14 @@
       "type": "ability",
       "flags": {
         "system_breaker": false,
-        "lifecycle": "added"
+        "lifecycle": "removed"
       },
       "kit_tags": [
         "attack"
       ],
       "wikiDescription": "Gain the required number of Attack Range and the required number of Attack Speed during your chosen ability duration.",
       "availability": {
-        "status": "conflict",
+        "status": "unverified_legacy",
         "signals": {
           "cdragon_registry": {
             "present": false,
@@ -10805,11 +10806,11 @@
       "set": "make_it_rain",
       "flags": {
         "system_breaker": false,
-        "lifecycle": "added"
+        "lifecycle": "removed"
       },
       "type": "standalone",
       "availability": {
-        "status": "conflict",
+        "status": "unverified_legacy",
         "signals": {
           "cdragon_registry": {
             "present": false,
@@ -11469,11 +11470,11 @@
       ],
       "flags": {
         "system_breaker": false,
-        "lifecycle": "added"
+        "lifecycle": "removed"
       },
       "type": "standalone",
       "availability": {
-        "status": "conflict",
+        "status": "unverified_legacy",
         "signals": {
           "cdragon_registry": {
             "present": false,
@@ -11545,11 +11546,11 @@
       "set": "stackosaurus_rex",
       "flags": {
         "system_breaker": false,
-        "lifecycle": "added"
+        "lifecycle": "removed"
       },
       "type": "standalone",
       "availability": {
-        "status": "conflict",
+        "status": "unverified_legacy",
         "signals": {
           "cdragon_registry": {
             "present": false,
@@ -12026,11 +12027,11 @@
       ],
       "flags": {
         "system_breaker": false,
-        "lifecycle": "added"
+        "lifecycle": "removed"
       },
       "type": "standalone",
       "availability": {
-        "status": "conflict",
+        "status": "unverified_legacy",
         "signals": {
           "cdragon_registry": {
             "present": false,
@@ -12708,7 +12709,7 @@
       "type": "ability",
       "flags": {
         "system_breaker": false,
-        "lifecycle": "added"
+        "lifecycle": "removed"
       },
       "kit_tags": [
         "ability",
@@ -12716,7 +12717,7 @@
       ],
       "wikiDescription": "Your chosen ability deals damage in an area around it.",
       "availability": {
-        "status": "conflict",
+        "status": "unverified_legacy",
         "signals": {
           "cdragon_registry": {
             "present": false,
@@ -13892,7 +13893,7 @@
       "type": "ability",
       "flags": {
         "system_breaker": false,
-        "lifecycle": "added"
+        "lifecycle": "removed"
       },
       "kit_tags": [
         "ability",
@@ -13900,7 +13901,7 @@
       ],
       "wikiDescription": "Attacks and Abilities empowered by your chosen ability deal additional damage to the target and nearby enemies.",
       "availability": {
-        "status": "conflict",
+        "status": "unverified_legacy",
         "signals": {
           "cdragon_registry": {
             "present": false,
@@ -14432,7 +14433,7 @@
       "type": "ability",
       "flags": {
         "system_breaker": false,
-        "lifecycle": "added"
+        "lifecycle": "removed"
       },
       "kit_tags": [
         "ability",
@@ -14440,7 +14441,7 @@
       ],
       "wikiDescription": "When your chosen ability damages enemy champions, gain the required number of Armor and Magic Resistance.",
       "availability": {
-        "status": "conflict",
+        "status": "unverified_legacy",
         "signals": {
           "cdragon_registry": {
             "present": false,
@@ -15522,11 +15523,11 @@
       ],
       "flags": {
         "system_breaker": false,
-        "lifecycle": "added"
+        "lifecycle": "removed"
       },
       "type": "standalone",
       "availability": {
-        "status": "conflict",
+        "status": "unverified_legacy",
         "signals": {
           "cdragon_registry": {
             "present": false,
@@ -16345,11 +16346,11 @@
       "kit_tags": [],
       "flags": {
         "system_breaker": false,
-        "lifecycle": "added"
+        "lifecycle": "removed"
       },
       "type": "standalone",
       "availability": {
-        "status": "conflict",
+        "status": "unverified_legacy",
         "signals": {
           "cdragon_registry": {
             "present": false,
@@ -16625,11 +16626,11 @@
       "set": "snowday",
       "flags": {
         "system_breaker": false,
-        "lifecycle": "added"
+        "lifecycle": "removed"
       },
       "type": "standalone",
       "availability": {
-        "status": "conflict",
+        "status": "unverified_legacy",
         "signals": {
           "cdragon_registry": {
             "present": false,
@@ -17079,14 +17080,14 @@
       "type": "standalone",
       "flags": {
         "system_breaker": false,
-        "lifecycle": "added"
+        "lifecycle": "removed"
       },
       "kit_tags": [
         "heal_shield"
       ],
       "wikiDescription": "Gain a Shield for every second you spend Channeling.",
       "availability": {
-        "status": "conflict",
+        "status": "unverified_legacy",
         "signals": {
           "cdragon_registry": {
             "present": false,
@@ -17346,7 +17347,7 @@
       "type": "standalone",
       "flags": {
         "system_breaker": false,
-        "lifecycle": "added"
+        "lifecycle": "removed"
       },
       "kit_tags": [
         "ability",
@@ -17354,7 +17355,7 @@
       ],
       "wikiDescription": "Recall to enter your Cannon Launcher. It has significantly increased range, travel speed, and damage.",
       "availability": {
-        "status": "conflict",
+        "status": "unverified_legacy",
         "signals": {
           "cdragon_registry": {
             "present": false,
@@ -17420,7 +17421,7 @@
       "type": "ability",
       "flags": {
         "system_breaker": false,
-        "lifecycle": "added"
+        "lifecycle": "removed"
       },
       "kit_tags": [
         "movement",
@@ -17428,7 +17429,7 @@
       ],
       "wikiDescription": "Activating your chosen ability grants you Movement Speed for its duration.",
       "availability": {
-        "status": "conflict",
+        "status": "unverified_legacy",
         "signals": {
           "cdragon_registry": {
             "present": false,
@@ -17494,14 +17495,14 @@
       "type": "ability",
       "flags": {
         "system_breaker": false,
-        "lifecycle": "added"
+        "lifecycle": "removed"
       },
       "kit_tags": [
         "ability"
       ],
       "wikiDescription": "Striking enemy champions with your chosen ability forges a bond of Friendship. your chosen ability gains temporarily increased damage based on your level of Friendship.",
       "availability": {
-        "status": "conflict",
+        "status": "unverified_legacy",
         "signals": {
           "cdragon_registry": {
             "present": false,
@@ -17778,7 +17779,7 @@
       "type": "ability",
       "flags": {
         "system_breaker": false,
-        "lifecycle": "added"
+        "lifecycle": "removed"
       },
       "kit_tags": [
         "ability",
@@ -17787,7 +17788,7 @@
       ],
       "wikiDescription": "Immobilizing or Grounding enemy champions with your chosen ability deals extra damage and heals you.",
       "availability": {
-        "status": "conflict",
+        "status": "unverified_legacy",
         "signals": {
           "cdragon_registry": {
             "present": false,
@@ -18692,11 +18693,11 @@
       "set": "make_it_rain",
       "flags": {
         "system_breaker": false,
-        "lifecycle": "added"
+        "lifecycle": "removed"
       },
       "type": "standalone",
       "availability": {
-        "status": "conflict",
+        "status": "unverified_legacy",
         "signals": {
           "cdragon_registry": {
             "present": false,
@@ -20207,11 +20208,11 @@
       "kit_tags": [],
       "flags": {
         "system_breaker": false,
-        "lifecycle": "added"
+        "lifecycle": "removed"
       },
       "type": "standalone",
       "availability": {
-        "status": "conflict",
+        "status": "unverified_legacy",
         "signals": {
           "cdragon_registry": {
             "present": false,
@@ -20449,7 +20450,7 @@
       "type": "standalone",
       "flags": {
         "system_breaker": false,
-        "lifecycle": "added"
+        "lifecycle": "removed"
       },
       "kit_tags": [
         "ability",
@@ -20458,7 +20459,7 @@
       ],
       "wikiDescription": "While in combat, Autocast a circular axe that deals physical damage. Enemies on the outer edge take additional damage and heal you.",
       "availability": {
-        "status": "conflict",
+        "status": "unverified_legacy",
         "signals": {
           "cdragon_registry": {
             "present": false,
@@ -20528,11 +20529,11 @@
       ],
       "flags": {
         "system_breaker": false,
-        "lifecycle": "added"
+        "lifecycle": "removed"
       },
       "type": "standalone",
       "availability": {
-        "status": "conflict",
+        "status": "unverified_legacy",
         "signals": {
           "cdragon_registry": {
             "present": false,
@@ -20598,7 +20599,7 @@
       "type": "ability",
       "flags": {
         "system_breaker": false,
-        "lifecycle": "added"
+        "lifecycle": "removed"
       },
       "kit_tags": [
         "ability",
@@ -20606,7 +20607,7 @@
       ],
       "wikiDescription": "Using another Ability resets the cooldown of your chosen ability.",
       "availability": {
-        "status": "conflict",
+        "status": "unverified_legacy",
         "signals": {
           "cdragon_registry": {
             "present": false,
@@ -20672,7 +20673,7 @@
       "type": "ability",
       "flags": {
         "system_breaker": false,
-        "lifecycle": "added"
+        "lifecycle": "removed"
       },
       "kit_tags": [
         "tank",
@@ -20680,7 +20681,7 @@
       ],
       "wikiDescription": "Striking an enemy champion with your chosen ability grants you the required number of Armor or Magic Resist based on their damage type for the required number of seconds. This effect can stack.",
       "availability": {
-        "status": "conflict",
+        "status": "unverified_legacy",
         "signals": {
           "cdragon_registry": {
             "present": false,
@@ -21165,11 +21166,11 @@
       ],
       "flags": {
         "system_breaker": false,
-        "lifecycle": "added"
+        "lifecycle": "removed"
       },
       "type": "standalone",
       "availability": {
-        "status": "conflict",
+        "status": "unverified_legacy",
         "signals": {
           "cdragon_registry": {
             "present": false,
@@ -21417,7 +21418,7 @@
       "type": "ability",
       "flags": {
         "system_breaker": false,
-        "lifecycle": "added"
+        "lifecycle": "removed"
       },
       "kit_tags": [
         "heal_shield",
@@ -21425,7 +21426,7 @@
       ],
       "wikiDescription": "Shields granted from your chosen ability are stronger and scaling with target's missing Health.",
       "availability": {
-        "status": "conflict",
+        "status": "unverified_legacy",
         "signals": {
           "cdragon_registry": {
             "present": false,
@@ -21951,7 +21952,7 @@
       "type": "ability",
       "flags": {
         "system_breaker": false,
-        "lifecycle": "added"
+        "lifecycle": "removed"
       },
       "kit_tags": [
         "ability",
@@ -21959,7 +21960,7 @@
       ],
       "wikiDescription": "After using your chosen ability, your next basic attack gains attack range, attack speed and deals bonus max Health magic damage.",
       "availability": {
-        "status": "conflict",
+        "status": "unverified_legacy",
         "signals": {
           "cdragon_registry": {
             "present": false,
@@ -22850,7 +22851,7 @@
       "type": "standalone",
       "flags": {
         "system_breaker": false,
-        "lifecycle": "added"
+        "lifecycle": "removed"
       },
       "kit_tags": [
         "cc",
@@ -22858,7 +22859,7 @@
       ],
       "wikiDescription": "A few seconds after death, a shark chomps all nearby enemies. You can move after death to aim the shark attack.",
       "availability": {
-        "status": "conflict",
+        "status": "unverified_legacy",
         "signals": {
           "cdragon_registry": {
             "present": false,
@@ -24751,14 +24752,14 @@
       "type": "standalone",
       "flags": {
         "system_breaker": false,
-        "lifecycle": "added"
+        "lifecycle": "removed"
       },
       "kit_tags": [
         "heal_shield"
       ],
       "wikiDescription": "Standing in Brush regenerates the required number of max Health per second.",
       "availability": {
-        "status": "conflict",
+        "status": "unverified_legacy",
         "signals": {
           "cdragon_registry": {
             "present": false,
@@ -24828,11 +24829,11 @@
       ],
       "flags": {
         "system_breaker": false,
-        "lifecycle": "added"
+        "lifecycle": "removed"
       },
       "type": "standalone",
       "availability": {
-        "status": "conflict",
+        "status": "unverified_legacy",
         "signals": {
           "cdragon_registry": {
             "present": false,
@@ -25490,11 +25491,11 @@
       ],
       "flags": {
         "system_breaker": false,
-        "lifecycle": "added"
+        "lifecycle": "removed"
       },
       "type": "standalone",
       "availability": {
-        "status": "conflict",
+        "status": "unverified_legacy",
         "signals": {
           "cdragon_registry": {
             "present": false,
@@ -26019,14 +26020,14 @@
       "type": "ability",
       "flags": {
         "system_breaker": false,
-        "lifecycle": "added"
+        "lifecycle": "removed"
       },
       "kit_tags": [
         "ability"
       ],
       "wikiDescription": "Your chosen ability targets 2 additional enemies in front of you.",
       "availability": {
-        "status": "conflict",
+        "status": "unverified_legacy",
         "signals": {
           "cdragon_registry": {
             "present": false,
@@ -26624,11 +26625,11 @@
       ],
       "flags": {
         "system_breaker": false,
-        "lifecycle": "added"
+        "lifecycle": "removed"
       },
       "type": "standalone",
       "availability": {
-        "status": "conflict",
+        "status": "unverified_legacy",
         "signals": {
           "cdragon_registry": {
             "present": false,
@@ -26697,11 +26698,11 @@
       ],
       "flags": {
         "system_breaker": false,
-        "lifecycle": "added"
+        "lifecycle": "removed"
       },
       "type": "standalone",
       "availability": {
-        "status": "conflict",
+        "status": "unverified_legacy",
         "signals": {
           "cdragon_registry": {
             "present": false,
@@ -26767,7 +26768,7 @@
       "type": "standalone",
       "flags": {
         "system_breaker": false,
-        "lifecycle": "added"
+        "lifecycle": "removed"
       },
       "kit_tags": [
         "dot",
@@ -26775,7 +26776,7 @@
       ],
       "wikiDescription": "Taking damage from champions builds up a burst of needles that fly out of you, dealing damage and slowing nearby enemies.",
       "availability": {
-        "status": "conflict",
+        "status": "unverified_legacy",
         "signals": {
           "cdragon_registry": {
             "present": false,
@@ -27017,14 +27018,14 @@
       "type": "ability",
       "flags": {
         "system_breaker": false,
-        "lifecycle": "added"
+        "lifecycle": "removed"
       },
       "kit_tags": [
         "ability"
       ],
       "wikiDescription": "Casting your chosen ability sends a clone toward your mouse position and recasts it.",
       "availability": {
-        "status": "conflict",
+        "status": "unverified_legacy",
         "signals": {
           "cdragon_registry": {
             "present": false,
@@ -27090,14 +27091,14 @@
       "type": "ability",
       "flags": {
         "system_breaker": false,
-        "lifecycle": "added"
+        "lifecycle": "removed"
       },
       "kit_tags": [
         "ability"
       ],
       "wikiDescription": "Your chosen ability missile splits into two on hit, at max Range, or when Recast.",
       "availability": {
-        "status": "conflict",
+        "status": "unverified_legacy",
         "signals": {
           "cdragon_registry": {
             "present": false,
@@ -27163,7 +27164,7 @@
       "type": "standalone",
       "flags": {
         "system_breaker": false,
-        "lifecycle": "added"
+        "lifecycle": "removed"
       },
       "kit_tags": [
         "cc",
@@ -27171,7 +27172,7 @@
       ],
       "wikiDescription": "Sharks circle your Snowball, slowing and damaging nearby enemies. When your Snowball hits a Champion, they become trapped in a shark storm!",
       "availability": {
-        "status": "conflict",
+        "status": "unverified_legacy",
         "signals": {
           "cdragon_registry": {
             "present": false,
@@ -27241,11 +27242,11 @@
       ],
       "flags": {
         "system_breaker": false,
-        "lifecycle": "added"
+        "lifecycle": "removed"
       },
       "type": "standalone",
       "availability": {
-        "status": "conflict",
+        "status": "unverified_legacy",
         "signals": {
           "cdragon_registry": {
             "present": false,
@@ -27488,14 +27489,14 @@
       "type": "standalone",
       "flags": {
         "system_breaker": false,
-        "lifecycle": "added"
+        "lifecycle": "removed"
       },
       "kit_tags": [
         "ability"
       ],
       "wikiDescription": "After entering Brush, deal the required number of% more damage for the required number of seconds. Remain in the Brush to refresh the effect.",
       "availability": {
-        "status": "conflict",
+        "status": "unverified_legacy",
         "signals": {
           "cdragon_registry": {
             "present": false,
@@ -28543,11 +28544,11 @@
       "set": "fully_automated",
       "flags": {
         "system_breaker": false,
-        "lifecycle": "added"
+        "lifecycle": "removed"
       },
       "type": "standalone",
       "availability": {
-        "status": "conflict",
+        "status": "unverified_legacy",
         "signals": {
           "cdragon_registry": {
             "present": false,
@@ -28613,14 +28614,14 @@
       "type": "standalone",
       "flags": {
         "system_breaker": false,
-        "lifecycle": "added"
+        "lifecycle": "removed"
       },
       "kit_tags": [
         "heal_shield"
       ],
       "wikiDescription": "Whenever someone heals around you, you heal the required number of% of their own healing. Doubled from Enemy healing.",
       "availability": {
-        "status": "conflict",
+        "status": "unverified_legacy",
         "signals": {
           "cdragon_registry": {
             "present": false,
@@ -28690,11 +28691,11 @@
       ],
       "flags": {
         "system_breaker": false,
-        "lifecycle": "added"
+        "lifecycle": "removed"
       },
       "type": "standalone",
       "availability": {
-        "status": "conflict",
+        "status": "unverified_legacy",
         "signals": {
           "cdragon_registry": {
             "present": false,
@@ -28935,7 +28936,7 @@
       "type": "ability",
       "flags": {
         "system_breaker": false,
-        "lifecycle": "added"
+        "lifecycle": "removed"
       },
       "kit_tags": [
         "attack",
@@ -28945,7 +28946,7 @@
       ],
       "wikiDescription": "Attacks during your chosen ability apply Marks that explode at the end of its duration, dealing damage and granting Move Speed.",
       "availability": {
-        "status": "conflict",
+        "status": "unverified_legacy",
         "signals": {
           "cdragon_registry": {
             "present": false,
@@ -29017,11 +29018,11 @@
       "set": "snowday",
       "flags": {
         "system_breaker": false,
-        "lifecycle": "added"
+        "lifecycle": "removed"
       },
       "type": "standalone",
       "availability": {
-        "status": "conflict",
+        "status": "unverified_legacy",
         "signals": {
           "cdragon_registry": {
             "present": false,
@@ -29436,7 +29437,7 @@
       "type": "standalone",
       "flags": {
         "system_breaker": false,
-        "lifecycle": "added"
+        "lifecycle": "removed"
       },
       "kit_tags": [
         "ability",
@@ -29444,7 +29445,7 @@
       ],
       "wikiDescription": "Recasting Snowball deals increased damage, Knocks Up the target, and Knocks Back nearby enemies.",
       "availability": {
-        "status": "conflict",
+        "status": "unverified_legacy",
         "signals": {
           "cdragon_registry": {
             "present": false,
@@ -29514,11 +29515,11 @@
       ],
       "flags": {
         "system_breaker": false,
-        "lifecycle": "added"
+        "lifecycle": "removed"
       },
       "type": "standalone",
       "availability": {
-        "status": "conflict",
+        "status": "unverified_legacy",
         "signals": {
           "cdragon_registry": {
             "present": false,
@@ -29584,7 +29585,7 @@
       "type": "standalone",
       "flags": {
         "system_breaker": false,
-        "lifecycle": "added"
+        "lifecycle": "removed"
       },
       "kit_tags": [
         "ability",
@@ -29593,7 +29594,7 @@
       ],
       "wikiDescription": "On Ultimate cast, spawn a Zone that grants Ability Haste and Movement Speed. While inside, it fires missiles that deal the required number of% of your damage.",
       "availability": {
-        "status": "conflict",
+        "status": "unverified_legacy",
         "signals": {
           "cdragon_registry": {
             "present": false,
@@ -29666,11 +29667,11 @@
       "set": "snowday",
       "flags": {
         "system_breaker": false,
-        "lifecycle": "added"
+        "lifecycle": "removed"
       },
       "type": "standalone",
       "availability": {
-        "status": "conflict",
+        "status": "unverified_legacy",
         "signals": {
           "cdragon_registry": {
             "present": false,
@@ -29914,11 +29915,11 @@
       ],
       "flags": {
         "system_breaker": false,
-        "lifecycle": "added"
+        "lifecycle": "removed"
       },
       "type": "standalone",
       "availability": {
-        "status": "conflict",
+        "status": "unverified_legacy",
         "signals": {
           "cdragon_registry": {
             "present": false,
@@ -29984,7 +29985,7 @@
       "type": "ability",
       "flags": {
         "system_breaker": false,
-        "lifecycle": "added"
+        "lifecycle": "removed"
       },
       "kit_tags": [
         "ability",
@@ -29992,7 +29993,7 @@
       ],
       "wikiDescription": "If a target Knocked Back by your chosen ability hits another champion, they are Knocked Up and dealt damage. When colliding with terrain, the Knock Up duration is extended and they are dealt bonus damage.",
       "availability": {
-        "status": "conflict",
+        "status": "unverified_legacy",
         "signals": {
           "cdragon_registry": {
             "present": false,
@@ -30058,7 +30059,7 @@
       "type": "standalone",
       "flags": {
         "system_breaker": false,
-        "lifecycle": "added"
+        "lifecycle": "removed"
       },
       "kit_tags": [
         "ability",
@@ -30066,7 +30067,7 @@
       ],
       "wikiDescription": "Gain the When the Darkness Comes Summoner Spell. Create a zone that transports everyone inside of it to another dimension.",
       "availability": {
-        "status": "conflict",
+        "status": "unverified_legacy",
         "signals": {
           "cdragon_registry": {
             "present": false,
@@ -30132,7 +30133,7 @@
       "type": "quest",
       "flags": {
         "system_breaker": false,
-        "lifecycle": "added"
+        "lifecycle": "removed"
       },
       "kit_tags": [
         "ability",
@@ -30140,7 +30141,7 @@
       ],
       "wikiDescription": "QUEST: Gather Poro Snax and feed the required number of Poros. REWARD: Gain the Poro Charge Summoner Spell, which launches waves of Poros at the enemy team. Additional waves unlock per Quest Level. \"Oho! Look how charming they are!\" — Poro Herder",
       "availability": {
-        "status": "conflict",
+        "status": "unverified_legacy",
         "signals": {
           "cdragon_registry": {
             "present": false,
@@ -30407,11 +30408,11 @@
       ],
       "flags": {
         "system_breaker": false,
-        "lifecycle": "removed"
+        "lifecycle": "added"
       },
       "type": "standalone",
       "availability": {
-        "status": "removed",
+        "status": "candidate_registry_present",
         "signals": {
           "cdragon_registry": {
             "present": true,
@@ -30592,11 +30593,11 @@
       ],
       "flags": {
         "system_breaker": false,
-        "lifecycle": "removed"
+        "lifecycle": "added"
       },
       "type": "standalone",
       "availability": {
-        "status": "removed",
+        "status": "candidate_registry_present",
         "signals": {
           "cdragon_registry": {
             "present": true,
@@ -30930,11 +30931,11 @@
       ],
       "flags": {
         "system_breaker": false,
-        "lifecycle": "removed"
+        "lifecycle": "added"
       },
       "type": "standalone",
       "availability": {
-        "status": "removed",
+        "status": "candidate_registry_present",
         "signals": {
           "cdragon_registry": {
             "present": true,
@@ -31100,11 +31101,11 @@
       "kit_tags": [],
       "flags": {
         "system_breaker": false,
-        "lifecycle": "removed"
+        "lifecycle": "added"
       },
       "type": "standalone",
       "availability": {
-        "status": "removed",
+        "status": "candidate_registry_present",
         "signals": {
           "cdragon_registry": {
             "present": true,
@@ -31599,11 +31600,11 @@
       ],
       "flags": {
         "system_breaker": false,
-        "lifecycle": "removed"
+        "lifecycle": "added"
       },
       "type": "standalone",
       "availability": {
-        "status": "removed",
+        "status": "candidate_registry_present",
         "signals": {
           "cdragon_registry": {
             "present": true,
@@ -31920,11 +31921,11 @@
       ],
       "flags": {
         "system_breaker": false,
-        "lifecycle": "removed"
+        "lifecycle": "active"
       },
       "type": "standalone",
       "availability": {
-        "status": "removed",
+        "status": "confirmed_live",
         "signals": {
           "cdragon_registry": {
             "present": true,
@@ -32399,11 +32400,11 @@
       ],
       "flags": {
         "system_breaker": false,
-        "lifecycle": "removed"
+        "lifecycle": "added"
       },
       "type": "standalone",
       "availability": {
-        "status": "removed",
+        "status": "candidate_registry_present",
         "signals": {
           "cdragon_registry": {
             "present": true,
@@ -32755,11 +32756,11 @@
       ],
       "flags": {
         "system_breaker": false,
-        "lifecycle": "removed"
+        "lifecycle": "active"
       },
       "type": "standalone",
       "availability": {
-        "status": "removed",
+        "status": "confirmed_live",
         "signals": {
           "cdragon_registry": {
             "present": true,
@@ -33035,11 +33036,11 @@
       ],
       "flags": {
         "system_breaker": false,
-        "lifecycle": "removed"
+        "lifecycle": "added"
       },
       "type": "standalone",
       "availability": {
-        "status": "removed",
+        "status": "candidate_registry_present",
         "signals": {
           "cdragon_registry": {
             "present": true,
@@ -33320,11 +33321,11 @@
       ],
       "flags": {
         "system_breaker": false,
-        "lifecycle": "removed"
+        "lifecycle": "added"
       },
       "type": "standalone",
       "availability": {
-        "status": "removed",
+        "status": "candidate_registry_present",
         "signals": {
           "cdragon_registry": {
             "present": true,
@@ -33607,11 +33608,11 @@
       ],
       "flags": {
         "system_breaker": false,
-        "lifecycle": "removed"
+        "lifecycle": "added"
       },
       "type": "standalone",
       "availability": {
-        "status": "removed",
+        "status": "candidate_registry_present",
         "signals": {
           "cdragon_registry": {
             "present": true,
@@ -33977,11 +33978,11 @@
       ],
       "flags": {
         "system_breaker": false,
-        "lifecycle": "removed"
+        "lifecycle": "active"
       },
       "type": "standalone",
       "availability": {
-        "status": "removed",
+        "status": "confirmed_live",
         "signals": {
           "cdragon_registry": {
             "present": true,
@@ -34228,11 +34229,11 @@
       ],
       "flags": {
         "system_breaker": false,
-        "lifecycle": "removed"
+        "lifecycle": "added"
       },
       "type": "standalone",
       "availability": {
-        "status": "removed",
+        "status": "candidate_registry_present",
         "signals": {
           "cdragon_registry": {
             "present": true,
@@ -34476,11 +34477,11 @@
       ],
       "flags": {
         "system_breaker": false,
-        "lifecycle": "removed"
+        "lifecycle": "added"
       },
       "type": "standalone",
       "availability": {
-        "status": "removed",
+        "status": "candidate_registry_present",
         "signals": {
           "cdragon_registry": {
             "present": true,
@@ -34754,11 +34755,11 @@
       ],
       "flags": {
         "system_breaker": false,
-        "lifecycle": "removed"
+        "lifecycle": "active"
       },
       "type": "standalone",
       "availability": {
-        "status": "removed",
+        "status": "confirmed_live",
         "signals": {
           "cdragon_registry": {
             "present": true,
@@ -34987,11 +34988,11 @@
         "availability_label": "BUG/MECHANISM",
         "availability_source": "player-observed-live-game",
         "availability_observed_at": "2026-06-20",
-        "lifecycle": "removed"
+        "lifecycle": "active"
       },
       "type": "standalone",
       "availability": {
-        "status": "removed",
+        "status": "confirmed_live",
         "signals": {
           "cdragon_registry": {
             "present": true,
@@ -35308,11 +35309,11 @@
       ],
       "flags": {
         "system_breaker": false,
-        "lifecycle": "removed"
+        "lifecycle": "added"
       },
       "type": "standalone",
       "availability": {
-        "status": "removed",
+        "status": "candidate_registry_present",
         "signals": {
           "cdragon_registry": {
             "present": true,
@@ -35603,11 +35604,11 @@
       ],
       "flags": {
         "system_breaker": false,
-        "lifecycle": "removed"
+        "lifecycle": "added"
       },
       "type": "standalone",
       "availability": {
-        "status": "removed",
+        "status": "candidate_registry_present",
         "signals": {
           "cdragon_registry": {
             "present": true,
@@ -35729,12 +35730,12 @@
       "type": "standalone",
       "flags": {
         "system_breaker": false,
-        "lifecycle": "added"
+        "lifecycle": "removed"
       },
       "kit_tags": [],
       "wikiDescription": "Added to ARAM Mayhem in Patch 26.12. Riot lists this augment in the official patch notes; its full client tooltip is not exposed in the current 16.12 augment file yet.",
       "availability": {
-        "status": "conflict",
+        "status": "unverified_legacy",
         "signals": {
           "cdragon_registry": {
             "present": false,
@@ -35938,11 +35939,11 @@
       ],
       "flags": {
         "system_breaker": false,
-        "lifecycle": "removed"
+        "lifecycle": "added"
       },
       "type": "standalone",
       "availability": {
-        "status": "removed",
+        "status": "candidate_registry_present",
         "signals": {
           "cdragon_registry": {
             "present": true,
@@ -36407,11 +36408,11 @@
       ],
       "flags": {
         "system_breaker": false,
-        "lifecycle": "removed"
+        "lifecycle": "added"
       },
       "type": "standalone",
       "availability": {
-        "status": "removed",
+        "status": "candidate_registry_present",
         "signals": {
           "cdragon_registry": {
             "present": true,
@@ -37123,12 +37124,12 @@
       ],
       "flags": {
         "system_breaker": false,
-        "lifecycle": "removed"
+        "lifecycle": "active"
       },
       "type": "standalone",
       "augmentId": "ARAM_RabbleRousing",
       "availability": {
-        "status": "removed",
+        "status": "confirmed_live",
         "signals": {
           "cdragon_registry": {
             "present": true,
@@ -37578,11 +37579,11 @@
       ],
       "flags": {
         "system_breaker": false,
-        "lifecycle": "removed"
+        "lifecycle": "added"
       },
       "type": "standalone",
       "availability": {
-        "status": "removed",
+        "status": "candidate_registry_present",
         "signals": {
           "cdragon_registry": {
             "present": true,
@@ -37786,11 +37787,11 @@
       ],
       "flags": {
         "system_breaker": false,
-        "lifecycle": "removed"
+        "lifecycle": "added"
       },
       "type": "standalone",
       "availability": {
-        "status": "removed",
+        "status": "candidate_registry_present",
         "signals": {
           "cdragon_registry": {
             "present": true,
@@ -38005,11 +38006,11 @@
       ],
       "flags": {
         "system_breaker": false,
-        "lifecycle": "removed"
+        "lifecycle": "added"
       },
       "type": "standalone",
       "availability": {
-        "status": "removed",
+        "status": "candidate_registry_present",
         "signals": {
           "cdragon_registry": {
             "present": true,
@@ -38229,11 +38230,11 @@
       ],
       "flags": {
         "system_breaker": true,
-        "lifecycle": "removed"
+        "lifecycle": "added"
       },
       "type": "standalone",
       "availability": {
-        "status": "removed",
+        "status": "candidate_registry_present",
         "signals": {
           "cdragon_registry": {
             "present": true,
@@ -38460,11 +38461,11 @@
       ],
       "flags": {
         "system_breaker": false,
-        "lifecycle": "removed"
+        "lifecycle": "active"
       },
       "type": "standalone",
       "availability": {
-        "status": "removed",
+        "status": "confirmed_live",
         "signals": {
           "cdragon_registry": {
             "present": true,
@@ -38819,11 +38820,11 @@
       ],
       "flags": {
         "system_breaker": false,
-        "lifecycle": "removed"
+        "lifecycle": "active"
       },
       "type": "standalone",
       "availability": {
-        "status": "removed",
+        "status": "confirmed_live",
         "signals": {
           "cdragon_registry": {
             "present": true,
@@ -38996,11 +38997,11 @@
       ],
       "flags": {
         "system_breaker": false,
-        "lifecycle": "removed"
+        "lifecycle": "added"
       },
       "type": "standalone",
       "availability": {
-        "status": "removed",
+        "status": "candidate_registry_present",
         "signals": {
           "cdragon_registry": {
             "present": true,
@@ -39122,14 +39123,14 @@
       "type": "standalone",
       "flags": {
         "system_breaker": false,
-        "lifecycle": "added"
+        "lifecycle": "removed"
       },
       "kit_tags": [
         "cc"
       ],
       "wikiDescription": "Occasionally send out squishy, slappy hands towards all nearby enemy champions, tethering them. Your next attack will pull in all tethered enemies.",
       "availability": {
-        "status": "conflict",
+        "status": "unverified_legacy",
         "signals": {
           "cdragon_registry": {
             "present": false,
@@ -39305,11 +39306,11 @@
       ],
       "flags": {
         "system_breaker": false,
-        "lifecycle": "removed"
+        "lifecycle": "active"
       },
       "type": "standalone",
       "availability": {
-        "status": "removed",
+        "status": "confirmed_live",
         "signals": {
           "cdragon_registry": {
             "present": true,
@@ -39520,11 +39521,11 @@
       ],
       "flags": {
         "system_breaker": false,
-        "lifecycle": "removed"
+        "lifecycle": "added"
       },
       "type": "standalone",
       "availability": {
-        "status": "removed",
+        "status": "candidate_registry_present",
         "signals": {
           "cdragon_registry": {
             "present": true,
@@ -39733,11 +39734,11 @@
       ],
       "flags": {
         "system_breaker": false,
-        "lifecycle": "removed"
+        "lifecycle": "active"
       },
       "type": "standalone",
       "availability": {
-        "status": "removed",
+        "status": "confirmed_live",
         "signals": {
           "cdragon_registry": {
             "present": true,
@@ -40047,11 +40048,11 @@
       ],
       "flags": {
         "system_breaker": false,
-        "lifecycle": "removed"
+        "lifecycle": "added"
       },
       "type": "standalone",
       "availability": {
-        "status": "removed",
+        "status": "candidate_registry_present",
         "signals": {
           "cdragon_registry": {
             "present": true,
@@ -40239,11 +40240,11 @@
       ],
       "flags": {
         "system_breaker": false,
-        "lifecycle": "removed"
+        "lifecycle": "added"
       },
       "type": "standalone",
       "availability": {
-        "status": "removed",
+        "status": "candidate_registry_present",
         "signals": {
           "cdragon_registry": {
             "present": true,
@@ -40409,11 +40410,11 @@
       "kit_tags": [],
       "flags": {
         "system_breaker": false,
-        "lifecycle": "removed"
+        "lifecycle": "added"
       },
       "type": "standalone",
       "availability": {
-        "status": "removed",
+        "status": "candidate_registry_present",
         "signals": {
           "cdragon_registry": {
             "present": true,
@@ -40582,11 +40583,11 @@
       ],
       "flags": {
         "system_breaker": false,
-        "lifecycle": "removed"
+        "lifecycle": "added"
       },
       "type": "standalone",
       "availability": {
-        "status": "removed",
+        "status": "candidate_registry_present",
         "signals": {
           "cdragon_registry": {
             "present": true,
@@ -41064,11 +41065,11 @@
       ],
       "flags": {
         "system_breaker": false,
-        "lifecycle": "removed"
+        "lifecycle": "added"
       },
       "type": "standalone",
       "availability": {
-        "status": "removed",
+        "status": "candidate_registry_present",
         "signals": {
           "cdragon_registry": {
             "present": true,
@@ -41274,11 +41275,11 @@
       ],
       "flags": {
         "system_breaker": true,
-        "lifecycle": "removed"
+        "lifecycle": "active"
       },
       "type": "standalone",
       "availability": {
-        "status": "removed",
+        "status": "confirmed_live",
         "signals": {
           "cdragon_registry": {
             "present": true,
@@ -41451,11 +41452,11 @@
       ],
       "flags": {
         "system_breaker": false,
-        "lifecycle": "removed"
+        "lifecycle": "added"
       },
       "type": "standalone",
       "availability": {
-        "status": "removed",
+        "status": "candidate_registry_present",
         "signals": {
           "cdragon_registry": {
             "present": true,
@@ -41701,11 +41702,11 @@
       ],
       "flags": {
         "system_breaker": false,
-        "lifecycle": "removed"
+        "lifecycle": "active"
       },
       "type": "standalone",
       "availability": {
-        "status": "removed",
+        "status": "confirmed_live",
         "signals": {
           "cdragon_registry": {
             "present": true,
@@ -42461,7 +42462,7 @@
       "kit_tags": [],
       "flags": {
         "system_breaker": false,
-        "lifecycle": "added"
+        "lifecycle": "removed"
       },
       "type": "standalone",
       "availability": {

@@ -418,3 +418,62 @@ Commands run:
 | `npx eslint src scripts` | PASS (exit 0, no output) |
 | `npm run build` | PASS (Next.js build completed) |
 | `(cd overlay && npm run build)` | PASS (overlay sync-data, tsc, and Vite build completed) |
+
+## Step 5 (rev2) — corrected availability resolution (codex)
+
+Date: 2026-06-23 (Asia/Taipei)
+
+Corrected:
+
+- Current CDragon registry + wiki-live now overrides stale legacy tombstones / old `flags.lifecycle=removed`.
+- Legacy-only rows absent from current CDragon and wiki resolve to `unverified_legacy`, not `conflict`.
+- `conflict` is reserved for current source disagreement, not absence.
+- `unverified_legacy` was added to the availability status enum and maps to a non-live lifecycle.
+- Placeholder definitions such as `ARAM_MissingPingAugment` remain `candidate_registry_present` but map to non-live lifecycle.
+
+Rebuilt `data/internal/augments.json`:
+
+| Measure | Count |
+| --- | ---: |
+| Rows | 260 |
+| `confirmed_live` | 139 |
+| `candidate_registry_present` | 28 |
+| `disabled` | 4 |
+| `removed` | 25 |
+| `unverified_legacy` | 64 |
+| `conflict` | 0 |
+| `win_rate` numeric coverage | 123 |
+
+Registry/wiki cross-tab:
+
+| CDragon registry | Wiki status | Resolved status | Count |
+| --- | --- | --- | ---: |
+| present | live | `confirmed_live` | 139 |
+| present | absent | `candidate_registry_present` | 28 |
+| present | disabled | `disabled` | 4 |
+| absent | absent | `unverified_legacy` | 64 |
+| absent | absent | `removed` | 25 |
+
+Lifecycle / scoring audit:
+
+- 0 non-live rows map to a live lifecycle. Non-live here means `disabled`, `removed`, `unverified_legacy`, `conflict`, plus placeholder `candidate_registry_present`.
+- 0 `unverified_legacy` / `disabled` / `removed` rows carry `flags.lifecycle=active` or `flags.lifecycle=added`.
+- Live scoring entrants are now 166 (`139 active` + `27 added`) versus 192 in rejected Step 5 v1 (`127 active` + `65 added`).
+- `infinite-recursion` is now `unverified_legacy` with `flags.lifecycle=removed`.
+- `ARAM_CriticalHealing` is now `confirmed_live` with `flags.lifecycle=active`.
+
+Curated system breaker audit:
+
+- 1 curated `flags.system_breaker` row is not `confirmed_live`: `slow-and-steady` / `ARAM_SlowAndSteady` resolves to `candidate_registry_present` with `flags.lifecycle=added` because it is in CDragon registry but lacks wiki live corroboration. `flags.system_breaker` was preserved for review.
+- 0 curated system breakers landed in `unverified_legacy`, `disabled`, or `removed`.
+
+Commands run:
+
+| Command | Result |
+| --- | --- |
+| `python3 scripts/test_assemble_augments.py` | PASS (9 tests) |
+| `python3 scripts/assemble_augments.py --existing <(git show HEAD~1:data/internal/augments.json)` | PASS; wrote 260 rows; availability counts 139 / 28 / 4 / 25 / 64 / 0; win_rate 123 |
+| `npm test` | FAIL; 25 files passed, 2 files failed, 245 / 250 tests passed. Failures are downstream assertions in `src/lib/__tests__/data-integrity.test.ts` and `src/lib/__tests__/pool-orchestrator.test.ts` that still encode rejected Step 5 v1 assumptions (`slow-and-steady` expected removed, `jeweled-gauntlet` expected removed, legacy-only combo/pool rows expected removed rather than `unverified_legacy`). These files are outside the allowed Step 5 correction edit set, so they were not changed. |
+| `npx eslint src scripts` | PASS (exit 0, no output) |
+| `npm run build` | PASS (Next.js build completed) |
+| `(cd overlay && npm run build)` | SKIPPED; rev2 did not touch overlay code or overlay data-sync inputs. |

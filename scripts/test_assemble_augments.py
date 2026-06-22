@@ -37,6 +37,22 @@ def base_row(augment_id: str, name: str = "Test Augment") -> dict:
 
 
 class AvailabilityResolverTests(unittest.TestCase):
+    def test_legacy_only_resolves_unverified_legacy_non_live(self):
+        availability = resolve_availability(
+            augment_id=None,
+            slug="legacy-only",
+            cdragon_present=False,
+            wiki_row=None,
+            definition_placeholder=False,
+            tombstone_removed=False,
+            existing_lifecycle="active",
+        )
+
+        self.assertEqual(availability["status"], "unverified_legacy")
+        self.assertEqual(lifecycle_for_availability(availability["status"]), "removed")
+        self.assertFalse(availability["signals"]["cdragon_registry"]["present"])
+        self.assertFalse(availability["signals"]["wiki"]["present"])
+
     def test_registry_only_resolves_candidate_registry_present(self):
         availability = resolve_availability(
             augment_id="ARAM_RegistryOnly",
@@ -80,6 +96,32 @@ class AvailabilityResolverTests(unittest.TestCase):
         self.assertNotEqual(availability["status"], "confirmed_live")
         self.assertTrue(availability["signals"]["cdragon_registry"]["definitionPlaceholder"])
 
+    def test_placeholder_candidate_is_non_live_in_assembled_catalog(self):
+        existing = {"patch": "26.12", "scraped_at": "old", "augments": []}
+        placeholder_base = base_row("ARAM_MissingPingAugment", "Missing Ping Augment")
+        placeholder_base["definitionPlaceholder"] = True
+        base_catalog = {"generated_at": "2026-06-23T00:00:00+00:00", "augments": [placeholder_base]}
+        wiki_feed = {
+            "augments": {
+                "ARAM_MissingPingAugment": {
+                    "wikiDescription": "Placeholder should not be live evidence.",
+                    "wikiAvailabilityNotes": [],
+                }
+            }
+        }
+
+        output = assemble_catalog(
+            existing_catalog=existing,
+            base_catalog=base_catalog,
+            wiki_feed=wiki_feed,
+            winrate_feed={"win_rates": {}},
+            identity_map={"mappings": []},
+        )
+
+        row = output["augments"][0]
+        self.assertEqual(row["availability"]["status"], "candidate_registry_present")
+        self.assertEqual(row["flags"]["lifecycle"], "removed")
+
     def test_registry_with_wiki_live_resolves_confirmed_live(self):
         availability = resolve_availability(
             augment_id="ARAM_Live",
@@ -94,7 +136,7 @@ class AvailabilityResolverTests(unittest.TestCase):
         self.assertEqual(lifecycle_for_availability(availability["status"]), "active")
         self.assertEqual(availability["signals"]["wiki"]["status"], "live")
 
-    def test_removed_tombstone_wins_over_live_signals(self):
+    def test_current_cdragon_and_wiki_live_override_stale_tombstone(self):
         availability = resolve_availability(
             augment_id="ARAM_Removed",
             slug="removed",
@@ -104,9 +146,25 @@ class AvailabilityResolverTests(unittest.TestCase):
             tombstone_removed=True,
         )
 
-        self.assertEqual(availability["status"], "removed")
-        self.assertEqual(lifecycle_for_availability(availability["status"]), "removed")
+        self.assertEqual(availability["status"], "confirmed_live")
+        self.assertEqual(lifecycle_for_availability(availability["status"]), "active")
         self.assertTrue(availability["signals"]["tombstone"]["removed"])
+
+    def test_current_live_and_current_removed_sources_resolve_conflict(self):
+        availability = resolve_availability(
+            augment_id="ARAM_CurrentConflict",
+            slug="current-conflict",
+            cdragon_present=True,
+            wiki_row={"wikiDescription": "A current wiki row."},
+            definition_placeholder=False,
+            tombstone_removed=False,
+            tencent_status="removed",
+        )
+
+        self.assertEqual(availability["status"], "conflict")
+        self.assertEqual(lifecycle_for_availability(availability["status"]), "removed")
+        self.assertEqual(availability["signals"]["wiki"]["status"], "live")
+        self.assertEqual(availability["signals"]["tencent"]["status"], "removed")
 
 
 class AssembleCatalogTests(unittest.TestCase):
