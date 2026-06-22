@@ -305,3 +305,69 @@ Commands run:
 | `npx eslint src scripts` | PASS (exit 0, no output) |
 | `npm run build` | PASS (Next.js build completed) |
 | `(cd overlay && npm run build)` | SKIPPED; Step 3 did not touch overlay code or overlay data-sync inputs |
+
+## Step 4 — Wiki feed: effect text + Notes + availability (codex)
+
+Date: 2026-06-23 (Asia/Taipei)
+
+Built:
+
+- `scripts/augment_wiki_feed.py` — internal-only LoL Wiki feed builder keyed by CDragon `augmentNameId`.
+- `scripts/test_augment_wiki_feed.py` and `scripts/fixtures/augment_wiki_page.html` — deterministic fixture-backed tests, no live network.
+- `data/internal/augment-wiki-feed.json` — feed artifact.
+- `data/internal/augment-wiki-only-report.json` — wiki rows not resolvable to CDragon base.
+- `data/internal/augment-wiki-unmatched-report.json` — unresolved wiki row report.
+- `data/internal/augment-wiki-contradictions-report.json` — wiki vs CDragon report-only existence / rarity / availability signals.
+
+Source:
+
+- `https://wiki.leagueoflegends.com/en-us/ARAM:_Mayhem/Augments`
+- Fetched at: `2026-06-22T17:54:33+00:00`
+
+Parsing:
+
+- Wiki table rows provide `wikiDescription` and `wikiRarity`; availability sentences are split into `wikiAvailabilityNotes`.
+- Availability annotations are evidence only. Step 4 does not resolve lifecycle or availability.
+- The `#Notes` section is parsed from the page-level Notes list. Notes attach to augmentIds through explicit wiki augment icon/title/file references; note-only CDragon matches are retained even when the augment has no wiki table row.
+- Nested table text inside effect cells is ignored so tabber/table-only data does not pollute `wikiDescription`.
+
+Coverage:
+
+| Measure | Count |
+| --- | ---: |
+| Wiki table rows parsed | 222 |
+| CDragon-keyed feed entries | 142 |
+| Feed entries with `wikiDescription` | 140 |
+| Feed entries with `wikiNotes` | 5 |
+| Feed entries with `wikiAvailabilityNotes` | 6 |
+| Feed entries with `wikiRarity` | 140 |
+| Page-level Notes bullets captured | 3 |
+
+Reports:
+
+| Report | Count |
+| --- | ---: |
+| Wiki-only rows | 82 |
+| Unmatched wiki rows | 82 |
+| Contradictions: existence | 110 (`wiki_only`: 82, `cdragon_only`: 28) |
+| Contradictions: rarity | 1 (`ARAM_Terror`: wiki `silver`, CDragon `gold`) |
+| Contradictions: availability | 6 |
+
+Boundary confirmations:
+
+- `data/internal/augments.json` was not modified; `/usr/bin/diff` against HEAD produced no output.
+- `public/data/**`, `data/internal/augment-base-catalog.json`, `data/internal/augment-winrate-feed.json`, pool rules, combos, champions, scoring twins, overlay code, and `messages/*` were not modified.
+- The wiki feed stores source evidence only; Step 5 remains responsible for resolved availability.
+
+Commands run:
+
+| Command | Result |
+| --- | --- |
+| `python3 scripts/test_augment_wiki_feed.py` | PASS (3 tests) |
+| `python3 scripts/augment_wiki_feed.py` | PASS; wrote 142 feed entries, 82 wiki-only rows, 110 existence / 1 rarity / 6 availability report entries |
+| `python3 scripts/test_augment_identity_resolver.py` | PASS (4 tests) |
+| `/usr/bin/diff -u <(git show HEAD:data/internal/augments.json) data/internal/augments.json` | PASS; no output |
+| `npm test` | PASS (27 files, 250 tests) |
+| `npx eslint src scripts` | PASS (exit 0, no output) |
+| `npm run build` | PASS (Next.js build completed) |
+| `(cd overlay && npm run build)` | SKIPPED; Step 4 did not touch overlay code or overlay data-sync inputs |

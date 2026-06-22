@@ -1,0 +1,1041 @@
+{
+  "schemaVersion": 1,
+  "identity_key": "CDragon augmentNameId",
+  "source": "lol_wiki",
+  "sourceUrl": "https://wiki.leagueoflegends.com/en-us/ARAM:_Mayhem/Augments",
+  "wikiFetchedAt": "2026-06-22T17:54:33+00:00",
+  "counts": {
+    "wikiRows": 222,
+    "matchedAugmentIds": 142,
+    "withWikiDescription": 140,
+    "withWikiNotes": 5,
+    "withWikiAvailabilityNotes": 6,
+    "withWikiRarity": 140,
+    "pageNotes": 3
+  },
+  "pageNotes": [
+    "Transmuted augments will state that they are such in their title (e.g. Transmuted: Jeweled Gauntlet).",
+    "If a champion acquires all three \"Bread\" augments ( Bread and Butter, Bread and Cheese, Bread and Jam), they gain a buff called Bread Sandwich that grants them 250 ultimate haste and an additional 50 ability haste on each basic ability.",
+    "When a Burn stack has been inflicted to an enemy, all different Burn sources will stack the 1st source's effect and credit the damage to the 1st source's owner (e.g. Tormentor inflicted 1st will be stacked by Slow Cooker)"
+  ],
+  "notes": [
+    "Wiki Notes and availability notes are evidence signals only.",
+    "Downstream availability and lifecycle resolution remains Step 5 work."
+  ],
+  "augments": {
+    "ARAM_ADAPt": {
+      "wikiDescription": "Convert all of your bonus attack damage into ability power at a rate of 1 ability power per 0.6 bonus attack damage. Additionally, increase your ability power by 15%.",
+      "wikiNotes": [],
+      "wikiAvailabilityNotes": [],
+      "wikiFetchedAt": "2026-06-22T17:54:33+00:00",
+      "wikiRarity": "silver"
+    },
+    "ARAM_AllForYou": {
+      "wikiDescription": "Your heals and shields on allied champions are increased in effectiveness by 30%.",
+      "wikiNotes": [],
+      "wikiAvailabilityNotes": [],
+      "wikiFetchedAt": "2026-06-22T17:54:33+00:00",
+      "wikiRarity": "gold"
+    },
+    "ARAM_ApexInventor": {
+      "wikiDescription": "Grants 100 item haste, which is equivalent to 50% cooldown reduction for items.",
+      "wikiNotes": [],
+      "wikiAvailabilityNotes": [],
+      "wikiFetchedAt": "2026-06-22T17:54:33+00:00",
+      "wikiRarity": "gold"
+    },
+    "ARAM_Archmage": {
+      "wikiDescription": "Whenever you cast an ability, refund the cooldown of another, randomly selected ability by 30% of the casted ability's cooldown.",
+      "wikiNotes": [],
+      "wikiAvailabilityNotes": [],
+      "wikiFetchedAt": "2026-06-22T17:54:33+00:00",
+      "wikiRarity": "prismatic"
+    },
+    "ARAM_BacktoBasics": {
+      "wikiDescription": "Your champion abilities deal 35% increased damage and you gain 70 ability haste and 35% increased healing and shielding from all sources, but your ultimate ability is permanently sealed.",
+      "wikiNotes": [],
+      "wikiAvailabilityNotes": [],
+      "wikiFetchedAt": "2026-06-22T17:54:33+00:00",
+      "wikiRarity": "prismatic"
+    },
+    "ARAM_BangBang": {
+      "wikiDescription": "Quest: Hit enemy champions with abilities while located at least 700 units away from them (at the time of the hit) 15 times (counts up to 1 hit per champion per cast instance). Reward: Upon completing your Quest, hitting enemy champions with abilities while located at least 700 units away from them at the time of the hit fires a meteor to their current location, which upon landing deals 75 – 200 (based on level) (+ 50% bonus AD) (+ 20% AP) magic damage to enemies within the area (8 second cooldown per target per cast instance). The meteor's damage and radius are increased based on your distance to the target at the time of the ability hit, increasing its damage by 0% – 230% and setting its radius to 120 – 1366.88 units. Maximum meteor damage is 172.5 – 460 (based on level) (+ 115% bonus AD) (+ 46% AP).",
+      "wikiNotes": [],
+      "wikiAvailabilityNotes": [],
+      "wikiFetchedAt": "2026-06-22T17:54:33+00:00",
+      "wikiRarity": "gold"
+    },
+    "ARAM_BigBrain": {
+      "wikiDescription": "Gain a shield that absorbs damage equal to 300% AP and lasts until destroyed. Shield is replenished upon respawn and every 70 seconds.",
+      "wikiNotes": [],
+      "wikiAvailabilityNotes": [],
+      "wikiFetchedAt": "2026-06-22T17:54:33+00:00",
+      "wikiRarity": "gold"
+    },
+    "ARAM_BladeWaltz": {
+      "wikiDescription": "Replace a summoner spell with Blade Waltz. Blade Waltz: Blink to the target enemy champion. You then blink to the nearest other enemy champion every 0.25 seconds over the next 1.75 seconds, blinking up to 7 additional times. The last blink targets the primary target. Each time you blink to an enemy, deal 30 – 150 (based on level) (+ 10% bonus AD) (+ 6% AP) physical damage to them and apply on-hit effects at 50% effectiveness, up to a total of 180 – 900 (based on level) (+ 60% bonus AD) (+ 36% AP) (45 second cooldown). While Blade Waltz is active, you are untargetable and unable to act. This effect will end prematurely if there are no longer any nearby valid targets to blink to. An enemy can be blinked to more than once if there are no other valid targets in range.",
+      "wikiNotes": [],
+      "wikiAvailabilityNotes": [],
+      "wikiFetchedAt": "2026-06-22T17:54:33+00:00",
+      "wikiRarity": "prismatic"
+    },
+    "ARAM_BluntForce": {
+      "wikiDescription": "Increases attack damage by 20%.",
+      "wikiNotes": [],
+      "wikiAvailabilityNotes": [],
+      "wikiFetchedAt": "2026-06-22T17:54:33+00:00",
+      "wikiRarity": "silver"
+    },
+    "ARAM_BreadAndButter": {
+      "wikiDescription": "Your champion's first basic ability (Q) gains 100 ability haste.",
+      "wikiNotes": [
+        "If a champion acquires all three \"Bread\" augments ( Bread and Butter, Bread and Cheese, Bread and Jam), they gain a buff called Bread Sandwich that grants them 250 ultimate haste and an additional 50 ability haste on each basic ability."
+      ],
+      "wikiAvailabilityNotes": [],
+      "wikiFetchedAt": "2026-06-22T17:54:33+00:00",
+      "wikiRarity": "gold"
+    },
+    "ARAM_BreadAndCheese": {
+      "wikiDescription": "Your champion's third basic ability (E) gains 100 ability haste.",
+      "wikiNotes": [
+        "If a champion acquires all three \"Bread\" augments ( Bread and Butter, Bread and Cheese, Bread and Jam), they gain a buff called Bread Sandwich that grants them 250 ultimate haste and an additional 50 ability haste on each basic ability."
+      ],
+      "wikiAvailabilityNotes": [],
+      "wikiFetchedAt": "2026-06-22T17:54:33+00:00",
+      "wikiRarity": "gold"
+    },
+    "ARAM_BreadAndJam": {
+      "wikiDescription": "Your champion's second basic ability (W) gains 100 ability haste.",
+      "wikiNotes": [
+        "If a champion acquires all three \"Bread\" augments ( Bread and Butter, Bread and Cheese, Bread and Jam), they gain a buff called Bread Sandwich that grants them 250 ultimate haste and an additional 50 ability haste on each basic ability."
+      ],
+      "wikiAvailabilityNotes": [],
+      "wikiFetchedAt": "2026-06-22T17:54:33+00:00",
+      "wikiRarity": "gold"
+    },
+    "ARAM_CantTouchThis": {
+      "wikiDescription": "Casting your ultimate grants you invulnerability for 2 seconds (8 second cooldown).",
+      "wikiNotes": [],
+      "wikiAvailabilityNotes": [],
+      "wikiFetchedAt": "2026-06-22T17:54:33+00:00",
+      "wikiRarity": "prismatic"
+    },
+    "ARAM_CelestialBody": {
+      "wikiDescription": "Gain 1500 bonus health, but reduce your damage output by 10%.",
+      "wikiNotes": [],
+      "wikiAvailabilityNotes": [],
+      "wikiFetchedAt": "2026-06-22T17:54:33+00:00",
+      "wikiRarity": "gold"
+    },
+    "ARAM_CircleofDeath": {
+      "wikiDescription": "Healing and health regeneration you do causes you to deal 70% of that value in magic damage to the nearest enemy champion within 1000 units.",
+      "wikiNotes": [],
+      "wikiAvailabilityNotes": [],
+      "wikiFetchedAt": "2026-06-22T17:54:33+00:00",
+      "wikiRarity": "prismatic"
+    },
+    "ARAM_ClownCollege": {
+      "wikiDescription": "Gain Shaco's Backstab, Deceive and Hallucinate's explosion. Replace a summoner spell with Deceive. Passive - Backstab: Your basic attacks deal 20 – 35 (based on level) (+ 50% bonus AD) (+ 35% AP) bonus physical damage on-hit when hitting an enemy from behind. Active - Deceive: Become invisible for up to 3 seconds and blink to the target location within 400 units after a 0.125-second delay. Your next basic attack while in stealth deals 100 (+ 150% bonus AD) (+ 55% AP) bonus physical damage, increased to「 155 (+ 232.5% bonus AD) (+ 85.25% AP) bonus physical damage 」「 155% damage 」if Backstab was applied (45 second cooldown). Passive - Hallucinate Death: Upon your death, release an explosion in a 350 radius of your death location, dealing 25% of target's maximum health true damage to enemies within. Additionally, you deploy a box at the location of your death that instantly fears nearby enemies for 1 second. This box does not attack but lasts for 3 seconds.",
+      "wikiNotes": [],
+      "wikiAvailabilityNotes": [
+        "This augment is currently disabled."
+      ],
+      "wikiFetchedAt": "2026-06-22T17:54:33+00:00",
+      "wikiRarity": "prismatic"
+    },
+    "ARAM_CourageoftheColossus": {
+      "wikiDescription": "Immobilizing or grounding an enemy champion grants a shield for 3 seconds that absorbs 150 – 450 (based on level) (+ 4% maximum health) damage (5 second cooldown per cast instance). Shields can stack between multiple triggers of this effect, though not refreshing the duration of previous shields.",
+      "wikiNotes": [],
+      "wikiAvailabilityNotes": [],
+      "wikiFetchedAt": "2026-06-22T17:54:33+00:00",
+      "wikiRarity": "prismatic"
+    },
+    "ARAM_CriticalHealing": {
+      "wikiDescription": "Your heals and shields now have a chance equal to your critical strike chance to increase in effectiveness by 40% (5 second cooldown per cast instance). Additionally, gain 25% critical strike chance.",
+      "wikiNotes": [],
+      "wikiAvailabilityNotes": [],
+      "wikiFetchedAt": "2026-06-22T17:54:33+00:00",
+      "wikiRarity": "gold"
+    },
+    "ARAM_Cruelty": {
+      "wikiDescription": "Immobilizing or grounding an enemy champion summons a comet above them that lands at their current location after 1 second, dealing 50 – 150 (based on level) (+ 40% AP) (+ 4% of your maximum health) magic damage to enemies within the area (6 second cooldown per target per cast instance).",
+      "wikiNotes": [],
+      "wikiAvailabilityNotes": [],
+      "wikiFetchedAt": "2026-06-22T17:54:33+00:00",
+      "wikiRarity": "prismatic"
+    },
+    "ARAM_Dashing": {
+      "wikiDescription": "Abilities with dashes or blinks gain 175 ability haste. On Kalista, this augment instead grants her 125% bonus attack speed.[1]",
+      "wikiNotes": [],
+      "wikiAvailabilityNotes": [],
+      "wikiFetchedAt": "2026-06-22T17:54:33+00:00",
+      "wikiRarity": "prismatic"
+    },
+    "ARAM_DawnbringersResolve": {
+      "wikiDescription": "Upon dropping below 50% maximum health, you are healed for 30% maximum health over 3 seconds (45 second cooldown, reset upon death).",
+      "wikiNotes": [],
+      "wikiAvailabilityNotes": [],
+      "wikiFetchedAt": "2026-06-22T17:54:33+00:00",
+      "wikiRarity": "gold"
+    },
+    "ARAM_Deft": {
+      "wikiDescription": "Grants 60% bonus attack speed.",
+      "wikiNotes": [],
+      "wikiAvailabilityNotes": [],
+      "wikiFetchedAt": "2026-06-22T17:54:33+00:00",
+      "wikiRarity": "silver"
+    },
+    "ARAM_DiveBomber": {
+      "wikiDescription": "Upon death, you explode to deal true damage equal to 20% of the target's maximum health to enemies within 500 units.",
+      "wikiNotes": [],
+      "wikiAvailabilityNotes": [],
+      "wikiFetchedAt": "2026-06-22T17:54:33+00:00",
+      "wikiRarity": "silver"
+    },
+    "ARAM_DivineDomain": {
+      "wikiDescription": "Scoring a takedown against an enemy champion within 3 seconds of damaging them causes them to leave behind their Essence for 8 seconds. You can basic attack the Essence to consume it: causing you to blink to its location after winding up for 1 second, during which you are untargetable (except to turrets), displacement immune, and unable to act. Upon consumption of the Essence, you gain 100% bonus movement speed decaying over 2 seconds, heal yourself for 75 – 300 (based on level) (+ 50% bonus AD) (+ 25% AP), and reset the cooldowns of your basic abilities. The heal is increased by 0% – 100% (based on your missing health), for a maximum heal of 150 – 600 (based on level) (+ 100% bonus AD) (+ 50% AP).",
+      "wikiNotes": [],
+      "wikiAvailabilityNotes": [],
+      "wikiFetchedAt": "2026-06-22T17:54:33+00:00",
+      "wikiRarity": "prismatic"
+    },
+    "ARAM_DivineIntervention": {
+      "wikiDescription": "Automatically cast Taric's Cosmic Radiance, calling down a protective star upon you that descends over 2.5 seconds. Afterwards, you and all allied champions within 400 units become invulnerable for 2.5 seconds (35 second cooldown).",
+      "wikiNotes": [],
+      "wikiAvailabilityNotes": [],
+      "wikiFetchedAt": "2026-06-22T17:54:33+00:00",
+      "wikiRarity": "gold"
+    },
+    "ARAM_DontBlink": {
+      "wikiDescription": "Deal 1% increased damage per 10 movement speed you have more than the target.",
+      "wikiNotes": [],
+      "wikiAvailabilityNotes": [],
+      "wikiFetchedAt": "2026-06-22T17:54:33+00:00",
+      "wikiRarity": "silver"
+    },
+    "ARAM_DoubleTap": {
+      "wikiDescription": "Basic attacks that critically strike apply on-hit effects an additional time. Additionally, gain 25% critical strike chance.",
+      "wikiNotes": [],
+      "wikiAvailabilityNotes": [],
+      "wikiFetchedAt": "2026-06-22T17:54:33+00:00",
+      "wikiRarity": "gold"
+    },
+    "ARAM_DrawYourSword": {
+      "wikiDescription": "Become melee, modifying your attack range to 200 (+ 100% bonus attack range from augments) units. Additionally, gain 24% bonus attack damage, 20% bonus attack speed, 24% bonus health, 20% bonus movement speed, and 20% life steal. These bonuses are increased by 0% – 100% (based on champion's default attack range).",
+      "wikiNotes": [],
+      "wikiAvailabilityNotes": [
+        "This augment is only available for ranged champions.",
+        "This augment is not offered if the champion has built Runaan's Hurricane."
+      ],
+      "wikiFetchedAt": "2026-06-22T17:54:33+00:00",
+      "wikiRarity": "prismatic"
+    },
+    "ARAM_DropBear": {
+      "wikiDescription": "Upon death, you summon Tibbers who drops from above and lands onto the location of your death over 0.5 seconds. Upon landing, he deals 250 – 750 (based on level) (+ 100% AP) (+ 2 per 1 flat magic penetration) (+ 5 per 1% magic penetration) magic damage to nearby enemies and stuns them for 1.5 seconds. Tibbers then chases after and targets the enemy champion that killed you, attacking them once he is in range. Tibbers has all of your augments and deals 25 – 150 (based on level) (+ 50% AP) magic damage every second to enemies within a 350 radius of him. His stats are: 1500 – 6000 (based on level) (+ 15% maximum health) (+ 150% AP) health (rapidly decays over his lifetime) 50 – 300 (based on level) (+ 75% AD) magic damage (basic attack damage) 0.650 (+ 30% attack speed) attack speed 150 attack range 200 – 300 (based on level) (+ 20% movement speed) movement speed",
+      "wikiNotes": [],
+      "wikiAvailabilityNotes": [],
+      "wikiFetchedAt": "2026-06-22T17:54:33+00:00",
+      "wikiRarity": "prismatic"
+    },
+    "ARAM_Dropkick": {
+      "wikiDescription": "Your basic attacks and abilities execute enemy champions below 5% (+ 3.5% per 100 base AD) (+ 2% per 1000 bonus health) of their maximum health, which causes their corpse to be sent flying away in a line. Upon collision with an enemy champion or terrain, the target's corpse explodes to deal 150 – 500 (based on level) (+ 100% bonus armor) (+ 100% bonus magic resistance) magic damage to nearby enemies. Successful executions heal you for 100 – 300 (based on level) (+ 25% bonus health). The execution may also be triggered by the explosion and goes through shields.",
+      "wikiNotes": [],
+      "wikiAvailabilityNotes": [],
+      "wikiFetchedAt": "2026-06-22T17:54:33+00:00",
+      "wikiRarity": "prismatic"
+    },
+    "ARAM_DualWield": {
+      "wikiDescription": "Your basic attacks launch a bolt at the target that fires after a 0.225-second delay on-attack, deals 40% of the triggering attack's pre-mitigation damage, and applies on-hit effects at 40% effectiveness. Additionally, increase your total attack speed by 10%.",
+      "wikiNotes": [],
+      "wikiAvailabilityNotes": [],
+      "wikiFetchedAt": "2026-06-22T17:54:33+00:00",
+      "wikiRarity": "prismatic"
+    },
+    "ARAM_Earthwake": {
+      "wikiDescription": "Dashing or blinking causes you to leave behind a trail from the location you moved to your destination that detonates after 0.75 seconds in a 300 radius, dealing 70 – 210 (based on level) (+ 125% bonus AD) (+ 60% AP) physical damage per explosion to enemies hit, reduced to 70% against minions. Enemies can be affected only once every second from all cast instances, and the effect is not triggered if you move beyond 2000 units with the dash or blink.",
+      "wikiNotes": [],
+      "wikiAvailabilityNotes": [
+        "This augment is only offered to up to 2 players on each team for a given game."
+      ],
+      "wikiFetchedAt": "2026-06-22T17:54:33+00:00",
+      "wikiRarity": "prismatic"
+    },
+    "ARAM_EmpoweredByTheFaithful": {
+      "wikiDescription": "Granting a heal or shield to an allied champion blesses them for 8 seconds. Whenever a blessed ally damages an enemy champion, you generate a stack of Devotion, stacking up to 50 times. Upon reaching maximum stacks, you unleash a shockwave that deals 50 – 300 (based on level) (+ 750% heal and shield power) magic damage to nearby enemies. Enemy champions damaged below a percentage of their maximum health equal to 25% of your heal and shield power are executed.",
+      "wikiNotes": [],
+      "wikiAvailabilityNotes": [],
+      "wikiFetchedAt": "2026-06-22T17:54:33+00:00",
+      "wikiRarity": "prismatic"
+    },
+    "ARAM_EndlessHunt": {
+      "wikiDescription": "You can now identify the Vitals of enemy champions within 2000 units, marked as an arc around them and pointing towards a specific direction. Dealing damage to a target with a basic attack or ability while you are facing in the direction of their exposed Vital will consume it, dealing bonus true damage equal to 6% (+ 1.5% per En Passant stack) of the target's maximum health, healing you for 50 – 200 (based on level) (+ 5% missing health), and granting you 50% (+ 5% per En Passant stack) bonus movement speed that decays over 2 seconds. Consuming a target's Vital also grants you an En Passant stack for 8 seconds, refreshing on subsequent Vital triggers and stacking up a number of times. Each En Passant stack increases the consumed Vital damage and bonus movement speed. Vitals on targets become exposed instantly once you are within range and remain exposed until you die. Once a target's Vital is consumed, you identify a new Vital on them pointing in a different direction from the previous after 4 seconds.",
+      "wikiNotes": [],
+      "wikiAvailabilityNotes": [],
+      "wikiFetchedAt": "2026-06-22T17:54:33+00:00",
+      "wikiRarity": "prismatic"
+    },
+    "ARAM_Erosion": {
+      "wikiDescription": "Each instance of damage dealt to an enemy reduces their armor and magic resistance by 1.5% for 4 seconds, stacking up to 20 times for a total of 30% resistances reduction.",
+      "wikiNotes": [],
+      "wikiAvailabilityNotes": [],
+      "wikiFetchedAt": "2026-06-22T17:54:33+00:00",
+      "wikiRarity": "silver"
+    },
+    "ARAM_EtherealWeapon": {
+      "wikiDescription": "Your abilities apply on-hit effects (1 second cooldown per target).",
+      "wikiNotes": [],
+      "wikiAvailabilityNotes": [],
+      "wikiFetchedAt": "2026-06-22T17:54:33+00:00",
+      "wikiRarity": "gold"
+    },
+    "ARAM_Eureka": {
+      "wikiDescription": "Gain ability haste equal to 30% AP.",
+      "wikiNotes": [],
+      "wikiAvailabilityNotes": [],
+      "wikiFetchedAt": "2026-06-22T17:54:33+00:00",
+      "wikiRarity": "prismatic"
+    },
+    "ARAM_FanTheHammer": {
+      "wikiDescription": "Your next basic attack against an enemy champion in each cardinal direction within 750 range additionally on-attack fires 5 missiles at the target that each deal 8 – 51 (based on level) (+ 14% bonus AD) physical damage, for a total of 40 – 255 (based on level) (+ 70% bonus AD) physical damage (5 second cooldown per direction). Missiles' damage is increased by 0% – 50% (based on distance travelled). Each missile can critically strike for (200% + 30%) damage and applies on-hit effects at 20% effectiveness.",
+      "wikiNotes": [],
+      "wikiAvailabilityNotes": [],
+      "wikiFetchedAt": "2026-06-22T17:54:33+00:00",
+      "wikiRarity": "prismatic"
+    },
+    "ARAM_FeyMagic": {
+      "wikiDescription": "Damaging enemies with your ultimate ability polymorphs them into harmless critters for 2 seconds, during which their base movement speed is reduced by 60, and disarms them for the same duration (15 second cooldown per target).",
+      "wikiNotes": [],
+      "wikiAvailabilityNotes": [],
+      "wikiFetchedAt": "2026-06-22T17:54:33+00:00",
+      "wikiRarity": "prismatic"
+    },
+    "ARAM_Firebrand": {
+      "wikiDescription": "Basic attacks apply a Burn for 5 seconds that deals bonus magic damage equal to「 0.4% of the target's maximum health per second. 」「 2% of the target's maximum health over the duration. 」This Burn stacks infinitely and refreshes with each application.",
+      "wikiNotes": [],
+      "wikiAvailabilityNotes": [],
+      "wikiFetchedAt": "2026-06-22T17:54:33+00:00",
+      "wikiRarity": "gold"
+    },
+    "ARAM_Firefox": {
+      "wikiDescription": "Automatically cast a modified version of Ahri's Fox-Fire, gaining 25% bonus movement speed that decays over 2 seconds and conjuring 3 flames that orbit you clockwise for up to 2.5 seconds at a radius of 150 units. The flames will fly toward the nearest visible enemies within 550 units, dealing 35 – 160 (based on level) (+ 25% bonus AD (+ 25% AP) adaptive damage, reduced to「 10.5 – 48 (based on level) (+ 7.5% bonus AD (+ 7.5% AP) 」「 30% of the original damage 」for enemies hit by subsequent flames from the same cast (7 second cooldown).",
+      "wikiNotes": [],
+      "wikiAvailabilityNotes": [],
+      "wikiFetchedAt": "2026-06-22T17:54:33+00:00",
+      "wikiRarity": "silver"
+    },
+    "ARAM_FirstAidKit": {
+      "wikiDescription": "Grants 20% heal and shield power.",
+      "wikiNotes": [],
+      "wikiAvailabilityNotes": [],
+      "wikiFetchedAt": "2026-06-22T17:54:33+00:00",
+      "wikiRarity": "silver"
+    },
+    "ARAM_Flashbang": {
+      "wikiDescription": "Using Flash creates an explosion around the blink location that deals 70 – 240 (based on level) (+ 70% AD) (+ 60% AP) magic damage to nearby enemies and slows them by 35% for 1.25 seconds. Additionally, the cooldown of your Flash resets upon your death. If Flash is not equipped, you will be prompted to replace one of your summoner spells with Flash.",
+      "wikiNotes": [],
+      "wikiAvailabilityNotes": [],
+      "wikiFetchedAt": "2026-06-22T17:54:33+00:00",
+      "wikiRarity": "silver"
+    },
+    "ARAM_Flashy": {
+      "wikiDescription": "Your Flash now has 3 charges with a 2-second cooldown between casts (120 seconds recharge time for all 3 charges). If Flash is not equipped, you will be prompted to replace one of your summoner spells with Flash.",
+      "wikiNotes": [],
+      "wikiAvailabilityNotes": [],
+      "wikiFetchedAt": "2026-06-22T17:54:33+00:00",
+      "wikiRarity": "gold"
+    },
+    "ARAM_FromBeginningToEnd": {
+      "wikiDescription": "Gain the Dark Harvest and First Strike keystone runes. Dark Harvest Base damage changed to 50 – 100 (based on level). Damage per soul changed to 20. Bonus AD ratio changed to 35% bonus AD. AP ratio changed to 25% AP. Gain 8 bonus souls for selecting this augment as not your first augment. First Strike Base gold increased to 20 from 15 (ARAM override value). Bonus damage increased to 10% from 7%.",
+      "wikiNotes": [],
+      "wikiAvailabilityNotes": [],
+      "wikiFetchedAt": "2026-06-22T17:54:33+00:00",
+      "wikiRarity": "gold"
+    },
+    "ARAM_GetExcited": {
+      "wikiDescription": "Scoring a champion takedown grants you 100% bonus movement speed and 15% total attack speed for 4 seconds.",
+      "wikiNotes": [],
+      "wikiAvailabilityNotes": [],
+      "wikiFetchedAt": "2026-06-22T17:54:33+00:00",
+      "wikiRarity": "gold"
+    },
+    "ARAM_GiantSlayer": {
+      "wikiDescription": "Become tiny, reducing your size by 75% and granting you 20% bonus movement speed. Additionally, deal 10% / 15% / 25% / 30% (based on target's size) bonus damage against enemy champions with greater size than you.",
+      "wikiNotes": [],
+      "wikiAvailabilityNotes": [],
+      "wikiFetchedAt": "2026-06-22T17:54:33+00:00",
+      "wikiRarity": "prismatic"
+    },
+    "ARAM_Goliath": {
+      "wikiDescription": "Grants 35% bonus health, 15% adaptive force, and 50% increased size.",
+      "wikiNotes": [],
+      "wikiAvailabilityNotes": [],
+      "wikiFetchedAt": "2026-06-22T17:54:33+00:00",
+      "wikiRarity": "prismatic"
+    },
+    "ARAM_Goredrink": {
+      "wikiDescription": "Gain 15% omnivamp.",
+      "wikiNotes": [],
+      "wikiAvailabilityNotes": [],
+      "wikiFetchedAt": "2026-06-22T17:54:33+00:00",
+      "wikiRarity": "silver"
+    },
+    "ARAM_GuiltyPleasure": {
+      "wikiDescription": "Immobilizing or grounding an enemy champion heals you for 30 – 250 (based on level) (+ 1.5% maximum health) (5 second cooldown per cast instance).",
+      "wikiNotes": [],
+      "wikiAvailabilityNotes": [],
+      "wikiFetchedAt": "2026-06-22T17:54:33+00:00",
+      "wikiRarity": "silver"
+    },
+    "ARAM_HeavyHitter": {
+      "wikiDescription": "Basic attacks deal bonus physical damage equal to 3.5% of your maximum health.",
+      "wikiNotes": [],
+      "wikiAvailabilityNotes": [],
+      "wikiFetchedAt": "2026-06-22T17:54:33+00:00",
+      "wikiRarity": "silver"
+    },
+    "ARAM_Hellbent": {
+      "wikiDescription": "Generate a stack of Revivemaxxing for each enemy champion you hit with basic attacks or abilities, lasting for 6 seconds, refreshing on subsequent hits, and stacking up to 10 times. At maximum stacks, you become Hellbent. Hellbent: Upon taking lethal damage, you enter resurrection for 4 seconds, during which you are invulnerable, untargetable, and unable to act. Afterwards, you revive with 35% – 75% (based on level) of your maximum health (120 second cooldown). Additionally, you become empowered for the next 15 seconds, granting you 15 – 120 (based on level) bonus Attack Damage or 25 – 200 (based on level) Ability Power (Adaptive), 20% – 40% (based on level) bonus movement speed while facing toward nearby enemy champions, and 15% – 30% (based on level) omnivamp for the duration.",
+      "wikiNotes": [],
+      "wikiAvailabilityNotes": [],
+      "wikiFetchedAt": "2026-06-22T17:54:33+00:00",
+      "wikiRarity": "prismatic"
+    },
+    "ARAM_HighRoller": {
+      "wikiDescription": "Nearby enemies that die have a 7% chance to drop a Stat Anvil at the location of their death. You can pick up dropped anvils by moving over them. The obtained Stat Anvils will be consumed once the shop is enabled again (after your death).",
+      "wikiNotes": [],
+      "wikiAvailabilityNotes": [],
+      "wikiFetchedAt": "2026-06-22T17:54:33+00:00",
+      "wikiRarity": "prismatic"
+    },
+    "ARAM_Homeguard": {
+      "wikiDescription": "Gain 100% bonus movement speed. This bonus is lost for 6 seconds after taking damage from champions.",
+      "wikiNotes": [],
+      "wikiAvailabilityNotes": [],
+      "wikiFetchedAt": "2026-06-22T17:54:33+00:00",
+      "wikiRarity": "silver"
+    },
+    "ARAM_IceCold": {
+      "wikiDescription": "Your slowing effects reduce the movement speed of targets by an additional 75.",
+      "wikiNotes": [],
+      "wikiAvailabilityNotes": [],
+      "wikiFetchedAt": "2026-06-22T17:54:33+00:00",
+      "wikiRarity": "silver"
+    },
+    "ARAM_ImTheJuggernaut": {
+      "wikiDescription": "You generate a stack of Juggernauting for each instance of damage you deal or take (excluding damage over time), lasting for 6 seconds and refreshing on subsequent damage dealt or taken. For every 10 stacks of Juggernauting, you gain 15 – 30 (based on level) bonus Attack Damage or 25 – 50 (based on level) Ability Power (Adaptive), 4 – 8 (based on level) bonus armor and bonus magic resistance, 10% increased size, and 8% tenacity. Stacks expire one by one when the duration ends, with the decay rate being faster the more stacks you have.",
+      "wikiNotes": [],
+      "wikiAvailabilityNotes": [],
+      "wikiFetchedAt": "2026-06-22T17:54:33+00:00",
+      "wikiRarity": "prismatic"
+    },
+    "ARAM_Impassable": {
+      "wikiDescription": "Gain the Aftershock and Glacial Augment keystone runes. Aftershock Cooldown reduced to 15 seconds from 20. Glacial Augment Cooldown reduced to 15 seconds from 25.",
+      "wikiNotes": [],
+      "wikiAvailabilityNotes": [],
+      "wikiFetchedAt": "2026-06-22T17:54:33+00:00",
+      "wikiRarity": "gold"
+    },
+    "ARAM_InfernalConduit": {
+      "wikiDescription": "Your ability hits against champions apply a Burn for 3 seconds that deals「 2 – 20 (based on level) (+ 4.6% bonus AD) (+ 2% AP) bonus magic damage per second 」「 6 – 60 (based on level) (+ 14% bonus AD) (+ 6% AP) bonus magic damage over the duration 」(1 second cooldown per cast instance). This Burn stacks infinitely and refreshes with each application. Additionally, all of your Burn effects reduce the cooldowns of all your basic abilities by 0.08 seconds for each tick of damage they deal to a target. Damage over time effects from all sources except items(unexpected) count as Burn sources for triggering the cooldown reduction. Eligible Augments for Burn: Buff Buddies, Firebrand, Grandma's Chili Oil, Holy Fire, Infernal Conduit, Slow Cooker",
+      "wikiNotes": [],
+      "wikiAvailabilityNotes": [],
+      "wikiFetchedAt": "2026-06-22T17:54:33+00:00",
+      "wikiRarity": "prismatic"
+    },
+    "ARAM_InfernalSoul": {
+      "wikiDescription": "Grants the Infernal Dragon Soul, or a different Dragon Soul if you aleady have it.",
+      "wikiNotes": [],
+      "wikiAvailabilityNotes": [],
+      "wikiFetchedAt": "2026-06-22T17:54:33+00:00",
+      "wikiRarity": "silver"
+    },
+    "ARAM_InfernoTriggered": {
+      "wikiDescription": "Your damaging basic attacks and abilities against at least one enemy champion unique from the previous damaging hit made against champions generate a stack of Style for 6 seconds, refreshing on subsequent unique or non-unique hits and stacking up to 6 times. For each stack, gain 4.25% / 4.5% / 4.75% / 5% (based on level) bonus movement speed, up to a maximum of 25.5% / 27% / 28.5% / 30% (based on level). Upon reaching maximum Style stacks, you unleash a torrent of shots for 2.277 seconds, during which you rapidly shoot at nearby enemies over 2.013 seconds at sporadic times in 0.2-second intervals each (up to 10 times per enemy), dealing 20 – 40 (based on level) (+ 40% AD) (+ 25% AP) physical damage with each shot, reduced by 75% against minions. Enemies below 30% of their maximum health are critically struck for「 double damage 」「 40 – 80 (based on level) (+ 80% AD) (+ 50% AP) physical damage 」(15 second cooldown). This effect ends prematurely if you become affected by cast-inhibiting crowd control. Shot damage applies life steal. Style stacks are consumed at the end of the shooting effect.",
+      "wikiNotes": [],
+      "wikiAvailabilityNotes": [],
+      "wikiFetchedAt": "2026-06-22T17:54:33+00:00",
+      "wikiRarity": "prismatic"
+    },
+    "ARAM_ItsCritical": {
+      "wikiDescription": "Grants 50% critical strike chance.",
+      "wikiNotes": [],
+      "wikiAvailabilityNotes": [],
+      "wikiFetchedAt": "2026-06-22T17:54:33+00:00",
+      "wikiRarity": "gold"
+    },
+    "ARAM_ItsKillingTime": {
+      "wikiDescription": "Upon casting your ultimate ability, you apply Zed's Death Mark to all enemy champions (8 second cooldown). The mark stores 40% of all post-mitigation damage you deal to the affected target, detonating after 5 seconds to deal true damage equal to the damage stored against them.",
+      "wikiNotes": [],
+      "wikiAvailabilityNotes": [],
+      "wikiFetchedAt": "2026-06-22T17:54:33+00:00",
+      "wikiRarity": "gold"
+    },
+    "ARAM_JeweledGauntlet": {
+      "wikiDescription": "Your abilities can now critically strike for (145% + bonus critical damage) damage. Additionally, gain 25% (+ 4.5% per 100 AP) critical strike chance. If both Jeweled Gauntlet and Vulnerability are equipped, only rolls the critical strike chance of the augment that has the higher critical damage (or either if equal). The interaction between Jeweled Gauntlet and Vulnerability may behave incorrectly with persistent area damage effects.(bug)",
+      "wikiNotes": [],
+      "wikiAvailabilityNotes": [],
+      "wikiFetchedAt": "2026-06-22T17:54:33+00:00",
+      "wikiRarity": "prismatic"
+    },
+    "ARAM_Juiced": {
+      "wikiDescription": "Basic attacks on-hit against enemy champions consume 2.5% of your maximum mana to deal bonus magic damage equal to 4.5% of your maximum mana. This damage can critically strike for (100% + 30%) bonus damage.",
+      "wikiNotes": [],
+      "wikiAvailabilityNotes": [],
+      "wikiFetchedAt": "2026-06-22T17:54:33+00:00",
+      "wikiRarity": "silver"
+    },
+    "ARAM_LegDay": {
+      "wikiDescription": "Gain 50 bonus movement speed and 40% slow resist.",
+      "wikiNotes": [],
+      "wikiAvailabilityNotes": [],
+      "wikiFetchedAt": "2026-06-22T17:54:33+00:00",
+      "wikiRarity": "silver"
+    },
+    "ARAM_LightemUp": {
+      "wikiDescription": "Basic attacks generate a stack, up to 4. The fourth stack consumes them all to quickly launch 4 missiles at the target that each deal 11 – 80 (based on level) (+ 35% bonus AD) (+ 19% AP) bonus magic damage on-hit, for a total of 44 – 320 (based on level) (+ 140% bonus AD) (+ 76% AP).",
+      "wikiNotes": [],
+      "wikiAvailabilityNotes": [],
+      "wikiFetchedAt": "2026-06-22T17:54:33+00:00",
+      "wikiRarity": "silver"
+    },
+    "ARAM_LittleDevil": {
+      "wikiDescription": "Forge a pact with Little Devil Teemo, who drains 0.5% of your current health every second, increased to 5% if there are enemy champions within 1000 units. In return, you deal 20% bonus true damage and your basic attacks and abilities summon a Life Remnant nearby for 5 seconds (0.75-second spawn cooldown). You can absorb a Life Remnant by moving over it, healing you for 50 – 150 (based on level) (+ 50% bonus AD) (+ 25% AP) and granting you 15% bonus movement speed.",
+      "wikiNotes": [],
+      "wikiAvailabilityNotes": [
+        "This augment is currently disabled."
+      ],
+      "wikiFetchedAt": "2026-06-22T17:54:33+00:00",
+      "wikiRarity": "prismatic"
+    },
+    "ARAM_MadScientist": {
+      "wikiDescription": "Upon acquiring this augment and each time you respawn, gain either 30% adaptive force, 20% bonus health, and 40% increased size or 70 ability haste, 40% bonus movement speed, and 40% reduced size.",
+      "wikiNotes": [],
+      "wikiAvailabilityNotes": [],
+      "wikiFetchedAt": "2026-06-22T17:54:33+00:00",
+      "wikiRarity": "prismatic"
+    },
+    "ARAM_MagicMissile": {
+      "wikiDescription": "Dealing damage to an enemy champion with an ability fires 3 missiles at them that each deal true damage equal to 0.33% of the target's maximum health, increased to up to 1% based on distance travelled (maximum damage reached at 1000 units). This effect can only trigger once every 6 seconds from the same cast.",
+      "wikiNotes": [],
+      "wikiAvailabilityNotes": [],
+      "wikiFetchedAt": "2026-06-22T17:54:33+00:00",
+      "wikiRarity": "gold"
+    },
+    "ARAM_Marksmage": {
+      "wikiDescription": "Basic attacks deal bonus physical damage equal to 75% AP.",
+      "wikiNotes": [],
+      "wikiAvailabilityNotes": [],
+      "wikiFetchedAt": "2026-06-22T17:54:33+00:00",
+      "wikiRarity": "gold"
+    },
+    "ARAM_MasterofDuality": {
+      "wikiDescription": "Basic attacks on-hit grant 6 – 18 (based on level) ability power and damaging abilities once per cast instance grant 3 – 9 (based on level) bonus attack damage, lasting for 5 seconds, with the duration of both refreshing on subsequent hits, and stacking infinitely.",
+      "wikiNotes": [],
+      "wikiAvailabilityNotes": [],
+      "wikiFetchedAt": "2026-06-22T17:54:33+00:00",
+      "wikiRarity": "prismatic"
+    },
+    "ARAM_MindtoMatter": {
+      "wikiDescription": "Grants bonus health equal to 50% maximum mana. Maximum bonus health granted by this effect is capped at 99,999 bonus health.",
+      "wikiNotes": [],
+      "wikiAvailabilityNotes": [],
+      "wikiFetchedAt": "2026-06-22T17:54:33+00:00",
+      "wikiRarity": "silver"
+    },
+    "ARAM_Minionmancer": {
+      "wikiDescription": "Your pets deal 40% increased damage as well as gain 40% bonus health and size.",
+      "wikiNotes": [],
+      "wikiAvailabilityNotes": [],
+      "wikiFetchedAt": "2026-06-22T17:54:33+00:00",
+      "wikiRarity": "gold"
+    },
+    "ARAM_MountainSoul": {
+      "wikiDescription": "Grants the Mountain Dragon Soul, or a different Dragon Soul if you aleady have it.",
+      "wikiNotes": [],
+      "wikiAvailabilityNotes": [],
+      "wikiFetchedAt": "2026-06-22T17:54:33+00:00",
+      "wikiRarity": "silver"
+    },
+    "ARAM_Multishot": {
+      "wikiDescription": "Assigns quests that require you to hit enemy champions with a specific ability's missile a number of times (counts up to 1 hit per champion per cast instance). There are six quest tiers, and completing each tier rewards you with an additional missile fired on the ability's cast. The reward effect also modifies the ability to fire all of its missiles in a cone. Subsequent missile hits from the same cast against the same enemy deal 30% damage.",
+      "wikiNotes": [],
+      "wikiAvailabilityNotes": [],
+      "wikiFetchedAt": "2026-06-22T17:54:33+00:00",
+      "wikiRarity": "prismatic"
+    },
+    "ARAM_MysticPunch": {
+      "wikiDescription": "Basic attacks on-hit reduce the remaining cooldowns of your abilities by 1.25 seconds.",
+      "wikiNotes": [],
+      "wikiAvailabilityNotes": [],
+      "wikiFetchedAt": "2026-06-22T17:54:33+00:00",
+      "wikiRarity": "prismatic"
+    },
+    "ARAM_OceanSoul": {
+      "wikiDescription": "Grants the Ocean Dragon Soul, which has a modified base heal value of 100, or a different Dragon Soul if you aleady have it.",
+      "wikiNotes": [],
+      "wikiAvailabilityNotes": [],
+      "wikiFetchedAt": "2026-06-22T17:54:33+00:00",
+      "wikiRarity": "silver"
+    },
+    "ARAM_OkBoomerang": {
+      "wikiDescription": "Automatically cast an improved version of Sivir's Boomerang Blade at the closest nearby enemy champion within 1250 units, dealing 40 – 200 (based on level) (+ 30% bonus AD) (+ 20% AP) adaptive damage to enemies hit (10 second cooldown).",
+      "wikiNotes": [],
+      "wikiAvailabilityNotes": [],
+      "wikiFetchedAt": "2026-06-22T17:54:33+00:00",
+      "wikiRarity": "gold"
+    },
+    "ARAM_OmniSoul": {
+      "wikiDescription": "Grants 3 random Dragon Souls.",
+      "wikiNotes": [],
+      "wikiAvailabilityNotes": [],
+      "wikiFetchedAt": "2026-06-22T17:54:33+00:00",
+      "wikiRarity": "prismatic"
+    },
+    "ARAM_OutlawsGrit": {
+      "wikiDescription": "Dashing or blinking grants 12 bonus armor and bonus magic resistance for 15 seconds, stacking up to 5 times for a total of 60 bonus resistances, and refreshing on subsequent triggers.",
+      "wikiNotes": [],
+      "wikiAvailabilityNotes": [],
+      "wikiFetchedAt": "2026-06-22T17:54:33+00:00",
+      "wikiRarity": "gold"
+    },
+    "ARAM_Overflow": {
+      "wikiDescription": "Your abilities' mana costs are doubled, but you also gain 10% (+ 0.5% per 100 maximum mana) increased damage as well as self and outgoing healing and shielding.",
+      "wikiNotes": [],
+      "wikiAvailabilityNotes": [],
+      "wikiFetchedAt": "2026-06-22T17:54:33+00:00",
+      "wikiRarity": "gold"
+    },
+    "ARAM_PandorasBox": {
+      "wikiDescription": "Your current augments transform into an equal number of completely random Prismatic ones.",
+      "wikiNotes": [],
+      "wikiAvailabilityNotes": [],
+      "wikiFetchedAt": "2026-06-22T17:54:33+00:00",
+      "wikiRarity": "prismatic"
+    },
+    "ARAM_Perseverance": {
+      "wikiDescription": "Grants 1000% base health regeneration, increased to 2000% while below 25% maximum health.",
+      "wikiNotes": [],
+      "wikiAvailabilityNotes": [
+        "This augment is currently disabled.",
+        "This augment prevents the user from being offered the Vampirism augment."
+      ],
+      "wikiFetchedAt": "2026-06-22T17:54:33+00:00",
+      "wikiRarity": "gold"
+    },
+    "ARAM_PhenomenalEvil": {
+      "wikiDescription": "Gain Veigar's Phenomenal Evil Power. Phenomenal Evil Power: Generate a permanent stack of Phenomenal Evil each time you damage an enemy champion with ability damage. This effect cannot trigger more than once every second globally and once every 3 seconds from the same cast instance. For each stack, gain 1 ability power. If this is not your first augment, start with 40 Phenomenal Evil stacks, granting you 40 ability power. The 40 bonus stacks for selecting this augment as not your first augment are given once the first stack is earned.",
+      "wikiNotes": [],
+      "wikiAvailabilityNotes": [],
+      "wikiFetchedAt": "2026-06-22T17:54:33+00:00",
+      "wikiRarity": "gold"
+    },
+    "ARAM_ProteinShake": {
+      "wikiDescription": "Gain 25% (+ 35% per 100 bonus armor) (+ 35% per 100 bonus magic resistance) heal and shield power.",
+      "wikiNotes": [],
+      "wikiAvailabilityNotes": [],
+      "wikiFetchedAt": "2026-06-22T17:54:33+00:00",
+      "wikiRarity": "prismatic"
+    },
+    "ARAM_Purist_Caster": {
+      "wikiDescription": "Convert all of your bonus attack speed into ability haste at a rate of 0.65 ability haste per 1% bonus attack speed. Additionally, your abilities' total cooldowns are reduced by 10%.",
+      "wikiNotes": [],
+      "wikiAvailabilityNotes": [],
+      "wikiFetchedAt": "2026-06-22T17:54:33+00:00",
+      "wikiRarity": "silver"
+    },
+    "ARAM_QuantumComputing": {
+      "wikiDescription": "Automatically cast an improved version of Camille's Tactical Sweep when an enemy champion is within 650 units of you, winding up over 0.75 seconds to slash in a 650 radius around you. The slash deals 200 – 350 (based on level) (+ 75% bonus AD) (+ 45% AP) physical damage to enemies within the area (30 second cooldown). Enemies hit by the outer edge of the circle take bonus physical damage equal to 10% (+ 2.5% per 100 bonus AD) (+ 1.6% per 100 AP) (+ 0.1% per 100 bonus health) of their maximum health and are slowed by 80% decaying over 2 seconds. Additionally, you are healed for 80% of the bonus post-mitigation damage against enemy champions hit by the outer edge.",
+      "wikiNotes": [],
+      "wikiAvailabilityNotes": [
+        "This augment is currently disabled."
+      ],
+      "wikiFetchedAt": "2026-06-22T17:54:33+00:00",
+      "wikiRarity": "prismatic"
+    },
+    "ARAM_Quest_SteelYourHeart": {
+      "wikiDescription": "Quest: Obtain Heartsteel and accumulate over 300 bonus health from Colossal Consumption. Reward: Upon completing your Quest, increase the bonus health gained from Heartsteel's Colossal Consumption by 200%.",
+      "wikiNotes": [],
+      "wikiAvailabilityNotes": [],
+      "wikiFetchedAt": "2026-06-22T17:54:33+00:00",
+      "wikiRarity": "gold"
+    },
+    "ARAM_Quest_UrfsChampion": {
+      "wikiDescription": "Quest: Score 18 champion takedowns. Reward: Upon completing your Quest, you receive The Golden Spatula. If your inventory is full at the time of quest completion, the item will be granted as soon as a slot in the inventory is available.",
+      "wikiNotes": [],
+      "wikiAvailabilityNotes": [],
+      "wikiFetchedAt": "2026-06-22T17:54:33+00:00",
+      "wikiRarity": "prismatic"
+    },
+    "ARAM_Quest_VoidImmolation": {
+      "wikiDescription": "Gain Bami's Cinder. You can now purchase Hollow Radiance and Sunfire Aegis in spite of the item limit imposed by Immolate. Quest: Obtain Hollow Radiance and Sunfire Aegis. Reward: Upon completing your Quest, convert the items you obtained for the quest into Void Immolation. Void Immolation counts as 2 Burn effect sources. When gaining Bami's Cinder, you will lose an Ruby Crystal or a Glowing Mote in your inventory as it will get upgraded with no gold returned back to you.(bug)",
+      "wikiNotes": [],
+      "wikiAvailabilityNotes": [],
+      "wikiFetchedAt": "2026-06-22T17:54:33+00:00",
+      "wikiRarity": "prismatic"
+    },
+    "ARAM_Quest_WoogletsWitchcap": {
+      "wikiDescription": "Gain a Needlessly Large Rod. Quest: Obtain Rabadon's Deathcap and Zhonya's Hourglass. Reward: Upon completing your Quest, convert the items you obtained for the quest into Wooglet's Witchcap.",
+      "wikiNotes": [],
+      "wikiAvailabilityNotes": [],
+      "wikiFetchedAt": "2026-06-22T17:54:33+00:00",
+      "wikiRarity": "prismatic"
+    },
+    "ARAM_Quickstep": {
+      "wikiDescription": "Upgrades one of your champion's abilities, empowering the ability's cast to cause you to dash up to 350 units towards your cursor.",
+      "wikiNotes": [],
+      "wikiAvailabilityNotes": [],
+      "wikiFetchedAt": "2026-06-22T17:54:33+00:00",
+      "wikiRarity": "gold"
+    },
+    "ARAM_RabbleRousing": {
+      "wikiDescription": "Upgrades one of your champion's abilities, empowering the ability's cast to heal you for 30 – 100 (based on level) (+ 25% bonus AD) (+ 15% AP) (+ 5% bonus health). This is increased by up to 50% based on how long the ability's cooldown is, for a maximum heal of 45 – 150 (based on level) (+ 37.5% bonus AD) (+ 22.5% AP) (+ 7.5% bonus health).",
+      "wikiNotes": [],
+      "wikiAvailabilityNotes": [],
+      "wikiFetchedAt": "2026-06-22T17:54:33+00:00",
+      "wikiRarity": "gold"
+    },
+    "ARAM_Recursion": {
+      "wikiDescription": "Grants 60 ability haste.",
+      "wikiNotes": [],
+      "wikiAvailabilityNotes": [],
+      "wikiFetchedAt": "2026-06-22T17:54:33+00:00",
+      "wikiRarity": "gold"
+    },
+    "ARAM_ScopedWeapons": {
+      "wikiDescription": "Gain ( 75 / 50) bonus attack range.",
+      "wikiNotes": [],
+      "wikiAvailabilityNotes": [],
+      "wikiFetchedAt": "2026-06-22T17:54:33+00:00",
+      "wikiRarity": "silver"
+    },
+    "ARAM_ScopierWeapons": {
+      "wikiDescription": "Gain ( 200 / 100) bonus attack range.",
+      "wikiNotes": [],
+      "wikiAvailabilityNotes": [],
+      "wikiFetchedAt": "2026-06-22T17:54:33+00:00",
+      "wikiRarity": "gold"
+    },
+    "ARAM_ScopiestWeapons": {
+      "wikiDescription": "Gain ( 250 / 150) bonus attack range.",
+      "wikiNotes": [],
+      "wikiAvailabilityNotes": [],
+      "wikiFetchedAt": "2026-06-22T17:54:33+00:00",
+      "wikiRarity": "prismatic"
+    },
+    "ARAM_SearingDawn": {
+      "wikiDescription": "Gain Leona's Sunlight. Sunlight: Your damaging abilities mark enemies, causing them to take 40 – 200 (based on level) bonus magic damage from your ally's next basic attack or ability hit against them (0.75-second cooldown per target).",
+      "wikiNotes": [],
+      "wikiAvailabilityNotes": [],
+      "wikiFetchedAt": "2026-06-22T17:54:33+00:00",
+      "wikiRarity": "gold"
+    },
+    "ARAM_ShadowRunner": {
+      "wikiDescription": "After dashing, blinking, or exiting stealth, gain 300 bonus movement speed for 2 seconds.",
+      "wikiNotes": [],
+      "wikiAvailabilityNotes": [],
+      "wikiFetchedAt": "2026-06-22T17:54:33+00:00",
+      "wikiRarity": "silver"
+    },
+    "ARAM_ShrinkRay": {
+      "wikiDescription": "Basic attacks on-hit reduce the target's damage dealt by 15% for 3 seconds, refreshing with each hit. Their size is also reduced significantly for the duration.",
+      "wikiNotes": [],
+      "wikiAvailabilityNotes": [],
+      "wikiFetchedAt": "2026-06-22T17:54:33+00:00",
+      "wikiRarity": "gold"
+    },
+    "ARAM_SkilledSniper": {
+      "wikiDescription": "Hitting an enemy champion with a basic ability while located at least 700 units away from them at the time of the hit reduces its current cooldown by 80% of its total cooldown, modified to 65% for damage over time abilities.",
+      "wikiNotes": [],
+      "wikiAvailabilityNotes": [],
+      "wikiFetchedAt": "2026-06-22T17:54:33+00:00",
+      "wikiRarity": "gold"
+    },
+    "ARAM_SlapAround": {
+      "wikiDescription": "Immobilizing or grounding an enemy champion grants you 6 bonus Attack Damage or 10 Ability Power (Adaptive), stacking infinitely (5 second cooldown per cast instance). Lose 50% of stacks on death. If the bonus attack damage and the ability power of the unit are equal, the stat granted is always bonus AD.(unexpected)",
+      "wikiNotes": [],
+      "wikiAvailabilityNotes": [],
+      "wikiFetchedAt": "2026-06-22T17:54:33+00:00",
+      "wikiRarity": "silver"
+    },
+    "ARAM_SlowCooker": {
+      "wikiNotes": [
+        "When a Burn stack has been inflicted to an enemy, all different Burn sources will stack the 1st source's effect and credit the damage to the 1st source's owner (e.g. Tormentor inflicted 1st will be stacked by Slow Cooker)"
+      ],
+      "wikiAvailabilityNotes": [],
+      "wikiFetchedAt": "2026-06-22T17:54:33+00:00"
+    },
+    "ARAM_Snowday": {
+      "wikiDescription": "Your Mark deals bonus magic damage equal to 100% of its damage and has its cooldown reduced equivalent to 100 ability haste. If Mark is not equipped, you will be prompted to replace one of your summoner spells with Mark.",
+      "wikiNotes": [],
+      "wikiAvailabilityNotes": [],
+      "wikiFetchedAt": "2026-06-22T17:54:33+00:00",
+      "wikiRarity": "silver"
+    },
+    "ARAM_SonicBoom": {
+      "wikiDescription": "Granting a buff, heal, or shield to your ally deals 30 – 150 (based on level) true damage to enemies within 450 units of them and slows targets by 30% for 2 seconds (2 second cooldown).",
+      "wikiNotes": [],
+      "wikiAvailabilityNotes": [],
+      "wikiFetchedAt": "2026-06-22T17:54:33+00:00",
+      "wikiRarity": "silver"
+    },
+    "ARAM_SoulSiphon": {
+      "wikiDescription": "Heal for 12% of the post-mitigation damage dealt by your critical strikes. Additionally, gain 25% critical strike chance. Any damage from Critical strikes will heal, including those from non-basic attack sources ( Talon's Noxian Diplomacy, Ashe's Volley, etc).",
+      "wikiNotes": [],
+      "wikiAvailabilityNotes": [],
+      "wikiFetchedAt": "2026-06-22T17:54:33+00:00",
+      "wikiRarity": "gold"
+    },
+    "ARAM_SpecializedRecursion": {
+      "wikiDescription": "Assigns quests that require you to hit enemy champions with a specific ability a number of times (counts up to 1 hit per champion per cast instance). There are two quest tiers, and completing each tier rewards you with ability haste on the ability.",
+      "wikiNotes": [],
+      "wikiAvailabilityNotes": [],
+      "wikiFetchedAt": "2026-06-22T17:54:33+00:00",
+      "wikiRarity": "gold"
+    },
+    "ARAM_SpinToWin": {
+      "wikiDescription": "Your spinning abilities deal 30% increased damage and have their cooldown reduced equivalent to 30 ability haste. Eligible Abilities: Ahri's Fox-Fire and Spirit Rush, Amumu's Tantrum, Ambessa's Lacerate, Darius' Decimate, Draven's Spinning Axe, Stand Aside, and Whirling Death, Garen's Judgment, Hecarim's Rampage, Jax's Counter Strike, Katarina's Voracity and Death Lotus, Kayn's Reaping Slash, Lillia's Blooming Blows, Nocturne's Umbra Blades, Rammus' Powerball, Renekton's Cull the Meek, Riven's Broken Wings, Samira's Blade Whirl and Inferno Trigger, Sylas' Petricite Burst, Wukong's Cyclone, Tryndamere's Spinning Slash, Xin Zhao's Crescent Guard, Zed's Shadow Slash PENDING FOR TEST:: Akshan's Avengerang and Heroic Swing, Lillia's Watch Out! Eep! and Swirlseed, Poppy's Keeper's Verdict, etc.",
+      "wikiNotes": [],
+      "wikiAvailabilityNotes": [],
+      "wikiFetchedAt": "2026-06-22T17:54:33+00:00",
+      "wikiRarity": "silver"
+    },
+    "ARAM_SpiritBomb": {
+      "wikiDescription": "Your healing and shielding on yourself or allies builds up a Spirit Bomb on top of you. Once you have healed and shielded a combined total of 200 – 2000 (based on level), you toss the Spirit Bomb onto the nearest and most wounded allied champion after a 1.1-second delay. Upon impact, the Spirit Bomb explodes in a 475 radius to heal allied champions within the area for 5% – 15% (based on level) (+ 3% per 100 AP) of their missing health and grants them a shield for 2 seconds that absorbs damage equal to 10% – 25% (based on level) (+ 2% per 100 AP) of their current health. Healing and shielding from this effect do not count toward the Spirit Bomb's trigger condition.",
+      "wikiNotes": [],
+      "wikiAvailabilityNotes": [],
+      "wikiFetchedAt": "2026-06-22T17:54:33+00:00",
+      "wikiRarity": "prismatic"
+    },
+    "ARAM_SpiritualPurification": {
+      "wikiDescription": "Scoring a champion takedown causes the area around the slain champion to explode in a 500 unit radius, dealing adaptive damage to enemies within equal to 15% of their current health and leaving behind a zone for 1.5 seconds that slows enemies within by 60%.",
+      "wikiNotes": [],
+      "wikiAvailabilityNotes": [],
+      "wikiFetchedAt": "2026-06-22T17:54:33+00:00",
+      "wikiRarity": "gold"
+    },
+    "ARAM_StackosaurusRex": {
+      "wikiDescription": "Increase the number of permanent stacks you gain from abilities, item effects, and augments by 100%.",
+      "wikiNotes": [],
+      "wikiAvailabilityNotes": [],
+      "wikiFetchedAt": "2026-06-22T17:54:33+00:00",
+      "wikiRarity": "silver"
+    },
+    "ARAM_Stats": {
+      "wikiDescription": "Gain 2 Stat Anvils.",
+      "wikiNotes": [],
+      "wikiAvailabilityNotes": [],
+      "wikiFetchedAt": "2026-06-22T17:54:33+00:00",
+      "wikiRarity": "silver"
+    },
+    "ARAM_StatsOnStats": {
+      "wikiDescription": "Gain 3 Stat Anvils, with a higher chance of obtaining Gold and Prismatic tier anvils.",
+      "wikiNotes": [],
+      "wikiAvailabilityNotes": [],
+      "wikiFetchedAt": "2026-06-22T17:54:33+00:00",
+      "wikiRarity": "gold"
+    },
+    "ARAM_StatsOnStatsOnStats": {
+      "wikiDescription": "Gain 4 Stat Anvils, with a higher chance of obtaining Gold and Prismatic tier anvils. Additionally, on the next round of augment selection, you gain an additional reroll per augment slot.",
+      "wikiNotes": [],
+      "wikiAvailabilityNotes": [],
+      "wikiFetchedAt": "2026-06-22T17:54:33+00:00",
+      "wikiRarity": "prismatic"
+    },
+    "ARAM_StuckInHereWithMe": {
+      "wikiDescription": "Casting your ultimate ability grants you an aura for 2 seconds, growing in size over the duration to up to 500 units. After the duration, you taunt all enemies within the aura for 2 seconds and gain 50% damage reduction for the same duration (30 second cooldown). Additionally, gain 30 ultimate haste. Aura is activated once the ultimate's effect starts or has elapsed. On Katarina, this augment will activate at the start of Death Lotus' channel.",
+      "wikiNotes": [],
+      "wikiAvailabilityNotes": [],
+      "wikiFetchedAt": "2026-06-22T17:54:33+00:00",
+      "wikiRarity": "prismatic"
+    },
+    "ARAM_SustainingStrike": {
+      "wikiDescription": "Upgrades one of your champion's abilities, empowering the ability to heal you for 30% of its post-mitigation damage dealt to enemy champions.",
+      "wikiNotes": [],
+      "wikiAvailabilityNotes": [],
+      "wikiFetchedAt": "2026-06-22T17:54:33+00:00",
+      "wikiRarity": "silver"
+    },
+    "ARAM_SymphonyofWar": {
+      "wikiDescription": "Gain the Conqueror and Lethal Tempo keystone runes. Conqueror Adaptive force per stack changed to 1.8 – 3.3 (based on level) bonus Attack Damage or 3 – 5.5 (based on level) Ability Power (Adaptive). Healing changed to ( 10% / 8%) of damage dealt. Lethal Tempo Bonus attack speed per stack changed to ( 13% – 18% / 8% – 12%) (based on level). Maximum bonus attack speed changed to ( 78% – 108% / 48% – 72%) (based on level). Removed: No longer empowers basic attacks at maximum stacks to fire a bolt that deals bonus adaptive damage. New Effect: At maximum stacks, gain 50 bonus attack range and increase the attack speed cap to 10.",
+      "wikiNotes": [],
+      "wikiAvailabilityNotes": [],
+      "wikiFetchedAt": "2026-06-22T17:54:33+00:00",
+      "wikiRarity": "prismatic"
+    },
+    "ARAM_TankEngine": {
+      "wikiDescription": "Scoring a champion takedown generates a stack, stacking infinitely. For each stack, increase your maximum health and size by 5%. Lose 65% of stacks on death.",
+      "wikiNotes": [],
+      "wikiAvailabilityNotes": [],
+      "wikiFetchedAt": "2026-06-22T17:54:33+00:00",
+      "wikiRarity": "gold"
+    },
+    "ARAM_TankItOrLeaveIt": {
+      "wikiDescription": "Gain Critical Defend Chance equal to 100% critical strike chance, up to 50%. Additionally, gain 25% critical strike chance. Critical Defend Chance: Grants you a chance to reduce an instance of damage taken by 20% (5 second cooldown per enemy spell cast instance).",
+      "wikiNotes": [],
+      "wikiAvailabilityNotes": [],
+      "wikiFetchedAt": "2026-06-22T17:54:33+00:00",
+      "wikiRarity": "silver"
+    },
+    "ARAM_TapDancer": {
+      "wikiDescription": "Basic attacks on-hit against enemy champions and minions grant 10 bonus movement speed, lasting for 5 seconds, refreshing on subsequent triggers, and stacking infinitely. Additionally, gain bonus attack speed equal to 10% total movement speed.",
+      "wikiNotes": [],
+      "wikiAvailabilityNotes": [],
+      "wikiFetchedAt": "2026-06-22T17:54:33+00:00",
+      "wikiRarity": "prismatic"
+    },
+    "ARAM_Terror": {
+      "wikiDescription": "Upgrades one of your champion's abilities, empowering the ability's cast to fear all enemies within 450 units of you for 1.75 seconds (30 second cooldown).",
+      "wikiNotes": [],
+      "wikiAvailabilityNotes": [],
+      "wikiFetchedAt": "2026-06-22T17:54:33+00:00",
+      "wikiRarity": "silver"
+    },
+    "ARAM_ThreadtheNeedle": {
+      "wikiDescription": "Grants 18% armor penetration and magic penetration.",
+      "wikiNotes": [],
+      "wikiAvailabilityNotes": [],
+      "wikiFetchedAt": "2026-06-22T17:54:33+00:00",
+      "wikiRarity": "gold"
+    },
+    "ARAM_Tormentor": {
+      "wikiNotes": [
+        "When a Burn stack has been inflicted to an enemy, all different Burn sources will stack the 1st source's effect and credit the damage to the 1st source's owner (e.g. Tormentor inflicted 1st will be stacked by Slow Cooker)"
+      ],
+      "wikiAvailabilityNotes": [],
+      "wikiFetchedAt": "2026-06-22T17:54:33+00:00"
+    },
+    "ARAM_TransmuteChaos": {
+      "wikiDescription": "Gain two completely random augments, excluding the other two offerings in your current assortment.",
+      "wikiNotes": [],
+      "wikiAvailabilityNotes": [],
+      "wikiFetchedAt": "2026-06-22T17:54:33+00:00",
+      "wikiRarity": "prismatic"
+    },
+    "ARAM_TransmuteGold": {
+      "wikiDescription": "Gain one random Gold augment, excluding the other two offerings in your current assortment.",
+      "wikiNotes": [],
+      "wikiAvailabilityNotes": [],
+      "wikiFetchedAt": "2026-06-22T17:54:33+00:00",
+      "wikiRarity": "silver"
+    },
+    "ARAM_TransmutePrismatic": {
+      "wikiDescription": "Gain one random Prismatic augment, excluding the other two offerings in your current assortment.",
+      "wikiNotes": [],
+      "wikiAvailabilityNotes": [],
+      "wikiFetchedAt": "2026-06-22T17:54:33+00:00",
+      "wikiRarity": "gold"
+    },
+    "ARAM_Typhoon": {
+      "wikiDescription": "Basic attacks launch a missile at a nearby enemy champion that deals 30% AD physical damage and applies on-hit effects.",
+      "wikiNotes": [],
+      "wikiAvailabilityNotes": [],
+      "wikiFetchedAt": "2026-06-22T17:54:33+00:00",
+      "wikiRarity": "silver"
+    },
+    "ARAM_UltimateRevolution": {
+      "wikiDescription": "Casting your ultimate ability resets its cooldown once its effect starts or has elapsed (75 second cooldown, reset upon death).",
+      "wikiNotes": [],
+      "wikiAvailabilityNotes": [],
+      "wikiFetchedAt": "2026-06-22T17:54:33+00:00",
+      "wikiRarity": "prismatic"
+    },
+    "ARAM_UltimateUnstoppable": {
+      "wikiDescription": "Casting your ultimate ability grants you crowd control immunity for 3 seconds (8 second cooldown).",
+      "wikiNotes": [],
+      "wikiAvailabilityNotes": [],
+      "wikiFetchedAt": "2026-06-22T17:54:33+00:00",
+      "wikiRarity": "silver"
+    },
+    "ARAM_Upgrade_Collector": {
+      "wikiDescription": "Upgrades The Collector, empowering Death to have its execution threshold increased by 0.5% each time you kill an enemy champion, capped at a threshold of 12.5% of the target's maximum health, and Taxes to generate a further 25 (total 50) from kills. Additionally, gain 250.",
+      "wikiNotes": [],
+      "wikiAvailabilityNotes": [],
+      "wikiFetchedAt": "2026-06-22T17:54:33+00:00",
+      "wikiRarity": "silver"
+    },
+    "ARAM_Upgrade_IE": {
+      "wikiDescription": "Upgrades Infinity Edge, empowering it to gain Sword of the Divine's Excoriate. Additionally, gain 500 and 25% critical strike chance. Excoriate: Gain a random amount of bonus critical strike damage that scales up to 50% of your critical strike chance, with the value of this amount changing every 0.25 seconds.",
+      "wikiNotes": [],
+      "wikiAvailabilityNotes": [],
+      "wikiFetchedAt": "2026-06-22T17:54:33+00:00",
+      "wikiRarity": "gold"
+    },
+    "ARAM_Upgrade_Immolate": {
+      "wikiDescription": "Upgrades Bami's Cinder, Hollow Radiance, Sunfire Aegis, and Void Immolation, empowering Immolate to additionally grant you 12 per tick for each enemy champion afflicted by its effect. Additionally, gain 250. Clones do not count as valid targets for the effect.",
+      "wikiNotes": [],
+      "wikiAvailabilityNotes": [],
+      "wikiFetchedAt": "2026-06-22T17:54:33+00:00",
+      "wikiRarity": "silver"
+    },
+    "ARAM_Upgrade_Sheen": {
+      "wikiDescription": "Upgrades all Spellblade items, empowering the passive effect to deal additional bonus physical damage equal to 4% of the target's maximum health and heal you for 3.5% of your maximum health. Additionally, gain 250.",
+      "wikiNotes": [],
+      "wikiAvailabilityNotes": [],
+      "wikiFetchedAt": "2026-06-22T17:54:33+00:00",
+      "wikiRarity": "gold"
+    },
+    "ARAM_Upgrade_ZH": {
+      "wikiDescription": "Upgrades Seeker's Armguard, Wooglet's Witchcap, and Zhonya's Hourglass, empowering Stasis to allow you to move during its active effect, during which time you also gain 50% bonus movement speed. Additionally, the cooldown of Zhonya's Hourglass' Stasis is reduced to 45 seconds.",
+      "wikiNotes": [],
+      "wikiAvailabilityNotes": [],
+      "wikiFetchedAt": "2026-06-22T17:54:33+00:00",
+      "wikiRarity": "silver"
+    },
+    "ARAM_Vulnerability": {
+      "wikiDescription": "Damage dealt by items and damage over time effects can now critically strike for (145% + bonus critical damage) damage (5 second cooldown per cast instance). Additionally, gain 25% critical strike chance. If both Jeweled Gauntlet and Vulnerability are equipped, only rolls the critical strike chance of the augment that has the higher critical damage (or either if equal). The interaction between Jeweled Gauntlet and Vulnerability may behave incorrectly with persistent area damage effects.(bug)",
+      "wikiNotes": [],
+      "wikiAvailabilityNotes": [],
+      "wikiFetchedAt": "2026-06-22T17:54:33+00:00",
+      "wikiRarity": "gold"
+    },
+    "ARAM_WeeWooWeeWoo": {
+      "wikiDescription": "Gain 0% – 50% (based on target ally's missing health) bonus movement speed while facing toward nearby allied champions, lingering for 2 seconds after no longer facing them. Your heals and shields are also increased by 0% – 50% (based on target's missing health).",
+      "wikiNotes": [],
+      "wikiAvailabilityNotes": [],
+      "wikiFetchedAt": "2026-06-22T17:54:33+00:00",
+      "wikiRarity": "gold"
+    },
+    "ARAM_WindspeakersBlessing": {
+      "wikiDescription": "Your or allies' heals and shields on yourself, or your heals and shields on allies, grant the target 30 – 60 (based on level) bonus armor and bonus magic resistance for 3 seconds.",
+      "wikiNotes": [],
+      "wikiAvailabilityNotes": [],
+      "wikiFetchedAt": "2026-06-22T17:54:33+00:00",
+      "wikiRarity": "prismatic"
+    },
+    "ARAM_WitchfulThinking": {
+      "wikiDescription": "Grants 20 – 80 (based on level) ability power.",
+      "wikiNotes": [],
+      "wikiAvailabilityNotes": [],
+      "wikiFetchedAt": "2026-06-22T17:54:33+00:00",
+      "wikiRarity": "silver"
+    },
+    "ARAM_WithHaste": {
+      "wikiDescription": "Grants bonus movement speed equal to 70% ability haste.",
+      "wikiNotes": [],
+      "wikiAvailabilityNotes": [],
+      "wikiFetchedAt": "2026-06-22T17:54:33+00:00",
+      "wikiRarity": "gold"
+    },
+    "ARAM_YowchMyCoins": {
+      "wikiDescription": "Enemy champions that you score a takedown against drop 6 – 10 (based on level) coins, with each coin landing 500 units away from the location of their death and lasting 10 seconds. You or allied champions can collect the coins by moving over them, granting 15 for each coin collected.",
+      "wikiNotes": [],
+      "wikiAvailabilityNotes": [],
+      "wikiFetchedAt": "2026-06-22T17:54:33+00:00",
+      "wikiRarity": "gold"
+    },
+    "ARAM_Zealot": {
+      "wikiDescription": "Gain 35% (+ 5% per 100 AP) bonus attack speed and 25% (+ 5% per 100 AP) critical strike chance.",
+      "wikiNotes": [],
+      "wikiAvailabilityNotes": [],
+      "wikiFetchedAt": "2026-06-22T17:54:33+00:00",
+      "wikiRarity": "silver"
+    },
+    "ARAM_escAPADe": {
+      "wikiDescription": "Convert all of your ability power into bonus attack damage at a rate of 1 bonus attack damage per 1.66 ability power. Additionally, increase your total attack damage by 15%. Does not convert the Ability Power obtained from Riftmaker's Void Infusion, nor from Archangel's Staff or Seraph's Embrace's Awe.(bug)",
+      "wikiNotes": [],
+      "wikiAvailabilityNotes": [],
+      "wikiFetchedAt": "2026-06-22T17:54:33+00:00",
+      "wikiRarity": "silver"
+    }
+  }
+}
