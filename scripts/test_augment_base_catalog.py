@@ -2,7 +2,13 @@
 
 import unittest
 
-from scrape_mayhem_augments_cdragon import build_base_catalog
+from scrape_mayhem_augments_cdragon import (
+    SNAPSHOT_DEFINITION_SOURCE,
+    build_base_catalog,
+    build_tooltip_index,
+    extract_augments,
+    should_record_hotfix_event,
+)
 
 
 class AugmentBaseCatalogTests(unittest.TestCase):
@@ -23,11 +29,39 @@ class AugmentBaseCatalogTests(unittest.TestCase):
                 "rarity": "kPrismatic",
             },
             {
+                "id": 1500,
+                "augmentNameId": "ADAPt",
+                "nameTRA": "ADAPt Duplicate",
+                "augmentSmallIconPath": "/lol-game-data/assets/ASSETS/UX/Kiwi/Augments/Icons/ADAPt_duplicate_small.png",
+                "rarity": "kGold",
+            },
+            {
                 "id": 1424,
                 "augmentNameId": "ARAM_MissingPingAugment",
                 "nameTRA": "???",
                 "augmentSmallIconPath": "/lol-game-data/assets/ASSETS/UX/Kiwi/Augments/Icons/MissingPing_small.png",
                 "rarity": "kPrismatic",
+            },
+            {
+                "id": 1601,
+                "augmentNameId": "ChainReaction",
+                "nameTRA": "",
+                "augmentSmallIconPath": "/lol-game-data/assets/ASSETS/UX/Kiwi/Augments/Icons/ChainReaction_small.png",
+                "rarity": "kGold",
+            },
+            {
+                "id": 1602,
+                "augmentNameId": "ARAM_UnrelatedArenaRow",
+                "nameTRA": "Unrelated Arena Row",
+                "augmentSmallIconPath": "/lol-game-data/assets/ASSETS/UX/Cherry/Augments/Icons/Unrelated_small.png",
+                "rarity": "kSilver",
+            },
+            {
+                "id": 1603,
+                "augmentNameId": "ArcaneCometRecharge",
+                "nameTRA": "Arcane Comet Recharge",
+                "augmentSmallIconPath": "/lol-game-data/assets/ASSETS/UX/Kiwi/Augments/Icons/ArcaneCometRecharge_small.png",
+                "rarity": "kSilver",
             },
         ]
         arena_by_locale = {
@@ -68,11 +102,16 @@ class AugmentBaseCatalogTests(unittest.TestCase):
             "en": {
                 "entries": {
                     "cherry_adapt_tooltip": "Cherry ADAPt tooltip",
+                    "kiwi_adapt_name": "ADAPt",
                     "kiwi_adapt_tooltip": "Kiwi ADAPt tooltip",
                     "kiwi_augment_divinedomain_name": "Rite of Ascension",
                     "kiwi_augment_divinedomain_summary": "Essence summary.",
                     "kiwi_augment_divinedomain_tooltip": "Essence tooltip.",
                     "kiwi_aram_missingpingaugment_name": "???",
+                    "kiwi_chainreaction_name": "Chain Reaction",
+                    "kiwi_chainreaction_summary": "React in a chain.",
+                    "kiwi_chainreaction_tooltip": "Chain Reaction tooltip.",
+                    "kiwi_arcanecomet_recharge": "Comet recharge status text.",
                 }
             },
             "zh_cn": {"entries": {"kiwi_augment_divinedomain_name": "飞升仪式"}},
@@ -95,6 +134,12 @@ class AugmentBaseCatalogTests(unittest.TestCase):
         )
 
         by_id = {augment["augmentId"]: augment for augment in catalog["augments"]}
+        self.assertEqual(set(by_id), {
+            "ARAM_ADAPt",
+            "ARAM_DivineDomain",
+            "ARAM_MissingPingAugment",
+            "ChainReaction",
+        })
 
         adapt = by_id["ARAM_ADAPt"]
         self.assertEqual(adapt["rarity"], "silver")
@@ -120,6 +165,103 @@ class AugmentBaseCatalogTests(unittest.TestCase):
         self.assertEqual(missing["name"], "???")
         self.assertEqual(missing["dataValues"], {})
         self.assertNotIn("availability", missing)
+
+        codename = by_id["ChainReaction"]
+        self.assertEqual(codename["name"], "Chain Reaction")
+        self.assertEqual(codename["slug"], "chain-reaction")
+        self.assertEqual(codename["rarity"], "gold")
+        self.assertEqual(codename["effectText"]["desc"], "React in a chain.")
+        self.assertEqual(codename["effectText"]["tooltip"], "Chain Reaction tooltip.")
+        self.assertTrue(codename["cdragon"]["kiwi"]["present"])
+        self.assertIn("kiwi_chainreaction_name", codename["cdragon"]["kiwi"]["keys"])
+
+    def test_hotfix_snapshot_uses_same_kiwi_definition_set_as_base_catalog(self):
+        roster = [
+            {
+                "augmentNameId": "ChainReaction",
+                "nameTRA": "",
+                "rarity": "kGold",
+            },
+            {
+                "augmentNameId": "ARAM_UnrelatedArenaRow",
+                "nameTRA": "Unrelated Arena Row",
+                "rarity": "kSilver",
+            },
+        ]
+        stringtable = {
+            "entries": {
+                "kiwi_chainreaction_name": "Chain Reaction",
+                "kiwi_chainreaction_tooltip": "Chain Reaction tooltip.",
+            }
+        }
+
+        snapshot = extract_augments(
+            roster,
+            build_tooltip_index(stringtable),
+            names_idx={},
+            stringtable=stringtable,
+        )
+
+        self.assertEqual([augment["nameId"] for augment in snapshot], ["ChainReaction"])
+        self.assertEqual(snapshot[0]["name"], "Chain Reaction")
+        self.assertEqual(snapshot[0]["slug"], "chain-reaction")
+        self.assertEqual(snapshot[0]["tooltip"], "Chain Reaction tooltip.")
+
+    def test_reviewed_registry_token_aliases_bridge_codename_drift(self):
+        roster = [
+            {
+                "augmentNameId": "BloodMoneyBurn",
+                "nameTRA": "Combusting Interest",
+                "rarity": "kGold",
+            }
+        ]
+        stringtables_by_locale = {
+            "en": {"entries": {"kiwi_bloodmoney_name": "Combusting Interest"}},
+            "zh_cn": {"entries": {"kiwi_bloodmoney_name": "Combusting Interest zh-CN"}},
+            "zh_tw": {"entries": {"kiwi_bloodmoney_name": "Combusting Interest zh-TW"}},
+            "ja": {"entries": {"kiwi_bloodmoney_name": "Combusting Interest ja"}},
+            "ko": {"entries": {"kiwi_bloodmoney_name": "Combusting Interest ko"}},
+        }
+
+        catalog = build_base_catalog(
+            roster=roster,
+            arena_by_locale={"en": {"augments": []}},
+            stringtables_by_locale=stringtables_by_locale,
+            registry_token_aliases={"bloodmoney": "BloodMoneyBurn"},
+            fetched_at="2026-06-22T00:00:00+00:00",
+        )
+
+        by_id = {augment["augmentId"]: augment for augment in catalog["augments"]}
+
+        self.assertIn("BloodMoneyBurn", by_id)
+        self.assertEqual(by_id["BloodMoneyBurn"]["name"], "Combusting Interest")
+        self.assertEqual(catalog["reports"]["kiwiDefinitions"]["aliasedTokens"][0]["token"], "bloodmoney")
+
+    def test_definition_source_migration_does_not_emit_false_hotfix_event(self):
+        delta = {
+            "added": [{"nameId": "ChainReaction"}],
+            "removed": [],
+            "changed": [],
+        }
+
+        self.assertFalse(
+            should_record_hotfix_event(
+                previous={"patch": "26.12", "augments": [{"nameId": "ARAM_ADAPt"}]},
+                delta=delta,
+                patch="26.12",
+            )
+        )
+        self.assertTrue(
+            should_record_hotfix_event(
+                previous={
+                    "patch": "26.12",
+                    "definition_source": SNAPSHOT_DEFINITION_SOURCE,
+                    "augments": [{"nameId": "ARAM_ADAPt"}],
+                },
+                delta=delta,
+                patch="26.12",
+            )
+        )
 
 
 if __name__ == "__main__":

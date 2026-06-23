@@ -65,6 +65,42 @@ class AugmentIdentityResolverTests(unittest.TestCase):
         self.assertEqual(by_slug["quest-steel-your-heart"], "ARAM_Quest_SteelYourHeart")
         self.assertEqual(outputs["unmatched"]["counts"]["internal_augments"], 0)
 
+    def test_resolves_base_catalog_augment_ids_and_bare_codenames(self):
+        outputs = build_identity_outputs(
+            cdragon_snapshot={
+                "augments": [
+                    {
+                        "augmentId": "ChainReaction",
+                        "name": "Chain Reaction",
+                        "names": {"en": "Chain Reaction"},
+                        "slug": "chain-reaction",
+                        "rarity": "gold",
+                    }
+                ]
+            },
+            internal_catalog={
+                "augments": [
+                    {
+                        "slug": "chain-reaction",
+                        "name": "Chain Reaction",
+                        "rarity": "gold",
+                        "wikiDescription": "Deal damage in a chain.",
+                        "flags": {"lifecycle": "active"},
+                    }
+                ]
+            },
+            alias_table={"aliases": []},
+        )
+
+        by_slug = {
+            source["slug"]: mapping["augmentId"]
+            for mapping in outputs["mapping"]["mappings"]
+            for source in mapping["sources"].get("internal_augments", [])
+        }
+
+        self.assertEqual(by_slug["chain-reaction"], "ChainReaction")
+        self.assertEqual(outputs["unmatched"]["counts"]["internal_augments"], 0)
+
     def test_uses_minimal_aliases_for_true_identity_exceptions(self):
         outputs = build_identity_outputs(
             cdragon_snapshot={

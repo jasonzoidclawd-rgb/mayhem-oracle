@@ -2,13 +2,13 @@
   "identity_key": "CDragon augmentNameId",
   "normalization": "lowercase, strip non-alphanumerics, strip leading Quest: prefix",
   "counts": {
-    "cdragon": 170,
-    "mapped_augmentIds": 166,
+    "cdragon": 245,
+    "mapped_augmentIds": 238,
     "aliases": 1,
     "source_matches": {
-      "internal_augments": 167,
-      "wiki": 165,
-      "arammayhem_win_rate": 123
+      "internal_augments": 239,
+      "wiki": 209,
+      "arammayhem_win_rate": 120
     }
   },
   "alias_entries": [
@@ -74,7 +74,7 @@
               "token": "adapt"
             },
             "slug": "adapt",
-            "win_rate": 55.96
+            "win_rate": 55.88
           }
         ]
       }
@@ -122,7 +122,7 @@
               "token": "allforyou"
             },
             "slug": "all-for-you",
-            "win_rate": 51.11
+            "win_rate": 51.28
           }
         ]
       }
@@ -170,7 +170,7 @@
               "token": "apexinventor"
             },
             "slug": "apex-inventor",
-            "win_rate": 49.81
+            "win_rate": 49.57
           }
         ]
       }
@@ -194,7 +194,7 @@
             },
             "slug": "archmage",
             "rarity": "prismatic",
-            "lifecycle": "added",
+            "lifecycle": "active",
             "hasWikiDescription": true
           }
         ],
@@ -218,7 +218,7 @@
               "token": "archmage"
             },
             "slug": "archmage",
-            "win_rate": 53.32
+            "win_rate": 53.23
           }
         ]
       }
@@ -266,55 +266,7 @@
               "token": "backtobasics"
             },
             "slug": "back-to-basics",
-            "win_rate": 55.75
-          }
-        ]
-      }
-    },
-    {
-      "augmentId": "ARAM_BangBang",
-      "cdragon": {
-        "augmentNameId": "ARAM_BangBang",
-        "name": "From Downtown",
-        "slug": "bang-bang",
-        "rarity": "gold"
-      },
-      "sources": {
-        "internal_augments": [
-          {
-            "sourceKey": "from-downtown",
-            "name": "From Downtown",
-            "match": {
-              "method": "normalized",
-              "token": "fromdowntown"
-            },
-            "slug": "from-downtown",
-            "rarity": "gold",
-            "lifecycle": "added",
-            "hasWikiDescription": true
-          }
-        ],
-        "wiki": [
-          {
-            "sourceKey": "From Downtown",
-            "name": "From Downtown",
-            "match": {
-              "method": "normalized",
-              "token": "fromdowntown"
-            },
-            "hasWikiDescription": true
-          }
-        ],
-        "arammayhem_win_rate": [
-          {
-            "sourceKey": "from-downtown",
-            "name": "From Downtown",
-            "match": {
-              "method": "normalized",
-              "token": "fromdowntown"
-            },
-            "slug": "from-downtown",
-            "win_rate": 52.36
+            "win_rate": 55.64
           }
         ]
       }
@@ -362,7 +314,7 @@
               "token": "bigbrain"
             },
             "slug": "big-brain",
-            "win_rate": 52.6
+            "win_rate": 52.42
           }
         ]
       }
@@ -410,7 +362,7 @@
               "token": "bladewaltz"
             },
             "slug": "blade-waltz",
-            "win_rate": 47.85
+            "win_rate": 47.9
           }
         ]
       }
@@ -458,7 +410,7 @@
               "token": "bluntforce"
             },
             "slug": "blunt-force",
-            "win_rate": 57.3
+            "win_rate": 57.29
           }
         ]
       }
@@ -506,7 +458,7 @@
               "token": "breadandbutter"
             },
             "slug": "bread-and-butter",
-            "win_rate": 49.45
+            "win_rate": 49.37
           }
         ]
       }
@@ -554,7 +506,7 @@
               "token": "breadandcheese"
             },
             "slug": "bread-and-cheese",
-            "win_rate": 50.06
+            "win_rate": 49.88
           }
         ]
       }
@@ -602,7 +554,7 @@
               "token": "breadandjam"
             },
             "slug": "bread-and-jam",
-            "win_rate": 48.94
+            "win_rate": 48.97
           }
         ]
       }
@@ -627,20 +579,10 @@
             "slug": "buff-buddies",
             "rarity": "silver",
             "lifecycle": "removed",
-            "hasWikiDescription": true
+            "hasWikiDescription": false
           }
         ],
-        "wiki": [
-          {
-            "sourceKey": "Buff Buddies",
-            "name": "Buff Buddies",
-            "match": {
-              "method": "normalized",
-              "token": "buffbuddies"
-            },
-            "hasWikiDescription": true
-          }
-        ],
+        "wiki": [],
         "arammayhem_win_rate": []
       }
     },
@@ -656,7 +598,7 @@
         "internal_augments": [
           {
             "sourceKey": "cant-touch-this",
-            "name": "Cant Touch This",
+            "name": "Can't Touch This",
             "match": {
               "method": "normalized",
               "token": "canttouchthis"
@@ -669,8 +611,8 @@
         ],
         "wiki": [
           {
-            "sourceKey": "Cant Touch This",
-            "name": "Cant Touch This",
+            "sourceKey": "Can't Touch This",
+            "name": "Can't Touch This",
             "match": {
               "method": "normalized",
               "token": "canttouchthis"
@@ -681,13 +623,13 @@
         "arammayhem_win_rate": [
           {
             "sourceKey": "cant-touch-this",
-            "name": "Cant Touch This",
+            "name": "Can't Touch This",
             "match": {
               "method": "normalized",
               "token": "canttouchthis"
             },
             "slug": "cant-touch-this",
-            "win_rate": 46.53
+            "win_rate": 46.46
           }
         ]
       }
@@ -735,7 +677,7 @@
               "token": "celestialbody"
             },
             "slug": "celestial-body",
-            "win_rate": 57.04
+            "win_rate": 57.23
           }
         ]
       }
@@ -760,20 +702,10 @@
             "slug": "cerberus",
             "rarity": "prismatic",
             "lifecycle": "removed",
-            "hasWikiDescription": true
+            "hasWikiDescription": false
           }
         ],
-        "wiki": [
-          {
-            "sourceKey": "Cerberus",
-            "name": "Cerberus",
-            "match": {
-              "method": "normalized",
-              "token": "cerberus"
-            },
-            "hasWikiDescription": true
-          }
-        ],
+        "wiki": [],
         "arammayhem_win_rate": []
       }
     },
@@ -820,7 +752,7 @@
               "token": "circleofdeath"
             },
             "slug": "circle-of-death",
-            "win_rate": 48.95
+            "win_rate": 48.64
           }
         ]
       }
@@ -905,7 +837,7 @@
               "token": "courageofthecolossus"
             },
             "slug": "courage-of-the-colossus",
-            "win_rate": 49.6
+            "win_rate": 49.71
           }
         ]
       }
@@ -930,20 +862,10 @@
             "slug": "crack-open-that-egg",
             "rarity": "silver",
             "lifecycle": "removed",
-            "hasWikiDescription": true
+            "hasWikiDescription": false
           }
         ],
-        "wiki": [
-          {
-            "sourceKey": "Crack Open That Egg",
-            "name": "Crack Open That Egg",
-            "match": {
-              "method": "normalized",
-              "token": "crackopenthategg"
-            },
-            "hasWikiDescription": true
-          }
-        ],
+        "wiki": [],
         "arammayhem_win_rate": []
       }
     },
@@ -966,7 +888,7 @@
             },
             "slug": "critical-healing",
             "rarity": "gold",
-            "lifecycle": "removed",
+            "lifecycle": "active",
             "hasWikiDescription": true
           }
         ],
@@ -1027,7 +949,7 @@
               "token": "cruelty"
             },
             "slug": "cruelty",
-            "win_rate": 49.79
+            "win_rate": 49.89
           }
         ]
       }
@@ -1075,7 +997,7 @@
               "token": "dashing"
             },
             "slug": "dashing",
-            "win_rate": 50.25
+            "win_rate": 50.27
           }
         ]
       }
@@ -1123,7 +1045,7 @@
               "token": "dawnbringersresolve"
             },
             "slug": "dawnbringers-resolve",
-            "win_rate": 52.06
+            "win_rate": 51.99
           }
         ]
       }
@@ -1171,7 +1093,7 @@
               "token": "deft"
             },
             "slug": "deft",
-            "win_rate": 57.65
+            "win_rate": 57.67
           }
         ]
       }
@@ -1196,20 +1118,10 @@
             "slug": "demons-dance",
             "rarity": "gold",
             "lifecycle": "removed",
-            "hasWikiDescription": true
+            "hasWikiDescription": false
           }
         ],
-        "wiki": [
-          {
-            "sourceKey": "Demon's Dance",
-            "name": "Demon's Dance",
-            "match": {
-              "method": "normalized",
-              "token": "demonsdance"
-            },
-            "hasWikiDescription": true
-          }
-        ],
+        "wiki": [],
         "arammayhem_win_rate": []
       }
     },
@@ -1256,7 +1168,7 @@
               "token": "divebomber"
             },
             "slug": "dive-bomber",
-            "win_rate": 48.42
+            "win_rate": 48.54
           }
         ]
       }
@@ -1280,7 +1192,7 @@
             },
             "slug": "rite-of-ascension",
             "rarity": "prismatic",
-            "lifecycle": "added",
+            "lifecycle": "active",
             "hasWikiDescription": true
           }
         ],
@@ -1304,7 +1216,7 @@
               "token": "riteofascension"
             },
             "slug": "rite-of-ascension",
-            "win_rate": 46.45
+            "win_rate": 46.27
           }
         ]
       }
@@ -1352,7 +1264,7 @@
               "token": "divineintervention"
             },
             "slug": "divine-intervention",
-            "win_rate": 48.74
+            "win_rate": 48.86
           }
         ]
       }
@@ -1400,7 +1312,7 @@
               "token": "dontblink"
             },
             "slug": "dont-blink",
-            "win_rate": 50.92
+            "win_rate": 50.53
           }
         ]
       }
@@ -1424,7 +1336,7 @@
             },
             "slug": "double-tap",
             "rarity": "gold",
-            "lifecycle": "removed",
+            "lifecycle": "active",
             "hasWikiDescription": true
           }
         ],
@@ -1485,7 +1397,7 @@
               "token": "drawyoursword"
             },
             "slug": "draw-your-sword",
-            "win_rate": 61.67
+            "win_rate": 61.47
           }
         ]
       }
@@ -1509,7 +1421,7 @@
             },
             "slug": "dropbear",
             "rarity": "prismatic",
-            "lifecycle": "added",
+            "lifecycle": "active",
             "hasWikiDescription": true
           }
         ],
@@ -1533,7 +1445,7 @@
               "token": "dropbear"
             },
             "slug": "dropbear",
-            "win_rate": 52.26
+            "win_rate": 51.72
           }
         ]
       }
@@ -1581,7 +1493,7 @@
               "token": "dropkick"
             },
             "slug": "dropkick",
-            "win_rate": 60.88
+            "win_rate": 61.08
           }
         ]
       }
@@ -1629,9 +1541,46 @@
               "token": "dualwield"
             },
             "slug": "dual-wield",
-            "win_rate": 58.84
+            "win_rate": 58.93
           }
         ]
+      }
+    },
+    {
+      "augmentId": "ARAM_Earthwake",
+      "cdragon": {
+        "augmentNameId": "ARAM_Earthwake",
+        "name": "Earthwake",
+        "slug": "earthwake",
+        "rarity": "prismatic"
+      },
+      "sources": {
+        "internal_augments": [
+          {
+            "sourceKey": "earthwake",
+            "name": "Earthwake",
+            "match": {
+              "method": "normalized",
+              "token": "earthwake"
+            },
+            "slug": "earthwake",
+            "rarity": "prismatic",
+            "lifecycle": "active",
+            "hasWikiDescription": true
+          }
+        ],
+        "wiki": [
+          {
+            "sourceKey": "Earthwake",
+            "name": "Earthwake",
+            "match": {
+              "method": "normalized",
+              "token": "earthwake"
+            },
+            "hasWikiDescription": true
+          }
+        ],
+        "arammayhem_win_rate": []
       }
     },
     {
@@ -1677,7 +1626,7 @@
               "token": "empoweredbythefaithful"
             },
             "slug": "empowered-by-the-faithful",
-            "win_rate": 49.66
+            "win_rate": 49.79
           }
         ]
       }
@@ -1701,7 +1650,7 @@
             },
             "slug": "en-passant",
             "rarity": "prismatic",
-            "lifecycle": "added",
+            "lifecycle": "active",
             "hasWikiDescription": true
           }
         ],
@@ -1725,7 +1674,7 @@
               "token": "enpassant"
             },
             "slug": "en-passant",
-            "win_rate": 50.18
+            "win_rate": 50.2
           }
         ]
       }
@@ -1773,7 +1722,7 @@
               "token": "erosion"
             },
             "slug": "erosion",
-            "win_rate": 51.82
+            "win_rate": 52.21
           }
         ]
       }
@@ -1821,7 +1770,7 @@
               "token": "etherealweapon"
             },
             "slug": "ethereal-weapon",
-            "win_rate": 57.06
+            "win_rate": 57.14
           }
         ]
       }
@@ -1869,7 +1818,7 @@
               "token": "eureka"
             },
             "slug": "eureka",
-            "win_rate": 59.16
+            "win_rate": 59.0
           }
         ]
       }
@@ -1894,20 +1843,10 @@
             "slug": "executioner",
             "rarity": "gold",
             "lifecycle": "removed",
-            "hasWikiDescription": true
+            "hasWikiDescription": false
           }
         ],
-        "wiki": [
-          {
-            "sourceKey": "Executioner",
-            "name": "Executioner",
-            "match": {
-              "method": "normalized",
-              "token": "executioner"
-            },
-            "hasWikiDescription": true
-          }
-        ],
+        "wiki": [],
         "arammayhem_win_rate": []
       }
     },
@@ -1954,7 +1893,7 @@
               "token": "fanthehammer"
             },
             "slug": "fan-the-hammer",
-            "win_rate": 54.24
+            "win_rate": 54.42
           }
         ]
       }
@@ -1979,20 +1918,10 @@
             "slug": "feel-the-burn",
             "rarity": "prismatic",
             "lifecycle": "removed",
-            "hasWikiDescription": true
+            "hasWikiDescription": false
           }
         ],
-        "wiki": [
-          {
-            "sourceKey": "Feel the Burn",
-            "name": "Feel the Burn",
-            "match": {
-              "method": "normalized",
-              "token": "feeltheburn"
-            },
-            "hasWikiDescription": true
-          }
-        ],
+        "wiki": [],
         "arammayhem_win_rate": []
       }
     },
@@ -2039,7 +1968,7 @@
               "token": "feymagic"
             },
             "slug": "fey-magic",
-            "win_rate": 48.29
+            "win_rate": 48.34
           }
         ]
       }
@@ -2087,7 +2016,7 @@
               "token": "firebrand"
             },
             "slug": "firebrand",
-            "win_rate": 48.64
+            "win_rate": 48.6
           }
         ]
       }
@@ -2135,7 +2064,7 @@
               "token": "firefox"
             },
             "slug": "firefox",
-            "win_rate": 51.79
+            "win_rate": 51.77
           }
         ]
       }
@@ -2183,7 +2112,7 @@
               "token": "firstaidkit"
             },
             "slug": "first-aid-kit",
-            "win_rate": 52.16
+            "win_rate": 52.36
           }
         ]
       }
@@ -2231,9 +2160,46 @@
               "token": "flashbang"
             },
             "slug": "flashbang",
-            "win_rate": 47.47
+            "win_rate": 49.26
           }
         ]
+      }
+    },
+    {
+      "augmentId": "ARAM_Flashy",
+      "cdragon": {
+        "augmentNameId": "ARAM_Flashy",
+        "name": "Flashy",
+        "slug": "flashy",
+        "rarity": "gold"
+      },
+      "sources": {
+        "internal_augments": [
+          {
+            "sourceKey": "flashy",
+            "name": "Flashy",
+            "match": {
+              "method": "normalized",
+              "token": "flashy"
+            },
+            "slug": "flashy",
+            "rarity": "gold",
+            "lifecycle": "active",
+            "hasWikiDescription": true
+          }
+        ],
+        "wiki": [
+          {
+            "sourceKey": "Flashy",
+            "name": "Flashy",
+            "match": {
+              "method": "normalized",
+              "token": "flashy"
+            },
+            "hasWikiDescription": true
+          }
+        ],
+        "arammayhem_win_rate": []
       }
     },
     {
@@ -2279,7 +2245,7 @@
               "token": "frombeginningtoend"
             },
             "slug": "from-beginning-to-end",
-            "win_rate": 51.62
+            "win_rate": 51.56
           }
         ]
       }
@@ -2304,20 +2270,10 @@
             "slug": "frost-wraith",
             "rarity": "silver",
             "lifecycle": "removed",
-            "hasWikiDescription": true
+            "hasWikiDescription": false
           }
         ],
-        "wiki": [
-          {
-            "sourceKey": "Frost Wraith",
-            "name": "Frost Wraith",
-            "match": {
-              "method": "normalized",
-              "token": "frostwraith"
-            },
-            "hasWikiDescription": true
-          }
-        ],
+        "wiki": [],
         "arammayhem_win_rate": []
       }
     },
@@ -2364,7 +2320,7 @@
               "token": "getexcited"
             },
             "slug": "get-excited",
-            "win_rate": 51.48
+            "win_rate": 51.36
           }
         ]
       }
@@ -2412,7 +2368,7 @@
               "token": "giantslayer"
             },
             "slug": "giant-slayer",
-            "win_rate": 57.65
+            "win_rate": 57.56
           }
         ]
       }
@@ -2460,7 +2416,7 @@
               "token": "goliath"
             },
             "slug": "goliath",
-            "win_rate": 60.03
+            "win_rate": 60.16
           }
         ]
       }
@@ -2508,7 +2464,7 @@
               "token": "goredrink"
             },
             "slug": "goredrink",
-            "win_rate": 57.89
+            "win_rate": 57.81
           }
         ]
       }
@@ -2532,7 +2488,7 @@
             },
             "slug": "guilty-pleasure",
             "rarity": "silver",
-            "lifecycle": "removed",
+            "lifecycle": "active",
             "hasWikiDescription": true
           }
         ],
@@ -2593,7 +2549,7 @@
               "token": "heavyhitter"
             },
             "slug": "heavy-hitter",
-            "win_rate": 63.29
+            "win_rate": 63.46
           }
         ]
       }
@@ -2617,7 +2573,7 @@
             },
             "slug": "hellbent",
             "rarity": "prismatic",
-            "lifecycle": "added",
+            "lifecycle": "active",
             "hasWikiDescription": true
           }
         ],
@@ -2641,7 +2597,7 @@
               "token": "hellbent"
             },
             "slug": "hellbent",
-            "win_rate": 47.59
+            "win_rate": 47.55
           }
         ]
       }
@@ -2665,7 +2621,7 @@
             },
             "slug": "high-roller",
             "rarity": "prismatic",
-            "lifecycle": "added",
+            "lifecycle": "active",
             "hasWikiDescription": true
           }
         ],
@@ -2689,7 +2645,7 @@
               "token": "highroller"
             },
             "slug": "high-roller",
-            "win_rate": 55.56
+            "win_rate": 55.54
           }
         ]
       }
@@ -2714,20 +2670,10 @@
             "slug": "holy-fire",
             "rarity": "gold",
             "lifecycle": "removed",
-            "hasWikiDescription": true
+            "hasWikiDescription": false
           }
         ],
-        "wiki": [
-          {
-            "sourceKey": "Holy Fire",
-            "name": "Holy Fire",
-            "match": {
-              "method": "normalized",
-              "token": "holyfire"
-            },
-            "hasWikiDescription": true
-          }
-        ],
+        "wiki": [],
         "arammayhem_win_rate": []
       }
     },
@@ -2774,7 +2720,7 @@
               "token": "homeguard"
             },
             "slug": "homeguard",
-            "win_rate": 52.73
+            "win_rate": 52.64
           }
         ]
       }
@@ -2822,7 +2768,7 @@
               "token": "icecold"
             },
             "slug": "ice-cold",
-            "win_rate": 54.91
+            "win_rate": 54.99
           }
         ]
       }
@@ -2846,7 +2792,7 @@
             },
             "slug": "titans-resolve",
             "rarity": "prismatic",
-            "lifecycle": "added",
+            "lifecycle": "active",
             "hasWikiDescription": true
           }
         ],
@@ -2870,7 +2816,7 @@
               "token": "titansresolve"
             },
             "slug": "titans-resolve",
-            "win_rate": 45.72
+            "win_rate": 45.83
           }
         ]
       }
@@ -2918,7 +2864,7 @@
               "token": "impassable"
             },
             "slug": "impassable",
-            "win_rate": 47.97
+            "win_rate": 47.89
           }
         ]
       }
@@ -2966,7 +2912,7 @@
               "token": "infernalconduit"
             },
             "slug": "infernal-conduit",
-            "win_rate": 58.78
+            "win_rate": 58.81
           }
         ]
       }
@@ -3014,7 +2960,7 @@
               "token": "infernalsoul"
             },
             "slug": "infernal-soul",
-            "win_rate": 49.32
+            "win_rate": 49.27
           }
         ]
       }
@@ -3062,7 +3008,7 @@
               "token": "triggeredinferno"
             },
             "slug": "triggered-inferno",
-            "win_rate": 46.6
+            "win_rate": 46.48
           }
         ]
       }
@@ -3086,7 +3032,7 @@
             },
             "slug": "its-critical",
             "rarity": "gold",
-            "lifecycle": "removed",
+            "lifecycle": "active",
             "hasWikiDescription": true
           }
         ],
@@ -3147,7 +3093,7 @@
               "token": "itskillingtime"
             },
             "slug": "its-killing-time",
-            "win_rate": 49.85
+            "win_rate": 49.78
           }
         ]
       }
@@ -3171,7 +3117,7 @@
             },
             "slug": "jeweled-gauntlet",
             "rarity": "prismatic",
-            "lifecycle": "removed",
+            "lifecycle": "active",
             "hasWikiDescription": true
           }
         ],
@@ -3232,7 +3178,7 @@
               "token": "juiced"
             },
             "slug": "juiced",
-            "win_rate": 47.84
+            "win_rate": 47.87
           }
         ]
       }
@@ -3257,20 +3203,10 @@
             "slug": "keystone-conjurer",
             "rarity": "gold",
             "lifecycle": "removed",
-            "hasWikiDescription": true
+            "hasWikiDescription": false
           }
         ],
-        "wiki": [
-          {
-            "sourceKey": "Keystone Conjurer",
-            "name": "Keystone Conjurer",
-            "match": {
-              "method": "normalized",
-              "token": "keystoneconjurer"
-            },
-            "hasWikiDescription": true
-          }
-        ],
+        "wiki": [],
         "arammayhem_win_rate": []
       }
     },
@@ -3317,7 +3253,7 @@
               "token": "legday"
             },
             "slug": "leg-day",
-            "win_rate": 51.94
+            "win_rate": 52.04
           }
         ]
       }
@@ -3334,7 +3270,7 @@
         "internal_augments": [
           {
             "sourceKey": "light-em-up",
-            "name": "Light 'em Up!",
+            "name": "Light 'Em Up!",
             "match": {
               "method": "normalized",
               "token": "lightemup"
@@ -3347,8 +3283,8 @@
         ],
         "wiki": [
           {
-            "sourceKey": "Light 'em Up!",
-            "name": "Light 'em Up!",
+            "sourceKey": "Light 'Em Up!",
+            "name": "Light 'Em Up!",
             "match": {
               "method": "normalized",
               "token": "lightemup"
@@ -3359,13 +3295,13 @@
         "arammayhem_win_rate": [
           {
             "sourceKey": "light-em-up",
-            "name": "Light 'em Up!",
+            "name": "Light 'Em Up!",
             "match": {
               "method": "normalized",
               "token": "lightemup"
             },
             "slug": "light-em-up",
-            "win_rate": 53.45
+            "win_rate": 53.5
           }
         ]
       }
@@ -3390,20 +3326,10 @@
             "slug": "lightning-strikes",
             "rarity": "gold",
             "lifecycle": "removed",
-            "hasWikiDescription": true
+            "hasWikiDescription": false
           }
         ],
-        "wiki": [
-          {
-            "sourceKey": "Lightning Strikes",
-            "name": "Lightning Strikes",
-            "match": {
-              "method": "normalized",
-              "token": "lightningstrikes"
-            },
-            "hasWikiDescription": true
-          }
-        ],
+        "wiki": [],
         "arammayhem_win_rate": []
       }
     },
@@ -3487,7 +3413,7 @@
               "token": "madscientist"
             },
             "slug": "mad-scientist",
-            "win_rate": 53.47
+            "win_rate": 53.35
           }
         ]
       }
@@ -3535,7 +3461,7 @@
               "token": "magicmissile"
             },
             "slug": "magic-missile",
-            "win_rate": 59.36
+            "win_rate": 59.33
           }
         ]
       }
@@ -3583,7 +3509,7 @@
               "token": "marksmage"
             },
             "slug": "marksmage",
-            "win_rate": 52.67
+            "win_rate": 52.53
           }
         ]
       }
@@ -3631,7 +3557,7 @@
               "token": "masterofduality"
             },
             "slug": "master-of-duality",
-            "win_rate": 49.79
+            "win_rate": 49.73
           }
         ]
       }
@@ -3679,7 +3605,7 @@
               "token": "mindtomatter"
             },
             "slug": "mind-to-matter",
-            "win_rate": 53.89
+            "win_rate": 53.72
           }
         ]
       }
@@ -3727,9 +3653,36 @@
               "token": "minionmancer"
             },
             "slug": "minionmancer",
-            "win_rate": 50.67
+            "win_rate": 50.29
           }
         ]
+      }
+    },
+    {
+      "augmentId": "ARAM_MissingPingAugment",
+      "cdragon": {
+        "augmentNameId": "ARAM_MissingPingAugment",
+        "name": "???",
+        "slug": "missing-ping-augment",
+        "rarity": "prismatic"
+      },
+      "sources": {
+        "internal_augments": [
+          {
+            "sourceKey": "missing-ping-augment",
+            "name": "???",
+            "match": {
+              "method": "normalized",
+              "token": "missingpingaugment"
+            },
+            "slug": "missing-ping-augment",
+            "rarity": "prismatic",
+            "lifecycle": "removed",
+            "hasWikiDescription": false
+          }
+        ],
+        "wiki": [],
+        "arammayhem_win_rate": []
       }
     },
     {
@@ -3744,7 +3697,7 @@
         "internal_augments": [
           {
             "sourceKey": "mountainsoul",
-            "name": "MountainSoul",
+            "name": "Mountain Soul",
             "match": {
               "method": "normalized",
               "token": "mountainsoul"
@@ -3757,8 +3710,8 @@
         ],
         "wiki": [
           {
-            "sourceKey": "MountainSoul",
-            "name": "MountainSoul",
+            "sourceKey": "Mountain Soul",
+            "name": "Mountain Soul",
             "match": {
               "method": "normalized",
               "token": "mountainsoul"
@@ -3769,13 +3722,13 @@
         "arammayhem_win_rate": [
           {
             "sourceKey": "mountainsoul",
-            "name": "MountainSoul",
+            "name": "Mountain Soul",
             "match": {
               "method": "normalized",
               "token": "mountainsoul"
             },
             "slug": "mountainsoul",
-            "win_rate": 48.33
+            "win_rate": 48.26
           }
         ]
       }
@@ -3799,7 +3752,7 @@
             },
             "slug": "multishot",
             "rarity": "prismatic",
-            "lifecycle": "added",
+            "lifecycle": "active",
             "hasWikiDescription": true
           }
         ],
@@ -3823,7 +3776,7 @@
               "token": "multishot"
             },
             "slug": "multishot",
-            "win_rate": 45.65
+            "win_rate": 45.59
           }
         ]
       }
@@ -3871,7 +3824,7 @@
               "token": "mysticpunch"
             },
             "slug": "mystic-punch",
-            "win_rate": 55.21
+            "win_rate": 55.02
           }
         ]
       }
@@ -3919,7 +3872,7 @@
               "token": "oceansoul"
             },
             "slug": "ocean-soul",
-            "win_rate": 56.04
+            "win_rate": 56.0
           }
         ]
       }
@@ -3967,7 +3920,7 @@
               "token": "okboomerang"
             },
             "slug": "ok-boomerang",
-            "win_rate": 49.15
+            "win_rate": 49.05
           }
         ]
       }
@@ -4015,7 +3968,7 @@
               "token": "omnisoul"
             },
             "slug": "omni-soul",
-            "win_rate": 51.27
+            "win_rate": 51.43
           }
         ]
       }
@@ -4032,7 +3985,7 @@
         "internal_augments": [
           {
             "sourceKey": "orbitallaser",
-            "name": "OrbitalLaser",
+            "name": "Orbital Laser",
             "match": {
               "method": "normalized",
               "token": "orbitallaser"
@@ -4040,20 +3993,10 @@
             "slug": "orbitallaser",
             "rarity": "prismatic",
             "lifecycle": "removed",
-            "hasWikiDescription": true
+            "hasWikiDescription": false
           }
         ],
-        "wiki": [
-          {
-            "sourceKey": "OrbitalLaser",
-            "name": "OrbitalLaser",
-            "match": {
-              "method": "normalized",
-              "token": "orbitallaser"
-            },
-            "hasWikiDescription": true
-          }
-        ],
+        "wiki": [],
         "arammayhem_win_rate": []
       }
     },
@@ -4100,7 +4043,7 @@
               "token": "outlawsgrit"
             },
             "slug": "outlaws-grit",
-            "win_rate": 52.92
+            "win_rate": 52.78
           }
         ]
       }
@@ -4148,7 +4091,7 @@
               "token": "overflow"
             },
             "slug": "overflow",
-            "win_rate": 51.85
+            "win_rate": 51.91
           }
         ]
       }
@@ -4165,7 +4108,7 @@
         "internal_augments": [
           {
             "sourceKey": "pandorasbox",
-            "name": "PandorasBox",
+            "name": "Pandora's Box",
             "match": {
               "method": "normalized",
               "token": "pandorasbox"
@@ -4178,8 +4121,8 @@
         ],
         "wiki": [
           {
-            "sourceKey": "PandorasBox",
-            "name": "PandorasBox",
+            "sourceKey": "Pandora's Box",
+            "name": "Pandora's Box",
             "match": {
               "method": "normalized",
               "token": "pandorasbox"
@@ -4190,13 +4133,13 @@
         "arammayhem_win_rate": [
           {
             "sourceKey": "pandorasbox",
-            "name": "PandorasBox",
+            "name": "Pandora's Box",
             "match": {
               "method": "normalized",
               "token": "pandorasbox"
             },
             "slug": "pandorasbox",
-            "win_rate": 46.48
+            "win_rate": 46.59
           }
         ]
       }
@@ -4281,7 +4224,7 @@
               "token": "phenomenalevil"
             },
             "slug": "phenomenal-evil",
-            "win_rate": 60.79
+            "win_rate": 60.54
           }
         ]
       }
@@ -4306,20 +4249,10 @@
             "slug": "bounce-of-the-poro-king",
             "rarity": "prismatic",
             "lifecycle": "removed",
-            "hasWikiDescription": true
+            "hasWikiDescription": false
           }
         ],
-        "wiki": [
-          {
-            "sourceKey": "Bounce of the Poro King",
-            "name": "Bounce of the Poro King",
-            "match": {
-              "method": "normalized",
-              "token": "bounceoftheporoking"
-            },
-            "hasWikiDescription": true
-          }
-        ],
+        "wiki": [],
         "arammayhem_win_rate": []
       }
     },
@@ -4343,20 +4276,10 @@
             "slug": "poro-blaster",
             "rarity": "gold",
             "lifecycle": "removed",
-            "hasWikiDescription": true
+            "hasWikiDescription": false
           }
         ],
-        "wiki": [
-          {
-            "sourceKey": "Poro Blaster",
-            "name": "Poro Blaster",
-            "match": {
-              "method": "normalized",
-              "token": "poroblaster"
-            },
-            "hasWikiDescription": true
-          }
-        ],
+        "wiki": [],
         "arammayhem_win_rate": []
       }
     },
@@ -4403,7 +4326,7 @@
               "token": "proteinshake"
             },
             "slug": "protein-shake",
-            "win_rate": 47.66
+            "win_rate": 47.57
           }
         ]
       }
@@ -4451,7 +4374,7 @@
               "token": "puristcaster"
             },
             "slug": "purist-caster",
-            "win_rate": 52.19
+            "win_rate": 52.22
           }
         ]
       }
@@ -4505,7 +4428,7 @@
         "internal_augments": [
           {
             "sourceKey": "quest-steel-your-heart",
-            "name": "Quest: Steel Your Heart",
+            "name": "Steel Your Heart",
             "match": {
               "method": "normalized",
               "token": "queststeelyourheart"
@@ -4518,8 +4441,8 @@
         ],
         "wiki": [
           {
-            "sourceKey": "Quest: Steel Your Heart",
-            "name": "Quest: Steel Your Heart",
+            "sourceKey": "Steel Your Heart",
+            "name": "Steel Your Heart",
             "match": {
               "method": "normalized",
               "token": "steelyourheart"
@@ -4530,13 +4453,13 @@
         "arammayhem_win_rate": [
           {
             "sourceKey": "quest-steel-your-heart",
-            "name": "Quest: Steel Your Heart",
+            "name": "Steel Your Heart",
             "match": {
               "method": "normalized",
               "token": "queststeelyourheart"
             },
             "slug": "quest-steel-your-heart",
-            "win_rate": 63.34
+            "win_rate": 63.31
           }
         ]
       }
@@ -4553,7 +4476,7 @@
         "internal_augments": [
           {
             "sourceKey": "quest-urfs-champion",
-            "name": "Quest: Urf's Champion",
+            "name": "Urf's Champion",
             "match": {
               "method": "normalized",
               "token": "questurfschampion"
@@ -4566,8 +4489,8 @@
         ],
         "wiki": [
           {
-            "sourceKey": "Quest: Urf's Champion",
-            "name": "Quest: Urf's Champion",
+            "sourceKey": "Urf's Champion",
+            "name": "Urf's Champion",
             "match": {
               "method": "normalized",
               "token": "urfschampion"
@@ -4578,13 +4501,13 @@
         "arammayhem_win_rate": [
           {
             "sourceKey": "quest-urfs-champion",
-            "name": "Quest: Urf's Champion",
+            "name": "Urf's Champion",
             "match": {
               "method": "normalized",
               "token": "questurfschampion"
             },
             "slug": "quest-urfs-champion",
-            "win_rate": 49.84
+            "win_rate": 49.66
           }
         ]
       }
@@ -4601,17 +4524,10 @@
         "internal_augments": [
           {
             "sourceKey": "void-immolation",
-            "name": "Void Immolation",
+            "name": "Icathia's Fall",
             "match": {
-              "method": "alias",
-              "token": "voidimmolation",
-              "alias": {
-                "aliases": [
-                  "Void Immolation",
-                  "void-immolation"
-                ],
-                "reason": "The committed internal/wiki-facing row is named for the rewarded item, while CDragon's canonical augment display name is Icathia's Fall."
-              }
+              "method": "normalized",
+              "token": "icathiasfall"
             },
             "slug": "void-immolation",
             "rarity": "prismatic",
@@ -4621,18 +4537,11 @@
         ],
         "wiki": [
           {
-            "sourceKey": "Void Immolation",
-            "name": "Void Immolation",
+            "sourceKey": "Icathia's Fall",
+            "name": "Icathia's Fall",
             "match": {
-              "method": "alias",
-              "token": "voidimmolation",
-              "alias": {
-                "aliases": [
-                  "Void Immolation",
-                  "void-immolation"
-                ],
-                "reason": "The committed internal/wiki-facing row is named for the rewarded item, while CDragon's canonical augment display name is Icathia's Fall."
-              }
+              "method": "normalized",
+              "token": "icathiasfall"
             },
             "hasWikiDescription": true
           }
@@ -4640,20 +4549,13 @@
         "arammayhem_win_rate": [
           {
             "sourceKey": "void-immolation",
-            "name": "Void Immolation",
+            "name": "Icathia's Fall",
             "match": {
-              "method": "alias",
-              "token": "voidimmolation",
-              "alias": {
-                "aliases": [
-                  "Void Immolation",
-                  "void-immolation"
-                ],
-                "reason": "The committed internal/wiki-facing row is named for the rewarded item, while CDragon's canonical augment display name is Icathia's Fall."
-              }
+              "method": "normalized",
+              "token": "icathiasfall"
             },
             "slug": "void-immolation",
-            "win_rate": 60.2
+            "win_rate": 60.27
           }
         ]
       }
@@ -4670,7 +4572,7 @@
         "internal_augments": [
           {
             "sourceKey": "quest-wooglets-witchcap",
-            "name": "Quest: Wooglet's Witchcap",
+            "name": "Wooglet's Witchcap",
             "match": {
               "method": "normalized",
               "token": "questwoogletswitchcap"
@@ -4683,8 +4585,8 @@
         ],
         "wiki": [
           {
-            "sourceKey": "Quest: Wooglet's Witchcap",
-            "name": "Quest: Wooglet's Witchcap",
+            "sourceKey": "Wooglet's Witchcap",
+            "name": "Wooglet's Witchcap",
             "match": {
               "method": "normalized",
               "token": "woogletswitchcap"
@@ -4695,13 +4597,13 @@
         "arammayhem_win_rate": [
           {
             "sourceKey": "quest-wooglets-witchcap",
-            "name": "Quest: Wooglet's Witchcap",
+            "name": "Wooglet's Witchcap",
             "match": {
               "method": "normalized",
               "token": "questwoogletswitchcap"
             },
             "slug": "quest-wooglets-witchcap",
-            "win_rate": 54.62
+            "win_rate": 54.44
           }
         ]
       }
@@ -4725,7 +4627,7 @@
             },
             "slug": "quickstep",
             "rarity": "gold",
-            "lifecycle": "added",
+            "lifecycle": "active",
             "hasWikiDescription": true
           }
         ],
@@ -4749,7 +4651,7 @@
               "token": "quickstep"
             },
             "slug": "quickstep",
-            "win_rate": 44.83
+            "win_rate": 44.57
           }
         ]
       }
@@ -4773,7 +4675,7 @@
             },
             "slug": "rabble-rousing",
             "rarity": "gold",
-            "lifecycle": "removed",
+            "lifecycle": "active",
             "hasWikiDescription": true
           },
           {
@@ -4785,7 +4687,7 @@
             },
             "slug": "rejuvenation",
             "rarity": "gold",
-            "lifecycle": "added",
+            "lifecycle": "active",
             "hasWikiDescription": true
           }
         ],
@@ -4832,20 +4734,10 @@
             "slug": "cheating",
             "rarity": "gold",
             "lifecycle": "removed",
-            "hasWikiDescription": true
+            "hasWikiDescription": false
           }
         ],
-        "wiki": [
-          {
-            "sourceKey": "Cheating",
-            "name": "Cheating",
-            "match": {
-              "method": "normalized",
-              "token": "cheating"
-            },
-            "hasWikiDescription": true
-          }
-        ],
+        "wiki": [],
         "arammayhem_win_rate": []
       }
     },
@@ -4892,7 +4784,7 @@
               "token": "recursion"
             },
             "slug": "recursion",
-            "win_rate": 52.4
+            "win_rate": 52.44
           }
         ]
       }
@@ -4917,20 +4809,10 @@
             "slug": "repulsor",
             "rarity": "silver",
             "lifecycle": "removed",
-            "hasWikiDescription": true
+            "hasWikiDescription": false
           }
         ],
-        "wiki": [
-          {
-            "sourceKey": "Repulsor",
-            "name": "Repulsor",
-            "match": {
-              "method": "normalized",
-              "token": "repulsor"
-            },
-            "hasWikiDescription": true
-          }
-        ],
+        "wiki": [],
         "arammayhem_win_rate": []
       }
     },
@@ -4954,20 +4836,10 @@
             "slug": "restless-restoration",
             "rarity": "gold",
             "lifecycle": "removed",
-            "hasWikiDescription": true
+            "hasWikiDescription": false
           }
         ],
-        "wiki": [
-          {
-            "sourceKey": "Restless Restoration",
-            "name": "Restless Restoration",
-            "match": {
-              "method": "normalized",
-              "token": "restlessrestoration"
-            },
-            "hasWikiDescription": true
-          }
-        ],
+        "wiki": [],
         "arammayhem_win_rate": []
       }
     },
@@ -5014,7 +4886,7 @@
               "token": "scopedweapons"
             },
             "slug": "scoped-weapons",
-            "win_rate": 52.9
+            "win_rate": 52.93
           }
         ]
       }
@@ -5062,7 +4934,7 @@
               "token": "scopierweapons"
             },
             "slug": "scopier-weapons",
-            "win_rate": 56.9
+            "win_rate": 56.78
           }
         ]
       }
@@ -5158,7 +5030,7 @@
               "token": "searingdawn"
             },
             "slug": "searing-dawn",
-            "win_rate": 48.78
+            "win_rate": 48.82
           }
         ]
       }
@@ -5183,20 +5055,10 @@
             "slug": "self-destruct",
             "rarity": "silver",
             "lifecycle": "removed",
-            "hasWikiDescription": true
+            "hasWikiDescription": false
           }
         ],
-        "wiki": [
-          {
-            "sourceKey": "Self Destruct",
-            "name": "Self Destruct",
-            "match": {
-              "method": "normalized",
-              "token": "selfdestruct"
-            },
-            "hasWikiDescription": true
-          }
-        ],
+        "wiki": [],
         "arammayhem_win_rate": []
       }
     },
@@ -5291,7 +5153,7 @@
               "token": "shrinkray"
             },
             "slug": "shrink-ray",
-            "win_rate": 46.31
+            "win_rate": 46.25
           }
         ]
       }
@@ -5339,7 +5201,7 @@
               "token": "skilledsniper"
             },
             "slug": "skilled-sniper",
-            "win_rate": 54.29
+            "win_rate": 54.14
           }
         ]
       }
@@ -5387,7 +5249,7 @@
               "token": "slaparound"
             },
             "slug": "slap-around",
-            "win_rate": 54.64
+            "win_rate": 54.51
           }
         ]
       }
@@ -5412,20 +5274,10 @@
             "slug": "slow-and-steady",
             "rarity": "gold",
             "lifecycle": "removed",
-            "hasWikiDescription": true
+            "hasWikiDescription": false
           }
         ],
-        "wiki": [
-          {
-            "sourceKey": "Slow And Steady",
-            "name": "Slow And Steady",
-            "match": {
-              "method": "normalized",
-              "token": "slowandsteady"
-            },
-            "hasWikiDescription": true
-          }
-        ],
+        "wiki": [],
         "arammayhem_win_rate": []
       }
     },
@@ -5448,21 +5300,11 @@
             },
             "slug": "slow-cooker",
             "rarity": "prismatic",
-            "lifecycle": "removed",
-            "hasWikiDescription": true
+            "lifecycle": "active",
+            "hasWikiDescription": false
           }
         ],
-        "wiki": [
-          {
-            "sourceKey": "Slow Cooker",
-            "name": "Slow Cooker",
-            "match": {
-              "method": "normalized",
-              "token": "slowcooker"
-            },
-            "hasWikiDescription": true
-          }
-        ],
+        "wiki": [],
         "arammayhem_win_rate": []
       }
     },
@@ -5485,7 +5327,7 @@
             },
             "slug": "snowday",
             "rarity": "silver",
-            "lifecycle": "added",
+            "lifecycle": "active",
             "hasWikiDescription": true
           }
         ],
@@ -5509,7 +5351,7 @@
               "token": "snowday"
             },
             "slug": "snowday",
-            "win_rate": 46.39
+            "win_rate": 46.44
           }
         ]
       }
@@ -5518,7 +5360,7 @@
       "augmentId": "ARAM_SonicBoom",
       "cdragon": {
         "augmentNameId": "ARAM_SonicBoom",
-        "name": "Sonic Boom",
+        "name": "Buffing, <healing>healing</healing>, or <shield>Shielding</shield> your ally deals <trueDamage>@Damage@ true damage</trueDamage> and <status>Slows enemies surrounding them</status> by @SlowAmount*-100@% for 2 seconds (@ProcCooldown@ seconds Cooldown).<br><br>Damage Dealt: @f2@",
         "slug": "sonic-boom",
         "rarity": "silver"
       },
@@ -5526,7 +5368,7 @@
         "internal_augments": [
           {
             "sourceKey": "sonic-boom",
-            "name": "Sonic Boom",
+            "name": "Buffing, <healing>healing</healing>, or <shield>Shielding</shield> your ally deals <trueDamage>@Damage@ true damage</trueDamage> and <status>Slows enemies surrounding them</status> by @SlowAmount*-100@% for 2 seconds (@ProcCooldown@ seconds Cooldown).<br><br>Damage Dealt: @f2@",
             "match": {
               "method": "normalized",
               "token": "sonicboom"
@@ -5539,11 +5381,11 @@
         ],
         "wiki": [
           {
-            "sourceKey": "Sonic Boom",
-            "name": "Sonic Boom",
+            "sourceKey": "Buffing, <healing>healing</healing>, or <shield>Shielding</shield> your ally deals <trueDamage>@Damage@ true damage</trueDamage> and <status>Slows enemies surrounding them</status> by @SlowAmount*-100@% for 2 seconds (@ProcCooldown@ seconds Cooldown).<br><br>Damage Dealt: @f2@",
+            "name": "Buffing, <healing>healing</healing>, or <shield>Shielding</shield> your ally deals <trueDamage>@Damage@ true damage</trueDamage> and <status>Slows enemies surrounding them</status> by @SlowAmount*-100@% for 2 seconds (@ProcCooldown@ seconds Cooldown).<br><br>Damage Dealt: @f2@",
             "match": {
               "method": "normalized",
-              "token": "sonicboom"
+              "token": "buffinghealinghealinghealingorshieldshieldingshieldyourallydealstruedamagedamagetruedamagetruedamageandstatusslowsenemiessurroundingthemstatusbyslowamount100for2secondsproccooldownsecondscooldownbrbrdamagedealtf2"
             },
             "hasWikiDescription": true
           }
@@ -5551,13 +5393,13 @@
         "arammayhem_win_rate": [
           {
             "sourceKey": "sonic-boom",
-            "name": "Sonic Boom",
+            "name": "Buffing, <healing>healing</healing>, or <shield>Shielding</shield> your ally deals <trueDamage>@Damage@ true damage</trueDamage> and <status>Slows enemies surrounding them</status> by @SlowAmount*-100@% for 2 seconds (@ProcCooldown@ seconds Cooldown).<br><br>Damage Dealt: @f2@",
             "match": {
               "method": "normalized",
               "token": "sonicboom"
             },
             "slug": "sonic-boom",
-            "win_rate": 52.12
+            "win_rate": 52.0
           }
         ]
       }
@@ -5581,7 +5423,7 @@
             },
             "slug": "soul-siphon",
             "rarity": "gold",
-            "lifecycle": "removed",
+            "lifecycle": "active",
             "hasWikiDescription": true
           }
         ],
@@ -5597,54 +5439,6 @@
           }
         ],
         "arammayhem_win_rate": []
-      }
-    },
-    {
-      "augmentId": "ARAM_SpecializedRecursion",
-      "cdragon": {
-        "augmentNameId": "ARAM_SpecializedRecursion",
-        "name": "Pursuit of Haste",
-        "slug": "specialized-recursion",
-        "rarity": "gold"
-      },
-      "sources": {
-        "internal_augments": [
-          {
-            "sourceKey": "pursuit-of-haste",
-            "name": "Pursuit of Haste",
-            "match": {
-              "method": "normalized",
-              "token": "pursuitofhaste"
-            },
-            "slug": "pursuit-of-haste",
-            "rarity": "gold",
-            "lifecycle": "added",
-            "hasWikiDescription": true
-          }
-        ],
-        "wiki": [
-          {
-            "sourceKey": "Pursuit of Haste",
-            "name": "Pursuit of Haste",
-            "match": {
-              "method": "normalized",
-              "token": "pursuitofhaste"
-            },
-            "hasWikiDescription": true
-          }
-        ],
-        "arammayhem_win_rate": [
-          {
-            "sourceKey": "pursuit-of-haste",
-            "name": "Pursuit of Haste",
-            "match": {
-              "method": "normalized",
-              "token": "pursuitofhaste"
-            },
-            "slug": "pursuit-of-haste",
-            "win_rate": 55.18
-          }
-        ]
       }
     },
     {
@@ -5667,20 +5461,10 @@
             "slug": "speed-demon",
             "rarity": "silver",
             "lifecycle": "removed",
-            "hasWikiDescription": true
+            "hasWikiDescription": false
           }
         ],
-        "wiki": [
-          {
-            "sourceKey": "Speed Demon",
-            "name": "Speed Demon",
-            "match": {
-              "method": "normalized",
-              "token": "speeddemon"
-            },
-            "hasWikiDescription": true
-          }
-        ],
+        "wiki": [],
         "arammayhem_win_rate": []
       }
     },
@@ -5727,7 +5511,7 @@
               "token": "spintowin"
             },
             "slug": "spin-to-win",
-            "win_rate": 51.29
+            "win_rate": 51.09
           }
         ]
       }
@@ -5751,7 +5535,7 @@
             },
             "slug": "spirit-bomb",
             "rarity": "prismatic",
-            "lifecycle": "added",
+            "lifecycle": "active",
             "hasWikiDescription": true
           }
         ],
@@ -5775,7 +5559,7 @@
               "token": "spiritbomb"
             },
             "slug": "spirit-bomb",
-            "win_rate": 56.1
+            "win_rate": 55.37
           }
         ]
       }
@@ -5823,7 +5607,7 @@
               "token": "spiritualpurification"
             },
             "slug": "spiritual-purification",
-            "win_rate": 48
+            "win_rate": 47.94
           }
         ]
       }
@@ -5847,7 +5631,7 @@
             },
             "slug": "stackosaurusrex",
             "rarity": "silver",
-            "lifecycle": "added",
+            "lifecycle": "active",
             "hasWikiDescription": true
           }
         ],
@@ -5871,7 +5655,7 @@
               "token": "stackosaurusrex"
             },
             "slug": "stackosaurusrex",
-            "win_rate": 56.47
+            "win_rate": 56.6
           }
         ]
       }
@@ -5919,7 +5703,7 @@
               "token": "stats"
             },
             "slug": "stats",
-            "win_rate": 49.49
+            "win_rate": 49.66
           }
         ]
       }
@@ -5967,7 +5751,7 @@
               "token": "statsonstats"
             },
             "slug": "stats-on-stats",
-            "win_rate": 52.28
+            "win_rate": 52.24
           }
         ]
       }
@@ -6015,7 +5799,7 @@
               "token": "statsonstatsonstats"
             },
             "slug": "stats-on-stats-on-stats",
-            "win_rate": 49.23
+            "win_rate": 48.96
           }
         ]
       }
@@ -6063,55 +5847,7 @@
               "token": "stuckinherewithme"
             },
             "slug": "stuck-in-here-with-me",
-            "win_rate": 47.14
-          }
-        ]
-      }
-    },
-    {
-      "augmentId": "ARAM_SustainingStrike",
-      "cdragon": {
-        "augmentNameId": "ARAM_SustainingStrike",
-        "name": "Siphon",
-        "slug": "sustaining-strike",
-        "rarity": "silver"
-      },
-      "sources": {
-        "internal_augments": [
-          {
-            "sourceKey": "siphon",
-            "name": "Siphon",
-            "match": {
-              "method": "normalized",
-              "token": "siphon"
-            },
-            "slug": "siphon",
-            "rarity": "silver",
-            "lifecycle": "added",
-            "hasWikiDescription": true
-          }
-        ],
-        "wiki": [
-          {
-            "sourceKey": "Siphon",
-            "name": "Siphon",
-            "match": {
-              "method": "normalized",
-              "token": "siphon"
-            },
-            "hasWikiDescription": true
-          }
-        ],
-        "arammayhem_win_rate": [
-          {
-            "sourceKey": "siphon",
-            "name": "Siphon",
-            "match": {
-              "method": "normalized",
-              "token": "siphon"
-            },
-            "slug": "siphon",
-            "win_rate": 52.98
+            "win_rate": 47.11
           }
         ]
       }
@@ -6159,7 +5895,7 @@
               "token": "symphonyofwar"
             },
             "slug": "symphony-of-war",
-            "win_rate": 48.73
+            "win_rate": 48.58
           }
         ]
       }
@@ -6207,7 +5943,7 @@
               "token": "tankengine"
             },
             "slug": "tank-engine",
-            "win_rate": 67.13
+            "win_rate": 67.29
           }
         ]
       }
@@ -6231,7 +5967,7 @@
             },
             "slug": "tank-it-or-leave-it",
             "rarity": "silver",
-            "lifecycle": "removed",
+            "lifecycle": "active",
             "hasWikiDescription": true
           }
         ],
@@ -6292,7 +6028,7 @@
               "token": "tapdancer"
             },
             "slug": "tap-dancer",
-            "win_rate": 53.83
+            "win_rate": 53.77
           }
         ]
       }
@@ -6316,7 +6052,7 @@
             },
             "slug": "terror",
             "rarity": "gold",
-            "lifecycle": "added",
+            "lifecycle": "active",
             "hasWikiDescription": true
           }
         ],
@@ -6340,7 +6076,7 @@
               "token": "terror"
             },
             "slug": "terror",
-            "win_rate": 46.04
+            "win_rate": 45.85
           }
         ]
       }
@@ -6365,20 +6101,10 @@
             "slug": "the-brutalizer",
             "rarity": "silver",
             "lifecycle": "removed",
-            "hasWikiDescription": true
+            "hasWikiDescription": false
           }
         ],
-        "wiki": [
-          {
-            "sourceKey": "The Brutalizer",
-            "name": "The Brutalizer",
-            "match": {
-              "method": "normalized",
-              "token": "thebrutalizer"
-            },
-            "hasWikiDescription": true
-          }
-        ],
+        "wiki": [],
         "arammayhem_win_rate": []
       }
     },
@@ -6425,7 +6151,7 @@
               "token": "threadtheneedle"
             },
             "slug": "thread-the-needle",
-            "win_rate": 48.88
+            "win_rate": 48.96
           }
         ]
       }
@@ -6449,21 +6175,11 @@
             },
             "slug": "tormentor",
             "rarity": "silver",
-            "lifecycle": "removed",
-            "hasWikiDescription": true
+            "lifecycle": "active",
+            "hasWikiDescription": false
           }
         ],
-        "wiki": [
-          {
-            "sourceKey": "Tormentor",
-            "name": "Tormentor",
-            "match": {
-              "method": "normalized",
-              "token": "tormentor"
-            },
-            "hasWikiDescription": true
-          }
-        ],
+        "wiki": [],
         "arammayhem_win_rate": []
       }
     },
@@ -6510,9 +6226,46 @@
               "token": "transmutechaos"
             },
             "slug": "transmute-chaos",
-            "win_rate": 50.19
+            "win_rate": 50.26
           }
         ]
+      }
+    },
+    {
+      "augmentId": "ARAM_TransmuteGold",
+      "cdragon": {
+        "augmentNameId": "ARAM_TransmuteGold",
+        "name": "Transmute: Gold",
+        "slug": "transmute-gold",
+        "rarity": "silver"
+      },
+      "sources": {
+        "internal_augments": [
+          {
+            "sourceKey": "transmute-gold",
+            "name": "Transmute: Gold",
+            "match": {
+              "method": "normalized",
+              "token": "transmutegold"
+            },
+            "slug": "transmute-gold",
+            "rarity": "silver",
+            "lifecycle": "active",
+            "hasWikiDescription": true
+          }
+        ],
+        "wiki": [
+          {
+            "sourceKey": "Transmute: Gold",
+            "name": "Transmute: Gold",
+            "match": {
+              "method": "normalized",
+              "token": "transmutegold"
+            },
+            "hasWikiDescription": true
+          }
+        ],
+        "arammayhem_win_rate": []
       }
     },
     {
@@ -6558,7 +6311,7 @@
               "token": "transmuteprismatic"
             },
             "slug": "transmute-prismatic",
-            "win_rate": 57.13
+            "win_rate": 56.86
           }
         ]
       }
@@ -6575,7 +6328,7 @@
         "internal_augments": [
           {
             "sourceKey": "trueshotprodigy",
-            "name": "TrueshotProdigy",
+            "name": "Trueshot Prodigy",
             "match": {
               "method": "normalized",
               "token": "trueshotprodigy"
@@ -6610,20 +6363,10 @@
             "slug": "twice-thrice",
             "rarity": "gold",
             "lifecycle": "removed",
-            "hasWikiDescription": true
+            "hasWikiDescription": false
           }
         ],
-        "wiki": [
-          {
-            "sourceKey": "Twice Thrice",
-            "name": "Twice Thrice",
-            "match": {
-              "method": "normalized",
-              "token": "twicethrice"
-            },
-            "hasWikiDescription": true
-          }
-        ],
+        "wiki": [],
         "arammayhem_win_rate": []
       }
     },
@@ -6670,7 +6413,7 @@
               "token": "typhoon"
             },
             "slug": "typhoon",
-            "win_rate": 52.64
+            "win_rate": 52.67
           }
         ]
       }
@@ -6718,7 +6461,7 @@
               "token": "ultimaterevolution"
             },
             "slug": "ultimate-revolution",
-            "win_rate": 48.65
+            "win_rate": 48.73
           }
         ]
       }
@@ -6766,7 +6509,7 @@
               "token": "ultimateunstoppable"
             },
             "slug": "ultimate-unstoppable",
-            "win_rate": 48.58
+            "win_rate": 48.52
           }
         ]
       }
@@ -6814,7 +6557,7 @@
               "token": "upgradecollector"
             },
             "slug": "upgrade-collector",
-            "win_rate": 55.15
+            "win_rate": 55.06
           }
         ]
       }
@@ -6866,20 +6609,10 @@
             "slug": "upgrade-hubris",
             "rarity": "gold",
             "lifecycle": "removed",
-            "hasWikiDescription": true
+            "hasWikiDescription": false
           }
         ],
-        "wiki": [
-          {
-            "sourceKey": "Upgrade Hubris",
-            "name": "Upgrade Hubris",
-            "match": {
-              "method": "normalized",
-              "token": "upgradehubris"
-            },
-            "hasWikiDescription": true
-          }
-        ],
+        "wiki": [],
         "arammayhem_win_rate": []
       }
     },
@@ -6926,7 +6659,7 @@
               "token": "upgradeinfinityedge"
             },
             "slug": "upgrade-infinity-edge",
-            "win_rate": 63.09
+            "win_rate": 62.77
           }
         ]
       }
@@ -6974,7 +6707,7 @@
               "token": "upgradeimmolate"
             },
             "slug": "upgrade-immolate",
-            "win_rate": 58.07
+            "win_rate": 58.2
           }
         ]
       }
@@ -7022,7 +6755,7 @@
               "token": "upgradesheen"
             },
             "slug": "upgrade-sheen",
-            "win_rate": 51.39
+            "win_rate": 50.99
           }
         ]
       }
@@ -7070,7 +6803,7 @@
               "token": "upgradezhonyas"
             },
             "slug": "upgrade-zhonyas",
-            "win_rate": 52.57
+            "win_rate": 52.61
           }
         ]
       }
@@ -7095,20 +6828,10 @@
             "slug": "void-rift",
             "rarity": "prismatic",
             "lifecycle": "removed",
-            "hasWikiDescription": true
+            "hasWikiDescription": false
           }
         ],
-        "wiki": [
-          {
-            "sourceKey": "Void Rift",
-            "name": "Void Rift",
-            "match": {
-              "method": "normalized",
-              "token": "voidrift"
-            },
-            "hasWikiDescription": true
-          }
-        ],
+        "wiki": [],
         "arammayhem_win_rate": []
       }
     },
@@ -7131,7 +6854,7 @@
             },
             "slug": "vulnerability",
             "rarity": "gold",
-            "lifecycle": "removed",
+            "lifecycle": "active",
             "hasWikiDescription": true
           }
         ],
@@ -7169,20 +6892,10 @@
             "slug": "heads-up-cupcake",
             "rarity": "prismatic",
             "lifecycle": "removed",
-            "hasWikiDescription": true
+            "hasWikiDescription": false
           }
         ],
-        "wiki": [
-          {
-            "sourceKey": "Heads Up Cupcake!",
-            "name": "Heads Up Cupcake!",
-            "match": {
-              "method": "normalized",
-              "token": "headsupcupcake"
-            },
-            "hasWikiDescription": true
-          }
-        ],
+        "wiki": [],
         "arammayhem_win_rate": []
       }
     },
@@ -7205,7 +6918,7 @@
             },
             "slug": "wee-woo-wee-woo",
             "rarity": "gold",
-            "lifecycle": "added",
+            "lifecycle": "active",
             "hasWikiDescription": true
           }
         ],
@@ -7229,7 +6942,7 @@
               "token": "weewooweewoo"
             },
             "slug": "wee-woo-wee-woo",
-            "win_rate": 55.35
+            "win_rate": 55.47
           }
         ]
       }
@@ -7254,20 +6967,10 @@
             "slug": "weighted-popoffs",
             "rarity": "silver",
             "lifecycle": "removed",
-            "hasWikiDescription": true
+            "hasWikiDescription": false
           }
         ],
-        "wiki": [
-          {
-            "sourceKey": "Weighted Popoffs",
-            "name": "Weighted Popoffs",
-            "match": {
-              "method": "normalized",
-              "token": "weightedpopoffs"
-            },
-            "hasWikiDescription": true
-          }
-        ],
+        "wiki": [],
         "arammayhem_win_rate": []
       }
     },
@@ -7314,7 +7017,7 @@
               "token": "windspeakersblessing"
             },
             "slug": "windspeakers-blessing",
-            "win_rate": 55.67
+            "win_rate": 55.8
           }
         ]
       }
@@ -7362,7 +7065,7 @@
               "token": "witchfulthinking"
             },
             "slug": "witchful-thinking",
-            "win_rate": 54.47
+            "win_rate": 54.32
           }
         ]
       }
@@ -7410,7 +7113,7 @@
               "token": "withhaste"
             },
             "slug": "with-haste",
-            "win_rate": 53.27
+            "win_rate": 53.2
           }
         ]
       }
@@ -7434,7 +7137,7 @@
             },
             "slug": "yowch-my-coins",
             "rarity": "gold",
-            "lifecycle": "added",
+            "lifecycle": "active",
             "hasWikiDescription": true
           }
         ],
@@ -7458,7 +7161,7 @@
               "token": "yowchmycoins"
             },
             "slug": "yowch-my-coins",
-            "win_rate": 49.57
+            "win_rate": 49.45
           }
         ]
       }
@@ -7482,7 +7185,7 @@
             },
             "slug": "zealot",
             "rarity": "silver",
-            "lifecycle": "removed",
+            "lifecycle": "active",
             "hasWikiDescription": true
           }
         ],
@@ -7543,9 +7246,2636 @@
               "token": "escapade"
             },
             "slug": "escapade",
-            "win_rate": 53.52
+            "win_rate": 53.37
           }
         ]
+      }
+    },
+    {
+      "augmentId": "Ability_SelfAOE_DoubleCast",
+      "cdragon": {
+        "augmentNameId": "Ability_SelfAOE_DoubleCast",
+        "name": "Echo Cast",
+        "slug": "ability_-self-a-o-e_-double-cast",
+        "rarity": "prismatic"
+      },
+      "sources": {
+        "internal_augments": [
+          {
+            "sourceKey": "echo-cast",
+            "name": "Echo Cast",
+            "match": {
+              "method": "normalized",
+              "token": "echocast"
+            },
+            "slug": "echo-cast",
+            "rarity": "prismatic",
+            "lifecycle": "removed",
+            "hasWikiDescription": true
+          }
+        ],
+        "wiki": [
+          {
+            "sourceKey": "Echo Cast",
+            "name": "Echo Cast",
+            "match": {
+              "method": "normalized",
+              "token": "echocast"
+            },
+            "hasWikiDescription": true
+          }
+        ],
+        "arammayhem_win_rate": []
+      }
+    },
+    {
+      "augmentId": "Adamant",
+      "cdragon": {
+        "augmentNameId": "Adamant",
+        "name": "Adamant",
+        "slug": "adamant",
+        "rarity": "silver"
+      },
+      "sources": {
+        "internal_augments": [
+          {
+            "sourceKey": "adamant",
+            "name": "Adamant",
+            "match": {
+              "method": "normalized",
+              "token": "adamant"
+            },
+            "slug": "adamant",
+            "rarity": "silver",
+            "lifecycle": "removed",
+            "hasWikiDescription": true
+          }
+        ],
+        "wiki": [
+          {
+            "sourceKey": "Adamant",
+            "name": "Adamant",
+            "match": {
+              "method": "normalized",
+              "token": "adamant"
+            },
+            "hasWikiDescription": true
+          }
+        ],
+        "arammayhem_win_rate": []
+      }
+    },
+    {
+      "augmentId": "BabyKitty",
+      "cdragon": {
+        "augmentNameId": "BabyKitty",
+        "name": "I'm a Baby Kitty Where is Mama",
+        "slug": "baby-kitty",
+        "rarity": "prismatic"
+      },
+      "sources": {
+        "internal_augments": [
+          {
+            "sourceKey": "im-a-baby-kitty-where-is-mama",
+            "name": "I'm a Baby Kitty Where is Mama",
+            "match": {
+              "method": "normalized",
+              "token": "imababykittywhereismama"
+            },
+            "slug": "im-a-baby-kitty-where-is-mama",
+            "rarity": "prismatic",
+            "lifecycle": "removed",
+            "hasWikiDescription": true
+          }
+        ],
+        "wiki": [
+          {
+            "sourceKey": "I'm a Baby Kitty Where is Mama",
+            "name": "I'm a Baby Kitty Where is Mama",
+            "match": {
+              "method": "normalized",
+              "token": "imababykittywhereismama"
+            },
+            "hasWikiDescription": true
+          }
+        ],
+        "arammayhem_win_rate": []
+      }
+    },
+    {
+      "augmentId": "BiggestSnowballEver",
+      "cdragon": {
+        "augmentNameId": "BiggestSnowballEver",
+        "name": "Biggest Snowball Ever",
+        "slug": "biggest-snowball-ever",
+        "rarity": "prismatic"
+      },
+      "sources": {
+        "internal_augments": [
+          {
+            "sourceKey": "biggest-snowball-ever",
+            "name": "Biggest Snowball Ever",
+            "match": {
+              "method": "normalized",
+              "token": "biggestsnowballever"
+            },
+            "slug": "biggest-snowball-ever",
+            "rarity": "prismatic",
+            "lifecycle": "removed",
+            "hasWikiDescription": true
+          }
+        ],
+        "wiki": [
+          {
+            "sourceKey": "Biggest Snowball Ever",
+            "name": "Biggest Snowball Ever",
+            "match": {
+              "method": "normalized",
+              "token": "biggestsnowballever"
+            },
+            "hasWikiDescription": true
+          }
+        ],
+        "arammayhem_win_rate": []
+      }
+    },
+    {
+      "augmentId": "BloodMoneyBurn",
+      "cdragon": {
+        "augmentNameId": "BloodMoneyBurn",
+        "name": "Combusting Interest",
+        "slug": "blood-money-burn",
+        "rarity": "gold"
+      },
+      "sources": {
+        "internal_augments": [
+          {
+            "sourceKey": "combusting-interest",
+            "name": "Combusting Interest",
+            "match": {
+              "method": "normalized",
+              "token": "combustinginterest"
+            },
+            "slug": "combusting-interest",
+            "rarity": "gold",
+            "lifecycle": "removed",
+            "hasWikiDescription": true
+          }
+        ],
+        "wiki": [
+          {
+            "sourceKey": "Combusting Interest",
+            "name": "Combusting Interest",
+            "match": {
+              "method": "normalized",
+              "token": "combustinginterest"
+            },
+            "hasWikiDescription": true
+          }
+        ],
+        "arammayhem_win_rate": []
+      }
+    },
+    {
+      "augmentId": "Bonk",
+      "cdragon": {
+        "augmentNameId": "Bonk",
+        "name": "BONK!",
+        "slug": "bonk",
+        "rarity": "gold"
+      },
+      "sources": {
+        "internal_augments": [
+          {
+            "sourceKey": "bonk",
+            "name": "BONK!",
+            "match": {
+              "method": "normalized",
+              "token": "bonk"
+            },
+            "slug": "bonk",
+            "rarity": "gold",
+            "lifecycle": "removed",
+            "hasWikiDescription": true
+          }
+        ],
+        "wiki": [
+          {
+            "sourceKey": "BONK!",
+            "name": "BONK!",
+            "match": {
+              "method": "normalized",
+              "token": "bonk"
+            },
+            "hasWikiDescription": true
+          }
+        ],
+        "arammayhem_win_rate": []
+      }
+    },
+    {
+      "augmentId": "BrushPower",
+      "cdragon": {
+        "augmentNameId": "BrushPower",
+        "name": "Hide on Bush",
+        "slug": "brush-power",
+        "rarity": "gold"
+      },
+      "sources": {
+        "internal_augments": [
+          {
+            "sourceKey": "hide-on-bush",
+            "name": "Hide on Bush",
+            "match": {
+              "method": "normalized",
+              "token": "hideonbush"
+            },
+            "slug": "hide-on-bush",
+            "rarity": "gold",
+            "lifecycle": "removed",
+            "hasWikiDescription": true
+          }
+        ],
+        "wiki": [
+          {
+            "sourceKey": "Hide on Bush",
+            "name": "Hide on Bush",
+            "match": {
+              "method": "normalized",
+              "token": "hideonbush"
+            },
+            "hasWikiDescription": true
+          }
+        ],
+        "arammayhem_win_rate": []
+      }
+    },
+    {
+      "augmentId": "BurstingTeeth",
+      "cdragon": {
+        "augmentNameId": "BurstingTeeth",
+        "name": "Tooth Fairy",
+        "slug": "bursting-teeth",
+        "rarity": "gold"
+      },
+      "sources": {
+        "internal_augments": [
+          {
+            "sourceKey": "tooth-fairy",
+            "name": "Tooth Fairy",
+            "match": {
+              "method": "normalized",
+              "token": "toothfairy"
+            },
+            "slug": "tooth-fairy",
+            "rarity": "gold",
+            "lifecycle": "removed",
+            "hasWikiDescription": true
+          }
+        ],
+        "wiki": [
+          {
+            "sourceKey": "Tooth Fairy",
+            "name": "Tooth Fairy",
+            "match": {
+              "method": "normalized",
+              "token": "toothfairy"
+            },
+            "hasWikiDescription": true
+          }
+        ],
+        "arammayhem_win_rate": []
+      }
+    },
+    {
+      "augmentId": "ChainReaction",
+      "cdragon": {
+        "augmentNameId": "ChainReaction",
+        "name": "Chain Reaction",
+        "slug": "chain-reaction",
+        "rarity": "prismatic"
+      },
+      "sources": {
+        "internal_augments": [
+          {
+            "sourceKey": "chain-reaction",
+            "name": "Chain Reaction",
+            "match": {
+              "method": "normalized",
+              "token": "chainreaction"
+            },
+            "slug": "chain-reaction",
+            "rarity": "prismatic",
+            "lifecycle": "removed",
+            "hasWikiDescription": true
+          }
+        ],
+        "wiki": [
+          {
+            "sourceKey": "Chain Reaction",
+            "name": "Chain Reaction",
+            "match": {
+              "method": "normalized",
+              "token": "chainreaction"
+            },
+            "hasWikiDescription": true
+          }
+        ],
+        "arammayhem_win_rate": []
+      }
+    },
+    {
+      "augmentId": "CritNCast",
+      "cdragon": {
+        "augmentNameId": "CritNCast",
+        "name": "Crit 'n Cast",
+        "slug": "crit-n-cast",
+        "rarity": "silver"
+      },
+      "sources": {
+        "internal_augments": [
+          {
+            "sourceKey": "crit-n-cast",
+            "name": "Crit 'n Cast",
+            "match": {
+              "method": "normalized",
+              "token": "critncast"
+            },
+            "slug": "crit-n-cast",
+            "rarity": "silver",
+            "lifecycle": "removed",
+            "hasWikiDescription": true
+          }
+        ],
+        "wiki": [
+          {
+            "sourceKey": "Crit 'n Cast",
+            "name": "Crit 'n Cast",
+            "match": {
+              "method": "normalized",
+              "token": "critncast"
+            },
+            "hasWikiDescription": true
+          }
+        ],
+        "arammayhem_win_rate": []
+      }
+    },
+    {
+      "augmentId": "CriticalMissile",
+      "cdragon": {
+        "augmentNameId": "CriticalMissile",
+        "name": "Critical Missile",
+        "slug": "critical-missile",
+        "rarity": "gold"
+      },
+      "sources": {
+        "internal_augments": [
+          {
+            "sourceKey": "critical-missile",
+            "name": "Critical Missile",
+            "match": {
+              "method": "normalized",
+              "token": "criticalmissile"
+            },
+            "slug": "critical-missile",
+            "rarity": "gold",
+            "lifecycle": "removed",
+            "hasWikiDescription": true
+          }
+        ],
+        "wiki": [
+          {
+            "sourceKey": "Critical Missile",
+            "name": "Critical Missile",
+            "match": {
+              "method": "normalized",
+              "token": "criticalmissile"
+            },
+            "hasWikiDescription": true
+          }
+        ],
+        "arammayhem_win_rate": []
+      }
+    },
+    {
+      "augmentId": "CriticalRhythm",
+      "cdragon": {
+        "augmentNameId": "CriticalRhythm",
+        "name": "Critical Rhythm",
+        "slug": "critical-rhythm",
+        "rarity": "gold"
+      },
+      "sources": {
+        "internal_augments": [
+          {
+            "sourceKey": "critical-rhythm",
+            "name": "Critical Rhythm",
+            "match": {
+              "method": "normalized",
+              "token": "criticalrhythm"
+            },
+            "slug": "critical-rhythm",
+            "rarity": "gold",
+            "lifecycle": "removed",
+            "hasWikiDescription": true
+          }
+        ],
+        "wiki": [
+          {
+            "sourceKey": "Critical Rhythm",
+            "name": "Critical Rhythm",
+            "match": {
+              "method": "normalized",
+              "token": "criticalrhythm"
+            },
+            "hasWikiDescription": true
+          }
+        ],
+        "arammayhem_win_rate": []
+      }
+    },
+    {
+      "augmentId": "DarkWind",
+      "cdragon": {
+        "augmentNameId": "DarkWind",
+        "name": "Ravenous Bind",
+        "slug": "dark-wind",
+        "rarity": "gold"
+      },
+      "sources": {
+        "internal_augments": [
+          {
+            "sourceKey": "ravenous-bind",
+            "name": "Ravenous Bind",
+            "match": {
+              "method": "normalized",
+              "token": "ravenousbind"
+            },
+            "slug": "ravenous-bind",
+            "rarity": "gold",
+            "lifecycle": "removed",
+            "hasWikiDescription": true
+          }
+        ],
+        "wiki": [
+          {
+            "sourceKey": "Ravenous Bind",
+            "name": "Ravenous Bind",
+            "match": {
+              "method": "normalized",
+              "token": "ravenousbind"
+            },
+            "hasWikiDescription": true
+          }
+        ],
+        "arammayhem_win_rate": []
+      }
+    },
+    {
+      "augmentId": "DimensionShift_Active",
+      "cdragon": {
+        "augmentNameId": "DimensionShift_Active",
+        "name": "Dimension Shift",
+        "slug": "dimension-shift_-active",
+        "rarity": "prismatic"
+      },
+      "sources": {
+        "internal_augments": [
+          {
+            "sourceKey": "dimension-shift",
+            "name": "Dimension Shift",
+            "match": {
+              "method": "normalized",
+              "token": "dimensionshift"
+            },
+            "slug": "dimension-shift",
+            "rarity": "prismatic",
+            "lifecycle": "removed",
+            "hasWikiDescription": true
+          }
+        ],
+        "wiki": [
+          {
+            "sourceKey": "Dimension Shift",
+            "name": "Dimension Shift",
+            "match": {
+              "method": "normalized",
+              "token": "dimensionshift"
+            },
+            "hasWikiDescription": true
+          }
+        ],
+        "arammayhem_win_rate": []
+      }
+    },
+    {
+      "augmentId": "Donation",
+      "cdragon": {
+        "augmentNameId": "Donation",
+        "name": "Donation",
+        "slug": "donation",
+        "rarity": "gold"
+      },
+      "sources": {
+        "internal_augments": [
+          {
+            "sourceKey": "donation",
+            "name": "Donation",
+            "match": {
+              "method": "normalized",
+              "token": "donation"
+            },
+            "slug": "donation",
+            "rarity": "gold",
+            "lifecycle": "removed",
+            "hasWikiDescription": true
+          }
+        ],
+        "wiki": [
+          {
+            "sourceKey": "Donation",
+            "name": "Donation",
+            "match": {
+              "method": "normalized",
+              "token": "donation"
+            },
+            "hasWikiDescription": true
+          }
+        ],
+        "arammayhem_win_rate": []
+      }
+    },
+    {
+      "augmentId": "DoubleDefense",
+      "cdragon": {
+        "augmentNameId": "DoubleDefense",
+        "name": "Bolstered",
+        "slug": "double-defense",
+        "rarity": "silver"
+      },
+      "sources": {
+        "internal_augments": [
+          {
+            "sourceKey": "double-defense",
+            "name": "Double Defense",
+            "match": {
+              "method": "normalized",
+              "token": "doubledefense"
+            },
+            "slug": "double-defense",
+            "rarity": "silver",
+            "lifecycle": "removed",
+            "hasWikiDescription": true
+          }
+        ],
+        "wiki": [
+          {
+            "sourceKey": "Double Defense",
+            "name": "Double Defense",
+            "match": {
+              "method": "normalized",
+              "token": "doubledefense"
+            },
+            "hasWikiDescription": true
+          }
+        ],
+        "arammayhem_win_rate": []
+      }
+    },
+    {
+      "augmentId": "Dropybara_Active",
+      "cdragon": {
+        "augmentNameId": "Dropybara_Active",
+        "name": "Droppybara",
+        "slug": "dropybara_-active",
+        "rarity": "prismatic"
+      },
+      "sources": {
+        "internal_augments": [
+          {
+            "sourceKey": "droppybara",
+            "name": "Droppybara",
+            "match": {
+              "method": "normalized",
+              "token": "droppybara"
+            },
+            "slug": "droppybara",
+            "rarity": "prismatic",
+            "lifecycle": "removed",
+            "hasWikiDescription": true
+          }
+        ],
+        "wiki": [
+          {
+            "sourceKey": "Droppybara",
+            "name": "Droppybara",
+            "match": {
+              "method": "normalized",
+              "token": "droppybara"
+            },
+            "hasWikiDescription": true
+          }
+        ],
+        "arammayhem_win_rate": []
+      }
+    },
+    {
+      "augmentId": "EmpyreanPromise",
+      "cdragon": {
+        "augmentNameId": "EmpyreanPromise",
+        "name": "Empyrean Promise",
+        "slug": "empyrean-promise",
+        "rarity": "prismatic"
+      },
+      "sources": {
+        "internal_augments": [
+          {
+            "sourceKey": "empyrean-promise",
+            "name": "Empyrean Promise",
+            "match": {
+              "method": "normalized",
+              "token": "empyreanpromise"
+            },
+            "slug": "empyrean-promise",
+            "rarity": "prismatic",
+            "lifecycle": "removed",
+            "hasWikiDescription": true
+          }
+        ],
+        "wiki": [
+          {
+            "sourceKey": "Empyrean Promise",
+            "name": "Empyrean Promise",
+            "match": {
+              "method": "normalized",
+              "token": "empyreanpromise"
+            },
+            "hasWikiDescription": true
+          }
+        ],
+        "arammayhem_win_rate": []
+      }
+    },
+    {
+      "augmentId": "EndlessDecimation",
+      "cdragon": {
+        "augmentNameId": "EndlessDecimation",
+        "name": "Endless Decimation",
+        "slug": "endless-decimation",
+        "rarity": "gold"
+      },
+      "sources": {
+        "internal_augments": [
+          {
+            "sourceKey": "endless-decimation",
+            "name": "Endless Decimation",
+            "match": {
+              "method": "normalized",
+              "token": "endlessdecimation"
+            },
+            "slug": "endless-decimation",
+            "rarity": "gold",
+            "lifecycle": "removed",
+            "hasWikiDescription": true
+          }
+        ],
+        "wiki": [
+          {
+            "sourceKey": "Endless Decimation",
+            "name": "Endless Decimation",
+            "match": {
+              "method": "normalized",
+              "token": "endlessdecimation"
+            },
+            "hasWikiDescription": true
+          }
+        ],
+        "arammayhem_win_rate": []
+      }
+    },
+    {
+      "augmentId": "Equilibrium",
+      "cdragon": {
+        "augmentNameId": "Equilibrium",
+        "name": "Our Healing",
+        "slug": "equilibrium",
+        "rarity": "gold"
+      },
+      "sources": {
+        "internal_augments": [
+          {
+            "sourceKey": "our-healing",
+            "name": "Our Healing",
+            "match": {
+              "method": "normalized",
+              "token": "ourhealing"
+            },
+            "slug": "our-healing",
+            "rarity": "gold",
+            "lifecycle": "removed",
+            "hasWikiDescription": true
+          }
+        ],
+        "wiki": [
+          {
+            "sourceKey": "Our Healing",
+            "name": "Our Healing",
+            "match": {
+              "method": "normalized",
+              "token": "ourhealing"
+            },
+            "hasWikiDescription": true
+          }
+        ],
+        "arammayhem_win_rate": []
+      }
+    },
+    {
+      "augmentId": "EscapePlan",
+      "cdragon": {
+        "augmentNameId": "EscapePlan",
+        "name": "Escape Plan",
+        "slug": "escape-plan",
+        "rarity": "silver"
+      },
+      "sources": {
+        "internal_augments": [
+          {
+            "sourceKey": "escape-plan",
+            "name": "Escape Plan",
+            "match": {
+              "method": "normalized",
+              "token": "escapeplan"
+            },
+            "slug": "escape-plan",
+            "rarity": "silver",
+            "lifecycle": "removed",
+            "hasWikiDescription": true
+          }
+        ],
+        "wiki": [
+          {
+            "sourceKey": "Escape Plan",
+            "name": "Escape Plan",
+            "match": {
+              "method": "normalized",
+              "token": "escapeplan"
+            },
+            "hasWikiDescription": true
+          }
+        ],
+        "arammayhem_win_rate": []
+      }
+    },
+    {
+      "augmentId": "FinalForm",
+      "cdragon": {
+        "augmentNameId": "FinalForm",
+        "name": "Final Form",
+        "slug": "final-form",
+        "rarity": "prismatic"
+      },
+      "sources": {
+        "internal_augments": [
+          {
+            "sourceKey": "final-form",
+            "name": "Final Form",
+            "match": {
+              "method": "normalized",
+              "token": "finalform"
+            },
+            "slug": "final-form",
+            "rarity": "prismatic",
+            "lifecycle": "removed",
+            "hasWikiDescription": true
+          }
+        ],
+        "wiki": [
+          {
+            "sourceKey": "Final Form",
+            "name": "Final Form",
+            "match": {
+              "method": "normalized",
+              "token": "finalform"
+            },
+            "hasWikiDescription": true
+          }
+        ],
+        "arammayhem_win_rate": []
+      }
+    },
+    {
+      "augmentId": "FishBait",
+      "cdragon": {
+        "augmentNameId": "FishBait",
+        "name": "Shark Bait",
+        "slug": "fish-bait",
+        "rarity": "gold"
+      },
+      "sources": {
+        "internal_augments": [
+          {
+            "sourceKey": "shark-bait",
+            "name": "Shark Bait",
+            "match": {
+              "method": "normalized",
+              "token": "sharkbait"
+            },
+            "slug": "shark-bait",
+            "rarity": "gold",
+            "lifecycle": "removed",
+            "hasWikiDescription": true
+          }
+        ],
+        "wiki": [
+          {
+            "sourceKey": "Shark Bait",
+            "name": "Shark Bait",
+            "match": {
+              "method": "normalized",
+              "token": "sharkbait"
+            },
+            "hasWikiDescription": true
+          }
+        ],
+        "arammayhem_win_rate": []
+      }
+    },
+    {
+      "augmentId": "Flash2",
+      "cdragon": {
+        "augmentNameId": "Flash2",
+        "name": "Flash 2",
+        "slug": "flash2",
+        "rarity": "silver"
+      },
+      "sources": {
+        "internal_augments": [
+          {
+            "sourceKey": "flash-2",
+            "name": "Flash 2",
+            "match": {
+              "method": "normalized",
+              "token": "flash2"
+            },
+            "slug": "flash-2",
+            "rarity": "silver",
+            "lifecycle": "removed",
+            "hasWikiDescription": true
+          }
+        ],
+        "wiki": [
+          {
+            "sourceKey": "Flash 2",
+            "name": "Flash 2",
+            "match": {
+              "method": "normalized",
+              "token": "flash2"
+            },
+            "hasWikiDescription": true
+          }
+        ],
+        "arammayhem_win_rate": []
+      }
+    },
+    {
+      "augmentId": "Gash",
+      "cdragon": {
+        "augmentNameId": "Gash",
+        "name": "Gash",
+        "slug": "gash",
+        "rarity": "prismatic"
+      },
+      "sources": {
+        "internal_augments": [
+          {
+            "sourceKey": "gash",
+            "name": "Gash",
+            "match": {
+              "method": "normalized",
+              "token": "gash"
+            },
+            "slug": "gash",
+            "rarity": "prismatic",
+            "lifecycle": "removed",
+            "hasWikiDescription": true
+          }
+        ],
+        "wiki": [
+          {
+            "sourceKey": "Gash",
+            "name": "Gash",
+            "match": {
+              "method": "normalized",
+              "token": "gash"
+            },
+            "hasWikiDescription": true
+          }
+        ],
+        "arammayhem_win_rate": []
+      }
+    },
+    {
+      "augmentId": "GlassCannon",
+      "cdragon": {
+        "augmentNameId": "GlassCannon",
+        "name": "Glass Cannon",
+        "slug": "glass-cannon",
+        "rarity": "prismatic"
+      },
+      "sources": {
+        "internal_augments": [
+          {
+            "sourceKey": "glass-cannon",
+            "name": "Glass Cannon",
+            "match": {
+              "method": "normalized",
+              "token": "glasscannon"
+            },
+            "slug": "glass-cannon",
+            "rarity": "prismatic",
+            "lifecycle": "removed",
+            "hasWikiDescription": true
+          }
+        ],
+        "wiki": [
+          {
+            "sourceKey": "Glass Cannon",
+            "name": "Glass Cannon",
+            "match": {
+              "method": "normalized",
+              "token": "glasscannon"
+            },
+            "hasWikiDescription": true
+          }
+        ],
+        "arammayhem_win_rate": []
+      }
+    },
+    {
+      "augmentId": "GoldenSnowball",
+      "cdragon": {
+        "augmentNameId": "GoldenSnowball",
+        "name": "Holy Snowball",
+        "slug": "golden-snowball",
+        "rarity": "prismatic"
+      },
+      "sources": {
+        "internal_augments": [
+          {
+            "sourceKey": "holy-snowball",
+            "name": "Holy Snowball",
+            "match": {
+              "method": "normalized",
+              "token": "holysnowball"
+            },
+            "slug": "holy-snowball",
+            "rarity": "prismatic",
+            "lifecycle": "removed",
+            "hasWikiDescription": true
+          }
+        ],
+        "wiki": [
+          {
+            "sourceKey": "Holy Snowball",
+            "name": "Holy Snowball",
+            "match": {
+              "method": "normalized",
+              "token": "holysnowball"
+            },
+            "hasWikiDescription": true
+          }
+        ],
+        "arammayhem_win_rate": []
+      }
+    },
+    {
+      "augmentId": "Goldrend",
+      "cdragon": {
+        "augmentNameId": "Goldrend",
+        "name": "Goldrend",
+        "slug": "goldrend",
+        "rarity": "prismatic"
+      },
+      "sources": {
+        "internal_augments": [
+          {
+            "sourceKey": "goldrend",
+            "name": "Goldrend",
+            "match": {
+              "method": "normalized",
+              "token": "goldrend"
+            },
+            "slug": "goldrend",
+            "rarity": "prismatic",
+            "lifecycle": "removed",
+            "hasWikiDescription": true
+          }
+        ],
+        "wiki": [
+          {
+            "sourceKey": "Goldrend",
+            "name": "Goldrend",
+            "match": {
+              "method": "normalized",
+              "token": "goldrend"
+            },
+            "hasWikiDescription": true
+          }
+        ],
+        "arammayhem_win_rate": []
+      }
+    },
+    {
+      "augmentId": "GrandmasChiliOil",
+      "cdragon": {
+        "augmentNameId": "GrandmasChiliOil",
+        "name": "Grandma's Chili Oil",
+        "slug": "grandmas-chili-oil",
+        "rarity": "gold"
+      },
+      "sources": {
+        "internal_augments": [
+          {
+            "sourceKey": "grandmas-chili-oil",
+            "name": "Grandma's Chili Oil",
+            "match": {
+              "method": "normalized",
+              "token": "grandmaschilioil"
+            },
+            "slug": "grandmas-chili-oil",
+            "rarity": "gold",
+            "lifecycle": "removed",
+            "hasWikiDescription": true
+          }
+        ],
+        "wiki": [
+          {
+            "sourceKey": "Grandma's Chili Oil",
+            "name": "Grandma's Chili Oil",
+            "match": {
+              "method": "normalized",
+              "token": "grandmaschilioil"
+            },
+            "hasWikiDescription": true
+          }
+        ],
+        "arammayhem_win_rate": []
+      }
+    },
+    {
+      "augmentId": "GrowthSpurt",
+      "cdragon": {
+        "augmentNameId": "GrowthSpurt",
+        "name": "Growth Spurt",
+        "slug": "growth-spurt",
+        "rarity": "gold"
+      },
+      "sources": {
+        "internal_augments": [
+          {
+            "sourceKey": "growth-spurt",
+            "name": "Growth Spurt",
+            "match": {
+              "method": "normalized",
+              "token": "growthspurt"
+            },
+            "slug": "growth-spurt",
+            "rarity": "gold",
+            "lifecycle": "removed",
+            "hasWikiDescription": true
+          }
+        ],
+        "wiki": [
+          {
+            "sourceKey": "Growth Spurt",
+            "name": "Growth Spurt",
+            "match": {
+              "method": "normalized",
+              "token": "growthspurt"
+            },
+            "hasWikiDescription": true
+          }
+        ],
+        "arammayhem_win_rate": []
+      }
+    },
+    {
+      "augmentId": "HandOfBaron",
+      "cdragon": {
+        "augmentNameId": "HandOfBaron",
+        "name": "Hand of Baron",
+        "slug": "hand-of-baron",
+        "rarity": "prismatic"
+      },
+      "sources": {
+        "internal_augments": [
+          {
+            "sourceKey": "hand-of-baron",
+            "name": "Hand of Baron",
+            "match": {
+              "method": "normalized",
+              "token": "handofbaron"
+            },
+            "slug": "hand-of-baron",
+            "rarity": "prismatic",
+            "lifecycle": "removed",
+            "hasWikiDescription": true
+          }
+        ],
+        "wiki": [
+          {
+            "sourceKey": "Hand of Baron",
+            "name": "Hand of Baron",
+            "match": {
+              "method": "normalized",
+              "token": "handofbaron"
+            },
+            "hasWikiDescription": true
+          }
+        ],
+        "arammayhem_win_rate": []
+      }
+    },
+    {
+      "augmentId": "HatOnAHat",
+      "cdragon": {
+        "augmentNameId": "HatOnAHat",
+        "name": "Hat on a Hat",
+        "slug": "hat-on-a-hat",
+        "rarity": "silver"
+      },
+      "sources": {
+        "internal_augments": [
+          {
+            "sourceKey": "hat-on-a-hat",
+            "name": "Hat on a Hat",
+            "match": {
+              "method": "normalized",
+              "token": "hatonahat"
+            },
+            "slug": "hat-on-a-hat",
+            "rarity": "silver",
+            "lifecycle": "removed",
+            "hasWikiDescription": true
+          }
+        ],
+        "wiki": [
+          {
+            "sourceKey": "Hat on a Hat",
+            "name": "Hat on a Hat",
+            "match": {
+              "method": "normalized",
+              "token": "hatonahat"
+            },
+            "hasWikiDescription": true
+          }
+        ],
+        "arammayhem_win_rate": []
+      }
+    },
+    {
+      "augmentId": "HextechSoul",
+      "cdragon": {
+        "augmentNameId": "HextechSoul",
+        "name": "Hextech Soul",
+        "slug": "hextech-soul",
+        "rarity": "silver"
+      },
+      "sources": {
+        "internal_augments": [
+          {
+            "sourceKey": "hextech-soul",
+            "name": "Hextech Soul",
+            "match": {
+              "method": "normalized",
+              "token": "hextechsoul"
+            },
+            "slug": "hextech-soul",
+            "rarity": "silver",
+            "lifecycle": "removed",
+            "hasWikiDescription": true
+          }
+        ],
+        "wiki": [
+          {
+            "sourceKey": "Hextech Soul",
+            "name": "Hextech Soul",
+            "match": {
+              "method": "normalized",
+              "token": "hextechsoul"
+            },
+            "hasWikiDescription": true
+          }
+        ],
+        "arammayhem_win_rate": []
+      }
+    },
+    {
+      "augmentId": "InfiniteRecursion",
+      "cdragon": {
+        "augmentNameId": "InfiniteRecursion",
+        "name": "Infinite Recursion",
+        "slug": "infinite-recursion",
+        "rarity": "prismatic"
+      },
+      "sources": {
+        "internal_augments": [
+          {
+            "sourceKey": "infinite-recursion",
+            "name": "Infinite Recursion",
+            "match": {
+              "method": "normalized",
+              "token": "infiniterecursion"
+            },
+            "slug": "infinite-recursion",
+            "rarity": "prismatic",
+            "lifecycle": "removed",
+            "hasWikiDescription": true
+          }
+        ],
+        "wiki": [
+          {
+            "sourceKey": "Infinite Recursion",
+            "name": "Infinite Recursion",
+            "match": {
+              "method": "normalized",
+              "token": "infiniterecursion"
+            },
+            "hasWikiDescription": true
+          }
+        ],
+        "arammayhem_win_rate": []
+      }
+    },
+    {
+      "augmentId": "KillSecured",
+      "cdragon": {
+        "augmentNameId": "KillSecured",
+        "name": "Kill Secured",
+        "slug": "kill-secured",
+        "rarity": "silver"
+      },
+      "sources": {
+        "internal_augments": [
+          {
+            "sourceKey": "kill-secured",
+            "name": "Kill Secured",
+            "match": {
+              "method": "normalized",
+              "token": "killsecured"
+            },
+            "slug": "kill-secured",
+            "rarity": "silver",
+            "lifecycle": "removed",
+            "hasWikiDescription": true
+          }
+        ],
+        "wiki": [
+          {
+            "sourceKey": "Kill Secured",
+            "name": "Kill Secured",
+            "match": {
+              "method": "normalized",
+              "token": "killsecured"
+            },
+            "hasWikiDescription": true
+          }
+        ],
+        "arammayhem_win_rate": []
+      }
+    },
+    {
+      "augmentId": "KingMe",
+      "cdragon": {
+        "augmentNameId": "KingMe",
+        "name": "King Me",
+        "slug": "king-me",
+        "rarity": "prismatic"
+      },
+      "sources": {
+        "internal_augments": [
+          {
+            "sourceKey": "king-me",
+            "name": "King Me",
+            "match": {
+              "method": "normalized",
+              "token": "kingme"
+            },
+            "slug": "king-me",
+            "rarity": "prismatic",
+            "lifecycle": "removed",
+            "hasWikiDescription": true
+          }
+        ],
+        "wiki": [
+          {
+            "sourceKey": "King Me",
+            "name": "King Me",
+            "match": {
+              "method": "normalized",
+              "token": "kingme"
+            },
+            "hasWikiDescription": true
+          }
+        ],
+        "arammayhem_win_rate": []
+      }
+    },
+    {
+      "augmentId": "LaserHeal",
+      "cdragon": {
+        "augmentNameId": "LaserHeal",
+        "name": "Laser Heal",
+        "slug": "laser-heal",
+        "rarity": "prismatic"
+      },
+      "sources": {
+        "internal_augments": [
+          {
+            "sourceKey": "laser-heal",
+            "name": "Laser Heal",
+            "match": {
+              "method": "normalized",
+              "token": "laserheal"
+            },
+            "slug": "laser-heal",
+            "rarity": "prismatic",
+            "lifecycle": "removed",
+            "hasWikiDescription": true
+          }
+        ],
+        "wiki": [
+          {
+            "sourceKey": "Laser Heal",
+            "name": "Laser Heal",
+            "match": {
+              "method": "normalized",
+              "token": "laserheal"
+            },
+            "hasWikiDescription": true
+          }
+        ],
+        "arammayhem_win_rate": []
+      }
+    },
+    {
+      "augmentId": "LittleExtraHelp",
+      "cdragon": {
+        "augmentNameId": "LittleExtraHelp",
+        "name": "Lil' Extra Help",
+        "slug": "little-extra-help",
+        "rarity": "gold"
+      },
+      "sources": {
+        "internal_augments": [
+          {
+            "sourceKey": "lil-extra-help",
+            "name": "Lil' Extra Help",
+            "match": {
+              "method": "normalized",
+              "token": "lilextrahelp"
+            },
+            "slug": "lil-extra-help",
+            "rarity": "gold",
+            "lifecycle": "removed",
+            "hasWikiDescription": true
+          }
+        ],
+        "wiki": [
+          {
+            "sourceKey": "Lil' Extra Help",
+            "name": "Lil' Extra Help",
+            "match": {
+              "method": "normalized",
+              "token": "lilextrahelp"
+            },
+            "hasWikiDescription": true
+          }
+        ],
+        "arammayhem_win_rate": []
+      }
+    },
+    {
+      "augmentId": "MercysStrike",
+      "cdragon": {
+        "augmentNameId": "MercysStrike",
+        "name": "Mercy's Strike",
+        "slug": "mercys-strike",
+        "rarity": "gold"
+      },
+      "sources": {
+        "internal_augments": [
+          {
+            "sourceKey": "mercys-strike",
+            "name": "Mercy's Strike",
+            "match": {
+              "method": "normalized",
+              "token": "mercysstrike"
+            },
+            "slug": "mercys-strike",
+            "rarity": "gold",
+            "lifecycle": "removed",
+            "hasWikiDescription": true
+          }
+        ],
+        "wiki": [
+          {
+            "sourceKey": "Mercy's Strike",
+            "name": "Mercy's Strike",
+            "match": {
+              "method": "normalized",
+              "token": "mercysstrike"
+            },
+            "hasWikiDescription": true
+          }
+        ],
+        "arammayhem_win_rate": []
+      }
+    },
+    {
+      "augmentId": "MightyShield",
+      "cdragon": {
+        "augmentNameId": "MightyShield",
+        "name": "Mighty Shield",
+        "slug": "mighty-shield",
+        "rarity": "silver"
+      },
+      "sources": {
+        "internal_augments": [
+          {
+            "sourceKey": "mighty-shield",
+            "name": "Mighty Shield",
+            "match": {
+              "method": "normalized",
+              "token": "mightyshield"
+            },
+            "slug": "mighty-shield",
+            "rarity": "silver",
+            "lifecycle": "removed",
+            "hasWikiDescription": true
+          }
+        ],
+        "wiki": [
+          {
+            "sourceKey": "Mighty Shield",
+            "name": "Mighty Shield",
+            "match": {
+              "method": "normalized",
+              "token": "mightyshield"
+            },
+            "hasWikiDescription": true
+          }
+        ],
+        "arammayhem_win_rate": []
+      }
+    },
+    {
+      "augmentId": "Missile_Split",
+      "cdragon": {
+        "augmentNameId": "Missile_Split",
+        "name": "Spell Split",
+        "slug": "missile_-split",
+        "rarity": "prismatic"
+      },
+      "sources": {
+        "internal_augments": [
+          {
+            "sourceKey": "spell-split",
+            "name": "Spellsplit",
+            "match": {
+              "method": "normalized",
+              "token": "spellsplit"
+            },
+            "slug": "spell-split",
+            "rarity": "prismatic",
+            "lifecycle": "removed",
+            "hasWikiDescription": true
+          }
+        ],
+        "wiki": [
+          {
+            "sourceKey": "Spellsplit",
+            "name": "Spellsplit",
+            "match": {
+              "method": "normalized",
+              "token": "spellsplit"
+            },
+            "hasWikiDescription": true
+          }
+        ],
+        "arammayhem_win_rate": []
+      }
+    },
+    {
+      "augmentId": "NatureIsHealing",
+      "cdragon": {
+        "augmentNameId": "NatureIsHealing",
+        "name": "Nature is Healing",
+        "slug": "nature-is-healing",
+        "rarity": "gold"
+      },
+      "sources": {
+        "internal_augments": [
+          {
+            "sourceKey": "nature-is-healing",
+            "name": "Nature is Healing",
+            "match": {
+              "method": "normalized",
+              "token": "natureishealing"
+            },
+            "slug": "nature-is-healing",
+            "rarity": "gold",
+            "lifecycle": "removed",
+            "hasWikiDescription": true
+          }
+        ],
+        "wiki": [
+          {
+            "sourceKey": "Nature is Healing",
+            "name": "Nature is Healing",
+            "match": {
+              "method": "normalized",
+              "token": "natureishealing"
+            },
+            "hasWikiDescription": true
+          }
+        ],
+        "arammayhem_win_rate": []
+      }
+    },
+    {
+      "augmentId": "Nightstalking",
+      "cdragon": {
+        "augmentNameId": "Nightstalking",
+        "name": "Nightstalking",
+        "slug": "nightstalking",
+        "rarity": "gold"
+      },
+      "sources": {
+        "internal_augments": [
+          {
+            "sourceKey": "nightstalking",
+            "name": "Nightstalking",
+            "match": {
+              "method": "normalized",
+              "token": "nightstalking"
+            },
+            "slug": "nightstalking",
+            "rarity": "gold",
+            "lifecycle": "removed",
+            "hasWikiDescription": true
+          }
+        ],
+        "wiki": [
+          {
+            "sourceKey": "Nightstalking",
+            "name": "Nightstalking",
+            "match": {
+              "method": "normalized",
+              "token": "nightstalking"
+            },
+            "hasWikiDescription": true
+          }
+        ],
+        "arammayhem_win_rate": []
+      }
+    },
+    {
+      "augmentId": "OminousPact",
+      "cdragon": {
+        "augmentNameId": "OminousPact",
+        "name": "Ominous Pact",
+        "slug": "ominous-pact",
+        "rarity": "prismatic"
+      },
+      "sources": {
+        "internal_augments": [
+          {
+            "sourceKey": "ominous-pact",
+            "name": "Ominous Pact",
+            "match": {
+              "method": "normalized",
+              "token": "ominouspact"
+            },
+            "slug": "ominous-pact",
+            "rarity": "prismatic",
+            "lifecycle": "removed",
+            "hasWikiDescription": true
+          }
+        ],
+        "wiki": [
+          {
+            "sourceKey": "Ominous Pact",
+            "name": "Ominous Pact",
+            "match": {
+              "method": "normalized",
+              "token": "ominouspact"
+            },
+            "hasWikiDescription": true
+          }
+        ],
+        "arammayhem_win_rate": []
+      }
+    },
+    {
+      "augmentId": "Overextender",
+      "cdragon": {
+        "augmentNameId": "Overextender",
+        "name": "Overextender",
+        "slug": "overextender",
+        "rarity": "gold"
+      },
+      "sources": {
+        "internal_augments": [
+          {
+            "sourceKey": "overextender",
+            "name": "Overextender",
+            "match": {
+              "method": "normalized",
+              "token": "overextender"
+            },
+            "slug": "overextender",
+            "rarity": "gold",
+            "lifecycle": "removed",
+            "hasWikiDescription": true
+          }
+        ],
+        "wiki": [
+          {
+            "sourceKey": "Overextender",
+            "name": "Overextender",
+            "match": {
+              "method": "normalized",
+              "token": "overextender"
+            },
+            "hasWikiDescription": true
+          }
+        ],
+        "arammayhem_win_rate": []
+      }
+    },
+    {
+      "augmentId": "PinballSnowball",
+      "cdragon": {
+        "augmentNameId": "PinballSnowball",
+        "name": "Pinball",
+        "slug": "pinball-snowball",
+        "rarity": "gold"
+      },
+      "sources": {
+        "internal_augments": [
+          {
+            "sourceKey": "pinball",
+            "name": "Pinball",
+            "match": {
+              "method": "normalized",
+              "token": "pinball"
+            },
+            "slug": "pinball",
+            "rarity": "gold",
+            "lifecycle": "removed",
+            "hasWikiDescription": true
+          }
+        ],
+        "wiki": [
+          {
+            "sourceKey": "Pinball",
+            "name": "Pinball",
+            "match": {
+              "method": "normalized",
+              "token": "pinball"
+            },
+            "hasWikiDescription": true
+          }
+        ],
+        "arammayhem_win_rate": []
+      }
+    },
+    {
+      "augmentId": "Poltergeist",
+      "cdragon": {
+        "augmentNameId": "Poltergeist",
+        "name": "Poltergeist",
+        "slug": "poltergeist",
+        "rarity": "silver"
+      },
+      "sources": {
+        "internal_augments": [
+          {
+            "sourceKey": "poltergeist",
+            "name": "Poltergeist",
+            "match": {
+              "method": "normalized",
+              "token": "poltergeist"
+            },
+            "slug": "poltergeist",
+            "rarity": "silver",
+            "lifecycle": "removed",
+            "hasWikiDescription": true
+          }
+        ],
+        "wiki": [
+          {
+            "sourceKey": "Poltergeist",
+            "name": "Poltergeist",
+            "match": {
+              "method": "normalized",
+              "token": "poltergeist"
+            },
+            "hasWikiDescription": true
+          }
+        ],
+        "arammayhem_win_rate": []
+      }
+    },
+    {
+      "augmentId": "PoroCharge_Active",
+      "cdragon": {
+        "augmentNameId": "PoroCharge_Active",
+        "name": "Poro Stampede",
+        "slug": "poro-charge_-active",
+        "rarity": "prismatic"
+      },
+      "sources": {
+        "internal_augments": [
+          {
+            "sourceKey": "poro-stampede",
+            "name": "Poro Stampede",
+            "match": {
+              "method": "normalized",
+              "token": "porostampede"
+            },
+            "slug": "poro-stampede",
+            "rarity": "prismatic",
+            "lifecycle": "removed",
+            "hasWikiDescription": true
+          }
+        ],
+        "wiki": [
+          {
+            "sourceKey": "Poro Stampede",
+            "name": "Poro Stampede",
+            "match": {
+              "method": "normalized",
+              "token": "porostampede"
+            },
+            "hasWikiDescription": true
+          }
+        ],
+        "arammayhem_win_rate": []
+      }
+    },
+    {
+      "augmentId": "PressureCooker",
+      "cdragon": {
+        "augmentNameId": "PressureCooker",
+        "name": "Pressure Cooker",
+        "slug": "pressure-cooker",
+        "rarity": "gold"
+      },
+      "sources": {
+        "internal_augments": [
+          {
+            "sourceKey": "pressure-cooker",
+            "name": "Pressure Cooker",
+            "match": {
+              "method": "normalized",
+              "token": "pressurecooker"
+            },
+            "slug": "pressure-cooker",
+            "rarity": "gold",
+            "lifecycle": "removed",
+            "hasWikiDescription": true
+          }
+        ],
+        "wiki": [
+          {
+            "sourceKey": "Pressure Cooker",
+            "name": "Pressure Cooker",
+            "match": {
+              "method": "normalized",
+              "token": "pressurecooker"
+            },
+            "hasWikiDescription": true
+          }
+        ],
+        "arammayhem_win_rate": []
+      }
+    },
+    {
+      "augmentId": "PromQueen",
+      "cdragon": {
+        "augmentNameId": "PromQueen",
+        "name": "Prom Queen",
+        "slug": "prom-queen",
+        "rarity": "prismatic"
+      },
+      "sources": {
+        "internal_augments": [
+          {
+            "sourceKey": "prom-queen",
+            "name": "Prom Queen",
+            "match": {
+              "method": "normalized",
+              "token": "promqueen"
+            },
+            "slug": "prom-queen",
+            "rarity": "prismatic",
+            "lifecycle": "removed",
+            "hasWikiDescription": true
+          }
+        ],
+        "wiki": [
+          {
+            "sourceKey": "Prom Queen",
+            "name": "Prom Queen",
+            "match": {
+              "method": "normalized",
+              "token": "promqueen"
+            },
+            "hasWikiDescription": true
+          }
+        ],
+        "arammayhem_win_rate": []
+      }
+    },
+    {
+      "augmentId": "RedEnvelopes",
+      "cdragon": {
+        "augmentNameId": "RedEnvelopes",
+        "name": "Red Envelopes",
+        "slug": "red-envelopes",
+        "rarity": "gold"
+      },
+      "sources": {
+        "internal_augments": [
+          {
+            "sourceKey": "red-envelopes",
+            "name": "Red Envelopes",
+            "match": {
+              "method": "normalized",
+              "token": "redenvelopes"
+            },
+            "slug": "red-envelopes",
+            "rarity": "prismatic",
+            "lifecycle": "removed",
+            "hasWikiDescription": true
+          }
+        ],
+        "wiki": [
+          {
+            "sourceKey": "Red Envelopes",
+            "name": "Red Envelopes",
+            "match": {
+              "method": "normalized",
+              "token": "redenvelopes"
+            },
+            "hasWikiDescription": true
+          }
+        ],
+        "arammayhem_win_rate": []
+      }
+    },
+    {
+      "augmentId": "SharkTempest",
+      "cdragon": {
+        "augmentNameId": "SharkTempest",
+        "name": "Shark Tempest",
+        "slug": "shark-tempest",
+        "rarity": "gold"
+      },
+      "sources": {
+        "internal_augments": [
+          {
+            "sourceKey": "shark-tempest",
+            "name": "Shark Tempest",
+            "match": {
+              "method": "normalized",
+              "token": "sharktempest"
+            },
+            "slug": "shark-tempest",
+            "rarity": "gold",
+            "lifecycle": "removed",
+            "hasWikiDescription": true
+          }
+        ],
+        "wiki": [
+          {
+            "sourceKey": "Shark Tempest",
+            "name": "Shark Tempest",
+            "match": {
+              "method": "normalized",
+              "token": "sharktempest"
+            },
+            "hasWikiDescription": true
+          }
+        ],
+        "arammayhem_win_rate": []
+      }
+    },
+    {
+      "augmentId": "ShrinkEngine",
+      "cdragon": {
+        "augmentNameId": "ShrinkEngine",
+        "name": "Shrink Engine",
+        "slug": "shrink-engine",
+        "rarity": "gold"
+      },
+      "sources": {
+        "internal_augments": [
+          {
+            "sourceKey": "shrink-engine",
+            "name": "Shrink Engine",
+            "match": {
+              "method": "normalized",
+              "token": "shrinkengine"
+            },
+            "slug": "shrink-engine",
+            "rarity": "gold",
+            "lifecycle": "removed",
+            "hasWikiDescription": true
+          }
+        ],
+        "wiki": [
+          {
+            "sourceKey": "Shrink Engine",
+            "name": "Shrink Engine",
+            "match": {
+              "method": "normalized",
+              "token": "shrinkengine"
+            },
+            "hasWikiDescription": true
+          }
+        ],
+        "arammayhem_win_rate": []
+      }
+    },
+    {
+      "augmentId": "SnowballRoulette",
+      "cdragon": {
+        "augmentNameId": "SnowballRoulette",
+        "name": "Snowball Roulette",
+        "slug": "snowball-roulette",
+        "rarity": "gold"
+      },
+      "sources": {
+        "internal_augments": [
+          {
+            "sourceKey": "snowball-roulette",
+            "name": "Snowball Roulette",
+            "match": {
+              "method": "normalized",
+              "token": "snowballroulette"
+            },
+            "slug": "snowball-roulette",
+            "rarity": "gold",
+            "lifecycle": "removed",
+            "hasWikiDescription": true
+          }
+        ],
+        "wiki": [
+          {
+            "sourceKey": "Snowball Roulette",
+            "name": "Snowball Roulette",
+            "match": {
+              "method": "normalized",
+              "token": "snowballroulette"
+            },
+            "hasWikiDescription": true
+          }
+        ],
+        "arammayhem_win_rate": []
+      }
+    },
+    {
+      "augmentId": "SnowballUpgrade",
+      "cdragon": {
+        "augmentNameId": "SnowballUpgrade",
+        "name": "Snowball Upgrade",
+        "slug": "snowball-upgrade",
+        "rarity": "gold"
+      },
+      "sources": {
+        "internal_augments": [
+          {
+            "sourceKey": "snowball-upgrade",
+            "name": "Snowball Upgrade",
+            "match": {
+              "method": "normalized",
+              "token": "snowballupgrade"
+            },
+            "slug": "snowball-upgrade",
+            "rarity": "gold",
+            "lifecycle": "removed",
+            "hasWikiDescription": true
+          }
+        ],
+        "wiki": [
+          {
+            "sourceKey": "Snowball Upgrade",
+            "name": "Snowball Upgrade",
+            "match": {
+              "method": "normalized",
+              "token": "snowballupgrade"
+            },
+            "hasWikiDescription": true
+          }
+        ],
+        "arammayhem_win_rate": []
+      }
+    },
+    {
+      "augmentId": "Snowbomb",
+      "cdragon": {
+        "augmentNameId": "Snowbomb",
+        "name": "Snowblast",
+        "slug": "snowbomb",
+        "rarity": "gold"
+      },
+      "sources": {
+        "internal_augments": [
+          {
+            "sourceKey": "snowblast",
+            "name": "Snowblast",
+            "match": {
+              "method": "normalized",
+              "token": "snowblast"
+            },
+            "slug": "snowblast",
+            "rarity": "gold",
+            "lifecycle": "removed",
+            "hasWikiDescription": true
+          }
+        ],
+        "wiki": [
+          {
+            "sourceKey": "Snowblast",
+            "name": "Snowblast",
+            "match": {
+              "method": "normalized",
+              "token": "snowblast"
+            },
+            "hasWikiDescription": true
+          }
+        ],
+        "arammayhem_win_rate": []
+      }
+    },
+    {
+      "augmentId": "Sonata",
+      "cdragon": {
+        "augmentNameId": "Sonata",
+        "name": "Sonata",
+        "slug": "sonata",
+        "rarity": "gold"
+      },
+      "sources": {
+        "internal_augments": [
+          {
+            "sourceKey": "sonata",
+            "name": "Sonata",
+            "match": {
+              "method": "normalized",
+              "token": "sonata"
+            },
+            "slug": "sonata",
+            "rarity": "gold",
+            "lifecycle": "removed",
+            "hasWikiDescription": true
+          }
+        ],
+        "wiki": [
+          {
+            "sourceKey": "Sonata",
+            "name": "Sonata",
+            "match": {
+              "method": "normalized",
+              "token": "sonata"
+            },
+            "hasWikiDescription": true
+          }
+        ],
+        "arammayhem_win_rate": []
+      }
+    },
+    {
+      "augmentId": "SoulEater",
+      "cdragon": {
+        "augmentNameId": "SoulEater",
+        "name": "Soul Eater",
+        "slug": "soul-eater",
+        "rarity": "gold"
+      },
+      "sources": {
+        "internal_augments": [
+          {
+            "sourceKey": "soul-eater",
+            "name": "Soul Eater",
+            "match": {
+              "method": "normalized",
+              "token": "souleater"
+            },
+            "slug": "soul-eater",
+            "rarity": "gold",
+            "lifecycle": "removed",
+            "hasWikiDescription": true
+          }
+        ],
+        "wiki": [
+          {
+            "sourceKey": "Soul Eater",
+            "name": "Soul Eater",
+            "match": {
+              "method": "normalized",
+              "token": "souleater"
+            },
+            "hasWikiDescription": true
+          }
+        ],
+        "arammayhem_win_rate": []
+      }
+    },
+    {
+      "augmentId": "SpellVolley",
+      "cdragon": {
+        "augmentNameId": "SpellVolley",
+        "name": "Tripleshot",
+        "slug": "spell-volley",
+        "rarity": "prismatic"
+      },
+      "sources": {
+        "internal_augments": [
+          {
+            "sourceKey": "tripleshot",
+            "name": "Tripleshot",
+            "match": {
+              "method": "normalized",
+              "token": "tripleshot"
+            },
+            "slug": "tripleshot",
+            "rarity": "prismatic",
+            "lifecycle": "removed",
+            "hasWikiDescription": true
+          }
+        ],
+        "wiki": [
+          {
+            "sourceKey": "Tripleshot",
+            "name": "Tripleshot",
+            "match": {
+              "method": "normalized",
+              "token": "tripleshot"
+            },
+            "hasWikiDescription": true
+          }
+        ],
+        "arammayhem_win_rate": []
+      }
+    },
+    {
+      "augmentId": "SwiftAndSafe",
+      "cdragon": {
+        "augmentNameId": "SwiftAndSafe",
+        "name": "Swift and Safe",
+        "slug": "swift-and-safe",
+        "rarity": "silver"
+      },
+      "sources": {
+        "internal_augments": [
+          {
+            "sourceKey": "swift-and-safe",
+            "name": "Swift and Safe",
+            "match": {
+              "method": "normalized",
+              "token": "swiftandsafe"
+            },
+            "slug": "swift-and-safe",
+            "rarity": "silver",
+            "lifecycle": "removed",
+            "hasWikiDescription": true
+          }
+        ],
+        "wiki": [
+          {
+            "sourceKey": "Swift and Safe",
+            "name": "Swift and Safe",
+            "match": {
+              "method": "normalized",
+              "token": "swiftandsafe"
+            },
+            "hasWikiDescription": true
+          }
+        ],
+        "arammayhem_win_rate": []
+      }
+    },
+    {
+      "augmentId": "TitansPulse",
+      "cdragon": {
+        "augmentNameId": "TitansPulse",
+        "name": "Stay Resolute",
+        "slug": "titans-pulse",
+        "rarity": "silver"
+      },
+      "sources": {
+        "internal_augments": [
+          {
+            "sourceKey": "stay-resolute",
+            "name": "Stay Resolute",
+            "match": {
+              "method": "normalized",
+              "token": "stayresolute"
+            },
+            "slug": "stay-resolute",
+            "rarity": "silver",
+            "lifecycle": "removed",
+            "hasWikiDescription": true
+          }
+        ],
+        "wiki": [
+          {
+            "sourceKey": "Stay Resolute",
+            "name": "Stay Resolute",
+            "match": {
+              "method": "normalized",
+              "token": "stayresolute"
+            },
+            "hasWikiDescription": true
+          }
+        ],
+        "arammayhem_win_rate": []
+      }
+    },
+    {
+      "augmentId": "TrainOfTheDead",
+      "cdragon": {
+        "augmentNameId": "TrainOfTheDead",
+        "name": "Final City Transit",
+        "slug": "train-of-the-dead",
+        "rarity": "gold"
+      },
+      "sources": {
+        "internal_augments": [
+          {
+            "sourceKey": "final-city-transit",
+            "name": "Final City Transit",
+            "match": {
+              "method": "normalized",
+              "token": "finalcitytransit"
+            },
+            "slug": "final-city-transit",
+            "rarity": "gold",
+            "lifecycle": "removed",
+            "hasWikiDescription": true
+          }
+        ],
+        "wiki": [
+          {
+            "sourceKey": "Final City Transit",
+            "name": "Final City Transit",
+            "match": {
+              "method": "normalized",
+              "token": "finalcitytransit"
+            },
+            "hasWikiDescription": true
+          }
+        ],
+        "arammayhem_win_rate": []
+      }
+    },
+    {
+      "augmentId": "Twinfire",
+      "cdragon": {
+        "augmentNameId": "Twinfire",
+        "name": "Twin Fire",
+        "slug": "twinfire",
+        "rarity": "silver"
+      },
+      "sources": {
+        "internal_augments": [
+          {
+            "sourceKey": "twin-fire",
+            "name": "Twin Fire",
+            "match": {
+              "method": "normalized",
+              "token": "twinfire"
+            },
+            "slug": "twin-fire",
+            "rarity": "silver",
+            "lifecycle": "removed",
+            "hasWikiDescription": true
+          }
+        ],
+        "wiki": [
+          {
+            "sourceKey": "Twin Fire",
+            "name": "Twin Fire",
+            "match": {
+              "method": "normalized",
+              "token": "twinfire"
+            },
+            "hasWikiDescription": true
+          }
+        ],
+        "arammayhem_win_rate": []
+      }
+    },
+    {
+      "augmentId": "UltimateAwakening",
+      "cdragon": {
+        "augmentNameId": "UltimateAwakening",
+        "name": "Ultimate Awakening",
+        "slug": "ultimate-awakening",
+        "rarity": "prismatic"
+      },
+      "sources": {
+        "internal_augments": [
+          {
+            "sourceKey": "ultimate-awakening",
+            "name": "Ultimate Awakening",
+            "match": {
+              "method": "normalized",
+              "token": "ultimateawakening"
+            },
+            "slug": "ultimate-awakening",
+            "rarity": "prismatic",
+            "lifecycle": "removed",
+            "hasWikiDescription": true
+          }
+        ],
+        "wiki": [
+          {
+            "sourceKey": "Ultimate Awakening",
+            "name": "Ultimate Awakening",
+            "match": {
+              "method": "normalized",
+              "token": "ultimateawakening"
+            },
+            "hasWikiDescription": true
+          }
+        ],
+        "arammayhem_win_rate": []
+      }
+    },
+    {
+      "augmentId": "Upgrade_MikaelsBlessing",
+      "cdragon": {
+        "augmentNameId": "Upgrade_MikaelsBlessing",
+        "name": "Upgrade Mikael's Blessing",
+        "slug": "upgrade_-mikaels-blessing",
+        "rarity": "prismatic"
+      },
+      "sources": {
+        "internal_augments": [
+          {
+            "sourceKey": "upgrade-mikaels-blessing",
+            "name": "Upgrade Mikael's Blessing",
+            "match": {
+              "method": "normalized",
+              "token": "upgrademikaelsblessing"
+            },
+            "slug": "upgrade-mikaels-blessing",
+            "rarity": "prismatic",
+            "lifecycle": "removed",
+            "hasWikiDescription": true
+          }
+        ],
+        "wiki": [
+          {
+            "sourceKey": "Upgrade Mikael's Blessing",
+            "name": "Upgrade Mikael's Blessing",
+            "match": {
+              "method": "normalized",
+              "token": "upgrademikaelsblessing"
+            },
+            "hasWikiDescription": true
+          }
+        ],
+        "arammayhem_win_rate": []
+      }
+    },
+    {
+      "augmentId": "Upgrade_SwordOfBlossom",
+      "cdragon": {
+        "augmentNameId": "Upgrade_SwordOfBlossom",
+        "name": "Upgrade Sword of Blossoming Dawn",
+        "slug": "upgrade_-sword-of-blossom",
+        "rarity": "prismatic"
+      },
+      "sources": {
+        "internal_augments": [
+          {
+            "sourceKey": "upgrade-sword-of-blossoming-dawn",
+            "name": "Upgrade Sword of Blossoming Dawn",
+            "match": {
+              "method": "normalized",
+              "token": "upgradeswordofblossomingdawn"
+            },
+            "slug": "upgrade-sword-of-blossoming-dawn",
+            "rarity": "prismatic",
+            "lifecycle": "removed",
+            "hasWikiDescription": true
+          }
+        ],
+        "wiki": [
+          {
+            "sourceKey": "Upgrade Sword of Blossoming Dawn",
+            "name": "Upgrade Sword of Blossoming Dawn",
+            "match": {
+              "method": "normalized",
+              "token": "upgradeswordofblossomingdawn"
+            },
+            "hasWikiDescription": true
+          }
+        ],
+        "arammayhem_win_rate": []
+      }
+    },
+    {
+      "augmentId": "Upgrade_Thornmail",
+      "cdragon": {
+        "augmentNameId": "Upgrade_Thornmail",
+        "name": "Upgrade Thornmail",
+        "slug": "upgrade_-thornmail",
+        "rarity": "silver"
+      },
+      "sources": {
+        "internal_augments": [
+          {
+            "sourceKey": "upgrade-thornmail",
+            "name": "Upgrade Thornmail",
+            "match": {
+              "method": "normalized",
+              "token": "upgradethornmail"
+            },
+            "slug": "upgrade-thornmail",
+            "rarity": "silver",
+            "lifecycle": "removed",
+            "hasWikiDescription": true
+          }
+        ],
+        "wiki": [
+          {
+            "sourceKey": "Upgrade Thornmail",
+            "name": "Upgrade Thornmail",
+            "match": {
+              "method": "normalized",
+              "token": "upgradethornmail"
+            },
+            "hasWikiDescription": true
+          }
+        ],
+        "arammayhem_win_rate": []
+      }
+    },
+    {
+      "augmentId": "Vampirism",
+      "cdragon": {
+        "augmentNameId": "Vampirism",
+        "name": "Vampirism",
+        "slug": "vampirism",
+        "rarity": "gold"
+      },
+      "sources": {
+        "internal_augments": [
+          {
+            "sourceKey": "vampirism",
+            "name": "Vampirism",
+            "match": {
+              "method": "normalized",
+              "token": "vampirism"
+            },
+            "slug": "vampirism",
+            "rarity": "gold",
+            "lifecycle": "removed",
+            "hasWikiDescription": true
+          }
+        ],
+        "wiki": [
+          {
+            "sourceKey": "Vampirism",
+            "name": "Vampirism",
+            "match": {
+              "method": "normalized",
+              "token": "vampirism"
+            },
+            "hasWikiDescription": true
+          }
+        ],
+        "arammayhem_win_rate": []
+      }
+    },
+    {
+      "augmentId": "VoidDash",
+      "cdragon": {
+        "augmentNameId": "VoidDash",
+        "name": "Void Dash",
+        "slug": "void-dash",
+        "rarity": "gold"
+      },
+      "sources": {
+        "internal_augments": [
+          {
+            "sourceKey": "void-dash",
+            "name": "Void Dash",
+            "match": {
+              "method": "normalized",
+              "token": "voiddash"
+            },
+            "slug": "void-dash",
+            "rarity": "gold",
+            "lifecycle": "removed",
+            "hasWikiDescription": true
+          }
+        ],
+        "wiki": [
+          {
+            "sourceKey": "Void Dash",
+            "name": "Void Dash",
+            "match": {
+              "method": "normalized",
+              "token": "voiddash"
+            },
+            "hasWikiDescription": true
+          }
+        ],
+        "arammayhem_win_rate": []
+      }
+    },
+    {
+      "augmentId": "WindBeneathBlade",
+      "cdragon": {
+        "augmentNameId": "WindBeneathBlade",
+        "name": "Wind Beneath Blade",
+        "slug": "wind-beneath-blade",
+        "rarity": "silver"
+      },
+      "sources": {
+        "internal_augments": [
+          {
+            "sourceKey": "wind-beneath-blade",
+            "name": "Wind Beneath Blade",
+            "match": {
+              "method": "normalized",
+              "token": "windbeneathblade"
+            },
+            "slug": "wind-beneath-blade",
+            "rarity": "silver",
+            "lifecycle": "removed",
+            "hasWikiDescription": true
+          }
+        ],
+        "wiki": [
+          {
+            "sourceKey": "Wind Beneath Blade",
+            "name": "Wind Beneath Blade",
+            "match": {
+              "method": "normalized",
+              "token": "windbeneathblade"
+            },
+            "hasWikiDescription": true
+          }
+        ],
+        "arammayhem_win_rate": []
+      }
+    },
+    {
+      "augmentId": "YouSpinMeRightRound",
+      "cdragon": {
+        "augmentNameId": "YouSpinMeRightRound",
+        "name": "Spin Me Right Round",
+        "slug": "you-spin-me-right-round",
+        "rarity": "silver"
+      },
+      "sources": {
+        "internal_augments": [
+          {
+            "sourceKey": "spin-me-right-round",
+            "name": "Spin Me Right Round",
+            "match": {
+              "method": "normalized",
+              "token": "spinmerightround"
+            },
+            "slug": "spin-me-right-round",
+            "rarity": "silver",
+            "lifecycle": "removed",
+            "hasWikiDescription": true
+          }
+        ],
+        "wiki": [
+          {
+            "sourceKey": "Spin Me Right Round",
+            "name": "Spin Me Right Round",
+            "match": {
+              "method": "normalized",
+              "token": "spinmerightround"
+            },
+            "hasWikiDescription": true
+          }
+        ],
+        "arammayhem_win_rate": []
       }
     }
   ]

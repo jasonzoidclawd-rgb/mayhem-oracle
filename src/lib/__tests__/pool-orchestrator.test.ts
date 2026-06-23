@@ -204,8 +204,8 @@ describe("pool orchestrator — 26.12 availability wiring", () => {
     const expectedReasons = new Map([
       ["slow-and-steady", "candidate_registry_present"],
       ["clown-college", "disabled"],
-      ["adamant", "removed"],
-      ["infinite-recursion", "unverified_legacy"],
+      ["adamant", "disabled"],
+      ["warlock-juicebox", "unverified_legacy"],
     ]);
     const nonOfferable = augmentsData.augments.filter((augment) => expectedReasons.has(augment.slug));
     expect(nonOfferable.length).toBe(expectedReasons.size);

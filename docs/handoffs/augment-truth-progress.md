@@ -612,3 +612,97 @@ Commands run:
 | targeted combo/pool check | PASS (5622 combos, 0 non-`confirmed_live` combo refs) |
 
 P1 COMPLETE — awaiting Claude independent verification and human push gate.
+
+## Step 2 FIX — Mayhem set from kiwi_ stringtable + re-run (codex)
+
+Date: 2026-06-23 (Asia/Taipei)
+
+Scope:
+
+- Fixed `scripts/scrape_mayhem_augments_cdragon.py` so Step 2 builds the Mayhem definition set from current `kiwi_*` stringtable name keys, not `augmentNameId.startswith("ARAM_")`.
+- Preserved the Phase 1 authority model: `kiwi` / registry is definition evidence only; `confirmed_live` still requires wiki/Tencent/telemetry corroboration; kiwi-only rows remain `candidate_registry_present` and non-offerable.
+- Added `availability.signals.kiwi` for auditability without changing the live resolution order.
+- Kept explicit patch-note removals authoritative: `upgrade-sword-of-blossoming-dawn` remains `removed` / non-offerable even though stale registry/wiki text exists.
+
+Step 2 / identity counts:
+
+| Metric | Count |
+| --- | ---: |
+| `kiwi_*` definition tokens | 259 |
+| Base catalog rows | 245 |
+| Reviewed registry-token aliases | 10 |
+| Duplicate ARAM/bare rows disambiguated by preserving `ARAM_` id | 123 |
+| Unmatched kiwi definition tokens left for human review | 14 |
+| Ambiguous kiwi definition tokens | 0 |
+| Identity mapped augmentIds | 238 |
+| Identity unmatched: CDragon / internal / wiki / arammayhem win-rate | 7 / 21 / 20 / 3 |
+
+Reviewed registry-token aliases added for Claude review:
+
+- `alonetime` -> `Snowbomb` (`Snowblast`)
+- `bloodmoney` -> `BloodMoneyBurn` (`Combusting Interest`)
+- `burnbabyburn` -> `PressureCooker` (`Pressure Cooker`)
+- `dimensionshift` -> `DimensionShift_Active` (`Dimension Shift`)
+- `ouchmycoins` -> `ARAM_YowchMyCoins` (`Yowch, My Coins!`)
+- `poroblaster` -> `ARAM_Poro_Blast` (`Poro Blaster`)
+- `porocharge` -> `PoroCharge_Active` (`Poro Stampede`)
+- `setautocast` -> `FullyAutomated` (`Fully Automated`)
+- `vanguard` -> `ARAM_Quickstep` (`Quickstep`)
+- `weeewooweewoo` -> `ARAM_WeeWooWeeWoo` (`Wee Woo Wee Woo`)
+
+Unmatched kiwi definition tokens left non-offerable / report-only:
+
+- `burstingteethcounter`, `dimensionshiftplayerbuff`, `fetch`, `jarvanones`, `onfirebuff`, `porochargefedporoscount`, `setambulancce`, `setdivebomb`, `setfirecracker`, `setgamble`, `setmoney`, `setsnowball`, `setstacking`, `siegeminionaura`
+
+Availability after Step 5 re-run:
+
+| Status | Count |
+| --- | ---: |
+| `confirmed_live` | 195 |
+| `candidate_registry_present` | 39 |
+| `disabled` | 11 |
+| `removed` | 6 |
+| `unverified_legacy` | 16 |
+| `conflict` | 0 |
+
+Authority checks:
+
+- `confirmed_live` rows with kiwi + wiki live corroboration: 195.
+- Kiwi-only/no-wiki candidate rows: 39, all non-offerable.
+- `unverified_legacy` dropped from 64 to 16.
+- `Chain Reaction` (`ChainReaction`) is `confirmed_live`, `flags.lifecycle=active`, offerable.
+- `ARAM_MissingPingAugment` is `candidate_registry_present`, `flags.lifecycle=removed`, non-offerable.
+- `upgrade-sword-of-blossoming-dawn` is `removed`, `flags.lifecycle=removed`, non-offerable; removed sources are `patch_notes,tombstone`.
+- Public augment / pool / item / patch-note boundary check: no `win_rate`, `provenance`, `availability`, `signals`, `dataValues`, `calculations`, `wikiAvailabilityNotes`, or `wikiFetchedAt`.
+
+Combo gate checks after Step 7 re-run:
+
+- `draven`: `chain-reaction=S`, `twin-fire=A`.
+- `vayne`: `chain-reaction=S`, `twin-fire=A`.
+- `riven`: `chain-reaction=S`, `ravenous-bind=S`, `tooth-fairy=A`, `twin-fire=A`.
+- `kled`: `chain-reaction=S`, `ravenous-bind=A`, `tooth-fairy=A`.
+- `jhin` and `ryze` S-tier combo sets differ: `jhinOnly=master-of-duality,tank-it-or-leave-it`; `ryzeOnly=jeweled-gauntlet`.
+
+Commands run:
+
+| Command | Result |
+| --- | --- |
+| `python3 scripts/test_augment_base_catalog.py` | PASS (4 tests) |
+| `python3 scripts/test_augment_identity_resolver.py` | PASS (5 tests) |
+| `python3 scripts/test_assemble_augments.py` | PASS (12 tests) |
+| `python3 scripts/scrape_mayhem_augments_cdragon.py --base-catalog-only` | PASS; wrote 245 base rows from 259 kiwi definition tokens |
+| `python3 scripts/augment_identity_resolver.py` | PASS; mapped 238 augmentIds |
+| `python3 scripts/augment_wiki_feed.py` | PASS; 206 matched augmentIds, 18 wiki-only rows |
+| `python3 scripts/augment_winrate_feed.py` | PASS; 120 augmentIds with win_rate |
+| `python3 scripts/apply_removed_augment_tombstones.py` | PASS; restored explicit removed tombstone/localized fields |
+| `python3 scripts/assemble_augments.py` | PASS; rows=267; availability counts 195 / 39 / 11 / 6 / 16 / 0 |
+| `npm test -- src/__tests__/augment-authority-model.test.ts` | PASS (1 file, 6 tests) |
+| `python3 scripts/generate_pool_rules.py` | PASS; offerable=195, non_offerable=72 |
+| `npm_config_cache=/private/tmp/mayhem-npm-cache npx --yes tsx scripts/generate_internal_combos.ts` | PASS; 8184 combos |
+| `python3 scripts/export_public_catalog.py` | PASS |
+| `npm test` | PASS (28 files, 257 tests) |
+| `npx eslint src scripts` | PASS (exit 0, no output) |
+| `npm run build` | PASS (Next.js build completed, 3321 static pages) |
+| `python3 scripts/export_public_catalog.py && npm test -- src/lib/__tests__/public-data-boundary.test.ts` | PASS (1 file, 4 tests) |
+| `(cd overlay && npm_config_cache=/private/tmp/mayhem-npm-cache npm run build)` | PASS (`sync-data`, `tsc`, Vite build) |
+| `git diff --check` | PASS |

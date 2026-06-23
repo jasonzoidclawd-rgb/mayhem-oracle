@@ -4,97 +4,17 @@
   "source": "lol_wiki",
   "sourceUrl": "https://wiki.leagueoflegends.com/en-us/ARAM:_Mayhem/Augments",
   "counts": {
-    "existence": 110,
-    "rarity": 1,
-    "availability": 6
+    "existence": 57,
+    "rarity": 2,
+    "availability": 14
   },
   "existence": [
-    {
-      "kind": "wiki_only",
-      "source": "lol_wiki",
-      "sourceKey": "Adamant",
-      "name": "Adamant",
-      "wikiRarity": "silver",
-      "status": "unmatched"
-    },
     {
       "kind": "wiki_only",
       "source": "lol_wiki",
       "sourceKey": "Adaptive Ward",
       "name": "Adaptive Ward",
       "wikiRarity": "silver",
-      "status": "unmatched"
-    },
-    {
-      "kind": "wiki_only",
-      "source": "lol_wiki",
-      "sourceKey": "BONK!",
-      "name": "BONK!",
-      "wikiRarity": "silver",
-      "status": "unmatched"
-    },
-    {
-      "kind": "wiki_only",
-      "source": "lol_wiki",
-      "sourceKey": "Biggest Snowball Ever",
-      "name": "Biggest Snowball Ever",
-      "wikiRarity": "prismatic",
-      "status": "unmatched"
-    },
-    {
-      "kind": "wiki_only",
-      "source": "lol_wiki",
-      "sourceKey": "Bolstered",
-      "name": "Bolstered",
-      "wikiRarity": "silver",
-      "status": "unmatched"
-    },
-    {
-      "kind": "wiki_only",
-      "source": "lol_wiki",
-      "sourceKey": "Chain Reaction",
-      "name": "Chain Reaction",
-      "wikiRarity": "prismatic",
-      "status": "unmatched"
-    },
-    {
-      "kind": "wiki_only",
-      "source": "lol_wiki",
-      "sourceKey": "Combusting Interest",
-      "name": "Combusting Interest",
-      "wikiRarity": "gold",
-      "status": "unmatched"
-    },
-    {
-      "kind": "wiki_only",
-      "source": "lol_wiki",
-      "sourceKey": "Crit 'n Cast",
-      "name": "Crit 'n Cast",
-      "wikiRarity": "silver",
-      "status": "unmatched"
-    },
-    {
-      "kind": "wiki_only",
-      "source": "lol_wiki",
-      "sourceKey": "Critical Missile",
-      "name": "Critical Missile",
-      "wikiRarity": "gold",
-      "status": "unmatched"
-    },
-    {
-      "kind": "wiki_only",
-      "source": "lol_wiki",
-      "sourceKey": "Critical Rhythm",
-      "name": "Critical Rhythm",
-      "wikiRarity": "gold",
-      "status": "unmatched"
-    },
-    {
-      "kind": "wiki_only",
-      "source": "lol_wiki",
-      "sourceKey": "Dimension Shift",
-      "name": "Dimension Shift",
-      "wikiRarity": "prismatic",
       "status": "unmatched"
     },
     {
@@ -108,80 +28,8 @@
     {
       "kind": "wiki_only",
       "source": "lol_wiki",
-      "sourceKey": "Donation",
-      "name": "Donation",
-      "wikiRarity": "gold",
-      "status": "unmatched"
-    },
-    {
-      "kind": "wiki_only",
-      "source": "lol_wiki",
       "sourceKey": "Double Strike",
       "name": "Double Strike",
-      "wikiRarity": "silver",
-      "status": "unmatched"
-    },
-    {
-      "kind": "wiki_only",
-      "source": "lol_wiki",
-      "sourceKey": "Droppybara",
-      "name": "Droppybara",
-      "wikiRarity": "prismatic",
-      "status": "unmatched"
-    },
-    {
-      "kind": "wiki_only",
-      "source": "lol_wiki",
-      "sourceKey": "Echo Cast",
-      "name": "Echo Cast",
-      "wikiRarity": "prismatic",
-      "status": "unmatched"
-    },
-    {
-      "kind": "wiki_only",
-      "source": "lol_wiki",
-      "sourceKey": "Empyrean Promise",
-      "name": "Empyrean Promise",
-      "wikiRarity": "prismatic",
-      "status": "unmatched"
-    },
-    {
-      "kind": "wiki_only",
-      "source": "lol_wiki",
-      "sourceKey": "Endless Decimation",
-      "name": "Endless Decimation",
-      "wikiRarity": "gold",
-      "status": "unmatched"
-    },
-    {
-      "kind": "wiki_only",
-      "source": "lol_wiki",
-      "sourceKey": "Escape Plan",
-      "name": "Escape Plan",
-      "wikiRarity": "silver",
-      "status": "unmatched"
-    },
-    {
-      "kind": "wiki_only",
-      "source": "lol_wiki",
-      "sourceKey": "Final City Transit",
-      "name": "Final City Transit",
-      "wikiRarity": "gold",
-      "status": "unmatched"
-    },
-    {
-      "kind": "wiki_only",
-      "source": "lol_wiki",
-      "sourceKey": "Final Form",
-      "name": "Final Form",
-      "wikiRarity": "prismatic",
-      "status": "unmatched"
-    },
-    {
-      "kind": "wiki_only",
-      "source": "lol_wiki",
-      "sourceKey": "Flash 2",
-      "name": "Flash 2",
       "wikiRarity": "silver",
       "status": "unmatched"
     },
@@ -196,65 +44,9 @@
     {
       "kind": "wiki_only",
       "source": "lol_wiki",
-      "sourceKey": "Glass Cannon",
-      "name": "Glass Cannon",
-      "wikiRarity": "prismatic",
-      "status": "unmatched"
-    },
-    {
-      "kind": "wiki_only",
-      "source": "lol_wiki",
-      "sourceKey": "Goldrend",
-      "name": "Goldrend",
-      "wikiRarity": "prismatic",
-      "status": "unmatched"
-    },
-    {
-      "kind": "wiki_only",
-      "source": "lol_wiki",
-      "sourceKey": "Growth Spurt",
-      "name": "Growth Spurt",
+      "sourceKey": "From Downtown",
+      "name": "From Downtown",
       "wikiRarity": "gold",
-      "status": "unmatched"
-    },
-    {
-      "kind": "wiki_only",
-      "source": "lol_wiki",
-      "sourceKey": "Hand of Baron",
-      "name": "Hand of Baron",
-      "wikiRarity": "prismatic",
-      "status": "unmatched"
-    },
-    {
-      "kind": "wiki_only",
-      "source": "lol_wiki",
-      "sourceKey": "Hextech Soul",
-      "name": "Hextech Soul",
-      "wikiRarity": "silver",
-      "status": "unmatched"
-    },
-    {
-      "kind": "wiki_only",
-      "source": "lol_wiki",
-      "sourceKey": "Hide on Bush",
-      "name": "Hide on Bush",
-      "wikiRarity": "gold",
-      "status": "unmatched"
-    },
-    {
-      "kind": "wiki_only",
-      "source": "lol_wiki",
-      "sourceKey": "Holy Snowball",
-      "name": "Holy Snowball",
-      "wikiRarity": "prismatic",
-      "status": "unmatched"
-    },
-    {
-      "kind": "wiki_only",
-      "source": "lol_wiki",
-      "sourceKey": "Infinite Recursion",
-      "name": "Infinite Recursion",
-      "wikiRarity": "prismatic",
       "status": "unmatched"
     },
     {
@@ -263,86 +55,6 @@
       "sourceKey": "It's Go Time",
       "name": "It's Go Time",
       "wikiRarity": "silver",
-      "status": "unmatched"
-    },
-    {
-      "kind": "wiki_only",
-      "source": "lol_wiki",
-      "sourceKey": "Kill Secured",
-      "name": "Kill Secured",
-      "wikiRarity": "silver",
-      "status": "unmatched"
-    },
-    {
-      "kind": "wiki_only",
-      "source": "lol_wiki",
-      "sourceKey": "King Me",
-      "name": "King Me",
-      "wikiRarity": "prismatic",
-      "status": "unmatched"
-    },
-    {
-      "kind": "wiki_only",
-      "source": "lol_wiki",
-      "sourceKey": "Lil' Extra Help",
-      "name": "Lil' Extra Help",
-      "wikiRarity": "gold",
-      "status": "unmatched"
-    },
-    {
-      "kind": "wiki_only",
-      "source": "lol_wiki",
-      "sourceKey": "Mercy's Strike",
-      "name": "Mercy's Strike",
-      "wikiRarity": "gold",
-      "status": "unmatched"
-    },
-    {
-      "kind": "wiki_only",
-      "source": "lol_wiki",
-      "sourceKey": "Mighty Shield",
-      "name": "Mighty Shield",
-      "wikiRarity": "silver",
-      "status": "unmatched"
-    },
-    {
-      "kind": "wiki_only",
-      "source": "lol_wiki",
-      "sourceKey": "Nature is Healing",
-      "name": "Nature is Healing",
-      "wikiRarity": "gold",
-      "status": "unmatched"
-    },
-    {
-      "kind": "wiki_only",
-      "source": "lol_wiki",
-      "sourceKey": "Nightstalking",
-      "name": "Nightstalking",
-      "wikiRarity": "gold",
-      "status": "unmatched"
-    },
-    {
-      "kind": "wiki_only",
-      "source": "lol_wiki",
-      "sourceKey": "Ominous Pact",
-      "name": "Ominous Pact",
-      "wikiRarity": "prismatic",
-      "status": "unmatched"
-    },
-    {
-      "kind": "wiki_only",
-      "source": "lol_wiki",
-      "sourceKey": "Our Healing",
-      "name": "Our Healing",
-      "wikiRarity": "gold",
-      "status": "unmatched"
-    },
-    {
-      "kind": "wiki_only",
-      "source": "lol_wiki",
-      "sourceKey": "Overextender",
-      "name": "Overextender",
-      "wikiRarity": "gold",
       "status": "unmatched"
     },
     {
@@ -372,22 +84,6 @@
     {
       "kind": "wiki_only",
       "source": "lol_wiki",
-      "sourceKey": "Pinball",
-      "name": "Pinball",
-      "wikiRarity": "gold",
-      "status": "unmatched"
-    },
-    {
-      "kind": "wiki_only",
-      "source": "lol_wiki",
-      "sourceKey": "Poltergeist",
-      "name": "Poltergeist",
-      "wikiRarity": "silver",
-      "status": "unmatched"
-    },
-    {
-      "kind": "wiki_only",
-      "source": "lol_wiki",
       "sourceKey": "Porcupine",
       "name": "Porcupine",
       "wikiRarity": "gold",
@@ -396,25 +92,9 @@
     {
       "kind": "wiki_only",
       "source": "lol_wiki",
-      "sourceKey": "Poro Stampede",
-      "name": "Poro Stampede",
-      "wikiRarity": "prismatic",
-      "status": "unmatched"
-    },
-    {
-      "kind": "wiki_only",
-      "source": "lol_wiki",
-      "sourceKey": "Pressure Cooker",
-      "name": "Pressure Cooker",
+      "sourceKey": "Pursuit of Haste",
+      "name": "Pursuit of Haste",
       "wikiRarity": "gold",
-      "status": "unmatched"
-    },
-    {
-      "kind": "wiki_only",
-      "source": "lol_wiki",
-      "sourceKey": "Prom Queen",
-      "name": "Prom Queen",
-      "wikiRarity": "prismatic",
       "status": "unmatched"
     },
     {
@@ -428,104 +108,8 @@
     {
       "kind": "wiki_only",
       "source": "lol_wiki",
-      "sourceKey": "Quest: Sneakerhead",
-      "name": "Quest: Sneakerhead",
-      "wikiRarity": "prismatic",
-      "status": "unmatched"
-    },
-    {
-      "kind": "wiki_only",
-      "source": "lol_wiki",
-      "sourceKey": "Ravenous Bind",
-      "name": "Ravenous Bind",
-      "wikiRarity": "gold",
-      "status": "unmatched"
-    },
-    {
-      "kind": "wiki_only",
-      "source": "lol_wiki",
-      "sourceKey": "ReEnergize",
-      "name": "ReEnergize",
-      "wikiRarity": "silver",
-      "status": "unmatched"
-    },
-    {
-      "kind": "wiki_only",
-      "source": "lol_wiki",
-      "sourceKey": "Shark Bait",
-      "name": "Shark Bait",
-      "wikiRarity": "gold",
-      "status": "unmatched"
-    },
-    {
-      "kind": "wiki_only",
-      "source": "lol_wiki",
-      "sourceKey": "Shark Tempest",
-      "name": "Shark Tempest",
-      "wikiRarity": "gold",
-      "status": "unmatched"
-    },
-    {
-      "kind": "wiki_only",
-      "source": "lol_wiki",
-      "sourceKey": "Shrink Engine",
-      "name": "Shrink Engine",
-      "wikiRarity": "gold",
-      "status": "unmatched"
-    },
-    {
-      "kind": "wiki_only",
-      "source": "lol_wiki",
-      "sourceKey": "Snap Back",
-      "name": "Snap Back",
-      "wikiRarity": "gold",
-      "status": "unmatched"
-    },
-    {
-      "kind": "wiki_only",
-      "source": "lol_wiki",
-      "sourceKey": "Snowball Upgrade",
-      "name": "Snowball Upgrade",
-      "wikiRarity": "gold",
-      "status": "unmatched"
-    },
-    {
-      "kind": "wiki_only",
-      "source": "lol_wiki",
-      "sourceKey": "Snowblast",
-      "name": "Snowblast",
-      "wikiRarity": "gold",
-      "status": "unmatched"
-    },
-    {
-      "kind": "wiki_only",
-      "source": "lol_wiki",
-      "sourceKey": "Sonata",
-      "name": "Sonata",
-      "wikiRarity": "gold",
-      "status": "unmatched"
-    },
-    {
-      "kind": "wiki_only",
-      "source": "lol_wiki",
-      "sourceKey": "Soul Eater",
-      "name": "Soul Eater",
-      "wikiRarity": "gold",
-      "status": "unmatched"
-    },
-    {
-      "kind": "wiki_only",
-      "source": "lol_wiki",
-      "sourceKey": "Spell Split",
-      "name": "Spell Split",
-      "wikiRarity": "prismatic",
-      "status": "unmatched"
-    },
-    {
-      "kind": "wiki_only",
-      "source": "lol_wiki",
-      "sourceKey": "Spin Me Right Round",
-      "name": "Spin Me Right Round",
+      "sourceKey": "Siphon",
+      "name": "Siphon",
       "wikiRarity": "silver",
       "status": "unmatched"
     },
@@ -540,25 +124,9 @@
     {
       "kind": "wiki_only",
       "source": "lol_wiki",
-      "sourceKey": "Stay Resolute",
-      "name": "Stay Resolute",
-      "wikiRarity": "silver",
-      "status": "unmatched"
-    },
-    {
-      "kind": "wiki_only",
-      "source": "lol_wiki",
       "sourceKey": "Surge Field",
       "name": "Surge Field",
       "wikiRarity": "prismatic",
-      "status": "unmatched"
-    },
-    {
-      "kind": "wiki_only",
-      "source": "lol_wiki",
-      "sourceKey": "Swift and Safe",
-      "name": "Swift and Safe",
-      "wikiRarity": "silver",
       "status": "unmatched"
     },
     {
@@ -572,89 +140,9 @@
     {
       "kind": "wiki_only",
       "source": "lol_wiki",
-      "sourceKey": "Tooth Fairy",
-      "name": "Tooth Fairy",
-      "wikiRarity": "gold",
-      "status": "unmatched"
-    },
-    {
-      "kind": "wiki_only",
-      "source": "lol_wiki",
-      "sourceKey": "Tripleshot",
-      "name": "Tripleshot",
-      "wikiRarity": "prismatic",
-      "status": "unmatched"
-    },
-    {
-      "kind": "wiki_only",
-      "source": "lol_wiki",
       "sourceKey": "Trusty Weapon",
       "name": "Trusty Weapon",
       "wikiRarity": "silver",
-      "status": "unmatched"
-    },
-    {
-      "kind": "wiki_only",
-      "source": "lol_wiki",
-      "sourceKey": "Twin Fire",
-      "name": "Twin Fire",
-      "wikiRarity": "silver",
-      "status": "unmatched"
-    },
-    {
-      "kind": "wiki_only",
-      "source": "lol_wiki",
-      "sourceKey": "Ult Bot",
-      "name": "Ult Bot",
-      "wikiRarity": "prismatic",
-      "status": "unmatched"
-    },
-    {
-      "kind": "wiki_only",
-      "source": "lol_wiki",
-      "sourceKey": "Ultimate Awakening",
-      "name": "Ultimate Awakening",
-      "wikiRarity": "prismatic",
-      "status": "unmatched"
-    },
-    {
-      "kind": "wiki_only",
-      "source": "lol_wiki",
-      "sourceKey": "Upgrade Sword of Blossoming Dawn",
-      "name": "Upgrade Sword of Blossoming Dawn",
-      "wikiRarity": "prismatic",
-      "status": "unmatched"
-    },
-    {
-      "kind": "wiki_only",
-      "source": "lol_wiki",
-      "sourceKey": "Vampirism",
-      "name": "Vampirism",
-      "wikiRarity": "gold",
-      "status": "unmatched"
-    },
-    {
-      "kind": "wiki_only",
-      "source": "lol_wiki",
-      "sourceKey": "Veil of Warding",
-      "name": "Veil of Warding",
-      "wikiRarity": "silver",
-      "status": "unmatched"
-    },
-    {
-      "kind": "wiki_only",
-      "source": "lol_wiki",
-      "sourceKey": "Virtuous Cycle",
-      "name": "Virtuous Cycle",
-      "wikiRarity": "silver",
-      "status": "unmatched"
-    },
-    {
-      "kind": "wiki_only",
-      "source": "lol_wiki",
-      "sourceKey": "Void Dash",
-      "name": "Void Dash",
-      "wikiRarity": "gold",
       "status": "unmatched"
     },
     {
@@ -860,9 +348,94 @@
       "augmentId": "ARAM_WeightedPopoffs",
       "name": "Weighted Popoffs",
       "rarity": "silver"
+    },
+    {
+      "kind": "cdragon_only",
+      "source": "cdragon",
+      "augmentId": "BabyKitty",
+      "name": "I'm a Baby Kitty Where is Mama",
+      "rarity": "prismatic"
+    },
+    {
+      "kind": "cdragon_only",
+      "source": "cdragon",
+      "augmentId": "FullyAutomated",
+      "name": "Fully Automated",
+      "rarity": "silver"
+    },
+    {
+      "kind": "cdragon_only",
+      "source": "cdragon",
+      "augmentId": "Gash",
+      "name": "Gash",
+      "rarity": "prismatic"
+    },
+    {
+      "kind": "cdragon_only",
+      "source": "cdragon",
+      "augmentId": "GrandmasChiliOil",
+      "name": "Grandma's Chili Oil",
+      "rarity": "gold"
+    },
+    {
+      "kind": "cdragon_only",
+      "source": "cdragon",
+      "augmentId": "HatOnAHat",
+      "name": "Hat on a Hat",
+      "rarity": "silver"
+    },
+    {
+      "kind": "cdragon_only",
+      "source": "cdragon",
+      "augmentId": "LaserHeal",
+      "name": "Laser Heal",
+      "rarity": "prismatic"
+    },
+    {
+      "kind": "cdragon_only",
+      "source": "cdragon",
+      "augmentId": "RedEnvelopes",
+      "name": "Red Envelopes",
+      "rarity": "gold"
+    },
+    {
+      "kind": "cdragon_only",
+      "source": "cdragon",
+      "augmentId": "SnowballRoulette",
+      "name": "Snowball Roulette",
+      "rarity": "gold"
+    },
+    {
+      "kind": "cdragon_only",
+      "source": "cdragon",
+      "augmentId": "Upgrade_MikaelsBlessing",
+      "name": "Upgrade Mikael's Blessing",
+      "rarity": "prismatic"
+    },
+    {
+      "kind": "cdragon_only",
+      "source": "cdragon",
+      "augmentId": "Upgrade_Thornmail",
+      "name": "Upgrade Thornmail",
+      "rarity": "silver"
+    },
+    {
+      "kind": "cdragon_only",
+      "source": "cdragon",
+      "augmentId": "WindBeneathBlade",
+      "name": "Wind Beneath Blade",
+      "rarity": "silver"
     }
   ],
   "rarity": [
+    {
+      "source": "lol_wiki",
+      "augmentId": "Bonk",
+      "name": "BONK!",
+      "wikiRarity": "silver",
+      "cdragonRarity": "gold",
+      "note": "CDragon remains rarity authority; this report is evidence only."
+    },
     {
       "source": "lol_wiki",
       "augmentId": "ARAM_Terror",
@@ -873,6 +446,16 @@
     }
   ],
   "availability": [
+    {
+      "source": "lol_wiki",
+      "augmentId": "Adamant",
+      "name": "Adamant",
+      "signal": "wiki_availability_note_with_cdragon_registry_presence",
+      "wikiAvailabilityNotes": [
+        "This augment is currently disabled."
+      ],
+      "note": "Registry presence is definition only; Step 4 records wiki evidence and does not resolve availability."
+    },
     {
       "source": "lol_wiki",
       "augmentId": "ARAM_ClownCollege",
@@ -906,11 +489,42 @@
     },
     {
       "source": "lol_wiki",
+      "augmentId": "Dropybara_Active",
+      "name": "Droppybara",
+      "signal": "wiki_availability_note_with_cdragon_registry_presence",
+      "wikiAvailabilityNotes": [
+        "This augment is only offered to up to 1 player on each team for a given game.",
+        "This augment is currently disabled."
+      ],
+      "note": "Registry presence is definition only; Step 4 records wiki evidence and does not resolve availability."
+    },
+    {
+      "source": "lol_wiki",
       "augmentId": "ARAM_Earthwake",
       "name": "Earthwake",
       "signal": "wiki_availability_note_with_cdragon_registry_presence",
       "wikiAvailabilityNotes": [
         "This augment is only offered to up to 2 players on each team for a given game."
+      ],
+      "note": "Registry presence is definition only; Step 4 records wiki evidence and does not resolve availability."
+    },
+    {
+      "source": "lol_wiki",
+      "augmentId": "TrainOfTheDead",
+      "name": "Final City Transit",
+      "signal": "wiki_availability_note_with_cdragon_registry_presence",
+      "wikiAvailabilityNotes": [
+        "This augment is currently disabled."
+      ],
+      "note": "Registry presence is definition only; Step 4 records wiki evidence and does not resolve availability."
+    },
+    {
+      "source": "lol_wiki",
+      "augmentId": "Overextender",
+      "name": "Overextender",
+      "signal": "wiki_availability_note_with_cdragon_registry_presence",
+      "wikiAvailabilityNotes": [
+        "This augment is only available on the Butcher's Bridge map."
       ],
       "note": "Registry presence is definition only; Step 4 records wiki evidence and does not resolve availability."
     },
@@ -929,6 +543,48 @@
       "source": "lol_wiki",
       "augmentId": "ARAM_QuantumComputing",
       "name": "Quantum Computing",
+      "signal": "wiki_availability_note_with_cdragon_registry_presence",
+      "wikiAvailabilityNotes": [
+        "This augment is currently disabled."
+      ],
+      "note": "Registry presence is definition only; Step 4 records wiki evidence and does not resolve availability."
+    },
+    {
+      "source": "lol_wiki",
+      "augmentId": "Quest_Sneakerhead",
+      "name": "Quest: Sneakerhead",
+      "signal": "wiki_availability_note_with_cdragon_registry_presence",
+      "wikiAvailabilityNotes": [
+        "This augment is currently disabled."
+      ],
+      "note": "Registry presence is definition only; Step 4 records wiki evidence and does not resolve availability."
+    },
+    {
+      "source": "lol_wiki",
+      "augmentId": "SnowballUpgrade",
+      "name": "Snowball Upgrade",
+      "signal": "wiki_availability_note_with_cdragon_registry_presence",
+      "wikiAvailabilityNotes": [
+        "This augment is currently disabled."
+      ],
+      "note": "Registry presence is definition only; Step 4 records wiki evidence and does not resolve availability."
+    },
+    {
+      "source": "lol_wiki",
+      "augmentId": "Vampirism",
+      "name": "Vampirism",
+      "signal": "wiki_availability_note_with_cdragon_registry_presence",
+      "wikiAvailabilityNotes": [
+        "This augment is currently disabled.",
+        "This augment prevents the user from being offered the Perseverance augment.",
+        "This augment is not offered if the champion has built Warmog's Armor."
+      ],
+      "note": "Registry presence is definition only; Step 4 records wiki evidence and does not resolve availability."
+    },
+    {
+      "source": "lol_wiki",
+      "augmentId": "VoidDash",
+      "name": "Void Dash",
       "signal": "wiki_availability_note_with_cdragon_registry_presence",
       "wikiAvailabilityNotes": [
         "This augment is currently disabled."

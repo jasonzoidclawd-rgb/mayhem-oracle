@@ -1,6 +1,6 @@
 {
   "patch": "26.12",
-  "scraped_at": "2026-06-22T21:43:35.300206+00:00",
+  "scraped_at": "2026-06-23T08:07:04.768282+00:00",
   "schemaVersion": "augment-truth-step5",
   "sources": {
     "definition": "data/internal/augment-base-catalog.json",
@@ -8,8 +8,8 @@
     "preserved": "data/internal/augments.json@pre-step5"
   },
   "counts": {
-    "augments": 260,
-    "winRateCoverage": 123
+    "augments": 267,
+    "winRateCoverage": 120
   },
   "augments": [
     {
@@ -162,25 +162,33 @@
       "wikiRarity": "prismatic"
     },
     {
+      "augmentId": "InfiniteRecursion",
       "slug": "infinite-recursion",
       "name": "Infinite Recursion",
+      "displayName": "Infinite Recursion",
       "rarity": "prismatic",
-      "icon": "https://arammayhem.com/augments/Infinite_Recursion_mayhem_augment.webp",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/kiwi/augments/icons/infiniterecursion_small.png",
+      "names": {
+        "en": "Infinite Recursion",
+        "zh_cn": "无限循环往复",
+        "zh_tw": "無限循環",
+        "ja": "無限再帰",
+        "ko": "무한 반복"
+      },
+      "kit_tags": [
+        "haste"
+      ],
+      "flags": {
+        "system_breaker": false,
+        "lifecycle": "active"
+      },
+      "type": "standalone",
       "name_zh_CN": "无限循环往复",
       "name_zh_TW": "無限循環",
       "name_ja": "無限再帰",
       "name_ko": "무한 반복",
-      "wikiDescription": "Gain 60 ability haste , increased by 3 each time you score a champion takedown .",
-      "wikiSet": "Stackosaurus Rex",
-      "kit_tags": [
-        "haste"
-      ],
-      "set": "stackosaurus_rex",
-      "flags": {
-        "system_breaker": false,
-        "lifecycle": "removed"
-      },
-      "type": "standalone"
+      "wikiDescription": "Gain 60 ability haste, increased by 3 each time you score a champion takedown.",
+      "wikiRarity": "prismatic"
     },
     {
       "slug": "warlock-juicebox",
@@ -262,24 +270,34 @@
       "wikiRarity": "gold"
     },
     {
+      "augmentId": "PressureCooker",
       "slug": "pressure-cooker",
       "name": "Pressure Cooker",
+      "displayName": "Pressure Cooker",
       "rarity": "gold",
-      "icon": "https://arammayhem.com/augments/Pressure_Cooker_mayhem_augment.webp",
-      "name_zh_CN": "高压锅",
-      "name_zh_TW": "壓力火鍋",
-      "name_ja": "圧力鍋",
-      "name_ko": "압력솥",
-      "type": "quest",
-      "flags": {
-        "system_breaker": false,
-        "lifecycle": "removed"
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/kiwi/augments/icons/questpressurecooker_small.png",
+      "names": {
+        "en": "Pressure Cooker",
+        "zh_cn": "高压锅",
+        "zh_tw": "壓力火鍋",
+        "ja": "圧力鍋",
+        "ko": "압력솥"
       },
       "kit_tags": [
         "dot",
         "tank"
       ],
-      "wikiDescription": "Every second, apply a stacking Burn to nearby enemy champions, scaling with your max Health. QUEST: Deal Burn damage to enemy Champions. REWARD: Size and damage increase per Quest Level."
+      "flags": {
+        "system_breaker": false,
+        "lifecycle": "active"
+      },
+      "type": "quest",
+      "name_zh_CN": "高压锅",
+      "name_zh_TW": "壓力火鍋",
+      "name_ja": "圧力鍋",
+      "name_ko": "압력솥",
+      "wikiDescription": "Surrounds you in flames, causing you to apply a Burn every second to enemy champions within 300 units for 3 seconds that deals magic damage equal to「 0.66% of your maximum health per second. 」「 2% of your maximum health over the duration. 」This Burn stacks infinitely and refreshes with each application. Additionally, you are assigned with quests that require you to deal a certain amount of damage with the Burn effect against enemy champions. There are three quest tiers, and each completed tier grants you a reward that improves Pressure Cooker's effect.",
+      "wikiRarity": "gold"
     },
     {
       "augmentId": "ARAM_Quest_VoidImmolation",
@@ -341,23 +359,33 @@
       "wikiRarity": "prismatic"
     },
     {
+      "augmentId": "BloodMoneyBurn",
       "slug": "combusting-interest",
       "name": "Combusting Interest",
+      "displayName": "Combusting Interest",
       "rarity": "gold",
-      "icon": "https://arammayhem.com/augments/Combusting_Interest_mayhem_augment.webp",
-      "name_zh_CN": "炽燃利息",
-      "name_zh_TW": "燃燒利息",
-      "name_ja": "燃える利回り",
-      "name_ko": "타오르는 이자",
-      "type": "standalone",
-      "flags": {
-        "system_breaker": false,
-        "lifecycle": "removed"
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/kiwi/augments/icons/bloodmoney2_small.png",
+      "names": {
+        "en": "Combusting Interest",
+        "zh_cn": "炽燃利息",
+        "zh_tw": "燃燒利息",
+        "ja": "燃える利回り",
+        "ko": "타오르는 이자"
       },
       "kit_tags": [
         "dot"
       ],
-      "wikiDescription": "Burns and damage over time applied to champions generates gold."
+      "flags": {
+        "system_breaker": false,
+        "lifecycle": "active"
+      },
+      "type": "standalone",
+      "name_zh_CN": "炽燃利息",
+      "name_zh_TW": "燃燒利息",
+      "name_ja": "燃える利回り",
+      "name_ko": "타오르는 이자",
+      "wikiDescription": "Gain 1 – 3 (based on level) (+ 0.75% of damage dealt) gold for each tick of damage dealt to enemy champions with persistent damage effects.",
+      "wikiRarity": "gold"
     },
     {
       "augmentId": "ARAM_MagicMissile",
@@ -768,27 +796,35 @@
       "wikiRarity": "silver"
     },
     {
+      "augmentId": "Twinfire",
       "slug": "twin-fire",
       "name": "Twin Fire",
+      "displayName": "Twin Fire",
       "rarity": "silver",
-      "icon": "https://arammayhem.com/augments/Twin_Fire_mayhem_augment.webp",
-      "name_zh_CN": "双生火焰",
-      "name_zh_TW": "雙響炮",
-      "name_ja": "ツインファイア",
-      "name_ko": "쌍둥이 불꽃",
-      "wikiDescription": "Damaging abilities against enemy champions launch 1 (+ 1 per 33. 33 % critical strike chance) Firecrackers at the target that each deal 10 – 30 (based on level) (+ 7% bonus AD) (+ 7% AP) magic damage (5 second cooldown). Additionally, gain 15% critical strike chance .",
-      "wikiSet": "Firecracker",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/kiwi/augments/icons/twinfire_small.png",
+      "names": {
+        "en": "Twin Fire",
+        "zh_cn": "双生火焰",
+        "zh_tw": "雙響炮",
+        "ja": "ツインファイア",
+        "ko": "쌍둥이 불꽃"
+      },
       "kit_tags": [
         "ability",
         "attack",
         "crit"
       ],
-      "set": "firecracker",
       "flags": {
         "system_breaker": false,
-        "lifecycle": "removed"
+        "lifecycle": "active"
       },
-      "type": "standalone"
+      "type": "standalone",
+      "name_zh_CN": "双生火焰",
+      "name_zh_TW": "雙響炮",
+      "name_ja": "ツインファイア",
+      "name_ko": "쌍둥이 불꽃",
+      "wikiDescription": "Damaging abilities against enemy champions launch 1 (+ 1 per 33.33% critical strike chance) missiles at the target that each deal 10 – 30 (based on level) (+ 7% bonus AD) (+ 7% AP) magic damage (5 second cooldown). Additionally, gain 25% critical strike chance.",
+      "wikiRarity": "silver"
     },
     {
       "augmentId": "ARAM_SpiritBomb",
@@ -816,7 +852,7 @@
       "name_zh_TW": "靈魂炸彈",
       "name_ja": "スピリットボム",
       "name_ko": "영혼 폭탄",
-      "wikiDescription": "Your healing and shielding on yourself or allies builds up a Spirit Bomb on top of you. Once you have healed and shielded a combined total of 200 – 2000 (based on level), you toss the Spirit Bomb onto the nearest and most wounded allied champion after a 1.1-second delay. Upon impact, the Spirit Bomb explodes in a 475 radius to heal allied champions within the area for 5% – 15% (based on level) (+ 3% per 100 AP) of their missing health and grants them a shield for 2 seconds that absorbs damage equal to 10% – 25% (based on level) (+ 2% per 100 AP) of their current health. Healing and shielding from this effect do not count toward the Spirit Bomb's trigger condition.",
+      "wikiDescription": "Your healing and shielding on yourself or allies builds up a Spirit Bomb on top of you. Once you have healed and shielded a combined total of 200 – 2000 (based on level), you toss the Spirit Bomb onto the most wounded allied champion over 1.1 seconds. Upon impact, the Spirit Bomb explodes in a 475 radius to heal allied champions within the area for 5% – 15% (based on level) (+ 3% per 100 AP) of their missing health and grants them a shield for 2 seconds that absorbs damage equal to 10% – 25% (based on level) (+ 2% per 100 AP) of their current health. Healing and shielding from this effect do not count toward the Spirit Bomb's trigger condition. The toss range for the Spirit Bomb is global; it will target the lowest-health ally on the map.",
       "wikiRarity": "prismatic"
     },
     {
@@ -975,10 +1011,10 @@
       "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/kiwi/augments/icons/weewooweewoo_small.png",
       "names": {
         "en": "Wee Woo Wee Woo",
-        "zh_cn": "Wee Woo Wee Woo",
-        "zh_tw": "Wee Woo Wee Woo",
-        "ja": "Wee Woo Wee Woo",
-        "ko": "Wee Woo Wee Woo"
+        "zh_cn": "喂呜喂呜",
+        "zh_tw": "嗚咿嗚咿",
+        "ja": "うぃ～！おりゃっ！",
+        "ko": "삐뽀삐뽀"
       },
       "kit_tags": [
         "heal_shield",
@@ -989,10 +1025,10 @@
         "lifecycle": "active"
       },
       "type": "standalone",
-      "name_zh_CN": "Wee Woo Wee Woo",
-      "name_zh_TW": "Wee Woo Wee Woo",
-      "name_ja": "Wee Woo Wee Woo",
-      "name_ko": "Wee Woo Wee Woo",
+      "name_zh_CN": "喂呜喂呜",
+      "name_zh_TW": "嗚咿嗚咿",
+      "name_ja": "うぃ～！おりゃっ！",
+      "name_ko": "삐뽀삐뽀",
       "wikiDescription": "Gain 0% – 50% (based on target ally's missing health) bonus movement speed while facing toward nearby allied champions, lingering for 2 seconds after no longer facing them. Your heals and shields are also increased by 0% – 50% (based on target's missing health).",
       "wikiRarity": "gold"
     },
@@ -1045,7 +1081,7 @@
       ],
       "flags": {
         "system_breaker": false,
-        "lifecycle": "active"
+        "lifecycle": "removed"
       },
       "type": "ability",
       "name_zh_CN": "Pursuit of Haste",
@@ -1141,26 +1177,34 @@
       "wikiRarity": "silver"
     },
     {
+      "augmentId": "Sonata",
       "slug": "sonata",
       "name": "Sonata",
+      "displayName": "Sonata",
       "rarity": "gold",
-      "icon": "https://arammayhem.com/augments/Sonata_mayhem_augment.webp",
-      "name_zh_CN": "咏叹奏鸣",
-      "name_zh_TW": "奏鳴曲",
-      "name_ja": "ソナタ",
-      "name_ko": "소나타",
-      "wikiDescription": "Alternate between automatically casting a modified version of Sona's Aria of Perseverance and modified Song of Celerity , with the former being cast first (10 second cooldown). Aria of Perseverance: Heal yourself for 60 (+ 60% AP) and send out a tone to the most wounded allied champion within 1000 units that heals them for the same amount. Additionally, generate an aura that grants you and tagged allied champions a 80 (+ 40% AP) shield for 1. 5 seconds. Song of Celerity: Gain 30% bonus movement speed for 7 seconds. If you take damage during this time, the duration ends prematurely once or if 3 seconds have elapsed. Additionally, generate an aura that grants tagged allied champions 20% bonus movement speed for 3 seconds.",
-      "wikiSet": "Fully Automated Wee Woo Wee Woo",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/kiwi/augments/icons/sonata_small.png",
+      "names": {
+        "en": "Sonata",
+        "zh_cn": "咏叹奏鸣",
+        "zh_tw": "奏鳴曲",
+        "ja": "ソナタ",
+        "ko": "소나타"
+      },
       "kit_tags": [
         "ability",
         "heal_shield"
       ],
-      "set": "fully_automated",
       "flags": {
         "system_breaker": false,
-        "lifecycle": "removed"
+        "lifecycle": "active"
       },
-      "type": "standalone"
+      "type": "standalone",
+      "name_zh_CN": "咏叹奏鸣",
+      "name_zh_TW": "奏鳴曲",
+      "name_ja": "ソナタ",
+      "name_ko": "소나타",
+      "wikiDescription": "Alternate between automatically casting a modified version of Sona's Aria of Perseverance and modified Song of Celerity, with the former being cast first (10 second cooldown). Aria of Perseverance: Heal yourself for 60 (+ 60% AP) and send out a tone to the most wounded allied champion within 1000 units that heals them for the same amount. Additionally, generate an aura that grants you and tagged allied champions a 80 (+ 40% AP) shield for 1.5 seconds. Song of Celerity: Gain 30% bonus movement speed for 7 seconds. If you take damage during this time, the duration ends prematurely once or if 3 seconds have elapsed. Additionally, generate an aura that grants tagged allied champions 20% bonus movement speed for 3 seconds.",
+      "wikiRarity": "gold"
     },
     {
       "augmentId": "ARAM_SlapAround",
@@ -1328,15 +1372,19 @@
       "wikiRarity": "prismatic"
     },
     {
+      "augmentId": "EscapePlan",
       "slug": "escape-plan",
       "name": "Escape Plan",
+      "displayName": "Escape Plan",
       "rarity": "silver",
-      "icon": "https://arammayhem.com/augments/Escape_Plan_mayhem_augment.webp",
-      "name_zh_CN": "逃跑计划",
-      "name_zh_TW": "逃跑計畫",
-      "name_ja": "脱出プラン",
-      "name_ko": "도주 계획",
-      "wikiDescription": "Upon dropping below 35% of your maximum health , gain a shield for 65% of your maximum health , 150% bonus movement speed , and reduced size (75 second cooldown). These effects all decay over 5. 5 seconds.",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/kiwi/augments/icons/escapeplan_small.png",
+      "names": {
+        "en": "Escape Plan",
+        "zh_cn": "逃跑计划",
+        "zh_tw": "逃跑計畫",
+        "ja": "脱出プラン",
+        "ko": "도주 계획"
+      },
       "kit_tags": [
         "heal_shield",
         "movement",
@@ -1344,9 +1392,15 @@
       ],
       "flags": {
         "system_breaker": false,
-        "lifecycle": "removed"
+        "lifecycle": "active"
       },
-      "type": "standalone"
+      "type": "standalone",
+      "name_zh_CN": "逃跑计划",
+      "name_zh_TW": "逃跑計畫",
+      "name_ja": "脱出プラン",
+      "name_ko": "도주 계획",
+      "wikiDescription": "Upon dropping below 35% of your maximum health, gain a shield for 65% of your maximum health, 150% bonus movement speed, and reduced size (75 second cooldown). These effects all decay over 5.5 seconds.",
+      "wikiRarity": "silver"
     },
     {
       "augmentId": "ARAM_MindtoMatter",
@@ -1410,66 +1464,94 @@
       "wikiRarity": "prismatic"
     },
     {
+      "augmentId": "ShrinkEngine",
       "slug": "shrink-engine",
       "name": "Shrink Engine",
+      "displayName": "Shrink Engine",
       "rarity": "gold",
-      "icon": "https://arammayhem.com/augments/Shrink_Engine_mayhem_augment.webp",
-      "name_zh_CN": "缩小引擎",
-      "name_zh_TW": "縮小引擎",
-      "name_ja": "縮小エンジン",
-      "name_ko": "축소 엔진",
-      "wikiDescription": "Scoring a champion takedown generates a stack, stacking infinitely. For each stack, gain 8 ability haste and 1% bonus movement speed , and reduce your size by 4%. Lose 65% of stacks on death. Size reduction is capped at 80% (20 stacks).",
-      "wikiSet": "Stackosaurus Rex",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/kiwi/augments/icons/shrinkengine_small.png",
+      "names": {
+        "en": "Shrink Engine",
+        "zh_cn": "缩小引擎",
+        "zh_tw": "縮小引擎",
+        "ja": "縮小エンジン",
+        "ko": "축소 엔진"
+      },
       "kit_tags": [
         "haste",
         "movement"
       ],
-      "set": "stackosaurus_rex",
       "flags": {
         "system_breaker": false,
-        "lifecycle": "removed"
+        "lifecycle": "active"
       },
-      "type": "standalone"
+      "type": "standalone",
+      "name_zh_CN": "缩小引擎",
+      "name_zh_TW": "縮小引擎",
+      "name_ja": "縮小エンジン",
+      "name_ko": "축소 엔진",
+      "wikiDescription": "Scoring a champion takedown generates a stack, stacking infinitely. For each stack, gain 8 ability haste and 1% bonus movement speed, and reduce your size by 4%. Lose 65% of stacks on death. Size reduction is capped at 80% (20 stacks).",
+      "wikiRarity": "gold"
     },
     {
+      "augmentId": "BurstingTeeth",
       "slug": "tooth-fairy",
       "name": "Tooth Fairy",
+      "displayName": "Tooth Fairy",
       "rarity": "gold",
-      "icon": "https://arammayhem.com/augments/Tooth_Fairy_mayhem_augment.webp",
-      "name_zh_CN": "牙仙子",
-      "name_zh_TW": "牙仙",
-      "name_ja": "歯の妖精",
-      "name_ko": "이빨 요정",
-      "type": "quest",
-      "flags": {
-        "system_breaker": false,
-        "lifecycle": "removed"
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/kiwi/augments/icons/questburstingteeth_small.png",
+      "names": {
+        "en": "Tooth Fairy",
+        "zh_cn": "牙仙子",
+        "zh_tw": "牙仙",
+        "ja": "歯の妖精",
+        "ko": "이빨 요정"
       },
       "kit_tags": [
         "ability",
         "attack"
       ],
-      "wikiDescription": "Bursting enemies drops Teeth. Picking up Teeth grants you permanent Lethality and Magic Penetration."
+      "flags": {
+        "system_breaker": false,
+        "lifecycle": "active"
+      },
+      "type": "quest",
+      "name_zh_CN": "牙仙子",
+      "name_zh_TW": "牙仙",
+      "name_ja": "歯の妖精",
+      "name_ko": "이빨 요정",
+      "wikiDescription": "When you deal damage to an enemy champion equal to or more than 25% of their maximum health within 2.5 seconds, they drop a Tooth on the ground (4 second cooldown per target). You can pick up this Tooth by moving over it, granting you a Dental Records stack. For each stack, you gain 4 lethality and flat magic penetration.",
+      "wikiRarity": "gold"
     },
     {
+      "augmentId": "GrowthSpurt",
       "slug": "growth-spurt",
       "name": "Growth Spurt",
+      "displayName": "Growth Spurt",
       "rarity": "gold",
-      "icon": "https://arammayhem.com/augments/Growth_Spurt_mayhem_augment.webp",
-      "name_zh_CN": "生机迸发",
-      "name_zh_TW": "急遽成長",
-      "name_ja": "成長期",
-      "name_ko": "급속 성장",
-      "wikiDescription": "Replace a summoner spell with Growth Spurt . Growth Spurt: Enlarge yourself, causing you to knock up enemies within 400 units for 1 second. For the next 7 seconds, you gain 300 (+ 20% maximum health) bonus health and 50% increased size.",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/kiwi/augments/icons/growthspurt_small.png",
+      "names": {
+        "en": "Growth Spurt",
+        "zh_cn": "生机迸发",
+        "zh_tw": "急遽成長",
+        "ja": "成長期",
+        "ko": "급속 성장"
+      },
       "kit_tags": [
         "tank",
         "cc"
       ],
       "flags": {
         "system_breaker": false,
-        "lifecycle": "removed"
+        "lifecycle": "active"
       },
-      "type": "standalone"
+      "type": "standalone",
+      "name_zh_CN": "生机迸发",
+      "name_zh_TW": "急遽成長",
+      "name_ja": "成長期",
+      "name_ko": "급속 성장",
+      "wikiDescription": "Replace a summoner spell with Growth Spurt. Growth Spurt: Enlarge yourself, causing you to knock up enemies within 400 units for 1 second. For the next 7 seconds, you gain 300 (+ 20% maximum health) bonus health and 50% increased size.",
+      "wikiRarity": "gold"
     },
     {
       "augmentId": "ARAM_escAPADe",
@@ -1595,23 +1677,33 @@
       "wikiRarity": "prismatic"
     },
     {
+      "augmentId": "LittleExtraHelp",
       "slug": "lil-extra-help",
       "name": "Lil' Extra Help",
+      "displayName": "Lil' Extra Help",
       "rarity": "gold",
-      "icon": "https://arammayhem.com/augments/Lil_Extra_Help_mayhem_augment.webp",
-      "name_zh_CN": "小小的额外帮助",
-      "name_zh_TW": "小小助力",
-      "name_ja": "ちょこっとヘルプ",
-      "name_ko": "작은 도움",
-      "type": "ability",
-      "flags": {
-        "system_breaker": false,
-        "lifecycle": "removed"
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/kiwi/augments/icons/genericabilityaugmenticon_gold.png",
+      "names": {
+        "en": "Lil' Extra Help",
+        "zh_cn": "小小的额外帮助",
+        "zh_tw": "小小助力",
+        "ja": "ちょこっとヘルプ",
+        "ko": "작은 도움"
       },
       "kit_tags": [
         "attack"
       ],
-      "wikiDescription": "Gain the required number of Attack Range and the required number of Attack Speed during your chosen ability duration."
+      "flags": {
+        "system_breaker": false,
+        "lifecycle": "active"
+      },
+      "type": "ability",
+      "name_zh_CN": "小小的额外帮助",
+      "name_zh_TW": "小小助力",
+      "name_ja": "ちょこっとヘルプ",
+      "name_ko": "작은 도움",
+      "wikiDescription": "Upgrades one of your champion's abilities that has an effect which empowers your basic attacks for a duration, further enhancing the attacks by granting you ( 150 / 100) bonus attack range and ( 75% / 40%) bonus attack speed while the effect is active.",
+      "wikiRarity": "gold"
     },
     {
       "augmentId": "ARAM_WithHaste",
@@ -1673,23 +1765,31 @@
       "wikiRarity": "prismatic"
     },
     {
+      "augmentId": "Donation",
       "slug": "donation",
       "name": "Donation",
+      "displayName": "Donation",
       "rarity": "gold",
-      "icon": "https://arammayhem.com/augments/Donation_mayhem_augment.webp",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/kiwi/augments/icons/donation_small.png",
+      "names": {
+        "en": "Donation",
+        "zh_cn": "捐赠",
+        "zh_tw": "斗內",
+        "ja": "寄付",
+        "ko": "후원"
+      },
+      "kit_tags": [],
+      "flags": {
+        "system_breaker": false,
+        "lifecycle": "active"
+      },
+      "type": "standalone",
       "name_zh_CN": "捐赠",
       "name_zh_TW": "斗內",
       "name_ja": "寄付",
       "name_ko": "후원",
       "wikiDescription": "Gain 1750 upon acquiring this augment.",
-      "wikiSet": "Make it Rain",
-      "kit_tags": [],
-      "set": "make_it_rain",
-      "flags": {
-        "system_breaker": false,
-        "lifecycle": "removed"
-      },
-      "type": "standalone"
+      "wikiRarity": "gold"
     },
     {
       "augmentId": "ARAM_SustainingStrike",
@@ -1711,7 +1811,7 @@
       ],
       "flags": {
         "system_breaker": false,
-        "lifecycle": "active"
+        "lifecycle": "removed"
       },
       "type": "ability",
       "name_zh_CN": "Siphon",
@@ -1781,46 +1881,64 @@
       "wikiRarity": "silver"
     },
     {
+      "augmentId": "SwiftAndSafe",
       "slug": "swift-and-safe",
       "name": "Swift and Safe",
+      "displayName": "Swift and Safe",
       "rarity": "silver",
-      "icon": "https://arammayhem.com/augments/Swift_and_Safe_mayhem_augment.webp",
-      "name_zh_CN": "快中求稳",
-      "name_zh_TW": "又快又穩",
-      "name_ja": "迅速に安全に",
-      "name_ko": "빠르고 안전하게",
-      "wikiDescription": "After dashing or blinking , gain a shield that lasts for 2 seconds and absorbs 65 – 290 (based on level) (+ 65% AD) (+ 26% AP) damage (5 second cooldown).",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/kiwi/augments/icons/swiftandsafe_small.png",
+      "names": {
+        "en": "Swift and Safe",
+        "zh_cn": "快中求稳",
+        "zh_tw": "又快又穩",
+        "ja": "迅速に安全に",
+        "ko": "빠르고 안전하게"
+      },
       "kit_tags": [
         "movement",
         "heal_shield"
       ],
       "flags": {
         "system_breaker": false,
-        "lifecycle": "removed"
+        "lifecycle": "active"
       },
-      "type": "standalone"
+      "type": "standalone",
+      "name_zh_CN": "快中求稳",
+      "name_zh_TW": "又快又穩",
+      "name_ja": "迅速に安全に",
+      "name_ko": "빠르고 안전하게",
+      "wikiDescription": "After dashing or blinking, gain a shield that lasts for 2 seconds and absorbs 65 – 290 (based on level) (+ 65% AD) (+ 26% AP) damage (5 second cooldown).",
+      "wikiRarity": "silver"
     },
     {
+      "augmentId": "SoulEater",
       "slug": "soul-eater",
       "name": "Soul Eater",
+      "displayName": "Soul Eater",
       "rarity": "gold",
-      "icon": "https://arammayhem.com/augments/Soul_Eater_mayhem_augment.webp",
-      "name_zh_CN": "吞噬灵魂",
-      "name_zh_TW": "食魂者",
-      "name_ja": "ソウルイーター",
-      "name_ko": "영혼의 포식자",
-      "wikiDescription": "Immobilizing or grounding an enemy champion grants you 20 bonus health , stacking infinitely (5 second cooldown per cast instance ).",
-      "wikiSet": "Stackosaurus Rex",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/kiwi/augments/icons/souleater_small.png",
+      "names": {
+        "en": "Soul Eater",
+        "zh_cn": "吞噬灵魂",
+        "zh_tw": "食魂者",
+        "ja": "ソウルイーター",
+        "ko": "영혼의 포식자"
+      },
       "kit_tags": [
         "tank",
         "cc"
       ],
-      "set": "stackosaurus_rex",
       "flags": {
         "system_breaker": false,
-        "lifecycle": "removed"
+        "lifecycle": "active"
       },
-      "type": "standalone"
+      "type": "standalone",
+      "name_zh_CN": "吞噬灵魂",
+      "name_zh_TW": "食魂者",
+      "name_ja": "ソウルイーター",
+      "name_ko": "영혼의 포식자",
+      "wikiDescription": "Immobilizing or grounding an enemy champion grants you 20 bonus health, stacking infinitely (5 second cooldown per cast instance).",
+      "wikiRarity": "gold"
     },
     {
       "augmentId": "ARAM_Homeguard",
@@ -1882,15 +2000,19 @@
       "wikiRarity": "gold"
     },
     {
+      "augmentId": "FinalForm",
       "slug": "final-form",
       "name": "Final Form",
+      "displayName": "Final Form",
       "rarity": "prismatic",
-      "icon": "https://arammayhem.com/augments/Final_Form_mayhem_augment.webp",
-      "name_zh_CN": "最终形态",
-      "name_zh_TW": "最終型態",
-      "name_ja": "最終形態",
-      "name_ko": "최종 형태",
-      "wikiDescription": "Casting your ultimate ability empowers you for 10 seconds, causing you to gain a shield for 50% of your maximum health , 20% omnivamp , and 30% bonus movement speed for the duration (20 second cooldown).",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/kiwi/augments/icons/finalform_small.png",
+      "names": {
+        "en": "Final Form",
+        "zh_cn": "最终形态",
+        "zh_tw": "最終型態",
+        "ja": "最終形態",
+        "ko": "최종 형태"
+      },
       "kit_tags": [
         "ability",
         "heal_shield",
@@ -1898,9 +2020,15 @@
       ],
       "flags": {
         "system_breaker": false,
-        "lifecycle": "removed"
+        "lifecycle": "active"
       },
-      "type": "standalone"
+      "type": "standalone",
+      "name_zh_CN": "最终形态",
+      "name_zh_TW": "最終型態",
+      "name_ja": "最終形態",
+      "name_ko": "최종 형태",
+      "wikiDescription": "Casting your ultimate ability empowers you for 10 seconds, causing you to gain a shield for 50% of your maximum health, 20% omnivamp, and 30% bonus movement speed for the duration (20 second cooldown).",
+      "wikiRarity": "prismatic"
     },
     {
       "augmentId": "ARAM_Typhoon",
@@ -2060,7 +2188,7 @@
       ],
       "flags": {
         "system_breaker": false,
-        "lifecycle": "active"
+        "lifecycle": "removed"
       },
       "type": "quest",
       "name_zh_CN": "From Downtown",
@@ -2186,24 +2314,34 @@
       "wikiRarity": "silver"
     },
     {
+      "augmentId": "Bonk",
       "slug": "bonk",
       "name": "BONK!",
+      "displayName": "BONK!",
       "rarity": "gold",
-      "icon": "https://arammayhem.com/augments/BONK_mayhem_augment.webp",
-      "name_zh_CN": "邦！",
-      "name_zh_TW": "一棒入魂！",
-      "name_ja": "ボカッ！",
-      "name_ko": "꽁!",
-      "type": "ability",
-      "flags": {
-        "system_breaker": false,
-        "lifecycle": "removed"
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/kiwi/augments/icons/bonk_large.png",
+      "names": {
+        "en": "BONK!",
+        "zh_cn": "邦！",
+        "zh_tw": "一棒入魂！",
+        "ja": "ボカッ！",
+        "ko": "꽁!"
       },
       "kit_tags": [
         "ability",
         "attack"
       ],
-      "wikiDescription": "Attacks and Abilities empowered by your chosen ability deal additional damage to the target and nearby enemies."
+      "flags": {
+        "system_breaker": false,
+        "lifecycle": "active"
+      },
+      "type": "ability",
+      "name_zh_CN": "邦！",
+      "name_zh_TW": "一棒入魂！",
+      "name_ja": "ボカッ！",
+      "name_ko": "꽁!",
+      "wikiDescription": "Upgrades one of your champion's abilities that has an empowered basic attack effect, further enhancing the attack to deal 30% increased damage to the target and 30% of its damage to nearby enemies.",
+      "wikiRarity": "silver"
     },
     {
       "augmentId": "ARAM_SonicBoom",
@@ -2267,24 +2405,34 @@
       "wikiRarity": "gold"
     },
     {
+      "augmentId": "TitansPulse",
       "slug": "stay-resolute",
       "name": "Stay Resolute",
+      "displayName": "Stay Resolute",
       "rarity": "silver",
-      "icon": "https://arammayhem.com/augments/Stay_Resolute_mayhem_augment.webp",
-      "name_zh_CN": "保持坚定",
-      "name_zh_TW": "果斷",
-      "name_ja": "固い決意",
-      "name_ko": "확고한 의지로",
-      "type": "ability",
-      "flags": {
-        "system_breaker": false,
-        "lifecycle": "removed"
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/kiwi/augments/icons/genericabilityaugmenticon_silver.png",
+      "names": {
+        "en": "Stay Resolute",
+        "zh_cn": "保持坚定",
+        "zh_tw": "果斷",
+        "ja": "固い決意",
+        "ko": "확고한 의지로"
       },
       "kit_tags": [
         "ability",
         "tank"
       ],
-      "wikiDescription": "When your chosen ability damages enemy champions, gain the required number of Armor and Magic Resistance."
+      "flags": {
+        "system_breaker": false,
+        "lifecycle": "active"
+      },
+      "type": "ability",
+      "name_zh_CN": "保持坚定",
+      "name_zh_TW": "果斷",
+      "name_ja": "固い決意",
+      "name_ko": "확고한 의지로",
+      "wikiDescription": "Upgrades one of your champion's abilities, empowering the ability to grant you 4 / 8 / 12 (based on level) bonus armor or bonus magic resistance for a duration when it damages an enemy champion (5 second cooldown per target per cast instance). This effect can stack up to a number of times. The resistance type granted is based on the target's adaptive type: bonus armor for physical and bonus magic resistance for magic. If this is not your first augment, gain 20 bonus armor and bonus magic resistance.",
+      "wikiRarity": "silver"
     },
     {
       "augmentId": "ARAM_LegDay",
@@ -2407,24 +2555,34 @@
       "wikiRarity": "silver"
     },
     {
+      "augmentId": "HandOfBaron",
       "slug": "hand-of-baron",
       "name": "Hand of Baron",
+      "displayName": "Hand of Baron",
       "rarity": "prismatic",
-      "icon": "https://arammayhem.com/augments/Hand_of_Baron_mayhem_augment.webp",
-      "name_zh_CN": "男爵之手",
-      "name_zh_TW": "巴龍之爪",
-      "name_ja": "バロンの牙",
-      "name_ko": "남작의 도움",
-      "wikiDescription": "Gain a modified Hand of Baron , which only grants 25% increased adaptive force and greatly empowers nearby allied minions .",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/kiwi/augments/icons/handofbaron_small.png",
+      "names": {
+        "en": "Hand of Baron",
+        "zh_cn": "男爵之手",
+        "zh_tw": "巴龍之爪",
+        "ja": "バロンの牙",
+        "ko": "남작의 도움"
+      },
       "kit_tags": [
         "attack",
         "ability"
       ],
       "flags": {
         "system_breaker": false,
-        "lifecycle": "removed"
+        "lifecycle": "active"
       },
-      "type": "standalone"
+      "type": "standalone",
+      "name_zh_CN": "男爵之手",
+      "name_zh_TW": "巴龍之爪",
+      "name_ja": "バロンの牙",
+      "name_ko": "남작의 도움",
+      "wikiDescription": "Gain a modified Hand of Baron, which only grants 25% increased adaptive force and greatly empowers nearby allied minions.",
+      "wikiRarity": "prismatic"
     },
     {
       "augmentId": "ARAM_FromBeginningToEnd",
@@ -2517,21 +2675,31 @@
       "wikiRarity": "gold"
     },
     {
+      "augmentId": "KingMe",
       "slug": "king-me",
       "name": "King Me",
+      "displayName": "King Me",
       "rarity": "prismatic",
-      "icon": "https://arammayhem.com/augments/King_Me_mayhem_augment.webp",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/kiwi/augments/icons/kingme_small.png",
+      "names": {
+        "en": "King Me",
+        "zh_cn": "尊我为王",
+        "zh_tw": "封我為王",
+        "ja": "即位",
+        "ko": "나는 왕이다"
+      },
+      "kit_tags": [],
+      "flags": {
+        "system_breaker": false,
+        "lifecycle": "active"
+      },
+      "type": "standalone",
       "name_zh_CN": "尊我为王",
       "name_zh_TW": "封我為王",
       "name_ja": "即位",
       "name_ko": "나는 왕이다",
-      "wikiDescription": "Upon entering the enemy team's gate or Catapult for the first time, either of which are located near their spawn , you become Kinged , causing you to gain one random Prismatic-tier augment and the first eligible Legendary item in your inventory to be upgraded with improved stats. The gold value of all upgradeable stats on the item is increased by exactly 1000 . King Me prioritize upgrading the first Legendary item eligible for a upgrade based on its position in the inventory, detecting each slot until an eligible item is found.",
-      "kit_tags": [],
-      "flags": {
-        "system_breaker": false,
-        "lifecycle": "removed"
-      },
-      "type": "standalone"
+      "wikiDescription": "Upon entering the enemy team's gate or Catapult for the first time, either of which are located near their spawn, you become Kinged, causing you to gain one random Prismatic-tier augment and the first eligible Legendary item in your inventory to be upgraded with improved stats. The gold value of all upgradeable stats on the item is increased by exactly 1000. King Me prioritize upgrading the first Legendary item eligible for a upgrade based on its position in the inventory, detecting each slot until an eligible item is found.",
+      "wikiRarity": "prismatic"
     },
     {
       "augmentId": "ARAM_SpinToWin",
@@ -2564,27 +2732,35 @@
       "wikiRarity": "silver"
     },
     {
+      "augmentId": "BiggestSnowballEver",
       "slug": "biggest-snowball-ever",
       "name": "Biggest Snowball Ever",
+      "displayName": "Biggest Snowball Ever",
       "rarity": "prismatic",
-      "icon": "https://arammayhem.com/augments/Biggest_Snowball_Ever_mayhem_augment.webp",
-      "name_zh_CN": "史上最大雪球",
-      "name_zh_TW": "巨無霸雪球",
-      "name_ja": "超特大の雪玉！",
-      "name_ko": "데굴데굴 눈덩이!",
-      "wikiDescription": "Upgrades your Mark into a massive snowball, empowering it with an increased size radius and the ability to pass through non-champions. The snowball additionally explodes upon impact of the target hit to deal 200 – 350 (based on level) (+ 100% bonus AD) (+ 60% AP) magic damage to all nearby enemies, knock them up for 0. 75 seconds, and slow them by 20% for 2 seconds. Additionally, your Mark's cooldown is reduced equivalent to 100 ability haste. If Mark is not equipped, you will be prompted to replace one of your summoner spells with Mark . Non-champions hit by the snowball are stunned for 1. 25 seconds.",
-      "wikiSet": "Snowday",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/kiwi/augments/icons/biggestsnowballever_small.png",
+      "names": {
+        "en": "Biggest Snowball Ever",
+        "zh_cn": "史上最大雪球",
+        "zh_tw": "巨無霸雪球",
+        "ja": "超特大の雪玉！",
+        "ko": "데굴데굴 눈덩이!"
+      },
       "kit_tags": [
         "ability",
         "movement",
         "cc"
       ],
-      "set": "snowday",
       "flags": {
         "system_breaker": false,
-        "lifecycle": "removed"
+        "lifecycle": "active"
       },
-      "type": "standalone"
+      "type": "standalone",
+      "name_zh_CN": "史上最大雪球",
+      "name_zh_TW": "巨無霸雪球",
+      "name_ja": "超特大の雪玉！",
+      "name_ko": "데굴데굴 눈덩이!",
+      "wikiDescription": "Upgrades your Mark into a massive snowball, empowering it with an increased size radius and the ability to pass through non-champions. The snowball additionally explodes upon impact of the target hit to deal 200 – 350 (based on level) (+ 100% bonus AD) (+ 60% AP) magic damage to all nearby enemies, knock them up for 0.75 seconds, and slow them by 20% for 2 seconds. Additionally, your Mark's cooldown is reduced equivalent to 100 ability haste. If Mark is not equipped, you will be prompted to replace one of your summoner spells with Mark. Non-champions hit by the snowball are stunned for 1.25 seconds.",
+      "wikiRarity": "prismatic"
     },
     {
       "augmentId": "ARAM_OmniSoul",
@@ -2692,24 +2868,34 @@
       "wikiRarity": "silver"
     },
     {
+      "augmentId": "Overextender",
       "slug": "overextender",
       "name": "Overextender",
+      "displayName": "Overextender",
       "rarity": "gold",
-      "icon": "https://arammayhem.com/augments/Overextender_mayhem_augment.webp",
-      "name_zh_CN": "过量延伸者",
-      "name_zh_TW": "過度延伸",
-      "name_ja": "深追いしすぎ",
-      "name_ko": "무리한 진입",
-      "type": "standalone",
-      "flags": {
-        "system_breaker": false,
-        "lifecycle": "removed"
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/kiwi/augments/icons/overextender_small.png",
+      "names": {
+        "en": "Overextender",
+        "zh_cn": "过量延伸者",
+        "zh_tw": "過度延伸",
+        "ja": "深追いしすぎ",
+        "ko": "무리한 진입"
       },
       "kit_tags": [
         "ability",
         "movement"
       ],
-      "wikiDescription": "Recall to enter your Cannon Launcher. It has significantly increased range, travel speed, and damage."
+      "flags": {
+        "system_breaker": false,
+        "lifecycle": "active"
+      },
+      "type": "standalone",
+      "name_zh_CN": "过量延伸者",
+      "name_zh_TW": "過度延伸",
+      "name_ja": "深追いしすぎ",
+      "name_ko": "무리한 진입",
+      "wikiDescription": "Your launch with the Cannon Launcher is now empowered, increasing the launch range by 12,000 units and the impact damage by 50%, as well as the travel speed by a significant amount. Additionally, your Recall is now functional and is upgraded to Empowered Recall. Total launch range is 18,500 units, reduced to 16,500 after your team's Outer turret is destroyed. Increased impact damage is 180 – 690 (based on level) magic damage.",
+      "wikiRarity": "gold"
     },
     {
       "slug": "its-go-time",
@@ -2780,25 +2966,35 @@
       "wikiRarity": "gold"
     },
     {
+      "augmentId": "DarkWind",
       "slug": "ravenous-bind",
       "name": "Ravenous Bind",
+      "displayName": "Ravenous Bind",
       "rarity": "gold",
-      "icon": "https://arammayhem.com/augments/Ravenous_Bind_mayhem_augment.webp",
-      "name_zh_CN": "贪欲束缚",
-      "name_zh_TW": "貪婪束縛",
-      "name_ja": "貪欲な束縛",
-      "name_ko": "굶주린 속박",
-      "type": "ability",
-      "flags": {
-        "system_breaker": false,
-        "lifecycle": "removed"
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/kiwi/augments/icons/upgradehubris_small.png",
+      "names": {
+        "en": "Ravenous Bind",
+        "zh_cn": "贪欲束缚",
+        "zh_tw": "貪婪束縛",
+        "ja": "貪欲な束縛",
+        "ko": "굶주린 속박"
       },
       "kit_tags": [
         "ability",
         "heal_shield",
         "cc"
       ],
-      "wikiDescription": "Immobilizing or Grounding enemy champions with your chosen ability deals extra damage and heals you."
+      "flags": {
+        "system_breaker": false,
+        "lifecycle": "active"
+      },
+      "type": "ability",
+      "name_zh_CN": "贪欲束缚",
+      "name_zh_TW": "貪婪束縛",
+      "name_ja": "貪欲な束縛",
+      "name_ko": "굶주린 속박",
+      "wikiDescription": "Upgrades one of your champion's abilities that has a immobilizing or grounding effect, empowering the ability to deal 15 – 90 (based on level) (+ 10% AP) (+ 0.5% of your maximum health) magic damage to affected targets and heal you for 50 – 200 (based on level) (+ 5% AP) (+ 10% bonus health). The heal is increased by up to 50% based on how long the ability's cooldown is.",
+      "wikiRarity": "gold"
     },
     {
       "augmentId": "ARAM_Dashing",
@@ -2920,28 +3116,36 @@
       "wikiRarity": "gold"
     },
     {
+      "augmentId": "Goldrend",
       "slug": "goldrend",
       "name": "Goldrend",
+      "displayName": "Goldrend",
       "rarity": "prismatic",
-      "icon": "https://arammayhem.com/augments/Goldrend_mayhem_augment.webp",
-      "name_zh_CN": "夺金",
-      "name_zh_TW": "黃金撕裂",
-      "name_ja": "ゴールドレンド",
-      "name_ko": "골드 강탈",
-      "wikiDescription": "Damaging basic attacks or abilities against enemy champions deal 50 – 150 (based on level) (+ 40% bonus AD) (+ 20% AP) bonus magic damage , and grant you 30 and 25% bonus movement speed for 1. 5 seconds (30 second cooldown per champion).",
-      "wikiSet": "Make it Rain",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/kiwi/augments/icons/goldrend_small.png",
+      "names": {
+        "en": "Goldrend",
+        "zh_cn": "夺金",
+        "zh_tw": "黃金撕裂",
+        "ja": "ゴールドレンド",
+        "ko": "골드 강탈"
+      },
       "kit_tags": [
         "attack",
         "ability",
         "on_hit",
         "movement"
       ],
-      "set": "make_it_rain",
       "flags": {
         "system_breaker": false,
-        "lifecycle": "removed"
+        "lifecycle": "active"
       },
-      "type": "standalone"
+      "type": "standalone",
+      "name_zh_CN": "夺金",
+      "name_zh_TW": "黃金撕裂",
+      "name_ja": "ゴールドレンド",
+      "name_ko": "골드 강탈",
+      "wikiDescription": "Damaging basic attacks or abilities against enemy champions deal 50 – 150 (based on level) (+ 40% bonus AD) (+ 20% AP) bonus magic damage, and grant you 30 and 25% bonus movement speed for 1.5 seconds (30 second cooldown per champion).",
+      "wikiRarity": "prismatic"
     },
     {
       "augmentId": "ARAM_ItsKillingTime",
@@ -3153,21 +3357,31 @@
       "wikiRarity": "prismatic"
     },
     {
+      "augmentId": "HextechSoul",
       "slug": "hextech-soul",
       "name": "Hextech Soul",
+      "displayName": "Hextech Soul",
       "rarity": "silver",
-      "icon": "https://arammayhem.com/augments/Hextech_Soul_mayhem_augment.webp",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/infernalsoul_small.png",
+      "names": {
+        "en": "Hextech Soul",
+        "zh_cn": "海克斯科技龙魂",
+        "zh_tw": "海克斯科技龍魂",
+        "ja": "ヘクステック ソウル",
+        "ko": "마법공학의 영혼"
+      },
+      "kit_tags": [],
+      "flags": {
+        "system_breaker": false,
+        "lifecycle": "active"
+      },
+      "type": "standalone",
       "name_zh_CN": "海克斯科技龙魂",
       "name_zh_TW": "海克斯科技龍魂",
       "name_ja": "ヘクステック ソウル",
       "name_ko": "마법공학의 영혼",
-      "wikiDescription": "Grants the Hextech Dragon Soul , or a different Dragon Soul if you aleady have it.",
-      "kit_tags": [],
-      "flags": {
-        "system_breaker": false,
-        "lifecycle": "removed"
-      },
-      "type": "standalone"
+      "wikiDescription": "Grants the Hextech Dragon Soul, or a different Dragon Soul if you aleady have it.",
+      "wikiRarity": "silver"
     },
     {
       "augmentId": "ARAM_YowchMyCoins",
@@ -3178,10 +3392,10 @@
       "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/kiwi/augments/icons/youchmycoins_small.png",
       "names": {
         "en": "Yowch, My Coins!",
-        "zh_cn": "Yowch, My Coins!",
-        "zh_tw": "Yowch, My Coins!",
-        "ja": "Yowch, My Coins!",
-        "ko": "Yowch, My Coins!"
+        "zh_cn": "哎哟，我的硬币！",
+        "zh_tw": "哎呀，我的金幣！",
+        "ja": "あいたっ、私のコイン！",
+        "ko": "으악, 내 동전!"
       },
       "kit_tags": [],
       "flags": {
@@ -3189,53 +3403,73 @@
         "lifecycle": "active"
       },
       "type": "standalone",
-      "name_zh_CN": "Yowch, My Coins!",
-      "name_zh_TW": "Yowch, My Coins!",
-      "name_ja": "Yowch, My Coins!",
-      "name_ko": "Yowch, My Coins!",
+      "name_zh_CN": "哎哟，我的硬币！",
+      "name_zh_TW": "哎呀，我的金幣！",
+      "name_ja": "あいたっ、私のコイン！",
+      "name_ko": "으악, 내 동전!",
       "wikiDescription": "Enemy champions that you score a takedown against drop 6 – 10 (based on level) coins, with each coin landing 500 units away from the location of their death and lasting 10 seconds. You or allied champions can collect the coins by moving over them, granting 15 for each coin collected.",
       "wikiRarity": "gold"
     },
     {
+      "augmentId": "EndlessDecimation",
       "slug": "endless-decimation",
       "name": "Endless Decimation",
+      "displayName": "Endless Decimation",
       "rarity": "gold",
-      "icon": "https://arammayhem.com/augments/Endless_Decimation_mayhem_augment.webp",
-      "name_zh_CN": "无尽大杀四方",
-      "name_zh_TW": "無盡屠滅",
-      "name_ja": "終わりなき殲滅",
-      "name_ko": "끝없는 학살",
-      "type": "standalone",
-      "flags": {
-        "system_breaker": false,
-        "lifecycle": "removed"
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/endlessdecimate_small.png",
+      "names": {
+        "en": "Endless Decimation",
+        "zh_cn": "无尽大杀四方",
+        "zh_tw": "無盡屠滅",
+        "ja": "終わりなき殲滅",
+        "ko": "끝없는 학살"
       },
       "kit_tags": [
         "ability",
         "on_hit",
         "heal_shield"
       ],
-      "wikiDescription": "While in combat, Autocast a circular axe that deals physical damage. Enemies on the outer edge take additional damage and heal you."
+      "flags": {
+        "system_breaker": false,
+        "lifecycle": "active"
+      },
+      "type": "standalone",
+      "name_zh_CN": "无尽大杀四方",
+      "name_zh_TW": "無盡屠滅",
+      "name_ja": "終わりなき殲滅",
+      "name_ko": "끝없는 학살",
+      "wikiDescription": "Automatically cast an improved version of Darius' Decimate, winding up over 1.25 seconds to slash in a 460 radius around you. The slash deals 100 – 400 (based on level) (+ 60% AD) (+ 40% AP) physical damage to enemies within the area (8 second cooldown). Enemies within the 240 inner radius of the slash take「 50% damage. 」「 50 – 200 (based on level) (+ 30% AD) (+ 20% AP) physical damage. 」Additionally, for each enemy champion hit along the outer edge, you heal for 15% of your missing health and the cooldown of this effect is reduced by 10%, down to a minimum of 3 seconds.",
+      "wikiRarity": "gold"
     },
     {
+      "augmentId": "UltimateAwakening",
       "slug": "ultimate-awakening",
       "name": "Ultimate Awakening",
+      "displayName": "Ultimate Awakening",
       "rarity": "prismatic",
-      "icon": "https://arammayhem.com/augments/Ultimate_Awakening_mayhem_augment.webp",
-      "name_zh_CN": "终极唤醒",
-      "name_zh_TW": "大絕覺醒",
-      "name_ja": "究極の目覚め",
-      "name_ko": "궁극의 각성",
-      "wikiDescription": "Casting your ultimate ability resets the cooldowns of all your basic abilities and grants you 300 basic ability haste for 15 seconds (20 second cooldown). Additionally, gain 30 ultimate haste.",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/kiwi/augments/icons/zerohour_small.png",
+      "names": {
+        "en": "Ultimate Awakening",
+        "zh_cn": "终极唤醒",
+        "zh_tw": "大絕覺醒",
+        "ja": "究極の目覚め",
+        "ko": "궁극의 각성"
+      },
       "kit_tags": [
         "ability",
         "haste"
       ],
       "flags": {
         "system_breaker": false,
-        "lifecycle": "removed"
+        "lifecycle": "active"
       },
-      "type": "standalone"
+      "type": "standalone",
+      "name_zh_CN": "终极唤醒",
+      "name_zh_TW": "大絕覺醒",
+      "name_ja": "究極の目覚め",
+      "name_ko": "궁극의 각성",
+      "wikiDescription": "Casting your ultimate ability resets the cooldowns of all your basic abilities and grants you 300 basic ability haste for 15 seconds (20 second cooldown). Additionally, gain 30 ultimate haste.",
+      "wikiRarity": "prismatic"
     },
     {
       "slug": "overloaded",
@@ -3335,15 +3569,19 @@
       "wikiRarity": "gold"
     },
     {
+      "augmentId": "OminousPact",
       "slug": "ominous-pact",
       "name": "Ominous Pact",
+      "displayName": "Ominous Pact",
       "rarity": "prismatic",
-      "icon": "https://arammayhem.com/augments/Ominous_Pact_mayhem_augment.webp",
-      "name_zh_CN": "不祥契约",
-      "name_zh_TW": "不祥契約",
-      "name_ja": "不穏な盟約",
-      "name_ko": "불길한 서약",
-      "wikiDescription": "Your abilities now have a health cost of 5% current health to cast them. In return, you gain ability power based on your missing health , up to 75 – 150 (based on level) at 70% missing health , 0% – 50% (based on missing health) bonus movement speed , and 0% – 20% (based on missing health) omnivamp .",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/wisdomofages_small.png",
+      "names": {
+        "en": "Ominous Pact",
+        "zh_cn": "不祥契约",
+        "zh_tw": "不祥契約",
+        "ja": "不穏な盟約",
+        "ko": "불길한 서약"
+      },
       "kit_tags": [
         "ability",
         "heal_shield",
@@ -3351,9 +3589,15 @@
       ],
       "flags": {
         "system_breaker": false,
-        "lifecycle": "removed"
+        "lifecycle": "active"
       },
-      "type": "standalone"
+      "type": "standalone",
+      "name_zh_CN": "不祥契约",
+      "name_zh_TW": "不祥契約",
+      "name_ja": "不穏な盟約",
+      "name_ko": "불길한 서약",
+      "wikiDescription": "Your abilities now have a health cost of 5% current health to cast them. In return, you gain ability power based on your missing health, up to 75 – 150 (based on level) at 70% missing health, 0% – 50% (based on missing health) bonus movement speed, and 0% – 20% (based on missing health) omnivamp.",
+      "wikiRarity": "prismatic"
     },
     {
       "augmentId": "ARAM_InfernalSoul",
@@ -3383,24 +3627,34 @@
       "wikiRarity": "silver"
     },
     {
+      "augmentId": "DoubleDefense",
       "slug": "double-defense",
-      "name": "Double Defense",
+      "name": "Bolstered",
+      "displayName": "Bolstered",
       "rarity": "silver",
-      "icon": "https://arammayhem.com/augments/Double_Defense_mayhem_augment.webp",
-      "name_zh_CN": "双重防御",
-      "name_zh_TW": "雙重防禦",
-      "name_ja": "ダブルディフェンス",
-      "name_ko": "2연속 방어",
-      "type": "ability",
-      "flags": {
-        "system_breaker": false,
-        "lifecycle": "removed"
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/kiwi/augments/icons/genericabilityaugmenticon_silver.png",
+      "names": {
+        "en": "Bolstered",
+        "zh_cn": "加固护盾",
+        "zh_tw": "能力強化",
+        "ja": "補強",
+        "ko": "보강"
       },
       "kit_tags": [
         "heal_shield",
         "ability"
       ],
-      "wikiDescription": "Shields granted from your chosen ability are stronger and scaling with target's missing Health."
+      "flags": {
+        "system_breaker": false,
+        "lifecycle": "active"
+      },
+      "type": "ability",
+      "name_zh_CN": "加固护盾",
+      "name_zh_TW": "能力強化",
+      "name_ja": "補強",
+      "name_ko": "보강",
+      "wikiDescription": "Upgrades one of your champion's abilities that has a shield effect, increasing the strength of the ability's shield by 0% – 60% (based on target's missing health).",
+      "wikiRarity": "silver"
     },
     {
       "augmentId": "ARAM_StatsOnStatsOnStats",
@@ -3460,24 +3714,34 @@
       "wikiRarity": "gold"
     },
     {
+      "augmentId": "MercysStrike",
       "slug": "mercys-strike",
       "name": "Mercy's Strike",
+      "displayName": "Mercy's Strike",
       "rarity": "gold",
-      "icon": "https://arammayhem.com/augments/Mercy_s_Strike_mayhem_augment.webp",
-      "name_zh_CN": "仁慈打击",
-      "name_zh_TW": "慈悲之擊",
-      "name_ja": "慈悲の一撃",
-      "name_ko": "자비의 일격",
-      "type": "ability",
-      "flags": {
-        "system_breaker": false,
-        "lifecycle": "removed"
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/kiwi/augments/icons/genericabilityaugmenticon_gold.png",
+      "names": {
+        "en": "Mercy's Strike",
+        "zh_cn": "仁慈打击",
+        "zh_tw": "慈悲之擊",
+        "ja": "慈悲の一撃",
+        "ko": "자비의 일격"
       },
       "kit_tags": [
         "ability",
         "attack"
       ],
-      "wikiDescription": "After using your chosen ability, your next basic attack gains attack range, attack speed and deals bonus max Health magic damage."
+      "flags": {
+        "system_breaker": false,
+        "lifecycle": "active"
+      },
+      "type": "ability",
+      "name_zh_CN": "仁慈打击",
+      "name_zh_TW": "慈悲之擊",
+      "name_ja": "慈悲の一撃",
+      "name_ko": "자비의 일격",
+      "wikiDescription": "Upgrades one of your champion's abilities, empowering the ability's cast to enhance your next basic attack within a duration. The enhanced attack has 300 bonus range, gains 75% bonus attack speed, and deals bonus magic damage equal to 3% (+ 2% per 10% heal and shield power) of the target's maximum health.",
+      "wikiRarity": "gold"
     },
     {
       "augmentId": "ARAM_CircleofDeath",
@@ -3600,24 +3864,34 @@
       "wikiRarity": "gold"
     },
     {
+      "augmentId": "FishBait",
       "slug": "shark-bait",
       "name": "Shark Bait",
+      "displayName": "Shark Bait",
       "rarity": "gold",
-      "icon": "https://arammayhem.com/augments/Shark_Bait_mayhem_augment.webp",
-      "name_zh_CN": "鲨鱼诱饵",
-      "name_zh_TW": "鯊魚誘餌",
-      "name_ja": "サメのエサ",
-      "name_ko": "상어 미끼",
-      "type": "standalone",
-      "flags": {
-        "system_breaker": false,
-        "lifecycle": "removed"
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/kiwi/augments/icons/fishbait_small.png",
+      "names": {
+        "en": "Shark Bait",
+        "zh_cn": "鲨鱼诱饵",
+        "zh_tw": "鯊魚誘餌",
+        "ja": "サメのエサ",
+        "ko": "상어 미끼"
       },
       "kit_tags": [
         "cc",
         "dot"
       ],
-      "wikiDescription": "A few seconds after death, a shark chomps all nearby enemies. You can move after death to aim the shark attack."
+      "flags": {
+        "system_breaker": false,
+        "lifecycle": "active"
+      },
+      "type": "standalone",
+      "name_zh_CN": "鲨鱼诱饵",
+      "name_zh_TW": "鯊魚誘餌",
+      "name_ja": "サメのエサ",
+      "name_ko": "상어 미끼",
+      "wikiDescription": "Upon taking fatal damage, you become a Shark Bait, causing you to enter a zombie state for 3.5 seconds, during which your movement speed is set to a static 400, you gain ghosting, and enemies within 400 units of you are slowed by 40%. At the end of the duration, a massive shark emerges from beneath you that lets out a powerful chomp (400 radius), dealing 80 – 300 (based on level) (+ 20% of target's missing health) magic damage to all enemies within the area and knocking them up for 1 second. While under the zombie state, you are able to move and become invulnerable, untargetable, and immune to crowd control, but you are also rendered unable to declare basic attacks, cast abilities, use summoner spells, and activate items.",
+      "wikiRarity": "gold"
     },
     {
       "augmentId": "ARAM_DivineIntervention",
@@ -3858,43 +4132,63 @@
       "wikiRarity": "prismatic"
     },
     {
+      "augmentId": "NatureIsHealing",
       "slug": "nature-is-healing",
       "name": "Nature is Healing",
+      "displayName": "Nature is Healing",
       "rarity": "gold",
-      "icon": "https://arammayhem.com/augments/Nature_is_Healing_mayhem_augment.webp",
-      "name_zh_CN": "自然即是治愈",
-      "name_zh_TW": "自然治療",
-      "name_ja": "大自然が回復している",
-      "name_ko": "자연의 회복",
-      "type": "standalone",
-      "flags": {
-        "system_breaker": false,
-        "lifecycle": "removed"
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/kiwi/augments/icons/natureishealing_small.png",
+      "names": {
+        "en": "Nature is Healing",
+        "zh_cn": "自然即是治愈",
+        "zh_tw": "自然治療",
+        "ja": "大自然が回復している",
+        "ko": "자연의 회복"
       },
       "kit_tags": [
         "heal_shield"
       ],
-      "wikiDescription": "Standing in Brush regenerates the required number of max Health per second."
+      "flags": {
+        "system_breaker": false,
+        "lifecycle": "active"
+      },
+      "type": "standalone",
+      "name_zh_CN": "自然即是治愈",
+      "name_zh_TW": "自然治療",
+      "name_ja": "大自然が回復している",
+      "name_ko": "자연의 회복",
+      "wikiDescription": "Heal yourself for 0.6% – 2.1% (based on level) of your maximum health for each second that you are within brush.",
+      "wikiRarity": "gold"
     },
     {
+      "augmentId": "Poltergeist",
       "slug": "poltergeist",
       "name": "Poltergeist",
+      "displayName": "Poltergeist",
       "rarity": "silver",
-      "icon": "https://arammayhem.com/augments/Poltergeist_mayhem_augment.webp",
-      "name_zh_CN": "吵闹鬼",
-      "name_zh_TW": "守護面紗",
-      "name_ja": "ポルターガイスト",
-      "name_ko": "폴터가이스트",
-      "wikiDescription": "Replace a summoner spell with Poltergeist . Poltergeist: Casts both Barrier and Ghost on yourself, both lasting 5 seconds and with the former granting a shield for 110 – 440 (based on level) and the latter granting 30% bonus movement speed .",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/kiwi/augments/icons/poltergeist_small.png",
+      "names": {
+        "en": "Poltergeist",
+        "zh_cn": "吵闹鬼",
+        "zh_tw": "搗蛋鬼",
+        "ja": "ポルターガイスト",
+        "ko": "폴터가이스트"
+      },
       "kit_tags": [
         "heal_shield",
         "movement"
       ],
       "flags": {
         "system_breaker": false,
-        "lifecycle": "removed"
+        "lifecycle": "active"
       },
-      "type": "standalone"
+      "type": "standalone",
+      "name_zh_CN": "吵闹鬼",
+      "name_zh_TW": "搗蛋鬼",
+      "name_ja": "ポルターガイスト",
+      "name_ko": "폴터가이스트",
+      "wikiDescription": "Replace a summoner spell with Poltergeist. Poltergeist: Casts both Barrier and Ghost on yourself, both lasting 5 seconds and with the former granting a shield for 110 – 440 (based on level) and the latter granting 30% bonus movement speed.",
+      "wikiRarity": "silver"
     },
     {
       "augmentId": "ARAM_SpiritualPurification",
@@ -3957,23 +4251,33 @@
       "wikiRarity": "gold"
     },
     {
+      "augmentId": "Nightstalking",
       "slug": "nightstalking",
       "name": "Nightstalking",
+      "displayName": "Nightstalking",
       "rarity": "gold",
-      "icon": "https://arammayhem.com/augments/Nightstalking_mayhem_augment.webp",
-      "name_zh_CN": "夜狩",
-      "name_zh_TW": "終城快車",
-      "name_ja": "ナイトストーク",
-      "name_ko": "밤의 추적",
-      "wikiDescription": "Scoring a takedown against an enemy champion within 3 seconds of damaging them renders you invisible for 1. 5 seconds. Attacking or casting abilites ends the stealth immediately.",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/kiwi/augments/icons/nightstalking_small.png",
+      "names": {
+        "en": "Nightstalking",
+        "zh_cn": "夜狩",
+        "zh_tw": "暗夜潛行",
+        "ja": "ナイトストーク",
+        "ko": "밤의 추적"
+      },
       "kit_tags": [
         "cc"
       ],
       "flags": {
         "system_breaker": false,
-        "lifecycle": "removed"
+        "lifecycle": "active"
       },
-      "type": "standalone"
+      "type": "standalone",
+      "name_zh_CN": "夜狩",
+      "name_zh_TW": "暗夜潛行",
+      "name_ja": "ナイトストーク",
+      "name_ko": "밤의 추적",
+      "wikiDescription": "Scoring a takedown against an enemy champion within 3 seconds of damaging them renders you invisible for 1.5 seconds. Attacking or casting abilites ends the stealth immediately.",
+      "wikiRarity": "gold"
     },
     {
       "augmentId": "ARAM_BladeWaltz",
@@ -4041,23 +4345,33 @@
       "wikiRarity": "silver"
     },
     {
+      "augmentId": "SpellVolley",
       "slug": "tripleshot",
       "name": "Tripleshot",
+      "displayName": "Tripleshot",
       "rarity": "prismatic",
-      "icon": "https://arammayhem.com/augments/Tripleshot_mayhem_augment.webp",
-      "name_zh_CN": "三重射击",
-      "name_zh_TW": "三連射",
-      "name_ja": "トリプルショット",
-      "name_ko": "3연발",
-      "type": "ability",
-      "flags": {
-        "system_breaker": false,
-        "lifecycle": "removed"
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/kiwi/augments/icons/genericabilityaugmenticon_prismatic.png",
+      "names": {
+        "en": "Tripleshot",
+        "zh_cn": "三重射击",
+        "zh_tw": "三連射",
+        "ja": "トリプルショット",
+        "ko": "3연발"
       },
       "kit_tags": [
         "ability"
       ],
-      "wikiDescription": "Your chosen ability targets 2 additional enemies in front of you."
+      "flags": {
+        "system_breaker": false,
+        "lifecycle": "active"
+      },
+      "type": "ability",
+      "name_zh_CN": "三重射击",
+      "name_zh_TW": "三連射",
+      "name_ja": "トリプルショット",
+      "name_ko": "3연발",
+      "wikiDescription": "Upgrades one of your champion's abilities that is unit-targeted and fires a missile, empowering the ability to fire its missiles at two additional enemies in front of you. Subsequent hits from the same cast against the same enemy deal 30% damage.",
+      "wikiRarity": "prismatic"
     },
     {
       "augmentId": "ARAM_ProteinShake",
@@ -4152,15 +4466,19 @@
       "wikiRarity": "silver"
     },
     {
+      "augmentId": "EmpyreanPromise",
       "slug": "empyrean-promise",
       "name": "Empyrean Promise",
+      "displayName": "Empyrean Promise",
       "rarity": "prismatic",
-      "icon": "https://arammayhem.com/augments/Empyrean_Promise_mayhem_augment.webp",
-      "name_zh_CN": "至高天诺言",
-      "name_zh_TW": "幻焰之誓",
-      "name_ja": "荘厳の天球の約束",
-      "name_ko": "창공의 서약",
-      "wikiDescription": "Replace a summoner spell with Empyrean Promise's Vigilance active. Additionally, gain 15% heal and shield power . Active - Vigilance: After a 0. 25 -second delay, dash to the current location of the target allied champion and gain a 100 – 250 (based on level) (+ 100% AP) (+ 10% bonus health) shield for 3 seconds. Upon arrival, grant the ally the same shield (20 second cooldown; 2000 range).",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/kiwi/augments/icons/empyreampromise_small.png",
+      "names": {
+        "en": "Empyrean Promise",
+        "zh_cn": "至高天诺言",
+        "zh_tw": "幻焰之誓",
+        "ja": "荘厳の天球の約束",
+        "ko": "창공의 서약"
+      },
       "kit_tags": [
         "heal_shield",
         "movement",
@@ -4168,28 +4486,44 @@
       ],
       "flags": {
         "system_breaker": false,
-        "lifecycle": "removed"
+        "lifecycle": "active"
       },
-      "type": "standalone"
+      "type": "standalone",
+      "name_zh_CN": "至高天诺言",
+      "name_zh_TW": "幻焰之誓",
+      "name_ja": "荘厳の天球の約束",
+      "name_ko": "창공의 서약",
+      "wikiDescription": "Replace a summoner spell with Empyrean Promise's Vigilance active. Additionally, gain 15% heal and shield power. Active - Vigilance: After a 0.25-second delay, dash to the current location of the target allied champion and gain a 100 – 250 (based on level) (+ 100% AP) (+ 10% bonus health) shield for 3 seconds. Upon arrival, grant the ally the same shield (20 second cooldown; 2000 range).",
+      "wikiRarity": "prismatic"
     },
     {
+      "augmentId": "KillSecured",
       "slug": "kill-secured",
       "name": "Kill Secured",
+      "displayName": "Kill Secured",
       "rarity": "silver",
-      "icon": "https://arammayhem.com/augments/Kill_Secured_mayhem_augment.webp",
-      "name_zh_CN": "杀意翻涌",
-      "name_zh_TW": "收頭好手",
-      "name_ja": "キルを確認",
-      "name_ko": "확보된 킬",
-      "wikiDescription": "Gain 60% bonus movement speed towards enemy champions below 40% of their maximum health .",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/kiwi/augments/icons/killsecure_small.png",
+      "names": {
+        "en": "Kill Secured",
+        "zh_cn": "杀意翻涌",
+        "zh_tw": "收頭好手",
+        "ja": "キルを確認",
+        "ko": "확보된 킬"
+      },
       "kit_tags": [
         "movement"
       ],
       "flags": {
         "system_breaker": false,
-        "lifecycle": "removed"
+        "lifecycle": "active"
       },
-      "type": "standalone"
+      "type": "standalone",
+      "name_zh_CN": "杀意翻涌",
+      "name_zh_TW": "收頭好手",
+      "name_ja": "キルを確認",
+      "name_ko": "확보된 킬",
+      "wikiDescription": "Gain 60% bonus movement speed towards enemy champions below 40% of their maximum health.",
+      "wikiRarity": "silver"
     },
     {
       "slug": "porcupine",
@@ -4243,82 +4577,122 @@
       "wikiRarity": "prismatic"
     },
     {
+      "augmentId": "Ability_SelfAOE_DoubleCast",
       "slug": "echo-cast",
       "name": "Echo Cast",
+      "displayName": "Echo Cast",
       "rarity": "prismatic",
-      "icon": "https://arammayhem.com/augments/Echo_Cast_mayhem_augment.webp",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/kiwi/augments/icons/genericabilityaugmenticon_prismatic.png",
+      "names": {
+        "en": "Echo Cast",
+        "zh_cn": "回响施放",
+        "zh_tw": "共鳴施放",
+        "ja": "エコー キャスト",
+        "ko": "메아리 시전"
+      },
+      "kit_tags": [
+        "ability"
+      ],
+      "flags": {
+        "system_breaker": false,
+        "lifecycle": "active"
+      },
+      "type": "ability",
       "name_zh_CN": "回响施放",
       "name_zh_TW": "共鳴施放",
       "name_ja": "エコー キャスト",
       "name_ko": "메아리 시전",
-      "type": "ability",
-      "flags": {
-        "system_breaker": false,
-        "lifecycle": "removed"
+      "wikiDescription": "Upgrades one of your champion's abilities, empowering the ability's cast to summon a clone of your champion that is untargetable and moves up to 500 units towards your cursor. The clone then casts the ability it was summoned from after a 0.25-second delay, mimicking the active effects of the casted spell and disappearing after it finishes casting. Clone movement speed is 1000. Clone has a maximum lifetime of 7 seconds.",
+      "wikiRarity": "prismatic"
+    },
+    {
+      "augmentId": "Missile_Split",
+      "slug": "spell-split",
+      "name": "Spell Split",
+      "displayName": "Spell Split",
+      "rarity": "prismatic",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/kiwi/augments/icons/genericabilityaugmenticon_prismatic.png",
+      "names": {
+        "en": "Spell Split",
+        "zh_cn": "咒语裂变",
+        "zh_tw": "法術迸裂",
+        "ja": "スペルスプリット",
+        "ko": "주문 분산"
       },
       "kit_tags": [
         "ability"
       ],
-      "wikiDescription": "Casting your chosen ability sends a clone toward your mouse position and recasts it."
-    },
-    {
-      "slug": "spell-split",
-      "name": "Spellsplit",
-      "rarity": "prismatic",
-      "icon": "https://arammayhem.com/augments/Spellsplit_mayhem_augment.webp",
+      "flags": {
+        "system_breaker": false,
+        "lifecycle": "active"
+      },
+      "type": "ability",
       "name_zh_CN": "咒语裂变",
       "name_zh_TW": "法術迸裂",
       "name_ja": "スペルスプリット",
       "name_ko": "주문 분산",
-      "type": "ability",
-      "flags": {
-        "system_breaker": false,
-        "lifecycle": "removed"
-      },
-      "kit_tags": [
-        "ability"
-      ],
-      "wikiDescription": "Your chosen ability missile splits into two on hit, at max Range, or when Recast."
+      "wikiDescription": "Upgrades one of your champion's abilities that has a missile, empowering the ability's missile to split in two over 0.25 seconds upon hitting an enemy, at maximum range, or when recast. Each of the split missiles fire perpendicularly in opposite directions and apply the same effects to enemies they hit. Subsequent missile hits from the same cast against the same enemy deal 30% damage. Recast can be used after 0.15 seconds of the initial cast.",
+      "wikiRarity": "prismatic"
     },
     {
+      "augmentId": "SharkTempest",
       "slug": "shark-tempest",
       "name": "Shark Tempest",
+      "displayName": "Shark Tempest",
       "rarity": "gold",
-      "icon": "https://arammayhem.com/augments/Shark_Tempest_mayhem_augment.webp",
-      "name_zh_CN": "鲨鱼暴风",
-      "name_zh_TW": "鯊魚風暴",
-      "name_ja": "シャークテンペスト",
-      "name_ko": "상어 폭풍",
-      "type": "standalone",
-      "flags": {
-        "system_breaker": false,
-        "lifecycle": "removed"
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/kiwi/augments/icons/sharktempest_small.png",
+      "names": {
+        "en": "Shark Tempest",
+        "zh_cn": "鲨鱼暴风",
+        "zh_tw": "鯊魚風暴",
+        "ja": "シャークテンペスト",
+        "ko": "상어 폭풍"
       },
       "kit_tags": [
         "cc",
         "dot"
       ],
-      "wikiDescription": "Sharks circle your Snowball, slowing and damaging nearby enemies. When your Snowball hits a Champion, they become trapped in a shark storm!"
+      "flags": {
+        "system_breaker": false,
+        "lifecycle": "active"
+      },
+      "type": "standalone",
+      "name_zh_CN": "鲨鱼暴风",
+      "name_zh_TW": "鯊魚風暴",
+      "name_ja": "シャークテンペスト",
+      "name_ko": "상어 폭풍",
+      "wikiDescription": "Your Mark is empowered to circle sharks around it in a 300 radius, dealing 50 – 100 (based on level) magic damage to enemies it passes through as it travels and slowing targets hit by 30% for 1 second. If the missile hits an enemy champion, the sharks circle around their location in a 425 radius instead for 3 seconds, dealing「 25 – 75 (based on level) (+ 20% bonus AD) (+ 12% AP) magic damage every second 」「 75 – 225 (based on level) (+ 60% bonus AD) (+ 36% AP) total magic damage over the duration 」to enemies within the area and slowing them by 30% for 3 seconds. If Mark is not equipped, you will be prompted to replace one of your summoner spells with Mark.",
+      "wikiRarity": "gold"
     },
     {
+      "augmentId": "Flash2",
       "slug": "flash-2",
       "name": "Flash 2",
+      "displayName": "Flash 2",
       "rarity": "silver",
-      "icon": "https://arammayhem.com/augments/Flash_2_mayhem_augment.webp",
-      "name_zh_CN": "闪闪现现",
-      "name_zh_TW": "二次閃現",
-      "name_ja": "フラッシュ2",
-      "name_ko": "점멸 2",
-      "wikiDescription": "Replace a summoner spell with Flash . Additionally, gain 70 summoner spell haste.",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/kiwi/augments/icons/flash2_small.png",
+      "names": {
+        "en": "Flash 2",
+        "zh_cn": "闪闪现现",
+        "zh_tw": "二次閃現",
+        "ja": "フラッシュ2",
+        "ko": "점멸 2"
+      },
       "kit_tags": [
         "haste",
         "movement"
       ],
       "flags": {
         "system_breaker": false,
-        "lifecycle": "removed"
+        "lifecycle": "active"
       },
-      "type": "standalone"
+      "type": "standalone",
+      "name_zh_CN": "闪闪现现",
+      "name_zh_TW": "二次閃現",
+      "name_ja": "フラッシュ2",
+      "name_ko": "점멸 2",
+      "wikiDescription": "Replace a summoner spell with Flash. Additionally, gain 70 summoner spell haste.",
+      "wikiRarity": "silver"
     },
     {
       "augmentId": "ARAM_InfernoTriggered",
@@ -4352,23 +4726,33 @@
       "wikiRarity": "prismatic"
     },
     {
+      "augmentId": "BrushPower",
       "slug": "hide-on-bush",
       "name": "Hide on Bush",
+      "displayName": "Hide on Bush",
       "rarity": "gold",
-      "icon": "https://arammayhem.com/augments/Hide_on_Bush_mayhem_augment.webp",
-      "name_zh_CN": "藏身草丛",
-      "name_zh_TW": "躲草叢",
-      "name_ja": "Hide on Bush",
-      "name_ko": "Hide on bush",
-      "type": "standalone",
-      "flags": {
-        "system_breaker": false,
-        "lifecycle": "removed"
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/kiwi/augments/icons/brushpower_small.png",
+      "names": {
+        "en": "Hide on Bush",
+        "zh_cn": "藏身草丛",
+        "zh_tw": "躲草叢",
+        "ja": "Hide on Bush",
+        "ko": "Hide on bush"
       },
       "kit_tags": [
         "ability"
       ],
-      "wikiDescription": "After entering Brush, deal the required number of% more damage for the required number of seconds. Remain in the Brush to refresh the effect."
+      "flags": {
+        "system_breaker": false,
+        "lifecycle": "active"
+      },
+      "type": "standalone",
+      "name_zh_CN": "藏身草丛",
+      "name_zh_TW": "躲草叢",
+      "name_ja": "Hide on Bush",
+      "name_ko": "Hide on bush",
+      "wikiDescription": "While in brush, you deal 20% increased damage. This effect lingers for 2 seconds after leaving brush.",
+      "wikiRarity": "gold"
     },
     {
       "augmentId": "ARAM_CantTouchThis",
@@ -4519,65 +4903,93 @@
       "wikiRarity": "gold"
     },
     {
+      "augmentId": "PromQueen",
       "slug": "prom-queen",
       "name": "Prom Queen",
+      "displayName": "Prom Queen",
       "rarity": "prismatic",
-      "icon": "https://arammayhem.com/augments/Prom_Queen_mayhem_augment.webp",
-      "name_zh_CN": "舞会女王",
-      "name_zh_TW": "舞會皇后",
-      "name_ja": "プロムクイーン",
-      "name_ko": "퀸카",
-      "wikiDescription": "Automatically cast a modified version of Rakan's The Quickness , empowering you to break into a captivating sprint for 6 seconds. While empowered, you gain ghosting and 50% bonus movement speed , and enemies you collide with are knocked down and become charmed for 1. 5 seconds (35 second cooldown). A sparkly tiara will descend upon you 2. 5 seconds before the effect activates.",
-      "wikiSet": "Fully Automated",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/kiwi/augments/icons/promqueen_small.png",
+      "names": {
+        "en": "Prom Queen",
+        "zh_cn": "舞会女王",
+        "zh_tw": "舞會皇后",
+        "ja": "プロムクイーン",
+        "ko": "퀸카"
+      },
       "kit_tags": [
         "movement",
         "cc"
       ],
-      "set": "fully_automated",
       "flags": {
         "system_breaker": false,
-        "lifecycle": "removed"
+        "lifecycle": "active"
       },
-      "type": "standalone"
+      "type": "standalone",
+      "name_zh_CN": "舞会女王",
+      "name_zh_TW": "舞會皇后",
+      "name_ja": "プロムクイーン",
+      "name_ko": "퀸카",
+      "wikiDescription": "Automatically cast a modified version of Rakan's The Quickness, empowering you to break into a captivating sprint for 6 seconds. While empowered, you gain ghosting and 50% bonus movement speed, and enemies you collide with are knocked down and become charmed for 1.5 seconds (35 second cooldown). A sparkly tiara will descend upon you 2.5 seconds before the effect activates.",
+      "wikiRarity": "prismatic"
     },
     {
+      "augmentId": "Equilibrium",
       "slug": "our-healing",
       "name": "Our Healing",
+      "displayName": "Our Healing",
       "rarity": "gold",
-      "icon": "https://arammayhem.com/augments/Our_Healing_mayhem_augment.webp",
-      "name_zh_CN": "我们的治疗",
-      "name_zh_TW": "共享治療",
-      "name_ja": "みんなの回復",
-      "name_ko": "우리의 치유",
-      "type": "standalone",
-      "flags": {
-        "system_breaker": false,
-        "lifecycle": "removed"
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/kiwi/augments/icons/equillibrium_small.png",
+      "names": {
+        "en": "Our Healing",
+        "zh_cn": "我们的治疗",
+        "zh_tw": "共享治療",
+        "ja": "みんなの回復",
+        "ko": "우리의 치유"
       },
       "kit_tags": [
         "heal_shield"
       ],
-      "wikiDescription": "Whenever someone heals around you, you heal the required number of% of their own healing. Doubled from Enemy healing."
+      "flags": {
+        "system_breaker": false,
+        "lifecycle": "active"
+      },
+      "type": "standalone",
+      "name_zh_CN": "我们的治疗",
+      "name_zh_TW": "共享治療",
+      "name_ja": "みんなの回復",
+      "name_ko": "우리의 치유",
+      "wikiDescription": "Whenever a nearby unit is healed (excluding yourself), you heal yourself equal to 15% of the amount they healed, doubled to 30% from the heals of enemies.",
+      "wikiRarity": "gold"
     },
     {
+      "augmentId": "MightyShield",
       "slug": "mighty-shield",
       "name": "Mighty Shield",
+      "displayName": "Mighty Shield",
       "rarity": "silver",
-      "icon": "https://arammayhem.com/augments/Mighty_Shield_mayhem_augment.webp",
-      "name_zh_CN": "强力护盾",
-      "name_zh_TW": "巨大盾牌",
-      "name_ja": "マイティシールド",
-      "name_ko": "강력한 방패",
-      "wikiDescription": "Gain 40 – 100 (based on level) adaptive force for 3 seconds upon gaining a shield (5 second cooldown).",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/kiwi/augments/icons/mightyshield_small.png",
+      "names": {
+        "en": "Mighty Shield",
+        "zh_cn": "强力护盾",
+        "zh_tw": "巨大盾牌",
+        "ja": "マイティシールド",
+        "ko": "강력한 방패"
+      },
       "kit_tags": [
         "heal_shield",
         "ability"
       ],
       "flags": {
         "system_breaker": false,
-        "lifecycle": "removed"
+        "lifecycle": "active"
       },
-      "type": "standalone"
+      "type": "standalone",
+      "name_zh_CN": "强力护盾",
+      "name_zh_TW": "巨大盾牌",
+      "name_ja": "マイティシールド",
+      "name_ko": "강력한 방패",
+      "wikiDescription": "Gain 40 – 100 (based on level) adaptive force for 3 seconds upon gaining a shield (5 second cooldown).",
+      "wikiRarity": "silver"
     },
     {
       "augmentId": "ARAM_Terror",
@@ -4632,26 +5044,34 @@
       "wikiDescription": "Attacks during your chosen ability apply Marks that explode at the end of its duration, dealing damage and granting Move Speed."
     },
     {
+      "augmentId": "PinballSnowball",
       "slug": "pinball",
       "name": "Pinball",
+      "displayName": "Pinball",
       "rarity": "gold",
-      "icon": "https://arammayhem.com/augments/Pinball_mayhem_augment.webp",
-      "name_zh_CN": "弹球",
-      "name_zh_TW": "彈珠台",
-      "name_ja": "ピンボール",
-      "name_ko": "핀볼",
-      "wikiDescription": "Your Mark is empowered to instead throw a pinball, which deals 100 – 500 (based on level) bonus true damage and ricochets off of terrain that it collides with. Each time the pinball ricochets, its remaining travel distance is reset, it increases in radius by 25%, deals 20% increased damage, and reduces Mark's remaining cooldown by 30%. The pinball can ricochet up to 4 times, for a maximum radius increase of 100% and a damage increase of 80%. Additionally, your Mark's cooldown is reduced equivalent to 50 ability haste. If Mark is not equipped, you will be prompted to replace one of your summoner spells with Mark .",
-      "wikiSet": "Snowday",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/kiwi/augments/icons/pinballsnowball_small.png",
+      "names": {
+        "en": "Pinball",
+        "zh_cn": "弹球",
+        "zh_tw": "彈珠台",
+        "ja": "ピンボール",
+        "ko": "핀볼"
+      },
       "kit_tags": [
         "ability",
         "on_hit"
       ],
-      "set": "snowday",
       "flags": {
         "system_breaker": false,
-        "lifecycle": "removed"
+        "lifecycle": "active"
       },
-      "type": "standalone"
+      "type": "standalone",
+      "name_zh_CN": "弹球",
+      "name_zh_TW": "彈珠台",
+      "name_ja": "ピンボール",
+      "name_ko": "핀볼",
+      "wikiDescription": "Your Mark is empowered to instead throw a pinball, which deals 100 – 500 (based on level) bonus true damage and ricochets off of terrain that it collides with. Each time the pinball ricochets, its remaining travel distance is reset, it increases in radius by 25%, deals 20% increased damage, and reduces Mark's remaining cooldown by 30%. The pinball can ricochet up to 4 times, for a maximum radius increase of 100% and a damage increase of 80%. Additionally, your Mark's cooldown is reduced equivalent to 50 ability haste. If Mark is not equipped, you will be prompted to replace one of your summoner spells with Mark.",
+      "wikiRarity": "gold"
     },
     {
       "augmentId": "ARAM_ImTheJuggernaut",
@@ -4712,44 +5132,64 @@
       "wikiRarity": "prismatic"
     },
     {
+      "augmentId": "Snowbomb",
       "slug": "snowblast",
       "name": "Snowblast",
+      "displayName": "Snowblast",
       "rarity": "gold",
-      "icon": "https://arammayhem.com/augments/Snowblast_mayhem_augment.webp",
-      "name_zh_CN": "冰雪爆裂",
-      "name_zh_TW": "雪爆",
-      "name_ja": "スノーブラスト",
-      "name_ko": "눈 폭발",
-      "type": "standalone",
-      "flags": {
-        "system_breaker": false,
-        "lifecycle": "removed"
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/kiwi/augments/icons/snowbomb_small.png",
+      "names": {
+        "en": "Snowblast",
+        "zh_cn": "冰雪爆裂",
+        "zh_tw": "雪爆",
+        "ja": "スノーブラスト",
+        "ko": "눈 폭발"
       },
       "kit_tags": [
         "ability",
         "cc"
       ],
-      "wikiDescription": "Recasting Snowball deals increased damage, Knocks Up the target, and Knocks Back nearby enemies."
+      "flags": {
+        "system_breaker": false,
+        "lifecycle": "active"
+      },
+      "type": "standalone",
+      "name_zh_CN": "冰雪爆裂",
+      "name_zh_TW": "雪爆",
+      "name_ja": "スノーブラスト",
+      "name_ko": "눈 폭발",
+      "wikiDescription": "Empowers the Dash spell from Mark to deal 100% increased damage and upon arrival cause you to knock up the target and knock back nearby enemies. Additionally, your Mark's cooldown is reduced equivalent to 100 ability haste. If Mark is not equipped, you will be prompted to replace one of your summoner spells with Mark.",
+      "wikiRarity": "gold"
     },
     {
+      "augmentId": "YouSpinMeRightRound",
       "slug": "spin-me-right-round",
       "name": "Spin Me Right Round",
+      "displayName": "Spin Me Right Round",
       "rarity": "silver",
-      "icon": "https://arammayhem.com/augments/Spin_Me_Right_Round_mayhem_augment.webp",
-      "name_zh_CN": "转得我眩晕了",
-      "name_zh_TW": "把我耍得團團轉",
-      "name_ja": "振り回して",
-      "name_ko": "빙글빙글",
-      "wikiDescription": "Replace a summoner spell with Akshan's Heroic Swing ( 10 second cooldown , starts post-effect). Heroic Swing - Active: You can activate Heroic Swing three times before the ability goes on cooldown, and you can use the third cast only after 0. 5 seconds of the second cast. An attack or movement command may be inputted to use the second and third casts. First Cast: Fire a hook in the target direction that embeds in the first terrain hit for 2 seconds. Heroic Swing's second cast can be used while the hook is attached. If the hook fails to attach or you become immobilized , grounded , or polymorphed within the duration, Heroic Swing is cancelled and placed on full cooldown. Second Cast: Swing around the terrain in either a clockwise or counterclockwise direction based on the position of the cursor relative to your facing direction , stopping upon colliding with an enemy champion or terrain. While swinging, fire at the nearest visible enemy within 500 units every 0. 231 seconds to deal them 15 – 75 (based on level) (+ 15% AD) × (1 + 0. 3 per 100% bonus attack speed) physical damage and apply on-hit effects for each shot, with on-hit damage reduced to 25% effectiveness. The dash will be interrupted if you are affected by any immobilizing or polymorphing crowd control during the dash. Third Cast: End the swing by jumping to the target location and fire one last shot at a nearby visible enemy. Scoring an enemy champion takedown reduces Heroic Swing's current cooldown to 0. 5 seconds.",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/kiwi/augments/icons/youspinmerightround_small.png",
+      "names": {
+        "en": "Spin Me Right Round",
+        "zh_cn": "转得我眩晕了",
+        "zh_tw": "把我耍得團團轉",
+        "ja": "振り回して",
+        "ko": "빙글빙글"
+      },
       "kit_tags": [
         "movement",
         "ability"
       ],
       "flags": {
         "system_breaker": false,
-        "lifecycle": "removed"
+        "lifecycle": "active"
       },
-      "type": "standalone"
+      "type": "standalone",
+      "name_zh_CN": "转得我眩晕了",
+      "name_zh_TW": "把我耍得團團轉",
+      "name_ja": "振り回して",
+      "name_ko": "빙글빙글",
+      "wikiDescription": "Replace a summoner spell with Akshan's Heroic Swing (10 second cooldown, starts post-effect). Heroic Swing - Active: You can activate Heroic Swing three times before the ability goes on cooldown, and you can use the third cast only after 0.5 seconds of the second cast. An attack or movement command may be inputted to use the second and third casts. First Cast: Fire a hook in the target direction that embeds in the first terrain hit for 2 seconds. Heroic Swing's second cast can be used while the hook is attached. If the hook fails to attach or you become immobilized, grounded, or polymorphed within the duration, Heroic Swing is cancelled and placed on full cooldown. Second Cast: Swing around the terrain in either a clockwise or counterclockwise direction based on the position of the cursor relative to your facing direction, stopping upon colliding with an enemy champion or terrain. While swinging, fire at the nearest visible enemy within your attack range (minimum 400 units) every 0.231 seconds to deal them 15 – 75 (based on level) (+ 15% AD) × (1 + 0.3 per 100% bonus attack speed) physical damage and apply on-hit effects for each shot, with on-hit damage reduced to 25% effectiveness. The dash will be interrupted if you are affected by any immobilizing or polymorphing crowd control during the dash. Third Cast: End the swing by jumping to the target location and fire one last shot at a nearby visible enemy.",
+      "wikiRarity": "silver"
     },
     {
       "slug": "surge-field",
@@ -4773,27 +5213,35 @@
       "wikiDescription": "On Ultimate cast, spawn a Zone that grants Ability Haste and Movement Speed. While inside, it fires missiles that deal the required number of% of your damage."
     },
     {
+      "augmentId": "GoldenSnowball",
       "slug": "holy-snowball",
       "name": "Holy Snowball",
+      "displayName": "Holy Snowball",
       "rarity": "prismatic",
-      "icon": "https://arammayhem.com/augments/Holy_Snowball_mayhem_augment.webp",
-      "name_zh_CN": "神圣雪球",
-      "name_zh_TW": "神聖雪球",
-      "name_ja": "聖なる雪玉",
-      "name_ko": "신성한 눈덩이",
-      "wikiDescription": "After using the Dash spell from Mark , you become invulnerable for 1. 5 seconds upon arrival. Additionally, your Mark's cooldown is reduced equivalent to 100 ability haste. If Mark is not equipped, you will be prompted to replace one of your summoner spells with Mark .",
-      "wikiSet": "Snowday",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/kiwi/augments/icons/goldensnowball_small.png",
+      "names": {
+        "en": "Holy Snowball",
+        "zh_cn": "神圣雪球",
+        "zh_tw": "神聖雪球",
+        "ja": "聖なる雪玉",
+        "ko": "신성한 눈덩이"
+      },
       "kit_tags": [
         "ability",
         "movement",
         "haste"
       ],
-      "set": "snowday",
       "flags": {
         "system_breaker": false,
-        "lifecycle": "removed"
+        "lifecycle": "active"
       },
-      "type": "standalone"
+      "type": "standalone",
+      "name_zh_CN": "神圣雪球",
+      "name_zh_TW": "神聖雪球",
+      "name_ja": "聖なる雪玉",
+      "name_ko": "신성한 눈덩이",
+      "wikiDescription": "After using the Dash spell from Mark, you become invulnerable for 1.5 seconds upon arrival. Additionally, your Mark's cooldown is reduced equivalent to 100 ability haste. If Mark is not equipped, you will be prompted to replace one of your summoner spells with Mark.",
+      "wikiRarity": "prismatic"
     },
     {
       "augmentId": "ARAM_Quickstep",
@@ -4804,10 +5252,10 @@
       "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/kiwi/augments/icons/genericabilityaugmenticon_gold.png",
       "names": {
         "en": "Quickstep",
-        "zh_cn": "Quickstep",
-        "zh_tw": "Quickstep",
-        "ja": "Quickstep",
-        "ko": "Quickstep"
+        "zh_cn": "快步",
+        "zh_tw": "快步移動",
+        "ja": "クイックステップ",
+        "ko": "날쌘걸음"
       },
       "kit_tags": [
         "movement"
@@ -4817,92 +5265,132 @@
         "lifecycle": "active"
       },
       "type": "ability",
-      "name_zh_CN": "Quickstep",
-      "name_zh_TW": "Quickstep",
-      "name_ja": "Quickstep",
-      "name_ko": "Quickstep",
+      "name_zh_CN": "快步",
+      "name_zh_TW": "快步移動",
+      "name_ja": "クイックステップ",
+      "name_ko": "날쌘걸음",
       "wikiDescription": "Upgrades one of your champion's abilities, empowering the ability's cast to cause you to dash up to 350 units towards your cursor.",
       "wikiRarity": "gold"
     },
     {
+      "augmentId": "GlassCannon",
       "slug": "glass-cannon",
       "name": "Glass Cannon",
+      "displayName": "Glass Cannon",
       "rarity": "prismatic",
-      "icon": "https://arammayhem.com/augments/Glass_Cannon_mayhem_augment.webp",
-      "name_zh_CN": "玻璃大炮",
-      "name_zh_TW": "玻璃大砲",
-      "name_ja": "グラスキャノン",
-      "name_ko": "유리 대포",
-      "wikiDescription": "You gain a health threshold equal to 70% maximum health which cannot be modified nor exceeded by any means. In return, you deal bonus true damage equal to 15% of all of the damage you deal pre-mitigation .",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/kiwi/augments/icons/glasscannon_small.png",
+      "names": {
+        "en": "Glass Cannon",
+        "zh_cn": "玻璃大炮",
+        "zh_tw": "玻璃大砲",
+        "ja": "グラスキャノン",
+        "ko": "유리 대포"
+      },
       "kit_tags": [
         "attack",
         "dot"
       ],
       "flags": {
         "system_breaker": false,
-        "lifecycle": "removed"
+        "lifecycle": "active"
       },
-      "type": "standalone"
+      "type": "standalone",
+      "name_zh_CN": "玻璃大炮",
+      "name_zh_TW": "玻璃大砲",
+      "name_ja": "グラスキャノン",
+      "name_ko": "유리 대포",
+      "wikiDescription": "You gain a health threshold equal to 70% maximum health which cannot be modified nor exceeded by any means. In return, you deal bonus true damage equal to 15% of all of the damage you deal pre-mitigation.",
+      "wikiRarity": "prismatic"
     },
     {
+      "augmentId": "ChainReaction",
       "slug": "chain-reaction",
       "name": "Chain Reaction",
+      "displayName": "Chain Reaction",
       "rarity": "prismatic",
-      "icon": "https://arammayhem.com/augments/Chain_Reaction_mayhem_augment.webp",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/kiwi/augments/icons/genericabilityaugmenticon_prismatic.png",
+      "names": {
+        "en": "Chain Reaction",
+        "zh_cn": "连锁反应",
+        "zh_tw": "連鎖反應",
+        "ja": "連鎖反応",
+        "ko": "연쇄 반응"
+      },
+      "kit_tags": [
+        "ability",
+        "cc"
+      ],
+      "flags": {
+        "system_breaker": false,
+        "lifecycle": "active"
+      },
+      "type": "ability",
       "name_zh_CN": "连锁反应",
       "name_zh_TW": "連鎖反應",
       "name_ja": "連鎖反応",
       "name_ko": "연쇄 반응",
-      "type": "ability",
-      "flags": {
-        "system_breaker": false,
-        "lifecycle": "removed"
+      "wikiDescription": "Upgrades one of your champion's abilities that has a knock back effect, empowering the ability to trigger a chain reaction effect when displaced champions hit other champions or terrain within 200 units. If a knocked back champion collides with another enemy champion during their displacement, the champions they collided with are dealt 100 – 400 (based on level) magic damage and knocked up for 0.5 seconds. If they collide with terrain during their displacement, they will rebound to take 150 – 800 (based on level) magic damage and become knocked up for 0.75 seconds and stunned for 0.5 seconds. The knock up duration is increased to up to 1.1 seconds based on how long the ability's cooldown is.",
+      "wikiRarity": "prismatic"
+    },
+    {
+      "augmentId": "DimensionShift_Active",
+      "slug": "dimension-shift",
+      "name": "Dimension Shift",
+      "displayName": "Dimension Shift",
+      "rarity": "prismatic",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/kiwi/augments/icons/whenthedarknesscomes_small.png",
+      "names": {
+        "en": "Dimension Shift",
+        "zh_cn": "位面转移",
+        "zh_tw": "次元轉移",
+        "ja": "ディメンションシフト",
+        "ko": "차원 이동"
       },
       "kit_tags": [
         "ability",
         "cc"
       ],
-      "wikiDescription": "If a target Knocked Back by your chosen ability hits another champion, they are Knocked Up and dealt damage. When colliding with terrain, the Knock Up duration is extended and they are dealt bonus damage."
-    },
-    {
-      "slug": "dimension-shift",
-      "name": "Dimension Shift",
-      "rarity": "prismatic",
-      "icon": "https://arammayhem.com/augments/Dimension_Shift_mayhem_augment.webp",
+      "flags": {
+        "system_breaker": false,
+        "lifecycle": "active"
+      },
+      "type": "standalone",
       "name_zh_CN": "位面转移",
       "name_zh_TW": "次元轉移",
       "name_ja": "ディメンションシフト",
       "name_ko": "차원 이동",
-      "type": "standalone",
-      "flags": {
-        "system_breaker": false,
-        "lifecycle": "removed"
-      },
-      "kit_tags": [
-        "ability",
-        "cc"
-      ],
-      "wikiDescription": "Gain the When the Darkness Comes Summoner Spell. Create a zone that transports everyone inside of it to another dimension."
+      "wikiDescription": "Replace a summoner spell with When the Darkness Comes. When the Darkness Comes: Sends a bright, cosmic light arcing to the target location. Upon impact, the light spreads out to cause all units within a 500 radius to be sent to the Dark Realm for 8 seconds. If you are in the Dark Realm, you gain 25 – 100 (based on level) bonus attack damage, 25 – 100 (based on level) ability power, 200 – 1000 (based on level) bonus health, and 35% increased size. The Dark Realm is a battlefield that exists outside of the normal realm in an alternate dimension. It exists only for units hit by the cosmic light, and consists of an arena that has a radius of 1200 units and includes any terrain features that would exist in the map of the normal realm, including structures, walls, and brushes. The boundaries of the arena are impassable but not considered terrain themselves, and enemies that try to move out of the area will be displaced back inside. Units between realms see each other as glowing stars, considering each other dead and negating any interactions between each other. Only units that were hit by the light will enter the realm; other units cannot follow them. Everything that occurs inside the Dark Realm is hidden to units outside of it, and vice versa. Structures exist in all realms at the same time, but are untargetable in the Dark Realm. Turrets will behave normally as if all units were in the same realm. Pets still inside the Dark Realm are killed at its end.",
+      "wikiRarity": "prismatic"
     },
     {
+      "augmentId": "PoroCharge_Active",
       "slug": "poro-stampede",
       "name": "Poro Stampede",
+      "displayName": "Poro Stampede",
       "rarity": "prismatic",
-      "icon": "https://arammayhem.com/augments/Poro_Stampede_mayhem_augment.webp",
-      "name_zh_CN": "魄罗蛮冲",
-      "name_zh_TW": "普羅衝鋒",
-      "name_ja": "ポロの大群",
-      "name_ko": "포로 쇄도",
-      "type": "quest",
-      "flags": {
-        "system_breaker": false,
-        "lifecycle": "removed"
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/kiwi/augments/icons/questporocharge_small.png",
+      "names": {
+        "en": "Poro Stampede",
+        "zh_cn": "魄罗蛮冲",
+        "zh_tw": "普羅衝鋒",
+        "ja": "ポロの大群",
+        "ko": "포로 쇄도"
       },
       "kit_tags": [
         "ability",
         "movement"
       ],
-      "wikiDescription": "QUEST: Gather Poro Snax and feed the required number of Poros. REWARD: Gain the Poro Charge Summoner Spell, which launches waves of Poros at the enemy team. Additional waves unlock per Quest Level. \"Oho! Look how charming they are!\" — Poro Herder"
+      "flags": {
+        "system_breaker": false,
+        "lifecycle": "active"
+      },
+      "type": "quest",
+      "name_zh_CN": "魄罗蛮冲",
+      "name_zh_TW": "普羅衝鋒",
+      "name_ja": "ポロの大群",
+      "name_ko": "포로 쇄도",
+      "wikiDescription": "Poro-Snaxes will now randomly appear around you every 35 – 20 (based on level) seconds. You can pick up a Poro-Snax by moving over it, granting you a Poro-Snax charge. Poro-Snaxes will not spawn while you are at the maximum number of Poro-Snax charges (2). Feeding a Poro with a Poro-Snax generates a stack of Poro Love. At 5 stacks, you are granted the Poro Charge summoner spell and are prompted to replace one of your summoner spells with it. You are then assigned with quests that require you to reach a certain amount of Poro Love stacks. There are nine quest tiers, and each completed tier rewards you with an additional Poro wave for Poro Charge. Poro Charge: After a 1-second delay, you unleash a stampede of Poros, summoning a phalanx of 5 Poros that charge forward in the target direction. Enemies hit by the charge are dealt 50 – 100 (based on level) (+ 20 per Poro Love stack) physical damage, reduced to 15% against minions, and slowed by 85% for 2 seconds. Each Poro stops upon colliding with an enemy champion. Fire additional waves of Poros based on the number of Poro Love stacks you have. Each subsequent wave is fired 0.75 seconds after the previous one. Enemy champions take 50% damage from subsequent waves that hit them.",
+      "wikiRarity": "prismatic"
     },
     {
       "slug": "mystery-augment",
@@ -4926,15 +5414,19 @@
       "wikiDescription": "Your Enemy Missing pings will cause you to launch a missile at the pinged location, exploding upon arrival to deal 100 – 400 (based on level) (+ 10% of target's missing health) magic damage to enemies struck, and heal allied champions within for 50 – 200 (based on level) (+ 10% of target's missing health) . While equipped with this augment, the player can only use up to 3 Enemy Missing pings each within 6 seconds at most. This incurs a separate cooldown from the global one, sending an alert to the player that reads: You must wait before issuing more pings of that type. Otherwise, the global ping cooldown is incurred as normal. The heal is not affected by the -50% outgoing healing penalty from the ARAM global champion buff ."
     },
     {
+      "augmentId": "Adamant",
       "slug": "adamant",
       "name": "Adamant",
+      "displayName": "Adamant",
       "rarity": "silver",
-      "icon": "https://arammayhem.com/augments/Adamant_mayhem_augment.webp",
-      "name_zh_CN": "坚若磐石",
-      "name_zh_TW": "雙重打擊",
-      "name_ja": "アダマント",
-      "name_ko": "단호함",
-      "wikiDescription": "Immobilizing or grounding an enemy champion grants 10 bonus armor and bonus magic resistance for 10 seconds, stacking up to 10 times for a total of 100 bonus resistances, and refreshing on subsequent triggers (5 second cooldown per cast instance ).",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/kiwi/augments/icons/adamant_small.png",
+      "names": {
+        "en": "Adamant",
+        "zh_cn": "坚若磐石",
+        "zh_tw": "意志堅定",
+        "ja": "アダマント",
+        "ko": "단호함"
+      },
       "kit_tags": [
         "tank",
         "cc"
@@ -4943,7 +5435,13 @@
         "system_breaker": false,
         "lifecycle": "removed"
       },
-      "type": "standalone"
+      "type": "standalone",
+      "name_zh_CN": "坚若磐石",
+      "name_zh_TW": "意志堅定",
+      "name_ja": "アダマント",
+      "name_ko": "단호함",
+      "wikiDescription": "Immobilizing or grounding an enemy champion grants 10 bonus armor and bonus magic resistance for 10 seconds, stacking up to 10 times for a total of 100 bonus resistances, and refreshing on subsequent triggers (5 second cooldown per cast instance).",
+      "wikiRarity": "silver"
     },
     {
       "augmentId": "ARAM_PoroKing",
@@ -5085,7 +5583,7 @@
       "name_zh_TW": "小丑學院",
       "name_ja": "ピエロ大学",
       "name_ko": "광대 대학",
-      "wikiDescription": "Gain Shaco's Backstab, Deceive and Hallucinate's explosion. Replace a summoner spell with Deceive. Passive - Backstab: Your basic attacks deal 20 – 35 (based on level) (+ 50% bonus AD) (+ 35% AP) bonus physical damage on-hit when hitting an enemy from behind. Active - Deceive: Become invisible for up to 3 seconds and blink to the target location within 400 units after a 0.125-second delay. Your next basic attack while in stealth deals 100 (+ 150% bonus AD) (+ 55% AP) bonus physical damage, increased to「 155 (+ 232.5% bonus AD) (+ 85.25% AP) bonus physical damage 」「 155% damage 」if Backstab was applied (45 second cooldown). Passive - Hallucinate Death: Upon your death, release an explosion in a 350 radius of your death location, dealing 25% of target's maximum health true damage to enemies within. Additionally, you deploy a box at the location of your death that instantly fears nearby enemies for 1 second. This box does not attack but lasts for 3 seconds.",
+      "wikiDescription": "Gain Shaco's Backstab, Deceive and Hallucinate's explosion. Replace a summoner spell with Deceive. Passive - Backstab: Your basic attacks deal 20 – 35 (based on level) (+ 50% bonus AD) (+ 35% AP) bonus physical damage on-hit when hitting an enemy from behind. Active - Deceive: Become invisible for up to 3 seconds and blink to the target location within 400 units after a 0.125-second delay. Your next basic attack while in stealth deals 100 (+ 150% bonus AD) (+ 55% AP) bonus physical damage, increased to「 155 (+ 232.5% bonus AD) (+ 85.25% AP) bonus physical damage 」「 155% damage 」if Backstab was applied (45 second cooldown). Passive - Hallucinate Death: Upon your death, release an explosion in a 350 radius of your death location, dealing magic damage equal to 25% of target's maximum health to enemies within the area. Additionally, you deploy a box at the location of your death that instantly fears nearby enemies for 1 second. This box does not attack but lasts for 3 seconds.",
       "wikiRarity": "prismatic"
     },
     {
@@ -5117,24 +5615,34 @@
       "name_ko": "알 깨기"
     },
     {
+      "augmentId": "CritNCast",
       "slug": "crit-n-cast",
       "name": "Crit 'n Cast",
+      "displayName": "Crit 'n Cast",
       "rarity": "silver",
-      "icon": "https://arammayhem.com/augments/Crit_'n_Cast_mayhem_augment.webp",
-      "name_zh_CN": "由暴生急",
-      "name_zh_TW": "暴擊和施法",
-      "name_ja": "クリティカルキャスト",
-      "name_ko": "치명적 가속",
-      "wikiDescription": "Gain ability haste equal to 40% of your critical strike chance .",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/kiwi/augments/icons/critncast_small.png",
+      "names": {
+        "en": "Crit 'n Cast",
+        "zh_cn": "由暴生急",
+        "zh_tw": "暴擊和施法",
+        "ja": "クリティカルキャスト",
+        "ko": "치명적 가속"
+      },
       "kit_tags": [
         "crit",
         "haste"
       ],
       "flags": {
         "system_breaker": false,
-        "lifecycle": "removed"
+        "lifecycle": "active"
       },
-      "type": "standalone"
+      "type": "standalone",
+      "name_zh_CN": "由暴生急",
+      "name_zh_TW": "暴擊和施法",
+      "name_ja": "クリティカルキャスト",
+      "name_ko": "치명적 가속",
+      "wikiDescription": "Gain ability haste equal to 40% of your critical strike chance.",
+      "wikiRarity": "silver"
     },
     {
       "augmentId": "ARAM_CriticalHealing",
@@ -5167,47 +5675,65 @@
       "wikiRarity": "gold"
     },
     {
+      "augmentId": "CriticalMissile",
       "slug": "critical-missile",
       "name": "Critical Missile",
+      "displayName": "Critical Missile",
       "rarity": "gold",
-      "icon": "https://arammayhem.com/augments/Critical_Missile_mayhem_augment.webp",
-      "name_zh_CN": "暴击飞弹",
-      "name_zh_TW": "暴擊沖天炮",
-      "name_ja": "クリティカルミサイル",
-      "name_ko": "치명적 미사일",
-      "wikiDescription": "Critical strikes against enemy champions launch 1 (+ 1 per 33. 33 % critical strike chance) Firecrackers at the target that each deal 20 – 100 (based on level) magic damage . Additionally, gain 25% critical strike chance . Critical strikes from Jeweled Gauntlet and Vulnerability will launch Firecrackers .",
-      "wikiSet": "Firecracker",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/kiwi/augments/icons/criticalmissile_small.png",
+      "names": {
+        "en": "Critical Missile",
+        "zh_cn": "暴击飞弹",
+        "zh_tw": "暴擊沖天炮",
+        "ja": "クリティカルミサイル",
+        "ko": "치명적 미사일"
+      },
       "kit_tags": [
         "attack",
         "crit",
         "ability"
       ],
-      "set": "firecracker",
       "flags": {
         "system_breaker": false,
-        "lifecycle": "removed"
+        "lifecycle": "active"
       },
-      "type": "standalone"
+      "type": "standalone",
+      "name_zh_CN": "暴击飞弹",
+      "name_zh_TW": "暴擊沖天炮",
+      "name_ja": "クリティカルミサイル",
+      "name_ko": "치명적 미사일",
+      "wikiDescription": "Critical strikes against enemy champions launch 1 (+ 1 per 33.33% critical strike chance) missiles at the target that each deal 20 – 100 (based on level) magic damage. Additionally, gain 25% critical strike chance. Critical strikes from Jeweled Gauntlet and Vulnerability will launch missiles.",
+      "wikiRarity": "gold"
     },
     {
+      "augmentId": "CriticalRhythm",
       "slug": "critical-rhythm",
       "name": "Critical Rhythm",
+      "displayName": "Critical Rhythm",
       "rarity": "gold",
-      "icon": "https://arammayhem.com/augments/Critical_Rhythm_mayhem_augment.webp",
-      "name_zh_CN": "暴击律动",
-      "name_zh_TW": "暴擊節奏",
-      "name_ja": "クリティカルの律動",
-      "name_ko": "치명적 리듬",
-      "wikiDescription": "Your critical strikes grant you 6% bonus attack speed for 6 seconds, stacking up to 10 times for a total of 60% . Additionally, gain 25% critical strike chance .",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/kiwi/augments/icons/criticalrhythm_small.png",
+      "names": {
+        "en": "Critical Rhythm",
+        "zh_cn": "暴击律动",
+        "zh_tw": "暴擊節奏",
+        "ja": "クリティカルの律動",
+        "ko": "치명적 리듬"
+      },
       "kit_tags": [
         "attack",
         "crit"
       ],
       "flags": {
         "system_breaker": false,
-        "lifecycle": "removed"
+        "lifecycle": "active"
       },
-      "type": "standalone"
+      "type": "standalone",
+      "name_zh_CN": "暴击律动",
+      "name_zh_TW": "暴擊節奏",
+      "name_ja": "クリティカルの律動",
+      "name_ko": "치명적 리듬",
+      "wikiDescription": "Your critical strikes grant you 6% bonus attack speed for 6 seconds, stacking up to 10 times for a total of 60%. Additionally, gain 25% critical strike chance.",
+      "wikiRarity": "gold"
     },
     {
       "augmentId": "ARAM_DemonsDance",
@@ -5302,15 +5828,19 @@
       "wikiRarity": "gold"
     },
     {
+      "augmentId": "Dropybara_Active",
       "slug": "droppybara",
       "name": "Droppybara",
+      "displayName": "Droppybara",
       "rarity": "prismatic",
-      "icon": "https://arammayhem.com/augments/Droppybara_mayhem_augment.webp",
-      "name_zh_CN": "卡皮巴拉空投",
-      "name_zh_TW": "空降水豚",
-      "name_ja": "ドロッピバラ",
-      "name_ko": "카피바라 폭격",
-      "wikiDescription": "Replace a summoner spell with Droppybara . Droppybara: Call upon a massive capybara to land down at the target location after 2. 5 seconds, dealing true damage equal to the 30% of the target's maximum health to enemies within a 650 radius. Deals 70% damage to minions. This augment is only offered to up to 1 player on each team for a given game.",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/orbitallaser_small.png",
+      "names": {
+        "en": "Droppybara",
+        "zh_cn": "卡皮巴拉空投",
+        "zh_tw": "空降水豚",
+        "ja": "ドロッピバラ",
+        "ko": "카피바라 폭격"
+      },
       "kit_tags": [
         "ability",
         "cc"
@@ -5319,7 +5849,13 @@
         "system_breaker": false,
         "lifecycle": "removed"
       },
-      "type": "standalone"
+      "type": "standalone",
+      "name_zh_CN": "卡皮巴拉空投",
+      "name_zh_TW": "空降水豚",
+      "name_ja": "ドロッピバラ",
+      "name_ko": "카피바라 폭격",
+      "wikiDescription": "Replace a summoner spell with Droppybara. Droppybara: Call upon a massive capybara to land down at the target location after 2.5 seconds, dealing true damage equal to the 30% of the target's maximum health to enemies within a 650 radius. Deals 70% damage to minions.",
+      "wikiRarity": "prismatic"
     },
     {
       "augmentId": "ARAM_Executioner",
@@ -5378,25 +5914,33 @@
       "name_ko": "저주의 화염"
     },
     {
+      "augmentId": "TrainOfTheDead",
       "slug": "final-city-transit",
       "name": "Final City Transit",
+      "displayName": "Final City Transit",
       "rarity": "gold",
-      "icon": "https://arammayhem.com/augments/Final_City_Transit_mayhem_augment.webp",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/kiwi/augments/icons/nightstalking_small.png",
+      "names": {
+        "en": "Final City Transit",
+        "zh_cn": "最终都市列车",
+        "zh_tw": "終城快車",
+        "ja": "ファイナルシティ交通",
+        "ko": "최후의 도시 대중교통"
+      },
+      "kit_tags": [
+        "ability"
+      ],
+      "flags": {
+        "system_breaker": false,
+        "lifecycle": "removed"
+      },
+      "type": "standalone",
       "name_zh_CN": "最终都市列车",
       "name_zh_TW": "終城快車",
       "name_ja": "ファイナルシティ交通",
       "name_ko": "최후의 도시 대중교통",
       "wikiDescription": "Upon death, you summon a train over 1 second that launches towards your killer at full speed, travelling in their direction at a global distance and dealing 150 – 750 (based on level) (+ 65% bonus AD) (+ 50% AP) (+ 15% maximum health) physical damage to enemies it passes through. The train is summoned a slight distance away from the front of your killer, based on their facing direction at the time of your death, and launches towards the position they were located at the time of your death.",
-      "wikiSet": "Dive Bomb",
-      "kit_tags": [
-        "ability"
-      ],
-      "set": "dive_bomb",
-      "flags": {
-        "system_breaker": false,
-        "lifecycle": "removed"
-      },
-      "type": "standalone"
+      "wikiRarity": "gold"
     },
     {
       "augmentId": "ARAM_FrostWraith",
@@ -5427,15 +5971,19 @@
       "name_ko": "서리 망령"
     },
     {
+      "augmentId": "Gash",
       "slug": "gash",
       "name": "Gash",
+      "displayName": "Gash",
       "rarity": "prismatic",
-      "icon": "https://arammayhem.com/augments/Gash_mayhem_augment.webp",
-      "name_zh_CN": "砍伤",
-      "name_zh_TW": "深割",
-      "name_ja": "深手",
-      "name_ko": "깊은 상처",
-      "wikiDescription": "Basic attacks on-hit deal ( 20 – 40 / 10 – 20 ) (based on level) (+ ( 25% / 20% ) bonus armor) bonus true damage . Additionally, gain 50% bonus attack speed .",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/kiwi/augments/icons/darksteeltalons_small.png",
+      "names": {
+        "en": "Gash",
+        "zh_cn": "砍伤",
+        "zh_tw": "深割",
+        "ja": "深手",
+        "ko": "깊은 상처"
+      },
       "kit_tags": [
         "attack",
         "on_hit",
@@ -5445,18 +5993,26 @@
         "system_breaker": false,
         "lifecycle": "removed"
       },
-      "type": "standalone"
+      "type": "standalone",
+      "name_zh_CN": "砍伤",
+      "name_zh_TW": "深割",
+      "name_ja": "深手",
+      "name_ko": "깊은 상처"
     },
     {
+      "augmentId": "GrandmasChiliOil",
       "slug": "grandmas-chili-oil",
       "name": "Grandma's Chili Oil",
+      "displayName": "Grandma's Chili Oil",
       "rarity": "gold",
-      "icon": "https://arammayhem.com/augments/Grandma's_Chili_Oil_mayhem_augment.webp",
-      "name_zh_CN": "祖母的辣椒油",
-      "name_zh_TW": "阿嬤的辣油",
-      "name_ja": "おばあちゃんのラー油",
-      "name_ko": "할머니의 고추기름",
-      "wikiDescription": "Your next basic attack or ability hit, or Burn effect, against an enemy champion inflicts them with a Burn that deals 「 100 – 350 (based on level) magic damage over 3 seconds, 」 「 16. 67 – 37. 5 (based on level) magic damage every 0. 25 seconds over 3 seconds, 」 as well as releases a canister of chili from the target that lands to a location near them after 0. 75 seconds (3 second cooldown). Upon landing, the canister shatters to create a pool of Chili Oil at the impact area with a radius of 175 units, lasting for 5 seconds. The pool heals you and allied champions within for 30 – 75 (based on level) upon entering and each second of the pool's lifetime thereafter. While enemies are within the pool, they are dealt 150 magic damage every second. For each unique Burn effect source that you have, up to 10, increase the pool's size by 40 units and its damage per tick by 50 magic damage . The healing per tick is also increased by 25 for each unique Burn effect source that the unit being healed has, up to 10. Healing granted by pools counts as self-healing . This effect can be triggered from only one target at a time. Damage over time effects from sources other than items and augments, such as champion abilities or summoner spells, do not count as Burn sources for Grandma's Chili Oil . Eligible Items for Burn : Blackfire Torch , Hollow Radiance , Liandry's Torment , Malignance , Sunfire Aegis , The Golden Spatula , Void Immolation Void Immolation uniquely counts as 2 Burn sources. Eligible Augments for Burn : Buff Buddies, Feel the Burn, Firebrand, Holy Fire, Infernal Conduit, Slow Cooker, Tormentor Grandma's Chili Oil does not count itself as a Burn effect. The pools of Chili Oil will follow their user in and out of Mordekaiser's Realm of Death but will only be visible in the realm they were generated. (bug)",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/kiwi/augments/icons/grandmaschilioil_small.png",
+      "names": {
+        "en": "Grandma's Chili Oil",
+        "zh_cn": "祖母的辣椒油",
+        "zh_tw": "阿嬤的辣油",
+        "ja": "おばあちゃんのラー油",
+        "ko": "할머니의 고추기름"
+      },
       "kit_tags": [
         "ability",
         "dot"
@@ -5465,7 +6021,11 @@
         "system_breaker": false,
         "lifecycle": "removed"
       },
-      "type": "standalone"
+      "type": "standalone",
+      "name_zh_CN": "祖母的辣椒油",
+      "name_zh_TW": "阿嬤的辣油",
+      "name_ja": "おばあちゃんのラー油",
+      "name_ko": "할머니의 고추기름"
     },
     {
       "augmentId": "ARAM_GuiltyPleasure",
@@ -5498,15 +6058,19 @@
       "wikiRarity": "silver"
     },
     {
+      "augmentId": "HatOnAHat",
       "slug": "hat-on-a-hat",
       "name": "Hat on a Hat",
+      "displayName": "Hat on a Hat",
       "rarity": "silver",
-      "icon": "https://arammayhem.com/augments/Hat_on_a_Hat_mayhem_augment.webp",
-      "name_zh_CN": "帽上加帽",
-      "name_zh_TW": "帽上加帽",
-      "name_ja": "帽子の上に帽子",
-      "name_ko": "모자 겹쳐쓰기",
-      "wikiDescription": "Gain 15 ability power and 8 bonus magic resistance for each headwear item or hat you have in your inventory, reduced to 8 ability power and 4 bonus magic resistance for hats obtained from Cappa Juice and Stat Bonus . Eligible Epic Items: Haunting Guise , Spectre's Cowl Eligible Legendary Items: Abyssal Mask , Bloodletter's Curse , Cosmic Drive , Diadem of Songs , Edge of Night , Experimental Hexplate , Fimbulwinter , , Hollow Radiance , Hubris , Jak'Sho, The Protean , Knight's Vow , Liandry's Torment , Rabadon's Deathcap , Riftmaker , Shurelya's Battlesong , Whispering Circlet , Wooglet's Witchcap The stats gained for an eligible item is equal to 460 . The stats gained for a stack of Cappa Juice and Stat Bonus is equal to 240 .",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/kiwi/augments/icons/hatonahat_small.png",
+      "names": {
+        "en": "Hat on a Hat",
+        "zh_cn": "帽上加帽",
+        "zh_tw": "帽上加帽",
+        "ja": "帽子の上に帽子",
+        "ko": "모자 겹쳐쓰기"
+      },
       "kit_tags": [
         "ability"
       ],
@@ -5514,7 +6078,11 @@
         "system_breaker": false,
         "lifecycle": "removed"
       },
-      "type": "standalone"
+      "type": "standalone",
+      "name_zh_CN": "帽上加帽",
+      "name_zh_TW": "帽上加帽",
+      "name_ja": "帽子の上に帽子",
+      "name_ko": "모자 겹쳐쓰기"
     },
     {
       "augmentId": "ARAM_WatchOutGrapefruit",
@@ -5572,26 +6140,32 @@
       "name_ko": "신성한 불길"
     },
     {
+      "augmentId": "BabyKitty",
       "slug": "im-a-baby-kitty-where-is-mama",
       "name": "I'm a Baby Kitty Where is Mama",
+      "displayName": "I'm a Baby Kitty Where is Mama",
       "rarity": "prismatic",
-      "icon": "https://arammayhem.com/augments/I'm_a_Baby_Kitty_Where_is_Mama_mayhem_augment.webp",
-      "name_zh_CN": "小猫咪找妈妈",
-      "name_zh_TW": "我是小貓咪媽咪在哪裡",
-      "name_ja": "ボクは子ネコ。ママはどこ？",
-      "name_ko": "엄마 찾는 아기 고양이",
-      "wikiDescription": "Bind with the nearest allied champion to you after 2 seconds, forming a tether between you and them (400 radius). While the tether persists, you gain 75% bonus movement speed and 50% heal and shield power . Additionally, gain 37. 5 % bonus movement speed while facing your bound ally within 1500 units. The tether will break when you or your bound ally dies, allowing you to form a new tether.",
-      "wikiSet": "Wee Woo Wee Woo",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/kiwi/augments/icons/babykitty_small.png",
+      "names": {
+        "en": "I'm a Baby Kitty Where is Mama",
+        "zh_cn": "小猫咪找妈妈",
+        "zh_tw": "我是小貓咪媽咪在哪裡",
+        "ja": "ボクは子ネコ。ママはどこ？",
+        "ko": "엄마 찾는 아기 고양이"
+      },
       "kit_tags": [
         "movement",
         "heal_shield"
       ],
-      "set": "wee_woo",
       "flags": {
         "system_breaker": false,
         "lifecycle": "removed"
       },
-      "type": "standalone"
+      "type": "standalone",
+      "name_zh_CN": "小猫咪找妈妈",
+      "name_zh_TW": "我是小貓咪媽咪在哪裡",
+      "name_ja": "ボクは子ネコ。ママはどこ？",
+      "name_ko": "엄마 찾는 아기 고양이"
     },
     {
       "augmentId": "ARAM_ItsCritical",
@@ -5680,15 +6254,19 @@
       "name_ko": "핵심 룬 요술사"
     },
     {
+      "augmentId": "LaserHeal",
       "slug": "laser-heal",
       "name": "Laser Heal",
+      "displayName": "Laser Heal",
       "rarity": "prismatic",
-      "icon": "https://arammayhem.com/augments/Laser_Heal_mayhem_augment.webp",
-      "name_zh_CN": "激光治疗",
-      "name_zh_TW": "雷射治療",
-      "name_ja": "レーザーヒール",
-      "name_ko": "체력 회복 광선",
-      "wikiDescription": "Replace a summoner spell with Laser Heal . Laser Heal: Channel for up to 2. 5 seconds to project an energy beam in the target direction, during which you can steer the beam in the direction of the cursor. The beam heals you and allies within for 200 – 550 (based on level) (+ 70% AP) (+ 50% bonus health) and deals 100 – 350 (based on level) (+ 50% AP) magic damage to enemies within, both over the duration. Enemies hit are also slowed by 20%. Laser Heal can be recast during the channel to end it early. Healing granted by the laser counts as self-healing .",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/kiwi/augments/icons/laseheal_small.png",
+      "names": {
+        "en": "Laser Heal",
+        "zh_cn": "激光治疗",
+        "zh_tw": "雷射治療",
+        "ja": "レーザーヒール",
+        "ko": "체력 회복 광선"
+      },
       "kit_tags": [
         "ability",
         "heal_shield"
@@ -5697,7 +6275,11 @@
         "system_breaker": false,
         "lifecycle": "removed"
       },
-      "type": "standalone"
+      "type": "standalone",
+      "name_zh_CN": "激光治疗",
+      "name_zh_TW": "雷射治療",
+      "name_ja": "レーザーヒール",
+      "name_ko": "체력 회복 광선"
     },
     {
       "augmentId": "ARAM_LightningStrikes",
@@ -5942,23 +6524,29 @@
       "augmentId": "ARAM_RabbleRousing"
     },
     {
+      "augmentId": "RedEnvelopes",
       "slug": "red-envelopes",
       "name": "Red Envelopes",
-      "rarity": "prismatic",
-      "icon": "https://arammayhem.com/augments/Red_Envelopes_mayhem_augment.webp",
-      "name_zh_CN": "红包",
-      "name_zh_TW": "紅包",
-      "name_ja": "紅いお年玉袋",
-      "name_ko": "붉은 봉투",
-      "wikiDescription": "Red envelopes will now randomly appear around you every 25 – 15 (based on level) seconds. You can pick up these envelopes by moving over them, granting you between 8 – 15 (based on level) and 22 – 46 (based on level) gold , and 100 bonus movement speed for 3 seconds. Additionally, whenever you pick an envelope, you gain one of the following stats by random: 5 bonus attack damage 5 ability power 5 ability haste 5 bonus armor 5 bonus magic resistance 50 bonus health 10% bonus attack speed 5 bonus movement speed 5 Lethality 5 magic penetration",
-      "wikiSet": "Make it Rain",
+      "displayName": "Red Envelopes",
+      "rarity": "gold",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/kiwi/augments/icons/redenvelopes_small.png",
+      "names": {
+        "en": "Red Envelopes",
+        "zh_cn": "红包",
+        "zh_tw": "紅包",
+        "ja": "紅いお年玉袋",
+        "ko": "붉은 봉투"
+      },
       "kit_tags": [],
-      "set": "make_it_rain",
       "flags": {
         "system_breaker": false,
         "lifecycle": "removed"
       },
-      "type": "standalone"
+      "type": "standalone",
+      "name_zh_CN": "红包",
+      "name_zh_TW": "紅包",
+      "name_ja": "紅いお年玉袋",
+      "name_ko": "붉은 봉투"
     },
     {
       "augmentId": "ARAM_RabbleRousing",
@@ -6130,48 +6718,62 @@
       "name_ko": "찜솥"
     },
     {
+      "augmentId": "SnowballRoulette",
       "slug": "snowball-roulette",
       "name": "Snowball Roulette",
+      "displayName": "Snowball Roulette",
       "rarity": "gold",
-      "icon": "https://arammayhem.com/augments/Snowball_Roulette_mayhem_augment.webp",
-      "name_zh_CN": "雪球扭蛋机",
-      "name_zh_TW": "雪球輪盤",
-      "name_ja": "雪玉ルーレット",
-      "name_ko": "눈덩이 룰렛",
-      "wikiDescription": "Hitting an enemy with Mark casts a random harmful summoner spell on them, and also casts a random beneficial summoner spell on yourself. Using Dash casts the beneficial summoner spell on yourself again upon arrival. Additionally, your Mark's cooldown is reduced equivalent to 100 ability haste. If Mark is not equipped, you will be prompted to replace one of your summoner spells with Mark . Harmful summoner spells: Exhaust and Ignite Beneficial Summoner spells: Barrier , Clarity , Cleanse , Ghost , and Heal Recasting Barrier and Cleanse refreshes the duration. Recasted Heal will heal less since the Recently Healed debuff will be applied on the first. Ghost can be stacked up to a maximum of 5 times (which is possible with Biggest Snowball Ever augment)",
-      "wikiSet": "Snowday",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/kiwi/augments/icons/snowballupgrade_small.png",
+      "names": {
+        "en": "Snowball Roulette",
+        "zh_cn": "雪球扭蛋机",
+        "zh_tw": "雪球輪盤",
+        "ja": "雪玉ルーレット",
+        "ko": "눈덩이 룰렛"
+      },
       "kit_tags": [
         "ability",
         "cc"
       ],
-      "set": "snowday",
       "flags": {
         "system_breaker": false,
         "lifecycle": "removed"
       },
-      "type": "standalone"
+      "type": "standalone",
+      "name_zh_CN": "雪球扭蛋机",
+      "name_zh_TW": "雪球輪盤",
+      "name_ja": "雪玉ルーレット",
+      "name_ko": "눈덩이 룰렛"
     },
     {
+      "augmentId": "SnowballUpgrade",
       "slug": "snowball-upgrade",
       "name": "Snowball Upgrade",
+      "displayName": "Snowball Upgrade",
       "rarity": "gold",
-      "icon": "https://arammayhem.com/augments/Snowball_Upgrade_mayhem_augment.webp",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/kiwi/augments/icons/snowballupgrade_small.png",
+      "names": {
+        "en": "Snowball Upgrade",
+        "zh_cn": "升级：雪球",
+        "zh_tw": "雪球升級",
+        "ja": "雪玉アップグレード",
+        "ko": "눈덩이 업그레이드"
+      },
+      "kit_tags": [
+        "ability",
+        "cc"
+      ],
+      "flags": {
+        "system_breaker": false,
+        "lifecycle": "removed"
+      },
+      "type": "standalone",
       "name_zh_CN": "升级：雪球",
       "name_zh_TW": "雪球升級",
       "name_ja": "雪玉アップグレード",
       "name_ko": "눈덩이 업그레이드",
-      "wikiDescription": "Your Mark is empowered to hail a snowstorm at the location where the target was hit for 2 seconds, granting sight of the area and dealing 「 200 (+ 200% bonus AD) (+ 120% AP) magic damage 」 「 25 (+ 25% bonus AD) (+ 15% AP) magic damage every 0. 25 seconds 」 to enemies within over the duration, as well as slowing them by 50% (+ 6% per 100 AP) . Additionally, your Mark's cooldown is reduced equivalent to 50 ability haste. If Mark is not equipped, you will be prompted to replace one of your summoner spells with Mark .",
-      "wikiSet": "Snowday",
-      "kit_tags": [
-        "ability",
-        "cc"
-      ],
-      "set": "snowday",
-      "flags": {
-        "system_breaker": false,
-        "lifecycle": "removed"
-      },
-      "type": "standalone"
+      "wikiDescription": "Your Mark is empowered to hail a snowstorm at the location where the target was hit for 2 seconds, granting sight of the area and dealing「 200 (+ 200% bonus AD) (+ 120% AP) magic damage 」「 25 (+ 25% bonus AD) (+ 15% AP) magic damage every 0.25 seconds 」to enemies within over the duration, as well as slowing them by 50% (+ 6% per 100 AP). Additionally, your Mark's cooldown is reduced equivalent to 50 ability haste. If Mark is not equipped, you will be prompted to replace one of your summoner spells with Mark.",
+      "wikiRarity": "gold"
     },
     {
       "augmentId": "ARAM_SoulSiphon",
@@ -6464,38 +7066,48 @@
       "name_ko": "오만 업그레이드"
     },
     {
+      "augmentId": "Upgrade_MikaelsBlessing",
       "slug": "upgrade-mikaels-blessing",
       "name": "Upgrade Mikael's Blessing",
+      "displayName": "Upgrade Mikael's Blessing",
       "rarity": "prismatic",
-      "icon": "https://arammayhem.com/augments/Upgrade_Mikael's_Blessing_mayhem_augment.webp",
-      "name_zh_CN": "升级：米凯尔的祝福",
-      "name_zh_TW": "升級：米凱爾的祝福",
-      "name_ja": "ミカエルの祝福 アップグレード",
-      "name_ko": "미카엘의 축복 업그레이드",
-      "wikiDescription": "Upgrades Mikael's Blessing , reducing the cooldown of Purify to 45 seconds and empowering its active to instead affect you and all nearby allied champions, cleansing all targets of crowd control (excluding Airborne ), healing them for 150 – 450 (based on level) (+ 50% AP) , and granting them 65% tenacity for 3 seconds. Additionally, you are granted Mikael's Blessing for free. If you already have Mikael's Blessing , gain 2300 instead. If your inventory is full, the item will be granted as soon as a slot in the inventory is available.",
-      "wikiSet": "Wee Woo Wee Woo",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/kiwi/augments/icons/upgrademikaelsblessing_small.png",
+      "names": {
+        "en": "Upgrade Mikael's Blessing",
+        "zh_cn": "升级：米凯尔的祝福",
+        "zh_tw": "升級米凱的祝福",
+        "ja": "ミカエルの祝福 アップグレード",
+        "ko": "미카엘의 축복 업그레이드"
+      },
       "kit_tags": [
         "ability",
         "heal_shield",
         "cc"
       ],
-      "set": "wee_woo",
       "flags": {
         "system_breaker": false,
         "lifecycle": "removed"
       },
-      "type": "standalone"
+      "type": "standalone",
+      "name_zh_CN": "升级：米凯尔的祝福",
+      "name_zh_TW": "升級米凱的祝福",
+      "name_ja": "ミカエルの祝福 アップグレード",
+      "name_ko": "미카엘의 축복 업그레이드"
     },
     {
+      "augmentId": "Upgrade_Thornmail",
       "slug": "upgrade-thornmail",
       "name": "Upgrade Thornmail",
+      "displayName": "Upgrade Thornmail",
       "rarity": "silver",
-      "icon": "https://arammayhem.com/augments/Upgrade_Thornmail_mayhem_augment.webp",
-      "name_zh_CN": "升级：荆棘之甲",
-      "name_zh_TW": "升級荊棘之甲",
-      "name_ja": "ソーンメイル アップグレード",
-      "name_ko": "가시 갑옷 업그레이드",
-      "wikiDescription": "Upgrades Bramble Vest and Thornmail , empowering Thorns to generate a protective shell around you. The shell is broken by the next enemy champion to use a basic attack on-hit against you, which causes them to take 50 – 250 (based on level) (+ 30% armor) (+ 30% magic resistance) (+ 12% maximum health) magic damage . Shell regenerates after 20 – 5 (based on level) seconds of being out-of-combat with enemy champions.",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/kiwi/augments/icons/upgradecollector_small.png",
+      "names": {
+        "en": "Upgrade Thornmail",
+        "zh_cn": "升级：荆棘之甲",
+        "zh_tw": "升級荊棘之甲",
+        "ja": "ソーンメイル アップグレード",
+        "ko": "가시 갑옷 업그레이드"
+      },
       "kit_tags": [
         "tank",
         "on_hit"
@@ -6504,18 +7116,26 @@
         "system_breaker": false,
         "lifecycle": "removed"
       },
-      "type": "standalone"
+      "type": "standalone",
+      "name_zh_CN": "升级：荆棘之甲",
+      "name_zh_TW": "升級荊棘之甲",
+      "name_ja": "ソーンメイル アップグレード",
+      "name_ko": "가시 갑옷 업그레이드"
     },
     {
+      "augmentId": "Vampirism",
       "slug": "vampirism",
       "name": "Vampirism",
+      "displayName": "Vampirism",
       "rarity": "gold",
-      "icon": "https://arammayhem.com/augments/Vampirism_mayhem_augment.webp",
-      "name_zh_CN": "吸血习性",
-      "name_zh_TW": "吸血迷信",
-      "name_ja": "吸血鬼信仰",
-      "name_ko": "흡혈병",
-      "wikiDescription": "You can no longer be healed by allies and your health regeneration is set to 0 . Gain 25% omnivamp . Diadem of Songs' Consonance and Moonstone Renewer's Starlit Grace will specifically not target champions with this augment. This augment prevents the user from being offered the Perseverance augment. This augment is not offered if the champion has built Warmog's Armor .",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/kiwi/augments/icons/vampired_small.png",
+      "names": {
+        "en": "Vampirism",
+        "zh_cn": "吸血习性",
+        "zh_tw": "吸血迷信",
+        "ja": "吸血鬼信仰",
+        "ko": "흡혈병"
+      },
       "kit_tags": [
         "heal_shield",
         "dot"
@@ -6524,21 +7144,27 @@
         "system_breaker": false,
         "lifecycle": "removed"
       },
-      "type": "standalone"
+      "type": "standalone",
+      "name_zh_CN": "吸血习性",
+      "name_zh_TW": "吸血迷信",
+      "name_ja": "吸血鬼信仰",
+      "name_ko": "흡혈병",
+      "wikiDescription": "You can no longer be healed by allies and your health regeneration is set to 0. Gain 25% omnivamp. Diadem of Songs' Consonance and Moonstone Renewer's Starlit Grace will specifically not target champions with this augment.",
+      "wikiRarity": "gold"
     },
     {
+      "augmentId": "VoidDash",
       "slug": "void-dash",
       "name": "Void Dash",
+      "displayName": "Void Dash",
       "rarity": "gold",
-      "icon": "https://arammayhem.com/augments/Void_Dash_mayhem_augment.webp",
-      "name_zh_CN": "虚空冲刺",
-      "name_zh_TW": "虛空衝刺",
-      "name_ja": "ヴォイドダッシュ",
-      "name_ko": "공허 돌진",
-      "type": "ability",
-      "flags": {
-        "system_breaker": false,
-        "lifecycle": "removed"
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/kiwi/augments/icons/genericabilityaugmenticon_gold.png",
+      "names": {
+        "en": "Void Dash",
+        "zh_cn": "虚空冲刺",
+        "zh_tw": "虛空衝刺",
+        "ja": "ヴォイドダッシュ",
+        "ko": "공허 돌진"
       },
       "kit_tags": [
         "ability",
@@ -6546,7 +7172,17 @@
         "cc",
         "dot"
       ],
-      "wikiDescription": "Dashing with your chosen ability spawns a Void Zone that Slows enemy champions and deals magic damage."
+      "flags": {
+        "system_breaker": false,
+        "lifecycle": "removed"
+      },
+      "type": "ability",
+      "name_zh_CN": "虚空冲刺",
+      "name_zh_TW": "虛空衝刺",
+      "name_ja": "ヴォイドダッシュ",
+      "name_ko": "공허 돌진",
+      "wikiDescription": "Upgrades one of your champion's abilities that has a dash, empowering the ability to spawn a void zone (250 radius) at the dash's destination after a 0.3-second delay. Enemy champions within the zone are dealt 80 – 400 (based on level) (+ 100% ability haste) magic damage and are slowed by 35% for 1 second.",
+      "wikiRarity": "gold"
     },
     {
       "augmentId": "ARAM_VoidRift",
@@ -6635,15 +7271,19 @@
       "name_ko": "중량 폭주"
     },
     {
+      "augmentId": "WindBeneathBlade",
       "slug": "wind-beneath-blade",
       "name": "Wind Beneath Blade",
+      "displayName": "Wind Beneath Blade",
       "rarity": "silver",
-      "icon": "https://arammayhem.com/augments/Wind_Beneath_Blade_mayhem_augment.webp",
-      "name_zh_CN": "刃下生风",
-      "name_zh_TW": "刃下狂風",
-      "name_ja": "刃の下の風",
-      "name_ko": "칼날 아래 바람",
-      "wikiDescription": "Gain 1. 5 bonus movement speed per 1 Lethality or flat magic penetration , and 5 bonus movement speed per 10% armor penetration or magic penetration .",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/kiwi/augments/icons/windbeneathblade_small.png",
+      "names": {
+        "en": "Wind Beneath Blade",
+        "zh_cn": "刃下生风",
+        "zh_tw": "刃下狂風",
+        "ja": "刃の下の風",
+        "ko": "칼날 아래 바람"
+      },
       "kit_tags": [
         "movement",
         "ability"
@@ -6652,7 +7292,11 @@
         "system_breaker": false,
         "lifecycle": "removed"
       },
-      "type": "standalone"
+      "type": "standalone",
+      "name_zh_CN": "刃下生风",
+      "name_zh_TW": "刃下狂風",
+      "name_ja": "刃の下の風",
+      "name_ko": "칼날 아래 바람"
     },
     {
       "augmentId": "ARAM_Zealot",
@@ -6686,15 +7330,19 @@
       "wikiRarity": "silver"
     },
     {
+      "augmentId": "Upgrade_SwordOfBlossom",
       "slug": "upgrade-sword-of-blossoming-dawn",
       "name": "Upgrade Sword of Blossoming Dawn",
+      "displayName": "Upgrade Sword of Blossoming Dawn",
       "rarity": "prismatic",
-      "icon": "https://arammayhem.com/augments/Upgrade_Sword_of_Blossoming_Dawn_mayhem_augment.webp",
-      "name_zh_CN": "升级：破晓绽放之剑",
-      "name_zh_TW": "升級：破曉綻放之劍",
-      "name_ja": "花咲く夜明けの剣 アップグレード",
-      "name_ko": "Upgrade Sword of Blossoming Dawn",
-      "wikiDescription": "Gain 100% Attack Speed. When you have Sword of Blossoming Dawn, your attacks against champions deal 50% damage but increase Sword of Blossoming Dawn's healing by 250%.",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/kiwi/augments/icons/upgrademikaelsblessing_small.png",
+      "names": {
+        "en": "Upgrade Sword of Blossoming Dawn",
+        "zh_cn": "升级：花晓之剑",
+        "zh_tw": "升級破曉綻放之劍",
+        "ja": "花咲く夜明けの剣 アップグレード",
+        "ko": "꽃피는 새벽의 검 업그레이드"
+      },
       "kit_tags": [
         "attack",
         "on_hit",
@@ -6704,7 +7352,13 @@
         "system_breaker": false,
         "lifecycle": "removed"
       },
-      "type": "standalone"
+      "type": "standalone",
+      "name_zh_CN": "升级：破晓绽放之剑",
+      "name_zh_TW": "升級：破曉綻放之劍",
+      "name_ja": "花咲く夜明けの剣 アップグレード",
+      "name_ko": "Upgrade Sword of Blossoming Dawn",
+      "wikiDescription": "Upgrades Sword of Blossoming Dawn, empowering Peppermint to have its healing increased by 250%. Additionally, you gain 100% bonus attack speed.",
+      "wikiRarity": "prismatic"
     },
     {
       "augmentId": "ARAM_Earthwake",
@@ -6810,6 +7464,193 @@
       "name_ja": "変質: ゴールド",
       "name_ko": "전환: 골드",
       "wikiDescription": "Gain one random Gold augment, excluding the other two offerings in your current assortment.",
+      "wikiRarity": "silver"
+    },
+    {
+      "augmentId": "FullyAutomated",
+      "slug": "fully-automated",
+      "name": "Fully Automated",
+      "displayName": "Fully Automated",
+      "rarity": "silver",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/fullyautomated_small.png",
+      "names": {
+        "en": "Fully Automated",
+        "zh_cn": "完全自动化",
+        "zh_tw": "全自動",
+        "ja": "完全自動化",
+        "ko": "완전 자동화"
+      },
+      "kit_tags": [],
+      "flags": {
+        "system_breaker": false,
+        "lifecycle": "removed"
+      },
+      "type": "standalone",
+      "name_zh_CN": "完全自动化",
+      "name_zh_TW": "全自動",
+      "name_ja": "完全自動化",
+      "name_ko": "완전 자동화"
+    },
+    {
+      "augmentId": "Quest_Sneakerhead",
+      "slug": "sneakerhead",
+      "name": "Sneakerhead",
+      "displayName": "Sneakerhead",
+      "rarity": "prismatic",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/kiwi/augments/icons/sneakerhead_small.png",
+      "names": {
+        "en": "Sneakerhead",
+        "zh_cn": "王中王，靴中靴",
+        "zh_tw": "球鞋收藏家",
+        "ja": "スニーカーヘッド",
+        "ko": "신발 수집가"
+      },
+      "kit_tags": [],
+      "flags": {
+        "system_breaker": false,
+        "lifecycle": "removed"
+      },
+      "type": "standalone",
+      "name_zh_CN": "王中王，靴中靴",
+      "name_zh_TW": "球鞋收藏家",
+      "name_ja": "スニーカーヘッド",
+      "name_ko": "신발 수집가",
+      "wikiDescription": "Assigns quests that require you to perform specific tasks while equipped with a particular Boots item, which is granted to you for free during its respective quest. Finish the following quests, which are assigned to you in a random order: Quest - Berserker's Greaves: Basic attack 25 times. Quest - Boots of Swiftness: Run 300 steps. Quest - Ionian Boots of Lucidity: Cast 20 abilities. Quest - Mercury's Treads: Become afflicted by crowd control 5 times. Quest - Plated Steelcaps: Reduce a total of 200 damage with Plating. Quest - Sorcerer's Shoes: Deal a total of 1500 damage with abilities. Reward: Upon completing all of the above quests, you receive Jarvan I's. You cannot purchase any Boots items while equipped with this augment. If you already have a Boots item, it is replaced by the Boots granted by this effect. Boots items gained from this effect cannot be sold.",
+      "wikiRarity": "prismatic"
+    },
+    {
+      "augmentId": "ReEnergize",
+      "slug": "reenergize",
+      "name": "ReEnergize",
+      "displayName": "ReEnergize",
+      "rarity": "silver",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/kiwi/augments/icons/mobiuscoil_small.png",
+      "names": {
+        "en": "ReEnergize",
+        "zh_cn": "活力再生",
+        "zh_tw": "活力補給",
+        "ja": "エネルギー再充填",
+        "ko": "재충전"
+      },
+      "kit_tags": [],
+      "flags": {
+        "system_breaker": false,
+        "lifecycle": "active"
+      },
+      "type": "standalone",
+      "name_zh_CN": "活力再生",
+      "name_zh_TW": "活力補給",
+      "name_ja": "エネルギー再充填",
+      "name_ko": "재충전",
+      "wikiDescription": "Your Energized attacks against targets not hit by your previous Energized attack do not consume any Energize stacks on-hit. Additionally, when fully Energized, your next basic attack deals bonus magic damage on-hit equal to 10% of the target's current health.",
+      "wikiRarity": "silver"
+    },
+    {
+      "augmentId": "SkipTheBasics",
+      "slug": "ult-bot",
+      "name": "Ult Bot",
+      "displayName": "Ult Bot",
+      "rarity": "prismatic",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/kiwi/augments/icons/skipthebasic_small.png",
+      "names": {
+        "en": "Ult Bot",
+        "zh_cn": "大招工具人",
+        "zh_tw": "大絕電腦",
+        "ja": "アルティメット (AI)",
+        "ko": "궁극기 봇"
+      },
+      "kit_tags": [],
+      "flags": {
+        "system_breaker": false,
+        "lifecycle": "active"
+      },
+      "type": "standalone",
+      "name_zh_CN": "大招工具人",
+      "name_zh_TW": "大絕電腦",
+      "name_ja": "アルティメット (AI)",
+      "name_ko": "궁극기 봇",
+      "wikiDescription": "Your ability haste now only applies to the cooldown of your ultimate ability. In return, increase your ability haste by 150% and gain 100 ability haste.",
+      "wikiRarity": "prismatic"
+    },
+    {
+      "augmentId": "SnapBack",
+      "slug": "snap-back",
+      "name": "Snap Back",
+      "displayName": "Snap Back",
+      "rarity": "gold",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/kiwi/augments/icons/genericabilityaugmenticon_gold.png",
+      "names": {
+        "en": "Snap Back",
+        "zh_cn": "复位",
+        "zh_tw": "躍回",
+        "ja": "スナップバック",
+        "ko": "원상복구"
+      },
+      "kit_tags": [],
+      "flags": {
+        "system_breaker": false,
+        "lifecycle": "active"
+      },
+      "type": "standalone",
+      "name_zh_CN": "复位",
+      "name_zh_TW": "躍回",
+      "name_ja": "スナップバック",
+      "name_ko": "원상복구",
+      "wikiDescription": "Upgrades one of your champion's abilities, empowering the ability with a recast. Using the recast causes you to blink back to your original casting position of the ability and explode to deal 100 – 300 (based on level) (+ 20% AD) (+ 20% AP) magic damage to nearby enemies.",
+      "wikiRarity": "gold"
+    },
+    {
+      "augmentId": "VeilOfWarding",
+      "slug": "veil-of-warding",
+      "name": "Veil of Warding",
+      "displayName": "Veil of Warding",
+      "rarity": "silver",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/kiwi/augments/icons/poltergeist_small.png",
+      "names": {
+        "en": "Veil of Warding",
+        "zh_cn": "防护面纱",
+        "zh_tw": "守護面紗",
+        "ja": "ワーディングヴェール",
+        "ko": "감시의 장막"
+      },
+      "kit_tags": [],
+      "flags": {
+        "system_breaker": false,
+        "lifecycle": "active"
+      },
+      "type": "standalone",
+      "name_zh_CN": "防护面纱",
+      "name_zh_TW": "守護面紗",
+      "name_ja": "ワーディングヴェール",
+      "name_ko": "감시의 장막",
+      "wikiDescription": "Grants a spell shield that blocks the next hostile ability (30 second cooldown, timer does not restart from champion damage taken).",
+      "wikiRarity": "silver"
+    },
+    {
+      "augmentId": "VirtuousCycle",
+      "slug": "virtuous-cycle",
+      "name": "Virtuous Cycle",
+      "displayName": "Virtuous Cycle",
+      "rarity": "silver",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/virtuouscycle_small.png",
+      "names": {
+        "en": "Virtuous Cycle",
+        "zh_cn": "良性循环",
+        "zh_tw": "良性循環",
+        "ja": "好循環",
+        "ko": "선순환"
+      },
+      "kit_tags": [],
+      "flags": {
+        "system_breaker": false,
+        "lifecycle": "active"
+      },
+      "type": "standalone",
+      "name_zh_CN": "良性循环",
+      "name_zh_TW": "良性循環",
+      "name_ja": "好循環",
+      "name_ko": "선순환",
+      "wikiDescription": "Your heals grant a shield for 5 seconds that is equal to 20% of the healing value, and your shields grant a heal equal to 20% of the shield's strength. This effect cannot trigger from itself.",
       "wikiRarity": "silver"
     }
   ]

@@ -1,76 +1,61 @@
 {
   "identity_key": "CDragon augmentNameId",
   "counts": {
-    "identity": 3,
-    "existence": 181,
-    "rarity": 0,
-    "availability": 107
+    "identity": 0,
+    "existence": 48,
+    "rarity": 1,
+    "availability": 106
   },
-  "identity": [
-    {
-      "source": "internal_augments",
-      "augmentNameId": "ARAM_Quest_VoidImmolation",
-      "sourceName": "Void Immolation",
-      "cdragonName": "Icathia's Fall",
-      "method": "alias",
-      "aliasToken": "voidimmolation",
-      "reason": "The committed internal/wiki-facing row is named for the rewarded item, while CDragon's canonical augment display name is Icathia's Fall."
-    },
-    {
-      "source": "wiki",
-      "augmentNameId": "ARAM_Quest_VoidImmolation",
-      "sourceName": "Void Immolation",
-      "cdragonName": "Icathia's Fall",
-      "method": "alias",
-      "aliasToken": "voidimmolation",
-      "reason": "The committed internal/wiki-facing row is named for the rewarded item, while CDragon's canonical augment display name is Icathia's Fall."
-    },
-    {
-      "source": "arammayhem_win_rate",
-      "augmentNameId": "ARAM_Quest_VoidImmolation",
-      "sourceName": "Void Immolation",
-      "cdragonName": "Icathia's Fall",
-      "method": "alias",
-      "aliasToken": "voidimmolation",
-      "reason": "The committed internal/wiki-facing row is named for the rewarded item, while CDragon's canonical augment display name is Icathia's Fall."
-    }
-  ],
+  "identity": [],
   "existence": [
     {
       "kind": "cdragon_only",
       "source": "cdragon",
-      "augmentNameId": "ARAM_Earthwake",
-      "name": "Earthwake",
+      "augmentNameId": "FullyAutomated",
+      "name": "Fully Automated",
+      "rarity": "silver"
+    },
+    {
+      "kind": "cdragon_only",
+      "source": "cdragon",
+      "augmentNameId": "Quest_Sneakerhead",
+      "name": "Sneakerhead",
       "rarity": "prismatic"
     },
     {
       "kind": "cdragon_only",
       "source": "cdragon",
-      "augmentNameId": "ARAM_Flashy",
-      "name": "Flashy",
+      "augmentNameId": "ReEnergize",
+      "name": "ReEnergize",
+      "rarity": "silver"
+    },
+    {
+      "kind": "cdragon_only",
+      "source": "cdragon",
+      "augmentNameId": "SkipTheBasics",
+      "name": "Ult Bot",
+      "rarity": "prismatic"
+    },
+    {
+      "kind": "cdragon_only",
+      "source": "cdragon",
+      "augmentNameId": "SnapBack",
+      "name": "Snap Back",
       "rarity": "gold"
     },
     {
       "kind": "cdragon_only",
       "source": "cdragon",
-      "augmentNameId": "ARAM_MissingPingAugment",
-      "name": "???",
-      "rarity": "prismatic"
+      "augmentNameId": "VeilOfWarding",
+      "name": "Veil of Warding",
+      "rarity": "silver"
     },
     {
       "kind": "cdragon_only",
       "source": "cdragon",
-      "augmentNameId": "ARAM_TransmuteGold",
-      "name": "Transmute: Gold",
+      "augmentNameId": "VirtuousCycle",
+      "name": "Virtuous Cycle",
       "rarity": "silver"
-    },
-    {
-      "kind": "source_only",
-      "source": "internal_augments",
-      "sourceKey": "infinite-recursion",
-      "name": "Infinite Recursion",
-      "rarity": "prismatic",
-      "status": "unmatched"
     },
     {
       "kind": "source_only",
@@ -83,32 +68,8 @@
     {
       "kind": "source_only",
       "source": "internal_augments",
-      "sourceKey": "pressure-cooker",
-      "name": "Pressure Cooker",
-      "rarity": "gold",
-      "status": "unmatched"
-    },
-    {
-      "kind": "source_only",
-      "source": "internal_augments",
-      "sourceKey": "combusting-interest",
-      "name": "Combusting Interest",
-      "rarity": "gold",
-      "status": "unmatched"
-    },
-    {
-      "kind": "source_only",
-      "source": "internal_augments",
-      "sourceKey": "twin-fire",
-      "name": "Twin Fire",
-      "rarity": "silver",
-      "status": "unmatched"
-    },
-    {
-      "kind": "source_only",
-      "source": "internal_augments",
-      "sourceKey": "sonata",
-      "name": "Sonata",
+      "sourceKey": "pursuit-of-haste",
+      "name": "Pursuit of Haste",
       "rarity": "gold",
       "status": "unmatched"
     },
@@ -123,73 +84,9 @@
     {
       "kind": "source_only",
       "source": "internal_augments",
-      "sourceKey": "escape-plan",
-      "name": "Escape Plan",
+      "sourceKey": "siphon",
+      "name": "Siphon",
       "rarity": "silver",
-      "status": "unmatched"
-    },
-    {
-      "kind": "source_only",
-      "source": "internal_augments",
-      "sourceKey": "shrink-engine",
-      "name": "Shrink Engine",
-      "rarity": "gold",
-      "status": "unmatched"
-    },
-    {
-      "kind": "source_only",
-      "source": "internal_augments",
-      "sourceKey": "tooth-fairy",
-      "name": "Tooth Fairy",
-      "rarity": "gold",
-      "status": "unmatched"
-    },
-    {
-      "kind": "source_only",
-      "source": "internal_augments",
-      "sourceKey": "growth-spurt",
-      "name": "Growth Spurt",
-      "rarity": "gold",
-      "status": "unmatched"
-    },
-    {
-      "kind": "source_only",
-      "source": "internal_augments",
-      "sourceKey": "lil-extra-help",
-      "name": "Lil' Extra Help",
-      "rarity": "gold",
-      "status": "unmatched"
-    },
-    {
-      "kind": "source_only",
-      "source": "internal_augments",
-      "sourceKey": "donation",
-      "name": "Donation",
-      "rarity": "gold",
-      "status": "unmatched"
-    },
-    {
-      "kind": "source_only",
-      "source": "internal_augments",
-      "sourceKey": "swift-and-safe",
-      "name": "Swift and Safe",
-      "rarity": "silver",
-      "status": "unmatched"
-    },
-    {
-      "kind": "source_only",
-      "source": "internal_augments",
-      "sourceKey": "soul-eater",
-      "name": "Soul Eater",
-      "rarity": "gold",
-      "status": "unmatched"
-    },
-    {
-      "kind": "source_only",
-      "source": "internal_augments",
-      "sourceKey": "final-form",
-      "name": "Final Form",
-      "rarity": "prismatic",
       "status": "unmatched"
     },
     {
@@ -203,41 +100,9 @@
     {
       "kind": "source_only",
       "source": "internal_augments",
-      "sourceKey": "bonk",
-      "name": "BONK!",
+      "sourceKey": "from-downtown",
+      "name": "From Downtown",
       "rarity": "gold",
-      "status": "unmatched"
-    },
-    {
-      "kind": "source_only",
-      "source": "internal_augments",
-      "sourceKey": "stay-resolute",
-      "name": "Stay Resolute",
-      "rarity": "silver",
-      "status": "unmatched"
-    },
-    {
-      "kind": "source_only",
-      "source": "internal_augments",
-      "sourceKey": "hand-of-baron",
-      "name": "Hand of Baron",
-      "rarity": "prismatic",
-      "status": "unmatched"
-    },
-    {
-      "kind": "source_only",
-      "source": "internal_augments",
-      "sourceKey": "king-me",
-      "name": "King Me",
-      "rarity": "prismatic",
-      "status": "unmatched"
-    },
-    {
-      "kind": "source_only",
-      "source": "internal_augments",
-      "sourceKey": "biggest-snowball-ever",
-      "name": "Biggest Snowball Ever",
-      "rarity": "prismatic",
       "status": "unmatched"
     },
     {
@@ -246,14 +111,6 @@
       "sourceKey": "dont-change-the-channel",
       "name": "Don't Change the Channel",
       "rarity": "silver",
-      "status": "unmatched"
-    },
-    {
-      "kind": "source_only",
-      "source": "internal_augments",
-      "sourceKey": "overextender",
-      "name": "Overextender",
-      "rarity": "gold",
       "status": "unmatched"
     },
     {
@@ -275,46 +132,6 @@
     {
       "kind": "source_only",
       "source": "internal_augments",
-      "sourceKey": "ravenous-bind",
-      "name": "Ravenous Bind",
-      "rarity": "gold",
-      "status": "unmatched"
-    },
-    {
-      "kind": "source_only",
-      "source": "internal_augments",
-      "sourceKey": "goldrend",
-      "name": "Goldrend",
-      "rarity": "prismatic",
-      "status": "unmatched"
-    },
-    {
-      "kind": "source_only",
-      "source": "internal_augments",
-      "sourceKey": "hextech-soul",
-      "name": "Hextech Soul",
-      "rarity": "silver",
-      "status": "unmatched"
-    },
-    {
-      "kind": "source_only",
-      "source": "internal_augments",
-      "sourceKey": "endless-decimation",
-      "name": "Endless Decimation",
-      "rarity": "gold",
-      "status": "unmatched"
-    },
-    {
-      "kind": "source_only",
-      "source": "internal_augments",
-      "sourceKey": "ultimate-awakening",
-      "name": "Ultimate Awakening",
-      "rarity": "prismatic",
-      "status": "unmatched"
-    },
-    {
-      "kind": "source_only",
-      "source": "internal_augments",
       "sourceKey": "overloaded",
       "name": "Overloaded",
       "rarity": "prismatic",
@@ -331,153 +148,9 @@
     {
       "kind": "source_only",
       "source": "internal_augments",
-      "sourceKey": "ominous-pact",
-      "name": "Ominous Pact",
-      "rarity": "prismatic",
-      "status": "unmatched"
-    },
-    {
-      "kind": "source_only",
-      "source": "internal_augments",
-      "sourceKey": "double-defense",
-      "name": "Double Defense",
-      "rarity": "silver",
-      "status": "unmatched"
-    },
-    {
-      "kind": "source_only",
-      "source": "internal_augments",
-      "sourceKey": "mercys-strike",
-      "name": "Mercy's Strike",
-      "rarity": "gold",
-      "status": "unmatched"
-    },
-    {
-      "kind": "source_only",
-      "source": "internal_augments",
-      "sourceKey": "shark-bait",
-      "name": "Shark Bait",
-      "rarity": "gold",
-      "status": "unmatched"
-    },
-    {
-      "kind": "source_only",
-      "source": "internal_augments",
-      "sourceKey": "nature-is-healing",
-      "name": "Nature is Healing",
-      "rarity": "gold",
-      "status": "unmatched"
-    },
-    {
-      "kind": "source_only",
-      "source": "internal_augments",
-      "sourceKey": "poltergeist",
-      "name": "Poltergeist",
-      "rarity": "silver",
-      "status": "unmatched"
-    },
-    {
-      "kind": "source_only",
-      "source": "internal_augments",
-      "sourceKey": "nightstalking",
-      "name": "Nightstalking",
-      "rarity": "gold",
-      "status": "unmatched"
-    },
-    {
-      "kind": "source_only",
-      "source": "internal_augments",
-      "sourceKey": "tripleshot",
-      "name": "Tripleshot",
-      "rarity": "prismatic",
-      "status": "unmatched"
-    },
-    {
-      "kind": "source_only",
-      "source": "internal_augments",
-      "sourceKey": "empyrean-promise",
-      "name": "Empyrean Promise",
-      "rarity": "prismatic",
-      "status": "unmatched"
-    },
-    {
-      "kind": "source_only",
-      "source": "internal_augments",
-      "sourceKey": "kill-secured",
-      "name": "Kill Secured",
-      "rarity": "silver",
-      "status": "unmatched"
-    },
-    {
-      "kind": "source_only",
-      "source": "internal_augments",
       "sourceKey": "porcupine",
       "name": "Porcupine",
       "rarity": "gold",
-      "status": "unmatched"
-    },
-    {
-      "kind": "source_only",
-      "source": "internal_augments",
-      "sourceKey": "echo-cast",
-      "name": "Echo Cast",
-      "rarity": "prismatic",
-      "status": "unmatched"
-    },
-    {
-      "kind": "source_only",
-      "source": "internal_augments",
-      "sourceKey": "spell-split",
-      "name": "Spellsplit",
-      "rarity": "prismatic",
-      "status": "unmatched"
-    },
-    {
-      "kind": "source_only",
-      "source": "internal_augments",
-      "sourceKey": "shark-tempest",
-      "name": "Shark Tempest",
-      "rarity": "gold",
-      "status": "unmatched"
-    },
-    {
-      "kind": "source_only",
-      "source": "internal_augments",
-      "sourceKey": "flash-2",
-      "name": "Flash 2",
-      "rarity": "silver",
-      "status": "unmatched"
-    },
-    {
-      "kind": "source_only",
-      "source": "internal_augments",
-      "sourceKey": "hide-on-bush",
-      "name": "Hide on Bush",
-      "rarity": "gold",
-      "status": "unmatched"
-    },
-    {
-      "kind": "source_only",
-      "source": "internal_augments",
-      "sourceKey": "prom-queen",
-      "name": "Prom Queen",
-      "rarity": "prismatic",
-      "status": "unmatched"
-    },
-    {
-      "kind": "source_only",
-      "source": "internal_augments",
-      "sourceKey": "our-healing",
-      "name": "Our Healing",
-      "rarity": "gold",
-      "status": "unmatched"
-    },
-    {
-      "kind": "source_only",
-      "source": "internal_augments",
-      "sourceKey": "mighty-shield",
-      "name": "Mighty Shield",
-      "rarity": "silver",
       "status": "unmatched"
     },
     {
@@ -491,30 +164,6 @@
     {
       "kind": "source_only",
       "source": "internal_augments",
-      "sourceKey": "pinball",
-      "name": "Pinball",
-      "rarity": "gold",
-      "status": "unmatched"
-    },
-    {
-      "kind": "source_only",
-      "source": "internal_augments",
-      "sourceKey": "snowblast",
-      "name": "Snowblast",
-      "rarity": "gold",
-      "status": "unmatched"
-    },
-    {
-      "kind": "source_only",
-      "source": "internal_augments",
-      "sourceKey": "spin-me-right-round",
-      "name": "Spin Me Right Round",
-      "rarity": "silver",
-      "status": "unmatched"
-    },
-    {
-      "kind": "source_only",
-      "source": "internal_augments",
       "sourceKey": "surge-field",
       "name": "Surge Field",
       "rarity": "prismatic",
@@ -523,136 +172,8 @@
     {
       "kind": "source_only",
       "source": "internal_augments",
-      "sourceKey": "holy-snowball",
-      "name": "Holy Snowball",
-      "rarity": "prismatic",
-      "status": "unmatched"
-    },
-    {
-      "kind": "source_only",
-      "source": "internal_augments",
-      "sourceKey": "glass-cannon",
-      "name": "Glass Cannon",
-      "rarity": "prismatic",
-      "status": "unmatched"
-    },
-    {
-      "kind": "source_only",
-      "source": "internal_augments",
-      "sourceKey": "chain-reaction",
-      "name": "Chain Reaction",
-      "rarity": "prismatic",
-      "status": "unmatched"
-    },
-    {
-      "kind": "source_only",
-      "source": "internal_augments",
-      "sourceKey": "dimension-shift",
-      "name": "Dimension Shift",
-      "rarity": "prismatic",
-      "status": "unmatched"
-    },
-    {
-      "kind": "source_only",
-      "source": "internal_augments",
-      "sourceKey": "poro-stampede",
-      "name": "Poro Stampede",
-      "rarity": "prismatic",
-      "status": "unmatched"
-    },
-    {
-      "kind": "source_only",
-      "source": "internal_augments",
       "sourceKey": "mystery-augment",
       "name": "???",
-      "rarity": "prismatic",
-      "status": "unmatched"
-    },
-    {
-      "kind": "source_only",
-      "source": "internal_augments",
-      "sourceKey": "adamant",
-      "name": "Adamant",
-      "rarity": "silver",
-      "status": "unmatched"
-    },
-    {
-      "kind": "source_only",
-      "source": "internal_augments",
-      "sourceKey": "crit-n-cast",
-      "name": "Crit 'n Cast",
-      "rarity": "silver",
-      "status": "unmatched"
-    },
-    {
-      "kind": "source_only",
-      "source": "internal_augments",
-      "sourceKey": "critical-missile",
-      "name": "Critical Missile",
-      "rarity": "gold",
-      "status": "unmatched"
-    },
-    {
-      "kind": "source_only",
-      "source": "internal_augments",
-      "sourceKey": "critical-rhythm",
-      "name": "Critical Rhythm",
-      "rarity": "gold",
-      "status": "unmatched"
-    },
-    {
-      "kind": "source_only",
-      "source": "internal_augments",
-      "sourceKey": "droppybara",
-      "name": "Droppybara",
-      "rarity": "prismatic",
-      "status": "unmatched"
-    },
-    {
-      "kind": "source_only",
-      "source": "internal_augments",
-      "sourceKey": "final-city-transit",
-      "name": "Final City Transit",
-      "rarity": "gold",
-      "status": "unmatched"
-    },
-    {
-      "kind": "source_only",
-      "source": "internal_augments",
-      "sourceKey": "gash",
-      "name": "Gash",
-      "rarity": "prismatic",
-      "status": "unmatched"
-    },
-    {
-      "kind": "source_only",
-      "source": "internal_augments",
-      "sourceKey": "grandmas-chili-oil",
-      "name": "Grandma's Chili Oil",
-      "rarity": "gold",
-      "status": "unmatched"
-    },
-    {
-      "kind": "source_only",
-      "source": "internal_augments",
-      "sourceKey": "hat-on-a-hat",
-      "name": "Hat on a Hat",
-      "rarity": "silver",
-      "status": "unmatched"
-    },
-    {
-      "kind": "source_only",
-      "source": "internal_augments",
-      "sourceKey": "im-a-baby-kitty-where-is-mama",
-      "name": "I'm a Baby Kitty Where is Mama",
-      "rarity": "prismatic",
-      "status": "unmatched"
-    },
-    {
-      "kind": "source_only",
-      "source": "internal_augments",
-      "sourceKey": "laser-heal",
-      "name": "Laser Heal",
       "rarity": "prismatic",
       "status": "unmatched"
     },
@@ -691,30 +212,6 @@
     {
       "kind": "source_only",
       "source": "internal_augments",
-      "sourceKey": "red-envelopes",
-      "name": "Red Envelopes",
-      "rarity": "prismatic",
-      "status": "unmatched"
-    },
-    {
-      "kind": "source_only",
-      "source": "internal_augments",
-      "sourceKey": "snowball-roulette",
-      "name": "Snowball Roulette",
-      "rarity": "gold",
-      "status": "unmatched"
-    },
-    {
-      "kind": "source_only",
-      "source": "internal_augments",
-      "sourceKey": "snowball-upgrade",
-      "name": "Snowball Upgrade",
-      "rarity": "gold",
-      "status": "unmatched"
-    },
-    {
-      "kind": "source_only",
-      "source": "internal_augments",
       "sourceKey": "squishy-slappy-grab",
       "name": "Squishy Slappy Grab",
       "rarity": "prismatic",
@@ -730,62 +227,6 @@
     },
     {
       "kind": "source_only",
-      "source": "internal_augments",
-      "sourceKey": "upgrade-mikaels-blessing",
-      "name": "Upgrade Mikael's Blessing",
-      "rarity": "prismatic",
-      "status": "unmatched"
-    },
-    {
-      "kind": "source_only",
-      "source": "internal_augments",
-      "sourceKey": "upgrade-thornmail",
-      "name": "Upgrade Thornmail",
-      "rarity": "silver",
-      "status": "unmatched"
-    },
-    {
-      "kind": "source_only",
-      "source": "internal_augments",
-      "sourceKey": "vampirism",
-      "name": "Vampirism",
-      "rarity": "gold",
-      "status": "unmatched"
-    },
-    {
-      "kind": "source_only",
-      "source": "internal_augments",
-      "sourceKey": "void-dash",
-      "name": "Void Dash",
-      "rarity": "gold",
-      "status": "unmatched"
-    },
-    {
-      "kind": "source_only",
-      "source": "internal_augments",
-      "sourceKey": "wind-beneath-blade",
-      "name": "Wind Beneath Blade",
-      "rarity": "silver",
-      "status": "unmatched"
-    },
-    {
-      "kind": "source_only",
-      "source": "internal_augments",
-      "sourceKey": "upgrade-sword-of-blossoming-dawn",
-      "name": "Upgrade Sword of Blossoming Dawn",
-      "rarity": "prismatic",
-      "status": "unmatched"
-    },
-    {
-      "kind": "source_only",
-      "source": "wiki",
-      "sourceKey": "Infinite Recursion",
-      "name": "Infinite Recursion",
-      "rarity": "",
-      "status": "unmatched"
-    },
-    {
-      "kind": "source_only",
       "source": "wiki",
       "sourceKey": "Warlock Juicebox",
       "name": "Warlock Juicebox",
@@ -795,32 +236,8 @@
     {
       "kind": "source_only",
       "source": "wiki",
-      "sourceKey": "Pressure Cooker",
-      "name": "Pressure Cooker",
-      "rarity": "",
-      "status": "unmatched"
-    },
-    {
-      "kind": "source_only",
-      "source": "wiki",
-      "sourceKey": "Combusting Interest",
-      "name": "Combusting Interest",
-      "rarity": "",
-      "status": "unmatched"
-    },
-    {
-      "kind": "source_only",
-      "source": "wiki",
-      "sourceKey": "Twin Fire",
-      "name": "Twin Fire",
-      "rarity": "",
-      "status": "unmatched"
-    },
-    {
-      "kind": "source_only",
-      "source": "wiki",
-      "sourceKey": "Sonata",
-      "name": "Sonata",
+      "sourceKey": "Pursuit of Haste",
+      "name": "Pursuit of Haste",
       "rarity": "",
       "status": "unmatched"
     },
@@ -835,72 +252,8 @@
     {
       "kind": "source_only",
       "source": "wiki",
-      "sourceKey": "Escape Plan",
-      "name": "Escape Plan",
-      "rarity": "",
-      "status": "unmatched"
-    },
-    {
-      "kind": "source_only",
-      "source": "wiki",
-      "sourceKey": "Shrink Engine",
-      "name": "Shrink Engine",
-      "rarity": "",
-      "status": "unmatched"
-    },
-    {
-      "kind": "source_only",
-      "source": "wiki",
-      "sourceKey": "Tooth Fairy",
-      "name": "Tooth Fairy",
-      "rarity": "",
-      "status": "unmatched"
-    },
-    {
-      "kind": "source_only",
-      "source": "wiki",
-      "sourceKey": "Growth Spurt",
-      "name": "Growth Spurt",
-      "rarity": "",
-      "status": "unmatched"
-    },
-    {
-      "kind": "source_only",
-      "source": "wiki",
-      "sourceKey": "Lil' Extra Help",
-      "name": "Lil' Extra Help",
-      "rarity": "",
-      "status": "unmatched"
-    },
-    {
-      "kind": "source_only",
-      "source": "wiki",
-      "sourceKey": "Donation",
-      "name": "Donation",
-      "rarity": "",
-      "status": "unmatched"
-    },
-    {
-      "kind": "source_only",
-      "source": "wiki",
-      "sourceKey": "Swift and Safe",
-      "name": "Swift and Safe",
-      "rarity": "",
-      "status": "unmatched"
-    },
-    {
-      "kind": "source_only",
-      "source": "wiki",
-      "sourceKey": "Soul Eater",
-      "name": "Soul Eater",
-      "rarity": "",
-      "status": "unmatched"
-    },
-    {
-      "kind": "source_only",
-      "source": "wiki",
-      "sourceKey": "Final Form",
-      "name": "Final Form",
+      "sourceKey": "Siphon",
+      "name": "Siphon",
       "rarity": "",
       "status": "unmatched"
     },
@@ -915,40 +268,8 @@
     {
       "kind": "source_only",
       "source": "wiki",
-      "sourceKey": "BONK!",
-      "name": "BONK!",
-      "rarity": "",
-      "status": "unmatched"
-    },
-    {
-      "kind": "source_only",
-      "source": "wiki",
-      "sourceKey": "Stay Resolute",
-      "name": "Stay Resolute",
-      "rarity": "",
-      "status": "unmatched"
-    },
-    {
-      "kind": "source_only",
-      "source": "wiki",
-      "sourceKey": "Hand of Baron",
-      "name": "Hand of Baron",
-      "rarity": "",
-      "status": "unmatched"
-    },
-    {
-      "kind": "source_only",
-      "source": "wiki",
-      "sourceKey": "King Me",
-      "name": "King Me",
-      "rarity": "",
-      "status": "unmatched"
-    },
-    {
-      "kind": "source_only",
-      "source": "wiki",
-      "sourceKey": "Biggest Snowball Ever",
-      "name": "Biggest Snowball Ever",
+      "sourceKey": "From Downtown",
+      "name": "From Downtown",
       "rarity": "",
       "status": "unmatched"
     },
@@ -957,14 +278,6 @@
       "source": "wiki",
       "sourceKey": "Don't Change the Channel",
       "name": "Don't Change the Channel",
-      "rarity": "",
-      "status": "unmatched"
-    },
-    {
-      "kind": "source_only",
-      "source": "wiki",
-      "sourceKey": "Overextender",
-      "name": "Overextender",
       "rarity": "",
       "status": "unmatched"
     },
@@ -987,46 +300,6 @@
     {
       "kind": "source_only",
       "source": "wiki",
-      "sourceKey": "Ravenous Bind",
-      "name": "Ravenous Bind",
-      "rarity": "",
-      "status": "unmatched"
-    },
-    {
-      "kind": "source_only",
-      "source": "wiki",
-      "sourceKey": "Goldrend",
-      "name": "Goldrend",
-      "rarity": "",
-      "status": "unmatched"
-    },
-    {
-      "kind": "source_only",
-      "source": "wiki",
-      "sourceKey": "Hextech Soul",
-      "name": "Hextech Soul",
-      "rarity": "",
-      "status": "unmatched"
-    },
-    {
-      "kind": "source_only",
-      "source": "wiki",
-      "sourceKey": "Endless Decimation",
-      "name": "Endless Decimation",
-      "rarity": "",
-      "status": "unmatched"
-    },
-    {
-      "kind": "source_only",
-      "source": "wiki",
-      "sourceKey": "Ultimate Awakening",
-      "name": "Ultimate Awakening",
-      "rarity": "",
-      "status": "unmatched"
-    },
-    {
-      "kind": "source_only",
-      "source": "wiki",
       "sourceKey": "Overloaded",
       "name": "Overloaded",
       "rarity": "",
@@ -1043,152 +316,8 @@
     {
       "kind": "source_only",
       "source": "wiki",
-      "sourceKey": "Ominous Pact",
-      "name": "Ominous Pact",
-      "rarity": "",
-      "status": "unmatched"
-    },
-    {
-      "kind": "source_only",
-      "source": "wiki",
-      "sourceKey": "Double Defense",
-      "name": "Double Defense",
-      "rarity": "",
-      "status": "unmatched"
-    },
-    {
-      "kind": "source_only",
-      "source": "wiki",
-      "sourceKey": "Mercy's Strike",
-      "name": "Mercy's Strike",
-      "rarity": "",
-      "status": "unmatched"
-    },
-    {
-      "kind": "source_only",
-      "source": "wiki",
-      "sourceKey": "Shark Bait",
-      "name": "Shark Bait",
-      "rarity": "",
-      "status": "unmatched"
-    },
-    {
-      "kind": "source_only",
-      "source": "wiki",
-      "sourceKey": "Nature is Healing",
-      "name": "Nature is Healing",
-      "rarity": "",
-      "status": "unmatched"
-    },
-    {
-      "kind": "source_only",
-      "source": "wiki",
-      "sourceKey": "Poltergeist",
-      "name": "Poltergeist",
-      "rarity": "",
-      "status": "unmatched"
-    },
-    {
-      "kind": "source_only",
-      "source": "wiki",
-      "sourceKey": "Nightstalking",
-      "name": "Nightstalking",
-      "rarity": "",
-      "status": "unmatched"
-    },
-    {
-      "kind": "source_only",
-      "source": "wiki",
-      "sourceKey": "Tripleshot",
-      "name": "Tripleshot",
-      "rarity": "",
-      "status": "unmatched"
-    },
-    {
-      "kind": "source_only",
-      "source": "wiki",
-      "sourceKey": "Empyrean Promise",
-      "name": "Empyrean Promise",
-      "rarity": "",
-      "status": "unmatched"
-    },
-    {
-      "kind": "source_only",
-      "source": "wiki",
-      "sourceKey": "Kill Secured",
-      "name": "Kill Secured",
-      "rarity": "",
-      "status": "unmatched"
-    },
-    {
-      "kind": "source_only",
-      "source": "wiki",
       "sourceKey": "Porcupine",
       "name": "Porcupine",
-      "rarity": "",
-      "status": "unmatched"
-    },
-    {
-      "kind": "source_only",
-      "source": "wiki",
-      "sourceKey": "Echo Cast",
-      "name": "Echo Cast",
-      "rarity": "",
-      "status": "unmatched"
-    },
-    {
-      "kind": "source_only",
-      "source": "wiki",
-      "sourceKey": "Spellsplit",
-      "name": "Spellsplit",
-      "rarity": "",
-      "status": "unmatched"
-    },
-    {
-      "kind": "source_only",
-      "source": "wiki",
-      "sourceKey": "Shark Tempest",
-      "name": "Shark Tempest",
-      "rarity": "",
-      "status": "unmatched"
-    },
-    {
-      "kind": "source_only",
-      "source": "wiki",
-      "sourceKey": "Flash 2",
-      "name": "Flash 2",
-      "rarity": "",
-      "status": "unmatched"
-    },
-    {
-      "kind": "source_only",
-      "source": "wiki",
-      "sourceKey": "Hide on Bush",
-      "name": "Hide on Bush",
-      "rarity": "",
-      "status": "unmatched"
-    },
-    {
-      "kind": "source_only",
-      "source": "wiki",
-      "sourceKey": "Prom Queen",
-      "name": "Prom Queen",
-      "rarity": "",
-      "status": "unmatched"
-    },
-    {
-      "kind": "source_only",
-      "source": "wiki",
-      "sourceKey": "Our Healing",
-      "name": "Our Healing",
-      "rarity": "",
-      "status": "unmatched"
-    },
-    {
-      "kind": "source_only",
-      "source": "wiki",
-      "sourceKey": "Mighty Shield",
-      "name": "Mighty Shield",
       "rarity": "",
       "status": "unmatched"
     },
@@ -1203,30 +332,6 @@
     {
       "kind": "source_only",
       "source": "wiki",
-      "sourceKey": "Pinball",
-      "name": "Pinball",
-      "rarity": "",
-      "status": "unmatched"
-    },
-    {
-      "kind": "source_only",
-      "source": "wiki",
-      "sourceKey": "Snowblast",
-      "name": "Snowblast",
-      "rarity": "",
-      "status": "unmatched"
-    },
-    {
-      "kind": "source_only",
-      "source": "wiki",
-      "sourceKey": "Spin Me Right Round",
-      "name": "Spin Me Right Round",
-      "rarity": "",
-      "status": "unmatched"
-    },
-    {
-      "kind": "source_only",
-      "source": "wiki",
       "sourceKey": "Surge Field",
       "name": "Surge Field",
       "rarity": "",
@@ -1235,136 +340,8 @@
     {
       "kind": "source_only",
       "source": "wiki",
-      "sourceKey": "Holy Snowball",
-      "name": "Holy Snowball",
-      "rarity": "",
-      "status": "unmatched"
-    },
-    {
-      "kind": "source_only",
-      "source": "wiki",
-      "sourceKey": "Glass Cannon",
-      "name": "Glass Cannon",
-      "rarity": "",
-      "status": "unmatched"
-    },
-    {
-      "kind": "source_only",
-      "source": "wiki",
-      "sourceKey": "Chain Reaction",
-      "name": "Chain Reaction",
-      "rarity": "",
-      "status": "unmatched"
-    },
-    {
-      "kind": "source_only",
-      "source": "wiki",
-      "sourceKey": "Dimension Shift",
-      "name": "Dimension Shift",
-      "rarity": "",
-      "status": "unmatched"
-    },
-    {
-      "kind": "source_only",
-      "source": "wiki",
-      "sourceKey": "Poro Stampede",
-      "name": "Poro Stampede",
-      "rarity": "",
-      "status": "unmatched"
-    },
-    {
-      "kind": "source_only",
-      "source": "wiki",
       "sourceKey": "???",
       "name": "???",
-      "rarity": "",
-      "status": "unmatched"
-    },
-    {
-      "kind": "source_only",
-      "source": "wiki",
-      "sourceKey": "Adamant",
-      "name": "Adamant",
-      "rarity": "",
-      "status": "unmatched"
-    },
-    {
-      "kind": "source_only",
-      "source": "wiki",
-      "sourceKey": "Crit 'n Cast",
-      "name": "Crit 'n Cast",
-      "rarity": "",
-      "status": "unmatched"
-    },
-    {
-      "kind": "source_only",
-      "source": "wiki",
-      "sourceKey": "Critical Missile",
-      "name": "Critical Missile",
-      "rarity": "",
-      "status": "unmatched"
-    },
-    {
-      "kind": "source_only",
-      "source": "wiki",
-      "sourceKey": "Critical Rhythm",
-      "name": "Critical Rhythm",
-      "rarity": "",
-      "status": "unmatched"
-    },
-    {
-      "kind": "source_only",
-      "source": "wiki",
-      "sourceKey": "Droppybara",
-      "name": "Droppybara",
-      "rarity": "",
-      "status": "unmatched"
-    },
-    {
-      "kind": "source_only",
-      "source": "wiki",
-      "sourceKey": "Final City Transit",
-      "name": "Final City Transit",
-      "rarity": "",
-      "status": "unmatched"
-    },
-    {
-      "kind": "source_only",
-      "source": "wiki",
-      "sourceKey": "Gash",
-      "name": "Gash",
-      "rarity": "",
-      "status": "unmatched"
-    },
-    {
-      "kind": "source_only",
-      "source": "wiki",
-      "sourceKey": "Grandma's Chili Oil",
-      "name": "Grandma's Chili Oil",
-      "rarity": "",
-      "status": "unmatched"
-    },
-    {
-      "kind": "source_only",
-      "source": "wiki",
-      "sourceKey": "Hat on a Hat",
-      "name": "Hat on a Hat",
-      "rarity": "",
-      "status": "unmatched"
-    },
-    {
-      "kind": "source_only",
-      "source": "wiki",
-      "sourceKey": "I'm a Baby Kitty Where is Mama",
-      "name": "I'm a Baby Kitty Where is Mama",
-      "rarity": "",
-      "status": "unmatched"
-    },
-    {
-      "kind": "source_only",
-      "source": "wiki",
-      "sourceKey": "Laser Heal",
-      "name": "Laser Heal",
       "rarity": "",
       "status": "unmatched"
     },
@@ -1403,519 +380,406 @@
     {
       "kind": "source_only",
       "source": "wiki",
-      "sourceKey": "Red Envelopes",
-      "name": "Red Envelopes",
-      "rarity": "",
-      "status": "unmatched"
-    },
-    {
-      "kind": "source_only",
-      "source": "wiki",
-      "sourceKey": "Snowball Roulette",
-      "name": "Snowball Roulette",
-      "rarity": "",
-      "status": "unmatched"
-    },
-    {
-      "kind": "source_only",
-      "source": "wiki",
-      "sourceKey": "Snowball Upgrade",
-      "name": "Snowball Upgrade",
-      "rarity": "",
-      "status": "unmatched"
-    },
-    {
-      "kind": "source_only",
-      "source": "wiki",
       "sourceKey": "Squishy Slappy Grab",
       "name": "Squishy Slappy Grab",
       "rarity": "",
       "status": "unmatched"
-    },
-    {
-      "kind": "source_only",
-      "source": "wiki",
-      "sourceKey": "Upgrade Mikael's Blessing",
-      "name": "Upgrade Mikael's Blessing",
-      "rarity": "",
-      "status": "unmatched"
-    },
-    {
-      "kind": "source_only",
-      "source": "wiki",
-      "sourceKey": "Upgrade Thornmail",
-      "name": "Upgrade Thornmail",
-      "rarity": "",
-      "status": "unmatched"
-    },
-    {
-      "kind": "source_only",
-      "source": "wiki",
-      "sourceKey": "Vampirism",
-      "name": "Vampirism",
-      "rarity": "",
-      "status": "unmatched"
-    },
-    {
-      "kind": "source_only",
-      "source": "wiki",
-      "sourceKey": "Void Dash",
-      "name": "Void Dash",
-      "rarity": "",
-      "status": "unmatched"
-    },
-    {
-      "kind": "source_only",
-      "source": "wiki",
-      "sourceKey": "Wind Beneath Blade",
-      "name": "Wind Beneath Blade",
-      "rarity": "",
-      "status": "unmatched"
-    },
-    {
-      "kind": "source_only",
-      "source": "wiki",
-      "sourceKey": "Upgrade Sword of Blossoming Dawn",
-      "name": "Upgrade Sword of Blossoming Dawn",
-      "rarity": "",
-      "status": "unmatched"
     }
   ],
-  "rarity": [],
+  "rarity": [
+    {
+      "source": "internal_augments",
+      "augmentNameId": "RedEnvelopes",
+      "name": "Red Envelopes",
+      "sourceRarity": "prismatic",
+      "cdragonRarity": "gold"
+    }
+  ],
   "availability": [
     {
       "source": "internal_augments",
+      "augmentNameId": "InfiniteRecursion",
       "name": "Infinite Recursion",
-      "slug": "infinite-recursion",
-      "signal": "internal_active_but_cdragon_missing",
-      "note": "Do not infer live availability from this internal lifecycle flag."
+      "signal": "internal_removed_but_cdragon_registry_present",
+      "note": "Registry presence is definition only; this is reported, not resolved."
     },
     {
       "source": "internal_augments",
-      "name": "Warlock Juicebox",
-      "slug": "warlock-juicebox",
-      "signal": "internal_added_but_cdragon_missing",
-      "note": "Do not infer live availability from this internal lifecycle flag."
-    },
-    {
-      "source": "internal_augments",
+      "augmentNameId": "PressureCooker",
       "name": "Pressure Cooker",
-      "slug": "pressure-cooker",
-      "signal": "internal_added_but_cdragon_missing",
-      "note": "Do not infer live availability from this internal lifecycle flag."
+      "signal": "internal_removed_but_cdragon_registry_present",
+      "note": "Registry presence is definition only; this is reported, not resolved."
     },
     {
       "source": "internal_augments",
+      "augmentNameId": "BloodMoneyBurn",
       "name": "Combusting Interest",
-      "slug": "combusting-interest",
-      "signal": "internal_added_but_cdragon_missing",
-      "note": "Do not infer live availability from this internal lifecycle flag."
+      "signal": "internal_removed_but_cdragon_registry_present",
+      "note": "Registry presence is definition only; this is reported, not resolved."
     },
     {
       "source": "internal_augments",
+      "augmentNameId": "Twinfire",
       "name": "Twin Fire",
-      "slug": "twin-fire",
+      "signal": "internal_removed_but_cdragon_registry_present",
+      "note": "Registry presence is definition only; this is reported, not resolved."
+    },
+    {
+      "source": "internal_augments",
+      "name": "Pursuit of Haste",
+      "slug": "pursuit-of-haste",
       "signal": "internal_active_but_cdragon_missing",
       "note": "Do not infer live availability from this internal lifecycle flag."
     },
     {
       "source": "internal_augments",
+      "augmentNameId": "Sonata",
       "name": "Sonata",
-      "slug": "sonata",
-      "signal": "internal_active_but_cdragon_missing",
-      "note": "Do not infer live availability from this internal lifecycle flag."
+      "signal": "internal_removed_but_cdragon_registry_present",
+      "note": "Registry presence is definition only; this is reported, not resolved."
     },
     {
       "source": "internal_augments",
-      "name": "Forged By The Master",
-      "slug": "forged-by-the-master",
-      "signal": "internal_added_but_cdragon_missing",
-      "note": "Do not infer live availability from this internal lifecycle flag."
-    },
-    {
-      "source": "internal_augments",
+      "augmentNameId": "EscapePlan",
       "name": "Escape Plan",
-      "slug": "escape-plan",
-      "signal": "internal_active_but_cdragon_missing",
-      "note": "Do not infer live availability from this internal lifecycle flag."
+      "signal": "internal_removed_but_cdragon_registry_present",
+      "note": "Registry presence is definition only; this is reported, not resolved."
     },
     {
       "source": "internal_augments",
+      "augmentNameId": "ShrinkEngine",
       "name": "Shrink Engine",
-      "slug": "shrink-engine",
-      "signal": "internal_active_but_cdragon_missing",
-      "note": "Do not infer live availability from this internal lifecycle flag."
+      "signal": "internal_removed_but_cdragon_registry_present",
+      "note": "Registry presence is definition only; this is reported, not resolved."
     },
     {
       "source": "internal_augments",
+      "augmentNameId": "BurstingTeeth",
       "name": "Tooth Fairy",
-      "slug": "tooth-fairy",
-      "signal": "internal_added_but_cdragon_missing",
-      "note": "Do not infer live availability from this internal lifecycle flag."
+      "signal": "internal_removed_but_cdragon_registry_present",
+      "note": "Registry presence is definition only; this is reported, not resolved."
     },
     {
       "source": "internal_augments",
+      "augmentNameId": "GrowthSpurt",
       "name": "Growth Spurt",
-      "slug": "growth-spurt",
-      "signal": "internal_active_but_cdragon_missing",
-      "note": "Do not infer live availability from this internal lifecycle flag."
+      "signal": "internal_removed_but_cdragon_registry_present",
+      "note": "Registry presence is definition only; this is reported, not resolved."
     },
     {
       "source": "internal_augments",
+      "augmentNameId": "LittleExtraHelp",
       "name": "Lil' Extra Help",
-      "slug": "lil-extra-help",
-      "signal": "internal_added_but_cdragon_missing",
-      "note": "Do not infer live availability from this internal lifecycle flag."
+      "signal": "internal_removed_but_cdragon_registry_present",
+      "note": "Registry presence is definition only; this is reported, not resolved."
     },
     {
       "source": "internal_augments",
+      "augmentNameId": "Donation",
       "name": "Donation",
-      "slug": "donation",
+      "signal": "internal_removed_but_cdragon_registry_present",
+      "note": "Registry presence is definition only; this is reported, not resolved."
+    },
+    {
+      "source": "internal_augments",
+      "name": "Siphon",
+      "slug": "siphon",
       "signal": "internal_active_but_cdragon_missing",
       "note": "Do not infer live availability from this internal lifecycle flag."
     },
     {
       "source": "internal_augments",
+      "augmentNameId": "SwiftAndSafe",
       "name": "Swift and Safe",
-      "slug": "swift-and-safe",
-      "signal": "internal_active_but_cdragon_missing",
-      "note": "Do not infer live availability from this internal lifecycle flag."
+      "signal": "internal_removed_but_cdragon_registry_present",
+      "note": "Registry presence is definition only; this is reported, not resolved."
     },
     {
       "source": "internal_augments",
+      "augmentNameId": "SoulEater",
       "name": "Soul Eater",
-      "slug": "soul-eater",
-      "signal": "internal_active_but_cdragon_missing",
-      "note": "Do not infer live availability from this internal lifecycle flag."
+      "signal": "internal_removed_but_cdragon_registry_present",
+      "note": "Registry presence is definition only; this is reported, not resolved."
     },
     {
       "source": "internal_augments",
+      "augmentNameId": "FinalForm",
       "name": "Final Form",
-      "slug": "final-form",
+      "signal": "internal_removed_but_cdragon_registry_present",
+      "note": "Registry presence is definition only; this is reported, not resolved."
+    },
+    {
+      "source": "internal_augments",
+      "name": "From Downtown",
+      "slug": "from-downtown",
       "signal": "internal_active_but_cdragon_missing",
       "note": "Do not infer live availability from this internal lifecycle flag."
     },
     {
       "source": "internal_augments",
-      "name": "Terrain'd",
-      "slug": "terraind",
-      "signal": "internal_added_but_cdragon_missing",
-      "note": "Do not infer live availability from this internal lifecycle flag."
-    },
-    {
-      "source": "internal_augments",
+      "augmentNameId": "Bonk",
       "name": "BONK!",
-      "slug": "bonk",
-      "signal": "internal_added_but_cdragon_missing",
-      "note": "Do not infer live availability from this internal lifecycle flag."
+      "signal": "internal_removed_but_cdragon_registry_present",
+      "note": "Registry presence is definition only; this is reported, not resolved."
     },
     {
       "source": "internal_augments",
+      "augmentNameId": "TitansPulse",
       "name": "Stay Resolute",
-      "slug": "stay-resolute",
-      "signal": "internal_added_but_cdragon_missing",
-      "note": "Do not infer live availability from this internal lifecycle flag."
+      "signal": "internal_removed_but_cdragon_registry_present",
+      "note": "Registry presence is definition only; this is reported, not resolved."
     },
     {
       "source": "internal_augments",
+      "augmentNameId": "HandOfBaron",
       "name": "Hand of Baron",
-      "slug": "hand-of-baron",
-      "signal": "internal_active_but_cdragon_missing",
-      "note": "Do not infer live availability from this internal lifecycle flag."
+      "signal": "internal_removed_but_cdragon_registry_present",
+      "note": "Registry presence is definition only; this is reported, not resolved."
     },
     {
       "source": "internal_augments",
+      "augmentNameId": "KingMe",
       "name": "King Me",
-      "slug": "king-me",
-      "signal": "internal_active_but_cdragon_missing",
-      "note": "Do not infer live availability from this internal lifecycle flag."
+      "signal": "internal_removed_but_cdragon_registry_present",
+      "note": "Registry presence is definition only; this is reported, not resolved."
     },
     {
       "source": "internal_augments",
+      "augmentNameId": "BiggestSnowballEver",
       "name": "Biggest Snowball Ever",
-      "slug": "biggest-snowball-ever",
-      "signal": "internal_active_but_cdragon_missing",
-      "note": "Do not infer live availability from this internal lifecycle flag."
+      "signal": "internal_removed_but_cdragon_registry_present",
+      "note": "Registry presence is definition only; this is reported, not resolved."
     },
     {
       "source": "internal_augments",
-      "name": "Don't Change the Channel",
-      "slug": "dont-change-the-channel",
-      "signal": "internal_added_but_cdragon_missing",
-      "note": "Do not infer live availability from this internal lifecycle flag."
-    },
-    {
-      "source": "internal_augments",
+      "augmentNameId": "Overextender",
       "name": "Overextender",
-      "slug": "overextender",
-      "signal": "internal_added_but_cdragon_missing",
-      "note": "Do not infer live availability from this internal lifecycle flag."
+      "signal": "internal_removed_but_cdragon_registry_present",
+      "note": "Registry presence is definition only; this is reported, not resolved."
     },
     {
       "source": "internal_augments",
-      "name": "It's Go Time",
-      "slug": "its-go-time",
-      "signal": "internal_added_but_cdragon_missing",
-      "note": "Do not infer live availability from this internal lifecycle flag."
-    },
-    {
-      "source": "internal_augments",
-      "name": "Trusty Weapon",
-      "slug": "trusty-weapon",
-      "signal": "internal_added_but_cdragon_missing",
-      "note": "Do not infer live availability from this internal lifecycle flag."
-    },
-    {
-      "source": "internal_augments",
+      "augmentNameId": "DarkWind",
       "name": "Ravenous Bind",
-      "slug": "ravenous-bind",
-      "signal": "internal_added_but_cdragon_missing",
-      "note": "Do not infer live availability from this internal lifecycle flag."
+      "signal": "internal_removed_but_cdragon_registry_present",
+      "note": "Registry presence is definition only; this is reported, not resolved."
     },
     {
       "source": "internal_augments",
+      "augmentNameId": "Goldrend",
       "name": "Goldrend",
-      "slug": "goldrend",
-      "signal": "internal_active_but_cdragon_missing",
-      "note": "Do not infer live availability from this internal lifecycle flag."
+      "signal": "internal_removed_but_cdragon_registry_present",
+      "note": "Registry presence is definition only; this is reported, not resolved."
     },
     {
       "source": "internal_augments",
+      "augmentNameId": "HextechSoul",
       "name": "Hextech Soul",
-      "slug": "hextech-soul",
-      "signal": "internal_active_but_cdragon_missing",
-      "note": "Do not infer live availability from this internal lifecycle flag."
+      "signal": "internal_removed_but_cdragon_registry_present",
+      "note": "Registry presence is definition only; this is reported, not resolved."
     },
     {
       "source": "internal_augments",
+      "augmentNameId": "EndlessDecimation",
       "name": "Endless Decimation",
-      "slug": "endless-decimation",
-      "signal": "internal_added_but_cdragon_missing",
-      "note": "Do not infer live availability from this internal lifecycle flag."
+      "signal": "internal_removed_but_cdragon_registry_present",
+      "note": "Registry presence is definition only; this is reported, not resolved."
     },
     {
       "source": "internal_augments",
+      "augmentNameId": "UltimateAwakening",
       "name": "Ultimate Awakening",
-      "slug": "ultimate-awakening",
-      "signal": "internal_active_but_cdragon_missing",
-      "note": "Do not infer live availability from this internal lifecycle flag."
+      "signal": "internal_removed_but_cdragon_registry_present",
+      "note": "Registry presence is definition only; this is reported, not resolved."
     },
     {
       "source": "internal_augments",
-      "name": "Overloaded",
-      "slug": "overloaded",
-      "signal": "internal_added_but_cdragon_missing",
-      "note": "Do not infer live availability from this internal lifecycle flag."
-    },
-    {
-      "source": "internal_augments",
-      "name": "Adaptive Ward",
-      "slug": "adaptive-ward",
-      "signal": "internal_added_but_cdragon_missing",
-      "note": "Do not infer live availability from this internal lifecycle flag."
-    },
-    {
-      "source": "internal_augments",
+      "augmentNameId": "OminousPact",
       "name": "Ominous Pact",
-      "slug": "ominous-pact",
-      "signal": "internal_active_but_cdragon_missing",
-      "note": "Do not infer live availability from this internal lifecycle flag."
+      "signal": "internal_removed_but_cdragon_registry_present",
+      "note": "Registry presence is definition only; this is reported, not resolved."
     },
     {
       "source": "internal_augments",
+      "augmentNameId": "DoubleDefense",
       "name": "Double Defense",
-      "slug": "double-defense",
-      "signal": "internal_added_but_cdragon_missing",
-      "note": "Do not infer live availability from this internal lifecycle flag."
+      "signal": "internal_removed_but_cdragon_registry_present",
+      "note": "Registry presence is definition only; this is reported, not resolved."
     },
     {
       "source": "internal_augments",
+      "augmentNameId": "MercysStrike",
       "name": "Mercy's Strike",
-      "slug": "mercys-strike",
-      "signal": "internal_added_but_cdragon_missing",
-      "note": "Do not infer live availability from this internal lifecycle flag."
+      "signal": "internal_removed_but_cdragon_registry_present",
+      "note": "Registry presence is definition only; this is reported, not resolved."
     },
     {
       "source": "internal_augments",
+      "augmentNameId": "FishBait",
       "name": "Shark Bait",
-      "slug": "shark-bait",
-      "signal": "internal_added_but_cdragon_missing",
-      "note": "Do not infer live availability from this internal lifecycle flag."
+      "signal": "internal_removed_but_cdragon_registry_present",
+      "note": "Registry presence is definition only; this is reported, not resolved."
     },
     {
       "source": "internal_augments",
+      "augmentNameId": "NatureIsHealing",
       "name": "Nature is Healing",
-      "slug": "nature-is-healing",
-      "signal": "internal_added_but_cdragon_missing",
-      "note": "Do not infer live availability from this internal lifecycle flag."
+      "signal": "internal_removed_but_cdragon_registry_present",
+      "note": "Registry presence is definition only; this is reported, not resolved."
     },
     {
       "source": "internal_augments",
+      "augmentNameId": "Poltergeist",
       "name": "Poltergeist",
-      "slug": "poltergeist",
-      "signal": "internal_active_but_cdragon_missing",
-      "note": "Do not infer live availability from this internal lifecycle flag."
+      "signal": "internal_removed_but_cdragon_registry_present",
+      "note": "Registry presence is definition only; this is reported, not resolved."
     },
     {
       "source": "internal_augments",
+      "augmentNameId": "Nightstalking",
       "name": "Nightstalking",
-      "slug": "nightstalking",
-      "signal": "internal_active_but_cdragon_missing",
-      "note": "Do not infer live availability from this internal lifecycle flag."
+      "signal": "internal_removed_but_cdragon_registry_present",
+      "note": "Registry presence is definition only; this is reported, not resolved."
     },
     {
       "source": "internal_augments",
+      "augmentNameId": "SpellVolley",
       "name": "Tripleshot",
-      "slug": "tripleshot",
-      "signal": "internal_added_but_cdragon_missing",
-      "note": "Do not infer live availability from this internal lifecycle flag."
+      "signal": "internal_removed_but_cdragon_registry_present",
+      "note": "Registry presence is definition only; this is reported, not resolved."
     },
     {
       "source": "internal_augments",
+      "augmentNameId": "EmpyreanPromise",
       "name": "Empyrean Promise",
-      "slug": "empyrean-promise",
-      "signal": "internal_active_but_cdragon_missing",
-      "note": "Do not infer live availability from this internal lifecycle flag."
+      "signal": "internal_removed_but_cdragon_registry_present",
+      "note": "Registry presence is definition only; this is reported, not resolved."
     },
     {
       "source": "internal_augments",
+      "augmentNameId": "KillSecured",
       "name": "Kill Secured",
-      "slug": "kill-secured",
-      "signal": "internal_active_but_cdragon_missing",
-      "note": "Do not infer live availability from this internal lifecycle flag."
+      "signal": "internal_removed_but_cdragon_registry_present",
+      "note": "Registry presence is definition only; this is reported, not resolved."
     },
     {
       "source": "internal_augments",
-      "name": "Porcupine",
-      "slug": "porcupine",
-      "signal": "internal_added_but_cdragon_missing",
-      "note": "Do not infer live availability from this internal lifecycle flag."
-    },
-    {
-      "source": "internal_augments",
+      "augmentNameId": "Ability_SelfAOE_DoubleCast",
       "name": "Echo Cast",
-      "slug": "echo-cast",
-      "signal": "internal_added_but_cdragon_missing",
-      "note": "Do not infer live availability from this internal lifecycle flag."
+      "signal": "internal_removed_but_cdragon_registry_present",
+      "note": "Registry presence is definition only; this is reported, not resolved."
     },
     {
       "source": "internal_augments",
+      "augmentNameId": "Missile_Split",
       "name": "Spellsplit",
-      "slug": "spell-split",
-      "signal": "internal_added_but_cdragon_missing",
-      "note": "Do not infer live availability from this internal lifecycle flag."
+      "signal": "internal_removed_but_cdragon_registry_present",
+      "note": "Registry presence is definition only; this is reported, not resolved."
     },
     {
       "source": "internal_augments",
+      "augmentNameId": "SharkTempest",
       "name": "Shark Tempest",
-      "slug": "shark-tempest",
-      "signal": "internal_added_but_cdragon_missing",
-      "note": "Do not infer live availability from this internal lifecycle flag."
+      "signal": "internal_removed_but_cdragon_registry_present",
+      "note": "Registry presence is definition only; this is reported, not resolved."
     },
     {
       "source": "internal_augments",
+      "augmentNameId": "Flash2",
       "name": "Flash 2",
-      "slug": "flash-2",
-      "signal": "internal_active_but_cdragon_missing",
-      "note": "Do not infer live availability from this internal lifecycle flag."
+      "signal": "internal_removed_but_cdragon_registry_present",
+      "note": "Registry presence is definition only; this is reported, not resolved."
     },
     {
       "source": "internal_augments",
+      "augmentNameId": "BrushPower",
       "name": "Hide on Bush",
-      "slug": "hide-on-bush",
-      "signal": "internal_added_but_cdragon_missing",
-      "note": "Do not infer live availability from this internal lifecycle flag."
+      "signal": "internal_removed_but_cdragon_registry_present",
+      "note": "Registry presence is definition only; this is reported, not resolved."
     },
     {
       "source": "internal_augments",
+      "augmentNameId": "PromQueen",
       "name": "Prom Queen",
-      "slug": "prom-queen",
-      "signal": "internal_active_but_cdragon_missing",
-      "note": "Do not infer live availability from this internal lifecycle flag."
+      "signal": "internal_removed_but_cdragon_registry_present",
+      "note": "Registry presence is definition only; this is reported, not resolved."
     },
     {
       "source": "internal_augments",
+      "augmentNameId": "Equilibrium",
       "name": "Our Healing",
-      "slug": "our-healing",
-      "signal": "internal_added_but_cdragon_missing",
-      "note": "Do not infer live availability from this internal lifecycle flag."
+      "signal": "internal_removed_but_cdragon_registry_present",
+      "note": "Registry presence is definition only; this is reported, not resolved."
     },
     {
       "source": "internal_augments",
+      "augmentNameId": "MightyShield",
       "name": "Mighty Shield",
-      "slug": "mighty-shield",
-      "signal": "internal_active_but_cdragon_missing",
-      "note": "Do not infer live availability from this internal lifecycle flag."
+      "signal": "internal_removed_but_cdragon_registry_present",
+      "note": "Registry presence is definition only; this is reported, not resolved."
     },
     {
       "source": "internal_augments",
-      "name": "Pin Cushion",
-      "slug": "pin-cushion",
-      "signal": "internal_added_but_cdragon_missing",
-      "note": "Do not infer live availability from this internal lifecycle flag."
-    },
-    {
-      "source": "internal_augments",
+      "augmentNameId": "PinballSnowball",
       "name": "Pinball",
-      "slug": "pinball",
-      "signal": "internal_active_but_cdragon_missing",
-      "note": "Do not infer live availability from this internal lifecycle flag."
+      "signal": "internal_removed_but_cdragon_registry_present",
+      "note": "Registry presence is definition only; this is reported, not resolved."
     },
     {
       "source": "internal_augments",
+      "augmentNameId": "Snowbomb",
       "name": "Snowblast",
-      "slug": "snowblast",
-      "signal": "internal_added_but_cdragon_missing",
-      "note": "Do not infer live availability from this internal lifecycle flag."
+      "signal": "internal_removed_but_cdragon_registry_present",
+      "note": "Registry presence is definition only; this is reported, not resolved."
     },
     {
       "source": "internal_augments",
+      "augmentNameId": "YouSpinMeRightRound",
       "name": "Spin Me Right Round",
-      "slug": "spin-me-right-round",
-      "signal": "internal_active_but_cdragon_missing",
-      "note": "Do not infer live availability from this internal lifecycle flag."
+      "signal": "internal_removed_but_cdragon_registry_present",
+      "note": "Registry presence is definition only; this is reported, not resolved."
     },
     {
       "source": "internal_augments",
-      "name": "Surge Field",
-      "slug": "surge-field",
-      "signal": "internal_added_but_cdragon_missing",
-      "note": "Do not infer live availability from this internal lifecycle flag."
-    },
-    {
-      "source": "internal_augments",
+      "augmentNameId": "GoldenSnowball",
       "name": "Holy Snowball",
-      "slug": "holy-snowball",
-      "signal": "internal_active_but_cdragon_missing",
-      "note": "Do not infer live availability from this internal lifecycle flag."
+      "signal": "internal_removed_but_cdragon_registry_present",
+      "note": "Registry presence is definition only; this is reported, not resolved."
     },
     {
       "source": "internal_augments",
+      "augmentNameId": "GlassCannon",
       "name": "Glass Cannon",
-      "slug": "glass-cannon",
-      "signal": "internal_active_but_cdragon_missing",
-      "note": "Do not infer live availability from this internal lifecycle flag."
+      "signal": "internal_removed_but_cdragon_registry_present",
+      "note": "Registry presence is definition only; this is reported, not resolved."
     },
     {
       "source": "internal_augments",
+      "augmentNameId": "ChainReaction",
       "name": "Chain Reaction",
-      "slug": "chain-reaction",
-      "signal": "internal_added_but_cdragon_missing",
-      "note": "Do not infer live availability from this internal lifecycle flag."
+      "signal": "internal_removed_but_cdragon_registry_present",
+      "note": "Registry presence is definition only; this is reported, not resolved."
     },
     {
       "source": "internal_augments",
+      "augmentNameId": "DimensionShift_Active",
       "name": "Dimension Shift",
-      "slug": "dimension-shift",
-      "signal": "internal_added_but_cdragon_missing",
-      "note": "Do not infer live availability from this internal lifecycle flag."
+      "signal": "internal_removed_but_cdragon_registry_present",
+      "note": "Registry presence is definition only; this is reported, not resolved."
     },
     {
       "source": "internal_augments",
+      "augmentNameId": "PoroCharge_Active",
       "name": "Poro Stampede",
-      "slug": "poro-stampede",
-      "signal": "internal_added_but_cdragon_missing",
-      "note": "Do not infer live availability from this internal lifecycle flag."
+      "signal": "internal_removed_but_cdragon_registry_present",
+      "note": "Registry presence is definition only; this is reported, not resolved."
+    },
+    {
+      "source": "internal_augments",
+      "augmentNameId": "Adamant",
+      "name": "Adamant",
+      "signal": "internal_removed_but_cdragon_registry_present",
+      "note": "Registry presence is definition only; this is reported, not resolved."
     },
     {
       "source": "internal_augments",
@@ -1961,8 +825,22 @@
     },
     {
       "source": "internal_augments",
-      "augmentNameId": "ARAM_CriticalHealing",
-      "name": "Critical Healing",
+      "augmentNameId": "CritNCast",
+      "name": "Crit 'n Cast",
+      "signal": "internal_removed_but_cdragon_registry_present",
+      "note": "Registry presence is definition only; this is reported, not resolved."
+    },
+    {
+      "source": "internal_augments",
+      "augmentNameId": "CriticalMissile",
+      "name": "Critical Missile",
+      "signal": "internal_removed_but_cdragon_registry_present",
+      "note": "Registry presence is definition only; this is reported, not resolved."
+    },
+    {
+      "source": "internal_augments",
+      "augmentNameId": "CriticalRhythm",
+      "name": "Critical Rhythm",
       "signal": "internal_removed_but_cdragon_registry_present",
       "note": "Registry presence is definition only; this is reported, not resolved."
     },
@@ -1982,8 +860,8 @@
     },
     {
       "source": "internal_augments",
-      "augmentNameId": "ARAM_DoubleTap",
-      "name": "Double Tap",
+      "augmentNameId": "Dropybara_Active",
+      "name": "Droppybara",
       "signal": "internal_removed_but_cdragon_registry_present",
       "note": "Registry presence is definition only; this is reported, not resolved."
     },
@@ -2003,6 +881,13 @@
     },
     {
       "source": "internal_augments",
+      "augmentNameId": "TrainOfTheDead",
+      "name": "Final City Transit",
+      "signal": "internal_removed_but_cdragon_registry_present",
+      "note": "Registry presence is definition only; this is reported, not resolved."
+    },
+    {
+      "source": "internal_augments",
       "augmentNameId": "ARAM_FrostWraith",
       "name": "Frost Wraith",
       "signal": "internal_removed_but_cdragon_registry_present",
@@ -2010,8 +895,22 @@
     },
     {
       "source": "internal_augments",
-      "augmentNameId": "ARAM_GuiltyPleasure",
-      "name": "Guilty Pleasure",
+      "augmentNameId": "Gash",
+      "name": "Gash",
+      "signal": "internal_removed_but_cdragon_registry_present",
+      "note": "Registry presence is definition only; this is reported, not resolved."
+    },
+    {
+      "source": "internal_augments",
+      "augmentNameId": "GrandmasChiliOil",
+      "name": "Grandma's Chili Oil",
+      "signal": "internal_removed_but_cdragon_registry_present",
+      "note": "Registry presence is definition only; this is reported, not resolved."
+    },
+    {
+      "source": "internal_augments",
+      "augmentNameId": "HatOnAHat",
+      "name": "Hat on a Hat",
       "signal": "internal_removed_but_cdragon_registry_present",
       "note": "Registry presence is definition only; this is reported, not resolved."
     },
@@ -2031,15 +930,8 @@
     },
     {
       "source": "internal_augments",
-      "augmentNameId": "ARAM_ItsCritical",
-      "name": "It's Critical",
-      "signal": "internal_removed_but_cdragon_registry_present",
-      "note": "Registry presence is definition only; this is reported, not resolved."
-    },
-    {
-      "source": "internal_augments",
-      "augmentNameId": "ARAM_JeweledGauntlet",
-      "name": "Jeweled Gauntlet",
+      "augmentNameId": "BabyKitty",
+      "name": "I'm a Baby Kitty Where is Mama",
       "signal": "internal_removed_but_cdragon_registry_present",
       "note": "Registry presence is definition only; this is reported, not resolved."
     },
@@ -2052,6 +944,13 @@
     },
     {
       "source": "internal_augments",
+      "augmentNameId": "LaserHeal",
+      "name": "Laser Heal",
+      "signal": "internal_removed_but_cdragon_registry_present",
+      "note": "Registry presence is definition only; this is reported, not resolved."
+    },
+    {
+      "source": "internal_augments",
       "augmentNameId": "ARAM_LightningStrikes",
       "name": "Lightning Strikes",
       "signal": "internal_removed_but_cdragon_registry_present",
@@ -2059,15 +958,8 @@
     },
     {
       "source": "internal_augments",
-      "name": "One Trick Pony",
-      "slug": "one-trick-pony",
-      "signal": "internal_added_but_cdragon_missing",
-      "note": "Do not infer live availability from this internal lifecycle flag."
-    },
-    {
-      "source": "internal_augments",
       "augmentNameId": "ARAM_OrbitalLaser_Active",
-      "name": "OrbitalLaser",
+      "name": "Orbital Laser",
       "signal": "internal_removed_but_cdragon_registry_present",
       "note": "Registry presence is definition only; this is reported, not resolved."
     },
@@ -2094,8 +986,8 @@
     },
     {
       "source": "internal_augments",
-      "augmentNameId": "ARAM_RabbleRousing",
-      "name": "Rabble Rousing",
+      "augmentNameId": "RedEnvelopes",
+      "name": "Red Envelopes",
       "signal": "internal_removed_but_cdragon_registry_present",
       "note": "Registry presence is definition only; this is reported, not resolved."
     },
@@ -2129,15 +1021,15 @@
     },
     {
       "source": "internal_augments",
-      "augmentNameId": "ARAM_SlowCooker",
-      "name": "Slow Cooker",
+      "augmentNameId": "SnowballRoulette",
+      "name": "Snowball Roulette",
       "signal": "internal_removed_but_cdragon_registry_present",
       "note": "Registry presence is definition only; this is reported, not resolved."
     },
     {
       "source": "internal_augments",
-      "augmentNameId": "ARAM_SoulSiphon",
-      "name": "Soul Siphon",
+      "augmentNameId": "SnowballUpgrade",
+      "name": "Snowball Upgrade",
       "signal": "internal_removed_but_cdragon_registry_present",
       "note": "Registry presence is definition only; this is reported, not resolved."
     },
@@ -2150,20 +1042,6 @@
     },
     {
       "source": "internal_augments",
-      "name": "Squishy Slappy Grab",
-      "slug": "squishy-slappy-grab",
-      "signal": "internal_added_but_cdragon_missing",
-      "note": "Do not infer live availability from this internal lifecycle flag."
-    },
-    {
-      "source": "internal_augments",
-      "augmentNameId": "ARAM_TankItOrLeaveIt",
-      "name": "Tank It Or Leave It",
-      "signal": "internal_removed_but_cdragon_registry_present",
-      "note": "Registry presence is definition only; this is reported, not resolved."
-    },
-    {
-      "source": "internal_augments",
       "augmentNameId": "ARAM_TheBrutalizer",
       "name": "The Brutalizer",
       "signal": "internal_removed_but_cdragon_registry_present",
@@ -2171,15 +1049,8 @@
     },
     {
       "source": "internal_augments",
-      "augmentNameId": "ARAM_Tormentor",
-      "name": "Tormentor",
-      "signal": "internal_removed_but_cdragon_registry_present",
-      "note": "Registry presence is definition only; this is reported, not resolved."
-    },
-    {
-      "source": "internal_augments",
       "augmentNameId": "ARAM_TrueshotProdigy",
-      "name": "TrueshotProdigy",
+      "name": "Trueshot Prodigy",
       "signal": "internal_removed_but_cdragon_registry_present",
       "note": "Registry presence is definition only; this is reported, not resolved."
     },
@@ -2206,15 +1077,36 @@
     },
     {
       "source": "internal_augments",
-      "augmentNameId": "ARAM_VoidRift",
-      "name": "Void Rift",
+      "augmentNameId": "Upgrade_MikaelsBlessing",
+      "name": "Upgrade Mikael's Blessing",
       "signal": "internal_removed_but_cdragon_registry_present",
       "note": "Registry presence is definition only; this is reported, not resolved."
     },
     {
       "source": "internal_augments",
-      "augmentNameId": "ARAM_Vulnerability",
-      "name": "Vulnerability",
+      "augmentNameId": "Upgrade_Thornmail",
+      "name": "Upgrade Thornmail",
+      "signal": "internal_removed_but_cdragon_registry_present",
+      "note": "Registry presence is definition only; this is reported, not resolved."
+    },
+    {
+      "source": "internal_augments",
+      "augmentNameId": "Vampirism",
+      "name": "Vampirism",
+      "signal": "internal_removed_but_cdragon_registry_present",
+      "note": "Registry presence is definition only; this is reported, not resolved."
+    },
+    {
+      "source": "internal_augments",
+      "augmentNameId": "VoidDash",
+      "name": "Void Dash",
+      "signal": "internal_removed_but_cdragon_registry_present",
+      "note": "Registry presence is definition only; this is reported, not resolved."
+    },
+    {
+      "source": "internal_augments",
+      "augmentNameId": "ARAM_VoidRift",
+      "name": "Void Rift",
       "signal": "internal_removed_but_cdragon_registry_present",
       "note": "Registry presence is definition only; this is reported, not resolved."
     },
@@ -2227,8 +1119,22 @@
     },
     {
       "source": "internal_augments",
-      "augmentNameId": "ARAM_Zealot",
-      "name": "Zealot",
+      "augmentNameId": "WindBeneathBlade",
+      "name": "Wind Beneath Blade",
+      "signal": "internal_removed_but_cdragon_registry_present",
+      "note": "Registry presence is definition only; this is reported, not resolved."
+    },
+    {
+      "source": "internal_augments",
+      "augmentNameId": "Upgrade_SwordOfBlossom",
+      "name": "Upgrade Sword of Blossoming Dawn",
+      "signal": "internal_removed_but_cdragon_registry_present",
+      "note": "Registry presence is definition only; this is reported, not resolved."
+    },
+    {
+      "source": "internal_augments",
+      "augmentNameId": "ARAM_MissingPingAugment",
+      "name": "???",
       "signal": "internal_removed_but_cdragon_registry_present",
       "note": "Registry presence is definition only; this is reported, not resolved."
     }

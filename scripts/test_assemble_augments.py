@@ -58,6 +58,8 @@ class AvailabilityResolverTests(unittest.TestCase):
             augment_id="ARAM_RegistryOnly",
             slug="registry-only",
             cdragon_present=True,
+            kiwi_present=True,
+            kiwi_keys=["kiwi_registryonly_name"],
             wiki_row=None,
             definition_placeholder=False,
             tombstone_removed=False,
@@ -66,6 +68,8 @@ class AvailabilityResolverTests(unittest.TestCase):
         self.assertEqual(availability["status"], "candidate_registry_present")
         self.assertEqual(lifecycle_for_availability(availability["status"]), "removed")
         self.assertTrue(availability["signals"]["cdragon_registry"]["present"])
+        self.assertTrue(availability["signals"]["kiwi"]["present"])
+        self.assertEqual(availability["signals"]["kiwi"]["keys"], ["kiwi_registryonly_name"])
         self.assertFalse(availability["signals"]["wiki"]["present"])
 
     def test_wiki_currently_disabled_resolves_disabled(self):
@@ -149,6 +153,22 @@ class AvailabilityResolverTests(unittest.TestCase):
         self.assertEqual(availability["status"], "confirmed_live")
         self.assertEqual(lifecycle_for_availability(availability["status"]), "active")
         self.assertTrue(availability["signals"]["tombstone"]["removed"])
+
+    def test_explicit_patch_removed_stays_removed_even_with_registry_and_wiki_text(self):
+        availability = resolve_availability(
+            augment_id="Upgrade_SwordOfBlossom",
+            slug="upgrade-sword-of-blossoming-dawn",
+            cdragon_present=True,
+            kiwi_present=True,
+            wiki_row={"wikiDescription": "Stale wiki row."},
+            definition_placeholder=False,
+            tombstone_removed=True,
+            patch_removed=True,
+        )
+
+        self.assertEqual(availability["status"], "removed")
+        self.assertEqual(lifecycle_for_availability(availability["status"]), "removed")
+        self.assertEqual(availability["signals"]["resolution"]["removedSources"], ["patch_notes", "tombstone"])
 
     def test_current_live_and_current_removed_sources_resolve_conflict(self):
         availability = resolve_availability(

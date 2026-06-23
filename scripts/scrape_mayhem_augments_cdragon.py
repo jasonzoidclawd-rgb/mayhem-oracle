@@ -5,8 +5,8 @@ Riot does NOT publish ARAM: Mayhem server-side hotfixes ("不停機更新") on t
 English patch-notes page, so the scraper that reads `...-patch-X-Y-notes` pages
 is structurally blind to them. The authoritative first-hand source is the live
 game data, mirrored by CommunityDragon. ARAM Mayhem's internal codename is
-"kiwi" (Arena is "cherry"); its augments live in the shared augment registry
-under the `ARAM_` nameId prefix.
+"kiwi" (Arena is "cherry"); its augment definitions live in the shared augment
+registry and are identified by `kiwi_*` stringtable definition keys.
 
 This script extracts the canonical Riot augment text + rarity for every Mayhem
 augment, writes a snapshot, and — by diffing against the previously committed
@@ -15,7 +15,7 @@ patch number is unchanged. That is the signal a server-side hotfix shipped.
 
 Sources (CommunityDragon `latest`):
     roster + rarity : plugins/rcp-be-lol-game-data/global/default/v1/cherry-augments.json
-                      (filter augmentNameId starting "ARAM_")
+                      (match kiwi stringtable definition tokens to augmentNameId)
     Riot tooltips   : game/en_us/data/menu/en_us/lol.stringtable.json
                       (keys matching kiwi_*_tooltip / _desc / _name)
 
@@ -59,6 +59,8 @@ CDRAGON_LOCALES = {
 SNAPSHOT_PATH = INTERNAL_DATA_DIR / "cdragon-mayhem-augments.json"
 HOTFIX_PATH = INTERNAL_DATA_DIR / "mayhem-hotfixes.json"
 BASE_CATALOG_PATH = INTERNAL_DATA_DIR / "augment-base-catalog.json"
+IDENTITY_ALIAS_PATH = INTERNAL_DATA_DIR / "augment-identity-aliases.json"
+SNAPSHOT_DEFINITION_SOURCE = "kiwi-stringtable-v1"
 
 _NONALNUM = re.compile(r"[^a-z0-9]")
 # stringtable key noise stripped before matching to an augment nameId. Mayhem
@@ -80,6 +82,33 @@ def norm(s: str) -> str:
     return _NONALNUM.sub("", s.lower())
 
 
+def registry_token(s: str) -> str:
+    """Normalize registry/stringtable tokens for CDragon augmentNameId matching."""
+    token = norm(s)
+    return token[4:] if token.startswith("aram") else token
+
+
+def _stringtable_key_parts(key: str) -> tuple[str, str, str] | None:
+    low = key.lower()
+    m = _KEY_PREFIX.match(low)
+    if not m:
+        return None
+    body = low[m.end():]
+    suffix = _KEY_SUFFIX.search(body)
+    if suffix:
+        kind = suffix.group(1)
+        body = _KEY_SUFFIX.sub("", body)
+    elif m.group(2) == "aram_" and "_" not in body:
+        # Some Mayhem name keys are shaped like kiwi_aram_archmage.
+        kind = "name"
+    else:
+        return None
+    token = registry_token(body)
+    if not token:
+        return None
+    return m.group(1), token, kind
+
+
 def build_tooltip_index(stringtable: dict) -> dict[str, str]:
     """Map normalized augment token → best Riot-authored tooltip/description.
 
@@ -94,16 +123,13 @@ def build_tooltip_index(stringtable: dict) -> dict[str, str]:
     for key, value in entries.items():
         if not isinstance(key, str) or not isinstance(value, str):
             continue
-        low = key.lower()
-        if not re.search(r"_(tooltip|desc)$", low):
+        if not re.search(r"_(tooltip|desc)$", key.lower()):
             continue
-        m = _KEY_PREFIX.match(low)
-        if not m:
+        parts = _stringtable_key_parts(key)
+        if not parts:
             continue
-        priority = 1 if m.group(1) == "kiwi" else 0
-        token = norm(_KEY_SUFFIX.sub("", _KEY_PREFIX.sub("", low)))
-        if not token:
-            continue
+        prefix, token, _kind = parts
+        priority = 1 if prefix == "kiwi" else 0
         cand = (priority, len(value), value.strip())
         if token not in best or cand[:2] > best[token][:2]:
             best[token] = cand
@@ -129,22 +155,11 @@ def build_stringtable_definition_index(stringtable: dict) -> dict[str, dict[str,
     for key, value in entries.items():
         if not isinstance(key, str) or not isinstance(value, str):
             continue
-        low = key.lower()
-        m = _KEY_PREFIX.match(low)
-        if not m:
+        parts = _stringtable_key_parts(key)
+        if not parts:
             continue
-        body = _KEY_PREFIX.sub("", low)
-        suffix = _KEY_SUFFIX.search(body)
-        if suffix:
-            kind = suffix.group(1)
-            body = _KEY_SUFFIX.sub("", body)
-        else:
-            # Some Mayhem name keys are shaped like kiwi_aram_archmage.
-            kind = "name"
-        token = norm(body)
-        if not token:
-            continue
-        cand = (_source_priority(m.group(1)), len(value), value.strip(), key)
+        prefix, token, kind = parts
+        cand = (_source_priority(prefix), len(value), value.strip(), key)
         current = best.setdefault(token, {}).get(kind)
         if current is None or cand[:2] > current[:2]:
             best[token][kind] = cand
@@ -177,6 +192,36 @@ def _stringtable_indexes(payloads: dict[str, dict | list]) -> dict[str, dict[str
     }
 
 
+def _kiwi_definition_index(stringtable: dict | list) -> dict[str, dict]:
+    entries = stringtable.get("entries", stringtable) if isinstance(stringtable, dict) else {}
+    if not isinstance(entries, dict):
+        return {}
+
+    definitions: dict[str, dict] = {}
+    for key, value in entries.items():
+        if not isinstance(key, str) or not isinstance(value, str):
+            continue
+        parts = _stringtable_key_parts(key)
+        if not parts:
+            continue
+        prefix, token, kind = parts
+        if prefix != "kiwi":
+            continue
+        row = definitions.setdefault(token, {"token": token, "keys": set(), "kinds": set()})
+        row["keys"].add(key)
+        row["kinds"].add(kind)
+
+    return {
+        token: {
+            "token": token,
+            "keys": sorted(info["keys"]),
+            "kinds": sorted(info["kinds"]),
+        }
+        for token, info in sorted(definitions.items())
+        if "name" in info["kinds"]
+    }
+
+
 def _arena_index(arena_en: dict | list) -> dict[str, list[dict]]:
     index: dict[str, list[dict]] = {}
     for row in _arena_augments(arena_en):
@@ -187,14 +232,125 @@ def _arena_index(arena_en: dict | list) -> dict[str, list[dict]]:
     return index
 
 
-def _roster_augments(roster: dict | list) -> list[dict]:
+def _roster_rows(roster: dict | list) -> list[dict]:
     augments = roster.get("augments", roster) if isinstance(roster, dict) else roster
     if not isinstance(augments, list):
         return []
-    return [
-        augment for augment in augments
-        if isinstance(augment, dict) and augment.get("augmentNameId", "").startswith("ARAM_")
-    ]
+    return [augment for augment in augments if isinstance(augment, dict) and augment.get("augmentNameId")]
+
+
+def _mayhem_roster_augments(
+    roster: dict | list,
+    kiwi_definitions: dict[str, dict],
+    registry_token_aliases: dict[str, str] | None = None,
+) -> tuple[list[tuple[dict, dict]], dict]:
+    registry_by_token: dict[str, list[dict]] = {}
+    registry_by_id: dict[str, dict] = {}
+    for augment in _roster_rows(roster):
+        augment_id = augment.get("augmentNameId", "")
+        if augment_id:
+            registry_by_id[augment_id] = augment
+        token = registry_token(augment.get("augmentNameId", ""))
+        if token:
+            registry_by_token.setdefault(token, []).append(augment)
+
+    aliases = {
+        registry_token(token): augment_id
+        for token, augment_id in (registry_token_aliases or {}).items()
+        if registry_token(token) and augment_id
+    }
+    matched_by_id: dict[str, tuple[dict, dict]] = {}
+    unmatched: list[dict] = []
+    ambiguous: list[dict] = []
+    disambiguated: list[dict] = []
+    aliased: list[dict] = []
+    duplicate_registry_ids: list[dict] = []
+
+    for token, definition in sorted(kiwi_definitions.items()):
+        matches = registry_by_token.get(token, [])
+        if not matches:
+            alias_target = aliases.get(token)
+            if alias_target and alias_target in registry_by_id:
+                matches = [registry_by_id[alias_target]]
+                aliased.append({
+                    "token": token,
+                    "selectedAugmentNameId": alias_target,
+                    "keys": definition["keys"],
+                })
+            elif alias_target:
+                unmatched.append({
+                    "token": token,
+                    "keys": definition["keys"],
+                    "aliasTargetMissing": alias_target,
+                })
+                continue
+        if not matches:
+            unmatched.append({"token": token, "keys": definition["keys"]})
+            continue
+        if len(matches) > 1:
+            aram_matches = [
+                match for match in matches
+                if str(match.get("augmentNameId", "")).startswith("ARAM_")
+            ]
+            if len(aram_matches) != 1:
+                ambiguous.append({
+                    "token": token,
+                    "keys": definition["keys"],
+                    "augmentNameIds": sorted(match.get("augmentNameId", "") for match in matches),
+                })
+                continue
+            matches = aram_matches
+            disambiguated.append({
+                "token": token,
+                "selectedAugmentNameId": matches[0].get("augmentNameId", ""),
+                "candidateAugmentNameIds": sorted(match.get("augmentNameId", "") for match in registry_by_token[token]),
+                "reason": "preferred existing ARAM_ registry row over duplicate bare codename row",
+            })
+
+        augment = matches[0]
+        augment_id = augment.get("augmentNameId", "")
+        existing = matched_by_id.get(augment_id)
+        if existing:
+            duplicate_registry_ids.append({
+                "augmentNameId": augment_id,
+                "tokens": sorted([*existing[1]["tokens"], token]),
+            })
+            existing[1]["tokens"].append(token)
+            existing[1]["keys"] = sorted({*existing[1]["keys"], *definition["keys"]})
+            existing[1]["kinds"] = sorted({*existing[1]["kinds"], *definition["kinds"]})
+            continue
+
+        matched_by_id[augment_id] = (
+            augment,
+            {
+                "present": True,
+                "tokens": [token],
+                "keys": list(definition["keys"]),
+                "kinds": list(definition["kinds"]),
+            },
+        )
+
+    matched = sorted(matched_by_id.values(), key=lambda item: item[0].get("augmentNameId", ""))
+    return matched, {
+        "definitionTokens": len(kiwi_definitions),
+        "matchedRegistryRows": len(matched),
+        "unmatchedTokens": unmatched,
+        "ambiguousTokens": ambiguous,
+        "disambiguatedTokens": disambiguated,
+        "aliasedTokens": aliased,
+        "duplicateRegistryIds": duplicate_registry_ids,
+    }
+
+
+def _kiwi_metadata(kiwi_definition: dict | None) -> dict:
+    if not kiwi_definition:
+        return {"present": False, "tokens": [], "keys": [], "kinds": []}
+    return {
+        "present": bool(kiwi_definition.get("present", True)),
+        "tokens": list(kiwi_definition.get("tokens", [])),
+        "keys": list(kiwi_definition.get("keys", [])),
+        "kinds": list(kiwi_definition.get("kinds", [])),
+    }
 
 
 def _slug_from_name_id(name_id: str) -> str:
@@ -202,7 +358,9 @@ def _slug_from_name_id(name_id: str) -> str:
     return re.sub(r"(?<!^)(?=[A-Z])", "-", core).lower()
 
 
-def _roster_tokens(augment: dict, stringtable_index: dict[str, dict]) -> list[str]:
+def _roster_tokens(
+    augment: dict, stringtable_index: dict[str, dict], kiwi_definition: dict | None = None
+) -> list[str]:
     name_id = augment.get("augmentNameId", "")
     values = [
         name_id,
@@ -210,11 +368,12 @@ def _roster_tokens(augment: dict, stringtable_index: dict[str, dict]) -> list[st
         augment.get("nameTRA", ""),
         _slug_from_name_id(name_id),
     ]
-    tokens = [norm(value) for value in values]
+    tokens = [registry_token(value) for value in values]
+    tokens.extend(kiwi_definition.get("tokens", []) if kiwi_definition else [])
     for token in list(tokens):
         entry = stringtable_index.get(token, {}).get("name")
         if entry:
-            tokens.append(norm(entry["value"]))
+            tokens.append(registry_token(entry["value"]))
     seen: set[str] = set()
     out: list[str] = []
     for token in tokens:
@@ -387,6 +546,7 @@ def build_base_catalog(
     roster: dict | list,
     arena_by_locale: dict[str, dict | list],
     stringtables_by_locale: dict[str, dict | list],
+    registry_token_aliases: dict[str, str] | None = None,
     fetched_at: str | None = None,
     source: str = CDRAGON,
 ) -> dict:
@@ -398,11 +558,17 @@ def build_base_catalog(
     stringtable_indexes = _stringtable_indexes(stringtables_by_locale)
     arena_en = _locale_payload(arena_by_locale, "en")
     arena_by_token = _arena_index(arena_en)
+    kiwi_definitions = _kiwi_definition_index(_locale_payload(stringtables_by_locale, "en"))
+    mayhem_roster, kiwi_report = _mayhem_roster_augments(
+        roster,
+        kiwi_definitions,
+        registry_token_aliases=registry_token_aliases,
+    )
     augments: list[dict] = []
 
-    for roster_row in _roster_augments(roster):
+    for roster_row, kiwi_definition in mayhem_roster:
         augment_id = roster_row["augmentNameId"]
-        tokens = _roster_tokens(roster_row, stringtable_indexes["en"])
+        tokens = _roster_tokens(roster_row, stringtable_indexes["en"], kiwi_definition)
         arena_row = _match_arena_row(roster_row, arena_by_token, tokens)
         names, names_provenance = _localized_names(
             roster_row, arena_row, arena_by_locale, stringtable_indexes, tokens
@@ -422,14 +588,17 @@ def build_base_catalog(
         roster_small = roster_row.get("augmentSmallIconPath", "")
         if not icon_small:
             icon_small = roster_small
+        slug = _slug_from_name_id(augment_id)
 
         augments.append({
             "augmentId": augment_id,
+            "slug": slug,
             "cdragon": {
                 "rosterId": roster_row.get("id"),
                 "augmentNameId": augment_id,
                 "arenaApiName": arena_row.get("apiName") if arena_row else None,
                 "stringtableTokens": tokens,
+                "kiwi": _kiwi_metadata(kiwi_definition),
             },
             "name": names.get("en") or roster_row.get("nameTRA", ""),
             "names": names,
@@ -487,9 +656,17 @@ def build_base_catalog(
         },
         "notes": [
             "CDragon registry presence is definition only; this catalog does not set live availability.",
+            "Rows are matched from kiwi stringtable definition tokens to CDragon augmentNameId; kiwi presence is Mayhem definition evidence only.",
             "Rows without an arenaApiName are registry/stringtable definitions with no rich arena dataValues/calculations in the fetched endpoint.",
         ],
-        "counts": _catalog_counts(augments),
+        "counts": {
+            **_catalog_counts(augments),
+            "kiwiDefinitionTokens": kiwi_report["definitionTokens"],
+            "kiwiUnmatchedTokens": len(kiwi_report["unmatchedTokens"]),
+            "kiwiAmbiguousTokens": len(kiwi_report["ambiguousTokens"]),
+            "kiwiAliasedTokens": len(kiwi_report["aliasedTokens"]),
+        },
+        "reports": {"kiwiDefinitions": kiwi_report},
         "augments": augments,
     }
 
@@ -507,9 +684,30 @@ def fetch_base_catalog_inputs() -> tuple[dict | list, dict[str, dict | list], di
     return roster, arena_by_locale, stringtables_by_locale
 
 
+def registry_token_aliases_from_table(alias_table: dict | None) -> dict[str, str]:
+    aliases: dict[str, str] = {}
+    entries = alias_table.get("registry_token_aliases", []) if isinstance(alias_table, dict) else []
+    if not isinstance(entries, list):
+        return aliases
+    for entry in entries:
+        if not isinstance(entry, dict):
+            continue
+        token = registry_token(entry.get("token", ""))
+        augment_id = entry.get("augmentNameId", "")
+        if token and augment_id:
+            aliases[token] = augment_id
+    return aliases
+
+
 def write_base_catalog(path: Path = BASE_CATALOG_PATH) -> dict:
     roster, arena_by_locale, stringtables_by_locale = fetch_base_catalog_inputs()
-    catalog = build_base_catalog(roster, arena_by_locale, stringtables_by_locale)
+    alias_table = load_json(IDENTITY_ALIAS_PATH) or {}
+    catalog = build_base_catalog(
+        roster,
+        arena_by_locale,
+        stringtables_by_locale,
+        registry_token_aliases=registry_token_aliases_from_table(alias_table),
+    )
     path.write_text(json.dumps(catalog, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     print(
         f"  Mayhem base catalog: {catalog['counts']['augments']} augments; "
@@ -540,17 +738,35 @@ def localized_name_index() -> dict[str, dict[str, str]]:
 
 
 def extract_augments(
-    roster: dict | list, tooltips: dict[str, str], names_idx: dict[str, dict[str, str]]
+    roster: dict | list,
+    tooltips: dict[str, str],
+    names_idx: dict[str, dict[str, str]],
+    stringtable: dict | None = None,
+    registry_token_aliases: dict[str, str] | None = None,
 ) -> list[dict]:
-    augs = roster.get("augments", roster) if isinstance(roster, dict) else roster
     out: list[dict] = []
-    for a in augs:
+    if stringtable is None:
+        roster_rows = [
+            (augment, None)
+            for augment in _roster_rows(roster)
+            if augment.get("augmentNameId", "").startswith("ARAM_")
+        ]
+        stringtable_index: dict[str, dict[str, dict]] = {}
+    else:
+        roster_rows, _kiwi_report = _mayhem_roster_augments(
+            roster,
+            _kiwi_definition_index(stringtable),
+            registry_token_aliases=registry_token_aliases,
+        )
+        stringtable_index = build_stringtable_definition_index(stringtable)
+
+    for a, kiwi_definition in roster_rows:
         name_id = a.get("augmentNameId", "")
-        if not name_id.startswith("ARAM_"):
-            continue
-        core = name_id[len("ARAM_"):]
-        token = norm(core)
-        en_name = a.get("nameTRA") or core
+        core = name_id.removeprefix("ARAM_")
+        tokens = _roster_tokens(a, stringtable_index, kiwi_definition)
+        token = tokens[0] if tokens else registry_token(core)
+        name_entry = _best_string_entry(stringtable_index, tokens, ("name",))
+        en_name = (name_entry or {}).get("value") or a.get("nameTRA") or core
         # Join to localized names; fall back to the English name per locale.
         names = dict(names_idx.get(token, {}))
         names.setdefault("en", en_name)
@@ -558,7 +774,7 @@ def extract_augments(
             "nameId": name_id,
             "name": en_name,
             "names": names,
-            "slug": re.sub(r"(?<!^)(?=[A-Z])", "-", core).lower(),
+            "slug": _slug_from_name_id(name_id),
             "rarity": RARITY_MAP.get(a.get("rarity", ""), a.get("rarity", "")),
             "tooltip": tooltips.get(token, ""),
         })
@@ -606,6 +822,18 @@ def diff_augments(old: list[dict], new: list[dict]) -> dict[str, list]:
                             "before": {f: o.get(f) for f in fields},
                             "after": {f: n.get(f) for f in fields}})
     return {"added": added, "removed": removed, "changed": changed}
+
+
+def _delta_size(delta: dict) -> int:
+    return len(delta["added"]) + len(delta["removed"]) + len(delta["changed"])
+
+
+def should_record_hotfix_event(previous: dict, delta: dict, patch: str) -> bool:
+    if not _delta_size(delta):
+        return False
+    if previous.get("patch") != patch:
+        return False
+    return previous.get("definition_source") == SNAPSHOT_DEFINITION_SOURCE
 
 
 def load_json(path: Path) -> dict | None:
@@ -669,7 +897,14 @@ def main() -> None:
     roster = fetch_json(ROSTER_URL)
     stringtable = fetch_json(STRINGTABLE_URL)
     tooltips = build_tooltip_index(stringtable)
-    augments = extract_augments(roster, tooltips, localized_name_index())
+    alias_table = load_json(IDENTITY_ALIAS_PATH) or {}
+    augments = extract_augments(
+        roster,
+        tooltips,
+        localized_name_index(),
+        stringtable=stringtable,
+        registry_token_aliases=registry_token_aliases_from_table(alias_table),
+    )
     matched = sum(1 for a in augments if a["tooltip"])
     print(f"  Mayhem augments: {len(augments)} ({matched} with Riot tooltip)")
 
@@ -678,8 +913,8 @@ def main() -> None:
 
     if prev and prev.get("augments"):
         delta = diff_augments(prev["augments"], augments)
-        n = len(delta["added"]) + len(delta["removed"]) + len(delta["changed"])
-        if n and prev.get("patch") == patch:
+        n = _delta_size(delta)
+        if should_record_hotfix_event(prev, delta, patch):
             # Same patch, different augment data => server-side hotfix.
             event = build_event(delta, patch, now)
             hotfixes = load_json(HOTFIX_PATH) or {"events": []}
@@ -695,6 +930,12 @@ def main() -> None:
             print(f"  ⚠ HOTFIX detected on patch {patch}: "
                   f"+{len(delta['added'])} -{len(delta['removed'])} "
                   f"~{len(delta['changed'])} augments → {HOTFIX_PATH.name}")
+        elif n and prev.get("patch") == patch and prev.get("definition_source") != SNAPSHOT_DEFINITION_SOURCE:
+            print(
+                "  Definition source changed "
+                f"({prev.get('definition_source', 'legacy-aram-prefix')} → {SNAPSHOT_DEFINITION_SOURCE}); "
+                "establishing a new snapshot baseline without a hotfix event."
+            )
         elif n:
             print(f"  Patch changed ({prev.get('patch')} → {patch}); "
                   f"{n} augment deltas attributed to the patch, not a hotfix.")
@@ -704,8 +945,13 @@ def main() -> None:
         print("  No prior snapshot — establishing hotfix-detection baseline.")
 
     SNAPSHOT_PATH.write_text(
-        json.dumps({"patch": patch, "fetched_at": now, "source": CDRAGON,
-                    "augments": augments}, ensure_ascii=False, indent=2),
+        json.dumps({
+            "patch": patch,
+            "fetched_at": now,
+            "source": CDRAGON,
+            "definition_source": SNAPSHOT_DEFINITION_SOURCE,
+            "augments": augments,
+        }, ensure_ascii=False, indent=2),
         encoding="utf-8",
     )
     print(f"  → {SNAPSHOT_PATH.name} written")

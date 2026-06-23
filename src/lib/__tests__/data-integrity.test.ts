@@ -146,7 +146,7 @@ describe("data integrity", () => {
   });
 
   test("legacy-only rows are unverified legacy and non-offerable", () => {
-    const legacy = augmentsData.augments.find((augment) => augment.slug === "infinite-recursion");
+    const legacy = augmentsData.augments.find((augment) => augment.slug === "warlock-juicebox");
 
     expect(legacy?.availability?.status).toBe("unverified_legacy");
     expect(legacy?.flags.lifecycle).toBe("removed");

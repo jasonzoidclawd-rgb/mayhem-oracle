@@ -145,6 +145,9 @@ def resolve_availability(
     augment_id: str | None,
     slug: str,
     cdragon_present: bool,
+    kiwi_present: bool = False,
+    kiwi_keys: list[str] | None = None,
+    kiwi_tokens: list[str] | None = None,
     wiki_row: dict | None,
     definition_placeholder: bool,
     tombstone_removed: bool,
@@ -164,7 +167,7 @@ def resolve_availability(
     if tombstone_removed:
         stale_removed_sources.append("tombstone")
     if patch_removed:
-        stale_removed_sources.append("patch_notes")
+        removed_sources.append("patch_notes")
     if wiki["status"] == "disabled":
         disabled_sources.append("wiki")
     elif wiki["status"] == "live":
@@ -184,6 +187,8 @@ def resolve_availability(
 
     if definition_placeholder:
         status = "candidate_registry_present"
+    elif patch_removed:
+        status = "removed"
     elif (disabled_sources or removed_sources) and live_sources:
         status = "conflict"
     elif disabled_sources and not live_sources:
@@ -206,6 +211,11 @@ def resolve_availability(
             "present": cdragon_present,
             "augmentId": augment_id,
             "definitionPlaceholder": definition_placeholder,
+        },
+        "kiwi": {
+            "present": kiwi_present,
+            "keys": kiwi_keys or [],
+            "tokens": kiwi_tokens or [],
         },
         "wiki": wiki,
         "tencent": {"status": tencent_status},
@@ -368,7 +378,11 @@ def build_cdragon_row(
         "provenance": field_provenance(base.get("provenance", {}), wiki_row, has_win_rate, existing_row),
     }
     for locale, output_field in LOCALE_FIELDS.items():
-        row[output_field] = names.get(locale) or (existing_row or {}).get(output_field, "")
+        existing_localized = (existing_row or {}).get(output_field, "")
+        if availability["status"] == "removed" and existing_localized:
+            row[output_field] = existing_localized
+        else:
+            row[output_field] = names.get(locale) or existing_localized
     if wiki_row and wiki_row.get("wikiDescription"):
         row["wikiDescription"] = wiki_row["wikiDescription"]
     if wiki_row and wiki_row.get("wikiRarity"):
@@ -423,6 +437,18 @@ def build_legacy_row(
     return row
 
 
+def kiwi_signal_from_base(base: dict | None) -> dict:
+    if not isinstance(base, dict):
+        return {"present": False, "keys": [], "tokens": []}
+    cdragon = base.get("cdragon") if isinstance(base.get("cdragon"), dict) else {}
+    kiwi = cdragon.get("kiwi") if isinstance(cdragon.get("kiwi"), dict) else {}
+    return {
+        "present": bool(kiwi.get("present")),
+        "keys": list(kiwi.get("keys") or []),
+        "tokens": list(kiwi.get("tokens") or []),
+    }
+
+
 def assemble_catalog(
     *,
     existing_catalog: dict,
@@ -462,10 +488,14 @@ def assemble_catalog(
         tombstone_removed = existing_removed_is_tombstone(existing_row, slug, removed_slugs, wiki_row)
 
         if base and is_primary:
+            kiwi_signal = kiwi_signal_from_base(base)
             availability = resolve_availability(
                 augment_id=augment_id,
                 slug=slug,
                 cdragon_present=True,
+                kiwi_present=kiwi_signal["present"],
+                kiwi_keys=kiwi_signal["keys"],
+                kiwi_tokens=kiwi_signal["tokens"],
                 wiki_row=wiki_row,
                 definition_placeholder=bool(base.get("definitionPlaceholder")),
                 tombstone_removed=tombstone_removed,
@@ -484,10 +514,14 @@ def assemble_catalog(
             emitted_base_ids.add(augment_id)
             continue
 
+        kiwi_signal = kiwi_signal_from_base(base)
         availability = resolve_availability(
             augment_id=augment_id,
             slug=slug,
             cdragon_present=bool(base),
+            kiwi_present=kiwi_signal["present"],
+            kiwi_keys=kiwi_signal["keys"],
+            kiwi_tokens=kiwi_signal["tokens"],
             wiki_row=wiki_row,
             definition_placeholder=bool(base.get("definitionPlaceholder")) if base else False,
             tombstone_removed=tombstone_removed,
@@ -514,10 +548,14 @@ def assemble_catalog(
         slug = slugify(base.get("name", "")) or slug_from_augment_id(augment_id)
         while slug in existing_by_slug or any(row.get("slug") == slug for row in rows):
             slug = f"{slug_from_augment_id(augment_id)}-{len(rows)}"
+        kiwi_signal = kiwi_signal_from_base(base)
         availability = resolve_availability(
             augment_id=augment_id,
             slug=slug,
             cdragon_present=True,
+            kiwi_present=kiwi_signal["present"],
+            kiwi_keys=kiwi_signal["keys"],
+            kiwi_tokens=kiwi_signal["tokens"],
             wiki_row=wiki_row,
             definition_placeholder=bool(base.get("definitionPlaceholder")),
             tombstone_removed=False,

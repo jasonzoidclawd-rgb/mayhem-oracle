@@ -12,7 +12,7 @@ from pathlib import Path
 from data_paths import INTERNAL_DATA_DIR
 
 
-CDRAGON_PATH = INTERNAL_DATA_DIR / "cdragon-mayhem-augments.json"
+CDRAGON_PATH = INTERNAL_DATA_DIR / "augment-base-catalog.json"
 INTERNAL_AUGMENTS_PATH = INTERNAL_DATA_DIR / "augments.json"
 ALIAS_PATH = INTERNAL_DATA_DIR / "augment-identity-aliases.json"
 MAPPING_PATH = INTERNAL_DATA_DIR / "augment-identity-map.json"
@@ -42,7 +42,14 @@ def _write_json(path: Path, data: dict) -> None:
 
 
 def _cdragon_id(augment: dict) -> str:
-    return augment.get("augmentNameId") or augment.get("nameId") or ""
+    cdragon = augment.get("cdragon") if isinstance(augment.get("cdragon"), dict) else {}
+    return (
+        augment.get("augmentId")
+        or augment.get("augmentNameId")
+        or augment.get("nameId")
+        or cdragon.get("augmentNameId")
+        or ""
+    )
 
 
 def _cdragon_payload(augment: dict) -> dict:
@@ -56,9 +63,12 @@ def _cdragon_payload(augment: dict) -> dict:
 
 def _cdragon_variants(augment: dict) -> list[str]:
     name_id = _cdragon_id(augment)
+    cdragon = augment.get("cdragon") if isinstance(augment.get("cdragon"), dict) else {}
     variants = [
         name_id,
         name_id.removeprefix("ARAM_"),
+        cdragon.get("augmentNameId", ""),
+        cdragon.get("augmentNameId", "").removeprefix("ARAM_"),
         augment.get("name", ""),
         augment.get("slug", ""),
     ]
