@@ -1,0 +1,599 @@
+{
+  "schemaVersion": 1,
+  "identity_key": "CDragon augmentNameId",
+  "source": "lol_wiki",
+  "sourceUrl": "https://wiki.leagueoflegends.com/en-us/ARAM:_Mayhem/Augments",
+  "counts": {
+    "existence": 57,
+    "rarity": 2,
+    "availability": 14
+  },
+  "existence": [
+    {
+      "kind": "wiki_only",
+      "source": "lol_wiki",
+      "sourceKey": "Adaptive Ward",
+      "name": "Adaptive Ward",
+      "wikiRarity": "silver",
+      "status": "unmatched"
+    },
+    {
+      "kind": "wiki_only",
+      "source": "lol_wiki",
+      "sourceKey": "Don't Change the Channel",
+      "name": "Don't Change the Channel",
+      "wikiRarity": "silver",
+      "status": "unmatched"
+    },
+    {
+      "kind": "wiki_only",
+      "source": "lol_wiki",
+      "sourceKey": "Double Strike",
+      "name": "Double Strike",
+      "wikiRarity": "silver",
+      "status": "unmatched"
+    },
+    {
+      "kind": "wiki_only",
+      "source": "lol_wiki",
+      "sourceKey": "Forged By The Master",
+      "name": "Forged By The Master",
+      "wikiRarity": "silver",
+      "status": "unmatched"
+    },
+    {
+      "kind": "wiki_only",
+      "source": "lol_wiki",
+      "sourceKey": "From Downtown",
+      "name": "From Downtown",
+      "wikiRarity": "gold",
+      "status": "unmatched"
+    },
+    {
+      "kind": "wiki_only",
+      "source": "lol_wiki",
+      "sourceKey": "It's Go Time",
+      "name": "It's Go Time",
+      "wikiRarity": "silver",
+      "status": "unmatched"
+    },
+    {
+      "kind": "wiki_only",
+      "source": "lol_wiki",
+      "sourceKey": "Overloaded",
+      "name": "Overloaded",
+      "wikiRarity": "prismatic",
+      "status": "unmatched"
+    },
+    {
+      "kind": "wiki_only",
+      "source": "lol_wiki",
+      "sourceKey": "Pat On The Back",
+      "name": "Pat On The Back",
+      "wikiRarity": "gold",
+      "status": "unmatched"
+    },
+    {
+      "kind": "wiki_only",
+      "source": "lol_wiki",
+      "sourceKey": "Pin Cushion",
+      "name": "Pin Cushion",
+      "wikiRarity": "prismatic",
+      "status": "unmatched"
+    },
+    {
+      "kind": "wiki_only",
+      "source": "lol_wiki",
+      "sourceKey": "Porcupine",
+      "name": "Porcupine",
+      "wikiRarity": "gold",
+      "status": "unmatched"
+    },
+    {
+      "kind": "wiki_only",
+      "source": "lol_wiki",
+      "sourceKey": "Pursuit of Haste",
+      "name": "Pursuit of Haste",
+      "wikiRarity": "gold",
+      "status": "unmatched"
+    },
+    {
+      "kind": "wiki_only",
+      "source": "lol_wiki",
+      "sourceKey": "Pursuit of Power",
+      "name": "Pursuit of Power",
+      "wikiRarity": "gold",
+      "status": "unmatched"
+    },
+    {
+      "kind": "wiki_only",
+      "source": "lol_wiki",
+      "sourceKey": "Siphon",
+      "name": "Siphon",
+      "wikiRarity": "silver",
+      "status": "unmatched"
+    },
+    {
+      "kind": "wiki_only",
+      "source": "lol_wiki",
+      "sourceKey": "Squishy Slappy Grab",
+      "name": "Squishy Slappy Grab",
+      "wikiRarity": "prismatic",
+      "status": "unmatched"
+    },
+    {
+      "kind": "wiki_only",
+      "source": "lol_wiki",
+      "sourceKey": "Surge Field",
+      "name": "Surge Field",
+      "wikiRarity": "prismatic",
+      "status": "unmatched"
+    },
+    {
+      "kind": "wiki_only",
+      "source": "lol_wiki",
+      "sourceKey": "Terrain'd",
+      "name": "Terrain'd",
+      "wikiRarity": "gold",
+      "status": "unmatched"
+    },
+    {
+      "kind": "wiki_only",
+      "source": "lol_wiki",
+      "sourceKey": "Trusty Weapon",
+      "name": "Trusty Weapon",
+      "wikiRarity": "silver",
+      "status": "unmatched"
+    },
+    {
+      "kind": "wiki_only",
+      "source": "lol_wiki",
+      "sourceKey": "Warlock Juicebox",
+      "name": "Warlock Juicebox",
+      "wikiRarity": "gold",
+      "status": "unmatched"
+    },
+    {
+      "kind": "cdragon_only",
+      "source": "cdragon",
+      "augmentId": "ARAM_BuffBuddies",
+      "name": "Buff Buddies",
+      "rarity": "silver"
+    },
+    {
+      "kind": "cdragon_only",
+      "source": "cdragon",
+      "augmentId": "ARAM_Cerberus",
+      "name": "Cerberus",
+      "rarity": "prismatic"
+    },
+    {
+      "kind": "cdragon_only",
+      "source": "cdragon",
+      "augmentId": "ARAM_CrackOpenThatEgg",
+      "name": "Crack Open That Egg",
+      "rarity": "silver"
+    },
+    {
+      "kind": "cdragon_only",
+      "source": "cdragon",
+      "augmentId": "ARAM_DemonsDance",
+      "name": "Demon's Dance",
+      "rarity": "gold"
+    },
+    {
+      "kind": "cdragon_only",
+      "source": "cdragon",
+      "augmentId": "ARAM_Executioner",
+      "name": "Executioner",
+      "rarity": "gold"
+    },
+    {
+      "kind": "cdragon_only",
+      "source": "cdragon",
+      "augmentId": "ARAM_FeeltheBurn",
+      "name": "Feel the Burn",
+      "rarity": "prismatic"
+    },
+    {
+      "kind": "cdragon_only",
+      "source": "cdragon",
+      "augmentId": "ARAM_FrostWraith",
+      "name": "Frost Wraith",
+      "rarity": "silver"
+    },
+    {
+      "kind": "cdragon_only",
+      "source": "cdragon",
+      "augmentId": "ARAM_HolyFire",
+      "name": "Holy Fire",
+      "rarity": "gold"
+    },
+    {
+      "kind": "cdragon_only",
+      "source": "cdragon",
+      "augmentId": "ARAM_KeystoneConjurer",
+      "name": "Keystone Conjurer",
+      "rarity": "gold"
+    },
+    {
+      "kind": "cdragon_only",
+      "source": "cdragon",
+      "augmentId": "ARAM_LightningStrikes",
+      "name": "Lightning Strikes",
+      "rarity": "gold"
+    },
+    {
+      "kind": "cdragon_only",
+      "source": "cdragon",
+      "augmentId": "ARAM_MissingPingAugment",
+      "name": "???",
+      "rarity": "prismatic"
+    },
+    {
+      "kind": "cdragon_only",
+      "source": "cdragon",
+      "augmentId": "ARAM_OrbitalLaser_Active",
+      "name": "Orbital Laser",
+      "rarity": "prismatic"
+    },
+    {
+      "kind": "cdragon_only",
+      "source": "cdragon",
+      "augmentId": "ARAM_PoroKing",
+      "name": "Bounce of the Poro King",
+      "rarity": "prismatic"
+    },
+    {
+      "kind": "cdragon_only",
+      "source": "cdragon",
+      "augmentId": "ARAM_Poro_Blast",
+      "name": "Poro Blaster",
+      "rarity": "gold"
+    },
+    {
+      "kind": "cdragon_only",
+      "source": "cdragon",
+      "augmentId": "ARAM_Recall",
+      "name": "Cheating",
+      "rarity": "gold"
+    },
+    {
+      "kind": "cdragon_only",
+      "source": "cdragon",
+      "augmentId": "ARAM_Repulsor",
+      "name": "Repulsor",
+      "rarity": "silver"
+    },
+    {
+      "kind": "cdragon_only",
+      "source": "cdragon",
+      "augmentId": "ARAM_RestlessRestoration",
+      "name": "Restless Restoration",
+      "rarity": "gold"
+    },
+    {
+      "kind": "cdragon_only",
+      "source": "cdragon",
+      "augmentId": "ARAM_SelfDestruct",
+      "name": "Self Destruct",
+      "rarity": "silver"
+    },
+    {
+      "kind": "cdragon_only",
+      "source": "cdragon",
+      "augmentId": "ARAM_SlowAndSteady",
+      "name": "Slow And Steady",
+      "rarity": "gold"
+    },
+    {
+      "kind": "cdragon_only",
+      "source": "cdragon",
+      "augmentId": "ARAM_SpeedDemon",
+      "name": "Speed Demon",
+      "rarity": "silver"
+    },
+    {
+      "kind": "cdragon_only",
+      "source": "cdragon",
+      "augmentId": "ARAM_TheBrutalizer",
+      "name": "The Brutalizer",
+      "rarity": "silver"
+    },
+    {
+      "kind": "cdragon_only",
+      "source": "cdragon",
+      "augmentId": "ARAM_TrueshotProdigy",
+      "name": "Trueshot Prodigy",
+      "rarity": "prismatic"
+    },
+    {
+      "kind": "cdragon_only",
+      "source": "cdragon",
+      "augmentId": "ARAM_TwiceThrice",
+      "name": "Twice Thrice",
+      "rarity": "gold"
+    },
+    {
+      "kind": "cdragon_only",
+      "source": "cdragon",
+      "augmentId": "ARAM_Upgrade_Cutlass",
+      "name": "Upgrade Cutlass",
+      "rarity": "silver"
+    },
+    {
+      "kind": "cdragon_only",
+      "source": "cdragon",
+      "augmentId": "ARAM_Upgrade_Hubris",
+      "name": "Upgrade Hubris",
+      "rarity": "gold"
+    },
+    {
+      "kind": "cdragon_only",
+      "source": "cdragon",
+      "augmentId": "ARAM_VoidRift",
+      "name": "Void Rift",
+      "rarity": "prismatic"
+    },
+    {
+      "kind": "cdragon_only",
+      "source": "cdragon",
+      "augmentId": "ARAM_WatchOutGrapefruit",
+      "name": "Heads Up Cupcake!",
+      "rarity": "prismatic"
+    },
+    {
+      "kind": "cdragon_only",
+      "source": "cdragon",
+      "augmentId": "ARAM_WeightedPopoffs",
+      "name": "Weighted Popoffs",
+      "rarity": "silver"
+    },
+    {
+      "kind": "cdragon_only",
+      "source": "cdragon",
+      "augmentId": "BabyKitty",
+      "name": "I'm a Baby Kitty Where is Mama",
+      "rarity": "prismatic"
+    },
+    {
+      "kind": "cdragon_only",
+      "source": "cdragon",
+      "augmentId": "FullyAutomated",
+      "name": "Fully Automated",
+      "rarity": "silver"
+    },
+    {
+      "kind": "cdragon_only",
+      "source": "cdragon",
+      "augmentId": "Gash",
+      "name": "Gash",
+      "rarity": "prismatic"
+    },
+    {
+      "kind": "cdragon_only",
+      "source": "cdragon",
+      "augmentId": "GrandmasChiliOil",
+      "name": "Grandma's Chili Oil",
+      "rarity": "gold"
+    },
+    {
+      "kind": "cdragon_only",
+      "source": "cdragon",
+      "augmentId": "HatOnAHat",
+      "name": "Hat on a Hat",
+      "rarity": "silver"
+    },
+    {
+      "kind": "cdragon_only",
+      "source": "cdragon",
+      "augmentId": "LaserHeal",
+      "name": "Laser Heal",
+      "rarity": "prismatic"
+    },
+    {
+      "kind": "cdragon_only",
+      "source": "cdragon",
+      "augmentId": "RedEnvelopes",
+      "name": "Red Envelopes",
+      "rarity": "gold"
+    },
+    {
+      "kind": "cdragon_only",
+      "source": "cdragon",
+      "augmentId": "SnowballRoulette",
+      "name": "Snowball Roulette",
+      "rarity": "gold"
+    },
+    {
+      "kind": "cdragon_only",
+      "source": "cdragon",
+      "augmentId": "Upgrade_MikaelsBlessing",
+      "name": "Upgrade Mikael's Blessing",
+      "rarity": "prismatic"
+    },
+    {
+      "kind": "cdragon_only",
+      "source": "cdragon",
+      "augmentId": "Upgrade_Thornmail",
+      "name": "Upgrade Thornmail",
+      "rarity": "silver"
+    },
+    {
+      "kind": "cdragon_only",
+      "source": "cdragon",
+      "augmentId": "WindBeneathBlade",
+      "name": "Wind Beneath Blade",
+      "rarity": "silver"
+    }
+  ],
+  "rarity": [
+    {
+      "source": "lol_wiki",
+      "augmentId": "Bonk",
+      "name": "BONK!",
+      "wikiRarity": "silver",
+      "cdragonRarity": "gold",
+      "note": "CDragon remains rarity authority; this report is evidence only."
+    },
+    {
+      "source": "lol_wiki",
+      "augmentId": "ARAM_Terror",
+      "name": "Terror",
+      "wikiRarity": "silver",
+      "cdragonRarity": "gold",
+      "note": "CDragon remains rarity authority; this report is evidence only."
+    }
+  ],
+  "availability": [
+    {
+      "source": "lol_wiki",
+      "augmentId": "Adamant",
+      "name": "Adamant",
+      "signal": "wiki_availability_note_with_cdragon_registry_presence",
+      "wikiAvailabilityNotes": [
+        "This augment is currently disabled."
+      ],
+      "note": "Registry presence is definition only; Step 4 records wiki evidence and does not resolve availability."
+    },
+    {
+      "source": "lol_wiki",
+      "augmentId": "ARAM_ClownCollege",
+      "name": "Clown College",
+      "signal": "wiki_availability_note_with_cdragon_registry_presence",
+      "wikiAvailabilityNotes": [
+        "This augment is currently disabled."
+      ],
+      "note": "Registry presence is definition only; Step 4 records wiki evidence and does not resolve availability."
+    },
+    {
+      "source": "lol_wiki",
+      "augmentId": "ARAM_LittleDevil",
+      "name": "Devil on Your Shoulder",
+      "signal": "wiki_availability_note_with_cdragon_registry_presence",
+      "wikiAvailabilityNotes": [
+        "This augment is currently disabled."
+      ],
+      "note": "Registry presence is definition only; Step 4 records wiki evidence and does not resolve availability."
+    },
+    {
+      "source": "lol_wiki",
+      "augmentId": "ARAM_DrawYourSword",
+      "name": "Draw Your Sword",
+      "signal": "wiki_availability_note_with_cdragon_registry_presence",
+      "wikiAvailabilityNotes": [
+        "This augment is only available for ranged champions.",
+        "This augment is not offered if the champion has built Runaan's Hurricane."
+      ],
+      "note": "Registry presence is definition only; Step 4 records wiki evidence and does not resolve availability."
+    },
+    {
+      "source": "lol_wiki",
+      "augmentId": "Dropybara_Active",
+      "name": "Droppybara",
+      "signal": "wiki_availability_note_with_cdragon_registry_presence",
+      "wikiAvailabilityNotes": [
+        "This augment is only offered to up to 1 player on each team for a given game.",
+        "This augment is currently disabled."
+      ],
+      "note": "Registry presence is definition only; Step 4 records wiki evidence and does not resolve availability."
+    },
+    {
+      "source": "lol_wiki",
+      "augmentId": "ARAM_Earthwake",
+      "name": "Earthwake",
+      "signal": "wiki_availability_note_with_cdragon_registry_presence",
+      "wikiAvailabilityNotes": [
+        "This augment is only offered to up to 2 players on each team for a given game."
+      ],
+      "note": "Registry presence is definition only; Step 4 records wiki evidence and does not resolve availability."
+    },
+    {
+      "source": "lol_wiki",
+      "augmentId": "TrainOfTheDead",
+      "name": "Final City Transit",
+      "signal": "wiki_availability_note_with_cdragon_registry_presence",
+      "wikiAvailabilityNotes": [
+        "This augment is currently disabled."
+      ],
+      "note": "Registry presence is definition only; Step 4 records wiki evidence and does not resolve availability."
+    },
+    {
+      "source": "lol_wiki",
+      "augmentId": "Overextender",
+      "name": "Overextender",
+      "signal": "wiki_availability_note_with_cdragon_registry_presence",
+      "wikiAvailabilityNotes": [
+        "This augment is only available on the Butcher's Bridge map."
+      ],
+      "note": "Registry presence is definition only; Step 4 records wiki evidence and does not resolve availability."
+    },
+    {
+      "source": "lol_wiki",
+      "augmentId": "ARAM_Perseverance",
+      "name": "Perseverance",
+      "signal": "wiki_availability_note_with_cdragon_registry_presence",
+      "wikiAvailabilityNotes": [
+        "This augment is currently disabled.",
+        "This augment prevents the user from being offered the Vampirism augment."
+      ],
+      "note": "Registry presence is definition only; Step 4 records wiki evidence and does not resolve availability."
+    },
+    {
+      "source": "lol_wiki",
+      "augmentId": "ARAM_QuantumComputing",
+      "name": "Quantum Computing",
+      "signal": "wiki_availability_note_with_cdragon_registry_presence",
+      "wikiAvailabilityNotes": [
+        "This augment is currently disabled."
+      ],
+      "note": "Registry presence is definition only; Step 4 records wiki evidence and does not resolve availability."
+    },
+    {
+      "source": "lol_wiki",
+      "augmentId": "Quest_Sneakerhead",
+      "name": "Quest: Sneakerhead",
+      "signal": "wiki_availability_note_with_cdragon_registry_presence",
+      "wikiAvailabilityNotes": [
+        "This augment is currently disabled."
+      ],
+      "note": "Registry presence is definition only; Step 4 records wiki evidence and does not resolve availability."
+    },
+    {
+      "source": "lol_wiki",
+      "augmentId": "SnowballUpgrade",
+      "name": "Snowball Upgrade",
+      "signal": "wiki_availability_note_with_cdragon_registry_presence",
+      "wikiAvailabilityNotes": [
+        "This augment is currently disabled."
+      ],
+      "note": "Registry presence is definition only; Step 4 records wiki evidence and does not resolve availability."
+    },
+    {
+      "source": "lol_wiki",
+      "augmentId": "Vampirism",
+      "name": "Vampirism",
+      "signal": "wiki_availability_note_with_cdragon_registry_presence",
+      "wikiAvailabilityNotes": [
+        "This augment is currently disabled.",
+        "This augment prevents the user from being offered the Perseverance augment.",
+        "This augment is not offered if the champion has built Warmog's Armor."
+      ],
+      "note": "Registry presence is definition only; Step 4 records wiki evidence and does not resolve availability."
+    },
+    {
+      "source": "lol_wiki",
+      "augmentId": "VoidDash",
+      "name": "Void Dash",
+      "signal": "wiki_availability_note_with_cdragon_registry_presence",
+      "wikiAvailabilityNotes": [
+        "This augment is currently disabled."
+      ],
+      "note": "Registry presence is definition only; Step 4 records wiki evidence and does not resolve availability."
+    }
+  ],
+  "notes": [
+    "Contradictions are report-only for Claude review.",
+    "CDragon wins definition and rarity; availability is resolved in Step 5 from all signals."
+  ]
+}

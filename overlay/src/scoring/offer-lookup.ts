@@ -167,10 +167,11 @@ export function buildOverlayAugmentLookup(args: {
   const counts = rarityCounts(args.allAugments);
 
   for (const augment of args.allAugments) {
-    if (
-      augment.flags?.lifecycle === "removed" &&
-      augment.flags?.availability_override !== "bug_mechanism"
-    ) {
+    const availabilityStatus = augment.availability?.status;
+    const nonOfferable = availabilityStatus
+      ? availabilityStatus !== "confirmed_live"
+      : augment.flags?.lifecycle === "removed";
+    if (nonOfferable) {
       continue;
     }
 

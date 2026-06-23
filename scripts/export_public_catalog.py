@@ -52,6 +52,24 @@ def strip_keys(value, forbidden: set[str]):
     return value
 
 
+def build_public_augments(internal_dir: Path, forbidden: set[str]) -> dict:
+    augments = read_json(internal_dir / "augments.json")
+    pool_rules = read_json(internal_dir / "pool-rules.json")
+    lifecycle = pool_rules.get("lifecycle", {}) if isinstance(pool_rules, dict) else {}
+    removed_patches = lifecycle.get("removed", {}) if isinstance(lifecycle, dict) else {}
+    added_patches = lifecycle.get("added", {}) if isinstance(lifecycle, dict) else {}
+
+    for augment in augments.get("augments", []):
+        slug = augment.get("slug")
+        if not slug:
+            continue
+        patch = removed_patches.get(slug) or added_patches.get(slug)
+        if patch:
+            augment.setdefault("flags", {})["lifecycle_patch"] = patch
+
+    return strip_keys(augments, forbidden)
+
+
 PUBLIC_COMBO_TIERS = {"S"}
 MAX_TEASER_PER_CHAMPION = 3
 
@@ -78,6 +96,18 @@ def build_combo_teaser(combos: list[dict]) -> list[dict]:
     return teaser
 
 
+def build_public_hotfixes(hotfixes: dict) -> dict:
+    events = []
+    for event in hotfixes.get("events", []):
+        changes = [
+            change for change in event.get("changes", [])
+            if change.get("type") != "mechanism" and change.get("status") != "bug_mechanism"
+        ]
+        if changes:
+            events.append({**event, "changes": changes})
+    return {**hotfixes, "events": events}
+
+
 def export_public_catalog(
     internal_dir: Path = INTERNAL_DATA_DIR,
     public_dir: Path = PUBLIC_DATA_DIR,
@@ -91,11 +121,26 @@ def export_public_catalog(
         "oracleScore",
         "modelWeights",
         "scoreBreakdown",
+        "availability",
+        "signals",
+        "provenance",
+        "dataValues",
+        "calculations",
+        "wikiAvailabilityNotes",
+        "wikiFetchedAt",
+        "cdragon",
+        "cdragonIcon",
+        "cdragonRarity",
+        "canonicalTooltip",
+        "effectText",
+        "effectTextByLocale",
+        "definitionPlaceholder",
+        "legacyCatalogRow",
     }
-    write_sanitized_json(
-        internal_dir / "augments.json",
+    forbidden_augment_telemetry = forbidden_telemetry | {"wikiNotes"}
+    write_json(
         public_dir / "augments.json",
-        forbidden_telemetry,
+        build_public_augments(internal_dir, forbidden_augment_telemetry),
     )
     write_sanitized_json(
         internal_dir / "items.json",
@@ -119,12 +164,15 @@ def export_public_catalog(
     pool_rules = read_json(internal_dir / "pool-rules.json")
     for field in ("disabled", "mutually_exclusive", "item_exclusions", "ally_exclusions"):
         pool_rules[field] = []
+    pool_rules["lifecycle"] = {"added": {}, "removed": {}}
+    pool_rules.pop("availability", None)
+    pool_rules.pop("availability_overrides", None)
     write_json(public_dir / "pool-rules.json", pool_rules)
 
     # Hotfix feed (public-safe: localized names, rarity, change type only).
     hotfixes = internal_dir / "mayhem-hotfixes.json"
     if hotfixes.exists():
-        copy_json(hotfixes, public_dir / "mayhem-hotfixes.json")
+        write_json(public_dir / "mayhem-hotfixes.json", build_public_hotfixes(read_json(hotfixes)))
 
 
 def main() -> None:

@@ -1,0 +1,93 @@
+{
+  "version": 1,
+  "description": "Manual identity exceptions for Step 1 resolver. Keep this table minimal; each entry requires Claude review.",
+  "normalization": "lowercase, strip non-alphanumerics, strip leading Quest: prefix",
+  "registry_token_aliases": [
+    {
+      "token": "alonetime",
+      "augmentNameId": "Snowbomb",
+      "display": "Snowblast",
+      "reason": "Kiwi stringtable token is alonetime; current CDragon registry codename is Snowbomb and display name is Snowblast.",
+      "review_note": "Definition identity only; not availability evidence."
+    },
+    {
+      "token": "bloodmoney",
+      "augmentNameId": "BloodMoneyBurn",
+      "display": "Combusting Interest",
+      "reason": "Kiwi stringtable token is bloodmoney; current CDragon registry codename is BloodMoneyBurn and display name is Combusting Interest.",
+      "review_note": "Definition identity only; not availability evidence."
+    },
+    {
+      "token": "burnbabyburn",
+      "augmentNameId": "PressureCooker",
+      "display": "Pressure Cooker",
+      "reason": "Kiwi stringtable token is burnbabyburn; current CDragon registry codename is PressureCooker and display name is Pressure Cooker.",
+      "review_note": "Definition identity only; not availability evidence."
+    },
+    {
+      "token": "dimensionshift",
+      "augmentNameId": "DimensionShift_Active",
+      "display": "Dimension Shift",
+      "reason": "Kiwi stringtable token is dimensionshift; current CDragon registry codename is DimensionShift_Active and display name is Dimension Shift.",
+      "review_note": "Definition identity only; not availability evidence."
+    },
+    {
+      "token": "ouchmycoins",
+      "augmentNameId": "ARAM_YowchMyCoins",
+      "display": "Yowch, My Coins!",
+      "reason": "Kiwi stringtable token is ouchmycoins; current CDragon registry codename is ARAM_YowchMyCoins and display name is Yowch, My Coins!.",
+      "review_note": "Definition identity only; not availability evidence."
+    },
+    {
+      "token": "poroblaster",
+      "augmentNameId": "ARAM_Poro_Blast",
+      "display": "Poro Blaster",
+      "reason": "Kiwi stringtable token is poroblaster; current CDragon registry codename is ARAM_Poro_Blast and display name is Poro Blaster.",
+      "review_note": "Definition identity only; not availability evidence."
+    },
+    {
+      "token": "porocharge",
+      "augmentNameId": "PoroCharge_Active",
+      "display": "Poro Stampede",
+      "reason": "Kiwi stringtable token is porocharge; current CDragon registry codename is PoroCharge_Active and display name is Poro Stampede.",
+      "review_note": "Definition identity only; not availability evidence."
+    },
+    {
+      "token": "setautocast",
+      "augmentNameId": "FullyAutomated",
+      "display": "Fully Automated",
+      "reason": "Kiwi stringtable token is setautocast; current CDragon registry codename is FullyAutomated and display name is Fully Automated.",
+      "review_note": "Definition identity only; not availability evidence."
+    },
+    {
+      "token": "vanguard",
+      "augmentNameId": "ARAM_Quickstep",
+      "display": "Quickstep",
+      "reason": "Kiwi stringtable token is vanguard; current CDragon registry codename is ARAM_Quickstep and display name is Quickstep.",
+      "review_note": "Definition identity only; not availability evidence."
+    },
+    {
+      "token": "weeewooweewoo",
+      "augmentNameId": "ARAM_WeeWooWeeWoo",
+      "display": "Wee Woo Wee Woo",
+      "reason": "Kiwi stringtable token has an extra e; current CDragon registry codename is ARAM_WeeWooWeeWoo and display name is Wee Woo Wee Woo.",
+      "review_note": "Definition identity only; not availability evidence."
+    }
+  ],
+  "aliases": [
+    {
+      "augmentNameId": "ARAM_Quest_VoidImmolation",
+      "aliases": [
+        "Void Immolation",
+        "void-immolation"
+      ],
+      "applies_to": [
+        "internal_augments",
+        "wiki",
+        "arammayhem_win_rate"
+      ],
+      "reason": "The committed internal/wiki-facing row is named for the rewarded item, while CDragon's canonical augment display name is Icathia's Fall.",
+      "review_note": "Do not use this alias as availability evidence; it only maps identity to CDragon augmentNameId."
+    }
+  ]
+}

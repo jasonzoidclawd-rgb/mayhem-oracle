@@ -83,30 +83,31 @@ function median(values: number[]): number {
     : sorted[middle];
 }
 
+function isOfferableForPrior(
+  augment: DecisionAugment,
+  data: DecisionEngineData,
+): boolean {
+  const slug = normalize(augment.slug);
+  const availabilityStatus = augment.availability?.status;
+  if (availabilityStatus) return availabilityStatus === "confirmed_live";
+
+  const disabled = new Set(data.poolRules.disabled.map(normalize));
+  const removed = new Set(Object.keys(data.poolRules.lifecycle.removed).map(normalize));
+  return !disabled.has(slug) && !removed.has(slug) && augment.flags?.lifecycle !== "removed";
+}
+
 function rarityPrior(
   context: DecisionContext,
   data: DecisionEngineData,
   modelConfig: DecisionModelConfig,
 ): number {
-  const disabled = new Set(data.poolRules.disabled.map(normalize));
-  const removed = new Set(Object.keys(data.poolRules.lifecycle.removed).map(normalize));
-  const observedLive = new Set(
-    Object.keys(data.poolRules.availability_overrides?.observed_live ?? {}).map(normalize),
-  );
   const observed = data.augments
     .filter(
-      (augment) => {
-        const slug = normalize(augment.slug);
-        const isObservedLive = observedLive.has(slug);
-        return (
-          augment.rarity === context.screenRarity &&
-          !disabled.has(slug) &&
-          (!removed.has(slug) || isObservedLive) &&
-          (augment.flags?.lifecycle !== "removed" || isObservedLive) &&
-          typeof augment.win_rate === "number" &&
-          Number.isFinite(augment.win_rate)
-        );
-      },
+      (augment) =>
+        augment.rarity === context.screenRarity &&
+        isOfferableForPrior(augment, data) &&
+        typeof augment.win_rate === "number" &&
+        Number.isFinite(augment.win_rate),
     )
     .map((augment) => augment.win_rate as number);
   const [minimum, maximum] = modelConfig.priorClamp;

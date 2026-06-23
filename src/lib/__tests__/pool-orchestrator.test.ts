@@ -195,34 +195,41 @@ describe("pool orchestrator — real-data behavior", () => {
   });
 });
 
-// ── 26.12 lifecycle wiring (Session 4) ───────────────────────────────────────
-// Uses the REAL generated pool-rules.json: scraped flags.lifecycle must reach
-// Layer 1 so removed augments are verifiably excluded end-to-end.
+// ── 26.12 availability wiring ────────────────────────────────────────────────
+// Uses the REAL generated pool-rules.json: resolved availability must reach
+// Layer 1 so non-offerable augments are excluded with auditable reasons.
 
-describe("pool orchestrator — 26.12 lifecycle wiring", () => {
-  test("26.12-removed augments are excluded with reason `removed` under real pool rules", () => {
-    const removed = augmentsData.augments
-      .filter((a) => a.slug !== "jeweled-gauntlet")
-      .filter((a) => a.flags.lifecycle === "removed")
-      .slice(0, 5);
-    expect(removed.length).toBe(5);
+describe("pool orchestrator — 26.12 availability wiring", () => {
+  test("non-offerable augments are excluded with their resolved availability reason", () => {
+    const expectedReasons = new Map([
+      ["slow-and-steady", "removed"],
+      ["clown-college", "disabled"],
+      ["adamant", "disabled"],
+      ["warlock-juicebox", "unverified_legacy"],
+    ]);
+    const nonOfferable = augmentsData.augments.filter((augment) => expectedReasons.has(augment.slug));
+    expect(nonOfferable.length).toBe(expectedReasons.size);
 
     const result = getChampionAugmentPool({
       championSlug: "garen",
-      augments: removed as unknown as PoolAugmentInput[],
+      augments: nonOfferable as unknown as PoolAugmentInput[],
       championKitTags: ["attack", "tank"] as ChampionTag[],
       poolRules: poolRulesData as unknown as PoolRules,
     });
 
-    for (const aug of removed) {
+    for (const aug of nonOfferable) {
       const exclusion = result.excluded.find((e) => e.slug === aug.slug);
-      expect(exclusion?.reason, `${aug.slug} should be excluded as removed`).toBe("removed");
+      expect(exclusion?.reason, `${aug.slug} should be excluded by availability`).toBe(
+        expectedReasons.get(aug.slug),
+      );
     }
   });
 
-  test("observed-live mechanism overrides stale removed lifecycle for Jeweled Gauntlet", () => {
+  test("confirmed-live Jeweled Gauntlet is offerable without an observed-live override", () => {
     const jeweled = augmentsData.augments.find((a) => a.slug === "jeweled-gauntlet");
-    expect(jeweled?.flags.lifecycle).toBe("removed");
+    expect(jeweled?.availability?.status).toBe("confirmed_live");
+    expect(jeweled?.flags.lifecycle).toBe("active");
+    expect((poolRulesData as { availability_overrides?: unknown }).availability_overrides).toBeUndefined();
 
     const result = getChampionAugmentPool({
       championSlug: "brand",

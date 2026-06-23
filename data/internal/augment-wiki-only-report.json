@@ -1,0 +1,248 @@
+{
+  "schemaVersion": 1,
+  "identity_key": "CDragon augmentNameId",
+  "source": "lol_wiki",
+  "sourceUrl": "https://wiki.leagueoflegends.com/en-us/ARAM:_Mayhem/Augments",
+  "counts": {
+    "wikiOnlyRows": 18
+  },
+  "wikiOnly": [
+    {
+      "sourceKey": "Adaptive Ward",
+      "name": "Adaptive Ward",
+      "status": "unmatched",
+      "tokens": [
+        {
+          "field": "sourceKey",
+          "value": "Adaptive Ward",
+          "token": "adaptiveward"
+        }
+      ],
+      "wikiRarity": "silver"
+    },
+    {
+      "sourceKey": "Don't Change the Channel",
+      "name": "Don't Change the Channel",
+      "status": "unmatched",
+      "tokens": [
+        {
+          "field": "sourceKey",
+          "value": "Don't Change the Channel",
+          "token": "dontchangethechannel"
+        }
+      ],
+      "wikiRarity": "silver"
+    },
+    {
+      "sourceKey": "Double Strike",
+      "name": "Double Strike",
+      "status": "unmatched",
+      "tokens": [
+        {
+          "field": "sourceKey",
+          "value": "Double Strike",
+          "token": "doublestrike"
+        }
+      ],
+      "wikiRarity": "silver"
+    },
+    {
+      "sourceKey": "Forged By The Master",
+      "name": "Forged By The Master",
+      "status": "unmatched",
+      "tokens": [
+        {
+          "field": "sourceKey",
+          "value": "Forged By The Master",
+          "token": "forgedbythemaster"
+        }
+      ],
+      "wikiRarity": "silver"
+    },
+    {
+      "sourceKey": "From Downtown",
+      "name": "From Downtown",
+      "status": "unmatched",
+      "tokens": [
+        {
+          "field": "sourceKey",
+          "value": "From Downtown",
+          "token": "fromdowntown"
+        }
+      ],
+      "wikiRarity": "gold"
+    },
+    {
+      "sourceKey": "It's Go Time",
+      "name": "It's Go Time",
+      "status": "unmatched",
+      "tokens": [
+        {
+          "field": "sourceKey",
+          "value": "It's Go Time",
+          "token": "itsgotime"
+        }
+      ],
+      "wikiRarity": "silver"
+    },
+    {
+      "sourceKey": "Overloaded",
+      "name": "Overloaded",
+      "status": "unmatched",
+      "tokens": [
+        {
+          "field": "sourceKey",
+          "value": "Overloaded",
+          "token": "overloaded"
+        }
+      ],
+      "wikiRarity": "prismatic"
+    },
+    {
+      "sourceKey": "Pat On The Back",
+      "name": "Pat On The Back",
+      "status": "unmatched",
+      "tokens": [
+        {
+          "field": "sourceKey",
+          "value": "Pat On The Back",
+          "token": "patontheback"
+        }
+      ],
+      "wikiRarity": "gold"
+    },
+    {
+      "sourceKey": "Pin Cushion",
+      "name": "Pin Cushion",
+      "status": "unmatched",
+      "tokens": [
+        {
+          "field": "sourceKey",
+          "value": "Pin Cushion",
+          "token": "pincushion"
+        }
+      ],
+      "wikiRarity": "prismatic"
+    },
+    {
+      "sourceKey": "Porcupine",
+      "name": "Porcupine",
+      "status": "unmatched",
+      "tokens": [
+        {
+          "field": "sourceKey",
+          "value": "Porcupine",
+          "token": "porcupine"
+        }
+      ],
+      "wikiRarity": "gold"
+    },
+    {
+      "sourceKey": "Pursuit of Haste",
+      "name": "Pursuit of Haste",
+      "status": "unmatched",
+      "tokens": [
+        {
+          "field": "sourceKey",
+          "value": "Pursuit of Haste",
+          "token": "pursuitofhaste"
+        }
+      ],
+      "wikiRarity": "gold"
+    },
+    {
+      "sourceKey": "Pursuit of Power",
+      "name": "Pursuit of Power",
+      "status": "unmatched",
+      "tokens": [
+        {
+          "field": "sourceKey",
+          "value": "Pursuit of Power",
+          "token": "pursuitofpower"
+        }
+      ],
+      "wikiRarity": "gold"
+    },
+    {
+      "sourceKey": "Siphon",
+      "name": "Siphon",
+      "status": "unmatched",
+      "tokens": [
+        {
+          "field": "sourceKey",
+          "value": "Siphon",
+          "token": "siphon"
+        }
+      ],
+      "wikiRarity": "silver"
+    },
+    {
+      "sourceKey": "Squishy Slappy Grab",
+      "name": "Squishy Slappy Grab",
+      "status": "unmatched",
+      "tokens": [
+        {
+          "field": "sourceKey",
+          "value": "Squishy Slappy Grab",
+          "token": "squishyslappygrab"
+        }
+      ],
+      "wikiRarity": "prismatic"
+    },
+    {
+      "sourceKey": "Surge Field",
+      "name": "Surge Field",
+      "status": "unmatched",
+      "tokens": [
+        {
+          "field": "sourceKey",
+          "value": "Surge Field",
+          "token": "surgefield"
+        }
+      ],
+      "wikiRarity": "prismatic"
+    },
+    {
+      "sourceKey": "Terrain'd",
+      "name": "Terrain'd",
+      "status": "unmatched",
+      "tokens": [
+        {
+          "field": "sourceKey",
+          "value": "Terrain'd",
+          "token": "terraind"
+        }
+      ],
+      "wikiRarity": "gold"
+    },
+    {
+      "sourceKey": "Trusty Weapon",
+      "name": "Trusty Weapon",
+      "status": "unmatched",
+      "tokens": [
+        {
+          "field": "sourceKey",
+          "value": "Trusty Weapon",
+          "token": "trustyweapon"
+        }
+      ],
+      "wikiRarity": "silver"
+    },
+    {
+      "sourceKey": "Warlock Juicebox",
+      "name": "Warlock Juicebox",
+      "status": "unmatched",
+      "tokens": [
+        {
+          "field": "sourceKey",
+          "value": "Warlock Juicebox",
+          "token": "warlockjuicebox"
+        }
+      ],
+      "wikiRarity": "gold"
+    }
+  ],
+  "notes": [
+    "Wiki-only rows are report-only and are not added to the CDragon-keyed feed."
+  ]
+}

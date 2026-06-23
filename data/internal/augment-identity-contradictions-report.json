@@ -1,0 +1,1154 @@
+{
+  "identity_key": "CDragon augmentNameId",
+  "counts": {
+    "identity": 0,
+    "existence": 48,
+    "rarity": 1,
+    "availability": 106
+  },
+  "identity": [],
+  "existence": [
+    {
+      "kind": "cdragon_only",
+      "source": "cdragon",
+      "augmentNameId": "FullyAutomated",
+      "name": "Fully Automated",
+      "rarity": "silver"
+    },
+    {
+      "kind": "cdragon_only",
+      "source": "cdragon",
+      "augmentNameId": "Quest_Sneakerhead",
+      "name": "Sneakerhead",
+      "rarity": "prismatic"
+    },
+    {
+      "kind": "cdragon_only",
+      "source": "cdragon",
+      "augmentNameId": "ReEnergize",
+      "name": "ReEnergize",
+      "rarity": "silver"
+    },
+    {
+      "kind": "cdragon_only",
+      "source": "cdragon",
+      "augmentNameId": "SkipTheBasics",
+      "name": "Ult Bot",
+      "rarity": "prismatic"
+    },
+    {
+      "kind": "cdragon_only",
+      "source": "cdragon",
+      "augmentNameId": "SnapBack",
+      "name": "Snap Back",
+      "rarity": "gold"
+    },
+    {
+      "kind": "cdragon_only",
+      "source": "cdragon",
+      "augmentNameId": "VeilOfWarding",
+      "name": "Veil of Warding",
+      "rarity": "silver"
+    },
+    {
+      "kind": "cdragon_only",
+      "source": "cdragon",
+      "augmentNameId": "VirtuousCycle",
+      "name": "Virtuous Cycle",
+      "rarity": "silver"
+    },
+    {
+      "kind": "source_only",
+      "source": "internal_augments",
+      "sourceKey": "warlock-juicebox",
+      "name": "Warlock Juicebox",
+      "rarity": "gold",
+      "status": "unmatched"
+    },
+    {
+      "kind": "source_only",
+      "source": "internal_augments",
+      "sourceKey": "pursuit-of-haste",
+      "name": "Pursuit of Haste",
+      "rarity": "gold",
+      "status": "unmatched"
+    },
+    {
+      "kind": "source_only",
+      "source": "internal_augments",
+      "sourceKey": "forged-by-the-master",
+      "name": "Forged By The Master",
+      "rarity": "silver",
+      "status": "unmatched"
+    },
+    {
+      "kind": "source_only",
+      "source": "internal_augments",
+      "sourceKey": "siphon",
+      "name": "Siphon",
+      "rarity": "silver",
+      "status": "unmatched"
+    },
+    {
+      "kind": "source_only",
+      "source": "internal_augments",
+      "sourceKey": "terraind",
+      "name": "Terrain'd",
+      "rarity": "gold",
+      "status": "unmatched"
+    },
+    {
+      "kind": "source_only",
+      "source": "internal_augments",
+      "sourceKey": "from-downtown",
+      "name": "From Downtown",
+      "rarity": "gold",
+      "status": "unmatched"
+    },
+    {
+      "kind": "source_only",
+      "source": "internal_augments",
+      "sourceKey": "dont-change-the-channel",
+      "name": "Don't Change the Channel",
+      "rarity": "silver",
+      "status": "unmatched"
+    },
+    {
+      "kind": "source_only",
+      "source": "internal_augments",
+      "sourceKey": "its-go-time",
+      "name": "It's Go Time",
+      "rarity": "silver",
+      "status": "unmatched"
+    },
+    {
+      "kind": "source_only",
+      "source": "internal_augments",
+      "sourceKey": "trusty-weapon",
+      "name": "Trusty Weapon",
+      "rarity": "silver",
+      "status": "unmatched"
+    },
+    {
+      "kind": "source_only",
+      "source": "internal_augments",
+      "sourceKey": "overloaded",
+      "name": "Overloaded",
+      "rarity": "prismatic",
+      "status": "unmatched"
+    },
+    {
+      "kind": "source_only",
+      "source": "internal_augments",
+      "sourceKey": "adaptive-ward",
+      "name": "Adaptive Ward",
+      "rarity": "silver",
+      "status": "unmatched"
+    },
+    {
+      "kind": "source_only",
+      "source": "internal_augments",
+      "sourceKey": "porcupine",
+      "name": "Porcupine",
+      "rarity": "gold",
+      "status": "unmatched"
+    },
+    {
+      "kind": "source_only",
+      "source": "internal_augments",
+      "sourceKey": "pin-cushion",
+      "name": "Pin Cushion",
+      "rarity": "prismatic",
+      "status": "unmatched"
+    },
+    {
+      "kind": "source_only",
+      "source": "internal_augments",
+      "sourceKey": "surge-field",
+      "name": "Surge Field",
+      "rarity": "prismatic",
+      "status": "unmatched"
+    },
+    {
+      "kind": "source_only",
+      "source": "internal_augments",
+      "sourceKey": "mystery-augment",
+      "name": "???",
+      "rarity": "prismatic",
+      "status": "unmatched"
+    },
+    {
+      "kind": "source_only",
+      "source": "internal_augments",
+      "sourceKey": "one-trick-pony",
+      "name": "One Trick Pony",
+      "rarity": "prismatic",
+      "status": "unmatched"
+    },
+    {
+      "kind": "source_only",
+      "source": "internal_augments",
+      "sourceKey": "pat-on-the-back",
+      "name": "Pat On The Back",
+      "rarity": "gold",
+      "status": "unmatched"
+    },
+    {
+      "kind": "source_only",
+      "source": "internal_augments",
+      "sourceKey": "pursuit-of-power",
+      "name": "Pursuit of Power",
+      "rarity": "silver",
+      "status": "unmatched"
+    },
+    {
+      "kind": "source_only",
+      "source": "internal_augments",
+      "sourceKey": "support-main",
+      "name": "Quest: Support Main",
+      "rarity": "silver",
+      "status": "unmatched"
+    },
+    {
+      "kind": "source_only",
+      "source": "internal_augments",
+      "sourceKey": "squishy-slappy-grab",
+      "name": "Squishy Slappy Grab",
+      "rarity": "prismatic",
+      "status": "unmatched"
+    },
+    {
+      "kind": "source_only",
+      "source": "internal_augments",
+      "sourceKey": "trailblazer",
+      "name": "Trailblazer",
+      "rarity": "gold",
+      "status": "unmatched"
+    },
+    {
+      "kind": "source_only",
+      "source": "wiki",
+      "sourceKey": "Warlock Juicebox",
+      "name": "Warlock Juicebox",
+      "rarity": "",
+      "status": "unmatched"
+    },
+    {
+      "kind": "source_only",
+      "source": "wiki",
+      "sourceKey": "Pursuit of Haste",
+      "name": "Pursuit of Haste",
+      "rarity": "",
+      "status": "unmatched"
+    },
+    {
+      "kind": "source_only",
+      "source": "wiki",
+      "sourceKey": "Forged By The Master",
+      "name": "Forged By The Master",
+      "rarity": "",
+      "status": "unmatched"
+    },
+    {
+      "kind": "source_only",
+      "source": "wiki",
+      "sourceKey": "Siphon",
+      "name": "Siphon",
+      "rarity": "",
+      "status": "unmatched"
+    },
+    {
+      "kind": "source_only",
+      "source": "wiki",
+      "sourceKey": "Terrain'd",
+      "name": "Terrain'd",
+      "rarity": "",
+      "status": "unmatched"
+    },
+    {
+      "kind": "source_only",
+      "source": "wiki",
+      "sourceKey": "From Downtown",
+      "name": "From Downtown",
+      "rarity": "",
+      "status": "unmatched"
+    },
+    {
+      "kind": "source_only",
+      "source": "wiki",
+      "sourceKey": "Don't Change the Channel",
+      "name": "Don't Change the Channel",
+      "rarity": "",
+      "status": "unmatched"
+    },
+    {
+      "kind": "source_only",
+      "source": "wiki",
+      "sourceKey": "It's Go Time",
+      "name": "It's Go Time",
+      "rarity": "",
+      "status": "unmatched"
+    },
+    {
+      "kind": "source_only",
+      "source": "wiki",
+      "sourceKey": "Trusty Weapon",
+      "name": "Trusty Weapon",
+      "rarity": "",
+      "status": "unmatched"
+    },
+    {
+      "kind": "source_only",
+      "source": "wiki",
+      "sourceKey": "Overloaded",
+      "name": "Overloaded",
+      "rarity": "",
+      "status": "unmatched"
+    },
+    {
+      "kind": "source_only",
+      "source": "wiki",
+      "sourceKey": "Adaptive Ward",
+      "name": "Adaptive Ward",
+      "rarity": "",
+      "status": "unmatched"
+    },
+    {
+      "kind": "source_only",
+      "source": "wiki",
+      "sourceKey": "Porcupine",
+      "name": "Porcupine",
+      "rarity": "",
+      "status": "unmatched"
+    },
+    {
+      "kind": "source_only",
+      "source": "wiki",
+      "sourceKey": "Pin Cushion",
+      "name": "Pin Cushion",
+      "rarity": "",
+      "status": "unmatched"
+    },
+    {
+      "kind": "source_only",
+      "source": "wiki",
+      "sourceKey": "Surge Field",
+      "name": "Surge Field",
+      "rarity": "",
+      "status": "unmatched"
+    },
+    {
+      "kind": "source_only",
+      "source": "wiki",
+      "sourceKey": "???",
+      "name": "???",
+      "rarity": "",
+      "status": "unmatched"
+    },
+    {
+      "kind": "source_only",
+      "source": "wiki",
+      "sourceKey": "One Trick Pony",
+      "name": "One Trick Pony",
+      "rarity": "",
+      "status": "unmatched"
+    },
+    {
+      "kind": "source_only",
+      "source": "wiki",
+      "sourceKey": "Pat On The Back",
+      "name": "Pat On The Back",
+      "rarity": "",
+      "status": "unmatched"
+    },
+    {
+      "kind": "source_only",
+      "source": "wiki",
+      "sourceKey": "Pursuit of Power",
+      "name": "Pursuit of Power",
+      "rarity": "",
+      "status": "unmatched"
+    },
+    {
+      "kind": "source_only",
+      "source": "wiki",
+      "sourceKey": "Quest: Support Main",
+      "name": "Quest: Support Main",
+      "rarity": "",
+      "status": "unmatched"
+    },
+    {
+      "kind": "source_only",
+      "source": "wiki",
+      "sourceKey": "Squishy Slappy Grab",
+      "name": "Squishy Slappy Grab",
+      "rarity": "",
+      "status": "unmatched"
+    }
+  ],
+  "rarity": [
+    {
+      "source": "internal_augments",
+      "augmentNameId": "RedEnvelopes",
+      "name": "Red Envelopes",
+      "sourceRarity": "prismatic",
+      "cdragonRarity": "gold"
+    }
+  ],
+  "availability": [
+    {
+      "source": "internal_augments",
+      "augmentNameId": "InfiniteRecursion",
+      "name": "Infinite Recursion",
+      "signal": "internal_removed_but_cdragon_registry_present",
+      "note": "Registry presence is definition only; this is reported, not resolved."
+    },
+    {
+      "source": "internal_augments",
+      "augmentNameId": "PressureCooker",
+      "name": "Pressure Cooker",
+      "signal": "internal_removed_but_cdragon_registry_present",
+      "note": "Registry presence is definition only; this is reported, not resolved."
+    },
+    {
+      "source": "internal_augments",
+      "augmentNameId": "BloodMoneyBurn",
+      "name": "Combusting Interest",
+      "signal": "internal_removed_but_cdragon_registry_present",
+      "note": "Registry presence is definition only; this is reported, not resolved."
+    },
+    {
+      "source": "internal_augments",
+      "augmentNameId": "Twinfire",
+      "name": "Twin Fire",
+      "signal": "internal_removed_but_cdragon_registry_present",
+      "note": "Registry presence is definition only; this is reported, not resolved."
+    },
+    {
+      "source": "internal_augments",
+      "name": "Pursuit of Haste",
+      "slug": "pursuit-of-haste",
+      "signal": "internal_active_but_cdragon_missing",
+      "note": "Do not infer live availability from this internal lifecycle flag."
+    },
+    {
+      "source": "internal_augments",
+      "augmentNameId": "Sonata",
+      "name": "Sonata",
+      "signal": "internal_removed_but_cdragon_registry_present",
+      "note": "Registry presence is definition only; this is reported, not resolved."
+    },
+    {
+      "source": "internal_augments",
+      "augmentNameId": "EscapePlan",
+      "name": "Escape Plan",
+      "signal": "internal_removed_but_cdragon_registry_present",
+      "note": "Registry presence is definition only; this is reported, not resolved."
+    },
+    {
+      "source": "internal_augments",
+      "augmentNameId": "ShrinkEngine",
+      "name": "Shrink Engine",
+      "signal": "internal_removed_but_cdragon_registry_present",
+      "note": "Registry presence is definition only; this is reported, not resolved."
+    },
+    {
+      "source": "internal_augments",
+      "augmentNameId": "BurstingTeeth",
+      "name": "Tooth Fairy",
+      "signal": "internal_removed_but_cdragon_registry_present",
+      "note": "Registry presence is definition only; this is reported, not resolved."
+    },
+    {
+      "source": "internal_augments",
+      "augmentNameId": "GrowthSpurt",
+      "name": "Growth Spurt",
+      "signal": "internal_removed_but_cdragon_registry_present",
+      "note": "Registry presence is definition only; this is reported, not resolved."
+    },
+    {
+      "source": "internal_augments",
+      "augmentNameId": "LittleExtraHelp",
+      "name": "Lil' Extra Help",
+      "signal": "internal_removed_but_cdragon_registry_present",
+      "note": "Registry presence is definition only; this is reported, not resolved."
+    },
+    {
+      "source": "internal_augments",
+      "augmentNameId": "Donation",
+      "name": "Donation",
+      "signal": "internal_removed_but_cdragon_registry_present",
+      "note": "Registry presence is definition only; this is reported, not resolved."
+    },
+    {
+      "source": "internal_augments",
+      "name": "Siphon",
+      "slug": "siphon",
+      "signal": "internal_active_but_cdragon_missing",
+      "note": "Do not infer live availability from this internal lifecycle flag."
+    },
+    {
+      "source": "internal_augments",
+      "augmentNameId": "SwiftAndSafe",
+      "name": "Swift and Safe",
+      "signal": "internal_removed_but_cdragon_registry_present",
+      "note": "Registry presence is definition only; this is reported, not resolved."
+    },
+    {
+      "source": "internal_augments",
+      "augmentNameId": "SoulEater",
+      "name": "Soul Eater",
+      "signal": "internal_removed_but_cdragon_registry_present",
+      "note": "Registry presence is definition only; this is reported, not resolved."
+    },
+    {
+      "source": "internal_augments",
+      "augmentNameId": "FinalForm",
+      "name": "Final Form",
+      "signal": "internal_removed_but_cdragon_registry_present",
+      "note": "Registry presence is definition only; this is reported, not resolved."
+    },
+    {
+      "source": "internal_augments",
+      "name": "From Downtown",
+      "slug": "from-downtown",
+      "signal": "internal_active_but_cdragon_missing",
+      "note": "Do not infer live availability from this internal lifecycle flag."
+    },
+    {
+      "source": "internal_augments",
+      "augmentNameId": "Bonk",
+      "name": "BONK!",
+      "signal": "internal_removed_but_cdragon_registry_present",
+      "note": "Registry presence is definition only; this is reported, not resolved."
+    },
+    {
+      "source": "internal_augments",
+      "augmentNameId": "TitansPulse",
+      "name": "Stay Resolute",
+      "signal": "internal_removed_but_cdragon_registry_present",
+      "note": "Registry presence is definition only; this is reported, not resolved."
+    },
+    {
+      "source": "internal_augments",
+      "augmentNameId": "HandOfBaron",
+      "name": "Hand of Baron",
+      "signal": "internal_removed_but_cdragon_registry_present",
+      "note": "Registry presence is definition only; this is reported, not resolved."
+    },
+    {
+      "source": "internal_augments",
+      "augmentNameId": "KingMe",
+      "name": "King Me",
+      "signal": "internal_removed_but_cdragon_registry_present",
+      "note": "Registry presence is definition only; this is reported, not resolved."
+    },
+    {
+      "source": "internal_augments",
+      "augmentNameId": "BiggestSnowballEver",
+      "name": "Biggest Snowball Ever",
+      "signal": "internal_removed_but_cdragon_registry_present",
+      "note": "Registry presence is definition only; this is reported, not resolved."
+    },
+    {
+      "source": "internal_augments",
+      "augmentNameId": "Overextender",
+      "name": "Overextender",
+      "signal": "internal_removed_but_cdragon_registry_present",
+      "note": "Registry presence is definition only; this is reported, not resolved."
+    },
+    {
+      "source": "internal_augments",
+      "augmentNameId": "DarkWind",
+      "name": "Ravenous Bind",
+      "signal": "internal_removed_but_cdragon_registry_present",
+      "note": "Registry presence is definition only; this is reported, not resolved."
+    },
+    {
+      "source": "internal_augments",
+      "augmentNameId": "Goldrend",
+      "name": "Goldrend",
+      "signal": "internal_removed_but_cdragon_registry_present",
+      "note": "Registry presence is definition only; this is reported, not resolved."
+    },
+    {
+      "source": "internal_augments",
+      "augmentNameId": "HextechSoul",
+      "name": "Hextech Soul",
+      "signal": "internal_removed_but_cdragon_registry_present",
+      "note": "Registry presence is definition only; this is reported, not resolved."
+    },
+    {
+      "source": "internal_augments",
+      "augmentNameId": "EndlessDecimation",
+      "name": "Endless Decimation",
+      "signal": "internal_removed_but_cdragon_registry_present",
+      "note": "Registry presence is definition only; this is reported, not resolved."
+    },
+    {
+      "source": "internal_augments",
+      "augmentNameId": "UltimateAwakening",
+      "name": "Ultimate Awakening",
+      "signal": "internal_removed_but_cdragon_registry_present",
+      "note": "Registry presence is definition only; this is reported, not resolved."
+    },
+    {
+      "source": "internal_augments",
+      "augmentNameId": "OminousPact",
+      "name": "Ominous Pact",
+      "signal": "internal_removed_but_cdragon_registry_present",
+      "note": "Registry presence is definition only; this is reported, not resolved."
+    },
+    {
+      "source": "internal_augments",
+      "augmentNameId": "DoubleDefense",
+      "name": "Double Defense",
+      "signal": "internal_removed_but_cdragon_registry_present",
+      "note": "Registry presence is definition only; this is reported, not resolved."
+    },
+    {
+      "source": "internal_augments",
+      "augmentNameId": "MercysStrike",
+      "name": "Mercy's Strike",
+      "signal": "internal_removed_but_cdragon_registry_present",
+      "note": "Registry presence is definition only; this is reported, not resolved."
+    },
+    {
+      "source": "internal_augments",
+      "augmentNameId": "FishBait",
+      "name": "Shark Bait",
+      "signal": "internal_removed_but_cdragon_registry_present",
+      "note": "Registry presence is definition only; this is reported, not resolved."
+    },
+    {
+      "source": "internal_augments",
+      "augmentNameId": "NatureIsHealing",
+      "name": "Nature is Healing",
+      "signal": "internal_removed_but_cdragon_registry_present",
+      "note": "Registry presence is definition only; this is reported, not resolved."
+    },
+    {
+      "source": "internal_augments",
+      "augmentNameId": "Poltergeist",
+      "name": "Poltergeist",
+      "signal": "internal_removed_but_cdragon_registry_present",
+      "note": "Registry presence is definition only; this is reported, not resolved."
+    },
+    {
+      "source": "internal_augments",
+      "augmentNameId": "Nightstalking",
+      "name": "Nightstalking",
+      "signal": "internal_removed_but_cdragon_registry_present",
+      "note": "Registry presence is definition only; this is reported, not resolved."
+    },
+    {
+      "source": "internal_augments",
+      "augmentNameId": "SpellVolley",
+      "name": "Tripleshot",
+      "signal": "internal_removed_but_cdragon_registry_present",
+      "note": "Registry presence is definition only; this is reported, not resolved."
+    },
+    {
+      "source": "internal_augments",
+      "augmentNameId": "EmpyreanPromise",
+      "name": "Empyrean Promise",
+      "signal": "internal_removed_but_cdragon_registry_present",
+      "note": "Registry presence is definition only; this is reported, not resolved."
+    },
+    {
+      "source": "internal_augments",
+      "augmentNameId": "KillSecured",
+      "name": "Kill Secured",
+      "signal": "internal_removed_but_cdragon_registry_present",
+      "note": "Registry presence is definition only; this is reported, not resolved."
+    },
+    {
+      "source": "internal_augments",
+      "augmentNameId": "Ability_SelfAOE_DoubleCast",
+      "name": "Echo Cast",
+      "signal": "internal_removed_but_cdragon_registry_present",
+      "note": "Registry presence is definition only; this is reported, not resolved."
+    },
+    {
+      "source": "internal_augments",
+      "augmentNameId": "Missile_Split",
+      "name": "Spellsplit",
+      "signal": "internal_removed_but_cdragon_registry_present",
+      "note": "Registry presence is definition only; this is reported, not resolved."
+    },
+    {
+      "source": "internal_augments",
+      "augmentNameId": "SharkTempest",
+      "name": "Shark Tempest",
+      "signal": "internal_removed_but_cdragon_registry_present",
+      "note": "Registry presence is definition only; this is reported, not resolved."
+    },
+    {
+      "source": "internal_augments",
+      "augmentNameId": "Flash2",
+      "name": "Flash 2",
+      "signal": "internal_removed_but_cdragon_registry_present",
+      "note": "Registry presence is definition only; this is reported, not resolved."
+    },
+    {
+      "source": "internal_augments",
+      "augmentNameId": "BrushPower",
+      "name": "Hide on Bush",
+      "signal": "internal_removed_but_cdragon_registry_present",
+      "note": "Registry presence is definition only; this is reported, not resolved."
+    },
+    {
+      "source": "internal_augments",
+      "augmentNameId": "PromQueen",
+      "name": "Prom Queen",
+      "signal": "internal_removed_but_cdragon_registry_present",
+      "note": "Registry presence is definition only; this is reported, not resolved."
+    },
+    {
+      "source": "internal_augments",
+      "augmentNameId": "Equilibrium",
+      "name": "Our Healing",
+      "signal": "internal_removed_but_cdragon_registry_present",
+      "note": "Registry presence is definition only; this is reported, not resolved."
+    },
+    {
+      "source": "internal_augments",
+      "augmentNameId": "MightyShield",
+      "name": "Mighty Shield",
+      "signal": "internal_removed_but_cdragon_registry_present",
+      "note": "Registry presence is definition only; this is reported, not resolved."
+    },
+    {
+      "source": "internal_augments",
+      "augmentNameId": "PinballSnowball",
+      "name": "Pinball",
+      "signal": "internal_removed_but_cdragon_registry_present",
+      "note": "Registry presence is definition only; this is reported, not resolved."
+    },
+    {
+      "source": "internal_augments",
+      "augmentNameId": "Snowbomb",
+      "name": "Snowblast",
+      "signal": "internal_removed_but_cdragon_registry_present",
+      "note": "Registry presence is definition only; this is reported, not resolved."
+    },
+    {
+      "source": "internal_augments",
+      "augmentNameId": "YouSpinMeRightRound",
+      "name": "Spin Me Right Round",
+      "signal": "internal_removed_but_cdragon_registry_present",
+      "note": "Registry presence is definition only; this is reported, not resolved."
+    },
+    {
+      "source": "internal_augments",
+      "augmentNameId": "GoldenSnowball",
+      "name": "Holy Snowball",
+      "signal": "internal_removed_but_cdragon_registry_present",
+      "note": "Registry presence is definition only; this is reported, not resolved."
+    },
+    {
+      "source": "internal_augments",
+      "augmentNameId": "GlassCannon",
+      "name": "Glass Cannon",
+      "signal": "internal_removed_but_cdragon_registry_present",
+      "note": "Registry presence is definition only; this is reported, not resolved."
+    },
+    {
+      "source": "internal_augments",
+      "augmentNameId": "ChainReaction",
+      "name": "Chain Reaction",
+      "signal": "internal_removed_but_cdragon_registry_present",
+      "note": "Registry presence is definition only; this is reported, not resolved."
+    },
+    {
+      "source": "internal_augments",
+      "augmentNameId": "DimensionShift_Active",
+      "name": "Dimension Shift",
+      "signal": "internal_removed_but_cdragon_registry_present",
+      "note": "Registry presence is definition only; this is reported, not resolved."
+    },
+    {
+      "source": "internal_augments",
+      "augmentNameId": "PoroCharge_Active",
+      "name": "Poro Stampede",
+      "signal": "internal_removed_but_cdragon_registry_present",
+      "note": "Registry presence is definition only; this is reported, not resolved."
+    },
+    {
+      "source": "internal_augments",
+      "augmentNameId": "Adamant",
+      "name": "Adamant",
+      "signal": "internal_removed_but_cdragon_registry_present",
+      "note": "Registry presence is definition only; this is reported, not resolved."
+    },
+    {
+      "source": "internal_augments",
+      "augmentNameId": "ARAM_PoroKing",
+      "name": "Bounce of the Poro King",
+      "signal": "internal_removed_but_cdragon_registry_present",
+      "note": "Registry presence is definition only; this is reported, not resolved."
+    },
+    {
+      "source": "internal_augments",
+      "augmentNameId": "ARAM_BuffBuddies",
+      "name": "Buff Buddies",
+      "signal": "internal_removed_but_cdragon_registry_present",
+      "note": "Registry presence is definition only; this is reported, not resolved."
+    },
+    {
+      "source": "internal_augments",
+      "augmentNameId": "ARAM_Cerberus",
+      "name": "Cerberus",
+      "signal": "internal_removed_but_cdragon_registry_present",
+      "note": "Registry presence is definition only; this is reported, not resolved."
+    },
+    {
+      "source": "internal_augments",
+      "augmentNameId": "ARAM_Recall",
+      "name": "Cheating",
+      "signal": "internal_removed_but_cdragon_registry_present",
+      "note": "Registry presence is definition only; this is reported, not resolved."
+    },
+    {
+      "source": "internal_augments",
+      "augmentNameId": "ARAM_ClownCollege",
+      "name": "Clown College",
+      "signal": "internal_removed_but_cdragon_registry_present",
+      "note": "Registry presence is definition only; this is reported, not resolved."
+    },
+    {
+      "source": "internal_augments",
+      "augmentNameId": "ARAM_CrackOpenThatEgg",
+      "name": "Crack Open That Egg",
+      "signal": "internal_removed_but_cdragon_registry_present",
+      "note": "Registry presence is definition only; this is reported, not resolved."
+    },
+    {
+      "source": "internal_augments",
+      "augmentNameId": "CritNCast",
+      "name": "Crit 'n Cast",
+      "signal": "internal_removed_but_cdragon_registry_present",
+      "note": "Registry presence is definition only; this is reported, not resolved."
+    },
+    {
+      "source": "internal_augments",
+      "augmentNameId": "CriticalMissile",
+      "name": "Critical Missile",
+      "signal": "internal_removed_but_cdragon_registry_present",
+      "note": "Registry presence is definition only; this is reported, not resolved."
+    },
+    {
+      "source": "internal_augments",
+      "augmentNameId": "CriticalRhythm",
+      "name": "Critical Rhythm",
+      "signal": "internal_removed_but_cdragon_registry_present",
+      "note": "Registry presence is definition only; this is reported, not resolved."
+    },
+    {
+      "source": "internal_augments",
+      "augmentNameId": "ARAM_DemonsDance",
+      "name": "Demon's Dance",
+      "signal": "internal_removed_but_cdragon_registry_present",
+      "note": "Registry presence is definition only; this is reported, not resolved."
+    },
+    {
+      "source": "internal_augments",
+      "augmentNameId": "ARAM_LittleDevil",
+      "name": "Devil on Your Shoulder",
+      "signal": "internal_removed_but_cdragon_registry_present",
+      "note": "Registry presence is definition only; this is reported, not resolved."
+    },
+    {
+      "source": "internal_augments",
+      "augmentNameId": "Dropybara_Active",
+      "name": "Droppybara",
+      "signal": "internal_removed_but_cdragon_registry_present",
+      "note": "Registry presence is definition only; this is reported, not resolved."
+    },
+    {
+      "source": "internal_augments",
+      "augmentNameId": "ARAM_Executioner",
+      "name": "Executioner",
+      "signal": "internal_removed_but_cdragon_registry_present",
+      "note": "Registry presence is definition only; this is reported, not resolved."
+    },
+    {
+      "source": "internal_augments",
+      "augmentNameId": "ARAM_FeeltheBurn",
+      "name": "Feel the Burn",
+      "signal": "internal_removed_but_cdragon_registry_present",
+      "note": "Registry presence is definition only; this is reported, not resolved."
+    },
+    {
+      "source": "internal_augments",
+      "augmentNameId": "TrainOfTheDead",
+      "name": "Final City Transit",
+      "signal": "internal_removed_but_cdragon_registry_present",
+      "note": "Registry presence is definition only; this is reported, not resolved."
+    },
+    {
+      "source": "internal_augments",
+      "augmentNameId": "ARAM_FrostWraith",
+      "name": "Frost Wraith",
+      "signal": "internal_removed_but_cdragon_registry_present",
+      "note": "Registry presence is definition only; this is reported, not resolved."
+    },
+    {
+      "source": "internal_augments",
+      "augmentNameId": "Gash",
+      "name": "Gash",
+      "signal": "internal_removed_but_cdragon_registry_present",
+      "note": "Registry presence is definition only; this is reported, not resolved."
+    },
+    {
+      "source": "internal_augments",
+      "augmentNameId": "GrandmasChiliOil",
+      "name": "Grandma's Chili Oil",
+      "signal": "internal_removed_but_cdragon_registry_present",
+      "note": "Registry presence is definition only; this is reported, not resolved."
+    },
+    {
+      "source": "internal_augments",
+      "augmentNameId": "HatOnAHat",
+      "name": "Hat on a Hat",
+      "signal": "internal_removed_but_cdragon_registry_present",
+      "note": "Registry presence is definition only; this is reported, not resolved."
+    },
+    {
+      "source": "internal_augments",
+      "augmentNameId": "ARAM_WatchOutGrapefruit",
+      "name": "Heads Up Cupcake!",
+      "signal": "internal_removed_but_cdragon_registry_present",
+      "note": "Registry presence is definition only; this is reported, not resolved."
+    },
+    {
+      "source": "internal_augments",
+      "augmentNameId": "ARAM_HolyFire",
+      "name": "Holy Fire",
+      "signal": "internal_removed_but_cdragon_registry_present",
+      "note": "Registry presence is definition only; this is reported, not resolved."
+    },
+    {
+      "source": "internal_augments",
+      "augmentNameId": "BabyKitty",
+      "name": "I'm a Baby Kitty Where is Mama",
+      "signal": "internal_removed_but_cdragon_registry_present",
+      "note": "Registry presence is definition only; this is reported, not resolved."
+    },
+    {
+      "source": "internal_augments",
+      "augmentNameId": "ARAM_KeystoneConjurer",
+      "name": "Keystone Conjurer",
+      "signal": "internal_removed_but_cdragon_registry_present",
+      "note": "Registry presence is definition only; this is reported, not resolved."
+    },
+    {
+      "source": "internal_augments",
+      "augmentNameId": "LaserHeal",
+      "name": "Laser Heal",
+      "signal": "internal_removed_but_cdragon_registry_present",
+      "note": "Registry presence is definition only; this is reported, not resolved."
+    },
+    {
+      "source": "internal_augments",
+      "augmentNameId": "ARAM_LightningStrikes",
+      "name": "Lightning Strikes",
+      "signal": "internal_removed_but_cdragon_registry_present",
+      "note": "Registry presence is definition only; this is reported, not resolved."
+    },
+    {
+      "source": "internal_augments",
+      "augmentNameId": "ARAM_OrbitalLaser_Active",
+      "name": "Orbital Laser",
+      "signal": "internal_removed_but_cdragon_registry_present",
+      "note": "Registry presence is definition only; this is reported, not resolved."
+    },
+    {
+      "source": "internal_augments",
+      "augmentNameId": "ARAM_Perseverance",
+      "name": "Perseverance",
+      "signal": "internal_removed_but_cdragon_registry_present",
+      "note": "Registry presence is definition only; this is reported, not resolved."
+    },
+    {
+      "source": "internal_augments",
+      "augmentNameId": "ARAM_Poro_Blast",
+      "name": "Poro Blaster",
+      "signal": "internal_removed_but_cdragon_registry_present",
+      "note": "Registry presence is definition only; this is reported, not resolved."
+    },
+    {
+      "source": "internal_augments",
+      "augmentNameId": "ARAM_QuantumComputing",
+      "name": "Quantum Computing",
+      "signal": "internal_removed_but_cdragon_registry_present",
+      "note": "Registry presence is definition only; this is reported, not resolved."
+    },
+    {
+      "source": "internal_augments",
+      "augmentNameId": "RedEnvelopes",
+      "name": "Red Envelopes",
+      "signal": "internal_removed_but_cdragon_registry_present",
+      "note": "Registry presence is definition only; this is reported, not resolved."
+    },
+    {
+      "source": "internal_augments",
+      "augmentNameId": "ARAM_Repulsor",
+      "name": "Repulsor",
+      "signal": "internal_removed_but_cdragon_registry_present",
+      "note": "Registry presence is definition only; this is reported, not resolved."
+    },
+    {
+      "source": "internal_augments",
+      "augmentNameId": "ARAM_RestlessRestoration",
+      "name": "Restless Restoration",
+      "signal": "internal_removed_but_cdragon_registry_present",
+      "note": "Registry presence is definition only; this is reported, not resolved."
+    },
+    {
+      "source": "internal_augments",
+      "augmentNameId": "ARAM_SelfDestruct",
+      "name": "Self Destruct",
+      "signal": "internal_removed_but_cdragon_registry_present",
+      "note": "Registry presence is definition only; this is reported, not resolved."
+    },
+    {
+      "source": "internal_augments",
+      "augmentNameId": "ARAM_SlowAndSteady",
+      "name": "Slow And Steady",
+      "signal": "internal_removed_but_cdragon_registry_present",
+      "note": "Registry presence is definition only; this is reported, not resolved."
+    },
+    {
+      "source": "internal_augments",
+      "augmentNameId": "SnowballRoulette",
+      "name": "Snowball Roulette",
+      "signal": "internal_removed_but_cdragon_registry_present",
+      "note": "Registry presence is definition only; this is reported, not resolved."
+    },
+    {
+      "source": "internal_augments",
+      "augmentNameId": "SnowballUpgrade",
+      "name": "Snowball Upgrade",
+      "signal": "internal_removed_but_cdragon_registry_present",
+      "note": "Registry presence is definition only; this is reported, not resolved."
+    },
+    {
+      "source": "internal_augments",
+      "augmentNameId": "ARAM_SpeedDemon",
+      "name": "Speed Demon",
+      "signal": "internal_removed_but_cdragon_registry_present",
+      "note": "Registry presence is definition only; this is reported, not resolved."
+    },
+    {
+      "source": "internal_augments",
+      "augmentNameId": "ARAM_TheBrutalizer",
+      "name": "The Brutalizer",
+      "signal": "internal_removed_but_cdragon_registry_present",
+      "note": "Registry presence is definition only; this is reported, not resolved."
+    },
+    {
+      "source": "internal_augments",
+      "augmentNameId": "ARAM_TrueshotProdigy",
+      "name": "Trueshot Prodigy",
+      "signal": "internal_removed_but_cdragon_registry_present",
+      "note": "Registry presence is definition only; this is reported, not resolved."
+    },
+    {
+      "source": "internal_augments",
+      "augmentNameId": "ARAM_TwiceThrice",
+      "name": "Twice Thrice",
+      "signal": "internal_removed_but_cdragon_registry_present",
+      "note": "Registry presence is definition only; this is reported, not resolved."
+    },
+    {
+      "source": "internal_augments",
+      "augmentNameId": "ARAM_Upgrade_Cutlass",
+      "name": "Upgrade Cutlass",
+      "signal": "internal_removed_but_cdragon_registry_present",
+      "note": "Registry presence is definition only; this is reported, not resolved."
+    },
+    {
+      "source": "internal_augments",
+      "augmentNameId": "ARAM_Upgrade_Hubris",
+      "name": "Upgrade Hubris",
+      "signal": "internal_removed_but_cdragon_registry_present",
+      "note": "Registry presence is definition only; this is reported, not resolved."
+    },
+    {
+      "source": "internal_augments",
+      "augmentNameId": "Upgrade_MikaelsBlessing",
+      "name": "Upgrade Mikael's Blessing",
+      "signal": "internal_removed_but_cdragon_registry_present",
+      "note": "Registry presence is definition only; this is reported, not resolved."
+    },
+    {
+      "source": "internal_augments",
+      "augmentNameId": "Upgrade_Thornmail",
+      "name": "Upgrade Thornmail",
+      "signal": "internal_removed_but_cdragon_registry_present",
+      "note": "Registry presence is definition only; this is reported, not resolved."
+    },
+    {
+      "source": "internal_augments",
+      "augmentNameId": "Vampirism",
+      "name": "Vampirism",
+      "signal": "internal_removed_but_cdragon_registry_present",
+      "note": "Registry presence is definition only; this is reported, not resolved."
+    },
+    {
+      "source": "internal_augments",
+      "augmentNameId": "VoidDash",
+      "name": "Void Dash",
+      "signal": "internal_removed_but_cdragon_registry_present",
+      "note": "Registry presence is definition only; this is reported, not resolved."
+    },
+    {
+      "source": "internal_augments",
+      "augmentNameId": "ARAM_VoidRift",
+      "name": "Void Rift",
+      "signal": "internal_removed_but_cdragon_registry_present",
+      "note": "Registry presence is definition only; this is reported, not resolved."
+    },
+    {
+      "source": "internal_augments",
+      "augmentNameId": "ARAM_WeightedPopoffs",
+      "name": "Weighted Popoffs",
+      "signal": "internal_removed_but_cdragon_registry_present",
+      "note": "Registry presence is definition only; this is reported, not resolved."
+    },
+    {
+      "source": "internal_augments",
+      "augmentNameId": "WindBeneathBlade",
+      "name": "Wind Beneath Blade",
+      "signal": "internal_removed_but_cdragon_registry_present",
+      "note": "Registry presence is definition only; this is reported, not resolved."
+    },
+    {
+      "source": "internal_augments",
+      "augmentNameId": "Upgrade_SwordOfBlossom",
+      "name": "Upgrade Sword of Blossoming Dawn",
+      "signal": "internal_removed_but_cdragon_registry_present",
+      "note": "Registry presence is definition only; this is reported, not resolved."
+    },
+    {
+      "source": "internal_augments",
+      "augmentNameId": "ARAM_MissingPingAugment",
+      "name": "???",
+      "signal": "internal_removed_but_cdragon_registry_present",
+      "note": "Registry presence is definition only; this is reported, not resolved."
+    }
+  ],
+  "wiki_availability": {
+    "status": "unavailable_in_committed_step_1_inputs",
+    "note": "The committed internal catalog contains wikiDescription rows but no independent wiki availability-notes snapshot. Step 1 reports that gap instead of guessing."
+  },
+  "wiki_rarity": {
+    "status": "unavailable_in_committed_step_1_inputs",
+    "note": "The committed internal catalog does not preserve an independent wiki rarity field; rarity disagreements here compare CDragon with existing internal rarity only."
+  },
+  "tencent": {
+    "status": "not_parsed_in_step_1",
+    "note": "Tencent prose is left as a later validation reference; this report focuses on CDragon vs committed wiki/internal signals."
+  }
+}

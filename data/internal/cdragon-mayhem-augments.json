@@ -1,6 +1,6 @@
 {
   "patch": "26.12",
-  "fetched_at": "2026-06-22T23:20:04.460712+00:00",
+  "fetched_at": "2026-06-22T21:53:37.446549+00:00",
   "source": "https://raw.communitydragon.org/latest",
   "augments": [
     {
@@ -185,8 +185,8 @@
       "nameId": "ARAM_CantTouchThis",
       "name": "Can't Touch This",
       "names": {
-        "en": "Cant Touch This",
-        "zh-TW": "空增幅裝置",
+        "en": "Can't Touch This",
+        "zh-TW": "無法掌握",
         "zh-CN": "你摸不到",
         "ja": "ヤケドするぜ",
         "ko": "난공불락"
@@ -256,7 +256,7 @@
       "name": "Courage of the Colossus",
       "names": {
         "en": "Courage of the Colossus",
-        "zh-TW": "巨像勇氣",
+        "zh-TW": "巨像之勇氣",
         "zh-CN": "巨像的勇气",
         "ja": "巨人の勇気",
         "ko": "거석상의 용기"
@@ -326,7 +326,7 @@
       "name": "Dawnbringer's Resolve",
       "names": {
         "en": "Dawnbringer's Resolve",
-        "zh-TW": "不朽守衛",
+        "zh-TW": "黎明使者之決意",
         "zh-CN": "黎明使者的坚决",
         "ja": "ドーンブリンガーの誓い",
         "ko": "빛의 인도자 결의"
@@ -406,7 +406,7 @@
       "name": "Don't Blink",
       "names": {
         "en": "Don't Blink",
-        "zh-TW": "格擋",
+        "zh-TW": "別眨眼",
         "zh-CN": "唯快不破",
         "ja": "瞬きより速く",
         "ko": "속전속결"
@@ -489,7 +489,11 @@
       "nameId": "ARAM_Earthwake",
       "name": "Earthwake",
       "names": {
-        "en": "Earthwake"
+        "en": "Earthwake",
+        "zh-TW": "大地覺醒",
+        "zh-CN": "大地苏醒",
+        "ja": "アースウェイク",
+        "ko": "대지의 각성"
       },
       "slug": "earthwake",
       "rarity": "prismatic",
@@ -594,7 +598,7 @@
       "name": "Feel the Burn",
       "names": {
         "en": "Feel the Burn",
-        "zh-TW": "感受灼燒",
+        "zh-TW": "燒起來吧",
         "zh-CN": "感受燃烧",
         "ja": "熱気",
         "ko": "저주의 화염"
@@ -677,7 +681,11 @@
       "nameId": "ARAM_Flashy",
       "name": "Flashy",
       "names": {
-        "en": "Flashy"
+        "en": "Flashy",
+        "zh-TW": "閃光俠",
+        "zh-CN": "闪现向前",
+        "ja": "閃光",
+        "ko": "점멸 난사"
       },
       "slug": "flashy",
       "rarity": "gold",
@@ -842,7 +850,7 @@
       "name": "Homeguard",
       "names": {
         "en": "Homeguard",
-        "zh-TW": "守護家園",
+        "zh-TW": "溫泉加速",
         "zh-CN": "家园卫士",
         "ja": "ホームガード",
         "ko": "민병대"
@@ -1015,8 +1023,8 @@
       "nameId": "ARAM_LightemUp",
       "name": "Light 'Em Up!",
       "names": {
-        "en": "Light 'em Up!",
-        "zh-TW": "來點顏色",
+        "en": "Light 'Em Up!",
+        "zh-TW": "亮起來！",
         "zh-CN": "点亮他们！",
         "ja": "光で照らせ！",
         "ko": "불을 밝혀"
@@ -1137,7 +1145,11 @@
       "nameId": "ARAM_MissingPingAugment",
       "name": "???",
       "names": {
-        "en": "???"
+        "en": "???",
+        "zh-TW": "？？？",
+        "zh-CN": "？？？",
+        "ja": "？？？",
+        "ko": "???"
       },
       "slug": "missing-ping-augment",
       "rarity": "prismatic",
@@ -1147,8 +1159,8 @@
       "nameId": "ARAM_MountainSoul",
       "name": "Mountain Soul",
       "names": {
-        "en": "MountainSoul",
-        "zh-TW": "高山之魂",
+        "en": "Mountain Soul",
+        "zh-TW": "裂地龍魂",
         "zh-CN": "山脉龙魂",
         "ja": "マウンテンソウル",
         "ko": "대지의 영혼"
@@ -1269,7 +1281,7 @@
       "nameId": "ARAM_PandorasBox",
       "name": "Pandora's Box",
       "names": {
-        "en": "PandorasBox",
+        "en": "Pandora's Box",
         "zh-TW": "潘朵拉的寶盒",
         "zh-CN": "潘朵拉的盒子",
         "ja": "パンドラの箱",
@@ -1373,11 +1385,11 @@
       "nameId": "ARAM_Quest_SteelYourHeart",
       "name": "Steel Your Heart",
       "names": {
-        "en": "Quest: Steel Your Heart",
-        "zh-TW": "任務：心鋼起來",
-        "zh-CN": "任务：钢化你心",
-        "ja": "クエスト: 覚悟を決めろ",
-        "ko": "퀘스트: 강철 같은 심장"
+        "en": "Steel Your Heart",
+        "zh-TW": "心鋼起來",
+        "zh-CN": "钢化你心",
+        "ja": "覚悟を決めろ",
+        "ko": "강철 같은 심장"
       },
       "slug": "quest_-steel-your-heart",
       "rarity": "gold",
@@ -1387,11 +1399,11 @@
       "nameId": "ARAM_Quest_UrfsChampion",
       "name": "Urf's Champion",
       "names": {
-        "en": "Quest: Urf's Champion",
-        "zh-TW": "任務：阿福英雄",
-        "zh-CN": "任务：海牛阿福的勇士",
-        "ja": "クエスト: アーフのチャンピオン",
-        "ko": "퀘스트: 우르프의 챔피언"
+        "en": "Urf's Champion",
+        "zh-TW": "阿福英雄",
+        "zh-CN": "海牛阿福的勇士",
+        "ja": "アーフのチャンピオン",
+        "ko": "우르프의 챔피언"
       },
       "slug": "quest_-urfs-champion",
       "rarity": "prismatic",
@@ -1411,11 +1423,11 @@
       "nameId": "ARAM_Quest_WoogletsWitchcap",
       "name": "Wooglet's Witchcap",
       "names": {
-        "en": "Quest: Wooglet's Witchcap",
-        "zh-TW": "任務：烏莉特的法帽",
-        "zh-CN": "任务：沃格勒特的巫师帽",
-        "ja": "クエスト: ウーグレット ウィッチキャップ",
-        "ko": "퀘스트: 우글렛의 마녀 모자"
+        "en": "Wooglet's Witchcap",
+        "zh-TW": "烏莉特的法帽",
+        "zh-CN": "沃格勒特的巫师帽",
+        "ja": "ウーグレット ウィッチキャップ",
+        "ko": "우글렛의 마녀 모자"
       },
       "slug": "quest_-wooglets-witchcap",
       "rarity": "prismatic",
@@ -1426,10 +1438,10 @@
       "name": "Quickstep",
       "names": {
         "en": "Quickstep",
-        "zh-TW": "快步移動",
-        "zh-CN": "快步",
-        "ja": "クイックステップ",
-        "ko": "날쌘걸음"
+        "zh-TW": "Quickstep",
+        "zh-CN": "Quickstep",
+        "ja": "Quickstep",
+        "ko": "Quickstep"
       },
       "slug": "quickstep",
       "rarity": "gold",
@@ -1506,7 +1518,7 @@
       "name": "Scoped Weapons",
       "names": {
         "en": "Scoped Weapons",
-        "zh-TW": "狙擊武器",
+        "zh-TW": "射程強化改造",
         "zh-CN": "万用瞄准镜",
         "ja": "スコープ装着",
         "ko": "조준경 부착"
@@ -1673,11 +1685,11 @@
       "nameId": "ARAM_SonicBoom",
       "name": "Sonic Boom",
       "names": {
-        "en": "Sonic Boom",
-        "zh-TW": "餘音震盪",
-        "zh-CN": "天音爆",
-        "ja": "ソニックブーム",
-        "ko": "음속 폭발"
+        "en": "Buffing, <healing>healing</healing>, or <shield>Shielding</shield> your ally deals <trueDamage>@Damage@ true damage</trueDamage> and <status>Slows enemies surrounding them</status> by @SlowAmount*-100@% for 2 seconds (@ProcCooldown@ seconds Cooldown).<br><br>Damage Dealt: @f2@",
+        "zh-TW": "強化、<healing>治療</healing>、或<shield>賦予友軍護盾</shield>時，會對友軍周圍的敵軍造成<trueDamage>@Damage@真實傷害</trueDamage>，並<status>緩速@SlowAmount*-100@%</status>，持續2秒(冷卻時間@ProcCooldown@秒)。<br><br>傷害量：@f2@",
+        "zh-CN": "在为你的友军提供增益效果、<healing>治疗效果</healing>或<shield>护盾效果</shield>时，会对其附近的敌人们造成<trueDamage>@Damage@真实伤害</trueDamage>和持续2秒的@SlowAmount*-100@%<status>减速</status>。(@ProcCooldown@秒冷却时间)<br><br>已造成的伤害：@f2@",
+        "ja": "味方にバフ、<healing>体力回復効果</healing>、または<shield>シールド</shield>を付与すると、その周囲の敵に<trueDamage>@Damage@の確定ダメージ</trueDamage>を与え、2秒間@SlowAmount*-100@%の<status>スロウ効果</status>を付与する(クールダウン@ProcCooldown@秒)。<br><br>与えたダメージ量: @f2@",
+        "ko": "아군에게 이로운 효과, <healing>체력 회복</healing>, <shield>보호막</shield>을 부여하면 아군 주변 적들에게 <trueDamage>@Damage@의 고정 피해</trueDamage>를 입히고 2초 동안 @SlowAmount*-100@% <status>둔화</status>시킵니다. (재사용 대기시간 @ProcCooldown@초)<br><br>입힌 피해량: @f2@"
       },
       "slug": "sonic-boom",
       "rarity": "silver",
@@ -1973,7 +1985,11 @@
       "nameId": "ARAM_TransmuteGold",
       "name": "Transmute: Gold",
       "names": {
-        "en": "Transmute: Gold"
+        "en": "Transmute: Gold",
+        "zh-TW": "質變：金級",
+        "zh-CN": "质变：黄金阶",
+        "ja": "変質: ゴールド",
+        "ko": "전환: 골드"
       },
       "slug": "transmute-gold",
       "rarity": "silver",
@@ -1997,7 +2013,7 @@
       "nameId": "ARAM_TrueshotProdigy",
       "name": "Trueshot Prodigy",
       "names": {
-        "en": "TrueshotProdigy",
+        "en": "Trueshot Prodigy",
         "zh-TW": "彈幕神童",
         "zh-CN": "精准奇才",
         "ja": "トゥルーショットプロディジー",
@@ -2040,7 +2056,7 @@
       "name": "Ultimate Revolution",
       "names": {
         "en": "Ultimate Revolution",
-        "zh-TW": "大絕轉盤",
+        "zh-TW": "終極革新",
         "zh-CN": "终极刷新",
         "ja": "究極進化",
         "ko": "궁극기 대변혁"
@@ -2068,7 +2084,7 @@
       "name": "Upgrade Collector",
       "names": {
         "en": "Upgrade Collector",
-        "zh-TW": "升級荊棘之甲",
+        "zh-TW": "升級收藏家",
         "zh-CN": "升级：收集者",
         "ja": "コレクター アップグレード",
         "ko": "징수의 총 업그레이드"
@@ -2096,7 +2112,7 @@
       "name": "Upgrade Hubris",
       "names": {
         "en": "Upgrade Hubris",
-        "zh-TW": "貪婪束縛",
+        "zh-TW": "升級傲慢",
         "zh-CN": "升级：狂妄",
         "ja": "ヒュブリス アップグレード",
         "ko": "오만 업그레이드"
@@ -2196,10 +2212,10 @@
       "name": "Wee Woo Wee Woo",
       "names": {
         "en": "Wee Woo Wee Woo",
-        "zh-TW": "嗚咿嗚咿",
-        "zh-CN": "喂呜喂呜",
-        "ja": "うぃ～！おりゃっ！",
-        "ko": "삐뽀삐뽀"
+        "zh-TW": "Wee Woo Wee Woo",
+        "zh-CN": "Wee Woo Wee Woo",
+        "ja": "Wee Woo Wee Woo",
+        "ko": "Wee Woo Wee Woo"
       },
       "slug": "wee-woo-wee-woo",
       "rarity": "gold",
@@ -2266,10 +2282,10 @@
       "name": "Yowch, My Coins!",
       "names": {
         "en": "Yowch, My Coins!",
-        "zh-TW": "哎呀，我的金幣！",
-        "zh-CN": "哎哟，我的硬币！",
-        "ja": "あいたっ、私のコイン！",
-        "ko": "으악, 내 동전!"
+        "zh-TW": "Yowch, My Coins!",
+        "zh-CN": "Yowch, My Coins!",
+        "ja": "Yowch, My Coins!",
+        "ko": "Yowch, My Coins!"
       },
       "slug": "yowch-my-coins",
       "rarity": "gold",

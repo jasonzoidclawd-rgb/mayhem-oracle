@@ -1,6 +1,6 @@
 {
   "patch": "26.12",
-  "scraped_at": "2026-06-21T07:18:08.184027+00:00",
+  "scraped_at": "2026-06-22T21:53:36.450704+00:00",
   "source": "https://www.leagueoflegends.com/en-us/news/game-updates/",
   "patches": [
     {
@@ -1295,9 +1295,10 @@
             {
               "subject": {
                 "en": "Upgrade Sword of Blossoming Dawn",
-                "zh-cn": "升級破曉綻放之劍",
+                "zh-cn": "升级：破晓绽放之剑",
                 "ja-jp": "花咲く夜明けの剣 アップグレード",
-                "ko-kr": "Upgrade Sword of Blossoming Dawn"
+                "ko-kr": "Upgrade Sword of Blossoming Dawn",
+                "zh-tw": "升級：破曉綻放之劍"
               },
               "text": {
                 "en": "[REMOVED] Basic attacks against champions now deal 50% damage",
@@ -1637,7 +1638,7 @@
                 "zh-cn": "家园卫士",
                 "ja-jp": "ホームガード",
                 "ko-kr": "민병대",
-                "zh-tw": "守護家園"
+                "zh-tw": "溫泉加速"
               },
               "text": {
                 "en": "Time to regain bonus movespeed after taking damage: 3 ⇒ 6 seconds",

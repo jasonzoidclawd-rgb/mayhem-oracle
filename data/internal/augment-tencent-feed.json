@@ -1,0 +1,1915 @@
+{
+  "patch": "26.12",
+  "source": "https://lol.qq.com/gicp/news/410/37088140.html",
+  "note": "Section-aware corroboration: Mayhem added/adjusted => live; removed/disabled sections => non-current; unrelated prose is ignored.",
+  "counts": {
+    "keys": 266,
+    "live": 58,
+    "no_signal": 172,
+    "removed": 36
+  },
+  "augments": {
+    "ARAM_ADAPt": {
+      "tencent_status": null,
+      "matchedNames": [],
+      "matchedSections": {}
+    },
+    "ARAM_AllForYou": {
+      "tencent_status": null,
+      "matchedNames": [],
+      "matchedSections": {}
+    },
+    "ARAM_ApexInventor": {
+      "tencent_status": null,
+      "matchedNames": [],
+      "matchedSections": {}
+    },
+    "ARAM_Archmage": {
+      "tencent_status": "live",
+      "matchedNames": [
+        "大法师"
+      ],
+      "matchedSections": {
+        "live": [
+          "大法师"
+        ]
+      }
+    },
+    "ARAM_BacktoBasics": {
+      "tencent_status": null,
+      "matchedNames": [],
+      "matchedSections": {}
+    },
+    "ARAM_BigBrain": {
+      "tencent_status": null,
+      "matchedNames": [],
+      "matchedSections": {}
+    },
+    "ARAM_BladeWaltz": {
+      "tencent_status": "live",
+      "matchedNames": [
+        "利刃华尔兹"
+      ],
+      "matchedSections": {
+        "live": [
+          "利刃华尔兹"
+        ]
+      }
+    },
+    "ARAM_BluntForce": {
+      "tencent_status": null,
+      "matchedNames": [],
+      "matchedSections": {}
+    },
+    "ARAM_BreadAndButter": {
+      "tencent_status": null,
+      "matchedNames": [],
+      "matchedSections": {}
+    },
+    "ARAM_BreadAndCheese": {
+      "tencent_status": null,
+      "matchedNames": [],
+      "matchedSections": {}
+    },
+    "ARAM_BreadAndJam": {
+      "tencent_status": null,
+      "matchedNames": [],
+      "matchedSections": {}
+    },
+    "ARAM_BuffBuddies": {
+      "tencent_status": "removed",
+      "matchedNames": [
+        "霸符兄弟"
+      ],
+      "matchedSections": {
+        "removed": [
+          "霸符兄弟"
+        ]
+      }
+    },
+    "ARAM_CantTouchThis": {
+      "tencent_status": null,
+      "matchedNames": [],
+      "matchedSections": {}
+    },
+    "ARAM_CelestialBody": {
+      "tencent_status": null,
+      "matchedNames": [],
+      "matchedSections": {}
+    },
+    "ARAM_Cerberus": {
+      "tencent_status": "removed",
+      "matchedNames": [
+        "地狱三头犬"
+      ],
+      "matchedSections": {
+        "removed": [
+          "地狱三头犬"
+        ]
+      }
+    },
+    "ARAM_CircleofDeath": {
+      "tencent_status": null,
+      "matchedNames": [],
+      "matchedSections": {}
+    },
+    "ARAM_ClownCollege": {
+      "tencent_status": null,
+      "matchedNames": [],
+      "matchedSections": {}
+    },
+    "ARAM_CourageoftheColossus": {
+      "tencent_status": null,
+      "matchedNames": [],
+      "matchedSections": {}
+    },
+    "ARAM_CrackOpenThatEgg": {
+      "tencent_status": "removed",
+      "matchedNames": [
+        "砸开那颗蛋"
+      ],
+      "matchedSections": {
+        "removed": [
+          "砸开那颗蛋"
+        ]
+      }
+    },
+    "ARAM_CriticalHealing": {
+      "tencent_status": null,
+      "matchedNames": [],
+      "matchedSections": {}
+    },
+    "ARAM_Cruelty": {
+      "tencent_status": null,
+      "matchedNames": [],
+      "matchedSections": {}
+    },
+    "ARAM_Dashing": {
+      "tencent_status": null,
+      "matchedNames": [],
+      "matchedSections": {}
+    },
+    "ARAM_DawnbringersResolve": {
+      "tencent_status": null,
+      "matchedNames": [],
+      "matchedSections": {}
+    },
+    "ARAM_Deft": {
+      "tencent_status": null,
+      "matchedNames": [],
+      "matchedSections": {}
+    },
+    "ARAM_DemonsDance": {
+      "tencent_status": "removed",
+      "matchedNames": [
+        "魔鬼之舞"
+      ],
+      "matchedSections": {
+        "removed": [
+          "魔鬼之舞"
+        ]
+      }
+    },
+    "ARAM_DiveBomber": {
+      "tencent_status": null,
+      "matchedNames": [],
+      "matchedSections": {}
+    },
+    "ARAM_DivineDomain": {
+      "tencent_status": "live",
+      "matchedNames": [
+        "飞升仪式"
+      ],
+      "matchedSections": {
+        "live": [
+          "飞升仪式"
+        ]
+      }
+    },
+    "ARAM_DivineIntervention": {
+      "tencent_status": null,
+      "matchedNames": [],
+      "matchedSections": {}
+    },
+    "ARAM_DontBlink": {
+      "tencent_status": null,
+      "matchedNames": [],
+      "matchedSections": {}
+    },
+    "ARAM_DoubleTap": {
+      "tencent_status": null,
+      "matchedNames": [],
+      "matchedSections": {}
+    },
+    "ARAM_DrawYourSword": {
+      "tencent_status": "live",
+      "matchedNames": [
+        "亮出你的剑"
+      ],
+      "matchedSections": {
+        "live": [
+          "亮出你的剑"
+        ]
+      }
+    },
+    "ARAM_DropBear": {
+      "tencent_status": "live",
+      "matchedNames": [
+        "空投熊"
+      ],
+      "matchedSections": {
+        "live": [
+          "空投熊"
+        ]
+      }
+    },
+    "ARAM_Dropkick": {
+      "tencent_status": null,
+      "matchedNames": [],
+      "matchedSections": {}
+    },
+    "ARAM_DualWield": {
+      "tencent_status": null,
+      "matchedNames": [],
+      "matchedSections": {}
+    },
+    "ARAM_Earthwake": {
+      "tencent_status": null,
+      "matchedNames": [],
+      "matchedSections": {}
+    },
+    "ARAM_EmpoweredByTheFaithful": {
+      "tencent_status": null,
+      "matchedNames": [],
+      "matchedSections": {}
+    },
+    "ARAM_EndlessHunt": {
+      "tencent_status": "live",
+      "matchedNames": [
+        "吃过路兵"
+      ],
+      "matchedSections": {
+        "live": [
+          "吃过路兵"
+        ]
+      }
+    },
+    "ARAM_Erosion": {
+      "tencent_status": null,
+      "matchedNames": [],
+      "matchedSections": {}
+    },
+    "ARAM_EtherealWeapon": {
+      "tencent_status": null,
+      "matchedNames": [],
+      "matchedSections": {}
+    },
+    "ARAM_Eureka": {
+      "tencent_status": null,
+      "matchedNames": [],
+      "matchedSections": {}
+    },
+    "ARAM_Executioner": {
+      "tencent_status": "removed",
+      "matchedNames": [
+        "裁决使"
+      ],
+      "matchedSections": {
+        "removed": [
+          "裁决使"
+        ]
+      }
+    },
+    "ARAM_FanTheHammer": {
+      "tencent_status": null,
+      "matchedNames": [],
+      "matchedSections": {}
+    },
+    "ARAM_FeeltheBurn": {
+      "tencent_status": "removed",
+      "matchedNames": [
+        "感受燃烧"
+      ],
+      "matchedSections": {
+        "removed": [
+          "感受燃烧"
+        ]
+      }
+    },
+    "ARAM_FeyMagic": {
+      "tencent_status": null,
+      "matchedNames": [],
+      "matchedSections": {}
+    },
+    "ARAM_Firebrand": {
+      "tencent_status": null,
+      "matchedNames": [],
+      "matchedSections": {}
+    },
+    "ARAM_Firefox": {
+      "tencent_status": null,
+      "matchedNames": [],
+      "matchedSections": {}
+    },
+    "ARAM_FirstAidKit": {
+      "tencent_status": null,
+      "matchedNames": [],
+      "matchedSections": {}
+    },
+    "ARAM_Flashbang": {
+      "tencent_status": null,
+      "matchedNames": [],
+      "matchedSections": {}
+    },
+    "ARAM_Flashy": {
+      "tencent_status": null,
+      "matchedNames": [],
+      "matchedSections": {}
+    },
+    "ARAM_FromBeginningToEnd": {
+      "tencent_status": null,
+      "matchedNames": [],
+      "matchedSections": {}
+    },
+    "ARAM_FrostWraith": {
+      "tencent_status": "removed",
+      "matchedNames": [
+        "冰霜 幽灵"
+      ],
+      "matchedSections": {
+        "removed": [
+          "冰霜 幽灵"
+        ]
+      }
+    },
+    "ARAM_GetExcited": {
+      "tencent_status": null,
+      "matchedNames": [],
+      "matchedSections": {}
+    },
+    "ARAM_GiantSlayer": {
+      "tencent_status": null,
+      "matchedNames": [],
+      "matchedSections": {}
+    },
+    "ARAM_Goliath": {
+      "tencent_status": null,
+      "matchedNames": [],
+      "matchedSections": {}
+    },
+    "ARAM_Goredrink": {
+      "tencent_status": null,
+      "matchedNames": [],
+      "matchedSections": {}
+    },
+    "ARAM_GuiltyPleasure": {
+      "tencent_status": null,
+      "matchedNames": [],
+      "matchedSections": {}
+    },
+    "ARAM_HeavyHitter": {
+      "tencent_status": null,
+      "matchedNames": [],
+      "matchedSections": {}
+    },
+    "ARAM_Hellbent": {
+      "tencent_status": "live",
+      "matchedNames": [
+        "濒死悟道"
+      ],
+      "matchedSections": {
+        "live": [
+          "濒死悟道"
+        ]
+      }
+    },
+    "ARAM_HighRoller": {
+      "tencent_status": "live",
+      "matchedNames": [
+        "掷骰狂人"
+      ],
+      "matchedSections": {
+        "live": [
+          "掷骰狂人"
+        ]
+      }
+    },
+    "ARAM_HolyFire": {
+      "tencent_status": "removed",
+      "matchedNames": [
+        "圣火"
+      ],
+      "matchedSections": {
+        "removed": [
+          "圣火"
+        ]
+      }
+    },
+    "ARAM_Homeguard": {
+      "tencent_status": null,
+      "matchedNames": [],
+      "matchedSections": {}
+    },
+    "ARAM_IceCold": {
+      "tencent_status": null,
+      "matchedNames": [],
+      "matchedSections": {}
+    },
+    "ARAM_ImTheJuggernaut": {
+      "tencent_status": "live",
+      "matchedNames": [
+        "泰坦的坚决"
+      ],
+      "matchedSections": {
+        "live": [
+          "泰坦的坚决"
+        ]
+      }
+    },
+    "ARAM_Impassable": {
+      "tencent_status": null,
+      "matchedNames": [],
+      "matchedSections": {}
+    },
+    "ARAM_InfernalConduit": {
+      "tencent_status": null,
+      "matchedNames": [],
+      "matchedSections": {}
+    },
+    "ARAM_InfernalSoul": {
+      "tencent_status": null,
+      "matchedNames": [],
+      "matchedSections": {}
+    },
+    "ARAM_InfernoTriggered": {
+      "tencent_status": null,
+      "matchedNames": [],
+      "matchedSections": {}
+    },
+    "ARAM_ItsCritical": {
+      "tencent_status": null,
+      "matchedNames": [],
+      "matchedSections": {}
+    },
+    "ARAM_ItsKillingTime": {
+      "tencent_status": null,
+      "matchedNames": [],
+      "matchedSections": {}
+    },
+    "ARAM_JeweledGauntlet": {
+      "tencent_status": null,
+      "matchedNames": [],
+      "matchedSections": {}
+    },
+    "ARAM_Juiced": {
+      "tencent_status": null,
+      "matchedNames": [],
+      "matchedSections": {}
+    },
+    "ARAM_KeystoneConjurer": {
+      "tencent_status": "removed",
+      "matchedNames": [
+        "基石法师"
+      ],
+      "matchedSections": {
+        "removed": [
+          "基石法师"
+        ]
+      }
+    },
+    "ARAM_LegDay": {
+      "tencent_status": null,
+      "matchedNames": [],
+      "matchedSections": {}
+    },
+    "ARAM_LightemUp": {
+      "tencent_status": null,
+      "matchedNames": [],
+      "matchedSections": {}
+    },
+    "ARAM_LightningStrikes": {
+      "tencent_status": "removed",
+      "matchedNames": [
+        "闪电打击"
+      ],
+      "matchedSections": {
+        "removed": [
+          "闪电打击"
+        ]
+      }
+    },
+    "ARAM_LittleDevil": {
+      "tencent_status": null,
+      "matchedNames": [],
+      "matchedSections": {}
+    },
+    "ARAM_MadScientist": {
+      "tencent_status": null,
+      "matchedNames": [],
+      "matchedSections": {}
+    },
+    "ARAM_MagicMissile": {
+      "tencent_status": null,
+      "matchedNames": [],
+      "matchedSections": {}
+    },
+    "ARAM_Marksmage": {
+      "tencent_status": null,
+      "matchedNames": [],
+      "matchedSections": {}
+    },
+    "ARAM_MasterofDuality": {
+      "tencent_status": null,
+      "matchedNames": [],
+      "matchedSections": {}
+    },
+    "ARAM_MindtoMatter": {
+      "tencent_status": null,
+      "matchedNames": [],
+      "matchedSections": {}
+    },
+    "ARAM_Minionmancer": {
+      "tencent_status": null,
+      "matchedNames": [],
+      "matchedSections": {}
+    },
+    "ARAM_MissingPingAugment": {
+      "tencent_status": null,
+      "matchedNames": [],
+      "matchedSections": {}
+    },
+    "ARAM_MountainSoul": {
+      "tencent_status": null,
+      "matchedNames": [],
+      "matchedSections": {}
+    },
+    "ARAM_Multishot": {
+      "tencent_status": "live",
+      "matchedNames": [
+        "多重射击"
+      ],
+      "matchedSections": {
+        "live": [
+          "多重射击"
+        ]
+      }
+    },
+    "ARAM_MysticPunch": {
+      "tencent_status": null,
+      "matchedNames": [],
+      "matchedSections": {}
+    },
+    "ARAM_OceanSoul": {
+      "tencent_status": null,
+      "matchedNames": [],
+      "matchedSections": {}
+    },
+    "ARAM_OkBoomerang": {
+      "tencent_status": null,
+      "matchedNames": [],
+      "matchedSections": {}
+    },
+    "ARAM_OmniSoul": {
+      "tencent_status": null,
+      "matchedNames": [],
+      "matchedSections": {}
+    },
+    "ARAM_OrbitalLaser_Active": {
+      "tencent_status": null,
+      "matchedNames": [],
+      "matchedSections": {}
+    },
+    "ARAM_OutlawsGrit": {
+      "tencent_status": null,
+      "matchedNames": [],
+      "matchedSections": {}
+    },
+    "ARAM_Overflow": {
+      "tencent_status": null,
+      "matchedNames": [],
+      "matchedSections": {}
+    },
+    "ARAM_PandorasBox": {
+      "tencent_status": null,
+      "matchedNames": [],
+      "matchedSections": {}
+    },
+    "ARAM_Perseverance": {
+      "tencent_status": null,
+      "matchedNames": [],
+      "matchedSections": {}
+    },
+    "ARAM_PhenomenalEvil": {
+      "tencent_status": null,
+      "matchedNames": [],
+      "matchedSections": {}
+    },
+    "ARAM_PoroKing": {
+      "tencent_status": "removed",
+      "matchedNames": [
+        "魄罗之王的弹跳"
+      ],
+      "matchedSections": {
+        "removed": [
+          "魄罗之王的弹跳"
+        ]
+      }
+    },
+    "ARAM_Poro_Blast": {
+      "tencent_status": "removed",
+      "matchedNames": [
+        "魄罗爆破手"
+      ],
+      "matchedSections": {
+        "removed": [
+          "魄罗爆破手"
+        ]
+      }
+    },
+    "ARAM_ProteinShake": {
+      "tencent_status": null,
+      "matchedNames": [],
+      "matchedSections": {}
+    },
+    "ARAM_Purist_Caster": {
+      "tencent_status": null,
+      "matchedNames": [],
+      "matchedSections": {}
+    },
+    "ARAM_QuantumComputing": {
+      "tencent_status": null,
+      "matchedNames": [],
+      "matchedSections": {}
+    },
+    "ARAM_Quest_SteelYourHeart": {
+      "tencent_status": null,
+      "matchedNames": [],
+      "matchedSections": {}
+    },
+    "ARAM_Quest_UrfsChampion": {
+      "tencent_status": null,
+      "matchedNames": [],
+      "matchedSections": {}
+    },
+    "ARAM_Quest_VoidImmolation": {
+      "tencent_status": null,
+      "matchedNames": [],
+      "matchedSections": {}
+    },
+    "ARAM_Quest_WoogletsWitchcap": {
+      "tencent_status": null,
+      "matchedNames": [],
+      "matchedSections": {}
+    },
+    "ARAM_Quickstep": {
+      "tencent_status": "live",
+      "matchedNames": [
+        "快步"
+      ],
+      "matchedSections": {
+        "live": [
+          "快步"
+        ]
+      }
+    },
+    "ARAM_RabbleRousing": {
+      "tencent_status": "live",
+      "matchedNames": [
+        "活力焕发"
+      ],
+      "matchedSections": {
+        "live": [
+          "活力焕发"
+        ]
+      }
+    },
+    "ARAM_Recall": {
+      "tencent_status": "removed",
+      "matchedNames": [
+        "作弊",
+        "作弊：我能回城！"
+      ],
+      "matchedSections": {
+        "removed": [
+          "作弊：我能回城！",
+          "作弊"
+        ]
+      }
+    },
+    "ARAM_Recursion": {
+      "tencent_status": null,
+      "matchedNames": [],
+      "matchedSections": {}
+    },
+    "ARAM_Repulsor": {
+      "tencent_status": "removed",
+      "matchedNames": [
+        "退敌力场"
+      ],
+      "matchedSections": {
+        "removed": [
+          "退敌力场"
+        ]
+      }
+    },
+    "ARAM_RestlessRestoration": {
+      "tencent_status": "removed",
+      "matchedNames": [
+        "无休回复"
+      ],
+      "matchedSections": {
+        "removed": [
+          "无休回复"
+        ]
+      }
+    },
+    "ARAM_ScopedWeapons": {
+      "tencent_status": null,
+      "matchedNames": [],
+      "matchedSections": {}
+    },
+    "ARAM_ScopierWeapons": {
+      "tencent_status": null,
+      "matchedNames": [],
+      "matchedSections": {}
+    },
+    "ARAM_ScopiestWeapons": {
+      "tencent_status": null,
+      "matchedNames": [],
+      "matchedSections": {}
+    },
+    "ARAM_SearingDawn": {
+      "tencent_status": null,
+      "matchedNames": [],
+      "matchedSections": {}
+    },
+    "ARAM_SelfDestruct": {
+      "tencent_status": "removed",
+      "matchedNames": [
+        "自我毁灭"
+      ],
+      "matchedSections": {
+        "removed": [
+          "自我毁灭"
+        ]
+      }
+    },
+    "ARAM_ShadowRunner": {
+      "tencent_status": null,
+      "matchedNames": [],
+      "matchedSections": {}
+    },
+    "ARAM_ShrinkRay": {
+      "tencent_status": null,
+      "matchedNames": [],
+      "matchedSections": {}
+    },
+    "ARAM_SkilledSniper": {
+      "tencent_status": null,
+      "matchedNames": [],
+      "matchedSections": {}
+    },
+    "ARAM_SlapAround": {
+      "tencent_status": null,
+      "matchedNames": [],
+      "matchedSections": {}
+    },
+    "ARAM_SlowAndSteady": {
+      "tencent_status": "removed",
+      "matchedNames": [
+        "一板一眼"
+      ],
+      "matchedSections": {
+        "removed": [
+          "一板一眼"
+        ]
+      }
+    },
+    "ARAM_SlowCooker": {
+      "tencent_status": null,
+      "matchedNames": [],
+      "matchedSections": {}
+    },
+    "ARAM_Snowday": {
+      "tencent_status": "live",
+      "matchedNames": [
+        "下雪天"
+      ],
+      "matchedSections": {
+        "live": [
+          "下雪天"
+        ]
+      }
+    },
+    "ARAM_SonicBoom": {
+      "tencent_status": null,
+      "matchedNames": [],
+      "matchedSections": {}
+    },
+    "ARAM_SoulSiphon": {
+      "tencent_status": null,
+      "matchedNames": [],
+      "matchedSections": {}
+    },
+    "ARAM_SpeedDemon": {
+      "tencent_status": "removed",
+      "matchedNames": [
+        "速度恶魔"
+      ],
+      "matchedSections": {
+        "removed": [
+          "速度恶魔"
+        ]
+      }
+    },
+    "ARAM_SpinToWin": {
+      "tencent_status": null,
+      "matchedNames": [],
+      "matchedSections": {}
+    },
+    "ARAM_SpiritBomb": {
+      "tencent_status": "live",
+      "matchedNames": [
+        "灵魄炸弹"
+      ],
+      "matchedSections": {
+        "live": [
+          "灵魄炸弹"
+        ]
+      }
+    },
+    "ARAM_SpiritualPurification": {
+      "tencent_status": null,
+      "matchedNames": [],
+      "matchedSections": {}
+    },
+    "ARAM_StackosaurusRex": {
+      "tencent_status": "live",
+      "matchedNames": [
+        "叠角龙"
+      ],
+      "matchedSections": {
+        "live": [
+          "叠角龙"
+        ]
+      }
+    },
+    "ARAM_Stats": {
+      "tencent_status": null,
+      "matchedNames": [],
+      "matchedSections": {}
+    },
+    "ARAM_StatsOnStats": {
+      "tencent_status": null,
+      "matchedNames": [],
+      "matchedSections": {}
+    },
+    "ARAM_StatsOnStatsOnStats": {
+      "tencent_status": null,
+      "matchedNames": [],
+      "matchedSections": {}
+    },
+    "ARAM_StuckInHereWithMe": {
+      "tencent_status": null,
+      "matchedNames": [],
+      "matchedSections": {}
+    },
+    "ARAM_SymphonyofWar": {
+      "tencent_status": null,
+      "matchedNames": [],
+      "matchedSections": {}
+    },
+    "ARAM_TankEngine": {
+      "tencent_status": null,
+      "matchedNames": [],
+      "matchedSections": {}
+    },
+    "ARAM_TankItOrLeaveIt": {
+      "tencent_status": null,
+      "matchedNames": [],
+      "matchedSections": {}
+    },
+    "ARAM_TapDancer": {
+      "tencent_status": null,
+      "matchedNames": [],
+      "matchedSections": {}
+    },
+    "ARAM_Terror": {
+      "tencent_status": "live",
+      "matchedNames": [
+        "惊惧"
+      ],
+      "matchedSections": {
+        "live": [
+          "惊惧"
+        ]
+      }
+    },
+    "ARAM_TheBrutalizer": {
+      "tencent_status": "removed",
+      "matchedNames": [
+        "残暴之力"
+      ],
+      "matchedSections": {
+        "removed": [
+          "残暴之力"
+        ]
+      }
+    },
+    "ARAM_ThreadtheNeedle": {
+      "tencent_status": null,
+      "matchedNames": [],
+      "matchedSections": {}
+    },
+    "ARAM_Tormentor": {
+      "tencent_status": "removed",
+      "matchedNames": [
+        "折磨者"
+      ],
+      "matchedSections": {
+        "removed": [
+          "折磨者"
+        ]
+      }
+    },
+    "ARAM_TransmuteChaos": {
+      "tencent_status": null,
+      "matchedNames": [],
+      "matchedSections": {}
+    },
+    "ARAM_TransmuteGold": {
+      "tencent_status": null,
+      "matchedNames": [],
+      "matchedSections": {}
+    },
+    "ARAM_TransmutePrismatic": {
+      "tencent_status": null,
+      "matchedNames": [],
+      "matchedSections": {}
+    },
+    "ARAM_TrueshotProdigy": {
+      "tencent_status": "removed",
+      "matchedNames": [
+        "精准奇才"
+      ],
+      "matchedSections": {
+        "removed": [
+          "精准奇才"
+        ]
+      }
+    },
+    "ARAM_TwiceThrice": {
+      "tencent_status": "removed",
+      "matchedNames": [
+        "接二连三"
+      ],
+      "matchedSections": {
+        "removed": [
+          "接二连三"
+        ]
+      }
+    },
+    "ARAM_Typhoon": {
+      "tencent_status": null,
+      "matchedNames": [],
+      "matchedSections": {}
+    },
+    "ARAM_UltimateRevolution": {
+      "tencent_status": null,
+      "matchedNames": [],
+      "matchedSections": {}
+    },
+    "ARAM_UltimateUnstoppable": {
+      "tencent_status": null,
+      "matchedNames": [],
+      "matchedSections": {}
+    },
+    "ARAM_Upgrade_Collector": {
+      "tencent_status": null,
+      "matchedNames": [],
+      "matchedSections": {}
+    },
+    "ARAM_Upgrade_Cutlass": {
+      "tencent_status": "removed",
+      "matchedNames": [
+        "升级：弯刀"
+      ],
+      "matchedSections": {
+        "removed": [
+          "升级：弯刀"
+        ]
+      }
+    },
+    "ARAM_Upgrade_Hubris": {
+      "tencent_status": "removed",
+      "matchedNames": [
+        "升级：狂妄"
+      ],
+      "matchedSections": {
+        "removed": [
+          "升级：狂妄"
+        ]
+      }
+    },
+    "ARAM_Upgrade_IE": {
+      "tencent_status": null,
+      "matchedNames": [],
+      "matchedSections": {}
+    },
+    "ARAM_Upgrade_Immolate": {
+      "tencent_status": null,
+      "matchedNames": [],
+      "matchedSections": {}
+    },
+    "ARAM_Upgrade_Sheen": {
+      "tencent_status": null,
+      "matchedNames": [],
+      "matchedSections": {}
+    },
+    "ARAM_Upgrade_ZH": {
+      "tencent_status": null,
+      "matchedNames": [],
+      "matchedSections": {}
+    },
+    "ARAM_VoidRift": {
+      "tencent_status": "removed",
+      "matchedNames": [
+        "虚空裂隙"
+      ],
+      "matchedSections": {
+        "removed": [
+          "虚空裂隙"
+        ]
+      }
+    },
+    "ARAM_Vulnerability": {
+      "tencent_status": null,
+      "matchedNames": [],
+      "matchedSections": {}
+    },
+    "ARAM_WatchOutGrapefruit": {
+      "tencent_status": "removed",
+      "matchedNames": [
+        "当心小蛋糕！"
+      ],
+      "matchedSections": {
+        "removed": [
+          "当心小蛋糕！"
+        ]
+      }
+    },
+    "ARAM_WeeWooWeeWoo": {
+      "tencent_status": "live",
+      "matchedNames": [
+        "喂呜喂呜"
+      ],
+      "matchedSections": {
+        "live": [
+          "喂呜喂呜"
+        ]
+      }
+    },
+    "ARAM_WeightedPopoffs": {
+      "tencent_status": "removed",
+      "matchedNames": [
+        "负重爆气"
+      ],
+      "matchedSections": {
+        "removed": [
+          "负重爆气"
+        ]
+      }
+    },
+    "ARAM_WindspeakersBlessing": {
+      "tencent_status": null,
+      "matchedNames": [],
+      "matchedSections": {}
+    },
+    "ARAM_WitchfulThinking": {
+      "tencent_status": null,
+      "matchedNames": [],
+      "matchedSections": {}
+    },
+    "ARAM_WithHaste": {
+      "tencent_status": null,
+      "matchedNames": [],
+      "matchedSections": {}
+    },
+    "ARAM_YowchMyCoins": {
+      "tencent_status": "live",
+      "matchedNames": [
+        "哎哟，我的硬币！"
+      ],
+      "matchedSections": {
+        "live": [
+          "哎哟，我的硬币！"
+        ]
+      }
+    },
+    "ARAM_Zealot": {
+      "tencent_status": null,
+      "matchedNames": [],
+      "matchedSections": {}
+    },
+    "ARAM_escAPADe": {
+      "tencent_status": null,
+      "matchedNames": [],
+      "matchedSections": {}
+    },
+    "Ability_SelfAOE_DoubleCast": {
+      "tencent_status": "live",
+      "matchedNames": [
+        "回响施放"
+      ],
+      "matchedSections": {
+        "live": [
+          "回响施放"
+        ]
+      }
+    },
+    "Adamant": {
+      "tencent_status": null,
+      "matchedNames": [],
+      "matchedSections": {}
+    },
+    "BabyKitty": {
+      "tencent_status": "removed",
+      "matchedNames": [
+        "小猫咪找妈妈"
+      ],
+      "matchedSections": {
+        "removed": [
+          "小猫咪找妈妈"
+        ]
+      }
+    },
+    "BiggestSnowballEver": {
+      "tencent_status": null,
+      "matchedNames": [],
+      "matchedSections": {}
+    },
+    "BloodMoneyBurn": {
+      "tencent_status": "live",
+      "matchedNames": [
+        "炽燃利息"
+      ],
+      "matchedSections": {
+        "live": [
+          "炽燃利息"
+        ]
+      }
+    },
+    "Bonk": {
+      "tencent_status": "live",
+      "matchedNames": [
+        "邦！"
+      ],
+      "matchedSections": {
+        "live": [
+          "邦！"
+        ]
+      }
+    },
+    "BrushPower": {
+      "tencent_status": "live",
+      "matchedNames": [
+        "藏身草丛"
+      ],
+      "matchedSections": {
+        "live": [
+          "藏身草丛"
+        ]
+      }
+    },
+    "BurstingTeeth": {
+      "tencent_status": "live",
+      "matchedNames": [
+        "牙仙",
+        "牙仙子"
+      ],
+      "matchedSections": {
+        "live": [
+          "牙仙子",
+          "牙仙"
+        ]
+      }
+    },
+    "ChainReaction": {
+      "tencent_status": "live",
+      "matchedNames": [
+        "连锁反应"
+      ],
+      "matchedSections": {
+        "live": [
+          "连锁反应"
+        ]
+      }
+    },
+    "CritNCast": {
+      "tencent_status": null,
+      "matchedNames": [],
+      "matchedSections": {}
+    },
+    "CriticalMissile": {
+      "tencent_status": null,
+      "matchedNames": [],
+      "matchedSections": {}
+    },
+    "CriticalRhythm": {
+      "tencent_status": null,
+      "matchedNames": [],
+      "matchedSections": {}
+    },
+    "DarkWind": {
+      "tencent_status": "live",
+      "matchedNames": [
+        "贪欲束缚"
+      ],
+      "matchedSections": {
+        "live": [
+          "贪欲束缚"
+        ]
+      }
+    },
+    "DimensionShift_Active": {
+      "tencent_status": "live",
+      "matchedNames": [
+        "位面转移"
+      ],
+      "matchedSections": {
+        "live": [
+          "位面转移"
+        ]
+      }
+    },
+    "Donation": {
+      "tencent_status": null,
+      "matchedNames": [],
+      "matchedSections": {}
+    },
+    "DoubleDefense": {
+      "tencent_status": "live",
+      "matchedNames": [
+        "加固护盾"
+      ],
+      "matchedSections": {
+        "live": [
+          "加固护盾"
+        ]
+      }
+    },
+    "Dropybara_Active": {
+      "tencent_status": null,
+      "matchedNames": [],
+      "matchedSections": {}
+    },
+    "EmpyreanPromise": {
+      "tencent_status": null,
+      "matchedNames": [],
+      "matchedSections": {}
+    },
+    "EndlessDecimation": {
+      "tencent_status": "live",
+      "matchedNames": [
+        "无尽大杀四方"
+      ],
+      "matchedSections": {
+        "live": [
+          "无尽大杀四方"
+        ]
+      }
+    },
+    "Equilibrium": {
+      "tencent_status": "live",
+      "matchedNames": [
+        "我们的治疗"
+      ],
+      "matchedSections": {
+        "live": [
+          "我们的治疗"
+        ]
+      }
+    },
+    "EscapePlan": {
+      "tencent_status": null,
+      "matchedNames": [],
+      "matchedSections": {}
+    },
+    "FinalForm": {
+      "tencent_status": null,
+      "matchedNames": [],
+      "matchedSections": {}
+    },
+    "FishBait": {
+      "tencent_status": "live",
+      "matchedNames": [
+        "鲨鱼诱饵"
+      ],
+      "matchedSections": {
+        "live": [
+          "鲨鱼诱饵"
+        ]
+      }
+    },
+    "Flash2": {
+      "tencent_status": null,
+      "matchedNames": [],
+      "matchedSections": {}
+    },
+    "FullyAutomated": {
+      "tencent_status": null,
+      "matchedNames": [],
+      "matchedSections": {}
+    },
+    "Gash": {
+      "tencent_status": "removed",
+      "matchedNames": [
+        "砍伤"
+      ],
+      "matchedSections": {
+        "removed": [
+          "砍伤"
+        ]
+      }
+    },
+    "GlassCannon": {
+      "tencent_status": null,
+      "matchedNames": [],
+      "matchedSections": {}
+    },
+    "GoldenSnowball": {
+      "tencent_status": null,
+      "matchedNames": [],
+      "matchedSections": {}
+    },
+    "Goldrend": {
+      "tencent_status": null,
+      "matchedNames": [],
+      "matchedSections": {}
+    },
+    "GrandmasChiliOil": {
+      "tencent_status": "removed",
+      "matchedNames": [
+        "祖母的辣椒油"
+      ],
+      "matchedSections": {
+        "removed": [
+          "祖母的辣椒油"
+        ]
+      }
+    },
+    "GrowthSpurt": {
+      "tencent_status": null,
+      "matchedNames": [],
+      "matchedSections": {}
+    },
+    "HandOfBaron": {
+      "tencent_status": null,
+      "matchedNames": [],
+      "matchedSections": {}
+    },
+    "HatOnAHat": {
+      "tencent_status": "removed",
+      "matchedNames": [
+        "帽上加帽"
+      ],
+      "matchedSections": {
+        "removed": [
+          "帽上加帽",
+          "帽上加帽"
+        ]
+      }
+    },
+    "HextechSoul": {
+      "tencent_status": null,
+      "matchedNames": [],
+      "matchedSections": {}
+    },
+    "InfiniteRecursion": {
+      "tencent_status": null,
+      "matchedNames": [],
+      "matchedSections": {}
+    },
+    "KillSecured": {
+      "tencent_status": null,
+      "matchedNames": [],
+      "matchedSections": {}
+    },
+    "KingMe": {
+      "tencent_status": null,
+      "matchedNames": [],
+      "matchedSections": {}
+    },
+    "LaserHeal": {
+      "tencent_status": "removed",
+      "matchedNames": [
+        "激光治疗"
+      ],
+      "matchedSections": {
+        "removed": [
+          "激光治疗"
+        ]
+      }
+    },
+    "LittleExtraHelp": {
+      "tencent_status": "live",
+      "matchedNames": [
+        "小小的额外帮助"
+      ],
+      "matchedSections": {
+        "live": [
+          "小小的额外帮助"
+        ]
+      }
+    },
+    "MercysStrike": {
+      "tencent_status": "live",
+      "matchedNames": [
+        "仁慈打击"
+      ],
+      "matchedSections": {
+        "live": [
+          "仁慈打击"
+        ]
+      }
+    },
+    "MightyShield": {
+      "tencent_status": null,
+      "matchedNames": [],
+      "matchedSections": {}
+    },
+    "Missile_Split": {
+      "tencent_status": "live",
+      "matchedNames": [
+        "咒语裂变"
+      ],
+      "matchedSections": {
+        "live": [
+          "咒语裂变"
+        ]
+      }
+    },
+    "NatureIsHealing": {
+      "tencent_status": "live",
+      "matchedNames": [
+        "自然即是治愈"
+      ],
+      "matchedSections": {
+        "live": [
+          "自然即是治愈"
+        ]
+      }
+    },
+    "Nightstalking": {
+      "tencent_status": null,
+      "matchedNames": [],
+      "matchedSections": {}
+    },
+    "OminousPact": {
+      "tencent_status": null,
+      "matchedNames": [],
+      "matchedSections": {}
+    },
+    "Overextender": {
+      "tencent_status": "live",
+      "matchedNames": [
+        "过量延伸者"
+      ],
+      "matchedSections": {
+        "live": [
+          "过量延伸者"
+        ]
+      }
+    },
+    "PinballSnowball": {
+      "tencent_status": null,
+      "matchedNames": [],
+      "matchedSections": {}
+    },
+    "Poltergeist": {
+      "tencent_status": null,
+      "matchedNames": [],
+      "matchedSections": {}
+    },
+    "PoroCharge_Active": {
+      "tencent_status": "live",
+      "matchedNames": [
+        "魄罗蛮冲"
+      ],
+      "matchedSections": {
+        "live": [
+          "魄罗蛮冲"
+        ]
+      }
+    },
+    "PressureCooker": {
+      "tencent_status": "live",
+      "matchedNames": [
+        "高压锅"
+      ],
+      "matchedSections": {
+        "live": [
+          "高压锅"
+        ]
+      }
+    },
+    "PromQueen": {
+      "tencent_status": null,
+      "matchedNames": [],
+      "matchedSections": {}
+    },
+    "Quest_Sneakerhead": {
+      "tencent_status": null,
+      "matchedNames": [],
+      "matchedSections": {}
+    },
+    "ReEnergize": {
+      "tencent_status": null,
+      "matchedNames": [],
+      "matchedSections": {}
+    },
+    "RedEnvelopes": {
+      "tencent_status": "removed",
+      "matchedNames": [
+        "红包"
+      ],
+      "matchedSections": {
+        "removed": [
+          "红包"
+        ]
+      }
+    },
+    "SharkTempest": {
+      "tencent_status": "live",
+      "matchedNames": [
+        "鲨鱼暴风"
+      ],
+      "matchedSections": {
+        "live": [
+          "鲨鱼暴风"
+        ]
+      }
+    },
+    "ShrinkEngine": {
+      "tencent_status": null,
+      "matchedNames": [],
+      "matchedSections": {}
+    },
+    "SkipTheBasics": {
+      "tencent_status": "live",
+      "matchedNames": [
+        "大招工具人"
+      ],
+      "matchedSections": {
+        "live": [
+          "大招工具人"
+        ]
+      }
+    },
+    "SnapBack": {
+      "tencent_status": null,
+      "matchedNames": [],
+      "matchedSections": {}
+    },
+    "SnowballRoulette": {
+      "tencent_status": "removed",
+      "matchedNames": [
+        "雪球扭蛋机"
+      ],
+      "matchedSections": {
+        "removed": [
+          "雪球扭蛋机"
+        ]
+      }
+    },
+    "SnowballUpgrade": {
+      "tencent_status": null,
+      "matchedNames": [],
+      "matchedSections": {}
+    },
+    "Snowbomb": {
+      "tencent_status": "live",
+      "matchedNames": [
+        "冰雪爆裂",
+        "雪爆"
+      ],
+      "matchedSections": {
+        "live": [
+          "冰雪爆裂",
+          "雪爆"
+        ]
+      }
+    },
+    "Sonata": {
+      "tencent_status": null,
+      "matchedNames": [],
+      "matchedSections": {}
+    },
+    "SoulEater": {
+      "tencent_status": null,
+      "matchedNames": [],
+      "matchedSections": {}
+    },
+    "SpellVolley": {
+      "tencent_status": "live",
+      "matchedNames": [
+        "三重射击"
+      ],
+      "matchedSections": {
+        "live": [
+          "三重射击"
+        ]
+      }
+    },
+    "SwiftAndSafe": {
+      "tencent_status": null,
+      "matchedNames": [],
+      "matchedSections": {}
+    },
+    "TitansPulse": {
+      "tencent_status": "live",
+      "matchedNames": [
+        "保持坚定"
+      ],
+      "matchedSections": {
+        "live": [
+          "保持坚定"
+        ]
+      }
+    },
+    "TrainOfTheDead": {
+      "tencent_status": null,
+      "matchedNames": [],
+      "matchedSections": {}
+    },
+    "Twinfire": {
+      "tencent_status": null,
+      "matchedNames": [],
+      "matchedSections": {}
+    },
+    "UltimateAwakening": {
+      "tencent_status": null,
+      "matchedNames": [],
+      "matchedSections": {}
+    },
+    "Upgrade_MikaelsBlessing": {
+      "tencent_status": null,
+      "matchedNames": [],
+      "matchedSections": {}
+    },
+    "Upgrade_SwordOfBlossom": {
+      "tencent_status": null,
+      "matchedNames": [],
+      "matchedSections": {}
+    },
+    "Upgrade_Thornmail": {
+      "tencent_status": "removed",
+      "matchedNames": [
+        "升级：荆棘之甲"
+      ],
+      "matchedSections": {
+        "removed": [
+          "升级：荆棘之甲"
+        ]
+      }
+    },
+    "Vampirism": {
+      "tencent_status": null,
+      "matchedNames": [],
+      "matchedSections": {}
+    },
+    "VeilOfWarding": {
+      "tencent_status": null,
+      "matchedNames": [],
+      "matchedSections": {}
+    },
+    "VirtuousCycle": {
+      "tencent_status": null,
+      "matchedNames": [],
+      "matchedSections": {}
+    },
+    "VoidDash": {
+      "tencent_status": "live",
+      "matchedNames": [
+        "虚空冲刺"
+      ],
+      "matchedSections": {
+        "live": [
+          "虚空冲刺"
+        ]
+      }
+    },
+    "WindBeneathBlade": {
+      "tencent_status": "removed",
+      "matchedNames": [
+        "刃下生风"
+      ],
+      "matchedSections": {
+        "removed": [
+          "刃下生风"
+        ]
+      }
+    },
+    "YouSpinMeRightRound": {
+      "tencent_status": "live",
+      "matchedNames": [
+        "转得我眩晕了"
+      ],
+      "matchedSections": {
+        "live": [
+          "转得我眩晕了"
+        ]
+      }
+    },
+    "warlock-juicebox": {
+      "tencent_status": "live",
+      "matchedNames": [
+        "术士果汁盒"
+      ],
+      "matchedSections": {
+        "live": [
+          "术士果汁盒"
+        ]
+      }
+    },
+    "ARAM_SpecializedRecursion": {
+      "tencent_status": null,
+      "matchedNames": [],
+      "matchedSections": {}
+    },
+    "forged-by-the-master": {
+      "tencent_status": "live",
+      "matchedNames": [
+        "大师铸就"
+      ],
+      "matchedSections": {
+        "live": [
+          "大师铸就"
+        ]
+      }
+    },
+    "ARAM_SustainingStrike": {
+      "tencent_status": null,
+      "matchedNames": [],
+      "matchedSections": {}
+    },
+    "terraind": {
+      "tencent_status": "live",
+      "matchedNames": [
+        "地形专家"
+      ],
+      "matchedSections": {
+        "live": [
+          "地形专家"
+        ]
+      }
+    },
+    "ARAM_BangBang": {
+      "tencent_status": null,
+      "matchedNames": [],
+      "matchedSections": {}
+    },
+    "dont-change-the-channel": {
+      "tencent_status": "live",
+      "matchedNames": [
+        "别停止引导"
+      ],
+      "matchedSections": {
+        "live": [
+          "别停止引导"
+        ]
+      }
+    },
+    "its-go-time": {
+      "tencent_status": "live",
+      "matchedNames": [
+        "前进时间到"
+      ],
+      "matchedSections": {
+        "live": [
+          "前进时间到"
+        ]
+      }
+    },
+    "trusty-weapon": {
+      "tencent_status": "live",
+      "matchedNames": [
+        "可靠武器"
+      ],
+      "matchedSections": {
+        "live": [
+          "可靠武器",
+          "可靠武器"
+        ]
+      }
+    },
+    "overloaded": {
+      "tencent_status": "live",
+      "matchedNames": [
+        "超负荷"
+      ],
+      "matchedSections": {
+        "live": [
+          "超负荷"
+        ]
+      }
+    },
+    "adaptive-ward": {
+      "tencent_status": "live",
+      "matchedNames": [
+        "自适应防护"
+      ],
+      "matchedSections": {
+        "live": [
+          "自适应防护"
+        ]
+      }
+    },
+    "porcupine": {
+      "tencent_status": "live",
+      "matchedNames": [
+        "豪猪"
+      ],
+      "matchedSections": {
+        "live": [
+          "豪猪"
+        ]
+      }
+    },
+    "pin-cushion": {
+      "tencent_status": "live",
+      "matchedNames": [
+        "针插垫"
+      ],
+      "matchedSections": {
+        "live": [
+          "针插垫"
+        ]
+      }
+    },
+    "surge-field": {
+      "tencent_status": "live",
+      "matchedNames": [
+        "电涌力场"
+      ],
+      "matchedSections": {
+        "live": [
+          "电涌力场"
+        ]
+      }
+    },
+    "mystery-augment": {
+      "tencent_status": null,
+      "matchedNames": [],
+      "matchedSections": {}
+    },
+    "one-trick-pony": {
+      "tencent_status": null,
+      "matchedNames": [],
+      "matchedSections": {}
+    },
+    "pat-on-the-back": {
+      "tencent_status": "live",
+      "matchedNames": [
+        "轻拍背部"
+      ],
+      "matchedSections": {
+        "live": [
+          "轻拍背部"
+        ]
+      }
+    },
+    "pursuit-of-power": {
+      "tencent_status": "live",
+      "matchedNames": [
+        "威能之追求"
+      ],
+      "matchedSections": {
+        "live": [
+          "威能之追求"
+        ]
+      }
+    },
+    "support-main": {
+      "tencent_status": null,
+      "matchedNames": [],
+      "matchedSections": {}
+    },
+    "squishy-slappy-grab": {
+      "tencent_status": "live",
+      "matchedNames": [
+        "软弹啪叽抓"
+      ],
+      "matchedSections": {
+        "live": [
+          "软弹啪叽抓"
+        ]
+      }
+    },
+    "trailblazer": {
+      "tencent_status": null,
+      "matchedNames": [],
+      "matchedSections": {}
+    }
+  }
+}
