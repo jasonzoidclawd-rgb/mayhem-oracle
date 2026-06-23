@@ -1,56 +1,13 @@
 {
   "identity_key": "CDragon augmentNameId",
   "counts": {
-    "cdragon": 7,
+    "cdragon": 0,
     "internal_augments": 21,
     "wiki": 20,
-    "arammayhem_win_rate": 3
+    "arammayhem_win_rate": 0
   },
   "sources": {
-    "cdragon": [
-      {
-        "augmentNameId": "FullyAutomated",
-        "name": "Fully Automated",
-        "slug": "fully-automated",
-        "rarity": "silver"
-      },
-      {
-        "augmentNameId": "Quest_Sneakerhead",
-        "name": "Sneakerhead",
-        "slug": "quest_-sneakerhead",
-        "rarity": "prismatic"
-      },
-      {
-        "augmentNameId": "ReEnergize",
-        "name": "ReEnergize",
-        "slug": "re-energize",
-        "rarity": "silver"
-      },
-      {
-        "augmentNameId": "SkipTheBasics",
-        "name": "Ult Bot",
-        "slug": "skip-the-basics",
-        "rarity": "prismatic"
-      },
-      {
-        "augmentNameId": "SnapBack",
-        "name": "Snap Back",
-        "slug": "snap-back",
-        "rarity": "gold"
-      },
-      {
-        "augmentNameId": "VeilOfWarding",
-        "name": "Veil of Warding",
-        "slug": "veil-of-warding",
-        "rarity": "silver"
-      },
-      {
-        "augmentNameId": "VirtuousCycle",
-        "name": "Virtuous Cycle",
-        "slug": "virtuous-cycle",
-        "rarity": "silver"
-      }
-    ],
+    "cdragon": [],
     "internal_augments": [
       {
         "sourceKey": "warlock-juicebox",
@@ -81,7 +38,7 @@
         ],
         "slug": "pursuit-of-haste",
         "rarity": "gold",
-        "lifecycle": "active",
+        "lifecycle": "removed",
         "hasWikiDescription": true
       },
       {
@@ -113,7 +70,7 @@
         ],
         "slug": "siphon",
         "rarity": "silver",
-        "lifecycle": "active",
+        "lifecycle": "removed",
         "hasWikiDescription": true
       },
       {
@@ -145,7 +102,7 @@
         ],
         "slug": "from-downtown",
         "rarity": "gold",
-        "lifecycle": "active",
+        "lifecycle": "removed",
         "hasWikiDescription": true
       },
       {
@@ -645,50 +602,7 @@
         "hasWikiDescription": true
       }
     ],
-    "arammayhem_win_rate": [
-      {
-        "sourceKey": "pursuit-of-haste",
-        "name": "Pursuit of Haste",
-        "status": "unmatched",
-        "tokens": [
-          {
-            "field": "name",
-            "value": "Pursuit of Haste",
-            "token": "pursuitofhaste"
-          }
-        ],
-        "slug": "pursuit-of-haste",
-        "win_rate": 54.53
-      },
-      {
-        "sourceKey": "siphon",
-        "name": "Siphon",
-        "status": "unmatched",
-        "tokens": [
-          {
-            "field": "name",
-            "value": "Siphon",
-            "token": "siphon"
-          }
-        ],
-        "slug": "siphon",
-        "win_rate": 52.57
-      },
-      {
-        "sourceKey": "from-downtown",
-        "name": "From Downtown",
-        "status": "unmatched",
-        "tokens": [
-          {
-            "field": "name",
-            "value": "From Downtown",
-            "token": "fromdowntown"
-          }
-        ],
-        "slug": "from-downtown",
-        "win_rate": 52.11
-      }
-    ]
+    "arammayhem_win_rate": []
   },
   "notes": [
     "arammayhem_win_rate is best-effort only; unmatched rows do not block identity resolution.",

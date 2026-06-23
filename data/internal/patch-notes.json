@@ -1,8 +1,225 @@
 {
-  "patch": "26.12",
-  "scraped_at": "2026-06-22T21:53:36.450704+00:00",
+  "patch": "26.13",
+  "scraped_at": "2026-06-23T23:08:24.391682+00:00",
   "source": "https://www.leagueoflegends.com/en-us/news/game-updates/",
   "patches": [
+    {
+      "version": "26.13",
+      "title": "Patch 26.13 Notes",
+      "released": "",
+      "sections": [
+        {
+          "id": "augments",
+          "title": "Augments",
+          "changes": [
+            {
+              "subject": {
+                "en": "Archmage",
+                "zh-cn": "大法师",
+                "ja-jp": "魔帝",
+                "ko-kr": "대마법사",
+                "zh-tw": "大法師"
+              },
+              "text": {
+                "en": "Tier: Gold ⇒ Prismatic",
+                "zh-cn": "Tier: Gold ⇒ Prismatic",
+                "ja-jp": "ティア：ゴールド ⇒ プリズム",
+                "ko-kr": "Tier: Gold ⇒ Prismatic"
+              },
+              "kind": "changed"
+            },
+            {
+              "subject": {
+                "en": "Combusting Interest",
+                "zh-cn": "炽燃利息",
+                "ja-jp": "燃える利回り",
+                "ko-kr": "타오르는 이자",
+                "zh-tw": "燃燒利息"
+              },
+              "text": {
+                "en": "Percent Gold from Damage: 1% ⇒ 0.75%",
+                "zh-cn": "Percent Gold from Damage: 1% ⇒ 0.75%",
+                "ja-jp": "ダメージから獲得するゴールドの割合：1% ⇒ 0.75%",
+                "ko-kr": "Percent Gold from Damage: 1% ⇒ 0.75%"
+              },
+              "kind": "nerfed"
+            },
+            {
+              "subject": {
+                "en": "From Down Town",
+                "zh-cn": "From Down Town",
+                "ja-jp": "ロングシュート",
+                "ko-kr": "From Down Town"
+              },
+              "text": {
+                "en": "Added restrictions to the largest Area of Effect size.",
+                "zh-cn": "Added restrictions to the largest Area of Effect size.",
+                "ja-jp": "効果範囲の最大サイズに制限を追加しました。",
+                "ko-kr": "Added restrictions to the largest Area of Effect size."
+              },
+              "kind": "changed"
+            },
+            {
+              "subject": {
+                "en": "Glass Cannon",
+                "zh-cn": "玻璃大炮",
+                "ja-jp": "グラスキャノン",
+                "ko-kr": "유리 대포",
+                "zh-tw": "玻璃大砲"
+              },
+              "text": {
+                "en": "True Damage Percent: 15% ⇒ 25% / 15% melee / ranged",
+                "zh-cn": "True Damage Percent: 15% ⇒ 25% / 15% melee / ranged",
+                "ja-jp": "確定ダメージ割合：15% ⇒ 25% / 15%（近接/遠隔）",
+                "ko-kr": "True Damage Percent: 15% ⇒ 25% / 15% melee / ranged"
+              },
+              "kind": "buffed"
+            },
+            {
+              "subject": {
+                "en": "Pin Cushion",
+                "zh-cn": "针插垫",
+                "ja-jp": "針山",
+                "ko-kr": "바늘꽂이",
+                "zh-tw": "豪豬"
+              },
+              "text": {
+                "en": "Damage per Nail: 20 - 30 ⇒ 20 - 60",
+                "zh-cn": "Damage per Nail: 20 - 30 ⇒ 20 - 60",
+                "ja-jp": "針ごとのダメージ：20～30 ⇒ 20～60",
+                "ko-kr": "Damage per Nail: 20 - 30 ⇒ 20 - 60"
+              },
+              "kind": "buffed"
+            },
+            {
+              "subject": {
+                "en": "Pressure Cooker",
+                "zh-cn": "高压锅",
+                "ja-jp": "圧力鍋",
+                "ko-kr": "압력솥",
+                "zh-tw": "壓力火鍋"
+              },
+              "text": {
+                "en": "Total Burn Damage: 2% max Health ⇒ 1.5% max Health",
+                "zh-cn": "Total Burn Damage: 2% max Health ⇒ 1.5% max Health",
+                "ja-jp": "合計炎上ダメージ：最大体力の2% ⇒ 最大体力の1.5%",
+                "ko-kr": "Total Burn Damage: 2% max Health ⇒ 1.5% max Health"
+              },
+              "kind": "nerfed"
+            },
+            {
+              "subject": {
+                "en": "Quickstep",
+                "zh-cn": "快步",
+                "ja-jp": "クイックステップ",
+                "ko-kr": "날쌘걸음",
+                "zh-tw": "快步移動"
+              },
+              "text": {
+                "en": "Tier: Prismatic ⇒ Gold",
+                "zh-cn": "Tier: Prismatic ⇒ Gold",
+                "ja-jp": "ティア：プリズム ⇒ ゴールド",
+                "ko-kr": "Tier: Prismatic ⇒ Gold"
+              },
+              "kind": "changed"
+            },
+            {
+              "subject": {
+                "en": "Spirit Bomb",
+                "zh-cn": "灵魄炸弹",
+                "ja-jp": "スピリットボム",
+                "ko-kr": "영혼 폭탄",
+                "zh-tw": "靈魂炸彈"
+              },
+              "text": {
+                "en": "Shield Duration: 4s ⇒ 2s",
+                "zh-cn": "Shield Duration: 4s ⇒ 2s",
+                "ja-jp": "シールド効果時間：4秒 ⇒ 2秒",
+                "ko-kr": "Shield Duration: 4s ⇒ 2s"
+              },
+              "kind": "nerfed"
+            },
+            {
+              "subject": {
+                "en": "Tooth Fairy",
+                "zh-cn": "牙仙子",
+                "ja-jp": "歯の妖精",
+                "ko-kr": "이빨 요정",
+                "zh-tw": "牙仙"
+              },
+              "text": {
+                "en": "Burst Threshold: 20% ⇒ 25%",
+                "zh-cn": "Burst Threshold: 20% ⇒ 25%",
+                "ja-jp": "バーストダメージのしきい値：20% ⇒ 25%",
+                "ko-kr": "Burst Threshold: 20% ⇒ 25%"
+              },
+              "kind": "buffed"
+            },
+            {
+              "subject": {
+                "en": "Tooth Fairy",
+                "zh-cn": "牙仙子",
+                "ja-jp": "歯の妖精",
+                "ko-kr": "이빨 요정",
+                "zh-tw": "牙仙"
+              },
+              "text": {
+                "en": "Lethality and Magic Penetration: 5 ⇒ 4",
+                "zh-cn": "Lethality and Magic Penetration: 5 ⇒ 4",
+                "ja-jp": "脅威と魔法防御貫通：+5 ⇒ +4",
+                "ko-kr": "Lethality and Magic Penetration: 5 ⇒ 4"
+              },
+              "kind": "nerfed"
+            },
+            {
+              "subject": {
+                "en": "Twinfire",
+                "zh-cn": "Twinfire",
+                "ja-jp": "ツインファイア",
+                "ko-kr": "Twinfire"
+              },
+              "text": {
+                "en": "Critical Chance: 15% ⇒ 25%",
+                "zh-cn": "Critical Chance: 15% ⇒ 25%",
+                "ja-jp": "クリティカル率：15% ⇒ 25%",
+                "ko-kr": "Critical Chance: 15% ⇒ 25%"
+              },
+              "kind": "buffed"
+            },
+            {
+              "subject": {
+                "en": "Void Immolation",
+                "zh-cn": "Void Immolation",
+                "ja-jp": "ヴォイドの猛火",
+                "ko-kr": "Void Immolation"
+              },
+              "text": {
+                "en": "Added Passive Desolate: Killing an enemy deals magic damage around them.",
+                "zh-cn": "Added Passive Desolate: Killing an enemy deals magic damage around them.",
+                "ja-jp": "追加された自動効果 荒涼：敵をキルすると、その周囲に魔法ダメージを与える。",
+                "ko-kr": "Added Passive Desolate: Killing an enemy deals magic damage around them."
+              },
+              "kind": "changed"
+            },
+            {
+              "subject": {
+                "en": "Youch My Coins",
+                "zh-cn": "Youch My Coins",
+                "ja-jp": "あいたっ、私のコイン！",
+                "ko-kr": "Youch My Coins"
+              },
+              "text": {
+                "en": "Coin Drops: 16 ⇒ 9",
+                "zh-cn": "Coin Drops: 16 ⇒ 9",
+                "ja-jp": "コインドロップ：16 ⇒ 9",
+                "ko-kr": "Coin Drops: 16 ⇒ 9"
+              },
+              "kind": "nerfed"
+            }
+          ]
+        }
+      ]
+    },
     {
       "version": "26.12",
       "title": "Patch 26.12 Notes",

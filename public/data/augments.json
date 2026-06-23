@@ -1,6 +1,6 @@
 {
   "patch": "26.12",
-  "scraped_at": "2026-06-23T08:07:04.768282+00:00",
+  "scraped_at": "2026-06-23T23:01:01.311461+00:00",
   "schemaVersion": "augment-truth-step5",
   "sources": {
     "definition": "data/internal/augment-base-catalog.json",
@@ -203,7 +203,7 @@
       "flags": {
         "system_breaker": false,
         "lifecycle": "removed",
-        "lifecycle_patch": "26.12"
+        "lifecycle_patch": "26.13"
       },
       "kit_tags": [
         "heal_shield"
@@ -1083,7 +1083,7 @@
       "flags": {
         "system_breaker": false,
         "lifecycle": "removed",
-        "lifecycle_patch": "26.12"
+        "lifecycle_patch": "26.13"
       },
       "type": "ability",
       "name_zh_CN": "Pursuit of Haste",
@@ -1338,7 +1338,7 @@
       "flags": {
         "system_breaker": false,
         "lifecycle": "removed",
-        "lifecycle_patch": "26.12"
+        "lifecycle_patch": "26.13"
       },
       "kit_tags": [],
       "wikiDescription": "Increase your Item and Augment damage by the required number of."
@@ -1815,7 +1815,7 @@
       "flags": {
         "system_breaker": false,
         "lifecycle": "removed",
-        "lifecycle_patch": "26.12"
+        "lifecycle_patch": "26.13"
       },
       "type": "ability",
       "name_zh_CN": "Siphon",
@@ -2137,7 +2137,7 @@
       "flags": {
         "system_breaker": false,
         "lifecycle": "removed",
-        "lifecycle_patch": "26.12"
+        "lifecycle_patch": "26.13"
       },
       "kit_tags": [
         "ability",
@@ -2194,7 +2194,7 @@
       "flags": {
         "system_breaker": false,
         "lifecycle": "removed",
-        "lifecycle_patch": "26.12"
+        "lifecycle_patch": "26.13"
       },
       "type": "quest",
       "name_zh_CN": "From Downtown",
@@ -2837,7 +2837,7 @@
       "flags": {
         "system_breaker": false,
         "lifecycle": "removed",
-        "lifecycle_patch": "26.12"
+        "lifecycle_patch": "26.13"
       },
       "kit_tags": [
         "heal_shield"
@@ -2917,7 +2917,7 @@
       "flags": {
         "system_breaker": false,
         "lifecycle": "removed",
-        "lifecycle_patch": "26.12"
+        "lifecycle_patch": "26.13"
       },
       "kit_tags": [
         "movement",
@@ -2938,7 +2938,7 @@
       "flags": {
         "system_breaker": false,
         "lifecycle": "removed",
-        "lifecycle_patch": "26.12"
+        "lifecycle_patch": "26.13"
       },
       "kit_tags": [
         "ability"
@@ -3493,7 +3493,7 @@
       "flags": {
         "system_breaker": false,
         "lifecycle": "removed",
-        "lifecycle_patch": "26.12"
+        "lifecycle_patch": "26.13"
       },
       "kit_tags": [
         "ability",
@@ -3514,7 +3514,7 @@
       "flags": {
         "system_breaker": false,
         "lifecycle": "removed",
-        "lifecycle_patch": "26.12"
+        "lifecycle_patch": "26.13"
       },
       "kit_tags": [
         "tank",
@@ -4549,7 +4549,7 @@
       "flags": {
         "system_breaker": false,
         "lifecycle": "removed",
-        "lifecycle_patch": "26.12"
+        "lifecycle_patch": "26.13"
       },
       "kit_tags": [
         "dot",
@@ -5046,7 +5046,7 @@
       "flags": {
         "system_breaker": false,
         "lifecycle": "removed",
-        "lifecycle_patch": "26.12"
+        "lifecycle_patch": "26.13"
       },
       "kit_tags": [
         "attack",
@@ -5054,7 +5054,13 @@
         "on_hit",
         "movement"
       ],
-      "wikiDescription": "Attacks during your chosen ability apply Marks that explode at the end of its duration, dealing damage and granting Move Speed."
+      "wikiDescription": "Attacks during your chosen ability apply Marks that explode at the end of its duration, dealing damage and granting Move Speed.",
+      "recentChanges": {
+        "patch": "26.13",
+        "changes": [
+          "Damage per Nail: 20 - 30 ⇒ 20 - 60"
+        ]
+      }
     },
     {
       "augmentId": "PinballSnowball",
@@ -5217,7 +5223,7 @@
       "flags": {
         "system_breaker": false,
         "lifecycle": "removed",
-        "lifecycle_patch": "26.12"
+        "lifecycle_patch": "26.13"
       },
       "kit_tags": [
         "ability",
@@ -5419,7 +5425,7 @@
       "flags": {
         "system_breaker": false,
         "lifecycle": "removed",
-        "lifecycle_patch": "26.12"
+        "lifecycle_patch": "26.13"
       },
       "kit_tags": [
         "ability",
@@ -5449,7 +5455,7 @@
       "flags": {
         "system_breaker": false,
         "lifecycle": "removed",
-        "lifecycle_patch": "26.12"
+        "lifecycle_patch": "26.13"
       },
       "type": "standalone",
       "name_zh_CN": "坚若磐石",
@@ -5481,7 +5487,7 @@
       "flags": {
         "system_breaker": false,
         "lifecycle": "removed",
-        "lifecycle_patch": "26.12"
+        "lifecycle_patch": "26.13"
       },
       "type": "standalone",
       "name_zh_CN": "魄罗之王的弹跳",
@@ -5511,7 +5517,7 @@
       "flags": {
         "system_breaker": false,
         "lifecycle": "removed",
-        "lifecycle_patch": "26.12"
+        "lifecycle_patch": "26.13"
       },
       "type": "standalone",
       "name_zh_CN": "霸符兄弟",
@@ -5540,7 +5546,7 @@
       "flags": {
         "system_breaker": false,
         "lifecycle": "removed",
-        "lifecycle_patch": "26.12"
+        "lifecycle_patch": "26.13"
       },
       "type": "standalone",
       "name_zh_CN": "地狱三头犬",
@@ -5566,7 +5572,7 @@
       "flags": {
         "system_breaker": false,
         "lifecycle": "removed",
-        "lifecycle_patch": "26.12"
+        "lifecycle_patch": "26.13"
       },
       "type": "standalone",
       "name_zh_CN": "作弊：我能回城！",
@@ -5597,7 +5603,7 @@
       "flags": {
         "system_breaker": false,
         "lifecycle": "removed",
-        "lifecycle_patch": "26.12"
+        "lifecycle_patch": "26.13"
       },
       "type": "standalone",
       "name_zh_CN": "小丑学院",
@@ -5628,7 +5634,7 @@
       "flags": {
         "system_breaker": false,
         "lifecycle": "removed",
-        "lifecycle_patch": "26.12"
+        "lifecycle_patch": "26.13"
       },
       "type": "standalone",
       "name_zh_CN": "砸开那颗蛋",
@@ -5779,7 +5785,7 @@
       "flags": {
         "system_breaker": false,
         "lifecycle": "removed",
-        "lifecycle_patch": "26.12"
+        "lifecycle_patch": "26.13"
       },
       "type": "standalone",
       "name_zh_CN": "魔鬼之舞",
@@ -5810,7 +5816,7 @@
       "flags": {
         "system_breaker": false,
         "lifecycle": "removed",
-        "lifecycle_patch": "26.12"
+        "lifecycle_patch": "26.13"
       },
       "type": "standalone",
       "name_zh_CN": "你肩上的恶魔",
@@ -5872,7 +5878,7 @@
       "flags": {
         "system_breaker": false,
         "lifecycle": "removed",
-        "lifecycle_patch": "26.12"
+        "lifecycle_patch": "26.13"
       },
       "type": "standalone",
       "name_zh_CN": "卡皮巴拉空投",
@@ -5902,7 +5908,7 @@
       "flags": {
         "system_breaker": false,
         "lifecycle": "removed",
-        "lifecycle_patch": "26.12"
+        "lifecycle_patch": "26.13"
       },
       "type": "standalone",
       "name_zh_CN": "裁决使",
@@ -5932,7 +5938,7 @@
       "flags": {
         "system_breaker": false,
         "lifecycle": "removed",
-        "lifecycle_patch": "26.12"
+        "lifecycle_patch": "26.13"
       },
       "type": "standalone",
       "name_zh_CN": "感受燃烧",
@@ -5960,7 +5966,7 @@
       "flags": {
         "system_breaker": false,
         "lifecycle": "removed",
-        "lifecycle_patch": "26.12"
+        "lifecycle_patch": "26.13"
       },
       "type": "standalone",
       "name_zh_CN": "最终都市列车",
@@ -5991,7 +5997,7 @@
       "flags": {
         "system_breaker": false,
         "lifecycle": "removed",
-        "lifecycle_patch": "26.12"
+        "lifecycle_patch": "26.13"
       },
       "type": "standalone",
       "name_zh_CN": "冰霜 幽灵",
@@ -6021,7 +6027,7 @@
       "flags": {
         "system_breaker": false,
         "lifecycle": "removed",
-        "lifecycle_patch": "26.12"
+        "lifecycle_patch": "26.13"
       },
       "type": "standalone",
       "name_zh_CN": "砍伤",
@@ -6050,7 +6056,7 @@
       "flags": {
         "system_breaker": false,
         "lifecycle": "removed",
-        "lifecycle_patch": "26.12"
+        "lifecycle_patch": "26.13"
       },
       "type": "standalone",
       "name_zh_CN": "祖母的辣椒油",
@@ -6108,7 +6114,7 @@
       "flags": {
         "system_breaker": false,
         "lifecycle": "removed",
-        "lifecycle_patch": "26.12"
+        "lifecycle_patch": "26.13"
       },
       "type": "standalone",
       "name_zh_CN": "帽上加帽",
@@ -6136,7 +6142,7 @@
       "flags": {
         "system_breaker": false,
         "lifecycle": "removed",
-        "lifecycle_patch": "26.12"
+        "lifecycle_patch": "26.13"
       },
       "type": "standalone",
       "name_zh_CN": "当心小蛋糕！",
@@ -6165,7 +6171,7 @@
       "flags": {
         "system_breaker": false,
         "lifecycle": "removed",
-        "lifecycle_patch": "26.12"
+        "lifecycle_patch": "26.13"
       },
       "type": "standalone",
       "name_zh_CN": "圣火",
@@ -6194,7 +6200,7 @@
       "flags": {
         "system_breaker": false,
         "lifecycle": "removed",
-        "lifecycle_patch": "26.12"
+        "lifecycle_patch": "26.13"
       },
       "type": "standalone",
       "name_zh_CN": "小猫咪找妈妈",
@@ -6281,7 +6287,7 @@
       "flags": {
         "system_breaker": false,
         "lifecycle": "removed",
-        "lifecycle_patch": "26.12"
+        "lifecycle_patch": "26.13"
       },
       "type": "standalone",
       "name_zh_CN": "基石法师",
@@ -6310,7 +6316,7 @@
       "flags": {
         "system_breaker": false,
         "lifecycle": "removed",
-        "lifecycle_patch": "26.12"
+        "lifecycle_patch": "26.13"
       },
       "type": "standalone",
       "name_zh_CN": "激光治疗",
@@ -6339,7 +6345,7 @@
       "flags": {
         "system_breaker": false,
         "lifecycle": "removed",
-        "lifecycle_patch": "26.12"
+        "lifecycle_patch": "26.13"
       },
       "type": "standalone",
       "name_zh_CN": "闪电打击",
@@ -6360,7 +6366,7 @@
       "flags": {
         "system_breaker": false,
         "lifecycle": "removed",
-        "lifecycle_patch": "26.12"
+        "lifecycle_patch": "26.13"
       },
       "kit_tags": [],
       "wikiDescription": "Added to ARAM Mayhem in Patch 26.12. Riot lists this augment in the official patch notes; its full client tooltip is not exposed in the current 16.12 augment file yet."
@@ -6386,7 +6392,7 @@
       "flags": {
         "system_breaker": false,
         "lifecycle": "removed",
-        "lifecycle_patch": "26.12"
+        "lifecycle_patch": "26.13"
       },
       "type": "standalone",
       "name_zh_CN": "轨道镭射",
@@ -6407,7 +6413,7 @@
       "flags": {
         "system_breaker": false,
         "lifecycle": "removed",
-        "lifecycle_patch": "26.12"
+        "lifecycle_patch": "26.13"
       },
       "kit_tags": [
         "heal_shield",
@@ -6436,7 +6442,7 @@
       "flags": {
         "system_breaker": false,
         "lifecycle": "removed",
-        "lifecycle_patch": "26.12"
+        "lifecycle_patch": "26.13"
       },
       "type": "standalone",
       "name_zh_CN": "坚韧",
@@ -6468,7 +6474,7 @@
       "flags": {
         "system_breaker": false,
         "lifecycle": "removed",
-        "lifecycle_patch": "26.12"
+        "lifecycle_patch": "26.13"
       },
       "type": "standalone",
       "name_zh_CN": "魄罗爆破手",
@@ -6489,7 +6495,7 @@
       "flags": {
         "system_breaker": false,
         "lifecycle": "removed",
-        "lifecycle_patch": "26.12"
+        "lifecycle_patch": "26.13"
       },
       "kit_tags": [
         "ability"
@@ -6517,7 +6523,7 @@
       "flags": {
         "system_breaker": false,
         "lifecycle": "removed",
-        "lifecycle_patch": "26.12"
+        "lifecycle_patch": "26.13"
       },
       "type": "standalone",
       "name_zh_CN": "量子计算",
@@ -6540,7 +6546,7 @@
       "flags": {
         "system_breaker": false,
         "lifecycle": "removed",
-        "lifecycle_patch": "26.12"
+        "lifecycle_patch": "26.13"
       },
       "kit_tags": [
         "heal_shield",
@@ -6587,7 +6593,7 @@
       "flags": {
         "system_breaker": false,
         "lifecycle": "removed",
-        "lifecycle_patch": "26.12"
+        "lifecycle_patch": "26.13"
       },
       "type": "standalone",
       "name_zh_CN": "红包",
@@ -6646,7 +6652,7 @@
       "flags": {
         "system_breaker": false,
         "lifecycle": "removed",
-        "lifecycle_patch": "26.12"
+        "lifecycle_patch": "26.13"
       },
       "type": "standalone",
       "name_zh_CN": "退敌力场",
@@ -6675,7 +6681,7 @@
       "flags": {
         "system_breaker": false,
         "lifecycle": "removed",
-        "lifecycle_patch": "26.12"
+        "lifecycle_patch": "26.13"
       },
       "type": "standalone",
       "name_zh_CN": "无休回复",
@@ -6704,7 +6710,7 @@
       "flags": {
         "system_breaker": false,
         "lifecycle": "removed",
-        "lifecycle_patch": "26.12"
+        "lifecycle_patch": "26.13"
       },
       "type": "standalone",
       "name_zh_CN": "自我毁灭",
@@ -6732,7 +6738,7 @@
       "flags": {
         "system_breaker": true,
         "lifecycle": "removed",
-        "lifecycle_patch": "26.12"
+        "lifecycle_patch": "26.13"
       },
       "type": "standalone",
       "name_zh_CN": "一板一眼",
@@ -6789,7 +6795,7 @@
       "flags": {
         "system_breaker": false,
         "lifecycle": "removed",
-        "lifecycle_patch": "26.12"
+        "lifecycle_patch": "26.13"
       },
       "type": "standalone",
       "name_zh_CN": "雪球扭蛋机",
@@ -6818,7 +6824,7 @@
       "flags": {
         "system_breaker": false,
         "lifecycle": "removed",
-        "lifecycle_patch": "26.12"
+        "lifecycle_patch": "26.13"
       },
       "type": "standalone",
       "name_zh_CN": "升级：雪球",
@@ -6879,7 +6885,7 @@
       "flags": {
         "system_breaker": false,
         "lifecycle": "removed",
-        "lifecycle_patch": "26.12"
+        "lifecycle_patch": "26.13"
       },
       "type": "standalone",
       "name_zh_CN": "速度恶魔",
@@ -6900,7 +6906,7 @@
       "flags": {
         "system_breaker": false,
         "lifecycle": "removed",
-        "lifecycle_patch": "26.12"
+        "lifecycle_patch": "26.13"
       },
       "kit_tags": [
         "cc"
@@ -6959,7 +6965,7 @@
       "flags": {
         "system_breaker": false,
         "lifecycle": "removed",
-        "lifecycle_patch": "26.12"
+        "lifecycle_patch": "26.13"
       },
       "type": "standalone",
       "name_zh_CN": "残暴之力",
@@ -6989,7 +6995,7 @@
       "flags": {
         "system_breaker": false,
         "lifecycle": "removed",
-        "lifecycle_patch": "26.12"
+        "lifecycle_patch": "26.13"
       },
       "type": "standalone",
       "name_zh_CN": "折磨者",
@@ -7010,7 +7016,7 @@
       "flags": {
         "system_breaker": false,
         "lifecycle": "removed",
-        "lifecycle_patch": "26.12"
+        "lifecycle_patch": "26.13"
       },
       "kit_tags": []
     },
@@ -7035,7 +7041,7 @@
       "flags": {
         "system_breaker": false,
         "lifecycle": "removed",
-        "lifecycle_patch": "26.12"
+        "lifecycle_patch": "26.13"
       },
       "type": "standalone",
       "name_zh_CN": "精准奇才",
@@ -7064,7 +7070,7 @@
       "flags": {
         "system_breaker": false,
         "lifecycle": "removed",
-        "lifecycle_patch": "26.12"
+        "lifecycle_patch": "26.13"
       },
       "type": "standalone",
       "name_zh_CN": "接二连三",
@@ -7090,7 +7096,7 @@
       "flags": {
         "system_breaker": false,
         "lifecycle": "removed",
-        "lifecycle_patch": "26.12"
+        "lifecycle_patch": "26.13"
       },
       "type": "standalone",
       "name_zh_CN": "升级：弯刀",
@@ -7119,7 +7125,7 @@
       "flags": {
         "system_breaker": false,
         "lifecycle": "removed",
-        "lifecycle_patch": "26.12"
+        "lifecycle_patch": "26.13"
       },
       "type": "standalone",
       "name_zh_CN": "升级：狂妄",
@@ -7149,7 +7155,7 @@
       "flags": {
         "system_breaker": false,
         "lifecycle": "removed",
-        "lifecycle_patch": "26.12"
+        "lifecycle_patch": "26.13"
       },
       "type": "standalone",
       "name_zh_CN": "升级：米凯尔的祝福",
@@ -7178,7 +7184,7 @@
       "flags": {
         "system_breaker": false,
         "lifecycle": "removed",
-        "lifecycle_patch": "26.12"
+        "lifecycle_patch": "26.13"
       },
       "type": "standalone",
       "name_zh_CN": "升级：荆棘之甲",
@@ -7207,7 +7213,7 @@
       "flags": {
         "system_breaker": false,
         "lifecycle": "removed",
-        "lifecycle_patch": "26.12"
+        "lifecycle_patch": "26.13"
       },
       "type": "standalone",
       "name_zh_CN": "吸血习性",
@@ -7240,7 +7246,7 @@
       "flags": {
         "system_breaker": false,
         "lifecycle": "removed",
-        "lifecycle_patch": "26.12"
+        "lifecycle_patch": "26.13"
       },
       "type": "ability",
       "name_zh_CN": "虚空冲刺",
@@ -7271,7 +7277,7 @@
       "flags": {
         "system_breaker": false,
         "lifecycle": "removed",
-        "lifecycle_patch": "26.12"
+        "lifecycle_patch": "26.13"
       },
       "type": "standalone",
       "name_zh_CN": "虚空裂隙",
@@ -7330,7 +7336,7 @@
       "flags": {
         "system_breaker": false,
         "lifecycle": "removed",
-        "lifecycle_patch": "26.12"
+        "lifecycle_patch": "26.13"
       },
       "type": "standalone",
       "name_zh_CN": "负重爆气",
@@ -7359,7 +7365,7 @@
       "flags": {
         "system_breaker": false,
         "lifecycle": "removed",
-        "lifecycle_patch": "26.12"
+        "lifecycle_patch": "26.13"
       },
       "type": "standalone",
       "name_zh_CN": "刃下生风",
@@ -7420,7 +7426,7 @@
       "flags": {
         "system_breaker": false,
         "lifecycle": "removed",
-        "lifecycle_patch": "26.12"
+        "lifecycle_patch": "26.13"
       },
       "type": "standalone",
       "name_zh_CN": "升级：破晓绽放之剑",
@@ -7502,7 +7508,7 @@
       "flags": {
         "system_breaker": false,
         "lifecycle": "removed",
-        "lifecycle_patch": "26.12"
+        "lifecycle_patch": "26.13"
       },
       "type": "standalone",
       "name_zh_CN": "？？？",
@@ -7555,7 +7561,7 @@
       "flags": {
         "system_breaker": false,
         "lifecycle": "removed",
-        "lifecycle_patch": "26.12"
+        "lifecycle_patch": "26.13"
       },
       "type": "standalone",
       "name_zh_CN": "完全自动化",
@@ -7581,7 +7587,7 @@
       "flags": {
         "system_breaker": false,
         "lifecycle": "removed",
-        "lifecycle_patch": "26.12"
+        "lifecycle_patch": "26.13"
       },
       "type": "standalone",
       "name_zh_CN": "王中王，靴中靴",

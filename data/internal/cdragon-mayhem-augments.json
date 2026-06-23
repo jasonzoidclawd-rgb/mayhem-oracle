@@ -1,7 +1,8 @@
 {
   "patch": "26.12",
-  "fetched_at": "2026-06-22T21:53:37.446549+00:00",
+  "fetched_at": "2026-06-23T23:08:25.577377+00:00",
   "source": "https://raw.communitydragon.org/latest",
+  "definition_source": "kiwi-stringtable-v1",
   "augments": [
     {
       "nameId": "ARAM_ADAPt",
@@ -72,16 +73,6 @@
       "slug": "backto-basics",
       "rarity": "prismatic",
       "tooltip": "Your Ultimate Ability is sealed. Gain @DamageAmp*100@% Ability Damage, <healing>Healing</healing>, <shield>Shielding</shield>, and <scaleAbilityHaste>@Haste@ Ability Haste</scaleAbilityHaste>."
-    },
-    {
-      "nameId": "ARAM_BangBang",
-      "name": "From Downtown",
-      "names": {
-        "en": "From Downtown"
-      },
-      "slug": "bang-bang",
-      "rarity": "gold",
-      "tooltip": ""
     },
     {
       "nameId": "ARAM_BigBrain",
@@ -1438,10 +1429,10 @@
       "name": "Quickstep",
       "names": {
         "en": "Quickstep",
-        "zh-TW": "Quickstep",
-        "zh-CN": "Quickstep",
-        "ja": "Quickstep",
-        "ko": "Quickstep"
+        "zh-TW": "快步移動",
+        "zh-CN": "快步",
+        "ja": "クイックステップ",
+        "ko": "날쌘걸음"
       },
       "slug": "quickstep",
       "rarity": "gold",
@@ -1683,7 +1674,7 @@
     },
     {
       "nameId": "ARAM_SonicBoom",
-      "name": "Sonic Boom",
+      "name": "Buffing, <healing>healing</healing>, or <shield>Shielding</shield> your ally deals <trueDamage>@Damage@ true damage</trueDamage> and <status>Slows enemies surrounding them</status> by @SlowAmount*-100@% for 2 seconds (@ProcCooldown@ seconds Cooldown).<br><br>Damage Dealt: @f2@",
       "names": {
         "en": "Buffing, <healing>healing</healing>, or <shield>Shielding</shield> your ally deals <trueDamage>@Damage@ true damage</trueDamage> and <status>Slows enemies surrounding them</status> by @SlowAmount*-100@% for 2 seconds (@ProcCooldown@ seconds Cooldown).<br><br>Damage Dealt: @f2@",
         "zh-TW": "強化、<healing>治療</healing>、或<shield>賦予友軍護盾</shield>時，會對友軍周圍的敵軍造成<trueDamage>@Damage@真實傷害</trueDamage>，並<status>緩速@SlowAmount*-100@%</status>，持續2秒(冷卻時間@ProcCooldown@秒)。<br><br>傷害量：@f2@",
@@ -1708,16 +1699,6 @@
       "slug": "soul-siphon",
       "rarity": "gold",
       "tooltip": "Gain <crit>@CritChance*100@% Crit Chance</crit> and <lifeSteal>@HealPercentage*100@% Lifesteal on <crit>Critical Strikes</crit></lifeSteal>.<br><br>Total Healing Done: @f2@"
-    },
-    {
-      "nameId": "ARAM_SpecializedRecursion",
-      "name": "Pursuit of Haste",
-      "names": {
-        "en": "Pursuit of Haste"
-      },
-      "slug": "specialized-recursion",
-      "rarity": "gold",
-      "tooltip": ""
     },
     {
       "nameId": "ARAM_SpeedDemon",
@@ -1844,16 +1825,6 @@
       "slug": "stuck-in-here-with-me",
       "rarity": "prismatic",
       "tooltip": "After using your <keywordMajor>Ultimate</keywordMajor>, gain @DamageMitigation@ damage reduction for @TauntChannelTime@ seconds, after which you <status>Taunt</status> enemies inside for @TauntDuration@ seconds."
-    },
-    {
-      "nameId": "ARAM_SustainingStrike",
-      "name": "Siphon",
-      "names": {
-        "en": "Siphon"
-      },
-      "slug": "sustaining-strike",
-      "rarity": "silver",
-      "tooltip": ""
     },
     {
       "nameId": "ARAM_SymphonyofWar",
@@ -2212,10 +2183,10 @@
       "name": "Wee Woo Wee Woo",
       "names": {
         "en": "Wee Woo Wee Woo",
-        "zh-TW": "Wee Woo Wee Woo",
-        "zh-CN": "Wee Woo Wee Woo",
-        "ja": "Wee Woo Wee Woo",
-        "ko": "Wee Woo Wee Woo"
+        "zh-TW": "嗚咿嗚咿",
+        "zh-CN": "喂呜喂呜",
+        "ja": "うぃ～！おりゃっ！",
+        "ko": "삐뽀삐뽀"
       },
       "slug": "wee-woo-wee-woo",
       "rarity": "gold",
@@ -2282,10 +2253,10 @@
       "name": "Yowch, My Coins!",
       "names": {
         "en": "Yowch, My Coins!",
-        "zh-TW": "Yowch, My Coins!",
-        "zh-CN": "Yowch, My Coins!",
-        "ja": "Yowch, My Coins!",
-        "ko": "Yowch, My Coins!"
+        "zh-TW": "哎呀，我的金幣！",
+        "zh-CN": "哎哟，我的硬币！",
+        "ja": "あいたっ、私のコイン！",
+        "ko": "으악, 내 동전!"
       },
       "slug": "yowch-my-coins",
       "rarity": "gold",
@@ -2318,6 +2289,1006 @@
       "slug": "esc-a-p-a-de",
       "rarity": "silver",
       "tooltip": "Convert <scaleAP>Ability Power</scaleAP> to <scaleAD>Bonus Attack Damage</scaleAD> and gain <scaleAD>@ADAmpCalcTooltip@ Attack Damage</scaleAD>.<br><br>Current Conversion: @f1@<br><br><rules>Converts at a rate of <scaleAD>@ConversionRate@ Attack Damage</scaleAD> per point of <scaleAP>Ability Power</scaleAP>.</rules>"
+    },
+    {
+      "nameId": "Ability_SelfAOE_DoubleCast",
+      "name": "Echo Cast",
+      "names": {
+        "en": "Echo Cast"
+      },
+      "slug": "ability_-self-a-o-e_-double-cast",
+      "rarity": "prismatic",
+      "tooltip": "Casting your {{SpellName}} sends a clone of the ability toward your mouse position and recasts it after @DelayTime@ seconds."
+    },
+    {
+      "nameId": "Adamant",
+      "name": "Adamant",
+      "names": {
+        "en": "Adamant",
+        "zh-TW": "意志堅定",
+        "zh-CN": "坚若磐石",
+        "ja": "アダマント",
+        "ko": "단호함"
+      },
+      "slug": "adamant",
+      "rarity": "silver",
+      "tooltip": "Each time you <status>Immobilize</status> or <status>Ground</status> an enemy, gain @ResistsPerLevel@ <scaleArmor>Armor</scaleArmor> and <scaleMR>Magic Resist</scaleMR> for @AugDuration@ seconds (up to @MaxStacks@ stacks)."
+    },
+    {
+      "nameId": "BabyKitty",
+      "name": "I'm a Baby Kitty Where is Mama",
+      "names": {
+        "en": "I'm a Baby Kitty Where is Mama"
+      },
+      "slug": "baby-kitty",
+      "rarity": "prismatic",
+      "tooltip": "Standing next to an ally marks them as your mama. <br>Gain <speed>@HuntPercentMS*100@% Movement Speed</speed> when moving towards Mama. Gain <speed>@MamaBonusPercentMS*100@% Movement Speed</speed> and <scaleLevel>@BonusHSP@</scaleLevel> <healing>Heal</healing> and <shield>Shield</shield> Power when close to your mama."
+    },
+    {
+      "nameId": "BiggestSnowballEver",
+      "name": "Biggest Snowball Ever",
+      "names": {
+        "en": "Biggest Snowball Ever",
+        "zh-TW": "巨無霸雪球",
+        "zh-CN": "史上最大雪球",
+        "ja": "超特大の雪玉！",
+        "ko": "데굴데굴 눈덩이!"
+      },
+      "slug": "biggest-snowball-ever",
+      "rarity": "prismatic",
+      "tooltip": "Gain @Haste@ Ability Haste on <spellName>Snowball</spellName>. <br><br>Your snowball is <attention>BIG</attention> and will pass through minions. It <status>Slows</status> enemies for @MoveSpeedModTooltip*100@% for @SlowDuration@ seconds, <status>Knocks Up</status> for @KnockUpDuration@ seconds, and deals an additional <magicDamage>@SnowballDamage@ damage</magicDamage>.<br><br><rules>If you don't have one, gain a <spellName>Snowball</spellName>.</rules>"
+    },
+    {
+      "nameId": "BloodMoneyBurn",
+      "name": "Combusting Interest",
+      "names": {
+        "en": "Combusting Interest"
+      },
+      "slug": "blood-money-burn",
+      "rarity": "gold",
+      "tooltip": "Burns and damage over time applied to champions generates <gold>@GoldPerProc@ + @PercentGoldFromDamage*100@% of damage dealt as Gold</gold>.<br><br>Gold Generated: <b>@f1@</b>"
+    },
+    {
+      "nameId": "Bonk",
+      "name": "BONK!",
+      "names": {
+        "en": "BONK!",
+        "zh-TW": "一棒入魂！",
+        "zh-CN": "邦！",
+        "ja": "ボカッ！",
+        "ko": "꽁!"
+      },
+      "slug": "bonk",
+      "rarity": "gold",
+      "tooltip": "Attacks and Abilities empowered by {{SpellName}} deal an additional @DamageMultiplier*100@% damage to the target and nearby enemies.<br><br>Additional Champions Bonked: @f1@"
+    },
+    {
+      "nameId": "BrushPower",
+      "name": "Hide on Bush",
+      "names": {
+        "en": "Hide on Bush"
+      },
+      "slug": "brush-power",
+      "rarity": "gold",
+      "tooltip": "Entering <keyword>Brush</keyword> grants <spellName>Brush Power</spellName> for @BuffDuration@ seconds. While <spellName>Brush Power</spellName> is active, you deal @DamageAmplification*100@% more damage.<br><br>Damage done: <attention>@f1@</attention><br><br><rules>Staying in Brush refreshes Brush Power.</rules>"
+    },
+    {
+      "nameId": "BurstingTeeth",
+      "name": "Tooth Fairy",
+      "names": {
+        "en": "Tooth Fairy"
+      },
+      "slug": "bursting-teeth",
+      "rarity": "gold",
+      "tooltip": "When you deal more than <attention>@BurstRequirement@</attention> of an enemy champion's Health in less than <attention>@BurstDurationCheck@</attention> seconds, they drop a <keyword>Tooth</keyword>.<br><br>Your <attention>@f1@</attention> <keyword>Teeth</keyword> collection currently gives you <scaleLethality>@LethalityPerTooth@ Lethality</scaleLethality> and <magicPen>@MPenPerTooth@ Magic Penetration</magicPen>.<br><br><rules> @PerTargetCooldown@ seconds cooldown per target</rules>"
+    },
+    {
+      "nameId": "ChainReaction",
+      "name": "Chain Reaction",
+      "names": {
+        "en": "Chain Reaction",
+        "zh-TW": "連鎖反應",
+        "zh-CN": "连锁反应",
+        "ja": "連鎖反応",
+        "ko": "연쇄 반응"
+      },
+      "slug": "chain-reaction",
+      "rarity": "prismatic",
+      "tooltip": "If a champion you <status>Knock Back</status> with {{SpellName}} hits another champion, they are <status>Knocked Up</status> for @ChampCollideKnockupDuration@ seconds and are dealt <magicDamage>@EnemyHitDamage@ magic damage</magicDamage>. If enemy champions collide with terrain, they are <status>Knocked Up</status> for @MinKnockUpDuration@ seconds and are dealt <magicDamage>@WallCollisionDamage@ magic damage</magicDamage>.<br><br>Enemies Knocked Up: @f1@<br>Walls Hit: @f2@<br><br><rules>Knock Up Duration and Height scale with your spell's cooldown.</rules>"
+    },
+    {
+      "nameId": "CritNCast",
+      "name": "Crit 'n Cast",
+      "names": {
+        "en": "Crit 'n Cast",
+        "zh-TW": "暴擊和施法",
+        "zh-CN": "由暴生急",
+        "ja": "クリティカルキャスト",
+        "ko": "치명적 가속"
+      },
+      "slug": "crit-n-cast",
+      "rarity": "silver",
+      "tooltip": "Gain @f1@ Ability Haste (@CritToHasteConversion*100@%%i:scaleCrit%)."
+    },
+    {
+      "nameId": "CriticalMissile",
+      "name": "Critical Missile",
+      "names": {
+        "en": "Critical Missile",
+        "zh-TW": "暴擊沖天炮",
+        "zh-CN": "暴击飞弹",
+        "ja": "クリティカルミサイル",
+        "ko": "치명적 미사일"
+      },
+      "slug": "critical-missile",
+      "rarity": "gold",
+      "tooltip": "When you <crit>Crit</crit>, fire 1 plus @AdditionalMis@ missiles that deal <magicDamage>@Damage@ magic damage</magicDamage> each. <br><br>Gain <crit>%i:scaleCrit% @CrtiChance*100@% Crit chance</crit>."
+    },
+    {
+      "nameId": "CriticalRhythm",
+      "name": "Critical Rhythm",
+      "names": {
+        "en": "Critical Rhythm",
+        "zh-TW": "暴擊節奏",
+        "zh-CN": "暴击律动",
+        "ja": "クリティカルの律動",
+        "ko": "치명적 리듬"
+      },
+      "slug": "critical-rhythm",
+      "rarity": "gold",
+      "tooltip": "Your basic Attack stacks <attackSpeed>@ASPerStack*100@% Attack Speed</attackSpeed> on <crit>Critical Strikes</crit> up to @MaxStack@ stacks.<br><br>Gain <crit>%i:scaleCrit% @CritChance*100@% Crit chance</crit>."
+    },
+    {
+      "nameId": "DarkWind",
+      "name": "Ravenous Bind",
+      "names": {
+        "en": "Ravenous Bind"
+      },
+      "slug": "dark-wind",
+      "rarity": "gold",
+      "tooltip": "<status>Immobilizing</status> or <status>Grounding</status> enemy champions with {{SpellName}} deals an additional <magicDamage>@Damage@ magic damage</magicDamage> and heals <healing>@f3@ Health.</healing><br><br>Total Damage: <magicDamage>@f2@</magicDamage><br>Minimum healing: <healing>@Heal@</healing><br>Total Healing: <healing>@f1@</healing><br><br><rules>Healing increases up to @BonusHealingPercent_Max*100@% based on spell cooldown.</rules>"
+    },
+    {
+      "nameId": "DimensionShift_Active",
+      "name": "Dimension Shift",
+      "names": {
+        "en": "Dimension Shift"
+      },
+      "slug": "dimension-shift_-active",
+      "rarity": "prismatic",
+      "tooltip": ""
+    },
+    {
+      "nameId": "Donation",
+      "name": "Donation",
+      "names": {
+        "en": "Donation",
+        "zh-TW": "斗內",
+        "zh-CN": "捐赠",
+        "ja": "寄付",
+        "ko": "후원"
+      },
+      "slug": "donation",
+      "rarity": "gold",
+      "tooltip": "Receive <font color=\"#ffd138\">@GoldAmount@</font> Gold. Thanks chat! :)"
+    },
+    {
+      "nameId": "DoubleDefense",
+      "name": "Bolstered",
+      "names": {
+        "en": "Bolstered",
+        "zh-TW": "能力強化",
+        "zh-CN": "加固护盾",
+        "ja": "補強",
+        "ko": "보강"
+      },
+      "slug": "double-defense",
+      "rarity": "silver",
+      "tooltip": "Shields granted from {{SpellName}} are up to @BonusRatioMax*100@% stronger, scaling with target's missing Health.<br><br>Bonus Shield: @f1@<br><rules>Most effective at @MinHealthThreshold*100@% max health</rules>."
+    },
+    {
+      "nameId": "Dropybara_Active",
+      "name": "Droppybara",
+      "names": {
+        "en": "Droppybara"
+      },
+      "slug": "dropybara_-active",
+      "rarity": "prismatic",
+      "tooltip": ""
+    },
+    {
+      "nameId": "EmpyreanPromise",
+      "name": "Empyrean Promise",
+      "names": {
+        "en": "Empyrean Promise",
+        "zh-TW": "幻焰之誓",
+        "zh-CN": "至高天诺言",
+        "ja": "荘厳の天球の約束",
+        "ko": "창공의 서약"
+      },
+      "slug": "empyrean-promise",
+      "rarity": "prismatic",
+      "tooltip": ""
+    },
+    {
+      "nameId": "EndlessDecimation",
+      "name": "Endless Decimation",
+      "names": {
+        "en": "Endless Decimation",
+        "zh-TW": "無盡屠滅",
+        "zh-CN": "无尽大杀四方",
+        "ja": "終わりなき殲滅",
+        "ko": "끝없는 학살"
+      },
+      "slug": "endless-decimation",
+      "rarity": "gold",
+      "tooltip": "<keywordMajor>Autocast</keywordMajor> a circular axe swing that deals <physicalDamage>physical damage</physicalDamage> every @Cooldown@ seconds in combat. Enemies along the outer edge take increased damage (@FullDamage@) and <healing>heal you @BaseHealPercent*100@% of your Missing Health</healing>. Each enemy hit along the outer edge reduces this ability's cooldown by 10% down to a minimum of 3 seconds."
+    },
+    {
+      "nameId": "Equilibrium",
+      "name": "Our Healing",
+      "names": {
+        "en": "Our Healing"
+      },
+      "slug": "equilibrium",
+      "rarity": "gold",
+      "tooltip": "{{Kiwi_Augment_Equilibrium_Summary}}"
+    },
+    {
+      "nameId": "EscapePlan",
+      "name": "Escape Plan",
+      "names": {
+        "en": "Escape Plan",
+        "zh-TW": "逃跑計畫",
+        "zh-CN": "逃跑计划",
+        "ja": "脱出プラン",
+        "ko": "도주 계획"
+      },
+      "slug": "escape-plan",
+      "rarity": "silver",
+      "tooltip": "Gain a massive <shield>@ShieldAmount@ decaying Shield</shield>, decaying <speed>@MovespeedModEnhanced*100@% Movement Speed</speed>, and a decaying shrink effect upon reaching <scaleHealth>@HealthThreshold*100@% Health</scaleHealth> (@Cooldown@ seconds Cooldown)."
+    },
+    {
+      "nameId": "FinalForm",
+      "name": "Final Form",
+      "names": {
+        "en": "Final Form",
+        "zh-TW": "最終型態",
+        "zh-CN": "最终形态",
+        "ja": "最終形態",
+        "ko": "최종 형태"
+      },
+      "slug": "final-form",
+      "rarity": "prismatic",
+      "tooltip": "After casting your <attention>Ultimate</attention>, gain a <shield>@MaxHealthShield*100@% max Health Shield</shield>, <lifeSteal>@OmniVamp*100@% Omnivamp</lifeSteal> and <speed>@MSBonus*100@% bonus Movement Speed</speed> for @AugDuration@ seconds. (@Cooldown@ seconds Cooldown)."
+    },
+    {
+      "nameId": "FishBait",
+      "name": "Shark Bait",
+      "names": {
+        "en": "Shark Bait"
+      },
+      "slug": "fish-bait",
+      "rarity": "gold",
+      "tooltip": "On death, become <keyword>Shark Bait</keyword>. You can take no actions other than moving, which <status>slows nearby enemies by @Slow*100@%</status>. After a few seconds, a <keyword>Shark</keyword> emerges, <status>knocking up</status> all nearby Enemies and biting them for <magicDamage>@BaseDamageToApply@ + @MissingHealthPercentDamage@ Missing Health Magic Damage</magicDamage>.<br><br>Times the Shark consumed an Enemy Champion: <attention>@f2.0@</attention>"
+    },
+    {
+      "nameId": "Flash2",
+      "name": "Flash 2",
+      "names": {
+        "en": "Flash 2",
+        "zh-TW": "二次閃現",
+        "zh-CN": "闪闪现现",
+        "ja": "フラッシュ2",
+        "ko": "점멸 2"
+      },
+      "slug": "flash2",
+      "rarity": "silver",
+      "tooltip": ""
+    },
+    {
+      "nameId": "FullyAutomated",
+      "name": "Fully Automated",
+      "names": {
+        "en": "Fully Automated",
+        "zh-TW": "全自動",
+        "zh-CN": "完全自动化",
+        "ja": "完全自動化",
+        "ko": "완전 자동화"
+      },
+      "slug": "fully-automated",
+      "rarity": "silver",
+      "tooltip": "Your <keywordMajor>Autocast</keywordMajor> Cooldowns are reduced by @AutocastFlatCDR@ seconds and benefit from your Ability Haste."
+    },
+    {
+      "nameId": "Gash",
+      "name": "Gash",
+      "names": {
+        "en": "Gash",
+        "zh-TW": "深割",
+        "zh-CN": "砍伤",
+        "ja": "深手",
+        "ko": "깊은 상처"
+      },
+      "slug": "gash",
+      "rarity": "prismatic",
+      "tooltip": "Gain @AS*100@% <speed>Attack Speed</speed>. Attacks apply <trueDamage>{{ Item_Melee_Ranged_Split_Dynamic }} true damage</trueDamage> {{ Item_Keyword_OnHit }}.<br><br>Total Damage Dealt to Champions: @f1@"
+    },
+    {
+      "nameId": "GlassCannon",
+      "name": "Glass Cannon",
+      "names": {
+        "en": "Glass Cannon",
+        "zh-TW": "玻璃大砲",
+        "zh-CN": "玻璃大炮",
+        "ja": "グラスキャノン",
+        "ko": "유리 대포"
+      },
+      "slug": "glass-cannon",
+      "rarity": "prismatic",
+      "tooltip": "{{Kiwi_GlassCannon_Summary}}<br><br>Damage Dealt: @f1@"
+    },
+    {
+      "nameId": "GoldenSnowball",
+      "name": "Holy Snowball",
+      "names": {
+        "en": "Holy Snowball"
+      },
+      "slug": "golden-snowball",
+      "rarity": "prismatic",
+      "tooltip": "Gain @Haste@ Ability Haste on <spellName>Snowball</spellName>. <br><br>You become <keywordMajor>Invulnerable</keywordMajor> for @InvulnerabilityDuration@ seconds when you dash with Snowball.<br><br><rules>If you don't have one, gain a <spellName>Snowball</spellName>.</rules><br><br>"
+    },
+    {
+      "nameId": "Goldrend",
+      "name": "Goldrend",
+      "names": {
+        "en": "Goldrend",
+        "zh-TW": "黃金撕裂",
+        "zh-CN": "夺金",
+        "ja": "ゴールドレンド",
+        "ko": "골드 강탈"
+      },
+      "slug": "goldrend",
+      "rarity": "prismatic",
+      "tooltip": "Damaging a champion with Attacks or Abilities deals an additional <magicDamage>@ReaperDamage@ magic damage</magicDamage>, grants you <gold>@TotalGoldPerProcTooltip@</gold> Gold and <speed>@PercentMovespeedGain*100@% Movement Speed</speed> for @MovementSpeedDuration@ seconds (@TimerDuration@ seconds Cooldown per champion).<br><br>Damage Dealt: @f1@<br>Gold Earned: @f2@"
+    },
+    {
+      "nameId": "GrandmasChiliOil",
+      "name": "Grandma's Chili Oil",
+      "names": {
+        "en": "Grandma's Chili Oil",
+        "zh-TW": "阿嬤的辣油",
+        "zh-CN": "祖母的辣椒油",
+        "ja": "おばあちゃんのラー油",
+        "ko": "할머니의 고추기름"
+      },
+      "slug": "grandmas-chili-oil",
+      "rarity": "gold",
+      "tooltip": "Basic attacks and ability hits against enemies inflicts them with a Burn that deals <magicDamage>@FireStarterDamage@ magic damage</magicDamage> for @FireStarterDuration@ seconds. Applying a <keywordMajor>Burn</keywordMajor> drops a <keywordMajor>Chili Oil</keywordMajor> pool nearby for @GroundDuration@ seconds. <keywordMajor>Chili Oil</keywordMajor> restores <healing>@HealPerSecond@ Health</healing> and <keywordMajor>Burns</keywordMajor> enemies for <magicDamage>@CurrentEnemyBlazeBurnPerSecond@ magic damage</magicDamage> per second. <br><br><rules><keywordMajor>Chili Oil</keywordMajor> effects become stronger for each <keywordMajor>Burn</keywordMajor> you apply.<br><keywordMajor>Burn</keywordMajor> damage equals to @BaseFireDamagePerSecond@ plus @FireDamagePerBurn@ per Burn source, up to 10 sources.</rules>"
+    },
+    {
+      "nameId": "GrowthSpurt",
+      "name": "Growth Spurt",
+      "names": {
+        "en": "Growth Spurt",
+        "zh-TW": "急遽成長",
+        "zh-CN": "生机迸发",
+        "ja": "成長期",
+        "ko": "급속 성장"
+      },
+      "slug": "growth-spurt",
+      "rarity": "gold",
+      "tooltip": "Gain <active>Growth Spurt</active> as a Summoner Spell.<br><br>Growth Spurt suddenly increases your size, <status>Knocking Up</status> nearby enemies for @KnockbackDuration@ second and granting <scaleHealth>@TotalBonusHealth@ max Health</scaleHealth> for @BuffDuration@ seconds."
+    },
+    {
+      "nameId": "HandOfBaron",
+      "name": "Hand of Baron",
+      "names": {
+        "en": "Hand of Baron",
+        "zh-TW": "巴龍之爪",
+        "zh-CN": "男爵之手",
+        "ja": "バロンの牙",
+        "ko": "남작의 도움"
+      },
+      "slug": "hand-of-baron",
+      "rarity": "prismatic",
+      "tooltip": "Gain <scaleAP>@AFAmp*100@% Adaptive Force</scaleAP>. Nearby allied minions are greatly empowered."
+    },
+    {
+      "nameId": "HatOnAHat",
+      "name": "Hat on a Hat",
+      "names": {
+        "en": "Hat on a Hat",
+        "zh-TW": "帽上加帽",
+        "zh-CN": "帽上加帽",
+        "ja": "帽子の上に帽子",
+        "ko": "모자 겹쳐쓰기"
+      },
+      "slug": "hat-on-a-hat",
+      "rarity": "silver",
+      "tooltip": "Headwear items and hats give <scaleAP>@HatAPAdd@ Ability Power</scaleAP> and <scaleMR>@HatMRAdd@ Magic Resist</scaleMR>.<br>Cappa Juice gives <scaleAP>@CapAPAdd@ Ability Power</scaleAP> and <scaleMR>@CapMRAdd@ Magic Resist</scaleMR>.<br><br>Your headwear items and hats are currently granting:<li>@f1.1@ Ability Power<li>@f2.1@ Magic Resist"
+    },
+    {
+      "nameId": "HextechSoul",
+      "name": "Hextech Soul",
+      "names": {
+        "en": "Hextech Soul",
+        "zh-TW": "海克斯科技龍魂",
+        "zh-CN": "海克斯科技龙魂",
+        "ja": "ヘクステック ソウル",
+        "ko": "마법공학의 영혼"
+      },
+      "slug": "hextech-soul",
+      "rarity": "silver",
+      "tooltip": ""
+    },
+    {
+      "nameId": "InfiniteRecursion",
+      "name": "Infinite Recursion",
+      "names": {
+        "en": "Infinite Recursion",
+        "zh-TW": "無限循環",
+        "zh-CN": "无限循环往复",
+        "ja": "無限再帰",
+        "ko": "무한 반복"
+      },
+      "slug": "infinite-recursion",
+      "rarity": "prismatic",
+      "tooltip": "Gain @StartingHaste@ Ability Haste, plus @HastePerStack@ Ability Haste per takedown.<br><br>Current Ability Haste: @CurrentHaste@"
+    },
+    {
+      "nameId": "KillSecured",
+      "name": "Kill Secured",
+      "names": {
+        "en": "Kill Secured",
+        "zh-TW": "收頭好手",
+        "zh-CN": "杀意翻涌",
+        "ja": "キルを確認",
+        "ko": "확보된 킬"
+      },
+      "slug": "kill-secured",
+      "rarity": "silver",
+      "tooltip": "Gain <speed>@MovementSpeed*100@% Movement Speed</speed> towards enemies below <health>@HealthThreshold*100@% health</health>."
+    },
+    {
+      "nameId": "KingMe",
+      "name": "King Me",
+      "names": {
+        "en": "King Me",
+        "zh-TW": "封我為王",
+        "zh-CN": "尊我为王",
+        "ja": "即位",
+        "ko": "나는 왕이다"
+      },
+      "slug": "king-me",
+      "rarity": "prismatic",
+      "tooltip": "The first time you take the enemy transport <attention>with a Legendary Item</attention> you become <font color = '#d158f9'>Kinged</font>, upgrading your item and gaining a random Prismatic Augment."
+    },
+    {
+      "nameId": "LaserHeal",
+      "name": "Laser Heal",
+      "names": {
+        "en": "Laser Heal",
+        "zh-TW": "雷射治療",
+        "zh-CN": "激光治疗",
+        "ja": "レーザーヒール",
+        "ko": "체력 회복 광선"
+      },
+      "slug": "laser-heal",
+      "rarity": "prismatic",
+      "tooltip": "Cast a laser for 2.5 seconds that heals allies for <scaleHealth>@TotalHeal@ health</scaleHealth>, and deals <scaleAP>@TotalDamage@ magic damage</scaleAP> to enemies and <status>Slows</status> them for @MoveSpeedMod*100@%.<br><br>Damage Dealt: @f1@<br>Total Healing Done: @f2@"
+    },
+    {
+      "nameId": "LittleExtraHelp",
+      "name": "Lil' Extra Help",
+      "names": {
+        "en": "Lil' Extra Help"
+      },
+      "slug": "little-extra-help",
+      "rarity": "gold",
+      "tooltip": "Gain @RangeIncrease@ Attack Range and @ExtraAttackSpeed@ <attackSpeed>Attack Speed</attackSpeed> during your {{SpellName}} duration."
+    },
+    {
+      "nameId": "MercysStrike",
+      "name": "Mercy's Strike",
+      "names": {
+        "en": "Mercy's Strike",
+        "zh-TW": "慈悲之擊",
+        "zh-CN": "仁慈打击",
+        "ja": "慈悲の一撃",
+        "ko": "자비의 일격"
+      },
+      "slug": "mercys-strike",
+      "rarity": "gold",
+      "tooltip": "After using {{SpellName}}, your next basic attack gains <attention>@AttackRangeInc@ bonus attack range</attention>, <speed>@ASBonus*100@% attack speed</speed> and deals an additional <magicDamage>@MaxHealthDamage@ max Health magic damage</magicDamage>.<br><br>Total Damage Dealt: @f1.0@"
+    },
+    {
+      "nameId": "MightyShield",
+      "name": "Mighty Shield",
+      "names": {
+        "en": "Mighty Shield",
+        "zh-TW": "巨大盾牌",
+        "zh-CN": "强力护盾",
+        "ja": "マイティシールド",
+        "ko": "강력한 방패"
+      },
+      "slug": "mighty-shield",
+      "rarity": "silver",
+      "tooltip": ""
+    },
+    {
+      "nameId": "Missile_Split",
+      "name": "Spell Split",
+      "names": {
+        "en": "Spell Split"
+      },
+      "slug": "missile_-split",
+      "rarity": "prismatic",
+      "tooltip": "{{Kiwi_Missile_Split_Summary}} <br><br>Additional target hit: @f1@<br><rules>Enemies take less damage if hit by the same spell.</rules>"
+    },
+    {
+      "nameId": "NatureIsHealing",
+      "name": "Nature is Healing",
+      "names": {
+        "en": "Nature is Healing",
+        "zh-TW": "自然治療",
+        "zh-CN": "自然即是治愈",
+        "ja": "大自然が回復している",
+        "ko": "자연의 회복"
+      },
+      "slug": "nature-is-healing",
+      "rarity": "gold",
+      "tooltip": "Regenerate <healing>@MaxHealthHealPerSecond@ max Health</healing> per second while in <keyword>Brush</keyword>.<br><br>Total Healing: @f1.0@"
+    },
+    {
+      "nameId": "Nightstalking",
+      "name": "Nightstalking",
+      "names": {
+        "en": "Nightstalking",
+        "zh-TW": "暗夜潛行",
+        "zh-CN": "夜狩",
+        "ja": "ナイトストーク",
+        "ko": "밤의 추적"
+      },
+      "slug": "nightstalking",
+      "rarity": "gold",
+      "tooltip": "Takedowns against enemy champions within @TakedownWindow@ seconds of damaging them renders you invisible for @StealthDuration@ seconds."
+    },
+    {
+      "nameId": "OminousPact",
+      "name": "Ominous Pact",
+      "names": {
+        "en": "Ominous Pact",
+        "zh-TW": "不祥契約",
+        "zh-CN": "不祥契约",
+        "ja": "不穏な盟約",
+        "ko": "불길한 서약"
+      },
+      "slug": "ominous-pact",
+      "rarity": "prismatic",
+      "tooltip": ""
+    },
+    {
+      "nameId": "Overextender",
+      "name": "Overextender",
+      "names": {
+        "en": "Overextender",
+        "zh-TW": "過度延伸",
+        "zh-CN": "过量延伸者",
+        "ja": "深追いしすぎ",
+        "ko": "무리한 진입"
+      },
+      "slug": "overextender",
+      "rarity": "gold",
+      "tooltip": "Your Cannon Launcher has significantly increased range, travel speed, and damage. Recall to enter your Cannon Launcher. <br><br>Units Travelled: @f1@"
+    },
+    {
+      "nameId": "PinballSnowball",
+      "name": "Pinball",
+      "names": {
+        "en": "Pinball"
+      },
+      "slug": "pinball-snowball",
+      "rarity": "gold",
+      "tooltip": "Your <spellName>Snowball</spellName> gains @AbilityHaste@ Ability Haste, deals extra @TrueDamage@ <trueDamage>true damage</trueDamage> and bounces off walls. Each bounce increases its size by @SizeAmp*100@%, increases its damage dealt by @DamageAmp*100@% and reduces its Cooldown by @CDRefundOnBounce*100@%.<br><br>Number of Bounces: <statTracking>@f1@</statTracking>"
+    },
+    {
+      "nameId": "Poltergeist",
+      "name": "Poltergeist",
+      "names": {
+        "en": "Poltergeist",
+        "zh-TW": "搗蛋鬼",
+        "zh-CN": "吵闹鬼",
+        "ja": "ポルターガイスト",
+        "ko": "폴터가이스트"
+      },
+      "slug": "poltergeist",
+      "rarity": "silver",
+      "tooltip": ""
+    },
+    {
+      "nameId": "PoroCharge_Active",
+      "name": "Poro Stampede",
+      "names": {
+        "en": "Poro Stampede"
+      },
+      "slug": "poro-charge_-active",
+      "rarity": "prismatic",
+      "tooltip": ""
+    },
+    {
+      "nameId": "PressureCooker",
+      "name": "Pressure Cooker",
+      "names": {
+        "en": "Pressure Cooker",
+        "zh-TW": "壓力火鍋",
+        "zh-CN": "高压锅",
+        "ja": "圧力鍋",
+        "ko": "압력솥"
+      },
+      "slug": "pressure-cooker",
+      "rarity": "gold",
+      "tooltip": ""
+    },
+    {
+      "nameId": "PromQueen",
+      "name": "Prom Queen",
+      "names": {
+        "en": "Prom Queen",
+        "zh-TW": "舞會皇后",
+        "zh-CN": "舞会女王",
+        "ja": "プロムクイーン",
+        "ko": "퀸카"
+      },
+      "slug": "prom-queen",
+      "rarity": "prismatic",
+      "tooltip": ""
+    },
+    {
+      "nameId": "Quest_Sneakerhead",
+      "name": "Sneakerhead",
+      "names": {
+        "en": "Sneakerhead"
+      },
+      "slug": "quest_-sneakerhead",
+      "rarity": "prismatic",
+      "tooltip": "<mainText><font color='#a327ef'>Do the following quests for a super reward: </font></mainText><br><br>Quest 1: Attack <attackSpeed>@f1@ of @BGAttacks@ times</attackSpeed> with Berserker's Greaves<br>Quest 2: Run <speed>@f2@ of @BOSSteps@ steps</speed> with Boots of Swiftness<br>Quest 3: Cast <scaleAP>@f3@ of @IBOLSpells@ spells</scaleAP> with Ionian Boots of Lucidity<br>Quest 4: Be CC'd <status>@f4@ of @MTCCs@ times</status> with Mercury's Treads<br>Quest 5: Reduce <scaleAD>@f5@ of @PSDamageMelee@ attack damage</scaleAD> with Plated Steelcaps<br>Quest 6: Deal <attention>@f6@ of @SSSDamage@ spell damage</attention> with Sorcerer's Shoes<br>"
+    },
+    {
+      "nameId": "ReEnergize",
+      "name": "ReEnergize",
+      "names": {
+        "en": "ReEnergize",
+        "zh-TW": "活力補給",
+        "zh-CN": "活力再生",
+        "ja": "エネルギー再充填",
+        "ko": "재충전"
+      },
+      "slug": "re-energize",
+      "rarity": "silver",
+      "tooltip": "Gain an <keyword>Energized Attack</keyword> that deals <magicDamage>@TargetCurrentHealthRatio*100@% target current Health</magicDamage>. Charges are fully refunded if the target is not the same as your previous.<br><br>Charges Refunded: @f1@"
+    },
+    {
+      "nameId": "RedEnvelopes",
+      "name": "Red Envelopes",
+      "names": {
+        "en": "Red Envelopes",
+        "zh-TW": "紅包",
+        "zh-CN": "红包",
+        "ja": "紅いお年玉袋",
+        "ko": "붉은 봉투"
+      },
+      "slug": "red-envelopes",
+      "rarity": "gold",
+      "tooltip": "<keyword>Red Envelopes</keyword> appear randomly around you every @TimeBetweenEnvelopes@ seconds. Picking them up gives you between <font color=\"#ffd138\">@EnvelopeValueMin@</font> and <font color=\"#ffd138\">@EnvelopeValueMax@</font> Gold, plus <speed>@MSBuff@ Move Speed</speed> for @BuffDuration@ seconds.<br><br>You have opened <important>@f1@</important> <keyword>Red Envelopes</keyword> and received <font color=\"#ffd138\">@f2@</font> Gold from them.<br><br>Additional Stats Gained:<br>%i:scaleAH% <scaleAbilityHaste>Ability Haste</scaleAbilityHaste>: @f5@<br>%i:scaleMS% <speed>Move Speed</speed>: @f10@<br>%i:scaleAD% <scaleAD>Attack Damage</scaleAD>: @f3@<br>%i:scaleAP% <scaleAP>Ability Power</scaleAP>: @f4@<br>%i:scaleArmor% <scaleArmor>Armor</scaleArmor>: @f6@<br>%i:scaleMR% <scaleMR>Magic Resistance</scaleMR>: @f7@<br>%i:scaleHealth% <scaleHealth>Health</scaleHealth>: @f8@<br>%i:scaleAS% <attackSpeed>Attack Speed</attackSpeed>: @f9*100@%<br>%i:scaleAPen% <armorPen>Lethality</armorPen>: @f11@<br>%i:scaleMPen% <magicPen>Magic Penetration</magicPen>: @f12@"
+    },
+    {
+      "nameId": "SharkTempest",
+      "name": "Shark Tempest",
+      "names": {
+        "en": "Shark Tempest",
+        "zh-TW": "鯊魚風暴",
+        "zh-CN": "鲨鱼暴风",
+        "ja": "シャークテンペスト",
+        "ko": "상어 폭풍"
+      },
+      "slug": "shark-tempest",
+      "rarity": "gold",
+      "tooltip": "<keyword>Sharks</keyword> circle your Snowball, <status>slowing</status> and dealing <magicDamage>@BaseDamageTotal@ magic damage</magicDamage> to enemies they pass through. If your Snowball hits a Champion, the Sharks attach to them and create a <keyword>Shark Tempest</keyword>, which deals <magicDamage>@AttachedDamagePerSecond@ magic damage</magicDamage> per second and <status>Slows nearby enemies by @SlowStrengthTT*100@% for @AttachedSlowDuration@ seconds</status>."
+    },
+    {
+      "nameId": "ShrinkEngine",
+      "name": "Shrink Engine",
+      "names": {
+        "en": "Shrink Engine",
+        "zh-TW": "縮小引擎",
+        "zh-CN": "缩小引擎",
+        "ja": "縮小エンジン",
+        "ko": "축소 엔진"
+      },
+      "slug": "shrink-engine",
+      "rarity": "gold",
+      "tooltip": "Takedowns grant a stack that makes you @SizeReductionPerStack*100@% smaller, grants <speed>@HastePerStack@ Ability Haste</speed>, and <speed>@MoveSpeedAmpPerStack*100@% Movement Speed</speed>.<br><br>Lose @PercentOfStacksLost*100@% stacks on death.<br>------------------------------------------------------------<br>You currently have <font color=\"#80eeff\">@f3@</font> stacks, granting you:<br>+ <font color=\"#f2deff\">@f1@</font> Ability Haste<br>+ <font color=\"#f2deff\">@f2@%</font> Movement Speed"
+    },
+    {
+      "nameId": "SkipTheBasics",
+      "name": "Ult Bot",
+      "names": {
+        "en": "Ult Bot"
+      },
+      "slug": "skip-the-basics",
+      "rarity": "prismatic",
+      "tooltip": "Your <scaleAbilityHaste>Ability Haste</scaleAbilityHaste> only applies to your <keyword>Ultimate</keyword>, but is 50% more effective. Gain <scaleAbilityHaste>100 Ability Haste</scaleAbilityHaste>."
+    },
+    {
+      "nameId": "SnapBack",
+      "name": "Snap Back",
+      "names": {
+        "en": "Snap Back",
+        "zh-TW": "躍回",
+        "zh-CN": "复位",
+        "ja": "スナップバック",
+        "ko": "원상복구"
+      },
+      "slug": "snap-back",
+      "rarity": "gold",
+      "tooltip": "Recast {{SpellName}} to explode for @SnapDamage@ magic damage and return to your original position."
+    },
+    {
+      "nameId": "SnowballRoulette",
+      "name": "Snowball Roulette",
+      "names": {
+        "en": "Snowball Roulette",
+        "zh-TW": "雪球輪盤",
+        "zh-CN": "雪球扭蛋机",
+        "ja": "雪玉ルーレット",
+        "ko": "눈덩이 룰렛"
+      },
+      "slug": "snowball-roulette",
+      "rarity": "gold",
+      "tooltip": ""
+    },
+    {
+      "nameId": "SnowballUpgrade",
+      "name": "Snowball Upgrade",
+      "names": {
+        "en": "Snowball Upgrade",
+        "zh-TW": "雪球升級",
+        "zh-CN": "升级：雪球",
+        "ja": "雪玉アップグレード",
+        "ko": "눈덩이 업그레이드"
+      },
+      "slug": "snowball-upgrade",
+      "rarity": "gold",
+      "tooltip": "Gain @AbilityHaste@ Ability Haste on your Snowball. <br>Hitting a target creates an area that <status>Slows</status> enemies by @TotalSlowAmount@ and deals <magicDamage>@TotalDamagePerSecond@ magic damage</magicDamage> per second for @BaseDuration@ seconds (total <magicDamage>@TotalDamage@ magic damage</magicDamage>).<br><br><br>"
+    },
+    {
+      "nameId": "Snowbomb",
+      "name": "Snowblast",
+      "names": {
+        "en": "Snowblast"
+      },
+      "slug": "snowbomb",
+      "rarity": "gold",
+      "tooltip": ""
+    },
+    {
+      "nameId": "Sonata",
+      "name": "Sonata",
+      "names": {
+        "en": "Sonata",
+        "zh-TW": "奏鳴曲",
+        "zh-CN": "咏叹奏鸣",
+        "ja": "ソナタ",
+        "ko": "소나타"
+      },
+      "slug": "sonata",
+      "rarity": "gold",
+      "tooltip": ""
+    },
+    {
+      "nameId": "SoulEater",
+      "name": "Soul Eater",
+      "names": {
+        "en": "Soul Eater",
+        "zh-TW": "食魂者",
+        "zh-CN": "吞噬灵魂",
+        "ja": "ソウルイーター",
+        "ko": "영혼의 포식자"
+      },
+      "slug": "soul-eater",
+      "rarity": "gold",
+      "tooltip": "<status>Immobilizing</status> an enemy champion grants <scaleHealth>@HealthGainPerStack@ max Health</scaleHealth>.<br><br>Total Health Gained: <scaleHealth>@HealthGained@</scaleHealth>"
+    },
+    {
+      "nameId": "SpellVolley",
+      "name": "Tripleshot",
+      "names": {
+        "en": "Tripleshot"
+      },
+      "slug": "spell-volley",
+      "rarity": "prismatic",
+      "tooltip": "{{Kiwi_SpellVolley_Summary}}<br><br>Additional Targets Hit: @f1@<br><rules>Units take less damage from the same spell.</rules>"
+    },
+    {
+      "nameId": "SwiftAndSafe",
+      "name": "Swift and Safe",
+      "names": {
+        "en": "Swift and Safe",
+        "zh-TW": "又快又穩",
+        "zh-CN": "快中求稳",
+        "ja": "迅速に安全に",
+        "ko": "빠르고 안전하게"
+      },
+      "slug": "swift-and-safe",
+      "rarity": "silver",
+      "tooltip": "Gain a <shield>@ShieldAmount@ Shield</shield> for @ShieldDuration@ seconds after a Dash or Blink (@Cooldown@ seconds Cooldown).<br>"
+    },
+    {
+      "nameId": "TitansPulse",
+      "name": "Stay Resolute",
+      "names": {
+        "en": "Stay Resolute"
+      },
+      "slug": "titans-pulse",
+      "rarity": "silver",
+      "tooltip": "Damaging enemy champions with {{SpellName}} grants you @ARMR_Inc@ <scaleArmor>Armor</scaleArmor> or <scaleMR>Magic Resistance</scaleMR> based on their %i:miniAdaptiveForce% Damage Type. <br><br>Bonus <scaleArmor>Armor</scaleArmor>: @f1@<br>Bonus <scaleMR>Magic Resistance</scaleMR>: @f2@<br><br><br><rules> If this is not your first augment, gain @AdditionalARMR@ <scaleArmor>Armor</scaleArmor> and <scaleMR>Magic Resistance</scaleMR>.<br>@SpellIDCD@ seconds cooldown per target.</rules>"
+    },
+    {
+      "nameId": "TrainOfTheDead",
+      "name": "Final City Transit",
+      "names": {
+        "en": "Final City Transit"
+      },
+      "slug": "train-of-the-dead",
+      "rarity": "gold",
+      "tooltip": "When you die, launch a train towards your killer, dealing <physicalDamage>@Damage@ physical damage</physicalDamage> to enemies it hits. The train does not stop.<br><br>Your locomotive has dealt a total of <attention>@f2@</attention> damage to <attention>@f1@</attention> enemy champions.<br>It has \"accidentally\" killed <attention>@f3@</attention>."
+    },
+    {
+      "nameId": "Twinfire",
+      "name": "Twin Fire",
+      "names": {
+        "en": "Twin Fire",
+        "zh-TW": "雙響炮",
+        "zh-CN": "双生火焰",
+        "ja": "ツインファイア",
+        "ko": "쌍둥이 불꽃"
+      },
+      "slug": "twinfire",
+      "rarity": "silver",
+      "tooltip": "{{Kiwi_TwinFire_Summary}}"
+    },
+    {
+      "nameId": "UltimateAwakening",
+      "name": "Ultimate Awakening",
+      "names": {
+        "en": "Ultimate Awakening",
+        "zh-TW": "大絕覺醒",
+        "zh-CN": "终极唤醒",
+        "ja": "究極の目覚め",
+        "ko": "궁극의 각성"
+      },
+      "slug": "ultimate-awakening",
+      "rarity": "prismatic",
+      "tooltip": ""
+    },
+    {
+      "nameId": "Upgrade_MikaelsBlessing",
+      "name": "Upgrade Mikael's Blessing",
+      "names": {
+        "en": "Upgrade Mikael's Blessing",
+        "zh-TW": "升級米凱的祝福",
+        "zh-CN": "升级：米凯尔的祝福",
+        "ja": "ミカエルの祝福 アップグレード",
+        "ko": "미카엘의 축복 업그레이드"
+      },
+      "slug": "upgrade_-mikaels-blessing",
+      "rarity": "prismatic",
+      "tooltip": "Gain Mikael's Blessing. Reduce Mikael's Blessing Cooldown to @Cooldown@ seconds.<br><br>On Mikael's Blessing activate, unleashes a wave to nearby ally champions, cleansing <status>Disabling</status> and <status>Immobilizing</status> effects, restoring <healing>@HealCalc@ Health</healing>, and granting @TenacityAmount*100@% Tenacity for @TenacityDuration@ seconds."
+    },
+    {
+      "nameId": "Upgrade_SwordOfBlossom",
+      "name": "Upgrade Sword of Blossoming Dawn",
+      "names": {
+        "en": "Upgrade Sword of Blossoming Dawn"
+      },
+      "slug": "upgrade_-sword-of-blossom",
+      "rarity": "prismatic",
+      "tooltip": "{{Kiwi_Upgrade_SwordOfBlossom_Summary}}"
+    },
+    {
+      "nameId": "Upgrade_Thornmail",
+      "name": "Upgrade Thornmail",
+      "names": {
+        "en": "Upgrade Thornmail",
+        "zh-TW": "升級荊棘之甲",
+        "zh-CN": "升级：荆棘之甲",
+        "ja": "ソーンメイル アップグレード",
+        "ko": "가시 갑옷 업그레이드"
+      },
+      "slug": "upgrade_-thornmail",
+      "rarity": "silver",
+      "tooltip": "After @ThornshieldCooldown@ seconds out of combat, your Thornmail or Bramble Vest generates a shell that reflects @ThornShieldDamage@ damage from Attacks."
+    },
+    {
+      "nameId": "Vampirism",
+      "name": "Vampirism",
+      "names": {
+        "en": "Vampirism",
+        "zh-TW": "吸血迷信",
+        "zh-CN": "吸血习性",
+        "ja": "吸血鬼信仰",
+        "ko": "흡혈병"
+      },
+      "slug": "vampirism",
+      "rarity": "gold",
+      "tooltip": ""
+    },
+    {
+      "nameId": "VeilOfWarding",
+      "name": "Veil of Warding",
+      "names": {
+        "en": "Veil of Warding",
+        "zh-TW": "守護面紗",
+        "zh-CN": "防护面纱",
+        "ja": "ワーディングヴェール",
+        "ko": "감시의 장막"
+      },
+      "slug": "veil-of-warding",
+      "rarity": "silver",
+      "tooltip": ""
+    },
+    {
+      "nameId": "VirtuousCycle",
+      "name": "Virtuous Cycle",
+      "names": {
+        "en": "Virtuous Cycle",
+        "zh-TW": "良性循環",
+        "zh-CN": "良性循环",
+        "ja": "好循環",
+        "ko": "선순환"
+      },
+      "slug": "virtuous-cycle",
+      "rarity": "silver",
+      "tooltip": "Your <healing>heals</healing> grant an extra <shield>@ShieldFromHealPercentage*100@% Shield</shield> and your <shield>Shields</shield> grant an extra <healing>@HealFromShieldPercentage*100@% Healing</healing>.<br><br>Total Healing Done: @f1@<br>Shields Generated: @f2@"
+    },
+    {
+      "nameId": "VoidDash",
+      "name": "Void Dash",
+      "names": {
+        "en": "Void Dash",
+        "zh-TW": "虛空衝刺",
+        "zh-CN": "虚空冲刺",
+        "ja": "ヴォイドダッシュ",
+        "ko": "공허 돌진"
+      },
+      "slug": "void-dash",
+      "rarity": "gold",
+      "tooltip": "{{SpellName}} spawns a Void Zone at the targeted destination. It <status>Slows</status> enemy champions for @SlowAmount*100@% for @SlowDuration@ seconds, and deals <magicDamage>@TotalDamage@ magic damage</magicDamage>. <br><br>Champions Slowed: @f1@"
+    },
+    {
+      "nameId": "WindBeneathBlade",
+      "name": "Wind Beneath Blade",
+      "names": {
+        "en": "Wind Beneath Blade",
+        "zh-TW": "刃下狂風",
+        "zh-CN": "刃下生风",
+        "ja": "刃の下の風",
+        "ko": "칼날 아래 바람"
+      },
+      "slug": "wind-beneath-blade",
+      "rarity": "silver",
+      "tooltip": "Gain <speed>@MSFromBasePen@ Movement Speed</speed> from flat <armorPen>%i:scaleAPen%Armor Penetration</armorPen> and <magicPen>%i:scaleMPen%Magic Penetration</magicPen>. Gain <speed>@PercentPenConversion@ Movement Speed</speed> every @PercentPenConversion@% of your percent <armorPen>%i:scaleAPen%Armor Penetration</armorPen> and <magicPen>%i:scaleMPen%Magic Penetration</magicPen><br><br>Gain <speed>@f2@ Movement Speed</speed>."
+    },
+    {
+      "nameId": "YouSpinMeRightRound",
+      "name": "Spin Me Right Round",
+      "names": {
+        "en": "Spin Me Right Round"
+      },
+      "slug": "you-spin-me-right-round",
+      "rarity": "silver",
+      "tooltip": "Replace a Summoner Spell with <spellName>Heroic Swing</spellName>.<br><br><rules><spellName>Heroic Swing</spellName> fires a grappling hook, sticking into terrain, after which you can <recast>Recast</recast> to swing around it. While swinging, automatically Attack the nearest enemy. Colliding with an enemy champion or <recast>Recasting</recast> ends the swing.</rules>"
     }
   ]
 }

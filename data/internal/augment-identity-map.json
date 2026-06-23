@@ -3,11 +3,11 @@
   "normalization": "lowercase, strip non-alphanumerics, strip leading Quest: prefix",
   "counts": {
     "cdragon": 245,
-    "mapped_augmentIds": 238,
+    "mapped_augmentIds": 245,
     "aliases": 1,
     "source_matches": {
-      "internal_augments": 239,
-      "wiki": 209,
+      "internal_augments": 246,
+      "wiki": 205,
       "arammayhem_win_rate": 120
     }
   },
@@ -6175,7 +6175,7 @@
             },
             "slug": "tormentor",
             "rarity": "silver",
-            "lifecycle": "active",
+            "lifecycle": "removed",
             "hasWikiDescription": false
           }
         ],
@@ -7270,7 +7270,7 @@
             },
             "slug": "echo-cast",
             "rarity": "prismatic",
-            "lifecycle": "removed",
+            "lifecycle": "active",
             "hasWikiDescription": true
           }
         ],
@@ -7345,20 +7345,10 @@
             "slug": "im-a-baby-kitty-where-is-mama",
             "rarity": "prismatic",
             "lifecycle": "removed",
-            "hasWikiDescription": true
+            "hasWikiDescription": false
           }
         ],
-        "wiki": [
-          {
-            "sourceKey": "I'm a Baby Kitty Where is Mama",
-            "name": "I'm a Baby Kitty Where is Mama",
-            "match": {
-              "method": "normalized",
-              "token": "imababykittywhereismama"
-            },
-            "hasWikiDescription": true
-          }
-        ],
+        "wiki": [],
         "arammayhem_win_rate": []
       }
     },
@@ -7381,7 +7371,7 @@
             },
             "slug": "biggest-snowball-ever",
             "rarity": "prismatic",
-            "lifecycle": "removed",
+            "lifecycle": "active",
             "hasWikiDescription": true
           }
         ],
@@ -7418,7 +7408,7 @@
             },
             "slug": "combusting-interest",
             "rarity": "gold",
-            "lifecycle": "removed",
+            "lifecycle": "active",
             "hasWikiDescription": true
           }
         ],
@@ -7455,7 +7445,7 @@
             },
             "slug": "bonk",
             "rarity": "gold",
-            "lifecycle": "removed",
+            "lifecycle": "active",
             "hasWikiDescription": true
           }
         ],
@@ -7492,7 +7482,7 @@
             },
             "slug": "hide-on-bush",
             "rarity": "gold",
-            "lifecycle": "removed",
+            "lifecycle": "active",
             "hasWikiDescription": true
           }
         ],
@@ -7529,7 +7519,7 @@
             },
             "slug": "tooth-fairy",
             "rarity": "gold",
-            "lifecycle": "removed",
+            "lifecycle": "active",
             "hasWikiDescription": true
           }
         ],
@@ -7566,7 +7556,7 @@
             },
             "slug": "chain-reaction",
             "rarity": "prismatic",
-            "lifecycle": "removed",
+            "lifecycle": "active",
             "hasWikiDescription": true
           }
         ],
@@ -7603,7 +7593,7 @@
             },
             "slug": "crit-n-cast",
             "rarity": "silver",
-            "lifecycle": "removed",
+            "lifecycle": "active",
             "hasWikiDescription": true
           }
         ],
@@ -7640,7 +7630,7 @@
             },
             "slug": "critical-missile",
             "rarity": "gold",
-            "lifecycle": "removed",
+            "lifecycle": "active",
             "hasWikiDescription": true
           }
         ],
@@ -7677,7 +7667,7 @@
             },
             "slug": "critical-rhythm",
             "rarity": "gold",
-            "lifecycle": "removed",
+            "lifecycle": "active",
             "hasWikiDescription": true
           }
         ],
@@ -7714,7 +7704,7 @@
             },
             "slug": "ravenous-bind",
             "rarity": "gold",
-            "lifecycle": "removed",
+            "lifecycle": "active",
             "hasWikiDescription": true
           }
         ],
@@ -7751,7 +7741,7 @@
             },
             "slug": "dimension-shift",
             "rarity": "prismatic",
-            "lifecycle": "removed",
+            "lifecycle": "active",
             "hasWikiDescription": true
           }
         ],
@@ -7788,7 +7778,7 @@
             },
             "slug": "donation",
             "rarity": "gold",
-            "lifecycle": "removed",
+            "lifecycle": "active",
             "hasWikiDescription": true
           }
         ],
@@ -7818,24 +7808,24 @@
         "internal_augments": [
           {
             "sourceKey": "double-defense",
-            "name": "Double Defense",
+            "name": "Bolstered",
             "match": {
               "method": "normalized",
               "token": "doubledefense"
             },
             "slug": "double-defense",
             "rarity": "silver",
-            "lifecycle": "removed",
+            "lifecycle": "active",
             "hasWikiDescription": true
           }
         ],
         "wiki": [
           {
-            "sourceKey": "Double Defense",
-            "name": "Double Defense",
+            "sourceKey": "Bolstered",
+            "name": "Bolstered",
             "match": {
               "method": "normalized",
-              "token": "doubledefense"
+              "token": "bolstered"
             },
             "hasWikiDescription": true
           }
@@ -7899,7 +7889,7 @@
             },
             "slug": "empyrean-promise",
             "rarity": "prismatic",
-            "lifecycle": "removed",
+            "lifecycle": "active",
             "hasWikiDescription": true
           }
         ],
@@ -7936,7 +7926,7 @@
             },
             "slug": "endless-decimation",
             "rarity": "gold",
-            "lifecycle": "removed",
+            "lifecycle": "active",
             "hasWikiDescription": true
           }
         ],
@@ -7973,7 +7963,7 @@
             },
             "slug": "our-healing",
             "rarity": "gold",
-            "lifecycle": "removed",
+            "lifecycle": "active",
             "hasWikiDescription": true
           }
         ],
@@ -8010,7 +8000,7 @@
             },
             "slug": "escape-plan",
             "rarity": "silver",
-            "lifecycle": "removed",
+            "lifecycle": "active",
             "hasWikiDescription": true
           }
         ],
@@ -8047,7 +8037,7 @@
             },
             "slug": "final-form",
             "rarity": "prismatic",
-            "lifecycle": "removed",
+            "lifecycle": "active",
             "hasWikiDescription": true
           }
         ],
@@ -8084,7 +8074,7 @@
             },
             "slug": "shark-bait",
             "rarity": "gold",
-            "lifecycle": "removed",
+            "lifecycle": "active",
             "hasWikiDescription": true
           }
         ],
@@ -8121,7 +8111,7 @@
             },
             "slug": "flash-2",
             "rarity": "silver",
-            "lifecycle": "removed",
+            "lifecycle": "active",
             "hasWikiDescription": true
           }
         ],
@@ -8136,6 +8126,33 @@
             "hasWikiDescription": true
           }
         ],
+        "arammayhem_win_rate": []
+      }
+    },
+    {
+      "augmentId": "FullyAutomated",
+      "cdragon": {
+        "augmentNameId": "FullyAutomated",
+        "name": "Fully Automated",
+        "slug": "fully-automated",
+        "rarity": "silver"
+      },
+      "sources": {
+        "internal_augments": [
+          {
+            "sourceKey": "fully-automated",
+            "name": "Fully Automated",
+            "match": {
+              "method": "normalized",
+              "token": "fullyautomated"
+            },
+            "slug": "fully-automated",
+            "rarity": "silver",
+            "lifecycle": "removed",
+            "hasWikiDescription": false
+          }
+        ],
+        "wiki": [],
         "arammayhem_win_rate": []
       }
     },
@@ -8159,20 +8176,10 @@
             "slug": "gash",
             "rarity": "prismatic",
             "lifecycle": "removed",
-            "hasWikiDescription": true
+            "hasWikiDescription": false
           }
         ],
-        "wiki": [
-          {
-            "sourceKey": "Gash",
-            "name": "Gash",
-            "match": {
-              "method": "normalized",
-              "token": "gash"
-            },
-            "hasWikiDescription": true
-          }
-        ],
+        "wiki": [],
         "arammayhem_win_rate": []
       }
     },
@@ -8195,7 +8202,7 @@
             },
             "slug": "glass-cannon",
             "rarity": "prismatic",
-            "lifecycle": "removed",
+            "lifecycle": "active",
             "hasWikiDescription": true
           }
         ],
@@ -8232,7 +8239,7 @@
             },
             "slug": "holy-snowball",
             "rarity": "prismatic",
-            "lifecycle": "removed",
+            "lifecycle": "active",
             "hasWikiDescription": true
           }
         ],
@@ -8269,7 +8276,7 @@
             },
             "slug": "goldrend",
             "rarity": "prismatic",
-            "lifecycle": "removed",
+            "lifecycle": "active",
             "hasWikiDescription": true
           }
         ],
@@ -8307,20 +8314,10 @@
             "slug": "grandmas-chili-oil",
             "rarity": "gold",
             "lifecycle": "removed",
-            "hasWikiDescription": true
+            "hasWikiDescription": false
           }
         ],
-        "wiki": [
-          {
-            "sourceKey": "Grandma's Chili Oil",
-            "name": "Grandma's Chili Oil",
-            "match": {
-              "method": "normalized",
-              "token": "grandmaschilioil"
-            },
-            "hasWikiDescription": true
-          }
-        ],
+        "wiki": [],
         "arammayhem_win_rate": []
       }
     },
@@ -8343,7 +8340,7 @@
             },
             "slug": "growth-spurt",
             "rarity": "gold",
-            "lifecycle": "removed",
+            "lifecycle": "active",
             "hasWikiDescription": true
           }
         ],
@@ -8380,7 +8377,7 @@
             },
             "slug": "hand-of-baron",
             "rarity": "prismatic",
-            "lifecycle": "removed",
+            "lifecycle": "active",
             "hasWikiDescription": true
           }
         ],
@@ -8418,20 +8415,10 @@
             "slug": "hat-on-a-hat",
             "rarity": "silver",
             "lifecycle": "removed",
-            "hasWikiDescription": true
+            "hasWikiDescription": false
           }
         ],
-        "wiki": [
-          {
-            "sourceKey": "Hat on a Hat",
-            "name": "Hat on a Hat",
-            "match": {
-              "method": "normalized",
-              "token": "hatonahat"
-            },
-            "hasWikiDescription": true
-          }
-        ],
+        "wiki": [],
         "arammayhem_win_rate": []
       }
     },
@@ -8454,7 +8441,7 @@
             },
             "slug": "hextech-soul",
             "rarity": "silver",
-            "lifecycle": "removed",
+            "lifecycle": "active",
             "hasWikiDescription": true
           }
         ],
@@ -8491,7 +8478,7 @@
             },
             "slug": "infinite-recursion",
             "rarity": "prismatic",
-            "lifecycle": "removed",
+            "lifecycle": "active",
             "hasWikiDescription": true
           }
         ],
@@ -8528,7 +8515,7 @@
             },
             "slug": "kill-secured",
             "rarity": "silver",
-            "lifecycle": "removed",
+            "lifecycle": "active",
             "hasWikiDescription": true
           }
         ],
@@ -8565,7 +8552,7 @@
             },
             "slug": "king-me",
             "rarity": "prismatic",
-            "lifecycle": "removed",
+            "lifecycle": "active",
             "hasWikiDescription": true
           }
         ],
@@ -8603,20 +8590,10 @@
             "slug": "laser-heal",
             "rarity": "prismatic",
             "lifecycle": "removed",
-            "hasWikiDescription": true
+            "hasWikiDescription": false
           }
         ],
-        "wiki": [
-          {
-            "sourceKey": "Laser Heal",
-            "name": "Laser Heal",
-            "match": {
-              "method": "normalized",
-              "token": "laserheal"
-            },
-            "hasWikiDescription": true
-          }
-        ],
+        "wiki": [],
         "arammayhem_win_rate": []
       }
     },
@@ -8639,7 +8616,7 @@
             },
             "slug": "lil-extra-help",
             "rarity": "gold",
-            "lifecycle": "removed",
+            "lifecycle": "active",
             "hasWikiDescription": true
           }
         ],
@@ -8676,7 +8653,7 @@
             },
             "slug": "mercys-strike",
             "rarity": "gold",
-            "lifecycle": "removed",
+            "lifecycle": "active",
             "hasWikiDescription": true
           }
         ],
@@ -8713,7 +8690,7 @@
             },
             "slug": "mighty-shield",
             "rarity": "silver",
-            "lifecycle": "removed",
+            "lifecycle": "active",
             "hasWikiDescription": true
           }
         ],
@@ -8743,21 +8720,21 @@
         "internal_augments": [
           {
             "sourceKey": "spell-split",
-            "name": "Spellsplit",
+            "name": "Spell Split",
             "match": {
               "method": "normalized",
               "token": "spellsplit"
             },
             "slug": "spell-split",
             "rarity": "prismatic",
-            "lifecycle": "removed",
+            "lifecycle": "active",
             "hasWikiDescription": true
           }
         ],
         "wiki": [
           {
-            "sourceKey": "Spellsplit",
-            "name": "Spellsplit",
+            "sourceKey": "Spell Split",
+            "name": "Spell Split",
             "match": {
               "method": "normalized",
               "token": "spellsplit"
@@ -8787,7 +8764,7 @@
             },
             "slug": "nature-is-healing",
             "rarity": "gold",
-            "lifecycle": "removed",
+            "lifecycle": "active",
             "hasWikiDescription": true
           }
         ],
@@ -8824,7 +8801,7 @@
             },
             "slug": "nightstalking",
             "rarity": "gold",
-            "lifecycle": "removed",
+            "lifecycle": "active",
             "hasWikiDescription": true
           }
         ],
@@ -8861,7 +8838,7 @@
             },
             "slug": "ominous-pact",
             "rarity": "prismatic",
-            "lifecycle": "removed",
+            "lifecycle": "active",
             "hasWikiDescription": true
           }
         ],
@@ -8898,7 +8875,7 @@
             },
             "slug": "overextender",
             "rarity": "gold",
-            "lifecycle": "removed",
+            "lifecycle": "active",
             "hasWikiDescription": true
           }
         ],
@@ -8935,7 +8912,7 @@
             },
             "slug": "pinball",
             "rarity": "gold",
-            "lifecycle": "removed",
+            "lifecycle": "active",
             "hasWikiDescription": true
           }
         ],
@@ -8972,7 +8949,7 @@
             },
             "slug": "poltergeist",
             "rarity": "silver",
-            "lifecycle": "removed",
+            "lifecycle": "active",
             "hasWikiDescription": true
           }
         ],
@@ -9009,7 +8986,7 @@
             },
             "slug": "poro-stampede",
             "rarity": "prismatic",
-            "lifecycle": "removed",
+            "lifecycle": "active",
             "hasWikiDescription": true
           }
         ],
@@ -9046,7 +9023,7 @@
             },
             "slug": "pressure-cooker",
             "rarity": "gold",
-            "lifecycle": "removed",
+            "lifecycle": "active",
             "hasWikiDescription": true
           }
         ],
@@ -9083,7 +9060,7 @@
             },
             "slug": "prom-queen",
             "rarity": "prismatic",
-            "lifecycle": "removed",
+            "lifecycle": "active",
             "hasWikiDescription": true
           }
         ],
@@ -9094,6 +9071,80 @@
             "match": {
               "method": "normalized",
               "token": "promqueen"
+            },
+            "hasWikiDescription": true
+          }
+        ],
+        "arammayhem_win_rate": []
+      }
+    },
+    {
+      "augmentId": "Quest_Sneakerhead",
+      "cdragon": {
+        "augmentNameId": "Quest_Sneakerhead",
+        "name": "Sneakerhead",
+        "slug": "quest_-sneakerhead",
+        "rarity": "prismatic"
+      },
+      "sources": {
+        "internal_augments": [
+          {
+            "sourceKey": "sneakerhead",
+            "name": "Sneakerhead",
+            "match": {
+              "method": "normalized",
+              "token": "sneakerhead"
+            },
+            "slug": "sneakerhead",
+            "rarity": "prismatic",
+            "lifecycle": "removed",
+            "hasWikiDescription": true
+          }
+        ],
+        "wiki": [
+          {
+            "sourceKey": "Sneakerhead",
+            "name": "Sneakerhead",
+            "match": {
+              "method": "normalized",
+              "token": "sneakerhead"
+            },
+            "hasWikiDescription": true
+          }
+        ],
+        "arammayhem_win_rate": []
+      }
+    },
+    {
+      "augmentId": "ReEnergize",
+      "cdragon": {
+        "augmentNameId": "ReEnergize",
+        "name": "ReEnergize",
+        "slug": "re-energize",
+        "rarity": "silver"
+      },
+      "sources": {
+        "internal_augments": [
+          {
+            "sourceKey": "reenergize",
+            "name": "ReEnergize",
+            "match": {
+              "method": "normalized",
+              "token": "reenergize"
+            },
+            "slug": "reenergize",
+            "rarity": "silver",
+            "lifecycle": "active",
+            "hasWikiDescription": true
+          }
+        ],
+        "wiki": [
+          {
+            "sourceKey": "ReEnergize",
+            "name": "ReEnergize",
+            "match": {
+              "method": "normalized",
+              "token": "reenergize"
             },
             "hasWikiDescription": true
           }
@@ -9119,22 +9170,12 @@
               "token": "redenvelopes"
             },
             "slug": "red-envelopes",
-            "rarity": "prismatic",
+            "rarity": "gold",
             "lifecycle": "removed",
-            "hasWikiDescription": true
+            "hasWikiDescription": false
           }
         ],
-        "wiki": [
-          {
-            "sourceKey": "Red Envelopes",
-            "name": "Red Envelopes",
-            "match": {
-              "method": "normalized",
-              "token": "redenvelopes"
-            },
-            "hasWikiDescription": true
-          }
-        ],
+        "wiki": [],
         "arammayhem_win_rate": []
       }
     },
@@ -9157,7 +9198,7 @@
             },
             "slug": "shark-tempest",
             "rarity": "gold",
-            "lifecycle": "removed",
+            "lifecycle": "active",
             "hasWikiDescription": true
           }
         ],
@@ -9194,7 +9235,7 @@
             },
             "slug": "shrink-engine",
             "rarity": "gold",
-            "lifecycle": "removed",
+            "lifecycle": "active",
             "hasWikiDescription": true
           }
         ],
@@ -9205,6 +9246,80 @@
             "match": {
               "method": "normalized",
               "token": "shrinkengine"
+            },
+            "hasWikiDescription": true
+          }
+        ],
+        "arammayhem_win_rate": []
+      }
+    },
+    {
+      "augmentId": "SkipTheBasics",
+      "cdragon": {
+        "augmentNameId": "SkipTheBasics",
+        "name": "Ult Bot",
+        "slug": "skip-the-basics",
+        "rarity": "prismatic"
+      },
+      "sources": {
+        "internal_augments": [
+          {
+            "sourceKey": "ult-bot",
+            "name": "Ult Bot",
+            "match": {
+              "method": "normalized",
+              "token": "ultbot"
+            },
+            "slug": "ult-bot",
+            "rarity": "prismatic",
+            "lifecycle": "active",
+            "hasWikiDescription": true
+          }
+        ],
+        "wiki": [
+          {
+            "sourceKey": "Ult Bot",
+            "name": "Ult Bot",
+            "match": {
+              "method": "normalized",
+              "token": "ultbot"
+            },
+            "hasWikiDescription": true
+          }
+        ],
+        "arammayhem_win_rate": []
+      }
+    },
+    {
+      "augmentId": "SnapBack",
+      "cdragon": {
+        "augmentNameId": "SnapBack",
+        "name": "Snap Back",
+        "slug": "snap-back",
+        "rarity": "gold"
+      },
+      "sources": {
+        "internal_augments": [
+          {
+            "sourceKey": "snap-back",
+            "name": "Snap Back",
+            "match": {
+              "method": "normalized",
+              "token": "snapback"
+            },
+            "slug": "snap-back",
+            "rarity": "gold",
+            "lifecycle": "active",
+            "hasWikiDescription": true
+          }
+        ],
+        "wiki": [
+          {
+            "sourceKey": "Snap Back",
+            "name": "Snap Back",
+            "match": {
+              "method": "normalized",
+              "token": "snapback"
             },
             "hasWikiDescription": true
           }
@@ -9232,20 +9347,10 @@
             "slug": "snowball-roulette",
             "rarity": "gold",
             "lifecycle": "removed",
-            "hasWikiDescription": true
+            "hasWikiDescription": false
           }
         ],
-        "wiki": [
-          {
-            "sourceKey": "Snowball Roulette",
-            "name": "Snowball Roulette",
-            "match": {
-              "method": "normalized",
-              "token": "snowballroulette"
-            },
-            "hasWikiDescription": true
-          }
-        ],
+        "wiki": [],
         "arammayhem_win_rate": []
       }
     },
@@ -9305,7 +9410,7 @@
             },
             "slug": "snowblast",
             "rarity": "gold",
-            "lifecycle": "removed",
+            "lifecycle": "active",
             "hasWikiDescription": true
           }
         ],
@@ -9342,7 +9447,7 @@
             },
             "slug": "sonata",
             "rarity": "gold",
-            "lifecycle": "removed",
+            "lifecycle": "active",
             "hasWikiDescription": true
           }
         ],
@@ -9379,7 +9484,7 @@
             },
             "slug": "soul-eater",
             "rarity": "gold",
-            "lifecycle": "removed",
+            "lifecycle": "active",
             "hasWikiDescription": true
           }
         ],
@@ -9416,7 +9521,7 @@
             },
             "slug": "tripleshot",
             "rarity": "prismatic",
-            "lifecycle": "removed",
+            "lifecycle": "active",
             "hasWikiDescription": true
           }
         ],
@@ -9453,7 +9558,7 @@
             },
             "slug": "swift-and-safe",
             "rarity": "silver",
-            "lifecycle": "removed",
+            "lifecycle": "active",
             "hasWikiDescription": true
           }
         ],
@@ -9490,7 +9595,7 @@
             },
             "slug": "stay-resolute",
             "rarity": "silver",
-            "lifecycle": "removed",
+            "lifecycle": "active",
             "hasWikiDescription": true
           }
         ],
@@ -9564,7 +9669,7 @@
             },
             "slug": "twin-fire",
             "rarity": "silver",
-            "lifecycle": "removed",
+            "lifecycle": "active",
             "hasWikiDescription": true
           }
         ],
@@ -9601,7 +9706,7 @@
             },
             "slug": "ultimate-awakening",
             "rarity": "prismatic",
-            "lifecycle": "removed",
+            "lifecycle": "active",
             "hasWikiDescription": true
           }
         ],
@@ -9639,20 +9744,10 @@
             "slug": "upgrade-mikaels-blessing",
             "rarity": "prismatic",
             "lifecycle": "removed",
-            "hasWikiDescription": true
+            "hasWikiDescription": false
           }
         ],
-        "wiki": [
-          {
-            "sourceKey": "Upgrade Mikael's Blessing",
-            "name": "Upgrade Mikael's Blessing",
-            "match": {
-              "method": "normalized",
-              "token": "upgrademikaelsblessing"
-            },
-            "hasWikiDescription": true
-          }
-        ],
+        "wiki": [],
         "arammayhem_win_rate": []
       }
     },
@@ -9713,20 +9808,10 @@
             "slug": "upgrade-thornmail",
             "rarity": "silver",
             "lifecycle": "removed",
-            "hasWikiDescription": true
+            "hasWikiDescription": false
           }
         ],
-        "wiki": [
-          {
-            "sourceKey": "Upgrade Thornmail",
-            "name": "Upgrade Thornmail",
-            "match": {
-              "method": "normalized",
-              "token": "upgradethornmail"
-            },
-            "hasWikiDescription": true
-          }
-        ],
+        "wiki": [],
         "arammayhem_win_rate": []
       }
     },
@@ -9760,6 +9845,80 @@
             "match": {
               "method": "normalized",
               "token": "vampirism"
+            },
+            "hasWikiDescription": true
+          }
+        ],
+        "arammayhem_win_rate": []
+      }
+    },
+    {
+      "augmentId": "VeilOfWarding",
+      "cdragon": {
+        "augmentNameId": "VeilOfWarding",
+        "name": "Veil of Warding",
+        "slug": "veil-of-warding",
+        "rarity": "silver"
+      },
+      "sources": {
+        "internal_augments": [
+          {
+            "sourceKey": "veil-of-warding",
+            "name": "Veil of Warding",
+            "match": {
+              "method": "normalized",
+              "token": "veilofwarding"
+            },
+            "slug": "veil-of-warding",
+            "rarity": "silver",
+            "lifecycle": "active",
+            "hasWikiDescription": true
+          }
+        ],
+        "wiki": [
+          {
+            "sourceKey": "Veil of Warding",
+            "name": "Veil of Warding",
+            "match": {
+              "method": "normalized",
+              "token": "veilofwarding"
+            },
+            "hasWikiDescription": true
+          }
+        ],
+        "arammayhem_win_rate": []
+      }
+    },
+    {
+      "augmentId": "VirtuousCycle",
+      "cdragon": {
+        "augmentNameId": "VirtuousCycle",
+        "name": "Virtuous Cycle",
+        "slug": "virtuous-cycle",
+        "rarity": "silver"
+      },
+      "sources": {
+        "internal_augments": [
+          {
+            "sourceKey": "virtuous-cycle",
+            "name": "Virtuous Cycle",
+            "match": {
+              "method": "normalized",
+              "token": "virtuouscycle"
+            },
+            "slug": "virtuous-cycle",
+            "rarity": "silver",
+            "lifecycle": "active",
+            "hasWikiDescription": true
+          }
+        ],
+        "wiki": [
+          {
+            "sourceKey": "Virtuous Cycle",
+            "name": "Virtuous Cycle",
+            "match": {
+              "method": "normalized",
+              "token": "virtuouscycle"
             },
             "hasWikiDescription": true
           }
@@ -9824,20 +9983,10 @@
             "slug": "wind-beneath-blade",
             "rarity": "silver",
             "lifecycle": "removed",
-            "hasWikiDescription": true
+            "hasWikiDescription": false
           }
         ],
-        "wiki": [
-          {
-            "sourceKey": "Wind Beneath Blade",
-            "name": "Wind Beneath Blade",
-            "match": {
-              "method": "normalized",
-              "token": "windbeneathblade"
-            },
-            "hasWikiDescription": true
-          }
-        ],
+        "wiki": [],
         "arammayhem_win_rate": []
       }
     },
@@ -9860,7 +10009,7 @@
             },
             "slug": "spin-me-right-round",
             "rarity": "silver",
-            "lifecycle": "removed",
+            "lifecycle": "active",
             "hasWikiDescription": true
           }
         ],

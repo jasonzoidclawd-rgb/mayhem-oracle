@@ -1,5 +1,5 @@
 {
-  "scraped_at": "2026-06-22T21:45:03.367797+00:00",
+  "scraped_at": "2026-06-23T23:01:34.494701+00:00",
   "mayhemExclusive": [
     {
       "slug": "atmas-reckoning",
@@ -8343,13 +8343,14 @@
       "wikiPassives": [
         {
           "label": "Unique - Control:",
-          "text": "Abilities with immobilizing effects have their cooldown reduced equivalent to 15 ability haste."
+          "text": "Abilities with immobilizing effects have their cooldown reduced equivalent to 20 ability haste."
         }
       ],
       "wikiNotes": [],
       "recipe": [
-        "Blasting Wand",
-        "Bandleglass Mirror"
+        "Amplifying Tome",
+        "Bandleglass Mirror",
+        "Amplifying Tome"
       ],
       "name_zh_TW": "帝王命令",
       "name_zh_CN": "帝国指令",
@@ -8847,13 +8848,14 @@
       "wikiPassives": [
         {
           "label": "Unique - Control:",
-          "text": "Abilities with immobilizing effects have their cooldown reduced equivalent to 15 ability haste."
+          "text": "Abilities with immobilizing effects have their cooldown reduced equivalent to 20 ability haste."
         }
       ],
       "wikiNotes": [],
       "recipe": [
-        "Blasting Wand",
-        "Bandleglass Mirror"
+        "Amplifying Tome",
+        "Bandleglass Mirror",
+        "Amplifying Tome"
       ],
       "name_zh_TW": "帝王命令",
       "name_zh_CN": "帝国指令",
