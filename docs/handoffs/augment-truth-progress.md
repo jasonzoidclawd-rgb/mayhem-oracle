@@ -681,7 +681,7 @@ Combo gate checks after Step 7 re-run:
 - `vayne`: `chain-reaction=S`, `twin-fire=A`.
 - `riven`: `chain-reaction=S`, `ravenous-bind=S`, `tooth-fairy=A`, `twin-fire=A`.
 - `kled`: `chain-reaction=S`, `ravenous-bind=A`, `tooth-fairy=A`.
-- `jhin` and `ryze` S-tier combo sets differ: `jhinOnly=master-of-duality,tank-it-or-leave-it`; `ryzeOnly=jeweled-gauntlet`.
+- `jhin` vs `ryze`: **the "jhin ≠ ryze" gate was an INVALID expectation.** Their public top-3 S-tier teaser is intentionally identical (`back-to-basics`, `biggest-snowball-ever`, `bread-and-butter`) — and that is CORRECT: it matches the prior meta reference (arammayhem had both champions on exactly those three universal-best augments). Champion specificity is proven instead by the AD champions recovering Chain Reaction (draven/vayne/riven/kled above), not by forcing jhin and ryze to differ. (For completeness, the full internal combo sets do differ — `jhinOnly=master-of-duality,tank-it-or-leave-it`, `ryzeOnly=jeweled-gauntlet` — but equality of the public teaser is the acceptable, meta-aligned outcome.)
 
 Commands run:
 
@@ -706,3 +706,68 @@ Commands run:
 | `python3 scripts/export_public_catalog.py && npm test -- src/lib/__tests__/public-data-boundary.test.ts` | PASS (1 file, 4 tests) |
 | `(cd overlay && npm_config_cache=/private/tmp/mayhem-npm-cache npm run build)` | PASS (`sync-data`, `tsc`, Vite build) |
 | `git diff --check` | PASS |
+
+## Phase 2 ambiguous tail — REVIEW BEFORE MERGE (Claude, 2026-06-23)
+
+Durable, reviewable list of the non-offerable augments needing human adjudication before any merge to `main`. Signals: kiwi = Mayhem-specific stringtable tuning present; wiki = on the LoL Wiki Mayhem page; registry = in CDragon roster. All rows below are currently **non-offerable** (excluded from pools/combos).
+
+### unverified_legacy (16) — not corroborated by current CDragon/kiwi or wiki; quarantined, non-offerable
+- **Adaptive Ward** (`adaptive-ward`) — kiwi:N wiki:N registry:N
+- **Don't Change the Channel** (`dont-change-the-channel`) — kiwi:N wiki:N registry:N
+- **Forged By The Master** (`forged-by-the-master`) — kiwi:N wiki:N registry:N
+- **From Downtown** (`ARAM_BangBang`) — kiwi:N wiki:N registry:N
+- **It's Go Time** (`its-go-time`) — kiwi:N wiki:N registry:N
+- **One Trick Pony** (`one-trick-pony`) — kiwi:N wiki:N registry:N
+- **Overloaded** (`overloaded`) — kiwi:N wiki:N registry:N
+- **Pin Cushion** (`pin-cushion`) — kiwi:N wiki:N registry:N
+- **Porcupine** (`porcupine`) — kiwi:N wiki:N registry:N
+- **Pursuit of Haste** (`ARAM_SpecializedRecursion`) — kiwi:N wiki:N registry:N
+- **Siphon** (`ARAM_SustainingStrike`) — kiwi:N wiki:N registry:N
+- **Squishy Slappy Grab** (`squishy-slappy-grab`) — kiwi:N wiki:N registry:N
+- **Surge Field** (`surge-field`) — kiwi:N wiki:N registry:N
+- **Terrain'd** (`terraind`) — kiwi:N wiki:N registry:N
+- **Trusty Weapon** (`trusty-weapon`) — kiwi:N wiki:N registry:N
+- **Warlock Juicebox** (`warlock-juicebox`) — kiwi:N wiki:N registry:N
+
+### candidate_registry_present (39) — kiwi/registry definition present but NO wiki corroboration; non-offerable until corroborated/approved
+- **???** (`ARAM_MissingPingAugment`) — kiwi:Y wiki:N registry:Y
+- **Bounce of the Poro King** (`ARAM_PoroKing`) — kiwi:Y wiki:N registry:Y
+- **Buff Buddies** (`ARAM_BuffBuddies`) — kiwi:Y wiki:N registry:Y
+- **Cerberus** (`ARAM_Cerberus`) — kiwi:Y wiki:N registry:Y
+- **Cheating** (`ARAM_Recall`) — kiwi:Y wiki:N registry:Y
+- **Crack Open That Egg** (`ARAM_CrackOpenThatEgg`) — kiwi:Y wiki:N registry:Y
+- **Demon's Dance** (`ARAM_DemonsDance`) — kiwi:Y wiki:N registry:Y
+- **Executioner** (`ARAM_Executioner`) — kiwi:Y wiki:N registry:Y
+- **Feel the Burn** (`ARAM_FeeltheBurn`) — kiwi:Y wiki:N registry:Y
+- **Frost Wraith** (`ARAM_FrostWraith`) — kiwi:Y wiki:N registry:Y
+- **Fully Automated** (`FullyAutomated`) — kiwi:Y wiki:N registry:Y
+- **Gash** (`Gash`) — kiwi:Y wiki:N registry:Y
+- **Grandma's Chili Oil** (`GrandmasChiliOil`) — kiwi:Y wiki:N registry:Y
+- **Hat on a Hat** (`HatOnAHat`) — kiwi:Y wiki:N registry:Y
+- **Heads Up Cupcake!** (`ARAM_WatchOutGrapefruit`) — kiwi:Y wiki:N registry:Y
+- **Holy Fire** (`ARAM_HolyFire`) — kiwi:Y wiki:N registry:Y
+- **I'm a Baby Kitty Where is Mama** (`BabyKitty`) — kiwi:Y wiki:N registry:Y
+- **Keystone Conjurer** (`ARAM_KeystoneConjurer`) — kiwi:Y wiki:N registry:Y
+- **Laser Heal** (`LaserHeal`) — kiwi:Y wiki:N registry:Y
+- **Lightning Strikes** (`ARAM_LightningStrikes`) — kiwi:Y wiki:N registry:Y
+- **Orbital Laser** (`ARAM_OrbitalLaser_Active`) — kiwi:Y wiki:N registry:Y
+- **Poro Blaster** (`ARAM_Poro_Blast`) — kiwi:Y wiki:N registry:Y
+- **Red Envelopes** (`RedEnvelopes`) — kiwi:Y wiki:N registry:Y
+- **Repulsor** (`ARAM_Repulsor`) — kiwi:Y wiki:N registry:Y
+- **Restless Restoration** (`ARAM_RestlessRestoration`) — kiwi:Y wiki:N registry:Y
+- **Self Destruct** (`ARAM_SelfDestruct`) — kiwi:Y wiki:N registry:Y
+- **Slow And Steady** (`ARAM_SlowAndSteady`) — kiwi:Y wiki:N registry:Y
+- **Snowball Roulette** (`SnowballRoulette`) — kiwi:Y wiki:N registry:Y
+- **Speed Demon** (`ARAM_SpeedDemon`) — kiwi:Y wiki:N registry:Y
+- **The Brutalizer** (`ARAM_TheBrutalizer`) — kiwi:Y wiki:N registry:Y
+- **Trueshot Prodigy** (`ARAM_TrueshotProdigy`) — kiwi:Y wiki:N registry:Y
+- **Twice Thrice** (`ARAM_TwiceThrice`) — kiwi:Y wiki:N registry:Y
+- **Upgrade Cutlass** (`ARAM_Upgrade_Cutlass`) — kiwi:Y wiki:N registry:Y
+- **Upgrade Hubris** (`ARAM_Upgrade_Hubris`) — kiwi:Y wiki:N registry:Y
+- **Upgrade Mikael's Blessing** (`Upgrade_MikaelsBlessing`) — kiwi:Y wiki:N registry:Y
+- **Upgrade Thornmail** (`Upgrade_Thornmail`) — kiwi:Y wiki:N registry:Y
+- **Void Rift** (`ARAM_VoidRift`) — kiwi:Y wiki:N registry:Y
+- **Weighted Popoffs** (`ARAM_WeightedPopoffs`) — kiwi:Y wiki:N registry:Y
+- **Wind Beneath Blade** (`WindBeneathBlade`) — kiwi:Y wiki:N registry:Y
+
+**How to read this:** kiwi:Y wiki:N = likely a live Mayhem augment the wiki just has not documented yet (held as candidate pending corroboration). kiwi:N wiki:N registry:N = likely genuinely removed (or a codename/alias miss worth spot-checking, e.g. `From Downtown`/`ARAM_BangBang`). Promote to offerable only after wiki/Tencent corroboration or explicit human approval.
