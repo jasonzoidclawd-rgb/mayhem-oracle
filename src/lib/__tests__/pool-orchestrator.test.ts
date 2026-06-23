@@ -202,7 +202,7 @@ describe("pool orchestrator — real-data behavior", () => {
 describe("pool orchestrator — 26.12 availability wiring", () => {
   test("non-offerable augments are excluded with their resolved availability reason", () => {
     const expectedReasons = new Map([
-      ["slow-and-steady", "candidate_registry_present"],
+      ["slow-and-steady", "removed"],
       ["clown-college", "disabled"],
       ["adamant", "disabled"],
       ["warlock-juicebox", "unverified_legacy"],

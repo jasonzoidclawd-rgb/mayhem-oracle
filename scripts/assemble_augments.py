@@ -25,6 +25,7 @@ AUGMENTS_PATH = INTERNAL_DATA_DIR / "augments.json"
 BASE_CATALOG_PATH = INTERNAL_DATA_DIR / "augment-base-catalog.json"
 WIKI_FEED_PATH = INTERNAL_DATA_DIR / "augment-wiki-feed.json"
 WINRATE_FEED_PATH = INTERNAL_DATA_DIR / "augment-winrate-feed.json"
+TENCENT_FEED_PATH = INTERNAL_DATA_DIR / "augment-tencent-feed.json"
 IDENTITY_MAP_PATH = INTERNAL_DATA_DIR / "augment-identity-map.json"
 PATCH_NOTES_PATH = INTERNAL_DATA_DIR / "patch-notes.json"
 
@@ -185,17 +186,24 @@ def resolve_availability(
     elif telemetry_status in {"live", "observed_live", "observed_bug_mechanism"}:
         live_sources.append("telemetry")
 
+    # Tencent official removed/disabled sections are stronger than a stale wiki
+    # row. Only observed live telemetry should conflict with an official
+    # non-current source; wiki text alone does not keep an augment offerable.
+    observed_live_sources = [s for s in live_sources if s == "telemetry"]
+
     if definition_placeholder:
         status = "candidate_registry_present"
     elif patch_removed:
         status = "removed"
-    elif (disabled_sources or removed_sources) and live_sources:
+    elif (disabled_sources or removed_sources) and observed_live_sources:
         status = "conflict"
-    elif disabled_sources and not live_sources:
+    elif disabled_sources:
         status = "disabled"
-    elif removed_sources and not live_sources:
+    elif removed_sources:
         status = "removed"
-    elif cdragon_present and wiki["status"] == "live":
+    elif cdragon_present and (wiki["status"] == "live" or tencent_status == "live"):
+        # Official Tencent 26.12 patch notes corroborate "currently live" — an
+        # accepted corroboration source alongside the wiki (spec §2.6/§3).
         status = "confirmed_live"
     elif cdragon_present:
         status = "candidate_registry_present"
@@ -457,11 +465,19 @@ def assemble_catalog(
     winrate_feed: dict,
     identity_map: dict,
     removed_slugs: set[str] | None = None,
+    tencent_feed: dict | None = None,
 ) -> dict:
     removed_slugs = removed_slugs or set()
     base_by_id = {row["augmentId"]: row for row in base_catalog.get("augments", [])}
     wiki_by_id = wiki_feed.get("augments", {})
     win_rates = winrate_feed.get("win_rates", {})
+    tencent_by_key = (tencent_feed or {}).get("augments", {})
+
+    def tencent_status_for(augment_id: str | None, slug: str | None) -> str | None:
+        for key in (augment_id, slug):
+            if key and isinstance(tencent_by_key.get(key), dict):
+                return tencent_by_key[key].get("tencent_status")
+        return None
     slug_to_augment_id, primary_slug_by_id = build_identity_indexes(identity_map)
     existing_by_slug = {row.get("slug"): row for row in existing_catalog.get("augments", []) if row.get("slug")}
     emitted_base_ids: set[str] = set()
@@ -501,6 +517,7 @@ def assemble_catalog(
                 tombstone_removed=tombstone_removed,
                 patch_removed=slug in removed_slugs,
                 existing_lifecycle=existing_row.get("flags", {}).get("lifecycle"),
+                tencent_status=tencent_status_for(augment_id, slug),
             )
             rows.append(build_cdragon_row(
                 base=base,
@@ -560,6 +577,7 @@ def assemble_catalog(
             definition_placeholder=bool(base.get("definitionPlaceholder")),
             tombstone_removed=False,
             patch_removed=slug in removed_slugs,
+            tencent_status=tencent_status_for(augment_id, slug),
         )
         rows.append(build_cdragon_row(
             base=base,
@@ -603,6 +621,7 @@ def main() -> None:
     wiki_feed = read_json(WIKI_FEED_PATH)
     winrate_feed = read_json(WINRATE_FEED_PATH)
     identity_map = read_json(IDENTITY_MAP_PATH)
+    tencent_feed = read_json(TENCENT_FEED_PATH) if TENCENT_FEED_PATH.exists() else {}
     removed_slugs = removed_patch_note_slugs(read_json(PATCH_NOTES_PATH)) if PATCH_NOTES_PATH.exists() else set()
 
     output = assemble_catalog(
@@ -612,6 +631,7 @@ def main() -> None:
         winrate_feed=winrate_feed,
         identity_map=identity_map,
         removed_slugs=removed_slugs,
+        tencent_feed=tencent_feed,
     )
     write_json(args.output, output)
 

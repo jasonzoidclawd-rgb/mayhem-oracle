@@ -52,6 +52,24 @@ def strip_keys(value, forbidden: set[str]):
     return value
 
 
+def build_public_augments(internal_dir: Path, forbidden: set[str]) -> dict:
+    augments = read_json(internal_dir / "augments.json")
+    pool_rules = read_json(internal_dir / "pool-rules.json")
+    lifecycle = pool_rules.get("lifecycle", {}) if isinstance(pool_rules, dict) else {}
+    removed_patches = lifecycle.get("removed", {}) if isinstance(lifecycle, dict) else {}
+    added_patches = lifecycle.get("added", {}) if isinstance(lifecycle, dict) else {}
+
+    for augment in augments.get("augments", []):
+        slug = augment.get("slug")
+        if not slug:
+            continue
+        patch = removed_patches.get(slug) or added_patches.get(slug)
+        if patch:
+            augment.setdefault("flags", {})["lifecycle_patch"] = patch
+
+    return strip_keys(augments, forbidden)
+
+
 PUBLIC_COMBO_TIERS = {"S"}
 MAX_TEASER_PER_CHAMPION = 3
 
@@ -120,10 +138,9 @@ def export_public_catalog(
         "legacyCatalogRow",
     }
     forbidden_augment_telemetry = forbidden_telemetry | {"wikiNotes"}
-    write_sanitized_json(
-        internal_dir / "augments.json",
+    write_json(
         public_dir / "augments.json",
-        forbidden_augment_telemetry,
+        build_public_augments(internal_dir, forbidden_augment_telemetry),
     )
     write_sanitized_json(
         internal_dir / "items.json",

@@ -59,8 +59,24 @@ export function AugmentsClient({
   const [search, setSearch] = useState("");
   const [sortBy, setSortBy] = useState<"score" | "name">("score");
 
+  const currentAugments = useMemo(
+    () => augments.filter((a) => a.flags?.lifecycle !== "removed"),
+    [augments],
+  );
+  const removedAugments = useMemo(
+    () =>
+      augments
+        .filter((a) => a.flags?.lifecycle === "removed")
+        .sort((a, b) => {
+          const patchCompare = (b.flags?.lifecycle_patch ?? "").localeCompare(a.flags?.lifecycle_patch ?? "");
+          if (patchCompare !== 0) return patchCompare;
+          return localizedName(a, locale).localeCompare(localizedName(b, locale));
+        }),
+    [augments, locale],
+  );
+
   const filtered = useMemo(() => {
-    return augments.filter((a) => {
+    return currentAugments.filter((a) => {
       const rarityMatch = activeRarity === "all" || a.rarity === activeRarity;
       const displayName = localizedName(a, locale);
       const q = search.toLowerCase();
@@ -72,7 +88,7 @@ export function AugmentsClient({
         (a.wikiDescription ?? a.description ?? "").toLowerCase().includes(q);
       return rarityMatch && searchMatch;
     });
-  }, [augments, activeRarity, search, locale]);
+  }, [currentAugments, activeRarity, search, locale]);
 
   const sorted = useMemo(() => {
     return [...filtered].sort((a, b) => {
@@ -83,12 +99,12 @@ export function AugmentsClient({
 
   const counts = useMemo(
     () => ({
-      all: augments.length,
-      prismatic: augments.filter((a) => a.rarity === "prismatic").length,
-      gold: augments.filter((a) => a.rarity === "gold").length,
-      silver: augments.filter((a) => a.rarity === "silver").length,
+      all: currentAugments.length,
+      prismatic: currentAugments.filter((a) => a.rarity === "prismatic").length,
+      gold: currentAugments.filter((a) => a.rarity === "gold").length,
+      silver: currentAugments.filter((a) => a.rarity === "silver").length,
     }),
-    [augments],
+    [currentAugments],
   );
 
   const rarityLabels: Record<AugmentRarity, string> = {
@@ -164,8 +180,10 @@ export function AugmentsClient({
       )}
 
       <p className="text-xs text-[var(--color-text-muted)] mt-8 text-center">
-        {t("showing", { count: sorted.length, total: augments.length })}
+        {t("showing", { count: sorted.length, total: currentAugments.length })}
       </p>
+
+      <RemovedAugmentsTable augments={removedAugments} locale={locale} />
     </div>
   );
 }
@@ -429,5 +447,56 @@ function AugmentCard({
         </div>
       </div>
     </Tooltip>
+  );
+}
+
+function RemovedAugmentsTable({
+  augments,
+  locale,
+}: {
+  augments: ScoredAugment[];
+  locale: string;
+}) {
+  const t = useTranslations("augments");
+  const tChamp = useTranslations("champion");
+  if (augments.length === 0) return null;
+
+  return (
+    <section className="mt-10">
+      <div className="mb-3">
+        <h2 className="text-lg font-semibold text-[var(--color-text-primary)]">
+          {t("removedArchiveTitle")}
+        </h2>
+        <p className="text-xs text-[var(--color-text-muted)]">
+          {t("removedArchiveSubtitle", { count: augments.length })}
+        </p>
+      </div>
+      <div className="overflow-x-auto rounded-lg border border-[var(--color-border-default)]">
+        <table className="w-full min-w-[520px] text-left text-xs">
+          <thead className="bg-[var(--color-bg-card)] text-[var(--color-text-muted)]">
+            <tr>
+              <th className="px-3 py-2 font-medium">{t("removedArchiveName")}</th>
+              <th className="px-3 py-2 font-medium">{t("removedArchiveRarity")}</th>
+              <th className="px-3 py-2 font-medium">{t("removedArchiveVersion")}</th>
+            </tr>
+          </thead>
+          <tbody>
+            {augments.map((augment) => (
+              <tr key={augment.slug} className="border-t border-[var(--color-border-default)]/70">
+                <td className="px-3 py-2 text-[var(--color-text-secondary)]">
+                  {localizedName(augment, locale)}
+                </td>
+                <td className="px-3 py-2 text-[var(--color-text-muted)]">
+                  {tChamp(augment.rarity)}
+                </td>
+                <td className="px-3 py-2 text-red-300/85">
+                  {augment.flags?.lifecycle_patch ?? "26.12"}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </section>
   );
 }

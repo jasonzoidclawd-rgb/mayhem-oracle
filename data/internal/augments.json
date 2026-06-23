@@ -11,10 +11,10 @@
   "counts": {
     "augments": 267,
     "availability": {
-      "confirmed_live": 195,
-      "candidate_registry_present": 39,
+      "confirmed_live": 194,
+      "candidate_registry_present": 4,
       "disabled": 11,
-      "removed": 6,
+      "removed": 42,
       "unverified_legacy": 16,
       "conflict": 0
     },
@@ -1119,7 +1119,7 @@
             "wikiFetchedAt": "2026-06-23T08:07:41+00:00"
           },
           "tencent": {
-            "status": null
+            "status": "live"
           },
           "telemetry": {
             "status": null
@@ -1136,7 +1136,8 @@
           },
           "resolution": {
             "liveSources": [
-              "wiki"
+              "wiki",
+              "tencent"
             ],
             "disabledSources": [],
             "removedSources": []
@@ -2062,7 +2063,7 @@
             "wikiFetchedAt": "2026-06-23T08:07:41+00:00"
           },
           "tencent": {
-            "status": null
+            "status": "live"
           },
           "telemetry": {
             "status": null
@@ -2079,7 +2080,8 @@
           },
           "resolution": {
             "liveSources": [
-              "wiki"
+              "wiki",
+              "tencent"
             ],
             "disabledSources": [],
             "removedSources": []
@@ -2712,7 +2714,7 @@
             "wikiFetchedAt": "2026-06-23T08:07:41+00:00"
           },
           "tencent": {
-            "status": null
+            "status": "live"
           },
           "telemetry": {
             "status": null
@@ -2729,7 +2731,8 @@
           },
           "resolution": {
             "liveSources": [
-              "wiki"
+              "wiki",
+              "tencent"
             ],
             "disabledSources": [],
             "removedSources": []
@@ -5923,7 +5926,7 @@
             "wikiFetchedAt": "2026-06-23T08:07:41+00:00"
           },
           "tencent": {
-            "status": null
+            "status": "live"
           },
           "telemetry": {
             "status": null
@@ -5940,7 +5943,8 @@
           },
           "resolution": {
             "liveSources": [
-              "wiki"
+              "wiki",
+              "tencent"
             ],
             "disabledSources": [],
             "removedSources": []
@@ -6321,7 +6325,7 @@
             "wikiFetchedAt": "2026-06-23T08:07:41+00:00"
           },
           "tencent": {
-            "status": null
+            "status": "live"
           },
           "telemetry": {
             "status": null
@@ -6338,7 +6342,8 @@
           },
           "resolution": {
             "liveSources": [
-              "wiki"
+              "wiki",
+              "tencent"
             ],
             "disabledSources": [],
             "removedSources": []
@@ -7423,7 +7428,7 @@
             "wikiFetchedAt": "2026-06-23T08:07:41+00:00"
           },
           "tencent": {
-            "status": null
+            "status": "live"
           },
           "telemetry": {
             "status": null
@@ -7440,7 +7445,8 @@
           },
           "resolution": {
             "liveSources": [
-              "wiki"
+              "wiki",
+              "tencent"
             ],
             "disabledSources": [],
             "removedSources": []
@@ -7624,7 +7630,7 @@
             "wikiFetchedAt": "2026-06-23T08:07:41+00:00"
           },
           "tencent": {
-            "status": null
+            "status": "live"
           },
           "telemetry": {
             "status": null
@@ -7641,7 +7647,8 @@
           },
           "resolution": {
             "liveSources": [
-              "wiki"
+              "wiki",
+              "tencent"
             ],
             "disabledSources": [],
             "removedSources": []
@@ -11140,7 +11147,7 @@
             "wikiFetchedAt": "2026-06-23T08:07:41+00:00"
           },
           "tencent": {
-            "status": null
+            "status": "live"
           },
           "telemetry": {
             "status": null
@@ -11157,7 +11164,8 @@
           },
           "resolution": {
             "liveSources": [
-              "wiki"
+              "wiki",
+              "tencent"
             ],
             "disabledSources": [],
             "removedSources": []
@@ -12331,7 +12339,7 @@
             "wikiFetchedAt": "2026-06-23T08:07:41+00:00"
           },
           "tencent": {
-            "status": null
+            "status": "live"
           },
           "telemetry": {
             "status": null
@@ -12348,7 +12356,8 @@
           },
           "resolution": {
             "liveSources": [
-              "wiki"
+              "wiki",
+              "tencent"
             ],
             "disabledSources": [],
             "removedSources": []
@@ -12529,7 +12538,7 @@
             "wikiFetchedAt": "2026-06-23T08:07:41+00:00"
           },
           "tencent": {
-            "status": null
+            "status": "live"
           },
           "telemetry": {
             "status": null
@@ -12546,7 +12555,8 @@
           },
           "resolution": {
             "liveSources": [
-              "wiki"
+              "wiki",
+              "tencent"
             ],
             "disabledSources": [],
             "removedSources": []
@@ -16374,7 +16384,7 @@
             "wikiFetchedAt": "2026-06-23T08:07:41+00:00"
           },
           "tencent": {
-            "status": null
+            "status": "live"
           },
           "telemetry": {
             "status": null
@@ -16391,7 +16401,8 @@
           },
           "resolution": {
             "liveSources": [
-              "wiki"
+              "wiki",
+              "tencent"
             ],
             "disabledSources": [],
             "removedSources": []
@@ -16989,7 +17000,7 @@
             "wikiFetchedAt": "2026-06-23T08:07:41+00:00"
           },
           "tencent": {
-            "status": null
+            "status": "live"
           },
           "telemetry": {
             "status": null
@@ -17006,7 +17017,8 @@
           },
           "resolution": {
             "liveSources": [
-              "wiki"
+              "wiki",
+              "tencent"
             ],
             "disabledSources": [],
             "removedSources": []
@@ -17701,7 +17713,7 @@
             "wikiFetchedAt": "2026-06-23T08:07:41+00:00"
           },
           "tencent": {
-            "status": null
+            "status": "live"
           },
           "telemetry": {
             "status": null
@@ -17718,7 +17730,8 @@
           },
           "resolution": {
             "liveSources": [
-              "wiki"
+              "wiki",
+              "tencent"
             ],
             "disabledSources": [],
             "removedSources": []
@@ -21372,7 +21385,7 @@
             "wikiFetchedAt": "2026-06-23T08:07:41+00:00"
           },
           "tencent": {
-            "status": null
+            "status": "live"
           },
           "telemetry": {
             "status": null
@@ -21389,7 +21402,8 @@
           },
           "resolution": {
             "liveSources": [
-              "wiki"
+              "wiki",
+              "tencent"
             ],
             "disabledSources": [],
             "removedSources": []
@@ -21962,7 +21976,7 @@
             "wikiFetchedAt": "2026-06-23T08:07:41+00:00"
           },
           "tencent": {
-            "status": null
+            "status": "live"
           },
           "telemetry": {
             "status": null
@@ -21979,7 +21993,8 @@
           },
           "resolution": {
             "liveSources": [
-              "wiki"
+              "wiki",
+              "tencent"
             ],
             "disabledSources": [],
             "removedSources": []
@@ -22645,7 +22660,7 @@
             "wikiFetchedAt": "2026-06-23T08:07:41+00:00"
           },
           "tencent": {
-            "status": null
+            "status": "live"
           },
           "telemetry": {
             "status": null
@@ -22662,7 +22677,8 @@
           },
           "resolution": {
             "liveSources": [
-              "wiki"
+              "wiki",
+              "tencent"
             ],
             "disabledSources": [],
             "removedSources": []
@@ -25093,7 +25109,7 @@
             "wikiFetchedAt": "2026-06-23T08:07:41+00:00"
           },
           "tencent": {
-            "status": null
+            "status": "live"
           },
           "telemetry": {
             "status": null
@@ -25110,7 +25126,8 @@
           },
           "resolution": {
             "liveSources": [
-              "wiki"
+              "wiki",
+              "tencent"
             ],
             "disabledSources": [],
             "removedSources": []
@@ -25296,7 +25313,7 @@
             "wikiFetchedAt": "2026-06-23T08:07:41+00:00"
           },
           "tencent": {
-            "status": null
+            "status": "live"
           },
           "telemetry": {
             "status": null
@@ -25313,7 +25330,8 @@
           },
           "resolution": {
             "liveSources": [
-              "wiki"
+              "wiki",
+              "tencent"
             ],
             "disabledSources": [],
             "removedSources": []
@@ -26714,7 +26732,7 @@
             "wikiFetchedAt": "2026-06-23T08:07:41+00:00"
           },
           "tencent": {
-            "status": null
+            "status": "live"
           },
           "telemetry": {
             "status": null
@@ -26731,7 +26749,8 @@
           },
           "resolution": {
             "liveSources": [
-              "wiki"
+              "wiki",
+              "tencent"
             ],
             "disabledSources": [],
             "removedSources": []
@@ -27422,7 +27441,7 @@
             "wikiFetchedAt": "2026-06-23T08:07:41+00:00"
           },
           "tencent": {
-            "status": null
+            "status": "live"
           },
           "telemetry": {
             "status": null
@@ -27439,7 +27458,8 @@
           },
           "resolution": {
             "liveSources": [
-              "wiki"
+              "wiki",
+              "tencent"
             ],
             "disabledSources": [],
             "removedSources": []
@@ -28540,7 +28560,7 @@
             "wikiFetchedAt": "2026-06-23T08:07:41+00:00"
           },
           "tencent": {
-            "status": null
+            "status": "live"
           },
           "telemetry": {
             "status": null
@@ -28557,7 +28577,8 @@
           },
           "resolution": {
             "liveSources": [
-              "wiki"
+              "wiki",
+              "tencent"
             ],
             "disabledSources": [],
             "removedSources": []
@@ -30743,7 +30764,7 @@
             "wikiFetchedAt": "2026-06-23T08:07:41+00:00"
           },
           "tencent": {
-            "status": null
+            "status": "live"
           },
           "telemetry": {
             "status": null
@@ -30760,7 +30781,8 @@
           },
           "resolution": {
             "liveSources": [
-              "wiki"
+              "wiki",
+              "tencent"
             ],
             "disabledSources": [],
             "removedSources": []
@@ -32086,7 +32108,7 @@
             "wikiFetchedAt": "2026-06-23T08:07:41+00:00"
           },
           "tencent": {
-            "status": null
+            "status": "live"
           },
           "telemetry": {
             "status": null
@@ -32103,7 +32125,8 @@
           },
           "resolution": {
             "liveSources": [
-              "wiki"
+              "wiki",
+              "tencent"
             ],
             "disabledSources": [],
             "removedSources": []
@@ -32490,7 +32513,7 @@
             "wikiFetchedAt": "2026-06-23T08:07:41+00:00"
           },
           "tencent": {
-            "status": null
+            "status": "live"
           },
           "telemetry": {
             "status": null
@@ -32507,7 +32530,8 @@
           },
           "resolution": {
             "liveSources": [
-              "wiki"
+              "wiki",
+              "tencent"
             ],
             "disabledSources": [],
             "removedSources": []
@@ -32894,7 +32918,7 @@
             "wikiFetchedAt": "2026-06-23T08:07:41+00:00"
           },
           "tencent": {
-            "status": null
+            "status": "live"
           },
           "telemetry": {
             "status": null
@@ -32911,7 +32935,8 @@
           },
           "resolution": {
             "liveSources": [
-              "wiki"
+              "wiki",
+              "tencent"
             ],
             "disabledSources": [],
             "removedSources": []
@@ -33976,7 +34001,7 @@
             "wikiFetchedAt": "2026-06-23T08:07:41+00:00"
           },
           "tencent": {
-            "status": null
+            "status": "live"
           },
           "telemetry": {
             "status": null
@@ -33993,7 +34018,8 @@
           },
           "resolution": {
             "liveSources": [
-              "wiki"
+              "wiki",
+              "tencent"
             ],
             "disabledSources": [],
             "removedSources": []
@@ -34177,7 +34203,7 @@
             "wikiFetchedAt": "2026-06-23T08:07:41+00:00"
           },
           "tencent": {
-            "status": null
+            "status": "live"
           },
           "telemetry": {
             "status": null
@@ -34194,7 +34220,8 @@
           },
           "resolution": {
             "liveSources": [
-              "wiki"
+              "wiki",
+              "tencent"
             ],
             "disabledSources": [],
             "removedSources": []
@@ -34379,7 +34406,7 @@
             "wikiFetchedAt": "2026-06-23T08:07:41+00:00"
           },
           "tencent": {
-            "status": null
+            "status": "live"
           },
           "telemetry": {
             "status": null
@@ -34396,7 +34423,8 @@
           },
           "resolution": {
             "liveSources": [
-              "wiki"
+              "wiki",
+              "tencent"
             ],
             "disabledSources": [],
             "removedSources": []
@@ -34980,7 +35008,7 @@
             "wikiFetchedAt": "2026-06-23T08:07:41+00:00"
           },
           "tencent": {
-            "status": null
+            "status": "live"
           },
           "telemetry": {
             "status": null
@@ -34997,7 +35025,8 @@
           },
           "resolution": {
             "liveSources": [
-              "wiki"
+              "wiki",
+              "tencent"
             ],
             "disabledSources": [],
             "removedSources": []
@@ -35607,7 +35636,7 @@
             "wikiFetchedAt": "2026-06-23T08:07:41+00:00"
           },
           "tencent": {
-            "status": null
+            "status": "live"
           },
           "telemetry": {
             "status": null
@@ -35624,7 +35653,8 @@
           },
           "resolution": {
             "liveSources": [
-              "wiki"
+              "wiki",
+              "tencent"
             ],
             "disabledSources": [],
             "removedSources": []
@@ -35808,7 +35838,7 @@
             "wikiFetchedAt": "2026-06-23T08:07:41+00:00"
           },
           "tencent": {
-            "status": null
+            "status": "live"
           },
           "telemetry": {
             "status": null
@@ -35825,7 +35855,8 @@
           },
           "resolution": {
             "liveSources": [
-              "wiki"
+              "wiki",
+              "tencent"
             ],
             "disabledSources": [],
             "removedSources": []
@@ -36467,7 +36498,7 @@
             "wikiFetchedAt": "2026-06-23T08:07:41+00:00"
           },
           "tencent": {
-            "status": null
+            "status": "live"
           },
           "telemetry": {
             "status": null
@@ -36484,7 +36515,8 @@
           },
           "resolution": {
             "liveSources": [
-              "wiki"
+              "wiki",
+              "tencent"
             ],
             "disabledSources": [],
             "removedSources": []
@@ -36867,7 +36899,7 @@
             "wikiFetchedAt": "2026-06-23T08:07:41+00:00"
           },
           "tencent": {
-            "status": null
+            "status": "live"
           },
           "telemetry": {
             "status": null
@@ -36884,7 +36916,8 @@
           },
           "resolution": {
             "liveSources": [
-              "wiki"
+              "wiki",
+              "tencent"
             ],
             "disabledSources": [],
             "removedSources": []
@@ -37350,7 +37383,7 @@
             "wikiFetchedAt": "2026-06-23T08:07:41+00:00"
           },
           "tencent": {
-            "status": null
+            "status": "live"
           },
           "telemetry": {
             "status": null
@@ -37367,7 +37400,8 @@
           },
           "resolution": {
             "liveSources": [
-              "wiki"
+              "wiki",
+              "tencent"
             ],
             "disabledSources": [],
             "removedSources": []
@@ -37549,7 +37583,7 @@
             "wikiFetchedAt": "2026-06-23T08:07:41+00:00"
           },
           "tencent": {
-            "status": null
+            "status": "live"
           },
           "telemetry": {
             "status": null
@@ -37566,7 +37600,8 @@
           },
           "resolution": {
             "liveSources": [
-              "wiki"
+              "wiki",
+              "tencent"
             ],
             "disabledSources": [],
             "removedSources": []
@@ -37746,7 +37781,7 @@
             "wikiFetchedAt": "2026-06-23T08:07:41+00:00"
           },
           "tencent": {
-            "status": null
+            "status": "live"
           },
           "telemetry": {
             "status": null
@@ -37763,7 +37798,8 @@
           },
           "resolution": {
             "liveSources": [
-              "wiki"
+              "wiki",
+              "tencent"
             ],
             "disabledSources": [],
             "removedSources": []
@@ -37948,7 +37984,7 @@
             "wikiFetchedAt": "2026-06-23T08:07:41+00:00"
           },
           "tencent": {
-            "status": null
+            "status": "live"
           },
           "telemetry": {
             "status": null
@@ -37965,7 +38001,8 @@
           },
           "resolution": {
             "liveSources": [
-              "wiki"
+              "wiki",
+              "tencent"
             ],
             "disabledSources": [],
             "removedSources": []
@@ -38430,7 +38467,7 @@
             "wikiFetchedAt": "2026-06-23T08:07:41+00:00"
           },
           "tencent": {
-            "status": null
+            "status": "live"
           },
           "telemetry": {
             "status": null
@@ -38447,7 +38484,8 @@
           },
           "resolution": {
             "liveSources": [
-              "wiki"
+              "wiki",
+              "tencent"
             ],
             "disabledSources": [],
             "removedSources": []
@@ -38833,7 +38871,7 @@
             "wikiFetchedAt": "2026-06-23T08:07:41+00:00"
           },
           "tencent": {
-            "status": null
+            "status": "live"
           },
           "telemetry": {
             "status": null
@@ -38850,7 +38888,8 @@
           },
           "resolution": {
             "liveSources": [
-              "wiki"
+              "wiki",
+              "tencent"
             ],
             "disabledSources": [],
             "removedSources": []
@@ -39034,7 +39073,7 @@
             "wikiFetchedAt": "2026-06-23T08:07:41+00:00"
           },
           "tencent": {
-            "status": null
+            "status": "live"
           },
           "telemetry": {
             "status": null
@@ -39051,7 +39090,8 @@
           },
           "resolution": {
             "liveSources": [
-              "wiki"
+              "wiki",
+              "tencent"
             ],
             "disabledSources": [],
             "removedSources": []
@@ -39236,7 +39276,7 @@
             "wikiFetchedAt": "2026-06-23T08:07:41+00:00"
           },
           "tencent": {
-            "status": null
+            "status": "live"
           },
           "telemetry": {
             "status": null
@@ -39253,7 +39293,8 @@
           },
           "resolution": {
             "liveSources": [
-              "wiki"
+              "wiki",
+              "tencent"
             ],
             "disabledSources": [],
             "removedSources": []
@@ -39702,7 +39743,7 @@
       },
       "type": "standalone",
       "availability": {
-        "status": "candidate_registry_present",
+        "status": "removed",
         "signals": {
           "cdragon_registry": {
             "present": true,
@@ -39729,7 +39770,7 @@
             "wikiFetchedAt": null
           },
           "tencent": {
-            "status": null
+            "status": "removed"
           },
           "telemetry": {
             "status": null
@@ -39748,6 +39789,7 @@
             "liveSources": [],
             "disabledSources": [],
             "removedSources": [
+              "tencent",
               "tombstone"
             ]
           }
@@ -39913,7 +39955,7 @@
       },
       "type": "standalone",
       "availability": {
-        "status": "candidate_registry_present",
+        "status": "removed",
         "signals": {
           "cdragon_registry": {
             "present": true,
@@ -39938,7 +39980,7 @@
             "wikiFetchedAt": null
           },
           "tencent": {
-            "status": null
+            "status": "removed"
           },
           "telemetry": {
             "status": null
@@ -39957,6 +39999,7 @@
             "liveSources": [],
             "disabledSources": [],
             "removedSources": [
+              "tencent",
               "tombstone"
             ]
           }
@@ -40271,7 +40314,7 @@
       },
       "type": "standalone",
       "availability": {
-        "status": "candidate_registry_present",
+        "status": "removed",
         "signals": {
           "cdragon_registry": {
             "present": true,
@@ -40296,7 +40339,7 @@
             "wikiFetchedAt": null
           },
           "tencent": {
-            "status": null
+            "status": "removed"
           },
           "telemetry": {
             "status": null
@@ -40315,6 +40358,7 @@
             "liveSources": [],
             "disabledSources": [],
             "removedSources": [
+              "tencent",
               "tombstone"
             ]
           }
@@ -40461,7 +40505,7 @@
       },
       "type": "standalone",
       "availability": {
-        "status": "candidate_registry_present",
+        "status": "removed",
         "signals": {
           "cdragon_registry": {
             "present": true,
@@ -40486,7 +40530,7 @@
             "wikiFetchedAt": null
           },
           "tencent": {
-            "status": null
+            "status": "removed"
           },
           "telemetry": {
             "status": null
@@ -40505,6 +40549,7 @@
             "liveSources": [],
             "disabledSources": [],
             "removedSources": [
+              "tencent",
               "tombstone"
             ]
           }
@@ -41000,7 +41045,7 @@
       },
       "type": "standalone",
       "availability": {
-        "status": "candidate_registry_present",
+        "status": "removed",
         "signals": {
           "cdragon_registry": {
             "present": true,
@@ -41027,7 +41072,7 @@
             "wikiFetchedAt": null
           },
           "tencent": {
-            "status": null
+            "status": "removed"
           },
           "telemetry": {
             "status": null
@@ -41046,6 +41091,7 @@
             "liveSources": [],
             "disabledSources": [],
             "removedSources": [
+              "tencent",
               "tombstone"
             ]
           }
@@ -42228,7 +42274,7 @@
       },
       "type": "standalone",
       "availability": {
-        "status": "candidate_registry_present",
+        "status": "removed",
         "signals": {
           "cdragon_registry": {
             "present": true,
@@ -42254,7 +42300,7 @@
             "wikiFetchedAt": null
           },
           "tencent": {
-            "status": null
+            "status": "removed"
           },
           "telemetry": {
             "status": null
@@ -42273,6 +42319,7 @@
             "liveSources": [],
             "disabledSources": [],
             "removedSources": [
+              "tencent",
               "tombstone"
             ]
           }
@@ -43069,7 +43116,7 @@
       },
       "type": "standalone",
       "availability": {
-        "status": "candidate_registry_present",
+        "status": "removed",
         "signals": {
           "cdragon_registry": {
             "present": true,
@@ -43096,7 +43143,7 @@
             "wikiFetchedAt": null
           },
           "tencent": {
-            "status": null
+            "status": "removed"
           },
           "telemetry": {
             "status": null
@@ -43115,6 +43162,7 @@
             "liveSources": [],
             "disabledSources": [],
             "removedSources": [
+              "tencent",
               "tombstone"
             ]
           }
@@ -43380,7 +43428,7 @@
       },
       "type": "standalone",
       "availability": {
-        "status": "candidate_registry_present",
+        "status": "removed",
         "signals": {
           "cdragon_registry": {
             "present": true,
@@ -43405,7 +43453,7 @@
             "wikiFetchedAt": null
           },
           "tencent": {
-            "status": null
+            "status": "removed"
           },
           "telemetry": {
             "status": null
@@ -43424,6 +43472,7 @@
             "liveSources": [],
             "disabledSources": [],
             "removedSources": [
+              "tencent",
               "tombstone"
             ]
           }
@@ -43817,7 +43866,7 @@
       },
       "type": "standalone",
       "availability": {
-        "status": "candidate_registry_present",
+        "status": "removed",
         "signals": {
           "cdragon_registry": {
             "present": true,
@@ -43843,7 +43892,7 @@
             "wikiFetchedAt": null
           },
           "tencent": {
-            "status": null
+            "status": "removed"
           },
           "telemetry": {
             "status": null
@@ -43862,6 +43911,7 @@
             "liveSources": [],
             "disabledSources": [],
             "removedSources": [
+              "tencent",
               "tombstone"
             ]
           }
@@ -44014,7 +44064,7 @@
       },
       "type": "standalone",
       "availability": {
-        "status": "candidate_registry_present",
+        "status": "removed",
         "signals": {
           "cdragon_registry": {
             "present": true,
@@ -44041,7 +44091,7 @@
             "wikiFetchedAt": null
           },
           "tencent": {
-            "status": null
+            "status": "removed"
           },
           "telemetry": {
             "status": null
@@ -44060,6 +44110,7 @@
             "liveSources": [],
             "disabledSources": [],
             "removedSources": [
+              "tencent",
               "tombstone"
             ]
           }
@@ -44213,7 +44264,7 @@
       },
       "type": "standalone",
       "availability": {
-        "status": "candidate_registry_present",
+        "status": "removed",
         "signals": {
           "cdragon_registry": {
             "present": true,
@@ -44240,7 +44291,7 @@
             "wikiFetchedAt": null
           },
           "tencent": {
-            "status": null
+            "status": "removed"
           },
           "telemetry": {
             "status": null
@@ -44259,6 +44310,7 @@
             "liveSources": [],
             "disabledSources": [],
             "removedSources": [
+              "tencent",
               "tombstone"
             ]
           }
@@ -44655,7 +44707,7 @@
       },
       "type": "standalone",
       "availability": {
-        "status": "candidate_registry_present",
+        "status": "removed",
         "signals": {
           "cdragon_registry": {
             "present": true,
@@ -44682,7 +44734,7 @@
             "wikiFetchedAt": null
           },
           "tencent": {
-            "status": null
+            "status": "removed"
           },
           "telemetry": {
             "status": null
@@ -44701,6 +44753,7 @@
             "liveSources": [],
             "disabledSources": [],
             "removedSources": [
+              "tencent",
               "tombstone"
             ]
           }
@@ -44853,7 +44906,7 @@
       },
       "type": "standalone",
       "availability": {
-        "status": "candidate_registry_present",
+        "status": "removed",
         "signals": {
           "cdragon_registry": {
             "present": true,
@@ -44880,7 +44933,7 @@
             "wikiFetchedAt": null
           },
           "tencent": {
-            "status": null
+            "status": "removed"
           },
           "telemetry": {
             "status": null
@@ -44899,6 +44952,7 @@
             "liveSources": [],
             "disabledSources": [],
             "removedSources": [
+              "tencent",
               "tombstone"
             ]
           }
@@ -45127,7 +45181,7 @@
       },
       "type": "standalone",
       "availability": {
-        "status": "candidate_registry_present",
+        "status": "removed",
         "signals": {
           "cdragon_registry": {
             "present": true,
@@ -45153,7 +45207,7 @@
             "wikiFetchedAt": null
           },
           "tencent": {
-            "status": null
+            "status": "removed"
           },
           "telemetry": {
             "status": null
@@ -45172,6 +45226,7 @@
             "liveSources": [],
             "disabledSources": [],
             "removedSources": [
+              "tencent",
               "tombstone"
             ]
           }
@@ -45323,7 +45378,7 @@
       },
       "type": "standalone",
       "availability": {
-        "status": "candidate_registry_present",
+        "status": "removed",
         "signals": {
           "cdragon_registry": {
             "present": true,
@@ -45350,7 +45405,7 @@
             "wikiFetchedAt": null
           },
           "tencent": {
-            "status": null
+            "status": "removed"
           },
           "telemetry": {
             "status": null
@@ -45369,6 +45424,7 @@
             "liveSources": [],
             "disabledSources": [],
             "removedSources": [
+              "tencent",
               "tombstone"
             ]
           }
@@ -46143,7 +46199,7 @@
       },
       "type": "standalone",
       "availability": {
-        "status": "candidate_registry_present",
+        "status": "removed",
         "signals": {
           "cdragon_registry": {
             "present": true,
@@ -46169,7 +46225,7 @@
             "wikiFetchedAt": null
           },
           "tencent": {
-            "status": null
+            "status": "removed"
           },
           "telemetry": {
             "status": null
@@ -46188,6 +46244,7 @@
             "liveSources": [],
             "disabledSources": [],
             "removedSources": [
+              "tencent",
               "tombstone"
             ]
           }
@@ -46339,7 +46396,7 @@
       },
       "type": "standalone",
       "availability": {
-        "status": "candidate_registry_present",
+        "status": "removed",
         "signals": {
           "cdragon_registry": {
             "present": true,
@@ -46366,7 +46423,7 @@
             "wikiFetchedAt": null
           },
           "tencent": {
-            "status": null
+            "status": "removed"
           },
           "telemetry": {
             "status": null
@@ -46385,6 +46442,7 @@
             "liveSources": [],
             "disabledSources": [],
             "removedSources": [
+              "tencent",
               "tombstone"
             ]
           }
@@ -46584,7 +46642,7 @@
       },
       "type": "standalone",
       "availability": {
-        "status": "candidate_registry_present",
+        "status": "removed",
         "signals": {
           "cdragon_registry": {
             "present": true,
@@ -46609,7 +46667,7 @@
             "wikiFetchedAt": null
           },
           "tencent": {
-            "status": null
+            "status": "removed"
           },
           "telemetry": {
             "status": null
@@ -46628,6 +46686,7 @@
             "liveSources": [],
             "disabledSources": [],
             "removedSources": [
+              "tencent",
               "tombstone"
             ]
           }
@@ -47461,7 +47520,7 @@
       },
       "type": "standalone",
       "availability": {
-        "status": "candidate_registry_present",
+        "status": "removed",
         "signals": {
           "cdragon_registry": {
             "present": true,
@@ -47488,7 +47547,7 @@
             "wikiFetchedAt": null
           },
           "tencent": {
-            "status": null
+            "status": "removed"
           },
           "telemetry": {
             "status": null
@@ -47507,6 +47566,7 @@
             "liveSources": [],
             "disabledSources": [],
             "removedSources": [
+              "tencent",
               "tombstone"
             ]
           }
@@ -48370,7 +48430,7 @@
       },
       "type": "standalone",
       "availability": {
-        "status": "candidate_registry_present",
+        "status": "removed",
         "signals": {
           "cdragon_registry": {
             "present": true,
@@ -48397,7 +48457,7 @@
             "wikiFetchedAt": null
           },
           "tencent": {
-            "status": null
+            "status": "removed"
           },
           "telemetry": {
             "status": null
@@ -48416,6 +48476,7 @@
             "liveSources": [],
             "disabledSources": [],
             "removedSources": [
+              "tencent",
               "tombstone"
             ]
           }
@@ -48631,7 +48692,7 @@
             "wikiFetchedAt": "2026-06-23T08:07:41+00:00"
           },
           "tencent": {
-            "status": null
+            "status": "live"
           },
           "telemetry": {
             "status": null
@@ -48648,7 +48709,8 @@
           },
           "resolution": {
             "liveSources": [
-              "wiki"
+              "wiki",
+              "tencent"
             ],
             "disabledSources": [],
             "removedSources": []
@@ -48852,7 +48914,7 @@
       },
       "type": "standalone",
       "availability": {
-        "status": "candidate_registry_present",
+        "status": "removed",
         "signals": {
           "cdragon_registry": {
             "present": true,
@@ -48879,7 +48941,7 @@
             "wikiFetchedAt": null
           },
           "tencent": {
-            "status": null
+            "status": "removed"
           },
           "telemetry": {
             "status": null
@@ -48898,6 +48960,7 @@
             "liveSources": [],
             "disabledSources": [],
             "removedSources": [
+              "tencent",
               "tombstone"
             ]
           }
@@ -49086,7 +49149,7 @@
       },
       "type": "standalone",
       "availability": {
-        "status": "candidate_registry_present",
+        "status": "removed",
         "signals": {
           "cdragon_registry": {
             "present": true,
@@ -49111,7 +49174,7 @@
             "wikiFetchedAt": null
           },
           "tencent": {
-            "status": null
+            "status": "removed"
           },
           "telemetry": {
             "status": null
@@ -49130,6 +49193,7 @@
             "liveSources": [],
             "disabledSources": [],
             "removedSources": [
+              "tencent",
               "tombstone"
             ]
           }
@@ -49325,7 +49389,7 @@
       },
       "type": "standalone",
       "availability": {
-        "status": "candidate_registry_present",
+        "status": "removed",
         "signals": {
           "cdragon_registry": {
             "present": true,
@@ -49352,7 +49416,7 @@
             "wikiFetchedAt": null
           },
           "tencent": {
-            "status": null
+            "status": "removed"
           },
           "telemetry": {
             "status": null
@@ -49371,6 +49435,7 @@
             "liveSources": [],
             "disabledSources": [],
             "removedSources": [
+              "tencent",
               "tombstone"
             ]
           }
@@ -49575,7 +49640,7 @@
       },
       "type": "standalone",
       "availability": {
-        "status": "candidate_registry_present",
+        "status": "removed",
         "signals": {
           "cdragon_registry": {
             "present": true,
@@ -49602,7 +49667,7 @@
             "wikiFetchedAt": null
           },
           "tencent": {
-            "status": null
+            "status": "removed"
           },
           "telemetry": {
             "status": null
@@ -49621,6 +49686,7 @@
             "liveSources": [],
             "disabledSources": [],
             "removedSources": [
+              "tencent",
               "tombstone"
             ]
           }
@@ -50030,7 +50096,7 @@
       },
       "type": "standalone",
       "availability": {
-        "status": "candidate_registry_present",
+        "status": "removed",
         "signals": {
           "cdragon_registry": {
             "present": true,
@@ -50055,7 +50121,7 @@
             "wikiFetchedAt": null
           },
           "tencent": {
-            "status": null
+            "status": "removed"
           },
           "telemetry": {
             "status": null
@@ -50074,6 +50140,7 @@
             "liveSources": [],
             "disabledSources": [],
             "removedSources": [
+              "tencent",
               "tombstone"
             ]
           }
@@ -50658,7 +50725,7 @@
       },
       "type": "standalone",
       "availability": {
-        "status": "candidate_registry_present",
+        "status": "removed",
         "signals": {
           "cdragon_registry": {
             "present": true,
@@ -50684,7 +50751,7 @@
             "wikiFetchedAt": null
           },
           "tencent": {
-            "status": null
+            "status": "removed"
           },
           "telemetry": {
             "status": null
@@ -50703,6 +50770,7 @@
             "liveSources": [],
             "disabledSources": [],
             "removedSources": [
+              "tencent",
               "tombstone"
             ]
           }
@@ -51233,7 +51301,7 @@
       },
       "type": "standalone",
       "availability": {
-        "status": "candidate_registry_present",
+        "status": "removed",
         "signals": {
           "cdragon_registry": {
             "present": true,
@@ -51258,7 +51326,7 @@
             "wikiFetchedAt": null
           },
           "tencent": {
-            "status": null
+            "status": "removed"
           },
           "telemetry": {
             "status": null
@@ -51277,6 +51345,7 @@
             "liveSources": [],
             "disabledSources": [],
             "removedSources": [
+              "tencent",
               "tombstone"
             ]
           }
@@ -51462,11 +51531,11 @@
       ],
       "flags": {
         "system_breaker": false,
-        "lifecycle": "active"
+        "lifecycle": "removed"
       },
       "type": "standalone",
       "availability": {
-        "status": "confirmed_live",
+        "status": "removed",
         "signals": {
           "cdragon_registry": {
             "present": true,
@@ -51492,7 +51561,7 @@
             "wikiFetchedAt": "2026-06-23T08:07:41+00:00"
           },
           "tencent": {
-            "status": null
+            "status": "removed"
           },
           "telemetry": {
             "status": null
@@ -51505,7 +51574,7 @@
           },
           "existing_catalog": {
             "slug": "tormentor",
-            "lifecycle": "active"
+            "lifecycle": "removed"
           },
           "resolution": {
             "liveSources": [
@@ -51513,6 +51582,7 @@
             ],
             "disabledSources": [],
             "removedSources": [
+              "tencent",
               "tombstone"
             ]
           }
@@ -51808,7 +51878,7 @@
       },
       "type": "standalone",
       "availability": {
-        "status": "candidate_registry_present",
+        "status": "removed",
         "signals": {
           "cdragon_registry": {
             "present": true,
@@ -51834,7 +51904,7 @@
             "wikiFetchedAt": null
           },
           "tencent": {
-            "status": null
+            "status": "removed"
           },
           "telemetry": {
             "status": null
@@ -51853,6 +51923,7 @@
             "liveSources": [],
             "disabledSources": [],
             "removedSources": [
+              "tencent",
               "tombstone"
             ]
           }
@@ -52023,7 +52094,7 @@
       },
       "type": "standalone",
       "availability": {
-        "status": "candidate_registry_present",
+        "status": "removed",
         "signals": {
           "cdragon_registry": {
             "present": true,
@@ -52048,7 +52119,7 @@
             "wikiFetchedAt": null
           },
           "tencent": {
-            "status": null
+            "status": "removed"
           },
           "telemetry": {
             "status": null
@@ -52067,6 +52138,7 @@
             "liveSources": [],
             "disabledSources": [],
             "removedSources": [
+              "tencent",
               "tombstone"
             ]
           }
@@ -52213,7 +52285,7 @@
       },
       "type": "standalone",
       "availability": {
-        "status": "candidate_registry_present",
+        "status": "removed",
         "signals": {
           "cdragon_registry": {
             "present": true,
@@ -52240,7 +52312,7 @@
             "wikiFetchedAt": null
           },
           "tencent": {
-            "status": null
+            "status": "removed"
           },
           "telemetry": {
             "status": null
@@ -52259,6 +52331,7 @@
             "liveSources": [],
             "disabledSources": [],
             "removedSources": [
+              "tencent",
               "tombstone"
             ]
           }
@@ -52412,7 +52485,7 @@
       },
       "type": "standalone",
       "availability": {
-        "status": "candidate_registry_present",
+        "status": "removed",
         "signals": {
           "cdragon_registry": {
             "present": true,
@@ -52439,7 +52512,7 @@
             "wikiFetchedAt": null
           },
           "tencent": {
-            "status": null
+            "status": "removed"
           },
           "telemetry": {
             "status": null
@@ -52458,6 +52531,7 @@
             "liveSources": [],
             "disabledSources": [],
             "removedSources": [
+              "tencent",
               "tombstone"
             ]
           }
@@ -52808,7 +52882,7 @@
       },
       "type": "standalone",
       "availability": {
-        "status": "candidate_registry_present",
+        "status": "removed",
         "signals": {
           "cdragon_registry": {
             "present": true,
@@ -52835,7 +52909,7 @@
             "wikiFetchedAt": null
           },
           "tencent": {
-            "status": null
+            "status": "removed"
           },
           "telemetry": {
             "status": null
@@ -52854,6 +52928,7 @@
             "liveSources": [],
             "disabledSources": [],
             "removedSources": [
+              "tencent",
               "tombstone"
             ]
           }
@@ -53248,7 +53323,7 @@
             "wikiFetchedAt": "2026-06-23T08:07:41+00:00"
           },
           "tencent": {
-            "status": null
+            "status": "live"
           },
           "telemetry": {
             "status": null
@@ -53264,7 +53339,9 @@
             "lifecycle": "removed"
           },
           "resolution": {
-            "liveSources": [],
+            "liveSources": [
+              "tencent"
+            ],
             "disabledSources": [
               "wiki"
             ],
@@ -53424,7 +53501,7 @@
       },
       "type": "standalone",
       "availability": {
-        "status": "candidate_registry_present",
+        "status": "removed",
         "signals": {
           "cdragon_registry": {
             "present": true,
@@ -53451,7 +53528,7 @@
             "wikiFetchedAt": null
           },
           "tencent": {
-            "status": null
+            "status": "removed"
           },
           "telemetry": {
             "status": null
@@ -53470,6 +53547,7 @@
             "liveSources": [],
             "disabledSources": [],
             "removedSources": [
+              "tencent",
               "tombstone"
             ]
           }
@@ -53860,7 +53938,7 @@
       },
       "type": "standalone",
       "availability": {
-        "status": "candidate_registry_present",
+        "status": "removed",
         "signals": {
           "cdragon_registry": {
             "present": true,
@@ -53887,7 +53965,7 @@
             "wikiFetchedAt": null
           },
           "tencent": {
-            "status": null
+            "status": "removed"
           },
           "telemetry": {
             "status": null
@@ -53906,6 +53984,7 @@
             "liveSources": [],
             "disabledSources": [],
             "removedSources": [
+              "tencent",
               "tombstone"
             ]
           }
@@ -54059,7 +54138,7 @@
       },
       "type": "standalone",
       "availability": {
-        "status": "candidate_registry_present",
+        "status": "removed",
         "signals": {
           "cdragon_registry": {
             "present": true,
@@ -54086,7 +54165,7 @@
             "wikiFetchedAt": null
           },
           "tencent": {
-            "status": null
+            "status": "removed"
           },
           "telemetry": {
             "status": null
@@ -54105,6 +54184,7 @@
             "liveSources": [],
             "disabledSources": [],
             "removedSources": [
+              "tencent",
               "tombstone"
             ]
           }
@@ -56228,7 +56308,7 @@
             "wikiFetchedAt": "2026-06-23T08:07:41+00:00"
           },
           "tencent": {
-            "status": null
+            "status": "live"
           },
           "telemetry": {
             "status": null
@@ -56245,7 +56325,8 @@
           },
           "resolution": {
             "liveSources": [
-              "wiki"
+              "wiki",
+              "tencent"
             ],
             "disabledSources": [],
             "removedSources": []

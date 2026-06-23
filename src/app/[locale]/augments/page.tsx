@@ -24,13 +24,14 @@ export default async function AugmentsPage({
     win_rate: augment.win_rate ?? null,
     set: normalizeAugmentSet(augment.set, augment.wikiSet),
   }));
+  const currentCount = normalizedAugments.filter((augment) => augment.flags?.lifecycle !== "removed").length;
 
   return (
     <div className="py-8">
       <header className="mb-8">
         <h1 className="text-3xl font-bold mb-1">{t("title")}</h1>
         <p className="text-[var(--color-text-secondary)]">
-          {t("subtitle", { count: augments.length, patch })}
+          {t("subtitle", { count: currentCount, patch })}
         </p>
         <DataProvenance locale={locale} />
       </header>

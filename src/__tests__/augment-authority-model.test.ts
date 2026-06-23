@@ -255,7 +255,7 @@ describe("augment authority model guards", () => {
     expect(reconciliationReport.curatedBreakerReconciliation.map((entry) => entry.availability.status)).toEqual([
       "confirmed_live",
       "confirmed_live",
-      "candidate_registry_present",
+      "removed",
     ]);
     expect(reconciliationReport.unverifiedLegacy.count).toBe(unverifiedLegacySlugs.length);
     expect(reconciliationReport.unverifiedLegacy.augments.map((entry) => entry.slug).sort()).toEqual(

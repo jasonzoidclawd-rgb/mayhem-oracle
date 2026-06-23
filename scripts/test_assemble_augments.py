@@ -170,7 +170,7 @@ class AvailabilityResolverTests(unittest.TestCase):
         self.assertEqual(lifecycle_for_availability(availability["status"]), "removed")
         self.assertEqual(availability["signals"]["resolution"]["removedSources"], ["patch_notes", "tombstone"])
 
-    def test_current_live_and_current_removed_sources_resolve_conflict(self):
+    def test_tencent_removed_overrides_stale_wiki_live(self):
         availability = resolve_availability(
             augment_id="ARAM_CurrentConflict",
             slug="current-conflict",
@@ -181,10 +181,27 @@ class AvailabilityResolverTests(unittest.TestCase):
             tencent_status="removed",
         )
 
-        self.assertEqual(availability["status"], "conflict")
+        self.assertEqual(availability["status"], "removed")
         self.assertEqual(lifecycle_for_availability(availability["status"]), "removed")
         self.assertEqual(availability["signals"]["wiki"]["status"], "live")
         self.assertEqual(availability["signals"]["tencent"]["status"], "removed")
+
+    def test_telemetry_live_conflicts_with_tencent_removed(self):
+        availability = resolve_availability(
+            augment_id="ARAM_ObservedConflict",
+            slug="observed-conflict",
+            cdragon_present=True,
+            wiki_row=None,
+            definition_placeholder=False,
+            tombstone_removed=False,
+            tencent_status="removed",
+            telemetry_status="observed_live",
+        )
+
+        self.assertEqual(availability["status"], "conflict")
+        self.assertEqual(lifecycle_for_availability(availability["status"]), "removed")
+        self.assertEqual(availability["signals"]["tencent"]["status"], "removed")
+        self.assertEqual(availability["signals"]["telemetry"]["status"], "observed_live")
 
     def test_derived_removed_lifecycle_is_not_tombstone_evidence_on_rerun(self):
         existing = {

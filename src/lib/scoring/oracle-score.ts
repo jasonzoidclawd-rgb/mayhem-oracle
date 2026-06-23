@@ -42,6 +42,7 @@ export interface ScoredAugment {
   flags?: {
     system_breaker?: boolean;
     lifecycle?: string;
+    lifecycle_patch?: string;
   };
 }
 

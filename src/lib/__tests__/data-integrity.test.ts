@@ -101,9 +101,10 @@ describe("data integrity", () => {
   });
 
   test("26.12 breaker re-verification follows resolved availability truth", () => {
-    // CDragon+wiki is now the availability truth. Jeweled Gauntlet and
-    // Vulnerability are confirmed live; Slow and Steady is registry-only and
-    // therefore non-offerable. All eight keep their historical breaker flag.
+    // CDragon+wiki/Tencent is now the availability truth. Jeweled Gauntlet and
+    // Vulnerability are confirmed live; Slow and Steady is explicitly listed
+    // under Tencent's official 26.12 removed section and is non-offerable.
+    // All eight keep their historical breaker flag.
     // Curation note: stackosaurusrex was evaluated and rejected as a ninth
     // breaker — "% more stacks" is a quantitative amplifier, not a rewrite.
     const find = (slug: string) => augmentsData.augments.find((a) => a.slug === slug);
@@ -116,9 +117,10 @@ describe("data integrity", () => {
     }
 
     const slowAndSteady = find("slow-and-steady");
-    expect(slowAndSteady?.availability?.status).toBe("candidate_registry_present");
+    expect(slowAndSteady?.availability?.status).toBe("removed");
     expect(slowAndSteady?.flags.lifecycle).toBe("removed");
     expect(slowAndSteady?.flags.system_breaker).toBe(true);
+    expect(slowAndSteady?.availability?.signals?.tencent?.status).toBe("removed");
 
     for (const slug of [
       "draw-your-sword", "master-of-duality",
@@ -150,6 +152,16 @@ describe("data integrity", () => {
 
     expect(legacy?.availability?.status).toBe("unverified_legacy");
     expect(legacy?.flags.lifecycle).toBe("removed");
+  });
+
+  test("One Trick Pony stays unverified and out of champion pools", () => {
+    const oneTrickPony = augmentsData.augments.find((augment) => augment.slug === "one-trick-pony");
+
+    expect(oneTrickPony?.availability?.status).toBe("unverified_legacy");
+    expect(oneTrickPony?.flags.lifecycle).toBe("removed");
+    expect(oneTrickPony?.availability?.signals?.tencent?.status).toBeNull();
+    expect(oneTrickPony?.availability?.signals?.wiki?.status).toBe("absent");
+    expect(oneTrickPony?.availability?.signals?.cdragon_registry?.present).toBe(false);
   });
 
   test("CommunityDragon Mayhem rarity snapshot reaches engine augment data", () => {

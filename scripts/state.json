@@ -1,7 +1,7 @@
 {
   "patch": "26.12",
   "augments": 267,
-  "tests": "257",
+  "tests": "258",
   "parityBudget": 0,
   "lastTag": "26.12-phase3-complete"
 }

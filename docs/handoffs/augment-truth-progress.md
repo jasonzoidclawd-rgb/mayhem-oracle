@@ -771,3 +771,20 @@ Durable, reviewable list of the non-offerable augments needing human adjudicatio
 - **Wind Beneath Blade** (`WindBeneathBlade`) — kiwi:Y wiki:N registry:Y
 
 **How to read this:** kiwi:Y wiki:N = likely a live Mayhem augment the wiki just has not documented yet (held as candidate pending corroboration). kiwi:N wiki:N registry:N = likely genuinely removed (or a codename/alias miss worth spot-checking, e.g. `From Downtown`/`ARAM_BangBang`). Promote to offerable only after wiki/Tencent corroboration or explicit human approval.
+
+## Step 9 — Tencent section-aware corroboration + current-page split (Claude)
+
+**Status:** replaces the earlier positive-only Tencent note above. The first Tencent parser treated any localized name anywhere on the Tencent page as live; that was wrong because the page has separate Mayhem removed/added/adjusted/disabled sections and also unrelated Arena bugfix prose.
+
+Corrected source interpretation:
+- `Slow and Steady` / `一板一眼`: Tencent match is in `已移除的强化符文`, so status is `removed`, lifecycle `removed`, non-offerable. Registry/kiwi definition presence does not override official removal.
+- `Jeweled Gauntlet` / `珠光护手`: appears in Arena bugfix prose only, so Tencent provides **no** Mayhem availability signal. It remains `confirmed_live` via CDragon/kiwi + Wiki live corroboration, and it must not show as `已移除`.
+- `One Trick Pony`: no current Tencent/wiki/CDragon/kiwi corroboration in the assembled feed; keep `unverified_legacy`, lifecycle `removed`, non-offerable. Treat as an unverified Riot artifact/easter egg until telemetry or a stronger source maps it.
+
+Implemented:
+- `scripts/build_tencent_feed.py` now parses Tencent sections: added/adjusted => `live`; removed => `removed`; disabled => `disabled`; unrelated prose ignored. Fixture test covers Slow and Steady, Jeweled Gauntlet, disabled rows, and a known live row.
+- `scripts/assemble_augments.py` now lets official Tencent removed/disabled sections beat stale wiki live rows; only observed-live telemetry should create a conflict against an official non-current signal.
+- `scripts/update-data.sh` now regenerates the identity map and builds `augment-tencent-feed.json` before assembly.
+- Current `augments.json` counts: `confirmed_live=194`, `candidate_registry_present=4`, `disabled=11`, `removed=42`, `unverified_legacy=16`, `conflict=0`.
+- Champion-specific pool generation ran with `availability.offerable=194`; generated combos remain `8184` rows across all `172` champions. Pool numbers are implemented, but they depend on corrected availability plus `kit_tags`, and combo generation intentionally emits only meaningful tiered matches rather than one row for every offerable augment.
+- Augments page now hides `flags.lifecycle=removed` rows from the main grid and renders them in a separate removed/non-current archive table with version metadata from `pool-rules.json`.
