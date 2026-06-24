@@ -1,5 +1,9 @@
 @import "tailwindcss";
 
+/* Promotes phone-landscape widths to the tablet bento layout instead of
+   stretching the 1-column phone-portrait layout sideways. */
+@custom-variant landscape-phone (@media (orientation: landscape) and (max-height: 500px) and (max-width: 1023px));
+
 /* ─── Mayhem Oracle Dark Gaming Theme ─── */
 @theme {
   /* Core palette — inspired by arammayhem.com + blitz.gg */
@@ -55,6 +59,15 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }
 
 /* ─── Glassmorphism card utility ─── */
