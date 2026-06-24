@@ -1,6 +1,6 @@
 {
   "patch": "26.12",
-  "scraped_at": "2026-06-23T23:01:01.311461+00:00",
+  "scraped_at": "2026-06-24T22:59:44.848067+00:00",
   "schemaVersion": "augment-truth-step5",
   "sources": {
     "definition": "data/internal/augment-base-catalog.json",
@@ -297,14 +297,8 @@
       "name_zh_TW": "壓力火鍋",
       "name_ja": "圧力鍋",
       "name_ko": "압력솥",
-      "wikiDescription": "Surrounds you in flames, causing you to apply a Burn every second to enemy champions within 300 units for 3 seconds that deals magic damage equal to「 0.66% of your maximum health per second. 」「 2% of your maximum health over the duration. 」This Burn stacks infinitely and refreshes with each application. Additionally, you are assigned with quests that require you to deal a certain amount of damage with the Burn effect against enemy champions. There are three quest tiers, and each completed tier grants you a reward that improves Pressure Cooker's effect.",
-      "wikiRarity": "gold",
-      "recentChanges": {
-        "patch": "26.13",
-        "changes": [
-          "Total Burn Damage: 2% max Health ⇒ 1.5% max Health"
-        ]
-      }
+      "wikiDescription": "Surrounds you in flames, causing you to apply a Burn every second to enemy champions within 300 units for 3 seconds that deals magic damage equal to「 0.5% of your maximum health per second. 」「 1.5% of your maximum health over the duration. 」This Burn stacks infinitely and refreshes with each application. Additionally, you are assigned with quests that require you to deal a certain amount of damage with the Burn effect against enemy champions. There are three quest tiers, and each completed tier grants you a reward that improves Pressure Cooker's effect.",
+      "wikiRarity": "gold"
     },
     {
       "augmentId": "ARAM_Quest_VoidImmolation",
@@ -334,13 +328,7 @@
       "name_ja": "イカシアの滅亡",
       "name_ko": "이케시아의 몰락",
       "wikiDescription": "Gain Bami's Cinder. You can now purchase Hollow Radiance and Sunfire Aegis in spite of the item limit imposed by Immolate. Quest: Obtain Hollow Radiance and Sunfire Aegis. Reward: Upon completing your Quest, convert the items you obtained for the quest into Void Immolation. Void Immolation counts as 2 Burn effect sources. When gaining Bami's Cinder, you will lose an Ruby Crystal or a Glowing Mote in your inventory as it will get upgraded with no gold returned back to you.(bug)",
-      "wikiRarity": "prismatic",
-      "recentChanges": {
-        "patch": "26.13",
-        "changes": [
-          "Added Passive Desolate: Killing an enemy deals magic damage around them."
-        ]
-      }
+      "wikiRarity": "prismatic"
     },
     {
       "augmentId": "ARAM_Goliath",
@@ -398,13 +386,7 @@
       "name_ja": "燃える利回り",
       "name_ko": "타오르는 이자",
       "wikiDescription": "Gain 1 – 3 (based on level) (+ 0.75% of damage dealt) gold for each tick of damage dealt to enemy champions with persistent damage effects.",
-      "wikiRarity": "gold",
-      "recentChanges": {
-        "patch": "26.13",
-        "changes": [
-          "Percent Gold from Damage: 1% ⇒ 0.75%"
-        ]
-      }
+      "wikiRarity": "gold"
     },
     {
       "augmentId": "ARAM_MagicMissile",
@@ -843,13 +825,7 @@
       "name_ja": "ツインファイア",
       "name_ko": "쌍둥이 불꽃",
       "wikiDescription": "Damaging abilities against enemy champions launch 1 (+ 1 per 33.33% critical strike chance) missiles at the target that each deal 10 – 30 (based on level) (+ 7% bonus AD) (+ 7% AP) magic damage (5 second cooldown). Additionally, gain 25% critical strike chance.",
-      "wikiRarity": "silver",
-      "recentChanges": {
-        "patch": "26.13",
-        "changes": [
-          "Critical Chance: 15% ⇒ 25%"
-        ]
-      }
+      "wikiRarity": "silver"
     },
     {
       "augmentId": "ARAM_SpiritBomb",
@@ -878,13 +854,7 @@
       "name_ja": "スピリットボム",
       "name_ko": "영혼 폭탄",
       "wikiDescription": "Your healing and shielding on yourself or allies builds up a Spirit Bomb on top of you. Once you have healed and shielded a combined total of 200 – 2000 (based on level), you toss the Spirit Bomb onto the most wounded allied champion over 1.1 seconds. Upon impact, the Spirit Bomb explodes in a 475 radius to heal allied champions within the area for 5% – 15% (based on level) (+ 3% per 100 AP) of their missing health and grants them a shield for 2 seconds that absorbs damage equal to 10% – 25% (based on level) (+ 2% per 100 AP) of their current health. Healing and shielding from this effect do not count toward the Spirit Bomb's trigger condition. The toss range for the Spirit Bomb is global; it will target the lowest-health ally on the map.",
-      "wikiRarity": "prismatic",
-      "recentChanges": {
-        "patch": "26.13",
-        "changes": [
-          "Shield Duration: 4s ⇒ 2s"
-        ]
-      }
+      "wikiRarity": "prismatic"
     },
     {
       "augmentId": "ARAM_OceanSoul",
@@ -1554,14 +1524,7 @@
       "name_ja": "歯の妖精",
       "name_ko": "이빨 요정",
       "wikiDescription": "When you deal damage to an enemy champion equal to or more than 25% of their maximum health within 2.5 seconds, they drop a Tooth on the ground (4 second cooldown per target). You can pick up this Tooth by moving over it, granting you a Dental Records stack. For each stack, you gain 4 lethality and flat magic penetration.",
-      "wikiRarity": "gold",
-      "recentChanges": {
-        "patch": "26.13",
-        "changes": [
-          "Burst Threshold: 20% ⇒ 25%",
-          "Lethality and Magic Penetration: 5 ⇒ 4"
-        ]
-      }
+      "wikiRarity": "gold"
     },
     {
       "augmentId": "GrowthSpurt",
@@ -1714,13 +1677,7 @@
       "name_ja": "魔帝",
       "name_ko": "대마법사",
       "wikiDescription": "Whenever you cast an ability, refund the cooldown of another, randomly selected ability by 30% of the casted ability's cooldown.",
-      "wikiRarity": "prismatic",
-      "recentChanges": {
-        "patch": "26.13",
-        "changes": [
-          "Tier: Gold ⇒ Prismatic"
-        ]
-      }
+      "wikiRarity": "prismatic"
     },
     {
       "augmentId": "LittleExtraHelp",
@@ -3466,13 +3423,7 @@
       "name_ja": "あいたっ、私のコイン！",
       "name_ko": "으악, 내 동전!",
       "wikiDescription": "Enemy champions that you score a takedown against drop 6 – 10 (based on level) coins, with each coin landing 500 units away from the location of their death and lasting 10 seconds. You or allied champions can collect the coins by moving over them, granting 15 for each coin collected.",
-      "wikiRarity": "gold",
-      "recentChanges": {
-        "patch": "26.13",
-        "changes": [
-          "Coin Drops: 16 ⇒ 9"
-        ]
-      }
+      "wikiRarity": "gold"
     },
     {
       "augmentId": "EndlessDecimation",
@@ -5345,13 +5296,7 @@
       "name_ja": "クイックステップ",
       "name_ko": "날쌘걸음",
       "wikiDescription": "Upgrades one of your champion's abilities, empowering the ability's cast to cause you to dash up to 350 units towards your cursor.",
-      "wikiRarity": "gold",
-      "recentChanges": {
-        "patch": "26.13",
-        "changes": [
-          "Tier: Prismatic ⇒ Gold"
-        ]
-      }
+      "wikiRarity": "gold"
     },
     {
       "augmentId": "GlassCannon",
@@ -5380,14 +5325,8 @@
       "name_zh_TW": "玻璃大砲",
       "name_ja": "グラスキャノン",
       "name_ko": "유리 대포",
-      "wikiDescription": "You gain a health threshold equal to 70% maximum health which cannot be modified nor exceeded by any means. In return, you deal bonus true damage equal to 15% of all of the damage you deal pre-mitigation.",
-      "wikiRarity": "prismatic",
-      "recentChanges": {
-        "patch": "26.13",
-        "changes": [
-          "True Damage Percent: 15% ⇒ 25% / 15% melee / ranged"
-        ]
-      }
+      "wikiDescription": "You gain a health threshold equal to 70% maximum health which cannot be modified nor exceeded by any means. In return, you deal bonus true damage equal to ( 25% / 15%) of all of the damage you deal pre-mitigation.",
+      "wikiRarity": "prismatic"
     },
     {
       "augmentId": "ChainReaction",

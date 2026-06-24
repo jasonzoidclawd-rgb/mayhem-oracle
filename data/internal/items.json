@@ -1,5 +1,5 @@
 {
-  "scraped_at": "2026-06-23T23:01:34.494701+00:00",
+  "scraped_at": "2026-06-24T23:01:14.953637+00:00",
   "mayhemExclusive": [
     {
       "slug": "atmas-reckoning",
@@ -249,7 +249,7 @@
         "MagicResist",
         "AbilityHaste"
       ],
-      "description": "1000 Health 100 Armor 80 Magic Resist 25 Ability Haste 200% Base Health RegenImmolateAfter taking or dealing damage, deal  magic damage per second to nearby enemies for 5 seconds.",
+      "description": "1000 Health 100 Armor 80 Magic Resist 25 Ability Haste 200% Base Health RegenImmolateAfter taking or dealing damage, deal  magic damage per second to nearby enemies for 5 seconds. DesolateKilling an enemy deals magic damage around them.",
       "wikiPassives": [
         {
           "label": "Unique - Immolate:",
@@ -3495,7 +3495,7 @@
         "CooldownReduction",
         "AbilityHaste"
       ],
-      "description": "50 Attack Damage 10 Ability HasteEver Rising MoonHitting a champion with 2 separate Attacks or Abilities within 2 seconds grants you a Shield for 2 seconds.",
+      "description": "60 Attack Damage 15 Ability HasteEver Rising MoonHitting a champion with 2 separate Attacks or Abilities within 2 seconds grants you a Shield for 2 seconds.",
       "tier": "legendary",
       "wikiPassives": [
         {
@@ -7267,7 +7267,7 @@
         "ArmorPenetration",
         "AbilityHaste"
       ],
-      "description": "60 Ability Power 5% Move Speed 22% Armor Penetration 30% Magic PenetrationGiant SlayerDeal up to 15% bonus damage against champions with greater max Health than you.Max damage increase reached when Health difference is greater than 2500.",
+      "description": "60 Ability Power 5% Move Speed 22% Armor Penetration 30% Magic PenetrationGiant SlayerDeal up to 15% bonus damage against champions with greater max Health than you.Max damage increase reached when Health difference is greater than 3000.",
       "wikiPassives": [],
       "wikiNotes": [],
       "recipe": [],
@@ -7287,7 +7287,7 @@
         "CooldownReduction",
         "AbilityHaste"
       ],
-      "description": "50 Ability Power 15% Heal and Shield Power 25 Ability HastePromiseGain 15% of your Promised ally's  Ability Power, and grant your Promised ally 15% of your  Ability Haste. ACTIVE  (0s)PromiseMake a Promise to an ally.",
+      "description": "50 Ability Power 15% Heal and Shield Power 25 Ability HastePromiseGain 10% of your Promised ally's  Ability Power, and grant your Promised ally 10% of your  Ability Haste. ACTIVE  (0s)PromiseMake a Promise to an ally.",
       "wikiPassives": [],
       "wikiNotes": [],
       "recipe": [],
@@ -7306,7 +7306,7 @@
         "Damage",
         "ArmorPenetration"
       ],
-      "description": "35 Attack Damage 12 LethalityChar  (0s) per targetYour next Ability hit Burns enemies for  to  current Health physical damage over 4 seconds, based on how much more max Health they have than you.Bonus damage maximum is reached at 3000 health difference",
+      "description": "40 Attack Damage 12 LethalityChar  (0s) per targetYour next Ability hit Burns enemies for  to  current Health physical damage over 4 seconds, based on how much more max Health they have than you.Bonus damage maximum is reached at 3000 health difference",
       "wikiPassives": [],
       "wikiNotes": [],
       "recipe": [],
@@ -8214,7 +8214,7 @@
         "CooldownReduction",
         "AbilityHaste"
       ],
-      "description": "65 Ability Power 15 Ability Haste 150% Base Mana RegenControlGain  15 Ability Haste for your abilities with Immobilizing effects.CommandOn Immobilizing an enemy champion, mark them as 6% Vulnerable for 4 seconds.",
+      "description": "60 Ability Power 15 Ability Haste 150% Base Mana RegenControlGain  20 Ability Haste for your abilities with Immobilizing effects.CommandOn Immobilizing an enemy champion, mark them as 7% Vulnerable for 4 seconds.",
       "tier": "legendary",
       "wikiPassives": [],
       "wikiNotes": [],
@@ -8338,7 +8338,7 @@
         "CooldownReduction",
         "AbilityHaste"
       ],
-      "description": "65 Ability Power 15 Ability Haste 150% Base Mana RegenControlGain  15 Ability Haste for your abilities with Immobilizing effects.CommandOn Immobilizing an enemy champion, mark them as 6% Vulnerable for 4 seconds.",
+      "description": "65 Ability Power 15 Ability Haste 150% Base Mana RegenControlGain  20 Ability Haste for your abilities with Immobilizing effects.CommandOn Immobilizing an enemy champion, mark them as 7% Vulnerable for 4 seconds.",
       "tier": "legendary",
       "wikiPassives": [
         {
@@ -11591,7 +11591,7 @@
         "Armor",
         "Lane"
       ],
-      "description": "140 Health 10 Armor 10 Magic ResistHelping HandAttacks deal 5 bonus physical damage to minions.",
+      "description": "150 Health 8 Armor 8 Magic ResistHelping HandAttacks deal 5 bonus physical damage to minions.",
       "tier": "starter",
       "wikiPassives": [],
       "wikiNotes": [],

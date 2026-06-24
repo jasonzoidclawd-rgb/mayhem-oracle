@@ -1,6 +1,6 @@
 {
   "patch": "26.12",
-  "scraped_at": "2026-06-23T23:01:07.899417+00:00",
+  "scraped_at": "2026-06-24T22:59:50.745395+00:00",
   "generated_from": "internal-pool-mechanics",
   "combos": [
     {
@@ -12920,6 +12920,13 @@
     },
     {
       "champion": "gragas",
+      "augment": "Lil' Extra Help",
+      "augmentSlug": "lil-extra-help",
+      "tier": "B",
+      "ref": "ability-fit:Q/W/E/R"
+    },
+    {
+      "champion": "gragas",
       "augment": "Ominous Pact",
       "augmentSlug": "ominous-pact",
       "tier": "B",
@@ -12957,6 +12964,13 @@
       "champion": "gragas",
       "augment": "Blade Waltz",
       "augmentSlug": "blade-waltz",
+      "tier": "C",
+      "ref": "mechanical:ad_scaling"
+    },
+    {
+      "champion": "gragas",
+      "augment": "Blunt Force",
+      "augmentSlug": "blunt-force",
       "tier": "C",
       "ref": "mechanical:ad_scaling"
     },

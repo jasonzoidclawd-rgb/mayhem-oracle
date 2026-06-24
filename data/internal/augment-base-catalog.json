@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "identity_key": "CDragon augmentNameId",
-  "generated_at": "2026-06-23T23:01:01.311461+00:00",
+  "generated_at": "2026-06-24T22:59:44.848067+00:00",
   "source": "https://raw.communitydragon.org/latest",
   "sources": {
     "roster": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/cherry-augments.json",
@@ -16111,13 +16111,13 @@
           2.0
         ],
         "MaxLevelManaSpendThreshold": [
-          400.0,
-          400.0,
-          400.0,
-          400.0,
-          400.0,
-          400.0,
-          400.0
+          300.0,
+          300.0,
+          300.0,
+          300.0,
+          300.0,
+          300.0,
+          300.0
         ],
         "RefundAmount": [
           5.0,
@@ -29957,28 +29957,28 @@
         "rosterSmall": "/lol-game-data/assets/ASSETS/UX/Kiwi/Augments/Icons/GlassCannon_small.png"
       },
       "effectText": {
-        "desc": "Reduce <scaleHealth>max Health by @HPReductionPerc*100@%</scaleHealth>. Deal an extra @TrueDamagePerc*100@% damage as <trueDamage>true damage</trueDamage>.",
+        "desc": "Reduce <scaleHealth>max Health by @HPReductionPerc*100@%</scaleHealth>. Deal an extra @TrueDamagePercSplit@ damage as <trueDamage>true damage</trueDamage>.",
         "tooltip": "{{Kiwi_GlassCannon_Summary}}<br><br>Damage Dealt: @f1@"
       },
       "effectTextByLocale": {
         "en": {
-          "desc": "Reduce <scaleHealth>max Health by @HPReductionPerc*100@%</scaleHealth>. Deal an extra @TrueDamagePerc*100@% damage as <trueDamage>true damage</trueDamage>.",
+          "desc": "Reduce <scaleHealth>max Health by @HPReductionPerc*100@%</scaleHealth>. Deal an extra @TrueDamagePercSplit@ damage as <trueDamage>true damage</trueDamage>.",
           "tooltip": "{{Kiwi_GlassCannon_Summary}}<br><br>Damage Dealt: @f1@"
         },
         "zh_cn": {
-          "desc": "减少<scaleHealth>@HPReductionPerc*100@%最大生命值</scaleHealth>。造成额外的@TrueDamagePerc*100@%<trueDamage>真实伤害</trueDamage>。",
+          "desc": "减少<scaleHealth>@HPReductionPerc*100@%最大生命值</scaleHealth>。造成@TrueDamagePercSplit@<trueDamage>额外真实伤害</trueDamage>。",
           "tooltip": "{{Kiwi_GlassCannon_Summary}}<br><br>已造成的伤害：@f1@"
         },
         "zh_tw": {
-          "desc": "<scaleHealth>最大生命減少@HPReductionPerc*100@%</scaleHealth>。造成額外@TrueDamagePerc*100@%的<trueDamage>真實傷害</trueDamage>。",
+          "desc": "<scaleHealth>最大生命減少@HPReductionPerc*100@%</scaleHealth>。造成額外@TrueDamagePercSplit@<trueDamage>真實傷害</trueDamage>。",
           "tooltip": "{{Kiwi_GlassCannon_Summary}}<br><br>傷害量：@f1@"
         },
         "ja": {
-          "desc": "<scaleHealth>最大体力が@HPReductionPerc*100@%</scaleHealth>低下する。追加で@TrueDamagePerc*100@%の<trueDamage>確定ダメージ</trueDamage>を与える。",
+          "desc": "<scaleHealth>最大体力が@HPReductionPerc*100@%</scaleHealth>低下する。追加で@TrueDamagePercSplit@の<trueDamage>確定ダメージ</trueDamage>を与える。",
           "tooltip": "{{Kiwi_GlassCannon_Summary}}<br><br>与えたダメージ量: @f1@"
         },
         "ko": {
-          "desc": "<scaleHealth>최대 체력이 @HPReductionPerc*100@%</scaleHealth> 감소합니다. 피해량의 @TrueDamagePerc*100@%만큼 추가 <trueDamage>고정 피해</trueDamage>를 입힙니다.",
+          "desc": "<scaleHealth>최대 체력이 @HPReductionPerc*100@%</scaleHealth> 감소합니다. 피해량의 @TrueDamagePercSplit@만큼 추가 <trueDamage>고정 피해</trueDamage>를 입힙니다.",
           "tooltip": "{{Kiwi_GlassCannon_Summary}}<br><br>입힌 피해량: @f1@"
         }
       },
