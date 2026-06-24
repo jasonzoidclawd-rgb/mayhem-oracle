@@ -7,6 +7,7 @@ import { notFound } from "next/navigation";
 import { routing, isSupportedLocale } from "@/i18n/routing";
 import { SITE_URL, localizedUrl, languageAlternates } from "@/lib/site";
 import { Navbar } from "@/components/ui/Navbar";
+import { MobileTabBar } from "@/components/ui/MobileTabBar";
 import { NavigationProgress } from "@/components/ui/NavigationProgress";
 import { ConsentManager } from "@/components/ads/ConsentManager";
 import { Footer } from "@/components/ui/Footer";
@@ -136,10 +137,11 @@ export default async function LocaleLayout({
         <NextIntlClientProvider messages={messages}>
           <NavigationProgress />
           <Navbar />
-          <main className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 pt-20 pb-12">
+          <main className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 pt-20 pb-[calc(76px+env(safe-area-inset-bottom))] lg:pb-12">
             {children}
           </main>
           <Footer />
+          <MobileTabBar />
           <ConsentManager
             copy={{
               title: tm("consentTitle"),

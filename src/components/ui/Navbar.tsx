@@ -3,6 +3,7 @@
 import { useTranslations, useLocale } from "next-intl";
 import { useRouter, usePathname, Link } from "@/i18n/navigation";
 import { routing, type Locale } from "@/i18n/routing";
+import { CmdKSearch } from "@/components/dashboard/CmdKSearch";
 
 const LOCALE_LABELS: Record<Locale, string> = {
   en: "English",
@@ -63,8 +64,9 @@ export function Navbar() {
           })}
         </div>
 
-        {/* Account + language switcher */}
+        {/* Search + account + language switcher */}
         <div className="flex items-center gap-3">
+          <CmdKSearch />
           <Link
             href="/account"
             aria-label={t("account")}
