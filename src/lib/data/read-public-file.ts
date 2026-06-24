@@ -30,3 +30,11 @@ export function readAugmentsFile<T>(): Promise<T> {
 export function readMetaFile<T>(): Promise<T> {
   return parseJsonFile<T>(path.join(process.cwd(), "public", "data", "meta.json"));
 }
+
+export function readPatchNotesFile<T>(): Promise<T> {
+  return parseJsonFile<T>(path.join(process.cwd(), "public", "data", "patch-notes.json"));
+}
+
+export function readCombosFile<T>(): Promise<T> {
+  return parseJsonFile<T>(path.join(process.cwd(), "public", "data", "combos.json"));
+}
