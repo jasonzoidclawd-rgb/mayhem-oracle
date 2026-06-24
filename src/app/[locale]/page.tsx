@@ -1,6 +1,37 @@
-import { getTranslations, setRequestLocale } from "next-intl/server";
-import { Link } from "@/i18n/navigation";
-import { loadPublicJson } from "@/lib/data/public-loader";
+import { setRequestLocale } from "next-intl/server";
+import {
+  readChampionsFile,
+  readAugmentsFile,
+  readMetaFile,
+  readPatchNotesFile,
+  readCombosFile,
+} from "@/lib/data/read-public-file";
+import type { LocalizedNameRecord } from "@/lib/i18n/localized-name";
+import { DashboardIslands } from "@/components/dashboard/DashboardIslands";
+import { PatchPulseBanner } from "@/components/dashboard/PatchPulseBanner";
+import { HeroMover, type HeroChampion } from "@/components/dashboard/HeroMover";
+import { MetaAtAGlance } from "@/components/dashboard/MetaAtAGlance";
+import { TierMiniGrid, type TierChampion } from "@/components/dashboard/TierMiniGrid";
+import { MoversCarousel, type ChangedAugment } from "@/components/dashboard/MoversCarousel";
+import { AugmentSpotlight } from "@/components/dashboard/AugmentSpotlight";
+import { ComboHighlights } from "@/components/dashboard/ComboHighlights";
+import { AdvisorTeaser } from "@/components/dashboard/AdvisorTeaser";
+import { CompanionLauncher } from "@/components/dashboard/CompanionLauncher";
+import { RotateHint } from "@/components/ui/RotateHint";
+
+type ChampionRecord = LocalizedNameRecord &
+  HeroChampion &
+  Pick<TierChampion, "tier" | "rank">;
+
+type AugmentRecord = LocalizedNameRecord &
+  ChangedAugment & {
+    wikiDescription?: string;
+  };
+
+type ComboRecord = { champion: string; augment: string; tier: string };
+
+type PatchNoteChange = { text: { en: string } };
+type PatchNoteSection = { id: string; changes: PatchNoteChange[] };
 
 export default async function HomePage({
   params,
@@ -9,161 +40,80 @@ export default async function HomePage({
 }) {
   const { locale } = await params;
   setRequestLocale(locale);
-  const t = await getTranslations("home");
 
-  const { champions, patch } = loadPublicJson<{ champions: unknown[]; patch: string }>("champions.json");
-  const { augments } = loadPublicJson<{ augments: unknown[] }>("augments.json");
-  const { scraped_at } = loadPublicJson<{ scraped_at?: string }>("meta.json");
-  const champCount = (champions as unknown[]).length;
-  const augCount = (augments as unknown[]).length;
-  const patchLabel = (patch as string).replace(/\.$/, "");
-  const lastUpdatedLabel = scraped_at
-    ? new Intl.DateTimeFormat(locale, { dateStyle: "medium" }).format(new Date(scraped_at))
-    : patchLabel;
+  const [championsFile, augmentsFile, metaFile, patchNotesFile, combosFile] = await Promise.all([
+    readChampionsFile<{ champions: ChampionRecord[] }>(),
+    readAugmentsFile<{ augments: AugmentRecord[] }>(),
+    readMetaFile<{ patch: string; scraped_at: string }>(),
+    readPatchNotesFile<{ patches: Array<{ version: string; sections: PatchNoteSection[] }> }>(),
+    readCombosFile<{ combos: ComboRecord[] }>(),
+  ]);
+
+  const champions = championsFile.champions;
+  const augments = augmentsFile.augments;
+  const { patch, scraped_at } = metaFile;
+
+  const byRank = [...champions].sort((a, b) => a.rank - b.rank);
+  const heroChampion = byRank[0];
+  const tierChampions = byRank.filter((c) => c.tier === "S+" || c.tier === "S");
+  const sPlusCount = champions.filter((c) => c.tier === "S+").length;
+
+  const augByName = new Map(augments.map((a) => [a.name, a]));
+  const augmentChangeEntries = patchNotesFile.patches[0].sections
+    .filter((s) => s.id === "augments")
+    .flatMap((s) => s.changes);
+
+  const changedAugmentsBySlug = new Map<string, AugmentRecord>();
+  for (const change of augmentChangeEntries) {
+    const augment = augByName.get(change.text.en);
+    if (augment && !changedAugmentsBySlug.has(augment.slug)) {
+      changedAugmentsBySlug.set(augment.slug, augment);
+    }
+  }
+  const changedAugments = [...changedAugmentsBySlug.values()];
+
+  const changedPrismatic = changedAugments.find((a) => a.rarity === "prismatic");
+  const fallbackPrismatic = augments.find((a) => a.rarity === "prismatic");
+  const spotlight = changedPrismatic ?? fallbackPrismatic;
+  const isSpotlightChanged = changedPrismatic != null;
+
+  const champBySlug = new Map(champions.map((c) => [c.slug, c]));
+  const comboByChampion = new Map<string, ComboRecord>();
+  for (const combo of combosFile.combos) {
+    if (!comboByChampion.has(combo.champion)) comboByChampion.set(combo.champion, combo);
+  }
+  const rankedCombos = [...comboByChampion.values()]
+    .map((combo) => {
+      const champion = champBySlug.get(combo.champion);
+      const augment = augByName.get(combo.augment);
+      return champion && augment ? { champion, augment } : null;
+    })
+    .filter((x): x is NonNullable<typeof x> => x !== null)
+    .sort((a, b) => a.champion.rank - b.champion.rank)
+    .slice(0, 6);
 
   return (
-    <div className="flex flex-col items-center gap-12 py-12">
-      {/* ─── Hero ─── */}
-      <section className="text-center max-w-2xl">
-        <h1 className="text-5xl sm:text-6xl font-bold tracking-tight mb-4">
-          <span className="bg-gradient-to-r from-[var(--color-neon-primary)] to-[var(--color-neon-secondary)] bg-clip-text text-transparent">
-            {t("hero")}
-          </span>
-        </h1>
-        <p className="text-xl text-[var(--color-text-secondary)] mb-2">
-          {t("subtitle")}
-        </p>
-        <p className="text-[var(--color-text-muted)]">
-          {t("description")}
-        </p>
-
-        {/* CTAs */}
-        <div className="flex gap-4 justify-center mt-8">
-          <Link
-            href="/tier-list"
-            className="px-6 py-3 rounded-lg font-medium text-white
-                       bg-gradient-to-r from-[var(--color-neon-primary)] to-[var(--color-neon-secondary)]
-                       hover:opacity-90 transition-opacity"
-          >
-            {t("ctaTierList")}
-          </Link>
-          <Link
-            href="/champions"
-            className="px-6 py-3 rounded-lg font-medium neon-border
-                       text-[var(--color-neon-primary)] hover:bg-[var(--color-neon-glow)]
-                       transition-colors"
-          >
-            {t("ctaChampion")}
-          </Link>
-        </div>
-      </section>
-
-      {/* ─── Stats Cards ─── */}
-      <section className="w-full max-w-3xl">
-        <h2 className="text-lg font-medium text-[var(--color-text-secondary)] mb-4 text-center">
-          {t("statsTitle")}
-        </h2>
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-          <StatCard label={t("championsTracked")} value={String(champCount)} />
-          <StatCard label={t("augmentsScored")} value={String(augCount)} />
-          <StatCard label={t("patchVersion")} value={patchLabel} />
-          <StatCard label={t("lastUpdated")} value={lastUpdatedLabel} />
-        </div>
-      </section>
-
-      {/* ─── Feature Highlights ─── */}
-      <section className="w-full max-w-5xl">
-        <div className="text-center mb-8">
-          <h2 className="text-2xl sm:text-3xl font-bold tracking-tight">{t("featuresTitle")}</h2>
-          <p className="mt-2 text-[var(--color-text-muted)]">{t("featuresSubtitle")}</p>
-        </div>
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-          <FeatureCard
-            href="/tier-list"
-            icon="🏆"
-            title={t("feat1Title")}
-            body={t("feat1Body")}
-          />
-          <FeatureCard
-            href="/augments"
-            icon="✨"
-            title={t("feat2Title")}
-            body={t("feat2Body")}
-          />
-          <FeatureCard
-            href="/damage-sim"
-            icon="🧮"
-            title={t("feat3Title")}
-            body={t("feat3Body")}
-          />
-          <FeatureCard
-            href="/membership"
-            icon="🔮"
-            title={t("feat4Title")}
-            body={t("feat4Body")}
-            tag={t("feat4Tag")}
-          />
-        </div>
-      </section>
-
-      {/* ─── Members CTA band ─── */}
-      <section className="w-full max-w-4xl">
-        <div className="flex flex-col items-center gap-4 rounded-2xl border border-amber-400/25 bg-gradient-to-b from-amber-400/[0.06] to-transparent px-6 py-10 text-center sm:px-10">
-          <h2 className="text-2xl font-bold tracking-tight">{t("ctaBandTitle")}</h2>
-          <p className="max-w-xl text-[var(--color-text-secondary)]">{t("ctaBandBody")}</p>
-          <Link
-            href="/membership"
-            className="mt-2 rounded-lg bg-amber-400/90 px-6 py-3 font-semibold text-black transition hover:bg-amber-300"
-          >
-            {t("ctaBandButton")}
-          </Link>
-        </div>
-      </section>
-    </div>
-  );
-}
-
-function FeatureCard({
-  href,
-  icon,
-  title,
-  body,
-  tag,
-}: {
-  href: string;
-  icon: string;
-  title: string;
-  body: string;
-  tag?: string;
-}) {
-  return (
-    <Link
-      href={href}
-      className="glass-card group flex flex-col gap-2 p-5 text-left transition hover:-translate-y-0.5"
-    >
-      <div className="flex items-center justify-between">
-        <span className="text-2xl" aria-hidden="true">
-          {icon}
-        </span>
-        {tag ? (
-          <span className="rounded-full border border-amber-400/40 bg-amber-400/10 px-2 py-0.5 text-[10px] font-medium uppercase tracking-widest text-amber-300">
-            {tag}
-          </span>
-        ) : null}
+    <>
+      <DashboardIslands />
+      <div className="grid grid-cols-1 gap-3 md:grid-cols-6 md:gap-3.5 lg:grid-cols-12 lg:gap-4">
+        <PatchPulseBanner patch={patch} />
+        <RotateHint />
+        <HeroMover champion={heroChampion} total={champions.length} patch={patch} />
+        <MetaAtAGlance
+          sPlusCount={sPlusCount}
+          championCount={champions.length}
+          augmentCount={augments.length}
+          changedAugmentCount={changedAugments.length}
+          patch={patch}
+          updatedAt={scraped_at}
+        />
+        <TierMiniGrid champions={tierChampions} />
+        <MoversCarousel augments={changedAugments} />
+        {spotlight && <AugmentSpotlight augment={spotlight} isChangedThisPatch={isSpotlightChanged} />}
+        <ComboHighlights combos={rankedCombos} />
+        <AdvisorTeaser />
+        <CompanionLauncher />
       </div>
-      <h3 className="font-semibold text-[var(--color-text-primary)]">{title}</h3>
-      <p className="text-sm leading-relaxed text-[var(--color-text-secondary)]">{body}</p>
-    </Link>
-  );
-}
-
-function StatCard({ label, value }: { label: string; value: string }) {
-  return (
-    <div className="glass-card p-4 text-center">
-      <p className="text-2xl font-bold text-[var(--color-text-primary)]">
-        {value}
-      </p>
-      <p className="text-xs text-[var(--color-text-muted)] mt-1">{label}</p>
-    </div>
+    </>
   );
 }

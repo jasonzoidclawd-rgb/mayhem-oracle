@@ -3,7 +3,7 @@
 import { useTranslations, useLocale } from "next-intl";
 import { useRouter, usePathname, Link } from "@/i18n/navigation";
 import { routing, type Locale } from "@/i18n/routing";
-import { useState } from "react";
+import { CmdKSearch } from "@/components/dashboard/CmdKSearch";
 
 const LOCALE_LABELS: Record<Locale, string> = {
   en: "English",
@@ -28,7 +28,6 @@ export function Navbar() {
   const locale = useLocale();
   const router = useRouter();
   const pathname = usePathname();
-  const [menuOpen, setMenuOpen] = useState(false);
 
   const switchLocale = (newLocale: string) => {
     router.replace(pathname, { locale: newLocale as Locale });
@@ -44,8 +43,8 @@ export function Navbar() {
           <span className="sm:hidden">MO</span>
         </Link>
 
-        {/* Desktop nav links */}
-        <div className="hidden sm:flex items-center gap-6 h-full">
+        {/* Desktop nav links — below lg, MobileTabBar owns route navigation */}
+        <div className="hidden lg:flex items-center gap-6 h-full">
           {NAV_ITEMS.map((item) => {
             const isActive =
               pathname === item.href || pathname.startsWith(item.href + "/");
@@ -65,13 +64,14 @@ export function Navbar() {
           })}
         </div>
 
-        {/* Account + language switcher + mobile menu toggle */}
+        {/* Search + account + language switcher */}
         <div className="flex items-center gap-3">
+          <CmdKSearch />
           <Link
             href="/account"
             aria-label={t("account")}
             title={t("account")}
-            className={`hidden h-8 w-8 items-center justify-center rounded-full border transition-colors sm:flex
+            className={`hidden h-8 w-8 items-center justify-center rounded-full border transition-colors lg:flex
               ${pathname.startsWith("/account") || pathname.startsWith("/membership")
                 ? "border-[var(--color-neon-primary)] text-[var(--color-neon-primary)]"
                 : "border-[var(--color-border-default)] text-[var(--color-text-secondary)] hover:border-[var(--color-border-hover)] hover:text-[var(--color-text-primary)]"}`}
@@ -93,59 +93,8 @@ export function Navbar() {
               </option>
             ))}
           </select>
-
-          {/* Mobile hamburger */}
-          <button
-            className="sm:hidden text-[var(--color-text-secondary)]"
-            onClick={() => setMenuOpen(!menuOpen)}
-            aria-label={t("toggleMenu")}
-          >
-            <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
-              {menuOpen ? (
-                <path d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" />
-              ) : (
-                <path d="M3 5h14M3 10h14M3 15h14" stroke="currentColor" strokeWidth="1.5" fill="none" strokeLinecap="round" />
-              )}
-            </svg>
-          </button>
         </div>
       </div>
-
-      {/* Mobile menu */}
-      {menuOpen && (
-        <div className="sm:hidden border-t border-[var(--color-border-default)] bg-[var(--color-bg-primary)] px-4 py-3">
-          {NAV_ITEMS.map((item) => {
-            const isActive =
-              pathname === item.href || pathname.startsWith(item.href + "/");
-            return (
-              <Link
-                key={item.key}
-                href={item.href}
-                aria-current={isActive ? "page" : undefined}
-                className={`block py-2 text-sm transition-colors
-                  ${isActive
-                    ? "text-[var(--color-neon-primary)]"
-                    : "text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)]"}`}
-                onClick={() => setMenuOpen(false)}
-              >
-                {t(item.key)}
-              </Link>
-            );
-          })}
-          <Link
-            href="/account"
-            aria-current={
-              pathname.startsWith("/account") || pathname.startsWith("/membership")
-                ? "page"
-                : undefined
-            }
-            className="mt-1 block border-t border-[var(--color-border-default)] pt-3 text-sm text-[var(--color-neon-primary)]"
-            onClick={() => setMenuOpen(false)}
-          >
-            {t("account")}
-          </Link>
-        </div>
-      )}
     </nav>
   );
 }

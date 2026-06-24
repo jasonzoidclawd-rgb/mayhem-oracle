@@ -1,5 +1,9 @@
 @import "tailwindcss";
 
+/* Promotes phone-landscape widths to the tablet bento layout instead of
+   stretching the 1-column phone-portrait layout sideways. */
+@custom-variant landscape-phone (@media (orientation: landscape) and (max-height: 500px) and (max-width: 1023px));
+
 /* ─── Mayhem Oracle Dark Gaming Theme ─── */
 @theme {
   /* Core palette — inspired by arammayhem.com + blitz.gg */
@@ -55,6 +59,15 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }
 
 /* ─── Glassmorphism card utility ─── */
@@ -128,3 +141,17 @@ body {
 ::-webkit-scrollbar-track { background: var(--color-bg-primary); }
 ::-webkit-scrollbar-thumb { background: var(--color-bg-elevated); border-radius: 3px; }
 ::-webkit-scrollbar-thumb:hover { background: var(--color-text-muted); }
+
+/* ─── Reveal-on-scroll (wired by DashboardIslands) ───
+   Visible by default so content never hides behind JS that hasn't run yet;
+   only opts into the hide-then-reveal dance once data-reveal-ready confirms
+   the observer is live, and only when motion is allowed. */
+.reveal { opacity: 1; }
+@media (prefers-reduced-motion: no-preference) {
+  @keyframes reveal-up {
+    from { opacity: 0; transform: translateY(12px); }
+    to { opacity: 1; transform: none; }
+  }
+  [data-reveal-ready] .reveal { opacity: 0; }
+  [data-reveal-ready] .reveal.in { animation: reveal-up 480ms cubic-bezier(.16,1,.3,1) both; }
+}

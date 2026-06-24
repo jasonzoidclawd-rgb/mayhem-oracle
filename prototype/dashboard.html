@@ -1,0 +1,552 @@
+<!doctype html>
+<html lang="en" class="dark">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>Mayhem Oracle — Integrated Broadcast Dashboard (prototype)</title>
+<meta name="description" content="Standalone prototype of the integrated command-center dashboard. No build step — open directly in a browser." />
+<!--
+  Mayhem Oracle — Dashboard prototype  (docs/modernization-proposal-2026-06.md §3)
+  Single self-contained file: tokens + layout + motion in one <style>, MOCK + render in one <script>.
+  Each widget carries a build-spec comment mapping it to its real component file.
+  Images are plain CDN <img> for look only; the real route uses pre-baked AVIF/WebP assets (§7/§8).
+  Landscape phones (orientation:landscape, short viewport — not just wide) promote to the same
+  bento grid as desktop; portrait phones get a dismissible hint nudging them to rotate instead
+  of being shown a cramped grid.
+-->
+<style>
+/* ─── Tokens (inlined verbatim from globals.css @theme + grade-tokens.ts, proposal §3/§4.1) ─── */
+:root{
+  --bg-primary:#0a0e17; --bg-secondary:#111827; --bg-card:#1a1f2e; --bg-stage:#05070d;
+  --neon-primary:#00d4ff; --neon-secondary:#7c3aed;
+  --tier-god:#ff4655; --tier-strong:#ff8c00; --tier-good:#3b82f6; --tier-avg:#22c55e; --tier-weak:#6b7280;
+  --rarity-prismatic:#c896ff; --rarity-gold:#ffd700; --rarity-silver:#94a3b8;
+  --grade-hot:#fbbf24; --grade-strong:#34d399; --grade-steady:#38bdf8; --grade-average:#94a3b8; --grade-weak:#fb7185;
+  --mover-up:#34d399; --mover-down:#fb7185; --mover-new:#fbbf24;
+  --text-primary:#f1f5f9; --text-secondary:#94a3b8; --text-muted:#64748b;
+  --border:rgba(255,255,255,.08); --border-hover:rgba(255,255,255,.16);
+  --radius-card:14px; --radius-bento:18px;
+  --ease-broadcast:cubic-bezier(.16,1,.3,1); --ease-snap:cubic-bezier(.34,1.56,.64,1);
+  --dur-base:240ms; --dur-reveal:480ms; --dur-cinematic:720ms; --stagger-step:60ms;
+  --shadow-stage:inset 0 1px 0 rgb(255 255 255/.04), 0 8px 32px -8px rgb(0 0 0/.6);
+  --glow-hot:0 0 0 1px rgb(255 70 85/.35), 0 0 28px -4px rgb(255 70 85/.45);
+  --grad-stage:radial-gradient(120% 120% at 50% 0%, var(--bg-primary) 0%, var(--bg-stage) 100%);
+  --grad-glass:linear-gradient(180deg, rgb(255 255 255/.06), rgb(255 255 255/.01));
+  --font-display:"Inter Tight",-apple-system,system-ui,"Segoe UI",Roboto,sans-serif; /* prototype proxy for the ≤15KB broadcast face */
+  --font-body:Inter,-apple-system,system-ui,"Segoe UI",Roboto,sans-serif;
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{
+  background:var(--grad-stage) fixed; color:var(--text-primary);
+  font-family:var(--font-body); -webkit-font-smoothing:antialiased; line-height:1.45;
+  min-height:100vh; padding-bottom:calc(76px + env(safe-area-inset-bottom)); /* reserve thumb-zone tab bar */
+}
+@media (min-width:1024px){ body{padding-bottom:48px} }
+a{color:inherit;text-decoration:none}
+::-webkit-scrollbar{width:8px;height:8px}
+::-webkit-scrollbar-thumb{background:#252b3b;border-radius:4px}
+::-webkit-scrollbar-thumb:hover{background:var(--text-muted)}
+
+/* ─── Shell / nav ─── */
+.nav{position:sticky;top:0;z-index:40;display:flex;align-items:center;gap:18px;height:56px;
+  padding:0 max(16px,env(safe-area-inset-left)); border-bottom:1px solid var(--border);
+  background:rgba(10,14,23,.78); backdrop-filter:blur(14px)}
+.brand{display:flex;align-items:center;gap:8px;font-weight:800;font-family:var(--font-display);letter-spacing:.3px}
+.brand .bolt{color:var(--neon-primary);filter:drop-shadow(0 0 6px rgba(0,212,255,.5))}
+.nav-links{display:flex;gap:18px;margin-left:8px}
+.nav-links a{font-size:13px;color:var(--text-secondary);transition:color .2s}
+.nav-links a:hover{color:var(--text-primary)}
+.nav-spacer{flex:1}
+.kbtn{display:flex;align-items:center;gap:10px;font-size:12.5px;color:var(--text-secondary);
+  background:var(--bg-card);border:1px solid var(--border);border-radius:10px;padding:7px 12px;cursor:pointer;transition:border-color .2s}
+.kbtn:hover{border-color:var(--border-hover)}
+.kbd{font-family:var(--font-display);font-size:11px;color:var(--text-muted);border:1px solid var(--border);border-radius:5px;padding:1px 6px}
+.avatar{width:30px;height:30px;border-radius:50%;background:linear-gradient(135deg,var(--neon-secondary),var(--neon-primary));
+  display:grid;place-items:center;font-size:12px;font-weight:700;color:#06121a}
+.tag-new{font-family:var(--font-display);font-size:9.5px;font-weight:800;letter-spacing:.8px;color:var(--neon-primary);
+  border:1px solid rgba(0,212,255,.4);border-radius:5px;padding:1px 5px;vertical-align:middle}
+
+/* ─── Bento grid (proposal §2.4) ─── */
+.wrap{max-width:1280px;margin:0 auto;padding:14px max(14px,env(safe-area-inset-left)) 0}
+/* ── MOBILE-FIRST grid (addendum §2.1): BASE = single priority column (phone). Enhance UP. ── */
+:root{--gap:12px}
+@media (min-width:768px){:root{--gap:14px}}
+@media (min-width:1024px){:root{--gap:16px}}
+.grid{display:grid;grid-template-columns:1fr;gap:var(--gap)}
+.grid>*{grid-column:auto}                                  /* full-width by default */
+/* >=768px tablet: 6-col bento (no stranded middle tier) */
+@media (min-width:768px){
+  .grid{grid-template-columns:repeat(6,1fr)}
+  .col-3,.col-4{grid-column:span 3}
+  .col-5,.col-6,.col-7,.col-8{grid-column:span 6}
+  .col-12{grid-column:1/-1}
+}
+/* >=1024px desktop: full 12-col broadcast bento (Proposal §2.4 — unchanged) */
+@media (min-width:1024px){
+  .grid{grid-template-columns:repeat(12,1fr)}
+  .col-3{grid-column:span 3}.col-4{grid-column:span 4}.col-5{grid-column:span 5}
+  .col-6{grid-column:span 6}.col-7{grid-column:span 7}.col-8{grid-column:span 8}
+  .col-12{grid-column:1/-1}
+}
+.fold-rule{grid-column:1/-1;display:flex;align-items:center;gap:12px;margin:4px 0;color:var(--text-muted);font-size:11px;letter-spacing:1px}
+.fold-rule::before,.fold-rule::after{content:"";height:1px;flex:1;background:var(--border)}
+
+/* ─── Card primitives (.glass-card / .bento-cell) ─── */
+.cell{background:rgba(26,31,46,.6);backdrop-filter:blur(12px);border:1px solid var(--border);
+  border-radius:var(--radius-bento);box-shadow:var(--shadow-stage);position:relative;overflow:hidden}
+.cell.pad{padding:16px 18px}
+.cell.featured{box-shadow:var(--glow-hot)}
+.cell-h{display:flex;align-items:center;justify-content:space-between;margin:0 0 12px}
+.cell-h .t{font-family:var(--font-display);font-size:12px;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;color:var(--text-secondary)}
+.cell-h .more{font-size:11.5px;color:var(--neon-primary)}
+.muted{color:var(--text-muted)} .sec{color:var(--text-secondary)}
+
+/* tier + grade chips */
+.tier{display:inline-grid;place-items:center;font-family:var(--font-display);font-weight:800;font-size:13px;
+  min-width:34px;height:26px;padding:0 7px;border-radius:8px;border:1px solid}
+.tier-god{color:var(--tier-god);background:rgb(255 70 85/.14);border-color:rgb(255 70 85/.35)}
+.tier-strong{color:var(--tier-strong);background:rgb(255 140 0/.14);border-color:rgb(255 140 0/.35)}
+.tier-good{color:var(--tier-good);background:rgb(59 130 246/.14);border-color:rgb(59 130 246/.35)}
+.tier-avg{color:var(--tier-avg);background:rgb(34 197 94/.14);border-color:rgb(34 197 94/.35)}
+.tier-weak{color:var(--tier-weak);background:rgb(107 114 128/.14);border-color:rgb(107 114 128/.35)}
+.delta{font-family:var(--font-display);font-weight:800;font-size:12px}
+.delta-up{color:var(--mover-up)} .delta-down{color:var(--mover-down)} .delta-new{color:var(--mover-new)}
+
+/* champion icon */
+.ico{border-radius:10px;background:linear-gradient(135deg,#1c2334,#0c111c);object-fit:cover;display:block;border:1px solid var(--border)}
+
+/* ─── W2 HeroMover ─── */
+.hero{min-height:200px;display:flex;flex-direction:column;justify-content:flex-end} /* mobile: fast LCP */
+@media (min-width:768px){.hero{min-height:280px}}
+@media (min-width:1024px){.hero{min-height:340px}}
+.hero .art{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:55% 22%;z-index:0}
+.hero .scrim{position:absolute;inset:0;z-index:1;
+  background:linear-gradient(180deg,rgba(5,7,13,.15) 0%,rgba(5,7,13,.55) 55%,rgba(5,7,13,.94) 100%)}
+.hero .body{position:relative;z-index:2;padding:20px 22px}
+.hero .live{display:inline-flex;align-items:center;gap:7px;font-size:11px;letter-spacing:1px;color:#ffd9dd;
+  background:rgb(255 70 85/.18);border:1px solid rgb(255 70 85/.4);border-radius:999px;padding:3px 10px;text-transform:uppercase}
+.hero h2{font-family:var(--font-display);font-size:clamp(34px,5vw,52px);line-height:.95;margin:12px 0 6px;font-weight:800;letter-spacing:-.5px}
+.hero .stats{display:flex;flex-wrap:wrap;gap:14px;align-items:baseline;color:var(--text-secondary);font-size:14px}
+.hero .stats b{color:var(--text-primary);font-family:var(--font-display);font-variant-numeric:tabular-nums}
+.hero .cta{margin-top:14px;display:inline-flex;align-items:center;gap:8px;font-size:13.5px;font-weight:600;color:#06121a;
+  background:linear-gradient(90deg,var(--neon-primary),var(--neon-secondary));border-radius:10px;padding:9px 16px;width:max-content}
+
+/* ─── W3 MetaAtAGlance readouts ─── */
+.readouts{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.ro{background:var(--grad-glass);border:1px solid var(--border);border-radius:12px;padding:11px 12px}
+.ro .v{font-family:var(--font-display);font-weight:800;font-size:22px;font-variant-numeric:tabular-nums;line-height:1.1}
+.ro .l{font-size:10.5px;color:var(--text-muted);margin-top:3px;text-transform:uppercase;letter-spacing:.6px}
+
+/* ─── W4 tier mini grid / W5 movers / W6 favorites rows ─── */
+.iconrow{display:flex;gap:10px;overflow-x:auto;padding-bottom:4px;scroll-snap-type:x mandatory}
+.champtile{flex:0 0 auto;width:64px;text-align:center;scroll-snap-align:start}
+.champtile .nm{font-size:10.5px;color:var(--text-secondary);margin-top:5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.champtile .corner{position:relative}
+.champtile .corner .pin{position:absolute;top:-5px;right:-5px;font-size:11px}
+
+.mover{flex:0 0 auto;display:flex;align-items:center;gap:11px;background:var(--grad-glass);
+  border:1px solid var(--border);border-radius:12px;padding:9px 12px 9px 9px;scroll-snap-align:start}
+.mover .path{font-size:12px;color:var(--text-secondary)}
+.mover .nm{font-weight:600;font-size:13px}
+
+/* ─── W7 augment spotlight ─── */
+.aug-hero{display:flex;gap:12px;align-items:center;background:radial-gradient(120% 140% at 0% 0%,rgb(200 150 255/.16),transparent 60%);
+  border:1px solid rgb(200 150 255/.3);border-radius:14px;padding:12px}
+.aug-badge{width:46px;height:46px;border-radius:11px;display:grid;place-items:center;font-size:22px;
+  background:rgb(255 215 0/.14);border:1px solid rgb(255 215 0/.4)}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+.chip{font-size:11.5px;color:var(--rarity-prismatic);border:1px solid rgb(200 150 255/.4);
+  background:rgb(200 150 255/.12);border-radius:999px;padding:4px 10px}
+
+/* ─── W8 advisor teaser (locked) ─── */
+.locked{text-align:center;padding:6px 4px}
+.rings{display:flex;justify-content:center;gap:14px;margin:14px 0 16px}
+.ring{width:62px}
+.ring .dial{width:62px;height:62px;border-radius:50%;display:grid;place-items:center;font-family:var(--font-display);
+  font-weight:800;font-size:17px;color:var(--text-muted);border:3px solid var(--border);position:relative}
+.ring .lab{font-size:10px;color:var(--text-muted);margin-top:6px;letter-spacing:.5px}
+.ring.hot .dial{border-color:var(--grade-hot);color:var(--grade-hot);box-shadow:0 0 18px -6px var(--grade-hot)}
+.ring.steady .dial{border-color:var(--grade-steady);color:var(--grade-steady)}
+.unlock{display:inline-flex;gap:8px;align-items:center;font-weight:600;font-size:13px;color:#06121a;
+  background:linear-gradient(90deg,var(--grade-hot),#ff8c00);border-radius:10px;padding:9px 18px}
+
+/* ─── W9 combos ─── */
+.combo{display:flex;align-items:center;gap:10px;padding:8px 0;border-top:1px solid var(--border)}
+.combo:first-of-type{border-top:0}
+.combo .plus{color:var(--text-muted);font-size:13px}
+.combo .lbl{font-size:13px}.combo .aug{color:var(--rarity-gold)}
+
+/* ─── W10 streak ─── */
+.streak{display:flex;flex-direction:column;gap:12px;height:100%;justify-content:center}
+.streak .big{font-family:var(--font-display);font-weight:800;font-size:30px}
+.streak .go{font-size:12.5px;color:var(--neon-primary)}
+
+/* ─── ⌘K modal ─── */
+.kover{position:fixed;inset:0;z-index:60;background:rgba(3,5,10,.6);backdrop-filter:blur(4px);display:none;align-items:flex-start;justify-content:center;padding-top:12vh}
+.kover.open{display:flex}
+.kpanel{width:min(620px,92vw);background:var(--bg-card);border:1px solid var(--border-hover);border-radius:16px;overflow:hidden;box-shadow:0 24px 80px -20px #000}
+.kpanel input{width:100%;border:0;background:transparent;color:var(--text-primary);font-size:16px;padding:18px 18px;outline:none;border-bottom:1px solid var(--border)}
+.kres{max-height:46vh;overflow:auto;padding:6px}
+.kitem{display:flex;align-items:center;gap:12px;padding:9px 12px;border-radius:10px;cursor:pointer}
+.kitem:hover,.kitem.active{background:rgba(255,255,255,.05)}
+.kitem .kind{margin-left:auto;font-size:10px;color:var(--text-muted);text-transform:uppercase;letter-spacing:.6px}
+
+/* ─── Motion (reduced-motion default-safe, proposal §4.3) ─── */
+.reveal{opacity:1}
+@media (prefers-reduced-motion: no-preference){
+  @keyframes reveal-up{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+  @keyframes kenburns{from{transform:scale(1.02)}to{transform:scale(1.1)}}
+  @keyframes pulse{0%,100%{opacity:1}50%{opacity:.35}}
+  @keyframes rotate-hint-spin{0%,35%{transform:rotate(0deg)}50%,85%{transform:rotate(-90deg)}100%{transform:rotate(0deg)}}
+  [data-reveal-ready] .reveal{opacity:0}
+  [data-reveal-ready] .reveal.in{animation:reveal-up var(--dur-reveal) var(--ease-broadcast) both}
+  .livedot{animation:pulse 1.8s ease-in-out infinite}
+  .rotate-hint.show .rotate-ico{animation:rotate-hint-spin 2.4s ease-in-out infinite}
+}
+/* Ken-Burns ONLY tablet+ with motion allowed — phones never loop-composite on battery (addendum §2.5) */
+@media (min-width:768px) and (prefers-reduced-motion:no-preference){
+  .hero .art{animation:kenburns 22s ease-in-out infinite alternate;will-change:transform}
+}
+/* MANDATORY global reduced-motion reset (repo had none) */
+@media (prefers-reduced-motion: reduce){
+  *,*::before,*::after{animation-duration:.001ms!important;animation-iteration-count:1!important;
+    transition-duration:.001ms!important;scroll-behavior:auto!important}
+  .reveal,.reveal.in{opacity:1!important;transform:none!important}
+}
+
+/* ─── Mobile-first nav (addendum §2.3): brand-only bar on phone, full broadcast nav on desktop ─── */
+.nav-links{display:none}
+.kbtn .ph{display:none}
+@media (min-width:1024px){ .nav-links{display:flex} .kbtn .ph{display:inline} }
+
+/* ─── Mobile companion launcher (lg:hidden) — the 2-second second-screen job ─── */
+.companion-launcher{grid-column:1/-1;display:flex;align-items:center;justify-content:center;gap:10px;
+  min-height:52px;border-radius:14px;font-family:var(--font-display);font-weight:800;font-size:15px;letter-spacing:.3px;color:#06121a;
+  background:linear-gradient(135deg,var(--neon-secondary),var(--neon-primary));box-shadow:0 10px 28px -8px rgba(0,212,255,.5)}
+@media (min-width:1024px){ .companion-launcher{display:none} }
+
+/* ─── Bottom thumb-zone tab bar (lg:hidden) ─── */
+.tabbar{position:fixed;left:0;right:0;bottom:0;z-index:50;display:grid;grid-template-columns:repeat(5,1fr);
+  height:calc(58px + env(safe-area-inset-bottom));padding-bottom:env(safe-area-inset-bottom);
+  background:rgba(10,14,23,.92);backdrop-filter:blur(14px);border-top:1px solid var(--border)}
+.tab{display:grid;place-items:center;min-height:44px;font-size:10.5px;gap:3px;color:var(--text-secondary)}
+.tab .gl{font-size:18px;line-height:1}
+.tab[aria-current=page]{color:var(--neon-primary)}
+.tab-fab{align-self:center;width:56px;height:56px;border-radius:50%;color:#06121a;
+  background:linear-gradient(135deg,var(--neon-secondary),var(--neon-primary));
+  display:grid;place-items:center;font-size:24px;transform:translateY(-12px);box-shadow:0 8px 24px -6px rgba(0,212,255,.55)}
+@media (min-width:1024px){ .tabbar{display:none} }
+
+/* ─── Phone landscape: promote to the broadcast bento, same as desktop ───
+   Real phones in landscape are ~360–430px TALL regardless of width (an iPhone SE landscape is
+   only 667px wide — narrower than the 768px tablet breakpoint — so it would otherwise be stuck
+   in the single-column portrait grid even sideways). max-height is the reliable "phone, rotated"
+   signal; tablets/desktops stay 700px+ tall in landscape. Capped at max-width:1023px so a merely
+   short DESKTOP window never gets demoted out of the 12-col layout it already qualifies for. */
+@media (orientation:landscape) and (max-height:500px) and (max-width:1023px){
+  .grid{grid-template-columns:repeat(6,1fr)}
+  .col-3,.col-4{grid-column:span 3}
+  .col-5,.col-6,.col-7,.col-8{grid-column:span 6}
+  .col-12{grid-column:1/-1}
+  .hero{min-height:132px}
+  .hero .body{padding:14px 16px}
+  .hero h2{font-size:clamp(22px,4vw,30px);margin:8px 0 4px}
+  .hero .stats{font-size:12.5px;gap:10px}
+  .hero .cta{margin-top:8px;padding:7px 13px}
+  .cell.pad{padding:11px 13px}
+  .cell-h{margin:0 0 8px}
+  .tabbar,.companion-launcher{display:none}
+  body{padding-bottom:0}
+}
+
+/* ─── Rotate-to-landscape hint (phones only — tablets already get the bento in portrait) ─── */
+.rotate-hint{display:none;align-items:center;gap:10px;margin:0 0 12px;padding:10px 14px;
+  border-radius:12px;background:var(--grad-glass);border:1px solid var(--border);
+  color:var(--text-secondary);font-size:12.5px}
+.rotate-hint.show{display:flex}
+.rotate-hint .rotate-ico{font-size:17px;display:inline-block;transform-origin:50% 50%}
+.rotate-hint .x{margin-left:auto;cursor:pointer;color:var(--text-muted);font-size:16px;line-height:1;
+  background:none;border:0;font-family:inherit;padding:0}
+
+.banner{display:flex;align-items:center;gap:12px;padding:11px 16px;border-radius:14px;
+  background:linear-gradient(90deg,rgb(255 70 85/.16),rgb(124 58 237/.14));border:1px solid rgb(255 70 85/.28)}
+.banner .livedot{width:9px;height:9px;border-radius:50%;background:var(--tier-god);box-shadow:0 0 10px var(--tier-god);flex:0 0 auto}
+.banner .x{margin-left:auto;color:var(--text-muted);cursor:pointer;font-size:18px;line-height:1}
+.foot{max-width:1280px;margin:26px auto 0;padding:16px;color:var(--text-muted);font-size:11.5px;text-align:center;border-top:1px solid var(--border)}
+</style>
+</head>
+<body>
+
+<!-- nav shell — real route keeps src/components/ui/Navbar.tsx, adds only the ⌘K trigger (§2.1) -->
+<nav class="nav">
+  <a class="brand" href="#"><span class="bolt">⚡</span> Mayhem&nbsp;Oracle</a>
+  <div class="nav-links">
+    <a href="#">Tier List</a><a href="#">Champions</a><a href="#">Augments</a>
+    <a href="#">Items</a><a href="#">Advisor</a><a href="#">Patch Notes</a>
+  </div>
+  <div class="nav-spacer"></div>
+  <button class="kbtn" id="kTrigger"><span>🔍</span><span class="ph">Search…</span><span class="kbd">⌘K</span></button>
+  <div class="avatar" title="Account">JZ</div>
+</nav>
+
+<div class="wrap">
+  <div class="rotate-hint" id="rotateHint" role="status">
+    <span class="rotate-ico" aria-hidden="true">📱</span>
+    <span>Turn your phone sideways for the full broadcast layout</span>
+    <button class="x" id="rotateHintClose" aria-label="Dismiss">×</button>
+  </div>
+  <div class="grid" id="grid"><!-- widgets injected by renderDashboard() --></div>
+</div>
+<div class="foot" id="foot"></div>
+
+<!-- Bottom thumb-zone tab bar → src/components/ui/MobileTabBar.tsx (lg:hidden). Center FAB = /companion. -->
+<nav class="tabbar">
+  <a class="tab" aria-current="page"><span class="gl">⌂</span>Home</a>
+  <a class="tab"><span class="gl">▤</span>Tiers</a>
+  <a class="tab-fab" href="companion.html" aria-label="Score my augments">⚡</a>
+  <a class="tab"><span class="gl">◆</span>Augments</a>
+  <a class="tab"><span class="gl">☻</span>Me</a>
+</nav>
+
+<!-- ⌘K palette → src/components/dashboard/CmdKSearch.tsx (loads search/index.json on open) -->
+<div class="kover" id="kOver">
+  <div class="kpanel" role="dialog" aria-label="Search">
+    <input id="kInput" placeholder="Search champions, augments, items…" autocomplete="off" />
+    <div class="kres" id="kRes"></div>
+  </div>
+</div>
+
+<script>
+/* ─── MOCK (verified real values, proposal §3) ─── */
+const ICON = id => `https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/${id}.png`;
+const SPLASH = key => `https://ddragon.leagueoflegends.com/cdn/img/champion/splash/${key}_0.jpg`;
+const MOCK = {
+  patch:"26.12", lastUpdated:"Jun 22",
+  summary:{ up:8, down:5, new:0 },
+  heroMover:{ name:"Brand", slug:"brand", id:63, key:"Brand", tier:"S+", wr:55.98, wrDelta:+2.1, pr:14.5, rank:1, total:172 },
+  meta:{ splus:7, riser:"Sett", augOfPatch:"Tank Engine", champions:172, augments:255, combos:441 },
+  tierMini:[
+    {name:"Brand",id:63,tier:"S+"},{name:"Sona",id:37,tier:"S+"},{name:"Ziggs",id:115,tier:"S+"},
+    {name:"Lux",id:99,tier:"S+"},{name:"Brand",id:63,tier:"S+"},{name:"Karthus",id:30,tier:"S+"},
+    {name:"Seraphine",id:147,tier:"S+"},{name:"Swain",id:50,tier:"S"},{name:"Sett",id:875,tier:"S"},
+    {name:"Yasuo",id:157,tier:"S"},{name:"Kennen",id:85,tier:"S"},{name:"Jinx",id:222,tier:"S"}
+  ],
+  movers:[
+    {name:"Brand",id:63,from:"S",to:"S+",d:+2.1},
+    {name:"Ziggs",id:115,from:"A",to:"S",d:+1.4},
+    {name:"Sett",id:875,from:"B",to:"A",d:+0.8},
+    {name:"Karthus",id:30,from:"S",to:"S+",d:+1.1},
+    {name:"Yasuo",id:157,from:"S",to:"A",d:-1.2},
+    {name:"Garen",id:86,from:"A",to:"B",d:-0.9}
+  ],
+  favorites:[ {name:"Brand",id:63,tier:"S+",moved:"S→S+"}, {name:"Ziggs",id:115,tier:"S",moved:"A→S"} ],
+  augmentSpotlight:{ name:"Tank Engine", rarity:"gold" },
+  prismaticPicks:["Prismatic Egg","Light 'em Up","Ultimate Unstoppable"],
+  combos:[
+    {champ:"Brand",aug:"Tank Engine",tier:"S+"},
+    {champ:"Sona",aug:"Mighty Meow",tier:"S+"},
+    {champ:"Ziggs",aug:"Big Brain",tier:"S"},
+    {champ:"Karthus",aug:"Soul Siphon",tier:"S"}
+  ],
+  sampleVerdict:{ pick:"Brand", grade:"hot" }, /* static marketing sample — never engine output */
+  streakNew:8,
+  search:[
+    {name:"Brand",id:63,kind:"champion"},{name:"Ziggs",id:115,kind:"champion"},
+    {name:"Sett",id:875,kind:"champion"},{name:"Yasuo",id:157,kind:"champion"},
+    {name:"Sona",id:37,kind:"champion"},{name:"Karthus",id:30,kind:"champion"},
+    {name:"Tank Engine",kind:"augment"},{name:"Big Brain",kind:"augment"},{name:"Soul Siphon",kind:"augment"},
+    {name:"Liandry's Torment",kind:"item"},{name:"Rabadon's Deathcap",kind:"item"}
+  ]
+};
+const TIER_CLASS = {"S+":"tier-god","S":"tier-strong","A":"tier-good","B":"tier-avg","C":"tier-weak","D":"tier-weak"};
+const tc = t => TIER_CLASS[t] || "tier-weak";
+const sign = n => (n>0?"▲":n<0?"▼":"—") + Math.abs(n).toFixed(1);
+const dcls = n => n>0?"delta-up":n<0?"delta-down":"";
+const imgFallback = `onerror="this.style.visibility='hidden'"`;
+const icon = (id,size=44) => `<img class="ico" width="${size}" height="${size}" src="${ICON(id)}" alt="" loading="lazy" ${imgFallback}>`;
+
+/* ─── Widget renderers (each → its component file) ─── */
+const W = {};
+
+// CompanionLauncher → src/components/companion/CompanionLauncher.tsx (lg:hidden; addendum §2.2 mobile item 0)
+W.companion = () => `<a class="companion-launcher reveal" href="companion.html">⚡ Score my augments</a>`;
+
+// W1 PatchPulseBanner → src/components/dashboard/PatchPulseBanner.tsx (server)
+W.patch = m => `<div class="col-12 reveal"><div class="banner">
+  <span class="livedot"></span>
+  <span><b style="font-family:var(--font-display)">Patch ${m.patch} is LIVE</b>
+    &nbsp;·&nbsp; <span class="delta-up delta">${m.summary.up} ↑</span>
+    &nbsp; <span class="delta-down delta">${m.summary.down} ↓</span>
+    &nbsp; <span class="muted">${m.summary.new} new</span>
+    &nbsp;·&nbsp; <a style="color:var(--neon-primary)">See what changed →</a></span>
+  <span class="tag-new">NEW</span><span class="x" title="dismiss" onclick="this.closest('.col-12').remove()">×</span>
+</div></div>`;
+
+// W2 HeroMover → HeroMover.tsx (server; LCP; pre-baked splash + priority in prod)
+W.hero = m => { const h=m.heroMover; return `<div class="col-8 reveal">
+  <div class="cell hero featured">
+    <img class="art" src="${SPLASH(h.key)}" alt="${h.name} splash" ${imgFallback}>
+    <div class="scrim"></div>
+    <div class="body">
+      <span class="live"><span class="livedot" style="width:7px;height:7px;border-radius:50%;background:var(--tier-god);display:inline-block"></span> Top mover · patch ${m.patch}</span>
+      <h2>${h.name}</h2>
+      <div class="stats">
+        <span class="tier ${tc(h.tier)}" style="height:30px;font-size:15px">${h.tier}</span>
+        <span>#<b>${h.rank}</b>/${h.total}</span>
+        <span><b>${h.wr.toFixed(2)}%</b> WR <span class="delta ${dcls(h.wrDelta)}">${sign(h.wrDelta)}</span></span>
+        <span><b>${h.pr}%</b> pick</span>
+      </div>
+      <a class="cta">View ${h.name} →</a>
+    </div>
+  </div></div>`; };
+
+// W3 MetaAtAGlance → MetaAtAGlance.tsx (server)
+W.meta = m => `<div class="col-4 reveal"><div class="cell pad">
+  <div class="cell-h"><span class="t">Meta at a glance</span></div>
+  <div class="readouts">
+    <div class="ro"><div class="v" style="color:var(--tier-god)">${m.meta.splus}</div><div class="l">S+ champions</div></div>
+    <div class="ro"><div class="v">${m.meta.riser}</div><div class="l">Biggest riser</div></div>
+    <div class="ro"><div class="v" style="color:var(--rarity-gold)">${m.meta.augOfPatch}</div><div class="l">Augment of patch</div></div>
+    <div class="ro"><div class="v">${m.lastUpdated}</div><div class="l">Last updated</div></div>
+    <div class="ro"><div class="v">${m.meta.champions}</div><div class="l">Champions</div></div>
+    <div class="ro"><div class="v">${m.meta.augments}</div><div class="l">Augments</div></div>
+  </div></div></div>`;
+
+// W4 TierMiniGrid → TierMiniGrid.tsx (server)
+W.tierMini = m => `<div class="col-12 reveal"><div class="cell pad">
+  <div class="cell-h"><span class="t">S+ / S board</span><a class="more">Full tier list →</a></div>
+  <div class="iconrow">${m.tierMini.map(c=>`<div class="champtile">
+    ${icon(c.id,56)}<div class="nm">${c.name}</div>
+    <span class="tier ${tc(c.tier)}" style="height:18px;min-width:26px;font-size:10px;margin-top:4px">${c.tier}</span>
+  </div>`).join("")}</div></div></div>`;
+
+const foldRule = txt => `<div class="fold-rule">${txt}</div>`;
+
+// W5 MoversCarousel → MoversCarousel.tsx (client island)
+W.movers = m => `<div class="col-8 reveal"><div class="cell pad">
+  <div class="cell-h"><span class="t">Movers this patch</span><a class="more">All movers →</a></div>
+  <div class="iconrow">${m.movers.map(c=>`<div class="mover">
+    ${icon(c.id,38)}
+    <div><div class="nm">${c.name}</div>
+      <div class="path"><span class="tier ${tc(c.from)}" style="height:16px;min-width:22px;font-size:9px;padding:0 4px">${c.from}</span>
+      → <span class="tier ${tc(c.to)}" style="height:16px;min-width:22px;font-size:9px;padding:0 4px">${c.to}</span>
+      <span class="delta ${dcls(c.d)}">${sign(c.d)}</span></div></div>
+  </div>`).join("")}</div></div></div>`;
+
+// W8 AdvisorTeaser → AdvisorTeaser.tsx (client; STATIC sample only, never engine output — §5.2)
+W.advisor = m => `<div class="col-4 reveal"><div class="cell pad" style="text-align:center">
+  <div class="cell-h"><span class="t">The Oracle</span><span class="tag-new">MEMBERS</span></div>
+  <div class="locked">
+    <div class="muted" style="font-size:12.5px">Live augment verdicts, tailored to your champion.</div>
+    <div class="rings">
+      <div class="ring hot"><div class="dial">••</div><div class="lab">HOT</div></div>
+      <div class="ring steady"><div class="dial">••</div><div class="lab">STEADY</div></div>
+      <div class="ring"><div class="dial">??</div><div class="lab">REROLL</div></div>
+    </div>
+    <a class="unlock">🔓 Unlock the Oracle</a>
+    <div class="muted" style="font-size:11px;margin-top:9px">I have an invite code</div>
+  </div></div></div>`;
+
+// W6 FavoritesStrip → FavoritesStrip.tsx (client island, ssr:false; localStorage)
+W.favorites = m => { const f=m.favorites; return `<div class="col-6 reveal"><div class="cell pad">
+  <div class="cell-h"><span class="t">Your champions</span><span class="muted" style="font-size:11px">★ followed</span></div>
+  ${f.length ? `<div class="iconrow">${f.map(c=>`<div class="champtile"><div class="corner">
+      ${icon(c.id,56)}<span class="pin">★</span></div>
+      <div class="nm">${c.name}</div>
+      <div class="path" style="font-size:10px;color:var(--mover-up)">${c.moved}</div>
+  </div>`).join("")}</div>`
+  : `<div class="muted" style="font-size:12.5px;padding:8px 0">Follow champions to track their tier movement here.</div>`}
+  </div></div>`; };
+
+// W7 AugmentSpotlight → AugmentSpotlight.tsx (server)
+W.augment = m => `<div class="col-6 reveal"><div class="cell pad">
+  <div class="cell-h"><span class="t">Augment spotlight</span><a class="more">All augments →</a></div>
+  <div class="aug-hero">
+    <div class="aug-badge">⚙️</div>
+    <div><div style="font-weight:700;font-size:15px;color:var(--rarity-gold)">${m.augmentSpotlight.name}</div>
+      <div class="muted" style="font-size:11.5px">Gold · augment of the patch</div></div>
+  </div>
+  <div class="chips">${m.prismaticPicks.map(p=>`<span class="chip">◆ ${p}</span>`).join("")}</div>
+  </div></div>`;
+
+// W9 ComboHighlights → ComboHighlights.tsx (server; combos.json ⋈ champions map)
+W.combos = m => `<div class="col-8 reveal"><div class="cell pad">
+  <div class="cell-h"><span class="t">Top combos</span><a class="more">Explore combos →</a></div>
+  ${m.combos.map(c=>`<div class="combo">
+    <span class="tier ${tc(c.tier)}" style="height:20px;min-width:28px;font-size:11px">${c.tier}</span>
+    <span class="lbl">${c.champ}</span><span class="plus">+</span><span class="lbl aug">${c.aug}</span>
+  </div>`).join("")}
+  </div></div>`;
+
+// W10 StreakCheckin → StreakCheckin.tsx (client island, ssr:false)
+W.streak = m => `<div class="col-4 reveal"><div class="cell pad">
+  <div class="cell-h"><span class="t">Since your last visit</span></div>
+  <div class="streak">
+    <div><span class="big" style="color:var(--mover-up)">${m.streakNew}</span> <span class="sec">champs moved</span></div>
+    <div class="muted" style="font-size:12px">You last checked the meta yesterday.</div>
+    <a class="go">Continue where you left off →</a>
+  </div></div></div>`;
+
+/* ─── Compose ─── */
+function renderDashboard(){
+  const g = document.getElementById("grid");
+  g.innerHTML = [
+    W.patch(MOCK), W.companion(), W.hero(MOCK), W.meta(MOCK), W.tierMini(MOCK),
+    foldRule("FOLD"),
+    W.movers(MOCK), W.advisor(MOCK),
+    W.favorites(MOCK), W.augment(MOCK),
+    W.combos(MOCK), W.streak(MOCK)
+  ].join("");
+  document.getElementById("foot").innerHTML =
+    `Prototype · ${MOCK.meta.champions} champions · ${MOCK.meta.augments} augments · ${MOCK.meta.combos} combos · patch ${MOCK.patch}
+     &nbsp;—&nbsp; standalone mock of docs/modernization-proposal-2026-06.md §3. Real route: src/app/[locale]/page.tsx`;
+}
+
+/* ─── Reveal-on-view (the ~0.5KB IntersectionObserver hook, §4.3) ─── */
+function wireReveal(){
+  document.documentElement.setAttribute("data-reveal-ready","");
+  const io = new IntersectionObserver((es)=>es.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add("in"); io.unobserve(e.target);} }),{threshold:.12});
+  document.querySelectorAll(".reveal").forEach((el,i)=>{ el.style.animationDelay=(Math.min(i,6)*60)+"ms"; io.observe(el); });
+}
+
+/* ─── ⌘K palette ─── */
+function wireCmdK(){
+  const over=document.getElementById("kOver"), inp=document.getElementById("kInput"), res=document.getElementById("kRes");
+  const open=()=>{ over.classList.add("open"); inp.value=""; draw(""); setTimeout(()=>inp.focus(),30); };
+  const close=()=>over.classList.remove("open");
+  const kindIco={champion:"🧙",augment:"◆",item:"🛡️"};
+  function draw(q){
+    const items=MOCK.search.filter(s=>s.name.toLowerCase().includes(q.toLowerCase())).slice(0,8);
+    res.innerHTML = items.length ? items.map((s,i)=>`<div class="kitem ${i===0?"active":""}">
+      <span>${kindIco[s.kind]||"•"}</span><span>${s.name}</span><span class="kind">${s.kind}</span></div>`).join("")
+      : `<div class="kitem muted">No matches for “${q}”.</div>`;
+  }
+  document.getElementById("kTrigger").addEventListener("click",open);
+  over.addEventListener("click",e=>{ if(e.target===over) close(); });
+  inp.addEventListener("input",e=>draw(e.target.value));
+  document.addEventListener("keydown",e=>{
+    if((e.metaKey||e.ctrlKey)&&e.key.toLowerCase()==="k"){ e.preventDefault(); over.classList.contains("open")?close():open(); }
+    if(e.key==="Escape") close();
+  });
+}
+
+/* ─── Rotate-to-landscape hint: phones in portrait only, dismissible (sticky via localStorage) ─── */
+function wireRotateHint(){
+  const hint = document.getElementById("rotateHint");
+  const KEY = "mo_rotate_hint_dismissed";
+  const dismissed = () => { try{ return !!localStorage.getItem(KEY); }catch{ return false; } };
+  const mq = window.matchMedia("(orientation:portrait) and (max-width:767px)");
+  const sync = () => hint.classList.toggle("show", !dismissed() && mq.matches);
+  document.getElementById("rotateHintClose").addEventListener("click",()=>{
+    try{ localStorage.setItem(KEY,"1"); }catch{}
+    hint.classList.remove("show");
+  });
+  mq.addEventListener("change",sync);
+  sync();
+}
+
+renderDashboard(); wireReveal(); wireCmdK(); wireRotateHint();
+</script>
+</body>
+</html>

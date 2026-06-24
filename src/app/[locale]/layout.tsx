@@ -7,7 +7,9 @@ import { notFound } from "next/navigation";
 import { routing, isSupportedLocale } from "@/i18n/routing";
 import { SITE_URL, localizedUrl, languageAlternates } from "@/lib/site";
 import { Navbar } from "@/components/ui/Navbar";
+import { MobileTabBar } from "@/components/ui/MobileTabBar";
 import { NavigationProgress } from "@/components/ui/NavigationProgress";
+import { RegisterServiceWorker } from "@/components/ui/RegisterServiceWorker";
 import { ConsentManager } from "@/components/ads/ConsentManager";
 import { Footer } from "@/components/ui/Footer";
 import "@/styles/globals.css";
@@ -48,6 +50,13 @@ export async function generateMetadata({
     },
     description,
     manifest: "/manifest.json",
+    icons: {
+      icon: [
+        { url: "/icons/icon-192.png", sizes: "192x192", type: "image/png" },
+        { url: "/icons/icon-512.png", sizes: "512x512", type: "image/png" },
+      ],
+      apple: [{ url: "/icons/apple-touch-icon.png", sizes: "180x180", type: "image/png" }],
+    },
     alternates: {
       canonical: localizedUrl("/", locale),
       languages: languageAlternates("/"),
@@ -128,11 +137,13 @@ export default async function LocaleLayout({
         />
         <NextIntlClientProvider messages={messages}>
           <NavigationProgress />
+          <RegisterServiceWorker />
           <Navbar />
-          <main className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 pt-20 pb-12">
+          <main className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 pt-20 pb-[calc(76px+env(safe-area-inset-bottom))] lg:pb-12">
             {children}
           </main>
           <Footer />
+          <MobileTabBar />
           <ConsentManager
             copy={{
               title: tm("consentTitle"),
