@@ -6,30 +6,8 @@ import {
 import { MembershipGate } from "@/components/membership/MembershipGate";
 import type { DecisionGrade } from "@/lib/contracts/decision";
 import { loadPublicJson } from "@/lib/data/public-loader";
-import { pickActiveEntitlement, type EntitlementRow } from "@/lib/entitlements/core";
-import { createClient } from "@/lib/supabase/server";
+import { readMemberAccess } from "@/lib/membership/read-member-access";
 import { getTranslations, setRequestLocale } from "next-intl/server";
-
-// Resolve membership server-side so non-members never receive the member tool
-// (or the picker catalog). The client keeps its own 401/403 fallback for
-// entitlements that lapse mid-session.
-async function readAdvisorAccess(): Promise<{ active: boolean; signedIn: boolean }> {
-  try {
-    const supabase = await createClient();
-    const {
-      data: { user },
-    } = await supabase.auth.getUser();
-    if (!user) return { active: false, signedIn: false };
-    const { data } = await supabase
-      .from("entitlements")
-      .select("kind,status,starts_at,expires_at")
-      .eq("user_id", user.id);
-    const verdict = pickActiveEntitlement((data as EntitlementRow[]) ?? [], new Date());
-    return { active: verdict.active, signedIn: true };
-  } catch {
-    return { active: false, signedIn: false };
-  }
-}
 
 type RawChampion = { slug: string; name: string; icon?: string };
 type RawAugment = {
@@ -58,7 +36,7 @@ export default async function AdvisorPage({
   const tg = await getTranslations("grades");
 
   // Gate the member tool. Non-members get an upsell instead of the live form.
-  const { active, signedIn } = await readAdvisorAccess();
+  const { active, signedIn } = await readMemberAccess();
   if (!active) {
     return (
       <div className="mx-auto flex max-w-md flex-col items-center gap-5 py-16">

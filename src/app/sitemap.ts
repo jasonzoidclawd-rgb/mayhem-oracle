@@ -17,6 +17,7 @@ const STATIC_PATHS = [
   "/items",
   "/patch-notes",
   "/advisor",
+  "/companion",
   "/damage-sim",
   "/membership",
   "/privacy",
