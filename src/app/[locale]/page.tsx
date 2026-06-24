@@ -1,6 +1,6 @@
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
-import { loadPublicJson } from "@/lib/data/public-loader";
+import { readChampionsFile, readAugmentsFile, readMetaFile } from "@/lib/data/read-public-file";
 
 export default async function HomePage({
   params,
@@ -11,9 +11,9 @@ export default async function HomePage({
   setRequestLocale(locale);
   const t = await getTranslations("home");
 
-  const { champions, patch } = loadPublicJson<{ champions: unknown[]; patch: string }>("champions.json");
-  const { augments } = loadPublicJson<{ augments: unknown[] }>("augments.json");
-  const { scraped_at } = loadPublicJson<{ scraped_at?: string }>("meta.json");
+  const { champions, patch } = await readChampionsFile<{ champions: unknown[]; patch: string }>();
+  const { augments } = await readAugmentsFile<{ augments: unknown[] }>();
+  const { scraped_at } = await readMetaFile<{ scraped_at?: string }>();
   const champCount = (champions as unknown[]).length;
   const augCount = (augments as unknown[]).length;
   const patchLabel = (patch as string).replace(/\.$/, "");
