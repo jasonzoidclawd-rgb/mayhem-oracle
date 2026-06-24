@@ -34,7 +34,7 @@ from augment_winrate_feed import (
     load_json,
 )
 from data_paths import INTERNAL_DATA_DIR
-from champion_slug_aliases import canonical_champion_slug
+from champion_slug_aliases import canonical_champion_name, canonical_champion_slug
 
 BASE_URL = "https://arammayhem.com"
 HEADERS = {
@@ -127,8 +127,12 @@ def parse_tier_list(html: str) -> list[dict]:
             wr_match = re.search(r'Win Rate:\s*([\d.]+)%', title)
             pr_match = re.search(r'Pick Rate:\s*([\d.]+)%', title)
 
-            # Title-case from slug (e.g. "aurelion-sol" → "Aurelion Sol")
-            display_name = " ".join(w.capitalize() for w in slug.split("-"))
+            # Title-case from slug (e.g. "aurelion-sol" → "Aurelion Sol"), with a
+            # curated override for slugs that compact spaces/punctuation
+            # (e.g. "monkeyking" → "Wukong", "drmundo" → "Dr. Mundo").
+            display_name = canonical_champion_name(
+                slug, " ".join(w.capitalize() for w in slug.split("-"))
+            )
 
             champions.append({
                 "slug": slug,

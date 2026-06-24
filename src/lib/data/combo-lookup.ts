@@ -86,3 +86,37 @@ export function resolveChampionCombos(
 
   return resolved;
 }
+
+export interface AugmentChampionCombo {
+  /** Champion slug as stored in the combos feed (matches champions.json slug). */
+  champion: string;
+  tier: ComboTier;
+}
+
+/**
+ * Reverse of buildComboTierLookup: given an augment slug, list the champions
+ * it combos with (S/A/B/C tiers only), de-duplicated by champion. Powers the
+ * "strong on champions" links on the augment detail page.
+ */
+export function resolveAugmentChampions(
+  augmentSlug: string,
+  combos: ComboLookupEntry[],
+  augments: AugmentLookupEntry[],
+): AugmentChampionCombo[] {
+  const augmentSlugByKey = buildAugmentSlugIndex(augments);
+  const seen = new Set<string>();
+  const out: AugmentChampionCombo[] = [];
+
+  for (const combo of combos) {
+    if (!VALID_COMBO_TIERS.has(combo.tier)) continue;
+    const slug = combo.augmentSlug ?? augmentSlugByKey.get(normalizeLookupKey(combo.augment));
+    if (slug !== augmentSlug) continue;
+
+    const championKey = normalizeLookupKey(combo.champion);
+    if (seen.has(championKey)) continue;
+    seen.add(championKey);
+    out.push({ champion: combo.champion, tier: combo.tier as ComboTier });
+  }
+
+  return out;
+}

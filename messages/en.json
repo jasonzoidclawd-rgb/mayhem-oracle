@@ -318,7 +318,11 @@
     "badgeRemoved": "REMOVED",
     "badgeAbility": "Ability",
     "badgeQuest": "Quest",
-    "badgeMechanism": "BUG/MECHANISM"
+    "badgeMechanism": "BUG/MECHANISM",
+    "detailBack": "All augments",
+    "detailStrongOn": "Strong on champions",
+    "detailKitSynergy": "Kit synergy",
+    "detailRemovedIn": "Removed in patch {patch}"
   },
   "items": {
     "title": "ARAM Mayhem Items",

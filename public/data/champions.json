@@ -128,7 +128,7 @@
     },
     {
       "slug": "drmundo",
-      "name": "Drmundo",
+      "name": "Dr. Mundo",
       "tier": "S+",
       "rank": 4,
       "win_rate": 54.26,
@@ -297,7 +297,7 @@
     },
     {
       "slug": "aurelionsol",
-      "name": "Aurelionsol",
+      "name": "Aurelion Sol",
       "tier": "S",
       "rank": 8,
       "win_rate": 53.72,
@@ -337,7 +337,7 @@
     },
     {
       "slug": "missfortune",
-      "name": "Missfortune",
+      "name": "Miss Fortune",
       "tier": "S",
       "rank": 9,
       "win_rate": 51.96,
@@ -545,7 +545,7 @@
     },
     {
       "slug": "tahmkench",
-      "name": "Tahmkench",
+      "name": "Tahm Kench",
       "tier": "S",
       "rank": 14,
       "win_rate": 51.89,
@@ -712,7 +712,7 @@
     },
     {
       "slug": "twistedfate",
-      "name": "Twistedfate",
+      "name": "Twisted Fate",
       "tier": "S",
       "rank": 18,
       "win_rate": 54.3,
@@ -797,7 +797,7 @@
     },
     {
       "slug": "masteryi",
-      "name": "Masteryi",
+      "name": "Master Yi",
       "tier": "S",
       "rank": 20,
       "win_rate": 51.66,
@@ -1130,7 +1130,7 @@
     },
     {
       "slug": "kaisa",
-      "name": "Kaisa",
+      "name": "Kai'Sa",
       "tier": "A",
       "rank": 28,
       "win_rate": 49.76,
@@ -1463,7 +1463,7 @@
     },
     {
       "slug": "xinzhao",
-      "name": "Xinzhao",
+      "name": "Xin Zhao",
       "tier": "A",
       "rank": 36,
       "win_rate": 50.47,
@@ -1800,7 +1800,7 @@
     },
     {
       "slug": "velkoz",
-      "name": "Velkoz",
+      "name": "Vel'Koz",
       "tier": "A",
       "rank": 44,
       "win_rate": 50.51,
@@ -2248,7 +2248,7 @@
     },
     {
       "slug": "chogath",
-      "name": "Chogath",
+      "name": "Cho'Gath",
       "tier": "B",
       "rank": 55,
       "win_rate": 48.21,
@@ -2912,7 +2912,7 @@
     },
     {
       "slug": "kogmaw",
-      "name": "Kogmaw",
+      "name": "Kog'Maw",
       "tier": "C",
       "rank": 71,
       "win_rate": 51.13,
@@ -3200,7 +3200,7 @@
     },
     {
       "slug": "jarvaniv",
-      "name": "Jarvaniv",
+      "name": "Jarvan IV",
       "tier": "C",
       "rank": 78,
       "win_rate": 47.42,
@@ -3823,7 +3823,7 @@
     },
     {
       "slug": "monkeyking",
-      "name": "Monkeyking",
+      "name": "Wukong",
       "tier": "C",
       "rank": 93,
       "win_rate": 49.16,
@@ -4322,7 +4322,7 @@
     },
     {
       "slug": "renata",
-      "name": "Renata",
+      "name": "Renata Glasc",
       "tier": "C",
       "rank": 105,
       "win_rate": 51.88,
@@ -5236,7 +5236,7 @@
     },
     {
       "slug": "leesin",
-      "name": "Leesin",
+      "name": "Lee Sin",
       "tier": "C",
       "rank": 127,
       "win_rate": 40.42,
@@ -5654,7 +5654,7 @@
     },
     {
       "slug": "khazix",
-      "name": "Khazix",
+      "name": "Kha'Zix",
       "tier": "C",
       "rank": 137,
       "win_rate": 44.07,
@@ -6233,7 +6233,7 @@
     },
     {
       "slug": "ksante",
-      "name": "Ksante",
+      "name": "K'Sante",
       "tier": "C",
       "rank": 151,
       "win_rate": 42.42,
@@ -6275,7 +6275,7 @@
     },
     {
       "slug": "nunu",
-      "name": "Nunu",
+      "name": "Nunu & Willump",
       "tier": "C",
       "rank": 152,
       "win_rate": 45.09,
@@ -6318,7 +6318,7 @@
     },
     {
       "slug": "reksai",
-      "name": "Reksai",
+      "name": "Rek'Sai",
       "tier": "C",
       "rank": 153,
       "win_rate": 47.72,
@@ -6403,7 +6403,7 @@
     },
     {
       "slug": "belveth",
-      "name": "Belveth",
+      "name": "Bel'Veth",
       "tier": "C",
       "rank": 155,
       "win_rate": 45.67,
@@ -6696,7 +6696,7 @@
     },
     {
       "slug": "leblanc",
-      "name": "Leblanc",
+      "name": "LeBlanc",
       "tier": "C",
       "rank": 162,
       "win_rate": 41.94,

@@ -910,7 +910,7 @@
                 {
                   "type": "champion",
                   "slug": "kaisa",
-                  "name": "Kaisa",
+                  "name": "Kai'Sa",
                   "known": true,
                   "href": "/champions/kaisa",
                   "roleTags": [
@@ -973,7 +973,7 @@
                 {
                   "type": "champion",
                   "slug": "kaisa",
-                  "name": "Kaisa",
+                  "name": "Kai'Sa",
                   "known": true,
                   "href": "/champions/kaisa",
                   "roleTags": [
@@ -1040,7 +1040,7 @@
                 {
                   "type": "champion",
                   "slug": "ksante",
-                  "name": "Ksante",
+                  "name": "K'Sante",
                   "known": true,
                   "href": "/champions/ksante",
                   "roleTags": [
@@ -1118,7 +1118,7 @@
                 {
                   "type": "champion",
                   "slug": "leblanc",
-                  "name": "Leblanc",
+                  "name": "LeBlanc",
                   "known": true,
                   "href": "/champions/leblanc",
                   "roleTags": [
@@ -1180,7 +1180,7 @@
                 {
                   "type": "champion",
                   "slug": "leblanc",
-                  "name": "Leblanc",
+                  "name": "LeBlanc",
                   "known": true,
                   "href": "/champions/leblanc",
                   "roleTags": [
@@ -1242,7 +1242,7 @@
                 {
                   "type": "champion",
                   "slug": "leblanc",
-                  "name": "Leblanc",
+                  "name": "LeBlanc",
                   "known": true,
                   "href": "/champions/leblanc",
                   "roleTags": [
@@ -1484,7 +1484,7 @@
                 {
                   "type": "champion",
                   "slug": "reksai",
-                  "name": "Reksai",
+                  "name": "Rek'Sai",
                   "known": true,
                   "href": "/champions/reksai",
                   "roleTags": [
@@ -1552,7 +1552,7 @@
                 {
                   "type": "champion",
                   "slug": "reksai",
-                  "name": "Reksai",
+                  "name": "Rek'Sai",
                   "known": true,
                   "href": "/champions/reksai",
                   "roleTags": [
@@ -4000,7 +4000,7 @@
                 {
                   "type": "champion",
                   "slug": "leesin",
-                  "name": "Leesin",
+                  "name": "Lee Sin",
                   "known": true,
                   "href": "/champions/leesin",
                   "roleTags": [
@@ -4057,7 +4057,7 @@
                 {
                   "type": "champion",
                   "slug": "leesin",
-                  "name": "Leesin",
+                  "name": "Lee Sin",
                   "known": true,
                   "href": "/champions/leesin",
                   "roleTags": [
@@ -4114,7 +4114,7 @@
                 {
                   "type": "champion",
                   "slug": "leesin",
-                  "name": "Leesin",
+                  "name": "Lee Sin",
                   "known": true,
                   "href": "/champions/leesin",
                   "roleTags": [
@@ -5428,7 +5428,7 @@
                 {
                   "type": "champion",
                   "slug": "xinzhao",
-                  "name": "Xinzhao",
+                  "name": "Xin Zhao",
                   "known": true,
                   "href": "/champions/xinzhao",
                   "roleTags": [
@@ -5497,7 +5497,7 @@
                 {
                   "type": "champion",
                   "slug": "xinzhao",
-                  "name": "Xinzhao",
+                  "name": "Xin Zhao",
                   "known": true,
                   "href": "/champions/xinzhao",
                   "roleTags": [
@@ -5564,7 +5564,7 @@
                 {
                   "type": "champion",
                   "slug": "xinzhao",
-                  "name": "Xinzhao",
+                  "name": "Xin Zhao",
                   "known": true,
                   "href": "/champions/xinzhao",
                   "roleTags": [
@@ -11365,7 +11365,7 @@
                 {
                   "type": "champion",
                   "slug": "xinzhao",
-                  "name": "Xinzhao",
+                  "name": "Xin Zhao",
                   "known": true,
                   "href": "/champions/xinzhao",
                   "roleTags": [
@@ -11436,7 +11436,7 @@
                 {
                   "type": "champion",
                   "slug": "xinzhao",
-                  "name": "Xinzhao",
+                  "name": "Xin Zhao",
                   "known": true,
                   "href": "/champions/xinzhao",
                   "roleTags": [
@@ -12013,6 +12013,22 @@
                 }
               ],
               "relatedEntities": [
+                {
+                  "type": "champion",
+                  "slug": "aurelionsol",
+                  "name": "Aurelion Sol",
+                  "known": true,
+                  "href": "/champions/aurelionsol",
+                  "roleTags": [
+                    "mage"
+                  ],
+                  "kitTags": [
+                    "ability",
+                    "cc",
+                    "haste",
+                    "movement"
+                  ]
+                },
                 {
                   "type": "augment",
                   "slug": "overflow",
@@ -13251,7 +13267,7 @@
                 {
                   "type": "champion",
                   "slug": "leesin",
-                  "name": "Leesin",
+                  "name": "Lee Sin",
                   "known": true,
                   "href": "/champions/leesin",
                   "roleTags": [
@@ -13307,7 +13323,7 @@
                 {
                   "type": "champion",
                   "slug": "leesin",
-                  "name": "Leesin",
+                  "name": "Lee Sin",
                   "known": true,
                   "href": "/champions/leesin",
                   "roleTags": [
@@ -13361,7 +13377,7 @@
                 {
                   "type": "champion",
                   "slug": "leesin",
-                  "name": "Leesin",
+                  "name": "Lee Sin",
                   "known": true,
                   "href": "/champions/leesin",
                   "roleTags": [
@@ -13408,7 +13424,7 @@
                 {
                   "type": "champion",
                   "slug": "leesin",
-                  "name": "Leesin",
+                  "name": "Lee Sin",
                   "known": true,
                   "href": "/champions/leesin",
                   "roleTags": [
@@ -13464,7 +13480,7 @@
                 {
                   "type": "champion",
                   "slug": "leesin",
-                  "name": "Leesin",
+                  "name": "Lee Sin",
                   "known": true,
                   "href": "/champions/leesin",
                   "roleTags": [
@@ -14622,9 +14638,32 @@
               "targets": [
                 {
                   "type": "champion",
-                  "slug": "wukong",
+                  "slug": "monkeyking",
                   "name": "Wukong",
-                  "known": false
+                  "known": true,
+                  "href": "/champions/monkeyking",
+                  "roleTags": [
+                    "fighter",
+                    "tank"
+                  ],
+                  "kitTags": [
+                    "ability",
+                    "attack",
+                    "cc",
+                    "dot",
+                    "movement",
+                    "on_hit",
+                    "tank"
+                  ]
+                },
+                {
+                  "type": "ability",
+                  "slug": "monkeyking:W",
+                  "name": "Warrior Trickster",
+                  "known": true,
+                  "href": "/champions/monkeyking",
+                  "championSlug": "monkeyking",
+                  "abilityKey": "W"
                 }
               ],
               "relatedEntities": [],
@@ -14664,9 +14703,32 @@
               "targets": [
                 {
                   "type": "champion",
-                  "slug": "wukong",
+                  "slug": "monkeyking",
                   "name": "Wukong",
-                  "known": false
+                  "known": true,
+                  "href": "/champions/monkeyking",
+                  "roleTags": [
+                    "fighter",
+                    "tank"
+                  ],
+                  "kitTags": [
+                    "ability",
+                    "attack",
+                    "cc",
+                    "dot",
+                    "movement",
+                    "on_hit",
+                    "tank"
+                  ]
+                },
+                {
+                  "type": "ability",
+                  "slug": "monkeyking:W",
+                  "name": "Warrior Trickster",
+                  "known": true,
+                  "href": "/champions/monkeyking",
+                  "championSlug": "monkeyking",
+                  "abilityKey": "W"
                 }
               ],
               "relatedEntities": [],
@@ -14701,9 +14763,32 @@
               "targets": [
                 {
                   "type": "champion",
-                  "slug": "wukong",
+                  "slug": "monkeyking",
                   "name": "Wukong",
-                  "known": false
+                  "known": true,
+                  "href": "/champions/monkeyking",
+                  "roleTags": [
+                    "fighter",
+                    "tank"
+                  ],
+                  "kitTags": [
+                    "ability",
+                    "attack",
+                    "cc",
+                    "dot",
+                    "movement",
+                    "on_hit",
+                    "tank"
+                  ]
+                },
+                {
+                  "type": "ability",
+                  "slug": "monkeyking:E",
+                  "name": "Nimbus Strike",
+                  "known": true,
+                  "href": "/champions/monkeyking",
+                  "championSlug": "monkeyking",
+                  "abilityKey": "E"
                 }
               ],
               "relatedEntities": [],
@@ -16006,7 +16091,7 @@
           "nerfed": 26
         },
         "byEntityType": {
-          "ability": 26,
+          "ability": 29,
           "augment": 3,
           "champion": 43,
           "item": 7,
@@ -18220,7 +18305,7 @@
                 {
                   "type": "champion",
                   "slug": "tahmkench",
-                  "name": "Tahmkench",
+                  "name": "Tahm Kench",
                   "known": true,
                   "href": "/champions/tahmkench",
                   "roleTags": [
@@ -18278,7 +18363,7 @@
                 {
                   "type": "champion",
                   "slug": "tahmkench",
-                  "name": "Tahmkench",
+                  "name": "Tahm Kench",
                   "known": true,
                   "href": "/champions/tahmkench",
                   "roleTags": [
@@ -19297,7 +19382,7 @@
                 {
                   "type": "champion",
                   "slug": "xinzhao",
-                  "name": "Xinzhao",
+                  "name": "Xin Zhao",
                   "known": true,
                   "href": "/champions/xinzhao",
                   "roleTags": [
@@ -19484,7 +19569,7 @@
                 {
                   "type": "champion",
                   "slug": "xinzhao",
-                  "name": "Xinzhao",
+                  "name": "Xin Zhao",
                   "known": true,
                   "href": "/champions/xinzhao",
                   "roleTags": [
@@ -19669,7 +19754,7 @@
                 {
                   "type": "champion",
                   "slug": "xinzhao",
-                  "name": "Xinzhao",
+                  "name": "Xin Zhao",
                   "known": true,
                   "href": "/champions/xinzhao",
                   "roleTags": [
@@ -19853,7 +19938,7 @@
                 {
                   "type": "champion",
                   "slug": "xinzhao",
-                  "name": "Xinzhao",
+                  "name": "Xin Zhao",
                   "known": true,
                   "href": "/champions/xinzhao",
                   "roleTags": [
@@ -23914,6 +23999,23 @@
                   "rarity": "gold",
                   "lifecycle": "active",
                   "offerable": true
+                },
+                {
+                  "type": "champion",
+                  "slug": "velkoz",
+                  "name": "Vel'Koz",
+                  "known": true,
+                  "href": "/champions/velkoz",
+                  "roleTags": [
+                    "mage",
+                    "support"
+                  ],
+                  "kitTags": [
+                    "ability",
+                    "cc",
+                    "dot",
+                    "haste"
+                  ]
                 }
               ],
               "metrics": [],

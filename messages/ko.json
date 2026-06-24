@@ -240,7 +240,11 @@
     "badgeRemoved": "제거됨",
     "badgeAbility": "스킬",
     "badgeQuest": "퀘스트",
-    "badgeMechanism": "BUG/메커니즘"
+    "badgeMechanism": "BUG/메커니즘",
+    "detailBack": "모든 증강",
+    "detailStrongOn": "시너지 챔피언",
+    "detailKitSynergy": "키트 시너지",
+    "detailRemovedIn": "{patch} 패치에서 삭제됨"
   },
   "items": {
     "title": "ARAM 메이헴 아이템",
