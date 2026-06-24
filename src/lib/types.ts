@@ -109,7 +109,7 @@ export interface Combo {
   type: "synergy" | "trap" | "fun" | "bug";
 }
 
-// ─── Patch notes (from arammayhem.com /patch-notes) ───
+// ─── Patch notes (official Riot article + deterministic Mayhem Oracle linking) ───
 
 export type ChangeKind = "buffed" | "nerfed" | "changed" | "mechanism";
 
@@ -124,14 +124,56 @@ export type PatchSectionId =
 
 export type PatchLocale = "en" | "zh-tw" | "zh-cn" | "ja-jp" | "ko-kr";
 
+export type PatchEntityType = "champion" | "ability" | "augment" | "item" | "system";
+
+export interface PatchEntityRef {
+  type: PatchEntityType;
+  slug: string;
+  name: string;
+  known: boolean;
+  href?: string;
+  roleTags?: string[];
+  kitTags?: string[];
+  categories?: string[];
+  rarity?: AugmentRarity;
+  availability?: string;
+  lifecycle?: string;
+  offerable?: boolean;
+  championSlug?: string;
+  abilityKey?: string;
+}
+
+export interface PatchMetricChange {
+  label: string;
+  before: string;
+  after: string;
+  numericDirection?: "increase" | "decrease" | "flat";
+}
+
+export interface PatchImpact {
+  damageRelevant: boolean;
+  modelSignals: string[];
+  engineRefs: string[];
+}
+
 export interface PatchChange {
   /** Locale-keyed subject (augment name, champion, system area). May be empty. */
   subject: Partial<Record<PatchLocale, string>>;
   /** Locale-keyed change body. en is always present. */
   text: Partial<Record<PatchLocale, string>> & { en: string };
+  /** Ability/stat subheading from Riot notes, e.g. "E - Conflagration". */
+  detail?: string;
+  /** Official Riot context paragraph for the subject block, English canonical. */
+  context?: string;
   /** Champion slug if this change targets a single champion (Champion Balance section). */
   subjectSlug?: string;
+  sourceType?: "new_champion_preview" | string;
   kind: ChangeKind;
+  targets?: PatchEntityRef[];
+  relatedEntities?: PatchEntityRef[];
+  metrics?: PatchMetricChange[];
+  labels?: string[];
+  impact?: PatchImpact;
 }
 
 export interface PatchSection {
@@ -145,6 +187,17 @@ export interface PatchNote {
   version: string;          // "26.8"
   title: string;            // raw card title from source
   released: string;         // raw date string ("Released: April 14, 2026")
+  sourceUrl?: string;
+  publishedAt?: string;
+  authors?: string[];
+  intro?: string;
+  summary?: {
+    totalChanges: number;
+    byKind: Partial<Record<ChangeKind, number>>;
+    byEntityType: Partial<Record<PatchEntityType, number>>;
+    byLabel: Record<string, number>;
+    damageRelevant: number;
+  };
   sections: PatchSection[];
 }
 
@@ -152,6 +205,8 @@ export interface PatchNotesData {
   patch: string;
   scraped_at: string;
   source: string;
+  sourceKind?: string;
+  sourceUrl?: string;
   patches: PatchNote[];
 }
 

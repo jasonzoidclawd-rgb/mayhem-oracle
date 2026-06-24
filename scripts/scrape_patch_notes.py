@@ -23,7 +23,6 @@ from __future__ import annotations
 import html as html_module
 import json
 import re
-import subprocess
 import time
 from datetime import datetime, timezone
 from pathlib import Path
@@ -56,12 +55,22 @@ LOCALE_PREFIXES: dict[str, str] = {
     "ko-kr": "ko-kr",
 }
 
-# h4 sub-section headings inside ARAM: Mayhem → canonical section ids
+# h4 sub-section headings inside ARAM: Mayhem -> canonical section ids.
 MAYHEM_SUBSECTION_MAP: dict[str, str] = {
     "Champions": "champions",
     "Augments":  "augments",
     "Systems":   "general",
     "Items":     "new_items",
+    "Bugfixes":  "bugfixes",
+}
+
+# h2 article sections that can affect Mayhem Oracle surfaces. These are
+# parsed from the official Riot article in addition to the mode-specific
+# ARAM: Mayhem section.
+ARTICLE_SECTION_MAP: dict[str, str] = {
+    "Champions": "champions",
+    "Items": "new_items",
+    "ARAM: Mayhem": "augments",
 }
 
 _TAG_RE = re.compile(r"<[^>]+>")
@@ -75,7 +84,9 @@ _H4_BLOCK_RE  = re.compile(r"<h4[^>]*>(.*?)</h4>(.*?)(?=<h4[^>]*>|$)", re.DOTALL
 _UL_RE        = re.compile(r"<ul[^>]*>(.*?)</ul>", re.DOTALL)
 _LI_RE        = re.compile(r"<li[^>]*>(.*?)</li>", re.DOTALL)
 _STRONG_RE    = re.compile(r"<strong[^>]*>(.*?)</strong>", re.DOTALL)
-_TIME_RE = re.compile(r'<time[^>]+datetime="([^"T]+)')
+_TIME_RE = re.compile(r'<time[^>]+date(?:T|t)ime="([^"]+)"')
+_TITLE_RE = re.compile(r'<h1[^>]*data-testid="title"[^>]*>(.*?)</h1>', re.DOTALL)
+_AUTHORS_RE = re.compile(r'<div class="authors">\s*<span>(.*?)</span>', re.DOTALL)
 _META_DATE_RE = re.compile(
     r'<meta[^>]+(?:name|property)="(?:article:published_time|date)"[^>]+content="([^"T]+)'
 )
@@ -93,6 +104,40 @@ def fetch(path_or_url: str) -> str:
 
 def strip_tags(s: str) -> str:
     return _WS_RE.sub(" ", html_module.unescape(_TAG_RE.sub(" ", s))).strip()
+
+
+def normalize_key(s: str) -> str:
+    """Stable name matching key for Riot text -> local catalog entities."""
+    return re.sub(r"[^a-z0-9]+", "", html_module.unescape(s).lower())
+
+
+def slugify(s: str) -> str:
+    return re.sub(r"(^-|-$)", "", re.sub(r"[^a-z0-9]+", "-", s.lower()))
+
+
+def source_url(path_or_url: str) -> str:
+    return path_or_url if path_or_url.startswith("http") else BASE_URL + path_or_url
+
+
+def extract_article_metadata(html: str, en_path: str) -> dict:
+    title_m = _TITLE_RE.search(html)
+    time_m = _TIME_RE.search(html) or _META_DATE_RE.search(html)
+    authors_m = _AUTHORS_RE.search(html)
+    intro = ""
+    intro_m = re.search(r'<blockquote[^>]*class="[^"]*context[^"]*"[^>]*>(.*?)</blockquote>', html, re.DOTALL)
+    if intro_m:
+        intro = strip_tags(intro_m.group(1))
+    return {
+        "sourceUrl": source_url(en_path),
+        "articleTitle": strip_tags(title_m.group(1)) if title_m else "",
+        "publishedAt": time_m.group(1).strip() if time_m else "",
+        "authors": [
+            a.strip()
+            for a in re.split(r",\s*", strip_tags(authors_m.group(1)) if authors_m else "")
+            if a.strip()
+        ],
+        "intro": intro,
+    }
 
 
 # ── URL discovery ──────────────────────────────────────────────────────────
@@ -240,6 +285,101 @@ def _parse_section_html(
     return sections
 
 
+def _extract_context(block_html: str) -> str:
+    m = re.search(r'<blockquote[^>]*class="[^"]*context[^"]*"[^>]*>(.*?)</blockquote>', block_html, re.DOTALL)
+    return strip_tags(m.group(1)) if m else ""
+
+
+def _li_texts(html: str) -> list[str]:
+    out: list[str] = []
+    for li in _LI_RE.finditer(html):
+        raw = strip_tags(li.group(1))
+        text = re.sub(r"\s*⇒\s*", " ⇒ ", raw)
+        text = re.sub(r"\s+:", ":", text).strip()
+        if text:
+            out.append(text)
+    return out
+
+
+def _parse_h2_entity_section(section_html: str, section_id: str, title: str) -> list[dict]:
+    """Parse Riot h2 sections whose direct subjects are h3 blocks."""
+    changes: list[dict] = []
+    h3s = list(re.finditer(r"<h3[^>]*>(.*?)</h3>", section_html, re.DOTALL))
+    for idx, h3_m in enumerate(h3s):
+        subject = strip_tags(h3_m.group(1))
+        if not subject:
+            continue
+        start = h3_m.end()
+        end = h3s[idx + 1].start() if idx + 1 < len(h3s) else len(section_html)
+        block = section_html[start:end]
+        context = _extract_context(block)
+
+        h4s = list(_H4_BLOCK_RE.finditer(block))
+        if h4s:
+            for h4_m in h4s:
+                detail = strip_tags(h4_m.group(1))
+                for text in _li_texts(h4_m.group(2)):
+                    ch: dict = {"subject": subject, "text": text}
+                    if context:
+                        ch["context"] = context
+                    if detail:
+                        ch["detail"] = detail
+                    if section_id == "champions":
+                        ch["subjectSlug"] = slugify(subject)
+                    changes.append(ch)
+        else:
+            for text in _li_texts(block):
+                ch = {"subject": subject, "text": text}
+                if context:
+                    ch["context"] = context
+                changes.append(ch)
+
+    return [{"id": section_id, "title": title, "changes": changes}] if changes else []
+
+
+def _parse_new_champion_section(section_html: str, title: str) -> list[dict]:
+    """Parse a new-champion article section like 26.13 Locke."""
+    changes: list[dict] = []
+    context = _extract_context(section_html)
+    for h4_m in _H4_BLOCK_RE.finditer(section_html):
+        detail = strip_tags(h4_m.group(1))
+        for text in _li_texts(h4_m.group(2)):
+            ch: dict = {
+                "subject": title,
+                "text": text,
+                "detail": detail,
+                "kind": "changed",
+                "sourceType": "new_champion_preview",
+                "subjectSlug": slugify(title),
+            }
+            if context:
+                ch["context"] = context
+            changes.append(ch)
+    return [{"id": "champions", "title": "Champions", "changes": changes}] if changes else []
+
+
+def _parse_mayhem_section(section_html: str) -> list[dict]:
+    sections: list[dict] = []
+    for h4_m in _H4_BLOCK_RE.finditer(section_html):
+        h4_title = strip_tags(h4_m.group(1))
+        section_id = _resolve_section_id(h4_title, MAYHEM_SUBSECTION_MAP)
+        if not section_id:
+            continue
+        body = h4_m.group(2)
+        changes: list[dict] = []
+        pairs = _extract_subject_ul_pairs(body)
+        if pairs:
+            for subject, ul_html in pairs:
+                for text in _li_texts(ul_html):
+                    changes.append({"subject": subject, "text": text})
+        else:
+            for text in _li_texts(body):
+                changes.append({"subject": "" if section_id == "bugfixes" else h4_title, "text": text})
+        if changes:
+            sections.append({"id": section_id, "title": h4_title, "changes": changes})
+    return sections
+
+
 def parse_patch_page(html: str, en_path: str, *, locale_mode: bool = False) -> dict:
     """Parse one full patch page into our intermediate patch dict.
 
@@ -250,28 +390,47 @@ def parse_patch_page(html: str, en_path: str, *, locale_mode: bool = False) -> d
     vm = _PATCH_VER_RE.search(en_path)
     version = f"{vm.group(1)}.{vm.group(2)}" if vm else "unknown"
 
-    tm = _TIME_RE.search(html) or _META_DATE_RE.search(html)
-    released = tm.group(1).strip() if tm else ""
-
+    metadata = extract_article_metadata(html, en_path)
+    released = metadata["publishedAt"][:10] if metadata.get("publishedAt") else ""
     sections: list[dict] = []
 
-    mayhem_html = _extract_h2_section(html, "ARAM: Mayhem")
-    if mayhem_html:
-        sections.extend(_parse_section_html(mayhem_html, MAYHEM_SUBSECTION_MAP, locale_mode=locale_mode))
+    if locale_mode:
+        mayhem_html = _extract_h2_section(html, "ARAM: Mayhem")
+        if mayhem_html:
+            sections.extend(_parse_section_html(mayhem_html, MAYHEM_SUBSECTION_MAP, locale_mode=True))
+        return {"version": version, "title": f"Patch {version} Notes", "released": released, "sections": sections}
 
-    if not locale_mode:
-        # Also capture generic ARAM section changes not already in Mayhem section.
-        aram_html = _extract_h2_section(html, "ARAM")
-        if aram_html:
-            existing = {s["id"] for s in sections}
-            aram_map = {k: v for k, v in MAYHEM_SUBSECTION_MAP.items() if v not in existing}
-            for sec in _parse_section_html(aram_html, aram_map):
-                sections.append(sec)
+    h2s = list(_ALL_H2_RE.finditer(html))
+    for i, h2_m in enumerate(h2s):
+        title = strip_tags(h2_m.group(1))
+        start = h2_m.end()
+        end = h2s[i + 1].start() if i + 1 < len(h2s) else len(html)
+        section_html = html[start:end]
+        if title == "ARAM: Mayhem":
+            sections.extend(_parse_mayhem_section(section_html))
+        elif title in {"Champions", "Items"}:
+            section_id = ARTICLE_SECTION_MAP[title]
+            sections.extend(_parse_h2_entity_section(section_html, section_id, title))
+        elif title not in ARTICLE_SECTION_MAP and _H4_BLOCK_RE.search(section_html):
+            # New champion releases are article h2 blocks with ability h4s rather
+            # than entries in the Champions h2 section. Keep them as unknown
+            # champion targets until the champion catalog catches up.
+            if "champion spotlight" in section_html.lower():
+                sections.extend(_parse_new_champion_section(section_html, title))
 
-    return {"version": version, "title": f"Patch {version} Notes", "released": released, "sections": sections}
+    return {
+        "version": version,
+        "title": metadata.get("articleTitle") or f"Patch {version} Notes",
+        "released": released,
+        "sourceUrl": metadata["sourceUrl"],
+        "publishedAt": metadata.get("publishedAt", ""),
+        "authors": metadata.get("authors", []),
+        "intro": metadata.get("intro", ""),
+        "sections": sections,
+    }
 
 
-# ── Classification (cerebras-batch primary, regex fallback) ───────────────
+# ── Deterministic classification ──────────────────────────────────────────
 
 ARROW = "⇒"
 _NUM_RE = re.compile(r"-?\d+(?:\.\d+)?")
@@ -281,6 +440,339 @@ _INVERTED_TERMS = re.compile(
 )
 _NERF_HINTS = re.compile(r"\b(no longer|reduced)\b", re.IGNORECASE)
 _BUFF_HINTS = re.compile(r"\b(now also|additional|increased)\b", re.IGNORECASE)
+
+LABEL_KEYWORDS: list[tuple[str, re.Pattern[str]]] = [
+    ("damage", re.compile(r"\bdamage|dmg|lethality|penetration|crit|critical|on-hit\b", re.I)),
+    ("cooldown", re.compile(r"\bcooldown|recharge|haste\b", re.I)),
+    ("mana", re.compile(r"\bmana|energy|cost\b", re.I)),
+    ("health", re.compile(r"\bhealth|hp|durability\b", re.I)),
+    ("shield", re.compile(r"\bshield\b", re.I)),
+    ("healing", re.compile(r"\bheal(?:ing|s|ed)?\b|life steal|omnivamp|\bvamp\b", re.I)),
+    ("movement", re.compile(r"\bmove speed|movement|dash|blink|teleport|slow\b", re.I)),
+    ("range", re.compile(r"\brange|area of effect|aoe|radius|size\b", re.I)),
+    ("attack_speed", re.compile(r"\battack speed\b", re.I)),
+    ("ability_power", re.compile(r"\bability power|\bAP\b", re.I)),
+    ("attack_damage", re.compile(r"\battack damage|\bAD\b|total ad|bonus ad\b", re.I)),
+    ("armor_magic_resist", re.compile(r"\barmor|magic resist|mr\b", re.I)),
+    ("economy", re.compile(r"\bgold|coin|shop|itemization\b", re.I)),
+    ("rarity", re.compile(r"\btier|prismatic|gold|silver\b", re.I)),
+    ("restriction", re.compile(r"\brestriction|restricted|no longer|removed|disabled\b", re.I)),
+    ("offering_pool", re.compile(r"\boffer|offered|augment pool|pool\b", re.I)),
+    ("bugfix", re.compile(r"\bbug|fixed|issue|incorrectly|prevented\b", re.I)),
+]
+
+RIOT_NAME_ALIASES: dict[str, str] = {
+    "youchmycoins": "yowchmycoins",
+}
+
+DAMAGE_LABELS = {
+    "damage",
+    "cooldown",
+    "shield",
+    "healing",
+    "attack_speed",
+    "ability_power",
+    "attack_damage",
+    "armor_magic_resist",
+    "range",
+}
+
+
+def canonical_text(change: dict) -> str:
+    text = change.get("text", "")
+    if isinstance(text, dict):
+        return text.get("en", "")
+    return str(text)
+
+
+def canonical_subject(change: dict) -> str:
+    subject = change.get("subject", "")
+    if isinstance(subject, dict):
+        return subject.get("en", "")
+    return str(subject)
+
+
+def wrap_locale_fields(patches: list[dict]) -> list[dict]:
+    for patch in patches:
+        for section in patch.get("sections", []):
+            for change in section.get("changes", []):
+                if not isinstance(change.get("subject"), dict):
+                    change["subject"] = {"en": change.get("subject", "")}
+                if not isinstance(change.get("text"), dict):
+                    change["text"] = {"en": change.get("text", "")}
+    return patches
+
+
+def _catalog_ref(entity_type: str, slug: str, name: str, href: str | None, known: bool, extra: dict | None = None) -> dict:
+    ref = {
+        "type": entity_type,
+        "slug": slug,
+        "name": name,
+        "known": known,
+    }
+    if href:
+        ref["href"] = href
+    if extra:
+        ref.update(extra)
+    return ref
+
+
+def _add_name(index: dict[str, dict], name: str | None, ref: dict) -> None:
+    if not name:
+        return
+    key = normalize_key(name)
+    if key and key not in index:
+        index[key] = ref
+
+
+def load_entity_catalogs() -> dict:
+    indexes: dict[str, dict[str, dict]] = {"champion": {}, "item": {}, "augment": {}, "ability": {}}
+    scan_refs: list[dict] = []
+
+    champions_path = OUT_DIR / "champions.json"
+    if champions_path.exists():
+        champions = json.loads(champions_path.read_text(encoding="utf-8")).get("champions", [])
+        for champ in champions:
+            slug = champ.get("slug") or slugify(champ.get("name", ""))
+            ref = _catalog_ref(
+                "champion",
+                slug,
+                champ.get("name", slug),
+                f"/champions/{slug}",
+                True,
+                {"roleTags": champ.get("tags", []), "kitTags": champ.get("kit_tags", [])},
+            )
+            for name in (champ.get("name"), champ.get("name_zh_TW"), champ.get("name_zh_CN"), champ.get("name_ja"), champ.get("name_ko")):
+                _add_name(indexes["champion"], name, ref)
+            scan_refs.append(ref)
+
+    items_path = OUT_DIR / "items.json"
+    if items_path.exists():
+        items = json.loads(items_path.read_text(encoding="utf-8")).get("items", [])
+        for item in items:
+            ident = str(item.get("id")) if item.get("id") is not None else slugify(item.get("name", ""))
+            ref = _catalog_ref(
+                "item",
+                ident,
+                item.get("name", ident),
+                f"/items/{ident}" if ident else None,
+                True,
+                {"categories": item.get("categories", [])},
+            )
+            for name in (item.get("name"), item.get("slug"), item.get("name_zh_TW"), item.get("name_zh_CN"), item.get("name_ja"), item.get("name_ko")):
+                _add_name(indexes["item"], name, ref)
+            scan_refs.append(ref)
+
+    augments_path = OUT_DIR / "augments.json"
+    if augments_path.exists():
+        augments = json.loads(augments_path.read_text(encoding="utf-8")).get("augments", [])
+        for aug in augments:
+            slug = aug.get("slug") or slugify(aug.get("name", ""))
+            availability = aug.get("availability", {}).get("status")
+            lifecycle = aug.get("flags", {}).get("lifecycle")
+            ref = _catalog_ref(
+                "augment",
+                slug,
+                aug.get("name") or aug.get("displayName") or slug,
+                f"/augments/{slug}",
+                True,
+                {
+                    "rarity": aug.get("rarity"),
+                    "availability": availability,
+                    "lifecycle": lifecycle,
+                    "offerable": availability == "confirmed_live" and lifecycle != "removed",
+                },
+            )
+            names = aug.get("names", {}) if isinstance(aug.get("names"), dict) else {}
+            for name in (
+                aug.get("name"),
+                aug.get("displayName"),
+                aug.get("slug"),
+                names.get("en"),
+                names.get("zh_tw"),
+                names.get("zh_cn"),
+                names.get("ja"),
+                names.get("ko"),
+            ):
+                _add_name(indexes["augment"], name, ref)
+            scan_refs.append(ref)
+
+    abilities_path = OUT_DIR / "abilities.json"
+    if abilities_path.exists():
+        profiles = json.loads(abilities_path.read_text(encoding="utf-8")).get("profiles", {})
+        for champion_slug, profile in profiles.items():
+            for ability in profile.get("abilities", []):
+                key = ability.get("key", "")
+                name = ability.get("name", "")
+                if not name:
+                    continue
+                slug = f"{champion_slug}:{key}"
+                ref = _catalog_ref(
+                    "ability",
+                    slug,
+                    name,
+                    f"/champions/{champion_slug}",
+                    True,
+                    {"championSlug": champion_slug, "abilityKey": key},
+                )
+                for loc_name in (name, ability.get("name_zh_TW"), ability.get("name_zh_CN"), ability.get("name_ja"), ability.get("name_ko")):
+                    _add_name(indexes["ability"], loc_name, ref)
+                scan_refs.append(ref)
+
+    scan_refs.sort(key=lambda r: len(normalize_key(r["name"])), reverse=True)
+    return {"indexes": indexes, "scanRefs": scan_refs}
+
+
+def _unknown_ref(section_id: str, subject: str) -> dict:
+    if section_id == "champions":
+        entity_type = "champion"
+        href = None
+    elif section_id == "new_items":
+        entity_type = "item"
+        href = None
+    elif section_id == "augments":
+        entity_type = "augment"
+        href = None
+    else:
+        entity_type = "system"
+        href = None
+    return _catalog_ref(entity_type, slugify(subject or section_id), subject or section_id, href, False)
+
+
+def _primary_target(section_id: str, subject: str, catalogs: dict) -> dict | None:
+    if not subject and section_id in {"general", "bugfixes"}:
+        return _catalog_ref("system", section_id, section_id, None, True)
+    index_key = {
+        "champions": "champion",
+        "new_items": "item",
+        "augments": "augment",
+    }.get(section_id)
+    if not index_key:
+        return _unknown_ref(section_id, subject)
+    key = normalize_key(subject)
+    alias_key = RIOT_NAME_ALIASES.get(key, key)
+    return catalogs["indexes"][index_key].get(alias_key) or _unknown_ref(section_id, subject)
+
+
+def _related_entities(change: dict, catalogs: dict, primary: dict | None) -> list[dict]:
+    haystack = (str(change.get("context", "")) + " " + canonical_text(change)).lower()
+    related: list[dict] = []
+    seen = {primary.get("type", "") + ":" + primary.get("slug", "")} if primary else set()
+    for ref in catalogs["scanRefs"]:
+        if ref["type"] == "ability":
+            continue
+        key = normalize_key(ref["name"])
+        ref_id = ref["type"] + ":" + ref["slug"]
+        if len(key) < 6 or ref_id in seen:
+            continue
+        tokens = [re.escape(t) for t in re.findall(r"[a-z0-9]+", ref["name"].lower())]
+        if not tokens:
+            continue
+        pattern = r"(?<![a-z0-9])" + r"[\W_]+".join(tokens) + r"(?![a-z0-9])"
+        if re.search(pattern, haystack):
+            related.append(ref)
+            seen.add(ref_id)
+        if len(related) >= 8:
+            break
+    return related
+
+
+def parse_metrics(text: str) -> list[dict]:
+    if ARROW not in text:
+        return []
+    left, right = text.split(ARROW, 1)
+    label = ""
+    before = left.strip()
+    if ":" in left:
+        label, before = [p.strip() for p in left.split(":", 1)]
+    metric = {
+        "label": label or "Value",
+        "before": before,
+        "after": right.strip(),
+    }
+    lnums = [float(x) for x in _NUM_RE.findall(before)]
+    rnums = [float(x) for x in _NUM_RE.findall(right)]
+    if lnums and rnums:
+        delta = (sum(rnums) / len(rnums)) - (sum(lnums) / len(lnums))
+        metric["numericDirection"] = "increase" if delta > 0 else "decrease" if delta < 0 else "flat"
+    return [metric]
+
+
+def label_change(change: dict) -> list[str]:
+    text = str(change.get("context", "")) + " " + canonical_text(change)
+    labels = [label for label, pattern in LABEL_KEYWORDS if pattern.search(text)]
+    return labels or ["general"]
+
+
+def impact_for(change: dict, labels: list[str], targets: list[dict]) -> dict:
+    target_types = {target.get("type") for target in targets}
+    engine_refs: list[str] = []
+    if labels and DAMAGE_LABELS.intersection(labels):
+        if "champion" in target_types or "ability" in target_types:
+            engine_refs.extend([
+                "src/lib/scoring/damage-context.ts:computeChampionBaseline",
+                "src/lib/scoring/ability-augment-fit.ts:abilityAugmentFit",
+            ])
+        if "augment" in target_types:
+            engine_refs.extend([
+                "src/lib/decision/evaluate.ts:evaluateCandidate",
+                "src/lib/scoring/damage-context.ts:computeAugmentDamageContext",
+            ])
+        if "item" in target_types:
+            engine_refs.extend([
+                "src/lib/data/championStats.ts:stackItemStats",
+                "src/lib/decision/evaluate.ts:itemValue",
+            ])
+    return {
+        "damageRelevant": bool(engine_refs),
+        "modelSignals": sorted(set(labels).intersection(DAMAGE_LABELS)),
+        "engineRefs": list(dict.fromkeys(engine_refs)),
+    }
+
+
+def enrich_patch_entities(patches: list[dict], catalogs: dict) -> None:
+    for patch in patches:
+        counts: dict[str, int] = {}
+        labels_count: dict[str, int] = {}
+        for section in patch.get("sections", []):
+            section_id = section.get("id", "")
+            for change in section.get("changes", []):
+                subject = canonical_subject(change)
+                primary = _primary_target(section_id, subject, catalogs)
+                targets = [primary] if primary else []
+
+                # Ability detail inside a champion block links the concrete ability
+                # when the local ability profile has the same name/key.
+                if section_id == "champions" and primary and primary.get("known") and change.get("detail"):
+                    detail_key = normalize_key(re.sub(r"^[QWERP]\s*-\s*", "", str(change["detail"]), flags=re.I))
+                    for ref in catalogs["indexes"]["ability"].values():
+                        if ref.get("championSlug") == primary["slug"] and normalize_key(ref["name"]) in detail_key:
+                            targets.append(ref)
+                            break
+
+                related = _related_entities(change, catalogs, primary)
+                metrics = parse_metrics(canonical_text(change))
+                labels = label_change(change)
+                change["targets"] = targets
+                change["relatedEntities"] = related
+                change["metrics"] = metrics
+                change["labels"] = labels
+                change["impact"] = impact_for(change, labels, targets)
+                for target in targets:
+                    counts[target["type"]] = counts.get(target["type"], 0) + 1
+                for label in labels:
+                    labels_count[label] = labels_count.get(label, 0) + 1
+        flat = [ch for sec in patch.get("sections", []) for ch in sec.get("changes", [])]
+        by_kind: dict[str, int] = {}
+        for ch in flat:
+            by_kind[ch.get("kind", "changed")] = by_kind.get(ch.get("kind", "changed"), 0) + 1
+        patch["summary"] = {
+            "totalChanges": len(flat),
+            "byKind": dict(sorted(by_kind.items())),
+            "byEntityType": dict(sorted(counts.items())),
+            "byLabel": dict(sorted(labels_count.items())),
+            "damageRelevant": sum(1 for ch in flat if ch.get("impact", {}).get("damageRelevant")),
+        }
 
 
 def classify_fallback(text: str) -> str:
@@ -306,99 +798,13 @@ def classify_fallback(text: str) -> str:
     return "buffed" if increased else "nerfed"
 
 
-CLASSIFIER_PROMPT_TEMPLATE = """You classify League of Legends ARAM Mayhem patch-note changes.
-
-For each input row, output exactly one of: "buffed", "nerfed", "changed".
-- "buffed"  = stronger (more damage, lower cooldown, more healing, etc).
-- "nerfed"  = weaker (less damage, higher cooldown, restrictions added).
-- "changed" = neutral / mixed / bug fix / rework where direction is unclear.
-
-Return STRICT JSON ONLY. No prose, no fences. Schema:
-{{"kinds": ["...", "..."]}}
-
-The "kinds" array MUST have EXACTLY {n} entries — one per input row, same order.
-Do NOT output extra entries. Do NOT skip rows.
-
-Input ({n} rows):
-{payload}
-"""
-
-CHUNK_SIZE = 20
-
-
-def _classify_chunk(chunk: list[dict], llm_ask: Path, timeout: int) -> list[str] | None:
-    payload = json.dumps(
-        [{"subject": c.get("subject", ""), "text": c["text"]} for c in chunk],
-        ensure_ascii=False,
-    )
-    prompt = CLASSIFIER_PROMPT_TEMPLATE.format(n=len(chunk), payload=payload)
-    try:
-        result = subprocess.run(
-            [str(llm_ask), "cerebras-batch"],
-            input=prompt, capture_output=True, text=True, timeout=timeout,
-        )
-    except subprocess.TimeoutExpired:
-        print(f"    cerebras-batch timed out on chunk of {len(chunk)}")
-        return None
-    if result.returncode != 0:
-        print(f"    cerebras-batch rc={result.returncode}: {result.stderr.strip()[:160]}")
-        return None
-    raw = result.stdout.strip()
-    raw = re.sub(r"^```(?:json)?\s*|\s*```$", "", raw, flags=re.MULTILINE)
-    try:
-        parsed = json.loads(raw)
-    except json.JSONDecodeError:
-        obj_m = re.search(r"\{.*\}", raw, re.DOTALL)
-        if not obj_m:
-            print(f"    cerebras-batch non-JSON: {raw[:160]}")
-            return None
-        try:
-            parsed = json.loads(obj_m.group(0))
-        except json.JSONDecodeError:
-            return None
-    kinds = parsed.get("kinds") if isinstance(parsed, dict) else None
-    if not isinstance(kinds, list) or len(kinds) != len(chunk):
-        got = len(kinds) if isinstance(kinds, list) else "n/a"
-        print(f"    cerebras-batch length mismatch: got {got}, expected {len(chunk)}")
-        return None
-    valid = {"buffed", "nerfed", "changed"}
-    return [k if k in valid else "changed" for k in kinds]
-
-
-def classify_batch_via_llm(changes: list[dict], timeout: int = 60) -> list[str] | None:
-    if not changes:
-        return []
-    llm_ask = Path.home() / "bin" / "llm-ask"
-    if not llm_ask.exists():
-        print("    cerebras-batch unavailable (~/bin/llm-ask missing)")
-        return None
-    out: list[str] = []
-    for i in range(0, len(changes), CHUNK_SIZE):
-        chunk = changes[i : i + CHUNK_SIZE]
-        kinds = _classify_chunk(chunk, llm_ask, timeout)
-        if kinds is None:
-            time.sleep(2)
-            kinds = _classify_chunk(chunk, llm_ask, timeout)
-        if kinds is None:
-            return None
-        out.extend(kinds)
-        time.sleep(0.4)
-    return out
-
-
 def classify_patch(patch: dict) -> None:
     flat = [ch for sec in patch["sections"] for ch in sec["changes"]]
     if not flat:
         return
-    kinds = classify_batch_via_llm(flat)
-    if kinds is None:
-        kinds = [classify_fallback(c["text"]) for c in flat]
-        source = "regex-fallback"
-    else:
-        source = "cerebras-batch"
-    for ch, k in zip(flat, kinds):
-        ch["kind"] = k
-    print(f"    classified {len(flat)} changes via {source}")
+    for ch in flat:
+        ch["kind"] = ch.get("kind") or classify_fallback(canonical_text(ch))
+    print(f"    classified {len(flat)} changes via regex")
 
 
 # ── Locale stitching ──────────────────────────────────────────────────────
@@ -533,6 +939,7 @@ def update_augment_recent_changes(merged_patches: list[dict]) -> None:
     data = json.loads(aug_path.read_text("utf-8"))
     augments: list[dict] = data.get("augments", [])
     by_name = {a["name"].lower().strip(): a for a in augments}
+    by_slug = {a["slug"]: a for a in augments if a.get("slug")}
 
     applied = 0
     missing: list[str] = []
@@ -540,7 +947,14 @@ def update_augment_recent_changes(merged_patches: list[dict]) -> None:
         en_subject = change["subject"].get("en", "").strip()
         if not en_subject:
             continue
-        aug = by_name.get(en_subject.lower())
+        target = next(
+            (
+                t for t in change.get("targets", [])
+                if t.get("type") == "augment" and t.get("known") and t.get("slug")
+            ),
+            None,
+        )
+        aug = by_slug.get(target["slug"]) if target else by_name.get(en_subject.lower())
         en_text = change["text"].get("en", "") if isinstance(change["text"], dict) else change["text"]
         if aug is not None:
             existing = aug.get("recentChanges", {})
@@ -593,38 +1007,16 @@ def main() -> None:
     if not en_patches:
         raise SystemExit("No EN patches parsed — aborting.")
 
-    # Classify
-    print("\nClassifying changes (cerebras-batch primary)...")
+    # Classify and deterministically link to local catalogs.
+    print("\nClassifying changes (deterministic regex)...")
     for patch in en_patches:
         print(f"  Patch {patch['version']}:")
         classify_patch(patch)
 
-    # Fetch locale pages
-    print("\nFetching locale pages...")
-    by_locale: dict[str, list[dict]] = {}
-    for loc_key in LOCALE_PREFIXES:
-        loc_patches: list[dict] = []
-        for i, en_path in enumerate(en_paths):
-            if i > 0:
-                time.sleep(0.6)
-            lpath = locale_path(en_path, loc_key)
-            try:
-                html = fetch(lpath)
-            except (URLError, OSError) as e:
-                print(f"  {loc_key} {en_path}: skipped ({e})")
-                continue
-            loc_patches.append(parse_patch_page(html, en_path, locale_mode=True))
-        by_locale[loc_key] = loc_patches
-        print(f"  {loc_key}: {len(loc_patches)} patches")
-
-    # Stitch locales
-    print("\nStitching locales...")
-    merged = stitch_locales(en_patches, by_locale)
-
-    # Enrich augment subject names from augments.json
-    print("\nEnriching augment subject names from augments.json...")
-    enriched = enrich_augment_subjects(merged)
-    print(f"  augment subject translations applied: {enriched}")
+    print("\nLinking patch-note rows to Mayhem Oracle catalogs...")
+    catalogs = load_entity_catalogs()
+    enrich_patch_entities(en_patches, catalogs)
+    merged = wrap_locale_fields(en_patches)
 
     # Write recentChanges back to augments.json
     print("\nUpdating augments.json recentChanges...")
@@ -635,6 +1027,8 @@ def main() -> None:
         "patch": current_patch,
         "scraped_at": datetime.now(timezone.utc).isoformat(),
         "source": BASE_URL + NEWS_PATH,
+        "sourceKind": "official-riot-patch-notes",
+        "sourceUrl": merged[0].get("sourceUrl") if merged else "",
         "patches": merged,
     }
 
