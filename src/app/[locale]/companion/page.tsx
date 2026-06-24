@@ -3,7 +3,7 @@ import {
   type CompanionAugmentOption,
   type CompanionChampionOption,
 } from "@/components/companion/CompanionClient";
-import { loadPublicJson } from "@/lib/data/public-loader";
+import { readChampionsFile, readAugmentsFile } from "@/lib/data/read-public-file";
 import { readMemberAccess } from "@/lib/membership/read-member-access";
 import { setRequestLocale } from "next-intl/server";
 
@@ -33,8 +33,10 @@ export default async function CompanionPage({
 
   const initialAccess = await readMemberAccess();
 
-  const { champions } = loadPublicJson<{ champions: RawChampion[] }>("champions.json");
-  const { augments } = loadPublicJson<{ augments: RawAugment[] }>("augments.json");
+  const [{ champions }, { augments }] = await Promise.all([
+    readChampionsFile<{ champions: RawChampion[] }>(),
+    readAugmentsFile<{ augments: RawAugment[] }>(),
+  ]);
 
   const localizedName = (augment: RawAugment): string => {
     if (locale === "zh-TW") return augment.name_zh_TW ?? augment.name_zh_CN ?? augment.name;

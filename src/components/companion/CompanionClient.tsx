@@ -347,50 +347,41 @@ export function CompanionClient({
 
       {/* Sticky control cluster: champion header, chips, rarity tabs, search */}
       <div className="sticky top-20 z-30 -mx-4 border-b border-[var(--color-border-default)] bg-[var(--color-bg-primary)]/95 px-4 pb-3 pt-3 backdrop-blur-md">
-        <button
-          type="button"
-          onClick={() => setPickerOpen(true)}
-          aria-label={t("changeChampion")}
-          className="flex w-full items-center gap-3 text-left"
-        >
-          <span
-            className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full text-sm font-bold text-white"
-            style={{ background: `hsl(${hashHue(championSlug || "?")}, 60%, 38%)` }}
+        <div className="flex w-full items-center gap-3">
+          <button
+            type="button"
+            onClick={() => setPickerOpen(true)}
+            aria-label={t("changeChampion")}
+            className="flex min-w-0 flex-1 items-center gap-3 text-left"
           >
-            {championSlug ? initials(championName) : "?"}
-          </span>
-          <span className="min-w-0 flex-1">
-            <span className="block truncate font-semibold text-[var(--color-text-primary)]">
-              {championName || t("pickerTitle")}
+            <span
+              className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full text-sm font-bold text-white"
+              style={{ background: `hsl(${hashHue(championSlug || "?")}, 60%, 38%)` }}
+            >
+              {championSlug ? initials(championName) : "?"}
             </span>
-            <span className="block truncate text-xs text-[var(--color-text-muted)]">
-              {t("stickyHint")}
+            <span className="min-w-0 flex-1">
+              <span className="block truncate font-semibold text-[var(--color-text-primary)]">
+                {championName || t("pickerTitle")}
+              </span>
+              <span className="block truncate text-xs text-[var(--color-text-muted)]">
+                {t("stickyHint")}
+              </span>
             </span>
-          </span>
-          <span
-            role="button"
-            tabIndex={0}
+          </button>
+          <button
+            type="button"
             aria-label={wakeOn ? t("wakeLockOn") : t("wakeLockOff")}
-            onClick={(e) => {
-              e.stopPropagation();
-              void toggleWakeLock();
-            }}
-            onKeyDown={(e) => {
-              if (e.key === "Enter" || e.key === " ") {
-                e.stopPropagation();
-                e.preventDefault();
-                void toggleWakeLock();
-              }
-            }}
-            className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-full border text-base ${
+            onClick={() => void toggleWakeLock()}
+            className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-full border text-base ${
               wakeOn
                 ? "border-[var(--color-neon-primary)] text-[var(--color-neon-primary)]"
                 : "border-[var(--color-border-default)] text-[var(--color-text-muted)]"
             } ${wakeUnsupported ? "opacity-40" : ""}`}
           >
             {wakeOn ? "◉" : "○"}
-          </span>
-        </button>
+          </button>
+        </div>
 
         <div className="mt-3 flex gap-2 overflow-x-auto">
           <Chip label={t("roundLabel")} value={String(round)} />
@@ -413,7 +404,7 @@ export function CompanionClient({
               key={r}
               type="button"
               onClick={() => changeRarity(r)}
-              className={`flex-1 rounded-lg border px-2 py-1.5 text-xs font-semibold transition ${
+              className={`flex min-h-11 flex-1 items-center justify-center rounded-lg border px-2 text-xs font-semibold transition ${
                 rarity === r
                   ? RARITY_TAB_CLASS[r]
                   : "border-[var(--color-border-default)] text-[var(--color-text-muted)]"

@@ -186,7 +186,7 @@ describe("data integrity", () => {
     expect(upgradeSword?.flags.lifecycle).toBe("removed");
     expect(upgradeSword?.name_zh_TW).toBe("升級：破曉綻放之劍");
     expect(upgradeMikaels?.name_zh_TW).not.toBe("升級：破曉綻放之劍");
-    expect(poolRules.lifecycle.removed["upgrade-sword-of-blossoming-dawn"]).toBe("26.12");
+    expect(poolRules.lifecycle.removed["upgrade-sword-of-blossoming-dawn"]).toBe(poolRules.patch);
 
     for (const combo of combosData.combos) {
       expect(
