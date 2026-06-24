@@ -9,6 +9,7 @@ import { SITE_URL, localizedUrl, languageAlternates } from "@/lib/site";
 import { Navbar } from "@/components/ui/Navbar";
 import { MobileTabBar } from "@/components/ui/MobileTabBar";
 import { NavigationProgress } from "@/components/ui/NavigationProgress";
+import { RegisterServiceWorker } from "@/components/ui/RegisterServiceWorker";
 import { ConsentManager } from "@/components/ads/ConsentManager";
 import { Footer } from "@/components/ui/Footer";
 import "@/styles/globals.css";
@@ -136,6 +137,7 @@ export default async function LocaleLayout({
         />
         <NextIntlClientProvider messages={messages}>
           <NavigationProgress />
+          <RegisterServiceWorker />
           <Navbar />
           <main className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 pt-20 pb-[calc(76px+env(safe-area-inset-bottom))] lg:pb-12">
             {children}
