@@ -14622,9 +14622,32 @@
               "targets": [
                 {
                   "type": "champion",
-                  "slug": "wukong",
-                  "name": "Wukong",
-                  "known": false
+                  "slug": "monkeyking",
+                  "name": "Monkeyking",
+                  "known": true,
+                  "href": "/champions/monkeyking",
+                  "roleTags": [
+                    "fighter",
+                    "tank"
+                  ],
+                  "kitTags": [
+                    "ability",
+                    "attack",
+                    "cc",
+                    "dot",
+                    "movement",
+                    "on_hit",
+                    "tank"
+                  ]
+                },
+                {
+                  "type": "ability",
+                  "slug": "monkeyking:W",
+                  "name": "Warrior Trickster",
+                  "known": true,
+                  "href": "/champions/monkeyking",
+                  "championSlug": "monkeyking",
+                  "abilityKey": "W"
                 }
               ],
               "relatedEntities": [],
@@ -14664,9 +14687,32 @@
               "targets": [
                 {
                   "type": "champion",
-                  "slug": "wukong",
-                  "name": "Wukong",
-                  "known": false
+                  "slug": "monkeyking",
+                  "name": "Monkeyking",
+                  "known": true,
+                  "href": "/champions/monkeyking",
+                  "roleTags": [
+                    "fighter",
+                    "tank"
+                  ],
+                  "kitTags": [
+                    "ability",
+                    "attack",
+                    "cc",
+                    "dot",
+                    "movement",
+                    "on_hit",
+                    "tank"
+                  ]
+                },
+                {
+                  "type": "ability",
+                  "slug": "monkeyking:W",
+                  "name": "Warrior Trickster",
+                  "known": true,
+                  "href": "/champions/monkeyking",
+                  "championSlug": "monkeyking",
+                  "abilityKey": "W"
                 }
               ],
               "relatedEntities": [],
@@ -14701,9 +14747,32 @@
               "targets": [
                 {
                   "type": "champion",
-                  "slug": "wukong",
-                  "name": "Wukong",
-                  "known": false
+                  "slug": "monkeyking",
+                  "name": "Monkeyking",
+                  "known": true,
+                  "href": "/champions/monkeyking",
+                  "roleTags": [
+                    "fighter",
+                    "tank"
+                  ],
+                  "kitTags": [
+                    "ability",
+                    "attack",
+                    "cc",
+                    "dot",
+                    "movement",
+                    "on_hit",
+                    "tank"
+                  ]
+                },
+                {
+                  "type": "ability",
+                  "slug": "monkeyking:E",
+                  "name": "Nimbus Strike",
+                  "known": true,
+                  "href": "/champions/monkeyking",
+                  "championSlug": "monkeyking",
+                  "abilityKey": "E"
                 }
               ],
               "relatedEntities": [],
@@ -16006,7 +16075,7 @@
           "nerfed": 26
         },
         "byEntityType": {
-          "ability": 26,
+          "ability": 29,
           "augment": 3,
           "champion": 43,
           "item": 7,

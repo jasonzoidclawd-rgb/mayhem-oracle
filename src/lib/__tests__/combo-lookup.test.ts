@@ -1,7 +1,11 @@
 import { describe, expect, test } from "vitest";
 import augmentsData from "../../../data/internal/augments.json";
 import combosData from "../../../data/internal/combos.json";
-import { buildComboTierLookup, normalizeLookupKey } from "../data/combo-lookup";
+import {
+  buildComboTierLookup,
+  normalizeLookupKey,
+  resolveAugmentChampions,
+} from "../data/combo-lookup";
 
 describe("normalizeLookupKey", () => {
   test("normalizes punctuation, spaces, and ampersands", () => {
@@ -59,5 +63,28 @@ describe("buildComboTierLookup", () => {
     );
 
     expect(lookup.get(generated!.augmentSlug)).toBe(generated!.tier);
+  });
+});
+
+describe("resolveAugmentChampions", () => {
+  const augments = [{ slug: "double-defense", name: "Double Defense" }];
+
+  test("lists champions for an augment, de-duplicated, S/A/B/C only", () => {
+    const result = resolveAugmentChampions(
+      "double-defense",
+      [
+        { champion: "aatrox", augment: "Double Defense", tier: "S" },
+        { champion: "aatrox", augment: "Double Defense", tier: "A" },
+        { champion: "garen", augment: "Double Defense", tier: "B" },
+        { champion: "teemo", augment: "Double Defense", tier: "D" },
+        { champion: "ashe", augment: "Other Augment", tier: "S" },
+      ],
+      augments,
+    );
+
+    expect(result).toEqual([
+      { champion: "aatrox", tier: "S" },
+      { champion: "garen", tier: "B" },
+    ]);
   });
 });

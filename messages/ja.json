@@ -240,7 +240,11 @@
     "badgeRemoved": "削除済み",
     "badgeAbility": "アビリティ",
     "badgeQuest": "クエスト",
-    "badgeMechanism": "BUG/メカニクス"
+    "badgeMechanism": "BUG/メカニクス",
+    "detailBack": "すべてのオーグメント",
+    "detailStrongOn": "相性の良いチャンピオン",
+    "detailKitSynergy": "キットシナジー",
+    "detailRemovedIn": "パッチ {patch} で削除"
   },
   "items": {
     "title": "ARAMメイヘム アイテム",

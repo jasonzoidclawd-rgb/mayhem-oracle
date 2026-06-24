@@ -240,7 +240,11 @@
     "badgeRemoved": "已移除",
     "badgeAbility": "技能",
     "badgeQuest": "任務",
-    "badgeMechanism": "BUG/機制"
+    "badgeMechanism": "BUG/機制",
+    "detailBack": "所有增幅",
+    "detailStrongOn": "強力英雄組合",
+    "detailKitSynergy": "套件協同",
+    "detailRemovedIn": "已於 {patch} 版本移除"
   },
   "items": {
     "title": "ARAM 大亂鬥裝備",

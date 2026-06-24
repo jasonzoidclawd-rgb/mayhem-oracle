@@ -463,6 +463,9 @@ LABEL_KEYWORDS: list[tuple[str, re.Pattern[str]]] = [
 
 RIOT_NAME_ALIASES: dict[str, str] = {
     "youchmycoins": "yowchmycoins",
+    # Riot patch notes use the display name "Wukong"; the local champion
+    # catalog stores him under his engine slug/name "Monkeyking".
+    "wukong": "monkeyking",
 }
 
 DAMAGE_LABELS = {
@@ -977,7 +980,43 @@ def update_augment_recent_changes(merged_patches: list[dict]) -> None:
 
 # ── Main ──────────────────────────────────────────────────────────────────
 
+def relink() -> None:
+    """Re-run only the deterministic catalog linking against the existing
+    internal patch-notes.json — no network fetch. Use when the entity catalog
+    (champions/items/augments) changes but the scraped Riot text has not, e.g.
+    after fixing a name alias. enrich_patch_entities is idempotent, so the only
+    output that changes is rows whose resolution the catalog change affects."""
+    out_path = OUT_DIR / "patch-notes.json"
+    if not out_path.exists():
+        raise SystemExit(f"{out_path} not found — run a full scrape first.")
+    doc = json.loads(out_path.read_text(encoding="utf-8"))
+    patches = doc.get("patches", [])
+
+    print("Re-linking patch-note rows to Mayhem Oracle catalogs...")
+    catalogs = load_entity_catalogs()
+    enrich_patch_entities(patches, catalogs)
+
+    print("Updating augments.json recentChanges...")
+    update_augment_recent_changes(patches)
+
+    out_path.write_text(json.dumps(doc, indent=2, ensure_ascii=False), encoding="utf-8")
+    print(f"Done. Re-linked {out_path} ({len(patches)} patches).")
+
+
 def main() -> None:
+    import argparse
+
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument(
+        "--relink",
+        action="store_true",
+        help="Re-run catalog linking on existing patch-notes.json without scraping.",
+    )
+    args = parser.parse_args()
+    if args.relink:
+        relink()
+        return
+
     OUT_DIR.mkdir(parents=True, exist_ok=True)
     print(f"Discovering patch note URLs from {BASE_URL}{NEWS_PATH} ...")
 
