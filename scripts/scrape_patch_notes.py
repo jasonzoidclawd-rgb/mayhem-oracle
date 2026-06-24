@@ -463,9 +463,6 @@ LABEL_KEYWORDS: list[tuple[str, re.Pattern[str]]] = [
 
 RIOT_NAME_ALIASES: dict[str, str] = {
     "youchmycoins": "yowchmycoins",
-    # Riot patch notes use the display name "Wukong"; the local champion
-    # catalog stores him under his engine slug/name "Monkeyking".
-    "wukong": "monkeyking",
 }
 
 DAMAGE_LABELS = {
