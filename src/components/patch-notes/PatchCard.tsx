@@ -1,18 +1,16 @@
 import { getTranslations } from "next-intl/server";
+import { Link } from "@/i18n/navigation";
 import type {
   ChangeKind,
+  PatchChange,
+  PatchEntityRef,
   PatchNote,
   PatchSection,
-  PatchChange,
 } from "@/lib/types";
 import { ChangeBadge } from "./ChangeBadge";
 
 type DataLocale = "en" | "zh-tw" | "zh-cn" | "ja-jp" | "ko-kr";
 
-// Lookup chain per UI locale. The source site has no dedicated zh-TW
-// patch-notes page, but augment subjects are back-filled with Traditional
-// names from CommunityDragon, so zh-TW prefers that field before falling
-// back to Simplified body text.
 const LOCALE_CHAIN: Record<string, DataLocale[]> = {
   en: ["en"],
   "zh-CN": ["zh-cn", "en"],
@@ -36,10 +34,12 @@ export async function PatchCard({
   patch,
   locale,
   isCurrent = false,
+  compact = false,
 }: {
   patch: PatchNote;
   locale: string;
   isCurrent?: boolean;
+  compact?: boolean;
 }) {
   const t = await getTranslations("patchNotes");
   const chain: DataLocale[] = LOCALE_CHAIN[locale] ?? ["en"];
@@ -52,15 +52,20 @@ export async function PatchCard({
             {t("patchLabel", { patch: patch.version })}
           </h2>
           <div className="flex items-center gap-1.5">
-            {isCurrent && !patch.released ? (
-              <span className="inline-flex items-center rounded-full border border-purple-400/40 bg-purple-400/15 px-2 py-0.5 text-xs font-medium text-purple-300">
-                {t("previewBadge")}
-              </span>
-            ) : null}
             {isCurrent ? (
               <span className="inline-flex items-center rounded-full border border-[var(--color-accent)]/40 bg-[var(--color-accent)]/15 px-2 py-0.5 text-xs font-medium text-[var(--color-accent)]">
                 {t("currentBadge")}
               </span>
+            ) : null}
+            {patch.sourceUrl ? (
+              <a
+                href={patch.sourceUrl}
+                target="_blank"
+                rel="noreferrer"
+                className="inline-flex min-h-8 items-center rounded-full border border-[var(--color-border)] px-2 text-xs text-[var(--color-text-muted)] hover:border-[var(--color-accent)] hover:text-[var(--color-accent)]"
+              >
+                Riot ↗
+              </a>
             ) : null}
           </div>
         </div>
@@ -71,9 +76,14 @@ export async function PatchCard({
         ) : null}
       </header>
 
-      <div className="space-y-6 px-5 py-5">
-        {patch.sections.map((section) => (
-          <Section key={section.id} section={section} chain={chain} />
+      <div className={compact ? "space-y-4 px-5 py-5" : "space-y-6 px-5 py-5"}>
+        {patch.sections.map((section, idx) => (
+          <Section
+            key={`${section.id}-${idx}`}
+            section={section}
+            chain={chain}
+            compact={compact}
+          />
         ))}
       </div>
     </article>
@@ -83,9 +93,11 @@ export async function PatchCard({
 async function Section({
   section,
   chain,
+  compact,
 }: {
   section: PatchSection;
   chain: DataLocale[];
+  compact: boolean;
 }) {
   const t = await getTranslations("patchNotes");
   const sectionTitle =
@@ -95,12 +107,17 @@ async function Section({
 
   return (
     <section>
-      <h3 className="mb-3 text-sm font-semibold uppercase tracking-wider text-[var(--color-accent)]">
-        {sectionTitle}
-      </h3>
-      <ul className="space-y-2">
-        {section.changes.map((change, idx) => (
-          <ChangeRow key={idx} change={change} chain={chain} />
+      <div className="mb-3 flex items-center justify-between gap-3">
+        <h3 className="text-sm font-semibold uppercase tracking-wider text-[var(--color-accent)]">
+          {sectionTitle}
+        </h3>
+        <span className="text-xs text-[var(--color-text-muted)]">
+          {section.changes.length}
+        </span>
+      </div>
+      <ul className={compact ? "space-y-2" : "space-y-3"}>
+        {section.changes.slice(0, compact ? 12 : undefined).map((change, idx) => (
+          <ChangeRow key={idx} change={change} chain={chain} compact={compact} />
         ))}
       </ul>
     </section>
@@ -121,26 +138,122 @@ type SectionKey = keyof typeof SECTION_KEYS;
 async function ChangeRow({
   change,
   chain,
+  compact,
 }: {
   change: PatchChange;
   chain: DataLocale[];
+  compact: boolean;
 }) {
   const t = await getTranslations("patchNotes");
   const subject = pickLocaleText(change.subject, chain);
   const text = pickLocaleText(change.text, chain);
   const kindLabel = t(`kinds.${change.kind as ChangeKind}`);
+  const targets = change.targets ?? [];
+  const related = change.relatedEntities ?? [];
+  const metrics = change.metrics ?? [];
+  const labels = change.labels ?? [];
+  const engineRefs = change.impact?.engineRefs ?? [];
 
   return (
-    <li className="flex items-start gap-3 rounded-md border border-[var(--color-border)]/50 bg-[var(--color-bg-card)]/40 px-3 py-2">
-      <ChangeBadge kind={change.kind} label={kindLabel} />
-      <div className="min-w-0 flex-1 text-sm">
-        {subject ? (
-          <div className="font-medium text-[var(--color-text-primary)]">
-            {subject}
+    <li className="rounded-lg border border-[var(--color-border)]/50 bg-[var(--color-bg-card)]/40 px-3 py-3">
+      <div className="flex flex-wrap items-start gap-3">
+        <ChangeBadge kind={change.kind} label={kindLabel} />
+        <div className="min-w-0 flex-1 text-sm">
+          <div className="flex flex-wrap items-center gap-2">
+            {subject ? (
+              <div className="font-medium text-[var(--color-text-primary)]">
+                {subject}
+              </div>
+            ) : null}
+            {change.detail ? (
+              <span className="rounded border border-[var(--color-border)] px-1.5 py-0.5 text-[11px] text-[var(--color-text-muted)]">
+                {change.detail}
+              </span>
+            ) : null}
           </div>
-        ) : null}
-        <div className="text-[var(--color-text-secondary)]">{text}</div>
+          <div className="mt-1 text-[var(--color-text-secondary)]">{text}</div>
+        </div>
       </div>
+
+      {targets.length || related.length ? (
+        <div className="mt-3 flex flex-wrap gap-2">
+          {targets.map((target) => (
+            <EntityChip key={`${target.type}-${target.slug}`} entity={target} />
+          ))}
+          {related.slice(0, compact ? 2 : 5).map((entity) => (
+            <EntityChip
+              key={`rel-${entity.type}-${entity.slug}`}
+              entity={entity}
+              muted
+            />
+          ))}
+        </div>
+      ) : null}
+
+      {metrics.length ? (
+        <div className="mt-3 grid gap-2 sm:grid-cols-2">
+          {metrics.map((metric) => (
+            <div
+              key={`${metric.label}-${metric.before}-${metric.after}`}
+              className="rounded-md border border-[var(--color-border)]/60 bg-[var(--color-bg-primary)]/40 px-3 py-2 text-xs"
+            >
+              <div className="font-medium text-[var(--color-text-primary)]">
+                {metric.label}
+              </div>
+              <div className="mt-1 text-[var(--color-text-muted)]">
+                <span>{metric.before}</span>
+                <span className="mx-2 text-[var(--color-accent)]">→</span>
+                <span>{metric.after}</span>
+              </div>
+            </div>
+          ))}
+        </div>
+      ) : null}
+
+      {!compact && (labels.length || engineRefs.length) ? (
+        <div className="mt-3 flex flex-wrap gap-2 text-[11px]">
+          {labels.slice(0, 5).map((label) => (
+            <span
+              key={label}
+              className="rounded-full border border-[var(--color-border)] px-2 py-0.5 text-[var(--color-text-muted)]"
+            >
+              {label}
+            </span>
+          ))}
+          {engineRefs.length ? (
+            <span className="rounded-full border border-amber-400/30 bg-amber-400/10 px-2 py-0.5 text-amber-300">
+              {t("modelImpact", { count: engineRefs.length })}
+            </span>
+          ) : null}
+        </div>
+      ) : null}
     </li>
   );
+}
+
+function EntityChip({
+  entity,
+  muted = false,
+}: {
+  entity: PatchEntityRef;
+  muted?: boolean;
+}) {
+  const className = `inline-flex min-h-8 items-center rounded-full border px-2 text-xs ${
+    muted
+      ? "border-[var(--color-border)] text-[var(--color-text-muted)]"
+      : entity.known
+        ? "border-[var(--color-accent)]/35 bg-[var(--color-accent)]/10 text-[var(--color-accent)]"
+        : "border-rose-400/30 bg-rose-400/10 text-rose-300"
+  }`;
+  const label = `${entity.type}: ${entity.name}`;
+
+  if (entity.href && entity.known) {
+    return (
+      <Link href={entity.href} className={className}>
+        {label}
+      </Link>
+    );
+  }
+
+  return <span className={className}>{label}</span>;
 }
