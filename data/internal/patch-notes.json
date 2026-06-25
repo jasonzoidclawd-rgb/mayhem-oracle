@@ -1,6 +1,6 @@
 {
   "patch": "26.13",
-  "scraped_at": "2026-06-24T23:07:49.754567+00:00",
+  "scraped_at": "2026-06-25T23:16:38.382066+00:00",
   "source": "https://www.leagueoflegends.com/en-us/news/game-updates/",
   "sourceKind": "official-riot-patch-notes",
   "sourceUrl": "https://www.leagueoflegends.com/en-us/news/game-updates/league-of-legends-patch-26-13-notes",
@@ -16662,6 +16662,7 @@
                   ],
                   "kitTags": [
                     "ability",
+                    "attack",
                     "cc",
                     "haste",
                     "heal_shield",
@@ -18595,6 +18596,7 @@
                   ],
                   "kitTags": [
                     "ability",
+                    "attack",
                     "cc",
                     "haste",
                     "heal_shield",
@@ -18678,6 +18680,7 @@
                   ],
                   "kitTags": [
                     "ability",
+                    "attack",
                     "cc",
                     "haste",
                     "heal_shield",

@@ -1,6 +1,6 @@
 {
-  "patch": "26.12",
-  "fetched_at": "2026-06-24T23:07:50.733183+00:00",
+  "patch": "26.13",
+  "fetched_at": "2026-06-25T23:16:39.486820+00:00",
   "source": "https://raw.communitydragon.org/latest",
   "definition_source": "kiwi-stringtable-v1",
   "augments": [

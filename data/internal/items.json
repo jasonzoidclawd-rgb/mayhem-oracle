@@ -1,5 +1,5 @@
 {
-  "scraped_at": "2026-06-24T23:01:14.953637+00:00",
+  "scraped_at": "2026-06-25T23:09:55.519136+00:00",
   "mayhemExclusive": [
     {
       "slug": "atmas-reckoning",
@@ -253,7 +253,7 @@
       "wikiPassives": [
         {
           "label": "Unique - Immolate:",
-          "text": "Taking or dealing damage activates this passive for 5 seconds. Deal 20 (+ 1.5% of your maximum health) true damage every second to enemies within 325 (+ 100% bonus size) units, with the damage being increased to 150% against minions."
+          "text": "Taking or dealing damage activates this passive for 5 seconds. Deal 20 (+ 3.5% of your bonus health) magic damage every second to enemies within 325 (+ 100% bonus size) units, with the damage being increased to 150% against minions."
         }
       ],
       "wikiNotes": [
