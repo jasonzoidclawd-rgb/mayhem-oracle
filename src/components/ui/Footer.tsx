@@ -27,7 +27,6 @@ export async function Footer() {
     {
       title: t("exploreTitle"),
       links: [
-        { href: "/tier-list", label: tn("tierList") },
         { href: "/champions", label: tn("champions") },
         { href: "/augments", label: tn("augments") },
         { href: "/patch-notes", label: tn("patchNotes") },

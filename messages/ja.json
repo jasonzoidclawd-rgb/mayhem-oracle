@@ -818,8 +818,10 @@
     "faq4A": "トライアルと招待アクセスは自動的に期限切れになります — 解約は不要です。アカウントデータの削除はお問い合わせページからいつでも請求できます。"
   },
   "championsIndex": {
+    "viewTier": "ティアリスト",
     "viewGrid": "グリッド",
     "viewTable": "データ表",
+    "viewLabel": "表示モード",
     "searchPlaceholder": "名前・称号・クラスで検索…",
     "sortWinRate": "勝率",
     "sortTier": "ティア",

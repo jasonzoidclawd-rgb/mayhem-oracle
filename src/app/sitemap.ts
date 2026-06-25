@@ -11,7 +11,6 @@ import { routing } from "@/i18n/routing";
  */
 const STATIC_PATHS = [
   "/",
-  "/tier-list",
   "/champions",
   "/augments",
   "/items",

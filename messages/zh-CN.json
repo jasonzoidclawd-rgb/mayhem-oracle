@@ -818,8 +818,10 @@
     "faq4A": "试用与邀请权限会自动到期 — 无需取消。你可随时在\"联系我们\"页面要求删除账号数据。"
   },
   "championsIndex": {
+    "viewTier": "强度排名",
     "viewGrid": "网格",
     "viewTable": "数据表",
+    "viewLabel": "查看模式",
     "searchPlaceholder": "搜索名称、称号、职业…",
     "sortWinRate": "胜率",
     "sortTier": "分级",

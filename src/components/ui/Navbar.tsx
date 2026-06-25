@@ -15,7 +15,6 @@ const LOCALE_LABELS: Record<Locale, string> = {
 
 const NAV_ITEMS = [
   { href: "/advisor", key: "advisor" },
-  { href: "/tier-list", key: "tierList" },
   { href: "/champions", key: "champions" },
   { href: "/augments", key: "augments" },
   { href: "/items", key: "items" },

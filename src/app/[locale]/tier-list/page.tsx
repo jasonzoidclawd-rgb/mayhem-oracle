@@ -1,9 +1,8 @@
-import { getTranslations, setRequestLocale } from "next-intl/server";
-import { TierListClient } from "@/components/tier-list/TierListClient";
-import { DataProvenance } from "@/components/ui/DataProvenance";
-import { readFile } from "fs/promises";
-import path from "path";
+import { setRequestLocale } from "next-intl/server";
+import { redirect } from "@/i18n/navigation";
 
+// The tier list is now a view inside the unified /champions dashboard.
+// Preserve the old URL for SEO/bookmarks by redirecting to /champions.
 export default async function TierListPage({
   params,
 }: {
@@ -11,22 +10,5 @@ export default async function TierListPage({
 }) {
   const { locale } = await params;
   setRequestLocale(locale);
-  const t = await getTranslations("tierList");
-
-  const dataPath = path.join(process.cwd(), "public", "data", "champions.json");
-  const raw = await readFile(dataPath, "utf-8");
-  const { champions, patch } = JSON.parse(raw);
-
-  return (
-    <div className="py-8">
-      <header className="mb-8">
-        <h1 className="text-3xl font-bold">{t("title")}</h1>
-        <p className="text-[var(--color-text-secondary)] mt-1">
-          {t("subtitle")} · {t("patchLabel", { patch })}
-        </p>
-        <DataProvenance locale={locale} />
-      </header>
-      <TierListClient champions={champions} />
-    </div>
-  );
+  redirect({ href: "/champions", locale });
 }

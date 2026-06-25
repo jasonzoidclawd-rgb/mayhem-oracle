@@ -274,8 +274,10 @@
     "statMissileSpeed": "Missile Speed"
   },
   "championsIndex": {
+    "viewTier": "Tier List",
     "viewGrid": "Grid",
     "viewTable": "Stats Table",
+    "viewLabel": "View mode",
     "searchPlaceholder": "Search name, title, class...",
     "sortWinRate": "Win Rate",
     "sortTier": "Tier",

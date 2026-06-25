@@ -6,7 +6,7 @@ import { usePathname, Link } from "@/i18n/navigation";
 
 const PRIMARY_TABS = [
   { href: "/", glyph: "⌂", key: "tabHome" },
-  { href: "/tier-list", glyph: "▤", key: "tabTiers" },
+  { href: "/champions", glyph: "▤", key: "tabTiers" },
 ] as const;
 
 const SECONDARY_TAB = { href: "/augments", glyph: "◆", key: "tabAugments" } as const;
@@ -15,7 +15,6 @@ const SECONDARY_TAB = { href: "/augments", glyph: "◆", key: "tabAugments" } as
 // account is here too since Navbar's account icon is lg:flex-only below lg.
 const MORE_LINKS = [
   { href: "/advisor", key: "advisor" },
-  { href: "/champions", key: "champions" },
   { href: "/items", key: "items" },
   { href: "/damage-sim", key: "damageSim" },
   { href: "/patch-notes", key: "patchNotes" },

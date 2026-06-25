@@ -818,8 +818,10 @@
     "faq4A": "체험 및 초대 이용권은 자동으로 만료됩니다 — 취소할 필요가 없습니다. 계정 데이터 삭제는 문의 페이지에서 언제든 요청할 수 있습니다."
   },
   "championsIndex": {
+    "viewTier": "티어 리스트",
     "viewGrid": "그리드",
     "viewTable": "스탯 표",
+    "viewLabel": "보기 모드",
     "searchPlaceholder": "이름·칭호·클래스 검색…",
     "sortWinRate": "승률",
     "sortTier": "티어",

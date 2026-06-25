@@ -18,7 +18,7 @@ export async function TierMiniGrid({ champions }: { champions: TierChampion[] })
     <div className="glass-card reveal p-4 md:col-span-6 lg:col-span-8">
       <div className="flex items-center justify-between">
         <h3 className="text-sm font-semibold text-[var(--color-text-primary)]">{t("tierBoardTitle")}</h3>
-        <Link href="/tier-list" className="flex min-h-11 items-center text-sm text-[var(--color-neon-primary)] hover:underline">
+        <Link href="/champions" className="flex min-h-11 items-center text-sm text-[var(--color-neon-primary)] hover:underline">
           {t("tierBoardCta")} →
         </Link>
       </div>

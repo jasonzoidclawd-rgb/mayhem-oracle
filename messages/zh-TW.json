@@ -818,8 +818,10 @@
     "faq4A": "試用與邀請權限會自動到期 — 無需取消。你可隨時在「聯絡我們」頁面要求刪除帳號資料。"
   },
   "championsIndex": {
+    "viewTier": "強度排名",
     "viewGrid": "網格",
     "viewTable": "數據表",
+    "viewLabel": "檢視模式",
     "searchPlaceholder": "搜尋名稱、稱號、職業…",
     "sortWinRate": "勝率",
     "sortTier": "分級",
