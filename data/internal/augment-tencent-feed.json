@@ -3,9 +3,9 @@
   "source": "https://lol.qq.com/gicp/news/410/37088140.html",
   "note": "Section-aware corroboration: Mayhem added/adjusted => live; removed/disabled sections => non-current; unrelated prose is ignored.",
   "counts": {
-    "keys": 266,
+    "keys": 267,
     "live": 58,
-    "no_signal": 172,
+    "no_signal": 173,
     "removed": 36
   },
   "augments": {
@@ -1259,6 +1259,11 @@
       }
     },
     "Dropybara_Active": {
+      "tencent_status": null,
+      "matchedNames": [],
+      "matchedSections": {}
+    },
+    "DustToDiamonds": {
       "tencent_status": null,
       "matchedNames": [],
       "matchedSections": {}

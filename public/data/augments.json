@@ -1,6 +1,6 @@
 {
   "patch": "26.12",
-  "scraped_at": "2026-06-25T23:09:24.282475+00:00",
+  "scraped_at": "2026-06-26T22:59:34.096143+00:00",
   "schemaVersion": "augment-truth-step5",
   "sources": {
     "definition": "data/internal/augment-base-catalog.json",
@@ -8,7 +8,7 @@
     "preserved": "data/internal/augments.json@pre-step5"
   },
   "counts": {
-    "augments": 267,
+    "augments": 268,
     "winRateCoverage": 120
   },
   "augments": [
@@ -5415,7 +5415,7 @@
       "name_zh_TW": "普羅衝鋒",
       "name_ja": "ポロの大群",
       "name_ko": "포로 쇄도",
-      "wikiDescription": "Poro-Snaxes will now randomly appear around you every 35 – 20 (based on level) seconds. You can pick up a Poro-Snax by moving over it, granting you a Poro-Snax charge. Poro-Snaxes will not spawn while you are at the maximum number of Poro-Snax charges (2). Feeding a Poro with a Poro-Snax generates a stack of Poro Love. At 5 stacks, you are granted the Poro Charge summoner spell and are prompted to replace one of your summoner spells with it. You are then assigned with quests that require you to reach a certain amount of Poro Love stacks. There are nine quest tiers, and each completed tier rewards you with an additional Poro wave for Poro Charge. Poro Charge: After a 1-second delay, you unleash a stampede of Poros, summoning a phalanx of 5 Poros that charge forward in the target direction. Enemies hit by the charge are dealt 50 – 100 (based on level) (+ 20 per Poro Love stack) physical damage, reduced to 15% against minions, and slowed by 85% for 2 seconds. Each Poro stops upon colliding with an enemy champion. Fire additional waves of Poros based on the number of Poro Love stacks you have. Each subsequent wave is fired 0.75 seconds after the previous one. Enemy champions take 50% damage from subsequent waves that hit them.",
+      "wikiDescription": "Poro-Snaxes will now randomly appear around you every 35 – 20 (based on level) seconds. You can pick up a Poro-Snax by moving over it, granting you a Poro-Snax charge. Poro-Snaxes will not spawn while you are at the maximum number of Poro-Snax charges (2). Feeding a Poro with a Poro-Snax generates a stack of Poro Love. At 5 stacks, you are granted the Poro Charge summoner spell and are prompted to replace one of your summoner spells with it. You are then assigned with quests that require you to reach a certain amount of Poro Love stacks. There are nine quest tiers, and each completed tier rewards you with an additional Poro wave for Poro Charge. Poro Charge: After a 1-second delay, you unleash a stampede of Poros, summoning a phalanx of 5 massive Poros that charge forward in the target direction. Enemies hit by the charge are dealt 50 – 100 (based on level) (+ 20 per Poro Love stack) physical damage, reduced to 15% against minions, and slowed by 85% for 2 seconds. Each Poro stops upon colliding with an enemy champion. Fire additional waves of Poros based on the number of Poro Love stacks you have. Each subsequent wave is fired 0.75 seconds after the previous one. Enemy champions take 50% damage from subsequent waves that hit them.",
       "wikiRarity": "prismatic"
     },
     {
@@ -7737,6 +7737,32 @@
       "name_ko": "선순환",
       "wikiDescription": "Your heals grant a shield for 5 seconds that is equal to 20% of the healing value, and your shields grant a heal equal to 20% of the shield's strength. This effect cannot trigger from itself.",
       "wikiRarity": "silver"
+    },
+    {
+      "augmentId": "DustToDiamonds",
+      "slug": "dust-to-diamonds",
+      "name": "Dust To Diamonds",
+      "displayName": "Dust To Diamonds",
+      "rarity": "silver",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/dust_to_diamonds_small.png",
+      "names": {
+        "en": "Dust To Diamonds",
+        "zh_cn": "变废为宝",
+        "zh_tw": "塵土變鑽石",
+        "ja": "塵がダイヤモンドに",
+        "ko": "먼지에서 다이아몬드로"
+      },
+      "kit_tags": [],
+      "flags": {
+        "system_breaker": false,
+        "lifecycle": "removed",
+        "lifecycle_patch": "26.13"
+      },
+      "type": "standalone",
+      "name_zh_CN": "变废为宝",
+      "name_zh_TW": "塵土變鑽石",
+      "name_ja": "塵がダイヤモンドに",
+      "name_ko": "먼지에서 다이아몬드로"
     }
   ]
 }

@@ -4,7 +4,7 @@
   "source": "lol_wiki",
   "sourceUrl": "https://wiki.leagueoflegends.com/en-us/ARAM:_Mayhem/Augments",
   "counts": {
-    "existence": 57,
+    "existence": 58,
     "rarity": 2,
     "availability": 14
   },
@@ -355,6 +355,13 @@
       "augmentId": "BabyKitty",
       "name": "I'm a Baby Kitty Where is Mama",
       "rarity": "prismatic"
+    },
+    {
+      "kind": "cdragon_only",
+      "source": "cdragon",
+      "augmentId": "DustToDiamonds",
+      "name": "Dust To Diamonds",
+      "rarity": "silver"
     },
     {
       "kind": "cdragon_only",

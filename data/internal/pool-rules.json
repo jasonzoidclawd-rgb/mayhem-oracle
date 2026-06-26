@@ -1,6 +1,6 @@
 {
   "patch": "26.13",
-  "scraped_at": "2026-06-25T23:16:38.382066+00:00",
+  "scraped_at": "2026-06-26T23:07:18.475155+00:00",
   "availability": {
     "offerable": {
       "adapt": "confirmed_live",
@@ -211,6 +211,7 @@
       "devil-on-your-shoulder": "disabled",
       "dont-change-the-channel": "unverified_legacy",
       "droppybara": "disabled",
+      "dust-to-diamonds": "candidate_registry_present",
       "executioner": "removed",
       "feel-the-burn": "removed",
       "final-city-transit": "disabled",
@@ -305,6 +306,7 @@
       "devil-on-your-shoulder": "26.13",
       "dont-change-the-channel": "26.13",
       "droppybara": "26.13",
+      "dust-to-diamonds": "26.13",
       "executioner": "26.13",
       "feel-the-burn": "26.13",
       "final-city-transit": "26.13",

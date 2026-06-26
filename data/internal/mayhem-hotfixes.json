@@ -1,6 +1,21 @@
 {
   "events": [
     {
+      "detected_at": "2026-06-26T23:07:19.609363+00:00",
+      "patch": "26.13",
+      "date": "2026-06-26",
+      "changes": [
+        {
+          "slug": "dust-to-diamonds",
+          "names": {
+            "en": "Dust To Diamonds"
+          },
+          "rarity": "silver",
+          "type": "added"
+        }
+      ]
+    },
+    {
       "detected_at": "2026-06-20T18:56:38.048204+00:00",
       "patch": "26.12",
       "date": "2026-06-20",
@@ -36,6 +51,6 @@
       ]
     }
   ],
-  "patch": "26.12",
-  "generated_at": "2026-06-22T23:20:14.549524+00:00"
+  "patch": "26.13",
+  "generated_at": "2026-06-26T23:07:19.609363+00:00"
 }

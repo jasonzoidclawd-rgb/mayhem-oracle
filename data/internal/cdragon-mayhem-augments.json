@@ -1,6 +1,6 @@
 {
   "patch": "26.13",
-  "fetched_at": "2026-06-25T23:16:39.486820+00:00",
+  "fetched_at": "2026-06-26T23:07:19.609363+00:00",
   "source": "https://raw.communitydragon.org/latest",
   "definition_source": "kiwi-stringtable-v1",
   "augments": [
@@ -2495,6 +2495,16 @@
       "slug": "dropybara_-active",
       "rarity": "prismatic",
       "tooltip": ""
+    },
+    {
+      "nameId": "DustToDiamonds",
+      "name": "Dust To Diamonds",
+      "names": {
+        "en": "Dust To Diamonds"
+      },
+      "slug": "dust-to-diamonds",
+      "rarity": "silver",
+      "tooltip": "When <keywordMajor>Dust To Diamonds</keywordMajor> is removed or replaced gain a <keywordMajor>@AnvilsGranted@ %i:StatAnvil% Prismatic Stat Anvils</keywordMajor>."
     },
     {
       "nameId": "EmpyreanPromise",

@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "identity_key": "CDragon augmentNameId",
-  "generated_at": "2026-06-25T23:09:24.282475+00:00",
+  "generated_at": "2026-06-26T22:59:34.096143+00:00",
   "source": "https://raw.communitydragon.org/latest",
   "sources": {
     "roster": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/cherry-augments.json",
@@ -26,26 +26,33 @@
     "Rows without an arenaApiName are registry/stringtable definitions with no rich arena dataValues/calculations in the fetched endpoint."
   ],
   "counts": {
-    "augments": 245,
+    "augments": 246,
     "richEndpointMatches": 119,
     "definitionPlaceholders": 1,
     "withIconLarge": 119,
-    "withIconSmall": 245,
-    "withRosterSmallIcon": 245,
+    "withIconSmall": 246,
+    "withRosterSmallIcon": 246,
     "withDataValues": 119,
     "withCalculations": 45,
-    "withTooltip": 242,
-    "withAllLocaleNames": 245,
-    "kiwiDefinitionTokens": 259,
-    "kiwiUnmatchedTokens": 14,
+    "withTooltip": 243,
+    "withAllLocaleNames": 246,
+    "kiwiDefinitionTokens": 261,
+    "kiwiUnmatchedTokens": 15,
     "kiwiAmbiguousTokens": 0,
     "kiwiAliasedTokens": 10
   },
   "reports": {
     "kiwiDefinitions": {
-      "definitionTokens": 259,
-      "matchedRegistryRows": 245,
+      "definitionTokens": 261,
+      "matchedRegistryRows": 246,
       "unmatchedTokens": [
+        {
+          "token": "burn",
+          "keys": [
+            "kiwi_burn_name",
+            "kiwi_burn_tooltip"
+          ]
+        },
         {
           "token": "burstingteethcounter",
           "keys": [
@@ -28861,6 +28868,121 @@
           "ko": {
             "desc": "cdragon:stringtable:kiwi_augment_droppybara_summary",
             "tooltip": "cdragon:stringtable:kiwi_augment_droppybara_tooltip"
+          }
+        },
+        "dataValues": "",
+        "calculations": ""
+      }
+    },
+    {
+      "augmentId": "DustToDiamonds",
+      "slug": "dust-to-diamonds",
+      "cdragon": {
+        "rosterId": 394,
+        "augmentNameId": "DustToDiamonds",
+        "arenaApiName": null,
+        "stringtableTokens": [
+          "dusttodiamonds"
+        ],
+        "kiwi": {
+          "present": true,
+          "tokens": [
+            "dusttodiamonds"
+          ],
+          "keys": [
+            "kiwi_dusttodiamonds_name",
+            "kiwi_dusttodiamonds_tooltip"
+          ],
+          "kinds": [
+            "name",
+            "tooltip"
+          ]
+        }
+      },
+      "name": "Dust To Diamonds",
+      "names": {
+        "en": "Dust To Diamonds",
+        "zh_cn": "变废为宝",
+        "zh_tw": "塵土變鑽石",
+        "ja": "塵がダイヤモンドに",
+        "ko": "먼지에서 다이아몬드로"
+      },
+      "rarity": "silver",
+      "icon": {
+        "large": "",
+        "small": "/lol-game-data/assets/ASSETS/UX/Cherry/Augments/Icons/Dust_to_Diamonds_small.png",
+        "rosterSmall": "/lol-game-data/assets/ASSETS/UX/Cherry/Augments/Icons/Dust_to_Diamonds_small.png"
+      },
+      "effectText": {
+        "desc": "",
+        "tooltip": "When <keywordMajor>Dust To Diamonds</keywordMajor> is removed or replaced gain a <keywordMajor>@AnvilsGranted@ %i:StatAnvil% Prismatic Stat Anvils</keywordMajor>."
+      },
+      "effectTextByLocale": {
+        "en": {
+          "desc": "",
+          "tooltip": "When <keywordMajor>Dust To Diamonds</keywordMajor> is removed or replaced gain a <keywordMajor>@AnvilsGranted@ %i:StatAnvil% Prismatic Stat Anvils</keywordMajor>."
+        },
+        "zh_cn": {
+          "desc": "",
+          "tooltip": "当<keywordMajor>变废为宝</keywordMajor>被移除或替换时，会获得<keywordMajor>@AnvilsGranted@个%i:StatAnvil%棱彩阶属性锻造器</keywordMajor>。"
+        },
+        "zh_tw": {
+          "desc": "",
+          "tooltip": "<keywordMajor>塵土變鑽石</keywordMajor>被移除或替換時，獲得<keywordMajor>@AnvilsGranted@個%i:StatAnvil%稜鏡能力值鐵砧</keywordMajor>。"
+        },
+        "ja": {
+          "desc": "",
+          "tooltip": "<keywordMajor>「塵がダイヤモンドに」</keywordMajor>が削除または置き換えられると、<keywordMajor>@AnvilsGranted@ %i:StatAnvil% プリズムのステータスの金床</keywordMajor>を獲得する。"
+        },
+        "ko": {
+          "desc": "",
+          "tooltip": "<keywordMajor>먼지에서 다이아몬드로</keywordMajor>가 제거되거나 교체되면 <keywordMajor>%i:StatAnvil% 프리즘 능력치 모루 @AnvilsGranted@개</keywordMajor>를 획득합니다."
+        }
+      },
+      "dataValues": {},
+      "calculations": {},
+      "definitionPlaceholder": false,
+      "provenance": {
+        "definition": "cdragon",
+        "augmentId": "cdragon:cherry-augments.augmentNameId",
+        "name": "cdragon:stringtable:kiwi_dusttodiamonds_name",
+        "names": {
+          "en": "cdragon:stringtable:kiwi_dusttodiamonds_name",
+          "zh_cn": "cdragon:stringtable:kiwi_dusttodiamonds_name",
+          "zh_tw": "cdragon:stringtable:kiwi_dusttodiamonds_name",
+          "ja": "cdragon:stringtable:kiwi_dusttodiamonds_name",
+          "ko": "cdragon:stringtable:kiwi_dusttodiamonds_name"
+        },
+        "rarity": "cdragon:cherry-augments.rarity",
+        "icon": {
+          "large": "",
+          "small": "cdragon:cherry-augments.augmentSmallIconPath",
+          "rosterSmall": "cdragon:cherry-augments.augmentSmallIconPath"
+        },
+        "effectText": {
+          "desc": "",
+          "tooltip": "cdragon:stringtable:kiwi_dusttodiamonds_tooltip"
+        },
+        "effectTextByLocale": {
+          "en": {
+            "desc": "",
+            "tooltip": "cdragon:stringtable:kiwi_dusttodiamonds_tooltip"
+          },
+          "zh_cn": {
+            "desc": "",
+            "tooltip": "cdragon:stringtable:kiwi_dusttodiamonds_tooltip"
+          },
+          "zh_tw": {
+            "desc": "",
+            "tooltip": "cdragon:stringtable:kiwi_dusttodiamonds_tooltip"
+          },
+          "ja": {
+            "desc": "",
+            "tooltip": "cdragon:stringtable:kiwi_dusttodiamonds_tooltip"
+          },
+          "ko": {
+            "desc": "",
+            "tooltip": "cdragon:stringtable:kiwi_dusttodiamonds_tooltip"
           }
         },
         "dataValues": "",
