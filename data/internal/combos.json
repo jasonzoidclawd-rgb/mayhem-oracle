@@ -1,6 +1,6 @@
 {
   "patch": "26.13",
-  "scraped_at": "2026-06-26T22:59:41.149356+00:00",
+  "scraped_at": "2026-06-27T22:56:32.996510+00:00",
   "generated_from": "internal-pool-mechanics",
   "combos": [
     {
@@ -2406,6 +2406,13 @@
     },
     {
       "champion": "anivia",
+      "augment": "Combusting Interest",
+      "augmentSlug": "combusting-interest",
+      "tier": "A",
+      "ref": "mechanical:dot_synergy"
+    },
+    {
+      "champion": "anivia",
       "augment": "Firebrand",
       "augmentSlug": "firebrand",
       "tier": "A",
@@ -2725,6 +2732,13 @@
       "augmentSlug": "with-haste",
       "tier": "S",
       "ref": "mechanical:ability_haste"
+    },
+    {
+      "champion": "annie",
+      "augment": "Combusting Interest",
+      "augmentSlug": "combusting-interest",
+      "tier": "A",
+      "ref": "mechanical:dot_synergy"
     },
     {
       "champion": "annie",
@@ -5185,6 +5199,13 @@
     },
     {
       "champion": "brand",
+      "augment": "Combusting Interest",
+      "augmentSlug": "combusting-interest",
+      "tier": "A",
+      "ref": "mechanical:dot_synergy"
+    },
+    {
+      "champion": "brand",
       "augment": "Dropkick",
       "augmentSlug": "dropkick",
       "tier": "A",
@@ -5728,6 +5749,13 @@
       "augmentSlug": "blade-waltz",
       "tier": "A",
       "ref": "mechanical:on_hit"
+    },
+    {
+      "champion": "briar",
+      "augment": "Combusting Interest",
+      "augmentSlug": "combusting-interest",
+      "tier": "A",
+      "ref": "mechanical:dot_synergy"
     },
     {
       "champion": "briar",
@@ -6732,6 +6760,13 @@
     },
     {
       "champion": "cassiopeia",
+      "augment": "Combusting Interest",
+      "augmentSlug": "combusting-interest",
+      "tier": "S",
+      "ref": "mechanical:dot_synergy"
+    },
+    {
+      "champion": "cassiopeia",
       "augment": "Firebrand",
       "augmentSlug": "firebrand",
       "tier": "S",
@@ -7369,6 +7404,13 @@
     },
     {
       "champion": "corki",
+      "augment": "Combusting Interest",
+      "augmentSlug": "combusting-interest",
+      "tier": "S",
+      "ref": "mechanical:dot_synergy"
+    },
+    {
+      "champion": "corki",
       "augment": "Firebrand",
       "augmentSlug": "firebrand",
       "tier": "S",
@@ -7730,6 +7772,13 @@
       "augmentSlug": "double-defense",
       "tier": "S",
       "ref": "ability-fit:Q"
+    },
+    {
+      "champion": "darius",
+      "augment": "Combusting Interest",
+      "augmentSlug": "combusting-interest",
+      "tier": "S",
+      "ref": "mechanical:dot_synergy"
     },
     {
       "champion": "darius",
@@ -8881,6 +8930,13 @@
     },
     {
       "champion": "drmundo",
+      "augment": "Combusting Interest",
+      "augmentSlug": "combusting-interest",
+      "tier": "A",
+      "ref": "mechanical:dot_synergy"
+    },
+    {
+      "champion": "drmundo",
       "augment": "Firebrand",
       "augmentSlug": "firebrand",
       "tier": "A",
@@ -10547,6 +10603,13 @@
     },
     {
       "champion": "fiddlesticks",
+      "augment": "Combusting Interest",
+      "augmentSlug": "combusting-interest",
+      "tier": "S",
+      "ref": "mechanical:dot_synergy"
+    },
+    {
+      "champion": "fiddlesticks",
       "augment": "Firebrand",
       "augmentSlug": "firebrand",
       "tier": "S",
@@ -11121,6 +11184,13 @@
     },
     {
       "champion": "fizz",
+      "augment": "Combusting Interest",
+      "augmentSlug": "combusting-interest",
+      "tier": "A",
+      "ref": "mechanical:dot_synergy"
+    },
+    {
+      "champion": "fizz",
       "augment": "Dashing",
       "augmentSlug": "dashing",
       "tier": "A",
@@ -11468,6 +11538,13 @@
       "augmentSlug": "double-defense",
       "tier": "A",
       "ref": "ability-fit:R"
+    },
+    {
+      "champion": "galio",
+      "augment": "Combusting Interest",
+      "augmentSlug": "combusting-interest",
+      "tier": "A",
+      "ref": "mechanical:dot_synergy"
     },
     {
       "champion": "galio",
@@ -11821,6 +11898,13 @@
     },
     {
       "champion": "gangplank",
+      "augment": "Combusting Interest",
+      "augmentSlug": "combusting-interest",
+      "tier": "A",
+      "ref": "mechanical:dot_synergy"
+    },
+    {
+      "champion": "gangplank",
       "augment": "Dropkick",
       "augmentSlug": "dropkick",
       "tier": "A",
@@ -11937,6 +12021,13 @@
       "augmentSlug": "blade-waltz",
       "tier": "A",
       "ref": "mechanical:on_hit"
+    },
+    {
+      "champion": "garen",
+      "augment": "Combusting Interest",
+      "augmentSlug": "combusting-interest",
+      "tier": "A",
+      "ref": "mechanical:dot_synergy"
     },
     {
       "champion": "garen",
@@ -13655,6 +13746,13 @@
     },
     {
       "champion": "hecarim",
+      "augment": "Combusting Interest",
+      "augmentSlug": "combusting-interest",
+      "tier": "A",
+      "ref": "mechanical:dot_synergy"
+    },
+    {
+      "champion": "hecarim",
       "augment": "Courage of the Colossus",
       "augmentSlug": "courage-of-the-colossus",
       "tier": "A",
@@ -19070,6 +19168,13 @@
       "augmentSlug": "vulnerability",
       "tier": "S",
       "ref": "mechanical:ability_crit"
+    },
+    {
+      "champion": "katarina",
+      "augment": "Combusting Interest",
+      "augmentSlug": "combusting-interest",
+      "tier": "A",
+      "ref": "mechanical:dot_synergy"
     },
     {
       "champion": "katarina",
@@ -19822,6 +19927,13 @@
     },
     {
       "champion": "kennen",
+      "augment": "Combusting Interest",
+      "augmentSlug": "combusting-interest",
+      "tier": "A",
+      "ref": "mechanical:dot_synergy"
+    },
+    {
+      "champion": "kennen",
       "augment": "Crit 'n Cast",
       "augmentSlug": "crit-n-cast",
       "tier": "A",
@@ -22811,6 +22923,13 @@
     },
     {
       "champion": "lillia",
+      "augment": "Combusting Interest",
+      "augmentSlug": "combusting-interest",
+      "tier": "A",
+      "ref": "mechanical:dot_synergy"
+    },
+    {
+      "champion": "lillia",
       "augment": "Dropkick",
       "augmentSlug": "dropkick",
       "tier": "A",
@@ -23889,6 +24008,13 @@
     },
     {
       "champion": "lulu",
+      "augment": "Combusting Interest",
+      "augmentSlug": "combusting-interest",
+      "tier": "A",
+      "ref": "mechanical:dot_synergy"
+    },
+    {
+      "champion": "lulu",
       "augment": "Courage of the Colossus",
       "augmentSlug": "courage-of-the-colossus",
       "tier": "A",
@@ -24957,6 +25083,13 @@
       "augmentSlug": "zealot",
       "tier": "C",
       "ref": "mechanical:attack_speed"
+    },
+    {
+      "champion": "malzahar",
+      "augment": "Combusting Interest",
+      "augmentSlug": "combusting-interest",
+      "tier": "S",
+      "ref": "mechanical:dot_synergy"
     },
     {
       "champion": "malzahar",
@@ -25450,6 +25583,13 @@
     },
     {
       "champion": "maokai",
+      "augment": "Combusting Interest",
+      "augmentSlug": "combusting-interest",
+      "tier": "A",
+      "ref": "mechanical:dot_synergy"
+    },
+    {
+      "champion": "maokai",
       "augment": "Dropkick",
       "augmentSlug": "dropkick",
       "tier": "A",
@@ -25842,6 +25982,13 @@
     },
     {
       "champion": "masteryi",
+      "augment": "Combusting Interest",
+      "augmentSlug": "combusting-interest",
+      "tier": "A",
+      "ref": "mechanical:dot_synergy"
+    },
+    {
+      "champion": "masteryi",
       "augment": "Final Form",
       "augmentSlug": "final-form",
       "tier": "A",
@@ -25979,6 +26126,13 @@
       "augmentSlug": "tripleshot",
       "tier": "S",
       "ref": "ability-fit:E"
+    },
+    {
+      "champion": "mel",
+      "augment": "Combusting Interest",
+      "augmentSlug": "combusting-interest",
+      "tier": "A",
+      "ref": "mechanical:dot_synergy"
     },
     {
       "champion": "mel",
@@ -26224,6 +26378,13 @@
       "augmentSlug": "vulnerability",
       "tier": "S",
       "ref": "mechanical:ability_crit"
+    },
+    {
+      "champion": "milio",
+      "augment": "Combusting Interest",
+      "augmentSlug": "combusting-interest",
+      "tier": "A",
+      "ref": "mechanical:dot_synergy"
     },
     {
       "champion": "milio",
@@ -26497,6 +26658,13 @@
       "augmentSlug": "blade-waltz",
       "tier": "A",
       "ref": "mechanical:on_hit"
+    },
+    {
+      "champion": "missfortune",
+      "augment": "Combusting Interest",
+      "augmentSlug": "combusting-interest",
+      "tier": "A",
+      "ref": "mechanical:dot_synergy"
     },
     {
       "champion": "missfortune",
@@ -26840,6 +27008,13 @@
       "augmentSlug": "chain-reaction",
       "tier": "A",
       "ref": "ability-fit:R"
+    },
+    {
+      "champion": "monkeyking",
+      "augment": "Combusting Interest",
+      "augmentSlug": "combusting-interest",
+      "tier": "A",
+      "ref": "mechanical:dot_synergy"
     },
     {
       "champion": "monkeyking",
@@ -27319,6 +27494,13 @@
     },
     {
       "champion": "mordekaiser",
+      "augment": "Combusting Interest",
+      "augmentSlug": "combusting-interest",
+      "tier": "A",
+      "ref": "mechanical:dot_synergy"
+    },
+    {
+      "champion": "mordekaiser",
       "augment": "Courage of the Colossus",
       "augmentSlug": "courage-of-the-colossus",
       "tier": "A",
@@ -27526,6 +27708,13 @@
       "augmentSlug": "vulnerability",
       "tier": "S",
       "ref": "mechanical:ability_crit"
+    },
+    {
+      "champion": "morgana",
+      "augment": "Combusting Interest",
+      "augmentSlug": "combusting-interest",
+      "tier": "A",
+      "ref": "mechanical:dot_synergy"
     },
     {
       "champion": "morgana",
@@ -27904,6 +28093,13 @@
       "augmentSlug": "blade-waltz",
       "tier": "A",
       "ref": "mechanical:dash_synergy"
+    },
+    {
+      "champion": "naafiri",
+      "augment": "Combusting Interest",
+      "augmentSlug": "combusting-interest",
+      "tier": "A",
+      "ref": "mechanical:dot_synergy"
     },
     {
       "champion": "naafiri",
@@ -28614,6 +28810,13 @@
     },
     {
       "champion": "nasus",
+      "augment": "Combusting Interest",
+      "augmentSlug": "combusting-interest",
+      "tier": "S",
+      "ref": "mechanical:dot_synergy"
+    },
+    {
+      "champion": "nasus",
       "augment": "Firebrand",
       "augmentSlug": "firebrand",
       "tier": "S",
@@ -28933,6 +29136,13 @@
       "augmentSlug": "chain-reaction",
       "tier": "A",
       "ref": "ability-fit:R"
+    },
+    {
+      "champion": "nautilus",
+      "augment": "Combusting Interest",
+      "augmentSlug": "combusting-interest",
+      "tier": "A",
+      "ref": "mechanical:dot_synergy"
     },
     {
       "champion": "nautilus",
@@ -29958,6 +30168,13 @@
     },
     {
       "champion": "nilah",
+      "augment": "Combusting Interest",
+      "augmentSlug": "combusting-interest",
+      "tier": "A",
+      "ref": "mechanical:dot_synergy"
+    },
+    {
+      "champion": "nilah",
       "augment": "Critical Rhythm",
       "augmentSlug": "critical-rhythm",
       "tier": "A",
@@ -31974,6 +32191,13 @@
     },
     {
       "champion": "ornn",
+      "augment": "Combusting Interest",
+      "augmentSlug": "combusting-interest",
+      "tier": "A",
+      "ref": "mechanical:dot_synergy"
+    },
+    {
+      "champion": "ornn",
       "augment": "Courage of the Colossus",
       "augmentSlug": "courage-of-the-colossus",
       "tier": "A",
@@ -32681,6 +32905,13 @@
     },
     {
       "champion": "poppy",
+      "augment": "Combusting Interest",
+      "augmentSlug": "combusting-interest",
+      "tier": "A",
+      "ref": "mechanical:dot_synergy"
+    },
+    {
+      "champion": "poppy",
       "augment": "Critical Rhythm",
       "augmentSlug": "critical-rhythm",
       "tier": "A",
@@ -33070,6 +33301,13 @@
       "augmentSlug": "blade-waltz",
       "tier": "A",
       "ref": "mechanical:dash_synergy"
+    },
+    {
+      "champion": "pyke",
+      "augment": "Combusting Interest",
+      "augmentSlug": "combusting-interest",
+      "tier": "A",
+      "ref": "mechanical:dot_synergy"
     },
     {
       "champion": "pyke",
@@ -33497,6 +33735,13 @@
       "augmentSlug": "chain-reaction",
       "tier": "A",
       "ref": "ability-fit:R"
+    },
+    {
+      "champion": "qiyana",
+      "augment": "Combusting Interest",
+      "augmentSlug": "combusting-interest",
+      "tier": "A",
+      "ref": "mechanical:dot_synergy"
     },
     {
       "champion": "qiyana",
@@ -35327,6 +35572,13 @@
     },
     {
       "champion": "reksai",
+      "augment": "Combusting Interest",
+      "augmentSlug": "combusting-interest",
+      "tier": "A",
+      "ref": "mechanical:dot_synergy"
+    },
+    {
+      "champion": "reksai",
       "augment": "Dropkick",
       "augmentSlug": "dropkick",
       "tier": "A",
@@ -35726,6 +35978,13 @@
     },
     {
       "champion": "renata",
+      "augment": "Combusting Interest",
+      "augmentSlug": "combusting-interest",
+      "tier": "A",
+      "ref": "mechanical:dot_synergy"
+    },
+    {
+      "champion": "renata",
       "augment": "Courage of the Colossus",
       "augmentSlug": "courage-of-the-colossus",
       "tier": "A",
@@ -35919,6 +36178,13 @@
       "augmentSlug": "blade-waltz",
       "tier": "A",
       "ref": "mechanical:dash_synergy"
+    },
+    {
+      "champion": "renekton",
+      "augment": "Combusting Interest",
+      "augmentSlug": "combusting-interest",
+      "tier": "A",
+      "ref": "mechanical:dot_synergy"
     },
     {
       "champion": "renekton",
@@ -37039,6 +37305,13 @@
       "augmentSlug": "double-defense",
       "tier": "S",
       "ref": "ability-fit:W"
+    },
+    {
+      "champion": "rumble",
+      "augment": "Combusting Interest",
+      "augmentSlug": "combusting-interest",
+      "tier": "S",
+      "ref": "mechanical:dot_synergy"
     },
     {
       "champion": "rumble",
@@ -39650,6 +39923,13 @@
       "augmentSlug": "blade-waltz",
       "tier": "S",
       "ref": "mechanical:on_hit"
+    },
+    {
+      "champion": "shaco",
+      "augment": "Combusting Interest",
+      "augmentSlug": "combusting-interest",
+      "tier": "S",
+      "ref": "mechanical:dot_synergy"
     },
     {
       "champion": "shaco",
@@ -40689,6 +40969,13 @@
     },
     {
       "champion": "singed",
+      "augment": "Combusting Interest",
+      "augmentSlug": "combusting-interest",
+      "tier": "S",
+      "ref": "mechanical:dot_synergy"
+    },
+    {
+      "champion": "singed",
       "augment": "Firebrand",
       "augmentSlug": "firebrand",
       "tier": "S",
@@ -41410,6 +41697,13 @@
     },
     {
       "champion": "skarner",
+      "augment": "Combusting Interest",
+      "augmentSlug": "combusting-interest",
+      "tier": "A",
+      "ref": "mechanical:dot_synergy"
+    },
+    {
+      "champion": "skarner",
       "augment": "Critical Rhythm",
       "augmentSlug": "critical-rhythm",
       "tier": "A",
@@ -41771,6 +42065,13 @@
       "augmentSlug": "double-defense",
       "tier": "A",
       "ref": "ability-fit:R"
+    },
+    {
+      "champion": "smolder",
+      "augment": "Combusting Interest",
+      "augmentSlug": "combusting-interest",
+      "tier": "A",
+      "ref": "mechanical:dot_synergy"
     },
     {
       "champion": "smolder",
@@ -42695,6 +42996,13 @@
       "augmentSlug": "double-defense",
       "tier": "A",
       "ref": "ability-fit:R"
+    },
+    {
+      "champion": "swain",
+      "augment": "Combusting Interest",
+      "augmentSlug": "combusting-interest",
+      "tier": "A",
+      "ref": "mechanical:dot_synergy"
     },
     {
       "champion": "swain",
@@ -44273,6 +44581,13 @@
     },
     {
       "champion": "talon",
+      "augment": "Combusting Interest",
+      "augmentSlug": "combusting-interest",
+      "tier": "A",
+      "ref": "mechanical:dot_synergy"
+    },
+    {
+      "champion": "talon",
       "augment": "Critical Rhythm",
       "augmentSlug": "critical-rhythm",
       "tier": "A",
@@ -44725,6 +45040,13 @@
       "augmentSlug": "terror",
       "tier": "B",
       "ref": "ability-fit:Q/W/E"
+    },
+    {
+      "champion": "teemo",
+      "augment": "Combusting Interest",
+      "augmentSlug": "combusting-interest",
+      "tier": "S",
+      "ref": "mechanical:dot_synergy"
     },
     {
       "champion": "teemo",
@@ -45698,6 +46020,13 @@
       "augmentSlug": "vulnerability",
       "tier": "S",
       "ref": "mechanical:ability_crit"
+    },
+    {
+      "champion": "trundle",
+      "augment": "Combusting Interest",
+      "augmentSlug": "combusting-interest",
+      "tier": "A",
+      "ref": "mechanical:dot_synergy"
     },
     {
       "champion": "trundle",
@@ -46818,6 +47147,13 @@
       "augmentSlug": "blade-waltz",
       "tier": "A",
       "ref": "mechanical:on_hit"
+    },
+    {
+      "champion": "twitch",
+      "augment": "Combusting Interest",
+      "augmentSlug": "combusting-interest",
+      "tier": "A",
+      "ref": "mechanical:dot_synergy"
     },
     {
       "champion": "twitch",
@@ -49033,6 +49369,13 @@
     },
     {
       "champion": "velkoz",
+      "augment": "Combusting Interest",
+      "augmentSlug": "combusting-interest",
+      "tier": "A",
+      "ref": "mechanical:dot_synergy"
+    },
+    {
+      "champion": "velkoz",
       "augment": "Dropkick",
       "augmentSlug": "dropkick",
       "tier": "A",
@@ -50521,6 +50864,13 @@
       "augmentSlug": "vulnerability",
       "tier": "S",
       "ref": "mechanical:ability_crit"
+    },
+    {
+      "champion": "viktor",
+      "augment": "Combusting Interest",
+      "augmentSlug": "combusting-interest",
+      "tier": "A",
+      "ref": "mechanical:dot_synergy"
     },
     {
       "champion": "viktor",
@@ -53699,6 +54049,13 @@
       "augmentSlug": "blade-waltz",
       "tier": "A",
       "ref": "mechanical:on_hit"
+    },
+    {
+      "champion": "yunara",
+      "augment": "Combusting Interest",
+      "augmentSlug": "combusting-interest",
+      "tier": "A",
+      "ref": "mechanical:dot_synergy"
     },
     {
       "champion": "yunara",
@@ -54115,6 +54472,13 @@
     },
     {
       "champion": "yuumi",
+      "augment": "Combusting Interest",
+      "augmentSlug": "combusting-interest",
+      "tier": "S",
+      "ref": "mechanical:dot_synergy"
+    },
+    {
+      "champion": "yuumi",
       "augment": "Dashing",
       "augmentSlug": "dashing",
       "tier": "S",
@@ -54525,6 +54889,13 @@
       "augmentSlug": "blade-waltz",
       "tier": "A",
       "ref": "mechanical:on_hit"
+    },
+    {
+      "champion": "zaahen",
+      "augment": "Combusting Interest",
+      "augmentSlug": "combusting-interest",
+      "tier": "A",
+      "ref": "mechanical:dot_synergy"
     },
     {
       "champion": "zaahen",

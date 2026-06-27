@@ -1,6 +1,6 @@
 {
   "patch": "26.13",
-  "fetched_at": "2026-06-26T23:07:19.609363+00:00",
+  "fetched_at": "2026-06-27T23:04:03.100578+00:00",
   "source": "https://raw.communitydragon.org/latest",
   "definition_source": "kiwi-stringtable-v1",
   "augments": [
@@ -2500,7 +2500,11 @@
       "nameId": "DustToDiamonds",
       "name": "Dust To Diamonds",
       "names": {
-        "en": "Dust To Diamonds"
+        "en": "Dust To Diamonds",
+        "zh-TW": "塵土變鑽石",
+        "zh-CN": "变废为宝",
+        "ja": "塵がダイヤモンドに",
+        "ko": "먼지에서 다이아몬드로"
       },
       "slug": "dust-to-diamonds",
       "rarity": "silver",

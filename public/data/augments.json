@@ -1,6 +1,6 @@
 {
   "patch": "26.12",
-  "scraped_at": "2026-06-26T22:59:34.096143+00:00",
+  "scraped_at": "2026-06-27T22:56:27.350688+00:00",
   "schemaVersion": "augment-truth-step5",
   "sources": {
     "definition": "data/internal/augment-base-catalog.json",
@@ -385,7 +385,7 @@
       "name_zh_TW": "燃燒利息",
       "name_ja": "燃える利回り",
       "name_ko": "타오르는 이자",
-      "wikiDescription": "Gain 1 – 3 (based on level) (+ 0.75% of damage dealt) gold for each tick of damage dealt to enemy champions with persistent damage effects.",
+      "wikiDescription": "Gain 1 – 3 (based on level) (+ 0.75% of damage dealt) gold for each tick of damage dealt to enemy champions with persistent damage effects as well as damage over time from item effects.",
       "wikiRarity": "gold"
     },
     {
