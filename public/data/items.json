@@ -1,5 +1,5 @@
 {
-  "scraped_at": "2026-06-27T22:57:39.263513+00:00",
+  "scraped_at": "2026-06-28T22:56:49.403101+00:00",
   "mayhemExclusive": [
     {
       "slug": "atmas-reckoning",
@@ -2515,7 +2515,7 @@
       "wikiPassives": [
         {
           "label": "Unique - Lightning Bolt:",
-          "text": "Shocks the target enemy champion with a bolt of lightning, dealing 175 – 262.18 (based on level) (+ 30% AP) magic damage and slowing them by 25% for 1.5 seconds (60 second cooldown; 700 range)."
+          "text": "Shocks the target enemy champion with a bolt of lightning, dealing 175 – 253 (based on level) (+ 30% AP) magic damage and slowing them by 25% for 1.5 seconds (60 second cooldown; 700 range)."
         }
       ],
       "wikiNotes": [
@@ -7093,7 +7093,7 @@
       "wikiPassives": [
         {
           "label": "Unique - Soul Siphon:",
-          "text": "Gain 30% of pre-mitigation damage dealt to champions as Soul Charges, up to 80 – 270 (based on level). Healing or shielding an allied champion (excluding yourself) consumes all charges to heal them equal to the consumed amount."
+          "text": "Gain 30% of pre-mitigation damage dealt to champions as Soul Charges, up to 80 – 250 (based on level). Healing or shielding an allied champion (excluding yourself) consumes all charges to heal them equal to the consumed amount."
         },
         {
           "label": "Unique Passive - Soul Siphon:",
@@ -7370,7 +7370,7 @@
       "wikiPassives": [
         {
           "label": "Unique - Lifeline:",
-          "text": "If you would take damage that would reduce you below 30% of your maximum health, you first gain 200 – 311.76 (based on level) bonus health for 5 seconds and heal yourself for 200 – 423.53 (based on level) (+ 175% bonus armor) (+ 175% bonus magic resistance) over the same duration, during which you also gain 15% increased size, 10% bonus movement speed, and 25% tenacity (90 second cooldown)."
+          "text": "If you would take damage that would reduce you below 30% of your maximum health, you first gain 200 – 300 (based on level) bonus health for 5 seconds and heal yourself for 200 – 400 (based on level) (+ 175% bonus armor) (+ 175% bonus magic resistance) over the same duration, during which you also gain 15% increased size, 10% bonus movement speed, and 25% tenacity (90 second cooldown)."
         }
       ],
       "wikiNotes": [],
@@ -7868,7 +7868,7 @@
       "wikiPassives": [
         {
           "label": "Unique - Lightning Bolt:",
-          "text": "Shocks the target enemy champion with a bolt of lightning, dealing 175 – 262.18 (based on level) (+ 30% AP) magic damage and slowing them by 25% for 1.5 seconds (60 second cooldown; 700 range)."
+          "text": "Shocks the target enemy champion with a bolt of lightning, dealing 175 – 253 (based on level) (+ 30% AP) magic damage and slowing them by 25% for 1.5 seconds (60 second cooldown; 700 range)."
         }
       ],
       "wikiNotes": [
@@ -9258,7 +9258,7 @@
       "wikiPassives": [
         {
           "label": "Unique - Soul Siphon:",
-          "text": "Gain 30% of pre-mitigation damage dealt to champions as Soul Charges, up to 80 – 270 (based on level). Healing or shielding an allied champion (excluding yourself) consumes all charges to heal them equal to the consumed amount."
+          "text": "Gain 30% of pre-mitigation damage dealt to champions as Soul Charges, up to 80 – 250 (based on level). Healing or shielding an allied champion (excluding yourself) consumes all charges to heal them equal to the consumed amount."
         },
         {
           "label": "Unique Passive - Soul Siphon:",
