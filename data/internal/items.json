@@ -1,5 +1,5 @@
 {
-  "scraped_at": "2026-06-28T22:56:49.403101+00:00",
+  "scraped_at": "2026-06-29T22:49:11.986544+00:00",
   "mayhemExclusive": [
     {
       "slug": "atmas-reckoning",
@@ -4119,7 +4119,7 @@
       "wikiPassives": [
         {
           "label": "Unique - Anguish:",
-          "text": "Every 4 seconds after entering combat with champions, sap all enemy champions around you within Template:Cr 650 units to deal magic damage equal to 3% of your bonus health to them and heal yourself equal to 250% of the post-mitigation damage dealt."
+          "text": "Every 4 seconds after entering combat with champions, sap all enemy champions around you within 650 units to deal magic damage equal to 3% of your bonus health to them and heal yourself equal to 250% of the post-mitigation damage dealt."
         }
       ],
       "wikiNotes": [
