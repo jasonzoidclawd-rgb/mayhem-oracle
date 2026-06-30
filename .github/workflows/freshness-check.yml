@@ -45,12 +45,19 @@ jobs:
             exit 0
           fi
 
-          body="STALE: upstream=$upstream published=$published. Freshness check run: $RUN_URL"
+          if [ "$status" = "unknown" ]; then
+            title="Data freshness check is unknown: upstream $upstream, published $published"
+            body="UNKNOWN: upstream=$upstream published=$published. Freshness check could not determine patch freshness. Run: $RUN_URL"
+          else
+            title="Published data is stale: upstream $upstream, published $published"
+            body="STALE: upstream=$upstream published=$published. Freshness check run: $RUN_URL"
+          fi
+
           if [ -n "$existing" ]; then
             gh issue comment "$existing" --body "$body"
           else
             gh issue create \
-              --title "Published data is stale: upstream $upstream, published $published" \
+              --title "$title" \
               --label data-staleness \
               --body "$body"
           fi

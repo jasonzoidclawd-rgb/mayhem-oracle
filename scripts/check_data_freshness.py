@@ -68,14 +68,28 @@ def main() -> None:
     parser.add_argument("--json", action="store_true")
     args = parser.parse_args()
 
-    published_patch = args.published_patch or load_published_patch(args.published_meta)
-    upstream_patch = args.upstream_patch or fetch_upstream_patch()
+    published_error = None
+    upstream_error = None
+    try:
+        published_patch = args.published_patch or load_published_patch(args.published_meta)
+    except Exception as exc:
+        published_patch = None
+        published_error = str(exc)
+    try:
+        upstream_patch = args.upstream_patch or fetch_upstream_patch()
+    except Exception as exc:
+        upstream_patch = None
+        upstream_error = str(exc)
     status = freshness_status(published_patch, upstream_patch)
     result = {
         "status": status,
         "published_patch": published_patch,
         "upstream_patch": upstream_patch,
     }
+    if published_error:
+        result["published_error"] = published_error
+    if upstream_error:
+        result["upstream_error"] = upstream_error
 
     if args.json:
         print(json.dumps(result, sort_keys=True))
