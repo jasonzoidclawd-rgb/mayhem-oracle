@@ -1,0 +1,62 @@
+name: Freshness Check
+
+on:
+  schedule:
+    - cron: '0 2 * * *'
+  workflow_dispatch:
+
+jobs:
+  freshness:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      issues: write
+      actions: write
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Compare published and upstream patches
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: |
+          set +e
+          python3 scripts/check_data_freshness.py --json > freshness.json
+          check_status=$?
+          set -e
+          cat freshness.json
+
+          status=$(python3 -c "import json; print(json.load(open('freshness.json'))['status'])")
+          published=$(python3 -c "import json; print(json.load(open('freshness.json')).get('published_patch') or 'unknown')")
+          upstream=$(python3 -c "import json; print(json.load(open('freshness.json')).get('upstream_patch') or 'unknown')")
+
+          gh label create data-staleness --color D93F0B --description "Automated data freshness drift" 2>/dev/null || true
+          existing=$(gh issue list --label data-staleness --state open --limit 1 --json number --jq '.[0].number')
+
+          if [ "$status" = "fresh" ]; then
+            if [ -n "$existing" ]; then
+              gh issue close "$existing" --comment "Freshness check recovered: published=$published upstream=$upstream. Run: $RUN_URL"
+            fi
+            exit 0
+          fi
+
+          body="STALE: upstream=$upstream published=$published. Freshness check run: $RUN_URL"
+          if [ -n "$existing" ]; then
+            gh issue comment "$existing" --body "$body"
+          else
+            gh issue create \
+              --title "Published data is stale: upstream $upstream, published $published" \
+              --label data-staleness \
+              --body "$body"
+          fi
+
+          if [ "$status" = "stale" ]; then
+            gh workflow run "Update Data" || true
+          fi
+
+          exit "$check_status"

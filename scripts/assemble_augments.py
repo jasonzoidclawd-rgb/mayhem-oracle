@@ -28,6 +28,7 @@ WINRATE_FEED_PATH = INTERNAL_DATA_DIR / "augment-winrate-feed.json"
 TENCENT_FEED_PATH = INTERNAL_DATA_DIR / "augment-tencent-feed.json"
 IDENTITY_MAP_PATH = INTERNAL_DATA_DIR / "augment-identity-map.json"
 PATCH_NOTES_PATH = INTERNAL_DATA_DIR / "patch-notes.json"
+META_PATH = INTERNAL_DATA_DIR / "meta.json"
 
 CDRAGON_CDN_BASE = (
     "https://raw.communitydragon.org/latest/plugins/"
@@ -201,16 +202,18 @@ def resolve_availability(
         status = "disabled"
     elif removed_sources:
         status = "removed"
-    elif cdragon_present and (wiki["status"] == "live" or tencent_status == "live"):
-        # Official Tencent 26.12 patch notes corroborate "currently live" — an
-        # accepted corroboration source alongside the wiki (spec §2.6/§3).
+    elif stale_removed_sources:
+        status = "removed"
+    elif cdragon_present and (kiwi_present or wiki["status"] == "live" or tencent_status == "live"):
+        # CDragon-primary: first-party registry presence plus a Mayhem kiwi
+        # stringtable entry is sufficient live evidence. Wiki/Tencent remain
+        # additive corroboration signals and every removal/disable/tombstone
+        # branch above still wins.
         status = "confirmed_live"
     elif cdragon_present:
         status = "candidate_registry_present"
     elif wiki["status"] == "live":
         status = "conflict"
-    elif stale_removed_sources:
-        status = "removed"
     else:
         status = "unverified_legacy"
 
@@ -322,7 +325,9 @@ def existing_removed_is_tombstone(existing_row: dict | None, slug: str, removed_
     existing_signals = existing_availability.get("signals") if isinstance(existing_availability, dict) else None
     existing_tombstone = existing_signals.get("tombstone") if isinstance(existing_signals, dict) else None
     if isinstance(existing_tombstone, dict) and isinstance(existing_tombstone.get("removed"), bool):
-        return existing_tombstone["removed"]
+        if not existing_tombstone["removed"]:
+            return False
+        return existing_availability.get("status") in {"removed", "disabled"}
     if existing_row.get("flags", {}).get("lifecycle") != "removed":
         return False
     notes = (wiki_row or {}).get("wikiAvailabilityNotes") or []
@@ -466,6 +471,7 @@ def assemble_catalog(
     identity_map: dict,
     removed_slugs: set[str] | None = None,
     tencent_feed: dict | None = None,
+    patch: str | None = None,
 ) -> dict:
     removed_slugs = removed_slugs or set()
     base_by_id = {row["augmentId"]: row for row in base_catalog.get("augments", [])}
@@ -592,7 +598,7 @@ def assemble_catalog(
 
     status_counts = Counter(row["availability"]["status"] for row in rows)
     return {
-        "patch": existing_catalog.get("patch", "26.12"),
+        "patch": patch or existing_catalog.get("patch", "26.12"),
         "scraped_at": base_catalog.get("generated_at") or existing_catalog.get("scraped_at"),
         "schemaVersion": "augment-truth-step5",
         "sources": {
@@ -622,6 +628,7 @@ def main() -> None:
     winrate_feed = read_json(WINRATE_FEED_PATH)
     identity_map = read_json(IDENTITY_MAP_PATH)
     tencent_feed = read_json(TENCENT_FEED_PATH) if TENCENT_FEED_PATH.exists() else {}
+    meta = read_json(META_PATH) if META_PATH.exists() else {}
     removed_slugs = removed_patch_note_slugs(read_json(PATCH_NOTES_PATH)) if PATCH_NOTES_PATH.exists() else set()
 
     output = assemble_catalog(
@@ -632,6 +639,7 @@ def main() -> None:
         identity_map=identity_map,
         removed_slugs=removed_slugs,
         tencent_feed=tencent_feed,
+        patch=meta.get("patch"),
     )
     write_json(args.output, output)
 

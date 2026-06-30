@@ -1,6 +1,6 @@
 {
-  "patch": "26.12",
-  "scraped_at": "2026-06-29T22:47:58.888984+00:00",
+  "patch": "26.13",
+  "scraped_at": "2026-06-30T18:42:04.616830+00:00",
   "schemaVersion": "augment-truth-step5",
   "sources": {
     "definition": "data/internal/augment-base-catalog.json",
@@ -6397,8 +6397,7 @@
       ],
       "flags": {
         "system_breaker": false,
-        "lifecycle": "removed",
-        "lifecycle_patch": "26.13"
+        "lifecycle": "active"
       },
       "type": "standalone",
       "name_zh_CN": "轨道镭射",
@@ -7160,8 +7159,7 @@
       ],
       "flags": {
         "system_breaker": false,
-        "lifecycle": "removed",
-        "lifecycle_patch": "26.13"
+        "lifecycle": "active"
       },
       "type": "standalone",
       "name_zh_CN": "升级：米凯尔的祝福",
@@ -7566,8 +7564,7 @@
       "kit_tags": [],
       "flags": {
         "system_breaker": false,
-        "lifecycle": "removed",
-        "lifecycle_patch": "26.13"
+        "lifecycle": "active"
       },
       "type": "standalone",
       "name_zh_CN": "完全自动化",
@@ -7755,8 +7752,7 @@
       "kit_tags": [],
       "flags": {
         "system_breaker": false,
-        "lifecycle": "removed",
-        "lifecycle_patch": "26.13"
+        "lifecycle": "active"
       },
       "type": "standalone",
       "name_zh_CN": "变废为宝",
