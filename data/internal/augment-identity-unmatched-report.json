@@ -1,20 +1,13 @@
 {
   "identity_key": "CDragon augmentNameId",
   "counts": {
-    "cdragon": 1,
+    "cdragon": 0,
     "internal_augments": 21,
     "wiki": 20,
     "arammayhem_win_rate": 0
   },
   "sources": {
-    "cdragon": [
-      {
-        "augmentNameId": "DustToDiamonds",
-        "name": "Dust To Diamonds",
-        "slug": "dust-to-diamonds",
-        "rarity": "silver"
-      }
-    ],
+    "cdragon": [],
     "internal_augments": [
       {
         "sourceKey": "warlock-juicebox",

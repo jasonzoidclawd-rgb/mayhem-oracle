@@ -2,19 +2,12 @@
   "identity_key": "CDragon augmentNameId",
   "counts": {
     "identity": 0,
-    "existence": 42,
+    "existence": 41,
     "rarity": 0,
-    "availability": 53
+    "availability": 49
   },
   "identity": [],
   "existence": [
-    {
-      "kind": "cdragon_only",
-      "source": "cdragon",
-      "augmentNameId": "DustToDiamonds",
-      "name": "Dust To Diamonds",
-      "rarity": "silver"
-    },
     {
       "kind": "source_only",
       "source": "internal_augments",
@@ -509,13 +502,6 @@
     },
     {
       "source": "internal_augments",
-      "augmentNameId": "ARAM_OrbitalLaser_Active",
-      "name": "Orbital Laser",
-      "signal": "internal_removed_but_cdragon_registry_present",
-      "note": "Registry presence is definition only; this is reported, not resolved."
-    },
-    {
-      "source": "internal_augments",
       "augmentNameId": "ARAM_Perseverance",
       "name": "Perseverance",
       "signal": "internal_removed_but_cdragon_registry_present",
@@ -635,13 +621,6 @@
     },
     {
       "source": "internal_augments",
-      "augmentNameId": "Upgrade_MikaelsBlessing",
-      "name": "Upgrade Mikael's Blessing",
-      "signal": "internal_removed_but_cdragon_registry_present",
-      "note": "Registry presence is definition only; this is reported, not resolved."
-    },
-    {
-      "source": "internal_augments",
       "augmentNameId": "Upgrade_Thornmail",
       "name": "Upgrade Thornmail",
       "signal": "internal_removed_but_cdragon_registry_present",
@@ -698,22 +677,8 @@
     },
     {
       "source": "internal_augments",
-      "augmentNameId": "FullyAutomated",
-      "name": "Fully Automated",
-      "signal": "internal_removed_but_cdragon_registry_present",
-      "note": "Registry presence is definition only; this is reported, not resolved."
-    },
-    {
-      "source": "internal_augments",
       "augmentNameId": "Quest_Sneakerhead",
       "name": "Sneakerhead",
-      "signal": "internal_removed_but_cdragon_registry_present",
-      "note": "Registry presence is definition only; this is reported, not resolved."
-    },
-    {
-      "source": "internal_augments",
-      "augmentNameId": "DustToDiamonds",
-      "name": "Dust To Diamonds",
       "signal": "internal_removed_but_cdragon_registry_present",
       "note": "Registry presence is definition only; this is reported, not resolved."
     }
