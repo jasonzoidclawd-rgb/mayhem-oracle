@@ -4,7 +4,9 @@
 from __future__ import annotations
 
 import argparse
+import contextlib
 import json
+import sys
 from pathlib import Path
 from typing import Any
 
@@ -76,7 +78,13 @@ def main() -> None:
         published_patch = None
         published_error = str(exc)
     try:
-        upstream_patch = args.upstream_patch or fetch_upstream_patch()
+        if args.upstream_patch:
+            upstream_patch = args.upstream_patch
+        elif args.json:
+            with contextlib.redirect_stdout(sys.stderr):
+                upstream_patch = fetch_upstream_patch()
+        else:
+            upstream_patch = fetch_upstream_patch()
     except Exception as exc:
         upstream_patch = None
         upstream_error = str(exc)
