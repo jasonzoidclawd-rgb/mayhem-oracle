@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 
+import json
 import unittest
 from io import StringIO
 from unittest.mock import patch
@@ -64,6 +65,26 @@ class DataFreshnessTests(unittest.TestCase):
         self.assertEqual(cm.exception.code, 1)
         self.assertIn('"status": "unknown"', out.getvalue())
         self.assertIn('"upstream_error": "upstream unavailable"', out.getvalue())
+
+    def test_json_mode_redirects_fetch_stdout_and_outputs_parseable_json(self):
+        out = StringIO()
+        err = StringIO()
+
+        def noisy_fetch():
+            print("Fetching https://example.test/search-index.json ...")
+            return "26.13"
+
+        with patch("sys.argv", ["check", "--published-patch", "26.13", "--json"]):
+            with patch("check_data_freshness.fetch_upstream_patch", side_effect=noisy_fetch):
+                with patch("sys.stdout", out), patch("sys.stderr", err):
+                    main()
+
+        payload = json.loads(out.getvalue())
+        self.assertEqual(payload["status"], "fresh")
+        self.assertEqual(payload["published_patch"], "26.13")
+        self.assertEqual(payload["upstream_patch"], "26.13")
+        self.assertNotIn("Fetching", out.getvalue())
+        self.assertIn("Fetching https://example.test/search-index.json ...", err.getvalue())
 
 
 if __name__ == "__main__":
