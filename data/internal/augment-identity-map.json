@@ -3,10 +3,10 @@
   "normalization": "lowercase, strip non-alphanumerics, strip leading Quest: prefix",
   "counts": {
     "cdragon": 246,
-    "mapped_augmentIds": 246,
+    "mapped_augmentIds": 245,
     "aliases": 1,
     "source_matches": {
-      "internal_augments": 247,
+      "internal_augments": 246,
       "wiki": 205,
       "arammayhem_win_rate": 120
     }
@@ -74,7 +74,7 @@
               "token": "adapt"
             },
             "slug": "adapt",
-            "win_rate": 51.45
+            "win_rate": 55.88
           }
         ]
       }
@@ -122,7 +122,7 @@
               "token": "allforyou"
             },
             "slug": "all-for-you",
-            "win_rate": 50.91
+            "win_rate": 51.28
           }
         ]
       }
@@ -170,7 +170,7 @@
               "token": "apexinventor"
             },
             "slug": "apex-inventor",
-            "win_rate": 50.17
+            "win_rate": 49.57
           }
         ]
       }
@@ -218,7 +218,7 @@
               "token": "archmage"
             },
             "slug": "archmage",
-            "win_rate": 54.1
+            "win_rate": 53.23
           }
         ]
       }
@@ -266,7 +266,7 @@
               "token": "backtobasics"
             },
             "slug": "back-to-basics",
-            "win_rate": 56.27
+            "win_rate": 55.64
           }
         ]
       }
@@ -314,7 +314,7 @@
               "token": "bigbrain"
             },
             "slug": "big-brain",
-            "win_rate": 53.19
+            "win_rate": 52.42
           }
         ]
       }
@@ -362,7 +362,7 @@
               "token": "bladewaltz"
             },
             "slug": "blade-waltz",
-            "win_rate": 47.14
+            "win_rate": 47.9
           }
         ]
       }
@@ -410,7 +410,7 @@
               "token": "bluntforce"
             },
             "slug": "blunt-force",
-            "win_rate": 57.12
+            "win_rate": 57.29
           }
         ]
       }
@@ -458,7 +458,7 @@
               "token": "breadandbutter"
             },
             "slug": "bread-and-butter",
-            "win_rate": 49.71
+            "win_rate": 49.37
           }
         ]
       }
@@ -506,7 +506,7 @@
               "token": "breadandcheese"
             },
             "slug": "bread-and-cheese",
-            "win_rate": 49.84
+            "win_rate": 49.88
           }
         ]
       }
@@ -554,7 +554,7 @@
               "token": "breadandjam"
             },
             "slug": "bread-and-jam",
-            "win_rate": 49.27
+            "win_rate": 48.97
           }
         ]
       }
@@ -629,7 +629,7 @@
               "token": "canttouchthis"
             },
             "slug": "cant-touch-this",
-            "win_rate": 46.63
+            "win_rate": 46.46
           }
         ]
       }
@@ -677,7 +677,7 @@
               "token": "celestialbody"
             },
             "slug": "celestial-body",
-            "win_rate": 56.86
+            "win_rate": 57.23
           }
         ]
       }
@@ -752,7 +752,7 @@
               "token": "circleofdeath"
             },
             "slug": "circle-of-death",
-            "win_rate": 49.07
+            "win_rate": 48.64
           }
         ]
       }
@@ -837,7 +837,7 @@
               "token": "courageofthecolossus"
             },
             "slug": "courage-of-the-colossus",
-            "win_rate": 49.74
+            "win_rate": 49.71
           }
         ]
       }
@@ -949,7 +949,7 @@
               "token": "cruelty"
             },
             "slug": "cruelty",
-            "win_rate": 50.67
+            "win_rate": 49.89
           }
         ]
       }
@@ -997,7 +997,7 @@
               "token": "dashing"
             },
             "slug": "dashing",
-            "win_rate": 50.15
+            "win_rate": 50.27
           }
         ]
       }
@@ -1045,7 +1045,7 @@
               "token": "dawnbringersresolve"
             },
             "slug": "dawnbringers-resolve",
-            "win_rate": 51.59
+            "win_rate": 51.99
           }
         ]
       }
@@ -1093,7 +1093,7 @@
               "token": "deft"
             },
             "slug": "deft",
-            "win_rate": 58.21
+            "win_rate": 57.67
           }
         ]
       }
@@ -1168,7 +1168,7 @@
               "token": "divebomber"
             },
             "slug": "dive-bomber",
-            "win_rate": 48.63
+            "win_rate": 48.54
           }
         ]
       }
@@ -1216,7 +1216,7 @@
               "token": "riteofascension"
             },
             "slug": "rite-of-ascension",
-            "win_rate": 45.07
+            "win_rate": 46.27
           }
         ]
       }
@@ -1264,7 +1264,7 @@
               "token": "divineintervention"
             },
             "slug": "divine-intervention",
-            "win_rate": 48.88
+            "win_rate": 48.86
           }
         ]
       }
@@ -1312,7 +1312,7 @@
               "token": "dontblink"
             },
             "slug": "dont-blink",
-            "win_rate": 50.77
+            "win_rate": 50.53
           }
         ]
       }
@@ -1397,7 +1397,7 @@
               "token": "drawyoursword"
             },
             "slug": "draw-your-sword",
-            "win_rate": 62.31
+            "win_rate": 61.47
           }
         ]
       }
@@ -1445,7 +1445,7 @@
               "token": "dropbear"
             },
             "slug": "dropbear",
-            "win_rate": 51.51
+            "win_rate": 51.72
           }
         ]
       }
@@ -1493,7 +1493,7 @@
               "token": "dropkick"
             },
             "slug": "dropkick",
-            "win_rate": 63.16
+            "win_rate": 61.08
           }
         ]
       }
@@ -1541,7 +1541,7 @@
               "token": "dualwield"
             },
             "slug": "dual-wield",
-            "win_rate": 60.16
+            "win_rate": 58.93
           }
         ]
       }
@@ -1626,7 +1626,7 @@
               "token": "empoweredbythefaithful"
             },
             "slug": "empowered-by-the-faithful",
-            "win_rate": 50.23
+            "win_rate": 49.79
           }
         ]
       }
@@ -1674,7 +1674,7 @@
               "token": "enpassant"
             },
             "slug": "en-passant",
-            "win_rate": 50.14
+            "win_rate": 50.2
           }
         ]
       }
@@ -1722,7 +1722,7 @@
               "token": "erosion"
             },
             "slug": "erosion",
-            "win_rate": 52.65
+            "win_rate": 52.21
           }
         ]
       }
@@ -1770,7 +1770,7 @@
               "token": "etherealweapon"
             },
             "slug": "ethereal-weapon",
-            "win_rate": 57.66
+            "win_rate": 57.14
           }
         ]
       }
@@ -1818,7 +1818,7 @@
               "token": "eureka"
             },
             "slug": "eureka",
-            "win_rate": 60.59
+            "win_rate": 59.0
           }
         ]
       }
@@ -1893,7 +1893,7 @@
               "token": "fanthehammer"
             },
             "slug": "fan-the-hammer",
-            "win_rate": 55.59
+            "win_rate": 54.42
           }
         ]
       }
@@ -1968,7 +1968,7 @@
               "token": "feymagic"
             },
             "slug": "fey-magic",
-            "win_rate": 48.79
+            "win_rate": 48.34
           }
         ]
       }
@@ -2016,7 +2016,7 @@
               "token": "firebrand"
             },
             "slug": "firebrand",
-            "win_rate": 48.97
+            "win_rate": 48.6
           }
         ]
       }
@@ -2064,7 +2064,7 @@
               "token": "firefox"
             },
             "slug": "firefox",
-            "win_rate": 50.51
+            "win_rate": 51.77
           }
         ]
       }
@@ -2112,7 +2112,7 @@
               "token": "firstaidkit"
             },
             "slug": "first-aid-kit",
-            "win_rate": 52.23
+            "win_rate": 52.36
           }
         ]
       }
@@ -2160,7 +2160,7 @@
               "token": "flashbang"
             },
             "slug": "flashbang",
-            "win_rate": 47.59
+            "win_rate": 49.26
           }
         ]
       }
@@ -2245,7 +2245,7 @@
               "token": "frombeginningtoend"
             },
             "slug": "from-beginning-to-end",
-            "win_rate": 52.26
+            "win_rate": 51.56
           }
         ]
       }
@@ -2320,7 +2320,7 @@
               "token": "getexcited"
             },
             "slug": "get-excited",
-            "win_rate": 51.38
+            "win_rate": 51.36
           }
         ]
       }
@@ -2368,7 +2368,7 @@
               "token": "giantslayer"
             },
             "slug": "giant-slayer",
-            "win_rate": 58.36
+            "win_rate": 57.56
           }
         ]
       }
@@ -2416,7 +2416,7 @@
               "token": "goliath"
             },
             "slug": "goliath",
-            "win_rate": 61.12
+            "win_rate": 60.16
           }
         ]
       }
@@ -2464,7 +2464,7 @@
               "token": "goredrink"
             },
             "slug": "goredrink",
-            "win_rate": 62.0
+            "win_rate": 57.81
           }
         ]
       }
@@ -2549,7 +2549,7 @@
               "token": "heavyhitter"
             },
             "slug": "heavy-hitter",
-            "win_rate": 69.1
+            "win_rate": 63.46
           }
         ]
       }
@@ -2597,7 +2597,7 @@
               "token": "hellbent"
             },
             "slug": "hellbent",
-            "win_rate": 46.83
+            "win_rate": 47.55
           }
         ]
       }
@@ -2645,7 +2645,7 @@
               "token": "highroller"
             },
             "slug": "high-roller",
-            "win_rate": 54.29
+            "win_rate": 55.54
           }
         ]
       }
@@ -2720,7 +2720,7 @@
               "token": "homeguard"
             },
             "slug": "homeguard",
-            "win_rate": 53.34
+            "win_rate": 52.64
           }
         ]
       }
@@ -2768,7 +2768,7 @@
               "token": "icecold"
             },
             "slug": "ice-cold",
-            "win_rate": 55.12
+            "win_rate": 54.99
           }
         ]
       }
@@ -2816,7 +2816,7 @@
               "token": "titansresolve"
             },
             "slug": "titans-resolve",
-            "win_rate": 45.64
+            "win_rate": 45.83
           }
         ]
       }
@@ -2864,7 +2864,7 @@
               "token": "impassable"
             },
             "slug": "impassable",
-            "win_rate": 47.57
+            "win_rate": 47.89
           }
         ]
       }
@@ -2912,7 +2912,7 @@
               "token": "infernalconduit"
             },
             "slug": "infernal-conduit",
-            "win_rate": 59.06
+            "win_rate": 58.81
           }
         ]
       }
@@ -2960,7 +2960,7 @@
               "token": "infernalsoul"
             },
             "slug": "infernal-soul",
-            "win_rate": 49.85
+            "win_rate": 49.27
           }
         ]
       }
@@ -3008,7 +3008,7 @@
               "token": "triggeredinferno"
             },
             "slug": "triggered-inferno",
-            "win_rate": 46.73
+            "win_rate": 46.48
           }
         ]
       }
@@ -3093,7 +3093,7 @@
               "token": "itskillingtime"
             },
             "slug": "its-killing-time",
-            "win_rate": 49.65
+            "win_rate": 49.78
           }
         ]
       }
@@ -3178,7 +3178,7 @@
               "token": "juiced"
             },
             "slug": "juiced",
-            "win_rate": 48.11
+            "win_rate": 47.87
           }
         ]
       }
@@ -3253,7 +3253,7 @@
               "token": "legday"
             },
             "slug": "leg-day",
-            "win_rate": 52.38
+            "win_rate": 52.04
           }
         ]
       }
@@ -3301,7 +3301,7 @@
               "token": "lightemup"
             },
             "slug": "light-em-up",
-            "win_rate": 53.92
+            "win_rate": 53.5
           }
         ]
       }
@@ -3413,7 +3413,7 @@
               "token": "madscientist"
             },
             "slug": "mad-scientist",
-            "win_rate": 53.6
+            "win_rate": 53.35
           }
         ]
       }
@@ -3461,7 +3461,7 @@
               "token": "magicmissile"
             },
             "slug": "magic-missile",
-            "win_rate": 59.71
+            "win_rate": 59.33
           }
         ]
       }
@@ -3509,7 +3509,7 @@
               "token": "marksmage"
             },
             "slug": "marksmage",
-            "win_rate": 52.3
+            "win_rate": 52.53
           }
         ]
       }
@@ -3557,7 +3557,7 @@
               "token": "masterofduality"
             },
             "slug": "master-of-duality",
-            "win_rate": 50.6
+            "win_rate": 49.73
           }
         ]
       }
@@ -3605,7 +3605,7 @@
               "token": "mindtomatter"
             },
             "slug": "mind-to-matter",
-            "win_rate": 54.08
+            "win_rate": 53.72
           }
         ]
       }
@@ -3653,7 +3653,7 @@
               "token": "minionmancer"
             },
             "slug": "minionmancer",
-            "win_rate": 49.98
+            "win_rate": 50.29
           }
         ]
       }
@@ -3728,7 +3728,7 @@
               "token": "mountainsoul"
             },
             "slug": "mountainsoul",
-            "win_rate": 48.09
+            "win_rate": 48.26
           }
         ]
       }
@@ -3776,7 +3776,7 @@
               "token": "multishot"
             },
             "slug": "multishot",
-            "win_rate": 46.4
+            "win_rate": 45.59
           }
         ]
       }
@@ -3824,7 +3824,7 @@
               "token": "mysticpunch"
             },
             "slug": "mystic-punch",
-            "win_rate": 55.06
+            "win_rate": 55.02
           }
         ]
       }
@@ -3872,7 +3872,7 @@
               "token": "oceansoul"
             },
             "slug": "ocean-soul",
-            "win_rate": 52.76
+            "win_rate": 56.0
           }
         ]
       }
@@ -3920,7 +3920,7 @@
               "token": "okboomerang"
             },
             "slug": "ok-boomerang",
-            "win_rate": 49.13
+            "win_rate": 49.05
           }
         ]
       }
@@ -3968,7 +3968,7 @@
               "token": "omnisoul"
             },
             "slug": "omni-soul",
-            "win_rate": 51.41
+            "win_rate": 51.43
           }
         ]
       }
@@ -4043,7 +4043,7 @@
               "token": "outlawsgrit"
             },
             "slug": "outlaws-grit",
-            "win_rate": 52.46
+            "win_rate": 52.78
           }
         ]
       }
@@ -4091,7 +4091,7 @@
               "token": "overflow"
             },
             "slug": "overflow",
-            "win_rate": 51.71
+            "win_rate": 51.91
           }
         ]
       }
@@ -4139,7 +4139,7 @@
               "token": "pandorasbox"
             },
             "slug": "pandorasbox",
-            "win_rate": 46.36
+            "win_rate": 46.59
           }
         ]
       }
@@ -4224,7 +4224,7 @@
               "token": "phenomenalevil"
             },
             "slug": "phenomenal-evil",
-            "win_rate": 61.7
+            "win_rate": 60.54
           }
         ]
       }
@@ -4326,7 +4326,7 @@
               "token": "proteinshake"
             },
             "slug": "protein-shake",
-            "win_rate": 47.47
+            "win_rate": 47.57
           }
         ]
       }
@@ -4374,7 +4374,7 @@
               "token": "puristcaster"
             },
             "slug": "purist-caster",
-            "win_rate": 52.92
+            "win_rate": 52.22
           }
         ]
       }
@@ -4459,7 +4459,7 @@
               "token": "queststeelyourheart"
             },
             "slug": "quest-steel-your-heart",
-            "win_rate": 64.94
+            "win_rate": 63.31
           }
         ]
       }
@@ -4507,7 +4507,7 @@
               "token": "questurfschampion"
             },
             "slug": "quest-urfs-champion",
-            "win_rate": 49.55
+            "win_rate": 49.66
           }
         ]
       }
@@ -4555,7 +4555,7 @@
               "token": "icathiasfall"
             },
             "slug": "void-immolation",
-            "win_rate": 59.33
+            "win_rate": 60.27
           }
         ]
       }
@@ -4603,7 +4603,7 @@
               "token": "questwoogletswitchcap"
             },
             "slug": "quest-wooglets-witchcap",
-            "win_rate": 55.41
+            "win_rate": 54.44
           }
         ]
       }
@@ -4651,7 +4651,7 @@
               "token": "quickstep"
             },
             "slug": "quickstep",
-            "win_rate": 44.86
+            "win_rate": 44.57
           }
         ]
       }
@@ -4784,7 +4784,7 @@
               "token": "recursion"
             },
             "slug": "recursion",
-            "win_rate": 52.74
+            "win_rate": 52.44
           }
         ]
       }
@@ -4886,7 +4886,7 @@
               "token": "scopedweapons"
             },
             "slug": "scoped-weapons",
-            "win_rate": 53.1
+            "win_rate": 52.93
           }
         ]
       }
@@ -4934,7 +4934,7 @@
               "token": "scopierweapons"
             },
             "slug": "scopier-weapons",
-            "win_rate": 57.33
+            "win_rate": 56.78
           }
         ]
       }
@@ -4982,7 +4982,7 @@
               "token": "scopiestweapons"
             },
             "slug": "scopiest-weapons",
-            "win_rate": 54.08
+            "win_rate": 53.14
           }
         ]
       }
@@ -5030,7 +5030,7 @@
               "token": "searingdawn"
             },
             "slug": "searing-dawn",
-            "win_rate": 49.08
+            "win_rate": 48.82
           }
         ]
       }
@@ -5105,7 +5105,7 @@
               "token": "shadowrunner"
             },
             "slug": "shadow-runner",
-            "win_rate": 51.43
+            "win_rate": 55.03
           }
         ]
       }
@@ -5153,7 +5153,7 @@
               "token": "shrinkray"
             },
             "slug": "shrink-ray",
-            "win_rate": 46.84
+            "win_rate": 46.25
           }
         ]
       }
@@ -5201,7 +5201,7 @@
               "token": "skilledsniper"
             },
             "slug": "skilled-sniper",
-            "win_rate": 54.54
+            "win_rate": 54.14
           }
         ]
       }
@@ -5249,7 +5249,7 @@
               "token": "slaparound"
             },
             "slug": "slap-around",
-            "win_rate": 54.48
+            "win_rate": 54.51
           }
         ]
       }
@@ -5351,7 +5351,7 @@
               "token": "snowday"
             },
             "slug": "snowday",
-            "win_rate": 46.32
+            "win_rate": 46.44
           }
         ]
       }
@@ -5399,7 +5399,7 @@
               "token": "sonicboom"
             },
             "slug": "sonic-boom",
-            "win_rate": 51.87
+            "win_rate": 52.0
           }
         ]
       }
@@ -5511,7 +5511,7 @@
               "token": "spintowin"
             },
             "slug": "spin-to-win",
-            "win_rate": 51.55
+            "win_rate": 51.09
           }
         ]
       }
@@ -5559,7 +5559,7 @@
               "token": "spiritbomb"
             },
             "slug": "spirit-bomb",
-            "win_rate": 52.81
+            "win_rate": 55.37
           }
         ]
       }
@@ -5607,7 +5607,7 @@
               "token": "spiritualpurification"
             },
             "slug": "spiritual-purification",
-            "win_rate": 47.89
+            "win_rate": 47.94
           }
         ]
       }
@@ -5655,7 +5655,7 @@
               "token": "stackosaurusrex"
             },
             "slug": "stackosaurusrex",
-            "win_rate": 56.68
+            "win_rate": 56.6
           }
         ]
       }
@@ -5703,7 +5703,7 @@
               "token": "stats"
             },
             "slug": "stats",
-            "win_rate": 49.39
+            "win_rate": 49.66
           }
         ]
       }
@@ -5751,7 +5751,7 @@
               "token": "statsonstats"
             },
             "slug": "stats-on-stats",
-            "win_rate": 52.54
+            "win_rate": 52.24
           }
         ]
       }
@@ -5799,7 +5799,7 @@
               "token": "statsonstatsonstats"
             },
             "slug": "stats-on-stats-on-stats",
-            "win_rate": 49.41
+            "win_rate": 48.96
           }
         ]
       }
@@ -5847,7 +5847,7 @@
               "token": "stuckinherewithme"
             },
             "slug": "stuck-in-here-with-me",
-            "win_rate": 46.7
+            "win_rate": 47.11
           }
         ]
       }
@@ -5895,7 +5895,7 @@
               "token": "symphonyofwar"
             },
             "slug": "symphony-of-war",
-            "win_rate": 48.85
+            "win_rate": 48.58
           }
         ]
       }
@@ -5943,7 +5943,7 @@
               "token": "tankengine"
             },
             "slug": "tank-engine",
-            "win_rate": 67.52
+            "win_rate": 67.29
           }
         ]
       }
@@ -6028,7 +6028,7 @@
               "token": "tapdancer"
             },
             "slug": "tap-dancer",
-            "win_rate": 54.45
+            "win_rate": 53.77
           }
         ]
       }
@@ -6076,7 +6076,7 @@
               "token": "terror"
             },
             "slug": "terror",
-            "win_rate": 45.64
+            "win_rate": 45.85
           }
         ]
       }
@@ -6151,7 +6151,7 @@
               "token": "threadtheneedle"
             },
             "slug": "thread-the-needle",
-            "win_rate": 49.42
+            "win_rate": 48.96
           }
         ]
       }
@@ -6226,7 +6226,7 @@
               "token": "transmutechaos"
             },
             "slug": "transmute-chaos",
-            "win_rate": 51.06
+            "win_rate": 50.26
           }
         ]
       }
@@ -6311,7 +6311,7 @@
               "token": "transmuteprismatic"
             },
             "slug": "transmute-prismatic",
-            "win_rate": 58.14
+            "win_rate": 56.86
           }
         ]
       }
@@ -6413,7 +6413,7 @@
               "token": "typhoon"
             },
             "slug": "typhoon",
-            "win_rate": 52.97
+            "win_rate": 52.67
           }
         ]
       }
@@ -6461,7 +6461,7 @@
               "token": "ultimaterevolution"
             },
             "slug": "ultimate-revolution",
-            "win_rate": 48.85
+            "win_rate": 48.73
           }
         ]
       }
@@ -6509,7 +6509,7 @@
               "token": "ultimateunstoppable"
             },
             "slug": "ultimate-unstoppable",
-            "win_rate": 47.86
+            "win_rate": 48.52
           }
         ]
       }
@@ -6557,7 +6557,7 @@
               "token": "upgradecollector"
             },
             "slug": "upgrade-collector",
-            "win_rate": 55.54
+            "win_rate": 55.06
           }
         ]
       }
@@ -6659,7 +6659,7 @@
               "token": "upgradeinfinityedge"
             },
             "slug": "upgrade-infinity-edge",
-            "win_rate": 63.61
+            "win_rate": 62.77
           }
         ]
       }
@@ -6707,7 +6707,7 @@
               "token": "upgradeimmolate"
             },
             "slug": "upgrade-immolate",
-            "win_rate": 58.7
+            "win_rate": 58.2
           }
         ]
       }
@@ -6755,7 +6755,7 @@
               "token": "upgradesheen"
             },
             "slug": "upgrade-sheen",
-            "win_rate": 51.77
+            "win_rate": 50.99
           }
         ]
       }
@@ -6803,7 +6803,7 @@
               "token": "upgradezhonyas"
             },
             "slug": "upgrade-zhonyas",
-            "win_rate": 53.92
+            "win_rate": 52.61
           }
         ]
       }
@@ -6942,7 +6942,7 @@
               "token": "weewooweewoo"
             },
             "slug": "wee-woo-wee-woo",
-            "win_rate": 55.26
+            "win_rate": 55.47
           }
         ]
       }
@@ -7017,7 +7017,7 @@
               "token": "windspeakersblessing"
             },
             "slug": "windspeakers-blessing",
-            "win_rate": 55.74
+            "win_rate": 55.8
           }
         ]
       }
@@ -7065,7 +7065,7 @@
               "token": "witchfulthinking"
             },
             "slug": "witchful-thinking",
-            "win_rate": 55.29
+            "win_rate": 54.32
           }
         ]
       }
@@ -7113,7 +7113,7 @@
               "token": "withhaste"
             },
             "slug": "with-haste",
-            "win_rate": 54.06
+            "win_rate": 53.2
           }
         ]
       }
@@ -7161,7 +7161,7 @@
               "token": "yowchmycoins"
             },
             "slug": "yowch-my-coins",
-            "win_rate": 49.42
+            "win_rate": 49.45
           }
         ]
       }
@@ -7246,7 +7246,7 @@
               "token": "escapade"
             },
             "slug": "escapade",
-            "win_rate": 53.35
+            "win_rate": 53.37
           }
         ]
       }
@@ -7867,33 +7867,6 @@
             "hasWikiDescription": true
           }
         ],
-        "arammayhem_win_rate": []
-      }
-    },
-    {
-      "augmentId": "DustToDiamonds",
-      "cdragon": {
-        "augmentNameId": "DustToDiamonds",
-        "name": "Dust To Diamonds",
-        "slug": "dust-to-diamonds",
-        "rarity": "silver"
-      },
-      "sources": {
-        "internal_augments": [
-          {
-            "sourceKey": "dust-to-diamonds",
-            "name": "Dust To Diamonds",
-            "match": {
-              "method": "normalized",
-              "token": "dusttodiamonds"
-            },
-            "slug": "dust-to-diamonds",
-            "rarity": "silver",
-            "lifecycle": "removed",
-            "hasWikiDescription": false
-          }
-        ],
-        "wiki": [],
         "arammayhem_win_rate": []
       }
     },

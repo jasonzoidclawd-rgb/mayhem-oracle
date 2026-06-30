@@ -3,6 +3,7 @@ name: Update Data
 on:
   schedule:
     - cron: '0 22 * * *'   # 22:00 UTC = 06:00 Taipei
+    - cron: '0 10 * * *'   # redundant guard against dropped schedule events
   workflow_dispatch:
 
 jobs:
@@ -31,6 +32,43 @@ jobs:
         env:
           GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
         run: ./scripts/update-data.sh
+
+      - name: Check freshness and manage staleness issue
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: |
+          set +e
+          python3 scripts/check_data_freshness.py --json > freshness.json
+          check_status=$?
+          set -e
+          cat freshness.json
+
+          status=$(python3 -c "import json; print(json.load(open('freshness.json'))['status'])")
+          published=$(python3 -c "import json; print(json.load(open('freshness.json')).get('published_patch') or 'unknown')")
+          upstream=$(python3 -c "import json; print(json.load(open('freshness.json')).get('upstream_patch') or 'unknown')")
+
+          gh label create data-staleness --color D93F0B --description "Automated data freshness drift" 2>/dev/null || true
+          existing=$(gh issue list --label data-staleness --state open --limit 1 --json number --jq '.[0].number')
+
+          if [ "$status" = "fresh" ]; then
+            if [ -n "$existing" ]; then
+              gh issue close "$existing" --comment "Freshness check recovered: published=$published upstream=$upstream. Run: $RUN_URL"
+            fi
+            exit 0
+          fi
+
+          body="STALE: upstream=$upstream published=$published. Data update did not publish the upstream patch. Run: $RUN_URL"
+          if [ -n "$existing" ]; then
+            gh issue comment "$existing" --body "$body"
+          else
+            gh issue create \
+              --title "Published data is stale: upstream $upstream, published $published" \
+              --label data-staleness \
+              --body "$body"
+          fi
+
+          exit "$check_status"
 
       - name: Commit and push
         run: |

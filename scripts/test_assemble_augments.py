@@ -58,8 +58,7 @@ class AvailabilityResolverTests(unittest.TestCase):
             augment_id="ARAM_RegistryOnly",
             slug="registry-only",
             cdragon_present=True,
-            kiwi_present=True,
-            kiwi_keys=["kiwi_registryonly_name"],
+            kiwi_present=False,
             wiki_row=None,
             definition_placeholder=False,
             tombstone_removed=False,
@@ -68,15 +67,34 @@ class AvailabilityResolverTests(unittest.TestCase):
         self.assertEqual(availability["status"], "candidate_registry_present")
         self.assertEqual(lifecycle_for_availability(availability["status"]), "removed")
         self.assertTrue(availability["signals"]["cdragon_registry"]["present"])
-        self.assertTrue(availability["signals"]["kiwi"]["present"])
-        self.assertEqual(availability["signals"]["kiwi"]["keys"], ["kiwi_registryonly_name"])
+        self.assertFalse(availability["signals"]["kiwi"]["present"])
         self.assertFalse(availability["signals"]["wiki"]["present"])
+
+    def test_registry_with_kiwi_resolves_confirmed_live(self):
+        availability = resolve_availability(
+            augment_id="ARAM_RegistryWithKiwi",
+            slug="registry-with-kiwi",
+            cdragon_present=True,
+            kiwi_present=True,
+            kiwi_keys=["kiwi_registrywithkiwi_name"],
+            kiwi_tokens=["registrywithkiwi"],
+            wiki_row=None,
+            definition_placeholder=False,
+            tombstone_removed=False,
+        )
+
+        self.assertEqual(availability["status"], "confirmed_live")
+        self.assertEqual(lifecycle_for_availability(availability["status"]), "active")
+        self.assertTrue(availability["signals"]["cdragon_registry"]["present"])
+        self.assertTrue(availability["signals"]["kiwi"]["present"])
+        self.assertEqual(availability["signals"]["wiki"]["status"], "absent")
 
     def test_wiki_currently_disabled_resolves_disabled(self):
         availability = resolve_availability(
             augment_id="ARAM_ClownCollege",
             slug="clown-college",
             cdragon_present=True,
+            kiwi_present=True,
             wiki_row={"wikiAvailabilityNotes": ["This augment is currently disabled."]},
             definition_placeholder=False,
             tombstone_removed=False,
@@ -91,6 +109,7 @@ class AvailabilityResolverTests(unittest.TestCase):
             augment_id="ARAM_MissingPingAugment",
             slug="missing-ping-augment",
             cdragon_present=True,
+            kiwi_present=True,
             wiki_row={"wikiDescription": "Placeholder should not be live evidence."},
             definition_placeholder=True,
             tombstone_removed=False,
@@ -140,18 +159,19 @@ class AvailabilityResolverTests(unittest.TestCase):
         self.assertEqual(lifecycle_for_availability(availability["status"]), "active")
         self.assertEqual(availability["signals"]["wiki"]["status"], "live")
 
-    def test_current_cdragon_and_wiki_live_override_stale_tombstone(self):
+    def test_stale_tombstone_removal_outranks_cdragon_and_wiki_live(self):
         availability = resolve_availability(
             augment_id="ARAM_Removed",
             slug="removed",
             cdragon_present=True,
+            kiwi_present=True,
             wiki_row={"wikiDescription": "A current wiki row."},
             definition_placeholder=False,
             tombstone_removed=True,
         )
 
-        self.assertEqual(availability["status"], "confirmed_live")
-        self.assertEqual(lifecycle_for_availability(availability["status"]), "active")
+        self.assertEqual(availability["status"], "removed")
+        self.assertEqual(lifecycle_for_availability(availability["status"]), "removed")
         self.assertTrue(availability["signals"]["tombstone"]["removed"])
 
     def test_explicit_patch_removed_stays_removed_even_with_registry_and_wiki_text(self):
@@ -178,6 +198,7 @@ class AvailabilityResolverTests(unittest.TestCase):
             wiki_row={"wikiDescription": "A current wiki row."},
             definition_placeholder=False,
             tombstone_removed=False,
+            kiwi_present=True,
             tencent_status="removed",
         )
 
@@ -194,6 +215,7 @@ class AvailabilityResolverTests(unittest.TestCase):
             wiki_row=None,
             definition_placeholder=False,
             tombstone_removed=False,
+            kiwi_present=True,
             tencent_status="removed",
             telemetry_status="observed_live",
         )
@@ -202,6 +224,39 @@ class AvailabilityResolverTests(unittest.TestCase):
         self.assertEqual(lifecycle_for_availability(availability["status"]), "removed")
         self.assertEqual(availability["signals"]["tencent"]["status"], "removed")
         self.assertEqual(availability["signals"]["telemetry"]["status"], "observed_live")
+
+    def test_wiki_live_absent_from_cdragon_resolves_conflict(self):
+        availability = resolve_availability(
+            augment_id="ARAM_WikiOnly",
+            slug="wiki-only",
+            cdragon_present=False,
+            kiwi_present=False,
+            wiki_row={"wikiDescription": "A current wiki row."},
+            definition_placeholder=False,
+            tombstone_removed=False,
+        )
+
+        self.assertEqual(availability["status"], "conflict")
+        self.assertEqual(lifecycle_for_availability(availability["status"]), "removed")
+        self.assertEqual(availability["signals"]["wiki"]["status"], "live")
+
+    def test_confirmed_live_preserves_corroboration_signals(self):
+        availability = resolve_availability(
+            augment_id="ARAM_Corroborated",
+            slug="corroborated",
+            cdragon_present=True,
+            kiwi_present=True,
+            wiki_row={"wikiDescription": "A current wiki row."},
+            definition_placeholder=False,
+            tombstone_removed=False,
+            tencent_status="live",
+        )
+
+        self.assertEqual(availability["status"], "confirmed_live")
+        self.assertTrue(availability["signals"]["kiwi"]["present"])
+        self.assertEqual(availability["signals"]["wiki"]["status"], "live")
+        self.assertEqual(availability["signals"]["tencent"]["status"], "live")
+        self.assertEqual(availability["signals"]["resolution"]["liveSources"], ["wiki", "tencent"])
 
     def test_derived_removed_lifecycle_is_not_tombstone_evidence_on_rerun(self):
         existing = {
@@ -286,6 +341,97 @@ class AvailabilityResolverTests(unittest.TestCase):
         self.assertEqual(row["availability"]["status"], "confirmed_live")
         self.assertEqual(row["flags"]["lifecycle"], "active")
         self.assertFalse(row.get("legacyCatalogRow", False))
+
+    def test_stale_candidate_tombstone_does_not_block_current_cdragon_kiwi_live(self):
+        existing = {
+            "patch": "26.12",
+            "scraped_at": "old",
+            "augments": [
+                {
+                    "augmentId": "ARAM_OrbitalLaser_Active",
+                    "slug": "orbitallaser",
+                    "name": "Orbital Laser",
+                    "rarity": "gold",
+                    "win_rate": None,
+                    "icon": "https://example.test/orbitallaser.png",
+                    "name_zh_CN": "orbitallaser zh-CN",
+                    "name_zh_TW": "orbitallaser zh-TW",
+                    "name_ja": "orbitallaser ja",
+                    "name_ko": "orbitallaser ko",
+                    "kit_tags": [],
+                    "flags": {"system_breaker": False, "lifecycle": "removed"},
+                    "availability": {
+                        "status": "candidate_registry_present",
+                        "signals": {
+                            "patch_notes": {"removed": False},
+                            "tombstone": {"removed": True},
+                        },
+                    },
+                    "type": "standalone",
+                }
+            ],
+        }
+        base = base_row("ARAM_OrbitalLaser_Active", "Orbital Laser")
+        base["cdragon"]["kiwi"] = {
+            "present": True,
+            "keys": ["kiwi_aram_orbitallaser_active_name"],
+            "tokens": ["orbitallaseractive"],
+        }
+
+        output = assemble_catalog(
+            existing_catalog=existing,
+            base_catalog={"generated_at": "2026-06-23T00:00:00+00:00", "augments": [base]},
+            wiki_feed={"augments": {}},
+            winrate_feed={"win_rates": {}},
+            identity_map={"mappings": []},
+        )
+
+        row = output["augments"][0]
+        self.assertEqual(row["availability"]["status"], "confirmed_live")
+        self.assertEqual(row["flags"]["lifecycle"], "active")
+        self.assertFalse(row["availability"]["signals"]["tombstone"]["removed"])
+
+    def test_removed_catalog_tombstone_stays_removed_without_current_live_evidence(self):
+        existing = {
+            "patch": "26.12",
+            "scraped_at": "old",
+            "augments": [
+                {
+                    "slug": "retired-augment",
+                    "name": "Retired Augment",
+                    "rarity": "gold",
+                    "win_rate": None,
+                    "icon": "https://example.test/retired.png",
+                    "name_zh_CN": "retired zh-CN",
+                    "name_zh_TW": "retired zh-TW",
+                    "name_ja": "retired ja",
+                    "name_ko": "retired ko",
+                    "kit_tags": [],
+                    "flags": {"system_breaker": False, "lifecycle": "removed"},
+                    "availability": {
+                        "status": "removed",
+                        "signals": {
+                            "patch_notes": {"removed": False},
+                            "tombstone": {"removed": True},
+                        },
+                    },
+                    "type": "standalone",
+                }
+            ],
+        }
+
+        output = assemble_catalog(
+            existing_catalog=existing,
+            base_catalog={"generated_at": "2026-06-23T00:00:00+00:00", "augments": []},
+            wiki_feed={"augments": {}},
+            winrate_feed={"win_rates": {}},
+            identity_map={"mappings": []},
+        )
+
+        row = output["augments"][0]
+        self.assertEqual(row["availability"]["status"], "removed")
+        self.assertEqual(row["flags"]["lifecycle"], "removed")
+        self.assertTrue(row["availability"]["signals"]["tombstone"]["removed"])
 
 
 class AssembleCatalogTests(unittest.TestCase):
@@ -376,6 +522,18 @@ class AssembleCatalogTests(unittest.TestCase):
         self.assertEqual(row["flags"]["lifecycle"], "active")
         self.assertEqual(row["provenance"]["win_rate"], "arammayhem:augment-winrate-feed")
         self.assertEqual(row["provenance"]["wikiDescription"], "wiki:augment-wiki-feed")
+
+    def test_assembled_catalog_uses_meta_patch_when_provided(self):
+        output = assemble_catalog(
+            existing_catalog={"patch": "26.12", "scraped_at": "old", "augments": []},
+            base_catalog={"generated_at": "2026-06-23T00:00:00+00:00", "augments": []},
+            wiki_feed={"augments": {}},
+            winrate_feed={"win_rates": {}},
+            identity_map={"mappings": []},
+            patch="26.13",
+        )
+
+        self.assertEqual(output["patch"], "26.13")
 
 
 if __name__ == "__main__":

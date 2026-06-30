@@ -37,6 +37,11 @@ type AvailabilitySignals = {
     augmentId?: string | null;
     definitionPlaceholder?: boolean;
   };
+  kiwi?: {
+    present?: boolean;
+    keys?: string[];
+    tokens?: string[];
+  };
   wiki?: { status?: string | null };
   tencent?: { status?: string | null };
   telemetry?: { status?: string | null };
@@ -134,6 +139,10 @@ function hasLiveCorroboration(signals: AvailabilitySignals | undefined): boolean
   );
 }
 
+function hasFirstPartyLiveEvidence(signals: AvailabilitySignals | undefined): boolean {
+  return signals?.cdragon_registry?.present === true && signals?.kiwi?.present === true;
+}
+
 describe("augment authority model guards", () => {
   test("keeps arammayhem provenance isolated to win_rate", () => {
     const violations = augments.flatMap((augment) =>
@@ -171,7 +180,7 @@ describe("augment authority model guards", () => {
     expect(violations).toEqual([]);
   });
 
-  test("never treats registry presence or placeholder definitions as confirmed live", () => {
+  test("confirmed live requires first-party live evidence or corroboration, and never placeholders", () => {
     const violations = augments.flatMap((augment) => {
       const status = augment.availability?.status;
       const signals = augment.availability?.signals;
@@ -181,8 +190,8 @@ describe("augment authority model guards", () => {
         if (signals?.cdragon_registry?.present !== true) {
           failures.push(`${augment.slug} confirmed_live without CDragon registry presence`);
         }
-        if (!hasLiveCorroboration(signals)) {
-          failures.push(`${augment.slug} confirmed_live without wiki/tencent/telemetry live corroboration`);
+        if (!hasFirstPartyLiveEvidence(signals) && !hasLiveCorroboration(signals)) {
+          failures.push(`${augment.slug} confirmed_live without kiwi or corroboration evidence`);
         }
       }
 

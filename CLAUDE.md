@@ -10,8 +10,8 @@ Maintained by `scripts/update-state.sh` (post-commit hook via
 `scripts/install-hooks.sh`); do not hand-edit this block.
 
 <!-- STATE:START -->
-- Patch: `26.12`
-- Augments: `267`
+- Patch: `26.13`
+- Augments: `268`
 - Tests passing: `262`
 - Cross-parity budget: `0` divergent champions
 - Last tag: `26.12-phase3-complete`
