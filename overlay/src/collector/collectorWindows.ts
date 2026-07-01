@@ -7,7 +7,7 @@ export const CONSENT_WINDOW_LABEL = "consent";
 export const COLLECTOR_CONTROLS_WINDOW_LABEL = "collector-controls";
 export const COLLECTOR_STATUS_EVENT = "collector-status";
 
-const CONSENT_WINDOW_OPTIONS = {
+export const CONSENT_WINDOW_OPTIONS = {
   url: "/?window=consent",
   title: "Mayhem Oracle Consent",
   width: 460,
@@ -26,7 +26,7 @@ const CONSENT_WINDOW_OPTIONS = {
   visible: true,
 } as const;
 
-const COLLECTOR_CONTROLS_WINDOW_OPTIONS = {
+export const COLLECTOR_CONTROLS_WINDOW_OPTIONS = {
   url: "/?window=collector-controls",
   title: "Mayhem Oracle Collector",
   width: 260,

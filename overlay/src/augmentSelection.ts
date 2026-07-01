@@ -1,5 +1,20 @@
 import type { PoolAugment } from "./scoring";
 
+export interface DetectedAugmentText {
+  text: string;
+  region_index: number;
+}
+
+export interface MatchedAugmentCard {
+  augment: PoolAugment;
+  regionIndex: number;
+  ocrText: string;
+}
+
+export interface GameflowCaptureGate {
+  liveCaptureAllowed: boolean;
+}
+
 export function shouldStartAugmentSelection({
   augmentLevel,
 }: {
@@ -118,4 +133,51 @@ export function matchAugment(
   }
 
   return bestMatch;
+}
+
+export function matchAugmentFrame(
+  detected: DetectedAugmentText[],
+  lookup: Map<string, PoolAugment>,
+  matcher: (
+    text: string,
+    lookup: Map<string, PoolAugment>,
+  ) => PoolAugment | null = matchAugment,
+): MatchedAugmentCard[] {
+  return detected
+    .map((entry) => {
+      const augment = matcher(entry.text, lookup);
+      if (!augment) return null;
+      return {
+        augment,
+        regionIndex: entry.region_index,
+        ocrText: entry.text,
+      };
+    })
+    .filter((entry): entry is MatchedAugmentCard => entry !== null)
+    .sort((left, right) => left.regionIndex - right.regionIndex);
+}
+
+export function isCompleteThreeCardOffer(
+  matchedCards: Array<{ augment: Pick<PoolAugment, "slug">; regionIndex: number }>,
+): boolean {
+  if (matchedCards.length !== 3) return false;
+  const regions = new Set(matchedCards.map((card) => card.regionIndex));
+  const slugs = new Set(matchedCards.map((card) => card.augment.slug));
+  return (
+    regions.size === 3 &&
+    slugs.size === 3 &&
+    [0, 1, 2].every((region) => regions.has(region))
+  );
+}
+
+export function shouldRunOcrForGameflow(
+  gameflow: GameflowCaptureGate | null | undefined,
+): boolean {
+  return gameflow?.liveCaptureAllowed === true;
+}
+
+export function shouldClearOcrStateForGameflow(
+  gameflow: GameflowCaptureGate | null | undefined,
+): boolean {
+  return !shouldRunOcrForGameflow(gameflow);
 }

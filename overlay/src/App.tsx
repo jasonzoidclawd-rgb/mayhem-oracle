@@ -6,7 +6,11 @@ import {
 import { buildOverlayAugmentLookup, matchAugmentName } from "./scoring/offer-lookup";
 import {
   advanceOcrSelection,
+  isCompleteThreeCardOffer,
+  matchAugmentFrame,
+  shouldClearOcrStateForGameflow,
   shouldEndAugmentSelectionForLevel,
+  shouldRunOcrForGameflow,
 } from "./augmentSelection";
 import {
   CollectorOverlayController,
@@ -157,6 +161,7 @@ function App() {
   const ocrHasSeenCardsRef = useRef(false);
   const ocrEmptyPassesRef = useRef(0);
   const ocrSelectionCompletedRef = useRef(false);
+  const gameflowCaptureAllowedRef = useRef(false);
   const [showStartupTip, setShowStartupTip] = useState(true);
   const [leagueFocused, setLeagueFocused] = useState(false);
   const [overlayData, setOverlayData] = useState<OverlayData | null>(null);
@@ -421,7 +426,7 @@ function App() {
       !memberSnapshot?.modelConfig ||
       !decisionData ||
       !currentRound ||
-      matchedCards.length === 0
+      !isCompleteThreeCardOffer(matchedCards)
     ) {
       return null;
     }
@@ -465,6 +470,21 @@ function App() {
     setMatchedCards([]);
   }, []);
 
+  const clearGameOnlyState = useCallback((nextPhase: Phase) => {
+    ocrSelectionCompletedRef.current = true;
+    setPlayerData(null);
+    setChampionSlug(null);
+    lastAugmentLevelRef.current = 0;
+    setPickedAugments([]);
+    setMatchedCards([]);
+    lastGameTimeRef.current = null;
+    lastRecordedRoundRef.current = "";
+    activeGameHashRef.current = null;
+    setCoachOpen(false);
+    stopOcr();
+    updatePhase(nextPhase);
+  }, [stopOcr, updatePhase]);
+
   // OCR detection
   const runOcr = useCallback(async (runId: number) => {
     if (
@@ -480,17 +500,11 @@ function App() {
 
       if (!ocrActiveRef.current || ocrRunIdRef.current !== runId) return;
 
-      const matched: MatchedCard[] = [];
-      for (const det of detected) {
-        const aug = matchAugmentName(det.text, nameLookup);
-        if (aug) {
-          matched.push({
-            augment: aug,
-            regionIndex: det.region_index,
-            ocrText: det.text,
-          });
-        }
-      }
+      const matched: MatchedCard[] = matchAugmentFrame(
+        detected,
+        nameLookup,
+        matchAugmentName,
+      );
 
       const nextSelection = advanceOcrSelection(
         {
@@ -502,12 +516,9 @@ function App() {
       ocrHasSeenCardsRef.current = nextSelection.hasSeenCards;
       ocrEmptyPassesRef.current = nextSelection.emptyPasses;
       setMatchedCards(matched);
-      const distinctRegions = new Set(matched.map((card) => card.regionIndex));
-      const distinctSlugs = new Set(matched.map((card) => card.augment.slug));
       if (
         collectorCaptureEnabled &&
-        distinctRegions.size === 3 &&
-        distinctSlugs.size === 3 &&
+        isCompleteThreeCardOffer(matched) &&
         playerData
       ) {
         const round = AUGMENT_LEVELS.reduce(
@@ -555,6 +566,7 @@ function App() {
 
   // Start/stop OCR polling
   const startOcr = useCallback(() => {
+    if (!gameflowCaptureAllowedRef.current) return;
     if (ocrActiveRef.current) return;
     ocrActiveRef.current = true;
     ocrHasSeenCardsRef.current = false;
@@ -583,24 +595,13 @@ function App() {
       // macOS only — default to showing on other platforms
     }
 
-    try {
-      const gameflow = await invoke<LcuGameflowState | null>("get_lcu_gameflow_state");
-      if (gameflow && !gameflow.liveCaptureAllowed) {
-        ocrSelectionCompletedRef.current = true;
-        setPlayerData(null);
-        setChampionSlug(null);
-        lastAugmentLevelRef.current = 0;
-        setPickedAugments([]);
-        setMatchedCards([]);
-        lastGameTimeRef.current = null;
-        lastRecordedRoundRef.current = "";
-        activeGameHashRef.current = null;
-        stopOcr();
-        updatePhase("client_found");
-        return;
-      }
-    } catch {
-      // Older or unavailable LCU state falls through to Live Client detection.
+    const gameflow = await invoke<LcuGameflowState | null>("get_lcu_gameflow_state")
+      .catch(() => null);
+    gameflowCaptureAllowedRef.current = shouldRunOcrForGameflow(gameflow);
+    if (shouldClearOcrStateForGameflow(gameflow)) {
+      const clientFound = await invoke<boolean>("detect_league_client").catch(() => false);
+      clearGameOnlyState(clientFound ? "client_found" : "idle");
+      return;
     }
 
     try {
@@ -684,25 +685,24 @@ function App() {
 
     try {
       const clientFound = await invoke<boolean>("detect_league_client");
-      ocrSelectionCompletedRef.current = true;
-      setPlayerData(null);
-      setChampionSlug(null);
-      lastAugmentLevelRef.current = 0;
-      setPickedAugments([]);
-      setMatchedCards([]);
-      lastGameTimeRef.current = null;
-      lastRecordedRoundRef.current = "";
-      activeGameHashRef.current = null;
-      stopOcr();
       if (clientFound) {
-        updatePhase("client_found");
+        clearGameOnlyState("client_found");
       } else {
-        updatePhase("idle");
+        clearGameOnlyState("idle");
       }
     } catch {
-      updatePhase("idle");
+      clearGameOnlyState("idle");
     }
-  }, [champNameToSlug, championSlug, collectorEnabled, leagueFocused, startOcr, stopOcr, updatePhase]);
+  }, [
+    champNameToSlug,
+    championSlug,
+    clearGameOnlyState,
+    collectorEnabled,
+    leagueFocused,
+    startOcr,
+    stopOcr,
+    updatePhase,
+  ]);
 
   useEffect(() => {
     const onKeyDown = (event: KeyboardEvent) => {
@@ -719,6 +719,7 @@ function App() {
       if (
         !memberEnabled ||
         phase !== "augment_selection" ||
+        !isCompleteThreeCardOffer(matchedCards) ||
         !Number.isInteger(regionIndex) ||
         regionIndex < 0 ||
         regionIndex > 2
@@ -783,7 +784,11 @@ function App() {
       />}
 
       {/* Badges overlaid on augment cards during selection */}
-      {memberEnabled && phase === "augment_selection" && matchedCards.length > 0 && leagueFocused && decisionResult && (
+      {memberEnabled &&
+        phase === "augment_selection" &&
+        isCompleteThreeCardOffer(matchedCards) &&
+        leagueFocused &&
+        decisionResult && (
         <>
           {matchedCards.map((card) => {
             const pos = BADGE_POSITIONS[card.regionIndex];
