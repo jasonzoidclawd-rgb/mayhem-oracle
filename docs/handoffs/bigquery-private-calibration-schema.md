@@ -154,6 +154,18 @@ anonymous local match context only when the normalized gameflow gate reports
 produce export rows. Raw OCR text, raw LCU fields, screenshots, identity fields,
 API keys, and credential fields are rejected before sanitizer/export.
 
+The opt-in local command is:
+
+```bash
+npm run export:collector-calibration:local -- \
+  --enable-local-export \
+  --input /path/to/safe-collector-events.json \
+  --out-dir /tmp/mayhem-collector-calibration
+```
+
+It writes sanitized NDJSON files locally only. It does not contact BigQuery,
+does not upload over the network, and must remain separate from public routes.
+
 ## Retention And Minimization
 
 - Keep raw collector input out of BigQuery; export only allowlisted rows.

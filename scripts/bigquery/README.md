@@ -22,6 +22,30 @@ Input shape:
 
 The command writes local `.ndjson` files and does not contact BigQuery.
 
+## Collector Event Export
+
+Collector-event export is local-only and opt-in:
+
+```bash
+npm run export:collector-calibration:local -- \
+  --enable-local-export \
+  --input /path/to/safe-collector-events.json \
+  --out-dir /tmp/mayhem-collector-calibration
+```
+
+Input shape:
+
+```json
+{
+  "gate": { "liveCaptureAllowed": true, "phase": "InProgress" },
+  "events": []
+}
+```
+
+The command requires `--enable-local-export`, writes the same five NDJSON files
+as the private calibration dry-run, skips incomplete OCR offers, skips all rows
+when `liveCaptureAllowed` is false, and has no upload mode.
+
 ## Upload Gate
 
 `--upload` is intentionally not implemented in this scaffold. A future upload
