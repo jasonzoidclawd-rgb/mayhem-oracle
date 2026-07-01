@@ -99,14 +99,21 @@ identity fields, API keys, and credential fields are rejected by the adapter.
 
 ## Future Upload Gate
 
-Future upload work must stay behind explicit credentials:
+Upload work stays behind an explicit flag and credentials:
 
 - `BIGQUERY_PROJECT_ID`
 - `BIGQUERY_DATASET`
 - `GOOGLE_APPLICATION_CREDENTIALS`
 
-If credentials are missing, upload mode must fail closed before any network
-request.
+Use:
+
+```bash
+npm run export:private-calibration -- --upload --input /path/to/sanitized-input.json
+```
+
+If credentials are missing, upload mode fails closed before any network request.
+Default dry-run and collector local export do not construct the BigQuery
+uploader. Upload tests mock the uploader/client only.
 
 ## Non-Goals
 

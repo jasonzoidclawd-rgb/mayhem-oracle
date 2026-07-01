@@ -139,7 +139,10 @@ The local NDJSON exporter is:
 
 - `scripts/bigquery/export-private-calibration.ts`
 
-Default export mode is dry-run and local-only.
+Default export mode is dry-run and local-only. Upload mode exists only behind
+an explicit `--upload` flag plus the `BIGQUERY_PROJECT_ID`, `BIGQUERY_DATASET`,
+and `GOOGLE_APPLICATION_CREDENTIALS` environment gate. Tests use mocked
+uploaders only; no default path contacts BigQuery.
 
 ## Collector Adapter Boundary
 
@@ -165,6 +168,26 @@ npm run export:collector-calibration:local -- \
 
 It writes sanitized NDJSON files locally only. It does not contact BigQuery,
 does not upload over the network, and must remain separate from public routes.
+
+## Upload Boundary
+
+The env-gated uploader is:
+
+- `src/lib/bigquery/bigquery-upload.ts`
+
+Approved upload targets are limited to:
+
+- `collector_raw.augment_offers`
+- `collector_raw.round_events`
+- `collector_raw.local_match_context`
+- `riot_raw.match_summaries`
+- `riot_derived.participant_augments`
+
+Upload mode consumes the same sanitized `PrivateCalibrationInput` /
+`PrivateCalibrationExport` shapes as local dry-run. Missing environment values
+fail closed before BigQuery is constructed. Empty tables are skipped. The
+collector local export command remains local-only and does not construct the
+BigQuery uploader.
 
 ## Retention And Minimization
 
