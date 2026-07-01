@@ -48,3 +48,9 @@ __pycache__/
 # graphify analysis output (local only)
 graphify-out/
 *-prompt.txt
+
+# Riot API discovery scratch payloads (local only; may contain PUUID/name data)
+.riot-discovery/
+riot-discovery/
+*.riot-raw.json
+*.riot-timeline-raw.json
