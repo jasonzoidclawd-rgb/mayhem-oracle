@@ -10,6 +10,7 @@
     "test": "vitest run",
     "test:bigquery-calibration": "vitest run src/lib/bigquery/private-calibration.test.ts",
     "export:private-calibration:dry-run": "jiti scripts/bigquery/export-private-calibration.ts --dry-run",
+    "export:collector-calibration:local": "jiti scripts/bigquery/export-collector-calibration.ts",
     "test:watch": "vitest",
     "update-data": "./scripts/update-data.sh"
   },

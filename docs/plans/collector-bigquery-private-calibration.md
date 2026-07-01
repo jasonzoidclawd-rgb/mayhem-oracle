@@ -71,6 +71,32 @@ responsible for PR #21 window focus behavior and PR #27 live OCR capture gating;
 this scaffold does not add a BigQuery client, network upload, public page, or
 public endpoint.
 
+## Local Operator Export
+
+For development/operator validation, safe collector calibration events can be
+exported locally with:
+
+```bash
+npm run export:collector-calibration:local -- \
+  --enable-local-export \
+  --input /path/to/safe-collector-events.json \
+  --out-dir /tmp/mayhem-collector-calibration
+```
+
+The command consumes:
+
+```json
+{
+  "gate": { "liveCaptureAllowed": true, "phase": "InProgress" },
+  "events": []
+}
+```
+
+It is disabled unless `--enable-local-export` is present, writes only local
+NDJSON, and has no BigQuery or network upload mode. The input must already use
+safe collector event shapes; raw OCR text, screenshots, raw LCU payloads,
+identity fields, API keys, and credential fields are rejected by the adapter.
+
 ## Future Upload Gate
 
 Future upload work must stay behind explicit credentials:
