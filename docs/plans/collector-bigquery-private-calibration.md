@@ -48,6 +48,29 @@ npm run export:private-calibration:dry-run -- --input /path/to/sanitized-input.j
 
 The command writes NDJSON locally and does not contact BigQuery by default.
 
+## Collector Event Wiring Boundary
+
+The local collector calibration adapter lives in:
+
+- `src/lib/bigquery/collector-calibration.ts`
+
+It models the safe event shape already produced by the overlay collector/OCR
+flow:
+
+- complete three-card visible augment offers;
+- round-level selected augment state;
+- anonymous local match context.
+
+The adapter is root-library code, not overlay runtime upload code. It reuses the
+private calibration sanitizers, skips incomplete OCR offers, skips every event
+when `liveCaptureAllowed` is false, and writes only local NDJSON through the
+existing dry-run export shape. Local callers can use
+`buildPrivateCalibrationInputFromCollectorEvents` to turn a gated event batch
+into the PR #29 `PrivateCalibrationInput` shape. The overlay remains
+responsible for PR #21 window focus behavior and PR #27 live OCR capture gating;
+this scaffold does not add a BigQuery client, network upload, public page, or
+public endpoint.
+
 ## Future Upload Gate
 
 Future upload work must stay behind explicit credentials:
