@@ -4,6 +4,7 @@ import {
   findRiotFieldPaths,
   summarizeRiotMatchSchema,
 } from "@/lib/riot/transform";
+import { defaultMatchRegionalRoute } from "@/lib/riot/routing";
 
 const match = {
   metadata: {
@@ -50,6 +51,24 @@ const match = {
         perks: {
           styles: [{ selections: [{ perk: 8112 }] }],
         },
+      },
+    ],
+  },
+};
+
+const zeroAugmentMatch = {
+  ...match,
+  info: {
+    ...match.info,
+    participants: [
+      {
+        ...match.info.participants[0],
+        playerAugment1: 0,
+        playerAugment2: 0,
+        playerAugment3: 0,
+        playerAugment4: 0,
+        playerAugment5: 0,
+        playerAugment6: 0,
       },
     ],
   },
@@ -108,5 +127,72 @@ describe("Riot Match-V5 transform", () => {
       "info.participants[0].perks",
       "info.participants[0].perks.styles[0].selections[0].perk",
     ]);
+  });
+
+  it("distinguishes selected augment fields from selected augment values", () => {
+    const context = extractMatchContext(zeroAugmentMatch);
+    const summary = summarizeRiotMatchSchema(zeroAugmentMatch);
+
+    expect(context.participants[0].selectedAugmentCandidates).toEqual([]);
+    expect(summary.selectedAugmentFieldPaths).toEqual([
+      "info.participants[0].playerAugment1",
+      "info.participants[0].playerAugment2",
+      "info.participants[0].playerAugment3",
+      "info.participants[0].playerAugment4",
+      "info.participants[0].playerAugment5",
+      "info.participants[0].playerAugment6",
+    ]);
+    expect(summary.hasSelectedAugmentFieldPaths).toBe(true);
+    expect(summary.hasSelectedAugmentValues).toBe(false);
+  });
+
+  it("reports selected augment values only when candidate values are nonzero", () => {
+    const summary = summarizeRiotMatchSchema({
+      ...zeroAugmentMatch,
+      info: {
+        ...zeroAugmentMatch.info,
+        participants: [
+          {
+            ...zeroAugmentMatch.info.participants[0],
+            playerAugment1: 45678,
+          },
+        ],
+      },
+    });
+
+    expect(summary.hasSelectedAugmentFieldPaths).toBe(true);
+    expect(summary.hasSelectedAugmentValues).toBe(true);
+  });
+
+  it("keeps mission evidence out of selected augment fields", () => {
+    const summary = summarizeRiotMatchSchema({
+      ...zeroAugmentMatch,
+      info: {
+        ...zeroAugmentMatch.info,
+        participants: [
+          {
+            ...zeroAugmentMatch.info.participants[0],
+            missions: { playerScore0: 12 },
+            playerMissionStat: 99,
+          },
+        ],
+      },
+    });
+
+    expect(summary.selectedAugmentFieldPaths).not.toContain("info.participants[0].missions");
+    expect(summary.selectedAugmentFieldPaths).not.toContain(
+      "info.participants[0].playerMissionStat",
+    );
+    expect(summary.modeSpecificFieldPaths).toContain("info.participants[0].missions");
+    expect(summary.modeSpecificFieldPaths).toContain("info.participants[0].playerMissionStat");
+  });
+});
+
+describe("Riot route defaults", () => {
+  it("uses the sea regional route for SEA platform match-v5 probes", () => {
+    expect(defaultMatchRegionalRoute("tw2")).toBe("sea");
+    expect(defaultMatchRegionalRoute("sg2")).toBe("sea");
+    expect(defaultMatchRegionalRoute("vn2")).toBe("sea");
+    expect(defaultMatchRegionalRoute("na1")).toBe("americas");
   });
 });

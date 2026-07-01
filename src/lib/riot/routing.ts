@@ -41,6 +41,18 @@ export function riotPlatformBaseUrl(route: RiotPlatformRoute = "na1"): string {
   return `https://${route}.api.riotgames.com`;
 }
 
+export function defaultAccountRegionalRoute(): RiotRegionalRoute {
+  return "asia";
+}
+
+export function defaultMatchRegionalRoute(
+  platformRoute: RiotPlatformRoute = "na1",
+): RiotRegionalRoute {
+  return platformRoute === "tw2" || platformRoute === "sg2" || platformRoute === "vn2"
+    ? "sea"
+    : "americas";
+}
+
 export function encodeRiotPathSegment(value: string): string {
   return encodeURIComponent(value);
 }

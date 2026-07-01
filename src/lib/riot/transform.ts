@@ -42,13 +42,15 @@ export interface RiotMatchSchemaSummary {
   offeredAugmentFieldPaths: string[];
   perkFieldPaths: string[];
   modeSpecificFieldPaths: string[];
-  hasSelectedAugmentCandidates: boolean;
+  hasSelectedAugmentFieldPaths: boolean;
+  hasSelectedAugmentValues: boolean;
   hasOfferedAugmentCandidates: boolean;
 }
 
-const SELECTED_AUGMENT_KEY_PATTERN = /(augment|playeraugment|cherry|mayhem|mission)/i;
+const SELECTED_AUGMENT_KEY_PATTERN = /augment|playeraugment/i;
 const OFFER_KEY_PATTERN = /(offer|offered|choice|choices|option|options)/i;
 const PERK_KEY_PATTERN = /^perks?$|perk/i;
+const MODE_SPECIFIC_KEY_PATTERN = /(cherry|mayhem|mission)/i;
 const IDENTITY_KEY_PATTERN =
   /(puuid|summonerid|summonername|riotid|gameName|tagLine|profileIconId)/i;
 
@@ -303,8 +305,14 @@ export function summarizeRiotMatchSchema(
     .map((entry) => entry.path);
 
   const modeSpecificFieldPaths = candidatePaths
-    .filter((entry) => /(cherry|mayhem|mission)/i.test(`${entry.key} ${String(entry.valuePreview)}`))
+    .filter((entry) =>
+      MODE_SPECIFIC_KEY_PATTERN.test(`${entry.key} ${String(entry.valuePreview)}`),
+    )
     .map((entry) => entry.path);
+
+  const hasSelectedAugmentValues = context.participants.some(
+    (participant) => participant.selectedAugmentCandidates.length > 0,
+  );
 
   return {
     matchId: context.matchId,
@@ -317,7 +325,8 @@ export function summarizeRiotMatchSchema(
     offeredAugmentFieldPaths: sortedUnique(offeredAugmentFieldPaths),
     perkFieldPaths: sortedUnique(perkFieldPaths),
     modeSpecificFieldPaths: sortedUnique(modeSpecificFieldPaths),
-    hasSelectedAugmentCandidates: selectedAugmentFieldPaths.length > 0,
+    hasSelectedAugmentFieldPaths: selectedAugmentFieldPaths.length > 0,
+    hasSelectedAugmentValues,
     hasOfferedAugmentCandidates: offeredAugmentFieldPaths.length > 0,
   };
 }

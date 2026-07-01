@@ -16,6 +16,10 @@ The scaffold supports:
 - Optional Match-V5 timeline inspection.
 - Sanitized schema summaries for fields containing `augment`, `playerAugment`,
   `perk`, `cherry`, `mayhem`, or `mission`.
+- Split regional routing for Account-V1 and Match-V5 probes. Account-V1 defaults
+  to `asia`; Match-V5 defaults to `sea` for `tw2`/`sg2`/`vn2` platform probes
+  and `americas` otherwise. The legacy `--regional` flag remains a Match-V5
+  alias.
 
 Raw Riot payloads can contain PUUID/name data and must stay local. The repository
 now ignores local Riot discovery scratch payload patterns.
@@ -39,26 +43,36 @@ derived output.
 
 Live Match-V5 conclusion for this run:
 
-- Live endpoint check: `lol/status/v4/platform-data` succeeded for `tw2`, proving
-  the exported key was present and accepted for at least the status endpoint.
-- Match-V5 live probe: `TW2_427286604` returned `403 Forbidden` on the `sea`
-  regional route.
-- Regional fallback probe: the same match id returned `404 Not Found` on `asia`,
-  `americas`, and `europe`, which indicates `sea` is the only plausible regional
-  route for this match id.
-- Selected augments: not proven from live Match-V5 because match detail access was
-  forbidden.
-- Exact selected-augment field paths: not observed in a live ARAM Mayhem match in
-  this run.
-- Offered-but-not-picked augments: not observed in this run and should remain
-  collector-owned unless Match-V5/timeline evidence proves otherwise.
-- Observed `queueId`/`gameMode`/`mapId`: not available because Match-V5 detail
-  returned `403 Forbidden`.
+- Account-V1 by Riot ID succeeds on `asia`, `americas`, and `europe`.
+- Account-V1 by Riot ID returns `403 Forbidden` on `sea`.
+- PUUID to Match-V5 match-id discovery succeeds on `sea`.
+- Match-V5 sample `TW2_404846583` was fetched from `sea`.
+- The sample is regular ARAM, not ARAM Mayhem: `queueId` `450`, `gameMode`
+  `ARAM`, `mapId` `12`, `gameVersion` `16.7.760.9485`.
+- `playerAugment1` through `playerAugment6` field paths exist on participant
+  payloads.
+- Nonzero selected augment values were not proven in this regular ARAM sample;
+  sanitized participant `selectedAugmentCandidates` remained empty.
+- Offered-but-not-picked augments were not observed.
 
-The safe product conclusion is unchanged until live match evidence is captured:
-Riot API may feed private match context and, if fields exist, final selected
-augment picks. It cannot replace the collector for offered-but-not-picked
-augment sets without explicit Match-V5/timeline evidence.
+The safe product conclusion is unchanged until an actual ARAM Mayhem match sample
+is captured: Riot API can feed private match context and has stable
+`playerAugment1` through `playerAugment6` field paths, but nonzero selected
+augment values for ARAM Mayhem are not yet proven. It cannot replace the
+collector for offered-but-not-picked augment sets without explicit Match-V5 or
+timeline evidence.
+
+## Transform Semantics
+
+- `selectedAugmentFieldPaths` and `hasSelectedAugmentFieldPaths` mean candidate
+  `playerAugment`/augment-like participant fields exist in the payload.
+- `hasSelectedAugmentValues` means sanitized participants contain nonzero
+  selected augment candidate values.
+- CLI `selectedAugmentsPresent` follows `hasSelectedAugmentValues`, not field
+  existence.
+- CLI `selectedAugmentFieldPathsPresent` exposes field existence separately.
+- Mission fields are mode-specific evidence, not selected augment evidence.
+- `offeredAugmentsPresent` remains based on offer/choice/option evidence.
 
 ## BigQuery Plan
 
@@ -69,8 +83,9 @@ Private calibration/model-validation tables:
 - `riot_raw.timelines`: restricted raw Match-V5 timeline storage when needed.
 - `riot_derived.participants`: sanitized participant-level match context,
   excluding PUUIDs, names, and account identifiers.
-- `riot_derived.participant_augments`: create only if Match-V5 proves final
-  selected augment fields exist.
+- `riot_derived.participant_augments`: create only if a real ARAM Mayhem
+  Match-V5 sample proves nonzero selected augment values in the participant
+  fields.
 - `collector_raw.augment_offers`: remains collector-owned for offered-but-not-
   picked augment sets, offer timing, OCR confidence, and round-by-round evidence.
 

@@ -1,5 +1,10 @@
 import { RiotApiClient, RiotApiError } from "../../src/lib/riot/client";
-import type { RiotPlatformRoute, RiotRegionalRoute } from "../../src/lib/riot/routing";
+import {
+  defaultAccountRegionalRoute,
+  defaultMatchRegionalRoute,
+  type RiotPlatformRoute,
+  type RiotRegionalRoute,
+} from "../../src/lib/riot/routing";
 import {
   extractMatchContext,
   summarizeRiotMatchSchema,
@@ -12,7 +17,8 @@ interface CliOptions {
   tagLine?: string;
   puuid?: string;
   matchId?: string;
-  regionalRoute: RiotRegionalRoute;
+  accountRegionalRoute: RiotRegionalRoute;
+  matchRegionalRoute: RiotRegionalRoute;
   platformRoute: RiotPlatformRoute;
   count: number;
   start: number;
@@ -75,13 +81,22 @@ function booleanOption(args: Record<string, string | boolean>, key: string): boo
 
 function parseCliOptions(argv: string[]): CliOptions {
   const args = parseArgs(argv);
+  const platformRoute = (stringOption(args, "platform") ?? "na1") as RiotPlatformRoute;
+  const regionalAlias = stringOption(args, "regional") as RiotRegionalRoute | undefined;
+  const accountRegionalRoute = (stringOption(args, "account-regional") ??
+    defaultAccountRegionalRoute()) as RiotRegionalRoute;
+  const matchRegionalRoute = (stringOption(args, "match-regional") ??
+    regionalAlias ??
+    defaultMatchRegionalRoute(platformRoute)) as RiotRegionalRoute;
+
   return {
     gameName: stringOption(args, "game-name"),
     tagLine: stringOption(args, "tag-line"),
     puuid: stringOption(args, "puuid"),
     matchId: stringOption(args, "match-id"),
-    regionalRoute: (stringOption(args, "regional") ?? "americas") as RiotRegionalRoute,
-    platformRoute: (stringOption(args, "platform") ?? "na1") as RiotPlatformRoute,
+    accountRegionalRoute,
+    matchRegionalRoute,
+    platformRoute,
     count: numberOption(args, "count") ?? 20,
     start: numberOption(args, "start") ?? 0,
     queue: numberOption(args, "queue"),
@@ -98,6 +113,12 @@ function usage(): string {
     "  RIOT_API_KEY=... npx --yes tsx scripts/riot/discover_matches.ts --puuid <puuid> [--queue 2400] [--count 20] [--timeline]",
     '  RIOT_API_KEY=... npx --yes tsx scripts/riot/discover_matches.ts --game-name "Name" --tag-line TAG [--queue 2400]',
     "",
+    "Regional routing:",
+    "  --account-regional controls Account-V1 and defaults to asia.",
+    "  --match-regional controls Match-V5.",
+    "  --regional remains a backwards-compatible alias for --match-regional.",
+    "  --match-regional defaults to sea for tw2/sg2/vn2 platforms, otherwise americas.",
+    "",
     "The script prints sanitized summaries only. Do not commit raw Riot payloads.",
   ].join("\n");
 }
@@ -107,7 +128,11 @@ function printJson(value: unknown): void {
 }
 
 function hasAnySelectedAugment(matches: ObservedMatch[]): boolean {
-  return matches.some((match) => match.schema.hasSelectedAugmentCandidates);
+  return matches.some((match) => match.schema.hasSelectedAugmentValues);
+}
+
+function hasAnySelectedAugmentFieldPath(matches: ObservedMatch[]): boolean {
+  return matches.some((match) => match.schema.hasSelectedAugmentFieldPaths);
 }
 
 function hasAnyOfferedAugment(matches: ObservedMatch[]): boolean {
@@ -141,15 +166,15 @@ async function main(): Promise<void> {
   }
 
   const endpointsChecked: string[] = [];
-  const client = new RiotApiClient({
+  const statusClient = new RiotApiClient({
     apiKey,
-    regionalRoute: options.regionalRoute,
+    regionalRoute: options.matchRegionalRoute,
     platformRoute: options.platformRoute,
   });
 
   if (options.status) {
     endpointsChecked.push("lol-status-v4/platform-data");
-    const status = await client.platformStatus();
+    const status = await statusClient.platformStatus();
     printJson({
       endpointsChecked,
       platformRoute: options.platformRoute,
@@ -158,10 +183,21 @@ async function main(): Promise<void> {
     return;
   }
 
+  const accountClient = new RiotApiClient({
+    apiKey,
+    regionalRoute: options.accountRegionalRoute,
+    platformRoute: options.platformRoute,
+  });
+  const matchClient = new RiotApiClient({
+    apiKey,
+    regionalRoute: options.matchRegionalRoute,
+    platformRoute: options.platformRoute,
+  });
+
   let puuid = options.puuid;
   if (!puuid && options.gameName && options.tagLine) {
     endpointsChecked.push("account-v1/accounts/by-riot-id/{gameName}/{tagLine}");
-    const account = await client.accountByRiotId(options.gameName, options.tagLine);
+    const account = await accountClient.accountByRiotId(options.gameName, options.tagLine);
     puuid = account.puuid;
   }
 
@@ -170,7 +206,7 @@ async function main(): Promise<void> {
     matchIds = [options.matchId];
   } else if (puuid) {
     endpointsChecked.push("match-v5/matches/by-puuid/{puuid}/ids");
-    matchIds = await client.matchIdsByPuuid({
+    matchIds = await matchClient.matchIdsByPuuid({
       puuid,
       start: options.start,
       count: options.count,
@@ -182,7 +218,12 @@ async function main(): Promise<void> {
 
   const observedMatches: ObservedMatch[] = [];
   for (const matchId of matchIds.slice(0, options.count)) {
-    const observed = await fetchObservedMatch(client, matchId, options.timeline, endpointsChecked);
+    const observed = await fetchObservedMatch(
+      matchClient,
+      matchId,
+      options.timeline,
+      endpointsChecked,
+    );
     if (options.queue !== undefined && observed.schema.queueId !== options.queue) {
       continue;
     }
@@ -191,9 +232,11 @@ async function main(): Promise<void> {
 
   printJson({
     endpointsChecked: Array.from(new Set(endpointsChecked)),
-    regionalRoute: options.regionalRoute,
+    accountRegionalRoute: options.accountRegionalRoute,
+    matchRegionalRoute: options.matchRegionalRoute,
     platformRoute: options.platformRoute,
     observedMatchCount: observedMatches.length,
+    selectedAugmentFieldPathsPresent: hasAnySelectedAugmentFieldPath(observedMatches),
     selectedAugmentsPresent: hasAnySelectedAugment(observedMatches),
     offeredAugmentsPresent: hasAnyOfferedAugment(observedMatches),
     collectorReplacement:
