@@ -70,6 +70,15 @@ mayhem-oracle/
 └── next.config.ts         # Next.js + next-intl plugin
 ```
 
+## Current context
+
+- `CLAUDE.md` and `AGENTS.md` contain the short standing contracts for agents.
+- `docs/handoffs/current-github-context.md` records recent PR/merge state.
+- `docs/handoffs/overlay-current-state.md` records the overlay consent,
+  collector, member-coach, and auth findings.
+- `docs/plans/riot-api-bigquery-discovery.md` records the Riot API and
+  BigQuery discovery roadmap.
+
 ## Data sources
 
 | Source | What it provides | Method |

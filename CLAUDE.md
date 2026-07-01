@@ -78,5 +78,11 @@ update-data step gate, data-integrity test).
 
 - `AGENTS.md` — agent operating rules · `CO_WORKFLOW.md` — Claude/Codex handoffs
 - `GAME_MECHANICS.md` — selection mechanics, 26.12 changes, live-gate checklist
+- `docs/handoffs/current-github-context.md` — recent PR/merge state to verify
+  before assuming what is already on `main`.
+- `docs/handoffs/overlay-current-state.md` — overlay consent/focus, collector,
+  member coach, and device-auth findings.
+- `docs/plans/riot-api-bigquery-discovery.md` — Riot API + BigQuery discovery
+  roadmap and compliance boundaries.
 - 26.12 rebuild ledger: phase tags `26.12-phase<N>-complete`, prompt at
   `docs/plans/patch-26.12-scoring-engine-rebuild-plan-prompt.md`

@@ -36,6 +36,11 @@ timestamp (see CLAUDE.md). Verification evidence: use `/usr/bin/diff`,
 
 - Check `git status --short --branch` before editing; preserve unrelated
   changes; call out suspicious pre-existing modifications.
+- Before overlay, data-ingest, or platform-roadmap work, read
+  `docs/handoffs/current-github-context.md`,
+  `docs/handoffs/overlay-current-state.md`, and
+  `docs/plans/riot-api-bigquery-discovery.md` instead of rediscovering recent
+  state from scratch.
 - Never hand-edit `public/data/` (generated; curated fields are pipeline-owned).
 - New user-facing copy goes through all five `messages/*.json` in one commit.
 - Tag before risky overlay work; the overlay's working state is sacred.

@@ -79,5 +79,10 @@ Every handoff should include:
 
 - `CLAUDE.md` is the standing repo context and should stay stable.
 - `CO_WORKFLOW.md` is the reusable handoff contract between agents.
+- Recent repo state lives in handoff/plan docs, especially
+  `docs/handoffs/current-github-context.md`,
+  `docs/handoffs/overlay-current-state.md`, and
+  `docs/plans/riot-api-bigquery-discovery.md`; cite them in handoff packets
+  when the task touches overlay, collector, Riot API, or data platform work.
 - For this repo, validate web changes with `npm run lint`, `npm test`, and `npm run build`.
 - For overlay changes, also validate with `cd overlay && npm run build`.
