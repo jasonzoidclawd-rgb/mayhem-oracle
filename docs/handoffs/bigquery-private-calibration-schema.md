@@ -141,6 +141,19 @@ The local NDJSON exporter is:
 
 Default export mode is dry-run and local-only.
 
+## Collector Adapter Boundary
+
+The collector event adapter is:
+
+- `src/lib/bigquery/collector-calibration.ts`
+
+It is a local-only buffer/export adapter for safe collector-produced event
+shapes. It accepts complete visible three-card offer events, round events, and
+anonymous local match context only when the normalized gameflow gate reports
+`liveCaptureAllowed: true`. Partial OCR offers and non-live events do not
+produce export rows. Raw OCR text, raw LCU fields, screenshots, identity fields,
+API keys, and credential fields are rejected before sanitizer/export.
+
 ## Retention And Minimization
 
 - Keep raw collector input out of BigQuery; export only allowlisted rows.
