@@ -22,7 +22,7 @@ from data_paths import INTERNAL_DATA_DIR
 WIKI_PAGE_TITLE = "ARAM:_Mayhem/Augments"
 WIKI_PAGE_URL = "https://wiki.leagueoflegends.com/en-us/ARAM:_Mayhem/Augments"
 WIKI_API = "https://wiki.leagueoflegends.com/api.php"
-HEADERS = {"User-Agent": "MayhemOracleBot/1.0 (https://github.com/mayhem-oracle)"}
+HEADERS = {"User-Agent": "MayhemOracleBot/1.0 (https://github.com/jasonzoidclawd-rgb/wasfun.lol)"}
 
 IDENTITY_MAP_PATH = INTERNAL_DATA_DIR / "augment-identity-map.json"
 BASE_CATALOG_PATH = INTERNAL_DATA_DIR / "augment-base-catalog.json"

@@ -8,8 +8,8 @@ PWA that works on iOS (Add to Home Screen) and Windows (browser + Microsoft Stor
 
 ```bash
 # 1. Clone and install
-git clone https://github.com/YOUR_USERNAME/mayhem-oracle.git
-cd mayhem-oracle
+git clone https://github.com/jasonzoidclawd-rgb/wasfun.lol.git
+cd wasfun.lol
 npm install
 
 # 2. Run dev server
