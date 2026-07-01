@@ -1,0 +1,109 @@
+{
+  "version": 1,
+  "purpose": "private calibration and model validation only",
+  "forbidden": [
+    "puuid",
+    "riotId",
+    "summonerName",
+    "gameName",
+    "tagLine",
+    "chat",
+    "screenshot",
+    "rawLcu",
+    "api keys",
+    "Google credentials",
+    "raw LCU payloads"
+  ],
+  "tables": {
+    "collector_raw.augment_offers": {
+      "description": "Collector-owned visible offer set and selected offer evidence.",
+      "fields": {
+        "schema_version": "INT64 REQUIRED",
+        "local_match_nonce": "STRING REQUIRED",
+        "local_session_nonce": "STRING",
+        "patch": "STRING",
+        "game_version": "STRING",
+        "queue_id": "INT64",
+        "game_mode": "STRING",
+        "map_id": "INT64",
+        "champion_slug": "STRING",
+        "champion_id": "INT64",
+        "round": "INT64",
+        "augment_level": "INT64",
+        "offered_augment_slugs": "ARRAY<STRING>",
+        "offered_augment_ids": "ARRAY<INT64>",
+        "selected_augment_slug": "STRING",
+        "selected_augment_id": "INT64",
+        "ocr_confidence": "FLOAT64",
+        "fixture_provenance": "STRING",
+        "client_timestamp_bucket": "TIMESTAMP REQUIRED"
+      }
+    },
+    "collector_raw.round_events": {
+      "description": "Collector-owned round state without raw LCU payloads.",
+      "fields": {
+        "schema_version": "INT64 REQUIRED",
+        "local_match_nonce": "STRING REQUIRED",
+        "patch": "STRING",
+        "champion_slug": "STRING",
+        "champion_id": "INT64",
+        "round": "INT64",
+        "augment_level": "INT64",
+        "selected_augment_slugs": "ARRAY<STRING>",
+        "selected_augment_ids": "ARRAY<INT64>",
+        "item_ids": "ARRAY<STRING>",
+        "summoner_spell_ids": "ARRAY<INT64>",
+        "client_timestamp_bucket": "TIMESTAMP REQUIRED"
+      }
+    },
+    "collector_raw.local_match_context": {
+      "description": "Anonymous local match context for calibration joins.",
+      "fields": {
+        "schema_version": "INT64 REQUIRED",
+        "local_match_nonce": "STRING REQUIRED",
+        "patch": "STRING",
+        "game_version": "STRING",
+        "queue_id": "INT64",
+        "game_mode": "STRING",
+        "map_id": "INT64",
+        "region": "STRING",
+        "platform": "STRING",
+        "client_timestamp_bucket": "TIMESTAMP REQUIRED"
+      }
+    },
+    "riot_raw.match_summaries": {
+      "description": "Sanitized Match-V5 metadata summaries for private calibration.",
+      "fields": {
+        "schema_version": "INT64 REQUIRED",
+        "match_id": "STRING",
+        "patch": "STRING",
+        "game_version": "STRING",
+        "queue_id": "INT64",
+        "map_id": "INT64",
+        "game_mode": "STRING",
+        "game_type": "STRING",
+        "participant_count": "INT64 REQUIRED",
+        "selected_augment_field_paths_present": "BOOL REQUIRED",
+        "selected_augments_present": "BOOL REQUIRED",
+        "offered_augments_present": "BOOL REQUIRED",
+        "selected_augment_field_paths": "ARRAY<STRING>",
+        "offered_augment_field_paths": "ARRAY<STRING>"
+      }
+    },
+    "riot_derived.participant_augments": {
+      "description": "Derived only after real ARAM Mayhem samples prove nonzero selected augment values.",
+      "fields": {
+        "schema_version": "INT64 REQUIRED",
+        "match_id": "STRING",
+        "participant_id": "INT64",
+        "participant_index": "INT64 REQUIRED",
+        "champion_id": "INT64",
+        "champion_name": "STRING",
+        "selected_augment_field_paths_present": "BOOL REQUIRED",
+        "selected_augments_present": "BOOL REQUIRED",
+        "offered_augments_present": "BOOL REQUIRED",
+        "selected_augment_values": "ARRAY<STRING>"
+      }
+    }
+  }
+}
