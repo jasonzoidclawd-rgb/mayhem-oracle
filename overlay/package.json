@@ -8,8 +8,10 @@
     "predev": "npm run sync-data",
     "dev": "vite",
     "test": "vitest run",
+    "audit:windows-artifact": "node ./scripts/audit-windows-artifact.mjs",
     "prebuild": "npm run sync-data",
     "build": "tsc && vite build",
+    "package:windows": "tauri build --bundles nsis",
     "preview": "vite preview",
     "tauri": "tauri"
   },
