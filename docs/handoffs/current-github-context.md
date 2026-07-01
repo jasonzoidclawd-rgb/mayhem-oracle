@@ -12,7 +12,7 @@ decisions.
 | #18 | Merged | `9d6902c823b42000bae01f342913d7af2f1dab4c` | SP1 pool-add hardening and 26.13 ingest. CDragon became first-party live evidence while official removal/disable/tombstone/conflict precedence stayed higher. |
 | #19 | Merged | `7be1f9d6ebfe13b53fc308c738c86880e3b1aef1` | SP2 freshness unknown-state reporting. |
 | #20 | Merged | `09a148fc58eccdcf7987115ddea1590ca60b5bb1` | Freshness JSON stdout hotfix. |
-| #21 | Open at verification time | `codex/overlay-consent-focus` @ `8515ea7`; <https://github.com/jasonzoidclawd-rgb/mayhem-oracle/pull/21> | Overlay focus-safety split. Do not assume merged unless `gh pr view 21` confirms it. |
+| #21 | Merged | `3717b1f2625cc35ab21781c7becbfde7e1da487c` | Overlay focus-safety split: consent and collector controls moved out of the fullscreen transparent overlay. |
 
 Verification command used for #21:
 
@@ -20,8 +20,7 @@ Verification command used for #21:
 gh pr view 21 --json number,state,mergedAt,mergeCommit,headRefName,baseRefName,url,title --jq '.'
 ```
 
-Observed result: PR #21 was `OPEN`, `mergedAt` was `null`, and `mergeCommit`
-was `null`.
+Observed result after merge: PR #21 was `MERGED` at `2026-07-01T03:34:04Z` with merge commit `3717b1f2625cc35ab21781c7becbfde7e1da487c`.
 
 ## Data State At Verification
 
