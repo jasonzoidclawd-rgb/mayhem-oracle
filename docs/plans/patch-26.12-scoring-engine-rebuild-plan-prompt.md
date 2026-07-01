@@ -3,7 +3,7 @@
 You are in plan mode. Research and produce an execution plan only — no code edits, no commits.
 Ultrathink. Load context exhaustively before writing the plan; use the full context window. Read files completely, don't skim.
 
-Repo: https://github.com/jasonzoidclawd-rgb/mayhem-oracle (local: `~/Desktop/mayhem-oracle/`, overlay at `overlay/`)
+Repo: https://github.com/jasonzoidclawd-rgb/wasfun.lol (local: `~/Desktop/mayhem-oracle/`, overlay at `overlay/`)
 Provenance: two prior Opus 4.6 analysis sessions (claude.ai shares `73999e07…` and `dedb7497…`). Their conclusions are distilled below — treat this section as authoritative; do not attempt to fetch the links.
 
 ## Why this plan exists

@@ -46,7 +46,7 @@ from data_paths import INTERNAL_DATA_DIR
 
 DATA_FILE = INTERNAL_DATA_DIR / "items.json"
 WIKI_API  = "https://wiki.leagueoflegends.com/api.php"
-HEADERS   = {"User-Agent": "MayhemOracleBot/1.0 (https://github.com/mayhem-oracle)"}
+HEADERS   = {"User-Agent": "MayhemOracleBot/1.0 (https://github.com/jasonzoidclawd-rgb/wasfun.lol)"}
 
 # Item tier sections on the /en-us/Item wiki list page that are relevant to Mayhem
 WIKI_TIER_SECTIONS: dict[str, str] = {
