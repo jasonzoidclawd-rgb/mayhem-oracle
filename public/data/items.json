@@ -1,5 +1,5 @@
 {
-  "scraped_at": "2026-06-30T23:04:30.748883+00:00",
+  "scraped_at": "2026-07-01T12:29:24.776181+00:00",
   "mayhemExclusive": [
     {
       "slug": "atmas-reckoning",
@@ -5177,11 +5177,11 @@
       "wikiPassives": [
         {
           "label": "Unique - Sinister Pact:",
-          "text": "Gain 0% – 45% (based on current you are health missing) ability power and bonus movement speed."
+          "text": "Gain 0% – 45% (based on flat missing health) ability power and bonus movement speed."
         }
       ],
       "wikiNotes": [
-        "Sinister Pack's buff persists through death and will continue using the amount of health the user currently has while dead (including in rare/unintentional cases in which the user gains a heal while dead)."
+        "Sinister Pact's buff persists through death and will continue using the amount of health the user currently has while dead (including in rare/unintentional cases in which the user gains a heal while dead)."
       ],
       "recipe": [],
       "tier": null,
