@@ -32,7 +32,7 @@ Observed result after merge: PR #21 was `MERGED` at `2026-07-01T03:34:04Z` with 
 
 ## Scope Notes For Future Agents
 
-- Do not merge PR #21 as part of context updates.
+- Do not modify or revert PR #21 overlay behavior as part of context updates.
 - Do not mix SP1/SP2 data freshness work into overlay or roadmap docs unless a
   task explicitly asks for it.
 - Do not hand-edit generated data under `public/data/`.
