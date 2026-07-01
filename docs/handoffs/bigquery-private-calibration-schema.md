@@ -189,6 +189,25 @@ fail closed before BigQuery is constructed. Empty tables are skipped. The
 collector local export command remains local-only and does not construct the
 BigQuery uploader.
 
+## Schema Validation Boundary
+
+The schema validation/provisioning tool is:
+
+- `src/lib/bigquery/calibration-schema.ts`
+- `scripts/bigquery/calibration-schema.ts`
+
+It uses `scripts/bigquery/private-calibration-schema.json` as the source of
+truth. Default CLI behavior prints usage/fails closed and does not construct a
+BigQuery client. BigQuery-backed validation or provisioning requires one of:
+
+- `--validate`
+- `--create-missing`
+
+Both modes require `BIGQUERY_PROJECT_ID`, `BIGQUERY_DATASET`, and
+`GOOGLE_APPLICATION_CREDENTIALS`. Validation reports missing dataset, missing
+tables, mismatched schemas, and valid tables. Provisioning creates only missing
+tables; it does not delete, loosen, or rewrite existing mismatched tables.
+
 ## Retention And Minimization
 
 - Keep raw collector input out of BigQuery; export only allowlisted rows.

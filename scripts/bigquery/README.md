@@ -52,6 +52,34 @@ Upload is implemented but disabled by default. The default command remains
 local dry-run and does not construct a BigQuery uploader or make a network
 request.
 
+## Schema Validation And Provisioning
+
+Before any operator upload, validate the private dataset and five table schemas:
+
+```bash
+BIGQUERY_PROJECT_ID=your-project \
+BIGQUERY_DATASET=your_private_dataset \
+GOOGLE_APPLICATION_CREDENTIALS=/secure/path/service-account.json \
+npm run bigquery:calibration:schema -- --validate
+```
+
+The command reports missing dataset, missing tables, schema mismatches, and
+valid tables. It reads `scripts/bigquery/private-calibration-schema.json` as
+the source of truth.
+
+Provisioning is opt-in and creates only missing tables:
+
+```bash
+BIGQUERY_PROJECT_ID=your-project \
+BIGQUERY_DATASET=your_private_dataset \
+GOOGLE_APPLICATION_CREDENTIALS=/secure/path/service-account.json \
+npm run bigquery:calibration:schema -- --create-missing
+```
+
+`--create-missing` does not delete tables, drop fields, loosen required fields,
+or modify mismatched existing tables. Run `--validate` again after provisioning
+and resolve mismatches manually before enabling upload.
+
 Use upload mode only from an operator environment with all required secrets:
 
 ```bash
