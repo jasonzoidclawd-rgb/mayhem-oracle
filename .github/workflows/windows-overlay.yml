@@ -1,0 +1,85 @@
+name: Windows Overlay
+
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - ".github/workflows/windows-overlay.yml"
+      - "data/internal/**"
+      - "overlay/**"
+  push:
+    branches:
+      - "**"
+    paths:
+      - ".github/workflows/windows-overlay.yml"
+      - "data/internal/**"
+      - "overlay/**"
+
+jobs:
+  build-windows-overlay:
+    name: Build Windows Tauri overlay
+    runs-on: windows-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v5.0.1
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v5.0.0
+        with:
+          node-version: "22"
+          cache: "npm"
+          cache-dependency-path: |
+            package-lock.json
+            overlay/package-lock.json
+
+      - name: Set up Rust
+        shell: pwsh
+        run: |
+          rustup toolchain install stable --profile minimal
+          rustup default stable
+          rustc --version
+          cargo --version
+
+      - name: Install NSIS
+        shell: pwsh
+        run: choco install nsis -y --no-progress
+
+      - name: Install root dependencies
+        run: npm ci
+
+      - name: Install overlay dependencies
+        working-directory: overlay
+        run: npm ci
+
+      - name: Run overlay tests
+        working-directory: overlay
+        run: npm test
+
+      - name: Build overlay renderer
+        working-directory: overlay
+        run: npm run build
+
+      - name: Run Rust tests
+        working-directory: overlay/src-tauri
+        run: cargo test
+
+      - name: Audit renderer artifacts
+        working-directory: overlay
+        run: npm run audit:windows-artifact
+
+      - name: Build Windows installer
+        working-directory: overlay
+        run: npm run package:windows
+
+      - name: Audit packaged artifacts
+        working-directory: overlay
+        run: npm run audit:windows-artifact
+
+      - name: Upload Windows overlay bundle
+        uses: actions/upload-artifact@v4.6.2
+        with:
+          name: mayhem-oracle-overlay-windows-unsigned
+          path: overlay/src-tauri/target/release/bundle/**
+          if-no-files-found: error
+          retention-days: 7

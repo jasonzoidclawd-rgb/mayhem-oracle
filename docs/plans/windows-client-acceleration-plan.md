@@ -147,20 +147,20 @@ Files likely touched:
 
 Tasks:
 
-- [ ] Add a Windows build workflow for the Tauri overlay.
+- [x] Add a Windows build workflow for the Tauri overlay.
   - Use `windows-latest`.
   - Install Rust and Node dependencies.
   - Run overlay tests before packaging.
-- [ ] Verify packaged resources.
+- [x] Verify packaged resources.
   - Public data present.
   - Tauri capabilities present.
   - OCR binary/model resources present if bundled.
   - No `.env`, Riot keys, raw screenshots, raw LCU payloads, or BigQuery
     credentials in artifacts.
-- [ ] Add unsigned-build warning and signing plan.
+- [x] Add unsigned-build warning and signing plan.
   - Document expected Windows trust prompts for unsigned builds.
   - Do not enable auto-update until signing/feed integrity is designed.
-- [ ] Evaluate Tauri updater only after packaging is stable.
+- [x] Evaluate Tauri updater only after packaging is stable.
   - Keep app code/resources local.
   - Do not remote-load renderer JS.
   - Require HTTPS feed, hash verification, staged rollout, rollback path, and

@@ -335,15 +335,7 @@ fn run_tesseract(
     }))
 }
 
-#[tauri::command]
-async fn detect_augment_names(
-    known_names: Option<Vec<String>>,
-) -> Result<Vec<DetectedAugment>, String> {
-    if !is_league_foreground() {
-        return Err("League of Legends is not the foreground application".to_string());
-    }
-
-    // Capture the primary screen
+fn capture_card_name_crops() -> Result<Vec<(usize, image::DynamicImage)>, String> {
     let screens = xcap::Monitor::all().map_err(|e| format!("Failed to list monitors: {}", e))?;
     let monitor = screens.into_iter().next().ok_or("No monitor found")?;
     let screenshot = monitor
@@ -352,6 +344,36 @@ async fn detect_augment_names(
 
     let screen_w = screenshot.width() as f64;
     let screen_h = screenshot.height() as f64;
+    let mut crops = Vec::with_capacity(CARD_NAME_REGIONS.len());
+
+    for (i, region) in CARD_NAME_REGIONS.iter().enumerate() {
+        let px = (region.x * screen_w) as u32;
+        let py = (region.y * screen_h) as u32;
+        let pw = (region.w * screen_w) as u32;
+        let ph = (region.h * screen_h) as u32;
+
+        if px + pw > screenshot.width() || py + ph > screenshot.height() {
+            continue;
+        }
+
+        crops.push((
+            i,
+            image::DynamicImage::ImageRgba8(screenshot.view(px, py, pw, ph).to_image()),
+        ));
+    }
+
+    Ok(crops)
+}
+
+#[tauri::command]
+async fn detect_augment_names(
+    known_names: Option<Vec<String>>,
+) -> Result<Vec<DetectedAugment>, String> {
+    if !is_league_foreground() {
+        return Err("League of Legends is not the foreground application".to_string());
+    }
+
+    let crops = capture_card_name_crops()?;
     let ocr_languages = preferred_tesseract_languages();
 
     let mut user_words_file = None;
@@ -378,21 +400,8 @@ async fn detect_augment_names(
         }
     }
 
-    let mut handles = Vec::with_capacity(CARD_NAME_REGIONS.len());
-    for (i, region) in CARD_NAME_REGIONS.iter().enumerate() {
-        // Convert fractional coordinates to pixels
-        let px = (region.x * screen_w) as u32;
-        let py = (region.y * screen_h) as u32;
-        let pw = (region.w * screen_w) as u32;
-        let ph = (region.h * screen_h) as u32;
-
-        // Bounds check
-        if px + pw > screenshot.width() || py + ph > screenshot.height() {
-            continue;
-        }
-
-        // Crop to the card name region
-        let crop = image::DynamicImage::ImageRgba8(screenshot.view(px, py, pw, ph).to_image());
+    let mut handles = Vec::with_capacity(crops.len());
+    for (i, crop) in crops {
         let languages = ocr_languages.clone();
         let words = user_words_file.clone();
         handles.push(tokio::task::spawn_blocking(move || {
