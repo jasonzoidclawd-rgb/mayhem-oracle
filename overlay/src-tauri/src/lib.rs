@@ -1,11 +1,11 @@
 use image::GenericImageView;
 use serde::{Deserialize, Serialize};
 use std::io::Write;
-use std::path::PathBuf;
 use std::sync::Arc;
 use sysinfo::System;
 
 mod collector;
+mod lcu;
 pub mod member;
 mod sanitize;
 mod upload_queue;
@@ -16,12 +16,6 @@ extern crate objc;
 
 // ─── Types ──────────────────────────────────────────────────────────────────
 
-#[derive(Clone, Debug)]
-struct LeagueClientCredentials {
-    port: u16,
-    auth_token: String,
-}
-
 #[derive(Serialize, Deserialize, Clone, Debug)]
 pub struct LivePlayerData {
     pub champion: String,
@@ -31,119 +25,28 @@ pub struct LivePlayerData {
     pub game_mode: String,
 }
 
-// ─── Lockfile Discovery ─────────────────────────────────────────────────────
-
-fn find_lockfile_path() -> Option<PathBuf> {
-    #[cfg(target_os = "macos")]
-    {
-        let paths = ["/Applications/League of Legends.app/Contents/LoL/lockfile"];
-        for p in &paths {
-            let path = PathBuf::from(p);
-            if path.exists() {
-                return Some(path);
-            }
-        }
-        // Fallback: scan processes for install directory
-        let sys = System::new_all();
-        for proc in sys.processes().values() {
-            let name = proc.name().to_string_lossy().to_string();
-            if name.contains("LeagueClient") {
-                if let Some(exe) = proc.exe() {
-                    let mut dir = exe.to_path_buf();
-                    dir.pop(); // remove binary name
-                    dir.push("lockfile");
-                    if dir.exists() {
-                        return Some(dir);
-                    }
-                }
-            }
-        }
-    }
-
-    #[cfg(target_os = "windows")]
-    {
-        let paths = [
-            r"C:\Riot Games\League of Legends\lockfile",
-            r"D:\Riot Games\League of Legends\lockfile",
-        ];
-        for p in &paths {
-            let path = PathBuf::from(p);
-            if path.exists() {
-                return Some(path);
-            }
-        }
-        let sys = System::new_all();
-        for proc in sys.processes().values() {
-            let name = proc.name().to_string_lossy().to_string();
-            if name.contains("LeagueClient") {
-                if let Some(exe) = proc.exe() {
-                    let mut dir = exe.to_path_buf();
-                    dir.pop();
-                    dir.push("lockfile");
-                    if dir.exists() {
-                        return Some(dir);
-                    }
-                }
-            }
-        }
-    }
-
-    None
-}
-
-fn parse_lockfile(path: &PathBuf) -> Option<LeagueClientCredentials> {
-    let content = std::fs::read_to_string(path).ok()?;
-    // Format: LeagueClient:pid:port:password:https
-    let parts: Vec<&str> = content.trim().split(':').collect();
-    if parts.len() < 5 {
-        return None;
-    }
-    Some(LeagueClientCredentials {
-        port: parts[2].parse().ok()?,
-        auth_token: parts[3].to_string(),
-    })
-}
-
 // ─── Tauri Commands ─────────────────────────────────────────────────────────
 
 #[tauri::command]
 fn detect_league_client() -> bool {
-    let Some(path) = find_lockfile_path() else {
-        return false;
-    };
-
-    parse_lockfile(&path).is_some()
+    lcu::discover_lcu_credentials().is_some()
 }
 
 #[tauri::command]
 async fn get_game_phase() -> Option<String> {
-    let path = find_lockfile_path()?;
-    let credentials = parse_lockfile(&path)?;
-    let url = format!(
-        "https://127.0.0.1:{}/lol-gameflow/v1/gameflow-phase",
-        credentials.port
-    );
-    let client = reqwest::Client::builder()
-        .danger_accept_invalid_certs(true)
-        .build()
-        .ok()?;
+    let credentials = lcu::discover_lcu_credentials()?;
+    lcu::read_gameflow_state(&credentials).await.ok()?.raw_phase
+}
 
-    let resp = client
-        .get(&url)
-        .basic_auth("riot", Some(&credentials.auth_token))
-        .send()
-        .await
-        .ok()?;
-
-    let text = resp.text().await.ok()?;
-    // Response is a JSON string like "InProgress"
-    serde_json::from_str::<String>(&text).ok()
+#[tauri::command]
+async fn get_lcu_gameflow_state() -> Option<lcu::GameflowState> {
+    let credentials = lcu::discover_lcu_credentials()?;
+    lcu::read_gameflow_state(&credentials).await.ok()
 }
 
 #[tauri::command]
 async fn get_game_hash() -> Option<String> {
-    let path = find_lockfile_path()?;
-    let credentials = parse_lockfile(&path)?;
+    let credentials = lcu::discover_lcu_credentials()?;
     let url = format!(
         "https://127.0.0.1:{}/lol-gameflow/v1/session",
         credentials.port
@@ -646,6 +549,7 @@ pub fn run() {
         .invoke_handler(tauri::generate_handler![
             detect_league_client,
             get_game_phase,
+            get_lcu_gameflow_state,
             get_game_hash,
             get_live_player_data,
             check_tesseract,

@@ -50,6 +50,11 @@ interface LivePlayerData {
   game_mode: string;
 }
 
+interface LcuGameflowState {
+  phase: string;
+  liveCaptureAllowed: boolean;
+}
+
 interface DetectedAugment {
   text: string;
   region_index: number;
@@ -576,6 +581,26 @@ function App() {
       }
     } catch {
       // macOS only — default to showing on other platforms
+    }
+
+    try {
+      const gameflow = await invoke<LcuGameflowState | null>("get_lcu_gameflow_state");
+      if (gameflow && !gameflow.liveCaptureAllowed) {
+        ocrSelectionCompletedRef.current = true;
+        setPlayerData(null);
+        setChampionSlug(null);
+        lastAugmentLevelRef.current = 0;
+        setPickedAugments([]);
+        setMatchedCards([]);
+        lastGameTimeRef.current = null;
+        lastRecordedRoundRef.current = "";
+        activeGameHashRef.current = null;
+        stopOcr();
+        updatePhase("client_found");
+        return;
+      }
+    } catch {
+      // Older or unavailable LCU state falls through to Live Client detection.
     }
 
     try {

@@ -8,9 +8,11 @@ use std::sync::{
 use serde::{Deserialize, Serialize};
 use tauri::State;
 
+use crate::lcu::{
+    discover_lcu_credentials, normalize_gameflow_phase, LeagueClientCredentials,
+};
 use crate::sanitize::{sanitize_match, ContributorRound, MatchSource};
 use crate::upload_queue::UploadQueue;
-use crate::{find_lockfile_path, parse_lockfile, LeagueClientCredentials};
 
 pub const DAILY_EXPORT_LIMIT: u16 = 100;
 
@@ -22,10 +24,10 @@ pub enum GameflowPhase {
 
 impl GameflowPhase {
     fn from_lcu(value: &str) -> Self {
-        match value {
-            "ChampSelect" | "GameStart" | "InProgress" | "Reconnect" | "WaitingForStats"
-            | "PreEndOfGame" => Self::InProgress,
-            _ => Self::None,
+        if normalize_gameflow_phase(Some(value)).blocks_background_collection {
+            Self::InProgress
+        } else {
+            Self::None
         }
     }
 }
@@ -591,7 +593,7 @@ pub async fn collector_tick(state: State<'_, CollectorState>) -> Result<Collecto
         return Ok(state.status());
     }
 
-    let Some(credentials) = find_lockfile_path().and_then(|path| parse_lockfile(&path)) else {
+    let Some(credentials) = discover_lcu_credentials() else {
         state.active_game.store(false, Ordering::Relaxed);
         state.set_error(None);
         return Ok(state.status());
