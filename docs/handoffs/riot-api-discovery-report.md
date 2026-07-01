@@ -39,14 +39,21 @@ derived output.
 
 Live Match-V5 conclusion for this run:
 
-- Live endpoint check: blocked because `RIOT_API_KEY` was not present in the
-  execution environment.
-- Selected augments: pending a consenting Riot ID, PUUID, or match id sample.
+- Live endpoint check: `lol/status/v4/platform-data` succeeded for `tw2`, proving
+  the exported key was present and accepted for at least the status endpoint.
+- Match-V5 live probe: `TW2_427286604` returned `403 Forbidden` on the `sea`
+  regional route.
+- Regional fallback probe: the same match id returned `404 Not Found` on `asia`,
+  `americas`, and `europe`, which indicates `sea` is the only plausible regional
+  route for this match id.
+- Selected augments: not proven from live Match-V5 because match detail access was
+  forbidden.
 - Exact selected-augment field paths: not observed in a live ARAM Mayhem match in
   this run.
 - Offered-but-not-picked augments: not observed in this run and should remain
   collector-owned unless Match-V5/timeline evidence proves otherwise.
-- Observed `queueId`/`gameMode`/`mapId`: pending a live ARAM Mayhem match detail.
+- Observed `queueId`/`gameMode`/`mapId`: not available because Match-V5 detail
+  returned `403 Forbidden`.
 
 The safe product conclusion is unchanged until live match evidence is captured:
 Riot API may feed private match context and, if fields exist, final selected
