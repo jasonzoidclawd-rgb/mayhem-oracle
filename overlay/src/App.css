@@ -316,6 +316,48 @@ html, body, #root {
   border-color: rgba(148, 163, 184, 0.35);
 }
 
+.collector-consent button:disabled {
+  cursor: wait;
+  opacity: 0.55;
+}
+
+.consent-window-root,
+.collector-window-root {
+  width: 100vw;
+  height: 100vh;
+  display: grid;
+  color: #cbd5e1;
+  font-family: "Inter", system-ui, -apple-system, sans-serif;
+}
+
+.consent-window-root {
+  place-items: center;
+  padding: 16px;
+  background: #0f172a;
+}
+
+.collector-window-root {
+  place-items: end;
+  padding: 0;
+  background: transparent;
+}
+
+.consent-window-root .collector-consent,
+.collector-window-root .collector-panel {
+  position: static;
+  transform: none;
+}
+
+.consent-window-root .collector-consent {
+  width: 100%;
+  max-width: 420px;
+}
+
+.collector-window-root .collector-panel {
+  width: 100%;
+  min-height: 100%;
+}
+
 /* ─── Startup Tip ─── */
 .startup-tip {
   position: fixed;

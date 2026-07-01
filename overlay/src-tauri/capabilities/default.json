@@ -2,8 +2,10 @@
   "$schema": "../gen/schemas/desktop-schema.json",
   "identifier": "default",
   "description": "Capability for the main window",
-  "windows": ["overlay"],
+  "windows": ["overlay", "consent", "collector-controls"],
   "permissions": [
-    "core:default"
+    "core:default",
+    "core:webview:allow-create-webview-window",
+    "core:window:allow-close"
   ]
 }

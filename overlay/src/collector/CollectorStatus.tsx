@@ -1,5 +1,18 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { invoke } from "@tauri-apps/api/core";
+import { listen } from "@tauri-apps/api/event";
+import {
+  closeCurrentWindow,
+  closeWindow,
+  COLLECTOR_CONTROLS_WINDOW_LABEL,
+  COLLECTOR_STATUS_EVENT,
+  CONSENT_WINDOW_LABEL,
+  openCollectorControlsWindow,
+  openConsentWindow,
+  publishCollectorStatus,
+  shouldShowCollectorControlsWindow,
+  shouldShowConsentWindow,
+} from "./collectorWindows";
 
 export type CollectorConsent = "pending" | "accepted" | "declined";
 
@@ -17,7 +30,18 @@ interface CollectorStatusProps {
   onStatus: (status: CollectorSnapshot) => void;
 }
 
-export function CollectorStatus({ onStatus }: CollectorStatusProps) {
+interface CollectorStatusOptions {
+  poll?: boolean;
+  publishRefreshes?: boolean;
+}
+
+export function useCollectorStatus(
+  onStatus: (status: CollectorSnapshot) => void = () => {},
+  {
+    poll = true,
+    publishRefreshes = false,
+  }: CollectorStatusOptions = {},
+) {
   const [status, setStatus] = useState<CollectorSnapshot | null>(null);
 
   const applyStatus = useCallback((next: CollectorSnapshot) => {
@@ -36,52 +60,114 @@ export function CollectorStatus({ onStatus }: CollectorStatusProps) {
         const next = await invoke<CollectorSnapshot>(
           tick ? "collector_tick" : "get_collector_status",
         );
-        if (!cancelled) applyStatus(next);
+        if (!cancelled) {
+          applyStatus(next);
+          if (publishRefreshes) void publishCollectorStatus(next);
+        }
       } finally {
         running = false;
       }
     };
 
     void refresh(false);
+    if (!poll) {
+      return () => {
+        cancelled = true;
+      };
+    }
     const interval = setInterval(() => void refresh(true), 5_000);
     return () => {
       cancelled = true;
       clearInterval(interval);
     };
+  }, [applyStatus, poll, publishRefreshes]);
+
+  useEffect(() => {
+    let disposed = false;
+    let unlisten: (() => void) | null = null;
+
+    void listen<CollectorSnapshot>(COLLECTOR_STATUS_EVENT, (event) => {
+      applyStatus(event.payload);
+    }).then((nextUnlisten) => {
+      if (disposed) {
+        nextUnlisten();
+        return;
+      }
+      unlisten = nextUnlisten;
+    });
+
+    return () => {
+      disposed = true;
+      unlisten?.();
+    };
   }, [applyStatus]);
 
-  const setConsent = async (accepted: boolean) => {
-    applyStatus(await invoke<CollectorSnapshot>("set_collector_consent", { accepted }));
-  };
+  const setConsent = useCallback(async (accepted: boolean) => {
+    const next = await invoke<CollectorSnapshot>("set_collector_consent", { accepted });
+    applyStatus(next);
+    await publishCollectorStatus(next);
+    return next;
+  }, [applyStatus]);
 
-  const setPaused = async (paused: boolean) => {
-    applyStatus(await invoke<CollectorSnapshot>("set_collector_paused", { paused }));
-  };
+  const setPaused = useCallback(async (paused: boolean) => {
+    const next = await invoke<CollectorSnapshot>("set_collector_paused", { paused });
+    applyStatus(next);
+    await publishCollectorStatus(next);
+    return next;
+  }, [applyStatus]);
 
-  if (!status || status.consent === "pending") {
-    return (
-      <section className="collector-consent" role="dialog" aria-modal="true">
-        <strong>Help improve Mayhem Oracle?</strong>
-        <p>
-          The collector uploads only de-identified Mayhem match fields. Riot IDs,
-          PUUIDs, names, chat, and screenshots never leave this device.
-        </p>
-        <p>Declining disables both collection and the overlay.</p>
-        <div className="collector-actions">
-          <button onClick={() => void setConsent(true)}>Allow and continue</button>
-          <button className="secondary" onClick={() => void setConsent(false)}>
-            Decline
-          </button>
-        </div>
-      </section>
-    );
-  }
+  return {
+    status,
+    setConsent,
+    setPaused,
+  };
+}
+
+interface CollectorConsentPromptProps {
+  disabled?: boolean;
+  onChoice: (accepted: boolean) => void;
+}
+
+export function CollectorConsentPrompt({
+  disabled = false,
+  onChoice,
+}: CollectorConsentPromptProps) {
+  return (
+    <section className="collector-consent" role="dialog" aria-modal="true">
+      <strong>Help improve Mayhem Oracle?</strong>
+      <p>
+        The collector uploads only de-identified Mayhem match fields. Riot IDs,
+        PUUIDs, names, chat, and screenshots never leave this device.
+      </p>
+      <p>Declining disables both collection and the overlay.</p>
+      <div className="collector-actions">
+        <button disabled={disabled} onClick={() => onChoice(true)}>Allow and continue</button>
+        <button className="secondary" disabled={disabled} onClick={() => onChoice(false)}>
+          Decline
+        </button>
+      </div>
+    </section>
+  );
+}
+
+interface CollectorControlsProps {
+  status: CollectorSnapshot | null;
+  onConsent: (accepted: boolean) => void;
+  onPaused: (paused: boolean) => void;
+}
+
+export function CollectorControls({
+  status,
+  onConsent,
+  onPaused,
+}: CollectorControlsProps) {
+  if (!status || status.consent === "pending") return null;
 
   if (status.consent === "declined") {
     return (
       <section className="collector-panel">
         <strong>Collector and overlay disabled</strong>
-        <button onClick={() => void setConsent(true)}>Enable</button>
+        <button onClick={() => onConsent(true)}>Enable</button>
       </section>
     );
   }
@@ -97,9 +183,106 @@ export function CollectorStatus({ onStatus }: CollectorStatusProps) {
         <span>{status.queuedBatches} queued</span>
       </div>
       {status.lastError && <span className="collector-error">{status.lastError}</span>}
-      <button onClick={() => void setPaused(!status.paused)}>
+      <button onClick={() => onPaused(!status.paused)}>
         {status.paused ? "Resume" : "Pause"}
       </button>
     </section>
+  );
+}
+
+export function CollectorStatus({ onStatus }: CollectorStatusProps) {
+  const { status, setConsent, setPaused } = useCollectorStatus(onStatus);
+
+  if (!status || status.consent === "pending") {
+    return (
+      <CollectorConsentPrompt
+        onChoice={(accepted) => void setConsent(accepted)}
+      />
+    );
+  }
+
+  return (
+    <CollectorControls
+      status={status}
+      onConsent={(accepted) => void setConsent(accepted)}
+      onPaused={(paused) => void setPaused(paused)}
+    />
+  );
+}
+
+export function CollectorOverlayController({ onStatus }: CollectorStatusProps) {
+  const { status } = useCollectorStatus(onStatus, {
+    poll: true,
+    publishRefreshes: true,
+  });
+
+  useEffect(() => {
+    if (!status) return;
+
+    if (shouldShowConsentWindow(status)) {
+      void openConsentWindow();
+      void closeWindow(COLLECTOR_CONTROLS_WINDOW_LABEL);
+      return;
+    }
+
+    if (shouldShowCollectorControlsWindow(status)) {
+      void closeWindow(CONSENT_WINDOW_LABEL);
+      void openCollectorControlsWindow();
+    }
+  }, [status]);
+
+  return null;
+}
+
+export function CollectorConsentWindow() {
+  const { status, setConsent } = useCollectorStatus(undefined, { poll: false });
+  const [closing, setClosing] = useState(false);
+  const closeRequested = useRef(false);
+
+  useEffect(() => {
+    if (!closeRequested.current && status && status.consent !== "pending") {
+      closeRequested.current = true;
+      void closeCurrentWindow();
+    }
+  }, [status]);
+
+  const choose = async (accepted: boolean) => {
+    setClosing(true);
+    try {
+      await setConsent(accepted);
+    } finally {
+      await closeCurrentWindow();
+    }
+  };
+
+  if (closing) return null;
+
+  return (
+    <main className="consent-window-root">
+      <CollectorConsentPrompt
+        disabled={!status}
+        onChoice={(accepted) => void choose(accepted)}
+      />
+    </main>
+  );
+}
+
+export function CollectorControlsWindow() {
+  const { status, setConsent, setPaused } = useCollectorStatus(undefined, { poll: false });
+
+  useEffect(() => {
+    if (status?.consent === "pending") {
+      void closeCurrentWindow();
+    }
+  }, [status]);
+
+  return (
+    <main className="collector-window-root">
+      <CollectorControls
+        status={status}
+        onConsent={(accepted) => void setConsent(accepted)}
+        onPaused={(paused) => void setPaused(paused)}
+      />
+    </main>
   );
 }

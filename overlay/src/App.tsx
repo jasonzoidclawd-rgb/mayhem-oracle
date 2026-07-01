@@ -9,9 +9,10 @@ import {
   shouldEndAugmentSelectionForLevel,
 } from "./augmentSelection";
 import {
-  CollectorStatus,
+  CollectorOverlayController,
   type CollectorSnapshot,
 } from "./collector/CollectorStatus";
+import { overlayShouldIgnoreMouseEvents } from "./collector/collectorWindows";
 import type {
   AbilityProfile,
   ChampionBaseStats,
@@ -251,9 +252,8 @@ function App() {
     };
   }, [abilityProfiles, championSlug]);
 
-  // On mount: hide dock icon + check local OCR and capture prerequisites.
+  // On mount: check local OCR and capture prerequisites.
   useEffect(() => {
-    invoke("set_dock_visible", { visible: false });
     invoke<boolean>("check_tesseract").then((ok) => {
       if (!ok) setDataError("Tesseract OCR is not installed or not available on PATH.");
     });
@@ -264,13 +264,18 @@ function App() {
     return () => clearTimeout(tipTimer);
   }, []);
 
-  // Keep in-game guidance click-through, but allow consent and collector controls outside games.
   useEffect(() => {
-    const activeOverlay = phase === "in_game" || phase === "augment_selection";
+    if (!collectorStatus) return;
+    invoke("set_dock_visible", { visible: collectorStatus.consent === "pending" });
+  }, [collectorStatus]);
+
+  // The full-screen visual overlay must not capture the desktop. Bounded
+  // consent/collector windows own their own mouse interaction.
+  useEffect(() => {
     invoke("set_click_through", {
-      ignore: collectorEnabled && activeOverlay && !coachOpen,
+      ignore: overlayShouldIgnoreMouseEvents({ coachOpen }),
     });
-  }, [coachOpen, collectorEnabled, phase]);
+  }, [coachOpen]);
 
   const championSlugByName = useMemo(() => {
     const map = new Map<string, string>();
@@ -832,7 +837,7 @@ function App() {
         mode={mode}
         onModeChange={setMode}
       />
-      <CollectorStatus onStatus={setCollectorStatus} />
+      <CollectorOverlayController onStatus={setCollectorStatus} />
     </div>
   );
 }
