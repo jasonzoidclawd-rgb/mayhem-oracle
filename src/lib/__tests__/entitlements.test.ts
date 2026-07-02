@@ -17,6 +17,10 @@ const TRIAL_RESERVE_MIGRATION_PATH = join(
   process.cwd(),
   "supabase/migrations/20260702_trial_reserve_rpc.sql",
 );
+const MODEL_RELEASE_RLS_MIGRATION_PATH = join(
+  process.cwd(),
+  "supabase/migrations/20260702_model_release_rls.sql",
+);
 
 function migrationSql(): string {
   return readFileSync(MIGRATION_PATH, "utf8").toLowerCase();
@@ -24,6 +28,10 @@ function migrationSql(): string {
 
 function trialReserveMigrationSql(): string {
   return readFileSync(TRIAL_RESERVE_MIGRATION_PATH, "utf8").toLowerCase();
+}
+
+function modelReleaseRlsMigrationSql(): string {
+  return readFileSync(MODEL_RELEASE_RLS_MIGRATION_PATH, "utf8").toLowerCase();
 }
 
 /** Policy statements for one table, so we can assert what each table allows. */
@@ -154,6 +162,27 @@ describe("membership migration structure", () => {
     expect(finalize).toContain("reserved_game_hash = null");
     expect(finalize).toContain("reserved_at = null");
     expect(finalize).not.toContain("credits_consumed = credits_consumed + 1");
+  });
+
+  test("model release manifest RLS blocks anon base-table reads and exposes only version-chip fields", () => {
+    const sql = modelReleaseRlsMigrationSql();
+    const view = sql.split("create or replace view public.model_release_versions")[1]?.split(";")[0] ?? "";
+
+    expect(sql).toContain('drop policy if exists "active releases are readable"');
+    expect(sql).toContain("revoke all on public.model_releases from anon");
+    expect(sql).toContain("grant select on public.model_releases to authenticated");
+    expect(sql).toContain("to authenticated");
+    expect(sql).toContain("(auth.jwt() -> 'app_metadata' ->> 'role') = 'admin'");
+    expect(view).toContain("model_version");
+    expect(view).toContain("engine_version");
+    expect(view).toContain("data_version");
+    expect(view).toContain("status");
+    expect(view).toContain("where status = 'active'");
+    expect(view).not.toContain("signature");
+    expect(view).not.toContain("package_url");
+    expect(view).not.toContain("config_sha256");
+    expect(sql).toContain("revoke all on public.model_release_versions from public");
+    expect(sql).toContain("grant select on public.model_release_versions to authenticated");
   });
 });
 

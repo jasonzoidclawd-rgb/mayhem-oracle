@@ -62,7 +62,7 @@ export function createOverlayDeps(): OverlayApiDeps {
       return user?.id ?? null;
     },
     getActiveRelease: async () => {
-      const client = await createClient();
+      const client = createServiceClient();
       const { data } = await client
         .from("model_releases")
         .select("model_version,engine_version,data_version,config_sha256,signature,package_url")
