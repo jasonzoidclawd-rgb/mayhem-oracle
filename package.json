@@ -9,6 +9,7 @@
     "lint": "eslint .",
     "test": "vitest run",
     "test:bigquery-calibration": "vitest run src/lib/bigquery",
+    "bigquery:calibration:schema": "jiti scripts/bigquery/calibration-schema.ts",
     "export:private-calibration": "jiti scripts/bigquery/export-private-calibration.ts",
     "export:private-calibration:dry-run": "jiti scripts/bigquery/export-private-calibration.ts --dry-run",
     "export:collector-calibration:local": "jiti scripts/bigquery/export-collector-calibration.ts",

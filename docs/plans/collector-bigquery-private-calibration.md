@@ -115,6 +115,27 @@ If credentials are missing, upload mode fails closed before any network request.
 Default dry-run and collector local export do not construct the BigQuery
 uploader. Upload tests mock the uploader/client only.
 
+## Schema Validation Gate
+
+Before any real upload, run:
+
+```bash
+npm run bigquery:calibration:schema -- --validate
+```
+
+For first-time setup, provision only missing tables:
+
+```bash
+npm run bigquery:calibration:schema -- --create-missing
+```
+
+Both commands require the same BigQuery env vars as upload. Default/no-flag
+execution is usage-only and does not contact BigQuery. `--create-missing`
+creates missing tables from `scripts/bigquery/private-calibration-schema.json`
+but does not delete fields, loosen modes, or modify mismatched existing tables.
+Safe rollout sequence: validate, create missing, validate again, then enable
+upload only after the validation report is clean.
+
 ## Non-Goals
 
 - No public augment win-rate endpoint.
