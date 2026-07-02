@@ -5,6 +5,11 @@ import type { DecisionApiDeps } from "./decision";
 import type { InviteApiDeps } from "./invites";
 import { leaseExpiry, type OverlayApiDeps } from "./overlay";
 
+type TrialReservationRpcResult = {
+  game_hash?: unknown;
+  reserved_at?: unknown;
+};
+
 export function createDecisionDeps(): DecisionApiDeps {
   return {
     requireEntitlement: () => requireActiveEntitlement(),
@@ -86,27 +91,21 @@ export function createOverlayDeps(): OverlayApiDeps {
     },
     reserveTrialCredit: async (userId, gameHash) => {
       const service = createServiceClient();
-      const staleCutoff = new Date(Date.now() - 40 * 60_000).toISOString();
-      // One row per (user, device); take the first with credits left and no
-      // fresh reservation. Finalization/release of credits lands with the
-      // telemetry pipeline (Milestone 3B).
-      const { data: rows } = await service
-        .from("referral_progress")
-        .select("id,credits_granted,credits_consumed,reserved_at,reserved_game_hash")
-        .eq("user_id", userId);
-      const available = (rows ?? []).find(
-        (row) =>
-          row.credits_consumed < row.credits_granted &&
-          (!row.reserved_at || row.reserved_at < staleCutoff || row.reserved_game_hash === gameHash),
-      );
-      if (!available) return null;
-      const now = new Date();
-      const { error } = await service
-        .from("referral_progress")
-        .update({ reserved_game_hash: gameHash, reserved_at: now.toISOString() })
-        .eq("id", available.id);
-      if (error) return null;
-      return { gameHash, expiresAt: leaseExpiry(now) };
+      const { data, error } = await service.rpc("reserve_trial_credit", {
+        p_user_id: userId,
+        p_game_hash: gameHash,
+      });
+      if (error || !data || typeof data !== "object") return null;
+
+      const reservation = data as TrialReservationRpcResult;
+      if (typeof reservation.reserved_at !== "string") return null;
+      const reservedAt = new Date(reservation.reserved_at);
+      if (Number.isNaN(reservedAt.getTime())) return null;
+
+      return {
+        gameHash: typeof reservation.game_hash === "string" ? reservation.game_hash : gameHash,
+        expiresAt: leaseExpiry(reservedAt),
+      };
     },
   };
 }
