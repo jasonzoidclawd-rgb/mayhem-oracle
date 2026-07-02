@@ -33,6 +33,12 @@ jobs:
           GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
         run: ./scripts/update-data.sh
 
+      - name: Run data publish tests
+        run: npm test
+
+      - name: Build before publishing data
+        run: npm run build
+
       - name: Check freshness and manage staleness issue
         env:
           GH_TOKEN: ${{ github.token }}
