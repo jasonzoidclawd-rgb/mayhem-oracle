@@ -4,7 +4,7 @@
  * Vercel domain). The fallback is a placeholder — replace via env in prod.
  */
 export const SITE_URL = (
-  process.env.NEXT_PUBLIC_SITE_URL ?? "https://mayhemoracle.com"
+  process.env.NEXT_PUBLIC_SITE_URL ?? "https://wasfun.lol"
 ).replace(/\/$/, "");
 
 /**
