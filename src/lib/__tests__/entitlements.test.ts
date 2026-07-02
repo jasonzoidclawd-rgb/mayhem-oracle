@@ -13,9 +13,25 @@ const MIGRATION_PATH = join(
   process.cwd(),
   "supabase/migrations/20260613_membership_platform.sql",
 );
+const TRIAL_RESERVE_MIGRATION_PATH = join(
+  process.cwd(),
+  "supabase/migrations/20260702_trial_reserve_rpc.sql",
+);
+const MODEL_RELEASE_RLS_MIGRATION_PATH = join(
+  process.cwd(),
+  "supabase/migrations/20260702_model_release_rls.sql",
+);
 
 function migrationSql(): string {
   return readFileSync(MIGRATION_PATH, "utf8").toLowerCase();
+}
+
+function trialReserveMigrationSql(): string {
+  return readFileSync(TRIAL_RESERVE_MIGRATION_PATH, "utf8").toLowerCase();
+}
+
+function modelReleaseRlsMigrationSql(): string {
+  return readFileSync(MODEL_RELEASE_RLS_MIGRATION_PATH, "utf8").toLowerCase();
 }
 
 /** Policy statements for one table, so we can assert what each table allows. */
@@ -116,6 +132,57 @@ describe("membership migration structure", () => {
     const sql = migrationSql();
     expect(sql).toContain("create or replace function public.redeem_invite");
     expect(sql).toContain("security definer");
+  });
+
+  test("trial credit reservations are atomic and same-hash idempotent", () => {
+    const sql = trialReserveMigrationSql();
+    const existingReservationBranch =
+      sql.split("reserved_game_hash = p_game_hash")[1]?.split("credits_consumed < credits_granted")[0] ?? "";
+    const consumptionBranch =
+      sql.split("credits_consumed < credits_granted")[1]?.split("end;")[0] ?? "";
+
+    expect(sql).toContain("create or replace function public.reserve_trial_credit");
+    expect(sql).toContain("security definer");
+    expect(sql).toContain("for update");
+    expect(existingReservationBranch).toContain("reserved_at >= v_stale_cutoff");
+    expect(existingReservationBranch).toContain("return jsonb_build_object");
+    expect(existingReservationBranch).not.toContain("credits_consumed = credits_consumed + 1");
+    expect(consumptionBranch).toContain("if not found then");
+    expect(consumptionBranch).toContain("return null");
+    expect(consumptionBranch).toContain("credits_consumed = credits_consumed + 1");
+    expect(consumptionBranch).toContain("reserved_game_hash = p_game_hash");
+  });
+
+  test("trial finalization keeps long games consumed and refunds verified short games", () => {
+    const sql = trialReserveMigrationSql();
+    const finalize = sql.split("create or replace function public.finalize_trial_credit")[1] ?? "";
+
+    expect(finalize).toContain("p_duration_seconds < 480");
+    expect(finalize).toContain("credits_consumed = greatest(credits_consumed - 1, 0)");
+    expect(finalize).toContain("reserved_game_hash = null");
+    expect(finalize).toContain("reserved_at = null");
+    expect(finalize).not.toContain("credits_consumed = credits_consumed + 1");
+  });
+
+  test("model release manifest RLS blocks anon base-table reads and exposes only version-chip fields", () => {
+    const sql = modelReleaseRlsMigrationSql();
+    const view = sql.split("create or replace view public.model_release_versions")[1]?.split(";")[0] ?? "";
+
+    expect(sql).toContain('drop policy if exists "active releases are readable"');
+    expect(sql).toContain("revoke all on public.model_releases from anon");
+    expect(sql).toContain("grant select on public.model_releases to authenticated");
+    expect(sql).toContain("to authenticated");
+    expect(sql).toContain("(auth.jwt() -> 'app_metadata' ->> 'role') = 'admin'");
+    expect(view).toContain("model_version");
+    expect(view).toContain("engine_version");
+    expect(view).toContain("data_version");
+    expect(view).toContain("status");
+    expect(view).toContain("where status = 'active'");
+    expect(view).not.toContain("signature");
+    expect(view).not.toContain("package_url");
+    expect(view).not.toContain("config_sha256");
+    expect(sql).toContain("revoke all on public.model_release_versions from public");
+    expect(sql).toContain("grant select on public.model_release_versions to authenticated");
   });
 });
 

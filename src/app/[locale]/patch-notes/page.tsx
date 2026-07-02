@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { AdSlot } from "@/components/ads/AdSlot";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import {
@@ -10,6 +11,8 @@ import {
   readAugmentsFile,
   readPatchNotesFile,
 } from "@/lib/data/read-public-file";
+import type { Locale } from "@/i18n/routing";
+import { languageAlternates, localizedUrl } from "@/lib/site";
 
 async function loadPatchNotes(): Promise<PatchNotesData | null> {
   try {
@@ -35,6 +38,30 @@ async function loadRemovedAugments(): Promise<RemovedPatchAugment[]> {
   } catch {
     return [];
   }
+}
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+  const t = await getTranslations({ locale, namespace: "patchNotes" });
+  const route = "/patch-notes";
+  const title = t("title");
+  const description = t("subtitle");
+  const url = localizedUrl(route, locale as Locale);
+
+  return {
+    title,
+    description,
+    alternates: {
+      canonical: url,
+      languages: languageAlternates(route),
+    },
+    openGraph: { title, description, url, locale },
+    twitter: { card: "summary_large_image", title, description },
+  };
 }
 
 export default async function PatchNotesPage({

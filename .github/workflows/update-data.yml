@@ -22,16 +22,22 @@ jobs:
 
       - uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: '22'
           cache: 'npm'
 
       - name: Install Node deps
-        run: npm install
+        run: npm ci
 
       - name: Regenerate internal data and export public catalogs
         env:
           GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
         run: ./scripts/update-data.sh
+
+      - name: Run data publish tests
+        run: npm test
+
+      - name: Build before publishing data
+        run: npm run build
 
       - name: Check freshness and manage staleness issue
         env:

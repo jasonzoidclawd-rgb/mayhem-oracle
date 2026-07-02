@@ -148,4 +148,32 @@ describe("public data boundary", () => {
     expect(publicAugments.augments.every((augment) => !("win_rate" in augment))).toBe(true);
     expect(publicCombos.combos.every((combo) => combo.tier === "S")).toBe(true);
   });
+
+  test("publishes only sanitized localized augment descriptions", () => {
+    const publicAugments = readJson("public/data/augments.json") as {
+      augments: Array<Record<string, unknown>>;
+    };
+
+    expect(publicAugments.augments.length).toBeGreaterThan(0);
+    let localizedCount = 0;
+    for (const augment of publicAugments.augments) {
+      expect(augment.effectTextByLocale).toBeUndefined();
+      const localizedDescriptions = [
+        augment.description_zh_TW,
+        augment.description_zh_CN,
+        augment.description_ja,
+        augment.description_ko,
+      ];
+      const hasDescriptions = localizedDescriptions.every((value) => typeof value === "string");
+      const hasNoDescriptions = localizedDescriptions.every((value) => value === undefined);
+      expect(hasDescriptions || hasNoDescriptions, `${augment.slug}.description_<locale>`).toBe(true);
+      if (hasDescriptions) {
+        localizedCount += 1;
+        for (const description of localizedDescriptions) {
+          expect(String(description), `${augment.slug}.description_<locale>`).not.toMatch(/<[^>]+>/);
+        }
+      }
+    }
+    expect(localizedCount).toBeGreaterThan(200);
+  });
 });

@@ -1,12 +1,14 @@
+import type { Metadata } from "next";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import Image from "next/image";
 import { readFile } from "fs/promises";
 import path from "path";
 import { notFound } from "next/navigation";
 import { Link } from "@/i18n/navigation";
-import { routing } from "@/i18n/routing";
+import { routing, type Locale } from "@/i18n/routing";
 import type { Item } from "@/lib/types";
 import { localizedName } from "@/lib/i18n/localized-name";
+import { languageAlternates, localizedUrl } from "@/lib/site";
 
 // Raw Riot API category identifier → translation key in items namespace.
 const CATEGORY_LABEL_KEY: Record<string, string> = {
@@ -176,6 +178,35 @@ export async function generateStaticParams() {
   } catch {
     return [];
   }
+}
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string; identifier: string }>;
+}): Promise<Metadata> {
+  const { locale, identifier } = await params;
+  const t = await getTranslations({ locale, namespace: "items" });
+  const data = await loadItemsData();
+  const item = findItem(data, identifier);
+  if (!item) notFound();
+
+  const name = localizedName(item, locale);
+  const route = `/items/${identifier}`;
+  const title = t("metaDetailTitle", { name });
+  const description = t("metaDetailDescription", { name });
+  const url = localizedUrl(route, locale as Locale);
+
+  return {
+    title,
+    description,
+    alternates: {
+      canonical: url,
+      languages: languageAlternates(route),
+    },
+    openGraph: { title, description, url, locale },
+    twitter: { card: "summary_large_image", title, description },
+  };
 }
 
 // ─── Styles ───────────────────────────────────────────────────────────────────

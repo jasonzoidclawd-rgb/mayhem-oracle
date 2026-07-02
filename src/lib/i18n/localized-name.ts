@@ -7,11 +7,12 @@ export interface LocalizedNameRecord {
 }
 
 export interface LocalizedDescriptionRecord {
-  description: string;
-  description_zh_TW?: string;
-  description_zh_CN?: string;
-  description_ja?: string;
-  description_ko?: string;
+  description?: string | null;
+  wikiDescription?: string | null;
+  description_zh_TW?: string | null;
+  description_zh_CN?: string | null;
+  description_ja?: string | null;
+  description_ko?: string | null;
 }
 
 /**
@@ -35,16 +36,17 @@ export function localizedName(record: LocalizedNameRecord, locale: string): stri
 }
 
 export function localizedDescription(record: LocalizedDescriptionRecord, locale: string): string {
+  const fallback = record.description || record.wikiDescription || "";
   switch (locale) {
     case "zh-TW":
-      return record.description_zh_TW || record.description;
+      return record.description_zh_TW || fallback;
     case "zh-CN":
-      return record.description_zh_CN || record.description;
+      return record.description_zh_CN || fallback;
     case "ja":
-      return record.description_ja || record.description;
+      return record.description_ja || fallback;
     case "ko":
-      return record.description_ko || record.description;
+      return record.description_ko || fallback;
     default:
-      return record.description;
+      return fallback;
   }
 }

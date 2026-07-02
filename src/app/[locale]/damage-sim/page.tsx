@@ -7,12 +7,16 @@
  *   Armor penetration        — https://wiki.leagueoflegends.com/en-us/Armor_penetration
  *   Lethality                — https://wiki.leagueoflegends.com/en-us/Lethality (1:1 since v14.1)
  */
+import type { Metadata } from "next";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { readFile } from "fs/promises";
 import path from "path";
 import type { Item, ChampionBaseStats, AbilityProfile } from "@/lib/types";
 import { parseItemStats, computeDamageProfile, computeMagicDamageProfile } from "@/lib/data/itemStats";
 import DamageCalculator, { type CalcChampion, type CalcItem } from "@/components/damage-sim/DamageCalculator";
+import type { Locale } from "@/i18n/routing";
+import { languageAlternates, localizedUrl } from "@/lib/site";
+import { localizedDescription, localizedName } from "@/lib/i18n/localized-name";
 
 // ─── Data loaders ─────────────────────────────────────────────────────────────
 
@@ -31,11 +35,15 @@ async function loadAugments(): Promise<Augment[]> {
 interface RawChampion {
   slug: string;
   name: string;
+  name_zh_TW?: string;
+  name_zh_CN?: string;
+  name_ja?: string;
+  name_ko?: string;
   icon: string;
   baseStats?: ChampionBaseStats;
 }
 
-async function loadChampions(): Promise<CalcChampion[]> {
+async function loadChampions(locale: string): Promise<CalcChampion[]> {
   const [champFile, abilFile] = await Promise.all([
     readFile(path.join(process.cwd(), "public", "data", "champions.json"), "utf-8"),
     readFile(path.join(process.cwd(), "public", "data", "abilities.json"), "utf-8"),
@@ -50,7 +58,8 @@ async function loadChampions(): Promise<CalcChampion[]> {
       const profile = profiles[c.slug];
       return {
         slug: c.slug,
-        name: c.name,
+        name: localizedName(c, locale),
+        searchName: c.name,
         icon: c.icon,
         attackType: profile?.attackType ?? "ranged",
         damageType: profile?.damageType ?? "physical",
@@ -71,6 +80,14 @@ async function loadChampions(): Promise<CalcChampion[]> {
 interface Augment {
   slug: string;
   name: string;
+  name_zh_TW?: string;
+  name_zh_CN?: string;
+  name_ja?: string;
+  name_ko?: string;
+  description_zh_TW?: string | null;
+  description_zh_CN?: string | null;
+  description_ja?: string | null;
+  description_ko?: string | null;
   rarity: "prismatic" | "gold" | "silver";
   win_rate: number;
   icon?: string;
@@ -175,6 +192,30 @@ const RARITY_STYLE: Record<string, string> = {
 const TARGET_ARMOR = 100;
 const TARGET_MR = 50;
 
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+  const t = await getTranslations({ locale, namespace: "damageSim" });
+  const route = "/damage-sim";
+  const title = t("title");
+  const description = t("subtitle", { armor: TARGET_ARMOR, mr: TARGET_MR });
+  const url = localizedUrl(route, locale as Locale);
+
+  return {
+    title,
+    description,
+    alternates: {
+      canonical: url,
+      languages: languageAlternates(route),
+    },
+    openGraph: { title, description, url, locale },
+    twitter: { card: "summary_large_image", title, description },
+  };
+}
+
 // ─── Page ─────────────────────────────────────────────────────────────────────
 
 export default async function DamageSimPage({
@@ -189,8 +230,13 @@ export default async function DamageSimPage({
   const [allItems, augments, calcChampions] = await Promise.all([
     loadItems(),
     loadAugments(),
-    loadChampions(),
+    loadChampions(locale),
   ]);
+  const augmentBySlug = new Map(augments.map((augment) => [augment.slug, augment]));
+  const augmentName = (slug: string, fallback: string): string => {
+    const augment = augmentBySlug.get(slug);
+    return augment ? localizedName(augment, locale) : fallback;
+  };
 
   // ── Item damage table ──────────────────────────────────────────────────────
 
@@ -343,7 +389,13 @@ export default async function DamageSimPage({
       (parsed.lifeSteal ?? 0) > 0 ||
       (parsed.omnivamp ?? 0) > 0
     ) {
-      calcItems.push({ id, name: item.name, icon: item.icon, stats: parsed });
+      calcItems.push({
+        id,
+        name: localizedName(item, locale),
+        searchName: item.name,
+        icon: item.icon,
+        stats: parsed,
+      });
     }
   }
   calcItems.sort((a, b) => a.name.localeCompare(b.name));
@@ -395,8 +447,8 @@ export default async function DamageSimPage({
             <FormulaLine label={t("formula")} formula="total = base × Π (1 + amp_i)" />
             <FormulaLine label={t("example")} formula="20% + 20% = 1.20 × 1.20 = 1.44×" note={t("noteNot140")} />
             <div className="mt-1 space-y-1 text-xs text-[var(--color-text-muted)]">
-              <p><span className="text-amber-300">Giant Slayer</span> — {t("giantSlayerAmp")}</p>
-              <p><span className="text-amber-300">Infernal Might</span> — {t("infernalMightAmp")}</p>
+              <p><span className="text-amber-300">{augmentName("giant-slayer", "Giant Slayer")}</span> — {t("giantSlayerAmp")}</p>
+              <p><span className="text-amber-300">{augmentName("infernal-might", "Infernal Might")}</span> — {t("infernalMightAmp")}</p>
             </div>
           </FormulaCard>
 
@@ -433,9 +485,9 @@ export default async function DamageSimPage({
 
           <FormulaCard title={t("specialInteractions")} source="wiki.leagueoflegends.com/en-us/Damage">
             <div className="space-y-2 text-sm text-[var(--color-text-secondary)]">
-              <p><span className="text-amber-300 font-medium">Jeweled Gauntlet / Vulnerability</span> — {t("jeweledInteractionNote")}</p>
+              <p><span className="text-amber-300 font-medium">{augmentName("jeweled-gauntlet", "Jeweled Gauntlet")} / {augmentName("vulnerability", "Vulnerability")}</span> — {t("jeweledInteractionNote")}</p>
               <p><span className="text-amber-300 font-medium">{t("trueDamage")}</span> — {t("trueDamageInteractionNote")}</p>
-              <p><span className="text-amber-300 font-medium">Giant Slayer</span> — {t("giantSlayerInteractionNote")}</p>
+              <p><span className="text-amber-300 font-medium">{augmentName("giant-slayer", "Giant Slayer")}</span> — {t("giantSlayerInteractionNote")}</p>
             </div>
           </FormulaCard>
 
@@ -468,7 +520,7 @@ export default async function DamageSimPage({
                         {aug.rarity[0].toUpperCase()}
                       </span>
                       <span className="text-sm font-medium text-[var(--color-text-primary)] truncate">
-                        {aug.name}
+                        {localizedName(aug, locale)}
                       </span>
                     </div>
                     <div className="flex flex-wrap gap-1 shrink-0">
@@ -479,7 +531,7 @@ export default async function DamageSimPage({
                       ))}
                     </div>
                     <p className="text-xs text-[var(--color-text-muted)] leading-relaxed flex-1 min-w-0">
-                      {aug.description}
+                      {localizedDescription(aug, locale) || aug.description}
                     </p>
                     <span className="text-xs text-[var(--color-text-muted)] shrink-0 tabular-nums">
                       {aug.win_rate != null ? `${aug.win_rate.toFixed(1)}%` : "—"}
@@ -519,7 +571,7 @@ export default async function DamageSimPage({
                   key={row.item.id ?? row.item.slug}
                   className={`border-b border-[var(--color-border-default)] hover:bg-[var(--color-bg-card)]/40 transition-colors ${i % 2 === 0 ? "" : "bg-[var(--color-bg-card)]/20"}`}
                 >
-                  <td className="px-4 py-2.5 font-medium text-[var(--color-text-primary)]">{row.item.name}</td>
+                  <td className="px-4 py-2.5 font-medium text-[var(--color-text-primary)]">{localizedName(row.item, locale)}</td>
                   <Num>{row.ad}</Num>
                   <Num>{row.critChancePct > 0 ? `${row.critChancePct.toFixed(0)}%` : "—"}</Num>
                   <Num>{row.critDamagePct > 0 ? `+${row.critDamagePct.toFixed(0)}%` : "—"}</Num>
@@ -567,7 +619,7 @@ export default async function DamageSimPage({
                   key={row.item.id ?? row.item.slug}
                   className={`border-b border-[var(--color-border-default)] hover:bg-[var(--color-bg-card)]/40 transition-colors ${i % 2 === 0 ? "" : "bg-[var(--color-bg-card)]/20"}`}
                 >
-                  <td className="px-4 py-2.5 font-medium text-[var(--color-text-primary)]">{row.item.name}</td>
+                  <td className="px-4 py-2.5 font-medium text-[var(--color-text-primary)]">{localizedName(row.item, locale)}</td>
                   <Num>{row.ap}</Num>
                   <Num>{row.magicPenPct > 0 ? `${row.magicPenPct.toFixed(0)}%` : "—"}</Num>
                   <Num>{row.magicPenFlat > 0 ? row.magicPenFlat : "—"}</Num>

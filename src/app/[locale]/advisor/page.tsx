@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import {
   AdvisorMemberClient,
   type AdvisorAugmentOption,
@@ -8,8 +9,19 @@ import type { DecisionGrade } from "@/lib/contracts/decision";
 import { loadPublicJson } from "@/lib/data/public-loader";
 import { readMemberAccess } from "@/lib/membership/read-member-access";
 import { getTranslations, setRequestLocale } from "next-intl/server";
+import type { Locale } from "@/i18n/routing";
+import { languageAlternates, localizedUrl } from "@/lib/site";
+import { localizedName } from "@/lib/i18n/localized-name";
 
-type RawChampion = { slug: string; name: string; icon?: string };
+type RawChampion = {
+  slug: string;
+  name: string;
+  name_zh_TW?: string;
+  name_zh_CN?: string;
+  name_ja?: string;
+  name_ko?: string;
+  icon?: string;
+};
 type RawAugment = {
   slug: string;
   name: string;
@@ -21,6 +33,30 @@ type RawAugment = {
   rarity?: "silver" | "gold" | "prismatic";
   icon?: string;
 };
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+  const t = await getTranslations({ locale, namespace: "advisor" });
+  const route = "/advisor";
+  const title = t("title");
+  const description = t("description");
+  const url = localizedUrl(route, locale as Locale);
+
+  return {
+    title,
+    description,
+    alternates: {
+      canonical: url,
+      languages: languageAlternates(route),
+    },
+    openGraph: { title, description, url, locale },
+    twitter: { card: "summary_large_image", title, description },
+  };
+}
 
 // The Advisor is a member tool: this page ships only the public picker catalog
 // (slug/name/icon/rarity). All scoring — pools, weights, grades — comes from
@@ -56,21 +92,17 @@ export default async function AdvisorPage({
   const { champions } = loadPublicJson<{ champions: RawChampion[] }>("champions.json");
   const { augments } = loadPublicJson<{ augments: RawAugment[] }>("augments.json");
 
-  const localizedName = (augment: RawAugment): string => {
-    if (locale === "zh-TW") return augment.name_zh_TW ?? augment.name_zh_CN ?? augment.name;
-    if (locale === "zh-CN") return augment.name_zh_CN ?? augment.name;
-    if (locale === "ja") return augment.name_ja ?? augment.name;
-    if (locale === "ko") return augment.name_ko ?? augment.name;
-    return augment.displayName ?? augment.name;
-  };
-
   const championOptions: AdvisorChampionOption[] = champions
-    .map(({ slug, name, icon }) => ({ slug, name, icon }))
+    .map((champion) => ({
+      slug: champion.slug,
+      name: localizedName(champion, locale),
+      icon: champion.icon,
+    }))
     .sort((a, b) => a.name.localeCompare(b.name));
 
   const augmentOptions: AdvisorAugmentOption[] = augments.map((augment) => ({
     slug: augment.slug,
-    displayName: localizedName(augment),
+    displayName: localizedName(augment, locale),
     rarity: augment.rarity ?? "gold",
     icon: augment.icon,
   }));

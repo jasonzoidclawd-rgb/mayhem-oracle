@@ -39,7 +39,11 @@
       "name_ja": "タンクエンジン",
       "name_ko": "탱크 엔진",
       "wikiDescription": "Scoring a champion takedown generates a stack, stacking infinitely. For each stack, increase your maximum health and size by 5%. Lose 65% of stacks on death.",
-      "wikiRarity": "gold"
+      "wikiRarity": "gold",
+      "description_zh_TW": "參與擊殺時獲得一層堆層，可增加體型和最大生命。死亡時失去層數。",
+      "description_zh_CN": "参与击杀时，获得一个层数，使你的体型增大并提升最大生命值。阵亡时损失层数。",
+      "description_ja": "キルまたはアシストを獲得すると、自分のサイズと最大体力を増加させるスタックを獲得する。倒されるとスタックを失う。",
+      "description_ko": "처치 관여 시 중첩을 얻어 크기가 커지고 최대 체력이 증가합니다. 사망 시 중첩을 잃습니다."
     },
     {
       "augmentId": "ARAM_Quest_SteelYourHeart",
@@ -68,7 +72,11 @@
       "name_ja": "覚悟を決めろ",
       "name_ko": "강철 같은 심장",
       "wikiDescription": "Quest: Obtain Heartsteel and accumulate over 300 bonus health from Colossal Consumption. Reward: Upon completing your Quest, increase the bonus health gained from Heartsteel's Colossal Consumption by 200%.",
-      "wikiRarity": "gold"
+      "wikiRarity": "gold",
+      "description_zh_TW": "任務：擁有@StackThreshold@層以上的雄心之鋼。 獎勵：雄心之鋼堆層乘以@StackMultiplication@倍。",
+      "description_zh_CN": "任务：持有【心之钢】且层数在@StackThreshold@层或以上。 奖励：将你的【心之钢】层数乘以@StackMultiplication@。",
+      "description_ja": "クエスト: @StackThreshold@スタック以上の「心の鋼」を所有する。 報酬: 「心の鋼」のスタックが@StackMultiplication@倍になる。",
+      "description_ko": "퀘스트: 효과가 @StackThreshold@중첩 이상 적용된 강철심장을 보유해야 합니다. 보상: 강철심장 중첩이 @StackMultiplication@배가 됩니다."
     },
     {
       "augmentId": "ARAM_HeavyHitter",
@@ -98,7 +106,11 @@
       "name_ja": "ヘビーヒッター",
       "name_ko": "강타자",
       "wikiDescription": "Basic attacks deal bonus physical damage equal to 3.5% of your maximum health.",
-      "wikiRarity": "silver"
+      "wikiRarity": "silver",
+      "description_zh_TW": "你的普攻額外造成等同於自身最大生命@HealthPercent*100@%的物理傷害。",
+      "description_zh_CN": "你的攻击造成相当于你@HealthPercent*100@%最大生命值的额外物理伤害。",
+      "description_ja": "通常攻撃が自身の最大体力の@HealthPercent*100@%にあたる追加物理ダメージを与える。",
+      "description_ko": "기본 공격 시 최대 체력의 @HealthPercent*100@%에 해당하는 추가 물리 피해를 입힙니다."
     },
     {
       "augmentId": "ARAM_Upgrade_IE",
@@ -128,7 +140,11 @@
       "name_ja": "インフィニティ エッジ アップグレード",
       "name_ko": "무한의 대검 업그레이드",
       "wikiDescription": "Upgrades Infinity Edge, empowering it to gain Sword of the Divine's Excoriate. Additionally, gain 500 and 25% critical strike chance. Excoriate: Gain a random amount of bonus critical strike damage that scales up to 50% of your critical strike chance, with the value of this amount changing every 0.25 seconds.",
-      "wikiRarity": "gold"
+      "wikiRarity": "gold",
+      "description_zh_TW": "獲得@CritChance*100@%%i:scaleCrit%暴擊率和500金錢。 持有無盡之刃時，每次普攻可從%i:scaleCrit%暴擊率獲得隨機%i:scaleCritMult%暴擊傷害。",
+      "description_zh_CN": "获得@CritChance*100@% %i:scaleCrit%暴击几率和500金币。 装备无尽之刃后，可使你的%i:scaleCrit%暴击几率在每次攻击都会提供随机的%i:scaleCritMult%暴击伤害。",
+      "description_ja": "クリティカル率が@CritChance*100@% %i:scaleCrit%増加し、500ゴールドを獲得する。 「インフィニティ エッジ」を装備すると%i:scaleCrit%クリティカル率が通常攻撃ごとにランダムに%i:scaleCritMult%クリティカルダメージを与える。",
+      "description_ko": "@CritChance*100@%의 치명타 확률%i:scaleCrit% 및 500골드를 얻습니다. 무한의 대검을 보유하고 있으면 치명타 확률%i:scaleCrit%이 기본 공격 시 무작위로 치명타 피해량%i:scaleCritMult%을 부여합니다."
     },
     {
       "augmentId": "ARAM_DrawYourSword",
@@ -159,7 +175,11 @@
       "name_ja": "剣を構えよ",
       "name_ko": "검을 뽑아라",
       "wikiDescription": "Become melee, modifying your attack range to 200 (+ 100% bonus attack range from augments) units. Additionally, gain 24% bonus attack damage, 20% bonus attack speed, 24% bonus health, 20% bonus movement speed, and 20% life steal. These bonuses are increased by 0% – 100% (based on champion's default attack range).",
-      "wikiRarity": "prismatic"
+      "wikiRarity": "prismatic",
+      "description_zh_TW": "變為近戰並增加物攻、生命、攻速、吸血以及跑速(成長幅度取決於你犧牲的距離)。",
+      "description_zh_CN": "变为近战状态，并且获得攻击力、生命值、攻击速度、生命偷取和移动速度 (每个属性都基于舍弃的攻击距离而进一步提升)。",
+      "description_ja": "近接攻撃チャンピオンに変化し、攻撃力、体力、攻撃速度、ライフスティール、移動速度が増加する(減少した射程距離に応じて増加する)。",
+      "description_ko": "이제 근접 챔피언으로 간주됩니다. 공격력, 체력, 공격 속도, 생명력 흡수 효과, 이동 속도를 얻습니다. 각 능력치는 잃은 공격 사거리에 따라 추가로 증가합니다."
     },
     {
       "augmentId": "InfiniteRecursion",
@@ -188,7 +208,11 @@
       "name_ja": "無限再帰",
       "name_ko": "무한 반복",
       "wikiDescription": "Gain 60 ability haste, increased by 3 each time you score a champion takedown.",
-      "wikiRarity": "prismatic"
+      "wikiRarity": "prismatic",
+      "description_zh_TW": "增加@StartingHaste@技能加速，每次參與擊殺則額外增加@HastePerStack@技能加速。",
+      "description_zh_CN": "获得@StartingHaste@技能急速，外加每次参与击杀@HastePerStack@技能急速。",
+      "description_ja": "スキルヘイストが@StartingHaste@増加する。さらに、キルまたはアシストごとに、スキルヘイストが@HastePerStack@増加する。",
+      "description_ko": "스킬 가속을 @StartingHaste@+처치 관여당 @HastePerStack@ 얻습니다."
     },
     {
       "slug": "warlock-juicebox",
@@ -239,7 +263,11 @@
       "name_ja": "ドロップキック",
       "name_ko": "드롭킥",
       "wikiDescription": "Your basic attacks and abilities execute enemy champions below 5% (+ 3.5% per 100 base AD) (+ 2% per 1000 bonus health) of their maximum health, which causes their corpse to be sent flying away in a line. Upon collision with an enemy champion or terrain, the target's corpse explodes to deal 150 – 500 (based on level) (+ 100% bonus armor) (+ 100% bonus magic resistance) magic damage to nearby enemies. Successful executions heal you for 100 – 300 (based on level) (+ 25% bonus health). The execution may also be triggered by the explosion and goes through shields.",
-      "wikiRarity": "prismatic"
+      "wikiRarity": "prismatic",
+      "description_zh_TW": "普攻會處決低生命的敵方英雄、造成擊退並引發爆炸，同時回復自身生命。",
+      "description_zh_CN": "你的攻击会处决低生命值的敌方英雄，从而击退并引发一次爆炸，同时治疗你自身。",
+      "description_ja": "通常攻撃が体力の低い敵チャンピオンにとどめを刺す。また、その敵をノックバックして爆発を起こし、自身を回復する。",
+      "description_ko": "기본 공격 시 체력이 낮은 적 챔피언을 처형하고, 뒤로 밀어내 폭발시키며 자신의 체력을 회복합니다."
     },
     {
       "augmentId": "ARAM_PhenomenalEvil",
@@ -268,7 +296,11 @@
       "name_ja": "偉大なる悪",
       "name_ko": "극악무도",
       "wikiDescription": "Gain Veigar's Phenomenal Evil Power. Phenomenal Evil Power: Generate a permanent stack of Phenomenal Evil each time you damage an enemy champion with ability damage. This effect cannot trigger more than once every second globally and once every 3 seconds from the same cast instance. For each stack, gain 1 ability power. If this is not your first augment, start with 40 Phenomenal Evil stacks, granting you 40 ability power. The 40 bonus stacks for selecting this augment as not your first augment are given once the first stack is earned.",
-      "wikiRarity": "gold"
+      "wikiRarity": "gold",
+      "description_zh_TW": "使用技能對敵方英雄造成傷害後，可永久增加@APPerProc@魔攻。 若這是你拿的第二件增幅裝置，開始時有@StartingAPIfSecondAugment@魔攻。",
+      "description_zh_CN": "在你用技能对敌人造成伤害时永久获得@APPerProc@法术强度。 如果是作为你的第二个强化符文，则自带@StartingAPIfSecondAugment@法术强度。",
+      "description_ja": "スキルで敵チャンピオンにダメージを与えると、魔力が@APPerProc@恒久的に増加する。 2つ目のオーグメントとして入手した場合は、@StartingAPIfSecondAugment@の魔力で始まる。",
+      "description_ko": "스킬로 적 챔피언에게 피해를 입히면 영구적으로 @APPerProc@의 주문력을 얻습니다. 두 번째 증강일 경우 @StartingAPIfSecondAugment@의 주문력으로 시작합니다."
     },
     {
       "augmentId": "PressureCooker",
@@ -298,7 +330,11 @@
       "name_ja": "圧力鍋",
       "name_ko": "압력솥",
       "wikiDescription": "Surrounds you in flames, causing you to apply a Burn every second to enemy champions within 300 units for 3 seconds that deals magic damage equal to「 0.5% of your maximum health per second. 」「 1.5% of your maximum health over the duration. 」This Burn stacks infinitely and refreshes with each application. Additionally, you are assigned with quests that require you to deal a certain amount of damage with the Burn effect against enemy champions. There are three quest tiers, and each completed tier grants you a reward that improves Pressure Cooker's effect.",
-      "wikiRarity": "gold"
+      "wikiRarity": "gold",
+      "description_zh_TW": "每秒對鄰近敵方英雄附加一層燃燒，傷害隨你的最大生命成長。 任務：對敵方英雄造成燃燒傷害。 獎勵：任務每升一級，提升體型和傷害。",
+      "description_zh_CN": "每一秒，对附近的敌方英雄们施加一层可叠加的灼烧，这个效果受益于你的最大生命值。 任务：对敌方英雄造成灼烧伤害 奖励：提升【高压锅】的规模和伤害，基于任务等级。",
+      "description_ja": "1秒ごとに、周囲の敵チャンピオンに炎上のスタックを付与し、自身の最大体力に応じたダメージを与える。 クエスト: 敵チャンピオンに炎上ダメージを与える。 報酬: クエストレベルに応じてサイズとダメージが増加する。",
+      "description_ko": "매초 최대 체력에 비례해 주변 적 챔피언에게 중첩되는 화상 효과를 적용합니다. 퀘스트: 적 챔피언에게 화상 피해를 입혀야 합니다. 보상: 퀘스트 레벨당 크기와 피해량이 증가합니다."
     },
     {
       "augmentId": "ARAM_Quest_VoidImmolation",
@@ -328,7 +364,11 @@
       "name_ja": "イカシアの滅亡",
       "name_ko": "이케시아의 몰락",
       "wikiDescription": "Gain Bami's Cinder. You can now purchase Hollow Radiance and Sunfire Aegis in spite of the item limit imposed by Immolate. Quest: Obtain Hollow Radiance and Sunfire Aegis. Reward: Upon completing your Quest, convert the items you obtained for the quest into Void Immolation. Void Immolation counts as 2 Burn effect sources. When gaining Bami's Cinder, you will lose an Ruby Crystal or a Glowing Mote in your inventory as it will get upgraded with no gold returned back to you.(bug)",
-      "wikiRarity": "prismatic"
+      "wikiRarity": "prismatic",
+      "description_zh_TW": "立即獲得一個巴米灰燼。 任務：持有日炎聖盾和虛偽光彩。 獎勵：這些道具能合成虛空獻祭。",
+      "description_zh_CN": "即刻：获得1个【斑比的熔渣】。 任务：持有日炎圣盾和璀璨回响。 奖励：将这些装备合成为虚空献祭。",
+      "description_ja": "即時: 「バミ シンダー」を1個獲得する。 クエスト: 「サンファイア イージス」と「ホロウ レディアンス」を所持する。 報酬: これらのアイテムが組み合わさって「ヴォイドの猛火」になる。",
+      "description_ko": "즉시: 바미의 불씨를 획득합니다. 퀘스트: 태양불꽃 방패와 공허한 광휘를 보유해야 합니다. 보상: 두 아이템이 공허의 불길로 합쳐집니다."
     },
     {
       "augmentId": "ARAM_Goliath",
@@ -357,7 +397,11 @@
       "name_ja": "大巨人",
       "name_ko": "거인",
       "wikiDescription": "Grants 35% bonus health, 15% adaptive force, and 50% increased size.",
-      "wikiRarity": "prismatic"
+      "wikiRarity": "prismatic",
+      "description_zh_TW": "體型變大，增加@HealthAmp*100@%生命及@AFAmp*100@%適性之力。",
+      "description_zh_CN": "体型变大，获得@HealthAmp*100@%生命值和@AFAmp*100@%适应之力。",
+      "description_ja": "サイズが大きくなり、体力が@HealthAmp*100@%、アダプティブフォースが@AFAmp*100@%増加する。",
+      "description_ko": "크기가 커져 체력이 @HealthAmp*100@% 증가하고 적응형 능력치가 @AFAmp*100@% 증가합니다."
     },
     {
       "augmentId": "BloodMoneyBurn",
@@ -386,7 +430,11 @@
       "name_ja": "燃える利回り",
       "name_ko": "타오르는 이자",
       "wikiDescription": "Gain 1 – 3 (based on level) (+ 0.75% of damage dealt) gold for each tick of damage dealt to enemy champions with persistent damage effects as well as damage over time from item effects.",
-      "wikiRarity": "gold"
+      "wikiRarity": "gold",
+      "description_zh_TW": "對英雄造成燃燒或持續傷害時，獲得金錢。",
+      "description_zh_CN": "施加至英雄的灼烧和持续伤害会生成金币。",
+      "description_ja": "チャンピオンに炎上効果と継続ダメージを与えると、ゴールドを獲得する。",
+      "description_ko": "챔피언에게 적용된 화상 및 지속 피해 효과가 골드를 생성합니다."
     },
     {
       "augmentId": "ARAM_MagicMissile",
@@ -416,7 +464,11 @@
       "name_ja": "マジックミサイル",
       "name_ko": "마법 미사일",
       "wikiDescription": "Dealing damage to an enemy champion with an ability fires 3 missiles at them that each deal true damage equal to 0.33% of the target's maximum health, increased to up to 1% based on distance travelled (maximum damage reached at 1000 units). This effect can only trigger once every 6 seconds from the same cast.",
-      "wikiRarity": "gold"
+      "wikiRarity": "gold",
+      "description_zh_TW": "造成技能傷害會對目標發射@NumberOfMissiles@枚飛彈，每一枚飛彈會根據飛行距離造成百分比最大生命的真實傷害。",
+      "description_zh_CN": "造成技能伤害会对其发射@NumberOfMissiles@个飞弹，每个造成基于飞行距离的百分比最大生命值的真实伤害。",
+      "description_ja": "スキルでダメージを与えると、@NumberOfMissiles@発のミサイルが発射され、それぞれが飛行距離に応じて最大体力の一定割合の確定ダメージを与える。",
+      "description_ko": "스킬 피해를 입히면 투사체 @NumberOfMissiles@개를 발사해 이동한 거리에 따라 각각 최대 체력 비례 고정 피해를 입힙니다."
     },
     {
       "augmentId": "ARAM_Eureka",
@@ -446,7 +498,11 @@
       "name_ja": "エウレカ",
       "name_ko": "유레카",
       "wikiDescription": "Gain ability haste equal to 30% AP.",
-      "wikiRarity": "prismatic"
+      "wikiRarity": "prismatic",
+      "description_zh_TW": "增加相當於@APToHasteConversion*100@%魔攻的技能加速。",
+      "description_zh_CN": "获得相当于@APToHasteConversion*100@%法术强度的技能急速。",
+      "description_ja": "魔力の@APToHasteConversion*100@%にあたるスキルヘイストを獲得する。",
+      "description_ko": "주문력의 @APToHasteConversion*100@%에 해당하는 스킬 가속을 얻습니다."
     },
     {
       "augmentId": "ARAM_DualWield",
@@ -476,7 +532,11 @@
       "name_ja": "二刀流",
       "name_ko": "양손잡이",
       "wikiDescription": "Your basic attacks launch a bolt at the target that fires after a 0.225-second delay on-attack, deals 40% of the triggering attack's pre-mitigation damage, and applies on-hit effects at 40% effectiveness. Additionally, increase your total attack speed by 10%.",
-      "wikiRarity": "prismatic"
+      "wikiRarity": "prismatic",
+      "description_zh_TW": "普攻會射出一道箭矢，施加{{ Item_Keyword_OnHit }}但威力減弱。增加@AttackSpeed*100@%總攻速。",
+      "description_zh_CN": "在攻击时，发射一个箭矢，它施加效能削减的{{ Item_Keyword_OnHit }}。获得@AttackSpeed*100@%总攻击速度。",
+      "description_ja": "通常攻撃で矢を放ち、効果が低下した{{ Item_Keyword_OnHit }}を適用する。合計攻撃速度が@AttackSpeed*100@%増加する。",
+      "description_ko": "기본 공격 시 감소한 {{ Item_Keyword_OnHit }} 효과를 적용하는 투사체를 발사합니다. 총 공격 속도가 @AttackSpeed*100@% 증가합니다."
     },
     {
       "augmentId": "ARAM_InfernalConduit",
@@ -506,7 +566,11 @@
       "name_ja": "獄炎路",
       "name_ko": "지옥의 전도체",
       "wikiDescription": "Your ability hits against champions apply a Burn for 3 seconds that deals「 2 – 20 (based on level) (+ 4.6% bonus AD) (+ 2% AP) bonus magic damage per second 」「 6 – 60 (based on level) (+ 14% bonus AD) (+ 6% AP) bonus magic damage over the duration 」(1 second cooldown per cast instance). This Burn stacks infinitely and refreshes with each application. Additionally, all of your Burn effects reduce the cooldowns of all your basic abilities by 0.08 seconds for each tick of damage they deal to a target. Damage over time effects from all sources except items(unexpected) count as Burn sources for triggering the cooldown reduction. Eligible Augments for Burn: Buff Buddies, Firebrand, Grandma's Chili Oil, Holy Fire, Infernal Conduit, Slow Cooker",
-      "wikiRarity": "prismatic"
+      "wikiRarity": "prismatic",
+      "description_zh_TW": "技能附加可累加的燃燒，此效果會持續造成傷害。 你施加的燃燒效果可縮短基礎技能冷卻時間。",
+      "description_zh_CN": "你的技能会施加一层可叠加的灼烧，持续造成魔法伤害。 你的灼烧效果会降低你各基础技能的冷却时间。",
+      "description_ja": "スキルが炎上のスタックを適用し、継続ダメージを与える。 敵に炎上の効果を与えると、自身の通常スキルのクールダウンが短縮される。",
+      "description_ko": "스킬 사용 시 중첩되는 화상 효과를 적용해 지속적으로 피해를 입힙니다. 화상 효과가 기본 스킬의 재사용 대기시간을 감소시킵니다."
     },
     {
       "augmentId": "ARAM_Upgrade_Immolate",
@@ -535,7 +599,11 @@
       "name_ja": "猛火 アップグレード",
       "name_ko": "불사르기 업그레이드",
       "wikiDescription": "Upgrades Bami's Cinder, Hollow Radiance, Sunfire Aegis, and Void Immolation, empowering Immolate to additionally grant you 12 per tick for each enemy champion afflicted by its effect. Additionally, gain 250. Clones do not count as valid targets for the effect.",
-      "wikiRarity": "silver"
+      "wikiRarity": "silver",
+      "description_zh_TW": "每有一名受獻祭影響的目標，虛偽光彩和日炎聖盾賦予@GoldPerTick@金錢。獲得250金錢。",
+      "description_zh_CN": "【璀璨回响】和【日炎圣盾】每当有目标受到【献祭】效果影响时，提供@GoldPerTick@ 金币 。获得250金币。",
+      "description_ja": "「ホロウ レディアンス」と「サンファイア イージス」が「猛火」の影響を受けた対象1体ごとに@GoldPerTick@ゴールドを付与する。250ゴールドを獲得する。",
+      "description_ko": "공허한 광휘 및 태양불꽃 방패가 불사르기 효과가 적용된 대상 수에 비례하여 @GoldPerTick@골드를 제공합니다. 250골드를 획득합니다."
     },
     {
       "augmentId": "ARAM_Goredrink",
@@ -564,7 +632,11 @@
       "name_ja": "ゴアドリンク",
       "name_ko": "선혈포식",
       "wikiDescription": "Gain 15% omnivamp.",
-      "wikiRarity": "silver"
+      "wikiRarity": "silver",
+      "description_zh_TW": "獲得@Omnivamp*100@%全能吸血效果。",
+      "description_zh_CN": "获得@Omnivamp*100@%全能吸血。",
+      "description_ja": "オムニヴァンプが@Omnivamp*100@%増加する。",
+      "description_ko": "모든 피해 흡혈 @Omnivamp*100@%를 얻습니다."
     },
     {
       "augmentId": "ARAM_Deft",
@@ -593,7 +665,11 @@
       "name_ja": "技巧",
       "name_ko": "능수능란",
       "wikiDescription": "Grants 60% bonus attack speed.",
-      "wikiRarity": "silver"
+      "wikiRarity": "silver",
+      "description_zh_TW": "增加%i:scaleAS% @AttackSpeed*100@%攻速。",
+      "description_zh_CN": "获得%i:scaleAS% @AttackSpeed*100@%攻击速度。",
+      "description_ja": "%i:scaleAS%攻撃速度が@AttackSpeed*100@%増加する。",
+      "description_ko": "%i:scaleAS% @AttackSpeed*100@%의 공격 속도를 얻습니다."
     },
     {
       "augmentId": "ARAM_GiantSlayer",
@@ -623,7 +699,11 @@
       "name_ja": "ジャイアント スレイヤー",
       "name_ko": "거인 학살자",
       "wikiDescription": "Become tiny, reducing your size by 75% and granting you 20% bonus movement speed. Additionally, deal 10% / 15% / 25% / 30% (based on target's size) bonus damage against enemy champions with greater size than you.",
-      "wikiRarity": "prismatic"
+      "wikiRarity": "prismatic",
+      "description_zh_TW": "體型變小，獲得跑速，並根據目標英雄與自身體型差距造成額外傷害。",
+      "description_zh_CN": "体型变小，获得移动速度，并基于敌方英雄体型大于你的程度获得额外伤害。",
+      "description_ja": "小さくなって移動速度が増加する。また、対象のチャンピオンが自身よりどれだけ大きいかに応じて、追加ダメージを獲得する。",
+      "description_ko": "크기가 작아져 이동 속도가 증가하며 상대가 자신보다 큰 정도에 비례해 챔피언에게 추가 피해를 입힙니다."
     },
     {
       "augmentId": "ARAM_BluntForce",
@@ -652,7 +732,11 @@
       "name_ja": "無骨なる力",
       "name_ko": "육중한 힘",
       "wikiDescription": "Increases attack damage by 20%.",
-      "wikiRarity": "silver"
+      "wikiRarity": "silver",
+      "description_zh_TW": "獲得%i:scaleAD% @ADAmp*100@%物攻。",
+      "description_zh_CN": "获得%i:scaleAD%@ADAmp*100@%攻击力。",
+      "description_ja": "%i:scaleAD%攻撃力が@ADAmp*100@%増加する。",
+      "description_ko": "%i:scaleAD% 공격력이 @ADAmp*100@% 증가합니다."
     },
     {
       "augmentId": "ARAM_TransmutePrismatic",
@@ -679,7 +763,11 @@
       "name_ja": "変質: プリズム",
       "name_ko": "전환: 프리즘",
       "wikiDescription": "Gain one random Prismatic augment, excluding the other two offerings in your current assortment.",
-      "wikiRarity": "gold"
+      "wikiRarity": "gold",
+      "description_zh_TW": "獲得一件隨機%i:Augment%稜鏡增幅裝置。",
+      "description_zh_CN": "获得1个随机%i:Augment%棱彩阶强化符文。",
+      "description_ja": "ランダムな%i:Augment%プリズムオーグメントを1個獲得する。",
+      "description_ko": "무작위 %i:Augment% 프리즘 증강을 획득합니다."
     },
     {
       "augmentId": "ARAM_EtherealWeapon",
@@ -709,7 +797,11 @@
       "name_ja": "エーテル武器",
       "name_ko": "환영 무기",
       "wikiDescription": "Your abilities apply on-hit effects (1 second cooldown per target).",
-      "wikiRarity": "gold"
+      "wikiRarity": "gold",
+      "description_zh_TW": "技能會施加{{ Item_Keyword_OnHit }}。對每個目標有1秒冷卻時間。",
+      "description_zh_CN": "你的技能可施加{{ Item_Keyword_OnHit }}。每个目标有1秒冷却时间。",
+      "description_ja": "スキルが{{ Item_Keyword_OnHit }}を付与する。対象ごとにクールダウン1秒。",
+      "description_ko": "스킬이 {{ Item_Keyword_OnHit }} 효과를 적용합니다. 대상마다 1초의 재사용 대기시간이 적용됩니다."
     },
     {
       "augmentId": "ARAM_CelestialBody",
@@ -738,7 +830,11 @@
       "name_ja": "聖体",
       "name_ko": "천상의 신체",
       "wikiDescription": "Gain 1500 bonus health, but reduce your damage output by 10%.",
-      "wikiRarity": "gold"
+      "wikiRarity": "gold",
+      "description_zh_TW": "增加@Health@生命，但造成的傷害降低@DamageReduction*100@%。",
+      "description_zh_CN": "获得@Health@生命值，但你造成的伤害降低@DamageReduction*100@%。",
+      "description_ja": "体力が@Health@増加する代わりに、与えるダメージが@DamageReduction*100@%低下する。",
+      "description_ko": "@Health@의 체력을 얻지만, 피해량이 @DamageReduction*100@% 감소합니다."
     },
     {
       "augmentId": "ARAM_ScopierWeapons",
@@ -767,7 +863,11 @@
       "name_ja": "改造スコープ装着",
       "name_ko": "상급 조준경 부착",
       "wikiDescription": "Gain ( 200 / 100) bonus attack range.",
-      "wikiRarity": "gold"
+      "wikiRarity": "gold",
+      "description_zh_TW": "增加@RangeIncrease@攻擊距離。",
+      "description_zh_CN": "获得@RangeIncrease@攻击距离。",
+      "description_ja": "射程距離が@RangeIncrease@増加する。",
+      "description_ko": "공격 사거리가 @RangeIncrease@ 증가합니다."
     },
     {
       "augmentId": "ARAM_StackosaurusRex",
@@ -794,7 +894,11 @@
       "name_ja": "スタックサウルス・レックス",
       "name_ko": "다단 중첩",
       "wikiDescription": "Increase the number of permanent stacks you gain from abilities, item effects, and augments by 100%.",
-      "wikiRarity": "silver"
+      "wikiRarity": "silver",
+      "description_zh_TW": "永久獲得技能、增幅裝置或道具的堆層時，額外獲得@StackModifier*100@%堆層！",
+      "description_zh_CN": "在你获得一个技能、强化符文或装备的永久层数时，多获得@StackModifier*100@%！",
+      "description_ja": "恒久的なスキル、オーグメント、アイテムのスタックを獲得する際に、スタック獲得量が@StackModifier*100@%増加する！",
+      "description_ko": "스킬, 증강 또는 아이템 중첩을 영구적으로 획득할 때마다 @StackModifier*100@% 더 획득합니다!"
     },
     {
       "augmentId": "Twinfire",
@@ -825,7 +929,11 @@
       "name_ja": "ツインファイア",
       "name_ko": "쌍둥이 불꽃",
       "wikiDescription": "Damaging abilities against enemy champions launch 1 (+ 1 per 33.33% critical strike chance) missiles at the target that each deal 10 – 30 (based on level) (+ 7% bonus AD) (+ 7% AP) magic damage (5 second cooldown). Additionally, gain 25% critical strike chance.",
-      "wikiRarity": "silver"
+      "wikiRarity": "silver",
+      "description_zh_TW": "造成技能傷害時，發射1+@AdditionalMis@枚飛彈，每一枚造成@Damage@魔法傷害。 增加%i:scaleCrit% @CrtiChance*100@%暴擊率。",
+      "description_zh_CN": "造成技能伤害时，发射1+@AdditionalMis@个飞弹，每个造成@Damage@魔法伤害。 此外，获得%i:scaleCrit%@CrtiChance*100@%暴击几率。",
+      "description_ja": "スキルダメージ時、1 + @AdditionalMis@個のミサイルを発射し、それぞれ@Damage@の魔法ダメージを与える。 %i:scaleCrit%クリティカル率が@CrtiChance*100@%増加する。",
+      "description_ko": "스킬 피해를 입히면 투사체 1+@AdditionalMis@개를 발사해 각각 @Damage@의 마법 피해를 입힙니다. %i:scaleCrit% 치명타 확률이 @CrtiChance*100@% 증가합니다."
     },
     {
       "augmentId": "ARAM_SpiritBomb",
@@ -854,7 +962,11 @@
       "name_ja": "スピリットボム",
       "name_ko": "영혼 폭탄",
       "wikiDescription": "Your healing and shielding on yourself or allies builds up a Spirit Bomb on top of you. Once you have healed and shielded a combined total of 200 – 2000 (based on level), you toss the Spirit Bomb onto the most wounded allied champion over 1.1 seconds. Upon impact, the Spirit Bomb explodes in a 475 radius to heal allied champions within the area for 5% – 15% (based on level) (+ 3% per 100 AP) of their missing health and grants them a shield for 2 seconds that absorbs damage equal to 10% – 25% (based on level) (+ 2% per 100 AP) of their current health. Healing and shielding from this effect do not count toward the Spirit Bomb's trigger condition. The toss range for the Spirit Bomb is global; it will target the lowest-health ally on the map.",
-      "wikiRarity": "prismatic"
+      "wikiRarity": "prismatic",
+      "description_zh_TW": "對友方英雄進行治療和護盾會累積靈魂炸彈。滿層時，將該炸彈丟到生命最低的友軍身上，為其及附近友軍提供治療並護盾。",
+      "description_zh_CN": "为友方英雄提供治疗和护盾时会为你积攒一颗【灵魄炸弹】。在满层时，投掷该炸弹至生命值最低的那个友军，从而对其和附近友军们提供治疗和护盾。",
+      "description_ja": "味方チャンピオンに体力回復効果やシールドを付与すると、スピリットボムがチャージされる。最大スタック時、体力が最も低い味方にボムを投げて、その味方と周囲の味方の体力を回復してシールドを付与する。",
+      "description_ko": "아군 챔피언의 체력을 회복시키거나 보호막을 씌우면 영혼 폭탄이 중첩됩니다. 최대 중첩 시 체력이 가장 낮은 아군에게 폭탄을 던져, 해당 아군 및 주변 아군의 체력을 회복시키고 보호막을 부여합니다."
     },
     {
       "augmentId": "ARAM_OceanSoul",
@@ -883,7 +995,11 @@
       "name_ja": "オーシャンソウル",
       "name_ko": "바다의 영혼",
       "wikiDescription": "Grants the Ocean Dragon Soul, which has a modified base heal value of 100, or a different Dragon Soul if you aleady have it.",
-      "wikiRarity": "silver"
+      "wikiRarity": "silver",
+      "description_zh_TW": "獲得海洋之魂，對敵軍造成傷害後可增加大量生命及魔力回復。",
+      "description_zh_CN": "获得【海洋龙魂】，在对敌方英雄造成伤害后提供高额的生命和法力回复。",
+      "description_ja": "「オーシャンソウル」を獲得し、敵にダメージを与えると体力およびマナの自動回復量が増加する。",
+      "description_ko": "적에게 피해를 입힌 후 높은 체력 및 마나 재생 효과를 얻는 바다의 영혼을 획득합니다."
     },
     {
       "augmentId": "ARAM_ADAPt",
@@ -913,7 +1029,11 @@
       "name_ja": "変力装置",
       "name_ko": "적응형 능력치",
       "wikiDescription": "Convert all of your bonus attack damage into ability power at a rate of 1 ability power per 0.6 bonus attack damage. Additionally, increase your ability power by 15%.",
-      "wikiRarity": "silver"
+      "wikiRarity": "silver",
+      "description_zh_TW": "將額外物攻轉換為魔攻。增加@APAmp*100@%魔攻。",
+      "description_zh_CN": "将额外攻击力转化为法术强度。获得@APAmp*100@%法术强度。",
+      "description_ja": "増加攻撃力を魔力に変換する。魔力が@APAmp*100@%増加する。",
+      "description_ko": "추가 공격력을 주문력으로 전환합니다. 주문력이 @APAmp*100@% 증가합니다."
     },
     {
       "augmentId": "ARAM_BacktoBasics",
@@ -944,7 +1064,11 @@
       "name_ja": "初志貫徹",
       "name_ko": "기본으로 돌아가기",
       "wikiDescription": "Your champion abilities deal 35% increased damage and you gain 70 ability haste and 35% increased healing and shielding from all sources, but your ultimate ability is permanently sealed.",
-      "wikiRarity": "prismatic"
+      "wikiRarity": "prismatic",
+      "description_zh_TW": "增加技能傷害、治療、護盾，並獲得技能加速，但無法使用大絕。",
+      "description_zh_CN": "获得提升过的技能伤害、治疗效果、护盾和技能急速，但你不能使用你的终极技能。",
+      "description_ja": "スキルダメージ、体力回復効果、シールド効果、スキルヘイストが増加する代わりに、アルティメットスキルを使用できなくなる。",
+      "description_ko": "스킬 피해량, 체력 회복량, 보호막 흡수량 및 스킬 가속이 증가하지만 궁극기를 사용할 수 없습니다."
     },
     {
       "augmentId": "ARAM_WindspeakersBlessing",
@@ -974,7 +1098,11 @@
       "name_ja": "風詠みの祝福",
       "name_ko": "바람전달자의 축복",
       "wikiDescription": "Your or allies' heals and shields on yourself, or your heals and shields on allies, grant the target 30 – 60 (based on level) bonus armor and bonus magic resistance for 3 seconds.",
-      "wikiRarity": "prismatic"
+      "wikiRarity": "prismatic",
+      "description_zh_TW": "治療與護盾效果同時會增加目標的物理防禦與魔法防禦3秒。",
+      "description_zh_CN": "你的治疗效果和护盾效果还会提升目标的护甲和魔法抗性，这些加成持续3秒。",
+      "description_ja": "自身の体力回復効果およびシールド効果が、3秒間対象の物理防御と魔法防御を増加させる。",
+      "description_ko": "회복 및 보호막 효과를 부여하면 3초 동안 대상의 방어력 및 마법 저항력이 증가합니다."
     },
     {
       "augmentId": "ARAM_HighRoller",
@@ -1001,7 +1129,11 @@
       "name_ja": "ギャンブラー",
       "name_ko": "도박꾼",
       "wikiDescription": "Nearby enemies that die have a 7% chance to drop a Stat Anvil at the location of their death. You can pick up dropped anvils by moving over them. The obtained Stat Anvils will be consumed once the shop is enabled again (after your death).",
-      "wikiRarity": "prismatic"
+      "wikiRarity": "prismatic",
+      "description_zh_TW": "鄰近敵軍在死亡時有機會掉落能力值鐵砧。",
+      "description_zh_CN": "附近敌人在阵亡时有几率掉落【属性锻造器】。",
+      "description_ja": "周囲の敵が倒された際に、一定の確率で「ステータスの金床」をドロップする。",
+      "description_ko": "주변 적이 죽을 때 일정 확률로 능력치 모루를 떨어뜨립니다."
     },
     {
       "augmentId": "ARAM_WeeWooWeeWoo",
@@ -1031,7 +1163,11 @@
       "name_ja": "うぃ～！おりゃっ！",
       "name_ko": "삐뽀삐뽀",
       "wikiDescription": "Gain 0% – 50% (based on target ally's missing health) bonus movement speed while facing toward nearby allied champions, lingering for 2 seconds after no longer facing them. Your heals and shields are also increased by 0% – 50% (based on target's missing health).",
-      "wikiRarity": "gold"
+      "wikiRarity": "gold",
+      "description_zh_TW": "當你朝生命較低的友軍移動時，會獲得跑速。目標生命越低，你的治療和護盾效果越強。",
+      "description_zh_CN": "在朝着低生命值的友军移动时，获得移动速度。你的治疗和护盾获得提升，基于你目标的低生命值程度。",
+      "description_ja": "体力が低下している味方に向かって移動する際、移動速度が増加する。対象の体力が低いほど、回復効果とシールド効果が大きくなる。",
+      "description_ko": "체력이 낮은 아군을 향해 이동할 때 이동 속도가 증가합니다. 대상의 체력이 낮을수록 체력 회복량 및 보호막 흡수량이 증가합니다."
     },
     {
       "augmentId": "ARAM_MysticPunch",
@@ -1061,7 +1197,11 @@
       "name_ja": "神秘の鉄拳",
       "name_ko": "신비한 주먹",
       "wikiDescription": "Basic attacks on-hit reduce the remaining cooldowns of your abilities by 1.25 seconds.",
-      "wikiRarity": "prismatic"
+      "wikiRarity": "prismatic",
+      "description_zh_TW": "{{ Item_Keyword_OnHit }}會縮短技能冷卻時間@CooldownRefund@秒%i:scaleCooldown%。",
+      "description_zh_CN": "{{ Item_Keyword_OnHit }}使你的各个技能的冷却时间缩减@CooldownRefund@秒%i:scaleCooldown%。",
+      "description_ja": "{{ Item_Keyword_OnHit }}がスキルのクールダウンを@CooldownRefund@秒短縮する%i:scaleCooldown%。",
+      "description_ko": "{{ Item_Keyword_OnHit }} 스킬의 재사용 대기시간이 @CooldownRefund@초 %i:scaleCooldown% 감소합니다."
     },
     {
       "augmentId": "ARAM_SpecializedRecursion",
@@ -1118,7 +1258,11 @@
       "name_ja": "コレクター アップグレード",
       "name_ko": "징수의 총 업그레이드",
       "wikiDescription": "Upgrades The Collector, empowering Death to have its execution threshold increased by 0.5% each time you kill an enemy champion, capped at a threshold of 12.5% of the target's maximum health, and Taxes to generate a further 25 (total 50) from kills. Additionally, gain 250.",
-      "wikiRarity": "silver"
+      "wikiRarity": "silver",
+      "description_zh_TW": "以蒐集者的被動效果處決敵軍時，會提升處決門檻並獲得額外金錢。 獲得250金錢。",
+      "description_zh_CN": "使用【收集者】的被动处决敌人时的处决阈值提升，并且提供额外金币。 获得250金币。",
+      "description_ja": "「コレクター」の自動効果で対象を倒すと、とどめを刺す体力境界値が増加し、追加でゴールドを付与する。 250ゴールドを獲得する。",
+      "description_ko": "징수의 총 기본 지속 효과로 적을 처형하면 처형 기준치가 높아지며 추가 골드를 얻습니다. 250골드를 획득합니다."
     },
     {
       "augmentId": "ARAM_ShadowRunner",
@@ -1147,7 +1291,11 @@
       "name_ja": "影走り",
       "name_ko": "그림자 질주",
       "wikiDescription": "After dashing, blinking, or exiting stealth, gain 300 bonus movement speed for 2 seconds.",
-      "wikiRarity": "silver"
+      "wikiRarity": "silver",
+      "description_zh_TW": "使用衝刺、閃現或傳送技能或脫離潛行後，增加跑速。",
+      "description_zh_CN": "在使用一个冲刺、闪烁或传送类技能或离开潜行状态之后，获得移动速度。",
+      "description_ja": "ダッシュ、ブリンク、またはテレポートを行うスキルを使用した後、もしくはステルス状態解除後に、移動速度が増加する。",
+      "description_ko": "돌진, 점멸, 순간이동 스킬을 사용하거나 은신 상태에서 벗어난 후 이동 속도가 증가합니다."
     },
     {
       "augmentId": "ARAM_IceCold",
@@ -1176,7 +1324,11 @@
       "name_ja": "結氷",
       "name_ko": "차가운 냉기",
       "wikiDescription": "Your slowing effects reduce the movement speed of targets by an additional 75.",
-      "wikiRarity": "silver"
+      "wikiRarity": "silver",
+      "description_zh_TW": "造成的緩速效果額外降低@ExtraSlowAmount@跑速。",
+      "description_zh_CN": "你的减速效果可使移动速度降低额外的@ExtraSlowAmount@。",
+      "description_ja": "敵へのスロウ効果で、移動速度が追加で@ExtraSlowAmount@低下する。",
+      "description_ko": "둔화 효과가 이동 속도를 추가로 @ExtraSlowAmount@ 감소시킵니다."
     },
     {
       "augmentId": "Sonata",
@@ -1206,7 +1358,11 @@
       "name_ja": "ソナタ",
       "name_ko": "소나타",
       "wikiDescription": "Alternate between automatically casting a modified version of Sona's Aria of Perseverance and modified Song of Celerity, with the former being cast first (10 second cooldown). Aria of Perseverance: Heal yourself for 60 (+ 60% AP) and send out a tone to the most wounded allied champion within 1000 units that heals them for the same amount. Additionally, generate an aura that grants you and tagged allied champions a 80 (+ 40% AP) shield for 1.5 seconds. Song of Celerity: Gain 30% bonus movement speed for 7 seconds. If you take damage during this time, the duration ends prematurely once or if 3 seconds have elapsed. Additionally, generate an aura that grants tagged allied champions 20% bonus movement speed for 3 seconds.",
-      "wikiRarity": "gold"
+      "wikiRarity": "gold",
+      "description_zh_TW": "每隔@Cooldown@秒自動輪替施放堅毅詠嘆調和迅捷奏鳴曲。 堅毅詠嘆調使鄰近友軍回復生命，並暫時獲得護盾靈氣。 迅捷奏鳴曲暫時賦予可增加跑速的靈氣。",
+      "description_zh_CN": "每@Cooldown@秒，以一个不断交替的旋律来自动施放坚毅咏叹调和迅捷奏鸣曲。 坚毅咏叹调治疗附近友军并提供一个临时的护盾光环。 迅捷奏鸣曲提供一个临时光环来提供额外移动速度。",
+      "description_ja": "@Cooldown@秒ごとに、忍耐のアリアとセレリティを交互に自動発動する旋律を奏でる。 忍耐のアリアは周囲の味方を回復し、一時的にシールドオーラを付与する。 セレリティが一時的にオーラを付与し、移動速度が増加する。",
+      "description_ko": "@Cooldown@초마다 인내의 아리아와 기민함의 노래를 번갈아 자동 사용합니다. 인내의 아리아는 주변 아군의 체력을 회복시키고 일시적으로 보호막 오라를 부여합니다. 기민함의 노래는 추가 이동 속도를 부여하는 오라를 잠시 동안 생성합니다."
     },
     {
       "augmentId": "ARAM_SlapAround",
@@ -1237,7 +1393,11 @@
       "name_ja": "叩きまくれ",
       "name_ko": "우당탕탕",
       "wikiDescription": "Immobilizing or grounding an enemy champion grants you 6 bonus Attack Damage or 10 Ability Power (Adaptive), stacking infinitely (5 second cooldown per cast instance). Lose 50% of stacks on death. If the bonus attack damage and the ability power of the unit are equal, the stat granted is always bonus AD.(unexpected)",
-      "wikiRarity": "silver"
+      "wikiRarity": "silver",
+      "description_zh_TW": "硬控場或禁錮敵軍時，獲得@AdaptiveForce@適性之力。死亡時失去@PercentOfStacksLost*100@%。",
+      "description_zh_CN": "每当你定身或缚地一个敌人时，获得@AdaptiveForce@适应之力。阵亡时损失@PercentOfStacksLost*100@%。",
+      "description_ja": "敵に移動不能効果か釘付け効果を与えると、アダプティブフォースが@AdaptiveForce@増加する。倒されると@PercentOfStacksLost*100@%を失う。",
+      "description_ko": "적을 이동 불가 상태로 만들거나 이동 스킬을 사용할 수 없게 하면 @AdaptiveForce@의 적응형 능력치를 얻습니다. 사망 시 @PercentOfStacksLost*100@%를 잃습니다."
     },
     {
       "augmentId": "ARAM_Quest_WoogletsWitchcap",
@@ -1264,7 +1424,11 @@
       "name_ja": "ウーグレット ウィッチキャップ",
       "name_ko": "우글렛의 마녀 모자",
       "wikiDescription": "Gain a Needlessly Large Rod. Quest: Obtain Rabadon's Deathcap and Zhonya's Hourglass. Reward: Upon completing your Quest, convert the items you obtained for the quest into Wooglet's Witchcap.",
-      "wikiRarity": "prismatic"
+      "wikiRarity": "prismatic",
+      "description_zh_TW": "立刻獲得巨型魔棒。 條件：擁有死亡之帽和中婭沙漏。 獎勵：獲得烏莉特的法帽。",
+      "description_zh_CN": "立刻：获得无用大棒。 需求：持有灭世者的死亡之帽和中娅沙漏。 奖励:获得沃格勒特的巫师帽。",
+      "description_ja": "即時: 「ムダニ デカイ ロッド」を獲得する。 条件: 「ラバドン デスキャップ」と「ゾーニャの砂時計」を所有する。 報酬: 「ウーグレット ウィッチキャップ」を獲得する。",
+      "description_ko": "즉시: 쓸데없이 큰 지팡이를 획득합니다. 조건: 라바돈의 죽음모자와 존야의 모래시계를 보유해야 합니다. 보상: 우글렛의 마녀 모자를 획득합니다."
     },
     {
       "augmentId": "ARAM_WitchfulThinking",
@@ -1293,7 +1457,11 @@
       "name_ja": "魔法的思考",
       "name_ko": "사악한 정신",
       "wikiDescription": "Grants 20 – 80 (based on level) ability power.",
-      "wikiRarity": "silver"
+      "wikiRarity": "silver",
+      "description_zh_TW": "增加%i:scaleAP% @AP@魔攻。",
+      "description_zh_CN": "获得%i:scaleAP%@AP@法术强度。",
+      "description_ja": "%i:scaleAP%魔力が@AP@増加する。",
+      "description_ko": "%i:scaleAP% 주문력이 @AP@ 증가합니다."
     },
     {
       "augmentId": "ARAM_SkilledSniper",
@@ -1323,7 +1491,11 @@
       "name_ja": "腕利きスナイパー",
       "name_ko": "노련한 저격수",
       "wikiDescription": "Hitting an enemy champion with a basic ability while located at least 700 units away from them at the time of the hit reduces its current cooldown by 80% of its total cooldown, modified to 65% for damage over time abilities.",
-      "wikiRarity": "gold"
+      "wikiRarity": "gold",
+      "description_zh_TW": "以非大絕技能狙擊敵軍時，可縮短冷卻時間@ReducedCooldownPercent*100@%(持續性技能為@PeriodicReductionAmount*100@%)。",
+      "description_zh_CN": "用一个非终极技能狙击一个敌人时，返还该技能@ReducedCooldownPercent*100@%冷却时间(周期性技能返还@PeriodicReductionAmount*100@%)。",
+      "description_ja": "アルティメット以外のスキルで敵をスナイプすると、そのスキルのクールダウンが@ReducedCooldownPercent*100@%短縮される(継続的に効果を与えるスキルは@PeriodicReductionAmount*100@%)。",
+      "description_ko": "기본 스킬로 적을 저격하면 해당 스킬의 재사용 대기시간이 @ReducedCooldownPercent*100@% 반환됩니다. (지속 스킬의 경우 @PeriodicReductionAmount*100@%)"
     },
     {
       "slug": "forged-by-the-master",
@@ -1372,7 +1544,11 @@
       "name_ja": "ぐるぐるハンマー",
       "name_ko": "탄환 세례",
       "wikiDescription": "Your next basic attack against an enemy champion in each cardinal direction within 750 range additionally on-attack fires 5 missiles at the target that each deal 8 – 51 (based on level) (+ 14% bonus AD) physical damage, for a total of 40 – 255 (based on level) (+ 70% bonus AD) physical damage (5 second cooldown per direction). Missiles' damage is increased by 0% – 50% (based on distance travelled). Each missile can critically strike for (200% + 30%) damage and applies on-hit effects at 20% effectiveness.",
-      "wikiRarity": "prismatic"
+      "wikiRarity": "prismatic",
+      "description_zh_TW": "對敵方英雄普攻時，發射@AdditionalBolts@枚飛彈，傷害量隨飛行距離增加。每個方向的冷卻時間各不相同。",
+      "description_zh_CN": "对敌方英雄的攻击会发射@AdditionalBolts@个额外飞弹，造成随距离提升的额外伤害。每个方向的冷却时间独立计算。",
+      "description_ja": "敵チャンピオンに対する通常攻撃で@AdditionalBolts@発のミサイルが発射され、距離に応じてより多くのダメージを与える。各方向に個別のクールダウンがある。",
+      "description_ko": "적 챔피언 공격 시 이동한 거리에 비례해 피해량이 증가하는 투사체 @AdditionalBolts@개를 발사합니다. 방향마다 재사용 대기시간이 따로 적용됩니다."
     },
     {
       "augmentId": "EscapePlan",
@@ -1403,7 +1579,11 @@
       "name_ja": "脱出プラン",
       "name_ko": "도주 계획",
       "wikiDescription": "Upon dropping below 35% of your maximum health, gain a shield for 65% of your maximum health, 150% bonus movement speed, and reduced size (75 second cooldown). These effects all decay over 5.5 seconds.",
-      "wikiRarity": "silver"
+      "wikiRarity": "silver",
+      "description_zh_TW": "達到@HealthThreshold*100@%生命時，獲得大量逐漸衰減的護盾、逐漸衰減的跑速，以及逐漸恢復的縮小效果。",
+      "description_zh_CN": "在降至@HealthThreshold*100@%生命值时，获得巨量持续衰减的护盾、持续衰减的移动速度和持续衰减的缩小效果。",
+      "description_ja": "体力が@HealthThreshold*100@%に達したときに、大量の徐々に減少するシールドを獲得し、移動速度が増加し、縮小効果を獲得する。これらは時間とともに徐々に減少する。",
+      "description_ko": "체력이 @HealthThreshold*100@%가 되면 막대한 보호막, 이동 속도, 축소 효과를 얻습니다. 이러한 효과는 시간이 지나면 점차 사라집니다."
     },
     {
       "augmentId": "ARAM_MindtoMatter",
@@ -1433,7 +1613,11 @@
       "name_ja": "精神の体現",
       "name_ko": "정신 변환",
       "wikiDescription": "Grants bonus health equal to 50% maximum mana. Maximum bonus health granted by this effect is capped at 99,999 bonus health.",
-      "wikiRarity": "silver"
+      "wikiRarity": "silver",
+      "description_zh_TW": "增加最大生命，增加量為魔力的一半。",
+      "description_zh_CN": "使你的最大生命值提升，数额相当于你一半的法力值。",
+      "description_ja": "マナの半分にあたる最大体力を獲得する。",
+      "description_ko": "최대 체력이 마나의 절반만큼 증가합니다."
     },
     {
       "augmentId": "ARAM_TapDancer",
@@ -1464,7 +1648,11 @@
       "name_ja": "タップダンサー",
       "name_ko": "탭 댄서",
       "wikiDescription": "Basic attacks on-hit against enemy champions and minions grant 10 bonus movement speed, lasting for 5 seconds, refreshing on subsequent triggers, and stacking infinitely. Additionally, gain bonus attack speed equal to 10% total movement speed.",
-      "wikiRarity": "prismatic"
+      "wikiRarity": "prismatic",
+      "description_zh_TW": "普攻可增加跑速。根據跑速獲得攻速。",
+      "description_zh_CN": "你的攻击会为你提供移动速度。基于你的移动速度获得攻击速度。",
+      "description_ja": "通常攻撃で移動速度が増加する。移動速度に応じて攻撃速度が増加する。",
+      "description_ko": "기본 공격 시 이동 속도가 증가합니다. 이동 속도에 비례하여 공격 속도가 증가합니다."
     },
     {
       "augmentId": "ShrinkEngine",
@@ -1494,7 +1682,11 @@
       "name_ja": "縮小エンジン",
       "name_ko": "축소 엔진",
       "wikiDescription": "Scoring a champion takedown generates a stack, stacking infinitely. For each stack, gain 8 ability haste and 1% bonus movement speed, and reduce your size by 4%. Lose 65% of stacks on death. Size reduction is capped at 80% (20 stacks).",
-      "wikiRarity": "gold"
+      "wikiRarity": "gold",
+      "description_zh_TW": "參與擊殺會使體型變小，並賦予技能加速及跑速。 死亡時失去@PercentOfStacksLost*100@%堆層。",
+      "description_zh_CN": "参与击杀后会让你变小并且获得技能急速和移动速度。 阵亡时损失@PercentOfStacksLost*100@%层数。",
+      "description_ja": "キルまたはアシストで自身が小さくなり、スキルヘイストと移動速度が増加する。 倒されるとスタックの@PercentOfStacksLost*100@%を失う。",
+      "description_ko": "처치 관여 시 크기가 작아지고 스킬 가속 및 이동 속도를 얻습니다. 사망 시 중첩을 @PercentOfStacksLost*100@% 잃습니다."
     },
     {
       "augmentId": "BurstingTeeth",
@@ -1524,7 +1716,11 @@
       "name_ja": "歯の妖精",
       "name_ko": "이빨 요정",
       "wikiDescription": "When you deal damage to an enemy champion equal to or more than 25% of their maximum health within 2.5 seconds, they drop a Tooth on the ground (4 second cooldown per target). You can pick up this Tooth by moving over it, granting you a Dental Records stack. For each stack, you gain 4 lethality and flat magic penetration.",
-      "wikiRarity": "gold"
+      "wikiRarity": "gold",
+      "description_zh_TW": "暴擊敵軍會掉落牙齒。撿起牙齒會永久獲得物理致命和魔法穿透。",
+      "description_zh_CN": "爆裂敌人会掉落牙齿。拾取牙齿会提供给你永久的穿甲和法术穿透。",
+      "description_ja": "敵にバーストダメージを与えると歯がドロップする。歯を拾うと、恒久的に脅威と魔法防御貫通を獲得する。",
+      "description_ko": "적에게 폭발적 피해를 입히면 이빨을 떨어뜨립니다. 이빨을 주우면 영구적으로 물리 관통력과 마법 관통력을 얻습니다."
     },
     {
       "augmentId": "GrowthSpurt",
@@ -1554,7 +1750,11 @@
       "name_ja": "成長期",
       "name_ko": "급속 성장",
       "wikiDescription": "Replace a summoner spell with Growth Spurt. Growth Spurt: Enlarge yourself, causing you to knock up enemies within 400 units for 1 second. For the next 7 seconds, you gain 300 (+ 20% maximum health) bonus health and 50% increased size.",
-      "wikiRarity": "gold"
+      "wikiRarity": "gold",
+      "description_zh_TW": "獲得召喚師技能「急遽成長」。 「急遽成長」會使你體型瞬間變大，擊飛鄰近敵軍並賦予你最大生命。",
+      "description_zh_CN": "获得生机迸发作为一个召唤师技能。 生机迸发会猛然提升你的体型，击飞附近的敌人们并提供最大生命值。",
+      "description_ja": "サモナースペルの成長期を獲得する。 「成長期」は自身のサイズを急増させ、周囲の敵をノックアップし、最大体力を増加させる。",
+      "description_ko": "급속 성장 소환사 주문을 얻습니다. 급속 성장으로 급격히 크기가 커져 주변 적을 공중으로 띄워 올리고, 최대 체력을 얻습니다."
     },
     {
       "augmentId": "ARAM_escAPADe",
@@ -1584,7 +1784,11 @@
       "name_ja": "魔攻のいたずら",
       "name_ko": "마법사 (물리)",
       "wikiDescription": "Convert all of your ability power into bonus attack damage at a rate of 1 bonus attack damage per 1.66 ability power. Additionally, increase your total attack damage by 15%. Does not convert the Ability Power obtained from Riftmaker's Void Infusion, nor from Archangel's Staff or Seraph's Embrace's Awe.(bug)",
-      "wikiRarity": "silver"
+      "wikiRarity": "silver",
+      "description_zh_TW": "將魔攻轉換為額外物攻。增加@ADAmp*100@%物攻。",
+      "description_zh_CN": "将法术强度转化为额外攻击力。获得@ADAmp*100@%攻击力。",
+      "description_ja": "魔力を増加攻撃力に変換する。攻撃力が@ADAmp*100@%増加する。",
+      "description_ko": "주문력을 추가 공격력으로 전환합니다. 공격력이 @ADAmp*100@% 증가합니다."
     },
     {
       "augmentId": "ARAM_MadScientist",
@@ -1616,7 +1820,11 @@
       "name_ja": "狂気の化学者",
       "name_ko": "미친 과학자",
       "wikiDescription": "Upon acquiring this augment and each time you respawn, gain either 30% adaptive force, 20% bonus health, and 40% increased size or 70 ability haste, 40% bonus movement speed, and 40% reduced size.",
-      "wikiRarity": "prismatic"
+      "wikiRarity": "prismatic",
+      "description_zh_TW": "每次復活時，體型變大(增加適性之力及生命)或變小(增加技能加速及跑速)。",
+      "description_zh_CN": "每次重生时，你的体型要么变大(获得适应之力和生命值)，要么变小(获得技能急速和移动速度)。",
+      "description_ja": "復活するたびに、自身が巨大化(アダプティブフォースと体力が増加)または小型化(スキルヘイストと移動速度が増加)する。",
+      "description_ko": "부활할 때마다 크기가 커져 적응형 능력치와 체력을 얻거나, 크기가 작아져 스킬 가속과 이동 속도를 얻습니다."
     },
     {
       "augmentId": "ARAM_LightemUp",
@@ -1647,7 +1855,11 @@
       "name_ja": "光で照らせ！",
       "name_ko": "불을 밝혀",
       "wikiDescription": "Basic attacks generate a stack, up to 4. The fourth stack consumes them all to quickly launch 4 missiles at the target that each deal 11 – 80 (based on level) (+ 35% bonus AD) (+ 19% AP) bonus magic damage on-hit, for a total of 44 – 320 (based on level) (+ 140% bonus AD) (+ 76% AP).",
-      "wikiRarity": "silver"
+      "wikiRarity": "silver",
+      "description_zh_TW": "每第4次普攻發射4枚飛彈，造成魔法傷害。{{ Item_Keyword_OnHit }}",
+      "description_zh_CN": "每第4次攻击发射4个飞弹以造成魔法伤害{{ Item_Keyword_OnHit }}。",
+      "description_ja": "通常攻撃4回ごとに、ミサイルを4発発射し、魔法ダメージ{{ Item_Keyword_OnHit }}を与える。",
+      "description_ko": "4번째 기본 공격마다 투사체 4개를 발사해 {{ Item_Keyword_OnHit }} 마법 피해를 입힙니다."
     },
     {
       "augmentId": "ARAM_Archmage",
@@ -1677,7 +1889,11 @@
       "name_ja": "魔帝",
       "name_ko": "대마법사",
       "wikiDescription": "Whenever you cast an ability, refund the cooldown of another, randomly selected ability by 30% of the casted ability's cooldown.",
-      "wikiRarity": "prismatic"
+      "wikiRarity": "prismatic",
+      "description_zh_TW": "施放技能時，會返還另一個隨機技能的費用，數值為原始技能冷卻時間的@RefundPercent*100@%。",
+      "description_zh_CN": "施放一个技能会返还另一个随机技能的花费，数额相当于@RefundPercent*100@%原技能冷却时间。",
+      "description_ja": "スキルを使用すると、ランダムな他のスキルのコストが、最初のスキルのクールダウンの@RefundPercent*100@%解消する。",
+      "description_ko": "스킬을 사용하면 사용한 스킬 재사용 대기시간의 @RefundPercent*100@%만큼 다른 무작위 스킬의 재사용 대기시간을 반환합니다."
     },
     {
       "augmentId": "LittleExtraHelp",
@@ -1706,7 +1922,11 @@
       "name_ja": "ちょこっとヘルプ",
       "name_ko": "작은 도움",
       "wikiDescription": "Upgrades one of your champion's abilities that has an effect which empowers your basic attacks for a duration, further enhancing the attacks by granting you ( 150 / 100) bonus attack range and ( 75% / 40%) bonus attack speed while the effect is active.",
-      "wikiRarity": "gold"
+      "wikiRarity": "gold",
+      "description_zh_TW": "在{{SpellName}}持續期間增加@RangeIncrease@攻擊距離和@ExtraAttackSpeed@攻速。",
+      "description_zh_CN": "在你的【{{SpellName}}】技能持续期间获得@RangeIncrease@攻击距离和@ExtraAttackSpeed@攻击速度。",
+      "description_ja": "{{SpellName}}の効果時間中は、通常攻撃の射程が@RangeIncrease@、攻撃速度が@ExtraAttackSpeed@増加する。",
+      "description_ko": "{{SpellName}} 지속시간 동안 공격 사거리가 @RangeIncrease@, 공격 속도가 @ExtraAttackSpeed@ 증가합니다."
     },
     {
       "augmentId": "ARAM_WithHaste",
@@ -1736,7 +1956,11 @@
       "name_ja": "大急ぎ",
       "name_ko": "속행",
       "wikiDescription": "Grants bonus movement speed equal to 70% ability haste.",
-      "wikiRarity": "gold"
+      "wikiRarity": "gold",
+      "description_zh_TW": "獲得等同於技能加速@AbilityHasteToMSConversion*100@%的跑速。",
+      "description_zh_CN": "获得移动速度，相当于你的@AbilityHasteToMSConversion*100@%技能急速。",
+      "description_ja": "スキルヘイストの@AbilityHasteToMSConversion*100@%にあたる移動速度を獲得する。",
+      "description_ko": "스킬 가속의 @AbilityHasteToMSConversion*100@%에 해당하는 이동 속도를 얻습니다."
     },
     {
       "augmentId": "ARAM_ScopiestWeapons",
@@ -1765,7 +1989,11 @@
       "name_ja": "超改造スコープ装着",
       "name_ko": "최상급 조준경 부착",
       "wikiDescription": "Gain ( 250 / 150) bonus attack range.",
-      "wikiRarity": "prismatic"
+      "wikiRarity": "prismatic",
+      "description_zh_TW": "增加@RangeIncrease@攻擊距離。",
+      "description_zh_CN": "获得@RangeIncrease@攻击距离。",
+      "description_ja": "射程距離が@RangeIncrease@増加する。",
+      "description_ko": "공격 사거리가 @RangeIncrease@ 증가합니다."
     },
     {
       "augmentId": "Donation",
@@ -1792,7 +2020,11 @@
       "name_ja": "寄付",
       "name_ko": "후원",
       "wikiDescription": "Gain 1750 upon acquiring this augment.",
-      "wikiRarity": "gold"
+      "wikiRarity": "gold",
+      "description_zh_TW": "獲得@GoldAmount@金錢。別問那麼多。",
+      "description_zh_CN": "获得@GoldAmount@金币。无需多问。",
+      "description_ja": "@GoldAmount@ゴールドを獲得する。それ以上も以下もない。",
+      "description_ko": "@GoldAmount@골드를 획득합니다. 묻지도 따지지도 않습니다."
     },
     {
       "augmentId": "ARAM_SustainingStrike",
@@ -1853,7 +2085,11 @@
       "name_ja": "無法者の気概",
       "name_ko": "무법자의 투지",
       "wikiDescription": "Dashing or blinking grants 12 bonus armor and bonus magic resistance for 15 seconds, stacking up to 5 times for a total of 60 bonus resistances, and refreshing on subsequent triggers.",
-      "wikiRarity": "gold"
+      "wikiRarity": "gold",
+      "description_zh_TW": "使用衝刺、閃現或傳送技能後，增加@ResistsPerStack@物防和魔防，最多@MaxStacks@層。",
+      "description_zh_CN": "在使用一次冲刺、闪烁或传送之后，你获得@ResistsPerStack@护甲和魔法抗性，这个效果至多可叠加至@MaxStacks@层。",
+      "description_ja": "ダッシュ、ブリンク、またはテレポートを行うと、物理防御が@ResistsPerStack@と魔法防御が増加する。この効果は最大@MaxStacks@回スタックする。",
+      "description_ko": "돌진, 점멸, 순간이동 스킬을 사용한 후 @ResistsPerStack@의 방어력 및 마법 저항력을 얻습니다. 최대 @MaxStacks@회 중첩됩니다."
     },
     {
       "augmentId": "ARAM_ScopedWeapons",
@@ -1882,7 +2118,11 @@
       "name_ja": "スコープ装着",
       "name_ko": "조준경 부착",
       "wikiDescription": "Gain ( 75 / 50) bonus attack range.",
-      "wikiRarity": "silver"
+      "wikiRarity": "silver",
+      "description_zh_TW": "增加@RangeIncrease@攻擊距離。",
+      "description_zh_CN": "获得@RangeIncrease@攻击距离。",
+      "description_ja": "射程距離が@RangeIncrease@増加する。",
+      "description_ko": "공격 사거리가 @RangeIncrease@ 증가합니다."
     },
     {
       "augmentId": "SwiftAndSafe",
@@ -1942,7 +2182,11 @@
       "name_ja": "ソウルイーター",
       "name_ko": "영혼의 포식자",
       "wikiDescription": "Immobilizing or grounding an enemy champion grants you 20 bonus health, stacking infinitely (5 second cooldown per cast instance).",
-      "wikiRarity": "gold"
+      "wikiRarity": "gold",
+      "description_zh_TW": "對敵方英雄造成硬控場後，賦予@HealthGainPerStack@最大生命。",
+      "description_zh_CN": "定身一个敌方英雄时会提供@HealthGainPerStack@最大生命值。",
+      "description_ja": "敵チャンピオンに移動不能効果を与えると、最大体力が@HealthGainPerStack@増加する。",
+      "description_ko": "적 챔피언을 이동 불가 상태로 만들면 최대 체력을 @HealthGainPerStack@ 얻습니다."
     },
     {
       "augmentId": "ARAM_Homeguard",
@@ -1971,7 +2215,11 @@
       "name_ja": "ホームガード",
       "name_ko": "민병대",
       "wikiDescription": "Gain 100% bonus movement speed. This bonus is lost for 6 seconds after taking damage from champions.",
-      "wikiRarity": "silver"
+      "wikiRarity": "silver",
+      "description_zh_TW": "獲得@spell.Augment_Homeguard:MovementSpeed*100@%跑速，承受傷害後@spell.Augment_Homeguard:DisableCooldown@秒內會失效。",
+      "description_zh_CN": "获得@spell.Augment_Homeguard:MovementSpeed*100@%移动速度，在受到伤害后失效@spell.Augment_Homeguard:DisableCooldown@秒。",
+      "description_ja": "移動速度が@spell.Augment_Homeguard:MovementSpeed*100@%増加し、ダメージを受けると@spell.Augment_Homeguard:DisableCooldown@秒間無効化される。",
+      "description_ko": "이동 속도가 @spell.Augment_Homeguard:MovementSpeed*100@% 증가합니다. 피해를 입은 후 @spell.Augment_Homeguard:DisableCooldown@초 동안은 효과가 멈춥니다."
     },
     {
       "augmentId": "ARAM_Marksmage",
@@ -2001,7 +2249,11 @@
       "name_ja": "マークスメイジ",
       "name_ko": "마법 명사수",
       "wikiDescription": "Basic attacks deal bonus physical damage equal to 75% AP.",
-      "wikiRarity": "gold"
+      "wikiRarity": "gold",
+      "description_zh_TW": "你的普攻造成等同於@APRatio*100@%魔攻的額外物理傷害。",
+      "description_zh_CN": "你的攻击造成相当于你@APRatio*100@%法术强度的额外物理伤害。",
+      "description_ja": "通常攻撃が魔力の@APRatio*100@%にあたる物理ダメージを追加で与える。",
+      "description_ko": "기본 공격 시 주문력의 @APRatio*100@%만큼 추가 물리 피해를 입힙니다."
     },
     {
       "augmentId": "FinalForm",
@@ -2032,7 +2284,11 @@
       "name_ja": "最終形態",
       "name_ko": "최종 형태",
       "wikiDescription": "Casting your ultimate ability empowers you for 10 seconds, causing you to gain a shield for 50% of your maximum health, 20% omnivamp, and 30% bonus movement speed for the duration (20 second cooldown).",
-      "wikiRarity": "prismatic"
+      "wikiRarity": "prismatic",
+      "description_zh_TW": "施放大絕後，獲得最大生命護盾、全能吸血以及跑速，持續@AugDuration@秒。",
+      "description_zh_CN": "在施放你的终极技能时，获得持续@AugDuration@秒的最大生命值护盾、全能吸血和移动速度。",
+      "description_ja": "アルティメット使用後、@AugDuration@秒間、最大体力に応じたシールドとオムニヴァンプを獲得し、移動速度が増加する。",
+      "description_ko": "궁극기를 사용하면 @AugDuration@초 동안 최대 체력 비례 보호막, 모든 피해 흡혈, 이동 속도를 얻습니다."
     },
     {
       "augmentId": "ARAM_Typhoon",
@@ -2062,7 +2318,11 @@
       "name_ja": "タイフーン",
       "name_ko": "태풍",
       "wikiDescription": "Basic attacks launch a missile at a nearby enemy champion that deals 30% AD physical damage and applies on-hit effects.",
-      "wikiRarity": "silver"
+      "wikiRarity": "silver",
+      "description_zh_TW": "普攻會朝額外一名目標射出飛彈，造成較低傷害，並附加{{ Item_Keyword_OnHit }}。",
+      "description_zh_CN": "你的攻击会对一个额外目标发射一个飞弹，从而造成削减过的伤害并施加{{ Item_Keyword_OnHit }}。",
+      "description_ja": "通常攻撃で追加の対象1体に向けてミサイルを発射し、一定割合低下したダメージを与えて、{{ Item_Keyword_OnHit }}を適用する。",
+      "description_ko": "기본 공격 시 추가 대상에게 투사체를 발사해 감소된 피해를 입히고 {{ Item_Keyword_OnHit }} 효과를 적용합니다."
     },
     {
       "augmentId": "ARAM_BigBrain",
@@ -2092,7 +2352,11 @@
       "name_ja": "頭脳派",
       "name_ko": "전술적 대비",
       "wikiDescription": "Gain a shield that absorbs damage equal to 300% AP and lasts until destroyed. Shield is replenished upon respawn and every 70 seconds.",
-      "wikiRarity": "gold"
+      "wikiRarity": "gold",
+      "description_zh_TW": "每有%i:scaleAP% @AP@魔攻增加@ShieldBase@護盾。在死亡或護盾耗盡後70秒重置。",
+      "description_zh_CN": "每拥有%i:scaleAP%@AP@法术强度就会获得@ShieldBase@护盾值。阵亡时或耗尽后70秒重置。",
+      "description_ja": "%i:scaleAP%魔力@AP@ごとに、耐久値@ShieldBase@のシールドを獲得する。自身が倒された場合、またはシールドの耐久値がなくなってから70秒経過するとリセットされる。",
+      "description_ko": "%i:scaleAP% 주문력 @AP@당 @ShieldBase@의 피해를 흡수하는 보호막을 얻습니다. 사망 시 또는 만료 70초 후 초기화됩니다."
     },
     {
       "augmentId": "ARAM_Upgrade_ZH",
@@ -2122,7 +2386,11 @@
       "name_ja": "ゾーニャ アップグレード",
       "name_ko": "존야 업그레이드",
       "wikiDescription": "Upgrades Seeker's Armguard, Wooglet's Witchcap, and Zhonya's Hourglass, empowering Stasis to allow you to move during its active effect, during which time you also gain 50% bonus movement speed. Additionally, the cooldown of Zhonya's Hourglass' Stasis is reduced to 45 seconds.",
-      "wikiRarity": "silver"
+      "wikiRarity": "silver",
+      "description_zh_TW": "將中婭沙漏的冷卻時間縮短至@UpgradeCD@秒。你現在處於中婭沙漏、探索者護腕或烏莉特的法帽的凝滯狀態時可以移動且增加跑速。 獲得250金錢。",
+      "description_zh_CN": "【中娅沙漏】的冷却时间降低至@UpgradeCD@秒。你现在可以在【中娅沙漏】、【探索者的护臂】或【沃格勒特的巫师帽】凝滞状态持续期间移动并获得移动速度。 获得250金币。",
+      "description_ja": "「ゾーニャの砂時計」のクールダウンが@UpgradeCD@秒に短縮される。「ゾーニャの砂時計」、「シーカー アームガード」あるいは「ウーグレット ウィッチキャップ」の固有時停止状態中に動くことができ、移動速度が上昇する。 250ゴールドを獲得する。",
+      "description_ko": "존야의 모래시계 재사용 대기시간이 @UpgradeCD@초로 감소합니다. 이제 존야의 모래시계, 추적자의 팔목 보호대 또는 우글렛의 마녀모자 경직 상태에서 이동할 수 있으며 이동 속도가 증가합니다. 250골드를 획득합니다."
     },
     {
       "slug": "terraind",
@@ -2172,7 +2440,11 @@
       "name_ja": "再帰",
       "name_ko": "되풀이",
       "wikiDescription": "Grants 60 ability haste.",
-      "wikiRarity": "gold"
+      "wikiRarity": "gold",
+      "description_zh_TW": "增加@AbilityHaste@技能加速。",
+      "description_zh_CN": "获得@AbilityHaste@技能急速。",
+      "description_ja": "スキルヘイストが@AbilityHaste@増加する。",
+      "description_ko": "스킬 가속이 @AbilityHaste@ 증가합니다."
     },
     {
       "augmentId": "ARAM_BangBang",
@@ -2235,7 +2507,11 @@
       "name_ja": "ステータス上のステータス！",
       "name_ko": "능력치 더하기 능력치!",
       "wikiDescription": "Gain 3 Stat Anvils, with a higher chance of obtaining Gold and Prismatic tier anvils.",
-      "wikiRarity": "gold"
+      "wikiRarity": "gold",
+      "description_zh_TW": "獲得@AmountOfStatAnvils@塊%i:StatAnvil%能力值鐵砧！",
+      "description_zh_CN": "获得@AmountOfStatAnvils@个%i:StatAnvil%【属性锻造器】！",
+      "description_ja": "「%i:StatAnvil%ステータスの金床」を@AmountOfStatAnvils@個獲得する。",
+      "description_ko": "%i:StatAnvil% 능력치 모루를 @AmountOfStatAnvils@개 획득합니다."
     },
     {
       "augmentId": "ARAM_DropBear",
@@ -2264,7 +2540,11 @@
       "name_ja": "ドロップベア",
       "name_ko": "곰 투하",
       "wikiDescription": "Upon death, you summon Tibbers who drops from above and lands onto the location of your death over 0.5 seconds. Upon landing, he deals 250 – 750 (based on level) (+ 100% AP) (+ 2 per 1 flat magic penetration) (+ 5 per 1% magic penetration) magic damage to nearby enemies and stuns them for 1.5 seconds. Tibbers then chases after and targets the enemy champion that killed you, attacking them once he is in range. Tibbers has all of your augments and lasts for up to 8 – 20 (based on level) seconds. He gains 80% – 100% (based on level) bonus attack speed and deals 25 – 150 (based on level) (+ 50% AP) magic damage every second to enemies within 350 units of him. His stats are: 1500 – 6000 (based on level) (+ 15% maximum health) (+ 150% AP) health (rapidly decays over his lifetime) 50 – 300 (based on level) (+ 75% AD) magic damage (basic attack damage) 1.00 attack speed 150 attack range 50 armor 50 magic resistance 200 – 300 (based on level) (+ 20% movement speed) movement speed",
-      "wikiRarity": "prismatic"
+      "wikiRarity": "prismatic",
+      "description_zh_TW": "死亡時，一隻擁有你所有增幅裝置的巨型泰貝爾會從天而降，對鄰近敵軍造成傷害。",
+      "description_zh_CN": "阵亡时，一个具有你所有强化符文的巨大提伯斯从天而降并伤害附近的敌人们。",
+      "description_ja": "デス時に、すべてのオーグメントを受け継いだ巨大なティバーズが空から降ってきて、周囲の敵にダメージを与える。",
+      "description_ko": "사망 시, 플레이어의 증강을 모두 지닌 거대 티버가 하늘에서 떨어져 주변 적에게 피해를 입힙니다."
     },
     {
       "augmentId": "ARAM_Purist_Caster",
@@ -2294,7 +2574,11 @@
       "name_ja": "純粋なるキャスター",
       "name_ko": "순수주의자 - 마법사",
       "wikiDescription": "Convert all of your bonus attack speed into ability haste at a rate of 0.65 ability haste per 1% bonus attack speed. Additionally, your abilities' total cooldowns are reduced by 10%.",
-      "wikiRarity": "silver"
+      "wikiRarity": "silver",
+      "description_zh_TW": "冷卻時間減免一定百分比，並將所有攻速轉換為技能加速。",
+      "description_zh_CN": "获得百分比冷却缩减并将你的所有攻击速度转化为技能急速。",
+      "description_ja": "クールダウン短縮を獲得し、攻撃速度が全てスキルヘイストに変換される。",
+      "description_ko": "백분율 기반 재사용 대기시간 감소를 얻고 모든 공격 속도를 스킬 가속으로 전환합니다."
     },
     {
       "augmentId": "ARAM_FirstAidKit",
@@ -2323,7 +2607,11 @@
       "name_ja": "救急セット",
       "name_ko": "응급처치 키트",
       "wikiDescription": "Grants 20% heal and shield power.",
-      "wikiRarity": "silver"
+      "wikiRarity": "silver",
+      "description_zh_TW": "增加@HealShieldAmp*100@%治療與護盾強度。",
+      "description_zh_CN": "获得@HealShieldAmp*100@%治疗和护盾强度。",
+      "description_ja": "体力回復量とシールド量が@HealShieldAmp*100@%増加する。",
+      "description_ko": "체력 회복 및 보호막 효과가 @HealShieldAmp*100@% 증가합니다."
     },
     {
       "augmentId": "Bonk",
@@ -2353,7 +2641,11 @@
       "name_ja": "ボカッ！",
       "name_ko": "꽁!",
       "wikiDescription": "Upgrades one of your champion's abilities that has an empowered basic attack effect, further enhancing the attack to deal 30% increased damage to the target and 30% of its damage to nearby enemies.",
-      "wikiRarity": "silver"
+      "wikiRarity": "silver",
+      "description_zh_TW": "以{{SpellName}}強化的普攻與技能，會對目標與鄰近敵軍造成額外傷害。",
+      "description_zh_CN": "被【{{SpellName}}】技能强化的攻击或技能会对目标和附近的敌人们造成额外伤害。",
+      "description_ja": "{{SpellName}}によって強化された通常攻撃とスキルが、対象と周囲の敵に追加ダメージを与える。",
+      "description_ko": "{{SpellName}} 효과로 강화된 기본 공격과 스킬이 대상 및 주변 적에게 추가로 피해를 입힙니다."
     },
     {
       "augmentId": "ARAM_SonicBoom",
@@ -2384,7 +2676,11 @@
       "name_ja": "味方にバフ、<healing>体力回復効果</healing>、または<shield>シールド</shield>を付与すると、その周囲の敵に<trueDamage>@Damage@の確定ダメージ</trueDamage>を与え、2秒間@SlowAmount*-100@%の<status>スロウ効果</status>を付与する(クールダウン@ProcCooldown@秒)。<br><br>与えたダメージ量: @f2@",
       "name_ko": "아군에게 이로운 효과, <healing>체력 회복</healing>, <shield>보호막</shield>을 부여하면 아군 주변 적들에게 <trueDamage>@Damage@의 고정 피해</trueDamage>를 입히고 2초 동안 @SlowAmount*-100@% <status>둔화</status>시킵니다. (재사용 대기시간 @ProcCooldown@초)<br><br>입힌 피해량: @f2@",
       "wikiDescription": "Granting a buff, heal, or shield to your ally deals 30 – 150 (based on level) true damage to enemies within 450 units of them and slows targets by 30% for 2 seconds (2 second cooldown).",
-      "wikiRarity": "silver"
+      "wikiRarity": "silver",
+      "description_zh_TW": "強化、治療、或賦予友軍護盾時，會對友軍周圍的敵人造成傷害與緩速。",
+      "description_zh_CN": "在为你的友军提供增益效果、治疗效果或护盾效果时，会对其附近的敌人们造成伤害和减速。",
+      "description_ja": "味方にバフ、体力回復効果、またはシールドを付与すると、その周囲の敵にダメージとスロウ効果を与える。",
+      "description_ko": "아군에게 이로운 효과, 회복, 보호막을 부여하면 아군 주변 적들에게 피해를 입히고 둔화시킵니다."
     },
     {
       "augmentId": "ARAM_DawnbringersResolve",
@@ -2414,7 +2710,11 @@
       "name_ja": "ドーンブリンガーの誓い",
       "name_ko": "빛의 인도자 결의",
       "wikiDescription": "Upon dropping below 50% maximum health, you are healed for 30% maximum health over 3 seconds (45 second cooldown, reset upon death).",
-      "wikiRarity": "gold"
+      "wikiRarity": "gold",
+      "description_zh_TW": "生命低於@HealthThreshold*100@%時，在3秒內回復@HealAmount*100@%最大生命。 每@Cooldown@秒或死亡時重置。",
+      "description_zh_CN": "在跌到@HealthThreshold*100@%生命值以下时，在3秒里持续回复共@HealAmount*100@%最大生命值。 阵亡时或每@Cooldown@秒重置。",
+      "description_ja": "体力が@HealthThreshold*100@%未満に低下した時、3秒かけて最大体力の@HealAmount*100@%を回復する。 @Cooldown@秒ごと、または倒されるとリセットされる。",
+      "description_ko": "체력이 @HealthThreshold*100@% 아래로 떨어지면 3초 동안 최대 체력의 @HealAmount*100@%를 회복합니다. 사망 시 또는 @Cooldown@초마다 초기화됩니다."
     },
     {
       "augmentId": "TitansPulse",
@@ -2444,7 +2744,11 @@
       "name_ja": "固い決意",
       "name_ko": "확고한 의지로",
       "wikiDescription": "Upgrades one of your champion's abilities, empowering the ability to grant you 4 / 8 / 12 (based on level) bonus armor or bonus magic resistance for a duration when it damages an enemy champion (5 second cooldown per target per cast instance). This effect can stack up to a number of times. The resistance type granted is based on the target's adaptive type: bonus armor for physical and bonus magic resistance for magic. If this is not your first augment, gain 20 bonus armor and bonus magic resistance.",
-      "wikiRarity": "silver"
+      "wikiRarity": "silver",
+      "description_zh_TW": "{{Spellname}}對敵方英雄造成傷害時，增加@ARMR_Inc@物防和魔防。",
+      "description_zh_CN": "当【{{SpellName}}】技能对敌方英雄造成伤害时，获得@ARMR_Inc@护甲和魔法抗性。",
+      "description_ja": "{{Spellname}}で敵チャンピオンにダメージを与えると、物理防御と魔法防御が@ARMR_Inc@増加する。",
+      "description_ko": "{{Spellname}} 스킬로 적 챔피언에게 피해를 입히면 방어력 및 마법 저항력이 @ARMR_Inc@ 증가합니다."
     },
     {
       "augmentId": "ARAM_LegDay",
@@ -2473,7 +2777,11 @@
       "name_ja": "レッグデー",
       "name_ko": "하체 운동의 날",
       "wikiDescription": "Gain 50 bonus movement speed and 40% slow resist.",
-      "wikiRarity": "silver"
+      "wikiRarity": "silver",
+      "description_zh_TW": "獲得@MovementSpeed@跑速和@SlowResist*100@%緩速抗性。",
+      "description_zh_CN": "获得@MovementSpeed@移动速度和@SlowResist*100@%减速抗性。",
+      "description_ja": "移動速度が@MovementSpeed@、スロウ耐性が@SlowResist*100@%増加する。",
+      "description_ko": "@MovementSpeed@의 이동 속도와 @SlowResist*100@%의 둔화 저항을 얻습니다."
     },
     {
       "augmentId": "ARAM_Overflow",
@@ -2503,7 +2811,11 @@
       "name_ja": "オーバーフロー",
       "name_ko": "범람",
       "wikiDescription": "Your abilities' mana costs are doubled, but you also gain 10% (+ 0.5% per 100 maximum mana) increased damage as well as self and outgoing healing and shielding.",
-      "wikiRarity": "gold"
+      "wikiRarity": "gold",
+      "description_zh_TW": "你的魔力消耗加倍。 技能的治療、護盾以及傷害提升，提升幅度取決於最大魔力。",
+      "description_zh_CN": "你的法力消耗翻倍。 你的技能的治疗效果、护盾效果和伤害获得提升，提升幅度基于你的最大法力值。",
+      "description_ja": "自身のマナコストが2倍になる。 スキルの回復、シールド、およびダメージが最大マナに基づいて増加する。",
+      "description_ko": "마나 소모량이 2배가 됩니다. 스킬의 체력 회복량, 보호막 흡수량 및 피해량이 최대 마나에 비례해 증가합니다."
     },
     {
       "augmentId": "ARAM_Erosion",
@@ -2533,7 +2845,11 @@
       "name_ja": "浸食",
       "name_ko": "부식",
       "wikiDescription": "Each instance of damage dealt to an enemy reduces their armor and magic resistance by 1.5% for 4 seconds, stacking up to 20 times for a total of 30% resistances reduction.",
-      "wikiRarity": "silver"
+      "wikiRarity": "silver",
+      "description_zh_TW": "對敵軍造成傷害可累加一層物理與魔法防禦削弱，持續@ShredDuration@秒。",
+      "description_zh_CN": "对敌人造成伤害时会施加一层持续@ShredDuration@秒且可叠加的护甲和魔法抗性击碎效果。",
+      "description_ja": "敵にダメージを与えると、@ShredDuration@秒間物理防御と魔法防御を低下させるスタックを付与する。",
+      "description_ko": "적에게 피해를 입히면 @ShredDuration@초 동안 방어력 및 마법 저항력 감소 중첩을 얻습니다."
     },
     {
       "augmentId": "ARAM_Firefox",
@@ -2564,7 +2880,11 @@
       "name_ja": "ファイヤーフォックス",
       "name_ko": "불여우",
       "wikiDescription": "Automatically cast a modified version of Ahri's Fox-Fire, gaining 25% bonus movement speed that decays over 2 seconds and conjuring 3 flames that orbit you clockwise for up to 2.5 seconds at a radius of 150 units. The flames will fly toward the nearest visible enemies within 550 units, dealing 35 – 160 (based on level) (+ 25% bonus AD (+ 25% AP) adaptive damage, reduced to「 10.5 – 48 (based on level) (+ 7.5% bonus AD (+ 7.5% AP) 」「 30% of the original damage 」for enemies hit by subsequent flames from the same cast (7 second cooldown).",
-      "wikiRarity": "silver"
+      "wikiRarity": "silver",
+      "description_zh_TW": "自動施放 獲得跑速並召喚三團環繞你的火焰，指定最靠近的可見敵軍並造成魔法傷害。",
+      "description_zh_CN": "自动施放 获得移动速度并召唤3道烈焰环绕于你，瞄准距离内相距最近的那个可见英雄并造成魔法伤害。",
+      "description_ja": "自動発動 移動速度が増加して、周回する3つの炎を作り出し、可視化されていて射程内で最も近くにいる敵を対象に魔法ダメージを与える。",
+      "description_ko": "자동 사용 이동 속도가 증가하고 주위를 빙빙 도는 불꽃 3개를 생성합니다. 불꽃은 시야에 들어오는 가장 가까운 적을 대상으로 지정해 마법 피해를 입힙니다."
     },
     {
       "augmentId": "HandOfBaron",
@@ -2624,7 +2944,11 @@
       "name_ja": "徹頭徹尾",
       "name_ko": "시작부터 끝까지",
       "wikiDescription": "Gain the Dark Harvest and First Strike keystone runes. Dark Harvest Base damage changed to 50 – 100 (based on level). Damage per soul changed to 20. Bonus AD ratio changed to 35% bonus AD. AP ratio changed to 25% AP. Gain 8 bonus souls for selecting this augment as not your first augment. First Strike Base gold increased to 20 from 15 (ARAM override value). Bonus damage increased to 10% from 7%.",
-      "wikiRarity": "gold"
+      "wikiRarity": "gold",
+      "description_zh_TW": "獲得先發制人及靈魂收割關鍵符文。",
+      "description_zh_CN": "获得先攻和黑暗收割基石符文。",
+      "description_ja": "キーストーンルーンの「ファーストストライク」と「魂の収穫」を獲得する。",
+      "description_ko": "선제공격과 어둠의 수확 핵심 룬을 얻습니다."
     },
     {
       "augmentId": "ARAM_GetExcited",
@@ -2654,7 +2978,11 @@
       "name_ja": "超エキサイティン！",
       "name_ko": "신난다!",
       "wikiDescription": "Scoring a champion takedown grants you 100% bonus movement speed and 15% total attack speed for 4 seconds.",
-      "wikiRarity": "gold"
+      "wikiRarity": "gold",
+      "description_zh_TW": "參與擊殺時，增加跑速和攻速，持續@BuffDuration@秒。",
+      "description_zh_CN": "参与击杀后，在@BuffDuration@秒内提升移动速度和攻击速度。",
+      "description_ja": "キルまたはアシストを獲得すると@BuffDuration@秒間、移動速度と攻撃速度が増加する。",
+      "description_ko": "처치 관여 시 @BuffDuration@초 동안 이동 속도 및 공격 속도를 얻습니다."
     },
     {
       "augmentId": "ARAM_Upgrade_Sheen",
@@ -2684,7 +3012,11 @@
       "name_ja": "シーン アップグレード",
       "name_ko": "광휘의 검 업그레이드",
       "wikiDescription": "Upgrades all Spellblade items, empowering the passive effect to deal additional bonus physical damage equal to 4% of the target's maximum health and heal you for 3.5% of your maximum health. Additionally, gain 250.",
-      "wikiRarity": "gold"
+      "wikiRarity": "gold",
+      "description_zh_TW": "魔法彎刀的效果會造成額外傷害，並依目標生命的一定比例治療你。此外，可獲得250金錢。",
+      "description_zh_CN": "你的咒刃效果造成额外伤害并治疗你自身，治疗量相当于目标生命值的一定百分比。此外，获得250金币。",
+      "description_ja": "追撃効果が追加ダメージを与え、さらに対象の体力の一定割合に応じて自身の体力を回復する。さらに250ゴールドを獲得する。",
+      "description_ko": "주문 검 효과가 추가 피해를 입히고 대상 체력의 일정 비율만큼 자신의 체력을 회복시킵니다. 추가로 250골드를 획득합니다."
     },
     {
       "augmentId": "KingMe",
@@ -2741,7 +3073,11 @@
       "name_ja": "勝利への回転",
       "name_ko": "승리를 위한 회전",
       "wikiDescription": "Your spinning abilities deal 30% increased damage and have their cooldown reduced equivalent to 30 ability haste. Eligible Abilities: Ahri's Fox-Fire and Spirit Rush, Amumu's Tantrum, Ambessa's Lacerate, Darius' Decimate, Draven's Spinning Axe, Stand Aside, and Whirling Death, Garen's Judgment, Hecarim's Rampage, Jax's Counter Strike, Katarina's Voracity and Death Lotus, Kayn's Reaping Slash, Lillia's Blooming Blows, Nocturne's Umbra Blades, Rammus' Powerball, Renekton's Cull the Meek, Riven's Broken Wings, Samira's Blade Whirl and Inferno Trigger, Sylas' Petricite Burst, Wukong's Cyclone, Tryndamere's Spinning Slash, Xin Zhao's Crescent Guard, Zed's Shadow Slash PENDING FOR TEST:: Akshan's Avengerang and Heroic Swing, Lillia's Watch Out! Eep! and Swirlseed, Poppy's Keeper's Verdict, etc.",
-      "wikiRarity": "silver"
+      "wikiRarity": "silver",
+      "description_zh_TW": "旋轉技能增加@SpinHaste@技能加速，並額外造成@SpinDamageAmp*100@%傷害。",
+      "description_zh_CN": "你的旋转类技能获得@SpinHaste@技能急速并且多造成@SpinDamageAmp*100@%伤害。",
+      "description_ja": "回転するスキルが@SpinHaste@のスキルヘイストを獲得し、@SpinDamageAmp*100@%の追加ダメージを与える。",
+      "description_ko": "회전 스킬의 스킬 가속이 @SpinHaste@, 피해량이 @SpinDamageAmp*100@% 증가합니다."
     },
     {
       "augmentId": "BiggestSnowballEver",
@@ -2772,7 +3108,11 @@
       "name_ja": "超特大の雪玉！",
       "name_ko": "데굴데굴 눈덩이!",
       "wikiDescription": "Upgrades your Mark into a massive snowball, empowering it with an increased size radius and the ability to pass through non-champions. The snowball additionally explodes upon impact of the target hit to deal 200 – 350 (based on level) (+ 100% bonus AD) (+ 60% AP) magic damage to all nearby enemies, knock them up for 0.75 seconds, and slow them by 20% for 2 seconds. Additionally, your Mark's cooldown is reduced equivalent to 100 ability haste. If Mark is not equipped, you will be prompted to replace one of your summoner spells with Mark. Non-champions hit by the snowball are stunned for 1.25 seconds.",
-      "wikiRarity": "prismatic"
+      "wikiRarity": "prismatic",
+      "description_zh_TW": "雪球增加@Haste@技能加速。 你的雪球超大且會穿過士兵。雪球會緩速、擊飛英雄並造成額外傷害。 若你沒有雪球就會獲得一顆雪球。",
+      "description_zh_CN": "你的雪球获得@Haste@技能急速。 你的雪球现在变得非常大，并且可以穿过小兵。它会减速， 击飞英雄，并造成额外伤害。 如果你没有雪球，则获得一个雪球。",
+      "description_ja": "雪玉のスキルヘイストが@Haste@増加する。 雪玉は大きくなり、ミニオンを通り抜ける。チャンピオンにスロウ効果を与えてノックアップし、追加ダメージを与える。 まだ持っていない場合は、雪玉を1個獲得する。",
+      "description_ko": "눈덩이의 스킬 가속이 @Haste@만큼 증가합니다. 눈덩이가 거대해지고 미니언을 관통합니다. 눈덩이는 챔피언을 둔화시키고, 공중에 띄우며, 피해를 추가로 입힙니다. 눈덩이를 보유하지 않은 경우 눈덩이를 얻습니다."
     },
     {
       "augmentId": "ARAM_OmniSoul",
@@ -2799,7 +3139,11 @@
       "name_ja": "オムニソウル",
       "name_ko": "전능의 영혼",
       "wikiDescription": "Grants 3 random Dragon Souls.",
-      "wikiRarity": "prismatic"
+      "wikiRarity": "prismatic",
+      "description_zh_TW": "獲得@SoulsToAdd@種隨機龍魂。",
+      "description_zh_CN": "获得@SoulsToAdd@个随机龙魂。",
+      "description_ja": "ランダムなドラゴンソウルを@SoulsToAdd@個獲得する。",
+      "description_ko": "무작위 드래곤 영혼 @SoulsToAdd@개를 획득합니다."
     },
     {
       "augmentId": "ARAM_AllForYou",
@@ -2828,7 +3172,11 @@
       "name_ja": "キミのためさ",
       "name_ko": "너만을 위해",
       "wikiDescription": "Your heals and shields on allied champions are increased in effectiveness by 30%.",
-      "wikiRarity": "gold"
+      "wikiRarity": "gold",
+      "description_zh_TW": "對友軍使用時，你的治療和護盾效果提升。",
+      "description_zh_CN": "你的治疗和护盾在用在一个友军身上时会变强。",
+      "description_ja": "味方に対する体力回復効果とシールドが強化される。",
+      "description_ko": "아군에게 사용하는 체력 회복 및 보호막 효과가 증가합니다."
     },
     {
       "slug": "dont-change-the-channel",
@@ -2878,7 +3226,11 @@
       "name_ja": "瞬きより速く",
       "name_ko": "속전속결",
       "wikiDescription": "Deal 1% increased damage per 10 movement speed you have more than the target.",
-      "wikiRarity": "silver"
+      "wikiRarity": "silver",
+      "description_zh_TW": "每高出目標10跑速，傷害便增加@BonusDamagePerMSDifference*1000@%。",
+      "description_zh_CN": "你每比目标多10移动速度，则对其多造成@BonusDamagePerMSDifference*1000@%额外伤害。",
+      "description_ja": "自身の移動速度が敵を上回っている場合、対象に追加ダメージを与える(移動速度差10につき、@BonusDamagePerMSDifference*1000@%の追加ダメージ)。",
+      "description_ko": "대상보다 이동 속도가 10 높을 때마다 추가 피해량이 @BonusDamagePerMSDifference*1000@% 증가합니다."
     },
     {
       "augmentId": "Overextender",
@@ -2908,7 +3260,11 @@
       "name_ja": "深追いしすぎ",
       "name_ko": "무리한 진입",
       "wikiDescription": "Your launch with the Cannon Launcher is now empowered, increasing the launch range by 12,000 units and the impact damage by 50%, as well as the travel speed by a significant amount. Additionally, your Recall is now functional and is upgraded to Empowered Recall. Total launch range is 18,500 units, reduced to 16,500 after your team's Outer turret is destroyed. Increased impact damage is 180 – 690 (based on level) magic damage.",
-      "wikiRarity": "gold"
+      "wikiRarity": "gold",
+      "description_zh_TW": "回城進入你的砲擊發射器。它的射程、砲彈速度和傷害都大幅提升。",
+      "description_zh_CN": "回城并进入到你的加农炮发射器。它的距离、飞行速度和伤害已经得到显著提升。",
+      "description_ja": "リコールで「キャノンランチャー」に入る。射程、移動速度、ダメージが大幅に増加する。",
+      "description_ko": "귀환하여 대포 발사기에 탑승하세요. 발사기의 사거리, 이동 속도, 피해량이 대폭 증가했습니다."
     },
     {
       "slug": "its-go-time",
@@ -2978,7 +3334,11 @@
       "name_ja": "ミニオンマンサー",
       "name_ko": "소환술사",
       "wikiDescription": "Your pets deal 40% increased damage as well as gain 40% bonus health and size.",
-      "wikiRarity": "gold"
+      "wikiRarity": "gold",
+      "description_zh_TW": "你的召喚物增加@MinionAmp*100@%體型、生命與傷害。",
+      "description_zh_CN": "你的召唤物获得@MinionAmp*100@%体型提升、生命值和伤害。",
+      "description_ja": "自身が召喚したユニットのサイズ、体力、ダメージが@MinionAmp*100@%増加する。",
+      "description_ko": "소환물의 크기, 체력, 피해량이 @MinionAmp*100@% 증가합니다."
     },
     {
       "augmentId": "DarkWind",
@@ -3009,7 +3369,11 @@
       "name_ja": "貪欲な束縛",
       "name_ko": "굶주린 속박",
       "wikiDescription": "Upgrades one of your champion's abilities that has a immobilizing or grounding effect, empowering the ability to deal 15 – 90 (based on level) (+ 10% AP) (+ 0.5% of your maximum health) magic damage to affected targets and heal you for 50 – 200 (based on level) (+ 5% AP) (+ 10% bonus health). The heal is increased by up to 50% based on how long the ability's cooldown is.",
-      "wikiRarity": "gold"
+      "wikiRarity": "gold",
+      "description_zh_TW": "以{{SpellName}}對敵方英雄施加硬控場或禁錮時造成額外傷害，並使你回復生命。",
+      "description_zh_CN": "用你的【{{SpellName}}】技能定身或缚地敌方英雄时造成额外伤害并对你进行治疗。",
+      "description_ja": "{{SpellName}}で敵チャンピオンに移動不能効果または釘付け効果を付与すると、追加ダメージを与えて自身の体力を回復する。",
+      "description_ko": "{{SpellName}} 스킬로 적 챔피언을 이동 불가 상태로 만들거나 이동 스킬을 사용할 수 없게 하면 추가 피해를 입히고 체력을 회복합니다."
     },
     {
       "augmentId": "ARAM_Dashing",
@@ -3039,7 +3403,11 @@
       "name_ja": "疾走",
       "name_ko": "돌진",
       "wikiDescription": "Abilities with dashes or blinks gain 175 ability haste. On Kalista, this augment instead grants her 125% bonus attack speed.[1]",
-      "wikiRarity": "prismatic"
+      "wikiRarity": "prismatic",
+      "description_zh_TW": "衝刺、跳躍、閃現或傳送技能獲得@Haste@技能加速。",
+      "description_zh_CN": "你的冲刺、跳跃、闪烁或传送类技能获得@Haste@技能急速。",
+      "description_ja": "ダッシュ、リープ、ブリンク、またはテレポートを行うスキルのスキルヘイストが@Haste@増加する。",
+      "description_ko": "돌진, 도약, 점멸, 순간이동 스킬의 스킬 가속이 @Haste@만큼 증가합니다."
     },
     {
       "augmentId": "ARAM_TransmuteChaos",
@@ -3066,7 +3434,11 @@
       "name_ja": "変質: 混沌",
       "name_ko": "전환: 혼돈",
       "wikiDescription": "Gain two completely random augments, excluding the other two offerings in your current assortment.",
-      "wikiRarity": "prismatic"
+      "wikiRarity": "prismatic",
+      "description_zh_TW": "獲得@AugmentsToGrantToolTipOnly@件隨機%i:Augment%增幅裝置。",
+      "description_zh_CN": "获得@AugmentsToGrantToolTipOnly@个随机%i:Augment%强化符文。",
+      "description_ja": "ランダムな%i:Augment%オーグメントを@AugmentsToGrantToolTipOnly@個獲得する。",
+      "description_ko": "무작위 %i:Augment%증강 @AugmentsToGrantToolTipOnly@개를 획득합니다."
     },
     {
       "augmentId": "ARAM_EndlessHunt",
@@ -3098,7 +3470,11 @@
       "name_ja": "アンパッサン",
       "name_ko": "앙파상",
       "wikiDescription": "You can now identify the Vitals of enemy champions within 2000 units, marked as an arc around them and pointing towards a specific direction. Dealing damage to a target with a basic attack or ability while you are facing in the direction of their exposed Vital will consume it, dealing bonus true damage equal to 6% (+ 1.5% per En Passant stack) of the target's maximum health, healing you for 50 – 200 (based on level) (+ 5% missing health), and granting you 50% (+ 5% per En Passant stack) bonus movement speed that decays over 2 seconds. Consuming a target's Vital also grants you an En Passant stack for 8 seconds, refreshing on subsequent Vital triggers and stacking up a number of times. Each En Passant stack increases the consumed Vital damage and bonus movement speed. Vitals on targets become exposed instantly once you are within range and remain exposed until you die. Once a target's Vital is consumed, you identify a new Vital on them pointing in a different direction from the previous after 4 seconds.",
-      "wikiRarity": "prismatic"
+      "wikiRarity": "prismatic",
+      "description_zh_TW": "定期找出敵方英雄的破綻。用普攻或技能擊中破綻時，造成最大生命的真實傷害、回復自身生命並增加跑速。這些效果可累加。",
+      "description_zh_CN": "周期性地识别出敌方英雄身上的破绽。 用攻击或技能命中它们时，会造成最大生命值真实伤害、回复生命值并提供移动速度。这些效果可以叠加。",
+      "description_ja": "時々、敵チャンピオンの「急所」が明らかになる。通常攻撃かスキルが「急所」に命中すると、対象の最大体力に応じた確定ダメージを与え、自身の体力を回復し、移動速度が増加する。この効果はスタックする。",
+      "description_ko": "주기적으로 적 챔피언의 급소를 파악합니다. 급소를 기본 공격 또는 스킬로 타격하면 최대 체력 비례 고정 피해를 입히고, 체력을 회복하며, 이동 속도가 증가합니다. 이 효과는 중첩될 수 있습니다."
     },
     {
       "augmentId": "ARAM_BreadAndCheese",
@@ -3128,7 +3504,11 @@
       "name_ja": "パンとチーズ",
       "name_ko": "빵과 치즈",
       "wikiDescription": "Your champion's third basic ability (E) gains 100 ability haste.",
-      "wikiRarity": "gold"
+      "wikiRarity": "gold",
+      "description_zh_TW": "你的{{SpellName}}獲得@EAbilityHaste@技能加速。",
+      "description_zh_CN": "你的【{{SpellName}}】技能获得@EAbilityHaste@技能急速。",
+      "description_ja": "{{SpellName}}のスキルヘイストが@EAbilityHaste@増加する。",
+      "description_ko": "{{SpellName}} 스킬 가속이 @EAbilityHaste@ 증가합니다."
     },
     {
       "augmentId": "Goldrend",
@@ -3160,7 +3540,11 @@
       "name_ja": "ゴールドレンド",
       "name_ko": "골드 강탈",
       "wikiDescription": "Damaging basic attacks or abilities against enemy champions deal 50 – 150 (based on level) (+ 40% bonus AD) (+ 20% AP) bonus magic damage, and grant you 30 and 25% bonus movement speed for 1.5 seconds (30 second cooldown per champion).",
-      "wikiRarity": "prismatic"
+      "wikiRarity": "prismatic",
+      "description_zh_TW": "以普攻或技能傷害英雄時，造成額外魔法傷害，並獲得金錢和跑速。",
+      "description_zh_CN": "用攻击或技能对一个英雄造成伤害时会造成额外魔法伤害，并为你提供金币和 移动速度。",
+      "description_ja": "チャンピオンに通常攻撃かスキルでダメージを与えると追加魔法ダメージを与え、ゴールドを獲得して、移動速度が増加する。",
+      "description_ko": "기본 공격이나 스킬로 챔피언에게 피해를 입히면 추가 마법 피해를 입히고 골드를 획득하며 이동 속도가 증가합니다."
     },
     {
       "augmentId": "ARAM_ItsKillingTime",
@@ -3190,7 +3574,11 @@
       "name_ja": "殺戮の時",
       "name_ko": "처형 시간",
       "wikiDescription": "Upon casting your ultimate ability, you apply Zed's Death Mark to all enemy champions (8 second cooldown). The mark stores 40% of all post-mitigation damage you deal to the affected target, detonating after 5 seconds to deal true damage equal to the damage stored against them.",
-      "wikiRarity": "gold"
+      "wikiRarity": "gold",
+      "description_zh_TW": "施放大絕後，標記所有敵軍，並儲存你對目標造成的傷害。倒數結束時，引爆傷害。",
+      "description_zh_CN": "在施放你的终极技能后，标记所有敌人并存储你对他们造成的伤害。当它结束时，引爆该伤害。",
+      "description_ja": "アルティメットスキル発動後、すべての敵にマークを付与し、マークした敵に与えたダメージを蓄える。アルティメットスキル終了時、蓄えたダメージを解き放つ。",
+      "description_ko": "궁극기 사용 후 모든 적에게 표식을 남깁니다. 표식은 대상에게 입히는 피해를 비축합니다. 표식이 사라지면 비축한 피해를 폭발시킵니다."
     },
     {
       "augmentId": "ARAM_Quest_UrfsChampion",
@@ -3217,7 +3605,11 @@
       "name_ja": "アーフのチャンピオン",
       "name_ko": "우르프의 챔피언",
       "wikiDescription": "Quest: Score 18 champion takedowns. Reward: Upon completing your Quest, you receive The Golden Spatula. If your inventory is full at the time of quest completion, the item will be granted as soon as a slot in the inventory is available.",
-      "wikiRarity": "prismatic"
+      "wikiRarity": "prismatic",
+      "description_zh_TW": "任務：參與擊殺@QuestRequirement@次。 獎勵：黃金鍋鏟。",
+      "description_zh_CN": "任务：参与击杀@QuestRequirement@次。 奖励：金铲铲",
+      "description_ja": "クエスト: キルまたはアシストを@QuestRequirement@回獲得する。 報酬: 「金のへら」を獲得する。",
+      "description_ko": "퀘스트: 처치 관여를 @QuestRequirement@회 달성해야 합니다. 보상: 황금 뒤집개"
     },
     {
       "augmentId": "ARAM_ApexInventor",
@@ -3246,7 +3638,11 @@
       "name_ja": "至高の発明家",
       "name_ko": "최첨단 발명가",
       "wikiDescription": "Grants 100 item haste, which is equivalent to 50% cooldown reduction for items.",
-      "wikiRarity": "gold"
+      "wikiRarity": "gold",
+      "description_zh_TW": "獲得@ItemHaste@道具加速(等同於@TooltipCDR@%道具冷卻時間減免)。 道具加速會縮短所有道具技能的冷卻時間%i:cooldown%。",
+      "description_zh_CN": "获得@ItemHaste@装备急速(相当于@TooltipCDR@%装备冷却缩减)。 装备急速可缩减所有装备技能的冷却时间%i:cooldown%。",
+      "description_ja": "アイテムヘイストが@ItemHaste@増加する(アイテムクールダウン短縮@TooltipCDR@%に相当)。 アイテムヘイストはすべてのアイテムスキルのクールダウン%i:cooldown%を短縮する。",
+      "description_ko": "아이템 가속이 @ItemHaste@ 증가합니다. (@TooltipCDR@%의 아이템 재사용 대기시간 감소 효과와 동일) 아이템 가속은 모든 아이템 스킬의 재사용 대기시간%i:cooldown%을 감소시킵니다."
     },
     {
       "augmentId": "ARAM_Cruelty",
@@ -3277,7 +3673,11 @@
       "name_ja": "冷酷な一撃",
       "name_ko": "잔혹 행위",
       "wikiDescription": "Immobilizing or grounding an enemy champion summons a comet above them that lands at their current location after 1 second, dealing 50 – 150 (based on level) (+ 40% AP) (+ 4% of your maximum health) magic damage to enemies within the area (6 second cooldown per target per cast instance).",
-      "wikiRarity": "prismatic"
+      "wikiRarity": "prismatic",
+      "description_zh_TW": "硬控場或禁錮英雄時，召喚一顆於短暫延遲後墜落的彗星，對鄰近敵軍造成魔法傷害。",
+      "description_zh_CN": "定身或缚地一个英雄时，召唤一颗会在短暂延迟后着陆的彗星，对附近的敌人们造成魔法伤害。",
+      "description_ja": "チャンピオンに移動不能効果か釘付け効果を与えると彗星が召喚される。彗星は少ししてから落下して、周囲の敵に魔法ダメージを与える。",
+      "description_ko": "챔피언을 이동 불가 상태로 만들거나 이동 스킬을 사용할 수 없게 하면 혜성을 소환합니다. 혜성은 잠시 후 떨어지며, 주변 적에게 마법 피해를 입힙니다."
     },
     {
       "augmentId": "ARAM_MasterofDuality",
@@ -3308,7 +3708,11 @@
       "name_ja": "文武両道",
       "name_ko": "결투의 대가",
       "wikiDescription": "Basic attacks on-hit grant 6 – 18 (based on level) ability power and damaging abilities once per cast instance grant 3 – 9 (based on level) bonus attack damage, lasting for 5 seconds, with the duration of both refreshing on subsequent hits, and stacking infinitely.",
-      "wikiRarity": "prismatic"
+      "wikiRarity": "prismatic",
+      "description_zh_TW": "普攻可累加魔攻，傷害技能則可增加物攻。",
+      "description_zh_CN": "你的每次攻击为你提供可叠加的法术强度，并且你的每次技能在伤害敌人时为你提供可叠加的攻击力。",
+      "description_ja": "通常攻撃で魔力の増加スタック、スキルで敵にダメージを与えると攻撃力の増加スタックを獲得する。",
+      "description_ko": "기본 공격 시 중첩되는 주문력을 얻고 스킬로 적에게 피해를 입히면 공격력을 얻습니다."
     },
     {
       "augmentId": "ARAM_EmpoweredByTheFaithful",
@@ -3339,7 +3743,11 @@
       "name_ja": "信ずる者の加護",
       "name_ko": "신념을 통한 강화",
       "wikiDescription": "Granting a heal or shield to an allied champion blesses them for 8 seconds. Whenever a blessed ally damages an enemy champion, you generate a stack of Devotion, stacking up to 50 times. Upon reaching maximum stacks, you unleash a shockwave that deals 50 – 300 (based on level) (+ 750% heal and shield power) magic damage to nearby enemies. Enemy champions damaged below a percentage of their maximum health equal to 25% of your heal and shield power are executed.",
-      "wikiRarity": "prismatic"
+      "wikiRarity": "prismatic",
+      "description_zh_TW": "給予友軍治療或護盾時會祝福對方；他們對敵軍造成傷害時，你會獲得信仰。 累積足夠信仰時，便會發出衝擊波，造成魔法傷害並處決低生命的敵軍。",
+      "description_zh_CN": "为友军提供治疗或护盾会赐福他们，使其伤害填充你的虔诚。 当你拥有足够的虔诚时，释放一道冲击波来造成魔法伤害并处决低生命值的敌人们。",
+      "description_ja": "味方に体力回復効果またはシールドを付与すると、その味方に「祝福」を与える。祝福された味方が与えるダメージに応じて献身を獲得する。 献身が十分に溜まると、衝撃波を放って敵に魔法ダメージを与え、体力が低下した敵にとどめを刺す。",
+      "description_ko": "아군을 상대로 체력을 회복시키거나 보호막을 씌우면 대상을 축복합니다. 축복받은 아군이 피해를 입히면 헌신이 차오릅니다. 헌신을 충분히 모으면 충격파를 내보내 마법 피해를 입히고 체력이 낮은 적을 처형합니다."
     },
     {
       "augmentId": "ARAM_CourageoftheColossus",
@@ -3369,7 +3777,11 @@
       "name_ja": "巨人の勇気",
       "name_ko": "거석상의 용기",
       "wikiDescription": "Immobilizing or grounding an enemy champion grants a shield for 3 seconds that absorbs 150 – 450 (based on level) (+ 4% maximum health) damage (5 second cooldown per cast instance). Shields can stack between multiple triggers of this effect, though not refreshing the duration of previous shields.",
-      "wikiRarity": "prismatic"
+      "wikiRarity": "prismatic",
+      "description_zh_TW": "在硬控場或禁錮敵方英雄後獲得@TotalShield@護盾。",
+      "description_zh_CN": "定身或缚地一个敌方英雄后获得@TotalShield@护盾值。",
+      "description_ja": "敵チャンピオンに移動不能効果か釘付け効果を与えると耐久値@TotalShield@のシールドを獲得する。",
+      "description_ko": "적 챔피언을 이동 불가 상태로 만들거나 이동 스킬을 사용할 수 없게 하면 @TotalShield@의 보호막을 얻습니다."
     },
     {
       "augmentId": "HextechSoul",
@@ -3396,7 +3808,11 @@
       "name_ja": "ヘクステック ソウル",
       "name_ko": "마법공학의 영혼",
       "wikiDescription": "Grants the Hextech Dragon Soul, or a different Dragon Soul if you aleady have it.",
-      "wikiRarity": "silver"
+      "wikiRarity": "silver",
+      "description_zh_TW": "每過一段時間，下一次傷害性技能或普攻會對附近敵人觸發連鎖的閃電炸裂，造成傷害與緩速。",
+      "description_zh_CN": "周期性地使你的下一个伤害型技能或攻击触发一道闪电爆裂，连锁穿过敌人以造成伤害和减速。",
+      "description_ja": "一定時間ごとに、次に敵へダメージを与えるスキルまたは通常攻撃が稲妻の爆発を引き起こす。稲妻は敵に連鎖してダメージを与え、スロウ効果を与える。",
+      "description_ko": "주기적으로 스킬 또는 기본 공격으로 피해를 입히면 번개를 발사해 적에게 연쇄적으로 피해를 입히고 둔화시킵니다."
     },
     {
       "augmentId": "ARAM_YowchMyCoins",
@@ -3423,7 +3839,11 @@
       "name_ja": "あいたっ、私のコイン！",
       "name_ko": "으악, 내 동전!",
       "wikiDescription": "Enemy champions that you score a takedown against drop 6 – 10 (based on level) coins, with each coin landing 500 units away from the location of their death and lasting 10 seconds. You or allied champions can collect the coins by moving over them, granting 15 for each coin collected.",
-      "wikiRarity": "gold"
+      "wikiRarity": "gold",
+      "description_zh_TW": "參與擊殺敵方英雄時，敵方英雄會在附近掉落金幣，供你和隊友撿取。每枚金幣值@GoldPerCoin@金錢。",
+      "description_zh_CN": "在参与击杀敌方英雄后，该英雄会在附近掉落多枚硬币，你和友军可以收集它们。每枚硬币价值@GoldPerCoin@金币。",
+      "description_ja": "キルまたはアシストを獲得すると、敵チャンピオンがコインを付近にドロップする。コインは自身も味方も回収できる。コイン1枚は@GoldPerCoin@ゴールドに相当する。",
+      "description_ko": "처치 관여 시 적 챔피언이 주변에 자신과 아군이 주울 수 있는 동전을 떨어뜨립니다. 각 동전은 @GoldPerCoin@골드의 가치를 지닙니다."
     },
     {
       "augmentId": "EndlessDecimation",
@@ -3454,7 +3874,11 @@
       "name_ja": "終わりなき殲滅",
       "name_ko": "끝없는 학살",
       "wikiDescription": "Automatically cast an improved version of Darius' Decimate, winding up over 1.25 seconds to slash in a 460 radius around you. The slash deals 100 – 400 (based on level) (+ 60% AD) (+ 40% AP) physical damage to enemies within the area (8 second cooldown). Enemies within the 240 inner radius of the slash take「 50% damage. 」「 50 – 200 (based on level) (+ 30% AD) (+ 20% AP) physical damage. 」Additionally, for each enemy champion hit along the outer edge, you heal for 15% of your missing health and the cooldown of this effect is reduced by 10%, down to a minimum of 3 seconds.",
-      "wikiRarity": "gold"
+      "wikiRarity": "gold",
+      "description_zh_TW": "戰鬥時，自動施放圓形斧擊，造成物理傷害。外圈的敵軍會受到額外傷害，並讓你回復生命。",
+      "description_zh_CN": "在战斗状态下，自动施放一次环形斧头挥舞从而造成物理伤害。被斧刃命中的敌人们受到额外伤害并治疗你。",
+      "description_ja": "戦闘中、自動発動で円を描くように斧を振り回し、物理ダメージを与える。外縁部にいる敵には追加ダメージを与え、自身の体力を回復する。",
+      "description_ko": "전투 중 자동 사용으로 도끼를 원형으로 휘둘러 물리 피해를 입힙니다. 바깥쪽 칼날에 적 적중 시 추가 피해를 입히고 체력을 회복합니다."
     },
     {
       "augmentId": "UltimateAwakening",
@@ -3484,7 +3908,11 @@
       "name_ja": "究極の目覚め",
       "name_ko": "궁극의 각성",
       "wikiDescription": "Casting your ultimate ability resets the cooldowns of all your basic abilities and grants you 300 basic ability haste for 15 seconds (20 second cooldown). Additionally, gain 30 ultimate haste.",
-      "wikiRarity": "prismatic"
+      "wikiRarity": "prismatic",
+      "description_zh_TW": "增加@AH@大絕加速。 施放大絕後，重置基礎技能並增加@AdditionalHaste@基礎技能加速，持續@BuffDuration@秒(冷卻時間@Cooldown@秒)。",
+      "description_zh_CN": "获得@AH@终极技能急速。 在施放你的终极技能后，刷新你的所有基础技能并获得持续@BuffDuration@秒的@AdditionalHaste@基础技能急速。(@Cooldown@秒冷却时间)",
+      "description_ja": "アルティメットスキルヘイストが@AH@増加する。 アルティメットスキルを使用すると、通常スキルのクールダウンが解消し、@BuffDuration@秒間、通常スキルヘイストが@AdditionalHaste@増加する(クールダウン@Cooldown@秒)。",
+      "description_ko": "궁극기 가속이 @AH@ 증가합니다. 궁극기 사용 시 기본 스킬이 초기화되고 @BuffDuration@초 동안 기본 스킬 가속이 @AdditionalHaste@ 증가합니다. (재사용 대기시간 @Cooldown@초)"
     },
     {
       "slug": "overloaded",
@@ -3553,7 +3981,11 @@
       "name_ja": "ステータス！",
       "name_ko": "능력치!",
       "wikiDescription": "Gain 2 Stat Anvils.",
-      "wikiRarity": "silver"
+      "wikiRarity": "silver",
+      "description_zh_TW": "獲得@AmountOfStatAnvils@塊%i:StatAnvil%能力值鐵砧！",
+      "description_zh_CN": "获得@AmountOfStatAnvils@个%i:StatAnvil%【属性锻造器】！",
+      "description_ja": "「%i:StatAnvil%ステータスの金床」を@AmountOfStatAnvils@個獲得する。",
+      "description_ko": "%i:StatAnvil% 능력치 모루를 @AmountOfStatAnvils@개 획득합니다."
     },
     {
       "augmentId": "ARAM_BreadAndButter",
@@ -3583,7 +4015,11 @@
       "name_ja": "パンとバター",
       "name_ko": "빵과 버터",
       "wikiDescription": "Your champion's first basic ability (Q) gains 100 ability haste.",
-      "wikiRarity": "gold"
+      "wikiRarity": "gold",
+      "description_zh_TW": "你的@spell1KeyBind@獲得@QAbilityHaste@技能加速。",
+      "description_zh_CN": "你的@spell1KeyBind@获得@QAbilityHaste@技能急速。",
+      "description_ja": "@spell1KeyBind@のスキルヘイストが@QAbilityHaste@増加する。",
+      "description_ko": "@spell1KeyBind@ 스킬 가속을 @QAbilityHaste@ 얻습니다."
     },
     {
       "augmentId": "OminousPact",
@@ -3614,7 +4050,11 @@
       "name_ja": "不穏な盟約",
       "name_ko": "불길한 서약",
       "wikiDescription": "Your abilities now have a health cost of 5% current health to cast them. In return, you gain ability power based on your missing health, up to 75 – 150 (based on level) at 70% missing health, 0% – 50% (based on missing health) bonus movement speed, and 0% – 20% (based on missing health) omnivamp.",
-      "wikiRarity": "prismatic"
+      "wikiRarity": "prismatic",
+      "description_zh_TW": "根據已損失生命獲得魔攻、跑速和全能吸血，每次施放技能都會受到傷害。",
+      "description_zh_CN": "基于已损失生命值，获得法术强度、移动速度和全能吸血，每次你施放技能时会对自身造成伤害。",
+      "description_ja": "減少体力に応じて、魔力、移動速度およびオムニヴァンプが増加し、スキルを使用するたびにダメージを受ける。",
+      "description_ko": "잃은 체력에 비례하여 주문력, 이동 속도, 모든 피해 흡혈을 얻지만, 스킬을 사용할 때마다 피해를 입습니다."
     },
     {
       "augmentId": "ARAM_InfernalSoul",
@@ -3641,7 +4081,11 @@
       "name_ja": "インファーナルソウル",
       "name_ko": "지옥불 영혼",
       "wikiDescription": "Grants the Infernal Dragon Soul, or a different Dragon Soul if you aleady have it.",
-      "wikiRarity": "silver"
+      "wikiRarity": "silver",
+      "description_zh_TW": "獲得赤燄龍魂，使用技能或普攻命中敵軍時，造成額外傷害。",
+      "description_zh_CN": "你获得炼狱龙魂，使用技能或攻击命中敌人时造成额外伤害。",
+      "description_ja": "「インファーナルドラゴンソウル」を獲得し、敵にスキルまたは通常攻撃を命中させた際、追加ダメージを与える。",
+      "description_ko": "스킬 또는 기본 공격으로 적을 공격할 때마다 추가 피해를 입히는 화염의 드래곤 영혼을 얻습니다."
     },
     {
       "augmentId": "DoubleDefense",
@@ -3671,7 +4115,11 @@
       "name_ja": "補強",
       "name_ko": "보강",
       "wikiDescription": "Upgrades one of your champion's abilities that has a shield effect, increasing the strength of the ability's shield by 0% – 60% (based on target's missing health).",
-      "wikiRarity": "silver"
+      "wikiRarity": "silver",
+      "description_zh_TW": "{{SpellName}}賦予的護盾量增強，且會隨目標的已損失生命而提升。",
+      "description_zh_CN": "来自【{{SpellName}}】技能的护盾变得更强并且受益于目标的已损失生命值。",
+      "description_ja": "{{SpellName}}から付与されるシールドが強化され、対象の減少体力に応じて効果が増加する。",
+      "description_ko": "{{SpellName}} 스킬로 부여되는 보호막이 더 강력해지며, 효과가 대상 잃은 체력에 비례합니다."
     },
     {
       "augmentId": "ARAM_StatsOnStatsOnStats",
@@ -3698,7 +4146,11 @@
       "name_ja": "ステータス上のステータス上のステータス！",
       "name_ko": "능력치 더하기 능력치 더하기 능력치!",
       "wikiDescription": "Gain 4 Stat Anvils, with a higher chance of obtaining Gold and Prismatic tier anvils. Additionally, on the next round of augment selection, you gain an additional reroll per augment slot.",
-      "wikiRarity": "prismatic"
+      "wikiRarity": "prismatic",
+      "description_zh_TW": "獲得@AmountOfStatAnvils@塊%i:StatAnvil%能力值鐵砧！",
+      "description_zh_CN": "获得@AmountOfStatAnvils@个%i:StatAnvil%【属性锻造器】！",
+      "description_ja": "「%i:StatAnvil%ステータスの金床」を@AmountOfStatAnvils@個獲得する。",
+      "description_ko": "%i:StatAnvil% 능력치 모루를 @AmountOfStatAnvils@개 획득합니다."
     },
     {
       "augmentId": "ARAM_OkBoomerang",
@@ -3728,7 +4180,11 @@
       "name_ja": "OKブーメラン",
       "name_ko": "부메랑 투척",
       "wikiDescription": "Automatically cast an improved version of Sivir's Boomerang Blade at the closest nearby enemy champion within 1250 units, dealing 40 – 200 (based on level) (+ 30% bonus AD) (+ 20% AP) adaptive damage to enemies hit (10 second cooldown).",
-      "wikiRarity": "gold"
+      "wikiRarity": "gold",
+      "description_zh_TW": "每@Cooldown@秒自動施放對鄰近敵軍發射回力鏢。",
+      "description_zh_CN": "每@Cooldown@秒朝着一个附近的敌人自动施放投掷一个回力镖。",
+      "description_ja": "@Cooldown@秒ごとに、近くの敵1体に対してブーメランが自動発動で発射される。",
+      "description_ko": "자동 사용 @Cooldown@초마다 근처 적에게 부메랑을 던집니다."
     },
     {
       "augmentId": "MercysStrike",
@@ -3758,7 +4214,11 @@
       "name_ja": "慈悲の一撃",
       "name_ko": "자비의 일격",
       "wikiDescription": "Upgrades one of your champion's abilities, empowering the ability's cast to enhance your next basic attack within a duration. The enhanced attack has 300 bonus range, gains 75% bonus attack speed, and deals bonus magic damage equal to 3% (+ 2% per 10% heal and shield power) of the target's maximum health.",
-      "wikiRarity": "gold"
+      "wikiRarity": "gold",
+      "description_zh_TW": "使用{{SpellName}}後，你的下幾次普攻將獲得攻擊距離和攻速，並造成額外最大生命的魔法傷害。",
+      "description_zh_CN": "在使用【{{SpellName}}】技能之后，你的下一次普攻获得攻击距离、攻击速度并造成额外最大生命值魔法伤害。",
+      "description_ja": "{{SpellName}}を使用すると、次の通常攻撃の射程と攻撃速度が増加し、最大体力に応じた魔法ダメージを追加で与える。",
+      "description_ko": "{{SpellName}} 사용 후 다음 기본 공격 시 공격 사거리와 공격 속도가 증가하고 추가로 최대 체력 비례 마법 피해를 입힙니다."
     },
     {
       "augmentId": "ARAM_CircleofDeath",
@@ -3788,7 +4248,11 @@
       "name_ja": "死者の集い",
       "name_ko": "죽음의 순환",
       "wikiDescription": "Healing and health regeneration you do causes you to deal 70% of that value in magic damage to the nearest enemy champion within 1000 units.",
-      "wikiRarity": "prismatic"
+      "wikiRarity": "prismatic",
+      "description_zh_TW": "施展治療和生命回復時，也會對最靠近的敵方英雄造成魔法傷害。",
+      "description_zh_CN": "治疗效果和生命回复效果还会对相距最近的那个敌方英雄造成魔法伤害。",
+      "description_ja": "体力を回復または自動回復すると、最も近くにいる敵チャンピオンに、魔法ダメージとして与える。",
+      "description_ko": "체력을 회복하거나 체력을 재생하면 가장 가까운 적 챔피언에게 마법 피해를 입힙니다."
     },
     {
       "augmentId": "ARAM_BreadAndJam",
@@ -3818,7 +4282,11 @@
       "name_ja": "パンとジャム",
       "name_ko": "빵과 잼",
       "wikiDescription": "Your champion's second basic ability (W) gains 100 ability haste.",
-      "wikiRarity": "gold"
+      "wikiRarity": "gold",
+      "description_zh_TW": "你的{{SpellName}}獲得@WAbilityHaste@技能加速。",
+      "description_zh_CN": "你的【{{SpellName}}】技能获得@WAbilityHaste@技能急速。",
+      "description_ja": "{{SpellName}}のスキルヘイストが@WAbilityHaste@増加する。",
+      "description_ko": "{{SpellName}} 스킬 가속이 @WAbilityHaste@ 증가합니다."
     },
     {
       "augmentId": "ARAM_ThreadtheNeedle",
@@ -3848,7 +4316,11 @@
       "name_ja": "貫通力",
       "name_ko": "바늘에 실 끼우기",
       "wikiDescription": "Grants 18% armor penetration and magic penetration.",
-      "wikiRarity": "gold"
+      "wikiRarity": "gold",
+      "description_zh_TW": "獲得@PercentPen*100@%%i:scaleAPen%物理穿透與%i:scaleMPen%魔法穿透。",
+      "description_zh_CN": "获得@PercentPen*100@%%i:scaleAPen%护甲穿透和%i:scaleMPen%法术穿透。",
+      "description_ja": "%i:scaleAPen%物理防御貫通と%i:scaleMPen%魔法防御貫通が@PercentPen*100@%増加する。",
+      "description_ko": "%i:scaleAPen% 방어구 관통력 및 %i:scaleMPen% 마법 관통력 @PercentPen*100@%를 얻습니다."
     },
     {
       "augmentId": "ARAM_SearingDawn",
@@ -3878,7 +4350,11 @@
       "name_ja": "灼熱の夜明け",
       "name_ko": "타오르는 새벽",
       "wikiDescription": "Gain Leona's Sunlight. Sunlight: Your damaging abilities mark enemies, causing them to take 40 – 200 (based on level) bonus magic damage from your ally's next basic attack or ability hit against them (0.75-second cooldown per target).",
-      "wikiRarity": "gold"
+      "wikiRarity": "gold",
+      "description_zh_TW": "技能會標記敵軍，友軍的下一次普攻或技能會對其造成額外魔法傷害。",
+      "description_zh_CN": "你的技能会标记敌人，使其在被你的友军的下一个攻击或技能命中时会受到额外魔法伤害。",
+      "description_ja": "スキルが敵をマークする。味方はマークされた敵に対し、次の通常攻撃またはスキルで追加の魔法ダメージを与える。",
+      "description_ko": "스킬이 적에게 표식을 남깁니다. 적은 아군의 다음 기본 공격 또는 스킬로부터 마법 피해를 추가로 입습니다."
     },
     {
       "augmentId": "FishBait",
@@ -3908,7 +4384,11 @@
       "name_ja": "サメのエサ",
       "name_ko": "상어 미끼",
       "wikiDescription": "Upon taking fatal damage, you become a Shark Bait, causing you to enter a zombie state for 3.5 seconds, during which your movement speed is set to a static 400, you gain ghosting, and enemies within 400 units of you are slowed by 40%. At the end of the duration, a massive shark emerges from beneath you that lets out a powerful chomp (400 radius), dealing 80 – 300 (based on level) (+ 20% of target's missing health) magic damage to all enemies within the area and knocking them up for 1 second. While under the zombie state, you are able to move and become invulnerable, untargetable, and immune to crowd control, but you are also rendered unable to declare basic attacks, cast abilities, use summoner spells, and activate items.",
-      "wikiRarity": "gold"
+      "wikiRarity": "gold",
+      "description_zh_TW": "死亡後幾秒內，鯊魚會撕咬所有鄰近敵軍。你在死亡後可以透過移動瞄準鯊魚攻擊。",
+      "description_zh_CN": "在阵亡之后的若干秒，一头鲨鱼会啃噬所有附近的敌人们。你可以在阵亡后进行移动，以给鲨鱼攻击进行定位。",
+      "description_ja": "デスしてから数秒後に、サメが周囲のすべての敵に噛みつく。デス後も移動してサメの攻撃の狙いを定めることができる。",
+      "description_ko": "사망 몇 초 후 상어가 주변 모든 적을 물어뜯습니다. 사망 후에도 이동하여 상어 공격의 대상을 정할 수 있습니다."
     },
     {
       "augmentId": "ARAM_DivineIntervention",
@@ -3939,7 +4419,11 @@
       "name_ja": "聖なる介入",
       "name_ko": "신성한 중재",
       "wikiDescription": "Automatically cast Taric's Cosmic Radiance, calling down a protective star upon you that descends over 2.5 seconds. Afterwards, you and all allied champions within 400 units become invulnerable for 2.5 seconds (35 second cooldown).",
-      "wikiRarity": "gold"
+      "wikiRarity": "gold",
+      "description_zh_TW": "戰鬥開始後不久，召喚一顆守護星。守護星落地時，你和附近的友軍獲得幾秒鐘的無敵狀態。 隨後每隔@BaseCD@秒自動施放一次。",
+      "description_zh_CN": "战斗开始后的短时间内，召唤一颗护体星星。在它着陆时，你和附近的友军们进入持续若干秒的免疫伤害状态。 随后每@BaseCD@秒自动施放这个效果。",
+      "description_ja": "戦闘開始から少し経つと、守護星を召喚する。星が落下すると、自身および周囲の味方が数秒間無敵状態になる。 その後は@BaseCD@秒ごとに自動発動する。",
+      "description_ko": "전투 시작 직후, 보호의 별을 소환합니다. 별이 착지하면 자신과 주변 아군이 몇 초 동안 무적 상태가 됩니다. 이후 @BaseCD@초마다 자동 사용합니다."
     },
     {
       "augmentId": "ARAM_SymphonyofWar",
@@ -3970,7 +4454,11 @@
       "name_ja": "闘争交響曲",
       "name_ko": "전장의 교향곡",
       "wikiDescription": "Gain the Conqueror and Lethal Tempo keystone runes. Conqueror Adaptive force per stack changed to 1.8 – 3.3 (based on level) bonus Attack Damage or 3 – 5.5 (based on level) Ability Power (Adaptive). Healing changed to ( 10% / 8%) of damage dealt. Lethal Tempo Bonus attack speed per stack changed to ( 13% – 18% / 8% – 12%) (based on level). Maximum bonus attack speed changed to ( 78% – 108% / 48% – 72%) (based on level). Removed: No longer empowers basic attacks at maximum stacks to fire a bolt that deals bonus adaptive damage. New Effect: At maximum stacks, gain 50 bonus attack range and increase the attack speed cap to 10.",
-      "wikiRarity": "prismatic"
+      "wikiRarity": "prismatic",
+      "description_zh_TW": "獲得致命節奏與征服者關鍵符文。",
+      "description_zh_CN": "获得致命节奏和征服者基石符文。",
+      "description_ja": "キーストーンルーンの「リーサルテンポ」と「征服者」を獲得する。",
+      "description_ko": "치명적 속도와 정복자 핵심 룬을 얻습니다."
     },
     {
       "augmentId": "ARAM_UltimateRevolution",
@@ -4000,7 +4488,11 @@
       "name_ja": "究極進化",
       "name_ko": "궁극기 대변혁",
       "wikiDescription": "Casting your ultimate ability resets its cooldown once its effect starts or has elapsed (75 second cooldown, reset upon death).",
-      "wikiRarity": "prismatic"
+      "wikiRarity": "prismatic",
+      "description_zh_TW": "施放大絕後重置其冷卻時間(冷卻時間@Cooldown@秒，或在死亡時重置)。",
+      "description_zh_CN": "在施放终极技能后刷新你的终极技能(@Cooldown@秒冷却时间或阵亡时重置)。",
+      "description_ja": "アルティメットスキルが発動後にリフレッシュされる(クールダウン@Cooldown@秒、または倒されるとリセット)。",
+      "description_ko": "궁극기를 사용한 다음 초기화합니다. (재사용 대기시간 @Cooldown@초 또는 사망 시 초기화)"
     },
     {
       "augmentId": "ARAM_Firebrand",
@@ -4030,7 +4522,11 @@
       "name_ja": "火付け役",
       "name_ko": "화염 낙인",
       "wikiDescription": "Basic attacks apply a Burn for 5 seconds that deals bonus magic damage equal to「 0.4% of the target's maximum health per second. 」「 2% of the target's maximum health over the duration. 」This Burn stacks infinitely and refreshes with each application.",
-      "wikiRarity": "gold"
+      "wikiRarity": "gold",
+      "description_zh_TW": "普攻{{ Item_Keyword_OnHit }}造成燃燒效果，並持續造成傷害，可無限累加。",
+      "description_zh_CN": "你的攻击会施加一个可无限叠加的灼烧{{ Item_Keyword_OnHit }}，持续造成伤害。",
+      "description_ja": "通常攻撃が無限にスタック可能な炎上{{ Item_Keyword_OnHit }}を付与し、継続ダメージを与える。",
+      "description_ko": "기본 공격 시 무한히 중첩되는 화상({{ Item_Keyword_OnHit }}) 효과를 적용해 지속적으로 피해를 입힙니다."
     },
     {
       "augmentId": "ARAM_UltimateUnstoppable",
@@ -4060,7 +4556,11 @@
       "name_ja": "破竹のアルティメット",
       "name_ko": "궁극의 저지 불가",
       "wikiDescription": "Casting your ultimate ability grants you crowd control immunity for 3 seconds (8 second cooldown).",
-      "wikiRarity": "silver"
+      "wikiRarity": "silver",
+      "description_zh_TW": "使用大絕後會免疫控場效果@UnstoppableDuration@秒(冷卻時間@Cooldown@秒)。",
+      "description_zh_CN": "在你使用你的终极技能后，你获得持续@UnstoppableDuration@秒的控制免疫。 (@Cooldown@秒冷却时间)。",
+      "description_ja": "アルティメットスキルを使用すると、@UnstoppableDuration@秒間、行動妨害効果を受けなくなる(クールダウン@Cooldown@秒)。",
+      "description_ko": "궁극기 사용 시 @UnstoppableDuration@초 동안 군중 제어 효과에 면역이 됩니다. (재사용 대기시간 @Cooldown@초)"
     },
     {
       "augmentId": "ARAM_DiveBomber",
@@ -4089,7 +4589,11 @@
       "name_ja": "急降下爆撃",
       "name_ko": "폭격기",
       "wikiDescription": "Upon death, you explode to deal true damage equal to 20% of the target's maximum health to enemies within 500 units.",
-      "wikiRarity": "silver"
+      "wikiRarity": "silver",
+      "description_zh_TW": "死亡時爆炸，造成大量真實傷害。",
+      "description_zh_CN": "在你阵亡时爆炸，造成巨量真实伤害。",
+      "description_ja": "倒された際に爆発し、大量の確定ダメージを与える。",
+      "description_ko": "사망 시 폭발하여 막대한 고정 피해를 입힙니다."
     },
     {
       "augmentId": "ARAM_MountainSoul",
@@ -4116,7 +4620,11 @@
       "name_ja": "マウンテンソウル",
       "name_ko": "대지의 영혼",
       "wikiDescription": "Grants the Mountain Dragon Soul, or a different Dragon Soul if you aleady have it.",
-      "wikiRarity": "silver"
+      "wikiRarity": "silver",
+      "description_zh_TW": "獲得裂地龍魂，脫離戰鬥一段時間後可獲得一道護盾。",
+      "description_zh_CN": "你获得山脉龙魂，在脱离战斗之后获得一个持续一小段时间的护盾。",
+      "description_ja": "「マウンテンソウル」を獲得し、少しの間、非戦闘状態が続くとシールドを獲得する。",
+      "description_ko": "전투에서 벗어나면 잠시 동안 보호막을 획득하는 대지의 영혼을 얻습니다."
     },
     {
       "augmentId": "ARAM_FeyMagic",
@@ -4146,7 +4654,11 @@
       "name_ja": "神秘の魔法",
       "name_ko": "요정 마법",
       "wikiDescription": "Damaging enemies with your ultimate ability polymorphs them into harmless critters for 2 seconds, during which their base movement speed is reduced by 60, and disarms them for the same duration (15 second cooldown per target).",
-      "wikiRarity": "prismatic"
+      "wikiRarity": "prismatic",
+      "description_zh_TW": "使用大絕造成傷害會變形敵軍幾秒。",
+      "description_zh_CN": "你的终极技能的伤害会对敌人造成持续若干秒的变形效果。",
+      "description_ja": "アルティメットスキルでダメージを与えると、敵に数秒間のポリモーフ効果を付与する。",
+      "description_ko": "궁극기로 적에게 피해를 입히면 몇 초 동안 변이시킵니다."
     },
     {
       "augmentId": "NatureIsHealing",
@@ -4175,7 +4687,11 @@
       "name_ja": "大自然が回復している",
       "name_ko": "자연의 회복",
       "wikiDescription": "Heal yourself for 0.6% – 2.1% (based on level) of your maximum health for each second that you are within brush.",
-      "wikiRarity": "gold"
+      "wikiRarity": "gold",
+      "description_zh_TW": "站在草叢中時，每秒會回復@MaxHealthHealPerSecond@最大生命。",
+      "description_zh_CN": "站在草丛中时，每秒回复@MaxHealthHealPerSecond@最大生命值。",
+      "description_ja": "茂みの中では、毎秒、最大体力の@MaxHealthHealPerSecond@を回復する。",
+      "description_ko": "수풀에 서 있으면 매초 최대 체력의 @MaxHealthHealPerSecond@만큼 체력을 재생합니다."
     },
     {
       "augmentId": "Poltergeist",
@@ -4205,7 +4721,11 @@
       "name_ja": "ポルターガイスト",
       "name_ko": "폴터가이스트",
       "wikiDescription": "Replace a summoner spell with Poltergeist. Poltergeist: Casts both Barrier and Ghost on yourself, both lasting 5 seconds and with the former granting a shield for 110 – 440 (based on level) and the latter granting 30% bonus movement speed.",
-      "wikiRarity": "silver"
+      "wikiRarity": "silver",
+      "description_zh_TW": "獲得召喚師技能「搗蛋鬼」。 「搗蛋鬼」可施放「光盾」和「鬼步」。",
+      "description_zh_CN": "获得【吵闹鬼】作为一个召唤师技能。 吵闹鬼会同时施放召唤师技能【屏障】和【幽灵疾步】。",
+      "description_ja": "サモナースペルとして「ポルターガイスト」を獲得する。 「ポルターガイスト」は「バリア」と「ゴースト」の両方を発動する。",
+      "description_ko": "폴터가이스트 소환사 주문을 얻습니다. 폴터가이스트는 방어막과 유체화를 동시에 사용합니다."
     },
     {
       "augmentId": "ARAM_SpiritualPurification",
@@ -4236,7 +4756,11 @@
       "name_ja": "精霊の浄化",
       "name_ko": "영혼의 정화",
       "wikiDescription": "Scoring a champion takedown causes the area around the slain champion to explode in a 500 unit radius, dealing adaptive damage to enemies within equal to 15% of their current health and leaving behind a zone for 1.5 seconds that slows enemies within by 60%.",
-      "wikiRarity": "gold"
+      "wikiRarity": "gold",
+      "description_zh_TW": "參與擊殺時會產生爆炸，使鄰近敵軍緩速@SlowAmount*100@%，並根據其當前生命造成傷害。",
+      "description_zh_CN": "参与击杀时，产生一次爆炸，对附近其它敌人们造成@SlowAmount*100@%减速，并且造成基于他们当前生命值的伤害。",
+      "description_ja": "キルまたはアシスト獲得時、爆発を起こして周囲の他の敵に@SlowAmount*100@%のスロウ効果を与え、現在体力に応じたダメージを与える。",
+      "description_ko": "처치 관여 시 폭발을 일으켜 주변 다른 적을 @SlowAmount*100@% 둔화시키고 적 현재 체력에 비례하는 피해를 입힙니다."
     },
     {
       "augmentId": "ARAM_Impassable",
@@ -4265,7 +4789,11 @@
       "name_ja": "通行不可",
       "name_ko": "넘을 수 없는 벽",
       "wikiDescription": "Gain the Aftershock and Glacial Augment keystone runes. Aftershock Cooldown reduced to 15 seconds from 20. Glacial Augment Cooldown reduced to 15 seconds from 25.",
-      "wikiRarity": "gold"
+      "wikiRarity": "gold",
+      "description_zh_TW": "獲得裂地衝擊與冰川增幅關鍵符文。",
+      "description_zh_CN": "获余震和冰川增幅基石符文。",
+      "description_ja": "キーストーンルーンの「アフターショック」と「グレイシャルオーグメント」を獲得する。",
+      "description_ko": "여진과 빙결 강화 핵심 룬을 얻습니다."
     },
     {
       "augmentId": "Nightstalking",
@@ -4294,7 +4822,11 @@
       "name_ja": "ナイトストーク",
       "name_ko": "밤의 추적",
       "wikiDescription": "Scoring a takedown against an enemy champion within 3 seconds of damaging them renders you invisible for 1.5 seconds. Attacking or casting abilites ends the stealth immediately.",
-      "wikiRarity": "gold"
+      "wikiRarity": "gold",
+      "description_zh_TW": "對敵方英雄造成傷害後，在@TakedownWindow@秒內參與擊殺他們，會讓你進入隱形狀態。",
+      "description_zh_CN": "在对敌人造成伤害的@TakedownWindow@秒内参与击杀该敌人会使你进入隐身状态。",
+      "description_ja": "敵チャンピオンにダメージを与えてから@TakedownWindow@秒以内にその対象からキルまたはアシストを獲得すると、自身をインビジブル状態にする。",
+      "description_ko": "자신이 피해를 입힌 챔피언이 @TakedownWindow@초 안에 죽으면 투명 상태가 됩니다."
     },
     {
       "augmentId": "ARAM_BladeWaltz",
@@ -4326,7 +4858,11 @@
       "name_ja": "ブレードワルツ",
       "name_ko": "검무",
       "wikiDescription": "Replace a summoner spell with Blade Waltz. Blade Waltz: Blink to the target enemy champion. You then blink to the nearest other enemy champion every 0.25 seconds over the next 1.75 seconds, blinking up to 7 additional times. The last blink targets the primary target. Each time you blink to an enemy, deal 30 – 150 (based on level) (+ 10% bonus AD) (+ 6% AP) physical damage to them and apply on-hit effects at 50% effectiveness, up to a total of 180 – 900 (based on level) (+ 60% bonus AD) (+ 36% AP) (45 second cooldown). While Blade Waltz is active, you are untargetable and unable to act. This effect will end prematurely if there are no longer any nearby valid targets to blink to. An enemy can be blinked to more than once if there are no other valid targets in range.",
-      "wikiRarity": "prismatic"
+      "wikiRarity": "prismatic",
+      "description_zh_TW": "獲得召喚師技能華爾茲劍舞。",
+      "description_zh_CN": "获得利刃华尔兹作为一个召唤师技能。",
+      "description_ja": "サモナースペルとしてブレードワルツを獲得する。",
+      "description_ko": "검무 소환사 주문을 얻습니다."
     },
     {
       "augmentId": "ARAM_Juiced",
@@ -4359,7 +4895,11 @@
       "name_ja": "パワーアップ",
       "name_ko": "도취",
       "wikiDescription": "Basic attacks on-hit against enemy champions consume 2.5% of your maximum mana to deal bonus magic damage equal to 4.5% of your maximum mana. This damage can critically strike for (100% + 30%) bonus damage.",
-      "wikiRarity": "silver"
+      "wikiRarity": "silver",
+      "description_zh_TW": "%i:OnHit%命中會消耗@Calc_Mana_Cost@魔力造成@Calc_Damage@魔法傷害，此傷害可暴擊。",
+      "description_zh_CN": "%i:OnHit%攻击特效消耗@Calc_Mana_Cost@法力值以造成@Calc_Damage@魔法伤害，这个伤害可以暴击。",
+      "description_ja": "%i:OnHit%通常攻撃時、@Calc_Mana_Cost@マナを消費して魔法ダメージを@Calc_Damage@与える。このダメージはクリティカル判定を持つ。",
+      "description_ko": "%i:OnHit% 적중 시 마나를 @Calc_Mana_Cost@ 소모해 @Calc_Damage@의 마법 피해를 입힙니다. 이 피해량에는 치명타가 적용될 수 있습니다."
     },
     {
       "augmentId": "SpellVolley",
@@ -4388,7 +4928,11 @@
       "name_ja": "トリプルショット",
       "name_ko": "3연발",
       "wikiDescription": "Upgrades one of your champion's abilities that is unit-targeted and fires a missile, empowering the ability to fire its missiles at two additional enemies in front of you. Subsequent hits from the same cast against the same enemy deal 30% damage.",
-      "wikiRarity": "prismatic"
+      "wikiRarity": "prismatic",
+      "description_zh_TW": "你的{{SpellName}}會額外鎖定你前方的2名敵軍。",
+      "description_zh_CN": "你的【{{SpellName}}】技能会瞄准你前方2个额外的敌人。",
+      "description_ja": "{{SpellName}}が自身の前方にいる敵を追加で2体対象にする。",
+      "description_ko": "{{SpellName}} 스킬이 전방에 있는 적 2명을 추가로 대상 지정합니다."
     },
     {
       "augmentId": "ARAM_ProteinShake",
@@ -4418,7 +4962,11 @@
       "name_ja": "プロテインシェイク",
       "name_ko": "프로틴 음료",
       "wikiDescription": "Gain 25% (+ 35% per 100 bonus armor) (+ 35% per 100 bonus magic resistance) heal and shield power.",
-      "wikiRarity": "prismatic"
+      "wikiRarity": "prismatic",
+      "description_zh_TW": "根據額外物防和魔防，增加%i:scaleHealShield%@BonusHSPower@%治療量和護盾量。",
+      "description_zh_CN": "获得%i:scaleHealShield%@BonusHSPower@%治疗和护盾强度，基于额外护甲和魔抗。",
+      "description_ja": "増加物理防御および増加魔法防御に応じて、体力回復およびシールド効果が%i:scaleHealShield%@BonusHSPower@%増加する。",
+      "description_ko": "추가 방어력 및 마법 저항력에 비례하여 %i:scaleHealShield%@BonusHSPower@%의 체력 회복 및 보호막 효과를 얻습니다."
     },
     {
       "augmentId": "ARAM_Hellbent",
@@ -4449,7 +4997,11 @@
       "name_ja": "ヘルベント",
       "name_ko": "열의",
       "wikiDescription": "Generate a stack of Revivemaxxing for each enemy champion you hit with basic attacks or abilities, lasting for 6 seconds, refreshing on subsequent hits, and stacking up to 10 times. At maximum stacks, you become Hellbent. Hellbent: Upon taking lethal damage, you enter resurrection for 4 seconds, during which you are invulnerable, untargetable, and unable to act. Afterwards, you revive with 35% – 75% (based on level) of your maximum health (120 second cooldown). Additionally, you become empowered for the next 15 seconds, granting you 15 – 120 (based on level) bonus Attack Damage or 25 – 200 (based on level) Ability Power (Adaptive), 20% – 40% (based on level) bonus movement speed while facing toward nearby enemy champions, and 15% – 30% (based on level) omnivamp for the duration.",
-      "wikiRarity": "prismatic"
+      "wikiRarity": "prismatic",
+      "description_zh_TW": "透過普攻或技能傷害敵方英雄會賦予層數。滿層後，死亡時會復活並獲得強化。",
+      "description_zh_CN": "用攻击或技能伤害敌方英雄时会提供层数。在满层时，你在阵亡时会进行强化复活。",
+      "description_ja": "敵チャンピオンに通常攻撃またはスキルでダメージを与えると、スタックを獲得する。最大スタック時に倒されると強化されて復活する。",
+      "description_ko": "적 챔피언에게 기본 공격 또는 스킬로 피해를 입히면 중첩을 얻습니다. 중첩이 최대치에 도달하면 사망 시 강화된 상태로 부활합니다."
     },
     {
       "augmentId": "ARAM_Flashbang",
@@ -4480,7 +5032,11 @@
       "name_ja": "フラッシュバン",
       "name_ko": "점멸탄",
       "wikiDescription": "Using Flash creates an explosion around the blink location that deals 70 – 240 (based on level) (+ 70% AD) (+ 60% AP) magic damage to nearby enemies and slows them by 35% for 1.25 seconds. Additionally, the cooldown of your Flash resets upon your death. If Flash is not equipped, you will be prompted to replace one of your summoner spells with Flash.",
-      "wikiRarity": "silver"
+      "wikiRarity": "silver",
+      "description_zh_TW": "閃現會觸發爆炸，造成傷害和緩速效果(死亡時重置)。",
+      "description_zh_CN": "你的【闪现】会引发一次爆炸，造成伤害和减速（阵亡时重置）。",
+      "description_ja": "自分が「フラッシュ」を使用すると爆発が発生し、ダメージとスロウ効果を与える (倒されるとリセットされる)。",
+      "description_ko": "점멸 시 폭발을 일으켜 피해를 입히고 둔화시킵니다. (사망 시 초기화)"
     },
     {
       "augmentId": "EmpyreanPromise",
@@ -4511,7 +5067,11 @@
       "name_ja": "荘厳の天球の約束",
       "name_ko": "창공의 서약",
       "wikiDescription": "Replace a summoner spell with Empyrean Promise's Vigilance active. Additionally, gain 15% heal and shield power. Active - Vigilance: After a 0.25-second delay, dash to the current location of the target allied champion and gain a 100 – 250 (based on level) (+ 100% AP) (+ 10% bonus health) shield for 3 seconds. Upon arrival, grant the ally the same shield (20 second cooldown; 2000 range).",
-      "wikiRarity": "prismatic"
+      "wikiRarity": "prismatic",
+      "description_zh_TW": "增加%i:scaleHealShield% @HSAmp*100@%治療量和護盾量。獲得幻焰之誓召喚師技能。 全神貫注 傳送到友軍身旁，抵達時獲得@ShieldAmount@護盾，持續@ShieldDuration@秒。",
+      "description_zh_CN": "获得%i:scaleHealShield%@HSAmp*100@%治疗和护盾强度。获得至高天诺言作为一个召唤师技能。 警惕 传送至你的友军并在着陆时提供持续@ShieldDuration@秒的@ShieldAmount@护盾值。",
+      "description_ja": "体力回復およびシールド効果が%i:scaleHealShield% @HSAmp*100@%増加する。サモナースペルとして荘厳の天球の約束を獲得する。 警戒 味方のところまでテレポートし、到着後@ShieldDuration@秒間、耐久値@ShieldAmount@のシールドを付与する。",
+      "description_ko": "체력 회복 및 보호막 효과%i:scaleHealShield%가 @HSAmp*100@% 증가합니다. 창공의 서약 소환사 주문을 얻습니다. 경계 아군에게 순간이동하고, 착지 후 @ShieldDuration@초 동안 @ShieldAmount@의 피해를 흡수하는 보호막을 부여합니다."
     },
     {
       "augmentId": "KillSecured",
@@ -4540,7 +5100,11 @@
       "name_ja": "キルを確認",
       "name_ko": "확보된 킬",
       "wikiDescription": "Gain 60% bonus movement speed towards enemy champions below 40% of their maximum health.",
-      "wikiRarity": "silver"
+      "wikiRarity": "silver",
+      "description_zh_TW": "跑向低生命敵軍時，增加跑速。",
+      "description_zh_CN": "在朝着低生命值的敌人时，获得额外移动速度。",
+      "description_ja": "体力が低い敵の方向へ移動する際、移動速度が増加する。",
+      "description_ko": "체력이 낮은 적에게 접근 시 이동 속도가 증가합니다."
     },
     {
       "slug": "porcupine",
@@ -4592,7 +5156,11 @@
       "name_ja": "一緒に閉じ込められた",
       "name_ko": "도망갈 수 없어",
       "wikiDescription": "Casting your ultimate ability grants you an aura for 2 seconds, growing in size over the duration to up to 500 units. After the duration, you taunt all enemies within the aura for 2 seconds and gain 50% damage reduction for the same duration (30 second cooldown). Additionally, gain 30 ultimate haste. Aura is activated once the ultimate's effect starts or has elapsed. On Katarina, this augment will activate at the start of Death Lotus' channel.",
-      "wikiRarity": "prismatic"
+      "wikiRarity": "prismatic",
+      "description_zh_TW": "施放大絕後，嘲諷鄰近敵軍並賦予自身傷害減免。",
+      "description_zh_CN": "使用你的终极技能时会嘲讽附近的敌人们并提供给你伤害减免。",
+      "description_ja": "アルティメットスキル使用後、周囲の敵をタウントし、ダメージ軽減率が増加する。",
+      "description_ko": "궁극기를 사용하면 주변 적을 도발하고 피해량 감소를 얻습니다."
     },
     {
       "augmentId": "Ability_SelfAOE_DoubleCast",
@@ -4621,7 +5189,11 @@
       "name_ja": "エコー キャスト",
       "name_ko": "메아리 시전",
       "wikiDescription": "Upgrades one of your champion's abilities, empowering the ability's cast to summon a clone of your champion that is untargetable and moves up to 500 units towards your cursor. The clone then casts the ability it was summoned from after a 0.25-second delay, mimicking the active effects of the casted spell and disappearing after it finishes casting. Clone movement speed is 1000. Clone has a maximum lifetime of 7 seconds.",
-      "wikiRarity": "prismatic"
+      "wikiRarity": "prismatic",
+      "description_zh_TW": "施放{{SpellName}}時會朝滑鼠位置製造一個分身，並重施技能。",
+      "description_zh_CN": "施放你的【{{SpellName}}】技能时会朝你的鼠标位置派出一个复制体并再次施放该技能。",
+      "description_ja": "{{SpellName}}使用時、マウスカーソルの位置にクローンを送り出し、再発動する。",
+      "description_ko": "{{SpellName}} 스킬을 사용하면 마우스 커서 위치로 분신을 보내고 스킬을 재사용합니다."
     },
     {
       "augmentId": "Missile_Split",
@@ -4650,7 +5222,11 @@
       "name_ja": "スペルスプリット",
       "name_ko": "주문 분산",
       "wikiDescription": "Upgrades one of your champion's abilities that has a missile, empowering the ability's missile to split in two over 0.25 seconds upon hitting an enemy, at maximum range, or when recast. Each of the split missiles fire perpendicularly in opposite directions and apply the same effects to enemies they hit. Subsequent missile hits from the same cast against the same enemy deal 30% damage. Recast can be used after 0.15 seconds of the initial cast.",
-      "wikiRarity": "prismatic"
+      "wikiRarity": "prismatic",
+      "description_zh_TW": "你的{{SpellName}}飛彈在命中、達到最遠距離或重施技能時會分裂成兩發。",
+      "description_zh_CN": "在命中时、最大距离时或再次施放时，你的【{{SpellName}}】技能的飞弹会分裂为两部分。",
+      "description_ja": "自身の{{SpellName}}のミサイルが、命中時、最大射程到達時、再発動時に2つに分裂する。",
+      "description_ko": "{{SpellName}} 투사체가 적중하거나 최대 사거리에 도달하거나 재사용 시 두 개로 나뉩니다."
     },
     {
       "augmentId": "SharkTempest",
@@ -4680,7 +5256,11 @@
       "name_ja": "シャークテンペスト",
       "name_ko": "상어 폭풍",
       "wikiDescription": "Your Mark is empowered to circle sharks around it in a 300 radius, dealing 50 – 100 (based on level) magic damage to enemies it passes through as it travels and slowing targets hit by 30% for 1 second. If the missile hits an enemy champion, the sharks circle around their location in a 425 radius instead for 3 seconds, dealing「 25 – 75 (based on level) (+ 20% bonus AD) (+ 12% AP) magic damage every second 」「 75 – 225 (based on level) (+ 60% bonus AD) (+ 36% AP) total magic damage over the duration 」to enemies within the area and slowing them by 30% for 3 seconds. If Mark is not equipped, you will be prompted to replace one of your summoner spells with Mark.",
-      "wikiRarity": "gold"
+      "wikiRarity": "gold",
+      "description_zh_TW": "鯊魚會圍繞你的雪球盤旋，緩速並傷害鄰近敵軍。當你的雪球命中英雄時，對方會被困在鯊魚風暴中！",
+      "description_zh_CN": "鲨鱼们环绕着你的【雪球】，对附近的敌人们造成伤害和减速。当你的【雪球】命中一个英雄时，其会陷入一阵鲨鱼风暴之中！",
+      "description_ja": "サメが雪玉の周囲を旋回し、周囲の敵にスロウ効果とダメージを与える。雪玉がチャンピオンに命中すると、そのチャンピオンはサメの嵐に閉じ込められる！",
+      "description_ko": "상어가 눈덩이 주위를 돌며 주변 적을 둔화시키고 피해를 입힙니다. 눈덩이가 챔피언에게 적중하면 해당 챔피언이 상어 폭풍에 갇힙니다!"
     },
     {
       "augmentId": "Flash2",
@@ -4710,7 +5290,11 @@
       "name_ja": "フラッシュ2",
       "name_ko": "점멸 2",
       "wikiDescription": "Replace a summoner spell with Flash. Additionally, gain 70 summoner spell haste.",
-      "wikiRarity": "silver"
+      "wikiRarity": "silver",
+      "description_zh_TW": "獲得第二次閃現召喚師技能和@SummonerHaste@召喚師技能加速。",
+      "description_zh_CN": "获得第二个【闪现】召唤师技能和@SummonerHaste@召唤师技能急速。",
+      "description_ja": "2つ目の「フラッシュ」サモナースペルとサモナーヘイスト@SummonerHaste@を獲得する。",
+      "description_ko": "두 번째 점멸 소환사 주문을 얻고 소환사 주문 가속이 @SummonerHaste@ 증가합니다."
     },
     {
       "augmentId": "ARAM_InfernoTriggered",
@@ -4741,7 +5325,11 @@
       "name_ja": "巻き起こるインフェルノ",
       "name_ko": "지옥불 난사 발동",
       "wikiDescription": "Your damaging basic attacks and abilities against at least one enemy champion unique from the previous damaging hit made against champions generate a stack of Style for 6 seconds, refreshing on subsequent unique or non-unique hits and stacking up to 6 times. For each stack, gain 4.25% / 4.5% / 4.75% / 5% (based on level) bonus movement speed, up to a maximum of 25.5% / 27% / 28.5% / 30% (based on level). Upon reaching maximum Style stacks, you unleash a torrent of shots for 2.277 seconds, during which you rapidly shoot at nearby enemies over 2.013 seconds at sporadic times in 0.2-second intervals each (up to 10 times per enemy), dealing 20 – 40 (based on level) (+ 40% AD) (+ 25% AP) physical damage with each shot, reduced by 75% against minions. Enemies below 30% of their maximum health are critically struck for「 double damage 」「 40 – 80 (based on level) (+ 80% AD) (+ 50% AP) physical damage 」(15 second cooldown). This effect ends prematurely if you become affected by cast-inhibiting crowd control. Shot damage applies life steal. Style stacks are consumed at the end of the shooting effect.",
-      "wikiRarity": "prismatic"
+      "wikiRarity": "prismatic",
+      "description_zh_TW": "獲得敢死風采。煞氣等級達到S時，自動使用「地獄火狂襲」。",
+      "description_zh_CN": "获得悍勇本色。在你达到S评价等级时，自动使用炼狱扳机。",
+      "description_ja": "デアデビルインパルスを獲得する。Sスタイルに到達すると、自動的にインフェルノトリガーを使用する。",
+      "description_ko": "무모한 충동을 얻습니다. 스타일이 S등급에 도달하면 지옥불 난사를 자동 사용합니다."
     },
     {
       "augmentId": "BrushPower",
@@ -4770,7 +5358,11 @@
       "name_ja": "Hide on Bush",
       "name_ko": "Hide on bush",
       "wikiDescription": "While in brush, you deal 20% increased damage. This effect lingers for 2 seconds after leaving brush.",
-      "wikiRarity": "gold"
+      "wikiRarity": "gold",
+      "description_zh_TW": "進入草叢後，可造成額外@DamageAmplification*100@%傷害，持續@BuffDuration@秒。待在草叢中可重置效果。",
+      "description_zh_CN": "在进入草丛后，多造成@DamageAmplification*100@%伤害，持续@BuffDuration@秒。留在草丛中会刷新这个效果。",
+      "description_ja": "茂みに入ると@BuffDuration@秒間、与えるダメージが@DamageAmplification*100@%増加する。茂みに留まっていると効果がリフレッシュされる。",
+      "description_ko": "수풀에 들어간 후 @BuffDuration@초 동안 피해량이 @DamageAmplification*100@% 증가합니다. 수풀에 머무르면 효과가 초기화됩니다."
     },
     {
       "augmentId": "ARAM_CantTouchThis",
@@ -4800,7 +5392,11 @@
       "name_ja": "ヤケドするぜ",
       "name_ko": "난공불락",
       "wikiDescription": "Casting your ultimate grants you invulnerability for 2 seconds (8 second cooldown).",
-      "wikiRarity": "prismatic"
+      "wikiRarity": "prismatic",
+      "description_zh_TW": "施放大絕時，進入無敵狀態，持續一小段時間。",
+      "description_zh_CN": "施放你的终极技能会使你进入短时间的免疫伤害状态。",
+      "description_ja": "アルティメットスキルを発動すると、少しの間無敵状態になる。",
+      "description_ko": "궁극기를 사용하면 잠시 동안 무적 상태가 됩니다."
     },
     {
       "augmentId": "ARAM_PandorasBox",
@@ -4827,7 +5423,11 @@
       "name_ja": "パンドラの箱",
       "name_ko": "판도라의 상자",
       "wikiDescription": "Your current augments transform into an equal number of completely random Prismatic ones.",
-      "wikiRarity": "prismatic"
+      "wikiRarity": "prismatic",
+      "description_zh_TW": "將所有的增幅裝置物轉化為隨機稜鏡%i:Augment%增幅裝置。",
+      "description_zh_CN": "将你的所有强化符文变为随机的棱彩阶%i:Augment%强化符文。",
+      "description_ja": "自分のすべてのオーグメントがランダムなプリズム%i:Augment%オーグメントに変質する。",
+      "description_ko": "모든 증강을 무작위 프리즘%i:Augment% 증강으로 전환합니다."
     },
     {
       "augmentId": "ARAM_DivineDomain",
@@ -4857,7 +5457,11 @@
       "name_ja": "超越の儀式",
       "name_ko": "초월 의식",
       "wikiDescription": "Scoring a takedown against an enemy champion within 3 seconds of damaging them causes them to leave behind their Essence for 8 seconds. You can basic attack the Essence to consume it: causing you to blink to its location after winding up for 1 second, during which you are untargetable (except to turrets), displacement immune, and unable to act. Upon consumption of the Essence, you gain 100% bonus movement speed decaying over 2 seconds, heal yourself for 75 – 300 (based on level) (+ 50% bonus AD) (+ 25% AP), and reset the cooldowns of your basic abilities. The heal is increased by 0% – 100% (based on your missing health), for a maximum heal of 150 – 600 (based on level) (+ 100% bonus AD) (+ 50% AP).",
-      "wikiRarity": "prismatic"
+      "wikiRarity": "prismatic",
+      "description_zh_TW": "參與擊殺時，敵方英雄會留下精華。攻擊精華會獲得跑速，並重置基礎技能冷卻時間。",
+      "description_zh_CN": "参与击杀敌方英雄后会留下其精华。攻击该精华会提供移动速度并重置基础技能冷却时间。",
+      "description_ja": "キルまたはアシストを奪うと、敵チャンピオンが「エッセンス」を残す。「エッセンス」に通常攻撃を行うと移動速度が増加し、通常スキルのクールダウンがリセットされる。",
+      "description_ko": "처치 관여 시 적 챔피언이 정수를 남깁니다. 정수를 공격하면 이동 속도가 증가하고 기본 스킬 재사용 대기시간이 초기화됩니다."
     },
     {
       "augmentId": "ARAM_Snowday",
@@ -4918,7 +5522,11 @@
       "name_ja": "縮小光線",
       "name_ko": "감쇠 광선",
       "wikiDescription": "Basic attacks on-hit reduce the target's damage dealt by 15% for 3 seconds, refreshing with each hit. Their size is also reduced significantly for the duration.",
-      "wikiRarity": "gold"
+      "wikiRarity": "gold",
+      "description_zh_TW": "你的普攻{{ Item_Keyword_OnHit }}會使目標的傷害和體型降低@DamageReduction*100@%。",
+      "description_zh_CN": "你的攻击会将目标的伤害与体型削减@DamageReduction*100@%{{ Item_Keyword_OnHit }}。",
+      "description_ja": "通常攻撃が対象のダメージとサイズを@DamageReduction*100@%低下させる({{ Item_Keyword_OnHit }})。",
+      "description_ko": "기본 공격 시 대상의 입히는 피해량과 크기를 @DamageReduction*100@% 감소시킵니다. ({{ Item_Keyword_OnHit }})"
     },
     {
       "augmentId": "PromQueen",
@@ -4948,7 +5556,11 @@
       "name_ja": "プロムクイーン",
       "name_ko": "퀸카",
       "wikiDescription": "Automatically cast a modified version of Rakan's The Quickness, empowering you to break into a captivating sprint for 6 seconds. While empowered, you gain ghosting and 50% bonus movement speed, and enemies you collide with are knocked down and become charmed for 1.5 seconds (35 second cooldown). A sparkly tiara will descend upon you 2.5 seconds before the effect activates.",
-      "wikiRarity": "prismatic"
+      "wikiRarity": "prismatic",
+      "description_zh_TW": "每隔@BaseCD@秒自動施放，以閃亮寶冠為自己加冕。戴上寶冠時，獲得銳空的大絕，可魅惑觸碰到的敵軍。",
+      "description_zh_CN": "每@BaseCD@秒，自动施放一道闪亮宝冠降临在你头上。当它着陆时，获得洛的终极技能，魅惑你碰到的敌人们。",
+      "description_ja": "@BaseCD@秒ごとに自動発動で光り輝くティアラが頭上に降りてくる。その着地時にラカンのアルティメットを獲得し、触れた敵にチャーム効果を与える。",
+      "description_ko": "@BaseCD@초마다 반짝이는 티아라를 자동 사용해 자신에게 내려오게 합니다. 티아라를 쓰면 라칸의 궁극기를 얻어 닿는 적을 매혹합니다."
     },
     {
       "augmentId": "Equilibrium",
@@ -4977,7 +5589,11 @@
       "name_ja": "みんなの回復",
       "name_ko": "우리의 치유",
       "wikiDescription": "Whenever a nearby unit is healed (excluding yourself), you heal yourself equal to 15% of the amount they healed, doubled to 30% from the heals of enemies.",
-      "wikiRarity": "gold"
+      "wikiRarity": "gold",
+      "description_zh_TW": "當其他人在你周圍接受治療時，你也會獲得其中@AllyHealingRatio*100@%的治療效果。來自敵軍的治療效果加倍。",
+      "description_zh_CN": "每当你周围的某人进行治疗时，你获得相当于其@AllyHealingRatio*100@%治疗效果的治疗效果。从敌方治疗中获得双倍。",
+      "description_ja": "周囲で誰かが体力を回復すると、自身もその@AllyHealingRatio*100@%にあたる体力を回復する。敵が回復した場合は効果が2倍になる。",
+      "description_ko": "주변의 누군가가 체력을 회복할 때마다 그 회복량의 @AllyHealingRatio*100@%만큼 자신의 체력을 회복합니다. 적의 체력 회복 효과는 두 배로 적용됩니다."
     },
     {
       "augmentId": "MightyShield",
@@ -5007,7 +5623,11 @@
       "name_ja": "マイティシールド",
       "name_ko": "강력한 방패",
       "wikiDescription": "Gain 40 – 100 (based on level) adaptive force for 3 seconds upon gaining a shield (5 second cooldown).",
-      "wikiRarity": "silver"
+      "wikiRarity": "silver",
+      "description_zh_TW": "獲得護盾時，增加%i:miniAdaptiveForce%@AdaptiveAmp@適性之力，持續@ShieldDuration@秒(冷卻時間@Cooldown@秒)。",
+      "description_zh_CN": "当你获得护盾时，获得%i:miniAdaptiveForce%@AdaptiveAmp@适应之力，持续@ShieldDuration@秒。(@Cooldown@秒冷却时间)",
+      "description_ja": "シールド獲得時に@ShieldDuration@秒間、%i:miniAdaptiveForce%@AdaptiveAmp@アダプティブフォースを獲得する(クールダウン@Cooldown@秒)。",
+      "description_ko": "보호막을 얻으면 @ShieldDuration@초 동안 @AdaptiveAmp@의 적응형 능력치%i:miniAdaptiveForce%를 얻습니다. (재사용 대기시간 @Cooldown@초)"
     },
     {
       "augmentId": "ARAM_Terror",
@@ -5037,7 +5657,11 @@
       "name_ja": "恐怖",
       "name_ko": "공포",
       "wikiDescription": "Upgrades one of your champion's abilities, empowering the ability's cast to fear all enemies within 450 units of you for 1.75 seconds (30 second cooldown).",
-      "wikiRarity": "silver"
+      "wikiRarity": "silver",
+      "description_zh_TW": "施放{{SpellName}}時，使周圍敵軍陷入恐懼。",
+      "description_zh_CN": "每当你施放【{{SpellName}}】技能时，恐惧你周围的敌人们.",
+      "description_ja": "{{SpellName}}を使用するたびに周囲の敵にフィアー効果を与える。",
+      "description_ko": "{{SpellName}} 스킬을 사용할 때마다 주변 적을 공포에 빠뜨립니다."
     },
     {
       "slug": "pin-cushion",
@@ -5096,7 +5720,11 @@
       "name_ja": "ピンボール",
       "name_ko": "핀볼",
       "wikiDescription": "Your Mark is empowered to instead throw a pinball, which deals 100 – 500 (based on level) bonus true damage and ricochets off of terrain that it collides with. Each time the pinball ricochets, its remaining travel distance is reset, it increases in radius by 25%, deals 20% increased damage, and reduces Mark's remaining cooldown by 30%. The pinball can ricochet up to 4 times, for a maximum radius increase of 100% and a damage increase of 80%. Additionally, your Mark's cooldown is reduced equivalent to 50 ability haste. If Mark is not equipped, you will be prompted to replace one of your summoner spells with Mark.",
-      "wikiRarity": "gold"
+      "wikiRarity": "gold",
+      "description_zh_TW": "你的雪球獲得技能加速，且會造成額外真實傷害。 雪球碰到牆體反彈時，體積和傷害會增加，並縮短冷卻時間。",
+      "description_zh_CN": "你的雪球获得技能急速并且造成额外的真实伤害。 当雪球从墙体上反弹时，它的体型和伤害获得提升，并缩短它的冷却时间。",
+      "description_ja": "雪玉のスキルヘイストが増加し、確定ダメージを追加で与える。 雪玉は壁に跳ね返るとサイズとダメージが増加し、クールダウンが短縮される。",
+      "description_ko": "눈덩이의 스킬 가속이 증가하고 추가 고정 피해를 입힙니다. 눈덩이가 벽에 튕기면 크기와 피해량이 증가하고 재사용 대기시간이 감소합니다."
     },
     {
       "augmentId": "ARAM_ImTheJuggernaut",
@@ -5125,7 +5753,11 @@
       "name_ja": "巨人の誓い",
       "name_ko": "거인의 결의",
       "wikiDescription": "You generate a stack of Juggernauting for each instance of damage you deal or take (excluding damage over time), lasting for 6 seconds and refreshing on subsequent damage dealt or taken. For every 10 stacks of Juggernauting, you gain 15 – 30 (based on level) bonus Attack Damage or 25 – 50 (based on level) Ability Power (Adaptive), 4 – 8 (based on level) bonus armor and bonus magic resistance, 10% increased size, and 8% tenacity. Stacks expire one by one when the duration ends, with the decay rate being faster the more stacks you have.",
-      "wikiRarity": "prismatic"
+      "wikiRarity": "prismatic",
+      "description_zh_TW": "受到或造成傷害時獲得層數。每累積@Stacks_Max@層，便獲得適性之力、物防、魔防、體型和韌性。",
+      "description_zh_CN": "在承受或造成伤害时获得层数。每@Stacks_Max@层，获得适应之力、护甲、魔法抗性、体型和韧性。",
+      "description_ja": "ダメージを受けるかダメージを与えるとスタックを獲得する。@Stacks_Max@スタックごとに、アダプティブフォース、物理防御、魔法防御、サイズ、行動妨害耐性が増加する。",
+      "description_ko": "피해를 받거나 입히면 중첩을 얻습니다. @Stacks_Max@중첩마다 적응형 능력치, 방어력, 마법 저항력, 크기, 강인함을 얻습니다."
     },
     {
       "augmentId": "ARAM_Multishot",
@@ -5184,7 +5816,11 @@
       "name_ja": "スノーブラスト",
       "name_ko": "눈 폭발",
       "wikiDescription": "Empowers the Dash spell from Mark to deal 100% increased damage and upon arrival cause you to knock up the target and knock back nearby enemies. Additionally, your Mark's cooldown is reduced equivalent to 100 ability haste. If Mark is not equipped, you will be prompted to replace one of your summoner spells with Mark.",
-      "wikiRarity": "gold"
+      "wikiRarity": "gold",
+      "description_zh_TW": "重施雪球會造成更高的傷害，擊飛目標，並擊退鄰近敵軍。",
+      "description_zh_CN": "再次施放雪球会造成提升伤害、击飞该目标、并击退附近的敌人们。",
+      "description_ja": "雪玉を再発動するとダメージが増加し、対象をノックアップして、周囲の敵をノックバックする。",
+      "description_ko": "눈덩이를 다시 사용하면 증가한 피해를 입히고 대상을 공중에 띄우며, 주변 적들을 뒤로 밀어냅니다."
     },
     {
       "augmentId": "YouSpinMeRightRound",
@@ -5267,7 +5903,11 @@
       "name_ja": "聖なる雪玉",
       "name_ko": "신성한 눈덩이",
       "wikiDescription": "After using the Dash spell from Mark, you become invulnerable for 1.5 seconds upon arrival. Additionally, your Mark's cooldown is reduced equivalent to 100 ability haste. If Mark is not equipped, you will be prompted to replace one of your summoner spells with Mark.",
-      "wikiRarity": "prismatic"
+      "wikiRarity": "prismatic",
+      "description_zh_TW": "雪球增加@Haste@技能加速。 使用雪球衝刺時，短暫進入無敵狀態。 若你沒有雪球就會獲得一顆雪球。",
+      "description_zh_CN": "雪球获得@Haste@技能急速。 你在用【雪球】冲刺后短暂免疫伤害。 如果你没有雪球，获得一个雪球。",
+      "description_ja": "雪玉のスキルヘイストが@Haste@増加する。 雪玉を持ってダッシュすると、少しの間無敵になる。 まだ持っていない場合は雪玉を1個獲得する。",
+      "description_ko": "눈덩이의 스킬 가속이 @Haste@만큼 증가합니다. 눈덩이로 돌진하면 잠시 무적 상태가 됩니다. 눈덩이를 보유하지 않은 경우 눈덩이를 얻습니다."
     },
     {
       "augmentId": "ARAM_Quickstep",
@@ -5296,7 +5936,11 @@
       "name_ja": "クイックステップ",
       "name_ko": "날쌘걸음",
       "wikiDescription": "Upgrades one of your champion's abilities, empowering the ability's cast to cause you to dash up to 350 units towards your cursor.",
-      "wikiRarity": "gold"
+      "wikiRarity": "gold",
+      "description_zh_TW": "使用{{SpellName}}時，朝著游標衝刺。",
+      "description_zh_CN": "当你使用【{{SpellName}}】技能时，朝你的鼠标指针进行冲刺。",
+      "description_ja": "{{SpellName}}を使用すると、カーソルの方向にダッシュする。",
+      "description_ko": "{{SpellName}} 사용 시 커서 방향으로 돌진합니다."
     },
     {
       "augmentId": "GlassCannon",
@@ -5326,7 +5970,11 @@
       "name_ja": "グラスキャノン",
       "name_ko": "유리 대포",
       "wikiDescription": "You gain a health threshold equal to 70% maximum health which cannot be modified nor exceeded by any means. In return, you deal bonus true damage equal to ( 25% / 15%) of all of the damage you deal pre-mitigation.",
-      "wikiRarity": "prismatic"
+      "wikiRarity": "prismatic",
+      "description_zh_TW": "最大生命減少@HPReductionPerc*100@%。造成額外@TrueDamagePercSplit@真實傷害。",
+      "description_zh_CN": "减少@HPReductionPerc*100@%最大生命值。造成@TrueDamagePercSplit@额外真实伤害。",
+      "description_ja": "最大体力が@HPReductionPerc*100@%低下する。追加で@TrueDamagePercSplit@の確定ダメージを与える。",
+      "description_ko": "최대 체력이 @HPReductionPerc*100@% 감소합니다. 피해량의 @TrueDamagePercSplit@만큼 추가 고정 피해를 입힙니다."
     },
     {
       "augmentId": "ChainReaction",
@@ -5356,7 +6004,11 @@
       "name_ja": "連鎖反応",
       "name_ko": "연쇄 반응",
       "wikiDescription": "Upgrades one of your champion's abilities that has a knock back effect, empowering the ability to trigger a chain reaction effect when displaced champions hit other champions or terrain within 200 units. If a knocked back champion collides with another enemy champion during their displacement, the champions they collided with are dealt 100 – 400 (based on level) magic damage and knocked up for 0.5 seconds. If they collide with terrain during their displacement, they will rebound to take 150 – 800 (based on level) magic damage and become knocked up for 0.75 seconds and stunned for 0.5 seconds. The knock up duration is increased to up to 1.1 seconds based on how long the ability's cooldown is.",
-      "wikiRarity": "prismatic"
+      "wikiRarity": "prismatic",
+      "description_zh_TW": "如果目標被{{SpellName}}擊退時撞到另一位英雄，該英雄會被擊飛並受到傷害。如果撞擊地形，則延長擊飛時間並造成額外傷害。",
+      "description_zh_CN": "如果一个被【{{SpellName}}】技能击退的目标命中了另一个英雄，则二者都会被击飞并受到伤害。在与地形产生碰撞时，该击飞时长会延长并且他们会受到额外伤害。",
+      "description_ja": "{{SpellName}}によってノックバックされた象が別のチャンピオンに当たると、両方がノックアップ状態になり、ダメージを受ける。地形に衝突すると、ノックアップの効果時間が延長され、追加ダメージを受ける。",
+      "description_ko": "{{SpellName}} 스킬로 뒤로 밀어낸 대상이 다른 챔피언과 부딪히면 둘 다 공중에 뜨고 피해를 입습니다. 지형에 충돌하면 공중에 뜨는 시간이 길어지고 추가 피해를 입습니다."
     },
     {
       "augmentId": "DimensionShift_Active",
@@ -5386,7 +6038,11 @@
       "name_ja": "ディメンションシフト",
       "name_ko": "차원 이동",
       "wikiDescription": "Replace a summoner spell with When the Darkness Comes. When the Darkness Comes: Sends a bright, cosmic light arcing to the target location. Upon impact, the light spreads out to cause all units within a 500 radius to be sent to the Dark Realm for 8 seconds. If you are in the Dark Realm, you gain 25 – 100 (based on level) bonus attack damage, 25 – 100 (based on level) ability power, 200 – 1000 (based on level) bonus health, and 35% increased size. The Dark Realm is a battlefield that exists outside of the normal realm in an alternate dimension. It exists only for units hit by the cosmic light, and consists of an arena that has a radius of 1200 units and includes any terrain features that would exist in the map of the normal realm, including structures, walls, and brushes. The boundaries of the arena are impassable but not considered terrain themselves, and enemies that try to move out of the area will be displaced back inside. Units between realms see each other as glowing stars, considering each other dead and negating any interactions between each other. Only units that were hit by the light will enter the realm; other units cannot follow them. Everything that occurs inside the Dark Realm is hidden to units outside of it, and vice versa. Structures exist in all realms at the same time, but are untargetable in the Dark Realm. Turrets will behave normally as if all units were in the same realm. Pets still inside the Dark Realm are killed at its end.",
-      "wikiRarity": "prismatic"
+      "wikiRarity": "prismatic",
+      "description_zh_TW": "獲得召喚師技能「黑暗時刻」。創造一個區域，將其中所有人傳送到另一個次元。",
+      "description_zh_CN": "获得当黑暗到来召唤师技能。生成一个地带来将它其中的所有人传送到另一个位面。",
+      "description_ja": "サモナースペルの「闇の訪れ」を獲得する。ゾーンを生成し、範囲内にいる全員を別次元に転送する。",
+      "description_ko": "어둠이 드리우면 소환사 주문을 얻습니다. 내부의 모든 대상을 다른 차원으로 이동시키는 영역을 생성합니다."
     },
     {
       "augmentId": "PoroCharge_Active",
@@ -5416,7 +6072,11 @@
       "name_ja": "ポロの大群",
       "name_ko": "포로 쇄도",
       "wikiDescription": "Poro-Snaxes will now randomly appear around you every 35 – 20 (based on level) seconds. You can pick up a Poro-Snax by moving over it, granting you a Poro-Snax charge. Poro-Snaxes will not spawn while you are at the maximum number of Poro-Snax charges (2). Feeding a Poro with a Poro-Snax generates a stack of Poro Love. At 5 stacks, you are granted the Poro Charge summoner spell and are prompted to replace one of your summoner spells with it. You are then assigned with quests that require you to reach a certain amount of Poro Love stacks. There are nine quest tiers, and each completed tier rewards you with an additional Poro wave for Poro Charge. Poro Charge: After a 1-second delay, you unleash a stampede of Poros, summoning a phalanx of 5 massive Poros that charge forward in the target direction. Enemies hit by the charge are dealt 50 – 100 (based on level) (+ 20 per Poro Love stack) physical damage, reduced to 15% against minions, and slowed by 85% for 2 seconds. Each Poro stops upon colliding with an enemy champion. Fire additional waves of Poros based on the number of Poro Love stacks you have. Each subsequent wave is fired 0.75 seconds after the previous one. Enemy champions take 50% damage from subsequent waves that hit them.",
-      "wikiRarity": "prismatic"
+      "wikiRarity": "prismatic",
+      "description_zh_TW": "任務：收集普羅點心並餵食@QuestRequirement@普羅。 獎勵：召喚師技能「普羅衝鋒」——向敵方隊伍發射一波波超可愛又超危險的普羅。任務每升一級，就能發射更多次普羅。 「喔呵！你看看他們多可愛啊！」——普羅牧人",
+      "description_zh_CN": "任务：收集【魄罗佳肴】并投喂@QuestRequirement@只魄罗 奖励：获得【魄罗冲锋】召唤师技能，可让魄罗们对敌方队伍发动几波攻势。每任务等级都会解锁额外的波次。 “噢吼！它们可真萌啊！”——魄罗驯养人",
+      "description_ja": "クエスト: 「ポロのおやつ」を集めて@QuestRequirement@体のポロにあげる。 報酬: サモナースペル「ポロチャージ」を獲得する。発動すると、敵チームに向かってポロの波を放つ。クエストレベルに応じて波の数が増加する。 「おや？なんて愛らしいんでしょう！」──ポロの世話係",
+      "description_ko": "퀘스트: 포로 간식을 모아 포로 @QuestRequirement@마리에게 줘야 합니다. 보상: 적 팀에게 포로 무리를 날리는 포로 돌격 소환사 주문을 얻습니다. 퀘스트 레벨당 추가 무리를 얻습니다. \"아! 어찌나 사랑스러운지!\" - 포로치기"
     },
     {
       "slug": "mystery-augment",
@@ -5469,7 +6129,11 @@
       "name_ja": "アダマント",
       "name_ko": "단호함",
       "wikiDescription": "Immobilizing or grounding an enemy champion grants 10 bonus armor and bonus magic resistance for 10 seconds, stacking up to 10 times for a total of 100 bonus resistances, and refreshing on subsequent triggers (5 second cooldown per cast instance).",
-      "wikiRarity": "silver"
+      "wikiRarity": "silver",
+      "description_zh_TW": "每次硬控場或禁錮敵軍時，增加物防和魔防。",
+      "description_zh_CN": "每当你定身或缚地一个敌人时，获得护甲和魔抗。",
+      "description_ja": "敵に移動不能効果か釘付け効果を与えるたびに、物理防御と魔法防御が増加する。",
+      "description_ko": "적을 이동 불가 상태로 만들거나 이동 스킬을 사용할 수 없게 할 때마다 방어력 및 마법 저항력을 얻습니다."
     },
     {
       "augmentId": "ARAM_PoroKing",
@@ -5499,7 +6163,11 @@
       "name_zh_CN": "魄罗之王的弹跳",
       "name_zh_TW": "普羅王跳跳",
       "name_ja": "ポロキングのバウンド",
-      "name_ko": "포로 왕의 바운스"
+      "name_ko": "포로 왕의 바운스",
+      "description_zh_TW": "獲得普羅王跳跳！ 普羅王跳跳：化身普羅王，連續彈跳，對鄰近敵軍造成物理傷害並擊退他們。",
+      "description_zh_CN": "获得魄罗之王的弹跳！ 魄罗之王的弹跳：变身为【魄罗之王】并反复弹跳，造成物理伤害并击退 附近的敌人们。",
+      "description_ja": "ポロキングのバウンドを獲得する！ ポロキングのバウンド: ポロキングに変身して連続で跳ね周り、周囲の敵に物理ダメージを与えてノックバックする。",
+      "description_ko": "포로 왕의 바운스를 획득합니다! 포로 왕의 바운스: 포로 왕으로 변신하여 주기적으로 튀어 오르며 주변 적에게 물리 피해를 입히고 뒤로 밀어냅니다."
     },
     {
       "augmentId": "ARAM_BuffBuddies",
@@ -5529,7 +6197,11 @@
       "name_zh_CN": "霸符兄弟",
       "name_zh_TW": "增益麻吉",
       "name_ja": "バフバディー",
-      "name_ko": "쌍버프"
+      "name_ko": "쌍버프",
+      "description_zh_TW": "你獲得力量的餘燼和智慧的餘燼。 賦予自己技能加速和施法資源回復，並讓你的普攻對敵方英雄造成燃燒和緩速效果。",
+      "description_zh_CN": "你获得余烬之冠和洞悉之冠。 为你自己提供技能急速和施法资源回复并使你的攻击对敌方英雄造成灼烧和减速。",
+      "description_ja": "残火の赤紋章と洞察の青紋章を獲得する。 自身のスキルヘイストとリソース自動回復効果が増加し、通常攻撃が敵チャンピオンに炎上とスロウ効果を与える。",
+      "description_ko": "잉걸불 문장과 통찰력의 문장을 획득합니다. 자신에게 스킬 가속 및 자원 재생을 부여하며, 기본 공격 시 적 챔피언에게 화상을 적용하고 둔화시킵니다."
     },
     {
       "augmentId": "ARAM_Cerberus",
@@ -5558,7 +6230,11 @@
       "name_zh_CN": "地狱三头犬",
       "name_zh_TW": "地獄三頭犬",
       "name_ja": "ケルベロス",
-      "name_ko": "케르베로스"
+      "name_ko": "케르베로스",
+      "description_zh_TW": "獲得刀鋒之雹及強攻關鍵符文。",
+      "description_zh_CN": "获得丛刃和强攻基石符文。",
+      "description_ja": "「ヘイルブレード」と「プレスアタック」のキーストーンルーンを獲得する。",
+      "description_ko": "칼날비와 집중 공격 핵심 룬을 얻습니다."
     },
     {
       "augmentId": "ARAM_Recall",
@@ -5584,7 +6260,11 @@
       "name_zh_CN": "作弊：我能回城！",
       "name_zh_TW": "作弊",
       "name_ja": "チート",
-      "name_ko": "부정 행위"
+      "name_ko": "부정 행위",
+      "description_zh_TW": "點按回城即可返回基地、購買道具並獲得增幅裝置。",
+      "description_zh_CN": "按下【回城】能够回到基地，购买装备并且获得强化符文。",
+      "description_ja": "リコールを押して本拠地に戻り、アイテムを購入してオーグメントを入手しよう。",
+      "description_ko": "귀환 버튼을 눌러 기지로 복귀해, 아이템을 구매하고, 증강을 획득할 수 있습니다."
     },
     {
       "augmentId": "ARAM_ClownCollege",
@@ -5617,7 +6297,11 @@
       "name_ja": "ピエロ大学",
       "name_ko": "광대 대학",
       "wikiDescription": "Gain Shaco's Backstab, Deceive and Hallucinate's explosion. Replace a summoner spell with Deceive. Passive - Backstab: Your basic attacks deal 20 – 35 (based on level) (+ 50% bonus AD) (+ 35% AP) bonus physical damage on-hit when hitting an enemy from behind. Active - Deceive: Become invisible for up to 3 seconds and blink to the target location within 400 units after a 0.125-second delay. Your next basic attack while in stealth deals 100 (+ 150% bonus AD) (+ 55% AP) bonus physical damage, increased to「 155 (+ 232.5% bonus AD) (+ 85.25% AP) bonus physical damage 」「 155% damage 」if Backstab was applied (45 second cooldown). Passive - Hallucinate Death: Upon your death, release an explosion in a 350 radius of your death location, dealing magic damage equal to 25% of target's maximum health to enemies within the area. Additionally, you deploy a box at the location of your death that instantly fears nearby enemies for 1 second. This box does not attack but lasts for 3 seconds.",
-      "wikiRarity": "prismatic"
+      "wikiRarity": "prismatic",
+      "description_zh_TW": "獲得召喚師技能「欺詐魔術」。 欺詐魔術：傳送並進入隱形狀態。隱形期間，下一次普攻造成額外物理傷害。 死亡時生成一個會爆炸的盒子，對鄰近敵軍造成大量魔法傷害及恐懼效果。",
+      "description_zh_CN": "获得召唤师技能欺诈魔术。 欺诈魔术：你传送并变为隐形。你在隐形状态下的下一次攻击造成额外物理伤害。在你阵亡时，生成一个爆炸盒子来对附近的敌人们造成大量魔法伤害和恐惧。",
+      "description_ja": "サモナースペル「幻惑」を獲得する。 「幻惑」: 瞬間移動してインビジブル状態になる。インビジブル状態中の次の通常攻撃が物理ダメージを追加で与える。 倒されると爆発する箱を出現させ、周囲の敵に大量の魔法ダメージとフィアー効果を与える。",
+      "description_ko": "속임수 소환사 주문을 얻습니다. 속임수: 근처로 순간이동해 투명 상태가 됩니다. 투명 상태에서 다음 기본 공격 시 물리 피해를 추가로 입힙니다. 사망 시, 폭발하는 상자를 생성하여 엄청난 마법 피해를 입히고 주변 적을 공포에 빠뜨립니다."
     },
     {
       "augmentId": "ARAM_CrackOpenThatEgg",
@@ -5646,7 +6330,11 @@
       "name_zh_CN": "砸开那颗蛋",
       "name_zh_TW": "敲爆那顆蛋",
       "name_ja": "あのタマゴを割れ",
-      "name_ko": "알 깨기"
+      "name_ko": "알 깨기",
+      "description_zh_TW": "護盾會在失效時爆炸。",
+      "description_zh_CN": "你的护盾值将在到期时爆炸。",
+      "description_ja": "シールドが効果終了時に爆発する。",
+      "description_ko": "보호막이 사라질 때 폭발합니다."
     },
     {
       "augmentId": "CritNCast",
@@ -5676,7 +6364,11 @@
       "name_ja": "クリティカルキャスト",
       "name_ko": "치명적 가속",
       "wikiDescription": "Gain ability haste equal to 40% of your critical strike chance.",
-      "wikiRarity": "silver"
+      "wikiRarity": "silver",
+      "description_zh_TW": "獲得自身@CritToHasteConversion*100@%%i:scaleCrit%暴擊率的技能加速。",
+      "description_zh_CN": "获得相当于你@CritToHasteConversion*100@%%i:scaleCrit%暴击几率的技能急速。",
+      "description_ja": "%i:scaleCrit%クリティカル率の@CritToHasteConversion*100@%にあたるスキルヘイストを獲得する。",
+      "description_ko": "%i:scaleCrit% 치명타 확률의 @CritToHasteConversion*100@%에 해당하는 스킬 가속을 얻습니다."
     },
     {
       "augmentId": "ARAM_CriticalHealing",
@@ -5706,7 +6398,11 @@
       "name_ja": "クリティカルヒール",
       "name_ko": "치명적 치유",
       "wikiDescription": "Your heals and shields now have a chance equal to your critical strike chance to increase in effectiveness by 40% (5 second cooldown per cast instance). Additionally, gain 25% critical strike chance.",
-      "wikiRarity": "gold"
+      "wikiRarity": "gold",
+      "description_zh_TW": "你的治療與護盾可以暴擊，治療量或護盾量提升@CritHeal*100@%。增加%i:scaleCrit% @CritChance*100@%暴擊率。",
+      "description_zh_CN": "你的治疗和护盾可以暴击，造成@CritHeal*100@%额外数额的效果。获得%i:scaleCrit% @CritChance*100@%暴击几率。",
+      "description_ja": "自身の体力回復とシールドに、効果量が@CritHeal*100@%上昇するクリティカル判定が付与される。クリティカル率が%i:scaleCrit% @CritChance*100@%増加する。",
+      "description_ko": "체력 회복 및 보호막 효과에 치명타가 적용되어 @CritHeal*100@% 증폭될 수 있습니다. 치명타 확률%i:scaleCrit%이 @CritChance*100@% 증가합니다."
     },
     {
       "augmentId": "CriticalMissile",
@@ -5737,7 +6433,11 @@
       "name_ja": "クリティカルミサイル",
       "name_ko": "치명적 미사일",
       "wikiDescription": "Critical strikes against enemy champions launch 1 (+ 1 per 33.33% critical strike chance) missiles at the target that each deal 20 – 100 (based on level) magic damage. Additionally, gain 25% critical strike chance. Critical strikes from Jeweled Gauntlet and Vulnerability will launch missiles.",
-      "wikiRarity": "gold"
+      "wikiRarity": "gold",
+      "description_zh_TW": "暴擊時，會發射飛彈，造成魔法傷害。 增加%i:scaleCrit% @CrtiChance*100@%暴擊率。",
+      "description_zh_CN": "当你暴击时，发射飞弹造成魔法伤害。 获得%i:scaleCrit% @CrtiChance*100@%暴击几率。",
+      "description_ja": "クリティカル時にミサイルを発射し、魔法ダメージを与える。 %i:scaleCrit%クリティカル率が@CrtiChance*100@%増加する。",
+      "description_ko": "치명타 적중 시 미사일을 발사해 마법 피해를 입힙니다. %i:scaleCrit% 치명타 확률이 @CrtiChance*100@% 증가합니다."
     },
     {
       "augmentId": "CriticalRhythm",
@@ -5767,7 +6467,11 @@
       "name_ja": "クリティカルの律動",
       "name_ko": "치명적 리듬",
       "wikiDescription": "Your critical strikes grant you 6% bonus attack speed for 6 seconds, stacking up to 10 times for a total of 60%. Additionally, gain 25% critical strike chance.",
-      "wikiRarity": "gold"
+      "wikiRarity": "gold",
+      "description_zh_TW": "普攻暴擊時會累加攻速。 增加%i:scaleCrit% @CritChance*100@%暴擊率。",
+      "description_zh_CN": "你的普攻在暴击时获得可叠加的攻击速度。 获得%i:scaleCrit% @CritChance*100@%暴击几率。",
+      "description_ja": "通常攻撃のクリティカル時に攻撃速度が増加するスタックを獲得する。 %i:scaleCrit%クリティカル率が@CritChance*100@%増加する。",
+      "description_ko": "기본 공격 시 치명타가 발동하면 공격 속도 중첩을 획득합니다. %i:scaleCrit% 치명타 확률을 @CritChance*100@% 획득합니다."
     },
     {
       "augmentId": "ARAM_DemonsDance",
@@ -5797,7 +6501,11 @@
       "name_zh_CN": "魔鬼之舞",
       "name_zh_TW": "不死魔舞",
       "name_ja": "悪魔のダンス",
-      "name_ko": "악마의 춤"
+      "name_ko": "악마의 춤",
+      "description_zh_TW": "獲得瞬疾步法及不死之握關鍵符文。",
+      "description_zh_CN": "获得迅捷步法和不灭之握基石符文。",
+      "description_ja": "キーストーンルーンの「フリートフットワーク」と「不死者の握撃」を獲得する。",
+      "description_ko": "기민한 발놀림 및 착취의 손아귀 핵심 룬을 얻습니다."
     },
     {
       "augmentId": "ARAM_LittleDevil",
@@ -5830,7 +6538,11 @@
       "name_ja": "肩の上の悪魔",
       "name_ko": "어깨 위의 악마",
       "wikiDescription": "Forge a pact with Little Devil Teemo, who drains 0.5% of your current health every second, increased to 5% if there are enemy champions within 1000 units. In return, you deal 20% bonus true damage and your basic attacks and abilities summon a Life Remnant nearby for 5 seconds (0.75-second spawn cooldown). You can absorb a Life Remnant by moving over it, healing you for 50 – 150 (based on level) (+ 50% bonus AD) (+ 25% AP) and granting you 15% bonus movement speed.",
-      "wikiRarity": "prismatic"
+      "wikiRarity": "prismatic",
+      "description_zh_TW": "與小惡魔本魔締結契約。 他會持續汲取你的生命，但也會獎勵你，使你對英雄造成額外真實傷害，並生成生命殘渣給你。",
+      "description_zh_CN": "与【大魔王】本尊签订一个契约。 他持续汲取你的生命力，但回报给你力量，让你对英雄造成额外真实伤害并且创造治疗残片供你获取。",
+      "description_ja": "かの恐ろしい「ちび悪魔」と契約を結ぶ。 時間とともに体力を吸い取られる代わりにチャンピオンに追加確定ダメージを与えるようになり、獲得すると体力が回復するかけらが発生する。",
+      "description_ko": "작은 악마와 직접 계약을 맺습니다. 지속적으로 생명력을 흡수당하지만, 대가로 챔피언 대상 추가 고정 피해를 부여하고 획득할 수 있는 체력 회복 파편을 남깁니다."
     },
     {
       "augmentId": "ARAM_DoubleTap",
@@ -5861,7 +6573,11 @@
       "name_ja": "ダブルタップ",
       "name_ko": "한 발에 두 놈",
       "wikiDescription": "Basic attacks that critically strike apply on-hit effects an additional time. Additionally, gain 25% critical strike chance.",
-      "wikiRarity": "gold"
+      "wikiRarity": "gold",
+      "description_zh_TW": "暴擊額外施加一次%i:OnHit%命中效果。 增加%i:scaleCrit% @Calc_Crit_Chance@%暴擊率。",
+      "description_zh_CN": "你的暴击施加一次额外的%i:OnHit%附带攻击特效。 获得%i:scaleCrit% @Calc_Crit_Chance@暴击几率。",
+      "description_ja": "クリティカルヒット時、%i:OnHit%通常攻撃時効果を追加でもう一度適用する。 %i:scaleCrit%クリティカル率が@Calc_Crit_Chance@増加する。",
+      "description_ko": "치명타 발동 시 %i:OnHit% 적중 시 효과를 한 번 더 적용합니다. %i:scaleCrit% 치명타 확률을 @Calc_Crit_Chance@ 획득합니다."
     },
     {
       "augmentId": "Dropybara_Active",
@@ -5892,7 +6608,11 @@
       "name_ja": "ドロッピバラ",
       "name_ko": "카피바라 폭격",
       "wikiDescription": "Replace a summoner spell with Droppybara. Droppybara: Call upon a massive capybara to land down at the target location after 2.5 seconds, dealing true damage equal to the 30% of the target's maximum health to enemies within a 650 radius. Deals 70% damage to minions.",
-      "wikiRarity": "prismatic"
+      "wikiRarity": "prismatic",
+      "description_zh_TW": "獲得召喚師技能「空降水豚」。 在短暫延遲後，召喚出水豚，造成@DamagetoChampions*100@%最大生命的真實傷害。",
+      "description_zh_CN": "获得卡皮巴拉空投作为一个召唤师技能。 在一阵延迟后，召唤一个卡皮巴拉落下，造成@DamagetoChampions*100@%最大生命值的真实伤害。",
+      "description_ja": "サモナースペルとしてドロッピバラを獲得する。 発動から少し遅れて、カピバラが降り注ぎ、最大体力の@DamagetoChampions*100@%にあたる確定ダメージを与える。",
+      "description_ko": "카피바라 폭격 소환사 주문을 얻습니다. 잠시 후 카피바라를 소환해 최대 체력의 @DamagetoChampions*100@%에 해당하는 고정 피해를 입힙니다."
     },
     {
       "augmentId": "ARAM_Executioner",
@@ -5920,7 +6640,11 @@
       "name_zh_CN": "裁决使",
       "name_zh_TW": "處刑者",
       "name_ja": "処刑人",
-      "name_ko": "처형자"
+      "name_ko": "처형자",
+      "description_zh_TW": "對生命低於@HealthThreshold*100@%的敵軍造成@BonusDamage*100@%額外傷害。參與擊殺時，重置基礎技能。",
+      "description_zh_CN": "对生命值低于@HealthThreshold*100@%的敌人们多造成@BonusDamage*100@%伤害。在参与击杀后重置你的基础技能。",
+      "description_ja": "残り体力が@HealthThreshold*100@%未満の敵に対して与えるダメージが@BonusDamage*100@%増加する。キルまたはアシストを獲得すると、通常スキルがリセットされる。",
+      "description_ko": "체력이 @HealthThreshold*100@% 아래로 떨어진 적에게 입히는 피해량이 @BonusDamage*100@% 증가합니다. 처치 관여 시 기본 스킬이 초기화됩니다."
     },
     {
       "augmentId": "ARAM_FeeltheBurn",
@@ -5950,7 +6674,11 @@
       "name_zh_CN": "感受燃烧",
       "name_zh_TW": "燒起來吧",
       "name_ja": "熱気",
-      "name_ko": "저주의 화염"
+      "name_ko": "저주의 화염",
+      "description_zh_TW": "獲得感受灼燒召喚師技能。 施放感受灼燒後，對所有鄰近敵方英雄施放點燃及虛弱。",
+      "description_zh_CN": "获得召唤师技能感受灼烧。 感受灼烧会对所有附近的敌人们施放引燃和虚弱。",
+      "description_ja": "サモナースペルの「熱気」を獲得する。 「熱気」を発動すると、周囲のすべての敵チャンピオンに「イグナイト」と「イグゾースト」を使用できる。",
+      "description_ko": "저주의 화염 소환사 주문을 얻습니다. 저주의 화염을 사용하면 주변 모든 적 챔피언에게 점화와 탈진을 사용합니다."
     },
     {
       "augmentId": "TrainOfTheDead",
@@ -5980,7 +6708,11 @@
       "name_ja": "ファイナルシティ交通",
       "name_ko": "최후의 도시 대중교통",
       "wikiDescription": "Upon death, you summon a train over 1 second that launches towards your killer at full speed, travelling in their direction at a global distance and dealing 150 – 750 (based on level) (+ 65% bonus AD) (+ 50% AP) (+ 15% maximum health) physical damage to enemies it passes through. The train is summoned a slight distance away from the front of your killer, based on their facing direction at the time of your death, and launches towards the position they were located at the time of your death.",
-      "wikiRarity": "gold"
+      "wikiRarity": "gold",
+      "description_zh_TW": "死亡時，朝擊殺者發出一列火車，對命中的敵軍造成@Damage@物理傷害。列車沿途不停靠喔。",
+      "description_zh_CN": "在你阵亡时，朝击杀你的敌人发动一辆列车，对它命中的每个敌人造成@Damage@物理伤害。这个列车不会停下。",
+      "description_ja": "デス時に、自身を倒した敵に向かって列車を発車させ、命中した敵に@Damage@の物理ダメージを与える。この列車は止まらない。",
+      "description_ko": "사망하면 처치자를 향해 열차를 발사합니다. 열차에 적중당한 적은 @Damage@의 물리 피해를 입습니다. 열차는 멈추지 않습니다."
     },
     {
       "augmentId": "ARAM_FrostWraith",
@@ -6009,7 +6741,11 @@
       "name_zh_CN": "冰霜 幽灵",
       "name_zh_TW": "寒霜幽魂",
       "name_ja": "フロストレイス",
-      "name_ko": "서리 망령"
+      "name_ko": "서리 망령",
+      "description_zh_TW": "每@Cooldown@秒自動施放，對鄰近敵軍造成定身效果，持續@RootDuration@秒。",
+      "description_zh_CN": "每@Cooldown@秒，自动施放@RootDuration@秒禁锢给附近的敌人们。",
+      "description_ja": "@Cooldown@秒ごとに、周囲の敵に対して@RootDuration@秒間のスネア効果を自動で付与する。",
+      "description_ko": "자동 사용 @Cooldown@초마다 주변 적을 @RootDuration@초 동안 속박합니다."
     },
     {
       "augmentId": "Gash",
@@ -6039,7 +6775,11 @@
       "name_zh_CN": "砍伤",
       "name_zh_TW": "深割",
       "name_ja": "深手",
-      "name_ko": "깊은 상처"
+      "name_ko": "깊은 상처",
+      "description_zh_TW": "增加@AS*100@%攻速。%i:OnHit%命中時造成真實傷害，傷害隨%i:scaleArmor%物防增加。",
+      "description_zh_CN": "获得@AS*100@%攻击速度。造成真实伤害%i:OnHit% 攻击附伤，受益于你的%i:scaleArmor%护甲。",
+      "description_ja": "攻撃速度が@AS*100@%増加する。%i:OnHit%通常攻撃時効果で%i:scaleArmor%物理防御に応じて増加する確定ダメージを与える。",
+      "description_ko": "공격 속도가 @AS*100@% 증가합니다. 방어력%i:scaleArmor%에 비례해 적중 시%i:OnHit% 고정 피해를 입힙니다."
     },
     {
       "augmentId": "GrandmasChiliOil",
@@ -6068,7 +6808,11 @@
       "name_zh_CN": "祖母的辣椒油",
       "name_zh_TW": "阿嬤的辣油",
       "name_ja": "おばあちゃんのラー油",
-      "name_ko": "할머니의 고추기름"
+      "name_ko": "할머니의 고추기름",
+      "description_zh_TW": "普攻和技能命中敵軍時，對其施加燃燒，在附近澆上一灘辣油。辣油能回復生命，並使敵軍燃燒。 施加越多燃燒，辣油效果越強。",
+      "description_zh_CN": "普攻和技能在命中敌人时会对其施加一个灼烧，这个效果会在附近掉落一滩辣椒油。辣椒油会回复生命值并灼烧敌人们。 你施加的每个灼烧都会使辣椒油效果变得更强。",
+      "description_ja": "通常攻撃およびスキルは敵に命中すると炎上させ、近くにラー油の沼を生成する。ラー油は体力を回復し、敵を炎上させる。 炎上を適用するごとに、ラー油の効果が高まっていく。",
+      "description_ko": "적에게 기본 공격 및 스킬 적중 시 화상을 적용하고, 주변에 고추기름 웅덩이를 생성합니다. 고추기름은 체력을 회복시키고 적에게 화상을 적용합니다. 고추기름의 효과는 적용한 화상의 수에 비례해 강력해집니다."
     },
     {
       "augmentId": "ARAM_GuiltyPleasure",
@@ -6098,7 +6842,11 @@
       "name_ja": "罪なる喜び",
       "name_ko": "죄책감의 쾌락",
       "wikiDescription": "Immobilizing or grounding an enemy champion heals you for 30 – 250 (based on level) (+ 1.5% maximum health) (5 second cooldown per cast instance).",
-      "wikiRarity": "silver"
+      "wikiRarity": "silver",
+      "description_zh_TW": "硬控場或禁錮敵方英雄時使你回復生命。",
+      "description_zh_CN": "定身或缚地敌方英雄时对你进行治疗。",
+      "description_ja": "敵チャンピオンに移動不能効果か釘付け効果を与えると、体力を回復する。",
+      "description_ko": "적 챔피언을 이동 불가 상태로 만들거나 이동 스킬을 사용할 수 없게 하면 체력을 회복합니다."
     },
     {
       "augmentId": "HatOnAHat",
@@ -6126,7 +6874,11 @@
       "name_zh_CN": "帽上加帽",
       "name_zh_TW": "帽上加帽",
       "name_ja": "帽子の上に帽子",
-      "name_ko": "모자 겹쳐쓰기"
+      "name_ko": "모자 겹쳐쓰기",
+      "description_zh_TW": "頭部道具提供額外魔攻和魔防。",
+      "description_zh_CN": "头戴式装备和帽子提供额外法术强度和魔法抗性。",
+      "description_ja": "帽子系アイテムおよび帽子から追加の魔力と魔法防御を獲得する。",
+      "description_ko": "머리에 착용하는 아이템과 모자가 추가로 주문력 및 마법 저항력을 제공합니다."
     },
     {
       "augmentId": "ARAM_WatchOutGrapefruit",
@@ -6154,7 +6906,11 @@
       "name_zh_CN": "当心小蛋糕！",
       "name_zh_TW": "小心杯子蛋糕！",
       "name_ja": "カップケーキに要注意！",
-      "name_ko": "컵케이크 조심해!"
+      "name_ko": "컵케이크 조심해!",
+      "description_zh_TW": "杯子蛋糕會不時飛過大橋。接住杯子蛋糕的玩家可獲得金錢，而被杯子蛋糕砸中的第一個英雄及其鄰近友軍會回復生命。根據治療量獲得金錢。",
+      "description_zh_CN": "小蛋糕将间歇性地飞越整个大桥。小蛋糕会提供金币给接住它的人，并对第一个命中的英雄及其附近的友军回复生命值。获得基于该治疗数额的金币。",
+      "description_ja": "一定時間ごとに、カップケーキが橋を横切って飛んでくる。カップケーキをキャッチしたチャンピオンはゴールドを獲得し、最初に当たったチャンピオンとその周囲の味方の体力を回復する。回復した体力量に応じてゴールドを獲得する。",
+      "description_ko": "이따금 컵케이크가 다리 위로 날아갑니다. 컵케이크를 잡으면 골드를 획득하고 처음 컵케이크에 닿은 챔피언 및 주변 아군의 체력을 회복합니다. 체력 회복량에 따라 골드를 획득합니다."
     },
     {
       "augmentId": "ARAM_HolyFire",
@@ -6183,7 +6939,11 @@
       "name_zh_CN": "圣火",
       "name_zh_TW": "神聖之火",
       "name_ja": "聖なる炎",
-      "name_ko": "신성한 불길"
+      "name_ko": "신성한 불길",
+      "description_zh_TW": "治療或賦予護盾時，可對鄰近敵軍附加可無限累加的燃燒效果，在數秒內造成部分最大生命的魔法傷害。",
+      "description_zh_CN": "你的治疗或护盾会对一个附近的敌人施加一层无限叠加的灼烧，在若干秒内持续造成百分比最大生命值的魔法伤害。",
+      "description_ja": "自身の体力回復効果とシールドが、近くの敵1体に炎上のスタックを1つ付与する。これは無限にスタックし、数秒かけて最大体力の一定割合の魔法ダメージを与える。",
+      "description_ko": "체력을 회복하거나 보호막을 씌울 때 주변 적에게 무한히 중첩되는 화상 효과를 적용해 몇 초에 걸쳐 최대 체력에 비례하는 마법 피해를 입힙니다."
     },
     {
       "augmentId": "BabyKitty",
@@ -6212,7 +6972,11 @@
       "name_zh_CN": "小猫咪找妈妈",
       "name_zh_TW": "我是小貓咪媽咪在哪裡",
       "name_ja": "ボクは子ネコ。ママはどこ？",
-      "name_ko": "엄마 찾는 아기 고양이"
+      "name_ko": "엄마 찾는 아기 고양이",
+      "description_zh_TW": "站在友軍旁邊會將其標記為媽媽。 向媽媽移動時會增加跑速。接近媽媽時，增加跑速、治療量和護盾量。",
+      "description_zh_CN": "站在一个友军的附近并将其标记为你的妈妈。 当朝着妈妈移动时，获得移动速度。当靠近你的妈妈时，获得移动速度、治疗和护盾强度。",
+      "description_ja": "味方の隣に立つと、その味方が自分のママとしてマークされる。 ママに向かう際は、移動速度が増加する。ママの側にいると、移動速度、体力回復効果、シールド量が増加する。",
+      "description_ko": "아군 옆에 서 있으면 해당 아군에게 자신의 엄마라는 표식을 남깁니다. 엄마를 향해 이동할 때 이동 속도를 얻습니다. 엄마 주위에 있으면 이동 속도, 체력 회복 및 보호막 효과를 얻습니다."
     },
     {
       "augmentId": "ARAM_ItsCritical",
@@ -6241,7 +7005,11 @@
       "name_ja": "まさにクリティカル",
       "name_ko": "치명적인 공격",
       "wikiDescription": "Grants 50% critical strike chance.",
-      "wikiRarity": "gold"
+      "wikiRarity": "gold",
+      "description_zh_TW": "增加%i:scaleCrit% @CritChance*100@%暴擊率。",
+      "description_zh_CN": "获得%i:scaleCrit%@CritChance*100@%暴击几率。",
+      "description_ja": "クリティカル率が%i:scaleCrit% @CritChance*100@%増加する。",
+      "description_ko": "%i:scaleCrit% 치명타 확률이 @CritChance*100@% 증가합니다."
     },
     {
       "augmentId": "ARAM_JeweledGauntlet",
@@ -6271,7 +7039,11 @@
       "name_ja": "ジュエル ガントレット",
       "name_ko": "보석 건틀릿",
       "wikiDescription": "Your abilities can now critically strike for (145% + bonus critical damage) damage. Additionally, gain 25% (+ 4.5% per 100 AP) critical strike chance. If both Jeweled Gauntlet and Vulnerability are equipped, only rolls the critical strike chance of the augment that has the higher critical damage (or either if equal). The interaction between Jeweled Gauntlet and Vulnerability may behave incorrectly with persistent area damage effects.(bug)",
-      "wikiRarity": "prismatic"
+      "wikiRarity": "prismatic",
+      "description_zh_TW": "技能可以暴擊。 增加%i:scaleCrit% @CritGranted@%暴擊率。",
+      "description_zh_CN": "你的技能可以造成暴击。 获得%i:scaleCrit% @CritGranted@暴击几率。",
+      "description_ja": "スキルがクリティカル判定を持つ。 クリティカル率が%i:scaleCrit% @CritGranted@増加する。",
+      "description_ko": "스킬에 치명타가 적용될 수 있습니다. %i:scaleCrit% 치명타 확률이 @CritGranted@% 증가합니다."
     },
     {
       "augmentId": "ARAM_KeystoneConjurer",
@@ -6299,7 +7071,11 @@
       "name_zh_CN": "基石法师",
       "name_zh_TW": "符文術士",
       "name_ja": "キーストーンの奇術師",
-      "name_ko": "핵심 룬 요술사"
+      "name_ko": "핵심 룬 요술사",
+      "description_zh_TW": "獲得召喚：艾莉及奧術彗星關鍵符文。",
+      "description_zh_CN": "获得召唤：艾黎和奥术彗星基石符文。",
+      "description_ja": "キーストーンルーンの「エアリー召喚」と「秘儀の彗星」を獲得する。",
+      "description_ko": "콩콩이 소환과 신비로운 유성 핵심 룬을 얻습니다."
     },
     {
       "augmentId": "LaserHeal",
@@ -6328,7 +7104,11 @@
       "name_zh_CN": "激光治疗",
       "name_zh_TW": "雷射治療",
       "name_ja": "レーザーヒール",
-      "name_ko": "체력 회복 광선"
+      "name_ko": "체력 회복 광선",
+      "description_zh_TW": "施放持續2.5秒的雷射，為友軍回復生命，並對敵軍造成魔法傷害和緩速效果。",
+      "description_zh_CN": "施放一个持续2.5秒的治疗激光，治疗友军，使敌人减速并对其造成魔法伤害。",
+      "description_ja": "2.5秒間、レーザーを放って味方の体力を回復し、敵にスロウ効果と魔法ダメージを与える。",
+      "description_ko": "2.5초 동안 광선을 발사해 아군에게는 체력을 회복시키고, 적에게는 마법 피해를 입히며 둔화시킵니다."
     },
     {
       "augmentId": "ARAM_LightningStrikes",
@@ -6357,7 +7137,11 @@
       "name_zh_CN": "闪电打击",
       "name_zh_TW": "電光石火",
       "name_ja": "ライトニングストライク",
-      "name_ko": "벼락"
+      "name_ko": "벼락",
+      "description_zh_TW": "增加@TotalASValue*100@%總攻速。 每秒普攻次數達@Breakpoint1@次時，造成額外魔法傷害{{ Item_Keyword_OnHit }}。",
+      "description_zh_CN": "获得@TotalASValue*100@%总攻击速度。 在@Breakpoint1@攻击次数/秒时，造成额外的魔法伤害 {{ Item_Keyword_OnHit }}。",
+      "description_ja": "合計攻撃速度が@TotalASValue*100@%増加する。 毎秒攻撃回数が@Breakpoint1@回になると、追加で魔法ダメージ{{ Item_Keyword_OnHit }}を与える。",
+      "description_ko": "총 공격 속도가 @TotalASValue*100@% 증가합니다. 초당 공격 횟수 @Breakpoint1@회에서 추가 마법 피해({{ Item_Keyword_OnHit }})를 입힙니다."
     },
     {
       "slug": "one-trick-pony",
@@ -6403,7 +7187,11 @@
       "name_zh_CN": "轨道镭射",
       "name_zh_TW": "衛星雷射炮",
       "name_ja": "軌道レーザー",
-      "name_ko": "궤도형 레이저"
+      "name_ko": "궤도형 레이저",
+      "description_zh_TW": "獲得衛星雷射炮召喚師技能。 在短暫延遲後，發射衛星雷射炮，造成@DamagetoChampions*100@%最大生命的真實傷害，且在@GroundDuration@秒內造成@TotalDamageOverTimeTooltip@魔法傷害。",
+      "description_zh_CN": "获得召唤师技能轨道镭射。 在一阵延迟后，召唤一道轨道镭射光束落下，造成@DamagetoChampions*100@%最大生命值的真实伤害外加在@GroundDuration@秒里持续造成共@TotalDamageOverTimeTooltip@魔法伤害。",
+      "description_ja": "軌道レーザーのサモナースペルを獲得する。 発動から少し遅れて、軌道レーザーが降り注ぎ、@GroundDuration@秒かけて最大体力の@DamagetoChampions*100@%にあたる確定ダメージと@TotalDamageOverTimeTooltip@の魔法ダメージを与える。",
+      "description_ko": "궤도형 레이저 소환사 주문을 얻습니다. 잠시 후 궤도형 레이저로 최대 체력의 @DamagetoChampions*100@%에 해당하는 고정 피해를 입히고, 추가로 @GroundDuration@초 동안 @TotalDamageOverTimeTooltip@의 마법 피해를 입힙니다."
     },
     {
       "slug": "pat-on-the-back",
@@ -6455,7 +7243,11 @@
       "name_ja": "忍耐",
       "name_ko": "인내심",
       "wikiDescription": "Grants 1000% base health regeneration, increased to 2000% while below 25% maximum health.",
-      "wikiRarity": "gold"
+      "wikiRarity": "gold",
+      "description_zh_TW": "增加大量生命回復，生命低於一定值時增加更多。",
+      "description_zh_CN": "获得巨幅提升的生命回复，这个数额会在低生命值时进一步提升。",
+      "description_ja": "体力自動回復が大幅に増加する。体力が低下すると、回復量がさらに増加する。",
+      "description_ko": "체력 재생 효과가 크게 증가하고 체력이 낮으면 추가로 증가합니다."
     },
     {
       "augmentId": "ARAM_Poro_Blast",
@@ -6485,7 +7277,11 @@
       "name_zh_CN": "魄罗爆破手",
       "name_zh_TW": "普羅能量炮",
       "name_ja": "ポロブラスター",
-      "name_ko": "포로 발사기"
+      "name_ko": "포로 발사기",
+      "description_zh_TW": "你持續收集普羅。對敵軍造成傷害時，朝目標發射所有普羅，每隻造成最大生命的真實傷害。若你有5隻普羅，牠們將造成一次擊退。",
+      "description_zh_CN": "你周期性地召集魄罗。伤害一个敌人时会对其发射所有魄罗，每个魄罗造成目标最大生命值真实伤害。如果你有5个魄罗，那么它们会进行一次击退。",
+      "description_ja": "時間経過でポロを集める。敵にダメージを与えると、すべてのポロを発射し、それぞれが最大体力に応じた確定ダメージを与える。ポロが5体いると、1回ノックバックする。",
+      "description_ko": "시간에 따라 포로를 모읍니다. 적에게 피해를 입히면 모든 포로를 대상에게 발사해 각각 최대 체력 비례 고정 피해를 입힙니다. 포로가 5마리 있다면 대상을 잠시 뒤로 밀어냅니다."
     },
     {
       "slug": "pursuit-of-power",
@@ -6536,7 +7332,11 @@
       "name_ja": "量子演算",
       "name_ko": "양자 연산",
       "wikiDescription": "Automatically cast an improved version of Camille's Tactical Sweep when an enemy champion is within 650 units of you, winding up over 0.75 seconds to slash in a 650 radius around you. The slash deals 200 – 350 (based on level) (+ 75% bonus AD) (+ 45% AP) physical damage to enemies within the area (30 second cooldown). Enemies hit by the outer edge of the circle take bonus physical damage equal to 10% (+ 2.5% per 100 bonus AD) (+ 1.6% per 100 AP) (+ 0.1% per 100 bonus health) of their maximum health and are slowed by 80% decaying over 2 seconds. Additionally, you are healed for 80% of the bonus post-mitigation damage against enemy champions hit by the outer edge.",
-      "wikiRarity": "prismatic"
+      "wikiRarity": "prismatic",
+      "description_zh_TW": "定期自動施放一次大範圍斬擊。敵軍遭命中時會緩速，額外承受最大生命傷害，並讓你回復生命。",
+      "description_zh_CN": "周期性地自动施放一次巨型斩击。被击中的敌人会被减速，受到额外最大生命值伤害，并且治疗你。",
+      "description_ja": "一定時間ごとに自動発動で周囲を大きく斬りつける。また、命中した敵にスロウ効果および最大体力割合ダメージを与え、自身を回復させる。",
+      "description_ko": "주기적으로 강력한 베기를 자동 사용합니다. 적중당한 적은 둔화되고 최대 체력에 비례한 피해를 추가로 받으며, 자신은 체력을 회복합니다."
     },
     {
       "slug": "support-main",
@@ -6604,7 +7404,11 @@
       "name_zh_CN": "红包",
       "name_zh_TW": "紅包",
       "name_ja": "紅いお年玉袋",
-      "name_ko": "붉은 봉투"
+      "name_ko": "붉은 봉투",
+      "description_zh_TW": "紅包會隨機出現在你周圍。將其撿起即可獲得金錢與少量隨機能力值。",
+      "description_zh_CN": "红包会随机出现在你周围。拾取它们会给你金币和少量的某个随机属性。",
+      "description_ja": "紅いお年玉袋がランダムに周囲に出現する。拾うとゴールドと、ランダムなステータスが少量増加する。",
+      "description_ko": "붉은 봉투가 주변에 무작위로 나타납니다. 붉은 봉투를 주우면 골드를 획득하고 소량의 무작위 능력치를 얻습니다."
     },
     {
       "augmentId": "ARAM_RabbleRousing",
@@ -6634,7 +7438,11 @@
       "name_ja": "再生",
       "name_ko": "원기 회복",
       "wikiDescription": "Upgrades one of your champion's abilities, empowering the ability's cast to heal you for 30 – 100 (based on level) (+ 25% bonus AD) (+ 15% AP) (+ 5% bonus health). This is increased by up to 50% based on how long the ability's cooldown is, for a maximum heal of 45 – 150 (based on level) (+ 37.5% bonus AD) (+ 22.5% AP) (+ 7.5% bonus health).",
-      "wikiRarity": "gold"
+      "wikiRarity": "gold",
+      "description_zh_TW": "使用{{SpellName}}可回復生命。",
+      "description_zh_CN": "使用【{{SpellName}}】技能时回复生命值。",
+      "description_ja": "{{SpellName}}を使用すると体力が回復する。",
+      "description_ko": "{{SpellName}} 사용 시 체력을 회복합니다."
     },
     {
       "augmentId": "ARAM_Repulsor",
@@ -6663,7 +7471,11 @@
       "name_zh_CN": "退敌力场",
       "name_zh_TW": "反重力裝置",
       "name_ja": "リパルサー",
-      "name_ko": "반발"
+      "name_ko": "반발",
+      "description_zh_TW": "生命低於@HealthThreshold*100@%時，擊退鄰近敵軍並使其緩速@SlowAmount*100@%。",
+      "description_zh_CN": "在你跌下@HealthThreshold*100@%生命值时，对附近的敌人们造成击退和@SlowAmount*100@%减速。",
+      "description_ja": "体力が@HealthThreshold*100@%未満に低下した際、周囲の敵をノックバックさせ@SlowAmount*100@%のスロウ効果を与える。",
+      "description_ko": "체력이 @HealthThreshold*100@% 아래로 떨어지면 주변 적을 뒤로 밀어내고 @SlowAmount*100@% 둔화시킵니다."
     },
     {
       "augmentId": "ARAM_RestlessRestoration",
@@ -6692,7 +7504,11 @@
       "name_zh_CN": "无休回复",
       "name_zh_TW": "回復不休",
       "name_ja": "無尽蔵のスタミナ",
-      "name_ko": "끊임없는 회복"
+      "name_ko": "끊임없는 회복",
+      "description_zh_TW": "移動時持續回復生命。",
+      "description_zh_CN": "你在移动时持续获得治疗。",
+      "description_ja": "移動中、継続的に体力が回復する。",
+      "description_ko": "이동 시 지속적으로 체력을 회복합니다."
     },
     {
       "augmentId": "ARAM_SelfDestruct",
@@ -6721,7 +7537,11 @@
       "name_zh_CN": "自我毁灭",
       "name_zh_TW": "自我毀滅",
       "name_ja": "自己破壊",
-      "name_ko": "자폭"
+      "name_ko": "자폭",
+      "description_zh_TW": "每@BaseCooldown@秒，在自身放置一顆炸彈。炸彈在@BombDelay@秒後爆炸，造成真實傷害並擊飛敵軍。",
+      "description_zh_CN": "每@BaseCooldown@秒，在你身上黏附一个炸弹。在@BombDelay@秒后，它会爆炸，对敌人们造成真实伤害和击飞效果。",
+      "description_ja": "@BaseCooldown@秒ごとに自身に爆弾を設置する。爆弾は@BombDelay@秒後に爆発し、確定ダメージを与え、敵をノックアップさせる。",
+      "description_ko": "@BaseCooldown@초마다 자신에게 폭탄이 부착됩니다. @BombDelay@초 후에 폭탄이 폭발해 적에게 고정 피해를 입히고 공중으로 띄워 올립니다."
     },
     {
       "augmentId": "ARAM_SlowAndSteady",
@@ -6749,7 +7569,11 @@
       "name_zh_CN": "一板一眼",
       "name_zh_TW": "穩紮穩打",
       "name_ja": "ゆっくり着実に",
-      "name_ko": "천천히, 꾸준히"
+      "name_ko": "천천히, 꾸준히",
+      "description_zh_TW": "攻速變為@StaticRatio@。所有額外攻速轉換為物攻(每1%攻速轉換為@BaseAD@+@ADPerAS@物攻)。",
+      "description_zh_CN": "你的攻击速度变为@StaticRatio@。所有额外攻击速度会被转化为攻击力。(@BaseAD@外加@ADPerAS@攻击力每1%攻击速度)。",
+      "description_ja": "自身の攻撃速度が@StaticRatio@になる。すべての追加の攻撃速度が攻撃力に変換される。(攻撃速度1%ごとに、@BaseAD@に加えて @ADPerAS@の攻撃力)。",
+      "description_ko": "공격 속도가 @StaticRatio@의 수치로 고정됩니다. 모든 추가 공격 속도가 공격력으로 전환됩니다. (공격 속도 1%당 @ADPerAS@의 공격력+@BaseAD@)"
     },
     {
       "augmentId": "ARAM_SlowCooker",
@@ -6777,7 +7601,11 @@
       "name_zh_CN": "慢炖",
       "name_zh_TW": "細煮慢燉",
       "name_ja": "スロウクッカー",
-      "name_ko": "찜솥"
+      "name_ko": "찜솥",
+      "description_zh_TW": "每秒對鄰近敵方英雄附加可無限累加的燃燒，傷害隨你的最大生命成長。",
+      "description_zh_CN": "每一秒，对附近的敌方英雄们施加一层可无限叠加的灼烧，这个效果受益于你的最大生命值。",
+      "description_ja": "毎秒、周囲の敵チャンピオンに無限にスタック可能な炎上を付与し、自身の最大体力に応じたダメージを与える。",
+      "description_ko": "매초 최대 체력에 비례해 주변 적에게 무한히 중첩되는 화상 효과를 적용합니다."
     },
     {
       "augmentId": "SnowballRoulette",
@@ -6837,7 +7665,11 @@
       "name_ja": "雪玉アップグレード",
       "name_ko": "눈덩이 업그레이드",
       "wikiDescription": "Your Mark is empowered to hail a snowstorm at the location where the target was hit for 2 seconds, granting sight of the area and dealing「 200 (+ 200% bonus AD) (+ 120% AP) magic damage 」「 25 (+ 25% bonus AD) (+ 15% AP) magic damage every 0.25 seconds 」to enemies within over the duration, as well as slowing them by 50% (+ 6% per 100 AP). Additionally, your Mark's cooldown is reduced equivalent to 50 ability haste. If Mark is not equipped, you will be prompted to replace one of your summoner spells with Mark.",
-      "wikiRarity": "gold"
+      "wikiRarity": "gold",
+      "description_zh_TW": "讓你的雪球獲得@AbilityHaste@技能加速。命中敵軍時會降雪，造成範圍傷害並使鄰近敵軍緩速。 若你沒有雪球就會獲得一顆雪球。",
+      "description_zh_CN": "雪球获得@AbilityHaste@技能急速。击中一个敌人时，会产生一次降雪，来对附近的敌人造成范围伤害和减速效果。 如果你没有雪球，获得一个雪球。",
+      "description_ja": "雪玉のスキルヘイストが@AbilityHaste@増加する。敵に命中すると雪が降り、範囲ダメージを与え、周囲の敵にスロウ効果を付与する。 まだ持っていない場合は雪玉を1個獲得する。",
+      "description_ko": "눈덩이의 스킬 가속이 @AbilityHaste@만큼 증가합니다. 적에게 눈덩이가 적중하면 눈이 내려 주변 적에게 광역 피해를 입히고 둔화시킵니다. 눈덩이를 보유하지 않은 경우 눈덩이를 얻습니다."
     },
     {
       "augmentId": "ARAM_SoulSiphon",
@@ -6867,7 +7699,11 @@
       "name_ja": "ソウルサイフォン",
       "name_ko": "영혼 흡수",
       "wikiDescription": "Heal for 12% of the post-mitigation damage dealt by your critical strikes. Additionally, gain 25% critical strike chance. Any damage from Critical strikes will heal, including those from non-basic attack sources ( Talon's Noxian Diplomacy, Ashe's Volley, etc).",
-      "wikiRarity": "gold"
+      "wikiRarity": "gold",
+      "description_zh_TW": "獲得等同於暴擊造成傷害的@HealPercentage*100@%的治療。 增加%i:scaleCrit% @CritChance*100@%暴擊率。",
+      "description_zh_CN": "暴击造成伤害的@HealPercentage*100@%会等额治疗你自身。 获得%i:scaleCrit% @CritChance*100@%暴击几率。",
+      "description_ja": "クリティカルによって与えたダメージの@HealPercentage*100@%にあたる体力を回復する。 %i:scaleCrit%クリティカル率が@CritChance*100@%増加する。",
+      "description_ko": "치명타로 입힌 피해량의 @HealPercentage*100@%만큼 체력을 회복합니다. %i:scaleCrit% 치명타 확률이 @CritChance*100@% 증가합니다."
     },
     {
       "augmentId": "ARAM_SpeedDemon",
@@ -6946,7 +7782,11 @@
       "name_ja": "タンクこそ至高",
       "name_ko": "확률적 방어",
       "wikiDescription": "Gain Critical Defend Chance equal to 100% critical strike chance, up to 50%. Additionally, gain 25% critical strike chance. Critical Defend Chance: Grants you a chance to reduce an instance of damage taken by 20% (5 second cooldown per enemy spell cast instance).",
-      "wikiRarity": "silver"
+      "wikiRarity": "silver",
+      "description_zh_TW": "可根據自身暴擊率進行完美防禦(上限為@MaxChance*100@%機率)，觸發時減少承受的傷害。 增加%i:scaleCrit% @CritChance*100@%暴擊率。",
+      "description_zh_CN": "你可以使用你的暴击几率(最大@MaxChance*100@%几率)来进行会心防御，使你有一定几率来使所受伤害降低。 获得%i:scaleCrit%@CritChance*100@%暴击几率。",
+      "description_ja": "クリティカル防御判定を持つようになる。これはクリティカル率の数値を参照し(最大確率は@MaxChance*100@%)、受けるダメージを軽減する。 %i:scaleCrit%クリティカル率が@CritChance*100@%増加する。",
+      "description_ko": "공격당할 때 치명타 확률(최대 @MaxChance*100@%)에 따라 치명 방어가 발동해 받는 피해가 감소할 수 있습니다. %i:scaleCrit% 치명타 확률이 @CritChance*100@% 증가합니다."
     },
     {
       "augmentId": "ARAM_TheBrutalizer",
@@ -6976,7 +7816,11 @@
       "name_zh_CN": "残暴之力",
       "name_zh_TW": "兇殘之柄",
       "name_ja": "ブルータライザー",
-      "name_ko": "야수화"
+      "name_ko": "야수화",
+      "description_zh_TW": "增加@AD@物攻、@AbilityHaste@技能加速、以及@Lethality@物理致命。",
+      "description_zh_CN": "获得@AD@攻击力、@AbilityHaste@技能急速和@Lethality@穿甲。",
+      "description_ja": "攻撃力が@AD@、スキルヘイストが@AbilityHaste@、脅威が@Lethality@増加する。",
+      "description_ko": "공격력이 @AD@ , 스킬 가속이 @AbilityHaste@, 물리 관통력이 @Lethality@ 증가합니다."
     },
     {
       "augmentId": "ARAM_Tormentor",
@@ -7006,7 +7850,11 @@
       "name_zh_CN": "折磨者",
       "name_zh_TW": "烈焰折磨",
       "name_ja": "苦みの種",
-      "name_ko": "고문자"
+      "name_ko": "고문자",
+      "description_zh_TW": "硬控場或禁錮敵方英雄時對其施加一項燃燒效果，造成持續傷害，可無限累加。",
+      "description_zh_CN": "定身或缚地敌方英雄时提供一层灼烧，这个效果会持续造成伤害并可无限叠加。",
+      "description_ja": "敵チャンピオンに移動不能効果か釘付け効果を付与すると、対象を炎上させて継続ダメージを与える。この効果は無限にスタックする。",
+      "description_ko": "적 챔피언을 이동 불가 상태로 만들거나 이동 스킬을 사용할 수 없게 하면 무한히 중첩되는 화상 효과를 적용해 지속적으로 피해를 입힙니다."
     },
     {
       "slug": "trailblazer",
@@ -7052,7 +7900,11 @@
       "name_zh_CN": "精准奇才",
       "name_zh_TW": "彈幕神童",
       "name_ja": "トゥルーショットプロディジー",
-      "name_ko": "정조준 일격 신동"
+      "name_ko": "정조준 일격 신동",
+      "description_zh_TW": "從遠處對敵方英雄造成傷害後，向對方發射精準彈幕。",
+      "description_zh_CN": "在你从远处对一名敌人造成伤害时，对其发射一道精准弹幕。",
+      "description_ja": "遠くからチャンピオンにダメージを与えると、対象に向けて「トゥルーショットバラージ」が発射される。",
+      "description_ko": "멀리 떨어진 챔피언에게 피해를 입히면 정조준 일격을 발사합니다."
     },
     {
       "augmentId": "ARAM_TwiceThrice",
@@ -7081,7 +7933,11 @@
       "name_zh_CN": "接二连三",
       "name_zh_TW": "二次三次",
       "name_ja": "二度三度",
-      "name_ko": "두 배 세 배"
+      "name_ko": "두 배 세 배",
+      "description_zh_TW": "每@ProcCadence@次普攻會觸發第二次{{ Item_Keyword_OnHit }}。",
+      "description_zh_CN": "每@ProcCadence@次攻击，你的{{ Item_Keyword_OnHit }}效果会触发第二次。",
+      "description_ja": "通常攻撃@ProcCadence@回ごとに、{{ Item_Keyword_OnHit }}が2回発動する。",
+      "description_ko": "@ProcCadence@번째 기본 공격을 가할 때마다 {{ Item_Keyword_OnHit }} 효과가 한 번 더 발동합니다."
     },
     {
       "augmentId": "ARAM_Upgrade_Cutlass",
@@ -7107,7 +7963,11 @@
       "name_zh_CN": "升级：弯刀",
       "name_zh_TW": "升級彎刀",
       "name_ja": "カトラス アップグレード",
-      "name_ko": "해적검 업그레이드"
+      "name_ko": "해적검 업그레이드",
+      "description_zh_TW": "將鬼使彎刀和生命之索的冷卻時間縮短至@UpgradeCD@秒。發動時，獲得@DamageAmp*100@%傷害增幅。 獲得250金錢。",
+      "description_zh_CN": "【幽魂弯刀】和【救生索】的冷却时间降低至@UpgradeCD@秒。主动效果激活时，获得@DamageAmp*100@%伤害增幅。 获得250金币。",
+      "description_ja": "「スペクトラル カトラス」と「ライフライン」のクールダウンが@UpgradeCD@秒に短縮される。発動中、ダメージ増加量が@DamageAmp*100@%増加する。 250ゴールドを獲得する。",
+      "description_ko": "망령 해적검 및 생명선의 재사용 대기시간이 @UpgradeCD@초로 감소합니다. 사용 시 피해량이 @DamageAmp*100@% 증폭됩니다. 250골드를 획득합니다."
     },
     {
       "augmentId": "ARAM_Upgrade_Hubris",
@@ -7136,7 +7996,11 @@
       "name_zh_CN": "升级：狂妄",
       "name_zh_TW": "升級傲慢",
       "name_ja": "ヒュブリス アップグレード",
-      "name_ko": "오만 업그레이드"
+      "name_ko": "오만 업그레이드",
+      "description_zh_TW": "參與擊殺時，傲慢可讓你回復生命，並提升跑速，恢復量與提升量都會隨著顯赫層數增加。 獲得%i:goldCoins% 250金錢。",
+      "description_zh_CN": "参与击杀时，【狂妄】会为你提供治疗和移动速度，随你的盛名层数增长。 获得+%i:goldCoins%250金币。",
+      "description_ja": "キルまたはアシストを獲得すると、「ヒュブリス」が自身を回復し、エミネンスのスタック数に応じて移動速度が増加する。 +%i:goldCoins%250ゴールドを獲得する。",
+      "description_ko": "처치 관여 시, 오만이 체력을 회복시키고 이동 속도를 부여합니다. 두 효과 모두 명성 중첩에 비례하여 증가합니다. +%i:goldCoins% 250골드를 획득합니다."
     },
     {
       "augmentId": "Upgrade_MikaelsBlessing",
@@ -7194,7 +8058,11 @@
       "name_zh_CN": "升级：荆棘之甲",
       "name_zh_TW": "升級荊棘之甲",
       "name_ja": "ソーンメイル アップグレード",
-      "name_ko": "가시 갑옷 업그레이드"
+      "name_ko": "가시 갑옷 업그레이드",
+      "description_zh_TW": "脫離戰鬥@ThornshieldCooldown@秒後，你的「荊棘之甲」或「刺藤胸甲」生成外殼，反彈更多普攻傷害。",
+      "description_zh_CN": "在脱离战斗@ThornshieldCooldown@秒后，你的【荆棘之甲】或【棘刺背心】会生成一个甲壳来回敬更多伤害给攻击者。",
+      "description_ja": "戦闘状態を離れて@ThornshieldCooldown@秒経過すると、「ソーンメイル」または「ブランブル ベスト」が殻を生成し、通常攻撃からの反射ダメージが増加する。",
+      "description_ko": "전투에서 벗어나고 @ThornshieldCooldown@초 후 가시 갑옷 또는 덤불 조끼가 기본 공격 피해량을 추가로 반사하는 껍질을 생성합니다."
     },
     {
       "augmentId": "Vampirism",
@@ -7225,7 +8093,11 @@
       "name_ja": "吸血鬼信仰",
       "name_ko": "흡혈병",
       "wikiDescription": "You can no longer be healed by allies and your health regeneration is set to 0. Gain 25% omnivamp. Diadem of Songs' Consonance and Moonstone Renewer's Starlit Grace will specifically not target champions with this augment.",
-      "wikiRarity": "gold"
+      "wikiRarity": "gold",
+      "description_zh_TW": "你無法接受友軍治療，也無法獲得生命回復。獲得@OmniVamp*100@%全能吸血。",
+      "description_zh_CN": "你不再能够被友军治疗或获得生命回复。获得@OmniVamp*100@%全能吸血。",
+      "description_ja": "味方からの体力回復を受けられず、体力自動回復も獲得できない。@OmniVamp*100@%のオムニヴァンプを獲得する。",
+      "description_ko": "아군이 자신의 체력을 회복시키거나 자신이 체력 재생을 얻을 수 없습니다. @OmniVamp*100@%의 모든 피해 흡혈 효과를 얻습니다."
     },
     {
       "augmentId": "VoidDash",
@@ -7258,7 +8130,11 @@
       "name_ja": "ヴォイドダッシュ",
       "name_ko": "공허 돌진",
       "wikiDescription": "Upgrades one of your champion's abilities that has a dash, empowering the ability to spawn a void zone (250 radius) at the dash's destination after a 0.3-second delay. Enemy champions within the zone are dealt 80 – 400 (based on level) (+ 100% ability haste) magic damage and are slowed by 35% for 1 second.",
-      "wikiRarity": "gold"
+      "wikiRarity": "gold",
+      "description_zh_TW": "使用{{Spellname}}衝刺時會生成一個虛空區域，緩速敵方英雄並造成魔法傷害。",
+      "description_zh_CN": "用【{{SpellName}}】技能冲刺时会产生一片【虚空地带】来对敌方英雄们造成减速和魔法伤害。",
+      "description_ja": "{{Spellname}}でダッシュすると「ヴォイドゾーン」を発生させる。このゾーンは敵チャンピオンにスロウ効果と魔法ダメージを与える。",
+      "description_ko": "{{Spellname}} 스킬로 돌진 시 적 챔피언을 둔화시키고 마법 피해를 입히는 공허 지대를 생성합니다."
     },
     {
       "augmentId": "ARAM_VoidRift",
@@ -7287,7 +8163,11 @@
       "name_zh_CN": "虚空裂隙",
       "name_zh_TW": "虛空裂縫",
       "name_ja": "ヴォイドの裂谷",
-      "name_ko": "공허 균열"
+      "name_ko": "공허 균열",
+      "description_zh_TW": "使用技能對敵軍造成傷害時，產生一道虛空裂痕。如附近有另一道虛空裂痕，它們會被吞沒並在中間產生一道裂縫，對範圍內的敵軍造成魔法傷害和緩速效果。",
+      "description_zh_CN": "用技能对敌人造成伤害时，会制造一道虚空裂痕。如果附近有另一道虚空裂痕，则它们都会被消耗，以在它们之间生成一道裂隙，对其中的敌人们造成魔法伤害和减速。",
+      "description_ja": "スキルによって敵にダメージを与えると、ヴォイドの傷を生成する。近くに別のヴォイドの傷が存在すると、両方の傷が消費され、間に裂け目が発生する。裂け目内の敵に魔法ダメージを与え、スロウ効果を与える。",
+      "description_ko": "적에게 스킬로 피해를 입히면 공허 상흔이 생성됩니다. 주변에 다른 공허 상흔이 있다면 두 상흔이 모두 사라지고 그 사이에 균열이 생성됩니다. 균열 내부에 있는 적은 마법 피해를 입고 둔화됩니다."
     },
     {
       "augmentId": "ARAM_Vulnerability",
@@ -7317,7 +8197,11 @@
       "name_ja": "搦め手",
       "name_ko": "취약",
       "wikiDescription": "Damage dealt by items and damage over time effects can now critically strike for (145% + bonus critical damage) damage (5 second cooldown per cast instance). Additionally, gain 25% critical strike chance. If both Jeweled Gauntlet and Vulnerability are equipped, only rolls the critical strike chance of the augment that has the higher critical damage (or either if equal). The interaction between Jeweled Gauntlet and Vulnerability may behave incorrectly with persistent area damage effects.(bug)",
-      "wikiRarity": "gold"
+      "wikiRarity": "gold",
+      "description_zh_TW": "道具與持續傷害效果可以暴擊。 增加%i:scaleCrit% @CritChance*100@%暴擊率。",
+      "description_zh_CN": "你的装备效果和持续伤害效果可以暴击。 获得%i:scaleCrit% @CritChance*100@%暴击几率。",
+      "description_ja": "アイテムおよび継続ダメージ効果がクリティカル判定を持つ。 %i:scaleCrit%クリティカル率が@CritChance*100@%増加する。",
+      "description_ko": "아이템 및 지속 피해 효과에 치명타가 적용될 수 있습니다. %i:scaleCrit% 치명타 확률이 @CritChance*100@% 증가합니다."
     },
     {
       "augmentId": "ARAM_WeightedPopoffs",
@@ -7346,7 +8230,11 @@
       "name_zh_CN": "负重爆气",
       "name_zh_TW": "重磅爆發",
       "name_ja": "加重ポップオフ",
-      "name_ko": "중량 폭주"
+      "name_ko": "중량 폭주",
+      "description_zh_TW": "技能命中敵軍時，賦予你爆發堆層，縮短非大絕技能冷卻時間。",
+      "description_zh_CN": "用技能击中敌人时，会为你提供【爆气】层数，从而缩短你的非终极技能冷却时间。",
+      "description_ja": "スキルで敵にダメージを与えると、ポップオフのスタックを獲得し、アルティメット以外のスキルのクールダウンが短縮される。",
+      "description_ko": "스킬로 적을 타격하면 폭주 중첩을 얻어 기본 스킬 재사용 대기시간이 감소합니다."
     },
     {
       "augmentId": "WindBeneathBlade",
@@ -7375,7 +8263,11 @@
       "name_zh_CN": "刃下生风",
       "name_zh_TW": "刃下狂風",
       "name_ja": "刃の下の風",
-      "name_ko": "칼날 아래 바람"
+      "name_ko": "칼날 아래 바람",
+      "description_zh_TW": "物理穿透和魔法穿透越高，跑速越快。",
+      "description_zh_CN": "你的护甲穿透和法术穿透越高，你就移动得越快。",
+      "description_ja": "物理防御貫通と魔法防御貫通が高いほど移動速度が増加する。",
+      "description_ko": "방어구 관통력 및 마법 관통력이 높을수록 이동 속도가 빨라집니다."
     },
     {
       "augmentId": "ARAM_Zealot",
@@ -7406,7 +8298,11 @@
       "name_ja": "狂信的",
       "name_ko": "광신자",
       "wikiDescription": "Gain 35% (+ 5% per 100 AP) bonus attack speed and 25% (+ 5% per 100 AP) critical strike chance.",
-      "wikiRarity": "silver"
+      "wikiRarity": "silver",
+      "description_zh_TW": "增加@Calc_Crit_Chance@暴擊率和@Calc_AS@攻速。",
+      "description_zh_CN": "获得@Calc_Crit_Chance@暴击几率和@Calc_AS@攻击速度（随法术强度变化）。",
+      "description_ja": "クリティカル率が@Calc_Crit_Chance@、攻撃速度が@Calc_AS@増加する。",
+      "description_ko": "치명타 확률을 @Calc_Crit_Chance@, 공격 속도를 @Calc_AS@ 얻습니다."
     },
     {
       "augmentId": "Upgrade_SwordOfBlossom",
@@ -7438,7 +8334,11 @@
       "name_ja": "花咲く夜明けの剣 アップグレード",
       "name_ko": "Upgrade Sword of Blossoming Dawn",
       "wikiDescription": "Upgrades Sword of Blossoming Dawn, empowering Peppermint to have its healing increased by 250%. Additionally, you gain 100% bonus attack speed.",
-      "wikiRarity": "prismatic"
+      "wikiRarity": "prismatic",
+      "description_zh_TW": "增加@AttackSpeed*100@%攻速。 你對敵方英雄進行普攻時，破曉綻放之劍的治療效果提升至@PercentInc*100@%。",
+      "description_zh_CN": "获得@AttackSpeed*100@%攻击速度。 你对英雄的攻击会使来自【花晓之剑】的治疗效果提升@PercentInc*100@%。",
+      "description_ja": "攻撃速度が@AttackSpeed*100@%増加する。 敵チャンピオンを攻撃すると、「花咲く夜明けの剣」の回復効果が@PercentInc*100@%に増加する。",
+      "description_ko": "공격 속도를 @AttackSpeed*100@% 획득합니다. 적 챔피언 공격 시 꽃피는 새벽의 검 체력 회복량이 @PercentInc*100@%로 증가합니다."
     },
     {
       "augmentId": "ARAM_Earthwake",
@@ -7465,7 +8365,11 @@
       "name_ja": "アースウェイク",
       "name_ko": "대지의 각성",
       "wikiDescription": "Dashing or blinking causes you to leave behind a trail from the location you moved to your destination that detonates after 0.75 seconds in a 300 radius, dealing 70 – 210 (based on level) (+ 125% bonus AD) (+ 60% AP) physical damage per explosion to enemies hit, reduced to 70% against minions. Enemies can be affected only once every second from all cast instances, and the effect is not triggered if you move beyond 2000 units with the dash or blink.",
-      "wikiRarity": "prismatic"
+      "wikiRarity": "prismatic",
+      "description_zh_TW": "施放衝刺、閃現或傳送技能後會留下軌跡，軌跡會在@ExplosionDelayTime@秒後引爆。",
+      "description_zh_CN": "你的冲刺、闪烁或传送类技能会留下一条在@ExplosionDelayTime@秒后爆炸的轨迹。",
+      "description_ja": "ダッシュ、ブリンク、またはテレポートを行うスキルを使用すると軌跡が残る。軌跡は@ExplosionDelayTime@秒後に爆発する。",
+      "description_ko": "돌진, 점멸, 순간이동 스킬이 @ExplosionDelayTime@초 후에 폭발하는 흔적을 남깁니다."
     },
     {
       "augmentId": "ARAM_Flashy",
@@ -7492,7 +8396,11 @@
       "name_ja": "閃光",
       "name_ko": "점멸 난사",
       "wikiDescription": "Your Flash now has 3 charges with a 2-second cooldown between casts (120 seconds recharge time for all 3 charges). If Flash is not equipped, you will be prompted to replace one of your summoner spells with Flash.",
-      "wikiRarity": "gold"
+      "wikiRarity": "gold",
+      "description_zh_TW": "你可以使用@MaxAmmo@次閃現，冷卻時間為@FlashCooldown@秒。",
+      "description_zh_CN": "你的闪现有@MaxAmmo@层充能，并且冷却时间为@FlashCooldown@秒。",
+      "description_ja": "「フラッシュ」が@MaxAmmo@回分のチャージを獲得し、クールダウンが@FlashCooldown@秒間になる。",
+      "description_ko": "점멸 사용 가능 횟수가 @MaxAmmo@번, 재사용 대기시간이 @FlashCooldown@초가 됩니다."
     },
     {
       "augmentId": "ARAM_MissingPingAugment",
@@ -7545,7 +8453,11 @@
       "name_ja": "変質: ゴールド",
       "name_ko": "전환: 골드",
       "wikiDescription": "Gain one random Gold augment, excluding the other two offerings in your current assortment.",
-      "wikiRarity": "silver"
+      "wikiRarity": "silver",
+      "description_zh_TW": "獲得一件隨機%i:Augment%金色增幅裝置。",
+      "description_zh_CN": "获得1个随机%i:Augment%黄金阶强化符文。",
+      "description_ja": "ランダムな%i:Augment%ゴールドオーグメントを1個獲得する。",
+      "description_ko": "무작위 %i:Augment% 골드 증강을 획득합니다."
     },
     {
       "augmentId": "FullyAutomated",
@@ -7598,7 +8510,11 @@
       "name_ja": "スニーカーヘッド",
       "name_ko": "신발 수집가",
       "wikiDescription": "Assigns quests that require you to perform specific tasks while equipped with a particular Boots item, which is granted to you for free during its respective quest. Finish the following quests, which are assigned to you in a random order: Quest - Berserker's Greaves: Basic attack 25 times. Quest - Boots of Swiftness: Run 300 steps. Quest - Ionian Boots of Lucidity: Cast 20 abilities. Quest - Mercury's Treads: Become afflicted by crowd control 5 times. Quest - Plated Steelcaps: Reduce a total of 200 damage with Plating. Quest - Sorcerer's Shoes: Deal a total of 1500 damage with abilities. Reward: Upon completing all of the above quests, you receive Jarvan I's. You cannot purchase any Boots items while equipped with this augment. If you already have a Boots item, it is replaced by the Boots granted by this effect. Boots items gained from this effect cannot be sold.",
-      "wikiRarity": "prismatic"
+      "wikiRarity": "prismatic",
+      "description_zh_TW": "立即：獲得1雙隨機升級版靴子。 條件：完成任務可換另一雙。 獎勵：嘉文一世的靴子",
+      "description_zh_CN": "即刻：随机获得一双升级后的靴子。 需求：完成其任务，以更换为另一双。 奖励：嘉文一世之靴",
+      "description_ja": "即時: ランダムなアップグレード後のブーツを獲得する。 条件: クエストを完了すると別のものと交換できる。 報酬: ジャーヴァンI世のブーツ",
+      "description_ko": "즉시: 한 쌍의 무작위 업그레이드 장화를 얻습니다. 조건: 해당 장화의 퀘스트를 완료하여 다음 퀘스트를 받으세요. 보상: 자르반 1세의 장화"
     },
     {
       "augmentId": "ReEnergize",
@@ -7625,7 +8541,11 @@
       "name_ja": "エネルギー再充填",
       "name_ko": "재충전",
       "wikiDescription": "Your Energized attacks against targets not hit by your previous Energized attack do not consume any Energize stacks on-hit. Additionally, when fully Energized, your next basic attack deals bonus magic damage on-hit equal to 10% of the target's current health.",
-      "wikiRarity": "silver"
+      "wikiRarity": "silver",
+      "description_zh_TW": "獲得一次充能普攻，造成@TargetCurrentHealthRatio*100@%目標現有生命的傷害。若該目標並非上次的目標，則使用次數會完全返還。",
+      "description_zh_CN": "获得一次盈能攻击，它造成@TargetCurrentHealthRatio*100@%目标当前生命值的伤害。你的盈能攻击充能数会得到全额返还，如果目标与你前一次攻击的目标不是同一个。",
+      "description_ja": "エネルギー充填状態の通常攻撃を1チャージ獲得し、対象の現在体力の@TargetCurrentHealthRatio*100@%にあたるダメージを与える。対象が前回とは異なる場合、チャージが全回復する。",
+      "description_ko": "충전 상태 공격을 얻어 대상 현재 체력의 @TargetCurrentHealthRatio*100@%에 해당하는 피해를 입힙니다. 대상이 이전 대상과 다르면 충전을 모두 돌려받습니다."
     },
     {
       "augmentId": "SkipTheBasics",
@@ -7679,7 +8599,11 @@
       "name_ja": "スナップバック",
       "name_ko": "원상복구",
       "wikiDescription": "Upgrades one of your champion's abilities, empowering the ability with a recast. Using the recast causes you to blink back to your original casting position of the ability and explode to deal 100 – 300 (based on level) (+ 20% AD) (+ 20% AP) magic damage to nearby enemies.",
-      "wikiRarity": "gold"
+      "wikiRarity": "gold",
+      "description_zh_TW": "重施技能{{SpellName}}會引爆並返回你原本的位置。",
+      "description_zh_CN": "再次施放【{{SpellName}}】技能时会产生爆炸，并回到你的原本位置。",
+      "description_ja": "{{SpellName}}を再発動すると爆発し、元の位置に戻る。",
+      "description_ko": "{{SpellName}} 재사용 시 폭발하며 원래 위치로 돌아갑니다."
     },
     {
       "augmentId": "VeilOfWarding",
@@ -7706,7 +8630,11 @@
       "name_ja": "ワーディングヴェール",
       "name_ko": "감시의 장막",
       "wikiDescription": "Grants a spell shield that blocks the next hostile ability (30 second cooldown, timer does not restart from champion damage taken).",
-      "wikiRarity": "silver"
+      "wikiRarity": "silver",
+      "description_zh_TW": "每@Cooldown@秒獲得一道法術護盾，可阻擋下一個敵方技能。",
+      "description_zh_CN": "每@Cooldown@秒获得一层法术护盾来格挡下一个敌方技能。",
+      "description_ja": "次に敵から受けるスキルをブロックするスペルシールドを@Cooldown@秒ごとに獲得する。",
+      "description_ko": "@Cooldown@초마다 적의 다음 스킬을 막아 주는 주문 방어막을 생성합니다."
     },
     {
       "augmentId": "VirtuousCycle",
@@ -7733,7 +8661,11 @@
       "name_ja": "好循環",
       "name_ko": "선순환",
       "wikiDescription": "Your heals grant a shield for 5 seconds that is equal to 20% of the healing value, and your shields grant a heal equal to 20% of the shield's strength. This effect cannot trigger from itself.",
-      "wikiRarity": "silver"
+      "wikiRarity": "silver",
+      "description_zh_TW": "你的治療會賦予額外的護盾，且你的護盾會賦予額外的治療。",
+      "description_zh_CN": "你的治疗效果提供额外护盾，而你的护盾提供额外治疗效果。",
+      "description_ja": "体力回復効果が追加のシールドを付与し、シールドが追加で体力回復効果を付与する。",
+      "description_ko": "회복 시 추가 보호막을 얻고 보호막 사용 시 체력을 추가로 회복합니다."
     },
     {
       "augmentId": "DustToDiamonds",

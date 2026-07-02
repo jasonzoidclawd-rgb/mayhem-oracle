@@ -17,6 +17,7 @@ import { computeDamageCalculation } from "@/lib/data/damage-calculations";
 export interface CalcChampion {
   slug: string;
   name: string;
+  searchName?: string;
   icon: string;
   attackType: "melee" | "ranged";
   damageType: "physical" | "magic" | "mixed";
@@ -28,6 +29,7 @@ export interface CalcChampion {
 export interface CalcItem {
   id: number;
   name: string;
+  searchName?: string;
   icon: string;
   stats: ItemStats;
 }
@@ -363,7 +365,11 @@ function ChampionPanel({
   const filtered = useMemo(() => {
     if (!search) return champions;
     const q = search.toLowerCase();
-    return champions.filter((c) => c.name.toLowerCase().includes(q));
+    return champions.filter(
+      (c) =>
+        c.name.toLowerCase().includes(q) ||
+        (c.searchName?.toLowerCase().includes(q) ?? false),
+    );
   }, [champions, search]);
 
   return (
@@ -559,7 +565,13 @@ function ItemSlot({
     const chosen = new Set(chosenIds.filter((id) => id != null));
     const q = search.toLowerCase();
     return items
-      .filter((it) => !chosen.has(it.id) && (q === "" || it.name.toLowerCase().includes(q)))
+      .filter(
+        (it) =>
+          !chosen.has(it.id) &&
+          (q === "" ||
+            it.name.toLowerCase().includes(q) ||
+            (it.searchName?.toLowerCase().includes(q) ?? false)),
+      )
       .slice(0, 20);
   }, [items, chosenIds, search]);
 

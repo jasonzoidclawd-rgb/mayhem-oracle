@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import {
   CompanionClient,
   type CompanionAugmentOption,
@@ -5,9 +6,19 @@ import {
 } from "@/components/companion/CompanionClient";
 import { readChampionsFile, readAugmentsFile } from "@/lib/data/read-public-file";
 import { readMemberAccess } from "@/lib/membership/read-member-access";
-import { setRequestLocale } from "next-intl/server";
+import { getTranslations, setRequestLocale } from "next-intl/server";
+import type { Locale } from "@/i18n/routing";
+import { languageAlternates, localizedUrl } from "@/lib/site";
+import { localizedName } from "@/lib/i18n/localized-name";
 
-type RawChampion = { slug: string; name: string };
+type RawChampion = {
+  slug: string;
+  name: string;
+  name_zh_TW?: string;
+  name_zh_CN?: string;
+  name_ja?: string;
+  name_ko?: string;
+};
 type RawAugment = {
   slug: string;
   name: string;
@@ -18,6 +29,30 @@ type RawAugment = {
   name_ko?: string;
   rarity?: "silver" | "gold" | "prismatic";
 };
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+  const t = await getTranslations({ locale, namespace: "companion" });
+  const route = "/companion";
+  const title = t("title");
+  const description = t("description");
+  const url = localizedUrl(route, locale as Locale);
+
+  return {
+    title,
+    description,
+    alternates: {
+      canonical: url,
+      languages: languageAlternates(route),
+    },
+    openGraph: { title, description, url, locale },
+    twitter: { card: "summary_large_image", title, description },
+  };
+}
 
 // Companion always ships the public picker catalog — unlike /advisor, it does
 // not swap the whole page for non-members. Only the verdict zone is gated
@@ -38,21 +73,18 @@ export default async function CompanionPage({
     readAugmentsFile<{ augments: RawAugment[] }>(),
   ]);
 
-  const localizedName = (augment: RawAugment): string => {
-    if (locale === "zh-TW") return augment.name_zh_TW ?? augment.name_zh_CN ?? augment.name;
-    if (locale === "zh-CN") return augment.name_zh_CN ?? augment.name;
-    if (locale === "ja") return augment.name_ja ?? augment.name;
-    if (locale === "ko") return augment.name_ko ?? augment.name;
-    return augment.displayName ?? augment.name;
-  };
-
   const championOptions: CompanionChampionOption[] = champions
-    .map(({ slug, name }) => ({ slug, name }))
+    .map((champion) => ({
+      slug: champion.slug,
+      name: localizedName(champion, locale),
+      searchName: champion.name,
+    }))
     .sort((a, b) => a.name.localeCompare(b.name));
 
   const augmentOptions: CompanionAugmentOption[] = augments.map((augment) => ({
     slug: augment.slug,
-    displayName: localizedName(augment),
+    displayName: localizedName(augment, locale),
+    searchName: augment.name,
     rarity: augment.rarity ?? "gold",
   }));
 

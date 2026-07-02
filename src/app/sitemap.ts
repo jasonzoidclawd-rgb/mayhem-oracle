@@ -12,6 +12,7 @@ import { routing } from "@/i18n/routing";
 const STATIC_PATHS = [
   "/",
   "/champions",
+  "/tier-list",
   "/augments",
   "/items",
   "/patch-notes",
@@ -31,6 +32,18 @@ async function championSlugs(): Promise<string[]> {
       champions?: { slug: string }[];
     };
     return (data.champions ?? []).map((c) => c.slug);
+  } catch {
+    return [];
+  }
+}
+
+async function augmentSlugs(): Promise<string[]> {
+  try {
+    const file = path.join(process.cwd(), "public", "data", "augments.json");
+    const data = JSON.parse(await readFile(file, "utf-8")) as {
+      augments?: { slug: string }[];
+    };
+    return (data.augments ?? []).map((augment) => augment.slug);
   } catch {
     return [];
   }
@@ -56,11 +69,16 @@ async function itemIdentifiers(): Promise<string[]> {
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const lastModified = new Date();
-  const [slugs, itemIds] = await Promise.all([championSlugs(), itemIdentifiers()]);
+  const [slugs, augmentIds, itemIds] = await Promise.all([
+    championSlugs(),
+    augmentSlugs(),
+    itemIdentifiers(),
+  ]);
 
   const paths: string[] = [
     ...STATIC_PATHS,
     ...slugs.map((slug) => `/champions/${slug}`),
+    ...augmentIds.map((slug) => `/augments/${slug}`),
     ...itemIds.map((identifier) => `/items/${identifier}`),
   ];
 

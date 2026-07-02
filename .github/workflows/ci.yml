@@ -39,3 +39,24 @@ jobs:
       - name: Build overlay
         working-directory: overlay
         run: npm run build
+
+  python-pipeline-tests:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v5.0.1
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install Python test dependencies
+        run: python3 -m pip install pytest
+
+      - name: Run script unit tests
+        run: cd scripts && python3 -m unittest discover -p "test_*.py"
+
+      - name: Run model tests
+        run: python3 -m pytest scripts/model/tests -q

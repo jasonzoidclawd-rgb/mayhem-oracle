@@ -4,7 +4,9 @@
 from __future__ import annotations
 
 import argparse
+import html
 import json
+import re
 import shutil
 from pathlib import Path
 
@@ -12,6 +14,15 @@ from data_paths import INTERNAL_DATA_DIR, ROOT
 
 PUBLIC_DATA_DIR = ROOT / "public" / "data"
 COPY_FILES = ("abilities.json", "champions.json", "meta.json")
+LOCALIZED_AUGMENT_DESCRIPTION_FIELDS = {
+    "zh_tw": "description_zh_TW",
+    "zh_cn": "description_zh_CN",
+    "ja": "description_ja",
+    "ko": "description_ko",
+}
+TAG_RE = re.compile(r"<[^>]+>")
+BR_RE = re.compile(r"<br\s*/?>", re.IGNORECASE)
+WHITESPACE_RE = re.compile(r"\s+")
 
 
 def read_json(path: Path) -> dict:
@@ -52,6 +63,30 @@ def strip_keys(value, forbidden: set[str]):
     return value
 
 
+def sanitized_description(value: object) -> str | None:
+    if not isinstance(value, str):
+        return None
+    text = BR_RE.sub(" ", value)
+    text = TAG_RE.sub("", text)
+    text = html.unescape(text)
+    text = WHITESPACE_RE.sub(" ", text).strip()
+    return text or None
+
+
+def add_public_localized_augment_descriptions(augment: dict) -> None:
+    by_locale = augment.get("effectTextByLocale")
+    if not isinstance(by_locale, dict):
+        return
+
+    for locale_key, public_field in LOCALIZED_AUGMENT_DESCRIPTION_FIELDS.items():
+        localized = by_locale.get(locale_key)
+        if not isinstance(localized, dict):
+            continue
+        description = sanitized_description(localized.get("desc"))
+        if description:
+            augment[public_field] = description
+
+
 def build_public_augments(internal_dir: Path, forbidden: set[str]) -> dict:
     augments = read_json(internal_dir / "augments.json")
     pool_rules = read_json(internal_dir / "pool-rules.json")
@@ -63,6 +98,7 @@ def build_public_augments(internal_dir: Path, forbidden: set[str]) -> dict:
         slug = augment.get("slug")
         if not slug:
             continue
+        add_public_localized_augment_descriptions(augment)
         patch = removed_patches.get(slug) or added_patches.get(slug)
         if patch:
             augment.setdefault("flags", {})["lifecycle_patch"] = patch

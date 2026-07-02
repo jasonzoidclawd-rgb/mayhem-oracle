@@ -60,6 +60,18 @@ class EvaluateTests(unittest.TestCase):
         )
         self.assertEqual(counts["round"], {"1": 2, "2": 2, "3": 2, "4": 2})
 
+    def test_load_parity_fixtures_ignores_support_snapshots(self):
+        fixtures = evaluate.load_parity_fixtures(PARITY_FIXTURE_DIR)
+        self.assertEqual(
+            [name for name, _ in fixtures],
+            [
+                "all-weak-brand",
+                "competitive-brand",
+                "exploration-brand",
+                "hard-trap-garen",
+            ],
+        )
+
     def test_report_has_deltas_stability_traps_parity_and_manual_gate(self):
         report = self.report()
 

@@ -149,13 +149,26 @@ missing_breakers = [
     }
     if not next((a for a in augments if a.get("slug") == slug and a.get("flags", {}).get("system_breaker") is True), None)
 ]
+locale_failures = []
+for suffix in ("zh_TW", "zh_CN", "ja", "ko"):
+    champion_field = f"name_{suffix}"
+    augment_field = f"name_{suffix}"
+    champion_count = sum(1 for c in champions if str(c.get(champion_field) or "").strip())
+    augment_count = sum(1 for a in augments if str(a.get(augment_field) or "").strip())
+    champion_coverage = champion_count / len(champions) if champions else 0
+    augment_coverage = augment_count / len(augments) if augments else 0
+    if champion_coverage < 0.9:
+        locale_failures.append(f"champion {champion_field}={champion_count}/{len(champions)}")
+    if augment_coverage < 0.8:
+        locale_failures.append(f"augment {augment_field}={augment_count}/{len(augments)}")
 
-if champion_tagged == 0 or augment_tagged == 0 or missing_breakers:
+if champion_tagged == 0 or augment_tagged == 0 or missing_breakers or locale_failures:
     raise SystemExit(
         "classification validation failed: "
         f"champion kit_tags={champion_tagged}/{len(champions)}, "
         f"augment kit_tags={augment_tagged}/{len(augments)}, "
-        f"missing system breakers={missing_breakers}"
+        f"missing system breakers={missing_breakers}, "
+        f"locale coverage failures={locale_failures}"
     )
 PY
 
