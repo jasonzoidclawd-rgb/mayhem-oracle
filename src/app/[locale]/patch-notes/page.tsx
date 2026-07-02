@@ -48,14 +48,19 @@ export async function generateMetadata({
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: "patchNotes" });
   const route = "/patch-notes";
+  const title = t("title");
+  const description = t("subtitle");
+  const url = localizedUrl(route, locale as Locale);
 
   return {
-    title: t("title"),
-    description: t("subtitle"),
+    title,
+    description,
     alternates: {
-      canonical: localizedUrl(route, locale as Locale),
+      canonical: url,
       languages: languageAlternates(route),
     },
+    openGraph: { title, description, url, locale },
+    twitter: { card: "summary_large_image", title, description },
   };
 }
 

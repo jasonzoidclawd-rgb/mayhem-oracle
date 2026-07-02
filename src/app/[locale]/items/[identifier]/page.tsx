@@ -193,14 +193,19 @@ export async function generateMetadata({
 
   const name = localizedName(item, locale);
   const route = `/items/${identifier}`;
+  const title = t("metaDetailTitle", { name });
+  const description = t("metaDetailDescription", { name });
+  const url = localizedUrl(route, locale as Locale);
 
   return {
-    title: t("metaDetailTitle", { name }),
-    description: t("metaDetailDescription", { name }),
+    title,
+    description,
     alternates: {
-      canonical: localizedUrl(route, locale as Locale),
+      canonical: url,
       languages: languageAlternates(route),
     },
+    openGraph: { title, description, url, locale },
+    twitter: { card: "summary_large_image", title, description },
   };
 }
 

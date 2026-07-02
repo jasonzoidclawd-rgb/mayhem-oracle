@@ -104,14 +104,19 @@ export async function generateMetadata({
     silver: tChamp("silver"),
   }[augment.rarity];
   const route = `/augments/${augment.slug}`;
+  const title = t("metaDetailTitle", { name, rarity });
+  const description = t("metaDetailDescription", { name, rarity });
+  const url = localizedUrl(route, locale as Locale);
 
   return {
-    title: t("metaDetailTitle", { name, rarity }),
-    description: t("metaDetailDescription", { name, rarity }),
+    title,
+    description,
     alternates: {
-      canonical: localizedUrl(route, locale as Locale),
+      canonical: url,
       languages: languageAlternates(route),
     },
+    openGraph: { title, description, url, locale },
+    twitter: { card: "summary_large_image", title, description },
   };
 }
 

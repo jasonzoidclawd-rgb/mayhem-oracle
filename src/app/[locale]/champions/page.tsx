@@ -51,14 +51,19 @@ export async function generateMetadata({
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: "champion" });
   const route = "/champions";
+  const title = t("metaTitle");
+  const description = t("metaDescription");
+  const url = localizedUrl(route, locale as Locale);
 
   return {
-    title: t("metaTitle"),
-    description: t("metaDescription"),
+    title,
+    description,
     alternates: {
-      canonical: localizedUrl(route, locale as Locale),
+      canonical: url,
       languages: languageAlternates(route),
     },
+    openGraph: { title, description, url, locale },
+    twitter: { card: "summary_large_image", title, description },
   };
 }
 

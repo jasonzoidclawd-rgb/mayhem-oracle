@@ -93,14 +93,19 @@ export async function generateMetadata({
 
   const name = localizedName(champ, locale);
   const route = `/champions/${champ.slug}`;
+  const title = t("metaDetailTitle", { name, tier: champ.tier, patch: data.patch });
+  const description = t("metaDetailDescription", { name, tier: champ.tier, patch: data.patch });
+  const url = localizedUrl(route, locale as Locale);
 
   return {
-    title: t("metaDetailTitle", { name, tier: champ.tier, patch: data.patch }),
-    description: t("metaDetailDescription", { name, tier: champ.tier, patch: data.patch }),
+    title,
+    description,
     alternates: {
-      canonical: localizedUrl(route, locale as Locale),
+      canonical: url,
       languages: languageAlternates(route),
     },
+    openGraph: { title, description, url, locale },
+    twitter: { card: "summary_large_image", title, description },
   };
 }
 
