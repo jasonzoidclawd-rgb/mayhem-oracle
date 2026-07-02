@@ -14,11 +14,13 @@ import type {
 export interface CompanionChampionOption {
   slug: string;
   name: string;
+  searchName?: string;
 }
 
 export interface CompanionAugmentOption {
   slug: string;
   displayName: string;
+  searchName?: string;
   rarity: AugmentRarity;
 }
 
@@ -179,14 +181,22 @@ export function CompanionClient({
   const offerable = useMemo(() => {
     const needle = query.trim().toLowerCase();
     return augments.filter(
-      (a) => a.rarity === rarity && (!needle || a.displayName.toLowerCase().includes(needle)),
+      (a) =>
+        a.rarity === rarity &&
+        (!needle ||
+          a.displayName.toLowerCase().includes(needle) ||
+          (a.searchName?.toLowerCase().includes(needle) ?? false)),
     );
   }, [augments, rarity, query]);
 
   const filteredChampions = useMemo(() => {
     const needle = championQuery.trim().toLowerCase();
     if (!needle) return champions;
-    return champions.filter((c) => c.name.toLowerCase().includes(needle));
+    return champions.filter(
+      (c) =>
+        c.name.toLowerCase().includes(needle) ||
+        (c.searchName?.toLowerCase().includes(needle) ?? false),
+    );
   }, [champions, championQuery]);
 
   function toast(message: string) {
