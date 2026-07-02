@@ -8,8 +8,12 @@
  *
  * CI-only: kept under scripts/ so its google-auth-library / R2 deps never reach
  * the web bundle. Requires env: SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY,
- * R2_* , GCP_PROJECT_ID, GOOGLE_APPLICATION_CREDENTIALS (or _JSON), CURRENT_PATCH.
+ * R2_* , GCP_PROJECT_ID, GOOGLE_APPLICATION_CREDENTIALS (or _JSON).
+ * CURRENT_PATCH is an optional override; otherwise public/data/meta.json is
+ * the source of truth.
  */
+import { readFile } from "fs/promises";
+import path from "path";
 import { createClient } from "@supabase/supabase-js";
 import { AwsClient } from "aws4fetch";
 import { GoogleAuth } from "google-auth-library";
@@ -22,6 +26,35 @@ function env(name: string): string {
   const value = process.env[name];
   if (!value) throw new Error(`missing env ${name}`);
   return value;
+}
+
+function validatePatch(value: unknown, source: string): string {
+  if (typeof value !== "string" || !/^\d+\.\d+$/.test(value.trim())) {
+    throw new Error(`malformed telemetry patch in ${source}: expected version like 26.13`);
+  }
+  return value.trim();
+}
+
+export function patchFromMetaJson(raw: string, source = "public/data/meta.json"): string {
+  let parsed: unknown;
+  try {
+    parsed = JSON.parse(raw);
+  } catch (error) {
+    throw new Error(`malformed telemetry patch metadata in ${source}: ${(error as Error).message}`);
+  }
+  if (!parsed || typeof parsed !== "object" || Array.isArray(parsed)) {
+    throw new Error(`malformed telemetry patch metadata in ${source}: expected object`);
+  }
+  return validatePatch((parsed as { patch?: unknown }).patch, `${source}.patch`);
+}
+
+export async function resolveCurrentPatch(
+  metaPath = path.join(process.cwd(), "public", "data", "meta.json"),
+): Promise<string> {
+  if (process.env.CURRENT_PATCH !== undefined) {
+    return validatePatch(process.env.CURRENT_PATCH, "CURRENT_PATCH");
+  }
+  return patchFromMetaJson(await readFile(metaPath, "utf-8"), metaPath);
 }
 
 function r2Client(): { client: AwsClient; endpoint: string } {
@@ -62,7 +95,8 @@ async function main(): Promise<void> {
   });
   const auth = new GoogleAuth({ scopes: ["https://www.googleapis.com/auth/bigquery.insertdata"] });
   const projectId = env("GCP_PROJECT_ID");
-  const currentPatch = env("CURRENT_PATCH");
+  const currentPatch = await resolveCurrentPatch();
+  console.log(`using telemetry patch ${currentPatch}`);
   const { client, endpoint } = r2Client();
 
   // Expire stale trial reservations (>24h) so abandoned games release credits.
@@ -117,7 +151,9 @@ async function main(): Promise<void> {
   console.log(`loaded ${loadedMatches} matches from ${batches?.length ?? 0} batches`);
 }
 
-main().catch((error) => {
-  console.error(error);
-  process.exit(1);
-});
+if (process.env.NODE_ENV !== "test") {
+  main().catch((error) => {
+    console.error(error);
+    process.exit(1);
+  });
+}

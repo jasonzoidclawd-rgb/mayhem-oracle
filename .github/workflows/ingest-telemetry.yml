@@ -1,8 +1,8 @@
 name: Ingest telemetry
 
 # Nightly: load stored R2 batches into BigQuery and finalize trial credits.
-# Claude-owned (M3B). Separate from the data-update cron. No-ops cleanly when
-# there are no stored batches.
+# Separate from the data-update cron. No-ops cleanly when there are no stored
+# batches.
 on:
   schedule:
     - cron: "23 3 * * *" # 03:23 UTC daily (off-peak, non-:00)
@@ -35,7 +35,6 @@ jobs:
           R2_BUCKET: ${{ secrets.R2_BUCKET }}
           GCP_PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
           GOOGLE_APPLICATION_CREDENTIALS_JSON: ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS_JSON }}
-          CURRENT_PATCH: "26.12"
         run: |
           if [ -z "$SUPABASE_URL" ] || [ -z "$GCP_PROJECT_ID" ]; then
             echo "Telemetry secrets not configured — skipping (no-op)."
