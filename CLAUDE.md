@@ -38,6 +38,17 @@ Maintained by `scripts/update-state.sh` (post-commit hook via
   import path — edit both sides together.
 - `public/data/` is generated — never hand-edit. `scripts/update-data.sh`
   owns the snapshot/restore of curated fields.
+- Disclosure ladder: public (`public/data/`, `/api/v1`) < member (server-gated
+  via `requireActiveEntitlement`) < internal (`data/internal/`, calibration/
+  model/telemetry). Enforced by `export_public_catalog.py` +
+  `public-data-boundary.test.ts`; see AGENTS.md "Data Ladder & Anti-Scraping".
+- Localization is data architecture: language-agnostic slugs/ids, per-locale
+  display fields resolved through `src/lib/i18n/localized-name.ts`. Raw
+  `.name`/`.description` renders and hardcoded `en_US` in shared paths are
+  bugs (AGENTS.md "Localization Is Data Architecture").
+- The update pipeline is product infrastructure: stale/partial/broken publishes
+  are product outages, and freshness claims must trace to `meta.json`
+  (AGENTS.md "Update Pipeline Is Product Infrastructure").
 - Overlay work is compliance-sensitive: no game automation, hidden-information
   access, or client injection without explicit review.
 
@@ -84,5 +95,8 @@ update-data step gate, data-integrity test).
   member coach, and device-auth findings.
 - `docs/plans/riot-api-bigquery-discovery.md` — Riot API + BigQuery discovery
   roadmap and compliance boundaries.
+- `docs/reviews/2026-07-02-architecture-review.md` — full-repo review:
+  blocking findings (update-publish test gate, canonicals, telemetry patch
+  stamp, English-persistence root causes) and product-owner questions.
 - 26.12 rebuild ledger: phase tags `26.12-phase<N>-complete`, prompt at
   `docs/plans/patch-26.12-scoring-engine-rebuild-plan-prompt.md`

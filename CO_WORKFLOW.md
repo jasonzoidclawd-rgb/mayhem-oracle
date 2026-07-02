@@ -13,9 +13,12 @@ Derived from the Karpathy-style `CLAUDE.md` rules:
 
 ## Default Split
 
+- This split is a per-task default, not a standing ownership map: no agent
+  permanently owns any file or repo area, and no area is exempt from review.
 - Use Claude for exploration, problem framing, research, and broad code reading.
 - Use Codex for surgical implementation, patching, lint/test/build loops, and final verification.
-- If one agent owns a file, the other should avoid editing that file until handoff is complete.
+- While a handoff is in flight, only the assigned agent edits the files in
+  scope; the lock ends when the handoff completes.
 
 ## Shared Rules
 
