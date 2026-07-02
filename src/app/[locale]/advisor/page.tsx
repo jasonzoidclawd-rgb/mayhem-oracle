@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import {
   AdvisorMemberClient,
   type AdvisorAugmentOption,
@@ -8,6 +9,8 @@ import type { DecisionGrade } from "@/lib/contracts/decision";
 import { loadPublicJson } from "@/lib/data/public-loader";
 import { readMemberAccess } from "@/lib/membership/read-member-access";
 import { getTranslations, setRequestLocale } from "next-intl/server";
+import type { Locale } from "@/i18n/routing";
+import { languageAlternates, localizedUrl } from "@/lib/site";
 
 type RawChampion = { slug: string; name: string; icon?: string };
 type RawAugment = {
@@ -21,6 +24,25 @@ type RawAugment = {
   rarity?: "silver" | "gold" | "prismatic";
   icon?: string;
 };
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+  const t = await getTranslations({ locale, namespace: "advisor" });
+  const route = "/advisor";
+
+  return {
+    title: t("title"),
+    description: t("description"),
+    alternates: {
+      canonical: localizedUrl(route, locale as Locale),
+      languages: languageAlternates(route),
+    },
+  };
+}
 
 // The Advisor is a member tool: this page ships only the public picker catalog
 // (slug/name/icon/rarity). All scoring — pools, weights, grades — comes from

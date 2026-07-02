@@ -7,12 +7,15 @@
  *   Armor penetration        — https://wiki.leagueoflegends.com/en-us/Armor_penetration
  *   Lethality                — https://wiki.leagueoflegends.com/en-us/Lethality (1:1 since v14.1)
  */
+import type { Metadata } from "next";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { readFile } from "fs/promises";
 import path from "path";
 import type { Item, ChampionBaseStats, AbilityProfile } from "@/lib/types";
 import { parseItemStats, computeDamageProfile, computeMagicDamageProfile } from "@/lib/data/itemStats";
 import DamageCalculator, { type CalcChampion, type CalcItem } from "@/components/damage-sim/DamageCalculator";
+import type { Locale } from "@/i18n/routing";
+import { languageAlternates, localizedUrl } from "@/lib/site";
 
 // ─── Data loaders ─────────────────────────────────────────────────────────────
 
@@ -174,6 +177,25 @@ const RARITY_STYLE: Record<string, string> = {
 
 const TARGET_ARMOR = 100;
 const TARGET_MR = 50;
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+  const t = await getTranslations({ locale, namespace: "damageSim" });
+  const route = "/damage-sim";
+
+  return {
+    title: t("title"),
+    description: t("subtitle", { armor: TARGET_ARMOR, mr: TARGET_MR }),
+    alternates: {
+      canonical: localizedUrl(route, locale as Locale),
+      languages: languageAlternates(route),
+    },
+  };
+}
 
 // ─── Page ─────────────────────────────────────────────────────────────────────
 

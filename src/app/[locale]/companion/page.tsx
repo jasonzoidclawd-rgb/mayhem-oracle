@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import {
   CompanionClient,
   type CompanionAugmentOption,
@@ -5,7 +6,9 @@ import {
 } from "@/components/companion/CompanionClient";
 import { readChampionsFile, readAugmentsFile } from "@/lib/data/read-public-file";
 import { readMemberAccess } from "@/lib/membership/read-member-access";
-import { setRequestLocale } from "next-intl/server";
+import { getTranslations, setRequestLocale } from "next-intl/server";
+import type { Locale } from "@/i18n/routing";
+import { languageAlternates, localizedUrl } from "@/lib/site";
 
 type RawChampion = { slug: string; name: string };
 type RawAugment = {
@@ -18,6 +21,25 @@ type RawAugment = {
   name_ko?: string;
   rarity?: "silver" | "gold" | "prismatic";
 };
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+  const t = await getTranslations({ locale, namespace: "companion" });
+  const route = "/companion";
+
+  return {
+    title: t("title"),
+    description: t("description"),
+    alternates: {
+      canonical: localizedUrl(route, locale as Locale),
+      languages: languageAlternates(route),
+    },
+  };
+}
 
 // Companion always ships the public picker catalog — unlike /advisor, it does
 // not swap the whole page for non-members. Only the verdict zone is gated

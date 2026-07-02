@@ -1,7 +1,10 @@
+import type { Metadata } from "next";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { readFile } from "fs/promises";
 import path from "path";
 import { ChampionsIndex } from "@/components/champions/ChampionsIndex";
+import type { Locale } from "@/i18n/routing";
+import { languageAlternates, localizedUrl } from "@/lib/site";
 
 export type ChampionEntry = {
   slug: string;
@@ -39,6 +42,25 @@ export type ChampionEntry = {
     hpRegenGrowth: number;
   };
 };
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+  const t = await getTranslations({ locale, namespace: "champion" });
+  const route = "/champions";
+
+  return {
+    title: t("metaTitle"),
+    description: t("metaDescription"),
+    alternates: {
+      canonical: localizedUrl(route, locale as Locale),
+      languages: languageAlternates(route),
+    },
+  };
+}
 
 export default async function ChampionsIndexPage({
   params,

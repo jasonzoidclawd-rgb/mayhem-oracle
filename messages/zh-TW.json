@@ -118,6 +118,10 @@
   "champion": {
     "indexTitle": "英雄",
     "indexSubtitle": "{count} 名英雄 — 點擊查看神諭增強排名",
+    "metaTitle": "ARAM 大亂鬥英雄",
+    "metaDescription": "瀏覽所有 ARAM 大亂鬥英雄的即時階級、勝率、選用率與在地化英雄數據。",
+    "metaDetailTitle": "{name} ARAM 大亂鬥指南 — {tier} 階",
+    "metaDetailDescription": "{name} 在 ARAM 大亂鬥 {patch} 版本為 {tier} 階。查看屬性、最佳增強、陷阱與會員增強池指引。",
     "augments": "最佳增強",
     "builds": "推薦出裝",
     "combos": "組合連攜",
@@ -214,6 +218,10 @@
   "augments": {
     "title": "增強",
     "subtitle": "{count} 個增強 · 版本 {patch} · 依神諭評分排序",
+    "metaTitle": "ARAM 大亂鬥增強",
+    "metaDescription": "瀏覽 ARAM 大亂鬥增強的神諭評分、稀有度、版本狀態與英雄組合連結。",
+    "metaDetailTitle": "{name} 增強指南",
+    "metaDetailDescription": "{name} 是 {rarity} ARAM 大亂鬥增強。查看效果脈絡、版本狀態與公開英雄強力組合。",
     "search": "搜尋名稱、套組或效果...",
     "sortScore": "排序：神諭評分",
     "sortWinRate": "排序：勝率",
@@ -249,6 +257,8 @@
   "items": {
     "title": "ARAM 大亂鬥裝備",
     "subtitle": "大亂鬥專屬裝備與調整裝備數據",
+    "metaDetailTitle": "{name} ARAM 大亂鬥裝備",
+    "metaDetailDescription": "查看 {name} 的裝備屬性、價格、效果、合成路線與 ARAM 大亂鬥調整。",
     "mayhemExclusive": "大亂鬥專屬",
     "allItems": "全部裝備",
     "search": "搜尋裝備...",
@@ -673,6 +683,7 @@
   },
   "companion": {
     "title": "夥伴",
+    "description": "在對戰中用手機開啟 ARAM 大亂鬥夥伴工具，為你拿到的增強即時評分。",
     "stickyHint": "沿用上一場的英雄",
     "changeChampion": "更換英雄",
     "pickerTitle": "選擇你的英雄",

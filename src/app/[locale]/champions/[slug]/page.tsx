@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { requireActiveEntitlement } from "@/lib/entitlements/server";
 import { MembershipGate } from "@/components/membership/MembershipGate";
@@ -13,7 +14,7 @@ import { getChampionAugmentPool } from "@/lib/scoring/pool-orchestrator";
 import { analyzeInteractions, type MechanicalInteraction, type AugmentMechanic } from "@/lib/scoring/augment-interactions";
 import { localizedDescription, localizedName } from "@/lib/i18n/localized-name";
 import { buildComboTierLookup, resolveChampionCombos } from "@/lib/data/combo-lookup";
-import { routing } from "@/i18n/routing";
+import { routing, type Locale } from "@/i18n/routing";
 import { ChampionMatrixClient } from "@/components/champions/ChampionMatrixClient";
 import {
   loadChampionDetailData,
@@ -29,7 +30,7 @@ import {
 } from "@/components/champions/PoolConstructionSection";
 import type { DecisionGrade } from "@/lib/contracts/decision";
 import { JsonLd } from "@/components/seo/JsonLd";
-import { SITE_URL } from "@/lib/site";
+import { SITE_URL, languageAlternates, localizedUrl } from "@/lib/site";
 
 type ChampionData = ChampionDetailChampion;
 type AugmentData = ChampionDetailAugment;
@@ -57,6 +58,30 @@ export async function generateStaticParams() {
   return routing.locales.flatMap((locale) =>
     champions.map((c) => ({ locale, slug: c.slug }))
   );
+}
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string; slug: string }>;
+}): Promise<Metadata> {
+  const { locale, slug } = await params;
+  const t = await getTranslations({ locale, namespace: "champion" });
+  const data = await loadChampionDetailData("public");
+  const champ = data.champions.find((c) => c.slug === slug);
+  if (!champ) notFound();
+
+  const name = localizedName(champ, locale);
+  const route = `/champions/${champ.slug}`;
+
+  return {
+    title: t("metaDetailTitle", { name, tier: champ.tier, patch: data.patch }),
+    description: t("metaDetailDescription", { name, tier: champ.tier, patch: data.patch }),
+    alternates: {
+      canonical: localizedUrl(route, locale as Locale),
+      languages: languageAlternates(route),
+    },
+  };
 }
 
 // ─── Page ─────────────────────────────────────────────────────────────────────

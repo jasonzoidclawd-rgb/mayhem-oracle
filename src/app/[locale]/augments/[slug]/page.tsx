@@ -1,9 +1,11 @@
+import type { Metadata } from "next";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import Image from "next/image";
 import { notFound } from "next/navigation";
 import { Link } from "@/i18n/navigation";
-import { routing } from "@/i18n/routing";
+import { routing, type Locale } from "@/i18n/routing";
 import { localizedName } from "@/lib/i18n/localized-name";
+import { languageAlternates, localizedUrl } from "@/lib/site";
 import {
   readAugmentsFile,
   readChampionsFile,
@@ -81,6 +83,36 @@ export async function generateStaticParams() {
   } catch {
     return [];
   }
+}
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string; slug: string }>;
+}): Promise<Metadata> {
+  const { locale, slug } = await params;
+  const t = await getTranslations({ locale, namespace: "augments" });
+  const tChamp = await getTranslations({ locale, namespace: "champion" });
+  const augments = await loadAugments();
+  const augment = augments.find((a) => a.slug === slug);
+  if (!augment) notFound();
+
+  const name = localizedName(augment, locale);
+  const rarity = {
+    prismatic: tChamp("prismatic"),
+    gold: tChamp("gold"),
+    silver: tChamp("silver"),
+  }[augment.rarity];
+  const route = `/augments/${augment.slug}`;
+
+  return {
+    title: t("metaDetailTitle", { name, rarity }),
+    description: t("metaDetailDescription", { name, rarity }),
+    alternates: {
+      canonical: localizedUrl(route, locale as Locale),
+      languages: languageAlternates(route),
+    },
+  };
 }
 
 // ─── Page ─────────────────────────────────────────────────────────────────────

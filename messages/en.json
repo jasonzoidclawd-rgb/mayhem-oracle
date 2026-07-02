@@ -180,6 +180,10 @@
   "champion": {
     "indexTitle": "Champions",
     "indexSubtitle": "{count} champions — click any to see Oracle-ranked augments",
+    "metaTitle": "ARAM Mayhem Champions",
+    "metaDescription": "Browse every ARAM Mayhem champion with live tiers, win rates, pick rates, and localized champion stats.",
+    "metaDetailTitle": "{name} ARAM Mayhem Guide — Tier {tier}",
+    "metaDetailDescription": "{name} is Tier {tier} in ARAM Mayhem patch {patch}. See stats, best augments, traps, and member pool guidance.",
     "augments": "Best Augments",
     "builds": "Recommended Build",
     "combos": "Combo Synergies",
@@ -294,6 +298,10 @@
   "augments": {
     "title": "Augments",
     "subtitle": "{count} augments · Patch {patch} · sorted by Oracle Score",
+    "metaTitle": "ARAM Mayhem Augments",
+    "metaDescription": "Browse ARAM Mayhem augments with Oracle scores, rarities, patch status, and champion combo links.",
+    "metaDetailTitle": "{name} Augment Guide",
+    "metaDetailDescription": "{name} is a {rarity} ARAM Mayhem augment. See effect context, patch status, and strongest public champion combos.",
     "search": "Search name, set, or effect...",
     "sortScore": "Sort: Oracle Score",
     "sortWinRate": "Sort: Win Rate",
@@ -329,6 +337,8 @@
   "items": {
     "title": "ARAM Mayhem Items",
     "subtitle": "Mayhem-exclusive items and modified item stats",
+    "metaDetailTitle": "{name} ARAM Mayhem Item",
+    "metaDetailDescription": "See {name} item stats, cost, effects, recipes, and ARAM Mayhem modifications.",
     "mayhemExclusive": "Mayhem Exclusive",
     "allItems": "All Items",
     "search": "Search items...",
@@ -753,6 +763,7 @@
   },
   "companion": {
     "title": "Companion",
+    "description": "Use the ARAM Mayhem companion to score offered augments from your phone during a match.",
     "stickyHint": "Sticky from last game",
     "changeChampion": "Change champion",
     "pickerTitle": "Pick your champion",

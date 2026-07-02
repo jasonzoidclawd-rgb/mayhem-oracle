@@ -118,6 +118,10 @@
   "champion": {
     "indexTitle": "チャンピオン",
     "indexSubtitle": "{count} 体のチャンピオン — クリックしてオラクルランキングを確認",
+    "metaTitle": "ARAMメイヘム チャンピオン",
+    "metaDescription": "ARAMメイヘムの全チャンピオンを、現行ティア、勝率、ピック率、ローカライズ済みステータスで確認できます。",
+    "metaDetailTitle": "{name} ARAMメイヘム ガイド — ティア{tier}",
+    "metaDetailDescription": "{name} は ARAMメイヘム パッチ{patch}でティア{tier}です。ステータス、最適オーグメント、トラップ、メンバープール指針を確認できます。",
     "augments": "ベストオーグメント",
     "builds": "推奨ビルド",
     "combos": "コンボシナジー",
@@ -214,6 +218,10 @@
   "augments": {
     "title": "オーグメント",
     "subtitle": "{count} 個のオーグメント · パッチ {patch} · オラクルスコア順",
+    "metaTitle": "ARAMメイヘム オーグメント",
+    "metaDescription": "ARAMメイヘムのオーグメントを、Oracle スコア、レアリティ、パッチ状態、チャンピオンコンボリンク付きで確認できます。",
+    "metaDetailTitle": "{name} オーグメントガイド",
+    "metaDetailDescription": "{name} は {rarity} の ARAMメイヘム オーグメントです。効果の文脈、パッチ状態、公開チャンピオン強力コンボを確認できます。",
     "search": "名前、セット、効果で検索...",
     "sortScore": "並び替え：オラクルスコア",
     "sortWinRate": "並び替え：勝率",
@@ -249,6 +257,8 @@
   "items": {
     "title": "ARAMメイヘム アイテム",
     "subtitle": "メイヘム専用アイテムと調整アイテムのデータ",
+    "metaDetailTitle": "{name} ARAMメイヘム アイテム",
+    "metaDetailDescription": "{name} のアイテムステータス、価格、効果、レシピ、ARAMメイヘムでの変更を確認できます。",
     "mayhemExclusive": "メイヘム専用",
     "allItems": "全アイテム",
     "search": "アイテムを検索...",
@@ -673,6 +683,7 @@
   },
   "companion": {
     "title": "コンパニオン",
+    "description": "対戦中にスマホで ARAMメイヘム コンパニオンを開き、提示されたオーグメントを採点できます。",
     "stickyHint": "前回のチャンピオンを保持",
     "changeChampion": "チャンピオンを変更",
     "pickerTitle": "チャンピオンを選択",

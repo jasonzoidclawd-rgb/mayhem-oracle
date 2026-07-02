@@ -118,6 +118,10 @@
   "champion": {
     "indexTitle": "英雄",
     "indexSubtitle": "{count} 名英雄 — 点击查看神谕强化排名",
+    "metaTitle": "ARAM 大乱斗英雄",
+    "metaDescription": "浏览所有 ARAM 大乱斗英雄的实时阶级、胜率、选取率与本地化英雄数据。",
+    "metaDetailTitle": "{name} ARAM 大乱斗指南 — {tier} 阶",
+    "metaDetailDescription": "{name} 在 ARAM 大乱斗 {patch} 版本为 {tier} 阶。查看属性、最佳强化、陷阱与会员强化池指引。",
     "augments": "最佳强化",
     "builds": "推荐出装",
     "combos": "组合联携",
@@ -214,6 +218,10 @@
   "augments": {
     "title": "强化",
     "subtitle": "{count} 个强化 · 版本 {patch} · 按神谕评分排序",
+    "metaTitle": "ARAM 大乱斗强化",
+    "metaDescription": "浏览 ARAM 大乱斗强化的神谕评分、稀有度、版本状态与英雄组合链接。",
+    "metaDetailTitle": "{name} 强化指南",
+    "metaDetailDescription": "{name} 是 {rarity} ARAM 大乱斗强化。查看效果脉络、版本状态与公开英雄强力组合。",
     "search": "搜索名称、套装或效果...",
     "sortScore": "排序：神谕评分",
     "sortWinRate": "排序：胜率",
@@ -249,6 +257,8 @@
   "items": {
     "title": "ARAM 大乱斗装备",
     "subtitle": "大乱斗专属装备与调整装备数据",
+    "metaDetailTitle": "{name} ARAM 大乱斗装备",
+    "metaDetailDescription": "查看 {name} 的装备属性、价格、效果、合成路线与 ARAM 大乱斗调整。",
     "mayhemExclusive": "大乱斗专属",
     "allItems": "全部装备",
     "search": "搜索装备...",
@@ -673,6 +683,7 @@
   },
   "companion": {
     "title": "伙伴",
+    "description": "在对局中用手机打开 ARAM 大乱斗伙伴工具，为你拿到的强化即时评分。",
     "stickyHint": "沿用上一场的英雄",
     "changeChampion": "更换英雄",
     "pickerTitle": "选择你的英雄",
