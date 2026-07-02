@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Inter } from "next/font/google";
+import localFont from "next/font/local";
 import { NextIntlClientProvider } from "next-intl";
 import { getMessages, getTranslations } from "next-intl/server";
 import { setRequestLocale } from "next-intl/server";
@@ -16,8 +16,8 @@ import "@/styles/globals.css";
 
 // Latin UI font. CJK locales fall through to the platform CJK stack defined in
 // globals.css (PingFang / JhengHei / Noto Sans CJK), so we don't ship CJK webfonts.
-const inter = Inter({
-  subsets: ["latin"],
+const inter = localFont({
+  src: "../../../public/fonts/inter-latin.woff2",
   display: "swap",
   variable: "--font-inter",
 });
