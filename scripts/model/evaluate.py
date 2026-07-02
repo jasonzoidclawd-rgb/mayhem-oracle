@@ -78,11 +78,25 @@ def calibration_deltas(active: object, candidate: object, path: str = "") -> lis
     return [delta]
 
 
+def is_parity_fixture(value: object) -> bool:
+    return (
+        isinstance(value, dict)
+        and isinstance(value.get("context"), dict)
+        and isinstance(value.get("result"), dict)
+        and isinstance(value["result"].get("candidates"), list)
+    )
+
+
 def load_parity_fixtures(directory: Path) -> list[tuple[str, dict]]:
-    return [
-        (path.stem, json.loads(path.read_text(encoding="utf-8")))
-        for path in sorted(directory.glob("*.json"))
-    ]
+    fixtures = []
+    for path in sorted(directory.glob("*.json")):
+        data = json.loads(path.read_text(encoding="utf-8"))
+        if not is_parity_fixture(data):
+            continue
+        fixtures.append((path.stem, data))
+    if not fixtures:
+        raise ValueError(f"no parity fixtures found in {directory}")
+    return fixtures
 
 
 def candidate_score(
