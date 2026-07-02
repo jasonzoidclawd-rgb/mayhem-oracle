@@ -46,4 +46,12 @@ Revisit only if credit-consumption complaints appear.
 
 ## Verification log
 
-- (pending)
+- 2026-07-02: merge `e31b474` pushed; Vercel production deploy triggered with
+  `NEXT_PUBLIC_SITE_URL` set. Migration application attempted via Supabase
+  MCP: **project `krmyzbcoifdpgrszcfun` is INACTIVE (free-tier auto-pause)** —
+  membership/auth/bootstrap are down in production until restored, and
+  migrations cannot apply. Owner must restore the project (dashboard or
+  approve MCP restore), then apply both 20260702 migrations and run the curls
+  above. Separate launch finding: free-tier pausing will keep taking
+  membership down during idle periods — needs a keep-alive ping or a paid
+  plan before public launch.
