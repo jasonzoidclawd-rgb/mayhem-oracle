@@ -179,15 +179,26 @@ bundles.
 (Q2 below) — GPT's fix #1 is the same issue; blocked on the distribution
 decision, then implement authenticated post-install data fetch.
 
-## Product-owner questions (defaults in parentheses)
+## Product-owner questions — ANSWERED 2026-07-02
 
-1. Riot locale coverage: expand to all Data Dragon locales or stay at 5?
-   (Default: stay at 5 until per-locale file architecture lands; design for
-   expansion now.)
-2. Overlay data exposure: authenticated member-data fetch for installers, or
-   accept that overlay holders see internal catalogs? (Default: authenticated
-   fetch before any public installer distribution.)
-3. Champion-page builds section needs an item-recommendation data source —
-   scrape/derive or defer? (Default: defer; ship editorial + freshness first.)
-4. Confirm `NEXT_PUBLIC_SITE_URL` and contact email are set for wasfun.lol in
-   Vercel. (Default: treat as unset until verified.)
+1. Riot locale coverage → **all Data Dragon locales, auto-discovered.**
+   Plan: `docs/plans/2026-07-02-full-riot-locale-coverage.md` (phases L1–L5,
+   after round-2 merge).
+2. Overlay data exposure → **fetch on the fly behind the entitlement gate.**
+   Plan: `docs/plans/2026-07-02-overlay-member-datapack.md` (signed data pack
+   via bootstrap; installers ship public-layer only).
+3. Champion-page builds → **build the item/damage data moat now.**
+   Plan: `docs/plans/2026-07-02-item-build-damage-moat.md` (Riot Match-V5 +
+   collector telemetry → BigQuery aggregation → damage-engine fusion →
+   member-gated recommendations, public teaser only).
+4. Site origin → **done.** `NEXT_PUBLIC_SITE_URL=https://wasfun.lol` set in
+   Vercel production (2026-07-02; takes effect next deploy; wasfun.lol +
+   wasfun.gg attached to the team). Remaining: flip the `src/lib/site.ts`
+   fallback at round-2 merge; `NEXT_PUBLIC_CONTACT_EMAIL` still placeholder —
+   owner to choose a monitored inbox.
+5. Update-gate cost → **full `npm test` + build in the daily publish
+   accepted** (implemented in round 1).
+
+GPT-5.5 round-1 verdict reconciliation accepted with conditions (see
+addendum); merge sequence per its guidance: round 2 lands on top of round 1,
+verify R1–R7 green, merge once, bundle with `--all` for re-review.
