@@ -1,7 +1,7 @@
 {
   "patch": "26.13",
   "augments": 268,
-  "tests": "262",
+  "tests": "309",
   "parityBudget": 0,
-  "lastTag": "26.12-phase3-complete"
+  "lastTag": "pre-docs-review-4a83c26"
 }
