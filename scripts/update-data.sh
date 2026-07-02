@@ -140,6 +140,10 @@ augments = json.loads((data_dir / "augments.json").read_text())["augments"]
 
 champion_tagged = sum(1 for c in champions if c.get("kit_tags"))
 augment_tagged = sum(1 for a in augments if a.get("kit_tags"))
+champion_zh_tw = sum(1 for c in champions if str(c.get("name_zh_TW") or "").strip())
+augment_zh_tw = sum(1 for a in augments if str(a.get("name_zh_TW") or "").strip())
+champion_zh_tw_coverage = champion_zh_tw / len(champions) if champions else 0
+augment_zh_tw_coverage = augment_zh_tw / len(augments) if augments else 0
 missing_breakers = [
     slug
     for slug in {
@@ -149,13 +153,19 @@ missing_breakers = [
     }
     if not next((a for a in augments if a.get("slug") == slug and a.get("flags", {}).get("system_breaker") is True), None)
 ]
+locale_failures = []
+if champion_zh_tw_coverage < 0.9:
+    locale_failures.append(f"champion name_zh_TW={champion_zh_tw}/{len(champions)}")
+if augment_zh_tw_coverage < 0.8:
+    locale_failures.append(f"augment name_zh_TW={augment_zh_tw}/{len(augments)}")
 
-if champion_tagged == 0 or augment_tagged == 0 or missing_breakers:
+if champion_tagged == 0 or augment_tagged == 0 or missing_breakers or locale_failures:
     raise SystemExit(
         "classification validation failed: "
         f"champion kit_tags={champion_tagged}/{len(champions)}, "
         f"augment kit_tags={augment_tagged}/{len(augments)}, "
-        f"missing system breakers={missing_breakers}"
+        f"missing system breakers={missing_breakers}, "
+        f"locale coverage failures={locale_failures}"
     )
 PY
 
