@@ -30,7 +30,7 @@ import {
 } from "@/components/champions/PoolConstructionSection";
 import type { DecisionGrade } from "@/lib/contracts/decision";
 import { JsonLd } from "@/components/seo/JsonLd";
-import { SITE_URL, languageAlternates, localizedUrl } from "@/lib/site";
+import { languageAlternates, localizedUrl } from "@/lib/site";
 
 type ChampionData = ChampionDetailChampion;
 type AugmentData = ChampionDetailAugment;
@@ -44,6 +44,26 @@ type PillLabels = {
   atkType: string;
   cc: string;
   mismatch: string;
+};
+
+type MechanicLabels = Record<AugmentMechanic, string>;
+
+type AbilityStatLabels = {
+  damage: string;
+  ap: string;
+  bonusAd: string;
+  totalAd: string;
+  health: string;
+  cooldown: string;
+  cost: string;
+  range: string;
+  dot: string;
+  aoe: string;
+  onHit: string;
+  radius: string;
+  width: string;
+  speed: string;
+  cast: string;
 };
 
 // ─── Static params for all 172 champions ─────────────────────────────────────
@@ -119,6 +139,17 @@ export default async function ChampionPage({
   if (!champ) notFound();
   const activeChamp = activeData.champions.find((c) => c.slug === slug) ?? champ;
   const champName = localizedName(champ, locale);
+  const localizedAugmentDescription = (augment: AugmentData): string =>
+    localizedDescription(augment, locale) || augment.wikiDescription || augment.description || "";
+  const displayAugment = (augment: AugmentData): AugmentData => {
+    const description = localizedAugmentDescription(augment);
+    return {
+      ...augment,
+      name: localizedName(augment, locale),
+      description,
+      wikiDescription: description,
+    };
+  };
 
   const champWr = activeChamp.win_rate ?? champ.win_rate ?? 50;
   const abilityProfile: AbilityProfile | undefined = abilities[slug];
@@ -262,7 +293,7 @@ export default async function ChampionPage({
   ];
 
   const tailoredHighlights: TailoredHighlight[] = scoredAugments.slice(0, 6).map(({ aug, score, comboTier }) => ({
-    aug,
+    aug: displayAugment(aug),
     score,
     comboTier,
   }));
@@ -277,16 +308,16 @@ export default async function ChampionPage({
   if (isMember && abilityProfile && activeChamp.baseStats) {
     const allInteractions = analyzeInteractions(
       {
-        name: activeChamp.name,
+        name: localizedName(activeChamp, locale),
         slug: activeChamp.slug,
         baseStats: activeChamp.baseStats,
         abilityProfile,
       },
       poolAugments.map((a) => ({
         slug: a.slug,
-        name: a.name,
-        description: a.description ?? "",
-        wikiDescription: a.wikiDescription,
+        name: localizedName(a, locale),
+        description: localizedAugmentDescription(a),
+        wikiDescription: localizedAugmentDescription(a),
       })),
     );
     // Show strength 3 always, top strength 2 (capped at 8 each), skip strength 1
@@ -345,31 +376,69 @@ export default async function ChampionPage({
       missileSpeed: t("statMissileSpeed"),
     },
   };
+  const mechanicLabels: MechanicLabels = {
+    ABILITY_CRIT: t("mechanicAbilityCrit"),
+    ON_HIT: t("mechanicOnHit"),
+    ATTACK_SPEED: t("mechanicAttackSpeed"),
+    DOT_SYNERGY: t("mechanicDotSynergy"),
+    ULT_POWER: t("mechanicUltPower"),
+    ULT_SEALED: t("mechanicUltSealed"),
+    ABILITY_HASTE: t("mechanicAbilityHaste"),
+    ON_CAST: t("mechanicOnCast"),
+    DASH_SYNERGY: t("mechanicDash"),
+    EXECUTE: t("mechanicExecute"),
+    LIFESTEAL: t("mechanicLifesteal"),
+    TRUE_DAMAGE: t("mechanicTrueDamage"),
+    MANA_SCALING: t("mechanicManaScaling"),
+    SIZE_CHANGE: t("mechanicSizeChange"),
+    SHIELD: t("mechanicShield"),
+    SUMMON_REPLACE: t("mechanicSummoner"),
+    MELEE_CONVERT: t("mechanicMeleeConvert"),
+    AD_SCALING: t("mechanicAdScaling"),
+    AP_SCALING: t("mechanicApScaling"),
+    IMMOBILIZE_TRIGGER: t("mechanicImmobilize"),
+  };
+  const abilityStatLabels: AbilityStatLabels = {
+    damage: t("abilityStatDamage"),
+    ap: t("abilityStatAp"),
+    bonusAd: t("abilityStatBonusAd"),
+    totalAd: t("abilityStatTotalAd"),
+    health: t("abilityStatHealth"),
+    cooldown: t("abilityStatCooldown"),
+    cost: t("abilityStatCost"),
+    range: t("abilityStatRange"),
+    dot: t("abilityStatDot"),
+    aoe: t("abilityStatAoe"),
+    onHit: t("abilityStatOnHit"),
+    radius: t("abilityStatRadius"),
+    width: t("abilityStatWidth"),
+    speed: t("abilityStatSpeed"),
+    cast: t("abilityStatCast"),
+  };
 
   const topCombos = strongCombos
-    .map((c) => augmentBySlug.get(c.augmentSlug)?.name ?? c.augment)
+    .map((c) => {
+      const augment = augmentBySlug.get(c.augmentSlug);
+      return augment ? localizedName(augment, locale) : c.augment;
+    })
     .filter(Boolean)
     .slice(0, 8);
   const championJsonLd = {
     "@context": "https://schema.org",
     "@type": "Article",
-    headline: `${champ.name} ARAM Mayhem — Tier ${champ.tier}, Augments & Combos (Patch ${patch})`,
-    about: { "@type": "Thing", name: `${champ.name} (League of Legends ARAM Mayhem)` },
+    headline: t("metaDetailTitle", { name: champName, tier: champ.tier, patch }),
+    about: { "@type": "Thing", name: `${champName} (League of Legends ARAM Mayhem)` },
     inLanguage: locale,
-    url: `${SITE_URL}${locale === "en" ? "" : `/${locale}`}/champions/${champ.slug}`,
+    url: localizedUrl(`/champions/${champ.slug}`, locale as Locale),
     image: champ.icon,
     keywords: [
       "ARAM Mayhem",
-      champ.name,
+      champName,
       `Tier ${champ.tier}`,
       ...(champ.kit_tags ?? []),
       ...topCombos,
     ],
-    description:
-      `${champ.name} is Tier ${champ.tier} in ARAM Mayhem (patch ${patch})` +
-      (champWr ? ` with a ${champWr.toFixed(1)}% win rate` : "") +
-      (champ.pick_rate ? ` and ${champ.pick_rate.toFixed(1)}% pick rate` : "") +
-      (topCombos.length ? `. Strongest augment combos: ${topCombos.join(", ")}.` : "."),
+    description: t("metaDetailDescription", { name: champName, tier: champ.tier, patch }),
   };
 
   return (
@@ -444,13 +513,15 @@ export default async function ChampionPage({
               <div className="flex flex-wrap gap-1.5">
                 {strongCombos.map((c) => {
                   const aug = augmentBySlug.get(c.augmentSlug);
+                  const augName = aug ? localizedName(aug, locale) : c.augment;
+                  const augDescription = aug ? localizedAugmentDescription(aug) : undefined;
                   return (
-                    <Tooltip key={`${c.champion}-${c.augmentSlug}-${c.tier}`} content={aug?.wikiDescription ?? aug?.description}>
+                    <Tooltip key={`${c.champion}-${c.augmentSlug}-${c.tier}`} content={augDescription}>
                       <div className="flex items-center gap-1.5 px-2 py-1.5 rounded-lg border border-green-400/30 bg-green-400/5 cursor-default">
                         {aug && (
                           <Image
                             src={aug.icon}
-                            alt={aug.name}
+                            alt={augName}
                             width={24}
                             height={24}
                             className="rounded"
@@ -458,7 +529,7 @@ export default async function ChampionPage({
                           />
                         )}
                         <span className="text-xs font-medium text-green-300">
-                          {aug?.name ?? c.augment}
+                          {augName}
                         </span>
                         <span className="text-[9px] font-bold px-1 py-0.5 rounded bg-green-400/20 text-green-400">
                           S
@@ -479,13 +550,15 @@ export default async function ChampionPage({
               <div className="flex flex-wrap gap-1.5">
                 {avoidCombos.map((c) => {
                   const aug = augmentBySlug.get(c.augmentSlug);
+                  const augName = aug ? localizedName(aug, locale) : c.augment;
+                  const augDescription = aug ? localizedAugmentDescription(aug) : undefined;
                   return (
-                    <Tooltip key={`${c.champion}-${c.augmentSlug}-${c.tier}`} content={aug?.wikiDescription ?? aug?.description}>
+                    <Tooltip key={`${c.champion}-${c.augmentSlug}-${c.tier}`} content={augDescription}>
                       <div className="flex items-center gap-1.5 px-2 py-1.5 rounded-lg border border-red-400/30 bg-red-400/5 cursor-default">
                         {aug && (
                           <Image
                             src={aug.icon}
-                            alt={aug.name}
+                            alt={augName}
                             width={24}
                             height={24}
                             className="rounded"
@@ -493,7 +566,7 @@ export default async function ChampionPage({
                           />
                         )}
                         <span className="text-xs font-medium text-red-300">
-                          {aug?.name ?? c.augment}
+                          {augName}
                         </span>
                         <span className="text-[9px] font-bold px-1 py-0.5 rounded bg-red-400/20 text-red-400">
                           C
@@ -533,7 +606,7 @@ export default async function ChampionPage({
               </h3>
               <div className="space-y-1">
                 {mechanicalSynergies.map((ix, i) => (
-                  <InteractionRow key={`syn-${i}`} ix={ix} augments={augments} />
+                  <InteractionRow key={`syn-${i}`} ix={ix} augments={augments} locale={locale} mechanicLabels={mechanicLabels} />
                 ))}
               </div>
             </div>
@@ -546,7 +619,7 @@ export default async function ChampionPage({
               </h3>
               <div className="space-y-1">
                 {mechanicalTraps.map((ix, i) => (
-                  <InteractionRow key={`trap-${i}`} ix={ix} augments={augments} />
+                  <InteractionRow key={`trap-${i}`} ix={ix} augments={augments} locale={locale} mechanicLabels={mechanicLabels} />
                 ))}
               </div>
             </div>
@@ -625,8 +698,8 @@ export default async function ChampionPage({
                   </div>
                   <div className="flex-1 min-w-0">
                     <span className="text-xs sm:text-sm font-semibold">{abilityName}</span>
-                    <WikiAbilityStats ability={ability} />
-                    {!ability.cooldown && ability.stats && <AbilityStatLine stats={ability.stats} />}
+                    <WikiAbilityStats ability={ability} labels={abilityStatLabels} />
+                    {!ability.cooldown && ability.stats && <AbilityStatLine stats={ability.stats} labels={abilityStatLabels} />}
                     <p className="text-[11px] text-[var(--color-text-secondary)] mt-1 leading-relaxed line-clamp-2 sm:line-clamp-none">
                       {abilityDescription}
                     </p>
@@ -641,7 +714,7 @@ export default async function ChampionPage({
       <PoolConstructionSection
         title={t("poolConstruction")}
         subtitle={t("poolConstructionSubtitle", {
-          name: champ.name,
+          name: champName,
           kept: pool?.total ?? augments.length,
           total: augments.length,
         })}
@@ -672,7 +745,7 @@ export default async function ChampionPage({
         {isMember ? (
           <ChampionMatrixClient
             championSlug={champ.slug}
-            augmentNames={Object.fromEntries(augments.map((a) => [a.slug, a.name]))}
+            augmentNames={Object.fromEntries(augments.map((a) => [a.slug, localizedName(a, locale)]))}
             copy={{
               title: tm("matrixTitle"),
               subtitle: tm("matrixSubtitle"),
@@ -737,6 +810,7 @@ export default async function ChampionPage({
                   breakdown={breakdown}
                   comboTier={comboTier}
                   pillLabels={pillLabels}
+                  locale={locale}
                 />
               ))}
             </div>
@@ -790,6 +864,7 @@ function AugmentRow({
   breakdown,
   comboTier,
   pillLabels,
+  locale,
 }: {
   rank: number;
   aug: AugmentData;
@@ -797,12 +872,15 @@ function AugmentRow({
   breakdown: ReturnType<typeof computeOracleScore>["breakdown"];
   comboTier?: ComboTier;
   pillLabels: PillLabels;
+  locale: string;
 }) {
   const isStrong = comboTier === "S";
   const isTrap = comboTier === "C";
+  const augName = localizedName(aug, locale);
+  const augDescription = localizedDescription(aug, locale);
 
   return (
-    <Tooltip content={aug.wikiDescription ?? aug.description}>
+    <Tooltip content={augDescription}>
       <div
         className={`flex items-center gap-2 sm:gap-3 px-2 sm:px-3 py-2 rounded-lg border transition-colors cursor-default
           ${isStrong ? "border-green-400/30 bg-green-400/5" : isTrap ? "border-red-400/20 bg-red-400/5" : "border-[var(--color-border-default)]/50"}`}
@@ -816,7 +894,7 @@ function AugmentRow({
         <div className="relative w-7 h-7 sm:w-8 sm:h-8 rounded shrink-0">
           <Image
             src={aug.icon}
-            alt={aug.name}
+            alt={augName}
             fill
             className="object-contain"
             sizes="(max-width: 640px) 28px, 32px"
@@ -827,7 +905,7 @@ function AugmentRow({
         {/* Name + rarity */}
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-1.5">
-            <span className="text-xs sm:text-sm font-medium truncate">{aug.name}</span>
+            <span className="text-xs sm:text-sm font-medium truncate">{augName}</span>
             <span className={`w-1.5 h-1.5 rounded-full shrink-0 ${RARITY_DOT[aug.rarity] ?? ""}`} />
             {comboTier && (
               <span
@@ -932,29 +1010,6 @@ function AttackTypeBadge({ type, label }: { type: string; label: string }) {
 
 // ─── Mechanical Interaction Components ────────────────────────────────────────
 
-const MECHANIC_LABEL: Record<AugmentMechanic, string> = {
-  ABILITY_CRIT:      "Ability Crit",
-  ON_HIT:            "On-Hit",
-  ATTACK_SPEED:      "Atk Speed",
-  DOT_SYNERGY:       "DoT",
-  ULT_POWER:         "Ult Power",
-  ULT_SEALED:        "Ult Sealed",
-  ABILITY_HASTE:     "Ability Haste",
-  ON_CAST:           "On-Cast",
-  DASH_SYNERGY:      "Dash",
-  EXECUTE:           "Execute",
-  LIFESTEAL:         "Lifesteal",
-  TRUE_DAMAGE:       "True Dmg",
-  MANA_SCALING:      "Mana Scale",
-  SIZE_CHANGE:       "Size Change",
-  SHIELD:            "Shield",
-  SUMMON_REPLACE:    "Summoner",
-  MELEE_CONVERT:     "Melee Conv",
-  AD_SCALING:        "AD Scale",
-  AP_SCALING:        "AP Scale",
-  IMMOBILIZE_TRIGGER: "Immobilize",
-};
-
 const STRENGTH_DOTS = (strength: 1 | 2 | 3, isTrap: boolean) => {
   const color = isTrap ? "bg-red-400" : "bg-green-400";
   const dim = isTrap ? "bg-red-400/20" : "bg-green-400/20";
@@ -970,11 +1025,16 @@ const STRENGTH_DOTS = (strength: 1 | 2 | 3, isTrap: boolean) => {
 function InteractionRow({
   ix,
   augments,
+  locale,
+  mechanicLabels,
 }: {
   ix: MechanicalInteraction;
   augments: AugmentData[];
+  locale: string;
+  mechanicLabels: MechanicLabels;
 }) {
   const aug = augments.find((a) => a.slug === ix.augmentSlug);
+  const augName = aug ? localizedName(aug, locale) : ix.augmentName;
   const isTrap = ix.type === "trap";
   const borderColor = isTrap ? "border-red-400/20" : "border-green-400/20";
   const bgColor = isTrap ? "bg-red-400/5" : "bg-green-400/5";
@@ -986,7 +1046,7 @@ function InteractionRow({
           <div className="relative w-6 h-6 rounded shrink-0">
             <Image
               src={aug.icon}
-              alt={ix.augmentName}
+              alt={augName}
               fill
               className="object-contain"
               sizes="24px"
@@ -996,7 +1056,7 @@ function InteractionRow({
         )}
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-1.5 flex-wrap">
-            <span className="text-xs font-medium truncate">{ix.augmentName}</span>
+            <span className="text-xs font-medium truncate">{augName}</span>
             {STRENGTH_DOTS(ix.strength, isTrap)}
             <span className={`text-[9px] font-semibold px-1 py-0.5 rounded border
               ${isTrap
@@ -1004,7 +1064,7 @@ function InteractionRow({
                 : "text-green-300 border-green-400/30 bg-green-400/10"
               }`}
             >
-              {MECHANIC_LABEL[ix.mechanic]}
+              {mechanicLabels[ix.mechanic]}
             </span>
             {ix.abilities.length > 0 && (
               <span className="text-[9px] text-[var(--color-text-muted)]">
@@ -1029,35 +1089,35 @@ const DMG_TYPE_COLOR: Record<string, string> = {
   true: "text-white",
 };
 
-function AbilityStatLine({ stats }: { stats: AbilityStats }) {
+function AbilityStatLine({ stats, labels }: { stats: AbilityStats; labels: AbilityStatLabels }) {
   const parts: Array<{ label: string; value: string; color?: string }> = [];
 
   if (stats.baseDamage?.length) {
     const dmg = stats.baseDamage;
     parts.push({
-      label: "Dmg",
+      label: labels.damage,
       value: dmg.length > 1 ? `${dmg[0]}–${dmg[dmg.length - 1]}` : `${dmg[0]}`,
       color: DMG_TYPE_COLOR[stats.damageType ?? ""] ?? "text-[var(--color-text-secondary)]",
     });
   }
 
   if (stats.apRatio) {
-    parts.push({ label: "AP", value: `${(stats.apRatio * 100).toFixed(0)}%`, color: "text-blue-300" });
+    parts.push({ label: labels.ap, value: `${(stats.apRatio * 100).toFixed(0)}%`, color: "text-blue-300" });
   }
   if (stats.adRatio) {
-    parts.push({ label: "bAD", value: `${(stats.adRatio * 100).toFixed(0)}%`, color: "text-orange-300" });
+    parts.push({ label: labels.bonusAd, value: `${(stats.adRatio * 100).toFixed(0)}%`, color: "text-orange-300" });
   }
   if (stats.totalAdRatio) {
-    parts.push({ label: "tAD", value: `${(stats.totalAdRatio * 100).toFixed(0)}%`, color: "text-orange-300" });
+    parts.push({ label: labels.totalAd, value: `${(stats.totalAdRatio * 100).toFixed(0)}%`, color: "text-orange-300" });
   }
   if (stats.hpRatio) {
-    parts.push({ label: "HP", value: `${(stats.hpRatio * 100).toFixed(0)}%`, color: "text-green-300" });
+    parts.push({ label: labels.health, value: `${(stats.hpRatio * 100).toFixed(0)}%`, color: "text-green-300" });
   }
 
   if (stats.cooldown?.length) {
     const cd = stats.cooldown;
     parts.push({
-      label: "CD",
+      label: labels.cooldown,
       value: cd.length > 1 && cd[0] !== cd[cd.length - 1] ? `${cd[0]}–${cd[cd.length - 1]}s` : `${cd[0]}s`,
     });
   }
@@ -1065,7 +1125,7 @@ function AbilityStatLine({ stats }: { stats: AbilityStats }) {
   if (stats.manaCost?.length) {
     const cost = stats.manaCost;
     parts.push({
-      label: "Cost",
+      label: labels.cost,
       value: cost.length > 1 && cost[0] !== cost[cost.length - 1] ? `${cost[0]}–${cost[cost.length - 1]}` : `${cost[0]}`,
       color: "text-cyan-300",
     });
@@ -1080,13 +1140,13 @@ function AbilityStatLine({ stats }: { stats: AbilityStats }) {
   }
 
   if (stats.range) {
-    parts.push({ label: "Range", value: `${stats.range}` });
+    parts.push({ label: labels.range, value: `${stats.range}` });
   }
 
   const flags: string[] = [];
-  if (stats.isDot) flags.push("DoT");
-  if (stats.isAoe) flags.push("AoE");
-  if (stats.isOnHit) flags.push("On-Hit");
+  if (stats.isDot) flags.push(labels.dot);
+  if (stats.isAoe) flags.push(labels.aoe);
+  if (stats.isOnHit) flags.push(labels.onHit);
 
   if (parts.length === 0 && flags.length === 0) return null;
 
@@ -1108,32 +1168,32 @@ function AbilityStatLine({ stats }: { stats: AbilityStats }) {
 
 // ─── Wiki Ability Stats ─────────────────────────────────────────────────────
 
-function WikiAbilityStats({ ability }: { ability: AbilityEntry }) {
+function WikiAbilityStats({ ability, labels }: { ability: AbilityEntry; labels: AbilityStatLabels }) {
   const pills: Array<{ label: string; value: string; color?: string }> = [];
 
   if (ability.cooldown) {
-    pills.push({ label: "CD", value: ability.cooldown });
+    pills.push({ label: labels.cooldown, value: ability.cooldown });
   }
   if (ability.cost) {
-    pills.push({ label: "Cost", value: ability.cost, color: "text-cyan-300" });
+    pills.push({ label: labels.cost, value: ability.cost, color: "text-cyan-300" });
   }
   if (ability.range) {
-    pills.push({ label: "Range", value: ability.range });
+    pills.push({ label: labels.range, value: ability.range });
   }
   if (ability.effectRadius) {
-    pills.push({ label: "Radius", value: ability.effectRadius });
+    pills.push({ label: labels.radius, value: ability.effectRadius });
   }
   if (ability.width) {
-    pills.push({ label: "Width", value: ability.width });
+    pills.push({ label: labels.width, value: ability.width });
   }
   if (ability.speed) {
-    pills.push({ label: "Speed", value: ability.speed });
+    pills.push({ label: labels.speed, value: ability.speed });
   }
   if (ability.castTime) {
-    pills.push({ label: "Cast", value: `${ability.castTime}s` });
+    pills.push({ label: labels.cast, value: `${ability.castTime}s` });
   }
   if (ability.damageFormula) {
-    pills.push({ label: "Dmg", value: ability.damageFormula, color: "text-purple-300" });
+    pills.push({ label: labels.damage, value: ability.damageFormula, color: "text-purple-300" });
   }
 
   if (pills.length === 0) return null;

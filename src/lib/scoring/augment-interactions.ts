@@ -227,6 +227,9 @@ export type AugmentMechanicTag = AugmentMechanic;
 
 // ─── Augment Mechanic Detection ─────────────────────────────────────────────
 
+// TODO(i18n): The interaction `reason` strings below are still English-only.
+// Move them to message keys when the mechanical-analysis copy is localized.
+
 export function detectAugmentMechanics(description: string): AugmentMechanic[] {
   const d = description.toLowerCase();
   const tags: AugmentMechanic[] = [];
