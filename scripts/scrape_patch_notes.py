@@ -24,7 +24,6 @@ import html as html_module
 import json
 import re
 import time
-from datetime import datetime, timezone
 from pathlib import Path
 from urllib.error import URLError
 from urllib.request import Request, urlopen
@@ -508,6 +507,21 @@ def wrap_locale_fields(patches: list[dict]) -> list[dict]:
     return patches
 
 
+
+def _localized_ref_names(record: dict) -> dict[str, str]:
+    names = {
+        locale: value
+        for locale, field in _REF_LOCALE_FIELDS.items()
+        if (value := record.get(field))
+    }
+    legacy_names = record.get("names", {})
+    if isinstance(legacy_names, dict):
+        for locale, key in _REF_NAMES_MAP_KEYS.items():
+            if locale not in names and legacy_names.get(key):
+                names[locale] = legacy_names[key]
+    return names
+
+
 def _catalog_ref(entity_type: str, slug: str, name: str, href: str | None, known: bool, extra: dict | None = None) -> dict:
     ref = {
         "type": entity_type,
@@ -545,7 +559,11 @@ def load_entity_catalogs() -> dict:
                 champ.get("name", slug),
                 f"/champions/{slug}",
                 True,
-                {"roleTags": champ.get("tags", []), "kitTags": champ.get("kit_tags", [])},
+                {
+                    "roleTags": champ.get("tags", []),
+                    "kitTags": champ.get("kit_tags", []),
+                    "names": _localized_ref_names(champ),
+                },
             )
             for name in (champ.get("name"), champ.get("name_zh_TW"), champ.get("name_zh_CN"), champ.get("name_ja"), champ.get("name_ko")):
                 _add_name(indexes["champion"], name, ref)
@@ -562,7 +580,10 @@ def load_entity_catalogs() -> dict:
                 item.get("name", ident),
                 f"/items/{ident}" if ident else None,
                 True,
-                {"categories": item.get("categories", [])},
+                {
+                    "categories": item.get("categories", []),
+                    "names": _localized_ref_names(item),
+                },
             )
             for name in (item.get("name"), item.get("slug"), item.get("name_zh_TW"), item.get("name_zh_CN"), item.get("name_ja"), item.get("name_ko")):
                 _add_name(indexes["item"], name, ref)
@@ -586,6 +607,7 @@ def load_entity_catalogs() -> dict:
                     "availability": availability,
                     "lifecycle": lifecycle,
                     "offerable": availability == "confirmed_live" and lifecycle != "removed",
+                    "names": _localized_ref_names(aug),
                 },
             )
             names = aug.get("names", {}) if isinstance(aug.get("names"), dict) else {}
@@ -618,7 +640,11 @@ def load_entity_catalogs() -> dict:
                     name,
                     f"/champions/{champion_slug}",
                     True,
-                    {"championSlug": champion_slug, "abilityKey": key},
+                    {
+                        "championSlug": champion_slug,
+                        "abilityKey": key,
+                        "names": _localized_ref_names(ability),
+                    },
                 )
                 for loc_name in (name, ability.get("name_zh_TW"), ability.get("name_zh_CN"), ability.get("name_ja"), ability.get("name_ko")):
                     _add_name(indexes["ability"], loc_name, ref)
@@ -875,12 +901,16 @@ def stitch_locales(en_patches: list[dict], by_locale: dict[str, list[dict]]) -> 
                     merged["subjectSlug"] = ch["subjectSlug"]
                 merged_changes.append(merged)
             merged_sections.append({"id": sec["id"], "title": sec["title"], "changes": merged_changes})
-        out.append({
+        merged_patch = {
             "version": en_patch["version"],
             "title": en_patch["title"],
             "released": en_patch["released"],
             "sections": merged_sections,
-        })
+        }
+        for key in ("sourceUrl", "publishedAt", "authors", "intro"):
+            if key in en_patch:
+                merged_patch[key] = en_patch[key]
+        out.append(merged_patch)
     return out
 
 
@@ -891,6 +921,20 @@ _AUGMENT_LOCALE_FIELDS = {
     "zh-cn": "name_zh_CN",
     "ja-jp": "name_ja",
     "ko-kr": "name_ko",
+}
+
+_REF_LOCALE_FIELDS = {
+    "zh-tw": "name_zh_TW",
+    "zh-cn": "name_zh_CN",
+    "ja-jp": "name_ja",
+    "ko-kr": "name_ko",
+}
+
+_REF_NAMES_MAP_KEYS = {
+    "zh-tw": "zh_tw",
+    "zh-cn": "zh_cn",
+    "ja-jp": "ja",
+    "ko-kr": "ko",
 }
 
 
@@ -1023,6 +1067,13 @@ def relink() -> None:
     print(f"Done. Re-linked {out_path} ({len(patches)} patches).")
 
 
+def stable_scraped_at(patches: list[dict]) -> str:
+    if not patches:
+        return ""
+    latest = patches[0]
+    return latest.get("publishedAt") or latest.get("released") or ""
+
+
 def main() -> None:
     import argparse
 
@@ -1111,12 +1162,13 @@ def main() -> None:
     current_patch = merged[0]["version"] if merged else None
     out = {
         "patch": current_patch,
-        "scraped_at": datetime.now(timezone.utc).isoformat(),
         "source": BASE_URL + NEWS_PATH,
         "sourceKind": "official-riot-patch-notes",
         "sourceUrl": merged[0].get("sourceUrl") if merged else "",
         "patches": merged,
     }
+    if scraped_at := stable_scraped_at(merged):
+        out["scraped_at"] = scraped_at
 
     out_path = OUT_DIR / "patch-notes.json"
     out_path.write_text(json.dumps(out, indent=2, ensure_ascii=False), encoding="utf-8")

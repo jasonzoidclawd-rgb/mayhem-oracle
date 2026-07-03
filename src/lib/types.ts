@@ -153,6 +153,7 @@ export interface PatchEntityRef {
   availability?: string;
   lifecycle?: string;
   offerable?: boolean;
+  names?: Partial<Record<PatchLocale, string>>;
   championSlug?: string;
   abilityKey?: string;
 }
@@ -217,7 +218,7 @@ export interface PatchNote {
 
 export interface PatchNotesData {
   patch: string;
-  scraped_at: string;
+  scraped_at?: string;
   source: string;
   sourceKind?: string;
   sourceUrl?: string;

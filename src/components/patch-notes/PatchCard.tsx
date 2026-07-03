@@ -188,6 +188,7 @@ async function ChangeRow({
             <EntityChip
               key={`${target.type}-${target.slug}`}
               entity={target}
+              chain={chain}
               typeLabel={typeLabel}
             />
           ))}
@@ -195,6 +196,7 @@ async function ChangeRow({
             <EntityChip
               key={`rel-${entity.type}-${entity.slug}`}
               entity={entity}
+              chain={chain}
               typeLabel={typeLabel}
               muted
             />
@@ -245,10 +247,12 @@ async function ChangeRow({
 
 function EntityChip({
   entity,
+  chain,
   typeLabel,
   muted = false,
 }: {
   entity: PatchEntityRef;
+  chain: DataLocale[];
   typeLabel: (type: string) => string;
   muted?: boolean;
 }) {
@@ -259,7 +263,7 @@ function EntityChip({
         ? "border-[var(--color-accent)]/35 bg-[var(--color-accent)]/10 text-[var(--color-accent)]"
         : "border-rose-400/30 bg-rose-400/10 text-rose-300"
   }`;
-  const label = `${typeLabel(entity.type)}: ${entity.name}`;
+  const label = `${typeLabel(entity.type)}: ${localizedEntityName(entity, chain)}`;
 
   if (entity.href && entity.known) {
     return (
@@ -270,4 +274,12 @@ function EntityChip({
   }
 
   return <span className={className}>{label}</span>;
+}
+
+function localizedEntityName(entity: PatchEntityRef, chain: DataLocale[]): string {
+  for (const locale of chain) {
+    const name = entity.names?.[locale];
+    if (name) return name;
+  }
+  return entity.name;
 }
