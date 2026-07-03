@@ -441,6 +441,10 @@ _INVERTED_TERMS = re.compile(
 )
 _NERF_HINTS = re.compile(r"\b(no longer|reduced)\b", re.IGNORECASE)
 _BUFF_HINTS = re.compile(r"\b(now also|additional|increased)\b", re.IGNORECASE)
+_REMOVAL_HINTS = re.compile(
+    r"\b(has been removed|removed from|disabled)\b",
+    re.IGNORECASE,
+)
 
 LABEL_KEYWORDS: list[tuple[str, re.Pattern[str]]] = [
     ("damage", re.compile(r"\bdamage|dmg|lethality|penetration|crit|critical|on-hit\b", re.I)),
@@ -799,12 +803,30 @@ def classify_fallback(text: str) -> str:
     return "buffed" if increased else "nerfed"
 
 
+def deterministic_kind(section_id: str, change: dict) -> str | None:
+    if section_id == "bugfixes":
+        return "fixed"
+    if section_id == "new_items":
+        return "added"
+    if change.get("sourceType") == "new_champion_preview":
+        return "added"
+    if _REMOVAL_HINTS.search(canonical_text(change)):
+        return "removed"
+    return None
+
+
 def classify_patch(patch: dict) -> None:
     flat = [ch for sec in patch["sections"] for ch in sec["changes"]]
     if not flat:
         return
-    for ch in flat:
-        ch["kind"] = ch.get("kind") or classify_fallback(canonical_text(ch))
+    for sec in patch["sections"]:
+        section_id = sec.get("id", "")
+        for ch in sec["changes"]:
+            ch["kind"] = (
+                deterministic_kind(section_id, ch)
+                or ch.get("kind")
+                or classify_fallback(canonical_text(ch))
+            )
     print(f"    classified {len(flat)} changes via regex")
 
 
