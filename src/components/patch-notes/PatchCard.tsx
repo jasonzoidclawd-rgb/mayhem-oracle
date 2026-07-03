@@ -5,6 +5,10 @@ import {
   normalizeChangeKind,
   normalizePatchObjectType,
 } from "@/lib/patch-notes/labels";
+import {
+  patchNoteAnchor,
+  patchNoteSectionAnchor,
+} from "@/lib/patch-notes/seo";
 import type {
   PatchChange,
   PatchEntityRef,
@@ -49,7 +53,7 @@ export async function PatchCard({
   const chain: DataLocale[] = LOCALE_CHAIN[locale] ?? ["en"];
 
   return (
-    <article className="glass-card overflow-hidden">
+    <article id={patchNoteAnchor(patch.version)} className="glass-card overflow-hidden">
       <header className="border-b border-[var(--color-border)] px-5 py-4">
         <div className="flex flex-wrap items-baseline justify-between gap-2">
           <h2 className="text-xl font-semibold">
@@ -84,6 +88,7 @@ export async function PatchCard({
         {patch.sections.map((section, idx) => (
           <Section
             key={`${section.id}-${idx}`}
+            patchVersion={patch.version}
             section={section}
             chain={chain}
             compact={compact}
@@ -95,10 +100,12 @@ export async function PatchCard({
 }
 
 async function Section({
+  patchVersion,
   section,
   chain,
   compact,
 }: {
+  patchVersion: string;
   section: PatchSection;
   chain: DataLocale[];
   compact: boolean;
@@ -110,7 +117,7 @@ async function Section({
       : section.title;
 
   return (
-    <section>
+    <section id={patchNoteSectionAnchor(patchVersion, section.id)}>
       <div className="mb-3 flex items-center justify-between gap-3">
         <h3 className="text-sm font-semibold uppercase tracking-wider text-[var(--color-accent)]">
           {sectionTitle}

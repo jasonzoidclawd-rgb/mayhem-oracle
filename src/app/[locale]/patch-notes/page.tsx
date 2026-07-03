@@ -16,6 +16,8 @@ import {
 } from "@/lib/data/read-public-file";
 import type { Locale } from "@/i18n/routing";
 import { languageAlternates, localizedUrl } from "@/lib/site";
+import { JsonLd } from "@/components/seo/JsonLd";
+import { buildPatchNotesJsonLd } from "@/lib/patch-notes/seo";
 
 async function loadPatchNotes(): Promise<PatchNotesData | null> {
   try {
@@ -49,10 +51,17 @@ export async function generateMetadata({
   params: Promise<{ locale: string }>;
 }): Promise<Metadata> {
   const { locale } = await params;
-  const t = await getTranslations({ locale, namespace: "patchNotes" });
+  const [t, data] = await Promise.all([
+    getTranslations({ locale, namespace: "patchNotes" }),
+    loadPatchNotes(),
+  ]);
   const route = "/patch-notes";
-  const title = t("title");
-  const description = t("subtitle");
+  const title = data?.patch
+    ? `${t("patchLabel", { patch: data.patch })} · ${t("title")}`
+    : t("title");
+  const description = data?.patch
+    ? `${t("subtitle")} · ${t("patchLabel", { patch: data.patch })}`
+    : t("subtitle");
   const url = localizedUrl(route, locale as Locale);
 
   return {
@@ -80,9 +89,27 @@ export default async function PatchNotesPage({
     loadRemovedAugments(),
     loadHotfixes(),
   ]);
+  const route = "/patch-notes";
+  const url = localizedUrl(route, locale as Locale);
+  const title = data?.patch
+    ? `${t("patchLabel", { patch: data.patch })} · ${t("title")}`
+    : t("title");
+  const description = data?.patch
+    ? `${t("subtitle")} · ${t("patchLabel", { patch: data.patch })}`
+    : t("subtitle");
+  const jsonLd = data
+    ? buildPatchNotesJsonLd(data, locale as Locale, {
+        url,
+        title,
+        description,
+        breadcrumbLabel: t("title"),
+        patchLabel: (patch) => t("patchLabel", { patch }),
+      })
+    : null;
 
   return (
     <div className="py-8">
+      {jsonLd ? <JsonLd data={jsonLd} /> : null}
       <header className="mb-8">
         <h1 className="text-3xl font-bold">{t("title")}</h1>
         <p className="mt-1 text-[var(--color-text-secondary)]">
