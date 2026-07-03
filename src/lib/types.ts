@@ -111,7 +111,15 @@ export interface Combo {
 
 // ─── Patch notes (official Riot article + deterministic Mayhem Oracle linking) ───
 
-export type ChangeKind = "buffed" | "nerfed" | "changed" | "mechanism";
+export type ChangeKind =
+  | "buffed"
+  | "nerfed"
+  | "changed"
+  | "mechanism"
+  | "added"
+  | "removed"
+  | "fixed"
+  | "hotfix";
 
 export type PatchSectionId =
   | "highlights"
@@ -124,7 +132,13 @@ export type PatchSectionId =
 
 export type PatchLocale = "en" | "zh-tw" | "zh-cn" | "ja-jp" | "ko-kr";
 
-export type PatchEntityType = "champion" | "ability" | "augment" | "item" | "system";
+export type PatchEntityType =
+  | "champion"
+  | "ability"
+  | "augment"
+  | "item"
+  | "system"
+  | "unknown";
 
 export interface PatchEntityRef {
   type: PatchEntityType;

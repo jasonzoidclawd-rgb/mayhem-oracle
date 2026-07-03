@@ -1,7 +1,7 @@
 import { getTranslations } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
+import { normalizeChangeKind } from "@/lib/patch-notes/labels";
 import type {
-  ChangeKind,
   PatchChange,
   PatchEntityRef,
   PatchNote,
@@ -147,7 +147,8 @@ async function ChangeRow({
   const t = await getTranslations("patchNotes");
   const subject = pickLocaleText(change.subject, chain);
   const text = pickLocaleText(change.text, chain);
-  const kindLabel = t(`kinds.${change.kind as ChangeKind}`);
+  const normalizedKind = normalizeChangeKind(change.kind);
+  const kindLabel = t(`kinds.${normalizedKind}`);
   const targets = change.targets ?? [];
   const related = change.relatedEntities ?? [];
   const metrics = change.metrics ?? [];
