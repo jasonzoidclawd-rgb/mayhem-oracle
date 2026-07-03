@@ -2,7 +2,7 @@ name: Update Data
 
 on:
   schedule:
-    - cron: '52 8 * * *'   # 22:00 UTC = 06:00 Taipei
+    - cron: '0 21 * * *'   # 22:00 UTC = 06:00 Taipei
     - cron: '0 10 * * *'   # redundant guard against dropped schedule events
   workflow_dispatch:
 
