@@ -50,6 +50,7 @@ OUT_DIR = INTERNAL_DATA_DIR
 # zh-cn: global site redirects to a 404; use zh-tw content under zh-cn key
 # for backward-compatibility with existing patch-notes.json consumers.
 LOCALE_PREFIXES: dict[str, str] = {
+    "zh-tw": "zh-tw",
     "zh-cn": "zh-tw",
     "ja-jp": "ja-jp",
     "ko-kr": "ko-kr",
@@ -1025,6 +1026,7 @@ def main() -> None:
     # Fetch and parse EN pages
     print("\nFetching and parsing EN patch pages...")
     en_patches: list[dict] = []
+    parsed_en_paths: list[str] = []
     for i, path in enumerate(en_paths):
         if i > 0:
             time.sleep(0.8)
@@ -1039,9 +1041,30 @@ def main() -> None:
         if not patch["sections"]:
             print(f"    WARNING: no ARAM: Mayhem content found — check h2 selector")
         en_patches.append(patch)
+        parsed_en_paths.append(path)
 
     if not en_patches:
         raise SystemExit("No EN patches parsed — aborting.")
+
+    # Fetch localized pages opportunistically; any missing locale falls back to
+    # EN text during positional stitching.
+    print("\nFetching and parsing localized patch pages...")
+    by_locale: dict[str, list[dict]] = {locale_key: [] for locale_key in LOCALE_PREFIXES}
+    for locale_key in LOCALE_PREFIXES:
+        for path in parsed_en_paths:
+            time.sleep(0.8)
+            localized_path = locale_path(path, locale_key)
+            try:
+                html = fetch(localized_path)
+            except (URLError, OSError) as e:
+                print(f"  {locale_key} {path.split('/')[-1]}: falling back to EN ({e})")
+                continue
+            patch = parse_patch_page(html, localized_path, locale_mode=True)
+            total = sum(len(s["changes"]) for s in patch["sections"])
+            print(f"  {locale_key} {patch['version']}: {len(patch['sections'])} sections, {total} changes")
+            if not patch["sections"]:
+                print(f"    WARNING: no localized ARAM: Mayhem content found — using EN fallback")
+            by_locale[locale_key].append(patch)
 
     # Classify and deterministically link to local catalogs.
     print("\nClassifying changes (deterministic regex)...")
@@ -1049,10 +1072,15 @@ def main() -> None:
         print(f"  Patch {patch['version']}:")
         classify_patch(patch)
 
+    print("\nStitching localized patch-note text...")
+    merged = stitch_locales(en_patches, by_locale)
+    augmented_subjects = enrich_augment_subjects(merged)
+    print(f"  enriched localized augment subjects: {augmented_subjects}")
+
     print("\nLinking patch-note rows to Mayhem Oracle catalogs...")
     catalogs = load_entity_catalogs()
-    enrich_patch_entities(en_patches, catalogs)
-    merged = wrap_locale_fields(en_patches)
+    enrich_patch_entities(merged, catalogs)
+    merged = wrap_locale_fields(merged)
 
     # Write recentChanges back to augments.json
     print("\nUpdating augments.json recentChanges...")
