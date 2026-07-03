@@ -4,9 +4,10 @@ import { useEffect, useRef, useState } from "react";
 import { useTranslations, useLocale } from "next-intl";
 import { localizedName, type LocalizedNameRecord } from "@/lib/i18n/localized-name";
 
-type SearchItem = LocalizedNameRecord & { kind: "champion" | "augment" };
-
-const KIND_ICON: Record<SearchItem["kind"], string> = { champion: "🧙", augment: "◆" };
+type SearchItem = LocalizedNameRecord & {
+  kind: "champion" | "augment";
+  icon?: string;
+};
 
 export function CmdKSearch() {
   const t = useTranslations("dashboard");
@@ -15,7 +16,6 @@ export function CmdKSearch() {
   const [query, setQuery] = useState("");
   const [items, setItems] = useState<SearchItem[] | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
-
   // Lazy-load the search corpus only once the palette is actually opened.
   useEffect(() => {
     if (!open || items) return;
@@ -23,21 +23,23 @@ export function CmdKSearch() {
       fetch("/data/champions.json").then((r) => r.json()),
       fetch("/data/augments.json").then((r) => r.json()),
     ]).then(([champData, augData]) => {
-      const champItems: SearchItem[] = champData.champions.map((c: LocalizedNameRecord) => ({
+      const champItems: SearchItem[] = champData.champions.map((c: LocalizedNameRecord & { icon?: string }) => ({
         name: c.name,
         name_zh_TW: c.name_zh_TW,
         name_zh_CN: c.name_zh_CN,
         name_ja: c.name_ja,
         name_ko: c.name_ko,
         kind: "champion" as const,
+        icon: c.icon,
       }));
-      const augItems: SearchItem[] = augData.augments.map((a: LocalizedNameRecord) => ({
+      const augItems: SearchItem[] = augData.augments.map((a: LocalizedNameRecord & { icon?: string }) => ({
         name: a.name,
         name_zh_TW: a.name_zh_TW,
         name_zh_CN: a.name_zh_CN,
         name_ja: a.name_ja,
         name_ko: a.name_ko,
         kind: "augment" as const,
+        icon: a.icon,
       }));
       setItems([...champItems, ...augItems]);
     });
@@ -87,10 +89,22 @@ export function CmdKSearch() {
                    bg-[var(--color-bg-card)] px-3 text-xs text-[var(--color-text-secondary)]
                    transition-colors hover:border-[var(--color-border-hover)]"
       >
-        <span aria-hidden="true">🔍</span>
+        <svg
+          aria-hidden="true"
+          viewBox="0 0 20 20"
+          className="h-4 w-4"
+          fill="none"
+        >
+          <path
+            d="M8.5 14.5a6 6 0 1 1 4.24-1.76L17 17"
+            stroke="currentColor"
+            strokeWidth="1.8"
+            strokeLinecap="round"
+          />
+        </svg>
         <span className="hidden lg:inline">{t("searchTriggerLabel")}</span>
         <span className="hidden rounded border border-[var(--color-border-default)] px-1.5 py-px text-[11px] text-[var(--color-text-muted)] lg:inline">
-          ⌘K
+          ⌘K / Ctrl K
         </span>
       </button>
 
@@ -123,7 +137,21 @@ export function CmdKSearch() {
                     key={`${item.kind}-${item.name}-${i}`}
                     className="flex items-center gap-3 rounded-lg px-3 py-2.5 hover:bg-white/5"
                   >
-                    <span aria-hidden="true">{KIND_ICON[item.kind]}</span>
+                    {item.icon ? (
+                      // eslint-disable-next-line @next/next/no-img-element
+                      <img
+                        src={item.icon}
+                        alt=""
+                        className="h-8 w-8 shrink-0 rounded-md object-cover"
+                        loading="lazy"
+                        decoding="async"
+                      />
+                    ) : (
+                      <span
+                        aria-hidden="true"
+                        className="h-8 w-8 shrink-0 rounded-md border border-[var(--color-border-default)] bg-white/5"
+                      />
+                    )}
                     <span>{localizedName(item, locale)}</span>
                     <span className="ml-auto text-[10px] uppercase tracking-wide text-[var(--color-text-muted)]">
                       {item.kind === "champion" ? t("searchKindChampion") : t("searchKindAugment")}
