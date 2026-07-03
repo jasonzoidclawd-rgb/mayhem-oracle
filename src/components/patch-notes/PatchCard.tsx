@@ -1,6 +1,10 @@
 import { getTranslations } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
-import { normalizeChangeKind } from "@/lib/patch-notes/labels";
+import { formatPatchDate } from "@/lib/patch-notes/chrome";
+import {
+  normalizeChangeKind,
+  normalizePatchObjectType,
+} from "@/lib/patch-notes/labels";
 import type {
   PatchChange,
   PatchEntityRef,
@@ -64,14 +68,14 @@ export async function PatchCard({
                 rel="noreferrer"
                 className="inline-flex min-h-8 items-center rounded-full border border-[var(--color-border)] px-2 text-xs text-[var(--color-text-muted)] hover:border-[var(--color-accent)] hover:text-[var(--color-accent)]"
               >
-                Riot ↗
+                {t("riotSourceShort")}
               </a>
             ) : null}
           </div>
         </div>
         {patch.released ? (
           <p className="mt-1 text-sm text-[var(--color-text-muted)]">
-            {patch.released}
+            {t("releasedOn", { date: formatPatchDate(patch.released, locale) })}
           </p>
         ) : null}
       </header>
@@ -154,6 +158,8 @@ async function ChangeRow({
   const metrics = change.metrics ?? [];
   const labels = change.labels ?? [];
   const engineRefs = change.impact?.engineRefs ?? [];
+  const typeLabel = (type: string) =>
+    t(`objectTypes.${normalizePatchObjectType(type)}`);
 
   return (
     <li className="rounded-lg border border-[var(--color-border)]/50 bg-[var(--color-bg-card)]/40 px-3 py-3">
@@ -179,12 +185,17 @@ async function ChangeRow({
       {targets.length || related.length ? (
         <div className="mt-3 flex flex-wrap gap-2">
           {targets.map((target) => (
-            <EntityChip key={`${target.type}-${target.slug}`} entity={target} />
+            <EntityChip
+              key={`${target.type}-${target.slug}`}
+              entity={target}
+              typeLabel={typeLabel}
+            />
           ))}
           {related.slice(0, compact ? 2 : 5).map((entity) => (
             <EntityChip
               key={`rel-${entity.type}-${entity.slug}`}
               entity={entity}
+              typeLabel={typeLabel}
               muted
             />
           ))}
@@ -234,9 +245,11 @@ async function ChangeRow({
 
 function EntityChip({
   entity,
+  typeLabel,
   muted = false,
 }: {
   entity: PatchEntityRef;
+  typeLabel: (type: string) => string;
   muted?: boolean;
 }) {
   const className = `inline-flex min-h-8 items-center rounded-full border px-2 text-xs ${
@@ -246,7 +259,7 @@ function EntityChip({
         ? "border-[var(--color-accent)]/35 bg-[var(--color-accent)]/10 text-[var(--color-accent)]"
         : "border-rose-400/30 bg-rose-400/10 text-rose-300"
   }`;
-  const label = `${entity.type}: ${entity.name}`;
+  const label = `${typeLabel(entity.type)}: ${entity.name}`;
 
   if (entity.href && entity.known) {
     return (

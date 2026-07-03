@@ -2,6 +2,7 @@ import { getTranslations } from "next-intl/server";
 import { readFile } from "fs/promises";
 import path from "path";
 import { ChangeBadge } from "./ChangeBadge";
+import { formatPatchDate } from "@/lib/patch-notes/chrome";
 import type { ChangeKind } from "@/lib/types";
 
 type HotfixType = "added" | "removed" | "rarity" | "effect" | "mechanism";
@@ -15,7 +16,7 @@ interface HotfixChange {
   toRarity?: string | null;
 }
 
-interface HotfixEvent {
+export interface HotfixEvent {
   date: string;
   patch: string;
   changes: HotfixChange[];
@@ -23,14 +24,14 @@ interface HotfixEvent {
 
 // Hotfix type → ChangeBadge color semantics (reused from regular patch notes).
 const TYPE_KIND: Record<HotfixType, ChangeKind> = {
-  added: "buffed",
-  removed: "nerfed",
+  added: "added",
+  removed: "removed",
   rarity: "changed",
   effect: "changed",
   mechanism: "mechanism",
 };
 
-async function loadHotfixes(): Promise<HotfixEvent[]> {
+export async function loadHotfixes(): Promise<HotfixEvent[]> {
   try {
     const raw = await readFile(
       path.join(process.cwd(), "public", "data", "mayhem-hotfixes.json"),
@@ -42,10 +43,16 @@ async function loadHotfixes(): Promise<HotfixEvent[]> {
   }
 }
 
-export async function HotfixNotes({ locale }: { locale: string }) {
+export async function HotfixNotes({
+  locale,
+  events,
+}: {
+  locale: string;
+  events?: HotfixEvent[];
+}) {
   const t = await getTranslations("patchNotes");
-  const events = await loadHotfixes();
-  if (!events.length) return null;
+  const hotfixEvents = events ?? await loadHotfixes();
+  if (!hotfixEvents.length) return null;
 
   return (
     <section className="mb-8">
@@ -59,12 +66,14 @@ export async function HotfixNotes({ locale }: { locale: string }) {
       </div>
 
       <div className="space-y-4">
-        {events.map((event) => (
+        {hotfixEvents.map((event) => (
           <article key={event.date} className="glass-card overflow-hidden">
             <header className="border-b border-[var(--color-border)] px-5 py-3">
               <span className="text-sm font-medium text-[var(--color-text-secondary)]">
                 {t("patchLabel", { patch: event.patch })} ·{" "}
-                {t("hotfix.detected", { date: event.date })}
+                {t("hotfix.detected", {
+                  date: formatPatchDate(event.date, locale),
+                })}
               </span>
             </header>
             <ul className="space-y-2 px-5 py-4">

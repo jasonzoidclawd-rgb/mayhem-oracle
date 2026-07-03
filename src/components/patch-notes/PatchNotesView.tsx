@@ -1,5 +1,10 @@
 import { getTranslations } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
+import {
+  buildPatchHeroChrome,
+  formatPatchDate,
+} from "@/lib/patch-notes/chrome";
+import { buildPatchDigest } from "@/lib/patch-notes/digest";
 import type { ChangeKind, PatchNote, PatchNotesData } from "@/lib/types";
 import { PatchCard } from "./PatchCard";
 
@@ -24,10 +29,12 @@ export async function PatchNotesView({
   data,
   locale,
   removedAugments,
+  hotfixEventCount = 0,
 }: {
   data: PatchNotesData;
   locale: string;
   removedAugments: RemovedPatchAugment[];
+  hotfixEventCount?: number;
 }) {
   const t = await getTranslations("patchNotes");
 
@@ -45,8 +52,16 @@ export async function PatchNotesView({
 
   return (
     <div className="space-y-6">
-      <PatchHero patch={current} sourceUrl={data.sourceUrl || current.sourceUrl} />
-      <PatchSummary patch={current} />
+      <PatchHero
+        patch={current}
+        locale={locale}
+        sourceUrl={data.sourceUrl || current.sourceUrl}
+      />
+      <PatchSummary
+        patch={current}
+        removedAugmentsCount={removedAugments.length}
+        hotfixEventCount={hotfixEventCount}
+      />
       <PatchCard patch={current} locale={locale} isCurrent />
       <RemovedAugmentsTable augments={removedAugments} locale={locale} />
 
@@ -80,13 +95,21 @@ export async function PatchNotesView({
 
 async function PatchHero({
   patch,
+  locale,
   sourceUrl,
 }: {
   patch: PatchNote;
+  locale: string;
   sourceUrl?: string;
 }) {
   const t = await getTranslations("patchNotes");
   const authors = patch.authors?.length ? patch.authors.join(", ") : null;
+  const dateLabel = formatPatchDate(patch.publishedAt || patch.released, locale);
+  const chrome = buildPatchHeroChrome(
+    patch,
+    locale,
+    t("patchLabel", { patch: patch.version }),
+  );
 
   return (
     <section className="glass-card overflow-hidden border border-[var(--color-border-hover)]">
@@ -95,22 +118,41 @@ async function PatchHero({
           <span className="rounded-full border border-[var(--color-accent)]/40 bg-[var(--color-accent)]/15 px-2 py-0.5 text-xs font-semibold uppercase tracking-wider text-[var(--color-accent)]">
             {t("officialSource")}
           </span>
-          <span className="text-xs text-[var(--color-text-muted)]">
-            {patch.publishedAt || patch.released}
-          </span>
+          {dateLabel ? (
+            <span className="text-xs text-[var(--color-text-muted)]">
+              {dateLabel}
+            </span>
+          ) : null}
         </div>
         <h2 className="mt-3 text-2xl font-bold text-[var(--color-text-primary)] sm:text-3xl">
-          {patch.title || t("patchLabel", { patch: patch.version })}
+          {chrome.heading}
         </h2>
         {authors ? (
           <p className="mt-1 text-sm text-[var(--color-text-muted)]">
             {t("articleByline", { authors })}
           </p>
         ) : null}
-        {patch.intro ? (
+        {chrome.intro ? (
           <p className="mt-4 max-w-4xl text-sm leading-6 text-[var(--color-text-secondary)]">
-            {patch.intro}
+            {chrome.intro}
           </p>
+        ) : null}
+        {chrome.originalArticle ? (
+          <details className="mt-4 max-w-4xl rounded-lg border border-[var(--color-border)] bg-[var(--color-bg-card)]/35 px-3 py-2 text-sm">
+            <summary className="cursor-pointer font-medium text-[var(--color-text-secondary)] hover:text-[var(--color-accent)]">
+              {t("originalArticleLabel")}
+            </summary>
+            <div className="mt-3 space-y-2 text-[var(--color-text-secondary)]">
+              {chrome.originalArticle.title ? (
+                <p className="font-medium text-[var(--color-text-primary)]">
+                  {chrome.originalArticle.title}
+                </p>
+              ) : null}
+              {chrome.originalArticle.intro ? (
+                <p className="leading-6">{chrome.originalArticle.intro}</p>
+              ) : null}
+            </div>
+          </details>
         ) : null}
         {sourceUrl ? (
           <a
@@ -127,10 +169,19 @@ async function PatchHero({
   );
 }
 
-async function PatchSummary({ patch }: { patch: PatchNote }) {
+async function PatchSummary({
+  patch,
+  removedAugmentsCount,
+  hotfixEventCount,
+}: {
+  patch: PatchNote;
+  removedAugmentsCount: number;
+  hotfixEventCount: number;
+}) {
   const t = await getTranslations("patchNotes");
   const summary = patch.summary;
   if (!summary) return null;
+  const digest = buildPatchDigest(patch, removedAugmentsCount, hotfixEventCount);
 
   const cards = [
     ["summaryTotal", summary.totalChanges],
@@ -138,10 +189,13 @@ async function PatchSummary({ patch }: { patch: PatchNote }) {
     ["summaryChampions", summary.byEntityType.champion ?? 0],
     ["summaryAugments", summary.byEntityType.augment ?? 0],
     ["summaryItems", summary.byEntityType.item ?? 0],
+    ["summaryAdded", digest.added],
+    ["summaryRemoved", digest.removed],
+    ["summaryHotfixes", digest.hotfixes],
   ] as const;
 
   return (
-    <section className="grid grid-cols-2 gap-3 md:grid-cols-5">
+    <section className="grid grid-cols-2 gap-3 md:grid-cols-4 xl:grid-cols-8">
       {cards.map(([key, value]) => (
         <div key={key} className="glass-card p-4">
           <div className="text-2xl font-bold text-[var(--color-text-primary)]">

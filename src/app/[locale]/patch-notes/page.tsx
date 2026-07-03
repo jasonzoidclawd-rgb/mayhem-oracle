@@ -5,7 +5,10 @@ import {
   PatchNotesView,
   type RemovedPatchAugment,
 } from "@/components/patch-notes/PatchNotesView";
-import { HotfixNotes } from "@/components/patch-notes/HotfixNotes";
+import {
+  HotfixNotes,
+  loadHotfixes,
+} from "@/components/patch-notes/HotfixNotes";
 import type { PatchNotesData } from "@/lib/types";
 import {
   readAugmentsFile,
@@ -72,9 +75,10 @@ export default async function PatchNotesPage({
   const { locale } = await params;
   setRequestLocale(locale);
   const t = await getTranslations("patchNotes");
-  const [data, removedAugments] = await Promise.all([
+  const [data, removedAugments, hotfixEvents] = await Promise.all([
     loadPatchNotes(),
     loadRemovedAugments(),
+    loadHotfixes(),
   ]);
 
   return (
@@ -87,12 +91,13 @@ export default async function PatchNotesPage({
         </p>
       </header>
       <AdSlot slot="public-patch-notes" />
-      <HotfixNotes locale={locale} />
+      <HotfixNotes locale={locale} events={hotfixEvents} />
       {data ? (
         <PatchNotesView
           data={data}
           locale={locale}
           removedAugments={removedAugments}
+          hotfixEventCount={hotfixEvents.length}
         />
       ) : (
         <div className="glass-card p-8 text-center text-[var(--color-text-muted)]">
