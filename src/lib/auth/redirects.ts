@@ -7,15 +7,8 @@ export function safeNextPath(value: string | null): string {
   return value;
 }
 
-export function authCallbackUrl(next = "/"): string {
-  const url = new URL("/auth/callback", `${SITE_URL}/`);
-  const safeNext = safeNextPath(next);
-
-  if (safeNext !== "/") {
-    url.searchParams.set("next", safeNext);
-  }
-
-  return url.toString();
+export function authCallbackUrl(): string {
+  return new URL("/auth/callback", `${SITE_URL}/`).toString();
 }
 
 export function canonicalRedirect(next: string): string {

@@ -29,7 +29,7 @@ describe("auth routes", () => {
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY = "test-anon-key";
   });
 
-  test("uses the canonical site URL for the Supabase OAuth callback and preserves safe next", async () => {
+  test("uses the canonical site URL for the Supabase OAuth callback", async () => {
     signInWithOAuth.mockImplementation(async ({ options }) => ({
       data: {
         url: `https://krmyzbcoifdpgrszcfun.supabase.co/auth/v1/authorize?provider=google&redirect_to=${encodeURIComponent(options.redirectTo)}`,
@@ -45,36 +45,14 @@ describe("auth routes", () => {
     expect(signInWithOAuth).toHaveBeenCalledWith({
       provider: "google",
       options: {
-        redirectTo: "https://wasfun.lol/auth/callback?next=%2Faccount",
-      },
-    });
-
-    const location = response.headers.get("location");
-    expect(location).not.toBeNull();
-
-    const redirectTo = new URL(location!).searchParams.get("redirect_to");
-    expect(redirectTo).toBe("https://wasfun.lol/auth/callback?next=%2Faccount");
-  });
-
-  test("drops unsafe signin next values before building the OAuth callback", async () => {
-    signInWithOAuth.mockImplementation(async ({ options }) => ({
-      data: {
-        url: `https://krmyzbcoifdpgrszcfun.supabase.co/auth/v1/authorize?provider=google&redirect_to=${encodeURIComponent(options.redirectTo)}`,
-      },
-      error: null,
-    }));
-
-    const { GET } = await import("@/app/api/auth/signin/route");
-    await GET(
-      new Request("https://mayhem-oracle.vercel.app/api/auth/signin?next=https%3A%2F%2Fevil.example"),
-    );
-
-    expect(signInWithOAuth).toHaveBeenCalledWith({
-      provider: "google",
-      options: {
         redirectTo: "https://wasfun.lol/auth/callback",
       },
     });
+    const location = response.headers.get("location");
+    expect(location).toContain(
+      "redirect_to=https%3A%2F%2Fwasfun.lol%2Fauth%2Fcallback",
+    );
+    expect(location).not.toContain("next");
   });
 
   test("exchanges callback codes and returns to the canonical site URL", async () => {
