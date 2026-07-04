@@ -4,6 +4,7 @@ import path from "path";
 import { localizedUrl, languageAlternates } from "@/lib/site";
 import { routing } from "@/i18n/routing";
 import { resolvePatchNotesLastModified } from "@/lib/patch-notes/seo";
+import { patchDetailRoute } from "@/lib/patch-notes/routes";
 import type { PatchNotesData } from "@/lib/types";
 
 /**
@@ -92,17 +93,29 @@ async function patchNotesLastModified(): Promise<Date | null> {
   }
 }
 
+async function patchNoteRoutes(): Promise<string[]> {
+  try {
+    const file = path.join(process.cwd(), "public", "data", "patch-notes.json");
+    const data = JSON.parse(await readFile(file, "utf-8")) as PatchNotesData;
+    return (data.patches ?? []).map((patch) => patchDetailRoute(patch.version));
+  } catch {
+    return [];
+  }
+}
+
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const [
     slugs,
     augmentIds,
     itemIds,
+    patchRoutes,
     publicDataLastModified,
     patchNoteLastModified,
   ] = await Promise.all([
     championSlugs(),
     augmentSlugs(),
     itemIdentifiers(),
+    patchNoteRoutes(),
     publicMetaLastModified(),
     patchNotesLastModified(),
   ]);
@@ -112,12 +125,13 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     ...slugs.map((slug) => `/champions/${slug}`),
     ...augmentIds.map((slug) => `/augments/${slug}`),
     ...itemIds.map((identifier) => `/items/${identifier}`),
+    ...patchRoutes,
   ];
 
   return paths.flatMap((p) =>
     routing.locales.map((locale) => {
       const lastModified =
-        p === "/patch-notes"
+        p === "/patch-notes" || p.startsWith("/patch-notes/")
           ? patchNoteLastModified ?? publicDataLastModified ?? undefined
           : publicDataLastModified ?? undefined;
 
