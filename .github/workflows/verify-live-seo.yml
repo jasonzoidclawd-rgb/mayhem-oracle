@@ -1,0 +1,63 @@
+name: Verify Live SEO
+
+on:
+  workflow_dispatch:
+    inputs:
+      base_url:
+        description: Base URL to verify
+        default: https://wasfun.lol
+        required: true
+        type: string
+      all:
+        description: Check every localized patch detail page
+        default: false
+        required: true
+        type: boolean
+  schedule:
+    - cron: '30 23 * * *'
+    - cron: '30 11 * * *'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: verify-live-seo
+  cancel-in-progress: false
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Verify live patch-note SEO
+        env:
+          BASE_URL: ${{ github.event_name == 'workflow_dispatch' && inputs.base_url || 'https://wasfun.lol' }}
+          RUN_ALL: ${{ github.event_name == 'workflow_dispatch' && inputs.all || false }}
+        run: |
+          set -euo pipefail
+
+          command=(python3 scripts/verify_live_patch_seo.py --base-url "$BASE_URL")
+          mode="newest"
+          if [[ "${{ github.event_name }}" == "workflow_dispatch" && "${{ inputs.all }}" == "true" ]]; then
+            command+=(--all)
+            mode="all"
+          fi
+
+          printf 'Running:'
+          printf ' %q' "${command[@]}"
+          printf '\n'
+          "${command[@]}"
+
+          {
+            echo "### Live SEO verification"
+            echo "- Base URL: \`$BASE_URL\`"
+            echo "- Mode: \`$mode\`"
+            echo "- Command: \`${command[*]}\`"
+          } >> "$GITHUB_STEP_SUMMARY"
