@@ -1,6 +1,7 @@
 import { describe, expect, test } from "vitest";
 import { readFileSync } from "node:fs";
 import path from "node:path";
+import { localizedUrl } from "@/lib/site";
 import {
   buildPatchDetailStaticParams,
   findPatchByVersion,
@@ -80,6 +81,24 @@ describe("patch-note detail routes", () => {
     );
     expect(findPatchByVersion(fixture, "26.11")).toBeNull();
     expect(patchDetailRoute("26.13")).toBe("/patch-notes/26.13");
+  });
+
+  test("default-locale dotted patch detail routes are generated and proxy-covered", () => {
+    const route = patchDetailRoute("26.13");
+    const params = buildPatchDetailStaticParams(fixture, routing.locales);
+    const proxySource = readFileSync(
+      path.join(process.cwd(), "src/proxy.ts"),
+      "utf8",
+    );
+
+    expect(localizedUrl(route, routing.defaultLocale)).toBe(
+      "https://wasfun.lol/patch-notes/26.13",
+    );
+    expect(params).toContainEqual({
+      locale: routing.defaultLocale,
+      patch: "26.13",
+    });
+    expect(proxySource).toContain('"/patch-notes/:path*"');
   });
 
   test("patch cards expose crawlable links to detail pages", () => {

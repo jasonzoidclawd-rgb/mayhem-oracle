@@ -69,6 +69,7 @@ export default async function proxy(request: NextRequest) {
 
 export const config = {
   matcher: [
+    "/patch-notes/:path*",
     "/((?!api|_next|_vercel|.*\\..*|manifest\\.json|sw\\.js).*)",
   ],
 };
