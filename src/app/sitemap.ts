@@ -3,6 +3,8 @@ import { readFile } from "fs/promises";
 import path from "path";
 import { localizedUrl, languageAlternates } from "@/lib/site";
 import { routing } from "@/i18n/routing";
+import { resolvePatchNotesLastModified } from "@/lib/patch-notes/seo";
+import type { PatchNotesData } from "@/lib/types";
 
 /**
  * Public, indexable routes (account/admin are excluded — see robots.ts).
@@ -67,12 +69,42 @@ async function itemIdentifiers(): Promise<string[]> {
   }
 }
 
+async function publicMetaLastModified(): Promise<Date | null> {
+  try {
+    const file = path.join(process.cwd(), "public", "data", "meta.json");
+    const data = JSON.parse(await readFile(file, "utf-8")) as {
+      scraped_at?: string;
+    };
+    const date = data.scraped_at ? new Date(data.scraped_at) : null;
+    return date && !Number.isNaN(date.getTime()) ? date : null;
+  } catch {
+    return null;
+  }
+}
+
+async function patchNotesLastModified(): Promise<Date | null> {
+  try {
+    const file = path.join(process.cwd(), "public", "data", "patch-notes.json");
+    const data = JSON.parse(await readFile(file, "utf-8")) as PatchNotesData;
+    return resolvePatchNotesLastModified(data);
+  } catch {
+    return null;
+  }
+}
+
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const lastModified = new Date();
-  const [slugs, augmentIds, itemIds] = await Promise.all([
+  const [
+    slugs,
+    augmentIds,
+    itemIds,
+    publicDataLastModified,
+    patchNoteLastModified,
+  ] = await Promise.all([
     championSlugs(),
     augmentSlugs(),
     itemIdentifiers(),
+    publicMetaLastModified(),
+    patchNotesLastModified(),
   ]);
 
   const paths: string[] = [
@@ -83,10 +115,17 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   ];
 
   return paths.flatMap((p) =>
-    routing.locales.map((locale) => ({
-      url: localizedUrl(p, locale),
-      lastModified,
-      alternates: { languages: languageAlternates(p) },
-    })),
+    routing.locales.map((locale) => {
+      const lastModified =
+        p === "/patch-notes"
+          ? patchNoteLastModified ?? publicDataLastModified ?? undefined
+          : publicDataLastModified ?? undefined;
+
+      return {
+        url: localizedUrl(p, locale),
+        lastModified,
+        alternates: { languages: languageAlternates(p) },
+      };
+    }),
   );
 }
