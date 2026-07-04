@@ -1,4 +1,5 @@
 import type { Locale } from "@/i18n/routing";
+import { patchDetailRoute } from "@/lib/patch-notes/routes";
 import type { PatchNote, PatchNotesData } from "@/lib/types";
 
 export interface PatchNotesJsonLdOptions {
@@ -6,6 +7,21 @@ export interface PatchNotesJsonLdOptions {
   title: string;
   description: string;
   breadcrumbLabel: string;
+  patchLabel: (patch: string) => string;
+}
+
+export interface PatchDetailJsonLdOptions {
+  url: string;
+  title: string;
+  description: string;
+  patchNotesUrl: string;
+  patchNotesLabel: string;
+  patchLabel: (patch: string) => string;
+}
+
+export interface PatchDetailMetadataOptions {
+  pageTitle: string;
+  subtitle: string;
   patchLabel: (patch: string) => string;
 }
 
@@ -43,7 +59,7 @@ export function patchNoteSectionAnchor(patch: string, sectionId: string): string
 }
 
 export function patchNoteSectionHref(patch: string, sectionId: string): string {
-  return `/patch-notes#${patchNoteSectionAnchor(patch, sectionId)}`;
+  return `${patchDetailRoute(patch)}#${patchNoteSectionAnchor(patch, sectionId)}`;
 }
 
 export function resolvePatchNotesLastModified(
@@ -55,6 +71,34 @@ export function resolvePatchNotesLastModified(
     validDate(currentPatch(data)?.publishedAt) ??
     validDate(currentPatch(data)?.released)
   );
+}
+
+export function resolvePatchNotePublishedDate(
+  note: PatchNote | null | undefined,
+): Date | null {
+  if (!note) return null;
+  return validDate(note.publishedAt) ?? validDate(note.released);
+}
+
+export function buildPatchDetailMetadataText(
+  note: PatchNote,
+  options: PatchDetailMetadataOptions,
+): { title: string; description: string } {
+  const label = options.patchLabel(note.version);
+  const sourceTitle = note.title || label;
+
+  return {
+    title: `${label} · ${options.pageTitle}`,
+    description: `${options.subtitle} · ${label} · ${sourceTitle}`,
+  };
+}
+
+function patchDetailUrl(collectionUrl: string, patch: string): string {
+  return `${collectionUrl.replace(/\/$/, "")}/${encodeURIComponent(patch)}`;
+}
+
+function siteUrlFromPatchNotesUrl(patchNotesUrl: string): string {
+  return patchNotesUrl.replace(/\/patch-notes\/?$/, "");
 }
 
 export function buildPatchNotesJsonLd(
@@ -69,7 +113,7 @@ export function buildPatchNotesJsonLd(
   const itemListElements = data.patches.map((patch, index) => ({
     "@type": "ListItem",
     position: index + 1,
-    url: `${options.url}#${patchNoteAnchor(patch.version)}`,
+    url: patchDetailUrl(options.url, patch.version),
     name: options.patchLabel(patch.version),
   }));
 
@@ -138,4 +182,62 @@ export function buildPatchNotesJsonLd(
   }
 
   return { "@context": "https://schema.org", "@graph": graph };
+}
+
+export function buildPatchDetailJsonLd(
+  note: PatchNote,
+  locale: Locale,
+  options: PatchDetailJsonLdOptions,
+): Record<string, unknown> {
+  const date = resolvePatchNotePublishedDate(note)?.toISOString();
+  const articleId = `${options.url}#article`;
+
+  return {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "Article",
+        "@id": articleId,
+        headline: note.title || options.title,
+        description: options.description,
+        url: options.url,
+        mainEntityOfPage: options.url,
+        inLanguage: locale,
+        datePublished: date,
+        dateModified: date,
+        author: (note.authors ?? []).map((name) => ({
+          "@type": "Person",
+          name,
+        })),
+        isPartOf: {
+          "@type": "CollectionPage",
+          url: options.patchNotesUrl,
+        },
+        keywords: Object.keys(note.summary?.byKind ?? {}).join(", "),
+      },
+      {
+        "@type": "BreadcrumbList",
+        itemListElement: [
+          {
+            "@type": "ListItem",
+            position: 1,
+            name: "Mayhem Oracle",
+            item: siteUrlFromPatchNotesUrl(options.patchNotesUrl),
+          },
+          {
+            "@type": "ListItem",
+            position: 2,
+            name: options.patchNotesLabel,
+            item: options.patchNotesUrl,
+          },
+          {
+            "@type": "ListItem",
+            position: 3,
+            name: options.patchLabel(note.version),
+            item: options.url,
+          },
+        ],
+      },
+    ],
+  };
 }

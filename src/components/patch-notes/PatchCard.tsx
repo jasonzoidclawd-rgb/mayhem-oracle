@@ -9,6 +9,7 @@ import {
   patchNoteAnchor,
   patchNoteSectionAnchor,
 } from "@/lib/patch-notes/seo";
+import { patchDetailRoute } from "@/lib/patch-notes/routes";
 import type {
   PatchChange,
   PatchEntityRef,
@@ -43,11 +44,13 @@ export async function PatchCard({
   locale,
   isCurrent = false,
   compact = false,
+  linkTitle = true,
 }: {
   patch: PatchNote;
   locale: string;
   isCurrent?: boolean;
   compact?: boolean;
+  linkTitle?: boolean;
 }) {
   const t = await getTranslations("patchNotes");
   const chain: DataLocale[] = LOCALE_CHAIN[locale] ?? ["en"];
@@ -57,7 +60,16 @@ export async function PatchCard({
       <header className="border-b border-[var(--color-border)] px-5 py-4">
         <div className="flex flex-wrap items-baseline justify-between gap-2">
           <h2 className="text-xl font-semibold">
-            {t("patchLabel", { patch: patch.version })}
+            {linkTitle ? (
+              <Link
+                href={patchDetailRoute(patch.version)}
+                className="hover:text-[var(--color-accent)]"
+              >
+                {t("patchLabel", { patch: patch.version })}
+              </Link>
+            ) : (
+              t("patchLabel", { patch: patch.version })
+            )}
           </h2>
           <div className="flex items-center gap-1.5">
             {isCurrent ? (

@@ -1,4 +1,6 @@
 import { describe, expect, test } from "vitest";
+import { readFileSync } from "node:fs";
+import path from "node:path";
 import {
   buildPatchDetailStaticParams,
   findPatchByVersion,
@@ -78,5 +80,16 @@ describe("patch-note detail routes", () => {
     );
     expect(findPatchByVersion(fixture, "26.11")).toBeNull();
     expect(patchDetailRoute("26.13")).toBe("/patch-notes/26.13");
+  });
+
+  test("patch cards expose crawlable links to detail pages", () => {
+    const source = readFileSync(
+      path.join(process.cwd(), "src/components/patch-notes/PatchCard.tsx"),
+      "utf8",
+    );
+
+    expect(source).toContain("patchDetailRoute(patch.version)");
+    expect(source).toContain('href={patchDetailRoute(patch.version)}');
+    expect(source).toContain("id={patchNoteSectionAnchor(patchVersion, section.id)}");
   });
 });

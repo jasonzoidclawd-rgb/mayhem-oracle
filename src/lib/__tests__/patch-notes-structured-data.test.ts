@@ -1,5 +1,7 @@
 import { describe, expect, test } from "vitest";
 import {
+  buildPatchDetailJsonLd,
+  buildPatchDetailMetadataText,
   buildPatchNotesJsonLd,
   resolvePatchNotesLastModified,
 } from "@/lib/patch-notes/seo";
@@ -91,5 +93,67 @@ describe("patch-notes structured data", () => {
       dateModified: "2026-06-23T18:00:00.000Z",
     });
     expect(JSON.stringify(jsonLd)).not.toContain("oracleScore");
+  });
+
+  test("builds detail JSON-LD with patch-specific dates and breadcrumbs", () => {
+    const note = fixture.patches[1];
+    const jsonLd = buildPatchDetailJsonLd(note, "zh-TW", {
+      url: "https://wasfun.lol/zh-TW/patch-notes/26.12",
+      title: "版本 26.12 · 版本更新",
+      description: "Riot 官方更新公告 · League of Legends Patch 26.12 Notes",
+      patchNotesUrl: "https://wasfun.lol/zh-TW/patch-notes",
+      patchNotesLabel: "版本更新",
+      patchLabel: (patch) => `版本 ${patch}`,
+    });
+
+    const graph = jsonLd["@graph"] as Record<string, unknown>[];
+    const article = graph.find((node) => node["@type"] === "Article");
+    const breadcrumb = graph.find(
+      (node) => node["@type"] === "BreadcrumbList",
+    );
+
+    expect(article).toMatchObject({
+      headline: "League of Legends Patch 26.12 Notes",
+      datePublished: "2026-06-11T12:00:00.000Z",
+      dateModified: "2026-06-11T12:00:00.000Z",
+    });
+    expect(article?.dateModified).not.toBe("2026-06-23T18:00:00.000Z");
+
+    const items = breadcrumb?.itemListElement as Record<string, unknown>[];
+    expect(items).toHaveLength(3);
+    expect(items.map((item) => item.name)).toEqual([
+      "Mayhem Oracle",
+      "版本更新",
+      "版本 26.12",
+    ]);
+    expect(items[2]).toMatchObject({
+      position: 3,
+      item: "https://wasfun.lol/zh-TW/patch-notes/26.12",
+    });
+  });
+
+  test("builds unique detail metadata across patch versions and locales", () => {
+    const currentEn = buildPatchDetailMetadataText(fixture.patches[0], {
+      pageTitle: "Patch Notes",
+      subtitle: "Official Riot patch notes connected to public Mayhem data.",
+      patchLabel: (patch) => `Patch ${patch}`,
+    });
+    const olderEn = buildPatchDetailMetadataText(fixture.patches[1], {
+      pageTitle: "Patch Notes",
+      subtitle: "Official Riot patch notes connected to public Mayhem data.",
+      patchLabel: (patch) => `Patch ${patch}`,
+    });
+    const currentZhTw = buildPatchDetailMetadataText(fixture.patches[0], {
+      pageTitle: "版本更新",
+      subtitle: "Riot 官方更新公告，連結 Mayhem Oracle 公開資料。",
+      patchLabel: (patch) => `版本 ${patch}`,
+    });
+
+    expect(currentEn.title).not.toBe(olderEn.title);
+    expect(currentEn.description).not.toBe(olderEn.description);
+    expect(currentEn.title).not.toBe(currentZhTw.title);
+    expect(currentEn.description).not.toBe(currentZhTw.description);
+    expect(currentEn.title).toContain("26.13");
+    expect(olderEn.title).toContain("26.12");
   });
 });

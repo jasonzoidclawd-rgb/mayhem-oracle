@@ -11,9 +11,12 @@ import {
   findPatchByVersion,
   patchDetailRoute,
 } from "@/lib/patch-notes/routes";
-import { resolvePatchNotesLastModified } from "@/lib/patch-notes/seo";
+import {
+  buildPatchDetailJsonLd,
+  buildPatchDetailMetadataText,
+} from "@/lib/patch-notes/seo";
 import { languageAlternates, localizedUrl } from "@/lib/site";
-import type { PatchNote, PatchNotesData } from "@/lib/types";
+import type { PatchNotesData } from "@/lib/types";
 
 export const dynamicParams = false;
 
@@ -44,10 +47,11 @@ export async function generateMetadata({
   if (!note) notFound();
 
   const route = patchDetailRoute(note.version);
-  const title = `${t("patchLabel", { patch: note.version })} · ${t("title")}`;
-  const description = `${t("subtitle")} · ${
-    note.title || t("patchLabel", { patch: note.version })
-  }`;
+  const { title, description } = buildPatchDetailMetadataText(note, {
+    pageTitle: t("title"),
+    subtitle: t("subtitle"),
+    patchLabel: (patchVersion) => t("patchLabel", { patch: patchVersion }),
+  });
   const url = localizedUrl(route, locale as Locale);
 
   return {
@@ -78,15 +82,18 @@ export default async function PatchDetailPage({
 
   const route = patchDetailRoute(note.version);
   const url = localizedUrl(route, locale as Locale);
-  const title = `${t("patchLabel", { patch: note.version })} · ${t("title")}`;
-  const description = `${t("subtitle")} · ${note.title || title}`;
-  const jsonLd = buildPatchDetailJsonLd({
-    note,
-    data,
-    locale: locale as Locale,
+  const { title, description } = buildPatchDetailMetadataText(note, {
+    pageTitle: t("title"),
+    subtitle: t("subtitle"),
+    patchLabel: (patchVersion) => t("patchLabel", { patch: patchVersion }),
+  });
+  const jsonLd = buildPatchDetailJsonLd(note, locale as Locale, {
     url,
     title,
     description,
+    patchNotesUrl: localizedUrl("/patch-notes", locale as Locale),
+    patchNotesLabel: t("title"),
+    patchLabel: (patchVersion) => t("patchLabel", { patch: patchVersion }),
   });
 
   return (
@@ -113,49 +120,8 @@ export default async function PatchDetailPage({
         patch={note}
         locale={locale}
         isCurrent={note.version === data.patch}
+        linkTitle={false}
       />
     </div>
   );
-}
-
-function buildPatchDetailJsonLd({
-  note,
-  data,
-  locale,
-  url,
-  title,
-  description,
-}: {
-  note: PatchNote;
-  data: PatchNotesData;
-  locale: Locale;
-  url: string;
-  title: string;
-  description: string;
-}): Record<string, unknown> {
-  return {
-    "@context": "https://schema.org",
-    "@type": "Article",
-    headline: note.title || title,
-    description,
-    url,
-    mainEntityOfPage: url,
-    inLanguage: locale,
-    datePublished: isoDate(note.publishedAt || note.released),
-    dateModified: resolvePatchNotesLastModified(data)?.toISOString(),
-    author: (note.authors ?? []).map((name) => ({
-      "@type": "Person",
-      name,
-    })),
-    isPartOf: {
-      "@type": "CollectionPage",
-      url: localizedUrl("/patch-notes", locale),
-    },
-  };
-}
-
-function isoDate(value: string | null | undefined): string | undefined {
-  if (!value) return undefined;
-  const date = new Date(value);
-  return Number.isNaN(date.getTime()) ? undefined : date.toISOString();
 }
