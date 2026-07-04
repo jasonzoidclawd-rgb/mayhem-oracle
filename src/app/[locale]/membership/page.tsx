@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { getTranslations, setRequestLocale } from "next-intl/server";
+import { GoogleSignInButton } from "@/components/auth/GoogleSignInButton";
 import { Link } from "@/i18n/navigation";
 import { RedeemForm } from "@/components/membership/AccountClient";
 import { pickActiveEntitlement, type EntitlementRow } from "@/lib/entitlements/core";
@@ -181,12 +182,7 @@ export default async function MembershipPage({
           ) : (
             <div className="flex flex-col items-center gap-4 text-center">
               <p className="text-sm text-[var(--color-text-secondary)]">{t("howSubtitle")}</p>
-              <a
-                href={`/api/auth/signin?next=/${locale}/membership`}
-                className="rounded-lg bg-amber-400/90 px-6 py-3 font-semibold text-black transition hover:bg-amber-300"
-              >
-                {t("signInCta")}
-              </a>
+              <GoogleSignInButton next={`/${locale}/membership`} label={t("signInCta")} />
             </div>
           )}
         </div>

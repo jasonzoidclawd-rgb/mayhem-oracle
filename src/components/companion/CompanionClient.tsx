@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useTranslations } from "next-intl";
+import { GoogleSignInButton } from "@/components/auth/GoogleSignInButton";
 import { MembershipGate } from "@/components/membership/MembershipGate";
 import { gradeToken } from "@/lib/membership/grade-tokens";
 import { requestDecision } from "@/lib/membership/decision-client";
@@ -583,12 +584,11 @@ export function CompanionClient({
                   cta={tm("lockedCta")}
                 />
                 {!initialAccess.signedIn ? (
-                  <a
-                    href={`/api/auth/signin?next=/${locale}/companion`}
-                    className="text-sm text-amber-300 transition hover:underline"
-                  >
-                    {tm("signInCta")}
-                  </a>
+                  <GoogleSignInButton
+                    next={`/${locale}/companion`}
+                    label={tm("signInCta")}
+                    size="medium"
+                  />
                 ) : null}
               </div>
             ) : null}

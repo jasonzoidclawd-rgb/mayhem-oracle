@@ -1,14 +1,12 @@
 import { beforeEach, describe, expect, test, vi } from "vitest";
 import { NextRequest } from "next/server";
 
-const signInWithOAuth = vi.fn();
 const exchangeCodeForSession = vi.fn();
 const intlMiddleware = vi.hoisted(() => vi.fn(() => undefined));
 
 vi.mock("@/lib/supabase/server", () => ({
   createClient: vi.fn(async () => ({
     auth: {
-      signInWithOAuth,
       exchangeCodeForSession,
     },
   })),
@@ -21,7 +19,6 @@ vi.mock("next-intl/middleware", () => ({
 describe("auth routes", () => {
   beforeEach(() => {
     vi.resetModules();
-    signInWithOAuth.mockReset();
     exchangeCodeForSession.mockReset();
     intlMiddleware.mockClear();
     process.env.NEXT_PUBLIC_SITE_URL = "https://wasfun.lol";
@@ -29,30 +26,15 @@ describe("auth routes", () => {
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY = "test-anon-key";
   });
 
-  test("uses the canonical site URL for the Supabase OAuth callback", async () => {
-    signInWithOAuth.mockImplementation(async ({ options }) => ({
-      data: {
-        url: `https://krmyzbcoifdpgrszcfun.supabase.co/auth/v1/authorize?provider=google&redirect_to=${encodeURIComponent(options.redirectTo)}`,
-      },
-      error: null,
-    }));
-
+  test("legacy sign-in route does not start a Supabase Google OAuth redirect", async () => {
     const { GET } = await import("@/app/api/auth/signin/route");
     const response = await GET(
       new Request("https://mayhem-oracle.vercel.app/api/auth/signin?next=%2Faccount"),
     );
 
-    expect(signInWithOAuth).toHaveBeenCalledWith({
-      provider: "google",
-      options: {
-        redirectTo: "https://wasfun.lol/auth/callback",
-      },
-    });
-    const location = response.headers.get("location");
-    expect(location).toContain(
-      "redirect_to=https%3A%2F%2Fwasfun.lol%2Fauth%2Fcallback",
+    expect(response.headers.get("location")).toBe(
+      "https://wasfun.lol/account?error=google_identity_required",
     );
-    expect(location).not.toContain("next");
   });
 
   test("exchanges callback codes and returns to the canonical site URL", async () => {

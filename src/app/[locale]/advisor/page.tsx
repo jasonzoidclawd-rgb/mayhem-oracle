@@ -4,6 +4,7 @@ import {
   type AdvisorAugmentOption,
   type AdvisorChampionOption,
 } from "@/components/advisor/AdvisorMemberClient";
+import { GoogleSignInButton } from "@/components/auth/GoogleSignInButton";
 import { MembershipGate } from "@/components/membership/MembershipGate";
 import type { DecisionGrade } from "@/lib/contracts/decision";
 import { loadPublicJson } from "@/lib/data/public-loader";
@@ -78,12 +79,7 @@ export default async function AdvisorPage({
       <div className="mx-auto flex max-w-md flex-col items-center gap-5 py-16">
         <MembershipGate title={t("lockedTitle")} body={t("lockedBody")} cta={t("lockedCta")} />
         {!signedIn ? (
-          <a
-            href={`/api/auth/signin?next=/${locale}/advisor`}
-            className="text-sm text-amber-300 transition hover:underline"
-          >
-            {t("signInCta")}
-          </a>
+          <GoogleSignInButton next={`/${locale}/advisor`} label={t("signInCta")} size="medium" />
         ) : null}
       </div>
     );

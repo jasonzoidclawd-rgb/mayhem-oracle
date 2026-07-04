@@ -1,4 +1,5 @@
 import { RedeemForm } from "@/components/membership/AccountClient";
+import { GoogleSignInButton } from "@/components/auth/GoogleSignInButton";
 import { Link } from "@/i18n/navigation";
 import { pickActiveEntitlement, type EntitlementRow } from "@/lib/entitlements/core";
 import { createClient } from "@/lib/supabase/server";
@@ -33,12 +34,7 @@ export default async function AccountPage({
         <h1 className="text-2xl font-bold">{t("title")}</h1>
         <p className="mt-4 text-white/70">{t("signInPrompt")}</p>
         <div className="mt-6 flex flex-wrap gap-3">
-          <a
-            href={`/api/auth/signin?next=/${locale}/account`}
-            className="inline-block rounded-lg bg-amber-400/90 px-5 py-2.5 font-semibold text-black hover:bg-amber-300"
-          >
-            {t("signInCta")}
-          </a>
+          <GoogleSignInButton next={`/${locale}/account`} label={t("signInCta")} />
           <Link
             href="/membership"
             className="inline-block rounded-lg border border-white/15 px-5 py-2.5 font-medium text-white/80 transition hover:bg-white/5"
