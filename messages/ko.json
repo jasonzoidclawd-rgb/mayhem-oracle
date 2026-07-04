@@ -88,6 +88,7 @@
     "searchNoResults": "\"{query}\"에 대한 결과가 없습니다",
     "searchKindChampion": "챔피언",
     "searchKindAugment": "증강",
+    "searchKindPatchNote": "패치 노트",
     "searchTriggerLabel": "검색"
   },
   "tierList": {

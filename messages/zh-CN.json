@@ -88,6 +88,7 @@
     "searchNoResults": "未找到与「{query}」匹配的结果",
     "searchKindChampion": "英雄",
     "searchKindAugment": "强化",
+    "searchKindPatchNote": "版本更新",
     "searchTriggerLabel": "搜索"
   },
   "tierList": {

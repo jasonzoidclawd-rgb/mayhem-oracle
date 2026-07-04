@@ -150,6 +150,7 @@
     "searchNoResults": "No matches for \"{query}\"",
     "searchKindChampion": "champion",
     "searchKindAugment": "augment",
+    "searchKindPatchNote": "patch note",
     "searchTriggerLabel": "Search"
   },
   "tierList": {

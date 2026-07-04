@@ -3,14 +3,23 @@
 import { useEffect, useRef, useState } from "react";
 import { useTranslations, useLocale } from "next-intl";
 import { localizedName, type LocalizedNameRecord } from "@/lib/i18n/localized-name";
+import {
+  buildPatchNoteSearchItems,
+  type PatchNoteSearchItem,
+} from "@/lib/patch-notes/search";
+import type { PatchNotesData } from "@/lib/types";
 
 type SearchItem = LocalizedNameRecord & {
-  kind: "champion" | "augment";
+  kind: "champion" | "augment" | "patch-note";
   icon?: string;
+  href?: string;
+  snippet?: string;
+  searchText?: string;
 };
 
 export function CmdKSearch() {
   const t = useTranslations("dashboard");
+  const tPatch = useTranslations("patchNotes");
   const locale = useLocale();
   const [open, setOpen] = useState(false);
   const [query, setQuery] = useState("");
@@ -22,7 +31,10 @@ export function CmdKSearch() {
     Promise.all([
       fetch("/data/champions.json").then((r) => r.json()),
       fetch("/data/augments.json").then((r) => r.json()),
-    ]).then(([champData, augData]) => {
+      fetch("/data/patch-notes.json")
+        .then((r) => (r.ok ? r.json() : null))
+        .catch(() => null),
+    ]).then(([champData, augData, patchData]) => {
       const champItems: SearchItem[] = champData.champions.map((c: LocalizedNameRecord & { icon?: string }) => ({
         name: c.name,
         name_zh_TW: c.name_zh_TW,
@@ -41,9 +53,14 @@ export function CmdKSearch() {
         kind: "augment" as const,
         icon: a.icon,
       }));
-      setItems([...champItems, ...augItems]);
+      const patchItems: PatchNoteSearchItem[] = buildPatchNoteSearchItems(
+        patchData as PatchNotesData | null,
+        locale,
+        { patchLabel: (patch) => tPatch("patchLabel", { patch }) },
+      );
+      setItems([...champItems, ...augItems, ...patchItems]);
     });
-  }, [open, items]);
+  }, [open, items, locale, tPatch]);
 
   useEffect(() => {
     if (!open) return;
@@ -76,7 +93,9 @@ export function CmdKSearch() {
 
   const q = query.toLowerCase();
   const results = (items ?? [])
-    .filter((item) => localizedName(item, locale).toLowerCase().includes(q))
+    .filter((item) =>
+      (item.searchText ?? localizedName(item, locale)).toLowerCase().includes(q),
+    )
     .slice(0, 8);
 
   return (
@@ -133,30 +152,19 @@ export function CmdKSearch() {
             <div className="max-h-[46vh] overflow-auto p-1.5">
               {results.length > 0 ? (
                 results.map((item, i) => (
-                  <div
+                  <SearchResult
                     key={`${item.kind}-${item.name}-${i}`}
-                    className="flex items-center gap-3 rounded-lg px-3 py-2.5 hover:bg-white/5"
-                  >
-                    {item.icon ? (
-                      // eslint-disable-next-line @next/next/no-img-element
-                      <img
-                        src={item.icon}
-                        alt=""
-                        className="h-8 w-8 shrink-0 rounded-md object-cover"
-                        loading="lazy"
-                        decoding="async"
-                      />
-                    ) : (
-                      <span
-                        aria-hidden="true"
-                        className="h-8 w-8 shrink-0 rounded-md border border-[var(--color-border-default)] bg-white/5"
-                      />
-                    )}
-                    <span>{localizedName(item, locale)}</span>
-                    <span className="ml-auto text-[10px] uppercase tracking-wide text-[var(--color-text-muted)]">
-                      {item.kind === "champion" ? t("searchKindChampion") : t("searchKindAugment")}
-                    </span>
-                  </div>
+                    item={item}
+                    locale={locale}
+                    kindLabel={
+                      item.kind === "champion"
+                        ? t("searchKindChampion")
+                        : item.kind === "augment"
+                          ? t("searchKindAugment")
+                          : t("searchKindPatchNote")
+                    }
+                    onSelect={() => setOpen(false)}
+                  />
                 ))
               ) : (
                 <div className="px-3 py-2.5 text-[var(--color-text-muted)]">
@@ -169,4 +177,63 @@ export function CmdKSearch() {
       )}
     </>
   );
+}
+
+function SearchResult({
+  item,
+  locale,
+  kindLabel,
+  onSelect,
+}: {
+  item: SearchItem;
+  locale: string;
+  kindLabel: string;
+  onSelect: () => void;
+}) {
+  const content = (
+    <>
+      {item.icon ? (
+        // eslint-disable-next-line @next/next/no-img-element
+        <img
+          src={item.icon}
+          alt=""
+          className="h-8 w-8 shrink-0 rounded-md object-cover"
+          loading="lazy"
+          decoding="async"
+        />
+      ) : (
+        <span
+          aria-hidden="true"
+          className="h-8 w-8 shrink-0 rounded-md border border-[var(--color-border-default)] bg-white/5"
+        />
+      )}
+      <span className="min-w-0 flex-1">
+        <span className="block truncate">{localizedName(item, locale)}</span>
+        {item.snippet ? (
+          <span className="mt-0.5 block truncate text-xs text-[var(--color-text-muted)]">
+            {item.snippet}
+          </span>
+        ) : null}
+      </span>
+      <span className="ml-auto shrink-0 text-[10px] uppercase tracking-wide text-[var(--color-text-muted)]">
+        {kindLabel}
+      </span>
+    </>
+  );
+  const className = "flex items-center gap-3 rounded-lg px-3 py-2.5 hover:bg-white/5";
+
+  if (item.href) {
+    return (
+      <a href={localizedHref(item.href, locale)} className={className} onClick={onSelect}>
+        {content}
+      </a>
+    );
+  }
+
+  return <div className={className}>{content}</div>;
+}
+
+function localizedHref(href: string, locale: string): string {
+  if (locale === "en" || !href.startsWith("/")) return href;
+  return `/${locale}${href}`;
 }

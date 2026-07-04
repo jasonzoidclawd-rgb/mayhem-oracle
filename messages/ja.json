@@ -88,6 +88,7 @@
     "searchNoResults": "「{query}」に一致する結果はありません",
     "searchKindChampion": "チャンピオン",
     "searchKindAugment": "オーグメント",
+    "searchKindPatchNote": "パッチノート",
     "searchTriggerLabel": "検索"
   },
   "tierList": {

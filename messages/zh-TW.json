@@ -88,6 +88,7 @@
     "searchNoResults": "找不到符合「{query}」的結果",
     "searchKindChampion": "英雄",
     "searchKindAugment": "增強",
+    "searchKindPatchNote": "版本更新",
     "searchTriggerLabel": "搜尋"
   },
   "tierList": {
