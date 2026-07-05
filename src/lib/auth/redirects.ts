@@ -16,9 +16,10 @@ export function safeNextPath(value: string | null): string {
   if (nextUrl.origin !== "https://local.invalid") return "/";
 
   const pathname = nextUrl.pathname;
+  const lowerPathname = pathname.toLowerCase();
   if (
     blockedNextPathPrefixes.some((prefix) =>
-      pathname === prefix || pathname.startsWith(`${prefix}/`),
+      lowerPathname === prefix || lowerPathname.startsWith(`${prefix}/`),
     )
   ) {
     return "/";

@@ -73,6 +73,8 @@ describe("auth routes", () => {
     expect(safeNextPath("/api/admin/entitlements")).toBe("/");
     expect(safeNextPath("/_next/static/chunk.js")).toBe("/");
     expect(safeNextPath("/_vercel/insights/view")).toBe("/");
+    expect(safeNextPath("/API/admin/entitlements")).toBe("/");
+    expect(safeNextPath("/Auth/callback")).toBe("/");
     expect(safeNextPath("/zh-TW/account")).toBe("/zh-TW/account");
     expect(safeNextPath("/account")).toBe("/account");
   });
@@ -117,7 +119,12 @@ describe("auth routes", () => {
     expect(source.indexOf('from("decision_sessions")')).toBeGreaterThan(
       source.indexOf("if (!user)"),
     );
-    expect(source).toContain('action="/api/auth/signout?next=%2F"');
+    expect(source).toContain(
+      'const signoutNext = locale === "en" ? "/" : `/${locale}`;',
+    );
+    expect(source).toContain(
+      "action={`/api/auth/signout?next=${encodeURIComponent(signoutNext)}`}",
+    );
     expect(source).toContain('method="post"');
   });
 
