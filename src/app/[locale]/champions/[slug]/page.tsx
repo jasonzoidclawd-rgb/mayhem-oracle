@@ -21,6 +21,7 @@ import {
   type ChampionDetailAugment,
   type ChampionDetailChampion,
 } from "@/lib/champions/detail-data";
+import { buildChampionDetailJsonLd } from "@/lib/seo/champion-detail";
 import {
   PoolConstructionSection,
   type PoolLayer,
@@ -421,30 +422,19 @@ export default async function ChampionPage({
     cast: t("abilityStatCast"),
   };
 
-  const topCombos = strongCombos
-    .map((c) => {
-      const augment = augmentBySlug.get(c.augmentSlug);
-      return augment ? localizedName(augment, locale) : c.augment;
-    })
-    .filter(Boolean)
-    .slice(0, 8);
-  const championJsonLd = {
-    "@context": "https://schema.org",
-    "@type": "Article",
-    headline: t("metaDetailTitle", { name: champName, tier: champ.tier, patch }),
-    about: { "@type": "Thing", name: `${champName} (League of Legends ARAM Mayhem)` },
-    inLanguage: locale,
-    url: localizedUrl(`/champions/${champ.slug}`, locale as Locale),
-    image: champ.icon,
-    keywords: [
-      "ARAM Mayhem",
-      champName,
-      `Tier ${champ.tier}`,
-      ...(champ.kit_tags ?? []),
-      ...topCombos,
-    ],
-    description: t("metaDetailDescription", { name: champName, tier: champ.tier, patch }),
-  };
+  const championRoute = `/champions/${champ.slug}`;
+  const championJsonLd = buildChampionDetailJsonLd(champ, locale, {
+    url: localizedUrl(championRoute, locale as Locale),
+    homeUrl: localizedUrl("/", locale as Locale),
+    championsUrl: localizedUrl("/champions", locale as Locale),
+    championsLabel: t("indexTitle"),
+    name: champName,
+    patch,
+    tierLabel: champ.tier,
+    tagLabels: champ.tags,
+    classLabels: champ.classes,
+    kitTagLabels: champ.kit_tags,
+  });
 
   return (
     <div className="py-4 sm:py-8 max-w-4xl">
