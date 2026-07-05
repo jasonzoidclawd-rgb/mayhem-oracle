@@ -8,7 +8,7 @@ type PublicAugmentSeoRecord = {
 
 type AugmentDetailJsonLdOptions = {
   url: string;
-  homeUrl?: string;
+  homeUrl: string;
   name: string;
   description?: string;
   augmentsUrl: string;
@@ -63,7 +63,7 @@ export function buildAugmentDetailJsonLd(
             "@type": "ListItem",
             position: 1,
             name: "Mayhem Oracle",
-            item: options.homeUrl ?? new URL("/", options.url).toString().replace(/\/$/, ""),
+            item: options.homeUrl,
           },
           {
             "@type": "ListItem",

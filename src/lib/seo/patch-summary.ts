@@ -4,8 +4,11 @@ type PatchSummaryInput = {
   patch?: string | null;
   lifecycleState?: string | null;
   lifecyclePatch?: string | null;
-  publicChanges?: string[];
 };
+
+// Lifecycle is scraper-owned; only allowlisted states may surface in public
+// copy so future states never ship unreviewed wording.
+const PUBLIC_LIFECYCLE_STATES = new Set(["removed"]);
 
 type PatchSummary = {
   title: string;
@@ -29,17 +32,12 @@ export function buildPatchSummary(input: PatchSummaryInput): PatchSummary {
       : `This ${entityKind} page for ${entityName} reflects public Arena Mayhem data.`,
   ];
 
-  if (lifecycleState && lifecycleState !== "active") {
+  if (lifecycleState && PUBLIC_LIFECYCLE_STATES.has(lifecycleState)) {
     lines.push(
       lifecyclePatch
         ? `${entityName} is marked ${lifecycleState} in patch ${lifecyclePatch}.`
         : `${entityName} is marked ${lifecycleState}.`,
     );
-  }
-
-  for (const change of input.publicChanges ?? []) {
-    const publicChange = clean(change);
-    if (publicChange) lines.push(publicChange);
   }
 
   return {

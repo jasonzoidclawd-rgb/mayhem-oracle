@@ -2,7 +2,7 @@ import type { Item } from "@/lib/types";
 
 type ItemDetailJsonLdOptions = {
   url: string;
-  homeUrl?: string;
+  homeUrl: string;
   itemsUrl: string;
   itemsLabel: string;
   name: string;
@@ -68,7 +68,7 @@ export function buildItemDetailJsonLd(
             "@type": "ListItem",
             position: 1,
             name: "Mayhem Oracle",
-            item: options.homeUrl ?? new URL("/", options.url).toString().replace(/\/$/, ""),
+            item: options.homeUrl,
           },
           {
             "@type": "ListItem",

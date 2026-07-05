@@ -54,6 +54,22 @@ describe("public patch summary", () => {
     expect(removed.lines).toContain("Warlock Juicebox is marked removed in patch 26.13.");
   });
 
+  test("does not render lifecycle wording for states outside the public allowlist", () => {
+    for (const lifecycleState of ["new", "disabled", "internal-only"]) {
+      const summary = buildPatchSummary({
+        entityName: "Tank Engine",
+        entityKind: "augment",
+        patch: "26.13",
+        lifecycleState,
+        lifecyclePatch: "26.13",
+      });
+
+      expect(summary.lines).toEqual([
+        "This augment page for Tank Engine reflects public Arena Mayhem data for patch 26.13.",
+      ]);
+    }
+  });
+
   test("does not invent changes when no public changes are provided", () => {
     const summary = buildPatchSummary({
       entityName: "Tank Engine",
@@ -71,7 +87,6 @@ describe("public patch summary", () => {
       patch: "26.13",
       lifecycleState: "removed",
       lifecyclePatch: "26.13",
-      publicChanges: ["Public archive status only."],
     });
     const serialized = JSON.stringify(summary).toLowerCase();
 

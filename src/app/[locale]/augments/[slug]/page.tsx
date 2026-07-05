@@ -87,14 +87,12 @@ const TIER_BADGE: Record<ComboTier, string> = {
 export const dynamicParams = false;
 
 export async function generateStaticParams() {
-  try {
-    const augments = await loadAugments();
-    return routing.locales.flatMap((locale) =>
-      augments.map((augment) => ({ locale, slug: augment.slug })),
-    );
-  } catch {
-    return [];
-  }
+  // No try/catch: with dynamicParams=false a data read failure must fail the
+  // build loudly instead of publishing a site with zero augment pages.
+  const augments = await loadAugments();
+  return routing.locales.flatMap((locale) =>
+    augments.map((augment) => ({ locale, slug: augment.slug })),
+  );
 }
 
 export async function generateMetadata({
@@ -302,8 +300,8 @@ export default async function AugmentDetailPage({
             {patchSummary.title}
           </h2>
           <div className="space-y-1.5">
-            {patchSummary.lines.map((line) => (
-              <p key={line} className="text-sm text-[var(--color-text-secondary)] leading-relaxed">
+            {patchSummary.lines.map((line, index) => (
+              <p key={index} className="text-sm text-[var(--color-text-secondary)] leading-relaxed">
                 {line}
               </p>
             ))}

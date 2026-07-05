@@ -22,6 +22,7 @@ describe("augment detail structured data", () => {
     const url = localizedUrl("/augments/tank-engine", "zh-TW");
     const jsonLd = buildAugmentDetailJsonLd(fixtureAugment, "zh-TW", {
       url,
+      homeUrl: localizedUrl("/", "zh-TW"),
       name: "坦克引擎",
       description: "Gain movement speed based on bonus health.",
       augmentsUrl: localizedUrl("/augments", "zh-TW"),

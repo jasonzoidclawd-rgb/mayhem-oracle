@@ -163,23 +163,21 @@ function parseDescription(raw: string): ParsedDescription {
 export const dynamicParams = false;
 
 export async function generateStaticParams() {
-  try {
-    const data = await loadItemsData();
-    return routing.locales.flatMap((locale) => [
-      ...data.mayhemExclusive.map((item) => ({
+  // No try/catch: with dynamicParams=false a data read failure must fail the
+  // build loudly instead of publishing a site with zero item pages.
+  const data = await loadItemsData();
+  return routing.locales.flatMap((locale) => [
+    ...data.mayhemExclusive.map((item) => ({
+      locale,
+      identifier: item.slug,
+    })),
+    ...data.items
+      .filter((item) => item.id != null)
+      .map((item) => ({
         locale,
-        identifier: item.slug,
+        identifier: String(item.id),
       })),
-      ...data.items
-        .filter((item) => item.id != null)
-        .map((item) => ({
-          locale,
-          identifier: String(item.id),
-        })),
-    ]);
-  } catch {
-    return [];
-  }
+  ]);
 }
 
 export async function generateMetadata({

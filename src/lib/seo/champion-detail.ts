@@ -2,7 +2,7 @@ import type { ChampionDetailChampion } from "@/lib/champions/detail-data";
 
 type ChampionDetailJsonLdOptions = {
   url: string;
-  homeUrl?: string;
+  homeUrl: string;
   championsUrl: string;
   championsLabel: string;
   name: string;
@@ -75,7 +75,7 @@ export function buildChampionDetailJsonLd(
             "@type": "ListItem",
             position: 1,
             name: "Mayhem Oracle",
-            item: options.homeUrl ?? new URL("/", options.url).toString().replace(/\/$/, ""),
+            item: options.homeUrl,
           },
           {
             "@type": "ListItem",

@@ -106,6 +106,7 @@ describe("item detail structured data", () => {
   test("does not include private scoring or prompt-related fields in item JSON-LD", () => {
     const data = buildItemDetailJsonLd(itemFixture, "en", {
       url: localizedUrl("/items/atmas-reckoning", "en"),
+      homeUrl: localizedUrl("/", "en"),
       itemsUrl: localizedUrl("/items", "en"),
       itemsLabel: "Items",
       name: "Atma's Reckoning",

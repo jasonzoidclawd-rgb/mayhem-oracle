@@ -132,6 +132,7 @@ describe("champion detail structured data", () => {
   test("does not include private scoring, member, session, or prompt fields in champion JSON-LD", () => {
     const data = buildChampionDetailJsonLd(championFixture, "en", {
       url: localizedUrl("/champions/brand", "en"),
+      homeUrl: localizedUrl("/", "en"),
       championsUrl: localizedUrl("/champions", "en"),
       championsLabel: "Champions",
       name: "Brand",
