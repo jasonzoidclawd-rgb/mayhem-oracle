@@ -1,7 +1,7 @@
 import { createServerClient } from "@supabase/ssr";
 import createIntlMiddleware from "next-intl/middleware";
 import { type NextRequest, NextResponse } from "next/server";
-import { routing } from "./i18n/routing";
+import { collapseDuplicateLocalePrefix, routing } from "./i18n/routing";
 import { SITE_URL } from "./lib/site";
 
 const intlMiddleware = createIntlMiddleware(routing);
@@ -24,6 +24,12 @@ function canonicalEntryRedirectUrl(request: NextRequest): URL | null {
     url.hostname = canonicalSite.hostname;
     url.port = canonicalSite.port;
     url.pathname = "/auth/callback";
+    changed = true;
+  }
+
+  const collapsedPath = collapseDuplicateLocalePrefix(url.pathname);
+  if (collapsedPath) {
+    url.pathname = collapsedPath;
     changed = true;
   }
 
