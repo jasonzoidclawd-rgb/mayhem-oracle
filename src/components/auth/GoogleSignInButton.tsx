@@ -6,10 +6,12 @@ import { useRouter } from "@/i18n/navigation";
 import { safeNextPath } from "@/lib/auth/redirects";
 import {
   GOOGLE_IDENTITY_SCRIPT_SRC,
+  generateGoogleNonce,
   getGoogleClientId,
   normalizeGoogleSignInNextPath,
   signInWithGoogleCredential,
   type GoogleCredentialResponse,
+  type GoogleNoncePair,
 } from "@/lib/auth/google-identity";
 import { createClient } from "@/lib/supabase/client";
 
@@ -40,10 +42,21 @@ export function GoogleSignInButton({
   const [scriptReady, setScriptReady] = useState(false);
   const [message, setMessage] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
+  const [noncePair, setNoncePair] = useState<GoogleNoncePair | "unsupported" | null>(null);
   const clientId = getGoogleClientId({
     NEXT_PUBLIC_GOOGLE_CLIENT_ID: process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID,
   });
   const nextPath = normalizeGoogleSignInNextPath(safeNextPath(next));
+
+  useEffect(() => {
+    let cancelled = false;
+    void generateGoogleNonce().then((pair) => {
+      if (!cancelled) setNoncePair(pair ?? "unsupported");
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
 
   const handleCredential = useCallback(
     async (response: GoogleCredentialResponse) => {
@@ -52,7 +65,11 @@ export function GoogleSignInButton({
 
       try {
         const supabase = createClient();
-        await signInWithGoogleCredential(supabase, response);
+        await signInWithGoogleCredential(
+          supabase,
+          response,
+          noncePair && noncePair !== "unsupported" ? { nonce: noncePair.nonce } : {},
+        );
         router.push(nextPath);
         router.refresh();
       } catch (error) {
@@ -61,11 +78,14 @@ export function GoogleSignInButton({
         setBusy(false);
       }
     },
-    [nextPath, router],
+    [nextPath, noncePair, router],
   );
 
   const renderGoogleButton = useCallback(() => {
     if (!clientId || !scriptReady || !buttonRef.current || !window.google?.accounts.id) {
+      return;
+    }
+    if (noncePair === null) {
       return;
     }
 
@@ -76,6 +96,7 @@ export function GoogleSignInButton({
       ux_mode: "popup",
       auto_select: false,
       cancel_on_tap_outside: true,
+      ...(noncePair !== "unsupported" ? { nonce: noncePair.hashedNonce } : {}),
     });
     window.google.accounts.id.renderButton(buttonRef.current, {
       type: "standard",
@@ -86,7 +107,7 @@ export function GoogleSignInButton({
       logo_alignment: "left",
       width: size === "large" ? 260 : 220,
     });
-  }, [clientId, handleCredential, scriptReady, size]);
+  }, [clientId, handleCredential, noncePair, scriptReady, size]);
 
   useEffect(() => {
     renderGoogleButton();

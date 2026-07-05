@@ -18,6 +18,7 @@ type GoogleIdentityInitializeConfig = {
   ux_mode?: "popup" | "redirect";
   auto_select?: boolean;
   cancel_on_tap_outside?: boolean;
+  nonce?: string;
 };
 
 declare global {
