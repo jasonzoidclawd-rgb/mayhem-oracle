@@ -10,6 +10,8 @@ import { routing, type Locale } from "@/i18n/routing";
 import type { Item } from "@/lib/types";
 import { localizedName } from "@/lib/i18n/localized-name";
 import { buildItemDetailJsonLd } from "@/lib/seo/item-detail";
+import { buildPatchSummary } from "@/lib/seo/patch-summary";
+import { readMetaFile } from "@/lib/data/read-public-file";
 import { languageAlternates, localizedUrl } from "@/lib/site";
 
 // Raw Riot API category identifier → translation key in items namespace.
@@ -289,6 +291,15 @@ export default async function ItemDetailPage({
   // Wiki URL: spaces → underscores, apostrophes encoded
   const wikiUrl = `https://wiki.leagueoflegends.com/en-us/${encodeURIComponent(item.name.replace(/ /g, "_"))}`;
   const route = `/items/${identifier}`;
+  // items.json carries no patch field; meta.json is the public patch source.
+  const meta = await readMetaFile<{ patch?: string }>();
+  const patchSummary = buildPatchSummary(
+    { patch: meta.patch },
+    {
+      title: t("patchSummaryTitle"),
+      body: ({ patch }) => t("patchSummaryBody", { name: itemName, patch }),
+    },
+  );
   const itemJsonLd = buildItemDetailJsonLd(item, locale, {
     url: localizedUrl(route, locale as Locale),
     homeUrl: localizedUrl("/", locale as Locale),
@@ -385,6 +396,21 @@ export default async function ItemDetailPage({
           )}
         </div>
       </div>
+
+      {patchSummary && (
+        <section className="glass-card p-4 mb-6" aria-labelledby="patch-summary-heading">
+          <h2 id="patch-summary-heading" className="text-sm font-semibold mb-2">
+            {patchSummary.title}
+          </h2>
+          <div className="space-y-1.5">
+            {patchSummary.lines.map((line, index) => (
+              <p key={index} className="text-sm text-[var(--color-text-secondary)] leading-relaxed">
+                {line}
+              </p>
+            ))}
+          </div>
+        </section>
+      )}
 
       {/* ─── Stats ─── */}
       {(hasWikiData || hasCleanStats || statLines.length > 0) && (

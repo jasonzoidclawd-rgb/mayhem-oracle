@@ -72,6 +72,18 @@ describe("public patch summary", () => {
     }
   });
 
+  test("skips the lifecycle line when no removed copy is provided", () => {
+    const { title, body } = englishCopy("Warlock Juicebox");
+    const summary = buildPatchSummary(
+      { patch: "26.13", lifecycleState: "removed", lifecyclePatch: "26.13" },
+      { title, body },
+    );
+
+    expect(summary?.lines).toEqual([
+      "This augment page for Warlock Juicebox reflects public Arena Mayhem data for patch 26.13.",
+    ]);
+  });
+
   test("falls back to the current patch when the lifecycle patch is missing", () => {
     const summary = buildPatchSummary(
       { patch: "26.13", lifecycleState: "removed" },
@@ -114,17 +126,37 @@ describe("public patch summary", () => {
     expect(source).toContain("patchSummary.lines.map");
   });
 
+  test("item detail page renders a localized patch summary section from public meta patch", () => {
+    const source = readFileSync(
+      path.join(process.cwd(), "src/app/[locale]/items/[identifier]/page.tsx"),
+      "utf8",
+    );
+
+    expect(source).toContain('import { buildPatchSummary } from "@/lib/seo/patch-summary"');
+    expect(source).toContain('import { readMetaFile } from "@/lib/data/read-public-file"');
+    expect(source).toContain("const patchSummary = buildPatchSummary(");
+    expect(source).toContain('t("patchSummaryTitle")');
+    expect(source).toContain('t("patchSummaryBody", { name: itemName, patch })');
+    expect(source).toContain("{patchSummary && (");
+    expect(source).toContain("patchSummary.lines.map");
+  });
+
   test("patch summary copy exists in every locale message file", () => {
     for (const locale of ["en", "zh-TW", "zh-CN", "ja", "ko"]) {
       const messages = JSON.parse(
         readFileSync(path.join(process.cwd(), `messages/${locale}.json`), "utf8"),
-      ) as { augments: Record<string, string> };
+      ) as { augments: Record<string, string>; items: Record<string, string> };
 
       for (const key of ["patchSummaryTitle", "patchSummaryBody", "patchSummaryRemoved"]) {
         expect(messages.augments[key], `${locale}.augments.${key}`).toBeTruthy();
       }
-      expect(messages.augments.patchSummaryBody).toContain("{name}");
-      expect(messages.augments.patchSummaryBody).toContain("{patch}");
+      for (const key of ["patchSummaryTitle", "patchSummaryBody"]) {
+        expect(messages.items[key], `${locale}.items.${key}`).toBeTruthy();
+      }
+      for (const namespace of ["augments", "items"] as const) {
+        expect(messages[namespace].patchSummaryBody).toContain("{name}");
+        expect(messages[namespace].patchSummaryBody).toContain("{patch}");
+      }
       expect(messages.augments.patchSummaryRemoved).toContain("{name}");
       expect(messages.augments.patchSummaryRemoved).toContain("{patch}");
     }

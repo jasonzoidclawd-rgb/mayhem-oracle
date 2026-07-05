@@ -378,6 +378,8 @@
     "subtitle": "Mayhem-exclusive items and modified item stats",
     "metaDetailTitle": "{name} ARAM Mayhem Item",
     "metaDetailDescription": "See {name} item stats, cost, effects, recipes, and ARAM Mayhem modifications.",
+    "patchSummaryTitle": "Patch summary",
+    "patchSummaryBody": "This item page for {name} reflects public Arena Mayhem data for patch {patch}.",
     "mayhemExclusive": "Mayhem Exclusive",
     "allItems": "All Items",
     "search": "Search items...",

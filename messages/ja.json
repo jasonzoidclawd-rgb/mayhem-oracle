@@ -298,6 +298,8 @@
     "subtitle": "メイヘム専用アイテムと調整アイテムのデータ",
     "metaDetailTitle": "{name} ARAMメイヘム アイテム",
     "metaDetailDescription": "{name} のアイテムステータス、価格、効果、レシピ、ARAMメイヘムでの変更を確認できます。",
+    "patchSummaryTitle": "パッチ概要",
+    "patchSummaryBody": "この {name} のアイテムページは、パッチ {patch} の ARAMメイヘム公開データに基づいています。",
     "mayhemExclusive": "メイヘム専用",
     "allItems": "全アイテム",
     "search": "アイテムを検索...",

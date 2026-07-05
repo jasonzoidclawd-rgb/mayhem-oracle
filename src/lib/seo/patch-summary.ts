@@ -12,7 +12,8 @@ type PatchSummaryInput = {
 type PatchSummaryCopy = {
   title: string;
   body: (values: { patch: string }) => string;
-  removed: (values: { patch: string }) => string;
+  /** Omit for entity kinds without public lifecycle flags (e.g. items). */
+  removed?: (values: { patch: string }) => string;
 };
 
 type PatchSummary = {
@@ -43,7 +44,7 @@ export function buildPatchSummary(
   const lines = [copy.body({ patch })];
 
   const lifecycleState = clean(input.lifecycleState);
-  if (lifecycleState && PUBLIC_LIFECYCLE_STATES.has(lifecycleState)) {
+  if (lifecycleState && PUBLIC_LIFECYCLE_STATES.has(lifecycleState) && copy.removed) {
     lines.push(copy.removed({ patch: clean(input.lifecyclePatch) ?? patch }));
   }
 

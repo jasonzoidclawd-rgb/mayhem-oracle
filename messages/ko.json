@@ -298,6 +298,8 @@
     "subtitle": "메이헴 전용 아이템 및 수정된 아이템 데이터",
     "metaDetailTitle": "{name} ARAM 메이헴 아이템",
     "metaDetailDescription": "{name}의 아이템 스탯, 가격, 효과, 조합식, ARAM 메이헴 변경 사항을 확인하세요.",
+    "patchSummaryTitle": "패치 요약",
+    "patchSummaryBody": "이 {name} 아이템 페이지는 {patch} 패치의 ARAM 메이헴 공개 데이터를 반영합니다.",
     "mayhemExclusive": "메이헴 전용",
     "allItems": "전체 아이템",
     "search": "아이템 검색...",

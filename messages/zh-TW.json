@@ -298,6 +298,8 @@
     "subtitle": "大亂鬥專屬裝備與調整裝備數據",
     "metaDetailTitle": "{name} ARAM 大亂鬥裝備",
     "metaDetailDescription": "查看 {name} 的裝備屬性、價格、效果、合成路線與 ARAM 大亂鬥調整。",
+    "patchSummaryTitle": "版本摘要",
+    "patchSummaryBody": "本頁的 {name} 裝備內容反映 {patch} 版本的 ARAM 大亂鬥公開資料。",
     "mayhemExclusive": "大亂鬥專屬",
     "allItems": "全部裝備",
     "search": "搜尋裝備...",

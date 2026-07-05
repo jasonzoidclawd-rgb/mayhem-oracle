@@ -298,6 +298,8 @@
     "subtitle": "大乱斗专属装备与调整装备数据",
     "metaDetailTitle": "{name} ARAM 大乱斗装备",
     "metaDetailDescription": "查看 {name} 的装备属性、价格、效果、合成路线与 ARAM 大乱斗调整。",
+    "patchSummaryTitle": "版本摘要",
+    "patchSummaryBody": "本页的 {name} 装备内容反映 {patch} 版本的 ARAM 大乱斗公开数据。",
     "mayhemExclusive": "大乱斗专属",
     "allItems": "全部装备",
     "search": "搜索装备...",
