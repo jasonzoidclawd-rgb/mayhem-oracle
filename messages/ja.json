@@ -656,6 +656,7 @@
     "title": "メンバーシップ",
     "subtitle": "あなたの Oracle 権限と意思決定履歴。",
     "signInPrompt": "サインインしてメンバーシップや保存した意思決定を確認するか、メンバーシップの内容をご覧ください。",
+    "signOut": "ログアウト",
     "statusTitle": "ステータス",
     "statusActiveMember": "有効なメンバー",
     "statusActiveTrial": "トライアル中",

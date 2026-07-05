@@ -1,10 +1,30 @@
 import { SITE_URL } from "@/lib/site";
 
+const blockedNextPathPrefixes = ["/api", "/auth", "/_next", "/_vercel"];
+
 export function safeNextPath(value: string | null): string {
-  if (!value || !value.startsWith("/") || value.startsWith("//") || value.startsWith("/\\")) {
+  const trimmed = value?.trim();
+  if (!trimmed || !trimmed.startsWith("/") || trimmed.startsWith("//") || trimmed.startsWith("/\\")) {
     return "/";
   }
-  return value;
+  let nextUrl: URL;
+  try {
+    nextUrl = new URL(trimmed, "https://local.invalid");
+  } catch {
+    return "/";
+  }
+  if (nextUrl.origin !== "https://local.invalid") return "/";
+
+  const pathname = nextUrl.pathname;
+  if (
+    blockedNextPathPrefixes.some((prefix) =>
+      pathname === prefix || pathname.startsWith(`${prefix}/`),
+    )
+  ) {
+    return "/";
+  }
+
+  return `${pathname}${nextUrl.search}${nextUrl.hash}`;
 }
 
 export function authCallbackUrl(): string {

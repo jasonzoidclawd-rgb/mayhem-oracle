@@ -737,6 +737,7 @@
     "subtitle": "Your Oracle access and decision history.",
     "signInPrompt": "Sign in to track your membership and saved decisions, or see what membership includes.",
     "signInCta": "Sign in with Google",
+    "signOut": "Sign out",
     "statusTitle": "Status",
     "statusActiveMember": "Active member",
     "statusActiveTrial": "Trial access",

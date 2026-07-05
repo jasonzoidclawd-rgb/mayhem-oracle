@@ -1,13 +1,17 @@
 import { beforeEach, describe, expect, test, vi } from "vitest";
 import { NextRequest } from "next/server";
+import { readFileSync } from "node:fs";
+import path from "node:path";
 
 const exchangeCodeForSession = vi.fn();
+const signOut = vi.fn();
 const intlMiddleware = vi.hoisted(() => vi.fn(() => undefined));
 
 vi.mock("@/lib/supabase/server", () => ({
   createClient: vi.fn(async () => ({
     auth: {
       exchangeCodeForSession,
+      signOut,
     },
   })),
 }));
@@ -20,6 +24,7 @@ describe("auth routes", () => {
   beforeEach(() => {
     vi.resetModules();
     exchangeCodeForSession.mockReset();
+    signOut.mockReset();
     intlMiddleware.mockClear();
     process.env.NEXT_PUBLIC_SITE_URL = "https://wasfun.lol";
     process.env.NEXT_PUBLIC_SUPABASE_URL = "https://krmyzbcoifdpgrszcfun.supabase.co";
@@ -59,6 +64,61 @@ describe("auth routes", () => {
 
     expect(exchangeCodeForSession).toHaveBeenCalledWith("abc");
     expect(response.headers.get("location")).toBe("https://wasfun.lol/");
+  });
+
+  test("rejects auth, API, and framework next destinations", async () => {
+    const { safeNextPath } = await import("@/lib/auth/redirects");
+
+    expect(safeNextPath("/auth/callback")).toBe("/");
+    expect(safeNextPath("/api/admin/entitlements")).toBe("/");
+    expect(safeNextPath("/_next/static/chunk.js")).toBe("/");
+    expect(safeNextPath("/_vercel/insights/view")).toBe("/");
+    expect(safeNextPath("/zh-TW/account")).toBe("/zh-TW/account");
+    expect(safeNextPath("/account")).toBe("/account");
+  });
+
+  test("callback preserves localized account destinations after successful exchange", async () => {
+    exchangeCodeForSession.mockResolvedValue({ error: null });
+
+    const { GET } = await import("@/app/auth/callback/route");
+    const response = await GET(
+      new Request("https://wasfun.lol/auth/callback?code=abc&next=%2Fzh-TW%2Faccount"),
+    );
+
+    expect(exchangeCodeForSession).toHaveBeenCalledWith("abc");
+    expect(response.headers.get("location")).toBe("https://wasfun.lol/zh-TW/account");
+  });
+
+  test("signout clears the Supabase session and returns to a canonical public URL", async () => {
+    signOut.mockResolvedValue({ error: null });
+
+    const { POST } = await import("@/app/api/auth/signout/route");
+    const response = await POST(
+      new Request("https://wasfun.lol/api/auth/signout?next=%2Fauth%2Fcallback", {
+        method: "POST",
+      }),
+    );
+
+    expect(signOut).toHaveBeenCalled();
+    expect(response.status).toBe(303);
+    expect(response.headers.get("location")).toBe("https://wasfun.lol/");
+  });
+
+  test("account page gates private account data and renders the signout action", () => {
+    const source = readFileSync(
+      path.join(process.cwd(), "src/app/[locale]/account/page.tsx"),
+      "utf8",
+    );
+
+    expect(source.indexOf("if (!user)")).toBeGreaterThan(-1);
+    expect(source.indexOf('supabase.from("entitlements")')).toBeGreaterThan(
+      source.indexOf("if (!user)"),
+    );
+    expect(source.indexOf('from("decision_sessions")')).toBeGreaterThan(
+      source.indexOf("if (!user)"),
+    );
+    expect(source).toContain('action="/api/auth/signout?next=%2F"');
+    expect(source).toContain('method="post"');
   });
 
   test("rescues root auth codes to the callback route", async () => {

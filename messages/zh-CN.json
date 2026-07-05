@@ -656,6 +656,7 @@
     "title": "会员",
     "subtitle": "你的 Oracle 权限与决策记录。",
     "signInPrompt": "登录以跟踪你的会员状态与保存的决策，或查看会员包含哪些功能。",
+    "signOut": "退出登录",
     "statusTitle": "状态",
     "statusActiveMember": "有效会员",
     "statusActiveTrial": "体验中",

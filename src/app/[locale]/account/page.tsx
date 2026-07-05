@@ -80,9 +80,19 @@ export default async function AccountPage({
 
   return (
     <main className="mx-auto flex max-w-2xl flex-col gap-8 px-4 py-10">
-      <header>
-        <h1 className="text-2xl font-bold">{t("title")}</h1>
-        <p className="mt-1 text-sm text-white/60">{t("subtitle")}</p>
+      <header className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+        <div>
+          <h1 className="text-2xl font-bold">{t("title")}</h1>
+          <p className="mt-1 text-sm text-white/60">{t("subtitle")}</p>
+        </div>
+        <form action="/api/auth/signout?next=%2F" method="post">
+          <button
+            type="submit"
+            className="rounded-lg border border-white/15 px-4 py-2 text-sm font-medium text-white/70 transition hover:bg-white/5 hover:text-white"
+          >
+            {t("signOut")}
+          </button>
+        </form>
       </header>
 
       <AuthErrorBanner error={error} />
