@@ -1,3 +1,5 @@
+import { routing } from "@/i18n/routing";
+
 export const GOOGLE_IDENTITY_SCRIPT_SRC = "https://accounts.google.com/gsi/client";
 
 export type GoogleCredentialResponse = {
@@ -34,12 +36,18 @@ export function isGoogleIdentityAvailable(env: GoogleClientIdEnv = process.env):
   return getGoogleClientId(env).length > 0;
 }
 
+// Derived from routing.locales so new locales can never break sign-in
+// redirects (docs/plans/2026-07-02-full-riot-locale-coverage.md rule 1).
+const LOCALE_PREFIX_PATTERN = new RegExp(
+  `^/(?:${routing.locales.join("|")})(?=/|$)`,
+);
+
 export function normalizeGoogleSignInNextPath(nextPath: string): string {
   const trimmed = nextPath.trim();
   const safePath = trimmed.startsWith("/") && !trimmed.startsWith("//") && !trimmed.startsWith("/\\")
     ? trimmed
     : "/";
-  return safePath.replace(/^\/(?:en|zh-TW|zh-CN|ja|ko)(?=\/|$)/, "") || "/";
+  return safePath.replace(LOCALE_PREFIX_PATTERN, "") || "/";
 }
 
 export async function sha256Hex(value: string): Promise<string> {

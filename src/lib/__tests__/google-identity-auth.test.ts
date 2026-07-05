@@ -125,4 +125,25 @@ describe("Google Identity Services auth", () => {
     expect(zhTwLocalizedPath).toBe("/zh-TW/account");
     expect(zhTwLocalizedPath).not.toBe("/zh-TW/zh-TW/account");
   });
+
+  test("strips every routing locale prefix so adding locales cannot break sign-in redirects", async () => {
+    const { routing } = await import("@/i18n/routing");
+
+    for (const locale of routing.locales) {
+      expect(normalizeGoogleSignInNextPath(`/${locale}/account`), locale).toBe("/account");
+      expect(normalizeGoogleSignInNextPath(`/${locale}`), locale).toBe("/");
+    }
+    // Non-locale prefixes that merely resemble one must pass through untouched.
+    expect(normalizeGoogleSignInNextPath("/environment/account")).toBe("/environment/account");
+  });
+
+  test("locale prefix stripping has no hardcoded locale list", async () => {
+    const source = await readFile(
+      path.join(process.cwd(), "src/lib/auth/google-identity.ts"),
+      "utf-8",
+    );
+
+    expect(source).not.toMatch(/zh-TW|zh-CN|\bja\b|\bko\b/);
+    expect(source).toContain("routing.locales");
+  });
 });
