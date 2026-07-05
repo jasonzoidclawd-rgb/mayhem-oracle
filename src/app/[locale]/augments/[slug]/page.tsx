@@ -8,6 +8,7 @@ import { routing, type Locale } from "@/i18n/routing";
 import { localizedName } from "@/lib/i18n/localized-name";
 import { languageAlternates, localizedUrl } from "@/lib/site";
 import { buildAugmentDetailJsonLd } from "@/lib/seo/augment-detail";
+import { buildPatchSummary } from "@/lib/seo/patch-summary";
 import {
   readAugmentsFile,
   readChampionsFile,
@@ -41,6 +42,11 @@ interface AugmentRecord {
   };
 }
 
+interface AugmentsData {
+  patch?: string;
+  augments: AugmentRecord[];
+}
+
 interface ChampionRecord {
   slug: string;
   name: string;
@@ -52,8 +58,12 @@ interface ChampionRecord {
 
 // ─── Data helpers ─────────────────────────────────────────────────────────────
 
+async function loadAugmentsData(): Promise<AugmentsData> {
+  return readAugmentsFile<AugmentsData>();
+}
+
 async function loadAugments(): Promise<AugmentRecord[]> {
-  const data = await readAugmentsFile<{ augments: AugmentRecord[] }>();
+  const data = await loadAugmentsData();
   return data.augments;
 }
 
@@ -95,7 +105,8 @@ export async function generateMetadata({
   const { locale, slug } = await params;
   const t = await getTranslations({ locale, namespace: "augments" });
   const tChamp = await getTranslations({ locale, namespace: "champion" });
-  const augments = await loadAugments();
+  const augmentsData = await loadAugmentsData();
+  const augments = augmentsData.augments;
   const augment = augments.find((a) => a.slug === slug);
   if (!augment) notFound();
 
@@ -134,7 +145,8 @@ export default async function AugmentDetailPage({
   const t = await getTranslations("augments");
   const tChamp = await getTranslations("champion");
 
-  const augments = await loadAugments();
+  const augmentsData = await loadAugmentsData();
+  const augments = augmentsData.augments;
   const augment = augments.find((a) => a.slug === slug);
   if (!augment) notFound();
 
@@ -189,6 +201,13 @@ export default async function AugmentDetailPage({
     augmentsUrl: localizedUrl("/augments", locale as Locale),
     augmentsLabel: t("title"),
     rarityLabel: rarityLabel[augment.rarity],
+  });
+  const patchSummary = buildPatchSummary({
+    entityName: augmentName,
+    entityKind: "augment",
+    patch: augmentsData.patch,
+    lifecycleState: augment.flags?.lifecycle,
+    lifecyclePatch: augment.flags?.lifecycle_patch,
   });
 
   return (
@@ -277,6 +296,19 @@ export default async function AugmentDetailPage({
             )}
           </div>
         </div>
+
+        <section className="glass-card p-4 mb-6" aria-labelledby="patch-summary-heading">
+          <h2 id="patch-summary-heading" className="text-sm font-semibold mb-2">
+            {patchSummary.title}
+          </h2>
+          <div className="space-y-1.5">
+            {patchSummary.lines.map((line) => (
+              <p key={line} className="text-sm text-[var(--color-text-secondary)] leading-relaxed">
+                {line}
+              </p>
+            ))}
+          </div>
+        </section>
 
         {/* ─── Strong on champions ─── */}
         {strongOn.length > 0 && (
