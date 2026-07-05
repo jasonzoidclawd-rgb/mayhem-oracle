@@ -3,9 +3,11 @@ import { getTranslations, setRequestLocale } from "next-intl/server";
 import Image from "next/image";
 import { notFound } from "next/navigation";
 import { Link } from "@/i18n/navigation";
+import { JsonLd } from "@/components/seo/JsonLd";
 import { routing, type Locale } from "@/i18n/routing";
 import { localizedName } from "@/lib/i18n/localized-name";
 import { languageAlternates, localizedUrl } from "@/lib/site";
+import { buildAugmentDetailJsonLd } from "@/lib/seo/augment-detail";
 import {
   readAugmentsFile,
   readChampionsFile,
@@ -172,112 +174,131 @@ export default async function AugmentDetailPage({
   const wikiUrl = `https://wiki.leagueoflegends.com/en-us/${encodeURIComponent(
     augment.name.replace(/ /g, "_"),
   )}`;
+  const route = `/augments/${augment.slug}`;
+  const pageUrl = localizedUrl(route, locale as Locale);
+  const augmentJsonLd = buildAugmentDetailJsonLd(augment, locale, {
+    url: pageUrl,
+    homeUrl: localizedUrl("/", locale as Locale),
+    name: augmentName,
+    description:
+      augment.wikiDescription ??
+      t("metaDetailDescription", {
+        name: augmentName,
+        rarity: rarityLabel[augment.rarity],
+      }),
+    augmentsUrl: localizedUrl("/augments", locale as Locale),
+    augmentsLabel: t("title"),
+    rarityLabel: rarityLabel[augment.rarity],
+  });
 
   return (
-    <div className="py-8 max-w-3xl">
-      {/* Back link + wiki link */}
-      <div className="flex items-center justify-between mb-6">
-        <Link
-          href="/augments"
-          className="inline-flex items-center gap-1.5 text-sm text-[var(--color-text-muted)] hover:text-[var(--color-text-primary)] transition-colors"
-        >
-          {t("detailBack")}
-        </Link>
-        <a
-          href={wikiUrl}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="inline-flex items-center gap-1.5 text-xs text-[var(--color-text-muted)] hover:text-[var(--color-text-primary)] transition-colors"
-        >
-          <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-            <path strokeLinecap="round" strokeLinejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
-          </svg>
-          LoL Wiki
-        </a>
-      </div>
+    <>
+      <JsonLd data={augmentJsonLd} />
+      <div className="py-8 max-w-3xl">
+        {/* Back link + wiki link */}
+        <div className="flex items-center justify-between mb-6">
+          <Link
+            href="/augments"
+            className="inline-flex items-center gap-1.5 text-sm text-[var(--color-text-muted)] hover:text-[var(--color-text-primary)] transition-colors"
+          >
+            {t("detailBack")}
+          </Link>
+          <a
+            href={wikiUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-1.5 text-xs text-[var(--color-text-muted)] hover:text-[var(--color-text-primary)] transition-colors"
+          >
+            <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+            </svg>
+            LoL Wiki
+          </a>
+        </div>
 
-      {/* ─── Header ─── */}
-      <div className="flex items-start gap-6 mb-8">
-        {augment.icon && (
-          <div className="relative w-20 h-20 rounded-xl overflow-hidden border-2 border-[var(--color-border-hover)] shrink-0 bg-[var(--color-bg-card)]">
-            <Image
-              src={augment.icon}
-              alt={augmentName}
-              fill
-              className="object-contain p-1"
-              sizes="80px"
-              unoptimized
-            />
-          </div>
-        )}
-        <div className="flex-1 min-w-0">
-          <div className="flex items-center gap-3 flex-wrap">
-            <h1 className="text-3xl font-bold">{augmentName}</h1>
-            <span
-              className={`text-xs font-semibold px-2.5 py-1 rounded-md border ${RARITY_BADGE[augment.rarity]}`}
-            >
-              {rarityLabel[augment.rarity]}
-            </span>
-            {typeBadgeKey && (
-              <span className="text-xs font-medium px-2 py-0.5 rounded border border-[var(--color-border)] text-[var(--color-text-secondary)]">
-                {t(typeBadgeKey)}
-              </span>
-            )}
-            {isRemoved && (
-              <span className="text-xs font-medium px-2 py-0.5 rounded border border-rose-400/30 bg-rose-400/10 text-rose-300">
-                {augment.flags?.lifecycle_patch
-                  ? t("detailRemovedIn", { patch: augment.flags.lifecycle_patch })
-                  : t("badgeRemoved")}
-              </span>
-            )}
-          </div>
-
-          {augment.wikiDescription && (
-            <p className="mt-3 text-[var(--color-text-secondary)] leading-relaxed">
-              {augment.wikiDescription}
-            </p>
-          )}
-
-          {augment.kit_tags && augment.kit_tags.length > 0 && (
-            <div className="mt-4">
-              <div className="text-xs uppercase tracking-wider text-[var(--color-text-muted)] mb-1.5">
-                {t("detailKitSynergy")}
-              </div>
-              <div className="flex flex-wrap gap-1.5">
-                {augment.kit_tags.map((tag) => (
-                  <span
-                    key={tag}
-                    className="text-[11px] px-2 py-0.5 rounded border border-[var(--color-border)] bg-[var(--color-bg-card)] text-[var(--color-text-secondary)]"
-                  >
-                    {tag}
-                  </span>
-                ))}
-              </div>
+        {/* ─── Header ─── */}
+        <div className="flex items-start gap-6 mb-8">
+          {augment.icon && (
+            <div className="relative w-20 h-20 rounded-xl overflow-hidden border-2 border-[var(--color-border-hover)] shrink-0 bg-[var(--color-bg-card)]">
+              <Image
+                src={augment.icon}
+                alt={augmentName}
+                fill
+                className="object-contain p-1"
+                sizes="80px"
+                unoptimized
+              />
             </div>
           )}
-        </div>
-      </div>
-
-      {/* ─── Strong on champions ─── */}
-      {strongOn.length > 0 && (
-        <section className="glass-card p-5">
-          <h2 className="text-lg font-semibold mb-3">{t("detailStrongOn")}</h2>
-          <div className="flex flex-wrap gap-2">
-            {strongOn.map(({ record, tier }) => (
-              <Link
-                key={record!.slug}
-                href={`/champions/${record!.slug}`}
-                className="inline-flex items-center gap-2 rounded-full border border-[var(--color-border)] bg-[var(--color-bg-card)] px-3 py-1 text-sm hover:border-[var(--color-accent)] hover:text-[var(--color-accent)] transition-colors"
+          <div className="flex-1 min-w-0">
+            <div className="flex items-center gap-3 flex-wrap">
+              <h1 className="text-3xl font-bold">{augmentName}</h1>
+              <span
+                className={`text-xs font-semibold px-2.5 py-1 rounded-md border ${RARITY_BADGE[augment.rarity]}`}
               >
-                <span>{localizedName(record!, locale)}</span>
-                <span className={`text-[11px] font-semibold px-1.5 py-0.5 rounded border ${TIER_BADGE[tier]}`}>
-                  {tier}
+                {rarityLabel[augment.rarity]}
+              </span>
+              {typeBadgeKey && (
+                <span className="text-xs font-medium px-2 py-0.5 rounded border border-[var(--color-border)] text-[var(--color-text-secondary)]">
+                  {t(typeBadgeKey)}
                 </span>
-              </Link>
-            ))}
+              )}
+              {isRemoved && (
+                <span className="text-xs font-medium px-2 py-0.5 rounded border border-rose-400/30 bg-rose-400/10 text-rose-300">
+                  {augment.flags?.lifecycle_patch
+                    ? t("detailRemovedIn", { patch: augment.flags.lifecycle_patch })
+                    : t("badgeRemoved")}
+                </span>
+              )}
+            </div>
+
+            {augment.wikiDescription && (
+              <p className="mt-3 text-[var(--color-text-secondary)] leading-relaxed">
+                {augment.wikiDescription}
+              </p>
+            )}
+
+            {augment.kit_tags && augment.kit_tags.length > 0 && (
+              <div className="mt-4">
+                <div className="text-xs uppercase tracking-wider text-[var(--color-text-muted)] mb-1.5">
+                  {t("detailKitSynergy")}
+                </div>
+                <div className="flex flex-wrap gap-1.5">
+                  {augment.kit_tags.map((tag) => (
+                    <span
+                      key={tag}
+                      className="text-[11px] px-2 py-0.5 rounded border border-[var(--color-border)] bg-[var(--color-bg-card)] text-[var(--color-text-secondary)]"
+                    >
+                      {tag}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            )}
           </div>
-        </section>
-      )}
-    </div>
+        </div>
+
+        {/* ─── Strong on champions ─── */}
+        {strongOn.length > 0 && (
+          <section className="glass-card p-5">
+            <h2 className="text-lg font-semibold mb-3">{t("detailStrongOn")}</h2>
+            <div className="flex flex-wrap gap-2">
+              {strongOn.map(({ record, tier }) => (
+                <Link
+                  key={record!.slug}
+                  href={`/champions/${record!.slug}`}
+                  className="inline-flex items-center gap-2 rounded-full border border-[var(--color-border)] bg-[var(--color-bg-card)] px-3 py-1 text-sm hover:border-[var(--color-accent)] hover:text-[var(--color-accent)] transition-colors"
+                >
+                  <span>{localizedName(record!, locale)}</span>
+                  <span className={`text-[11px] font-semibold px-1.5 py-0.5 rounded border ${TIER_BADGE[tier]}`}>
+                    {tier}
+                  </span>
+                </Link>
+              ))}
+            </div>
+          </section>
+        )}
+      </div>
+    </>
   );
 }
