@@ -17,6 +17,7 @@ import {
   type CollectorSnapshot,
 } from "./collector/CollectorStatus";
 import { overlayShouldIgnoreMouseEvents } from "./collector/collectorWindows";
+import { normalizeChampionName, resolveKnownChampionSlug } from "./championResolve";
 import type {
   AbilityProfile,
   ChampionBaseStats,
@@ -131,10 +132,6 @@ const BADGE_POSITIONS = [
   { left: "50%", top: "62%" },
   { left: "69.5%", top: "62%" },
 ];
-
-function normalizeChampionName(value: string): string {
-  return value.toLowerCase().replace(/[^a-z]/g, "");
-}
 
 async function loadJson<T>(path: string): Promise<T> {
   const response = await fetch(new URL(path, window.location.origin));
@@ -253,8 +250,10 @@ function App() {
       })
       .catch(() => {
         if (cancelled) return;
+        // Degrade to kit-agnostic scoring instead of a hard error banner —
+        // a missing per-champion profile must not break augment screens.
         setAbilityProfiles((prev) => ({ ...prev, [championSlug]: null }));
-        setDataError(`Failed to load ability profile for ${championSlug}`);
+        console.warn(`ability profile unavailable for ${championSlug}; scoring without kit fit`);
       });
 
     return () => {
@@ -303,16 +302,15 @@ function App() {
     return map;
   }, [overlayData]);
 
-  const champNameToSlug = useCallback(
-    (name: string): string => {
-      const exact =
-        championSlugByName.get(name) ??
-        championSlugByName.get(name.toLowerCase());
-      if (exact) return exact;
+  const knownChampionSlugs = useMemo(
+    () => new Set((overlayData?.champions ?? []).map((champion) => champion.slug)),
+    [overlayData],
+  );
 
-      return championSlugByName.get(normalizeChampionName(name)) ?? normalizeChampionName(name);
-    },
-    [championSlugByName],
+  const champNameToSlug = useCallback(
+    (name: string): string | null =>
+      resolveKnownChampionSlug(name, championSlugByName, knownChampionSlugs),
+    [championSlugByName, knownChampionSlugs],
   );
 
   const comboBySlug = useMemo(() => {
