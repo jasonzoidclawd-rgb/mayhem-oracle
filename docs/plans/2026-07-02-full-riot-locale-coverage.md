@@ -70,3 +70,37 @@ fallback until translated.
 Executor: Codex per phase (L1 → L5), GPT-5.5 re-review after L2 and L5.
 Do not start before the round-2 branch (`codex/round2-lease-rls-og-hardening`)
 is merged — L2 touches the same champion-page files.
+
+## 2026-07-06 review addendum (timing + risk assessment)
+
+Assessment from the post-P5 review: the phasing above is right, but **do not
+start L1 until two gates pass**, and note one content-quality risk the plan
+does not yet cover.
+
+1. **Demand gate (before L1).** The structured-data/GEO surface for the
+   existing five locales went live 2026-07-05. Expansion scales an unvalidated
+   bet until Search Console shows the four non-English locales earning
+   meaningful impressions/clicks. Record the numbers here when checked.
+2. **Sequencing gate (before L1).** Land the in-flight SEO/GEO slices first
+   (SEO helper boundary test, item patch summaries, JSON-LD live verifier) —
+   L2 and this work touch the same detail-page files.
+3. **Thin/mixed-language content risk (new, affects L4).** DDragon covers
+   names/descriptions, but `wikiDescription`, wiki passives/notes, and
+   arammayhem-derived body copy are English-only sources. A new-locale detail
+   page is localized chrome around an English body; at scale that risks
+   site-wide quality signals, not just weak pages in the new locale. Before
+   the L4 sitemap/hreflang expansion, define a per-locale content-depth bar
+   (e.g. localized description coverage from the L1 catalogs) and only add a
+   locale to the sitemap once it clears the bar. Tier-1 static locales in L4
+   (`pt-BR es-ES ru-RU tr-TR vi-VN`) should also be the first sitemap
+   additions; regional English variants stay collapsed (decision 1) and never
+   get their own sitemap entries.
+4. **Pre-work completed 2026-07-06** (patterns that make locale count a
+   config change): patch-summary copy is injected from `messages/*.json` with
+   the helper deciding only which bounded lines render (`a807235`); the
+   hardcoded locale regex in `src/lib/auth/google-identity.ts` (violated
+   design decision 1's no-other-locale-lists rule) now derives from
+   `routing.locales`.
+5. **Cost check per L4 tier.** Each locale adds ~940 static pages per build
+   and one more locale to the daily refresh; record build minutes and cron
+   duration here before promoting the next tier.
