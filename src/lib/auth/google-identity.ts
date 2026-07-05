@@ -26,6 +26,14 @@ export function isGoogleIdentityAvailable(env: GoogleClientIdEnv = process.env):
   return getGoogleClientId(env).length > 0;
 }
 
+export function normalizeGoogleSignInNextPath(nextPath: string): string {
+  const trimmed = nextPath.trim();
+  const safePath = trimmed.startsWith("/") && !trimmed.startsWith("//") && !trimmed.startsWith("/\\")
+    ? trimmed
+    : "/";
+  return safePath.replace(/^\/(?:en|zh-TW|zh-CN|ja|ko)(?=\/|$)/, "") || "/";
+}
+
 export async function signInWithGoogleCredential(
   supabase: SupabaseGoogleTokenClient,
   response: GoogleCredentialResponse,

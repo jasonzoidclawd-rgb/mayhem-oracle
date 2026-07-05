@@ -5,6 +5,7 @@ import {
   GOOGLE_IDENTITY_SCRIPT_SRC,
   getGoogleClientId,
   isGoogleIdentityAvailable,
+  normalizeGoogleSignInNextPath,
   signInWithGoogleCredential,
 } from "@/lib/auth/google-identity";
 
@@ -92,5 +93,36 @@ describe("Google Identity Services auth", () => {
     expect(combined).not.toContain(oauthRedirectMethod);
     expect(combined).not.toContain("/api/auth/signin?next=");
     expect(combined).toContain("GoogleSignInButton");
+  });
+
+  test("Google sign-in call sites use unprefixed internal next paths", async () => {
+    const files = [
+      "src/app/[locale]/account/page.tsx",
+      "src/app/[locale]/advisor/page.tsx",
+      "src/app/[locale]/membership/page.tsx",
+      "src/app/[locale]/champions/[slug]/page.tsx",
+      "src/components/companion/CompanionClient.tsx",
+    ];
+    const combined = (
+      await Promise.all(files.map((file) => readFile(path.join(process.cwd(), file), "utf-8")))
+    ).join("\n");
+
+    expect(combined).not.toMatch(/GoogleSignInButton[\s\S]{0,120}next=\{`\/\$\{locale\}/);
+    expect(combined).not.toContain('signInNextPath={!isAuthenticated ? `/${locale');
+    expect(combined).not.toContain('signInUrl={`/${locale}/account`}');
+    expect(combined).toContain('<GoogleSignInButton next="/account"');
+    expect(combined).toContain('<GoogleSignInButton next="/advisor"');
+    expect(combined).toContain('<GoogleSignInButton next="/membership"');
+    expect(combined).toContain('next="/companion"');
+    expect(combined).toContain('signInNextPath={!isAuthenticated ? `/champions/${slug}` : undefined}');
+  });
+
+  test("non-default locale account redirects do not duplicate the locale prefix", () => {
+    const routerPath = normalizeGoogleSignInNextPath("/zh-TW/account");
+    const zhTwLocalizedPath = `/zh-TW${routerPath}`;
+
+    expect(routerPath).toBe("/account");
+    expect(zhTwLocalizedPath).toBe("/zh-TW/account");
+    expect(zhTwLocalizedPath).not.toBe("/zh-TW/zh-TW/account");
   });
 });

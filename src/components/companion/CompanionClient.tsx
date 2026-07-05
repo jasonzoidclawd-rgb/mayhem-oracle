@@ -99,7 +99,6 @@ export function CompanionClient({
   champions,
   augments,
   initialAccess,
-  locale,
 }: CompanionClientProps) {
   const t = useTranslations("companion");
   const tm = useTranslations("membership");
@@ -585,7 +584,7 @@ export function CompanionClient({
                 />
                 {!initialAccess.signedIn ? (
                   <GoogleSignInButton
-                    next={`/${locale}/companion`}
+                    next="/companion"
                     label={tm("signInCta")}
                     size="medium"
                   />

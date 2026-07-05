@@ -734,8 +734,8 @@ export default async function ChampionPage({
         highlights={tailoredHighlights}
         totalAugments={augments.length}
         gated={!isMember}
-        signInUrl={`/${locale}/account`}
-        signInNextPath={!isAuthenticated ? `/${locale === "en" ? "" : `${locale}/`}champions/${slug}` : undefined}
+        signInUrl="/account"
+        signInNextPath={!isAuthenticated ? `/champions/${slug}` : undefined}
         gateCopy={!isMember ? (isAuthenticated ? {
           title: tm("lockedTitle"),
           description: tm("lockedBody"),

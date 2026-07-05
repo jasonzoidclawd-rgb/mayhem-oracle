@@ -34,7 +34,7 @@ export default async function AccountPage({
         <h1 className="text-2xl font-bold">{t("title")}</h1>
         <p className="mt-4 text-white/70">{t("signInPrompt")}</p>
         <div className="mt-6 flex flex-wrap gap-3">
-          <GoogleSignInButton next={`/${locale}/account`} label={t("signInCta")} />
+          <GoogleSignInButton next="/account" label={t("signInCta")} />
           <Link
             href="/membership"
             className="inline-block rounded-lg border border-white/15 px-5 py-2.5 font-medium text-white/80 transition hover:bg-white/5"

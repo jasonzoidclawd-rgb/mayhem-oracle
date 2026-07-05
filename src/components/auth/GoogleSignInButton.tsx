@@ -7,6 +7,7 @@ import { safeNextPath } from "@/lib/auth/redirects";
 import {
   GOOGLE_IDENTITY_SCRIPT_SRC,
   getGoogleClientId,
+  normalizeGoogleSignInNextPath,
   signInWithGoogleCredential,
   type GoogleCredentialResponse,
 } from "@/lib/auth/google-identity";
@@ -42,7 +43,7 @@ export function GoogleSignInButton({
   const clientId = getGoogleClientId({
     NEXT_PUBLIC_GOOGLE_CLIENT_ID: process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID,
   });
-  const nextPath = safeNextPath(next);
+  const nextPath = normalizeGoogleSignInNextPath(safeNextPath(next));
 
   const handleCredential = useCallback(
     async (response: GoogleCredentialResponse) => {

@@ -182,7 +182,7 @@ export default async function MembershipPage({
           ) : (
             <div className="flex flex-col items-center gap-4 text-center">
               <p className="text-sm text-[var(--color-text-secondary)]">{t("howSubtitle")}</p>
-              <GoogleSignInButton next={`/${locale}/membership`} label={t("signInCta")} />
+              <GoogleSignInButton next="/membership" label={t("signInCta")} />
             </div>
           )}
         </div>

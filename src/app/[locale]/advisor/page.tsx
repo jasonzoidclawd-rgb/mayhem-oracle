@@ -79,7 +79,7 @@ export default async function AdvisorPage({
       <div className="mx-auto flex max-w-md flex-col items-center gap-5 py-16">
         <MembershipGate title={t("lockedTitle")} body={t("lockedBody")} cta={t("lockedCta")} />
         {!signedIn ? (
-          <GoogleSignInButton next={`/${locale}/advisor`} label={t("signInCta")} size="medium" />
+          <GoogleSignInButton next="/advisor" label={t("signInCta")} size="medium" />
         ) : null}
       </div>
     );
