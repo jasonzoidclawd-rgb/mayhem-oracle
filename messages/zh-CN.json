@@ -288,7 +288,10 @@
     "detailBack": "所有增幅",
     "detailStrongOn": "强力英雄组合",
     "detailKitSynergy": "套件协同",
-    "detailRemovedIn": "已于 {patch} 版本移除"
+    "detailRemovedIn": "已于 {patch} 版本移除",
+    "patchSummaryTitle": "版本摘要",
+    "patchSummaryBody": "本页的 {name} 强化内容反映 {patch} 版本的 ARAM 大乱斗公开数据。",
+    "patchSummaryRemoved": "{name} 已于 {patch} 版本标记为移除。"
   },
   "items": {
     "title": "ARAM 大乱斗装备",

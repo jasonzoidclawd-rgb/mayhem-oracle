@@ -288,7 +288,10 @@
     "detailBack": "所有增幅",
     "detailStrongOn": "強力英雄組合",
     "detailKitSynergy": "套件協同",
-    "detailRemovedIn": "已於 {patch} 版本移除"
+    "detailRemovedIn": "已於 {patch} 版本移除",
+    "patchSummaryTitle": "版本摘要",
+    "patchSummaryBody": "本頁的 {name} 增強內容反映 {patch} 版本的 ARAM 大亂鬥公開資料。",
+    "patchSummaryRemoved": "{name} 已於 {patch} 版本標記為移除。"
   },
   "items": {
     "title": "ARAM 大亂鬥裝備",

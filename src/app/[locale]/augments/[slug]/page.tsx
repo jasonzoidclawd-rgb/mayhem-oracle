@@ -200,13 +200,18 @@ export default async function AugmentDetailPage({
     augmentsLabel: t("title"),
     rarityLabel: rarityLabel[augment.rarity],
   });
-  const patchSummary = buildPatchSummary({
-    entityName: augmentName,
-    entityKind: "augment",
-    patch: augmentsData.patch,
-    lifecycleState: augment.flags?.lifecycle,
-    lifecyclePatch: augment.flags?.lifecycle_patch,
-  });
+  const patchSummary = buildPatchSummary(
+    {
+      patch: augmentsData.patch,
+      lifecycleState: augment.flags?.lifecycle,
+      lifecyclePatch: augment.flags?.lifecycle_patch,
+    },
+    {
+      title: t("patchSummaryTitle"),
+      body: ({ patch }) => t("patchSummaryBody", { name: augmentName, patch }),
+      removed: ({ patch }) => t("patchSummaryRemoved", { name: augmentName, patch }),
+    },
+  );
 
   return (
     <>
@@ -295,18 +300,20 @@ export default async function AugmentDetailPage({
           </div>
         </div>
 
-        <section className="glass-card p-4 mb-6" aria-labelledby="patch-summary-heading">
-          <h2 id="patch-summary-heading" className="text-sm font-semibold mb-2">
-            {patchSummary.title}
-          </h2>
-          <div className="space-y-1.5">
-            {patchSummary.lines.map((line, index) => (
-              <p key={index} className="text-sm text-[var(--color-text-secondary)] leading-relaxed">
-                {line}
-              </p>
-            ))}
-          </div>
-        </section>
+        {patchSummary && (
+          <section className="glass-card p-4 mb-6" aria-labelledby="patch-summary-heading">
+            <h2 id="patch-summary-heading" className="text-sm font-semibold mb-2">
+              {patchSummary.title}
+            </h2>
+            <div className="space-y-1.5">
+              {patchSummary.lines.map((line, index) => (
+                <p key={index} className="text-sm text-[var(--color-text-secondary)] leading-relaxed">
+                  {line}
+                </p>
+              ))}
+            </div>
+          </section>
+        )}
 
         {/* ─── Strong on champions ─── */}
         {strongOn.length > 0 && (

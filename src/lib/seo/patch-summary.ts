@@ -1,47 +1,54 @@
 type PatchSummaryInput = {
-  entityName: string;
-  entityKind: string;
   patch?: string | null;
   lifecycleState?: string | null;
   lifecyclePatch?: string | null;
 };
 
-// Lifecycle is scraper-owned; only allowlisted states may surface in public
-// copy so future states never ship unreviewed wording.
-const PUBLIC_LIFECYCLE_STATES = new Set(["removed"]);
+/**
+ * Pre-localized copy from the route's message namespace. The helper decides
+ * WHICH bounded lines may render; it never produces user-facing strings
+ * itself, so all copy stays in messages/*.json.
+ */
+type PatchSummaryCopy = {
+  title: string;
+  body: (values: { patch: string }) => string;
+  removed: (values: { patch: string }) => string;
+};
 
 type PatchSummary = {
   title: string;
   lines: string[];
 };
 
+// Lifecycle is scraper-owned; only allowlisted states may surface in public
+// copy so future states never ship unreviewed wording.
+const PUBLIC_LIFECYCLE_STATES = new Set(["removed"]);
+
 function clean(value: string | null | undefined) {
   const trimmed = value?.trim();
   return trimmed ? trimmed : undefined;
 }
 
-export function buildPatchSummary(input: PatchSummaryInput): PatchSummary {
-  const entityName = clean(input.entityName) ?? "This page";
-  const entityKind = clean(input.entityKind) ?? "entry";
+/**
+ * Returns null when no public patch value exists: freshness claims must trace
+ * to published data, so without a patch the summary block is omitted entirely.
+ */
+export function buildPatchSummary(
+  input: PatchSummaryInput,
+  copy: PatchSummaryCopy,
+): PatchSummary | null {
   const patch = clean(input.patch);
-  const lifecycleState = clean(input.lifecycleState);
-  const lifecyclePatch = clean(input.lifecyclePatch) ?? patch;
-  const lines = [
-    patch
-      ? `This ${entityKind} page for ${entityName} reflects public Arena Mayhem data for patch ${patch}.`
-      : `This ${entityKind} page for ${entityName} reflects public Arena Mayhem data.`,
-  ];
+  if (!patch) return null;
 
+  const lines = [copy.body({ patch })];
+
+  const lifecycleState = clean(input.lifecycleState);
   if (lifecycleState && PUBLIC_LIFECYCLE_STATES.has(lifecycleState)) {
-    lines.push(
-      lifecyclePatch
-        ? `${entityName} is marked ${lifecycleState} in patch ${lifecyclePatch}.`
-        : `${entityName} is marked ${lifecycleState}.`,
-    );
+    lines.push(copy.removed({ patch: clean(input.lifecyclePatch) ?? patch }));
   }
 
   return {
-    title: "Patch summary",
+    title: copy.title,
     lines,
   };
 }

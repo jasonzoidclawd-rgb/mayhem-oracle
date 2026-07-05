@@ -288,7 +288,10 @@
     "detailBack": "모든 증강",
     "detailStrongOn": "시너지 챔피언",
     "detailKitSynergy": "키트 시너지",
-    "detailRemovedIn": "{patch} 패치에서 삭제됨"
+    "detailRemovedIn": "{patch} 패치에서 삭제됨",
+    "patchSummaryTitle": "패치 요약",
+    "patchSummaryBody": "이 {name} 증강 페이지는 {patch} 패치의 ARAM 메이헴 공개 데이터를 반영합니다.",
+    "patchSummaryRemoved": "{name}은(는) {patch} 패치에서 제거됨으로 표시되었습니다."
   },
   "items": {
     "title": "ARAM 메이헴 아이템",

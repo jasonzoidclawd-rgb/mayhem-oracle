@@ -368,7 +368,10 @@
     "detailBack": "All augments",
     "detailStrongOn": "Strong on champions",
     "detailKitSynergy": "Kit synergy",
-    "detailRemovedIn": "Removed in patch {patch}"
+    "detailRemovedIn": "Removed in patch {patch}",
+    "patchSummaryTitle": "Patch summary",
+    "patchSummaryBody": "This augment page for {name} reflects public Arena Mayhem data for patch {patch}.",
+    "patchSummaryRemoved": "{name} is marked removed in patch {patch}."
   },
   "items": {
     "title": "ARAM Mayhem Items",

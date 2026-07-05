@@ -288,7 +288,10 @@
     "detailBack": "すべてのオーグメント",
     "detailStrongOn": "相性の良いチャンピオン",
     "detailKitSynergy": "キットシナジー",
-    "detailRemovedIn": "パッチ {patch} で削除"
+    "detailRemovedIn": "パッチ {patch} で削除",
+    "patchSummaryTitle": "パッチ概要",
+    "patchSummaryBody": "この {name} のオーグメントページは、パッチ {patch} の ARAMメイヘム公開データに基づいています。",
+    "patchSummaryRemoved": "{name} はパッチ {patch} で削除済みとしてマークされています。"
   },
   "items": {
     "title": "ARAMメイヘム アイテム",
