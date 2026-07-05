@@ -656,6 +656,7 @@
     "title": "멤버십",
     "subtitle": "내 Oracle 이용 권한과 결정 기록.",
     "signInPrompt": "로그인하여 멤버십과 저장된 의사결정을 확인하거나, 멤버십에 무엇이 포함되는지 살펴보세요.",
+    "signOut": "로그아웃",
     "statusTitle": "상태",
     "statusActiveMember": "활성 멤버",
     "statusActiveTrial": "체험 이용",
