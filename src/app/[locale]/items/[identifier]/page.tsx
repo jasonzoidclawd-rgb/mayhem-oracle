@@ -5,9 +5,11 @@ import { readFile } from "fs/promises";
 import path from "path";
 import { notFound } from "next/navigation";
 import { Link } from "@/i18n/navigation";
+import { JsonLd } from "@/components/seo/JsonLd";
 import { routing, type Locale } from "@/i18n/routing";
 import type { Item } from "@/lib/types";
 import { localizedName } from "@/lib/i18n/localized-name";
+import { buildItemDetailJsonLd } from "@/lib/seo/item-detail";
 import { languageAlternates, localizedUrl } from "@/lib/site";
 
 // Raw Riot API category identifier → translation key in items namespace.
@@ -288,29 +290,44 @@ export default async function ItemDetailPage({
 
   // Wiki URL: spaces → underscores, apostrophes encoded
   const wikiUrl = `https://wiki.leagueoflegends.com/en-us/${encodeURIComponent(item.name.replace(/ /g, "_"))}`;
+  const route = `/items/${identifier}`;
+  const itemJsonLd = buildItemDetailJsonLd(item, locale, {
+    url: localizedUrl(route, locale as Locale),
+    homeUrl: localizedUrl("/", locale as Locale),
+    itemsUrl: localizedUrl("/items", locale as Locale),
+    itemsLabel: t("title"),
+    name: itemName,
+    description: t("metaDetailDescription", { name: itemName }),
+    identifier,
+    tierLabel: item.tier ? TIER_DISPLAY[item.tier] : undefined,
+    tagLabel: effectiveTag ? mayhemTagLabel[effectiveTag] : undefined,
+    categoryLabels,
+  });
 
   return (
-    <div className="py-8 max-w-3xl">
-      {/* Back link + wiki link */}
-      <div className="flex items-center justify-between mb-6">
-        <Link
-          href="/items"
-          className="inline-flex items-center gap-1.5 text-sm text-[var(--color-text-muted)] hover:text-[var(--color-text-primary)] transition-colors"
-        >
-          {t("backToItems")}
-        </Link>
-        <a
-          href={wikiUrl}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="inline-flex items-center gap-1.5 text-xs text-[var(--color-text-muted)] hover:text-[var(--color-text-primary)] transition-colors"
-        >
-          <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-            <path strokeLinecap="round" strokeLinejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
-          </svg>
-          LoL Wiki
-        </a>
-      </div>
+    <>
+      <JsonLd data={itemJsonLd} />
+      <div className="py-8 max-w-3xl">
+        {/* Back link + wiki link */}
+        <div className="flex items-center justify-between mb-6">
+          <Link
+            href="/items"
+            className="inline-flex items-center gap-1.5 text-sm text-[var(--color-text-muted)] hover:text-[var(--color-text-primary)] transition-colors"
+          >
+            {t("backToItems")}
+          </Link>
+          <a
+            href={wikiUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-1.5 text-xs text-[var(--color-text-muted)] hover:text-[var(--color-text-primary)] transition-colors"
+          >
+            <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+            </svg>
+            LoL Wiki
+          </a>
+        </div>
 
       {/* ─── Header ─── */}
       <div className="flex items-start gap-6 mb-8">
@@ -492,7 +509,8 @@ export default async function ItemDetailPage({
           </p>
         </section>
       )}
-    </div>
+      </div>
+    </>
   );
 }
 
