@@ -898,5 +898,11 @@
     "s7Body": "Decline personalized ads in the consent banner, or contact us to access or delete your data.",
     "s8Title": "Contact",
     "s8Body": "Privacy questions? Reach us at {email}."
+  },
+  "auth": {
+    "errors": {
+      "google_identity_required": "Sign-in has moved. Use the Google button on this page to continue.",
+      "auth_callback": "Sign-in could not be completed. Please try again."
+    }
   }
 }

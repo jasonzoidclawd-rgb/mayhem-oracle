@@ -898,5 +898,11 @@
     "levelAbbr": "Lv",
     "allClasses": "전체",
     "statsFooter": "{count} / {total}명의 챔피언 · 데이터 출처: wiki.leagueoflegends.com · 레벨 성장은 공식 공식을 사용"
+  },
+  "auth": {
+    "errors": {
+      "google_identity_required": "로그인 방식이 변경되었습니다. 이 페이지의 Google 버튼을 이용해 주세요.",
+      "auth_callback": "로그인을 완료하지 못했습니다. 다시 시도해 주세요."
+    }
   }
 }

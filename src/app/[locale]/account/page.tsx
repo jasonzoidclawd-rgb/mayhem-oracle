@@ -1,4 +1,5 @@
 import { RedeemForm } from "@/components/membership/AccountClient";
+import { AuthErrorBanner } from "@/components/auth/AuthErrorBanner";
 import { GoogleSignInButton } from "@/components/auth/GoogleSignInButton";
 import { Link } from "@/i18n/navigation";
 import { pickActiveEntitlement, type EntitlementRow } from "@/lib/entitlements/core";
@@ -16,10 +17,13 @@ interface SessionRow {
 
 export default async function AccountPage({
   params,
+  searchParams,
 }: {
   params: Promise<{ locale: string }>;
+  searchParams: Promise<{ error?: string | string[] }>;
 }) {
   const { locale } = await params;
+  const { error } = await searchParams;
   setRequestLocale(locale);
   const t = await getTranslations("membership");
 
@@ -32,6 +36,9 @@ export default async function AccountPage({
     return (
       <main className="mx-auto max-w-2xl px-4 py-10">
         <h1 className="text-2xl font-bold">{t("title")}</h1>
+        <div className="mt-4">
+          <AuthErrorBanner error={error} />
+        </div>
         <p className="mt-4 text-white/70">{t("signInPrompt")}</p>
         <div className="mt-6 flex flex-wrap gap-3">
           <GoogleSignInButton next="/account" label={t("signInCta")} />
@@ -77,6 +84,8 @@ export default async function AccountPage({
         <h1 className="text-2xl font-bold">{t("title")}</h1>
         <p className="mt-1 text-sm text-white/60">{t("subtitle")}</p>
       </header>
+
+      <AuthErrorBanner error={error} />
 
       <section className="rounded-2xl border border-white/10 bg-white/[0.03] p-5">
         <h2 className="text-sm uppercase tracking-widest text-white/50">{t("statusTitle")}</h2>

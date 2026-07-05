@@ -898,5 +898,11 @@
     "levelAbbr": "Lv",
     "allClasses": "すべて",
     "statsFooter": "{count} / {total} 体の英雄 · データ元：wiki.leagueoflegends.com · レベル成長は公式の計算式を使用"
+  },
+  "auth": {
+    "errors": {
+      "google_identity_required": "サインイン方法が変わりました。このページの Google ボタンからお進みください。",
+      "auth_callback": "サインインを完了できませんでした。もう一度お試しください。"
+    }
   }
 }

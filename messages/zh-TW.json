@@ -898,5 +898,11 @@
     "levelAbbr": "等級",
     "allClasses": "全部",
     "statsFooter": "{count} / {total} 位英雄 · 數據來自 wiki.leagueoflegends.com · 等級成長採用官方公式"
+  },
+  "auth": {
+    "errors": {
+      "google_identity_required": "登入方式已更新，請使用本頁的 Google 按鈕繼續。",
+      "auth_callback": "登入未能完成，請再試一次。"
+    }
   }
 }
