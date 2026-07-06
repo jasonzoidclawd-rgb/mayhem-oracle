@@ -69,13 +69,37 @@ describe("auth routes", () => {
   test("rejects auth, API, and framework next destinations", async () => {
     const { safeNextPath } = await import("@/lib/auth/redirects");
 
-    expect(safeNextPath("/auth/callback")).toBe("/");
-    expect(safeNextPath("/api/admin/entitlements")).toBe("/");
-    expect(safeNextPath("/_next/static/chunk.js")).toBe("/");
-    expect(safeNextPath("/_vercel/insights/view")).toBe("/");
-    expect(safeNextPath("/API/admin/entitlements")).toBe("/");
-    expect(safeNextPath("/Auth/callback")).toBe("/");
+    const blockedPaths = [
+      "/auth/callback",
+      "/api/admin/entitlements",
+      "/_next/static/chunk.js",
+      "/_vercel/insights/view",
+      "/API/admin/entitlements",
+      "/Auth/callback",
+      "/%61pi/admin/entitlements",
+      "/%2561pi/admin/entitlements",
+      "/%61uth/callback",
+      "/zh-TW/auth/callback",
+      "/en/api/x",
+      "/zh-TW/%61pi/x",
+      "/%7A%68-TW/%61uth/callback",
+      "/%2fapi/x",
+      "/%5capi/x",
+      "/%2e%2e/api/x",
+      "/zh-TW/account/../auth/callback",
+      "/%c0%afapi",
+      "/%252525252525252525252561pi/x",
+    ];
+
+    for (const blockedPath of blockedPaths) {
+      expect(safeNextPath(blockedPath), blockedPath).toBe("/");
+    }
+
     expect(safeNextPath("/zh-TW/account")).toBe("/zh-TW/account");
+    expect(safeNextPath("/environment/account")).toBe("/environment/account");
+    expect(safeNextPath("/authors")).toBe("/authors");
+    expect(safeNextPath("/apiary")).toBe("/apiary");
+    expect(safeNextPath("/account?tab=billing#top")).toBe("/account?tab=billing#top");
     expect(safeNextPath("/account")).toBe("/account");
   });
 
