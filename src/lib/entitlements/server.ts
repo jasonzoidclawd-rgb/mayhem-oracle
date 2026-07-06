@@ -1,7 +1,7 @@
 import { createClient as createSupabaseJsClient } from "@supabase/supabase-js";
 import { createClient } from "../supabase/server";
 import {
-  pickActiveEntitlement,
+  pickActiveMemberEntitlement,
   type EntitlementKind,
   type EntitlementRow,
 } from "./core";
@@ -49,7 +49,7 @@ export async function requireActiveEntitlement(deps?: {
     .eq("user_id", user.id);
   if (error) return { ok: false, status: 403, reason: "lookup-failed" };
 
-  const verdict = pickActiveEntitlement(data ?? [], new Date());
+  const verdict = pickActiveMemberEntitlement(data ?? [], new Date());
   if (!verdict.active) return { ok: false, status: 403, reason: verdict.reason };
 
   return {

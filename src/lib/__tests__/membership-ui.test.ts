@@ -9,6 +9,7 @@ import {
   GRADE_TOKENS,
   gradeToken,
 } from "../membership/grade-tokens";
+import { redeemFailureMessage } from "@/components/membership/AccountClient";
 
 const CONTEXT: DecisionContext = {
   championSlug: "brand",
@@ -53,6 +54,34 @@ describe("grade tokens", () => {
       expect(token.className.length).toBeGreaterThan(0);
       expect(token.accent).toMatch(/^#[0-9a-f]{6}$/);
     }
+  });
+});
+
+describe("redeemFailureMessage", () => {
+  const copy = {
+    redeemTitle: "Redeem",
+    redeemPlaceholder: "MAYHEM-XXXX-XXXX",
+    redeemButton: "Redeem",
+    redeemSuccess: "Code redeemed.",
+    redeemError: "Could not redeem that code.",
+    redeemInvalidExpired: "Invalid or expired code.",
+  };
+
+  test("maps invalid expired exhausted and duplicate codes to localized copy", () => {
+    for (const error of [
+      "invalid invite code",
+      "invite code expired",
+      "invite code exhausted",
+      "invite code revoked",
+      "invite already redeemed",
+    ]) {
+      expect(redeemFailureMessage(error, copy), error).toBe(copy.redeemInvalidExpired);
+    }
+  });
+
+  test("falls back to generic localized copy for unknown failures", () => {
+    expect(redeemFailureMessage("redemption failed", copy)).toBe(copy.redeemError);
+    expect(redeemFailureMessage(undefined, copy)).toBe(copy.redeemError);
   });
 });
 

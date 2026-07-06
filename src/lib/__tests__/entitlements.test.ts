@@ -5,6 +5,7 @@ import {
   evaluateEntitlement,
   hashInviteCode,
   pickActiveEntitlement,
+  pickActiveOverlayDownloadEntitlement,
   type EntitlementRow,
 } from "../entitlements/core";
 import { requireActiveEntitlement, type EntitlementClient } from "../entitlements/server";
@@ -21,6 +22,10 @@ const MODEL_RELEASE_RLS_MIGRATION_PATH = join(
   process.cwd(),
   "supabase/migrations/20260702_model_release_rls.sql",
 );
+const OVERLAY_TESTER_MIGRATION_PATH = join(
+  process.cwd(),
+  "supabase/migrations/20260706_overlay_tester_download_access.sql",
+);
 
 function migrationSql(): string {
   return readFileSync(MIGRATION_PATH, "utf8").toLowerCase();
@@ -32,6 +37,10 @@ function trialReserveMigrationSql(): string {
 
 function modelReleaseRlsMigrationSql(): string {
   return readFileSync(MODEL_RELEASE_RLS_MIGRATION_PATH, "utf8").toLowerCase();
+}
+
+function overlayTesterMigrationSql(): string {
+  return readFileSync(OVERLAY_TESTER_MIGRATION_PATH, "utf8").toLowerCase();
 }
 
 /** Policy statements for one table, so we can assert what each table allows. */
@@ -84,6 +93,28 @@ describe("membership migration structure", () => {
 
   test("invite codes have a fixed kind: member or trial", () => {
     expect(migrationSql()).toMatch(/kind in \('member',\s*'trial'\)/);
+  });
+
+  test("overlay tester migration extends invite and entitlement kinds narrowly", () => {
+    const sql = overlayTesterMigrationSql();
+
+    expect(sql).toContain("overlay_tester");
+    expect(sql).toContain("alter table public.entitlements");
+    expect(sql).toContain("alter table public.invite_codes");
+    expect(sql).toContain("kind in ('member', 'trial', 'overlay_tester')");
+  });
+
+  test("MAYHEM-TEST-69420 invite is seeded as a single-use three-day overlay tester code", () => {
+    const sql = overlayTesterMigrationSql();
+
+    expect(sql).toContain(hashInviteCode("MAYHEM-TEST-69420"));
+    expect(sql).toContain("'overlay_tester'");
+    expect(sql).toContain("member_duration_days");
+    expect(sql).toContain("3");
+    expect(sql).toContain("max_redemptions");
+    expect(sql).toContain("1");
+    expect(sql).toContain("now() + interval '3 days'");
+    expect(sql).toContain("on conflict (code_hash) do update");
   });
 
   test("users cannot write entitlements: only select policies exist", () => {
@@ -231,6 +262,15 @@ describe("evaluateEntitlement", () => {
     ).toEqual({ active: true, kind: "trial" });
   });
 
+  test("an unexpired overlay tester entitlement is active with its kind", () => {
+    expect(
+      evaluateEntitlement(
+        { ...base, kind: "overlay_tester", expires_at: "2026-06-20T00:00:00Z" },
+        now,
+      ),
+    ).toEqual({ active: true, kind: "overlay_tester" });
+  });
+
   test("pickActiveEntitlement prefers member over trial", () => {
     const rows: EntitlementRow[] = [
       { ...base, kind: "trial", expires_at: "2026-06-20T00:00:00Z" },
@@ -239,6 +279,25 @@ describe("evaluateEntitlement", () => {
     const verdict = pickActiveEntitlement(rows, now);
     expect(verdict.active).toBe(true);
     expect(verdict.active && verdict.entitlement.kind).toBe("member");
+  });
+
+  test("pickActiveOverlayDownloadEntitlement accepts overlay tester access", () => {
+    const verdict = pickActiveOverlayDownloadEntitlement(
+      [{ ...base, kind: "overlay_tester", expires_at: "2026-06-20T00:00:00Z" }],
+      now,
+    );
+
+    expect(verdict.active).toBe(true);
+    expect(verdict.active && verdict.entitlement.kind).toBe("overlay_tester");
+  });
+
+  test("pickActiveOverlayDownloadEntitlement rejects expired tester access", () => {
+    const verdict = pickActiveOverlayDownloadEntitlement(
+      [{ ...base, kind: "overlay_tester", expires_at: "2026-06-12T00:00:00Z" }],
+      now,
+    );
+
+    expect(verdict).toEqual({ active: false, reason: "expired" });
   });
 
   test("pickActiveEntitlement reports the most useful inactive reason", () => {
@@ -326,6 +385,24 @@ describe("requireActiveEntitlement", () => {
       expect(result.user.id).toBe("u1");
       expect(result.entitlement.kind).toBe("member");
     }
+  });
+
+  test("overlay tester access does not unlock member decision APIs", async () => {
+    const result = await requireActiveEntitlement({
+      client: fakeClient({
+        user: { id: "u1" },
+        rows: [
+          {
+            kind: "overlay_tester",
+            status: "active",
+            starts_at: "2026-01-01T00:00:00Z",
+            expires_at: "2099-01-01T00:00:00Z",
+          },
+        ],
+      }),
+    });
+
+    expect(result).toMatchObject({ ok: false, status: 403, reason: "none" });
   });
 
   test("lookup failures fail closed with 403", async () => {

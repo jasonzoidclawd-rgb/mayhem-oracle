@@ -1,4 +1,4 @@
-import { pickActiveEntitlement, type EntitlementRow } from "@/lib/entitlements/core";
+import { pickActiveMemberEntitlement, type EntitlementRow } from "@/lib/entitlements/core";
 import { createClient } from "@/lib/supabase/server";
 
 export interface MemberAccess {
@@ -20,7 +20,7 @@ export async function readMemberAccess(): Promise<MemberAccess> {
       .from("entitlements")
       .select("kind,status,starts_at,expires_at")
       .eq("user_id", user.id);
-    const verdict = pickActiveEntitlement((data as EntitlementRow[]) ?? [], new Date());
+    const verdict = pickActiveMemberEntitlement((data as EntitlementRow[]) ?? [], new Date());
     return { active: verdict.active, signedIn: true };
   } catch {
     return { active: false, signedIn: false };

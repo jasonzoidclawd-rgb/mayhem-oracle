@@ -3,7 +3,7 @@ import { getTranslations, setRequestLocale } from "next-intl/server";
 import { GoogleSignInButton } from "@/components/auth/GoogleSignInButton";
 import { Link } from "@/i18n/navigation";
 import { RedeemForm } from "@/components/membership/AccountClient";
-import { pickActiveEntitlement, type EntitlementRow } from "@/lib/entitlements/core";
+import { pickActiveMemberEntitlement, type EntitlementRow } from "@/lib/entitlements/core";
 import { createClient } from "@/lib/supabase/server";
 import { CONTACT_EMAIL, languageAlternates, localizedUrl } from "@/lib/site";
 import type { Locale } from "@/i18n/routing";
@@ -36,7 +36,7 @@ async function readEntitlement() {
       .from("entitlements")
       .select("kind,status,starts_at,expires_at")
       .eq("user_id", user.id);
-    const verdict = pickActiveEntitlement((data as EntitlementRow[]) ?? [], new Date());
+    const verdict = pickActiveMemberEntitlement((data as EntitlementRow[]) ?? [], new Date());
     return { signedIn: true, active: verdict.active };
   } catch {
     return { signedIn: false, active: false };
@@ -176,6 +176,7 @@ export default async function MembershipPage({
                   redeemButton: tm("redeemButton"),
                   redeemSuccess: tm("redeemSuccess"),
                   redeemError: tm("redeemError"),
+                  redeemInvalidExpired: tm("redeemInvalidExpired"),
                 }}
               />
             </>

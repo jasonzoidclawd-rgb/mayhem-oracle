@@ -8,6 +8,22 @@ interface RedeemCopy {
   redeemButton: string;
   redeemSuccess: string;
   redeemError: string;
+  redeemInvalidExpired: string;
+}
+
+const LOCALIZED_REDEEM_ERRORS = [
+  "invalid invite code",
+  "invite code expired",
+  "invite code exhausted",
+  "invite code revoked",
+  "invite already redeemed",
+];
+
+export function redeemFailureMessage(error: string | undefined, copy: RedeemCopy): string {
+  if (error && LOCALIZED_REDEEM_ERRORS.some((known) => error.includes(known))) {
+    return copy.redeemInvalidExpired;
+  }
+  return copy.redeemError;
 }
 
 export function RedeemForm({ copy }: { copy: RedeemCopy }) {
@@ -35,7 +51,7 @@ export function RedeemForm({ copy }: { copy: RedeemCopy }) {
       } else {
         const body = (await response.json().catch(() => ({}))) as { error?: string };
         setState("error");
-        setMessage(body.error ?? copy.redeemError);
+        setMessage(redeemFailureMessage(body.error, copy));
       }
     } catch {
       setState("error");

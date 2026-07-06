@@ -227,6 +227,18 @@ describe("handleRedeemInvite", () => {
     expect(await response.json()).toEqual({ error: "invite code exhausted" });
   });
 
+  test("expired invite codes are rejected with a localized-safe reason", async () => {
+    const response = await handleRedeemInvite(
+      post({ code: "MAYHEM-TEST-69420" }),
+      inviteDeps({
+        redeem: async () => ({ data: null, error: { message: "P0001: invite code expired" } }),
+      }),
+    );
+
+    expect(response.status).toBe(400);
+    expect(await response.json()).toEqual({ error: "invite code expired" });
+  });
+
   test("double redemption is a 409", async () => {
     const response = await handleRedeemInvite(
       post({ code: "MAYHEM-AAAA-BBBB" }),
@@ -249,6 +261,24 @@ describe("handleRedeemInvite", () => {
     );
     expect(response.status).toBe(200);
     expect(await response.json()).toEqual({ kind: "member", expiresAt: "2026-07-13T00:00:00Z" });
+  });
+
+  test("successful overlay tester redemption returns kind and three-day expiry", async () => {
+    const response = await handleRedeemInvite(
+      post({ code: "MAYHEM-TEST-69420" }),
+      inviteDeps({
+        redeem: async () => ({
+          data: { kind: "overlay_tester", expires_at: "2026-07-09T12:00:00Z" },
+          error: null,
+        }),
+      }),
+    );
+
+    expect(response.status).toBe(200);
+    expect(await response.json()).toEqual({
+      kind: "overlay_tester",
+      expiresAt: "2026-07-09T12:00:00Z",
+    });
   });
 });
 

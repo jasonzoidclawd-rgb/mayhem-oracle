@@ -2,6 +2,7 @@ import { loadInternalDecisionData } from "../data/internal-loader";
 import { createServiceClient, requireActiveEntitlement } from "../entitlements/server";
 import { createClient } from "../supabase/server";
 import type { DecisionApiDeps } from "./decision";
+import type { OverlayDownloadApiDeps, OverlayPlatform } from "./downloads";
 import type { InviteApiDeps } from "./invites";
 import { leaseExpiry, type OverlayApiDeps } from "./overlay";
 
@@ -46,7 +47,35 @@ export function createInviteDeps(): InviteApiDeps {
         p_device_id: deviceId,
       });
       if (error) return { data: null, error: { message: error.message } };
-      return { data: data as { kind: "member" | "trial"; expires_at?: string | null }, error: null };
+      return {
+        data: data as { kind: "member" | "trial" | "overlay_tester"; expires_at?: string | null },
+        error: null,
+      };
+    },
+  };
+}
+
+export function createOverlayDownloadDeps(): OverlayDownloadApiDeps {
+  return {
+    getUser: async () => {
+      const client = await createClient();
+      const {
+        data: { user },
+      } = await client.auth.getUser();
+      return user ? { id: user.id } : null;
+    },
+    listEntitlements: async (userId) => {
+      const client = await createClient();
+      const { data, error } = await client
+        .from("entitlements")
+        .select("kind,status,starts_at,expires_at")
+        .eq("user_id", userId);
+      if (error) throw new Error(error.message);
+      return data ?? [];
+    },
+    artifactUrl: (platform: OverlayPlatform) => {
+      if (platform === "windows") return process.env.MAYHEM_OVERLAY_WINDOWS_URL || null;
+      return process.env.MAYHEM_OVERLAY_MAC_URL || null;
     },
   };
 }

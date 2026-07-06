@@ -33,6 +33,19 @@ const requiredKeys = [
   "damageSim.abilities",
   "damageSim.itemBuild",
   "damageSim.noSustainStats",
+  "membership.statusActiveOverlayTester",
+  "membership.downloadsTitle",
+  "membership.downloadWindows",
+  "membership.downloadMac",
+  "membership.downloadUnavailable",
+  "membership.downloadExpires",
+  "membership.redeemTestCode",
+  "membership.redeemInvalidExpired",
+  "membership.alphaWarningTitle",
+  "membership.alphaWarningUnsigned",
+  "membership.alphaWarningSmartScreen",
+  "membership.alphaWarningTesterOnly",
+  "membership.alphaWarningSensitiveLogs",
 ] as const;
 
 function readMessages(locale: string): Record<string, unknown> {

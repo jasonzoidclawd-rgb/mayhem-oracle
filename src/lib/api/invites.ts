@@ -1,7 +1,7 @@
-import { hashInviteCode } from "../entitlements/core";
+import { hashInviteCode, type EntitlementKind } from "../entitlements/core";
 
 export interface RedeemOutcome {
-  kind: "member" | "trial";
+  kind: EntitlementKind;
   expires_at?: string | null;
 }
 
