@@ -1,6 +1,6 @@
 use mayhem_oracle_lib::member::{
-    hash_game_id, parse_bootstrap_response, parse_game_session_response, verify_manifest,
-    verify_model_package, BootstrapManifest,
+    hash_game_id, parse_bootstrap_response, parse_game_session_response, resolve_api_base,
+    verify_manifest, verify_model_package, BootstrapManifest, DEFAULT_API_BASE,
 };
 use flate2::{write::GzEncoder, Compression};
 use serde_json::{json, Value};
@@ -66,6 +66,28 @@ fn hashes_game_ids_before_they_leave_the_device() {
         "e16198ede65335bfda99ff2c117383c75e0d7a83d87abba3b4bd0b7e836fe674"
     );
     assert_ne!(hash_game_id("991240001"), hash_game_id("991240002"));
+}
+
+#[test]
+fn defaults_member_api_base_to_production_origin() {
+    let api_base = resolve_api_base(None).unwrap();
+
+    assert_eq!(DEFAULT_API_BASE, "https://wasfun.lol");
+    assert_eq!(api_base.as_str(), "https://wasfun.lol/");
+}
+
+#[test]
+fn explicit_member_api_base_override_wins() {
+    let api_base = resolve_api_base(Some("http://localhost:3000")).unwrap();
+
+    assert_eq!(api_base.as_str(), "http://localhost:3000/");
+}
+
+#[test]
+fn blank_member_api_base_uses_production_default() {
+    let api_base = resolve_api_base(Some("   ")).unwrap();
+
+    assert_eq!(api_base.as_str(), "https://wasfun.lol/");
 }
 
 #[test]

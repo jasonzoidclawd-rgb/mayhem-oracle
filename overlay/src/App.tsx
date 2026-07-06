@@ -43,6 +43,13 @@ import {
 import { CoachPanel } from "./components/CoachPanel";
 import { GRADE_TOKENS, runLocalInference } from "./model/inference";
 import { confirmPickedAugment, localizedGrade } from "./model/presentation";
+import {
+  canRunOcr,
+  createOcrAvailability,
+  ocrAvailabilityFromError,
+  userFacingOcrStatus,
+  type OcrAvailability,
+} from "./ocrAvailability";
 import "./App.css";
 
 // ─── Types ───
@@ -164,6 +171,9 @@ function App() {
   const [overlayData, setOverlayData] = useState<OverlayData | null>(null);
   const [abilityProfiles, setAbilityProfiles] = useState<Record<string, AbilityProfile | null>>({});
   const [dataError, setDataError] = useState<string | null>(null);
+  const [ocrAvailability, setOcrAvailability] = useState<OcrAvailability>(
+    createOcrAvailability(true),
+  );
   const runOcrRef = useRef<(runId: number) => Promise<void>>(async () => {});
   const lastGameTimeRef = useRef<number | null>(null);
   const lastRecordedRoundRef = useRef("");
@@ -263,14 +273,20 @@ function App() {
 
   // On mount: check local OCR and capture prerequisites.
   useEffect(() => {
+    let cancelled = false;
     invoke<boolean>("check_tesseract").then((ok) => {
-      if (!ok) setDataError("Tesseract OCR is not installed or not available on PATH.");
+      if (!cancelled) setOcrAvailability(createOcrAvailability(ok));
+    }).catch(() => {
+      if (!cancelled) setOcrAvailability(createOcrAvailability(false));
     });
     invoke<boolean>("check_screen_capture_available").then((ok) => {
       if (!ok) invoke("open_screen_recording_settings");
     });
     const tipTimer = setTimeout(() => setShowStartupTip(false), 6000);
-    return () => clearTimeout(tipTimer);
+    return () => {
+      cancelled = true;
+      clearTimeout(tipTimer);
+    };
   }, []);
 
   useEffect(() => {
@@ -542,8 +558,10 @@ function App() {
         updatePhase("in_game");
         stopOcr();
       }
-    } catch {
+    } catch (error) {
       if (ocrActiveRef.current && ocrRunIdRef.current === runId) {
+        const unavailable = ocrAvailabilityFromError(error);
+        if (unavailable) setOcrAvailability(unavailable);
         setMatchedCards([]);
       }
     }
@@ -565,13 +583,14 @@ function App() {
   // Start/stop OCR polling
   const startOcr = useCallback(() => {
     if (!gameflowCaptureAllowedRef.current) return;
+    if (!canRunOcr(ocrAvailability)) return;
     if (ocrActiveRef.current) return;
     ocrActiveRef.current = true;
     ocrHasSeenCardsRef.current = false;
     ocrEmptyPassesRef.current = 0;
     setOcrActive(true);
     scheduleNextOcr(++ocrRunIdRef.current);
-  }, [scheduleNextOcr]);
+  }, [ocrAvailability, scheduleNextOcr]);
 
   // Main polling loop
   const poll = useCallback(async () => {
@@ -765,6 +784,7 @@ function App() {
   }, []);
 
   // ─── Render ───
+  const ocrStatusMessage = userFacingOcrStatus(ocrAvailability);
 
   return (
     <div className="overlay-root">
@@ -843,6 +863,9 @@ function App() {
       )}
       {collectorEnabled && dataError && (
         <div className="idle-panel">Overlay data failed to load: {dataError}</div>
+      )}
+      {collectorEnabled && ocrStatusMessage && (
+        <div className="idle-panel">{ocrStatusMessage}</div>
       )}
       {collectorEnabled && memberSnapshot?.error && (
         <div className="member-error">Member coach unavailable: {memberSnapshot.error}</div>

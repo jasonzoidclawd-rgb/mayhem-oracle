@@ -9,7 +9,7 @@ the **Rust** process at launch (`src-tauri/src/member.rs`), so it must be a
 real environment variable in the shell that starts Tauri — it is *not* a
 `VITE_*` variable and is *not* loaded from any `.env` file.
 
-- Unset → the member coach banner shows `api-base-not-configured`.
+- Unset → defaults to `https://wasfun.lol`.
 - Set, signed out → the banner shows `unauthenticated` (expected until
   overlay device-linking ships).
 

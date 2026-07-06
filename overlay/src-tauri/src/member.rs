@@ -13,6 +13,7 @@ use sha2::{Digest, Sha256};
 use tauri::State;
 
 const PUBLIC_KEY: &str = include_str!("../../../docs/handoffs/fixtures/m4/public-key.txt");
+pub const DEFAULT_API_BASE: &str = "https://wasfun.lol";
 
 pub fn hash_game_id(game_id: &str) -> String {
     hex::encode(Sha256::digest(game_id.as_bytes()))
@@ -86,20 +87,25 @@ pub struct MemberSnapshot {
 }
 
 pub struct MemberState {
-    api_base: Option<Url>,
+    api_base: Url,
     client: Client,
     cache_directory: PathBuf,
     snapshot: Mutex<MemberSnapshot>,
 }
 
+pub fn resolve_api_base(value: Option<&str>) -> Result<Url, String> {
+    let raw = value
+        .map(str::trim)
+        .filter(|value| !value.is_empty())
+        .unwrap_or(DEFAULT_API_BASE);
+    Url::parse(raw).map_err(|error| error.to_string())
+}
+
 impl MemberState {
     pub fn new(cache_directory: PathBuf) -> Result<Self, String> {
         std::fs::create_dir_all(&cache_directory).map_err(|error| error.to_string())?;
-        let api_base = std::env::var("MAYHEM_API_BASE")
-            .ok()
-            .filter(|value| !value.trim().is_empty())
-            .map(|value| Url::parse(value.trim()).map_err(|error| error.to_string()))
-            .transpose()?;
+        let api_base_env = std::env::var("MAYHEM_API_BASE").ok();
+        let api_base = resolve_api_base(api_base_env.as_deref())?;
         let client = Client::builder()
             .timeout(std::time::Duration::from_secs(20))
             .build()
@@ -124,11 +130,7 @@ impl MemberState {
     }
 
     fn endpoint(&self, path: &str) -> Result<Url, String> {
-        self.api_base
-            .as_ref()
-            .ok_or("api-base-not-configured".to_string())?
-            .join(path)
-            .map_err(|error| error.to_string())
+        self.api_base.join(path).map_err(|error| error.to_string())
     }
 
     async fn bootstrap(&self) -> Result<MemberSnapshot, String> {
@@ -196,8 +198,6 @@ impl MemberState {
             return Ok(url);
         }
         self.api_base
-            .as_ref()
-            .ok_or("api-base-not-configured".to_string())?
             .join(package_url)
             .map_err(|error| error.to_string())
     }
