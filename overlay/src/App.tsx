@@ -50,6 +50,11 @@ import {
   userFacingOcrStatus,
   type OcrAvailability,
 } from "./ocrAvailability";
+import {
+  BADGE_ANCHORS,
+  cssPointFromNormalizedAnchor,
+  type OverlayCalibration,
+} from "./calibration";
 import "./App.css";
 
 // ─── Types ───
@@ -133,13 +138,6 @@ type Phase = "idle" | "client_found" | "in_game" | "augment_selection";
 
 const AUGMENT_LEVELS = [3, 7, 11, 15];
 
-// Badge positions — centered below each card
-const BADGE_POSITIONS = [
-  { left: "30.5%", top: "62%" },
-  { left: "50%", top: "62%" },
-  { left: "69.5%", top: "62%" },
-];
-
 async function loadJson<T>(path: string): Promise<T> {
   const response = await fetch(new URL(path, window.location.origin));
   if (!response.ok) {
@@ -174,6 +172,8 @@ function App() {
   const [ocrAvailability, setOcrAvailability] = useState<OcrAvailability>(
     createOcrAvailability(true),
   );
+  const [calibration, setCalibration] = useState<OverlayCalibration | null>(null);
+  const [calibrationError, setCalibrationError] = useState<string | null>(null);
   const runOcrRef = useRef<(runId: number) => Promise<void>>(async () => {});
   const lastGameTimeRef = useRef<number | null>(null);
   const lastRecordedRoundRef = useRef("");
@@ -286,6 +286,35 @@ function App() {
     return () => {
       cancelled = true;
       clearTimeout(tipTimer);
+    };
+  }, []);
+
+  useEffect(() => {
+    let cancelled = false;
+    const refreshCalibration = async () => {
+      try {
+        const nextCalibration = await invoke<OverlayCalibration>("get_overlay_calibration");
+        if (!cancelled) {
+          setCalibration(nextCalibration);
+          setCalibrationError(null);
+        }
+      } catch (error) {
+        if (!cancelled) {
+          setCalibrationError(
+            error instanceof Error ? error.message : "overlay-calibration-unavailable",
+          );
+        }
+      }
+    };
+
+    void refreshCalibration();
+    const intervalId = setInterval(() => {
+      void refreshCalibration();
+    }, 5000);
+
+    return () => {
+      cancelled = true;
+      clearInterval(intervalId);
     };
   }, []);
 
@@ -785,9 +814,55 @@ function App() {
 
   // ─── Render ───
   const ocrStatusMessage = userFacingOcrStatus(ocrAvailability);
+  const badgePositions = useMemo(() => {
+    if (!calibration) {
+      return BADGE_ANCHORS.map((anchor) => ({
+        left: `${anchor.x * 100}%`,
+        top: `${anchor.y * 100}%`,
+      }));
+    }
+
+    return BADGE_ANCHORS.map((anchor) =>
+      cssPointFromNormalizedAnchor(
+        anchor,
+        calibration.viewport,
+        calibration.monitor.scaleFactor,
+      ),
+    );
+  }, [calibration]);
 
   return (
     <div className="overlay-root">
+      {(calibration || calibrationError) && (
+        <div className="calibration-panel">
+          <div className="calibration-title">Calibration</div>
+          {calibration ? (
+            <>
+              <div>Mode: {calibration.mode}</div>
+              <div>
+                Monitor: {calibration.monitor.x},{calibration.monitor.y}{" "}
+                {calibration.monitor.width}x{calibration.monitor.height}
+              </div>
+              <div>
+                League: {calibration.gameWindow
+                  ? `${calibration.gameWindow.x},${calibration.gameWindow.y} ${calibration.gameWindow.width}x${calibration.gameWindow.height}`
+                  : "not detected"}
+              </div>
+              <div>Scale: {calibration.monitor.scaleFactor.toFixed(2)}</div>
+              <div>
+                Viewport: {calibration.viewport.x},{calibration.viewport.y}{" "}
+                {calibration.viewport.width}x{calibration.viewport.height}
+              </div>
+              {calibration.warnings.map((warning) => (
+                <div className="calibration-warning" key={warning}>{warning}</div>
+              ))}
+            </>
+          ) : (
+            <div className="calibration-warning">{calibrationError}</div>
+          )}
+        </div>
+      )}
+
       {/* Status dot */}
       {collectorEnabled && <div
         className={`status-dot ${
@@ -809,7 +884,7 @@ function App() {
         decisionResult && (
         <>
           {matchedCards.map((card) => {
-            const pos = BADGE_POSITIONS[card.regionIndex];
+            const pos = badgePositions[card.regionIndex];
             if (!pos) return null;
             const candidate = decisionResult.candidates.find(
               (entry) => entry.augmentSlug === card.augment.slug,

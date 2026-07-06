@@ -4,6 +4,7 @@ use std::io::Write;
 use std::sync::Arc;
 use sysinfo::System;
 
+pub mod calibration;
 mod collector;
 mod lcu;
 pub mod member;
@@ -168,35 +169,6 @@ async fn get_live_player_data() -> Option<LivePlayerData> {
 // ─── OCR Types ──────────────────────────────────────────────────────────────
 
 #[derive(Serialize, Deserialize, Clone, Debug)]
-pub struct CardRegion {
-    pub x: f64,
-    pub y: f64,
-    pub w: f64,
-    pub h: f64,
-}
-
-const CARD_NAME_REGIONS: [CardRegion; 3] = [
-    CardRegion {
-        x: 0.219,
-        y: 0.347,
-        w: 0.172,
-        h: 0.083,
-    },
-    CardRegion {
-        x: 0.414,
-        y: 0.347,
-        w: 0.172,
-        h: 0.083,
-    },
-    CardRegion {
-        x: 0.609,
-        y: 0.347,
-        w: 0.172,
-        h: 0.083,
-    },
-];
-
-#[derive(Serialize, Deserialize, Clone, Debug)]
 pub struct DetectedAugment {
     pub text: String,
     pub region_index: usize,
@@ -279,6 +251,172 @@ fn check_screen_capture_available() -> bool {
     monitor.capture_image().is_ok()
 }
 
+struct MonitorSnapshot {
+    monitor: xcap::Monitor,
+    info: calibration::MonitorInfo,
+}
+
+fn monitor_info_from_xcap(monitor: &xcap::Monitor) -> Result<calibration::MonitorInfo, String> {
+    Ok(calibration::MonitorInfo {
+        x: monitor.x().map_err(|e| format!("Monitor x failed: {}", e))?,
+        y: monitor.y().map_err(|e| format!("Monitor y failed: {}", e))?,
+        width: monitor
+            .width()
+            .map_err(|e| format!("Monitor width failed: {}", e))?,
+        height: monitor
+            .height()
+            .map_err(|e| format!("Monitor height failed: {}", e))?,
+        scale_factor: monitor.scale_factor().unwrap_or(1.0) as f64,
+    })
+}
+
+fn monitor_snapshots() -> Result<Vec<MonitorSnapshot>, String> {
+    let monitors = xcap::Monitor::all().map_err(|e| format!("Failed to list monitors: {}", e))?;
+    let mut snapshots = Vec::with_capacity(monitors.len());
+
+    for monitor in monitors {
+        let info = monitor_info_from_xcap(&monitor)?;
+        snapshots.push(MonitorSnapshot { monitor, info });
+    }
+
+    if snapshots.is_empty() {
+        return Err("No monitor found".to_string());
+    }
+
+    Ok(snapshots)
+}
+
+fn find_league_window() -> Option<calibration::Rect> {
+    let windows = xcap::Window::all().ok()?;
+    let mut candidates: Vec<(u64, calibration::Rect)> = Vec::new();
+
+    for window in windows {
+        if window.is_minimized().unwrap_or(false) {
+            continue;
+        }
+
+        let app_name = window.app_name().unwrap_or_default();
+        let title = window.title().unwrap_or_default();
+        if !looks_like_league_window(&app_name, &title) {
+            continue;
+        }
+
+        let (Ok(x), Ok(y), Ok(width), Ok(height)) = (
+            window.x(),
+            window.y(),
+            window.width(),
+            window.height(),
+        ) else {
+            continue;
+        };
+        let rect = calibration::Rect {
+            x,
+            y,
+            width,
+            height,
+        };
+
+        if rect.width < 640 || rect.height < 480 {
+            continue;
+        }
+
+        let area = rect.width as u64 * rect.height as u64;
+        let focus_bonus = if window.is_focused().unwrap_or(false) {
+            area / 2
+        } else {
+            0
+        };
+        candidates.push((area + focus_bonus, rect));
+    }
+
+    candidates
+        .into_iter()
+        .max_by_key(|(score, _)| *score)
+        .map(|(_, rect)| rect)
+}
+
+fn looks_like_league_window(app_name: &str, title: &str) -> bool {
+    let haystack = format!("{} {}", app_name, title)
+        .to_lowercase()
+        .replace(' ', "");
+
+    haystack.contains("leagueoflegends") || haystack.contains("leagueclient")
+}
+
+fn selected_monitor_index(
+    monitors: &[MonitorSnapshot],
+    game_window: Option<&calibration::Rect>,
+) -> usize {
+    if let Some(window) = game_window {
+        if let Some((index, _)) = monitors
+            .iter()
+            .enumerate()
+            .map(|(index, monitor)| (index, calibration::overlap_area(window, &monitor.info)))
+            .filter(|(_, overlap)| *overlap > 0)
+            .max_by_key(|(_, overlap)| *overlap)
+        {
+            return index;
+        }
+    }
+
+    monitors
+        .iter()
+        .position(|snapshot| snapshot.monitor.is_primary().unwrap_or(false))
+        .unwrap_or(0)
+}
+
+fn detect_overlay_calibration() -> Result<calibration::OverlayCalibration, String> {
+    let monitors = monitor_snapshots()?;
+    let game_window = find_league_window();
+    let monitor_index = selected_monitor_index(&monitors, game_window.as_ref());
+
+    Ok(calibration::select_viewport(
+        &monitors[monitor_index].info,
+        game_window.as_ref(),
+    ))
+}
+
+#[cfg(target_os = "windows")]
+fn apply_overlay_window_bounds(
+    app: &tauri::AppHandle,
+    calibration: &calibration::OverlayCalibration,
+) -> Result<(), String> {
+    use tauri::{Manager, PhysicalPosition, PhysicalSize, Position, Size};
+
+    let Some(window) = app.get_webview_window("overlay") else {
+        return Ok(());
+    };
+
+    window
+        .set_position(Position::Physical(PhysicalPosition {
+            x: calibration.viewport.x,
+            y: calibration.viewport.y,
+        }))
+        .map_err(|e| format!("Overlay position failed: {}", e))?;
+    window
+        .set_size(Size::Physical(PhysicalSize {
+            width: calibration.viewport.width,
+            height: calibration.viewport.height,
+        }))
+        .map_err(|e| format!("Overlay size failed: {}", e))?;
+
+    Ok(())
+}
+
+#[tauri::command]
+fn get_overlay_calibration(
+    app: tauri::AppHandle,
+) -> Result<calibration::OverlayCalibration, String> {
+    let calibration = detect_overlay_calibration()?;
+
+    #[cfg(target_os = "windows")]
+    apply_overlay_window_bounds(&app, &calibration)?;
+    #[cfg(not(target_os = "windows"))]
+    let _ = &app;
+
+    Ok(calibration)
+}
+
 fn run_tesseract(
     crop: image::DynamicImage,
     idx: usize,
@@ -336,21 +474,31 @@ fn run_tesseract(
 }
 
 fn capture_card_name_crops() -> Result<Vec<(usize, image::DynamicImage)>, String> {
-    let screens = xcap::Monitor::all().map_err(|e| format!("Failed to list monitors: {}", e))?;
-    let monitor = screens.into_iter().next().ok_or("No monitor found")?;
+    let monitors = monitor_snapshots()?;
+    let game_window = find_league_window();
+    let monitor_index = selected_monitor_index(&monitors, game_window.as_ref());
+    let monitor = &monitors[monitor_index];
+    let calibration = calibration::select_viewport(&monitor.info, game_window.as_ref());
     let screenshot = monitor
+        .monitor
         .capture_image()
         .map_err(|e| format!("Capture failed: {}", e))?;
 
-    let screen_w = screenshot.width() as f64;
-    let screen_h = screenshot.height() as f64;
-    let mut crops = Vec::with_capacity(CARD_NAME_REGIONS.len());
+    let mut crops = Vec::with_capacity(calibration::CARD_NAME_REGIONS.len());
 
-    for (i, region) in CARD_NAME_REGIONS.iter().enumerate() {
-        let px = (region.x * screen_w) as u32;
-        let py = (region.y * screen_h) as u32;
-        let pw = (region.w * screen_w) as u32;
-        let ph = (region.h * screen_h) as u32;
+    for (i, region) in calibration::CARD_NAME_REGIONS.iter().enumerate() {
+        let rect = calibration::physical_rect_for_region(region, &calibration.viewport);
+        let px = rect.x - monitor.info.x;
+        let py = rect.y - monitor.info.y;
+
+        if px < 0 || py < 0 {
+            continue;
+        }
+
+        let px = px as u32;
+        let py = py as u32;
+        let pw = rect.width;
+        let ph = rect.height;
 
         if px + pw > screenshot.width() || py + ph > screenshot.height() {
             continue;
@@ -564,6 +712,7 @@ pub fn run() {
             check_tesseract,
             check_screen_capture_available,
             detect_augment_names,
+            get_overlay_calibration,
             probe_augment_api,
             set_dock_visible,
             set_click_through,

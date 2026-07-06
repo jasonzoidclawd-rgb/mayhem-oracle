@@ -1,0 +1,67 @@
+use mayhem_oracle_lib::calibration::{
+    physical_card_rects, physical_to_logical_rect, select_viewport, MonitorInfo, Rect,
+};
+
+fn monitor(width: u32, height: u32, scale_factor: f64) -> MonitorInfo {
+    MonitorInfo {
+        x: 0,
+        y: 0,
+        width,
+        height,
+        scale_factor,
+    }
+}
+
+fn window(width: u32, height: u32) -> Rect {
+    Rect {
+        x: 0,
+        y: 0,
+        width,
+        height,
+    }
+}
+
+#[test]
+fn uses_monitor_bounds_for_borderless_1920x1080() {
+    let calibration = select_viewport(&monitor(1920, 1080, 1.0), Some(&window(1920, 1080)));
+
+    assert_eq!(calibration.mode, "borderless-monitor-fallback");
+    assert_eq!(calibration.viewport.width, 1920);
+    assert_eq!(calibration.viewport.height, 1080);
+    assert!(calibration.warnings.is_empty());
+}
+
+#[test]
+fn supports_ultrawide_2560x1080_card_regions_without_clipping() {
+    let calibration = select_viewport(&monitor(2560, 1080, 1.0), Some(&window(2560, 1080)));
+    let rects = physical_card_rects(&calibration.viewport);
+
+    assert_eq!(rects.len(), 3);
+    for rect in rects {
+        assert!(rect.x >= 0);
+        assert!(rect.y >= 0);
+        assert!(rect.x as u32 + rect.width <= 2560);
+        assert!(rect.y as u32 + rect.height <= 1080);
+    }
+}
+
+#[test]
+fn converts_physical_pixels_to_logical_css_pixels() {
+    let logical = physical_to_logical_rect(&window(2560, 1440), 1.25);
+
+    assert_eq!(logical.width, 2048);
+    assert_eq!(logical.height, 1152);
+}
+
+#[test]
+fn falls_back_to_monitor_when_league_window_is_missing() {
+    let calibration = select_viewport(&monitor(2560, 1080, 1.0), None);
+
+    assert_eq!(calibration.mode, "monitor-fallback");
+    assert_eq!(calibration.viewport.width, 2560);
+    assert!(
+        calibration
+            .warnings
+            .contains(&"League window not detected; using monitor bounds.".to_string())
+    );
+}
