@@ -1,6 +1,7 @@
 "use client";
 
 import Script from "next/script";
+import { useTranslations } from "next-intl";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useRouter } from "@/i18n/navigation";
 import { safeNextPath } from "@/lib/auth/redirects";
@@ -21,22 +22,12 @@ type GoogleSignInButtonProps = {
   size?: "large" | "medium";
 };
 
-function googleUnavailableMessage(): string {
-  if (process.env.NODE_ENV === "development") {
-    return "Set NEXT_PUBLIC_GOOGLE_CLIENT_ID to enable Google sign-in.";
-  }
-  return "Google sign-in is unavailable.";
-}
-
-function authErrorMessage(error: unknown): string {
-  return error instanceof Error ? error.message : "Google sign-in failed";
-}
-
 export function GoogleSignInButton({
   next,
   label,
   size = "large",
 }: GoogleSignInButtonProps) {
+  const t = useTranslations("auth");
   const router = useRouter();
   const buttonRef = useRef<HTMLDivElement | null>(null);
   const [scriptReady, setScriptReady] = useState(false);
@@ -73,12 +64,15 @@ export function GoogleSignInButton({
         router.push(nextPath);
         router.refresh();
       } catch (error) {
-        setMessage(authErrorMessage(error));
+        // Raw provider errors go to the console only; the UI shows a known
+        // localized failure bucket (mirrors the auth-errors known-code rule).
+        console.error("google-signin:", error);
+        setMessage(t("signIn.failed"));
       } finally {
         setBusy(false);
       }
     },
-    [nextPath, noncePair, router],
+    [nextPath, noncePair, router, t],
   );
 
   const renderGoogleButton = useCallback(() => {
@@ -113,7 +107,13 @@ export function GoogleSignInButton({
     renderGoogleButton();
   }, [renderGoogleButton]);
 
-  const unavailable = clientId ? null : googleUnavailableMessage();
+  const unavailable = clientId ? null : t("signIn.unavailable");
+
+  useEffect(() => {
+    if (!clientId && process.env.NODE_ENV === "development") {
+      console.warn("Set NEXT_PUBLIC_GOOGLE_CLIENT_ID to enable Google sign-in.");
+    }
+  }, [clientId]);
 
   return (
     <div className="inline-flex flex-col items-center gap-2">
@@ -121,7 +121,7 @@ export function GoogleSignInButton({
         src={GOOGLE_IDENTITY_SCRIPT_SRC}
         strategy="afterInteractive"
         onLoad={() => setScriptReady(true)}
-        onError={() => setMessage("Google sign-in is unavailable.")}
+        onError={() => setMessage(t("signIn.unavailable"))}
       />
       {clientId ? (
         <div ref={buttonRef} aria-label={label} aria-busy={busy} />
@@ -134,7 +134,7 @@ export function GoogleSignInButton({
           {label}
         </button>
       )}
-      {busy ? <p className="text-xs text-white/50">Signing in...</p> : null}
+      {busy ? <p className="text-xs text-white/50">{t("signIn.busy")}</p> : null}
       {unavailable || message ? (
         <p role="alert" className="max-w-xs text-center text-xs text-rose-300">
           {unavailable || message}

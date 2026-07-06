@@ -906,6 +906,11 @@
     "statsFooter": "{count} / {total} 体の英雄 · データ元：wiki.leagueoflegends.com · レベル成長は公式の計算式を使用"
   },
   "auth": {
+    "signIn": {
+      "busy": "サインイン中…",
+      "unavailable": "Google サインインは現在利用できません。",
+      "failed": "Google サインインに失敗しました。もう一度お試しください。"
+    },
     "errors": {
       "google_identity_required": "サインイン方法が変わりました。このページの Google ボタンからお進みください。",
       "auth_callback": "サインインを完了できませんでした。もう一度お試しください。"

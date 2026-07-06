@@ -73,6 +73,35 @@ describe("Google Identity Services auth", () => {
     expect(source).toContain("accounts.id.renderButton");
   });
 
+  test("Google auth button copy is localized and never renders raw provider errors", async () => {
+    const source = await readFile(
+      path.join(process.cwd(), "src/components/auth/GoogleSignInButton.tsx"),
+      "utf-8",
+    );
+
+    expect(source).toContain('useTranslations("auth")');
+    expect(source).toContain('t("signIn.busy")');
+    expect(source).toContain('t("signIn.unavailable")');
+    expect(source).toContain('t("signIn.failed")');
+    // Raw provider error text must go to the console, never the UI.
+    expect(source).not.toMatch(/\.message\b/);
+    expect(source).not.toContain("Signing in...");
+    expect(source).not.toContain("Google sign-in is unavailable.");
+    expect(source).not.toContain("Google sign-in failed");
+  });
+
+  test("Google sign-in copy exists in every locale message file", async () => {
+    for (const locale of ["en", "zh-TW", "zh-CN", "ja", "ko"]) {
+      const messages = JSON.parse(
+        await readFile(path.join(process.cwd(), `messages/${locale}.json`), "utf-8"),
+      ) as { auth: { signIn?: Record<string, string> } };
+
+      for (const key of ["busy", "unavailable", "failed"]) {
+        expect(messages.auth.signIn?.[key], `${locale}.auth.signIn.${key}`).toBeTruthy();
+      }
+    }
+  });
+
   test("user-facing Google login path no longer starts Supabase OAuth", async () => {
     const files = [
       "src/app/api/auth/signin/route.ts",

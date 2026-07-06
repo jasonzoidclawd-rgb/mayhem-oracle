@@ -906,6 +906,11 @@
     "s8Body": "Privacy questions? Reach us at {email}."
   },
   "auth": {
+    "signIn": {
+      "busy": "Signing in...",
+      "unavailable": "Google sign-in is unavailable.",
+      "failed": "Google sign-in failed. Please try again."
+    },
     "errors": {
       "google_identity_required": "Sign-in has moved. Use the Google button on this page to continue.",
       "auth_callback": "Sign-in could not be completed. Please try again."
