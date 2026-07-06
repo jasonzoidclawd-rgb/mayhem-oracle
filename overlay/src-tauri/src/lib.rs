@@ -47,20 +47,7 @@ async fn get_lcu_gameflow_state() -> Option<lcu::GameflowState> {
 #[tauri::command]
 async fn get_game_hash() -> Option<String> {
     let credentials = lcu::discover_lcu_credentials()?;
-    let url = format!(
-        "https://127.0.0.1:{}/lol-gameflow/v1/session",
-        credentials.port
-    );
-    let session: serde_json::Value = reqwest::Client::builder()
-        .danger_accept_invalid_certs(true)
-        .build()
-        .ok()?
-        .get(url)
-        .basic_auth("riot", Some(&credentials.auth_token))
-        .send()
-        .await
-        .ok()?
-        .json()
+    let session = lcu::get_allowed_lcu_json(&credentials, "/lol-gameflow/v1/session")
         .await
         .ok()?;
     let game_id = session
@@ -508,6 +495,13 @@ fn set_click_through(app: tauri::AppHandle, ignore: bool) {
             }
         }
     }
+    #[cfg(not(target_os = "macos"))]
+    {
+        use tauri::Manager;
+        if let Some(window) = app.get_webview_window("overlay") {
+            let _ = window.set_ignore_cursor_events(ignore);
+        }
+    }
 }
 
 /// Returns true if League of Legends is the frontmost application
@@ -533,7 +527,34 @@ fn is_league_foreground() -> bool {
         let s = CStr::from_ptr(ptr).to_str().unwrap_or("").to_lowercase();
         s.replace(' ', "").contains("leagueoflegends")
     }
-    #[cfg(not(target_os = "macos"))]
+    #[cfg(target_os = "windows")]
+    {
+        use windows_sys::Win32::UI::WindowsAndMessaging::{
+            GetForegroundWindow, GetWindowThreadProcessId,
+        };
+
+        let hwnd = unsafe { GetForegroundWindow() };
+        if hwnd.is_null() {
+            return false;
+        }
+        let mut pid: u32 = 0;
+        unsafe { GetWindowThreadProcessId(hwnd, &mut pid) };
+        if pid == 0 {
+            return false;
+        }
+        let sys = System::new_all();
+        sys.process(sysinfo::Pid::from_u32(pid))
+            .map(|process| {
+                let name = process
+                    .name()
+                    .to_string_lossy()
+                    .to_lowercase()
+                    .replace(' ', "");
+                name.contains("leagueoflegends")
+            })
+            .unwrap_or(false)
+    }
+    #[cfg(not(any(target_os = "macos", target_os = "windows")))]
     {
         true
     }
@@ -596,9 +617,15 @@ pub fn run() {
                 let quit_item = MenuItem::with_id(app, "quit", "Exit Mayhem Oracle", true, None::<&str>)?;
                 let menu = Menu::with_items(app, &[&quit_item])?;
 
+                #[cfg(target_os = "macos")]
+                const TRAY_TOOLTIP: &str =
+                    "Mayhem Oracle\n⌘Q disabled — right-click to exit\nOr ⌘⌥⎋ → Force Quit";
+                #[cfg(not(target_os = "macos"))]
+                const TRAY_TOOLTIP: &str = "Mayhem Oracle\nRight-click the tray icon to exit";
+
                 let mut tray_builder = TrayIconBuilder::new()
                     .menu(&menu)
-                    .tooltip("Mayhem Oracle\n⌘Q disabled — right-click to exit\nOr ⌘⌥⎋ → Force Quit")
+                    .tooltip(TRAY_TOOLTIP)
                     .on_menu_event(|app, event| {
                         if event.id.as_ref() == "quit" {
                             app.exit(0);
@@ -671,6 +698,21 @@ pub fn run() {
                     }
                 });
 
+            }
+
+            #[cfg(not(target_os = "macos"))]
+            {
+                let window = app
+                    .get_webview_window("overlay")
+                    .expect("overlay window not found");
+
+                // Cover the primary monitor and stay click-through by default —
+                // the bounded consent/collector windows own mouse interaction.
+                if let Ok(Some(monitor)) = window.current_monitor() {
+                    let _ = window.set_position(*monitor.position());
+                    let _ = window.set_size(*monitor.size());
+                }
+                let _ = window.set_ignore_cursor_events(true);
             }
 
             std::thread::spawn(|| {

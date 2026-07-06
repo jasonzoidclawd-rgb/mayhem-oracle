@@ -126,6 +126,8 @@ type Phase = "idle" | "client_found" | "in_game" | "augment_selection";
 
 const AUGMENT_LEVELS = [3, 7, 11, 15];
 
+const isMacPlatform = navigator.platform.toLowerCase().includes("mac");
+
 // Badge positions — centered below each card
 const BADGE_POSITIONS = [
   { left: "30.5%", top: "62%" },
@@ -854,8 +856,14 @@ function App() {
           <img src="/icon.png" alt="" className="startup-icon" />
           <div className="startup-tip-text">
             <div className="startup-title">Mayhem Oracle</div>
-            <div className="startup-hint">⌘Q disabled — use menu bar icon to exit</div>
-            <div className="startup-hint">Or ⌘⌥⎋ (Force Quit)</div>
+            {isMacPlatform ? (
+              <>
+                <div className="startup-hint">⌘Q disabled — use menu bar icon to exit</div>
+                <div className="startup-hint">Or ⌘⌥⎋ (Force Quit)</div>
+              </>
+            ) : (
+              <div className="startup-hint">Right-click the tray icon to exit</div>
+            )}
           </div>
         </div>
       )}
