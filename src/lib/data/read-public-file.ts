@@ -27,6 +27,10 @@ export function readAugmentsFile<T>(): Promise<T> {
   return parseJsonFile<T>(path.join(process.cwd(), "public", "data", "augments.json"));
 }
 
+export function readItemsFile<T>(): Promise<T> {
+  return parseJsonFile<T>(path.join(process.cwd(), "public", "data", "items.json"));
+}
+
 export function readMetaFile<T>(): Promise<T> {
   return parseJsonFile<T>(path.join(process.cwd(), "public", "data", "meta.json"));
 }

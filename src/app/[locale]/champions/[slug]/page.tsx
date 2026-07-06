@@ -3,8 +3,6 @@ import { getTranslations, setRequestLocale } from "next-intl/server";
 import { requireActiveEntitlement } from "@/lib/entitlements/server";
 import { MembershipGate } from "@/components/membership/MembershipGate";
 import Image from "next/image";
-import { readFile } from "fs/promises";
-import path from "path";
 import { notFound } from "next/navigation";
 import { computeOracleScore, type ComboTier } from "@/lib/scoring/oracle-score";
 import type { AbilityProfile, AbilityEntry, AbilityStats, ChampionBaseStats } from "@/lib/types";
@@ -14,6 +12,7 @@ import { getChampionAugmentPool } from "@/lib/scoring/pool-orchestrator";
 import { analyzeInteractions, type MechanicalInteraction, type AugmentMechanic } from "@/lib/scoring/augment-interactions";
 import { localizedDescription, localizedName } from "@/lib/i18n/localized-name";
 import { buildComboTierLookup, resolveChampionCombos } from "@/lib/data/combo-lookup";
+import { readChampionsFile } from "@/lib/data/read-public-file";
 import { routing, type Locale } from "@/i18n/routing";
 import { ChampionMatrixClient } from "@/components/champions/ChampionMatrixClient";
 import {
@@ -72,9 +71,7 @@ type AbilityStatLabels = {
 export const dynamicParams = false;
 
 export async function generateStaticParams() {
-  const dataPath = path.join(process.cwd(), "public", "data", "champions.json");
-  const raw = await readFile(dataPath, "utf-8");
-  const { champions } = JSON.parse(raw) as { champions: ChampionData[] };
+  const { champions } = await readChampionsFile<{ champions: ChampionData[] }>();
 
   return routing.locales.flatMap((locale) =>
     champions.map((c) => ({ locale, slug: c.slug }))

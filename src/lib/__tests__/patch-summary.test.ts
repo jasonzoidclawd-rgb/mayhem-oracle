@@ -133,7 +133,7 @@ describe("public patch summary", () => {
     );
 
     expect(source).toContain('import { buildPatchSummary } from "@/lib/seo/patch-summary"');
-    expect(source).toContain('import { readMetaFile } from "@/lib/data/read-public-file"');
+    expect(source).toContain('import { readItemsFile, readMetaFile } from "@/lib/data/read-public-file"');
     expect(source).toContain("const patchSummary = buildPatchSummary(");
     expect(source).toContain('t("patchSummaryTitle")');
     expect(source).toContain('t("patchSummaryBody", { name: itemName, patch })');

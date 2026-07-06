@@ -1,8 +1,6 @@
 import type { Metadata } from "next";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import Image from "next/image";
-import { readFile } from "fs/promises";
-import path from "path";
 import { notFound } from "next/navigation";
 import { Link } from "@/i18n/navigation";
 import { JsonLd } from "@/components/seo/JsonLd";
@@ -11,7 +9,7 @@ import type { Item } from "@/lib/types";
 import { localizedName } from "@/lib/i18n/localized-name";
 import { buildItemDetailJsonLd } from "@/lib/seo/item-detail";
 import { buildPatchSummary } from "@/lib/seo/patch-summary";
-import { readMetaFile } from "@/lib/data/read-public-file";
+import { readItemsFile, readMetaFile } from "@/lib/data/read-public-file";
 import { languageAlternates, localizedUrl } from "@/lib/site";
 
 // Raw Riot API category identifier → translation key in items namespace.
@@ -67,9 +65,7 @@ interface ParsedDescription {
 // ─── Data helpers ─────────────────────────────────────────────────────────────
 
 async function loadItemsData(): Promise<ItemsData> {
-  const filePath = path.join(process.cwd(), "public", "data", "items.json");
-  const raw = await readFile(filePath, "utf-8");
-  return JSON.parse(raw) as ItemsData;
+  return readItemsFile<ItemsData>();
 }
 
 function findItem(data: ItemsData, identifier: string): Item | undefined {
@@ -227,9 +223,9 @@ const TIER_BADGE_STYLES: Record<string, string> = {
   boots:     "text-teal-300 bg-teal-400/10 border-teal-400/20",
 };
 
-const TIER_DISPLAY: Record<string, string> = {
-  starter: "Starter", basic: "Basic", epic: "Epic",
-  legendary: "Legendary", boots: "Boots",
+const TIER_LABEL_KEY: Record<string, string> = {
+  starter: "tierStarter", basic: "tierBasic", epic: "tierEpic",
+  legendary: "tierLegendary", boots: "tierBoots",
 };
 
 // ─── Page ─────────────────────────────────────────────────────────────────────
@@ -287,6 +283,7 @@ export default async function ItemDetailPage({
     modified:       t("modified"),
     "quest-reward": t("questReward"),
   };
+  const tierLabel = item.tier ? t(TIER_LABEL_KEY[item.tier]) : undefined;
 
   // Wiki URL: spaces → underscores, apostrophes encoded
   const wikiUrl = `https://wiki.leagueoflegends.com/en-us/${encodeURIComponent(item.name.replace(/ /g, "_"))}`;
@@ -308,7 +305,7 @@ export default async function ItemDetailPage({
     name: itemName,
     description: t("metaDetailDescription", { name: itemName }),
     identifier,
-    tierLabel: item.tier ? TIER_DISPLAY[item.tier] : undefined,
+    tierLabel,
     tagLabel: effectiveTag ? mayhemTagLabel[effectiveTag] : undefined,
     categoryLabels,
   });
@@ -364,7 +361,7 @@ export default async function ItemDetailPage({
             )}
             {item.tier && (
               <span className={`text-xs font-medium px-2 py-0.5 rounded border ${TIER_BADGE_STYLES[item.tier]}`}>
-                {TIER_DISPLAY[item.tier]}
+                {tierLabel}
               </span>
             )}
           </div>
@@ -456,7 +453,7 @@ export default async function ItemDetailPage({
                   ))}
                   {isModified && (
                     <p className="text-[11px] text-[var(--color-text-muted)] pl-1">
-                      ⚠ Passive description from standard mode — numeric values may differ in ARAM Mayhem.
+                      ⚠ {t("passiveStandardModeNote")}
                     </p>
                   )}
                 </>

@@ -130,4 +130,39 @@ describe("item detail structured data", () => {
     expect(source).toContain("const itemJsonLd = buildItemDetailJsonLd(");
     expect(source).toContain("<JsonLd data={itemJsonLd} />");
   });
+
+  test("item detail page localizes tier labels and the standard-mode passive note", () => {
+    const source = readFileSync(
+      path.join(ROOT, "src/app/[locale]/items/[identifier]/page.tsx"),
+      "utf-8",
+    );
+
+    expect(source).toContain("TIER_LABEL_KEY");
+    expect(source).not.toContain('legendary: "Legendary"');
+    expect(source).toContain('t("passiveStandardModeNote")');
+    expect(source).not.toContain("Passive description from standard mode");
+    // Public data reads go through the shared tracer-friendly helpers.
+    expect(source).toContain('import { readItemsFile, readMetaFile } from "@/lib/data/read-public-file"');
+    expect(source).not.toContain('readFile(filePath, "utf-8")');
+  });
+
+  test("item tier and passive-note copy exists in every locale message file", () => {
+    const keys = [
+      "tierStarter",
+      "tierBasic",
+      "tierEpic",
+      "tierLegendary",
+      "tierBoots",
+      "passiveStandardModeNote",
+    ];
+    for (const locale of ["en", "zh-TW", "zh-CN", "ja", "ko"]) {
+      const messages = JSON.parse(
+        readFileSync(path.join(ROOT, `messages/${locale}.json`), "utf-8"),
+      ) as { items: Record<string, string> };
+
+      for (const key of keys) {
+        expect(messages.items[key], `${locale}.items.${key}`).toBeTruthy();
+      }
+    }
+  });
 });
