@@ -4,10 +4,19 @@ import cdragonMayhemAugments from "../../../data/internal/cdragon-mayhem-augment
 import championsData from "../../../data/internal/champions.json";
 import combosData from "../../../data/internal/combos.json";
 import poolRules from "../../../data/internal/pool-rules.json";
+import publicAugments from "../../../public/data/augments.json";
+import publicMeta from "../../../public/data/meta.json";
 import { VALID_AUGMENT_SET_LABELS } from "../data/augment-set";
 import { buildComboTierLookup } from "../data/combo-lookup";
 
 describe("data integrity", () => {
+  test("public meta.json and augments.json agree on the current patch", () => {
+    // Item patch summaries read meta.json while augment summaries read
+    // augments.json — freshness claims break silently if they ever diverge.
+    expect(publicMeta.patch).toBeTruthy();
+    expect(publicAugments.patch).toBe(publicMeta.patch);
+  });
+
   test("champion and augment slugs are unique", () => {
     const championSlugs = championsData.champions.map((champion) => champion.slug);
     const augmentSlugs = augmentsData.augments.map((augment) => augment.slug);
