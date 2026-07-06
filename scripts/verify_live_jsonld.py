@@ -23,7 +23,8 @@ import urllib.request
 from dataclasses import dataclass
 from pathlib import Path
 
-SUPPORTED_LOCALES = ["en", "zh-TW", "zh-CN", "ja", "ko"]
+REPO_ROOT = Path(__file__).resolve().parent.parent
+DEFAULT_LOCALE = "en"
 
 ENTITY_TYPES = {
     "augment": "DefinedTerm",
@@ -63,12 +64,62 @@ class JsonLdCheck:
     detail: str = ""
 
 
+@dataclass(frozen=True)
+class RoutingConfig:
+    locales: tuple[str, ...]
+    default_locale: str
+
+
+def load_routing_config(repo_root: Path = REPO_ROOT) -> RoutingConfig:
+    routing_path = repo_root / "src" / "i18n" / "routing.ts"
+    source = routing_path.read_text()
+
+    locales_match = re.search(r"locales\s*:\s*\[([^\]]+)\]", source, re.DOTALL)
+    if not locales_match:
+        raise RuntimeError(f"Could not find locales in {routing_path}")
+    locales = tuple(
+        match.group(1) or match.group(2)
+        for match in re.finditer(r'"([^"]+)"|\'([^\']+)\'', locales_match.group(1))
+    )
+    if not locales:
+        raise RuntimeError(f"No locales found in {routing_path}")
+
+    default_match = re.search(r"defaultLocale\s*:\s*[\"']([^\"']+)[\"']", source)
+    if not default_match:
+        raise RuntimeError(f"Could not find default locale in {routing_path}")
+    default_locale = default_match.group(1)
+    if default_locale != DEFAULT_LOCALE:
+        raise RuntimeError(
+            f"Routing default locale {default_locale!r} does not match "
+            f"DEFAULT_LOCALE {DEFAULT_LOCALE!r}"
+        )
+    if default_locale not in locales:
+        raise RuntimeError(f"Routing default locale {default_locale!r} is not in locales")
+
+    messages_dir = repo_root / "messages"
+    missing_messages = [
+        f"messages/{locale}.json"
+        for locale in locales
+        if not (messages_dir / f"{locale}.json").is_file()
+    ]
+    if missing_messages:
+        raise RuntimeError(
+            "Missing message files for routed locales: " + ", ".join(missing_messages)
+        )
+
+    return RoutingConfig(locales=locales, default_locale=default_locale)
+
+
+ROUTING_CONFIG = load_routing_config()
+SUPPORTED_LOCALES = list(ROUTING_CONFIG.locales)
+
+
 def normalize_base_url(base_url: str) -> str:
     return base_url.rstrip("/")
 
 
 def localized_path(route: str, locale: str) -> str:
-    prefix = "" if locale == "en" else f"/{locale}"
+    prefix = "" if locale == DEFAULT_LOCALE else f"/{locale}"
     return f"{prefix}{route}"
 
 
@@ -212,7 +263,7 @@ def main() -> int:
     parser.add_argument(
         "--locales",
         default=",".join(SUPPORTED_LOCALES),
-        help="Comma-separated locale subset (default: all five)",
+        help="Comma-separated locale subset (default: all routed locales)",
     )
     args = parser.parse_args()
 

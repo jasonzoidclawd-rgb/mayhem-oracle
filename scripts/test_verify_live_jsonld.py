@@ -3,15 +3,20 @@
 from __future__ import annotations
 
 import unittest
+from pathlib import Path
+from tempfile import TemporaryDirectory
 
 from verify_live_jsonld import (
+    DEFAULT_LOCALE,
     ENTITY_TYPES,
+    REPO_ROOT,
     SUPPORTED_LOCALES,
     JsonLdCheck,
     check_detail_graph,
     extract_json_ld_blocks,
     find_detail_graph,
     forbidden_hits,
+    load_routing_config,
     localized_path,
     normalize_base_url,
     summarize_checks,
@@ -44,7 +49,69 @@ def page_html(graph: list[dict]) -> str:
     return f"<html><head>{website}{detail}</head><body></body></html>"
 
 
+def write_routing_fixture(
+    root: Path,
+    *,
+    locales: list[str],
+    default_locale: str = "en",
+    message_locales: list[str] | None = None,
+) -> None:
+    routing_dir = root / "src" / "i18n"
+    routing_dir.mkdir(parents=True)
+    routing_dir.joinpath("routing.ts").write_text(
+        "import { defineRouting } from \"next-intl/routing\";\n\n"
+        "export const routing = defineRouting({\n"
+        f"  locales: {locales!r},\n"
+        f"  defaultLocale: \"{default_locale}\",\n"
+        "  localePrefix: \"as-needed\",\n"
+        "});\n"
+    )
+
+    messages_dir = root / "messages"
+    messages_dir.mkdir()
+    for locale in message_locales if message_locales is not None else locales:
+        messages_dir.joinpath(f"{locale}.json").write_text("{}\n")
+
+
 class JsonLdVerifierTests(unittest.TestCase):
+    def test_supported_locales_are_loaded_from_routing(self) -> None:
+        with TemporaryDirectory() as temp_dir:
+            root = Path(temp_dir)
+            write_routing_fixture(root, locales=["en", "fr", "ja"])
+
+            config = load_routing_config(root)
+
+        self.assertEqual(config.locales, ("en", "fr", "ja"))
+        self.assertEqual(config.default_locale, "en")
+
+    def test_shipped_routed_locales_have_messages(self) -> None:
+        config = load_routing_config(REPO_ROOT)
+
+        self.assertEqual(config.default_locale, DEFAULT_LOCALE)
+        self.assertEqual(list(config.locales), SUPPORTED_LOCALES)
+        for locale in config.locales:
+            self.assertTrue((REPO_ROOT / "messages" / f"{locale}.json").is_file())
+
+    def test_routing_default_must_match_explicit_default(self) -> None:
+        with TemporaryDirectory() as temp_dir:
+            root = Path(temp_dir)
+            write_routing_fixture(root, locales=["en", "fr"], default_locale="fr")
+
+            with self.assertRaisesRegex(RuntimeError, "default locale"):
+                load_routing_config(root)
+
+    def test_each_routed_locale_requires_a_messages_file(self) -> None:
+        with TemporaryDirectory() as temp_dir:
+            root = Path(temp_dir)
+            write_routing_fixture(
+                root,
+                locales=["en", "fr"],
+                message_locales=["en"],
+            )
+
+            with self.assertRaisesRegex(RuntimeError, "messages/fr.json"):
+                load_routing_config(root)
+
     def test_locale_paths_prefix_every_non_default_locale(self) -> None:
         self.assertEqual(localized_path("/augments/tank-engine", "en"), "/augments/tank-engine")
         for locale in SUPPORTED_LOCALES[1:]:
