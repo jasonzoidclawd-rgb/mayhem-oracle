@@ -1,9 +1,32 @@
 # Current GitHub Context
 
-Last verified locally for this docs update: `2026-07-01`.
+Last verified locally for this docs update: `2026-07-06`.
 
 This file is context only. Re-verify with `gh` before making merge or release
 decisions.
+
+## 2026-07-06: SEO/GEO + auth hardening arc (direct pushes to main, no PRs)
+
+Commits `2863be9..ddf2ca9` landed the post-P5 review follow-ups directly on
+`main` (deployed to wasfun.lol; verified live):
+
+- Detail-page SEO: patch summaries on augment + item pages, localized in all
+  five locales; JSON-LD builders require `homeUrl`; SEO helper import-boundary
+  test (`seo-helper-boundary.test.ts`); `generateStaticParams` fails loudly.
+- Auth: locale-aware signout, case-insensitive next blocklist, locale-prefix
+  stripping derived from `routing.locales`, GoogleSignInButton localized with
+  provider errors bucketed (raw errors console-only).
+- Verifiers: `scripts/verify_live_jsonld.py` (+ unittest) owns the
+  augment/item/champion structured-data moat check — 15 checks, JSON-LD-parse
+  only. Patch-note verifier untouched. Data guard: `meta.json` and
+  `augments.json` patch values are pinned together in data-integrity tests.
+- Riot full-locale expansion stays gated — see the 2026-07-06 addendum in
+  `docs/plans/2026-07-02-full-riot-locale-coverage.md` (demand gate, content
+  depth bar, tiering) before starting L1.
+
+Post-deploy checks for future pushes: `python3 scripts/verify_live_jsonld.py
+--base-url https://wasfun.lol` and `python3 scripts/verify_live_patch_seo.py
+--base-url https://wasfun.lol`.
 
 ## Recent PR State
 
