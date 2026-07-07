@@ -3690,14 +3690,14 @@
             {
               "subject": {
                 "en": "Aatrox",
-                "zh-tw": "Aatrox",
+                "zh-tw": "銀級增幅裝置",
                 "zh-cn": "銀級增幅裝置",
                 "ja-jp": "シルバーオーグメント",
                 "ko-kr": "Aatrox"
               },
               "text": {
                 "en": "Sweet Spot Bonus Damage: 70 ⇒ 75",
-                "zh-tw": "Sweet Spot Bonus Damage: 70 ⇒ 75",
+                "zh-tw": "適性之護",
                 "zh-cn": "適性之護",
                 "ja-jp": "アダプティブワード",
                 "ko-kr": "Sweet Spot Bonus Damage: 70 ⇒ 75"
@@ -3756,14 +3756,14 @@
             {
               "subject": {
                 "en": "Gwen",
-                "zh-tw": "Gwen",
+                "zh-tw": "銀級增幅裝置",
                 "zh-cn": "銀級增幅裝置",
                 "ja-jp": "シルバーオーグメント",
                 "ko-kr": "Gwen"
               },
               "text": {
                 "en": "Base Damage Per Snip: 10/13.5/17/20.5/24 ⇒ 10/14/18/22/26",
-                "zh-tw": "Base Damage Per Snip: 10/13.5/17/20.5/24 ⇒ 10/14/18/22/26",
+                "zh-tw": "別轉台",
                 "zh-cn": "別轉台",
                 "ja-jp": "チャンネルはそのまま",
                 "ko-kr": "Base Damage Per Snip: 10/13.5/17/20.5/24 ⇒ 10/14/18/22/26"
@@ -3820,14 +3820,14 @@
             {
               "subject": {
                 "en": "Gwen",
-                "zh-tw": "Gwen",
+                "zh-tw": "銀級增幅裝置",
                 "zh-cn": "銀級增幅裝置",
                 "ja-jp": "シルバーオーグメント",
                 "ko-kr": "Gwen"
               },
               "text": {
                 "en": "Bonus Attack Speed: 20/35/50/65/80% ⇒ 30/42.5/55/67.5/80%",
-                "zh-tw": "Bonus Attack Speed: 20/35/50/65/80% ⇒ 30/42.5/55/67.5/80%",
+                "zh-tw": "雙重防禦",
                 "zh-cn": "雙重防禦",
                 "ja-jp": "ダブルディフェンス",
                 "ko-kr": "Bonus Attack Speed: 20/35/50/65/80% ⇒ 30/42.5/55/67.5/80%"
@@ -3884,14 +3884,14 @@
             {
               "subject": {
                 "en": "Hwei",
-                "zh-tw": "Hwei",
+                "zh-tw": "銀級增幅裝置",
                 "zh-cn": "銀級增幅裝置",
                 "ja-jp": "シルバーオーグメント",
                 "ko-kr": "Hwei"
               },
               "text": {
                 "en": "QQ Damage: 50 / 80 / 110 / 140 / 170 (+70% AP) (+3 / 4 / 5 / 6 / 7% Target Max HP) ⇒ 50 / 80 / 110 / 140 / 170 (+80% AP) (+3 / 4 / 5 / 6 / 7% Target Max HP)",
-                "zh-tw": "QQ Damage: 50 / 80 / 110 / 140 / 170 (+70% AP) (+3 / 4 / 5 / 6 / 7% Target Max HP) ⇒ 50 / 80 / 110 / 140 / 170 (+80% AP) (+3 / 4 / 5 / 6 / 7% Target Max HP)",
+                "zh-tw": "大師鑄造",
                 "zh-cn": "大師鑄造",
                 "ja-jp": "マスターに鍛えられて",
                 "ko-kr": "QQ Damage: 50 / 80 / 110 / 140 / 170 (+70% AP) (+3 / 4 / 5 / 6 / 7% Target Max HP) ⇒ 50 / 80 / 110 / 140 / 170 (+80% AP) (+3 / 4 / 5 / 6 / 7% Target Max HP)"
@@ -3950,14 +3950,14 @@
             {
               "subject": {
                 "en": "Hwei",
-                "zh-tw": "Hwei",
+                "zh-tw": "銀級增幅裝置",
                 "zh-cn": "銀級增幅裝置",
                 "ja-jp": "シルバーオーグメント",
                 "ko-kr": "Hwei"
               },
               "text": {
                 "en": "QW Damage: 60 / 85 / 110 / 135 / 160 (+25% AP), increased to up to 120 / 201.875 / 302.5 / 421.875 / 560 (+50 / 59.375 / 68.75 / 78.125 / 87.5% AP) ⇒ 60 / 85 / 110 / 135 / 160 (+30% AP), increased to up to 120 / 201.875 / 302.5 / 421.875 / 560 (+60 / 71.25 / 82.5 / 93.75 / 105% AP)",
-                "zh-tw": "QW Damage: 60 / 85 / 110 / 135 / 160 (+25% AP), increased to up to 120 / 201.875 / 302.5 / 421.875 / 560 (+50 / 59.375 / 68.75 / 78.125 / 87.5% AP) ⇒ 60 / 85 / 110 / 135 / 160 (+30% AP), increased to up to 120 / 201.875 / 302.5 / 421.875 / 560 (+60 / 71.25 / 82.5 / 93.75 / 105% AP)",
+                "zh-tw": "該出手了",
                 "zh-cn": "該出手了",
                 "ja-jp": "始まるぞ",
                 "ko-kr": "QW Damage: 60 / 85 / 110 / 135 / 160 (+25% AP), increased to up to 120 / 201.875 / 302.5 / 421.875 / 560 (+50 / 59.375 / 68.75 / 78.125 / 87.5% AP) ⇒ 60 / 85 / 110 / 135 / 160 (+30% AP), increased to up to 120 / 201.875 / 302.5 / 421.875 / 560 (+60 / 71.25 / 82.5 / 93.75 / 105% AP)"
@@ -4015,14 +4015,14 @@
             {
               "subject": {
                 "en": "Hwei",
-                "zh-tw": "Hwei",
+                "zh-tw": "銀級增幅裝置",
                 "zh-cn": "銀級增幅裝置",
                 "ja-jp": "シルバーオーグメント",
                 "ko-kr": "Hwei"
               },
               "text": {
                 "en": "QE Slow: 30% ⇒ 35%",
-                "zh-tw": "QE Slow: 30% ⇒ 35%",
+                "zh-tw": "追求力量",
                 "zh-cn": "追求力量",
                 "ja-jp": "力の追求",
                 "ko-kr": "QE Slow: 30% ⇒ 35%"
@@ -4073,14 +4073,14 @@
             {
               "subject": {
                 "en": "Hwei",
-                "zh-tw": "Hwei",
+                "zh-tw": "銀級增幅裝置",
                 "zh-cn": "銀級增幅裝置",
                 "ja-jp": "シルバーオーグメント",
                 "ko-kr": "Hwei"
               },
               "text": {
                 "en": "Cooldown: 13 / 12.5 / 12 / 11.5 / 11s ⇒ 12 / 11.5 / 11 / 10.5 / 10s",
-                "zh-tw": "Cooldown: 13 / 12.5 / 12 / 11.5 / 11s ⇒ 12 / 11.5 / 11 / 10.5 / 10s",
+                "zh-tw": "任務：專精輔助",
                 "zh-cn": "任務：專精輔助",
                 "ja-jp": "クエスト：サポートメイン",
                 "ko-kr": "Cooldown: 13 / 12.5 / 12 / 11.5 / 11s ⇒ 12 / 11.5 / 11 / 10.5 / 10s"
@@ -4136,14 +4136,14 @@
             {
               "subject": {
                 "en": "Jax",
-                "zh-tw": "Jax",
+                "zh-tw": "銀級增幅裝置",
                 "zh-cn": "銀級增幅裝置",
                 "ja-jp": "シルバーオーグメント",
                 "ko-kr": "Jax"
               },
               "text": {
                 "en": "Mana Cost: 65 ⇒ 50",
-                "zh-tw": "Mana Cost: 65 ⇒ 50",
+                "zh-tw": "虹吸",
                 "zh-cn": "虹吸",
                 "ja-jp": "サイフォン",
                 "ko-kr": "Mana Cost: 65 ⇒ 50"
@@ -4195,14 +4195,14 @@
             {
               "subject": {
                 "en": "Jax",
-                "zh-tw": "Jax",
+                "zh-tw": "銀級增幅裝置",
                 "zh-cn": "銀級增幅裝置",
                 "ja-jp": "シルバーオーグメント",
                 "ko-kr": "Jax"
               },
               "text": {
                 "en": "Target Max Health Damage: 3.5% minimum damage / 7% maximum damage ⇒ 4% minimum damage / 8% maximum damage",
-                "zh-tw": "Target Max Health Damage: 3.5% minimum damage / 7% maximum damage ⇒ 4% minimum damage / 8% maximum damage",
+                "zh-tw": "降雪之日",
                 "zh-cn": "降雪之日",
                 "ja-jp": "スノーデイ",
                 "ko-kr": "Target Max Health Damage: 3.5% minimum damage / 7% maximum damage ⇒ 4% minimum damage / 8% maximum damage"
@@ -4260,14 +4260,14 @@
             {
               "subject": {
                 "en": "Lee Sin",
-                "zh-tw": "Lee Sin",
+                "zh-tw": "銀級增幅裝置",
                 "zh-cn": "銀級增幅裝置",
                 "ja-jp": "シルバーオーグメント",
                 "ko-kr": "Lee Sin"
               },
               "text": {
                 "en": "AD Growth: 3.7 ⇒ 3.4",
-                "zh-tw": "AD Growth: 3.7 ⇒ 3.4",
+                "zh-tw": "堆層暴龍",
                 "zh-cn": "堆層暴龍",
                 "ja-jp": "スタックサウルス・レックス",
                 "ko-kr": "AD Growth: 3.7 ⇒ 3.4"
@@ -4326,14 +4326,14 @@
             {
               "subject": {
                 "en": "Lee Sin",
-                "zh-tw": "Lee Sin",
+                "zh-tw": "銀級增幅裝置",
                 "zh-cn": "銀級增幅裝置",
                 "ja-jp": "シルバーオーグメント",
                 "ko-kr": "Lee Sin"
               },
               "text": {
                 "en": "Damage: 65 / 95 / 125 / 155 / 185 (+95% bonus AD) ⇒ 60 / 90 / 120 / 150 / 180 (+90% bonus AD)",
-                "zh-tw": "Damage: 65 / 95 / 125 / 155 / 185 (+95% bonus AD) ⇒ 60 / 90 / 120 / 150 / 180 (+90% bonus AD)",
+                "zh-tw": "果斷",
                 "zh-cn": "果斷",
                 "ja-jp": "固い決意",
                 "ko-kr": "Damage: 65 / 95 / 125 / 155 / 185 (+95% bonus AD) ⇒ 60 / 90 / 120 / 150 / 180 (+90% bonus AD)"
@@ -4394,14 +4394,14 @@
             {
               "subject": {
                 "en": "Lee Sin",
-                "zh-tw": "Lee Sin",
+                "zh-tw": "銀級增幅裝置",
                 "zh-cn": "銀級增幅裝置",
                 "ja-jp": "シルバーオーグメント",
                 "ko-kr": "Lee Sin"
               },
               "text": {
                 "en": "Damage: 65 / 95 / 125 / 155 / 185 (+95% bonus AD) ⇒ 60 / 90 / 120 / 150 / 180 (+90% bonus AD)",
-                "zh-tw": "Damage: 65 / 95 / 125 / 155 / 185 (+95% bonus AD) ⇒ 60 / 90 / 120 / 150 / 180 (+90% bonus AD)",
+                "zh-tw": "可靠武器",
                 "zh-cn": "可靠武器",
                 "ja-jp": "頼れる武器",
                 "ko-kr": "Damage: 65 / 95 / 125 / 155 / 185 (+95% bonus AD) ⇒ 60 / 90 / 120 / 150 / 180 (+90% bonus AD)"
@@ -4462,14 +4462,14 @@
             {
               "subject": {
                 "en": "Nocturne",
-                "zh-tw": "Nocturne",
+                "zh-tw": "金級增幅裝置",
                 "zh-cn": "金級增幅裝置",
                 "ja-jp": "ゴールドオーグメント",
                 "ko-kr": "Nocturne"
               },
               "text": {
                 "en": "Damage: 65 / 110 / 155 / 200 / 245 ⇒ 65 / 105 / 145 / 185 / 225",
-                "zh-tw": "Damage: 65 / 110 / 155 / 200 / 245 ⇒ 65 / 105 / 145 / 185 / 225",
+                "zh-tw": "大法師",
                 "zh-cn": "大法師",
                 "ja-jp": "魔帝",
                 "ko-kr": "Damage: 65 / 110 / 155 / 200 / 245 ⇒ 65 / 105 / 145 / 185 / 225"
@@ -4529,14 +4529,14 @@
             {
               "subject": {
                 "en": "Orianna",
-                "zh-tw": "Orianna",
+                "zh-tw": "金級增幅裝置",
                 "zh-cn": "金級增幅裝置",
                 "ja-jp": "ゴールドオーグメント",
                 "ko-kr": "Orianna"
               },
               "text": {
                 "en": "Base Health: 585 ⇒ 565",
-                "zh-tw": "Base Health: 585 ⇒ 565",
+                "zh-tw": "一棒入魂！",
                 "zh-cn": "一棒入魂！",
                 "ja-jp": "ボカッ！",
                 "ko-kr": "Base Health: 585 ⇒ 565"
@@ -4589,14 +4589,14 @@
             {
               "subject": {
                 "en": "Orianna",
-                "zh-tw": "Orianna",
+                "zh-tw": "金級增幅裝置",
                 "zh-cn": "金級增幅裝置",
                 "ja-jp": "ゴールドオーグメント",
                 "ko-kr": "Orianna"
               },
               "text": {
                 "en": "Damage Increase Per Stack: 20% ⇒ 15%",
-                "zh-tw": "Damage Increase Per Stack: 20% ⇒ 15%",
+                "zh-tw": "燃燒利息",
                 "zh-cn": "燃燒利息",
                 "ja-jp": "燃える利回り",
                 "ko-kr": "Damage Increase Per Stack: 20% ⇒ 15%"
@@ -4654,14 +4654,14 @@
             {
               "subject": {
                 "en": "Orianna",
-                "zh-tw": "Orianna",
+                "zh-tw": "金級增幅裝置",
                 "zh-cn": "金級增幅裝置",
                 "ja-jp": "ゴールドオーグメント",
                 "ko-kr": "Orianna"
               },
               "text": {
                 "en": "Damage: 250/400/550 (+95% AP) ⇒ 225/350/475 (+110% AP)",
-                "zh-tw": "Damage: 250/400/550 (+95% AP) ⇒ 225/350/475 (+110% AP)",
+                "zh-tw": "無盡屠滅",
                 "zh-cn": "無盡屠滅",
                 "ja-jp": "終わりなき殲滅",
                 "ko-kr": "Damage: 250/400/550 (+95% AP) ⇒ 225/350/475 (+110% AP)"
@@ -4721,14 +4721,14 @@
             {
               "subject": {
                 "en": "Ryze",
-                "zh-tw": "Ryze",
+                "zh-tw": "金級增幅裝置",
                 "zh-cn": "金級增幅裝置",
                 "ja-jp": "ゴールドオーグメント",
                 "ko-kr": "Ryze"
               },
               "text": {
                 "en": "Base Health: 645 ⇒ 620",
-                "zh-tw": "Base Health: 645 ⇒ 620",
+                "zh-tw": "超遠射擊",
                 "zh-cn": "超遠射擊",
                 "ja-jp": "ロングシュート",
                 "ko-kr": "Base Health: 645 ⇒ 620"
@@ -4780,14 +4780,14 @@
             {
               "subject": {
                 "en": "Ryze",
-                "zh-tw": "Ryze",
+                "zh-tw": "金級增幅裝置",
                 "zh-cn": "金級增幅裝置",
                 "ja-jp": "ゴールドオーグメント",
                 "ko-kr": "Ryze"
               },
               "text": {
                 "en": "Base AD: 58 ⇒ 55",
-                "zh-tw": "Base AD: 58 ⇒ 55",
+                "zh-tw": "躲草叢",
                 "zh-cn": "躲草叢",
                 "ja-jp": "Hide on Bush",
                 "ko-kr": "Base AD: 58 ⇒ 55"
@@ -4844,14 +4844,14 @@
             {
               "subject": {
                 "en": "Sylas",
-                "zh-tw": "Sylas",
+                "zh-tw": "金級增幅裝置",
                 "zh-cn": "金級增幅裝置",
                 "ja-jp": "ゴールドオーグメント",
                 "ko-kr": "Sylas"
               },
               "text": {
                 "en": "Initial Damage: 40 / 60 / 80 / 100 / 120 (+40% AP) ⇒ 40 / 65 / 90 / 115 / 140 (+45% AP)",
-                "zh-tw": "Initial Damage: 40 / 60 / 80 / 100 / 120 (+40% AP) ⇒ 40 / 65 / 90 / 115 / 140 (+45% AP)",
+                "zh-tw": "小小助力",
                 "zh-cn": "小小助力",
                 "ja-jp": "ちょこっとヘルプ",
                 "ko-kr": "Initial Damage: 40 / 60 / 80 / 100 / 120 (+40% AP) ⇒ 40 / 65 / 90 / 115 / 140 (+45% AP)"
@@ -4913,14 +4913,14 @@
             {
               "subject": {
                 "en": "Sylas",
-                "zh-tw": "Sylas",
+                "zh-tw": "金級增幅裝置",
                 "zh-cn": "金級增幅裝置",
                 "ja-jp": "ゴールドオーグメント",
                 "ko-kr": "Sylas"
               },
               "text": {
                 "en": "Heal Amount: 20 / 40 / 60 / 80 / 100 (+20% AP) (+5% Sylas' Bonus HP), increased by up to 100% based on Sylas' missing health ⇒ 20 / 40 / 60 / 80 / 100 (+30% AP) (+5% Sylas' Bonus HP), increased by up to 100% based on Sylas' missing health",
-                "zh-tw": "Heal Amount: 20 / 40 / 60 / 80 / 100 (+20% AP) (+5% Sylas' Bonus HP), increased by up to 100% based on Sylas' missing health ⇒ 20 / 40 / 60 / 80 / 100 (+30% AP) (+5% Sylas' Bonus HP), increased by up to 100% based on Sylas' missing health",
+                "zh-tw": "慈悲之擊",
                 "zh-cn": "慈悲之擊",
                 "ja-jp": "慈悲の一撃",
                 "ko-kr": "Heal Amount: 20 / 40 / 60 / 80 / 100 (+20% AP) (+5% Sylas' Bonus HP), increased by up to 100% based on Sylas' missing health ⇒ 20 / 40 / 60 / 80 / 100 (+30% AP) (+5% Sylas' Bonus HP), increased by up to 100% based on Sylas' missing health"
@@ -4983,14 +4983,14 @@
             {
               "subject": {
                 "en": "Syndra",
-                "zh-tw": "Syndra",
+                "zh-tw": "金級增幅裝置",
                 "zh-cn": "金級增幅裝置",
                 "ja-jp": "ゴールドオーグメント",
                 "ko-kr": "Syndra"
               },
               "text": {
                 "en": "Base Health: 563 ⇒ 583",
-                "zh-tw": "Base Health: 563 ⇒ 583",
+                "zh-tw": "自然治療",
                 "zh-cn": "自然治療",
                 "ja-jp": "大自然が回復している",
                 "ko-kr": "Base Health: 563 ⇒ 583"
@@ -5041,14 +5041,14 @@
             {
               "subject": {
                 "en": "Syndra",
-                "zh-tw": "Syndra",
+                "zh-tw": "金級增幅裝置",
                 "zh-cn": "金級增幅裝置",
                 "ja-jp": "ゴールドオーグメント",
                 "ko-kr": "Syndra"
               },
               "text": {
                 "en": "Damage: 80-220 (+65% AP) ⇒ 90-230 (+70% AP)",
-                "zh-tw": "Damage: 80-220 (+65% AP) ⇒ 90-230 (+70% AP)",
+                "zh-tw": "共享治療",
                 "zh-cn": "共享治療",
                 "ja-jp": "みんなの回復",
                 "ko-kr": "Damage: 80-220 (+65% AP) ⇒ 90-230 (+70% AP)"
@@ -5106,14 +5106,14 @@
             {
               "subject": {
                 "en": "Tristana",
-                "zh-tw": "Tristana",
+                "zh-tw": "金級增幅裝置",
                 "zh-cn": "金級增幅裝置",
                 "ja-jp": "ゴールドオーグメント",
                 "ko-kr": "Tristana"
               },
               "text": {
                 "en": "AD Growth: 2.9 ⇒ 3.4",
-                "zh-tw": "AD Growth: 2.9 ⇒ 3.4",
+                "zh-tw": "過度延伸",
                 "zh-cn": "過度延伸",
                 "ja-jp": "深追いしすぎ",
                 "ko-kr": "AD Growth: 2.9 ⇒ 3.4"
@@ -5171,14 +5171,14 @@
             {
               "subject": {
                 "en": "Tristana",
-                "zh-tw": "Tristana",
+                "zh-tw": "金級增幅裝置",
                 "zh-cn": "金級增幅裝置",
                 "ja-jp": "ゴールドオーグメント",
                 "ko-kr": "Tristana"
               },
               "text": {
                 "en": "Mana: 30 / 35 / 40 / 45 / 50 ⇒ 15 / 20 / 25 / 30 / 35",
-                "zh-tw": "Mana: 30 / 35 / 40 / 45 / 50 ⇒ 15 / 20 / 25 / 30 / 35",
+                "zh-tw": "拍拍鼓勵",
                 "zh-cn": "拍拍鼓勵",
                 "ja-jp": "よくやった",
                 "ko-kr": "Mana: 30 / 35 / 40 / 45 / 50 ⇒ 15 / 20 / 25 / 30 / 35"
@@ -5231,14 +5231,14 @@
             {
               "subject": {
                 "en": "Varus",
-                "zh-tw": "Varus",
+                "zh-tw": "金級增幅裝置",
                 "zh-cn": "金級增幅裝置",
                 "ja-jp": "ゴールドオーグメント",
                 "ko-kr": "Varus"
               },
               "text": {
                 "en": "On Non-Champ Kill AD and AP: 10% of his Total AS ⇒ 11% of his Total AS",
-                "zh-tw": "On Non-Champ Kill AD and AP: 10% of his Total AS ⇒ 11% of his Total AS",
+                "zh-tw": "豪豬",
                 "zh-cn": "豪豬",
                 "ja-jp": "ヤマアラシ",
                 "ko-kr": "On Non-Champ Kill AD and AP: 10% of his Total AS ⇒ 11% of his Total AS"
@@ -5300,14 +5300,14 @@
             {
               "subject": {
                 "en": "Varus",
-                "zh-tw": "Varus",
+                "zh-tw": "金級增幅裝置",
                 "zh-cn": "金級增幅裝置",
                 "ja-jp": "ゴールドオーグメント",
                 "ko-kr": "Varus"
               },
               "text": {
                 "en": "On Champ Kill AD and AP: 25% of his Total AS ⇒ 33% of his Total AS",
-                "zh-tw": "On Champ Kill AD and AP: 25% of his Total AS ⇒ 33% of his Total AS",
+                "zh-tw": "壓力鍋",
                 "zh-cn": "壓力鍋",
                 "ja-jp": "圧力鍋",
                 "ko-kr": "On Champ Kill AD and AP: 25% of his Total AS ⇒ 33% of his Total AS"
@@ -5369,14 +5369,14 @@
             {
               "subject": {
                 "en": "Varus",
-                "zh-tw": "Varus",
+                "zh-tw": "金級增幅裝置",
                 "zh-cn": "金級增幅裝置",
                 "ja-jp": "ゴールドオーグメント",
                 "ko-kr": "Varus"
               },
               "text": {
                 "en": "On Non-Champ Kill AS: +50% AS ⇒ +30% AS",
-                "zh-tw": "On Non-Champ Kill AS: +50% AS ⇒ +30% AS",
+                "zh-tw": "疾速追擊",
                 "zh-cn": "疾速追擊",
                 "ja-jp": "素早さの追求",
                 "ko-kr": "On Non-Champ Kill AS: +50% AS ⇒ +30% AS"
@@ -5431,14 +5431,14 @@
             {
               "subject": {
                 "en": "Varus",
-                "zh-tw": "Varus",
+                "zh-tw": "金級增幅裝置",
                 "zh-cn": "金級增幅裝置",
                 "ja-jp": "ゴールドオーグメント",
                 "ko-kr": "Varus"
               },
               "text": {
                 "en": "Damage: 53.33 / 100 / 146.67 / 193.33 / 240 (+100% bonus AD) to 80 / 150 / 220 / 290 / 360 (+150% bonus AD) ⇒ 53.33 / 100 / 146.67 / 193.33 / 240 (+80% bonus AD) to 80 / 150 / 220 / 290 / 360 (+120% bonus AD)",
-                "zh-tw": "Damage: 53.33 / 100 / 146.67 / 193.33 / 240 (+100% bonus AD) to 80 / 150 / 220 / 290 / 360 (+150% bonus AD) ⇒ 53.33 / 100 / 146.67 / 193.33 / 240 (+80% bonus AD) to 80 / 150 / 220 / 290 / 360 (+120% bonus AD)",
+                "zh-tw": "貪婪束縛",
                 "zh-cn": "貪婪束縛",
                 "ja-jp": "貪欲な束縛",
                 "ko-kr": "Damage: 53.33 / 100 / 146.67 / 193.33 / 240 (+100% bonus AD) to 80 / 150 / 220 / 290 / 360 (+150% bonus AD) ⇒ 53.33 / 100 / 146.67 / 193.33 / 240 (+80% bonus AD) to 80 / 150 / 220 / 290 / 360 (+120% bonus AD)"
@@ -5500,14 +5500,14 @@
             {
               "subject": {
                 "en": "Varus",
-                "zh-tw": "Varus",
+                "zh-tw": "金級增幅裝置",
                 "zh-cn": "金級增幅裝置",
                 "ja-jp": "ゴールドオーグメント",
                 "ko-kr": "Varus"
               },
               "text": {
                 "en": "On-Hit Damage: 8 / 17 / 26 / 35 / 44 (+15% bonus AD) (+25% AP) ⇒ 4 / 13 / 22 / 31 / 40 (+15% bonus AD) (+25% AP)",
-                "zh-tw": "On-Hit Damage: 8 / 17 / 26 / 35 / 44 (+15% bonus AD) (+25% AP) ⇒ 4 / 13 / 22 / 31 / 40 (+15% bonus AD) (+25% AP)",
+                "zh-tw": "回春",
                 "zh-cn": "回春",
                 "ja-jp": "再生",
                 "ko-kr": "On-Hit Damage: 8 / 17 / 26 / 35 / 44 (+15% bonus AD) (+25% AP) ⇒ 4 / 13 / 22 / 31 / 40 (+15% bonus AD) (+25% AP)"
@@ -5571,14 +5571,14 @@
             {
               "subject": {
                 "en": "Xin Zhao",
-                "zh-tw": "Xin Zhao",
+                "zh-tw": "金級增幅裝置",
                 "zh-cn": "金級增幅裝置",
                 "ja-jp": "ゴールドオーグメント",
                 "ko-kr": "Xin Zhao"
               },
               "text": {
                 "en": "Healing: 3 / 4 / 5% Max HP (+45 / 55 / 80% AP) ⇒ 2 / 3.5 / 5% Max HP (+40 / 50 / 70% AP)",
-                "zh-tw": "Healing: 3 / 4 / 5% Max HP (+45 / 55 / 80% AP) ⇒ 2 / 3.5 / 5% Max HP (+40 / 50 / 70% AP)",
+                "zh-tw": "鯊魚誘餌",
                 "zh-cn": "鯊魚誘餌",
                 "ja-jp": "サメのエサ",
                 "ko-kr": "Healing: 3 / 4 / 5% Max HP (+45 / 55 / 80% AP) ⇒ 2 / 3.5 / 5% Max HP (+40 / 50 / 70% AP)"
@@ -5642,14 +5642,14 @@
             {
               "subject": {
                 "en": "Xin Zhao",
-                "zh-tw": "Xin Zhao",
+                "zh-tw": "金級增幅裝置",
                 "zh-cn": "金級增幅裝置",
                 "ja-jp": "ゴールドオーグメント",
                 "ko-kr": "Xin Zhao"
               },
               "text": {
                 "en": "Mana Cost: 60 / 55 / 50 / 45 / 40 ⇒ 60",
-                "zh-tw": "Mana Cost: 60 / 55 / 50 / 45 / 40 ⇒ 60",
+                "zh-tw": "鯊魚風暴",
                 "zh-cn": "鯊魚風暴",
                 "ja-jp": "シャークテンペスト",
                 "ko-kr": "Mana Cost: 60 / 55 / 50 / 45 / 40 ⇒ 60"
@@ -5705,14 +5705,14 @@
             {
               "subject": {
                 "en": "Xin Zhao",
-                "zh-tw": "Xin Zhao",
+                "zh-tw": "金級增幅裝置",
                 "zh-cn": "金級增幅裝置",
                 "ja-jp": "ゴールドオーグメント",
                 "ko-kr": "Xin Zhao"
               },
               "text": {
                 "en": "Mana Cost: 50 ⇒ 60",
-                "zh-tw": "Mana Cost: 50 ⇒ 60",
+                "zh-tw": "雪爆",
                 "zh-cn": "雪爆",
                 "ja-jp": "スノーブラスト",
                 "ko-kr": "Mana Cost: 50 ⇒ 60"
@@ -5768,14 +5768,14 @@
             {
               "subject": {
                 "en": "Yuumi",
-                "zh-tw": "Yuumi",
+                "zh-tw": "金級增幅裝置",
                 "zh-cn": "金級增幅裝置",
                 "ja-jp": "ゴールドオーグメント",
                 "ko-kr": "Yuumi"
               },
               "text": {
                 "en": "Heal Amount: 20 - 110 (+25% AP) (Levels 1 - 18) ⇒ 20 - 110 (+30% AP) (Levels 1 - 18)",
-                "zh-tw": "Heal Amount: 20 - 110 (+25% AP) (Levels 1 - 18) ⇒ 20 - 110 (+30% AP) (Levels 1 - 18)",
+                "zh-tw": "劃地為王",
                 "zh-cn": "劃地為王",
                 "ja-jp": "地形でドン",
                 "ko-kr": "Heal Amount: 20 - 110 (+25% AP) (Levels 1 - 18) ⇒ 20 - 110 (+30% AP) (Levels 1 - 18)"
@@ -5835,14 +5835,14 @@
             {
               "subject": {
                 "en": "Yuumi",
-                "zh-tw": "Yuumi",
+                "zh-tw": "金級增幅裝置",
                 "zh-cn": "金級增幅裝置",
                 "ja-jp": "ゴールドオーグメント",
                 "ko-kr": "Yuumi"
               },
               "text": {
                 "en": "Shield Amount: 65 / 90 / 115 / 140 / 165 (+30% AP) ⇒ 65 / 90 / 115 / 140 / 165 (+40% AP)",
-                "zh-tw": "Shield Amount: 65 / 90 / 115 / 140 / 165 (+30% AP) ⇒ 65 / 90 / 115 / 140 / 165 (+40% AP)",
+                "zh-tw": "牙仙",
                 "zh-cn": "牙仙",
                 "ja-jp": "歯の妖精",
                 "ko-kr": "Shield Amount: 65 / 90 / 115 / 140 / 165 (+30% AP) ⇒ 65 / 90 / 115 / 140 / 165 (+40% AP)"
@@ -5908,14 +5908,14 @@
             {
               "subject": {
                 "en": "What are Ability and Quest Augments?",
-                "zh-tw": "What are Ability and Quest Augments?",
+                "zh-tw": "華爾茲劍舞 現在會嘗試將最終攻擊重新鎖定初始目標，讓玩家能夠在初始目標附近著陸 拔劍吧",
                 "zh-cn": "華爾茲劍舞 現在會嘗試將最終攻擊重新鎖定初始目標，讓玩家能夠在初始目標附近著陸 拔劍吧",
                 "ja-jp": "ブレードワルツ プレイヤーが最終的に最初の対象の近くで終われるように、最後の攻撃で最初の対象に再度対象指定を試みるようになりました 剣を構えよ",
                 "ko-kr": "What are Ability and Quest Augments?"
               },
               "text": {
                 "en": "For example: Quick Step – Casting your self-targeted AoE ability makes you dash forward (Yes, Garen E and Kennen R are very happy about this!)",
-                "zh-tw": "For example: Quick Step – Casting your self-targeted AoE ability makes you dash forward (Yes, Garen E and Kennen R are very happy about this!)",
+                "zh-tw": "物攻：30%加成，依攻擊距離（500-650）提升至最多30% ⇒ 24%加成，隨攻擊距離（500-650）提升至最多100%",
                 "zh-cn": "物攻：30%加成，依攻擊距離（500-650）提升至最多30% ⇒ 24%加成，隨攻擊距離（500-650）提升至最多100%",
                 "ja-jp": "攻撃力：30%増加、射程（500～650）に応じて最大30%まで増加 ⇒ 24%増加、射程（500～650）に応じて最大100%まで増加",
                 "ko-kr": "For example: Quick Step – Casting your self-targeted AoE ability makes you dash forward (Yes, Garen E and Kennen R are very happy about this!)"
@@ -5973,14 +5973,14 @@
             {
               "subject": {
                 "en": "What are Ability and Quest Augments?",
-                "zh-tw": "What are Ability and Quest Augments?",
+                "zh-tw": "華爾茲劍舞 現在會嘗試將最終攻擊重新鎖定初始目標，讓玩家能夠在初始目標附近著陸 拔劍吧",
                 "zh-cn": "華爾茲劍舞 現在會嘗試將最終攻擊重新鎖定初始目標，讓玩家能夠在初始目標附近著陸 拔劍吧",
                 "ja-jp": "ブレードワルツ プレイヤーが最終的に最初の対象の近くで終われるように、最後の攻撃で最初の対象に再度対象指定を試みるようになりました 剣を構えよ",
                 "ko-kr": "What are Ability and Quest Augments?"
               },
               "text": {
                 "en": "Previously, Quest Augments only had a single unlock threshold, but in this update we're introducing multi-tier Quest Augments that can evolve multiple times into even stronger versions. Older Quest Augments, like Quest: Steel Your Heart, have also been updated with clearer visuals and requirement tracking in the UI.",
-                "zh-tw": "Previously, Quest Augments only had a single unlock threshold, but in this update we're introducing multi-tier Quest Augments that can evolve multiple times into even stronger versions. Older Quest Augments, like Quest: Steel Your Heart, have also been updated with clearer visuals and requirement tracking in the UI.",
+                "zh-tw": "攻速：25%額外提升，依攻擊距離（500-650）最高提升至30% ⇒ 20%額外提升（依攻擊距離500-650最高提升至100%）",
                 "zh-cn": "攻速：25%額外提升，依攻擊距離（500-650）最高提升至30% ⇒ 20%額外提升（依攻擊距離500-650最高提升至100%）",
                 "ja-jp": "攻撃速度：25%増加、射程（500～650）に応じて最大30%まで増加 ⇒ 20%増加、射程（500～650）に応じて最大100%まで増加",
                 "ko-kr": "Previously, Quest Augments only had a single unlock threshold, but in this update we're introducing multi-tier Quest Augments that can evolve multiple times into even stronger versions. Older Quest Augments, like Quest: Steel Your Heart, have also been updated with clearer visuals and requirement tracking in the UI."
