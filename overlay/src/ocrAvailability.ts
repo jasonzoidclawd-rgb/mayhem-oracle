@@ -1,5 +1,5 @@
 export const OCR_UNAVAILABLE_REASON =
-  "Tesseract OCR is not installed or not available on PATH.";
+  "System OCR is not available on this device. On Windows, install an OCR language pack (Settings > Time & Language > Language & Region).";
 
 export type OcrAvailability =
   | { available: true }
@@ -22,8 +22,9 @@ export function isRecoverableOcrUnavailable(
 }
 
 export function shouldBlockOverlayDataLoad(
-  _availability: OcrAvailability,
+  availability: OcrAvailability,
 ): boolean {
+  void availability;
   return false;
 }
 
@@ -38,6 +39,6 @@ export function ocrAvailabilityFromError(
   error: unknown,
 ): OcrAvailability | null {
   const message = error instanceof Error ? error.message : String(error ?? "");
-  if (!/tesseract/i.test(message)) return null;
+  if (!/ocr unavailable/i.test(message)) return null;
   return createOcrAvailability(false);
 }

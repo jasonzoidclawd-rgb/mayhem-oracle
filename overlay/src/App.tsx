@@ -274,7 +274,7 @@ function App() {
   // On mount: check local OCR and capture prerequisites.
   useEffect(() => {
     let cancelled = false;
-    invoke<boolean>("check_tesseract").then((ok) => {
+    invoke<boolean>("check_ocr").then((ok) => {
       if (!cancelled) setOcrAvailability(createOcrAvailability(ok));
     }).catch(() => {
       if (!cancelled) setOcrAvailability(createOcrAvailability(false));

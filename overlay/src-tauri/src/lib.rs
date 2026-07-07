@@ -1,13 +1,14 @@
+#![allow(unexpected_cfgs)] // objc 0.2 macros emit cfg(cargo-clippy) on current rustc.
+
 use image::GenericImageView;
 use serde::{Deserialize, Serialize};
-use std::io::Write;
 use std::sync::Arc;
-use sysinfo::System;
 
 pub mod calibration;
 mod collector;
 mod lcu;
 pub mod member;
+pub mod ocr;
 mod sanitize;
 mod upload_queue;
 
@@ -177,66 +178,8 @@ pub struct DetectedAugment {
 // ─── OCR Commands ───────────────────────────────────────────────────────────
 
 #[tauri::command]
-fn check_tesseract() -> bool {
-    std::process::Command::new("tesseract")
-        .arg("--version")
-        .output()
-        .map(|o| o.status.success())
-        .unwrap_or(false)
-}
-
-fn preferred_tesseract_languages() -> String {
-    let installed = std::process::Command::new("tesseract")
-        .arg("--list-langs")
-        .output()
-        .ok()
-        .and_then(|output| String::from_utf8(output.stdout).ok())
-        .unwrap_or_default();
-    let installed: std::collections::HashSet<&str> = installed.lines().map(str::trim).collect();
-
-    let sys = System::new_all();
-    let game_locale = sys
-        .processes()
-        .values()
-        .filter(|process| {
-            let name = process
-                .name()
-                .to_string_lossy()
-                .to_lowercase()
-                .replace(' ', "");
-            name.contains("leagueoflegends") || name.contains("leagueclient")
-        })
-        .flat_map(|process| process.cmd())
-        .map(|arg| arg.to_string_lossy())
-        .find_map(|arg| {
-            arg.strip_prefix("-Locale=")
-                .or_else(|| arg.strip_prefix("--locale="))
-                .map(str::to_string)
-        });
-
-    let locale_language = game_locale.as_deref().and_then(|locale| match locale {
-        locale if locale.starts_with("zh_TW") => Some("chi_tra"),
-        locale if locale.starts_with("zh_CN") => Some("chi_sim"),
-        locale if locale.starts_with("ja_") => Some("jpn"),
-        locale if locale.starts_with("ko_") => Some("kor"),
-        locale if locale.starts_with("en_") => Some("eng"),
-        _ => None,
-    });
-    if let Some(language) = locale_language.filter(|language| installed.contains(language)) {
-        return language.to_string();
-    }
-
-    let preferred = ["eng", "chi_tra", "chi_sim", "jpn", "kor"];
-    let langs: Vec<&str> = preferred
-        .into_iter()
-        .filter(|lang| installed.contains(lang))
-        .collect();
-
-    if langs.is_empty() {
-        "chi_tra".to_string()
-    } else {
-        langs.join("+")
-    }
+fn check_ocr() -> bool {
+    ocr::is_available()
 }
 
 #[tauri::command]
@@ -417,62 +360,6 @@ fn get_overlay_calibration(
     Ok(calibration)
 }
 
-fn run_tesseract(
-    crop: image::DynamicImage,
-    idx: usize,
-    ocr_languages: String,
-    user_words_path: Option<Arc<tempfile::TempPath>>,
-) -> Result<Option<DetectedAugment>, String> {
-    let scaled = image::imageops::resize(
-        &crop,
-        crop.width() * 2,
-        crop.height() * 2,
-        image::imageops::FilterType::Lanczos3,
-    );
-
-    let tmp_file = tempfile::Builder::new()
-        .prefix("mayhem_ocr_")
-        .suffix(".png")
-        .tempfile()
-        .map_err(|e| format!("Temp file failed: {}", e))?;
-    scaled
-        .save(tmp_file.path())
-        .map_err(|e| format!("Save failed: {}", e))?;
-
-    let mut texts = Vec::new();
-    for psm in ["11", "6"] {
-        let mut command = std::process::Command::new("tesseract");
-        command
-            .arg(tmp_file.path())
-            .arg("stdout")
-            .arg("-l")
-            .arg(&ocr_languages)
-            .arg("--psm")
-            .arg(psm);
-
-        if let Some(file) = &user_words_path {
-            command.arg("--user-words").arg(file.as_ref().as_os_str());
-        }
-
-        let output = command
-            .output()
-            .map_err(|e| format!("Tesseract failed: {}", e))?;
-
-        let text = String::from_utf8_lossy(&output.stdout)
-            .trim()
-            .replace(' ', "")
-            .replace('\n', "");
-        if !text.is_empty() && !texts.contains(&text) {
-            texts.push(text);
-        }
-    }
-    let text = texts.join("");
-    Ok((!text.is_empty()).then_some(DetectedAugment {
-        text,
-        region_index: idx,
-    }))
-}
-
 fn capture_card_name_crops() -> Result<Vec<(usize, image::DynamicImage)>, String> {
     let monitors = monitor_snapshots()?;
     let game_window = find_league_window();
@@ -522,38 +409,29 @@ async fn detect_augment_names(
     }
 
     let crops = capture_card_name_crops()?;
-    let ocr_languages = preferred_tesseract_languages();
+    let locale = ocr::detect_game_locale();
 
-    let mut user_words_file = None;
-
-    if let Some(names) = known_names {
-        if !names.is_empty() {
-            let mut file = tempfile::Builder::new()
-                .prefix("mayhem_ocr_words_")
-                .suffix(".txt")
-                .tempfile()
-                .map_err(|e| format!("User words file failed: {}", e))?;
-
-            for name in names {
-                let trimmed = name.trim();
-                if !trimmed.is_empty() {
-                    writeln!(file, "{}", trimmed)
-                        .map_err(|e| format!("User words write failed: {}", e))?;
-                }
-            }
-
-            file.flush()
-                .map_err(|e| format!("User words flush failed: {}", e))?;
-            user_words_file = Some(Arc::new(file.into_temp_path()));
-        }
-    }
+    // Vision biases language correction toward these names; the Windows
+    // backend ignores them (fuzzy matching happens in the frontend).
+    let known_names: Arc<Vec<String>> = Arc::new(
+        known_names
+            .unwrap_or_default()
+            .into_iter()
+            .map(|name| name.trim().to_string())
+            .filter(|name| !name.is_empty())
+            .collect(),
+    );
 
     let mut handles = Vec::with_capacity(crops.len());
     for (i, crop) in crops {
-        let languages = ocr_languages.clone();
-        let words = user_words_file.clone();
+        let known_names = known_names.clone();
         handles.push(tokio::task::spawn_blocking(move || {
-            run_tesseract(crop, i, languages, words)
+            ocr::read_card_text(&crop, locale, &known_names).map(|text| {
+                text.map(|text| DetectedAugment {
+                    text,
+                    region_index: i,
+                })
+            })
         }));
     }
 
@@ -709,7 +587,7 @@ pub fn run() {
             get_lcu_gameflow_state,
             get_game_hash,
             get_live_player_data,
-            check_tesseract,
+            check_ocr,
             check_screen_capture_available,
             detect_augment_names,
             get_overlay_calibration,
@@ -821,12 +699,6 @@ pub fn run() {
                 });
 
             }
-
-            std::thread::spawn(|| {
-                let _ = std::process::Command::new("tesseract")
-                    .arg("--list-langs")
-                    .output();
-            });
 
             Ok(())
         })

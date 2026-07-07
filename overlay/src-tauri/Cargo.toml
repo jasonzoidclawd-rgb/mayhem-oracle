@@ -21,7 +21,6 @@ tokio = { version = "1", features = ["full"] }
 sysinfo = "0.33"
 base64 = "0.22"
 xcap = "0.9"
-rusty-tesseract = "1.1"
 image = "0.25"
 tempfile = "3"
 chrono = { version = "0.4", features = ["serde"] }
@@ -33,3 +32,13 @@ sha2 = "0.10"
 [target.'cfg(target_os = "macos")'.dependencies]
 cocoa = "0.26"
 objc = "0.2"
+
+[target.'cfg(target_os = "windows")'.dependencies]
+windows = { version = "0.61", features = [
+    "Foundation",
+    "Foundation_Collections",
+    "Globalization",
+    "Graphics_Imaging",
+    "Media_Ocr",
+    "Storage_Streams",
+] }

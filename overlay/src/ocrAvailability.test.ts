@@ -3,17 +3,19 @@ import {
   canRunOcr,
   createOcrAvailability,
   isRecoverableOcrUnavailable,
+  ocrAvailabilityFromError,
+  OCR_UNAVAILABLE_REASON,
   shouldBlockOverlayDataLoad,
   userFacingOcrStatus,
 } from "./ocrAvailability";
 
 describe("OCR availability", () => {
-  test("treats missing Tesseract as recoverable OCR-unavailable state", () => {
+  test("treats unavailable system OCR as recoverable OCR-unavailable state", () => {
     const availability = createOcrAvailability(false);
 
     expect(availability).toEqual({
       available: false,
-      reason: "Tesseract OCR is not installed or not available on PATH.",
+      reason: OCR_UNAVAILABLE_REASON,
     });
     expect(isRecoverableOcrUnavailable(availability)).toBe(true);
     expect(canRunOcr(availability)).toBe(false);
@@ -24,11 +26,26 @@ describe("OCR availability", () => {
 
     expect(shouldBlockOverlayDataLoad(availability)).toBe(false);
     expect(userFacingOcrStatus(availability)).toBe(
-      "OCR unavailable: Tesseract OCR is not installed or not available on PATH.",
+      `OCR unavailable: ${OCR_UNAVAILABLE_REASON}`,
     );
   });
 
-  test("allows OCR-dependent features when Tesseract is available", () => {
+  test("maps native backend OCR-unavailable errors to recoverable availability", () => {
+    const availability = ocrAvailabilityFromError(
+      new Error("OCR unavailable: no Windows OCR language pack installed"),
+    );
+
+    expect(availability).toEqual({
+      available: false,
+      reason: OCR_UNAVAILABLE_REASON,
+    });
+  });
+
+  test("ignores non-availability OCR errors", () => {
+    expect(ocrAvailabilityFromError(new Error("OCR failed: PNG encode"))).toBeNull();
+  });
+
+  test("allows OCR-dependent features when system OCR is available", () => {
     const availability = createOcrAvailability(true);
 
     expect(availability).toEqual({ available: true });
