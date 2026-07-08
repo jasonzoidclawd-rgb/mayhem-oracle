@@ -1,6 +1,6 @@
 {
   "patch": "26.13",
-  "scraped_at": "2026-07-08T11:42:52.172822+00:00",
+  "scraped_at": "2026-07-08T22:57:11.630435+00:00",
   "schemaVersion": "augment-truth-step5",
   "sources": {
     "definition": "data/internal/augment-base-catalog.json",
