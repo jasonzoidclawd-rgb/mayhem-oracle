@@ -1,6 +1,6 @@
 {
   "patch": "26.13",
-  "scraped_at": "2026-07-08T22:57:11.630435+00:00",
+  "scraped_at": "2026-07-09T23:04:02.082524+00:00",
   "schemaVersion": "augment-truth-step5",
   "sources": {
     "definition": "data/internal/augment-base-catalog.json",
@@ -6037,7 +6037,7 @@
       "name_zh_TW": "次元轉移",
       "name_ja": "ディメンションシフト",
       "name_ko": "차원 이동",
-      "wikiDescription": "Replace a summoner spell with When the Darkness Comes. When the Darkness Comes: Sends a bright, cosmic light arcing to the target location. Upon impact, the light spreads out to cause all units within a 500 radius to be sent to the Dark Realm for 8 seconds. If you are in the Dark Realm, you gain 25 – 100 (based on level) bonus attack damage, 25 – 100 (based on level) ability power, 200 – 1000 (based on level) bonus health, and 35% increased size. The Dark Realm is a battlefield that exists outside of the normal realm in an alternate dimension. It exists only for units hit by the cosmic light, and consists of an arena that has a radius of 1200 units and includes any terrain features that would exist in the map of the normal realm, including structures, walls, and brushes. The boundaries of the arena are impassable but not considered terrain themselves, and enemies that try to move out of the area will be displaced back inside. Units between realms see each other as glowing stars, considering each other dead and negating any interactions between each other. Only units that were hit by the light will enter the realm; other units cannot follow them. Everything that occurs inside the Dark Realm is hidden to units outside of it, and vice versa. Structures exist in all realms at the same time, but are untargetable in the Dark Realm. Turrets will behave normally as if all units were in the same realm. Pets still inside the Dark Realm are killed at its end.",
+      "wikiDescription": "Replace a summoner spell with When the Darkness Comes. When the Darkness Comes: Sends a bright, cosmic light arcing to the target location over 2 seconds. Upon impact, the light spreads out to cause all units within a 500 radius to be sent to the Dark Realm for 8 seconds. If you are in the Dark Realm, you gain 25 – 100 (based on level) bonus attack damage, 25 – 100 (based on level) ability power, 200 – 1000 (based on level) bonus health, and 35% increased size. The Dark Realm is a battlefield that exists outside of the normal realm in an alternate dimension. It exists only for units hit by the cosmic light. The realm includes any terrain features that would exist in the map of the normal realm, including structures, walls, and brushes. Units between realms see each other as glowing stars, considering each other dead and negating any interactions between each other. Only units that were hit by the light will enter the realm; other units cannot follow them. Everything that occurs inside the Dark Realm is hidden to units outside of it, and vice versa. Structures exist in all realms at the same time, but are untargetable in the Dark Realm. Turrets will behave normally as if all units were in the same realm. Pets still inside the Dark Realm are killed at its end.",
       "wikiRarity": "prismatic",
       "description_zh_TW": "獲得召喚師技能「黑暗時刻」。創造一個區域，將其中所有人傳送到另一個次元。",
       "description_zh_CN": "获得当黑暗到来召唤师技能。生成一个地带来将它其中的所有人传送到另一个位面。",
