@@ -6,6 +6,10 @@ on:
     - cron: '0 10 * * *'   # redundant guard against dropped schedule events
   workflow_dispatch:
 
+concurrency:
+  group: data-pipeline-${{ github.ref }}
+  cancel-in-progress: false
+
 jobs:
   update:
     runs-on: ubuntu-latest

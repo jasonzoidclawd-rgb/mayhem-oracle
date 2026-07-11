@@ -3,11 +3,9 @@
 import unittest
 
 from scrape_mayhem_augments_cdragon import (
-    SNAPSHOT_DEFINITION_SOURCE,
     build_base_catalog,
     build_tooltip_index,
     extract_augments,
-    should_record_hotfix_event,
 )
 
 
@@ -236,33 +234,6 @@ class AugmentBaseCatalogTests(unittest.TestCase):
         self.assertIn("BloodMoneyBurn", by_id)
         self.assertEqual(by_id["BloodMoneyBurn"]["name"], "Combusting Interest")
         self.assertEqual(catalog["reports"]["kiwiDefinitions"]["aliasedTokens"][0]["token"], "bloodmoney")
-
-    def test_definition_source_migration_does_not_emit_false_hotfix_event(self):
-        delta = {
-            "added": [{"nameId": "ChainReaction"}],
-            "removed": [],
-            "changed": [],
-        }
-
-        self.assertFalse(
-            should_record_hotfix_event(
-                previous={"patch": "26.12", "augments": [{"nameId": "ARAM_ADAPt"}]},
-                delta=delta,
-                patch="26.12",
-            )
-        )
-        self.assertTrue(
-            should_record_hotfix_event(
-                previous={
-                    "patch": "26.12",
-                    "definition_source": SNAPSHOT_DEFINITION_SOURCE,
-                    "augments": [{"nameId": "ARAM_ADAPt"}],
-                },
-                delta=delta,
-                patch="26.12",
-            )
-        )
-
 
 if __name__ == "__main__":
     unittest.main()

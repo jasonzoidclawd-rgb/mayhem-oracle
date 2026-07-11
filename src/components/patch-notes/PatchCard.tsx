@@ -10,6 +10,7 @@ import {
   patchNoteSectionAnchor,
 } from "@/lib/patch-notes/seo";
 import { patchDetailRoute } from "@/lib/patch-notes/routes";
+import { describeFreshness } from "@/lib/patch-notes/freshness";
 import type {
   PatchChange,
   PatchEntityRef,
@@ -177,6 +178,9 @@ async function ChangeRow({
   const metrics = change.metrics ?? [];
   const labels = change.labels ?? [];
   const engineRefs = change.impact?.engineRefs ?? [];
+  const freshness = change.detectedAt
+    ? describeFreshness("fresh", change.detectedAt)
+    : null;
   const typeLabel = (type: string) =>
     t(`objectTypes.${normalizePatchObjectType(type)}`);
 
@@ -194,6 +198,27 @@ async function ChangeRow({
             {change.detail ? (
               <span className="rounded border border-[var(--color-border)] px-1.5 py-0.5 text-[11px] text-[var(--color-text-muted)]">
                 {change.detail}
+              </span>
+            ) : null}
+            {change.isHotfix ? (
+              <span className="rounded border border-amber-400/35 bg-amber-400/10 px-1.5 py-0.5 text-[11px] font-medium text-amber-200">
+                {t("hotfixBadge")}
+              </span>
+            ) : null}
+            {change.landedFromPbe ? (
+              <span className="rounded border border-cyan-400/35 bg-cyan-400/10 px-1.5 py-0.5 text-[11px] font-medium text-cyan-200">
+                {t("landedFromPbe")}
+              </span>
+            ) : null}
+            {freshness ? (
+              <span className="text-[11px] text-[var(--color-text-muted)]">
+                {freshness.state === "today"
+                  ? t("freshnessToday")
+                  : freshness.state === "days"
+                    ? t("freshnessDays", { days: freshness.days ?? 0 })
+                    : freshness.state === "stale"
+                      ? t("freshnessStale")
+                      : t("freshnessUnavailable")}
               </span>
             ) : null}
           </div>

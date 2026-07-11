@@ -2,10 +2,9 @@
 """Add deterministic tombstones for removed augments missing from live catalogs.
 
 The arammayhem detail pages can outlive the actual live augment roster. When a
-patch-note subject indicates an upgrade augment was removed, but the current
-CommunityDragon Mayhem roster no longer contains it, keep a removed tombstone in
-augments.json so OCR/history can resolve the name while pool rules and scoring
-exclude it.
+CommunityDragon structured diff records an augment removal, but the current
+live roster no longer contains it, keep a removed tombstone in augments.json so
+OCR/history can resolve the name while pool rules and scoring exclude it.
 
 No LLM is used here. A small metadata table supplies fields unavailable from the
 patch-note subject alone.
@@ -20,8 +19,8 @@ from pathlib import Path
 from data_paths import INTERNAL_DATA_DIR
 
 AUGMENTS_PATH = INTERNAL_DATA_DIR / "augments.json"
-PATCH_NOTES_PATH = INTERNAL_DATA_DIR / "patch-notes.json"
-CDRAGON_SNAPSHOT_PATH = INTERNAL_DATA_DIR / "cdragon-mayhem-augments.json"
+PATCH_EVENTS_PATH = INTERNAL_DATA_DIR / "patch-events.json"
+CDRAGON_SNAPSHOT_PATH = INTERNAL_DATA_DIR / "cdragon-augment-latest.json"
 
 
 REMOVED_TOMBSTONES = {
@@ -78,22 +77,22 @@ def cdragon_live_slugs() -> set[str]:
     snapshot = read_json(CDRAGON_SNAPSHOT_PATH)
     return {
         augment["slug"]
-        for augment in snapshot.get("augments", [])
+        for augment in snapshot.get("entities", [])
         if augment.get("slug")
     }
 
 
-def removed_patch_note_slugs() -> set[str]:
-    patch_notes = read_json(PATCH_NOTES_PATH)
-    slugs: set[str] = set()
-    for patch in patch_notes.get("patches", []):
-        for section in patch.get("sections", []):
-            for change in section.get("changes", []):
-                subject = (change.get("subject") or {}).get("en", "")
-                text = (change.get("text") or {}).get("en", "").strip()
-                if subject and text.lower().startswith("[removed]"):
-                    slugs.add(slugify(subject))
-    return slugs
+def removed_snapshot_event_slugs() -> set[str]:
+    if not PATCH_EVENTS_PATH.exists():
+        return set()
+    events = read_json(PATCH_EVENTS_PATH)
+    return {
+        event["slug"]
+        for event in events.get("events", [])
+        if event.get("entity_type") == "augment"
+        and event.get("change_kind") == "removed"
+        and event.get("slug")
+    }
 
 
 def main() -> None:
@@ -101,7 +100,7 @@ def main() -> None:
     augments = data.get("augments", [])
     by_slug = {augment.get("slug"): augment for augment in augments}
     live_slugs = cdragon_live_slugs()
-    removed_slugs = removed_patch_note_slugs()
+    removed_slugs = removed_snapshot_event_slugs()
 
     renamed = 0
     for slug, fixes in LOCALIZED_NAME_FIXES.items():

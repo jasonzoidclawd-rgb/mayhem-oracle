@@ -183,6 +183,12 @@ export interface PatchChange {
   /** Champion slug if this change targets a single champion (Champion Balance section). */
   subjectSlug?: string;
   sourceType?: "new_champion_preview" | string;
+  /** Source observation timestamp from the CDragon event, not a prose claim. */
+  detectedAt?: string;
+  /** Same-patch CDragon change after the numbered notes were published. */
+  isHotfix?: boolean;
+  /** A reconciled PBE preview whose target values now exist in latest. */
+  landedFromPbe?: boolean;
   kind: ChangeKind;
   targets?: PatchEntityRef[];
   relatedEntities?: PatchEntityRef[];

@@ -116,7 +116,7 @@ async function PatchHero({
       <div className="bg-gradient-to-br from-cyan-500/15 via-purple-500/10 to-transparent px-5 py-5 sm:px-6">
         <div className="flex flex-wrap items-center gap-2">
           <span className="rounded-full border border-[var(--color-accent)]/40 bg-[var(--color-accent)]/15 px-2 py-0.5 text-xs font-semibold uppercase tracking-wider text-[var(--color-accent)]">
-            {t("officialSource")}
+            {t("structuredSource")}
           </span>
           {dateLabel ? (
             <span className="text-xs text-[var(--color-text-muted)]">

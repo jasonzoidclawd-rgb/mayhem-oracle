@@ -20,7 +20,7 @@ trap 'rm -f "$AUGMENT_SNAPSHOT"' EXIT
 
 step() { printf "\n\033[1;36m▶ %s\033[0m\n" "$1"; }
 
-step "1/17  snapshot augment classifications"
+step "1/19  snapshot augment classifications"
 AUGMENT_SNAPSHOT="$AUGMENT_SNAPSHOT" python3 - <<'PY'
 import json
 import os
@@ -39,55 +39,58 @@ Path(os.environ["AUGMENT_SNAPSHOT"]).write_text(
 print(f"Snapshotted {sum(1 for v in snapshot.values() if v.get('kit_tags'))} classified augments")
 PY
 
-step "2/17  CommunityDragon  →  authoritative augment base catalog"
+step "2/19  CommunityDragon  →  authoritative augment base catalog"
 if ! python3 scripts/scrape_mayhem_augments_cdragon.py --base-catalog-only; then
   printf "\n\033[1;31m✗ CDragon augment base fetch failed; keeping committed augment artifacts and aborting rebuild.\033[0m\n" >&2
   exit 1
 fi
 
-step "3/17  CDragon/Wiki/Tencent/arammayhem  →  augment identity map"
+step "3/19  CDragon/Wiki/Tencent/arammayhem  →  augment identity map"
 python3 scripts/augment_identity_resolver.py
 
-step "4/17  LoL Wiki augment feed  →  internal augment-wiki-feed/reports"
+step "4/19  LoL Wiki augment feed  →  internal augment-wiki-feed/reports"
 python3 scripts/augment_wiki_feed.py
 
-step "5/17  Tencent 26.12 official notes  →  augment-tencent-feed"
+step "5/19  Tencent 26.12 official notes  →  augment-tencent-feed"
 python3 scripts/build_tencent_feed.py
 
-step "6/17  arammayhem.com  →  internal champions/augment win-rate feed/combos/meta"
+step "6/19  arammayhem.com  →  internal champions/augment win-rate feed/combos/meta"
 python3 scripts/scrape_arammayhem.py
 
-step "7/17  CommunityDragon  →  internal abilities/items"
+step "7/19  CommunityDragon  →  internal abilities/items"
 python3 scripts/scrape_community_dragon.py
 
-step "8/17  Data Dragon base stats  →  internal champions.json (enrich)"
+step "8/19  Data Dragon base stats  →  internal champions.json (enrich)"
 python3 scripts/scrape_base_stats.py
 
-step "9/17  CommunityDragon ability stats  →  internal abilities.json (enrich)"
+step "9/19  CommunityDragon ability stats  →  internal abilities.json (enrich)"
 npx --yes tsx scripts/scrape_ability_stats.ts
 
-step "10/17 LoL Wiki item passives  →  internal items.json (enrich)"
+step "10/19 LoL Wiki item passives  →  internal items.json (enrich)"
 python3 scripts/enrich_wiki.py
 
-step "10b/17 Data Dragon  →  localized champion, ability & item names (enrich)"
+step "10b/19 Data Dragon  →  localized champion, ability & item names (enrich)"
 python3 scripts/enrich_locale_names.py
 
-step "11/17 patch notes  →  internal patch-notes.json"
+step "11/19 Riot prose  →  patch title/date/canonical metadata only"
 python3 scripts/scrape_patch_notes.py
 
-# Numbered patch notes miss server-side hotfixes ("不停機更新"). CommunityDragon
-# mirrors live game data first-hand; diffing its Mayhem augment snapshot detects
-# hotfixes (changes at an unchanged patch number).
-step "12/17 CommunityDragon  →  Mayhem augment snapshot + hotfix detection"
-python3 scripts/scrape_mayhem_augments_cdragon.py
+# CommunityDragon is the structural source of truth for all three entities.
+# Each lane promotes only after its full branch transaction validates; PBE never
+# falls back to latest and latest is never relabeled as preview.
+step "12/19 CommunityDragon latest  →  live snapshots + patch/hotfix events"
+python3 scripts/cdragon_patch_pipeline.py --branch latest
 
-step "13/17 patch-note removed augment tombstones  →  augment resolver input"
+step "13/19 CommunityDragon pbe  →  preview snapshots + lifecycle reconciliation"
+python3 scripts/cdragon_patch_pipeline.py --branch pbe
+
+step "14/19 patch-note removed augment tombstones  →  augment resolver input"
 python3 scripts/apply_removed_augment_tombstones.py
 
-step "14/17 assemble augments.json  →  resolved availability"
+step "15/19 assemble augments.json  →  resolved availability"
 python3 scripts/assemble_augments.py
 
-step "15/17 restore augment classifications"
+step "16/19 restore augment classifications"
 AUGMENT_SNAPSHOT="$AUGMENT_SNAPSHOT" python3 - <<'PY'
 import json
 import os
@@ -123,7 +126,7 @@ missing = sum(1 for a in data["augments"] if not a.get("kit_tags"))
 print(f"Restored {restored} augments. Unclassified or universal: {missing}")
 PY
 
-step "16/17 classify internal champions/augments  →  kit_tags"
+step "17/19 classify internal champions/augments  →  kit_tags"
 # --allow-partial: a handful of champions that fail deterministic derivation (and
 # can't reach the optional LLM in CI) must NOT abort the whole refresh — an
 # untagged champion degrades to a universal augment pool, which is far better
@@ -172,13 +175,13 @@ if champion_tagged == 0 or augment_tagged == 0 or missing_breakers or locale_fai
     )
 PY
 
-step "16b/17 generate internal pool rules  →  pool-rules.json"
+step "17b/19 generate internal pool rules  →  pool-rules.json"
 python3 scripts/generate_pool_rules.py
 
-step "16c/17 generate current internal combos  →  combos.json"
+step "17c/19 generate current internal combos  →  combos.json"
 npx --yes tsx scripts/generate_internal_combos.ts
 
-step "17/17 export sanitized public catalogs"
+step "19/19 export bounded public catalogs + patch/PBE presentation projections"
 python3 scripts/export_public_catalog.py
 
 NEW_PATCH=$(python3 -c "import json; print(json.load(open('$META'))['patch'])")

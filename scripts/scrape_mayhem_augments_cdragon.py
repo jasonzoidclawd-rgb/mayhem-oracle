@@ -1,17 +1,15 @@
 """
-Mayhem Oracle — CommunityDragon first-hand augment source + hotfix detector
-===========================================================================
-Riot does NOT publish ARAM: Mayhem server-side hotfixes ("不停機更新") on the
-English patch-notes page, so the scraper that reads `...-patch-X-Y-notes` pages
-is structurally blind to them. The authoritative first-hand source is the live
-game data, mirrored by CommunityDragon. ARAM Mayhem's internal codename is
+Mayhem Oracle — CommunityDragon Mayhem augment base-catalog source
+===============================================================
+The source-versioned hotfix detector now lives in
+`cdragon_patch_pipeline.py`, shared by augments, champions, and items across
+both latest and PBE. This module remains the authoritative base-catalog
+extractor for ARAM Mayhem's internal `kiwi` augment definitions.
 "kiwi" (Arena is "cherry"); its augment definitions live in the shared augment
 registry and are identified by `kiwi_*` stringtable definition keys.
 
 This script extracts the canonical Riot augment text + rarity for every Mayhem
-augment, writes a snapshot, and — by diffing against the previously committed
-snapshot — emits hotfix records when augment text/rarity changes while the
-patch number is unchanged. That is the signal a server-side hotfix shipped.
+augment and writes the base catalog used by the normalizer.
 
 Sources (CommunityDragon `latest`):
     roster + rarity : plugins/rcp-be-lol-game-data/global/default/v1/cherry-augments.json
@@ -20,11 +18,10 @@ Sources (CommunityDragon `latest`):
                       (keys matching kiwi_*_tooltip / _desc / _name)
 
 Usage:
-    python3 scripts/scrape_mayhem_augments_cdragon.py
+    python3 scripts/scrape_mayhem_augments_cdragon.py --base-catalog-only
 
 Output:
-    data/internal/cdragon-mayhem-augments.json   – canonical snapshot (committed)
-    data/internal/mayhem-hotfixes.json           – detected hotfix events (committed)
+    data/internal/augment-base-catalog.json
 """
 
 from __future__ import annotations
@@ -58,11 +55,8 @@ CDRAGON_LOCALES = {
     "ko": "ko_kr",
 }
 
-SNAPSHOT_PATH = INTERNAL_DATA_DIR / "cdragon-mayhem-augments.json"
-HOTFIX_PATH = INTERNAL_DATA_DIR / "mayhem-hotfixes.json"
 BASE_CATALOG_PATH = INTERNAL_DATA_DIR / "augment-base-catalog.json"
 IDENTITY_ALIAS_PATH = INTERNAL_DATA_DIR / "augment-identity-aliases.json"
-SNAPSHOT_DEFINITION_SOURCE = "kiwi-stringtable-v1"
 
 _NONALNUM = re.compile(r"[^a-z0-9]")
 # stringtable key noise stripped before matching to an augment nameId. Mayhem
@@ -784,32 +778,6 @@ def extract_augments(
     return out
 
 
-def _change_record(aug: dict, ctype: str, **extra) -> dict:
-    """One localized hotfix change row for the UI."""
-    rec = {"slug": aug["slug"], "names": aug.get("names", {"en": aug["name"]}),
-           "rarity": aug.get("rarity"), "type": ctype}
-    rec.update(extra)
-    return rec
-
-
-def build_event(delta: dict, patch: str, when: str) -> dict:
-    """Turn a raw augment diff into a localized, structured hotfix event."""
-    changes: list[dict] = []
-    for a in delta["added"]:
-        changes.append(_change_record(a, "added"))
-    for a in delta["removed"]:
-        changes.append(_change_record(a, "removed"))
-    for c in delta["changed"]:
-        aug = c["new"]
-        if "rarity" in c["fields"]:
-            changes.append(_change_record(aug, "rarity",
-                                          fromRarity=c["before"].get("rarity"),
-                                          toRarity=c["after"].get("rarity")))
-        if "tooltip" in c["fields"] or "name" in c["fields"]:
-            changes.append(_change_record(aug, "effect"))
-    return {"detected_at": when, "patch": patch, "date": when[:10], "changes": changes}
-
-
 def diff_augments(old: list[dict], new: list[dict]) -> dict[str, list]:
     """Compatibility projection over the shared normalized entity comparator.
 
@@ -856,53 +824,11 @@ def diff_augments(old: list[dict], new: list[dict]) -> dict[str, list]:
     return {"added": added, "removed": removed, "changed": changed}
 
 
-def _delta_size(delta: dict) -> int:
-    return len(delta["added"]) + len(delta["removed"]) + len(delta["changed"])
-
-
-def should_record_hotfix_event(previous: dict, delta: dict, patch: str) -> bool:
-    if not _delta_size(delta):
-        return False
-    if previous.get("patch") != patch:
-        return False
-    return previous.get("definition_source") == SNAPSHOT_DEFINITION_SOURCE
-
-
 def load_json(path: Path) -> dict | None:
     try:
         return json.loads(path.read_text(encoding="utf-8"))
     except (FileNotFoundError, json.JSONDecodeError):
         return None
-
-
-def retire_observed_mechanism_events() -> None:
-    """Remove retired downstream observed-live events from the hotfix feed."""
-
-    hotfixes = load_json(HOTFIX_PATH)
-    if not hotfixes:
-        return
-
-    changed = False
-    events = []
-    for event in hotfixes.get("events", []):
-        changes = [
-            change for change in event.get("changes", [])
-            if change.get("type") != "mechanism" and change.get("status") != "bug_mechanism"
-        ]
-        if len(changes) != len(event.get("changes", [])):
-            changed = True
-        if changes:
-            events.append({**event, "changes": changes})
-
-    if not changed:
-        return
-
-    hotfixes["events"] = events
-    HOTFIX_PATH.write_text(
-        json.dumps(hotfixes, ensure_ascii=False, indent=2) + "\n",
-        encoding="utf-8",
-    )
-    print("  Retired observed-live mechanism events from mayhem-hotfixes.json")
 
 
 def main() -> None:
@@ -919,79 +845,14 @@ def main() -> None:
     )
     args = parser.parse_args()
 
-    if args.base_catalog_only:
+    if args.base_catalog_only or args.base_catalog:
         write_base_catalog()
         return
 
-    meta = load_json(INTERNAL_DATA_DIR / "meta.json") or {}
-    patch = meta.get("patch", "unknown")
-
-    roster = fetch_json(ROSTER_URL)
-    stringtable = fetch_json(STRINGTABLE_URL)
-    tooltips = build_tooltip_index(stringtable)
-    alias_table = load_json(IDENTITY_ALIAS_PATH) or {}
-    augments = extract_augments(
-        roster,
-        tooltips,
-        localized_name_index(),
-        stringtable=stringtable,
-        registry_token_aliases=registry_token_aliases_from_table(alias_table),
+    raise SystemExit(
+        "Augment hotfix detection moved to cdragon_patch_pipeline.py; "
+        "use --base-catalog-only for this base-catalog extractor."
     )
-    matched = sum(1 for a in augments if a["tooltip"])
-    print(f"  Mayhem augments: {len(augments)} ({matched} with Riot tooltip)")
-
-    prev = load_json(SNAPSHOT_PATH)
-    now = datetime.now(timezone.utc).isoformat()
-
-    if prev and prev.get("augments"):
-        delta = diff_augments(prev["augments"], augments)
-        n = _delta_size(delta)
-        if should_record_hotfix_event(prev, delta, patch):
-            # Same patch, different augment data => server-side hotfix.
-            event = build_event(delta, patch, now)
-            hotfixes = load_json(HOTFIX_PATH) or {"events": []}
-            hotfixes["patch"] = patch
-            hotfixes["generated_at"] = now
-            hotfixes["events"] = [
-                e for e in hotfixes.get("events", []) if e.get("date") != event["date"]
-            ] + [event]
-            hotfixes["events"].sort(key=lambda e: e["detected_at"], reverse=True)
-            HOTFIX_PATH.write_text(
-                json.dumps(hotfixes, ensure_ascii=False, indent=2), encoding="utf-8"
-            )
-            print(f"  ⚠ HOTFIX detected on patch {patch}: "
-                  f"+{len(delta['added'])} -{len(delta['removed'])} "
-                  f"~{len(delta['changed'])} augments → {HOTFIX_PATH.name}")
-        elif n and prev.get("patch") == patch and prev.get("definition_source") != SNAPSHOT_DEFINITION_SOURCE:
-            print(
-                "  Definition source changed "
-                f"({prev.get('definition_source', 'legacy-aram-prefix')} → {SNAPSHOT_DEFINITION_SOURCE}); "
-                "establishing a new snapshot baseline without a hotfix event."
-            )
-        elif n:
-            print(f"  Patch changed ({prev.get('patch')} → {patch}); "
-                  f"{n} augment deltas attributed to the patch, not a hotfix.")
-        else:
-            print("  No augment changes since last snapshot.")
-    else:
-        print("  No prior snapshot — establishing hotfix-detection baseline.")
-
-    SNAPSHOT_PATH.write_text(
-        json.dumps({
-            "patch": patch,
-            "fetched_at": now,
-            "source": CDRAGON,
-            "definition_source": SNAPSHOT_DEFINITION_SOURCE,
-            "augments": augments,
-        }, ensure_ascii=False, indent=2),
-        encoding="utf-8",
-    )
-    print(f"  → {SNAPSHOT_PATH.name} written")
-
-    if args.base_catalog:
-        write_base_catalog()
-
-    retire_observed_mechanism_events()
 
 
 if __name__ == "__main__":

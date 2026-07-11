@@ -27,7 +27,7 @@ WIKI_FEED_PATH = INTERNAL_DATA_DIR / "augment-wiki-feed.json"
 WINRATE_FEED_PATH = INTERNAL_DATA_DIR / "augment-winrate-feed.json"
 TENCENT_FEED_PATH = INTERNAL_DATA_DIR / "augment-tencent-feed.json"
 IDENTITY_MAP_PATH = INTERNAL_DATA_DIR / "augment-identity-map.json"
-PATCH_NOTES_PATH = INTERNAL_DATA_DIR / "patch-notes.json"
+PATCH_EVENTS_PATH = INTERNAL_DATA_DIR / "patch-events.json"
 META_PATH = INTERNAL_DATA_DIR / "meta.json"
 
 CDRAGON_CDN_BASE = (
@@ -169,7 +169,7 @@ def resolve_availability(
     if tombstone_removed:
         stale_removed_sources.append("tombstone")
     if patch_removed:
-        removed_sources.append("patch_notes")
+        removed_sources.append("cdragon_diff")
     if wiki["status"] == "disabled":
         disabled_sources.append("wiki")
     elif wiki["status"] == "live":
@@ -231,7 +231,7 @@ def resolve_availability(
         "wiki": wiki,
         "tencent": {"status": tencent_status},
         "telemetry": {"status": telemetry_status},
-        "patch_notes": {"removed": patch_removed},
+        "cdragon_diff": {"removed": patch_removed},
         "tombstone": {"removed": tombstone_removed},
         "existing_catalog": {"slug": slug, "lifecycle": existing_lifecycle},
         "resolution": {
@@ -287,15 +287,13 @@ def build_identity_indexes(identity_map: dict) -> tuple[dict[str, str], dict[str
     return slug_to_augment_id, primary_slug_by_id
 
 
-def removed_patch_note_slugs(patch_notes: dict) -> set[str]:
+def removed_snapshot_event_slugs(patch_events: dict) -> set[str]:
     slugs: set[str] = set()
-    for patch in patch_notes.get("patches", []):
-        for section in patch.get("sections", []):
-            for change in section.get("changes", []):
-                subject = (change.get("subject") or {}).get("en", "")
-                text = ((change.get("text") or {}).get("en") or "").strip().lower()
-                if subject and text.startswith("[removed]"):
-                    slugs.add(slugify(subject))
+    for event in patch_events.get("events", []):
+        if event.get("entity_type") == "augment" and event.get("change_kind") == "removed":
+            slug = event.get("slug")
+            if slug:
+                slugs.add(slug)
     return slugs
 
 
@@ -629,7 +627,11 @@ def main() -> None:
     identity_map = read_json(IDENTITY_MAP_PATH)
     tencent_feed = read_json(TENCENT_FEED_PATH) if TENCENT_FEED_PATH.exists() else {}
     meta = read_json(META_PATH) if META_PATH.exists() else {}
-    removed_slugs = removed_patch_note_slugs(read_json(PATCH_NOTES_PATH)) if PATCH_NOTES_PATH.exists() else set()
+    removed_slugs = (
+        removed_snapshot_event_slugs(read_json(PATCH_EVENTS_PATH))
+        if PATCH_EVENTS_PATH.exists()
+        else set()
+    )
 
     output = assemble_catalog(
         existing_catalog=existing_catalog,

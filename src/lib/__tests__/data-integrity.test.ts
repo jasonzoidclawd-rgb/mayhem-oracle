@@ -1,6 +1,6 @@
 import { describe, expect, test } from "vitest";
 import augmentsData from "../../../data/internal/augments.json";
-import cdragonMayhemAugments from "../../../data/internal/cdragon-mayhem-augments.json";
+import cdragonAugmentLatest from "../../../data/internal/cdragon-augment-latest.json";
 import championsData from "../../../data/internal/champions.json";
 import combosData from "../../../data/internal/combos.json";
 import poolRules from "../../../data/internal/pool-rules.json";
@@ -173,13 +173,13 @@ describe("data integrity", () => {
     expect(oneTrickPony?.availability?.signals?.cdragon_registry?.present).toBe(false);
   });
 
-  test("CommunityDragon Mayhem rarity snapshot reaches engine augment data", () => {
+  test("CommunityDragon latest rarity snapshot reaches engine augment data", () => {
     const bySlug = new Map(augmentsData.augments.map((augment) => [augment.slug, augment]));
 
-    for (const source of cdragonMayhemAugments.augments) {
+    for (const source of cdragonAugmentLatest.entities) {
       const augment = bySlug.get(source.slug);
       if (!augment) continue;
-      expect(augment.rarity, `${source.slug} rarity should match CDragon`).toBe(source.rarity);
+      expect(augment.rarity, `${source.slug} rarity should match CDragon`).toBe(source.fields.rarity);
     }
   });
 

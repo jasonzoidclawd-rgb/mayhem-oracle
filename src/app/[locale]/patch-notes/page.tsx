@@ -5,14 +5,12 @@ import {
   PatchNotesView,
   type RemovedPatchAugment,
 } from "@/components/patch-notes/PatchNotesView";
-import {
-  HotfixNotes,
-  loadHotfixes,
-} from "@/components/patch-notes/HotfixNotes";
+import { PbePreview, type PbePreviewData } from "@/components/patch-notes/PbePreview";
 import type { PatchNotesData } from "@/lib/types";
 import {
   readAugmentsFile,
   readPatchNotesFile,
+  readPbePreviewFile,
 } from "@/lib/data/read-public-file";
 import type { Locale } from "@/i18n/routing";
 import { languageAlternates, localizedUrl } from "@/lib/site";
@@ -22,6 +20,14 @@ import { buildPatchNotesJsonLd } from "@/lib/patch-notes/seo";
 async function loadPatchNotes(): Promise<PatchNotesData | null> {
   try {
     return await readPatchNotesFile<PatchNotesData>();
+  } catch {
+    return null;
+  }
+}
+
+async function loadPbePreview(): Promise<PbePreviewData | null> {
+  try {
+    return await readPbePreviewFile<PbePreviewData>();
   } catch {
     return null;
   }
@@ -84,10 +90,10 @@ export default async function PatchNotesPage({
   const { locale } = await params;
   setRequestLocale(locale);
   const t = await getTranslations("patchNotes");
-  const [data, removedAugments, hotfixEvents] = await Promise.all([
+  const [data, removedAugments, pbePreview] = await Promise.all([
     loadPatchNotes(),
     loadRemovedAugments(),
-    loadHotfixes(),
+    loadPbePreview(),
   ]);
   const route = "/patch-notes";
   const url = localizedUrl(route, locale as Locale);
@@ -118,14 +124,11 @@ export default async function PatchNotesPage({
         </p>
       </header>
       <AdSlot slot="public-patch-notes" />
-      <HotfixNotes locale={locale} events={hotfixEvents} />
       {data ? (
-        <PatchNotesView
-          data={data}
-          locale={locale}
-          removedAugments={removedAugments}
-          hotfixEventCount={hotfixEvents.length}
-        />
+        <>
+          <PatchNotesView data={data} locale={locale} removedAugments={removedAugments} />
+          <PbePreview data={pbePreview} locale={locale} />
+        </>
       ) : (
         <div className="glass-card p-8 text-center text-[var(--color-text-muted)]">
           {t("noData")}

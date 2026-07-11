@@ -67,3 +67,34 @@ the gate; no architecture or disclosure-boundary requirement is being waived.
   `python3 scripts/test_cdragon_snapshot_diff.py` (13 tests),
   `python3 scripts/test_augment_base_catalog.py` (4 tests), and source
   reachability HTTP 200 all pass.
+
+## Steps 4–6 — lifecycle, projection, UI, and cadence (2026-07-11)
+
+- PBE lifecycle reconciliation is source-value based: the same canonical ID,
+  change class, and target value must appear in latest before a preview is
+  marked landed. Repeated polls do not duplicate it; PBE resets age it out.
+- The prose scraper is now 148 lines and writes `patch-metadata.json` only.
+  The 1,183-line entity parser, old `data/internal/patch-notes.json`, old
+  augment-only hotfix snapshots/feed, their public export, and their UI
+  consumer were removed. Tombstones and augment lifecycle now read
+  `patch-events.json`.
+- `export_public_catalog.py` is the single projection boundary. It publishes
+  the current live event cycle to the existing patch-card contract and only
+  active PBE events to `public/data/pbe-preview.json`; raw snapshots,
+  comparison provenance, lifecycle archive, and scoring fields stay internal.
+  The boundary suite now checks that PBE is absent from scoring-facing catalogs,
+  the public API, and client loader.
+- `/patch-notes` now has a server-rendered `Coming in PBE` lane with canonical
+  links only for live entities, fresh/stale/unavailable states, day-level
+  detected-at indicators, live-hotfix badges, and source-reconciled
+  `Landed from PBE` badges. PBE remains display-only.
+- Added a six-hour `update-pbe-preview.yml` workflow and a shared workflow
+  concurrency group to prevent races with the daily full refresh.
+- Documentation: `docs/operations/cdragon-patch-pipeline.md` covers authority,
+  storage, rollover, recovery, public boundary, and operator commands.
+- Evidence: `npm test` passed (61 files, 448 tests); scoped ESLint passed;
+  `npm run build` passed with the existing five patch-detail locale routes;
+  public-boundary, scraper, projection, snapshot, lifecycle, augment-assembly,
+  and patch-publish fixture tests all passed. Browser automation was unavailable
+  in this session (no connected in-app browser backend), so no visual claim is
+  made beyond the successful production static build.

@@ -68,11 +68,15 @@ def git_diff_name_only(root: Path) -> list[str]:
 
 def assert_publish_inclusion(changed_paths: list[str]) -> None:
     changed = {path.replace("\\", "/") for path in changed_paths}
-    internal_changed = "data/internal/patch-notes.json" in changed
+    internal_changed = bool({
+        "data/internal/patch-events.json",
+        "data/internal/patch-metadata.json",
+        "data/internal/pbe-preview.json",
+    } & changed)
     public_changed = "public/data/patch-notes.json" in changed
     if internal_changed and not public_changed:
         raise PatchPublishError(
-            "public patch-notes must be changed when data/internal/patch-notes.json changes",
+            "public patch-notes must be changed when internal patch event or metadata data changes",
         )
 
 
@@ -116,17 +120,25 @@ def verify_patch_publish(
     if not isinstance(patches, list) or len(patches) < 3:
         raise PatchPublishError("patches count must be at least 3")
 
+    source_kind = data.get("sourceKind")
+    if source_kind != "cdragon-structured-diff-v1":
+        raise PatchPublishError("public patch-notes must be projected from CDragon structured diffs")
+
+    source_status = data.get("status")
+    if source_status not in {"fresh", "stale", "unavailable", "not_yet_confirmed"}:
+        raise PatchPublishError("public patch-notes source status is missing or invalid")
+
     changes = all_changes(data)
     total_changes = len(changes)
-    if total_changes <= 0:
-        raise PatchPublishError("total changes must be greater than 0")
+    if total_changes <= 0 and source_status != "fresh":
+        raise PatchPublishError("no patch changes and the CDragon source is not fresh")
 
     raw_kinds = {change.get("kind") for change in changes}
     kinds = sorted(kind for kind in raw_kinds if isinstance(kind, str))
     invalid_kinds = sorted(str(kind) for kind in raw_kinds if kind not in ALLOWED_KINDS)
     if invalid_kinds:
         raise PatchPublishError(f"unsupported kind(s): {', '.join(map(str, invalid_kinds))}")
-    if not any(kind in NON_GENERIC_KINDS for kind in kinds):
+    if total_changes and not any(kind in NON_GENERIC_KINDS for kind in kinds):
         raise PatchPublishError("at least one deterministic non-generic kind is required")
 
     zh_tw_text = sum(
@@ -134,8 +146,8 @@ def verify_patch_publish(
         for change in changes
         if isinstance(change.get("text"), dict) and change["text"].get("zh-tw")
     )
-    zh_tw_coverage = zh_tw_text / total_changes
-    if zh_tw_coverage < 0.9:
+    zh_tw_coverage = zh_tw_text / total_changes if total_changes else 1.0
+    if total_changes and zh_tw_coverage < 0.9:
         raise PatchPublishError(
             f"zh-TW text coverage below 90%: {zh_tw_text}/{total_changes}",
         )
@@ -150,6 +162,7 @@ def verify_patch_publish(
         "zhTwText": zh_tw_text,
         "zhTwCoverage": round(zh_tw_coverage, 4),
         "kinds": kinds,
+        "sourceStatus": source_status,
     }
 
 
