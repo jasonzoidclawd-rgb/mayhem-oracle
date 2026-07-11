@@ -89,6 +89,22 @@ class PatchEventProjectionTests(unittest.TestCase):
         self.assertEqual(len(projection["patches"]), 1)
         self.assertEqual(len(projection["patches"][0]["sections"][0]["changes"]), 1)
 
+    def test_projection_sanitizes_cdragon_markup_from_change_text(self):
+        projection = build_patch_notes_projection(
+            {
+                "current_open_cycle": "26.13",
+                "events": [event(
+                    fields_changed=["description"],
+                    before={"description": "<mainText>Old @Value@</mainText>"},
+                    after={"description": "<mainText>New<br>%i:cooldown%</mainText>"},
+                )],
+            },
+            {"patches": []},
+        )
+
+        change = projection["patches"][0]["sections"][0]["changes"][0]
+        self.assertEqual(change["text"]["en"], "description: Old → New")
+
     def test_live_projection_marks_a_source_reconciled_preview_as_landed(self):
         live = event()
         projection = build_patch_notes_projection(

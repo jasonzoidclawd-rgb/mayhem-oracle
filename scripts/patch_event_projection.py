@@ -4,6 +4,8 @@
 from __future__ import annotations
 
 import copy
+import html
+import re
 from typing import Any
 
 
@@ -12,6 +14,8 @@ SECTION_BY_ENTITY = {
     "item": "new_items",
     "augment": "augments",
 }
+_TAG_RE = re.compile(r"<[^>]+>")
+_TOKEN_RE = re.compile(r"@[^@]+@|%[^%]+%")
 PUBLIC_EVENT_FIELDS = (
     "entity_type",
     "canonical_id",
@@ -44,7 +48,14 @@ def _locale_names(names: dict[str, Any]) -> dict[str, str]:
 
 def _display(value: Any) -> str:
     if isinstance(value, str):
-        return value
+        text = _TOKEN_RE.sub(
+            " ",
+            _TAG_RE.sub(
+                " ",
+                html.unescape(value).replace("<br>", " ").replace("<br/>", " "),
+            ),
+        )
+        return re.sub(r"\s+", " ", text).strip()
     return repr(value)
 
 

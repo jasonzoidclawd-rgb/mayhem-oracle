@@ -1,6 +1,7 @@
 import { getTranslations } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
 import { describeFreshness } from "@/lib/patch-notes/freshness";
+import { formatPbeValue } from "@/lib/patch-notes/pbe";
 
 type PreviewEvent = {
   entity_type: "augment" | "champion" | "item";
@@ -47,8 +48,8 @@ function eventText(
   return event.fields_changed.map((field) =>
     t("pbeFieldChange", {
       field,
-      before: JSON.stringify(event.before[field]) ?? "",
-      after: JSON.stringify(event.after[field]) ?? "",
+      before: formatPbeValue(event.before[field]),
+      after: formatPbeValue(event.after[field]),
     }),
   ).join("; ");
 }
