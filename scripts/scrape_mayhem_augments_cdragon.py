@@ -36,6 +36,8 @@ from datetime import datetime, timezone
 from pathlib import Path
 from urllib.request import Request, urlopen
 
+from cdragon_entity_adapters import normalize_augment_entities
+from cdragon_snapshot_diff import build_snapshot, compare_snapshots
 from data_paths import INTERNAL_DATA_DIR
 
 CDRAGON = "https://raw.communitydragon.org/latest"
@@ -809,18 +811,48 @@ def build_event(delta: dict, patch: str, when: str) -> dict:
 
 
 def diff_augments(old: list[dict], new: list[dict]) -> dict[str, list]:
+    """Compatibility projection over the shared normalized entity comparator.
+
+    The established hotfix feed keeps its legacy delta shape while the actual
+    canonical-id comparison is now shared with champions and items.
+    """
     old_by = {a["nameId"]: a for a in old}
     new_by = {a["nameId"]: a for a in new}
-    added = [new_by[k] for k in new_by.keys() - old_by.keys()]
-    removed = [old_by[k] for k in old_by.keys() - new_by.keys()]
+    if not old_by and not new_by:
+        return {"added": [], "removed": [], "changed": []}
+    old_snapshot = build_snapshot(
+        entity_type="augment",
+        branch="latest",
+        source_version="legacy-augment-diff",
+        source_patch_label="legacy-augment-diff",
+        observed_at="1970-01-01T00:00:00Z",
+        entities=normalize_augment_entities(old),
+    )
+    new_snapshot = build_snapshot(
+        entity_type="augment",
+        branch="latest",
+        source_version="legacy-augment-diff",
+        source_patch_label="legacy-augment-diff",
+        observed_at="1970-01-01T00:00:00Z",
+        entities=normalize_augment_entities(new),
+    )
+    events = compare_snapshots(old_snapshot, new_snapshot, detected_at="1970-01-01T00:00:00Z")
+    added = [new_by[event["canonical_id"]] for event in events if event["change_kind"] == "added"]
+    removed = [old_by[event["canonical_id"]] for event in events if event["change_kind"] == "removed"]
     changed = []
-    for k in old_by.keys() & new_by.keys():
-        o, n = old_by[k], new_by[k]
-        fields = [f for f in ("rarity", "tooltip", "name") if o.get(f) != n.get(f)]
+    for event in events:
+        if event["change_kind"] in {"added", "removed"}:
+            continue
+        fields = [field for field in ("rarity", "tooltip", "name") if field in event["fields_changed"]]
         if fields:
-            changed.append({"nameId": k, "new": n, "fields": fields,
-                            "before": {f: o.get(f) for f in fields},
-                            "after": {f: n.get(f) for f in fields}})
+            name_id = event["canonical_id"]
+            changed.append({
+                "nameId": name_id,
+                "new": new_by[name_id],
+                "fields": fields,
+                "before": {field: old_by[name_id].get(field) for field in fields},
+                "after": {field: new_by[name_id].get(field) for field in fields},
+            })
     return {"added": added, "removed": removed, "changed": changed}
 
 

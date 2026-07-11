@@ -25,3 +25,20 @@ execution environment has no callable Claude review gate, while the caller
 explicitly directed continuous implementation through verification, push, and
 draft-PR update. Each step's evidence is recorded here and local tests remain
 the gate; no architecture or disclosure-boundary requirement is being waived.
+
+## Steps 1–2 — shared engine and entity adapters (2026-07-11)
+
+- Added `cdragon_snapshot_diff.py`: stable normalized snapshots, canonical-ID
+  comparisons, deterministic event ordering, duplicate/schema/coverage/version
+  rejection, PBE lifecycle reconciliation, bounded public PBE projection, and
+  journaled rollback-safe multi-file promotion.
+- Added explicit adapters for augments, champions, and items. Champion ability
+  effect and coefficient arrays must have a named `mDataValues` mapping; an
+  unknown positional shape is rejected rather than emitted as a noisy diff.
+- Refactored `scrape_mayhem_augments_cdragon.py::diff_augments` to project from
+  the shared comparator while retaining its existing `added`/`removed`/
+  `changed` delta shape. The Step 0 committed snapshot self-diff remains
+  exactly `{"added":[],"changed":[],"removed":[]}`.
+- Evidence: `python3 scripts/test_cdragon_snapshot_diff.py` (13 tests),
+  `python3 scripts/test_augment_base_catalog.py` (4 tests), and Python syntax
+  compilation all pass.
