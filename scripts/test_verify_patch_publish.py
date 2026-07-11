@@ -160,6 +160,17 @@ class VerifyPatchPublishTests(unittest.TestCase):
                     changed_paths=["data/internal/patch-events.json"],
                 )
 
+    def test_internal_pbe_preview_change_requires_public_preview_change(self):
+        with tempfile.TemporaryDirectory() as tmpdir:
+            root = Path(tmpdir)
+            self.write_public_data(root, patch_notes=public_patch_notes())
+
+            with self.assertRaisesRegex(PatchPublishError, "public PBE preview"):
+                verify_patch_publish(
+                    root=root,
+                    changed_paths=["data/internal/pbe-preview.json", "public/data/patch-notes.json"],
+                )
+
 
 if __name__ == "__main__":
     unittest.main()

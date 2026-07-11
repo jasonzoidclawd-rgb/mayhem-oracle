@@ -18,6 +18,7 @@ from typing import Callable
 from urllib.request import Request, urlopen
 
 from data_paths import INTERNAL_DATA_DIR
+from safe_http import read_limited_response
 
 
 BASE_URL = "https://www.leagueoflegends.com"
@@ -51,7 +52,7 @@ def fetch(path_or_url: str) -> str:
     url = path_or_url if path_or_url.startswith("http") else BASE_URL + path_or_url
     request = Request(url, headers=HEADERS)
     with urlopen(request, timeout=30) as response:
-        return response.read().decode("utf-8", errors="replace")
+        return read_limited_response(response).decode("utf-8", errors="replace")
 
 
 def strip_tags(value: str) -> str:

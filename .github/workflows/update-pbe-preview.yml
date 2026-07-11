@@ -39,6 +39,7 @@ jobs:
 
       - name: Verify PBE public boundary and static build
         run: |
+          python3 scripts/verify_patch_publish.py
           npx vitest run src/lib/__tests__/public-data-boundary.test.ts
           npm run build
 

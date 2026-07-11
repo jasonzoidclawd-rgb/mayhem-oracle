@@ -116,7 +116,8 @@ class PatchEventProjectionTests(unittest.TestCase):
             "events": [
                 event(branch="pbe", lane="preview", source_patch_label="pbe-cycle-16.14"),
                 event(slug="new-champion", canonical_id="999", branch="pbe", lane="preview", source_patch_label="pbe-cycle-16.14"),
-                event(slug="landed", lifecycle="landed", landed=True),
+                event(slug="old-cycle", source_patch_label="pbe-cycle-16.13"),
+                event(slug="landed", source_patch_label="pbe-cycle-16.14", lifecycle="landed", landed=True),
             ],
         }
         known = {

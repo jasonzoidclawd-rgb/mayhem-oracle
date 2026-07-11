@@ -165,6 +165,7 @@ def build_patch_notes_projection(
     landed_preview_keys = {
         (
             event.get("entity_type"),
+            event.get("canonical_id"),
             event.get("slug"),
             event.get("change_kind"),
             repr(event.get("after", {})),
@@ -181,6 +182,7 @@ def build_patch_notes_projection(
             **event,
             "landed_from_pbe": (
                 event.get("entity_type"),
+                event.get("canonical_id"),
                 event.get("slug"),
                 event.get("change_kind"),
                 repr(event.get("after", {})),
@@ -240,6 +242,8 @@ def build_preview_projection(
     events = []
     for event in archive.get("events", []):
         if not isinstance(event, dict) or event.get("landed") or event.get("lifecycle") in {"landed", "aged_out"}:
+            continue
+        if event.get("source_patch_label") != archive.get("source_patch_label"):
             continue
         projection = {field: copy.deepcopy(event[field]) for field in PUBLIC_EVENT_FIELDS if field in event}
         is_known, href = _href(event, known)

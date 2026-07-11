@@ -9,13 +9,21 @@ coverage independent of CommunityDragon availability.
 from __future__ import annotations
 
 import copy
+import hashlib
 import json
 import os
 import re
 import shutil
+import tempfile
 import uuid
+from contextlib import contextmanager
 from pathlib import Path
 from typing import Any, Iterable
+
+try:
+    import fcntl
+except ImportError:  # pragma: no cover - the production runners are POSIX
+    fcntl = None
 
 
 ENTITY_TYPES = frozenset({"augment", "champion", "item"})
@@ -126,6 +134,8 @@ def validate_snapshot(
         raise SnapshotValidationError(f"snapshot missing required field(s): {', '.join(missing)}")
     if snapshot["entity_type"] not in ENTITY_TYPES:
         raise SnapshotValidationError(f"unsupported entity type: {snapshot['entity_type']}")
+    if snapshot["schema_version"] != 1:
+        raise SnapshotValidationError(f"unsupported snapshot schema_version: {snapshot['schema_version']}")
     if snapshot["branch"] not in BRANCHES:
         raise SnapshotValidationError(f"unsupported CDragon branch: {snapshot['branch']}")
     if snapshot["lane"] != _lane_for_branch(snapshot["branch"]):
@@ -153,6 +163,14 @@ def validate_snapshot(
     if previous.get("branch") != snapshot["branch"]:
         raise SnapshotValidationError("branch changed within a snapshot lineage")
 
+    old_version = _version_parts(str(previous.get("source_version", "")))
+    new_version = _version_parts(snapshot["source_version"])
+    if old_version and new_version and new_version < old_version:
+        raise SnapshotValidationError(
+            "version regression: "
+            f"{snapshot['source_version']} < {previous.get('source_version')}",
+        )
+
     previous_rows = previous.get("entities")
     if isinstance(previous_rows, list) and previous_rows:
         minimum = len(previous_rows) * (1 - max_coverage_loss_ratio)
@@ -161,14 +179,6 @@ def validate_snapshot(
                 "abrupt coverage loss: "
                 f"{len(snapshot['entities'])}/{len(previous_rows)} entities",
             )
-
-    old_version = _version_parts(str(previous.get("source_version", "")))
-    new_version = _version_parts(snapshot["source_version"])
-    if old_version and new_version and new_version < old_version:
-        raise SnapshotValidationError(
-            "version regression: "
-            f"{snapshot['source_version']} < {previous.get('source_version')}",
-        )
 
 
 def _flatten(value: Any, prefix: str = "") -> dict[str, Any]:
@@ -318,14 +328,19 @@ def compare_snapshots(
 
 
 def _event_identity(event: dict[str, Any]) -> tuple[str, str, str, tuple[str, ...]]:
-    return _event_sort_key(event)
+    return (
+        str(event.get("entity_type", "")),
+        str(event.get("canonical_id", "")),
+        str(event.get("change_kind", "")),
+        tuple(event.get("fields_changed", [])),
+    )
 
 
 def _has_landed(preview: dict[str, Any], latest_events: Iterable[dict[str, Any]]) -> bool:
     for live in latest_events:
-        if (live.get("entity_type"), live.get("slug")) != (
+        if (live.get("entity_type"), live.get("canonical_id")) != (
             preview.get("entity_type"),
-            preview.get("slug"),
+            preview.get("canonical_id"),
         ):
             continue
         if live.get("change_kind") != preview.get("change_kind"):
@@ -419,6 +434,8 @@ def build_public_preview_projection(archive: dict[str, Any] | None) -> dict[str,
     for event in archive.get("events", []):
         if event.get("lifecycle") != "upcoming" or event.get("landed"):
             continue
+        if event.get("source_patch_label") != archive.get("source_patch_label"):
+            continue
         events.append({field: _stable(event[field]) for field in PUBLIC_EVENT_FIELDS if field in event})
     return {
         "schema_version": 1,
@@ -440,6 +457,21 @@ def _journal_path(root: Path) -> Path:
     return root / ".cdragon-pipeline-transaction.json"
 
 
+@contextmanager
+def _promotion_lock(root: Path):
+    """Serialize promotions that share a journal, including local/manual runs."""
+    lock_id = hashlib.sha256(str(root.resolve()).encode("utf-8")).hexdigest()
+    lock_path = Path(tempfile.gettempdir()) / f"mayhem-cdragon-pipeline-{lock_id}.lock"
+    with lock_path.open("a+", encoding="utf-8") as handle:
+        if fcntl is not None:
+            fcntl.flock(handle.fileno(), fcntl.LOCK_EX)
+        try:
+            yield
+        finally:
+            if fcntl is not None:
+                fcntl.flock(handle.fileno(), fcntl.LOCK_UN)
+
+
 def recover_pending_transaction(root: Path) -> None:
     """Restore pre-promotion files when an earlier process died mid-transaction."""
     journal_path = _journal_path(root)
@@ -459,16 +491,15 @@ def recover_pending_transaction(root: Path) -> None:
     journal_path.unlink(missing_ok=True)
 
 
-def atomic_write_many(
+def _atomic_write_many_unlocked(
     values: dict[Path, Any],
     *,
+    root: Path,
     fail_after: int | None = None,
 ) -> None:
     """Promote a complete branch update or recover the previous file set intact."""
     if not values:
         return
-    parents = [str(path.parent.resolve()) for path in values]
-    root = Path(os.path.commonpath(parents))
     recover_pending_transaction(root)
     stage = root / f".cdragon-pipeline-stage-{uuid.uuid4().hex}"
     payload_dir = stage / "payload"
@@ -497,3 +528,17 @@ def atomic_write_many(
     else:
         journal_path.unlink(missing_ok=True)
         shutil.rmtree(stage, ignore_errors=True)
+
+
+def atomic_write_many(
+    values: dict[Path, Any],
+    *,
+    fail_after: int | None = None,
+) -> None:
+    """Promote a complete branch update while serializing shared journals."""
+    if not values:
+        return
+    parents = [str(path.parent.resolve()) for path in values]
+    root = Path(os.path.commonpath(parents))
+    with _promotion_lock(root):
+        _atomic_write_many_unlocked(values, root=root, fail_after=fail_after)

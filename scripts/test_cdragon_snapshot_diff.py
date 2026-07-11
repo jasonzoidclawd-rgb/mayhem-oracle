@@ -186,6 +186,21 @@ class CDragonSnapshotDiffTests(unittest.TestCase):
         with self.assertRaisesRegex(SnapshotValidationError, "coverage loss"):
             validate_snapshot(reduced, previous=previous)
 
+        unsupported_schema = snapshot("item", "latest", "16.13.2", [entity("1", "one")])
+        unsupported_schema["schema_version"] = 2
+        with self.assertRaisesRegex(SnapshotValidationError, "schema_version"):
+            validate_snapshot(unsupported_schema)
+
+        regressed_and_truncated = snapshot("item", "pbe", "16.13.1", [entity("1", "one")])
+        previous_pbe = snapshot(
+            "item",
+            "pbe",
+            "16.13.9",
+            [entity(str(i), f"item-{i}") for i in range(10)],
+        )
+        with self.assertRaisesRegex(SnapshotValidationError, "version regression"):
+            validate_snapshot(regressed_and_truncated, previous=previous_pbe)
+
     def test_pbe_version_regression_fails_without_touching_latest(self):
         previous = snapshot("champion", "pbe", "16.14.5", [entity("1", "one")])
         regressed = snapshot("champion", "pbe", "16.14.4", [entity("1", "one")])
@@ -236,6 +251,73 @@ class CDragonSnapshotDiffTests(unittest.TestCase):
         aged = advance_preview_lifecycle(again, [], [], "pbe-cycle-16.15.1", "2026-07-18T00:00:00Z", max_open_cycles=1)
         self.assertEqual(aged["events"][0]["lifecycle"], "aged_out")
 
+    def test_preview_landing_requires_the_canonical_id(self):
+        preview_event = {
+            "entity_type": "item",
+            "canonical_id": "1001",
+            "slug": "shared-slug",
+            "change_kind": "numeric",
+            "fields_changed": ["cost"],
+            "before": {"cost": 300},
+            "after": {"cost": 350},
+            "branch": "pbe",
+            "lane": "preview",
+            "detected_at": "2026-07-11T00:00:00Z",
+            "source_patch_label": "pbe-cycle-16.14.2",
+            "landed": False,
+        }
+        wrong_entity = {**preview_event, "canonical_id": "2003", "branch": "latest", "lane": "live"}
+
+        archive = advance_preview_lifecycle(
+            None,
+            [preview_event],
+            [wrong_entity],
+            "pbe-cycle-16.14.2",
+            "2026-07-11T00:00:00Z",
+        )
+
+        self.assertFalse(archive["events"][0]["landed"])
+
+    def test_public_preview_contains_only_the_current_open_cycle(self):
+        archive = {
+            "schema_version": 1,
+            "branch": "pbe",
+            "lane": "preview",
+            "source_patch_label": "pbe-cycle-16.14.2",
+            "observed_at": "2026-07-11T01:00:00Z",
+            "status": "fresh",
+            "events": [
+                {
+                    "entity_type": "item",
+                    "canonical_id": "1",
+                    "slug": "old-cycle",
+                    "change_kind": "numeric",
+                    "fields_changed": ["cost"],
+                    "before": {"cost": 300},
+                    "after": {"cost": 350},
+                    "source_patch_label": "pbe-cycle-16.14.1",
+                    "lifecycle": "upcoming",
+                    "landed": False,
+                },
+                {
+                    "entity_type": "item",
+                    "canonical_id": "2",
+                    "slug": "current-cycle",
+                    "change_kind": "numeric",
+                    "fields_changed": ["cost"],
+                    "before": {"cost": 300},
+                    "after": {"cost": 350},
+                    "source_patch_label": "pbe-cycle-16.14.2",
+                    "lifecycle": "upcoming",
+                    "landed": False,
+                },
+            ],
+        }
+
+        projection = build_public_preview_projection(archive)
+
+        self.assertEqual([event["slug"] for event in projection["events"]], ["current-cycle"])
+
     def test_public_projection_is_current_open_cycle_only(self):
         archive = {
             "schema_version": 1,
@@ -243,9 +325,9 @@ class CDragonSnapshotDiffTests(unittest.TestCase):
             "source_patch_label": "pbe-cycle-16.14.2",
             "observed_at": "2026-07-11T01:00:00Z",
             "events": [
-                {"entity_type": "item", "slug": "active", "landed": False, "lifecycle": "upcoming", "before": {}, "after": {}},
-                {"entity_type": "item", "slug": "landed", "landed": True, "lifecycle": "landed", "before": {}, "after": {}},
-                {"entity_type": "item", "slug": "old", "landed": False, "lifecycle": "aged_out", "before": {}, "after": {}},
+                {"entity_type": "item", "slug": "active", "landed": False, "lifecycle": "upcoming", "source_patch_label": "pbe-cycle-16.14.2", "before": {}, "after": {}},
+                {"entity_type": "item", "slug": "landed", "landed": True, "lifecycle": "landed", "source_patch_label": "pbe-cycle-16.14.2", "before": {}, "after": {}},
+                {"entity_type": "item", "slug": "old", "landed": False, "lifecycle": "aged_out", "source_patch_label": "pbe-cycle-16.14.1", "before": {}, "after": {}},
             ],
             "history": [{"private": True}],
         }
@@ -272,6 +354,9 @@ class CDragonSnapshotDiffTests(unittest.TestCase):
         items = normalize_item_entities([{"id": 3006, "name": "Berserker's Greaves", "priceTotal": 1100, "stats": {"attackSpeed": 35}}])
         self.assertEqual(items[0]["id"], "3006")
         self.assertEqual(items[0]["fields"]["cost"], 1100)
+        with self.assertRaisesRegex(AdapterError, "missing display name"):
+            normalize_item_entities([{"id": 3007, "name": "", "priceTotal": 1100}])
+        self.assertEqual(normalize_item_entities([{"id": 2008, "name": "", "priceTotal": 60}]), [])
 
         base_stats = extract_base_stats_from_bin({
             "Characters/Brand/CharacterRecords/Root": {

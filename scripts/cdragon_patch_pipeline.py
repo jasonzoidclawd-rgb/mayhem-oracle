@@ -36,6 +36,7 @@ from cdragon_snapshot_diff import (
     validate_snapshot,
 )
 from data_paths import INTERNAL_DATA_DIR
+from safe_http import read_limited_response
 from scrape_mayhem_augments_cdragon import (
     build_tooltip_index,
     extract_augments,
@@ -46,6 +47,7 @@ from scrape_mayhem_augments_cdragon import (
 
 
 HEADERS = {"User-Agent": "MayhemOracle/1.0 (CDragon patch pipeline)"}
+LATEST_BASELINE_MAX_AGE_HOURS = 36
 FetchJson = Callable[[str], Union[dict[str, Any], list[Any]]]
 
 
@@ -149,6 +151,7 @@ def _latest_landing_evidence(
         if landed:
             evidence.append({
                 "entity_type": entity_type,
+                "canonical_id": canonical_id,
                 "slug": preview.get("slug"),
                 "change_kind": kind,
                 "after": copy.deepcopy(preview.get("after", {})),
@@ -180,6 +183,20 @@ def _reset_pbe_archive(
     }
 
 
+def _latest_baseline_is_fresh(archive: dict[str, Any] | None, now: str) -> bool:
+    if not isinstance(archive, dict) or archive.get("status") != "fresh":
+        return False
+    observed_at = archive.get("observed_at")
+    if not isinstance(observed_at, str) or not observed_at:
+        return False
+    try:
+        observed = datetime.fromisoformat(observed_at.replace("Z", "+00:00"))
+        current = datetime.fromisoformat(now.replace("Z", "+00:00"))
+    except ValueError:
+        return False
+    return (current - observed).total_seconds() <= LATEST_BASELINE_MAX_AGE_HOURS * 3600
+
+
 def build_branch_update(
     *,
     branch: str,
@@ -190,6 +207,7 @@ def build_branch_update(
     previous_snapshots: dict[str, dict[str, Any]],
     latest_snapshots: dict[str, dict[str, Any]],
     previous_archive: dict[str, Any] | None,
+    latest_baseline_confirmed: bool = True,
 ) -> dict[str, Any]:
     """Build a complete in-memory branch transaction before writing any file."""
     snapshots: dict[str, dict[str, Any]] = {}
@@ -236,7 +254,9 @@ def build_branch_update(
         archive = _build_latest_archive(previous_archive, events, source_patch_label, observed_at)
     elif branch == "pbe":
         preview_events = []
-        has_latest_baseline = all(entity_type in latest_snapshots for entity_type in ENTITY_TYPES)
+        has_latest_baseline = latest_baseline_confirmed and all(
+            entity_type in latest_snapshots for entity_type in ENTITY_TYPES
+        )
         if has_latest_baseline:
             for entity_type in sorted(ENTITY_TYPES):
                 baseline = latest_snapshots[entity_type]
@@ -264,7 +284,10 @@ def build_branch_update(
                 "source_patch_label": source_patch_label,
                 "observed_at": observed_at,
                 "status": "not_yet_confirmed",
-                "events": [],
+                # Keep the prior internal lineage for recovery/debugging while
+                # withholding it from the public projection until live data is
+                # confirmed again.
+                "events": copy.deepcopy((previous_archive or {}).get("events", [])),
             }
             preview_events = []
         events = preview_events
@@ -283,7 +306,7 @@ def _cdragon_base(branch: str) -> str:
 def _fetch_json(url: str) -> dict[str, Any] | list[Any]:
     request = Request(url, headers=HEADERS)
     with urlopen(request, timeout=60) as response:
-        return json.loads(response.read().decode("utf-8", errors="replace"))
+        return json.loads(read_limited_response(response).decode("utf-8", errors="replace"))
 
 
 def _metadata_version(payload: Any) -> str:
@@ -397,6 +420,7 @@ def promote_branch(
     latest = read_snapshot_lineage(internal_dir, "latest") if branch == "pbe" else {}
     archive_name = "patch-events.json" if branch == "latest" else "pbe-preview.json"
     archive = _read_json(internal_dir / archive_name)
+    latest_archive = _read_json(internal_dir / "patch-events.json") if branch == "pbe" else None
     update = build_branch_update(
         branch=branch,
         source_version=source_version,
@@ -406,6 +430,9 @@ def promote_branch(
         previous_snapshots=previous,
         latest_snapshots=latest,
         previous_archive=archive,
+        latest_baseline_confirmed=(
+            branch != "pbe" or _latest_baseline_is_fresh(latest_archive, now)
+        ),
     )
     values: dict[Path, Any] = {
         internal_dir / snapshot_filename(entity_type, branch): snapshot
@@ -429,7 +456,9 @@ def main() -> None:
         except Exception as exc:  # diagnostics only; no values have been promoted
             failures.append(f"{branch}: {exc}")
             print(f"[CDragon:{branch}] skipped without promotion: {exc}", file=sys.stderr)
-            continue
+            # An `all` run must not promote a preview against a stale live
+            # baseline after the live transaction failed.
+            break
         print(
             f"[CDragon:{branch}] promoted {len(update['snapshots'])} snapshots, "
             f"{len(update['new_events'])} events"

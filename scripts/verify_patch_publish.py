@@ -71,12 +71,17 @@ def assert_publish_inclusion(changed_paths: list[str]) -> None:
     internal_changed = bool({
         "data/internal/patch-events.json",
         "data/internal/patch-metadata.json",
-        "data/internal/pbe-preview.json",
     } & changed)
+    pbe_internal_changed = "data/internal/pbe-preview.json" in changed
     public_changed = "public/data/patch-notes.json" in changed
+    public_pbe_changed = "public/data/pbe-preview.json" in changed
     if internal_changed and not public_changed:
         raise PatchPublishError(
             "public patch-notes must be changed when internal patch event or metadata data changes",
+        )
+    if pbe_internal_changed and not public_pbe_changed:
+        raise PatchPublishError(
+            "public PBE preview must be changed when internal PBE preview data changes",
         )
 
 

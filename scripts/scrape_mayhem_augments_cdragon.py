@@ -36,6 +36,7 @@ from urllib.request import Request, urlopen
 from cdragon_entity_adapters import normalize_augment_entities
 from cdragon_snapshot_diff import build_snapshot, compare_snapshots
 from data_paths import INTERNAL_DATA_DIR
+from safe_http import read_limited_response
 
 CDRAGON = "https://raw.communitydragon.org/latest"
 ROSTER_URL = f"{CDRAGON}/plugins/rcp-be-lol-game-data/global/default/v1/cherry-augments.json"
@@ -70,7 +71,7 @@ def fetch_json(url: str) -> dict | list:
     print(f"  Fetching {url} ...")
     req = Request(url, headers=HEADERS)
     with urlopen(req, timeout=120) as resp:
-        return json.loads(resp.read().decode("utf-8", errors="replace"))
+        return json.loads(read_limited_response(resp).decode("utf-8", errors="replace"))
 
 
 def norm(s: str) -> str:

@@ -103,6 +103,11 @@ _BIN_BASE_STAT_FIELDS = {
     "attackSpeedPerLevelModifiable": "attackSpeedPerLevel",
 }
 
+# CDragon includes this generated teleport-home row without a display name. It
+# is not an entity users can buy or compare, so the omission is explicit rather
+# than a blanket tolerance for malformed item rows.
+_IGNORED_ITEM_IDS = {"2008"}
+
 
 def extract_base_stats_from_bin(payload: dict[str, Any]) -> dict[str, Any]:
     """Read direct CharacterRecord base values from a CDragon champion bin."""
@@ -192,8 +197,12 @@ def normalize_item_entities(rows: list[dict[str, Any]]) -> list[dict[str, Any]]:
     for row in rows:
         raw_id = row.get("id")
         name = str(row.get("name") or "")
-        if raw_id is None or not name:
-            continue
+        if raw_id is None:
+            raise AdapterError("item missing stable id")
+        if not name:
+            if str(raw_id) in _IGNORED_ITEM_IDS:
+                continue
+            raise AdapterError(f"item {raw_id} missing display name")
         fields: dict[str, Any] = {}
         if "priceTotal" in row:
             fields["cost"] = row["priceTotal"]

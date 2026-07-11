@@ -144,6 +144,32 @@ class CDragonPatchPipelineTests(unittest.TestCase):
         self.assertEqual(update["archive"]["status"], "not_yet_confirmed")
         self.assertEqual(update["archive"]["events"], [])
 
+    def test_stale_latest_baseline_keeps_pbe_unconfirmed(self):
+        latest = build_branch_update(
+            branch="latest",
+            source_version="16.13.2",
+            source_patch_label="26.13",
+            observed_at="2026-07-11T01:00:00Z",
+            entities_by_type=entities(0),
+            previous_snapshots={},
+            latest_snapshots={},
+            previous_archive=None,
+        )
+        pbe = build_branch_update(
+            branch="pbe",
+            source_version="16.14.1",
+            source_patch_label="pbe-cycle-16.14.1",
+            observed_at="2026-07-11T02:00:00Z",
+            entities_by_type=entities(1),
+            previous_snapshots={},
+            latest_snapshots=latest["snapshots"],
+            previous_archive=None,
+            latest_baseline_confirmed=False,
+        )
+
+        self.assertEqual(pbe["archive"]["status"], "not_yet_confirmed")
+        self.assertEqual(pbe["archive"]["events"], [])
+
     def test_lineage_reader_rejects_malformed_snapshot_without_falling_back_to_another_lane(self):
         with tempfile.TemporaryDirectory() as tmpdir:
             internal = Path(tmpdir)
