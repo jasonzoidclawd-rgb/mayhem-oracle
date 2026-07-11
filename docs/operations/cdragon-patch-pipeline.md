@@ -40,6 +40,13 @@ transaction. If a process dies mid-write, the next promotion restores the prior
 file set before acquiring new data. A failed PBE fetch does not mutate latest;
 a failed latest fetch does not create preview data.
 
+Promotions also take a per-repository process lock outside the checkout so a
+manual run cannot interleave with a scheduled run through the shared journal.
+Remote payloads are bounded to 128 MiB and have finite network timeouts; an
+oversized, malformed, or truncated response fails closed. A PBE poll whose live
+baseline is missing, non-fresh, or more than 36 hours old is retained internally
+as unconfirmed and is not exported as a truthful preview.
+
 When latest source values exactly match an open PBE event's target values, the
 PBE event becomes `landed`. It leaves the public upcoming list and the live
 projection marks the related event as landed from PBE. Time, prose similarity,
@@ -53,6 +60,11 @@ and release-date guesses never mark an event as landed.
   into the existing patch-card route contract, plus bounded Riot metadata for
   historical URLs.
 - `public/data/pbe-preview.json` — only active, current-cycle preview events.
+
+The preview projection filters by the archive's current cycle as well as
+`upcoming` lifecycle, so an older open entry retained for aging never leaks into
+the public window. `verify_patch_publish.py` requires both public patch files
+when their corresponding internal archives change.
 
 Raw snapshots, comparison provenance, lifecycle history, internal scoring
 fields, and calibration data stay under `data/internal/`. PBE links are emitted

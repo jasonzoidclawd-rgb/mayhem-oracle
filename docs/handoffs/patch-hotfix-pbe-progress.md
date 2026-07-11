@@ -98,3 +98,27 @@ the gate; no architecture or disclosure-boundary requirement is being waived.
   and patch-publish fixture tests all passed. Browser automation was unavailable
   in this session (no connected in-app browser backend), so no visual claim is
   made beyond the successful production static build.
+
+## Independent review and hardening (2026-07-12)
+
+- Reviewed the GitHub PR from base `7ed1c1b` against head `39d5633`; current
+  `main` had advanced to `70069cc` and GitHub reported the PR conflicting.
+  Integrated current `main` with the sole legacy-snapshot delete conflict
+  resolved in favor of the intentional removal.
+- Fixed and red-tested current-cycle preview projection, canonical-ID landing,
+  version-regression ordering, stale live-baseline handling, PBE publish-file
+  inclusion, promotion locking, bounded source reads, and malformed item rows.
+- Localized PBE event text and live/PBE freshness states across all five
+  message files. Sanitized CDragon markup/template tokens before rendering.
+- Production-equivalent QA used headed system Chrome through the local server
+  at `http://localhost:3104`: desktop `1440x900`, mobile `390x844`, and all
+  five locales. Each route returned 200, rendered 11 PBE events, had one h1,
+  no horizontal overflow, canonical entity links, keyboard Tab focus, no page
+  errors, and no requests for `data/internal` or server-only PBE loaders.
+  Full-page screenshots were captured outside the repository at
+  `/private/tmp/patch-notes-en-desktop-full.png` and
+  `/private/tmp/patch-notes-en-mobile-full.png`.
+- The in-app Browser backend and managed agent-browser CLI were unavailable;
+  the CLI registry fallback failed with `ENOTFOUND`. Headed system Chrome was
+  used as the supported local fallback. Chrome emitted only existing external
+  icon-preload warnings; no application errors or page errors occurred.
