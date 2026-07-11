@@ -132,6 +132,8 @@ export type PatchSectionId =
 
 export type PatchLocale = "en" | "zh-tw" | "zh-cn" | "ja-jp" | "ko-kr";
 
+export type PatchSourceStatus = "fresh" | "stale" | "unavailable" | "not_yet_confirmed";
+
 export type PatchEntityType =
   | "champion"
   | "ability"
@@ -225,6 +227,7 @@ export interface PatchNote {
 export interface PatchNotesData {
   patch: string;
   scraped_at?: string;
+  status?: PatchSourceStatus;
   source: string;
   sourceKind?: string;
   sourceUrl?: string;

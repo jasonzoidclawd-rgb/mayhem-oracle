@@ -5,6 +5,7 @@ import {
   formatPatchDate,
 } from "@/lib/patch-notes/chrome";
 import { buildPatchDigest } from "@/lib/patch-notes/digest";
+import { describeFreshness, type FreshnessDescription } from "@/lib/patch-notes/freshness";
 import type { ChangeKind, PatchNote, PatchNotesData } from "@/lib/types";
 import { PatchCard } from "./PatchCard";
 
@@ -49,6 +50,9 @@ export async function PatchNotesView({
   const [current, ...rest] = data.patches;
   const recent = rest.slice(0, RECENT_COUNT);
   const older = rest.slice(RECENT_COUNT);
+  const freshness = data.status || data.scraped_at
+    ? describeFreshness(data.status, data.scraped_at)
+    : null;
 
   return (
     <div className="space-y-6">
@@ -56,6 +60,7 @@ export async function PatchNotesView({
         patch={current}
         locale={locale}
         sourceUrl={data.sourceUrl || current.sourceUrl}
+        freshness={freshness}
       />
       <PatchSummary
         patch={current}
@@ -97,10 +102,12 @@ async function PatchHero({
   patch,
   locale,
   sourceUrl,
+  freshness,
 }: {
   patch: PatchNote;
   locale: string;
   sourceUrl?: string;
+  freshness: FreshnessDescription | null;
 }) {
   const t = await getTranslations("patchNotes");
   const authors = patch.authors?.length ? patch.authors.join(", ") : null;
@@ -121,6 +128,17 @@ async function PatchHero({
           {dateLabel ? (
             <span className="text-xs text-[var(--color-text-muted)]">
               {dateLabel}
+            </span>
+          ) : null}
+          {freshness ? (
+            <span className="text-xs text-[var(--color-text-muted)]">
+              {freshness.state === "today"
+                ? t("freshnessToday")
+                : freshness.state === "days"
+                  ? t("freshnessDays", { days: freshness.days ?? 0 })
+                  : freshness.state === "stale"
+                    ? t("freshnessStale")
+                    : t("freshnessUnavailable")}
             </span>
           ) : null}
         </div>

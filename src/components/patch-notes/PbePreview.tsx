@@ -38,11 +38,18 @@ function eventName(event: PreviewEvent, locale: string): string {
   return event.slug;
 }
 
-function eventText(event: PreviewEvent): string {
-  if (event.change_kind === "added") return "Added in the PBE snapshot.";
-  if (event.change_kind === "removed") return "Removed in the PBE snapshot.";
+function eventText(
+  event: PreviewEvent,
+  t: (key: string, values?: Record<string, string | number>) => string,
+): string {
+  if (event.change_kind === "added") return t("pbeAdded");
+  if (event.change_kind === "removed") return t("pbeRemoved");
   return event.fields_changed.map((field) =>
-    `${field}: ${JSON.stringify(event.before[field])} → ${JSON.stringify(event.after[field])}`,
+    t("pbeFieldChange", {
+      field,
+      before: JSON.stringify(event.before[field]) ?? "",
+      after: JSON.stringify(event.after[field]) ?? "",
+    }),
   ).join("; ");
 }
 
@@ -77,33 +84,42 @@ export async function PbePreview({ data, locale }: { data: PbePreviewData | null
       </header>
       {freshness.state === "unavailable" ? (
         <p className="px-5 py-5 text-sm text-[var(--color-text-muted)]">{t("pbeUnavailable")}</p>
-      ) : !events.length ? (
-        <p className="px-5 py-5 text-sm text-[var(--color-text-muted)]">{t("pbeNoChanges")}</p>
       ) : (
-        <ul className="divide-y divide-[var(--color-border)]">
-          {events.map((event) => (
-            <li key={`${event.entity_type}-${event.canonical_id}-${event.fields_changed.join("-")}`} className="px-5 py-4">
-              <div className="flex flex-wrap items-center gap-2">
-                <span className="rounded border border-cyan-400/30 px-1.5 py-0.5 text-[11px] uppercase tracking-wide text-cyan-200">
-                  {t(`objectTypes.${event.entity_type}`)}
-                </span>
-                {event.href && event.known ? (
-                  <Link href={event.href} className="font-medium text-[var(--color-text-primary)] hover:text-[var(--color-accent)]">
-                    {eventName(event, locale)}
-                  </Link>
-                ) : (
-                  <span className="font-medium text-[var(--color-text-primary)]">{eventName(event, locale)}</span>
-                )}
-              </div>
-              <p className="mt-1 text-sm leading-6 text-[var(--color-text-secondary)]">{eventText(event)}</p>
-              <p className="mt-2 text-[11px] text-[var(--color-text-muted)]">
-                {describeFreshness("fresh", event.detected_at).state === "today"
-                  ? t("freshnessToday")
-                  : t("freshnessDays", { days: describeFreshness("fresh", event.detected_at).days ?? 0 })}
-              </p>
-            </li>
-          ))}
-        </ul>
+        <>
+          {freshness.state === "stale" ? (
+            <p className="border-b border-amber-400/20 bg-amber-400/5 px-5 py-3 text-sm text-amber-100">
+              {t("pbeStale")}
+            </p>
+          ) : null}
+          {!events.length ? (
+            <p className="px-5 py-5 text-sm text-[var(--color-text-muted)]">{t("pbeNoChanges")}</p>
+          ) : (
+            <ul className="divide-y divide-[var(--color-border)]">
+              {events.map((event) => (
+                <li key={`${event.entity_type}-${event.canonical_id}-${event.fields_changed.join("-")}`} className="px-5 py-4">
+                  <div className="flex flex-wrap items-center gap-2">
+                    <span className="rounded border border-cyan-400/30 px-1.5 py-0.5 text-[11px] uppercase tracking-wide text-cyan-200">
+                      {t(`objectTypes.${event.entity_type}`)}
+                    </span>
+                    {event.href && event.known ? (
+                      <Link href={event.href} className="font-medium text-[var(--color-text-primary)] hover:text-[var(--color-accent)]">
+                        {eventName(event, locale)}
+                      </Link>
+                    ) : (
+                      <span className="font-medium text-[var(--color-text-primary)]">{eventName(event, locale)}</span>
+                    )}
+                  </div>
+                  <p className="mt-1 text-sm leading-6 text-[var(--color-text-secondary)]">{eventText(event, t)}</p>
+                  <p className="mt-2 text-[11px] text-[var(--color-text-muted)]">
+                    {describeFreshness("fresh", event.detected_at).state === "today"
+                      ? t("freshnessToday")
+                      : t("freshnessDays", { days: describeFreshness("fresh", event.detected_at).days ?? 0 })}
+                  </p>
+                </li>
+              ))}
+            </ul>
+          )}
+        </>
       )}
     </section>
   );
