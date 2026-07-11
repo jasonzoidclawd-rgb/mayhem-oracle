@@ -11,6 +11,7 @@ from pathlib import Path
 
 from cdragon_entity_adapters import (
     AdapterError,
+    extract_base_stats_from_bin,
     normalize_augment_entities,
     normalize_champion_entities,
     normalize_item_entities,
@@ -271,6 +272,15 @@ class CDragonSnapshotDiffTests(unittest.TestCase):
         items = normalize_item_entities([{"id": 3006, "name": "Berserker's Greaves", "priceTotal": 1100, "stats": {"attackSpeed": 35}}])
         self.assertEqual(items[0]["id"], "3006")
         self.assertEqual(items[0]["fields"]["cost"], 1100)
+
+        base_stats = extract_base_stats_from_bin({
+            "Characters/Brand/CharacterRecords/Root": {
+                "__type": "CharacterRecord",
+                "baseHPModifiable": {"baseValue": 570},
+                "baseArmorModifiable": {"baseValue": 24},
+            },
+        })
+        self.assertEqual(base_stats, {"health": 570, "armor": 24})
 
         with self.assertRaisesRegex(AdapterError, "positional"):
             normalize_champion_entities(

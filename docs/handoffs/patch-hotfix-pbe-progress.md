@@ -42,3 +42,28 @@ the gate; no architecture or disclosure-boundary requirement is being waived.
 - Evidence: `python3 scripts/test_cdragon_snapshot_diff.py` (13 tests),
   `python3 scripts/test_augment_base_catalog.py` (4 tests), and Python syntax
   compilation all pass.
+
+## Step 3 — live and PBE lineages (2026-07-11)
+
+- Added `cdragon_patch_pipeline.py`, which acquires all three entity sources
+  for one branch before building an in-memory transaction. It writes the three
+  lineage snapshots plus the matching event archive together through the
+  journaled rollback path.
+- `latest` and `pbe` have separate canonical files:
+  `cdragon-{augment,champion,item}-{latest,pbe}.json`. Source version,
+  branch/lane, patch label, observed timestamp, comparison base/target, and
+  canonical ID persist with every event.
+- A PBE version regression starts a new PBE lineage and ages the old upcoming
+  entries rather than manufacturing removal events. Missing/malformed source
+  payloads raise actionable diagnostics before any promotion; they never fall
+  back to the other lane.
+- Live source check: latest is
+  `16.13.7915903+branch.releases-16-13.content.release`; PBE is
+  `16.14.7942794+branch.releases-16-14.content.release` (one patch ahead).
+  The real initial promotion created 246 augment, 173 champion, and 705 item
+  rows per lane; 11 active PBE preview events were detected, while the live
+  lane correctly established a zero-event baseline.
+- Evidence: `python3 scripts/test_cdragon_patch_pipeline.py` (6 tests),
+  `python3 scripts/test_cdragon_snapshot_diff.py` (13 tests),
+  `python3 scripts/test_augment_base_catalog.py` (4 tests), and source
+  reachability HTTP 200 all pass.

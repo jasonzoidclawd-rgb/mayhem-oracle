@@ -86,9 +86,47 @@ def _champion_base_stats(detail: dict[str, Any]) -> dict[str, Any]:
     return {key: detail[key] for key in keys if key in detail}
 
 
+_BIN_BASE_STAT_FIELDS = {
+    "baseHPModifiable": "health",
+    "hpPerLevelModifiable": "healthPerLevel",
+    "baseStaticHPRegenModifiable": "healthRegen",
+    "hpRegenPerLevelModifiable": "healthRegenPerLevel",
+    "baseDamageModifiable": "attackDamage",
+    "damagePerLevelModifiable": "attackDamagePerLevel",
+    "baseArmorModifiable": "armor",
+    "armorPerLevelModifiable": "armorPerLevel",
+    "baseMR": "magicResistance",
+    "baseMoveSpeedModifiable": "moveSpeed",
+    "attackRangeModifiable": "attackRange",
+    "attackSpeedModifiable": "attackSpeed",
+    "attackSpeedRatioModifiable": "attackSpeedRatio",
+    "attackSpeedPerLevelModifiable": "attackSpeedPerLevel",
+}
+
+
+def extract_base_stats_from_bin(payload: dict[str, Any]) -> dict[str, Any]:
+    """Read direct CharacterRecord base values from a CDragon champion bin."""
+    record = next(
+        (value for value in payload.values()
+         if isinstance(value, dict) and value.get("__type") == "CharacterRecord"),
+        None,
+    )
+    if not isinstance(record, dict):
+        raise AdapterError("champion bin has no CharacterRecord")
+    stats: dict[str, Any] = {}
+    for source, destination in _BIN_BASE_STAT_FIELDS.items():
+        value = record.get(source)
+        if isinstance(value, dict) and "baseValue" in value:
+            stats[destination] = value["baseValue"]
+    if not stats:
+        raise AdapterError("champion bin has no base stats")
+    return stats
+
+
 def normalize_champion_entities(
     summary_rows: list[dict[str, Any]],
     details_by_id: dict[str, dict[str, Any]],
+    base_stats_by_id: dict[str, dict[str, Any]] | None = None,
 ) -> list[dict[str, Any]]:
     """Normalize CDragon champion summaries and named ability fields.
 
@@ -116,7 +154,9 @@ def normalize_champion_entities(
             ability: dict[str, Any] = {}
             for source, destination in (
                 ("cost", "cost"),
+                ("costCoefficients", "cost_coefficients"),
                 ("cooldown", "cooldown"),
+                ("cooldownCoefficients", "cooldown_coefficients"),
                 ("range", "range"),
                 ("castRange", "range"),
             ):
@@ -134,7 +174,7 @@ def normalize_champion_entities(
             if ability:
                 abilities["QWER"[index]] = ability
         fields: dict[str, Any] = {"abilities": abilities}
-        base_stats = _champion_base_stats(detail)
+        base_stats = (base_stats_by_id or {}).get(canonical_id) or _champion_base_stats(detail)
         if base_stats:
             fields["base_stats"] = base_stats
         normalized.append({

@@ -218,9 +218,17 @@ def compare_snapshots(
 ) -> list[dict[str, Any]]:
     """Compare two validated snapshots into ordered, source-attributed events."""
     validate_snapshot(previous)
-    validate_snapshot(current, previous=previous)
-    if previous["entity_type"] != current["entity_type"] or previous["branch"] != current["branch"]:
-        raise SnapshotValidationError("snapshots must share entity type and branch")
+    if previous["entity_type"] != current["entity_type"]:
+        raise SnapshotValidationError("snapshots must share an entity type")
+    # A PBE preview is deliberately allowed to compare the PBE target against
+    # a read-only latest baseline.  That relationship is explicit in
+    # `comparison`; it never promotes latest data into the PBE lineage.
+    if previous["branch"] == current["branch"]:
+        validate_snapshot(current, previous=previous)
+    elif comparison_base is not None:
+        validate_snapshot(current)
+    else:
+        raise SnapshotValidationError("cross-lane comparison requires explicit provenance")
 
     old_by_id = {row["id"]: row for row in previous["entities"]}
     new_by_id = {row["id"]: row for row in current["entities"]}
