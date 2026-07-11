@@ -85,9 +85,11 @@ For a local recovery or inspection:
 python3 scripts/cdragon_patch_pipeline.py --branch latest
 python3 scripts/cdragon_patch_pipeline.py --branch pbe
 python3 scripts/scrape_patch_notes.py
-python3 scripts/export_public_catalog.py
-python3 scripts/verify_patch_publish.py
-npx vitest run src/lib/__tests__/public-data-boundary.test.ts
+  python3 scripts/export_public_catalog.py
+  python3 scripts/verify_patch_publish.py
+  npx vitest run src/lib/__tests__/public-data-boundary.test.ts
+  npm run build
+  python3 scripts/verify_public_bundle_boundary.py
 ```
 
 Do not hand-edit `public/data/` or snapshot JSON. Inspect the diagnostic, fix
