@@ -11,12 +11,16 @@ import type { Metadata } from "next";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { readFile } from "fs/promises";
 import path from "path";
-import type { Item, ChampionBaseStats, AbilityProfile } from "@/lib/types";
-import { parseItemStats, computeDamageProfile, computeMagicDamageProfile } from "@/lib/data/itemStats";
+import type { Item, ItemStats, ChampionBaseStats, AbilityProfile } from "@/lib/types";
+import { computeDamageProfile, computeMagicDamageProfile } from "@/lib/data/itemStats";
 import DamageCalculator, { type CalcChampion, type CalcItem } from "@/components/damage-sim/DamageCalculator";
 import type { Locale } from "@/i18n/routing";
 import { languageAlternates, localizedUrl } from "@/lib/site";
 import { localizedDescription, localizedName } from "@/lib/i18n/localized-name";
+import { readEntityPresentationFile } from "@/lib/data/read-public-file";
+import { resolveEntityRef } from "@/lib/entities/catalog";
+import type { EntityPresentationData } from "@/lib/entities/types";
+import { EntityLink } from "@/components/entities/EntityLink";
 
 // ─── Data loaders ─────────────────────────────────────────────────────────────
 
@@ -109,26 +113,6 @@ type AugmentTag =
 
 interface TaggedAugment extends Augment {
   tags: AugmentTag[];
-}
-
-// ─── Stat parsing helpers ─────────────────────────────────────────────────────
-
-function descriptionStatLines(description: string): string[] {
-  const split = description
-    .replace(/([a-z])([A-Z][a-z])/g, "$1\n$2")
-    .replace(/(\d)([A-Z][a-z])/g, "$1\n$2");
-  const lines = split.split("\n").map((s) => s.trim()).filter(Boolean);
-  const statLines: string[] = [];
-  for (const line of lines) {
-    if (/^\d/.test(line)) {
-      const parts = line
-        .split(/(?<=\S) (?=\d+(?:\.\d+)?%?\s+[A-Z])/)
-        .map((p) => p.trim())
-        .filter(Boolean);
-      statLines.push(...parts);
-    } else break;
-  }
-  return statLines;
 }
 
 // ─── Augment tagging ──────────────────────────────────────────────────────────
@@ -232,10 +216,50 @@ export default async function DamageSimPage({
     loadAugments(),
     loadChampions(locale),
   ]);
-  const augmentBySlug = new Map(augments.map((augment) => [augment.slug, augment]));
-  const augmentName = (slug: string, fallback: string): string => {
-    const augment = augmentBySlug.get(slug);
-    return augment ? localizedName(augment, locale) : fallback;
+  const entityData = await readEntityPresentationFile<EntityPresentationData>();
+  const itemRecords = new Map(
+    entityData.entities
+      .filter((record) => record.type === "item")
+      .map((record) => [record.canonical_id, record]),
+  );
+  const entityChampions = calcChampions.map((champion) => ({
+    ...champion,
+    entity: resolveEntityRef(entityData, "champion", { slug: champion.slug }, locale) ?? undefined,
+  }));
+  const augmentRefs = new Map(
+    augments.flatMap((augment) => {
+      const ref = resolveEntityRef(entityData, "augment", { slug: augment.slug }, locale);
+      return ref ? [[augment.slug, ref] as const] : [];
+    }),
+  );
+
+  // Only normalized CDragon stat fields are eligible for damage calculations.
+  // Description/wiki text is presentation prose and is never parsed for
+  // balancing values here.
+  const itemStructuredStats = (item: Item): ItemStats => {
+    const record = itemRecords.get(String(item.id ?? ""));
+    const stats: ItemStats = {};
+    for (const stat of record?.stats ?? []) {
+      if (typeof stat.value !== "number") continue;
+      switch (stat.key) {
+        case "attack_damage": stats.attackDamage = stat.value; break;
+        case "ability_power": stats.abilityPower = stat.value; break;
+        case "health": stats.health = stat.value; break;
+        case "armor": stats.armor = stat.value; break;
+        case "magic_resist": stats.magicResist = stat.value; break;
+        case "attack_speed": stats.attackSpeed = stat.value; break;
+        case "ability_haste": stats.abilityHaste = stat.value; break;
+        case "movement_speed": stats.moveSpeedFlat = stat.value; break;
+        case "critical_strike_chance": stats.critChance = stat.value; break;
+        case "life_steal": stats.lifeSteal = stat.value; break;
+        default: break;
+      }
+    }
+    return stats;
+  };
+  const augmentLink = (slug: string, fallback: string) => {
+    const ref = augmentRefs.get(slug);
+    return ref ? <EntityLink entity={ref} variant="compact" /> : <span>{fallback}</span>;
   };
 
   // ── Item damage table ──────────────────────────────────────────────────────
@@ -258,13 +282,7 @@ export default async function DamageSimPage({
     const id = item.id ?? 0;
     if (id > 0 && id < 200_000 && !item.slug) continue;
 
-    const isModified = id >= 200_000 && id < 900_000;
-    const statsSource =
-      !isModified && item.wikiStats?.length
-        ? item.wikiStats
-        : descriptionStatLines(item.description ?? "");
-
-    const parsed = parseItemStats(statsSource);
+    const parsed = itemStructuredStats(item);
     if (!parsed.attackDamage || parsed.attackDamage < 30) continue;
 
     const profile = computeDamageProfile(parsed, TARGET_ARMOR);
@@ -308,13 +326,7 @@ export default async function DamageSimPage({
     const id = item.id ?? 0;
     if (id > 0 && id < 200_000 && !item.slug) continue;
 
-    const isModified = id >= 200_000 && id < 900_000;
-    const statsSource =
-      !isModified && item.wikiStats?.length
-        ? item.wikiStats
-        : descriptionStatLines(item.description ?? "");
-
-    const parsed = parseItemStats(statsSource);
+    const parsed = itemStructuredStats(item);
     if (!parsed.abilityPower || parsed.abilityPower < 30) continue;
 
     const profile = computeMagicDamageProfile(parsed, TARGET_MR);
@@ -370,12 +382,7 @@ export default async function DamageSimPage({
     if (calcSeen.has(item.name)) continue;
     calcSeen.add(item.name);
 
-    const isModified = id >= 200_000 && id < 900_000;
-    const statsSource =
-      !isModified && item.wikiStats?.length
-        ? item.wikiStats
-        : descriptionStatLines(item.description ?? "");
-    const parsed = parseItemStats(statsSource);
+    const parsed = itemStructuredStats(item);
 
     // Only include items that give meaningful combat stats
     if (
@@ -395,6 +402,12 @@ export default async function DamageSimPage({
         searchName: item.name,
         icon: item.icon,
         stats: parsed,
+        entity: resolveEntityRef(
+          entityData,
+          "item",
+          { canonicalId: item.id != null ? String(item.id) : undefined, slug: item.slug },
+          locale,
+        ) ?? undefined,
       });
     }
   }
@@ -414,7 +427,7 @@ export default async function DamageSimPage({
       {/* ─── Interactive Calculator ─── */}
       <section>
         <SectionHeading>{t("buildCalculator")}</SectionHeading>
-        <DamageCalculator champions={calcChampions} items={calcItems} />
+        <DamageCalculator champions={entityChampions} items={calcItems} />
       </section>
 
       {/* ─── Formula Reference ─── */}
@@ -447,8 +460,8 @@ export default async function DamageSimPage({
             <FormulaLine label={t("formula")} formula="total = base × Π (1 + amp_i)" />
             <FormulaLine label={t("example")} formula="20% + 20% = 1.20 × 1.20 = 1.44×" note={t("noteNot140")} />
             <div className="mt-1 space-y-1 text-xs text-[var(--color-text-muted)]">
-              <p><span className="text-amber-300">{augmentName("giant-slayer", "Giant Slayer")}</span> — {t("giantSlayerAmp")}</p>
-              <p><span className="text-amber-300">{augmentName("infernal-might", "Infernal Might")}</span> — {t("infernalMightAmp")}</p>
+              <p>{augmentLink("giant-slayer", "Giant Slayer")} — {t("giantSlayerAmp")}</p>
+              <p>{augmentLink("infernal-might", "Infernal Might")} — {t("infernalMightAmp")}</p>
             </div>
           </FormulaCard>
 
@@ -485,9 +498,9 @@ export default async function DamageSimPage({
 
           <FormulaCard title={t("specialInteractions")} source="wiki.leagueoflegends.com/en-us/Damage">
             <div className="space-y-2 text-sm text-[var(--color-text-secondary)]">
-              <p><span className="text-amber-300 font-medium">{augmentName("jeweled-gauntlet", "Jeweled Gauntlet")} / {augmentName("vulnerability", "Vulnerability")}</span> — {t("jeweledInteractionNote")}</p>
+              <p>{augmentLink("jeweled-gauntlet", "Jeweled Gauntlet")} <span aria-hidden="true">/</span> {augmentLink("vulnerability", "Vulnerability")} — {t("jeweledInteractionNote")}</p>
               <p><span className="text-amber-300 font-medium">{t("trueDamage")}</span> — {t("trueDamageInteractionNote")}</p>
-              <p><span className="text-amber-300 font-medium">{augmentName("giant-slayer", "Giant Slayer")}</span> — {t("giantSlayerInteractionNote")}</p>
+              <p>{augmentLink("giant-slayer", "Giant Slayer")} — {t("giantSlayerInteractionNote")}</p>
             </div>
           </FormulaCard>
 
@@ -519,9 +532,13 @@ export default async function DamageSimPage({
                       <span className={`text-xs font-semibold ${RARITY_STYLE[aug.rarity]}`}>
                         {aug.rarity[0].toUpperCase()}
                       </span>
-                      <span className="text-sm font-medium text-[var(--color-text-primary)] truncate">
-                        {localizedName(aug, locale)}
-                      </span>
+                      {augmentRefs.get(aug.slug) ? (
+                        <EntityLink entity={augmentRefs.get(aug.slug)!} variant="compact" className="truncate" />
+                      ) : (
+                        <span className="text-sm font-medium text-[var(--color-text-primary)] truncate">
+                          {localizedName(aug, locale)}
+                        </span>
+                      )}
                     </div>
                     <div className="flex flex-wrap gap-1 shrink-0">
                       {aug.tags.map((tagKey) => (
@@ -571,7 +588,11 @@ export default async function DamageSimPage({
                   key={row.item.id ?? row.item.slug}
                   className={`border-b border-[var(--color-border-default)] hover:bg-[var(--color-bg-card)]/40 transition-colors ${i % 2 === 0 ? "" : "bg-[var(--color-bg-card)]/20"}`}
                 >
-                  <td className="px-4 py-2.5 font-medium text-[var(--color-text-primary)]">{localizedName(row.item, locale)}</td>
+                  <td className="px-4 py-2.5 font-medium text-[var(--color-text-primary)]">
+                    {resolveEntityRef(entityData, "item", { canonicalId: row.item.id != null ? String(row.item.id) : undefined, slug: row.item.slug }, locale) ? (
+                      <EntityLink entity={resolveEntityRef(entityData, "item", { canonicalId: row.item.id != null ? String(row.item.id) : undefined, slug: row.item.slug }, locale)!} variant="compact" />
+                    ) : localizedName(row.item, locale)}
+                  </td>
                   <Num>{row.ad}</Num>
                   <Num>{row.critChancePct > 0 ? `${row.critChancePct.toFixed(0)}%` : "—"}</Num>
                   <Num>{row.critDamagePct > 0 ? `+${row.critDamagePct.toFixed(0)}%` : "—"}</Num>
@@ -619,7 +640,11 @@ export default async function DamageSimPage({
                   key={row.item.id ?? row.item.slug}
                   className={`border-b border-[var(--color-border-default)] hover:bg-[var(--color-bg-card)]/40 transition-colors ${i % 2 === 0 ? "" : "bg-[var(--color-bg-card)]/20"}`}
                 >
-                  <td className="px-4 py-2.5 font-medium text-[var(--color-text-primary)]">{localizedName(row.item, locale)}</td>
+                  <td className="px-4 py-2.5 font-medium text-[var(--color-text-primary)]">
+                    {resolveEntityRef(entityData, "item", { canonicalId: row.item.id != null ? String(row.item.id) : undefined, slug: row.item.slug }, locale) ? (
+                      <EntityLink entity={resolveEntityRef(entityData, "item", { canonicalId: row.item.id != null ? String(row.item.id) : undefined, slug: row.item.slug }, locale)!} variant="compact" />
+                    ) : localizedName(row.item, locale)}
+                  </td>
                   <Num>{row.ap}</Num>
                   <Num>{row.magicPenPct > 0 ? `${row.magicPenPct.toFixed(0)}%` : "—"}</Num>
                   <Num>{row.magicPenFlat > 0 ? row.magicPenFlat : "—"}</Num>

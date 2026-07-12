@@ -8,13 +8,22 @@ import {
   type PatchNoteSearchItem,
 } from "@/lib/patch-notes/search";
 import type { PatchNotesData } from "@/lib/types";
+import { resolveEntityRef } from "@/lib/entities/catalog";
+import type { EntityPresentationData, EntityRef } from "@/lib/entities/types";
+import { EntityLink } from "@/components/entities/EntityLink";
 
 type SearchItem = LocalizedNameRecord & {
-  kind: "champion" | "augment" | "patch-note";
+  kind: "champion" | "augment" | "item" | "patch-note";
   icon?: string;
   href?: string;
+  entity?: EntityRef;
   snippet?: string;
   searchText?: string;
+};
+
+type CatalogNameRecord = LocalizedNameRecord & {
+  slug: string;
+  icon?: string;
 };
 
 export function CmdKSearch() {
@@ -31,11 +40,13 @@ export function CmdKSearch() {
     Promise.all([
       fetch("/data/champions.json").then((r) => r.json()),
       fetch("/data/augments.json").then((r) => r.json()),
+      fetch("/data/items.json").then((r) => r.json()),
+      fetch("/data/entity-presentation.json").then((r) => r.json() as Promise<EntityPresentationData>),
       fetch("/data/patch-notes.json")
         .then((r) => (r.ok ? r.json() : null))
         .catch(() => null),
-    ]).then(([champData, augData, patchData]) => {
-      const champItems: SearchItem[] = champData.champions.map((c: LocalizedNameRecord & { icon?: string }) => ({
+    ]).then(([champData, augData, itemData, entityData, patchData]) => {
+      const champItems: SearchItem[] = champData.champions.map((c: CatalogNameRecord) => ({
         name: c.name,
         name_zh_TW: c.name_zh_TW,
         name_zh_CN: c.name_zh_CN,
@@ -43,8 +54,9 @@ export function CmdKSearch() {
         name_ko: c.name_ko,
         kind: "champion" as const,
         icon: c.icon,
+        entity: resolveEntityRef(entityData, "champion", { slug: c.slug }, locale) ?? undefined,
       }));
-      const augItems: SearchItem[] = augData.augments.map((a: LocalizedNameRecord & { icon?: string }) => ({
+      const augItems: SearchItem[] = augData.augments.map((a: CatalogNameRecord) => ({
         name: a.name,
         name_zh_TW: a.name_zh_TW,
         name_zh_CN: a.name_zh_CN,
@@ -52,13 +64,27 @@ export function CmdKSearch() {
         name_ko: a.name_ko,
         kind: "augment" as const,
         icon: a.icon,
+        entity: resolveEntityRef(entityData, "augment", { slug: a.slug }, locale) ?? undefined,
+      }));
+      const itemItems: SearchItem[] = [
+        ...(itemData.items ?? []),
+        ...(itemData.mayhemExclusive ?? []),
+      ].map((item: LocalizedNameRecord & { id?: number; slug?: string; icon?: string }) => ({
+        name: item.name,
+        name_zh_TW: item.name_zh_TW,
+        name_zh_CN: item.name_zh_CN,
+        name_ja: item.name_ja,
+        name_ko: item.name_ko,
+        kind: "item" as const,
+        icon: item.icon,
+        entity: resolveEntityRef(entityData, "item", { canonicalId: item.id != null ? String(item.id) : undefined, slug: item.slug }, locale) ?? undefined,
       }));
       const patchItems: PatchNoteSearchItem[] = buildPatchNoteSearchItems(
         patchData as PatchNotesData | null,
         locale,
         { patchLabel: (patch) => tPatch("patchLabel", { patch }) },
       );
-      setItems([...champItems, ...augItems, ...patchItems]);
+      setItems([...champItems, ...augItems, ...itemItems, ...patchItems]);
     });
   }, [open, items, locale, tPatch]);
 
@@ -161,7 +187,9 @@ export function CmdKSearch() {
                         ? t("searchKindChampion")
                         : item.kind === "augment"
                           ? t("searchKindAugment")
-                          : t("searchKindPatchNote")
+                          : item.kind === "item"
+                            ? t("searchKindItem")
+                            : t("searchKindPatchNote")
                     }
                     onSelect={() => setOpen(false)}
                   />
@@ -221,6 +249,10 @@ function SearchResult({
     </>
   );
   const className = "flex items-center gap-3 rounded-lg px-3 py-2.5 hover:bg-white/5";
+
+  if (item.entity) {
+    return <EntityLink entity={item.entity} variant="standard" className={className} />;
+  }
 
   if (item.href) {
     return (

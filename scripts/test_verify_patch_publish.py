@@ -81,6 +81,18 @@ class VerifyPatchPublishTests(unittest.TestCase):
                 json.dumps({"patch": meta_patch}),
                 encoding="utf-8",
             )
+        (public_dir / "entity-presentation.json").write_text(
+            json.dumps({
+                "schema_version": 1,
+                "source": "fixture",
+                "status": "fresh",
+                "patch": "26.13",
+                "pbe_patch": "26.14",
+                "observed_at": "2026-06-23T18:00:00Z",
+                "entities": [{"type": "augment", "canonical_id": "A", "slug": "fixture"}],
+            }),
+            encoding="utf-8",
+        )
 
     def test_passing_data_returns_concise_summary(self):
         with tempfile.TemporaryDirectory() as tmpdir:
@@ -92,6 +104,7 @@ class VerifyPatchPublishTests(unittest.TestCase):
                 changed_paths=[
                     "data/internal/patch-events.json",
                     "public/data/patch-notes.json",
+                    "public/data/entity-presentation.json",
                 ],
             )
 
@@ -168,7 +181,22 @@ class VerifyPatchPublishTests(unittest.TestCase):
             with self.assertRaisesRegex(PatchPublishError, "public PBE preview"):
                 verify_patch_publish(
                     root=root,
-                    changed_paths=["data/internal/pbe-preview.json", "public/data/patch-notes.json"],
+                    changed_paths=[
+                        "data/internal/pbe-preview.json",
+                        "public/data/patch-notes.json",
+                        "public/data/entity-presentation.json",
+                    ],
+                )
+
+    def test_cdragon_change_requires_public_entity_presentation_change(self):
+        with tempfile.TemporaryDirectory() as tmpdir:
+            root = Path(tmpdir)
+            self.write_public_data(root, patch_notes=public_patch_notes())
+
+            with self.assertRaisesRegex(PatchPublishError, "public entity presentation"):
+                verify_patch_publish(
+                    root=root,
+                    changed_paths=["data/internal/cdragon-item-latest.json"],
                 )
 
 

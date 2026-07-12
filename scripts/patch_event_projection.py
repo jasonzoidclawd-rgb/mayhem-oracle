@@ -80,28 +80,45 @@ def _kind(event: dict[str, Any]) -> str:
     return "changed"
 
 
-def _href(event: dict[str, Any], known: dict[str, set[str]]) -> tuple[bool, str | None]:
+def _href(
+    event: dict[str, Any],
+    known: dict[str, set[str]],
+    entity_records: dict[str, dict[str, dict[str, Any]]] | None = None,
+) -> tuple[bool, str | None]:
     entity_type = str(event.get("entity_type") or "")
     slug = str(event.get("slug") or "")
     canonical_id = str(event.get("canonical_id") or "")
-    key = canonical_id if entity_type == "item" else slug
+    record = (entity_records or {}).get(entity_type, {}).get(canonical_id, {})
+    key = canonical_id if entity_type == "item" else str(record.get("slug") or slug)
     if key not in known.get(entity_type, set()):
         return False, None
     route = {"champion": "champions", "item": "items", "augment": "augments"}.get(entity_type)
     return (True, f"/{route}/{key}") if route else (False, None)
 
 
-def _event_to_change(event: dict[str, Any], known: dict[str, set[str]]) -> dict[str, Any]:
+def _event_to_change(
+    event: dict[str, Any],
+    known: dict[str, set[str]],
+    entity_records: dict[str, dict[str, dict[str, Any]]] | None = None,
+) -> dict[str, Any]:
     entity_type = str(event.get("entity_type") or "unknown")
+    canonical_id = str(event.get("canonical_id") or "")
     names = _locale_names(event.get("names", {}))
-    is_known, href = _href(event, known)
+    is_known, href = _href(event, known, entity_records)
+    record = (entity_records or {}).get(entity_type, {}).get(canonical_id, {})
+    canonical_slug = str(record.get("slug") or event.get("slug") or "")
     target = {
         "type": entity_type,
-        "slug": str(event.get("slug") or ""),
+        "canonicalId": canonical_id,
+        "slug": canonical_slug,
         "name": names["en"],
         "known": is_known,
         "names": {key: value for key, value in names.items() if key != "en" and value},
     }
+    if record.get("icon"):
+        target["icon"] = record["icon"]
+    if record.get("lifecycle", {}).get("state"):
+        target["lifecycle"] = record["lifecycle"]["state"]
     if href:
         target["href"] = href
     return {
@@ -167,6 +184,7 @@ def build_patch_notes_projection(
     *,
     known: dict[str, set[str]] | None = None,
     pbe_archive: dict[str, Any] | None = None,
+    entity_records: dict[str, dict[str, dict[str, Any]]] | None = None,
 ) -> dict[str, Any]:
     """Build legacy-compatible cards solely from current CDragon live events."""
     patch_events = patch_events or {}
@@ -213,7 +231,7 @@ def build_patch_notes_projection(
     groups: dict[str, list[dict[str, Any]]] = {}
     for event in current_events:
         section = SECTION_BY_ENTITY.get(event.get("entity_type"), "general")
-        groups.setdefault(section, []).append(_event_to_change(event, known))
+        groups.setdefault(section, []).append(_event_to_change(event, known, entity_records))
     current = _metadata_patch(current_metadata)
     current.update({
         "version": current_cycle,
@@ -246,6 +264,7 @@ def build_patch_notes_projection(
 def build_preview_projection(
     archive: dict[str, Any] | None,
     known: dict[str, set[str]],
+    entity_records: dict[str, dict[str, dict[str, Any]]] | None = None,
 ) -> dict[str, Any]:
     """Expose only active PBE entries, with links restricted to live entities."""
     if not archive:
@@ -257,8 +276,14 @@ def build_preview_projection(
         if event.get("source_patch_label") != archive.get("source_patch_label"):
             continue
         projection = {field: copy.deepcopy(event[field]) for field in PUBLIC_EVENT_FIELDS if field in event}
-        is_known, href = _href(event, known)
+        record = (entity_records or {}).get(str(event.get("entity_type") or ""), {}).get(str(event.get("canonical_id") or ""), {})
+        is_known, href = _href(event, known, entity_records)
         projection["known"] = is_known
+        projection["canonicalId"] = str(event.get("canonical_id") or "")
+        if record.get("slug"):
+            projection["slug"] = record["slug"]
+        if record.get("icon"):
+            projection["icon"] = record["icon"]
         if href:
             projection["href"] = href
         events.append(projection)

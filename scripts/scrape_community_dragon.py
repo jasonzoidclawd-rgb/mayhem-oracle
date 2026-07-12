@@ -34,6 +34,7 @@ OUT_DIR = INTERNAL_DATA_DIR
 
 MAYHEM_EXCLUSIVE_ITEMS: list[dict] = [
     {
+        "id": 223039,
         "slug": "atmas-reckoning",
         "name": "Atma's Reckoning",
         "cost": 2900,
@@ -44,6 +45,7 @@ MAYHEM_EXCLUSIVE_ITEMS: list[dict] = [
         "mayhemTag": "exclusive",
     },
     {
+        "id": 3430,
         "slug": "rite-of-ruin",
         "name": "Rite of Ruin",
         "cost": 3000,
@@ -58,6 +60,7 @@ MAYHEM_EXCLUSIVE_ITEMS: list[dict] = [
         "mayhemTag": "exclusive",
     },
     {
+        "id": 4011,
         "slug": "sword-of-blossoming-dawn",
         "name": "Sword of Blossoming Dawn",
         "cost": 2350,
@@ -68,6 +71,7 @@ MAYHEM_EXCLUSIVE_ITEMS: list[dict] = [
         "mayhemTag": "exclusive",
     },
     {
+        "id": 4403,
         "slug": "the-golden-spatula",
         "name": "The Golden Spatula",
         "cost": 0,
@@ -81,6 +85,7 @@ MAYHEM_EXCLUSIVE_ITEMS: list[dict] = [
         "mayhemTag": "quest-reward",
     },
     {
+        "id": 223095,
         "slug": "stormrazor",
         "name": "Stormrazor",
         "cost": 3000,
@@ -91,6 +96,7 @@ MAYHEM_EXCLUSIVE_ITEMS: list[dict] = [
         "mayhemTag": "modified",
     },
     {
+        "id": 223084,
         "slug": "heartsteel",
         "name": "Heartsteel",
         "cost": 3000,
@@ -101,6 +107,7 @@ MAYHEM_EXCLUSIVE_ITEMS: list[dict] = [
         "mayhemTag": "modified",
     },
     {
+        "id": 228002,
         "slug": "wooglets-witchcap",
         "name": "Wooglet's Witchcap",
         "cost": 0,

@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import { getTranslations, setRequestLocale } from "next-intl/server";
-import Image from "next/image";
 import { notFound } from "next/navigation";
 import { Link } from "@/i18n/navigation";
 import { JsonLd } from "@/components/seo/JsonLd";
@@ -10,7 +9,12 @@ import { localizedName } from "@/lib/i18n/localized-name";
 import { buildItemDetailJsonLd } from "@/lib/seo/item-detail";
 import { buildPatchSummary } from "@/lib/seo/patch-summary";
 import { readItemsFile, readMetaFile } from "@/lib/data/read-public-file";
+import { readEntityPresentationFile } from "@/lib/data/read-public-file";
 import { languageAlternates, localizedUrl } from "@/lib/site";
+import { resolveEntityRef } from "@/lib/entities/catalog";
+import type { EntityPresentationData } from "@/lib/entities/types";
+import { EntityLink } from "@/components/entities/EntityLink";
+import { EntityStats } from "@/components/entities/EntityStats";
 
 // Raw Riot API category identifier → translation key in items namespace.
 const CATEGORY_LABEL_KEY: Record<string, string> = {
@@ -57,11 +61,6 @@ interface ItemsData {
   items: Item[];
 }
 
-interface ParsedDescription {
-  statLines: string[];
-  effectBlocks: { name: string; text: string }[];
-}
-
 // ─── Data helpers ─────────────────────────────────────────────────────────────
 
 async function loadItemsData(): Promise<ItemsData> {
@@ -98,62 +97,6 @@ function buildNameToItemMap(items: Item[]): Map<string, Item> {
     }
   }
   return map;
-}
-
-/**
- * Parses a concatenated item description string into stat lines and named effect blocks.
- *
- * The scraper concatenates everything: "45 Ability Power 200 HealthEffervescenceGain +1.2%..."
- * Strategy:
- *   1. Split at CamelCase join points (e.g. "HasteEffervescence" → "Haste\nEffervescence")
- *   2. Lines starting with a digit → stat lines (further split on embedded numbers)
- *   3. Short title-case lines → passive/active name headers
- *   4. Remaining lines → effect description text
- */
-function parseDescription(raw: string): ParsedDescription {
-  const split = raw
-    // Insert newline at CamelCase joins produced by the scraper
-    .replace(/([a-z])([A-Z][a-z])/g, "$1\n$2")
-    // Also split digit-then-uppercase that slipped through (e.g. "50.GoldPer")
-    .replace(/(\d)([A-Z][a-z])/g, "$1\n$2");
-
-  const lines = split.split("\n").map((s) => s.trim()).filter(Boolean);
-
-  const statLines: string[] = [];
-  const effectBlocks: { name: string; text: string }[] = [];
-  let currentBlock: { name: string; text: string } | null = null;
-  let inStats = true;
-
-  for (const line of lines) {
-    if (inStats && /^\d/.test(line)) {
-      // Split multiple stats packed on one line: "45 Ability Power 200 Health"
-      const parts = line
-        .split(/(?<=\S) (?=\d+(?:\.\d+)?%?\s+[A-Z])/)
-        .map((p) => p.trim())
-        .filter(Boolean);
-      statLines.push(...parts);
-    } else {
-      inStats = false;
-      // Decide: passive/active name vs description text
-      // Name heuristic: ≤ 40 chars, starts uppercase, no trailing punctuation
-      const looksLikeName =
-        line.length <= 40 &&
-        /^[A-Z]/.test(line) &&
-        !/[.!?]$/.test(line) &&
-        !/^(If |After |When |Dealing |Gain |Your |On-Hit|Active -|Passive -)/.test(line);
-
-      if (looksLikeName) {
-        if (currentBlock) effectBlocks.push(currentBlock);
-        currentBlock = { name: line, text: "" };
-      } else {
-        if (!currentBlock) currentBlock = { name: "", text: "" };
-        currentBlock.text += (currentBlock.text ? " " : "") + line;
-      }
-    }
-  }
-  if (currentBlock) effectBlocks.push(currentBlock);
-
-  return { statLines, effectBlocks };
 }
 
 // ─── Static params ────────────────────────────────────────────────────────────
@@ -239,10 +182,24 @@ export default async function ItemDetailPage({
   setRequestLocale(locale);
   const t = await getTranslations("items");
 
-  const data = await loadItemsData();
+  const [data, entityPresentation] = await Promise.all([
+    loadItemsData(),
+    readEntityPresentationFile<EntityPresentationData>(),
+  ]);
   const item = findItem(data, identifier);
   if (!item) notFound();
   const itemName = localizedName(item, locale);
+  const entityRef = resolveEntityRef(
+    entityPresentation,
+    "item",
+    { canonicalId: item.id != null ? String(item.id) : undefined, slug: item.slug },
+    locale,
+  );
+  const entityRecord = entityRef
+    ? entityPresentation.entities.find(
+        (record) => record.type === "item" && record.canonical_id === entityRef.canonicalId,
+      )
+    : null;
 
   const nameToItem = buildNameToItemMap(data.items);
 
@@ -261,10 +218,10 @@ export default async function ItemDetailPage({
   // Wiki stats are the STANDARD-mode values, which differ for modified items
   // (e.g. Rabadon's wiki says 130 AP; Mayhem version has 65 AP).
   // Only use wikiStats for exclusive items that don't have a modified base.
-  const useWikiStats  = !isModified && !!(item.wikiStats?.length);
-  const hasWikiData   = !!(useWikiStats || item.wikiPassives?.length);
-  const hasCleanStats = !!(item.stats && item.stats.trim());
-  const { statLines, effectBlocks } = parseDescription(item.description ?? "");
+  const effectBlocks = (item.wikiPassives ?? []).map((block) => ({
+    name: block.label,
+    text: block.text,
+  }));
 
   // Deduplicate category labels (SpellBlock and MagicResist both share the same localized label)
   const categoryLabels = [
@@ -337,21 +294,13 @@ export default async function ItemDetailPage({
 
       {/* ─── Header ─── */}
       <div className="flex items-start gap-6 mb-8">
-        {item.icon && (
-          <div className="relative w-20 h-20 rounded-xl overflow-hidden border-2 border-[var(--color-border-hover)] shrink-0 bg-[var(--color-bg-card)]">
-            <Image
-              src={item.icon}
-              alt={itemName}
-              fill
-              className="object-contain p-1"
-              sizes="80px"
-              unoptimized
-            />
-          </div>
-        )}
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-3 flex-wrap">
-            <h1 className="text-3xl font-bold">{itemName}</h1>
+            {entityRef ? (
+              <h1><EntityLink entity={entityRef} variant="hero" className="font-bold" /></h1>
+            ) : (
+              <h1 className="text-3xl font-bold">{itemName}</h1>
+            )}
             {effectiveTag && (
               <span
                 className={`text-xs font-semibold px-2.5 py-1 rounded-md border ${MAYHEM_TAG_STYLES[effectiveTag]}`}
@@ -409,71 +358,31 @@ export default async function ItemDetailPage({
         </section>
       )}
 
-      {/* ─── Stats ─── */}
-      {(hasWikiData || hasCleanStats || statLines.length > 0) && (
-        <section className="mb-6">
-          <SectionHeading>{t("stats")}</SectionHeading>
-          <div className="p-4 rounded-xl border border-[var(--color-border-default)] bg-[var(--color-bg-card)]/60 space-y-2">
-            {useWikiStats
-              ? item.wikiStats!.map((s, i) => <StatLine key={i} text={s} />)
-              : hasCleanStats
-              ? item.stats!.split(",").map((s, i) => <StatLine key={i} text={s.trim()} />)
-              : statLines.map((s, i) => <StatLine key={i} text={s} />)}
+      {entityRecord ? <EntityStats record={entityRecord} locale={locale} /> : null}
 
-          </div>
+      {entityRecord?.description ? (
+        <section className="glass-card p-5" aria-labelledby="item-description-heading">
+          <h2 id="item-description-heading" className="text-sm font-semibold mb-2">
+            {t("descriptionHeading")}
+          </h2>
+          <p className="text-sm leading-relaxed text-[var(--color-text-secondary)]">{entityRecord.description}</p>
         </section>
-      )}
+      ) : null}
 
-      {/* ─── Effect blocks ─────────────────────────────────────────────────────
-           Priority order:
-           1. effectBlocks parsed from Mayhem description (authoritative — Riot data)
-           2. wikiPassives from standard wiki (only if Mayhem description has passives,
-              meaning the mechanic exists in Mayhem even if numbers differ)
-           For modified items with no effectBlocks, the passive doesn't exist in
-           Mayhem — hiding wikiPassives prevents showing standard-mode-only passives.
-      ─── */}
+      {/* ─── Neutral effect prose ───────────────────────────────────────────── */}
       {effectBlocks.length > 0 && (
         <section className="mb-6">
           <SectionHeading>{t("effect")}</SectionHeading>
           <div className="space-y-3">
-            {item.wikiPassives?.length
-              ? <>
-                  {item.wikiPassives.map((block, i) => (
-                    <div
-                      key={i}
-                      className="p-4 rounded-xl border border-[var(--color-border-default)] bg-[var(--color-bg-card)]/40"
-                    >
-                      <p className="text-sm font-bold text-[var(--color-neon-primary)] mb-1.5">
-                        {block.label}
-                      </p>
-                      <p className="text-sm text-[var(--color-text-secondary)] leading-relaxed">
-                        {block.text}
-                      </p>
-                    </div>
-                  ))}
-                  {isModified && (
-                    <p className="text-[11px] text-[var(--color-text-muted)] pl-1">
-                      ⚠ {t("passiveStandardModeNote")}
-                    </p>
-                  )}
-                </>
-              : effectBlocks.map((block, i) => (
-                  <div
-                    key={i}
-                    className="p-4 rounded-xl border border-[var(--color-border-default)] bg-[var(--color-bg-card)]/40"
-                  >
-                    {block.name && (
-                      <p className="text-sm font-bold text-[var(--color-neon-primary)] mb-1.5">
-                        {block.name}
-                      </p>
-                    )}
-                    {block.text && (
-                      <p className="text-sm text-[var(--color-text-secondary)] leading-relaxed">
-                        {block.text}
-                      </p>
-                    )}
-                  </div>
-                ))}
+            {effectBlocks.map((block, i) => (
+              <div key={i} className="p-4 rounded-xl border border-[var(--color-border-default)] bg-[var(--color-bg-card)]/40">
+                <p className="text-sm font-bold text-[var(--color-neon-primary)] mb-1.5">{block.name}</p>
+                <p className="text-sm text-[var(--color-text-secondary)] leading-relaxed">{block.text}</p>
+              </div>
+            ))}
+            {isModified ? (
+              <p className="text-[11px] text-[var(--color-text-muted)] pl-1">⚠ {t("passiveStandardModeNote")}</p>
+            ) : null}
           </div>
         </section>
       )}
@@ -503,23 +412,17 @@ export default async function ItemDetailPage({
           <div className="flex flex-wrap items-center gap-2">
             {item.recipe.flatMap((component, i) => {
               const compItem = nameToItem.get(component.toLowerCase());
-              const identifier = compItem?.id ?? compItem?.slug;
-              const badge = (
-                <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg border border-[var(--color-border-default)] bg-[var(--color-bg-card)]/60 text-sm text-[var(--color-text-secondary)] hover:border-[var(--color-border-hover)] transition-colors">
-                  {compItem?.icon && (
-                    <div className="relative w-5 h-5 shrink-0">
-                      <Image src={compItem.icon} alt={component} fill className="object-contain" sizes="20px" unoptimized />
-                    </div>
-                  )}
-                  <span>{component}</span>
-                  {compItem && (
-                    <span className="text-amber-400/70 text-xs">{compItem.cost.toLocaleString()}g</span>
-                  )}
-                </div>
+              const componentRef = compItem
+                ? resolveEntityRef(entityPresentation, "item", { canonicalId: compItem.id != null ? String(compItem.id) : undefined, slug: compItem.slug }, locale)
+                : null;
+              const badge = componentRef ? (
+                <EntityLink entity={componentRef} variant="compact" />
+              ) : (
+                <span className="text-sm text-[var(--color-text-secondary)]">{component}</span>
               );
-              const linked = identifier
-                ? <Link key={`comp-${i}`} href={`/items/${identifier}`}>{badge}</Link>
-                : <div key={`comp-${i}`}>{badge}</div>;
+              const linked = componentRef
+                ? <span key={`comp-${i}`} className="inline-flex items-center gap-2 rounded-lg border border-[var(--color-border-default)] bg-[var(--color-bg-card)]/60 px-3 py-1.5">{badge}<span className="text-amber-400/70 text-xs">{compItem?.cost.toLocaleString()}g</span></span>
+                : <span key={`comp-${i}`} className="inline-flex rounded-lg border border-[var(--color-border-default)] bg-[var(--color-bg-card)]/60 px-3 py-1.5">{badge}</span>;
               return i === 0
                 ? [linked]
                 : [<span key={`plus-${i}`} className="text-[var(--color-text-muted)] select-none">+</span>, linked];
@@ -543,20 +446,4 @@ function SectionHeading({ children }: { children: React.ReactNode }) {
       {children}
     </h2>
   );
-}
-
-function StatLine({ text }: { text: string }) {
-  // Separate the value (e.g. "45", "12%") from the stat name
-  const match = text.match(/^(\d+(?:\.\d+)?%?)\s+(.+)$/);
-  if (match) {
-    return (
-      <div className="flex items-baseline gap-3">
-        <span className="text-base font-bold text-[var(--color-text-primary)] w-14 text-right shrink-0 tabular-nums">
-          {match[1]}
-        </span>
-        <span className="text-sm text-[var(--color-text-secondary)]">{match[2]}</span>
-      </div>
-    );
-  }
-  return <p className="text-sm text-[var(--color-text-secondary)] pl-1">{text}</p>;
 }

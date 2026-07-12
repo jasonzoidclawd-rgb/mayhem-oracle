@@ -2,6 +2,9 @@ import { getTranslations, getLocale } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
 import { localizedName, type LocalizedNameRecord } from "@/lib/i18n/localized-name";
 import { rarityBadgeClass } from "./tier-style";
+import { resolveEntityRef } from "@/lib/entities/catalog";
+import type { EntityPresentationData } from "@/lib/entities/types";
+import { EntityLink } from "@/components/entities/EntityLink";
 
 export type SpotlightAugment = LocalizedNameRecord & {
   slug: string;
@@ -13,13 +16,16 @@ export type SpotlightAugment = LocalizedNameRecord & {
 export async function AugmentSpotlight({
   augment,
   isChangedThisPatch,
+  entityPresentation,
 }: {
   augment: SpotlightAugment;
   isChangedThisPatch: boolean;
+  entityPresentation: EntityPresentationData;
 }) {
   const t = await getTranslations("dashboard");
   const locale = await getLocale();
   const name = localizedName(augment, locale);
+  const entityRef = resolveEntityRef(entityPresentation, "augment", { slug: augment.slug }, locale);
 
   return (
     <div className="glass-card reveal p-4 md:col-span-3 lg:col-span-4">
@@ -32,10 +38,8 @@ export async function AugmentSpotlight({
         )}
       </div>
       <div className="mt-3 flex items-center gap-3">
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src={augment.icon} alt="" className="h-14 w-14 shrink-0 rounded-xl" />
         <div className="min-w-0">
-          <p className="truncate text-base font-medium text-[var(--color-text-primary)]">{name}</p>
+          {entityRef ? <EntityLink entity={entityRef} variant="standard" className="text-base font-medium" /> : <p className="truncate text-base font-medium text-[var(--color-text-primary)]">{name}</p>}
           <span className={`mt-1 inline-block rounded px-1.5 py-0.5 text-[10px] font-semibold uppercase ${rarityBadgeClass(augment.rarity)}`}>
             {augment.rarity}
           </span>

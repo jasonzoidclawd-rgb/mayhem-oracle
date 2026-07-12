@@ -8,6 +8,9 @@ import path from "path";
 import type { ScoredAugment } from "@/lib/scoring/oracle-score";
 import type { Locale } from "@/i18n/routing";
 import { languageAlternates, localizedUrl } from "@/lib/site";
+import { readEntityPresentationFile } from "@/lib/data/read-public-file";
+import { resolveEntityRef } from "@/lib/entities/catalog";
+import type { EntityPresentationData, EntityRef } from "@/lib/entities/types";
 
 export async function generateMetadata({
   params,
@@ -43,7 +46,10 @@ export default async function AugmentsPage({
   const t = await getTranslations("augments");
 
   const dataDir = path.join(process.cwd(), "public", "data");
-  const augRaw = await readFile(path.join(dataDir, "augments.json"), "utf-8");
+  const [augRaw, entityPresentation] = await Promise.all([
+    readFile(path.join(dataDir, "augments.json"), "utf-8"),
+    readEntityPresentationFile<EntityPresentationData>(),
+  ]);
 
   const { augments, patch } = JSON.parse(augRaw);
   const normalizedAugments = (augments as Array<ScoredAugment & { wikiSet?: string | null }>).map((augment) => ({
@@ -52,6 +58,15 @@ export default async function AugmentsPage({
     set: normalizeAugmentSet(augment.set, augment.wikiSet),
   }));
   const currentCount = normalizedAugments.filter((augment) => augment.flags?.lifecycle !== "removed").length;
+  const entityRefs: Record<string, EntityRef> = Object.fromEntries(
+    normalizedAugments.flatMap((augment) => {
+      const ref = resolveEntityRef(entityPresentation, "augment", {
+        canonicalId: (augment as ScoredAugment & { augmentId?: string }).augmentId,
+        slug: augment.slug,
+      }, locale);
+      return ref ? [[augment.slug, ref]] : [];
+    }),
+  );
 
   return (
     <div className="py-8">
@@ -62,7 +77,7 @@ export default async function AugmentsPage({
         </p>
         <DataProvenance locale={locale} />
       </header>
-      <AugmentsClient augments={normalizedAugments} locale={locale} />
+      <AugmentsClient augments={normalizedAugments} locale={locale} entityRefs={entityRefs} />
     </div>
   );
 }

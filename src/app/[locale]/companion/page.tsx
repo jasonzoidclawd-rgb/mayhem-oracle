@@ -10,6 +10,9 @@ import { getTranslations, setRequestLocale } from "next-intl/server";
 import type { Locale } from "@/i18n/routing";
 import { languageAlternates, localizedUrl } from "@/lib/site";
 import { localizedName } from "@/lib/i18n/localized-name";
+import { readEntityPresentationFile } from "@/lib/data/read-public-file";
+import { resolveEntityRef } from "@/lib/entities/catalog";
+import type { EntityPresentationData } from "@/lib/entities/types";
 
 type RawChampion = {
   slug: string;
@@ -72,12 +75,14 @@ export default async function CompanionPage({
     readChampionsFile<{ champions: RawChampion[] }>(),
     readAugmentsFile<{ augments: RawAugment[] }>(),
   ]);
+  const entityData = await readEntityPresentationFile<EntityPresentationData>();
 
   const championOptions: CompanionChampionOption[] = champions
     .map((champion) => ({
       slug: champion.slug,
       name: localizedName(champion, locale),
       searchName: champion.name,
+      entity: resolveEntityRef(entityData, "champion", { slug: champion.slug }, locale) ?? undefined,
     }))
     .sort((a, b) => a.name.localeCompare(b.name));
 
@@ -86,6 +91,7 @@ export default async function CompanionPage({
     displayName: localizedName(augment, locale),
     searchName: augment.name,
     rarity: augment.rarity ?? "gold",
+    entity: resolveEntityRef(entityData, "augment", { slug: augment.slug }, locale) ?? undefined,
   }));
 
   return (

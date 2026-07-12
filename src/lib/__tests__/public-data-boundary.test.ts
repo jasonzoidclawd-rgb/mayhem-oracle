@@ -228,4 +228,38 @@ describe("public data boundary", () => {
       expect(event.landed).toBe(false);
     }
   });
+
+  test("entity presentation exposes only canonical presentation-safe stats", () => {
+    const presentation = readJson("public/data/entity-presentation.json") as {
+      schema_version: number;
+      entities: Array<Record<string, unknown>>;
+    };
+    expect(presentation.schema_version).toBe(1);
+    expect(presentation.entities.length).toBeGreaterThan(1000);
+    const identities = new Set<string>();
+    for (const entity of presentation.entities) {
+      expect(["champion", "augment", "item"]).toContain(entity.type);
+      expect(typeof entity.canonical_id).toBe("string");
+      expect(typeof entity.slug).toBe("string");
+      const identity = `${entity.type}:${entity.canonical_id}`;
+      expect(identities.has(identity)).toBe(false);
+      identities.add(identity);
+      expect(entity).not.toHaveProperty("comparison");
+      expect(entity).not.toHaveProperty("provenance");
+      expect(entity).not.toHaveProperty("source_url");
+      expect(collectForbiddenKeys(entity, new Set([
+        "dataValues", "calculations", "oracleScore", "scoreBreakdown", "modelWeights",
+        "first_seen_cycle", "last_seen_cycle", "observed_cycles", "history",
+        "raw", "rawSnapshot", "snapshot", "snapshots", "comparison", "comparisonBase",
+        "comparison_base", "base_branch", "target_branch", "source_url", "sourceUrl",
+        "member", "internal", "serverOnly", "provenance", "lineage",
+      ]))).toEqual([]);
+      for (const stat of (entity.stats as Array<Record<string, unknown>>)) {
+        expect(stat).toHaveProperty("source_path");
+        expect(stat).toHaveProperty("source_version");
+        expect(stat).toHaveProperty("patch");
+        expect(stat).toHaveProperty("lane");
+      }
+    }
+  });
 });

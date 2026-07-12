@@ -26,7 +26,8 @@
           "text": "Gain 0% – 30% (based on bonus health) critical strike chance."
         }
       ],
-      "wikiNotes": []
+      "wikiNotes": [],
+      "id": 223039
     },
     {
       "slug": "rite-of-ruin",
@@ -55,7 +56,8 @@
       ],
       "wikiNotes": [
         "Both Wrath and Ruin and Salvage the Wreckage can only occur once per cast instance."
-      ]
+      ],
+      "id": 3430
     },
     {
       "slug": "sword-of-blossoming-dawn",
@@ -84,7 +86,8 @@
       ],
       "wikiNotes": [
         "On ARAM: Mayhem where outgoing heals are reduced by 50%, Peppermint would heal 7.5 – 22.5 (based on level) (+ 5% bonus AD) (+ 3.5% AP) instead."
-      ]
+      ],
+      "id": 4011
     },
     {
       "slug": "the-golden-spatula",
@@ -109,7 +112,8 @@
           "text": "You are permanently On Fire!, causing you to Burn enemies within 400 units every second for 26 – 43 (based on level) magic damage and reduce your abilities' cooldowns by 0.2 seconds every 0.25 seconds as well as gain 5% bonus movement speed, increased to 20% while facing nearby enemy champions, 20% bonus attack speed, 50 – 900 (based on level) bonus health, 1.5 bonus mana regeneration, and 4 bonus energy regeneration. While On Fire!, however, you also take ( 25% / 35%) increased damage and reduce the effectiveness of incoming heals and shields by 25%."
         }
       ],
-      "wikiNotes": []
+      "wikiNotes": [],
+      "id": 4403
     },
     {
       "slug": "stormrazor",
@@ -139,7 +143,8 @@
       "wikiNotes": [
         "Each basic attack on-attack generates 6 Energize stacks while 1 is generated for every 24 in-game units traveled. This includes but is not limited to normal or special forms of movement, using dashes or blinks, or being displaced to another location.",
         "Hitting abilities that apply on-hit effects will also generate 6 stacks."
-      ]
+      ],
+      "id": 223095
     },
     {
       "slug": "heartsteel",
@@ -171,7 +176,8 @@
         "Colossal Consumption's stacks linger for 3 seconds after no longer being in range of the target.",
         "Colossal Consumption applies life steal.",
         "Colossal Consumption will activate on champion clones and grant its bonuses from them."
-      ]
+      ],
+      "id": 223084
     },
     {
       "slug": "wooglets-witchcap",
@@ -200,7 +206,8 @@
       ],
       "wikiNotes": [
         "Wooglet's Witchcap by itself grants 450 ability power due to the increase from Magical Opus."
-      ]
+      ],
+      "id": 228002
     }
   ],
   "items": [

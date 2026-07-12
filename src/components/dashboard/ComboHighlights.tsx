@@ -1,13 +1,16 @@
 import { getTranslations, getLocale } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
 import { localizedName, type LocalizedNameRecord } from "@/lib/i18n/localized-name";
+import { resolveEntityRef } from "@/lib/entities/catalog";
+import type { EntityPresentationData } from "@/lib/entities/types";
+import { EntityLink } from "@/components/entities/EntityLink";
 
 export type RankedCombo = {
   champion: LocalizedNameRecord & { slug: string; rank: number; icon: string };
   augment: LocalizedNameRecord & { slug: string };
 };
 
-export async function ComboHighlights({ combos }: { combos: RankedCombo[] }) {
+export async function ComboHighlights({ combos, entityPresentation }: { combos: RankedCombo[]; entityPresentation: EntityPresentationData }) {
   const t = await getTranslations("dashboard");
   const locale = await getLocale();
 
@@ -17,11 +20,17 @@ export async function ComboHighlights({ combos }: { combos: RankedCombo[] }) {
       <ul className="mt-3 flex flex-col gap-2">
         {combos.map(({ champion, augment }, i) => (
           <li key={`${champion.slug}-${augment.slug}-${i}`} className="flex items-center gap-2 text-sm">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src={champion.icon} alt="" className="h-7 w-7 shrink-0 rounded-md" />
-            <span className="truncate text-[var(--color-text-primary)]">{localizedName(champion, locale)}</span>
+            {resolveEntityRef(entityPresentation, "champion", { slug: champion.slug }, locale) ? (
+              <EntityLink entity={resolveEntityRef(entityPresentation, "champion", { slug: champion.slug }, locale)!} variant="compact" />
+            ) : (
+              <span className="truncate text-[var(--color-text-primary)]">{localizedName(champion, locale)}</span>
+            )}
             <span className="shrink-0 text-[var(--color-text-muted)]">+</span>
-            <span className="truncate text-[var(--color-text-secondary)]">{localizedName(augment, locale)}</span>
+            {resolveEntityRef(entityPresentation, "augment", { slug: augment.slug }, locale) ? (
+              <EntityLink entity={resolveEntityRef(entityPresentation, "augment", { slug: augment.slug }, locale)!} variant="compact" />
+            ) : (
+              <span className="truncate text-[var(--color-text-secondary)]">{localizedName(augment, locale)}</span>
+            )}
           </li>
         ))}
       </ul>

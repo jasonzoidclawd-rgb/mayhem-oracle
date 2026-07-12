@@ -3,10 +3,11 @@
 import Image from "next/image";
 import { useState, useMemo } from "react";
 import { useTranslations, useLocale } from "next-intl";
-import { Link } from "@/i18n/navigation";
 import type { Item } from "@/lib/types";
 import { Tooltip } from "@/components/ui/Tooltip";
 import { localizedName } from "@/lib/i18n/localized-name";
+import { EntityLink } from "@/components/entities/EntityLink";
+import type { EntityRef } from "@/lib/entities/types";
 
 const MAYHEM_TAG_STYLES: Record<string, string> = {
   exclusive:      "rarity-prismatic",
@@ -140,19 +141,14 @@ const CATEGORY_FILTERS = [
   "Boots",
 ];
 
-/** Returns the URL identifier for an item: slug for mayhem items, numeric id otherwise */
-function itemIdentifier(item: Item): string | null {
-  if (item.mayhemTag && item.slug) return item.slug;
-  if (item.id != null) return String(item.id);
-  return null;
-}
-
 export function ItemsClient({
   mayhemExclusive,
   items,
+  entityRefs,
 }: {
   mayhemExclusive: Item[];
   items: Item[];
+  entityRefs: Record<string, EntityRef>;
 }) {
   const t = useTranslations("items");
   const locale = useLocale();
@@ -199,7 +195,7 @@ export function ItemsClient({
       </div>
 
       {tab === "mayhem" ? (
-        <MayhemExclusiveTab items={mayhemExclusive} />
+        <MayhemExclusiveTab items={mayhemExclusive} entityRefs={entityRefs} />
       ) : (
         <AllItemsTab
           items={filteredItems}
@@ -207,13 +203,14 @@ export function ItemsClient({
           setSearch={setSearch}
           category={category}
           setCategory={setCategory}
+          entityRefs={entityRefs}
         />
       )}
     </div>
   );
 }
 
-function MayhemExclusiveTab({ items }: { items: Item[] }) {
+function MayhemExclusiveTab({ items, entityRefs }: { items: Item[]; entityRefs: Record<string, EntityRef> }) {
   const t = useTranslations("items");
 
   const groups: Record<string, Item[]> = {
@@ -249,6 +246,7 @@ function MayhemExclusiveTab({ items }: { items: Item[] }) {
                   key={item.slug}
                   item={item}
                   tagLabel={tagLabels[item.mayhemTag ?? "exclusive"]}
+                  entityRef={entityRefs[item.id != null ? String(item.id) : item.slug ?? ""]}
                 />
               ))}
             </div>
@@ -259,17 +257,16 @@ function MayhemExclusiveTab({ items }: { items: Item[] }) {
   );
 }
 
-function MayhemItemCard({ item, tagLabel }: { item: Item; tagLabel: string }) {
+function MayhemItemCard({ item, tagLabel, entityRef }: { item: Item; tagLabel: string; entityRef?: EntityRef }) {
   const locale = useLocale();
   const name = localizedName(item, locale);
   const t = useTranslations("items");
   const tagStyle = MAYHEM_TAG_STYLES[item.mayhemTag ?? "exclusive"];
-  const ident = itemIdentifier(item);
 
   const cardContent = (
     <div className="flex flex-col gap-3 p-4 rounded-xl border border-[var(--color-border-default)] bg-[var(--color-bg-card)]/60 hover:border-[var(--color-border-hover)] transition-colors">
       <div className="flex items-start gap-3">
-        {item.icon ? (
+        {entityRef ? <EntityLink entity={entityRef} variant="standard" /> : item.icon ? (
           <div className="relative w-12 h-12 rounded-lg overflow-hidden shrink-0 border border-[var(--color-border-default)]">
             <Image src={item.icon} alt={name} fill className="object-contain" sizes="48px" unoptimized />
           </div>
@@ -278,7 +275,7 @@ function MayhemItemCard({ item, tagLabel }: { item: Item; tagLabel: string }) {
         )}
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-2 flex-wrap">
-            <span className="font-semibold text-sm leading-tight">{name}</span>
+            {!entityRef ? <span className="font-semibold text-sm leading-tight">{name}</span> : null}
             <span className={`text-[10px] font-medium px-1.5 py-0.5 rounded border ${tagStyle}`}>{tagLabel}</span>
           </div>
           {item.cost > 0 && (
@@ -311,9 +308,6 @@ function MayhemItemCard({ item, tagLabel }: { item: Item; tagLabel: string }) {
     </div>
   );
 
-  if (ident) {
-    return <Link href={`/items/${ident}`}>{cardContent}</Link>;
-  }
   return cardContent;
 }
 
@@ -323,12 +317,14 @@ function AllItemsTab({
   setSearch,
   category,
   setCategory,
+  entityRefs,
 }: {
   items: Item[];
   search: string;
   setSearch: (s: string) => void;
   category: string;
   setCategory: (c: string) => void;
+  entityRefs: Record<string, EntityRef>;
 }) {
   const t = useTranslations("items");
   const [otherOpen, setOtherOpen] = useState(false);
@@ -376,7 +372,7 @@ function AllItemsTab({
       {/* Main items grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
         {mainItems.map((item) => (
-          <CatalogItemCard key={item.id ?? item.name} item={item} />
+          <CatalogItemCard key={item.id ?? item.name} item={item} entityRef={entityRefs[item.id != null ? String(item.id) : item.slug ?? ""]} />
         ))}
       </div>
 
@@ -416,7 +412,7 @@ function AllItemsTab({
               </p>
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
                 {otherItems.map((item) => (
-                  <CatalogItemCard key={item.id ?? item.name} item={item} />
+                  <CatalogItemCard key={item.id ?? item.name} item={item} entityRef={entityRefs[item.id != null ? String(item.id) : item.slug ?? ""]} />
                 ))}
               </div>
             </div>
@@ -427,11 +423,10 @@ function AllItemsTab({
   );
 }
 
-function CatalogItemCard({ item }: { item: Item }) {
+function CatalogItemCard({ item, entityRef }: { item: Item; entityRef?: EntityRef }) {
   const t = useTranslations("items");
   const locale = useLocale();
   const name = localizedName(item, locale);
-  const ident = itemIdentifier(item);
 
   const tooltipContent = item.description
     ? <p>{item.description}</p>
@@ -439,7 +434,7 @@ function CatalogItemCard({ item }: { item: Item }) {
 
   const cardInner = (
     <div className="flex items-start gap-3 p-3 rounded-lg border border-[var(--color-border-default)] bg-[var(--color-bg-card)]/40 hover:border-[var(--color-border-hover)] transition-colors cursor-pointer">
-      {item.icon ? (
+      {entityRef ? <EntityLink entity={entityRef} variant="standard" /> : item.icon ? (
         <div className="relative w-10 h-10 rounded shrink-0">
           <Image src={item.icon} alt={name} fill className="object-contain" sizes="40px" unoptimized />
         </div>
@@ -447,7 +442,7 @@ function CatalogItemCard({ item }: { item: Item }) {
         <div className="w-10 h-10 rounded shrink-0 bg-[var(--color-bg-card)] border border-[var(--color-border-default)]" />
       )}
       <div className="flex-1 min-w-0">
-        <div className="text-sm font-medium truncate">{name}</div>
+        {!entityRef ? <div className="text-sm font-medium truncate">{name}</div> : null}
         <div className="text-xs text-amber-400/80 mt-0.5">
           {item.cost.toLocaleString()} {t("goldUnit")}
         </div>
@@ -467,7 +462,5 @@ function CatalogItemCard({ item }: { item: Item }) {
     </div>
   );
 
-  const wrapped = ident ? <Link href={`/items/${ident}`}>{cardInner}</Link> : cardInner;
-
-  return <Tooltip content={tooltipContent}>{wrapped}</Tooltip>;
+  return <Tooltip content={tooltipContent}>{cardInner}</Tooltip>;
 }

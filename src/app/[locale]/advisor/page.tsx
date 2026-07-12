@@ -13,6 +13,9 @@ import { getTranslations, setRequestLocale } from "next-intl/server";
 import type { Locale } from "@/i18n/routing";
 import { languageAlternates, localizedUrl } from "@/lib/site";
 import { localizedName } from "@/lib/i18n/localized-name";
+import { readEntityPresentationFile } from "@/lib/data/read-public-file";
+import { resolveEntityRef } from "@/lib/entities/catalog";
+import type { EntityPresentationData } from "@/lib/entities/types";
 
 type RawChampion = {
   slug: string;
@@ -87,12 +90,14 @@ export default async function AdvisorPage({
 
   const { champions } = loadPublicJson<{ champions: RawChampion[] }>("champions.json");
   const { augments } = loadPublicJson<{ augments: RawAugment[] }>("augments.json");
+  const entityData = await readEntityPresentationFile<EntityPresentationData>();
 
   const championOptions: AdvisorChampionOption[] = champions
     .map((champion) => ({
       slug: champion.slug,
       name: localizedName(champion, locale),
       icon: champion.icon,
+      entity: resolveEntityRef(entityData, "champion", { slug: champion.slug }, locale) ?? undefined,
     }))
     .sort((a, b) => a.name.localeCompare(b.name));
 
@@ -101,6 +106,7 @@ export default async function AdvisorPage({
     displayName: localizedName(augment, locale),
     rarity: augment.rarity ?? "gold",
     icon: augment.icon,
+    entity: resolveEntityRef(entityData, "augment", { slug: augment.slug }, locale) ?? undefined,
   }));
 
   const gradeLabels: Record<DecisionGrade, string> = {

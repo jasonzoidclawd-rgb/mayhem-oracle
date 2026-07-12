@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import { getTranslations, setRequestLocale } from "next-intl/server";
-import Image from "next/image";
 import { notFound } from "next/navigation";
 import { Link } from "@/i18n/navigation";
 import { JsonLd } from "@/components/seo/JsonLd";
@@ -13,6 +12,7 @@ import {
   readAugmentsFile,
   readChampionsFile,
   readCombosFile,
+  readEntityPresentationFile,
 } from "@/lib/data/read-public-file";
 import {
   normalizeLookupKey,
@@ -21,10 +21,15 @@ import {
 } from "@/lib/data/combo-lookup";
 import type { AugmentRarity, AugmentType } from "@/lib/types";
 import type { ComboTier } from "@/lib/scoring/oracle-score";
+import { resolveEntityRef } from "@/lib/entities/catalog";
+import type { EntityPresentationData } from "@/lib/entities/types";
+import { EntityLink } from "@/components/entities/EntityLink";
+import { EntityStats } from "@/components/entities/EntityStats";
 
 // ─── Types ───────────────────────────────────────────────────────────────────
 
 interface AugmentRecord {
+  augmentId?: string;
   slug: string;
   name: string;
   rarity: AugmentRarity;
@@ -167,10 +172,22 @@ export default async function AugmentDetailPage({
   // "Strong on champions": reverse-lookup the public combo teaser, then resolve
   // each champion slug to a real champions.json record so we only link to pages
   // that exist.
-  const [combosData, championsData] = await Promise.all([
+  const [combosData, championsData, entityPresentation] = await Promise.all([
     readCombosFile<{ combos: ComboLookupEntry[] }>(),
     readChampionsFile<{ champions: ChampionRecord[] }>(),
+    readEntityPresentationFile<EntityPresentationData>(),
   ]);
+  const entityRef = resolveEntityRef(
+    entityPresentation,
+    "augment",
+    { canonicalId: augment.augmentId, slug },
+    locale,
+  );
+  const entityRecord = entityRef
+    ? entityPresentation.entities.find(
+        (record) => record.type === "augment" && record.canonical_id === entityRef.canonicalId,
+      )
+    : null;
   const championByKey = new Map(
     championsData.champions.map((c) => [normalizeLookupKey(c.slug), c]),
   );
@@ -240,21 +257,13 @@ export default async function AugmentDetailPage({
 
         {/* ─── Header ─── */}
         <div className="flex items-start gap-6 mb-8">
-          {augment.icon && (
-            <div className="relative w-20 h-20 rounded-xl overflow-hidden border-2 border-[var(--color-border-hover)] shrink-0 bg-[var(--color-bg-card)]">
-              <Image
-                src={augment.icon}
-                alt={augmentName}
-                fill
-                className="object-contain p-1"
-                sizes="80px"
-                unoptimized
-              />
-            </div>
-          )}
           <div className="flex-1 min-w-0">
             <div className="flex items-center gap-3 flex-wrap">
-              <h1 className="text-3xl font-bold">{augmentName}</h1>
+              {entityRef ? (
+                <h1><EntityLink entity={entityRef} variant="hero" className="font-bold" /></h1>
+              ) : (
+                <h1 className="text-3xl font-bold">{augmentName}</h1>
+              )}
               <span
                 className={`text-xs font-semibold px-2.5 py-1 rounded-md border ${RARITY_BADGE[augment.rarity]}`}
               >
@@ -273,12 +282,6 @@ export default async function AugmentDetailPage({
                 </span>
               )}
             </div>
-
-            {augment.wikiDescription && (
-              <p className="mt-3 text-[var(--color-text-secondary)] leading-relaxed">
-                {augment.wikiDescription}
-              </p>
-            )}
 
             {augment.kit_tags && augment.kit_tags.length > 0 && (
               <div className="mt-4">
@@ -300,6 +303,8 @@ export default async function AugmentDetailPage({
           </div>
         </div>
 
+        {entityRecord ? <EntityStats record={entityRecord} locale={locale} /> : null}
+
         {patchSummary && (
           <section className="glass-card p-4 mb-6" aria-labelledby="patch-summary-heading">
             <h2 id="patch-summary-heading" className="text-sm font-semibold mb-2">
@@ -315,22 +320,31 @@ export default async function AugmentDetailPage({
           </section>
         )}
 
+        {augment.wikiDescription && (
+          <section className="glass-card p-5 mb-6" aria-labelledby="augment-description-heading">
+            <h2 id="augment-description-heading" className="text-sm font-semibold mb-2">
+              {t("descriptionHeading")}
+            </h2>
+            <p className="text-[var(--color-text-secondary)] leading-relaxed">{augment.wikiDescription}</p>
+          </section>
+        )}
+
         {/* ─── Strong on champions ─── */}
         {strongOn.length > 0 && (
           <section className="glass-card p-5">
             <h2 className="text-lg font-semibold mb-3">{t("detailStrongOn")}</h2>
             <div className="flex flex-wrap gap-2">
               {strongOn.map(({ record, tier }) => (
-                <Link
-                  key={record!.slug}
-                  href={`/champions/${record!.slug}`}
-                  className="inline-flex items-center gap-2 rounded-full border border-[var(--color-border)] bg-[var(--color-bg-card)] px-3 py-1 text-sm hover:border-[var(--color-accent)] hover:text-[var(--color-accent)] transition-colors"
-                >
-                  <span>{localizedName(record!, locale)}</span>
+                <span key={record!.slug} className="inline-flex items-center gap-2 rounded-full border border-[var(--color-border)] bg-[var(--color-bg-card)] px-3 py-1 text-sm transition-colors">
+                  {resolveEntityRef(entityPresentation, "champion", { slug: record!.slug }, locale) ? (
+                    <EntityLink entity={resolveEntityRef(entityPresentation, "champion", { slug: record!.slug }, locale)!} variant="compact" />
+                  ) : (
+                    <span>{localizedName(record!, locale)}</span>
+                  )}
                   <span className={`text-[11px] font-semibold px-1.5 py-0.5 rounded border ${TIER_BADGE[tier]}`}>
                     {tier}
                   </span>
-                </Link>
+                </span>
               ))}
             </div>
           </section>

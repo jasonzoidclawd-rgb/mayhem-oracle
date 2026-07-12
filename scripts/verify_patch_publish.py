@@ -73,8 +73,20 @@ def assert_publish_inclusion(changed_paths: list[str]) -> None:
         "data/internal/patch-metadata.json",
     } & changed)
     pbe_internal_changed = "data/internal/pbe-preview.json" in changed
+    entity_internal_changed = any(
+        path.startswith("data/internal/cdragon-")
+        or path in {
+            "data/internal/patch-events.json",
+            "data/internal/pbe-preview.json",
+            "data/internal/champions.json",
+            "data/internal/augments.json",
+            "data/internal/items.json",
+        }
+        for path in changed
+    )
     public_changed = "public/data/patch-notes.json" in changed
     public_pbe_changed = "public/data/pbe-preview.json" in changed
+    public_entity_changed = "public/data/entity-presentation.json" in changed
     if internal_changed and not public_changed:
         raise PatchPublishError(
             "public patch-notes must be changed when internal patch event or metadata data changes",
@@ -82,6 +94,10 @@ def assert_publish_inclusion(changed_paths: list[str]) -> None:
     if pbe_internal_changed and not public_pbe_changed:
         raise PatchPublishError(
             "public PBE preview must be changed when internal PBE preview data changes",
+        )
+    if entity_internal_changed and not public_entity_changed:
+        raise PatchPublishError(
+            "public entity presentation must be changed when normalized entity or patch data changes",
         )
 
 
@@ -100,6 +116,15 @@ def verify_patch_publish(
     data = load_json(patch_notes_path)
     if not isinstance(data, dict):
         raise PatchPublishError("public patch-notes must be a JSON object")
+
+    entity_path = public_dir / "entity-presentation.json"
+    if not entity_path.exists() or entity_path.stat().st_size == 0:
+        raise PatchPublishError("missing public entity presentation file or file is empty")
+    entity_data = load_json(entity_path)
+    if not isinstance(entity_data, dict) or entity_data.get("schema_version") != 1:
+        raise PatchPublishError("public entity presentation schema is missing or invalid")
+    if not isinstance(entity_data.get("entities"), list) or not entity_data["entities"]:
+        raise PatchPublishError("public entity presentation has no entities")
 
     patch = data.get("patch")
     if not isinstance(patch, str) or not patch:

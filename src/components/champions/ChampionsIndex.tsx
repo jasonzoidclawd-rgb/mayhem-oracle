@@ -6,6 +6,8 @@ import Image from "next/image";
 import { Link } from "@/i18n/navigation";
 import type { ChampionEntry } from "@/app/[locale]/champions/page";
 import { localizedName } from "@/lib/i18n/localized-name";
+import { EntityLink } from "@/components/entities/EntityLink";
+import type { EntityRef } from "@/lib/entities/types";
 
 // ─── Constants ───────────────────────────────────────────────────────────────
 
@@ -80,8 +82,10 @@ function statAtLevel(base: number, growth: number, level: number): number {
 
 export function ChampionsIndex({
   champions,
+  entityRefs,
 }: {
   champions: ChampionEntry[];
+  entityRefs: Record<string, EntityRef>;
 }) {
   const locale = useLocale();
   const t = useTranslations("championsIndex");
@@ -287,7 +291,7 @@ export function ChampionsIndex({
                 </div>
                 <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-2 sm:gap-3">
                   {champs.map((c) => (
-                    <ChampionCard key={c.slug} champion={c} />
+                    <ChampionCard key={c.slug} champion={c} entityRef={entityRefs[c.slug]} />
                   ))}
                 </div>
               </section>
@@ -299,7 +303,7 @@ export function ChampionsIndex({
         /* ─── Grid View ─── */
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-2 sm:gap-3">
           {sorted.map((c) => (
-            <ChampionCard key={c.slug} champion={c} />
+            <ChampionCard key={c.slug} champion={c} entityRef={entityRefs[c.slug]} />
           ))}
           {sorted.length === 0 && (
             <div className="col-span-full">
@@ -313,7 +317,7 @@ export function ChampionsIndex({
           {/* Mobile: card list */}
           <div className="md:hidden space-y-2">
             {sorted.map((c, i) => (
-              <ChampionRowCard key={c.slug} champion={c} index={i} level={level} />
+              <ChampionRowCard key={c.slug} champion={c} index={i} level={level} entityRef={entityRefs[c.slug]} />
             ))}
             {sorted.length === 0 && <EmptyState text={tTier("noResults")} />}
           </div>
@@ -369,27 +373,15 @@ export function ChampionsIndex({
                         {c.rank ?? i + 1}
                       </td>
                       <td className="px-2 py-2">
-                        <Link
-                          href={`/champions/${c.slug}`}
-                          className="flex items-center gap-2 hover:text-[var(--color-neon-primary)] transition-colors"
-                        >
-                          <Image
-                            src={c.icon}
-                            alt={localizedName(c, locale)}
-                            width={28}
-                            height={28}
-                            className="rounded shrink-0"
-                            unoptimized
-                          />
-                          <div className="min-w-0">
-                            <div className="text-sm font-medium truncate">{localizedName(c, locale)}</div>
-                            {c.title && (
-                              <div className="text-[10px] text-[var(--color-text-muted)] truncate">
-                                {c.title}
-                              </div>
-                            )}
-                          </div>
-                        </Link>
+                        {entityRefs[c.slug] ? <EntityLink entity={entityRefs[c.slug]} variant="standard" /> : (
+                          <Link href={`/champions/${c.slug}`} className="flex items-center gap-2 hover:text-[var(--color-neon-primary)] transition-colors">
+                            <Image src={c.icon} alt={localizedName(c, locale)} width={28} height={28} className="rounded shrink-0" unoptimized />
+                            <div className="min-w-0">
+                              <div className="text-sm font-medium truncate">{localizedName(c, locale)}</div>
+                              {c.title && <div className="text-[10px] text-[var(--color-text-muted)] truncate">{c.title}</div>}
+                            </div>
+                          </Link>
+                        )}
                       </td>
                       <td className="px-2 py-2 text-left hidden lg:table-cell">
                         <div className="flex flex-wrap gap-1">
@@ -455,25 +447,19 @@ function EmptyState({ text }: { text: string }) {
 
 function ChampionCard({
   champion: c,
+  entityRef,
 }: {
   champion: ChampionEntry;
+  entityRef?: EntityRef;
 }) {
   const locale = useLocale();
   const name = localizedName(c, locale);
   return (
-    <Link
-      href={`/champions/${c.slug}`}
-      className="glass-card p-3 flex flex-col items-center gap-2 border border-[var(--color-border-default)] transition-all group hover:scale-[1.03] hover:border-[var(--color-neon-primary)]/40 hover:shadow-lg"
-    >
+    <div className="glass-card p-3 flex flex-col items-center gap-2 border border-[var(--color-border-default)] transition-all group hover:scale-[1.03] hover:border-[var(--color-neon-primary)]/40 hover:shadow-lg">
       <div className="relative">
-        <Image
-          src={c.icon}
-          alt={name}
-          width={56}
-          height={56}
-          className="rounded-lg border border-[var(--color-border-default)] group-hover:border-[var(--color-neon-primary)]/50 transition-colors"
-          unoptimized
-        />
+        {entityRef ? <EntityLink entity={entityRef} variant="standard" className="rounded-lg" /> : (
+          <Image src={c.icon} alt={name} width={56} height={56} className="rounded-lg border border-[var(--color-border-default)]" unoptimized />
+        )}
         <span
           className={`absolute -top-1.5 -right-1.5 text-[10px] font-bold px-1.5 py-0.5 rounded border ${
             TIER_BG[c.tier] ?? ""
@@ -484,9 +470,7 @@ function ChampionCard({
       </div>
 
       <div className="text-center w-full min-w-0">
-        <div className="text-xs font-bold truncate group-hover:text-[var(--color-text-primary)] transition-colors">
-          {name}
-        </div>
+        {!entityRef ? <div className="text-xs font-bold truncate group-hover:text-[var(--color-text-primary)] transition-colors">{name}</div> : null}
         {c.title && (
           <div className="text-[9px] text-[var(--color-text-muted)] truncate leading-tight">
             {c.title}
@@ -526,7 +510,7 @@ function ChampionCard({
           <StatMini label="AS" value={c.baseStats.baseAS.toFixed(2)} />
         </div>
       )}
-    </Link>
+    </div>
   );
 }
 
@@ -536,10 +520,12 @@ function ChampionRowCard({
   champion: c,
   index,
   level,
+  entityRef,
 }: {
   champion: ChampionEntry;
   index: number;
   level: number;
+  entityRef?: EntityRef;
 }) {
   const locale = useLocale();
   const name = localizedName(c, locale);
@@ -548,24 +534,14 @@ function ChampionRowCard({
   const ad = bs ? statAtLevel(bs.baseAD, bs.adGrowth, level) : 0;
 
   return (
-    <Link
-      href={`/champions/${c.slug}`}
-      className="glass-card flex items-center gap-3 p-3 border border-[var(--color-border-default)] transition-all hover:border-[var(--color-neon-primary)]/40"
-    >
+    <div className="glass-card flex items-center gap-3 p-3 border border-[var(--color-border-default)] transition-all hover:border-[var(--color-neon-primary)]/40">
       <span className="w-5 text-center text-xs text-[var(--color-text-muted)] tabular-nums shrink-0">
         {c.rank ?? index + 1}
       </span>
-      <Image
-        src={c.icon}
-        alt={name}
-        width={40}
-        height={40}
-        className="rounded-lg border border-[var(--color-border-default)] shrink-0"
-        unoptimized
-      />
+      {entityRef ? <EntityLink entity={entityRef} variant="standard" /> : <Image src={c.icon} alt={name} width={40} height={40} className="rounded-lg border border-[var(--color-border-default)] shrink-0" unoptimized />}
       <div className="min-w-0 flex-1">
         <div className="flex items-center gap-2">
-          <span className="text-sm font-semibold truncate">{name}</span>
+          {!entityRef ? <span className="text-sm font-semibold truncate">{name}</span> : null}
           <span
             className={`text-[10px] font-bold px-1.5 py-0.5 rounded border shrink-0 ${
               TIER_BG[c.tier] ?? ""
@@ -597,7 +573,7 @@ function ChampionRowCard({
           </div>
         )}
       </div>
-    </Link>
+    </div>
   );
 }
 

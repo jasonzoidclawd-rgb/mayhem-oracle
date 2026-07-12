@@ -63,14 +63,32 @@ and release-date guesses never mark an event as landed.
 
 The preview projection filters by the archive's current cycle as well as
 `upcoming` lifecycle, so an older open entry retained for aging never leaks into
-the public window. `verify_patch_publish.py` requires both public patch files
-when their corresponding internal archives change.
+the public window. `entity-presentation.json` is the separate public-safe
+EntityRef/stat projection used by detail pages, cards, search, and related
+links; it contains only normalized current values plus current-cycle live/PBE
+stat changes. `verify_patch_publish.py` requires the entity projection as well
+as both public patch files when their corresponding internal snapshots or
+archives change. Public catalog files are staged and journal-promoted together
+so an export failure leaves the previous complete public set intact.
 
 Raw snapshots, comparison provenance, lifecycle history, internal scoring
 fields, and calibration data stay under `data/internal/`. PBE links are emitted
 only when the entity already exists in the live public catalog. The patch UI
 uses day-level detected-at freshness and distinguishes fresh zero changes from
 stale, unavailable, or not-yet-confirmed source state.
+
+## Entity presentation
+
+`public/data/entity-presentation.json` is the only browser-safe source for
+canonical EntityRefs and structured detail-page stats. `EntityLink` resolves by
+type plus canonical CDragon ID, then supplies the localized name, stable route,
+icon, lifecycle state, and an accessible combined link. Unknown IDs, duplicate
+IDs, missing locales, and missing presentation fields fail closed. Champion base
+stats, item cost/stats, and augment rarity are emitted only when their CDragon
+field semantics are explicit; descriptions remain neutral prose and are never
+used to derive balancing values. The legacy Mayhem-only item rows are enriched
+with their explicit CDragon IDs during export so their cards and detail pages
+share the same canonical resolver.
 
 ## Operator workflow
 
@@ -85,11 +103,11 @@ For a local recovery or inspection:
 python3 scripts/cdragon_patch_pipeline.py --branch latest
 python3 scripts/cdragon_patch_pipeline.py --branch pbe
 python3 scripts/scrape_patch_notes.py
-  python3 scripts/export_public_catalog.py
-  python3 scripts/verify_patch_publish.py
-  npx vitest run src/lib/__tests__/public-data-boundary.test.ts
-  npm run build
-  python3 scripts/verify_public_bundle_boundary.py
+python3 scripts/export_public_catalog.py
+python3 scripts/verify_patch_publish.py
+npx vitest run src/lib/__tests__/public-data-boundary.test.ts
+npm run build
+python3 scripts/verify_public_bundle_boundary.py
 ```
 
 Do not hand-edit `public/data/` or snapshot JSON. Inspect the diagnostic, fix

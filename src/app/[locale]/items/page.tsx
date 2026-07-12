@@ -6,6 +6,9 @@ import { ItemsClient } from "@/components/items/ItemsClient";
 import type { Item } from "@/lib/types";
 import type { Locale } from "@/i18n/routing";
 import { languageAlternates, localizedUrl } from "@/lib/site";
+import { readEntityPresentationFile } from "@/lib/data/read-public-file";
+import { resolveEntityRef } from "@/lib/entities/catalog";
+import type { EntityPresentationData, EntityRef } from "@/lib/entities/types";
 
 interface ItemsData {
   scraped_at: string;
@@ -56,7 +59,10 @@ export default async function ItemsPage({
   setRequestLocale(locale);
   const t = await getTranslations("items");
 
-  const data = await loadItemsData();
+  const [data, entityPresentation] = await Promise.all([
+    loadItemsData(),
+    readEntityPresentationFile<EntityPresentationData>(),
+  ]);
 
   // ── Dedup + auto-tag ──────────────────────────────────────────────────────
   //
@@ -115,6 +121,16 @@ export default async function ItemsPage({
         return [...best.values()];
       })()
     : [];
+  const entityRefs: Record<string, EntityRef> = Object.fromEntries(
+    (data ? [...data.mayhemExclusive, ...processedItems] : []).flatMap((item) => {
+      const ref = resolveEntityRef(entityPresentation, "item", {
+        canonicalId: item.id != null ? String(item.id) : undefined,
+        slug: item.slug,
+      }, locale);
+      const key = item.id != null ? String(item.id) : item.slug;
+      return ref && key ? [[key, ref]] : [];
+    }),
+  );
 
   return (
     <div className="py-8 max-w-6xl">
@@ -127,6 +143,7 @@ export default async function ItemsPage({
         <ItemsClient
           mayhemExclusive={data.mayhemExclusive}
           items={processedItems}
+          entityRefs={entityRefs}
         />
       ) : (
         <div className="text-center py-20 text-[var(--color-text-muted)]">

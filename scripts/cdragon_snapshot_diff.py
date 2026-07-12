@@ -450,6 +450,9 @@ def build_public_preview_projection(archive: dict[str, Any] | None) -> dict[str,
 
 def _write_json(path: Path, value: Any) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
+    if isinstance(value, bytes):
+        path.write_bytes(value)
+        return
     path.write_text(json.dumps(value, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
 
 
@@ -458,7 +461,7 @@ def _journal_path(root: Path) -> Path:
 
 
 @contextmanager
-def _promotion_lock(root: Path):
+def promotion_lock(root: Path):
     """Serialize promotions that share a journal, including local/manual runs."""
     lock_id = hashlib.sha256(str(root.resolve()).encode("utf-8")).hexdigest()
     lock_path = Path(tempfile.gettempdir()) / f"mayhem-cdragon-pipeline-{lock_id}.lock"
@@ -470,6 +473,12 @@ def _promotion_lock(root: Path):
         finally:
             if fcntl is not None:
                 fcntl.flock(handle.fileno(), fcntl.LOCK_UN)
+
+
+# Kept private as a compatibility alias for the transaction helper below;
+# callers that need to serialize acquisition + validation + promotion should
+# use the public context manager.
+_promotion_lock = promotion_lock
 
 
 def recover_pending_transaction(root: Path) -> None:
@@ -534,11 +543,16 @@ def atomic_write_many(
     values: dict[Path, Any],
     *,
     fail_after: int | None = None,
+    lock_root: Path | None = None,
+    lock_held: bool = False,
 ) -> None:
     """Promote a complete branch update while serializing shared journals."""
     if not values:
         return
     parents = [str(path.parent.resolve()) for path in values]
-    root = Path(os.path.commonpath(parents))
-    with _promotion_lock(root):
+    root = lock_root.resolve() if lock_root is not None else Path(os.path.commonpath(parents))
+    if lock_held:
+        _atomic_write_many_unlocked(values, root=root, fail_after=fail_after)
+        return
+    with promotion_lock(root):
         _atomic_write_many_unlocked(values, root=root, fail_after=fail_after)

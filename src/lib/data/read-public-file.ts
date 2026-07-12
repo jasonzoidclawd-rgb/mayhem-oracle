@@ -43,6 +43,10 @@ export function readPbePreviewFile<T>(): Promise<T> {
   return parseJsonFile<T>(path.join(process.cwd(), "public", "data", "pbe-preview.json"));
 }
 
+export function readEntityPresentationFile<T>(): Promise<T> {
+  return parseJsonFile<T>(path.join(process.cwd(), "public", "data", "entity-presentation.json"));
+}
+
 export function readCombosFile<T>(): Promise<T> {
   return parseJsonFile<T>(path.join(process.cwd(), "public", "data", "combos.json"));
 }

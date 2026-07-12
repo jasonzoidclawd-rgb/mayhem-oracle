@@ -62,6 +62,7 @@ class PatchEventProjectionTests(unittest.TestCase):
             patch_events,
             metadata,
             known={"champion": {"brand"}, "item": set(), "augment": set()},
+            entity_records={"champion": {"63": {"icon": "brand.png", "lifecycle": {"state": "active"}}}},
         )
         current, historical = projection["patches"]
 
@@ -71,6 +72,8 @@ class PatchEventProjectionTests(unittest.TestCase):
         change = current["sections"][0]["changes"][0]
         self.assertEqual(change["kind"], "changed")
         self.assertEqual(change["targets"][0]["href"], "/champions/brand")
+        self.assertEqual(change["targets"][0]["canonicalId"], "63")
+        self.assertEqual(change["targets"][0]["icon"], "brand.png")
         self.assertEqual(change["text"]["en"], "abilities.Q.cooldown: [8, 7, 6] → [7, 6, 5]")
         self.assertEqual(historical["version"], "26.12")
         self.assertEqual(historical["sections"], [])
@@ -89,6 +92,23 @@ class PatchEventProjectionTests(unittest.TestCase):
         self.assertEqual(len(projection["patches"]), 1)
         self.assertEqual(len(projection["patches"][0]["sections"][0]["changes"]), 1)
 
+    def test_projection_uses_the_catalog_slug_for_canonical_entity_routes(self):
+        projection = build_patch_notes_projection(
+            {"current_open_cycle": "26.13", "events": [event(
+                entity_type="augment",
+                canonical_id="ARAM_ADAPt",
+                slug="a-d-a-pt",
+                names={"en": "ADAPt"},
+            )]},
+            {"patches": []},
+            known={"champion": set(), "item": set(), "augment": {"adapt"}},
+            entity_records={"augment": {"ARAM_ADAPt": {"slug": "adapt", "icon": "adapt.png"}}},
+        )
+        target = projection["patches"][0]["sections"][0]["changes"][0]["targets"][0]
+        self.assertEqual(target["slug"], "adapt")
+        self.assertEqual(target["href"], "/augments/adapt")
+        self.assertEqual(target["icon"], "adapt.png")
+
     def test_projection_sanitizes_cdragon_markup_from_change_text(self):
         projection = build_patch_notes_projection(
             {
@@ -104,6 +124,22 @@ class PatchEventProjectionTests(unittest.TestCase):
 
         change = projection["patches"][0]["sections"][0]["changes"][0]
         self.assertEqual(change["text"]["en"], "description: Old → New")
+
+    def test_riot_prose_metadata_cannot_create_structural_entity_events(self):
+        projection = build_patch_notes_projection(
+            {"current_open_cycle": "26.13", "events": []},
+            {
+                "patches": [{
+                    "version": "26.13",
+                    "articleTitle": "Patch notes mention Brand + 10 AD",
+                    "publishedAt": "2026-07-11T00:00:00Z",
+                    "sections": [{"title": "Champions", "changes": [{"subject": "Brand", "text": {"en": "+10 AD"}}]}],
+                }],
+            },
+        )
+        current = projection["patches"][0]
+        self.assertEqual(current["sections"], [])
+        self.assertEqual(current["summary"]["totalChanges"], 0)
 
     def test_live_projection_marks_a_source_reconciled_preview_as_landed(self):
         live = event()

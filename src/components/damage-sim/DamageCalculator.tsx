@@ -11,6 +11,8 @@ import {
   type ChampionStatsAtLevel,
 } from "@/lib/data/championStats";
 import { computeDamageCalculation } from "@/lib/data/damage-calculations";
+import { EntityLink } from "@/components/entities/EntityLink";
+import type { EntityRef } from "@/lib/entities/types";
 
 // ─── Serializable data from server ───────────────────────────────────────────
 
@@ -24,6 +26,7 @@ export interface CalcChampion {
   playstyle: { damage: number; durability: number; crowdControl: number; mobility: number; utility: number };
   abilities: { key: string; name: string; icon: string; description: string }[];
   baseStats: ChampionBaseStats;
+  entity?: EntityRef;
 }
 
 export interface CalcItem {
@@ -32,6 +35,7 @@ export interface CalcItem {
   searchName?: string;
   icon: string;
   stats: ItemStats;
+  entity?: EntityRef;
 }
 
 // ─── Constants ───────────────────────────────────────────────────────────────
@@ -399,14 +403,18 @@ function ChampionPanel({
           {/* Icon */}
           <div className="w-16 h-16 rounded-lg border border-[var(--color-border-default)] bg-[var(--color-bg-card)] flex items-center justify-center shrink-0 overflow-hidden">
             {champion ? (
-              <Image
-                src={champion.icon}
-                alt={champion.name}
-                width={64}
-                height={64}
-                className="rounded-lg"
-                unoptimized
-              />
+              champion.entity ? (
+                <EntityLink entity={champion.entity} variant="standard" className="h-full w-full flex-col justify-center text-center text-[10px]" />
+              ) : (
+                <Image
+                  src={champion.icon}
+                  alt={champion.name}
+                  width={64}
+                  height={64}
+                  className="rounded-lg"
+                  unoptimized
+                />
+              )
             ) : (
               <span className="text-2xl text-[var(--color-text-muted)]">?</span>
             )}
@@ -436,28 +444,38 @@ function ChampionPanel({
               {open && (
                 <div className="absolute z-30 top-full mt-1 w-full max-h-52 overflow-y-auto rounded-lg border border-[var(--color-border-default)] bg-[var(--color-bg-card)] shadow-xl">
                   {filtered.slice(0, 20).map((c) => (
-                    <button
-                      key={c.slug}
-                      className="flex items-center gap-2 w-full px-2 py-1.5 text-sm text-left hover:bg-[var(--color-neon-primary)]/10 text-[var(--color-text-primary)]"
-                      onClick={() => {
-                        onSelect(c.slug);
-                        setSearch("");
-                        setOpen(false);
-                      }}
-                    >
-                      <Image
-                        src={c.icon}
-                        alt={c.name}
-                        width={20}
-                        height={20}
-                        className="rounded-sm"
-                        unoptimized
-                      />
-                      <span>{c.name}</span>
-                      <span className="ml-auto text-[10px] text-[var(--color-text-muted)]">
+                    <div key={c.slug} className="flex items-center gap-2 w-full px-2 py-1.5 text-sm text-left hover:bg-[var(--color-neon-primary)]/10 text-[var(--color-text-primary)]">
+                      {c.entity ? (
+                        <EntityLink entity={c.entity} variant="compact" className="min-w-0 flex-1" />
+                      ) : (
+                        <>
+                          <Image
+                            src={c.icon}
+                            alt={c.name}
+                            width={20}
+                            height={20}
+                            className="rounded-sm"
+                            unoptimized
+                          />
+                          <span className="min-w-0 flex-1 truncate">{c.name}</span>
+                        </>
+                      )}
+                      <span className="text-[10px] text-[var(--color-text-muted)]">
                         {t(c.attackType)} · {t(c.damageType)}
                       </span>
-                    </button>
+                      <button
+                        type="button"
+                        aria-label={`Select ${c.name}`}
+                        className="shrink-0 rounded px-1.5 py-0.5 text-xs text-[var(--color-neon-primary)] hover:bg-[var(--color-neon-primary)]/15"
+                        onClick={() => {
+                          onSelect(c.slug);
+                          setSearch("");
+                          setOpen(false);
+                        }}
+                      >
+                        +
+                      </button>
+                    </div>
                   ))}
                 </div>
               )}
@@ -577,14 +595,24 @@ function ItemSlot({
 
   if (item) {
     return (
-      <button
-        onClick={() => onSelect(null)}
-        className="flex items-center gap-1 px-1.5 py-1 rounded-lg border border-[var(--color-border-default)] bg-[var(--color-bg-card)]/60 hover:border-red-400/50 transition-colors group"
-        title={item.name}
-      >
-        <Image src={item.icon} alt={item.name} width={24} height={24} className="rounded-sm" unoptimized />
-        <span className="text-[10px] text-[var(--color-text-muted)] group-hover:text-red-400">×</span>
-      </button>
+      <div className="flex items-center gap-1 px-1.5 py-1 rounded-lg border border-[var(--color-border-default)] bg-[var(--color-bg-card)]/60">
+        {item.entity ? (
+          <EntityLink entity={item.entity} variant="compact" className="max-w-[9rem]" />
+        ) : (
+          <>
+            <Image src={item.icon} alt={item.name} width={24} height={24} className="rounded-sm" unoptimized />
+            <span className="max-w-[7rem] truncate text-[10px] text-[var(--color-text-muted)]">{item.name}</span>
+          </>
+        )}
+        <button
+          type="button"
+          onClick={() => onSelect(null)}
+          aria-label={`Remove ${item.name}`}
+          className="shrink-0 rounded px-1 text-[10px] text-[var(--color-text-muted)] hover:bg-red-400/10 hover:text-red-400"
+        >
+          ×
+        </button>
+      </div>
     );
   }
 
@@ -607,18 +635,28 @@ function ItemSlot({
             className="w-full px-2 py-1.5 border-b border-[var(--color-border-default)] bg-transparent text-sm text-[var(--color-text-primary)] placeholder:text-[var(--color-text-muted)] outline-none"
           />
           {filtered.map((it) => (
-            <button
-              key={it.id}
-              className="flex items-center gap-2 w-full px-2 py-1 text-xs text-left hover:bg-[var(--color-neon-primary)]/10 text-[var(--color-text-primary)]"
-              onClick={() => {
-                onSelect(it.id);
-                setOpen(false);
-                setSearch("");
-              }}
-            >
-              <Image src={it.icon} alt={it.name} width={18} height={18} className="rounded-sm" unoptimized />
-              <span className="truncate">{it.name}</span>
-            </button>
+            <div key={it.id} className="flex items-center gap-2 w-full px-2 py-1 text-xs text-left hover:bg-[var(--color-neon-primary)]/10 text-[var(--color-text-primary)]">
+              {it.entity ? (
+                <EntityLink entity={it.entity} variant="compact" className="min-w-0 flex-1" />
+              ) : (
+                <>
+                  <Image src={it.icon} alt={it.name} width={18} height={18} className="rounded-sm" unoptimized />
+                  <span className="min-w-0 flex-1 truncate">{it.name}</span>
+                </>
+              )}
+              <button
+                type="button"
+                aria-label={`Select ${it.name}`}
+                className="shrink-0 rounded px-1.5 py-0.5 text-xs text-[var(--color-neon-primary)] hover:bg-[var(--color-neon-primary)]/15"
+                onClick={() => {
+                  onSelect(it.id);
+                  setOpen(false);
+                  setSearch("");
+                }}
+              >
+                +
+              </button>
+            </div>
           ))}
         </div>
       )}

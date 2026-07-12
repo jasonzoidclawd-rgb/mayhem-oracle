@@ -5,6 +5,7 @@ import {
   readMetaFile,
   readPatchNotesFile,
   readCombosFile,
+  readEntityPresentationFile,
 } from "@/lib/data/read-public-file";
 import type { LocalizedNameRecord } from "@/lib/i18n/localized-name";
 import { DashboardIslands } from "@/components/dashboard/DashboardIslands";
@@ -18,6 +19,7 @@ import { ComboHighlights } from "@/components/dashboard/ComboHighlights";
 import { AdvisorTeaser } from "@/components/dashboard/AdvisorTeaser";
 import { CompanionLauncher } from "@/components/dashboard/CompanionLauncher";
 import { RotateHint } from "@/components/ui/RotateHint";
+import type { EntityPresentationData } from "@/lib/entities/types";
 
 type ChampionRecord = LocalizedNameRecord &
   HeroChampion &
@@ -41,12 +43,13 @@ export default async function HomePage({
   const { locale } = await params;
   setRequestLocale(locale);
 
-  const [championsFile, augmentsFile, metaFile, patchNotesFile, combosFile] = await Promise.all([
+  const [championsFile, augmentsFile, metaFile, patchNotesFile, combosFile, entityPresentation] = await Promise.all([
     readChampionsFile<{ champions: ChampionRecord[] }>(),
     readAugmentsFile<{ augments: AugmentRecord[] }>(),
     readMetaFile<{ patch: string; scraped_at: string }>(),
     readPatchNotesFile<{ patches: Array<{ version: string; sections: PatchNoteSection[] }> }>(),
     readCombosFile<{ combos: ComboRecord[] }>(),
+    readEntityPresentationFile<EntityPresentationData>(),
   ]);
 
   const champions = championsFile.champions;
@@ -109,7 +112,7 @@ export default async function HomePage({
       <div className="grid grid-cols-1 gap-3 md:grid-cols-6 md:gap-3.5 lg:grid-cols-12 lg:gap-4">
         <PatchPulseBanner patch={patch} />
         <RotateHint />
-        <HeroMover champion={heroChampion} total={champions.length} patch={patch} />
+        <HeroMover champion={heroChampion} total={champions.length} patch={patch} entityPresentation={entityPresentation} />
         <MetaAtAGlance
           sPlusCount={sPlusCount}
           championCount={champions.length}
@@ -118,10 +121,10 @@ export default async function HomePage({
           patch={patch}
           updatedAt={scraped_at}
         />
-        <TierMiniGrid champions={tierChampions} />
-        <MoversCarousel augments={changedAugments} />
-        {spotlight && <AugmentSpotlight augment={spotlight} isChangedThisPatch={isSpotlightChanged} />}
-        <ComboHighlights combos={rankedCombos} />
+        <TierMiniGrid champions={tierChampions} entityPresentation={entityPresentation} />
+        <MoversCarousel augments={changedAugments} entityPresentation={entityPresentation} />
+        {spotlight && <AugmentSpotlight augment={spotlight} isChangedThisPatch={isSpotlightChanged} entityPresentation={entityPresentation} />}
+        <ComboHighlights combos={rankedCombos} entityPresentation={entityPresentation} />
         <AdvisorTeaser />
         <CompanionLauncher />
       </div>

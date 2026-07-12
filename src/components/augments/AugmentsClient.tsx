@@ -5,6 +5,8 @@ import Image from "next/image";
 import { useTranslations } from "next-intl";
 import { baselineOracleScore, type ScoredAugment } from "@/lib/scoring/oracle-score";
 import { Tooltip } from "@/components/ui/Tooltip";
+import { EntityLink } from "@/components/entities/EntityLink";
+import type { EntityRef } from "@/lib/entities/types";
 
 // ─── Constants ───────────────────────────────────────────────────────────────
 
@@ -48,9 +50,11 @@ function localizedName(aug: ScoredAugment, locale: string): string {
 export function AugmentsClient({
   augments,
   locale = "en",
+  entityRefs,
 }: {
   augments: ScoredAugment[];
   locale?: string;
+  entityRefs: Record<string, EntityRef>;
 }) {
   const t = useTranslations("augments");
   const tChamp = useTranslations("champion");
@@ -169,6 +173,7 @@ export function AugmentsClient({
             augment={aug}
             locale={locale}
             rarityLabel={rarityLabel[aug.rarity]}
+            entityRef={entityRefs[aug.slug]}
           />
         ))}
       </div>
@@ -183,7 +188,7 @@ export function AugmentsClient({
         {t("showing", { count: sorted.length, total: currentAugments.length })}
       </p>
 
-      <RemovedAugmentsTable augments={removedAugments} locale={locale} />
+      <RemovedAugmentsTable augments={removedAugments} locale={locale} entityRefs={entityRefs} />
     </div>
   );
 }
@@ -385,10 +390,12 @@ function AugmentCard({
   augment,
   locale,
   rarityLabel,
+  entityRef,
 }: {
   augment: ScoredAugment;
   locale: string;
   rarityLabel: string;
+  entityRef?: EntityRef;
 }) {
   const t = useTranslations("augments");
   const rarity = augment.rarity as keyof typeof RARITY_STYLES;
@@ -401,19 +408,14 @@ function AugmentCard({
       <div
         className={`glass-card p-3 flex flex-col items-center gap-2 border border-[var(--color-border-default)] transition-all cursor-default ${styles.glow}`}
       >
-        <div className="relative w-14 h-14 rounded-lg overflow-hidden shrink-0">
-          <Image
-            src={augment.icon}
-            alt={augment.name}
-            fill
-            className="object-contain"
-            sizes="56px"
-            unoptimized
-          />
-        </div>
-        <span className="text-xs font-medium text-center leading-tight line-clamp-2 w-full">
-          {displayName}
-        </span>
+        {entityRef ? <EntityLink entity={entityRef} variant="standard" className="w-full justify-center text-center" /> : (
+          <>
+            <div className="relative w-14 h-14 rounded-lg overflow-hidden shrink-0">
+              <Image src={augment.icon} alt={displayName} fill className="object-contain" sizes="56px" unoptimized />
+            </div>
+            <span className="text-xs font-medium text-center leading-tight line-clamp-2 w-full">{displayName}</span>
+          </>
+        )}
         <div className="flex flex-wrap justify-center gap-1 min-h-[14px]">
           {augment.flags?.lifecycle === "added" && (
             <span className="text-[9px] font-bold px-1 py-px rounded bg-green-500/20 text-green-300 border border-green-400/40">
@@ -453,9 +455,11 @@ function AugmentCard({
 function RemovedAugmentsTable({
   augments,
   locale,
+  entityRefs,
 }: {
   augments: ScoredAugment[];
   locale: string;
+  entityRefs: Record<string, EntityRef>;
 }) {
   const t = useTranslations("augments");
   const tChamp = useTranslations("champion");
@@ -484,7 +488,7 @@ function RemovedAugmentsTable({
             {augments.map((augment) => (
               <tr key={augment.slug} className="border-t border-[var(--color-border-default)]/70">
                 <td className="px-3 py-2 text-[var(--color-text-secondary)]">
-                  {localizedName(augment, locale)}
+                  {entityRefs[augment.slug] ? <EntityLink entity={entityRefs[augment.slug]} variant="compact" /> : localizedName(augment, locale)}
                 </td>
                 <td className="px-3 py-2 text-[var(--color-text-muted)]">
                   {tChamp(augment.rarity)}

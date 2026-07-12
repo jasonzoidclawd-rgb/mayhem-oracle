@@ -18,6 +18,8 @@ import type {
   PatchSection,
 } from "@/lib/types";
 import { ChangeBadge } from "./ChangeBadge";
+import { EntityLink } from "@/components/entities/EntityLink";
+import type { EntityRef, EntityType } from "@/lib/entities/types";
 
 type DataLocale = "en" | "zh-tw" | "zh-cn" | "ja-jp" | "ko-kr";
 
@@ -308,6 +310,24 @@ function EntityChip({
         : "border-rose-400/30 bg-rose-400/10 text-rose-300"
   }`;
   const label = `${typeLabel(entity.type)}: ${localizedEntityName(entity, chain)}`;
+
+  if (
+    entity.known &&
+    entity.href &&
+    entity.canonicalId &&
+    (entity.type === "champion" || entity.type === "augment" || entity.type === "item")
+  ) {
+    const ref: EntityRef = {
+      type: entity.type as EntityType,
+      canonicalId: entity.canonicalId,
+      slug: entity.slug,
+      name: localizedEntityName(entity, chain),
+      href: entity.href,
+      icon: entity.icon,
+      lifecycle: entity.lifecycle === "removed" ? "removed" : "active",
+    };
+    return <EntityLink entity={ref} variant="compact" className={className} />;
+  }
 
   if (entity.href && entity.known) {
     return (

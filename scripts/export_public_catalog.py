@@ -11,7 +11,9 @@ import shutil
 from pathlib import Path
 
 from data_paths import INTERNAL_DATA_DIR, ROOT
+from entity_presentation_projection import MAYHEM_CANONICAL_ITEM_IDS, build_entity_presentation
 from patch_event_projection import build_patch_notes_projection, build_preview_projection
+from cdragon_snapshot_diff import atomic_write_many
 
 PUBLIC_DATA_DIR = ROOT / "public" / "data"
 COPY_FILES = ("abilities.json", "champions.json", "meta.json")
@@ -163,18 +165,36 @@ def build_live_entity_lookup(internal_dir: Path) -> dict[str, set[str]]:
         },
         "item": {
             str(row["id"])
-            for row in items.get("items", [])
+            for row in [*items.get("items", []), *items.get("mayhemExclusive", [])]
             if isinstance(row, dict) and row.get("id") is not None
         },
     }
+
+
+def enrich_public_items(items: dict) -> dict:
+    """Attach stable CDragon IDs to the legacy Mayhem-only item rows."""
+    enriched = json.loads(json.dumps(items))
+    for row in enriched.get("mayhemExclusive", []):
+        if not isinstance(row, dict) or row.get("id") is not None:
+            continue
+        canonical_id = MAYHEM_CANONICAL_ITEM_IDS.get(str(row.get("slug") or ""))
+        if canonical_id:
+            row["id"] = int(canonical_id)
+    return enriched
 
 
 def export_public_catalog(
     internal_dir: Path = INTERNAL_DATA_DIR,
     public_dir: Path = PUBLIC_DATA_DIR,
 ) -> None:
+    # Build every public file in memory first.  The final promotion is a
+    # journaled all-files transaction so a failed projection cannot leave a
+    # mixed-version public/data directory behind.
+    outputs: dict[Path, object] = {}
     for filename in COPY_FILES:
-        copy_json(internal_dir / filename, public_dir / filename)
+        # Preserve byte-identical generated catalogs (including their existing
+        # newline convention) while still staging them in the same transaction.
+        outputs[public_dir / filename] = (internal_dir / filename).read_bytes()
 
     forbidden_telemetry = {
         "win_rate",
@@ -199,35 +219,74 @@ def export_public_catalog(
         "legacyCatalogRow",
     }
     forbidden_augment_telemetry = forbidden_telemetry | {"wikiNotes"}
-    write_json(
-        public_dir / "augments.json",
-        build_public_augments(internal_dir, forbidden_augment_telemetry),
+    outputs[public_dir / "augments.json"] = build_public_augments(
+        internal_dir,
+        forbidden_augment_telemetry,
     )
-    write_sanitized_json(
-        internal_dir / "items.json",
-        public_dir / "items.json",
-        forbidden_telemetry,
-    )
+    raw_items = (internal_dir / "items.json").read_bytes()
+    original_items = read_json(internal_dir / "items.json")
+    parsed_items = enrich_public_items(original_items)
+    sanitized_items = strip_keys(parsed_items, forbidden_telemetry)
+    outputs[public_dir / "items.json"] = raw_items if sanitized_items == original_items else sanitized_items
     # One explicit projection boundary for patch data.  The browser consumes
     # these bounded presentation files, never internal CDragon snapshots or
     # event-history/provenance archives.
-    known_entities = build_live_entity_lookup(internal_dir)
+    known_entities = {
+        **build_live_entity_lookup(internal_dir),
+        "item": {
+            str(row["id"])
+            for row in [*parsed_items.get("items", []), *parsed_items.get("mayhemExclusive", [])]
+            if isinstance(row, dict) and row.get("id") is not None
+        },
+    }
     patch_events = read_json(internal_dir / "patch-events.json")
     patch_metadata = read_json(internal_dir / "patch-metadata.json")
-    write_json(
-        public_dir / "patch-notes.json",
-        build_patch_notes_projection(
-            patch_events,
-            patch_metadata,
-            known=known_entities,
-            pbe_archive=read_json(internal_dir / "pbe-preview.json"),
-        ),
-    )
     pbe_archive = read_json(internal_dir / "pbe-preview.json")
-    write_json(
-        public_dir / "pbe-preview.json",
-        build_preview_projection(pbe_archive, known_entities),
+    snapshots = {
+        entity_type: read_json(internal_dir / f"cdragon-{entity_type}-latest.json")
+        for entity_type in ("augment", "champion", "item")
+    }
+    catalogs = {
+        "champion": {"rows": read_json(internal_dir / "champions.json").get("champions", [])},
+        "augment": {"rows": read_json(internal_dir / "augments.json").get("augments", [])},
+        "item": {
+            "rows": [
+                *parsed_items.get("items", []),
+                *parsed_items.get("mayhemExclusive", []),
+            ],
+        },
+    }
+    entity_presentation = build_entity_presentation(
+        snapshots=snapshots,
+        catalogs=catalogs,
+        patch_events=patch_events,
+        pbe_archive=pbe_archive,
     )
+    entity_records = {
+        entity_type: {
+            row["canonical_id"]: row
+            for row in entity_presentation["entities"]
+            if row["type"] == entity_type
+        }
+        for entity_type in ("augment", "champion", "item")
+    }
+    outputs[public_dir / "patch-notes.json"] = build_patch_notes_projection(
+        patch_events,
+        patch_metadata,
+        known=known_entities,
+        pbe_archive=pbe_archive,
+        entity_records=entity_records,
+    )
+    outputs[public_dir / "pbe-preview.json"] = build_preview_projection(
+        pbe_archive,
+        known_entities,
+        entity_records,
+    )
+
+    # Shared EntityRef/stat presentation boundary.  This is built from the
+    # normalized CDragon snapshots and bounded current-cycle events, not from
+    # prose or raw internal snapshot payloads.
+    outputs[public_dir / "entity-presentation.json"] = entity_presentation
 
     # Freemium combo teaser: publish a small slice of the headline S-tier
     # "strong combos" (champion/augment/tier only) for SEO + AI-citability and
@@ -235,7 +294,7 @@ def export_public_catalog(
     # and the curated internal `ref` stay member-only.
     combos = read_json(internal_dir / "combos.json")
     combos["combos"] = build_combo_teaser(combos.get("combos", []))
-    write_json(public_dir / "combos.json", combos)
+    outputs[public_dir / "combos.json"] = combos
 
     pool_rules = read_json(internal_dir / "pool-rules.json")
     for field in ("disabled", "mutually_exclusive", "item_exclusions", "ally_exclusions"):
@@ -243,10 +302,11 @@ def export_public_catalog(
     pool_rules["lifecycle"] = {"added": {}, "removed": {}}
     pool_rules.pop("availability", None)
     pool_rules.pop("availability_overrides", None)
-    write_json(public_dir / "pool-rules.json", pool_rules)
+    outputs[public_dir / "pool-rules.json"] = pool_rules
 
     # `patch-events.json` is the authoritative hotfix feed.  The legacy
     # mayhem-hotfixes file is intentionally not exported or consumed here.
+    atomic_write_many(outputs)
 
 
 def main() -> None:

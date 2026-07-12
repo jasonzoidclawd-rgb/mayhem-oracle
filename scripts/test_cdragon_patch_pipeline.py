@@ -170,6 +170,74 @@ class CDragonPatchPipelineTests(unittest.TestCase):
         self.assertEqual(pbe["archive"]["status"], "not_yet_confirmed")
         self.assertEqual(pbe["archive"]["events"], [])
 
+    def test_latest_and_pbe_observation_order_produces_the_same_valid_lineages(self):
+        latest_first = build_branch_update(
+            branch="latest",
+            source_version="16.13.2",
+            source_patch_label="26.13",
+            observed_at="2026-07-11T01:00:00Z",
+            entities_by_type=entities(0),
+            previous_snapshots={},
+            latest_snapshots={},
+            previous_archive=None,
+        )
+        pbe_after_latest = build_branch_update(
+            branch="pbe",
+            source_version="16.14.1",
+            source_patch_label="pbe-cycle-16.14.1",
+            observed_at="2026-07-11T02:00:00Z",
+            entities_by_type=entities(1),
+            previous_snapshots={},
+            latest_snapshots=latest_first["snapshots"],
+            previous_archive=None,
+        )
+        pbe_first = build_branch_update(
+            branch="pbe",
+            source_version="16.14.1",
+            source_patch_label="pbe-cycle-16.14.1",
+            observed_at="2026-07-11T02:00:00Z",
+            entities_by_type=entities(1),
+            previous_snapshots={},
+            latest_snapshots={},
+            previous_archive=None,
+            latest_baseline_confirmed=False,
+        )
+        latest_after_pbe = build_branch_update(
+            branch="latest",
+            source_version="16.13.2",
+            source_patch_label="26.13",
+            observed_at="2026-07-11T03:00:00Z",
+            entities_by_type=entities(0),
+            previous_snapshots={},
+            latest_snapshots={},
+            previous_archive=None,
+        )
+        pbe_reconciled = build_branch_update(
+            branch="pbe",
+            source_version="16.14.1",
+            source_patch_label="pbe-cycle-16.14.1",
+            observed_at="2026-07-11T03:00:00Z",
+            entities_by_type=entities(1),
+            previous_snapshots=pbe_first["snapshots"],
+            latest_snapshots=latest_after_pbe["snapshots"],
+            previous_archive=pbe_first["archive"],
+        )
+        self.assertEqual(pbe_first["archive"]["status"], "not_yet_confirmed")
+        self.assertEqual(
+            {kind: latest_after_pbe["snapshots"][kind]["entities"] for kind in latest_after_pbe["snapshots"]},
+            {kind: latest_first["snapshots"][kind]["entities"] for kind in latest_first["snapshots"]},
+        )
+        self.assertEqual(
+            [
+                (event["entity_type"], event["slug"], event["after"])
+                for event in pbe_reconciled["archive"]["events"]
+            ],
+            [
+                (event["entity_type"], event["slug"], event["after"])
+                for event in pbe_after_latest["archive"]["events"]
+            ],
+        )
+
     def test_lineage_reader_rejects_malformed_snapshot_without_falling_back_to_another_lane(self):
         with tempfile.TemporaryDirectory() as tmpdir:
             internal = Path(tmpdir)

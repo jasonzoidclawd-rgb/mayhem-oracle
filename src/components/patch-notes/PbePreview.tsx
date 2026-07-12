@@ -1,7 +1,8 @@
 import { getTranslations } from "next-intl/server";
-import { Link } from "@/i18n/navigation";
 import { describeFreshness } from "@/lib/patch-notes/freshness";
 import { formatPbeValue } from "@/lib/patch-notes/pbe";
+import { EntityLink } from "@/components/entities/EntityLink";
+import type { EntityRef } from "@/lib/entities/types";
 
 type PreviewEvent = {
   entity_type: "augment" | "champion" | "item";
@@ -15,6 +16,8 @@ type PreviewEvent = {
   detected_at: string;
   known?: boolean;
   href?: string;
+  canonicalId?: string;
+  icon?: string;
 };
 
 export type PbePreviewData = {
@@ -103,9 +106,19 @@ export async function PbePreview({ data, locale }: { data: PbePreviewData | null
                       {t(`objectTypes.${event.entity_type}`)}
                     </span>
                     {event.href && event.known ? (
-                      <Link href={event.href} className="font-medium text-[var(--color-text-primary)] hover:text-[var(--color-accent)]">
-                        {eventName(event, locale)}
-                      </Link>
+                      <EntityLink
+                        entity={{
+                          type: event.entity_type,
+                          canonicalId: event.canonicalId ?? event.canonical_id,
+                          slug: event.slug,
+                          name: eventName(event, locale),
+                          href: event.href,
+                          icon: event.icon,
+                          lifecycle: "active",
+                        } satisfies EntityRef}
+                        variant="compact"
+                        className="font-medium"
+                      />
                     ) : (
                       <span className="font-medium text-[var(--color-text-primary)]">{eventName(event, locale)}</span>
                     )}

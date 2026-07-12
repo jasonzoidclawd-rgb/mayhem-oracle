@@ -32,6 +32,7 @@ from cdragon_snapshot_diff import (
     atomic_write_many,
     build_snapshot,
     compare_snapshots,
+    promotion_lock,
     snapshot_filename,
     validate_snapshot,
 )
@@ -416,30 +417,35 @@ def promote_branch(
         if branch == "latest"
         else f"pbe-cycle-{source_version}"
     )
-    previous = read_snapshot_lineage(internal_dir, branch)
-    latest = read_snapshot_lineage(internal_dir, "latest") if branch == "pbe" else {}
-    archive_name = "patch-events.json" if branch == "latest" else "pbe-preview.json"
-    archive = _read_json(internal_dir / archive_name)
-    latest_archive = _read_json(internal_dir / "patch-events.json") if branch == "pbe" else None
-    update = build_branch_update(
-        branch=branch,
-        source_version=source_version,
-        source_patch_label=source_patch_label,
-        observed_at=now,
-        entities_by_type=entities,
-        previous_snapshots=previous,
-        latest_snapshots=latest,
-        previous_archive=archive,
-        latest_baseline_confirmed=(
-            branch != "pbe" or _latest_baseline_is_fresh(latest_archive, now)
-        ),
-    )
-    values: dict[Path, Any] = {
-        internal_dir / snapshot_filename(entity_type, branch): snapshot
-        for entity_type, snapshot in update["snapshots"].items()
-    }
-    values[internal_dir / archive_name] = update["archive"]
-    atomic_write_many(values)
+    # Fetching can happen without the lock, but lineage reads, comparison, and
+    # promotion must be one serialized critical section. Otherwise two manual
+    # runs can both diff the same old snapshot and the later write can discard
+    # the earlier event archive.
+    with promotion_lock(internal_dir):
+        previous = read_snapshot_lineage(internal_dir, branch)
+        latest = read_snapshot_lineage(internal_dir, "latest") if branch == "pbe" else {}
+        archive_name = "patch-events.json" if branch == "latest" else "pbe-preview.json"
+        archive = _read_json(internal_dir / archive_name)
+        latest_archive = _read_json(internal_dir / "patch-events.json") if branch == "pbe" else None
+        update = build_branch_update(
+            branch=branch,
+            source_version=source_version,
+            source_patch_label=source_patch_label,
+            observed_at=now,
+            entities_by_type=entities,
+            previous_snapshots=previous,
+            latest_snapshots=latest,
+            previous_archive=archive,
+            latest_baseline_confirmed=(
+                branch != "pbe" or _latest_baseline_is_fresh(latest_archive, now)
+            ),
+        )
+        values: dict[Path, Any] = {
+            internal_dir / snapshot_filename(entity_type, branch): snapshot
+            for entity_type, snapshot in update["snapshots"].items()
+        }
+        values[internal_dir / archive_name] = update["archive"]
+        atomic_write_many(values, lock_root=internal_dir, lock_held=True)
     return update
 
 

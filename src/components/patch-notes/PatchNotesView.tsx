@@ -8,10 +8,14 @@ import { buildPatchDigest } from "@/lib/patch-notes/digest";
 import { describeFreshness, type FreshnessDescription } from "@/lib/patch-notes/freshness";
 import type { ChangeKind, PatchNote, PatchNotesData } from "@/lib/types";
 import { PatchCard } from "./PatchCard";
+import type { EntityPresentationData } from "@/lib/entities/types";
+import { resolveEntityRef } from "@/lib/entities/catalog";
+import { EntityLink } from "@/components/entities/EntityLink";
 
 const RECENT_COUNT = 2;
 
 export interface RemovedPatchAugment {
+  augmentId?: string;
   slug: string;
   name: string;
   rarity: string;
@@ -30,11 +34,13 @@ export async function PatchNotesView({
   data,
   locale,
   removedAugments,
+  entityData,
   hotfixEventCount = 0,
 }: {
   data: PatchNotesData;
   locale: string;
   removedAugments: RemovedPatchAugment[];
+  entityData?: EntityPresentationData | null;
   hotfixEventCount?: number;
 }) {
   const t = await getTranslations("patchNotes");
@@ -68,7 +74,7 @@ export async function PatchNotesView({
         hotfixEventCount={hotfixEventCount}
       />
       <PatchCard patch={current} locale={locale} isCurrent />
-      <RemovedAugmentsTable augments={removedAugments} locale={locale} />
+      <RemovedAugmentsTable augments={removedAugments} locale={locale} entityData={entityData} />
 
       {recent.length > 0 ? (
         <section className="space-y-4">
@@ -231,9 +237,11 @@ async function PatchSummary({
 async function RemovedAugmentsTable({
   augments,
   locale,
+  entityData,
 }: {
   augments: RemovedPatchAugment[];
   locale: string;
+  entityData?: EntityPresentationData | null;
 }) {
   const t = await getTranslations("patchNotes");
   if (!augments.length) return null;
@@ -258,24 +266,36 @@ async function RemovedAugmentsTable({
             </tr>
           </thead>
           <tbody className="divide-y divide-[var(--color-border)]">
-            {augments.slice(0, 64).map((augment) => (
-              <tr key={augment.slug} className="hover:bg-[var(--color-bg-card)]/35">
-                <td className="px-5 py-3">
-                  <Link
-                    href={`/augments/${augment.slug}`}
-                    className="font-medium text-[var(--color-text-primary)] hover:text-[var(--color-accent)]"
-                  >
-                    {localizedAugmentName(augment, locale)}
-                  </Link>
-                </td>
-                <td className="px-5 py-3 capitalize text-[var(--color-text-secondary)]">
-                  {augment.rarity}
-                </td>
-                <td className="px-5 py-3 text-[var(--color-text-muted)]">
-                  {augment.flags?.lifecycle_patch ?? "—"}
-                </td>
-              </tr>
-            ))}
+            {augments.slice(0, 64).map((augment) => {
+              const ref = entityData
+                ? resolveEntityRef(
+                    entityData,
+                    "augment",
+                    { canonicalId: augment.augmentId, slug: augment.slug },
+                    locale,
+                  )
+                : null;
+              return (
+                <tr key={augment.slug} className="hover:bg-[var(--color-bg-card)]/35">
+                  <td className="px-5 py-3">
+                    {ref ? <EntityLink entity={ref} variant="standard" /> : (
+                      <Link
+                        href={`/augments/${augment.slug}`}
+                        className="font-medium text-[var(--color-text-primary)] hover:text-[var(--color-accent)]"
+                      >
+                        {localizedAugmentName(augment, locale)}
+                      </Link>
+                    )}
+                  </td>
+                  <td className="px-5 py-3 capitalize text-[var(--color-text-secondary)]">
+                    {augment.rarity}
+                  </td>
+                  <td className="px-5 py-3 text-[var(--color-text-muted)]">
+                    {augment.flags?.lifecycle_patch ?? "—"}
+                  </td>
+                </tr>
+              );
+            })}
           </tbody>
         </table>
       </div>
