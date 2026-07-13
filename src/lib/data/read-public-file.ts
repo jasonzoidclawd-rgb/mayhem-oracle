@@ -39,6 +39,10 @@ export function readPatchNotesFile<T>(): Promise<T> {
   return parseJsonFile<T>(path.join(process.cwd(), "public", "data", "patch-notes.json"));
 }
 
+export function readPbePreviewFile<T>(): Promise<T> {
+  return parseJsonFile<T>(path.join(process.cwd(), "public", "data", "pbe-preview.json"));
+}
+
 export function readCombosFile<T>(): Promise<T> {
   return parseJsonFile<T>(path.join(process.cwd(), "public", "data", "combos.json"));
 }

@@ -1,4 +1,4 @@
-import { readFileSync } from "node:fs";
+import { readdirSync, readFileSync } from "node:fs";
 import path from "node:path";
 import { describe, expect, test } from "vitest";
 
@@ -175,5 +175,57 @@ describe("public data boundary", () => {
       }
     }
     expect(localizedCount).toBeGreaterThan(200);
+  });
+
+  test("bounds the PBE preview to active public events without raw lineage or history", () => {
+    const preview = readJson("public/data/pbe-preview.json") as {
+      branch?: string;
+      lane?: string;
+      status?: string;
+      events?: Array<Record<string, unknown>>;
+    };
+    const forbiddenPreviewKeys = new Set([
+      "comparison",
+      "lifecycle",
+      "first_seen_cycle",
+      "last_seen_cycle",
+      "last_seen_at",
+      "observed_cycles",
+      "landed_at",
+      "source_version",
+      "entities",
+      "history",
+      "provenance",
+      "dataValues",
+      "calculations",
+      "modelWeights",
+      "scoreBreakdown",
+    ]);
+    const publicFiles = readdirSync(path.join(ROOT, "public", "data"));
+    const publicLoader = readFileSync(path.join(ROOT, "src/lib/data/public-loader.ts"), "utf-8");
+    const publicApi = readFileSync(path.join(ROOT, "src/lib/api/public-catalog.ts"), "utf-8");
+    const previewComponent = readFileSync(
+      path.join(ROOT, "src/components/patch-notes/PbePreview.tsx"),
+      "utf-8",
+    );
+
+    expect(preview.branch).toBe("pbe");
+    expect(preview.lane).toBe("preview");
+    expect(["fresh", "stale", "unavailable", "not_yet_confirmed"]).toContain(preview.status);
+    expect(collectForbiddenKeys(preview, forbiddenPreviewKeys)).toEqual([]);
+    expect(
+      publicFiles.filter((name) =>
+        name.startsWith("cdragon-") || name === "patch-events.json" || name === "pbe-preview-history.json",
+      ),
+    ).toEqual([]);
+    expect(publicLoader).not.toContain("pbe-preview.json");
+    expect(publicApi).not.toContain("pbe-preview");
+    expect(previewComponent).not.toContain("use client");
+
+    for (const event of preview.events ?? []) {
+      expect(event.branch).toBe("pbe");
+      expect(event.lane).toBe("preview");
+      expect(event.landed).toBe(false);
+    }
   });
 });

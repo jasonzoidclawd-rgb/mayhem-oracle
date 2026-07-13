@@ -1,0 +1,60 @@
+name: Update PBE Preview
+
+on:
+  schedule:
+    - cron: '0 */6 * * *'
+  workflow_dispatch:
+
+# Shared with the daily full refresh so a queued PBE poll cannot race its
+# snapshot/event/export transaction or push a stale generated projection.
+concurrency:
+  group: data-pipeline-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  update-pbe-preview:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+
+      - name: Install Node deps
+        run: npm ci
+
+      - name: Promote validated PBE lineage and bounded public preview
+        run: |
+          python3 scripts/cdragon_patch_pipeline.py --branch pbe
+          python3 scripts/export_public_catalog.py
+
+      - name: Verify PBE public boundary and static build
+        run: |
+          python3 scripts/verify_patch_publish.py
+          npx vitest run src/lib/__tests__/public-data-boundary.test.ts
+          npm run build
+          python3 scripts/verify_public_bundle_boundary.py
+
+      - name: Commit and push PBE preview when it changed
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add \
+            data/internal/cdragon-augment-pbe.json \
+            data/internal/cdragon-champion-pbe.json \
+            data/internal/cdragon-item-pbe.json \
+            data/internal/pbe-preview.json \
+            public/data/pbe-preview.json \
+            public/data/patch-notes.json
+          git diff --cached --quiet && echo "No PBE preview changes" && exit 0
+          git commit -m "data: update PBE preview $(date -u +%Y-%m-%dT%H:%MZ)"
+          git push

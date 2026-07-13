@@ -188,7 +188,7 @@ class AvailabilityResolverTests(unittest.TestCase):
 
         self.assertEqual(availability["status"], "removed")
         self.assertEqual(lifecycle_for_availability(availability["status"]), "removed")
-        self.assertEqual(availability["signals"]["resolution"]["removedSources"], ["patch_notes", "tombstone"])
+        self.assertEqual(availability["signals"]["resolution"]["removedSources"], ["cdragon_diff", "tombstone"])
 
     def test_tencent_removed_overrides_stale_wiki_live(self):
         availability = resolve_availability(

@@ -5,6 +5,7 @@ import {
   formatPatchDate,
 } from "@/lib/patch-notes/chrome";
 import { buildPatchDigest } from "@/lib/patch-notes/digest";
+import { describeFreshness, type FreshnessDescription } from "@/lib/patch-notes/freshness";
 import type { ChangeKind, PatchNote, PatchNotesData } from "@/lib/types";
 import { PatchCard } from "./PatchCard";
 
@@ -49,6 +50,9 @@ export async function PatchNotesView({
   const [current, ...rest] = data.patches;
   const recent = rest.slice(0, RECENT_COUNT);
   const older = rest.slice(RECENT_COUNT);
+  const freshness = data.status || data.scraped_at
+    ? describeFreshness(data.status, data.scraped_at)
+    : null;
 
   return (
     <div className="space-y-6">
@@ -56,6 +60,7 @@ export async function PatchNotesView({
         patch={current}
         locale={locale}
         sourceUrl={data.sourceUrl || current.sourceUrl}
+        freshness={freshness}
       />
       <PatchSummary
         patch={current}
@@ -97,10 +102,12 @@ async function PatchHero({
   patch,
   locale,
   sourceUrl,
+  freshness,
 }: {
   patch: PatchNote;
   locale: string;
   sourceUrl?: string;
+  freshness: FreshnessDescription | null;
 }) {
   const t = await getTranslations("patchNotes");
   const authors = patch.authors?.length ? patch.authors.join(", ") : null;
@@ -116,11 +123,22 @@ async function PatchHero({
       <div className="bg-gradient-to-br from-cyan-500/15 via-purple-500/10 to-transparent px-5 py-5 sm:px-6">
         <div className="flex flex-wrap items-center gap-2">
           <span className="rounded-full border border-[var(--color-accent)]/40 bg-[var(--color-accent)]/15 px-2 py-0.5 text-xs font-semibold uppercase tracking-wider text-[var(--color-accent)]">
-            {t("officialSource")}
+            {t("structuredSource")}
           </span>
           {dateLabel ? (
             <span className="text-xs text-[var(--color-text-muted)]">
               {dateLabel}
+            </span>
+          ) : null}
+          {freshness ? (
+            <span className="text-xs text-[var(--color-text-muted)]">
+              {freshness.state === "today"
+                ? t("freshnessToday")
+                : freshness.state === "days"
+                  ? t("freshnessDays", { days: freshness.days ?? 0 })
+                  : freshness.state === "stale"
+                    ? t("freshnessStale")
+                    : t("freshnessUnavailable")}
             </span>
           ) : null}
         </div>

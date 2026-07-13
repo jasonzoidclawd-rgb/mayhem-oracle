@@ -132,6 +132,8 @@ export type PatchSectionId =
 
 export type PatchLocale = "en" | "zh-tw" | "zh-cn" | "ja-jp" | "ko-kr";
 
+export type PatchSourceStatus = "fresh" | "stale" | "unavailable" | "not_yet_confirmed";
+
 export type PatchEntityType =
   | "champion"
   | "ability"
@@ -183,6 +185,12 @@ export interface PatchChange {
   /** Champion slug if this change targets a single champion (Champion Balance section). */
   subjectSlug?: string;
   sourceType?: "new_champion_preview" | string;
+  /** Source observation timestamp from the CDragon event, not a prose claim. */
+  detectedAt?: string;
+  /** Same-patch CDragon change after the numbered notes were published. */
+  isHotfix?: boolean;
+  /** A reconciled PBE preview whose target values now exist in latest. */
+  landedFromPbe?: boolean;
   kind: ChangeKind;
   targets?: PatchEntityRef[];
   relatedEntities?: PatchEntityRef[];
@@ -219,6 +227,7 @@ export interface PatchNote {
 export interface PatchNotesData {
   patch: string;
   scraped_at?: string;
+  status?: PatchSourceStatus;
   source: string;
   sourceKind?: string;
   sourceUrl?: string;

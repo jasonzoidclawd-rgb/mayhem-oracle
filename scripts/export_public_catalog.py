@@ -11,6 +11,7 @@ import shutil
 from pathlib import Path
 
 from data_paths import INTERNAL_DATA_DIR, ROOT
+from patch_event_projection import build_patch_notes_projection, build_preview_projection
 
 PUBLIC_DATA_DIR = ROOT / "public" / "data"
 COPY_FILES = ("abilities.json", "champions.json", "meta.json")
@@ -144,6 +145,30 @@ def build_public_hotfixes(hotfixes: dict) -> dict:
     return {**hotfixes, "events": events}
 
 
+def build_live_entity_lookup(internal_dir: Path) -> dict[str, set[str]]:
+    """PBE cards may link only to entities already present in the live catalog."""
+    champions = read_json(internal_dir / "champions.json")
+    augments = read_json(internal_dir / "augments.json")
+    items = read_json(internal_dir / "items.json")
+    return {
+        "champion": {
+            str(row["slug"])
+            for row in champions.get("champions", [])
+            if isinstance(row, dict) and row.get("slug")
+        },
+        "augment": {
+            str(row["slug"])
+            for row in augments.get("augments", [])
+            if isinstance(row, dict) and row.get("slug")
+        },
+        "item": {
+            str(row["id"])
+            for row in items.get("items", [])
+            if isinstance(row, dict) and row.get("id") is not None
+        },
+    }
+
+
 def export_public_catalog(
     internal_dir: Path = INTERNAL_DATA_DIR,
     public_dir: Path = PUBLIC_DATA_DIR,
@@ -183,10 +208,25 @@ def export_public_catalog(
         public_dir / "items.json",
         forbidden_telemetry,
     )
-    write_sanitized_json(
-        internal_dir / "patch-notes.json",
+    # One explicit projection boundary for patch data.  The browser consumes
+    # these bounded presentation files, never internal CDragon snapshots or
+    # event-history/provenance archives.
+    known_entities = build_live_entity_lookup(internal_dir)
+    patch_events = read_json(internal_dir / "patch-events.json")
+    patch_metadata = read_json(internal_dir / "patch-metadata.json")
+    write_json(
         public_dir / "patch-notes.json",
-        forbidden_telemetry,
+        build_patch_notes_projection(
+            patch_events,
+            patch_metadata,
+            known=known_entities,
+            pbe_archive=read_json(internal_dir / "pbe-preview.json"),
+        ),
+    )
+    pbe_archive = read_json(internal_dir / "pbe-preview.json")
+    write_json(
+        public_dir / "pbe-preview.json",
+        build_preview_projection(pbe_archive, known_entities),
     )
 
     # Freemium combo teaser: publish a small slice of the headline S-tier
@@ -205,10 +245,8 @@ def export_public_catalog(
     pool_rules.pop("availability_overrides", None)
     write_json(public_dir / "pool-rules.json", pool_rules)
 
-    # Hotfix feed (public-safe: localized names, rarity, change type only).
-    hotfixes = internal_dir / "mayhem-hotfixes.json"
-    if hotfixes.exists():
-        write_json(public_dir / "mayhem-hotfixes.json", build_public_hotfixes(read_json(hotfixes)))
+    # `patch-events.json` is the authoritative hotfix feed.  The legacy
+    # mayhem-hotfixes file is intentionally not exported or consumed here.
 
 
 def main() -> None:

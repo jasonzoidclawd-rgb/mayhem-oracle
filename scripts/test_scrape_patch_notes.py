@@ -1,238 +1,89 @@
 #!/usr/bin/env python3
+"""Riot prose is metadata only; CDragon owns structured entity changes."""
+
+from __future__ import annotations
 
 import json
 import tempfile
-import time as time_module
 import unittest
 from pathlib import Path
-from typing import Optional
-from urllib.error import URLError
 from unittest.mock import patch
 
+from cdragon_snapshot_diff import build_snapshot, compare_snapshots
 import scrape_patch_notes as scraper
 
 
-EN_PATCH_HTML = """
-<html>
-  <body>
-    <h1 data-testid="title">League of Legends Patch 26.13 Notes</h1>
-    <time datetime="2026-06-25T12:00:00Z"></time>
-    <h2>ARAM: Mayhem</h2>
-    <h4>Augments</h4>
-    <p><strong>Quest: Angel of Retribution</strong></p>
-    <ul><li>Damage: 10 ⇒ 12</li></ul>
-  </body>
-</html>
-"""
-
-ZH_TW_PATCH_HTML = """
-<html>
-  <body>
-    <h1 data-testid="title">英雄聯盟 26.13 版本更新公告</h1>
-    <time datetime="2026-06-25T12:00:00Z"></time>
-    <h2>隨機單中：大混戰</h2>
-    <h4>增幅裝置</h4>
-    <p><strong>復仇天使任務</strong></p>
-    <ul><li>傷害: 10 ⇒ 12</li></ul>
-  </body>
-</html>
+PATCH_HTML = """
+<html><body>
+  <h1 data-testid="title">League of Legends Patch 26.13 Notes</h1>
+  <time datetime="2026-06-25T12:00:00Z"></time>
+  <div class="authors"><span>Riot Fixture, Riot Editor</span></div>
+  <blockquote class="context">A prose-only introduction.</blockquote>
+  <h2>Champions</h2><h3>Brand</h3><p>Q damage: 80 ⇒ 90</p>
+</body></html>
 """
 
 
-class ScrapePatchNotesLocalePipelineTests(unittest.TestCase):
-    def _run_fixture_scrape(self, out_dir: Path) -> dict:
-        en_path = "/en-us/news/game-updates/league-of-legends-patch-26-13-notes"
-        zh_tw_path = "/zh-tw/news/game-updates/league-of-legends-patch-26-13-notes"
+class PatchMetadataOnlyTests(unittest.TestCase):
+    def test_extracts_only_title_date_url_and_attribution(self):
+        path = "/en-us/news/game-updates/league-of-legends-patch-26-13-notes"
+        document = scraper.build_metadata_document([path], fetcher=lambda _: PATCH_HTML)
 
-        def fixture_fetch(path_or_url: str) -> str:
-            if path_or_url == en_path:
-                return EN_PATCH_HTML
-            if path_or_url == zh_tw_path:
-                return ZH_TW_PATCH_HTML
-            raise URLError(f"fixture has no response for {path_or_url}")
-
-        empty_catalogs = {
-            "indexes": {"champion": {}, "item": {}, "augment": {}, "ability": {}},
-            "scanRefs": [],
-        }
-
-        with patch("sys.argv", ["scrape_patch_notes.py"]):
-            with patch.object(scraper, "OUT_DIR", out_dir):
-                with patch.object(scraper, "discover_patch_paths", return_value=[en_path]):
-                    with patch.object(scraper, "fetch", side_effect=fixture_fetch):
-                        with patch.object(scraper, "load_entity_catalogs", return_value=empty_catalogs):
-                            with patch.object(scraper, "update_augment_recent_changes"):
-                                with patch.object(scraper.time, "sleep"):
-                                    scraper.main()
-
-        return json.loads((out_dir / "patch-notes.json").read_text(encoding="utf-8"))
-
-    def _classified_kind(
-        self,
-        section_id: str,
-        text: str,
-        *,
-        source_type: Optional[str] = None,
-    ) -> str:
-        change = {
-            "subject": "Fixture",
-            "text": text,
-        }
-        if source_type:
-            change["sourceType"] = source_type
-        patch = {
+        self.assertEqual(document["patch"], "26.13")
+        self.assertEqual(document["patches"][0], {
             "version": "26.13",
-            "sections": [
-                {
-                    "id": section_id,
-                    "title": section_id,
-                    "changes": [change],
-                },
-            ],
-        }
+            "articleTitle": "League of Legends Patch 26.13 Notes",
+            "publishedAt": "2026-06-25T12:00:00Z",
+            "sourceUrl": "https://www.leagueoflegends.com/en-us/news/game-updates/league-of-legends-patch-26-13-notes",
+            "authors": ["Riot Fixture", "Riot Editor"],
+            "intro": "A prose-only introduction.",
+        })
+        encoded = json.dumps(document)
+        for forbidden in ("sections", "changes", "kind", "subject", "targets", "metrics"):
+            self.assertNotIn(f'"{forbidden}"', encoded)
 
-        scraper.classify_patch(patch)
-
-        return patch["sections"][0]["changes"][0]["kind"]
-
-    def test_load_entity_catalogs_includes_localized_ref_names(self):
-        with tempfile.TemporaryDirectory() as tmpdir:
-            out_dir = Path(tmpdir)
-            (out_dir / "champions.json").write_text(
-                json.dumps({
-                    "champions": [{
-                        "slug": "brand",
-                        "name": "Brand",
-                        "tags": ["mage"],
-                        "kit_tags": ["burn"],
-                        "name_zh_TW": "布蘭德",
-                        "name_zh_CN": "复仇焰魂",
-                        "name_ja": "ブランド",
-                        "name_ko": "브랜드",
-                    }],
-                }),
-                encoding="utf-8",
-            )
-            (out_dir / "items.json").write_text(
-                json.dumps({
-                    "items": [{
-                        "id": 123,
-                        "name": "The Golden Spatula",
-                        "name_zh_TW": "黃金鍋鏟",
-                        "name_zh_CN": "金铲铲",
-                        "name_ja": "ザ・金のへら",
-                        "name_ko": "황금 뒤집개",
-                    }],
-                }),
-                encoding="utf-8",
-            )
-            (out_dir / "augments.json").write_text(
-                json.dumps({
-                    "augments": [{
-                        "slug": "tank-engine",
-                        "name": "Tank Engine",
-                        "availability": {"status": "confirmed_live"},
-                        "flags": {},
-                        "name_zh_TW": "坦克引擎",
-                        "name_zh_CN": "坦克引擎",
-                        "name_ja": "タンクエンジン",
-                        "name_ko": "탱크 엔진",
-                    }],
-                }),
-                encoding="utf-8",
-            )
-            (out_dir / "abilities.json").write_text(
-                json.dumps({
-                    "profiles": {
-                        "brand": {
-                            "abilities": [{
-                                "key": "P",
-                                "name": "Blaze",
-                                "name_zh_TW": "烈炎鐵血",
-                                "name_zh_CN": "炽热之焰",
-                                "name_ja": "炎上",
-                                "name_ko": "불길",
-                            }],
-                        },
-                    },
-                }),
-                encoding="utf-8",
-            )
-
-            with patch.object(scraper, "OUT_DIR", out_dir):
-                catalogs = scraper.load_entity_catalogs()
-
-        champion = catalogs["indexes"]["champion"][scraper.normalize_key("Brand")]
-        item = catalogs["indexes"]["item"][scraper.normalize_key("The Golden Spatula")]
-        augment = catalogs["indexes"]["augment"][scraper.normalize_key("Tank Engine")]
-        ability = catalogs["indexes"]["ability"][scraper.normalize_key("Blaze")]
-
-        self.assertEqual(champion["names"]["zh-tw"], "布蘭德")
-        self.assertEqual(item["names"]["zh-cn"], "金铲铲")
-        self.assertEqual(augment["names"]["ja-jp"], "タンクエンジン")
-        self.assertEqual(ability["names"]["ko-kr"], "불길")
-
-    def test_bugfix_section_classifies_as_fixed(self):
+    def test_fixture_output_is_byte_stable(self):
+        path = "/en-us/news/game-updates/league-of-legends-patch-26-13-notes"
+        first = scraper.build_metadata_document([path], fetcher=lambda _: PATCH_HTML)
+        second = scraper.build_metadata_document([path], fetcher=lambda _: PATCH_HTML)
         self.assertEqual(
-            self._classified_kind("bugfixes", "Fixed an issue where rerolls could misreport."),
-            "fixed",
+            json.dumps(first, ensure_ascii=False, sort_keys=True),
+            json.dumps(second, ensure_ascii=False, sort_keys=True),
         )
 
-    def test_new_items_section_classifies_as_added(self):
-        self.assertEqual(
-            self._classified_kind("new_items", "Atma's Reckoning has entered the shop."),
-            "added",
+    def test_main_writes_patch_metadata_not_a_structural_patch_feed(self):
+        path = "/en-us/news/game-updates/league-of-legends-patch-26-13-notes"
+        with tempfile.TemporaryDirectory() as tmpdir:
+            out = Path(tmpdir)
+            with patch("sys.argv", ["scrape_patch_notes.py", "--out-dir", str(out)]):
+                with patch.object(scraper, "discover_patch_paths", return_value=[path]):
+                    with patch.object(scraper, "fetch", return_value=PATCH_HTML):
+                        scraper.main()
+            payload = json.loads((out / "patch-metadata.json").read_text(encoding="utf-8"))
+
+        self.assertEqual(payload["patches"][0]["version"], "26.13")
+        self.assertFalse((out / "patch-notes.json").exists())
+
+    def test_structural_change_absent_from_prose_is_still_detected_by_snapshot_diff(self):
+        before = build_snapshot(
+            entity_type="item", branch="latest", source_version="16.13.1",
+            source_patch_label="26.13", observed_at="2026-07-11T00:00:00Z",
+            entities=[{"id": "1001", "slug": "boots", "names": {"en": "Boots"}, "fields": {"cost": 300}}],
+        )
+        after = build_snapshot(
+            entity_type="item", branch="latest", source_version="16.13.2",
+            source_patch_label="26.13", observed_at="2026-07-11T01:00:00Z",
+            entities=[{"id": "1001", "slug": "boots", "names": {"en": "Boots"}, "fields": {"cost": 350}}],
+        )
+        event = compare_snapshots(before, after, detected_at="2026-07-11T01:00:00Z")[0]
+        prose = scraper.build_metadata_document(
+            ["/en-us/news/game-updates/league-of-legends-patch-26-13-notes"],
+            fetcher=lambda _: PATCH_HTML,
         )
 
-    def test_new_champion_preview_classifies_as_added(self):
-        self.assertEqual(
-            self._classified_kind(
-                "champions",
-                "Q damage: 40 ⇒ 50",
-                source_type="new_champion_preview",
-            ),
-            "added",
-        )
-
-    def test_explicit_removal_phrasing_classifies_as_removed(self):
-        for text in (
-            "This augment has been removed.",
-            "Removed from the augment pool.",
-            "This system has been disabled.",
-        ):
-            with self.subTest(text=text):
-                self.assertEqual(self._classified_kind("augments", text), "removed")
-
-    def test_numeric_balance_changes_still_classify_as_buffed_or_nerfed(self):
-        self.assertEqual(self._classified_kind("augments", "Damage: 10 ⇒ 12"), "buffed")
-        self.assertEqual(self._classified_kind("augments", "Damage: 12 ⇒ 10"), "nerfed")
-
-    def test_main_uses_article_published_at_as_scraped_at(self):
-        with tempfile.TemporaryDirectory() as tmpdir:
-            doc = self._run_fixture_scrape(Path(tmpdir))
-
-        self.assertEqual(doc["scraped_at"], "2026-06-25T12:00:00Z")
-
-    def test_fixture_scrape_is_byte_stable_across_runs(self):
-        with tempfile.TemporaryDirectory() as first, tempfile.TemporaryDirectory() as second:
-            self._run_fixture_scrape(Path(first))
-            time_module.sleep(0.001)
-            self._run_fixture_scrape(Path(second))
-
-            self.assertEqual(
-                (Path(first) / "patch-notes.json").read_bytes(),
-                (Path(second) / "patch-notes.json").read_bytes(),
-            )
-
-    def test_main_stitches_successfully_parsed_zh_tw_text(self):
-        with tempfile.TemporaryDirectory() as tmpdir:
-            doc = self._run_fixture_scrape(Path(tmpdir))
-
-        change = doc["patches"][0]["sections"][0]["changes"][0]
-        self.assertIn("zh-tw", change["text"])
-        self.assertIn("zh-tw", change["subject"])
-        self.assertEqual(change["text"]["zh-tw"], "傷害: 10 ⇒ 12")
-        self.assertEqual(change["subject"]["zh-tw"], "復仇天使任務")
+        self.assertEqual(event["entity_type"], "item")
+        self.assertEqual(event["fields_changed"], ["cost"])
+        self.assertNotIn("boots", json.dumps(prose).lower())
 
 
 if __name__ == "__main__":

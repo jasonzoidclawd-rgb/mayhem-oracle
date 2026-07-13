@@ -47,7 +47,9 @@ def patch_note(
 def public_patch_notes(*, patch: str = "26.13", notes: list[dict] | None = None) -> dict:
     return {
         "patch": patch,
-        "source": "fixture",
+        "source": "CommunityDragon snapshot diffs",
+        "sourceKind": "cdragon-structured-diff-v1",
+        "status": "fresh",
         "scraped_at": "2026-06-23T18:00:00.000Z",
         "patches": notes
         if notes is not None
@@ -88,7 +90,7 @@ class VerifyPatchPublishTests(unittest.TestCase):
             summary = verify_patch_publish(
                 root=root,
                 changed_paths=[
-                    "data/internal/patch-notes.json",
+                    "data/internal/patch-events.json",
                     "public/data/patch-notes.json",
                 ],
             )
@@ -155,7 +157,18 @@ class VerifyPatchPublishTests(unittest.TestCase):
             with self.assertRaisesRegex(PatchPublishError, "public patch-notes"):
                 verify_patch_publish(
                     root=root,
-                    changed_paths=["data/internal/patch-notes.json"],
+                    changed_paths=["data/internal/patch-events.json"],
+                )
+
+    def test_internal_pbe_preview_change_requires_public_preview_change(self):
+        with tempfile.TemporaryDirectory() as tmpdir:
+            root = Path(tmpdir)
+            self.write_public_data(root, patch_notes=public_patch_notes())
+
+            with self.assertRaisesRegex(PatchPublishError, "public PBE preview"):
+                verify_patch_publish(
+                    root=root,
+                    changed_paths=["data/internal/pbe-preview.json", "public/data/patch-notes.json"],
                 )
 
 

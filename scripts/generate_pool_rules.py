@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
 """
-generate_pool_rules.py — Extract patch-sensitive pool-shaping rules from patch-notes.json.
+generate_pool_rules.py — Reconcile pool lifecycle from CDragon patch events.
 
-Reads data/internal/patch-notes.json (all patches) and accumulates rules that affect
+Reads data/internal/patch-events.json and accumulates source-versioned lifecycle
+changes that affect
 champion augment pool composition:
   - item_exclusions: augment not offered if player owns specific item
   - mutually_exclusive: augment pairs that can never both be offered
@@ -24,7 +25,7 @@ from pathlib import Path
 from data_paths import INTERNAL_DATA_DIR
 
 DATA_DIR = INTERNAL_DATA_DIR
-PATCH_NOTES_PATH = DATA_DIR / "patch-notes.json"
+PATCH_EVENTS_PATH = DATA_DIR / "patch-events.json"
 AUGMENTS_PATH    = DATA_DIR / "augments.json"
 ITEMS_PATH       = DATA_DIR / "items.json"
 OUTPUT_PATH      = DATA_DIR / "pool-rules.json"
@@ -208,6 +209,21 @@ def extract_rules(patches: list, aug_map: dict, item_map: dict) -> dict:
     }
 
 
+def lifecycle_from_events(events: list[dict]) -> dict:
+    """Only CDragon additions/removals may alter augment lifecycle state."""
+    added: dict[str, str] = {}
+    removed: dict[str, str] = {}
+    for event in events:
+        if event.get("entity_type") != "augment" or not event.get("slug"):
+            continue
+        patch = str(event.get("source_patch_label") or "unknown")
+        if event.get("change_kind") == "added":
+            added.setdefault(event["slug"], patch)
+        elif event.get("change_kind") == "removed":
+            removed.setdefault(event["slug"], patch)
+    return {"added": dict(sorted(added.items())), "removed": dict(sorted(removed.items()))}
+
+
 # ─── Main ─────────────────────────────────────────────────────────────────────
 
 def main():
@@ -215,10 +231,9 @@ def main():
     parser.add_argument("--dry-run", action="store_true")
     args = parser.parse_args()
 
-    pn_raw  = json.loads(PATCH_NOTES_PATH.read_text("utf-8"))
-    patches = pn_raw["patches"]
-    current_patch = pn_raw.get("patch", patches[0]["version"] if patches else "unknown")
-    scraped_at    = pn_raw.get("scraped_at", "")
+    event_raw = json.loads(PATCH_EVENTS_PATH.read_text("utf-8"))
+    current_patch = event_raw.get("current_open_cycle", "unknown")
+    scraped_at = event_raw.get("observed_at", "")
 
     aug_raw  = json.loads(AUGMENTS_PATH.read_text("utf-8"))
     augments = aug_raw["augments"] if isinstance(aug_raw, dict) and "augments" in aug_raw else aug_raw
@@ -227,7 +242,17 @@ def main():
     item_raw = json.loads(ITEMS_PATH.read_text("utf-8"))
     item_map = build_item_name_map(item_raw)
 
-    rules = extract_rules(patches, aug_map, item_map)
+    # Interaction policy is a separate curated compatibility artifact. It is
+    # retained from the previous generated state, not re-derived from brittle
+    # article prose. CDragon events own all addition/removal lifecycle changes.
+    existing_rules = json.loads(OUTPUT_PATH.read_text("utf-8")) if OUTPUT_PATH.exists() else {}
+    rules = {
+        "item_exclusions": existing_rules.get("item_exclusions", []),
+        "mutually_exclusive": existing_rules.get("mutually_exclusive", []),
+        "ally_exclusions": existing_rules.get("ally_exclusions", []),
+        "disabled": existing_rules.get("disabled", []),
+        "lifecycle": lifecycle_from_events(event_raw.get("events", [])),
+    }
 
     # 26.12+: resolved availability is the offerability source. The legacy
     # lifecycle map remains as a compatibility fallback for older consumers, but
