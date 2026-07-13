@@ -90,6 +90,19 @@ used to derive balancing values. The legacy Mayhem-only item rows are enriched
 with their explicit CDragon IDs during export so their cards and detail pages
 share the same canonical resolver.
 
+The projected route contract is authoritative for navigation: `route_identifier`
+is the exact detail-page parameter and `known` is true only when that identifier
+is present in the same catalog used by `generateStaticParams`. Regular items use
+their numeric CDragon ID (for example `1001`), while Mayhem-exclusive items use
+the existing approved slug route. Entity links never derive URLs from display
+names. A CDragon-only champion such as Locke is retained as an unlinked
+identity (`known: false`) until the roster pipeline generates a real page. The
+static-route contract test builds all five-locale route sets from those catalog
+sources and reports the entity type, canonical ID, identifier, locale, and href
+for any mismatch. Historical Forged By The Master (CDragon ID `2127`) retains
+its canonical augment route; when latest promotes it, stale removal tombstones
+are cleared before public projection.
+
 ## Operator workflow
 
 The daily `.github/workflows/update-data.yml` performs both lane promotions as

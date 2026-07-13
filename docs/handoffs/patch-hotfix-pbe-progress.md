@@ -122,3 +122,33 @@ the gate; no architecture or disclosure-boundary requirement is being waived.
   the CLI registry fallback failed with `ENOTFOUND`. Headed system Chrome was
   used as the supported local fallback. Chrome emitted only existing external
   icon-preload warnings; no application errors or page errors occurred.
+
+## Merge and entity-presentation follow-up (2026-07-13)
+
+- Product-owner approval was recorded for merging PR #38 only at its reviewed
+  conflict-resolution head `9b6571d7974110bc54b4ceeb85e29b5fb2f88931`.
+  The PR was merged into `main` as `bf605c4dab3357846bce436b51c88149fc599b25`
+  ([PR #38](https://github.com/jasonzoidclawd-rgb/wasfun.lol/pull/38)). CI,
+  the Windows overlay workflow, and the Vercel checks were green at merge;
+  the post-merge CI and overlay runs also completed successfully.
+- The product owner accepted the documented transition limitation: the new
+  live lane starts at a clean baseline and historical backfill remains
+  deferred. No additional historical content was restored or exposed.
+- `followup/entity-presentation` was rebased onto the merged `origin/main`.
+  The rebased feature commits are `2c6624f` (presentation surfaces) and
+  `0927009` (verification state); route-contract hardening and generated
+  projections are pending in the follow-up draft PR.
+- The follow-up changes make `route_identifier` and `known` projection-owned
+  fields. Regular items use numeric IDs, Mayhem-exclusive items use the exact
+  existing slug route, and CDragon-only Locke remains unlinked until a real
+  generated champion page exists. Forged By The Master (ID 2127) has a
+  regression fixture proving stale removal tombstones clear when latest
+  promotes the entity.
+- Production smoke after the merge returned 200 for the English and
+  Traditional Chinese patch notes, patch 26.13, and Forged By The Master
+  routes. Live SEO verification passed 31/31 and JSON-LD verification passed
+  15/15. Follow-up browser-equivalent navigation followed every emitted link
+  in the English and Traditional Chinese index/card surfaces with zero 404s;
+  the in-app Browser backend was unavailable, so the supported Playwright
+  fallback was used and screenshots remain outside the repository under
+  `/private/tmp/entity-qa/`.
