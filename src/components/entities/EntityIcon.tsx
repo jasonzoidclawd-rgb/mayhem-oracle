@@ -18,9 +18,11 @@ function fallbackGlyph(type: EntityRef["type"]): string {
 export function EntityIcon({
   entity,
   variant = "standard",
+  loading = "lazy",
 }: {
   entity: EntityRef;
   variant?: EntityIconVariant;
+  loading?: "lazy" | "eager";
 }) {
   const size = ENTITY_ICON_SIZES[variant] ?? ENTITY_ICON_SIZES.standard;
   const [state, setState] = useState<"loading" | "loaded" | "error">(
@@ -44,6 +46,7 @@ export function EntityIcon({
           height={size.pixels}
           className="absolute inset-0 h-full w-full rounded object-contain"
           sizes={size.sizes}
+          loading={loading}
           unoptimized
           onLoad={() => setState("loaded")}
           onError={() => setState("error")}

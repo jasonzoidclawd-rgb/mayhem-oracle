@@ -183,7 +183,26 @@ class PatchEventProjectionTests(unittest.TestCase):
         )
 
         change = projection["patches"][0]["sections"][0]["changes"][0]
-        self.assertEqual(change["text"]["en"], "description: Old → New")
+        self.assertEqual(change["text"]["en"], "description: Old — → New —")
+
+    def test_projection_preserves_literal_percent_values_in_descriptions(self):
+        projection = build_patch_notes_projection(
+            {
+                "current_open_cycle": "26.13",
+                "events": [event(
+                    fields_changed=["description"],
+                    before={"description": "35% Attack Speed and 25% Move Speed"},
+                    after={"description": "40% Attack Speed and 25% Move Speed"},
+                )],
+            },
+            {"patches": []},
+        )
+
+        change = projection["patches"][0]["sections"][0]["changes"][0]
+        self.assertEqual(
+            change["text"]["en"],
+            "description: 35% Attack Speed and 25% Move Speed → 40% Attack Speed and 25% Move Speed",
+        )
 
     def test_riot_prose_metadata_cannot_create_structural_entity_events(self):
         projection = build_patch_notes_projection(

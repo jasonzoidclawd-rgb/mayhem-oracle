@@ -15,7 +15,7 @@ SECTION_BY_ENTITY = {
     "augment": "augments",
 }
 _TAG_RE = re.compile(r"<[^>]+>")
-_TOKEN_RE = re.compile(r"@[^@]+@|%[^%]+%")
+_TOKEN_RE = re.compile(r"@[^@]+@|%[A-Za-z][A-Za-z0-9_:.*-]*%|\{\{[^{}]+\}\}")
 PUBLIC_EVENT_FIELDS = (
     "entity_type",
     "canonical_id",
@@ -69,7 +69,7 @@ def _presentation_names(
 def _display(value: Any) -> str:
     if isinstance(value, str):
         text = _TOKEN_RE.sub(
-            " ",
+            " — ",
             _TAG_RE.sub(
                 " ",
                 html.unescape(value).replace("<br>", " ").replace("<br/>", " "),

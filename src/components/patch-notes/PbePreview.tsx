@@ -1,6 +1,6 @@
 import { getTranslations } from "next-intl/server";
 import { describeFreshness } from "@/lib/patch-notes/freshness";
-import { formatPbeValue } from "@/lib/patch-notes/pbe";
+import { formatPbeChange } from "@/lib/patch-notes/pbe";
 import { EntityLink } from "@/components/entities/EntityLink";
 import type { EntityRef } from "@/lib/entities/types";
 
@@ -52,13 +52,10 @@ function eventText(
 ): string {
   if (event.change_kind === "added") return t("pbeAdded");
   if (event.change_kind === "removed") return t("pbeRemoved");
-  return event.fields_changed.map((field) =>
-    t("pbeFieldChange", {
-      field,
-      before: formatPbeValue(event.before[field]),
-      after: formatPbeValue(event.after[field]),
-    }),
-  ).join("; ");
+  return event.fields_changed.map((field) => {
+    const change = formatPbeChange(event.before[field], event.after[field]);
+    return t("pbeFieldChange", { field, ...change });
+  }).join("; ");
 }
 
 export async function PbePreview({ data, locale }: { data: PbePreviewData | null; locale: string }) {
@@ -125,6 +122,7 @@ export async function PbePreview({ data, locale }: { data: PbePreviewData | null
                         lifecycle: "active",
                       } satisfies EntityRef}
                       variant="compact"
+                      loading="eager"
                       className="font-medium"
                     />
                   </div>

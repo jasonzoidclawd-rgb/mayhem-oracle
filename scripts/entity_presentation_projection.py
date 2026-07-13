@@ -17,7 +17,7 @@ from typing import Any
 
 ENTITY_TYPES = ("augment", "champion", "item")
 _TAG_RE = re.compile(r"<[^>]+>")
-_TOKEN_RE = re.compile(r"@[^@]+@|%[^%]+%")
+_TOKEN_RE = re.compile(r"@[^@]+@|%[A-Za-z][A-Za-z0-9_:.*-]*%|\{\{[^{}]+\}\}")
 
 # The Mayhem-only item catalog is authored separately from the CDragon item
 # endpoint and historically lacked IDs.  These IDs are the stable CDragon

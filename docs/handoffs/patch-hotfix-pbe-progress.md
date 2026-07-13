@@ -252,3 +252,30 @@ the gate; no architecture or disclosure-boundary requirement is being waived.
   mutating source input, and the localized EntityRef is unlinked in all route
   guards. The expected post-build behavior is a normal static 404 for direct
   `/zh-TW/items/3168`, not a soft-404 detail page or a Mayhem index card.
+
+## PBE presentation correction (2026-07-14)
+
+- The supplied visual report was an `aramgg.com` page, not the Mayhem Oracle
+  server. The rebuilt local server at `http://localhost:3000` serves the
+  Mayhem Oracle `/zh-TW/patch-notes` page; `/zh-TW/items/3168` returns a normal
+  404 and `/zh-TW/items`/`/zh-TW/patch-notes` return 200.
+- Reproduced a local PBE presentation defect independent of that screenshot:
+  long description changes repeated the entire sanitized before and after
+  strings, broad `%...%` token stripping deleted literal values such as `35%`,
+  and lazy preview icons stayed on type glyphs until manually scrolled into
+  view. These were presentation defects, not structural diff or route data.
+- `formatPbeChange` now collapses unchanged prose around the changed segment;
+  the token sanitizer only removes actual CDragon placeholders (`@...@`,
+  `%i:...%`, and `{{...}}`), preserving ordinary percentages. Unknown dynamic
+  values render as an em dash rather than an empty string or question mark.
+  The server-rendered PBE EntityLinks opt into eager icon loading for the
+  bounded current-cycle lane; other catalog surfaces remain lazy and keep the
+  fixed type-glyph fallback.
+- The exporter was rerun to regenerate `public/data/entity-presentation.json`
+  from the normalized source. Focused tests cover literal percentage
+  preservation, compact prose changes, and neutral unresolved-token markers.
+  Full Vitest (66 files / 471 tests), Python fixture suite (158 tests), public
+  bundle boundary, patch publish verification, compileall, lint, and the
+  rebuilt production server all pass. Browser fallback evidence:
+  `/private/tmp/entity-qa/pbe-icons-after-wait.png` shows loaded augment,
+  champion, and item icons with compact PBE changes and no question marks.

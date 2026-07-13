@@ -9,10 +9,12 @@ export function EntityLink({
   entity,
   variant = "standard",
   className = "",
+  loading = "lazy",
 }: {
   entity: EntityRef;
   variant?: EntityIconVariant;
   className?: string;
+  loading?: "lazy" | "eager";
 }) {
   // Keep the server render fail-closed if an older caller passes an unknown
   // variant during static generation; the contract's standard presentation is
@@ -23,7 +25,7 @@ export function EntityLink({
   } ${className}`;
   const content = (
     <>
-      <EntityIcon entity={entity} variant={variant} />
+      <EntityIcon entity={entity} variant={variant} loading={loading} />
       <span className="min-w-0 truncate">{entity.localizedName}</span>
     </>
   );

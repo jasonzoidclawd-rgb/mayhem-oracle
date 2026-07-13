@@ -114,6 +114,14 @@ repair does not require a lifecycle-data rewrite. `EntityIcon` keeps a fixed
 type glyph visible during lazy loading and after an image error; a remote icon
 failure is never rendered as a blank box.
 
+The server-rendered PBE lane opts its bounded current-cycle event icons into
+eager loading so a freshly opened preview does not show type glyphs while the
+section is below the first viewport. Other catalog surfaces retain lazy
+loading. PBE text changes use the sanitized `formatPbeChange` word-diff
+presentation: unchanged prose is collapsed with an ellipsis, literal values
+such as `35%` remain intact, and unresolved CDragon calculation tokens render
+as a neutral em dash. No prose number is interpreted as a balancing stat.
+
 The seven curated Mayhem item rows are canonical variants, not additional
 regular entities. Their explicit IDs are `223039`, `3430`, `4011`, `4403`,
 `223095`, `223084`, and `228002`. The acquisition adapter removes regular
@@ -190,6 +198,27 @@ npx vitest run src/lib/__tests__/entity-catalog.test.ts
 If a future CDragon refresh adds another mode gate, add its exact raw marker to
 the adapter predicate and add a fixture before changing the public projection;
 do not expand an ID blacklist from display-name guesses.
+
+### Preview presentation diagnostics
+
+If a PBE card appears to repeat an entire description or shows a question-mark
+placeholder, verify the running build before editing generated data:
+
+```bash
+npm test -- --run src/lib/__tests__/patch-pbe-format.test.ts
+python3 scripts/test_patch_event_projection.py
+python3 scripts/export_public_catalog.py
+npm run build
+node /private/tmp/entity-qa/current-patch-3000.cjs
+node /private/tmp/entity-qa/pbe-icons-after-wait.cjs
+```
+
+Expected browser evidence is no literal `?` in PBE text, preserved percentage
+values, compact before/after prose, all preview icon states `loaded`, and no
+console errors. A screenshot whose address bar is another site (for example
+`aramgg.com`) is not evidence about the local port; navigate to
+`http://localhost:3000/<locale>/patch-notes` and hard-refresh the rebuilt server
+before triaging.
 
 ## Operator workflow
 
