@@ -251,8 +251,16 @@ def export_public_catalog(
         "augment": {"rows": read_json(internal_dir / "augments.json").get("augments", [])},
         "item": {
             "rows": [
-                *parsed_items.get("items", []),
-                *parsed_items.get("mayhemExclusive", []),
+                *[
+                    {**row, "_route_identifier": str(row["id"])}
+                    for row in parsed_items.get("items", [])
+                    if isinstance(row, dict) and row.get("id") is not None
+                ],
+                *[
+                    {**row, "_route_identifier": str(row["slug"])}
+                    for row in parsed_items.get("mayhemExclusive", [])
+                    if isinstance(row, dict) and row.get("slug")
+                ],
             ],
         },
     }

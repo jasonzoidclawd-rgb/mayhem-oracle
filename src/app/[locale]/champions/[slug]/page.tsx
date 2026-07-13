@@ -36,6 +36,7 @@ import { resolveEntityRef } from "@/lib/entities/catalog";
 import type { EntityPresentationData, EntityRef } from "@/lib/entities/types";
 import { EntityLink } from "@/components/entities/EntityLink";
 import { EntityStats } from "@/components/entities/EntityStats";
+import { buildEntityRouteSets } from "@/lib/entities/routes";
 
 type ChampionData = ChampionDetailChampion;
 type AugmentData = ChampionDetailAugment;
@@ -77,9 +78,14 @@ export const dynamicParams = false;
 
 export async function generateStaticParams() {
   const { champions } = await readChampionsFile<{ champions: ChampionData[] }>();
+  const routes = buildEntityRouteSets({
+    champions,
+    augments: [],
+    items: { items: [], mayhemExclusive: [] },
+  });
 
   return routing.locales.flatMap((locale) =>
-    champions.map((c) => ({ locale, slug: c.slug }))
+    [...routes.champion].map((slug) => ({ locale, slug }))
   );
 }
 

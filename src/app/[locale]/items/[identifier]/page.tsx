@@ -15,6 +15,7 @@ import { resolveEntityRef } from "@/lib/entities/catalog";
 import type { EntityPresentationData } from "@/lib/entities/types";
 import { EntityLink } from "@/components/entities/EntityLink";
 import { EntityStats } from "@/components/entities/EntityStats";
+import { buildEntityRouteSets } from "@/lib/entities/routes";
 
 // Raw Riot API category identifier → translation key in items namespace.
 const CATEGORY_LABEL_KEY: Record<string, string> = {
@@ -107,18 +108,14 @@ export async function generateStaticParams() {
   // No try/catch: with dynamicParams=false a data read failure must fail the
   // build loudly instead of publishing a site with zero item pages.
   const data = await loadItemsData();
-  return routing.locales.flatMap((locale) => [
-    ...data.mayhemExclusive.map((item) => ({
-      locale,
-      identifier: item.slug,
-    })),
-    ...data.items
-      .filter((item) => item.id != null)
-      .map((item) => ({
-        locale,
-        identifier: String(item.id),
-      })),
-  ]);
+  const routes = buildEntityRouteSets({
+    champions: [],
+    augments: [],
+    items: data,
+  });
+  return routing.locales.flatMap((locale) =>
+    [...routes.item].map((identifier) => ({ locale, identifier })),
+  );
 }
 
 export async function generateMetadata({

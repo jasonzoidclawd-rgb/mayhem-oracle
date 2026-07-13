@@ -16,6 +16,10 @@ type PreviewEvent = {
   detected_at: string;
   known?: boolean;
   href?: string;
+  id?: string;
+  routeIdentifier?: string;
+  localizedName?: string;
+  iconUrl?: string;
   canonicalId?: string;
   icon?: string;
 };
@@ -105,23 +109,24 @@ export async function PbePreview({ data, locale }: { data: PbePreviewData | null
                     <span className="rounded border border-cyan-400/30 px-1.5 py-0.5 text-[11px] uppercase tracking-wide text-cyan-200">
                       {t(`objectTypes.${event.entity_type}`)}
                     </span>
-                    {event.href && event.known ? (
-                      <EntityLink
-                        entity={{
-                          type: event.entity_type,
-                          canonicalId: event.canonicalId ?? event.canonical_id,
-                          slug: event.slug,
-                          name: eventName(event, locale),
-                          href: event.href,
-                          icon: event.icon,
-                          lifecycle: "active",
-                        } satisfies EntityRef}
-                        variant="compact"
-                        className="font-medium"
-                      />
-                    ) : (
-                      <span className="font-medium text-[var(--color-text-primary)]">{eventName(event, locale)}</span>
-                    )}
+                    <EntityLink
+                      entity={{
+                        type: event.entity_type,
+                        id: event.id ?? event.canonicalId ?? event.canonical_id,
+                        routeIdentifier: event.routeIdentifier ?? "",
+                        localizedName: eventName(event, locale),
+                        iconUrl: event.iconUrl ?? event.icon ?? "",
+                        known: event.known === true && Boolean(event.routeIdentifier && event.href),
+                        ...(event.known && event.href && event.routeIdentifier ? { href: event.href } : {}),
+                        canonicalId: event.canonicalId ?? event.canonical_id,
+                        slug: event.slug,
+                        name: eventName(event, locale),
+                        icon: event.icon,
+                        lifecycle: "active",
+                      } satisfies EntityRef}
+                      variant="compact"
+                      className="font-medium"
+                    />
                   </div>
                   <p className="mt-1 text-sm leading-6 text-[var(--color-text-secondary)]">{eventText(event, t)}</p>
                   <p className="mt-2 text-[11px] text-[var(--color-text-muted)]">

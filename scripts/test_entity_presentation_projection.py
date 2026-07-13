@@ -2,7 +2,7 @@
 import json
 import unittest
 
-from entity_presentation_projection import MAYHEM_CANONICAL_ITEM_IDS, build_entity_presentation
+from entity_presentation_projection import CANONICAL_AUGMENT_IDS, MAYHEM_CANONICAL_ITEM_IDS, build_entity_presentation
 
 
 def snapshot(entity_type, branch, version, patch, entities, lane=None):
@@ -79,6 +79,10 @@ class EntityPresentationProjectionTests(unittest.TestCase):
         ])
         champion = next(row for row in result["entities"] if row["type"] == "champion")
         item = next(row for row in result["entities"] if row["type"] == "item")
+        self.assertEqual(champion["route_identifier"], "annie")
+        self.assertTrue(champion["known"])
+        self.assertEqual(item["route_identifier"], "1001")
+        self.assertTrue(item["known"])
         armor_stat = next(stat for stat in champion["stats"] if stat["key"] == "base_armor")
         self.assertEqual(armor_stat["source_path"], "fields.base_stats.armor")
         self.assertEqual(item["stats"][0]["unit"], "gold")
@@ -270,6 +274,42 @@ class EntityPresentationProjectionTests(unittest.TestCase):
         self.assertEqual([stat["key"] for stat in forged["stats"]], ["rarity"])
         self.assertNotIn("26.13", [stat["value"] for stat in forged["stats"]])
 
+    def test_forged_numeric_id_regression_and_noop_pbe_target(self):
+        self.assertEqual(CANONICAL_AUGMENT_IDS["forged-by-the-master"], "2127")
+        latest = {
+            "champion": snapshot("champion", "latest", "16.13.2", "26.13", []),
+            "augment": snapshot("augment", "latest", "16.13.2", "26.13", [
+                entity("2127", "forged-by-the-master", {"rarity": "silver"}),
+            ]),
+            "item": snapshot("item", "latest", "16.13.2", "26.13", []),
+        }
+        result = build_entity_presentation(
+            snapshots=latest,
+            catalogs={
+                "champion": {"rows": []},
+                "augment": {"rows": [{
+                    "slug": "forged-by-the-master",
+                    "name": "Forged By The Master",
+                    "augmentId": "2127",
+                    "flags": {"lifecycle": "removed", "lifecycle_patch": "26.13"},
+                }]},
+                "item": {"rows": []},
+            },
+            patch_events={"current_open_cycle": "26.13", "events": [{
+                "entity_type": "augment", "canonical_id": "2127", "slug": "forged-by-the-master",
+                "source_patch_label": "26.13", "change_kind": "removed", "fields_changed": [],
+            }]},
+            pbe_archive={"source_patch_label": "pbe-cycle-26.14", "events": [{
+                "entity_type": "augment", "canonical_id": "2127", "slug": "forged-by-the-master",
+                "source_patch_label": "pbe-cycle-26.14", "lane": "preview", "lifecycle": "upcoming",
+                "landed": False, "fields_changed": ["rarity"],
+                "before": {"rarity": "silver"}, "after": {"rarity": "silver"},
+            }]},
+        )
+        forged = next(row for row in result["entities"] if row["canonical_id"] == "2127")
+        self.assertEqual(forged["lifecycle"]["state"], "active")
+        self.assertEqual(forged["patch_changes"], [])
+
     def test_pbe_only_changes_are_projected_when_normalized_target_differs(self):
         latest = {
             "champion": snapshot("champion", "latest", "16.13.2", "26.13", [entity("1", "annie", {"base_stats": {"health": 600}})]),
@@ -311,6 +351,21 @@ class EntityPresentationProjectionTests(unittest.TestCase):
         )
         old = next(row for row in result["entities"] if row["canonical_id"] == "A_OLD")
         self.assertEqual(old["lifecycle"]["state"], "removed")
+
+    def test_cdragon_only_champion_is_explicitly_unlinked(self):
+        latest = {
+            "champion": snapshot("champion", "latest", "16.13.2", "26.13", [entity("805", "locke", {})]),
+            "augment": snapshot("augment", "latest", "16.13.2", "26.13", []),
+            "item": snapshot("item", "latest", "16.13.2", "26.13", []),
+        }
+        result = build_entity_presentation(
+            snapshots=latest,
+            catalogs={"champion": {"rows": []}, "augment": {"rows": []}, "item": {"rows": []}},
+        )
+        locke = result["entities"][0]
+        self.assertEqual(locke["slug"], "locke")
+        self.assertEqual(locke["route_identifier"], "")
+        self.assertFalse(locke["known"])
 
 
 if __name__ == "__main__":

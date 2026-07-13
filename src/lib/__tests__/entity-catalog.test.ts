@@ -1,8 +1,12 @@
 import { describe, expect, test } from "vitest";
 import entityData from "../../../public/data/entity-presentation.json";
+import championsData from "../../../public/data/champions.json";
+import augmentsData from "../../../public/data/augments.json";
+import itemsData from "../../../public/data/items.json";
 import { buildEntityIndex, resolveEntityRef } from "@/lib/entities/catalog";
 import { formatEntityStatValue } from "@/components/entities/EntityStats";
 import type { EntityPresentationData } from "@/lib/entities/types";
+import { assertEntityRefRoutes, buildEntityRouteSets, localizedEntityHref } from "@/lib/entities/routes";
 
 const data = entityData as EntityPresentationData;
 
@@ -11,13 +15,21 @@ describe("entity presentation catalog", () => {
     const cases = [
       ["champion", "1", "annie", "/champions/annie"],
       ["augment", "ARAM_ADAPt", "adapt", "/augments/adapt"],
-      ["item", "1001", "boots", "/items/boots"],
+      ["item", "1001", "boots", "/items/1001"],
     ] as const;
     for (const [type, canonicalId, slug, href] of cases) {
       const ref = resolveEntityRef(data, type, { canonicalId }, "en");
-      expect(ref).toMatchObject({ type, canonicalId, slug, href });
-      expect(ref?.icon).toBeTruthy();
-      expect(ref?.name).toBeTruthy();
+      expect(ref).toMatchObject({
+        type,
+        id: canonicalId,
+        canonicalId,
+        slug,
+        routeIdentifier: type === "item" ? canonicalId : slug,
+        href,
+        known: true,
+      });
+      expect(ref?.iconUrl).toBeTruthy();
+      expect(ref?.localizedName).toBeTruthy();
     }
     expect(resolveEntityRef(data, "champion", { canonicalId: "missing" }, "en")).toBeNull();
   });
@@ -28,7 +40,85 @@ describe("entity presentation catalog", () => {
       const ref = resolveEntityRef(data, "champion", { canonicalId: "1" }, locale);
       expect(ref?.name).toBe(expected);
       expect(ref?.href).toBe("/champions/annie");
+      expect(ref?.localizedName).toBe(expected);
     }
+  });
+
+  test("uses exact static route identifiers for regular and Mayhem items", () => {
+    const boots = resolveEntityRef(data, "item", { canonicalId: "1001" }, "en");
+    const atmas = resolveEntityRef(data, "item", { canonicalId: "223039" }, "en");
+    expect(boots).toMatchObject({ routeIdentifier: "1001", href: "/items/1001", known: true });
+    expect(atmas).toMatchObject({ routeIdentifier: "atmas-reckoning", href: "/items/atmas-reckoning", known: true });
+  });
+
+  test("keeps Locke unlinked while preserving the CDragon identity", () => {
+    const locke = resolveEntityRef(data, "champion", { canonicalId: "805" }, "en");
+    expect(locke).toMatchObject({ id: "805", slug: "locke", known: false, routeIdentifier: "" });
+    expect(locke?.href).toBeUndefined();
+  });
+
+  test("historical Forged By The Master retains its canonical page route", () => {
+    const forged = resolveEntityRef(data, "augment", { canonicalId: "2127" }, "zh-TW");
+    expect(forged).toMatchObject({
+      id: "2127",
+      slug: "forged-by-the-master",
+      routeIdentifier: "forged-by-the-master",
+      known: true,
+      href: "/augments/forged-by-the-master",
+      localizedName: "大師鑄造",
+    });
+  });
+
+  test("static route guard covers every known EntityRef in all five locales", () => {
+    const routes = buildEntityRouteSets({
+      champions: championsData.champions,
+      augments: augmentsData.augments,
+      items: itemsData,
+    });
+    const locales = ["en", "zh-TW", "zh-CN", "ja", "ko"] as const;
+    const refs = data.entities.flatMap((entity) => {
+      const ref = resolveEntityRef(data, entity.type, { canonicalId: entity.canonical_id }, "en");
+      return ref ? [ref] : [];
+    });
+    expect(() => assertEntityRefRoutes(refs, routes, locales)).not.toThrow();
+    for (const entity of data.entities) {
+      const ref = resolveEntityRef(data, entity.type, { canonicalId: entity.canonical_id }, "en");
+      expect(ref, `${entity.type}:${entity.canonical_id}`).toBeTruthy();
+      if (entity.known) {
+        expect(entity.route_identifier, `${entity.type}:${entity.canonical_id}`).not.toBe("");
+        expect(routes[entity.type].has(entity.route_identifier)).toBe(true);
+        for (const locale of locales) {
+          const localized = localizedEntityHref(locale, entity.type, entity.route_identifier);
+          expect(localized).toBe(
+            `${locale === "en" ? "" : `/${locale}`}/${entity.type === "champion" ? "champions" : entity.type === "augment" ? "augments" : "items"}/${entity.route_identifier}`,
+          );
+        }
+      } else {
+        expect(entity.route_identifier).toBe("");
+        expect(ref?.known).toBe(false);
+        expect(ref?.href).toBeUndefined();
+      }
+    }
+  });
+
+  test("duplicate static identifiers fail closed instead of creating ambiguous links", () => {
+    expect(() => buildEntityRouteSets({
+      champions: [{ slug: "duplicate" }, { slug: "duplicate" }],
+      augments: [],
+      items: { items: [], mayhemExclusive: [] },
+    })).toThrow("duplicate champion static route identifier");
+  });
+
+  test("route guard diagnostics identify every contract dimension", () => {
+    const ref = resolveEntityRef(data, "item", { canonicalId: "1001" }, "en");
+    expect(ref).toBeTruthy();
+    expect(() => assertEntityRefRoutes(
+      [{ ...ref!, known: true, routeIdentifier: "boots", href: "/items/boots" }],
+      buildEntityRouteSets({ champions: [], augments: [], items: { items: [], mayhemExclusive: [] } }),
+      ["zh-TW"],
+    )).toThrow(
+      "type=item canonicalId=1001 routeIdentifier=boots locale=zh-TW href=/zh-TW/items/boots",
+    );
   });
 
   test("duplicate canonical IDs fail closed in the runtime index", () => {

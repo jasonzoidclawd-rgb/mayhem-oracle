@@ -159,7 +159,7 @@ class AvailabilityResolverTests(unittest.TestCase):
         self.assertEqual(lifecycle_for_availability(availability["status"]), "active")
         self.assertEqual(availability["signals"]["wiki"]["status"], "live")
 
-    def test_stale_tombstone_removal_outranks_cdragon_and_wiki_live(self):
+    def test_cdragon_reappearance_clears_stale_tombstone_removal(self):
         availability = resolve_availability(
             augment_id="ARAM_Removed",
             slug="removed",
@@ -170,11 +170,11 @@ class AvailabilityResolverTests(unittest.TestCase):
             tombstone_removed=True,
         )
 
-        self.assertEqual(availability["status"], "removed")
-        self.assertEqual(lifecycle_for_availability(availability["status"]), "removed")
-        self.assertTrue(availability["signals"]["tombstone"]["removed"])
+        self.assertEqual(availability["status"], "confirmed_live")
+        self.assertEqual(lifecycle_for_availability(availability["status"]), "active")
+        self.assertFalse(availability["signals"]["tombstone"]["removed"])
 
-    def test_explicit_patch_removed_stays_removed_even_with_registry_and_wiki_text(self):
+    def test_cdragon_reappearance_clears_false_patch_removal_event(self):
         availability = resolve_availability(
             augment_id="Upgrade_SwordOfBlossom",
             slug="upgrade-sword-of-blossoming-dawn",
@@ -186,9 +186,39 @@ class AvailabilityResolverTests(unittest.TestCase):
             patch_removed=True,
         )
 
-        self.assertEqual(availability["status"], "removed")
-        self.assertEqual(lifecycle_for_availability(availability["status"]), "removed")
-        self.assertEqual(availability["signals"]["resolution"]["removedSources"], ["cdragon_diff", "tombstone"])
+        self.assertEqual(availability["status"], "confirmed_live")
+        self.assertEqual(lifecycle_for_availability(availability["status"]), "active")
+        self.assertEqual(availability["signals"]["resolution"]["removedSources"], [])
+
+    def test_forged_by_the_master_id_2127_reappears_as_active(self):
+        existing = {
+            "patch": "26.13",
+            "scraped_at": "old",
+            "augments": [{
+                "augmentId": "2127",
+                "slug": "forged-by-the-master",
+                "name": "Forged By The Master",
+                "rarity": "silver",
+                "flags": {"lifecycle": "removed"},
+                "availability": {"status": "removed", "signals": {"tombstone": {"removed": True}}},
+            }],
+        }
+        base = base_row("2127", "Forged By The Master")
+        base["slug"] = "forged-by-the-master"
+        base["cdragon"]["kiwi"] = {"present": True, "keys": ["kiwi_forged_name"], "tokens": ["forged"]}
+        output = assemble_catalog(
+            existing_catalog=existing,
+            base_catalog={"generated_at": "2026-07-13T00:00:00+00:00", "augments": [base]},
+            wiki_feed={"augments": {}},
+            winrate_feed={"win_rates": {}},
+            identity_map={"mappings": []},
+            removed_slugs={"forged-by-the-master"},
+        )
+        row = output["augments"][0]
+        self.assertEqual(row["augmentId"], "2127")
+        self.assertEqual(row["flags"]["lifecycle"], "active")
+        self.assertEqual(row["availability"]["status"], "confirmed_live")
+        self.assertFalse(row["availability"]["signals"]["tombstone"]["removed"])
 
     def test_tencent_removed_overrides_stale_wiki_live(self):
         availability = resolve_availability(

@@ -160,6 +160,16 @@ def resolve_availability(
 ) -> dict:
     """Resolve availability.status according to the spec's ordering."""
 
+    # The promoted latest CDragon snapshot is the structural authority. If an
+    # entity reappears there, stale legacy/tombstone removal signals must be
+    # cleared before lifecycle classification (Forged By The Master is the
+    # regression case). Independent official disabled/removed sources below
+    # still win when present.
+    restored_from_cdragon = cdragon_present and (tombstone_removed or patch_removed)
+    if restored_from_cdragon:
+        tombstone_removed = False
+        patch_removed = False
+
     wiki = wiki_signal(wiki_row, definition_placeholder)
     live_sources: list[str] = []
     disabled_sources: list[str] = []
@@ -204,7 +214,12 @@ def resolve_availability(
         status = "removed"
     elif stale_removed_sources:
         status = "removed"
-    elif cdragon_present and (kiwi_present or wiki["status"] == "live" or tencent_status == "live"):
+    elif cdragon_present and (
+        kiwi_present
+        or wiki["status"] == "live"
+        or tencent_status == "live"
+        or restored_from_cdragon
+    ):
         # CDragon-primary: first-party registry presence plus a Mayhem kiwi
         # stringtable entry is sufficient live evidence. Wiki/Tencent remain
         # additive corroboration signals and every removal/disable/tombstone

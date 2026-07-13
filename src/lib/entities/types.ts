@@ -43,6 +43,10 @@ export interface EntityPresentationRecord {
   type: EntityType;
   canonical_id: string;
   slug: string;
+  /** Exact identifier accepted by the corresponding static detail route. */
+  route_identifier: string;
+  /** False when the source entity has no generated canonical detail page. */
+  known: boolean;
   names: Record<string, string>;
   icon: string;
   description: string;
@@ -66,11 +70,21 @@ export interface EntityPresentationData {
 
 export interface EntityRef {
   type: EntityType;
-  canonicalId: string;
+  /** Canonical CDragon/Riot identifier. */
+  id: string;
+  /** Presentation slug; never used to infer a route. */
   slug: string;
-  name: string;
-  href: string;
-  icon?: string;
+  /** Exact route identifier projected by the server-side catalog. */
+  routeIdentifier: string;
+  localizedName: string;
+  iconUrl: string;
+  known: boolean;
+  href?: string;
   lifecycle: EntityLifecycleState;
+
+  /** Compatibility aliases for existing presentation consumers. */
+  canonicalId: string;
+  name: string;
+  icon?: string;
   availability?: string;
 }

@@ -241,6 +241,13 @@ describe("public data boundary", () => {
       expect(["champion", "augment", "item"]).toContain(entity.type);
       expect(typeof entity.canonical_id).toBe("string");
       expect(typeof entity.slug).toBe("string");
+      expect(typeof entity.route_identifier).toBe("string");
+      expect(typeof entity.known).toBe("boolean");
+      if (entity.known) {
+        expect(String(entity.route_identifier)).not.toBe("");
+      } else {
+        expect(entity.route_identifier).toBe("");
+      }
       const identity = `${entity.type}:${entity.canonical_id}`;
       expect(identities.has(identity)).toBe(false);
       identities.add(identity);
@@ -253,6 +260,7 @@ describe("public data boundary", () => {
         "raw", "rawSnapshot", "snapshot", "snapshots", "comparison", "comparisonBase",
         "comparison_base", "base_branch", "target_branch", "source_url", "sourceUrl",
         "member", "internal", "serverOnly", "provenance", "lineage",
+        "routeIdentifier", "localizedHref", "rawPbe", "pbeSnapshot", "pbeHistory",
       ]))).toEqual([]);
       for (const stat of (entity.stats as Array<Record<string, unknown>>)) {
         expect(stat).toHaveProperty("source_path");

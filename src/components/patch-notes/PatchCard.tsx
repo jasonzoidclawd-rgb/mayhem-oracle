@@ -305,36 +305,32 @@ function EntityChip({
   const className = `inline-flex min-h-8 items-center rounded-full border px-2 text-xs ${
     muted
       ? "border-[var(--color-border)] text-[var(--color-text-muted)]"
-      : entity.known
+      : entity.known && entity.href && entity.routeIdentifier
         ? "border-[var(--color-accent)]/35 bg-[var(--color-accent)]/10 text-[var(--color-accent)]"
         : "border-rose-400/30 bg-rose-400/10 text-rose-300"
   }`;
   const label = `${typeLabel(entity.type)}: ${localizedEntityName(entity, chain)}`;
+  const id = String(entity.id ?? entity.canonicalId ?? "");
 
   if (
-    entity.known &&
-    entity.href &&
-    entity.canonicalId &&
+    id &&
     (entity.type === "champion" || entity.type === "augment" || entity.type === "item")
   ) {
     const ref: EntityRef = {
       type: entity.type as EntityType,
-      canonicalId: entity.canonicalId,
+      id,
+      routeIdentifier: entity.routeIdentifier ?? "",
+      localizedName: localizedEntityName(entity, chain),
+      iconUrl: entity.iconUrl ?? entity.icon ?? "",
+      known: entity.known === true && Boolean(entity.routeIdentifier && entity.href),
+      ...(entity.known && entity.href && entity.routeIdentifier ? { href: entity.href } : {}),
+      canonicalId: id,
       slug: entity.slug,
       name: localizedEntityName(entity, chain),
-      href: entity.href,
       icon: entity.icon,
       lifecycle: entity.lifecycle === "removed" ? "removed" : "active",
     };
     return <EntityLink entity={ref} variant="compact" className={className} />;
-  }
-
-  if (entity.href && entity.known) {
-    return (
-      <Link href={entity.href} className={className}>
-        {label}
-      </Link>
-    );
   }
 
   return <span className={className}>{label}</span>;

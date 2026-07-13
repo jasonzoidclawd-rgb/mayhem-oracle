@@ -34,6 +34,14 @@ MAYHEM_CANONICAL_ITEM_IDS = {
     "wooglets-witchcap": "228002",
 }
 
+# Forged By The Master is a retained historical catalog row whose old source
+# omitted the numeric CDragon ID. The ID is part of the approved regression
+# contract and is used only to reconcile that row when CDragon promotes it
+# back into the latest snapshot.
+CANONICAL_AUGMENT_IDS = {
+    "forged-by-the-master": "2127",
+}
+
 
 # The semantic direction is explicit because lower values are beneficial for
 # cooldown/cost fields while higher values are beneficial for most combat stats.
@@ -87,6 +95,8 @@ def _catalog_id(entity_type: str, row: dict[str, Any]) -> str | None:
     value = row.get("canonical_id") or row.get("canonicalId")
     if value is None and entity_type == "augment":
         value = row.get("augmentId")
+        if value is None:
+            value = CANONICAL_AUGMENT_IDS.get(str(row.get("slug") or "").strip())
     if value is None and entity_type == "item":
         value = row.get("id")
     if value is None:
@@ -304,6 +314,29 @@ def _event_matches(record: dict[str, Any], event: dict[str, Any]) -> bool:
     )
 
 
+def _field_value(fields: dict[str, Any], path: str) -> Any:
+    value: Any = fields
+    for part in path.split("."):
+        if not isinstance(value, dict) or part not in value:
+            return None
+        value = value[part]
+    return value
+
+
+def _preview_target_matches_snapshot(event: dict[str, Any], snapshot_row: dict[str, Any]) -> bool:
+    """Reject a stale/no-op preview event whose normalized target is live."""
+
+    changed = event.get("fields_changed")
+    after = event.get("after")
+    fields = snapshot_row.get("fields")
+    if not isinstance(changed, list) or not changed or not isinstance(after, dict) or not isinstance(fields, dict):
+        return False
+    return all(
+        _field_value(fields, str(field)) == after.get(str(field))
+        for field in changed
+    )
+
+
 def _record(
     entity_type: str,
     snapshot_row: dict[str, Any],
@@ -317,6 +350,20 @@ def _record(
     catalog_row = catalog_row or {}
     flags = catalog_row.get("flags") if isinstance(catalog_row.get("flags"), dict) else {}
     lifecycle = "active" if present_in_snapshot else str(flags.get("lifecycle") or "unknown")
+    if entity_type == "item":
+        # Regular item pages accept numeric IDs. Mayhem-exclusive rows carry
+        # an explicit route identifier from the exporter because their static
+        # pages accept the curated slug instead.
+        route_identifier = str(
+            catalog_row.get("_route_identifier")
+            or (catalog_row.get("id") if catalog_row.get("id") is not None else "")
+        ).strip()
+    else:
+        # Champion and augment routes are generated from the public catalog;
+        # a CDragon-only row (for example Locke) intentionally remains
+        # unlinked until that catalog generates a real page.
+        route_identifier = str(catalog_row.get("slug") or "").strip()
+    known = bool(route_identifier and catalog_row)
     record = {
         "type": entity_type,
         "canonical_id": canonical_id,
@@ -324,6 +371,8 @@ def _record(
         # still useful for matching additions, but must not silently replace a
         # stable localized detail URL (for example ADAPt → /augments/adapt).
         "slug": str(catalog_row.get("slug") or snapshot_row.get("slug") or ""),
+        "route_identifier": route_identifier,
+        "known": known,
         "names": _names(snapshot_row, catalog_row),
         "icon": str(catalog_row.get("icon") or ""),
         "description": _neutral_description(catalog_row.get("wikiDescription") or catalog_row.get("description") or ""),
@@ -340,7 +389,20 @@ def _record(
         ),
         "patch_changes": [],
     }
-    changes = [event for event in [*live_events, *pbe_events] if _event_matches(record, event)]
+    changes = [
+        event for event in [*live_events, *pbe_events]
+        if _event_matches(record, event)
+        # A currently-present normalized entity is authoritative over a stale
+        # legacy removal tombstone. The tombstone must not reappear as a
+        # current-cycle stat change or removal card.
+        and not (present_in_snapshot and event.get("change_kind") == "removed")
+        and not (
+            event.get("lane") == "preview"
+            and event.get("lifecycle") != "landed"
+            and event.get("landed") is not True
+            and _preview_target_matches_snapshot(event, snapshot_row)
+        )
+    ]
     deduped: dict[tuple[Any, ...], dict[str, Any]] = {}
     for event in changes:
         for change in _change_stats(entity_type, event):

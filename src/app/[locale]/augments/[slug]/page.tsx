@@ -25,6 +25,7 @@ import { resolveEntityRef } from "@/lib/entities/catalog";
 import type { EntityPresentationData } from "@/lib/entities/types";
 import { EntityLink } from "@/components/entities/EntityLink";
 import { EntityStats } from "@/components/entities/EntityStats";
+import { buildEntityRouteSets } from "@/lib/entities/routes";
 
 // ─── Types ───────────────────────────────────────────────────────────────────
 
@@ -95,8 +96,13 @@ export async function generateStaticParams() {
   // No try/catch: with dynamicParams=false a data read failure must fail the
   // build loudly instead of publishing a site with zero augment pages.
   const augments = await loadAugments();
+  const routes = buildEntityRouteSets({
+    champions: [],
+    augments,
+    items: { items: [], mayhemExclusive: [] },
+  });
   return routing.locales.flatMap((locale) =>
-    augments.map((augment) => ({ locale, slug: augment.slug })),
+    [...routes.augment].map((slug) => ({ locale, slug })),
   );
 }
 

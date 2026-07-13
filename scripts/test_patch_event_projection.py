@@ -160,6 +160,32 @@ class PatchEventProjectionTests(unittest.TestCase):
         change = projection["patches"][0]["sections"][0]["changes"][0]
         self.assertTrue(change["landedFromPbe"])
 
+    def test_currently_present_entity_clears_false_removal_tombstone(self):
+        projection = build_patch_notes_projection(
+            {
+                "current_open_cycle": "26.13",
+                "events": [{
+                    "entity_type": "augment",
+                    "canonical_id": "2127",
+                    "slug": "forged-by-the-master",
+                    "source_patch_label": "26.13",
+                    "change_kind": "removed",
+                    "fields_changed": [],
+                    "before": {},
+                    "after": {},
+                }],
+            },
+            {"patches": [{"version": "26.13", "articleTitle": "Patch 26.13"}]},
+            known={"champion": set(), "augment": {"forged-by-the-master"}, "item": set()},
+            entity_records={"augment": {"2127": {
+                "slug": "forged-by-the-master",
+                "known": True,
+                "route_identifier": "forged-by-the-master",
+                "lifecycle": {"state": "active"},
+            }}},
+        )
+        self.assertEqual(projection["patches"][0]["sections"], [])
+
     def test_preview_projection_is_bounded_and_only_links_live_canonical_entities(self):
         archive = {
             "status": "fresh",

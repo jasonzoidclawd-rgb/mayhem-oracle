@@ -89,11 +89,18 @@ def _href(
     slug = str(event.get("slug") or "")
     canonical_id = str(event.get("canonical_id") or "")
     record = (entity_records or {}).get(entity_type, {}).get(canonical_id, {})
-    key = canonical_id if entity_type == "item" else str(record.get("slug") or slug)
-    if key not in known.get(entity_type, set()):
+    if "route_identifier" in record or "known" in record:
+        route_identifier = str(record.get("route_identifier") or "")
+        is_known = record.get("known") is True and bool(route_identifier)
+    else:
+        # Compatibility for older fixture records; generated projections
+        # always take the strict route contract above.
+        route_identifier = canonical_id if entity_type == "item" else str(record.get("slug") or slug)
+        is_known = route_identifier in known.get(entity_type, set())
+    if not is_known:
         return False, None
     route = {"champion": "champions", "item": "items", "augment": "augments"}.get(entity_type)
-    return (True, f"/{route}/{key}") if route else (False, None)
+    return (True, f"/{route}/{route_identifier}") if route else (False, None)
 
 
 def _event_to_change(
@@ -109,8 +116,12 @@ def _event_to_change(
     canonical_slug = str(record.get("slug") or event.get("slug") or "")
     target = {
         "type": entity_type,
+        "id": canonical_id,
         "canonicalId": canonical_id,
         "slug": canonical_slug,
+        "routeIdentifier": str(record.get("route_identifier") or ""),
+        "localizedName": names["en"],
+        "iconUrl": str(record.get("icon") or ""),
         "name": names["en"],
         "known": is_known,
         "names": {key: value for key, value in names.items() if key != "en" and value},
@@ -207,6 +218,17 @@ def build_patch_notes_projection(
         if isinstance(event, dict) and event.get("source_patch_label") == current_cycle
     ]
     current_events = [
+        event for event in current_events
+        if not (
+            event.get("change_kind") == "removed"
+            and (entity_records or {})
+            .get(str(event.get("entity_type") or ""), {})
+            .get(str(event.get("canonical_id") or ""), {})
+            .get("lifecycle", {})
+            .get("state") in {"active", "added"}
+        )
+    ]
+    current_events = [
         {
             **event,
             "landed_from_pbe": (
@@ -280,6 +302,10 @@ def build_preview_projection(
         is_known, href = _href(event, known, entity_records)
         projection["known"] = is_known
         projection["canonicalId"] = str(event.get("canonical_id") or "")
+        projection["id"] = projection["canonicalId"]
+        projection["routeIdentifier"] = str(record.get("route_identifier") or "")
+        projection["localizedName"] = str(record.get("names", {}).get("en") or event.get("names", {}).get("en") or "")
+        projection["iconUrl"] = str(record.get("icon") or "")
         if record.get("slug"):
             projection["slug"] = record["slug"]
         if record.get("icon"):

@@ -14,10 +14,10 @@ function fallbackGlyph(type: EntityRef["type"]): string {
 
 export function EntityIcon({ entity, variant = "standard" }: { entity: EntityRef; variant?: keyof typeof SIZE }) {
   const size = SIZE[variant];
-  if (entity.icon) {
+  if (entity.iconUrl) {
     return (
       <Image
-        src={entity.icon}
+        src={entity.iconUrl}
         alt=""
         aria-hidden="true"
         width={variant === "compact" ? 20 : variant === "hero" ? 80 : 28}
@@ -48,16 +48,37 @@ export function EntityLink({
   className?: string;
 }) {
   const size = SIZE[variant];
+  const classes = `inline-flex min-w-0 items-center ${size.gap} rounded ${size.text} text-[var(--color-text-primary)] ${
+    entity.known && entity.href ? "underline-offset-2 transition-colors hover:text-[var(--color-accent)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)]" : ""
+  } ${className}`;
+  const content = (
+    <>
+      <EntityIcon entity={entity} variant={variant} />
+      <span className="min-w-0 truncate">{entity.localizedName}</span>
+    </>
+  );
+  const label = `${entity.localizedName} (${entity.type})`;
+  if (!entity.known || !entity.href) {
+    return (
+      <span
+        aria-label={label}
+        data-entity-type={entity.type}
+        data-entity-id={entity.id}
+        className={classes}
+      >
+        {content}
+      </span>
+    );
+  }
   return (
     <Link
       href={entity.href}
-      aria-label={`${entity.name} (${entity.type})`}
+      aria-label={label}
       data-entity-type={entity.type}
-      data-entity-id={entity.canonicalId}
-      className={`inline-flex min-w-0 items-center ${size.gap} rounded ${size.text} text-[var(--color-text-primary)] underline-offset-2 transition-colors hover:text-[var(--color-accent)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)] ${className}`}
+      data-entity-id={entity.id}
+      className={classes}
     >
-      <EntityIcon entity={entity} variant={variant} />
-      <span className="min-w-0 truncate">{entity.name}</span>
+      {content}
     </Link>
   );
 }

@@ -58,9 +58,12 @@ function resolveRecord(
   return matches.length === 1 ? matches[0] : null;
 }
 
-export function entityHref(type: EntityType, record: Pick<EntityPresentationRecord, "slug" | "canonical_id">): string {
-  const identifier = record.slug || record.canonical_id;
-  return `/${ENTITY_ROUTES[type]}/${identifier}`;
+export function entityHref(
+  type: EntityType,
+  record: Pick<EntityPresentationRecord, "route_identifier" | "known">,
+): string | undefined {
+  if (record.known !== true || !record.route_identifier) return undefined;
+  return `/${ENTITY_ROUTES[type]}/${record.route_identifier}`;
 }
 
 export function resolveEntityRef(
@@ -71,12 +74,21 @@ export function resolveEntityRef(
 ): EntityRef | null {
   const record = resolveRecord(data, type, query);
   if (!record) return null;
+  const localizedName = localizedEntityName(record, locale);
+  const routeIdentifier = String(record.route_identifier || "");
+  const known = record.known === true && routeIdentifier.length > 0;
+  const href = known ? entityHref(type, record) : undefined;
   return {
     type,
+    id: record.canonical_id,
+    routeIdentifier,
+    localizedName,
+    iconUrl: record.icon || "",
+    known,
+    ...(href ? { href } : {}),
     canonicalId: record.canonical_id,
     slug: record.slug,
-    name: localizedEntityName(record, locale),
-    href: entityHref(type, record),
+    name: localizedName,
     icon: record.icon || undefined,
     lifecycle: record.lifecycle.state,
   };
