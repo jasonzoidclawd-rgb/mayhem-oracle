@@ -162,6 +162,35 @@ all five public keys (`en`, `zh-TW`, `zh-CN`, `ja`, `ko`) before publishing.
 This merge is presentation-only and must not copy snapshots, comparison state,
 or unrestricted PBE history into `public/data/`.
 
+### Mode-gated item recovery
+
+CommunityDragon's global item endpoint includes the Noxian Feats tier-3 boots
+even though they are not purchasable in ARAM: Mayhem. The authoritative marker
+is the raw `requiredBuffCurrencyName` value `Feats_NoxianBootPurchaseBuff`;
+item names, descriptions, and prose must not be used for this decision. The
+catalog acquisition predicate now rejects that marker, covering IDs `3168`
+(`Immortal Path`) and `3170`–`3175`. Existing generated internal catalogs do
+not retain the raw marker, so the public exporter also removes those known
+legacy IDs until the next complete acquisition replaces the internal file.
+
+The mode-gated rows may remain in normalized CDragon snapshots for source
+lineage, but they are source-only presentation records: they retain localized
+identity/icon metadata, serialize with `known: false` and an empty
+`route_identifier`, and never produce an item detail href. This keeps a PBE
+description change explainable without creating a soft-404 or presenting a
+Summoner's Rift item as a Mayhem route. Verify the recovery with:
+
+```bash
+python3 scripts/test_scrape_community_dragon.py
+python3 scripts/test_export_public_catalog.py
+python3 scripts/export_public_catalog.py
+npx vitest run src/lib/__tests__/entity-catalog.test.ts
+```
+
+If a future CDragon refresh adds another mode gate, add its exact raw marker to
+the adapter predicate and add a fixture before changing the public projection;
+do not expand an ID blacklist from display-name guesses.
+
 ## Operator workflow
 
 The daily `.github/workflows/update-data.yml` performs both lane promotions as

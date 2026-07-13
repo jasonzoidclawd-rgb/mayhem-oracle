@@ -360,10 +360,12 @@ def _record(
         # Regular item pages accept numeric IDs. Mayhem-exclusive rows carry
         # an explicit route identifier from the exporter because their static
         # pages accept the curated slug instead.
-        route_identifier = str(
-            route_catalog_row.get("_route_identifier")
-            or (route_catalog_row.get("id") if route_catalog_row.get("id") is not None else "")
-        ).strip()
+        if "_route_identifier" in route_catalog_row:
+            route_identifier = str(route_catalog_row.get("_route_identifier") or "").strip()
+        else:
+            route_identifier = str(
+                route_catalog_row.get("id") if route_catalog_row.get("id") is not None else ""
+            ).strip()
     else:
         # Champion and augment routes are generated from the public catalog;
         # a CDragon-only row (for example Locke) intentionally remains

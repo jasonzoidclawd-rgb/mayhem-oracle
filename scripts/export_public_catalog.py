@@ -11,6 +11,7 @@ import shutil
 from pathlib import Path
 
 from assemble_augments import preferred_icon_url
+from cdragon_entity_adapters import is_non_mayhem_item_id
 from data_paths import INTERNAL_DATA_DIR, ROOT
 from entity_presentation_projection import MAYHEM_CANONICAL_ITEM_IDS, build_entity_presentation
 from patch_event_projection import build_patch_notes_projection, build_preview_projection
@@ -196,6 +197,14 @@ def enrich_public_items(items: dict) -> dict:
     internal artifacts safe until the next full refresh.
     """
     enriched = json.loads(json.dumps(items))
+    enriched["items"] = [
+        row for row in enriched.get("items", [])
+        if not (
+            isinstance(row, dict)
+            and row.get("id") is not None
+            and is_non_mayhem_item_id(row["id"])
+        )
+    ]
     for row in enriched.get("mayhemExclusive", []):
         if not isinstance(row, dict) or row.get("id") is not None:
             continue
@@ -305,23 +314,29 @@ def export_public_catalog(
         for entity_type in ("augment", "champion", "item")
     }
     projected_augments = project_augment_icons(read_json(internal_dir / "augments.json"))
+    public_item_rows = [
+        {**row, "_route_identifier": str(row["id"])}
+        for row in parsed_items.get("items", [])
+        if isinstance(row, dict) and row.get("id") is not None
+    ]
+    public_item_rows.extend(
+        {**row, "_route_identifier": str(row["slug"])}
+        for row in parsed_items.get("mayhemExclusive", [])
+        if isinstance(row, dict) and row.get("slug")
+    )
+    # Preserve localized identity/icon metadata for a source row that is known
+    # to CDragon but deliberately has no Mayhem detail route. This lets the
+    # bounded PBE projection explain the change without creating a soft 404.
+    presentation_item_rows = [*public_item_rows]
+    presentation_item_rows.extend(
+        {**row, "_route_identifier": ""}
+        for row in original_items.get("items", [])
+        if isinstance(row, dict) and is_non_mayhem_item_id(row.get("id"))
+    )
     catalogs = {
         "champion": {"rows": read_json(internal_dir / "champions.json").get("champions", [])},
         "augment": {"rows": projected_augments.get("augments", [])},
-        "item": {
-            "rows": [
-                *[
-                    {**row, "_route_identifier": str(row["id"])}
-                    for row in parsed_items.get("items", [])
-                    if isinstance(row, dict) and row.get("id") is not None
-                ],
-                *[
-                    {**row, "_route_identifier": str(row["slug"])}
-                    for row in parsed_items.get("mayhemExclusive", [])
-                    if isinstance(row, dict) and row.get("slug")
-                ],
-            ],
-        },
+        "item": {"rows": presentation_item_rows},
     }
     entity_presentation = build_entity_presentation(
         snapshots=snapshots,

@@ -9454,27 +9454,6 @@
       "name_ko": "헤르메스의 발걸음"
     },
     {
-      "id": 3173,
-      "name": "Chainlaced Crushers",
-      "cost": 1250,
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/boots_tier3_mercury_64.png",
-      "categories": [
-        "SpellBlock",
-        "Boots",
-        "Tenacity",
-        "MagicResist"
-      ],
-      "description": "30 Magic Resist 45 Move Speed 30% TenacityNoxian Persistence  (0s)After taking magic damage from a Champion, gain a  magic shield for 5 seconds.",
-      "tier": "boots",
-      "wikiPassives": [],
-      "wikiNotes": [],
-      "recipe": [],
-      "name_zh_TW": "鎖鍊軍靴",
-      "name_zh_CN": "带链碾碎者",
-      "name_ja": "チェインレースド クラッシャー",
-      "name_ko": "사슬끈 분쇄자"
-    },
-    {
       "id": 3211,
       "name": "Spectre's Cowl",
       "cost": 1250,
@@ -9615,25 +9594,6 @@
       "name_zh_CN": "狂热",
       "name_ja": "ジール",
       "name_ko": "열정의 검"
-    },
-    {
-      "id": 3174,
-      "name": "Armored Advance",
-      "cost": 1200,
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/boots_tier3_platedsteelcaps_64.png",
-      "categories": [
-        "Armor",
-        "Boots"
-      ],
-      "description": "35 Armor 45 Move SpeedPlatingReduces incoming damage from Attacks by 10%.Noxian Endurance  (0s)After taking physical damage from a Champion, gain a  physical shield for 5 seconds.",
-      "tier": "boots",
-      "wikiPassives": [],
-      "wikiNotes": [],
-      "recipe": [],
-      "name_zh_TW": "裝甲戰靴",
-      "name_zh_CN": "装甲战靴",
-      "name_ja": "装甲強化の進撃",
-      "name_ko": "무장 진격"
     },
     {
       "id": 3802,
@@ -9810,45 +9770,6 @@
       "name_zh_CN": "海克斯科技发电机",
       "name_ja": "ヘクステック オルタネーター",
       "name_ko": "마법공학 교류 발전기"
-    },
-    {
-      "id": 3172,
-      "name": "Gunmetal Greaves",
-      "cost": 1100,
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/boots_tier3_berserkersgreaves_64.png",
-      "categories": [
-        "AttackSpeed",
-        "LifeSteal",
-        "NonbootsMovement"
-      ],
-      "description": "40% Attack Speed 45 Move Speed 5% Life StealNoxian GaitAttacks against Champions grant Move Speed  On-Hit decaying over 2 seconds.",
-      "tier": "boots",
-      "wikiPassives": [],
-      "wikiNotes": [],
-      "recipe": [],
-      "name_zh_TW": "槍銅護脛",
-      "name_zh_CN": "炮铜胫甲",
-      "name_ja": "ガンメタル ブーツ",
-      "name_ko": "건메탈 군화"
-    },
-    {
-      "id": 3175,
-      "name": "Spellslinger's Shoes",
-      "cost": 1100,
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/boots_tier3_sorceror_64.png",
-      "categories": [
-        "Boots",
-        "MagicPenetration"
-      ],
-      "description": "18 Magic Penetration 8% Magic Penetration 45 Move Speed",
-      "tier": "boots",
-      "wikiPassives": [],
-      "wikiNotes": [],
-      "recipe": [],
-      "name_zh_TW": "魔法使之鞋",
-      "name_zh_CN": "灵能使之靴",
-      "name_ja": "連呪使いのブーツ",
-      "name_ko": "주문투척자의 신발"
     },
     {
       "id": 4630,
@@ -10114,44 +10035,6 @@
       "name_zh_CN": "锯齿短匕",
       "name_ja": "セレイテッド ダーク",
       "name_ko": "톱날 단검"
-    },
-    {
-      "id": 3168,
-      "name": "Immortal Path",
-      "cost": 1000,
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3168_immortalcreed.png",
-      "categories": [
-        "LifeSteal",
-        "SpellVamp",
-        "Boots"
-      ],
-      "description": "45 Move Speed 4% OmnivampSlayGain 0.6% Omnivamp on Champion takedown, stacking up to 10 times.Now and ForeverWhile above half Health, deal 5% increased damage. While below half Health, gain 15% increased healing, shielding, and regeneration.",
-      "tier": "boots",
-      "wikiPassives": [],
-      "wikiNotes": [],
-      "recipe": [],
-      "name_zh_TW": "不朽之道",
-      "name_zh_CN": "不朽之路",
-      "name_ja": "不滅の道",
-      "name_ko": "불멸의 길"
-    },
-    {
-      "id": 3170,
-      "name": "Swiftmarch",
-      "cost": 1000,
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/boots_tier3_swiftness_64.png",
-      "categories": [
-        "Boots"
-      ],
-      "description": "65 Move SpeedFleetfootedReduce the effectiveness of Slows by 40%.Noxian FervorGain 5% of your Move Speed as Adaptive Force.",
-      "tier": "boots",
-      "wikiPassives": [],
-      "wikiNotes": [],
-      "recipe": [],
-      "name_zh_TW": "快速行軍",
-      "name_zh_CN": "迅速进军",
-      "name_ja": "スイフトマーチ",
-      "name_ko": "신속행진"
     },
     {
       "id": 223009,
@@ -10526,25 +10409,6 @@
       "name_zh_CN": "明朗之靴",
       "name_ja": "アイオニア ブーツ",
       "name_ko": "명석함의 아이오니아 장화"
-    },
-    {
-      "id": 3171,
-      "name": "Crimson Lucidity",
-      "cost": 900,
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/boots_tier3_ionianboots_64.png",
-      "categories": [
-        "CooldownReduction",
-        "Boots"
-      ],
-      "description": "20 Ability Haste 45 Move SpeedIonian InsightGain 20 Summoner Spell Haste.Noxian HasteEmpowering or protecting allies with abilities, dealing damage to enemy Champions with abilities, or casting a Summoner Spell grants  Move Speed for 4 seconds.Noxian Haste can only be triggered once per Ability cast.",
-      "tier": "boots",
-      "wikiPassives": [],
-      "wikiNotes": [],
-      "recipe": [],
-      "name_zh_TW": "血色法靴",
-      "name_zh_CN": "猩红明朗",
-      "name_ja": "真紅のアイオニア ブーツ",
-      "name_ko": "핏빛 명석함"
     },
     {
       "id": 4642,

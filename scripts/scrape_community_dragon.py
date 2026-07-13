@@ -21,6 +21,7 @@ from urllib.request import urlopen, Request
 from urllib.error import URLError
 
 from data_paths import INTERNAL_DATA_DIR
+from cdragon_entity_adapters import is_mayhem_item_row
 from entity_presentation_projection import MAYHEM_CANONICAL_ITEM_IDS
 
 CDN_BASE = (
@@ -378,6 +379,8 @@ def build_items() -> tuple[list[dict], list[dict]]:
 
     catalog: list[dict] = []
     for item in raw_items:
+        if not is_mayhem_item_row(item):
+            continue  # mode-gated items that cannot be purchased in Mayhem
         name = item.get("name", "").strip()
         if not name:
             continue

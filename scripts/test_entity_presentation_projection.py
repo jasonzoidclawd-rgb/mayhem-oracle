@@ -53,6 +53,35 @@ class EntityPresentationProjectionTests(unittest.TestCase):
         self.assertEqual(row["slug"], "rite-of-ruin")
         self.assertEqual(row["names"]["zh-TW"], "殞落之祭")
 
+    def test_explicitly_unroutable_item_keeps_safe_localized_metadata(self):
+        latest = {
+            "champion": snapshot("champion", "latest", "16.13.2", "26.13", []),
+            "augment": snapshot("augment", "latest", "16.13.2", "26.13", []),
+            "item": snapshot("item", "latest", "16.13.2", "26.13", [
+                entity("3168", "immortal-path", {"cost": 1000}),
+            ]),
+        }
+        result = build_entity_presentation(
+            snapshots=latest,
+            catalogs={
+                "champion": {"rows": []},
+                "augment": {"rows": []},
+                "item": {"rows": [{
+                    "id": 3168,
+                    "name": "Immortal Path",
+                    "name_zh_TW": "不朽之道",
+                    "icon": "immortal-path.png",
+                    "_route_identifier": "",
+                }]},
+            },
+        )
+
+        row = next(row for row in result["entities"] if row["canonical_id"] == "3168")
+        self.assertFalse(row["known"])
+        self.assertEqual(row["route_identifier"], "")
+        self.assertEqual(row["names"]["zh-TW"], "不朽之道")
+        self.assertEqual(row["icon"], "immortal-path.png")
+
     def test_all_entity_types_project_canonical_ids_and_safe_stats(self):
         latest = {
             "champion": snapshot("champion", "latest", "16.13.2", "26.13", [

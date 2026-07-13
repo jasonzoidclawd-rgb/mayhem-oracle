@@ -62,6 +62,21 @@ class ExportPublicCatalogTests(unittest.TestCase):
         self.assertTrue(result["augments"][0]["icon"].endswith("buffbuddies_small.png"))
         self.assertTrue(source["augments"][0]["icon"].endswith("buffbuddies_large.png"))
 
+    def test_mode_gated_noxian_boots_are_removed_from_public_mayhem_catalog(self):
+        source = {
+            "mayhemExclusive": [],
+            "items": [
+                {"id": 3168, "name": "Immortal Path"},
+                {"id": 3175, "name": "Spellslinger's Shoes"},
+                {"id": 1001, "name": "Boots"},
+            ],
+        }
+
+        result = enrich_public_items(source)
+
+        self.assertEqual([row["id"] for row in result["items"]], [1001])
+        self.assertEqual([row["id"] for row in source["items"]], [3168, 3175, 1001])
+
 
 if __name__ == "__main__":
     unittest.main()

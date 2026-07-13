@@ -213,14 +213,13 @@
       "source_patch_label": "pbe-cycle-16.14.7942794+branch.releases-16-14.content.release",
       "landed": false,
       "is_hotfix": false,
-      "known": true,
+      "known": false,
       "canonicalId": "3168",
       "id": "3168",
-      "routeIdentifier": "3168",
+      "routeIdentifier": "",
       "localizedName": "Immortal Path",
       "iconUrl": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3168_immortalcreed.png",
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3168_immortalcreed.png",
-      "href": "/items/3168"
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3168_immortalcreed.png"
     },
     {
       "entity_type": "item",

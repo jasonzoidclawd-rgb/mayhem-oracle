@@ -51,6 +51,18 @@ describe("entity presentation catalog", () => {
     expect(atmas).toMatchObject({ routeIdentifier: "atmas-reckoning", href: "/items/atmas-reckoning", known: true });
   });
 
+  test("does not route Noxian Feats boots as Mayhem items", () => {
+    const immortalPath = resolveEntityRef(data, "item", { canonicalId: "3168" }, "zh-TW");
+    expect(immortalPath).toMatchObject({
+      id: "3168",
+      name: "不朽之道",
+      localizedName: "不朽之道",
+      known: false,
+      routeIdentifier: "",
+    });
+    expect(immortalPath?.href).toBeUndefined();
+  });
+
   test("keeps Locke unlinked while preserving the CDragon identity", () => {
     const locke = resolveEntityRef(data, "champion", { canonicalId: "805" }, "en");
     expect(locke).toMatchObject({ id: "805", slug: "locke", known: false, routeIdentifier: "" });

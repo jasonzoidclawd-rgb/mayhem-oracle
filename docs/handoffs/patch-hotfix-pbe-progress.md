@@ -227,3 +227,28 @@ the gate; no architecture or disclosure-boundary requirement is being waived.
   tabs (7 Mayhem + 249 All Items, no duplicate names or IDs), Command-K
   “Infinity Edge” (one result), Traditional Chinese item metadata/canonical,
   localized PBE cards, and zero broken entity images or app console errors.
+
+## Mode-gated item correction (2026-07-13)
+
+- `/zh-TW/items/3168` exposed a parser boundary error, not a missing route
+  translation. The raw CDragon row for Immortal Path carries
+  `requiredBuffCurrencyName: Feats_NoxianBootPurchaseBuff`, which gates the
+  Noxian Feats tier-3 boot shop and is not an ARAM: Mayhem availability signal.
+  The old `build_items()` loop checked `inStore`, cost, and champion gates but
+  ignored this field, so it admitted IDs `3168` and `3170`–`3175` to the public
+  catalog.
+- `is_mayhem_item_row()` is now the acquisition predicate and rejects the
+  exact CDragon mode marker. `enrich_public_items()` also removes the seven
+  IDs from older generated internal catalogs that predate the marker, without
+  mutating its input. This is a compatibility projection only; future refreshes
+  remove the rows at acquisition.
+- The generated public item catalog changed from `461 + 7` regular/Mayhem rows
+  to `454 + 7`, with no Noxian Feats boot IDs. `entity-presentation.json`
+  retains Immortal Path's localized name and icon as a source-only record but
+  sets `known: false`, `route_identifier: ""`, and no href. The PBE event is
+  therefore display-only and unlinked; it cannot create `/items/3168`.
+- Regression coverage now proves the raw marker is filtered while ordinary
+  items remain, the compatibility export removes `3168`/`3175` without
+  mutating source input, and the localized EntityRef is unlinked in all route
+  guards. The expected post-build behavior is a normal static 404 for direct
+  `/zh-TW/items/3168`, not a soft-404 detail page or a Mayhem index card.
