@@ -10,6 +10,7 @@ import re
 import shutil
 from pathlib import Path
 
+from assemble_augments import preferred_icon_url
 from data_paths import INTERNAL_DATA_DIR, ROOT
 from entity_presentation_projection import MAYHEM_CANONICAL_ITEM_IDS, build_entity_presentation
 from patch_event_projection import build_patch_notes_projection, build_preview_projection
@@ -90,8 +91,20 @@ def add_public_localized_augment_descriptions(augment: dict) -> None:
             augment[public_field] = description
 
 
+def project_augment_icons(augments: dict) -> dict:
+    """Use the valid CDragon small asset without mutating internal input."""
+    projected = json.loads(json.dumps(augments))
+    for augment in projected.get("augments", []):
+        if not isinstance(augment, dict):
+            continue
+        corrected = preferred_icon_url(augment.get("cdragonIcon"))
+        if corrected:
+            augment["icon"] = corrected
+    return projected
+
+
 def build_public_augments(internal_dir: Path, forbidden: set[str]) -> dict:
-    augments = read_json(internal_dir / "augments.json")
+    augments = project_augment_icons(read_json(internal_dir / "augments.json"))
     pool_rules = read_json(internal_dir / "pool-rules.json")
     lifecycle = pool_rules.get("lifecycle", {}) if isinstance(pool_rules, dict) else {}
     removed_patches = lifecycle.get("removed", {}) if isinstance(lifecycle, dict) else {}
@@ -172,7 +185,16 @@ def build_live_entity_lookup(internal_dir: Path) -> dict[str, set[str]]:
 
 
 def enrich_public_items(items: dict) -> dict:
-    """Attach stable CDragon IDs to the legacy Mayhem-only item rows."""
+    """Attach IDs and remove regular rows shadowed by Mayhem variants.
+
+    Older internal snapshots contain both the regular CDragon row and the
+    curated Mayhem row for seven canonical IDs. The regular row is not a
+    second entity: it is the non-Mayhem representation of the same ID. Keep
+    the curated Mayhem row and remove the shadowed regular row at the explicit
+    public projection boundary. The scraper now applies the same rule at
+    acquisition time; this defensive projection keeps previously generated
+    internal artifacts safe until the next full refresh.
+    """
     enriched = json.loads(json.dumps(items))
     for row in enriched.get("mayhemExclusive", []):
         if not isinstance(row, dict) or row.get("id") is not None:
@@ -180,6 +202,42 @@ def enrich_public_items(items: dict) -> dict:
         canonical_id = MAYHEM_CANONICAL_ITEM_IDS.get(str(row.get("slug") or ""))
         if canonical_id:
             row["id"] = int(canonical_id)
+
+    mayhem_ids = {
+        str(row.get("id"))
+        for row in enriched.get("mayhemExclusive", [])
+        if isinstance(row, dict) and row.get("id") is not None
+    }
+    regular_by_id = {
+        str(row.get("id")): row
+        for row in enriched.get("items", [])
+        if isinstance(row, dict) and row.get("id") is not None
+    }
+    for row in enriched.get("mayhemExclusive", []):
+        if not isinstance(row, dict) or row.get("id") is None:
+            continue
+        shadow = regular_by_id.get(str(row["id"]))
+        if not shadow:
+            continue
+        # The old regular row is removed, but its Data Dragon locale fields
+        # remain valid presentation metadata for the same canonical entity.
+        for key, value in shadow.items():
+            if key.startswith("name_") and not row.get(key) and value:
+                row[key] = value
+    regular_rows = []
+    seen_regular_ids: set[str] = set()
+    for row in enriched.get("items", []):
+        if not isinstance(row, dict):
+            regular_rows.append(row)
+            continue
+        canonical_id = row.get("id")
+        if canonical_id is not None:
+            key = str(canonical_id)
+            if key in mayhem_ids or key in seen_regular_ids:
+                continue
+            seen_regular_ids.add(key)
+        regular_rows.append(row)
+    enriched["items"] = regular_rows
     return enriched
 
 
@@ -246,9 +304,10 @@ def export_public_catalog(
         entity_type: read_json(internal_dir / f"cdragon-{entity_type}-latest.json")
         for entity_type in ("augment", "champion", "item")
     }
+    projected_augments = project_augment_icons(read_json(internal_dir / "augments.json"))
     catalogs = {
         "champion": {"rows": read_json(internal_dir / "champions.json").get("champions", [])},
-        "augment": {"rows": read_json(internal_dir / "augments.json").get("augments", [])},
+        "augment": {"rows": projected_augments.get("augments", [])},
         "item": {
             "rows": [
                 *[

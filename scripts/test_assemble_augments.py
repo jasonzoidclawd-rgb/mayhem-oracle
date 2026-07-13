@@ -5,6 +5,7 @@ import unittest
 from assemble_augments import (
     assemble_catalog,
     lifecycle_for_availability,
+    preferred_icon_url,
     resolve_availability,
 )
 
@@ -37,6 +38,23 @@ def base_row(augment_id: str, name: str = "Test Augment") -> dict:
 
 
 class AvailabilityResolverTests(unittest.TestCase):
+    def test_preferred_icon_uses_cdragon_small_variant_before_stale_large_variant(self):
+        self.assertEqual(
+            preferred_icon_url(
+                {
+                    "large": "assets/ux/cherry/augments/icons/buffbuddies_large.png",
+                    "small": "assets/ux/cherry/augments/icons/buffbuddies_small.png",
+                }
+            ),
+            "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/buffbuddies_small.png",
+        )
+
+    def test_preferred_icon_falls_back_when_small_variant_is_absent(self):
+        self.assertEqual(
+            preferred_icon_url({"large": "assets/ux/cherry/augments/icons/test_large.png"}),
+            "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/test_large.png",
+        )
+
     def test_legacy_only_resolves_unverified_legacy_non_live(self):
         availability = resolve_availability(
             augment_id=None,

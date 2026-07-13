@@ -43,7 +43,7 @@
         "zh_cn": "物理转魔法",
         "zh_tw": "靈活轉換"
       },
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/adapt_large.png",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/adapt_small.png",
       "description": "Convert all of your bonus attack damage into ability power at a rate of 1 ability power per 0.6 bonus attack damage. Additionally, increase your ability power by 15%.",
       "lifecycle": {
         "state": "active",
@@ -78,7 +78,7 @@
         "zh_cn": "全心为你",
         "zh_tw": "全部都給你"
       },
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/allforyou_large.png",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/allforyou_small.png",
       "description": "Your heals and shields on allied champions are increased in effectiveness by 30%.",
       "lifecycle": {
         "state": "active",
@@ -113,7 +113,7 @@
         "zh_cn": "尖端发明家",
         "zh_tw": "頂尖發明家"
       },
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/apexinventor_large.png",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/apexinventor_small.png",
       "description": "Grants 100 item haste, which is equivalent to 50% cooldown reduction for items.",
       "lifecycle": {
         "state": "active",
@@ -183,7 +183,7 @@
         "zh_cn": "回归基本功",
         "zh_tw": "基本功夫"
       },
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/backtobasics_large.png",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/backtobasics_small.png",
       "description": "Your champion abilities deal 35 increased healing and shielding from all sources, but your ultimate ability is permanently sealed.",
       "lifecycle": {
         "state": "active",
@@ -242,7 +242,7 @@
         "zh_cn": "超强大脑",
         "zh_tw": "超強大腦"
       },
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/bigbrain_large.png",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/bigbrain_small.png",
       "description": "Gain a shield that absorbs damage equal to 300% AP and lasts until destroyed. Shield is replenished upon respawn and every 70 seconds.",
       "lifecycle": {
         "state": "active",
@@ -277,7 +277,7 @@
         "zh_cn": "利刃华尔兹",
         "zh_tw": "劍舞之心"
       },
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/bladewaltz_large.png",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/bladewaltz_small.png",
       "description": "Replace a summoner spell with Blade Waltz. Blade Waltz: Blink to the target enemy champion. You then blink to the nearest other enemy champion every 0.25 seconds over the next 1.75 seconds, blinking up to 7 additional times. The last blink targets the primary target. Each time you blink to an enemy, deal 30 – 150 (based on level) (+ 10 AP) physical damage to them and apply on-hit effects at 50 bonus AD) (+ 36% AP) (45 second cooldown). While Blade Waltz is active, you are untargetable and unable to act. This effect will end prematurely if there are no longer any nearby valid targets to blink to. An enemy can be blinked to more than once if there are no other valid targets in range.",
       "lifecycle": {
         "state": "active",
@@ -312,7 +312,7 @@
         "zh_cn": "大力",
         "zh_tw": "蠻力重擊"
       },
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/bluntforce_large.png",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/bluntforce_small.png",
       "description": "Increases attack damage by 20%.",
       "lifecycle": {
         "state": "active",
@@ -347,7 +347,7 @@
         "zh_cn": "面包和黄油",
         "zh_tw": "土司和奶油"
       },
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/breadandbutter_large.png",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/breadandbutter_small.png",
       "description": "Your champion's first basic ability (Q) gains 100 ability haste.",
       "lifecycle": {
         "state": "active",
@@ -382,7 +382,7 @@
         "zh_cn": "面包和奶酪",
         "zh_tw": "土司和起司"
       },
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/breadandcheese_large.png",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/breadandcheese_small.png",
       "description": "Your champion's third basic ability (E) gains 100 ability haste.",
       "lifecycle": {
         "state": "active",
@@ -417,7 +417,7 @@
         "zh_cn": "面包和果酱",
         "zh_tw": "土司和果醬"
       },
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/breadandjam_large.png",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/breadandjam_small.png",
       "description": "Your champion's second basic ability (W) gains 100 ability haste.",
       "lifecycle": {
         "state": "active",
@@ -452,7 +452,7 @@
         "zh_cn": "霸符兄弟",
         "zh_tw": "增益麻吉"
       },
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/buffbuddies_large.png",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/buffbuddies_small.png",
       "description": "",
       "lifecycle": {
         "state": "active",
@@ -487,7 +487,7 @@
         "zh_cn": "你摸不到",
         "zh_tw": "無法掌握"
       },
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/canttouchthis_large.png",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/canttouchthis_small.png",
       "description": "Casting your ultimate grants you invulnerability for 2 seconds (8 second cooldown).",
       "lifecycle": {
         "state": "active",
@@ -522,7 +522,7 @@
         "zh_cn": "星界躯体",
         "zh_tw": "天界之身"
       },
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/celestialbody_large.png",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/celestialbody_small.png",
       "description": "Gain 1500 bonus health, but reduce your damage output by 10%.",
       "lifecycle": {
         "state": "active",
@@ -557,7 +557,7 @@
         "zh_cn": "地狱三头犬",
         "zh_tw": "地獄三頭犬"
       },
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/cerberus_large.png",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/cerberus_small.png",
       "description": "",
       "lifecycle": {
         "state": "active",
@@ -592,7 +592,7 @@
         "zh_cn": "死亡之环",
         "zh_tw": "死亡循環"
       },
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/circleofdeath_large.png",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/circleofdeath_small.png",
       "description": "Healing and health regeneration you do causes you to deal 70% of that value in magic damage to the nearest enemy champion within 1000 units.",
       "lifecycle": {
         "state": "active",
@@ -627,7 +627,7 @@
         "zh_cn": "小丑学院",
         "zh_tw": "小丑學院"
       },
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/clowncollege_large.png",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/clowncollege_small.png",
       "description": "Gain Shaco's Backstab, Deceive and Hallucinate's explosion. Replace a summoner spell with Deceive. Passive - Backstab: Your basic attacks deal 20 – 35 (based on level) (+ 50 AP) bonus physical damage on-hit when hitting an enemy from behind. Active - Deceive: Become invisible for up to 3 seconds and blink to the target location within 400 units after a 0.125-second delay. Your next basic attack while in stealth deals 100 (+ 150 AP) bonus physical damage, increased to「 155 (+ 232.5 AP) bonus physical damage 」「 155 of target's maximum health to enemies within the area. Additionally, you deploy a box at the location of your death that instantly fears nearby enemies for 1 second. This box does not attack but lasts for 3 seconds.",
       "lifecycle": {
         "state": "active",
@@ -662,7 +662,7 @@
         "zh_cn": "巨像的勇气",
         "zh_tw": "巨像之勇氣"
       },
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/courageofthecolossus_large.png",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/courageofthecolossus_small.png",
       "description": "Immobilizing or grounding an enemy champion grants a shield for 3 seconds that absorbs 150 – 450 (based on level) (+ 4% maximum health) damage (5 second cooldown per cast instance). Shields can stack between multiple triggers of this effect, though not refreshing the duration of previous shields.",
       "lifecycle": {
         "state": "active",
@@ -732,7 +732,7 @@
         "zh_cn": "会心治疗",
         "zh_tw": "暴擊治療"
       },
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/criticalhealing_large.png",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/criticalhealing_small.png",
       "description": "Your heals and shields now have a chance equal to your critical strike chance to increase in effectiveness by 40 critical strike chance.",
       "lifecycle": {
         "state": "active",
@@ -802,7 +802,7 @@
         "zh_cn": "全凭身法",
         "zh_tw": "衝鋒"
       },
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/dashing_large.png",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/dashing_small.png",
       "description": "Abilities with dashes or blinks gain 175 ability haste. On Kalista, this augment instead grants her 125% bonus attack speed.[1]",
       "lifecycle": {
         "state": "active",
@@ -837,7 +837,7 @@
         "zh_cn": "黎明使者的坚决",
         "zh_tw": "黎明使者之決意"
       },
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/dawnbringersresolve_large.png",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/dawnbringersresolve_small.png",
       "description": "Upon dropping below 50 maximum health over 3 seconds (45 second cooldown, reset upon death).",
       "lifecycle": {
         "state": "active",
@@ -872,7 +872,7 @@
         "zh_cn": "灵巧",
         "zh_tw": "手腳麻利"
       },
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/deft_large.png",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/deft_small.png",
       "description": "Grants 60% bonus attack speed.",
       "lifecycle": {
         "state": "active",
@@ -907,7 +907,7 @@
         "zh_cn": "魔鬼之舞",
         "zh_tw": "不死魔舞"
       },
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/demonsdance_large.png",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/demonsdance_small.png",
       "description": "",
       "lifecycle": {
         "state": "active",
@@ -942,7 +942,7 @@
         "zh_cn": "俯冲轰炸",
         "zh_tw": "自爆炸彈客"
       },
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/divebomber_large.png",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/divebomber_small.png",
       "description": "Upon death, you explode to deal true damage equal to 20% of the target's maximum health to enemies within 500 units.",
       "lifecycle": {
         "state": "active",
@@ -1012,7 +1012,7 @@
         "zh_cn": "神圣干预",
         "zh_tw": "聖光顯靈"
       },
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/slowactingpainkillers_large.png",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/slowactingpainkillers_small.png",
       "description": "Automatically cast Taric's Cosmic Radiance, calling down a protective star upon you that descends over 2.5 seconds. Afterwards, you and all allied champions within 400 units become invulnerable for 2.5 seconds (35 second cooldown).",
       "lifecycle": {
         "state": "active",
@@ -1047,7 +1047,7 @@
         "zh_cn": "唯快不破",
         "zh_tw": "別眨眼"
       },
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/dontblink_large.png",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/dontblink_small.png",
       "description": "Deal 1% increased damage per 10 movement speed you have more than the target.",
       "lifecycle": {
         "state": "active",
@@ -1117,7 +1117,7 @@
         "zh_cn": "亮出你的剑",
         "zh_tw": "拔劍吧"
       },
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/drawyoursword_large.png",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/drawyoursword_small.png",
       "description": "Become melee, modifying your attack range to 200 (+ 100 bonus attack damage, 20 bonus health, 20 life steal. These bonuses are increased by 0 (based on champion's default attack range).",
       "lifecycle": {
         "state": "active",
@@ -1222,7 +1222,7 @@
         "zh_cn": "双刀流",
         "zh_tw": "雙刀流"
       },
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/dualwield_large.png",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/dualwield_small.png",
       "description": "Your basic attacks launch a bolt at the target that fires after a 0.225-second delay on-attack, deals 40 effectiveness. Additionally, increase your total attack speed by 10%.",
       "lifecycle": {
         "state": "active",
@@ -1257,7 +1257,7 @@
         "zh_cn": "大地苏醒",
         "zh_tw": "大地覺醒"
       },
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/earthwake_large.png",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/earthwake_small.png",
       "description": "Dashing or blinking causes you to leave behind a trail from the location you moved to your destination that detonates after 0.75 seconds in a 300 radius, dealing 70 – 210 (based on level) (+ 125 AP) physical damage per explosion to enemies hit, reduced to 70% against minions. Enemies can be affected only once every second from all cast instances, and the effect is not triggered if you move beyond 2000 units with the dash or blink.",
       "lifecycle": {
         "state": "active",
@@ -1362,7 +1362,7 @@
         "zh_cn": "侵蚀",
         "zh_tw": "侵蝕裝甲"
       },
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/erosion_large.png",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/erosion_small.png",
       "description": "Each instance of damage dealt to an enemy reduces their armor and magic resistance by 1.5 resistances reduction.",
       "lifecycle": {
         "state": "active",
@@ -1397,7 +1397,7 @@
         "zh_cn": "虚幻武器",
         "zh_tw": "幻影武器"
       },
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/etherealweapon_large.png",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/etherealweapon_small.png",
       "description": "Your abilities apply on-hit effects (1 second cooldown per target).",
       "lifecycle": {
         "state": "active",
@@ -1432,7 +1432,7 @@
         "zh_cn": "尤里卡",
         "zh_tw": "靈光一閃"
       },
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/eureka_large.png",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/eureka_small.png",
       "description": "Gain ability haste equal to 30% AP.",
       "lifecycle": {
         "state": "active",
@@ -1467,7 +1467,7 @@
         "zh_cn": "裁决使",
         "zh_tw": "處刑者"
       },
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/executioner_large.png",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/executioner_small.png",
       "description": "",
       "lifecycle": {
         "state": "active",
@@ -1502,7 +1502,7 @@
         "zh_cn": "连拨击锤",
         "zh_tw": "旋風鎚"
       },
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/fanthehammer_large.png",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/fanthehammer_small.png",
       "description": "Your next basic attack against an enemy champion in each cardinal direction within 750 range additionally on-attack fires 5 missiles at the target that each deal 8 – 51 (based on level) (+ 14 bonus AD) physical damage (5 second cooldown per direction). Missiles' damage is increased by 0 (based on distance travelled). Each missile can critically strike for (200 ) damage and applies on-hit effects at 20% effectiveness.",
       "lifecycle": {
         "state": "active",
@@ -1537,7 +1537,7 @@
         "zh_cn": "感受燃烧",
         "zh_tw": "燒起來吧"
       },
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/feeltheburn_large.png",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/feeltheburn_small.png",
       "description": "",
       "lifecycle": {
         "state": "active",
@@ -1572,7 +1572,7 @@
         "zh_cn": "精怪魔法",
         "zh_tw": "妖精魔法"
       },
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/feymagic_large.png",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/feymagic_small.png",
       "description": "Damaging enemies with your ultimate ability polymorphs them into harmless critters for 2 seconds, during which their base movement speed is reduced by 60, and disarms them for the same duration (15 second cooldown per target).",
       "lifecycle": {
         "state": "active",
@@ -1607,7 +1607,7 @@
         "zh_cn": "火上浇油",
         "zh_tw": "煽風點火"
       },
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/firebrand_large.png",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/firebrand_small.png",
       "description": "Basic attacks apply a Burn for 5 seconds that deals bonus magic damage equal to「 0.4 of the target's maximum health over the duration. 」This Burn stacks infinitely and refreshes with each application.",
       "lifecycle": {
         "state": "active",
@@ -1642,7 +1642,7 @@
         "zh_cn": "火狐",
         "zh_tw": "火狐"
       },
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/firfox_large.png",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/firfox_small.png",
       "description": "Automatically cast a modified version of Ahri's Fox-Fire, gaining 25 bonus AD (+ 25 bonus AD (+ 7.5 of the original damage 」for enemies hit by subsequent flames from the same cast (7 second cooldown).",
       "lifecycle": {
         "state": "active",
@@ -1677,7 +1677,7 @@
         "zh_cn": "急救用具",
         "zh_tw": "急救箱"
       },
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/firstaidkit_large.png",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/firstaidkit_small.png",
       "description": "Grants 20% heal and shield power.",
       "lifecycle": {
         "state": "active",
@@ -1747,7 +1747,7 @@
         "zh_cn": "闪现向前",
         "zh_tw": "閃光俠"
       },
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/flashy_large.png",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/flashy_small.png",
       "description": "Your Flash now has 3 charges with a 2-second cooldown between casts (120 seconds recharge time for all 3 charges). If Flash is not equipped, you will be prompted to replace one of your summoner spells with Flash.",
       "lifecycle": {
         "state": "active",
@@ -1782,7 +1782,7 @@
         "zh_cn": "有始有终",
         "zh_tw": "自始至終"
       },
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/frombeginningtoend_large.png",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/frombeginningtoend_small.png",
       "description": "Gain the Dark Harvest and First Strike keystone runes. Dark Harvest Base damage changed to 50 – 100 (based on level). Damage per soul changed to 20. Bonus AD ratio changed to 35 AP. Gain 8 bonus souls for selecting this augment as not your first augment. First Strike Base gold increased to 20 from 15 (ARAM override value). Bonus damage increased to 10 .",
       "lifecycle": {
         "state": "active",
@@ -1817,7 +1817,7 @@
         "zh_cn": "冰霜 幽灵",
         "zh_tw": "寒霜幽魂"
       },
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/frostwraith_large.png",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/frostwraith_small.png",
       "description": "",
       "lifecycle": {
         "state": "active",
@@ -1887,7 +1887,7 @@
         "zh_cn": "巨人杀手",
         "zh_tw": "巨人殺手"
       },
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/giantslayer_large.png",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/giantslayer_small.png",
       "description": "Become tiny, reducing your size by 75 bonus movement speed. Additionally, deal 10 / 25 (based on target's size) bonus damage against enemy champions with greater size than you.",
       "lifecycle": {
         "state": "active",
@@ -1922,7 +1922,7 @@
         "zh_cn": "歌利亚巨人",
         "zh_tw": "巨人"
       },
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/goliath_large.png",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/goliath_small.png",
       "description": "Grants 35 adaptive force, and 50% increased size.",
       "lifecycle": {
         "state": "active",
@@ -1957,7 +1957,7 @@
         "zh_cn": "渴血",
         "zh_tw": "飲血"
       },
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/goredrink_large.png",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/goredrink_small.png",
       "description": "Gain 15% omnivamp.",
       "lifecycle": {
         "state": "active",
@@ -1992,7 +1992,7 @@
         "zh_cn": "恶趣味",
         "zh_tw": "惡趣味"
       },
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/guiltypleasure_large.png",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/guiltypleasure_small.png",
       "description": "Immobilizing or grounding an enemy champion heals you for 30 – 250 (based on level) (+ 1.5% maximum health) (5 second cooldown per cast instance).",
       "lifecycle": {
         "state": "active",
@@ -2027,7 +2027,7 @@
         "zh_cn": "重量级打击手",
         "zh_tw": "重型打手"
       },
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/heavyhitter_large.png",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/heavyhitter_small.png",
       "description": "Basic attacks deal bonus physical damage equal to 3.5% of your maximum health.",
       "lifecycle": {
         "state": "active",
@@ -2132,7 +2132,7 @@
         "zh_cn": "圣火",
         "zh_tw": "神聖之火"
       },
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/holyfire_large.png",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/holyfire_small.png",
       "description": "",
       "lifecycle": {
         "state": "active",
@@ -2167,7 +2167,7 @@
         "zh_cn": "家园卫士",
         "zh_tw": "溫泉加速"
       },
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/homeguard_large.png",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/homeguard_small.png",
       "description": "Gain 100% bonus movement speed. This bonus is lost for 6 seconds after taking damage from champions.",
       "lifecycle": {
         "state": "active",
@@ -2202,7 +2202,7 @@
         "zh_cn": "冰寒",
         "zh_tw": "雪地踱步"
       },
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/icecold_large.png",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/icecold_small.png",
       "description": "Your slowing effects reduce the movement speed of targets by an additional 75.",
       "lifecycle": {
         "state": "active",
@@ -2272,7 +2272,7 @@
         "zh_cn": "不动如山",
         "zh_tw": "不可通行"
       },
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/impassable_large.png",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/impassable_small.png",
       "description": "Gain the Aftershock and Glacial Augment keystone runes. Aftershock Cooldown reduced to 15 seconds from 20. Glacial Augment Cooldown reduced to 15 seconds from 25.",
       "lifecycle": {
         "state": "active",
@@ -2307,7 +2307,7 @@
         "zh_cn": "炼狱导管",
         "zh_tw": "煉獄使者"
       },
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/infernalconduit_large.png",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/infernalconduit_small.png",
       "description": "Your ability hits against champions apply a Burn for 3 seconds that deals「 2 – 20 (based on level) (+ 4.6 AP) bonus magic damage per second 」「 6 – 60 (based on level) (+ 14 AP) bonus magic damage over the duration 」(1 second cooldown per cast instance). This Burn stacks infinitely and refreshes with each application. Additionally, all of your Burn effects reduce the cooldowns of all your basic abilities by 0.08 seconds for each tick of damage they deal to a target. Damage over time effects from all sources except items(unexpected) count as Burn sources for triggering the cooldown reduction. Eligible Augments for Burn: Buff Buddies, Firebrand, Grandma's Chili Oil, Holy Fire, Infernal Conduit, Slow Cooker",
       "lifecycle": {
         "state": "active",
@@ -2342,7 +2342,7 @@
         "zh_cn": "炼狱龙魂",
         "zh_tw": "煉獄惡靈"
       },
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/infernalsoul_large.png",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/infernalsoul_small.png",
       "description": "Grants the Infernal Dragon Soul, or a different Dragon Soul if you aleady have it.",
       "lifecycle": {
         "state": "active",
@@ -2412,7 +2412,7 @@
         "zh_cn": "关键暴击",
         "zh_tw": "痛恨一擊"
       },
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/itscritical_large.png",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/itscritical_small.png",
       "description": "Grants 50% critical strike chance.",
       "lifecycle": {
         "state": "active",
@@ -2447,7 +2447,7 @@
         "zh_cn": "杀戮时间到了",
         "zh_tw": "殺戮時間"
       },
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/itskillingtime_large.png",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/itskillingtime_small.png",
       "description": "Upon casting your ultimate ability, you apply Zed's Death Mark to all enemy champions (8 second cooldown). The mark stores 40% of all post-mitigation damage you deal to the affected target, detonating after 5 seconds to deal true damage equal to the damage stored against them.",
       "lifecycle": {
         "state": "active",
@@ -2482,7 +2482,7 @@
         "zh_cn": "珠光护手",
         "zh_tw": "寶石手套"
       },
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/jeweledgauntlet_large.png",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/jeweledgauntlet_small.png",
       "description": "Your abilities can now critically strike for (145 (+ 4.5% per 100 AP) critical strike chance. If both Jeweled Gauntlet and Vulnerability are equipped, only rolls the critical strike chance of the augment that has the higher critical damage (or either if equal). The interaction between Jeweled Gauntlet and Vulnerability may behave incorrectly with persistent area damage effects.(bug)",
       "lifecycle": {
         "state": "active",
@@ -2552,7 +2552,7 @@
         "zh_cn": "基石法师",
         "zh_tw": "符文術士"
       },
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/keystoneconjurer_large.png",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/keystoneconjurer_small.png",
       "description": "",
       "lifecycle": {
         "state": "active",
@@ -2587,7 +2587,7 @@
         "zh_cn": "练腿日",
         "zh_tw": "腿部訓練日"
       },
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/legday_large.png",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/legday_small.png",
       "description": "Gain 50 bonus movement speed and 40% slow resist.",
       "lifecycle": {
         "state": "active",
@@ -2622,7 +2622,7 @@
         "zh_cn": "点亮他们！",
         "zh_tw": "亮起來！"
       },
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/lightemup_large.png",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/lightemup_small.png",
       "description": "Basic attacks generate a stack, up to 4. The fourth stack consumes them all to quickly launch 4 missiles at the target that each deal 11 – 80 (based on level) (+ 35 AP) bonus magic damage on-hit, for a total of 44 – 320 (based on level) (+ 140 AP).",
       "lifecycle": {
         "state": "active",
@@ -2657,7 +2657,7 @@
         "zh_cn": "闪电打击",
         "zh_tw": "電光石火"
       },
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/lightningstrikes_large.png",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/lightningstrikes_small.png",
       "description": "",
       "lifecycle": {
         "state": "active",
@@ -2727,7 +2727,7 @@
         "zh_cn": "科学狂人",
         "zh_tw": "瘋狂科學家"
       },
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/madscientist_large.png",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/madscientist_small.png",
       "description": "Upon acquiring this augment and each time you respawn, gain either 30 bonus health, and 40 bonus movement speed, and 40% reduced size.",
       "lifecycle": {
         "state": "active",
@@ -2762,7 +2762,7 @@
         "zh_cn": "魔法飞弹",
         "zh_tw": "魔法導彈"
       },
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/magicmissile_large.png",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/magicmissile_small.png",
       "description": "Dealing damage to an enemy champion with an ability fires 3 missiles at them that each deal true damage equal to 0.33 based on distance travelled (maximum damage reached at 1000 units). This effect can only trigger once every 6 seconds from the same cast.",
       "lifecycle": {
         "state": "active",
@@ -2797,7 +2797,7 @@
         "zh_cn": "神射法师",
         "zh_tw": "射手法師"
       },
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/marksmage_large.png",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/marksmage_small.png",
       "description": "Basic attacks deal bonus physical damage equal to 75% AP.",
       "lifecycle": {
         "state": "active",
@@ -2832,7 +2832,7 @@
         "zh_cn": "物法皆修",
         "zh_tw": "雙修大師"
       },
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/masterofduality_large.png",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/masterofduality_small.png",
       "description": "Basic attacks on-hit grant 6 – 18 (based on level) ability power and damaging abilities once per cast instance grant 3 – 9 (based on level) bonus attack damage, lasting for 5 seconds, with the duration of both refreshing on subsequent hits, and stacking infinitely.",
       "lifecycle": {
         "state": "active",
@@ -2867,7 +2867,7 @@
         "zh_cn": "由心及物",
         "zh_tw": "因心成體"
       },
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/mindtomatter_large.png",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/mindtomatter_small.png",
       "description": "Grants bonus health equal to 50% maximum mana. Maximum bonus health granted by this effect is capped at 99,999 bonus health.",
       "lifecycle": {
         "state": "active",
@@ -2902,7 +2902,7 @@
         "zh_cn": "仆从大师",
         "zh_tw": "士兵術師"
       },
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/minionmancer_large.png",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/minionmancer_small.png",
       "description": "Your pets deal 40 bonus health and size.",
       "lifecycle": {
         "state": "active",
@@ -2972,7 +2972,7 @@
         "zh_cn": "山脉龙魂",
         "zh_tw": "裂地龍魂"
       },
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/mountainsoul_large.png",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/mountainsoul_small.png",
       "description": "Grants the Mountain Dragon Soul, or a different Dragon Soul if you aleady have it.",
       "lifecycle": {
         "state": "active",
@@ -3042,7 +3042,7 @@
         "zh_cn": "秘术冲拳",
         "zh_tw": "祕術拳擊"
       },
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/mysticpunch_large.png",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/mysticpunch_small.png",
       "description": "Basic attacks on-hit reduce the remaining cooldowns of your abilities by 1.25 seconds.",
       "lifecycle": {
         "state": "active",
@@ -3077,7 +3077,7 @@
         "zh_cn": "海洋龙魂",
         "zh_tw": "海洋之魂"
       },
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/oceansoul_large.png",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/oceansoul_small.png",
       "description": "Grants the Ocean Dragon Soul, which has a modified base heal value of 100, or a different Dragon Soul if you aleady have it.",
       "lifecycle": {
         "state": "active",
@@ -3112,7 +3112,7 @@
         "zh_cn": "回力OK镖",
         "zh_tw": "棒棒回力鏢"
       },
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/okboomerang_large.png",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/okboomerang_small.png",
       "description": "Automatically cast an improved version of Sivir's Boomerang Blade at the closest nearby enemy champion within 1250 units, dealing 40 – 200 (based on level) (+ 30 AP) adaptive damage to enemies hit (10 second cooldown).",
       "lifecycle": {
         "state": "active",
@@ -3147,7 +3147,7 @@
         "zh_cn": "全能龙魂",
         "zh_tw": "全能之魂"
       },
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/omnisoul_large.png",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/omnisoul_small.png",
       "description": "Grants 3 random Dragon Souls.",
       "lifecycle": {
         "state": "active",
@@ -3182,7 +3182,7 @@
         "zh_cn": "轨道镭射",
         "zh_tw": "衛星雷射炮"
       },
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/orbitallaser_large.png",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/orbitallaser_small.png",
       "description": "",
       "lifecycle": {
         "state": "active",
@@ -3217,7 +3217,7 @@
         "zh_cn": "狂徒豪气",
         "zh_tw": "俠盜恆毅"
       },
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/outlawsgrit_large.png",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/outlawsgrit_small.png",
       "description": "Dashing or blinking grants 12 bonus armor and bonus magic resistance for 15 seconds, stacking up to 5 times for a total of 60 bonus resistances, and refreshing on subsequent triggers.",
       "lifecycle": {
         "state": "active",
@@ -3252,7 +3252,7 @@
         "zh_cn": "溢流",
         "zh_tw": "溢流"
       },
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/overflow_large.png",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/overflow_small.png",
       "description": "Your abilities' mana costs are doubled, but you also gain 10 per 100 maximum mana) increased damage as well as self and outgoing healing and shielding.",
       "lifecycle": {
         "state": "active",
@@ -3287,7 +3287,7 @@
         "zh_cn": "潘朵拉的盒子",
         "zh_tw": "潘朵拉的寶盒"
       },
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/pandoras_box_large.png",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/pandoras_box_small.png",
       "description": "Your current augments transform into an equal number of completely random Prismatic ones.",
       "lifecycle": {
         "state": "active",
@@ -3322,7 +3322,7 @@
         "zh_cn": "坚韧",
         "zh_tw": "剛毅"
       },
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/perseverance_large.png",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/perseverance_small.png",
       "description": "Grants 1000 while below 25% maximum health.",
       "lifecycle": {
         "state": "active",
@@ -3357,7 +3357,7 @@
         "zh_cn": "超凡邪恶",
         "zh_tw": "極度邪惡"
       },
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/phenomenalevil_large.png",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/phenomenalevil_small.png",
       "description": "Gain Veigar's Phenomenal Evil Power. Phenomenal Evil Power: Generate a permanent stack of Phenomenal Evil each time you damage an enemy champion with ability damage. This effect cannot trigger more than once every second globally and once every 3 seconds from the same cast instance. For each stack, gain 1 ability power. If this is not your first augment, start with 40 Phenomenal Evil stacks, granting you 40 ability power. The 40 bonus stacks for selecting this augment as not your first augment are given once the first stack is earned.",
       "lifecycle": {
         "state": "active",
@@ -3532,7 +3532,7 @@
         "zh_cn": "量子计算",
         "zh_tw": "量子計算"
       },
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/quantumcomputing_large.png",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/quantumcomputing_small.png",
       "description": "Automatically cast an improved version of Camille's Tactical Sweep when an enemy champion is within 650 units of you, winding up over 0.75 seconds to slash in a 650 radius around you. The slash deals 200 – 350 (based on level) (+ 75 AP) physical damage to enemies within the area (30 second cooldown). Enemies hit by the outer edge of the circle take bonus physical damage equal to 10 per 100 bonus AD) (+ 1.6 per 100 bonus health) of their maximum health and are slowed by 80 of the bonus post-mitigation damage against enemy champions hit by the outer edge.",
       "lifecycle": {
         "state": "active",
@@ -3567,7 +3567,7 @@
         "zh_cn": "钢化你心",
         "zh_tw": "心鋼起來"
       },
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/quest_steelyourheart_large.png",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/quest_steelyourheart_small.png",
       "description": "Quest: Obtain Heartsteel and accumulate over 300 bonus health from Colossal Consumption. Reward: Upon completing your Quest, increase the bonus health gained from Heartsteel's Colossal Consumption by 200%.",
       "lifecycle": {
         "state": "active",
@@ -3602,7 +3602,7 @@
         "zh_cn": "海牛阿福的勇士",
         "zh_tw": "阿福英雄"
       },
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/quest_urfschampion_large.png",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/quest_urfschampion_small.png",
       "description": "Quest: Score 18 champion takedowns. Reward: Upon completing your Quest, you receive The Golden Spatula. If your inventory is full at the time of quest completion, the item will be granted as soon as a slot in the inventory is available.",
       "lifecycle": {
         "state": "active",
@@ -3672,7 +3672,7 @@
         "zh_cn": "沃格勒特的巫师帽",
         "zh_tw": "烏莉特的法帽"
       },
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/quest_woogletswitchcap_large.png",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/quest_woogletswitchcap_small.png",
       "description": "Gain a Needlessly Large Rod. Quest: Obtain Rabadon's Deathcap and Zhonya's Hourglass. Reward: Upon completing your Quest, convert the items you obtained for the quest into Wooglet's Witchcap.",
       "lifecycle": {
         "state": "active",
@@ -3810,7 +3810,7 @@
         "zh_cn": "循环往复",
         "zh_tw": "循環利用"
       },
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/recursion_large.png",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/recursion_small.png",
       "description": "Grants 60 ability haste.",
       "lifecycle": {
         "state": "active",
@@ -3845,7 +3845,7 @@
         "zh_cn": "退敌力场",
         "zh_tw": "反重力裝置"
       },
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/repulsor_large.png",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/repulsor_small.png",
       "description": "",
       "lifecycle": {
         "state": "active",
@@ -3880,7 +3880,7 @@
         "zh_cn": "无休回复",
         "zh_tw": "回復不休"
       },
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/restlessrestoration_large.png",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/restlessrestoration_small.png",
       "description": "",
       "lifecycle": {
         "state": "active",
@@ -3985,7 +3985,7 @@
         "zh_cn": "最万用的瞄准镜",
         "zh_tw": "頂狙武器"
       },
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/scopiestweapons_large.png",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/scopiestweapons_small.png",
       "description": "Gain ( 250 / 150) bonus attack range.",
       "lifecycle": {
         "state": "active",
@@ -4020,7 +4020,7 @@
         "zh_cn": "炽烈黎明",
         "zh_tw": "灼熱黎明"
       },
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/searingdawn_large.png",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/searingdawn_small.png",
       "description": "Gain Leona's Sunlight. Sunlight: Your damaging abilities mark enemies, causing them to take 40 – 200 (based on level) bonus magic damage from your ally's next basic attack or ability hit against them (0.75-second cooldown per target).",
       "lifecycle": {
         "state": "active",
@@ -4055,7 +4055,7 @@
         "zh_cn": "自我毁灭",
         "zh_tw": "自我毀滅"
       },
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/selfdestruct_large.png",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/selfdestruct_small.png",
       "description": "",
       "lifecycle": {
         "state": "active",
@@ -4090,7 +4090,7 @@
         "zh_cn": "暗影疾奔",
         "zh_tw": "飛影跑法"
       },
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/shadowrunner_large.png",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/shadowrunner_small.png",
       "description": "After dashing, blinking, or exiting stealth, gain 300 bonus movement speed for 2 seconds.",
       "lifecycle": {
         "state": "active",
@@ -4125,7 +4125,7 @@
         "zh_cn": "缩小射线",
         "zh_tw": "縮小光線"
       },
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/shrinkray_large.png",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/shrinkray_small.png",
       "description": "Basic attacks on-hit reduce the target's damage dealt by 15% for 3 seconds, refreshing with each hit. Their size is also reduced significantly for the duration.",
       "lifecycle": {
         "state": "active",
@@ -4160,7 +4160,7 @@
         "zh_cn": "老练狙神",
         "zh_tw": "老練狙擊手"
       },
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/skilledsniper_large.png",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/skilledsniper_small.png",
       "description": "Hitting an enemy champion with a basic ability while located at least 700 units away from them at the time of the hit reduces its current cooldown by 80 for damage over time abilities.",
       "lifecycle": {
         "state": "active",
@@ -4195,7 +4195,7 @@
         "zh_cn": "扇巴掌",
         "zh_tw": "痛打一頓"
       },
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/slaparound_large.png",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/slaparound_small.png",
       "description": "Immobilizing or grounding an enemy champion grants you 6 bonus Attack Damage or 10 Ability Power (Adaptive), stacking infinitely (5 second cooldown per cast instance). Lose 50% of stacks on death. If the bonus attack damage and the ability power of the unit are equal, the stat granted is always bonus AD.(unexpected)",
       "lifecycle": {
         "state": "active",
@@ -4230,7 +4230,7 @@
         "zh_cn": "一板一眼",
         "zh_tw": "穩紮穩打"
       },
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/slowandsteady_large.png",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/slowandsteady_small.png",
       "description": "",
       "lifecycle": {
         "state": "active",
@@ -4265,7 +4265,7 @@
         "zh_cn": "慢炖",
         "zh_tw": "細煮慢燉"
       },
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/slowcooker_large.png",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/slowcooker_small.png",
       "description": "",
       "lifecycle": {
         "state": "active",
@@ -4335,7 +4335,7 @@
         "zh_cn": "在为你的友军提供增益效果、<healing>治疗效果</healing>或<shield>护盾效果</shield>时，会对其附近的敌人们造成<trueDamage>@Damage@真实伤害</trueDamage>和持续2秒的@SlowAmount*-100@%<status>减速</status>。(@ProcCooldown@秒冷却时间)<br><br>已造成的伤害：@f2@",
         "zh_tw": "強化、<healing>治療</healing>、或<shield>賦予友軍護盾</shield>時，會對友軍周圍的敵軍造成<trueDamage>@Damage@真實傷害</trueDamage>，並<status>緩速@SlowAmount*-100@%</status>，持續2秒(冷卻時間@ProcCooldown@秒)。<br><br>傷害量：@f2@"
       },
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/sonicboom_large.png",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/sonicboom_small.png",
       "description": "Granting a buff, heal, or shield to your ally deals 30 – 150 (based on level) true damage to enemies within 450 units of them and slows targets by 30% for 2 seconds (2 second cooldown).",
       "lifecycle": {
         "state": "active",
@@ -4370,7 +4370,7 @@
         "zh_cn": "灵魂虹吸",
         "zh_tw": "靈魂虹吸"
       },
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/soulsiphon_large.png",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/soulsiphon_small.png",
       "description": "Heal for 12 critical strike chance. Any damage from Critical strikes will heal, including those from non-basic attack sources ( Talon's Noxian Diplomacy, Ashe's Volley, etc).",
       "lifecycle": {
         "state": "active",
@@ -4464,7 +4464,7 @@
         "zh_cn": "旋转至胜",
         "zh_tw": "一轉就贏"
       },
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/spintowin_large.png",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/spintowin_small.png",
       "description": "Your spinning abilities deal 30% increased damage and have their cooldown reduced equivalent to 30 ability haste. Eligible Abilities: Ahri's Fox-Fire and Spirit Rush, Amumu's Tantrum, Ambessa's Lacerate, Darius' Decimate, Draven's Spinning Axe, Stand Aside, and Whirling Death, Garen's Judgment, Hecarim's Rampage, Jax's Counter Strike, Katarina's Voracity and Death Lotus, Kayn's Reaping Slash, Lillia's Blooming Blows, Nocturne's Umbra Blades, Rammus' Powerball, Renekton's Cull the Meek, Riven's Broken Wings, Samira's Blade Whirl and Inferno Trigger, Sylas' Petricite Burst, Wukong's Cyclone, Tryndamere's Spinning Slash, Xin Zhao's Crescent Guard, Zed's Shadow Slash PENDING FOR TEST:: Akshan's Avengerang and Heroic Swing, Lillia's Watch Out! Eep! and Swirlseed, Poppy's Keeper's Verdict, etc.",
       "lifecycle": {
         "state": "active",
@@ -4569,7 +4569,7 @@
         "zh_cn": "叠角龙",
         "zh_tw": "堆層暴龍"
       },
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/stackosaurusrex_large.png",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/stackosaurusrex_small.png",
       "description": "Increase the number of permanent stacks you gain from abilities, item effects, and augments by 100%.",
       "lifecycle": {
         "state": "active",
@@ -4604,7 +4604,7 @@
         "zh_cn": "属性！",
         "zh_tw": "能力值！"
       },
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/stats_large.png",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/stats_small.png",
       "description": "Gain 2 Stat Anvils.",
       "lifecycle": {
         "state": "active",
@@ -4639,7 +4639,7 @@
         "zh_cn": "属性叠属性！",
         "zh_tw": "能力值堆起來！"
       },
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/statsonstats_large.png",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/statsonstats_small.png",
       "description": "Gain 3 Stat Anvils, with a higher chance of obtaining Gold and Prismatic tier anvils.",
       "lifecycle": {
         "state": "active",
@@ -4674,7 +4674,7 @@
         "zh_cn": "属性叠属性叠属性！",
         "zh_tw": "能力值堆堆堆起來！"
       },
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/statsonstatsonstats_large.png",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/statsonstatsonstats_small.png",
       "description": "Gain 4 Stat Anvils, with a higher chance of obtaining Gold and Prismatic tier anvils. Additionally, on the next round of augment selection, you gain an additional reroll per augment slot.",
       "lifecycle": {
         "state": "active",
@@ -4768,7 +4768,7 @@
         "zh_cn": "战争交响乐",
         "zh_tw": "戰爭交響曲"
       },
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/symphonyofwar_large.png",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/symphonyofwar_small.png",
       "description": "Gain the Conqueror and Lethal Tempo keystone runes. Conqueror Adaptive force per stack changed to 1.8 – 3.3 (based on level) bonus Attack Damage or 3 – 5.5 (based on level) Ability Power (Adaptive). Healing changed to ( 10 ) of damage dealt. Lethal Tempo Bonus attack speed per stack changed to ( 13 / 8 ) (based on level). Maximum bonus attack speed changed to ( 78 / 48 ) (based on level). Removed: No longer empowers basic attacks at maximum stacks to fire a bolt that deals bonus adaptive damage. New Effect: At maximum stacks, gain 50 bonus attack range and increase the attack speed cap to 10.",
       "lifecycle": {
         "state": "active",
@@ -4803,7 +4803,7 @@
         "zh_cn": "坦克引擎",
         "zh_tw": "坦克引擎"
       },
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/tank_engine_large.png",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/tank_engine_small.png",
       "description": "Scoring a champion takedown generates a stack, stacking infinitely. For each stack, increase your maximum health and size by 5 of stacks on death.",
       "lifecycle": {
         "state": "active",
@@ -4838,7 +4838,7 @@
         "zh_cn": "会心防御",
         "zh_tw": "毫髮無傷"
       },
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/tankitorleaveit_large.png",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/tankitorleaveit_small.png",
       "description": "Gain Critical Defend Chance equal to 100 . Additionally, gain 25 (5 second cooldown per enemy spell cast instance).",
       "lifecycle": {
         "state": "active",
@@ -4873,7 +4873,7 @@
         "zh_cn": "踢踏舞",
         "zh_tw": "輕舞飛揚"
       },
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/tapdancer_large.png",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/tapdancer_small.png",
       "description": "Basic attacks on-hit against enemy champions and minions grant 10 bonus movement speed, lasting for 5 seconds, refreshing on subsequent triggers, and stacking infinitely. Additionally, gain bonus attack speed equal to 10% total movement speed.",
       "lifecycle": {
         "state": "active",
@@ -4943,7 +4943,7 @@
         "zh_cn": "残暴之力",
         "zh_tw": "兇殘之柄"
       },
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/thebrutalizer_large.png",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/thebrutalizer_small.png",
       "description": "",
       "lifecycle": {
         "state": "active",
@@ -4978,7 +4978,7 @@
         "zh_cn": "穿针引线",
         "zh_tw": "穿針引線"
       },
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/threadtheneedle_large.png",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/threadtheneedle_small.png",
       "description": "Grants 18% armor penetration and magic penetration.",
       "lifecycle": {
         "state": "active",
@@ -5013,7 +5013,7 @@
         "zh_cn": "折磨者",
         "zh_tw": "烈焰折磨"
       },
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/tormentor_large.png",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/tormentor_small.png",
       "description": "",
       "lifecycle": {
         "state": "active",
@@ -5048,7 +5048,7 @@
         "zh_cn": "质变：混沌",
         "zh_tw": "質變：大混亂"
       },
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/transmutechaos_large.png",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/transmutechaos_small.png",
       "description": "Gain two completely random augments, excluding the other two offerings in your current assortment.",
       "lifecycle": {
         "state": "active",
@@ -5083,7 +5083,7 @@
         "zh_cn": "质变：黄金阶",
         "zh_tw": "質變：金級"
       },
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/transmutegold_large.png",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/transmutegold_small.png",
       "description": "Gain one random Gold augment, excluding the other two offerings in your current assortment.",
       "lifecycle": {
         "state": "active",
@@ -5118,7 +5118,7 @@
         "zh_cn": "质变：棱彩阶",
         "zh_tw": "質變：稜鏡"
       },
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/transmuteprismatic_large.png",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/transmuteprismatic_small.png",
       "description": "Gain one random Prismatic augment, excluding the other two offerings in your current assortment.",
       "lifecycle": {
         "state": "active",
@@ -5153,7 +5153,7 @@
         "zh_cn": "精准奇才",
         "zh_tw": "彈幕神童"
       },
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/trueshotprodigy_large.png",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/trueshotprodigy_small.png",
       "description": "",
       "lifecycle": {
         "state": "active",
@@ -5188,7 +5188,7 @@
         "zh_cn": "接二连三",
         "zh_tw": "二次三次"
       },
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/twicethrice_large.png",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/twicethrice_small.png",
       "description": "",
       "lifecycle": {
         "state": "active",
@@ -5223,7 +5223,7 @@
         "zh_cn": "台风",
         "zh_tw": "颱風"
       },
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/typhoon_large.png",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/typhoon_small.png",
       "description": "Basic attacks launch a missile at a nearby enemy champion that deals 30% AD physical damage and applies on-hit effects.",
       "lifecycle": {
         "state": "active",
@@ -5258,7 +5258,7 @@
         "zh_cn": "终极刷新",
         "zh_tw": "終極革新"
       },
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/ultimaterevolution_large.png",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/ultimaterevolution_small.png",
       "description": "Casting your ultimate ability resets its cooldown once its effect starts or has elapsed (75 second cooldown, reset upon death).",
       "lifecycle": {
         "state": "active",
@@ -5293,7 +5293,7 @@
         "zh_cn": "终极不可阻挡",
         "zh_tw": "無敵大絕"
       },
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/ultimateunstoppable_large.png",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/ultimateunstoppable_small.png",
       "description": "Casting your ultimate ability grants you crowd control immunity for 3 seconds (8 second cooldown).",
       "lifecycle": {
         "state": "active",
@@ -5608,7 +5608,7 @@
         "zh_cn": "易损",
         "zh_tw": "見縫插針"
       },
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/vulnerability_large.png",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/vulnerability_small.png",
       "description": "Damage dealt by items and damage over time effects can now critically strike for (145 critical strike chance. If both Jeweled Gauntlet and Vulnerability are equipped, only rolls the critical strike chance of the augment that has the higher critical damage (or either if equal). The interaction between Jeweled Gauntlet and Vulnerability may behave incorrectly with persistent area damage effects.(bug)",
       "lifecycle": {
         "state": "active",
@@ -5783,7 +5783,7 @@
         "zh_cn": "巫师式思考",
         "zh_tw": "女巫思維"
       },
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/witchfulthinking_large.png",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/witchfulthinking_small.png",
       "description": "Grants 20 – 80 (based on level) ability power.",
       "lifecycle": {
         "state": "active",
@@ -5818,7 +5818,7 @@
         "zh_cn": "急急小子",
         "zh_tw": "腳程加速"
       },
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/withhaste_large.png",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/withhaste_small.png",
       "description": "Grants bonus movement speed equal to 70% ability haste.",
       "lifecycle": {
         "state": "active",
@@ -5923,7 +5923,7 @@
         "zh_cn": "魔法转物理",
         "zh_tw": "轉換惡作劇"
       },
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/escapade_large.png",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/escapade_small.png",
       "description": "Convert all of your ability power into bonus attack damage at a rate of 1 bonus attack damage per 1.66 ability power. Additionally, increase your total attack damage by 15%. Does not convert the Ability Power obtained from Riftmaker's Void Infusion, nor from Archangel's Staff or Seraph's Embrace's Awe.(bug)",
       "lifecycle": {
         "state": "active",
@@ -114092,7 +114092,11 @@
       "route_identifier": "the-golden-spatula",
       "known": true,
       "names": {
-        "en": "The Golden Spatula"
+        "en": "The Golden Spatula",
+        "ja": "ザ・金のへら",
+        "ko": "황금 뒤집개",
+        "zh-CN": "金铲铲",
+        "zh-TW": "黃金鍋鏟"
       },
       "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/4403_goldenspatula.png",
       "description": "Obtained from Quest: Urf's Champion augment. Burn radius 400 units, increased mana regen 10 .",

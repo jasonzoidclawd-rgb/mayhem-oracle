@@ -18,7 +18,7 @@
       "name": "Tank Engine",
       "displayName": "Tank Engine",
       "rarity": "gold",
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/tank_engine_large.png",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/tank_engine_small.png",
       "names": {
         "en": "Tank Engine",
         "zh_cn": "坦克引擎",
@@ -51,7 +51,7 @@
       "name": "Steel Your Heart",
       "displayName": "Steel Your Heart",
       "rarity": "gold",
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/quest_steelyourheart_large.png",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/quest_steelyourheart_small.png",
       "names": {
         "en": "Steel Your Heart",
         "zh_cn": "钢化你心",
@@ -84,7 +84,7 @@
       "name": "Heavy Hitter",
       "displayName": "Heavy Hitter",
       "rarity": "silver",
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/heavyhitter_large.png",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/heavyhitter_small.png",
       "names": {
         "en": "Heavy Hitter",
         "zh_cn": "重量级打击手",
@@ -152,7 +152,7 @@
       "name": "Draw Your Sword",
       "displayName": "Draw Your Sword",
       "rarity": "prismatic",
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/drawyoursword_large.png",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/drawyoursword_small.png",
       "names": {
         "en": "Draw Your Sword",
         "zh_cn": "亮出你的剑",
@@ -275,7 +275,7 @@
       "name": "Phenomenal Evil",
       "displayName": "Phenomenal Evil",
       "rarity": "gold",
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/phenomenalevil_large.png",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/phenomenalevil_small.png",
       "names": {
         "en": "Phenomenal Evil",
         "zh_cn": "超凡邪恶",
@@ -376,7 +376,7 @@
       "name": "Goliath",
       "displayName": "Goliath",
       "rarity": "prismatic",
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/goliath_large.png",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/goliath_small.png",
       "names": {
         "en": "Goliath",
         "zh_cn": "歌利亚巨人",
@@ -442,7 +442,7 @@
       "name": "Magic Missile",
       "displayName": "Magic Missile",
       "rarity": "gold",
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/magicmissile_large.png",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/magicmissile_small.png",
       "names": {
         "en": "Magic Missile",
         "zh_cn": "魔法飞弹",
@@ -476,7 +476,7 @@
       "name": "Eureka",
       "displayName": "Eureka",
       "rarity": "prismatic",
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/eureka_large.png",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/eureka_small.png",
       "names": {
         "en": "Eureka",
         "zh_cn": "尤里卡",
@@ -510,7 +510,7 @@
       "name": "Dual Wield",
       "displayName": "Dual Wield",
       "rarity": "prismatic",
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/dualwield_large.png",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/dualwield_small.png",
       "names": {
         "en": "Dual Wield",
         "zh_cn": "双刀流",
@@ -544,7 +544,7 @@
       "name": "Infernal Conduit",
       "displayName": "Infernal Conduit",
       "rarity": "prismatic",
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/infernalconduit_large.png",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/infernalconduit_small.png",
       "names": {
         "en": "Infernal Conduit",
         "zh_cn": "炼狱导管",
@@ -611,7 +611,7 @@
       "name": "Goredrink",
       "displayName": "Goredrink",
       "rarity": "silver",
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/goredrink_large.png",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/goredrink_small.png",
       "names": {
         "en": "Goredrink",
         "zh_cn": "渴血",
@@ -644,7 +644,7 @@
       "name": "Deft",
       "displayName": "Deft",
       "rarity": "silver",
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/deft_large.png",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/deft_small.png",
       "names": {
         "en": "Deft",
         "zh_cn": "灵巧",
@@ -677,7 +677,7 @@
       "name": "Giant Slayer",
       "displayName": "Giant Slayer",
       "rarity": "prismatic",
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/giantslayer_large.png",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/giantslayer_small.png",
       "names": {
         "en": "Giant Slayer",
         "zh_cn": "巨人杀手",
@@ -711,7 +711,7 @@
       "name": "Blunt Force",
       "displayName": "Blunt Force",
       "rarity": "silver",
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/bluntforce_large.png",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/bluntforce_small.png",
       "names": {
         "en": "Blunt Force",
         "zh_cn": "大力",
@@ -744,7 +744,7 @@
       "name": "Transmute: Prismatic",
       "displayName": "Transmute: Prismatic",
       "rarity": "gold",
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/transmuteprismatic_large.png",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/transmuteprismatic_small.png",
       "names": {
         "en": "Transmute: Prismatic",
         "zh_cn": "质变：棱彩阶",
@@ -775,7 +775,7 @@
       "name": "Ethereal Weapon",
       "displayName": "Ethereal Weapon",
       "rarity": "gold",
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/etherealweapon_large.png",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/etherealweapon_small.png",
       "names": {
         "en": "Ethereal Weapon",
         "zh_cn": "虚幻武器",
@@ -809,7 +809,7 @@
       "name": "Celestial Body",
       "displayName": "Celestial Body",
       "rarity": "gold",
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/celestialbody_large.png",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/celestialbody_small.png",
       "names": {
         "en": "Celestial Body",
         "zh_cn": "星界躯体",
@@ -875,7 +875,7 @@
       "name": "Stackosaurus Rex",
       "displayName": "Stackosaurus Rex",
       "rarity": "silver",
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/stackosaurusrex_large.png",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/stackosaurusrex_small.png",
       "names": {
         "en": "Stackosaurus Rex",
         "zh_cn": "叠角龙",
@@ -974,7 +974,7 @@
       "name": "Ocean Soul",
       "displayName": "Ocean Soul",
       "rarity": "silver",
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/oceansoul_large.png",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/oceansoul_small.png",
       "names": {
         "en": "Ocean Soul",
         "zh_cn": "海洋龙魂",
@@ -1007,7 +1007,7 @@
       "name": "ADAPt",
       "displayName": "ADAPt",
       "rarity": "silver",
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/adapt_large.png",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/adapt_small.png",
       "names": {
         "en": "ADAPt",
         "zh_cn": "物理转魔法",
@@ -1041,7 +1041,7 @@
       "name": "Back To Basics",
       "displayName": "Back To Basics",
       "rarity": "prismatic",
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/backtobasics_large.png",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/backtobasics_small.png",
       "names": {
         "en": "Back To Basics",
         "zh_cn": "回归基本功",
@@ -1175,7 +1175,7 @@
       "name": "Mystic Punch",
       "displayName": "Mystic Punch",
       "rarity": "prismatic",
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/mysticpunch_large.png",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/mysticpunch_small.png",
       "names": {
         "en": "Mystic Punch",
         "zh_cn": "秘术冲拳",
@@ -1270,7 +1270,7 @@
       "name": "Shadow Runner",
       "displayName": "Shadow Runner",
       "rarity": "silver",
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/shadowrunner_large.png",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/shadowrunner_small.png",
       "names": {
         "en": "Shadow Runner",
         "zh_cn": "暗影疾奔",
@@ -1303,7 +1303,7 @@
       "name": "Ice Cold",
       "displayName": "Ice Cold",
       "rarity": "silver",
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/icecold_large.png",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/icecold_small.png",
       "names": {
         "en": "Ice Cold",
         "zh_cn": "冰寒",
@@ -1370,7 +1370,7 @@
       "name": "Slap Around",
       "displayName": "Slap Around",
       "rarity": "silver",
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/slaparound_large.png",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/slaparound_small.png",
       "names": {
         "en": "Slap Around",
         "zh_cn": "扇巴掌",
@@ -1405,7 +1405,7 @@
       "name": "Wooglet's Witchcap",
       "displayName": "Wooglet's Witchcap",
       "rarity": "prismatic",
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/quest_woogletswitchcap_large.png",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/quest_woogletswitchcap_small.png",
       "names": {
         "en": "Wooglet's Witchcap",
         "zh_cn": "沃格勒特的巫师帽",
@@ -1436,7 +1436,7 @@
       "name": "Witchful Thinking",
       "displayName": "Witchful Thinking",
       "rarity": "silver",
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/witchfulthinking_large.png",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/witchfulthinking_small.png",
       "names": {
         "en": "Witchful Thinking",
         "zh_cn": "巫师式思考",
@@ -1469,7 +1469,7 @@
       "name": "Skilled Sniper",
       "displayName": "Skilled Sniper",
       "rarity": "gold",
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/skilledsniper_large.png",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/skilledsniper_small.png",
       "names": {
         "en": "Skilled Sniper",
         "zh_cn": "老练狙神",
@@ -1521,7 +1521,7 @@
       "name": "Fan The Hammer",
       "displayName": "Fan The Hammer",
       "rarity": "prismatic",
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/fanthehammer_large.png",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/fanthehammer_small.png",
       "names": {
         "en": "Fan The Hammer",
         "zh_cn": "连拨击锤",
@@ -1591,7 +1591,7 @@
       "name": "Mind to Matter",
       "displayName": "Mind to Matter",
       "rarity": "silver",
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/mindtomatter_large.png",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/mindtomatter_small.png",
       "names": {
         "en": "Mind to Matter",
         "zh_cn": "由心及物",
@@ -1625,7 +1625,7 @@
       "name": "Tap Dancer",
       "displayName": "Tap Dancer",
       "rarity": "prismatic",
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/tapdancer_large.png",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/tapdancer_small.png",
       "names": {
         "en": "Tap Dancer",
         "zh_cn": "踢踏舞",
@@ -1762,7 +1762,7 @@
       "name": "escAPADe",
       "displayName": "escAPADe",
       "rarity": "silver",
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/escapade_large.png",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/escapade_small.png",
       "names": {
         "en": "escAPADe",
         "zh_cn": "魔法转物理",
@@ -1796,7 +1796,7 @@
       "name": "Mad Scientist",
       "displayName": "Mad Scientist",
       "rarity": "prismatic",
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/madscientist_large.png",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/madscientist_small.png",
       "names": {
         "en": "Mad Scientist",
         "zh_cn": "科学狂人",
@@ -1832,7 +1832,7 @@
       "name": "Light 'Em Up!",
       "displayName": "Light 'Em Up!",
       "rarity": "silver",
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/lightemup_large.png",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/lightemup_small.png",
       "names": {
         "en": "Light 'Em Up!",
         "zh_cn": "点亮他们！",
@@ -1934,7 +1934,7 @@
       "name": "With Haste",
       "displayName": "With Haste",
       "rarity": "gold",
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/withhaste_large.png",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/withhaste_small.png",
       "names": {
         "en": "With Haste",
         "zh_cn": "急急小子",
@@ -1968,7 +1968,7 @@
       "name": "Scopiest Weapons",
       "displayName": "Scopiest Weapons",
       "rarity": "prismatic",
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/scopiestweapons_large.png",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/scopiestweapons_small.png",
       "names": {
         "en": "Scopiest Weapons",
         "zh_cn": "最万用的瞄准镜",
@@ -2063,7 +2063,7 @@
       "name": "Outlaw's Grit",
       "displayName": "Outlaw's Grit",
       "rarity": "gold",
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/outlawsgrit_large.png",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/outlawsgrit_small.png",
       "names": {
         "en": "Outlaw's Grit",
         "zh_cn": "狂徒豪气",
@@ -2194,7 +2194,7 @@
       "name": "Homeguard",
       "displayName": "Homeguard",
       "rarity": "silver",
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/homeguard_large.png",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/homeguard_small.png",
       "names": {
         "en": "Homeguard",
         "zh_cn": "家园卫士",
@@ -2227,7 +2227,7 @@
       "name": "Marksmage",
       "displayName": "Marksmage",
       "rarity": "gold",
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/marksmage_large.png",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/marksmage_small.png",
       "names": {
         "en": "Marksmage",
         "zh_cn": "神射法师",
@@ -2296,7 +2296,7 @@
       "name": "Typhoon",
       "displayName": "Typhoon",
       "rarity": "silver",
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/typhoon_large.png",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/typhoon_small.png",
       "names": {
         "en": "Typhoon",
         "zh_cn": "台风",
@@ -2330,7 +2330,7 @@
       "name": "Big Brain",
       "displayName": "Big Brain",
       "rarity": "gold",
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/bigbrain_large.png",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/bigbrain_small.png",
       "names": {
         "en": "Big Brain",
         "zh_cn": "超强大脑",
@@ -2419,7 +2419,7 @@
       "name": "Recursion",
       "displayName": "Recursion",
       "rarity": "gold",
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/recursion_large.png",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/recursion_small.png",
       "names": {
         "en": "Recursion",
         "zh_cn": "循环往复",
@@ -2488,7 +2488,7 @@
       "name": "Stats on Stats!",
       "displayName": "Stats on Stats!",
       "rarity": "gold",
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/statsonstats_large.png",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/statsonstats_small.png",
       "names": {
         "en": "Stats on Stats!",
         "zh_cn": "属性叠属性！",
@@ -2586,7 +2586,7 @@
       "name": "First-Aid Kit",
       "displayName": "First-Aid Kit",
       "rarity": "silver",
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/firstaidkit_large.png",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/firstaidkit_small.png",
       "names": {
         "en": "First-Aid Kit",
         "zh_cn": "急救用具",
@@ -2653,7 +2653,7 @@
       "name": "Buffing, <healing>healing</healing>, or <shield>Shielding</shield> your ally deals <trueDamage>@Damage@ true damage</trueDamage> and <status>Slows enemies surrounding them</status> by @SlowAmount*-100@% for 2 seconds (@ProcCooldown@ seconds Cooldown).<br><br>Damage Dealt: @f2@",
       "displayName": "Buffing, <healing>healing</healing>, or <shield>Shielding</shield> your ally deals <trueDamage>@Damage@ true damage</trueDamage> and <status>Slows enemies surrounding them</status> by @SlowAmount*-100@% for 2 seconds (@ProcCooldown@ seconds Cooldown).<br><br>Damage Dealt: @f2@",
       "rarity": "silver",
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/sonicboom_large.png",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/sonicboom_small.png",
       "names": {
         "en": "Buffing, <healing>healing</healing>, or <shield>Shielding</shield> your ally deals <trueDamage>@Damage@ true damage</trueDamage> and <status>Slows enemies surrounding them</status> by @SlowAmount*-100@% for 2 seconds (@ProcCooldown@ seconds Cooldown).<br><br>Damage Dealt: @f2@",
         "zh_cn": "在为你的友军提供增益效果、<healing>治疗效果</healing>或<shield>护盾效果</shield>时，会对其附近的敌人们造成<trueDamage>@Damage@真实伤害</trueDamage>和持续2秒的@SlowAmount*-100@%<status>减速</status>。(@ProcCooldown@秒冷却时间)<br><br>已造成的伤害：@f2@",
@@ -2688,7 +2688,7 @@
       "name": "Dawnbringer's Resolve",
       "displayName": "Dawnbringer's Resolve",
       "rarity": "gold",
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/dawnbringersresolve_large.png",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/dawnbringersresolve_small.png",
       "names": {
         "en": "Dawnbringer's Resolve",
         "zh_cn": "黎明使者的坚决",
@@ -2756,7 +2756,7 @@
       "name": "Leg Day",
       "displayName": "Leg Day",
       "rarity": "silver",
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/legday_large.png",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/legday_small.png",
       "names": {
         "en": "Leg Day",
         "zh_cn": "练腿日",
@@ -2789,7 +2789,7 @@
       "name": "Overflow",
       "displayName": "Overflow",
       "rarity": "gold",
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/overflow_large.png",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/overflow_small.png",
       "names": {
         "en": "Overflow",
         "zh_cn": "溢流",
@@ -2823,7 +2823,7 @@
       "name": "Erosion",
       "displayName": "Erosion",
       "rarity": "silver",
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/erosion_large.png",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/erosion_small.png",
       "names": {
         "en": "Erosion",
         "zh_cn": "侵蚀",
@@ -2857,7 +2857,7 @@
       "name": "FireFox",
       "displayName": "FireFox",
       "rarity": "silver",
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/firfox_large.png",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/firfox_small.png",
       "names": {
         "en": "FireFox",
         "zh_cn": "火狐",
@@ -2922,7 +2922,7 @@
       "name": "From Beginning To End",
       "displayName": "From Beginning To End",
       "rarity": "gold",
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/frombeginningtoend_large.png",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/frombeginningtoend_small.png",
       "names": {
         "en": "From Beginning To End",
         "zh_cn": "有始有终",
@@ -3051,7 +3051,7 @@
       "name": "Spin To Win",
       "displayName": "Spin To Win",
       "rarity": "silver",
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/spintowin_large.png",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/spintowin_small.png",
       "names": {
         "en": "Spin To Win",
         "zh_cn": "旋转至胜",
@@ -3120,7 +3120,7 @@
       "name": "Omni Soul",
       "displayName": "Omni Soul",
       "rarity": "prismatic",
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/omnisoul_large.png",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/omnisoul_small.png",
       "names": {
         "en": "Omni Soul",
         "zh_cn": "全能龙魂",
@@ -3151,7 +3151,7 @@
       "name": "All For You",
       "displayName": "All For You",
       "rarity": "gold",
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/allforyou_large.png",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/allforyou_small.png",
       "names": {
         "en": "All For You",
         "zh_cn": "全心为你",
@@ -3204,7 +3204,7 @@
       "name": "Don't Blink",
       "displayName": "Don't Blink",
       "rarity": "silver",
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/dontblink_large.png",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/dontblink_small.png",
       "names": {
         "en": "Don't Blink",
         "zh_cn": "唯快不破",
@@ -3313,7 +3313,7 @@
       "name": "Minionmancer",
       "displayName": "Minionmancer",
       "rarity": "gold",
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/minionmancer_large.png",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/minionmancer_small.png",
       "names": {
         "en": "Minionmancer",
         "zh_cn": "仆从大师",
@@ -3381,7 +3381,7 @@
       "name": "Dashing",
       "displayName": "Dashing",
       "rarity": "prismatic",
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/dashing_large.png",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/dashing_small.png",
       "names": {
         "en": "Dashing",
         "zh_cn": "全凭身法",
@@ -3415,7 +3415,7 @@
       "name": "Transmute: Chaos",
       "displayName": "Transmute: Chaos",
       "rarity": "prismatic",
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/transmutechaos_large.png",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/transmutechaos_small.png",
       "names": {
         "en": "Transmute: Chaos",
         "zh_cn": "质变：混沌",
@@ -3482,7 +3482,7 @@
       "name": "Bread and Cheese",
       "displayName": "Bread and Cheese",
       "rarity": "gold",
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/breadandcheese_large.png",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/breadandcheese_small.png",
       "names": {
         "en": "Bread and Cheese",
         "zh_cn": "面包和奶酪",
@@ -3552,7 +3552,7 @@
       "name": "It's Killing Time",
       "displayName": "It's Killing Time",
       "rarity": "gold",
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/itskillingtime_large.png",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/itskillingtime_small.png",
       "names": {
         "en": "It's Killing Time",
         "zh_cn": "杀戮时间到了",
@@ -3586,7 +3586,7 @@
       "name": "Urf's Champion",
       "displayName": "Urf's Champion",
       "rarity": "prismatic",
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/quest_urfschampion_large.png",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/quest_urfschampion_small.png",
       "names": {
         "en": "Urf's Champion",
         "zh_cn": "海牛阿福的勇士",
@@ -3617,7 +3617,7 @@
       "name": "Apex Inventor",
       "displayName": "Apex Inventor",
       "rarity": "gold",
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/apexinventor_large.png",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/apexinventor_small.png",
       "names": {
         "en": "Apex Inventor",
         "zh_cn": "尖端发明家",
@@ -3685,7 +3685,7 @@
       "name": "Master of Duality",
       "displayName": "Master of Duality",
       "rarity": "prismatic",
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/masterofduality_large.png",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/masterofduality_small.png",
       "names": {
         "en": "Master of Duality",
         "zh_cn": "物法皆修",
@@ -3755,7 +3755,7 @@
       "name": "Courage of the Colossus",
       "displayName": "Courage of the Colossus",
       "rarity": "prismatic",
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/courageofthecolossus_large.png",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/courageofthecolossus_small.png",
       "names": {
         "en": "Courage of the Colossus",
         "zh_cn": "巨像的勇气",
@@ -3962,7 +3962,7 @@
       "name": "Stats!",
       "displayName": "Stats!",
       "rarity": "silver",
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/stats_large.png",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/stats_small.png",
       "names": {
         "en": "Stats!",
         "zh_cn": "属性！",
@@ -3993,7 +3993,7 @@
       "name": "Bread And Butter",
       "displayName": "Bread And Butter",
       "rarity": "gold",
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/breadandbutter_large.png",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/breadandbutter_small.png",
       "names": {
         "en": "Bread And Butter",
         "zh_cn": "面包和黄油",
@@ -4062,7 +4062,7 @@
       "name": "Infernal Soul",
       "displayName": "Infernal Soul",
       "rarity": "silver",
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/infernalsoul_large.png",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/infernalsoul_small.png",
       "names": {
         "en": "Infernal Soul",
         "zh_cn": "炼狱龙魂",
@@ -4127,7 +4127,7 @@
       "name": "Stats on Stats on Stats!",
       "displayName": "Stats on Stats on Stats!",
       "rarity": "prismatic",
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/statsonstatsonstats_large.png",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/statsonstatsonstats_small.png",
       "names": {
         "en": "Stats on Stats on Stats!",
         "zh_cn": "属性叠属性叠属性！",
@@ -4158,7 +4158,7 @@
       "name": "Ok Boomerang",
       "displayName": "Ok Boomerang",
       "rarity": "gold",
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/okboomerang_large.png",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/okboomerang_small.png",
       "names": {
         "en": "Ok Boomerang",
         "zh_cn": "回力OK镖",
@@ -4226,7 +4226,7 @@
       "name": "Circle of Death",
       "displayName": "Circle of Death",
       "rarity": "prismatic",
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/circleofdeath_large.png",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/circleofdeath_small.png",
       "names": {
         "en": "Circle of Death",
         "zh_cn": "死亡之环",
@@ -4260,7 +4260,7 @@
       "name": "Bread And Jam",
       "displayName": "Bread And Jam",
       "rarity": "gold",
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/breadandjam_large.png",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/breadandjam_small.png",
       "names": {
         "en": "Bread And Jam",
         "zh_cn": "面包和果酱",
@@ -4294,7 +4294,7 @@
       "name": "Thread the Needle",
       "displayName": "Thread the Needle",
       "rarity": "gold",
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/threadtheneedle_large.png",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/threadtheneedle_small.png",
       "names": {
         "en": "Thread the Needle",
         "zh_cn": "穿针引线",
@@ -4328,7 +4328,7 @@
       "name": "Searing Dawn",
       "displayName": "Searing Dawn",
       "rarity": "gold",
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/searingdawn_large.png",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/searingdawn_small.png",
       "names": {
         "en": "Searing Dawn",
         "zh_cn": "炽烈黎明",
@@ -4396,7 +4396,7 @@
       "name": "Divine Intervention",
       "displayName": "Divine Intervention",
       "rarity": "gold",
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/slowactingpainkillers_large.png",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/slowactingpainkillers_small.png",
       "names": {
         "en": "Divine Intervention",
         "zh_cn": "神圣干预",
@@ -4431,7 +4431,7 @@
       "name": "Symphony of War",
       "displayName": "Symphony of War",
       "rarity": "prismatic",
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/symphonyofwar_large.png",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/symphonyofwar_small.png",
       "names": {
         "en": "Symphony of War",
         "zh_cn": "战争交响乐",
@@ -4466,7 +4466,7 @@
       "name": "Ultimate Revolution",
       "displayName": "Ultimate Revolution",
       "rarity": "prismatic",
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/ultimaterevolution_large.png",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/ultimaterevolution_small.png",
       "names": {
         "en": "Ultimate Revolution",
         "zh_cn": "终极刷新",
@@ -4500,7 +4500,7 @@
       "name": "Firebrand",
       "displayName": "Firebrand",
       "rarity": "gold",
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/firebrand_large.png",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/firebrand_small.png",
       "names": {
         "en": "Firebrand",
         "zh_cn": "火上浇油",
@@ -4534,7 +4534,7 @@
       "name": "Ultimate Unstoppable",
       "displayName": "Ultimate Unstoppable",
       "rarity": "silver",
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/ultimateunstoppable_large.png",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/ultimateunstoppable_small.png",
       "names": {
         "en": "Ultimate Unstoppable",
         "zh_cn": "终极不可阻挡",
@@ -4568,7 +4568,7 @@
       "name": "Dive Bomber",
       "displayName": "Dive Bomber",
       "rarity": "silver",
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/divebomber_large.png",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/divebomber_small.png",
       "names": {
         "en": "Dive Bomber",
         "zh_cn": "俯冲轰炸",
@@ -4601,7 +4601,7 @@
       "name": "Mountain Soul",
       "displayName": "Mountain Soul",
       "rarity": "silver",
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/mountainsoul_large.png",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/mountainsoul_small.png",
       "names": {
         "en": "Mountain Soul",
         "zh_cn": "山脉龙魂",
@@ -4632,7 +4632,7 @@
       "name": "Fey Magic",
       "displayName": "Fey Magic",
       "rarity": "prismatic",
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/feymagic_large.png",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/feymagic_small.png",
       "names": {
         "en": "Fey Magic",
         "zh_cn": "精怪魔法",
@@ -4768,7 +4768,7 @@
       "name": "Impassable",
       "displayName": "Impassable",
       "rarity": "gold",
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/impassable_large.png",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/impassable_small.png",
       "names": {
         "en": "Impassable",
         "zh_cn": "不动如山",
@@ -4834,7 +4834,7 @@
       "name": "Blade Waltz",
       "displayName": "Blade Waltz",
       "rarity": "prismatic",
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/bladewaltz_large.png",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/bladewaltz_small.png",
       "names": {
         "en": "Blade Waltz",
         "zh_cn": "利刃华尔兹",
@@ -5370,7 +5370,7 @@
       "name": "Can't Touch This",
       "displayName": "Can't Touch This",
       "rarity": "prismatic",
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/canttouchthis_large.png",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/canttouchthis_small.png",
       "names": {
         "en": "Can't Touch This",
         "zh_cn": "你摸不到",
@@ -5404,7 +5404,7 @@
       "name": "Pandora's Box",
       "displayName": "Pandora's Box",
       "rarity": "prismatic",
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/pandoras_box_large.png",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/pandoras_box_small.png",
       "names": {
         "en": "Pandora's Box",
         "zh_cn": "潘朵拉的盒子",
@@ -5499,7 +5499,7 @@
       "name": "Shrink Ray",
       "displayName": "Shrink Ray",
       "rarity": "gold",
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/shrinkray_large.png",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/shrinkray_small.png",
       "names": {
         "en": "Shrink Ray",
         "zh_cn": "缩小射线",
@@ -6175,7 +6175,7 @@
       "name": "Buff Buddies",
       "displayName": "Buff Buddies",
       "rarity": "silver",
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/buffbuddies_large.png",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/buffbuddies_small.png",
       "names": {
         "en": "Buff Buddies",
         "zh_cn": "霸符兄弟",
@@ -6209,7 +6209,7 @@
       "name": "Cerberus",
       "displayName": "Cerberus",
       "rarity": "prismatic",
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/cerberus_large.png",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/cerberus_small.png",
       "names": {
         "en": "Cerberus",
         "zh_cn": "地狱三头犬",
@@ -6272,7 +6272,7 @@
       "name": "Clown College",
       "displayName": "Clown College",
       "rarity": "prismatic",
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/clowncollege_large.png",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/clowncollege_small.png",
       "names": {
         "en": "Clown College",
         "zh_cn": "小丑学院",
@@ -6376,7 +6376,7 @@
       "name": "Critical Healing",
       "displayName": "Critical Healing",
       "rarity": "gold",
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/criticalhealing_large.png",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/criticalhealing_small.png",
       "names": {
         "en": "Critical Healing",
         "zh_cn": "会心治疗",
@@ -6479,7 +6479,7 @@
       "name": "Demon's Dance",
       "displayName": "Demon's Dance",
       "rarity": "gold",
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/demonsdance_large.png",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/demonsdance_small.png",
       "names": {
         "en": "Demon's Dance",
         "zh_cn": "魔鬼之舞",
@@ -6620,7 +6620,7 @@
       "name": "Executioner",
       "displayName": "Executioner",
       "rarity": "gold",
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/executioner_large.png",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/executioner_small.png",
       "names": {
         "en": "Executioner",
         "zh_cn": "裁决使",
@@ -6652,7 +6652,7 @@
       "name": "Feel the Burn",
       "displayName": "Feel the Burn",
       "rarity": "prismatic",
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/feeltheburn_large.png",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/feeltheburn_small.png",
       "names": {
         "en": "Feel the Burn",
         "zh_cn": "感受燃烧",
@@ -6720,7 +6720,7 @@
       "name": "Frost Wraith",
       "displayName": "Frost Wraith",
       "rarity": "silver",
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/frostwraith_large.png",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/frostwraith_small.png",
       "names": {
         "en": "Frost Wraith",
         "zh_cn": "冰霜 幽灵",
@@ -6820,7 +6820,7 @@
       "name": "Guilty Pleasure",
       "displayName": "Guilty Pleasure",
       "rarity": "silver",
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/guiltypleasure_large.png",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/guiltypleasure_small.png",
       "names": {
         "en": "Guilty Pleasure",
         "zh_cn": "恶趣味",
@@ -6918,7 +6918,7 @@
       "name": "Holy Fire",
       "displayName": "Holy Fire",
       "rarity": "gold",
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/holyfire_large.png",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/holyfire_small.png",
       "names": {
         "en": "Holy Fire",
         "zh_cn": "圣火",
@@ -6984,7 +6984,7 @@
       "name": "It's Critical",
       "displayName": "It's Critical",
       "rarity": "gold",
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/itscritical_large.png",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/itscritical_small.png",
       "names": {
         "en": "It's Critical",
         "zh_cn": "关键暴击",
@@ -7017,7 +7017,7 @@
       "name": "Jeweled Gauntlet",
       "displayName": "Jeweled Gauntlet",
       "rarity": "prismatic",
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/jeweledgauntlet_large.png",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/jeweledgauntlet_small.png",
       "names": {
         "en": "Jeweled Gauntlet",
         "zh_cn": "珠光护手",
@@ -7051,7 +7051,7 @@
       "name": "Keystone Conjurer",
       "displayName": "Keystone Conjurer",
       "rarity": "gold",
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/keystoneconjurer_large.png",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/keystoneconjurer_small.png",
       "names": {
         "en": "Keystone Conjurer",
         "zh_cn": "基石法师",
@@ -7116,7 +7116,7 @@
       "name": "Lightning Strikes",
       "displayName": "Lightning Strikes",
       "rarity": "gold",
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/lightningstrikes_large.png",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/lightningstrikes_small.png",
       "names": {
         "en": "Lightning Strikes",
         "zh_cn": "闪电打击",
@@ -7167,7 +7167,7 @@
       "name": "Orbital Laser",
       "displayName": "Orbital Laser",
       "rarity": "prismatic",
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/orbitallaser_large.png",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/orbitallaser_small.png",
       "names": {
         "en": "Orbital Laser",
         "zh_cn": "轨道镭射",
@@ -7220,7 +7220,7 @@
       "name": "Perseverance",
       "displayName": "Perseverance",
       "rarity": "gold",
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/perseverance_large.png",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/perseverance_small.png",
       "names": {
         "en": "Perseverance",
         "zh_cn": "坚韧",
@@ -7309,7 +7309,7 @@
       "name": "Quantum Computing",
       "displayName": "Quantum Computing",
       "rarity": "prismatic",
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/quantumcomputing_large.png",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/quantumcomputing_small.png",
       "names": {
         "en": "Quantum Computing",
         "zh_cn": "量子计算",
@@ -7416,7 +7416,7 @@
       "name": "Rejuvenation",
       "displayName": "Rejuvenation",
       "rarity": "gold",
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/rabblerousing_large.png",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/rabblerousing_small.png",
       "names": {
         "en": "Rejuvenation",
         "zh_cn": "活力焕发",
@@ -7450,7 +7450,7 @@
       "name": "Repulsor",
       "displayName": "Repulsor",
       "rarity": "silver",
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/repulsor_large.png",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/repulsor_small.png",
       "names": {
         "en": "Repulsor",
         "zh_cn": "退敌力场",
@@ -7483,7 +7483,7 @@
       "name": "Restless Restoration",
       "displayName": "Restless Restoration",
       "rarity": "gold",
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/restlessrestoration_large.png",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/restlessrestoration_small.png",
       "names": {
         "en": "Restless Restoration",
         "zh_cn": "无休回复",
@@ -7516,7 +7516,7 @@
       "name": "Self Destruct",
       "displayName": "Self Destruct",
       "rarity": "silver",
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/selfdestruct_large.png",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/selfdestruct_small.png",
       "names": {
         "en": "Self Destruct",
         "zh_cn": "自我毁灭",
@@ -7549,7 +7549,7 @@
       "name": "Slow And Steady",
       "displayName": "Slow And Steady",
       "rarity": "gold",
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/slowandsteady_large.png",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/slowandsteady_small.png",
       "names": {
         "en": "Slow And Steady",
         "zh_cn": "一板一眼",
@@ -7581,7 +7581,7 @@
       "name": "Slow Cooker",
       "displayName": "Slow Cooker",
       "rarity": "prismatic",
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/slowcooker_large.png",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/slowcooker_small.png",
       "names": {
         "en": "Slow Cooker",
         "zh_cn": "慢炖",
@@ -7677,7 +7677,7 @@
       "name": "Soul Siphon",
       "displayName": "Soul Siphon",
       "rarity": "gold",
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/soulsiphon_large.png",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/soulsiphon_small.png",
       "names": {
         "en": "Soul Siphon",
         "zh_cn": "灵魂虹吸",
@@ -7760,7 +7760,7 @@
       "name": "Tank It Or Leave It",
       "displayName": "Tank It Or Leave It",
       "rarity": "silver",
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/tankitorleaveit_large.png",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/tankitorleaveit_small.png",
       "names": {
         "en": "Tank It Or Leave It",
         "zh_cn": "会心防御",
@@ -7794,7 +7794,7 @@
       "name": "The Brutalizer",
       "displayName": "The Brutalizer",
       "rarity": "silver",
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/thebrutalizer_large.png",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/thebrutalizer_small.png",
       "names": {
         "en": "The Brutalizer",
         "zh_cn": "残暴之力",
@@ -7828,7 +7828,7 @@
       "name": "Tormentor",
       "displayName": "Tormentor",
       "rarity": "silver",
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/tormentor_large.png",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/tormentor_small.png",
       "names": {
         "en": "Tormentor",
         "zh_cn": "折磨者",
@@ -7879,7 +7879,7 @@
       "name": "Trueshot Prodigy",
       "displayName": "Trueshot Prodigy",
       "rarity": "prismatic",
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/trueshotprodigy_large.png",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/trueshotprodigy_small.png",
       "names": {
         "en": "Trueshot Prodigy",
         "zh_cn": "精准奇才",
@@ -7912,7 +7912,7 @@
       "name": "Twice Thrice",
       "displayName": "Twice Thrice",
       "rarity": "gold",
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/twicethrice_large.png",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/twicethrice_small.png",
       "names": {
         "en": "Twice Thrice",
         "zh_cn": "接二连三",
@@ -8175,7 +8175,7 @@
       "name": "Vulnerability",
       "displayName": "Vulnerability",
       "rarity": "gold",
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/vulnerability_large.png",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/vulnerability_small.png",
       "names": {
         "en": "Vulnerability",
         "zh_cn": "易损",
@@ -8346,7 +8346,7 @@
       "name": "Earthwake",
       "displayName": "Earthwake",
       "rarity": "prismatic",
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/earthwake_large.png",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/earthwake_small.png",
       "names": {
         "en": "Earthwake",
         "zh_cn": "大地苏醒",
@@ -8377,7 +8377,7 @@
       "name": "Flashy",
       "displayName": "Flashy",
       "rarity": "gold",
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/flashy_large.png",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/flashy_small.png",
       "names": {
         "en": "Flashy",
         "zh_cn": "闪现向前",
@@ -8434,7 +8434,7 @@
       "name": "Transmute: Gold",
       "displayName": "Transmute: Gold",
       "rarity": "silver",
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/transmutegold_large.png",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/transmutegold_small.png",
       "names": {
         "en": "Transmute: Gold",
         "zh_cn": "质变：黄金阶",

@@ -103,6 +103,36 @@ for any mismatch. Historical Forged By The Master (CDragon ID `2127`) retains
 its canonical augment route; when latest promotes it, stale removal tombstones
 are cleared before public projection.
 
+### Icon and item-catalog recovery
+
+CommunityDragon's current augment CDN retains many small Cherry/Kiwi icon
+assets after the corresponding historical `*_large.png` path has become a
+404. The assembler therefore chooses the normalized `small` path first and
+falls back to `large`/`rosterSmall` only when no small path exists. The public
+export repeats this projection for committed internal artifacts so an icon
+repair does not require a lifecycle-data rewrite. `EntityIcon` keeps a fixed
+type glyph visible during lazy loading and after an image error; a remote icon
+failure is never rendered as a blank box.
+
+The seven curated Mayhem item rows are canonical variants, not additional
+regular entities. Their explicit IDs are `223039`, `3430`, `4011`, `4403`,
+`223095`, `223084`, and `228002`. The acquisition adapter removes regular
+CDragon rows with those IDs, and `export_public_catalog.py` defensively removes
+the same shadow rows from older internal artifacts while preserving locale
+name fields. After export, assert that the union of `items[]` and
+`mayhemExclusive[]` has no duplicate canonical IDs:
+
+```bash
+python3 scripts/export_public_catalog.py
+python3 scripts/test_export_public_catalog.py
+python3 scripts/test_scrape_community_dragon.py
+python3 scripts/verify_public_bundle_boundary.py
+```
+
+If a future refresh reintroduces a duplicate ID or a blank/broken icon, fix the
+source adapter or asset variant selection and rerun the affected generator;
+do not hand-edit `public/data/`.
+
 ## Operator workflow
 
 The daily `.github/workflows/update-data.yml` performs both lane promotions as

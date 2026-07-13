@@ -103,7 +103,12 @@ def preferred_icon_url(icon: dict | str | None) -> str:
         return cdragon_asset_url(icon)
     if not isinstance(icon, dict):
         return ""
-    return cdragon_asset_url(icon.get("large") or icon.get("small") or icon.get("rosterSmall"))
+    # The current CDragon CDN keeps the small augment asset while many legacy
+    # *_large.png paths resolve to an HTML 404 (and are blocked as an image by
+    # browsers). These cards render at 20–80px, so the small asset is the
+    # authoritative, stable presentation source. Fall back to large/roster
+    # only for older payloads that do not provide a small path.
+    return cdragon_asset_url(icon.get("small") or icon.get("large") or icon.get("rosterSmall"))
 
 
 def currently_disabled(notes: list[str]) -> bool:

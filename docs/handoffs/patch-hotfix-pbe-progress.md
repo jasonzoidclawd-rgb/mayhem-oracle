@@ -152,3 +152,44 @@ the gate; no architecture or disclosure-boundary requirement is being waived.
   the in-app Browser backend was unavailable, so the supported Playwright
   fallback was used and screenshots remain outside the repository under
   `/private/tmp/entity-qa/`.
+
+## Entity icon and duplicate-item hardening (2026-07-13)
+
+- Root cause of the missing augment icons: `scripts/assemble_augments.py`
+  selected CDragon's `*_large.png` path first. The current CDN returns an HTML
+  404 for many historical Cherry augment large paths (the browser reports
+  `ERR_BLOCKED_BY_ORB`), while the corresponding `*_small.png` asset returns
+  `200 image/png`. This affected 119 generated public icon URLs; the existing
+  `EntityLink` also had no load/error fallback, so slow or failed remote images
+  rendered as blank fixed boxes.
+- Root cause of duplicate item rows: `data/internal/items.json` combined the
+  regular CDragon catalog with seven curated Mayhem rows that represented the
+  same canonical IDs (`223039`, `3430`, `4011`, `4403`, `223095`, `223084`,
+  `228002`). Export assigned IDs to the legacy Mayhem rows after the merge,
+  producing seven duplicate IDs in `public/data/items.json`; UI name filtering
+  hid some cases but could not make the source contract unique.
+- Fixes are source/projection-owned: `build_items()` now attaches explicit
+  Mayhem IDs and removes shadowed regular rows; `enrich_public_items()` applies
+  the same deterministic rule defensively to old internal artifacts and carries
+  forward valid locale fields before removing a shadow; augment assembly now
+  prefers the valid small CDragon variant, and the public exporter applies that
+  projection without rewriting unrelated lifecycle/tombstone data.
+- `EntityIcon` is now a small client boundary under the server-rendered
+  `EntityLink`. It keeps a same-size type glyph visible while an icon is lazy
+  loading and after an `onError`, with no layout shift and no change to the
+  public data boundary. Shared sizing constants live in a server-safe module so
+  static generation cannot observe a client-module proxy.
+- Before/after generated invariants: item catalog `468 + 7` rows with 7
+  duplicate canonical IDs became `461 + 7` rows with zero duplicate IDs;
+  public augment rows retain 268 entries, with 119 stale large URLs replaced
+  by valid small URLs. Focused red tests cover the seven-ID projection, source
+  dedup helper, small-icon preference, non-mutating projection, and icon-load
+  fallback.
+- Production-equivalent QA used the rebuilt server at `http://localhost:3000`.
+  Browser plugin bootstrap failed with `Browser is not available: iab`, so the
+  supported Playwright fallback was used. Desktop and mobile English item
+  pages, mobile Traditional Chinese augment pages, and mobile English patch
+  notes all returned 200 with no console errors, failed image requests, broken
+  images, or duplicate visible item IDs. Direct navigation to
+  `/items/atmas-reckoning` returned 200 with no soft-404. Evidence screenshots
+  remain outside the repository under `/private/tmp/entity-qa/`.

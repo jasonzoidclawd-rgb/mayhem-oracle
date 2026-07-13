@@ -42,4 +42,15 @@ describe("EntityLink", () => {
     expect(html).toContain("Boots");
     expect(html).toContain(">I</span>");
   });
+
+  test("keeps a stable fallback visible while a remote icon loads", () => {
+    const html = renderToStaticMarkup(
+      createElement(EntityLink, {
+        entity: { ...base, iconUrl: "https://cdn.example.test/items/1001.png" },
+      }),
+    );
+    expect(html).toContain('data-entity-icon-state="loading"');
+    expect(html).toContain(">I</span>");
+    expect(html).toContain("cdn.example.test/items/1001.png");
+  });
 });

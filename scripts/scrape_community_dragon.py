@@ -21,6 +21,7 @@ from urllib.request import urlopen, Request
 from urllib.error import URLError
 
 from data_paths import INTERNAL_DATA_DIR
+from entity_presentation_projection import MAYHEM_CANONICAL_ITEM_IDS
 
 CDN_BASE = (
     "https://raw.communitydragon.org/latest/plugins/"
@@ -118,7 +119,6 @@ MAYHEM_EXCLUSIVE_ITEMS: list[dict] = [
         "mayhemTag": "modified",
     },
 ]
-
 
 # ── Helpers ────────────────────────────────────────────────────────────────────
 
@@ -413,15 +413,41 @@ def build_items() -> tuple[list[dict], list[dict]]:
     # Sort by cost descending (completed items first)
     catalog.sort(key=lambda x: x["cost"], reverse=True)
 
-    # Enrich Mayhem-exclusive items with icons from the catalog
+    # Enrich Mayhem-exclusive items with icons from the catalog and attach the
+    # stable ID used by CDragon snapshot matching. Exclude the regular row for
+    # the same ID: it is a non-Mayhem variant and would otherwise produce
+    # duplicate canonical entities in public catalogs and route projections.
     mayhem = []
     for item in MAYHEM_EXCLUSIVE_ITEMS:
         enriched = dict(item)
+        enriched["id"] = int(MAYHEM_CANONICAL_ITEM_IDS[item["slug"]])
         icon = name_to_icon.get(item["name"].lower(), "")
         enriched["icon"] = icon
         mayhem.append(enriched)
 
+    catalog = remove_mayhem_duplicate_rows(catalog, mayhem)
+
     return mayhem, catalog
+
+
+def remove_mayhem_duplicate_rows(catalog: list[dict], mayhem: list[dict]) -> list[dict]:
+    """Keep one canonical catalog row, preferring the curated Mayhem row."""
+    mayhem_ids = {
+        str(item["id"])
+        for item in mayhem
+        if isinstance(item, dict) and item.get("id") is not None
+    }
+    seen: set[str] = set()
+    result: list[dict] = []
+    for item in catalog:
+        canonical_id = item.get("id") if isinstance(item, dict) else None
+        if canonical_id is not None:
+            key = str(canonical_id)
+            if key in mayhem_ids or key in seen:
+                continue
+            seen.add(key)
+        result.append(item)
+    return result
 
 
 # ── Main ───────────────────────────────────────────────────────────────────────
