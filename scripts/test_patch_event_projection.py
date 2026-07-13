@@ -109,6 +109,66 @@ class PatchEventProjectionTests(unittest.TestCase):
         self.assertEqual(target["href"], "/augments/adapt")
         self.assertEqual(target["icon"], "adapt.png")
 
+    def test_projection_uses_catalog_localized_names_when_events_only_have_english(self):
+        projection = build_patch_notes_projection(
+            {"current_open_cycle": "26.13", "events": [event(
+                entity_type="item",
+                canonical_id="3152",
+                slug="hextech-rocketbelt",
+                names={"en": "Hextech Rocketbelt"},
+            )]},
+            {"patches": []},
+            entity_records={"item": {"3152": {
+                "slug": "hextech-rocketbelt",
+                "known": True,
+                "route_identifier": "3152",
+                "names": {
+                    "en": "Hextech Rocketbelt",
+                    "zh-TW": "海克斯科技火箭腰帶",
+                    "zh-CN": "海克斯科技火箭腰带",
+                    "ja": "ヘクステック ロケットベルト",
+                    "ko": "마법공학 로켓 벨트",
+                },
+            }}},
+        )
+        target = projection["patches"][0]["sections"][0]["changes"][0]["targets"][0]
+        self.assertEqual(target["names"]["zh-tw"], "海克斯科技火箭腰帶")
+        self.assertEqual(target["names"]["zh-cn"], "海克斯科技火箭腰带")
+        self.assertEqual(target["names"]["ja-jp"], "ヘクステック ロケットベルト")
+        self.assertEqual(target["names"]["ko-kr"], "마법공학 로켓 벨트")
+
+    def test_preview_projection_uses_catalog_localized_names_without_exposing_internal_fields(self):
+        archive = {
+            "status": "fresh",
+            "source_patch_label": "pbe-cycle-16.14",
+            "events": [event(
+                entity_type="item",
+                canonical_id="3152",
+                slug="hextech-rocketbelt",
+                branch="pbe",
+                lane="preview",
+                source_patch_label="pbe-cycle-16.14",
+                names={"en": "Hextech Rocketbelt"},
+            )],
+        }
+        projection = build_preview_projection(
+            archive,
+            {"champion": set(), "augment": set(), "item": {"3152"}},
+            {"item": {"3152": {
+                "slug": "hextech-rocketbelt",
+                "known": True,
+                "route_identifier": "3152",
+                "names": {
+                    "en": "Hextech Rocketbelt",
+                    "zh-TW": "海克斯科技火箭腰帶",
+                },
+            }}},
+        )
+        row = projection["events"][0]
+        self.assertEqual(row["names"]["zh-TW"], "海克斯科技火箭腰帶")
+        self.assertEqual(row["localizedName"], "Hextech Rocketbelt")
+        self.assertNotIn("comparison", json.dumps(projection))
+
     def test_projection_sanitizes_cdragon_markup_from_change_text(self):
         projection = build_patch_notes_projection(
             {

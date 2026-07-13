@@ -193,3 +193,37 @@ the gate; no architecture or disclosure-boundary requirement is being waived.
   images, or duplicate visible item IDs. Direct navigation to
   `/items/atmas-reckoning` returned 200 with no soft-404. Evidence screenshots
   remain outside the repository under `/private/tmp/entity-qa/`.
+
+## Follow-up route and metadata hardening (2026-07-13)
+
+- The remaining duplicate was a projection join defect: CDragon publishes
+  mode variants with the same slug, and the entity projection used that slug
+  as a route fallback. Item `664403` therefore inherited the Mayhem route for
+  canonical item `4403` (`/items/the-golden-spatula`) even though it had no
+  catalog-backed page. Exact canonical-ID matching now owns `known` and
+  `route_identifier`; slug matching may only supply safe display metadata.
+  Champion roster routes remain slug-keyed because that authoritative roster
+  does not publish CDragon numeric IDs. After regeneration, all 468 catalog
+  item records have unique known routes; the 237 source-only variants remain
+  explicitly unlinked.
+- PBE diff events often carried only English names even when the catalog had
+  all five locale fields. The public patch/PBE projection now merges bounded
+  catalog names into event labels, preserving the existing localized key
+  contract without exposing internal snapshots. All 11 current PBE events now
+  have `en`, `zh-TW`, `zh-CN`, `ja`, and `ko` names.
+- The item index already deduplicated display names, but Command-K still read
+  raw item rows. `src/lib/items/catalog.ts` is now the shared deterministic
+  presentation projection used by the item index and search. Searching
+  “Infinity Edge” changed from two results (`3031`, `223031`) to the single
+  highest-ID Mayhem representative (`223031`). Internal snapshots and source
+  IDs remain available for diffing.
+- Red coverage includes the same-slug route-inheritance regression, unique
+  known projected routes, localized live/PBE target metadata, and shared item
+  catalog deduplication. Focused Python suites pass 24/24; Vitest passes 66
+  files / 468 tests; the production build emits 4,658 pages. The rebuilt
+  production-equivalent server is running on `http://localhost:3000`.
+- Browser plugin bootstrap still reports `Browser is not available: iab`.
+  The supported elevated Playwright fallback verified desktop/mobile item
+  tabs (7 Mayhem + 249 All Items, no duplicate names or IDs), Command-K
+  “Infinity Edge” (one result), Traditional Chinese item metadata/canonical,
+  localized PBE cards, and zero broken entity images or app console errors.

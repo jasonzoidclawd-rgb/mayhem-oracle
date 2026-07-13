@@ -9,6 +9,7 @@ import { languageAlternates, localizedUrl } from "@/lib/site";
 import { readEntityPresentationFile } from "@/lib/data/read-public-file";
 import { resolveEntityRef } from "@/lib/entities/catalog";
 import type { EntityPresentationData, EntityRef } from "@/lib/entities/types";
+import { projectVisibleItemCatalog } from "@/lib/items/catalog";
 
 interface ItemsData {
   scraped_at: string;
@@ -64,65 +65,12 @@ export default async function ItemsPage({
     readEntityPresentationFile<EntityPresentationData>(),
   ]);
 
-  // ── Dedup + auto-tag ──────────────────────────────────────────────────────
-  //
-  // The scraped items[] pool contains several classes of entries that need
-  // to be cleaned up before display:
-  //
-  //  A) Base items (id < 200 000) whose Mayhem-modified counterpart exists at
-  //     id + 220 000.  Hide the base; show the +220 000 version tagged "modified".
-  //
-  //  B) Items whose name (case-insensitive) already appears in mayhemExclusive[].
-  //     Hide them — they are already displayed in the Mayhem tab.
-  //
-  //  C) When multiple entries survive A+B with the same name, keep only the one
-  //     with the highest id (most specific / most recent scrape wins).
-  //     This fixes cases like The Collector appearing as both 226 676 (2 500g)
-  //     and 667 666 (3 000g): the higher-id entry is the correct Mayhem version.
-  //
-  const processedItems = data
-    ? (() => {
-        const allIds = new Set(data.items.map((i) => i.id));
-
-        // Names of items already shown in the Mayhem-exclusive tab (case-insensitive)
-        const exclNames = new Set(
-          data.mayhemExclusive.map((i) => i.name.toLowerCase()),
-        );
-
-        // Base IDs hidden because a Mayhem-modified counterpart (id + 220 000) exists
-        const hiddenBaseIds = new Set(
-          data.items
-            .filter((i) => i.id != null && i.id >= 200_000 && allIds.has(i.id - 220_000))
-            .map((i) => i.id! - 220_000),
-        );
-
-        // Pass 1: remove duplicates-of-exclusive and hidden-base items; auto-tag
-        const candidates: Item[] = data.items
-          .filter((i) => {
-            if (exclNames.has(i.name.toLowerCase())) return false;           // rule B
-            if (i.id != null && i.id < 200_000 && hiddenBaseIds.has(i.id))  // rule A
-              return false;
-            return true;
-          })
-          .map((i): Item => {
-            if (i.id == null || i.id < 200_000) return i;
-            const tag = allIds.has(i.id - 220_000) ? "modified" : "exclusive";
-            return i.mayhemTag ? i : { ...i, mayhemTag: tag };
-          });
-
-        // Pass 2: name-level dedup — keep the entry with the highest id (rule C)
-        const best = new Map<string, Item>();
-        for (const item of candidates) {
-          const key = item.name.toLowerCase();
-          const prev = best.get(key);
-          if (!prev || (item.id ?? 0) > (prev.id ?? 0)) best.set(key, item);
-        }
-
-        return [...best.values()];
-      })()
-    : [];
+  const visibleCatalog = data
+    ? projectVisibleItemCatalog({ mayhemExclusive: data.mayhemExclusive, items: data.items })
+    : { mayhemExclusive: [], items: [] };
+  const processedItems = visibleCatalog.items;
   const entityRefs: Record<string, EntityRef> = Object.fromEntries(
-    (data ? [...data.mayhemExclusive, ...processedItems] : []).flatMap((item) => {
+    (data ? [...visibleCatalog.mayhemExclusive, ...processedItems] : []).flatMap((item) => {
       const ref = resolveEntityRef(entityPresentation, "item", {
         canonicalId: item.id != null ? String(item.id) : undefined,
         slug: item.slug,
@@ -141,7 +89,7 @@ export default async function ItemsPage({
 
       {data ? (
         <ItemsClient
-          mayhemExclusive={data.mayhemExclusive}
+          mayhemExclusive={visibleCatalog.mayhemExclusive}
           items={processedItems}
           entityRefs={entityRefs}
         />

@@ -46,6 +46,26 @@ def _locale_names(names: dict[str, Any]) -> dict[str, str]:
     }
 
 
+def _presentation_names(
+    event: dict[str, Any],
+    record: dict[str, Any],
+) -> dict[str, str]:
+    """Merge event labels with catalog-localized presentation names.
+
+    CDragon diff events commonly carry only an English label. The bounded
+    entity record is the public presentation authority for localized names;
+    event labels remain the fallback for source-only entities.
+    """
+    values: dict[str, Any] = {}
+    event_names = event.get("names")
+    if isinstance(event_names, dict):
+        values.update(event_names)
+    record_names = record.get("names")
+    if isinstance(record_names, dict):
+        values.update(record_names)
+    return _locale_names(values)
+
+
 def _display(value: Any) -> str:
     if isinstance(value, str):
         text = _TOKEN_RE.sub(
@@ -110,9 +130,9 @@ def _event_to_change(
 ) -> dict[str, Any]:
     entity_type = str(event.get("entity_type") or "unknown")
     canonical_id = str(event.get("canonical_id") or "")
-    names = _locale_names(event.get("names", {}))
-    is_known, href = _href(event, known, entity_records)
     record = (entity_records or {}).get(entity_type, {}).get(canonical_id, {})
+    names = _presentation_names(event, record)
+    is_known, href = _href(event, known, entity_records)
     canonical_slug = str(record.get("slug") or event.get("slug") or "")
     target = {
         "type": entity_type,
@@ -299,12 +319,20 @@ def build_preview_projection(
             continue
         projection = {field: copy.deepcopy(event[field]) for field in PUBLIC_EVENT_FIELDS if field in event}
         record = (entity_records or {}).get(str(event.get("entity_type") or ""), {}).get(str(event.get("canonical_id") or ""), {})
+        names = _presentation_names(event, record)
         is_known, href = _href(event, known, entity_records)
+        projection["names"] = {
+            "en": names["en"],
+            "zh-TW": names["zh-tw"],
+            "zh-CN": names["zh-cn"],
+            "ja": names["ja-jp"],
+            "ko": names["ko-kr"],
+        }
         projection["known"] = is_known
         projection["canonicalId"] = str(event.get("canonical_id") or "")
         projection["id"] = projection["canonicalId"]
         projection["routeIdentifier"] = str(record.get("route_identifier") or "")
-        projection["localizedName"] = str(record.get("names", {}).get("en") or event.get("names", {}).get("en") or "")
+        projection["localizedName"] = names["en"]
         projection["iconUrl"] = str(record.get("icon") or "")
         if record.get("slug"):
             projection["slug"] = record["slug"]

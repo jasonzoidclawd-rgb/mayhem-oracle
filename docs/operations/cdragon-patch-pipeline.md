@@ -133,6 +133,35 @@ If a future refresh reintroduces a duplicate ID or a blank/broken icon, fix the
 source adapter or asset variant selection and rerun the affected generator;
 do not hand-edit `public/data/`.
 
+### Route and localized-metadata recovery
+
+An item variant can share a CDragon display slug with a catalog-backed item
+without being the same public entity. Route ownership is therefore an exact
+canonical-ID join for items and augments; a slug match may supply only safe
+names, icons, and neutral description metadata. Champion routes remain
+slug-keyed because the authoritative champion roster does not publish the
+CDragon numeric ID. A source-only row must serialize as `known: false` with an
+empty `route_identifier`; never repair it by deriving a URL from its name.
+
+The item index and Command-K search consume the same deterministic
+`projectVisibleItemCatalog` projection. It hides base rows when a Mayhem
+variant exists, removes rows shadowed by curated Mayhem entities, and retains
+the highest-ID display representative for same-name variants. Internal rows
+remain available to snapshot diffing. If a query such as “Infinity Edge” shows
+both a base and a Mayhem ID, run:
+
+```bash
+npx vitest run src/lib/__tests__/item-catalog.test.ts
+npm test -- --run src/lib/__tests__/entity-catalog.test.ts
+python3 scripts/export_public_catalog.py
+```
+
+Patch and PBE events may carry only English source labels. The exporter merges
+the bounded `entity-presentation.json` locale names into those events; verify
+all five public keys (`en`, `zh-TW`, `zh-CN`, `ja`, `ko`) before publishing.
+This merge is presentation-only and must not copy snapshots, comparison state,
+or unrestricted PBE history into `public/data/`.
+
 ## Operator workflow
 
 The daily `.github/workflows/update-data.yml` performs both lane promotions as

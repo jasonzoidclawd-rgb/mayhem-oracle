@@ -3731,8 +3731,8 @@
       "type": "augment",
       "canonical_id": "ARAM_RabbleRousing",
       "slug": "rabble-rousing",
-      "route_identifier": "rabble-rousing",
-      "known": true,
+      "route_identifier": "",
+      "known": false,
       "names": {
         "en": "Rabble Rousing",
         "ja": "扇動者",
@@ -114089,8 +114089,8 @@
       "type": "item",
       "canonical_id": "664403",
       "slug": "the-golden-spatula",
-      "route_identifier": "the-golden-spatula",
-      "known": true,
+      "route_identifier": "",
+      "known": false,
       "names": {
         "en": "The Golden Spatula",
         "ja": "ザ・金のへら",

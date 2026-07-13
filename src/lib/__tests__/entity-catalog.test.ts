@@ -101,6 +101,23 @@ describe("entity presentation catalog", () => {
     }
   });
 
+  test("known projected records cannot share one canonical detail route", () => {
+    const routes = new Set<string>();
+    for (const entity of data.entities) {
+      if (!entity.known) continue;
+      const key = `${entity.type}:${entity.route_identifier}`;
+      expect(routes.has(key), `${key} (${entity.canonical_id})`).toBe(false);
+      routes.add(key);
+    }
+
+    // CDragon contains a Golden Spatula variant that shares the Mayhem
+    // display slug but is not a catalog-backed detail page. It must remain
+    // an explicitly unlinked source entity.
+    const variant = resolveEntityRef(data, "item", { canonicalId: "664403" }, "en");
+    expect(variant).toMatchObject({ id: "664403", known: false, routeIdentifier: "" });
+    expect(variant?.href).toBeUndefined();
+  });
+
   test("duplicate static identifiers fail closed instead of creating ambiguous links", () => {
     expect(() => buildEntityRouteSets({
       champions: [{ slug: "duplicate" }, { slug: "duplicate" }],

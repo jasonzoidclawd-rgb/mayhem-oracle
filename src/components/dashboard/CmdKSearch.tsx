@@ -10,6 +10,8 @@ import {
 import type { PatchNotesData } from "@/lib/types";
 import { resolveEntityRef } from "@/lib/entities/catalog";
 import type { EntityPresentationData, EntityRef } from "@/lib/entities/types";
+import { projectVisibleItemCatalog } from "@/lib/items/catalog";
+import type { Item } from "@/lib/types";
 import { EntityLink } from "@/components/entities/EntityLink";
 
 type SearchItem = LocalizedNameRecord & {
@@ -66,9 +68,13 @@ export function CmdKSearch() {
         icon: a.icon,
         entity: resolveEntityRef(entityData, "augment", { slug: a.slug }, locale) ?? undefined,
       }));
+      const visibleItems = projectVisibleItemCatalog({
+        items: (itemData.items ?? []) as Item[],
+        mayhemExclusive: (itemData.mayhemExclusive ?? []) as Item[],
+      });
       const itemItems: SearchItem[] = [
-        ...(itemData.items ?? []),
-        ...(itemData.mayhemExclusive ?? []),
+        ...visibleItems.mayhemExclusive,
+        ...visibleItems.items,
       ].map((item: LocalizedNameRecord & { id?: number; slug?: string; icon?: string }) => ({
         name: item.name,
         name_zh_TW: item.name_zh_TW,

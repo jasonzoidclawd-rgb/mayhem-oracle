@@ -226,6 +226,41 @@ class EntityPresentationProjectionTests(unittest.TestCase):
             ["item"],
         )
 
+    def test_item_variant_cannot_inherit_route_from_same_slug_catalog_row(self):
+        """Route ownership is canonical-ID based; slug matching is presentation-only."""
+        latest = {
+            "champion": snapshot("champion", "latest", "16.13.2", "26.13", []),
+            "augment": snapshot("augment", "latest", "16.13.2", "26.13", []),
+            "item": snapshot("item", "latest", "16.13.2", "26.13", [
+                entity("4403", "the-golden-spatula", {"cost": 2500}),
+                entity("664403", "the-golden-spatula", {"cost": 2500}),
+            ]),
+        }
+        result = build_entity_presentation(
+            snapshots=latest,
+            catalogs={
+                "champion": {"rows": []},
+                "augment": {"rows": []},
+                "item": {"rows": [{
+                    "id": 4403,
+                    "slug": "the-golden-spatula",
+                    "name": "The Golden Spatula",
+                    "name_zh_TW": "黃金鍋鏟",
+                    "icon": "spatula.png",
+                    "_route_identifier": "the-golden-spatula",
+                }]},
+            },
+        )
+        rows = {row["canonical_id"]: row for row in result["entities"] if row["type"] == "item"}
+        self.assertEqual(rows["4403"]["route_identifier"], "the-golden-spatula")
+        self.assertTrue(rows["4403"]["known"])
+        self.assertEqual(rows["664403"]["route_identifier"], "")
+        self.assertFalse(rows["664403"]["known"])
+        # The same-slug catalog row may provide safe display metadata, but not
+        # a route or a known=true claim for the unlisted canonical ID.
+        self.assertEqual(rows["664403"]["names"]["zh-TW"], "黃金鍋鏟")
+        self.assertEqual(rows["664403"]["icon"], "spatula.png")
+
     def test_forged_by_the_master_snapshot_presence_clears_legacy_removal(self):
         latest = {
             "champion": snapshot("champion", "latest", "16.13.2", "26.13", [entity("1", "annie", {})]),

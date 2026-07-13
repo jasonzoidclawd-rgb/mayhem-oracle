@@ -345,37 +345,43 @@ def _record(
     live_events: list[dict[str, Any]],
     pbe_events: list[dict[str, Any]],
     present_in_snapshot: bool = True,
+    route_catalog_row: dict[str, Any] | None = None,
 ) -> dict[str, Any]:
     canonical_id = str(snapshot_row["id"])
-    catalog_row = catalog_row or {}
-    flags = catalog_row.get("flags") if isinstance(catalog_row.get("flags"), dict) else {}
+    # A same-slug CDragon variant may borrow safe display metadata (names,
+    # icon, neutral description) from the catalog, but it must never inherit
+    # route ownership. Route ownership is selected by exact canonical ID;
+    # `catalog_row` may still be a slug-only presentation match.
+    display_catalog_row = catalog_row or {}
+    route_catalog_row = route_catalog_row if route_catalog_row is not None else display_catalog_row
+    flags = route_catalog_row.get("flags") if isinstance(route_catalog_row.get("flags"), dict) else {}
     lifecycle = "active" if present_in_snapshot else str(flags.get("lifecycle") or "unknown")
     if entity_type == "item":
         # Regular item pages accept numeric IDs. Mayhem-exclusive rows carry
         # an explicit route identifier from the exporter because their static
         # pages accept the curated slug instead.
         route_identifier = str(
-            catalog_row.get("_route_identifier")
-            or (catalog_row.get("id") if catalog_row.get("id") is not None else "")
+            route_catalog_row.get("_route_identifier")
+            or (route_catalog_row.get("id") if route_catalog_row.get("id") is not None else "")
         ).strip()
     else:
         # Champion and augment routes are generated from the public catalog;
         # a CDragon-only row (for example Locke) intentionally remains
         # unlinked until that catalog generates a real page.
-        route_identifier = str(catalog_row.get("slug") or "").strip()
-    known = bool(route_identifier and catalog_row)
+        route_identifier = str(route_catalog_row.get("slug") or "").strip()
+    known = bool(route_identifier and route_catalog_row)
     record = {
         "type": entity_type,
         "canonical_id": canonical_id,
         # Catalog slugs are the public canonical route.  CDragon slugs are
         # still useful for matching additions, but must not silently replace a
         # stable localized detail URL (for example ADAPt → /augments/adapt).
-        "slug": str(catalog_row.get("slug") or snapshot_row.get("slug") or ""),
+        "slug": str(display_catalog_row.get("slug") or snapshot_row.get("slug") or ""),
         "route_identifier": route_identifier,
         "known": known,
-        "names": _names(snapshot_row, catalog_row),
-        "icon": str(catalog_row.get("icon") or ""),
-        "description": _neutral_description(catalog_row.get("wikiDescription") or catalog_row.get("description") or ""),
+        "names": _names(snapshot_row, display_catalog_row),
+        "icon": str(display_catalog_row.get("icon") or ""),
+        "description": _neutral_description(display_catalog_row.get("wikiDescription") or display_catalog_row.get("description") or ""),
         "lifecycle": {
             "state": lifecycle,
             "patch": str(flags.get("lifecycle_patch") or ""),
@@ -443,8 +449,26 @@ def build_entity_presentation(
         seen: set[str] = set()
         for snapshot_row in snapshot_rows:
             canonical_id = str(snapshot_row["id"])
-            catalog_row = by_id.get(canonical_id) or by_slug.get(str(snapshot_row.get("slug") or ""))
-            rows.append(_record(entity_type, snapshot_row, catalog_row, snapshot, live_events, pbe_events))
+            route_catalog_row = by_id.get(canonical_id)
+            slug_catalog_row = by_slug.get(str(snapshot_row.get("slug") or ""))
+            # The champion roster's public route source is slug-keyed and does
+            # not publish the CDragon numeric ID. Slug matching is therefore
+            # the authoritative route join for champions only. Items and
+            # augments must have an exact canonical-ID catalog row.
+            if route_catalog_row is None and entity_type == "champion":
+                route_catalog_row = slug_catalog_row
+            display_catalog_row = route_catalog_row or slug_catalog_row
+            rows.append(_record(
+                entity_type,
+                snapshot_row,
+                display_catalog_row,
+                snapshot,
+                live_events,
+                pbe_events,
+                # An empty route row is intentional for a CDragon-only
+                # variant that only matched the catalog by slug.
+                route_catalog_row=route_catalog_row or {},
+            ))
             seen.add(canonical_id)
         # Retain removed historical entities when their catalog has a stable ID.
         for canonical_id, catalog_row in by_id.items():
