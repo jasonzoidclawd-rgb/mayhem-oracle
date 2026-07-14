@@ -110,7 +110,7 @@ export default async function HomePage({
     <>
       <DashboardIslands />
       <div className="grid grid-cols-1 gap-3 md:grid-cols-6 md:gap-3.5 lg:grid-cols-12 lg:gap-4">
-        <PatchPulseBanner patch={patch} />
+        <PatchPulseBanner patch={patch} updatedAt={scraped_at} />
         <RotateHint />
         <HeroMover champion={heroChampion} total={champions.length} patch={patch} entityPresentation={entityPresentation} />
         <MetaAtAGlance

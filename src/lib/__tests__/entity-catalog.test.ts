@@ -3,8 +3,8 @@ import entityData from "../../../public/data/entity-presentation.json";
 import championsData from "../../../public/data/champions.json";
 import augmentsData from "../../../public/data/augments.json";
 import itemsData from "../../../public/data/items.json";
-import { buildEntityIndex, resolveEntityRef } from "@/lib/entities/catalog";
-import { formatEntityStatValue } from "@/components/entities/EntityStats";
+import { buildEntityIndex, resolveEntityRef, unknownEntityRef } from "@/lib/entities/catalog";
+import { formatEntityStatValue } from "@/lib/entities/format";
 import type { EntityPresentationData } from "@/lib/entities/types";
 import { assertEntityRefRoutes, buildEntityRouteSets, localizedEntityHref } from "@/lib/entities/routes";
 
@@ -79,6 +79,64 @@ describe("entity presentation catalog", () => {
       href: "/augments/forged-by-the-master",
       localizedName: "大師鑄造",
     });
+  });
+
+  test("current CDragon lifecycle fixtures stay active and routeable", () => {
+    const fixtures = [
+      ["terraind", "Terraind"],
+      ["surge-field", "SurgeField"],
+      ["squishy-slappy-grab", "SquishySlappyGrab"],
+      ["porcupine", "PinCushion"],
+      ["its-go-time", "ItsGoTime"],
+      ["from-downtown", "ARAM_BangBang"],
+    ] as const;
+
+    for (const [slug, canonicalId] of fixtures) {
+      const row = augmentsData.augments.find((augment) => augment.slug === slug);
+      expect(row, slug).toBeTruthy();
+      expect(row?.flags?.lifecycle, slug).toBe("active");
+      expect(row?.flags?.lifecycle_patch, slug).toBeUndefined();
+
+      for (const locale of ["en", "zh-TW", "zh-CN", "ja", "ko"] as const) {
+        const ref = resolveEntityRef(data, "augment", { canonicalId }, locale);
+        expect(ref, `${slug}:${locale}`).toMatchObject({
+          id: canonicalId,
+          slug,
+          routeIdentifier: slug,
+          href: `/augments/${slug}`,
+          known: true,
+          localizedName: expect.any(String),
+          iconUrl: expect.stringContaining("communitydragon.org"),
+        });
+      }
+
+      const projected = data.entities.find(
+        (entity) => entity.type === "augment" && entity.canonical_id === canonicalId,
+      );
+      expect(projected?.lifecycle.state, slug).toBe("active");
+      expect(projected?.lifecycle.patch, slug).toBe("");
+    }
+
+    const genuinelyRemoved = augmentsData.augments.find((augment) => augment.slug === "frost-wraith");
+    expect(genuinelyRemoved?.flags?.lifecycle).toBe("removed");
+  });
+
+  test("unknown structured occurrences remain icon/name frames without invented links", () => {
+    const ref = unknownEntityRef("item", {
+      id: "3168",
+      slug: "immortal-path",
+      name: "不朽之道",
+      iconUrl: "https://raw.communitydragon.org/example.png",
+    });
+    expect(ref).toMatchObject({
+      type: "item",
+      id: "3168",
+      localizedName: "不朽之道",
+      iconUrl: "https://raw.communitydragon.org/example.png",
+      known: false,
+      routeIdentifier: "",
+    });
+    expect(ref.href).toBeUndefined();
   });
 
   test("static route guard covers every known EntityRef in all five locales", () => {
@@ -162,7 +220,7 @@ describe("entity presentation catalog", () => {
     expect(formatEntityStatValue(10, "percent")).toBe("10%");
     expect(formatEntityStatValue(8, "flat")).toBe("8");
     expect(formatEntityStatValue(8, "gold")).toBe("8g");
-    expect(formatEntityStatValue([10, 12], "percent")).toBe("10% / 12%");
+    expect(formatEntityStatValue([10, 12], "percent")).toBe("10%–12%");
     expect(formatEntityStatValue("gold", "label")).toBe("gold");
   });
 });

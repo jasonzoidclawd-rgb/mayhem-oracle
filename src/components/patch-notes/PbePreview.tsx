@@ -103,7 +103,7 @@ export async function PbePreview({ data, locale }: { data: PbePreviewData | null
               {events.map((event) => (
                 <li key={`${event.entity_type}-${event.canonical_id}-${event.fields_changed.join("-")}`} className="px-5 py-4">
                   <div className="flex flex-wrap items-center gap-2">
-                    <span className="rounded border border-cyan-400/30 px-1.5 py-0.5 text-[11px] uppercase tracking-wide text-cyan-200">
+                    <span className="rounded border border-cyan-400/30 px-1.5 py-0.5 text-[11px] text-cyan-200">
                       {t(`objectTypes.${event.entity_type}`)}
                     </span>
                     <EntityLink

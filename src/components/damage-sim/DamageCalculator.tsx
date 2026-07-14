@@ -578,6 +578,19 @@ function ItemSlot({
   }, []);
 
   const item = itemId != null ? items.find((it) => it.id === itemId) : null;
+  const itemRef = (candidate: CalcItem): EntityRef => candidate.entity ?? {
+    type: "item",
+    id: String(candidate.id),
+    slug: "",
+    routeIdentifier: "",
+    localizedName: candidate.name,
+    iconUrl: candidate.icon ?? "",
+    known: false,
+    canonicalId: String(candidate.id),
+    name: candidate.name,
+    icon: candidate.icon,
+    lifecycle: "unknown",
+  };
 
   const filtered = useMemo(() => {
     const chosen = new Set(chosenIds.filter((id) => id != null));
@@ -596,14 +609,7 @@ function ItemSlot({
   if (item) {
     return (
       <div className="flex items-center gap-1 px-1.5 py-1 rounded-lg border border-[var(--color-border-default)] bg-[var(--color-bg-card)]/60">
-        {item.entity ? (
-          <EntityLink entity={item.entity} variant="compact" className="max-w-[9rem]" />
-        ) : (
-          <>
-            <Image src={item.icon} alt={item.name} width={24} height={24} className="rounded-sm" unoptimized />
-            <span className="max-w-[7rem] truncate text-[10px] text-[var(--color-text-muted)]">{item.name}</span>
-          </>
-        )}
+        <EntityLink entity={itemRef(item)} variant="compact" className="max-w-[9rem]" />
         <button
           type="button"
           onClick={() => onSelect(null)}
@@ -636,14 +642,7 @@ function ItemSlot({
           />
           {filtered.map((it) => (
             <div key={it.id} className="flex items-center gap-2 w-full px-2 py-1 text-xs text-left hover:bg-[var(--color-neon-primary)]/10 text-[var(--color-text-primary)]">
-              {it.entity ? (
-                <EntityLink entity={it.entity} variant="compact" className="min-w-0 flex-1" />
-              ) : (
-                <>
-                  <Image src={it.icon} alt={it.name} width={18} height={18} className="rounded-sm" unoptimized />
-                  <span className="min-w-0 flex-1 truncate">{it.name}</span>
-                </>
-              )}
+              <EntityLink entity={itemRef(it)} variant="compact" className="min-w-0 flex-1" />
               <button
                 type="button"
                 aria-label={`Select ${it.name}`}

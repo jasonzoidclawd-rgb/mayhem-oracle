@@ -18,7 +18,7 @@ import type { Locale } from "@/i18n/routing";
 import { languageAlternates, localizedUrl } from "@/lib/site";
 import { localizedDescription, localizedName } from "@/lib/i18n/localized-name";
 import { readEntityPresentationFile } from "@/lib/data/read-public-file";
-import { resolveEntityRef } from "@/lib/entities/catalog";
+import { resolveEntityRef, unknownEntityRef } from "@/lib/entities/catalog";
 import type { EntityPresentationData } from "@/lib/entities/types";
 import { EntityLink } from "@/components/entities/EntityLink";
 
@@ -589,9 +589,15 @@ export default async function DamageSimPage({
                   className={`border-b border-[var(--color-border-default)] hover:bg-[var(--color-bg-card)]/40 transition-colors ${i % 2 === 0 ? "" : "bg-[var(--color-bg-card)]/20"}`}
                 >
                   <td className="px-4 py-2.5 font-medium text-[var(--color-text-primary)]">
-                    {resolveEntityRef(entityData, "item", { canonicalId: row.item.id != null ? String(row.item.id) : undefined, slug: row.item.slug }, locale) ? (
-                      <EntityLink entity={resolveEntityRef(entityData, "item", { canonicalId: row.item.id != null ? String(row.item.id) : undefined, slug: row.item.slug }, locale)!} variant="compact" />
-                    ) : localizedName(row.item, locale)}
+                    <EntityLink
+                      entity={resolveEntityRef(entityData, "item", { canonicalId: row.item.id != null ? String(row.item.id) : undefined, slug: row.item.slug }, locale) ?? unknownEntityRef("item", {
+                        id: row.item.id,
+                        slug: row.item.slug,
+                        name: localizedName(row.item, locale),
+                        iconUrl: row.item.icon,
+                      })}
+                      variant="compact"
+                    />
                   </td>
                   <Num>{row.ad}</Num>
                   <Num>{row.critChancePct > 0 ? `${row.critChancePct.toFixed(0)}%` : "—"}</Num>
@@ -641,9 +647,15 @@ export default async function DamageSimPage({
                   className={`border-b border-[var(--color-border-default)] hover:bg-[var(--color-bg-card)]/40 transition-colors ${i % 2 === 0 ? "" : "bg-[var(--color-bg-card)]/20"}`}
                 >
                   <td className="px-4 py-2.5 font-medium text-[var(--color-text-primary)]">
-                    {resolveEntityRef(entityData, "item", { canonicalId: row.item.id != null ? String(row.item.id) : undefined, slug: row.item.slug }, locale) ? (
-                      <EntityLink entity={resolveEntityRef(entityData, "item", { canonicalId: row.item.id != null ? String(row.item.id) : undefined, slug: row.item.slug }, locale)!} variant="compact" />
-                    ) : localizedName(row.item, locale)}
+                    <EntityLink
+                      entity={resolveEntityRef(entityData, "item", { canonicalId: row.item.id != null ? String(row.item.id) : undefined, slug: row.item.slug }, locale) ?? unknownEntityRef("item", {
+                        id: row.item.id,
+                        slug: row.item.slug,
+                        name: localizedName(row.item, locale),
+                        iconUrl: row.item.icon,
+                      })}
+                      variant="compact"
+                    />
                   </td>
                   <Num>{row.ap}</Num>
                   <Num>{row.magicPenPct > 0 ? `${row.magicPenPct.toFixed(0)}%` : "—"}</Num>

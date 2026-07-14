@@ -11,10 +11,10 @@ import { buildPatchSummary } from "@/lib/seo/patch-summary";
 import { readItemsFile, readMetaFile } from "@/lib/data/read-public-file";
 import { readEntityPresentationFile } from "@/lib/data/read-public-file";
 import { languageAlternates, localizedUrl } from "@/lib/site";
-import { resolveEntityRef } from "@/lib/entities/catalog";
+import { resolveEntityRef, unknownEntityRef } from "@/lib/entities/catalog";
 import type { EntityPresentationData } from "@/lib/entities/types";
 import { EntityLink } from "@/components/entities/EntityLink";
-import { EntityStats } from "@/components/entities/EntityStats";
+import { EntityRecordStats, EntitySectionHeading, EntityTag } from "@/components/entities/EntityPresentation";
 import { buildEntityRouteSets } from "@/lib/entities/routes";
 
 // Raw Riot API category identifier → translation key in items namespace.
@@ -178,6 +178,7 @@ export default async function ItemDetailPage({
   const { locale, identifier } = await params;
   setRequestLocale(locale);
   const t = await getTranslations("items");
+  const te = await getTranslations("entities");
 
   const [data, entityPresentation] = await Promise.all([
     loadItemsData(),
@@ -191,7 +192,12 @@ export default async function ItemDetailPage({
     "item",
     { canonicalId: item.id != null ? String(item.id) : undefined, slug: item.slug },
     locale,
-  );
+  ) ?? unknownEntityRef("item", {
+    id: item.id,
+    slug: item.slug,
+    name: itemName,
+    iconUrl: item.icon,
+  });
   const entityRecord = entityRef
     ? entityPresentation.entities.find(
         (record) => record.type === "item" && record.canonical_id === entityRef.canonicalId,
@@ -310,6 +316,7 @@ export default async function ItemDetailPage({
                 {tierLabel}
               </span>
             )}
+            {entityRef.lifecycle === "active" ? <EntityTag tone="cyan">{te("activeLabel")}</EntityTag> : null}
           </div>
 
           <div className="flex items-center gap-3 mt-1.5 flex-wrap">
@@ -355,7 +362,36 @@ export default async function ItemDetailPage({
         </section>
       )}
 
-      {entityRecord ? <EntityStats record={entityRecord} locale={locale} /> : null}
+      {entityRecord ? (
+        <EntityRecordStats
+          record={{
+            ...entityRecord,
+            // Mayhem catalog values are authoritative for item identity and
+            // stats; omit the generic CDragon cost projection when it would
+            // contradict the route-specific record.
+            stats: entityRecord.stats.filter((stat) => stat.key !== "cost"),
+            patch_changes: entityRecord.patch_changes.filter((change) => change.key !== "cost"),
+          }}
+          heading={te("statsHeading")}
+          labelFor={(key) => te(key)}
+          previewLabel={te("previewLabel")}
+          liveLabel={te("liveLabel")}
+          landedLabel={te("landedLabel")}
+          hotfixLabel={te("hotfixLabel")}
+          directionFor={(direction) => te(`direction.${direction}`)}
+        />
+      ) : null}
+
+      {item.stats ? (
+        <section className="mt-5" aria-labelledby="item-stats-heading">
+          <EntitySectionHeading><span id="item-stats-heading">{te("statsHeading")}</span></EntitySectionHeading>
+          <div className="flex flex-wrap gap-1.5">
+            {item.stats.split(",").map((stat) => stat.trim()).filter(Boolean).map((stat) => (
+              <EntityTag key={stat} tone="cyan">{stat}</EntityTag>
+            ))}
+          </div>
+        </section>
+      ) : null}
 
       {entityRecord?.description ? (
         <section className="glass-card p-5" aria-labelledby="item-description-heading">
@@ -412,10 +448,16 @@ export default async function ItemDetailPage({
               const componentRef = compItem
                 ? resolveEntityRef(entityPresentation, "item", { canonicalId: compItem.id != null ? String(compItem.id) : undefined, slug: compItem.slug }, locale)
                 : null;
-              const badge = componentRef ? (
-                <EntityLink entity={componentRef} variant="compact" />
-              ) : (
-                <span className="text-sm text-[var(--color-text-secondary)]">{component}</span>
+              const badge = (
+                <EntityLink
+                  entity={componentRef ?? unknownEntityRef("item", {
+                    id: compItem?.id,
+                    slug: compItem?.slug,
+                    name: compItem ? localizedName(compItem, locale) : component,
+                    iconUrl: compItem?.icon,
+                  })}
+                  variant="compact"
+                />
               );
               const linked = componentRef
                 ? <span key={`comp-${i}`} className="inline-flex items-center gap-2 rounded-lg border border-[var(--color-border-default)] bg-[var(--color-bg-card)]/60 px-3 py-1.5">{badge}<span className="text-amber-400/70 text-xs">{compItem?.cost.toLocaleString()}g</span></span>
@@ -438,9 +480,5 @@ export default async function ItemDetailPage({
 // ─── Sub-components ───────────────────────────────────────────────────────────
 
 function SectionHeading({ children }: { children: React.ReactNode }) {
-  return (
-    <h2 className="text-xs font-bold uppercase tracking-widest text-[var(--color-text-muted)] mb-3">
-      {children}
-    </h2>
-  );
+  return <EntitySectionHeading>{children}</EntitySectionHeading>;
 }

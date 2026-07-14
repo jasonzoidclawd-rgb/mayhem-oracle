@@ -94,6 +94,37 @@ export function resolveEntityRef(
   };
 }
 
+/**
+ * Build a fail-closed presentation ref for a structured occurrence that has
+ * no matching public catalog record. The returned ref is deliberately
+ * non-routeable; callers can still render the same icon/name frame without
+ * inventing a destination from a display slug.
+ */
+export function unknownEntityRef(
+  type: EntityType,
+  input: {
+    id?: string | number | null;
+    slug?: string | null;
+    name: string;
+    iconUrl?: string | null;
+  },
+): EntityRef {
+  const id = String(input.id ?? input.slug ?? input.name);
+  return {
+    type,
+    id,
+    slug: String(input.slug ?? ""),
+    routeIdentifier: "",
+    localizedName: input.name,
+    iconUrl: input.iconUrl ?? "",
+    known: false,
+    canonicalId: id,
+    name: input.name,
+    ...(input.iconUrl ? { icon: input.iconUrl } : {}),
+    lifecycle: "unknown",
+  };
+}
+
 export function resolveEntityRefs(
   data: EntityPresentationData,
   refs: Array<{ type: EntityType; canonicalId?: string; slug?: string }>,

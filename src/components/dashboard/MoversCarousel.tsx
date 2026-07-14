@@ -16,6 +16,7 @@ export async function MoversCarousel({ augments, entityPresentation }: { augment
   if (augments.length === 0) return null;
 
   const t = await getTranslations("dashboard");
+  const tChampion = await getTranslations("champion");
   const locale = await getLocale();
 
   return (
@@ -30,17 +31,24 @@ export async function MoversCarousel({ augments, entityPresentation }: { augment
         {augments.map((augment) => (
           (() => {
             const entityRef = resolveEntityRef(entityPresentation, "augment", { slug: augment.slug }, locale);
+            const ref = entityRef ?? {
+              type: "augment" as const,
+              id: augment.slug,
+              slug: augment.slug,
+              routeIdentifier: "",
+              localizedName: localizedName(augment, locale),
+              iconUrl: augment.icon ?? "",
+              known: false,
+              canonicalId: augment.slug,
+              name: localizedName(augment, locale),
+              icon: augment.icon,
+              lifecycle: "unknown" as const,
+            };
             return (
               <div key={augment.slug} className="flex shrink-0 flex-col items-center gap-1 rounded-lg border border-[var(--color-border-default)] p-2 transition-colors hover:border-[var(--color-border-hover)]" style={{ width: "76px" }}>
-                {entityRef ? <EntityLink entity={entityRef} variant="compact" className="w-full justify-center" /> : (
-                  <Link href={`/augments/${augment.slug}`} className="flex flex-col items-center gap-1">
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img src={augment.icon} alt={localizedName(augment, locale)} className="h-10 w-10 rounded-md" />
-                    <span className="truncate text-center text-[11px] text-[var(--color-text-secondary)]">{localizedName(augment, locale)}</span>
-                  </Link>
-                )}
-                <span className={`rounded px-1 py-0.5 text-[9px] font-semibold uppercase ${rarityBadgeClass(augment.rarity)}`}>
-                  {augment.rarity}
+                <EntityLink entity={ref} variant="compact" rarity={augment.rarity} className="w-full justify-center" />
+                <span className={`rounded px-1 py-0.5 text-[9px] font-semibold ${rarityBadgeClass(augment.rarity)}`}>
+                  {tChampion(augment.rarity as "prismatic" | "gold" | "silver")}
                 </span>
               </div>
             );

@@ -28,18 +28,23 @@ export async function TierMiniGrid({ champions, entityPresentation }: { champion
       <ul className="mt-3 grid grid-cols-2 gap-2 sm:grid-cols-3 md:grid-cols-4">
         {champions.map((champion) => {
           const entityRef = resolveEntityRef(entityPresentation, "champion", { slug: champion.slug }, locale);
+          const ref = entityRef ?? {
+            type: "champion" as const,
+            id: champion.slug,
+            slug: champion.slug,
+            routeIdentifier: "",
+            localizedName: localizedName(champion, locale),
+            iconUrl: champion.icon ?? "",
+            known: false,
+            canonicalId: champion.slug,
+            name: localizedName(champion, locale),
+            icon: champion.icon,
+            lifecycle: "unknown" as const,
+          };
           return (
             <li key={champion.slug}>
               <div className="flex items-center gap-1 rounded-lg border border-[var(--color-border-default)] p-2 transition-colors hover:border-[var(--color-border-hover)]">
-                {entityRef ? (
-                  <EntityLink entity={entityRef} variant="standard" className="min-w-0 flex-1" />
-                ) : (
-                  <Link href={`/champions/${champion.slug}`} className="flex min-w-0 flex-1 items-center gap-2">
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img src={champion.icon} alt={localizedName(champion, locale)} className="h-8 w-8 shrink-0 rounded-md" />
-                    <span className="truncate text-sm text-[var(--color-text-primary)]">{localizedName(champion, locale)}</span>
-                  </Link>
-                )}
+                <EntityLink entity={ref} variant="standard" tier={champion.tier} className="min-w-0 flex-1" />
                 <span className={`shrink-0 rounded px-1 py-0.5 text-[10px] font-semibold ${tierBadgeClass(champion.tier)}`}>
                   {champion.tier}
                 </span>

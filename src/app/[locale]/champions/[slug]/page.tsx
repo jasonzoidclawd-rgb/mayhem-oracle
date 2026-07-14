@@ -35,7 +35,7 @@ import { languageAlternates, localizedUrl } from "@/lib/site";
 import { resolveEntityRef } from "@/lib/entities/catalog";
 import type { EntityPresentationData, EntityRef } from "@/lib/entities/types";
 import { EntityLink } from "@/components/entities/EntityLink";
-import { EntityStats } from "@/components/entities/EntityStats";
+import { EntityPatchChanges, EntityStatsInline, EntityTag } from "@/components/entities/EntityPresentation";
 import { buildEntityRouteSets } from "@/lib/entities/routes";
 
 type ChampionData = ChampionDetailChampion;
@@ -129,6 +129,7 @@ export default async function ChampionPage({
   const { locale, slug } = await params;
   setRequestLocale(locale);
   const t = await getTranslations("champion");
+  const te = await getTranslations("entities");
   const tm = await getTranslations("membership");
   const tg = await getTranslations("grades");
 
@@ -158,8 +159,25 @@ export default async function ChampionPage({
   const activeChamp = activeData.champions.find((c) => c.slug === slug) ?? champ;
   const champName = localizedName(champ, locale);
   const entityRef = resolveEntityRef(entityPresentation, "champion", { slug }, locale);
-  const augmentRef = (augment?: AugmentData): EntityRef | null =>
-    augment ? resolveEntityRef(entityPresentation, "augment", { slug: augment.slug }, locale) : null;
+  const championEntityRecord = entityRef
+    ? entityPresentation.entities.find((record) => record.type === "champion" && record.canonical_id === entityRef.canonicalId)
+    : null;
+  const augmentRef = (augment?: AugmentData): EntityRef | null => {
+    if (!augment) return null;
+    return resolveEntityRef(entityPresentation, "augment", { slug: augment.slug }, locale) ?? {
+      type: "augment",
+      id: String((augment as AugmentData & { augmentId?: string }).augmentId ?? augment.slug),
+      slug: augment.slug,
+      routeIdentifier: "",
+      localizedName: localizedName(augment, locale),
+      iconUrl: augment.icon ?? "",
+      known: false,
+      canonicalId: String((augment as AugmentData & { augmentId?: string }).augmentId ?? augment.slug),
+      name: localizedName(augment, locale),
+      icon: augment.icon,
+      lifecycle: augment.flags?.lifecycle === "removed" ? "removed" : "unknown",
+    };
+  };
   const localizedAugmentDescription = (augment: AugmentData): string =>
     localizedDescription(augment, locale) || augment.wikiDescription || augment.description || "";
   const displayAugment = (augment: AugmentData): AugmentData => {
@@ -465,6 +483,7 @@ export default async function ChampionPage({
                 {t("statisticsUnavailableShort")}
               </span>
             )}
+            {entityRef?.lifecycle === "active" ? <EntityTag tone="cyan">{te("activeLabel")}</EntityTag> : null}
           </div>
           <div className="flex items-center gap-3 mt-1 text-sm text-[var(--color-text-secondary)]">
             {championStatisticsAvailable ? (
@@ -528,12 +547,9 @@ export default async function ChampionPage({
                   return (
                     <Tooltip key={`${c.champion}-${c.augmentSlug}-${c.tier}`} content={augDescription}>
                       <div className="flex items-center gap-1.5 px-2 py-1.5 rounded-lg border border-green-400/30 bg-green-400/5 cursor-default">
-                        {ref ? <EntityLink entity={ref} variant="compact" className="text-green-300" /> : (
+                        {ref ? <EntityLink entity={ref} variant="compact" tier="S" className="text-green-300" /> : (
                           <span className="text-xs font-medium text-green-300">{augName}</span>
                         )}
-                        <span className="text-[9px] font-bold px-1 py-0.5 rounded bg-green-400/20 text-green-400">
-                          S
-                        </span>
                       </div>
                     </Tooltip>
                   );
@@ -556,12 +572,9 @@ export default async function ChampionPage({
                   return (
                     <Tooltip key={`${c.champion}-${c.augmentSlug}-${c.tier}`} content={augDescription}>
                       <div className="flex items-center gap-1.5 px-2 py-1.5 rounded-lg border border-red-400/30 bg-red-400/5 cursor-default">
-                        {ref ? <EntityLink entity={ref} variant="compact" className="text-red-300" /> : (
+                        {ref ? <EntityLink entity={ref} variant="compact" tier="C" className="text-red-300" /> : (
                           <span className="text-xs font-medium text-red-300">{augName}</span>
                         )}
-                        <span className="text-[9px] font-bold px-1 py-0.5 rounded bg-red-400/20 text-red-400">
-                          C
-                        </span>
                       </div>
                     </Tooltip>
                   );
@@ -571,14 +584,6 @@ export default async function ChampionPage({
           )}
         </section>
       )}
-
-      {entityRef ? (
-        <EntityStats
-          record={entityPresentation.entities.find((record) => record.type === "champion" && record.canonical_id === entityRef.canonicalId)!}
-          locale={locale}
-          showCurrentStats
-        />
-      ) : null}
 
       {/* ─── Mechanical Interactions ─── */}
       {(mechanicalSynergies.length > 0 || mechanicalTraps.length > 0) && (
@@ -638,6 +643,26 @@ export default async function ChampionPage({
             />
           </div>
 
+          {championEntityRecord?.stats.length ? (
+            <div className="mb-4" aria-label={te("statsHeading")}>
+              <EntityStatsInline record={championEntityRecord} labelFor={(key) => te(key)} />
+            </div>
+          ) : null}
+
+          {championEntityRecord?.patch_changes.some((change) => !change.context) ? (
+            <div className="mb-4">
+              <EntityPatchChanges
+                changes={championEntityRecord.patch_changes.filter((change) => !change.context)}
+                labelFor={(key) => te(key)}
+                previewLabel={te("previewLabel")}
+                liveLabel={te("liveLabel")}
+                landedLabel={te("landedLabel")}
+                hotfixLabel={te("hotfixLabel")}
+                directionFor={(direction) => te(`direction.${direction}`)}
+              />
+            </div>
+          ) : null}
+
           {/* Playstyle bars — compact row */}
           <div className="grid grid-cols-5 gap-2 mb-4 px-2 py-2.5 rounded-lg bg-[var(--color-bg-card)]/60">
             {playstyleItems.map(([key, label]) => (
@@ -654,7 +679,7 @@ export default async function ChampionPage({
                     />
                   ))}
                 </div>
-                <span className="text-[8px] sm:text-[10px] text-[var(--color-text-muted)] uppercase tracking-wide text-center leading-tight">
+                <span className="text-[8px] sm:text-[10px] text-[var(--color-text-muted)] text-center leading-tight">
                   {label}
                 </span>
               </div>
@@ -686,7 +711,7 @@ export default async function ChampionPage({
                         unoptimized
                       />
                     </div>
-                    <span className="text-[9px] font-bold text-[var(--color-text-muted)] uppercase">
+                    <span className="text-[9px] font-bold text-[var(--color-text-muted)]">
                       {ability.key}
                     </span>
                   </div>
@@ -694,6 +719,19 @@ export default async function ChampionPage({
                     <span className="text-xs sm:text-sm font-semibold">{abilityName}</span>
                     <WikiAbilityStats ability={ability} labels={abilityStatLabels} />
                     {!ability.cooldown && ability.stats && <AbilityStatLine stats={ability.stats} labels={abilityStatLabels} />}
+                    {championEntityRecord?.patch_changes.some((change) => change.context?.startsWith(ability.key)) ? (
+                      <div className="mt-2">
+                        <EntityPatchChanges
+                          changes={championEntityRecord.patch_changes.filter((change) => change.context?.startsWith(ability.key))}
+                          labelFor={(key) => te(key)}
+                          previewLabel={te("previewLabel")}
+                          liveLabel={te("liveLabel")}
+                          landedLabel={te("landedLabel")}
+                          hotfixLabel={te("hotfixLabel")}
+                          directionFor={(direction) => te(`direction.${direction}`)}
+                        />
+                      </div>
+                    ) : null}
                     <p className="text-[11px] text-[var(--color-text-secondary)] mt-1 leading-relaxed line-clamp-2 sm:line-clamp-none">
                       {abilityDescription}
                     </p>
@@ -893,19 +931,11 @@ function AugmentRow({
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-1.5">
             {entityRef ? (
-              <EntityLink entity={entityRef} variant="compact" className="text-xs sm:text-sm font-medium" />
+              <EntityLink entity={entityRef} variant="compact" tier={comboTier} className="text-xs sm:text-sm font-medium" />
             ) : (
               <span className="text-xs sm:text-sm font-medium truncate">{augName}</span>
             )}
             <span className={`w-1.5 h-1.5 rounded-full shrink-0 ${RARITY_DOT[aug.rarity] ?? ""}`} />
-            {comboTier && (
-              <span
-                className={`text-[9px] font-bold px-1 rounded shrink-0
-                  ${isStrong ? "text-green-400 bg-green-400/20" : "text-red-400 bg-red-400/20"}`}
-              >
-                {comboTier}
-              </span>
-            )}
           </div>
           {/* Score breakdown pills — hidden on mobile for compact view */}
           <div className="hidden sm:flex gap-1.5 mt-0.5 flex-wrap">

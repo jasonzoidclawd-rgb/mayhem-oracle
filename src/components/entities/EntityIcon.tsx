@@ -19,10 +19,14 @@ export function EntityIcon({
   entity,
   variant = "standard",
   loading = "lazy",
+  tier,
+  rarity,
 }: {
   entity: EntityRef;
   variant?: EntityIconVariant;
   loading?: "lazy" | "eager";
+  tier?: string;
+  rarity?: string;
 }) {
   const size = ENTITY_ICON_SIZES[variant] ?? ENTITY_ICON_SIZES.standard;
   const [state, setState] = useState<"loading" | "loaded" | "error">(
@@ -34,6 +38,8 @@ export function EntityIcon({
     <span
       aria-hidden="true"
       data-entity-icon-state={state}
+      data-tier={tier ?? "neutral"}
+      data-rarity={rarity ?? ""}
       className={`${size.image} relative inline-flex shrink-0 items-center justify-center overflow-hidden rounded border border-[var(--color-border-default)] bg-[var(--color-bg-elevated)] text-[10px] font-bold text-[var(--color-text-muted)]`}
     >
       <span className={showFallback ? "" : "sr-only"}>{fallbackGlyph(entity.type)}</span>

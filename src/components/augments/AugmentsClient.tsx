@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useMemo } from "react";
-import Image from "next/image";
 import { useTranslations } from "next-intl";
 import { baselineOracleScore, type ScoredAugment } from "@/lib/scoring/oracle-score";
 import { Tooltip } from "@/components/ui/Tooltip";
@@ -43,6 +42,22 @@ function localizedName(aug: ScoredAugment, locale: string): string {
   if (locale === "ja") return aug.name_ja ?? aug.name;
   if (locale === "ko") return aug.name_ko ?? aug.name;
   return aug.name;
+}
+
+function presentationRef(aug: ScoredAugment, displayName: string, entityRef?: EntityRef): EntityRef {
+  return entityRef ?? {
+    type: "augment",
+    id: String((aug as ScoredAugment & { augmentId?: string }).augmentId ?? aug.slug),
+    slug: aug.slug,
+    routeIdentifier: "",
+    localizedName: displayName,
+    iconUrl: aug.icon ?? "",
+    known: false,
+    canonicalId: String((aug as ScoredAugment & { augmentId?: string }).augmentId ?? aug.slug),
+    name: displayName,
+    icon: aug.icon,
+    lifecycle: aug.flags?.lifecycle === "removed" ? "removed" : "unknown",
+  };
 }
 
 // ─── Main Component ─────────────────────────────────────────────────────────
@@ -402,20 +417,19 @@ function AugmentCard({
   const styles = RARITY_STYLES[rarity];
   const score = baselineOracleScore(augment);
   const displayName = localizedName(augment, locale);
+  const ref = presentationRef(augment, displayName, entityRef);
 
   return (
     <Tooltip content={<AugmentTooltip aug={augment} displayName={displayName} score={score} />}>
       <div
         className={`glass-card p-3 flex flex-col items-center gap-2 border border-[var(--color-border-default)] transition-all cursor-default ${styles.glow}`}
       >
-        {entityRef ? <EntityLink entity={entityRef} variant="standard" className="w-full justify-center text-center" /> : (
-          <>
-            <div className="relative w-14 h-14 rounded-lg overflow-hidden shrink-0">
-              <Image src={augment.icon} alt={displayName} fill className="object-contain" sizes="56px" unoptimized />
-            </div>
-            <span className="text-xs font-medium text-center leading-tight line-clamp-2 w-full">{displayName}</span>
-          </>
-        )}
+        <EntityLink
+          entity={ref}
+          variant="standard"
+          rarity={augment.rarity}
+          className="w-full justify-center text-center"
+        />
         <div className="flex flex-wrap justify-center gap-1 min-h-[14px]">
           {augment.flags?.lifecycle === "added" && (
             <span className="text-[9px] font-bold px-1 py-px rounded bg-green-500/20 text-green-300 border border-green-400/40">
@@ -444,7 +458,7 @@ function AugmentCard({
           {rarityLabel}
         </span>
         <div className="flex items-center justify-center gap-1.5 w-full text-[10px] text-[var(--color-text-muted)] mt-auto">
-          <span className="uppercase tracking-wide">{t("oracleLabel")}</span>
+          <span>{t("oracleLabel")}</span>
           <span className={`font-bold ${SCORE_COLOR(score)}`}>{score}</span>
         </div>
       </div>
@@ -488,7 +502,7 @@ function RemovedAugmentsTable({
             {augments.map((augment) => (
               <tr key={augment.slug} className="border-t border-[var(--color-border-default)]/70">
                 <td className="px-3 py-2 text-[var(--color-text-secondary)]">
-                  {entityRefs[augment.slug] ? <EntityLink entity={entityRefs[augment.slug]} variant="compact" /> : localizedName(augment, locale)}
+                  <EntityLink entity={presentationRef(augment, localizedName(augment, locale), entityRefs[augment.slug])} variant="compact" rarity={augment.rarity} />
                 </td>
                 <td className="px-3 py-2 text-[var(--color-text-muted)]">
                   {tChamp(augment.rarity)}

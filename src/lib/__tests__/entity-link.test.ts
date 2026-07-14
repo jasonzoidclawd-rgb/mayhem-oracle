@@ -26,11 +26,12 @@ const base: EntityRef = {
 
 describe("EntityLink", () => {
   test("renders one combined crawlable link with deterministic icon fallback", () => {
-    const html = renderToStaticMarkup(createElement(EntityLink, { entity: base }));
+    const html = renderToStaticMarkup(createElement(EntityLink, { entity: base, tier: "S" }));
     expect(html).toContain('href="/items/1001"');
     expect(html).toContain("Boots");
     expect(html).toContain(">I</span>");
     expect((html.match(/href=/g) ?? []).length).toBe(1);
+    expect(html).toContain('data-tier="S"');
   });
 
   test("renders unresolved entities as an accessible non-interactive identity", () => {

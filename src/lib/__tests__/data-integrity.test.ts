@@ -174,10 +174,21 @@ describe("data integrity", () => {
   });
 
   test("CommunityDragon latest rarity snapshot reaches engine augment data", () => {
-    const bySlug = new Map(augmentsData.augments.map((augment) => [augment.slug, augment]));
+    // Canonical IDs are authoritative. Some retained historical aliases share
+    // a CDragon ID with the current route (for example PinCushion's
+    // `pin-cushion` alias and `/augments/porcupine`), so a slug map can select
+    // the wrong lifecycle row.
+    const byCanonicalId = new Map<string, (typeof augmentsData.augments)[number]>();
+    for (const augment of augmentsData.augments) {
+      if (!augment.augmentId) continue;
+      const existing = byCanonicalId.get(augment.augmentId);
+      if (!existing || augment.flags?.lifecycle === "active") {
+        byCanonicalId.set(augment.augmentId, augment);
+      }
+    }
 
     for (const source of cdragonAugmentLatest.entities) {
-      const augment = bySlug.get(source.slug);
+      const augment = byCanonicalId.get(source.id);
       if (!augment) continue;
       expect(augment.rarity, `${source.slug} rarity should match CDragon`).toBe(source.fields.rarity);
     }

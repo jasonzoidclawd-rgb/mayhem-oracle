@@ -79,6 +79,16 @@ export default async function ItemsPage({
       return ref && key ? [[key, ref]] : [];
     }),
   );
+  const itemRefsByName: Record<string, EntityRef> = Object.fromEntries(
+    (data ? [...visibleCatalog.mayhemExclusive, ...processedItems] : []).flatMap((item) => {
+      const ref = resolveEntityRef(entityPresentation, "item", {
+        canonicalId: item.id != null ? String(item.id) : undefined,
+        slug: item.slug,
+      }, locale);
+      const key = item.name.trim().toLowerCase();
+      return ref && key ? [[key, ref]] : [];
+    }),
+  );
 
   return (
     <div className="py-8 max-w-6xl">
@@ -92,6 +102,7 @@ export default async function ItemsPage({
           mayhemExclusive={visibleCatalog.mayhemExclusive}
           items={processedItems}
           entityRefs={entityRefs}
+          itemRefsByName={itemRefsByName}
         />
       ) : (
         <div className="text-center py-20 text-[var(--color-text-muted)]">

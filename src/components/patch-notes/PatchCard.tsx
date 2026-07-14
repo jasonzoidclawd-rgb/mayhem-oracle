@@ -19,6 +19,7 @@ import type {
 } from "@/lib/types";
 import { ChangeBadge } from "./ChangeBadge";
 import { EntityLink } from "@/components/entities/EntityLink";
+import { EntitySectionHeading } from "@/components/entities/EntityPresentation";
 import type { EntityRef, EntityType } from "@/lib/entities/types";
 
 type DataLocale = "en" | "zh-tw" | "zh-cn" | "ja-jp" | "ko-kr";
@@ -134,9 +135,7 @@ async function Section({
   return (
     <section id={patchNoteSectionAnchor(patchVersion, section.id)}>
       <div className="mb-3 flex items-center justify-between gap-3">
-        <h3 className="text-sm font-semibold uppercase tracking-wider text-[var(--color-accent)]">
-          {sectionTitle}
-        </h3>
+        <EntitySectionHeading>{sectionTitle}</EntitySectionHeading>
         <span className="text-xs text-[var(--color-text-muted)]">
           {section.changes.length}
         </span>

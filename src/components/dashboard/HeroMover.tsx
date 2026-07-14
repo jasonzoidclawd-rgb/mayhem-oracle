@@ -29,14 +29,26 @@ export async function HeroMover({
   const t = await getTranslations("dashboard");
   const locale = await getLocale();
   const name = localizedName(champion, locale);
-  const entityRef = resolveEntityRef(entityPresentation, "champion", { slug: champion.slug }, locale);
+  const entityRef = resolveEntityRef(entityPresentation, "champion", { slug: champion.slug }, locale) ?? {
+    type: "champion" as const,
+    id: champion.slug,
+    slug: champion.slug,
+    routeIdentifier: "",
+    localizedName: name,
+    iconUrl: champion.icon ?? "",
+    known: false,
+    canonicalId: champion.slug,
+    name,
+    icon: champion.icon,
+    lifecycle: "unknown" as const,
+  };
 
   return (
     <div className="glass-card reveal flex items-center gap-4 p-4 md:col-span-6 lg:col-span-8">
       <div className="min-w-0 flex-1">
         <p className="text-xs text-[var(--color-text-muted)]">{t("heroTopMover", { patch })}</p>
         <div className="mt-1 flex items-center gap-2">
-          {entityRef ? <EntityLink entity={entityRef} variant="standard" className="min-w-0 text-lg font-semibold" /> : <h3 className="truncate text-lg font-semibold text-[var(--color-text-primary)]">{name}</h3>}
+          <EntityLink entity={entityRef} variant="standard" tier={champion.tier} className="min-w-0 text-lg font-semibold" />
           <span className={`shrink-0 rounded px-1.5 py-0.5 text-[11px] font-semibold ${tierBadgeClass(champion.tier)}`}>
             {champion.tier}
           </span>

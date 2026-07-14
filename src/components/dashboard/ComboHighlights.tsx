@@ -20,17 +20,32 @@ export async function ComboHighlights({ combos, entityPresentation }: { combos: 
       <ul className="mt-3 flex flex-col gap-2">
         {combos.map(({ champion, augment }, i) => (
           <li key={`${champion.slug}-${augment.slug}-${i}`} className="flex items-center gap-2 text-sm">
-            {resolveEntityRef(entityPresentation, "champion", { slug: champion.slug }, locale) ? (
-              <EntityLink entity={resolveEntityRef(entityPresentation, "champion", { slug: champion.slug }, locale)!} variant="compact" />
-            ) : (
-              <span className="truncate text-[var(--color-text-primary)]">{localizedName(champion, locale)}</span>
-            )}
+            <EntityLink entity={resolveEntityRef(entityPresentation, "champion", { slug: champion.slug }, locale) ?? {
+              type: "champion",
+              id: champion.slug,
+              slug: champion.slug,
+              routeIdentifier: "",
+              localizedName: localizedName(champion, locale),
+              iconUrl: champion.icon ?? "",
+              known: false,
+              canonicalId: champion.slug,
+              name: localizedName(champion, locale),
+              icon: champion.icon,
+              lifecycle: "unknown",
+            }} variant="compact" />
             <span className="shrink-0 text-[var(--color-text-muted)]">+</span>
-            {resolveEntityRef(entityPresentation, "augment", { slug: augment.slug }, locale) ? (
-              <EntityLink entity={resolveEntityRef(entityPresentation, "augment", { slug: augment.slug }, locale)!} variant="compact" />
-            ) : (
-              <span className="truncate text-[var(--color-text-secondary)]">{localizedName(augment, locale)}</span>
-            )}
+            <EntityLink entity={resolveEntityRef(entityPresentation, "augment", { slug: augment.slug }, locale) ?? {
+              type: "augment",
+              id: augment.slug,
+              slug: augment.slug,
+              routeIdentifier: "",
+              localizedName: localizedName(augment, locale),
+              iconUrl: "",
+              known: false,
+              canonicalId: augment.slug,
+              name: localizedName(augment, locale),
+              lifecycle: "unknown",
+            }} variant="compact" />
           </li>
         ))}
       </ul>

@@ -23,9 +23,22 @@ export async function AugmentSpotlight({
   entityPresentation: EntityPresentationData;
 }) {
   const t = await getTranslations("dashboard");
+  const tChampion = await getTranslations("champion");
   const locale = await getLocale();
   const name = localizedName(augment, locale);
-  const entityRef = resolveEntityRef(entityPresentation, "augment", { slug: augment.slug }, locale);
+  const entityRef = resolveEntityRef(entityPresentation, "augment", { slug: augment.slug }, locale) ?? {
+    type: "augment" as const,
+    id: augment.slug,
+    slug: augment.slug,
+    routeIdentifier: "",
+    localizedName: name,
+    iconUrl: augment.icon ?? "",
+    known: false,
+    canonicalId: augment.slug,
+    name,
+    icon: augment.icon,
+    lifecycle: "unknown" as const,
+  };
 
   return (
     <div className="glass-card reveal p-4 md:col-span-3 lg:col-span-4">
@@ -39,9 +52,9 @@ export async function AugmentSpotlight({
       </div>
       <div className="mt-3 flex items-center gap-3">
         <div className="min-w-0">
-          {entityRef ? <EntityLink entity={entityRef} variant="standard" className="text-base font-medium" /> : <p className="truncate text-base font-medium text-[var(--color-text-primary)]">{name}</p>}
-          <span className={`mt-1 inline-block rounded px-1.5 py-0.5 text-[10px] font-semibold uppercase ${rarityBadgeClass(augment.rarity)}`}>
-            {augment.rarity}
+          <EntityLink entity={entityRef} variant="standard" rarity={augment.rarity} className="text-base font-medium" />
+          <span className={`mt-1 inline-block rounded px-1.5 py-0.5 text-[10px] font-semibold ${rarityBadgeClass(augment.rarity)}`}>
+            {tChampion(augment.rarity as "prismatic" | "gold" | "silver")}
           </span>
         </div>
       </div>

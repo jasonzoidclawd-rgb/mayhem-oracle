@@ -10,11 +10,15 @@ export function EntityLink({
   variant = "standard",
   className = "",
   loading = "lazy",
+  tier,
+  rarity,
 }: {
   entity: EntityRef;
   variant?: EntityIconVariant;
   className?: string;
   loading?: "lazy" | "eager";
+  tier?: string;
+  rarity?: string;
 }) {
   // Keep the server render fail-closed if an older caller passes an unknown
   // variant during static generation; the contract's standard presentation is
@@ -25,11 +29,11 @@ export function EntityLink({
   } ${className}`;
   const content = (
     <>
-      <EntityIcon entity={entity} variant={variant} loading={loading} />
+      <EntityIcon entity={entity} variant={variant} loading={loading} tier={tier} rarity={rarity} />
       <span className="min-w-0 truncate">{entity.localizedName}</span>
     </>
   );
-  const label = `${entity.localizedName} (${entity.type})`;
+  const label = `${entity.localizedName} (${entity.type})${tier ? `, tier ${tier}` : ""}${rarity ? `, ${rarity}` : ""}`;
   if (!entity.known || !entity.href) {
     return (
       <span
