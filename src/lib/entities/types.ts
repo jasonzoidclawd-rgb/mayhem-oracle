@@ -1,4 +1,5 @@
 export type EntityType = "champion" | "augment" | "item";
+export type AugmentQualityTier = "S+" | "S" | "A" | "B" | "C";
 
 export type EntityLifecycleState =
   | "active"
@@ -56,6 +57,8 @@ export interface EntityPresentationRecord {
   };
   stats: EntityStat[];
   patch_changes: EntityStatChange[];
+  /** Optional only when the approved canonical global augment-tier source exists. */
+  quality_tier?: AugmentQualityTier | null;
 }
 
 export interface EntityPresentationData {
@@ -87,4 +90,6 @@ export interface EntityRef {
   name: string;
   icon?: string;
   availability?: string;
+  /** Presentation-only augment quality; never a champion ranking or rarity. */
+  qualityTier?: AugmentQualityTier | null;
 }

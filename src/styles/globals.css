@@ -136,15 +136,41 @@ body {
 .rarity-gold      { background: rgba(255, 215, 0, 0.15);   color: var(--color-rarity-gold);      border: 1px solid rgba(255, 215, 0, 0.4); }
 .rarity-silver    { background: rgba(148, 163, 184, 0.15); color: var(--color-rarity-silver);    border: 1px solid rgba(148, 163, 184, 0.4); }
 
-/* Quality tier is carried by the entity icon frame, not a text badge.  The
-   border weight/style remains distinguishable in grayscale and the aria/data
-   metadata keeps the semantic tier available to assistive tooling. */
-[data-tier="S+"] { border-width: 3px; border-color: var(--color-accent-god); }
-[data-tier="S"]  { border-width: 2px; border-color: var(--color-accent-strong); }
-[data-tier="A"]  { border-width: 2px; border-color: var(--color-accent-good); border-style: dashed; }
-[data-tier="B"]  { border-width: 1px; border-color: var(--color-accent-average); border-style: dotted; }
-[data-tier="C"]  { border-width: 1px; border-color: var(--color-accent-weak); }
-[data-tier="neutral"] { border-width: 1px; }
+/* Quality tier is carried by augment entity-icon frames, never by a text
+   badge. Every resting frame has the same one-pixel geometry; only the
+   semantic color changes. */
+[data-entity-icon][data-entity-type="augment"][data-tier="S+"] {
+  border-width: 1px;
+  border-style: solid;
+  border-color: var(--color-accent-god);
+}
+[data-entity-icon][data-entity-type="augment"][data-tier="S"] {
+  border-width: 1px;
+  border-style: solid;
+  border-color: var(--color-accent-strong);
+}
+[data-entity-icon][data-entity-type="augment"][data-tier="A"] {
+  border-width: 1px;
+  border-style: solid;
+  border-color: var(--color-accent-good);
+}
+[data-entity-icon][data-entity-type="augment"][data-tier="B"] {
+  border-width: 1px;
+  border-style: solid;
+  border-color: var(--color-accent-average);
+}
+[data-entity-icon][data-entity-type="augment"][data-tier="C"] {
+  border-width: 1px;
+  border-style: solid;
+  border-color: var(--color-accent-weak);
+}
+[data-entity-icon][data-entity-type="augment"][data-tier="neutral"],
+[data-entity-icon][data-entity-type="champion"],
+[data-entity-icon][data-entity-type="item"] {
+  border-width: 1px;
+  border-style: solid;
+  border-color: var(--color-border-default);
+}
 
 /* ─── Scrollbar styling ─── */
 ::-webkit-scrollbar { width: 6px; }

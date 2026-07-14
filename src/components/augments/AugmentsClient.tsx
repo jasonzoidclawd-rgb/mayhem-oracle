@@ -44,6 +44,10 @@ function localizedName(aug: ScoredAugment, locale: string): string {
   return aug.name;
 }
 
+function compareStableText(left: string, right: string): number {
+  return left < right ? -1 : left > right ? 1 : 0;
+}
+
 function presentationRef(aug: ScoredAugment, displayName: string, entityRef?: EntityRef): EntityRef {
   return entityRef ?? {
     type: "augment",
@@ -57,6 +61,7 @@ function presentationRef(aug: ScoredAugment, displayName: string, entityRef?: En
     name: displayName,
     icon: aug.icon,
     lifecycle: aug.flags?.lifecycle === "removed" ? "removed" : "unknown",
+    qualityTier: aug.quality_tier ?? null,
   };
 }
 
@@ -87,9 +92,9 @@ export function AugmentsClient({
       augments
         .filter((a) => a.flags?.lifecycle === "removed")
         .sort((a, b) => {
-          const patchCompare = (b.flags?.lifecycle_patch ?? "").localeCompare(a.flags?.lifecycle_patch ?? "");
+          const patchCompare = compareStableText(b.flags?.lifecycle_patch ?? "", a.flags?.lifecycle_patch ?? "");
           if (patchCompare !== 0) return patchCompare;
-          return localizedName(a, locale).localeCompare(localizedName(b, locale));
+          return compareStableText(localizedName(a, locale), localizedName(b, locale)) || compareStableText(a.slug, b.slug);
         }),
     [augments, locale],
   );
@@ -236,11 +241,11 @@ function GameNotes() {
 
           {/* Burn Stacking */}
           <NoteBlock title="Burn Stacking Rules">
-            <p>
+            <div>
               All Burn effects stack infinitely and refresh on application. When a Burn is first applied to a target,
               all subsequent Burn sources from <em>any player</em> stack onto that first source and credit damage to the
               first source&apos;s owner (e.g. <Em>Tormentor</Em> applied first will be stacked by <Em>Slow Cooker</Em>).
-            </p>
+            </div>
             <ul className="mt-2 space-y-1 list-disc list-inside text-[var(--color-text-secondary)]">
               <li><Em>Firebrand</Em> — basic attacks, <Stat>0.4% target max HP/s</Stat> (2% over 5s)</li>
               <li><Em>Tormentor</Em> — on CC, <Stat>0.8% target max HP/s</Stat> (4% over 5s)</li>
@@ -254,18 +259,18 @@ function GameNotes() {
 
           {/* Crit Interaction */}
           <NoteBlock title="Jeweled Gauntlet × Vulnerability">
-            <p>
+            <div>
               <Em>Jeweled Gauntlet</Em>: abilities crit for <Stat>(145% + bonus crit dmg)</Stat>,
               gain <Stat>25% (+4.5% per 100 AP) crit chance</Stat>.
-            </p>
-            <p className="mt-1">
+            </div>
+            <div className="mt-1">
               <Em>Vulnerability</Em>: items &amp; DoTs crit for <Stat>(145% + bonus crit dmg)</Stat>,
               gain <Stat>25% crit chance</Stat> (5s CD per cast).
-            </p>
-            <p className="mt-1 text-[var(--color-text-muted)]">
+            </div>
+            <div className="mt-1 text-[var(--color-text-muted)]">
               If both are equipped, only the augment with higher crit damage rolls its crit chance (not both).
               Known bug: may behave incorrectly with persistent area damage.
-            </p>
+            </div>
           </NoteBlock>
 
           {/* Conversion Augments */}
@@ -297,41 +302,41 @@ function GameNotes() {
 
           {/* Spin To Win */}
           <NoteBlock title="Spin To Win — Eligible Abilities">
-            <p>
+            <div>
               <Stat>+30% damage</Stat> and <Stat>30 ability haste</Stat> on spinning abilities.
-            </p>
-            <p className="mt-1 text-[var(--color-text-secondary)]">
+            </div>
+            <div className="mt-1 text-[var(--color-text-secondary)]">
               Ahri (Fox-Fire, Spirit Rush) · Amumu (Tantrum) · Ambessa (Lacerate) · Darius (Decimate) ·
               Draven (Spinning Axe, Stand Aside, Whirling Death) · Garen (Judgment) · Hecarim (Rampage) ·
               Jax (Counter Strike) · Katarina (Voracity, Death Lotus) · Kayn (Reaping Slash) ·
               Lillia (Blooming Blows) · Nocturne (Umbra Blades) · Rammus (Powerball) ·
               Renekton (Cull the Meek) · Riven (Broken Wings) · Samira (Blade Whirl, Inferno Trigger) ·
               Wukong (Cyclone) · Tryndamere (Spinning Slash) · Zed (Shadow Slash)
-            </p>
+            </div>
           </NoteBlock>
 
           {/* Transmuted / High Roller */}
           <NoteBlock title="Transmuted Augments (High Roller set)">
-            <p className="text-[var(--color-text-secondary)]">
+            <div className="text-[var(--color-text-secondary)]">
               Transmuted augments reroll into a random augment of a different tier.
               <Em>Transmute: Gold</Em> (silver rarity) gives 1 random gold augment.
               <Em>Transmute: Prismatic</Em> (gold rarity) gives 1 random prismatic.
               <Em>Transmute: Chaos</Em> (prismatic rarity) gives 2 completely random augments.
               The result is prefixed &quot;Transmuted:&quot; in its title.
-            </p>
+            </div>
           </NoteBlock>
 
           {/* Disabled */}
           <NoteBlock title="Currently Disabled Augments">
-            <p className="text-[var(--color-text-muted)]">
+            <div className="text-[var(--color-text-muted)]">
               <Em>Fetch</Em> (silver), <Em>Quest: Sneakerhead</Em> (prismatic),
               and <Em>Spin Me Right Round</Em> (silver) are currently disabled and cannot appear in games.
-            </p>
+            </div>
           </NoteBlock>
 
-          <p className="text-[11px] text-[var(--color-text-muted)] pt-2">
+          <div className="text-[11px] text-[var(--color-text-muted)] pt-2">
             Source: wiki.leagueoflegends.com/en-us/ARAM:_Mayhem/Augments
-          </p>
+          </div>
         </div>
       )}
     </div>

@@ -11,6 +11,7 @@ import shutil
 from pathlib import Path
 
 from assemble_augments import preferred_icon_url
+from augment_quality_tier import derive_quality_tiers
 from cdragon_entity_adapters import is_non_mayhem_item_id
 from data_paths import INTERNAL_DATA_DIR, ROOT
 from entity_presentation_projection import MAYHEM_CANONICAL_ITEM_IDS, build_entity_presentation
@@ -28,6 +29,18 @@ LOCALIZED_AUGMENT_DESCRIPTION_FIELDS = {
 TAG_RE = re.compile(r"<[^>]+>")
 BR_RE = re.compile(r"<br\s*/?>", re.IGNORECASE)
 WHITESPACE_RE = re.compile(r"\s+")
+PUBLIC_TIER_FORBIDDEN_KEYS = {
+    "win_rate", "winRate", "raw_win_rate", "rawWinRate", "wins", "wins_count", "winsCount",
+    "sample", "sample_count", "sampleCount", "sample_size", "sampleSize",
+    "games", "game_count", "gameCount", "games_count", "gamesCount", "match_count", "matchCount",
+    "percentile", "percentile_rank", "percentileRank", "rank", "numerical_rank",
+    "numericalRank", "band", "band_threshold", "bandThreshold", "threshold",
+    "thresholds", "threshold_inputs", "thresholdInputs", "calculation_inputs",
+    "calculationInputs", "confidence", "confidence_interval", "confidenceInterval",
+    "confidence_internals", "confidenceInternals", "scoring_inputs", "scoringInputs",
+    "score", "score_breakdown", "scoreBreakdown", "source_record", "sourceRecord",
+    "feed_provenance", "feedProvenance",
+}
 
 
 def read_json(path: Path) -> dict:
@@ -106,6 +119,19 @@ def project_augment_icons(augments: dict) -> dict:
 
 def build_public_augments(internal_dir: Path, forbidden: set[str]) -> dict:
     augments = project_augment_icons(read_json(internal_dir / "augments.json"))
+    quality_tiers: dict[str, str | None] = {}
+    feed_path = internal_dir / "augment-winrate-feed.json"
+    identity_path = internal_dir / "augment-base-catalog.json"
+    if feed_path.exists() and identity_path.exists():
+        feed = read_json(feed_path)
+        identity_catalog = read_json(identity_path)
+        current_patch = str(augments.get("patch") or "")
+        quality_tiers, _summary = derive_quality_tiers(
+            catalog=augments,
+            identity_catalog=identity_catalog,
+            feed=feed,
+            current_patch=current_patch,
+        )
     pool_rules = read_json(internal_dir / "pool-rules.json")
     lifecycle = pool_rules.get("lifecycle", {}) if isinstance(pool_rules, dict) else {}
     removed_patches = lifecycle.get("removed", {}) if isinstance(lifecycle, dict) else {}
@@ -115,6 +141,7 @@ def build_public_augments(internal_dir: Path, forbidden: set[str]) -> dict:
         slug = augment.get("slug")
         if not slug:
             continue
+        augment["quality_tier"] = quality_tiers.get(str(augment.get("augmentId") or ""))
         add_public_localized_augment_descriptions(augment)
         patch = removed_patches.get(slug) or added_patches.get(slug)
         if patch and (augment.get("flags") or {}).get("lifecycle") == "removed":
@@ -289,7 +316,7 @@ def export_public_catalog(
         "effectTextByLocale",
         "definitionPlaceholder",
         "legacyCatalogRow",
-    }
+    } | PUBLIC_TIER_FORBIDDEN_KEYS
     forbidden_augment_telemetry = forbidden_telemetry | {"wikiNotes"}
     outputs[public_dir / "augments.json"] = build_public_augments(
         internal_dir,

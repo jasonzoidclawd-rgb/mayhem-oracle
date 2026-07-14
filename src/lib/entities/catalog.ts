@@ -1,9 +1,12 @@
 import type {
+  AugmentQualityTier,
   EntityPresentationData,
   EntityPresentationRecord,
   EntityRef,
   EntityType,
 } from "./types";
+
+const AUGMENT_QUALITY_TIERS = new Set<AugmentQualityTier>(["S+", "S", "A", "B", "C"]);
 
 const ENTITY_ROUTES: Record<EntityType, string> = {
   champion: "champions",
@@ -78,6 +81,9 @@ export function resolveEntityRef(
   const routeIdentifier = String(record.route_identifier || "");
   const known = record.known === true && routeIdentifier.length > 0;
   const href = known ? entityHref(type, record) : undefined;
+  const qualityTier = type === "augment" && AUGMENT_QUALITY_TIERS.has(record.quality_tier as AugmentQualityTier)
+    ? record.quality_tier
+    : null;
   return {
     type,
     id: record.canonical_id,
@@ -91,6 +97,7 @@ export function resolveEntityRef(
     name: localizedName,
     icon: record.icon || undefined,
     lifecycle: record.lifecycle.state,
+    ...(type === "augment" ? { qualityTier } : {}),
   };
 }
 

@@ -388,7 +388,7 @@ export function ChampionsIndex({
                         {c.rank ?? i + 1}
                       </td>
                       <td className="px-2 py-2">
-                        <EntityLink entity={championRef(c, locale, entityRefs[c.slug])} variant="standard" tier={c.tier} />
+                        <EntityLink entity={championRef(c, locale, entityRefs[c.slug])} variant="standard" />
                       </td>
                       <td className="px-2 py-2 text-left hidden lg:table-cell">
                         <div className="flex flex-wrap gap-1">
@@ -463,7 +463,7 @@ function ChampionCard({
   return (
     <div className="glass-card p-3 flex flex-col items-center gap-2 border border-[var(--color-border-default)] transition-all group hover:scale-[1.03] hover:border-[var(--color-neon-primary)]/40 hover:shadow-lg">
       <div className="relative">
-        <EntityLink entity={championRef(c, locale, entityRef)} variant="standard" tier={c.tier} className="rounded-lg" />
+        <EntityLink entity={championRef(c, locale, entityRef)} variant="standard" className="rounded-lg" />
         <span
           className={`absolute -top-1.5 -right-1.5 text-[10px] font-bold px-1.5 py-0.5 rounded border ${
             TIER_BG[c.tier] ?? ""
@@ -540,7 +540,7 @@ function ChampionRowCard({
       <span className="w-5 text-center text-xs text-[var(--color-text-muted)] tabular-nums shrink-0">
         {c.rank ?? index + 1}
       </span>
-      <EntityLink entity={championRef(c, locale, entityRef)} variant="standard" tier={c.tier} />
+      <EntityLink entity={championRef(c, locale, entityRef)} variant="standard" />
       <div className="min-w-0 flex-1">
         <div className="flex items-center gap-2">
           <span

@@ -44,7 +44,7 @@ export async function TierMiniGrid({ champions, entityPresentation }: { champion
           return (
             <li key={champion.slug}>
               <div className="flex items-center gap-1 rounded-lg border border-[var(--color-border-default)] p-2 transition-colors hover:border-[var(--color-border-hover)]">
-                <EntityLink entity={ref} variant="standard" tier={champion.tier} className="min-w-0 flex-1" />
+                <EntityLink entity={ref} variant="standard" className="min-w-0 flex-1" />
                 <span className={`shrink-0 rounded px-1 py-0.5 text-[10px] font-semibold ${tierBadgeClass(champion.tier)}`}>
                   {champion.tier}
                 </span>

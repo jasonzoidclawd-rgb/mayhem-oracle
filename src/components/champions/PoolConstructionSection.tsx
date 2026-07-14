@@ -280,13 +280,12 @@ export function PoolConstructionSection({
             {highlightsTitle}
           </h3>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-1.5">
-            {highlights.map(({ aug, score, comboTier }) => (
+            {highlights.map(({ aug, score }) => (
               <Tooltip key={aug.slug} content={aug.wikiDescription ?? aug.description}>
                 <div className="flex items-center gap-2 rounded-lg border border-[var(--color-border-default)]/50 px-2 py-1.5 cursor-default">
                   <EntityLink
                     entity={highlightRef(aug, entityRefs[aug.slug])}
                     variant="compact"
-                    tier={comboTier}
                     rarity={aug.rarity}
                     className="min-w-0 flex-1"
                   />

@@ -4,7 +4,7 @@
   "status": "fresh",
   "patch": "26.13",
   "pbe_patch": "pbe-cycle-16.14.7942794+branch.releases-16-14.content.release",
-  "observed_at": "2026-07-14T02:09:10.993750Z",
+  "observed_at": "2026-07-14T02:09:05.260156Z",
   "entities": [
     {
       "type": "augment",
@@ -39,7 +39,8 @@
           "lane": "live"
         }
       ],
-      "patch_changes": []
+      "patch_changes": [],
+      "quality_tier": null
     },
     {
       "type": "augment",
@@ -74,7 +75,8 @@
           "lane": "live"
         }
       ],
-      "patch_changes": []
+      "patch_changes": [],
+      "quality_tier": null
     },
     {
       "type": "augment",
@@ -109,7 +111,8 @@
           "lane": "live"
         }
       ],
-      "patch_changes": []
+      "patch_changes": [],
+      "quality_tier": null
     },
     {
       "type": "augment",
@@ -144,7 +147,8 @@
           "lane": "live"
         }
       ],
-      "patch_changes": []
+      "patch_changes": [],
+      "quality_tier": null
     },
     {
       "type": "augment",
@@ -179,7 +183,8 @@
           "lane": "live"
         }
       ],
-      "patch_changes": []
+      "patch_changes": [],
+      "quality_tier": null
     },
     {
       "type": "augment",
@@ -214,7 +219,8 @@
           "lane": "live"
         }
       ],
-      "patch_changes": []
+      "patch_changes": [],
+      "quality_tier": null
     },
     {
       "type": "augment",
@@ -249,7 +255,8 @@
           "lane": "live"
         }
       ],
-      "patch_changes": []
+      "patch_changes": [],
+      "quality_tier": null
     },
     {
       "type": "augment",
@@ -284,7 +291,8 @@
           "lane": "live"
         }
       ],
-      "patch_changes": []
+      "patch_changes": [],
+      "quality_tier": null
     },
     {
       "type": "augment",
@@ -319,7 +327,8 @@
           "lane": "live"
         }
       ],
-      "patch_changes": []
+      "patch_changes": [],
+      "quality_tier": null
     },
     {
       "type": "augment",
@@ -354,7 +363,8 @@
           "lane": "live"
         }
       ],
-      "patch_changes": []
+      "patch_changes": [],
+      "quality_tier": null
     },
     {
       "type": "augment",
@@ -389,7 +399,8 @@
           "lane": "live"
         }
       ],
-      "patch_changes": []
+      "patch_changes": [],
+      "quality_tier": null
     },
     {
       "type": "augment",
@@ -424,7 +435,8 @@
           "lane": "live"
         }
       ],
-      "patch_changes": []
+      "patch_changes": [],
+      "quality_tier": null
     },
     {
       "type": "augment",
@@ -459,7 +471,8 @@
           "lane": "live"
         }
       ],
-      "patch_changes": []
+      "patch_changes": [],
+      "quality_tier": null
     },
     {
       "type": "augment",
@@ -494,7 +507,8 @@
           "lane": "live"
         }
       ],
-      "patch_changes": []
+      "patch_changes": [],
+      "quality_tier": null
     },
     {
       "type": "augment",
@@ -529,7 +543,8 @@
           "lane": "live"
         }
       ],
-      "patch_changes": []
+      "patch_changes": [],
+      "quality_tier": null
     },
     {
       "type": "augment",
@@ -564,7 +579,8 @@
           "lane": "live"
         }
       ],
-      "patch_changes": []
+      "patch_changes": [],
+      "quality_tier": null
     },
     {
       "type": "augment",
@@ -599,7 +615,8 @@
           "lane": "live"
         }
       ],
-      "patch_changes": []
+      "patch_changes": [],
+      "quality_tier": null
     },
     {
       "type": "augment",
@@ -634,7 +651,8 @@
           "lane": "live"
         }
       ],
-      "patch_changes": []
+      "patch_changes": [],
+      "quality_tier": null
     },
     {
       "type": "augment",
@@ -669,7 +687,8 @@
           "lane": "live"
         }
       ],
-      "patch_changes": []
+      "patch_changes": [],
+      "quality_tier": null
     },
     {
       "type": "augment",
@@ -704,7 +723,8 @@
           "lane": "live"
         }
       ],
-      "patch_changes": []
+      "patch_changes": [],
+      "quality_tier": null
     },
     {
       "type": "augment",
@@ -739,7 +759,8 @@
           "lane": "live"
         }
       ],
-      "patch_changes": []
+      "patch_changes": [],
+      "quality_tier": null
     },
     {
       "type": "augment",
@@ -774,7 +795,8 @@
           "lane": "live"
         }
       ],
-      "patch_changes": []
+      "patch_changes": [],
+      "quality_tier": null
     },
     {
       "type": "augment",
@@ -809,7 +831,8 @@
           "lane": "live"
         }
       ],
-      "patch_changes": []
+      "patch_changes": [],
+      "quality_tier": null
     },
     {
       "type": "augment",
@@ -844,7 +867,8 @@
           "lane": "live"
         }
       ],
-      "patch_changes": []
+      "patch_changes": [],
+      "quality_tier": null
     },
     {
       "type": "augment",
@@ -879,7 +903,8 @@
           "lane": "live"
         }
       ],
-      "patch_changes": []
+      "patch_changes": [],
+      "quality_tier": null
     },
     {
       "type": "augment",
@@ -914,7 +939,8 @@
           "lane": "live"
         }
       ],
-      "patch_changes": []
+      "patch_changes": [],
+      "quality_tier": null
     },
     {
       "type": "augment",
@@ -949,7 +975,8 @@
           "lane": "live"
         }
       ],
-      "patch_changes": []
+      "patch_changes": [],
+      "quality_tier": null
     },
     {
       "type": "augment",
@@ -984,7 +1011,8 @@
           "lane": "live"
         }
       ],
-      "patch_changes": []
+      "patch_changes": [],
+      "quality_tier": null
     },
     {
       "type": "augment",
@@ -1019,7 +1047,8 @@
           "lane": "live"
         }
       ],
-      "patch_changes": []
+      "patch_changes": [],
+      "quality_tier": null
     },
     {
       "type": "augment",
@@ -1054,7 +1083,8 @@
           "lane": "live"
         }
       ],
-      "patch_changes": []
+      "patch_changes": [],
+      "quality_tier": null
     },
     {
       "type": "augment",
@@ -1089,7 +1119,8 @@
           "lane": "live"
         }
       ],
-      "patch_changes": []
+      "patch_changes": [],
+      "quality_tier": null
     },
     {
       "type": "augment",
@@ -1124,7 +1155,8 @@
           "lane": "live"
         }
       ],
-      "patch_changes": []
+      "patch_changes": [],
+      "quality_tier": null
     },
     {
       "type": "augment",
@@ -1159,7 +1191,8 @@
           "lane": "live"
         }
       ],
-      "patch_changes": []
+      "patch_changes": [],
+      "quality_tier": null
     },
     {
       "type": "augment",
@@ -1194,7 +1227,8 @@
           "lane": "live"
         }
       ],
-      "patch_changes": []
+      "patch_changes": [],
+      "quality_tier": null
     },
     {
       "type": "augment",
@@ -1229,7 +1263,8 @@
           "lane": "live"
         }
       ],
-      "patch_changes": []
+      "patch_changes": [],
+      "quality_tier": null
     },
     {
       "type": "augment",
@@ -1264,7 +1299,8 @@
           "lane": "live"
         }
       ],
-      "patch_changes": []
+      "patch_changes": [],
+      "quality_tier": null
     },
     {
       "type": "augment",
@@ -1299,7 +1335,8 @@
           "lane": "live"
         }
       ],
-      "patch_changes": []
+      "patch_changes": [],
+      "quality_tier": null
     },
     {
       "type": "augment",
@@ -1334,7 +1371,8 @@
           "lane": "live"
         }
       ],
-      "patch_changes": []
+      "patch_changes": [],
+      "quality_tier": null
     },
     {
       "type": "augment",
@@ -1369,7 +1407,8 @@
           "lane": "live"
         }
       ],
-      "patch_changes": []
+      "patch_changes": [],
+      "quality_tier": null
     },
     {
       "type": "augment",
@@ -1404,7 +1443,8 @@
           "lane": "live"
         }
       ],
-      "patch_changes": []
+      "patch_changes": [],
+      "quality_tier": null
     },
     {
       "type": "augment",
@@ -1439,7 +1479,8 @@
           "lane": "live"
         }
       ],
-      "patch_changes": []
+      "patch_changes": [],
+      "quality_tier": null
     },
     {
       "type": "augment",
@@ -1474,7 +1515,8 @@
           "lane": "live"
         }
       ],
-      "patch_changes": []
+      "patch_changes": [],
+      "quality_tier": null
     },
     {
       "type": "augment",
@@ -1509,7 +1551,8 @@
           "lane": "live"
         }
       ],
-      "patch_changes": []
+      "patch_changes": [],
+      "quality_tier": null
     },
     {
       "type": "augment",
@@ -1544,7 +1587,8 @@
           "lane": "live"
         }
       ],
-      "patch_changes": []
+      "patch_changes": [],
+      "quality_tier": null
     },
     {
       "type": "augment",
@@ -1579,7 +1623,8 @@
           "lane": "live"
         }
       ],
-      "patch_changes": []
+      "patch_changes": [],
+      "quality_tier": null
     },
     {
       "type": "augment",
@@ -1614,7 +1659,8 @@
           "lane": "live"
         }
       ],
-      "patch_changes": []
+      "patch_changes": [],
+      "quality_tier": null
     },
     {
       "type": "augment",
@@ -1649,7 +1695,8 @@
           "lane": "live"
         }
       ],
-      "patch_changes": []
+      "patch_changes": [],
+      "quality_tier": null
     },
     {
       "type": "augment",
@@ -1684,7 +1731,8 @@
           "lane": "live"
         }
       ],
-      "patch_changes": []
+      "patch_changes": [],
+      "quality_tier": null
     },
     {
       "type": "augment",
@@ -1719,7 +1767,8 @@
           "lane": "live"
         }
       ],
-      "patch_changes": []
+      "patch_changes": [],
+      "quality_tier": null
     },
     {
       "type": "augment",
@@ -1754,7 +1803,8 @@
           "lane": "live"
         }
       ],
-      "patch_changes": []
+      "patch_changes": [],
+      "quality_tier": null
     },
     {
       "type": "augment",
@@ -1789,7 +1839,8 @@
           "lane": "live"
         }
       ],
-      "patch_changes": []
+      "patch_changes": [],
+      "quality_tier": null
     },
     {
       "type": "augment",
@@ -1824,7 +1875,8 @@
           "lane": "live"
         }
       ],
-      "patch_changes": []
+      "patch_changes": [],
+      "quality_tier": null
     },
     {
       "type": "augment",
@@ -1859,7 +1911,8 @@
           "lane": "live"
         }
       ],
-      "patch_changes": []
+      "patch_changes": [],
+      "quality_tier": null
     },
     {
       "type": "augment",
@@ -1894,7 +1947,8 @@
           "lane": "live"
         }
       ],
-      "patch_changes": []
+      "patch_changes": [],
+      "quality_tier": null
     },
     {
       "type": "augment",
@@ -1929,7 +1983,8 @@
           "lane": "live"
         }
       ],
-      "patch_changes": []
+      "patch_changes": [],
+      "quality_tier": null
     },
     {
       "type": "augment",
@@ -1964,7 +2019,8 @@
           "lane": "live"
         }
       ],
-      "patch_changes": []
+      "patch_changes": [],
+      "quality_tier": null
     },
     {
       "type": "augment",
@@ -1999,7 +2055,8 @@
           "lane": "live"
         }
       ],
-      "patch_changes": []
+      "patch_changes": [],
+      "quality_tier": null
     },
     {
       "type": "augment",
@@ -2034,7 +2091,8 @@
           "lane": "live"
         }
       ],
-      "patch_changes": []
+      "patch_changes": [],
+      "quality_tier": null
     },
     {
       "type": "augment",
@@ -2069,7 +2127,8 @@
           "lane": "live"
         }
       ],
-      "patch_changes": []
+      "patch_changes": [],
+      "quality_tier": null
     },
     {
       "type": "augment",
@@ -2104,7 +2163,8 @@
           "lane": "live"
         }
       ],
-      "patch_changes": []
+      "patch_changes": [],
+      "quality_tier": null
     },
     {
       "type": "augment",
@@ -2139,7 +2199,8 @@
           "lane": "live"
         }
       ],
-      "patch_changes": []
+      "patch_changes": [],
+      "quality_tier": null
     },
     {
       "type": "augment",
@@ -2174,7 +2235,8 @@
           "lane": "live"
         }
       ],
-      "patch_changes": []
+      "patch_changes": [],
+      "quality_tier": null
     },
     {
       "type": "augment",
@@ -2209,7 +2271,8 @@
           "lane": "live"
         }
       ],
-      "patch_changes": []
+      "patch_changes": [],
+      "quality_tier": null
     },
     {
       "type": "augment",
@@ -2244,7 +2307,8 @@
           "lane": "live"
         }
       ],
-      "patch_changes": []
+      "patch_changes": [],
+      "quality_tier": null
     },
     {
       "type": "augment",
@@ -2279,7 +2343,8 @@
           "lane": "live"
         }
       ],
-      "patch_changes": []
+      "patch_changes": [],
+      "quality_tier": null
     },
     {
       "type": "augment",
@@ -2314,7 +2379,8 @@
           "lane": "live"
         }
       ],
-      "patch_changes": []
+      "patch_changes": [],
+      "quality_tier": null
     },
     {
       "type": "augment",
@@ -2349,7 +2415,8 @@
           "lane": "live"
         }
       ],
-      "patch_changes": []
+      "patch_changes": [],
+      "quality_tier": null
     },
     {
       "type": "augment",
@@ -2384,7 +2451,8 @@
           "lane": "live"
         }
       ],
-      "patch_changes": []
+      "patch_changes": [],
+      "quality_tier": null
     },
     {
       "type": "augment",
@@ -2419,7 +2487,8 @@
           "lane": "live"
         }
       ],
-      "patch_changes": []
+      "patch_changes": [],
+      "quality_tier": null
     },
     {
       "type": "augment",
@@ -2454,7 +2523,8 @@
           "lane": "live"
         }
       ],
-      "patch_changes": []
+      "patch_changes": [],
+      "quality_tier": null
     },
     {
       "type": "augment",
@@ -2489,7 +2559,8 @@
           "lane": "live"
         }
       ],
-      "patch_changes": []
+      "patch_changes": [],
+      "quality_tier": null
     },
     {
       "type": "augment",
@@ -2524,7 +2595,8 @@
           "lane": "live"
         }
       ],
-      "patch_changes": []
+      "patch_changes": [],
+      "quality_tier": null
     },
     {
       "type": "augment",
@@ -2559,7 +2631,8 @@
           "lane": "live"
         }
       ],
-      "patch_changes": []
+      "patch_changes": [],
+      "quality_tier": null
     },
     {
       "type": "augment",
@@ -2594,7 +2667,8 @@
           "lane": "live"
         }
       ],
-      "patch_changes": []
+      "patch_changes": [],
+      "quality_tier": null
     },
     {
       "type": "augment",
@@ -2629,7 +2703,8 @@
           "lane": "live"
         }
       ],
-      "patch_changes": []
+      "patch_changes": [],
+      "quality_tier": null
     },
     {
       "type": "augment",
@@ -2664,7 +2739,8 @@
           "lane": "live"
         }
       ],
-      "patch_changes": []
+      "patch_changes": [],
+      "quality_tier": null
     },
     {
       "type": "augment",
@@ -2699,7 +2775,8 @@
           "lane": "live"
         }
       ],
-      "patch_changes": []
+      "patch_changes": [],
+      "quality_tier": null
     },
     {
       "type": "augment",
@@ -2734,7 +2811,8 @@
           "lane": "live"
         }
       ],
-      "patch_changes": []
+      "patch_changes": [],
+      "quality_tier": null
     },
     {
       "type": "augment",
@@ -2769,7 +2847,8 @@
           "lane": "live"
         }
       ],
-      "patch_changes": []
+      "patch_changes": [],
+      "quality_tier": null
     },
     {
       "type": "augment",
@@ -2804,7 +2883,8 @@
           "lane": "live"
         }
       ],
-      "patch_changes": []
+      "patch_changes": [],
+      "quality_tier": null
     },
     {
       "type": "augment",
@@ -2839,7 +2919,8 @@
           "lane": "live"
         }
       ],
-      "patch_changes": []
+      "patch_changes": [],
+      "quality_tier": null
     },
     {
       "type": "augment",
@@ -2874,7 +2955,8 @@
           "lane": "live"
         }
       ],
-      "patch_changes": []
+      "patch_changes": [],
+      "quality_tier": null
     },
     {
       "type": "augment",
@@ -2909,7 +2991,8 @@
           "lane": "live"
         }
       ],
-      "patch_changes": []
+      "patch_changes": [],
+      "quality_tier": null
     },
     {
       "type": "augment",
@@ -2944,7 +3027,8 @@
           "lane": "live"
         }
       ],
-      "patch_changes": []
+      "patch_changes": [],
+      "quality_tier": null
     },
     {
       "type": "augment",
@@ -2979,7 +3063,8 @@
           "lane": "live"
         }
       ],
-      "patch_changes": []
+      "patch_changes": [],
+      "quality_tier": null
     },
     {
       "type": "augment",
@@ -3014,7 +3099,8 @@
           "lane": "live"
         }
       ],
-      "patch_changes": []
+      "patch_changes": [],
+      "quality_tier": null
     },
     {
       "type": "augment",
@@ -3049,7 +3135,8 @@
           "lane": "live"
         }
       ],
-      "patch_changes": []
+      "patch_changes": [],
+      "quality_tier": null
     },
     {
       "type": "augment",
@@ -3084,7 +3171,8 @@
           "lane": "live"
         }
       ],
-      "patch_changes": []
+      "patch_changes": [],
+      "quality_tier": null
     },
     {
       "type": "augment",
@@ -3119,7 +3207,8 @@
           "lane": "live"
         }
       ],
-      "patch_changes": []
+      "patch_changes": [],
+      "quality_tier": null
     },
     {
       "type": "augment",
@@ -3154,7 +3243,8 @@
           "lane": "live"
         }
       ],
-      "patch_changes": []
+      "patch_changes": [],
+      "quality_tier": null
     },
     {
       "type": "augment",
@@ -3189,7 +3279,8 @@
           "lane": "live"
         }
       ],
-      "patch_changes": []
+      "patch_changes": [],
+      "quality_tier": null
     },
     {
       "type": "augment",
@@ -3224,7 +3315,8 @@
           "lane": "live"
         }
       ],
-      "patch_changes": []
+      "patch_changes": [],
+      "quality_tier": null
     },
     {
       "type": "augment",
@@ -3259,7 +3351,8 @@
           "lane": "live"
         }
       ],
-      "patch_changes": []
+      "patch_changes": [],
+      "quality_tier": null
     },
     {
       "type": "augment",
@@ -3294,7 +3387,8 @@
           "lane": "live"
         }
       ],
-      "patch_changes": []
+      "patch_changes": [],
+      "quality_tier": null
     },
     {
       "type": "augment",
@@ -3329,7 +3423,8 @@
           "lane": "live"
         }
       ],
-      "patch_changes": []
+      "patch_changes": [],
+      "quality_tier": null
     },
     {
       "type": "augment",
@@ -3364,7 +3459,8 @@
           "lane": "live"
         }
       ],
-      "patch_changes": []
+      "patch_changes": [],
+      "quality_tier": null
     },
     {
       "type": "augment",
@@ -3399,7 +3495,8 @@
           "lane": "live"
         }
       ],
-      "patch_changes": []
+      "patch_changes": [],
+      "quality_tier": null
     },
     {
       "type": "augment",
@@ -3434,7 +3531,8 @@
           "lane": "live"
         }
       ],
-      "patch_changes": []
+      "patch_changes": [],
+      "quality_tier": null
     },
     {
       "type": "augment",
@@ -3469,7 +3567,8 @@
           "lane": "live"
         }
       ],
-      "patch_changes": []
+      "patch_changes": [],
+      "quality_tier": null
     },
     {
       "type": "augment",
@@ -3504,7 +3603,8 @@
           "lane": "live"
         }
       ],
-      "patch_changes": []
+      "patch_changes": [],
+      "quality_tier": null
     },
     {
       "type": "augment",
@@ -3539,7 +3639,8 @@
           "lane": "live"
         }
       ],
-      "patch_changes": []
+      "patch_changes": [],
+      "quality_tier": null
     },
     {
       "type": "augment",
@@ -3574,7 +3675,8 @@
           "lane": "live"
         }
       ],
-      "patch_changes": []
+      "patch_changes": [],
+      "quality_tier": null
     },
     {
       "type": "augment",
@@ -3609,7 +3711,8 @@
           "lane": "live"
         }
       ],
-      "patch_changes": []
+      "patch_changes": [],
+      "quality_tier": null
     },
     {
       "type": "augment",
@@ -3644,7 +3747,8 @@
           "lane": "live"
         }
       ],
-      "patch_changes": []
+      "patch_changes": [],
+      "quality_tier": null
     },
     {
       "type": "augment",
@@ -3694,7 +3798,8 @@
           "is_hotfix": true,
           "direction": "changed"
         }
-      ]
+      ],
+      "quality_tier": null
     },
     {
       "type": "augment",
@@ -3729,7 +3834,8 @@
           "lane": "live"
         }
       ],
-      "patch_changes": []
+      "patch_changes": [],
+      "quality_tier": null
     },
     {
       "type": "augment",
@@ -3764,7 +3870,8 @@
           "lane": "live"
         }
       ],
-      "patch_changes": []
+      "patch_changes": [],
+      "quality_tier": null
     },
     {
       "type": "augment",
@@ -3797,7 +3904,8 @@
           "lane": "live"
         }
       ],
-      "patch_changes": []
+      "patch_changes": [],
+      "quality_tier": null
     },
     {
       "type": "augment",
@@ -3832,7 +3940,8 @@
           "lane": "live"
         }
       ],
-      "patch_changes": []
+      "patch_changes": [],
+      "quality_tier": null
     },
     {
       "type": "augment",
@@ -3867,7 +3976,8 @@
           "lane": "live"
         }
       ],
-      "patch_changes": []
+      "patch_changes": [],
+      "quality_tier": null
     },
     {
       "type": "augment",
@@ -3902,7 +4012,8 @@
           "lane": "live"
         }
       ],
-      "patch_changes": []
+      "patch_changes": [],
+      "quality_tier": null
     },
     {
       "type": "augment",
@@ -3937,7 +4048,8 @@
           "lane": "live"
         }
       ],
-      "patch_changes": []
+      "patch_changes": [],
+      "quality_tier": null
     },
     {
       "type": "augment",
@@ -3972,7 +4084,8 @@
           "lane": "live"
         }
       ],
-      "patch_changes": []
+      "patch_changes": [],
+      "quality_tier": null
     },
     {
       "type": "augment",
@@ -4007,7 +4120,8 @@
           "lane": "live"
         }
       ],
-      "patch_changes": []
+      "patch_changes": [],
+      "quality_tier": null
     },
     {
       "type": "augment",
@@ -4042,7 +4156,8 @@
           "lane": "live"
         }
       ],
-      "patch_changes": []
+      "patch_changes": [],
+      "quality_tier": null
     },
     {
       "type": "augment",
@@ -4077,7 +4192,8 @@
           "lane": "live"
         }
       ],
-      "patch_changes": []
+      "patch_changes": [],
+      "quality_tier": null
     },
     {
       "type": "augment",
@@ -4112,7 +4228,8 @@
           "lane": "live"
         }
       ],
-      "patch_changes": []
+      "patch_changes": [],
+      "quality_tier": null
     },
     {
       "type": "augment",
@@ -4147,7 +4264,8 @@
           "lane": "live"
         }
       ],
-      "patch_changes": []
+      "patch_changes": [],
+      "quality_tier": null
     },
     {
       "type": "augment",
@@ -4182,7 +4300,8 @@
           "lane": "live"
         }
       ],
-      "patch_changes": []
+      "patch_changes": [],
+      "quality_tier": null
     },
     {
       "type": "augment",
@@ -4217,7 +4336,8 @@
           "lane": "live"
         }
       ],
-      "patch_changes": []
+      "patch_changes": [],
+      "quality_tier": null
     },
     {
       "type": "augment",
@@ -4252,7 +4372,8 @@
           "lane": "live"
         }
       ],
-      "patch_changes": []
+      "patch_changes": [],
+      "quality_tier": null
     },
     {
       "type": "augment",
@@ -4287,7 +4408,8 @@
           "lane": "live"
         }
       ],
-      "patch_changes": []
+      "patch_changes": [],
+      "quality_tier": null
     },
     {
       "type": "augment",
@@ -4322,7 +4444,8 @@
           "lane": "live"
         }
       ],
-      "patch_changes": []
+      "patch_changes": [],
+      "quality_tier": null
     },
     {
       "type": "augment",
@@ -4357,7 +4480,8 @@
           "lane": "live"
         }
       ],
-      "patch_changes": []
+      "patch_changes": [],
+      "quality_tier": null
     },
     {
       "type": "augment",
@@ -4392,7 +4516,8 @@
           "lane": "live"
         }
       ],
-      "patch_changes": []
+      "patch_changes": [],
+      "quality_tier": null
     },
     {
       "type": "augment",
@@ -4427,7 +4552,8 @@
           "lane": "live"
         }
       ],
-      "patch_changes": []
+      "patch_changes": [],
+      "quality_tier": null
     },
     {
       "type": "augment",
@@ -4451,7 +4577,8 @@
         "patch": ""
       },
       "stats": [],
-      "patch_changes": []
+      "patch_changes": [],
+      "quality_tier": null
     },
     {
       "type": "augment",
@@ -4486,7 +4613,8 @@
           "lane": "live"
         }
       ],
-      "patch_changes": []
+      "patch_changes": [],
+      "quality_tier": null
     },
     {
       "type": "augment",
@@ -4521,7 +4649,8 @@
           "lane": "live"
         }
       ],
-      "patch_changes": []
+      "patch_changes": [],
+      "quality_tier": null
     },
     {
       "type": "augment",
@@ -4556,7 +4685,8 @@
           "lane": "live"
         }
       ],
-      "patch_changes": []
+      "patch_changes": [],
+      "quality_tier": null
     },
     {
       "type": "augment",
@@ -4591,7 +4721,8 @@
           "lane": "live"
         }
       ],
-      "patch_changes": []
+      "patch_changes": [],
+      "quality_tier": null
     },
     {
       "type": "augment",
@@ -4626,7 +4757,8 @@
           "lane": "live"
         }
       ],
-      "patch_changes": []
+      "patch_changes": [],
+      "quality_tier": null
     },
     {
       "type": "augment",
@@ -4661,7 +4793,8 @@
           "lane": "live"
         }
       ],
-      "patch_changes": []
+      "patch_changes": [],
+      "quality_tier": null
     },
     {
       "type": "augment",
@@ -4696,7 +4829,8 @@
           "lane": "live"
         }
       ],
-      "patch_changes": []
+      "patch_changes": [],
+      "quality_tier": null
     },
     {
       "type": "augment",
@@ -4731,7 +4865,8 @@
           "lane": "live"
         }
       ],
-      "patch_changes": []
+      "patch_changes": [],
+      "quality_tier": null
     },
     {
       "type": "augment",
@@ -4766,7 +4901,8 @@
           "lane": "live"
         }
       ],
-      "patch_changes": []
+      "patch_changes": [],
+      "quality_tier": null
     },
     {
       "type": "augment",
@@ -4790,7 +4926,8 @@
         "patch": ""
       },
       "stats": [],
-      "patch_changes": []
+      "patch_changes": [],
+      "quality_tier": null
     },
     {
       "type": "augment",
@@ -4825,7 +4962,8 @@
           "lane": "live"
         }
       ],
-      "patch_changes": []
+      "patch_changes": [],
+      "quality_tier": null
     },
     {
       "type": "augment",
@@ -4860,7 +4998,8 @@
           "lane": "live"
         }
       ],
-      "patch_changes": []
+      "patch_changes": [],
+      "quality_tier": null
     },
     {
       "type": "augment",
@@ -4895,7 +5034,8 @@
           "lane": "live"
         }
       ],
-      "patch_changes": []
+      "patch_changes": [],
+      "quality_tier": null
     },
     {
       "type": "augment",
@@ -4930,7 +5070,8 @@
           "lane": "live"
         }
       ],
-      "patch_changes": []
+      "patch_changes": [],
+      "quality_tier": null
     },
     {
       "type": "augment",
@@ -4965,7 +5106,8 @@
           "lane": "live"
         }
       ],
-      "patch_changes": []
+      "patch_changes": [],
+      "quality_tier": null
     },
     {
       "type": "augment",
@@ -5000,7 +5142,8 @@
           "lane": "live"
         }
       ],
-      "patch_changes": []
+      "patch_changes": [],
+      "quality_tier": null
     },
     {
       "type": "augment",
@@ -5035,7 +5178,8 @@
           "lane": "live"
         }
       ],
-      "patch_changes": []
+      "patch_changes": [],
+      "quality_tier": null
     },
     {
       "type": "augment",
@@ -5070,7 +5214,8 @@
           "lane": "live"
         }
       ],
-      "patch_changes": []
+      "patch_changes": [],
+      "quality_tier": null
     },
     {
       "type": "augment",
@@ -5105,7 +5250,8 @@
           "lane": "live"
         }
       ],
-      "patch_changes": []
+      "patch_changes": [],
+      "quality_tier": null
     },
     {
       "type": "augment",
@@ -5140,7 +5286,8 @@
           "lane": "live"
         }
       ],
-      "patch_changes": []
+      "patch_changes": [],
+      "quality_tier": null
     },
     {
       "type": "augment",
@@ -5175,7 +5322,8 @@
           "lane": "live"
         }
       ],
-      "patch_changes": []
+      "patch_changes": [],
+      "quality_tier": null
     },
     {
       "type": "augment",
@@ -5210,7 +5358,8 @@
           "lane": "live"
         }
       ],
-      "patch_changes": []
+      "patch_changes": [],
+      "quality_tier": null
     },
     {
       "type": "augment",
@@ -5245,7 +5394,8 @@
           "lane": "live"
         }
       ],
-      "patch_changes": []
+      "patch_changes": [],
+      "quality_tier": null
     },
     {
       "type": "augment",
@@ -5280,7 +5430,8 @@
           "lane": "live"
         }
       ],
-      "patch_changes": []
+      "patch_changes": [],
+      "quality_tier": null
     },
     {
       "type": "augment",
@@ -5315,7 +5466,8 @@
           "lane": "live"
         }
       ],
-      "patch_changes": []
+      "patch_changes": [],
+      "quality_tier": null
     },
     {
       "type": "augment",
@@ -5350,7 +5502,8 @@
           "lane": "live"
         }
       ],
-      "patch_changes": []
+      "patch_changes": [],
+      "quality_tier": null
     },
     {
       "type": "augment",
@@ -5385,7 +5538,8 @@
           "lane": "live"
         }
       ],
-      "patch_changes": []
+      "patch_changes": [],
+      "quality_tier": null
     },
     {
       "type": "augment",
@@ -5420,7 +5574,8 @@
           "lane": "live"
         }
       ],
-      "patch_changes": []
+      "patch_changes": [],
+      "quality_tier": null
     },
     {
       "type": "augment",
@@ -5455,7 +5610,8 @@
           "lane": "live"
         }
       ],
-      "patch_changes": []
+      "patch_changes": [],
+      "quality_tier": null
     },
     {
       "type": "augment",
@@ -5490,7 +5646,8 @@
           "lane": "live"
         }
       ],
-      "patch_changes": []
+      "patch_changes": [],
+      "quality_tier": null
     },
     {
       "type": "augment",
@@ -5525,7 +5682,8 @@
           "lane": "live"
         }
       ],
-      "patch_changes": []
+      "patch_changes": [],
+      "quality_tier": null
     },
     {
       "type": "augment",
@@ -5560,7 +5718,8 @@
           "lane": "live"
         }
       ],
-      "patch_changes": []
+      "patch_changes": [],
+      "quality_tier": null
     },
     {
       "type": "augment",
@@ -5595,7 +5754,8 @@
           "lane": "live"
         }
       ],
-      "patch_changes": []
+      "patch_changes": [],
+      "quality_tier": null
     },
     {
       "type": "augment",
@@ -5630,7 +5790,8 @@
           "lane": "live"
         }
       ],
-      "patch_changes": []
+      "patch_changes": [],
+      "quality_tier": null
     },
     {
       "type": "augment",
@@ -5665,7 +5826,8 @@
           "lane": "live"
         }
       ],
-      "patch_changes": []
+      "patch_changes": [],
+      "quality_tier": null
     },
     {
       "type": "augment",
@@ -5700,7 +5862,8 @@
           "lane": "live"
         }
       ],
-      "patch_changes": []
+      "patch_changes": [],
+      "quality_tier": null
     },
     {
       "type": "augment",
@@ -5735,7 +5898,8 @@
           "lane": "live"
         }
       ],
-      "patch_changes": []
+      "patch_changes": [],
+      "quality_tier": null
     },
     {
       "type": "augment",
@@ -5770,7 +5934,8 @@
           "lane": "live"
         }
       ],
-      "patch_changes": []
+      "patch_changes": [],
+      "quality_tier": null
     },
     {
       "type": "augment",
@@ -5805,7 +5970,8 @@
           "lane": "live"
         }
       ],
-      "patch_changes": []
+      "patch_changes": [],
+      "quality_tier": null
     },
     {
       "type": "augment",
@@ -5840,7 +6006,8 @@
           "lane": "live"
         }
       ],
-      "patch_changes": []
+      "patch_changes": [],
+      "quality_tier": null
     },
     {
       "type": "augment",
@@ -5875,7 +6042,8 @@
           "lane": "live"
         }
       ],
-      "patch_changes": []
+      "patch_changes": [],
+      "quality_tier": null
     },
     {
       "type": "augment",
@@ -5910,7 +6078,8 @@
           "lane": "live"
         }
       ],
-      "patch_changes": []
+      "patch_changes": [],
+      "quality_tier": null
     },
     {
       "type": "augment",
@@ -5945,7 +6114,8 @@
           "lane": "live"
         }
       ],
-      "patch_changes": []
+      "patch_changes": [],
+      "quality_tier": null
     },
     {
       "type": "augment",
@@ -5980,7 +6150,8 @@
           "lane": "live"
         }
       ],
-      "patch_changes": []
+      "patch_changes": [],
+      "quality_tier": null
     },
     {
       "type": "augment",
@@ -6015,7 +6186,8 @@
           "lane": "live"
         }
       ],
-      "patch_changes": []
+      "patch_changes": [],
+      "quality_tier": null
     },
     {
       "type": "augment",
@@ -6050,7 +6222,8 @@
           "lane": "live"
         }
       ],
-      "patch_changes": []
+      "patch_changes": [],
+      "quality_tier": null
     },
     {
       "type": "augment",
@@ -6085,7 +6258,8 @@
           "lane": "live"
         }
       ],
-      "patch_changes": []
+      "patch_changes": [],
+      "quality_tier": null
     },
     {
       "type": "augment",
@@ -6120,7 +6294,8 @@
           "lane": "live"
         }
       ],
-      "patch_changes": []
+      "patch_changes": [],
+      "quality_tier": null
     },
     {
       "type": "augment",
@@ -6155,7 +6330,8 @@
           "lane": "live"
         }
       ],
-      "patch_changes": []
+      "patch_changes": [],
+      "quality_tier": null
     },
     {
       "type": "augment",
@@ -6190,7 +6366,8 @@
           "lane": "live"
         }
       ],
-      "patch_changes": []
+      "patch_changes": [],
+      "quality_tier": null
     },
     {
       "type": "augment",
@@ -6225,7 +6402,8 @@
           "lane": "live"
         }
       ],
-      "patch_changes": []
+      "patch_changes": [],
+      "quality_tier": null
     },
     {
       "type": "augment",
@@ -6260,7 +6438,8 @@
           "lane": "live"
         }
       ],
-      "patch_changes": []
+      "patch_changes": [],
+      "quality_tier": null
     },
     {
       "type": "augment",
@@ -6295,7 +6474,8 @@
           "lane": "live"
         }
       ],
-      "patch_changes": []
+      "patch_changes": [],
+      "quality_tier": null
     },
     {
       "type": "augment",
@@ -6330,7 +6510,8 @@
           "lane": "live"
         }
       ],
-      "patch_changes": []
+      "patch_changes": [],
+      "quality_tier": null
     },
     {
       "type": "augment",
@@ -6365,7 +6546,8 @@
           "lane": "live"
         }
       ],
-      "patch_changes": []
+      "patch_changes": [],
+      "quality_tier": null
     },
     {
       "type": "augment",
@@ -6400,7 +6582,8 @@
           "lane": "live"
         }
       ],
-      "patch_changes": []
+      "patch_changes": [],
+      "quality_tier": null
     },
     {
       "type": "augment",
@@ -6435,7 +6618,8 @@
           "lane": "live"
         }
       ],
-      "patch_changes": []
+      "patch_changes": [],
+      "quality_tier": null
     },
     {
       "type": "augment",
@@ -6470,7 +6654,8 @@
           "lane": "live"
         }
       ],
-      "patch_changes": []
+      "patch_changes": [],
+      "quality_tier": null
     },
     {
       "type": "augment",
@@ -6505,7 +6690,8 @@
           "lane": "live"
         }
       ],
-      "patch_changes": []
+      "patch_changes": [],
+      "quality_tier": null
     },
     {
       "type": "augment",
@@ -6540,7 +6726,8 @@
           "lane": "live"
         }
       ],
-      "patch_changes": []
+      "patch_changes": [],
+      "quality_tier": null
     },
     {
       "type": "augment",
@@ -6575,7 +6762,8 @@
           "lane": "live"
         }
       ],
-      "patch_changes": []
+      "patch_changes": [],
+      "quality_tier": null
     },
     {
       "type": "augment",
@@ -6610,7 +6798,8 @@
           "lane": "live"
         }
       ],
-      "patch_changes": []
+      "patch_changes": [],
+      "quality_tier": null
     },
     {
       "type": "augment",
@@ -6645,7 +6834,8 @@
           "lane": "live"
         }
       ],
-      "patch_changes": []
+      "patch_changes": [],
+      "quality_tier": null
     },
     {
       "type": "augment",
@@ -6680,7 +6870,8 @@
           "lane": "live"
         }
       ],
-      "patch_changes": []
+      "patch_changes": [],
+      "quality_tier": null
     },
     {
       "type": "augment",
@@ -6715,7 +6906,8 @@
           "lane": "live"
         }
       ],
-      "patch_changes": []
+      "patch_changes": [],
+      "quality_tier": null
     },
     {
       "type": "augment",
@@ -6750,7 +6942,8 @@
           "lane": "live"
         }
       ],
-      "patch_changes": []
+      "patch_changes": [],
+      "quality_tier": null
     },
     {
       "type": "augment",
@@ -6785,7 +6978,8 @@
           "lane": "live"
         }
       ],
-      "patch_changes": []
+      "patch_changes": [],
+      "quality_tier": null
     },
     {
       "type": "augment",
@@ -6820,7 +7014,8 @@
           "lane": "live"
         }
       ],
-      "patch_changes": []
+      "patch_changes": [],
+      "quality_tier": null
     },
     {
       "type": "augment",
@@ -6855,7 +7050,8 @@
           "lane": "live"
         }
       ],
-      "patch_changes": []
+      "patch_changes": [],
+      "quality_tier": null
     },
     {
       "type": "augment",
@@ -6890,7 +7086,8 @@
           "lane": "live"
         }
       ],
-      "patch_changes": []
+      "patch_changes": [],
+      "quality_tier": null
     },
     {
       "type": "augment",
@@ -6925,7 +7122,8 @@
           "lane": "live"
         }
       ],
-      "patch_changes": []
+      "patch_changes": [],
+      "quality_tier": null
     },
     {
       "type": "augment",
@@ -6960,7 +7158,8 @@
           "lane": "live"
         }
       ],
-      "patch_changes": []
+      "patch_changes": [],
+      "quality_tier": null
     },
     {
       "type": "augment",
@@ -6995,7 +7194,8 @@
           "lane": "live"
         }
       ],
-      "patch_changes": []
+      "patch_changes": [],
+      "quality_tier": null
     },
     {
       "type": "augment",
@@ -7030,7 +7230,8 @@
           "lane": "live"
         }
       ],
-      "patch_changes": []
+      "patch_changes": [],
+      "quality_tier": null
     },
     {
       "type": "augment",
@@ -7065,7 +7266,8 @@
           "lane": "live"
         }
       ],
-      "patch_changes": []
+      "patch_changes": [],
+      "quality_tier": null
     },
     {
       "type": "augment",
@@ -7100,7 +7302,8 @@
           "lane": "live"
         }
       ],
-      "patch_changes": []
+      "patch_changes": [],
+      "quality_tier": null
     },
     {
       "type": "augment",
@@ -7135,7 +7338,8 @@
           "lane": "live"
         }
       ],
-      "patch_changes": []
+      "patch_changes": [],
+      "quality_tier": null
     },
     {
       "type": "augment",
@@ -7170,7 +7374,8 @@
           "lane": "live"
         }
       ],
-      "patch_changes": []
+      "patch_changes": [],
+      "quality_tier": null
     },
     {
       "type": "augment",
@@ -7205,7 +7410,8 @@
           "lane": "live"
         }
       ],
-      "patch_changes": []
+      "patch_changes": [],
+      "quality_tier": null
     },
     {
       "type": "augment",
@@ -7240,7 +7446,8 @@
           "lane": "live"
         }
       ],
-      "patch_changes": []
+      "patch_changes": [],
+      "quality_tier": null
     },
     {
       "type": "augment",
@@ -7275,7 +7482,8 @@
           "lane": "live"
         }
       ],
-      "patch_changes": []
+      "patch_changes": [],
+      "quality_tier": null
     },
     {
       "type": "augment",
@@ -7310,7 +7518,8 @@
           "lane": "live"
         }
       ],
-      "patch_changes": []
+      "patch_changes": [],
+      "quality_tier": null
     },
     {
       "type": "augment",
@@ -7345,7 +7554,8 @@
           "lane": "live"
         }
       ],
-      "patch_changes": []
+      "patch_changes": [],
+      "quality_tier": null
     },
     {
       "type": "augment",
@@ -7380,7 +7590,8 @@
           "lane": "live"
         }
       ],
-      "patch_changes": []
+      "patch_changes": [],
+      "quality_tier": null
     },
     {
       "type": "augment",
@@ -7415,7 +7626,8 @@
           "lane": "live"
         }
       ],
-      "patch_changes": []
+      "patch_changes": [],
+      "quality_tier": null
     },
     {
       "type": "augment",
@@ -7450,7 +7662,8 @@
           "lane": "live"
         }
       ],
-      "patch_changes": []
+      "patch_changes": [],
+      "quality_tier": null
     },
     {
       "type": "augment",
@@ -7485,7 +7698,8 @@
           "lane": "live"
         }
       ],
-      "patch_changes": []
+      "patch_changes": [],
+      "quality_tier": null
     },
     {
       "type": "augment",
@@ -7520,7 +7734,8 @@
           "lane": "live"
         }
       ],
-      "patch_changes": []
+      "patch_changes": [],
+      "quality_tier": null
     },
     {
       "type": "augment",
@@ -7555,7 +7770,8 @@
           "lane": "live"
         }
       ],
-      "patch_changes": []
+      "patch_changes": [],
+      "quality_tier": null
     },
     {
       "type": "augment",
@@ -7590,7 +7806,8 @@
           "lane": "live"
         }
       ],
-      "patch_changes": []
+      "patch_changes": [],
+      "quality_tier": null
     },
     {
       "type": "augment",
@@ -7625,7 +7842,8 @@
           "lane": "live"
         }
       ],
-      "patch_changes": []
+      "patch_changes": [],
+      "quality_tier": null
     },
     {
       "type": "augment",
@@ -7660,7 +7878,8 @@
           "lane": "live"
         }
       ],
-      "patch_changes": []
+      "patch_changes": [],
+      "quality_tier": null
     },
     {
       "type": "augment",
@@ -7695,7 +7914,8 @@
           "lane": "live"
         }
       ],
-      "patch_changes": []
+      "patch_changes": [],
+      "quality_tier": null
     },
     {
       "type": "augment",
@@ -7730,7 +7950,8 @@
           "lane": "live"
         }
       ],
-      "patch_changes": []
+      "patch_changes": [],
+      "quality_tier": null
     },
     {
       "type": "augment",
@@ -7765,7 +7986,8 @@
           "lane": "live"
         }
       ],
-      "patch_changes": []
+      "patch_changes": [],
+      "quality_tier": null
     },
     {
       "type": "augment",
@@ -7800,7 +8022,8 @@
           "lane": "live"
         }
       ],
-      "patch_changes": []
+      "patch_changes": [],
+      "quality_tier": null
     },
     {
       "type": "augment",
@@ -7835,7 +8058,8 @@
           "lane": "live"
         }
       ],
-      "patch_changes": []
+      "patch_changes": [],
+      "quality_tier": null
     },
     {
       "type": "augment",
@@ -7870,7 +8094,8 @@
           "lane": "live"
         }
       ],
-      "patch_changes": []
+      "patch_changes": [],
+      "quality_tier": null
     },
     {
       "type": "augment",
@@ -7905,7 +8130,8 @@
           "lane": "live"
         }
       ],
-      "patch_changes": []
+      "patch_changes": [],
+      "quality_tier": null
     },
     {
       "type": "augment",
@@ -7940,7 +8166,8 @@
           "lane": "live"
         }
       ],
-      "patch_changes": []
+      "patch_changes": [],
+      "quality_tier": null
     },
     {
       "type": "augment",
@@ -7975,7 +8202,8 @@
           "lane": "live"
         }
       ],
-      "patch_changes": []
+      "patch_changes": [],
+      "quality_tier": null
     },
     {
       "type": "augment",
@@ -8010,7 +8238,8 @@
           "lane": "live"
         }
       ],
-      "patch_changes": []
+      "patch_changes": [],
+      "quality_tier": null
     },
     {
       "type": "augment",
@@ -8045,7 +8274,8 @@
           "lane": "live"
         }
       ],
-      "patch_changes": []
+      "patch_changes": [],
+      "quality_tier": null
     },
     {
       "type": "augment",
@@ -8080,7 +8310,8 @@
           "lane": "live"
         }
       ],
-      "patch_changes": []
+      "patch_changes": [],
+      "quality_tier": null
     },
     {
       "type": "augment",
@@ -8115,7 +8346,8 @@
           "lane": "live"
         }
       ],
-      "patch_changes": []
+      "patch_changes": [],
+      "quality_tier": null
     },
     {
       "type": "augment",
@@ -8150,7 +8382,8 @@
           "lane": "live"
         }
       ],
-      "patch_changes": []
+      "patch_changes": [],
+      "quality_tier": null
     },
     {
       "type": "augment",
@@ -8185,7 +8418,8 @@
           "lane": "live"
         }
       ],
-      "patch_changes": []
+      "patch_changes": [],
+      "quality_tier": null
     },
     {
       "type": "augment",
@@ -8220,7 +8454,8 @@
           "lane": "live"
         }
       ],
-      "patch_changes": []
+      "patch_changes": [],
+      "quality_tier": null
     },
     {
       "type": "augment",
@@ -8255,7 +8490,8 @@
           "lane": "live"
         }
       ],
-      "patch_changes": []
+      "patch_changes": [],
+      "quality_tier": null
     },
     {
       "type": "augment",
@@ -8290,7 +8526,8 @@
           "lane": "live"
         }
       ],
-      "patch_changes": []
+      "patch_changes": [],
+      "quality_tier": null
     },
     {
       "type": "augment",
@@ -8325,7 +8562,8 @@
           "lane": "live"
         }
       ],
-      "patch_changes": []
+      "patch_changes": [],
+      "quality_tier": null
     },
     {
       "type": "augment",
@@ -8360,7 +8598,8 @@
           "lane": "live"
         }
       ],
-      "patch_changes": []
+      "patch_changes": [],
+      "quality_tier": null
     },
     {
       "type": "augment",
@@ -8395,7 +8634,8 @@
           "lane": "live"
         }
       ],
-      "patch_changes": []
+      "patch_changes": [],
+      "quality_tier": null
     },
     {
       "type": "augment",
@@ -8430,7 +8670,8 @@
           "lane": "live"
         }
       ],
-      "patch_changes": []
+      "patch_changes": [],
+      "quality_tier": null
     },
     {
       "type": "augment",
@@ -8465,7 +8706,8 @@
           "lane": "live"
         }
       ],
-      "patch_changes": []
+      "patch_changes": [],
+      "quality_tier": null
     },
     {
       "type": "augment",
@@ -8500,7 +8742,8 @@
           "lane": "live"
         }
       ],
-      "patch_changes": []
+      "patch_changes": [],
+      "quality_tier": null
     },
     {
       "type": "augment",
@@ -8535,7 +8778,8 @@
           "lane": "live"
         }
       ],
-      "patch_changes": []
+      "patch_changes": [],
+      "quality_tier": null
     },
     {
       "type": "augment",
@@ -8570,7 +8814,8 @@
           "lane": "live"
         }
       ],
-      "patch_changes": []
+      "patch_changes": [],
+      "quality_tier": null
     },
     {
       "type": "augment",
@@ -8605,7 +8850,8 @@
           "lane": "live"
         }
       ],
-      "patch_changes": []
+      "patch_changes": [],
+      "quality_tier": null
     },
     {
       "type": "augment",
@@ -8640,7 +8886,8 @@
           "lane": "live"
         }
       ],
-      "patch_changes": []
+      "patch_changes": [],
+      "quality_tier": null
     },
     {
       "type": "augment",
@@ -8675,7 +8922,8 @@
           "lane": "live"
         }
       ],
-      "patch_changes": []
+      "patch_changes": [],
+      "quality_tier": null
     },
     {
       "type": "augment",
@@ -8710,7 +8958,8 @@
           "lane": "live"
         }
       ],
-      "patch_changes": []
+      "patch_changes": [],
+      "quality_tier": null
     },
     {
       "type": "augment",
@@ -8745,7 +8994,8 @@
           "lane": "live"
         }
       ],
-      "patch_changes": []
+      "patch_changes": [],
+      "quality_tier": null
     },
     {
       "type": "augment",
@@ -8780,7 +9030,8 @@
           "lane": "live"
         }
       ],
-      "patch_changes": []
+      "patch_changes": [],
+      "quality_tier": null
     },
     {
       "type": "augment",
@@ -8815,7 +9066,8 @@
           "lane": "live"
         }
       ],
-      "patch_changes": []
+      "patch_changes": [],
+      "quality_tier": null
     },
     {
       "type": "augment",
@@ -8850,7 +9102,8 @@
           "lane": "live"
         }
       ],
-      "patch_changes": []
+      "patch_changes": [],
+      "quality_tier": null
     },
     {
       "type": "augment",
@@ -8885,7 +9138,8 @@
           "lane": "live"
         }
       ],
-      "patch_changes": []
+      "patch_changes": [],
+      "quality_tier": null
     },
     {
       "type": "augment",
@@ -8920,7 +9174,8 @@
           "lane": "live"
         }
       ],
-      "patch_changes": []
+      "patch_changes": [],
+      "quality_tier": null
     },
     {
       "type": "champion",

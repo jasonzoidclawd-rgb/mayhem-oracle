@@ -98,6 +98,34 @@ class ExportPublicCatalogTests(unittest.TestCase):
             self.assertEqual(result["augments"][0]["flags"]["lifecycle"], "active")
             self.assertNotIn("lifecycle_patch", result["augments"][0]["flags"])
 
+    def test_public_augment_projection_exposes_only_the_categorical_tier(self):
+        with TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            (root / "augments.json").write_text(json.dumps({
+                "patch": "26.13",
+                "augments": [{
+                    "augmentId": "ARAM_TEST",
+                    "slug": "test",
+                    "flags": {"lifecycle": "active"},
+                    "availability": {"status": "confirmed_live"},
+                }],
+            }), encoding="utf-8")
+            (root / "augment-base-catalog.json").write_text(json.dumps({
+                "augments": [{"augmentId": "ARAM_TEST"}],
+            }), encoding="utf-8")
+            (root / "augment-winrate-feed.json").write_text(json.dumps({
+                "patch": "26.13",
+                "win_rates": {"ARAM_TEST": 55.0},
+                "sample_counts": {"ARAM_TEST": 1000},
+            }), encoding="utf-8")
+            (root / "pool-rules.json").write_text(json.dumps({"lifecycle": {}}), encoding="utf-8")
+
+            result = build_public_augments(root, forbidden=set())
+
+            self.assertEqual(result["augments"][0]["quality_tier"], "S+")
+            self.assertNotIn("win_rate", result["augments"][0])
+            self.assertNotIn("sample_counts", result["augments"][0])
+
 
 if __name__ == "__main__":
     unittest.main()

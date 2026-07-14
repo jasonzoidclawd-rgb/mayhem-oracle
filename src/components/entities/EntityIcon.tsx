@@ -2,8 +2,10 @@
 
 import Image from "next/image";
 import { useState } from "react";
-import type { EntityRef } from "@/lib/entities/types";
+import type { AugmentQualityTier, EntityRef } from "@/lib/entities/types";
 import { ENTITY_ICON_SIZES, type EntityIconVariant } from "./entity-icon-constants";
+
+export type EntityIconFrame = "neutral" | "quality-tier";
 
 function fallbackGlyph(type: EntityRef["type"]): string {
   return type === "champion" ? "C" : type === "augment" ? "A" : "I";
@@ -19,16 +21,20 @@ export function EntityIcon({
   entity,
   variant = "standard",
   loading = "lazy",
-  tier,
+  frame = "neutral",
+  qualityTier,
   rarity,
 }: {
   entity: EntityRef;
   variant?: EntityIconVariant;
   loading?: "lazy" | "eager";
-  tier?: string;
+  frame?: EntityIconFrame;
+  qualityTier?: AugmentQualityTier | null;
   rarity?: string;
 }) {
   const size = ENTITY_ICON_SIZES[variant] ?? ENTITY_ICON_SIZES.standard;
+  const usesQualityTier = entity.type === "augment" && frame === "quality-tier";
+  const normalizedTier = usesQualityTier ? (qualityTier ?? "neutral") : undefined;
   const [state, setState] = useState<"loading" | "loaded" | "error">(
     entity.iconUrl ? "loading" : "error",
   );
@@ -37,8 +43,10 @@ export function EntityIcon({
   return (
     <span
       aria-hidden="true"
+      data-entity-icon="true"
+      data-entity-type={entity.type}
       data-entity-icon-state={state}
-      data-tier={tier ?? "neutral"}
+      {...(normalizedTier ? { "data-tier": normalizedTier } : {})}
       data-rarity={rarity ?? ""}
       className={`${size.image} relative inline-flex shrink-0 items-center justify-center overflow-hidden rounded border border-[var(--color-border-default)] bg-[var(--color-bg-elevated)] text-[10px] font-bold text-[var(--color-text-muted)]`}
     >

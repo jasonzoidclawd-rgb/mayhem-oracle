@@ -48,7 +48,7 @@ export async function HeroMover({
       <div className="min-w-0 flex-1">
         <p className="text-xs text-[var(--color-text-muted)]">{t("heroTopMover", { patch })}</p>
         <div className="mt-1 flex items-center gap-2">
-          <EntityLink entity={entityRef} variant="standard" tier={champion.tier} className="min-w-0 text-lg font-semibold" />
+          <EntityLink entity={entityRef} variant="standard" className="min-w-0 text-lg font-semibold" />
           <span className={`shrink-0 rounded px-1.5 py-0.5 text-[11px] font-semibold ${tierBadgeClass(champion.tier)}`}>
             {champion.tier}
           </span>

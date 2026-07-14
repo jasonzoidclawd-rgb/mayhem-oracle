@@ -493,6 +493,9 @@ def _record(
         ),
         "patch_changes": [],
     }
+    if entity_type == "augment":
+        tier = display_catalog_row.get("quality_tier")
+        record["quality_tier"] = tier if tier in {"S+", "S", "A", "B", "C"} else None
     changes = [
         event for event in [*live_events, *pbe_events]
         if _event_matches(record, event)

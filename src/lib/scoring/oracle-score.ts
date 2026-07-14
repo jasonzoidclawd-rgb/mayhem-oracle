@@ -11,6 +11,7 @@
  */
 
 import { SCORE_WEIGHTS, type AbilityProfile, type ChampionTag } from "../types";
+import type { AugmentQualityTier } from "../entities/types";
 
 export type AugmentRarity = "prismatic" | "gold" | "silver";
 export type ComboTier = "S" | "A" | "B" | "C";
@@ -31,6 +32,7 @@ export interface ScoredAugment {
   name_ko?: string;
   rarity: AugmentRarity;
   win_rate: number | null;
+  quality_tier?: AugmentQualityTier | null;
   icon: string;
   set?: string;
   wikiSet?: string;

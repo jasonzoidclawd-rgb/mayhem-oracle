@@ -26,12 +26,33 @@ const base: EntityRef = {
 
 describe("EntityLink", () => {
   test("renders one combined crawlable link with deterministic icon fallback", () => {
-    const html = renderToStaticMarkup(createElement(EntityLink, { entity: base, tier: "S" }));
+    const html = renderToStaticMarkup(createElement(EntityLink, { entity: base, qualityTier: "S" }));
     expect(html).toContain('href="/items/1001"');
     expect(html).toContain("Boots");
     expect(html).toContain(">I</span>");
     expect((html.match(/href=/g) ?? []).length).toBe(1);
+    expect(html).toContain('data-entity-type="item"');
+    expect(html).not.toContain("data-tier=");
+  });
+
+  test("keeps quality-tier metadata on augment icons only", () => {
+    const html = renderToStaticMarkup(createElement(EntityLink, {
+      entity: {
+        ...base,
+        type: "augment",
+        id: "ARAM_TEST",
+        slug: "test-augment",
+        localizedName: "Test Augment",
+        canonicalId: "ARAM_TEST",
+        href: "/augments/test-augment",
+      },
+      qualityTier: "S",
+      rarity: "gold",
+    }));
+    expect(html).toContain('data-entity-icon="true"');
+    expect(html).toContain('data-entity-type="augment"');
     expect(html).toContain('data-tier="S"');
+    expect(html).toContain('data-rarity="gold"');
   });
 
   test("renders unresolved entities as an accessible non-interactive identity", () => {

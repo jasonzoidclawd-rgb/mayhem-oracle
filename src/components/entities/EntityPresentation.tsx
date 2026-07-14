@@ -1,5 +1,5 @@
 import type { ReactNode } from "react";
-import type { EntityPresentationRecord, EntityStat, EntityStatChange, StatDirection } from "@/lib/entities/types";
+import type { AugmentQualityTier, EntityPresentationRecord, EntityStat, EntityStatChange, StatDirection } from "@/lib/entities/types";
 import { EntityLink } from "./EntityLink";
 import type { EntityRef } from "@/lib/entities/types";
 import { formatEntityStatValue } from "@/lib/entities/format";
@@ -147,7 +147,7 @@ export function EntityCard({
   stat,
   chips = [],
   description,
-  tier,
+  qualityTier,
   rarity,
 }: {
   entity: EntityRef;
@@ -155,14 +155,14 @@ export function EntityCard({
   stat?: { label: string; value: unknown; unit: EntityStat["unit"] };
   chips?: string[];
   description?: string;
-  tier?: string;
+  qualityTier?: AugmentQualityTier | null;
   rarity?: string;
 }) {
   return (
     <article className="border border-[var(--color-border-default)] bg-[var(--color-bg-card)]/45 p-3" data-entity-card={entity.type}>
       <div className="flex items-start gap-3">
         <div className="shrink-0">
-          <EntityLink entity={entity} variant="standard" tier={tier} rarity={rarity} className="font-semibold" />
+          <EntityLink entity={entity} variant="standard" qualityTier={qualityTier} rarity={rarity} className="font-semibold" />
           {kindLabel ? <div className="mt-1 text-center text-[10px] text-[var(--color-text-muted)]">{kindLabel}</div> : null}
         </div>
         <div className="min-w-0 flex-1">

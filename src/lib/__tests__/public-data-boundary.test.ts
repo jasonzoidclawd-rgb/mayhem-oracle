@@ -39,6 +39,33 @@ describe("public data boundary", () => {
     expect(publicAugments.augments.every((augment) => !("win_rate" in augment))).toBe(true);
   });
 
+  test("allows only the categorical augment quality tier when a canonical source exists", () => {
+    const allowedTiers = new Set(["S+", "S", "A", "B", "C", null]);
+    const forbiddenTierInputs = new Set([
+      "win_rate", "winRate", "rate", "rawRate", "raw_rate", "raw_win_rate", "rawWinRate", "wins", "wins_count", "winsCount",
+      "sample", "sample_count", "sampleCount", "sample_size", "sampleSize", "games", "game_count", "gameCount", "games_count", "gamesCount", "match_count", "matchCount",
+      "percentile", "percentile_rank", "percentileRank", "rank", "numerical_rank", "numericalRank", "band", "band_threshold", "bandThreshold",
+      "confidence", "confidence_interval", "confidenceInterval",
+      "confidence_internals", "confidenceInternals", "score", "scoreBreakdown", "score_breakdown", "scoring", "scoringInputs", "scoring_inputs",
+      "threshold", "thresholds", "thresholdInputs", "threshold_inputs", "calculationInputs", "calculation_inputs",
+      "sourceRecord", "source_record", "feedProvenance", "feed_provenance",
+    ]);
+    const publicAugments = readJson("public/data/augments.json") as {
+      augments: Array<Record<string, unknown>>;
+    };
+    const presentation = readJson("public/data/entity-presentation.json") as {
+      entities: Array<Record<string, unknown>>;
+    };
+    for (const augment of publicAugments.augments) {
+      if ("quality_tier" in augment) expect(allowedTiers.has(augment.quality_tier as string | null)).toBe(true);
+      expect(collectForbiddenKeys(augment, forbiddenTierInputs)).toEqual([]);
+    }
+    for (const augment of presentation.entities.filter((entity) => entity.type === "augment")) {
+      if ("quality_tier" in augment) expect(allowedTiers.has(augment.quality_tier as string | null)).toBe(true);
+      expect(collectForbiddenKeys(augment, forbiddenTierInputs)).toEqual([]);
+    }
+  });
+
   test("does not publish decision-only combos, rules, weights, pools, or item telemetry", () => {
     const publicCombos = readJson("public/data/combos.json") as {
       combos: Array<Record<string, unknown>>;

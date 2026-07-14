@@ -23,6 +23,27 @@ def entity(entity_id, slug, fields, names=None):
 
 
 class EntityPresentationProjectionTests(unittest.TestCase):
+    def test_augment_quality_tier_is_projected_without_performance_inputs(self):
+        latest = {
+            "champion": snapshot("champion", "latest", "16.13.2", "26.13", []),
+            "augment": snapshot("augment", "latest", "16.13.2", "26.13", [
+                entity("ARAM_TEST", "test", {"rarity": "gold"}),
+            ]),
+            "item": snapshot("item", "latest", "16.13.2", "26.13", []),
+        }
+        result = build_entity_presentation(
+            snapshots=latest,
+            catalogs={
+                "champion": {"rows": []},
+                "augment": {"rows": [{"augmentId": "ARAM_TEST", "slug": "test", "name": "Test", "quality_tier": "A"}]},
+                "item": {"rows": []},
+            },
+        )
+        augment = next(row for row in result["entities"] if row["type"] == "augment")
+        self.assertEqual(augment["quality_tier"], "A")
+        self.assertNotIn("win_rate", augment)
+        self.assertNotIn("sample_count", augment)
+
     def test_cross_entity_event_projects_to_augment_and_affected_item(self):
         latest = {
             "champion": snapshot("champion", "latest", "16.13.2", "26.13", []),

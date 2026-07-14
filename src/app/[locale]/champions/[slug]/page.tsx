@@ -547,7 +547,7 @@ export default async function ChampionPage({
                   return (
                     <Tooltip key={`${c.champion}-${c.augmentSlug}-${c.tier}`} content={augDescription}>
                       <div className="flex items-center gap-1.5 px-2 py-1.5 rounded-lg border border-green-400/30 bg-green-400/5 cursor-default">
-                        {ref ? <EntityLink entity={ref} variant="compact" tier="S" className="text-green-300" /> : (
+                        {ref ? <EntityLink entity={ref} variant="compact" className="text-green-300" /> : (
                           <span className="text-xs font-medium text-green-300">{augName}</span>
                         )}
                       </div>
@@ -572,7 +572,7 @@ export default async function ChampionPage({
                   return (
                     <Tooltip key={`${c.champion}-${c.augmentSlug}-${c.tier}`} content={augDescription}>
                       <div className="flex items-center gap-1.5 px-2 py-1.5 rounded-lg border border-red-400/30 bg-red-400/5 cursor-default">
-                        {ref ? <EntityLink entity={ref} variant="compact" tier="C" className="text-red-300" /> : (
+                        {ref ? <EntityLink entity={ref} variant="compact" className="text-red-300" /> : (
                           <span className="text-xs font-medium text-red-300">{augName}</span>
                         )}
                       </div>
@@ -931,7 +931,7 @@ function AugmentRow({
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-1.5">
             {entityRef ? (
-              <EntityLink entity={entityRef} variant="compact" tier={comboTier} className="text-xs sm:text-sm font-medium" />
+              <EntityLink entity={entityRef} variant="compact" className="text-xs sm:text-sm font-medium" />
             ) : (
               <span className="text-xs sm:text-sm font-medium truncate">{augName}</span>
             )}
