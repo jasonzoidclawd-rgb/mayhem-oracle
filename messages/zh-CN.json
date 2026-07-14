@@ -194,6 +194,8 @@
     "pillTier": "阶级",
     "winRateAbbr": "胜率",
     "pickRateAbbr": "选用率",
+    "statisticsUnavailable": "此版本尚无统计数据",
+    "statisticsUnavailableShort": "统计数据不可用",
     "mechanicalAnalysis": "机制分析",
     "mechanicalCounts": "{synergies} 个协同 · {traps} 个陷阱",
     "mechanicalSynergies": "协同",

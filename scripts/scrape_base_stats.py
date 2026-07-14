@@ -12,13 +12,19 @@ Source: https://ddragon.leagueoflegends.com/cdn/{version}/data/en_US/champion.js
 
 from __future__ import annotations
 import json
+import re
 from pathlib import Path
 from urllib.request import urlopen, Request
 
+from champion_slug_aliases import canonical_champion_slug
 from data_paths import INTERNAL_DATA_DIR
 
 HEADERS = {"User-Agent": "Mozilla/5.0 (Mayhem-Oracle-Scraper/1.0)"}
 OUT = INTERNAL_DATA_DIR / "champions.json"
+CDRAGON_ICON_TEMPLATE = (
+    "https://raw.communitydragon.org/latest/plugins/"
+    "rcp-be-lol-game-data/global/default/v1/champion-icons/{champion_id}.png"
+)
 
 # DDragon broke attackdamageperlevel in v16.5.1 (returns 0 for all champions).
 # Use v16.4.1 for AD growth, latest version for everything else.
@@ -43,6 +49,12 @@ STAT_MAP = {
     "hpregen":             "baseHPRegen",
     "hpregenperlevel":     "hpRegenGrowth",
 }
+
+
+def canonical_slug(ddragon_id: str) -> str:
+    """Convert a Data Dragon champion key into the site's canonical slug."""
+    slug = re.sub(r"[^a-z0-9]+", "-", ddragon_id.lower()).strip("-")
+    return canonical_champion_slug(slug)
 
 
 def fetch_json(url: str):
@@ -122,6 +134,35 @@ def main():
             matched += 1
         else:
             unmatched.append(champ["name"])
+
+    # Data Dragon is the authoritative active roster. arammayhem may lag a
+    # newly released champion's statistical feed, but a missing stat row must
+    # never remove the champion identity from the generated catalog. Keep the
+    # existing schema and make every third-party statistical field explicit.
+    existing_slugs = {champ.get("slug") for champ in champions}
+    added = []
+    for key, info in champ_data.items():
+        slug = canonical_slug(info.get("id") or key)
+        if not slug or slug in existing_slugs:
+            continue
+        stats = dd_by_name.get(info["name"].lower()) or dd_by_name.get(key.lower(), {})
+        champion_id = str(info.get("key") or "")
+        champions.append({
+            "slug": slug,
+            "name": info["name"],
+            "tier": None,
+            "rank": None,
+            "win_rate": None,
+            "pick_rate": None,
+            "tags": [str(tag).lower() for tag in info.get("tags", [])],
+            "icon": CDRAGON_ICON_TEMPLATE.format(champion_id=champion_id),
+            "baseStats": stats,
+        })
+        existing_slugs.add(slug)
+        added.append(slug)
+
+    if added:
+        print(f"Added {len(added)} Data Dragon roster champion(s) without arammayhem stats: {added}")
 
     print(f"Matched: {matched}/{len(champions)}")
     if unmatched:

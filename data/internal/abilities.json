@@ -1,5 +1,5 @@
 {
-  "scraped_at": "2026-07-12T22:40:59.901Z",
+  "scraped_at": "2026-07-14T08:57:46.740Z",
   "profiles": {
     "brand": {
       "damageType": "magic",
@@ -35438,6 +35438,215 @@
           "description_ja": "精霊の魔力を放つ。魔力は放物線を描いて飛んでいき、着弾と同時に範囲内のすべてのユニットとタワーをしばらく停止させる。",
           "name_ko": "운명의 소용돌이",
           "description_ko": "바드가 목표 지점에 영적 에너지를 발사하여 잠시 동안 모든 유닛과 포탑을 정지시킵니다."
+        }
+      ]
+    },
+    "locke": {
+      "damageType": "magic",
+      "attackType": "melee",
+      "playstyle": {
+        "damage": 3,
+        "durability": 2,
+        "crowdControl": 1,
+        "mobility": 3,
+        "utility": 1
+      },
+      "abilities": [
+        {
+          "key": "passive",
+          "name": "Silver Stake",
+          "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/characters/locke/hud/icons2d/locke_passive.locke.png",
+          "description": "Locke's attacks deal additional magic damage On-Hit, increased based on enemy missing Health.",
+          "stats": {
+            "apRatio": 0.1,
+            "damageType": "magic",
+            "isOnHit": true
+          },
+          "name_zh_TW": "銀樁咒殺",
+          "description_zh_TW": "洛克的普攻命中時造成額外魔法傷害，且傷害隨敵軍已損失生命提升。",
+          "name_zh_CN": "圣银穿心",
+          "description_zh_CN": "洛克的攻击会附带额外的魔法伤害，伤害值基于敌人的已损失生命值而提升。",
+          "name_ja": "シルバー・ステイク",
+          "description_ja": "通常攻撃は命中時に追加魔法ダメージを与える。このダメージは対象の減少体力に応じて増加する。",
+          "name_ko": "은빛 말뚝",
+          "description_ko": "기본 공격 적중 시 추가 마법 피해를 입힙니다. 피해량은 적이 잃은 체력에 비례해 증가합니다."
+        },
+        {
+          "key": "Q",
+          "name": "Ritual Nails",
+          "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/characters/locke/hud/icons2d/locke_q.locke.png",
+          "description": "Locke readies a set of Soul Nails to throw, dealing damage to and marking enemies hit. Locke can consume the marks to deal bonus damage with his attacks.",
+          "stats": {
+            "baseDamage": [
+              50,
+              60,
+              70,
+              80,
+              90
+            ],
+            "apRatio": 0.2,
+            "cooldown": [
+              10,
+              9,
+              8,
+              7,
+              6
+            ],
+            "manaCost": [
+              70
+            ],
+            "range": 950,
+            "ccDuration": 1,
+            "damageType": "magic",
+            "tags": [
+              "Trait_SignatureSpell",
+              "Trait_Ammo",
+              "Trait_DamageAbility",
+              "PositiveEffect_EmpowerAttack",
+              "Trait_RecastOrReplaceSpell",
+              "Trait_Ranged_StopsFirstHit",
+              "Trait_Ranged_Piercing"
+            ],
+            "isAoe": true,
+            "projectile": true,
+            "recast": true,
+            "longRange": true
+          },
+          "name_zh_TW": "咒釘簪命",
+          "description_zh_TW": "洛克取出一組咒釘並擲出，造成傷害並標記命中的敵軍。洛克的普攻可以消耗咒釘標記，造成額外傷害。",
+          "name_zh_CN": "伏魔三钉",
+          "description_zh_CN": "洛克依次击出三颗驱魔大钉，对命中的敌人们造成伤害，并附上一层印记。洛克的攻击可以引爆印记，造成额外伤害。",
+          "name_ja": "リチュアル・ネイル",
+          "description_ja": "「魂の釘」を構えて投げ、命中した敵にダメージを与えてマークを付与する。マークを消費して、通常攻撃で追加ダメージを与えられる。",
+          "name_ko": "의식용 대못",
+          "description_ko": "로크가 영혼의 대못을 여러 개 준비하고 던져 적중한 적에게 피해를 입히고 표식을 남깁니다. 로크는 기본 공격으로 표식을 소모하고 추가 피해를 입힐 수 있습니다."
+        },
+        {
+          "key": "W",
+          "name": "Soul Ignition",
+          "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/characters/locke/hud/icons2d/locke_w.locke.png",
+          "description": "Locke ignites his soul, gaining Attack Speed and Move Speed, and dealing damage to himself. At the end of the duration, Locke will heal back a portion of the damage he takes during the effect.",
+          "stats": {
+            "baseDamage": [
+              40,
+              80,
+              120,
+              160,
+              200
+            ],
+            "cooldown": [
+              20,
+              18,
+              16,
+              14,
+              12
+            ],
+            "manaCost": [
+              50
+            ],
+            "range": 250,
+            "tags": [
+              "Trait_SelfHeal",
+              "PositiveEffect_Boon"
+            ],
+            "heal": true
+          },
+          "name_zh_TW": "燃魂回元",
+          "description_zh_TW": "洛克點燃自己的靈魂，獲得攻速和跑速，並對自己造成傷害。效果結束時，洛克會治療部分效果期間所受傷害。",
+          "name_zh_CN": "灵焰仪式",
+          "description_zh_CN": "洛克点燃自己的灵魂，从而获得攻击速度和移动速度，但会不断对自身造成伤害。技能结束时，洛克将回复一部分在技能持续期间受到的伤害。",
+          "name_ja": "ソウル・イグニッション",
+          "description_ja": "魂を燃やし、攻撃速度と移動速度を増加させ、自身にダメージを与える。効果時間終了時、効果中に受けたダメージの一部を回復する。",
+          "name_ko": "영혼 점화",
+          "description_ko": "로크가 자신의 영혼을 불태워 공격 속도와 이동 속도를 얻고 자신에게 피해를 입힙니다. 지속시간이 끝나면 로크는 효과 지속시간 동안 받은 피해량의 일부를 회복합니다."
+        },
+        {
+          "key": "E",
+          "name": "Ashen Pursuit",
+          "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/characters/locke/hud/icons2d/locke_e.locke.png",
+          "description": "Locke teleports to a location before dashing to attack his next target, dealing damage to enemies passed through.",
+          "stats": {
+            "baseDamage": [
+              40,
+              50,
+              60,
+              70,
+              80
+            ],
+            "apRatio": 0.4,
+            "manaCost": [
+              30,
+              40,
+              50,
+              60,
+              70
+            ],
+            "range": 425,
+            "damageType": "magic",
+            "tags": [
+              "Trait_PlayerSelectedDashDirection",
+              "PositiveEffect_Teleport",
+              "Trait_DamageAbility",
+              "PositiveEffect_MoveBlock",
+              "Trait_RecastOrReplaceSpell",
+              "Trait_Melee_SmallWindup",
+              "Trait_AoE"
+            ],
+            "recast": true,
+            "dash": true
+          },
+          "name_zh_TW": "瞬影追命",
+          "description_zh_TW": "洛克傳送到一個位置，接著衝刺攻擊下一個目標，對途中經過的敵軍造成傷害。",
+          "name_zh_CN": "灰猎无影",
+          "description_zh_CN": "洛克传送至目标位置，并在下一次攻击时朝目标冲刺，对途经的敌人们造成伤害。",
+          "name_ja": "灰塵の追撃",
+          "description_ja": "指定地点にテレポートしてから次の対象へダッシュし、通過した敵にダメージを与える。",
+          "name_ko": "잿빛 추격",
+          "description_ko": "로크가 지정한 위치로 순간이동한 후 다음 대상에게 돌진해 공격하며, 경로상의 적에게 피해를 입힙니다."
+        },
+        {
+          "key": "R",
+          "name": "Purgatory",
+          "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/characters/locke/hud/icons2d/locke_r.locke.png",
+          "description": "Locke throws a binding artifact that deals damage and potentially executes enemies hit. Locke gains additional power for sealing away enemy champions.",
+          "stats": {
+            "baseDamage": [
+              150,
+              225,
+              300,
+              375,
+              450
+            ],
+            "apRatio": 0.6,
+            "cooldown": [
+              120,
+              100,
+              80,
+              80,
+              80
+            ],
+            "manaCost": [
+              100
+            ],
+            "range": 1000,
+            "ccDuration": 2,
+            "damageType": "magic",
+            "tags": [
+              "Trait_Ultimate",
+              "Trait_DamageAbility",
+              "Trait_AoE"
+            ],
+            "isAoe": true,
+            "longRange": true
+          },
+          "name_zh_TW": "芻靈疆域",
+          "description_zh_TW": "洛克投擲一件縛魂神器，對命中的敵軍造成傷害，並有機會封印處決目標。洛克封印敵方英雄時會獲得額外力量。",
+          "name_zh_CN": "万魔狱",
+          "description_zh_CN": "洛克扔出封印法器来对命中的敌人们造成伤害并且有可能将其处决。成功处决敌人会为洛克提供增益效果。",
+          "name_ja": "煉獄",
+          "description_ja": "拘束のアーティファクトを投げ、命中した敵にダメージを与え、場合によってはとどめを刺す。敵チャンピオンを封印すると、さらなる力を獲得する。",
+          "name_ko": "연옥",
+          "description_ko": "로크가 적을 구속하는 유물을 던져 적중한 적에게 피해를 입히고 경우에 따라 처형합니다. 로크는 적 챔피언을 봉인해 추가 위력을 얻습니다."
         }
       ]
     }

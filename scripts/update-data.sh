@@ -57,11 +57,11 @@ python3 scripts/build_tencent_feed.py
 step "6/19  arammayhem.com  →  internal champions/augment win-rate feed/combos/meta"
 python3 scripts/scrape_arammayhem.py
 
-step "7/19  CommunityDragon  →  internal abilities/items"
-python3 scripts/scrape_community_dragon.py
-
-step "8/19  Data Dragon base stats  →  internal champions.json (enrich)"
+step "7/19  Data Dragon  →  active champion identities + base stats"
 python3 scripts/scrape_base_stats.py
+
+step "8/19  CommunityDragon  →  internal abilities/items"
+python3 scripts/scrape_community_dragon.py
 
 step "9/19  CommunityDragon ability stats  →  internal abilities.json (enrich)"
 npx --yes tsx scripts/scrape_ability_stats.ts
@@ -183,6 +183,9 @@ npx --yes tsx scripts/generate_internal_combos.ts
 
 step "19/19 export bounded public catalogs + patch/PBE presentation projections"
 python3 scripts/export_public_catalog.py
+
+step "20/20 Data Dragon  →  active champion roster coverage gate"
+python3 scripts/check_roster_coverage.py
 
 NEW_PATCH=$(python3 -c "import json; print(json.load(open('$META'))['patch'])")
 

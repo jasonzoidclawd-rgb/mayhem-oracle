@@ -66,7 +66,7 @@ type AbilityStatLabels = {
   cast: string;
 };
 
-// ─── Static params for all 172 champions ─────────────────────────────────────
+// ─── Static params for all current-patch champions ───────────────────────────
 
 export const dynamicParams = false;
 
@@ -91,8 +91,9 @@ export async function generateMetadata({
 
   const name = localizedName(champ, locale);
   const route = `/champions/${champ.slug}`;
-  const title = t("metaDetailTitle", { name, tier: champ.tier, patch: data.patch });
-  const description = t("metaDetailDescription", { name, tier: champ.tier, patch: data.patch });
+  const tierLabel = champ.tier ?? t("statisticsUnavailableShort");
+  const title = t("metaDetailTitle", { name, tier: tierLabel, patch: data.patch });
+  const description = t("metaDetailDescription", { name, tier: tierLabel, patch: data.patch });
   const url = localizedUrl(route, locale as Locale);
 
   return {
@@ -154,7 +155,10 @@ export default async function ChampionPage({
     };
   };
 
-  const champWr = activeChamp.win_rate ?? champ.win_rate ?? 50;
+  const championStatisticsAvailable =
+    typeof activeChamp.win_rate === "number" &&
+    typeof activeChamp.pick_rate === "number";
+  const champWr = championStatisticsAvailable ? activeChamp.win_rate : null;
   const abilityProfile: AbilityProfile | undefined = abilities[slug];
 
   // Build combo lookup for this champion: augment-slug → tier
@@ -177,19 +181,21 @@ export default async function ChampionPage({
     : null;
   const poolAugments = pool ? [...pool.silver, ...pool.gold, ...pool.prismatic] : [];
 
-  const scoredAugments = poolAugments
-    .map((aug) => {
-      const comboTier = comboBySlug.get(aug.slug);
-      const result = computeOracleScore({
-        augment: aug,
-        championWinRate: champWr,
-        comboTier,
-        abilityProfile,
-        isSystemBreaker: aug.flags?.system_breaker === true,
-      });
-      return { aug, score: result.total, breakdown: result.breakdown, comboTier };
-    })
-    .sort((a, b) => b.score - a.score);
+  const scoredAugments = championStatisticsAvailable && champWr !== null
+    ? poolAugments
+      .map((aug) => {
+        const comboTier = comboBySlug.get(aug.slug);
+        const result = computeOracleScore({
+          augment: aug,
+          championWinRate: champWr,
+          comboTier,
+          abilityProfile,
+          isSystemBreaker: aug.flags?.system_breaker === true,
+        });
+        return { aug, score: result.total, breakdown: result.breakdown, comboTier };
+      })
+      .sort((a, b) => b.score - a.score)
+    : [];
 
   const excludedByReason = pool
     ? pool.excluded.reduce<Record<string, number>>((accumulator, entry) => {
@@ -427,7 +433,7 @@ export default async function ChampionPage({
     championsLabel: t("indexTitle"),
     name: champName,
     patch,
-    tierLabel: champ.tier,
+    tierLabel: champ.tier ?? t("statisticsUnavailableShort"),
     tagLabels: champ.tags,
     classLabels: champ.classes,
     kitTagLabels: champ.kit_tags,
@@ -455,14 +461,28 @@ export default async function ChampionPage({
                 {champ.rank}/{champions.length}
               </span>
             )}
-            <TierBadge tier={champ.tier} />
+            {champ.tier ? (
+              <TierBadge tier={champ.tier} />
+            ) : (
+              <span className="text-xs font-semibold text-[var(--color-text-muted)]">
+                {t("statisticsUnavailableShort")}
+              </span>
+            )}
           </div>
           <div className="flex items-center gap-3 mt-1 text-sm text-[var(--color-text-secondary)]">
-            <span className="font-bold text-[var(--color-wr-high)]">
-              {champWr.toFixed(1)}% {t("winRateAbbr")}
-            </span>
-            {champ.pick_rate && (
-              <span className="text-xs">{champ.pick_rate.toFixed(1)}% {t("pickRateAbbr")}</span>
+            {championStatisticsAvailable ? (
+              <>
+                <span className="font-bold text-[var(--color-wr-high)]">
+                  {activeChamp.win_rate!.toFixed(1)}% {t("winRateAbbr")}
+                </span>
+                <span className="text-xs">
+                  {activeChamp.pick_rate!.toFixed(1)}% {t("pickRateAbbr")}
+                </span>
+              </>
+            ) : (
+              <span className="font-medium text-amber-300">
+                {t("statisticsUnavailable")}
+              </span>
             )}
             <span className="text-[10px] text-[var(--color-text-muted)]">{t("patchLabel", { patch })}</span>
           </div>

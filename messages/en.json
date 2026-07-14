@@ -256,6 +256,8 @@
     "pillTier": "tier",
     "winRateAbbr": "WR",
     "pickRateAbbr": "PR",
+    "statisticsUnavailable": "Statistics not yet available for this patch",
+    "statisticsUnavailableShort": "Stats unavailable",
     "mechanicalAnalysis": "Mechanical Analysis",
     "mechanicalCounts": "{synergies} synergies · {traps} traps",
     "mechanicalSynergies": "Synergies",

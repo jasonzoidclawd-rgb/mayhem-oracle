@@ -194,6 +194,8 @@
     "pillTier": "ティア",
     "winRateAbbr": "勝率",
     "pickRateAbbr": "ピック率",
+    "statisticsUnavailable": "このパッチの統計データはまだありません",
+    "statisticsUnavailableShort": "統計データなし",
     "mechanicalAnalysis": "メカニクス分析",
     "mechanicalCounts": "シナジー {synergies} 件 · トラップ {traps} 件",
     "mechanicalSynergies": "シナジー",

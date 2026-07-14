@@ -53,7 +53,18 @@ export default async function HomePage({
   const augments = augmentsFile.augments;
   const { patch, scraped_at } = metaFile;
 
-  const byRank = [...champions].sort((a, b) => a.rank - b.rank);
+  // A new champion may be present in the roster before the third-party
+  // statistical feed has a tier/rank/rate row. Keep that identity visible on
+  // its detail page, but reserve ranking surfaces for complete stat records.
+  const byRank = [...champions]
+    .filter(
+      (champion) =>
+        champion.tier != null &&
+        champion.rank != null &&
+        champion.win_rate != null &&
+        champion.pick_rate != null,
+    )
+    .sort((a, b) => a.rank - b.rank);
   const heroChampion = byRank[0];
   const tierChampions = byRank.filter((c) => c.tier === "S+" || c.tier === "S");
   const sPlusCount = champions.filter((c) => c.tier === "S+").length;
@@ -77,7 +88,7 @@ export default async function HomePage({
   const spotlight = changedPrismatic ?? fallbackPrismatic;
   const isSpotlightChanged = changedPrismatic != null;
 
-  const champBySlug = new Map(champions.map((c) => [c.slug, c]));
+  const champBySlug = new Map(byRank.map((c) => [c.slug, c]));
   const comboByChampion = new Map<string, ComboRecord>();
   for (const combo of combosFile.combos) {
     if (!comboByChampion.has(combo.champion)) comboByChampion.set(combo.champion, combo);

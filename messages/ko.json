@@ -194,6 +194,8 @@
     "pillTier": "티어",
     "winRateAbbr": "승률",
     "pickRateAbbr": "픽률",
+    "statisticsUnavailable": "이 패치의 통계가 아직 없습니다",
+    "statisticsUnavailableShort": "통계 없음",
     "mechanicalAnalysis": "메커니즘 분석",
     "mechanicalCounts": "시너지 {synergies}개 · 함정 {traps}개",
     "mechanicalSynergies": "시너지",

@@ -37,6 +37,9 @@ jobs:
           GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
         run: ./scripts/update-data.sh
 
+      - name: Verify active champion roster coverage
+        run: python3 scripts/check_roster_coverage.py
+
       - name: Verify patch-notes publish coverage
         run: python3 scripts/verify_patch_publish.py
 

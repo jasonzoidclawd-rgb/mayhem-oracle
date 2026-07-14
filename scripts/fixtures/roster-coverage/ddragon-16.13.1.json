@@ -1,0 +1,17 @@
+{
+  "version": "16.13.1",
+  "data": {
+    "Brand": {
+      "id": "Brand",
+      "key": "63",
+      "name": "Brand",
+      "tags": ["Mage"]
+    },
+    "Locke": {
+      "id": "Locke",
+      "key": "805",
+      "name": "Locke",
+      "tags": ["Fighter"]
+    }
+  }
+}
