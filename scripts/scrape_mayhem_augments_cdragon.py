@@ -48,6 +48,21 @@ HEADERS = {"User-Agent": "MayhemOracle/1.0 (data pipeline)"}
 
 RARITY_MAP = {"kSilver": "silver", "kGold": "gold", "kPrismatic": "prismatic"}
 ARENA_RARITY_MAP = {0: "silver", 1: "gold", 2: "prismatic"}
+# The shared `augment_*` stringtable namespace contains historical and
+# non-offerable rows as well as the six current rows that were missing from
+# the old kiwi-only extractor (plus the previously reviewed Forged fixture).
+# Keep the broader key parser for diagnostics, but only promote these
+# source-reviewed tokens into the Mayhem base catalog. A generic definition is
+# never availability evidence by itself.
+CURRENT_GENERIC_DEFINITION_TOKENS = frozenset({
+    "bangbang",
+    "forgedbythemaster",
+    "itsgotime",
+    "pincushion",
+    "squishyslappygrab",
+    "surgefield",
+    "terraind",
+})
 CDRAGON_LOCALES = {
     "en": "en_us",
     "zh_cn": "zh_cn",
@@ -63,7 +78,12 @@ _NONALNUM = re.compile(r"[^a-z0-9]")
 # stringtable key noise stripped before matching to an augment nameId. Mayhem
 # augments are keyed kiwi_*; augments converted from Arena keep a shared cherry_*
 # tooltip. We index both and prefer kiwi_ (it reflects Mayhem-specific tuning).
-_KEY_PREFIX = re.compile(r"^(kiwi|cherry)_(aram_)?(augment_)?")
+# Current Mayhem definitions use both the historical `kiwi_*` keys and the
+# newer shared `augment_*` keys. `cherry_*` remains the Arena fallback. The
+# registry is still the entity-id authority; these prefixes only identify a
+# stringtable definition that can bridge a registry row into the Mayhem base
+# catalog.
+_KEY_PREFIX = re.compile(r"^(kiwi|cherry|augment)_(aram_)?(augment_)?")
 _KEY_SUFFIX = re.compile(r"_(tooltip|desc|summary|name)$")
 
 
@@ -95,8 +115,9 @@ def _stringtable_key_parts(key: str) -> tuple[str, str, str] | None:
     if suffix:
         kind = suffix.group(1)
         body = _KEY_SUFFIX.sub("", body)
-    elif m.group(2) == "aram_" and "_" not in body:
-        # Some Mayhem name keys are shaped like kiwi_aram_archmage.
+    elif (m.group(2) == "aram_" or m.group(1) == "augment") and "_" not in body:
+        # Some Mayhem name keys are shaped like kiwi_aram_archmage or
+        # augment_surgefield (the current shared stringtable form).
         kind = "name"
     else:
         return None
@@ -202,7 +223,9 @@ def _kiwi_definition_index(stringtable: dict | list) -> dict[str, dict]:
         if not parts:
             continue
         prefix, token, kind = parts
-        if prefix != "kiwi":
+        if prefix not in {"kiwi", "augment"}:
+            continue
+        if prefix == "augment" and token not in CURRENT_GENERIC_DEFINITION_TOKENS:
             continue
         row = definitions.setdefault(token, {"token": token, "keys": set(), "kinds": set()})
         row["keys"].add(key)

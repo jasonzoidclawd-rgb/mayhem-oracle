@@ -74,7 +74,8 @@ class PatchEventProjectionTests(unittest.TestCase):
         self.assertEqual(change["targets"][0]["href"], "/champions/brand")
         self.assertEqual(change["targets"][0]["canonicalId"], "63")
         self.assertEqual(change["targets"][0]["icon"], "brand.png")
-        self.assertEqual(change["text"]["en"], "abilities.Q.cooldown: [8, 7, 6] → [7, 6, 5]")
+        self.assertEqual(change["text"]["en"], "Q Cooldown: [8, 7, 6] → [7, 6, 5]")
+        self.assertEqual(change["text"]["zh-tw"], "Q 冷卻時間: [8, 7, 6] → [7, 6, 5]")
         self.assertEqual(historical["version"], "26.12")
         self.assertEqual(historical["sections"], [])
         self.assertNotIn("comparison", json.dumps(projection))
@@ -183,7 +184,7 @@ class PatchEventProjectionTests(unittest.TestCase):
         )
 
         change = projection["patches"][0]["sections"][0]["changes"][0]
-        self.assertEqual(change["text"]["en"], "description: Old — → New —")
+        self.assertEqual(change["text"]["en"], "Description: Old — → New —")
 
     def test_projection_preserves_literal_percent_values_in_descriptions(self):
         projection = build_patch_notes_projection(
@@ -201,7 +202,7 @@ class PatchEventProjectionTests(unittest.TestCase):
         change = projection["patches"][0]["sections"][0]["changes"][0]
         self.assertEqual(
             change["text"]["en"],
-            "description: 35% Attack Speed and 25% Move Speed → 40% Attack Speed and 25% Move Speed",
+            "Description: 35% Attack Speed and 25% Move Speed → 40% Attack Speed and 25% Move Speed",
         )
 
     def test_riot_prose_metadata_cannot_create_structural_entity_events(self):

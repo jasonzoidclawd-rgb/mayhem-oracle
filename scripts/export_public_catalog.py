@@ -117,8 +117,13 @@ def build_public_augments(internal_dir: Path, forbidden: set[str]) -> dict:
             continue
         add_public_localized_augment_descriptions(augment)
         patch = removed_patches.get(slug) or added_patches.get(slug)
-        if patch:
+        if patch and (augment.get("flags") or {}).get("lifecycle") == "removed":
             augment.setdefault("flags", {})["lifecycle_patch"] = patch
+        elif isinstance(augment.get("flags"), dict):
+            # A current CDragon row can reappear after a stale removal event.
+            # Do not let the old/addition patch leak into the public lifecycle
+            # field where detail pages and archives interpret it as removal.
+            augment["flags"].pop("lifecycle_patch", None)
 
     return strip_keys(augments, forbidden)
 

@@ -4,7 +4,7 @@
   "status": "fresh",
   "patch": "26.13",
   "pbe_patch": "pbe-cycle-16.14.7942794+branch.releases-16-14.content.release",
-  "observed_at": "2026-07-11T11:22:04.994004Z",
+  "observed_at": "2026-07-14T02:09:10.993750Z",
   "entities": [
     {
       "type": "augment",
@@ -17,15 +17,28 @@
         "ja": "マスターに鍛えられて",
         "ko": "장인의 솜씨",
         "zh-CN": "大师铸就",
-        "zh-TW": "大師鑄造"
+        "zh-TW": "大師鑄造",
+        "zh_cn": "大师铸就",
+        "zh_tw": "大師鑄造"
       },
-      "icon": "https://arammayhem.com/augments/Forged_By_The_Master_mayhem_augment.webp",
-      "description": "Increase your Item and Augment damage by the required number of.",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/kiwi/augments/icons/forgedbythemaster_small.png",
+      "description": "",
       "lifecycle": {
-        "state": "removed",
+        "state": "active",
         "patch": ""
       },
-      "stats": [],
+      "stats": [
+        {
+          "key": "rarity",
+          "label_key": "stats.rarity",
+          "value": "silver",
+          "unit": "label",
+          "source_path": "fields.rarity",
+          "source_version": "16.13.7915903+branch.releases-16-13.content.release",
+          "patch": "26.13",
+          "lane": "live"
+        }
+      ],
       "patch_changes": []
     },
     {
@@ -211,20 +224,31 @@
       "known": true,
       "names": {
         "en": "From Downtown",
-        "ja": "From Downtown",
-        "ko": "From Downtown",
-        "zh-CN": "From Downtown",
-        "zh-TW": "From Downtown",
-        "zh_cn": "From Downtown",
-        "zh_tw": "From Downtown"
+        "ja": "ロングシュート",
+        "ko": "로켓 배송",
+        "zh-CN": "狙神飞星",
+        "zh-TW": "超遠射擊",
+        "zh_cn": "狙神飞星",
+        "zh_tw": "超遠射擊"
       },
       "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/kiwi/augments/icons/questbangbang_small.png",
-      "description": "Quest: Hit enemy champions with abilities while located at least 700 units away from them (at the time of the hit) 15 times (counts up to 1 hit per champion per cast instance). Reward: Upon completing your Quest, hitting enemy champions with abilities while located at least 700 units away from them at the time of the hit fires a meteor to their current location, which upon landing deals 75 – 200 (based on level) (+ 50% bonus AD) (+ 20% AP) magic damage to enemies within the area (8 second cooldown per target per cast instance). The meteor's damage and radius are increased based on your distance to the target at the time of the ability hit, increasing its damage by 0% – 230% and setting its radius to 120 – 1366.88 units. Maximum meteor damage is 172.5 – 460 (based on level) (+ 115% bonus AD) (+ 46% AP).",
+      "description": "",
       "lifecycle": {
-        "state": "removed",
+        "state": "active",
         "patch": ""
       },
-      "stats": [],
+      "stats": [
+        {
+          "key": "rarity",
+          "label_key": "stats.rarity",
+          "value": "gold",
+          "unit": "label",
+          "source_path": "fields.rarity",
+          "source_version": "16.13.7915903+branch.releases-16-13.content.release",
+          "patch": "26.13",
+          "lane": "live"
+        }
+      ],
       "patch_changes": []
     },
     {
@@ -7205,6 +7229,41 @@
     },
     {
       "type": "augment",
+      "canonical_id": "ItsGoTime",
+      "slug": "its-go-time",
+      "route_identifier": "its-go-time",
+      "known": true,
+      "names": {
+        "en": "It's Go Time",
+        "ja": "始まるぞ",
+        "ko": "출발할 시간",
+        "zh-CN": "前进时间到",
+        "zh-TW": "該出手了",
+        "zh_cn": "前进时间到",
+        "zh_tw": "該出手了"
+      },
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/kiwi/augments/icons/genericabilityaugmenticon_silver.png",
+      "description": "",
+      "lifecycle": {
+        "state": "active",
+        "patch": ""
+      },
+      "stats": [
+        {
+          "key": "rarity",
+          "label_key": "stats.rarity",
+          "value": "silver",
+          "unit": "label",
+          "source_path": "fields.rarity",
+          "source_version": "16.13.7915903+branch.releases-16-13.content.release",
+          "patch": "26.13",
+          "lane": "live"
+        }
+      ],
+      "patch_changes": []
+    },
+    {
+      "type": "augment",
       "canonical_id": "KillSecured",
       "slug": "kill-secured",
       "route_identifier": "kill-secured",
@@ -7570,6 +7629,41 @@
       },
       "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/kiwi/augments/icons/overextender_small.png",
       "description": "Your launch with the Cannon Launcher is now empowered, increasing the launch range by 12,000 units and the impact damage by 50%, as well as the travel speed by a significant amount. Additionally, your Recall is now functional and is upgraded to Empowered Recall. Total launch range is 18,500 units, reduced to 16,500 after your team's Outer turret is destroyed. Increased impact damage is 180 – 690 (based on level) magic damage.",
+      "lifecycle": {
+        "state": "active",
+        "patch": ""
+      },
+      "stats": [
+        {
+          "key": "rarity",
+          "label_key": "stats.rarity",
+          "value": "gold",
+          "unit": "label",
+          "source_path": "fields.rarity",
+          "source_version": "16.13.7915903+branch.releases-16-13.content.release",
+          "patch": "26.13",
+          "lane": "live"
+        }
+      ],
+      "patch_changes": []
+    },
+    {
+      "type": "augment",
+      "canonical_id": "PinCushion",
+      "slug": "porcupine",
+      "route_identifier": "porcupine",
+      "known": true,
+      "names": {
+        "en": "Porcupine",
+        "ja": "ヤマアラシ",
+        "ko": "고슴도치",
+        "zh-CN": "豪猪",
+        "zh-TW": "豪豬",
+        "zh_cn": "豪猪",
+        "zh_tw": "豪豬"
+      },
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/kiwi/augments/icons/pincushion_small.png",
+      "description": "",
       "lifecycle": {
         "state": "active",
         "patch": ""
@@ -8220,6 +8314,76 @@
     },
     {
       "type": "augment",
+      "canonical_id": "SquishySlappyGrab",
+      "slug": "squishy-slappy-grab",
+      "route_identifier": "squishy-slappy-grab",
+      "known": true,
+      "names": {
+        "en": "Squishy Slappy Grab",
+        "ja": "スクイッシースラッピーグラブ",
+        "ko": "말랑 찰싹 손",
+        "zh-CN": "软弹啪叽抓",
+        "zh-TW": "伸縮手掌黏黏樂",
+        "zh_cn": "软弹啪叽抓",
+        "zh_tw": "伸縮手掌黏黏樂"
+      },
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/kiwi/augments/icons/squishyslappygrab_small.png",
+      "description": "",
+      "lifecycle": {
+        "state": "active",
+        "patch": ""
+      },
+      "stats": [
+        {
+          "key": "rarity",
+          "label_key": "stats.rarity",
+          "value": "prismatic",
+          "unit": "label",
+          "source_path": "fields.rarity",
+          "source_version": "16.13.7915903+branch.releases-16-13.content.release",
+          "patch": "26.13",
+          "lane": "live"
+        }
+      ],
+      "patch_changes": []
+    },
+    {
+      "type": "augment",
+      "canonical_id": "SurgeField",
+      "slug": "surge-field",
+      "route_identifier": "surge-field",
+      "known": true,
+      "names": {
+        "en": "Surge Field",
+        "ja": "サージフィールド",
+        "ko": "방출 역장",
+        "zh-CN": "电涌力场",
+        "zh-TW": "高能量場域",
+        "zh_cn": "电涌力场",
+        "zh_tw": "高能量場域"
+      },
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/kiwi/augments/icons/surgefield_small.png",
+      "description": "",
+      "lifecycle": {
+        "state": "active",
+        "patch": ""
+      },
+      "stats": [
+        {
+          "key": "rarity",
+          "label_key": "stats.rarity",
+          "value": "prismatic",
+          "unit": "label",
+          "source_path": "fields.rarity",
+          "source_version": "16.13.7915903+branch.releases-16-13.content.release",
+          "patch": "26.13",
+          "lane": "live"
+        }
+      ],
+      "patch_changes": []
+    },
+    {
+      "type": "augment",
       "canonical_id": "SwiftAndSafe",
       "slug": "swift-and-safe",
       "route_identifier": "swift-and-safe",
@@ -8244,6 +8408,41 @@
           "key": "rarity",
           "label_key": "stats.rarity",
           "value": "silver",
+          "unit": "label",
+          "source_path": "fields.rarity",
+          "source_version": "16.13.7915903+branch.releases-16-13.content.release",
+          "patch": "26.13",
+          "lane": "live"
+        }
+      ],
+      "patch_changes": []
+    },
+    {
+      "type": "augment",
+      "canonical_id": "Terraind",
+      "slug": "terraind",
+      "route_identifier": "terraind",
+      "known": true,
+      "names": {
+        "en": "Terrain'd",
+        "ja": "地形でドン",
+        "ko": "지형 생성됨",
+        "zh-CN": "地形专家",
+        "zh-TW": "劃地為王",
+        "zh_cn": "地形专家",
+        "zh_tw": "劃地為王"
+      },
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/lightningstrikes_small.png",
+      "description": "",
+      "lifecycle": {
+        "state": "active",
+        "patch": ""
+      },
+      "stats": [
+        {
+          "key": "rarity",
+          "label_key": "stats.rarity",
+          "value": "gold",
           "unit": "label",
           "source_path": "fields.rarity",
           "source_version": "16.13.7915903+branch.releases-16-13.content.release",
@@ -8404,7 +8603,7 @@
         "ja": "ミカエルの祝福 アップグレード",
         "ko": "미카엘의 축복 업그레이드",
         "zh-CN": "升级：米凯尔的祝福",
-        "zh-TW": "升級米凱的祝福",
+        "zh-TW": "升級：米凱爾的祝福",
         "zh_cn": "升级：米凯尔的祝福",
         "zh_tw": "升級米凱的祝福"
       },

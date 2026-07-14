@@ -2,8 +2,8 @@
   "identity_key": "CDragon augmentNameId",
   "counts": {
     "cdragon": 0,
-    "internal_augments": 21,
-    "wiki": 20,
+    "internal_augments": 13,
+    "wiki": 12,
     "arammayhem_win_rate": 0
   },
   "sources": {
@@ -42,22 +42,6 @@
         "hasWikiDescription": true
       },
       {
-        "sourceKey": "forged-by-the-master",
-        "name": "Forged By The Master",
-        "status": "unmatched",
-        "tokens": [
-          {
-            "field": "name",
-            "value": "Forged By The Master",
-            "token": "forgedbythemaster"
-          }
-        ],
-        "slug": "forged-by-the-master",
-        "rarity": "silver",
-        "lifecycle": "removed",
-        "hasWikiDescription": true
-      },
-      {
         "sourceKey": "siphon",
         "name": "Siphon",
         "status": "unmatched",
@@ -74,38 +58,6 @@
         "hasWikiDescription": true
       },
       {
-        "sourceKey": "terraind",
-        "name": "Terrain'd",
-        "status": "unmatched",
-        "tokens": [
-          {
-            "field": "name",
-            "value": "Terrain'd",
-            "token": "terraind"
-          }
-        ],
-        "slug": "terraind",
-        "rarity": "gold",
-        "lifecycle": "removed",
-        "hasWikiDescription": true
-      },
-      {
-        "sourceKey": "from-downtown",
-        "name": "From Downtown",
-        "status": "unmatched",
-        "tokens": [
-          {
-            "field": "name",
-            "value": "From Downtown",
-            "token": "fromdowntown"
-          }
-        ],
-        "slug": "from-downtown",
-        "rarity": "gold",
-        "lifecycle": "removed",
-        "hasWikiDescription": true
-      },
-      {
         "sourceKey": "dont-change-the-channel",
         "name": "Don't Change the Channel",
         "status": "unmatched",
@@ -117,22 +69,6 @@
           }
         ],
         "slug": "dont-change-the-channel",
-        "rarity": "silver",
-        "lifecycle": "removed",
-        "hasWikiDescription": true
-      },
-      {
-        "sourceKey": "its-go-time",
-        "name": "It's Go Time",
-        "status": "unmatched",
-        "tokens": [
-          {
-            "field": "name",
-            "value": "It's Go Time",
-            "token": "itsgotime"
-          }
-        ],
-        "slug": "its-go-time",
         "rarity": "silver",
         "lifecycle": "removed",
         "hasWikiDescription": true
@@ -182,54 +118,6 @@
         ],
         "slug": "adaptive-ward",
         "rarity": "silver",
-        "lifecycle": "removed",
-        "hasWikiDescription": true
-      },
-      {
-        "sourceKey": "porcupine",
-        "name": "Porcupine",
-        "status": "unmatched",
-        "tokens": [
-          {
-            "field": "name",
-            "value": "Porcupine",
-            "token": "porcupine"
-          }
-        ],
-        "slug": "porcupine",
-        "rarity": "gold",
-        "lifecycle": "removed",
-        "hasWikiDescription": true
-      },
-      {
-        "sourceKey": "pin-cushion",
-        "name": "Pin Cushion",
-        "status": "unmatched",
-        "tokens": [
-          {
-            "field": "name",
-            "value": "Pin Cushion",
-            "token": "pincushion"
-          }
-        ],
-        "slug": "pin-cushion",
-        "rarity": "prismatic",
-        "lifecycle": "removed",
-        "hasWikiDescription": true
-      },
-      {
-        "sourceKey": "surge-field",
-        "name": "Surge Field",
-        "status": "unmatched",
-        "tokens": [
-          {
-            "field": "name",
-            "value": "Surge Field",
-            "token": "surgefield"
-          }
-        ],
-        "slug": "surge-field",
-        "rarity": "prismatic",
         "lifecycle": "removed",
         "hasWikiDescription": true
       },
@@ -314,22 +202,6 @@
         "hasWikiDescription": true
       },
       {
-        "sourceKey": "squishy-slappy-grab",
-        "name": "Squishy Slappy Grab",
-        "status": "unmatched",
-        "tokens": [
-          {
-            "field": "name",
-            "value": "Squishy Slappy Grab",
-            "token": "squishyslappygrab"
-          }
-        ],
-        "slug": "squishy-slappy-grab",
-        "rarity": "prismatic",
-        "lifecycle": "removed",
-        "hasWikiDescription": true
-      },
-      {
         "sourceKey": "trailblazer",
         "name": "Trailblazer",
         "status": "unmatched",
@@ -374,19 +246,6 @@
         "hasWikiDescription": true
       },
       {
-        "sourceKey": "Forged By The Master",
-        "name": "Forged By The Master",
-        "status": "unmatched",
-        "tokens": [
-          {
-            "field": "name",
-            "value": "Forged By The Master",
-            "token": "forgedbythemaster"
-          }
-        ],
-        "hasWikiDescription": true
-      },
-      {
         "sourceKey": "Siphon",
         "name": "Siphon",
         "status": "unmatched",
@@ -400,32 +259,6 @@
         "hasWikiDescription": true
       },
       {
-        "sourceKey": "Terrain'd",
-        "name": "Terrain'd",
-        "status": "unmatched",
-        "tokens": [
-          {
-            "field": "name",
-            "value": "Terrain'd",
-            "token": "terraind"
-          }
-        ],
-        "hasWikiDescription": true
-      },
-      {
-        "sourceKey": "From Downtown",
-        "name": "From Downtown",
-        "status": "unmatched",
-        "tokens": [
-          {
-            "field": "name",
-            "value": "From Downtown",
-            "token": "fromdowntown"
-          }
-        ],
-        "hasWikiDescription": true
-      },
-      {
         "sourceKey": "Don't Change the Channel",
         "name": "Don't Change the Channel",
         "status": "unmatched",
@@ -434,19 +267,6 @@
             "field": "name",
             "value": "Don't Change the Channel",
             "token": "dontchangethechannel"
-          }
-        ],
-        "hasWikiDescription": true
-      },
-      {
-        "sourceKey": "It's Go Time",
-        "name": "It's Go Time",
-        "status": "unmatched",
-        "tokens": [
-          {
-            "field": "name",
-            "value": "It's Go Time",
-            "token": "itsgotime"
           }
         ],
         "hasWikiDescription": true
@@ -486,45 +306,6 @@
             "field": "name",
             "value": "Adaptive Ward",
             "token": "adaptiveward"
-          }
-        ],
-        "hasWikiDescription": true
-      },
-      {
-        "sourceKey": "Porcupine",
-        "name": "Porcupine",
-        "status": "unmatched",
-        "tokens": [
-          {
-            "field": "name",
-            "value": "Porcupine",
-            "token": "porcupine"
-          }
-        ],
-        "hasWikiDescription": true
-      },
-      {
-        "sourceKey": "Pin Cushion",
-        "name": "Pin Cushion",
-        "status": "unmatched",
-        "tokens": [
-          {
-            "field": "name",
-            "value": "Pin Cushion",
-            "token": "pincushion"
-          }
-        ],
-        "hasWikiDescription": true
-      },
-      {
-        "sourceKey": "Surge Field",
-        "name": "Surge Field",
-        "status": "unmatched",
-        "tokens": [
-          {
-            "field": "name",
-            "value": "Surge Field",
-            "token": "surgefield"
           }
         ],
         "hasWikiDescription": true
@@ -584,19 +365,6 @@
             "field": "name",
             "value": "Quest: Support Main",
             "token": "supportmain"
-          }
-        ],
-        "hasWikiDescription": true
-      },
-      {
-        "sourceKey": "Squishy Slappy Grab",
-        "name": "Squishy Slappy Grab",
-        "status": "unmatched",
-        "tokens": [
-          {
-            "field": "name",
-            "value": "Squishy Slappy Grab",
-            "token": "squishyslappygrab"
           }
         ],
         "hasWikiDescription": true

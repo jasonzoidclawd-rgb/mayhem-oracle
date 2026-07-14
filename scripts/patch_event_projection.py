@@ -79,19 +79,77 @@ def _display(value: Any) -> str:
     return repr(value)
 
 
-def _change_text(event: dict[str, Any]) -> str:
+FIELD_LABELS = {
+    "base_stats.health": {"en": "Health", "zh-tw": "生命值", "zh-cn": "生命值", "ja-jp": "体力", "ko-kr": "체력"},
+    "base_stats.armor": {"en": "Armor", "zh-tw": "護甲", "zh-cn": "护甲", "ja-jp": "アーマー", "ko-kr": "방어력"},
+    "base_stats.magicResistance": {"en": "Magic resist", "zh-tw": "魔法抗性", "zh-cn": "魔法抗性", "ja-jp": "魔法耐性", "ko-kr": "마법 저항력"},
+    "cost": {"en": "Cost", "zh-tw": "花費", "zh-cn": "费用", "ja-jp": "コスト", "ko-kr": "비용"},
+    "tooltip": {"en": "Description", "zh-tw": "描述", "zh-cn": "描述", "ja-jp": "説明", "ko-kr": "설명"},
+}
+
+
+GENERIC_CHANGE_TEXT = {
+    "added": {
+        "en": "Added in the CommunityDragon snapshot.",
+        "zh-tw": "已在 CommunityDragon 快照中新增。",
+        "zh-cn": "已在 CommunityDragon 快照中新增。",
+        "ja-jp": "CommunityDragon スナップショットに追加。",
+        "ko-kr": "CommunityDragon 스냅샷에 추가되었습니다.",
+    },
+    "removed": {
+        "en": "Removed in the CommunityDragon snapshot.",
+        "zh-tw": "已在 CommunityDragon 快照中移除。",
+        "zh-cn": "已在 CommunityDragon 快照中移除。",
+        "ja-jp": "CommunityDragon スナップショットから削除。",
+        "ko-kr": "CommunityDragon 스냅샷에서 제거되었습니다.",
+    },
+    "changed": {
+        "en": "Changed in the CommunityDragon snapshot.",
+        "zh-tw": "CommunityDragon 快照已變更。",
+        "zh-cn": "CommunityDragon 快照已变更。",
+        "ja-jp": "CommunityDragon スナップショットで変更。",
+        "ko-kr": "CommunityDragon 스냅샷에서 변경되었습니다.",
+    },
+}
+
+
+def _field_label(field: Any, locale: str = "en") -> str:
+    key = str(field or "")
+    localized = FIELD_LABELS.get(key, {}).get(locale)
+    if localized:
+        return localized
+    # Ability paths are structured source fields, but the UI should receive a
+    # human label rather than a raw dotted key.
+    parts = [part for part in key.split(".") if part]
+    if parts and parts[0] == "abilities" and len(parts) >= 3:
+        ability = parts[1]
+        metric = {
+            "en": {"cooldown": "Cooldown", "cost": "Cost", "cooldown_coefficients": "Cooldown", "cost_coefficients": "Cost", "effect_amounts": "Effect", "range": "Range"},
+            "zh-tw": {"cooldown": "冷卻時間", "cost": "消耗", "cooldown_coefficients": "冷卻時間", "cost_coefficients": "消耗", "effect_amounts": "效果", "range": "距離"},
+            "zh-cn": {"cooldown": "冷却时间", "cost": "消耗", "cooldown_coefficients": "冷却时间", "cost_coefficients": "消耗", "effect_amounts": "效果", "range": "距离"},
+            "ja-jp": {"cooldown": "クールダウン", "cost": "コスト", "cooldown_coefficients": "クールダウン", "cost_coefficients": "コスト", "effect_amounts": "効果", "range": "射程"},
+            "ko-kr": {"cooldown": "재사용 대기시간", "cost": "소모", "cooldown_coefficients": "재사용 대기시간", "cost_coefficients": "소모", "effect_amounts": "효과", "range": "사거리"},
+        }.get(locale, {}).get(parts[-1])
+        return f"{ability} {metric or parts[-1].replace('_', ' ').title()}"
+    return (parts[-1] if parts else "Change").replace("_", " ").title()
+
+
+def _change_texts(event: dict[str, Any]) -> dict[str, str]:
     kind = event.get("change_kind")
-    if kind == "added":
-        return "Added in the CommunityDragon snapshot."
-    if kind == "removed":
-        return "Removed in the CommunityDragon snapshot."
+    if kind in {"added", "removed"}:
+        return dict(GENERIC_CHANGE_TEXT[str(kind)])
     fields = event.get("fields_changed", [])
     before = event.get("before", {})
     after = event.get("after", {})
-    return "; ".join(
-        f"{field}: {_display(before.get(field))} → {_display(after.get(field))}"
-        for field in fields
-    ) or "Changed in the CommunityDragon snapshot."
+    if not fields:
+        return dict(GENERIC_CHANGE_TEXT["changed"])
+    return {
+        locale: "; ".join(
+            f"{_field_label(field, locale)}: {_display(before.get(field))} → {_display(after.get(field))}"
+            for field in fields
+        )
+        for locale in ("en", "zh-tw", "zh-cn", "ja-jp", "ko-kr")
+    }
 
 
 def _kind(event: dict[str, Any]) -> str:
@@ -154,7 +212,7 @@ def _event_to_change(
         target["href"] = href
     return {
         "subject": {key: value for key, value in names.items() if value},
-        "text": {"en": _change_text(event)},
+        "text": _change_texts(event),
         "kind": _kind(event),
         "detectedAt": event.get("detected_at"),
         "isHotfix": bool(event.get("is_hotfix")),
@@ -163,7 +221,7 @@ def _event_to_change(
         "relatedEntities": [],
         "metrics": [
             {
-                "label": field,
+                "label": _field_label(field),
                 "before": _display(event.get("before", {}).get(field)),
                 "after": _display(event.get("after", {}).get(field)),
             }
@@ -298,7 +356,10 @@ def build_patch_notes_projection(
         "sourceKind": "cdragon-structured-diff-v1",
         "status": patch_events.get("status", "unavailable"),
         "sourceUrl": current.get("sourceUrl", ""),
-        "scraped_at": patch_events.get("observed_at", ""),
+        # Keep the public patch-note last-modified value tied to the Riot
+        # metadata fetch, not the CDragon polling time. Structural snapshots
+        # can refresh many times without making the prose article newer.
+        "scraped_at": metadata.get("scraped_at") or current_metadata.get("publishedAt") or patch_events.get("observed_at", ""),
         "patches": [current, *history],
     }
 

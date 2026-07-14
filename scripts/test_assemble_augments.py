@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 
+import json
 import unittest
+from pathlib import Path
 
 from assemble_augments import (
     assemble_catalog,
@@ -179,8 +181,8 @@ class AvailabilityResolverTests(unittest.TestCase):
 
     def test_cdragon_reappearance_clears_stale_tombstone_removal(self):
         availability = resolve_availability(
-            augment_id="ARAM_Removed",
-            slug="removed",
+            augment_id="Terraind",
+            slug="terraind",
             cdragon_present=True,
             kiwi_present=True,
             wiki_row={"wikiDescription": "A current wiki row."},
@@ -192,10 +194,40 @@ class AvailabilityResolverTests(unittest.TestCase):
         self.assertEqual(lifecycle_for_availability(availability["status"]), "active")
         self.assertFalse(availability["signals"]["tombstone"]["removed"])
 
+    def test_reappearing_live_row_clears_stale_lifecycle_patch(self):
+        existing = {
+            "patch": "26.13",
+            "augments": [{
+                "augmentId": "Terraind",
+                "slug": "terraind",
+                "name": "Terrain'd",
+                "rarity": "gold",
+                "flags": {"lifecycle": "removed", "lifecycle_patch": "26.13"},
+            }],
+        }
+        base = base_row("Terraind", "Terrain'd")
+        base["slug"] = "terraind"
+        base["cdragon"]["kiwi"] = {
+            "present": True,
+            "keys": ["augment_terraind_name"],
+            "tokens": ["terraind"],
+        }
+        output = assemble_catalog(
+            existing_catalog=existing,
+            base_catalog={"generated_at": "2026-07-14T00:00:00+00:00", "augments": [base]},
+            wiki_feed={"augments": {}},
+            winrate_feed={"win_rates": {}},
+            identity_map={"mappings": []},
+            removed_slugs={"terraind"},
+        )
+        row = output["augments"][0]
+        self.assertEqual(row["flags"]["lifecycle"], "active")
+        self.assertNotIn("lifecycle_patch", row["flags"])
+
     def test_cdragon_reappearance_clears_false_patch_removal_event(self):
         availability = resolve_availability(
-            augment_id="Upgrade_SwordOfBlossom",
-            slug="upgrade-sword-of-blossoming-dawn",
+            augment_id="Terraind",
+            slug="terraind",
             cdragon_present=True,
             kiwi_present=True,
             wiki_row={"wikiDescription": "Stale wiki row."},
@@ -207,6 +239,21 @@ class AvailabilityResolverTests(unittest.TestCase):
         self.assertEqual(availability["status"], "confirmed_live")
         self.assertEqual(lifecycle_for_availability(availability["status"]), "active")
         self.assertEqual(availability["signals"]["resolution"]["removedSources"], [])
+
+    def test_known_disabled_upgrade_does_not_reappear_from_generic_cdragon_definition(self):
+        availability = resolve_availability(
+            augment_id="Upgrade_SwordOfBlossom",
+            slug="upgrade-sword-of-blossoming-dawn",
+            cdragon_present=True,
+            kiwi_present=True,
+            wiki_row={"wikiDescription": "Stale wiki row."},
+            definition_placeholder=False,
+            tombstone_removed=True,
+            patch_removed=True,
+        )
+
+        self.assertEqual(availability["status"], "removed")
+        self.assertTrue(availability["signals"]["resolution"]["removedSources"])
 
     def test_forged_by_the_master_id_2127_reappears_as_active(self):
         existing = {
@@ -582,6 +629,36 @@ class AssembleCatalogTests(unittest.TestCase):
         )
 
         self.assertEqual(output["patch"], "26.13")
+
+    def test_current_cdragon_lifecycle_regression_keeps_six_rows_live(self):
+        """Generated artifacts keep current rows active and old rows removed."""
+
+        root = Path(__file__).resolve().parents[1]
+        catalog = json.loads((root / "data/internal/augments.json").read_text(encoding="utf-8"))
+        events = json.loads((root / "data/internal/patch-events.json").read_text(encoding="utf-8"))
+        expected = {
+            "terraind",
+            "surge-field",
+            "squishy-slappy-grab",
+            "porcupine",
+            "its-go-time",
+            "from-downtown",
+        }
+        rows = {row["slug"]: row for row in catalog["augments"] if row.get("slug") in expected}
+        self.assertEqual(set(rows), expected)
+        for slug, row in rows.items():
+            self.assertEqual(row["availability"]["status"], "confirmed_live", slug)
+            self.assertEqual(row["flags"]["lifecycle"], "active", slug)
+            self.assertNotIn("lifecycle_patch", row["flags"], slug)
+
+        removal_slugs = {
+            event.get("slug")
+            for event in events.get("events", [])
+            if event.get("entity_type") == "augment" and event.get("change_kind") == "removed"
+        }
+        self.assertTrue(expected.isdisjoint(removal_slugs))
+        frost = next(row for row in catalog["augments"] if row.get("slug") == "frost-wraith")
+        self.assertEqual(frost["flags"]["lifecycle"], "removed")
 
 
 if __name__ == "__main__":

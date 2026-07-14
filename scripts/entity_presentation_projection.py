@@ -92,6 +92,14 @@ def _stable(value: Any) -> Any:
 
 
 def _catalog_id(entity_type: str, row: dict[str, Any]) -> str | None:
+    # A retained historical augment may have a legacy string `augmentId` even
+    # though the roster has a stable numeric ID.  The explicit contract map is
+    # authoritative for that row; do not let a presentation/catalog alias
+    # replace the canonical CDragon roster ID.
+    if entity_type == "augment":
+        mapped = CANONICAL_AUGMENT_IDS.get(str(row.get("slug") or "").strip())
+        if mapped:
+            return mapped
     value = row.get("canonical_id") or row.get("canonicalId")
     if value is None and entity_type == "augment":
         value = row.get("augmentId")
@@ -105,7 +113,46 @@ def _catalog_id(entity_type: str, row: dict[str, Any]) -> str | None:
     return text or None
 
 
+def _snapshot_id(entity_type: str, snapshot_row: dict[str, Any]) -> str:
+    """Return the public canonical ID for a normalized snapshot row."""
+
+    if entity_type == "augment":
+        mapped = CANONICAL_AUGMENT_IDS.get(str(snapshot_row.get("slug") or "").strip())
+        if mapped:
+            return mapped
+    return str(snapshot_row.get("id") or "")
+
+
+def _event_id(event: dict[str, Any]) -> str:
+    """Normalize legacy event aliases before joining the public projection."""
+
+    entity_type = str(event.get("entity_type") or "")
+    if entity_type == "augment":
+        mapped = CANONICAL_AUGMENT_IDS.get(str(event.get("slug") or "").strip())
+        if mapped:
+            return mapped
+    return str(event.get("canonical_id") or "")
+
+
 def _catalog_indexes(entity_type: str, rows: list[dict[str, Any]]) -> tuple[dict[str, dict[str, Any]], dict[str, dict[str, Any]]]:
+    def lifecycle_rank(row: dict[str, Any]) -> int:
+        flags = row.get("flags") if isinstance(row.get("flags"), dict) else {}
+        state = str(flags.get("lifecycle") or "").strip().lower()
+        return {
+            "active": 3,
+            "added": 3,
+            "candidate": 2,
+            "unverified_legacy": 1,
+            "removed": 0,
+            "disabled": 0,
+        }.get(state, 1)
+
+    def route_rank(row: dict[str, Any]) -> int:
+        # An explicit empty route is an intentional fail-closed record (for
+        # example a CDragon-only champion). A real route wins over that
+        # presentation-only alias when the canonical ID has duplicates.
+        return int(bool(str(row.get("_route_identifier") or row.get("slug") or "").strip()))
+
     by_id: dict[str, dict[str, Any]] = {}
     by_slug: dict[str, dict[str, Any]] = {}
     for row in rows:
@@ -118,13 +165,22 @@ def _catalog_indexes(entity_type: str, rows: list[dict[str, Any]]) -> tuple[dict
                 existing = by_id[canonical_id]
                 # Prefer an explicit Mayhem/catalog slug over the older
                 # generated row that carries only an ID.  If both rows have
-                # competing slugs, remove the ID and fail closed.
+                # competing slugs, prefer the current routeable row when the
+                # source explicitly marks one active. This is important for
+                # retained aliases such as PinCushion: the historical
+                # `pin-cushion` row shares the ID with the current `/porcupine`
+                # route and must not hide it. Equal-confidence duplicates
+                # still fail closed rather than guessing from a display name.
                 if not existing.get("slug") and slug:
                     # Preserve localized presentation fields from the older
                     # generated row while letting the explicit row provide
                     # the canonical route and mode-specific metadata.
                     by_id[canonical_id] = {**existing, **row}
                 elif existing.get("slug") and not slug:
+                    pass
+                elif (lifecycle_rank(row), route_rank(row)) > (lifecycle_rank(existing), route_rank(existing)):
+                    by_id[canonical_id] = row
+                elif (lifecycle_rank(row), route_rank(row)) < (lifecycle_rank(existing), route_rank(existing)):
                     pass
                 else:
                     by_id.pop(canonical_id, None)
@@ -310,7 +366,7 @@ def _change_stats(entity_type: str, event: dict[str, Any]) -> list[dict[str, Any
 def _event_matches(record: dict[str, Any], event: dict[str, Any]) -> bool:
     return (
         record.get("type") == event.get("entity_type")
-        and record.get("canonical_id") == str(event.get("canonical_id") or "")
+        and record.get("canonical_id") == _event_id(event)
     )
 
 
@@ -347,7 +403,7 @@ def _record(
     present_in_snapshot: bool = True,
     route_catalog_row: dict[str, Any] | None = None,
 ) -> dict[str, Any]:
-    canonical_id = str(snapshot_row["id"])
+    canonical_id = _snapshot_id(entity_type, snapshot_row)
     # A same-slug CDragon variant may borrow safe display metadata (names,
     # icon, neutral description) from the catalog, but it must never inherit
     # route ownership. Route ownership is selected by exact canonical ID;
@@ -450,8 +506,9 @@ def build_entity_presentation(
         by_id, by_slug = _catalog_indexes(entity_type, catalogs.get(entity_type, {}).get("rows", []))
         seen: set[str] = set()
         for snapshot_row in snapshot_rows:
-            canonical_id = str(snapshot_row["id"])
-            route_catalog_row = by_id.get(canonical_id)
+            raw_canonical_id = str(snapshot_row["id"])
+            canonical_id = _snapshot_id(entity_type, snapshot_row)
+            route_catalog_row = by_id.get(canonical_id) or by_id.get(raw_canonical_id)
             slug_catalog_row = by_slug.get(str(snapshot_row.get("slug") or ""))
             # The champion roster's public route source is slug-keyed and does
             # not publish the CDragon numeric ID. Slug matching is therefore

@@ -53,6 +53,21 @@ AVAILABILITY_STATUS_ORDER = [
     "conflict",
 ]
 
+# These rows were explicitly re-observed in the current CDragon registry after
+# stale removed/unverified projections. The exception is source-reviewed and
+# intentionally narrow: a generic CDragon definition or an old tombstone must
+# not revive every legacy augment in the registry (for example Upgrade Sword
+# of Blossoming Dawn remains disabled).
+CURRENT_REAPPEARED_LIVE_SLUGS = frozenset({
+    "from-downtown",
+    "forged-by-the-master",
+    "its-go-time",
+    "porcupine",
+    "squishy-slappy-grab",
+    "surge-field",
+    "terraind",
+})
+
 LOCALE_FIELDS = {
     "zh_cn": "name_zh_CN",
     "zh_tw": "name_zh_TW",
@@ -170,7 +185,11 @@ def resolve_availability(
     # cleared before lifecycle classification (Forged By The Master is the
     # regression case). Independent official disabled/removed sources below
     # still win when present.
-    restored_from_cdragon = cdragon_present and (tombstone_removed or patch_removed)
+    restored_from_cdragon = (
+        cdragon_present
+        and (slug in CURRENT_REAPPEARED_LIVE_SLUGS or (kiwi_present and not patch_removed))
+        and (tombstone_removed or patch_removed)
+    )
     if restored_from_cdragon:
         tombstone_removed = False
         patch_removed = False
@@ -319,8 +338,10 @@ def removed_snapshot_event_slugs(patch_events: dict) -> set[str]:
 
 def preserved_flags(existing_row: dict | None, lifecycle: str) -> dict:
     existing_flags = copy.deepcopy((existing_row or {}).get("flags") or {})
+    lifecycle_patch = existing_flags.get("lifecycle_patch")
     for key in (
         "lifecycle",
+        "lifecycle_patch",
         "availability_override",
         "availability_label",
         "availability_source",
@@ -329,6 +350,11 @@ def preserved_flags(existing_row: dict | None, lifecycle: str) -> dict:
         existing_flags.pop(key, None)
     existing_flags["system_breaker"] = bool(existing_flags.get("system_breaker"))
     existing_flags["lifecycle"] = lifecycle
+    # A row restored by the current CDragon registry must not carry the old
+    # removal patch into the public projection. Genuine removed rows retain
+    # their historical patch for the bounded archive.
+    if lifecycle == "removed" and lifecycle_patch:
+        existing_flags["lifecycle_patch"] = lifecycle_patch
     return existing_flags
 
 
@@ -350,6 +376,15 @@ def existing_removed_is_tombstone(existing_row: dict | None, slug: str, removed_
         return False
     notes = (wiki_row or {}).get("wikiAvailabilityNotes") or []
     return not currently_disabled(notes if isinstance(notes, list) else [])
+
+
+def existing_patch_removal(existing_row: dict | None) -> bool:
+    """Return whether the prior projection carries an official removal signal."""
+
+    availability = (existing_row or {}).get("availability")
+    signals = availability.get("signals") if isinstance(availability, dict) else None
+    patch_notes = signals.get("patch_notes") if isinstance(signals, dict) else None
+    return isinstance(patch_notes, dict) and patch_notes.get("removed") is True
 
 
 def field_provenance(base_provenance: dict, wiki_row: dict | None, has_win_rate: bool, existing_row: dict | None) -> dict:
@@ -526,6 +561,7 @@ def assemble_catalog(
         has_win_rate = bool(augment_id in win_rates)
         win_rate = win_rates.get(augment_id) if augment_id else None
         tombstone_removed = existing_removed_is_tombstone(existing_row, slug, removed_slugs, wiki_row)
+        patch_removed = slug in removed_slugs or existing_patch_removal(existing_row)
 
         if base and is_primary:
             kiwi_signal = kiwi_signal_from_base(base)
@@ -539,7 +575,7 @@ def assemble_catalog(
                 wiki_row=wiki_row,
                 definition_placeholder=bool(base.get("definitionPlaceholder")),
                 tombstone_removed=tombstone_removed,
-                patch_removed=slug in removed_slugs,
+                patch_removed=patch_removed,
                 existing_lifecycle=existing_row.get("flags", {}).get("lifecycle"),
                 tencent_status=tencent_status_for(augment_id, slug),
             )
@@ -555,24 +591,28 @@ def assemble_catalog(
             emitted_base_ids.add(augment_id)
             continue
 
-        kiwi_signal = kiwi_signal_from_base(base)
+        # A non-primary catalog alias shares the CDragon ID with the selected
+        # canonical row. Preserve it as historical data, but do not let the
+        # canonical definition or a display-name alias make it offerable.
+        existing_active_alias = existing_row.get("flags", {}).get("lifecycle") == "active"
+        kiwi_signal = {"present": False, "keys": [], "tokens": []} if base and not is_primary else kiwi_signal_from_base(base)
         availability = resolve_availability(
             augment_id=augment_id,
             slug=slug,
-            cdragon_present=bool(base),
+            cdragon_present=bool(base and (is_primary or existing_active_alias)),
             kiwi_present=kiwi_signal["present"],
             kiwi_keys=kiwi_signal["keys"],
             kiwi_tokens=kiwi_signal["tokens"],
             wiki_row=wiki_row,
             definition_placeholder=bool(base.get("definitionPlaceholder")) if base else False,
             tombstone_removed=tombstone_removed,
-            patch_removed=slug in removed_slugs,
+            patch_removed=patch_removed,
             existing_lifecycle=existing_row.get("flags", {}).get("lifecycle"),
         )
         rows.append(build_legacy_row(
             existing_row=existing_row,
             augment_id=augment_id,
-            cdragon_present=bool(base),
+            cdragon_present=bool(base and (is_primary or existing_active_alias)),
             wiki_row=wiki_row,
             win_rate=win_rate,
             has_win_rate=has_win_rate,

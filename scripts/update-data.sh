@@ -90,6 +90,9 @@ python3 scripts/apply_removed_augment_tombstones.py
 step "15/19 assemble augments.json  →  resolved availability"
 python3 scripts/assemble_augments.py
 
+step "15b/19 refresh augment reconciliation report"
+python3 scripts/refresh_augment_reconciliation_report.py
+
 step "16/19 restore augment classifications"
 AUGMENT_SNAPSHOT="$AUGMENT_SNAPSHOT" python3 - <<'PY'
 import json

@@ -1,7 +1,10 @@
 #!/usr/bin/env python3
 import unittest
+import json
+from pathlib import Path
+from tempfile import TemporaryDirectory
 
-from export_public_catalog import enrich_public_items, project_augment_icons
+from export_public_catalog import build_public_augments, enrich_public_items, project_augment_icons
 
 
 class ExportPublicCatalogTests(unittest.TestCase):
@@ -76,6 +79,24 @@ class ExportPublicCatalogTests(unittest.TestCase):
 
         self.assertEqual([row["id"] for row in result["items"]], [1001])
         self.assertEqual([row["id"] for row in source["items"]], [3168, 3175, 1001])
+
+    def test_reappeared_live_augments_do_not_keep_removed_patch_metadata(self):
+        with TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            (root / "augments.json").write_text(json.dumps({
+                "augments": [{
+                    "slug": "terraind",
+                    "flags": {"lifecycle": "active", "lifecycle_patch": "26.13"},
+                }],
+            }), encoding="utf-8")
+            (root / "pool-rules.json").write_text(json.dumps({
+                "lifecycle": {"added": {"terraind": "26.13"}, "removed": {}},
+            }), encoding="utf-8")
+
+            result = build_public_augments(root, forbidden=set())
+
+            self.assertEqual(result["augments"][0]["flags"]["lifecycle"], "active")
+            self.assertNotIn("lifecycle_patch", result["augments"][0]["flags"])
 
 
 if __name__ == "__main__":

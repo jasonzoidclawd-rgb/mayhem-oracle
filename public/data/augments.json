@@ -1,6 +1,6 @@
 {
   "patch": "26.13",
-  "scraped_at": "2026-07-12T22:39:33.668313+00:00",
+  "scraped_at": "2026-07-14T02:09:05.099783+00:00",
   "schemaVersion": "augment-truth-step5",
   "sources": {
     "definition": "data/internal/augment-base-catalog.json",
@@ -1498,22 +1498,33 @@
       "description_ko": "기본 스킬로 적을 저격하면 해당 스킬의 재사용 대기시간이 @ReducedCooldownPercent*100@% 반환됩니다. (지속 스킬의 경우 @PeriodicReductionAmount*100@%)"
     },
     {
+      "augmentId": "ForgedByTheMaster",
       "slug": "forged-by-the-master",
       "name": "Forged By The Master",
+      "displayName": "Forged By The Master",
       "rarity": "silver",
-      "icon": "https://arammayhem.com/augments/Forged_By_The_Master_mayhem_augment.webp",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/kiwi/augments/icons/forgedbythemaster_small.png",
+      "names": {
+        "en": "Forged By The Master",
+        "zh_cn": "大师铸就",
+        "zh_tw": "大師鑄造",
+        "ja": "マスターに鍛えられて",
+        "ko": "장인의 솜씨"
+      },
+      "kit_tags": [],
+      "flags": {
+        "system_breaker": false,
+        "lifecycle": "active"
+      },
+      "type": "standalone",
       "name_zh_CN": "大师铸就",
       "name_zh_TW": "大師鑄造",
       "name_ja": "マスターに鍛えられて",
       "name_ko": "장인의 솜씨",
-      "type": "standalone",
-      "flags": {
-        "system_breaker": false,
-        "lifecycle": "removed",
-        "lifecycle_patch": "26.13"
-      },
-      "kit_tags": [],
-      "wikiDescription": "Increase your Item and Augment damage by the required number of."
+      "description_zh_TW": "道具與增幅裝置的傷害提升@Calc_Damage_Amp@。",
+      "description_zh_CN": "使你的装备和强化符文伤害提升@Calc_Damage_Amp@。",
+      "description_ja": "アイテムとオーグメントが与えるダメージを@Calc_Damage_Amp@増加させる。",
+      "description_ko": "아이템 및 증강으로 입히는 피해량이 @Calc_Damage_Amp@ 증가합니다."
     },
     {
       "augmentId": "ARAM_FanTheHammer",
@@ -2393,25 +2404,36 @@
       "description_ko": "존야의 모래시계 재사용 대기시간이 @UpgradeCD@초로 감소합니다. 이제 존야의 모래시계, 추적자의 팔목 보호대 또는 우글렛의 마녀모자 경직 상태에서 이동할 수 있으며 이동 속도가 증가합니다. 250골드를 획득합니다."
     },
     {
+      "augmentId": "Terraind",
       "slug": "terraind",
       "name": "Terrain'd",
+      "displayName": "Terrain'd",
       "rarity": "gold",
-      "icon": "https://arammayhem.com/augments/Terrain_d_mayhem_augment.webp",
-      "name_zh_CN": "地形专家",
-      "name_zh_TW": "劃地為王",
-      "name_ja": "地形でドン",
-      "name_ko": "지형 생성됨",
-      "type": "ability",
-      "flags": {
-        "system_breaker": false,
-        "lifecycle": "removed",
-        "lifecycle_patch": "26.13"
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/lightningstrikes_small.png",
+      "names": {
+        "en": "Terrain'd",
+        "zh_cn": "地形专家",
+        "zh_tw": "劃地為王",
+        "ja": "地形でドン",
+        "ko": "지형 생성됨"
       },
       "kit_tags": [
         "ability",
         "dot"
       ],
-      "wikiDescription": "Your chosen ability deals damage in an area around it."
+      "flags": {
+        "system_breaker": false,
+        "lifecycle": "active"
+      },
+      "type": "ability",
+      "name_zh_CN": "地形专家",
+      "name_zh_TW": "劃地為王",
+      "name_ja": "地形でドン",
+      "name_ko": "지형 생성됨",
+      "description_zh_TW": "你的{{SpellName}}在其周圍造成範圍傷害。",
+      "description_zh_CN": "你的【{{SpellName}}】技能会在它周围的一个区域内造成伤害。",
+      "description_ja": "{{SpellName}}が一定範囲にダメージを与える。",
+      "description_ko": "{{SpellName}} 스킬이 주변 지역에 피해를 입힙니다."
     },
     {
       "augmentId": "ARAM_Recursion",
@@ -2455,32 +2477,27 @@
       "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/kiwi/augments/icons/questbangbang_small.png",
       "names": {
         "en": "From Downtown",
-        "zh_cn": "From Downtown",
-        "zh_tw": "From Downtown",
-        "ja": "From Downtown",
-        "ko": "From Downtown"
+        "zh_cn": "狙神飞星",
+        "zh_tw": "超遠射擊",
+        "ja": "ロングシュート",
+        "ko": "로켓 배송"
       },
       "kit_tags": [
         "ability"
       ],
       "flags": {
         "system_breaker": false,
-        "lifecycle": "removed",
-        "lifecycle_patch": "26.13"
+        "lifecycle": "active"
       },
       "type": "quest",
-      "name_zh_CN": "From Downtown",
-      "name_zh_TW": "From Downtown",
-      "name_ja": "From Downtown",
-      "name_ko": "From Downtown",
-      "wikiDescription": "Quest: Hit enemy champions with abilities while located at least 700 units away from them (at the time of the hit) 15 times (counts up to 1 hit per champion per cast instance). Reward: Upon completing your Quest, hitting enemy champions with abilities while located at least 700 units away from them at the time of the hit fires a meteor to their current location, which upon landing deals 75 – 200 (based on level) (+ 50% bonus AD) (+ 20% AP) magic damage to enemies within the area (8 second cooldown per target per cast instance). The meteor's damage and radius are increased based on your distance to the target at the time of the ability hit, increasing its damage by 0% – 230% and setting its radius to 120 – 1366.88 units. Maximum meteor damage is 172.5 – 460 (based on level) (+ 115% bonus AD) (+ 46% AP).",
-      "wikiRarity": "gold",
-      "recentChanges": {
-        "patch": "26.13",
-        "changes": [
-          "Added restrictions to the largest Area of Effect size."
-        ]
-      }
+      "name_zh_CN": "狙神飞星",
+      "name_zh_TW": "超遠射擊",
+      "name_ja": "ロングシュート",
+      "name_ko": "로켓 배송",
+      "description_zh_TW": "任務：用技能狙擊@QuestRequirement@名敵方英雄 獎勵：召喚隕石砸向你狙擊的敵方英雄，對其周圍區域造成魔法傷害",
+      "description_zh_CN": "任务：用技能狙击@QuestRequirement@个敌方英雄 奖励：一颗流星会飞向被狙击的敌方英雄，在其周围的一个区域内造成魔法伤害",
+      "description_ja": "クエスト: @QuestRequirement@体の敵チャンピオンをスキルでスナイプする。 報酬: スナイプした敵チャンピオンに向けて隕石を飛ばし、周囲の敵に魔法ダメージを与える。",
+      "description_ko": "퀘스트: 스킬로 적 챔피언 @QuestRequirement@명을 저격해야 합니다. 보상: 저격한 적 챔피언에게 유성을 날려 주변 지역에 마법 피해를 입힙니다."
     },
     {
       "augmentId": "ARAM_StatsOnStats",
@@ -3267,25 +3284,36 @@
       "description_ko": "귀환하여 대포 발사기에 탑승하세요. 발사기의 사거리, 이동 속도, 피해량이 대폭 증가했습니다."
     },
     {
+      "augmentId": "ItsGoTime",
       "slug": "its-go-time",
       "name": "It's Go Time",
+      "displayName": "It's Go Time",
       "rarity": "silver",
-      "icon": "https://arammayhem.com/augments/It_s_Go_Time_mayhem_augment.webp",
-      "name_zh_CN": "前进时间到",
-      "name_zh_TW": "該出手了",
-      "name_ja": "始まるぞ",
-      "name_ko": "출발할 시간",
-      "type": "ability",
-      "flags": {
-        "system_breaker": false,
-        "lifecycle": "removed",
-        "lifecycle_patch": "26.13"
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/kiwi/augments/icons/genericabilityaugmenticon_silver.png",
+      "names": {
+        "en": "It's Go Time",
+        "zh_cn": "前进时间到",
+        "zh_tw": "該出手了",
+        "ja": "始まるぞ",
+        "ko": "출발할 시간"
       },
       "kit_tags": [
         "movement",
         "ability"
       ],
-      "wikiDescription": "Activating your chosen ability grants you Movement Speed for its duration."
+      "flags": {
+        "system_breaker": false,
+        "lifecycle": "active"
+      },
+      "type": "ability",
+      "name_zh_CN": "前进时间到",
+      "name_zh_TW": "該出手了",
+      "name_ja": "始まるぞ",
+      "name_ko": "출발할 시간",
+      "description_zh_TW": "發動{{SpellName}}會在持續期間賦予自身跑速。",
+      "description_zh_CN": "激活【{{SpellName}}】技能会在其持续期间为你提供移动速度。",
+      "description_ja": "{{SpellName}}を発動すると、効果時間中、移動速度が増加する。",
+      "description_ko": "{{SpellName}} 사용 시 지속시간 동안 이동 속도가 증가합니다."
     },
     {
       "slug": "trusty-weapon",
@@ -5107,25 +5135,36 @@
       "description_ko": "체력이 낮은 적에게 접근 시 이동 속도가 증가합니다."
     },
     {
+      "augmentId": "PinCushion",
       "slug": "porcupine",
       "name": "Porcupine",
+      "displayName": "Porcupine",
       "rarity": "gold",
-      "icon": "https://arammayhem.com/augments/Porcupine_mayhem_augment.webp",
-      "name_zh_CN": "豪猪",
-      "name_zh_TW": "豪豬",
-      "name_ja": "ヤマアラシ",
-      "name_ko": "고슴도치",
-      "type": "standalone",
-      "flags": {
-        "system_breaker": false,
-        "lifecycle": "removed",
-        "lifecycle_patch": "26.13"
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/kiwi/augments/icons/pincushion_small.png",
+      "names": {
+        "en": "Porcupine",
+        "zh_cn": "豪猪",
+        "zh_tw": "豪豬",
+        "ja": "ヤマアラシ",
+        "ko": "고슴도치"
       },
       "kit_tags": [
         "dot",
         "cc"
       ],
-      "wikiDescription": "Taking damage from champions builds up a burst of needles that fly out of you, dealing damage and slowing nearby enemies."
+      "flags": {
+        "system_breaker": false,
+        "lifecycle": "active"
+      },
+      "type": "standalone",
+      "name_zh_CN": "豪猪",
+      "name_zh_TW": "豪豬",
+      "name_ja": "ヤマアラシ",
+      "name_ko": "고슴도치",
+      "description_zh_TW": "受到英雄傷害時，會匯聚細針然後向四周爆裂，對鄰近敵軍造成傷害和緩速效果。",
+      "description_zh_CN": "承受来自英雄的伤害会积攒一次尖针迸发，这些尖针会从你身上飞出，对附近的敌人们造成伤害和减速。",
+      "description_ja": "チャンピオンからダメージを受けると針が溜まり、最終的に自身から複数の針が放出されて周囲の敵にダメージを与え、スロウ効果を付与する。",
+      "description_ko": "챔피언에게 피해를 입으면 바늘 폭발이 축적되며, 이후 바늘이 튀어 나가 주변 적에게 피해를 입히고 둔화시킵니다."
     },
     {
       "augmentId": "ARAM_StuckInHereWithMe",
@@ -5690,7 +5729,8 @@
         "changes": [
           "Damage per Nail: 20 - 30 ⇒ 20 - 60"
         ]
-      }
+      },
+      "augmentId": "PinCushion"
     },
     {
       "augmentId": "PinballSnowball",
@@ -5853,26 +5893,37 @@
       "wikiRarity": "silver"
     },
     {
+      "augmentId": "SurgeField",
       "slug": "surge-field",
       "name": "Surge Field",
+      "displayName": "Surge Field",
       "rarity": "prismatic",
-      "icon": "https://arammayhem.com/augments/Surge_Field_mayhem_augment.webp",
-      "name_zh_CN": "电涌力场",
-      "name_zh_TW": "高能量場域",
-      "name_ja": "サージフィールド",
-      "name_ko": "방출 역장",
-      "type": "standalone",
-      "flags": {
-        "system_breaker": false,
-        "lifecycle": "removed",
-        "lifecycle_patch": "26.13"
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/kiwi/augments/icons/surgefield_small.png",
+      "names": {
+        "en": "Surge Field",
+        "zh_cn": "电涌力场",
+        "zh_tw": "高能量場域",
+        "ja": "サージフィールド",
+        "ko": "방출 역장"
       },
       "kit_tags": [
         "ability",
         "haste",
         "movement"
       ],
-      "wikiDescription": "On Ultimate cast, spawn a Zone that grants Ability Haste and Movement Speed. While inside, it fires missiles that deal the required number of% of your damage."
+      "flags": {
+        "system_breaker": false,
+        "lifecycle": "active"
+      },
+      "type": "standalone",
+      "name_zh_CN": "电涌力场",
+      "name_zh_TW": "高能量場域",
+      "name_ja": "サージフィールド",
+      "name_ko": "방출 역장",
+      "description_zh_TW": "施放大絕時，生成一個區域，為你提供技能加速和跑速。在裡面時，會發射飛彈，造成等同於你@MissileDamagePercent*100@%的傷害。",
+      "description_zh_CN": "在施放终极技能时，在你周围生成一个地带来提供技能急速和移动速度。在其中时，它会发射飞弹，飞弹造成相当于你造成的@MissileDamagePercent*100@%伤害。",
+      "description_ja": "アルティメットスキル使用時、スキルヘイストと移動速度が増加するゾーンを発生させる。その範囲内にいる間は、ミサイルが発射されて自身のダメージの@MissileDamagePercent*100@%のダメージを与える。",
+      "description_ko": "궁극기 사용 시 스킬 가속과 이동 속도를 부여하는 구역을 생성합니다. 구역 내부에 있는 동안 투사체를 발사해 피해량의 @MissileDamagePercent*100@%만큼 피해를 입힙니다."
     },
     {
       "augmentId": "GoldenSnowball",
@@ -7735,24 +7786,35 @@
       "name_ko": "질주하는 악마"
     },
     {
+      "augmentId": "SquishySlappyGrab",
       "slug": "squishy-slappy-grab",
       "name": "Squishy Slappy Grab",
+      "displayName": "Squishy Slappy Grab",
       "rarity": "prismatic",
-      "icon": "https://arammayhem.com/augments/Squishy_Slappy_Grab_mayhem_augment.webp",
-      "name_zh_CN": "软弹啪叽抓",
-      "name_zh_TW": "伸縮手掌黏黏樂",
-      "name_ja": "スクイッシースラッピーグラブ",
-      "name_ko": "말랑 찰싹 손",
-      "type": "standalone",
-      "flags": {
-        "system_breaker": false,
-        "lifecycle": "removed",
-        "lifecycle_patch": "26.13"
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/kiwi/augments/icons/squishyslappygrab_small.png",
+      "names": {
+        "en": "Squishy Slappy Grab",
+        "zh_cn": "软弹啪叽抓",
+        "zh_tw": "伸縮手掌黏黏樂",
+        "ja": "スクイッシースラッピーグラブ",
+        "ko": "말랑 찰싹 손"
       },
       "kit_tags": [
         "cc"
       ],
-      "wikiDescription": "Occasionally send out squishy, slappy hands towards all nearby enemy champions, tethering them. Your next attack will pull in all tethered enemies."
+      "flags": {
+        "system_breaker": false,
+        "lifecycle": "active"
+      },
+      "type": "standalone",
+      "name_zh_CN": "软弹啪叽抓",
+      "name_zh_TW": "伸縮手掌黏黏樂",
+      "name_ja": "スクイッシースラッピーグラブ",
+      "name_ko": "말랑 찰싹 손",
+      "description_zh_TW": "偶爾會向所有鄰近敵方英雄甩出黏呼呼的巴掌，束縛他們。下一次普攻會將所有被束縛的敵軍拉向你。",
+      "description_zh_CN": "偶尔对所有附近的敌方英雄放出软弹啪叽的手，然后用灵链系住。你的下次攻击将拉拽所有被系住的敌人。",
+      "description_ja": "時々、周囲のすべての敵チャンピオンに向かって、柔らかい手を送り出し、鎖で繋ぐ。次の通常攻撃で、繋がっているすべての敵を引き寄せる。",
+      "description_ko": "때때로 주변 모든 적 챔피언에게 말랑 찰싹 손을 내보내 연결합니다. 다음 기본 공격 시 연결된 모든 적을 끌어당깁니다."
     },
     {
       "augmentId": "ARAM_TankItOrLeaveIt",
@@ -8027,7 +8089,7 @@
       },
       "type": "standalone",
       "name_zh_CN": "升级：米凯尔的祝福",
-      "name_zh_TW": "升級米凱的祝福",
+      "name_zh_TW": "升級：米凱爾的祝福",
       "name_ja": "ミカエルの祝福 アップグレード",
       "name_ko": "미카엘의 축복 업그레이드"
     },
@@ -8426,7 +8488,11 @@
       "name_zh_CN": "？？？",
       "name_zh_TW": "？？？",
       "name_ja": "？？？",
-      "name_ko": "???"
+      "name_ko": "???",
+      "description_zh_TW": "使用敵人失去行蹤信號時，會向該位置發射一枚導彈，對敵軍造成傷害，並回復友軍生命。",
+      "description_zh_CN": "你的敌人消失信号将发射一个飞弹至被信号标记的位置，这个飞弹会伤害敌人并治疗友军。",
+      "description_ja": "「敵を見失った！」ピンの指定地点にミサイルを発射し、敵にダメージを与え、味方を回復する。",
+      "description_ko": "사라짐 신호를 보내면 신호 위치에 미사일을 발사해 적에게는 피해를 입히고 아군에게는 체력을 회복시킵니다."
     },
     {
       "augmentId": "ARAM_TransmuteGold",

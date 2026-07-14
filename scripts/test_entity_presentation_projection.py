@@ -332,7 +332,7 @@ class EntityPresentationProjectionTests(unittest.TestCase):
             patch_events=legacy_removal,
         )
         forged = next(row for row in result["entities"] if row["slug"] == "forged-by-the-master")
-        self.assertEqual(forged["canonical_id"], "ARAM_FORGED_BY_THE_MASTER")
+        self.assertEqual(forged["canonical_id"], "2127")
         self.assertEqual(forged["lifecycle"]["state"], "active")
         self.assertEqual(forged["patch_changes"], [])
         self.assertEqual([stat["key"] for stat in forged["stats"]], ["rarity"])
@@ -373,6 +373,43 @@ class EntityPresentationProjectionTests(unittest.TestCase):
         forged = next(row for row in result["entities"] if row["canonical_id"] == "2127")
         self.assertEqual(forged["lifecycle"]["state"], "active")
         self.assertEqual(forged["patch_changes"], [])
+
+    def test_duplicate_augment_id_prefers_current_route_over_historical_alias(self):
+        latest = {
+            "champion": snapshot("champion", "latest", "16.13.2", "26.13", []),
+            "augment": snapshot("augment", "latest", "16.13.2", "26.13", [
+                entity("PinCushion", "pin-cushion", {"rarity": "gold"}, {"en": "Porcupine"}),
+            ]),
+            "item": snapshot("item", "latest", "16.13.2", "26.13", []),
+        }
+        result = build_entity_presentation(
+            snapshots=latest,
+            catalogs={
+                "champion": {"rows": []},
+                "augment": {"rows": [
+                    {
+                        "augmentId": "PinCushion",
+                        "slug": "pin-cushion",
+                        "name": "Pin Cushion",
+                        "flags": {"lifecycle": "removed"},
+                    },
+                    {
+                        "augmentId": "PinCushion",
+                        "slug": "porcupine",
+                        "name": "Porcupine",
+                        "flags": {"lifecycle": "active"},
+                    },
+                ]},
+                "item": {"rows": []},
+            },
+        )
+        rows = [row for row in result["entities"] if row["type"] == "augment"]
+        self.assertEqual(len(rows), 1)
+        self.assertEqual(rows[0]["canonical_id"], "PinCushion")
+        self.assertEqual(rows[0]["slug"], "porcupine")
+        self.assertEqual(rows[0]["route_identifier"], "porcupine")
+        self.assertTrue(rows[0]["known"])
+        self.assertEqual(rows[0]["lifecycle"]["state"], "active")
 
     def test_pbe_only_changes_are_projected_when_normalized_target_differs(self):
         latest = {
