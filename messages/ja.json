@@ -194,6 +194,8 @@
     "pillTier": "ティア",
     "winRateAbbr": "勝率",
     "pickRateAbbr": "ピック率",
+    "statisticsUnavailable": "このパッチの統計データはまだありません",
+    "statisticsUnavailableShort": "統計データなし",
     "mechanicalAnalysis": "メカニクス分析",
     "mechanicalCounts": "シナジー {synergies} 件 · トラップ {traps} 件",
     "mechanicalSynergies": "シナジー",
@@ -811,6 +813,7 @@
     "legalTitle": "規約",
     "membership": "メンバーシップ",
     "signIn": "サインイン",
+    "about": "このサイトについて",
     "privacy": "プライバシー",
     "terms": "利用規約",
     "contact": "お問い合わせ",
@@ -938,6 +941,18 @@
     "levelAbbr": "Lv",
     "allClasses": "すべて",
     "statsFooter": "{count} / {total} 体の英雄 · データ元：wiki.leagueoflegends.com · レベル成長は公式の計算式を使用"
+  },
+  "about": {
+    "title": "メイヘムオラクルについて",
+    "intro": "メイヘムオラクルは、League of Legends ARAMメイヘムでより速く、より確かな判断をするための独立したコンパニオンです。",
+    "whatTitle": "メイヘムオラクルについて",
+    "whatBody": "現行パッチのゲームデータを、チャンピオンのティア、オーグメント情報、アイテム情報、パッチノート、メイヘムの選択肢を調べる実用的なツールにまとめています。",
+    "dataTitle": "データソースと更新",
+    "dataBody": "公開データパイプラインは、arammayhem、Riot の CommunityDragon と Data Dragon、League of Legends Wiki を組み合わせています。パイプラインは毎日実行され、現行パッチと各ソースの変化に合わせて公開カタログを更新します。",
+    "disclaimerTitle": "Riot Games に関する免責事項",
+    "contactTitle": "お問い合わせ",
+    "contactBody": "質問、データの誤り、フィードバックがあれば、お気軽にご連絡ください。",
+    "contactLink": "お問い合わせページへ"
   },
   "auth": {
     "signIn": {

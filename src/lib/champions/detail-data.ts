@@ -13,7 +13,7 @@ export interface ChampionDetailChampion {
   slug: string;
   name: string;
   title?: string;
-  tier: string;
+  tier: string | null;
   rank: number | null;
   win_rate: number | null;
   pick_rate: number | null;

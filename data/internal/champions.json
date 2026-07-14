@@ -1,6 +1,6 @@
 {
   "patch": "26.13",
-  "scraped_at": "2026-07-12T22:39:39.095225+00:00",
+  "scraped_at": "2026-07-14T08:46:58.077790+00:00",
   "champions": [
     {
       "slug": "brand",
@@ -7153,6 +7153,47 @@
       "name_zh_CN": "星界游神",
       "name_ja": "バード",
       "name_ko": "바드"
+    },
+    {
+      "slug": "locke",
+      "name": "Locke",
+      "tier": null,
+      "rank": null,
+      "win_rate": null,
+      "pick_rate": null,
+      "tags": [
+        "assassin",
+        "mage"
+      ],
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/805.png",
+      "baseStats": {
+        "baseHP": 655,
+        "hpGrowth": 109,
+        "baseArmor": 32,
+        "armorGrowth": 4.2,
+        "baseMR": 32,
+        "mrGrowth": 2.05,
+        "baseAD": 58,
+        "adGrowth": 0,
+        "baseAS": 0.688,
+        "asGrowth": 3.3,
+        "attackRange": 125,
+        "moveSpeed": 340,
+        "baseMP": 280,
+        "mpGrowth": 70,
+        "baseHPRegen": 9,
+        "hpRegenGrowth": 0.9
+      },
+      "name_zh_TW": "洛克",
+      "name_zh_CN": "灰烬驱魔人",
+      "name_ja": "ロック",
+      "name_ko": "로크",
+      "kit_tags": [
+        "ability",
+        "haste",
+        "heal_shield",
+        "movement"
+      ]
     }
   ]
 }

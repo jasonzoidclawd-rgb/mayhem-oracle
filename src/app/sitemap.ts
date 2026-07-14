@@ -23,6 +23,7 @@ const STATIC_PATHS = [
   "/companion",
   "/damage-sim",
   "/membership",
+  "/about",
   "/privacy",
   "/terms",
   "/contact",

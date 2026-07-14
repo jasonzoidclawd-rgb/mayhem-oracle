@@ -11,6 +11,7 @@ import { MobileTabBar } from "@/components/ui/MobileTabBar";
 import { NavigationProgress } from "@/components/ui/NavigationProgress";
 import { RegisterServiceWorker } from "@/components/ui/RegisterServiceWorker";
 import { ConsentManager } from "@/components/ads/ConsentManager";
+import { AnalyticsRuntime } from "@/components/analytics/AnalyticsRuntime";
 import { Footer } from "@/components/ui/Footer";
 import "@/styles/globals.css";
 
@@ -144,6 +145,7 @@ export default async function LocaleLayout({
           </main>
           <Footer />
           <MobileTabBar />
+          <AnalyticsRuntime />
           <ConsentManager
             copy={{
               title: tm("consentTitle"),

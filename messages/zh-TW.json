@@ -194,6 +194,8 @@
     "pillTier": "階級",
     "winRateAbbr": "勝率",
     "pickRateAbbr": "選用率",
+    "statisticsUnavailable": "此版本尚無統計資料",
+    "statisticsUnavailableShort": "統計資料不可用",
     "mechanicalAnalysis": "機制分析",
     "mechanicalCounts": "{synergies} 個協同 · {traps} 個陷阱",
     "mechanicalSynergies": "協同",
@@ -811,6 +813,7 @@
     "legalTitle": "法律",
     "membership": "會員",
     "signIn": "登入",
+    "about": "關於",
     "privacy": "隱私權",
     "terms": "服務條款",
     "contact": "聯絡我們",
@@ -938,6 +941,18 @@
     "levelAbbr": "等級",
     "allClasses": "全部",
     "statsFooter": "{count} / {total} 位英雄 · 數據來自 wiki.leagueoflegends.com · 等級成長採用官方公式"
+  },
+  "about": {
+    "title": "關於大亂鬥神諭",
+    "intro": "大亂鬥神諭是獨立的英雄聯盟 ARAM 大亂鬥助手，協助你更快做出更有依據的決策。",
+    "whatTitle": "大亂鬥神諭提供什麼",
+    "whatBody": "我們將當前版本的遊戲資料整理成英雄排名、增強背景、裝備資訊、版本更新與探索大亂鬥選擇的實用工具。",
+    "dataTitle": "資料來源與更新",
+    "dataBody": "公開資料管線整合 arammayhem、Riot 的 CommunityDragon 與 Data Dragon 資料，以及英雄聯盟 Wiki。管線每日執行，並會隨當前版本與來源資料變化更新公開目錄。",
+    "disclaimerTitle": "Riot Games 聲明",
+    "contactTitle": "聯絡我們",
+    "contactBody": "有問題、發現資料錯誤，或想提供意見嗎？歡迎聯絡我們。",
+    "contactLink": "前往聯絡頁面"
   },
   "auth": {
     "signIn": {
