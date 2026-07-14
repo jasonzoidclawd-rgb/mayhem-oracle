@@ -8,6 +8,8 @@
     "start": "next start",
     "lint": "eslint .",
     "test": "vitest run",
+    "verify:champion-static": "python3 scripts/check_champion_static_imports.py && python3 scripts/check_prerender_manifest.py",
+    "verify:champion-http": "python3 scripts/verify_champion_static_http.py",
     "test:bigquery-calibration": "vitest run src/lib/bigquery",
     "bigquery:calibration:schema": "jiti scripts/bigquery/calibration-schema.ts",
     "export:private-calibration": "jiti scripts/bigquery/export-private-calibration.ts",

@@ -196,6 +196,8 @@
     "pickRateAbbr": "ピック率",
     "statisticsUnavailable": "このパッチの統計データはまだありません",
     "statisticsUnavailableShort": "統計データなし",
+    "memberUnavailable": "メンバー向け詳細情報は一時的に利用できません。公開チャンピオン情報は引き続き表示できます。",
+    "memberPatchMismatch": "メンバー向け詳細情報はパッチ {memberPatch}、このページはパッチ {publicPatch} です。データ更新後に再読み込みしてください。",
     "mechanicalAnalysis": "メカニクス分析",
     "mechanicalCounts": "シナジー {synergies} 件 · トラップ {traps} 件",
     "mechanicalSynergies": "シナジー",

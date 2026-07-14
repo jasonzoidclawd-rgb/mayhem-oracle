@@ -1,20 +1,15 @@
 import type { Metadata } from "next";
 import { getTranslations, setRequestLocale } from "next-intl/server";
-import { requireActiveEntitlement } from "@/lib/entitlements/server";
-import { MembershipGate } from "@/components/membership/MembershipGate";
 import Image from "next/image";
 import { notFound } from "next/navigation";
-import { computeOracleScore, type ComboTier } from "@/lib/scoring/oracle-score";
 import type { AbilityProfile, AbilityEntry, AbilityStats, ChampionBaseStats } from "@/lib/types";
 import { Tooltip } from "@/components/ui/Tooltip";
 import { buildPoolProfile } from "@/lib/scoring/augment-tailoring";
-import { getChampionAugmentPool } from "@/lib/scoring/pool-orchestrator";
-import { analyzeInteractions, type MechanicalInteraction, type AugmentMechanic } from "@/lib/scoring/augment-interactions";
 import { localizedDescription, localizedName } from "@/lib/i18n/localized-name";
-import { buildComboTierLookup, resolveChampionCombos } from "@/lib/data/combo-lookup";
+import { resolveChampionCombos } from "@/lib/data/combo-lookup";
 import { readChampionsFile } from "@/lib/data/read-public-file";
 import { routing, type Locale } from "@/i18n/routing";
-import { ChampionMatrixClient } from "@/components/champions/ChampionMatrixClient";
+import { ChampionMemberIsland } from "@/components/champions/ChampionMemberIsland";
 import {
   loadChampionDetailData,
   type ChampionDetailAugment,
@@ -22,31 +17,15 @@ import {
 } from "@/lib/champions/detail-data";
 import { buildChampionDetailJsonLd } from "@/lib/seo/champion-detail";
 import {
-  PoolConstructionSection,
   type PoolLayer,
   type PoolProfileChip,
   type PoolRaritySummary,
-  type TailoredHighlight,
 } from "@/components/champions/PoolConstructionSection";
-import type { DecisionGrade } from "@/lib/contracts/decision";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { languageAlternates, localizedUrl } from "@/lib/site";
 
 type ChampionData = ChampionDetailChampion;
 type AugmentData = ChampionDetailAugment;
-
-type PillLabels = {
-  tier: string;
-  combo: string;
-  trap: string;
-  rarity: string;
-  dmgType: string;
-  atkType: string;
-  cc: string;
-  mismatch: string;
-};
-
-type MechanicLabels = Record<AugmentMechanic, string>;
 
 type AbilityStatLabels = {
   damage: string;
@@ -118,135 +97,34 @@ export default async function ChampionPage({
   const { locale, slug } = await params;
   setRequestLocale(locale);
   const t = await getTranslations("champion");
-  const tm = await getTranslations("membership");
-  const tg = await getTranslations("grades");
-
-  // Member decision content (pool construction, scored rankings) is gated on an
-  // active entitlement — not merely being signed in. A logged-in non-member
-  // must not receive server-rendered scores or breakdowns.
-  const { isAuthenticated, isMember } = await (async () => {
-    if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY) {
-      return { isAuthenticated: false, isMember: false };
-    }
-    const gate = await requireActiveEntitlement();
-    if (gate.ok) return { isAuthenticated: true, isMember: true };
-    return { isAuthenticated: gate.reason !== "unauthenticated", isMember: false };
-  })();
 
   const publicData = await loadChampionDetailData("public");
-  const memberData = isMember ? await loadChampionDetailData("member") : null;
-  const activeData = memberData ?? publicData;
-  const { champions, patch } = publicData;
-  const { augments, combos, poolRules, abilities } = activeData;
+  const { champions, augments, combos, abilities, patch } = publicData;
 
   const champ = champions.find((c) => c.slug === slug);
   if (!champ) notFound();
-  const activeChamp = activeData.champions.find((c) => c.slug === slug) ?? champ;
   const champName = localizedName(champ, locale);
   const localizedAugmentDescription = (augment: AugmentData): string =>
     localizedDescription(augment, locale) || augment.wikiDescription || augment.description || "";
-  const displayAugment = (augment: AugmentData): AugmentData => {
-    const description = localizedAugmentDescription(augment);
-    return {
-      ...augment,
-      name: localizedName(augment, locale),
-      description,
-      wikiDescription: description,
-    };
-  };
-
   const championStatisticsAvailable =
-    typeof activeChamp.win_rate === "number" &&
-    typeof activeChamp.pick_rate === "number";
-  const champWr = championStatisticsAvailable ? activeChamp.win_rate : null;
+    typeof champ.win_rate === "number" &&
+    typeof champ.pick_rate === "number";
   const abilityProfile: AbilityProfile | undefined = abilities[slug];
 
   // Build combo lookup for this champion: augment-slug → tier
   const champCombos = resolveChampionCombos(slug, combos, augments);
-  const comboBySlug = isMember
-    ? buildComboTierLookup(slug, combos, augments)
-    : new Map<string, ComboTier>();
   const augmentBySlug = new Map(augments.map((augment) => [augment.slug, augment]));
 
-  const poolProfile = buildPoolProfile(slug, abilityProfile, activeChamp.baseStats);
-  const pool = isMember
-    ? getChampionAugmentPool({
-        championSlug: slug,
-        augments,
-        abilityProfile,
-        baseStats: activeChamp.baseStats,
-        championKitTags: activeChamp.kit_tags ?? [],
-        poolRules,
-      })
-    : null;
-  const poolAugments = pool ? [...pool.silver, ...pool.gold, ...pool.prismatic] : [];
-
-  const scoredAugments = championStatisticsAvailable && champWr !== null
-    ? poolAugments
-      .map((aug) => {
-        const comboTier = comboBySlug.get(aug.slug);
-        const result = computeOracleScore({
-          augment: aug,
-          championWinRate: champWr,
-          comboTier,
-          abilityProfile,
-          isSystemBreaker: aug.flags?.system_breaker === true,
-        });
-        return { aug, score: result.total, breakdown: result.breakdown, comboTier };
-      })
-      .sort((a, b) => b.score - a.score)
-    : [];
-
-  const excludedByReason = pool
-    ? pool.excluded.reduce<Record<string, number>>((accumulator, entry) => {
-        accumulator[entry.reason] = (accumulator[entry.reason] ?? 0) + 1;
-        return accumulator;
-      }, {})
-    : {};
-  const countExcluded = (...reasons: string[]) =>
-    reasons.reduce((total, reason) => total + (excludedByReason[reason] ?? 0), 0);
-
-  let poolLayerRemainder = pool?.total ?? augments.length;
+  const poolProfile = buildPoolProfile(slug, abilityProfile, champ.baseStats);
   const poolLayers: PoolLayer[] = [
     {
       key: "source",
       label: t("poolStepSource"),
       detail: t("poolStepSourceDetail"),
-      kept: poolLayerRemainder,
+      kept: augments.length,
       removed: 0,
     },
   ];
-  const appendPoolLayer = (key: string, label: string, detail: string, removed: number) => {
-    poolLayerRemainder -= removed;
-    poolLayers.push({ key, label, detail, kept: poolLayerRemainder, removed });
-  };
-
-  if (pool) {
-    appendPoolLayer(
-      "lifecycle",
-      t("poolStepLifecycle"),
-      t("poolStepLifecycleDetail"),
-      countExcluded("disabled", "removed"),
-    );
-    appendPoolLayer(
-      "hard",
-      t("poolStepHard"),
-      t("poolStepHardDetail"),
-      countExcluded("hard-exclusion"),
-    );
-    appendPoolLayer(
-      "tags",
-      t("poolStepTags"),
-      t("poolStepTagsDetail"),
-      countExcluded("tag-mismatch"),
-    );
-    appendPoolLayer(
-      "items",
-      t("poolStepItems"),
-      t("poolStepItemsDetail"),
-      countExcluded("item-exclusion"),
-    );
-  }
 
   // Pre-compute translated damage/attack type labels
   const damageTypeLabel: Record<string, string> = {
@@ -287,74 +165,22 @@ export default async function ChampionPage({
     {
       key: "silver",
       label: t("silver"),
-      count: pool?.silver.length ?? augments.filter((augment) => augment.rarity === "silver").length,
+      count: augments.filter((augment) => augment.rarity === "silver").length,
     },
     {
       key: "gold",
       label: t("gold"),
-      count: pool?.gold.length ?? augments.filter((augment) => augment.rarity === "gold").length,
+      count: augments.filter((augment) => augment.rarity === "gold").length,
     },
     {
       key: "prismatic",
       label: t("prismatic"),
-      count: pool?.prismatic.length ?? augments.filter((augment) => augment.rarity === "prismatic").length,
+      count: augments.filter((augment) => augment.rarity === "prismatic").length,
     },
   ];
 
-  const tailoredHighlights: TailoredHighlight[] = scoredAugments.slice(0, 6).map(({ aug, score, comboTier }) => ({
-    aug: displayAugment(aug),
-    score,
-    comboTier,
-  }));
-
   const strongCombos = champCombos.filter((c) => c.tier === "S");
   const avoidCombos = champCombos.filter((c) => c.tier === "C");
-
-  // ── Mechanical Interaction Analysis ──
-  let mechanicalSynergies: MechanicalInteraction[] = [];
-  let mechanicalTraps: MechanicalInteraction[] = [];
-
-  if (isMember && abilityProfile && activeChamp.baseStats) {
-    const allInteractions = analyzeInteractions(
-      {
-        name: localizedName(activeChamp, locale),
-        slug: activeChamp.slug,
-        baseStats: activeChamp.baseStats,
-        abilityProfile,
-      },
-      poolAugments.map((a) => ({
-        slug: a.slug,
-        name: localizedName(a, locale),
-        description: localizedAugmentDescription(a),
-        wikiDescription: localizedAugmentDescription(a),
-      })),
-    );
-    // Show strength 3 always, top strength 2 (capped at 8 each), skip strength 1
-    const synAll = allInteractions.filter((i) => i.type === "synergy");
-    const trapAll = allInteractions.filter((i) => i.type === "trap");
-    const pickTop = (arr: MechanicalInteraction[], limit: number) => {
-      const s3 = arr.filter((i) => i.strength === 3);
-      const s2 = arr.filter((i) => i.strength === 2);
-      return [...s3, ...s2].slice(0, limit);
-    };
-    mechanicalSynergies = pickTop(synAll, 12);
-    mechanicalTraps = pickTop(trapAll, 8);
-  }
-
-  // Top augments — show top 20 from filtered pool
-  const topAugments = scoredAugments.slice(0, 20);
-
-  // Pre-compute translated pill labels
-  const pillLabels: PillLabels = {
-    tier:     t("pillTier"),
-    combo:    t("pillCombo"),
-    trap:     t("pillTrap"),
-    rarity:   t("pillRarity"),
-    dmgType:  t("pillDmgType"),
-    atkType:  t("pillAtkType"),
-    cc:       t("pillCC"),
-    mismatch: t("pillMismatch"),
-  };
 
   // Pre-compute translated playstyle labels
   const playstyleItems: Array<[keyof AbilityProfile["playstyle"], string]> = [
@@ -384,28 +210,6 @@ export default async function ChampionPage({
       moveSpeed: t("statMoveSpeed"),
       missileSpeed: t("statMissileSpeed"),
     },
-  };
-  const mechanicLabels: MechanicLabels = {
-    ABILITY_CRIT: t("mechanicAbilityCrit"),
-    ON_HIT: t("mechanicOnHit"),
-    ATTACK_SPEED: t("mechanicAttackSpeed"),
-    DOT_SYNERGY: t("mechanicDotSynergy"),
-    ULT_POWER: t("mechanicUltPower"),
-    ULT_SEALED: t("mechanicUltSealed"),
-    ABILITY_HASTE: t("mechanicAbilityHaste"),
-    ON_CAST: t("mechanicOnCast"),
-    DASH_SYNERGY: t("mechanicDash"),
-    EXECUTE: t("mechanicExecute"),
-    LIFESTEAL: t("mechanicLifesteal"),
-    TRUE_DAMAGE: t("mechanicTrueDamage"),
-    MANA_SCALING: t("mechanicManaScaling"),
-    SIZE_CHANGE: t("mechanicSizeChange"),
-    SHIELD: t("mechanicShield"),
-    SUMMON_REPLACE: t("mechanicSummoner"),
-    MELEE_CONVERT: t("mechanicMeleeConvert"),
-    AD_SCALING: t("mechanicAdScaling"),
-    AP_SCALING: t("mechanicApScaling"),
-    IMMOBILIZE_TRIGGER: t("mechanicImmobilize"),
   };
   const abilityStatLabels: AbilityStatLabels = {
     damage: t("abilityStatDamage"),
@@ -473,10 +277,10 @@ export default async function ChampionPage({
             {championStatisticsAvailable ? (
               <>
                 <span className="font-bold text-[var(--color-wr-high)]">
-                  {activeChamp.win_rate!.toFixed(1)}% {t("winRateAbbr")}
+                  {champ.win_rate!.toFixed(1)}% {t("winRateAbbr")}
                 </span>
                 <span className="text-xs">
-                  {activeChamp.pick_rate!.toFixed(1)}% {t("pickRateAbbr")}
+                  {champ.pick_rate!.toFixed(1)}% {t("pickRateAbbr")}
                 </span>
               </>
             ) : (
@@ -598,47 +402,6 @@ export default async function ChampionPage({
         <BaseStatsTable stats={champ.baseStats} copy={baseStatsCopy} />
       )}
 
-      {/* ─── Mechanical Interactions ─── */}
-      {(mechanicalSynergies.length > 0 || mechanicalTraps.length > 0) && (
-        <section className="glass-card p-4 mb-3 sm:mb-6">
-          <h2 className="text-sm font-bold mb-1 border-l-2 border-[var(--color-neon-primary)] pl-2">
-            {t("mechanicalAnalysis")}
-          </h2>
-          <p className="text-[10px] text-[var(--color-text-muted)] mb-3 pl-3">
-            {t("mechanicalCounts", {
-              synergies: mechanicalSynergies.length,
-              traps: mechanicalTraps.length,
-            })}
-          </p>
-
-          {mechanicalSynergies.length > 0 && (
-            <div className="mb-3">
-              <h3 className="text-xs font-semibold text-green-400 mb-1.5 border-l-2 border-green-400/50 pl-2">
-                {t("mechanicalSynergies")}
-              </h3>
-              <div className="space-y-1">
-                {mechanicalSynergies.map((ix, i) => (
-                  <InteractionRow key={`syn-${i}`} ix={ix} augments={augments} locale={locale} mechanicLabels={mechanicLabels} />
-                ))}
-              </div>
-            </div>
-          )}
-
-          {mechanicalTraps.length > 0 && (
-            <div>
-              <h3 className="text-xs font-semibold text-red-400 mb-1.5 border-l-2 border-red-400/50 pl-2">
-                {t("mechanicalTraps")}
-              </h3>
-              <div className="space-y-1">
-                {mechanicalTraps.map((ix, i) => (
-                  <InteractionRow key={`trap-${i}`} ix={ix} augments={augments} locale={locale} mechanicLabels={mechanicLabels} />
-                ))}
-              </div>
-            </div>
-          )}
-        </section>
-      )}
-
       {/* ─── Abilities ─── */}
       {abilityProfile && (
         <section className="glass-card p-4 mb-3 sm:mb-6">
@@ -723,117 +486,16 @@ export default async function ChampionPage({
         </section>
       )}
 
-      <PoolConstructionSection
-        title={t("poolConstruction")}
-        subtitle={t("poolConstructionSubtitle", {
-          name: champName,
-          kept: pool?.total ?? augments.length,
-          total: augments.length,
-        })}
-        rarityTitle={t("poolRarityMix")}
-        filterTitle={t("poolFilterStack")}
-        highlightsTitle={t("poolTopTailored")}
-        keptLabel={(count: number) => t("poolKept", { count })}
-        removedLabel={(count: number) => t("poolRemoved", { count })}
-        profileChips={poolProfileChips}
-        raritySummary={poolRaritySummary}
-        layers={poolLayers}
-        highlights={tailoredHighlights}
-        totalAugments={augments.length}
-        gated={!isMember}
-        signInUrl="/account"
-        signInNextPath={!isAuthenticated ? `/champions/${slug}` : undefined}
-        gateCopy={!isMember ? (isAuthenticated ? {
-          title: tm("lockedTitle"),
-          description: tm("lockedBody"),
-          signIn: tm("lockedCta"),
-        } : {
-          title: t("poolGateTitle"),
-          description: t("poolGateDescription"),
-          signIn: t("poolGateSignIn"),
-        }) : undefined}
+      <ChampionMemberIsland
+        championSlug={champ.slug}
+        championName={champName}
+        locale={locale}
+        publicPatch={patch}
+        publicProfileChips={poolProfileChips}
+        publicRaritySummary={poolRaritySummary}
+        publicLayers={poolLayers}
+        publicAugmentCount={augments.length}
       />
-
-      <section className="glass-card p-4">
-        {isMember ? (
-          <ChampionMatrixClient
-            championSlug={champ.slug}
-            augmentNames={Object.fromEntries(augments.map((a) => [a.slug, localizedName(a, locale)]))}
-            copy={{
-              title: tm("matrixTitle"),
-              subtitle: tm("matrixSubtitle"),
-              loading: tm("matrixLoading"),
-              error: tm("matrixError"),
-              round: tm("matrixRoundN"),
-              topPick: tm("matrixTopPick"),
-              modeCompetitive: tm("advModeCompetitive"),
-              modeExploration: tm("advModeExploration"),
-              raritySilver: tm("advRaritySilver"),
-              rarityGold: tm("advRarityGold"),
-              rarityPrismatic: tm("advRarityPrismatic"),
-              gradeLabels: {
-                hot: tg("hot"),
-                strong: tg("strong"),
-                steady: tg("steady"),
-                average: tg("average"),
-                weak: tg("weak"),
-              } as Record<DecisionGrade, string>,
-              lockedTitle: tm("lockedTitle"),
-              lockedBody: tm("lockedBody"),
-              lockedCta: tm("lockedCta"),
-            }}
-          />
-        ) : (
-          <MembershipGate title={tm("lockedTitle")} body={tm("lockedBody")} cta={tm("lockedCta")} />
-        )}
-      </section>
-
-      {/* ─── Augment Rankings (member-gated: scores + breakdowns) ─── */}
-      <section className="glass-card p-4">
-        <h2 className="text-sm font-bold mb-1 border-l-2 border-[var(--color-neon-primary)] pl-2">
-          {t("augments")} — {t("oracleRanked")}
-        </h2>
-        {isMember ? (
-          <>
-            <p className="text-[10px] text-[var(--color-text-muted)] mb-3 pl-3">
-              <span className="font-medium text-[var(--color-text-primary)]">N={pool?.total ?? 0}</span>
-              <span> / {augments.length} total</span>
-              {poolProfile.resource !== "mana" && (
-                <span>
-                  {" · "}
-                  {poolProfile.resource === "none"
-                    ? t("resourceNone")
-                    : poolProfile.resource === "energy"
-                      ? t("resourceEnergy")
-                      : t("resourceMana")}
-                </span>
-              )}
-              {abilityProfile && (
-                <span> · {attackTypeLabel[abilityProfile.attackType] ?? abilityProfile.attackType}</span>
-              )}
-            </p>
-
-            <div className="space-y-1.5">
-              {topAugments.map(({ aug, score, breakdown, comboTier }, i) => (
-                <AugmentRow
-                  key={aug.slug}
-                  rank={i + 1}
-                  aug={aug}
-                  score={score}
-                  breakdown={breakdown}
-                  comboTier={comboTier}
-                  pillLabels={pillLabels}
-                  locale={locale}
-                />
-              ))}
-            </div>
-          </>
-        ) : (
-          <div className="mt-3">
-            <MembershipGate title={tm("lockedTitle")} body={tm("lockedBody")} cta={tm("lockedCta")} />
-          </div>
-        )}
-      </section>
     </div>
   );
 }
@@ -853,144 +515,6 @@ function TierBadge({ tier }: { tier: string }) {
   return (
     <span className={`px-2.5 py-0.5 rounded-md text-sm font-bold border ${styles}`}>
       {tier}
-    </span>
-  );
-}
-
-const RARITY_DOT: Record<string, string> = {
-  prismatic: "bg-purple-400",
-  gold:      "bg-yellow-400",
-  silver:    "bg-slate-400",
-};
-
-const SCORE_COLOR = (score: number) => {
-  if (score >= 80) return "text-amber-300";
-  if (score >= 70) return "text-yellow-400";
-  if (score >= 60) return "text-green-400";
-  return "text-slate-400";
-};
-
-function AugmentRow({
-  rank,
-  aug,
-  score,
-  breakdown,
-  comboTier,
-  pillLabels,
-  locale,
-}: {
-  rank: number;
-  aug: AugmentData;
-  score: number;
-  breakdown: ReturnType<typeof computeOracleScore>["breakdown"];
-  comboTier?: ComboTier;
-  pillLabels: PillLabels;
-  locale: string;
-}) {
-  const isStrong = comboTier === "S";
-  const isTrap = comboTier === "C";
-  const augName = localizedName(aug, locale);
-  const augDescription = localizedDescription(aug, locale);
-
-  return (
-    <Tooltip content={augDescription}>
-      <div
-        className={`flex items-center gap-2 sm:gap-3 px-2 sm:px-3 py-2 rounded-lg border transition-colors cursor-default
-          ${isStrong ? "border-green-400/30 bg-green-400/5" : isTrap ? "border-red-400/20 bg-red-400/5" : "border-[var(--color-border-default)]/50"}`}
-      >
-        {/* Rank */}
-        <span className="text-[10px] text-[var(--color-text-muted)] w-4 text-right shrink-0">
-          {rank}
-        </span>
-
-        {/* Icon */}
-        <div className="relative w-7 h-7 sm:w-8 sm:h-8 rounded shrink-0">
-          <Image
-            src={aug.icon}
-            alt={augName}
-            fill
-            className="object-contain"
-            sizes="(max-width: 640px) 28px, 32px"
-            unoptimized
-          />
-        </div>
-
-        {/* Name + rarity */}
-        <div className="flex-1 min-w-0">
-          <div className="flex items-center gap-1.5">
-            <span className="text-xs sm:text-sm font-medium truncate">{augName}</span>
-            <span className={`w-1.5 h-1.5 rounded-full shrink-0 ${RARITY_DOT[aug.rarity] ?? ""}`} />
-            {comboTier && (
-              <span
-                className={`text-[9px] font-bold px-1 rounded shrink-0
-                  ${isStrong ? "text-green-400 bg-green-400/20" : "text-red-400 bg-red-400/20"}`}
-              >
-                {comboTier}
-              </span>
-            )}
-          </div>
-          {/* Score breakdown pills — hidden on mobile for compact view */}
-          <div className="hidden sm:flex gap-1.5 mt-0.5 flex-wrap">
-            {breakdown.tierBonus > 0 && (
-              <ScorePill label={pillLabels.tier} value={breakdown.tierBonus} />
-            )}
-            {breakdown.comboBonus > 0 && (
-              <ScorePill label={pillLabels.combo} value={breakdown.comboBonus} positive />
-            )}
-            {breakdown.trapPenalty < 0 && (
-              <ScorePill label={pillLabels.trap} value={breakdown.trapPenalty} negative />
-            )}
-            {breakdown.rarityBonus > 0 && (
-              <ScorePill label={pillLabels.rarity} value={breakdown.rarityBonus} />
-            )}
-            {breakdown.abilityTypeSynergy > 0 && (
-              <ScorePill label={pillLabels.dmgType} value={breakdown.abilityTypeSynergy} positive />
-            )}
-            {breakdown.attackTypeSynergy > 0 && (
-              <ScorePill label={pillLabels.atkType} value={breakdown.attackTypeSynergy} positive />
-            )}
-            {breakdown.ccSynergy > 0 && (
-              <ScorePill label={pillLabels.cc} value={breakdown.ccSynergy} positive />
-            )}
-            {breakdown.tagMismatch < 0 && (
-              <ScorePill label={pillLabels.mismatch} value={breakdown.tagMismatch} negative />
-            )}
-          </div>
-        </div>
-
-        {/* Win rate — hidden on mobile */}
-        <span className="hidden sm:inline text-xs text-[var(--color-text-muted)] shrink-0">
-          {aug.win_rate != null ? `${aug.win_rate.toFixed(1)}%` : "—"}
-        </span>
-
-        {/* Oracle Score */}
-        <span className={`text-sm sm:text-base font-bold w-10 sm:w-12 text-right shrink-0 ${SCORE_COLOR(score)}`}>
-          {Math.round(score)}
-        </span>
-      </div>
-    </Tooltip>
-  );
-}
-
-function ScorePill({
-  label,
-  value,
-  positive,
-  negative,
-}: {
-  label: string;
-  value: number;
-  positive?: boolean;
-  negative?: boolean;
-}) {
-  const color = negative
-    ? "text-red-400/80"
-    : positive
-      ? "text-green-400/80"
-      : "text-[var(--color-text-muted)]";
-  return (
-    <span className={`text-[9px] ${color}`}>
-      {label}:{value > 0 ? "+" : ""}{value}
     </span>
   );
 }
@@ -1018,79 +542,6 @@ function AttackTypeBadge({ type, label }: { type: string; label: string }) {
     <span className={`px-2.5 py-1 rounded-md text-xs font-semibold border ${style}`}>
       {label}
     </span>
-  );
-}
-
-// ─── Mechanical Interaction Components ────────────────────────────────────────
-
-const STRENGTH_DOTS = (strength: 1 | 2 | 3, isTrap: boolean) => {
-  const color = isTrap ? "bg-red-400" : "bg-green-400";
-  const dim = isTrap ? "bg-red-400/20" : "bg-green-400/20";
-  return (
-    <span className="inline-flex gap-0.5 ml-1">
-      {[1, 2, 3].map((n) => (
-        <span key={n} className={`w-1.5 h-1.5 rounded-full ${n <= strength ? color : dim}`} />
-      ))}
-    </span>
-  );
-};
-
-function InteractionRow({
-  ix,
-  augments,
-  locale,
-  mechanicLabels,
-}: {
-  ix: MechanicalInteraction;
-  augments: AugmentData[];
-  locale: string;
-  mechanicLabels: MechanicLabels;
-}) {
-  const aug = augments.find((a) => a.slug === ix.augmentSlug);
-  const augName = aug ? localizedName(aug, locale) : ix.augmentName;
-  const isTrap = ix.type === "trap";
-  const borderColor = isTrap ? "border-red-400/20" : "border-green-400/20";
-  const bgColor = isTrap ? "bg-red-400/5" : "bg-green-400/5";
-
-  return (
-    <Tooltip content={ix.reason}>
-      <div className={`flex items-center gap-2 px-2 py-1.5 rounded-lg border ${borderColor} ${bgColor} cursor-default`}>
-        {aug && (
-          <div className="relative w-6 h-6 rounded shrink-0">
-            <Image
-              src={aug.icon}
-              alt={augName}
-              fill
-              className="object-contain"
-              sizes="24px"
-              unoptimized
-            />
-          </div>
-        )}
-        <div className="flex-1 min-w-0">
-          <div className="flex items-center gap-1.5 flex-wrap">
-            <span className="text-xs font-medium truncate">{augName}</span>
-            {STRENGTH_DOTS(ix.strength, isTrap)}
-            <span className={`text-[9px] font-semibold px-1 py-0.5 rounded border
-              ${isTrap
-                ? "text-red-300 border-red-400/30 bg-red-400/10"
-                : "text-green-300 border-green-400/30 bg-green-400/10"
-              }`}
-            >
-              {mechanicLabels[ix.mechanic]}
-            </span>
-            {ix.abilities.length > 0 && (
-              <span className="text-[9px] text-[var(--color-text-muted)]">
-                {ix.abilities.join(", ")}
-              </span>
-            )}
-          </div>
-          <p className="hidden sm:block text-[10px] text-[var(--color-text-muted)] mt-0.5 line-clamp-1">
-            {ix.reason}
-          </p>
-        </div>
-      </div>
-    </Tooltip>
   );
 }
 
