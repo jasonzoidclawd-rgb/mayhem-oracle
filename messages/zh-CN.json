@@ -813,6 +813,7 @@
     "legalTitle": "法律",
     "membership": "会员",
     "signIn": "登录",
+    "about": "关于",
     "privacy": "隐私",
     "terms": "服务条款",
     "contact": "联系我们",
@@ -940,6 +941,18 @@
     "levelAbbr": "等级",
     "allClasses": "全部",
     "statsFooter": "{count} / {total} 位英雄 · 数据来自 wiki.leagueoflegends.com · 等级成长采用官方公式"
+  },
+  "about": {
+    "title": "关于大乱斗神谕",
+    "intro": "大乱斗神谕是独立的英雄联盟 ARAM 大乱斗助手，帮助你更快做出更有依据的决策。",
+    "whatTitle": "大乱斗神谕提供什么",
+    "whatBody": "我们将当前版本的游戏数据整理成英雄排名、强化背景、装备信息、版本更新，以及探索大乱斗选择的实用工具。",
+    "dataTitle": "数据来源与更新",
+    "dataBody": "公开数据管线整合 arammayhem、Riot 的 CommunityDragon 与 Data Dragon 数据，以及英雄联盟 Wiki。管线每日运行，并会随当前版本与来源数据变化更新公开目录。",
+    "disclaimerTitle": "Riot Games 声明",
+    "contactTitle": "联系我们",
+    "contactBody": "有问题、发现数据错误，或想提供意见吗？欢迎联系我们。",
+    "contactLink": "前往联系页面"
   },
   "auth": {
     "signIn": {

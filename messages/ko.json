@@ -813,6 +813,7 @@
     "legalTitle": "약관",
     "membership": "멤버십",
     "signIn": "로그인",
+    "about": "소개",
     "privacy": "개인정보",
     "terms": "이용약관",
     "contact": "문의",
@@ -940,6 +941,18 @@
     "levelAbbr": "Lv",
     "allClasses": "전체",
     "statsFooter": "{count} / {total}명의 챔피언 · 데이터 출처: wiki.leagueoflegends.com · 레벨 성장은 공식 공식을 사용"
+  },
+  "about": {
+    "title": "메이헴 오라클 소개",
+    "intro": "메이헴 오라클은 리그 오브 레전드 ARAM 메이헴에서 더 빠르고 근거 있는 결정을 돕는 독립적인 도우미입니다.",
+    "whatTitle": "메이헴 오라클이 하는 일",
+    "whatBody": "현재 패치의 게임 데이터를 챔피언 티어, 증강 정보, 아이템 정보, 패치 노트, 메이헴 선택지를 살펴보는 실용적인 도구로 정리합니다.",
+    "dataTitle": "데이터 출처와 업데이트",
+    "dataBody": "공개 데이터 파이프라인은 arammayhem, Riot의 CommunityDragon 및 Data Dragon 피드, 리그 오브 레전드 위키를 함께 사용합니다. 파이프라인은 매일 실행되며 현재 패치와 각 출처의 변경에 맞춰 공개 카탈로그를 업데이트합니다.",
+    "disclaimerTitle": "Riot Games 면책 고지",
+    "contactTitle": "문의",
+    "contactBody": "질문이 있거나 데이터 오류를 발견했거나 의견을 보내고 싶다면 연락해 주세요.",
+    "contactLink": "문의 페이지로 이동"
   },
   "auth": {
     "signIn": {

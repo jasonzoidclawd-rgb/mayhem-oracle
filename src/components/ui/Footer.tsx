@@ -43,6 +43,7 @@ export async function Footer() {
     {
       title: t("legalTitle"),
       links: [
+        { href: "/about", label: t("about") },
         { href: "/privacy", label: t("privacy") },
         { href: "/terms", label: t("terms") },
         { href: "/contact", label: t("contact") },

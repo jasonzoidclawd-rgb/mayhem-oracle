@@ -23,6 +23,7 @@
     "legalTitle": "Legal",
     "membership": "Membership",
     "signIn": "Sign in",
+    "about": "About",
     "privacy": "Privacy",
     "terms": "Terms",
     "contact": "Contact",
@@ -940,6 +941,18 @@
     "s7Body": "Decline personalized ads in the consent banner, or contact us to access or delete your data.",
     "s8Title": "Contact",
     "s8Body": "Privacy questions? Reach us at {email}."
+  },
+  "about": {
+    "title": "About Mayhem Oracle",
+    "intro": "Mayhem Oracle is an independent companion for making faster, better-informed decisions in League of Legends ARAM Mayhem.",
+    "whatTitle": "What Mayhem Oracle does",
+    "whatBody": "We turn current-patch game data into champion tiers, augment context, item information, patch notes, and practical tools for exploring a Mayhem draft.",
+    "dataTitle": "Data sources and updates",
+    "dataBody": "Our public data pipeline combines arammayhem, Riot's CommunityDragon and Data Dragon feeds, and the League of Legends wiki. It runs daily and refreshes the public catalog as the current patch and source data change.",
+    "disclaimerTitle": "Riot Games disclaimer",
+    "contactTitle": "Contact",
+    "contactBody": "Have a question, found a data issue, or want to share feedback? Please get in touch.",
+    "contactLink": "Visit the contact page"
   },
   "auth": {
     "signIn": {
