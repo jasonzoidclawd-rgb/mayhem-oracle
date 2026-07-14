@@ -2,6 +2,7 @@
 
 import { shouldLoadAds } from "@/lib/ads/consent";
 import { useAdConsent } from "@/lib/ads/useAdConsent";
+import { track } from "@/lib/analytics";
 import { useEffect, useRef } from "react";
 
 const ADS_ENABLED = process.env.NEXT_PUBLIC_ADS_ENABLED;
@@ -22,6 +23,10 @@ declare global {
 export function AdSlot({ slot, minHeight = 100 }: { slot: string; minHeight?: number }) {
   const consent = useAdConsent();
   const pushed = useRef(false);
+  const slotRef = useRef<HTMLDivElement | null>(null);
+  const viewable = useRef(false);
+  const visibilityRatio = useRef(0);
+  const viewableTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const active = shouldLoadAds(ADS_ENABLED, consent) && Boolean(AD_CLIENT);
 
   useEffect(() => {
@@ -43,9 +48,44 @@ export function AdSlot({ slot, minHeight = 100 }: { slot: string; minHeight?: nu
     }
   }, [active]);
 
+  useEffect(() => {
+    viewable.current = false;
+    visibilityRatio.current = 0;
+    if (viewableTimer.current) clearTimeout(viewableTimer.current);
+    viewableTimer.current = null;
+
+    if (!active || typeof IntersectionObserver === "undefined" || !slotRef.current) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        visibilityRatio.current = entry?.isIntersecting ? entry.intersectionRatio : 0;
+        if (visibilityRatio.current >= 0.5 && !viewable.current && !viewableTimer.current) {
+          viewableTimer.current = setTimeout(() => {
+            viewableTimer.current = null;
+            if (visibilityRatio.current >= 0.5 && !viewable.current) {
+              viewable.current = true;
+              track("ad_slot_viewable", { slot });
+            }
+          }, 1000);
+        } else if (visibilityRatio.current < 0.5 && viewableTimer.current) {
+          clearTimeout(viewableTimer.current);
+          viewableTimer.current = null;
+        }
+      },
+      { threshold: [0, 0.5] },
+    );
+
+    observer.observe(slotRef.current);
+    return () => {
+      observer.disconnect();
+      if (viewableTimer.current) clearTimeout(viewableTimer.current);
+      viewableTimer.current = null;
+    };
+  }, [active, slot]);
+
   // Reserve space regardless so the slot never shifts layout.
   return (
-    <div style={{ minHeight }} aria-hidden={!active} className="my-4 w-full overflow-hidden">
+    <div ref={slotRef} style={{ minHeight }} aria-hidden={!active} className="my-4 w-full overflow-hidden">
       {active ? (
         <ins
           className="adsbygoogle"

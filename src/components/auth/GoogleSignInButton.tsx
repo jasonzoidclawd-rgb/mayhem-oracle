@@ -15,6 +15,7 @@ import {
   type GoogleNoncePair,
 } from "@/lib/auth/google-identity";
 import { createClient } from "@/lib/supabase/client";
+import { track } from "@/lib/analytics";
 
 type GoogleSignInButtonProps = {
   next: string;
@@ -53,6 +54,7 @@ export function GoogleSignInButton({
     async (response: GoogleCredentialResponse) => {
       setBusy(true);
       setMessage(null);
+      track("signup_start");
 
       try {
         const supabase = createClient();
@@ -61,6 +63,7 @@ export function GoogleSignInButton({
           response,
           noncePair && noncePair !== "unsupported" ? { nonce: noncePair.nonce } : {},
         );
+        track("signup_complete");
         router.push(nextPath);
         router.refresh();
       } catch (error) {
