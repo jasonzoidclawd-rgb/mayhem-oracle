@@ -196,6 +196,8 @@
     "pickRateAbbr": "选用率",
     "statisticsUnavailable": "此版本尚无统计数据",
     "statisticsUnavailableShort": "统计数据不可用",
+    "memberUnavailable": "会员详细数据暂时不可用，公开英雄数据仍可正常查看。",
+    "memberPatchMismatch": "会员详细数据为 {memberPatch} 版本，但此页面为 {publicPatch} 版本。请在数据更新完成后刷新。",
     "mechanicalAnalysis": "机制分析",
     "mechanicalCounts": "{synergies} 个协同 · {traps} 个陷阱",
     "mechanicalSynergies": "协同",

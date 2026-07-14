@@ -109,6 +109,7 @@ describe("Google Identity Services auth", () => {
       "src/app/[locale]/advisor/page.tsx",
       "src/app/[locale]/membership/page.tsx",
       "src/app/[locale]/champions/[slug]/page.tsx",
+      "src/components/champions/ChampionMemberIsland.tsx",
       "src/components/champions/PoolConstructionSection.tsx",
       "src/components/companion/CompanionClient.tsx",
     ];
@@ -130,6 +131,7 @@ describe("Google Identity Services auth", () => {
       "src/app/[locale]/advisor/page.tsx",
       "src/app/[locale]/membership/page.tsx",
       "src/app/[locale]/champions/[slug]/page.tsx",
+      "src/components/champions/ChampionMemberIsland.tsx",
       "src/components/companion/CompanionClient.tsx",
     ];
     const combined = (
@@ -143,7 +145,7 @@ describe("Google Identity Services auth", () => {
     expect(combined).toContain('<GoogleSignInButton next="/advisor"');
     expect(combined).toContain('<GoogleSignInButton next="/membership"');
     expect(combined).toContain('next="/companion"');
-    expect(combined).toContain('signInNextPath={!isAuthenticated ? `/champions/${slug}` : undefined}');
+    expect(combined).toContain('signInNextPath={isSignedIn ? undefined : `/champions/${championSlug}`}');
   });
 
   test("non-default locale account redirects do not duplicate the locale prefix", () => {

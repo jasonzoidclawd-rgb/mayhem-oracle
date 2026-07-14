@@ -259,6 +259,8 @@
     "pickRateAbbr": "PR",
     "statisticsUnavailable": "Statistics not yet available for this patch",
     "statisticsUnavailableShort": "Stats unavailable",
+    "memberUnavailable": "Member details are temporarily unavailable. Public champion data remains available.",
+    "memberPatchMismatch": "Member details are for patch {memberPatch}, while this page is patch {publicPatch}. Refresh after the data update completes.",
     "mechanicalAnalysis": "Mechanical Analysis",
     "mechanicalCounts": "{synergies} synergies · {traps} traps",
     "mechanicalSynergies": "Synergies",
