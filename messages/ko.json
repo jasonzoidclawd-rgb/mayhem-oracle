@@ -871,7 +871,9 @@
       "abilityCooldown": "스킬 재사용 대기시간",
       "abilityRange": "스킬 사거리",
       "abilityEffect": "스킬 효과 수치",
-      "abilityCoefficient": "스킬 계수"
+      "abilityCoefficient": "스킬 계수",
+      "passiveAdded": "패시브 추가",
+      "gameplayChange": "게임플레이 변경"
     }
   },
   "terms": {

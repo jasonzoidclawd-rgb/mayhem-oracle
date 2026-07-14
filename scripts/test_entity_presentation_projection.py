@@ -23,6 +23,65 @@ def entity(entity_id, slug, fields, names=None):
 
 
 class EntityPresentationProjectionTests(unittest.TestCase):
+    def test_cross_entity_event_projects_to_augment_and_affected_item(self):
+        latest = {
+            "champion": snapshot("champion", "latest", "16.13.2", "26.13", []),
+            "augment": snapshot("augment", "latest", "16.13.2", "26.13", [
+                entity("ARAM_Quest_VoidImmolation", "void-immolation", {"rarity": "prismatic"}, {"en": "Icathia's Fall"}),
+            ]),
+            "item": snapshot("item", "latest", "16.13.2", "26.13", [
+                entity("223069", "void-immolation", {"description": "<passive>Desolate</passive>"}, {"en": "Void Immolation"}),
+            ]),
+        }
+        event = {
+            "entity_type": "augment",
+            "canonical_id": "ARAM_Quest_VoidImmolation",
+            "slug": "void-immolation",
+            "source_patch_label": "26.13",
+            "lane": "live",
+            "change_kind": "mechanism",
+            "fields_changed": ["semantic.passives.Desolate"],
+            "before": {"semantic.passives.Desolate": {}},
+            "after": {"semantic.passives.Desolate": {"name": "Desolate"}},
+            "change": {
+                "category": "passive-added",
+                "name": "Desolate",
+                "description": "Killing an enemy deals magic damage around them.",
+            },
+            "semantic_changes": [{
+                "category": "passive-added",
+                "name": "Desolate",
+                "description": "Killing an enemy deals magic damage around them.",
+                "before": {},
+                "after": {"name": "Desolate", "description": "Killing an enemy deals magic damage around them."},
+                "field": "semantic.passives.Desolate",
+            }],
+            "affected_entities": [{
+                "entity_type": "item",
+                "canonical_id": "223069",
+                "slug": "void-immolation",
+                "names": {"en": "Void Immolation"},
+            }],
+            "comparison": {"target_version": "16.13.2"},
+        }
+        result = build_entity_presentation(
+            snapshots=latest,
+            catalogs={
+                "champion": {"rows": []},
+                "augment": {"rows": [{"augmentId": "ARAM_Quest_VoidImmolation", "slug": "void-immolation", "name": "Icathia's Fall"}]},
+                "item": {"rows": [{"id": 223069, "slug": "void-immolation", "name": "Void Immolation"}]},
+            },
+            patch_events={"current_open_cycle": "26.13", "events": [event]},
+        )
+        augment = next(row for row in result["entities"] if row["type"] == "augment")
+        item = next(row for row in result["entities"] if row["type"] == "item")
+        self.assertEqual(len(augment["patch_changes"]), 1)
+        self.assertEqual(len(item["patch_changes"]), 1)
+        self.assertEqual(augment["patch_changes"][0]["before"], "")
+        self.assertEqual(augment["patch_changes"][0]["after"], "Desolate: Killing an enemy deals magic damage around them.")
+        self.assertEqual(item["patch_changes"][0]["after"], augment["patch_changes"][0]["after"])
+        self.assertEqual(item["patch_changes"][0]["source_path"], "patch.semantic")
+
     def test_mayhem_item_aliases_keep_cdragon_ids_and_localized_catalog_fields(self):
         self.assertEqual(
             set(MAYHEM_CANONICAL_ITEM_IDS),

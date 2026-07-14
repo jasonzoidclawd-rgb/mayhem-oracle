@@ -31,6 +31,54 @@ def event(**overrides: object) -> dict:
 
 
 class PatchEventProjectionTests(unittest.TestCase):
+    def test_cross_entity_gameplay_event_has_one_augment_subject_and_item_target(self):
+        projection = build_patch_notes_projection(
+            {
+                "current_open_cycle": "26.13",
+                "events": [event(
+                    entity_type="augment",
+                    canonical_id="ARAM_Quest_VoidImmolation",
+                    slug="void-immolation",
+                    names={"en": "Icathia's Fall"},
+                    change_kind="mechanism",
+                    fields_changed=["semantic.passives.Desolate"],
+                    before={"semantic.passives.Desolate": {}},
+                    after={"semantic.passives.Desolate": {"name": "Desolate"}},
+                    change={
+                        "category": "passive-added",
+                        "name": "Desolate",
+                        "description": "Killing an enemy deals magic damage around them.",
+                    },
+                    affected_entities=[{
+                        "entity_type": "item",
+                        "canonical_id": "223069",
+                        "slug": "void-immolation",
+                        "names": {"en": "Void Immolation"},
+                    }],
+                )],
+            },
+            {"patches": []},
+            known={"champion": set(), "augment": {"void-immolation"}, "item": {"223069"}},
+            entity_records={
+                "augment": {"ARAM_Quest_VoidImmolation": {
+                    "slug": "void-immolation", "known": True,
+                    "route_identifier": "void-immolation", "lifecycle": {"state": "active"},
+                }},
+                "item": {"223069": {
+                    "slug": "void-immolation", "known": True,
+                    "route_identifier": "223069", "lifecycle": {"state": "active"},
+                }},
+            },
+        )
+        changes = projection["patches"][0]["sections"][0]["changes"]
+        self.assertEqual(len(changes), 1)
+        change = changes[0]
+        self.assertEqual(change["kind"], "mechanism")
+        self.assertEqual(change["targets"][0]["href"], "/augments/void-immolation")
+        self.assertEqual(change["relatedEntities"][0]["href"], "/items/223069")
+        self.assertEqual(change["text"]["en"], "Passive added: Desolate. Killing an enemy deals magic damage around them.")
+        self.assertEqual(change["labels"], ["passive-added"])
+
     def test_live_projection_uses_snapshot_events_and_metadata_only(self):
         patch_events = {
             "current_open_cycle": "26.13",

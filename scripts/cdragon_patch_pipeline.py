@@ -12,10 +12,12 @@ import argparse
 import copy
 import json
 import re
+import shutil
 import sys
 from concurrent.futures import ThreadPoolExecutor
 from datetime import datetime, timezone
 from pathlib import Path
+from tempfile import TemporaryDirectory
 from typing import Any, Callable, Union
 from urllib.request import Request, urlopen
 
@@ -28,6 +30,7 @@ from cdragon_entity_adapters import (
 from cdragon_snapshot_diff import (
     ENTITY_TYPES,
     SnapshotValidationError,
+    apply_augment_entity_links,
     advance_preview_lifecycle,
     atomic_write_many,
     build_snapshot,
@@ -36,6 +39,7 @@ from cdragon_snapshot_diff import (
     snapshot_filename,
     validate_snapshot,
 )
+from augment_entity_links import load_augment_entity_links
 from data_paths import INTERNAL_DATA_DIR
 from safe_http import read_limited_response
 from scrape_mayhem_augments_cdragon import (
@@ -208,6 +212,7 @@ def build_branch_update(
     previous_snapshots: dict[str, dict[str, Any]],
     latest_snapshots: dict[str, dict[str, Any]],
     previous_archive: dict[str, Any] | None,
+    augment_entity_links: list[dict[str, Any]] | None = None,
     latest_baseline_confirmed: bool = True,
 ) -> dict[str, Any]:
     """Build a complete in-memory branch transaction before writing any file."""
@@ -252,6 +257,11 @@ def build_branch_update(
             previous = previous_snapshots.get(entity_type)
             if previous:
                 events.extend(compare_snapshots(previous, snapshots[entity_type], detected_at=observed_at))
+        events = apply_augment_entity_links(
+            events,
+            augment_entity_links or [],
+            snapshots,
+        )
         archive = _build_latest_archive(previous_archive, events, source_patch_label, observed_at)
     elif branch == "pbe":
         preview_events = []
@@ -270,6 +280,11 @@ def build_branch_update(
                         "source_version": baseline["source_version"],
                     },
                 ))
+            preview_events = apply_augment_entity_links(
+                preview_events,
+                augment_entity_links or [],
+                snapshots,
+            )
             archive = advance_preview_lifecycle(
                 previous_archive,
                 preview_events,
@@ -402,12 +417,69 @@ def _latest_patch_label(internal_dir: Path, source_version: str) -> str:
     return str(patch) if isinstance(patch, str) and patch else source_version
 
 
+ProjectionValidator = Callable[[Path, str, dict[str, Any]], None]
+
+
+def _write_candidate_json(path: Path, value: Any) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(json.dumps(value, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+
+
+def _validate_candidate_projection(
+    internal_dir: Path,
+    branch: str,
+    update: dict[str, Any],
+) -> None:
+    """Validate a staged public projection before advancing the baseline."""
+    # Import lazily so focused acquisition/diff tests do not import the full
+    # public export boundary at module load time.
+    from export_public_catalog import export_public_catalog
+    from verify_patch_publish import PatchPublishError, verify_patch_publish
+
+    archive_name = "patch-events.json" if branch == "latest" else "pbe-preview.json"
+    with TemporaryDirectory(prefix="mayhem-cdragon-candidate-") as temp:
+        root = Path(temp)
+        candidate_internal = root / "data" / "internal"
+        shutil.copytree(internal_dir, candidate_internal, symlinks=True)
+        for entity_type, snapshot in update["snapshots"].items():
+            _write_candidate_json(
+                candidate_internal / snapshot_filename(entity_type, branch),
+                snapshot,
+            )
+        _write_candidate_json(candidate_internal / archive_name, update["archive"])
+
+        candidate_public = root / "public" / "data"
+        export_public_catalog(candidate_internal, candidate_public)
+        try:
+            verify_patch_publish(root=root, changed_paths=[])
+        except PatchPublishError as exc:
+            raise SnapshotValidationError(f"candidate public projection failed: {exc}") from exc
+
+
+def _promote_branch_update(
+    internal_dir: Path,
+    branch: str,
+    update: dict[str, Any],
+    validate_projection: ProjectionValidator | None = None,
+) -> None:
+    """Validate and atomically advance one branch's snapshots and archive."""
+    (validate_projection or _validate_candidate_projection)(internal_dir, branch, update)
+    values: dict[Path, Any] = {
+        internal_dir / snapshot_filename(entity_type, branch): snapshot
+        for entity_type, snapshot in update["snapshots"].items()
+    }
+    archive_name = "patch-events.json" if branch == "latest" else "pbe-preview.json"
+    values[internal_dir / archive_name] = update["archive"]
+    atomic_write_many(values, lock_root=internal_dir, lock_held=True)
+
+
 def promote_branch(
     branch: str,
     *,
     internal_dir: Path = INTERNAL_DATA_DIR,
     fetch_json: FetchJson = _fetch_json,
     observed_at: str | None = None,
+    validate_projection: ProjectionValidator | None = None,
 ) -> dict[str, Any]:
     """Acquire one lane, then atomically promote every output for that lane."""
     now = observed_at or datetime.now(timezone.utc).isoformat().replace("+00:00", "Z")
@@ -427,6 +499,7 @@ def promote_branch(
         archive_name = "patch-events.json" if branch == "latest" else "pbe-preview.json"
         archive = _read_json(internal_dir / archive_name)
         latest_archive = _read_json(internal_dir / "patch-events.json") if branch == "pbe" else None
+        augment_entity_links = load_augment_entity_links(internal_dir / "augment-entity-links.json")
         update = build_branch_update(
             branch=branch,
             source_version=source_version,
@@ -436,16 +509,17 @@ def promote_branch(
             previous_snapshots=previous,
             latest_snapshots=latest,
             previous_archive=archive,
+            augment_entity_links=augment_entity_links,
             latest_baseline_confirmed=(
                 branch != "pbe" or _latest_baseline_is_fresh(latest_archive, now)
             ),
         )
-        values: dict[Path, Any] = {
-            internal_dir / snapshot_filename(entity_type, branch): snapshot
-            for entity_type, snapshot in update["snapshots"].items()
-        }
-        values[internal_dir / archive_name] = update["archive"]
-        atomic_write_many(values, lock_root=internal_dir, lock_held=True)
+        _promote_branch_update(
+            internal_dir,
+            branch,
+            update,
+            validate_projection=validate_projection,
+        )
     return update
 
 

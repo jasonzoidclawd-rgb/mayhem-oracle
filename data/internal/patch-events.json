@@ -166,6 +166,68 @@
     },
     {
       "entity_type": "augment",
+      "canonical_id": "ARAM_Quest_VoidImmolation",
+      "slug": "quest_-void-immolation",
+      "names": {
+        "en": "Icathia's Fall"
+      },
+      "branch": "latest",
+      "lane": "live",
+      "change_kind": "mechanism",
+      "fields_changed": [
+        "semantic.passives.Desolate"
+      ],
+      "before": {
+        "semantic.passives.Desolate": {}
+      },
+      "after": {
+        "semantic.passives.Desolate": {
+          "description": "Killing an enemy deals magic damage around them.",
+          "name": "Desolate"
+        }
+      },
+      "detected_at": "2026-07-14T02:09:05.260156Z",
+      "source_patch_label": "26.13",
+      "landed": false,
+      "is_hotfix": true,
+      "comparison": {
+        "base_branch": "latest",
+        "base_version": "16.13.7915903+branch.releases-16-13.content.release",
+        "target_branch": "latest",
+        "target_version": "16.13.7915903+branch.releases-16-13.content.release"
+      },
+      "semantic_changes": [
+        {
+          "after": {
+            "description": "Killing an enemy deals magic damage around them.",
+            "name": "Desolate"
+          },
+          "before": {},
+          "category": "passive-added",
+          "description": "Killing an enemy deals magic damage around them.",
+          "field": "semantic.passives.Desolate",
+          "name": "Desolate"
+        }
+      ],
+      "change": {
+        "category": "passive-added",
+        "name": "Desolate",
+        "description": "Killing an enemy deals magic damage around them."
+      },
+      "affected_entities": [
+        {
+          "entity_type": "item",
+          "canonical_id": "223069",
+          "slug": "void-immolation",
+          "names": {
+            "en": "Void Immolation"
+          }
+        }
+      ],
+      "relationship_kind": "quest-reward-transformation"
+    },
+    {
+      "entity_type": "augment",
       "canonical_id": "SquishySlappyGrab",
       "slug": "squishy-slappy-grab",
       "names": {

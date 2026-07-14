@@ -33,6 +33,8 @@ PUBLIC_EVENT_FIELDS = (
     "is_hotfix",
     "known",
     "href",
+    "affected_entities",
+    "change",
 )
 
 
@@ -112,6 +114,12 @@ GENERIC_CHANGE_TEXT = {
     },
 }
 
+SEMANTIC_CATEGORY_LABELS = {
+    "passive-added": {"en": "Passive added", "zh-tw": "新增被動效果", "zh-cn": "新增被动效果", "ja-jp": "パッシブ追加", "ko-kr": "패시브 추가"},
+    "passive-removed": {"en": "Passive removed", "zh-tw": "移除被動效果", "zh-cn": "移除被动效果", "ja-jp": "パッシブ削除", "ko-kr": "패시브 제거"},
+    "passive-description-changed": {"en": "Passive changed", "zh-tw": "被動效果變更", "zh-cn": "被动效果变更", "ja-jp": "パッシブ変更", "ko-kr": "패시브 변경"},
+}
+
 
 def _field_label(field: Any, locale: str = "en") -> str:
     key = str(field or "")
@@ -135,6 +143,21 @@ def _field_label(field: Any, locale: str = "en") -> str:
 
 
 def _change_texts(event: dict[str, Any]) -> dict[str, str]:
+    semantic = event.get("change")
+    if isinstance(semantic, dict):
+        category = str(semantic.get("category") or "")
+        name = str(semantic.get("name") or "").strip()
+        description = _display(semantic.get("description"))
+        labels = SEMANTIC_CATEGORY_LABELS.get(category)
+        if labels:
+            return {
+                locale: f"{labels[locale]}: {name}. {description}".strip()
+                for locale in ("en", "zh-tw", "zh-cn", "ja-jp", "ko-kr")
+            }
+        return {
+            locale: f"Gameplay change: {name}. {description}".strip()
+            for locale in ("en", "zh-tw", "zh-cn", "ja-jp", "ko-kr")
+        }
     kind = event.get("change_kind")
     if kind in {"added", "removed"}:
         return dict(GENERIC_CHANGE_TEXT[str(kind)])
@@ -155,7 +178,45 @@ def _change_texts(event: dict[str, Any]) -> dict[str, str]:
 def _kind(event: dict[str, Any]) -> str:
     if event.get("change_kind") in {"added", "removed"}:
         return str(event["change_kind"])
+    if event.get("change_kind") == "mechanism":
+        return "mechanism"
     return "changed"
+
+
+def _related_entity(
+    related: dict[str, Any],
+    known: dict[str, set[str]],
+    entity_records: dict[str, dict[str, dict[str, Any]]] | None,
+) -> dict[str, Any] | None:
+    entity_type = str(related.get("entity_type") or "")
+    canonical_id = str(related.get("canonical_id") or "")
+    if entity_type not in {"champion", "augment", "item"} or not canonical_id:
+        return None
+    record = (entity_records or {}).get(entity_type, {}).get(canonical_id, {})
+    names = _presentation_names(related, record)
+    synthetic = {
+        "entity_type": entity_type,
+        "canonical_id": canonical_id,
+        "slug": str(record.get("slug") or related.get("slug") or ""),
+    }
+    is_known, href = _href(synthetic, known, entity_records)
+    result = {
+        "type": entity_type,
+        "id": canonical_id,
+        "canonicalId": canonical_id,
+        "slug": synthetic["slug"],
+        "routeIdentifier": str(record.get("route_identifier") or ""),
+        "localizedName": names["en"],
+        "iconUrl": str(record.get("icon") or ""),
+        "name": names["en"],
+        "known": is_known,
+        "names": {key: value for key, value in names.items() if key != "en" and value},
+    }
+    if href:
+        result["href"] = href
+    if record.get("icon"):
+        result["icon"] = record["icon"]
+    return result
 
 
 def _href(
@@ -210,6 +271,24 @@ def _event_to_change(
         target["lifecycle"] = record["lifecycle"]["state"]
     if href:
         target["href"] = href
+    related = [
+        projected
+        for item in event.get("affected_entities", [])
+        if isinstance(item, dict)
+        for projected in [_related_entity(item, known, entity_records)]
+        if projected is not None
+    ]
+    semantic = event.get("change") if isinstance(event.get("change"), dict) else None
+    metrics = []
+    labels = list(event.get("fields_changed", []))
+    if semantic:
+        category = str(semantic.get("category") or "gameplay-change")
+        metrics = [{
+            "label": str(semantic.get("name") or category),
+            "before": "",
+            "after": _display(semantic.get("description")),
+        }]
+        labels = [category]
     return {
         "subject": {key: value for key, value in names.items() if value},
         "text": _change_texts(event),
@@ -218,8 +297,8 @@ def _event_to_change(
         "isHotfix": bool(event.get("is_hotfix")),
         "landedFromPbe": bool(event.get("landed_from_pbe")),
         "targets": [target],
-        "relatedEntities": [],
-        "metrics": [
+        "relatedEntities": related,
+        "metrics": metrics or [
             {
                 "label": _field_label(field),
                 "before": _display(event.get("before", {}).get(field)),
@@ -227,7 +306,7 @@ def _event_to_change(
             }
             for field in event.get("fields_changed", [])
         ],
-        "labels": list(event.get("fields_changed", [])),
+        "labels": labels,
         "impact": {"damageRelevant": False, "modelSignals": [], "engineRefs": []},
     }
 

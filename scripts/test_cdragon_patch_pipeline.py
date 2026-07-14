@@ -8,7 +8,12 @@ import tempfile
 import unittest
 from pathlib import Path
 
-from cdragon_patch_pipeline import build_branch_update, promote_branch, read_snapshot_lineage
+from cdragon_patch_pipeline import (
+    _promote_branch_update,
+    build_branch_update,
+    promote_branch,
+    read_snapshot_lineage,
+)
 from cdragon_snapshot_diff import build_snapshot, snapshot_filename
 
 
@@ -266,6 +271,49 @@ class CDragonPatchPipelineTests(unittest.TestCase):
 
             self.assertEqual(latest_path.read_bytes(), before)
             self.assertFalse((internal / snapshot_filename("item", "pbe")).exists())
+
+    def test_failed_projection_validation_preserves_last_good_baseline(self):
+        with tempfile.TemporaryDirectory() as tmpdir:
+            internal = Path(tmpdir)
+            previous = {kind: snapshot(kind, "latest", "16.13.1", rows) for kind, rows in entities(0).items()}
+            for entity_type, value in previous.items():
+                path = internal / snapshot_filename(entity_type, "latest")
+                path.write_text(json.dumps(value), encoding="utf-8")
+            archive_path = internal / "patch-events.json"
+            archive_path.write_text(
+                json.dumps({"schema_version": 1, "branch": "latest", "events": []}),
+                encoding="utf-8",
+            )
+            before = {
+                path: path.read_bytes()
+                for path in [
+                    *(internal / snapshot_filename(entity_type, "latest") for entity_type in previous),
+                    archive_path,
+                ]
+            }
+            update = build_branch_update(
+                branch="latest",
+                source_version="16.13.2",
+                source_patch_label="26.13",
+                observed_at="2026-07-11T01:00:00Z",
+                entities_by_type=entities(1),
+                previous_snapshots=previous,
+                latest_snapshots={},
+                previous_archive={"schema_version": 1, "branch": "latest", "events": []},
+            )
+
+            def reject_projection(_internal: Path, _branch: str, _update: dict) -> None:
+                raise RuntimeError("fixture projection rejected")
+
+            with self.assertRaisesRegex(RuntimeError, "projection rejected"):
+                _promote_branch_update(
+                    internal,
+                    "latest",
+                    update,
+                    validate_projection=reject_projection,
+                )
+
+            self.assertEqual({path: path.read_bytes() for path in before}, before)
 
 
 if __name__ == "__main__":

@@ -326,6 +326,37 @@ def _current_stats(entity_type: str, fields: dict[str, Any], source_version: str
 
 
 def _change_stats(entity_type: str, event: dict[str, Any]) -> list[dict[str, Any]]:
+    semantic = event.get("change") if isinstance(event.get("change"), dict) else None
+    if semantic:
+        category = str(semantic.get("category") or "gameplay-change")
+        name = str(semantic.get("name") or "").strip()
+        description = str(semantic.get("description") or "").strip()
+        def value(entry: Any) -> str:
+            if not isinstance(entry, dict) or not entry:
+                return ""
+            entry_name = str(entry.get("name") or name).strip()
+            entry_description = str(entry.get("description") or "").strip()
+            return ": ".join(part for part in (entry_name, entry_description) if part)
+
+        semantic_changes = event.get("semantic_changes")
+        first = semantic_changes[0] if isinstance(semantic_changes, list) and semantic_changes else {}
+        before_value = value(first.get("before"))
+        after_value = value(first.get("after")) or ": ".join(part for part in (name, description) if part)
+        label_key = "stats.passiveAdded" if category == "passive-added" else "stats.gameplayChange"
+        return [{
+            "key": f"semantic_{category.replace('-', '_')}_{re.sub(r'[^a-z0-9]+', '_', name.lower()).strip('_') or 'change'}",
+            "label_key": label_key,
+            "before": before_value,
+            "after": after_value,
+            "unit": "label",
+            "source_path": "patch.semantic",
+            "source_version": str((event.get("comparison") or {}).get("target_version") or event.get("source_version") or ""),
+            "patch": str(event.get("source_patch_label") or ""),
+            "lane": str(event.get("lane") or ("preview" if event.get("branch") == "pbe" else "live")),
+            "lifecycle": "landed" if event.get("landed_from_pbe") or event.get("landed") else ("preview" if event.get("lane") == "preview" else "live"),
+            "is_hotfix": bool(event.get("is_hotfix")),
+            "direction": "changed",
+        }]
     before = event.get("before") if isinstance(event.get("before"), dict) else {}
     after = event.get("after") if isinstance(event.get("after"), dict) else {}
     comparison = event.get("comparison") if isinstance(event.get("comparison"), dict) else {}
@@ -364,9 +395,16 @@ def _change_stats(entity_type: str, event: dict[str, Any]) -> list[dict[str, Any
 
 
 def _event_matches(record: dict[str, Any], event: dict[str, Any]) -> bool:
-    return (
+    if (
         record.get("type") == event.get("entity_type")
         and record.get("canonical_id") == _event_id(event)
+    ):
+        return True
+    return any(
+        isinstance(affected, dict)
+        and record.get("type") == affected.get("entity_type")
+        and record.get("canonical_id") == str(affected.get("canonical_id") or "")
+        for affected in event.get("affected_entities", [])
     )
 
 
@@ -382,6 +420,8 @@ def _field_value(fields: dict[str, Any], path: str) -> Any:
 def _preview_target_matches_snapshot(event: dict[str, Any], snapshot_row: dict[str, Any]) -> bool:
     """Reject a stale/no-op preview event whose normalized target is live."""
 
+    if event.get("affected_entities"):
+        return False
     changed = event.get("fields_changed")
     after = event.get("after")
     fields = snapshot_row.get("fields")

@@ -871,7 +871,9 @@
       "abilityCooldown": "技能冷卻",
       "abilityRange": "技能距離",
       "abilityEffect": "技能效果數值",
-      "abilityCoefficient": "技能係數"
+      "abilityCoefficient": "技能係數",
+      "passiveAdded": "新增被動效果",
+      "gameplayChange": "遊戲機制變更"
     }
   },
   "terms": {

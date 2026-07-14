@@ -20,6 +20,8 @@ from contextlib import contextmanager
 from pathlib import Path
 from typing import Any, Iterable
 
+from semantic_entity_diff import normalized_generic_fields, semantic_changes
+
 try:
     import fcntl
 except ImportError:  # pragma: no cover - the production runners are POSIX
@@ -43,6 +45,8 @@ PUBLIC_EVENT_FIELDS = (
     "source_patch_label",
     "landed",
     "is_hotfix",
+    "affected_entities",
+    "change",
 )
 
 
@@ -219,6 +223,40 @@ def _event_sort_key(event: dict[str, Any]) -> tuple[str, str, str, tuple[str, ..
     )
 
 
+def _event_common(
+    *,
+    current: dict[str, Any],
+    row: dict[str, Any],
+    comparison: dict[str, str],
+    detected_at: str,
+    change_kind: str,
+    fields_changed: list[str],
+    before: dict[str, Any],
+    after: dict[str, Any],
+    previous: dict[str, Any],
+) -> dict[str, Any]:
+    return {
+        "entity_type": current["entity_type"],
+        "canonical_id": row["id"],
+        "slug": row["slug"],
+        "names": _stable(row["names"]),
+        "branch": current["branch"],
+        "lane": current["lane"],
+        "change_kind": change_kind,
+        "fields_changed": fields_changed,
+        "before": before,
+        "after": after,
+        "detected_at": detected_at,
+        "source_patch_label": current["source_patch_label"],
+        "landed": False,
+        "is_hotfix": (
+            current["branch"] == "latest"
+            and previous["source_patch_label"] == current["source_patch_label"]
+        ),
+        "comparison": comparison,
+    }
+
+
 def compare_snapshots(
     previous: dict[str, Any],
     current: dict[str, Any],
@@ -293,38 +331,127 @@ def compare_snapshots(
     for entity_id in sorted(old_by_id.keys() & new_by_id.keys()):
         old = old_by_id[entity_id]
         new = new_by_id[entity_id]
-        old_fields = _flatten(old["fields"])
-        new_fields = _flatten(new["fields"])
+        old_semantic = semantic_changes(old["fields"], new["fields"])
+        old_fields = _flatten(normalized_generic_fields(old["fields"]))
+        new_fields = _flatten(normalized_generic_fields(new["fields"]))
         fields = sorted(
             field for field in old_fields.keys() | new_fields.keys()
             if old_fields.get(field) != new_fields.get(field)
         )
-        if not fields:
-            continue
-        before = {field: old_fields.get(field) for field in fields}
-        after = {field: new_fields.get(field) for field in fields}
-        events.append({
-            "entity_type": current["entity_type"],
-            "canonical_id": entity_id,
-            "slug": new["slug"],
-            "names": _stable(new["names"]),
-            "branch": current["branch"],
-            "lane": current["lane"],
-            "change_kind": _change_kind(fields, before, after),
-            "fields_changed": fields,
-            "before": before,
-            "after": after,
-            "detected_at": detected_at,
-            "source_patch_label": current["source_patch_label"],
-            "landed": False,
-            "is_hotfix": (
-                current["branch"] == "latest"
-                and previous["source_patch_label"] == current["source_patch_label"]
-            ),
-            "comparison": comparison,
-        })
+        if fields:
+            before = {field: old_fields.get(field) for field in fields}
+            after = {field: new_fields.get(field) for field in fields}
+            events.append(_event_common(
+                current=current,
+                row=new,
+                comparison=comparison,
+                detected_at=detected_at,
+                change_kind=_change_kind(fields, before, after),
+                fields_changed=fields,
+                before=before,
+                after=after,
+                previous=previous,
+            ))
+        for semantic_change in old_semantic:
+            field = str(semantic_change["field"])
+            event = _event_common(
+                current=current,
+                row=new,
+                comparison=comparison,
+                detected_at=detected_at,
+                change_kind="mechanism",
+                fields_changed=[field],
+                before={field: _stable(semantic_change["before"])},
+                after={field: _stable(semantic_change["after"])},
+                previous=previous,
+            )
+            event["semantic_changes"] = [_stable(semantic_change)]
+            event["change"] = {
+                "category": semantic_change["category"],
+                "name": semantic_change["name"],
+                "description": semantic_change["description"],
+            }
+            events.append(event)
 
     return sorted(events, key=_event_sort_key)
+
+
+def apply_augment_entity_links(
+    events: Iterable[dict[str, Any]],
+    relationships: Iterable[dict[str, Any]],
+    current_snapshots: dict[str, dict[str, Any]],
+) -> list[dict[str, Any]]:
+    """Promote linked item gameplay events to one augment-centered event.
+
+    The item remains in ``affected_entities`` so projections can show the same
+    event on both detail pages.  This deliberately consumes only the semantic
+    item event; unrelated item changes remain independent events.
+    """
+    links_by_item: dict[str, list[dict[str, Any]]] = {}
+    for relationship in relationships:
+        item_id = str(relationship.get("item_id") or "")
+        if item_id:
+            links_by_item.setdefault(item_id, []).append(relationship)
+    rows_by_type = {
+        entity_type: {
+            str(row.get("id")): row
+            for row in (snapshot or {}).get("entities", [])
+            if isinstance(row, dict)
+        }
+        for entity_type, snapshot in current_snapshots.items()
+    }
+    output: list[dict[str, Any]] = []
+    for source_event in events:
+        item_id = str(source_event.get("canonical_id") or "")
+        semantic = source_event.get("semantic_changes")
+        links = links_by_item.get(item_id, [])
+        if source_event.get("entity_type") != "item" or not isinstance(semantic, list) or not links:
+            output.append(source_event)
+            continue
+        consumed = False
+        for relationship in links:
+            augment_id = str(relationship.get("augment_id") or "")
+            augment_row = rows_by_type.get("augment", {}).get(augment_id)
+            item_row = rows_by_type.get("item", {}).get(item_id)
+            if not augment_row or not item_row:
+                continue
+            event = copy.deepcopy(source_event)
+            event.update({
+                "entity_type": "augment",
+                "canonical_id": augment_id,
+                "slug": augment_row["slug"],
+                "names": _stable(augment_row["names"]),
+                "fields_changed": [str(change.get("field")) for change in semantic],
+                "change_kind": "mechanism",
+                "affected_entities": [{
+                    "entity_type": "item",
+                    "canonical_id": item_id,
+                    "slug": item_row["slug"],
+                    "names": _stable(item_row["names"]),
+                }],
+                "relationship_kind": str(relationship.get("kind") or ""),
+            })
+            if len(semantic) == 1:
+                change = semantic[0]
+                event["change"] = {
+                    "category": change["category"],
+                    "name": change["name"],
+                    "description": change["description"],
+                }
+            else:
+                event["changes"] = [
+                    {
+                        "category": change["category"],
+                        "name": change["name"],
+                        "description": change["description"],
+                    }
+                    for change in semantic
+                ]
+            output.append(event)
+            consumed = True
+        if not consumed:
+            output.append(source_event)
+    return sorted(output, key=_event_sort_key)
 
 
 def _event_identity(event: dict[str, Any]) -> tuple[str, str, str, tuple[str, ...]]:

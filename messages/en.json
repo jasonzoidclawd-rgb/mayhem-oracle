@@ -938,7 +938,9 @@
       "abilityCooldown": "Ability cooldown",
       "abilityRange": "Ability range",
       "abilityEffect": "Ability effect",
-      "abilityCoefficient": "Ability coefficient"
+      "abilityCoefficient": "Ability coefficient",
+      "passiveAdded": "Passive added",
+      "gameplayChange": "Gameplay change"
     }
   },
   "terms": {

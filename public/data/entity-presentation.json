@@ -3679,7 +3679,22 @@
           "lane": "live"
         }
       ],
-      "patch_changes": []
+      "patch_changes": [
+        {
+          "key": "semantic_passive_added_desolate",
+          "label_key": "stats.passiveAdded",
+          "before": "",
+          "after": "Desolate: Killing an enemy deals magic damage around them.",
+          "unit": "label",
+          "source_path": "patch.semantic",
+          "source_version": "16.13.7915903+branch.releases-16-13.content.release",
+          "patch": "26.13",
+          "lane": "live",
+          "lifecycle": "live",
+          "is_hotfix": true,
+          "direction": "changed"
+        }
+      ]
     },
     {
       "type": "augment",
@@ -100681,7 +100696,22 @@
           "lane": "live"
         }
       ],
-      "patch_changes": []
+      "patch_changes": [
+        {
+          "key": "semantic_passive_added_desolate",
+          "label_key": "stats.passiveAdded",
+          "before": "",
+          "after": "Desolate: Killing an enemy deals magic damage around them.",
+          "unit": "label",
+          "source_path": "patch.semantic",
+          "source_version": "16.13.7915903+branch.releases-16-13.content.release",
+          "patch": "26.13",
+          "lane": "live",
+          "lifecycle": "live",
+          "is_hotfix": true,
+          "direction": "changed"
+        }
+      ]
     },
     {
       "type": "item",

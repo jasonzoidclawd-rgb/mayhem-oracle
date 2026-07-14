@@ -20,13 +20,14 @@
       ],
       "intro": "Our newest demon-huntin' baddie Locke is hitting the Rift this patch! You can check him out in between MSI matches—but you won't see him on that big stage yet. We've also got balance changes to a swathe of champions, from everyone's favorite “always chasin' charms, never savin' ADCs” support, to the Darkin who just won't die in my games. Ranked 5s will also be returning for a limited run starting on June 26. We decided to bump down start times to 8pm, to accommodate all us eepy lil guys who need to go night night by 10pm. So time to text the squad and get into queue. We also have last hit indicators coming to Ranked and Normal Draft queues! So now there's no excuse to miss those canons, pal. (You can also turn them off if you like a challenge.) Looking for more information on all things League of Legends? Check out our community-run wiki here ! Wrong patch notes? You can find the TFT patch notes here !",
       "summary": {
-        "totalChanges": 8,
+        "totalChanges": 9,
         "byKind": {
           "added": 7,
-          "changed": 1
+          "changed": 1,
+          "mechanism": 1
         },
         "byEntityType": {
-          "augment": 8
+          "augment": 9
         },
         "byLabel": {},
         "damageRelevant": 0
@@ -286,6 +287,84 @@
               "relatedEntities": [],
               "metrics": [],
               "labels": [],
+              "impact": {
+                "damageRelevant": false,
+                "modelSignals": [],
+                "engineRefs": []
+              }
+            },
+            {
+              "subject": {
+                "en": "Icathia's Fall",
+                "zh-tw": "伊卡西亞殞落",
+                "zh-cn": "艾卡西亚的陷落",
+                "ja-jp": "イカシアの滅亡",
+                "ko-kr": "이케시아의 몰락"
+              },
+              "text": {
+                "en": "Passive added: Desolate. Killing an enemy deals magic damage around them.",
+                "zh-tw": "新增被動效果: Desolate. Killing an enemy deals magic damage around them.",
+                "zh-cn": "新增被动效果: Desolate. Killing an enemy deals magic damage around them.",
+                "ja-jp": "パッシブ追加: Desolate. Killing an enemy deals magic damage around them.",
+                "ko-kr": "패시브 추가: Desolate. Killing an enemy deals magic damage around them."
+              },
+              "kind": "mechanism",
+              "detectedAt": "2026-07-14T02:09:05.260156Z",
+              "isHotfix": true,
+              "landedFromPbe": false,
+              "targets": [
+                {
+                  "type": "augment",
+                  "id": "ARAM_Quest_VoidImmolation",
+                  "canonicalId": "ARAM_Quest_VoidImmolation",
+                  "slug": "void-immolation",
+                  "routeIdentifier": "void-immolation",
+                  "localizedName": "Icathia's Fall",
+                  "iconUrl": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/kiwi/augments/icons/quest_voidimmolation_small.png",
+                  "name": "Icathia's Fall",
+                  "known": true,
+                  "names": {
+                    "zh-tw": "伊卡西亞殞落",
+                    "zh-cn": "艾卡西亚的陷落",
+                    "ja-jp": "イカシアの滅亡",
+                    "ko-kr": "이케시아의 몰락"
+                  },
+                  "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/kiwi/augments/icons/quest_voidimmolation_small.png",
+                  "lifecycle": "active",
+                  "href": "/augments/void-immolation"
+                }
+              ],
+              "relatedEntities": [
+                {
+                  "type": "item",
+                  "id": "223069",
+                  "canonicalId": "223069",
+                  "slug": "void-immolation",
+                  "routeIdentifier": "223069",
+                  "localizedName": "Void Immolation",
+                  "iconUrl": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/223069_kiwi_voidimmolation.mayhem_new_augments.png",
+                  "name": "Void Immolation",
+                  "known": true,
+                  "names": {
+                    "zh-tw": "虛空獻祭",
+                    "zh-cn": "虚空献祭",
+                    "ja-jp": "ヴォイドの猛火",
+                    "ko-kr": "공허의 불길"
+                  },
+                  "href": "/items/223069",
+                  "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/223069_kiwi_voidimmolation.mayhem_new_augments.png"
+                }
+              ],
+              "metrics": [
+                {
+                  "label": "Desolate",
+                  "before": "",
+                  "after": "Killing an enemy deals magic damage around them."
+                }
+              ],
+              "labels": [
+                "passive-added"
+              ],
               "impact": {
                 "damageRelevant": false,
                 "modelSignals": [],

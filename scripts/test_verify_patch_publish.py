@@ -199,6 +199,65 @@ class VerifyPatchPublishTests(unittest.TestCase):
                     changed_paths=["data/internal/cdragon-item-latest.json"],
                 )
 
+    def test_current_patch_completeness_resolves_subject_and_affected_entity(self):
+        with tempfile.TemporaryDirectory() as tmpdir:
+            root = Path(tmpdir)
+            notes = public_patch_notes(notes=[{
+                **patch_note(patch="26.13", kind="mechanism"),
+                "sections": [{
+                    "id": "augments",
+                    "title": "Augments",
+                    "changes": [{
+                        "subject": {"en": "Icathia's Fall"},
+                        "text": {"en": "Passive added: Desolate.", "zh-tw": "新增被動效果：Desolate。"},
+                        "kind": "mechanism",
+                        "targets": [{"type": "augment", "canonicalId": "ARAM_Quest_VoidImmolation", "id": "ARAM_Quest_VoidImmolation"}],
+                        "relatedEntities": [{"type": "item", "canonicalId": "223069", "id": "223069"}],
+                    }],
+                }],
+            }, patch_note(patch="26.12", kind="buffed"), patch_note(patch="26.11", kind="changed")])
+            self.write_public_data(root, patch_notes=notes)
+            entity_path = root / "public" / "data" / "entity-presentation.json"
+            entity_path.write_text(json.dumps({
+                "schema_version": 1, "source": "fixture", "status": "fresh", "patch": "26.13", "pbe_patch": "26.14", "observed_at": "2026-06-23T18:00:00Z",
+                "entities": [
+                    {"type": "augment", "canonical_id": "ARAM_Quest_VoidImmolation", "slug": "void-immolation", "patch_changes": [{"patch": "26.13", "after": "Desolate: Killing an enemy deals magic damage around them."}]},
+                    {"type": "item", "canonical_id": "223069", "slug": "void-immolation", "patch_changes": [{"patch": "26.13", "after": "Desolate: Killing an enemy deals magic damage around them."}]},
+                ],
+            }), encoding="utf-8")
+            internal = root / "data" / "internal"
+            internal.mkdir(parents=True)
+            (internal / "patch-events.json").write_text(json.dumps({
+                "events": [{
+                    "entity_type": "augment", "canonical_id": "ARAM_Quest_VoidImmolation", "slug": "void-immolation", "source_patch_label": "26.13", "change": {"category": "passive-added", "name": "Desolate"}, "affected_entities": [{"entity_type": "item", "canonical_id": "223069"}],
+                }]
+            }), encoding="utf-8")
+            summary = verify_patch_publish(
+                root=root,
+                changed_paths=["data/internal/patch-events.json", "public/data/patch-notes.json", "public/data/entity-presentation.json"],
+            )
+        self.assertEqual(summary["officialEntityChanges"], 1)
+        self.assertEqual(summary["resolvedEntityChanges"], 1)
+        self.assertEqual(summary["projectedEntityChanges"], 1)
+        self.assertEqual(summary["unmatchedSubjects"], [])
+        self.assertEqual(summary["missingProjections"], [])
+
+    def test_current_patch_completeness_fails_when_affected_item_is_dropped(self):
+        with tempfile.TemporaryDirectory() as tmpdir:
+            root = Path(tmpdir)
+            notes = public_patch_notes(notes=[patch_note(patch="26.13", kind="mechanism"), patch_note(patch="26.12", kind="buffed"), patch_note(patch="26.11", kind="changed")])
+            self.write_public_data(root, patch_notes=notes)
+            internal = root / "data" / "internal"
+            internal.mkdir(parents=True)
+            (internal / "patch-events.json").write_text(json.dumps({
+                "events": [{"entity_type": "augment", "canonical_id": "A", "slug": "fixture", "source_patch_label": "26.13", "change": {"category": "passive-added", "name": "Desolate"}, "affected_entities": [{"entity_type": "item", "canonical_id": "223069"}]}]
+            }), encoding="utf-8")
+            with self.assertRaisesRegex(PatchPublishError, "current-patch entity projection is incomplete"):
+                verify_patch_publish(
+                    root=root,
+                    changed_paths=["data/internal/patch-events.json", "public/data/patch-notes.json", "public/data/entity-presentation.json"],
+                )
+
 
 if __name__ == "__main__":
     unittest.main()

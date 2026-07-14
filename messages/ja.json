@@ -871,7 +871,9 @@
       "abilityCooldown": "スキルクールダウン",
       "abilityRange": "スキル射程",
       "abilityEffect": "スキル効果値",
-      "abilityCoefficient": "スキル係数"
+      "abilityCoefficient": "スキル係数",
+      "passiveAdded": "パッシブ追加",
+      "gameplayChange": "ゲームプレイ変更"
     }
   },
   "terms": {
