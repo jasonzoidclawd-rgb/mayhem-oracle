@@ -41,8 +41,9 @@ import {
   type MemberSnapshot,
 } from "./auth/member";
 import { CoachPanel } from "./components/CoachPanel";
-import { GRADE_TOKENS, runLocalInference } from "./model/inference";
-import { confirmPickedAugment, localizedGrade } from "./model/presentation";
+import { runLocalInference } from "./model/inference";
+import { confirmPickedAugment } from "./model/presentation";
+import { formatWinRate, tierClassName, tierForGrade } from "./model/tier";
 import {
   canRunOcr,
   createOcrAvailability,
@@ -436,6 +437,14 @@ function App() {
       comboTiers: Object.fromEntries(comboBySlug),
     };
   }, [abilityProfiles, championSlug, comboBySlug, overlayData]);
+
+  const winRateBySlug = useMemo(
+    () =>
+      Object.fromEntries(
+        (overlayData?.augments ?? []).map((augment) => [augment.slug, augment.win_rate]),
+      ),
+    [overlayData],
+  );
 
   const ocrKnownNames = useMemo(() => {
     if (!overlayData) return [];
@@ -890,20 +899,19 @@ function App() {
               (entry) => entry.augmentSlug === card.augment.slug,
             );
             if (!candidate) return null;
-            const grade = GRADE_TOKENS[candidate.grade];
+            const tier = tierForGrade(candidate.grade);
             return (
               <div
-                className={`badge badge-grade-${candidate.grade}`}
+                className={`badge badge-grade-${candidate.grade} ${tierClassName(tier)}`}
                 key={card.augment.slug}
-                style={{ left: pos.left, top: pos.top, borderColor: grade.color }}
+                style={{ left: pos.left, top: pos.top }}
               >
                 {card.augment.lifecycle === "added" && (
                   <span className="badge-new">NEW</span>
                 )}
                 <span className="badge-label">{mode}</span>
-                <span className="badge-grade" style={{ color: grade.color }}>
-                  {localizedGrade(candidate.grade, navigator.language)}
-                </span>
+                <span className="badge-tier">{tier}</span>
+                <span className="badge-wr">{formatWinRate(card.augment.win_rate)}</span>
                 <span className="badge-prob">
                   P:{Math.round(candidate.probability.withNormalRerolls * 100)}%
                 </span>
@@ -962,6 +970,7 @@ function App() {
         result={decisionResult}
         mode={mode}
         onModeChange={setMode}
+        winRateBySlug={winRateBySlug}
       />
       <CollectorOverlayController onStatus={setCollectorStatus} />
     </div>

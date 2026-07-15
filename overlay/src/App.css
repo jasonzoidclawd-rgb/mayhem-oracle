@@ -1,8 +1,31 @@
+@font-face {
+  font-family: "Inter";
+  src: url("/fonts/inter-latin.woff2") format("woff2");
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
+
+/* DESIGN.md tier tokens: God/S+ → Weak/C. */
+:root {
+  --tier-god: #ff4655;
+  --tier-strong: #ff8c00;
+  --tier-good: #3b82f6;
+  --tier-average: #22c55e;
+  --tier-weak: #6b7280;
+}
+
+.tier-splus { --tier-accent: var(--tier-god); }
+.tier-s { --tier-accent: var(--tier-strong); }
+.tier-a { --tier-accent: var(--tier-good); }
+.tier-b { --tier-accent: var(--tier-average); }
+.tier-c { --tier-accent: var(--tier-weak); }
 
 html, body, #root {
   width: 100%;
@@ -60,7 +83,18 @@ html, body, #root {
   font-size: 42px;
   font-weight: 900;
   line-height: 1;
-  text-shadow: 0 0 20px currentColor;
+  color: var(--tier-accent, #94a3b8);
+}
+
+.badge[class*="tier-"] {
+  border-color: var(--tier-accent, rgba(100, 116, 139, 0.3));
+}
+
+.badge-wr {
+  font-size: 11px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  color: #f1f5f9;
 }
 
 .badge-score {
@@ -271,6 +305,31 @@ html, body, #root {
   background: rgba(15, 23, 42, 0.7);
   border: 1px solid rgba(100, 116, 139, 0.24);
   border-radius: 8px;
+}
+
+/* Tier chip: DESIGN.md data-label badge (sm radius, label-sm type). */
+.tier-chip {
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1.25;
+  padding: 1px 8px;
+  border-radius: 6px;
+  border: 1px solid var(--tier-accent, #94a3b8);
+  color: var(--tier-accent, #94a3b8);
+  background: rgba(8, 12, 20, 0.6);
+}
+
+.coach-stats {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 11px;
+}
+
+.coach-wr {
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  color: #f1f5f9;
 }
 
 /* ─── Free collector ─── */
