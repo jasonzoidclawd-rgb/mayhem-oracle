@@ -39,7 +39,19 @@ export function tierClassName(letter: TierLetter): string {
   return TIER_CLASS[letter];
 }
 
-export function formatWinRate(winRate: number | null | undefined): string {
+export function formatWinRate(
+  winRate: number | string | null | undefined,
+  options?: { raw?: boolean },
+): string {
+  // Dev tier-fixture supplies an already-exact percentage STRING (produced by a
+  // string decimal shift, never a float) — pass it through verbatim so no
+  // IEEE-754 artifact can be introduced. Production always passes a number.
+  if (typeof winRate === "string") {
+    return winRate.length > 0 ? `${winRate}% WR` : "WR —";
+  }
   if (typeof winRate !== "number" || !Number.isFinite(winRate)) return "WR —";
-  return `${winRate.toFixed(1)}% WR`;
+  // Default (production) rounds to one decimal. `raw` preserves the source
+  // precision unchanged — used only by the dev tier-fixture mode.
+  const value = options?.raw ? String(winRate) : winRate.toFixed(1);
+  return `${value}% WR`;
 }

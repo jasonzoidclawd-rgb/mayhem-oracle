@@ -45,6 +45,13 @@ import { runLocalInference } from "./model/inference";
 import { confirmPickedAugment } from "./model/presentation";
 import { formatWinRate, tierClassName, tierForGrade } from "./model/tier";
 import {
+  buildAramggDecisionResult,
+  isTierFixtureEnabled,
+  TIER_FIXTURE_MEMBER,
+  type AramggFixtureCard,
+} from "./dev/tierFixture";
+import { useAramggTierFixture } from "./dev/useAramggTierFixture";
+import {
   canRunOcr,
   createOcrAvailability,
   ocrAvailabilityFromError,
@@ -186,9 +193,13 @@ function App() {
   const memberBootstrapCompleteRef = useRef(false);
   const collectorEnabled = collectorStatus?.consent === "accepted";
   const collectorCaptureEnabled = collectorEnabled && !collectorStatus?.paused;
+  // Dev-only: bypass ONLY the member-coach auth/data. Everything else (OCR,
+  // calibration, positioning, collector consent) stays on the real path.
+  const tierFixtureOn = isTierFixtureEnabled();
+  const effectiveMember = tierFixtureOn ? TIER_FIXTURE_MEMBER : memberSnapshot;
   const memberEnabled = memberRecommendationsVisible(
     collectorEnabled,
-    memberSnapshot,
+    effectiveMember,
   );
 
   const updatePhase = useCallback((nextPhase: Phase) => {
@@ -230,6 +241,12 @@ function App() {
   }, []);
 
   useEffect(() => {
+    // Dev tier-fixture: skip the real auth fetch entirely; the effective member
+    // snapshot is overridden above. Nothing else in the member path runs.
+    if (tierFixtureOn) {
+      memberBootstrapCompleteRef.current = true;
+      return;
+    }
     let cancelled = false;
     void bootstrapMember()
       .then((snapshot) => {
@@ -247,7 +264,7 @@ function App() {
     return () => {
       cancelled = true;
     };
-  }, []);
+  }, [tierFixtureOn]);
 
   useEffect(() => {
     if (!championSlug || abilityProfiles[championSlug] !== undefined) return;
@@ -508,6 +525,81 @@ function App() {
     mode,
     pickedAugments,
   ]);
+
+  // ─── Dev ARAMGG tier-fixture (dev + MAYHEM_OVERLAY_TIER_FIXTURE=1 only) ───
+  // Canonical, non-synthetic augment stats from ARAMGG drive the REAL PR #46
+  // render path. Statistics never fall back to synthetic/local values; only
+  // card geometry is injected when live OCR detection is unavailable.
+  const aramgg = useAramggTierFixture(tierFixtureOn, overlayData?.augments);
+
+  // Deterministic geometry fallback: when there is no live 3-card detection,
+  // synthesize a 3-card offer from the first resolved-with-stats augments so
+  // the real render path can be exercised without a live game. `badgePositions`
+  // supplies responsive positions (its calibration-free % anchors).
+  const syntheticMatchedCards = useMemo((): MatchedCard[] => {
+    if (
+      !tierFixtureOn ||
+      aramgg.status !== "ready" ||
+      isCompleteThreeCardOffer(matchedCards) ||
+      !overlayData
+    ) {
+      return [];
+    }
+    const chosen = overlayData.augments
+      .filter((a) => aramgg.resolvedBySlug.has(a.slug))
+      .sort((l, r) => l.slug.localeCompare(r.slug))
+      .slice(0, 3);
+    if (chosen.length < 3) return [];
+    return chosen.map((a, regionIndex) => ({
+      regionIndex,
+      ocrText: a.name,
+      augment: {
+        slug: a.slug,
+        name: a.name,
+        name_zh_TW: a.name_zh_TW,
+        lifecycle: a.flags?.lifecycle,
+        win_rate: a.win_rate ?? 50,
+        score: 0,
+        tier: "A",
+        rarity: a.rarity,
+        probability: 0,
+        probabilityWithReroll: 0,
+      },
+    }));
+  }, [tierFixtureOn, aramgg.status, aramgg.resolvedBySlug, matchedCards, overlayData]);
+
+  const injectingGeometry =
+    tierFixtureOn &&
+    !isCompleteThreeCardOffer(matchedCards) &&
+    syntheticMatchedCards.length === 3;
+
+  const effectiveMatchedCards = injectingGeometry ? syntheticMatchedCards : matchedCards;
+  const effectivePhase: Phase = injectingGeometry ? "augment_selection" : phase;
+  const effectiveLeagueFocused = injectingGeometry ? true : leagueFocused;
+  // Dev flag unlocks the badge/coach gate without real collector+member auth.
+  const effectiveMemberEnabled = tierFixtureOn ? effectiveMember?.enabled === true : memberEnabled;
+
+  const tierFixture = useMemo(() => {
+    const round = currentRound?.round ?? (tierFixtureOn ? 1 : null);
+    if (
+      !tierFixtureOn ||
+      aramgg.status !== "ready" ||
+      round === null ||
+      !isCompleteThreeCardOffer(effectiveMatchedCards)
+    ) {
+      return null;
+    }
+    const cards = [...effectiveMatchedCards]
+      .sort((left, right) => left.regionIndex - right.regionIndex)
+      .map((card): AramggFixtureCard | null => aramgg.resolvedBySlug.get(card.augment.slug) ?? null)
+      .filter((card): card is AramggFixtureCard => card !== null);
+    if (cards.length === 0) return null;
+    return buildAramggDecisionResult(cards, round as 1 | 2 | 3 | 4);
+  }, [tierFixtureOn, aramgg.status, aramgg.resolvedBySlug, currentRound, effectiveMatchedCards]);
+
+  const effectiveDecisionResult = tierFixture?.result ?? decisionResult;
+  const effectiveWinRateBySlug: Record<string, number | string | null> =
+    tierFixture?.winRateDisplayBySlug ?? winRateBySlug;
 
   const stopOcr = useCallback(() => {
     ocrActiveRef.current = false;
@@ -886,20 +978,23 @@ function App() {
       />}
 
       {/* Badges overlaid on augment cards during selection */}
-      {memberEnabled &&
-        phase === "augment_selection" &&
-        isCompleteThreeCardOffer(matchedCards) &&
-        leagueFocused &&
-        decisionResult && (
+      {effectiveMemberEnabled &&
+        effectivePhase === "augment_selection" &&
+        isCompleteThreeCardOffer(effectiveMatchedCards) &&
+        effectiveLeagueFocused &&
+        effectiveDecisionResult && (
         <>
-          {matchedCards.map((card) => {
+          {effectiveMatchedCards.map((card) => {
             const pos = badgePositions[card.regionIndex];
             if (!pos) return null;
-            const candidate = decisionResult.candidates.find(
+            const candidate = effectiveDecisionResult.candidates.find(
               (entry) => entry.augmentSlug === card.augment.slug,
             );
             if (!candidate) return null;
             const tier = tierForGrade(candidate.grade);
+            const winRate = tierFixtureOn
+              ? effectiveWinRateBySlug[card.augment.slug]
+              : card.augment.win_rate;
             return (
               <div
                 className={`badge badge-grade-${candidate.grade} ${tierClassName(tier)}`}
@@ -911,7 +1006,7 @@ function App() {
                 )}
                 <span className="badge-label">{mode}</span>
                 <span className="badge-tier">{tier}</span>
-                <span className="badge-wr">{formatWinRate(card.augment.win_rate)}</span>
+                <span className="badge-wr">{formatWinRate(winRate, { raw: tierFixtureOn })}</span>
                 <span className="badge-prob">
                   P:{Math.round(candidate.probability.withNormalRerolls * 100)}%
                 </span>
@@ -950,8 +1045,77 @@ function App() {
       {collectorEnabled && ocrStatusMessage && (
         <div className="idle-panel">{ocrStatusMessage}</div>
       )}
-      {collectorEnabled && memberSnapshot?.error && (
-        <div className="member-error">Member coach unavailable: {memberSnapshot.error}</div>
+      {collectorEnabled && effectiveMember?.error && (
+        <div className="member-error">Member coach unavailable: {effectiveMember.error}</div>
+      )}
+      {tierFixtureOn && (
+        <div
+          className="aramgg-debug-panel"
+          style={{
+            position: "fixed",
+            bottom: 8,
+            left: 8,
+            maxWidth: 520,
+            padding: "8px 10px",
+            font: "11px/1.4 ui-monospace, monospace",
+            color: "#e5e7eb",
+            background: "rgba(17,24,39,0.92)",
+            border: "1px solid #f59e0b",
+            borderRadius: 6,
+            zIndex: 9999,
+            pointerEvents: "auto",
+          }}
+        >
+          <div style={{ color: "#fbbf24", fontWeight: 700 }}>
+            ARAMGG TIER FIXTURE (dev) — upstream tier relabeled ·{" "}
+            {aramgg.status === "ready"
+              ? aramgg.fromCache
+                ? "CACHED"
+                : "LIVE"
+              : aramgg.status.toUpperCase()}
+            <button
+              onClick={aramgg.refresh}
+              style={{ marginLeft: 8, font: "inherit", cursor: "pointer" }}
+            >
+              force-refresh
+            </button>
+          </div>
+          <div>Source: ARAMGG (aramgg.com static JSON)</div>
+          {aramgg.status === "error" && (
+            <div style={{ color: "#f87171" }}>ERROR: {aramgg.error}</div>
+          )}
+          {aramgg.status === "ready" && (
+            <>
+              <div>
+                Patch/version: {aramgg.patch ?? "?"} · fetched{" "}
+                {aramgg.fetchedAt ? new Date(aramgg.fetchedAt).toISOString() : "?"}
+                {aramgg.fromCache && " (cache — not live)"}
+              </div>
+              <div style={{ opacity: 0.7 }}>{aramgg.sourceUrls?.stats}</div>
+              <div style={{ opacity: 0.7 }}>{aramgg.sourceUrls?.catalog}</div>
+              <div style={{ marginTop: 4 }}>
+                detected cards: {effectiveMatchedCards.length}
+                {injectingGeometry && " (injected geometry)"} · ARAMGG matched:{" "}
+                {aramgg.resolvedBySlug.size} · rendered badges:{" "}
+                {tierFixture?.debugRows.length ?? 0}
+              </div>
+              {tierFixture?.debugRows.map((row) => {
+                const lastResort = row.method === "localized-name";
+                return (
+                  <div
+                    key={row.slug}
+                    style={{ marginTop: 2, color: lastResort ? "#fbbf24" : undefined }}
+                  >
+                    {row.slug} · id={row.augmentId} ·{" "}
+                    {lastResort ? `${row.method} (LAST-RESORT fallback)` : row.method} · wr=
+                    {row.rawWinRate} → {row.winRatePercent}% · n={row.numGames} · tier{" "}
+                    {row.upstreamTier}→{row.cardTier}
+                  </div>
+                );
+              })}
+            </>
+          )}
+        </div>
       )}
 
       {/* Startup tip — auto-dismisses after 6s */}
@@ -966,11 +1130,12 @@ function App() {
         </div>
       )}
       <CoachPanel
-        open={memberEnabled && coachOpen}
-        result={decisionResult}
+        open={effectiveMemberEnabled && coachOpen}
+        result={effectiveDecisionResult}
         mode={mode}
         onModeChange={setMode}
-        winRateBySlug={winRateBySlug}
+        winRateBySlug={effectiveWinRateBySlug}
+        rawWinRate={tierFixtureOn}
       />
       <CollectorOverlayController onStatus={setCollectorStatus} />
     </div>

@@ -10,7 +10,9 @@ interface CoachPanelProps {
   result: DecisionResult | null;
   mode: DecisionMode;
   onModeChange: (mode: DecisionMode) => void;
-  winRateBySlug: Record<string, number | null>;
+  winRateBySlug: Record<string, number | string | null>;
+  /** Dev tier-fixture only: show raw win-rate precision instead of 1 decimal. */
+  rawWinRate?: boolean;
 }
 
 function interaction(
@@ -26,6 +28,7 @@ export function CoachPanel({
   mode,
   onModeChange,
   winRateBySlug,
+  rawWinRate = false,
 }: CoachPanelProps) {
   if (!open) return null;
 
@@ -63,7 +66,7 @@ export function CoachPanel({
           </div>
           <div className="coach-stats">
             <span className="coach-wr">
-              {formatWinRate(winRateBySlug[candidate.augmentSlug])}
+              {formatWinRate(winRateBySlug[candidate.augmentSlug], { raw: rawWinRate })}
             </span>
             <span>{localizedGrade(candidate.grade, navigator.language)}</span>
           </div>
