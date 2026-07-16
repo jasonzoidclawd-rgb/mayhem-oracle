@@ -16,7 +16,10 @@ import {
   CollectorOverlayController,
   type CollectorSnapshot,
 } from "./collector/CollectorStatus";
-import { overlayShouldIgnoreMouseEvents } from "./collector/collectorWindows";
+import {
+  overlayShouldIgnoreMouseEvents,
+  shouldShowCollectorUi,
+} from "./collector/collectorWindows";
 import { normalizeChampionName, resolveKnownChampionSlug } from "./championResolve";
 import type {
   AbilityProfile,
@@ -582,6 +585,10 @@ function App() {
   // synthetic preview cards. Nothing is injected into the real-offer path.
   const fixtureCards = fixtureMode.kind === "preview" ? previewCards : matchedCards;
   const isPreviewMode = fixtureMode.kind === "preview";
+  const collectorUiVisible = shouldShowCollectorUi({
+    leagueFocused,
+    previewMode: isPreviewMode,
+  });
 
   // Build the ARAMGG-backed decision result from whichever cards are active.
   const fixturePayload = useMemo(() => {
@@ -1006,7 +1013,7 @@ function App() {
       )}
 
       {/* Status dot */}
-      {collectorEnabled && <div
+      {collectorEnabled && collectorUiVisible && <div
         className={`status-dot ${
           phase === "augment_selection"
             ? "status-ocr"
@@ -1095,19 +1102,19 @@ function App() {
       )}
 
       {/* Idle / waiting */}
-      {collectorEnabled && phase === "idle" && (
+      {collectorEnabled && collectorUiVisible && phase === "idle" && (
         <div className="idle-panel">Waiting for League client...</div>
       )}
-      {collectorEnabled && phase === "client_found" && (
+      {collectorEnabled && collectorUiVisible && phase === "client_found" && (
         <div className="idle-panel">Client found — waiting for game...</div>
       )}
-      {collectorEnabled && dataError && (
+      {collectorEnabled && collectorUiVisible && dataError && (
         <div className="idle-panel">Overlay data failed to load: {dataError}</div>
       )}
-      {collectorEnabled && ocrStatusMessage && (
+      {collectorEnabled && collectorUiVisible && ocrStatusMessage && (
         <div className="idle-panel">{ocrStatusMessage}</div>
       )}
-      {collectorEnabled && effectiveMember?.error && (
+      {collectorEnabled && collectorUiVisible && effectiveMember?.error && (
         <div className="member-error">Member coach unavailable: {effectiveMember.error}</div>
       )}
       {/* Dev debug panel. Hidden on League focus-loss unless explicitly pinned
@@ -1211,7 +1218,7 @@ function App() {
       )}
 
       {/* Startup tip — auto-dismisses after 6s */}
-      {collectorEnabled && showStartupTip && (
+      {collectorEnabled && collectorUiVisible && showStartupTip && (
         <div className="startup-tip">
           <img src="/icon.png" alt="" className="startup-icon" />
           <div className="startup-tip-text">
@@ -1229,7 +1236,10 @@ function App() {
         winRateBySlug={badgeWinRateBySlug}
         rawWinRate={isFixtureBacked}
       />
-      <CollectorOverlayController onStatus={setCollectorStatus} />
+      <CollectorOverlayController
+        onStatus={setCollectorStatus}
+        showPanel={collectorUiVisible}
+      />
     </div>
   );
 }

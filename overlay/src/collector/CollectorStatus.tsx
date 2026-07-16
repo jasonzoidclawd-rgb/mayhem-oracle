@@ -10,8 +10,7 @@ import {
   openCollectorControlsWindow,
   openConsentWindow,
   publishCollectorStatus,
-  shouldShowCollectorControlsWindow,
-  shouldShowConsentWindow,
+  resolveCollectorWindowVisibility,
 } from "./collectorWindows";
 
 export type CollectorConsent = "pending" | "accepted" | "declined";
@@ -28,6 +27,10 @@ export interface CollectorSnapshot {
 
 interface CollectorStatusProps {
   onStatus: (status: CollectorSnapshot) => void;
+}
+
+interface CollectorOverlayControllerProps extends CollectorStatusProps {
+  showPanel?: boolean;
 }
 
 interface CollectorStatusOptions {
@@ -210,26 +213,48 @@ export function CollectorStatus({ onStatus }: CollectorStatusProps) {
   );
 }
 
-export function CollectorOverlayController({ onStatus }: CollectorStatusProps) {
+export function CollectorOverlayController({
+  onStatus,
+  showPanel = true,
+}: CollectorOverlayControllerProps) {
   const { status } = useCollectorStatus(onStatus, {
     poll: true,
     publishRefreshes: true,
   });
+  const visibleWindowsRef = useRef<{
+    consentWindow: boolean;
+    collectorControlsWindow: boolean;
+  } | null>(null);
 
   useEffect(() => {
     if (!status) return;
 
-    if (shouldShowConsentWindow(status)) {
-      void openConsentWindow();
-      void closeWindow(COLLECTOR_CONTROLS_WINDOW_LABEL);
-      return;
+    const nextVisibility = resolveCollectorWindowVisibility({
+      status,
+      controlsVisible: showPanel,
+    });
+    const previousVisibility = visibleWindowsRef.current;
+    visibleWindowsRef.current = nextVisibility;
+
+    if (previousVisibility?.consentWindow !== nextVisibility.consentWindow) {
+      if (nextVisibility.consentWindow) {
+        void openConsentWindow();
+      } else {
+        void closeWindow(CONSENT_WINDOW_LABEL);
+      }
     }
 
-    if (shouldShowCollectorControlsWindow(status)) {
-      void closeWindow(CONSENT_WINDOW_LABEL);
-      void openCollectorControlsWindow();
+    if (
+      previousVisibility?.collectorControlsWindow !==
+      nextVisibility.collectorControlsWindow
+    ) {
+      if (nextVisibility.collectorControlsWindow) {
+        void openCollectorControlsWindow();
+      } else {
+        void closeWindow(COLLECTOR_CONTROLS_WINDOW_LABEL);
+      }
     }
-  }, [status]);
+  }, [showPanel, status]);
 
   return null;
 }

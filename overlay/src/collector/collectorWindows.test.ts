@@ -4,6 +4,8 @@ import {
   COLLECTOR_CONTROLS_WINDOW_OPTIONS,
   CONSENT_WINDOW_OPTIONS,
   overlayShouldIgnoreMouseEvents,
+  resolveCollectorWindowVisibility,
+  shouldShowCollectorUi,
   shouldShowCollectorControlsWindow,
   shouldShowConsentWindow,
 } from "./collectorWindows";
@@ -33,6 +35,46 @@ describe("collector window routing", () => {
 
     expect(shouldShowConsentWindow(status("declined"))).toBe(false);
     expect(shouldShowCollectorControlsWindow(status("declined"))).toBe(true);
+  });
+
+  it("shows collector UI only while League is focused or explicit preview is active", () => {
+    expect(shouldShowCollectorUi({ leagueFocused: true, previewMode: false })).toBe(true);
+    expect(shouldShowCollectorUi({ leagueFocused: false, previewMode: true })).toBe(true);
+    // Tier fixture alone does nothing here; only focused League or resolved
+    // preview mode may surface collector pixels.
+    expect(shouldShowCollectorUi({ leagueFocused: false, previewMode: false })).toBe(false);
+  });
+
+  it("closes the collector controls window immediately when visible collector UI is off", () => {
+    expect(
+      resolveCollectorWindowVisibility({
+        status: status("accepted"),
+        controlsVisible: false,
+      }),
+    ).toEqual({
+      consentWindow: false,
+      collectorControlsWindow: false,
+    });
+
+    expect(
+      resolveCollectorWindowVisibility({
+        status: status("declined"),
+        controlsVisible: true,
+      }),
+    ).toEqual({
+      consentWindow: false,
+      collectorControlsWindow: true,
+    });
+
+    expect(
+      resolveCollectorWindowVisibility({
+        status: status("pending"),
+        controlsVisible: false,
+      }),
+    ).toEqual({
+      consentWindow: true,
+      collectorControlsWindow: false,
+    });
   });
 
   it("keeps the full-screen overlay click-through unless controls are explicitly open", () => {

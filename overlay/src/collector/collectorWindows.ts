@@ -62,6 +62,33 @@ export function shouldShowCollectorControlsWindow(status: CollectorSnapshot | nu
   return status !== null && status.consent !== "pending";
 }
 
+export function shouldShowCollectorUi({
+  leagueFocused,
+  previewMode,
+}: {
+  leagueFocused: boolean;
+  previewMode: boolean;
+}): boolean {
+  return leagueFocused || previewMode;
+}
+
+export function resolveCollectorWindowVisibility({
+  status,
+  controlsVisible,
+}: {
+  status: CollectorSnapshot | null;
+  controlsVisible: boolean;
+}): {
+  consentWindow: boolean;
+  collectorControlsWindow: boolean;
+} {
+  return {
+    consentWindow: shouldShowConsentWindow(status),
+    collectorControlsWindow:
+      shouldShowCollectorControlsWindow(status) && controlsVisible,
+  };
+}
+
 export function overlayShouldIgnoreMouseEvents({
   coachOpen,
 }: {
