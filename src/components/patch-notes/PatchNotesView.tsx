@@ -1,5 +1,4 @@
 import { getTranslations } from "next-intl/server";
-import { Link } from "@/i18n/navigation";
 import {
   buildPatchHeroChrome,
   formatPatchDate,
@@ -8,10 +7,15 @@ import { buildPatchDigest } from "@/lib/patch-notes/digest";
 import { describeFreshness, type FreshnessDescription } from "@/lib/patch-notes/freshness";
 import type { ChangeKind, PatchNote, PatchNotesData } from "@/lib/types";
 import { PatchCard } from "./PatchCard";
+import type { EntityPresentationData } from "@/lib/entities/types";
+import { resolveEntityRef } from "@/lib/entities/catalog";
+import { EntityLink } from "@/components/entities/EntityLink";
+import { EntitySectionHeading } from "@/components/entities/EntityPresentation";
 
 const RECENT_COUNT = 2;
 
 export interface RemovedPatchAugment {
+  augmentId?: string;
   slug: string;
   name: string;
   rarity: string;
@@ -23,6 +27,7 @@ export interface RemovedPatchAugment {
   flags?: {
     lifecycle?: string;
     lifecycle_patch?: string;
+    replacement_slug?: string;
   };
 }
 
@@ -30,14 +35,17 @@ export async function PatchNotesView({
   data,
   locale,
   removedAugments,
+  entityData,
   hotfixEventCount = 0,
 }: {
   data: PatchNotesData;
   locale: string;
   removedAugments: RemovedPatchAugment[];
+  entityData?: EntityPresentationData | null;
   hotfixEventCount?: number;
 }) {
   const t = await getTranslations("patchNotes");
+  const tChampion = await getTranslations("champion");
 
   if (!data.patches.length) {
     return (
@@ -68,7 +76,16 @@ export async function PatchNotesView({
         hotfixEventCount={hotfixEventCount}
       />
       <PatchCard patch={current} locale={locale} isCurrent />
-      <RemovedAugmentsTable augments={removedAugments} locale={locale} />
+      <RemovedAugmentsTable
+        augments={removedAugments}
+        locale={locale}
+        entityData={entityData}
+        rarityLabel={{
+          prismatic: tChampion("prismatic"),
+          gold: tChampion("gold"),
+          silver: tChampion("silver"),
+        }}
+      />
 
       {recent.length > 0 ? (
         <section className="space-y-4">
@@ -122,7 +139,7 @@ async function PatchHero({
     <section className="glass-card overflow-hidden border border-[var(--color-border-hover)]">
       <div className="bg-gradient-to-br from-cyan-500/15 via-purple-500/10 to-transparent px-5 py-5 sm:px-6">
         <div className="flex flex-wrap items-center gap-2">
-          <span className="rounded-full border border-[var(--color-accent)]/40 bg-[var(--color-accent)]/15 px-2 py-0.5 text-xs font-semibold uppercase tracking-wider text-[var(--color-accent)]">
+          <span className="rounded-full border border-[var(--color-accent)]/40 bg-[var(--color-accent)]/15 px-2 py-0.5 text-xs font-semibold text-[var(--color-accent)]">
             {t("structuredSource")}
           </span>
           {dateLabel ? (
@@ -213,17 +230,16 @@ async function PatchSummary({
   ] as const;
 
   return (
-    <section className="grid grid-cols-2 gap-3 md:grid-cols-4 xl:grid-cols-8">
-      {cards.map(([key, value]) => (
-        <div key={key} className="glass-card p-4">
-          <div className="text-2xl font-bold text-[var(--color-text-primary)]">
-            {value}
+    <section className="glass-card p-4">
+      <EntitySectionHeading>{t("summaryTitle")}</EntitySectionHeading>
+      <dl className="flex flex-wrap gap-x-5 gap-y-2">
+        {cards.map(([key, value]) => (
+          <div key={key} className="flex items-baseline gap-2 text-sm">
+            <dt className="text-[var(--color-text-muted)]">{t(key)}</dt>
+            <dd className="font-semibold tabular-nums text-[var(--color-text-primary)]">{value}</dd>
           </div>
-          <div className="mt-1 text-xs uppercase tracking-wider text-[var(--color-text-muted)]">
-            {t(key)}
-          </div>
-        </div>
-      ))}
+        ))}
+      </dl>
     </section>
   );
 }
@@ -231,9 +247,13 @@ async function PatchSummary({
 async function RemovedAugmentsTable({
   augments,
   locale,
+  entityData,
+  rarityLabel,
 }: {
   augments: RemovedPatchAugment[];
   locale: string;
+  entityData?: EntityPresentationData | null;
+  rarityLabel: Record<string, string>;
 }) {
   const t = await getTranslations("patchNotes");
   if (!augments.length) return null;
@@ -255,27 +275,64 @@ async function RemovedAugmentsTable({
               <th className="px-5 py-3 font-medium">{t("removedName")}</th>
               <th className="px-5 py-3 font-medium">{t("removedRarity")}</th>
               <th className="px-5 py-3 font-medium">{t("removedVersion")}</th>
+              <th className="px-5 py-3 font-medium">{t("removedStatus")}</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-[var(--color-border)]">
-            {augments.slice(0, 64).map((augment) => (
-              <tr key={augment.slug} className="hover:bg-[var(--color-bg-card)]/35">
-                <td className="px-5 py-3">
-                  <Link
-                    href={`/augments/${augment.slug}`}
-                    className="font-medium text-[var(--color-text-primary)] hover:text-[var(--color-accent)]"
-                  >
-                    {localizedAugmentName(augment, locale)}
-                  </Link>
-                </td>
-                <td className="px-5 py-3 capitalize text-[var(--color-text-secondary)]">
-                  {augment.rarity}
-                </td>
-                <td className="px-5 py-3 text-[var(--color-text-muted)]">
-                  {augment.flags?.lifecycle_patch ?? "—"}
-                </td>
-              </tr>
-            ))}
+            {augments.slice(0, 64).map((augment) => {
+              const ref = entityData
+                ? resolveEntityRef(
+                    entityData,
+                    "augment",
+                    { canonicalId: augment.augmentId, slug: augment.slug },
+                    locale,
+                  )
+                : null;
+              const replacementRef = entityData && augment.flags?.replacement_slug
+                ? resolveEntityRef(
+                    entityData,
+                    "augment",
+                    { slug: augment.flags.replacement_slug },
+                    locale,
+                  )
+                : null;
+              return (
+                <tr key={augment.slug} className="hover:bg-[var(--color-bg-card)]/35">
+                  <td className="px-5 py-3">
+                    <EntityLink entity={ref ?? {
+                      type: "augment",
+                      id: augment.augmentId ?? augment.slug,
+                      slug: augment.slug,
+                      routeIdentifier: "",
+                      localizedName: localizedAugmentName(augment, locale),
+                      iconUrl: augment.icon ?? "",
+                      known: false,
+                      canonicalId: augment.augmentId ?? augment.slug,
+                      name: localizedAugmentName(augment, locale),
+                      icon: augment.icon,
+                      lifecycle: "removed",
+                    }} variant="standard" rarity={augment.rarity} />
+                  </td>
+                  <td className="px-5 py-3 text-[var(--color-text-secondary)]">
+                    {rarityLabel[augment.rarity] ?? augment.rarity}
+                  </td>
+                  <td className="px-5 py-3 text-[var(--color-text-muted)]">
+                    {augment.flags?.lifecycle_patch ?? "—"}
+                  </td>
+                  <td className="px-5 py-3 text-[var(--color-text-muted)]">
+                    {replacementRef ? (
+                      <span className="inline-flex flex-wrap items-center gap-1.5">
+                        {t("removedReplacedBy")}
+                        <EntityLink entity={replacementRef} variant="compact" />
+                        <span>({rarityLabel.gold})</span>
+                      </span>
+                    ) : (
+                      t("removedArchiveOnly")
+                    )}
+                  </td>
+                </tr>
+              );
+            })}
           </tbody>
         </table>
       </div>

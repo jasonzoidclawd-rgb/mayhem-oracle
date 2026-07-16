@@ -5,6 +5,9 @@ import path from "path";
 import { ChampionsIndex } from "@/components/champions/ChampionsIndex";
 import type { Locale } from "@/i18n/routing";
 import { languageAlternates, localizedUrl } from "@/lib/site";
+import { readEntityPresentationFile } from "@/lib/data/read-public-file";
+import { resolveEntityRef } from "@/lib/entities/catalog";
+import type { EntityPresentationData, EntityRef } from "@/lib/entities/types";
 
 export type ChampionEntry = {
   slug: string;
@@ -77,8 +80,17 @@ export default async function ChampionsIndexPage({
   const t = await getTranslations("champion");
 
   const dataPath = path.join(process.cwd(), "public", "data", "champions.json");
-  const raw = await readFile(dataPath, "utf-8");
+  const [raw, entityPresentation] = await Promise.all([
+    readFile(dataPath, "utf-8"),
+    readEntityPresentationFile<EntityPresentationData>(),
+  ]);
   const { champions } = JSON.parse(raw) as { champions: ChampionEntry[] };
+  const entityRefs: Record<string, EntityRef> = Object.fromEntries(
+    champions.flatMap((champion) => {
+      const ref = resolveEntityRef(entityPresentation, "champion", { slug: champion.slug }, locale);
+      return ref ? [[champion.slug, ref]] : [];
+    }),
+  );
 
   return (
     <div className="py-8">
@@ -88,7 +100,7 @@ export default async function ChampionsIndexPage({
           {t("indexSubtitle", { count: champions.length })}
         </p>
       </header>
-      <ChampionsIndex champions={champions} />
+      <ChampionsIndex champions={champions} entityRefs={entityRefs} />
     </div>
   );
 }

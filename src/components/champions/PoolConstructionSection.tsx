@@ -1,8 +1,9 @@
-import Image from "next/image";
 import { GoogleSignInButton } from "@/components/auth/GoogleSignInButton";
 import { Link } from "@/i18n/navigation";
 import type { ComboTier } from "@/lib/scoring/oracle-score";
 import { Tooltip } from "@/components/ui/Tooltip";
+import { EntityLink } from "@/components/entities/EntityLink";
+import type { EntityRef } from "@/lib/entities/types";
 
 export type PoolLayer = {
   key: string;
@@ -55,6 +56,7 @@ type PoolConstructionSectionProps = {
   raritySummary: PoolRaritySummary[];
   layers: PoolLayer[];
   highlights: TailoredHighlight[];
+  entityRefs?: Record<string, EntityRef>;
   totalAugments: number;
   gated?: boolean;
   signInUrl?: string;
@@ -73,6 +75,22 @@ const RARITY_DOT_STYLES: Record<PoolRaritySummary["key"], string> = {
   gold:      "bg-yellow-400",
   silver:    "bg-slate-400",
 };
+
+function highlightRef(aug: TailoredHighlight["aug"], entityRef?: EntityRef): EntityRef {
+  return entityRef ?? {
+    type: "augment",
+    id: aug.slug,
+    slug: aug.slug,
+    routeIdentifier: "",
+    localizedName: aug.name,
+    iconUrl: aug.icon ?? "",
+    known: false,
+    canonicalId: aug.slug,
+    name: aug.name,
+    icon: aug.icon,
+    lifecycle: "unknown",
+  };
+}
 
 function scoreColor(score: number) {
   if (score >= 80) return "text-amber-300";
@@ -93,6 +111,7 @@ export function PoolConstructionSection({
   raritySummary,
   layers,
   highlights,
+  entityRefs = {},
   totalAugments,
   gated = false,
   signInUrl = "/account",
@@ -112,7 +131,7 @@ export function PoolConstructionSection({
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 mb-4">
         {profileChips.map((chip) => (
           <div key={chip.label} className="min-w-0 rounded-lg border border-[var(--color-border-default)]/60 px-2 py-2 bg-[var(--color-bg-card)]/40">
-            <div className="text-[9px] uppercase tracking-wide text-[var(--color-text-muted)]">
+            <div className="text-[10px] text-[var(--color-text-muted)]">
               {chip.label}
             </div>
             <div className="text-xs font-semibold text-[var(--color-text-primary)] truncate">
@@ -261,38 +280,16 @@ export function PoolConstructionSection({
             {highlightsTitle}
           </h3>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-1.5">
-            {highlights.map(({ aug, score, comboTier }) => (
+            {highlights.map(({ aug, score }) => (
               <Tooltip key={aug.slug} content={aug.wikiDescription ?? aug.description}>
                 <div className="flex items-center gap-2 rounded-lg border border-[var(--color-border-default)]/50 px-2 py-1.5 cursor-default">
-                  <div className="relative w-6 h-6 rounded shrink-0">
-                    <Image
-                      src={aug.icon}
-                      alt={aug.name}
-                      fill
-                      className="object-contain"
-                      sizes="24px"
-                      unoptimized
-                    />
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-1.5">
-                      <span className="text-xs font-medium truncate">{aug.name}</span>
-                      <span className={`w-1.5 h-1.5 rounded-full shrink-0 ${RARITY_DOT_STYLES[aug.rarity]}`} />
-                      {comboTier && (
-                        <span
-                          className={`text-[9px] font-bold px-1 rounded shrink-0
-                            ${comboTier === "C" ? "text-red-400 bg-red-400/20" : "text-green-400 bg-green-400/20"}`}
-                        >
-                          {comboTier}
-                        </span>
-                      )}
-                    </div>
-                    {(aug.kit_tags ?? []).length > 0 && (
-                      <div className="text-[9px] text-[var(--color-text-muted)] truncate">
-                        {(aug.kit_tags ?? []).join(", ")}
-                      </div>
-                    )}
-                  </div>
+                  <EntityLink
+                    entity={highlightRef(aug, entityRefs[aug.slug])}
+                    variant="compact"
+                    rarity={aug.rarity}
+                    className="min-w-0 flex-1"
+                  />
+                  <span className={`w-1.5 h-1.5 rounded-full shrink-0 ${RARITY_DOT_STYLES[aug.rarity]}`} aria-label={aug.rarity} />
                   <span className={`text-sm font-bold w-10 text-right shrink-0 ${scoreColor(score)}`}>
                     {Math.round(score)}
                   </span>

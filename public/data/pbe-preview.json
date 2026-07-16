@@ -12,10 +12,10 @@
       "slug": "dropkick",
       "names": {
         "en": "Dropkick",
-        "ja": "ドロップキック",
-        "ko": "드롭킥",
+        "zh-TW": "奪命飛踢",
         "zh-CN": "飞身踢",
-        "zh-TW": "奪命飛踢"
+        "ja": "ドロップキック",
+        "ko": "드롭킥"
       },
       "branch": "pbe",
       "lane": "preview",
@@ -34,6 +34,12 @@
       "landed": false,
       "is_hotfix": false,
       "known": true,
+      "canonicalId": "ARAM_Dropkick",
+      "id": "ARAM_Dropkick",
+      "routeIdentifier": "dropkick",
+      "localizedName": "Dropkick",
+      "iconUrl": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/kiwi/augments/icons/dropkick_small.png",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/kiwi/augments/icons/dropkick_small.png",
       "href": "/augments/dropkick"
     },
     {
@@ -42,10 +48,10 @@
       "slug": "infernal-conduit",
       "names": {
         "en": "Infernal Conduit",
-        "ja": "獄炎路",
-        "ko": "지옥의 전도체",
+        "zh-TW": "煉獄使者",
         "zh-CN": "炼狱导管",
-        "zh-TW": "煉獄使者"
+        "ja": "獄炎路",
+        "ko": "지옥의 전도체"
       },
       "branch": "pbe",
       "lane": "preview",
@@ -64,6 +70,12 @@
       "landed": false,
       "is_hotfix": false,
       "known": true,
+      "canonicalId": "ARAM_InfernalConduit",
+      "id": "ARAM_InfernalConduit",
+      "routeIdentifier": "infernal-conduit",
+      "localizedName": "Infernal Conduit",
+      "iconUrl": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/infernalconduit_small.png",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/infernalconduit_small.png",
       "href": "/augments/infernal-conduit"
     },
     {
@@ -71,7 +83,11 @@
       "canonical_id": "42",
       "slug": "corki",
       "names": {
-        "en": "Corki"
+        "en": "Corki",
+        "zh-TW": "庫奇",
+        "zh-CN": "英勇投弹手",
+        "ja": "コーキ",
+        "ko": "코르키"
       },
       "branch": "pbe",
       "lane": "preview",
@@ -90,6 +106,12 @@
       "landed": false,
       "is_hotfix": false,
       "known": true,
+      "canonicalId": "42",
+      "id": "42",
+      "routeIdentifier": "corki",
+      "localizedName": "Corki",
+      "iconUrl": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/42.png",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/42.png",
       "href": "/champions/corki"
     },
     {
@@ -97,7 +119,11 @@
       "canonical_id": "804",
       "slug": "yunara",
       "names": {
-        "en": "Yunara"
+        "en": "Yunara",
+        "zh-TW": "尤娜拉",
+        "zh-CN": "不破之誓",
+        "ja": "ユナラ",
+        "ko": "유나라"
       },
       "branch": "pbe",
       "lane": "preview",
@@ -116,6 +142,12 @@
       "landed": false,
       "is_hotfix": false,
       "known": true,
+      "canonicalId": "804",
+      "id": "804",
+      "routeIdentifier": "yunara",
+      "localizedName": "Yunara",
+      "iconUrl": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/804.png",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/804.png",
       "href": "/champions/yunara"
     },
     {
@@ -123,7 +155,11 @@
       "canonical_id": "3152",
       "slug": "hextech-rocketbelt",
       "names": {
-        "en": "Hextech Rocketbelt"
+        "en": "Hextech Rocketbelt",
+        "zh-TW": "海克斯科技火箭腰帶",
+        "zh-CN": "海克斯科技火箭腰带",
+        "ja": "ヘクステック ロケットベルト",
+        "ko": "마법공학 로켓 벨트"
       },
       "branch": "pbe",
       "lane": "preview",
@@ -142,6 +178,12 @@
       "landed": false,
       "is_hotfix": false,
       "known": true,
+      "canonicalId": "3152",
+      "id": "3152",
+      "routeIdentifier": "3152",
+      "localizedName": "Hextech Rocketbelt",
+      "iconUrl": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3152_mage_t4_hextechrocketbelt.png",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3152_mage_t4_hextechrocketbelt.png",
       "href": "/items/3152"
     },
     {
@@ -149,7 +191,11 @@
       "canonical_id": "3168",
       "slug": "immortal-path",
       "names": {
-        "en": "Immortal Path"
+        "en": "Immortal Path",
+        "zh-TW": "不朽之道",
+        "zh-CN": "不朽之路",
+        "ja": "不滅の道",
+        "ko": "불멸의 길"
       },
       "branch": "pbe",
       "lane": "preview",
@@ -167,15 +213,24 @@
       "source_patch_label": "pbe-cycle-16.14.7942794+branch.releases-16-14.content.release",
       "landed": false,
       "is_hotfix": false,
-      "known": true,
-      "href": "/items/3168"
+      "known": false,
+      "canonicalId": "3168",
+      "id": "3168",
+      "routeIdentifier": "",
+      "localizedName": "Immortal Path",
+      "iconUrl": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3168_immortalcreed.png",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3168_immortalcreed.png"
     },
     {
       "entity_type": "item",
       "canonical_id": "226672",
       "slug": "kraken-slayer",
       "names": {
-        "en": "Kraken Slayer"
+        "en": "Kraken Slayer",
+        "zh-TW": "海妖殺手",
+        "zh-CN": "海妖杀手",
+        "ja": "クラーケン スレイヤー",
+        "ko": "크라켄 학살자"
       },
       "branch": "pbe",
       "lane": "preview",
@@ -194,6 +249,12 @@
       "landed": false,
       "is_hotfix": false,
       "known": true,
+      "canonicalId": "226672",
+      "id": "226672",
+      "routeIdentifier": "226672",
+      "localizedName": "Kraken Slayer",
+      "iconUrl": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/6672_marksman_t4_behemothslayer.png",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/6672_marksman_t4_behemothslayer.png",
       "href": "/items/226672"
     },
     {
@@ -201,7 +262,11 @@
       "canonical_id": "226675",
       "slug": "navori-flickerblades",
       "names": {
-        "en": "Navori Flickerblades"
+        "en": "Navori Flickerblades",
+        "zh-TW": "那歐閃刃",
+        "zh-CN": "纳沃利烁刃",
+        "ja": "ナヴォリ フリッカーブレード",
+        "ko": "나보리 명멸검"
       },
       "branch": "pbe",
       "lane": "preview",
@@ -220,6 +285,12 @@
       "landed": false,
       "is_hotfix": false,
       "known": true,
+      "canonicalId": "226675",
+      "id": "226675",
+      "routeIdentifier": "226675",
+      "localizedName": "Navori Flickerblades",
+      "iconUrl": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/6675_navoriflickerblade.png",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/6675_navoriflickerblade.png",
       "href": "/items/226675"
     },
     {
@@ -227,7 +298,11 @@
       "canonical_id": "223046",
       "slug": "phantom-dancer",
       "names": {
-        "en": "Phantom Dancer"
+        "en": "Phantom Dancer",
+        "zh-TW": "幻影之舞",
+        "zh-CN": "幻影之舞",
+        "ja": "ファントム ダンサー",
+        "ko": "유령 무희"
       },
       "branch": "pbe",
       "lane": "preview",
@@ -246,6 +321,12 @@
       "landed": false,
       "is_hotfix": false,
       "known": true,
+      "canonicalId": "223046",
+      "id": "223046",
+      "routeIdentifier": "223046",
+      "localizedName": "Phantom Dancer",
+      "iconUrl": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3046_marksman_t3_phantomdancer.png",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3046_marksman_t3_phantomdancer.png",
       "href": "/items/223046"
     },
     {
@@ -253,7 +334,11 @@
       "canonical_id": "2525",
       "slug": "protoplasm-harness",
       "names": {
-        "en": "Protoplasm Harness"
+        "en": "Protoplasm Harness",
+        "zh-TW": "原質馭帶",
+        "zh-CN": "原生质护带",
+        "ja": "プロトプラズム ハーネス",
+        "ko": "원형질 안전벨트"
       },
       "branch": "pbe",
       "lane": "preview",
@@ -272,6 +357,12 @@
       "landed": false,
       "is_hotfix": false,
       "known": true,
+      "canonicalId": "2525",
+      "id": "2525",
+      "routeIdentifier": "2525",
+      "localizedName": "Protoplasm Harness",
+      "iconUrl": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/2525_tanklifeline.png",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/2525_tanklifeline.png",
       "href": "/items/2525"
     },
     {
@@ -279,7 +370,11 @@
       "canonical_id": "223094",
       "slug": "rapid-firecannon",
       "names": {
-        "en": "Rapid Firecannon"
+        "en": "Rapid Firecannon",
+        "zh-TW": "衝擊火炮",
+        "zh-CN": "疾射火炮",
+        "ja": "ラピッド ファイアキャノン",
+        "ko": "고속 연사포"
       },
       "branch": "pbe",
       "lane": "preview",
@@ -298,6 +393,12 @@
       "landed": false,
       "is_hotfix": false,
       "known": true,
+      "canonicalId": "223094",
+      "id": "223094",
+      "routeIdentifier": "223094",
+      "localizedName": "Rapid Firecannon",
+      "iconUrl": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3094_marksman_t3_rapidfirehandcannon.png",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3094_marksman_t3_rapidfirehandcannon.png",
       "href": "/items/223094"
     }
   ]

@@ -3,7 +3,324 @@
   "branch": "latest",
   "lane": "live",
   "current_open_cycle": "26.13",
-  "observed_at": "2026-07-11T11:21:39.980692Z",
+  "observed_at": "2026-07-14T02:09:05.260156Z",
   "status": "fresh",
-  "events": []
+  "events": [
+    {
+      "entity_type": "augment",
+      "canonical_id": "ARAM_BangBang",
+      "slug": "bang-bang",
+      "names": {
+        "en": "From Downtown"
+      },
+      "branch": "latest",
+      "lane": "live",
+      "change_kind": "added",
+      "fields_changed": [],
+      "before": {},
+      "after": {
+        "name": "From Downtown",
+        "rarity": "gold",
+        "tooltip": "<font color='#F0C200'>QUEST:</font> <keywordMajor>Snipe</keywordMajor> @QuestRequirement@ enemy champions with abilities<br><br><font color='#F0C200'>REWARD:</font> Send a meteor at <keywordMajor>Sniped</keywordMajor> enemy champions, dealing <magicDamage>Magic damage</magicDamage> in an area around them"
+      },
+      "detected_at": "2026-07-14T02:09:05.260156Z",
+      "source_patch_label": "26.13",
+      "landed": false,
+      "is_hotfix": false,
+      "comparison": {
+        "base_branch": "latest",
+        "base_version": "16.13.7915903+branch.releases-16-13.content.release",
+        "target_branch": "latest",
+        "target_version": "16.13.7915903+branch.releases-16-13.content.release"
+      }
+    },
+    {
+      "entity_type": "augment",
+      "canonical_id": "ForgedByTheMaster",
+      "slug": "forged-by-the-master",
+      "names": {
+        "en": "Forged By The Master",
+        "ja": "マスターに鍛えられて",
+        "ko": "장인의 솜씨",
+        "zh-CN": "大师铸就",
+        "zh-TW": "大師鑄造"
+      },
+      "branch": "latest",
+      "lane": "live",
+      "change_kind": "added",
+      "fields_changed": [],
+      "before": {},
+      "after": {
+        "name": "Forged By The Master",
+        "rarity": "silver",
+        "tooltip": "Your <attention>Item</attention> and <attention>Augment</attention> damage are increased by <attention>@Calc_Damage_Amp@</attention>.<br><br><rules>Bonus Damage: @f1.0@</rules>"
+      },
+      "detected_at": "2026-07-14T02:09:05.260156Z",
+      "source_patch_label": "26.13",
+      "landed": false,
+      "is_hotfix": false,
+      "comparison": {
+        "base_branch": "latest",
+        "base_version": "16.13.7915903+branch.releases-16-13.content.release",
+        "target_branch": "latest",
+        "target_version": "16.13.7915903+branch.releases-16-13.content.release"
+      }
+    },
+    {
+      "entity_type": "augment",
+      "canonical_id": "ItsGoTime",
+      "slug": "its-go-time",
+      "names": {
+        "en": "It's Go Time",
+        "ja": "始まるぞ",
+        "ko": "출발할 시간",
+        "zh-CN": "前进时间到",
+        "zh-TW": "該出手了"
+      },
+      "branch": "latest",
+      "lane": "live",
+      "change_kind": "added",
+      "fields_changed": [],
+      "before": {},
+      "after": {
+        "name": "It's Go Time",
+        "rarity": "silver",
+        "tooltip": "Activating {{SpellName}} grants you <speed>@Calc_Move_Speed@ Movement Speed</speed> for its duration."
+      },
+      "detected_at": "2026-07-14T02:09:05.260156Z",
+      "source_patch_label": "26.13",
+      "landed": false,
+      "is_hotfix": false,
+      "comparison": {
+        "base_branch": "latest",
+        "base_version": "16.13.7915903+branch.releases-16-13.content.release",
+        "target_branch": "latest",
+        "target_version": "16.13.7915903+branch.releases-16-13.content.release"
+      }
+    },
+    {
+      "entity_type": "augment",
+      "canonical_id": "ARAM_MissingPingAugment",
+      "slug": "missing-ping-augment",
+      "names": {
+        "en": "???",
+        "ja": "？？？",
+        "ko": "???",
+        "zh-CN": "？？？",
+        "zh-TW": "？？？"
+      },
+      "branch": "latest",
+      "lane": "live",
+      "change_kind": "text",
+      "fields_changed": [
+        "tooltip"
+      ],
+      "before": {
+        "tooltip": ""
+      },
+      "after": {
+        "tooltip": "Your <passive>Missing Pings</passive> will launch a missile at the pinged location that deals <magicDamage>@BaseDmgCalc@ + @DamageHPRatio*100@% missing Health magic damage</magicDamage> to enemies and heals allies for <scaleHealth>@BaseHealingCalc@ + @HealingHPRatio*100@% missing Health</scaleHealth>."
+      },
+      "detected_at": "2026-07-14T02:09:05.260156Z",
+      "source_patch_label": "26.13",
+      "landed": false,
+      "is_hotfix": true,
+      "comparison": {
+        "base_branch": "latest",
+        "base_version": "16.13.7915903+branch.releases-16-13.content.release",
+        "target_branch": "latest",
+        "target_version": "16.13.7915903+branch.releases-16-13.content.release"
+      }
+    },
+    {
+      "entity_type": "augment",
+      "canonical_id": "PinCushion",
+      "slug": "pin-cushion",
+      "names": {
+        "en": "Pin Cushion",
+        "ja": "針山",
+        "ko": "바늘꽂이",
+        "zh-CN": "针插垫",
+        "zh-TW": "豪豬"
+      },
+      "branch": "latest",
+      "lane": "live",
+      "change_kind": "added",
+      "fields_changed": [],
+      "before": {},
+      "after": {
+        "name": "Porcupine",
+        "rarity": "gold",
+        "tooltip": "Taking damage from champions builds up a burst of needles. At critical mass, the needles burst, dealing <physicalDamage>@Calc_Damage@ physical damage</physicalDamage> and <status>Slowing </status> nearby enemies by @Calc_Slow@ for @Slow_Duration@ seconds.<br><br><rules>Bursts: @f1.0@<br>Damage: @f2.0@</rules>"
+      },
+      "detected_at": "2026-07-14T02:09:05.260156Z",
+      "source_patch_label": "26.13",
+      "landed": false,
+      "is_hotfix": false,
+      "comparison": {
+        "base_branch": "latest",
+        "base_version": "16.13.7915903+branch.releases-16-13.content.release",
+        "target_branch": "latest",
+        "target_version": "16.13.7915903+branch.releases-16-13.content.release"
+      }
+    },
+    {
+      "entity_type": "augment",
+      "canonical_id": "ARAM_Quest_VoidImmolation",
+      "slug": "quest_-void-immolation",
+      "names": {
+        "en": "Icathia's Fall"
+      },
+      "branch": "latest",
+      "lane": "live",
+      "change_kind": "mechanism",
+      "fields_changed": [
+        "semantic.passives.Desolate"
+      ],
+      "before": {
+        "semantic.passives.Desolate": {}
+      },
+      "after": {
+        "semantic.passives.Desolate": {
+          "description": "Killing an enemy deals magic damage around them.",
+          "name": "Desolate"
+        }
+      },
+      "detected_at": "2026-07-14T02:09:05.260156Z",
+      "source_patch_label": "26.13",
+      "landed": false,
+      "is_hotfix": true,
+      "comparison": {
+        "base_branch": "latest",
+        "base_version": "16.13.7915903+branch.releases-16-13.content.release",
+        "target_branch": "latest",
+        "target_version": "16.13.7915903+branch.releases-16-13.content.release"
+      },
+      "semantic_changes": [
+        {
+          "after": {
+            "description": "Killing an enemy deals magic damage around them.",
+            "name": "Desolate"
+          },
+          "before": {},
+          "category": "passive-added",
+          "description": "Killing an enemy deals magic damage around them.",
+          "field": "semantic.passives.Desolate",
+          "name": "Desolate"
+        }
+      ],
+      "change": {
+        "category": "passive-added",
+        "name": "Desolate",
+        "description": "Killing an enemy deals magic damage around them."
+      },
+      "affected_entities": [
+        {
+          "entity_type": "item",
+          "canonical_id": "223069",
+          "slug": "void-immolation",
+          "names": {
+            "en": "Void Immolation"
+          }
+        }
+      ],
+      "relationship_kind": "quest-reward-transformation"
+    },
+    {
+      "entity_type": "augment",
+      "canonical_id": "SquishySlappyGrab",
+      "slug": "squishy-slappy-grab",
+      "names": {
+        "en": "Squishy Slappy Grab",
+        "ja": "スクイッシースラッピーグラブ",
+        "ko": "말랑 찰싹 손",
+        "zh-CN": "软弹啪叽抓",
+        "zh-TW": "伸縮手掌黏黏樂"
+      },
+      "branch": "latest",
+      "lane": "live",
+      "change_kind": "added",
+      "fields_changed": [],
+      "before": {},
+      "after": {
+        "name": "Squishy Slappy Grab",
+        "rarity": "prismatic",
+        "tooltip": "Occasionally send out Squishy Slappy Hands that latch on to all nearby enemy champions for @Buff_Duration@ seconds. While you're latched onto enemies, your next attack will <status>pull</status> them to you, deal <magicDamage>@Calc_Damage@ magic damage</magicDamage>, and <status>stun them for @Stun_Duration@ seconds</status>. You gain <shield>@Calc_Shield@ shield</shield> for @Shield_Duration@ seconds per <status>pulled</status> enemy.<br><br>This has a @Cooldown@ second cooldown.<br><br><rules>Enemies Yoinked: @f1.0@<br>Damage Dealt: @f2.0@<br>Shield Gained: @f3.0@</rules>"
+      },
+      "detected_at": "2026-07-14T02:09:05.260156Z",
+      "source_patch_label": "26.13",
+      "landed": false,
+      "is_hotfix": false,
+      "comparison": {
+        "base_branch": "latest",
+        "base_version": "16.13.7915903+branch.releases-16-13.content.release",
+        "target_branch": "latest",
+        "target_version": "16.13.7915903+branch.releases-16-13.content.release"
+      }
+    },
+    {
+      "entity_type": "augment",
+      "canonical_id": "SurgeField",
+      "slug": "surge-field",
+      "names": {
+        "en": "Surge Field",
+        "ja": "サージフィールド",
+        "ko": "방출 역장",
+        "zh-CN": "电涌力场",
+        "zh-TW": "高能量場域"
+      },
+      "branch": "latest",
+      "lane": "live",
+      "change_kind": "added",
+      "fields_changed": [],
+      "before": {},
+      "after": {
+        "name": "Surge Field",
+        "rarity": "prismatic",
+        "tooltip": "On ultimate cast, spawn a <keywordMajor>Zone</keywordMajor> around you. While in it, gain <scaleAbilityHaste>@ZoneAbilityHaste@ Ability Haste</scaleAbilityHaste>, <speed>@ZoneMovementSpeed*100@% Movement Speed</speed>, and fire missiles that deal <magicDamage>@MissileDamagePercent*100@% of damage dealt</magicDamage> to enemies.<br><br>The <keywordMajor>Zone</keywordMajor> follows you the first time you leave it and expires after a short duration the second time you do so.<br><br>Missile Damage: @f1@"
+      },
+      "detected_at": "2026-07-14T02:09:05.260156Z",
+      "source_patch_label": "26.13",
+      "landed": false,
+      "is_hotfix": false,
+      "comparison": {
+        "base_branch": "latest",
+        "base_version": "16.13.7915903+branch.releases-16-13.content.release",
+        "target_branch": "latest",
+        "target_version": "16.13.7915903+branch.releases-16-13.content.release"
+      }
+    },
+    {
+      "entity_type": "augment",
+      "canonical_id": "Terraind",
+      "slug": "terraind",
+      "names": {
+        "en": "Terrain'd",
+        "ja": "地形でドン",
+        "ko": "지형 생성됨",
+        "zh-CN": "地形专家",
+        "zh-TW": "劃地為王"
+      },
+      "branch": "latest",
+      "lane": "live",
+      "change_kind": "added",
+      "fields_changed": [],
+      "before": {},
+      "after": {
+        "name": "Terrain'd",
+        "rarity": "gold",
+        "tooltip": "Your terrain created by {{SpellName}} deals <magicDamage>@TickDamageTooltip@ magic damage</magicDamage> per second to nearby enemies.<br><br>Terrain Damage: @f1@<br><br><rules>Damage is increased by @Calc_TT_Ult_Damage_Amp@ for Ultimate Abilities.</rules>"
+      },
+      "detected_at": "2026-07-14T02:09:05.260156Z",
+      "source_patch_label": "26.13",
+      "landed": false,
+      "is_hotfix": false,
+      "comparison": {
+        "base_branch": "latest",
+        "base_version": "16.13.7915903+branch.releases-16-13.content.release",
+        "target_branch": "latest",
+        "target_version": "16.13.7915903+branch.releases-16-13.content.release"
+      }
+    }
+  ]
 }

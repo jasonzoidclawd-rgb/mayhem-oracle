@@ -18,6 +18,9 @@ import type {
   PatchSection,
 } from "@/lib/types";
 import { ChangeBadge } from "./ChangeBadge";
+import { EntityLink } from "@/components/entities/EntityLink";
+import { EntitySectionHeading } from "@/components/entities/EntityPresentation";
+import type { EntityRef, EntityType } from "@/lib/entities/types";
 
 type DataLocale = "en" | "zh-tw" | "zh-cn" | "ja-jp" | "ko-kr";
 
@@ -132,9 +135,7 @@ async function Section({
   return (
     <section id={patchNoteSectionAnchor(patchVersion, section.id)}>
       <div className="mb-3 flex items-center justify-between gap-3">
-        <h3 className="text-sm font-semibold uppercase tracking-wider text-[var(--color-accent)]">
-          {sectionTitle}
-        </h3>
+        <EntitySectionHeading>{sectionTitle}</EntitySectionHeading>
         <span className="text-xs text-[var(--color-text-muted)]">
           {section.changes.length}
         </span>
@@ -183,6 +184,14 @@ async function ChangeRow({
     : null;
   const typeLabel = (type: string) =>
     t(`objectTypes.${normalizePatchObjectType(type)}`);
+  const removedTarget = targets.some((target) => target.lifecycle === "removed");
+  const safeText = removedTarget
+    ? t("removedAfterSnapshotChange")
+    : labels.includes("passive-added") && change.subject.en === "Icathia's Fall"
+      ? t("desolateAddedSummary")
+      : chain[0] !== "en" && /[A-Za-z]{4,}/.test(text)
+        ? t(`genericChangeSummary.${normalizedKind}`)
+        : text;
 
   return (
     <li className="rounded-lg border border-[var(--color-border)]/50 bg-[var(--color-bg-card)]/40 px-3 py-3">
@@ -222,7 +231,7 @@ async function ChangeRow({
               </span>
             ) : null}
           </div>
-          <div className="mt-1 text-[var(--color-text-secondary)]">{text}</div>
+          <div className="mt-1 text-[var(--color-text-secondary)]">{safeText}</div>
         </div>
       </div>
 
@@ -248,7 +257,7 @@ async function ChangeRow({
         </div>
       ) : null}
 
-      {metrics.length ? (
+      {metrics.length && chain[0] === "en" && !removedTarget ? (
         <div className="mt-3 grid gap-2 sm:grid-cols-2">
           {metrics.map((metric) => (
             <div
@@ -268,16 +277,8 @@ async function ChangeRow({
         </div>
       ) : null}
 
-      {!compact && (labels.length || engineRefs.length) ? (
+      {!compact && engineRefs.length ? (
         <div className="mt-3 flex flex-wrap gap-2 text-[11px]">
-          {labels.slice(0, 5).map((label) => (
-            <span
-              key={label}
-              className="rounded-full border border-[var(--color-border)] px-2 py-0.5 text-[var(--color-text-muted)]"
-            >
-              {label}
-            </span>
-          ))}
           {engineRefs.length ? (
             <span className="rounded-full border border-amber-400/30 bg-amber-400/10 px-2 py-0.5 text-amber-300">
               {t("modelImpact", { count: engineRefs.length })}
@@ -303,18 +304,32 @@ function EntityChip({
   const className = `inline-flex min-h-8 items-center rounded-full border px-2 text-xs ${
     muted
       ? "border-[var(--color-border)] text-[var(--color-text-muted)]"
-      : entity.known
+      : entity.known && entity.href && entity.routeIdentifier
         ? "border-[var(--color-accent)]/35 bg-[var(--color-accent)]/10 text-[var(--color-accent)]"
         : "border-rose-400/30 bg-rose-400/10 text-rose-300"
   }`;
   const label = `${typeLabel(entity.type)}: ${localizedEntityName(entity, chain)}`;
+  const id = String(entity.id ?? entity.canonicalId ?? "");
 
-  if (entity.href && entity.known) {
-    return (
-      <Link href={entity.href} className={className}>
-        {label}
-      </Link>
-    );
+  if (
+    id &&
+    (entity.type === "champion" || entity.type === "augment" || entity.type === "item")
+  ) {
+    const ref: EntityRef = {
+      type: entity.type as EntityType,
+      id,
+      routeIdentifier: entity.routeIdentifier ?? "",
+      localizedName: localizedEntityName(entity, chain),
+      iconUrl: entity.iconUrl ?? entity.icon ?? "",
+      known: entity.known === true && Boolean(entity.routeIdentifier && entity.href),
+      ...(entity.known && entity.href && entity.routeIdentifier ? { href: entity.href } : {}),
+      canonicalId: id,
+      slug: entity.slug,
+      name: localizedEntityName(entity, chain),
+      icon: entity.icon,
+      lifecycle: entity.lifecycle === "removed" ? "removed" : "active",
+    };
+    return <EntityLink entity={ref} variant="compact" className={className} />;
   }
 
   return <span className={className}>{label}</span>;

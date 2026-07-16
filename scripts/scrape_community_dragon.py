@@ -21,6 +21,8 @@ from urllib.request import urlopen, Request
 from urllib.error import URLError
 
 from data_paths import INTERNAL_DATA_DIR
+from cdragon_entity_adapters import is_mayhem_item_row
+from entity_presentation_projection import MAYHEM_CANONICAL_ITEM_IDS
 
 CDN_BASE = (
     "https://raw.communitydragon.org/latest/plugins/"
@@ -34,6 +36,7 @@ OUT_DIR = INTERNAL_DATA_DIR
 
 MAYHEM_EXCLUSIVE_ITEMS: list[dict] = [
     {
+        "id": 223039,
         "slug": "atmas-reckoning",
         "name": "Atma's Reckoning",
         "cost": 2900,
@@ -44,6 +47,7 @@ MAYHEM_EXCLUSIVE_ITEMS: list[dict] = [
         "mayhemTag": "exclusive",
     },
     {
+        "id": 3430,
         "slug": "rite-of-ruin",
         "name": "Rite of Ruin",
         "cost": 3000,
@@ -58,6 +62,7 @@ MAYHEM_EXCLUSIVE_ITEMS: list[dict] = [
         "mayhemTag": "exclusive",
     },
     {
+        "id": 4011,
         "slug": "sword-of-blossoming-dawn",
         "name": "Sword of Blossoming Dawn",
         "cost": 2350,
@@ -68,6 +73,7 @@ MAYHEM_EXCLUSIVE_ITEMS: list[dict] = [
         "mayhemTag": "exclusive",
     },
     {
+        "id": 4403,
         "slug": "the-golden-spatula",
         "name": "The Golden Spatula",
         "cost": 0,
@@ -81,6 +87,7 @@ MAYHEM_EXCLUSIVE_ITEMS: list[dict] = [
         "mayhemTag": "quest-reward",
     },
     {
+        "id": 223095,
         "slug": "stormrazor",
         "name": "Stormrazor",
         "cost": 3000,
@@ -91,6 +98,7 @@ MAYHEM_EXCLUSIVE_ITEMS: list[dict] = [
         "mayhemTag": "modified",
     },
     {
+        "id": 223084,
         "slug": "heartsteel",
         "name": "Heartsteel",
         "cost": 3000,
@@ -101,6 +109,7 @@ MAYHEM_EXCLUSIVE_ITEMS: list[dict] = [
         "mayhemTag": "modified",
     },
     {
+        "id": 228002,
         "slug": "wooglets-witchcap",
         "name": "Wooglet's Witchcap",
         "cost": 0,
@@ -111,7 +120,6 @@ MAYHEM_EXCLUSIVE_ITEMS: list[dict] = [
         "mayhemTag": "modified",
     },
 ]
-
 
 # ── Helpers ────────────────────────────────────────────────────────────────────
 
@@ -371,6 +379,8 @@ def build_items() -> tuple[list[dict], list[dict]]:
 
     catalog: list[dict] = []
     for item in raw_items:
+        if not is_mayhem_item_row(item):
+            continue  # mode-gated items that cannot be purchased in Mayhem
         name = item.get("name", "").strip()
         if not name:
             continue
@@ -406,15 +416,41 @@ def build_items() -> tuple[list[dict], list[dict]]:
     # Sort by cost descending (completed items first)
     catalog.sort(key=lambda x: x["cost"], reverse=True)
 
-    # Enrich Mayhem-exclusive items with icons from the catalog
+    # Enrich Mayhem-exclusive items with icons from the catalog and attach the
+    # stable ID used by CDragon snapshot matching. Exclude the regular row for
+    # the same ID: it is a non-Mayhem variant and would otherwise produce
+    # duplicate canonical entities in public catalogs and route projections.
     mayhem = []
     for item in MAYHEM_EXCLUSIVE_ITEMS:
         enriched = dict(item)
+        enriched["id"] = int(MAYHEM_CANONICAL_ITEM_IDS[item["slug"]])
         icon = name_to_icon.get(item["name"].lower(), "")
         enriched["icon"] = icon
         mayhem.append(enriched)
 
+    catalog = remove_mayhem_duplicate_rows(catalog, mayhem)
+
     return mayhem, catalog
+
+
+def remove_mayhem_duplicate_rows(catalog: list[dict], mayhem: list[dict]) -> list[dict]:
+    """Keep one canonical catalog row, preferring the curated Mayhem row."""
+    mayhem_ids = {
+        str(item["id"])
+        for item in mayhem
+        if isinstance(item, dict) and item.get("id") is not None
+    }
+    seen: set[str] = set()
+    result: list[dict] = []
+    for item in catalog:
+        canonical_id = item.get("id") if isinstance(item, dict) else None
+        if canonical_id is not None:
+            key = str(canonical_id)
+            if key in mayhem_ids or key in seen:
+                continue
+            seen.add(key)
+        result.append(item)
+    return result
 
 
 # ── Main ───────────────────────────────────────────────────────────────────────

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useTranslations, useLocale } from "next-intl";
 import { localizedName, type LocalizedNameRecord } from "@/lib/i18n/localized-name";
 import {
@@ -8,13 +8,24 @@ import {
   type PatchNoteSearchItem,
 } from "@/lib/patch-notes/search";
 import type { PatchNotesData } from "@/lib/types";
+import { resolveEntityRef } from "@/lib/entities/catalog";
+import type { EntityPresentationData, EntityRef } from "@/lib/entities/types";
+import { projectVisibleItemCatalog } from "@/lib/items/catalog";
+import type { Item } from "@/lib/types";
+import { EntityLink } from "@/components/entities/EntityLink";
 
 type SearchItem = LocalizedNameRecord & {
-  kind: "champion" | "augment" | "patch-note";
+  kind: "champion" | "augment" | "item" | "patch-note";
   icon?: string;
   href?: string;
+  entity?: EntityRef;
   snippet?: string;
   searchText?: string;
+};
+
+type CatalogNameRecord = LocalizedNameRecord & {
+  slug: string;
+  icon?: string;
 };
 
 export function CmdKSearch() {
@@ -25,17 +36,20 @@ export function CmdKSearch() {
   const [query, setQuery] = useState("");
   const [items, setItems] = useState<SearchItem[] | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+  const triggerRef = useRef<HTMLButtonElement>(null);
   // Lazy-load the search corpus only once the palette is actually opened.
   useEffect(() => {
     if (!open || items) return;
     Promise.all([
       fetch("/data/champions.json").then((r) => r.json()),
       fetch("/data/augments.json").then((r) => r.json()),
+      fetch("/data/items.json").then((r) => r.json()),
+      fetch("/data/entity-presentation.json").then((r) => r.json() as Promise<EntityPresentationData>),
       fetch("/data/patch-notes.json")
         .then((r) => (r.ok ? r.json() : null))
         .catch(() => null),
-    ]).then(([champData, augData, patchData]) => {
-      const champItems: SearchItem[] = champData.champions.map((c: LocalizedNameRecord & { icon?: string }) => ({
+    ]).then(([champData, augData, itemData, entityData, patchData]) => {
+      const champItems: SearchItem[] = champData.champions.map((c: CatalogNameRecord) => ({
         name: c.name,
         name_zh_TW: c.name_zh_TW,
         name_zh_CN: c.name_zh_CN,
@@ -43,8 +57,9 @@ export function CmdKSearch() {
         name_ko: c.name_ko,
         kind: "champion" as const,
         icon: c.icon,
+        entity: resolveEntityRef(entityData, "champion", { slug: c.slug }, locale) ?? undefined,
       }));
-      const augItems: SearchItem[] = augData.augments.map((a: LocalizedNameRecord & { icon?: string }) => ({
+      const augItems: SearchItem[] = augData.augments.map((a: CatalogNameRecord) => ({
         name: a.name,
         name_zh_TW: a.name_zh_TW,
         name_zh_CN: a.name_zh_CN,
@@ -52,13 +67,34 @@ export function CmdKSearch() {
         name_ko: a.name_ko,
         kind: "augment" as const,
         icon: a.icon,
+        entity: resolveEntityRef(entityData, "augment", { slug: a.slug }, locale) ?? undefined,
+      }));
+      const visibleItems = projectVisibleItemCatalog({
+        items: (itemData.items ?? []) as Item[],
+        mayhemExclusive: (itemData.mayhemExclusive ?? []) as Item[],
+      });
+      const itemItems: SearchItem[] = [
+        ...visibleItems.mayhemExclusive,
+        ...visibleItems.items,
+      ].map((item: LocalizedNameRecord & { id?: number; slug?: string; icon?: string }) => ({
+        name: item.name,
+        name_zh_TW: item.name_zh_TW,
+        name_zh_CN: item.name_zh_CN,
+        name_ja: item.name_ja,
+        name_ko: item.name_ko,
+        kind: "item" as const,
+        icon: item.icon,
+        searchText: [item.name, item.name_zh_TW, item.name_zh_CN, item.name_ja, item.name_ko, item.id]
+          .filter(Boolean)
+          .join(" "),
+        entity: resolveEntityRef(entityData, "item", { canonicalId: item.id != null ? String(item.id) : undefined, slug: item.slug }, locale) ?? undefined,
       }));
       const patchItems: PatchNoteSearchItem[] = buildPatchNoteSearchItems(
         patchData as PatchNotesData | null,
         locale,
         { patchLabel: (patch) => tPatch("patchLabel", { patch }) },
       );
-      setItems([...champItems, ...augItems, ...patchItems]);
+      setItems([...champItems, ...augItems, ...itemItems, ...patchItems]);
     });
   }, [open, items, locale, tPatch]);
 
@@ -73,23 +109,28 @@ export function CmdKSearch() {
     setOpen(true);
   };
 
+  const closePalette = useCallback(() => {
+    setOpen(false);
+    requestAnimationFrame(() => triggerRef.current?.focus());
+  }, []);
+
   useEffect(() => {
     const onKeyDown = (e: KeyboardEvent) => {
       if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "k") {
         e.preventDefault();
         if (open) {
-          setOpen(false);
+          closePalette();
         } else {
           setQuery("");
           setOpen(true);
         }
       } else if (e.key === "Escape") {
-        setOpen(false);
+        closePalette();
       }
     };
     document.addEventListener("keydown", onKeyDown);
     return () => document.removeEventListener("keydown", onKeyDown);
-  }, [open]);
+  }, [open, closePalette]);
 
   const q = query.toLowerCase();
   const results = (items ?? [])
@@ -101,10 +142,11 @@ export function CmdKSearch() {
   return (
     <>
       <button
+        ref={triggerRef}
         type="button"
         onClick={openPalette}
         aria-label={t("searchTriggerLabel")}
-        className="flex h-9 items-center gap-2 rounded-lg border border-[var(--color-border-default)]
+        className="flex min-h-11 items-center gap-2 rounded-lg border border-[var(--color-border-default)]
                    bg-[var(--color-bg-card)] px-3 text-xs text-[var(--color-text-secondary)]
                    transition-colors hover:border-[var(--color-border-hover)]"
       >
@@ -131,11 +173,12 @@ export function CmdKSearch() {
         <div
           className="fixed inset-0 z-[60] flex items-start justify-center bg-black/60 pt-[12vh] backdrop-blur-sm"
           onClick={(e) => {
-            if (e.target === e.currentTarget) setOpen(false);
+            if (e.target === e.currentTarget) closePalette();
           }}
         >
           <div
             role="dialog"
+            aria-modal="true"
             aria-label={t("searchTriggerLabel")}
             className="w-[min(620px,92vw)] overflow-hidden rounded-2xl border border-[var(--color-border-hover)]
                        bg-[var(--color-bg-card)] shadow-2xl"
@@ -161,9 +204,11 @@ export function CmdKSearch() {
                         ? t("searchKindChampion")
                         : item.kind === "augment"
                           ? t("searchKindAugment")
-                          : t("searchKindPatchNote")
+                          : item.kind === "item"
+                            ? t("searchKindItem")
+                            : t("searchKindPatchNote")
                     }
-                    onSelect={() => setOpen(false)}
+                    onSelect={closePalette}
                   />
                 ))
               ) : (
@@ -222,6 +267,10 @@ function SearchResult({
   );
   const className = "flex items-center gap-3 rounded-lg px-3 py-2.5 hover:bg-white/5";
 
+  if (item.entity) {
+    return <EntityLink entity={item.entity} variant="standard" className={className} onClick={onSelect} />;
+  }
+
   if (item.href) {
     return (
       <a href={localizedHref(item.href, locale)} className={className} onClick={onSelect}>
@@ -234,6 +283,6 @@ function SearchResult({
 }
 
 function localizedHref(href: string, locale: string): string {
-  if (locale === "en" || !href.startsWith("/")) return href;
+  if (!href.startsWith("/")) return href;
   return `/${locale}${href}`;
 }

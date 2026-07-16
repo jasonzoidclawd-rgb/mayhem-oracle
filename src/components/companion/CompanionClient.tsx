@@ -11,11 +11,14 @@ import type {
   AugmentRound,
   DecisionResult,
 } from "@/lib/contracts/decision";
+import { EntityLink } from "@/components/entities/EntityLink";
+import type { EntityRef } from "@/lib/entities/types";
 
 export interface CompanionChampionOption {
   slug: string;
   name: string;
   searchName?: string;
+  entity?: EntityRef;
 }
 
 export interface CompanionAugmentOption {
@@ -23,6 +26,7 @@ export interface CompanionAugmentOption {
   displayName: string;
   searchName?: string;
   rarity: AugmentRarity;
+  entity?: EntityRef;
 }
 
 interface CompanionClientProps {
@@ -358,27 +362,33 @@ export function CompanionClient({
       {/* Sticky control cluster: champion header, chips, rarity tabs, search */}
       <div className="sticky top-20 z-30 -mx-4 border-b border-[var(--color-border-default)] bg-[var(--color-bg-primary)]/95 px-4 pb-3 pt-3 backdrop-blur-md">
         <div className="flex w-full items-center gap-3">
-          <button
-            type="button"
-            onClick={() => setPickerOpen(true)}
-            aria-label={t("changeChampion")}
-            className="flex min-w-0 flex-1 items-center gap-3 text-left"
-          >
-            <span
-              className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full text-sm font-bold text-white"
+          <div className="flex min-w-0 flex-1 items-center gap-3 text-left">
+            <button
+              type="button"
+              onClick={() => setPickerOpen(true)}
+              aria-label={t("changeChampion")}
+              className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full text-sm font-bold text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-neon-primary)]"
               style={{ background: `hsl(${hashHue(championSlug || "?")}, 60%, 38%)` }}
             >
               {championSlug ? initials(championName) : "?"}
-            </span>
-            <span className="min-w-0 flex-1">
-              <span className="block truncate font-semibold text-[var(--color-text-primary)]">
-                {championName || t("pickerTitle")}
-              </span>
+            </button>
+            <div className="min-w-0 flex-1">
+              {champions.find((champion) => champion.slug === championSlug)?.entity ? (
+                <EntityLink
+                  entity={champions.find((champion) => champion.slug === championSlug)!.entity!}
+                  variant="compact"
+                  className="font-semibold"
+                />
+              ) : (
+                <span className="block truncate font-semibold text-[var(--color-text-primary)]">
+                  {championName || t("pickerTitle")}
+                </span>
+              )}
               <span className="block truncate text-xs text-[var(--color-text-muted)]">
                 {t("stickyHint")}
               </span>
-            </span>
-          </button>
+            </div>
+          </div>
           <button
             type="button"
             aria-label={wakeOn ? t("wakeLockOn") : t("wakeLockOff")}
@@ -449,27 +459,32 @@ export function CompanionClient({
             const isSelected = selected.includes(augment.slug);
             const hue = hashHue(augment.slug);
             return (
-              <button
+              <div
                 key={augment.slug}
-                type="button"
-                onClick={() => toggleAugment(augment.slug)}
-                aria-pressed={isSelected}
                 className={`flex flex-col items-center gap-1 rounded-xl border p-2 text-center transition ${
                   isSelected
                     ? "border-[var(--color-neon-primary)] bg-[var(--color-neon-primary)]/10"
                     : "border-[var(--color-border-default)] bg-[var(--color-bg-card)]"
                 } ${selected.length >= 3 && !isSelected ? "opacity-40" : ""}`}
               >
-                <span
-                  className="flex h-12 w-12 items-center justify-center rounded-full text-sm font-bold text-white"
+                <button
+                  type="button"
+                  onClick={() => toggleAugment(augment.slug)}
+                  aria-pressed={isSelected}
+                  aria-label={`${augment.displayName}${isSelected ? " selected" : ""}`}
+                  className="flex h-12 w-12 items-center justify-center rounded-full text-sm font-bold text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-neon-primary)]"
                   style={{ background: `hsl(${hue}, 65%, 40%)` }}
                 >
                   {initials(augment.displayName)}
-                </span>
-                <span className="line-clamp-2 text-[11px] leading-tight text-[var(--color-text-secondary)]">
-                  {augment.displayName}
-                </span>
-              </button>
+                </button>
+                {augment.entity ? (
+                  <EntityLink entity={augment.entity} variant="compact" className="max-w-full justify-center text-center" />
+                ) : (
+                  <span className="line-clamp-2 text-[11px] leading-tight text-[var(--color-text-secondary)]">
+                    {augment.displayName}
+                  </span>
+                )}
+              </div>
             );
           })}
         </div>
@@ -513,20 +528,21 @@ export function CompanionClient({
             ) : (
               <ul className="flex flex-col gap-1">
                 {filteredChampions.map((c) => (
-                  <li key={c.slug}>
+                  <li key={c.slug} className="flex items-center gap-2 rounded-lg px-2 py-2 hover:bg-[var(--color-bg-card)]">
                     <button
                       type="button"
                       onClick={() => pickChampion(c.slug)}
-                      className="flex w-full items-center gap-3 rounded-lg px-2 py-2 text-left hover:bg-[var(--color-bg-card)]"
+                      aria-label={`${t("changeChampion")}: ${c.name}`}
+                      className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full text-xs font-bold text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-neon-primary)]"
                     >
                       <span
-                        className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-xs font-bold text-white"
+                        className="flex h-11 w-11 items-center justify-center rounded-full text-xs font-bold text-white"
                         style={{ background: `hsl(${hashHue(c.slug)}, 60%, 38%)` }}
                       >
                         {initials(c.name)}
                       </span>
-                      <span className="text-sm text-[var(--color-text-primary)]">{c.name}</span>
                     </button>
+                    {c.entity ? <EntityLink entity={c.entity} variant="standard" /> : <span className="text-sm text-[var(--color-text-primary)]">{c.name}</span>}
                   </li>
                 ))}
               </ul>
@@ -664,9 +680,17 @@ export function CompanionClient({
                             {GRADE_LETTERS[token.order] ?? "?"}
                           </text>
                         </svg>
+                      {augments.find((augment) => augment.slug === candidate.augmentSlug)?.entity ? (
+                        <EntityLink
+                          entity={augments.find((augment) => augment.slug === candidate.augmentSlug)!.entity!}
+                          variant="compact"
+                          className="max-w-[96px] justify-center text-center"
+                        />
+                      ) : (
                         <span className="max-w-[64px] truncate text-center text-[10px] text-[var(--color-text-secondary)]">
                           {nameBySlug.get(candidate.augmentSlug) ?? candidate.augmentSlug}
                         </span>
+                      )}
                         <span className="text-[10px] text-[var(--color-text-muted)]">
                           {tg(candidate.grade)}
                         </span>
@@ -688,9 +712,17 @@ export function CompanionClient({
                   <ul className="mt-2 flex flex-col gap-2">
                     {rankedCandidates.map((candidate) => (
                       <li key={candidate.augmentSlug}>
-                        <p className="font-semibold text-[var(--color-text-primary)]">
-                          {nameBySlug.get(candidate.augmentSlug) ?? candidate.augmentSlug}
-                        </p>
+                        {augments.find((augment) => augment.slug === candidate.augmentSlug)?.entity ? (
+                          <EntityLink
+                            entity={augments.find((augment) => augment.slug === candidate.augmentSlug)!.entity!}
+                            variant="compact"
+                            className="font-semibold"
+                          />
+                        ) : (
+                          <p className="font-semibold text-[var(--color-text-primary)]">
+                            {nameBySlug.get(candidate.augmentSlug) ?? candidate.augmentSlug}
+                          </p>
+                        )}
                         {candidate.warnings.length > 0 ? (
                           <p className="text-rose-300">{candidate.warnings.join(" · ")}</p>
                         ) : null}

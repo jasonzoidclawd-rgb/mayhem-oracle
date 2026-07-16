@@ -10,6 +10,9 @@ import { getTranslations, setRequestLocale } from "next-intl/server";
 import type { Locale } from "@/i18n/routing";
 import { languageAlternates, localizedUrl } from "@/lib/site";
 import { localizedName } from "@/lib/i18n/localized-name";
+import { readEntityPresentationFile } from "@/lib/data/read-public-file";
+import { resolveEntityRef } from "@/lib/entities/catalog";
+import type { EntityPresentationData } from "@/lib/entities/types";
 
 type RawChampion = {
   slug: string;
@@ -28,6 +31,7 @@ type RawAugment = {
   name_ja?: string;
   name_ko?: string;
   rarity?: "silver" | "gold" | "prismatic";
+  flags?: { lifecycle?: string };
 };
 
 export async function generateMetadata({
@@ -72,21 +76,26 @@ export default async function CompanionPage({
     readChampionsFile<{ champions: RawChampion[] }>(),
     readAugmentsFile<{ augments: RawAugment[] }>(),
   ]);
+  const entityData = await readEntityPresentationFile<EntityPresentationData>();
 
   const championOptions: CompanionChampionOption[] = champions
     .map((champion) => ({
       slug: champion.slug,
       name: localizedName(champion, locale),
       searchName: champion.name,
+      entity: resolveEntityRef(entityData, "champion", { slug: champion.slug }, locale) ?? undefined,
     }))
     .sort((a, b) => a.name.localeCompare(b.name));
 
-  const augmentOptions: CompanionAugmentOption[] = augments.map((augment) => ({
-    slug: augment.slug,
-    displayName: localizedName(augment, locale),
-    searchName: augment.name,
-    rarity: augment.rarity ?? "gold",
-  }));
+  const augmentOptions: CompanionAugmentOption[] = augments
+    .filter((augment) => augment.flags?.lifecycle === "active" || augment.flags?.lifecycle === "added")
+    .map((augment) => ({
+      slug: augment.slug,
+      displayName: localizedName(augment, locale),
+      searchName: augment.name,
+      rarity: augment.rarity ?? "gold",
+      entity: resolveEntityRef(entityData, "augment", { slug: augment.slug }, locale) ?? undefined,
+    }));
 
   return (
     <CompanionClient

@@ -2,6 +2,9 @@ import { getTranslations, getLocale } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
 import { localizedName, type LocalizedNameRecord } from "@/lib/i18n/localized-name";
 import { tierBadgeClass } from "./tier-style";
+import { resolveEntityRef } from "@/lib/entities/catalog";
+import type { EntityPresentationData } from "@/lib/entities/types";
+import { EntityLink } from "@/components/entities/EntityLink";
 
 export type TierChampion = LocalizedNameRecord & {
   slug: string;
@@ -10,7 +13,7 @@ export type TierChampion = LocalizedNameRecord & {
   icon: string;
 };
 
-export async function TierMiniGrid({ champions }: { champions: TierChampion[] }) {
+export async function TierMiniGrid({ champions, entityPresentation }: { champions: TierChampion[]; entityPresentation: EntityPresentationData }) {
   const t = await getTranslations("dashboard");
   const locale = await getLocale();
 
@@ -23,21 +26,32 @@ export async function TierMiniGrid({ champions }: { champions: TierChampion[] })
         </Link>
       </div>
       <ul className="mt-3 grid grid-cols-2 gap-2 sm:grid-cols-3 md:grid-cols-4">
-        {champions.map((champion) => (
-          <li key={champion.slug}>
-            <Link
-              href={`/champions/${champion.slug}`}
-              className="flex items-center gap-2 rounded-lg border border-[var(--color-border-default)] p-2 transition-colors hover:border-[var(--color-border-hover)]"
-            >
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src={champion.icon} alt="" className="h-8 w-8 shrink-0 rounded-md" />
-              <span className="truncate text-sm text-[var(--color-text-primary)]">{localizedName(champion, locale)}</span>
-              <span className={`ml-auto shrink-0 rounded px-1 py-0.5 text-[10px] font-semibold ${tierBadgeClass(champion.tier)}`}>
-                {champion.tier}
-              </span>
-            </Link>
-          </li>
-        ))}
+        {champions.map((champion) => {
+          const entityRef = resolveEntityRef(entityPresentation, "champion", { slug: champion.slug }, locale);
+          const ref = entityRef ?? {
+            type: "champion" as const,
+            id: champion.slug,
+            slug: champion.slug,
+            routeIdentifier: "",
+            localizedName: localizedName(champion, locale),
+            iconUrl: champion.icon ?? "",
+            known: false,
+            canonicalId: champion.slug,
+            name: localizedName(champion, locale),
+            icon: champion.icon,
+            lifecycle: "unknown" as const,
+          };
+          return (
+            <li key={champion.slug}>
+              <div className="flex items-center gap-1 rounded-lg border border-[var(--color-border-default)] p-2 transition-colors hover:border-[var(--color-border-hover)]">
+                <EntityLink entity={ref} variant="standard" className="min-w-0 flex-1" />
+                <span className={`shrink-0 rounded px-1 py-0.5 text-[10px] font-semibold ${tierBadgeClass(champion.tier)}`}>
+                  {champion.tier}
+                </span>
+              </div>
+            </li>
+          );
+        })}
       </ul>
     </div>
   );

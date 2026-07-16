@@ -39,6 +39,33 @@ describe("public data boundary", () => {
     expect(publicAugments.augments.every((augment) => !("win_rate" in augment))).toBe(true);
   });
 
+  test("allows only the categorical augment quality tier when a canonical source exists", () => {
+    const allowedTiers = new Set(["S+", "S", "A", "B", "C", null]);
+    const forbiddenTierInputs = new Set([
+      "win_rate", "winRate", "rate", "rawRate", "raw_rate", "raw_win_rate", "rawWinRate", "wins", "wins_count", "winsCount",
+      "sample", "sample_count", "sampleCount", "sample_size", "sampleSize", "games", "game_count", "gameCount", "games_count", "gamesCount", "match_count", "matchCount",
+      "percentile", "percentile_rank", "percentileRank", "rank", "numerical_rank", "numericalRank", "band", "band_threshold", "bandThreshold",
+      "confidence", "confidence_interval", "confidenceInterval",
+      "confidence_internals", "confidenceInternals", "score", "scoreBreakdown", "score_breakdown", "scoring", "scoringInputs", "scoring_inputs",
+      "threshold", "thresholds", "thresholdInputs", "threshold_inputs", "calculationInputs", "calculation_inputs",
+      "sourceRecord", "source_record", "feedProvenance", "feed_provenance",
+    ]);
+    const publicAugments = readJson("public/data/augments.json") as {
+      augments: Array<Record<string, unknown>>;
+    };
+    const presentation = readJson("public/data/entity-presentation.json") as {
+      entities: Array<Record<string, unknown>>;
+    };
+    for (const augment of publicAugments.augments) {
+      if ("quality_tier" in augment) expect(allowedTiers.has(augment.quality_tier as string | null)).toBe(true);
+      expect(collectForbiddenKeys(augment, forbiddenTierInputs)).toEqual([]);
+    }
+    for (const augment of presentation.entities.filter((entity) => entity.type === "augment")) {
+      if ("quality_tier" in augment) expect(allowedTiers.has(augment.quality_tier as string | null)).toBe(true);
+      expect(collectForbiddenKeys(augment, forbiddenTierInputs)).toEqual([]);
+    }
+  });
+
   test("does not publish decision-only combos, rules, weights, pools, or item telemetry", () => {
     const publicCombos = readJson("public/data/combos.json") as {
       combos: Array<Record<string, unknown>>;
@@ -82,6 +109,9 @@ describe("public data boundary", () => {
     ];
     const forbiddenItemKeys = new Set(forbiddenTelemetry);
     const forbiddenAugmentKeys = new Set([...forbiddenTelemetry, "wikiNotes"]);
+
+    expect(publicAugments).not.toHaveProperty("counts");
+    expect(publicAugments).not.toHaveProperty("sources");
 
     // Freemium teaser: a small slice of S-tier "strong combos" is published
     // (names + tier only) for SEO/AI-citability and as a conversion hook. The
@@ -226,6 +256,48 @@ describe("public data boundary", () => {
       expect(event.branch).toBe("pbe");
       expect(event.lane).toBe("preview");
       expect(event.landed).toBe(false);
+    }
+  });
+
+  test("entity presentation exposes only canonical presentation-safe stats", () => {
+    const presentation = readJson("public/data/entity-presentation.json") as {
+      schema_version: number;
+      entities: Array<Record<string, unknown>>;
+    };
+    expect(presentation.schema_version).toBe(1);
+    expect(presentation.entities.length).toBeGreaterThan(1000);
+    const identities = new Set<string>();
+    for (const entity of presentation.entities) {
+      expect(["champion", "augment", "item"]).toContain(entity.type);
+      expect(typeof entity.canonical_id).toBe("string");
+      expect(typeof entity.slug).toBe("string");
+      expect(typeof entity.route_identifier).toBe("string");
+      expect(typeof entity.known).toBe("boolean");
+      if (entity.known) {
+        expect(String(entity.route_identifier)).not.toBe("");
+      } else {
+        expect(entity.route_identifier).toBe("");
+      }
+      const identity = `${entity.type}:${entity.canonical_id}`;
+      expect(identities.has(identity)).toBe(false);
+      identities.add(identity);
+      expect(entity).not.toHaveProperty("comparison");
+      expect(entity).not.toHaveProperty("provenance");
+      expect(entity).not.toHaveProperty("source_url");
+      expect(collectForbiddenKeys(entity, new Set([
+        "dataValues", "calculations", "oracleScore", "scoreBreakdown", "modelWeights",
+        "first_seen_cycle", "last_seen_cycle", "observed_cycles", "history",
+        "raw", "rawSnapshot", "snapshot", "snapshots", "comparison", "comparisonBase",
+        "comparison_base", "base_branch", "target_branch", "source_url", "sourceUrl",
+        "member", "internal", "serverOnly", "provenance", "lineage",
+        "routeIdentifier", "localizedHref", "rawPbe", "pbeSnapshot", "pbeHistory",
+      ]))).toEqual([]);
+      for (const stat of (entity.stats as Array<Record<string, unknown>>)) {
+        expect(stat).toHaveProperty("source_path");
+        expect(stat).toHaveProperty("source_version");
+        expect(stat).toHaveProperty("patch");
+        expect(stat).toHaveProperty("lane");
+      }
     }
   });
 });

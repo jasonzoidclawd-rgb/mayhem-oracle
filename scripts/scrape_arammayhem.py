@@ -184,6 +184,14 @@ def parse_augments(html: str) -> list[dict]:
             "win_rate": win_rate,
         })
 
+        # Keep this parser ready for the source's optional per-augment sample
+        # field.  The current arammayhem.com markup does not publish it; when
+        # absent, the tier projection must remain neutral rather than infer a
+        # count from win rate or pick rate.
+        games_m = re.search(r"Games\s*</(?:dt|span)>\s*<(?:dd|span)[^>]*>\s*([\d,]+)", block, re.IGNORECASE)
+        if games_m:
+            rows[-1]["sample_count"] = int(games_m.group(1).replace(",", ""))
+
     return rows
 
 
@@ -498,6 +506,7 @@ def main():
         rows=augment_win_rate_rows,
         identity_map=identity_map,
         base_catalog=base_catalog,
+        patch=patch,
         generated_at=scraped_at,
     )
 

@@ -119,8 +119,7 @@ def normalize_base_url(base_url: str) -> str:
 
 
 def localized_path(route: str, locale: str) -> str:
-    prefix = "" if locale == DEFAULT_LOCALE else f"/{locale}"
-    return f"{prefix}{route}"
+    return f"/{locale}{route}"
 
 
 def extract_json_ld_blocks(html: str) -> list[dict]:
@@ -209,12 +208,18 @@ def fetch(url: str, timeout: int = 30) -> str:
         return response.read().decode("utf-8", errors="replace")
 
 
-def run_checks(base_url: str, locales: list[str], targets: dict[str, str]) -> list[JsonLdCheck]:
+def run_checks(
+    base_url: str,
+    locales: list[str],
+    targets: dict[str, str],
+    canonical_base_url: str | None = None,
+) -> list[JsonLdCheck]:
     checks: list[JsonLdCheck] = []
     base = normalize_base_url(base_url)
+    canonical_base = normalize_base_url(canonical_base_url or base_url)
 
     for locale in locales:
-        expected_home = base if locale == "en" else f"{base}/{locale}"
+        expected_home = f"{canonical_base}/{locale}"
 
         for kind, route in targets.items():
             url = f"{base}{localized_path(route, locale)}"
@@ -261,6 +266,11 @@ def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--base-url", default="https://wasfun.lol")
     parser.add_argument(
+        "--canonical-base-url",
+        default="https://wasfun.lol",
+        help="Expected public canonical origin when fetching a local preview",
+    )
+    parser.add_argument(
         "--locales",
         default=",".join(SUPPORTED_LOCALES),
         help="Comma-separated locale subset (default: all routed locales)",
@@ -269,7 +279,7 @@ def main() -> int:
 
     locales = [locale.strip() for locale in args.locales.split(",") if locale.strip()]
     targets = pick_targets(Path(__file__).resolve().parent.parent)
-    checks = run_checks(args.base_url, locales, targets)
+    checks = run_checks(args.base_url, locales, targets, args.canonical_base_url)
     summary = summarize_checks(checks)
 
     print(f"Live JSON-LD verification for {normalize_base_url(args.base_url)}")

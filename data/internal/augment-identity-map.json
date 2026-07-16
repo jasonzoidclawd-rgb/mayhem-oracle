@@ -2,12 +2,12 @@
   "identity_key": "CDragon augmentNameId",
   "normalization": "lowercase, strip non-alphanumerics, strip leading Quest: prefix",
   "counts": {
-    "cdragon": 246,
-    "mapped_augmentIds": 246,
+    "cdragon": 253,
+    "mapped_augmentIds": 253,
     "aliases": 1,
     "source_matches": {
-      "internal_augments": 247,
-      "wiki": 205,
+      "internal_augments": 255,
+      "wiki": 213,
       "arammayhem_win_rate": 120
     }
   },
@@ -269,6 +269,43 @@
             "win_rate": 56.26
           }
         ]
+      }
+    },
+    {
+      "augmentId": "ARAM_BangBang",
+      "cdragon": {
+        "augmentNameId": "ARAM_BangBang",
+        "name": "From Downtown",
+        "slug": "bang-bang",
+        "rarity": "gold"
+      },
+      "sources": {
+        "internal_augments": [
+          {
+            "sourceKey": "from-downtown",
+            "name": "From Downtown",
+            "match": {
+              "method": "normalized",
+              "token": "fromdowntown"
+            },
+            "slug": "from-downtown",
+            "rarity": "gold",
+            "lifecycle": "removed",
+            "hasWikiDescription": true
+          }
+        ],
+        "wiki": [
+          {
+            "sourceKey": "From Downtown",
+            "name": "From Downtown",
+            "match": {
+              "method": "normalized",
+              "token": "fromdowntown"
+            },
+            "hasWikiDescription": true
+          }
+        ],
+        "arammayhem_win_rate": []
       }
     },
     {
@@ -8157,6 +8194,43 @@
       }
     },
     {
+      "augmentId": "ForgedByTheMaster",
+      "cdragon": {
+        "augmentNameId": "ForgedByTheMaster",
+        "name": "Forged By The Master",
+        "slug": "forged-by-the-master",
+        "rarity": "silver"
+      },
+      "sources": {
+        "internal_augments": [
+          {
+            "sourceKey": "forged-by-the-master",
+            "name": "Forged By The Master",
+            "match": {
+              "method": "normalized",
+              "token": "forgedbythemaster"
+            },
+            "slug": "forged-by-the-master",
+            "rarity": "silver",
+            "lifecycle": "removed",
+            "hasWikiDescription": true
+          }
+        ],
+        "wiki": [
+          {
+            "sourceKey": "Forged By The Master",
+            "name": "Forged By The Master",
+            "match": {
+              "method": "normalized",
+              "token": "forgedbythemaster"
+            },
+            "hasWikiDescription": true
+          }
+        ],
+        "arammayhem_win_rate": []
+      }
+    },
+    {
       "augmentId": "FullyAutomated",
       "cdragon": {
         "augmentNameId": "FullyAutomated",
@@ -8516,6 +8590,43 @@
             "match": {
               "method": "normalized",
               "token": "infiniterecursion"
+            },
+            "hasWikiDescription": true
+          }
+        ],
+        "arammayhem_win_rate": []
+      }
+    },
+    {
+      "augmentId": "ItsGoTime",
+      "cdragon": {
+        "augmentNameId": "ItsGoTime",
+        "name": "It's Go Time",
+        "slug": "its-go-time",
+        "rarity": "silver"
+      },
+      "sources": {
+        "internal_augments": [
+          {
+            "sourceKey": "its-go-time",
+            "name": "It's Go Time",
+            "match": {
+              "method": "normalized",
+              "token": "itsgotime"
+            },
+            "slug": "its-go-time",
+            "rarity": "silver",
+            "lifecycle": "removed",
+            "hasWikiDescription": true
+          }
+        ],
+        "wiki": [
+          {
+            "sourceKey": "It's Go Time",
+            "name": "It's Go Time",
+            "match": {
+              "method": "normalized",
+              "token": "itsgotime"
             },
             "hasWikiDescription": true
           }
@@ -8913,6 +9024,64 @@
             "match": {
               "method": "normalized",
               "token": "overextender"
+            },
+            "hasWikiDescription": true
+          }
+        ],
+        "arammayhem_win_rate": []
+      }
+    },
+    {
+      "augmentId": "PinCushion",
+      "cdragon": {
+        "augmentNameId": "PinCushion",
+        "name": "Porcupine",
+        "slug": "pin-cushion",
+        "rarity": "gold"
+      },
+      "sources": {
+        "internal_augments": [
+          {
+            "sourceKey": "porcupine",
+            "name": "Porcupine",
+            "match": {
+              "method": "normalized",
+              "token": "porcupine"
+            },
+            "slug": "porcupine",
+            "rarity": "gold",
+            "lifecycle": "removed",
+            "hasWikiDescription": true
+          },
+          {
+            "sourceKey": "pin-cushion",
+            "name": "Pin Cushion",
+            "match": {
+              "method": "normalized",
+              "token": "pincushion"
+            },
+            "slug": "pin-cushion",
+            "rarity": "prismatic",
+            "lifecycle": "removed",
+            "hasWikiDescription": true
+          }
+        ],
+        "wiki": [
+          {
+            "sourceKey": "Porcupine",
+            "name": "Porcupine",
+            "match": {
+              "method": "normalized",
+              "token": "porcupine"
+            },
+            "hasWikiDescription": true
+          },
+          {
+            "sourceKey": "Pin Cushion",
+            "name": "Pin Cushion",
+            "match": {
+              "method": "normalized",
+              "token": "pincushion"
             },
             "hasWikiDescription": true
           }
@@ -9567,6 +9736,80 @@
       }
     },
     {
+      "augmentId": "SquishySlappyGrab",
+      "cdragon": {
+        "augmentNameId": "SquishySlappyGrab",
+        "name": "Squishy Slappy Grab",
+        "slug": "squishy-slappy-grab",
+        "rarity": "prismatic"
+      },
+      "sources": {
+        "internal_augments": [
+          {
+            "sourceKey": "squishy-slappy-grab",
+            "name": "Squishy Slappy Grab",
+            "match": {
+              "method": "normalized",
+              "token": "squishyslappygrab"
+            },
+            "slug": "squishy-slappy-grab",
+            "rarity": "prismatic",
+            "lifecycle": "removed",
+            "hasWikiDescription": true
+          }
+        ],
+        "wiki": [
+          {
+            "sourceKey": "Squishy Slappy Grab",
+            "name": "Squishy Slappy Grab",
+            "match": {
+              "method": "normalized",
+              "token": "squishyslappygrab"
+            },
+            "hasWikiDescription": true
+          }
+        ],
+        "arammayhem_win_rate": []
+      }
+    },
+    {
+      "augmentId": "SurgeField",
+      "cdragon": {
+        "augmentNameId": "SurgeField",
+        "name": "Surge Field",
+        "slug": "surge-field",
+        "rarity": "prismatic"
+      },
+      "sources": {
+        "internal_augments": [
+          {
+            "sourceKey": "surge-field",
+            "name": "Surge Field",
+            "match": {
+              "method": "normalized",
+              "token": "surgefield"
+            },
+            "slug": "surge-field",
+            "rarity": "prismatic",
+            "lifecycle": "removed",
+            "hasWikiDescription": true
+          }
+        ],
+        "wiki": [
+          {
+            "sourceKey": "Surge Field",
+            "name": "Surge Field",
+            "match": {
+              "method": "normalized",
+              "token": "surgefield"
+            },
+            "hasWikiDescription": true
+          }
+        ],
+        "arammayhem_win_rate": []
+      }
+    },
+    {
       "augmentId": "SwiftAndSafe",
       "cdragon": {
         "augmentNameId": "SwiftAndSafe",
@@ -9596,6 +9839,43 @@
             "match": {
               "method": "normalized",
               "token": "swiftandsafe"
+            },
+            "hasWikiDescription": true
+          }
+        ],
+        "arammayhem_win_rate": []
+      }
+    },
+    {
+      "augmentId": "Terraind",
+      "cdragon": {
+        "augmentNameId": "Terraind",
+        "name": "Terrain'd",
+        "slug": "terraind",
+        "rarity": "gold"
+      },
+      "sources": {
+        "internal_augments": [
+          {
+            "sourceKey": "terraind",
+            "name": "Terrain'd",
+            "match": {
+              "method": "normalized",
+              "token": "terraind"
+            },
+            "slug": "terraind",
+            "rarity": "gold",
+            "lifecycle": "removed",
+            "hasWikiDescription": true
+          }
+        ],
+        "wiki": [
+          {
+            "sourceKey": "Terrain'd",
+            "name": "Terrain'd",
+            "match": {
+              "method": "normalized",
+              "token": "terraind"
             },
             "hasWikiDescription": true
           }

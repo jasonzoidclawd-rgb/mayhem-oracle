@@ -63,14 +63,162 @@ and release-date guesses never mark an event as landed.
 
 The preview projection filters by the archive's current cycle as well as
 `upcoming` lifecycle, so an older open entry retained for aging never leaks into
-the public window. `verify_patch_publish.py` requires both public patch files
-when their corresponding internal archives change.
+the public window. `entity-presentation.json` is the separate public-safe
+EntityRef/stat projection used by detail pages, cards, search, and related
+links; it contains only normalized current values plus current-cycle live/PBE
+stat changes. `verify_patch_publish.py` requires the entity projection as well
+as both public patch files when their corresponding internal snapshots or
+archives change. Public catalog files are staged and journal-promoted together
+so an export failure leaves the previous complete public set intact.
 
 Raw snapshots, comparison provenance, lifecycle history, internal scoring
 fields, and calibration data stay under `data/internal/`. PBE links are emitted
 only when the entity already exists in the live public catalog. The patch UI
 uses day-level detected-at freshness and distinguishes fresh zero changes from
 stale, unavailable, or not-yet-confirmed source state.
+
+## Entity presentation
+
+`public/data/entity-presentation.json` is the only browser-safe source for
+canonical EntityRefs and structured detail-page stats. `EntityLink` resolves by
+type plus canonical CDragon ID, then supplies the localized name, stable route,
+icon, lifecycle state, and an accessible combined link. Unknown IDs, duplicate
+IDs, missing locales, and missing presentation fields fail closed. Champion base
+stats, item cost/stats, and augment rarity are emitted only when their CDragon
+field semantics are explicit; descriptions remain neutral prose and are never
+used to derive balancing values. The legacy Mayhem-only item rows are enriched
+with their explicit CDragon IDs during export so their cards and detail pages
+share the same canonical resolver.
+
+The projected route contract is authoritative for navigation: `route_identifier`
+is the exact detail-page parameter and `known` is true only when that identifier
+is present in the same catalog used by `generateStaticParams`. Regular items use
+their numeric CDragon ID (for example `1001`), while Mayhem-exclusive items use
+the existing approved slug route. Entity links never derive URLs from display
+names. A CDragon-only champion such as Locke is retained as an unlinked
+identity (`known: false`) until the roster pipeline generates a real page. The
+static-route contract test builds all five-locale route sets from those catalog
+sources and reports the entity type, canonical ID, identifier, locale, and href
+for any mismatch. Historical Forged By The Master (CDragon ID `2127`) retains
+its canonical augment route; when latest promotes it, stale removal tombstones
+are cleared before public projection.
+
+### Icon and item-catalog recovery
+
+CommunityDragon's current augment CDN retains many small Cherry/Kiwi icon
+assets after the corresponding historical `*_large.png` path has become a
+404. The assembler therefore chooses the normalized `small` path first and
+falls back to `large`/`rosterSmall` only when no small path exists. The public
+export repeats this projection for committed internal artifacts so an icon
+repair does not require a lifecycle-data rewrite. `EntityIcon` keeps a fixed
+type glyph visible during lazy loading and after an image error; a remote icon
+failure is never rendered as a blank box.
+
+The server-rendered PBE lane opts its bounded current-cycle event icons into
+eager loading so a freshly opened preview does not show type glyphs while the
+section is below the first viewport. Other catalog surfaces retain lazy
+loading. PBE text changes use the sanitized `formatPbeChange` word-diff
+presentation: unchanged prose is collapsed with an ellipsis, literal values
+such as `35%` remain intact, and unresolved CDragon calculation tokens render
+as a neutral em dash. No prose number is interpreted as a balancing stat.
+
+The seven curated Mayhem item rows are canonical variants, not additional
+regular entities. Their explicit IDs are `223039`, `3430`, `4011`, `4403`,
+`223095`, `223084`, and `228002`. The acquisition adapter removes regular
+CDragon rows with those IDs, and `export_public_catalog.py` defensively removes
+the same shadow rows from older internal artifacts while preserving locale
+name fields. After export, assert that the union of `items[]` and
+`mayhemExclusive[]` has no duplicate canonical IDs:
+
+```bash
+python3 scripts/export_public_catalog.py
+python3 scripts/test_export_public_catalog.py
+python3 scripts/test_scrape_community_dragon.py
+python3 scripts/verify_public_bundle_boundary.py
+```
+
+If a future refresh reintroduces a duplicate ID or a blank/broken icon, fix the
+source adapter or asset variant selection and rerun the affected generator;
+do not hand-edit `public/data/`.
+
+### Route and localized-metadata recovery
+
+An item variant can share a CDragon display slug with a catalog-backed item
+without being the same public entity. Route ownership is therefore an exact
+canonical-ID join for items and augments; a slug match may supply only safe
+names, icons, and neutral description metadata. Champion routes remain
+slug-keyed because the authoritative champion roster does not publish the
+CDragon numeric ID. A source-only row must serialize as `known: false` with an
+empty `route_identifier`; never repair it by deriving a URL from its name.
+
+The item index and Command-K search consume the same deterministic
+`projectVisibleItemCatalog` projection. It hides base rows when a Mayhem
+variant exists, removes rows shadowed by curated Mayhem entities, and retains
+the highest-ID display representative for same-name variants. Internal rows
+remain available to snapshot diffing. If a query such as “Infinity Edge” shows
+both a base and a Mayhem ID, run:
+
+```bash
+npx vitest run src/lib/__tests__/item-catalog.test.ts
+npm test -- --run src/lib/__tests__/entity-catalog.test.ts
+python3 scripts/export_public_catalog.py
+```
+
+Patch and PBE events may carry only English source labels. The exporter merges
+the bounded `entity-presentation.json` locale names into those events; verify
+all five public keys (`en`, `zh-TW`, `zh-CN`, `ja`, `ko`) before publishing.
+This merge is presentation-only and must not copy snapshots, comparison state,
+or unrestricted PBE history into `public/data/`.
+
+### Mode-gated item recovery
+
+CommunityDragon's global item endpoint includes the Noxian Feats tier-3 boots
+even though they are not purchasable in ARAM: Mayhem. The authoritative marker
+is the raw `requiredBuffCurrencyName` value `Feats_NoxianBootPurchaseBuff`;
+item names, descriptions, and prose must not be used for this decision. The
+catalog acquisition predicate now rejects that marker, covering IDs `3168`
+(`Immortal Path`) and `3170`–`3175`. Existing generated internal catalogs do
+not retain the raw marker, so the public exporter also removes those known
+legacy IDs until the next complete acquisition replaces the internal file.
+
+The mode-gated rows may remain in normalized CDragon snapshots for source
+lineage, but they are source-only presentation records: they retain localized
+identity/icon metadata, serialize with `known: false` and an empty
+`route_identifier`, and never produce an item detail href. This keeps a PBE
+description change explainable without creating a soft-404 or presenting a
+Summoner's Rift item as a Mayhem route. Verify the recovery with:
+
+```bash
+python3 scripts/test_scrape_community_dragon.py
+python3 scripts/test_export_public_catalog.py
+python3 scripts/export_public_catalog.py
+npx vitest run src/lib/__tests__/entity-catalog.test.ts
+```
+
+If a future CDragon refresh adds another mode gate, add its exact raw marker to
+the adapter predicate and add a fixture before changing the public projection;
+do not expand an ID blacklist from display-name guesses.
+
+### Preview presentation diagnostics
+
+If a PBE card appears to repeat an entire description or shows a question-mark
+placeholder, verify the running build before editing generated data:
+
+```bash
+npm test -- --run src/lib/__tests__/patch-pbe-format.test.ts
+python3 scripts/test_patch_event_projection.py
+python3 scripts/export_public_catalog.py
+npm run build
+node /private/tmp/entity-qa/current-patch-3000.cjs
+node /private/tmp/entity-qa/pbe-icons-after-wait.cjs
+```
+
+Expected browser evidence is no literal `?` in PBE text, preserved percentage
+values, compact before/after prose, all preview icon states `loaded`, and no
+console errors. A screenshot whose address bar is another site (for example
+`aramgg.com`) is not evidence about the local port; navigate to
+`http://localhost:3000/<locale>/patch-notes` and hard-refresh the rebuilt server
+before triaging.
 
 ## Operator workflow
 
@@ -85,11 +233,11 @@ For a local recovery or inspection:
 python3 scripts/cdragon_patch_pipeline.py --branch latest
 python3 scripts/cdragon_patch_pipeline.py --branch pbe
 python3 scripts/scrape_patch_notes.py
-  python3 scripts/export_public_catalog.py
-  python3 scripts/verify_patch_publish.py
-  npx vitest run src/lib/__tests__/public-data-boundary.test.ts
-  npm run build
-  python3 scripts/verify_public_bundle_boundary.py
+python3 scripts/export_public_catalog.py
+python3 scripts/verify_patch_publish.py
+npx vitest run src/lib/__tests__/public-data-boundary.test.ts
+npm run build
+python3 scripts/verify_public_bundle_boundary.py
 ```
 
 Do not hand-edit `public/data/` or snapshot JSON. Inspect the diagnostic, fix

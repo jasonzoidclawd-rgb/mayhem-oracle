@@ -54,6 +54,7 @@ jobs:
             data/internal/cdragon-item-pbe.json \
             data/internal/pbe-preview.json \
             public/data/pbe-preview.json \
+            public/data/entity-presentation.json \
             public/data/patch-notes.json
           git diff --cached --quiet && echo "No PBE preview changes" && exit 0
           git commit -m "data: update PBE preview $(date -u +%Y-%m-%dT%H:%MZ)"

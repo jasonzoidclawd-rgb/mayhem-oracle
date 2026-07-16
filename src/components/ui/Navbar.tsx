@@ -18,7 +18,6 @@ const NAV_ITEMS = [
   { href: "/champions", key: "champions" },
   { href: "/augments", key: "augments" },
   { href: "/items", key: "items" },
-  { href: "/damage-sim", key: "damageSim" },
   { href: "/patch-notes", key: "patchNotes" },
 ] as const;
 
@@ -70,7 +69,7 @@ export function Navbar() {
             href="/account"
             aria-label={t("account")}
             title={t("account")}
-            className={`hidden h-8 w-8 items-center justify-center rounded-full border transition-colors lg:flex
+            className={`hidden h-11 w-11 items-center justify-center rounded-full border transition-colors lg:flex
               ${pathname.startsWith("/account") || pathname.startsWith("/membership")
                 ? "border-[var(--color-neon-primary)] text-[var(--color-neon-primary)]"
                 : "border-[var(--color-border-default)] text-[var(--color-text-secondary)] hover:border-[var(--color-border-hover)] hover:text-[var(--color-text-primary)]"}`}
@@ -83,7 +82,7 @@ export function Navbar() {
             value={locale}
             onChange={(e) => switchLocale(e.target.value)}
             className="text-xs bg-[var(--color-bg-card)] text-[var(--color-text-secondary)]
-                       border border-[var(--color-border-default)] rounded-md px-2 py-1.5
+                       min-h-11 border border-[var(--color-border-default)] rounded-md px-2 py-1.5
                        hover:border-[var(--color-border-hover)] transition-colors cursor-pointer"
           >
             {routing.locales.map((loc) => (

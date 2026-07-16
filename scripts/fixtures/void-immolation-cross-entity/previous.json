@@ -1,0 +1,42 @@
+{
+  "source_version": "16.13.1",
+  "source_patch_label": "26.13",
+  "observed_at": "2026-07-11T00:00:00Z",
+  "relationships": [
+    {
+      "augment_id": "ARAM_Quest_VoidImmolation",
+      "item_id": "223069",
+      "kind": "quest-reward-transformation"
+    }
+  ],
+  "augment": [
+    {
+      "id": "ARAM_Quest_VoidImmolation",
+      "slug": "void-immolation",
+      "names": {"en": "Icathia's Fall"},
+      "fields": {
+        "name": "Icathia's Fall",
+        "rarity": "prismatic",
+        "tooltip": "Combine the quest rewards to transform into Void Immolation."
+      }
+    }
+  ],
+  "item": [
+    {
+      "id": "223069",
+      "slug": "void-immolation",
+      "names": {"en": "Void Immolation"},
+      "fields": {
+        "description": "<mainText><passive>Immolate</passive><br>After taking or dealing damage, deal magic damage nearby.</mainText>"
+      }
+    }
+  ],
+  "champion": [
+    {
+      "id": "63",
+      "slug": "brand",
+      "names": {"en": "Brand"},
+      "fields": {}
+    }
+  ]
+}

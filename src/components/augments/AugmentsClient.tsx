@@ -1,10 +1,11 @@
 "use client";
 
 import { useState, useMemo } from "react";
-import Image from "next/image";
 import { useTranslations } from "next-intl";
-import { baselineOracleScore, type ScoredAugment } from "@/lib/scoring/oracle-score";
+import type { ScoredAugment } from "@/lib/scoring/oracle-score";
 import { Tooltip } from "@/components/ui/Tooltip";
+import { EntityLink } from "@/components/entities/EntityLink";
+import type { EntityRef } from "@/lib/entities/types";
 
 // ─── Constants ───────────────────────────────────────────────────────────────
 
@@ -26,11 +27,12 @@ const RARITY_STYLES = {
   },
 } as const;
 
-const SCORE_COLOR = (score: number) => {
-  if (score >= 80) return "text-amber-300";
-  if (score >= 70) return "text-yellow-400";
-  if (score >= 60) return "text-green-400";
-  return "text-slate-400";
+const QUALITY_TIER_ORDER: Record<string, number> = {
+  "S+": 0,
+  S: 1,
+  A: 2,
+  B: 3,
+  C: 4,
 };
 
 // ─── Helpers ─────────────────────────────────────────────────────────────────
@@ -43,14 +45,45 @@ function localizedName(aug: ScoredAugment, locale: string): string {
   return aug.name;
 }
 
+function publicDescription(aug: ScoredAugment, locale: string): string {
+  if (locale === "zh-TW") return aug.description_zh_TW ?? "";
+  if (locale === "zh-CN") return aug.description_zh_CN ?? "";
+  if (locale === "ja") return aug.description_ja ?? "";
+  if (locale === "ko") return aug.description_ko ?? "";
+  return aug.wikiDescription ?? aug.description ?? "";
+}
+
+function compareStableText(left: string, right: string): number {
+  return left < right ? -1 : left > right ? 1 : 0;
+}
+
+function presentationRef(aug: ScoredAugment, displayName: string, entityRef?: EntityRef): EntityRef {
+  return entityRef ?? {
+    type: "augment",
+    id: String((aug as ScoredAugment & { augmentId?: string }).augmentId ?? aug.slug),
+    slug: aug.slug,
+    routeIdentifier: "",
+    localizedName: displayName,
+    iconUrl: aug.icon ?? "",
+    known: false,
+    canonicalId: String((aug as ScoredAugment & { augmentId?: string }).augmentId ?? aug.slug),
+    name: displayName,
+    icon: aug.icon,
+    lifecycle: aug.flags?.lifecycle === "removed" ? "removed" : "unknown",
+    qualityTier: aug.quality_tier ?? null,
+  };
+}
+
 // ─── Main Component ─────────────────────────────────────────────────────────
 
 export function AugmentsClient({
   augments,
   locale = "en",
+  entityRefs,
 }: {
   augments: ScoredAugment[];
   locale?: string;
+  entityRefs: Record<string, EntityRef>;
 }) {
   const t = useTranslations("augments");
   const tChamp = useTranslations("champion");
@@ -68,9 +101,9 @@ export function AugmentsClient({
       augments
         .filter((a) => a.flags?.lifecycle === "removed")
         .sort((a, b) => {
-          const patchCompare = (b.flags?.lifecycle_patch ?? "").localeCompare(a.flags?.lifecycle_patch ?? "");
+          const patchCompare = compareStableText(b.flags?.lifecycle_patch ?? "", a.flags?.lifecycle_patch ?? "");
           if (patchCompare !== 0) return patchCompare;
-          return localizedName(a, locale).localeCompare(localizedName(b, locale));
+          return compareStableText(localizedName(a, locale), localizedName(b, locale)) || compareStableText(a.slug, b.slug);
         }),
     [augments, locale],
   );
@@ -92,10 +125,14 @@ export function AugmentsClient({
 
   const sorted = useMemo(() => {
     return [...filtered].sort((a, b) => {
-      if (sortBy === "score") return baselineOracleScore(b) - baselineOracleScore(a);
-      return a.name.localeCompare(b.name);
+      if (sortBy === "score") {
+        const tierCompare = (QUALITY_TIER_ORDER[a.quality_tier ?? ""] ?? 5)
+          - (QUALITY_TIER_ORDER[b.quality_tier ?? ""] ?? 5);
+        if (tierCompare !== 0) return tierCompare;
+      }
+      return compareStableText(localizedName(a, locale), localizedName(b, locale));
     });
-  }, [filtered, sortBy]);
+  }, [filtered, sortBy, locale]);
 
   const counts = useMemo(
     () => ({
@@ -120,7 +157,7 @@ export function AugmentsClient({
   return (
     <div>
       {/* ─── Game Notes (collapsible) ─── */}
-      <GameNotes />
+      {locale === "en" && <GameNotes />}
 
       {/* ─── Rarity Tabs ─── */}
       <div className="flex flex-wrap items-center gap-2 mb-6">
@@ -169,6 +206,7 @@ export function AugmentsClient({
             augment={aug}
             locale={locale}
             rarityLabel={rarityLabel[aug.rarity]}
+            entityRef={entityRefs[aug.slug]}
           />
         ))}
       </div>
@@ -183,7 +221,7 @@ export function AugmentsClient({
         {t("showing", { count: sorted.length, total: currentAugments.length })}
       </p>
 
-      <RemovedAugmentsTable augments={removedAugments} locale={locale} />
+      <RemovedAugmentsTable augments={removedAugments} locale={locale} entityRefs={entityRefs} />
     </div>
   );
 }
@@ -216,11 +254,11 @@ function GameNotes() {
 
           {/* Burn Stacking */}
           <NoteBlock title="Burn Stacking Rules">
-            <p>
+            <div>
               All Burn effects stack infinitely and refresh on application. When a Burn is first applied to a target,
               all subsequent Burn sources from <em>any player</em> stack onto that first source and credit damage to the
               first source&apos;s owner (e.g. <Em>Tormentor</Em> applied first will be stacked by <Em>Slow Cooker</Em>).
-            </p>
+            </div>
             <ul className="mt-2 space-y-1 list-disc list-inside text-[var(--color-text-secondary)]">
               <li><Em>Firebrand</Em> — basic attacks, <Stat>0.4% target max HP/s</Stat> (2% over 5s)</li>
               <li><Em>Tormentor</Em> — on CC, <Stat>0.8% target max HP/s</Stat> (4% over 5s)</li>
@@ -234,18 +272,18 @@ function GameNotes() {
 
           {/* Crit Interaction */}
           <NoteBlock title="Jeweled Gauntlet × Vulnerability">
-            <p>
+            <div>
               <Em>Jeweled Gauntlet</Em>: abilities crit for <Stat>(145% + bonus crit dmg)</Stat>,
               gain <Stat>25% (+4.5% per 100 AP) crit chance</Stat>.
-            </p>
-            <p className="mt-1">
+            </div>
+            <div className="mt-1">
               <Em>Vulnerability</Em>: items &amp; DoTs crit for <Stat>(145% + bonus crit dmg)</Stat>,
               gain <Stat>25% crit chance</Stat> (5s CD per cast).
-            </p>
-            <p className="mt-1 text-[var(--color-text-muted)]">
+            </div>
+            <div className="mt-1 text-[var(--color-text-muted)]">
               If both are equipped, only the augment with higher crit damage rolls its crit chance (not both).
               Known bug: may behave incorrectly with persistent area damage.
-            </p>
+            </div>
           </NoteBlock>
 
           {/* Conversion Augments */}
@@ -277,41 +315,41 @@ function GameNotes() {
 
           {/* Spin To Win */}
           <NoteBlock title="Spin To Win — Eligible Abilities">
-            <p>
+            <div>
               <Stat>+30% damage</Stat> and <Stat>30 ability haste</Stat> on spinning abilities.
-            </p>
-            <p className="mt-1 text-[var(--color-text-secondary)]">
+            </div>
+            <div className="mt-1 text-[var(--color-text-secondary)]">
               Ahri (Fox-Fire, Spirit Rush) · Amumu (Tantrum) · Ambessa (Lacerate) · Darius (Decimate) ·
               Draven (Spinning Axe, Stand Aside, Whirling Death) · Garen (Judgment) · Hecarim (Rampage) ·
               Jax (Counter Strike) · Katarina (Voracity, Death Lotus) · Kayn (Reaping Slash) ·
               Lillia (Blooming Blows) · Nocturne (Umbra Blades) · Rammus (Powerball) ·
               Renekton (Cull the Meek) · Riven (Broken Wings) · Samira (Blade Whirl, Inferno Trigger) ·
               Wukong (Cyclone) · Tryndamere (Spinning Slash) · Zed (Shadow Slash)
-            </p>
+            </div>
           </NoteBlock>
 
           {/* Transmuted / High Roller */}
           <NoteBlock title="Transmuted Augments (High Roller set)">
-            <p className="text-[var(--color-text-secondary)]">
+            <div className="text-[var(--color-text-secondary)]">
               Transmuted augments reroll into a random augment of a different tier.
               <Em>Transmute: Gold</Em> (silver rarity) gives 1 random gold augment.
               <Em>Transmute: Prismatic</Em> (gold rarity) gives 1 random prismatic.
               <Em>Transmute: Chaos</Em> (prismatic rarity) gives 2 completely random augments.
               The result is prefixed &quot;Transmuted:&quot; in its title.
-            </p>
+            </div>
           </NoteBlock>
 
           {/* Disabled */}
           <NoteBlock title="Currently Disabled Augments">
-            <p className="text-[var(--color-text-muted)]">
+            <div className="text-[var(--color-text-muted)]">
               <Em>Fetch</Em> (silver), <Em>Quest: Sneakerhead</Em> (prismatic),
               and <Em>Spin Me Right Round</Em> (silver) are currently disabled and cannot appear in games.
-            </p>
+            </div>
           </NoteBlock>
 
-          <p className="text-[11px] text-[var(--color-text-muted)] pt-2">
+          <div className="text-[11px] text-[var(--color-text-muted)] pt-2">
             Source: wiki.leagueoflegends.com/en-us/ARAM:_Mayhem/Augments
-          </p>
+          </div>
         </div>
       )}
     </div>
@@ -340,14 +378,14 @@ function Stat({ children }: { children: React.ReactNode }) {
 function AugmentTooltip({
   aug,
   displayName,
-  score,
+  locale,
 }: {
   aug: ScoredAugment;
   displayName: string;
-  score: number;
+  locale: string;
 }) {
   const t = useTranslations("augments");
-  const desc = aug.wikiDescription ?? aug.description;
+  const desc = publicDescription(aug, locale);
   return (
     <div className="max-w-xs">
       <div className="font-medium">{displayName}</div>
@@ -373,7 +411,7 @@ function AugmentTooltip({
         </div>
       )}
       <div className="text-xs mt-2 text-white/50">
-        {t("oracleLabel")} {score}
+        {t("qualityTierLabel")} {aug.quality_tier ?? t("unrankedLabel")}
       </div>
     </div>
   );
@@ -385,35 +423,30 @@ function AugmentCard({
   augment,
   locale,
   rarityLabel,
+  entityRef,
 }: {
   augment: ScoredAugment;
   locale: string;
   rarityLabel: string;
+  entityRef?: EntityRef;
 }) {
   const t = useTranslations("augments");
   const rarity = augment.rarity as keyof typeof RARITY_STYLES;
   const styles = RARITY_STYLES[rarity];
-  const score = baselineOracleScore(augment);
   const displayName = localizedName(augment, locale);
+  const ref = presentationRef(augment, displayName, entityRef);
 
   return (
-    <Tooltip content={<AugmentTooltip aug={augment} displayName={displayName} score={score} />}>
+    <Tooltip content={<AugmentTooltip aug={augment} displayName={displayName} locale={locale} />}>
       <div
         className={`glass-card p-3 flex flex-col items-center gap-2 border border-[var(--color-border-default)] transition-all cursor-default ${styles.glow}`}
       >
-        <div className="relative w-14 h-14 rounded-lg overflow-hidden shrink-0">
-          <Image
-            src={augment.icon}
-            alt={augment.name}
-            fill
-            className="object-contain"
-            sizes="56px"
-            unoptimized
-          />
-        </div>
-        <span className="text-xs font-medium text-center leading-tight line-clamp-2 w-full">
-          {displayName}
-        </span>
+        <EntityLink
+          entity={ref}
+          variant="standard"
+          rarity={augment.rarity}
+          className="w-full justify-center text-center"
+        />
         <div className="flex flex-wrap justify-center gap-1 min-h-[14px]">
           {augment.flags?.lifecycle === "added" && (
             <span className="text-[9px] font-bold px-1 py-px rounded bg-green-500/20 text-green-300 border border-green-400/40">
@@ -442,8 +475,10 @@ function AugmentCard({
           {rarityLabel}
         </span>
         <div className="flex items-center justify-center gap-1.5 w-full text-[10px] text-[var(--color-text-muted)] mt-auto">
-          <span className="uppercase tracking-wide">{t("oracleLabel")}</span>
-          <span className={`font-bold ${SCORE_COLOR(score)}`}>{score}</span>
+          <span>{t("qualityTierLabel")}</span>
+          <span className="font-bold text-[var(--color-text-secondary)]">
+            {augment.quality_tier ?? t("unrankedLabel")}
+          </span>
         </div>
       </div>
     </Tooltip>
@@ -453,9 +488,11 @@ function AugmentCard({
 function RemovedAugmentsTable({
   augments,
   locale,
+  entityRefs,
 }: {
   augments: ScoredAugment[];
   locale: string;
+  entityRefs: Record<string, EntityRef>;
 }) {
   const t = useTranslations("augments");
   const tChamp = useTranslations("champion");
@@ -484,7 +521,7 @@ function RemovedAugmentsTable({
             {augments.map((augment) => (
               <tr key={augment.slug} className="border-t border-[var(--color-border-default)]/70">
                 <td className="px-3 py-2 text-[var(--color-text-secondary)]">
-                  {localizedName(augment, locale)}
+                  <EntityLink entity={presentationRef(augment, localizedName(augment, locale), entityRefs[augment.slug])} variant="compact" rarity={augment.rarity} />
                 </td>
                 <td className="px-3 py-2 text-[var(--color-text-muted)]">
                   {tChamp(augment.rarity)}

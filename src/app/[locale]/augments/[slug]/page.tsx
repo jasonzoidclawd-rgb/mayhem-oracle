@@ -1,11 +1,10 @@
 import type { Metadata } from "next";
 import { getTranslations, setRequestLocale } from "next-intl/server";
-import Image from "next/image";
 import { notFound } from "next/navigation";
 import { Link } from "@/i18n/navigation";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { routing, type Locale } from "@/i18n/routing";
-import { localizedName } from "@/lib/i18n/localized-name";
+import { localizedDescription, localizedName } from "@/lib/i18n/localized-name";
 import { languageAlternates, localizedUrl } from "@/lib/site";
 import { buildAugmentDetailJsonLd } from "@/lib/seo/augment-detail";
 import { buildPatchSummary } from "@/lib/seo/patch-summary";
@@ -13,6 +12,7 @@ import {
   readAugmentsFile,
   readChampionsFile,
   readCombosFile,
+  readEntityPresentationFile,
 } from "@/lib/data/read-public-file";
 import {
   normalizeLookupKey,
@@ -20,17 +20,27 @@ import {
   type ComboLookupEntry,
 } from "@/lib/data/combo-lookup";
 import type { AugmentRarity, AugmentType } from "@/lib/types";
-import type { ComboTier } from "@/lib/scoring/oracle-score";
+import { resolveEntityRef, unknownEntityRef } from "@/lib/entities/catalog";
+import type { EntityPresentationData } from "@/lib/entities/types";
+import { EntityLink } from "@/components/entities/EntityLink";
+import { EntityRecordStats, EntitySectionHeading, EntityTag } from "@/components/entities/EntityPresentation";
+import { buildEntityRouteSets } from "@/lib/entities/routes";
 
 // ─── Types ───────────────────────────────────────────────────────────────────
 
 interface AugmentRecord {
+  augmentId?: string;
   slug: string;
   name: string;
   rarity: AugmentRarity;
   type?: AugmentType;
   icon?: string;
+  description?: string;
   wikiDescription?: string;
+  description_zh_TW?: string | null;
+  description_zh_CN?: string | null;
+  description_ja?: string | null;
+  description_ko?: string | null;
   kit_tags?: string[];
   name_zh_TW?: string;
   name_zh_CN?: string;
@@ -50,6 +60,7 @@ interface AugmentsData {
 interface ChampionRecord {
   slug: string;
   name: string;
+  icon?: string;
   name_zh_TW?: string;
   name_zh_CN?: string;
   name_ja?: string;
@@ -75,13 +86,6 @@ const RARITY_BADGE: Record<AugmentRarity, string> = {
   silver: "rarity-silver border-current",
 };
 
-const TIER_BADGE: Record<ComboTier, string> = {
-  S: "text-rose-300 bg-rose-400/15 border-rose-400/30",
-  A: "text-amber-300 bg-amber-400/15 border-amber-400/30",
-  B: "text-sky-300 bg-sky-400/15 border-sky-400/30",
-  C: "text-slate-300 bg-slate-400/10 border-slate-400/20",
-};
-
 // ─── Static params ────────────────────────────────────────────────────────────
 
 export const dynamicParams = false;
@@ -90,8 +94,13 @@ export async function generateStaticParams() {
   // No try/catch: with dynamicParams=false a data read failure must fail the
   // build loudly instead of publishing a site with zero augment pages.
   const augments = await loadAugments();
+  const routes = buildEntityRouteSets({
+    champions: [],
+    augments,
+    items: { items: [], mayhemExclusive: [] },
+  });
   return routing.locales.flatMap((locale) =>
-    augments.map((augment) => ({ locale, slug: augment.slug })),
+    [...routes.augment].map((slug) => ({ locale, slug })),
   );
 }
 
@@ -142,6 +151,7 @@ export default async function AugmentDetailPage({
   setRequestLocale(locale);
   const t = await getTranslations("augments");
   const tChamp = await getTranslations("champion");
+  const te = await getTranslations("entities");
 
   const augmentsData = await loadAugmentsData();
   const augments = augmentsData.augments;
@@ -162,15 +172,33 @@ export default async function AugmentDetailPage({
         ? "badgeQuest"
         : null;
 
-  const isRemoved = augment.flags?.lifecycle === "removed";
-
   // "Strong on champions": reverse-lookup the public combo teaser, then resolve
   // each champion slug to a real champions.json record so we only link to pages
   // that exist.
-  const [combosData, championsData] = await Promise.all([
+  const [combosData, championsData, entityPresentation] = await Promise.all([
     readCombosFile<{ combos: ComboLookupEntry[] }>(),
     readChampionsFile<{ champions: ChampionRecord[] }>(),
+    readEntityPresentationFile<EntityPresentationData>(),
   ]);
+  const entityRef = resolveEntityRef(
+    entityPresentation,
+    "augment",
+    { canonicalId: augment.augmentId, slug },
+    locale,
+  ) ?? unknownEntityRef("augment", {
+    id: augment.augmentId,
+    slug,
+    name: augmentName,
+    iconUrl: augment.icon,
+  });
+  const entityRecord = entityRef
+    ? entityPresentation.entities.find(
+        (record) => record.type === "augment" && record.canonical_id === entityRef.canonicalId,
+      )
+    : null;
+  const isRemoved = entityRecord
+    ? entityRecord.lifecycle.state === "removed"
+    : augment.flags?.lifecycle === "removed";
   const championByKey = new Map(
     championsData.champions.map((c) => [normalizeLookupKey(c.slug), c]),
   );
@@ -212,6 +240,18 @@ export default async function AugmentDetailPage({
       removed: ({ patch }) => t("patchSummaryRemoved", { name: augmentName, patch }),
     },
   );
+  const explicitLocalizedDescription = locale === "zh-TW"
+    ? augment.description_zh_TW
+    : locale === "zh-CN"
+      ? augment.description_zh_CN
+      : locale === "ja"
+        ? augment.description_ja
+        : locale === "ko"
+          ? augment.description_ko
+          : augment.description || augment.wikiDescription;
+  const displayDescription = explicitLocalizedDescription || (locale === "en"
+    ? localizedDescription(augment, locale)
+    : t("descriptionUnavailable"));
 
   return (
     <>
@@ -240,21 +280,13 @@ export default async function AugmentDetailPage({
 
         {/* ─── Header ─── */}
         <div className="flex items-start gap-6 mb-8">
-          {augment.icon && (
-            <div className="relative w-20 h-20 rounded-xl overflow-hidden border-2 border-[var(--color-border-hover)] shrink-0 bg-[var(--color-bg-card)]">
-              <Image
-                src={augment.icon}
-                alt={augmentName}
-                fill
-                className="object-contain p-1"
-                sizes="80px"
-                unoptimized
-              />
-            </div>
-          )}
           <div className="flex-1 min-w-0">
             <div className="flex items-center gap-3 flex-wrap">
-              <h1 className="text-3xl font-bold">{augmentName}</h1>
+              {entityRef ? (
+                <h1><EntityLink entity={entityRef} variant="hero" className="font-bold" /></h1>
+              ) : (
+                <h1 className="text-3xl font-bold">{augmentName}</h1>
+              )}
               <span
                 className={`text-xs font-semibold px-2.5 py-1 rounded-md border ${RARITY_BADGE[augment.rarity]}`}
               >
@@ -272,17 +304,12 @@ export default async function AugmentDetailPage({
                     : t("badgeRemoved")}
                 </span>
               )}
+              {!isRemoved && entityRef.lifecycle === "active" ? <EntityTag tone="cyan">{te("activeLabel")}</EntityTag> : null}
             </div>
-
-            {augment.wikiDescription && (
-              <p className="mt-3 text-[var(--color-text-secondary)] leading-relaxed">
-                {augment.wikiDescription}
-              </p>
-            )}
 
             {augment.kit_tags && augment.kit_tags.length > 0 && (
               <div className="mt-4">
-                <div className="text-xs uppercase tracking-wider text-[var(--color-text-muted)] mb-1.5">
+                <div className="text-xs text-[var(--color-text-muted)] mb-1.5">
                   {t("detailKitSynergy")}
                 </div>
                 <div className="flex flex-wrap gap-1.5">
@@ -300,6 +327,19 @@ export default async function AugmentDetailPage({
           </div>
         </div>
 
+        {entityRecord ? (
+          <EntityRecordStats
+            record={entityRecord}
+            heading={te("statsHeading")}
+            labelFor={(key) => te(key)}
+            previewLabel={te("previewLabel")}
+            liveLabel={te("liveLabel")}
+            landedLabel={te("landedLabel")}
+            hotfixLabel={te("hotfixLabel")}
+            directionFor={(direction) => te(`direction.${direction}`)}
+          />
+        ) : null}
+
         {patchSummary && (
           <section className="glass-card p-4 mb-6" aria-labelledby="patch-summary-heading">
             <h2 id="patch-summary-heading" className="text-sm font-semibold mb-2">
@@ -315,22 +355,32 @@ export default async function AugmentDetailPage({
           </section>
         )}
 
+        {displayDescription && (
+          <section className="glass-card p-5 mb-6" aria-labelledby="augment-description-heading">
+            <EntitySectionHeading><span id="augment-description-heading">{t("descriptionHeading")}</span></EntitySectionHeading>
+            <p className="text-[var(--color-text-secondary)] leading-relaxed">{displayDescription}</p>
+          </section>
+        )}
+
         {/* ─── Strong on champions ─── */}
         {strongOn.length > 0 && (
           <section className="glass-card p-5">
             <h2 className="text-lg font-semibold mb-3">{t("detailStrongOn")}</h2>
             <div className="flex flex-wrap gap-2">
               {strongOn.map(({ record, tier }) => (
-                <Link
-                  key={record!.slug}
-                  href={`/champions/${record!.slug}`}
-                  className="inline-flex items-center gap-2 rounded-full border border-[var(--color-border)] bg-[var(--color-bg-card)] px-3 py-1 text-sm hover:border-[var(--color-accent)] hover:text-[var(--color-accent)] transition-colors"
-                >
-                  <span>{localizedName(record!, locale)}</span>
-                  <span className={`text-[11px] font-semibold px-1.5 py-0.5 rounded border ${TIER_BADGE[tier]}`}>
-                    {tier}
-                  </span>
-                </Link>
+                <span key={record!.slug} className="inline-flex items-center gap-2 rounded-full border border-[var(--color-border)] bg-[var(--color-bg-card)] px-3 py-1 text-sm transition-colors">
+                  <EntityLink
+                    entity={resolveEntityRef(entityPresentation, "champion", { slug: record!.slug }, locale) ?? unknownEntityRef("champion", {
+                      slug: record!.slug,
+                      name: localizedName(record!, locale),
+                      iconUrl: record!.icon,
+                    })}
+                    variant="compact"
+                  />
+                  <EntityTag tone={tier === "S" ? "green" : tier === "C" ? "red" : "amber"}>
+                    {tier === "S" ? t("strongOnTierStrong") : tier === "C" ? t("strongOnTierAvoid") : t("strongOnTierRelated")}
+                  </EntityTag>
+                </span>
               ))}
             </div>
           </section>

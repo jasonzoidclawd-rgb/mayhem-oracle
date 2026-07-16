@@ -63,21 +63,21 @@ class VerifyLivePatchSeoTests(unittest.TestCase):
         routes = build_expected_routes(patch_notes_fixture())
 
         self.assertEqual(SUPPORTED_LOCALES, ("en", "zh-TW", "zh-CN", "ja", "ko"))
-        self.assertEqual(localized_path("/patch-notes", "en"), "/patch-notes")
+        self.assertEqual(localized_path("/patch-notes", "en"), "/en/patch-notes")
         self.assertEqual(
             localized_path("/patch-notes/26.13", "zh-TW"),
             "/zh-TW/patch-notes/26.13",
         )
-        self.assertEqual(routes.list_paths[0], "/patch-notes")
+        self.assertEqual(routes.list_paths[0], "/en/patch-notes")
         self.assertIn("/zh-CN/patch-notes", routes.list_paths)
-        self.assertIn("/patch-notes/26.13", routes.detail_paths)
+        self.assertIn("/en/patch-notes/26.13", routes.detail_paths)
         self.assertIn("/ko/patch-notes/26.12", routes.detail_paths)
         self.assertEqual(routes.newest_patch["version"], "26.13")
 
     def test_parse_sitemap_urls_handles_namespaced_xml(self):
         xml = """<?xml version="1.0" encoding="UTF-8"?>
         <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-          <url><loc>https://wasfun.lol/patch-notes</loc></url>
+          <url><loc>https://wasfun.lol/en/patch-notes</loc></url>
           <url><loc>https://wasfun.lol/zh-TW/patch-notes/26.13</loc></url>
         </urlset>
         """
@@ -85,7 +85,7 @@ class VerifyLivePatchSeoTests(unittest.TestCase):
         self.assertEqual(
             parse_sitemap_urls(xml),
             {
-                "https://wasfun.lol/patch-notes",
+                "https://wasfun.lol/en/patch-notes",
                 "https://wasfun.lol/zh-TW/patch-notes/26.13",
             },
         )
@@ -132,7 +132,7 @@ class VerifyLivePatchSeoTests(unittest.TestCase):
             SeoCheck("sitemap", "https://wasfun.lol/sitemap.xml", True, []),
             SeoCheck(
                 "detail",
-                "https://wasfun.lol/patch-notes/26.13",
+                "https://wasfun.lol/en/patch-notes/26.13",
                 False,
                 ["missing canonical", "missing Article JSON-LD"],
             ),
@@ -149,7 +149,7 @@ class VerifyLivePatchSeoTests(unittest.TestCase):
             [
                 {
                     "kind": "detail",
-                    "url": "https://wasfun.lol/patch-notes/26.13",
+                    "url": "https://wasfun.lol/en/patch-notes/26.13",
                     "messages": ["missing canonical", "missing Article JSON-LD"],
                 }
             ],

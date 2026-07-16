@@ -10,12 +10,15 @@ import type {
   DecisionResult,
 } from "@/lib/contracts/decision";
 import { requestDecision } from "@/lib/membership/decision-client";
+import { EntityLink } from "@/components/entities/EntityLink";
+import type { EntityRef } from "@/lib/entities/types";
 import { useMemo, useState } from "react";
 
 export interface AdvisorChampionOption {
   slug: string;
   name: string;
   icon?: string;
+  entity?: EntityRef;
 }
 
 export interface AdvisorAugmentOption {
@@ -23,6 +26,7 @@ export interface AdvisorAugmentOption {
   displayName: string;
   rarity: AugmentRarity;
   icon?: string;
+  entity?: EntityRef;
 }
 
 export interface AdvisorCopy {
@@ -186,6 +190,12 @@ export function AdvisorMemberClient({
           ))}
         </select>
       </label>
+      {champions.find((champion) => champion.slug === championSlug)?.entity ? (
+        <EntityLink
+          entity={champions.find((champion) => champion.slug === championSlug)!.entity!}
+          variant="compact"
+        />
+      ) : null}
 
       <div className="flex flex-col gap-2">
         <span className="text-sm text-white/60">{copy.mode}</span>
@@ -247,16 +257,27 @@ export function AdvisorMemberClient({
         <p className="text-xs text-white/40">{copy.offeredHelp}</p>
         <div className="max-h-48 overflow-y-auto rounded-lg border border-white/10">
           {offerable.map((augment) => (
-            <button
+            <div
               key={augment.slug}
-              onClick={() => toggleOffer(augment.slug)}
-              className={`flex w-full items-center justify-between px-3 py-2 text-left text-sm ${
+              className={`flex w-full items-center justify-between gap-2 px-3 py-2 text-left text-sm ${
                 offered.includes(augment.slug) ? "bg-amber-400/15 text-amber-100" : "hover:bg-white/5"
               }`}
             >
-              <span>{augment.displayName}</span>
-              {offered.includes(augment.slug) ? <span className="text-amber-300">✓</span> : null}
-            </button>
+              <button
+                type="button"
+                onClick={() => toggleOffer(augment.slug)}
+                aria-pressed={offered.includes(augment.slug)}
+                aria-label={`${augment.displayName}${offered.includes(augment.slug) ? " selected" : ""}`}
+                className="min-h-9 min-w-9 rounded border border-white/10 px-2 text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-300"
+              >
+                {offered.includes(augment.slug) ? "✓" : "＋"}
+              </button>
+              {augment.entity ? (
+                <EntityLink entity={augment.entity} variant="compact" className="flex-1" />
+              ) : (
+                <span className="flex-1">{augment.displayName}</span>
+              )}
+            </div>
           ))}
         </div>
       </div>
@@ -304,9 +325,17 @@ export function AdvisorMemberClient({
                 className="rounded-xl border border-white/10 bg-white/[0.03] p-4"
               >
                 <div className="flex items-center justify-between gap-2">
-                  <span className="font-medium">
-                    {nameBySlug.get(candidate.augmentSlug) ?? candidate.augmentSlug}
-                  </span>
+                  {augments.find((augment) => augment.slug === candidate.augmentSlug)?.entity ? (
+                    <EntityLink
+                      entity={augments.find((augment) => augment.slug === candidate.augmentSlug)!.entity!}
+                      variant="standard"
+                      className="font-medium"
+                    />
+                  ) : (
+                    <span className="font-medium">
+                      {nameBySlug.get(candidate.augmentSlug) ?? candidate.augmentSlug}
+                    </span>
+                  )}
                   <GradeBadge grade={candidate.grade} label={copy.gradeLabels[candidate.grade]} size="lg" />
                 </div>
                 <div className="mt-2 flex flex-wrap gap-x-4 gap-y-1 text-xs text-white/50">

@@ -9,9 +9,11 @@ import { PbePreview, type PbePreviewData } from "@/components/patch-notes/PbePre
 import type { PatchNotesData } from "@/lib/types";
 import {
   readAugmentsFile,
+  readEntityPresentationFile,
   readPatchNotesFile,
   readPbePreviewFile,
 } from "@/lib/data/read-public-file";
+import type { EntityPresentationData } from "@/lib/entities/types";
 import type { Locale } from "@/i18n/routing";
 import { languageAlternates, localizedUrl } from "@/lib/site";
 import { JsonLd } from "@/components/seo/JsonLd";
@@ -28,6 +30,14 @@ async function loadPatchNotes(): Promise<PatchNotesData | null> {
 async function loadPbePreview(): Promise<PbePreviewData | null> {
   try {
     return await readPbePreviewFile<PbePreviewData>();
+  } catch {
+    return null;
+  }
+}
+
+async function loadEntityPresentation(): Promise<EntityPresentationData | null> {
+  try {
+    return await readEntityPresentationFile<EntityPresentationData>();
   } catch {
     return null;
   }
@@ -90,10 +100,11 @@ export default async function PatchNotesPage({
   const { locale } = await params;
   setRequestLocale(locale);
   const t = await getTranslations("patchNotes");
-  const [data, removedAugments, pbePreview] = await Promise.all([
+  const [data, removedAugments, pbePreview, entityData] = await Promise.all([
     loadPatchNotes(),
     loadRemovedAugments(),
     loadPbePreview(),
+    loadEntityPresentation(),
   ]);
   const route = "/patch-notes";
   const url = localizedUrl(route, locale as Locale);
@@ -126,7 +137,7 @@ export default async function PatchNotesPage({
       <AdSlot slot="public-patch-notes" />
       {data ? (
         <>
-          <PatchNotesView data={data} locale={locale} removedAugments={removedAugments} />
+          <PatchNotesView data={data} locale={locale} removedAugments={removedAugments} entityData={entityData} />
           <PbePreview data={pbePreview} locale={locale} />
         </>
       ) : (

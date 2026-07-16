@@ -10,6 +10,116 @@ from scrape_mayhem_augments_cdragon import (
 
 
 class AugmentBaseCatalogTests(unittest.TestCase):
+    def test_current_augment_stringtable_definitions_keep_the_six_live_registry_rows(self):
+        roster = [
+            {
+                "id": 2103,
+                "augmentNameId": "ARAM_BangBang",
+                "nameTRA": "From Downtown",
+                "augmentSmallIconPath": "/lol-game-data/assets/ASSETS/UX/Kiwi/Augments/Icons/QuestBangBang_small.png",
+                "rarity": "kGold",
+            },
+            {
+                "id": 2125,
+                "augmentNameId": "ItsGoTime",
+                "nameTRA": "It's Go Time",
+                "augmentSmallIconPath": "/lol-game-data/assets/ASSETS/UX/Kiwi/Augments/Icons/GenericAbilityAugmentIcon_Silver.png",
+                "rarity": "kSilver",
+            },
+            {
+                "id": 2139,
+                "augmentNameId": "PinCushion",
+                "nameTRA": "Porcupine",
+                "augmentSmallIconPath": "/lol-game-data/assets/ASSETS/UX/Kiwi/Augments/Icons/PinCushion_small.png",
+                "rarity": "kGold",
+            },
+            {
+                "id": 2115,
+                "augmentNameId": "SquishySlappyGrab",
+                "nameTRA": "Squishy Slappy Grab",
+                "augmentSmallIconPath": "/lol-game-data/assets/ASSETS/UX/Kiwi/Augments/Icons/SquishySlappyGrab_small.png",
+                "rarity": "kPrismatic",
+            },
+            {
+                "id": 2134,
+                "augmentNameId": "SurgeField",
+                "nameTRA": "Surge Field",
+                "augmentSmallIconPath": "/lol-game-data/assets/ASSETS/UX/Kiwi/Augments/Icons/SurgeField_small.png",
+                "rarity": "kPrismatic",
+            },
+            {
+                "id": 2129,
+                "augmentNameId": "Terraind",
+                "nameTRA": "Terrain'd",
+                "augmentSmallIconPath": "/lol-game-data/assets/ASSETS/UX/Cherry/Augments/Icons/LightningStrikes_small.png",
+                "rarity": "kGold",
+            },
+        ]
+        stringtable = {
+            "entries": {
+                "augment_bangbang_name": "From Downtown",
+                "augment_bangbang_desc": "Snipe enemies from downtown.",
+                "augment_itsgotime_name": "It's Go Time",
+                "augment_itsgotime_summary": "Gain movement speed.",
+                "augment_pincushion_name": "Porcupine",
+                "augment_pincushion_summary": "Burst needles.",
+                "augment_squishyslappygrab_name": "Squishy Slappy Grab",
+                "augment_squishyslappygrab_tooltip": "Pull nearby enemies.",
+                # CDragon's current registry uses the unsuffixed name key for
+                # this row; it is still an authoritative definition.
+                "augment_surgefield": "Surge Field",
+                "augment_surgefield_summary": "Create a zone.",
+                "augment_terraind_name": "Terrain'd",
+                "augment_terraind_summary": "Damage in an area.",
+            }
+        }
+        empty_arena = {"augments": []}
+        locales = {locale: stringtable for locale in ("en", "zh_cn", "zh_tw", "ja", "ko")}
+
+        catalog = build_base_catalog(
+            roster=roster,
+            arena_by_locale={locale: empty_arena for locale in locales},
+            stringtables_by_locale=locales,
+            fetched_at="2026-07-14T00:00:00+00:00",
+        )
+
+        self.assertEqual(
+            {row["augmentId"] for row in catalog["augments"]},
+            {
+                "ARAM_BangBang",
+                "ItsGoTime",
+                "PinCushion",
+                "SquishySlappyGrab",
+                "SurgeField",
+                "Terraind",
+            },
+        )
+        self.assertEqual(
+            {row["name"] for row in catalog["augments"]},
+            {"From Downtown", "It's Go Time", "Porcupine", "Squishy Slappy Grab", "Surge Field", "Terrain'd"},
+        )
+
+    def test_generic_augment_namespace_does_not_promote_unreviewed_legacy_rows(self):
+        roster = [{
+            "id": 2132,
+            "augmentNameId": "WarlockJuicebox",
+            "nameTRA": "Warlock Juicebox",
+            "augmentSmallIconPath": "/lol-game-data/assets/ASSETS/UX/Kiwi/Augments/Icons/WarlockJuicebox_small.png",
+            "rarity": "kGold",
+        }]
+        stringtable = {"entries": {
+            "augment_warlockjuicebox_name": "Warlock Juicebox",
+            "augment_warlockjuicebox_summary": "Gain omnivamp.",
+        }}
+        locales = {locale: stringtable for locale in ("en", "zh_cn", "zh_tw", "ja", "ko")}
+        catalog = build_base_catalog(
+            roster=roster,
+            arena_by_locale={locale: {"augments": []} for locale in locales},
+            stringtables_by_locale=locales,
+            fetched_at="2026-07-14T00:00:00+00:00",
+        )
+        self.assertEqual(catalog["augments"], [])
+
     def test_builds_rich_cdragon_rows_and_stringtable_bridged_rows(self):
         roster = [
             {

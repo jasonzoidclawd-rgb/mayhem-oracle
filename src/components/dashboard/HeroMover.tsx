@@ -2,6 +2,9 @@ import { getTranslations, getLocale } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
 import { localizedName, type LocalizedNameRecord } from "@/lib/i18n/localized-name";
 import { tierBadgeClass } from "./tier-style";
+import { resolveEntityRef } from "@/lib/entities/catalog";
+import type { EntityPresentationData } from "@/lib/entities/types";
+import { EntityLink } from "@/components/entities/EntityLink";
 
 export type HeroChampion = LocalizedNameRecord & {
   slug: string;
@@ -16,23 +19,36 @@ export async function HeroMover({
   champion,
   total,
   patch,
+  entityPresentation,
 }: {
   champion: HeroChampion;
   total: number;
   patch: string;
+  entityPresentation: EntityPresentationData;
 }) {
   const t = await getTranslations("dashboard");
   const locale = await getLocale();
   const name = localizedName(champion, locale);
+  const entityRef = resolveEntityRef(entityPresentation, "champion", { slug: champion.slug }, locale) ?? {
+    type: "champion" as const,
+    id: champion.slug,
+    slug: champion.slug,
+    routeIdentifier: "",
+    localizedName: name,
+    iconUrl: champion.icon ?? "",
+    known: false,
+    canonicalId: champion.slug,
+    name,
+    icon: champion.icon,
+    lifecycle: "unknown" as const,
+  };
 
   return (
     <div className="glass-card reveal flex items-center gap-4 p-4 md:col-span-6 lg:col-span-8">
-      {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img src={champion.icon} alt="" className="h-16 w-16 shrink-0 rounded-xl" />
       <div className="min-w-0 flex-1">
         <p className="text-xs text-[var(--color-text-muted)]">{t("heroTopMover", { patch })}</p>
         <div className="mt-1 flex items-center gap-2">
-          <h3 className="truncate text-lg font-semibold text-[var(--color-text-primary)]">{name}</h3>
+          <EntityLink entity={entityRef} variant="standard" className="min-w-0 text-lg font-semibold" />
           <span className={`shrink-0 rounded px-1.5 py-0.5 text-[11px] font-semibold ${tierBadgeClass(champion.tier)}`}>
             {champion.tier}
           </span>

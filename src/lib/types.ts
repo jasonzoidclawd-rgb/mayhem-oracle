@@ -144,10 +144,16 @@ export type PatchEntityType =
 
 export interface PatchEntityRef {
   type: PatchEntityType;
+  id?: string;
+  canonicalId?: string;
   slug: string;
+  routeIdentifier?: string;
+  localizedName?: string;
   name: string;
   known: boolean;
   href?: string;
+  iconUrl?: string;
+  icon?: string;
   roleTags?: string[];
   kitTags?: string[];
   categories?: string[];

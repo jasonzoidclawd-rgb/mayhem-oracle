@@ -5,7 +5,7 @@
   "sourceKind": "cdragon-structured-diff-v1",
   "status": "fresh",
   "sourceUrl": "https://www.leagueoflegends.com/en-us/news/game-updates/league-of-legends-patch-26-13-notes",
-  "scraped_at": "2026-07-11T11:21:39.980692Z",
+  "scraped_at": "2026-06-23T18:00:00.000Z",
   "patches": [
     {
       "version": "26.13",
@@ -20,13 +20,509 @@
       ],
       "intro": "Our newest demon-huntin' baddie Locke is hitting the Rift this patch! You can check him out in between MSI matches—but you won't see him on that big stage yet. We've also got balance changes to a swathe of champions, from everyone's favorite “always chasin' charms, never savin' ADCs” support, to the Darkin who just won't die in my games. Ranked 5s will also be returning for a limited run starting on June 26. We decided to bump down start times to 8pm, to accommodate all us eepy lil guys who need to go night night by 10pm. So time to text the squad and get into queue. We also have last hit indicators coming to Ranked and Normal Draft queues! So now there's no excuse to miss those canons, pal. (You can also turn them off if you like a challenge.) Looking for more information on all things League of Legends? Check out our community-run wiki here ! Wrong patch notes? You can find the TFT patch notes here !",
       "summary": {
-        "totalChanges": 0,
-        "byKind": {},
-        "byEntityType": {},
+        "totalChanges": 9,
+        "byKind": {
+          "added": 7,
+          "changed": 1,
+          "mechanism": 1
+        },
+        "byEntityType": {
+          "augment": 9
+        },
         "byLabel": {},
         "damageRelevant": 0
       },
-      "sections": []
+      "sections": [
+        {
+          "id": "augments",
+          "title": "Augments",
+          "changes": [
+            {
+              "subject": {
+                "en": "From Downtown",
+                "zh-tw": "超遠射擊",
+                "zh-cn": "狙神飞星",
+                "ja-jp": "ロングシュート",
+                "ko-kr": "로켓 배송"
+              },
+              "text": {
+                "en": "Added in the CommunityDragon snapshot.",
+                "zh-tw": "已在 CommunityDragon 快照中新增。",
+                "zh-cn": "已在 CommunityDragon 快照中新增。",
+                "ja-jp": "CommunityDragon スナップショットに追加。",
+                "ko-kr": "CommunityDragon 스냅샷에 추가되었습니다."
+              },
+              "kind": "added",
+              "detectedAt": "2026-07-14T02:09:05.260156Z",
+              "isHotfix": false,
+              "landedFromPbe": false,
+              "targets": [
+                {
+                  "type": "augment",
+                  "id": "ARAM_BangBang",
+                  "canonicalId": "ARAM_BangBang",
+                  "slug": "from-downtown",
+                  "routeIdentifier": "from-downtown",
+                  "localizedName": "From Downtown",
+                  "iconUrl": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/kiwi/augments/icons/questbangbang_small.png",
+                  "name": "From Downtown",
+                  "known": true,
+                  "names": {
+                    "zh-tw": "超遠射擊",
+                    "zh-cn": "狙神飞星",
+                    "ja-jp": "ロングシュート",
+                    "ko-kr": "로켓 배송"
+                  },
+                  "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/kiwi/augments/icons/questbangbang_small.png",
+                  "lifecycle": "active",
+                  "href": "/augments/from-downtown"
+                }
+              ],
+              "relatedEntities": [],
+              "metrics": [],
+              "labels": [],
+              "impact": {
+                "damageRelevant": false,
+                "modelSignals": [],
+                "engineRefs": []
+              }
+            },
+            {
+              "subject": {
+                "en": "Forged By The Master",
+                "zh-tw": "大師鑄造",
+                "zh-cn": "大师铸就",
+                "ja-jp": "マスターに鍛えられて",
+                "ko-kr": "장인의 솜씨"
+              },
+              "text": {
+                "en": "Added in the CommunityDragon snapshot.",
+                "zh-tw": "已在 CommunityDragon 快照中新增。",
+                "zh-cn": "已在 CommunityDragon 快照中新增。",
+                "ja-jp": "CommunityDragon スナップショットに追加。",
+                "ko-kr": "CommunityDragon 스냅샷에 추가되었습니다."
+              },
+              "kind": "added",
+              "detectedAt": "2026-07-14T02:09:05.260156Z",
+              "isHotfix": false,
+              "landedFromPbe": false,
+              "targets": [
+                {
+                  "type": "augment",
+                  "id": "ForgedByTheMaster",
+                  "canonicalId": "ForgedByTheMaster",
+                  "slug": "forged-by-the-master",
+                  "routeIdentifier": "",
+                  "localizedName": "Forged By The Master",
+                  "iconUrl": "",
+                  "name": "Forged By The Master",
+                  "known": true,
+                  "names": {
+                    "zh-tw": "大師鑄造",
+                    "zh-cn": "大师铸就",
+                    "ja-jp": "マスターに鍛えられて",
+                    "ko-kr": "장인의 솜씨"
+                  },
+                  "href": "/augments/forged-by-the-master"
+                }
+              ],
+              "relatedEntities": [],
+              "metrics": [],
+              "labels": [],
+              "impact": {
+                "damageRelevant": false,
+                "modelSignals": [],
+                "engineRefs": []
+              }
+            },
+            {
+              "subject": {
+                "en": "It's Go Time",
+                "zh-tw": "該出手了",
+                "zh-cn": "前进时间到",
+                "ja-jp": "始まるぞ",
+                "ko-kr": "출발할 시간"
+              },
+              "text": {
+                "en": "Added in the CommunityDragon snapshot.",
+                "zh-tw": "已在 CommunityDragon 快照中新增。",
+                "zh-cn": "已在 CommunityDragon 快照中新增。",
+                "ja-jp": "CommunityDragon スナップショットに追加。",
+                "ko-kr": "CommunityDragon 스냅샷에 추가되었습니다."
+              },
+              "kind": "added",
+              "detectedAt": "2026-07-14T02:09:05.260156Z",
+              "isHotfix": false,
+              "landedFromPbe": false,
+              "targets": [
+                {
+                  "type": "augment",
+                  "id": "ItsGoTime",
+                  "canonicalId": "ItsGoTime",
+                  "slug": "its-go-time",
+                  "routeIdentifier": "its-go-time",
+                  "localizedName": "It's Go Time",
+                  "iconUrl": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/kiwi/augments/icons/genericabilityaugmenticon_silver.png",
+                  "name": "It's Go Time",
+                  "known": true,
+                  "names": {
+                    "zh-tw": "該出手了",
+                    "zh-cn": "前进时间到",
+                    "ja-jp": "始まるぞ",
+                    "ko-kr": "출발할 시간"
+                  },
+                  "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/kiwi/augments/icons/genericabilityaugmenticon_silver.png",
+                  "lifecycle": "active",
+                  "href": "/augments/its-go-time"
+                }
+              ],
+              "relatedEntities": [],
+              "metrics": [],
+              "labels": [],
+              "impact": {
+                "damageRelevant": false,
+                "modelSignals": [],
+                "engineRefs": []
+              }
+            },
+            {
+              "subject": {
+                "en": "Missing Ping",
+                "zh-tw": "Missing Ping",
+                "zh-cn": "Missing Ping",
+                "ja-jp": "Missing Ping",
+                "ko-kr": "Missing Ping"
+              },
+              "text": {
+                "en": "Description:  → Your Missing Pings will launch a missile at the pinged location that deals — + — % missing Health magic damage to enemies and heals allies for — + — % missing Health .",
+                "zh-tw": "描述:  → Your Missing Pings will launch a missile at the pinged location that deals — + — % missing Health magic damage to enemies and heals allies for — + — % missing Health .",
+                "zh-cn": "描述:  → Your Missing Pings will launch a missile at the pinged location that deals — + — % missing Health magic damage to enemies and heals allies for — + — % missing Health .",
+                "ja-jp": "説明:  → Your Missing Pings will launch a missile at the pinged location that deals — + — % missing Health magic damage to enemies and heals allies for — + — % missing Health .",
+                "ko-kr": "설명:  → Your Missing Pings will launch a missile at the pinged location that deals — + — % missing Health magic damage to enemies and heals allies for — + — % missing Health ."
+              },
+              "kind": "changed",
+              "detectedAt": "2026-07-14T02:09:05.260156Z",
+              "isHotfix": true,
+              "landedFromPbe": false,
+              "targets": [
+                {
+                  "type": "augment",
+                  "id": "ARAM_MissingPingAugment",
+                  "canonicalId": "ARAM_MissingPingAugment",
+                  "slug": "missing-ping-augment",
+                  "routeIdentifier": "",
+                  "localizedName": "Missing Ping",
+                  "iconUrl": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/kiwi/augments/icons/missingping_small.png",
+                  "name": "Missing Ping",
+                  "known": false,
+                  "names": {
+                    "zh-tw": "Missing Ping",
+                    "zh-cn": "Missing Ping",
+                    "ja-jp": "Missing Ping",
+                    "ko-kr": "Missing Ping"
+                  },
+                  "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/kiwi/augments/icons/missingping_small.png",
+                  "lifecycle": "removed"
+                }
+              ],
+              "relatedEntities": [],
+              "metrics": [
+                {
+                  "label": "Description",
+                  "before": "",
+                  "after": "Your Missing Pings will launch a missile at the pinged location that deals — + — % missing Health magic damage to enemies and heals allies for — + — % missing Health ."
+                }
+              ],
+              "labels": [
+                "tooltip"
+              ],
+              "impact": {
+                "damageRelevant": false,
+                "modelSignals": [],
+                "engineRefs": []
+              }
+            },
+            {
+              "subject": {
+                "en": "Porcupine",
+                "zh-tw": "豪豬",
+                "zh-cn": "豪猪",
+                "ja-jp": "ヤマアラシ",
+                "ko-kr": "고슴도치"
+              },
+              "text": {
+                "en": "Added in the CommunityDragon snapshot.",
+                "zh-tw": "已在 CommunityDragon 快照中新增。",
+                "zh-cn": "已在 CommunityDragon 快照中新增。",
+                "ja-jp": "CommunityDragon スナップショットに追加。",
+                "ko-kr": "CommunityDragon 스냅샷에 추가되었습니다."
+              },
+              "kind": "added",
+              "detectedAt": "2026-07-14T02:09:05.260156Z",
+              "isHotfix": false,
+              "landedFromPbe": false,
+              "targets": [
+                {
+                  "type": "augment",
+                  "id": "PinCushion",
+                  "canonicalId": "PinCushion",
+                  "slug": "porcupine",
+                  "routeIdentifier": "porcupine",
+                  "localizedName": "Porcupine",
+                  "iconUrl": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/kiwi/augments/icons/pincushion_small.png",
+                  "name": "Porcupine",
+                  "known": true,
+                  "names": {
+                    "zh-tw": "豪豬",
+                    "zh-cn": "豪猪",
+                    "ja-jp": "ヤマアラシ",
+                    "ko-kr": "고슴도치"
+                  },
+                  "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/kiwi/augments/icons/pincushion_small.png",
+                  "lifecycle": "active",
+                  "href": "/augments/porcupine"
+                }
+              ],
+              "relatedEntities": [],
+              "metrics": [],
+              "labels": [],
+              "impact": {
+                "damageRelevant": false,
+                "modelSignals": [],
+                "engineRefs": []
+              }
+            },
+            {
+              "subject": {
+                "en": "Icathia's Fall",
+                "zh-tw": "伊卡西亞殞落",
+                "zh-cn": "艾卡西亚的陷落",
+                "ja-jp": "イカシアの滅亡",
+                "ko-kr": "이케시아의 몰락"
+              },
+              "text": {
+                "en": "Passive added: Desolate. Killing an enemy deals magic damage around them.",
+                "zh-tw": "新增被動效果: Desolate. Killing an enemy deals magic damage around them.",
+                "zh-cn": "新增被动效果: Desolate. Killing an enemy deals magic damage around them.",
+                "ja-jp": "パッシブ追加: Desolate. Killing an enemy deals magic damage around them.",
+                "ko-kr": "패시브 추가: Desolate. Killing an enemy deals magic damage around them."
+              },
+              "kind": "mechanism",
+              "detectedAt": "2026-07-14T02:09:05.260156Z",
+              "isHotfix": true,
+              "landedFromPbe": false,
+              "targets": [
+                {
+                  "type": "augment",
+                  "id": "ARAM_Quest_VoidImmolation",
+                  "canonicalId": "ARAM_Quest_VoidImmolation",
+                  "slug": "void-immolation",
+                  "routeIdentifier": "void-immolation",
+                  "localizedName": "Icathia's Fall",
+                  "iconUrl": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/kiwi/augments/icons/quest_voidimmolation_small.png",
+                  "name": "Icathia's Fall",
+                  "known": true,
+                  "names": {
+                    "zh-tw": "伊卡西亞殞落",
+                    "zh-cn": "艾卡西亚的陷落",
+                    "ja-jp": "イカシアの滅亡",
+                    "ko-kr": "이케시아의 몰락"
+                  },
+                  "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/kiwi/augments/icons/quest_voidimmolation_small.png",
+                  "lifecycle": "active",
+                  "href": "/augments/void-immolation"
+                }
+              ],
+              "relatedEntities": [
+                {
+                  "type": "item",
+                  "id": "223069",
+                  "canonicalId": "223069",
+                  "slug": "void-immolation",
+                  "routeIdentifier": "223069",
+                  "localizedName": "Void Immolation",
+                  "iconUrl": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/223069_kiwi_voidimmolation.png",
+                  "name": "Void Immolation",
+                  "known": true,
+                  "names": {
+                    "zh-tw": "虛空獻祭",
+                    "zh-cn": "虚空献祭",
+                    "ja-jp": "ヴォイドの猛火",
+                    "ko-kr": "공허의 불길"
+                  },
+                  "href": "/items/223069",
+                  "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/223069_kiwi_voidimmolation.png"
+                }
+              ],
+              "metrics": [
+                {
+                  "label": "Desolate",
+                  "before": "",
+                  "after": "Killing an enemy deals magic damage around them."
+                }
+              ],
+              "labels": [
+                "passive-added"
+              ],
+              "impact": {
+                "damageRelevant": false,
+                "modelSignals": [],
+                "engineRefs": []
+              }
+            },
+            {
+              "subject": {
+                "en": "Squishy Slappy Grab",
+                "zh-tw": "伸縮手掌黏黏樂",
+                "zh-cn": "软弹啪叽抓",
+                "ja-jp": "スクイッシースラッピーグラブ",
+                "ko-kr": "말랑 찰싹 손"
+              },
+              "text": {
+                "en": "Added in the CommunityDragon snapshot.",
+                "zh-tw": "已在 CommunityDragon 快照中新增。",
+                "zh-cn": "已在 CommunityDragon 快照中新增。",
+                "ja-jp": "CommunityDragon スナップショットに追加。",
+                "ko-kr": "CommunityDragon 스냅샷에 추가되었습니다."
+              },
+              "kind": "added",
+              "detectedAt": "2026-07-14T02:09:05.260156Z",
+              "isHotfix": false,
+              "landedFromPbe": false,
+              "targets": [
+                {
+                  "type": "augment",
+                  "id": "SquishySlappyGrab",
+                  "canonicalId": "SquishySlappyGrab",
+                  "slug": "squishy-slappy-grab",
+                  "routeIdentifier": "squishy-slappy-grab",
+                  "localizedName": "Squishy Slappy Grab",
+                  "iconUrl": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/kiwi/augments/icons/squishyslappygrab_small.png",
+                  "name": "Squishy Slappy Grab",
+                  "known": true,
+                  "names": {
+                    "zh-tw": "伸縮手掌黏黏樂",
+                    "zh-cn": "软弹啪叽抓",
+                    "ja-jp": "スクイッシースラッピーグラブ",
+                    "ko-kr": "말랑 찰싹 손"
+                  },
+                  "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/kiwi/augments/icons/squishyslappygrab_small.png",
+                  "lifecycle": "active",
+                  "href": "/augments/squishy-slappy-grab"
+                }
+              ],
+              "relatedEntities": [],
+              "metrics": [],
+              "labels": [],
+              "impact": {
+                "damageRelevant": false,
+                "modelSignals": [],
+                "engineRefs": []
+              }
+            },
+            {
+              "subject": {
+                "en": "Surge Field",
+                "zh-tw": "高能量場域",
+                "zh-cn": "电涌力场",
+                "ja-jp": "サージフィールド",
+                "ko-kr": "방출 역장"
+              },
+              "text": {
+                "en": "Added in the CommunityDragon snapshot.",
+                "zh-tw": "已在 CommunityDragon 快照中新增。",
+                "zh-cn": "已在 CommunityDragon 快照中新增。",
+                "ja-jp": "CommunityDragon スナップショットに追加。",
+                "ko-kr": "CommunityDragon 스냅샷에 추가되었습니다."
+              },
+              "kind": "added",
+              "detectedAt": "2026-07-14T02:09:05.260156Z",
+              "isHotfix": false,
+              "landedFromPbe": false,
+              "targets": [
+                {
+                  "type": "augment",
+                  "id": "SurgeField",
+                  "canonicalId": "SurgeField",
+                  "slug": "surge-field",
+                  "routeIdentifier": "surge-field",
+                  "localizedName": "Surge Field",
+                  "iconUrl": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/kiwi/augments/icons/surgefield_small.png",
+                  "name": "Surge Field",
+                  "known": true,
+                  "names": {
+                    "zh-tw": "高能量場域",
+                    "zh-cn": "电涌力场",
+                    "ja-jp": "サージフィールド",
+                    "ko-kr": "방출 역장"
+                  },
+                  "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/kiwi/augments/icons/surgefield_small.png",
+                  "lifecycle": "active",
+                  "href": "/augments/surge-field"
+                }
+              ],
+              "relatedEntities": [],
+              "metrics": [],
+              "labels": [],
+              "impact": {
+                "damageRelevant": false,
+                "modelSignals": [],
+                "engineRefs": []
+              }
+            },
+            {
+              "subject": {
+                "en": "Terrain'd",
+                "zh-tw": "劃地為王",
+                "zh-cn": "地形专家",
+                "ja-jp": "地形でドン",
+                "ko-kr": "지형 생성됨"
+              },
+              "text": {
+                "en": "Added in the CommunityDragon snapshot.",
+                "zh-tw": "已在 CommunityDragon 快照中新增。",
+                "zh-cn": "已在 CommunityDragon 快照中新增。",
+                "ja-jp": "CommunityDragon スナップショットに追加。",
+                "ko-kr": "CommunityDragon 스냅샷에 추가되었습니다."
+              },
+              "kind": "added",
+              "detectedAt": "2026-07-14T02:09:05.260156Z",
+              "isHotfix": false,
+              "landedFromPbe": false,
+              "targets": [
+                {
+                  "type": "augment",
+                  "id": "Terraind",
+                  "canonicalId": "Terraind",
+                  "slug": "terraind",
+                  "routeIdentifier": "terraind",
+                  "localizedName": "Terrain'd",
+                  "iconUrl": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/lightningstrikes_small.png",
+                  "name": "Terrain'd",
+                  "known": true,
+                  "names": {
+                    "zh-tw": "劃地為王",
+                    "zh-cn": "地形专家",
+                    "ja-jp": "地形でドン",
+                    "ko-kr": "지형 생성됨"
+                  },
+                  "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/lightningstrikes_small.png",
+                  "lifecycle": "active",
+                  "href": "/augments/terraind"
+                }
+              ],
+              "relatedEntities": [],
+              "metrics": [],
+              "labels": [],
+              "impact": {
+                "damageRelevant": false,
+                "modelSignals": [],
+                "engineRefs": []
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "version": "26.12",

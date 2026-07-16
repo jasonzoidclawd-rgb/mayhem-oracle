@@ -53,6 +53,29 @@ AVAILABILITY_STATUS_ORDER = [
     "conflict",
 ]
 
+# These rows were explicitly re-observed in the current CDragon registry after
+# stale removed/unverified projections. The exception is source-reviewed and
+# intentionally narrow: a generic CDragon definition or an old tombstone must
+# not revive every legacy augment in the registry (for example Upgrade Sword
+# of Blossoming Dawn remains disabled).
+CURRENT_REAPPEARED_LIVE_SLUGS = frozenset({
+    "from-downtown",
+    "forged-by-the-master",
+    "its-go-time",
+    "porcupine",
+    "squishy-slappy-grab",
+    "surge-field",
+    "terraind",
+})
+
+# This upgrade remains explicitly unavailable even though generic registry,
+# string-table, and wiki rows still exist for it.
+KNOWN_REMOVED_SLUGS = frozenset({"upgrade-sword-of-blossoming-dawn"})
+
+PRESERVED_LOCALIZED_NAMES = {
+    "upgrade-sword-of-blossoming-dawn": {"name_zh_TW": "升級：破曉綻放之劍"},
+}
+
 LOCALE_FIELDS = {
     "zh_cn": "name_zh_CN",
     "zh_tw": "name_zh_TW",
@@ -87,6 +110,25 @@ def slug_from_augment_id(augment_id: str) -> str:
     return slugify(value)
 
 
+def safe_augment_name(value: object, slug: str) -> str:
+    """Return a compact display label when CDragon exposes tooltip payloads."""
+
+    text = str(value or "").strip()
+    normalized_questions = text.replace("？", "?")
+    unsafe = (
+        not text
+        or (normalized_questions and set(normalized_questions) == {"?"})
+        or len(text) > 120
+        or "<" in text
+        or "@" in text
+        or "{{" in text
+    )
+    if not unsafe:
+        return text
+    words = [part for part in slug.removesuffix("-augment").split("-") if part]
+    return " ".join(word.capitalize() for word in words) or "Unresolved augment"
+
+
 def cdragon_asset_url(path: str | None) -> str:
     if not path:
         return ""
@@ -103,7 +145,12 @@ def preferred_icon_url(icon: dict | str | None) -> str:
         return cdragon_asset_url(icon)
     if not isinstance(icon, dict):
         return ""
-    return cdragon_asset_url(icon.get("large") or icon.get("small") or icon.get("rosterSmall"))
+    # The current CDragon CDN keeps the small augment asset while many legacy
+    # *_large.png paths resolve to an HTML 404 (and are blocked as an image by
+    # browsers). These cards render at 20–80px, so the small asset is the
+    # authoritative, stable presentation source. Fall back to large/roster
+    # only for older payloads that do not provide a small path.
+    return cdragon_asset_url(icon.get("small") or icon.get("large") or icon.get("rosterSmall"))
 
 
 def currently_disabled(notes: list[str]) -> bool:
@@ -160,6 +207,23 @@ def resolve_availability(
 ) -> dict:
     """Resolve availability.status according to the spec's ordering."""
 
+    # The promoted latest CDragon snapshot is the structural authority. If an
+    # entity reappears there, stale legacy/tombstone removal signals must be
+    # cleared before lifecycle classification (Forged By The Master is the
+    # regression case). Independent official disabled/removed sources below
+    # still win when present.
+    if slug in KNOWN_REMOVED_SLUGS:
+        patch_removed = True
+
+    restored_from_cdragon = (
+        cdragon_present
+        and slug in CURRENT_REAPPEARED_LIVE_SLUGS
+        and (tombstone_removed or patch_removed)
+    )
+    if restored_from_cdragon:
+        tombstone_removed = False
+        patch_removed = False
+
     wiki = wiki_signal(wiki_row, definition_placeholder)
     live_sources: list[str] = []
     disabled_sources: list[str] = []
@@ -204,7 +268,12 @@ def resolve_availability(
         status = "removed"
     elif stale_removed_sources:
         status = "removed"
-    elif cdragon_present and (kiwi_present or wiki["status"] == "live" or tencent_status == "live"):
+    elif cdragon_present and (
+        kiwi_present
+        or wiki["status"] == "live"
+        or tencent_status == "live"
+        or restored_from_cdragon
+    ):
         # CDragon-primary: first-party registry presence plus a Mayhem kiwi
         # stringtable entry is sufficient live evidence. Wiki/Tencent remain
         # additive corroboration signals and every removal/disable/tombstone
@@ -299,8 +368,10 @@ def removed_snapshot_event_slugs(patch_events: dict) -> set[str]:
 
 def preserved_flags(existing_row: dict | None, lifecycle: str) -> dict:
     existing_flags = copy.deepcopy((existing_row or {}).get("flags") or {})
+    lifecycle_patch = existing_flags.get("lifecycle_patch")
     for key in (
         "lifecycle",
+        "lifecycle_patch",
         "availability_override",
         "availability_label",
         "availability_source",
@@ -309,6 +380,11 @@ def preserved_flags(existing_row: dict | None, lifecycle: str) -> dict:
         existing_flags.pop(key, None)
     existing_flags["system_breaker"] = bool(existing_flags.get("system_breaker"))
     existing_flags["lifecycle"] = lifecycle
+    # A row restored by the current CDragon registry must not carry the old
+    # removal patch into the public projection. Genuine removed rows retain
+    # their historical patch for the bounded archive.
+    if lifecycle == "removed" and lifecycle_patch:
+        existing_flags["lifecycle_patch"] = lifecycle_patch
     return existing_flags
 
 
@@ -330,6 +406,15 @@ def existing_removed_is_tombstone(existing_row: dict | None, slug: str, removed_
         return False
     notes = (wiki_row or {}).get("wikiAvailabilityNotes") or []
     return not currently_disabled(notes if isinstance(notes, list) else [])
+
+
+def existing_patch_removal(existing_row: dict | None) -> bool:
+    """Return whether the prior projection carries an official removal signal."""
+
+    availability = (existing_row or {}).get("availability")
+    signals = availability.get("signals") if isinstance(availability, dict) else None
+    patch_notes = signals.get("patch_notes") if isinstance(signals, dict) else None
+    return isinstance(patch_notes, dict) and patch_notes.get("removed") is True
 
 
 def field_provenance(base_provenance: dict, wiki_row: dict | None, has_win_rate: bool, existing_row: dict | None) -> dict:
@@ -361,11 +446,12 @@ def build_cdragon_row(
         availability["status"],
         definition_placeholder=bool(base.get("definitionPlaceholder")),
     )
+    safe_name = safe_augment_name(base.get("name"), slug)
     row = {
         "augmentId": base["augmentId"],
         "slug": slug,
-        "name": base.get("name", ""),
-        "displayName": (existing_row or {}).get("name", base.get("name", "")),
+        "name": safe_name,
+        "displayName": safe_augment_name((existing_row or {}).get("name", safe_name), slug),
         "rarity": base.get("rarity", ""),
         "cdragonRarity": base.get("rarity", ""),
         "icon": preferred_icon_url(base.get("icon")),
@@ -393,7 +479,9 @@ def build_cdragon_row(
         if availability["status"] == "removed" and existing_localized:
             row[output_field] = existing_localized
         else:
-            row[output_field] = names.get(locale) or existing_localized
+            localized = names.get(locale) or existing_localized
+            row[output_field] = safe_augment_name(localized, slug) if localized else safe_name
+    row.update(PRESERVED_LOCALIZED_NAMES.get(slug, {}))
     if wiki_row and wiki_row.get("wikiDescription"):
         row["wikiDescription"] = wiki_row["wikiDescription"]
     if wiki_row and wiki_row.get("wikiRarity"):
@@ -506,6 +594,7 @@ def assemble_catalog(
         has_win_rate = bool(augment_id in win_rates)
         win_rate = win_rates.get(augment_id) if augment_id else None
         tombstone_removed = existing_removed_is_tombstone(existing_row, slug, removed_slugs, wiki_row)
+        patch_removed = slug in removed_slugs or existing_patch_removal(existing_row)
 
         if base and is_primary:
             kiwi_signal = kiwi_signal_from_base(base)
@@ -519,7 +608,7 @@ def assemble_catalog(
                 wiki_row=wiki_row,
                 definition_placeholder=bool(base.get("definitionPlaceholder")),
                 tombstone_removed=tombstone_removed,
-                patch_removed=slug in removed_slugs,
+                patch_removed=patch_removed,
                 existing_lifecycle=existing_row.get("flags", {}).get("lifecycle"),
                 tencent_status=tencent_status_for(augment_id, slug),
             )
@@ -535,24 +624,37 @@ def assemble_catalog(
             emitted_base_ids.add(augment_id)
             continue
 
-        kiwi_signal = kiwi_signal_from_base(base)
+        # A non-primary catalog alias shares the CDragon ID with the selected
+        # canonical row. Preserve it as historical data, but do not let the
+        # canonical definition or a display-name alias make it offerable.
+        existing_active_alias = existing_row.get("flags", {}).get("lifecycle") == "active"
+        kiwi_signal = {"present": False, "keys": [], "tokens": []} if base and not is_primary else kiwi_signal_from_base(base)
         availability = resolve_availability(
             augment_id=augment_id,
             slug=slug,
-            cdragon_present=bool(base),
+            cdragon_present=bool(base and (is_primary or existing_active_alias)),
             kiwi_present=kiwi_signal["present"],
             kiwi_keys=kiwi_signal["keys"],
             kiwi_tokens=kiwi_signal["tokens"],
             wiki_row=wiki_row,
             definition_placeholder=bool(base.get("definitionPlaceholder")) if base else False,
             tombstone_removed=tombstone_removed,
-            patch_removed=slug in removed_slugs,
+            patch_removed=patch_removed,
             existing_lifecycle=existing_row.get("flags", {}).get("lifecycle"),
         )
+        if base and not is_primary:
+            # One CDragon canonical ID owns one current route. A preserved
+            # display-name alias can still carry historical copy, but it must
+            # never remain offerable merely because its old row or wiki entry
+            # was once active (ARAM_RabbleRousing was reused by Rejuvenation).
+            availability["status"] = "removed"
+            availability.setdefault("signals", {})["canonical_alias"] = {
+                "canonicalSlug": primary_slug or "",
+            }
         rows.append(build_legacy_row(
             existing_row=existing_row,
             augment_id=augment_id,
-            cdragon_present=bool(base),
+            cdragon_present=bool(base and (is_primary or existing_active_alias)),
             wiki_row=wiki_row,
             win_rate=win_rate,
             has_win_rate=has_win_rate,

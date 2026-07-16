@@ -1,0 +1,11 @@
+{
+  "schema_version": 1,
+  "relationships": [
+    {
+      "augment_id": "ARAM_Quest_VoidImmolation",
+      "item_id": "223069",
+      "kind": "quest-reward-transformation",
+      "provenance": "Canonical CommunityDragon quest reward relationship: the ARAM Void Immolation quest produces item 223069; verified against the augment reward tooltip and item canonical ID."
+    }
+  ]
+}

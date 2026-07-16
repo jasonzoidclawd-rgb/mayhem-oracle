@@ -11,6 +11,36 @@ class AdapterError(ValueError):
     """CDragon changed shape in a way that cannot be normalized truthfully."""
 
 
+NON_MAYHEM_REQUIRED_BUFFS = frozenset({
+    # These tier-3 boots are gated by the Summoner's Rift Noxian Feats shop
+    # currency.  They are present in CDragon's global item endpoint but are
+    # not purchasable in ARAM: Mayhem.
+    "Feats_NoxianBootPurchaseBuff",
+})
+
+# Existing generated item catalogs predate the mode-gate filter and do not
+# retain `requiredBuffCurrencyName`.  Keep their known Noxian Feats rows out
+# of the public Mayhem catalog until the next acquisition replaces them.
+NON_MAYHEM_ITEM_IDS = frozenset({3168, 3170, 3171, 3172, 3173, 3174, 3175})
+
+
+def is_mayhem_item_row(row: dict[str, Any]) -> bool:
+    """Return whether a raw CDragon item is eligible for Mayhem catalogs."""
+    required_buff = row.get("requiredBuffCurrencyName")
+    return not (
+        isinstance(required_buff, str)
+        and required_buff.strip() in NON_MAYHEM_REQUIRED_BUFFS
+    )
+
+
+def is_non_mayhem_item_id(value: Any) -> bool:
+    """Recognize mode-gated IDs in older generated catalogs safely."""
+    try:
+        return int(value) in NON_MAYHEM_ITEM_IDS
+    except (TypeError, ValueError):
+        return False
+
+
 def _slug(value: str) -> str:
     return re.sub(r"(^-|-$)", "", re.sub(r"[^a-z0-9]+", "-", value.lower()))
 

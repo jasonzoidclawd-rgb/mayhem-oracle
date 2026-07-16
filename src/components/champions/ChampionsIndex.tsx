@@ -2,10 +2,27 @@
 
 import { useState, useMemo } from "react";
 import { useLocale, useTranslations } from "next-intl";
-import Image from "next/image";
-import { Link } from "@/i18n/navigation";
 import type { ChampionEntry } from "@/app/[locale]/champions/page";
 import { localizedName } from "@/lib/i18n/localized-name";
+import { EntityLink } from "@/components/entities/EntityLink";
+import type { EntityRef } from "@/lib/entities/types";
+
+function championRef(c: ChampionEntry, locale: string, entityRef?: EntityRef): EntityRef {
+  const name = localizedName(c, locale);
+  return entityRef ?? {
+    type: "champion",
+    id: c.slug,
+    slug: c.slug,
+    routeIdentifier: "",
+    localizedName: name,
+    iconUrl: c.icon ?? "",
+    known: false,
+    canonicalId: c.slug,
+    name,
+    icon: c.icon,
+    lifecycle: "unknown",
+  };
+}
 
 // ─── Constants ───────────────────────────────────────────────────────────────
 
@@ -80,12 +97,22 @@ function statAtLevel(base: number, growth: number, level: number): number {
 
 export function ChampionsIndex({
   champions,
+  entityRefs,
 }: {
   champions: ChampionEntry[];
+  entityRefs: Record<string, EntityRef>;
 }) {
   const locale = useLocale();
   const t = useTranslations("championsIndex");
   const tTier = useTranslations("tierList");
+  const roleLabels: Record<string, string> = {
+    assassin: tTier("filters.assassin"),
+    fighter: tTier("filters.fighter"),
+    mage: tTier("filters.mage"),
+    marksman: tTier("filters.marksman"),
+    support: tTier("filters.support"),
+    tank: tTier("filters.tank"),
+  };
   const [view, setView] = useState<ViewMode>("tier");
   const [search, setSearch] = useState("");
   const [activeClass, setActiveClass] = useState<string>("all");
@@ -258,7 +285,7 @@ export function ChampionsIndex({
                   : "bg-[var(--color-bg-card)] text-[var(--color-text-muted)] border-[var(--color-border-default)]"
               }`}
             >
-              {cl === "all" ? t("allClasses") : cl}
+              {cl === "all" ? t("allClasses") : roleLabels[cl.toLowerCase()] ?? cl}
               <span className="ml-1 opacity-50 tabular-nums">{classCounts[cl] ?? 0}</span>
             </button>
           ))}
@@ -287,7 +314,7 @@ export function ChampionsIndex({
                 </div>
                 <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-2 sm:gap-3">
                   {champs.map((c) => (
-                    <ChampionCard key={c.slug} champion={c} />
+                    <ChampionCard key={c.slug} champion={c} entityRef={entityRefs[c.slug]} roleLabels={roleLabels} />
                   ))}
                 </div>
               </section>
@@ -299,7 +326,7 @@ export function ChampionsIndex({
         /* ─── Grid View ─── */
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-2 sm:gap-3">
           {sorted.map((c) => (
-            <ChampionCard key={c.slug} champion={c} />
+            <ChampionCard key={c.slug} champion={c} entityRef={entityRefs[c.slug]} roleLabels={roleLabels} />
           ))}
           {sorted.length === 0 && (
             <div className="col-span-full">
@@ -313,7 +340,7 @@ export function ChampionsIndex({
           {/* Mobile: card list */}
           <div className="md:hidden space-y-2">
             {sorted.map((c, i) => (
-              <ChampionRowCard key={c.slug} champion={c} index={i} level={level} />
+              <ChampionRowCard key={c.slug} champion={c} index={i} level={level} entityRef={entityRefs[c.slug]} roleLabels={roleLabels} />
             ))}
             {sorted.length === 0 && <EmptyState text={tTier("noResults")} />}
           </div>
@@ -369,27 +396,7 @@ export function ChampionsIndex({
                         {c.rank ?? i + 1}
                       </td>
                       <td className="px-2 py-2">
-                        <Link
-                          href={`/champions/${c.slug}`}
-                          className="flex items-center gap-2 hover:text-[var(--color-neon-primary)] transition-colors"
-                        >
-                          <Image
-                            src={c.icon}
-                            alt={localizedName(c, locale)}
-                            width={28}
-                            height={28}
-                            className="rounded shrink-0"
-                            unoptimized
-                          />
-                          <div className="min-w-0">
-                            <div className="text-sm font-medium truncate">{localizedName(c, locale)}</div>
-                            {c.title && (
-                              <div className="text-[10px] text-[var(--color-text-muted)] truncate">
-                                {c.title}
-                              </div>
-                            )}
-                          </div>
-                        </Link>
+                        <EntityLink entity={championRef(c, locale, entityRefs[c.slug])} variant="standard" />
                       </td>
                       <td className="px-2 py-2 text-left hidden lg:table-cell">
                         <div className="flex flex-wrap gap-1">
@@ -400,7 +407,7 @@ export function ChampionsIndex({
                                 CLASS_COLOR[cl] ?? "text-slate-300 bg-slate-500/10 border-slate-400/20"
                               }`}
                             >
-                              {cl}
+                              {roleLabels[cl.toLowerCase()] ?? cl}
                             </span>
                           ))}
                         </div>
@@ -455,25 +462,18 @@ function EmptyState({ text }: { text: string }) {
 
 function ChampionCard({
   champion: c,
+  entityRef,
+  roleLabels,
 }: {
   champion: ChampionEntry;
+  entityRef?: EntityRef;
+  roleLabels: Record<string, string>;
 }) {
   const locale = useLocale();
-  const name = localizedName(c, locale);
   return (
-    <Link
-      href={`/champions/${c.slug}`}
-      className="glass-card p-3 flex flex-col items-center gap-2 border border-[var(--color-border-default)] transition-all group hover:scale-[1.03] hover:border-[var(--color-neon-primary)]/40 hover:shadow-lg"
-    >
+    <div className="glass-card p-3 flex flex-col items-center gap-2 border border-[var(--color-border-default)] transition-all group hover:scale-[1.03] hover:border-[var(--color-neon-primary)]/40 hover:shadow-lg">
       <div className="relative">
-        <Image
-          src={c.icon}
-          alt={name}
-          width={56}
-          height={56}
-          className="rounded-lg border border-[var(--color-border-default)] group-hover:border-[var(--color-neon-primary)]/50 transition-colors"
-          unoptimized
-        />
+        <EntityLink entity={championRef(c, locale, entityRef)} variant="standard" className="rounded-lg" />
         <span
           className={`absolute -top-1.5 -right-1.5 text-[10px] font-bold px-1.5 py-0.5 rounded border ${
             TIER_BG[c.tier] ?? ""
@@ -484,9 +484,6 @@ function ChampionCard({
       </div>
 
       <div className="text-center w-full min-w-0">
-        <div className="text-xs font-bold truncate group-hover:text-[var(--color-text-primary)] transition-colors">
-          {name}
-        </div>
         {c.title && (
           <div className="text-[9px] text-[var(--color-text-muted)] truncate leading-tight">
             {c.title}
@@ -503,7 +500,7 @@ function ChampionCard({
               CLASS_COLOR[cl] ?? "text-slate-300 bg-slate-500/10 border-slate-400/20"
             }`}
           >
-            {cl}
+            {roleLabels[cl.toLowerCase()] ?? cl}
           </span>
         ))}
       </div>
@@ -526,7 +523,7 @@ function ChampionCard({
           <StatMini label="AS" value={c.baseStats.baseAS.toFixed(2)} />
         </div>
       )}
-    </Link>
+    </div>
   );
 }
 
@@ -536,36 +533,28 @@ function ChampionRowCard({
   champion: c,
   index,
   level,
+  entityRef,
+  roleLabels,
 }: {
   champion: ChampionEntry;
   index: number;
   level: number;
+  entityRef?: EntityRef;
+  roleLabels: Record<string, string>;
 }) {
   const locale = useLocale();
-  const name = localizedName(c, locale);
   const bs = c.baseStats;
   const hp = bs ? statAtLevel(bs.baseHP, bs.hpGrowth, level) : 0;
   const ad = bs ? statAtLevel(bs.baseAD, bs.adGrowth, level) : 0;
 
   return (
-    <Link
-      href={`/champions/${c.slug}`}
-      className="glass-card flex items-center gap-3 p-3 border border-[var(--color-border-default)] transition-all hover:border-[var(--color-neon-primary)]/40"
-    >
+    <div className="glass-card flex items-center gap-3 p-3 border border-[var(--color-border-default)] transition-all hover:border-[var(--color-neon-primary)]/40">
       <span className="w-5 text-center text-xs text-[var(--color-text-muted)] tabular-nums shrink-0">
         {c.rank ?? index + 1}
       </span>
-      <Image
-        src={c.icon}
-        alt={name}
-        width={40}
-        height={40}
-        className="rounded-lg border border-[var(--color-border-default)] shrink-0"
-        unoptimized
-      />
+      <EntityLink entity={championRef(c, locale, entityRef)} variant="standard" />
       <div className="min-w-0 flex-1">
         <div className="flex items-center gap-2">
-          <span className="text-sm font-semibold truncate">{name}</span>
           <span
             className={`text-[10px] font-bold px-1.5 py-0.5 rounded border shrink-0 ${
               TIER_BG[c.tier] ?? ""
@@ -582,7 +571,7 @@ function ChampionRowCard({
                 CLASS_COLOR[cl] ?? "text-slate-300 bg-slate-500/10 border-slate-400/20"
               }`}
             >
-              {cl}
+              {roleLabels[cl.toLowerCase()] ?? cl}
             </span>
           ))}
         </div>
@@ -597,7 +586,7 @@ function ChampionRowCard({
           </div>
         )}
       </div>
-    </Link>
+    </div>
   );
 }
 

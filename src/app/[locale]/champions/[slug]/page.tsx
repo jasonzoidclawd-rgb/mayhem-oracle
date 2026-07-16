@@ -5,7 +5,7 @@ import { MembershipGate } from "@/components/membership/MembershipGate";
 import Image from "next/image";
 import { notFound } from "next/navigation";
 import { computeOracleScore, type ComboTier } from "@/lib/scoring/oracle-score";
-import type { AbilityProfile, AbilityEntry, AbilityStats, ChampionBaseStats } from "@/lib/types";
+import type { AbilityProfile, AbilityEntry, AbilityStats } from "@/lib/types";
 import { Tooltip } from "@/components/ui/Tooltip";
 import { buildPoolProfile } from "@/lib/scoring/augment-tailoring";
 import { getChampionAugmentPool } from "@/lib/scoring/pool-orchestrator";
@@ -13,6 +13,7 @@ import { analyzeInteractions, type MechanicalInteraction, type AugmentMechanic }
 import { localizedDescription, localizedName } from "@/lib/i18n/localized-name";
 import { buildComboTierLookup, resolveChampionCombos } from "@/lib/data/combo-lookup";
 import { readChampionsFile } from "@/lib/data/read-public-file";
+import { readEntityPresentationFile } from "@/lib/data/read-public-file";
 import { routing, type Locale } from "@/i18n/routing";
 import { ChampionMatrixClient } from "@/components/champions/ChampionMatrixClient";
 import {
@@ -31,6 +32,11 @@ import {
 import type { DecisionGrade } from "@/lib/contracts/decision";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { languageAlternates, localizedUrl } from "@/lib/site";
+import { resolveEntityRef } from "@/lib/entities/catalog";
+import type { EntityPresentationData, EntityRef } from "@/lib/entities/types";
+import { EntityLink } from "@/components/entities/EntityLink";
+import { EntityPatchChanges, EntityStatsInline, EntityTag } from "@/components/entities/EntityPresentation";
+import { buildEntityRouteSets } from "@/lib/entities/routes";
 
 type ChampionData = ChampionDetailChampion;
 type AugmentData = ChampionDetailAugment;
@@ -64,6 +70,7 @@ type AbilityStatLabels = {
   width: string;
   speed: string;
   cast: string;
+  cc: string;
 };
 
 // ─── Static params for all current-patch champions ───────────────────────────
@@ -72,9 +79,14 @@ export const dynamicParams = false;
 
 export async function generateStaticParams() {
   const { champions } = await readChampionsFile<{ champions: ChampionData[] }>();
+  const routes = buildEntityRouteSets({
+    champions,
+    augments: [],
+    items: { items: [], mayhemExclusive: [] },
+  });
 
   return routing.locales.flatMap((locale) =>
-    champions.map((c) => ({ locale, slug: c.slug }))
+    [...routes.champion].map((slug) => ({ locale, slug }))
   );
 }
 
@@ -118,8 +130,10 @@ export default async function ChampionPage({
   const { locale, slug } = await params;
   setRequestLocale(locale);
   const t = await getTranslations("champion");
+  const te = await getTranslations("entities");
   const tm = await getTranslations("membership");
   const tg = await getTranslations("grades");
+  const tr = await getTranslations("tierList.filters");
 
   // Member decision content (pool construction, scored rankings) is gated on an
   // active entitlement — not merely being signed in. A logged-in non-member
@@ -133,16 +147,42 @@ export default async function ChampionPage({
     return { isAuthenticated: gate.reason !== "unauthenticated", isMember: false };
   })();
 
-  const publicData = await loadChampionDetailData("public");
+  const [publicData, entityPresentation] = await Promise.all([
+    loadChampionDetailData("public"),
+    readEntityPresentationFile<EntityPresentationData>(),
+  ]);
   const memberData = isMember ? await loadChampionDetailData("member") : null;
   const activeData = memberData ?? publicData;
   const { champions, patch } = publicData;
-  const { augments, combos, poolRules, abilities } = activeData;
+  const { augments: allAugments, combos, poolRules, abilities } = activeData;
+  const augments = allAugments.filter(
+    (augment) => augment.flags?.lifecycle === "active" || augment.flags?.lifecycle === "added",
+  );
 
   const champ = champions.find((c) => c.slug === slug);
   if (!champ) notFound();
   const activeChamp = activeData.champions.find((c) => c.slug === slug) ?? champ;
   const champName = localizedName(champ, locale);
+  const entityRef = resolveEntityRef(entityPresentation, "champion", { slug }, locale);
+  const championEntityRecord = entityRef
+    ? entityPresentation.entities.find((record) => record.type === "champion" && record.canonical_id === entityRef.canonicalId)
+    : null;
+  const augmentRef = (augment?: AugmentData): EntityRef | null => {
+    if (!augment) return null;
+    return resolveEntityRef(entityPresentation, "augment", { slug: augment.slug }, locale) ?? {
+      type: "augment",
+      id: String((augment as AugmentData & { augmentId?: string }).augmentId ?? augment.slug),
+      slug: augment.slug,
+      routeIdentifier: "",
+      localizedName: localizedName(augment, locale),
+      iconUrl: augment.icon ?? "",
+      known: false,
+      canonicalId: String((augment as AugmentData & { augmentId?: string }).augmentId ?? augment.slug),
+      name: localizedName(augment, locale),
+      icon: augment.icon,
+      lifecycle: augment.flags?.lifecycle === "removed" ? "removed" : "unknown",
+    };
+  };
   const localizedAugmentDescription = (augment: AugmentData): string =>
     localizedDescription(augment, locale) || augment.wikiDescription || augment.description || "";
   const displayAugment = (augment: AugmentData): AugmentData => {
@@ -258,6 +298,16 @@ export default async function ChampionPage({
     ranged: t("ranged"),
     melee:  t("melee"),
   };
+  const roleLabel: Record<string, string> = {
+    assassin: tr("assassin"), fighter: tr("fighter"), mage: tr("mage"),
+    marksman: tr("marksman"), support: tr("support"), tank: tr("tank"),
+  };
+  const kitTagLabel: Record<string, string> = {
+    ability: t("kitTagAbility"), attack: t("kitTagAttack"), cc: t("kitTagCc"),
+    crit: t("kitTagCrit"), dot: t("kitTagDot"), haste: t("kitTagHaste"),
+    heal_shield: t("kitTagHealShield"), movement: t("kitTagMovement"),
+    on_hit: t("kitTagOnHit"), tank: t("kitTagTank"),
+  };
 
   const poolProfileChips: PoolProfileChip[] = [
     {
@@ -279,7 +329,9 @@ export default async function ChampionPage({
     },
     {
       label: t("poolChipTags"),
-      value: (champ.kit_tags ?? []).length > 0 ? (champ.kit_tags ?? []).join(", ") : t("poolUniversal"),
+      value: (champ.kit_tags ?? []).length > 0
+        ? (champ.kit_tags ?? []).map((tag) => kitTagLabel[tag] ?? tag).join(", ")
+        : t("poolUniversal"),
     },
   ];
 
@@ -306,6 +358,12 @@ export default async function ChampionPage({
     score,
     comboTier,
   }));
+  const augmentEntityRefs: Record<string, EntityRef> = Object.fromEntries(
+    augments.flatMap((augment) => {
+      const ref = augmentRef(augment);
+      return ref ? [[augment.slug, ref]] : [];
+    }),
+  );
 
   const strongCombos = champCombos.filter((c) => c.tier === "S");
   const avoidCombos = champCombos.filter((c) => c.tier === "C");
@@ -364,27 +422,6 @@ export default async function ChampionPage({
     ["mobility",     t("playstyleMobility")],
     ["utility",      t("playstyleUtility")],
   ];
-  const baseStatsCopy = {
-    title: t("baseStatsTitle"),
-    stat: t("baseStatsStat"),
-    base: t("baseStatsBase"),
-    growth: t("baseStatsGrowth"),
-    at18: t("baseStatsAt18"),
-    rows: {
-      health: t("statHealth"),
-      mana: t("statMana"),
-      hpRegen: t("statHpRegen"),
-      mpRegen: t("statMpRegen"),
-      armor: t("statArmor"),
-      magicResist: t("statMagicResist"),
-      attackDamage: t("statAttackDamage"),
-      attackSpeed: t("statAttackSpeed"),
-      attackSpeedGrowth: t("statAttackSpeedGrowth"),
-      attackRange: t("statAttackRange"),
-      moveSpeed: t("statMoveSpeed"),
-      missileSpeed: t("statMissileSpeed"),
-    },
-  };
   const mechanicLabels: MechanicLabels = {
     ABILITY_CRIT: t("mechanicAbilityCrit"),
     ON_HIT: t("mechanicOnHit"),
@@ -423,6 +460,7 @@ export default async function ChampionPage({
     width: t("abilityStatWidth"),
     speed: t("abilityStatSpeed"),
     cast: t("abilityStatCast"),
+    cc: t("pillCC"),
   };
 
   const championRoute = `/champions/${champ.slug}`;
@@ -434,9 +472,9 @@ export default async function ChampionPage({
     name: champName,
     patch,
     tierLabel: champ.tier ?? t("statisticsUnavailableShort"),
-    tagLabels: champ.tags,
-    classLabels: champ.classes,
-    kitTagLabels: champ.kit_tags,
+    tagLabels: champ.tags.map((tag) => roleLabel[tag] ?? tag),
+    classLabels: champ.classes?.map((tag) => roleLabel[tag] ?? tag),
+    kitTagLabels: champ.kit_tags?.map((tag) => kitTagLabel[tag] ?? tag),
   });
 
   return (
@@ -444,18 +482,13 @@ export default async function ChampionPage({
       <JsonLd data={championJsonLd} />
       {/* ─── Header ─── */}
       <div className="flex items-center gap-3 sm:gap-5 mb-4 sm:mb-6">
-        <div className="relative w-14 h-14 sm:w-20 sm:h-20 rounded-full overflow-hidden border-2 border-[var(--color-neon-primary)]/40 shrink-0">
-          <Image
-            src={champ.icon}
-            alt={champName}
-            fill
-            className="object-cover"
-            sizes="(max-width: 640px) 56px, 80px"
-          />
-        </div>
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-2 sm:gap-3">
-            <h1 className="text-xl sm:text-3xl font-bold truncate">{champName}</h1>
+            {entityRef ? (
+              <h1><EntityLink entity={entityRef} variant="hero" className="font-bold" /></h1>
+            ) : (
+              <h1 className="text-xl sm:text-3xl font-bold truncate">{champName}</h1>
+            )}
             {champ.rank && (
               <span className="text-sm sm:text-base text-[var(--color-text-muted)] font-medium shrink-0">
                 {champ.rank}/{champions.length}
@@ -468,6 +501,7 @@ export default async function ChampionPage({
                 {t("statisticsUnavailableShort")}
               </span>
             )}
+            {entityRef?.lifecycle === "active" ? <EntityTag tone="cyan">{te("activeLabel")}</EntityTag> : null}
           </div>
           <div className="flex items-center gap-3 mt-1 text-sm text-[var(--color-text-secondary)]">
             {championStatisticsAvailable ? (
@@ -492,7 +526,7 @@ export default async function ChampionPage({
                 key={cl}
                 className="px-1.5 py-0.5 text-[10px] font-medium rounded border border-[var(--color-border-default)] text-[var(--color-text-secondary)] capitalize"
               >
-                {cl}
+                {roleLabel[cl] ?? cl}
               </span>
             ))}
           </div>
@@ -503,7 +537,7 @@ export default async function ChampionPage({
                   key={tag}
                   className="px-1.5 py-0.5 text-[10px] rounded border border-[var(--color-neon-primary)]/30 bg-[var(--color-neon-primary)]/5 text-[var(--color-neon-primary)]/70"
                 >
-                  {tag}
+                  {kitTagLabel[tag] ?? tag}
                 </span>
               ))}
             </div>
@@ -527,25 +561,13 @@ export default async function ChampionPage({
                   const aug = augmentBySlug.get(c.augmentSlug);
                   const augName = aug ? localizedName(aug, locale) : c.augment;
                   const augDescription = aug ? localizedAugmentDescription(aug) : undefined;
+                  const ref = augmentRef(aug);
                   return (
                     <Tooltip key={`${c.champion}-${c.augmentSlug}-${c.tier}`} content={augDescription}>
                       <div className="flex items-center gap-1.5 px-2 py-1.5 rounded-lg border border-green-400/30 bg-green-400/5 cursor-default">
-                        {aug && (
-                          <Image
-                            src={aug.icon}
-                            alt={augName}
-                            width={24}
-                            height={24}
-                            className="rounded"
-                            unoptimized
-                          />
+                        {ref ? <EntityLink entity={ref} variant="compact" className="text-green-300" /> : (
+                          <span className="text-xs font-medium text-green-300">{augName}</span>
                         )}
-                        <span className="text-xs font-medium text-green-300">
-                          {augName}
-                        </span>
-                        <span className="text-[9px] font-bold px-1 py-0.5 rounded bg-green-400/20 text-green-400">
-                          S
-                        </span>
                       </div>
                     </Tooltip>
                   );
@@ -564,25 +586,13 @@ export default async function ChampionPage({
                   const aug = augmentBySlug.get(c.augmentSlug);
                   const augName = aug ? localizedName(aug, locale) : c.augment;
                   const augDescription = aug ? localizedAugmentDescription(aug) : undefined;
+                  const ref = augmentRef(aug);
                   return (
                     <Tooltip key={`${c.champion}-${c.augmentSlug}-${c.tier}`} content={augDescription}>
                       <div className="flex items-center gap-1.5 px-2 py-1.5 rounded-lg border border-red-400/30 bg-red-400/5 cursor-default">
-                        {aug && (
-                          <Image
-                            src={aug.icon}
-                            alt={augName}
-                            width={24}
-                            height={24}
-                            className="rounded"
-                            unoptimized
-                          />
+                        {ref ? <EntityLink entity={ref} variant="compact" className="text-red-300" /> : (
+                          <span className="text-xs font-medium text-red-300">{augName}</span>
                         )}
-                        <span className="text-xs font-medium text-red-300">
-                          {augName}
-                        </span>
-                        <span className="text-[9px] font-bold px-1 py-0.5 rounded bg-red-400/20 text-red-400">
-                          C
-                        </span>
                       </div>
                     </Tooltip>
                   );
@@ -591,11 +601,6 @@ export default async function ChampionPage({
             </div>
           )}
         </section>
-      )}
-
-      {/* ─── Base Stats ─── */}
-      {champ.baseStats && (
-        <BaseStatsTable stats={champ.baseStats} copy={baseStatsCopy} />
       )}
 
       {/* ─── Mechanical Interactions ─── */}
@@ -618,7 +623,7 @@ export default async function ChampionPage({
               </h3>
               <div className="space-y-1">
                 {mechanicalSynergies.map((ix, i) => (
-                  <InteractionRow key={`syn-${i}`} ix={ix} augments={augments} locale={locale} mechanicLabels={mechanicLabels} />
+                  <InteractionRow key={`syn-${i}`} ix={ix} augments={augments} locale={locale} mechanicLabels={mechanicLabels} entityRef={augmentRef(augments.find((a) => a.slug === ix.augmentSlug))} />
                 ))}
               </div>
             </div>
@@ -631,7 +636,7 @@ export default async function ChampionPage({
               </h3>
               <div className="space-y-1">
                 {mechanicalTraps.map((ix, i) => (
-                  <InteractionRow key={`trap-${i}`} ix={ix} augments={augments} locale={locale} mechanicLabels={mechanicLabels} />
+                  <InteractionRow key={`trap-${i}`} ix={ix} augments={augments} locale={locale} mechanicLabels={mechanicLabels} entityRef={augmentRef(augments.find((a) => a.slug === ix.augmentSlug))} />
                 ))}
               </div>
             </div>
@@ -656,6 +661,26 @@ export default async function ChampionPage({
             />
           </div>
 
+          {championEntityRecord?.stats.length ? (
+            <div className="mb-4" aria-label={te("statsHeading")}>
+              <EntityStatsInline record={championEntityRecord} labelFor={(key) => te(key)} />
+            </div>
+          ) : null}
+
+          {championEntityRecord?.patch_changes.some((change) => !change.context) ? (
+            <div className="mb-4">
+              <EntityPatchChanges
+                changes={championEntityRecord.patch_changes.filter((change) => !change.context)}
+                labelFor={(key) => te(key)}
+                previewLabel={te("previewLabel")}
+                liveLabel={te("liveLabel")}
+                landedLabel={te("landedLabel")}
+                hotfixLabel={te("hotfixLabel")}
+                directionFor={(direction) => te(`direction.${direction}`)}
+              />
+            </div>
+          ) : null}
+
           {/* Playstyle bars — compact row */}
           <div className="grid grid-cols-5 gap-2 mb-4 px-2 py-2.5 rounded-lg bg-[var(--color-bg-card)]/60">
             {playstyleItems.map(([key, label]) => (
@@ -672,7 +697,7 @@ export default async function ChampionPage({
                     />
                   ))}
                 </div>
-                <span className="text-[8px] sm:text-[10px] text-[var(--color-text-muted)] uppercase tracking-wide text-center leading-tight">
+                <span className="text-[8px] sm:text-[10px] text-[var(--color-text-muted)] text-center leading-tight">
                   {label}
                 </span>
               </div>
@@ -704,14 +729,27 @@ export default async function ChampionPage({
                         unoptimized
                       />
                     </div>
-                    <span className="text-[9px] font-bold text-[var(--color-text-muted)] uppercase">
-                      {ability.key}
+                    <span className="text-[9px] font-bold text-[var(--color-text-muted)]">
+                      {ability.key === "passive" ? "P" : ability.key}
                     </span>
                   </div>
                   <div className="flex-1 min-w-0">
                     <span className="text-xs sm:text-sm font-semibold">{abilityName}</span>
                     <WikiAbilityStats ability={ability} labels={abilityStatLabels} />
                     {!ability.cooldown && ability.stats && <AbilityStatLine stats={ability.stats} labels={abilityStatLabels} />}
+                    {championEntityRecord?.patch_changes.some((change) => change.context?.startsWith(ability.key)) ? (
+                      <div className="mt-2">
+                        <EntityPatchChanges
+                          changes={championEntityRecord.patch_changes.filter((change) => change.context?.startsWith(ability.key))}
+                          labelFor={(key) => te(key)}
+                          previewLabel={te("previewLabel")}
+                          liveLabel={te("liveLabel")}
+                          landedLabel={te("landedLabel")}
+                          hotfixLabel={te("hotfixLabel")}
+                          directionFor={(direction) => te(`direction.${direction}`)}
+                        />
+                      </div>
+                    ) : null}
                     <p className="text-[11px] text-[var(--color-text-secondary)] mt-1 leading-relaxed line-clamp-2 sm:line-clamp-none">
                       {abilityDescription}
                     </p>
@@ -739,6 +777,7 @@ export default async function ChampionPage({
         raritySummary={poolRaritySummary}
         layers={poolLayers}
         highlights={tailoredHighlights}
+        entityRefs={augmentEntityRefs}
         totalAugments={augments.length}
         gated={!isMember}
         signInUrl="/account"
@@ -824,6 +863,7 @@ export default async function ChampionPage({
                   comboTier={comboTier}
                   pillLabels={pillLabels}
                   locale={locale}
+                  entityRef={augmentRef(aug)}
                 />
               ))}
             </div>
@@ -878,6 +918,7 @@ function AugmentRow({
   comboTier,
   pillLabels,
   locale,
+  entityRef,
 }: {
   rank: number;
   aug: AugmentData;
@@ -886,6 +927,7 @@ function AugmentRow({
   comboTier?: ComboTier;
   pillLabels: PillLabels;
   locale: string;
+  entityRef?: EntityRef | null;
 }) {
   const isStrong = comboTier === "S";
   const isTrap = comboTier === "C";
@@ -903,31 +945,15 @@ function AugmentRow({
           {rank}
         </span>
 
-        {/* Icon */}
-        <div className="relative w-7 h-7 sm:w-8 sm:h-8 rounded shrink-0">
-          <Image
-            src={aug.icon}
-            alt={augName}
-            fill
-            className="object-contain"
-            sizes="(max-width: 640px) 28px, 32px"
-            unoptimized
-          />
-        </div>
-
         {/* Name + rarity */}
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-1.5">
-            <span className="text-xs sm:text-sm font-medium truncate">{augName}</span>
-            <span className={`w-1.5 h-1.5 rounded-full shrink-0 ${RARITY_DOT[aug.rarity] ?? ""}`} />
-            {comboTier && (
-              <span
-                className={`text-[9px] font-bold px-1 rounded shrink-0
-                  ${isStrong ? "text-green-400 bg-green-400/20" : "text-red-400 bg-red-400/20"}`}
-              >
-                {comboTier}
-              </span>
+            {entityRef ? (
+              <EntityLink entity={entityRef} variant="compact" className="text-xs sm:text-sm font-medium" />
+            ) : (
+              <span className="text-xs sm:text-sm font-medium truncate">{augName}</span>
             )}
+            <span className={`w-1.5 h-1.5 rounded-full shrink-0 ${RARITY_DOT[aug.rarity] ?? ""}`} />
           </div>
           {/* Score breakdown pills — hidden on mobile for compact view */}
           <div className="hidden sm:flex gap-1.5 mt-0.5 flex-wrap">
@@ -1040,11 +1066,13 @@ function InteractionRow({
   augments,
   locale,
   mechanicLabels,
+  entityRef,
 }: {
   ix: MechanicalInteraction;
   augments: AugmentData[];
   locale: string;
   mechanicLabels: MechanicLabels;
+  entityRef?: EntityRef | null;
 }) {
   const aug = augments.find((a) => a.slug === ix.augmentSlug);
   const augName = aug ? localizedName(aug, locale) : ix.augmentName;
@@ -1055,21 +1083,13 @@ function InteractionRow({
   return (
     <Tooltip content={ix.reason}>
       <div className={`flex items-center gap-2 px-2 py-1.5 rounded-lg border ${borderColor} ${bgColor} cursor-default`}>
-        {aug && (
-          <div className="relative w-6 h-6 rounded shrink-0">
-            <Image
-              src={aug.icon}
-              alt={augName}
-              fill
-              className="object-contain"
-              sizes="24px"
-              unoptimized
-            />
-          </div>
-        )}
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-1.5 flex-wrap">
-            <span className="text-xs font-medium truncate">{augName}</span>
+            {entityRef ? (
+              <EntityLink entity={entityRef} variant="compact" className="text-xs font-medium" />
+            ) : (
+              <span className="text-xs font-medium truncate">{augName}</span>
+            )}
             {STRENGTH_DOTS(ix.strength, isTrap)}
             <span className={`text-[9px] font-semibold px-1 py-0.5 rounded border
               ${isTrap
@@ -1146,7 +1166,7 @@ function AbilityStatLine({ stats, labels }: { stats: AbilityStats; labels: Abili
 
   if (stats.ccType) {
     parts.push({
-      label: stats.ccType,
+      label: labels.cc,
       value: stats.ccDuration ? `${stats.ccDuration}s` : "",
       color: "text-yellow-300",
     });
@@ -1219,120 +1239,5 @@ function WikiAbilityStats({ ability, labels }: { ability: AbilityEntry; labels: 
         </span>
       ))}
     </div>
-  );
-}
-
-// ─── Base Stats Table ────────────────────────────────────────────────────────
-
-function statAtLevel(base: number, growth: number, level: number): number {
-  return base + growth * (level - 1) * (0.7025 + 0.0175 * (level - 1));
-}
-
-type StatRow = {
-  label: keyof BaseStatsCopy["rows"];
-  base: keyof ChampionBaseStats;
-  growth?: keyof ChampionBaseStats;
-  decimals?: number;
-  isPercent?: boolean;
-  flat?: boolean; // no growth formula, just show base
-};
-
-type BaseStatsCopy = {
-  title: string;
-  stat: string;
-  base: string;
-  growth: string;
-  at18: string;
-  rows: {
-    health: string;
-    mana: string;
-    hpRegen: string;
-    mpRegen: string;
-    armor: string;
-    magicResist: string;
-    attackDamage: string;
-    attackSpeed: string;
-    attackSpeedGrowth: string;
-    attackRange: string;
-    moveSpeed: string;
-    missileSpeed: string;
-  };
-};
-
-const STAT_ROWS: StatRow[] = [
-  { label: "health", base: "baseHP", growth: "hpGrowth" },
-  { label: "mana", base: "baseMP", growth: "mpGrowth" },
-  { label: "hpRegen", base: "baseHPRegen", growth: "hpRegenGrowth", decimals: 1 },
-  { label: "mpRegen", base: "baseMPRegen", growth: "mpRegenGrowth", decimals: 1 },
-  { label: "armor", base: "baseArmor", growth: "armorGrowth", decimals: 1 },
-  { label: "magicResist", base: "baseMR", growth: "mrGrowth", decimals: 1 },
-  { label: "attackDamage", base: "baseAD", growth: "adGrowth", decimals: 1 },
-  { label: "attackSpeed", base: "baseAS", decimals: 3 },
-  { label: "attackSpeedGrowth", base: "asGrowth", decimals: 1, isPercent: true, flat: true },
-  { label: "attackRange", base: "attackRange", flat: true },
-  { label: "moveSpeed", base: "moveSpeed", flat: true },
-  { label: "missileSpeed", base: "missileSpeed", flat: true },
-];
-
-function BaseStatsTable({
-  stats,
-  copy,
-}: {
-  stats: ChampionBaseStats;
-  copy: BaseStatsCopy;
-}) {
-  const rows = STAT_ROWS.filter((row) => {
-    const val = stats[row.base];
-    return val != null && val !== 0;
-  });
-
-  return (
-    <section className="glass-card p-4 mb-3 sm:mb-6">
-      <h2 className="text-sm font-bold mb-3 border-l-2 border-[var(--color-neon-primary)] pl-2">
-        {copy.title}
-      </h2>
-      <div className="overflow-x-auto rounded-lg">
-        <table className="w-full text-xs sm:text-sm">
-          <thead>
-            <tr className="border-b border-[var(--color-border-default)]">
-              <th className="text-left text-[9px] sm:text-[10px] font-medium text-[var(--color-text-muted)] uppercase tracking-wide px-2 sm:px-3 py-1.5">{copy.stat}</th>
-              <th className="text-right text-[9px] sm:text-[10px] font-medium text-[var(--color-text-muted)] uppercase tracking-wide px-2 sm:px-3 py-1.5">{copy.base}</th>
-              <th className="text-right text-[9px] sm:text-[10px] font-medium text-[var(--color-text-muted)] uppercase tracking-wide px-2 sm:px-3 py-1.5">{copy.growth}</th>
-              <th className="text-right text-[9px] sm:text-[10px] font-medium text-[var(--color-neon-primary)]/70 uppercase tracking-wide px-2 sm:px-3 py-1.5">{copy.at18}</th>
-            </tr>
-          </thead>
-          <tbody>
-            {rows.map((row) => {
-              const base = stats[row.base] as number;
-              const growth = row.growth ? (stats[row.growth] as number | undefined) : undefined;
-              const dec = row.decimals ?? 0;
-
-              let at18: number | undefined;
-              if (!row.flat && !row.isPercent && growth != null) {
-                at18 = statAtLevel(base, growth, 18);
-              }
-
-              return (
-                <tr
-                  key={row.label}
-                  className="border-b border-[var(--color-border-default)]/30 last:border-0"
-                >
-                  <td className="px-2 sm:px-3 py-1 text-[11px] sm:text-xs text-[var(--color-text-secondary)]">{copy.rows[row.label]}</td>
-                  <td className="px-2 sm:px-3 py-1 text-right tabular-nums font-medium">
-                    {base.toFixed(dec)}{row.isPercent ? "%" : ""}
-                  </td>
-                  <td className="px-2 sm:px-3 py-1 text-right tabular-nums text-[var(--color-text-muted)] text-[11px]">
-                    {growth != null && growth > 0 ? `+${growth}` : "—"}
-                  </td>
-                  <td className="px-2 sm:px-3 py-1 text-right tabular-nums text-[var(--color-neon-primary)] font-medium">
-                    {at18 != null ? at18.toFixed(dec) : "—"}
-                  </td>
-                </tr>
-              );
-            })}
-          </tbody>
-        </table>
-      </div>
-    </section>
   );
 }

@@ -2,9 +2,9 @@
   "identity_key": "CDragon augmentNameId",
   "counts": {
     "identity": 0,
-    "existence": 41,
-    "rarity": 0,
-    "availability": 49
+    "existence": 25,
+    "rarity": 1,
+    "availability": 57
   },
   "identity": [],
   "existence": [
@@ -27,14 +27,6 @@
     {
       "kind": "source_only",
       "source": "internal_augments",
-      "sourceKey": "forged-by-the-master",
-      "name": "Forged By The Master",
-      "rarity": "silver",
-      "status": "unmatched"
-    },
-    {
-      "kind": "source_only",
-      "source": "internal_augments",
       "sourceKey": "siphon",
       "name": "Siphon",
       "rarity": "silver",
@@ -43,32 +35,8 @@
     {
       "kind": "source_only",
       "source": "internal_augments",
-      "sourceKey": "terraind",
-      "name": "Terrain'd",
-      "rarity": "gold",
-      "status": "unmatched"
-    },
-    {
-      "kind": "source_only",
-      "source": "internal_augments",
-      "sourceKey": "from-downtown",
-      "name": "From Downtown",
-      "rarity": "gold",
-      "status": "unmatched"
-    },
-    {
-      "kind": "source_only",
-      "source": "internal_augments",
       "sourceKey": "dont-change-the-channel",
       "name": "Don't Change the Channel",
-      "rarity": "silver",
-      "status": "unmatched"
-    },
-    {
-      "kind": "source_only",
-      "source": "internal_augments",
-      "sourceKey": "its-go-time",
-      "name": "It's Go Time",
       "rarity": "silver",
       "status": "unmatched"
     },
@@ -94,30 +62,6 @@
       "sourceKey": "adaptive-ward",
       "name": "Adaptive Ward",
       "rarity": "silver",
-      "status": "unmatched"
-    },
-    {
-      "kind": "source_only",
-      "source": "internal_augments",
-      "sourceKey": "porcupine",
-      "name": "Porcupine",
-      "rarity": "gold",
-      "status": "unmatched"
-    },
-    {
-      "kind": "source_only",
-      "source": "internal_augments",
-      "sourceKey": "pin-cushion",
-      "name": "Pin Cushion",
-      "rarity": "prismatic",
-      "status": "unmatched"
-    },
-    {
-      "kind": "source_only",
-      "source": "internal_augments",
-      "sourceKey": "surge-field",
-      "name": "Surge Field",
-      "rarity": "prismatic",
       "status": "unmatched"
     },
     {
@@ -163,14 +107,6 @@
     {
       "kind": "source_only",
       "source": "internal_augments",
-      "sourceKey": "squishy-slappy-grab",
-      "name": "Squishy Slappy Grab",
-      "rarity": "prismatic",
-      "status": "unmatched"
-    },
-    {
-      "kind": "source_only",
-      "source": "internal_augments",
       "sourceKey": "trailblazer",
       "name": "Trailblazer",
       "rarity": "gold",
@@ -195,14 +131,6 @@
     {
       "kind": "source_only",
       "source": "wiki",
-      "sourceKey": "Forged By The Master",
-      "name": "Forged By The Master",
-      "rarity": "",
-      "status": "unmatched"
-    },
-    {
-      "kind": "source_only",
-      "source": "wiki",
       "sourceKey": "Siphon",
       "name": "Siphon",
       "rarity": "",
@@ -211,32 +139,8 @@
     {
       "kind": "source_only",
       "source": "wiki",
-      "sourceKey": "Terrain'd",
-      "name": "Terrain'd",
-      "rarity": "",
-      "status": "unmatched"
-    },
-    {
-      "kind": "source_only",
-      "source": "wiki",
-      "sourceKey": "From Downtown",
-      "name": "From Downtown",
-      "rarity": "",
-      "status": "unmatched"
-    },
-    {
-      "kind": "source_only",
-      "source": "wiki",
       "sourceKey": "Don't Change the Channel",
       "name": "Don't Change the Channel",
-      "rarity": "",
-      "status": "unmatched"
-    },
-    {
-      "kind": "source_only",
-      "source": "wiki",
-      "sourceKey": "It's Go Time",
-      "name": "It's Go Time",
       "rarity": "",
       "status": "unmatched"
     },
@@ -261,30 +165,6 @@
       "source": "wiki",
       "sourceKey": "Adaptive Ward",
       "name": "Adaptive Ward",
-      "rarity": "",
-      "status": "unmatched"
-    },
-    {
-      "kind": "source_only",
-      "source": "wiki",
-      "sourceKey": "Porcupine",
-      "name": "Porcupine",
-      "rarity": "",
-      "status": "unmatched"
-    },
-    {
-      "kind": "source_only",
-      "source": "wiki",
-      "sourceKey": "Pin Cushion",
-      "name": "Pin Cushion",
-      "rarity": "",
-      "status": "unmatched"
-    },
-    {
-      "kind": "source_only",
-      "source": "wiki",
-      "sourceKey": "Surge Field",
-      "name": "Surge Field",
       "rarity": "",
       "status": "unmatched"
     },
@@ -327,18 +207,67 @@
       "name": "Quest: Support Main",
       "rarity": "",
       "status": "unmatched"
-    },
-    {
-      "kind": "source_only",
-      "source": "wiki",
-      "sourceKey": "Squishy Slappy Grab",
-      "name": "Squishy Slappy Grab",
-      "rarity": "",
-      "status": "unmatched"
     }
   ],
-  "rarity": [],
+  "rarity": [
+    {
+      "source": "internal_augments",
+      "augmentNameId": "PinCushion",
+      "name": "Pin Cushion",
+      "sourceRarity": "prismatic",
+      "cdragonRarity": "gold"
+    }
+  ],
   "availability": [
+    {
+      "source": "internal_augments",
+      "augmentNameId": "ForgedByTheMaster",
+      "name": "Forged By The Master",
+      "signal": "internal_removed_but_cdragon_registry_present",
+      "note": "Registry presence is definition only; this is reported, not resolved."
+    },
+    {
+      "source": "internal_augments",
+      "augmentNameId": "Terraind",
+      "name": "Terrain'd",
+      "signal": "internal_removed_but_cdragon_registry_present",
+      "note": "Registry presence is definition only; this is reported, not resolved."
+    },
+    {
+      "source": "internal_augments",
+      "augmentNameId": "ARAM_BangBang",
+      "name": "From Downtown",
+      "signal": "internal_removed_but_cdragon_registry_present",
+      "note": "Registry presence is definition only; this is reported, not resolved."
+    },
+    {
+      "source": "internal_augments",
+      "augmentNameId": "ItsGoTime",
+      "name": "It's Go Time",
+      "signal": "internal_removed_but_cdragon_registry_present",
+      "note": "Registry presence is definition only; this is reported, not resolved."
+    },
+    {
+      "source": "internal_augments",
+      "augmentNameId": "PinCushion",
+      "name": "Porcupine",
+      "signal": "internal_removed_but_cdragon_registry_present",
+      "note": "Registry presence is definition only; this is reported, not resolved."
+    },
+    {
+      "source": "internal_augments",
+      "augmentNameId": "PinCushion",
+      "name": "Pin Cushion",
+      "signal": "internal_removed_but_cdragon_registry_present",
+      "note": "Registry presence is definition only; this is reported, not resolved."
+    },
+    {
+      "source": "internal_augments",
+      "augmentNameId": "SurgeField",
+      "name": "Surge Field",
+      "signal": "internal_removed_but_cdragon_registry_present",
+      "note": "Registry presence is definition only; this is reported, not resolved."
+    },
     {
       "source": "internal_augments",
       "augmentNameId": "Adamant",
@@ -574,6 +503,13 @@
       "source": "internal_augments",
       "augmentNameId": "ARAM_SpeedDemon",
       "name": "Speed Demon",
+      "signal": "internal_removed_but_cdragon_registry_present",
+      "note": "Registry presence is definition only; this is reported, not resolved."
+    },
+    {
+      "source": "internal_augments",
+      "augmentNameId": "SquishySlappyGrab",
+      "name": "Squishy Slappy Grab",
       "signal": "internal_removed_but_cdragon_registry_present",
       "note": "Registry presence is definition only; this is reported, not resolved."
     },

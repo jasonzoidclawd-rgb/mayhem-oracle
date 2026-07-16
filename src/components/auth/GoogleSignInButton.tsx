@@ -128,15 +128,7 @@ export function GoogleSignInButton({
       />
       {clientId ? (
         <div ref={buttonRef} aria-label={label} aria-busy={busy} />
-      ) : (
-        <button
-          type="button"
-          disabled
-          className="rounded-lg border border-white/15 px-4 py-2 text-sm font-medium text-white/40"
-        >
-          {label}
-        </button>
-      )}
+      ) : null}
       {busy ? <p className="text-xs text-white/50">{t("signIn.busy")}</p> : null}
       {unavailable || message ? (
         <p role="alert" className="max-w-xs text-center text-xs text-rose-300">
