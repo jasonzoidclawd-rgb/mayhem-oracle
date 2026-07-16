@@ -24,6 +24,11 @@ import {
   type AramggRaws,
   type AramggStat,
 } from "../../../overlay/src/dev/aramggSource";
+import {
+  geometryPreviewEnabledFrom,
+  resolveOverlayFixtureMode,
+  type FixtureModeInput,
+} from "../../../overlay/src/dev/fixtureMode";
 
 // ─── Fixtures modeling the real ARAMGG shapes ───
 
@@ -306,5 +311,143 @@ describe("overlay ARAMGG tier fixture (dev-only)", () => {
       };
       expect(() => parseAramggSource(raws, 0)).toThrow(/zero valid records/);
     });
+  });
+});
+
+// ─── Release-blocking regressions from the 12:20–12:22 live test ───
+//
+// The reported defects (synthetic B/C/A badges over Finder/Safari, stale S
+// badges lingering, injected records over real cards, non-recovery on refocus,
+// a persistent empty translucent rectangle) all traced to auto-injected
+// geometry firing whenever OCR dropped below three cards while forcing
+// leagueFocused/phase. `resolveOverlayFixtureMode` is the pure state machine
+// that replaces that logic; these tests pin every reported failure path.
+describe("overlay fixture STATE MACHINE — release-blocking regressions", () => {
+  const base: FixtureModeInput = {
+    tierFixtureOn: true,
+    previewOn: false,
+    leagueFocused: true,
+    phase: "augment_selection",
+    completeOffer: true,
+    aramggReady: true,
+  };
+  const kind = (o: Partial<FixtureModeInput> = {}) =>
+    resolveOverlayFixtureMode({ ...base, ...o }).kind;
+
+  // 1. focus → blur → focus with the SAME offer
+  test("focus→blur→focus (same offer): real → hidden → real recovers", () => {
+    expect(kind({ leagueFocused: true })).toBe("real-offer");
+    expect(kind({ leagueFocused: false })).toBe("hidden"); // blur hides everything
+    expect(kind({ leagueFocused: true })).toBe("real-offer"); // refocus recovers
+  });
+
+  // 2. focus → blur → focus with a CHANGED offer (OCR mid-rescan on refocus)
+  test("focus→blur→focus (changed offer): no badges until 3 confident cards", () => {
+    expect(kind({ leagueFocused: false })).toBe("hidden");
+    // refocused but the new offer's OCR is not yet complete → diagnostic, not
+    // stale badges from the prior offer
+    expect(kind({ leagueFocused: true, completeOffer: false })).toBe("ocr-unavailable");
+    // OCR completes on the new offer → real badges
+    expect(kind({ leagueFocused: true, completeOffer: true })).toBe("real-offer");
+  });
+
+  // 3. OCR failure while League remains visible/focused
+  test("OCR failure while League focused → diagnostic, never synthetic", () => {
+    expect(kind({ completeOffer: false })).toBe("ocr-unavailable");
+    // ARAMGG not ready is still a diagnostic, never a geometry/preview fallback
+    expect(kind({ completeOffer: false, aramggReady: false })).toBe("ocr-unavailable");
+  });
+
+  // 4. no synthetic fallback in an active game
+  test("active game (in_game) never injects geometry", () => {
+    expect(kind({ phase: "in_game", completeOffer: false })).toBe("hidden");
+    // even with the preview flag on, a running game (non-idle) suppresses preview
+    expect(kind({ phase: "in_game", previewOn: true, leagueFocused: false })).toBe("hidden");
+  });
+
+  // 5. no badges outside League (unfocused or not detected)
+  test("League unfocused/idle hides all in-game surfaces", () => {
+    expect(kind({ leagueFocused: false, phase: "augment_selection" })).toBe("hidden");
+    expect(kind({ leagueFocused: false, phase: "idle" })).toBe("hidden");
+    expect(kind({ leagueFocused: true, phase: "idle" })).toBe("hidden");
+    expect(kind({ leagueFocused: false, phase: "client_found" })).toBe("hidden");
+  });
+
+  // 6. stale-offer invalidation: an incomplete offer never yields real badges
+  test("incomplete offer is never rendered as real badges", () => {
+    expect(kind({ completeOffer: false })).not.toBe("real-offer");
+  });
+
+  // 7 & 9. single overlay surface / no duplicate layers: the resolver returns
+  // exactly ONE mode, and real-offer vs preview are mutually exclusive because
+  // preview requires League to be entirely absent.
+  test("real-offer and preview are mutually exclusive (no duplicate layers)", () => {
+    // preview flag + focused real offer → real-offer wins, no preview overlay
+    expect(
+      kind({ previewOn: true, leagueFocused: true, phase: "augment_selection" }),
+    ).toBe("real-offer");
+    // preview flag + League entirely absent → preview only
+    expect(
+      kind({
+        tierFixtureOn: false,
+        previewOn: true,
+        leagueFocused: false,
+        phase: "idle",
+      }),
+    ).toBe("preview");
+  });
+
+  // 8. no orphaned/synthetic surface: geometry preview requires its OWN flag AND
+  // League entirely absent, and never fabricates stats.
+  test("geometry preview requires its own flag AND League absent", () => {
+    const preview = (o: Partial<FixtureModeInput>) =>
+      kind({ tierFixtureOn: false, previewOn: true, ...o });
+    // tier fixture alone (no preview flag) never previews, even idle+unfocused
+    expect(kind({ previewOn: false, leagueFocused: false, phase: "idle" })).toBe("hidden");
+    // preview flag but League focused → suppressed
+    expect(preview({ leagueFocused: true, phase: "idle" })).toBe("hidden");
+    // preview flag but a game is running (non-idle) → suppressed
+    expect(preview({ leagueFocused: false, phase: "in_game" })).toBe("hidden");
+    // preview flag + League absent (idle + unfocused) + ARAMGG ready → preview
+    expect(preview({ leagueFocused: false, phase: "idle", aramggReady: true })).toBe("preview");
+    // ARAMGG not ready → hidden, never synthetic stats
+    expect(preview({ leagueFocused: false, phase: "idle", aramggReady: false })).toBe("hidden");
+  });
+
+  // 10. dummy P:50% removed — ARAMGG-backed candidates carry probability 0 (the
+  // badge suppresses the `P:` span entirely for fixture-backed candidates).
+  test("ARAMGG-backed candidates carry NO fabricated pick probability", () => {
+    const card: AramggFixtureCard = {
+      slug: "alpha",
+      method: "cdragon-icon",
+      stat: {
+        augmentId: "1001",
+        rawWinRate: "0.563213",
+        winRatePercent: "56.3213",
+        numGames: "988166",
+        pickRate: "0.008409",
+        tier: 2,
+        tierLetter: "S",
+        grade: "strong",
+      },
+    };
+    const payload = buildAramggDecisionResult([card], 1);
+    expect(payload.result.candidates[0].probability.withNormalRerolls).toBe(0);
+    expect(payload.result.candidates[0].probability.initialThree).toBe(0);
+  });
+
+  // 11. atomic three-card update: real badges require a COMPLETE three-card offer
+  test("real badges require a complete three-card offer (atomic replacement)", () => {
+    expect(kind({ completeOffer: true })).toBe("real-offer");
+    expect(kind({ completeOffer: false })).toBe("ocr-unavailable");
+  });
+
+  // preview enable predicate: dev build AND explicit flag=1 (separate from the
+  // tier-fixture flag).
+  test("geometryPreviewEnabledFrom requires dev build AND flag=1", () => {
+    expect(geometryPreviewEnabledFrom({ dev: true, flag: "1" })).toBe(true);
+    expect(geometryPreviewEnabledFrom({ dev: false, flag: "1" })).toBe(false);
+    expect(geometryPreviewEnabledFrom({ dev: true, flag: undefined })).toBe(false);
+    expect(geometryPreviewEnabledFrom({ dev: true, flag: "0" })).toBe(false);
   });
 });

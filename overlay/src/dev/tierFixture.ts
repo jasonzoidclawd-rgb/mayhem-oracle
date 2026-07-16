@@ -96,7 +96,9 @@ function toCandidate(card: AramggFixtureCard): DecisionCandidateResult {
     // value always comes from `winRateDisplayBySlug` (the exact string).
     score: Number(stat.winRatePercent),
     percentile: 0,
-    probability: { initialThree: 0.5, withNormalRerolls: 0.5 },
+    // ARAMGG supplies no pick probability; this placeholder is NEVER rendered —
+    // the badge suppresses `P:` for ARAMGG-backed candidates (no fake model %).
+    probability: { initialThree: 0, withNormalRerolls: 0 },
     warnings: [],
     reasons: [
       `aramgg:tier-${stat.tier}`,

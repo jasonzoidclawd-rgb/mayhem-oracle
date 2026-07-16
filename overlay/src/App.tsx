@@ -51,6 +51,7 @@ import {
   type AramggFixtureCard,
 } from "./dev/tierFixture";
 import { useAramggTierFixture } from "./dev/useAramggTierFixture";
+import { isGeometryPreviewEnabled, resolveOverlayFixtureMode } from "./dev/fixtureMode";
 import {
   canRunOcr,
   createOcrAvailability,
@@ -189,13 +190,19 @@ function App() {
   const [memberSnapshot, setMemberSnapshot] = useState<MemberSnapshot | null>(null);
   const [mode, setMode] = useState<DecisionMode>("competitive");
   const [coachOpen, setCoachOpen] = useState(false);
+  // Dev debug panel (tier-fixture / preview only): pin keeps it visible when
+  // League loses focus; collapse shrinks it so it never obscures a card.
+  const [debugPinned, setDebugPinned] = useState(false);
+  const [debugCollapsed, setDebugCollapsed] = useState(false);
   const activeGameHashRef = useRef<string | null>(null);
   const memberBootstrapCompleteRef = useRef(false);
   const collectorEnabled = collectorStatus?.consent === "accepted";
   const collectorCaptureEnabled = collectorEnabled && !collectorStatus?.paused;
   // Dev-only: bypass ONLY the member-coach auth/data. Everything else (OCR,
-  // calibration, positioning, collector consent) stays on the real path.
+  // calibration, positioning, collector consent, focus, phase) stays on the
+  // real path. Geometry preview is a SEPARATE, independently-gated flag.
   const tierFixtureOn = isTierFixtureEnabled();
+  const geometryPreviewOn = isGeometryPreviewEnabled();
   const effectiveMember = tierFixtureOn ? TIER_FIXTURE_MEMBER : memberSnapshot;
   const memberEnabled = memberRecommendationsVisible(
     collectorEnabled,
@@ -526,25 +533,28 @@ function App() {
     pickedAugments,
   ]);
 
-  // ─── Dev ARAMGG tier-fixture (dev + MAYHEM_OVERLAY_TIER_FIXTURE=1 only) ───
-  // Canonical, non-synthetic augment stats from ARAMGG drive the REAL PR #46
-  // render path. Statistics never fall back to synthetic/local values; only
-  // card geometry is injected when live OCR detection is unavailable.
-  const aramgg = useAramggTierFixture(tierFixtureOn, overlayData?.augments);
+  // ─── Dev ARAMGG fixture / geometry preview (dev flags only) ───
+  // TIER_FIXTURE: canonical ARAMGG stats over REAL OCR-detected cards — never
+  // injects geometry, never forces focus/phase, so it can never mask real OCR.
+  // GEOMETRY_PREVIEW: synthetic cards, ONLY when League is absent, watermarked.
+  const aramgg = useAramggTierFixture(
+    tierFixtureOn || geometryPreviewOn,
+    overlayData?.augments,
+  );
 
-  // Deterministic geometry fallback: when there is no live 3-card detection,
-  // synthesize a 3-card offer from the first resolved-with-stats augments so
-  // the real render path can be exercised without a live game. `badgePositions`
-  // supplies responsive positions (its calibration-free % anchors).
-  const syntheticMatchedCards = useMemo((): MatchedCard[] => {
-    if (
-      !tierFixtureOn ||
-      aramgg.status !== "ready" ||
-      isCompleteThreeCardOffer(matchedCards) ||
-      !overlayData
-    ) {
-      return [];
-    }
+  const fixtureMode = resolveOverlayFixtureMode({
+    tierFixtureOn,
+    previewOn: geometryPreviewOn,
+    leagueFocused,
+    phase,
+    completeOffer: isCompleteThreeCardOffer(matchedCards),
+    aramggReady: aramgg.status === "ready",
+  });
+
+  // Synthetic cards exist ONLY in explicit preview mode (League absent). They
+  // are never used to fill a real offer or a transient OCR gap.
+  const previewCards = useMemo((): MatchedCard[] => {
+    if (fixtureMode.kind !== "preview" || !overlayData) return [];
     const chosen = overlayData.augments
       .filter((a) => aramgg.resolvedBySlug.has(a.slug))
       .sort((l, r) => l.slug.localeCompare(r.slug))
@@ -566,40 +576,58 @@ function App() {
         probabilityWithReroll: 0,
       },
     }));
-  }, [tierFixtureOn, aramgg.status, aramgg.resolvedBySlug, matchedCards, overlayData]);
+  }, [fixtureMode.kind, aramgg.resolvedBySlug, overlayData]);
 
-  const injectingGeometry =
-    tierFixtureOn &&
-    !isCompleteThreeCardOffer(matchedCards) &&
-    syntheticMatchedCards.length === 3;
+  // Cards the fixture renders over: REAL matched cards for a real offer, or the
+  // synthetic preview cards. Nothing is injected into the real-offer path.
+  const fixtureCards = fixtureMode.kind === "preview" ? previewCards : matchedCards;
+  const isPreviewMode = fixtureMode.kind === "preview";
 
-  const effectiveMatchedCards = injectingGeometry ? syntheticMatchedCards : matchedCards;
-  const effectivePhase: Phase = injectingGeometry ? "augment_selection" : phase;
-  const effectiveLeagueFocused = injectingGeometry ? true : leagueFocused;
-  // Dev flag unlocks the badge/coach gate without real collector+member auth.
-  const effectiveMemberEnabled = tierFixtureOn ? effectiveMember?.enabled === true : memberEnabled;
-
-  const tierFixture = useMemo(() => {
-    const round = currentRound?.round ?? (tierFixtureOn ? 1 : null);
-    if (
-      !tierFixtureOn ||
-      aramgg.status !== "ready" ||
-      round === null ||
-      !isCompleteThreeCardOffer(effectiveMatchedCards)
-    ) {
+  // Build the ARAMGG-backed decision result from whichever cards are active.
+  const fixturePayload = useMemo(() => {
+    if (fixtureMode.kind !== "real-offer" && fixtureMode.kind !== "preview") {
       return null;
     }
-    const cards = [...effectiveMatchedCards]
+    const round = currentRound?.round ?? 1;
+    const cards = [...fixtureCards]
       .sort((left, right) => left.regionIndex - right.regionIndex)
       .map((card): AramggFixtureCard | null => aramgg.resolvedBySlug.get(card.augment.slug) ?? null)
       .filter((card): card is AramggFixtureCard => card !== null);
     if (cards.length === 0) return null;
     return buildAramggDecisionResult(cards, round as 1 | 2 | 3 | 4);
-  }, [tierFixtureOn, aramgg.status, aramgg.resolvedBySlug, currentRound, effectiveMatchedCards]);
+  }, [fixtureMode.kind, fixtureCards, aramgg.resolvedBySlug, currentRound]);
 
-  const effectiveDecisionResult = tierFixture?.result ?? decisionResult;
-  const effectiveWinRateBySlug: Record<string, number | string | null> =
-    tierFixture?.winRateDisplayBySlug ?? winRateBySlug;
+  // Dev flag unlocks the member gate ONLY (no collector/entitlement) — it never
+  // relaxes the focus/phase/complete-offer gates below.
+  const effectiveMemberEnabled = tierFixtureOn ? effectiveMember?.enabled === true : memberEnabled;
+  const isFixtureBacked = fixturePayload != null; // ARAMGG-backed → no fake P:50%
+
+  const badgeDecisionResult = fixturePayload?.result ?? decisionResult;
+  const badgeWinRateBySlug: Record<string, number | string | null> =
+    fixturePayload?.winRateDisplayBySlug ?? winRateBySlug;
+
+  // Real ARAMGG/engine badges: strictly gated on REAL focus + augment phase +
+  // a confidently-matched complete offer. Preview badges: only in preview mode.
+  const realBadgesReady =
+    !isPreviewMode &&
+    effectiveMemberEnabled &&
+    phase === "augment_selection" &&
+    isCompleteThreeCardOffer(matchedCards) &&
+    leagueFocused &&
+    badgeDecisionResult != null;
+  const previewBadgesReady =
+    isPreviewMode && fixturePayload != null && previewCards.length === 3;
+  const showBadgeLayer = realBadgesReady || previewBadgesReady;
+
+  // Diagnostics counters (never conflate injected with detected).
+  const diag = {
+    ocrDetected: matchedCards.length,
+    previewInjected: isPreviewMode ? previewCards.length : 0,
+    offeredMatched: matchedCards.filter((c) => aramgg.resolvedBySlug.has(c.augment.slug)).length,
+    catalogResolved: aramgg.resolvedBySlug.size,
+    renderedRealBadges: realBadgesReady ? matchedCards.length : 0,
+    renderedPreviewBadges: previewBadgesReady ? previewCards.length : 0,
+  };
 
   const stopOcr = useCallback(() => {
     ocrActiveRef.current = false;
@@ -904,6 +932,19 @@ function App() {
     };
   }, [poll]);
 
+  // Fix #5: force an immediate scan the instant League regains focus, rather
+  // than waiting up to 1.5s for the next poll tick. Stale matched cards were
+  // already cleared on blur (poll → setMatchedCards([])), so refocus rebuilds
+  // the three-card offer atomically from a fresh OCR pass; badges stay hidden
+  // until all three current cards are confidently matched.
+  const pollRef = useRef(poll);
+  useEffect(() => {
+    pollRef.current = poll;
+  }, [poll]);
+  useEffect(() => {
+    if (leagueFocused) void pollRef.current();
+  }, [leagueFocused]);
+
   // Cleanup OCR on unmount
   useEffect(() => {
     return () => {
@@ -934,7 +975,7 @@ function App() {
 
   return (
     <div className="overlay-root">
-      {(calibration || calibrationError) && (
+      {leagueFocused && (calibration || calibrationError) && (
         <div className="calibration-panel">
           <div className="calibration-title">Calibration</div>
           {calibration ? (
@@ -977,39 +1018,51 @@ function App() {
         }`}
       />}
 
-      {/* Badges overlaid on augment cards during selection */}
-      {effectiveMemberEnabled &&
-        effectivePhase === "augment_selection" &&
-        isCompleteThreeCardOffer(effectiveMatchedCards) &&
-        effectiveLeagueFocused &&
-        effectiveDecisionResult && (
+      {/* Badges overlaid on augment cards. Rendered ONLY for a real focused
+          complete offer (realBadgesReady) or explicit League-absent preview
+          (previewBadgesReady) — never during a transient OCR gap, never while
+          League is unfocused, never over a stale offer. See fixtureMode.ts. */}
+      {showBadgeLayer && badgeDecisionResult && (
         <>
-          {effectiveMatchedCards.map((card) => {
+          {fixtureCards.map((card) => {
             const pos = badgePositions[card.regionIndex];
             if (!pos) return null;
-            const candidate = effectiveDecisionResult.candidates.find(
+            const candidate = badgeDecisionResult.candidates.find(
               (entry) => entry.augmentSlug === card.augment.slug,
             );
             if (!candidate) return null;
             const tier = tierForGrade(candidate.grade);
-            const winRate = tierFixtureOn
-              ? effectiveWinRateBySlug[card.augment.slug]
+            // ARAMGG/preview badges display the exact win-rate string; the real
+            // engine path uses the numeric augment win_rate.
+            const winRate = isFixtureBacked
+              ? badgeWinRateBySlug[card.augment.slug]
               : card.augment.win_rate;
             return (
               <div
-                className={`badge badge-grade-${candidate.grade} ${tierClassName(tier)}`}
+                className={`badge badge-grade-${candidate.grade} ${tierClassName(tier)}${
+                  isPreviewMode ? " badge-preview" : ""
+                }`}
                 key={card.augment.slug}
                 style={{ left: pos.left, top: pos.top }}
               >
+                {isPreviewMode && (
+                  <span className="preview-watermark">PREVIEW</span>
+                )}
                 {card.augment.lifecycle === "added" && (
                   <span className="badge-new">NEW</span>
                 )}
                 <span className="badge-label">{mode}</span>
                 <span className="badge-tier">{tier}</span>
-                <span className="badge-wr">{formatWinRate(winRate, { raw: tierFixtureOn })}</span>
-                <span className="badge-prob">
-                  P:{Math.round(candidate.probability.withNormalRerolls * 100)}%
+                <span className="badge-wr">
+                  {formatWinRate(winRate, { raw: isFixtureBacked })}
                 </span>
+                {/* No fake model probability for ARAMGG/preview badges; only the
+                    real engine supplies a pick probability. */}
+                {!isFixtureBacked && (
+                  <span className="badge-prob">
+                    P:{Math.round(candidate.probability.withNormalRerolls * 100)}%
+                  </span>
+                )}
                 {candidate.warnings.includes("hard-incompatible") && (
                   <strong className="badge-warning">Hard warning</strong>
                 )}
@@ -1017,6 +1070,15 @@ function App() {
             );
           })}
         </>
+      )}
+
+      {/* OCR diagnostic (dev fixture): League focused on an augment screen but
+          not three confident cards — show a diagnostic, never synthetic badges. */}
+      {fixtureMode.kind === "ocr-unavailable" && (
+        <div className="ocr-diagnostic">
+          OCR unavailable — {diag.ocrDetected}/3 cards matched
+          {aramgg.status !== "ready" && ` · ARAMGG ${aramgg.status}`}
+        </div>
       )}
 
       {/* Minimal HUD when in-game but not selecting */}
@@ -1048,13 +1110,16 @@ function App() {
       {collectorEnabled && effectiveMember?.error && (
         <div className="member-error">Member coach unavailable: {effectiveMember.error}</div>
       )}
-      {tierFixtureOn && (
+      {/* Dev debug panel. Hidden on League focus-loss unless explicitly pinned
+          (fix #4); collapsible/movable and bottom-right so it never obscures the
+          left recommendation (fix #10). */}
+      {(tierFixtureOn || geometryPreviewOn) && (leagueFocused || debugPinned) && (
         <div
           className="aramgg-debug-panel"
           style={{
             position: "fixed",
             bottom: 8,
-            left: 8,
+            right: 8,
             maxWidth: 520,
             padding: "8px 10px",
             font: "11px/1.4 ui-monospace, monospace",
@@ -1067,52 +1132,79 @@ function App() {
           }}
         >
           <div style={{ color: "#fbbf24", fontWeight: 700 }}>
-            ARAMGG TIER FIXTURE (dev) — upstream tier relabeled ·{" "}
+            ARAMGG {isPreviewMode ? "PREVIEW" : "TIER FIXTURE"} (dev) ·{" "}
             {aramgg.status === "ready"
               ? aramgg.fromCache
                 ? "CACHED"
                 : "LIVE"
               : aramgg.status.toUpperCase()}
             <button
-              onClick={aramgg.refresh}
+              onClick={() => setDebugCollapsed((c) => !c)}
               style={{ marginLeft: 8, font: "inherit", cursor: "pointer" }}
+            >
+              {debugCollapsed ? "expand" : "collapse"}
+            </button>
+            <button
+              onClick={() => setDebugPinned((p) => !p)}
+              style={{ marginLeft: 4, font: "inherit", cursor: "pointer" }}
+            >
+              {debugPinned ? "unpin" : "pin"}
+            </button>
+            <button
+              onClick={aramgg.refresh}
+              style={{ marginLeft: 4, font: "inherit", cursor: "pointer" }}
             >
               force-refresh
             </button>
           </div>
-          <div>Source: ARAMGG (aramgg.com static JSON)</div>
-          {aramgg.status === "error" && (
-            <div style={{ color: "#f87171" }}>ERROR: {aramgg.error}</div>
-          )}
-          {aramgg.status === "ready" && (
+          {!debugCollapsed && (
             <>
-              <div>
-                Patch/version: {aramgg.patch ?? "?"} · fetched{" "}
-                {aramgg.fetchedAt ? new Date(aramgg.fetchedAt).toISOString() : "?"}
-                {aramgg.fromCache && " (cache — not live)"}
-              </div>
-              <div style={{ opacity: 0.7 }}>{aramgg.sourceUrls?.stats}</div>
-              <div style={{ opacity: 0.7 }}>{aramgg.sourceUrls?.catalog}</div>
+              <div>Source: ARAMGG (aramgg.com static JSON)</div>
+              {aramgg.status === "error" && (
+                <div style={{ color: "#f87171" }}>ERROR: {aramgg.error}</div>
+              )}
+              {/* Diagnostics: injected preview cards are NEVER labelled "detected". */}
               <div style={{ marginTop: 4 }}>
-                detected cards: {effectiveMatchedCards.length}
-                {injectingGeometry && " (injected geometry)"} · ARAMGG matched:{" "}
-                {aramgg.resolvedBySlug.size} · rendered badges:{" "}
-                {tierFixture?.debugRows.length ?? 0}
+                OCR cards detected: {diag.ocrDetected} · preview cards injected:{" "}
+                {diag.previewInjected} · offered cards matched: {diag.offeredMatched} ·
+                catalog records resolved: {diag.catalogResolved}
               </div>
-              {tierFixture?.debugRows.map((row) => {
-                const lastResort = row.method === "localized-name";
-                return (
-                  <div
-                    key={row.slug}
-                    style={{ marginTop: 2, color: lastResort ? "#fbbf24" : undefined }}
-                  >
-                    {row.slug} · id={row.augmentId} ·{" "}
-                    {lastResort ? `${row.method} (LAST-RESORT fallback)` : row.method} · wr=
-                    {row.rawWinRate} → {row.winRatePercent}% · n={row.numGames} · tier{" "}
-                    {row.upstreamTier}→{row.cardTier}
+              <div>
+                rendered real badges: {diag.renderedRealBadges} · rendered preview
+                badges: {diag.renderedPreviewBadges}
+              </div>
+              {aramgg.status === "ready" && (
+                <>
+                  <div>
+                    Patch/version: {aramgg.patch ?? "?"} · fetched{" "}
+                    {aramgg.fetchedAt
+                      ? new Date(aramgg.fetchedAt).toISOString()
+                      : "?"}
+                    {aramgg.fromCache && " (cache — not live)"}
                   </div>
-                );
-              })}
+                  <div style={{ opacity: 0.7 }}>{aramgg.sourceUrls?.stats}</div>
+                  <div style={{ opacity: 0.7 }}>{aramgg.sourceUrls?.catalog}</div>
+                  {fixturePayload?.debugRows.map((row) => {
+                    const lastResort = row.method === "localized-name";
+                    return (
+                      <div
+                        key={row.slug}
+                        style={{
+                          marginTop: 2,
+                          color: lastResort ? "#fbbf24" : undefined,
+                        }}
+                      >
+                        {row.slug} · id={row.augmentId} ·{" "}
+                        {lastResort
+                          ? `${row.method} (LAST-RESORT fallback)`
+                          : row.method}{" "}
+                        · wr={row.rawWinRate} → {row.winRatePercent}% · n=
+                        {row.numGames} · tier {row.upstreamTier}→{row.cardTier}
+                      </div>
+                    );
+                  })}
+                </>
+              )}
             </>
           )}
         </div>
@@ -1130,12 +1222,12 @@ function App() {
         </div>
       )}
       <CoachPanel
-        open={effectiveMemberEnabled && coachOpen}
-        result={effectiveDecisionResult}
+        open={effectiveMemberEnabled && coachOpen && (leagueFocused || isPreviewMode)}
+        result={badgeDecisionResult}
         mode={mode}
         onModeChange={setMode}
-        winRateBySlug={effectiveWinRateBySlug}
-        rawWinRate={tierFixtureOn}
+        winRateBySlug={badgeWinRateBySlug}
+        rawWinRate={isFixtureBacked}
       />
       <CollectorOverlayController onStatus={setCollectorStatus} />
     </div>

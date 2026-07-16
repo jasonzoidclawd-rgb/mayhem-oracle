@@ -65,6 +65,46 @@ html, body, #root {
   gap: 2px;
   min-width: 100px;
   z-index: 50;
+  /* Info-only surface: must never intercept clicks on the cards, reroll, or the
+     central upgrade button beneath it (fix #9). There is no native click-through
+     (no ignoreCursorEvents), so this CSS is the guarantee. */
+  pointer-events: none;
+}
+
+/* Explicit geometry-preview badges carry a prominent watermark so synthetic
+   card geometry can never be mistaken for a real in-game offer (fix #3). */
+.badge-preview {
+  border-style: dashed;
+  border-color: rgba(251, 191, 36, 0.7);
+}
+
+.preview-watermark {
+  font-size: 8px;
+  font-weight: 900;
+  letter-spacing: 1.5px;
+  color: #fbbf24;
+  background: rgba(251, 191, 36, 0.14);
+  border: 1px solid rgba(251, 191, 36, 0.5);
+  border-radius: 3px;
+  padding: 1px 5px;
+  text-transform: uppercase;
+}
+
+/* OCR diagnostic shown when League is focused on an augment screen but three
+   cards are not yet confidently matched — replaces synthetic badges (fix #3). */
+.ocr-diagnostic {
+  position: fixed;
+  top: 8px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 60;
+  padding: 4px 10px;
+  font: 11px/1.3 ui-monospace, monospace;
+  color: #fbbf24;
+  background: rgba(8, 12, 20, 0.85);
+  border: 1px solid rgba(251, 191, 36, 0.4);
+  border-radius: 6px;
+  pointer-events: none;
 }
 
 .badge-S { border-color: rgba(251, 191, 36, 0.5); box-shadow: 0 0 12px rgba(251, 191, 36, 0.15); }

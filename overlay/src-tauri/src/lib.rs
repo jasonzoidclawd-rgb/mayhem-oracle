@@ -327,6 +327,7 @@ fn apply_overlay_window_bounds(
     use tauri::{Manager, PhysicalPosition, PhysicalSize, Position, Size};
 
     let Some(window) = app.get_webview_window("overlay") else {
+        eprintln!("[overlay-window] reposition skipped — \"overlay\" window not found");
         return Ok(());
     };
 
@@ -342,6 +343,17 @@ fn apply_overlay_window_bounds(
             height: calibration.viewport.height,
         }))
         .map_err(|e| format!("Overlay size failed: {}", e))?;
+
+    // Window-lifecycle audit log (fix #7). The single "overlay" window is only
+    // ever repositioned/resized here (Windows only); no window is created or
+    // destroyed to change modes.
+    eprintln!(
+        "[overlay-window] repositioned single \"overlay\" window to {},{} {}x{}",
+        calibration.viewport.x,
+        calibration.viewport.y,
+        calibration.viewport.width,
+        calibration.viewport.height
+    );
 
     Ok(())
 }
@@ -676,6 +688,19 @@ pub fn run() {
                     ns_win.setIgnoresMouseEvents_(cocoa::base::YES);
                     ns_win.setHidesOnDeactivate_(cocoa::base::NO);
                 }
+
+                // Window-lifecycle audit log (fix #7). There is exactly ONE native
+                // overlay window: created here from tauri.conf.json and NEVER
+                // repositioned, hidden, or destroyed at runtime on macOS. All
+                // calibration/collector/badge/debug surfaces are React components
+                // inside this single window, so "duplicate" panels or "ghost"
+                // badges can only be DOM state, never extra native windows. The
+                // window ignores mouse events natively → fully click-through.
+                eprintln!(
+                    "[overlay-window] created single native window \"overlay\" \
+                     (macOS full-screen, level=2147483639, ignoresMouseEvents=YES, \
+                     never repositioned/hidden/destroyed at runtime)"
+                );
 
                 // Re-assert level every 5s — game windows can temporarily jump above us
                 // during mode switches. Fetches ns_window fresh on main thread each time
