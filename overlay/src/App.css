@@ -53,17 +53,18 @@ html, body, #root {
 /* ─── Badge (positioned on augment cards) ─── */
 .badge {
   position: absolute;
-  transform: translate(-50%, 0);
+  transform: none;
   background: rgba(8, 12, 20, 0.92);
   backdrop-filter: blur(12px);
   border: 1.5px solid rgba(100, 116, 139, 0.3);
-  border-radius: 8px;
-  padding: 6px 14px;
+  border-radius: 7px;
+  padding: 4px 8px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 2px;
-  min-width: 100px;
+  gap: 1px;
+  width: 104px;
+  min-height: 86px;
   z-index: 50;
   /* Info-only surface: must never intercept clicks on the cards, reroll, or the
      central upgrade button beneath it (fix #9). There is no native click-through
@@ -90,23 +91,6 @@ html, body, #root {
   text-transform: uppercase;
 }
 
-/* OCR diagnostic shown when League is focused on an augment screen but three
-   cards are not yet confidently matched — replaces synthetic badges (fix #3). */
-.ocr-diagnostic {
-  position: fixed;
-  top: 8px;
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 60;
-  padding: 4px 10px;
-  font: 11px/1.3 ui-monospace, monospace;
-  color: #fbbf24;
-  background: rgba(8, 12, 20, 0.85);
-  border: 1px solid rgba(251, 191, 36, 0.4);
-  border-radius: 6px;
-  pointer-events: none;
-}
-
 .badge-S { border-color: rgba(251, 191, 36, 0.5); box-shadow: 0 0 12px rgba(251, 191, 36, 0.15); }
 .badge-A { border-color: rgba(74, 222, 128, 0.4); box-shadow: 0 0 12px rgba(74, 222, 128, 0.1); }
 .badge-B { border-color: rgba(96, 165, 250, 0.3); }
@@ -120,7 +104,7 @@ html, body, #root {
 }
 
 .badge-tier {
-  font-size: 42px;
+  font-size: 28px;
   font-weight: 900;
   line-height: 1;
   color: var(--tier-accent, #94a3b8);
@@ -240,36 +224,6 @@ html, body, #root {
   border: 1px solid rgba(251, 113, 133, 0.35);
   border-radius: 6px;
   padding: 5px 8px;
-}
-
-.calibration-panel {
-  position: fixed;
-  top: 24px;
-  right: 8px;
-  z-index: 120;
-  display: grid;
-  gap: 2px;
-  max-width: 340px;
-  padding: 8px 10px;
-  color: #94a3b8;
-  font-size: 10px;
-  line-height: 1.3;
-  background: rgba(8, 12, 20, 0.72);
-  border: 1px solid rgba(56, 189, 248, 0.24);
-  border-radius: 6px;
-  backdrop-filter: blur(8px);
-  pointer-events: none;
-}
-
-.calibration-title {
-  color: #bae6fd;
-  font-size: 10px;
-  font-weight: 800;
-  text-transform: uppercase;
-}
-
-.calibration-warning {
-  color: #fbbf24;
 }
 
 /* ─── Member coach ─── */

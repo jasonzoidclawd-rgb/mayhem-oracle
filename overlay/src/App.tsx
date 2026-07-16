@@ -10,12 +10,14 @@ import {
 } from "./scoring/offer-lookup";
 import {
   advanceOcrSelection,
+  augmentRoundForLevel,
+  AUGMENT_LEVELS,
   isCompleteThreeCardOffer,
   matchAugmentFrame,
   ocrRunIsCurrent,
   shouldClearOcrStateForGameflow,
-  shouldEndAugmentSelectionForLevel,
   shouldRunOcrForGameflow,
+  transitionAugmentRound,
 } from "./augmentSelection";
 import {
   CollectorOverlayController,
@@ -59,6 +61,12 @@ import {
 } from "./dev/tierFixture";
 import { useAramggTierFixture } from "./dev/useAramggTierFixture";
 import { isGeometryPreviewEnabled, resolveOverlayFixtureMode } from "./dev/fixtureMode";
+import { DevOverlayDiagnostics } from "./dev/DevOverlayDiagnostics";
+import { developmentSurfaceVisible } from "./dev/productionSurfaces";
+import type {
+  OcrCardDiagnostic as DevOcrCardDiagnostic,
+  OcrLifecycleSnapshot,
+} from "./dev/diagnostics";
 import {
   gameOverlayVisible,
   unknownForegroundState,
@@ -68,14 +76,14 @@ import {
   canRunOcr,
   createOcrAvailability,
   ocrAvailabilityFromError,
-  userFacingOcrStatus,
   type OcrAvailability,
 } from "./ocrAvailability";
 import {
-  BADGE_ANCHORS,
-  cssPointFromNormalizedAnchor,
+  CARD_NAME_REGIONS,
+  physicalRectForNormalizedRegion,
   type OverlayCalibration,
 } from "./calibration";
+import { overlayAvoidRects, placeBadgeAboveCard } from "./badgeLayout";
 import "./App.css";
 
 // ─── Types ───
@@ -100,6 +108,7 @@ interface DetectedAugment {
 
 interface NativeOcrCardDiagnostic {
   regionIndex: number;
+  cardRect: { x: number; y: number; width: number; height: number } | null;
   crop: { x: number; y: number; width: number; height: number } | null;
   captureSucceeded: boolean;
   rawText: string | null;
@@ -111,13 +120,8 @@ interface NativeOcrCardDiagnostic {
 interface OcrScanResult {
   detected: DetectedAugment[];
   diagnostics: NativeOcrCardDiagnostic[];
-}
-
-interface OcrCardDiagnostic extends NativeOcrCardDiagnostic {
-  normalizedText: string;
-  bestCandidate: string | null;
-  confidence: number | null;
-  rejectionReason: string | null;
+  captureAttempted: boolean;
+  cropCount: number;
 }
 
 interface MatchedCard {
@@ -179,8 +183,6 @@ type Phase = "idle" | "client_found" | "in_game" | "augment_selection";
 
 // ─── Constants ───
 
-const AUGMENT_LEVELS = [3, 7, 11, 15];
-
 async function loadJson<T>(path: string): Promise<T> {
   const response = await fetch(new URL(path, window.location.origin));
   if (!response.ok) {
@@ -216,7 +218,18 @@ function App() {
     unknownForegroundState(),
   );
   const foregroundStateRef = useRef<ForegroundState>(unknownForegroundState());
-  const [ocrDiagnostics, setOcrDiagnostics] = useState<OcrCardDiagnostic[]>([]);
+  const [ocrDiagnostics, setOcrDiagnostics] = useState<DevOcrCardDiagnostic[]>([]);
+  const [ocrLifecycle, setOcrLifecycle] = useState<OcrLifecycleSnapshot>({
+    phase: "idle",
+    currentRound: null,
+    active: false,
+    lastScanStart: null,
+    lastScanEnd: null,
+    scanRunId: null,
+    captureAttempted: false,
+    cropCount: 0,
+    noCropReason: "not-started",
+  });
   const [overlayData, setOverlayData] = useState<OverlayData | null>(null);
   const [abilityProfiles, setAbilityProfiles] = useState<Record<string, AbilityProfile | null>>({});
   const [dataError, setDataError] = useState<string | null>(null);
@@ -233,12 +246,13 @@ function App() {
   const [mode, setMode] = useState<DecisionMode>("competitive");
   const [coachOpen, setCoachOpen] = useState(false);
   // Dev debug panel (tier-fixture / preview only): pin keeps it visible when
-  // League loses focus; collapse shrinks it so it never obscures a card.
+  // League loses focus; it starts collapsed so it cannot obscure a badge.
   const [debugPinned, setDebugPinned] = useState(false);
-  const [debugCollapsed, setDebugCollapsed] = useState(false);
+  const [debugCollapsed, setDebugCollapsed] = useState(true);
   const activeGameHashRef = useRef<string | null>(null);
   const memberBootstrapCompleteRef = useRef(false);
   const gameWindowForeground = foregroundState.gameWindowForeground;
+  const devDiagnosticsEnabled = developmentSurfaceVisible(import.meta.env.DEV);
   const collectorEnabled = collectorStatus?.consent === "accepted";
   const collectorCaptureEnabled = collectorEnabled && !collectorStatus?.paused;
   // Dev-only: bypass ONLY the member-coach auth/data. Everything else (OCR,
@@ -255,6 +269,7 @@ function App() {
   const updatePhase = useCallback((nextPhase: Phase) => {
     phaseRef.current = nextPhase;
     setPhase(nextPhase);
+    setOcrLifecycle((previous) => ({ ...previous, phase: nextPhase }));
   }, []);
 
   useEffect(() => {
@@ -520,16 +535,9 @@ function App() {
   }, [overlayData]);
 
   // Current round
-  const currentRound = (() => {
-    if (!playerData) return null;
-    const level = playerData.level;
-    for (let i = AUGMENT_LEVELS.length - 1; i >= 0; i--) {
-      if (level >= AUGMENT_LEVELS[i]) {
-        return { round: i + 1, level: AUGMENT_LEVELS[i] };
-      }
-    }
-    return null;
-  })();
+  const currentRound = playerData ? augmentRoundForLevel(playerData.level) : null;
+  const currentRoundRef = useRef<number | null>(null);
+  currentRoundRef.current = currentRound?.round ?? null;
 
   const decisionResult = useMemo((): DecisionResult | null => {
     if (
@@ -678,7 +686,7 @@ function App() {
     renderedPreviewBadges: previewBadgesReady ? previewCards.length : 0,
   };
 
-  const stopOcr = useCallback(() => {
+  const cancelOcrRun = useCallback((clearVisibleState: boolean) => {
     ocrActiveRef.current = false;
     ocrRunIdRef.current += 1;
     ocrHasSeenCardsRef.current = false;
@@ -688,9 +696,40 @@ function App() {
       ocrTimeoutRef.current = null;
     }
     setOcrActive(false);
-    setMatchedCards([]);
-    setOcrDiagnostics([]);
+    setOcrLifecycle((previous) => ({
+      ...previous,
+      phase: phaseRef.current,
+      currentRound: currentRoundRef.current,
+      active: false,
+      scanRunId: null,
+      captureAttempted: false,
+      cropCount: 0,
+      noCropReason: "ocr-run-cancelled",
+    }));
+    if (clearVisibleState) {
+      setMatchedCards([]);
+      setOcrDiagnostics([]);
+    }
   }, []);
+
+  const stopOcr = useCallback(() => {
+    cancelOcrRun(true);
+  }, [cancelOcrRun]);
+
+  const finishOcr = useCallback(() => {
+    cancelOcrRun(false);
+  }, [cancelOcrRun]);
+
+  const resetOcrForNewRound = useCallback((round: number) => {
+    cancelOcrRun(true);
+    setOcrLifecycle((previous) => ({
+      ...previous,
+      phase: "augment_selection",
+      currentRound: round,
+      active: false,
+      noCropReason: "new-round-awaiting-scan",
+    }));
+  }, [cancelOcrRun]);
 
   const refreshForeground = useCallback(async (): Promise<ForegroundState | null> => {
     if (foregroundPollInFlightRef.current) return null;
@@ -702,6 +741,7 @@ function App() {
       foregroundStateRef.current = nextForeground;
       const changed = [
         "gameWindowForeground",
+        "leagueClientForeground",
         "riotClientForeground",
         "gameRunning",
         "gameWindowDetected",
@@ -709,6 +749,8 @@ function App() {
         "foregroundBundleIdentifier",
         "foregroundOwnerName",
         "foregroundWindowTitle",
+        "foregroundExecutablePath",
+        "foregroundWindowHandle",
       ].some((key) => (
         nextForeground[key as keyof ForegroundState] !==
         previousForeground[key as keyof ForegroundState]
@@ -742,14 +784,36 @@ function App() {
 
   // OCR detection
   const runOcr = useCallback(async (runId: number) => {
-    if (
-      !nameLookup.size ||
-      !ocrRunIsCurrent({
-        active: ocrActiveRef.current,
-        currentRunId: ocrRunIdRef.current,
-        runId,
-      })
-    ) return;
+    if (!ocrRunIsCurrent({
+      active: ocrActiveRef.current,
+      currentRunId: ocrRunIdRef.current,
+      runId,
+    })) return;
+
+    const scanStart = new Date().toISOString();
+    setOcrLifecycle((previous) => ({
+      ...previous,
+      phase: phaseRef.current,
+      currentRound: currentRoundRef.current,
+      active: true,
+      lastScanStart: scanStart,
+      lastScanEnd: null,
+      scanRunId: runId,
+      captureAttempted: false,
+      cropCount: 0,
+      noCropReason: nameLookup.size ? "capture-pending" : "name-lookup-not-ready",
+    }));
+
+    if (!nameLookup.size) {
+      setOcrLifecycle((previous) => ({
+        ...previous,
+        lastScanEnd: new Date().toISOString(),
+        captureAttempted: false,
+        cropCount: 0,
+        noCropReason: "name-lookup-not-ready",
+      }));
+      return;
+    }
 
     try {
       const scan = await invoke<OcrScanResult>("detect_augment_names", {
@@ -765,6 +829,15 @@ function App() {
       ) return;
 
       const detected = scan.detected;
+      setOcrLifecycle((previous) => ({
+        ...previous,
+        lastScanEnd: new Date().toISOString(),
+        captureAttempted: scan.captureAttempted,
+        cropCount: scan.cropCount,
+        noCropReason: scan.cropCount === 0
+          ? scan.diagnostics.find((diagnostic) => diagnostic.error)?.error ?? "no-crops-returned"
+          : null,
+      }));
       setOcrDiagnostics(
         scan.diagnostics.map((diagnostic) => {
           if (!diagnostic.rawText) {
@@ -830,7 +903,7 @@ function App() {
       if (nextSelection.shouldStop) {
         ocrSelectionCompletedRef.current = true;
         updatePhase("in_game");
-        stopOcr();
+        finishOcr();
       }
     } catch (error) {
       if (
@@ -847,6 +920,7 @@ function App() {
         setOcrDiagnostics(
           [0, 1, 2].map((regionIndex) => ({
             regionIndex,
+            cardRect: null,
             crop: null,
             captureSucceeded: false,
             rawText: null,
@@ -859,9 +933,16 @@ function App() {
             rejectionReason: message,
           })),
         );
+        setOcrLifecycle((previous) => ({
+          ...previous,
+          lastScanEnd: new Date().toISOString(),
+          captureAttempted: false,
+          cropCount: 0,
+          noCropReason: message,
+        }));
       }
     }
-  }, [collectorCaptureEnabled, nameLookup, ocrKnownNames, playerData, stopOcr, updatePhase]);
+  }, [collectorCaptureEnabled, nameLookup, ocrKnownNames, playerData, finishOcr, updatePhase]);
 
   useEffect(() => {
     runOcrRef.current = runOcr;
@@ -891,7 +972,18 @@ function App() {
     ocrHasSeenCardsRef.current = false;
     ocrEmptyPassesRef.current = 0;
     setOcrActive(true);
-    scheduleNextOcr(++ocrRunIdRef.current);
+    const runId = ++ocrRunIdRef.current;
+    setOcrLifecycle((previous) => ({
+      ...previous,
+      phase: phaseRef.current,
+      currentRound: currentRoundRef.current,
+      active: true,
+      scanRunId: runId,
+      captureAttempted: false,
+      cropCount: 0,
+      noCropReason: "scan-scheduled",
+    }));
+    scheduleNextOcr(runId);
   }, [ocrAvailability, scheduleNextOcr]);
 
   // Main polling loop
@@ -960,34 +1052,29 @@ function App() {
             stopOcr();
           }
 
-          const augmentLevel = [...AUGMENT_LEVELS]
-            .reverse()
-            .find((threshold) =>
-              data.level >= threshold && threshold > lastAugmentLevelRef.current
-            );
+          const roundTransition = transitionAugmentRound({
+            playerLevel: data.level,
+            lastAugmentLevel: lastAugmentLevelRef.current,
+            phase: phaseRef.current === "augment_selection" ? "augment_selection" : "in_game",
+          });
 
-          const shouldShowSelection = augmentLevel !== undefined;
-
-          if (shouldShowSelection) {
+          if (roundTransition.isNewRound && roundTransition.round) {
             ocrSelectionCompletedRef.current = false;
-            lastAugmentLevelRef.current = augmentLevel;
+            lastAugmentLevelRef.current = roundTransition.round.level;
+            resetOcrForNewRound(roundTransition.round.round);
             updatePhase("augment_selection");
             if (actualGameForeground) startOcr();
           } else if (phaseRef.current === "augment_selection") {
             if (ocrSelectionCompletedRef.current) {
               updatePhase("in_game");
-              stopOcr();
+              finishOcr();
               return;
             }
 
-            const doneSelecting = shouldEndAugmentSelectionForLevel({
-              playerLevel: data.level,
-              lastAugmentLevel: lastAugmentLevelRef.current,
-            });
-            if (doneSelecting) {
+            if (roundTransition.selectionComplete) {
               ocrSelectionCompletedRef.current = true;
               updatePhase("in_game");
-              stopOcr();
+              finishOcr();
             } else if (actualGameForeground) {
               startOcr();
             }
@@ -1018,7 +1105,9 @@ function App() {
     championSlug,
     clearGameOnlyState,
     collectorEnabled,
+    finishOcr,
     refreshForeground,
+    resetOcrForNewRound,
     startOcr,
     stopOcr,
     updatePhase,
@@ -1107,56 +1196,46 @@ function App() {
   }, []);
 
   // ─── Render ───
-  const ocrStatusMessage = userFacingOcrStatus(ocrAvailability);
   const badgePositions = useMemo(() => {
-    if (!calibration) {
-      return BADGE_ANCHORS.map((anchor) => ({
-        left: `${anchor.x * 100}%`,
-        top: `${anchor.y * 100}%`,
-      }));
+    const positions = new Map<number, { left: string; top: string }>();
+    if (!calibration) return positions;
+
+    const detectedRects = new Map(
+      ocrDiagnostics
+        .filter((diagnostic) => diagnostic.cardRect !== null)
+        .map((diagnostic) => [diagnostic.regionIndex, diagnostic.cardRect!]),
+    );
+    const avoidRects = overlayAvoidRects(
+      calibration.viewport,
+      calibration.monitor.scaleFactor,
+    );
+
+    for (const card of fixtureCards) {
+      const detectedRect = detectedRects.get(card.regionIndex);
+      const previewRegion = CARD_NAME_REGIONS[card.regionIndex];
+      const previewRect = isPreviewMode
+        ? previewRegion
+          ? physicalRectForNormalizedRegion(previewRegion, calibration.viewport)
+          : null
+        : null;
+      const cardRect = detectedRect ?? previewRect;
+      if (!cardRect) continue;
+      const placement = placeBadgeAboveCard({
+        cardRect,
+        viewport: calibration.viewport,
+        scaleFactor: calibration.monitor.scaleFactor,
+        avoidRects,
+      });
+      if (placement) {
+        positions.set(card.regionIndex, placement);
+      }
     }
 
-    return BADGE_ANCHORS.map((anchor) =>
-      cssPointFromNormalizedAnchor(
-        anchor,
-        calibration.viewport,
-        calibration.monitor.scaleFactor,
-      ),
-    );
-  }, [calibration]);
+    return positions;
+  }, [calibration, fixtureCards, isPreviewMode, ocrDiagnostics]);
 
   return (
     <div className="overlay-root">
-      {gameOverlayIsVisible && (calibration || calibrationError) && (
-        <div className="calibration-panel">
-          <div className="calibration-title">Calibration</div>
-          {calibration ? (
-            <>
-              <div>Mode: {calibration.mode}</div>
-              <div>
-                Monitor: {calibration.monitor.x},{calibration.monitor.y}{" "}
-                {calibration.monitor.width}x{calibration.monitor.height}
-              </div>
-              <div>
-                League: {calibration.gameWindow
-                  ? `${calibration.gameWindow.x},${calibration.gameWindow.y} ${calibration.gameWindow.width}x${calibration.gameWindow.height}`
-                  : "not detected"}
-              </div>
-              <div>Scale: {calibration.monitor.scaleFactor.toFixed(2)}</div>
-              <div>
-                Viewport: {calibration.viewport.x},{calibration.viewport.y}{" "}
-                {calibration.viewport.width}x{calibration.viewport.height}
-              </div>
-              {calibration.warnings.map((warning) => (
-                <div className="calibration-warning" key={warning}>{warning}</div>
-              ))}
-            </>
-          ) : (
-            <div className="calibration-warning">{calibrationError}</div>
-          )}
-        </div>
-      )}
-
       {/* Status dot */}
       {collectorEnabled && gameOverlayIsVisible && <div
         className={`status-dot ${
@@ -1177,7 +1256,7 @@ function App() {
       {showBadgeLayer && badgeDecisionResult && (
         <>
           {fixtureCards.map((card) => {
-            const pos = badgePositions[card.regionIndex];
+            const pos = badgePositions.get(card.regionIndex);
             if (!pos) return null;
             const candidate = badgeDecisionResult.candidates.find(
               (entry) => entry.augmentSlug === card.augment.slug,
@@ -1224,15 +1303,6 @@ function App() {
         </>
       )}
 
-      {/* OCR diagnostic (dev fixture): League focused on an augment screen but
-          not three confident cards — show a diagnostic, never synthetic badges. */}
-      {gameOverlayIsVisible && fixtureMode.kind === "ocr-unavailable" && (
-        <div className="ocr-diagnostic">
-          OCR unavailable — {diag.ocrDetected}/3 cards matched
-          {aramgg.status !== "ready" && ` · ARAMGG ${aramgg.status}`}
-        </div>
-      )}
-
       {/* Minimal HUD when in-game but not selecting */}
       {memberEnabled && phase === "in_game" && championSlug && gameOverlayIsVisible && (
         <div className="hud">
@@ -1256,140 +1326,29 @@ function App() {
       {collectorEnabled && gameOverlayIsVisible && dataError && (
         <div className="idle-panel">Overlay data failed to load: {dataError}</div>
       )}
-      {collectorEnabled && gameOverlayIsVisible && ocrStatusMessage && (
-        <div className="idle-panel">{ocrStatusMessage}</div>
-      )}
       {collectorEnabled && gameOverlayIsVisible && effectiveMember?.error && (
         <div className="member-error">Member coach unavailable: {effectiveMember.error}</div>
       )}
-      {/* Dev debug panel. Hidden on League focus-loss unless explicitly pinned
-          (fix #4); collapsible/movable and bottom-right so it never obscures the
-          left recommendation (fix #10). */}
-      {(tierFixtureOn || geometryPreviewOn) && (gameOverlayIsVisible || debugPinned) && (
-        <div
-          className="aramgg-debug-panel"
-          style={{
-            position: "fixed",
-            bottom: 8,
-            right: 8,
-            maxWidth: 520,
-            padding: "8px 10px",
-            font: "11px/1.4 ui-monospace, monospace",
-            color: "#e5e7eb",
-            background: "rgba(17,24,39,0.92)",
-            border: "1px solid #f59e0b",
-            borderRadius: 6,
-            zIndex: 9999,
-            pointerEvents: "auto",
-          }}
-        >
-          <div style={{ color: "#fbbf24", fontWeight: 700 }}>
-            ARAMGG {isPreviewMode ? "PREVIEW" : "TIER FIXTURE"} (dev) ·{" "}
-            {aramgg.status === "ready"
-              ? aramgg.fromCache
-                ? "CACHED"
-                : "LIVE"
-              : aramgg.status.toUpperCase()}
-            <button
-              onClick={() => setDebugCollapsed((c) => !c)}
-              style={{ marginLeft: 8, font: "inherit", cursor: "pointer" }}
-            >
-              {debugCollapsed ? "expand" : "collapse"}
-            </button>
-            <button
-              onClick={() => setDebugPinned((p) => !p)}
-              style={{ marginLeft: 4, font: "inherit", cursor: "pointer" }}
-            >
-              {debugPinned ? "unpin" : "pin"}
-            </button>
-            <button
-              onClick={aramgg.refresh}
-              style={{ marginLeft: 4, font: "inherit", cursor: "pointer" }}
-            >
-              force-refresh
-            </button>
-          </div>
-          {!debugCollapsed && (
-            <>
-              <div>Source: ARAMGG (aramgg.com static JSON)</div>
-              {aramgg.status === "error" && (
-                <div style={{ color: "#f87171" }}>ERROR: {aramgg.error}</div>
-              )}
-              {/* Diagnostics: injected preview cards are NEVER labelled "detected". */}
-              <div style={{ marginTop: 4 }}>
-                OCR cards detected: {diag.ocrDetected} · preview cards injected:{" "}
-                {diag.previewInjected} · offered cards matched: {diag.offeredMatched} ·
-                catalog records resolved: {diag.catalogResolved}
-              </div>
-              <div>
-                rendered real badges: {diag.renderedRealBadges} · rendered preview
-                badges: {diag.renderedPreviewBadges}
-              </div>
-              <div style={{ marginTop: 4, opacity: 0.85 }}>
-                Foreground: app={foregroundState.foregroundAppName ?? "?"} · bundle=
-                {foregroundState.foregroundBundleIdentifier ?? "?"} · owner=
-                {foregroundState.foregroundOwnerName ?? "?"} · title=
-                {foregroundState.foregroundWindowTitle || "?"} · gameForeground=
-                {String(foregroundState.gameWindowForeground)} · riotClientForeground=
-                {String(foregroundState.riotClientForeground)} · gameRunning=
-                {String(foregroundState.gameRunning)} · gameWindowDetected=
-                {String(foregroundState.gameWindowDetected)}
-              </div>
-              {ocrDiagnostics.map((diagnostic) => {
-                const crop = diagnostic.crop
-                  ? `${diagnostic.crop.x},${diagnostic.crop.y} ${diagnostic.crop.width}x${diagnostic.crop.height}`
-                  : "none";
-                const captureSize = diagnostic.captureWidth && diagnostic.captureHeight
-                  ? `${diagnostic.captureWidth}x${diagnostic.captureHeight}`
-                  : "none";
-                const confidence = diagnostic.confidence === null
-                  ? "?"
-                  : diagnostic.confidence.toFixed(2);
-                return (
-                  <div key={`ocr-diagnostic-${diagnostic.regionIndex}`} style={{ marginTop: 2 }}>
-                    card {diagnostic.regionIndex + 1} · crop={crop} · image={captureSize} · capture=
-                    {String(diagnostic.captureSucceeded)} · raw={diagnostic.rawText ?? ""} ·
-                    normalized={diagnostic.normalizedText} · best=
-                    {diagnostic.bestCandidate ?? "none"} · confidence={confidence} · reject=
-                    {diagnostic.rejectionReason ?? "none"}
-                  </div>
-                );
-              })}
-              {aramgg.status === "ready" && (
-                <>
-                  <div>
-                    Patch/version: {aramgg.patch ?? "?"} · fetched{" "}
-                    {aramgg.fetchedAt
-                      ? new Date(aramgg.fetchedAt).toISOString()
-                      : "?"}
-                    {aramgg.fromCache && " (cache — not live)"}
-                  </div>
-                  <div style={{ opacity: 0.7 }}>{aramgg.sourceUrls?.stats}</div>
-                  <div style={{ opacity: 0.7 }}>{aramgg.sourceUrls?.catalog}</div>
-                  {fixturePayload?.debugRows.map((row) => {
-                    const lastResort = row.method === "localized-name";
-                    return (
-                      <div
-                        key={row.slug}
-                        style={{
-                          marginTop: 2,
-                          color: lastResort ? "#fbbf24" : undefined,
-                        }}
-                      >
-                        {row.slug} · id={row.augmentId} ·{" "}
-                        {lastResort
-                          ? `${row.method} (LAST-RESORT fallback)`
-                          : row.method}{" "}
-                        · wr={row.rawWinRate} → {row.winRatePercent}% · n=
-                        {row.numGames} · tier {row.upstreamTier}→{row.cardTier}
-                      </div>
-                    );
-                  })}
-                </>
-              )}
-            </>
-          )}
-        </div>
+      {devDiagnosticsEnabled && (
+        <DevOverlayDiagnostics
+          gameOverlayIsVisible={gameOverlayIsVisible}
+          fixtureModeKind={fixtureMode.kind}
+          tierFixtureOn={tierFixtureOn}
+          geometryPreviewOn={geometryPreviewOn}
+          isPreviewMode={isPreviewMode}
+          debugPinned={debugPinned}
+          debugCollapsed={debugCollapsed}
+          setDebugPinned={setDebugPinned}
+          setDebugCollapsed={setDebugCollapsed}
+          calibration={calibration}
+          calibrationError={calibrationError}
+          aramgg={aramgg}
+          diag={diag}
+          foregroundState={foregroundState}
+          ocrDiagnostics={ocrDiagnostics}
+          ocrLifecycle={ocrLifecycle}
+          fixturePayload={fixturePayload}
+        />
       )}
 
       {/* Startup tip — auto-dismisses after 6s */}

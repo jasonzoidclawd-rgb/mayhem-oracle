@@ -85,3 +85,20 @@ fn falls_back_to_monitor_when_league_window_is_missing() {
         .warnings
         .contains(&"League window not detected; using monitor bounds.".to_string()));
 }
+
+#[test]
+fn windows_borderless_scaling_keeps_capture_and_overlay_rects_in_sync() {
+    let monitor = monitor(1920, 1080, 1.5);
+    let calibration = select_viewport(&monitor, Some(&window(1920, 1080)));
+    let logical = physical_card_rects(&calibration.viewport)[1].clone();
+
+    assert_eq!(calibration.mode, "borderless-monitor-fallback");
+    assert_eq!(
+        capture_rect_for_monitor(&logical, &monitor, 2880, 1620).width,
+        logical.width * 3 / 2
+    );
+    assert_eq!(
+        capture_rect_for_monitor(&logical, &monitor, 2880, 1620).height,
+        logical.height * 3 / 2
+    );
+}

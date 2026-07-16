@@ -15,6 +15,65 @@ export interface GameflowCaptureGate {
   liveCaptureAllowed: boolean;
 }
 
+export const AUGMENT_LEVELS = [3, 7, 11, 15] as const;
+
+export interface AugmentRound {
+  round: number;
+  level: number;
+}
+
+export interface AugmentRoundTransition {
+  round: AugmentRound | null;
+  isNewRound: boolean;
+  selectionComplete: boolean;
+  nextPhase: "in_game" | "augment_selection";
+}
+
+export function augmentRoundForLevel(level: number): AugmentRound | null {
+  for (let index = AUGMENT_LEVELS.length - 1; index >= 0; index -= 1) {
+    const threshold = AUGMENT_LEVELS[index];
+    if (level >= threshold) return { round: index + 1, level: threshold };
+  }
+  return null;
+}
+
+/**
+ * A new augment threshold is the lifecycle boundary for OCR. It must cancel
+ * the prior run and start a fresh one even if the previous run never observed
+ * the card text disappear after the player selected an augment.
+ */
+export function transitionAugmentRound({
+  playerLevel,
+  lastAugmentLevel,
+  phase,
+}: {
+  playerLevel: number;
+  lastAugmentLevel: number;
+  phase: "in_game" | "augment_selection";
+}): AugmentRoundTransition {
+  const round = AUGMENT_LEVELS
+    .map((level, index) => ({ round: index + 1, level }))
+    .reverse()
+    .find((candidate) => playerLevel >= candidate.level && candidate.level > lastAugmentLevel) ?? null;
+
+  if (round) {
+    return {
+      round,
+      isNewRound: true,
+      selectionComplete: false,
+      nextPhase: "augment_selection",
+    };
+  }
+
+  const selectionComplete = phase === "augment_selection" && playerLevel > lastAugmentLevel;
+  return {
+    round: augmentRoundForLevel(playerLevel),
+    isNewRound: false,
+    selectionComplete,
+    nextPhase: selectionComplete ? "in_game" : phase,
+  };
+}
+
 export function shouldStartAugmentSelection({
   augmentLevel,
 }: {
@@ -191,5 +250,8 @@ export function shouldRunOcrForGameflow(
 export function shouldClearOcrStateForGameflow(
   gameflow: GameflowCaptureGate | null | undefined,
 ): boolean {
-  return !shouldRunOcrForGameflow(gameflow);
+  // A transient LCU read failure must not erase the current round or make the
+  // next selection impossible. A confirmed non-live phase is the only clear
+  // boundary; OCR start remains fail-closed until a live phase is confirmed.
+  return gameflow != null && !shouldRunOcrForGameflow(gameflow);
 }

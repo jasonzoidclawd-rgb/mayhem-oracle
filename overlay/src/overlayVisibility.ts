@@ -1,5 +1,6 @@
 export interface ForegroundState {
   gameWindowForeground: boolean;
+  leagueClientForeground: boolean;
   riotClientForeground: boolean;
   gameRunning: boolean;
   gameWindowDetected: boolean;
@@ -7,11 +8,14 @@ export interface ForegroundState {
   foregroundBundleIdentifier: string | null;
   foregroundOwnerName: string | null;
   foregroundWindowTitle: string | null;
+  foregroundExecutablePath: string | null;
+  foregroundWindowHandle: number | null;
 }
 
 export function unknownForegroundState(): ForegroundState {
   return {
     gameWindowForeground: false,
+    leagueClientForeground: false,
     riotClientForeground: false,
     gameRunning: false,
     gameWindowDetected: false,
@@ -19,6 +23,8 @@ export function unknownForegroundState(): ForegroundState {
     foregroundBundleIdentifier: null,
     foregroundOwnerName: null,
     foregroundWindowTitle: null,
+    foregroundExecutablePath: null,
+    foregroundWindowHandle: null,
   };
 }
 

@@ -48,6 +48,14 @@ const FORBIDDEN_TEXT_PATTERNS = [
   /"client_email"\s*:/,
   /\brawLcu\b/i,
   /\braw_lcu\b/i,
+  /ARAMGG\s+(?:PREVIEW|TIER\s+FIXTURE)/i,
+  /\baramgg\b/i,
+  /MAYHEM_OVERLAY_(?:TIER_FIXTURE|GEOMETRY_PREVIEW)/i,
+  /data-dev-only/i,
+  /OCR unavailable\s+—/i,
+  /force-refresh/i,
+  /Foreground:\s*app=/i,
+  /calibration-panel/i,
 ];
 
 const REMOTE_RENDERER_PATTERNS = [

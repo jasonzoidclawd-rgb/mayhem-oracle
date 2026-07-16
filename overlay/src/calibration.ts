@@ -16,11 +16,6 @@ export interface NormalizedRegion {
   h: number;
 }
 
-export interface NormalizedAnchor {
-  x: number;
-  y: number;
-}
-
 export interface OverlayCalibration {
   monitor: MonitorInfo;
   gameWindow: PhysicalRect | null;
@@ -33,12 +28,6 @@ export const CARD_NAME_REGIONS: NormalizedRegion[] = [
   { x: 0.219, y: 0.347, w: 0.172, h: 0.083 },
   { x: 0.414, y: 0.347, w: 0.172, h: 0.083 },
   { x: 0.609, y: 0.347, w: 0.172, h: 0.083 },
-];
-
-export const BADGE_ANCHORS: NormalizedAnchor[] = [
-  { x: 0.305, y: 0.62 },
-  { x: 0.5, y: 0.62 },
-  { x: 0.695, y: 0.62 },
 ];
 
 const FULLSCREEN_TOLERANCE_PX = 24;
@@ -126,12 +115,13 @@ export function physicalRectForNormalizedRegion(
 export function cssRectFromPhysicalRect(
   rect: PhysicalRect,
   scaleFactor: number,
+  origin: Pick<PhysicalRect, "x" | "y"> = { x: 0, y: 0 },
 ): PhysicalRect {
   const divisor = safeScaleFactor(scaleFactor);
 
   return {
-    x: Math.round(rect.x / divisor),
-    y: Math.round(rect.y / divisor),
+    x: Math.round((rect.x - origin.x) / divisor),
+    y: Math.round((rect.y - origin.y) / divisor),
     width: Math.round(rect.width / divisor),
     height: Math.round(rect.height / divisor),
   };
@@ -146,19 +136,6 @@ export function physicalPointFromCssPoint(
   return {
     x: Math.round(point.x * multiplier),
     y: Math.round(point.y * multiplier),
-  };
-}
-
-export function cssPointFromNormalizedAnchor(
-  anchor: NormalizedAnchor,
-  viewport: PhysicalRect,
-  scaleFactor: number,
-): { left: string; top: string } {
-  const divisor = safeScaleFactor(scaleFactor);
-
-  return {
-    left: `${Math.round((anchor.x * viewport.width) / divisor)}px`,
-    top: `${Math.round((anchor.y * viewport.height) / divisor)}px`,
   };
 }
 

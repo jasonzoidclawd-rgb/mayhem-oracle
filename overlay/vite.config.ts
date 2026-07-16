@@ -1,11 +1,41 @@
+import path from "node:path";
+import { fileURLToPath } from "node:url";
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 
 const host = process.env.TAURI_DEV_HOST;
+const overlayRoot = path.dirname(fileURLToPath(import.meta.url));
+
+function productionDevAliases() {
+  const modules = [
+    ["tierFixture", "tierFixture"],
+    ["fixtureMode", "fixtureMode"],
+    ["useAramggTierFixture", "useAramggTierFixture"],
+    ["DevOverlayDiagnostics", "DevOverlayDiagnostics"],
+    ["DevOverlayDiagnostics.css", "empty.css"],
+  ];
+
+  return modules.flatMap(([name, replacementName]) => {
+    const replacement = path.resolve(overlayRoot, "src/dev/production", replacementName);
+    // Rollup sees the app's relative imports before Vite has normalized them
+    // to absolute paths, so register both forms explicitly.
+    return [
+      { find: `./dev/${name}`, replacement },
+      { find: path.resolve(overlayRoot, "src/dev", name), replacement },
+    ];
+  });
+}
 
 // https://vite.dev/config/
-export default defineConfig(async () => ({
+export default defineConfig(async ({ command }) => ({
   plugins: [react()],
+
+  // Production must not contain fixture data, ARAMGG adapters, or diagnostic
+  // controls. Replace the dev modules at bundle time; Vite dev keeps the real
+  // modules so the fixture workflow remains unchanged.
+  resolve: {
+    alias: command === "build" ? productionDevAliases() : [],
+  },
 
   // Expose MAYHEM_-prefixed env (e.g. MAYHEM_OVERLAY_TIER_FIXTURE) to the
   // client in addition to the default VITE_ prefix. Only read under a DEV guard.

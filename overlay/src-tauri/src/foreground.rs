@@ -8,6 +8,7 @@ pub const RIOT_CLIENT_BUNDLE_ID: &str = "com.riotgames.RiotGames.RiotClient";
 #[serde(rename_all = "camelCase")]
 pub struct ForegroundState {
     pub game_window_foreground: bool,
+    pub league_client_foreground: bool,
     pub riot_client_foreground: bool,
     pub game_running: bool,
     pub game_window_detected: bool,
@@ -15,6 +16,8 @@ pub struct ForegroundState {
     pub foreground_bundle_identifier: Option<String>,
     pub foreground_owner_name: Option<String>,
     pub foreground_window_title: Option<String>,
+    pub foreground_executable_path: Option<String>,
+    pub foreground_window_handle: Option<u64>,
 }
 
 pub struct ForegroundObservation<'a> {
@@ -22,6 +25,8 @@ pub struct ForegroundObservation<'a> {
     pub bundle_identifier: Option<&'a str>,
     pub owner_name: Option<&'a str>,
     pub window_title: Option<&'a str>,
+    pub executable_path: Option<&'a str>,
+    pub window_handle: Option<u64>,
     pub game_running: bool,
     pub game_window_detected: bool,
 }
@@ -39,6 +44,33 @@ pub fn classify_foreground(observation: ForegroundObservation<'_>) -> Foreground
         .is_some_and(|bundle| bundle.eq_ignore_ascii_case(LEAGUE_CLIENT_UX_BUNDLE_ID));
     let riot_client_app = app_name.as_deref() == Some("riotclient");
     let league_client_ux_app = app_name.as_deref() == Some("leagueclientux");
+    // When the OS gives us an executable path, it is authoritative. A generic
+    // "League of Legends" application name must not override a known client
+    // executable during the postgame/client transition.
+    let game_process = observation
+        .executable_path
+        .map(|path| is_actual_game_process("", Some(path)))
+        .unwrap_or_else(|| {
+            observation
+                .app_name
+                .is_some_and(|name| is_actual_game_process(name, None))
+        });
+    let riot_client_process = observation
+        .executable_path
+        .map(|path| is_riot_client_process("", Some(path)))
+        .unwrap_or_else(|| {
+            observation
+                .app_name
+                .is_some_and(|name| is_riot_client_process(name, None))
+        });
+    let league_client_ux_process = observation
+        .executable_path
+        .map(|path| is_league_client_ux_process("", Some(path)))
+        .unwrap_or_else(|| {
+            observation
+                .app_name
+                .is_some_and(|name| is_league_client_ux_process(name, None))
+        });
     let game_window = observation
         .owner_name
         .zip(observation.window_title)
@@ -46,21 +78,36 @@ pub fn classify_foreground(observation: ForegroundObservation<'_>) -> Foreground
     let riot_client_window = observation
         .owner_name
         .is_some_and(|owner| normalize_identity(owner) == "riotclient");
+    let league_client_foreground = league_client_ux_bundle
+        || league_client_ux_app
+        || league_client_ux_process
+        || riot_client_bundle
+        || riot_client_app
+        || riot_client_process
+        || riot_client_window;
 
     ForegroundState {
-        game_window_foreground: (game_bundle || game_window)
+        game_window_foreground: (game_bundle || game_window || game_process)
             && !riot_client_bundle
             && !league_client_ux_bundle
             && !riot_client_app
             && !league_client_ux_app
-            && !riot_client_window,
-        riot_client_foreground: riot_client_bundle || riot_client_app || riot_client_window,
+            && !riot_client_window
+            && !riot_client_process
+            && !league_client_ux_process,
+        league_client_foreground,
+        riot_client_foreground: riot_client_bundle
+            || riot_client_app
+            || riot_client_process
+            || riot_client_window,
         game_running: observation.game_running,
         game_window_detected: observation.game_window_detected,
         foreground_app_name: observation.app_name.map(str::to_string),
         foreground_bundle_identifier: observation.bundle_identifier.map(str::to_string),
         foreground_owner_name: observation.owner_name.map(str::to_string),
         foreground_window_title: observation.window_title.map(str::to_string),
+        foreground_executable_path: observation.executable_path.map(str::to_string),
+        foreground_window_handle: observation.window_handle,
     }
 }
 
@@ -75,16 +122,36 @@ pub fn is_actual_game_window(owner_name: &str, title: &str) -> bool {
 }
 
 pub fn is_actual_game_process(name: &str, executable_path: Option<&str>) -> bool {
-    let normalized_name = normalize_identity(name);
-    if normalized_name == "leagueoflegends" {
-        return true;
+    if let Some(path) = executable_path {
+        let path = path.replace('\\', "/").to_lowercase();
+        return path.contains("/game/leagueoflegends.app/contents/macos/leagueoflegends")
+            || path.ends_with("/game/league of legends.exe");
     }
 
-    executable_path
-        .map(|path| path.replace('\\', "/").to_lowercase())
-        .is_some_and(|path| {
-            path.contains("/game/leagueoflegends.app/contents/macos/leagueoflegends")
-        })
+    let normalized_name = normalize_identity(name);
+    normalized_name == "leagueoflegends" || normalized_name == "leagueoflegendsexe"
+}
+
+pub fn is_riot_client_process(name: &str, executable_path: Option<&str>) -> bool {
+    if let Some(path) = executable_path {
+        let path = path.replace('\\', "/").to_lowercase();
+        return path.contains("/riot client.app/contents/macos/riotclient")
+            || path.ends_with("/riotclientservices.exe");
+    }
+
+    let normalized_name = normalize_identity(name);
+    normalized_name == "riotclientservices" || normalized_name == "riotclientservicesexe"
+}
+
+pub fn is_league_client_ux_process(name: &str, executable_path: Option<&str>) -> bool {
+    if let Some(path) = executable_path {
+        let path = path.replace('\\', "/").to_lowercase();
+        return path.contains("/leagueclientux.app/contents/macos/leagueclientux")
+            || path.ends_with("/leagueclientux.exe");
+    }
+
+    let normalized_name = normalize_identity(name);
+    normalized_name == "leagueclientux" || normalized_name == "leagueclientuxexe"
 }
 
 fn normalize_identity(value: &str) -> String {
@@ -98,7 +165,8 @@ fn normalize_identity(value: &str) -> String {
 #[cfg(test)]
 mod tests {
     use super::{
-        classify_foreground, is_actual_game_process, is_actual_game_window, ForegroundObservation,
+        classify_foreground, is_actual_game_process, is_actual_game_window,
+        is_league_client_ux_process, is_riot_client_process, ForegroundObservation,
         LEAGUE_CLIENT_UX_BUNDLE_ID, LEAGUE_GAME_BUNDLE_ID, RIOT_CLIENT_BUNDLE_ID,
     };
 
@@ -114,6 +182,8 @@ mod tests {
             bundle_identifier: Some(bundle_identifier),
             owner_name: Some(owner_name),
             window_title: Some(window_title),
+            executable_path: None,
+            window_handle: None,
             game_running,
             game_window_detected: game_running,
         }
@@ -131,6 +201,7 @@ mod tests {
 
         assert!(state.game_window_foreground);
         assert!(!state.riot_client_foreground);
+        assert!(!state.league_client_foreground);
     }
 
     #[test]
@@ -140,6 +211,8 @@ mod tests {
             bundle_identifier: Some(LEAGUE_GAME_BUNDLE_ID),
             owner_name: None,
             window_title: None,
+            executable_path: None,
+            window_handle: None,
             game_running: true,
             game_window_detected: false,
         });
@@ -161,6 +234,7 @@ mod tests {
 
         assert!(!state.game_window_foreground);
         assert!(!state.riot_client_foreground);
+        assert!(state.league_client_foreground);
         assert!(state.game_running);
     }
 
@@ -184,6 +258,7 @@ mod tests {
         for (name, bundle) in [
             ("Finder", "com.apple.finder"),
             ("Safari", "com.apple.Safari"),
+            ("Terminal", "com.apple.Terminal"),
         ] {
             let state = classify_foreground(observation(name, bundle, name, name, true));
             assert!(!state.game_window_foreground, "{name} must stay hidden");
@@ -208,6 +283,55 @@ mod tests {
             Some("/Applications/League of Legends.app/Contents/LoL/Game/LeagueofLegends.app/Contents/MacOS/LeagueofLegends"),
         ));
         assert!(!is_actual_game_process("LeagueClientUx", None));
+        assert!(is_actual_game_process(
+            "unknown",
+            Some(r"C:\Riot Games\League of Legends\Game\League of Legends.exe"),
+        ));
+        assert!(!is_actual_game_process(
+            "unknown",
+            Some(r"C:\Riot Games\League of Legends\LeagueClientUx.exe"),
+        ));
+        assert!(!is_actual_game_process(
+            "League Of Legends",
+            Some(r"C:\Riot Games\League of Legends\LeagueClientUx.exe"),
+        ));
+        assert!(is_riot_client_process(
+            "unknown",
+            Some(r"C:\Riot Games\Riot Client\RiotClientServices.exe"),
+        ));
+        assert!(is_league_client_ux_process(
+            "unknown",
+            Some(r"C:\Riot Games\League of Legends\LeagueClientUx.exe"),
+        ));
+        assert!(is_riot_client_process(
+            "Riot Client",
+            Some("/Applications/Riot Client.app/Contents/MacOS/RiotClient"),
+        ));
+        assert!(is_league_client_ux_process(
+            "League Of Legends",
+            Some(
+                "/Applications/League of Legends.app/Contents/LoL/LeagueClientUx.app/Contents/MacOS/LeagueClientUx",
+            ),
+        ));
+    }
+
+    #[test]
+    fn known_client_executable_overrides_a_generic_league_app_name() {
+        let state = classify_foreground(ForegroundObservation {
+            app_name: Some("League Of Legends"),
+            bundle_identifier: None,
+            owner_name: Some("League Of Legends"),
+            window_title: Some("League of Legends (TM) Client"),
+            executable_path: Some(
+                "/Applications/League of Legends.app/Contents/LoL/LeagueClientUx.app/Contents/MacOS/LeagueClientUx",
+            ),
+            window_handle: None,
+            game_running: true,
+            game_window_detected: true,
+        });
+
+        assert!(!state.game_window_foreground);
+        assert!(state.league_client_foreground);
     }
 
     #[test]

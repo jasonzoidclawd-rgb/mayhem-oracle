@@ -202,4 +202,19 @@ describe("CollectorOverlayController", () => {
         .length,
     ).toBe(closeCountBeforeFocusToggles + 2);
   });
+
+  it("closes stale native controls on the initial unfocused render", async () => {
+    await act(async () => {
+      root = create(
+        React.createElement(CollectorOverlayController, {
+          onStatus: vi.fn(),
+          showPanel: false,
+        }),
+      );
+      await flush();
+    });
+
+    expect(closeWindowMock).toHaveBeenCalledWith(COLLECTOR_CONTROLS_WINDOW_LABEL);
+    expect(openCollectorControlsWindowMock).not.toHaveBeenCalled();
+  });
 });

@@ -1,8 +1,6 @@
 import { describe, expect, test } from "vitest";
 import {
-  BADGE_ANCHORS,
   CARD_NAME_REGIONS,
-  cssPointFromNormalizedAnchor,
   cssRectFromPhysicalRect,
   physicalPointFromCssPoint,
   physicalRectForNormalizedRegion,
@@ -61,13 +59,13 @@ describe("overlay calibration", () => {
     expect(calibration.warnings).toContain("League window not detected; using monitor bounds.");
   });
 
-  test("positions rendered badges in logical CSS pixels from normalized anchors", () => {
-    const middle = cssPointFromNormalizedAnchor(
-      BADGE_ANCHORS[1],
-      { x: 0, y: 0, width: 2560, height: 1440 },
-      1.25,
-    );
-
-    expect(middle).toEqual({ left: "1024px", top: "714px" });
+  test("converts a detected card rect to CSS coordinates relative to its viewport", () => {
+    expect(
+      cssRectFromPhysicalRect(
+        { x: 320, y: 500, width: 440, height: 120 },
+        2,
+        { x: 0, y: 0 },
+      ),
+    ).toEqual({ x: 160, y: 250, width: 220, height: 60 });
   });
 });

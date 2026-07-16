@@ -13,6 +13,7 @@ async function createOverlayFixture() {
   const overlayRoot = mkdtempSync(join(tmpdir(), "mayhem-overlay-audit-"));
   await mkdir(join(overlayRoot, "public", "data", "abilities"), { recursive: true });
   await mkdir(join(overlayRoot, "dist", "data", "abilities"), { recursive: true });
+  await mkdir(join(overlayRoot, "dist", "assets"), { recursive: true });
   await mkdir(join(overlayRoot, "src-tauri", "capabilities"), { recursive: true });
   await mkdir(join(overlayRoot, "src-tauri", "target", "release", "bundle", "nsis"), {
     recursive: true,
@@ -92,5 +93,15 @@ describe("windows artifact audit", () => {
     );
 
     await expect(auditWindowsArtifact({ overlayRoot })).rejects.toThrow(/remote/i);
+  });
+
+  test("rejects development-only overlay surfaces in renderer output", async () => {
+    const overlayRoot = await createOverlayFixture();
+    await writeFile(
+      join(overlayRoot, "dist", "assets", "app.js"),
+      "ARAMGG TIER FIXTURE data-dev-only force-refresh Foreground: app=",
+    );
+
+    await expect(auditWindowsArtifact({ overlayRoot })).rejects.toThrow(/forbidden/i);
   });
 });

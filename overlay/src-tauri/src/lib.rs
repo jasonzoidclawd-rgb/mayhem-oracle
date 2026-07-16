@@ -180,6 +180,7 @@ pub struct DetectedAugment {
 #[serde(rename_all = "camelCase")]
 pub struct OcrCardDiagnostic {
     pub region_index: usize,
+    pub card_rect: Option<calibration::Rect>,
     pub crop: Option<calibration::Rect>,
     pub capture_succeeded: bool,
     pub raw_text: Option<String>,
@@ -192,6 +193,8 @@ pub struct OcrCardDiagnostic {
 pub struct OcrScanResult {
     pub detected: Vec<DetectedAugment>,
     pub diagnostics: Vec<OcrCardDiagnostic>,
+    pub capture_attempted: bool,
+    pub crop_count: usize,
 }
 
 // ─── OCR Commands ───────────────────────────────────────────────────────────
@@ -387,6 +390,7 @@ struct CardCrop {
 struct CardCropSet {
     crops: Vec<CardCrop>,
     diagnostics: Vec<OcrCardDiagnostic>,
+    capture_attempted: bool,
 }
 
 fn capture_card_name_crops() -> Result<CardCropSet, String> {
@@ -403,6 +407,10 @@ fn capture_card_name_crops() -> Result<CardCropSet, String> {
             for (region_index, region) in calibration::CARD_NAME_REGIONS.iter().enumerate() {
                 diagnostics.push(OcrCardDiagnostic {
                     region_index,
+                    card_rect: Some(calibration::physical_rect_for_region(
+                        region,
+                        &calibration.viewport,
+                    )),
                     crop: Some(calibration::physical_rect_for_region(
                         region,
                         &calibration.viewport,
@@ -417,6 +425,7 @@ fn capture_card_name_crops() -> Result<CardCropSet, String> {
             return Ok(CardCropSet {
                 crops: Vec::new(),
                 diagnostics,
+                capture_attempted: true,
             });
         }
     };
@@ -437,6 +446,7 @@ fn capture_card_name_crops() -> Result<CardCropSet, String> {
         if px < 0 || py < 0 {
             diagnostics.push(OcrCardDiagnostic {
                 region_index: i,
+                card_rect: Some(logical_rect.clone()),
                 crop: Some(rect),
                 capture_succeeded: false,
                 raw_text: None,
@@ -455,6 +465,7 @@ fn capture_card_name_crops() -> Result<CardCropSet, String> {
         if pw == 0 || ph == 0 || px + pw > screenshot.width() || py + ph > screenshot.height() {
             diagnostics.push(OcrCardDiagnostic {
                 region_index: i,
+                card_rect: Some(logical_rect.clone()),
                 crop: Some(rect),
                 capture_succeeded: false,
                 raw_text: None,
@@ -471,6 +482,7 @@ fn capture_card_name_crops() -> Result<CardCropSet, String> {
         });
         diagnostics.push(OcrCardDiagnostic {
             region_index: i,
+            card_rect: Some(logical_rect),
             crop: Some(rect),
             capture_succeeded: true,
             raw_text: None,
@@ -480,16 +492,60 @@ fn capture_card_name_crops() -> Result<CardCropSet, String> {
         });
     }
 
-    Ok(CardCropSet { crops, diagnostics })
+    Ok(CardCropSet {
+        capture_attempted: true,
+        crops,
+        diagnostics,
+    })
 }
 
 #[tauri::command]
 async fn detect_augment_names(known_names: Option<Vec<String>>) -> Result<OcrScanResult, String> {
     if !collect_foreground_state().game_window_foreground {
-        return Err("League of Legends is not the foreground application".to_string());
+        let reason = "actual-game-window-not-foreground".to_string();
+        return Ok(OcrScanResult {
+            detected: Vec::new(),
+            diagnostics: (0..calibration::CARD_NAME_REGIONS.len())
+                .map(|region_index| OcrCardDiagnostic {
+                    region_index,
+                    card_rect: None,
+                    crop: None,
+                    capture_succeeded: false,
+                    raw_text: None,
+                    error: Some(reason.clone()),
+                    capture_width: None,
+                    capture_height: None,
+                })
+                .collect(),
+            capture_attempted: false,
+            crop_count: 0,
+        });
     }
 
-    let crop_set = capture_card_name_crops()?;
+    let crop_set = match capture_card_name_crops() {
+        Ok(crop_set) => crop_set,
+        Err(error) => {
+            return Ok(OcrScanResult {
+                detected: Vec::new(),
+                diagnostics: (0..calibration::CARD_NAME_REGIONS.len())
+                    .map(|region_index| OcrCardDiagnostic {
+                        region_index,
+                        card_rect: None,
+                        crop: None,
+                        capture_succeeded: false,
+                        raw_text: None,
+                        error: Some(error.clone()),
+                        capture_width: None,
+                        capture_height: None,
+                    })
+                    .collect(),
+                capture_attempted: false,
+                crop_count: 0,
+            });
+        }
+    };
+    let capture_attempted = crop_set.capture_attempted;
+    let crop_count = crop_set.crops.len();
     let locale = ocr::detect_game_locale();
 
     // Vision biases language correction toward these names; the Windows
@@ -558,6 +614,8 @@ async fn detect_augment_names(known_names: Option<Vec<String>>) -> Result<OcrSca
     Ok(OcrScanResult {
         detected,
         diagnostics,
+        capture_attempted,
+        crop_count,
     })
 }
 
@@ -655,6 +713,8 @@ struct FrontmostApplication {
     app_name: Option<String>,
     bundle_identifier: Option<String>,
     process_id: Option<u32>,
+    executable_path: Option<String>,
+    window_handle: Option<u64>,
 }
 
 #[cfg(target_os = "macos")]
@@ -685,11 +745,20 @@ fn running_application(process_id: u32) -> FrontmostApplication {
 
         let app_name: cocoa::base::id = objc::msg_send![application, localizedName];
         let bundle_identifier: cocoa::base::id = objc::msg_send![application, bundleIdentifier];
+        let executable_url: cocoa::base::id = objc::msg_send![application, executableURL];
+        let executable_path = if executable_url.is_null() {
+            None
+        } else {
+            let path: cocoa::base::id = objc::msg_send![executable_url, path];
+            ns_string_value(path)
+        };
 
         FrontmostApplication {
             app_name: ns_string_value(app_name),
             bundle_identifier: ns_string_value(bundle_identifier),
             process_id: Some(process_id),
+            executable_path,
+            window_handle: None,
         }
     }
 }
@@ -709,11 +778,10 @@ fn workspace_frontmost_application() -> FrontmostApplication {
         }
 
         let process_id: i32 = objc::msg_send![application, processIdentifier];
-        FrontmostApplication {
-            app_name: ns_string_value(objc::msg_send![application, localizedName]),
-            bundle_identifier: ns_string_value(objc::msg_send![application, bundleIdentifier]),
-            process_id: (process_id > 0).then_some(process_id as u32),
+        if process_id <= 0 {
+            return FrontmostApplication::default();
         }
+        running_application(process_id as u32)
     }
 }
 
@@ -841,6 +909,84 @@ fn foreground_window_metadata() -> (FrontmostApplication, Option<String>, Option
     )
 }
 
+#[cfg(target_os = "windows")]
+fn windows_foreground_metadata() -> (FrontmostApplication, Option<String>, Option<String>, bool) {
+    use std::path::Path;
+    use windows::core::PWSTR;
+    use windows::Win32::Foundation::CloseHandle;
+    use windows::Win32::System::Threading::{
+        OpenProcess, QueryFullProcessImageNameW, PROCESS_NAME_FORMAT,
+        PROCESS_QUERY_LIMITED_INFORMATION,
+    };
+    use windows::Win32::UI::WindowsAndMessaging::{
+        GetForegroundWindow, GetWindowTextW, GetWindowThreadProcessId,
+    };
+
+    fn executable_path(process_id: u32) -> Option<String> {
+        let process =
+            unsafe { OpenProcess(PROCESS_QUERY_LIMITED_INFORMATION, false, process_id) }.ok()?;
+        let mut buffer = [0u16; 32_768];
+        let mut length = buffer.len() as u32;
+        let result = unsafe {
+            QueryFullProcessImageNameW(
+                process,
+                PROCESS_NAME_FORMAT(0),
+                PWSTR(buffer.as_mut_ptr()),
+                &mut length,
+            )
+            .is_ok()
+        };
+        unsafe {
+            let _ = CloseHandle(process);
+        }
+        result.then(|| String::from_utf16_lossy(&buffer[..length as usize]))
+    }
+
+    fn window_title(hwnd: windows::Win32::Foundation::HWND) -> Option<String> {
+        let mut buffer = [0u16; 1_024];
+        let length = unsafe { GetWindowTextW(hwnd, &mut buffer) };
+        (length > 0).then(|| String::from_utf16_lossy(&buffer[..length as usize]))
+    }
+
+    let hwnd = unsafe { GetForegroundWindow() };
+    if hwnd.0.is_null() {
+        return (FrontmostApplication::default(), None, None, false);
+    }
+
+    let mut process_id = 0u32;
+    unsafe {
+        GetWindowThreadProcessId(hwnd, Some(&mut process_id));
+    }
+    if process_id == 0 {
+        return (
+            FrontmostApplication::default(),
+            None,
+            window_title(hwnd),
+            false,
+        );
+    }
+
+    let executable_path = executable_path(process_id);
+    let process_name = executable_path
+        .as_deref()
+        .and_then(|path| Path::new(path).file_stem())
+        .and_then(|name| name.to_str())
+        .map(str::to_string);
+    let title = window_title(hwnd);
+    let game_window_detected = process_name
+        .as_deref()
+        .is_some_and(|name| foreground::is_actual_game_process(name, executable_path.as_deref()));
+    let application = FrontmostApplication {
+        app_name: process_name.clone(),
+        bundle_identifier: None,
+        process_id: Some(process_id),
+        executable_path,
+        window_handle: Some(hwnd.0 as usize as u64),
+    };
+
+    (application, process_name, title, game_window_detected)
+}
+
 fn game_process_running() -> bool {
     let system = sysinfo::System::new_all();
     system.processes().values().any(|process| {
@@ -860,20 +1006,32 @@ fn collect_foreground_state() -> foreground::ForegroundState {
             bundle_identifier: frontmost.bundle_identifier.as_deref(),
             owner_name: owner_name.as_deref(),
             window_title: window_title.as_deref(),
+            executable_path: frontmost.executable_path.as_deref(),
+            window_handle: frontmost.window_handle,
             game_running: game_process_running(),
             game_window_detected,
         });
     }
 
-    #[cfg(not(target_os = "macos"))]
+    #[cfg(target_os = "windows")]
     {
-        foreground::ForegroundState {
-            game_window_foreground: true,
-            riot_client_foreground: false,
-            game_running: true,
-            game_window_detected: true,
-            ..foreground::ForegroundState::default()
-        }
+        let (frontmost, owner_name, window_title, game_window_detected) =
+            windows_foreground_metadata();
+        return foreground::classify_foreground(foreground::ForegroundObservation {
+            app_name: frontmost.app_name.as_deref(),
+            bundle_identifier: frontmost.bundle_identifier.as_deref(),
+            owner_name: owner_name.as_deref(),
+            window_title: window_title.as_deref(),
+            executable_path: frontmost.executable_path.as_deref(),
+            window_handle: frontmost.window_handle,
+            game_running: game_process_running(),
+            game_window_detected,
+        });
+    }
+
+    #[cfg(not(any(target_os = "macos", target_os = "windows")))]
+    {
+        foreground::ForegroundState::default()
     }
 }
 

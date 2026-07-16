@@ -234,24 +234,26 @@ export function CollectorOverlayController({
     const previousVisibility = visibleWindowsRef.current;
     visibleWindowsRef.current = nextVisibility;
 
-    if (previousVisibility?.consentWindow !== nextVisibility.consentWindow) {
-      if (nextVisibility.consentWindow) {
-        void openConsentWindow();
-      } else {
-        void closeWindow(CONSENT_WINDOW_LABEL);
-      }
+    if (nextVisibility.consentWindow && previousVisibility?.consentWindow !== true) {
+      void openConsentWindow();
+    } else if (!nextVisibility.consentWindow && (
+      previousVisibility === null || previousVisibility.consentWindow
+    )) {
+      // Close on the initial hidden render too. A stale native window can
+      // survive an overlay restart while League/Riot Client is foreground.
+      void closeWindow(CONSENT_WINDOW_LABEL);
     }
 
-    if (
-      previousVisibility?.collectorControlsWindow !==
-      nextVisibility.collectorControlsWindow
-    ) {
-      if (nextVisibility.collectorControlsWindow) {
-        void openCollectorControlsWindow();
-      } else {
-        void closeWindow(COLLECTOR_CONTROLS_WINDOW_LABEL);
-      }
+    if (nextVisibility.collectorControlsWindow && previousVisibility?.collectorControlsWindow !== true) {
+      void openCollectorControlsWindow();
+    } else if (!nextVisibility.collectorControlsWindow && (
+      previousVisibility === null || previousVisibility.collectorControlsWindow
+    )) {
+      // The first status refresh must also close a previously opened controls
+      // window; no controller state is unmounted or reset here.
+      void closeWindow(COLLECTOR_CONTROLS_WINDOW_LABEL);
     }
+
   }, [showPanel, status]);
 
   return null;
