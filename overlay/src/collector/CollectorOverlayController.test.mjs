@@ -174,5 +174,32 @@ describe("CollectorOverlayController", () => {
         lastError: "collector-backlog",
       }),
     );
+
+    const ticksBeforeFocusToggles = invokeMock.mock.calls.filter(
+      ([command]) => command === "collector_tick",
+    ).length;
+    const closeCountBeforeFocusToggles = closeWindowMock.mock.calls.filter(
+      ([label]) => label === COLLECTOR_CONTROLS_WINDOW_LABEL,
+    ).length;
+    for (const showPanel of [false, true, false, true]) {
+      await act(async () => {
+        root.update(
+          React.createElement(CollectorOverlayController, {
+            onStatus,
+            showPanel,
+          }),
+        );
+        await flush();
+      });
+    }
+
+    expect(
+      invokeMock.mock.calls.filter(([command]) => command === "collector_tick").length,
+    ).toBe(ticksBeforeFocusToggles);
+    expect(openCollectorControlsWindowMock).toHaveBeenCalledTimes(4);
+    expect(
+      closeWindowMock.mock.calls.filter(([label]) => label === COLLECTOR_CONTROLS_WINDOW_LABEL)
+        .length,
+    ).toBe(closeCountBeforeFocusToggles + 2);
   });
 });

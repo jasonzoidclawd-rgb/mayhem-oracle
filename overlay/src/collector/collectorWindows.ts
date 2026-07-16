@@ -62,16 +62,6 @@ export function shouldShowCollectorControlsWindow(status: CollectorSnapshot | nu
   return status !== null && status.consent !== "pending";
 }
 
-export function shouldShowCollectorUi({
-  leagueFocused,
-  previewMode,
-}: {
-  leagueFocused: boolean;
-  previewMode: boolean;
-}): boolean {
-  return leagueFocused || previewMode;
-}
-
 export function resolveCollectorWindowVisibility({
   status,
   controlsVisible,
@@ -83,7 +73,7 @@ export function resolveCollectorWindowVisibility({
   collectorControlsWindow: boolean;
 } {
   return {
-    consentWindow: shouldShowConsentWindow(status),
+    consentWindow: shouldShowConsentWindow(status) && controlsVisible,
     collectorControlsWindow:
       shouldShowCollectorControlsWindow(status) && controlsVisible,
   };
@@ -122,7 +112,9 @@ export async function openCollectorControlsWindow() {
 
 export async function closeWindow(label: string) {
   const window = await WebviewWindow.getByLabel(label);
-  await window?.close();
+  if (!window) return;
+  await window.hide().catch(() => {});
+  await window.close().catch(() => {});
 }
 
 export async function closeCurrentWindow() {

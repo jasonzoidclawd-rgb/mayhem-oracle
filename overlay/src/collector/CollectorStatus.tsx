@@ -227,8 +227,6 @@ export function CollectorOverlayController({
   } | null>(null);
 
   useEffect(() => {
-    if (!status) return;
-
     const nextVisibility = resolveCollectorWindowVisibility({
       status,
       controlsVisible: showPanel,

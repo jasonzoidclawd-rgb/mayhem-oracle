@@ -1,11 +1,30 @@
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 import type { CollectorSnapshot } from "./CollectorStatus";
+
+const windowMocks = vi.hoisted(() => ({
+  close: vi.fn(),
+  getByLabel: vi.fn(),
+  hide: vi.fn(),
+}));
+
+vi.mock("@tauri-apps/api/webviewWindow", () => ({
+  WebviewWindow: class MockWebviewWindow {
+    static getByLabel(...args: unknown[]) {
+      return windowMocks.getByLabel(...args);
+    }
+  },
+  getCurrentWebviewWindow: () => ({
+    close: windowMocks.close,
+    label: "overlay",
+  }),
+}));
+
 import {
   COLLECTOR_CONTROLS_WINDOW_OPTIONS,
   CONSENT_WINDOW_OPTIONS,
+  closeWindow,
   overlayShouldIgnoreMouseEvents,
   resolveCollectorWindowVisibility,
-  shouldShowCollectorUi,
   shouldShowCollectorControlsWindow,
   shouldShowConsentWindow,
 } from "./collectorWindows";
@@ -22,6 +41,20 @@ function status(consent: CollectorSnapshot["consent"]): CollectorSnapshot {
 }
 
 describe("collector window routing", () => {
+  it("hides a native collector window before closing it", async () => {
+    const calls: string[] = [];
+    windowMocks.hide.mockImplementation(async () => calls.push("hide"));
+    windowMocks.close.mockImplementation(async () => calls.push("close"));
+    windowMocks.getByLabel.mockResolvedValue({
+      close: windowMocks.close,
+      hide: windowMocks.hide,
+    });
+
+    await closeWindow("collector-controls");
+
+    expect(calls).toEqual(["hide", "close"]);
+  });
+
   it("routes pending consent to the bounded consent window only", () => {
     const pending = status("pending");
 
@@ -35,14 +68,6 @@ describe("collector window routing", () => {
 
     expect(shouldShowConsentWindow(status("declined"))).toBe(false);
     expect(shouldShowCollectorControlsWindow(status("declined"))).toBe(true);
-  });
-
-  it("shows collector UI only while League is focused or explicit preview is active", () => {
-    expect(shouldShowCollectorUi({ leagueFocused: true, previewMode: false })).toBe(true);
-    expect(shouldShowCollectorUi({ leagueFocused: false, previewMode: true })).toBe(true);
-    // Tier fixture alone does nothing here; only focused League or resolved
-    // preview mode may surface collector pixels.
-    expect(shouldShowCollectorUi({ leagueFocused: false, previewMode: false })).toBe(false);
   });
 
   it("closes the collector controls window immediately when visible collector UI is off", () => {
@@ -70,6 +95,16 @@ describe("collector window routing", () => {
       resolveCollectorWindowVisibility({
         status: status("pending"),
         controlsVisible: false,
+      }),
+    ).toEqual({
+      consentWindow: false,
+      collectorControlsWindow: false,
+    });
+
+    expect(
+      resolveCollectorWindowVisibility({
+        status: status("pending"),
+        controlsVisible: true,
       }),
     ).toEqual({
       consentWindow: true,

@@ -3,11 +3,16 @@ import { invoke } from "@tauri-apps/api/core";
 import {
   buildChampionPool,
 } from "./scoring";
-import { buildOverlayAugmentLookup, matchAugmentName } from "./scoring/offer-lookup";
+import {
+  buildOverlayAugmentLookup,
+  diagnoseAugmentMatch,
+  matchAugmentName,
+} from "./scoring/offer-lookup";
 import {
   advanceOcrSelection,
   isCompleteThreeCardOffer,
   matchAugmentFrame,
+  ocrRunIsCurrent,
   shouldClearOcrStateForGameflow,
   shouldEndAugmentSelectionForLevel,
   shouldRunOcrForGameflow,
@@ -18,7 +23,6 @@ import {
 } from "./collector/CollectorStatus";
 import {
   overlayShouldIgnoreMouseEvents,
-  shouldShowCollectorUi,
 } from "./collector/collectorWindows";
 import { normalizeChampionName, resolveKnownChampionSlug } from "./championResolve";
 import type {
@@ -56,6 +60,11 @@ import {
 import { useAramggTierFixture } from "./dev/useAramggTierFixture";
 import { isGeometryPreviewEnabled, resolveOverlayFixtureMode } from "./dev/fixtureMode";
 import {
+  gameOverlayVisible,
+  unknownForegroundState,
+  type ForegroundState,
+} from "./overlayVisibility";
+import {
   canRunOcr,
   createOcrAvailability,
   ocrAvailabilityFromError,
@@ -87,6 +96,28 @@ interface LcuGameflowState {
 interface DetectedAugment {
   text: string;
   region_index: number;
+}
+
+interface NativeOcrCardDiagnostic {
+  regionIndex: number;
+  crop: { x: number; y: number; width: number; height: number } | null;
+  captureSucceeded: boolean;
+  rawText: string | null;
+  error: string | null;
+  captureWidth: number | null;
+  captureHeight: number | null;
+}
+
+interface OcrScanResult {
+  detected: DetectedAugment[];
+  diagnostics: NativeOcrCardDiagnostic[];
+}
+
+interface OcrCardDiagnostic extends NativeOcrCardDiagnostic {
+  normalizedText: string;
+  bestCandidate: string | null;
+  confidence: number | null;
+  rejectionReason: string | null;
 }
 
 interface MatchedCard {
@@ -176,8 +207,16 @@ function App() {
   const ocrEmptyPassesRef = useRef(0);
   const ocrSelectionCompletedRef = useRef(false);
   const gameflowCaptureAllowedRef = useRef(false);
+  const pollInFlightRef = useRef(false);
+  const pollPendingRef = useRef(false);
+  const pollRef = useRef<() => Promise<void>>(async () => {});
+  const foregroundPollInFlightRef = useRef(false);
   const [showStartupTip, setShowStartupTip] = useState(true);
-  const [leagueFocused, setLeagueFocused] = useState(false);
+  const [foregroundState, setForegroundState] = useState<ForegroundState>(
+    unknownForegroundState(),
+  );
+  const foregroundStateRef = useRef<ForegroundState>(unknownForegroundState());
+  const [ocrDiagnostics, setOcrDiagnostics] = useState<OcrCardDiagnostic[]>([]);
   const [overlayData, setOverlayData] = useState<OverlayData | null>(null);
   const [abilityProfiles, setAbilityProfiles] = useState<Record<string, AbilityProfile | null>>({});
   const [dataError, setDataError] = useState<string | null>(null);
@@ -199,6 +238,7 @@ function App() {
   const [debugCollapsed, setDebugCollapsed] = useState(false);
   const activeGameHashRef = useRef<string | null>(null);
   const memberBootstrapCompleteRef = useRef(false);
+  const gameWindowForeground = foregroundState.gameWindowForeground;
   const collectorEnabled = collectorStatus?.consent === "accepted";
   const collectorCaptureEnabled = collectorEnabled && !collectorStatus?.paused;
   // Dev-only: bypass ONLY the member-coach auth/data. Everything else (OCR,
@@ -350,14 +390,6 @@ function App() {
     if (!collectorStatus) return;
     invoke("set_dock_visible", { visible: collectorStatus.consent === "pending" });
   }, [collectorStatus]);
-
-  // The full-screen visual overlay must not capture the desktop. Bounded
-  // consent/collector windows own their own mouse interaction.
-  useEffect(() => {
-    invoke("set_click_through", {
-      ignore: overlayShouldIgnoreMouseEvents({ coachOpen }),
-    });
-  }, [coachOpen]);
 
   const championSlugByName = useMemo(() => {
     const map = new Map<string, string>();
@@ -548,7 +580,7 @@ function App() {
   const fixtureMode = resolveOverlayFixtureMode({
     tierFixtureOn,
     previewOn: geometryPreviewOn,
-    leagueFocused,
+    gameWindowForeground,
     phase,
     completeOffer: isCompleteThreeCardOffer(matchedCards),
     aramggReady: aramgg.status === "ready",
@@ -585,10 +617,20 @@ function App() {
   // synthetic preview cards. Nothing is injected into the real-offer path.
   const fixtureCards = fixtureMode.kind === "preview" ? previewCards : matchedCards;
   const isPreviewMode = fixtureMode.kind === "preview";
-  const collectorUiVisible = shouldShowCollectorUi({
-    leagueFocused,
+  const gameOverlayIsVisible = gameOverlayVisible({
+    gameWindowForeground,
     previewMode: isPreviewMode,
   });
+
+  // The full-screen visual overlay must not capture the desktop. Bounded
+  // consent/collector windows own their own mouse interaction.
+  useEffect(() => {
+    invoke("set_click_through", {
+      ignore: overlayShouldIgnoreMouseEvents({
+        coachOpen: coachOpen && gameOverlayIsVisible,
+      }),
+    });
+  }, [coachOpen, gameOverlayIsVisible]);
 
   // Build the ARAMGG-backed decision result from whichever cards are active.
   const fixturePayload = useMemo(() => {
@@ -620,7 +662,7 @@ function App() {
     effectiveMemberEnabled &&
     phase === "augment_selection" &&
     isCompleteThreeCardOffer(matchedCards) &&
-    leagueFocused &&
+    gameWindowForeground &&
     badgeDecisionResult != null;
   const previewBadgesReady =
     isPreviewMode && fixturePayload != null && previewCards.length === 3;
@@ -647,7 +689,41 @@ function App() {
     }
     setOcrActive(false);
     setMatchedCards([]);
+    setOcrDiagnostics([]);
   }, []);
+
+  const refreshForeground = useCallback(async (): Promise<ForegroundState | null> => {
+    if (foregroundPollInFlightRef.current) return null;
+    foregroundPollInFlightRef.current = true;
+    try {
+      const nextForeground = await invoke<ForegroundState>("get_foreground_state")
+        .catch(() => unknownForegroundState());
+      const previousForeground = foregroundStateRef.current;
+      foregroundStateRef.current = nextForeground;
+      const changed = [
+        "gameWindowForeground",
+        "riotClientForeground",
+        "gameRunning",
+        "gameWindowDetected",
+        "foregroundAppName",
+        "foregroundBundleIdentifier",
+        "foregroundOwnerName",
+        "foregroundWindowTitle",
+      ].some((key) => (
+        nextForeground[key as keyof ForegroundState] !==
+        previousForeground[key as keyof ForegroundState]
+      ));
+      if (changed) setForegroundState(nextForeground);
+      if (!nextForeground.gameWindowForeground && (
+        previousForeground.gameWindowForeground || ocrActiveRef.current
+      )) {
+        stopOcr();
+      }
+      return nextForeground;
+    } finally {
+      foregroundPollInFlightRef.current = false;
+    }
+  }, [stopOcr]);
 
   const clearGameOnlyState = useCallback((nextPhase: Phase) => {
     ocrSelectionCompletedRef.current = true;
@@ -668,16 +744,49 @@ function App() {
   const runOcr = useCallback(async (runId: number) => {
     if (
       !nameLookup.size ||
-      !ocrActiveRef.current ||
-      ocrRunIdRef.current !== runId
+      !ocrRunIsCurrent({
+        active: ocrActiveRef.current,
+        currentRunId: ocrRunIdRef.current,
+        runId,
+      })
     ) return;
 
     try {
-      const detected = await invoke<DetectedAugment[]>("detect_augment_names", {
+      const scan = await invoke<OcrScanResult>("detect_augment_names", {
         knownNames: ocrKnownNames,
       });
 
-      if (!ocrActiveRef.current || ocrRunIdRef.current !== runId) return;
+      if (
+        !ocrRunIsCurrent({
+          active: ocrActiveRef.current,
+          currentRunId: ocrRunIdRef.current,
+          runId,
+        })
+      ) return;
+
+      const detected = scan.detected;
+      setOcrDiagnostics(
+        scan.diagnostics.map((diagnostic) => {
+          if (!diagnostic.rawText) {
+            return {
+              ...diagnostic,
+              normalizedText: "",
+              bestCandidate: null,
+              confidence: null,
+              rejectionReason: diagnostic.error ?? "no-text-recognized",
+            };
+          }
+
+          const match = diagnoseAugmentMatch(diagnostic.rawText, nameLookup);
+          return {
+            ...diagnostic,
+            normalizedText: match.normalizedText,
+            bestCandidate: match.bestCandidate,
+            confidence: match.confidence,
+            rejectionReason: match.rejectionReason,
+          };
+        }),
+      );
 
       const matched: MatchedCard[] = matchAugmentFrame(
         detected,
@@ -724,10 +833,32 @@ function App() {
         stopOcr();
       }
     } catch (error) {
-      if (ocrActiveRef.current && ocrRunIdRef.current === runId) {
+      if (
+        ocrRunIsCurrent({
+          active: ocrActiveRef.current,
+          currentRunId: ocrRunIdRef.current,
+          runId,
+        })
+      ) {
         const unavailable = ocrAvailabilityFromError(error);
         if (unavailable) setOcrAvailability(unavailable);
         setMatchedCards([]);
+        const message = error instanceof Error ? error.message : "ocr-scan-failed";
+        setOcrDiagnostics(
+          [0, 1, 2].map((regionIndex) => ({
+            regionIndex,
+            crop: null,
+            captureSucceeded: false,
+            rawText: null,
+            error: message,
+            captureWidth: null,
+            captureHeight: null,
+            normalizedText: "",
+            bestCandidate: null,
+            confidence: null,
+            rejectionReason: message,
+          })),
+        );
       }
     }
   }, [collectorCaptureEnabled, nameLookup, ocrKnownNames, playerData, stopOcr, updatePhase]);
@@ -739,7 +870,13 @@ function App() {
   const scheduleNextOcr = useCallback(function scheduleNextOcr(runId: number) {
     ocrTimeoutRef.current = setTimeout(async () => {
       await runOcrRef.current(runId);
-      if (ocrActiveRef.current && ocrRunIdRef.current === runId) {
+      if (
+        ocrRunIsCurrent({
+          active: ocrActiveRef.current,
+          currentRunId: ocrRunIdRef.current,
+          runId,
+        })
+      ) {
         scheduleNextOcr(runId);
       }
     }, 20);
@@ -759,128 +896,129 @@ function App() {
 
   // Main polling loop
   const poll = useCallback(async () => {
-    if (!collectorEnabled) {
-      stopOcr();
-      updatePhase("idle");
+    if (pollInFlightRef.current) {
+      pollPendingRef.current = true;
       return;
     }
+    pollInFlightRef.current = true;
 
-    let leagueIsFocused = leagueFocused;
     try {
-      leagueIsFocused = await invoke<boolean>("is_league_foreground");
-      setLeagueFocused(leagueIsFocused);
-      if (!leagueIsFocused) {
-        setMatchedCards([]);
+      if (!collectorEnabled) {
         stopOcr();
-      }
-    } catch {
-      // macOS only — default to showing on other platforms
-    }
-
-    const gameflow = await invoke<LcuGameflowState | null>("get_lcu_gameflow_state")
-      .catch(() => null);
-    gameflowCaptureAllowedRef.current = shouldRunOcrForGameflow(gameflow);
-    if (shouldClearOcrStateForGameflow(gameflow)) {
-      const clientFound = await invoke<boolean>("detect_league_client").catch(() => false);
-      clearGameOnlyState(clientFound ? "client_found" : "idle");
-      return;
-    }
-
-    try {
-      const data = await invoke<LivePlayerData | null>("get_live_player_data");
-      if (data) {
-        const gameHash = await invoke<string | null>("get_game_hash").catch(() => null);
-        if (!gameHash) {
-          setMemberSnapshot(disabledMember("game-hash-unavailable"));
-        } else if (
-          memberBootstrapCompleteRef.current &&
-          shouldVerifyGameStart(activeGameHashRef.current, gameHash)
-        ) {
-          activeGameHashRef.current = gameHash;
-          setMemberSnapshot(disabledMember("game-session-verification-pending"));
-          const snapshot = await verifyMemberGameStart(gameHash).catch((error) =>
-            disabledMember(
-              error instanceof Error ? error.message : "game-session-verification-failed",
-            ),
-          );
-          setMemberSnapshot(snapshot);
-        }
-        const lastGameTime = lastGameTimeRef.current;
-        if (lastGameTime !== null && data.game_time + 5 < lastGameTime) {
-          ocrSelectionCompletedRef.current = true;
-          lastAugmentLevelRef.current = 0;
-          setPickedAugments([]);
-          setMatchedCards([]);
-          lastRecordedRoundRef.current = "";
-          stopOcr();
-        }
-        lastGameTimeRef.current = data.game_time;
-        setPlayerData(data);
-        const slug = champNameToSlug(data.champion);
-        if (slug !== championSlug) {
-          ocrSelectionCompletedRef.current = true;
-          setChampionSlug(slug);
-          lastAugmentLevelRef.current = 0;
-          setPickedAugments([]);
-          stopOcr();
-        }
-
-        const augmentLevel = [...AUGMENT_LEVELS]
-          .reverse()
-          .find((threshold) =>
-            data.level >= threshold && threshold > lastAugmentLevelRef.current
-          );
-
-        const shouldShowSelection = augmentLevel !== undefined;
-
-        if (shouldShowSelection) {
-          ocrSelectionCompletedRef.current = false;
-          lastAugmentLevelRef.current = augmentLevel;
-          updatePhase("augment_selection");
-          if (leagueIsFocused) startOcr();
-        } else if (phaseRef.current === "augment_selection") {
-          if (ocrSelectionCompletedRef.current) {
-            updatePhase("in_game");
-            stopOcr();
-            return;
-          }
-
-          const doneSelecting = shouldEndAugmentSelectionForLevel({
-            playerLevel: data.level,
-            lastAugmentLevel: lastAugmentLevelRef.current,
-          });
-          if (doneSelecting) {
-            ocrSelectionCompletedRef.current = true;
-            updatePhase("in_game");
-            stopOcr();
-          } else if (leagueIsFocused) {
-            startOcr();
-          }
-        } else {
-          updatePhase("in_game");
-        }
+        updatePhase("idle");
         return;
       }
-    } catch {
-      // Live Client API not available
-    }
 
-    try {
-      const clientFound = await invoke<boolean>("detect_league_client");
-      if (clientFound) {
-        clearGameOnlyState("client_found");
-      } else {
+      const nextForeground = await refreshForeground();
+      const actualGameForeground = nextForeground?.gameWindowForeground === true;
+
+      const gameflow = await invoke<LcuGameflowState | null>("get_lcu_gameflow_state")
+        .catch(() => null);
+      gameflowCaptureAllowedRef.current = shouldRunOcrForGameflow(gameflow);
+      if (shouldClearOcrStateForGameflow(gameflow)) {
+        const clientFound = await invoke<boolean>("detect_league_client").catch(() => false);
+        clearGameOnlyState(clientFound ? "client_found" : "idle");
+        return;
+      }
+
+      try {
+        const data = await invoke<LivePlayerData | null>("get_live_player_data");
+        if (data) {
+          const gameHash = await invoke<string | null>("get_game_hash").catch(() => null);
+          if (!gameHash) {
+            setMemberSnapshot(disabledMember("game-hash-unavailable"));
+          } else if (
+            memberBootstrapCompleteRef.current &&
+            shouldVerifyGameStart(activeGameHashRef.current, gameHash)
+          ) {
+            activeGameHashRef.current = gameHash;
+            setMemberSnapshot(disabledMember("game-session-verification-pending"));
+            const snapshot = await verifyMemberGameStart(gameHash).catch((error) =>
+              disabledMember(
+                error instanceof Error ? error.message : "game-session-verification-failed",
+              ),
+            );
+            setMemberSnapshot(snapshot);
+          }
+          const lastGameTime = lastGameTimeRef.current;
+          if (lastGameTime !== null && data.game_time + 5 < lastGameTime) {
+            ocrSelectionCompletedRef.current = true;
+            lastAugmentLevelRef.current = 0;
+            setPickedAugments([]);
+            setMatchedCards([]);
+            lastRecordedRoundRef.current = "";
+            stopOcr();
+          }
+          lastGameTimeRef.current = data.game_time;
+          setPlayerData(data);
+          const slug = champNameToSlug(data.champion);
+          if (slug !== championSlug) {
+            ocrSelectionCompletedRef.current = true;
+            setChampionSlug(slug);
+            lastAugmentLevelRef.current = 0;
+            setPickedAugments([]);
+            stopOcr();
+          }
+
+          const augmentLevel = [...AUGMENT_LEVELS]
+            .reverse()
+            .find((threshold) =>
+              data.level >= threshold && threshold > lastAugmentLevelRef.current
+            );
+
+          const shouldShowSelection = augmentLevel !== undefined;
+
+          if (shouldShowSelection) {
+            ocrSelectionCompletedRef.current = false;
+            lastAugmentLevelRef.current = augmentLevel;
+            updatePhase("augment_selection");
+            if (actualGameForeground) startOcr();
+          } else if (phaseRef.current === "augment_selection") {
+            if (ocrSelectionCompletedRef.current) {
+              updatePhase("in_game");
+              stopOcr();
+              return;
+            }
+
+            const doneSelecting = shouldEndAugmentSelectionForLevel({
+              playerLevel: data.level,
+              lastAugmentLevel: lastAugmentLevelRef.current,
+            });
+            if (doneSelecting) {
+              ocrSelectionCompletedRef.current = true;
+              updatePhase("in_game");
+              stopOcr();
+            } else if (actualGameForeground) {
+              startOcr();
+            }
+          } else {
+            updatePhase("in_game");
+          }
+          return;
+        }
+      } catch {
+        // Live Client API not available
+      }
+
+      try {
+        const clientFound = await invoke<boolean>("detect_league_client");
+        clearGameOnlyState(clientFound ? "client_found" : "idle");
+      } catch {
         clearGameOnlyState("idle");
       }
-    } catch {
-      clearGameOnlyState("idle");
+    } finally {
+      pollInFlightRef.current = false;
+      if (pollPendingRef.current) {
+        pollPendingRef.current = false;
+        void pollRef.current();
+      }
     }
   }, [
     champNameToSlug,
     championSlug,
     clearGameOnlyState,
     collectorEnabled,
-    leagueFocused,
+    refreshForeground,
     startOcr,
     stopOcr,
     updatePhase,
@@ -927,6 +1065,14 @@ function App() {
   }, [currentRound, matchedCards, memberEnabled, phase]);
 
   useEffect(() => {
+    const foregroundIntervalId = setInterval(() => {
+      void refreshForeground();
+    }, 250);
+    void refreshForeground();
+    return () => clearInterval(foregroundIntervalId);
+  }, [refreshForeground]);
+
+  useEffect(() => {
     const intervalId = setInterval(() => {
       void poll();
     }, 1500);
@@ -939,18 +1085,17 @@ function App() {
     };
   }, [poll]);
 
-  // Fix #5: force an immediate scan the instant League regains focus, rather
+  // Fix #5: force an immediate scan the instant the game regains focus, rather
   // than waiting up to 1.5s for the next poll tick. Stale matched cards were
-  // already cleared on blur (poll → setMatchedCards([])), so refocus rebuilds
+  // already cleared on blur (foreground refresh → stopOcr()), so refocus rebuilds
   // the three-card offer atomically from a fresh OCR pass; badges stay hidden
   // until all three current cards are confidently matched.
-  const pollRef = useRef(poll);
   useEffect(() => {
     pollRef.current = poll;
   }, [poll]);
   useEffect(() => {
-    if (leagueFocused) void pollRef.current();
-  }, [leagueFocused]);
+    if (gameWindowForeground) void pollRef.current();
+  }, [gameWindowForeground]);
 
   // Cleanup OCR on unmount
   useEffect(() => {
@@ -982,7 +1127,7 @@ function App() {
 
   return (
     <div className="overlay-root">
-      {leagueFocused && (calibration || calibrationError) && (
+      {gameOverlayIsVisible && (calibration || calibrationError) && (
         <div className="calibration-panel">
           <div className="calibration-title">Calibration</div>
           {calibration ? (
@@ -1013,7 +1158,7 @@ function App() {
       )}
 
       {/* Status dot */}
-      {collectorEnabled && collectorUiVisible && <div
+      {collectorEnabled && gameOverlayIsVisible && <div
         className={`status-dot ${
           phase === "augment_selection"
             ? "status-ocr"
@@ -1081,7 +1226,7 @@ function App() {
 
       {/* OCR diagnostic (dev fixture): League focused on an augment screen but
           not three confident cards — show a diagnostic, never synthetic badges. */}
-      {fixtureMode.kind === "ocr-unavailable" && (
+      {gameOverlayIsVisible && fixtureMode.kind === "ocr-unavailable" && (
         <div className="ocr-diagnostic">
           OCR unavailable — {diag.ocrDetected}/3 cards matched
           {aramgg.status !== "ready" && ` · ARAMGG ${aramgg.status}`}
@@ -1089,7 +1234,7 @@ function App() {
       )}
 
       {/* Minimal HUD when in-game but not selecting */}
-      {memberEnabled && phase === "in_game" && championSlug && leagueFocused && (
+      {memberEnabled && phase === "in_game" && championSlug && gameOverlayIsVisible && (
         <div className="hud">
           <span className="champion-tag">
             {playerData?.champion ?? championSlug}
@@ -1102,25 +1247,25 @@ function App() {
       )}
 
       {/* Idle / waiting */}
-      {collectorEnabled && collectorUiVisible && phase === "idle" && (
+      {collectorEnabled && gameOverlayIsVisible && phase === "idle" && (
         <div className="idle-panel">Waiting for League client...</div>
       )}
-      {collectorEnabled && collectorUiVisible && phase === "client_found" && (
+      {collectorEnabled && gameOverlayIsVisible && phase === "client_found" && (
         <div className="idle-panel">Client found — waiting for game...</div>
       )}
-      {collectorEnabled && collectorUiVisible && dataError && (
+      {collectorEnabled && gameOverlayIsVisible && dataError && (
         <div className="idle-panel">Overlay data failed to load: {dataError}</div>
       )}
-      {collectorEnabled && collectorUiVisible && ocrStatusMessage && (
+      {collectorEnabled && gameOverlayIsVisible && ocrStatusMessage && (
         <div className="idle-panel">{ocrStatusMessage}</div>
       )}
-      {collectorEnabled && collectorUiVisible && effectiveMember?.error && (
+      {collectorEnabled && gameOverlayIsVisible && effectiveMember?.error && (
         <div className="member-error">Member coach unavailable: {effectiveMember.error}</div>
       )}
       {/* Dev debug panel. Hidden on League focus-loss unless explicitly pinned
           (fix #4); collapsible/movable and bottom-right so it never obscures the
           left recommendation (fix #10). */}
-      {(tierFixtureOn || geometryPreviewOn) && (leagueFocused || debugPinned) && (
+      {(tierFixtureOn || geometryPreviewOn) && (gameOverlayIsVisible || debugPinned) && (
         <div
           className="aramgg-debug-panel"
           style={{
@@ -1180,6 +1325,36 @@ function App() {
                 rendered real badges: {diag.renderedRealBadges} · rendered preview
                 badges: {diag.renderedPreviewBadges}
               </div>
+              <div style={{ marginTop: 4, opacity: 0.85 }}>
+                Foreground: app={foregroundState.foregroundAppName ?? "?"} · bundle=
+                {foregroundState.foregroundBundleIdentifier ?? "?"} · owner=
+                {foregroundState.foregroundOwnerName ?? "?"} · title=
+                {foregroundState.foregroundWindowTitle || "?"} · gameForeground=
+                {String(foregroundState.gameWindowForeground)} · riotClientForeground=
+                {String(foregroundState.riotClientForeground)} · gameRunning=
+                {String(foregroundState.gameRunning)} · gameWindowDetected=
+                {String(foregroundState.gameWindowDetected)}
+              </div>
+              {ocrDiagnostics.map((diagnostic) => {
+                const crop = diagnostic.crop
+                  ? `${diagnostic.crop.x},${diagnostic.crop.y} ${diagnostic.crop.width}x${diagnostic.crop.height}`
+                  : "none";
+                const captureSize = diagnostic.captureWidth && diagnostic.captureHeight
+                  ? `${diagnostic.captureWidth}x${diagnostic.captureHeight}`
+                  : "none";
+                const confidence = diagnostic.confidence === null
+                  ? "?"
+                  : diagnostic.confidence.toFixed(2);
+                return (
+                  <div key={`ocr-diagnostic-${diagnostic.regionIndex}`} style={{ marginTop: 2 }}>
+                    card {diagnostic.regionIndex + 1} · crop={crop} · image={captureSize} · capture=
+                    {String(diagnostic.captureSucceeded)} · raw={diagnostic.rawText ?? ""} ·
+                    normalized={diagnostic.normalizedText} · best=
+                    {diagnostic.bestCandidate ?? "none"} · confidence={confidence} · reject=
+                    {diagnostic.rejectionReason ?? "none"}
+                  </div>
+                );
+              })}
               {aramgg.status === "ready" && (
                 <>
                   <div>
@@ -1218,7 +1393,7 @@ function App() {
       )}
 
       {/* Startup tip — auto-dismisses after 6s */}
-      {collectorEnabled && collectorUiVisible && showStartupTip && (
+      {collectorEnabled && gameOverlayIsVisible && showStartupTip && (
         <div className="startup-tip">
           <img src="/icon.png" alt="" className="startup-icon" />
           <div className="startup-tip-text">
@@ -1229,7 +1404,7 @@ function App() {
         </div>
       )}
       <CoachPanel
-        open={effectiveMemberEnabled && coachOpen && (leagueFocused || isPreviewMode)}
+        open={effectiveMemberEnabled && coachOpen && gameOverlayIsVisible}
         result={badgeDecisionResult}
         mode={mode}
         onModeChange={setMode}
@@ -1238,7 +1413,7 @@ function App() {
       />
       <CollectorOverlayController
         onStatus={setCollectorStatus}
-        showPanel={collectorUiVisible}
+        showPanel={gameOverlayIsVisible}
       />
     </div>
   );

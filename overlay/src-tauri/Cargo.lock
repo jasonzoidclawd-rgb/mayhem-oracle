@@ -2842,6 +2842,8 @@ dependencies = [
  "base64 0.22.1",
  "chrono",
  "cocoa",
+ "core-foundation 0.10.1",
+ "core-graphics 0.24.0",
  "flate2",
  "hex",
  "image",

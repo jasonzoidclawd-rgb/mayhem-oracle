@@ -64,15 +64,13 @@ const FULLSCREEN_TOLERANCE_RATIO: f64 = 0.02;
 
 pub fn select_viewport(monitor: &MonitorInfo, game_window: Option<&Rect>) -> OverlayCalibration {
     match game_window {
-        Some(window) if rect_approximately_matches_monitor(monitor, window) => {
-            OverlayCalibration {
-                monitor: monitor.clone(),
-                game_window: Some(window.clone()),
-                viewport: monitor_rect(monitor),
-                mode: "borderless-monitor-fallback".to_string(),
-                warnings: Vec::new(),
-            }
-        }
+        Some(window) if rect_approximately_matches_monitor(monitor, window) => OverlayCalibration {
+            monitor: monitor.clone(),
+            game_window: Some(window.clone()),
+            viewport: monitor_rect(monitor),
+            mode: "borderless-monitor-fallback".to_string(),
+            warnings: Vec::new(),
+        },
         Some(window) => OverlayCalibration {
             monitor: monitor.clone(),
             game_window: Some(window.clone()),
@@ -133,6 +131,25 @@ pub fn physical_to_logical_rect(rect: &Rect, scale_factor: f64) -> Rect {
     }
 }
 
+/// Convert a monitor-relative logical rectangle into pixels in a captured image.
+/// CoreGraphics captures a logical display rect but returns a pixel-sized image.
+pub fn capture_rect_for_monitor(
+    rect: &Rect,
+    monitor: &MonitorInfo,
+    capture_width: u32,
+    capture_height: u32,
+) -> Rect {
+    let scale_x = capture_width as f64 / monitor.width.max(1) as f64;
+    let scale_y = capture_height as f64 / monitor.height.max(1) as f64;
+
+    Rect {
+        x: ((rect.x - monitor.x) as f64 * scale_x).round().max(0.0) as i32,
+        y: ((rect.y - monitor.y) as f64 * scale_y).round().max(0.0) as i32,
+        width: (rect.width as f64 * scale_x).round().max(0.0) as u32,
+        height: (rect.height as f64 * scale_y).round().max(0.0) as u32,
+    }
+}
+
 pub fn overlap_area(left: &Rect, right: &MonitorInfo) -> u64 {
     let x1 = left.x.max(right.x);
     let y1 = left.y.max(right.y);
@@ -156,9 +173,8 @@ fn monitor_rect(monitor: &MonitorInfo) -> Rect {
 }
 
 fn fullscreen_tolerance(monitor: &MonitorInfo) -> i32 {
-    FULLSCREEN_TOLERANCE_PX.max(
-        (monitor.width.max(monitor.height) as f64 * FULLSCREEN_TOLERANCE_RATIO).round() as i32,
-    )
+    FULLSCREEN_TOLERANCE_PX
+        .max((monitor.width.max(monitor.height) as f64 * FULLSCREEN_TOLERANCE_RATIO).round() as i32)
 }
 
 fn right_rect(rect: &Rect) -> i32 {

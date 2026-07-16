@@ -1,5 +1,6 @@
 use mayhem_oracle_lib::calibration::{
-    physical_card_rects, physical_to_logical_rect, select_viewport, MonitorInfo, Rect,
+    capture_rect_for_monitor, physical_card_rects, physical_to_logical_rect, select_viewport,
+    MonitorInfo, Rect,
 };
 
 fn monitor(width: u32, height: u32, scale_factor: f64) -> MonitorInfo {
@@ -54,14 +55,33 @@ fn converts_physical_pixels_to_logical_css_pixels() {
 }
 
 #[test]
+fn scales_logical_card_crop_into_retina_capture_pixels() {
+    let monitor = monitor(1280, 720, 2.0);
+    let logical = Rect {
+        x: 280,
+        y: 250,
+        width: 220,
+        height: 60,
+    };
+
+    assert_eq!(
+        capture_rect_for_monitor(&logical, &monitor, 2560, 1440),
+        Rect {
+            x: 560,
+            y: 500,
+            width: 440,
+            height: 120,
+        }
+    );
+}
+
+#[test]
 fn falls_back_to_monitor_when_league_window_is_missing() {
     let calibration = select_viewport(&monitor(2560, 1080, 1.0), None);
 
     assert_eq!(calibration.mode, "monitor-fallback");
     assert_eq!(calibration.viewport.width, 2560);
-    assert!(
-        calibration
-            .warnings
-            .contains(&"League window not detected; using monitor bounds.".to_string())
-    );
+    assert!(calibration
+        .warnings
+        .contains(&"League window not detected; using monitor bounds.".to_string()));
 }

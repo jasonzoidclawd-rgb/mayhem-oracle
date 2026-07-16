@@ -6,6 +6,7 @@ use std::sync::Arc;
 
 pub mod calibration;
 mod collector;
+mod foreground;
 mod lcu;
 pub mod member;
 pub mod ocr;
@@ -175,6 +176,24 @@ pub struct DetectedAugment {
     pub region_index: usize,
 }
 
+#[derive(Serialize, Deserialize, Clone, Debug)]
+#[serde(rename_all = "camelCase")]
+pub struct OcrCardDiagnostic {
+    pub region_index: usize,
+    pub crop: Option<calibration::Rect>,
+    pub capture_succeeded: bool,
+    pub raw_text: Option<String>,
+    pub error: Option<String>,
+    pub capture_width: Option<u32>,
+    pub capture_height: Option<u32>,
+}
+
+#[derive(Serialize, Deserialize, Clone, Debug)]
+pub struct OcrScanResult {
+    pub detected: Vec<DetectedAugment>,
+    pub diagnostics: Vec<OcrCardDiagnostic>,
+}
+
 // ─── OCR Commands ───────────────────────────────────────────────────────────
 
 #[tauri::command]
@@ -201,8 +220,12 @@ struct MonitorSnapshot {
 
 fn monitor_info_from_xcap(monitor: &xcap::Monitor) -> Result<calibration::MonitorInfo, String> {
     Ok(calibration::MonitorInfo {
-        x: monitor.x().map_err(|e| format!("Monitor x failed: {}", e))?,
-        y: monitor.y().map_err(|e| format!("Monitor y failed: {}", e))?,
+        x: monitor
+            .x()
+            .map_err(|e| format!("Monitor x failed: {}", e))?,
+        y: monitor
+            .y()
+            .map_err(|e| format!("Monitor y failed: {}", e))?,
         width: monitor
             .width()
             .map_err(|e| format!("Monitor width failed: {}", e))?,
@@ -240,16 +263,13 @@ fn find_league_window() -> Option<calibration::Rect> {
 
         let app_name = window.app_name().unwrap_or_default();
         let title = window.title().unwrap_or_default();
-        if !looks_like_league_window(&app_name, &title) {
+        if !foreground::is_actual_game_window(&app_name, &title) {
             continue;
         }
 
-        let (Ok(x), Ok(y), Ok(width), Ok(height)) = (
-            window.x(),
-            window.y(),
-            window.width(),
-            window.height(),
-        ) else {
+        let (Ok(x), Ok(y), Ok(width), Ok(height)) =
+            (window.x(), window.y(), window.width(), window.height())
+        else {
             continue;
         };
         let rect = calibration::Rect {
@@ -264,26 +284,13 @@ fn find_league_window() -> Option<calibration::Rect> {
         }
 
         let area = rect.width as u64 * rect.height as u64;
-        let focus_bonus = if window.is_focused().unwrap_or(false) {
-            area / 2
-        } else {
-            0
-        };
-        candidates.push((area + focus_bonus, rect));
+        candidates.push((area, rect));
     }
 
     candidates
         .into_iter()
         .max_by_key(|(score, _)| *score)
         .map(|(_, rect)| rect)
-}
-
-fn looks_like_league_window(app_name: &str, title: &str) -> bool {
-    let haystack = format!("{} {}", app_name, title)
-        .to_lowercase()
-        .replace(' ', "");
-
-    haystack.contains("leagueoflegends") || haystack.contains("leagueclient")
 }
 
 fn selected_monitor_index(
@@ -372,25 +379,71 @@ fn get_overlay_calibration(
     Ok(calibration)
 }
 
-fn capture_card_name_crops() -> Result<Vec<(usize, image::DynamicImage)>, String> {
+struct CardCrop {
+    region_index: usize,
+    image: image::DynamicImage,
+}
+
+struct CardCropSet {
+    crops: Vec<CardCrop>,
+    diagnostics: Vec<OcrCardDiagnostic>,
+}
+
+fn capture_card_name_crops() -> Result<CardCropSet, String> {
     let monitors = monitor_snapshots()?;
     let game_window = find_league_window();
     let monitor_index = selected_monitor_index(&monitors, game_window.as_ref());
     let monitor = &monitors[monitor_index];
     let calibration = calibration::select_viewport(&monitor.info, game_window.as_ref());
-    let screenshot = monitor
-        .monitor
-        .capture_image()
-        .map_err(|e| format!("Capture failed: {}", e))?;
+    let mut diagnostics = Vec::with_capacity(calibration::CARD_NAME_REGIONS.len());
+    let screenshot = match monitor.monitor.capture_image() {
+        Ok(screenshot) => screenshot,
+        Err(error) => {
+            let message = format!("Capture failed: {}", error);
+            for (region_index, region) in calibration::CARD_NAME_REGIONS.iter().enumerate() {
+                diagnostics.push(OcrCardDiagnostic {
+                    region_index,
+                    crop: Some(calibration::physical_rect_for_region(
+                        region,
+                        &calibration.viewport,
+                    )),
+                    capture_succeeded: false,
+                    raw_text: None,
+                    error: Some(message.clone()),
+                    capture_width: None,
+                    capture_height: None,
+                });
+            }
+            return Ok(CardCropSet {
+                crops: Vec::new(),
+                diagnostics,
+            });
+        }
+    };
 
     let mut crops = Vec::with_capacity(calibration::CARD_NAME_REGIONS.len());
 
     for (i, region) in calibration::CARD_NAME_REGIONS.iter().enumerate() {
-        let rect = calibration::physical_rect_for_region(region, &calibration.viewport);
-        let px = rect.x - monitor.info.x;
-        let py = rect.y - monitor.info.y;
+        let logical_rect = calibration::physical_rect_for_region(region, &calibration.viewport);
+        let rect = calibration::capture_rect_for_monitor(
+            &logical_rect,
+            &monitor.info,
+            screenshot.width(),
+            screenshot.height(),
+        );
+        let px = rect.x;
+        let py = rect.y;
 
         if px < 0 || py < 0 {
+            diagnostics.push(OcrCardDiagnostic {
+                region_index: i,
+                crop: Some(rect),
+                capture_succeeded: false,
+                raw_text: None,
+                error: Some("crop-origin-outside-monitor".to_string()),
+                capture_width: Some(screenshot.width()),
+                capture_height: Some(screenshot.height()),
+            });
             continue;
         }
 
@@ -399,28 +452,44 @@ fn capture_card_name_crops() -> Result<Vec<(usize, image::DynamicImage)>, String
         let pw = rect.width;
         let ph = rect.height;
 
-        if px + pw > screenshot.width() || py + ph > screenshot.height() {
+        if pw == 0 || ph == 0 || px + pw > screenshot.width() || py + ph > screenshot.height() {
+            diagnostics.push(OcrCardDiagnostic {
+                region_index: i,
+                crop: Some(rect),
+                capture_succeeded: false,
+                raw_text: None,
+                error: Some("crop-outside-captured-monitor".to_string()),
+                capture_width: Some(screenshot.width()),
+                capture_height: Some(screenshot.height()),
+            });
             continue;
         }
 
-        crops.push((
-            i,
-            image::DynamicImage::ImageRgba8(screenshot.view(px, py, pw, ph).to_image()),
-        ));
+        crops.push(CardCrop {
+            region_index: i,
+            image: image::DynamicImage::ImageRgba8(screenshot.view(px, py, pw, ph).to_image()),
+        });
+        diagnostics.push(OcrCardDiagnostic {
+            region_index: i,
+            crop: Some(rect),
+            capture_succeeded: true,
+            raw_text: None,
+            error: None,
+            capture_width: Some(screenshot.width()),
+            capture_height: Some(screenshot.height()),
+        });
     }
 
-    Ok(crops)
+    Ok(CardCropSet { crops, diagnostics })
 }
 
 #[tauri::command]
-async fn detect_augment_names(
-    known_names: Option<Vec<String>>,
-) -> Result<Vec<DetectedAugment>, String> {
-    if !is_league_foreground() {
+async fn detect_augment_names(known_names: Option<Vec<String>>) -> Result<OcrScanResult, String> {
+    if !collect_foreground_state().game_window_foreground {
         return Err("League of Legends is not the foreground application".to_string());
     }
 
-    let crops = capture_card_name_crops()?;
+    let crop_set = capture_card_name_crops()?;
     let locale = ocr::detect_game_locale();
 
     // Vision biases language correction toward these names; the Windows
@@ -434,29 +503,62 @@ async fn detect_augment_names(
             .collect(),
     );
 
-    let mut handles = Vec::with_capacity(crops.len());
-    for (i, crop) in crops {
+    let mut handles = Vec::with_capacity(crop_set.crops.len());
+    for crop in crop_set.crops {
+        let region_index = crop.region_index;
         let known_names = known_names.clone();
         handles.push(tokio::task::spawn_blocking(move || {
-            ocr::read_card_text(&crop, locale, &known_names).map(|text| {
-                text.map(|text| DetectedAugment {
-                    text,
-                    region_index: i,
-                })
-            })
+            (
+                region_index,
+                ocr::read_card_text(&crop.image, locale, &known_names),
+            )
         }));
     }
 
-    let mut results = Vec::with_capacity(handles.len());
+    let mut diagnostics = crop_set.diagnostics;
+    let mut detected = Vec::with_capacity(handles.len());
     for handle in handles {
         match handle.await {
-            Ok(Ok(Some(result))) => results.push(result),
-            Ok(Ok(None)) => {}
-            Ok(Err(error)) => return Err(error),
-            Err(error) => return Err(format!("OCR worker failed: {}", error)),
+            Ok((region_index, Ok(Some(text)))) => {
+                if let Some(diagnostic) = diagnostics
+                    .iter_mut()
+                    .find(|diagnostic| diagnostic.region_index == region_index)
+                {
+                    diagnostic.raw_text = Some(text.clone());
+                }
+                detected.push(DetectedAugment { text, region_index });
+            }
+            Ok((region_index, Ok(None))) => {
+                if let Some(diagnostic) = diagnostics
+                    .iter_mut()
+                    .find(|diagnostic| diagnostic.region_index == region_index)
+                {
+                    diagnostic.error = Some("no-text-recognized".to_string());
+                }
+            }
+            Ok((region_index, Err(error))) => {
+                if let Some(diagnostic) = diagnostics
+                    .iter_mut()
+                    .find(|diagnostic| diagnostic.region_index == region_index)
+                {
+                    diagnostic.error = Some(error);
+                }
+            }
+            Err(error) => {
+                let message = format!("OCR worker failed: {}", error);
+                for diagnostic in &mut diagnostics {
+                    if diagnostic.raw_text.is_none() && diagnostic.error.is_none() {
+                        diagnostic.error = Some(message.clone());
+                    }
+                }
+            }
         }
     }
-    Ok(results)
+    detected.sort_by_key(|result| result.region_index);
+    Ok(OcrScanResult {
+        detected,
+        diagnostics,
+    })
 }
 
 // ─── API Probe (check if augment data available via Live Client) ────────────
@@ -548,33 +650,222 @@ fn set_click_through(app: tauri::AppHandle, ignore: bool) {
     }
 }
 
-/// Returns true if League of Legends is the frontmost application
-#[tauri::command]
-fn is_league_foreground() -> bool {
-    #[cfg(target_os = "macos")]
-    unsafe {
-        use std::ffi::CStr;
-        let workspace: cocoa::base::id =
-            objc::msg_send![objc::class!(NSWorkspace), sharedWorkspace];
-        let frontmost: cocoa::base::id = objc::msg_send![workspace, frontmostApplication];
-        if frontmost.is_null() {
-            return false;
-        }
-        let bundle_id: cocoa::base::id = objc::msg_send![frontmost, bundleIdentifier];
-        if bundle_id.is_null() {
-            return false;
-        }
-        let ptr = cocoa::foundation::NSString::UTF8String(bundle_id);
-        if ptr.is_null() {
-            return false;
-        }
-        let s = CStr::from_ptr(ptr).to_str().unwrap_or("").to_lowercase();
-        s.replace(' ', "").contains("leagueoflegends")
+#[derive(Default)]
+struct FrontmostApplication {
+    app_name: Option<String>,
+    bundle_identifier: Option<String>,
+    process_id: Option<u32>,
+}
+
+#[cfg(target_os = "macos")]
+unsafe fn ns_string_value(value: cocoa::base::id) -> Option<String> {
+    use std::ffi::CStr;
+
+    if value.is_null() {
+        return None;
     }
+    let ptr = cocoa::foundation::NSString::UTF8String(value);
+    if ptr.is_null() {
+        return None;
+    }
+    let value = CStr::from_ptr(ptr).to_string_lossy().into_owned();
+    (!value.is_empty()).then_some(value)
+}
+
+#[cfg(target_os = "macos")]
+fn running_application(process_id: u32) -> FrontmostApplication {
+    unsafe {
+        let application: cocoa::base::id = objc::msg_send![
+            objc::class!(NSRunningApplication),
+            runningApplicationWithProcessIdentifier: process_id as i32
+        ];
+        if application.is_null() {
+            return FrontmostApplication::default();
+        }
+
+        let app_name: cocoa::base::id = objc::msg_send![application, localizedName];
+        let bundle_identifier: cocoa::base::id = objc::msg_send![application, bundleIdentifier];
+
+        FrontmostApplication {
+            app_name: ns_string_value(app_name),
+            bundle_identifier: ns_string_value(bundle_identifier),
+            process_id: Some(process_id),
+        }
+    }
+}
+
+#[cfg(target_os = "macos")]
+unsafe fn cf_dictionary_value(
+    dictionary: &core_foundation::dictionary::CFDictionary,
+    key: &'static str,
+) -> *const std::ffi::c_void {
+    use core_foundation::base::TCFType;
+    use core_foundation::dictionary::{CFDictionaryGetValueIfPresent, CFDictionaryRef};
+    use core_foundation::string::CFString;
+
+    let key = CFString::from_static_string(key);
+    let mut value = std::ptr::null();
+    let _ = CFDictionaryGetValueIfPresent(
+        dictionary.as_CFTypeRef() as CFDictionaryRef,
+        key.as_CFTypeRef() as *const std::ffi::c_void,
+        &mut value,
+    );
+    value
+}
+
+#[cfg(target_os = "macos")]
+unsafe fn cf_string_dictionary_value(
+    dictionary: &core_foundation::dictionary::CFDictionary,
+    key: &'static str,
+) -> Option<String> {
+    use core_foundation::base::TCFType;
+    use core_foundation::string::{CFString, CFStringRef};
+
+    let value = cf_dictionary_value(dictionary, key);
+    (!value.is_null()).then(|| CFString::wrap_under_get_rule(value as CFStringRef).to_string())
+}
+
+#[cfg(target_os = "macos")]
+unsafe fn cf_i32_dictionary_value(
+    dictionary: &core_foundation::dictionary::CFDictionary,
+    key: &'static str,
+) -> Option<i32> {
+    use core_foundation::base::TCFType;
+    use core_foundation::number::{CFNumber, CFNumberRef};
+
+    let value = cf_dictionary_value(dictionary, key);
+    (!value.is_null())
+        .then(|| CFNumber::wrap_under_get_rule(value as CFNumberRef).to_i32())
+        .flatten()
+}
+
+#[cfg(target_os = "macos")]
+fn foreground_window_metadata() -> (FrontmostApplication, Option<String>, Option<String>, bool) {
+    use core_foundation::base::TCFType;
+    use core_foundation::dictionary::CFDictionary;
+    use core_graphics::window::{
+        copy_window_info, kCGWindowListExcludeDesktopElements, kCGWindowListOptionOnScreenOnly,
+    };
+
+    let Some(windows) = copy_window_info(
+        kCGWindowListOptionOnScreenOnly | kCGWindowListExcludeDesktopElements,
+        0,
+    ) else {
+        return (FrontmostApplication::default(), None, None, false);
+    };
+
+    let own_process_id = std::process::id();
+    let mut foreground_application = FrontmostApplication::default();
+    let mut foreground_owner_name = None;
+    let mut foreground_window_title = None;
+    let mut game_window_detected = false;
+
+    // CoreGraphics returns visible windows front-to-back. Ignore menu/status
+    // layers and our own always-on-top windows before choosing the app window.
+    for window_ref in windows.get_all_values() {
+        if window_ref.is_null() {
+            continue;
+        }
+        let window = unsafe {
+            CFDictionary::<*const std::ffi::c_void, *const std::ffi::c_void>::wrap_under_get_rule(
+                window_ref as *const _,
+            )
+        };
+        let owner_name = unsafe { cf_string_dictionary_value(&window, "kCGWindowOwnerName") };
+        let title = unsafe { cf_string_dictionary_value(&window, "kCGWindowName") };
+        let owner_name_value = owner_name.as_deref().unwrap_or_default();
+        let title_value = title.as_deref().unwrap_or_default();
+        let process_id = unsafe { cf_i32_dictionary_value(&window, "kCGWindowOwnerPID") }
+            .and_then(|value| (value > 0).then_some(value as u32));
+        let layer = unsafe { cf_i32_dictionary_value(&window, "kCGWindowLayer") };
+
+        if foreground::is_actual_game_window(owner_name_value, title_value) {
+            game_window_detected = true;
+        }
+
+        if layer != Some(0) || process_id.is_none() || process_id == Some(own_process_id) {
+            continue;
+        }
+
+        let process_id = process_id.unwrap();
+        let application = running_application(process_id);
+        let is_own_window = application
+            .bundle_identifier
+            .as_deref()
+            .is_some_and(|bundle| bundle == "com.mayhem-oracle.overlay");
+        if is_own_window {
+            continue;
+        }
+
+        if foreground_application.process_id.is_none() {
+            foreground_application = FrontmostApplication {
+                app_name: application
+                    .app_name
+                    .or_else(|| owner_name.clone())
+                    .filter(|value| !value.is_empty()),
+                bundle_identifier: application.bundle_identifier,
+                process_id: Some(process_id),
+            };
+            foreground_owner_name = owner_name.filter(|value| !value.is_empty());
+            foreground_window_title = title.filter(|value| !value.is_empty());
+        }
+    }
+
+    (
+        foreground_application,
+        foreground_owner_name,
+        foreground_window_title,
+        game_window_detected,
+    )
+}
+
+fn game_process_running() -> bool {
+    let system = sysinfo::System::new_all();
+    system.processes().values().any(|process| {
+        let name = process.name().to_string_lossy();
+        let executable_path = process.exe().map(|path| path.to_string_lossy());
+        foreground::is_actual_game_process(&name, executable_path.as_deref())
+    })
+}
+
+fn collect_foreground_state() -> foreground::ForegroundState {
+    #[cfg(target_os = "macos")]
+    {
+        let (frontmost, owner_name, window_title, game_window_detected) =
+            foreground_window_metadata();
+        return foreground::classify_foreground(foreground::ForegroundObservation {
+            app_name: frontmost.app_name.as_deref(),
+            bundle_identifier: frontmost.bundle_identifier.as_deref(),
+            owner_name: owner_name.as_deref(),
+            window_title: window_title.as_deref(),
+            game_running: game_process_running(),
+            game_window_detected,
+        });
+    }
+
     #[cfg(not(target_os = "macos"))]
     {
-        true
+        foreground::ForegroundState {
+            game_window_foreground: true,
+            riot_client_foreground: false,
+            game_running: true,
+            game_window_detected: true,
+            ..foreground::ForegroundState::default()
+        }
     }
+}
+
+/// Returns the native foreground app/window classification used for all visual
+/// overlay gates. Game-running and game-window-detected are diagnostics only.
+#[tauri::command]
+fn get_foreground_state() -> foreground::ForegroundState {
+    collect_foreground_state()
+}
+
+/// Returns true only when the actual League game process/window is foreground.
+#[tauri::command]
+fn is_league_foreground() -> bool {
+    collect_foreground_state().game_window_foreground
 }
 
 /// Open macOS System Settings → Privacy → Screen Recording
@@ -607,6 +898,7 @@ pub fn run() {
             set_dock_visible,
             set_click_through,
             open_screen_recording_settings,
+            get_foreground_state,
             is_league_foreground,
             collector::get_collector_status,
             collector::set_collector_consent,

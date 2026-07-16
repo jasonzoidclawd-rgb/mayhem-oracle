@@ -10,6 +10,14 @@ import type { AbilityProfile } from "./types";
 
 export type OverlayAugmentLookup = Map<string, PoolAugment>;
 
+export interface AugmentMatchDiagnostic {
+  augment: PoolAugment | null;
+  normalizedText: string;
+  bestCandidate: string | null;
+  confidence: number | null;
+  rejectionReason: string | null;
+}
+
 function levenshtein(a: string, b: string): number {
   const m = a.length;
   const n = b.length;
@@ -225,4 +233,84 @@ export function matchAugmentName(
   }
 
   return bestMatch;
+}
+
+export function diagnoseAugmentMatch(
+  ocrText: string,
+  lookup: OverlayAugmentLookup,
+): AugmentMatchDiagnostic {
+  const normalizedText = normalizeAugmentNameForLookup(ocrText);
+  if (!normalizedText) {
+    return {
+      augment: null,
+      normalizedText,
+      bestCandidate: null,
+      confidence: null,
+      rejectionReason: "empty-after-normalization",
+    };
+  }
+
+  const augment = matchAugmentName(ocrText, lookup);
+  if (augment) {
+    const exact = lookup.get(normalizedText);
+    if (exact?.slug === augment.slug) {
+      return {
+        augment,
+        normalizedText,
+        bestCandidate: augment.slug,
+        confidence: 1,
+        rejectionReason: null,
+      };
+    }
+
+    const substring = [...lookup.entries()].find(
+      ([name, candidate]) =>
+        candidate.slug === augment.slug &&
+        normalizedText.length >= 2 &&
+        name.length >= 2 &&
+        (normalizedText.includes(name) || name.includes(normalizedText)),
+    );
+    return {
+      augment,
+      normalizedText,
+      bestCandidate: augment.slug,
+      confidence: substring ? 0.95 : 0.8,
+      rejectionReason: null,
+    };
+  }
+
+  let bestCandidate: PoolAugment | null = null;
+  let bestDistance = Infinity;
+  let bestThreshold = 0;
+  for (const [name, candidate] of lookup) {
+    const distance = levenshtein(normalizedText, name);
+    const threshold = Math.ceil(Math.min(normalizedText.length, name.length) * 0.3);
+    if (distance < bestDistance) {
+      bestCandidate = candidate;
+      bestDistance = distance;
+      bestThreshold = threshold;
+    }
+  }
+
+  if (!bestCandidate) {
+    return {
+      augment: null,
+      normalizedText,
+      bestCandidate: null,
+      confidence: null,
+      rejectionReason: "catalog-empty",
+    };
+  }
+
+  const confidence = Math.max(
+    0,
+    1 - bestDistance / Math.max(normalizedText.length, bestCandidate.name.length),
+  );
+  return {
+    augment: null,
+    normalizedText,
+    bestCandidate: bestCandidate.slug,
+    confidence,
+    rejectionReason: `distance-${bestDistance}-exceeds-threshold-${bestThreshold}`,
+  };
 }

@@ -29,7 +29,7 @@ export type OverlayFixtureMode =
 export interface FixtureModeInput {
   tierFixtureOn: boolean;
   previewOn: boolean;
-  leagueFocused: boolean;
+  gameWindowForeground: boolean;
   phase: OverlayPhase;
   /** isCompleteThreeCardOffer(matchedCards) — all three current cards matched. */
   completeOffer: boolean;
@@ -46,14 +46,14 @@ export function resolveOverlayFixtureMode(input: FixtureModeInput): OverlayFixtu
   // Preview is the ONLY geometry-injecting path and needs its own flag. It is
   // permitted only when League is entirely absent; a running/focused/in-game
   // League (any non-idle phase, or focus) suppresses it unconditionally.
-  if (input.previewOn && !input.leagueFocused && input.phase === "idle") {
+  if (input.previewOn && !input.gameWindowForeground && input.phase === "idle") {
     return input.aramggReady ? { kind: "preview" } : { kind: "hidden" };
   }
 
   if (!input.tierFixtureOn) return { kind: "hidden" };
 
   // Tier-fixture only paints over a real, focused, complete OCR offer.
-  if (input.leagueFocused && input.phase === "augment_selection") {
+  if (input.gameWindowForeground && input.phase === "augment_selection") {
     if (input.completeOffer && input.aramggReady) return { kind: "real-offer" };
     // Focused augment screen but not three confident cards (or ARAMGG still
     // loading): show a diagnostic, never synthetic cards, never stale badges.
