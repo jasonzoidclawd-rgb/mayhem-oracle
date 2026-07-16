@@ -73,6 +73,6 @@ describe("EntityLink", () => {
     );
     expect(html).toContain('data-entity-icon-state="loading"');
     expect(html).toContain(">I</span>");
-    expect(html).toContain("cdn.example.test/items/1001.png");
+    expect(html).toContain("cdn.example.test%2Fitems%2F1001.png");
   });
 });

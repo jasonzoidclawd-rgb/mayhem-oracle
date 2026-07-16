@@ -40,6 +40,48 @@ def base_row(augment_id: str, name: str = "Test Augment") -> dict:
 
 
 class AvailabilityResolverTests(unittest.TestCase):
+    def test_reused_canonical_id_keeps_only_definition_name_as_current(self):
+        existing_rows = []
+        for slug, name in (("rabble-rousing", "Rabble Rousing"), ("rejuvenation", "Rejuvenation")):
+            existing_rows.append({
+                "augmentId": "ARAM_RabbleRousing",
+                "slug": slug,
+                "name": name,
+                "rarity": "gold",
+                "flags": {"lifecycle": "active"},
+                "availability": {
+                    "status": "confirmed_live",
+                    "signals": {"tombstone": {"removed": False}},
+                },
+            })
+        output = assemble_catalog(
+            existing_catalog={"patch": "26.13", "augments": existing_rows},
+            base_catalog={
+                "generated_at": "now",
+                "augments": [base_row("ARAM_RabbleRousing", "Rejuvenation")],
+            },
+            wiki_feed={
+                "augments": {"ARAM_RabbleRousing": {"wikiDescription": "Current healing effect."}},
+            },
+            winrate_feed={"win_rates": {}},
+            identity_map={"mappings": [{
+                "augmentId": "ARAM_RabbleRousing",
+                "cdragon": {"name": "Rejuvenation"},
+                "sources": {"internal_augments": [
+                    {"slug": "rabble-rousing", "name": "Rabble Rousing", "lifecycle": "active"},
+                    {"slug": "rejuvenation", "name": "Rejuvenation", "lifecycle": "active"},
+                ]},
+            }]},
+        )
+
+        rows = {row["slug"]: row for row in output["augments"]}
+        self.assertEqual(rows["rejuvenation"]["flags"]["lifecycle"], "active")
+        self.assertEqual(rows["rabble-rousing"]["flags"]["lifecycle"], "removed")
+        self.assertEqual(
+            rows["rabble-rousing"]["availability"]["signals"]["canonical_alias"]["canonicalSlug"],
+            "rejuvenation",
+        )
+
     def test_preferred_icon_uses_cdragon_small_variant_before_stale_large_variant(self):
         self.assertEqual(
             preferred_icon_url(

@@ -16,7 +16,6 @@ const SECONDARY_TAB = { href: "/augments", glyph: "◆", key: "tabAugments" } as
 const MORE_LINKS = [
   { href: "/advisor", key: "advisor" },
   { href: "/items", key: "items" },
-  { href: "/damage-sim", key: "damageSim" },
   { href: "/patch-notes", key: "patchNotes" },
   { href: "/account", key: "account" },
 ] as const;
@@ -38,15 +37,16 @@ export function MobileTabBar() {
           type="button"
           aria-label={t("dismiss")}
           onClick={() => setMoreOpen(false)}
-          className="fixed inset-0 z-40 bg-black/60 lg:hidden"
+          className="fixed inset-0 z-[105] bg-black/60 lg:hidden"
         />
       )}
 
       {moreOpen && (
         <div
           role="dialog"
+          aria-modal="true"
           aria-label={t("moreSheetTitle")}
-          className="fixed inset-x-0 bottom-[calc(58px+env(safe-area-inset-bottom))] z-40
+          className="fixed inset-x-0 bottom-[calc(58px+env(safe-area-inset-bottom))] z-[110]
                      rounded-t-2xl border-t border-[var(--color-border-default)]
                      bg-[var(--color-bg-card)] p-2 pb-[max(8px,env(safe-area-inset-bottom))] lg:hidden"
         >
@@ -67,7 +67,7 @@ export function MobileTabBar() {
       )}
 
       <nav
-        className="fixed inset-x-0 bottom-0 z-50 grid grid-cols-5 border-t border-[var(--color-border-default)]
+        className="fixed inset-x-0 bottom-0 z-[100] grid grid-cols-5 border-t border-[var(--color-border-default)]
                    bg-[var(--color-bg-primary)]/92 backdrop-blur-lg lg:hidden"
         style={{
           height: "calc(58px + env(safe-area-inset-bottom))",

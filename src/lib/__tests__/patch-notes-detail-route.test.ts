@@ -34,24 +34,28 @@ describe("patch-note detail routes", () => {
   test("builds stable localized static params from fixture patches", () => {
     expect(buildPatchDetailStaticParams(fixture, ["en", "zh-TW"])).toEqual([
       { locale: "en", patch: "26.13" },
+      { locale: "en", patch: "26-13" },
       { locale: "en", patch: "26.12" },
+      { locale: "en", patch: "26-12" },
       { locale: "zh-TW", patch: "26.13" },
+      { locale: "zh-TW", patch: "26-13" },
       { locale: "zh-TW", patch: "26.12" },
+      { locale: "zh-TW", patch: "26-12" },
     ]);
   });
 
   test("builds every public patch and locale static param", () => {
     const params = buildPatchDetailStaticParams(patchNotesData, routing.locales);
     const expected = routing.locales.flatMap((locale) =>
-      patchNotesData.patches.map((patch) => ({
-        locale,
-        patch: patch.version,
-      })),
+      patchNotesData.patches.flatMap((patch) => [
+        { locale, patch: patch.version },
+        { locale, patch: patch.version.replace(".", "-") },
+      ]),
     );
 
     expect(params).toEqual(expected);
     expect(params).toHaveLength(
-      patchNotesData.patches.length * routing.locales.length,
+      patchNotesData.patches.length * routing.locales.length * 2,
     );
   });
 
@@ -69,10 +73,10 @@ describe("patch-note detail routes", () => {
       ],
     };
 
-    expect(buildPatchDetailStaticParams(fixture, ["en", "zh-TW"])).toHaveLength(4);
+    expect(buildPatchDetailStaticParams(fixture, ["en", "zh-TW"])).toHaveLength(8);
     expect(
       buildPatchDetailStaticParams(expandedFixture, ["en", "zh-TW"]),
-    ).toHaveLength(6);
+    ).toHaveLength(12);
   });
 
   test("resolves patch records and canonical detail routes", () => {
@@ -80,6 +84,7 @@ describe("patch-note detail routes", () => {
       "League of Legends Patch 26.12 Notes",
     );
     expect(findPatchByVersion(fixture, "26.11")).toBeNull();
+    expect(findPatchByVersion(fixture, "26-13")?.version).toBe("26.13");
     expect(patchDetailRoute("26.13")).toBe("/patch-notes/26.13");
   });
 
@@ -92,7 +97,7 @@ describe("patch-note detail routes", () => {
     );
 
     expect(localizedUrl(route, routing.defaultLocale)).toBe(
-      "https://wasfun.lol/patch-notes/26.13",
+      "https://wasfun.lol/en/patch-notes/26.13",
     );
     expect(params).toContainEqual({
       locale: routing.defaultLocale,

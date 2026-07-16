@@ -105,6 +105,14 @@ export function ChampionsIndex({
   const locale = useLocale();
   const t = useTranslations("championsIndex");
   const tTier = useTranslations("tierList");
+  const roleLabels: Record<string, string> = {
+    assassin: tTier("filters.assassin"),
+    fighter: tTier("filters.fighter"),
+    mage: tTier("filters.mage"),
+    marksman: tTier("filters.marksman"),
+    support: tTier("filters.support"),
+    tank: tTier("filters.tank"),
+  };
   const [view, setView] = useState<ViewMode>("tier");
   const [search, setSearch] = useState("");
   const [activeClass, setActiveClass] = useState<string>("all");
@@ -277,7 +285,7 @@ export function ChampionsIndex({
                   : "bg-[var(--color-bg-card)] text-[var(--color-text-muted)] border-[var(--color-border-default)]"
               }`}
             >
-              {cl === "all" ? t("allClasses") : cl}
+              {cl === "all" ? t("allClasses") : roleLabels[cl.toLowerCase()] ?? cl}
               <span className="ml-1 opacity-50 tabular-nums">{classCounts[cl] ?? 0}</span>
             </button>
           ))}
@@ -306,7 +314,7 @@ export function ChampionsIndex({
                 </div>
                 <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-2 sm:gap-3">
                   {champs.map((c) => (
-                    <ChampionCard key={c.slug} champion={c} entityRef={entityRefs[c.slug]} />
+                    <ChampionCard key={c.slug} champion={c} entityRef={entityRefs[c.slug]} roleLabels={roleLabels} />
                   ))}
                 </div>
               </section>
@@ -318,7 +326,7 @@ export function ChampionsIndex({
         /* ─── Grid View ─── */
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-2 sm:gap-3">
           {sorted.map((c) => (
-            <ChampionCard key={c.slug} champion={c} entityRef={entityRefs[c.slug]} />
+            <ChampionCard key={c.slug} champion={c} entityRef={entityRefs[c.slug]} roleLabels={roleLabels} />
           ))}
           {sorted.length === 0 && (
             <div className="col-span-full">
@@ -332,7 +340,7 @@ export function ChampionsIndex({
           {/* Mobile: card list */}
           <div className="md:hidden space-y-2">
             {sorted.map((c, i) => (
-              <ChampionRowCard key={c.slug} champion={c} index={i} level={level} entityRef={entityRefs[c.slug]} />
+              <ChampionRowCard key={c.slug} champion={c} index={i} level={level} entityRef={entityRefs[c.slug]} roleLabels={roleLabels} />
             ))}
             {sorted.length === 0 && <EmptyState text={tTier("noResults")} />}
           </div>
@@ -399,7 +407,7 @@ export function ChampionsIndex({
                                 CLASS_COLOR[cl] ?? "text-slate-300 bg-slate-500/10 border-slate-400/20"
                               }`}
                             >
-                              {cl}
+                              {roleLabels[cl.toLowerCase()] ?? cl}
                             </span>
                           ))}
                         </div>
@@ -455,9 +463,11 @@ function EmptyState({ text }: { text: string }) {
 function ChampionCard({
   champion: c,
   entityRef,
+  roleLabels,
 }: {
   champion: ChampionEntry;
   entityRef?: EntityRef;
+  roleLabels: Record<string, string>;
 }) {
   const locale = useLocale();
   return (
@@ -490,7 +500,7 @@ function ChampionCard({
               CLASS_COLOR[cl] ?? "text-slate-300 bg-slate-500/10 border-slate-400/20"
             }`}
           >
-            {cl}
+            {roleLabels[cl.toLowerCase()] ?? cl}
           </span>
         ))}
       </div>
@@ -524,11 +534,13 @@ function ChampionRowCard({
   index,
   level,
   entityRef,
+  roleLabels,
 }: {
   champion: ChampionEntry;
   index: number;
   level: number;
   entityRef?: EntityRef;
+  roleLabels: Record<string, string>;
 }) {
   const locale = useLocale();
   const bs = c.baseStats;
@@ -559,7 +571,7 @@ function ChampionRowCard({
                 CLASS_COLOR[cl] ?? "text-slate-300 bg-slate-500/10 border-slate-400/20"
               }`}
             >
-              {cl}
+              {roleLabels[cl.toLowerCase()] ?? cl}
             </span>
           ))}
         </div>

@@ -81,6 +81,20 @@ describe("entity presentation catalog", () => {
     });
   });
 
+  test("falls back to a unique canonical slug when CDragon publishes a string augment ID", () => {
+    const forged = resolveEntityRef(
+      data,
+      "augment",
+      { canonicalId: "ForgedByTheMaster", slug: "forged-by-the-master" },
+      "zh-TW",
+    );
+    expect(forged).toMatchObject({
+      canonicalId: "2127",
+      href: "/augments/forged-by-the-master",
+      known: true,
+    });
+  });
+
   test("current CDragon lifecycle fixtures stay active and routeable", () => {
     const fixtures = [
       ["terraind", "Terraind"],

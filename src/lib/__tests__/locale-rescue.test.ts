@@ -4,7 +4,6 @@ import { collapseDuplicateLocalePrefix, routing } from "@/i18n/routing";
 describe("collapseDuplicateLocalePrefix", () => {
   test("collapses a doubled prefix for every prefixed locale", () => {
     for (const locale of routing.locales) {
-      if (locale === routing.defaultLocale) continue;
       expect(collapseDuplicateLocalePrefix(`/${locale}/${locale}/account`)).toBe(
         `/${locale}/account`,
       );
@@ -38,7 +37,7 @@ describe("collapseDuplicateLocalePrefix", () => {
     );
   });
 
-  test("english default locale never produces a doubled prefix rescue", () => {
-    expect(collapseDuplicateLocalePrefix("/en/en/account")).toBeNull();
+  test("english uses the same doubled-prefix rescue as every locale", () => {
+    expect(collapseDuplicateLocalePrefix("/en/en/account")).toBe("/en/account");
   });
 });

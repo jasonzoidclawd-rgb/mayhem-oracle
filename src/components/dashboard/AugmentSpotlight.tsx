@@ -1,12 +1,12 @@
-import { getTranslations, getLocale } from "next-intl/server";
+import { getTranslations } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
-import { localizedName, type LocalizedNameRecord } from "@/lib/i18n/localized-name";
+import { localizedName, type LocalizedDescriptionRecord, type LocalizedNameRecord } from "@/lib/i18n/localized-name";
 import { rarityBadgeClass } from "./tier-style";
 import { resolveEntityRef } from "@/lib/entities/catalog";
 import type { EntityPresentationData } from "@/lib/entities/types";
 import { EntityLink } from "@/components/entities/EntityLink";
 
-export type SpotlightAugment = LocalizedNameRecord & {
+export type SpotlightAugment = LocalizedNameRecord & LocalizedDescriptionRecord & {
   slug: string;
   rarity: string;
   icon: string;
@@ -15,17 +15,27 @@ export type SpotlightAugment = LocalizedNameRecord & {
 
 export async function AugmentSpotlight({
   augment,
+  locale,
   isChangedThisPatch,
   entityPresentation,
 }: {
   augment: SpotlightAugment;
+  locale: string;
   isChangedThisPatch: boolean;
   entityPresentation: EntityPresentationData;
 }) {
   const t = await getTranslations("dashboard");
   const tChampion = await getTranslations("champion");
-  const locale = await getLocale();
   const name = localizedName(augment, locale);
+  const description = locale === "zh-TW"
+    ? augment.description_zh_TW ?? ""
+    : locale === "zh-CN"
+      ? augment.description_zh_CN ?? ""
+      : locale === "ja"
+        ? augment.description_ja ?? ""
+        : locale === "ko"
+          ? augment.description_ko ?? ""
+          : augment.description ?? augment.wikiDescription ?? "";
   const entityRef = resolveEntityRef(entityPresentation, "augment", { slug: augment.slug }, locale) ?? {
     type: "augment" as const,
     id: augment.slug,
@@ -58,8 +68,8 @@ export async function AugmentSpotlight({
           </span>
         </div>
       </div>
-      {augment.wikiDescription && (
-        <p className="mt-3 line-clamp-3 text-sm text-[var(--color-text-secondary)]">{augment.wikiDescription}</p>
+      {description && (
+        <p className="mt-3 line-clamp-3 text-sm text-[var(--color-text-secondary)]">{description}</p>
       )}
       <Link href="/augments" className="mt-3 flex min-h-11 items-center text-sm text-[var(--color-neon-primary)] hover:underline">
         {t("spotlightCta")} →

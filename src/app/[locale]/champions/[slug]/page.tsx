@@ -70,6 +70,7 @@ type AbilityStatLabels = {
   width: string;
   speed: string;
   cast: string;
+  cc: string;
 };
 
 // ─── Static params for all current-patch champions ───────────────────────────
@@ -132,6 +133,7 @@ export default async function ChampionPage({
   const te = await getTranslations("entities");
   const tm = await getTranslations("membership");
   const tg = await getTranslations("grades");
+  const tr = await getTranslations("tierList.filters");
 
   // Member decision content (pool construction, scored rankings) is gated on an
   // active entitlement — not merely being signed in. A logged-in non-member
@@ -152,7 +154,10 @@ export default async function ChampionPage({
   const memberData = isMember ? await loadChampionDetailData("member") : null;
   const activeData = memberData ?? publicData;
   const { champions, patch } = publicData;
-  const { augments, combos, poolRules, abilities } = activeData;
+  const { augments: allAugments, combos, poolRules, abilities } = activeData;
+  const augments = allAugments.filter(
+    (augment) => augment.flags?.lifecycle === "active" || augment.flags?.lifecycle === "added",
+  );
 
   const champ = champions.find((c) => c.slug === slug);
   if (!champ) notFound();
@@ -293,6 +298,16 @@ export default async function ChampionPage({
     ranged: t("ranged"),
     melee:  t("melee"),
   };
+  const roleLabel: Record<string, string> = {
+    assassin: tr("assassin"), fighter: tr("fighter"), mage: tr("mage"),
+    marksman: tr("marksman"), support: tr("support"), tank: tr("tank"),
+  };
+  const kitTagLabel: Record<string, string> = {
+    ability: t("kitTagAbility"), attack: t("kitTagAttack"), cc: t("kitTagCc"),
+    crit: t("kitTagCrit"), dot: t("kitTagDot"), haste: t("kitTagHaste"),
+    heal_shield: t("kitTagHealShield"), movement: t("kitTagMovement"),
+    on_hit: t("kitTagOnHit"), tank: t("kitTagTank"),
+  };
 
   const poolProfileChips: PoolProfileChip[] = [
     {
@@ -314,7 +329,9 @@ export default async function ChampionPage({
     },
     {
       label: t("poolChipTags"),
-      value: (champ.kit_tags ?? []).length > 0 ? (champ.kit_tags ?? []).join(", ") : t("poolUniversal"),
+      value: (champ.kit_tags ?? []).length > 0
+        ? (champ.kit_tags ?? []).map((tag) => kitTagLabel[tag] ?? tag).join(", ")
+        : t("poolUniversal"),
     },
   ];
 
@@ -443,6 +460,7 @@ export default async function ChampionPage({
     width: t("abilityStatWidth"),
     speed: t("abilityStatSpeed"),
     cast: t("abilityStatCast"),
+    cc: t("pillCC"),
   };
 
   const championRoute = `/champions/${champ.slug}`;
@@ -454,9 +472,9 @@ export default async function ChampionPage({
     name: champName,
     patch,
     tierLabel: champ.tier ?? t("statisticsUnavailableShort"),
-    tagLabels: champ.tags,
-    classLabels: champ.classes,
-    kitTagLabels: champ.kit_tags,
+    tagLabels: champ.tags.map((tag) => roleLabel[tag] ?? tag),
+    classLabels: champ.classes?.map((tag) => roleLabel[tag] ?? tag),
+    kitTagLabels: champ.kit_tags?.map((tag) => kitTagLabel[tag] ?? tag),
   });
 
   return (
@@ -508,7 +526,7 @@ export default async function ChampionPage({
                 key={cl}
                 className="px-1.5 py-0.5 text-[10px] font-medium rounded border border-[var(--color-border-default)] text-[var(--color-text-secondary)] capitalize"
               >
-                {cl}
+                {roleLabel[cl] ?? cl}
               </span>
             ))}
           </div>
@@ -519,7 +537,7 @@ export default async function ChampionPage({
                   key={tag}
                   className="px-1.5 py-0.5 text-[10px] rounded border border-[var(--color-neon-primary)]/30 bg-[var(--color-neon-primary)]/5 text-[var(--color-neon-primary)]/70"
                 >
-                  {tag}
+                  {kitTagLabel[tag] ?? tag}
                 </span>
               ))}
             </div>
@@ -712,7 +730,7 @@ export default async function ChampionPage({
                       />
                     </div>
                     <span className="text-[9px] font-bold text-[var(--color-text-muted)]">
-                      {ability.key}
+                      {ability.key === "passive" ? "P" : ability.key}
                     </span>
                   </div>
                   <div className="flex-1 min-w-0">
@@ -1148,7 +1166,7 @@ function AbilityStatLine({ stats, labels }: { stats: AbilityStats; labels: Abili
 
   if (stats.ccType) {
     parts.push({
-      label: stats.ccType,
+      label: labels.cc,
       value: stats.ccDuration ? `${stats.ccDuration}s` : "",
       color: "text-yellow-300",
     });

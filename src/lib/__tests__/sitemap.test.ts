@@ -91,7 +91,7 @@ describe("sitemap freshness", () => {
 
     expect(urls).toEqual(expect.arrayContaining(expectedDetailUrls));
     expect(expectedDetailUrls.every((url) => generatedUrls.has(url))).toBe(true);
-    expect(generatedUrls).toContain("https://wasfun.lol/patch-notes/26.13");
+    expect(generatedUrls).toContain("https://wasfun.lol/en/patch-notes/26.13");
     expect(proxySource).toContain('"/patch-notes/:path*"');
   });
 

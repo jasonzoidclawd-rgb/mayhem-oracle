@@ -27,6 +27,7 @@ export interface RemovedPatchAugment {
   flags?: {
     lifecycle?: string;
     lifecycle_patch?: string;
+    replacement_slug?: string;
   };
 }
 
@@ -44,6 +45,7 @@ export async function PatchNotesView({
   hotfixEventCount?: number;
 }) {
   const t = await getTranslations("patchNotes");
+  const tChampion = await getTranslations("champion");
 
   if (!data.patches.length) {
     return (
@@ -74,7 +76,16 @@ export async function PatchNotesView({
         hotfixEventCount={hotfixEventCount}
       />
       <PatchCard patch={current} locale={locale} isCurrent />
-      <RemovedAugmentsTable augments={removedAugments} locale={locale} entityData={entityData} />
+      <RemovedAugmentsTable
+        augments={removedAugments}
+        locale={locale}
+        entityData={entityData}
+        rarityLabel={{
+          prismatic: tChampion("prismatic"),
+          gold: tChampion("gold"),
+          silver: tChampion("silver"),
+        }}
+      />
 
       {recent.length > 0 ? (
         <section className="space-y-4">
@@ -237,10 +248,12 @@ async function RemovedAugmentsTable({
   augments,
   locale,
   entityData,
+  rarityLabel,
 }: {
   augments: RemovedPatchAugment[];
   locale: string;
   entityData?: EntityPresentationData | null;
+  rarityLabel: Record<string, string>;
 }) {
   const t = await getTranslations("patchNotes");
   if (!augments.length) return null;
@@ -262,6 +275,7 @@ async function RemovedAugmentsTable({
               <th className="px-5 py-3 font-medium">{t("removedName")}</th>
               <th className="px-5 py-3 font-medium">{t("removedRarity")}</th>
               <th className="px-5 py-3 font-medium">{t("removedVersion")}</th>
+              <th className="px-5 py-3 font-medium">{t("removedStatus")}</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-[var(--color-border)]">
@@ -271,6 +285,14 @@ async function RemovedAugmentsTable({
                     entityData,
                     "augment",
                     { canonicalId: augment.augmentId, slug: augment.slug },
+                    locale,
+                  )
+                : null;
+              const replacementRef = entityData && augment.flags?.replacement_slug
+                ? resolveEntityRef(
+                    entityData,
+                    "augment",
+                    { slug: augment.flags.replacement_slug },
                     locale,
                   )
                 : null;
@@ -291,11 +313,22 @@ async function RemovedAugmentsTable({
                       lifecycle: "removed",
                     }} variant="standard" rarity={augment.rarity} />
                   </td>
-                  <td className="px-5 py-3 capitalize text-[var(--color-text-secondary)]">
-                    {augment.rarity}
+                  <td className="px-5 py-3 text-[var(--color-text-secondary)]">
+                    {rarityLabel[augment.rarity] ?? augment.rarity}
                   </td>
                   <td className="px-5 py-3 text-[var(--color-text-muted)]">
                     {augment.flags?.lifecycle_patch ?? "—"}
+                  </td>
+                  <td className="px-5 py-3 text-[var(--color-text-muted)]">
+                    {replacementRef ? (
+                      <span className="inline-flex flex-wrap items-center gap-1.5">
+                        {t("removedReplacedBy")}
+                        <EntityLink entity={replacementRef} variant="compact" />
+                        <span>({rarityLabel.gold})</span>
+                      </span>
+                    ) : (
+                      t("removedArchiveOnly")
+                    )}
                   </td>
                 </tr>
               );

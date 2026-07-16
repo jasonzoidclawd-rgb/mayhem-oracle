@@ -44,7 +44,7 @@
   },
   "dashboard": {
     "patchLive": "パッチ {patch} 公開中",
-    "augmentChangesCount": "変更 {count} 件",
+    "augmentChangesCount": "現行カード {count} 件",
     "seeWhatChanged": "変更点を見る",
     "dismiss": "閉じる",
     "heroTopMover": "注目ピック · パッチ {patch}",
@@ -58,10 +58,10 @@
     "metaAugments": "オーグメント数",
     "metaChangedAugments": "今パッチの変更",
     "metaPatch": "パッチ",
-    "metaUpdated": "更新日時",
+    "metaUpdated": "カタログスナップショット",
     "tierBoardTitle": "S+ / S ボード",
     "tierBoardCta": "ティアリスト全体",
-    "augmentChangesTitle": "今パッチの変更",
+    "augmentChangesTitle": "パッチイベントがある現行オーグメント",
     "augmentChangesCta": "オーグメント一覧",
     "spotlightTitle": "プリズマティック特集",
     "spotlightTag": "今パッチの変更",
@@ -252,17 +252,27 @@
     "abilityStatRadius": "半径",
     "abilityStatWidth": "幅",
     "abilityStatSpeed": "速度",
-    "abilityStatCast": "詠唱"
+    "abilityStatCast": "詠唱",
+    "kitTagAbility": "スキル",
+    "kitTagAttack": "通常攻撃",
+    "kitTagCc": "行動妨害",
+    "kitTagCrit": "クリティカル",
+    "kitTagDot": "継続ダメージ",
+    "kitTagHaste": "スキルヘイスト",
+    "kitTagHealShield": "回復とシールド",
+    "kitTagMovement": "移動",
+    "kitTagOnHit": "通常攻撃時効果",
+    "kitTagTank": "耐久力"
   },
   "augments": {
     "title": "オーグメント",
-    "subtitle": "{count} 個のオーグメント · パッチ {patch} · オラクルスコア順",
+    "subtitle": "現行オーグメント {count} 個 · パッチ {patch} · 公開ティア順",
     "metaTitle": "ARAMメイヘム オーグメント",
-    "metaDescription": "ARAMメイヘムのオーグメントを、Oracle スコア、レアリティ、パッチ状態、チャンピオンコンボリンク付きで確認できます。",
+    "metaDescription": "現行ARAMメイヘムのオーグメントを、公開ティア、レアリティ、パッチ状態、チャンピオンコンボリンク付きで確認できます。",
     "metaDetailTitle": "{name} オーグメントガイド",
     "metaDetailDescription": "{name} は {rarity} の ARAMメイヘム オーグメントです。効果の文脈、パッチ状態、公開チャンピオン強力コンボを確認できます。",
     "search": "名前、セット、効果で検索...",
-    "sortScore": "並び替え：オラクルスコア",
+    "sortScore": "並び替え：公開ティア",
     "sortWinRate": "並び替え：勝率",
     "sortName": "並び替え：名前",
     "all": "すべて",
@@ -278,6 +288,8 @@
     "hasSpecialNotes": "特記事項あり",
     "winRateAbbr": "勝率",
     "oracleLabel": "Oracle",
+    "qualityTierLabel": "ティア",
+    "unrankedLabel": "未評価",
     "tierGodlike": "神級",
     "tierStrong": "強力",
     "tierGood": "良好",
@@ -294,6 +306,7 @@
     "strongOnTierAvoid": "慎重に組み合わせる",
     "strongOnTierRelated": "関連する組み合わせ",
     "descriptionHeading": "説明",
+    "descriptionUnavailable": "このアーカイブ済みオーグメントには確認済みの日本語説明がありません。履歴情報のみ参照用に保持しています。",
     "detailKitSynergy": "キットシナジー",
     "detailRemovedIn": "パッチ {patch} で削除",
     "patchSummaryTitle": "パッチ概要",
@@ -367,7 +380,13 @@
     "catConsumable": "消耗品",
     "catTrinket": "トリンケット",
     "catJungle": "ジャングル",
-    "catLane": "レーン"
+    "catLane": "レーン",
+    "voidImmolationDescription": "クエスト完了時にサンファイア イージスとホロウ レディアンスを統合する、防御型の燃焼アイテムです。",
+    "voidImmolationImmolateLabel": "猛火",
+    "voidImmolationImmolate": "ダメージを受けるか与えると、周囲の敵を5秒間燃焼させます。",
+    "voidImmolationDesolateLabel": "デソレイト",
+    "voidImmolationDesolate": "敵を倒すと、その周囲に魔法ダメージを与えます。",
+    "voidImmolationNote": "ヴォイドの猛火は燃焼効果2個分として扱われます。"
   },
   "patchNotes": {
     "title": "パッチノート",
@@ -415,6 +434,21 @@
     "removedName": "オーグメント",
     "removedRarity": "レアリティ",
     "removedVersion": "バージョン",
+    "removedStatus": "現在の状態",
+    "removedReplacedBy": "現行版で置換：",
+    "removedArchiveOnly": "アーカイブ済み・現行プール対象外",
+    "removedAfterSnapshotChange": "アーカイブ前にソース更新を検出しましたが、現在はオーグメントプール対象外です。",
+    "desolateAddedSummary": "「荒廃」を追加：敵を倒すと、その周囲に魔法ダメージを与えます。",
+    "genericChangeSummary": {
+      "buffed": "ソース上の強化を検出しました。",
+      "nerfed": "ソース上の弱体化を検出しました。",
+      "changed": "ソース上の説明または数値変更を検出しました。",
+      "mechanism": "ソース上のメカニズム変更を検出しました。",
+      "added": "現行ソーススナップショットに追加されました。",
+      "removed": "現行ソーススナップショットから削除されました。",
+      "fixed": "ソース上の修正を検出しました。",
+      "hotfix": "ライブホットフィックスを検出しました。"
+    },
   "kinds": {
     "buffed": "強化",
     "nerfed": "弱体化",
@@ -465,8 +499,8 @@
     "dataSource": "データソース：arammayhem.com",
     "notAffiliated": "Riot Gamesとは無関係です",
     "patchLabel": "パッチ {patch}",
-    "lastUpdated": "更新日 {date}",
-    "methodology": "ティアとランキングは現在のパッチの勝率データに基づいています。ピック率の低い項目は統計的に信頼性が低くなります。"
+    "lastUpdated": "カタログスナップショット：{date}",
+    "methodology": "公開ティアは現行パッチの全体勝率ソースで測定済みオーグメントを順位付けします。未測定の項目は未評価のままです。"
   },
   "advisor": {
     "title": "メイヘムアドバイザー",
@@ -567,6 +601,8 @@
   "damageSim": {
     "title": "ダメージ計算機",
     "subtitle": "計算式リファレンス · ARAMメイヘム · {armor}物防 / {mr}魔防基準",
+    "unavailableTitle": "ダメージ計算プレビューは利用できません",
+    "unavailableBody": "メイヘムのアイテムとオーグメント入力の検証が完了するまで計算機を非表示にし、空または不完全な結果を推奨として表示しません。",
     "buildCalculator": "ビルド計算機",
     "formulaReference": "計算式リファレンス",
     "augmentInteractionsTitle": "タイプ別オーグメント相互作用",
@@ -1010,10 +1046,15 @@
     "contactBody": "質問、データの誤り、フィードバックがあれば、お気軽にご連絡ください。",
     "contactLink": "お問い合わせページへ"
   },
+  "notFound": {
+    "title": "このページは現在のメイヘムカタログにありません",
+    "body": "URLが古い、削除済み、または現在のパッチでは利用できない可能性があります。",
+    "cta": "Mayhem Oracle に戻る"
+  },
   "auth": {
     "signIn": {
       "busy": "サインイン中…",
-      "unavailable": "Google サインインは現在利用できません。",
+      "unavailable": "このプレビュー環境ではメンバーログインが設定されていません。",
       "failed": "Google サインインに失敗しました。もう一度お試しください。"
     },
     "errors": {

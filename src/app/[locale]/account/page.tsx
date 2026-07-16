@@ -31,30 +31,36 @@ export default async function AccountPage({
   setRequestLocale(locale);
   const t = await getTranslations("membership");
 
+  const signedOut = (
+    <main className="mx-auto max-w-2xl px-4 py-10">
+      <h1 className="text-2xl font-bold">{t("title")}</h1>
+      <div className="mt-4">
+        <AuthErrorBanner error={error} />
+      </div>
+      <p className="mt-4 text-white/70">{t("signInPrompt")}</p>
+      <div className="mt-6 flex flex-wrap gap-3">
+        <GoogleSignInButton next="/account" label={t("signInCta")} />
+        <Link
+          href="/membership"
+          className="inline-block rounded-lg border border-white/15 px-5 py-2.5 font-medium text-white/80 transition hover:bg-white/5"
+        >
+          {t("lockedCta")}
+        </Link>
+      </div>
+    </main>
+  );
+
+  if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY) {
+    return signedOut;
+  }
+
   const supabase = await createClient();
   const {
     data: { user },
   } = await supabase.auth.getUser();
 
   if (!user) {
-    return (
-      <main className="mx-auto max-w-2xl px-4 py-10">
-        <h1 className="text-2xl font-bold">{t("title")}</h1>
-        <div className="mt-4">
-          <AuthErrorBanner error={error} />
-        </div>
-        <p className="mt-4 text-white/70">{t("signInPrompt")}</p>
-        <div className="mt-6 flex flex-wrap gap-3">
-          <GoogleSignInButton next="/account" label={t("signInCta")} />
-          <Link
-            href="/membership"
-            className="inline-block rounded-lg border border-white/15 px-5 py-2.5 font-medium text-white/80 transition hover:bg-white/5"
-          >
-            {t("lockedCta")}
-          </Link>
-        </div>
-      </main>
-    );
+    return signedOut;
   }
 
   const [{ data: entitlementRows }, { data: sessionRows }] = await Promise.all([
@@ -88,8 +94,7 @@ export default async function AccountPage({
 
   const history = (sessionRows as SessionRow[] | null) ?? [];
 
-  // localePrefix is "as-needed": en lands on /, other locales keep their prefix.
-  const signoutNext = locale === "en" ? "/" : `/${locale}`;
+  const signoutNext = `/${locale}`;
 
   return (
     <main className="mx-auto flex max-w-2xl flex-col gap-8 px-4 py-10">

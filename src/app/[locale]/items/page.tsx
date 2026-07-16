@@ -86,7 +86,8 @@ export default async function ItemsPage({
         slug: item.slug,
       }, locale);
       const key = item.name.trim().toLowerCase();
-      return ref && key ? [[key, ref]] : [];
+      const normalizedKey = key.replace(/[^a-z0-9]/g, "");
+      return ref && key ? [[key, ref], [normalizedKey, ref]] : [];
     }),
   );
 

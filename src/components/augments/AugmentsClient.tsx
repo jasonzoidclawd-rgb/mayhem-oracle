@@ -2,7 +2,7 @@
 
 import { useState, useMemo } from "react";
 import { useTranslations } from "next-intl";
-import { baselineOracleScore, type ScoredAugment } from "@/lib/scoring/oracle-score";
+import type { ScoredAugment } from "@/lib/scoring/oracle-score";
 import { Tooltip } from "@/components/ui/Tooltip";
 import { EntityLink } from "@/components/entities/EntityLink";
 import type { EntityRef } from "@/lib/entities/types";
@@ -27,11 +27,12 @@ const RARITY_STYLES = {
   },
 } as const;
 
-const SCORE_COLOR = (score: number) => {
-  if (score >= 80) return "text-amber-300";
-  if (score >= 70) return "text-yellow-400";
-  if (score >= 60) return "text-green-400";
-  return "text-slate-400";
+const QUALITY_TIER_ORDER: Record<string, number> = {
+  "S+": 0,
+  S: 1,
+  A: 2,
+  B: 3,
+  C: 4,
 };
 
 // ─── Helpers ─────────────────────────────────────────────────────────────────
@@ -42,6 +43,14 @@ function localizedName(aug: ScoredAugment, locale: string): string {
   if (locale === "ja") return aug.name_ja ?? aug.name;
   if (locale === "ko") return aug.name_ko ?? aug.name;
   return aug.name;
+}
+
+function publicDescription(aug: ScoredAugment, locale: string): string {
+  if (locale === "zh-TW") return aug.description_zh_TW ?? "";
+  if (locale === "zh-CN") return aug.description_zh_CN ?? "";
+  if (locale === "ja") return aug.description_ja ?? "";
+  if (locale === "ko") return aug.description_ko ?? "";
+  return aug.wikiDescription ?? aug.description ?? "";
 }
 
 function compareStableText(left: string, right: string): number {
@@ -116,10 +125,14 @@ export function AugmentsClient({
 
   const sorted = useMemo(() => {
     return [...filtered].sort((a, b) => {
-      if (sortBy === "score") return baselineOracleScore(b) - baselineOracleScore(a);
-      return a.name.localeCompare(b.name);
+      if (sortBy === "score") {
+        const tierCompare = (QUALITY_TIER_ORDER[a.quality_tier ?? ""] ?? 5)
+          - (QUALITY_TIER_ORDER[b.quality_tier ?? ""] ?? 5);
+        if (tierCompare !== 0) return tierCompare;
+      }
+      return compareStableText(localizedName(a, locale), localizedName(b, locale));
     });
-  }, [filtered, sortBy]);
+  }, [filtered, sortBy, locale]);
 
   const counts = useMemo(
     () => ({
@@ -144,7 +157,7 @@ export function AugmentsClient({
   return (
     <div>
       {/* ─── Game Notes (collapsible) ─── */}
-      <GameNotes />
+      {locale === "en" && <GameNotes />}
 
       {/* ─── Rarity Tabs ─── */}
       <div className="flex flex-wrap items-center gap-2 mb-6">
@@ -365,14 +378,14 @@ function Stat({ children }: { children: React.ReactNode }) {
 function AugmentTooltip({
   aug,
   displayName,
-  score,
+  locale,
 }: {
   aug: ScoredAugment;
   displayName: string;
-  score: number;
+  locale: string;
 }) {
   const t = useTranslations("augments");
-  const desc = aug.wikiDescription ?? aug.description;
+  const desc = publicDescription(aug, locale);
   return (
     <div className="max-w-xs">
       <div className="font-medium">{displayName}</div>
@@ -398,7 +411,7 @@ function AugmentTooltip({
         </div>
       )}
       <div className="text-xs mt-2 text-white/50">
-        {t("oracleLabel")} {score}
+        {t("qualityTierLabel")} {aug.quality_tier ?? t("unrankedLabel")}
       </div>
     </div>
   );
@@ -420,12 +433,11 @@ function AugmentCard({
   const t = useTranslations("augments");
   const rarity = augment.rarity as keyof typeof RARITY_STYLES;
   const styles = RARITY_STYLES[rarity];
-  const score = baselineOracleScore(augment);
   const displayName = localizedName(augment, locale);
   const ref = presentationRef(augment, displayName, entityRef);
 
   return (
-    <Tooltip content={<AugmentTooltip aug={augment} displayName={displayName} score={score} />}>
+    <Tooltip content={<AugmentTooltip aug={augment} displayName={displayName} locale={locale} />}>
       <div
         className={`glass-card p-3 flex flex-col items-center gap-2 border border-[var(--color-border-default)] transition-all cursor-default ${styles.glow}`}
       >
@@ -463,8 +475,10 @@ function AugmentCard({
           {rarityLabel}
         </span>
         <div className="flex items-center justify-center gap-1.5 w-full text-[10px] text-[var(--color-text-muted)] mt-auto">
-          <span>{t("oracleLabel")}</span>
-          <span className={`font-bold ${SCORE_COLOR(score)}`}>{score}</span>
+          <span>{t("qualityTierLabel")}</span>
+          <span className="font-bold text-[var(--color-text-secondary)]">
+            {augment.quality_tier ?? t("unrankedLabel")}
+          </span>
         </div>
       </div>
     </Tooltip>

@@ -68,6 +68,14 @@ CURRENT_REAPPEARED_LIVE_SLUGS = frozenset({
     "terraind",
 })
 
+# This upgrade remains explicitly unavailable even though generic registry,
+# string-table, and wiki rows still exist for it.
+KNOWN_REMOVED_SLUGS = frozenset({"upgrade-sword-of-blossoming-dawn"})
+
+PRESERVED_LOCALIZED_NAMES = {
+    "upgrade-sword-of-blossoming-dawn": {"name_zh_TW": "升級：破曉綻放之劍"},
+}
+
 LOCALE_FIELDS = {
     "zh_cn": "name_zh_CN",
     "zh_tw": "name_zh_TW",
@@ -100,6 +108,25 @@ def slug_from_augment_id(augment_id: str) -> str:
     value = re.sub(r"([a-z0-9])([A-Z])", r"\1-\2", value)
     value = re.sub(r"([A-Z]+)([A-Z][a-z])", r"\1-\2", value)
     return slugify(value)
+
+
+def safe_augment_name(value: object, slug: str) -> str:
+    """Return a compact display label when CDragon exposes tooltip payloads."""
+
+    text = str(value or "").strip()
+    normalized_questions = text.replace("？", "?")
+    unsafe = (
+        not text
+        or (normalized_questions and set(normalized_questions) == {"?"})
+        or len(text) > 120
+        or "<" in text
+        or "@" in text
+        or "{{" in text
+    )
+    if not unsafe:
+        return text
+    words = [part for part in slug.removesuffix("-augment").split("-") if part]
+    return " ".join(word.capitalize() for word in words) or "Unresolved augment"
 
 
 def cdragon_asset_url(path: str | None) -> str:
@@ -185,9 +212,12 @@ def resolve_availability(
     # cleared before lifecycle classification (Forged By The Master is the
     # regression case). Independent official disabled/removed sources below
     # still win when present.
+    if slug in KNOWN_REMOVED_SLUGS:
+        patch_removed = True
+
     restored_from_cdragon = (
         cdragon_present
-        and (slug in CURRENT_REAPPEARED_LIVE_SLUGS or (kiwi_present and not patch_removed))
+        and slug in CURRENT_REAPPEARED_LIVE_SLUGS
         and (tombstone_removed or patch_removed)
     )
     if restored_from_cdragon:
@@ -416,11 +446,12 @@ def build_cdragon_row(
         availability["status"],
         definition_placeholder=bool(base.get("definitionPlaceholder")),
     )
+    safe_name = safe_augment_name(base.get("name"), slug)
     row = {
         "augmentId": base["augmentId"],
         "slug": slug,
-        "name": base.get("name", ""),
-        "displayName": (existing_row or {}).get("name", base.get("name", "")),
+        "name": safe_name,
+        "displayName": safe_augment_name((existing_row or {}).get("name", safe_name), slug),
         "rarity": base.get("rarity", ""),
         "cdragonRarity": base.get("rarity", ""),
         "icon": preferred_icon_url(base.get("icon")),
@@ -448,7 +479,9 @@ def build_cdragon_row(
         if availability["status"] == "removed" and existing_localized:
             row[output_field] = existing_localized
         else:
-            row[output_field] = names.get(locale) or existing_localized
+            localized = names.get(locale) or existing_localized
+            row[output_field] = safe_augment_name(localized, slug) if localized else safe_name
+    row.update(PRESERVED_LOCALIZED_NAMES.get(slug, {}))
     if wiki_row and wiki_row.get("wikiDescription"):
         row["wikiDescription"] = wiki_row["wikiDescription"]
     if wiki_row and wiki_row.get("wikiRarity"):
@@ -609,6 +642,15 @@ def assemble_catalog(
             patch_removed=patch_removed,
             existing_lifecycle=existing_row.get("flags", {}).get("lifecycle"),
         )
+        if base and not is_primary:
+            # One CDragon canonical ID owns one current route. A preserved
+            # display-name alias can still carry historical copy, but it must
+            # never remain offerable merely because its old row or wiki entry
+            # was once active (ARAM_RabbleRousing was reused by Rejuvenation).
+            availability["status"] = "removed"
+            availability.setdefault("signals", {})["canonical_alias"] = {
+                "canonicalSlug": primary_slug or "",
+            }
         rows.append(build_legacy_row(
             existing_row=existing_row,
             augment_id=augment_id,

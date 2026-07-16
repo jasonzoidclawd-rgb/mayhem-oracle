@@ -243,7 +243,7 @@
       "id": 223069,
       "name": "Void Immolation",
       "cost": 6000,
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/223069_kiwi_voidimmolation.mayhem_new_augments.png",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/223069_kiwi_voidimmolation.png",
       "categories": [
         "Health",
         "SpellBlock",

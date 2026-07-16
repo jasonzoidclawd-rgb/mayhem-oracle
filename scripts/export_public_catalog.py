@@ -41,6 +41,16 @@ PUBLIC_TIER_FORBIDDEN_KEYS = {
     "score", "score_breakdown", "scoreBreakdown", "source_record", "sourceRecord",
     "feed_provenance", "feedProvenance",
 }
+PUBLIC_ITEM_ICON_OVERRIDES = {
+    # The committed snapshot predates CDragon's corrected Void Immolation
+    # filename. Keep the public projection on the canonical live asset until
+    # the next full acquisition refresh replaces the internal row.
+    "223069": (
+        "https://raw.communitydragon.org/latest/plugins/"
+        "rcp-be-lol-game-data/global/default/assets/items/icons2d/"
+        "223069_kiwi_voidimmolation.png"
+    ),
+}
 
 
 def read_json(path: Path) -> dict:
@@ -143,6 +153,12 @@ def build_public_augments(internal_dir: Path, forbidden: set[str]) -> dict:
             continue
         augment["quality_tier"] = quality_tiers.get(str(augment.get("augmentId") or ""))
         add_public_localized_augment_descriptions(augment)
+        canonical_alias = (
+            ((augment.get("availability") or {}).get("signals") or {})
+            .get("canonical_alias")
+        )
+        if isinstance(canonical_alias, dict) and canonical_alias.get("canonicalSlug"):
+            augment.setdefault("flags", {})["replacement_slug"] = canonical_alias["canonicalSlug"]
         patch = removed_patches.get(slug) or added_patches.get(slug)
         if patch and (augment.get("flags") or {}).get("lifecycle") == "removed":
             augment.setdefault("flags", {})["lifecycle_patch"] = patch
@@ -279,6 +295,9 @@ def enrich_public_items(items: dict) -> dict:
             seen_regular_ids.add(key)
         regular_rows.append(row)
     enriched["items"] = regular_rows
+    for row in [*enriched.get("items", []), *enriched.get("mayhemExclusive", [])]:
+        if isinstance(row, dict) and str(row.get("id")) in PUBLIC_ITEM_ICON_OVERRIDES:
+            row["icon"] = PUBLIC_ITEM_ICON_OVERRIDES[str(row["id"])]
     return enriched
 
 
@@ -317,11 +336,17 @@ def export_public_catalog(
         "definitionPlaceholder",
         "legacyCatalogRow",
     } | PUBLIC_TIER_FORBIDDEN_KEYS
-    forbidden_augment_telemetry = forbidden_telemetry | {"wikiNotes"}
-    outputs[public_dir / "augments.json"] = build_public_augments(
+    forbidden_augment_telemetry = forbidden_telemetry | {
+        "counts",
+        "sources",
+        "wikiNotes",
+        "winRateCoverage",
+    }
+    public_augments = build_public_augments(
         internal_dir,
         forbidden_augment_telemetry,
     )
+    outputs[public_dir / "augments.json"] = public_augments
     raw_items = (internal_dir / "items.json").read_bytes()
     original_items = read_json(internal_dir / "items.json")
     parsed_items = enrich_public_items(original_items)
@@ -346,6 +371,14 @@ def export_public_catalog(
         for entity_type in ("augment", "champion", "item")
     }
     projected_augments = project_augment_icons(read_json(internal_dir / "augments.json"))
+    public_tier_by_id = {
+        str(row.get("augmentId") or ""): row.get("quality_tier")
+        for row in public_augments.get("augments", [])
+        if isinstance(row, dict) and row.get("augmentId")
+    }
+    for row in projected_augments.get("augments", []):
+        if isinstance(row, dict):
+            row["quality_tier"] = public_tier_by_id.get(str(row.get("augmentId") or ""))
     public_item_rows = [
         {**row, "_route_identifier": str(row["id"])}
         for row in parsed_items.get("items", [])
@@ -367,6 +400,9 @@ def export_public_catalog(
     )
     catalogs = {
         "champion": {"rows": read_json(internal_dir / "champions.json").get("champions", [])},
+        # Merge the exact bounded public tier into the structural internal
+        # projection. This keeps placeholder/lifecycle evidence available for
+        # fail-closed links while making every public frame use one tier label.
         "augment": {"rows": projected_augments.get("augments", [])},
         "item": {"rows": presentation_item_rows},
     }

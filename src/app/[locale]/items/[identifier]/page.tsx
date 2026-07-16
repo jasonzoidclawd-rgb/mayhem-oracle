@@ -221,10 +221,19 @@ export default async function ItemDetailPage({
   // Wiki stats are the STANDARD-mode values, which differ for modified items
   // (e.g. Rabadon's wiki says 130 AP; Mayhem version has 65 AP).
   // Only use wikiStats for exclusive items that don't have a modified base.
-  const effectBlocks = (item.wikiPassives ?? []).map((block) => ({
-    name: block.label,
-    text: block.text,
-  }));
+  const isVoidImmolation = item.id === 223069;
+  const effectBlocks = isVoidImmolation
+    ? [
+        { name: t("voidImmolationImmolateLabel"), text: t("voidImmolationImmolate") },
+        { name: t("voidImmolationDesolateLabel"), text: t("voidImmolationDesolate") },
+      ]
+    : (item.wikiPassives ?? []).map((block) => ({
+        name: block.label,
+        text: block.text,
+      }));
+  const gameplayNotes = isVoidImmolation
+    ? [t("voidImmolationNote")]
+    : item.wikiNotes ?? [];
 
   // Deduplicate category labels (SpellBlock and MagicResist both share the same localized label)
   const categoryLabels = [
@@ -370,7 +379,16 @@ export default async function ItemDetailPage({
             // stats; omit the generic CDragon cost projection when it would
             // contradict the route-specific record.
             stats: entityRecord.stats.filter((stat) => stat.key !== "cost"),
-            patch_changes: entityRecord.patch_changes.filter((change) => change.key !== "cost"),
+            patch_changes: entityRecord.patch_changes
+              .filter((change) => change.key !== "cost")
+              .map((change) =>
+                isVoidImmolation && change.key === "semantic_passive_added_desolate"
+                  ? {
+                      ...change,
+                      after: `${t("voidImmolationDesolateLabel")}: ${t("voidImmolationDesolate")}`,
+                    }
+                  : change,
+              ),
           }}
           heading={te("statsHeading")}
           labelFor={(key) => te(key)}
@@ -393,7 +411,14 @@ export default async function ItemDetailPage({
         </section>
       ) : null}
 
-      {entityRecord?.description ? (
+      {isVoidImmolation ? (
+        <section className="glass-card p-5" aria-labelledby="item-description-heading">
+          <h2 id="item-description-heading" className="text-sm font-semibold mb-2">
+            {t("descriptionHeading")}
+          </h2>
+          <p className="text-sm leading-relaxed text-[var(--color-text-secondary)]">{t("voidImmolationDescription")}</p>
+        </section>
+      ) : entityRecord?.description ? (
         <section className="glass-card p-5" aria-labelledby="item-description-heading">
           <h2 id="item-description-heading" className="text-sm font-semibold mb-2">
             {t("descriptionHeading")}
@@ -421,11 +446,11 @@ export default async function ItemDetailPage({
       )}
 
       {/* ─── Gameplay Notes (from wiki) — only shown when the item has a passive in Mayhem ─── */}
-      {item.wikiNotes && item.wikiNotes.length > 0 && (!isModified || effectBlocks.length > 0) && (
+      {gameplayNotes.length > 0 && (!isModified || effectBlocks.length > 0) && (
         <section className="mb-6">
           <SectionHeading>{t("gameplayNotes")}</SectionHeading>
           <ul className="space-y-2">
-            {item.wikiNotes.map((note, i) => (
+            {gameplayNotes.map((note, i) => (
               <li
                 key={i}
                 className="flex gap-3 p-3 rounded-xl border border-[var(--color-border-default)] bg-[var(--color-bg-card)]/40"

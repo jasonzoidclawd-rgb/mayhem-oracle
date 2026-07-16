@@ -107,7 +107,7 @@
   },
   "dashboard": {
     "patchLive": "Patch {patch} is live",
-    "augmentChangesCount": "{count} changed",
+    "augmentChangesCount": "{count} current cards",
     "seeWhatChanged": "See what changed",
     "dismiss": "Dismiss",
     "heroTopMover": "Top pick · patch {patch}",
@@ -121,10 +121,10 @@
     "metaAugments": "Augments",
     "metaChangedAugments": "Changed this patch",
     "metaPatch": "Patch",
-    "metaUpdated": "Updated",
+    "metaUpdated": "Catalog snapshot",
     "tierBoardTitle": "S+ / S board",
     "tierBoardCta": "Full tier list",
-    "augmentChangesTitle": "Augment changes",
+    "augmentChangesTitle": "Current augments with patch events",
     "augmentChangesCta": "All augments",
     "spotlightTitle": "Prismatic spotlight",
     "spotlightTag": "Changed this patch",
@@ -315,7 +315,17 @@
     "abilityStatRadius": "Radius",
     "abilityStatWidth": "Width",
     "abilityStatSpeed": "Speed",
-    "abilityStatCast": "Cast"
+    "abilityStatCast": "Cast",
+    "kitTagAbility": "Abilities",
+    "kitTagAttack": "Basic attacks",
+    "kitTagCc": "Crowd control",
+    "kitTagCrit": "Critical strikes",
+    "kitTagDot": "Damage over time",
+    "kitTagHaste": "Ability haste",
+    "kitTagHealShield": "Healing and shielding",
+    "kitTagMovement": "Movement",
+    "kitTagOnHit": "On-hit",
+    "kitTagTank": "Durability"
   },
   "championsIndex": {
     "viewTier": "Tier List",
@@ -337,13 +347,13 @@
   },
   "augments": {
     "title": "Augments",
-    "subtitle": "{count} augments · Patch {patch} · sorted by Oracle Score",
+    "subtitle": "{count} current augments · Patch {patch} · sorted by public tier",
     "metaTitle": "ARAM Mayhem Augments",
-    "metaDescription": "Browse ARAM Mayhem augments with Oracle scores, rarities, patch status, and champion combo links.",
+    "metaDescription": "Browse current ARAM Mayhem augments with public tiers, rarities, patch status, and champion combo links.",
     "metaDetailTitle": "{name} Augment Guide",
     "metaDetailDescription": "{name} is a {rarity} ARAM Mayhem augment. See effect context, patch status, and strongest public champion combos.",
     "search": "Search name, set, or effect...",
-    "sortScore": "Sort: Oracle Score",
+    "sortScore": "Sort: Public tier",
     "sortWinRate": "Sort: Win Rate",
     "sortName": "Sort: Name",
     "all": "All",
@@ -359,6 +369,8 @@
     "hasSpecialNotes": "Has special notes",
     "winRateAbbr": "WR",
     "oracleLabel": "Oracle",
+    "qualityTierLabel": "Tier",
+    "unrankedLabel": "Unranked",
     "tierGodlike": "Godlike",
     "tierStrong": "Strong",
     "tierGood": "Good",
@@ -375,6 +387,7 @@
     "strongOnTierAvoid": "Use with care",
     "strongOnTierRelated": "Related pairing",
     "descriptionHeading": "Description",
+    "descriptionUnavailable": "A localized description is not available for this archived augment. Its lifecycle record remains available for reference.",
     "detailKitSynergy": "Kit synergy",
     "detailRemovedIn": "Removed in patch {patch}",
     "patchSummaryTitle": "Patch summary",
@@ -448,7 +461,13 @@
     "catConsumable": "Consumable",
     "catTrinket": "Trinket",
     "catJungle": "Jungle",
-    "catLane": "Lane"
+    "catLane": "Lane",
+    "voidImmolationDescription": "A completed quest reward that combines Sunfire Aegis and Hollow Radiance into one defensive burn item.",
+    "voidImmolationImmolateLabel": "Immolate",
+    "voidImmolationImmolate": "After taking or dealing damage, burn nearby enemies for 5 seconds.",
+    "voidImmolationDesolateLabel": "Desolate",
+    "voidImmolationDesolate": "Killing an enemy deals magic damage around them.",
+    "voidImmolationNote": "Void Immolation counts as two Burn sources."
   },
   "patchNotes": {
     "title": "Patch Notes",
@@ -496,6 +515,21 @@
     "removedName": "Augment",
     "removedRarity": "Rarity",
     "removedVersion": "Version",
+    "removedStatus": "Current status",
+    "removedReplacedBy": "Replaced by",
+    "removedArchiveOnly": "Archived; not in the current pool",
+    "removedAfterSnapshotChange": "A source update was detected before this augment was archived. It is not in the current pool.",
+    "desolateAddedSummary": "Desolate added: defeating an enemy deals magic damage around them.",
+    "genericChangeSummary": {
+      "buffed": "A source buff was detected.",
+      "nerfed": "A source nerf was detected.",
+      "changed": "A source description or value change was detected.",
+      "mechanism": "A source mechanic change was detected.",
+      "added": "Added to the current source snapshot.",
+      "removed": "Removed from the current source snapshot.",
+      "fixed": "A source fix was detected.",
+      "hotfix": "A live hotfix was detected."
+    },
   "kinds": {
     "buffed": "BUFFED",
     "nerfed": "NERFED",
@@ -546,8 +580,8 @@
     "dataSource": "Data sourced from arammayhem.com",
     "notAffiliated": "Not affiliated with Riot Games",
     "patchLabel": "Patch {patch}",
-    "lastUpdated": "Updated {date}",
-    "methodology": "Tiers and rankings are derived from win-rate data for the current patch. Low pick-rate entries are statistically less reliable."
+    "lastUpdated": "Catalog snapshot {date}",
+    "methodology": "Public tiers rank measured augments by the current-patch global win-rate source. Entries without a measurement remain unranked."
   },
   "advisor": {
     "title": "Mayhem Advisor",
@@ -648,6 +682,8 @@
   "damageSim": {
     "title": "Damage Calculator",
     "subtitle": "Formula reference · ARAM Mayhem · vs {armor} armor / {mr} MR baseline",
+    "unavailableTitle": "Damage calculator preview unavailable",
+    "unavailableBody": "The calculator is hidden until verified Mayhem item and augment inputs are complete. No empty or partial result is being presented as a working recommendation.",
     "buildCalculator": "Build Calculator",
     "formulaReference": "Formula Reference",
     "augmentInteractionsTitle": "Augment Interactions by Type",
@@ -1010,10 +1046,15 @@
     "contactBody": "Have a question, found a data issue, or want to share feedback? Please get in touch.",
     "contactLink": "Visit the contact page"
   },
+  "notFound": {
+    "title": "This page is outside the current Mayhem catalog",
+    "body": "The route may be outdated, removed, or not available in this patch.",
+    "cta": "Return to Mayhem Oracle"
+  },
   "auth": {
     "signIn": {
       "busy": "Signing in...",
-      "unavailable": "Google sign-in is unavailable.",
+      "unavailable": "Member sign-in is not configured for this preview.",
       "failed": "Google sign-in failed. Please try again."
     },
     "errors": {

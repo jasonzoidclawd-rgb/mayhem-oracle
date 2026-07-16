@@ -22,20 +22,26 @@ FORBIDDEN_MARKERS = (
     b"scoreBreakdown",
     b"oracleScore",
     b"modelWeights",
+    b"winRateCoverage",
 )
 
 
 def verify_bundle_boundary(root: Path) -> dict[str, int]:
     static_dir = root / ".next" / "static"
-    route_dir = root / ".next" / "server" / "app" / "[locale]" / "patch-notes"
-    if not static_dir.is_dir() or not route_dir.is_dir():
+    app_dir = root / ".next" / "server" / "app"
+    if not static_dir.is_dir() or not app_dir.is_dir():
         raise ValueError("production build artifacts are missing; run npm run build first")
 
     scanned = 0
     leaks: list[str] = []
-    for directory in (static_dir, route_dir):
+    for directory in (static_dir, app_dir):
         for path in directory.rglob("*"):
             if not path.is_file():
+                continue
+            # Server bundles and NFT dependency manifests legitimately name
+            # internal inputs. Only browser JavaScript and emitted HTML/RSC
+            # payloads cross the public boundary this gate protects.
+            if directory == app_dir and path.suffix not in {".html", ".rsc"}:
                 continue
             scanned += 1
             payload = path.read_bytes()

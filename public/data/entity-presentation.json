@@ -76,7 +76,7 @@
         }
       ],
       "patch_changes": [],
-      "quality_tier": null
+      "quality_tier": "A"
     },
     {
       "type": "augment",
@@ -112,7 +112,7 @@
         }
       ],
       "patch_changes": [],
-      "quality_tier": null
+      "quality_tier": "A"
     },
     {
       "type": "augment",
@@ -148,7 +148,7 @@
         }
       ],
       "patch_changes": [],
-      "quality_tier": null
+      "quality_tier": "B"
     },
     {
       "type": "augment",
@@ -184,7 +184,7 @@
         }
       ],
       "patch_changes": [],
-      "quality_tier": null
+      "quality_tier": "A"
     },
     {
       "type": "augment",
@@ -220,7 +220,7 @@
         }
       ],
       "patch_changes": [],
-      "quality_tier": null
+      "quality_tier": "S"
     },
     {
       "type": "augment",
@@ -292,7 +292,7 @@
         }
       ],
       "patch_changes": [],
-      "quality_tier": null
+      "quality_tier": "A"
     },
     {
       "type": "augment",
@@ -328,7 +328,7 @@
         }
       ],
       "patch_changes": [],
-      "quality_tier": null
+      "quality_tier": "C"
     },
     {
       "type": "augment",
@@ -364,7 +364,7 @@
         }
       ],
       "patch_changes": [],
-      "quality_tier": null
+      "quality_tier": "S"
     },
     {
       "type": "augment",
@@ -400,7 +400,7 @@
         }
       ],
       "patch_changes": [],
-      "quality_tier": null
+      "quality_tier": "B"
     },
     {
       "type": "augment",
@@ -436,7 +436,7 @@
         }
       ],
       "patch_changes": [],
-      "quality_tier": null
+      "quality_tier": "B"
     },
     {
       "type": "augment",
@@ -472,7 +472,7 @@
         }
       ],
       "patch_changes": [],
-      "quality_tier": null
+      "quality_tier": "B"
     },
     {
       "type": "augment",
@@ -544,7 +544,7 @@
         }
       ],
       "patch_changes": [],
-      "quality_tier": null
+      "quality_tier": "C"
     },
     {
       "type": "augment",
@@ -580,7 +580,7 @@
         }
       ],
       "patch_changes": [],
-      "quality_tier": null
+      "quality_tier": "S"
     },
     {
       "type": "augment",
@@ -652,7 +652,7 @@
         }
       ],
       "patch_changes": [],
-      "quality_tier": null
+      "quality_tier": "B"
     },
     {
       "type": "augment",
@@ -724,7 +724,7 @@
         }
       ],
       "patch_changes": [],
-      "quality_tier": null
+      "quality_tier": "B"
     },
     {
       "type": "augment",
@@ -832,7 +832,7 @@
         }
       ],
       "patch_changes": [],
-      "quality_tier": null
+      "quality_tier": "B"
     },
     {
       "type": "augment",
@@ -868,7 +868,7 @@
         }
       ],
       "patch_changes": [],
-      "quality_tier": null
+      "quality_tier": "B"
     },
     {
       "type": "augment",
@@ -904,7 +904,7 @@
         }
       ],
       "patch_changes": [],
-      "quality_tier": null
+      "quality_tier": "A"
     },
     {
       "type": "augment",
@@ -940,7 +940,7 @@
         }
       ],
       "patch_changes": [],
-      "quality_tier": null
+      "quality_tier": "S"
     },
     {
       "type": "augment",
@@ -1012,7 +1012,7 @@
         }
       ],
       "patch_changes": [],
-      "quality_tier": null
+      "quality_tier": "B"
     },
     {
       "type": "augment",
@@ -1048,7 +1048,7 @@
         }
       ],
       "patch_changes": [],
-      "quality_tier": null
+      "quality_tier": "C"
     },
     {
       "type": "augment",
@@ -1084,7 +1084,7 @@
         }
       ],
       "patch_changes": [],
-      "quality_tier": null
+      "quality_tier": "B"
     },
     {
       "type": "augment",
@@ -1120,7 +1120,7 @@
         }
       ],
       "patch_changes": [],
-      "quality_tier": null
+      "quality_tier": "A"
     },
     {
       "type": "augment",
@@ -1192,7 +1192,7 @@
         }
       ],
       "patch_changes": [],
-      "quality_tier": null
+      "quality_tier": "S+"
     },
     {
       "type": "augment",
@@ -1228,7 +1228,7 @@
         }
       ],
       "patch_changes": [],
-      "quality_tier": null
+      "quality_tier": "A"
     },
     {
       "type": "augment",
@@ -1264,7 +1264,7 @@
         }
       ],
       "patch_changes": [],
-      "quality_tier": null
+      "quality_tier": "S+"
     },
     {
       "type": "augment",
@@ -1300,7 +1300,7 @@
         }
       ],
       "patch_changes": [],
-      "quality_tier": null
+      "quality_tier": "S+"
     },
     {
       "type": "augment",
@@ -1372,7 +1372,7 @@
         }
       ],
       "patch_changes": [],
-      "quality_tier": null
+      "quality_tier": "B"
     },
     {
       "type": "augment",
@@ -1408,7 +1408,7 @@
         }
       ],
       "patch_changes": [],
-      "quality_tier": null
+      "quality_tier": "B"
     },
     {
       "type": "augment",
@@ -1444,7 +1444,7 @@
         }
       ],
       "patch_changes": [],
-      "quality_tier": null
+      "quality_tier": "A"
     },
     {
       "type": "augment",
@@ -1480,7 +1480,7 @@
         }
       ],
       "patch_changes": [],
-      "quality_tier": null
+      "quality_tier": "S"
     },
     {
       "type": "augment",
@@ -1516,7 +1516,7 @@
         }
       ],
       "patch_changes": [],
-      "quality_tier": null
+      "quality_tier": "S+"
     },
     {
       "type": "augment",
@@ -1588,7 +1588,7 @@
         }
       ],
       "patch_changes": [],
-      "quality_tier": null
+      "quality_tier": "S"
     },
     {
       "type": "augment",
@@ -1660,7 +1660,7 @@
         }
       ],
       "patch_changes": [],
-      "quality_tier": null
+      "quality_tier": "B"
     },
     {
       "type": "augment",
@@ -1696,7 +1696,7 @@
         }
       ],
       "patch_changes": [],
-      "quality_tier": null
+      "quality_tier": "B"
     },
     {
       "type": "augment",
@@ -1732,7 +1732,7 @@
         }
       ],
       "patch_changes": [],
-      "quality_tier": null
+      "quality_tier": "B"
     },
     {
       "type": "augment",
@@ -1768,7 +1768,7 @@
         }
       ],
       "patch_changes": [],
-      "quality_tier": null
+      "quality_tier": "A"
     },
     {
       "type": "augment",
@@ -1804,7 +1804,7 @@
         }
       ],
       "patch_changes": [],
-      "quality_tier": null
+      "quality_tier": "C"
     },
     {
       "type": "augment",
@@ -1876,7 +1876,7 @@
         }
       ],
       "patch_changes": [],
-      "quality_tier": null
+      "quality_tier": "A"
     },
     {
       "type": "augment",
@@ -1948,7 +1948,7 @@
         }
       ],
       "patch_changes": [],
-      "quality_tier": null
+      "quality_tier": "A"
     },
     {
       "type": "augment",
@@ -1984,7 +1984,7 @@
         }
       ],
       "patch_changes": [],
-      "quality_tier": null
+      "quality_tier": "S"
     },
     {
       "type": "augment",
@@ -2020,7 +2020,7 @@
         }
       ],
       "patch_changes": [],
-      "quality_tier": null
+      "quality_tier": "S+"
     },
     {
       "type": "augment",
@@ -2056,7 +2056,7 @@
         }
       ],
       "patch_changes": [],
-      "quality_tier": null
+      "quality_tier": "S+"
     },
     {
       "type": "augment",
@@ -2128,7 +2128,7 @@
         }
       ],
       "patch_changes": [],
-      "quality_tier": null
+      "quality_tier": "S+"
     },
     {
       "type": "augment",
@@ -2164,7 +2164,7 @@
         }
       ],
       "patch_changes": [],
-      "quality_tier": null
+      "quality_tier": "C"
     },
     {
       "type": "augment",
@@ -2200,7 +2200,7 @@
         }
       ],
       "patch_changes": [],
-      "quality_tier": null
+      "quality_tier": "A"
     },
     {
       "type": "augment",
@@ -2272,7 +2272,7 @@
         }
       ],
       "patch_changes": [],
-      "quality_tier": null
+      "quality_tier": "A"
     },
     {
       "type": "augment",
@@ -2308,7 +2308,7 @@
         }
       ],
       "patch_changes": [],
-      "quality_tier": null
+      "quality_tier": "S"
     },
     {
       "type": "augment",
@@ -2344,7 +2344,7 @@
         }
       ],
       "patch_changes": [],
-      "quality_tier": null
+      "quality_tier": "C"
     },
     {
       "type": "augment",
@@ -2380,7 +2380,7 @@
         }
       ],
       "patch_changes": [],
-      "quality_tier": null
+      "quality_tier": "C"
     },
     {
       "type": "augment",
@@ -2416,7 +2416,7 @@
         }
       ],
       "patch_changes": [],
-      "quality_tier": null
+      "quality_tier": "S"
     },
     {
       "type": "augment",
@@ -2452,7 +2452,7 @@
         }
       ],
       "patch_changes": [],
-      "quality_tier": null
+      "quality_tier": "B"
     },
     {
       "type": "augment",
@@ -2488,7 +2488,7 @@
         }
       ],
       "patch_changes": [],
-      "quality_tier": null
+      "quality_tier": "C"
     },
     {
       "type": "augment",
@@ -2560,7 +2560,7 @@
         }
       ],
       "patch_changes": [],
-      "quality_tier": null
+      "quality_tier": "B"
     },
     {
       "type": "augment",
@@ -2632,7 +2632,7 @@
         }
       ],
       "patch_changes": [],
-      "quality_tier": null
+      "quality_tier": "B"
     },
     {
       "type": "augment",
@@ -2704,7 +2704,7 @@
         }
       ],
       "patch_changes": [],
-      "quality_tier": null
+      "quality_tier": "A"
     },
     {
       "type": "augment",
@@ -2740,7 +2740,7 @@
         }
       ],
       "patch_changes": [],
-      "quality_tier": null
+      "quality_tier": "A"
     },
     {
       "type": "augment",
@@ -2848,7 +2848,7 @@
         }
       ],
       "patch_changes": [],
-      "quality_tier": null
+      "quality_tier": "A"
     },
     {
       "type": "augment",
@@ -2884,7 +2884,7 @@
         }
       ],
       "patch_changes": [],
-      "quality_tier": null
+      "quality_tier": "S+"
     },
     {
       "type": "augment",
@@ -2920,7 +2920,7 @@
         }
       ],
       "patch_changes": [],
-      "quality_tier": null
+      "quality_tier": "A"
     },
     {
       "type": "augment",
@@ -2956,7 +2956,7 @@
         }
       ],
       "patch_changes": [],
-      "quality_tier": null
+      "quality_tier": "B"
     },
     {
       "type": "augment",
@@ -2992,7 +2992,7 @@
         }
       ],
       "patch_changes": [],
-      "quality_tier": null
+      "quality_tier": "A"
     },
     {
       "type": "augment",
@@ -3028,27 +3028,27 @@
         }
       ],
       "patch_changes": [],
-      "quality_tier": null
+      "quality_tier": "B"
     },
     {
       "type": "augment",
       "canonical_id": "ARAM_MissingPingAugment",
       "slug": "missing-ping-augment",
-      "route_identifier": "missing-ping-augment",
-      "known": true,
+      "route_identifier": "",
+      "known": false,
       "names": {
-        "en": "???",
-        "ja": "？？？",
-        "ko": "???",
-        "zh-CN": "？？？",
-        "zh-TW": "？？？",
+        "en": "Missing Ping",
+        "ja": "Missing Ping",
+        "ko": "Missing Ping",
+        "zh-CN": "Missing Ping",
+        "zh-TW": "Missing Ping",
         "zh_cn": "？？？",
         "zh_tw": "？？？"
       },
       "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/kiwi/augments/icons/missingping_small.png",
       "description": "",
       "lifecycle": {
-        "state": "active",
+        "state": "removed",
         "patch": ""
       },
       "stats": [
@@ -3100,7 +3100,7 @@
         }
       ],
       "patch_changes": [],
-      "quality_tier": null
+      "quality_tier": "B"
     },
     {
       "type": "augment",
@@ -3136,7 +3136,7 @@
         }
       ],
       "patch_changes": [],
-      "quality_tier": null
+      "quality_tier": "C"
     },
     {
       "type": "augment",
@@ -3172,7 +3172,7 @@
         }
       ],
       "patch_changes": [],
-      "quality_tier": null
+      "quality_tier": "S"
     },
     {
       "type": "augment",
@@ -3208,7 +3208,7 @@
         }
       ],
       "patch_changes": [],
-      "quality_tier": null
+      "quality_tier": "A"
     },
     {
       "type": "augment",
@@ -3244,7 +3244,7 @@
         }
       ],
       "patch_changes": [],
-      "quality_tier": null
+      "quality_tier": "B"
     },
     {
       "type": "augment",
@@ -3280,7 +3280,7 @@
         }
       ],
       "patch_changes": [],
-      "quality_tier": null
+      "quality_tier": "A"
     },
     {
       "type": "augment",
@@ -3352,7 +3352,7 @@
         }
       ],
       "patch_changes": [],
-      "quality_tier": null
+      "quality_tier": "A"
     },
     {
       "type": "augment",
@@ -3388,7 +3388,7 @@
         }
       ],
       "patch_changes": [],
-      "quality_tier": null
+      "quality_tier": "A"
     },
     {
       "type": "augment",
@@ -3424,7 +3424,7 @@
         }
       ],
       "patch_changes": [],
-      "quality_tier": null
+      "quality_tier": "C"
     },
     {
       "type": "augment",
@@ -3496,7 +3496,7 @@
         }
       ],
       "patch_changes": [],
-      "quality_tier": null
+      "quality_tier": "S+"
     },
     {
       "type": "augment",
@@ -3604,7 +3604,7 @@
         }
       ],
       "patch_changes": [],
-      "quality_tier": null
+      "quality_tier": "C"
     },
     {
       "type": "augment",
@@ -3640,7 +3640,7 @@
         }
       ],
       "patch_changes": [],
-      "quality_tier": null
+      "quality_tier": "S"
     },
     {
       "type": "augment",
@@ -3712,7 +3712,7 @@
         }
       ],
       "patch_changes": [],
-      "quality_tier": null
+      "quality_tier": "S+"
     },
     {
       "type": "augment",
@@ -3748,7 +3748,7 @@
         }
       ],
       "patch_changes": [],
-      "quality_tier": null
+      "quality_tier": "B"
     },
     {
       "type": "augment",
@@ -3799,7 +3799,7 @@
           "direction": "changed"
         }
       ],
-      "quality_tier": null
+      "quality_tier": "S"
     },
     {
       "type": "augment",
@@ -3835,7 +3835,7 @@
         }
       ],
       "patch_changes": [],
-      "quality_tier": null
+      "quality_tier": "S"
     },
     {
       "type": "augment",
@@ -3871,23 +3871,25 @@
         }
       ],
       "patch_changes": [],
-      "quality_tier": null
+      "quality_tier": "C"
     },
     {
       "type": "augment",
       "canonical_id": "ARAM_RabbleRousing",
-      "slug": "rabble-rousing",
-      "route_identifier": "",
-      "known": false,
+      "slug": "rejuvenation",
+      "route_identifier": "rejuvenation",
+      "known": true,
       "names": {
-        "en": "Rabble Rousing",
-        "ja": "扇動者",
-        "ko": "선동",
-        "zh-CN": "古式佳酿",
-        "zh-TW": "煽動群眾"
+        "en": "Rejuvenation",
+        "ja": "再生",
+        "ko": "원기 회복",
+        "zh-CN": "活力焕发",
+        "zh-TW": "回春",
+        "zh_cn": "活力焕发",
+        "zh_tw": "回春"
       },
-      "icon": "https://arammayhem.com/augments/Rabble_Rousing_mayhem_augment.webp",
-      "description": "Casting an ability heals you for 5 – 60 (based on level) (+ 1% maximum health) . Toggled abilities will not trigger this augment as they do not count as ability activations for the purposes of on-cast effects.",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/rabblerousing_small.png",
+      "description": "Upgrades one of your champion's abilities, empowering the ability's cast to heal you for 30 – 100 (based on level) (+ 25% bonus AD) (+ 15% AP) (+ 5% bonus health). This is increased by up to 50% based on how long the ability's cooldown is, for a maximum heal of 45 – 150 (based on level) (+ 37.5% bonus AD) (+ 22.5% AP) (+ 7.5% bonus health).",
       "lifecycle": {
         "state": "active",
         "patch": ""
@@ -3977,7 +3979,7 @@
         }
       ],
       "patch_changes": [],
-      "quality_tier": null
+      "quality_tier": "A"
     },
     {
       "type": "augment",
@@ -4085,7 +4087,7 @@
         }
       ],
       "patch_changes": [],
-      "quality_tier": null
+      "quality_tier": "A"
     },
     {
       "type": "augment",
@@ -4121,7 +4123,7 @@
         }
       ],
       "patch_changes": [],
-      "quality_tier": null
+      "quality_tier": "S"
     },
     {
       "type": "augment",
@@ -4157,7 +4159,7 @@
         }
       ],
       "patch_changes": [],
-      "quality_tier": null
+      "quality_tier": "A"
     },
     {
       "type": "augment",
@@ -4193,7 +4195,7 @@
         }
       ],
       "patch_changes": [],
-      "quality_tier": null
+      "quality_tier": "B"
     },
     {
       "type": "augment",
@@ -4265,7 +4267,7 @@
         }
       ],
       "patch_changes": [],
-      "quality_tier": null
+      "quality_tier": "A"
     },
     {
       "type": "augment",
@@ -4301,7 +4303,7 @@
         }
       ],
       "patch_changes": [],
-      "quality_tier": null
+      "quality_tier": "C"
     },
     {
       "type": "augment",
@@ -4337,7 +4339,7 @@
         }
       ],
       "patch_changes": [],
-      "quality_tier": null
+      "quality_tier": "S"
     },
     {
       "type": "augment",
@@ -4373,7 +4375,7 @@
         }
       ],
       "patch_changes": [],
-      "quality_tier": null
+      "quality_tier": "A"
     },
     {
       "type": "augment",
@@ -4481,7 +4483,7 @@
         }
       ],
       "patch_changes": [],
-      "quality_tier": null
+      "quality_tier": "C"
     },
     {
       "type": "augment",
@@ -4490,11 +4492,11 @@
       "route_identifier": "sonic-boom",
       "known": true,
       "names": {
-        "en": "Buffing, <healing>healing</healing>, or <shield>Shielding</shield> your ally deals <trueDamage>@Damage@ true damage</trueDamage> and <status>Slows enemies surrounding them</status> by @SlowAmount*-100@% for 2 seconds (@ProcCooldown@ seconds Cooldown).<br><br>Damage Dealt: @f2@",
-        "ja": "味方にバフ、<healing>体力回復効果</healing>、または<shield>シールド</shield>を付与すると、その周囲の敵に<trueDamage>@Damage@の確定ダメージ</trueDamage>を与え、2秒間@SlowAmount*-100@%の<status>スロウ効果</status>を付与する(クールダウン@ProcCooldown@秒)。<br><br>与えたダメージ量: @f2@",
-        "ko": "아군에게 이로운 효과, <healing>체력 회복</healing>, <shield>보호막</shield>을 부여하면 아군 주변 적들에게 <trueDamage>@Damage@의 고정 피해</trueDamage>를 입히고 2초 동안 @SlowAmount*-100@% <status>둔화</status>시킵니다. (재사용 대기시간 @ProcCooldown@초)<br><br>입힌 피해량: @f2@",
-        "zh-CN": "在为你的友军提供增益效果、<healing>治疗效果</healing>或<shield>护盾效果</shield>时，会对其附近的敌人们造成<trueDamage>@Damage@真实伤害</trueDamage>和持续2秒的@SlowAmount*-100@%<status>减速</status>。(@ProcCooldown@秒冷却时间)<br><br>已造成的伤害：@f2@",
-        "zh-TW": "強化、<healing>治療</healing>、或<shield>賦予友軍護盾</shield>時，會對友軍周圍的敵軍造成<trueDamage>@Damage@真實傷害</trueDamage>，並<status>緩速@SlowAmount*-100@%</status>，持續2秒(冷卻時間@ProcCooldown@秒)。<br><br>傷害量：@f2@",
+        "en": "Sonic Boom",
+        "ja": "Sonic Boom",
+        "ko": "Sonic Boom",
+        "zh-CN": "Sonic Boom",
+        "zh-TW": "Sonic Boom",
         "zh_cn": "在为你的友军提供增益效果、<healing>治疗效果</healing>或<shield>护盾效果</shield>时，会对其附近的敌人们造成<trueDamage>@Damage@真实伤害</trueDamage>和持续2秒的@SlowAmount*-100@%<status>减速</status>。(@ProcCooldown@秒冷却时间)<br><br>已造成的伤害：@f2@",
         "zh_tw": "強化、<healing>治療</healing>、或<shield>賦予友軍護盾</shield>時，會對友軍周圍的敵軍造成<trueDamage>@Damage@真實傷害</trueDamage>，並<status>緩速@SlowAmount*-100@%</status>，持續2秒(冷卻時間@ProcCooldown@秒)。<br><br>傷害量：@f2@"
       },
@@ -4517,7 +4519,7 @@
         }
       ],
       "patch_changes": [],
-      "quality_tier": null
+      "quality_tier": "A"
     },
     {
       "type": "augment",
@@ -4650,7 +4652,7 @@
         }
       ],
       "patch_changes": [],
-      "quality_tier": null
+      "quality_tier": "A"
     },
     {
       "type": "augment",
@@ -4686,7 +4688,7 @@
         }
       ],
       "patch_changes": [],
-      "quality_tier": null
+      "quality_tier": "A"
     },
     {
       "type": "augment",
@@ -4722,7 +4724,7 @@
         }
       ],
       "patch_changes": [],
-      "quality_tier": null
+      "quality_tier": "C"
     },
     {
       "type": "augment",
@@ -4758,7 +4760,7 @@
         }
       ],
       "patch_changes": [],
-      "quality_tier": null
+      "quality_tier": "S"
     },
     {
       "type": "augment",
@@ -4794,7 +4796,7 @@
         }
       ],
       "patch_changes": [],
-      "quality_tier": null
+      "quality_tier": "B"
     },
     {
       "type": "augment",
@@ -4830,7 +4832,7 @@
         }
       ],
       "patch_changes": [],
-      "quality_tier": null
+      "quality_tier": "A"
     },
     {
       "type": "augment",
@@ -4866,7 +4868,7 @@
         }
       ],
       "patch_changes": [],
-      "quality_tier": null
+      "quality_tier": "B"
     },
     {
       "type": "augment",
@@ -4902,7 +4904,7 @@
         }
       ],
       "patch_changes": [],
-      "quality_tier": null
+      "quality_tier": "C"
     },
     {
       "type": "augment",
@@ -4963,7 +4965,7 @@
         }
       ],
       "patch_changes": [],
-      "quality_tier": null
+      "quality_tier": "B"
     },
     {
       "type": "augment",
@@ -4999,7 +5001,7 @@
         }
       ],
       "patch_changes": [],
-      "quality_tier": null
+      "quality_tier": "S+"
     },
     {
       "type": "augment",
@@ -5071,7 +5073,7 @@
         }
       ],
       "patch_changes": [],
-      "quality_tier": null
+      "quality_tier": "S"
     },
     {
       "type": "augment",
@@ -5107,7 +5109,7 @@
         }
       ],
       "patch_changes": [],
-      "quality_tier": null
+      "quality_tier": "C"
     },
     {
       "type": "augment",
@@ -5179,7 +5181,7 @@
         }
       ],
       "patch_changes": [],
-      "quality_tier": null
+      "quality_tier": "B"
     },
     {
       "type": "augment",
@@ -5251,7 +5253,7 @@
         }
       ],
       "patch_changes": [],
-      "quality_tier": null
+      "quality_tier": "A"
     },
     {
       "type": "augment",
@@ -5323,7 +5325,7 @@
         }
       ],
       "patch_changes": [],
-      "quality_tier": null
+      "quality_tier": "S"
     },
     {
       "type": "augment",
@@ -5431,7 +5433,7 @@
         }
       ],
       "patch_changes": [],
-      "quality_tier": null
+      "quality_tier": "A"
     },
     {
       "type": "augment",
@@ -5467,7 +5469,7 @@
         }
       ],
       "patch_changes": [],
-      "quality_tier": null
+      "quality_tier": "B"
     },
     {
       "type": "augment",
@@ -5503,7 +5505,7 @@
         }
       ],
       "patch_changes": [],
-      "quality_tier": null
+      "quality_tier": "C"
     },
     {
       "type": "augment",
@@ -5539,7 +5541,7 @@
         }
       ],
       "patch_changes": [],
-      "quality_tier": null
+      "quality_tier": "S"
     },
     {
       "type": "augment",
@@ -5647,7 +5649,7 @@
         }
       ],
       "patch_changes": [],
-      "quality_tier": null
+      "quality_tier": "S+"
     },
     {
       "type": "augment",
@@ -5683,7 +5685,7 @@
         }
       ],
       "patch_changes": [],
-      "quality_tier": null
+      "quality_tier": "S"
     },
     {
       "type": "augment",
@@ -5719,7 +5721,7 @@
         }
       ],
       "patch_changes": [],
-      "quality_tier": null
+      "quality_tier": "A"
     },
     {
       "type": "augment",
@@ -5755,7 +5757,7 @@
         }
       ],
       "patch_changes": [],
-      "quality_tier": null
+      "quality_tier": "S"
     },
     {
       "type": "augment",
@@ -5899,7 +5901,7 @@
         }
       ],
       "patch_changes": [],
-      "quality_tier": null
+      "quality_tier": "S"
     },
     {
       "type": "augment",
@@ -5971,7 +5973,7 @@
         }
       ],
       "patch_changes": [],
-      "quality_tier": null
+      "quality_tier": "S"
     },
     {
       "type": "augment",
@@ -6007,7 +6009,7 @@
         }
       ],
       "patch_changes": [],
-      "quality_tier": null
+      "quality_tier": "S"
     },
     {
       "type": "augment",
@@ -6043,7 +6045,7 @@
         }
       ],
       "patch_changes": [],
-      "quality_tier": null
+      "quality_tier": "A"
     },
     {
       "type": "augment",
@@ -6079,7 +6081,7 @@
         }
       ],
       "patch_changes": [],
-      "quality_tier": null
+      "quality_tier": "B"
     },
     {
       "type": "augment",
@@ -6151,7 +6153,7 @@
         }
       ],
       "patch_changes": [],
-      "quality_tier": null
+      "quality_tier": "A"
     },
     {
       "type": "augment",
@@ -8864,7 +8866,7 @@
         "ja": "ミカエルの祝福 アップグレード",
         "ko": "미카엘의 축복 업그레이드",
         "zh-CN": "升级：米凯尔的祝福",
-        "zh-TW": "升級：米凱爾的祝福",
+        "zh-TW": "升級米凱的祝福",
         "zh_cn": "升级：米凯尔的祝福",
         "zh_tw": "升級米凱的祝福"
       },
@@ -8898,8 +8900,8 @@
       "names": {
         "en": "Upgrade Sword of Blossoming Dawn",
         "ja": "花咲く夜明けの剣 アップグレード",
-        "ko": "Upgrade Sword of Blossoming Dawn",
-        "zh-CN": "升级：破晓绽放之剑",
+        "ko": "꽃피는 새벽의 검 업그레이드",
+        "zh-CN": "升级：花晓之剑",
         "zh-TW": "升級：破曉綻放之劍",
         "zh_cn": "升级：花晓之剑",
         "zh_tw": "升級破曉綻放之劍"
@@ -83603,9 +83605,13 @@
       "route_identifier": "",
       "known": false,
       "names": {
-        "en": "Locke"
+        "en": "Locke",
+        "ja": "ロック",
+        "ko": "로크",
+        "zh-CN": "灰烬驱魔人",
+        "zh-TW": "洛克"
       },
-      "icon": "",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/805.png",
       "description": "",
       "lifecycle": {
         "state": "active",
@@ -100933,7 +100939,7 @@
         "zh-CN": "虚空献祭",
         "zh-TW": "虛空獻祭"
       },
-      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/223069_kiwi_voidimmolation.mayhem_new_augments.png",
+      "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/223069_kiwi_voidimmolation.png",
       "description": "1000 Health 100 Armor 80 Magic Resist 25 Ability Haste 200% Base Health RegenImmolateAfter taking or dealing damage, deal magic damage per second to nearby enemies for 5 seconds. DesolateKilling an enemy deals magic damage around them.",
       "lifecycle": {
         "state": "active",
@@ -109972,7 +109978,7 @@
       "route_identifier": "rite-of-ruin",
       "known": true,
       "names": {
-        "en": "Rite Of Ruin",
+        "en": "Rite of Ruin",
         "ja": "破滅の儀式",
         "ko": "파멸의식 고서",
         "zh-CN": "毁坏仪式",

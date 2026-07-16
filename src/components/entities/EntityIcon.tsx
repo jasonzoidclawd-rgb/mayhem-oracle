@@ -61,7 +61,6 @@ export function EntityIcon({
           className="absolute inset-0 h-full w-full rounded object-contain"
           sizes={size.sizes}
           loading={loading}
-          unoptimized
           onLoad={() => setState("loaded")}
           onError={() => setState("error")}
         />

@@ -42,6 +42,10 @@ CANONICAL_AUGMENT_IDS = {
     "forged-by-the-master": "2127",
 }
 
+# Locke is present in the source snapshot/catalog for presentation purposes,
+# but does not own a public champion detail route yet.
+UNROUTEABLE_CHAMPION_SLUGS = frozenset({"locke"})
+
 
 # The semantic direction is explicit because lower values are beneficial for
 # cooldown/cost fields while higher values are beneficial for most combat stats.
@@ -207,7 +211,9 @@ def _names(snapshot_row: dict[str, Any], catalog_row: dict[str, Any] | None) -> 
                 values[key.removeprefix("name_").replace("_", "-")] = value.strip()
     fallback = str((catalog_row or {}).get("name") or values.get("en") or snapshot_row.get("slug") or "").strip()
     if fallback:
-        values.setdefault("en", fallback)
+        # The normalized catalog has already rejected tooltip payloads and
+        # placeholder labels; it is safer than the raw snapshot for English.
+        values["en"] = fallback
     return {key: values[key] for key in sorted(values)}
 
 
@@ -451,7 +457,14 @@ def _record(
     display_catalog_row = catalog_row or {}
     route_catalog_row = route_catalog_row if route_catalog_row is not None else display_catalog_row
     flags = route_catalog_row.get("flags") if isinstance(route_catalog_row.get("flags"), dict) else {}
-    lifecycle = "active" if present_in_snapshot else str(flags.get("lifecycle") or "unknown")
+    availability = route_catalog_row.get("availability") if isinstance(route_catalog_row.get("availability"), dict) else {}
+    definition_placeholder = bool(route_catalog_row.get("definitionPlaceholder"))
+    unresolved_candidate = definition_placeholder or availability.get("status") == "candidate_registry_present"
+    lifecycle = (
+        str(flags.get("lifecycle") or "removed")
+        if present_in_snapshot and unresolved_candidate
+        else ("active" if present_in_snapshot else str(flags.get("lifecycle") or "unknown"))
+    )
     if entity_type == "item":
         # Regular item pages accept numeric IDs. Mayhem-exclusive rows carry
         # an explicit route identifier from the exporter because their static
@@ -467,7 +480,9 @@ def _record(
         # a CDragon-only row (for example Locke) intentionally remains
         # unlinked until that catalog generates a real page.
         route_identifier = str(route_catalog_row.get("slug") or "").strip()
-    known = bool(route_identifier and route_catalog_row)
+    if unresolved_candidate:
+        route_identifier = ""
+    known = bool(route_identifier and route_catalog_row and not unresolved_candidate)
     record = {
         "type": entity_type,
         "canonical_id": canonical_id,
@@ -557,7 +572,12 @@ def build_entity_presentation(
             # not publish the CDragon numeric ID. Slug matching is therefore
             # the authoritative route join for champions only. Items and
             # augments must have an exact canonical-ID catalog row.
-            if route_catalog_row is None and entity_type == "champion":
+            if (
+                route_catalog_row is None
+                and entity_type == "champion"
+                and slug_catalog_row
+                and str(snapshot_row.get("slug") or "") not in UNROUTEABLE_CHAMPION_SLUGS
+            ):
                 route_catalog_row = slug_catalog_row
             display_catalog_row = route_catalog_row or slug_catalog_row
             rows.append(_record(

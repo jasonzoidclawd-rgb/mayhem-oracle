@@ -533,10 +533,10 @@ export function CompanionClient({
                       type="button"
                       onClick={() => pickChampion(c.slug)}
                       aria-label={`${t("changeChampion")}: ${c.name}`}
-                      className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-xs font-bold text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-neon-primary)]"
+                      className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full text-xs font-bold text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-neon-primary)]"
                     >
                       <span
-                        className="flex h-9 w-9 items-center justify-center rounded-full text-xs font-bold text-white"
+                        className="flex h-11 w-11 items-center justify-center rounded-full text-xs font-bold text-white"
                         style={{ background: `hsl(${hashHue(c.slug)}, 60%, 38%)` }}
                       >
                         {initials(c.name)}

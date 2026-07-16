@@ -169,6 +169,19 @@ def derive_quality_tiers(
     active_rows = _active_rows(catalog, current_patch)
     feed_patch = str(feed.get("patch") or "")
     patch_is_current = feed_patch == current_patch
+    # Some canonical current-patch feeds publish real global win rates but do
+    # not publish sample counts at all. Treat that as a feed-level contract,
+    # not as 120 independently missing values. If the feed publishes any
+    # sample counts, every row still has to meet the normal safety threshold.
+    published_sample_counts = _feed_value_map(
+        feed, "sample_counts", "sampleCounts", "game_counts", "gameCounts", "games"
+    )
+    rows = feed.get("rows") if isinstance(feed.get("rows"), list) else []
+    feed_has_sample_counts = bool(published_sample_counts) or any(
+        isinstance(row, dict)
+        and (row.get("sample_count") is not None or row.get("sampleCount") is not None)
+        for row in rows
+    )
     eligible: list[tuple[str, float]] = []
     summary: dict[str, Any] = {
         "totalAugments": len(canonical_rows),
@@ -179,6 +192,7 @@ def derive_quality_tiers(
         "feedPatch": feed_patch,
         "currentPatch": current_patch,
         "minimumGames": MIN_GLOBAL_AUGMENT_TIER_GAMES,
+        "eligibilityPolicy": "sample-threshold" if feed_has_sample_counts else "current-patch-global-rank",
     }
     tiers = {canonical_id: None for canonical_id in canonical_rows}
 
@@ -203,10 +217,10 @@ def derive_quality_tiers(
         if win_rate is None:
             reject("missing-or-invalid-win-rate")
             continue
-        if game_count is None:
+        if feed_has_sample_counts and game_count is None:
             reject("missing-or-invalid-sample-count")
             continue
-        if game_count < MIN_GLOBAL_AUGMENT_TIER_GAMES:
+        if feed_has_sample_counts and game_count < MIN_GLOBAL_AUGMENT_TIER_GAMES:
             reject("insufficient-sample-count")
             continue
         eligible.append((canonical_id, win_rate))

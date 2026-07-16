@@ -63,7 +63,7 @@ def write_routing_fixture(
         "export const routing = defineRouting({\n"
         f"  locales: {locales!r},\n"
         f"  defaultLocale: \"{default_locale}\",\n"
-        "  localePrefix: \"as-needed\",\n"
+                "  localePrefix: \"always\",\n"
         "});\n"
     )
 
@@ -112,9 +112,8 @@ class JsonLdVerifierTests(unittest.TestCase):
             with self.assertRaisesRegex(RuntimeError, "messages/fr.json"):
                 load_routing_config(root)
 
-    def test_locale_paths_prefix_every_non_default_locale(self) -> None:
-        self.assertEqual(localized_path("/augments/tank-engine", "en"), "/augments/tank-engine")
-        for locale in SUPPORTED_LOCALES[1:]:
+    def test_locale_paths_prefix_every_locale(self) -> None:
+        for locale in SUPPORTED_LOCALES:
             self.assertEqual(
                 localized_path("/augments/tank-engine", locale),
                 f"/{locale}/augments/tank-engine",

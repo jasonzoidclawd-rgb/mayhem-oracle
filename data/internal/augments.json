@@ -11,11 +11,11 @@
   "counts": {
     "augments": 268,
     "availability": {
-      "confirmed_live": 205,
+      "confirmed_live": 204,
       "candidate_registry_present": 1,
       "disabled": 11,
-      "removed": 42,
-      "unverified_legacy": 9,
+      "removed": 44,
+      "unverified_legacy": 8,
       "conflict": 0
     },
     "winRateCoverage": 120
@@ -9925,7 +9925,7 @@
           },
           "existing_catalog": {
             "slug": "forged-by-the-master",
-            "lifecycle": "removed"
+            "lifecycle": "active"
           },
           "resolution": {
             "liveSources": [
@@ -15871,7 +15871,7 @@
           },
           "existing_catalog": {
             "slug": "terraind",
-            "lifecycle": "removed"
+            "lifecycle": "active"
           },
           "resolution": {
             "liveSources": [
@@ -16282,7 +16282,7 @@
           },
           "existing_catalog": {
             "slug": "from-downtown",
-            "lifecycle": "removed"
+            "lifecycle": "active"
           },
           "resolution": {
             "liveSources": [],
@@ -17416,8 +17416,8 @@
     {
       "augmentId": "ARAM_SonicBoom",
       "slug": "sonic-boom",
-      "name": "Buffing, <healing>healing</healing>, or <shield>Shielding</shield> your ally deals <trueDamage>@Damage@ true damage</trueDamage> and <status>Slows enemies surrounding them</status> by @SlowAmount*-100@% for 2 seconds (@ProcCooldown@ seconds Cooldown).<br><br>Damage Dealt: @f2@",
-      "displayName": "Buffing, <healing>healing</healing>, or <shield>Shielding</shield> your ally deals <trueDamage>@Damage@ true damage</trueDamage> and <status>Slows enemies surrounding them</status> by @SlowAmount*-100@% for 2 seconds (@ProcCooldown@ seconds Cooldown).<br><br>Damage Dealt: @f2@",
+      "name": "Sonic Boom",
+      "displayName": "Sonic Boom",
       "rarity": "silver",
       "cdragonRarity": "silver",
       "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/cherry/augments/icons/sonicboom_small.png",
@@ -17662,10 +17662,10 @@
         "flags.lifecycle": "derived:availability.status",
         "type": "existing:data/internal/augments.json"
       },
-      "name_zh_CN": "在为你的友军提供增益效果、<healing>治疗效果</healing>或<shield>护盾效果</shield>时，会对其附近的敌人们造成<trueDamage>@Damage@真实伤害</trueDamage>和持续2秒的@SlowAmount*-100@%<status>减速</status>。(@ProcCooldown@秒冷却时间)<br><br>已造成的伤害：@f2@",
-      "name_zh_TW": "強化、<healing>治療</healing>、或<shield>賦予友軍護盾</shield>時，會對友軍周圍的敵軍造成<trueDamage>@Damage@真實傷害</trueDamage>，並<status>緩速@SlowAmount*-100@%</status>，持續2秒(冷卻時間@ProcCooldown@秒)。<br><br>傷害量：@f2@",
-      "name_ja": "味方にバフ、<healing>体力回復効果</healing>、または<shield>シールド</shield>を付与すると、その周囲の敵に<trueDamage>@Damage@の確定ダメージ</trueDamage>を与え、2秒間@SlowAmount*-100@%の<status>スロウ効果</status>を付与する(クールダウン@ProcCooldown@秒)。<br><br>与えたダメージ量: @f2@",
-      "name_ko": "아군에게 이로운 효과, <healing>체력 회복</healing>, <shield>보호막</shield>을 부여하면 아군 주변 적들에게 <trueDamage>@Damage@의 고정 피해</trueDamage>를 입히고 2초 동안 @SlowAmount*-100@% <status>둔화</status>시킵니다. (재사용 대기시간 @ProcCooldown@초)<br><br>입힌 피해량: @f2@",
+      "name_zh_CN": "Sonic Boom",
+      "name_zh_TW": "Sonic Boom",
+      "name_ja": "Sonic Boom",
+      "name_ko": "Sonic Boom",
       "wikiDescription": "Granting a buff, heal, or shield to your ally deals 30 – 150 (based on level) true damage to enemies within 450 units of them and slows targets by 30% for 2 seconds (2 second cooldown).",
       "wikiRarity": "silver"
     },
@@ -21902,7 +21902,7 @@
           },
           "existing_catalog": {
             "slug": "its-go-time",
-            "lifecycle": "removed"
+            "lifecycle": "active"
           },
           "resolution": {
             "liveSources": [
@@ -34156,7 +34156,7 @@
           },
           "existing_catalog": {
             "slug": "porcupine",
-            "lifecycle": "removed"
+            "lifecycle": "active"
           },
           "resolution": {
             "liveSources": [
@@ -37576,7 +37576,7 @@
       ],
       "wikiDescription": "Attacks during your chosen ability apply Marks that explode at the end of its duration, dealing damage and granting Move Speed.",
       "availability": {
-        "status": "unverified_legacy",
+        "status": "removed",
         "signals": {
           "cdragon_registry": {
             "present": false,
@@ -37616,6 +37616,9 @@
             "liveSources": [],
             "disabledSources": [],
             "removedSources": []
+          },
+          "canonical_alias": {
+            "canonicalSlug": "porcupine"
           }
         }
       },
@@ -38749,7 +38752,7 @@
           },
           "existing_catalog": {
             "slug": "surge-field",
-            "lifecycle": "removed"
+            "lifecycle": "active"
           },
           "resolution": {
             "liveSources": [
@@ -48922,12 +48925,12 @@
       ],
       "flags": {
         "system_breaker": false,
-        "lifecycle": "active"
+        "lifecycle": "removed"
       },
       "type": "standalone",
       "augmentId": "ARAM_RabbleRousing",
       "availability": {
-        "status": "confirmed_live",
+        "status": "removed",
         "signals": {
           "cdragon_registry": {
             "present": true,
@@ -48969,6 +48972,9 @@
             ],
             "disabledSources": [],
             "removedSources": []
+          },
+          "canonical_alias": {
+            "canonicalSlug": "rejuvenation"
           }
         }
       },
@@ -51567,7 +51573,7 @@
           },
           "existing_catalog": {
             "slug": "squishy-slappy-grab",
-            "lifecycle": "removed"
+            "lifecycle": "active"
           },
           "resolution": {
             "liveSources": [
@@ -53530,7 +53536,7 @@
         "type": "existing:data/internal/augments.json"
       },
       "name_zh_CN": "升级：米凯尔的祝福",
-      "name_zh_TW": "升級：米凱爾的祝福",
+      "name_zh_TW": "升級米凱的祝福",
       "name_ja": "ミカエルの祝福 アップグレード",
       "name_ko": "미카엘의 축복 업그레이드"
     },
@@ -55283,7 +55289,7 @@
             "removed": true
           },
           "tombstone": {
-            "removed": true
+            "removed": false
           },
           "existing_catalog": {
             "slug": "upgrade-sword-of-blossoming-dawn",
@@ -55295,8 +55301,7 @@
             ],
             "disabledSources": [],
             "removedSources": [
-              "cdragon_diff",
-              "tombstone"
+              "cdragon_diff"
             ]
           }
         }
@@ -55381,10 +55386,10 @@
         "flags.lifecycle": "derived:availability.status",
         "type": "existing:data/internal/augments.json"
       },
-      "name_zh_CN": "升级：破晓绽放之剑",
+      "name_zh_CN": "升级：花晓之剑",
       "name_zh_TW": "升級：破曉綻放之劍",
       "name_ja": "花咲く夜明けの剣 アップグレード",
-      "name_ko": "Upgrade Sword of Blossoming Dawn",
+      "name_ko": "꽃피는 새벽의 검 업그레이드",
       "wikiDescription": "Upgrades Sword of Blossoming Dawn, empowering Peppermint to have its healing increased by 250%. Additionally, you gain 100% bonus attack speed.",
       "wikiRarity": "prismatic"
     },
@@ -55948,8 +55953,8 @@
     {
       "augmentId": "ARAM_MissingPingAugment",
       "slug": "missing-ping-augment",
-      "name": "???",
-      "displayName": "???",
+      "name": "Missing Ping",
+      "displayName": "Missing Ping",
       "rarity": "prismatic",
       "cdragonRarity": "prismatic",
       "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/kiwi/augments/icons/missingping_small.png",
@@ -56128,10 +56133,10 @@
         "flags.lifecycle": "derived:availability.status",
         "type": "existing:data/internal/augments.json"
       },
-      "name_zh_CN": "？？？",
-      "name_zh_TW": "？？？",
-      "name_ja": "？？？",
-      "name_ko": "???"
+      "name_zh_CN": "Missing Ping",
+      "name_zh_TW": "Missing Ping",
+      "name_ja": "Missing Ping",
+      "name_ko": "Missing Ping"
     },
     {
       "augmentId": "ARAM_TransmuteGold",

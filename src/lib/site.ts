@@ -23,12 +23,12 @@ export const LEGAL_LAST_UPDATED = "2026-06-20";
 import { routing, type Locale } from "@/i18n/routing";
 
 /**
- * Builds an absolute URL for a path under a given locale, honoring next-intl's
- * `as-needed` prefix policy (default locale has no prefix).
+ * Builds an absolute URL for a path under a given locale. All locales use an
+ * explicit prefix so metadata and runtime routing share one canonical shape.
  */
 export function localizedUrl(path: string, locale: Locale = routing.defaultLocale): string {
   const clean = path === "/" ? "" : path.replace(/^(?!\/)/, "/");
-  const prefix = locale === routing.defaultLocale ? "" : `/${locale}`;
+  const prefix = `/${locale}`;
   return `${SITE_URL}${prefix}${clean}`;
 }
 

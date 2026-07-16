@@ -44,7 +44,7 @@
   },
   "dashboard": {
     "patchLive": "版本 {patch} 已上线",
-    "augmentChangesCount": "{count} 个变更",
+    "augmentChangesCount": "{count} 个当前卡片",
     "seeWhatChanged": "查看更新内容",
     "dismiss": "关闭",
     "heroTopMover": "本版本热门 · {patch}",
@@ -58,10 +58,10 @@
     "metaAugments": "强化数",
     "metaChangedAugments": "本版本变更",
     "metaPatch": "版本",
-    "metaUpdated": "更新时间",
+    "metaUpdated": "目录快照",
     "tierBoardTitle": "S+ / S 排行",
     "tierBoardCta": "完整排名",
-    "augmentChangesTitle": "本版本变更",
+    "augmentChangesTitle": "有版本事件的当前强化",
     "augmentChangesCta": "所有强化",
     "spotlightTitle": "棱彩精选",
     "spotlightTag": "本版本变更",
@@ -252,17 +252,27 @@
     "abilityStatRadius": "半径",
     "abilityStatWidth": "宽度",
     "abilityStatSpeed": "速度",
-    "abilityStatCast": "施放"
+    "abilityStatCast": "施放",
+    "kitTagAbility": "技能",
+    "kitTagAttack": "普攻",
+    "kitTagCc": "控制",
+    "kitTagCrit": "暴击",
+    "kitTagDot": "持续伤害",
+    "kitTagHaste": "技能急速",
+    "kitTagHealShield": "治疗与护盾",
+    "kitTagMovement": "位移",
+    "kitTagOnHit": "攻击特效",
+    "kitTagTank": "耐久"
   },
   "augments": {
     "title": "强化",
-    "subtitle": "{count} 个强化 · 版本 {patch} · 按神谕评分排序",
+    "subtitle": "{count} 个当前强化 · 版本 {patch} · 按公开阶级排序",
     "metaTitle": "ARAM 大乱斗强化",
-    "metaDescription": "浏览 ARAM 大乱斗强化的神谕评分、稀有度、版本状态与英雄组合链接。",
+    "metaDescription": "浏览当前 ARAM 大乱斗强化的公开阶级、稀有度、版本状态与英雄组合链接。",
     "metaDetailTitle": "{name} 强化指南",
     "metaDetailDescription": "{name} 是 {rarity} ARAM 大乱斗强化。查看效果脉络、版本状态与公开英雄强力组合。",
     "search": "搜索名称、套装或效果...",
-    "sortScore": "排序：神谕评分",
+    "sortScore": "排序：公开阶级",
     "sortWinRate": "排序：胜率",
     "sortName": "排序：名称",
     "all": "全部",
@@ -278,6 +288,8 @@
     "hasSpecialNotes": "有特殊备注",
     "winRateAbbr": "胜率",
     "oracleLabel": "Oracle",
+    "qualityTierLabel": "阶级",
+    "unrankedLabel": "尚未排名",
     "tierGodlike": "神级",
     "tierStrong": "强势",
     "tierGood": "良好",
@@ -294,6 +306,7 @@
     "strongOnTierAvoid": "谨慎搭配",
     "strongOnTierRelated": "相关搭配",
     "descriptionHeading": "描述",
+    "descriptionUnavailable": "此历史强化目前没有可确认的简体中文描述；生命周期记录仍保留供查阅。",
     "detailKitSynergy": "套件协同",
     "detailRemovedIn": "已于 {patch} 版本移除",
     "patchSummaryTitle": "版本摘要",
@@ -367,7 +380,13 @@
     "catConsumable": "消耗品",
     "catTrinket": "饰品",
     "catJungle": "打野",
-    "catLane": "线上"
+    "catLane": "线上",
+    "voidImmolationDescription": "完成任务后，将日炎圣盾与璀璨回响合成为一件防御型灼烧装备。",
+    "voidImmolationImmolateLabel": "献祭",
+    "voidImmolationImmolate": "承受或造成伤害后，灼烧附近敌人5秒。",
+    "voidImmolationDesolateLabel": "荒芜",
+    "voidImmolationDesolate": "击杀敌人时，对其周围造成魔法伤害。",
+    "voidImmolationNote": "虚空献祭会计为两个灼烧效果来源。"
   },
   "patchNotes": {
     "title": "版本更新",
@@ -415,6 +434,21 @@
     "removedName": "强化符文",
     "removedRarity": "稀有度",
     "removedVersion": "版本",
+    "removedStatus": "当前状态",
+    "removedReplacedBy": "由当前版本取代：",
+    "removedArchiveOnly": "已归档；不在当前强化池中",
+    "removedAfterSnapshotChange": "此强化在归档前曾检测到来源更新；目前已不在强化池中。",
+    "desolateAddedSummary": "新增“荒芜”：击杀敌人时，会对其周围造成魔法伤害。",
+    "genericChangeSummary": {
+      "buffed": "检测到来源增强调整。",
+      "nerfed": "检测到来源削弱调整。",
+      "changed": "检测到来源描述或数值变更。",
+      "mechanism": "检测到来源机制变更。",
+      "added": "已加入当前来源快照。",
+      "removed": "已从当前来源快照移除。",
+      "fixed": "检测到来源修正。",
+      "hotfix": "检测到正式服热修。"
+    },
   "kinds": {
     "buffed": "增强",
     "nerfed": "削弱",
@@ -465,8 +499,8 @@
     "dataSource": "数据来源：arammayhem.com",
     "notAffiliated": "与拳头游戏无关联",
     "patchLabel": "版本 {patch}",
-    "lastUpdated": "更新于 {date}",
-    "methodology": "段位与排名基于当前版本的胜率数据得出。选取率较低的条目在统计上可靠性较低。"
+    "lastUpdated": "目录快照：{date}",
+    "methodology": "公开阶级依据当前版本的全局胜率来源排列有测量数据的强化；没有测量数据的条目保持尚未排名。"
   },
   "advisor": {
     "title": "大乱斗顾问",
@@ -567,6 +601,8 @@
   "damageSim": {
     "title": "伤害计算器",
     "subtitle": "公式参考 · ARAM 大乱斗 · 对 {armor} 护甲 / {mr} 魔抗基准",
+    "unavailableTitle": "伤害计算器预览暂不开放",
+    "unavailableBody": "在大乱斗装备与强化输入完成验证前，计算器会保持隐藏，不会将空白或部分结果当成可用建议。",
     "buildCalculator": "出装计算器",
     "formulaReference": "公式参考",
     "augmentInteractionsTitle": "按类型分类的强化互动",
@@ -1010,10 +1046,15 @@
     "contactBody": "有问题、发现数据错误，或想提供意见吗？欢迎联系我们。",
     "contactLink": "前往联系页面"
   },
+  "notFound": {
+    "title": "此页面不在当前大乱斗目录中",
+    "body": "此路径可能已过期、被移除，或不适用于当前版本。",
+    "cta": "返回 Mayhem Oracle"
+  },
   "auth": {
     "signIn": {
       "busy": "登录中…",
-      "unavailable": "Google 登录当前不可用。",
+      "unavailable": "此预览环境尚未配置会员登录。",
       "failed": "Google 登录失败，请重试。"
     },
     "errors": {

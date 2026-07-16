@@ -91,6 +91,15 @@ class AugmentQualityTierTests(unittest.TestCase):
         self.assertEqual(summary["ineligibleReasons"]["insufficient-sample-count"], 1)
         self.assertEqual(summary["ineligibleReasons"]["missing-or-invalid-sample-count"], 1)
 
+    def test_current_patch_feed_without_any_sample_count_ranks_real_rates(self):
+        ids = ["A", "B", "C"]
+        current = feed(ids, rates={"A": 53.0, "B": 51.0, "C": 49.0})
+        current.pop("sample_counts")
+        tiers, summary = derive_quality_tiers(catalog=catalog(ids), feed=current, current_patch="26.13")
+        self.assertEqual([tiers[augment_id] for augment_id in ids], ["S+", "A", "B"])
+        self.assertEqual(summary["eligibleAugments"], 3)
+        self.assertEqual(summary["eligibilityPolicy"], "current-patch-global-rank")
+
     def test_stale_patch_and_duplicate_identity_are_neutral(self):
         duplicate_catalog = catalog(["A", "B"])
         duplicate_catalog["augments"].append(dict(duplicate_catalog["augments"][0]))

@@ -44,11 +44,11 @@
       "conflict"
     ],
     "byStatus": {
-      "confirmed_live": 205,
+      "confirmed_live": 204,
       "candidate_registry_present": 1,
       "disabled": 11,
-      "removed": 42,
-      "unverified_legacy": 9,
+      "removed": 44,
+      "unverified_legacy": 8,
       "conflict": 0
     },
     "conflicts": [],
@@ -1799,7 +1799,7 @@
     }
   ],
   "unverifiedLegacy": {
-    "count": 9,
+    "count": 8,
     "augments": [
       {
         "slug": "adaptive-ward",
@@ -1976,52 +1976,6 @@
           },
           "existing_catalog": {
             "slug": "overloaded",
-            "lifecycle": "removed"
-          },
-          "resolution": {
-            "liveSources": [],
-            "disabledSources": [],
-            "removedSources": []
-          }
-        }
-      },
-      {
-        "slug": "pin-cushion",
-        "augmentId": null,
-        "name": "Pin Cushion",
-        "signals": {
-          "cdragon_registry": {
-            "present": false,
-            "augmentId": null,
-            "definitionPlaceholder": false
-          },
-          "kiwi": {
-            "present": false,
-            "keys": [],
-            "tokens": []
-          },
-          "wiki": {
-            "present": false,
-            "status": "absent",
-            "availabilityNotes": [],
-            "hasDescription": false,
-            "hasNotes": false,
-            "wikiFetchedAt": null
-          },
-          "tencent": {
-            "status": null
-          },
-          "telemetry": {
-            "status": null
-          },
-          "patch_notes": {
-            "removed": false
-          },
-          "tombstone": {
-            "removed": false
-          },
-          "existing_catalog": {
-            "slug": "pin-cushion",
             "lifecycle": "removed"
           },
           "resolution": {
@@ -2910,7 +2864,7 @@
     ]
   },
   "removed": {
-    "count": 42,
+    "count": 44,
     "augments": [
       {
         "slug": "bounce-of-the-poro-king",
@@ -3985,6 +3939,55 @@
         }
       },
       {
+        "slug": "pin-cushion",
+        "augmentId": "PinCushion",
+        "name": "Pin Cushion",
+        "signals": {
+          "cdragon_registry": {
+            "present": false,
+            "augmentId": "PinCushion",
+            "definitionPlaceholder": false
+          },
+          "kiwi": {
+            "present": false,
+            "keys": [],
+            "tokens": []
+          },
+          "wiki": {
+            "present": false,
+            "status": "absent",
+            "availabilityNotes": [],
+            "hasDescription": false,
+            "hasNotes": false,
+            "wikiFetchedAt": null
+          },
+          "tencent": {
+            "status": null
+          },
+          "telemetry": {
+            "status": null
+          },
+          "cdragon_diff": {
+            "removed": false
+          },
+          "tombstone": {
+            "removed": false
+          },
+          "existing_catalog": {
+            "slug": "pin-cushion",
+            "lifecycle": "removed"
+          },
+          "resolution": {
+            "liveSources": [],
+            "disabledSources": [],
+            "removedSources": []
+          },
+          "canonical_alias": {
+            "canonicalSlug": "porcupine"
+          }
+        }
+      },
+      {
         "slug": "poro-blaster",
         "augmentId": "ARAM_Poro_Blast",
         "name": "Poro Blaster",
@@ -4084,6 +4087,57 @@
             "removedSources": [
               "tombstone"
             ]
+          }
+        }
+      },
+      {
+        "slug": "rabble-rousing",
+        "augmentId": "ARAM_RabbleRousing",
+        "name": "Rabble Rousing",
+        "signals": {
+          "cdragon_registry": {
+            "present": true,
+            "augmentId": "ARAM_RabbleRousing",
+            "definitionPlaceholder": false
+          },
+          "kiwi": {
+            "present": false,
+            "keys": [],
+            "tokens": []
+          },
+          "wiki": {
+            "present": true,
+            "status": "live",
+            "availabilityNotes": [],
+            "hasDescription": true,
+            "hasNotes": false,
+            "wikiFetchedAt": "2026-07-12T22:39:34+00:00"
+          },
+          "tencent": {
+            "status": null
+          },
+          "telemetry": {
+            "status": null
+          },
+          "cdragon_diff": {
+            "removed": false
+          },
+          "tombstone": {
+            "removed": false
+          },
+          "existing_catalog": {
+            "slug": "rabble-rousing",
+            "lifecycle": "active"
+          },
+          "resolution": {
+            "liveSources": [
+              "wiki"
+            ],
+            "disabledSources": [],
+            "removedSources": []
+          },
+          "canonical_alias": {
+            "canonicalSlug": "rejuvenation"
           }
         }
       },

@@ -13,6 +13,7 @@ export function EntityLink({
   frame,
   qualityTier,
   rarity,
+  onClick,
 }: {
   entity: EntityRef;
   variant?: EntityIconVariant;
@@ -21,6 +22,7 @@ export function EntityLink({
   frame?: EntityIconFrame;
   qualityTier?: AugmentQualityTier | null;
   rarity?: string;
+  onClick?: () => void;
 }) {
   // Keep the server render fail-closed if an older caller passes an unknown
   // variant during static generation; the contract's standard presentation is
@@ -64,6 +66,7 @@ export function EntityLink({
       data-entity-type={entity.type}
       data-entity-id={entity.id}
       className={classes}
+      onClick={onClick}
     >
       {content}
     </Link>

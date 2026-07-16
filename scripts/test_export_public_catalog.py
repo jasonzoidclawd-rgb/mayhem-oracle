@@ -80,6 +80,15 @@ class ExportPublicCatalogTests(unittest.TestCase):
         self.assertEqual([row["id"] for row in result["items"]], [1001])
         self.assertEqual([row["id"] for row in source["items"]], [3168, 3175, 1001])
 
+    def test_void_immolation_uses_the_live_canonical_icon(self):
+        source = {
+            "mayhemExclusive": [],
+            "items": [{"id": 223069, "name": "Void Immolation", "icon": "stale.png"}],
+        }
+        result = enrich_public_items(source)
+        self.assertTrue(result["items"][0]["icon"].endswith("223069_kiwi_voidimmolation.png"))
+        self.assertEqual(source["items"][0]["icon"], "stale.png")
+
     def test_reappeared_live_augments_do_not_keep_removed_patch_metadata(self):
         with TemporaryDirectory() as tmp:
             root = Path(tmp)
@@ -97,6 +106,32 @@ class ExportPublicCatalogTests(unittest.TestCase):
 
             self.assertEqual(result["augments"][0]["flags"]["lifecycle"], "active")
             self.assertNotIn("lifecycle_patch", result["augments"][0]["flags"])
+
+    def test_removed_canonical_alias_exposes_safe_replacement_slug(self):
+        with TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            (root / "augments.json").write_text(json.dumps({
+                "augments": [{
+                    "slug": "pin-cushion",
+                    "flags": {"lifecycle": "removed"},
+                    "availability": {
+                        "signals": {
+                            "canonical_alias": {"canonicalSlug": "porcupine"},
+                        },
+                    },
+                }],
+            }), encoding="utf-8")
+            (root / "pool-rules.json").write_text(json.dumps({
+                "lifecycle": {"removed": {"pin-cushion": "26.13"}},
+            }), encoding="utf-8")
+
+            result = build_public_augments(root, forbidden={"availability"})
+
+            self.assertEqual(
+                result["augments"][0]["flags"]["replacement_slug"],
+                "porcupine",
+            )
+            self.assertNotIn("availability", result["augments"][0])
 
     def test_public_augment_projection_exposes_only_the_categorical_tier(self):
         with TemporaryDirectory() as tmp:

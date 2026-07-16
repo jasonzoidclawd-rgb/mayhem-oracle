@@ -35,7 +35,12 @@ interface AugmentRecord {
   rarity: AugmentRarity;
   type?: AugmentType;
   icon?: string;
+  description?: string;
   wikiDescription?: string;
+  description_zh_TW?: string | null;
+  description_zh_CN?: string | null;
+  description_ja?: string | null;
+  description_ko?: string | null;
   kit_tags?: string[];
   name_zh_TW?: string;
   name_zh_CN?: string;
@@ -235,6 +240,18 @@ export default async function AugmentDetailPage({
       removed: ({ patch }) => t("patchSummaryRemoved", { name: augmentName, patch }),
     },
   );
+  const explicitLocalizedDescription = locale === "zh-TW"
+    ? augment.description_zh_TW
+    : locale === "zh-CN"
+      ? augment.description_zh_CN
+      : locale === "ja"
+        ? augment.description_ja
+        : locale === "ko"
+          ? augment.description_ko
+          : augment.description || augment.wikiDescription;
+  const displayDescription = explicitLocalizedDescription || (locale === "en"
+    ? localizedDescription(augment, locale)
+    : t("descriptionUnavailable"));
 
   return (
     <>
@@ -338,10 +355,10 @@ export default async function AugmentDetailPage({
           </section>
         )}
 
-        {(localizedDescription(augment, locale) || augment.wikiDescription) && (
+        {displayDescription && (
           <section className="glass-card p-5 mb-6" aria-labelledby="augment-description-heading">
             <EntitySectionHeading><span id="augment-description-heading">{t("descriptionHeading")}</span></EntitySectionHeading>
-            <p className="text-[var(--color-text-secondary)] leading-relaxed">{localizedDescription(augment, locale) || augment.wikiDescription}</p>
+            <p className="text-[var(--color-text-secondary)] leading-relaxed">{displayDescription}</p>
           </section>
         )}
 

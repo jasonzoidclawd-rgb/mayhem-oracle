@@ -106,8 +106,6 @@ def normalize_base_url(value: str | None) -> str:
 
 def localized_path(path: str, locale: str) -> str:
     route = path if path.startswith("/") else f"/{path}"
-    if locale == DEFAULT_LOCALE:
-        return route
     return f"/{locale}{route}"
 
 
@@ -281,11 +279,12 @@ def check_status(response: FetchResponse, failures: list[str]) -> bool:
 
 def check_sitemap(
     *,
-    base_url: str,
+    fetch_base_url: str,
+    canonical_base_url: str,
     routes: ExpectedRoutes,
     fetcher: Callable[[str], FetchResponse],
 ) -> SeoCheck:
-    url = absolute_url(base_url, "/sitemap.xml")
+    url = absolute_url(fetch_base_url, "/sitemap.xml")
     response = fetcher(url)
     failures: list[str] = []
     if not check_status(response, failures):
@@ -297,8 +296,8 @@ def check_sitemap(
         failures.append(f"sitemap XML parse failed: {exc}")
         return SeoCheck("sitemap", url, False, failures)
 
-    expected = {absolute_url(base_url, path) for path in routes.list_paths}
-    expected.update(absolute_url(base_url, path) for path in routes.detail_paths)
+    expected = {absolute_url(canonical_base_url, path) for path in routes.list_paths}
+    expected.update(absolute_url(canonical_base_url, path) for path in routes.detail_paths)
     missing = sorted(expected - urls)
     stale_anchors = sorted(
         sitemap_url
@@ -487,6 +486,7 @@ def check_section_ids(
 def check_detail_page(
     *,
     base_url: str,
+    canonical_base_url: str,
     locale: str,
     patch: dict[str, Any],
     fetcher: Callable[[str], FetchResponse],
@@ -502,8 +502,12 @@ def check_detail_page(
 
     parser = parse_html(response.body)
     nodes = extract_json_ld_nodes(response.body)
-    check_canonical(parser=parser, expected_url=url, failures=failures)
-    check_hreflang(parser=parser, base_url=base_url, route=route, failures=failures)
+    check_canonical(
+        parser=parser,
+        expected_url=absolute_url(canonical_base_url, path),
+        failures=failures,
+    )
+    check_hreflang(parser=parser, base_url=canonical_base_url, route=route, failures=failures)
     check_article_json_ld(nodes=nodes, patch=patch, failures=failures)
     check_breadcrumb_json_ld(
         nodes=nodes,
@@ -533,18 +537,25 @@ def summarize_checks(checks: list[SeoCheck]) -> dict[str, Any]:
 def verify_live_patch_seo(
     *,
     base_url: str,
+    canonical_base_url: str | None = None,
     all_patches: bool = False,
     patch_notes_path: Path = PATCH_NOTES_PATH,
     fetcher: Callable[[str], FetchResponse] = fetch_url,
 ) -> dict[str, Any]:
     base_url = normalize_base_url(base_url)
+    canonical_base_url = normalize_base_url(canonical_base_url or base_url)
     data = load_patch_notes(patch_notes_path)
     routes = build_expected_routes(data)
     patches = [patch for patch in data["patches"] if isinstance(patch, dict)]
     patches_to_fetch = patches if all_patches else [routes.newest_patch]
 
     checks: list[SeoCheck] = [
-        check_sitemap(base_url=base_url, routes=routes, fetcher=fetcher),
+        check_sitemap(
+            fetch_base_url=base_url,
+            canonical_base_url=canonical_base_url,
+            routes=routes,
+            fetcher=fetcher,
+        ),
     ]
     checks.extend(
         check_list_page(
@@ -558,6 +569,7 @@ def verify_live_patch_seo(
     checks.extend(
         check_detail_page(
             base_url=base_url,
+            canonical_base_url=canonical_base_url,
             locale=locale,
             patch=patch,
             fetcher=fetcher,
@@ -570,6 +582,7 @@ def verify_live_patch_seo(
     summary.update(
         {
             "baseUrl": base_url,
+            "canonicalBaseUrl": canonical_base_url,
             "mode": "all" if all_patches else "newest",
             "patchesExpected": len(patches),
             "detailPagesFetched": len(patches_to_fetch) * len(SUPPORTED_LOCALES),
@@ -613,6 +626,11 @@ def parse_args(argv: list[str]) -> argparse.Namespace:
         help="Fetch every localized patch detail page instead of only the newest patch.",
     )
     parser.add_argument(
+        "--canonical-base-url",
+        default="https://wasfun.lol",
+        help="Expected public canonical origin when fetching a local preview.",
+    )
+    parser.add_argument(
         "--patch-notes",
         type=Path,
         default=PATCH_NOTES_PATH,
@@ -632,6 +650,7 @@ def main(argv: list[str] | None = None) -> int:
 
     summary = verify_live_patch_seo(
         base_url=base_url,
+        canonical_base_url=args.canonical_base_url,
         all_patches=args.all,
         patch_notes_path=args.patch_notes,
     )

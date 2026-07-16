@@ -54,7 +54,14 @@ function resolveRecord(
   const records = data.entities.filter((record) => record.type === type);
   if (query.canonicalId) {
     const matches = records.filter((record) => record.canonical_id === query.canonicalId);
-    return matches.length === 1 ? matches[0] : null;
+    if (matches.length === 1) return matches[0];
+    if (matches.length > 1 || !query.slug) return null;
+    // Some current CDragon augments publish a string augmentNameId while the
+    // presentation contract uses the stable numeric roster ID. A unique,
+    // already-projected canonical slug is a safe fallback; never guess when
+    // either side is ambiguous.
+    const slugMatches = records.filter((record) => record.slug === query.slug);
+    return slugMatches.length === 1 ? slugMatches[0] : null;
   }
   if (!query.slug) return null;
   const matches = records.filter((record) => record.slug === query.slug);

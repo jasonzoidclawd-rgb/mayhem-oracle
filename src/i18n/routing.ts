@@ -3,7 +3,11 @@ import { defineRouting } from "next-intl/routing";
 export const routing = defineRouting({
   locales: ["en", "zh-TW", "zh-CN", "ja", "ko"],
   defaultLocale: "en",
-  localePrefix: "as-needed", // no /en/ prefix for default locale
+  // Always prefix the locale. With Next 16's production router, rewriting an
+  // unprefixed default-locale URL to /en while also canonicalizing /en back to
+  // the unprefixed URL creates a redirect loop. A single / -> /en redirect is
+  // explicit, crawlable, and keeps every rendered route on one contract.
+  localePrefix: "always",
 });
 
 export type Locale = (typeof routing.locales)[number];
@@ -12,9 +16,7 @@ export function isSupportedLocale(locale: string): locale is Locale {
   return routing.locales.includes(locale as Locale);
 }
 
-const PREFIXED_LOCALES = routing.locales.filter(
-  (locale) => locale !== routing.defaultLocale,
-);
+const PREFIXED_LOCALES = routing.locales;
 
 /**
  * Collapse accidentally doubled locale prefixes (/zh-TW/zh-TW/account →

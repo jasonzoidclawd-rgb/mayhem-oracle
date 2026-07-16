@@ -184,6 +184,14 @@ async function ChangeRow({
     : null;
   const typeLabel = (type: string) =>
     t(`objectTypes.${normalizePatchObjectType(type)}`);
+  const removedTarget = targets.some((target) => target.lifecycle === "removed");
+  const safeText = removedTarget
+    ? t("removedAfterSnapshotChange")
+    : labels.includes("passive-added") && change.subject.en === "Icathia's Fall"
+      ? t("desolateAddedSummary")
+      : chain[0] !== "en" && /[A-Za-z]{4,}/.test(text)
+        ? t(`genericChangeSummary.${normalizedKind}`)
+        : text;
 
   return (
     <li className="rounded-lg border border-[var(--color-border)]/50 bg-[var(--color-bg-card)]/40 px-3 py-3">
@@ -223,7 +231,7 @@ async function ChangeRow({
               </span>
             ) : null}
           </div>
-          <div className="mt-1 text-[var(--color-text-secondary)]">{text}</div>
+          <div className="mt-1 text-[var(--color-text-secondary)]">{safeText}</div>
         </div>
       </div>
 
@@ -249,7 +257,7 @@ async function ChangeRow({
         </div>
       ) : null}
 
-      {metrics.length ? (
+      {metrics.length && chain[0] === "en" && !removedTarget ? (
         <div className="mt-3 grid gap-2 sm:grid-cols-2">
           {metrics.map((metric) => (
             <div
@@ -269,16 +277,8 @@ async function ChangeRow({
         </div>
       ) : null}
 
-      {!compact && (labels.length || engineRefs.length) ? (
+      {!compact && engineRefs.length ? (
         <div className="mt-3 flex flex-wrap gap-2 text-[11px]">
-          {labels.slice(0, 5).map((label) => (
-            <span
-              key={label}
-              className="rounded-full border border-[var(--color-border)] px-2 py-0.5 text-[var(--color-text-muted)]"
-            >
-              {label}
-            </span>
-          ))}
           {engineRefs.length ? (
             <span className="rounded-full border border-amber-400/30 bg-amber-400/10 px-2 py-0.5 text-amber-300">
               {t("modelImpact", { count: engineRefs.length })}

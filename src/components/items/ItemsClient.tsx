@@ -183,7 +183,8 @@ export function ItemsClient({
       list = list.filter(
         (item) =>
           item.name.toLowerCase().includes(q) ||
-          localizedName(item, locale).toLowerCase().includes(q),
+          localizedName(item, locale).toLowerCase().includes(q) ||
+          String(item.id ?? "").includes(q),
       );
     }
     if (category !== "All") {
@@ -299,7 +300,7 @@ function MayhemItemCard({ item, tagLabel, entityRef, itemRefsByName }: { item: I
         </div>
       </div>
 
-      {item.stats && (
+      {locale === "en" && item.stats && (
         <div className="text-xs text-[var(--color-text-secondary)] leading-relaxed">
           <span className="text-[var(--color-text-muted)] mr-1">{t("stats")}:</span>
           {item.stats}
@@ -314,7 +315,9 @@ function MayhemItemCard({ item, tagLabel, entityRef, itemRefsByName }: { item: I
               <span key={`${component}-${index}`} className="inline-flex items-center gap-1">
                 {index > 0 ? <span aria-hidden="true">+</span> : null}
                 <EntityLink
-                  entity={itemRefsByName[component.trim().toLowerCase()] ?? unknownEntityRef("item", { name: component })}
+                  entity={itemRefsByName[component.trim().toLowerCase()]
+                    ?? itemRefsByName[component.toLowerCase().replace(/[^a-z0-9]/g, "")]
+                    ?? unknownEntityRef("item", { name: component })}
                   variant="compact"
                 />
               </span>
@@ -323,7 +326,7 @@ function MayhemItemCard({ item, tagLabel, entityRef, itemRefsByName }: { item: I
         </div>
       )}
 
-      {item.description && (
+      {locale === "en" && item.description && (
         <p className="text-xs text-[var(--color-text-secondary)] leading-relaxed border-t border-[var(--color-border-default)] pt-3">
           {item.description}
         </p>
@@ -452,7 +455,7 @@ function CatalogItemCard({ item, entityRef }: { item: Item; entityRef?: EntityRe
   const name = localizedName(item, locale);
   const ref = presentationRef(item, name, entityRef);
 
-  const tooltipContent = item.description
+  const tooltipContent = locale === "en" && item.description
     ? <p>{item.description}</p>
     : undefined;
 

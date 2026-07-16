@@ -28,11 +28,21 @@ type ChampionRecord = LocalizedNameRecord &
 type AugmentRecord = LocalizedNameRecord &
   ChangedAugment & {
     wikiDescription?: string;
+    description?: string;
+    description_zh_TW?: string;
+    description_zh_CN?: string;
+    description_ja?: string;
+    description_ko?: string;
+    flags?: { lifecycle?: string };
   };
 
 type ComboRecord = { champion: string; augment: string; tier: string };
 
-type PatchNoteChange = { text: { en: string } };
+type PatchNoteChange = {
+  subject?: { en?: string };
+  text: { en: string };
+  targets?: Array<{ slug?: string }>;
+};
 type PatchNoteSection = { id: string; changes: PatchNoteChange[] };
 
 export default async function HomePage({
@@ -53,7 +63,9 @@ export default async function HomePage({
   ]);
 
   const champions = championsFile.champions;
-  const augments = augmentsFile.augments;
+  const augments = augmentsFile.augments.filter(
+    (augment) => augment.flags?.lifecycle === "active" || augment.flags?.lifecycle === "added",
+  );
   const { patch, scraped_at } = metaFile;
 
   // A new champion may be present in the roster before the third-party
@@ -79,7 +91,10 @@ export default async function HomePage({
 
   const changedAugmentsBySlug = new Map<string, AugmentRecord>();
   for (const change of augmentChangeEntries) {
-    const augment = augByName.get(change.text.en);
+    const targetSlug = change.targets?.find((target) => target.slug)?.slug;
+    const augment = targetSlug
+      ? augments.find((candidate) => candidate.slug === targetSlug)
+      : augByName.get(change.subject?.en ?? change.text.en);
     if (augment && !changedAugmentsBySlug.has(augment.slug)) {
       changedAugmentsBySlug.set(augment.slug, augment);
     }
@@ -108,6 +123,7 @@ export default async function HomePage({
 
   return (
     <>
+      <h1 className="sr-only">Mayhem Oracle</h1>
       <DashboardIslands />
       <div className="grid grid-cols-1 gap-3 md:grid-cols-6 md:gap-3.5 lg:grid-cols-12 lg:gap-4">
         <PatchPulseBanner patch={patch} updatedAt={scraped_at} />
@@ -117,13 +133,13 @@ export default async function HomePage({
           sPlusCount={sPlusCount}
           championCount={champions.length}
           augmentCount={augments.length}
-          changedAugmentCount={changedAugments.length}
+          changedAugmentCount={augmentChangeEntries.length}
           patch={patch}
           updatedAt={scraped_at}
         />
         <TierMiniGrid champions={tierChampions} entityPresentation={entityPresentation} />
         <MoversCarousel augments={changedAugments} entityPresentation={entityPresentation} />
-        {spotlight && <AugmentSpotlight augment={spotlight} isChangedThisPatch={isSpotlightChanged} entityPresentation={entityPresentation} />}
+        {spotlight && <AugmentSpotlight augment={spotlight} locale={locale} isChangedThisPatch={isSpotlightChanged} entityPresentation={entityPresentation} />}
         <ComboHighlights combos={rankedCombos} entityPresentation={entityPresentation} />
         <AdvisorTeaser />
         <CompanionLauncher />

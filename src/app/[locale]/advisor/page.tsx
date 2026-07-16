@@ -80,6 +80,7 @@ export default async function AdvisorPage({
   if (!active) {
     return (
       <div className="mx-auto flex max-w-md flex-col items-center gap-5 py-16">
+        <h1 className="text-center text-2xl font-bold">{t("advTitle")}</h1>
         <MembershipGate title={t("lockedTitle")} body={t("lockedBody")} cta={t("lockedCta")} />
         {!signedIn ? (
           <GoogleSignInButton next="/advisor" label={t("signInCta")} size="medium" />

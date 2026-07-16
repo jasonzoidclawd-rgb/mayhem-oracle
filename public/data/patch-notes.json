@@ -187,11 +187,11 @@
             },
             {
               "subject": {
-                "en": "???",
-                "zh-tw": "？？？",
-                "zh-cn": "？？？",
-                "ja-jp": "？？？",
-                "ko-kr": "???"
+                "en": "Missing Ping",
+                "zh-tw": "Missing Ping",
+                "zh-cn": "Missing Ping",
+                "ja-jp": "Missing Ping",
+                "ko-kr": "Missing Ping"
               },
               "text": {
                 "en": "Description:  → Your Missing Pings will launch a missile at the pinged location that deals — + — % missing Health magic damage to enemies and heals allies for — + — % missing Health .",
@@ -210,20 +210,19 @@
                   "id": "ARAM_MissingPingAugment",
                   "canonicalId": "ARAM_MissingPingAugment",
                   "slug": "missing-ping-augment",
-                  "routeIdentifier": "missing-ping-augment",
-                  "localizedName": "???",
+                  "routeIdentifier": "",
+                  "localizedName": "Missing Ping",
                   "iconUrl": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/kiwi/augments/icons/missingping_small.png",
-                  "name": "???",
-                  "known": true,
+                  "name": "Missing Ping",
+                  "known": false,
                   "names": {
-                    "zh-tw": "？？？",
-                    "zh-cn": "？？？",
-                    "ja-jp": "？？？",
-                    "ko-kr": "???"
+                    "zh-tw": "Missing Ping",
+                    "zh-cn": "Missing Ping",
+                    "ja-jp": "Missing Ping",
+                    "ko-kr": "Missing Ping"
                   },
                   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/kiwi/augments/icons/missingping_small.png",
-                  "lifecycle": "active",
-                  "href": "/augments/missing-ping-augment"
+                  "lifecycle": "removed"
                 }
               ],
               "relatedEntities": [],
@@ -342,7 +341,7 @@
                   "slug": "void-immolation",
                   "routeIdentifier": "223069",
                   "localizedName": "Void Immolation",
-                  "iconUrl": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/223069_kiwi_voidimmolation.mayhem_new_augments.png",
+                  "iconUrl": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/223069_kiwi_voidimmolation.png",
                   "name": "Void Immolation",
                   "known": true,
                   "names": {
@@ -352,7 +351,7 @@
                     "ko-kr": "공허의 불길"
                   },
                   "href": "/items/223069",
-                  "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/223069_kiwi_voidimmolation.mayhem_new_augments.png"
+                  "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/223069_kiwi_voidimmolation.png"
                 }
               ],
               "metrics": [

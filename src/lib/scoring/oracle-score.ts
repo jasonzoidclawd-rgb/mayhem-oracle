@@ -38,6 +38,10 @@ export interface ScoredAugment {
   wikiSet?: string;
   description?: string;
   wikiDescription?: string;
+  description_zh_TW?: string;
+  description_zh_CN?: string;
+  description_ja?: string;
+  description_ko?: string;
   notes?: string[];
   kit_tags?: ChampionTag[];
   availability?: { status?: string };

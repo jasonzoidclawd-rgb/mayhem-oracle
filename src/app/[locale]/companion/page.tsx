@@ -31,6 +31,7 @@ type RawAugment = {
   name_ja?: string;
   name_ko?: string;
   rarity?: "silver" | "gold" | "prismatic";
+  flags?: { lifecycle?: string };
 };
 
 export async function generateMetadata({
@@ -86,13 +87,15 @@ export default async function CompanionPage({
     }))
     .sort((a, b) => a.name.localeCompare(b.name));
 
-  const augmentOptions: CompanionAugmentOption[] = augments.map((augment) => ({
-    slug: augment.slug,
-    displayName: localizedName(augment, locale),
-    searchName: augment.name,
-    rarity: augment.rarity ?? "gold",
-    entity: resolveEntityRef(entityData, "augment", { slug: augment.slug }, locale) ?? undefined,
-  }));
+  const augmentOptions: CompanionAugmentOption[] = augments
+    .filter((augment) => augment.flags?.lifecycle === "active" || augment.flags?.lifecycle === "added")
+    .map((augment) => ({
+      slug: augment.slug,
+      displayName: localizedName(augment, locale),
+      searchName: augment.name,
+      rarity: augment.rarity ?? "gold",
+      entity: resolveEntityRef(entityData, "augment", { slug: augment.slug }, locale) ?? undefined,
+    }));
 
   return (
     <CompanionClient

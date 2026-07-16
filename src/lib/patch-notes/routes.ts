@@ -9,7 +9,8 @@ export function findPatchByVersion(
   data: PatchNotesData | null | undefined,
   version: string,
 ): PatchNote | null {
-  return data?.patches.find((patch) => patch.version === version) ?? null;
+  const normalizedVersion = /^\d{2}-\d{1,2}$/.test(version) ? version.replace("-", ".") : version;
+  return data?.patches.find((patch) => patch.version === normalizedVersion) ?? null;
 }
 
 export function buildPatchDetailStaticParams(
@@ -18,6 +19,9 @@ export function buildPatchDetailStaticParams(
 ): { locale: Locale; patch: string }[] {
   if (!data?.patches?.length) return [];
   return locales.flatMap((locale) =>
-    data.patches.map((patch) => ({ locale, patch: patch.version })),
+    data.patches.flatMap((patch) => [
+      { locale, patch: patch.version },
+      { locale, patch: patch.version.replace(".", "-") },
+    ]),
   );
 }

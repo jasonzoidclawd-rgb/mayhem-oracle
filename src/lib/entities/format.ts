@@ -21,10 +21,10 @@ export function formatEntityStatValue(value: unknown, unit: EntityStat["unit"]):
     const number = formatNumber(value);
     if (unit === "percent") return `${number}%`;
     if (unit === "multiplier") return `${number}×`;
-    if (unit === "per5") return `${number}/5 sec`;
+    if (unit === "per5") return `${number}/5s`;
     if (unit === "gold") return `${number}g`;
-    if (unit === "seconds") return `${number} sec`;
-    if (unit === "units") return `${number} units`;
+    if (unit === "seconds") return `${number}s`;
+    if (unit === "units") return String(number);
     return number;
   }
   return typeof value === "string" ? value : "—";

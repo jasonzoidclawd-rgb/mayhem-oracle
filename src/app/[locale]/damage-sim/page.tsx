@@ -197,6 +197,7 @@ export async function generateMetadata({
     },
     openGraph: { title, description, url, locale },
     twitter: { card: "summary_large_image", title, description },
+    robots: { index: false, follow: false },
   };
 }
 
@@ -412,6 +413,23 @@ export default async function DamageSimPage({
     }
   }
   calcItems.sort((a, b) => a.name.localeCompare(b.name));
+
+  const hasVerifiedCalculatorData =
+    calcItems.length > 0 &&
+    deduped.length > 0 &&
+    apDeduped.length > 0 &&
+    tagged.length > 0;
+
+  if (!hasVerifiedCalculatorData) {
+    return (
+      <main className="mx-auto max-w-2xl py-16 text-center">
+        <h1 className="text-3xl font-bold">{t("unavailableTitle")}</h1>
+        <p className="mx-auto mt-3 max-w-xl text-sm leading-6 text-[var(--color-text-secondary)]">
+          {t("unavailableBody")}
+        </p>
+      </main>
+    );
+  }
 
   return (
     <div className="py-8 max-w-5xl space-y-10">

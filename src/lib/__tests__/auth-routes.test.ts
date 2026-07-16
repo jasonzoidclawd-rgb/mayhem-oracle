@@ -144,7 +144,7 @@ describe("auth routes", () => {
       source.indexOf("if (!user)"),
     );
     expect(source).toContain(
-      'const signoutNext = locale === "en" ? "/" : `/${locale}`;',
+      'const signoutNext = `/${locale}`;',
     );
     expect(source).toContain(
       "action={`/api/auth/signout?next=${encodeURIComponent(signoutNext)}`}",

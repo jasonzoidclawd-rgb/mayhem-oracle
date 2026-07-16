@@ -110,6 +110,9 @@ describe("public data boundary", () => {
     const forbiddenItemKeys = new Set(forbiddenTelemetry);
     const forbiddenAugmentKeys = new Set([...forbiddenTelemetry, "wikiNotes"]);
 
+    expect(publicAugments).not.toHaveProperty("counts");
+    expect(publicAugments).not.toHaveProperty("sources");
+
     // Freemium teaser: a small slice of S-tier "strong combos" is published
     // (names + tier only) for SEO/AI-citability and as a conversion hook. The
     // full combo set, traps (C-tier), oracle scores, and the curated internal
