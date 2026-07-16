@@ -695,6 +695,29 @@ fn running_application(process_id: u32) -> FrontmostApplication {
 }
 
 #[cfg(target_os = "macos")]
+fn workspace_frontmost_application() -> FrontmostApplication {
+    unsafe {
+        let workspace: cocoa::base::id =
+            objc::msg_send![objc::class!(NSWorkspace), sharedWorkspace];
+        if workspace.is_null() {
+            return FrontmostApplication::default();
+        }
+
+        let application: cocoa::base::id = objc::msg_send![workspace, frontmostApplication];
+        if application.is_null() {
+            return FrontmostApplication::default();
+        }
+
+        let process_id: i32 = objc::msg_send![application, processIdentifier];
+        FrontmostApplication {
+            app_name: ns_string_value(objc::msg_send![application, localizedName]),
+            bundle_identifier: ns_string_value(objc::msg_send![application, bundleIdentifier]),
+            process_id: (process_id > 0).then_some(process_id as u32),
+        }
+    }
+}
+
+#[cfg(target_os = "macos")]
 unsafe fn cf_dictionary_value(
     dictionary: &core_foundation::dictionary::CFDictionary,
     key: &'static str,
@@ -747,21 +770,24 @@ fn foreground_window_metadata() -> (FrontmostApplication, Option<String>, Option
         copy_window_info, kCGWindowListExcludeDesktopElements, kCGWindowListOptionOnScreenOnly,
     };
 
+    let foreground_application = workspace_frontmost_application();
+    let foreground_process_id = foreground_application.process_id;
+
     let Some(windows) = copy_window_info(
         kCGWindowListOptionOnScreenOnly | kCGWindowListExcludeDesktopElements,
         0,
     ) else {
-        return (FrontmostApplication::default(), None, None, false);
+        return (foreground_application, None, None, false);
     };
 
     let own_process_id = std::process::id();
-    let mut foreground_application = FrontmostApplication::default();
     let mut foreground_owner_name = None;
     let mut foreground_window_title = None;
     let mut game_window_detected = false;
 
-    // CoreGraphics returns visible windows front-to-back. Ignore menu/status
-    // layers and our own always-on-top windows before choosing the app window.
+    // NSWorkspace identifies the actual frontmost process, including a
+    // fullscreen Metal game with no regular CoreGraphics window. CoreGraphics
+    // only supplies optional owner/title metadata for that process.
     for window_ref in windows.get_all_values() {
         if window_ref.is_null() {
             continue;
@@ -797,15 +823,11 @@ fn foreground_window_metadata() -> (FrontmostApplication, Option<String>, Option
             continue;
         }
 
-        if foreground_application.process_id.is_none() {
-            foreground_application = FrontmostApplication {
-                app_name: application
-                    .app_name
-                    .or_else(|| owner_name.clone())
-                    .filter(|value| !value.is_empty()),
-                bundle_identifier: application.bundle_identifier,
-                process_id: Some(process_id),
-            };
+        if Some(process_id) != foreground_process_id {
+            continue;
+        }
+
+        if foreground_owner_name.is_none() {
             foreground_owner_name = owner_name.filter(|value| !value.is_empty());
             foreground_window_title = title.filter(|value| !value.is_empty());
         }

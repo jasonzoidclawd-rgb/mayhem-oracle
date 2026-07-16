@@ -134,6 +134,22 @@ mod tests {
     }
 
     #[test]
+    fn fullscreen_game_bundle_grants_focus_without_a_regular_window() {
+        let state = classify_foreground(ForegroundObservation {
+            app_name: Some("League Of Legends"),
+            bundle_identifier: Some(LEAGUE_GAME_BUNDLE_ID),
+            owner_name: None,
+            window_title: None,
+            game_running: true,
+            game_window_detected: false,
+        });
+
+        assert!(state.game_window_foreground);
+        assert!(!state.riot_client_foreground);
+        assert!(!state.game_window_detected);
+    }
+
+    #[test]
     fn league_client_ux_is_not_the_game_foreground() {
         let state = classify_foreground(observation(
             "League of Legends",
