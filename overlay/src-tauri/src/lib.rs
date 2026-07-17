@@ -190,11 +190,18 @@ pub struct OcrCardDiagnostic {
 }
 
 #[derive(Serialize, Deserialize, Clone, Debug)]
+#[serde(rename_all = "camelCase")]
 pub struct OcrScanResult {
     pub detected: Vec<DetectedAugment>,
     pub diagnostics: Vec<OcrCardDiagnostic>,
     pub capture_attempted: bool,
     pub crop_count: usize,
+    /// Screenshot + crop extraction duration for this scan, in milliseconds.
+    pub capture_ms: u64,
+    /// OCR recognition duration (all cards, run concurrently), in milliseconds.
+    pub ocr_ms: u64,
+    /// Total native scan duration, in milliseconds.
+    pub total_ms: u64,
 }
 
 // ─── OCR Commands ───────────────────────────────────────────────────────────
@@ -501,6 +508,7 @@ fn capture_card_name_crops() -> Result<CardCropSet, String> {
 
 #[tauri::command]
 async fn detect_augment_names(known_names: Option<Vec<String>>) -> Result<OcrScanResult, String> {
+    let scan_start = std::time::Instant::now();
     if !collect_foreground_state().game_window_foreground {
         let reason = "actual-game-window-not-foreground".to_string();
         return Ok(OcrScanResult {
@@ -519,9 +527,13 @@ async fn detect_augment_names(known_names: Option<Vec<String>>) -> Result<OcrSca
                 .collect(),
             capture_attempted: false,
             crop_count: 0,
+            capture_ms: 0,
+            ocr_ms: 0,
+            total_ms: scan_start.elapsed().as_millis() as u64,
         });
     }
 
+    let capture_start = std::time::Instant::now();
     let crop_set = match capture_card_name_crops() {
         Ok(crop_set) => crop_set,
         Err(error) => {
@@ -541,9 +553,13 @@ async fn detect_augment_names(known_names: Option<Vec<String>>) -> Result<OcrSca
                     .collect(),
                 capture_attempted: false,
                 crop_count: 0,
+                capture_ms: capture_start.elapsed().as_millis() as u64,
+                ocr_ms: 0,
+                total_ms: scan_start.elapsed().as_millis() as u64,
             });
         }
     };
+    let capture_ms = capture_start.elapsed().as_millis() as u64;
     let capture_attempted = crop_set.capture_attempted;
     let crop_count = crop_set.crops.len();
     let locale = ocr::detect_game_locale();
@@ -559,6 +575,7 @@ async fn detect_augment_names(known_names: Option<Vec<String>>) -> Result<OcrSca
             .collect(),
     );
 
+    let ocr_start = std::time::Instant::now();
     let mut handles = Vec::with_capacity(crop_set.crops.len());
     for crop in crop_set.crops {
         let region_index = crop.region_index;
@@ -616,6 +633,9 @@ async fn detect_augment_names(known_names: Option<Vec<String>>) -> Result<OcrSca
         diagnostics,
         capture_attempted,
         crop_count,
+        capture_ms,
+        ocr_ms: ocr_start.elapsed().as_millis() as u64,
+        total_ms: scan_start.elapsed().as_millis() as u64,
     })
 }
 

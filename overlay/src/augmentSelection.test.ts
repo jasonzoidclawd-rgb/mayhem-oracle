@@ -1,6 +1,5 @@
 import { describe, expect, it } from "vitest";
 import {
-  advanceOcrSelection,
   augmentRoundForLevel,
   isCompleteThreeCardOffer,
   ocrRunIsCurrent,
@@ -18,27 +17,6 @@ describe("augment OCR lifecycle", () => {
   it("does not erase a round on a transient missing gameflow response", () => {
     expect(shouldClearOcrStateForGameflow(null)).toBe(false);
     expect(shouldClearOcrStateForGameflow({ liveCaptureAllowed: false })).toBe(true);
-  });
-
-  it("does not stop after an initial empty capture and stops only after a seen offer disappears", () => {
-    const initial = advanceOcrSelection(
-      { hasSeenCards: false, emptyPasses: 0 },
-      0,
-    );
-    expect(initial.shouldStop).toBe(false);
-
-    const seen = advanceOcrSelection(
-      { hasSeenCards: initial.hasSeenCards, emptyPasses: initial.emptyPasses },
-      3,
-    );
-    expect(seen.hasSeenCards).toBe(true);
-    expect(seen.shouldStop).toBe(false);
-
-    const stale = advanceOcrSelection(
-      { hasSeenCards: seen.hasSeenCards, emptyPasses: seen.emptyPasses },
-      0,
-    );
-    expect(stale.shouldStop).toBe(false);
   });
 
   it("requires one fresh atomic offer across all three regions", () => {
@@ -64,7 +42,32 @@ describe("augment OCR lifecycle", () => {
     ).toBe(false);
   });
 
-  it("restarts OCR for R2 after R1 selection completes", () => {
+  it("never ends an open selection because the champion leveled up", () => {
+    // Reported defect: level 3 → 4 while the R1 offer was still open cleared
+    // every badge. Level is a round-boundary trigger ONLY — a level gained
+    // mid-offer must keep phase and never signal completion.
+    const midOffer = transitionAugmentRound({
+      playerLevel: 4,
+      lastAugmentLevel: 3,
+      phase: "augment_selection",
+    });
+    expect(midOffer.isNewRound).toBe(false);
+    expect(midOffer.nextPhase).toBe("augment_selection");
+    expect("selectionComplete" in midOffer).toBe(false);
+
+    // Several levels gained during one open offer (4, 5, 6) — same result.
+    for (const playerLevel of [4, 5, 6]) {
+      const transition = transitionAugmentRound({
+        playerLevel,
+        lastAugmentLevel: 3,
+        phase: "augment_selection",
+      });
+      expect(transition.isNewRound).toBe(false);
+      expect(transition.nextPhase).toBe("augment_selection");
+    }
+  });
+
+  it("starts R1 at level 3 and R2 at level 7 as new-round boundaries", () => {
     const r1 = transitionAugmentRound({
       playerLevel: 3,
       lastAugmentLevel: 0,
@@ -76,16 +79,6 @@ describe("augment OCR lifecycle", () => {
       nextPhase: "augment_selection",
     });
 
-    const afterSelection = transitionAugmentRound({
-      playerLevel: 4,
-      lastAugmentLevel: r1.round!.level,
-      phase: "augment_selection",
-    });
-    expect(afterSelection).toMatchObject({
-      selectionComplete: true,
-      nextPhase: "in_game",
-    });
-
     const r2 = transitionAugmentRound({
       playerLevel: 7,
       lastAugmentLevel: r1.round!.level,
@@ -94,31 +87,30 @@ describe("augment OCR lifecycle", () => {
     expect(r2).toMatchObject({
       round: { round: 2, level: 7 },
       isNewRound: true,
-      selectionComplete: false,
       nextPhase: "augment_selection",
     });
   });
 
-  it("restarts OCR for R3 after R2 selection completes", () => {
-    expect(augmentRoundForLevel(6)).toEqual({ round: 1, level: 3 });
-    expect(augmentRoundForLevel(12)).toEqual({ round: 3, level: 11 });
-
-    const afterR2 = transitionAugmentRound({
-      playerLevel: 8,
-      lastAugmentLevel: 7,
-      phase: "augment_selection",
-    });
-    expect(afterR2.nextPhase).toBe("in_game");
-
+  it("crosses a round boundary even while the previous offer is still open", () => {
+    // If the player somehow levels straight across the next threshold while an
+    // offer is displayed, the boundary still wins: a NEW round begins and the
+    // stale offer is replaced by the new-round reset.
     const r3 = transitionAugmentRound({
       playerLevel: 11,
       lastAugmentLevel: 7,
-      phase: afterR2.nextPhase,
+      phase: "augment_selection",
     });
     expect(r3).toMatchObject({
       round: { round: 3, level: 11 },
       isNewRound: true,
       nextPhase: "augment_selection",
     });
+  });
+
+  it("maps levels onto augment rounds", () => {
+    expect(augmentRoundForLevel(2)).toBeNull();
+    expect(augmentRoundForLevel(6)).toEqual({ round: 1, level: 3 });
+    expect(augmentRoundForLevel(12)).toEqual({ round: 3, level: 11 });
+    expect(augmentRoundForLevel(18)).toEqual({ round: 4, level: 15 });
   });
 });

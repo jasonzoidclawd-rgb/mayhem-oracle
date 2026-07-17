@@ -4,6 +4,36 @@ This file captures recent overlay findings so future agents do not rediscover
 them from screenshots, terminal history, or old handoffs. It is context only.
 Do not treat it as permission to change runtime behavior without a task.
 
+## Latched Offer Lifecycle + Riot zh-TW Identity Bridge (2026-07-17, PR #46)
+
+- `overlay/src/offerLifecycle.ts` owns augment-offer state: per-slot OCR-title
+  fingerprints, latch-until-evidence clearing (2-pass surface absence, pick
+  confirm, round boundary, focus loss, gameflow), per-slot reroll invalidation,
+  and atomic generation publishes. Champion level is a round-boundary trigger
+  ONLY — `transitionAugmentRound` no longer has `selectionComplete` (the level
+  3→4 badge wipe root cause).
+- OCR card identity (dev tier-fixture) resolves zh-TW OCR title → ARAMGG's
+  Riot zh-TW catalog (`aram-mayhem-augments.zh_tw.json`) → canonical numeric
+  augment ID → ARAMGG stats (`resolveOcrTitle` in `dev/aramggSource.ts`).
+  Icons are never consulted (quest cards obscure them; generic icons are
+  shared). Ambiguity rejects; zh-CN exact is a logged last resort.
+  疾速追擊 (id 2100) was the proving case: local catalog has regressed English
+  localized names + `lifecycle: "removed"`, so `buildOverlayAugmentLookup` now
+  includes non-live augments (on-screen evidence trumps catalog lifecycle;
+  pool prediction still excludes them).
+- Badges are compact chips (`BADGE_CHIP_SIZE` 168×32) placed ABOVE the card
+  frame derived from the detected name band (`cardFrameFromNameRect`), with
+  side-anchor fallback and per-slot states: tier/WR, SCANNING, UNMATCHED,
+  NO ARAMGG DATA. Dev calibration panel moved to bottom-left — top-right
+  collided with the rightmost chip at 1280×720.
+- Native `detect_augment_names` returns `captureMs`/`ocrMs`/`totalMs`
+  (`OcrScanResult` also gained the missing serde camelCase rename); the
+  frontend adds `matchMs`/`endToEndMs` to the diagnostics lifecycle panel.
+- Known non-blockers: rustfmt drift pre-exists in `collector.rs`/`lcu.rs`/
+  `member.rs`/`tests/member_contract.rs` (untouched); Windows MSVC
+  cross-`cargo check` from macOS dies in `ring`'s C build (needs a Windows C
+  toolchain) — Windows readiness is compile-gated but not machine-validated.
+
 ## Focus-Safety Finding
 
 The old macOS focus trap came from rendering consent and collector controls

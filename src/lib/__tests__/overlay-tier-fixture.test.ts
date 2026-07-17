@@ -13,6 +13,7 @@ import {
 } from "../../../overlay/src/dev/tierFixture";
 import {
   buildCatalogIndex,
+  buildRiotTitleIndex,
   decimalShiftPercent,
   loadAramggSource,
   numericTierToGrade,
@@ -21,6 +22,7 @@ import {
   parseNumericTier,
   parseStatsList,
   resolveAugmentId,
+  resolveOcrTitle,
   type AramggRaws,
   type AramggStat,
 } from "../../../overlay/src/dev/aramggSource";
@@ -45,11 +47,46 @@ const CATALOG = {
   "1006": { name: "ARAM_Warlock", displayName: "术士", iconLarge: "WarlockJuicebox_large.png" },
 };
 
+// Riot-localized zh-TW catalog (same numeric IDs / canonical ARAM_* names as
+// the zh_cn file, displayName in Traditional Chinese). 2100 mirrors the REAL
+// live-failure augment: 疾速追擊 (Pursuit of Haste, ARAM_SpecializedRecursion),
+// whose icon is a GENERIC gold ability icon shared by many augments — identity
+// must come from the zh-TW title alone (quest cards also obscure the icon).
+const CATALOG_ZH_TW = {
+  "2100": {
+    name: "ARAM_SpecializedRecursion",
+    displayName: "疾速追擊",
+    iconLarge: "GenericAbilityAugmentIcon_Gold_large.png",
+  },
+  // Riot identity resolves but ARAMGG has NO stat record (distinct state).
+  "2101": {
+    name: "ARAM_NoStats",
+    displayName: "無數據增幅",
+    iconLarge: "GenericAbilityAugmentIcon_Gold_large.png",
+  },
+  // Two entries share a zh-TW display name → ambiguous, must be rejected.
+  "2102": {
+    name: "ARAM_Dup1",
+    displayName: "同名增幅",
+    iconLarge: "GenericAbilityAugmentIcon_Gold_large.png",
+  },
+  "2103": {
+    name: "ARAM_Dup2",
+    displayName: "同名增幅",
+    iconLarge: "GenericAbilityAugmentIcon_Gold_large.png",
+  },
+  // zh-TW name deliberately far from the zh-CN "阿尔法" so the zh-CN exact
+  // last-resort path is reachable.
+  "1001": { name: "ARAM_Alpha", displayName: "阿爾法泰坦", iconLarge: "Alpha_large.png" },
+};
+
 const STATS_RAW = [
   ["1001", JSON.stringify({ win_rate: "0.563213", num_games: "988166", pick_rate: "0.008409", tier: "2" })],
   // length-5 entry: blob at index 1, trailing metadata (mirrors observed data)
   ["1002", JSON.stringify({ win_rate: "0.5", num_games: "60000", tier: "1" }), "m1", "m2", "m3"],
   ["1006", JSON.stringify({ win_rate: "0.641955", num_games: "1903216", pick_rate: "0.02", tier: "1" })],
+  // 疾速追擊 — the real ARAMGG record (id 2100, tier 2 → S).
+  ["2100", JSON.stringify({ win_rate: "0.537058", num_games: "79794", pick_rate: "0.01", tier: "2" })],
   ["1009", JSON.stringify({ win_rate: "0.4", num_games: "500", tier: "9" })], // bad tier → skipped
   ["1010", 12345], // no string blob → skipped
   "not-an-array", // skipped
@@ -201,6 +238,106 @@ describe("overlay ARAMGG tier fixture (dev-only)", () => {
     });
   });
 
+  describe("Riot zh-TW title bridge (quest augment identity)", () => {
+    const index = buildRiotTitleIndex(CATALOG_ZH_TW, CATALOG);
+
+    test("疾速追擊: exact zh-TW OCR title → canonical numeric ID 2100", () => {
+      const riot = resolveOcrTitle("疾速追擊", index);
+      expect(riot).toMatchObject({
+        augmentId: "2100",
+        canonicalName: "ARAM_SpecializedRecursion",
+        zhTwName: "疾速追擊",
+        method: "riot-zh-tw-exact",
+        confidence: 1,
+      });
+    });
+
+    test("resolution is icon-independent: the shared generic gold icon plays no role", () => {
+      // 2100 and 2101 share GenericAbilityAugmentIcon_Gold — icon-based
+      // resolution would be ambiguous. The title bridge never consults the
+      // icon (resolveOcrTitle takes no icon input), so BOTH resolve uniquely
+      // — exactly the quest-card case where the icon is obscured anyway.
+      expect(resolveOcrTitle("疾速追擊", index).augmentId).toBe("2100");
+      expect(resolveOcrTitle("無數據增幅", index).augmentId).toBe("2101");
+    });
+
+    test("疾速追击 (one-character Simplified drift) resolves via unambiguous zh-TW fuzzy", () => {
+      const riot = resolveOcrTitle("疾速追击", index);
+      expect(riot).toMatchObject({
+        augmentId: "2100",
+        method: "riot-zh-tw-fuzzy",
+        confidence: 0.9,
+      });
+    });
+
+    test("an ambiguous zh-TW name is rejected, never guessed", () => {
+      const rejection = resolveOcrTitle("同名增幅", index);
+      expect(rejection.augmentId).toBeNull();
+      expect((rejection as { reason: string }).reason).toBe("ambiguous-zh-tw-name");
+    });
+
+    test("zh-CN exact name is a logged LAST RESORT with reduced confidence", () => {
+      // "阿尔法" appears only in the zh_cn catalog; no zh-TW name is within
+      // one-character drift, so the Simplified exact path is the only match.
+      const riot = resolveOcrTitle("阿尔法", index);
+      expect(riot).toMatchObject({
+        augmentId: "1001",
+        method: "riot-zh-cn-exact",
+        confidence: 0.8,
+      });
+    });
+
+    test("an unknown title is rejected as riot-catalog-unmatched", () => {
+      const rejection = resolveOcrTitle("不存在的增幅名", index);
+      expect(rejection.augmentId).toBeNull();
+      expect((rejection as { reason: string }).reason).toBe("riot-catalog-unmatched");
+    });
+
+    test("an empty/whitespace title is rejected as empty-title", () => {
+      for (const empty of ["", "   ", null, undefined]) {
+        const rejection = resolveOcrTitle(empty, index);
+        expect(rejection.augmentId).toBeNull();
+        expect((rejection as { reason: string }).reason).toBe("empty-title");
+      }
+    });
+
+    test("'Riot resolved, no ARAMGG record' is distinguishable from 'unresolved'", () => {
+      const source = parseAramggSource(
+        {
+          stats: STATS_RAW,
+          catalog: CATALOG,
+          catalogZhTw: CATALOG_ZH_TW,
+          changelog: { latest: "16.13" },
+        },
+        0,
+      );
+      // 疾速追擊: identity resolved AND a live stat record exists.
+      const haste = resolveOcrTitle("疾速追擊", source.titleIndex);
+      expect(haste.augmentId).toBe("2100");
+      expect(source.statsById.get("2100")?.winRatePercent).toBe("53.7058");
+      expect(source.statsById.get("2100")?.tierLetter).toBe("S");
+      // 無數據增幅: identity resolved but NO stat record — a different state
+      // from a catalog-unmatched title, and diagnosed as such.
+      const noData = resolveOcrTitle("無數據增幅", source.titleIndex);
+      expect(noData.augmentId).toBe("2101");
+      expect(source.statsById.has("2101")).toBe(false);
+    });
+
+    test("parseAramggSource throws when the zh-TW catalog has zero titles", () => {
+      expect(() =>
+        parseAramggSource(
+          {
+            stats: STATS_RAW,
+            catalog: CATALOG,
+            catalogZhTw: {},
+            changelog: { latest: "16.13" },
+          },
+          0,
+        ),
+      ).toThrow(/zero localized titles/);
+    });
+  });
+
   describe("decision result uses ONLY ARAMGG stats (no synthetic/local fallback)", () => {
     const stat = (over: Partial<AramggStat>): AramggStat => ({
       augmentId: "1001",
@@ -286,17 +423,22 @@ describe("overlay ARAMGG tier fixture (dev-only)", () => {
         return okResponse(map[key]);
       }) as typeof fetch;
 
-    test("parses a full live payload through the dev proxy paths", async () => {
+    test("parses a full live payload (all four files) through the dev proxy paths", async () => {
       const source = await loadAramggSource(
         fakeFetch({
           "augments-stats-raw.json": STATS_RAW,
           "aram-mayhem-augments.zh_cn.json": CATALOG,
+          "aram-mayhem-augments.zh_tw.json": CATALOG_ZH_TW,
           "augments-changelog/index.json": { versions: ["16.13"], latest: "16.13" },
         }),
       );
       expect(source.patch).toBe("16.13");
       expect(source.statsById.get("1001")?.winRatePercent).toBe("56.3213");
+      expect(source.titleIndex.byZhTwName.has("疾速追擊")).toBe(true);
       expect(source.sourceUrls.stats).toBe("https://aramgg.com/data/augments-stats-raw.json");
+      expect(source.sourceUrls.catalogZhTw).toBe(
+        "https://aramgg.com/data/aram-mayhem-augments.zh_tw.json",
+      );
     });
     test("throws (does not fabricate) when a file 404s", async () => {
       await expect(
@@ -307,6 +449,7 @@ describe("overlay ARAMGG tier fixture (dev-only)", () => {
       const raws: AramggRaws = {
         stats: ["garbage"],
         catalog: CATALOG,
+        catalogZhTw: CATALOG_ZH_TW,
         changelog: { latest: "16.13" },
       };
       expect(() => parseAramggSource(raws, 0)).toThrow(/zero valid records/);
@@ -328,7 +471,7 @@ describe("overlay fixture STATE MACHINE — release-blocking regressions", () =>
     previewOn: false,
     gameWindowForeground: true,
     phase: "augment_selection",
-    completeOffer: true,
+    offerActive: true,
     aramggReady: true,
   };
   const kind = (o: Partial<FixtureModeInput> = {}) =>
@@ -342,25 +485,25 @@ describe("overlay fixture STATE MACHINE — release-blocking regressions", () =>
   });
 
   // 2. focus → blur → focus with a CHANGED offer (OCR mid-rescan on refocus)
-  test("focus→blur→focus (changed offer): no badges until 3 confident cards", () => {
+  test("focus→blur→focus (changed offer): no badges until the new offer latches", () => {
     expect(kind({ gameWindowForeground: false })).toBe("hidden");
-    // refocused but the new offer's OCR is not yet complete → diagnostic, not
-    // stale badges from the prior offer
-    expect(kind({ gameWindowForeground: true, completeOffer: false })).toBe("ocr-unavailable");
-    // OCR completes on the new offer → real badges
-    expect(kind({ gameWindowForeground: true, completeOffer: true })).toBe("real-offer");
+    // refocused but the new offer has not latched yet → diagnostic, not stale
+    // badges from the prior offer (blur reset the offer state)
+    expect(kind({ gameWindowForeground: true, offerActive: false })).toBe("ocr-unavailable");
+    // the new offer latches → per-slot badges
+    expect(kind({ gameWindowForeground: true, offerActive: true })).toBe("real-offer");
   });
 
   // 3. OCR failure while League remains visible/focused
   test("OCR failure while League focused → diagnostic, never synthetic", () => {
-    expect(kind({ completeOffer: false })).toBe("ocr-unavailable");
+    expect(kind({ offerActive: false })).toBe("ocr-unavailable");
     // ARAMGG not ready is still a diagnostic, never a geometry/preview fallback
-    expect(kind({ completeOffer: false, aramggReady: false })).toBe("ocr-unavailable");
+    expect(kind({ offerActive: false, aramggReady: false })).toBe("ocr-unavailable");
   });
 
   // 4. no synthetic fallback in an active game
   test("active game (in_game) never injects geometry", () => {
-    expect(kind({ phase: "in_game", completeOffer: false })).toBe("hidden");
+    expect(kind({ phase: "in_game", offerActive: false })).toBe("hidden");
     // even with the preview flag on, a running game (non-idle) suppresses preview
     expect(kind({ phase: "in_game", previewOn: true, gameWindowForeground: false })).toBe("hidden");
   });
@@ -373,9 +516,12 @@ describe("overlay fixture STATE MACHINE — release-blocking regressions", () =>
     expect(kind({ gameWindowForeground: false, phase: "client_found" })).toBe("hidden");
   });
 
-  // 6. stale-offer invalidation: an incomplete offer never yields real badges
-  test("incomplete offer is never rendered as real badges", () => {
-    expect(kind({ completeOffer: false })).not.toBe("real-offer");
+  // 6. stale-offer invalidation: with no LATCHED offer there are never real
+  // badges. (Per-slot safety within a latched offer — a slot never shows stale
+  // or invented data — is the offerLifecycle contract, pinned in
+  // overlay/src/offerLifecycle.test.ts.)
+  test("no latched offer is never rendered as real badges", () => {
+    expect(kind({ offerActive: false })).not.toBe("real-offer");
   });
 
   // 7 & 9. single overlay surface / no duplicate layers: the resolver returns
@@ -436,10 +582,12 @@ describe("overlay fixture STATE MACHINE — release-blocking regressions", () =>
     expect(payload.result.candidates[0].probability.initialThree).toBe(0);
   });
 
-  // 11. atomic three-card update: real badges require a COMPLETE three-card offer
-  test("real badges require a complete three-card offer (atomic replacement)", () => {
-    expect(kind({ completeOffer: true })).toBe("real-offer");
-    expect(kind({ completeOffer: false })).toBe("ocr-unavailable");
+  // 11. atomic update: the badge layer requires a LATCHED offer; every slot in
+  // it comes from ONE offer generation (applyScanToOffer returns a complete
+  // snapshot — publish can never mix generations).
+  test("real badges require a latched offer (atomic per-generation publish)", () => {
+    expect(kind({ offerActive: true })).toBe("real-offer");
+    expect(kind({ offerActive: false })).toBe("ocr-unavailable");
   });
 
   // preview enable predicate: dev build AND explicit flag=1 (separate from the

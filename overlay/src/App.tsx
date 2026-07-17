@@ -6,19 +6,24 @@ import {
 import {
   buildOverlayAugmentLookup,
   diagnoseAugmentMatch,
-  matchAugmentName,
+  normalizeAugmentNameForLookup,
+  type AugmentMatchDiagnostic,
 } from "./scoring/offer-lookup";
 import {
-  advanceOcrSelection,
   augmentRoundForLevel,
   AUGMENT_LEVELS,
   isCompleteThreeCardOffer,
-  matchAugmentFrame,
   ocrRunIsCurrent,
   shouldClearOcrStateForGameflow,
   shouldRunOcrForGameflow,
   transitionAugmentRound,
 } from "./augmentSelection";
+import {
+  applyScanToOffer,
+  emptyOfferState,
+  offerActive,
+  type OfferState,
+} from "./offerLifecycle";
 import {
   CollectorOverlayController,
   type CollectorSnapshot,
@@ -52,20 +57,26 @@ import {
 import { CoachPanel } from "./components/CoachPanel";
 import { runLocalInference } from "./model/inference";
 import { confirmPickedAugment } from "./model/presentation";
-import { formatWinRate, tierClassName, tierForGrade } from "./model/tier";
+import { formatWinRate, tierClassName, tierForGrade, type TierLetter } from "./model/tier";
 import {
   buildAramggDecisionResult,
   isTierFixtureEnabled,
   TIER_FIXTURE_MEMBER,
   type AramggFixtureCard,
 } from "./dev/tierFixture";
-import { useAramggTierFixture } from "./dev/useAramggTierFixture";
+import {
+  useAramggTierFixture,
+  type SlotAramggResolution,
+} from "./dev/useAramggTierFixture";
 import { isGeometryPreviewEnabled, resolveOverlayFixtureMode } from "./dev/fixtureMode";
 import { DevOverlayDiagnostics } from "./dev/DevOverlayDiagnostics";
 import { developmentSurfaceVisible } from "./dev/productionSurfaces";
-import type {
-  OcrCardDiagnostic as DevOcrCardDiagnostic,
-  OcrLifecycleSnapshot,
+import {
+  EMPTY_SCAN_TIMINGS,
+  type OcrCardDiagnostic as DevOcrCardDiagnostic,
+  type OcrLifecycleSnapshot,
+  type SlotDiagnosticState,
+  type SlotRejectionStage,
 } from "./dev/diagnostics";
 import {
   gameOverlayVisible,
@@ -82,8 +93,13 @@ import {
   CARD_NAME_REGIONS,
   physicalRectForNormalizedRegion,
   type OverlayCalibration,
+  type PhysicalRect,
 } from "./calibration";
-import { overlayAvoidRects, placeBadgeAboveCard } from "./badgeLayout";
+import {
+  cardFrameFromNameRect,
+  overlayAvoidRects,
+  placeBadgeAboveCard,
+} from "./badgeLayout";
 import "./App.css";
 
 // ─── Types ───
@@ -122,12 +138,41 @@ interface OcrScanResult {
   diagnostics: NativeOcrCardDiagnostic[];
   captureAttempted: boolean;
   cropCount: number;
+  captureMs: number;
+  ocrMs: number;
+  totalMs: number;
 }
 
 interface MatchedCard {
   augment: PoolAugment;
   regionIndex: number;
   ocrText: string;
+}
+
+/**
+ * One per-slot badge chip: a real recommendation (`tier`) or an explicit slot
+ * state — SCANNING (reroll/unreadable), UNMATCHED (Riot identity unresolved),
+ * NO ARAMGG DATA (identity resolved, no stat record).
+ */
+interface SlotChip {
+  regionIndex: number;
+  key: string;
+  state: "tier" | "scanning" | "unmatched" | "no-data";
+  tier: TierLetter | null;
+  winRateText: string | null;
+  isNew: boolean;
+}
+
+/**
+ * Per-slot identity resolution, computed once when a slot's title fingerprint
+ * changes and retained while the fingerprint is stable.
+ */
+interface SlotResolution {
+  /** Local-catalog match (the real decision-engine path). */
+  pool: PoolAugment | null;
+  poolDiagnostic: AugmentMatchDiagnostic;
+  /** Dev fixture: staged zh-TW Riot catalog → canonical ID → ARAMGG stats. */
+  aramgg: SlotAramggResolution | null;
 }
 
 interface OverlayAugment {
@@ -198,15 +243,16 @@ function App() {
   const [playerData, setPlayerData] = useState<LivePlayerData | null>(null);
   const [championSlug, setChampionSlug] = useState<string | null>(null);
   const [pickedAugments, setPickedAugments] = useState<string[]>([]);
-  const [matchedCards, setMatchedCards] = useState<MatchedCard[]>([]);
+  const [offerState, setOfferState] = useState<OfferState<SlotResolution>>(
+    () => emptyOfferState(),
+  );
+  const offerStateRef = useRef(offerState);
   const [, setOcrActive] = useState(false);
   const phaseRef = useRef<Phase>("idle");
   const lastAugmentLevelRef = useRef(0);
   const ocrTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const ocrActiveRef = useRef(false);
   const ocrRunIdRef = useRef(0);
-  const ocrHasSeenCardsRef = useRef(false);
-  const ocrEmptyPassesRef = useRef(0);
   const ocrSelectionCompletedRef = useRef(false);
   const gameflowCaptureAllowedRef = useRef(false);
   const pollInFlightRef = useRef(false);
@@ -229,6 +275,8 @@ function App() {
     captureAttempted: false,
     cropCount: 0,
     noCropReason: "not-started",
+    offerGeneration: 0,
+    timings: EMPTY_SCAN_TIMINGS,
   });
   const [overlayData, setOverlayData] = useState<OverlayData | null>(null);
   const [abilityProfiles, setAbilityProfiles] = useState<Record<string, AbilityProfile | null>>({});
@@ -271,6 +319,34 @@ function App() {
     setPhase(nextPhase);
     setOcrLifecycle((previous) => ({ ...previous, phase: nextPhase }));
   }, []);
+
+  // Atomic offer publication: the ref and the rendered state always hold the
+  // same complete snapshot, so no consumer can observe a mixed generation.
+  const publishOffer = useCallback((next: OfferState<SlotResolution>) => {
+    offerStateRef.current = next;
+    setOfferState(next);
+    setOcrLifecycle((previous) => ({ ...previous, offerGeneration: next.generation }));
+  }, []);
+
+  const resetOffer = useCallback(() => {
+    publishOffer(emptyOfferState(offerStateRef.current.generation + 1));
+  }, [publishOffer]);
+
+  // Slots whose title resolved to a local-catalog augment — the decision-engine
+  // path. Derived from the latched offer; always a single generation.
+  const matchedCards = useMemo(
+    (): MatchedCard[] =>
+      offerState.slots.flatMap((slot) =>
+        slot.resolution?.pool && slot.title
+          ? [{
+              augment: slot.resolution.pool,
+              regionIndex: slot.regionIndex,
+              ocrText: slot.title,
+            }]
+          : [],
+      ),
+    [offerState],
+  );
 
   useEffect(() => {
     let cancelled = false;
@@ -584,13 +660,19 @@ function App() {
     tierFixtureOn || geometryPreviewOn,
     overlayData?.augments,
   );
+  // Ref so the OCR loop always resolves against the freshest ARAMGG source
+  // without re-creating the scan callback when the source loads.
+  const aramggResolveRef = useRef(aramgg.resolveSlotTitle);
+  useEffect(() => {
+    aramggResolveRef.current = aramgg.resolveSlotTitle;
+  }, [aramgg.resolveSlotTitle]);
 
   const fixtureMode = resolveOverlayFixtureMode({
     tierFixtureOn,
     previewOn: geometryPreviewOn,
     gameWindowForeground,
     phase,
-    completeOffer: isCompleteThreeCardOffer(matchedCards),
+    offerActive: offerActive(offerState),
     aramggReady: aramgg.status === "ready",
   });
 
@@ -621,9 +703,6 @@ function App() {
     }));
   }, [fixtureMode.kind, aramgg.resolvedBySlug, overlayData]);
 
-  // Cards the fixture renders over: REAL matched cards for a real offer, or the
-  // synthetic preview cards. Nothing is injected into the real-offer path.
-  const fixtureCards = fixtureMode.kind === "preview" ? previewCards : matchedCards;
   const isPreviewMode = fixtureMode.kind === "preview";
   const gameOverlayIsVisible = gameOverlayVisible({
     gameWindowForeground,
@@ -642,17 +721,31 @@ function App() {
 
   // Build the ARAMGG-backed decision result from whichever cards are active.
   const fixturePayload = useMemo(() => {
-    if (fixtureMode.kind !== "real-offer" && fixtureMode.kind !== "preview") {
-      return null;
+    const round = (currentRound?.round ?? 1) as 1 | 2 | 3 | 4;
+    if (fixtureMode.kind === "real-offer") {
+      // Latched slots whose staged resolution reached a live ARAMGG record.
+      const cards = offerState.slots.flatMap((slot): AramggFixtureCard[] => {
+        const staged = slot.resolution?.aramgg;
+        if (!staged || staged.kind !== "matched") return [];
+        const slug =
+          staged.localSlug ??
+          staged.riot.canonicalName ??
+          `riot-${staged.riot.augmentId}`;
+        return [{ slug, stat: staged.stat, method: staged.riot.method }];
+      });
+      if (cards.length === 0) return null;
+      return buildAramggDecisionResult(cards, round);
     }
-    const round = currentRound?.round ?? 1;
-    const cards = [...fixtureCards]
-      .sort((left, right) => left.regionIndex - right.regionIndex)
-      .map((card): AramggFixtureCard | null => aramgg.resolvedBySlug.get(card.augment.slug) ?? null)
-      .filter((card): card is AramggFixtureCard => card !== null);
-    if (cards.length === 0) return null;
-    return buildAramggDecisionResult(cards, round as 1 | 2 | 3 | 4);
-  }, [fixtureMode.kind, fixtureCards, aramgg.resolvedBySlug, currentRound]);
+    if (fixtureMode.kind === "preview") {
+      const cards = [...previewCards]
+        .sort((left, right) => left.regionIndex - right.regionIndex)
+        .map((card): AramggFixtureCard | null => aramgg.resolvedBySlug.get(card.augment.slug) ?? null)
+        .filter((card): card is AramggFixtureCard => card !== null);
+      if (cards.length === 0) return null;
+      return buildAramggDecisionResult(cards, round);
+    }
+    return null;
+  }, [fixtureMode.kind, offerState, previewCards, aramgg.resolvedBySlug, currentRound]);
 
   // Dev flag unlocks the member gate ONLY (no collector/entitlement) — it never
   // relaxes the focus/phase/complete-offer gates below.
@@ -663,34 +756,107 @@ function App() {
   const badgeWinRateBySlug: Record<string, number | string | null> =
     fixturePayload?.winRateDisplayBySlug ?? winRateBySlug;
 
-  // Real ARAMGG/engine badges: strictly gated on REAL focus + augment phase +
-  // a confidently-matched complete offer. Preview badges: only in preview mode.
+  // Real per-slot chips: strictly gated on REAL focus + augment phase + a
+  // LATCHED offer. Each slot renders its own pipeline state (matched tier /
+  // SCANNING / UNMATCHED / NO ARAMGG DATA) — never stale, never invented, and
+  // always from one offer generation. Preview chips: only in preview mode.
   const realBadgesReady =
     !isPreviewMode &&
     effectiveMemberEnabled &&
     phase === "augment_selection" &&
-    isCompleteThreeCardOffer(matchedCards) &&
-    gameWindowForeground &&
-    badgeDecisionResult != null;
+    offerActive(offerState) &&
+    gameWindowForeground;
   const previewBadgesReady =
     isPreviewMode && fixturePayload != null && previewCards.length === 3;
   const showBadgeLayer = realBadgesReady || previewBadgesReady;
 
-  // Diagnostics counters (never conflate injected with detected).
+  const slotChips = useMemo((): SlotChip[] => {
+    if (previewBadgesReady && fixturePayload) {
+      return previewCards.flatMap((card): SlotChip[] => {
+        const candidate = fixturePayload.result.candidates.find(
+          (entry) => entry.augmentSlug === card.augment.slug,
+        );
+        if (!candidate) return [];
+        return [{
+          regionIndex: card.regionIndex,
+          key: `preview-${card.regionIndex}-${card.augment.slug}`,
+          state: "tier",
+          tier: tierForGrade(candidate.grade),
+          winRateText: formatWinRate(
+            fixturePayload.winRateDisplayBySlug[card.augment.slug],
+          ),
+          isNew: card.augment.lifecycle === "added",
+        }];
+      });
+    }
+    if (!realBadgesReady) return [];
+    return offerState.slots.map((slot): SlotChip => {
+      const base = {
+        regionIndex: slot.regionIndex,
+        key: `slot-${slot.regionIndex}-g${offerState.generation}`,
+      };
+      if (slot.fingerprint === null) {
+        // Reroll in flight / unreadable slot — no identity to show yet.
+        return { ...base, state: "scanning", tier: null, winRateText: null, isNew: false };
+      }
+      const staged = slot.resolution?.aramgg;
+      if (staged) {
+        if (staged.kind === "matched") {
+          return {
+            ...base,
+            state: "tier",
+            tier: staged.stat.tierLetter,
+            winRateText: formatWinRate(staged.stat.winRatePercent),
+            isNew: slot.resolution?.pool?.lifecycle === "added",
+          };
+        }
+        if (staged.kind === "no-data") {
+          // Riot identity resolved, but ARAMGG carries no stat record.
+          return { ...base, state: "no-data", tier: null, winRateText: null, isNew: false };
+        }
+        return { ...base, state: "unmatched", tier: null, winRateText: null, isNew: false };
+      }
+      // Engine path (no dev fixture): the local-catalog match backs the chip.
+      const pool = slot.resolution?.pool ?? null;
+      if (!pool) {
+        return { ...base, state: "unmatched", tier: null, winRateText: null, isNew: false };
+      }
+      const candidate = decisionResult?.candidates.find(
+        (entry) => entry.augmentSlug === pool.slug,
+      );
+      return {
+        ...base,
+        state: "tier",
+        tier: candidate ? tierForGrade(candidate.grade) : pool.tier,
+        winRateText: formatWinRate(pool.win_rate),
+        isNew: pool.lifecycle === "added",
+      };
+    });
+  }, [previewBadgesReady, fixturePayload, previewCards, realBadgesReady, offerState, decisionResult]);
+
+  // Staged diagnostics counters (never conflate injected with detected).
   const diag = {
-    ocrDetected: matchedCards.length,
+    cardsCaptured: ocrDiagnostics.filter((d) => d.captureSucceeded).length,
+    titlesRead: ocrDiagnostics.filter((d) => d.rawText).length,
+    riotResolved: offerState.slots.filter(
+      (slot) => slot.resolution?.aramgg && slot.resolution.aramgg.kind !== "unmatched",
+    ).length,
+    aramggMatched: offerState.slots.filter(
+      (slot) => slot.resolution?.aramgg?.kind === "matched",
+    ).length,
+    ocrDetected: offerState.slots.filter((slot) => slot.fingerprint !== null).length,
     previewInjected: isPreviewMode ? previewCards.length : 0,
-    offeredMatched: matchedCards.filter((c) => aramgg.resolvedBySlug.has(c.augment.slug)).length,
+    offeredMatched: matchedCards.length,
     catalogResolved: aramgg.resolvedBySlug.size,
-    renderedRealBadges: realBadgesReady ? matchedCards.length : 0,
-    renderedPreviewBadges: previewBadgesReady ? previewCards.length : 0,
+    renderedRealBadges: realBadgesReady
+      ? slotChips.filter((chip) => chip.state === "tier").length
+      : 0,
+    renderedPreviewBadges: previewBadgesReady ? slotChips.length : 0,
   };
 
   const cancelOcrRun = useCallback((clearVisibleState: boolean) => {
     ocrActiveRef.current = false;
     ocrRunIdRef.current += 1;
-    ocrHasSeenCardsRef.current = false;
-    ocrEmptyPassesRef.current = 0;
     if (ocrTimeoutRef.current) {
       clearTimeout(ocrTimeoutRef.current);
       ocrTimeoutRef.current = null;
@@ -707,10 +873,10 @@ function App() {
       noCropReason: "ocr-run-cancelled",
     }));
     if (clearVisibleState) {
-      setMatchedCards([]);
+      resetOffer();
       setOcrDiagnostics([]);
     }
-  }, []);
+  }, [resetOffer]);
 
   const stopOcr = useCallback(() => {
     cancelOcrRun(true);
@@ -773,7 +939,6 @@ function App() {
     setChampionSlug(null);
     lastAugmentLevelRef.current = 0;
     setPickedAugments([]);
-    setMatchedCards([]);
     lastGameTimeRef.current = null;
     lastRecordedRoundRef.current = "";
     activeGameHashRef.current = null;
@@ -815,11 +980,14 @@ function App() {
       return;
     }
 
+    const scanStartMs = performance.now();
     try {
       const scan = await invoke<OcrScanResult>("detect_augment_names", {
         knownNames: ocrKnownNames,
       });
 
+      // Stale-run guard: a cancelled or superseded scan can never publish —
+      // a stale OCR result cannot restore an old offer.
       if (
         !ocrRunIsCurrent({
           active: ocrActiveRef.current,
@@ -828,7 +996,28 @@ function App() {
         })
       ) return;
 
-      const detected = scan.detected;
+      const matchStartMs = performance.now();
+      const titles: Array<string | null> = [0, 1, 2].map(
+        (regionIndex) =>
+          scan.detected.find((entry) => entry.region_index === regionIndex)?.text ?? null,
+      );
+      const resolveSlot = (title: string): SlotResolution => {
+        const match = diagnoseAugmentMatch(title, nameLookup);
+        return {
+          pool: match.augment,
+          poolDiagnostic: match,
+          aramgg: aramggResolveRef.current ? aramggResolveRef.current(title) : null,
+        };
+      };
+      const applied = applyScanToOffer(
+        offerStateRef.current,
+        titles,
+        normalizeAugmentNameForLookup,
+        resolveSlot,
+      );
+      publishOffer(applied.state);
+      const matchMs = performance.now() - matchStartMs;
+
       setOcrLifecycle((previous) => ({
         ...previous,
         lastScanEnd: new Date().toISOString(),
@@ -837,46 +1026,90 @@ function App() {
         noCropReason: scan.cropCount === 0
           ? scan.diagnostics.find((diagnostic) => diagnostic.error)?.error ?? "no-crops-returned"
           : null,
+        offerGeneration: applied.state.generation,
+        timings: {
+          captureMs: scan.captureMs,
+          ocrMs: scan.ocrMs,
+          nativeTotalMs: scan.totalMs,
+          matchMs: Math.round(matchMs),
+          endToEndMs: Math.round(performance.now() - scanStartMs),
+        },
       }));
       setOcrDiagnostics(
         scan.diagnostics.map((diagnostic) => {
-          if (!diagnostic.rawText) {
-            return {
-              ...diagnostic,
-              normalizedText: "",
-              bestCandidate: null,
-              confidence: null,
-              rejectionReason: diagnostic.error ?? "no-text-recognized",
-            };
-          }
-
-          const match = diagnoseAugmentMatch(diagnostic.rawText, nameLookup);
+          const slot = applied.state.slots[diagnostic.regionIndex];
+          const resolution = slot?.resolution ?? null;
+          const aramggResolution = resolution?.aramgg ?? null;
+          const slotState: SlotDiagnosticState =
+            !slot || slot.fingerprint === null
+              ? "scanning"
+              : aramggResolution
+                ? aramggResolution.kind
+                : resolution?.pool
+                  ? "matched"
+                  : "unmatched";
+          const rejectionStage: SlotRejectionStage = !diagnostic.captureSucceeded
+            ? "capture"
+            : !diagnostic.rawText
+              ? "ocr"
+              : slotState === "unmatched"
+                ? "riot-catalog"
+                : slotState === "no-data"
+                  ? "aramgg"
+                  : null;
+          const poolDiagnostic = resolution?.poolDiagnostic;
           return {
             ...diagnostic,
-            normalizedText: match.normalizedText,
-            bestCandidate: match.bestCandidate,
-            confidence: match.confidence,
-            rejectionReason: match.rejectionReason,
+            normalizedText: slot?.fingerprint ?? poolDiagnostic?.normalizedText ?? "",
+            bestCandidate: poolDiagnostic?.bestCandidate ?? null,
+            confidence:
+              aramggResolution && aramggResolution.kind !== "unmatched"
+                ? aramggResolution.riot.confidence
+                : poolDiagnostic?.confidence ?? null,
+            rejectionReason: !diagnostic.rawText
+              ? diagnostic.error ?? "no-text-recognized"
+              : aramggResolution?.kind === "unmatched"
+                ? `${aramggResolution.rejection.reason}${
+                    "detail" in aramggResolution.rejection && aramggResolution.rejection.detail
+                      ? `: ${aramggResolution.rejection.detail}`
+                      : ""
+                  }`
+                : aramggResolution?.kind === "no-data"
+                  ? "riot-resolved-no-aramgg-record"
+                  : poolDiagnostic?.rejectionReason ?? null,
+            riotCanonicalName:
+              aramggResolution && aramggResolution.kind !== "unmatched"
+                ? aramggResolution.riot.canonicalName
+                : null,
+            riotAugmentId:
+              aramggResolution && aramggResolution.kind !== "unmatched"
+                ? aramggResolution.riot.augmentId
+                : null,
+            riotMethod:
+              aramggResolution && aramggResolution.kind !== "unmatched"
+                ? aramggResolution.riot.method
+                : null,
+            aramggResult:
+              aramggResolution?.kind === "matched"
+                ? `wr=${aramggResolution.stat.winRatePercent}% n=${aramggResolution.stat.numGames} tier=${aramggResolution.stat.tierLetter}`
+                : aramggResolution?.kind === "no-data"
+                  ? "no-record"
+                  : null,
+            slotState,
+            rejectionStage,
           };
         }),
       );
 
-      const matched: MatchedCard[] = matchAugmentFrame(
-        detected,
-        nameLookup,
-        matchAugmentName,
+      const matched: MatchedCard[] = applied.state.slots.flatMap((slot) =>
+        slot.resolution?.pool && slot.title
+          ? [{
+              augment: slot.resolution.pool,
+              regionIndex: slot.regionIndex,
+              ocrText: slot.title,
+            }]
+          : [],
       );
-
-      const nextSelection = advanceOcrSelection(
-        {
-          hasSeenCards: ocrHasSeenCardsRef.current,
-          emptyPasses: ocrEmptyPassesRef.current,
-        },
-        detected.length,
-      );
-      ocrHasSeenCardsRef.current = nextSelection.hasSeenCards;
-      ocrEmptyPassesRef.current = nextSelection.emptyPasses;
-      setMatchedCards(matched);
       if (
         collectorCaptureEnabled &&
         isCompleteThreeCardOffer(matched) &&
@@ -900,7 +1133,8 @@ function App() {
         }
       }
 
-      if (nextSelection.shouldStop) {
+      if (applied.cleared) {
+        // The selection surface has been absent long enough — the offer is over.
         ocrSelectionCompletedRef.current = true;
         updatePhase("in_game");
         finishOcr();
@@ -915,7 +1149,22 @@ function App() {
       ) {
         const unavailable = ocrAvailabilityFromError(error);
         if (unavailable) setOcrAvailability(unavailable);
-        setMatchedCards([]);
+        // A failed scan is screen-absence EVIDENCE, not an instant clear: the
+        // lifecycle tolerates one gap, then clears on sustained absence.
+        const applied = applyScanToOffer(
+          offerStateRef.current,
+          [null, null, null],
+          normalizeAugmentNameForLookup,
+          () => {
+            throw new Error("unreachable: empty scan never resolves");
+          },
+        );
+        publishOffer(applied.state);
+        if (applied.cleared) {
+          ocrSelectionCompletedRef.current = true;
+          updatePhase("in_game");
+          finishOcr();
+        }
         const message = error instanceof Error ? error.message : "ocr-scan-failed";
         setOcrDiagnostics(
           [0, 1, 2].map((regionIndex) => ({
@@ -931,6 +1180,12 @@ function App() {
             bestCandidate: null,
             confidence: null,
             rejectionReason: message,
+            riotCanonicalName: null,
+            riotAugmentId: null,
+            riotMethod: null,
+            aramggResult: null,
+            slotState: "scanning" as const,
+            rejectionStage: "capture" as const,
           })),
         );
         setOcrLifecycle((previous) => ({
@@ -942,7 +1197,7 @@ function App() {
         }));
       }
     }
-  }, [collectorCaptureEnabled, nameLookup, ocrKnownNames, playerData, finishOcr, updatePhase]);
+  }, [collectorCaptureEnabled, nameLookup, ocrKnownNames, playerData, publishOffer, finishOcr, updatePhase]);
 
   useEffect(() => {
     runOcrRef.current = runOcr;
@@ -969,8 +1224,6 @@ function App() {
     if (!canRunOcr(ocrAvailability)) return;
     if (ocrActiveRef.current) return;
     ocrActiveRef.current = true;
-    ocrHasSeenCardsRef.current = false;
-    ocrEmptyPassesRef.current = 0;
     setOcrActive(true);
     const runId = ++ocrRunIdRef.current;
     setOcrLifecycle((previous) => ({
@@ -1037,7 +1290,6 @@ function App() {
             ocrSelectionCompletedRef.current = true;
             lastAugmentLevelRef.current = 0;
             setPickedAugments([]);
-            setMatchedCards([]);
             lastRecordedRoundRef.current = "";
             stopOcr();
           }
@@ -1071,13 +1323,10 @@ function App() {
               return;
             }
 
-            if (roundTransition.selectionComplete) {
-              ocrSelectionCompletedRef.current = true;
-              updatePhase("in_game");
-              finishOcr();
-            } else if (actualGameForeground) {
-              startOcr();
-            }
+            // Level gained while the offer is still open must NOT end the
+            // selection — completion comes only from the offer lifecycle
+            // (surface absence / confirmed pick), never from champion level.
+            if (actualGameForeground) startOcr();
           } else {
             updatePhase("in_game");
           }
@@ -1148,10 +1397,15 @@ function App() {
           selectedAugmentSlug,
         });
       }
+      // A confirmed choice ends the offer: clear the latched state and return
+      // to in-game immediately instead of waiting for surface absence.
+      ocrSelectionCompletedRef.current = true;
+      stopOcr();
+      updatePhase("in_game");
     };
     window.addEventListener("keydown", onKeyDown);
     return () => window.removeEventListener("keydown", onKeyDown);
-  }, [currentRound, matchedCards, memberEnabled, phase]);
+  }, [currentRound, matchedCards, memberEnabled, phase, stopOcr, updatePhase]);
 
   useEffect(() => {
     const foregroundIntervalId = setInterval(() => {
@@ -1205,34 +1459,43 @@ function App() {
         .filter((diagnostic) => diagnostic.cardRect !== null)
         .map((diagnostic) => [diagnostic.regionIndex, diagnostic.cardRect!]),
     );
+    // Every region resolves to a rect: the natively detected one when the last
+    // scan supplied it, else the calibrated normalized region — so SCANNING /
+    // reroll slots still anchor their chip to the right card position.
+    const regionRects = new Map<number, PhysicalRect>();
+    CARD_NAME_REGIONS.forEach((region, regionIndex) => {
+      const detected = detectedRects.get(regionIndex);
+      regionRects.set(
+        regionIndex,
+        detected ?? physicalRectForNormalizedRegion(region, calibration.viewport),
+      );
+    });
     const avoidRects = overlayAvoidRects(
       calibration.viewport,
       calibration.monitor.scaleFactor,
     );
 
-    for (const card of fixtureCards) {
-      const detectedRect = detectedRects.get(card.regionIndex);
-      const previewRegion = CARD_NAME_REGIONS[card.regionIndex];
-      const previewRect = isPreviewMode
-        ? previewRegion
-          ? physicalRectForNormalizedRegion(previewRegion, calibration.viewport)
-          : null
-        : null;
-      const cardRect = detectedRect ?? previewRect;
+    for (const chip of slotChips) {
+      const cardRect = regionRects.get(chip.regionIndex);
       if (!cardRect) continue;
+      // A chip must never cover a NEIGHBORING card either — the other card
+      // frames are additional keep-out rects.
+      const otherFrames = [...regionRects.entries()]
+        .filter(([regionIndex]) => regionIndex !== chip.regionIndex)
+        .map(([, rect]) => cardFrameFromNameRect(rect, calibration.viewport));
       const placement = placeBadgeAboveCard({
         cardRect,
         viewport: calibration.viewport,
         scaleFactor: calibration.monitor.scaleFactor,
-        avoidRects,
+        avoidRects: [...avoidRects, ...otherFrames],
       });
       if (placement) {
-        positions.set(card.regionIndex, placement);
+        positions.set(chip.regionIndex, placement);
       }
     }
 
     return positions;
-  }, [calibration, fixtureCards, isPreviewMode, ocrDiagnostics]);
+  }, [calibration, ocrDiagnostics, slotChips]);
 
   return (
     <div className="overlay-root">
@@ -1249,54 +1512,48 @@ function App() {
         }`}
       />}
 
-      {/* Badges overlaid on augment cards. Rendered ONLY for a real focused
-          complete offer (realBadgesReady) or explicit League-absent preview
-          (previewBadgesReady) — never during a transient OCR gap, never while
-          League is unfocused, never over a stale offer. See fixtureMode.ts. */}
-      {showBadgeLayer && badgeDecisionResult && (
+      {/* Per-slot badge chips rendered OUTSIDE the card frames (above the
+          derived card frame, side-anchored as fallback). Rendered ONLY for a
+          real focused LATCHED offer (realBadgesReady) or explicit League-absent
+          preview (previewBadgesReady). Each chip reflects its slot's own
+          pipeline state — never stale, never invented. See fixtureMode.ts. */}
+      {showBadgeLayer && (
         <>
-          {fixtureCards.map((card) => {
-            const pos = badgePositions.get(card.regionIndex);
+          {slotChips.map((chip) => {
+            const pos = badgePositions.get(chip.regionIndex);
             if (!pos) return null;
-            const candidate = badgeDecisionResult.candidates.find(
-              (entry) => entry.augmentSlug === card.augment.slug,
-            );
-            if (!candidate) return null;
-            const tier = tierForGrade(candidate.grade);
-            // ARAMGG/preview badges display the exact win-rate string; the real
-            // engine path uses the numeric augment win_rate.
-            const winRate = isFixtureBacked
-              ? badgeWinRateBySlug[card.augment.slug]
-              : card.augment.win_rate;
+            if (chip.state !== "tier") {
+              const label =
+                chip.state === "scanning"
+                  ? "SCANNING"
+                  : chip.state === "no-data"
+                    ? "NO ARAMGG DATA"
+                    : "UNMATCHED";
+              return (
+                <div
+                  className={`badge-chip badge-chip-${chip.state}`}
+                  key={chip.key}
+                  style={{ left: pos.left, top: pos.top }}
+                >
+                  <span className="badge-chip-state">{label}</span>
+                </div>
+              );
+            }
             return (
               <div
-                className={`badge badge-grade-${candidate.grade} ${tierClassName(tier)}${
+                className={`badge-chip ${chip.tier ? tierClassName(chip.tier) : ""}${
                   isPreviewMode ? " badge-preview" : ""
                 }`}
-                key={card.augment.slug}
+                key={chip.key}
                 style={{ left: pos.left, top: pos.top }}
               >
                 {isPreviewMode && (
                   <span className="preview-watermark">PREVIEW</span>
                 )}
-                {card.augment.lifecycle === "added" && (
-                  <span className="badge-new">NEW</span>
-                )}
-                <span className="badge-label">{mode}</span>
-                <span className="badge-tier">{tier}</span>
-                <span className="badge-wr">
-                  {formatWinRate(winRate, { raw: isFixtureBacked })}
-                </span>
-                {/* No fake model probability for ARAMGG/preview badges; only the
-                    real engine supplies a pick probability. */}
-                {!isFixtureBacked && (
-                  <span className="badge-prob">
-                    P:{Math.round(candidate.probability.withNormalRerolls * 100)}%
-                  </span>
-                )}
-                {candidate.warnings.includes("hard-incompatible") && (
-                  <strong className="badge-warning">Hard warning</strong>
-                )}
+                {chip.isNew && <span className="badge-new">NEW</span>}
+                <span className="badge-tier">{chip.tier}</span>
+                <span className="badge-chip-sep">·</span>
+                <span className="badge-wr">{chip.winRateText}</span>
               </div>
             );
           })}

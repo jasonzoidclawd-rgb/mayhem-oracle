@@ -7,14 +7,32 @@ export interface MayhemAugmentIdentity {
   name_zh_CN?: string;
 }
 
+export type SlotAramggResolution =
+  | {
+      kind: "matched";
+      riot: { augmentId: string; canonicalName: string | null; zhTwName: string | null; method: string; confidence: number };
+      stat: AramggFixtureCard["stat"];
+      localSlug: string | null;
+    }
+  | {
+      kind: "no-data";
+      riot: { augmentId: string; canonicalName: string | null; zhTwName: string | null; method: string; confidence: number };
+      localSlug: string | null;
+    }
+  | {
+      kind: "unmatched";
+      rejection: { augmentId: null; reason: string; detail?: string };
+    };
+
 export interface AramggFixtureState {
   status: "idle" | "loading" | "ready" | "error";
   error: string | null;
   fromCache: boolean;
   patch: string | null;
   fetchedAt: number | null;
-  sourceUrls: { stats: string; catalog: string } | null;
+  sourceUrls: { stats: string; catalog: string; catalogZhTw?: string } | null;
   resolvedBySlug: Map<string, AramggFixtureCard>;
+  resolveSlotTitle: ((ocrTitle: string) => SlotAramggResolution) | null;
   refresh: () => void;
 }
 
@@ -33,6 +51,7 @@ export function useAramggTierFixture(
     fetchedAt: null,
     sourceUrls: null,
     resolvedBySlug: new Map(),
+    resolveSlotTitle: null,
     refresh,
   };
 }

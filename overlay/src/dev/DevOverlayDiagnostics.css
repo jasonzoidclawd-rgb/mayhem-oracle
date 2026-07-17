@@ -1,7 +1,10 @@
 .calibration-panel {
+  /* Bottom-left, stacked above the in-game HUD. Deliberately OUTSIDE the badge
+     chip band above the card frames — at 1280×720 a top-right panel collided
+     with the rightmost chip (see overlayAvoidRects + badgeLayout tests). */
   position: fixed;
-  top: 24px;
-  right: 8px;
+  bottom: 48px;
+  left: 8px;
   z-index: 120;
   display: grid;
   gap: 2px;

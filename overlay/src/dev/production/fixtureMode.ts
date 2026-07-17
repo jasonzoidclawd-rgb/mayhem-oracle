@@ -15,7 +15,7 @@ export function resolveOverlayFixtureMode(_input: {
   previewOn: boolean;
   gameWindowForeground: boolean;
   phase: OverlayPhase;
-  completeOffer: boolean;
+  offerActive: boolean;
   aramggReady: boolean;
 }): OverlayFixtureMode {
   void _input;

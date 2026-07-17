@@ -10,7 +10,7 @@ const baseInput = {
   previewOn: false,
   gameWindowForeground: false,
   phase: "idle" as const,
-  completeOffer: false,
+  offerActive: false,
   aramggReady: true,
 };
 
@@ -39,18 +39,18 @@ describe("development overlay surface modes", () => {
     ).toEqual({ kind: "preview" });
   });
 
-  it("renders a real fixture offer only for a focused complete selection", () => {
+  it("renders a real fixture offer only for a focused LATCHED selection", () => {
     expect(
       resolveOverlayFixtureMode({
         ...baseInput,
         gameWindowForeground: true,
         phase: "augment_selection",
-        completeOffer: true,
+        offerActive: true,
       }),
     ).toEqual({ kind: "real-offer" });
   });
 
-  it("keeps focused incomplete OCR diagnostic-only and never synthetic", () => {
+  it("keeps a focused screen with no latched offer diagnostic-only, never synthetic", () => {
     expect(
       resolveOverlayFixtureMode({
         ...baseInput,

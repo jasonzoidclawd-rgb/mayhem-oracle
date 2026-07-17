@@ -51,7 +51,7 @@ export function DevOverlayDiagnostics({
   ocrLifecycle,
   fixturePayload,
 }: DevOverlayDiagnosticsProps) {
-  const diagnostics = ocrDiagnostics.length > 0
+  const diagnostics: OcrCardDiagnostic[] = ocrDiagnostics.length > 0
     ? ocrDiagnostics
     : EMPTY_DIAGNOSTIC_REGIONS.map((regionIndex) => ({
       regionIndex,
@@ -66,6 +66,12 @@ export function DevOverlayDiagnostics({
       bestCandidate: null,
       confidence: null,
       rejectionReason: ocrLifecycle.noCropReason ?? "not-started",
+      riotCanonicalName: null,
+      riotAugmentId: null,
+      riotMethod: null,
+      aramggResult: null,
+      slotState: "scanning" as const,
+      rejectionStage: "capture" as const,
     }));
 
   return (
@@ -104,8 +110,10 @@ export function DevOverlayDiagnostics({
 
       {gameOverlayIsVisible && fixtureModeKind === "ocr-unavailable" && (
         <div className="ocr-diagnostic" data-dev-only="ocr-diagnostic">
-          OCR unavailable — {diag.ocrDetected}/3 cards matched
-          {aramgg.status !== "ready" && ` · ARAMGG ${aramgg.status}`}
+          No latched offer — captured {diag.cardsCaptured}/3 · titles{" "}
+          {diag.titlesRead}/3 · Riot IDs {diag.riotResolved}/3 · ARAMGG{" "}
+          {diag.aramggMatched}/3
+          {aramgg.status !== "ready" && ` · ARAMGG source ${aramgg.status}`}
         </div>
       )}
 
@@ -173,8 +181,19 @@ export function DevOverlayDiagnostics({
                 Capture attempted: {String(ocrLifecycle.captureAttempted)} · crop count: {ocrLifecycle.cropCount}
                 {ocrLifecycle.noCropReason && ` · no-crop reason: ${ocrLifecycle.noCropReason}`}
               </div>
+              <div>
+                Offer generation: {ocrLifecycle.offerGeneration} · latency: capture{" "}
+                {ocrLifecycle.timings.captureMs ?? "?"}ms · ocr {ocrLifecycle.timings.ocrMs ?? "?"}ms
+                · native {ocrLifecycle.timings.nativeTotalMs ?? "?"}ms · match{" "}
+                {ocrLifecycle.timings.matchMs ?? "?"}ms · end-to-end{" "}
+                {ocrLifecycle.timings.endToEndMs ?? "?"}ms
+              </div>
               <div style={{ marginTop: 4 }}>
-                OCR cards detected: {diag.ocrDetected} · preview cards injected: {diag.previewInjected} · offered cards matched: {diag.offeredMatched} · catalog records resolved: {diag.catalogResolved}
+                Pipeline: captured {diag.cardsCaptured} → titles {diag.titlesRead} → riot IDs{" "}
+                {diag.riotResolved} → aramgg {diag.aramggMatched} · slots latched: {diag.ocrDetected}
+              </div>
+              <div>
+                pool matched: {diag.offeredMatched} · preview injected: {diag.previewInjected} · catalog records resolved: {diag.catalogResolved}
               </div>
               <div>
                 rendered real badges: {diag.renderedRealBadges} · rendered preview badges: {diag.renderedPreviewBadges}
@@ -207,8 +226,12 @@ export function DevOverlayDiagnostics({
                   : diagnostic.confidence.toFixed(2);
                 return (
                   <div key={`ocr-diagnostic-${diagnostic.regionIndex}`} style={{ marginTop: 2 }}>
-                    card {diagnostic.regionIndex + 1} · cardRect={cardRect} · crop={crop} · image={captureSize} · capture=
-                    {String(diagnostic.captureSucceeded)} · raw={diagnostic.rawText ?? ""} · normalized={diagnostic.normalizedText} · best=
+                    card {diagnostic.regionIndex + 1} [{diagnostic.slotState}
+                    {diagnostic.rejectionStage && ` @ ${diagnostic.rejectionStage}`}] · cardRect={cardRect} · crop={crop} · image={captureSize} · capture=
+                    {String(diagnostic.captureSucceeded)} · raw={diagnostic.rawText ?? ""} · normalized={diagnostic.normalizedText} · riot=
+                    {diagnostic.riotCanonicalName ?? "none"}
+                    {diagnostic.riotAugmentId && ` (#${diagnostic.riotAugmentId}, ${diagnostic.riotMethod})`} · aramgg=
+                    {diagnostic.aramggResult ?? "none"} · best=
                     {diagnostic.bestCandidate ?? "none"} · confidence={confidence} · reject=
                     {diagnostic.rejectionReason ?? "none"}
                   </div>

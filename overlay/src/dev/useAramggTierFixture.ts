@@ -14,8 +14,12 @@ import {
   normalizeIconBase,
   parseAramggSource,
   resolveAugmentId,
+  resolveOcrTitle,
   type AramggRaws,
   type AramggSource,
+  type AramggStat,
+  type RiotTitleRejection,
+  type RiotTitleResolution,
 } from "./aramggSource";
 import type { AramggFixtureCard } from "./tierFixture";
 
@@ -25,6 +29,29 @@ export interface MayhemAugmentIdentity {
   icon?: string;
   name_zh_CN?: string;
 }
+
+/**
+ * Staged identity resolution for ONE OCR card title. The stages are explicit
+ * so diagnostics can distinguish "Riot identity unresolved" from "Riot
+ * identity resolved but ARAMGG record missing". The card icon is never
+ * consulted — quest cards replace or obscure it.
+ */
+export type SlotAramggResolution =
+  | {
+      kind: "matched";
+      riot: RiotTitleResolution;
+      stat: AramggStat;
+      localSlug: string | null;
+    }
+  | {
+      kind: "no-data"; // Riot canonical ID resolved; ARAMGG has no stat record
+      riot: RiotTitleResolution;
+      localSlug: string | null;
+    }
+  | {
+      kind: "unmatched"; // Riot identity unresolved (rejection carries stage/reason)
+      rejection: RiotTitleRejection;
+    };
 
 export interface AramggFixtureState {
   status: "idle" | "loading" | "ready" | "error";
@@ -36,10 +63,17 @@ export interface AramggFixtureState {
   sourceUrls: AramggSource["sourceUrls"] | null;
   /** slug → resolved record, only for augments matched to a LIVE stat. */
   resolvedBySlug: Map<string, AramggFixtureCard>;
+  /**
+   * OCR title → staged canonical resolution (zh-TW Riot catalog → numeric ID →
+   * ARAMGG stats). Null until the source is ready.
+   */
+  resolveSlotTitle: ((ocrTitle: string) => SlotAramggResolution) | null;
   refresh: () => void;
 }
 
-const CACHE_KEY = "mayhem-aramgg-fixture-cache-v1";
+// v2: raws now include the Riot zh-TW catalog; older cached shapes must not
+// be parsed (they would silently lose the canonical zh-TW bridge).
+const CACHE_KEY = "mayhem-aramgg-fixture-cache-v2";
 
 interface CacheEntry {
   raws: AramggRaws;
@@ -141,6 +175,37 @@ export function useAramggTierFixture(
     return map;
   }, [source, augments]);
 
+  // augmentId → local slug (unique inversions only) so a canonical Riot match
+  // can be labeled with the local catalog slug when one exists.
+  const localSlugByAugmentId = useMemo(() => {
+    const map = new Map<string, string | null>();
+    for (const [slug, card] of resolvedBySlug) {
+      map.set(card.stat.augmentId, map.has(card.stat.augmentId) ? null : slug);
+    }
+    return map;
+  }, [resolvedBySlug]);
+
+  const resolveSlotTitle = useMemo(() => {
+    if (!source) return null;
+    return (ocrTitle: string): SlotAramggResolution => {
+      const riot = resolveOcrTitle(ocrTitle, source.titleIndex);
+      if (riot.augmentId === null) {
+        return { kind: "unmatched", rejection: riot };
+      }
+      if (riot.method === "riot-zh-cn-exact") {
+        // Explicitly-logged last resort: Traditional OCR resolved only via the
+        // Simplified catalog name.
+        console.info(
+          `[aramgg-fixture] zh-CN last-resort title match: "${ocrTitle}" → augmentId ${riot.augmentId}`,
+        );
+      }
+      const localSlug = localSlugByAugmentId.get(riot.augmentId) ?? null;
+      const stat = source.statsById.get(riot.augmentId);
+      if (!stat) return { kind: "no-data", riot, localSlug };
+      return { kind: "matched", riot, stat, localSlug };
+    };
+  }, [source, localSlugByAugmentId]);
+
   return {
     status,
     error,
@@ -149,6 +214,7 @@ export function useAramggTierFixture(
     fetchedAt: source?.fetchedAt ?? null,
     sourceUrls: source?.sourceUrls ?? null,
     resolvedBySlug,
+    resolveSlotTitle,
     refresh,
   };
 }

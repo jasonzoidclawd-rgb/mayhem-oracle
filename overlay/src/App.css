@@ -50,26 +50,53 @@ html, body, #root {
 .status-disconnected { background: #ef4444; }
 .status-ocr { background: #a78bfa; box-shadow: 0 0 6px #a78bfa; }
 
-/* ─── Badge (positioned on augment cards) ─── */
-.badge {
+/* ─── Badge chip (compact horizontal strip ABOVE each card frame) ───
+   Geometry contract: badgeLayout.ts BADGE_CHIP_SIZE (168×32 CSS px, height
+   within 28–36px). The chip is placed OUTSIDE the card artwork — above the
+   derived card frame, side-anchored as fallback — never over card art, HUD,
+   reroll, or the central upgrade button. */
+.badge-chip {
   position: absolute;
   transform: none;
+  box-sizing: border-box;
+  width: 168px;
+  height: 32px;
   background: rgba(8, 12, 20, 0.92);
   backdrop-filter: blur(12px);
   border: 1.5px solid rgba(100, 116, 139, 0.3);
   border-radius: 7px;
-  padding: 4px 8px;
+  padding: 0 10px;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   align-items: center;
-  gap: 1px;
-  width: 104px;
-  min-height: 86px;
+  justify-content: center;
+  gap: 6px;
+  white-space: nowrap;
+  overflow: hidden;
   z-index: 50;
   /* Info-only surface: must never intercept clicks on the cards, reroll, or the
      central upgrade button beneath it (fix #9). There is no native click-through
      (no ignoreCursorEvents), so this CSS is the guarantee. */
   pointer-events: none;
+}
+
+/* Explicit per-slot pipeline states — never stale, never invented data. */
+.badge-chip-state {
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+.badge-chip-scanning { border-color: rgba(167, 139, 250, 0.5); }
+.badge-chip-scanning .badge-chip-state { color: #a78bfa; }
+.badge-chip-unmatched { border-color: rgba(251, 113, 133, 0.5); }
+.badge-chip-unmatched .badge-chip-state { color: #fb7185; }
+.badge-chip-no-data { border-color: rgba(148, 163, 184, 0.5); }
+.badge-chip-no-data .badge-chip-state { color: #94a3b8; }
+
+.badge-chip-sep {
+  color: #64748b;
+  font-weight: 700;
 }
 
 /* Explicit geometry-preview badges carry a prominent watermark so synthetic
@@ -96,21 +123,14 @@ html, body, #root {
 .badge-B { border-color: rgba(96, 165, 250, 0.3); }
 .badge-C { border-color: rgba(148, 163, 184, 0.2); }
 
-.badge-label {
-  font-size: 8px;
-  color: #64748b;
-  letter-spacing: 0.5px;
-  text-transform: uppercase;
-}
-
 .badge-tier {
-  font-size: 28px;
+  font-size: 16px;
   font-weight: 900;
   line-height: 1;
   color: var(--tier-accent, #94a3b8);
 }
 
-.badge[class*="tier-"] {
+.badge-chip[class*="tier-"] {
   border-color: var(--tier-accent, rgba(100, 116, 139, 0.3));
 }
 
@@ -125,12 +145,6 @@ html, body, #root {
   font-size: 11px;
   color: #94a3b8;
   font-weight: 700;
-}
-
-.badge-prob {
-  font-size: 9px;
-  color: #64748b;
-  font-weight: 500;
 }
 
 .badge-grade {
@@ -156,7 +170,6 @@ html, body, #root {
   border: 1px solid rgba(74, 222, 128, 0.4);
   border-radius: 3px;
   padding: 0 3px;
-  margin-bottom: 2px;
   letter-spacing: 0.5px;
 }
 

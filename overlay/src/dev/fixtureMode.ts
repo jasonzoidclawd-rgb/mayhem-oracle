@@ -17,9 +17,9 @@
 export type OverlayPhase = "idle" | "client_found" | "in_game" | "augment_selection";
 
 export type OverlayFixtureMode =
-  /** League focused, real complete OCR offer, ARAMGG ready → real badges. */
+  /** League focused, a latched real OCR offer, ARAMGG ready → per-slot badges. */
   | { kind: "real-offer" }
-  /** League focused at an augment screen but not 3 confident cards → diagnostic, no badges. */
+  /** League focused at an augment screen but no latched offer yet → diagnostic, no badges. */
   | { kind: "ocr-unavailable" }
   /** Explicit preview flag AND League absent → watermarked preview badges. */
   | { kind: "preview" }
@@ -31,8 +31,13 @@ export interface FixtureModeInput {
   previewOn: boolean;
   gameWindowForeground: boolean;
   phase: OverlayPhase;
-  /** isCompleteThreeCardOffer(matchedCards) — all three current cards matched. */
-  completeOffer: boolean;
+  /**
+   * offerActive(offerState) — a latched offer surface with ≥1 identified slot.
+   * Slots render per-slot states (matched / NO DATA / UNMATCHED / SCANNING);
+   * a slot never shows stale or invented data, so a partially-resolved offer
+   * is safe to render.
+   */
+  offerActive: boolean;
   aramggReady: boolean;
 }
 
@@ -52,11 +57,11 @@ export function resolveOverlayFixtureMode(input: FixtureModeInput): OverlayFixtu
 
   if (!input.tierFixtureOn) return { kind: "hidden" };
 
-  // Tier-fixture only paints over a real, focused, complete OCR offer.
+  // Tier-fixture only paints over a real, focused, latched OCR offer.
   if (input.gameWindowForeground && input.phase === "augment_selection") {
-    if (input.completeOffer && input.aramggReady) return { kind: "real-offer" };
-    // Focused augment screen but not three confident cards (or ARAMGG still
-    // loading): show a diagnostic, never synthetic cards, never stale badges.
+    if (input.offerActive && input.aramggReady) return { kind: "real-offer" };
+    // Focused augment screen but no latched offer (or ARAMGG still loading):
+    // show a diagnostic, never synthetic cards, never stale badges.
     return { kind: "ocr-unavailable" };
   }
 

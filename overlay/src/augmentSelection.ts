@@ -25,7 +25,6 @@ export interface AugmentRound {
 export interface AugmentRoundTransition {
   round: AugmentRound | null;
   isNewRound: boolean;
-  selectionComplete: boolean;
   nextPhase: "in_game" | "augment_selection";
 }
 
@@ -41,6 +40,12 @@ export function augmentRoundForLevel(level: number): AugmentRound | null {
  * A new augment threshold is the lifecycle boundary for OCR. It must cancel
  * the prior run and start a fresh one even if the previous run never observed
  * the card text disappear after the player selected an augment.
+ *
+ * Champion level is ONLY a round-boundary trigger. It is never a continuing
+ * validity gate: a level gained while an augment offer is still open (XP keeps
+ * accruing during selection) must not end the selection or clear the offer.
+ * Selection completion is decided by the offer lifecycle (surface absence /
+ * confirmed pick), not by level.
  */
 export function transitionAugmentRound({
   playerLevel,
@@ -60,17 +65,14 @@ export function transitionAugmentRound({
     return {
       round,
       isNewRound: true,
-      selectionComplete: false,
       nextPhase: "augment_selection",
     };
   }
 
-  const selectionComplete = phase === "augment_selection" && playerLevel > lastAugmentLevel;
   return {
     round: augmentRoundForLevel(playerLevel),
     isNewRound: false,
-    selectionComplete,
-    nextPhase: selectionComplete ? "in_game" : phase,
+    nextPhase: phase,
   };
 }
 
@@ -80,35 +82,6 @@ export function shouldStartAugmentSelection({
   augmentLevel: number | undefined;
 }): boolean {
   return augmentLevel !== undefined;
-}
-
-export function shouldEndAugmentSelectionForLevel({
-  playerLevel,
-  lastAugmentLevel,
-}: {
-  playerLevel: number;
-  lastAugmentLevel: number;
-}): boolean {
-  return lastAugmentLevel > 0 && playerLevel > lastAugmentLevel;
-}
-
-export function advanceOcrSelection(
-  state: { hasSeenCards: boolean; emptyPasses: number },
-  detectedCardCount: number,
-) {
-  if (detectedCardCount > 0) {
-    return { hasSeenCards: true, emptyPasses: 0, shouldStop: false };
-  }
-  if (!state.hasSeenCards) {
-    return { ...state, shouldStop: false };
-  }
-
-  const emptyPasses = state.emptyPasses + 1;
-  return {
-    hasSeenCards: true,
-    emptyPasses,
-    shouldStop: emptyPasses >= 2,
-  };
 }
 
 export function ocrRunIsCurrent({

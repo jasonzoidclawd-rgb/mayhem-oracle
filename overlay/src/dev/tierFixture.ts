@@ -19,7 +19,7 @@ import type {
   DecisionCandidateResult,
   DecisionResult,
 } from "../contracts/decision";
-import type { AramggStat, MatchMethod } from "./aramggSource";
+import type { AramggStat, MatchMethod, RiotTitleMethod } from "./aramggSource";
 import type { TierLetter } from "../model/tier";
 
 /** Pure enable predicate — separated from `import.meta` so it is unit-testable. */
@@ -54,14 +54,14 @@ export const TIER_FIXTURE_MEMBER: MemberSnapshot = {
 export interface AramggFixtureCard {
   slug: string;
   stat: AramggStat;
-  method: MatchMethod;
+  method: MatchMethod | RiotTitleMethod;
 }
 
 /** A debug-panel row: full provenance for one rendered card. */
 export interface AramggDebugRow {
   slug: string;
   augmentId: string;
-  method: MatchMethod;
+  method: MatchMethod | RiotTitleMethod;
   rawWinRate: string;
   winRatePercent: string;
   numGames: string;

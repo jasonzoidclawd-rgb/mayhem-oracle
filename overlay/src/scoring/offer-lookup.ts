@@ -174,15 +174,25 @@ export function buildOverlayAugmentLookup(args: {
   const poolBySlug = poolAugmentsBySlug(args.poolData);
   const counts = rarityCounts(args.allAugments);
 
-  for (const augment of args.allAugments) {
+  // The OCR lookup deliberately includes augments the catalog marks as
+  // removed / not confirmed live: a card OCR'd from a real offer screen is
+  // direct evidence the augment IS offerable (catalog lifecycle can lag the
+  // live game — e.g. 疾速追擊 / pursuit-of-haste on 26.13). Lifecycle
+  // exclusion still applies to pool PREDICTION in the pool orchestrator.
+  // Non-live entries are added FIRST so a live augment always wins a
+  // normalized-name collision.
+  const isNonLive = (augment: ScoredAugment): boolean => {
     const availabilityStatus = augment.availability?.status;
-    const nonOfferable = availabilityStatus
+    return availabilityStatus
       ? availabilityStatus !== "confirmed_live"
       : augment.flags?.lifecycle === "removed";
-    if (nonOfferable) {
-      continue;
-    }
+  };
+  const ordered = [
+    ...args.allAugments.filter(isNonLive),
+    ...args.allAugments.filter((augment) => !isNonLive(augment)),
+  ];
 
+  for (const augment of ordered) {
     const scored = poolBySlug.get(augment.slug) ?? fallbackScoredAugment({
       augment,
       championWinRate: args.championWinRate,
