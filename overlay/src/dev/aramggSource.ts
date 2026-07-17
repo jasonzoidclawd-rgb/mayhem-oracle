@@ -14,6 +14,7 @@
  */
 import type { DecisionGrade } from "../contracts/decision";
 import type { TierLetter } from "../model/tier";
+import { decimalShiftPercent } from "../winRateFormat";
 
 // Canonical source URLs, recorded verbatim for provenance display. At dev
 // runtime the overlay fetches these THROUGH the Vite dev proxy
@@ -284,37 +285,11 @@ export function resolveOcrTitle(
   return { augmentId: null, reason: "riot-catalog-unmatched" };
 }
 
-// ─── Pure: win-rate percentage via exact string decimal shift ───
-
-/**
- * Convert a 0–1 fraction STRING to a percentage STRING by shifting the decimal
- * point right two places on the digits themselves — never floating-point
- * multiplication, which would produce IEEE-754 artifacts (0.563213 * 100 =
- * 56.32130000000001). Trailing fractional zeros are preserved (source
- * precision); leading integer zeros are stripped.
- *
- *   "0.563213" → "56.3213"   "0.5" → "50"   "0.5000" → "50.00"
- *   "1" → "100"              "0"   → "0"
- *
- * Throws on any non-`\d+(\.\d+)?` input so malformed data never renders.
- */
-export function decimalShiftPercent(fraction: string): string {
-  if (typeof fraction !== "string" || !/^\d+(\.\d+)?$/.test(fraction)) {
-    throw new Error(`decimalShiftPercent: malformed fraction "${fraction}"`);
-  }
-  const [intPart, fracPart = ""] = fraction.split(".");
-  const digits = intPart + fracPart;
-  const pointPos = intPart.length + 2; // ×100 shifts the point right by 2
-  let out: string;
-  if (pointPos >= digits.length) {
-    out = digits + "0".repeat(pointPos - digits.length);
-  } else {
-    out = `${digits.slice(0, pointPos)}.${digits.slice(pointPos)}`;
-  }
-  // Strip leading integer zeros but keep at least one digit; leave the
-  // fractional part (and its trailing zeros) untouched.
-  return out.replace(/^0+(?=\d)/, "");
-}
+// ─── Win-rate percentage via exact string decimal shift ───
+// The shift lives in the PRODUCTION module (chips consume it in release
+// builds, where dev/ is stubbed out); re-exported here for existing dev/test
+// importers.
+export { decimalShiftPercent };
 
 // ─── Pure: numeric tier → letter / grade ───
 

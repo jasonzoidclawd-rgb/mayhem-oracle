@@ -6,6 +6,17 @@
   font-display: swap;
 }
 
+/* Anton (OFL 1.1 — see src/assets/fonts/OFL.txt), bundled locally so the
+   overlay never requests a remote font at runtime. Used for the tier glyph
+   only, matching the v1 dashboard tier-badge typography. */
+@font-face {
+  font-family: "Anton";
+  src: url("./assets/fonts/anton-latin.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: block;
+}
+
 * {
   margin: 0;
   padding: 0;
@@ -51,15 +62,15 @@ html, body, #root {
 .status-ocr { background: #a78bfa; box-shadow: 0 0 6px #a78bfa; }
 
 /* ─── Badge chip (compact horizontal strip ABOVE each card frame) ───
-   Geometry contract: badgeLayout.ts BADGE_CHIP_SIZE (168×32 CSS px, height
-   within 28–36px). The chip is placed OUTSIDE the card artwork — above the
-   derived card frame, side-anchored as fallback — never over card art, HUD,
-   reroll, or the central upgrade button. */
+   Geometry contract: badgeLayout.ts BADGE_CHIP_SIZE (118×32 CSS px, height
+   within 28–36px), content `[S+ · 61.6%]`. The chip is placed OUTSIDE the
+   card artwork — above the derived card frame, side-anchored as fallback —
+   never over card art, HUD, reroll, or the central upgrade button. */
 .badge-chip {
   position: absolute;
   transform: none;
   box-sizing: border-box;
-  width: 168px;
+  width: 118px;
   height: 32px;
   background: rgba(8, 12, 20, 0.92);
   backdrop-filter: blur(12px);
@@ -123,11 +134,26 @@ html, body, #root {
 .badge-B { border-color: rgba(96, 165, 250, 0.3); }
 .badge-C { border-color: rgba(148, 163, 184, 0.2); }
 
+/* Tier glyph: v1 dashboard typography (Anton 400, slight italic skew and
+   counter-rotation about the optical center). Applies to the GLYPH only —
+   the separator and percentage keep the compact UI font. */
 .badge-tier {
-  font-size: 16px;
-  font-weight: 900;
+  font-family: Anton, Impact, "Arial Narrow", sans-serif;
+  font-weight: 400;
+  font-size: 20px;
   line-height: 1;
   color: var(--tier-accent, #94a3b8);
+  display: inline-block;
+  transform: skewX(-9deg) rotate(-4deg);
+  /* Optical vertical centering: Anton's tall cap height sits high on the
+     line box, so rotate about a point slightly below geometric center. */
+  transform-origin: 50% 56%;
+}
+
+/* Two-character glyphs (S+) get slight negative tracking so the plus tucks
+   against the S, per the dashboard reference. */
+.badge-tier-two-char {
+  letter-spacing: -1px;
 }
 
 .badge-chip[class*="tier-"] {
