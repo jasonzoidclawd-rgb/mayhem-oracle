@@ -76,6 +76,29 @@ fn scales_logical_card_crop_into_retina_capture_pixels() {
 }
 
 #[test]
+fn overlay_anchor_is_the_monitor_rect_in_every_selection_mode() {
+    // The anchor is what the webview's CSS box maps onto: on macOS the overlay
+    // window is fullscreen over the monitor in EVERY mode, so detected-window
+    // and monitor-fallback modes produce identical CSS geometry for the same
+    // screen rect (fix #3: no chip jumps when window detection flaps).
+    let monitor_info = monitor(1280, 720, 2.0);
+    let expected = Rect {
+        x: 0,
+        y: 0,
+        width: 1280,
+        height: 720,
+    };
+
+    for calibration in [
+        select_viewport(&monitor_info, Some(&window(1280, 720))),
+        select_viewport(&monitor_info, Some(&window(960, 540))),
+        select_viewport(&monitor_info, None),
+    ] {
+        assert_eq!(calibration.overlay_anchor, expected, "{}", calibration.mode);
+    }
+}
+
+#[test]
 fn falls_back_to_monitor_when_league_window_is_missing() {
     let calibration = select_viewport(&monitor(2560, 1080, 1.0), None);
 

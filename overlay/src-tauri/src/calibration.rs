@@ -34,6 +34,14 @@ pub struct OverlayCalibration {
     pub monitor: MonitorInfo,
     pub game_window: Option<Rect>,
     pub viewport: Rect,
+    /// The rect (same calibrated space as `viewport`/`game_window`) that the
+    /// overlay webview's CSS box maps onto. Frontend conversion is a single
+    /// ratio: css = (rect − anchor.origin) × cssWindowSize / anchorSize —
+    /// `scale_factor` and devicePixelRatio never re-enter, so a monitor whose
+    /// reported scale flaps 1.0↔2.0 yields identical CSS geometry. Defaults
+    /// to the monitor (macOS: the overlay window is fullscreen); the Windows
+    /// path overrides it with the viewport after repositioning the window.
+    pub overlay_anchor: Rect,
     pub mode: String,
     pub warnings: Vec<String>,
 }
@@ -68,6 +76,7 @@ pub fn select_viewport(monitor: &MonitorInfo, game_window: Option<&Rect>) -> Ove
             monitor: monitor.clone(),
             game_window: Some(window.clone()),
             viewport: monitor_rect(monitor),
+            overlay_anchor: monitor_rect(monitor),
             mode: "borderless-monitor-fallback".to_string(),
             warnings: Vec::new(),
         },
@@ -75,6 +84,7 @@ pub fn select_viewport(monitor: &MonitorInfo, game_window: Option<&Rect>) -> Ove
             monitor: monitor.clone(),
             game_window: Some(window.clone()),
             viewport: window.clone(),
+            overlay_anchor: monitor_rect(monitor),
             mode: "league-window".to_string(),
             warnings: Vec::new(),
         },
@@ -82,6 +92,7 @@ pub fn select_viewport(monitor: &MonitorInfo, game_window: Option<&Rect>) -> Ove
             monitor: monitor.clone(),
             game_window: None,
             viewport: monitor_rect(monitor),
+            overlay_anchor: monitor_rect(monitor),
             mode: "monitor-fallback".to_string(),
             warnings: vec!["League window not detected; using monitor bounds.".to_string()],
         },

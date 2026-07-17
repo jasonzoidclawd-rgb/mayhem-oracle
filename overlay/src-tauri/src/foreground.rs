@@ -111,6 +111,22 @@ pub fn classify_foreground(observation: ForegroundObservation<'_>) -> Foreground
     }
 }
 
+/// Effective frontmost PID on macOS.
+///
+/// `NSWorkspace.frontmostApplication` read outside the main thread can return
+/// a value that is seconds STALE (observed: it kept reporting the game process
+/// 18s after Terminal took focus, leaving every overlay surface visible over
+/// the desktop). The z-order topmost layer-0 window from `CGWindowList` is
+/// always fresh and thread-safe, so it is the authority whenever such a window
+/// exists; the workspace value is only a fallback for a fullscreen game
+/// surface that owns no layer-0 window.
+pub fn effective_frontmost_pid(
+    topmost_layer0_pid: Option<u32>,
+    workspace_frontmost_pid: Option<u32>,
+) -> Option<u32> {
+    topmost_layer0_pid.or(workspace_frontmost_pid)
+}
+
 pub fn is_actual_game_window(owner_name: &str, title: &str) -> bool {
     let owner = normalize_identity(owner_name);
     let title = normalize_identity(title);
@@ -165,9 +181,10 @@ fn normalize_identity(value: &str) -> String {
 #[cfg(test)]
 mod tests {
     use super::{
-        classify_foreground, is_actual_game_process, is_actual_game_window,
-        is_league_client_ux_process, is_riot_client_process, ForegroundObservation,
-        LEAGUE_CLIENT_UX_BUNDLE_ID, LEAGUE_GAME_BUNDLE_ID, RIOT_CLIENT_BUNDLE_ID,
+        classify_foreground, effective_frontmost_pid, is_actual_game_process,
+        is_actual_game_window, is_league_client_ux_process, is_riot_client_process,
+        ForegroundObservation, LEAGUE_CLIENT_UX_BUNDLE_ID, LEAGUE_GAME_BUNDLE_ID,
+        RIOT_CLIENT_BUNDLE_ID,
     };
 
     fn observation<'a>(
@@ -263,6 +280,54 @@ mod tests {
             let state = classify_foreground(observation(name, bundle, name, name, true));
             assert!(!state.game_window_foreground, "{name} must stay hidden");
             assert!(!state.riot_client_foreground, "{name} is not Riot Client");
+        }
+    }
+
+    #[test]
+    fn zorder_topmost_window_overrides_a_stale_workspace_frontmost() {
+        // Regression pin for the 13:33:54 leak: NSWorkspace kept returning the
+        // game PID while Terminal's window was in front. The z-order topmost
+        // layer-0 window is the authority whenever one exists.
+        let game_pid = Some(4242);
+        let terminal_pid = Some(7001);
+        assert_eq!(effective_frontmost_pid(terminal_pid, game_pid), terminal_pid);
+        assert_eq!(effective_frontmost_pid(game_pid, terminal_pid), game_pid);
+    }
+
+    #[test]
+    fn workspace_frontmost_is_only_a_fallback_for_fullscreen_surfaces() {
+        // A fullscreen Metal game owns no layer-0 CG window; only then does
+        // the (possibly stale) workspace value decide.
+        assert_eq!(effective_frontmost_pid(None, Some(4242)), Some(4242));
+        assert_eq!(effective_frontmost_pid(None, None), None);
+    }
+
+    #[test]
+    fn stale_game_process_metadata_never_survives_a_desktop_frontmost() {
+        // End-to-end: once the z-order authority swaps the observation to the
+        // desktop app, game_running=true alone must never keep surfaces
+        // visible — for every desktop/client app we classify.
+        for (name, bundle) in [
+            ("Terminal", "com.apple.Terminal"),
+            ("Finder", "com.apple.finder"),
+            ("Safari", "com.apple.Safari"),
+            ("Riot Client", RIOT_CLIENT_BUNDLE_ID),
+            ("League Client UX", LEAGUE_CLIENT_UX_BUNDLE_ID),
+        ] {
+            let state = classify_foreground(ForegroundObservation {
+                app_name: Some(name),
+                bundle_identifier: Some(bundle),
+                owner_name: Some(name),
+                window_title: Some(name),
+                executable_path: None,
+                window_handle: None,
+                game_running: true,
+                game_window_detected: true,
+            });
+            assert!(
+                !state.game_window_foreground,
+                "{name} in front must hide every overlay surface",
+            );
         }
     }
 

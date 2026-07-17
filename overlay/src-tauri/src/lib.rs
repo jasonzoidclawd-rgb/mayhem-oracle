@@ -379,10 +379,16 @@ fn apply_overlay_window_bounds(
 fn get_overlay_calibration(
     app: tauri::AppHandle,
 ) -> Result<calibration::OverlayCalibration, String> {
-    let calibration = detect_overlay_calibration()?;
+    #[cfg_attr(not(target_os = "windows"), allow(unused_mut))]
+    let mut calibration = detect_overlay_calibration()?;
 
     #[cfg(target_os = "windows")]
-    apply_overlay_window_bounds(&app, &calibration)?;
+    {
+        apply_overlay_window_bounds(&app, &calibration)?;
+        // The overlay window now hugs the viewport, so the webview's CSS box
+        // maps onto the viewport rect rather than the monitor.
+        calibration.overlay_anchor = calibration.viewport.clone();
+    }
     #[cfg(not(target_os = "windows"))]
     let _ = &app;
 
@@ -858,24 +864,28 @@ fn foreground_window_metadata() -> (FrontmostApplication, Option<String>, Option
         copy_window_info, kCGWindowListExcludeDesktopElements, kCGWindowListOptionOnScreenOnly,
     };
 
-    let foreground_application = workspace_frontmost_application();
-    let foreground_process_id = foreground_application.process_id;
+    let workspace_application = workspace_frontmost_application();
 
     let Some(windows) = copy_window_info(
         kCGWindowListOptionOnScreenOnly | kCGWindowListExcludeDesktopElements,
         0,
     ) else {
-        return (foreground_application, None, None, false);
+        return (workspace_application, None, None, false);
     };
 
     let own_process_id = std::process::id();
-    let mut foreground_owner_name = None;
-    let mut foreground_window_title = None;
+    let mut topmost_process_id: Option<u32> = None;
+    let mut topmost_owner_name: Option<String> = None;
+    let mut topmost_window_title: Option<String> = None;
     let mut game_window_detected = false;
 
-    // NSWorkspace identifies the actual frontmost process, including a
-    // fullscreen Metal game with no regular CoreGraphics window. CoreGraphics
-    // only supplies optional owner/title metadata for that process.
+    // CGWindowList returns windows front-to-back: the first layer-0 window not
+    // owned by the overlay is the app the user actually sees in front, and it
+    // is always FRESH. NSWorkspace.frontmostApplication read outside the main
+    // thread can be seconds stale (observed: it kept returning the game while
+    // Terminal had focus, leaking every overlay surface onto the desktop), so
+    // it only serves as a fallback for a fullscreen game surface that owns no
+    // layer-0 window. See foreground::effective_frontmost_pid.
     for window_ref in windows.get_all_values() {
         if window_ref.is_null() {
             continue;
@@ -897,7 +907,11 @@ fn foreground_window_metadata() -> (FrontmostApplication, Option<String>, Option
             game_window_detected = true;
         }
 
-        if layer != Some(0) || process_id.is_none() || process_id == Some(own_process_id) {
+        if topmost_process_id.is_some()
+            || layer != Some(0)
+            || process_id.is_none()
+            || process_id == Some(own_process_id)
+        {
             continue;
         }
 
@@ -911,15 +925,33 @@ fn foreground_window_metadata() -> (FrontmostApplication, Option<String>, Option
             continue;
         }
 
-        if Some(process_id) != foreground_process_id {
-            continue;
-        }
-
-        if foreground_owner_name.is_none() {
-            foreground_owner_name = owner_name.filter(|value| !value.is_empty());
-            foreground_window_title = title.filter(|value| !value.is_empty());
-        }
+        topmost_process_id = Some(process_id);
+        topmost_owner_name = owner_name.filter(|value| !value.is_empty());
+        topmost_window_title = title.filter(|value| !value.is_empty());
     }
+
+    let effective_process_id = foreground::effective_frontmost_pid(
+        topmost_process_id,
+        workspace_application.process_id,
+    );
+
+    let foreground_application = match effective_process_id {
+        Some(pid)
+            if Some(pid) == topmost_process_id
+                && Some(pid) != workspace_application.process_id =>
+        {
+            running_application(pid)
+        }
+        _ => workspace_application,
+    };
+
+    // Owner/title metadata only ever describes the effective front window.
+    let (foreground_owner_name, foreground_window_title) =
+        if effective_process_id.is_some() && effective_process_id == topmost_process_id {
+            (topmost_owner_name, topmost_window_title)
+        } else {
+            (None, None)
+        };
 
     (
         foreground_application,
