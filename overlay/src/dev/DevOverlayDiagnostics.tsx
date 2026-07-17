@@ -12,9 +12,7 @@ export interface DevOverlayDiagnosticsProps {
   tierFixtureOn: boolean;
   geometryPreviewOn: boolean;
   isPreviewMode: boolean;
-  debugPinned: boolean;
   debugCollapsed: boolean;
-  setDebugPinned: Dispatch<SetStateAction<boolean>>;
   setDebugCollapsed: Dispatch<SetStateAction<boolean>>;
   calibration: OverlayCalibration | null;
   calibrationError: string | null;
@@ -38,9 +36,7 @@ export function DevOverlayDiagnostics({
   tierFixtureOn,
   geometryPreviewOn,
   isPreviewMode,
-  debugPinned,
   debugCollapsed,
-  setDebugPinned,
   setDebugCollapsed,
   calibration,
   calibrationError,
@@ -51,6 +47,14 @@ export function DevOverlayDiagnostics({
   ocrLifecycle,
   fixturePayload,
 }: DevOverlayDiagnosticsProps) {
+  // ONE gate for every development surface below (calibration, OCR
+  // diagnostic, ARAMGG debug panel). The 18:53 retest proved a bypass here
+  // paints panels over Terminal — there is none anymore: when the canonical
+  // predicate is false, this component renders NOTHING. The explicit
+  // geometry-preview mode (League absent, watermarked PREVIEW) is the only
+  // path that makes the predicate true without game foreground.
+  if (!gameOverlayIsVisible) return null;
+
   const diagnostics: OcrCardDiagnostic[] = ocrDiagnostics.length > 0
     ? ocrDiagnostics
     : EMPTY_DIAGNOSTIC_REGIONS.map((regionIndex) => ({
@@ -76,7 +80,7 @@ export function DevOverlayDiagnostics({
 
   return (
     <>
-      {gameOverlayIsVisible && (calibration || calibrationError) && (
+      {(calibration || calibrationError) && (
         <div className="calibration-panel" data-dev-only="calibration">
           <div className="calibration-title">
             Calibration{isPreviewMode && " · PREVIEW"}
@@ -108,7 +112,7 @@ export function DevOverlayDiagnostics({
         </div>
       )}
 
-      {gameOverlayIsVisible && fixtureModeKind === "ocr-unavailable" && (
+      {fixtureModeKind === "ocr-unavailable" && (
         <div className="ocr-diagnostic" data-dev-only="ocr-diagnostic">
           No latched offer — captured {diag.cardsCaptured}/3 · titles{" "}
           {diag.titlesRead}/3 · Riot IDs {diag.riotResolved}/3 · ARAMGG{" "}
@@ -117,7 +121,7 @@ export function DevOverlayDiagnostics({
         </div>
       )}
 
-      {(tierFixtureOn || geometryPreviewOn) && (gameOverlayIsVisible || debugPinned) && (
+      {(tierFixtureOn || geometryPreviewOn) && (
         <div
           className="aramgg-debug-panel"
           data-dev-only="debug-panel"
@@ -148,12 +152,6 @@ export function DevOverlayDiagnostics({
               style={{ marginLeft: 8, font: "inherit", cursor: "pointer" }}
             >
               {debugCollapsed ? "expand" : "collapse"}
-            </button>
-            <button
-              onClick={() => setDebugPinned((pinned) => !pinned)}
-              style={{ marginLeft: 4, font: "inherit", cursor: "pointer" }}
-            >
-              {debugPinned ? "unpin" : "pin"}
             </button>
             <button
               onClick={aramgg.refresh}

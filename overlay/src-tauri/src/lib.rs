@@ -734,7 +734,7 @@ fn set_click_through(app: tauri::AppHandle, ignore: bool) {
     }
 }
 
-#[derive(Default)]
+#[derive(Clone, Default)]
 struct FrontmostApplication {
     app_name: Option<String>,
     bundle_identifier: Option<String>,
@@ -857,108 +857,267 @@ unsafe fn cf_i32_dictionary_value(
 }
 
 #[cfg(target_os = "macos")]
-fn foreground_window_metadata() -> (FrontmostApplication, Option<String>, Option<String>, bool) {
+unsafe fn cf_f64_dictionary_value(
+    dictionary: &core_foundation::dictionary::CFDictionary,
+    key: &'static str,
+) -> Option<f64> {
+    use core_foundation::base::TCFType;
+    use core_foundation::number::{CFNumber, CFNumberRef};
+
+    let value = cf_dictionary_value(dictionary, key);
+    (!value.is_null())
+        .then(|| CFNumber::wrap_under_get_rule(value as CFNumberRef).to_f64())
+        .flatten()
+}
+
+#[cfg(target_os = "macos")]
+unsafe fn cf_window_bounds_size(
+    dictionary: &core_foundation::dictionary::CFDictionary,
+) -> (f64, f64) {
+    use core_foundation::base::TCFType;
+    use core_foundation::dictionary::{CFDictionary, CFDictionaryRef};
+
+    let value = cf_dictionary_value(dictionary, "kCGWindowBounds");
+    if value.is_null() {
+        return (0.0, 0.0);
+    }
+    let bounds =
+        CFDictionary::<*const std::ffi::c_void, *const std::ffi::c_void>::wrap_under_get_rule(
+            value as CFDictionaryRef,
+        );
+    (
+        cf_f64_dictionary_value(&bounds, "Width").unwrap_or(0.0),
+        cf_f64_dictionary_value(&bounds, "Height").unwrap_or(0.0),
+    )
+}
+
+#[cfg(target_os = "macos")]
+#[cfg_attr(not(debug_assertions), allow(dead_code))]
+struct ForegroundAnalysis {
+    frontmost: FrontmostApplication,
+    owner_name: Option<String>,
+    window_title: Option<String>,
+    game_window_detected: bool,
+    workspace: FrontmostApplication,
+    candidates: Vec<foreground::WindowCandidate>,
+    verdicts: Vec<&'static str>,
+    selected_process_id: Option<u32>,
+    effective_process_id: Option<u32>,
+    decision_reason: &'static str,
+}
+
+/// One complete foreground poll: walk `CGWindowList` front-to-back, resolve
+/// every owner PID to its process identity, and pick the z-order authority
+/// via `foreground::select_frontmost_window`.
+///
+/// Grounded rules (2026-07-17, observed live on this machine):
+/// - The real game window carries an EMPTY `kCGWindowName`, so game identity
+///   comes ONLY from the owner PID's bundle/executable — never the title.
+/// - LeagueClientUx's window owner name is "League of Legends"; names cannot
+///   distinguish client from game.
+/// - A borderless game surface may sit at an elevated window layer; the game
+///   process is the only owner that may grant foreground from there.
+/// - NSWorkspace.frontmostApplication read off the main thread can freeze
+///   indefinitely; it is only a fallback when the walk yields NO candidate.
+#[cfg(target_os = "macos")]
+fn analyze_foreground() -> ForegroundAnalysis {
     use core_foundation::base::TCFType;
     use core_foundation::dictionary::CFDictionary;
     use core_graphics::window::{
         copy_window_info, kCGWindowListExcludeDesktopElements, kCGWindowListOptionOnScreenOnly,
     };
+    use std::collections::HashMap;
 
     let workspace_application = workspace_frontmost_application();
+    let own_process_id = std::process::id();
 
-    let Some(windows) = copy_window_info(
+    let mut candidates: Vec<foreground::WindowCandidate> = Vec::new();
+    let mut applications: HashMap<u32, FrontmostApplication> = HashMap::new();
+
+    if let Some(windows) = copy_window_info(
         kCGWindowListOptionOnScreenOnly | kCGWindowListExcludeDesktopElements,
         0,
-    ) else {
-        return (workspace_application, None, None, false);
-    };
-
-    let own_process_id = std::process::id();
-    let mut topmost_process_id: Option<u32> = None;
-    let mut topmost_owner_name: Option<String> = None;
-    let mut topmost_window_title: Option<String> = None;
-    let mut game_window_detected = false;
-
-    // CGWindowList returns windows front-to-back: the first layer-0 window not
-    // owned by the overlay is the app the user actually sees in front, and it
-    // is always FRESH. NSWorkspace.frontmostApplication read outside the main
-    // thread can be seconds stale (observed: it kept returning the game while
-    // Terminal had focus, leaking every overlay surface onto the desktop), so
-    // it only serves as a fallback for a fullscreen game surface that owns no
-    // layer-0 window. See foreground::effective_frontmost_pid.
-    for window_ref in windows.get_all_values() {
-        if window_ref.is_null() {
-            continue;
+    ) {
+        for window_ref in windows.get_all_values() {
+            if window_ref.is_null() {
+                continue;
+            }
+            let window = unsafe {
+                CFDictionary::<*const std::ffi::c_void, *const std::ffi::c_void>::wrap_under_get_rule(
+                    window_ref as *const _,
+                )
+            };
+            let process_id = unsafe { cf_i32_dictionary_value(&window, "kCGWindowOwnerPID") }
+                .and_then(|value| (value > 0).then_some(value as u32));
+            let application = process_id.map(|pid| {
+                applications
+                    .entry(pid)
+                    .or_insert_with(|| running_application(pid))
+                    .clone()
+            });
+            let (width, height) = unsafe { cf_window_bounds_size(&window) };
+            let is_own_process = process_id == Some(own_process_id)
+                || application
+                    .as_ref()
+                    .and_then(|app| app.bundle_identifier.as_deref())
+                    .is_some_and(|bundle| bundle == "com.mayhem-oracle.overlay");
+            let is_game_process = application.as_ref().is_some_and(|app| {
+                foreground::is_game_owner(
+                    app.bundle_identifier.as_deref(),
+                    app.executable_path.as_deref(),
+                )
+            });
+            candidates.push(foreground::WindowCandidate {
+                window_number: unsafe { cf_i32_dictionary_value(&window, "kCGWindowNumber") },
+                layer: unsafe { cf_i32_dictionary_value(&window, "kCGWindowLayer") },
+                alpha: unsafe { cf_f64_dictionary_value(&window, "kCGWindowAlpha") },
+                width,
+                height,
+                process_id,
+                owner_name: unsafe { cf_string_dictionary_value(&window, "kCGWindowOwnerName") },
+                title: unsafe { cf_string_dictionary_value(&window, "kCGWindowName") },
+                is_own_process,
+                is_game_process,
+            });
         }
-        let window = unsafe {
-            CFDictionary::<*const std::ffi::c_void, *const std::ffi::c_void>::wrap_under_get_rule(
-                window_ref as *const _,
-            )
-        };
-        let owner_name = unsafe { cf_string_dictionary_value(&window, "kCGWindowOwnerName") };
-        let title = unsafe { cf_string_dictionary_value(&window, "kCGWindowName") };
-        let owner_name_value = owner_name.as_deref().unwrap_or_default();
-        let title_value = title.as_deref().unwrap_or_default();
-        let process_id = unsafe { cf_i32_dictionary_value(&window, "kCGWindowOwnerPID") }
-            .and_then(|value| (value > 0).then_some(value as u32));
-        let layer = unsafe { cf_i32_dictionary_value(&window, "kCGWindowLayer") };
-
-        if foreground::is_actual_game_window(owner_name_value, title_value) {
-            game_window_detected = true;
-        }
-
-        if topmost_process_id.is_some()
-            || layer != Some(0)
-            || process_id.is_none()
-            || process_id == Some(own_process_id)
-        {
-            continue;
-        }
-
-        let process_id = process_id.unwrap();
-        let application = running_application(process_id);
-        let is_own_window = application
-            .bundle_identifier
-            .as_deref()
-            .is_some_and(|bundle| bundle == "com.mayhem-oracle.overlay");
-        if is_own_window {
-            continue;
-        }
-
-        topmost_process_id = Some(process_id);
-        topmost_owner_name = owner_name.filter(|value| !value.is_empty());
-        topmost_window_title = title.filter(|value| !value.is_empty());
     }
 
+    // A window owned by the actual game process (any layer, any size) proves
+    // the game surface exists on-screen. Titles are useless here (empty).
+    let game_window_detected = candidates
+        .iter()
+        .any(|candidate| candidate.is_game_process);
+
+    let selection = foreground::select_frontmost_window(&candidates);
+    let selected = selection.selected_index.map(|index| &candidates[index]);
+    let selected_process_id = selected.and_then(|candidate| candidate.process_id);
     let effective_process_id = foreground::effective_frontmost_pid(
-        topmost_process_id,
+        selected_process_id,
         workspace_application.process_id,
     );
+    let decision_reason = if selection.selected_index.is_some() {
+        selection.reason
+    } else if workspace_application.process_id.is_some() {
+        "workspace-fallback-no-zorder-candidates"
+    } else {
+        "no-foreground-evidence"
+    };
 
-    let foreground_application = match effective_process_id {
-        Some(pid)
-            if Some(pid) == topmost_process_id
-                && Some(pid) != workspace_application.process_id =>
-        {
-            running_application(pid)
-        }
-        _ => workspace_application,
+    let frontmost = match effective_process_id {
+        Some(pid) if Some(pid) == selected_process_id => applications
+            .get(&pid)
+            .cloned()
+            .unwrap_or_else(|| running_application(pid)),
+        _ => workspace_application.clone(),
     };
 
     // Owner/title metadata only ever describes the effective front window.
-    let (foreground_owner_name, foreground_window_title) =
-        if effective_process_id.is_some() && effective_process_id == topmost_process_id {
-            (topmost_owner_name, topmost_window_title)
-        } else {
-            (None, None)
-        };
+    let (owner_name, window_title) = match selected {
+        Some(candidate) if effective_process_id == selected_process_id => (
+            candidate.owner_name.clone().filter(|value| !value.is_empty()),
+            candidate.title.clone().filter(|value| !value.is_empty()),
+        ),
+        _ => (None, None),
+    };
 
-    (
-        foreground_application,
-        foreground_owner_name,
-        foreground_window_title,
+    ForegroundAnalysis {
+        frontmost,
+        owner_name,
+        window_title,
         game_window_detected,
+        workspace: workspace_application,
+        candidates,
+        verdicts: selection.verdicts,
+        selected_process_id,
+        effective_process_id,
+        decision_reason,
+    }
+}
+
+#[cfg(target_os = "macos")]
+fn foreground_window_metadata() -> (FrontmostApplication, Option<String>, Option<String>, bool) {
+    let analysis = analyze_foreground();
+    (
+        analysis.frontmost,
+        analysis.owner_name,
+        analysis.window_title,
+        analysis.game_window_detected,
     )
+}
+
+#[cfg(all(target_os = "macos", debug_assertions))]
+#[derive(serde::Serialize)]
+#[serde(rename_all = "camelCase")]
+pub struct ForegroundCandidateReport {
+    #[serde(flatten)]
+    pub window: foreground::WindowCandidate,
+    pub verdict: &'static str,
+}
+
+#[cfg(all(target_os = "macos", debug_assertions))]
+#[derive(serde::Serialize)]
+#[serde(rename_all = "camelCase")]
+pub struct ForegroundPollDiagnostic {
+    pub own_process_id: u32,
+    pub workspace_process_id: Option<u32>,
+    pub workspace_app_name: Option<String>,
+    pub workspace_bundle_identifier: Option<String>,
+    pub workspace_executable_path: Option<String>,
+    pub candidates: Vec<ForegroundCandidateReport>,
+    pub selected_process_id: Option<u32>,
+    pub effective_process_id: Option<u32>,
+    pub decision_reason: &'static str,
+    pub state: foreground::ForegroundState,
+}
+
+/// DEVELOPMENT-ONLY full dump of one foreground poll: every window candidate
+/// with its exclusion verdict, the (possibly stale) NSWorkspace value, the
+/// selected z-order authority, and the resulting classification. Compiled
+/// out of release builds entirely — production never exposes process/window
+/// metadata.
+#[cfg(all(target_os = "macos", debug_assertions))]
+pub fn foreground_poll_diagnostic() -> ForegroundPollDiagnostic {
+    let analysis = analyze_foreground();
+    let state = foreground::classify_foreground(foreground::ForegroundObservation {
+        app_name: analysis.frontmost.app_name.as_deref(),
+        bundle_identifier: analysis.frontmost.bundle_identifier.as_deref(),
+        owner_name: analysis.owner_name.as_deref(),
+        window_title: analysis.window_title.as_deref(),
+        executable_path: analysis.frontmost.executable_path.as_deref(),
+        window_handle: analysis.frontmost.window_handle,
+        game_running: game_process_running(),
+        game_window_detected: analysis.game_window_detected,
+    });
+    ForegroundPollDiagnostic {
+        own_process_id: std::process::id(),
+        workspace_process_id: analysis.workspace.process_id,
+        workspace_app_name: analysis.workspace.app_name,
+        workspace_bundle_identifier: analysis.workspace.bundle_identifier,
+        workspace_executable_path: analysis.workspace.executable_path,
+        candidates: analysis
+            .candidates
+            .into_iter()
+            .zip(analysis.verdicts)
+            .map(|(window, verdict)| ForegroundCandidateReport { window, verdict })
+            .collect(),
+        selected_process_id: analysis.selected_process_id,
+        effective_process_id: analysis.effective_process_id,
+        decision_reason: analysis.decision_reason,
+        state,
+    }
+}
+
+#[tauri::command]
+fn get_foreground_diagnostic() -> Result<serde_json::Value, String> {
+    #[cfg(all(target_os = "macos", debug_assertions))]
+    {
+        return serde_json::to_value(foreground_poll_diagnostic())
+            .map_err(|error| error.to_string());
+    }
+    #[cfg(not(all(target_os = "macos", debug_assertions)))]
+    {
+        Err("foreground diagnostic is development-only".to_string())
+    }
 }
 
 #[cfg(target_os = "windows")]
@@ -1131,6 +1290,7 @@ pub fn run() {
             set_click_through,
             open_screen_recording_settings,
             get_foreground_state,
+            get_foreground_diagnostic,
             is_league_foreground,
             collector::get_collector_status,
             collector::set_collector_consent,

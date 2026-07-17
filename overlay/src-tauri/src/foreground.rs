@@ -114,17 +114,117 @@ pub fn classify_foreground(observation: ForegroundObservation<'_>) -> Foreground
 /// Effective frontmost PID on macOS.
 ///
 /// `NSWorkspace.frontmostApplication` read outside the main thread can return
-/// a value that is seconds STALE (observed: it kept reporting the game process
-/// 18s after Terminal took focus, leaving every overlay surface visible over
-/// the desktop). The z-order topmost layer-0 window from `CGWindowList` is
-/// always fresh and thread-safe, so it is the authority whenever such a window
-/// exists; the workspace value is only a fallback for a fullscreen game
-/// surface that owns no layer-0 window.
+/// a value that is seconds STALE — or frozen indefinitely (observed: it kept
+/// reporting the game process 18s+ after Terminal took focus, and in the
+/// 18:53 retest the inverse froze every surface off during a live game). The
+/// z-order authority from `CGWindowList` is always fresh and thread-safe, so
+/// it decides whenever a candidate window exists; the workspace value is only
+/// a fallback when the window list yields NO candidate at all. A cached
+/// NSWorkspace result must never override fresher CGWindowList evidence.
 pub fn effective_frontmost_pid(
-    topmost_layer0_pid: Option<u32>,
+    zorder_authority_pid: Option<u32>,
     workspace_frontmost_pid: Option<u32>,
 ) -> Option<u32> {
-    topmost_layer0_pid.or(workspace_frontmost_pid)
+    zorder_authority_pid.or(workspace_frontmost_pid)
+}
+
+/// One on-screen window from the front-to-back `CGWindowList` walk, reduced
+/// to the fields the selector needs. `is_game_process` must come from the
+/// owner PID's process identity (bundle identifier / executable path) — NEVER
+/// from the window title or owner name: the real macOS game window has an
+/// EMPTY title (observed live), and LeagueClientUx's window owner name is
+/// "League of Legends", indistinguishable from the game's "League Of Legends"
+/// after normalization.
+#[derive(Clone, Debug, Default, Serialize)]
+#[serde(rename_all = "camelCase")]
+pub struct WindowCandidate {
+    pub window_number: Option<i32>,
+    pub layer: Option<i32>,
+    pub alpha: Option<f64>,
+    pub width: f64,
+    pub height: f64,
+    pub process_id: Option<u32>,
+    pub owner_name: Option<String>,
+    pub title: Option<String>,
+    pub is_own_process: bool,
+    pub is_game_process: bool,
+}
+
+pub struct ZOrderSelection {
+    pub selected_index: Option<usize>,
+    /// One verdict per candidate, index-aligned: "selected" or the exclusion
+    /// reason.
+    pub verdicts: Vec<&'static str>,
+    pub reason: &'static str,
+}
+
+fn candidate_exclusion(candidate: &WindowCandidate) -> Option<&'static str> {
+    if candidate.is_own_process {
+        // The overlay's own windows sit at level 2147483639 on every Space
+        // (observed) — always first in the walk, never the authority.
+        return Some("own-process");
+    }
+    if candidate.process_id.is_none() {
+        return Some("no-owner-pid");
+    }
+    if candidate.alpha.is_some_and(|alpha| alpha < 0.01) {
+        return Some("transparent");
+    }
+    if candidate.width < 2.0 || candidate.height < 2.0 {
+        // The live game keeps a degenerate 1x2 helper window (observed);
+        // zero-area surfaces are never what the user is looking at.
+        return Some("zero-area");
+    }
+    match candidate.layer {
+        Some(0) => None,
+        // A fullscreen/borderless game surface may sit at an elevated window
+        // level (covering the menu bar). The game process is the ONLY owner
+        // allowed to grant foreground from a non-zero layer; everything else
+        // up there is system chrome (menu-bar/status items at 25, menubar at
+        // 24, Window Server cursor, Dock, notifications, tooltips).
+        _ if candidate.is_game_process => None,
+        _ => Some("non-app-layer"),
+    }
+}
+
+/// Walk candidates front-to-back and pick the first app-level window: the
+/// topmost layer-0 window, or the game's own surface at any layer. Returns
+/// index-aligned verdicts for the development diagnostic.
+pub fn select_frontmost_window(candidates: &[WindowCandidate]) -> ZOrderSelection {
+    let mut selected_index = None;
+    let mut verdicts = Vec::with_capacity(candidates.len());
+    for (index, candidate) in candidates.iter().enumerate() {
+        if selected_index.is_some() {
+            verdicts.push("behind-selection");
+            continue;
+        }
+        match candidate_exclusion(candidate) {
+            Some(reason) => verdicts.push(reason),
+            None => {
+                selected_index = Some(index);
+                verdicts.push("selected");
+            }
+        }
+    }
+    let reason = match selected_index {
+        Some(index) if candidates[index].layer != Some(0) => "zorder-game-window-elevated-layer",
+        Some(index) if candidates[index].is_game_process => "zorder-game-window",
+        Some(_) => "zorder-topmost-app-window",
+        None => "no-zorder-candidates",
+    };
+    ZOrderSelection {
+        selected_index,
+        verdicts,
+        reason,
+    }
+}
+
+/// Process-identity game check for window OWNERS: bundle identifier or
+/// executable path only. Display/owner names are ambiguous between the game
+/// and LeagueClientUx (observed) and must not grant game identity here.
+pub fn is_game_owner(bundle_identifier: Option<&str>, executable_path: Option<&str>) -> bool {
+    bundle_identifier.is_some_and(|bundle| bundle.eq_ignore_ascii_case(LEAGUE_GAME_BUNDLE_ID))
+        || executable_path.is_some_and(|path| is_actual_game_process("", Some(path)))
 }
 
 pub fn is_actual_game_window(owner_name: &str, title: &str) -> bool {
@@ -182,10 +282,202 @@ fn normalize_identity(value: &str) -> String {
 mod tests {
     use super::{
         classify_foreground, effective_frontmost_pid, is_actual_game_process,
-        is_actual_game_window, is_league_client_ux_process, is_riot_client_process,
-        ForegroundObservation, LEAGUE_CLIENT_UX_BUNDLE_ID, LEAGUE_GAME_BUNDLE_ID,
-        RIOT_CLIENT_BUNDLE_ID,
+        is_actual_game_window, is_game_owner, is_league_client_ux_process,
+        is_riot_client_process, select_frontmost_window, ForegroundObservation, WindowCandidate,
+        LEAGUE_CLIENT_UX_BUNDLE_ID, LEAGUE_GAME_BUNDLE_ID, RIOT_CLIENT_BUNDLE_ID,
     };
+
+    fn candidate(
+        layer: i32,
+        pid: u32,
+        owner: &str,
+        width: f64,
+        height: f64,
+    ) -> WindowCandidate {
+        WindowCandidate {
+            window_number: None,
+            layer: Some(layer),
+            alpha: Some(1.0),
+            width,
+            height,
+            process_id: Some(pid),
+            owner_name: Some(owner.to_string()),
+            title: None,
+            is_own_process: false,
+            is_game_process: false,
+        }
+    }
+
+    /// The observed 2026-07-17 desktop walk, verbatim shape: overlay window
+    /// (own, level 2147483639), Window Server cursor, menu-bar status items
+    /// at layer 25 (including a "Riot Client" status item), the menubar at
+    /// 24, then layer-0 app windows front-to-back.
+    fn observed_desktop_walk() -> Vec<WindowCandidate> {
+        let own = WindowCandidate {
+            is_own_process: true,
+            ..candidate(2147483639, 999, "mayhem-oracle-overlay", 1280.0, 720.0)
+        };
+        let game_small = WindowCandidate {
+            is_game_process: true,
+            ..candidate(0, 1427, "League Of Legends", 260.0, 265.0)
+        };
+        let game_degenerate = WindowCandidate {
+            is_game_process: true,
+            ..candidate(0, 1427, "League Of Legends", 1.0, 2.0)
+        };
+        vec![
+            own,
+            candidate(2147483630, 160, "Window Server", 12.0, 25.0),
+            candidate(25, 67610, "Riot Client", 38.0, 24.0),
+            candidate(25, 511, "控制中心", 38.0, 24.0),
+            candidate(24, 160, "Window Server", 1280.0, 24.0),
+            candidate(0, 482, "終端機", 1278.0, 665.0),
+            candidate(0, 436, "Safari", 1280.0, 695.0),
+            candidate(0, 78208, "League of Legends", 1024.0, 576.0), // LeagueClientUx
+            game_small,
+            game_degenerate,
+        ]
+    }
+
+    #[test]
+    fn own_overlay_window_is_never_the_foreground_authority() {
+        let walk = observed_desktop_walk();
+        let selection = select_frontmost_window(&walk);
+        assert_eq!(selection.verdicts[0], "own-process");
+        // Terminal (first layer-0 non-own window) is the authority.
+        assert_eq!(selection.selected_index, Some(5));
+        assert_eq!(walk[5].process_id, Some(482));
+        assert_eq!(selection.reason, "zorder-topmost-app-window");
+    }
+
+    #[test]
+    fn status_items_and_system_chrome_are_never_the_authority() {
+        let selection = select_frontmost_window(&observed_desktop_walk());
+        // Cursor, Riot Client status item, Control Center, menubar.
+        assert_eq!(selection.verdicts[1], "non-app-layer");
+        assert_eq!(selection.verdicts[2], "non-app-layer");
+        assert_eq!(selection.verdicts[3], "non-app-layer");
+        assert_eq!(selection.verdicts[4], "non-app-layer");
+    }
+
+    #[test]
+    fn terminal_topmost_with_game_running_behind_selects_terminal() {
+        // Required outcome 3: gameRunning=true in the background + Terminal
+        // topmost → the selector returns Terminal and classification stays
+        // false end-to-end.
+        let walk = observed_desktop_walk();
+        let selection = select_frontmost_window(&walk);
+        let selected = &walk[selection.selected_index.expect("authority")];
+        assert_eq!(selected.process_id, Some(482));
+
+        let state = classify_foreground(ForegroundObservation {
+            app_name: Some("終端機"),
+            bundle_identifier: Some("com.apple.Terminal"),
+            owner_name: selected.owner_name.as_deref(),
+            window_title: None,
+            executable_path: Some("/System/Applications/Utilities/Terminal.app/Contents/MacOS/Terminal"),
+            window_handle: None,
+            game_running: true,
+            game_window_detected: true,
+        });
+        assert!(!state.game_window_foreground);
+    }
+
+    #[test]
+    fn fullscreen_game_window_with_empty_title_is_the_authority_at_any_layer() {
+        // Required outcome 4: the real game window carries an EMPTY title
+        // (observed) and a borderless surface may sit at an elevated layer to
+        // cover the menu bar. Both shapes must select the game.
+        for layer in [0, 25, 101, 2147483629] {
+            let game = WindowCandidate {
+                is_game_process: true,
+                title: Some(String::new()),
+                ..candidate(layer, 1427, "League Of Legends", 1280.0, 720.0)
+            };
+            let walk = vec![
+                game,
+                candidate(0, 482, "終端機", 1278.0, 665.0),
+            ];
+            let selection = select_frontmost_window(&walk);
+            assert_eq!(selection.selected_index, Some(0), "layer {layer}");
+
+            let state = classify_foreground(ForegroundObservation {
+                app_name: Some("League Of Legends"),
+                bundle_identifier: Some(LEAGUE_GAME_BUNDLE_ID),
+                owner_name: Some("League Of Legends"),
+                window_title: None,
+                executable_path: Some(
+                    "/Applications/League of Legends.app/Contents/LoL/Game/LeagueofLegends.app/Contents/MacOS/LeagueofLegends",
+                ),
+                window_handle: None,
+                game_running: true,
+                game_window_detected: true,
+            });
+            assert!(state.game_window_foreground, "layer {layer}");
+        }
+    }
+
+    #[test]
+    fn elevated_layer_grants_nothing_to_non_game_processes() {
+        // Only the game process may claim foreground from a non-zero layer;
+        // a non-game window up there (tooltip, notification, shield) is
+        // skipped and the next layer-0 app decides.
+        let walk = vec![
+            candidate(101, 9000, "SomePopup", 400.0, 300.0),
+            candidate(0, 482, "終端機", 1278.0, 665.0),
+        ];
+        let selection = select_frontmost_window(&walk);
+        assert_eq!(selection.verdicts[0], "non-app-layer");
+        assert_eq!(selection.selected_index, Some(1));
+    }
+
+    #[test]
+    fn transparent_and_degenerate_windows_are_excluded() {
+        let transparent = WindowCandidate {
+            alpha: Some(0.0),
+            ..candidate(0, 7000, "GhostApp", 800.0, 600.0)
+        };
+        let degenerate = WindowCandidate {
+            is_game_process: true,
+            ..candidate(0, 1427, "League Of Legends", 1.0, 2.0)
+        };
+        let walk = vec![transparent, degenerate, candidate(0, 482, "終端機", 1278.0, 665.0)];
+        let selection = select_frontmost_window(&walk);
+        assert_eq!(selection.verdicts[0], "transparent");
+        assert_eq!(selection.verdicts[1], "zero-area");
+        assert_eq!(selection.selected_index, Some(2));
+    }
+
+    #[test]
+    fn game_identity_comes_from_process_metadata_never_from_names() {
+        // LeagueClientUx's window owner name is "League of Legends"
+        // (observed) — indistinguishable from the game by name. Only bundle
+        // or executable evidence may grant game identity.
+        assert!(is_game_owner(Some(LEAGUE_GAME_BUNDLE_ID), None));
+        assert!(is_game_owner(
+            None,
+            Some("/Applications/League of Legends.app/Contents/LoL/Game/LeagueofLegends.app/Contents/MacOS/LeagueofLegends"),
+        ));
+        assert!(!is_game_owner(
+            Some("com.riotgames.LeagueofLegends.LeagueClientUx"),
+            Some("/Applications/League of Legends.app/Contents/LoL/League of Legends.app/Contents/MacOS/LeagueClientUx"),
+        ));
+        assert!(!is_game_owner(None, None));
+    }
+
+    #[test]
+    fn workspace_never_overrides_fresher_zorder_evidence() {
+        // Required outcome 12: a (possibly frozen) NSWorkspace value claiming
+        // the game must lose to a fresh z-order authority — in BOTH
+        // directions.
+        let walk = observed_desktop_walk();
+        let selection = select_frontmost_window(&walk);
+        let zorder = walk[selection.selected_index.unwrap()].process_id;
+        assert_eq!(effective_frontmost_pid(zorder, Some(1427)), Some(482));
+        assert_eq!(effective_frontmost_pid(Some(1427), Some(482)), Some(1427));
+        // Workspace only decides when the walk yields nothing at all.
+        assert_eq!(effective_frontmost_pid(None, Some(1427)), Some(1427));
+    }
 
     fn observation<'a>(
         app_name: &'a str,

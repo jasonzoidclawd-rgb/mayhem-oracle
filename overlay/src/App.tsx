@@ -76,7 +76,13 @@ import {
 } from "./dev/useAramggTierFixture";
 import { isGeometryPreviewEnabled, resolveOverlayFixtureMode } from "./dev/fixtureMode";
 import { DevOverlayDiagnostics } from "./dev/DevOverlayDiagnostics";
-import { developmentSurfaceVisible } from "./dev/productionSurfaces";
+import { devPanelsVisible } from "./dev/productionSurfaces";
+import {
+  foregroundPollMayStart,
+  resolveWithTimeout,
+  FOREGROUND_POLL_TIMEOUT_MS,
+} from "./foregroundWatchdog";
+import { resolveScanActivation } from "./scanActivation";
 import {
   EMPTY_SCAN_TIMINGS,
   type OcrCardDiagnostic as DevOcrCardDiagnostic,
@@ -283,7 +289,7 @@ function App() {
   const pollInFlightRef = useRef(false);
   const pollPendingRef = useRef(false);
   const pollRef = useRef<() => Promise<void>>(async () => {});
-  const foregroundPollInFlightRef = useRef(false);
+  const foregroundPollStartedAtRef = useRef<number | null>(null);
   const [showStartupTip, setShowStartupTip] = useState(true);
   const [foregroundState, setForegroundState] = useState<ForegroundState>(
     unknownForegroundState(),
@@ -324,14 +330,14 @@ function App() {
   const [memberSnapshot, setMemberSnapshot] = useState<MemberSnapshot | null>(null);
   const [mode, setMode] = useState<DecisionMode>("competitive");
   const [coachOpen, setCoachOpen] = useState(false);
-  // Dev debug panel (tier-fixture / preview only): pin keeps it visible when
-  // League loses focus; it starts collapsed so it cannot obscure a badge.
-  const [debugPinned, setDebugPinned] = useState(false);
+  // Dev debug panel (tier-fixture / preview only): starts collapsed so it
+  // cannot obscure a badge. Its visibility always goes through the single
+  // devPanelsVisible gate — there is no pin/bypass that can keep it painted
+  // when the game loses foreground.
   const [debugCollapsed, setDebugCollapsed] = useState(true);
   const activeGameHashRef = useRef<string | null>(null);
   const memberBootstrapCompleteRef = useRef(false);
   const gameWindowForeground = foregroundState.gameWindowForeground;
-  const devDiagnosticsEnabled = developmentSurfaceVisible(import.meta.env.DEV);
   const collectorEnabled = collectorStatus?.consent === "accepted";
   const collectorCaptureEnabled = collectorEnabled && !collectorStatus?.paused;
   // Dev-only: bypass ONLY the member-coach auth/data. Everything else (OCR,
@@ -938,11 +944,19 @@ function App() {
   }, [cancelOcrRun]);
 
   const refreshForeground = useCallback(async (): Promise<ForegroundState | null> => {
-    if (foregroundPollInFlightRef.current) return null;
-    foregroundPollInFlightRef.current = true;
+    const startedAt = Date.now();
+    if (!foregroundPollMayStart(startedAt, foregroundPollStartedAtRef.current)) return null;
+    foregroundPollStartedAtRef.current = startedAt;
     try {
-      const nextForeground = await invoke<ForegroundState>("get_foreground_state")
-        .catch(() => unknownForegroundState());
+      // A hung native call must never latch the previous state forever: after
+      // the timeout the state degrades to unknown (everything hidden), and the
+      // stuck deadline above lets later ticks poll again.
+      const nextForeground = await resolveWithTimeout(
+        invoke<ForegroundState>("get_foreground_state")
+          .catch(() => unknownForegroundState()),
+        FOREGROUND_POLL_TIMEOUT_MS,
+        unknownForegroundState(),
+      );
       const previousForeground = foregroundStateRef.current;
       foregroundStateRef.current = nextForeground;
       const changed = [
@@ -962,6 +976,19 @@ function App() {
         previousForeground[key as keyof ForegroundState]
       ));
       if (changed) setForegroundState(nextForeground);
+      if (
+        import.meta.env.DEV &&
+        nextForeground.gameWindowForeground !== previousForeground.gameWindowForeground
+      ) {
+        // DEV-only: dump the full native candidate walk (every window, its
+        // exclusion verdict, the selected authority, the decision reason)
+        // whenever the classification flips. Compiled out of production.
+        void invoke("get_foreground_diagnostic")
+          .then((diagnostic) => {
+            console.info("[foreground-diagnostic]", JSON.stringify(diagnostic));
+          })
+          .catch(() => {});
+      }
       if (!nextForeground.gameWindowForeground && (
         previousForeground.gameWindowForeground || ocrActiveRef.current
       )) {
@@ -969,7 +996,7 @@ function App() {
       }
       return nextForeground;
     } finally {
-      foregroundPollInFlightRef.current = false;
+      foregroundPollStartedAtRef.current = null;
     }
   }, [stopOcr]);
 
@@ -1427,32 +1454,39 @@ function App() {
               : decision,
           );
 
+          if (phaseRef.current === "augment_selection" && ocrSelectionCompletedRef.current) {
+            updatePhase("in_game");
+            finishOcr();
+            return;
+          }
+          // Activation decides from FRESH inputs only (no memory): a stale
+          // foreground value from an earlier tick can never suppress scanning
+          // once the game is actually in front again.
+          const activation = resolveScanActivation({
+            gameWindowForeground: actualGameForeground,
+            phase: phaseRef.current,
+            scanMode: decision.scanMode,
+            selectionCompleted: ocrSelectionCompletedRef.current,
+          });
           if (phaseRef.current === "augment_selection") {
-            if (ocrSelectionCompletedRef.current) {
-              updatePhase("in_game");
-              finishOcr();
-              return;
-            }
             // Level gained while the offer is still open must NOT end the
             // selection — completion comes only from the offer lifecycle
             // (surface absence / confirmed pick), never from champion level.
-            if (actualGameForeground) startOcr();
+            if (activation === "fast-loop") startOcr();
           } else if (decision.scanMode === "fast") {
             // Death sequence with rounds pending: the delivery window is open
             // RIGHT NOW. Run the fast loop so the offer latches immediately;
             // the phase flips to augment_selection only when a validated
             // surface actually latches (inside the scan).
             updatePhase("in_game");
-            if (actualGameForeground) startOcr();
+            if (activation === "fast-loop") startOcr();
           } else {
             // ambient/off: no offer and no delivery window. Stop any leftover
             // fast loop WITHOUT clearing state, and (ambient) run one probe
             // this tick so a real surface still latches on stale telemetry.
             if (ocrActiveRef.current) finishOcr();
             updatePhase("in_game");
-            if (decision.scanMode === "ambient" && actualGameForeground) {
-              void runAmbientProbe();
-            }
+            if (activation === "ambient-probe") void runAmbientProbe();
           }
           return;
         }
@@ -1738,16 +1772,14 @@ function App() {
       {collectorEnabled && gameOverlayIsVisible && effectiveMember?.error && (
         <div className="member-error">Member coach unavailable: {effectiveMember.error}</div>
       )}
-      {devDiagnosticsEnabled && (
+      {devPanelsVisible({ devBuild: import.meta.env.DEV, gameOverlayIsVisible }) && (
         <DevOverlayDiagnostics
           gameOverlayIsVisible={gameOverlayIsVisible}
           fixtureModeKind={fixtureMode.kind}
           tierFixtureOn={tierFixtureOn}
           geometryPreviewOn={geometryPreviewOn}
           isPreviewMode={isPreviewMode}
-          debugPinned={debugPinned}
           debugCollapsed={debugCollapsed}
-          setDebugPinned={setDebugPinned}
           setDebugCollapsed={setDebugCollapsed}
           calibration={calibration}
           calibrationError={calibrationError}
