@@ -4,6 +4,51 @@ This file captures recent overlay findings so future agents do not rediscover
 them from screenshots, terminal history, or old handoffs. It is context only.
 Do not treat it as permission to change runtime behavior without a task.
 
+## Death-Delivery Round Model + CSS-Space Chips (2026-07-17, PR #46 round 2)
+
+Second fix round on PR #46 after the timed manual GUI test surfaced six
+defects. Root causes and current contracts:
+
+- **Round delivery**: Mayhem rounds R2–R4 are delivered during the DEATH
+  sequence, not at level thresholds. Levels 3/7/11/15 only create
+  eligibility. `overlay/src/roundDelivery.ts` owns the model:
+  `pendingRounds = eligibleRoundCount(level) − completedRounds`, completion
+  counted on strong evidence only (keydown pick confirm, or a queued offer
+  replacing a latched validated one — `replacedOffer`), chained R2→R3→R4.
+  `augment_selection` phase enters ONLY when a validated offer surface
+  latches (fast OCR loop or ambient probe), never from a level poll —
+  `transitionAugmentRound`/`shouldStartAugmentSelection` are deleted.
+  Scan modes: `fast` (offer latched, or death sequence with pending
+  rounds), `ambient` (pending rounds, one probe per 1.5s poll tick),
+  `off`.
+- **Foreground authority**: `NSWorkspace.frontmostApplication` off the
+  main thread returns values up to ~18s stale (game reported while
+  Terminal focused → chip/window leak onto desktop). The topmost layer-0
+  CGWindowList window is now the authority
+  (`foreground::effective_frontmost_pid`); workspace value is only a
+  fallback for fullscreen game surfaces with no layer-0 window.
+- **Coordinate space**: `OverlayCalibration.overlay_anchor` (macOS:
+  monitor rect; Windows: repositioned viewport) is the single conversion
+  boundary — `cssRectFromCalibratedRect(rect, anchor, cssWindow)` runs
+  exactly once per rect. `scaleFactor`/`devicePixelRatio` are display
+  metadata only; using either for geometry reintroduces the 1.0↔2.0
+  chip-position flap.
+- **Chips**: 118×32 CSS px, `[S+ · 61.6%]`, placed above the full card
+  frame (icon band 0.17 + name band + body band 0.24 of game height),
+  side-anchor fallback, withheld (null) rather than ever rendered inside
+  a card or over the reroll/upgrade control zones.
+- **Placeholder hygiene**: zero-validated scans are absence evidence —
+  `surfaceVisible` drops on the first such pass (chips hide, fixes the
+  33s stale placeholders and scoreboard occlusion), the latch survives
+  one pass for restore, clears after two.
+- **Win rate**: `overlay/src/winRateFormat.ts` — exact string decimal
+  shift + half-up one-decimal rounding ("0.5915" → "59.2%"); never
+  `Number()*100`/`toFixed`. Tier glyphs render in a bundled OFL Anton
+  latin woff2 (no runtime font fetch; `productionFont.test.ts` audits
+  source + dist).
+- Windows remains compile-gated, not machine-validated: no physical
+  Windows build has run.
+
 ## Latched Offer Lifecycle + Riot zh-TW Identity Bridge (2026-07-17, PR #46)
 
 - `overlay/src/offerLifecycle.ts` owns augment-offer state: per-slot OCR-title
