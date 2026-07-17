@@ -10,14 +10,16 @@ import {
   type AugmentMatchDiagnostic,
 } from "./scoring/offer-lookup";
 import {
-  augmentRoundForLevel,
-  AUGMENT_LEVELS,
   isCompleteThreeCardOffer,
   ocrRunIsCurrent,
   shouldClearOcrStateForGameflow,
   shouldRunOcrForGameflow,
-  transitionAugmentRound,
 } from "./augmentSelection";
+import {
+  resolveRoundDelivery,
+  TOTAL_AUGMENT_ROUNDS,
+  type RoundDeliveryDecision,
+} from "./roundDelivery";
 import {
   applyScanToOffer,
   emptyOfferState,
@@ -57,7 +59,11 @@ import {
 import { CoachPanel } from "./components/CoachPanel";
 import { runLocalInference } from "./model/inference";
 import { confirmPickedAugment } from "./model/presentation";
-import { formatWinRate, tierClassName, tierForGrade, type TierLetter } from "./model/tier";
+import { tierClassName, tierForGrade, type TierLetter } from "./model/tier";
+import {
+  compactWinRateFromFraction,
+  compactWinRateFromPercent,
+} from "./winRateFormat";
 import {
   buildAramggDecisionResult,
   isTierFixtureEnabled,
@@ -91,13 +97,14 @@ import {
 } from "./ocrAvailability";
 import {
   CARD_NAME_REGIONS,
+  cssRectFromCalibratedRect,
   physicalRectForNormalizedRegion,
   type OverlayCalibration,
   type PhysicalRect,
 } from "./calibration";
 import {
   cardFrameFromNameRect,
-  overlayAvoidRects,
+  overlayAvoidRectsCss,
   placeBadgeAboveCard,
 } from "./badgeLayout";
 import "./App.css";
@@ -175,6 +182,19 @@ interface SlotResolution {
   aramgg: SlotAramggResolution | null;
 }
 
+/**
+ * A slot counts as a VALIDATED card identity only when its OCR title reached a
+ * known augment (local catalog or staged Riot identity). Noise text read off
+ * gameplay or an occluding screen validates nothing, so it can never latch an
+ * offer or keep placeholder chips alive (offerLifecycle contract).
+ */
+function validateSlotResolution(resolution: SlotResolution): boolean {
+  return (
+    resolution.pool !== null ||
+    (resolution.aramgg !== null && resolution.aramgg.kind !== "unmatched")
+  );
+}
+
 interface OverlayAugment {
   slug: string;
   name: string;
@@ -249,7 +269,12 @@ function App() {
   const offerStateRef = useRef(offerState);
   const [, setOcrActive] = useState(false);
   const phaseRef = useRef<Phase>("idle");
-  const lastAugmentLevelRef = useRef(0);
+  // Rounds completed on STRONG evidence only (confirmed pick / queued-offer
+  // replacement) — can only undercount, which keeps probing alive and never
+  // suppresses a real offer. See roundDelivery.ts.
+  const completedRoundsRef = useRef(0);
+  const roundDeliveryRef = useRef<RoundDeliveryDecision | null>(null);
+  const [roundDelivery, setRoundDelivery] = useState<RoundDeliveryDecision | null>(null);
   const ocrTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const ocrActiveRef = useRef(false);
   const ocrRunIdRef = useRef(0);
@@ -286,6 +311,12 @@ function App() {
   );
   const [calibration, setCalibration] = useState<OverlayCalibration | null>(null);
   const [calibrationError, setCalibrationError] = useState<string | null>(null);
+  // CSS size of the overlay window as the webview itself reports it — one leg
+  // of the anchor-ratio conversion (see cssRectFromCalibratedRect).
+  const [cssWindow, setCssWindow] = useState(() => ({
+    width: window.innerWidth,
+    height: window.innerHeight,
+  }));
   const runOcrRef = useRef<(runId: number) => Promise<void>>(async () => {});
   const lastGameTimeRef = useRef<number | null>(null);
   const lastRecordedRoundRef = useRef("");
@@ -331,6 +362,25 @@ function App() {
   const resetOffer = useCallback(() => {
     publishOffer(emptyOfferState(offerStateRef.current.generation + 1));
   }, [publishOffer]);
+
+  // STRONG completion evidence arrived (confirmed pick or a queued offer
+  // replacing the current one): advance the round model immediately so
+  // recording and labels carry the true round without waiting for a poll tick.
+  const recordRoundCompleted = useCallback(() => {
+    completedRoundsRef.current = Math.min(
+      completedRoundsRef.current + 1,
+      TOTAL_AUGMENT_ROUNDS,
+    );
+    const current = roundDeliveryRef.current;
+    if (!current) return;
+    const next: RoundDeliveryDecision = {
+      ...current,
+      pendingRounds: Math.max(0, current.eligibleRounds - completedRoundsRef.current),
+      activeOfferRound: Math.min(completedRoundsRef.current + 1, TOTAL_AUGMENT_ROUNDS),
+    };
+    roundDeliveryRef.current = next;
+    setRoundDelivery(next);
+  }, []);
 
   // Slots whose title resolved to a local-catalog augment — the decision-engine
   // path. Derived from the latched offer; always a single generation.
@@ -610,17 +660,12 @@ function App() {
     );
   }, [overlayData]);
 
-  // Current round
-  const currentRound = playerData ? augmentRoundForLevel(playerData.level) : null;
-  const currentRoundRef = useRef<number | null>(null);
-  currentRoundRef.current = currentRound?.round ?? null;
-
   const decisionResult = useMemo((): DecisionResult | null => {
     if (
       !memberEnabled ||
       !memberSnapshot?.modelConfig ||
       !decisionData ||
-      !currentRound ||
+      !roundDelivery ||
       !isCompleteThreeCardOffer(matchedCards)
     ) {
       return null;
@@ -629,7 +674,7 @@ function App() {
     return runLocalInference(
       {
         championSlug: decisionData.champion.slug,
-        round: currentRound.round as 1 | 2 | 3 | 4,
+        round: roundDelivery.activeOfferRound as 1 | 2 | 3 | 4,
         screenRarity,
         mode,
         ownedAugmentSlugs: pickedAugments,
@@ -643,13 +688,13 @@ function App() {
       memberSnapshot.modelConfig,
     );
   }, [
-    currentRound,
     decisionData,
     matchedCards,
     memberEnabled,
     memberSnapshot,
     mode,
     pickedAugments,
+    roundDelivery,
   ]);
 
   // ─── Dev ARAMGG fixture / geometry preview (dev flags only) ───
@@ -721,7 +766,7 @@ function App() {
 
   // Build the ARAMGG-backed decision result from whichever cards are active.
   const fixturePayload = useMemo(() => {
-    const round = (currentRound?.round ?? 1) as 1 | 2 | 3 | 4;
+    const round = (roundDelivery?.activeOfferRound ?? 1) as 1 | 2 | 3 | 4;
     if (fixtureMode.kind === "real-offer") {
       // Latched slots whose staged resolution reached a live ARAMGG record.
       const cards = offerState.slots.flatMap((slot): AramggFixtureCard[] => {
@@ -745,7 +790,7 @@ function App() {
       return buildAramggDecisionResult(cards, round);
     }
     return null;
-  }, [fixtureMode.kind, offerState, previewCards, aramgg.resolvedBySlug, currentRound]);
+  }, [fixtureMode.kind, offerState, previewCards, aramgg.resolvedBySlug, roundDelivery]);
 
   // Dev flag unlocks the member gate ONLY (no collector/entitlement) — it never
   // relaxes the focus/phase/complete-offer gates below.
@@ -757,14 +802,18 @@ function App() {
     fixturePayload?.winRateDisplayBySlug ?? winRateBySlug;
 
   // Real per-slot chips: strictly gated on REAL focus + augment phase + a
-  // LATCHED offer. Each slot renders its own pipeline state (matched tier /
-  // SCANNING / UNMATCHED / NO ARAMGG DATA) — never stale, never invented, and
-  // always from one offer generation. Preview chips: only in preview mode.
+  // LATCHED offer whose validated surface is CURRENTLY on screen. Each slot
+  // renders its own pipeline state (matched tier / SCANNING / UNMATCHED /
+  // NO ARAMGG DATA) — never stale, never invented, and always from one offer
+  // generation. A latched offer whose surface is absent or occluded
+  // (scoreboard, death recap, tooltip) is internal state, never pixels.
+  // Preview chips: only in preview mode.
   const realBadgesReady =
     !isPreviewMode &&
     effectiveMemberEnabled &&
     phase === "augment_selection" &&
     offerActive(offerState) &&
+    offerState.surfaceVisible &&
     gameWindowForeground;
   const previewBadgesReady =
     isPreviewMode && fixturePayload != null && previewCards.length === 3;
@@ -782,7 +831,7 @@ function App() {
           key: `preview-${card.regionIndex}-${card.augment.slug}`,
           state: "tier",
           tier: tierForGrade(candidate.grade),
-          winRateText: formatWinRate(
+          winRateText: compactWinRateFromPercent(
             fixturePayload.winRateDisplayBySlug[card.augment.slug],
           ),
           isNew: card.augment.lifecycle === "added",
@@ -806,7 +855,9 @@ function App() {
             ...base,
             state: "tier",
             tier: staged.stat.tierLetter,
-            winRateText: formatWinRate(staged.stat.winRatePercent),
+            // Exact string pipeline from the raw ARAMGG fraction ("0.5915" →
+            // "59.2%"); the raw value stays on the stat for diagnostics.
+            winRateText: compactWinRateFromFraction(staged.stat.rawWinRate),
             isNew: slot.resolution?.pool?.lifecycle === "added",
           };
         }
@@ -828,7 +879,7 @@ function App() {
         ...base,
         state: "tier",
         tier: candidate ? tierForGrade(candidate.grade) : pool.tier,
-        winRateText: formatWinRate(pool.win_rate),
+        winRateText: compactWinRateFromPercent(pool.win_rate),
         isNew: pool.lifecycle === "added",
       };
     });
@@ -865,7 +916,7 @@ function App() {
     setOcrLifecycle((previous) => ({
       ...previous,
       phase: phaseRef.current,
-      currentRound: currentRoundRef.current,
+      currentRound: roundDeliveryRef.current?.activeOfferRound ?? null,
       active: false,
       scanRunId: null,
       captureAttempted: false,
@@ -884,17 +935,6 @@ function App() {
 
   const finishOcr = useCallback(() => {
     cancelOcrRun(false);
-  }, [cancelOcrRun]);
-
-  const resetOcrForNewRound = useCallback((round: number) => {
-    cancelOcrRun(true);
-    setOcrLifecycle((previous) => ({
-      ...previous,
-      phase: "augment_selection",
-      currentRound: round,
-      active: false,
-      noCropReason: "new-round-awaiting-scan",
-    }));
   }, [cancelOcrRun]);
 
   const refreshForeground = useCallback(async (): Promise<ForegroundState | null> => {
@@ -937,7 +977,9 @@ function App() {
     ocrSelectionCompletedRef.current = true;
     setPlayerData(null);
     setChampionSlug(null);
-    lastAugmentLevelRef.current = 0;
+    completedRoundsRef.current = 0;
+    roundDeliveryRef.current = null;
+    setRoundDelivery(null);
     setPickedAugments([]);
     lastGameTimeRef.current = null;
     lastRecordedRoundRef.current = "";
@@ -946,6 +988,17 @@ function App() {
     stopOcr();
     updatePhase(nextPhase);
   }, [stopOcr, updatePhase]);
+
+  // Per-slot identity resolution, shared by the fast OCR loop and the ambient
+  // probe so both apply identical latch/validation semantics.
+  const resolveSlotTitle = useCallback((title: string): SlotResolution => {
+    const match = diagnoseAugmentMatch(title, nameLookup);
+    return {
+      pool: match.augment,
+      poolDiagnostic: match,
+      aramgg: aramggResolveRef.current ? aramggResolveRef.current(title) : null,
+    };
+  }, [nameLookup]);
 
   // OCR detection
   const runOcr = useCallback(async (runId: number) => {
@@ -959,7 +1012,7 @@ function App() {
     setOcrLifecycle((previous) => ({
       ...previous,
       phase: phaseRef.current,
-      currentRound: currentRoundRef.current,
+      currentRound: roundDeliveryRef.current?.activeOfferRound ?? null,
       active: true,
       lastScanStart: scanStart,
       lastScanEnd: null,
@@ -1001,21 +1054,25 @@ function App() {
         (regionIndex) =>
           scan.detected.find((entry) => entry.region_index === regionIndex)?.text ?? null,
       );
-      const resolveSlot = (title: string): SlotResolution => {
-        const match = diagnoseAugmentMatch(title, nameLookup);
-        return {
-          pool: match.augment,
-          poolDiagnostic: match,
-          aramgg: aramggResolveRef.current ? aramggResolveRef.current(title) : null,
-        };
-      };
       const applied = applyScanToOffer(
         offerStateRef.current,
         titles,
         normalizeAugmentNameForLookup,
-        resolveSlot,
+        resolveSlotTitle,
+        validateSlotResolution,
       );
+      if (applied.replacedOffer) {
+        // A queued offer replaced the completed one mid-death-sequence —
+        // strong completion evidence for the previous round.
+        recordRoundCompleted();
+      }
       publishOffer(applied.state);
+      if (offerActive(applied.state) && phaseRef.current !== "augment_selection") {
+        // A validated card surface latching is what enters augment selection —
+        // never a level threshold, and never blocked by stale telemetry.
+        ocrSelectionCompletedRef.current = false;
+        updatePhase("augment_selection");
+      }
       const matchMs = performance.now() - matchStartMs;
 
       setOcrLifecycle((previous) => ({
@@ -1115,10 +1172,7 @@ function App() {
         isCompleteThreeCardOffer(matched) &&
         playerData
       ) {
-        const round = AUGMENT_LEVELS.reduce(
-          (current, level, index) => (playerData.level >= level ? index + 1 : current),
-          0,
-        );
+        const round = roundDeliveryRef.current?.activeOfferRound ?? 0;
         const offeredAugmentSlugs = matched
           .map((card) => card.augment.slug)
           .sort();
@@ -1158,6 +1212,7 @@ function App() {
           () => {
             throw new Error("unreachable: empty scan never resolves");
           },
+          () => false,
         );
         publishOffer(applied.state);
         if (applied.cleared) {
@@ -1197,7 +1252,7 @@ function App() {
         }));
       }
     }
-  }, [collectorCaptureEnabled, nameLookup, ocrKnownNames, playerData, publishOffer, finishOcr, updatePhase]);
+  }, [collectorCaptureEnabled, nameLookup, ocrKnownNames, playerData, publishOffer, recordRoundCompleted, resolveSlotTitle, finishOcr, updatePhase]);
 
   useEffect(() => {
     runOcrRef.current = runOcr;
@@ -1229,7 +1284,7 @@ function App() {
     setOcrLifecycle((previous) => ({
       ...previous,
       phase: phaseRef.current,
-      currentRound: currentRoundRef.current,
+      currentRound: roundDeliveryRef.current?.activeOfferRound ?? null,
       active: true,
       scanRunId: runId,
       captureAttempted: false,
@@ -1238,6 +1293,52 @@ function App() {
     }));
     scheduleNextOcr(runId);
   }, [ocrAvailability, scheduleNextOcr]);
+
+  // Ambient probe: ONE scan per poll tick while rounds are pending but no
+  // offer is latched and no death window is open. Telemetry must never block
+  // scanning a clearly visible surface — this latches a real offer even when
+  // death/level telemetry is briefly stale, without the 20ms fast loop burning
+  // capture during normal gameplay. On latch it escalates to the fast loop.
+  const ambientProbeInFlightRef = useRef(false);
+  const runAmbientProbe = useCallback(async () => {
+    if (ocrActiveRef.current || ambientProbeInFlightRef.current) return;
+    if (!gameflowCaptureAllowedRef.current) return;
+    if (!canRunOcr(ocrAvailability)) return;
+    if (!nameLookup.size) return;
+    ambientProbeInFlightRef.current = true;
+    try {
+      const scan = await invoke<OcrScanResult>("detect_augment_names", {
+        knownNames: ocrKnownNames,
+      });
+      // The fast loop owns publishing once it starts — drop a probe that lost
+      // the race so a stale result can never overwrite live scans.
+      if (ocrActiveRef.current) return;
+      const titles: Array<string | null> = [0, 1, 2].map(
+        (regionIndex) =>
+          scan.detected.find((entry) => entry.region_index === regionIndex)?.text ?? null,
+      );
+      const applied = applyScanToOffer(
+        offerStateRef.current,
+        titles,
+        normalizeAugmentNameForLookup,
+        resolveSlotTitle,
+        validateSlotResolution,
+      );
+      if (applied.replacedOffer) recordRoundCompleted();
+      publishOffer(applied.state);
+      if (offerActive(applied.state)) {
+        // A real surface latched from the probe: enter selection and escalate
+        // to the fast loop for reroll/occlusion tracking.
+        ocrSelectionCompletedRef.current = false;
+        updatePhase("augment_selection");
+        startOcr();
+      }
+    } catch {
+      // Probe failures are silent — the fast loop owns diagnostics/absence.
+    } finally {
+      ambientProbeInFlightRef.current = false;
+    }
+  }, [nameLookup, ocrAvailability, ocrKnownNames, publishOffer, recordRoundCompleted, resolveSlotTitle, startOcr, updatePhase]);
 
   // Main polling loop
   const poll = useCallback(async () => {
@@ -1288,7 +1389,7 @@ function App() {
           const lastGameTime = lastGameTimeRef.current;
           if (lastGameTime !== null && data.game_time + 5 < lastGameTime) {
             ocrSelectionCompletedRef.current = true;
-            lastAugmentLevelRef.current = 0;
+            completedRoundsRef.current = 0;
             setPickedAugments([]);
             lastRecordedRoundRef.current = "";
             stopOcr();
@@ -1299,36 +1400,59 @@ function App() {
           if (slug !== championSlug) {
             ocrSelectionCompletedRef.current = true;
             setChampionSlug(slug);
-            lastAugmentLevelRef.current = 0;
+            completedRoundsRef.current = 0;
             setPickedAugments([]);
             stopOcr();
           }
 
-          const roundTransition = transitionAugmentRound({
+          // Round DELIVERY: level thresholds only create eligibility. R1 is
+          // delivered at the level-3 timing; R2/R3/R4 deliver during a death
+          // sequence after crossing 7/11/15 — reaching a threshold while
+          // ALIVE never enters selection, never renders chips, never consumes
+          // a round, and never suppresses the future death-triggered offer.
+          const decision = resolveRoundDelivery({
             playerLevel: data.level,
-            lastAugmentLevel: lastAugmentLevelRef.current,
-            phase: phaseRef.current === "augment_selection" ? "augment_selection" : "in_game",
+            isDead: data.is_dead,
+            completedRounds: completedRoundsRef.current,
+            offerLatched: offerActive(offerStateRef.current),
           });
+          roundDeliveryRef.current = decision;
+          setRoundDelivery((previous) =>
+            previous &&
+            previous.eligibleRounds === decision.eligibleRounds &&
+            previous.pendingRounds === decision.pendingRounds &&
+            previous.scanMode === decision.scanMode &&
+            previous.activeOfferRound === decision.activeOfferRound
+              ? previous
+              : decision,
+          );
 
-          if (roundTransition.isNewRound && roundTransition.round) {
-            ocrSelectionCompletedRef.current = false;
-            lastAugmentLevelRef.current = roundTransition.round.level;
-            resetOcrForNewRound(roundTransition.round.round);
-            updatePhase("augment_selection");
-            if (actualGameForeground) startOcr();
-          } else if (phaseRef.current === "augment_selection") {
+          if (phaseRef.current === "augment_selection") {
             if (ocrSelectionCompletedRef.current) {
               updatePhase("in_game");
               finishOcr();
               return;
             }
-
             // Level gained while the offer is still open must NOT end the
             // selection — completion comes only from the offer lifecycle
             // (surface absence / confirmed pick), never from champion level.
             if (actualGameForeground) startOcr();
-          } else {
+          } else if (decision.scanMode === "fast") {
+            // Death sequence with rounds pending: the delivery window is open
+            // RIGHT NOW. Run the fast loop so the offer latches immediately;
+            // the phase flips to augment_selection only when a validated
+            // surface actually latches (inside the scan).
             updatePhase("in_game");
+            if (actualGameForeground) startOcr();
+          } else {
+            // ambient/off: no offer and no delivery window. Stop any leftover
+            // fast loop WITHOUT clearing state, and (ambient) run one probe
+            // this tick so a real surface still latches on stale telemetry.
+            if (ocrActiveRef.current) finishOcr();
+            updatePhase("in_game");
+            if (decision.scanMode === "ambient" && actualGameForeground) {
+              void runAmbientProbe();
+            }
           }
           return;
         }
@@ -1356,7 +1480,7 @@ function App() {
     collectorEnabled,
     finishOcr,
     refreshForeground,
-    resetOcrForNewRound,
+    runAmbientProbe,
     startOcr,
     stopOcr,
     updatePhase,
@@ -1391,21 +1515,24 @@ function App() {
         confirmPickedAugment(current, offered, regionIndex),
       );
       const selectedAugmentSlug = offered[regionIndex];
-      if (selectedAugmentSlug && currentRound) {
+      const confirmRound = roundDeliveryRef.current?.activeOfferRound ?? null;
+      if (selectedAugmentSlug && confirmRound) {
         void invoke("confirm_contributor_round_selection", {
-          round: currentRound.round,
+          round: confirmRound,
           selectedAugmentSlug,
         });
       }
-      // A confirmed choice ends the offer: clear the latched state and return
-      // to in-game immediately instead of waiting for surface absence.
+      // A confirmed choice is STRONG completion evidence and ends the offer:
+      // count the round, clear the latched state, and return to in-game
+      // immediately instead of waiting for surface absence.
+      recordRoundCompleted();
       ocrSelectionCompletedRef.current = true;
       stopOcr();
       updatePhase("in_game");
     };
     window.addEventListener("keydown", onKeyDown);
     return () => window.removeEventListener("keydown", onKeyDown);
-  }, [currentRound, matchedCards, memberEnabled, phase, stopOcr, updatePhase]);
+  }, [matchedCards, memberEnabled, phase, recordRoundCompleted, stopOcr, updatePhase]);
 
   useEffect(() => {
     const foregroundIntervalId = setInterval(() => {
@@ -1449,6 +1576,13 @@ function App() {
     };
   }, []);
 
+  useEffect(() => {
+    const onResize = () =>
+      setCssWindow({ width: window.innerWidth, height: window.innerHeight });
+    window.addEventListener("resize", onResize);
+    return () => window.removeEventListener("resize", onResize);
+  }, []);
+
   // ─── Render ───
   const badgePositions = useMemo(() => {
     const positions = new Map<number, { left: string; top: string }>();
@@ -1470,23 +1604,30 @@ function App() {
         detected ?? physicalRectForNormalizedRegion(region, calibration.viewport),
       );
     });
-    const avoidRects = overlayAvoidRects(
-      calibration.viewport,
-      calibration.monitor.scaleFactor,
+
+    // THE coordinate boundary: every calibrated rect converts to
+    // overlay-window CSS exactly once, as a pure ratio against the overlay
+    // anchor. scaleFactor never re-enters, so a flapping monitor scale or a
+    // detected-window↔monitor-fallback switch cannot move the chips.
+    const toCss = (rect: PhysicalRect) =>
+      cssRectFromCalibratedRect(rect, calibration.overlayAnchor, cssWindow);
+    const cssGameRect = toCss(calibration.viewport);
+    const cssRegionRects = new Map(
+      [...regionRects.entries()].map(([regionIndex, rect]) => [regionIndex, toCss(rect)]),
     );
+    const avoidRects = overlayAvoidRectsCss(cssWindow, cssGameRect);
 
     for (const chip of slotChips) {
-      const cardRect = regionRects.get(chip.regionIndex);
+      const cardRect = cssRegionRects.get(chip.regionIndex);
       if (!cardRect) continue;
       // A chip must never cover a NEIGHBORING card either — the other card
       // frames are additional keep-out rects.
-      const otherFrames = [...regionRects.entries()]
+      const otherFrames = [...cssRegionRects.entries()]
         .filter(([regionIndex]) => regionIndex !== chip.regionIndex)
-        .map(([, rect]) => cardFrameFromNameRect(rect, calibration.viewport));
+        .map(([, rect]) => cardFrameFromNameRect(rect, cssGameRect));
       const placement = placeBadgeAboveCard({
         cardRect,
-        viewport: calibration.viewport,
-        scaleFactor: calibration.monitor.scaleFactor,
+        gameRect: cssGameRect,
         avoidRects: [...avoidRects, ...otherFrames],
       });
       if (placement) {
@@ -1495,7 +1636,7 @@ function App() {
     }
 
     return positions;
-  }, [calibration, ocrDiagnostics, slotChips]);
+  }, [calibration, cssWindow, ocrDiagnostics, slotChips]);
 
   return (
     <div className="overlay-root">
@@ -1551,9 +1692,19 @@ function App() {
                   <span className="preview-watermark">PREVIEW</span>
                 )}
                 {chip.isNew && <span className="badge-new">NEW</span>}
-                <span className="badge-tier">{chip.tier}</span>
-                <span className="badge-chip-sep">·</span>
-                <span className="badge-wr">{chip.winRateText}</span>
+                <span
+                  className={`badge-tier${
+                    chip.tier && chip.tier.length > 1 ? " badge-tier-two-char" : ""
+                  }`}
+                >
+                  {chip.tier}
+                </span>
+                {chip.winRateText !== null && (
+                  <>
+                    <span className="badge-chip-sep">·</span>
+                    <span className="badge-wr">{chip.winRateText}</span>
+                  </>
+                )}
               </div>
             );
           })}
@@ -1568,7 +1719,8 @@ function App() {
           </span>
           <span className="hud-level">
             Lv.{playerData?.level ?? "?"}
-            {currentRound && ` · R${currentRound.round}`}
+            {roundDelivery && roundDelivery.eligibleRounds > 0 &&
+              ` · R${roundDelivery.activeOfferRound}`}
           </span>
         </div>
       )}

@@ -1,4 +1,4 @@
-import { cssRectFromPhysicalRect, type PhysicalRect } from "./calibration";
+import type { CssSize, NormalizedRegion, PhysicalRect } from "./calibration";
 
 export interface BadgeSize {
   width: number;
@@ -14,40 +14,53 @@ export interface BadgePlacement {
 }
 
 /**
- * Compact horizontal chip (e.g. `[S · 53.3884% WR]`) rendered OUTSIDE the card
+ * Compact horizontal chip (e.g. `[S+ · 61.6%]`) rendered OUTSIDE the card
  * artwork. Height must stay within 28–36 CSS px.
+ *
+ * Everything in this module is CSS pixels in overlay-window coordinates. The
+ * caller converts native calibrated rects exactly once at the boundary via
+ * `cssRectFromCalibratedRect` — no scale factor exists here.
  */
 export const BADGE_CHIP_SIZE: BadgeSize = {
-  width: 168,
+  width: 118,
   height: 32,
 };
 
 const BADGE_GAP = 6;
 
 /**
- * The native detected rectangle is the card's NAME band (the OCR crop region,
- * normalized y ≈ 0.347 of the viewport). The card frame extends ABOVE the name
- * band — champion / ability / quest icon art — so a chip anchored to the name
- * band alone would sit inside the artwork. The icon band is a fixed fraction
- * of the viewport height in the augment-selection layout.
+ * The detected rectangle is the card's NAME band (the OCR crop region,
+ * normalized y ≈ 0.347, h ≈ 0.083 of the game rect). Measured on the 1280×720
+ * reference screenshot the full card frame spans y ≈ 128–483 while the name
+ * band spans y ≈ 250–310, so the artwork/icon band ABOVE the name band is
+ * (250−128)/720 ≈ 0.17 of the game height and the description body BELOW it
+ * is (483−310)/720 ≈ 0.24. A chip anchored to the name band alone would sit
+ * inside the artwork — the frame is the true keep-out.
  */
-export const CARD_ICON_BAND_VIEWPORT_RATIO = 0.08;
+export const CARD_ICON_BAND_VIEWPORT_RATIO = 0.17;
+export const CARD_BODY_BAND_VIEWPORT_RATIO = 0.24;
 
 /**
- * Derive the card frame (name band + the icon/artwork band above it) from the
- * detected name-band rectangle, in the same physical coordinate space.
+ * Derive the full card frame (icon band above + name band + description body
+ * below) from the detected name-band rectangle. Space-agnostic ratios; used
+ * here in CSS space with the CSS game rect.
  */
 export function cardFrameFromNameRect(
   nameRect: PhysicalRect,
-  viewport: PhysicalRect,
+  gameRect: PhysicalRect,
 ): PhysicalRect {
-  const iconBand = Math.round(viewport.height * CARD_ICON_BAND_VIEWPORT_RATIO);
-  const top = Math.max(viewport.y, nameRect.y - iconBand);
+  const iconBand = Math.round(gameRect.height * CARD_ICON_BAND_VIEWPORT_RATIO);
+  const bodyBand = Math.round(gameRect.height * CARD_BODY_BAND_VIEWPORT_RATIO);
+  const top = Math.max(gameRect.y, nameRect.y - iconBand);
+  const frameBottom = Math.min(
+    gameRect.y + gameRect.height,
+    nameRect.y + nameRect.height + bodyBand,
+  );
   return {
     x: nameRect.x,
     y: top,
     width: nameRect.width,
-    height: nameRect.height + (nameRect.y - top),
+    height: Math.max(0, frameBottom - top),
   };
 }
 
@@ -73,41 +86,43 @@ function clamp(value: number, minimum: number, maximum: number): number {
 }
 
 /**
- * Reserve only fixed UI controls. Badge positions themselves always come from
- * the native card rectangle returned with the current OCR scan.
+ * Game-control keep-out zones as fractions of the game rect, measured on the
+ * 1280×720 reference: per-card reroll buttons y ≈ 497–523 under the three
+ * cards, central upgrade (升級) control y ≈ 575–608. They scale with the game
+ * viewport, not with DPI.
  */
-export function overlayAvoidRects(
-  viewport: PhysicalRect,
-  scaleFactor: number,
-): PhysicalRect[] {
-  const scale = Number.isFinite(scaleFactor) && scaleFactor > 0 ? scaleFactor : 1;
+const GAME_CONTROL_ZONES: NormalizedRegion[] = [
+  { x: 0.19, y: 0.67, w: 0.62, h: 0.08 },
+  { x: 0.4, y: 0.78, w: 0.2, h: 0.09 },
+];
 
+/**
+ * Reserve fixed overlay UI (relative to the CSS window) and game controls
+ * (relative to the CSS game rect). Badge positions themselves always come
+ * from the detected card rectangle of the current OCR scan.
+ */
+export function overlayAvoidRectsCss(
+  cssWindow: CssSize,
+  cssGameRect: PhysicalRect,
+): PhysicalRect[] {
   return [
-    // Status dot/startup HUD band.
-    { x: viewport.x, y: viewport.y, width: viewport.width, height: 44 * scale },
-    // Development calibration panel (bottom-left, above the HUD). It is absent
-    // from production, but badges must also remain safe while diagnostics are
-    // enabled. It deliberately sits below the card frames so it can never
-    // contest the chip band above them.
+    // Status dot / startup HUD band across the top of the overlay window.
+    { x: 0, y: 0, width: cssWindow.width, height: 44 },
+    // Development calibration panel (bottom-left, above the HUD strip). It is
+    // absent from production, but badges must also remain safe while
+    // diagnostics are enabled.
     {
-      x: viewport.x,
-      y: viewport.y + Math.max(0, viewport.height - (48 + 150) * scale),
-      width: 360 * scale,
-      height: 150 * scale,
+      x: 0,
+      y: Math.max(0, cssWindow.height - 198),
+      width: 360,
+      height: 150,
     },
-    // Reroll and central upgrade controls at the lower center of the offer.
-    {
-      x: viewport.x + viewport.width / 2 - 120 * scale,
-      y: viewport.y + viewport.height - 132 * scale,
-      width: 240 * scale,
-      height: 112 * scale,
-    },
-    {
-      x: viewport.x + viewport.width / 2 - 110 * scale,
-      y: viewport.y + viewport.height * 0.64,
-      width: 220 * scale,
-      height: 104 * scale,
-    },
+    ...GAME_CONTROL_ZONES.map((zone) => ({
+      x: cssGameRect.x + Math.round(zone.x * cssGameRect.width),
+      y: cssGameRect.y + Math.round(zone.y * cssGameRect.height),
+      width: Math.round(zone.w * cssGameRect.width),
+      height: Math.round(zone.h * cssGameRect.height),
+    })),
   ];
 }
 
@@ -118,60 +133,51 @@ export function overlayAvoidRects(
  * `avoidRects` (callers pass the other card frames there so a fallback anchor
  * cannot cover a neighboring card). When the space above the frame is too
  * narrow, a compact side anchor OUTSIDE the card is used instead; if no safe
- * position exists the chip is withheld entirely.
+ * position exists the chip is withheld entirely — never rendered inside the
+ * card.
  */
 export function placeBadgeAboveCard({
   cardRect,
-  viewport,
-  scaleFactor,
+  gameRect,
   avoidRects = [],
   size = BADGE_CHIP_SIZE,
 }: {
-  /** Native detected name-band rectangle (physical pixels). */
+  /** Detected name-band rect, CSS px in overlay-window coordinates. */
   cardRect: PhysicalRect;
-  viewport: PhysicalRect;
-  scaleFactor: number;
+  /** Calibrated game viewport, CSS px in the same coordinates. */
+  gameRect: PhysicalRect;
   avoidRects?: PhysicalRect[];
   size?: BadgeSize;
 }): BadgePlacement | null {
-  const divisor = Number.isFinite(scaleFactor) && scaleFactor > 0 ? scaleFactor : 1;
-  const cssViewport: PhysicalRect = {
-    x: 0,
-    y: 0,
-    width: viewport.width / divisor,
-    height: viewport.height / divisor,
-  };
-  const frame = cardFrameFromNameRect(cardRect, viewport);
-  const cssFrame = cssRectFromPhysicalRect(frame, divisor, viewport);
-  const cssAvoidRects = avoidRects.map((rect) => cssRectFromPhysicalRect(rect, divisor, viewport));
-  const blockers = [cssFrame, ...cssAvoidRects];
+  const frame = cardFrameFromNameRect(cardRect, gameRect);
+  const blockers = [frame, ...avoidRects];
 
   const fits = (candidate: PhysicalRect): boolean =>
-    candidate.x >= cssViewport.x &&
-    candidate.y >= cssViewport.y &&
-    right(candidate) <= right(cssViewport) &&
-    bottom(candidate) <= bottom(cssViewport) &&
+    candidate.x >= gameRect.x &&
+    candidate.y >= gameRect.y &&
+    right(candidate) <= right(gameRect) &&
+    bottom(candidate) <= bottom(gameRect) &&
     blockers.every((rect) => !overlaps(candidate, rect));
 
   // Preferred: horizontally centered immediately above the card frame, then
-  // frame-aligned variants, then nudged upward toward the viewport top.
-  const idealX = cssFrame.x + (cssFrame.width - size.width) / 2;
+  // frame-aligned variants, then nudged upward toward the game-rect top.
+  const idealX = frame.x + (frame.width - size.width) / 2;
   const aboveXCandidates = [
     idealX,
-    cssFrame.x,
-    cssFrame.x + cssFrame.width - size.width,
-  ].map((x) => clamp(x, cssViewport.x, right(cssViewport) - size.width));
-  const idealY = cssFrame.y - size.height - BADGE_GAP;
+    frame.x,
+    frame.x + frame.width - size.width,
+  ].map((x) => clamp(x, gameRect.x, right(gameRect) - size.width));
+  const idealY = frame.y - size.height - BADGE_GAP;
   const aboveYCandidates = [
     idealY,
-    ...cssAvoidRects.map((rect) => rect.y - size.height - BADGE_GAP),
-    cssViewport.y,
+    ...avoidRects.map((rect) => rect.y - size.height - BADGE_GAP),
+    gameRect.y,
   ];
 
   for (const rawY of aboveYCandidates) {
-    const y = clamp(rawY, cssViewport.y, bottom(cssViewport) - size.height);
+    const y = clamp(rawY, gameRect.y, bottom(gameRect) - size.height);
     // "Above" placements must keep the chip fully clear of the frame top.
-    if (y + size.height + BADGE_GAP > cssFrame.y) continue;
+    if (y + size.height + BADGE_GAP > frame.y) continue;
     for (const x of aboveXCandidates) {
       const candidate = { x, y, width: size.width, height: size.height };
       if (fits(candidate)) {
@@ -187,14 +193,14 @@ export function placeBadgeAboveCard({
 
   // Insufficient room above: compact side anchor OUTSIDE the card frame.
   const sideYCandidates = [
-    cssFrame.y,
-    cssFrame.y + (cssFrame.height - size.height) / 2,
+    frame.y,
+    frame.y + (frame.height - size.height) / 2,
   ];
   for (const rawY of sideYCandidates) {
-    const y = clamp(rawY, cssViewport.y, bottom(cssViewport) - size.height);
+    const y = clamp(rawY, gameRect.y, bottom(gameRect) - size.height);
     for (const x of [
-      cssFrame.x - size.width - BADGE_GAP, // left of the card
-      right(cssFrame) + BADGE_GAP, // right of the card
+      frame.x - size.width - BADGE_GAP, // left of the card
+      right(frame) + BADGE_GAP, // right of the card
     ]) {
       const candidate = { x, y, width: size.width, height: size.height };
       if (fits(candidate)) {
@@ -208,7 +214,7 @@ export function placeBadgeAboveCard({
     }
   }
 
-  // Do not render a badge if the viewport cannot provide a safe position. A
+  // Do not render a badge if the layout cannot provide a safe position. A
   // missing recommendation is safer than covering the card or a game control.
   return null;
 }

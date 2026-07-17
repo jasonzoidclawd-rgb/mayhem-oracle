@@ -21,12 +21,16 @@ function makeResolver() {
 
 const normalize = (title: string) => title.trim();
 
+// Titles containing 噪 model OCR noise: readable text that resolves to no
+// known augment identity. Everything else validates.
+const validate = (resolution: string) => !resolution.includes("噪");
+
 function scan(
   state: OfferState<string>,
   titles: Array<string | null>,
   resolve: (title: string, regionIndex: number) => string = (title) => `resolved:${title}`,
 ) {
-  return applyScanToOffer(state, titles, normalize, resolve);
+  return applyScanToOffer(state, titles, normalize, resolve, validate);
 }
 
 describe("latched offer lifecycle", () => {
@@ -130,6 +134,91 @@ describe("latched offer lifecycle", () => {
     const next = scan(cleared.state, ["新一", "新二", "新三"]);
     expect(next.state.generation).toBeGreaterThan(latched.state.generation);
     expect(next.state.slots.map((slot) => slot.title)).toEqual(["新一", "新二", "新三"]);
+  });
+
+  it("never latches from OCR noise: unvalidated text before an offer is inert", () => {
+    // Random gameplay text (HUD, minimap, announcements) reads as titles but
+    // resolves to no known augment — it must never create an offer.
+    const noise = scan(emptyOfferState(), ["噪音一", "噪音二", null]);
+    expect(noise.cleared).toBe(false);
+    expect(offerActive(noise.state)).toBe(false);
+    expect(noise.state.latched).toBe(false);
+    expect(noise.state.surfaceVisible).toBe(false);
+  });
+
+  it("hides the surface on the FIRST scan without validated evidence", () => {
+    const latched = scan(emptyOfferState(), ["卡一", "卡二", "卡三"]);
+    expect(latched.state.surfaceVisible).toBe(true);
+
+    // Offer closed / occluded: chips must disappear immediately even though
+    // the internal latch is retained for one more pass.
+    const firstAbsent = scan(latched.state, [null, null, null]);
+    expect(firstAbsent.cleared).toBe(false);
+    expect(firstAbsent.state.surfaceVisible).toBe(false);
+    expect(offerActive(firstAbsent.state)).toBe(true);
+  });
+
+  it("treats noise-only scans as surface absence: stale chips cannot survive gameplay", () => {
+    // Regression: SCANNING/UNMATCHED chips stayed ~33s over normal gameplay
+    // because noise text kept the old latch alive. Noise is absence evidence.
+    const latched = scan(emptyOfferState(), ["卡一", "卡二", "卡三"]);
+    const noiseOne = scan(latched.state, ["噪血條", "噪計分", "噪公告"]);
+    expect(noiseOne.state.surfaceVisible).toBe(false);
+    expect(noiseOne.cleared).toBe(false);
+    // The retained slots are untouched — noise is never written into them.
+    expect(noiseOne.state.slots[0].title).toBe("卡一");
+
+    const noiseTwo = scan(noiseOne.state, ["噪血條", "噪計分", "噪公告"]);
+    expect(noiseTwo.cleared).toBe(true);
+    expect(offerActive(noiseTwo.state)).toBe(false);
+  });
+
+  it("restores the same offer when its fingerprints return after brief occlusion", () => {
+    const resolver = makeResolver();
+    const latched = scan(emptyOfferState(), ["卡一", "卡二", "卡三"], resolver.resolve);
+
+    // Scoreboard covers the cards for one scan: hidden, retained.
+    const occluded = scan(latched.state, [null, null, null], resolver.resolve);
+    expect(occluded.state.surfaceVisible).toBe(false);
+
+    // The same surface returns: restored without re-resolving anything.
+    const restored = scan(occluded.state, ["卡一", "卡二", "卡三"], resolver.resolve);
+    expect(restored.state.surfaceVisible).toBe(true);
+    expect(restored.changedRegions).toEqual([]);
+    expect(restored.state.slots[0]).toBe(latched.state.slots[0]);
+    expect(resolver.calls).toEqual(["卡一", "卡二", "卡三"]);
+  });
+
+  it("keeps SCANNING evidence honest: a reroll slot counts as visible surface", () => {
+    const latched = scan(emptyOfferState(), ["卡一", "卡二", "卡三"]);
+    const rerolling = scan(latched.state, ["卡一", null, "卡三"]);
+    // Two validated cards remain on screen — the surface is visible, so the
+    // rerolled slot may render SCANNING.
+    expect(rerolling.state.surfaceVisible).toBe(true);
+    expect(rerolling.state.slots[1].fingerprint).toBeNull();
+  });
+
+  it("reports a queued offer replacing the current one (chained death rounds)", () => {
+    const r2 = scan(emptyOfferState(), ["R2一", "R2二", "R2三"]);
+    // Pick confirmed in-game: the R3 screen swaps in on the very next scan.
+    const r3 = scan(r2.state, ["R3一", "R3二", "R3三"]);
+    expect(r3.replacedOffer).toBe(true);
+    expect(offerActive(r3.state)).toBe(true);
+    expect(r3.state.generation).toBe(r2.state.generation + 1);
+    expect(r3.state.slots.map((slot) => slot.title)).toEqual(["R3一", "R3二", "R3三"]);
+  });
+
+  it("never reports a single-slot reroll as an offer replacement", () => {
+    const latched = scan(emptyOfferState(), ["卡一", "卡二", "卡三"]);
+    const rerolled = scan(latched.state, ["卡一", "新卡", "卡三"]);
+    expect(rerolled.replacedOffer).toBe(false);
+    // A fresh latch after a clear is a new offer, not a replacement either.
+    const cleared = scan(
+      scan(latched.state, [null, null, null]).state,
+      [null, null, null],
+    );
+    const fresh = scan(cleared.state, ["新一", "新二", "新三"]);
+    expect(fresh.replacedOffer).toBe(false);
   });
 
   it("runs a full four-round game: every round independently latches and clears", () => {

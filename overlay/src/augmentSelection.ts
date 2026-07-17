@@ -22,66 +22,18 @@ export interface AugmentRound {
   level: number;
 }
 
-export interface AugmentRoundTransition {
-  round: AugmentRound | null;
-  isNewRound: boolean;
-  nextPhase: "in_game" | "augment_selection";
-}
-
+/**
+ * Level-derived round label for DISPLAY only (HUD "R2" indicator). Round
+ * DELIVERY lives in `roundDelivery.ts`: crossing a threshold makes a round
+ * eligible; delivery happens at the R1 timing or during a death sequence, and
+ * completion is counted only on strong evidence — never from level.
+ */
 export function augmentRoundForLevel(level: number): AugmentRound | null {
   for (let index = AUGMENT_LEVELS.length - 1; index >= 0; index -= 1) {
     const threshold = AUGMENT_LEVELS[index];
     if (level >= threshold) return { round: index + 1, level: threshold };
   }
   return null;
-}
-
-/**
- * A new augment threshold is the lifecycle boundary for OCR. It must cancel
- * the prior run and start a fresh one even if the previous run never observed
- * the card text disappear after the player selected an augment.
- *
- * Champion level is ONLY a round-boundary trigger. It is never a continuing
- * validity gate: a level gained while an augment offer is still open (XP keeps
- * accruing during selection) must not end the selection or clear the offer.
- * Selection completion is decided by the offer lifecycle (surface absence /
- * confirmed pick), not by level.
- */
-export function transitionAugmentRound({
-  playerLevel,
-  lastAugmentLevel,
-  phase,
-}: {
-  playerLevel: number;
-  lastAugmentLevel: number;
-  phase: "in_game" | "augment_selection";
-}): AugmentRoundTransition {
-  const round = AUGMENT_LEVELS
-    .map((level, index) => ({ round: index + 1, level }))
-    .reverse()
-    .find((candidate) => playerLevel >= candidate.level && candidate.level > lastAugmentLevel) ?? null;
-
-  if (round) {
-    return {
-      round,
-      isNewRound: true,
-      nextPhase: "augment_selection",
-    };
-  }
-
-  return {
-    round: augmentRoundForLevel(playerLevel),
-    isNewRound: false,
-    nextPhase: phase,
-  };
-}
-
-export function shouldStartAugmentSelection({
-  augmentLevel,
-}: {
-  augmentLevel: number | undefined;
-}): boolean {
-  return augmentLevel !== undefined;
 }
 
 export function ocrRunIsCurrent({

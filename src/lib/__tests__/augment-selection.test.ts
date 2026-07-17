@@ -6,14 +6,16 @@ import {
   matchAugmentFrame,
   shouldClearOcrStateForGameflow,
   shouldRunOcrForGameflow,
-  shouldStartAugmentSelection,
-  transitionAugmentRound,
 } from "../../../overlay/src/augmentSelection";
 import {
   applyScanToOffer,
   emptyOfferState,
   offerActive,
 } from "../../../overlay/src/offerLifecycle";
+import {
+  eligibleRoundCount,
+  resolveRoundDelivery,
+} from "../../../overlay/src/roundDelivery";
 import type { PoolAugment } from "../../../overlay/src/scoring";
 
 function augment(slug: string, name: string, name_zh_TW: string): PoolAugment {
@@ -33,31 +35,40 @@ function augment(slug: string, name: string, name_zh_TW: string): PoolAugment {
 const identity = (title: string) => title;
 
 function scan(state = emptyOfferState<string>(), titles: Array<string | null>) {
-  return applyScanToOffer(state, titles, identity, (title) => title);
+  return applyScanToOffer(state, titles, identity, (title) => title, () => true);
 }
 
 describe("overlay augment selection matching", () => {
-  test("starts any newly reached augment threshold without requiring death state", () => {
-    expect(shouldStartAugmentSelection({ augmentLevel: 3 })).toBe(true);
-    expect(shouldStartAugmentSelection({ augmentLevel: 7 })).toBe(true);
-    expect(shouldStartAugmentSelection({ augmentLevel: 11 })).toBe(true);
-    expect(shouldStartAugmentSelection({ augmentLevel: 15 })).toBe(true);
-  });
+  test("level thresholds create ELIGIBILITY, not delivery", () => {
+    // Mayhem delivers R1 at the level-3 timing but R2/R3/R4 only during a
+    // death sequence after crossing 7/11/15. Crossing a threshold alive must
+    // never open a fast scan window or consume a round.
+    expect(eligibleRoundCount(3)).toBe(1);
+    expect(eligibleRoundCount(7)).toBe(2);
+    expect(eligibleRoundCount(11)).toBe(3);
+    expect(eligibleRoundCount(15)).toBe(4);
 
-  test("does not start when no new augment threshold was reached", () => {
-    expect(shouldStartAugmentSelection({ augmentLevel: undefined })).toBe(false);
+    const aliveAtSeven = resolveRoundDelivery({
+      playerLevel: 7,
+      isDead: false,
+      completedRounds: 1,
+      offerLatched: false,
+    });
+    expect(aliveAtSeven.scanMode).toBe("ambient");
+    expect(aliveAtSeven.pendingRounds).toBe(1);
   });
 
   test("a level gained during an open offer never ends the selection", () => {
-    // Regression pin for the level 3→4 badge wipe: champion level is only a
-    // round-boundary trigger, never a continuing validity gate.
-    const midOffer = transitionAugmentRound({
+    // Regression pin for the level 3→4 badge wipe: the delivery model has no
+    // level-derived completion input at all — a latched offer keeps its fast
+    // scan loop at any level.
+    const midOffer = resolveRoundDelivery({
       playerLevel: 8,
-      lastAugmentLevel: 7,
-      phase: "augment_selection",
+      isDead: false,
+      completedRounds: 1,
+      offerLatched: true,
     });
-    expect(midOffer.isNewRound).toBe(false);
-    expect(midOffer.nextPhase).toBe("augment_selection");
+    expect(midOffer.scanMode).toBe("fast");
   });
 
   test("ends the offer only after card text disappears for two consecutive OCR passes", () => {
