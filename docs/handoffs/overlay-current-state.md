@@ -4,6 +4,40 @@ This file captures recent overlay findings so future agents do not rediscover
 them from screenshots, terminal history, or old handoffs. It is context only.
 Do not treat it as permission to change runtime behavior without a task.
 
+## Foreground Resolver Ground Truth (2026-07-17, PR #46 round 3)
+
+The round-2 build inverted foreground classification live (panels over
+Terminal at 18:53:36; dead overlay during a real R1 offer 18:53:40–18:55:25).
+Live window metadata captured with `cargo run --example foreground_probe`
+established ground truth that now anchors `overlay/src-tauri/src/foreground.rs`:
+
+- The REAL macOS game window has an EMPTY `kCGWindowName`. Any title-based
+  game detection is dead code on macOS. LeagueClientUx's window owner name is
+  "League of Legends" — indistinguishable from the game by name. Game identity
+  comes ONLY from owner PID → bundle id
+  (`com.riotgames.LeagueofLegends.GameClient`) or executable path
+  (`foreground::is_game_owner`).
+- The game runs borderless and may hold an elevated window layer; the game
+  process is the only owner allowed to be z-order authority from a non-zero
+  layer (`select_frontmost_window`). Everything else non-zero is chrome:
+  status items at layer 25 (a "Riot Client" status item exists), menubar 24,
+  cursor ~2^31. The game also keeps a degenerate 1x2 helper window —
+  zero-area and alpha<0.01 windows are excluded.
+- NSWorkspace.frontmostApplication off the main thread can be stale or frozen
+  in EITHER direction. It is only a fallback when the CGWindowList walk yields
+  no candidate; a cached workspace value never overrides fresher z-order
+  evidence (`effective_frontmost_pid`).
+- Frontend: `foregroundWatchdog.ts` gives the foreground poll a timeout
+  (degrades to unknown = hidden) and a stuck deadline (a hung IPC can never
+  latch the last classification). `scanActivation.ts` decides
+  fast-loop/ambient-probe/none purely from fresh inputs. `devPanelsVisible`
+  is the single gate for every dev panel — the pin bypass is gone; the
+  tier-fixture flag alone never renders over another app.
+- `get_foreground_diagnostic` (full candidate walk + verdicts) is
+  macOS+debug_assertions only; release returns Err. The R1 captured-frame
+  replay test is `overlay/src-tauri/tests/r1_replay.rs` over
+  `corpus/full_frames/r1_offer_zh_tw_1280x720.jpeg`.
+
 ## Death-Delivery Round Model + CSS-Space Chips (2026-07-17, PR #46 round 2)
 
 Second fix round on PR #46 after the timed manual GUI test surfaced six
