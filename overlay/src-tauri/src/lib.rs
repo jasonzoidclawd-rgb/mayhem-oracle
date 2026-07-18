@@ -11,6 +11,7 @@ mod lcu;
 pub mod member;
 pub mod ocr;
 mod sanitize;
+pub mod surface_probe;
 mod upload_queue;
 
 #[cfg(target_os = "macos")]
@@ -643,6 +644,118 @@ async fn detect_augment_names(known_names: Option<Vec<String>>) -> Result<OcrSca
         ocr_ms: ocr_start.elapsed().as_millis() as u64,
         total_ms: scan_start.elapsed().as_millis() as u64,
     })
+}
+
+// ─── Geometry Surface Probe (pixel presence/occlusion; NO OCR) ──────────────
+// Round-6: presence/occlusion/freshness are decided from PIXELS here, not OCR.
+// This shares the OCR path's monitor/viewport selection but runs cheap CV
+// (surface_probe::analyze_surface) instead of the recognizer, so it can run on
+// a fast independent cadence while the slow OCR track only supplies identity.
+
+fn absent_surface_observation(
+    probe_seq: u64,
+    captured_at: f64,
+    reason: &str,
+    elapsed_ms: u64,
+) -> surface_probe::SurfaceObservation {
+    surface_probe::SurfaceObservation {
+        probe_seq,
+        captured_at,
+        capture_width: 0,
+        capture_height: 0,
+        present: false,
+        occluded: false,
+        confidence: 0.0,
+        cards: (0..calibration::CARD_NAME_REGIONS.len())
+            .map(|region_index| surface_probe::CardObservation {
+                region_index,
+                present: false,
+                card_rect: None,
+                interior_luma: 0.0,
+                interior_std: 0.0,
+                frame_contrast: 0.0,
+                edge_energy: 0.0,
+                structural_score: 0.0,
+                fingerprint: String::new(),
+            })
+            .collect(),
+        rejection_reasons: vec![reason.to_string()],
+        elapsed_ms,
+    }
+}
+
+#[tauri::command]
+async fn probe_augment_surface(
+    probe_seq: u64,
+    captured_at: f64,
+) -> Result<surface_probe::SurfaceObservation, String> {
+    let start = std::time::Instant::now();
+    // Foreground gate: a probe only means anything while the actual game window
+    // is in front. Out of foreground → an explicit absent observation (the
+    // frontend clears output), never a stale positive.
+    if !collect_foreground_state().game_window_foreground {
+        return Ok(absent_surface_observation(
+            probe_seq,
+            captured_at,
+            "actual-game-window-not-foreground",
+            start.elapsed().as_millis() as u64,
+        ));
+    }
+
+    let monitors = match monitor_snapshots() {
+        Ok(monitors) => monitors,
+        Err(error) => {
+            return Ok(absent_surface_observation(
+                probe_seq,
+                captured_at,
+                &error,
+                start.elapsed().as_millis() as u64,
+            ));
+        }
+    };
+    let game_window = find_league_window();
+    let monitor_index = selected_monitor_index(&monitors, game_window.as_ref());
+    let monitor = &monitors[monitor_index];
+    let calibration = calibration::select_viewport(&monitor.info, game_window.as_ref());
+    let screenshot = match monitor.monitor.capture_image() {
+        Ok(screenshot) => screenshot,
+        Err(error) => {
+            return Ok(absent_surface_observation(
+                probe_seq,
+                captured_at,
+                &format!("capture-failed: {}", error),
+                start.elapsed().as_millis() as u64,
+            ));
+        }
+    };
+    let capture_width = screenshot.width();
+    let capture_height = screenshot.height();
+    // Map the calibrated LOGICAL viewport into capture-pixel space for CV, and
+    // keep the LOGICAL name-band rects for chip rendering (same space the OCR
+    // path publishes, so rendering geometry is unchanged).
+    let viewport_px = calibration::capture_rect_for_monitor(
+        &calibration.viewport,
+        &monitor.info,
+        capture_width,
+        capture_height,
+    );
+    let name_band_rects = [
+        calibration::physical_rect_for_region(&calibration::CARD_NAME_REGIONS[0], &calibration.viewport),
+        calibration::physical_rect_for_region(&calibration::CARD_NAME_REGIONS[1], &calibration.viewport),
+        calibration::physical_rect_for_region(&calibration::CARD_NAME_REGIONS[2], &calibration.viewport),
+    ];
+    let dynamic = image::DynamicImage::ImageRgba8(screenshot);
+    let mut observation = surface_probe::analyze_surface(
+        &dynamic,
+        &viewport_px,
+        &name_band_rects,
+        probe_seq,
+        captured_at,
+        0,
+    );
+    // Measure end-to-end native latency (capture + analysis) for instrumentation.
+    observation.elapsed_ms = start.elapsed().as_millis() as u64;
+    Ok(observation)
 }
 
 // ─── API Probe (check if augment data available via Live Client) ────────────
@@ -1284,6 +1397,7 @@ pub fn run() {
             check_ocr,
             check_screen_capture_available,
             detect_augment_names,
+            probe_augment_surface,
             get_overlay_calibration,
             probe_augment_api,
             set_dock_visible,

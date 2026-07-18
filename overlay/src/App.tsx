@@ -88,24 +88,32 @@ import {
   resolveWithTimeout,
   FOREGROUND_POLL_TIMEOUT_MS,
 } from "./foregroundWatchdog";
-import {
-  evaluateSurfacePresence,
-  isPlausibleTitle,
-} from "./surfacePresence";
+import { isPlausibleTitle } from "./surfacePresence";
 import {
   DEFAULT_PROBE_CONFIG,
-  FRAME_FRESHNESS_TTL_MS,
-  PROBE_INTERVAL_MS,
+  PROBE_TIMEOUT_MS,
   nextProbeAction,
+  type ProbeSchedulerConfig,
 } from "./surfaceProbeScheduler";
 import {
-  buildVisibleFrame,
   emptyVisibleFrame,
   frameResultIsCurrent,
-  visibleFrameFresh,
   visibleFrameRenderable,
   type VisibleOfferFrame,
 } from "./visibleOfferFrame";
+import {
+  GEOMETRY_INTERVAL_MS,
+  GEOMETRY_FRESHNESS_TTL_MS,
+  IDENTITY_RETRY_MS,
+  buildGeometryVisibleFrame,
+  emptyGeometryObservation,
+  geometryFrameFresh,
+  identityForSlot,
+  newOfferDetected,
+  type GeometryObservation,
+  type IdentityRecord,
+} from "./surfaceGeometry";
+import { decideOcrTrigger } from "./ocrTrigger";
 import {
   EMPTY_SCAN_TIMINGS,
   type OcrCardDiagnostic as DevOcrCardDiagnostic,
@@ -135,6 +143,15 @@ import {
   placeBadgeAboveCard,
 } from "./badgeLayout";
 import "./App.css";
+
+// The geometry track runs the SAME self-healing scheduler as OCR (start / skip /
+// watchdog-restart) but on the fast cadence: presence/occlusion/freshness must
+// refresh sub-second, independent of a slow OCR pass. Timeout is the shared
+// bounded watchdog so a wedged capture re-arms within one cycle.
+const GEOMETRY_PROBE_CONFIG: ProbeSchedulerConfig = {
+  intervalMs: GEOMETRY_INTERVAL_MS,
+  timeoutMs: PROBE_TIMEOUT_MS,
+};
 
 // ─── Types ───
 
@@ -309,6 +326,36 @@ function App() {
   const probeRestartCountRef = useRef(0);
   const lastProbeSkipReasonRef = useRef<string>("idle");
   const lastProbeFailureReasonRef = useRef<string | null>(null);
+  // ─── Round-6 geometry track (the presence/occlusion/freshness AUTHORITY) ───
+  // A cheap Rust pixel probe (probe_augment_surface) runs on its own fast
+  // scheduler with its own single-in-flight guard, ownership token, seq, and
+  // watchdog — a mirror of the OCR guards above so the two tracks never stall
+  // each other. Geometry owns whether an offer is present, whether a modal has
+  // occluded it, and the capture clock the render gate ages against. OCR NEVER
+  // decides those; it only fills identity.
+  const geometryInFlightRef = useRef(false);
+  const geometryInFlightSinceRef = useRef<number | null>(null);
+  const geometryInFlightTokenRef = useRef<number | null>(null);
+  const geometrySeqRef = useRef(0);
+  const lastGeometryStartedAtRef = useRef<number | null>(null);
+  const geometryRestartCountRef = useRef(0);
+  const geometryObservationRef = useRef<GeometryObservation | null>(null);
+  // Render generation, bumped on each NEW offer (absent→present or a queued
+  // round replacement) so chip keys reset between offers.
+  const geometryGenerationRef = useRef(0);
+  // Per-slot identity keyed by the GEOMETRY fingerprint it was resolved against.
+  // identityForSlot returns a record only while its fingerprint still matches the
+  // live card, so a late OCR result from a superseded generation can never paint
+  // the new card (the identity stale-result guard).
+  const identityStoreRef = useRef<Array<IdentityRecord<SlotResolution> | null>>([null, null, null]);
+  // Cross-track OCR-trigger coordination: the geometry track decides which slots
+  // need a (re)read and stamps the fingerprints those reads are keyed to.
+  const ocrPendingSlotsRef = useRef<number[]>([]);
+  const ocrTriggerFingerprintsRef = useRef<string[]>(["", "", ""]);
+  const forceOcrSlotsRef = useRef<number[]>([]);
+  // DEV-only geometry latency ring (capture+analyze ms) for p50/p95/p99 logging.
+  const geometryLatenciesRef = useRef<number[]>([]);
+  const geometryProbeCountRef = useRef(0);
   // Whether the last poll saw an active, capture-allowed game (coarse gate).
   const activeGameRef = useRef(false);
   const phaseRef = useRef<Phase>("idle");
@@ -455,35 +502,37 @@ function App() {
     }));
   }, []);
 
-  // Publish one probe's visible frame, rejecting stale async results: a frame
-  // may publish only while its probe seq is still the newest started.
-  const publishScanFrame = useCallback((
-    captureSeq: number,
-    capturedAt: number,
-    applied: OfferState<SlotResolution>,
-    freshRects: Array<PhysicalRect | null>,
-    surface: { present: boolean; reason: string; confidence: number; plausibleTitles: number },
-  ) => {
-    if (!frameResultIsCurrent(captureSeq, scanSeqRef.current)) return;
-    const frame = buildVisibleFrame<SlotResolution>({
+  // Publish the visible frame FROM THE GEOMETRY OBSERVATION. This is the single
+  // authority for what renders: presence/occlusion/rects/fingerprints come from
+  // the pixel probe, per-slot identity is layered via identityForSlot (null →
+  // SCANNING). Called by the geometry track every probe (it always has the
+  // newest seq) and by the OCR track after it writes new identities (with the
+  // current geometry seq, so it repaints the live frame). Stale geometry results
+  // are rejected by frameResultIsCurrent(captureSeq, geometrySeqRef).
+  const republishGeometryFrame = useCallback((captureSeq: number) => {
+    const observation = geometryObservationRef.current;
+    if (observation == null) return;
+    if (!frameResultIsCurrent(captureSeq, geometrySeqRef.current)) return;
+    const frame = buildGeometryVisibleFrame<SlotResolution>({
       revision: (visibleRevisionRef.current += 1),
       captureSeq,
-      capturedAt,
-      offerState: applied,
-      freshRects,
-      surfaceValidated: surface.present,
+      observation,
+      generation: geometryGenerationRef.current,
+      resolveIdentity: (regionIndex, fingerprint) =>
+        identityForSlot(identityStoreRef.current[regionIndex], fingerprint),
     });
     visibleFrameRef.current = frame;
     setVisibleFrame(frame);
     setOcrLifecycle((previous) => ({
       ...previous,
       surfaceValidated: frame.surfaceValidated,
-      surfaceReason: surface.reason,
-      surfaceConfidence: surface.confidence,
-      plausibleTitles: surface.plausibleTitles,
+      surfaceReason: observation.present
+        ? (observation.occluded ? "occluded" : "present")
+        : observation.rejectionReasons[0] ?? "absent",
+      surfaceConfidence: observation.confidence,
+      plausibleTitles: observation.cards.filter((card) => card.present).length,
       freshRectCount: frame.slots.filter((slot) => slot.cardRect !== null).length,
       visibleFrameRevision: frame.revision,
-      lifecycleDisagreement: applied.latched && !frame.surfaceValidated,
     }));
   }, []);
 
@@ -935,10 +984,11 @@ function App() {
     !isPreviewMode &&
     effectiveMemberEnabled &&
     visibleFrameRenderable(visibleFrame, gameWindowForeground) &&
-    // Freshness TTL: a positive frame renders only while its capture is recent.
-    // renderClock forces this to re-run every ~250 ms, so the surface fails
-    // closed when the scheduler stops refreshing it (no frozen chips).
-    visibleFrameFresh(visibleFrame, renderClock, FRAME_FRESHNESS_TTL_MS);
+    // Geometry freshness TTL: a positive frame renders only while its GEOMETRY
+    // capture is recent. renderClock forces this to re-run every ~250 ms, so the
+    // surface fails closed when the geometry scheduler stops refreshing it. This
+    // is decoupled from OCR duration — the exact blink fix.
+    geometryFrameFresh(visibleFrame?.capturedAt ?? null, renderClock, GEOMETRY_FRESHNESS_TTL_MS);
   const previewBadgesReady =
     isPreviewMode && fixturePayload != null && previewCards.length === 3;
   const showBadgeLayer = realFrameRenderable || previewBadgesReady;
@@ -971,8 +1021,10 @@ function App() {
         regionIndex: slot.regionIndex,
         key: `slot-${slot.regionIndex}-g${visibleFrame.generation}`,
       };
-      if (slot.fingerprint === null) {
-        // Reroll in flight / unreadable slot — no identity to show yet.
+      if (slot.resolution === null) {
+        // Geometry confirms a card here, but its identity is pending (fresh
+        // trigger, reroll re-read in flight, or unreadable) — show SCANNING, not
+        // nothing: the chip must never vanish merely because OCR hasn't caught up.
         return [{ ...base, state: "scanning", tier: null, winRateText: null, isNew: false }];
       }
       const staged = slot.resolution?.aramgg;
@@ -1042,8 +1094,15 @@ function App() {
     if (clearLatch) {
       resetOffer();
       setOcrDiagnostics([]);
+      // Drop the geometry-keyed identity store and last observation so a stale
+      // present result cannot repaint after a game exit / focus loss. Advancing
+      // the geometry seq stale-rejects any in-flight geometry probe too.
+      identityStoreRef.current = [null, null, null];
+      geometryObservationRef.current = null;
+      ocrPendingSlotsRef.current = [];
     }
     bumpScanSeq();
+    geometrySeqRef.current += 1;
     publishEmptyVisibleFrame(scanSeqRef.current, performance.now());
     setOcrLifecycle((previous) => ({
       ...previous,
@@ -1160,14 +1219,133 @@ function App() {
   // on catalog identity (an offer whose names are unknown is still an offer).
   const titlePresent = useCallback(() => true, []);
 
-  // ─── The single self-healing surface probe (Stage 1 + Stage 2) ───
-  // ONE capture drives BOTH surface presence (title-quality only) and identity
-  // resolution (catalog) — never two screenshots. Presence publishes the visible
-  // frame (fresh or explicit-empty) EVERY probe, so a vanished surface clears
-  // within one 250 ms tick. Identity only fills chip content. The in-flight guard
-  // is released in `finally` on every path (success / stale-reject / throw), and
-  // a stale result is rejected by probe seq + foreground epoch.
-  const runSurfaceProbe = useCallback(async () => {
+  // ─── TRACK 1: geometry probe — presence / occlusion / freshness authority ───
+  // A cheap Rust PIXEL probe classifies the surface (present / occluded / absent)
+  // and publishes the visible frame EVERY probe on the fast cadence. This is the
+  // blink fix: a static offer's freshness refreshes every ~150 ms regardless of
+  // how long OCR takes. It NEVER runs OCR — it only decides which slots the OCR
+  // track should (re)read. Its single-in-flight guard is released in `finally` on
+  // every path, and stale results are rejected by geometry seq + foreground epoch.
+  const runGeometryProbe = useCallback(async () => {
+    geometryInFlightRef.current = true;
+    const startedAt = performance.now();
+    geometryInFlightSinceRef.current = startedAt;
+    lastGeometryStartedAtRef.current = startedAt;
+    const captureSeq = (geometrySeqRef.current += 1);
+    geometryInFlightTokenRef.current = captureSeq;
+    const foregroundEpoch = foregroundEpochRef.current;
+    const capturedAt = performance.now();
+    try {
+      const observation = await invoke<GeometryObservation>("probe_augment_surface", {
+        probeSeq: captureSeq,
+        capturedAt,
+      });
+      // Stale-result rejection: apply only while this probe's seq is still newest
+      // AND the foreground epoch it captured under is unchanged.
+      if (captureSeq !== geometrySeqRef.current) return;
+      if (foregroundEpoch !== foregroundEpochRef.current) return;
+
+      if (import.meta.env.DEV) {
+        // Live p50/p95/p99 capture+analyze latency (compiled out of production).
+        const ring = geometryLatenciesRef.current;
+        ring.push(observation.elapsedMs);
+        if (ring.length > 200) ring.shift();
+        geometryProbeCountRef.current += 1;
+        if (geometryProbeCountRef.current % 40 === 0 && ring.length > 0) {
+          const sorted = [...ring].sort((a, b) => a - b);
+          const at = (q: number) => sorted[Math.min(sorted.length - 1, Math.floor(q * sorted.length))];
+          console.info(
+            `[geometry-latency] n=${sorted.length} p50=${at(0.5).toFixed(1)} ` +
+              `p95=${at(0.95).toFixed(1)} p99=${at(0.99).toFixed(1)} ms`,
+          );
+        }
+      }
+
+      const previous = geometryObservationRef.current;
+      geometryObservationRef.current = observation;
+
+      // A NEW offer (absent→present or ≥2 slots swapped) bumps the render
+      // generation; a queued-round REPLACEMENT (previous offer was present) is
+      // strong round-completion evidence. A first appearance is NOT a completion.
+      if (newOfferDetected(previous, observation)) {
+        geometryGenerationRef.current += 1;
+        if (previous?.present && !previous.occluded) recordRoundCompleted();
+      }
+
+      // Publish the visible frame from geometry presence + current identities.
+      republishGeometryFrame(captureSeq);
+
+      // Phase follows the visible SURFACE: a present, unoccluded offer opens
+      // selection; an absent surface returns to in-game. Occlusion is transient
+      // (a modal over a live offer) — keep the phase and identities.
+      if (observation.present && !observation.occluded) {
+        if (phaseRef.current !== "augment_selection") {
+          ocrSelectionCompletedRef.current = false;
+          updatePhase("augment_selection");
+        }
+      } else if (!observation.present && phaseRef.current === "augment_selection") {
+        ocrSelectionCompletedRef.current = true;
+        updatePhase("in_game");
+      }
+
+      // Tell the OCR track which slots need a (re)read this cycle, keyed to the
+      // live geometry fingerprints.
+      const decision = decideOcrTrigger<SlotResolution>({
+        observation,
+        identities: identityStoreRef.current,
+        now: performance.now(),
+        retryMs: IDENTITY_RETRY_MS,
+        forceSlots: forceOcrSlotsRef.current,
+      });
+      forceOcrSlotsRef.current = [];
+      ocrPendingSlotsRef.current = decision.slots;
+      if (decision.slots.length > 0) {
+        ocrTriggerFingerprintsRef.current = observation.cards.map((card) => card.fingerprint);
+      }
+
+      if (datasetCaptureOn) {
+        // DEV-only redacted capture: card-region rects, the geometry presence
+        // verdict, and rejection reasons only — never identity or full-screen data.
+        lastFixtureInputRef.current = {
+          capturedAt,
+          present: observation.present && !observation.occluded,
+          confidence: observation.confidence,
+          cropsCaptured: observation.cards.filter((card) => card.present).length,
+          titles: [null, null, null],
+          cardRects: observation.cards.map((card) => card.cardRect),
+          rejectionReasons: observation.rejectionReasons,
+        };
+      }
+    } catch (error) {
+      if (captureSeq !== geometrySeqRef.current) return;
+      if (foregroundEpoch !== foregroundEpochRef.current) return;
+      // A geometry probe failure is screen-absence evidence: publish an empty
+      // frame so no chip survives, and stand the OCR track down.
+      const reason = error instanceof Error ? error.message : "geometry-probe-failed";
+      geometryObservationRef.current = emptyGeometryObservation(captureSeq, performance.now(), reason);
+      ocrPendingSlotsRef.current = [];
+      republishGeometryFrame(captureSeq);
+      if (phaseRef.current === "augment_selection") {
+        ocrSelectionCompletedRef.current = true;
+        updatePhase("in_game");
+      }
+    } finally {
+      // Release the guard ONLY if this probe still owns it (a watchdog restart
+      // hands ownership to the replacement — its late return must not free it).
+      if (geometryInFlightTokenRef.current === captureSeq) {
+        geometryInFlightSinceRef.current = null;
+        geometryInFlightRef.current = false;
+        geometryInFlightTokenRef.current = null;
+      }
+    }
+  }, [datasetCaptureOn, recordRoundCompleted, republishGeometryFrame, updatePhase]);
+
+  // ─── TRACK 2: OCR/identity probe — TRIGGERED by the geometry track ───────────
+  // Supplies per-slot identity ONLY: never presence, occlusion, or freshness. It
+  // reads just the slots geometry flagged (new / reroll / retry / force) and
+  // writes each result into the geometry-fingerprint-keyed identity store, so a
+  // late result from a superseded generation can never paint the live card.
+  const runIdentityProbe = useCallback(async (slots: number[], triggerFingerprints: string[]) => {
     probeInFlightRef.current = true;
     const startedAt = performance.now();
     probeInFlightSinceRef.current = startedAt;
@@ -1175,7 +1353,6 @@ function App() {
     const captureSeq = bumpScanSeq();
     probeInFlightTokenRef.current = captureSeq;
     const foregroundEpoch = foregroundEpochRef.current;
-    const previouslyPresent = visibleFrameRef.current?.surfaceValidated === true;
     const scanStart = new Date().toISOString();
     setOcrLifecycle((previous) => ({
       ...previous,
@@ -1213,76 +1390,45 @@ function App() {
         (regionIndex) =>
           scan.detected.find((entry) => entry.region_index === regionIndex)?.text ?? null,
       );
-      // Stage 1 — SURFACE PRESENCE from title-quality alone (no catalog lookup):
-      // only plausible titles seed a slot, and ≥2 (new) / ≥1 (already present)
-      // decide presence. This is what a future geometry probe would replace.
-      const plausibleTitles: Array<string | null> = rawTitles.map((title) =>
-        title != null && isPlausibleTitle(normalizeAugmentNameForLookup(title)) ? title : null,
-      );
-      const plausibleCount = plausibleTitles.filter((title) => title !== null).length;
-      const cropsCaptured = scan.diagnostics.filter((entry) => entry.captureSucceeded).length;
-      const presence = evaluateSurfacePresence({
-        cropsCaptured,
-        plausibleTitles: plausibleCount,
-        previouslyPresent,
+      // Re-read ONLY the triggered slots; untouched slots keep their prior title
+      // so applyScanToOffer leaves their identity intact (geometry already
+      // confirmed those cards did not reroll). A triggered slot with no plausible
+      // title this pass resolves to null → SCANNING → retry after the deadline.
+      const titlesForScan: Array<string | null> = [0, 1, 2].map((regionIndex) => {
+        if (!slots.includes(regionIndex)) return offerStateRef.current.slots[regionIndex].title;
+        const raw = rawTitles[regionIndex];
+        return raw != null && isPlausibleTitle(normalizeAugmentNameForLookup(raw)) ? raw : null;
       });
-      const freshRects: Array<PhysicalRect | null> = [0, 1, 2].map((regionIndex) => {
-        const diagnostic = scan.diagnostics.find((entry) => entry.regionIndex === regionIndex);
-        return diagnostic && diagnostic.captureSucceeded && diagnostic.cardRect
-          ? diagnostic.cardRect
-          : null;
-      });
-      if (datasetCaptureOn) {
-        // DEV-only redacted capture: card-region rects, name-band titles, and
-        // the presence verdict only — never identity or full-screen data.
-        lastFixtureInputRef.current = {
-          capturedAt,
-          present: presence.present,
-          confidence: presence.confidence,
-          cropsCaptured,
-          titles: rawTitles,
-          cardRects: freshRects,
-          rejectionReasons: presence.rejectionReasons,
-        };
-      }
-
-      // Stage 2 — IDENTITY. The latch keys on plausible-title presence
-      // (titlePresent), not a catalog hit; each slot still carries its catalog
-      // resolution so chips show tier / win rate / UNMATCHED / NO DATA.
+      // The offer LATCH (feeds the decision engine + collector) keeps grace; the
+      // identity STORE (what renders) is strict and geometry-fingerprint-keyed.
       const applied = applyScanToOffer(
         offerStateRef.current,
-        plausibleTitles,
+        titlesForScan,
         normalizeAugmentNameForLookup,
         resolveSlotTitle,
         titlePresent,
       );
-      if (applied.replacedOffer) {
-        // ≥2 slots swapped to new titles in one capture — a queued offer
-        // replaced the completed one: strong completion evidence.
-        recordRoundCompleted();
-      }
       publishOffer(applied.state);
-      // Publish the VISIBLE frame from THIS capture: fresh per-slot rects and the
-      // Stage-1 presence verdict. Not present → explicit EMPTY frame, so a
-      // vanished surface clears immediately (no wait for a poll or two misses).
-      publishScanFrame(captureSeq, capturedAt, applied.state, freshRects, {
-        present: presence.present,
-        reason: presence.present ? "present" : presence.rejectionReasons[0] ?? "absent",
-        confidence: presence.confidence,
-        plausibleTitles: plausibleCount,
-      });
-      // Phase follows PRESENCE (the visible surface), never a level threshold or
-      // stale telemetry: a present offer opens selection; an absent surface
-      // returns to in-game so round bookkeeping can advance.
-      if (presence.present && offerActive(applied.state)) {
-        if (phaseRef.current !== "augment_selection") {
-          ocrSelectionCompletedRef.current = false;
-          updatePhase("augment_selection");
-        }
-      } else if (phaseRef.current === "augment_selection") {
-        ocrSelectionCompletedRef.current = true;
-        updatePhase("in_game");
+      // Write the identity store for the triggered slots, keyed to the geometry
+      // fingerprint that triggered the read. Resolve STRICTLY from this pass's
+      // plausible title (never applyScanToOffer's grace) so a rerolled slot whose
+      // new title was unreadable stays SCANNING instead of showing the stale one.
+      const resolvedAt = performance.now();
+      for (const regionIndex of slots) {
+        const raw = rawTitles[regionIndex];
+        const readable = raw != null && isPlausibleTitle(normalizeAugmentNameForLookup(raw));
+        identityStoreRef.current[regionIndex] = {
+          fingerprint: triggerFingerprints[regionIndex] ?? "",
+          resolution: readable ? resolveSlotTitle(raw as string) : null,
+          resolvedAt,
+        };
       }
+      // Clear the pending queue; the next geometry tick re-populates it if any
+      // slot is still unresolved past the retry deadline (or rerolls again).
+      ocrPendingSlotsRef.current = [];
+      // Repaint the LIVE geometry frame with the new identities (geometry owns
+      // presence/freshness; this only refreshes chip content).
+      republishGeometryFrame(geometrySeqRef.current);
       const matchMs = performance.now() - matchStartMs;
 
       setOcrLifecycle((previous) => ({
@@ -1397,38 +1543,28 @@ function App() {
         }
       }
 
-      // No separate "cleared" path: presence already drove the phase above and
-      // publishScanFrame published an explicit-empty frame when absent.
+      // Presence, occlusion, and clearing are the geometry track's job — this
+      // identity pass only refreshed chip content on the live geometry frame.
     } catch (error) {
-      // A stale or superseded probe (newer seq, or a foreground flip) must not
-      // publish — even on error — so it can't resurrect an already-cleared frame.
+      // A stale or superseded OCR probe (newer seq, or a foreground flip) must not
+      // write identities — geometry, not OCR, decides presence and clearing.
       if (captureSeq !== scanSeqRef.current) return;
       if (foregroundEpoch !== foregroundEpochRef.current) return;
-      const capturedAt = performance.now();
       const unavailable = ocrAvailabilityFromError(error);
       if (unavailable) setOcrAvailability(unavailable);
-      // A capture failure is screen-absence evidence: advance the latch's grace
-      // and publish an EMPTY frame so no chip survives a failed scan.
-      const applied = applyScanToOffer(
-        offerStateRef.current,
-        [null, null, null],
-        normalizeAugmentNameForLookup,
-        () => {
-          throw new Error("unreachable: empty scan never resolves");
-        },
-        () => false,
-      );
-      publishOffer(applied.state);
-      publishScanFrame(captureSeq, capturedAt, applied.state, [null, null, null], {
-        present: false,
-        reason: "scan-error",
-        confidence: 0,
-        plausibleTitles: 0,
-      });
-      if (phaseRef.current === "augment_selection") {
-        ocrSelectionCompletedRef.current = true;
-        updatePhase("in_game");
+      // Identity-only failure: mark the triggered slots unresolved (retry after
+      // the deadline). Presence/freshness are unaffected — the geometry track
+      // keeps publishing, so a readable offer still shows SCANNING chips.
+      const failedAt = performance.now();
+      for (const regionIndex of slots) {
+        identityStoreRef.current[regionIndex] = {
+          fingerprint: triggerFingerprints[regionIndex] ?? "",
+          resolution: null,
+          resolvedAt: failedAt,
+        };
       }
+      ocrPendingSlotsRef.current = [];
+      republishGeometryFrame(geometrySeqRef.current);
       const message = error instanceof Error ? error.message : "ocr-scan-failed";
       setOcrDiagnostics(
         [0, 1, 2].map((regionIndex) => ({
@@ -1482,22 +1618,50 @@ function App() {
         }));
       }
     }
-  }, [bumpScanSeq, collectorCaptureEnabled, datasetCaptureOn, ocrKnownNames, playerData, publishOffer, publishScanFrame, recordRoundCompleted, resolveSlotTitle, titlePresent, updatePhase]);
+  }, [bumpScanSeq, collectorCaptureEnabled, ocrKnownNames, playerData, publishOffer, republishGeometryFrame, resolveSlotTitle, titlePresent]);
 
-  // ─── Self-healing 250 ms scheduler tick ───
-  // A pure reducer (nextProbeAction) decides start / skip / restart from live
-  // refs ONLY — foreground, active-game, and in-flight timing. It NEVER reads
-  // scanMode / pendingRounds / completedRounds / activeOfferRound / level /
-  // death / phase / latch, so no stale telemetry read can stop it. The restart
-  // branch IS the watchdog: an in-flight probe that overran the bounded timeout
-  // is invalidated (seq bumped → its late return stale-rejects), its guard is
-  // reset, and a fresh probe starts — no remount, no focus toggle. The whole
-  // thing recovers a wedged scheduler on the next 250 ms tick.
-  const surfaceProbeTick = useCallback(() => {
+  // ─── TRACK 1 scheduler tick: the fast geometry probe ─────────────────────────
+  // Same pure reducer (nextProbeAction) as OCR — start / skip / watchdog-restart
+  // from live refs ONLY (foreground, active-game, in-flight timing), never
+  // telemetry — but on the geometry config and the geometry guards. The restart
+  // branch IS the watchdog: a wedged geometry probe is invalidated (seq bumped →
+  // late return stale-rejects), its guard reset, and a fresh probe starts.
+  const geometryProbeTick = useCallback(() => {
     const action = nextProbeAction(
       {
         foreground: foregroundStateRef.current.gameWindowForeground,
         activeGame: activeGameRef.current,
+        inFlight: geometryInFlightRef.current,
+        inFlightSince: geometryInFlightSinceRef.current,
+        lastProbeStartedAt: lastGeometryStartedAtRef.current,
+      },
+      GEOMETRY_PROBE_CONFIG,
+      performance.now(),
+    );
+    if (action.kind === "skip") return;
+    if (action.kind === "restart") {
+      geometrySeqRef.current += 1;
+      geometryInFlightRef.current = false;
+      geometryInFlightSinceRef.current = null;
+      geometryInFlightTokenRef.current = null;
+      geometryRestartCountRef.current += 1;
+    }
+    // Capture availability is the only capability gate geometry needs (no name
+    // catalog); it re-checks every tick so it can never latch asleep.
+    if (!canRunOcr(ocrAvailability)) return;
+    void runGeometryProbe();
+  }, [ocrAvailability, runGeometryProbe]);
+
+  // ─── TRACK 2 scheduler tick: the TRIGGERED OCR/identity probe ────────────────
+  // Its "active game" gate is whether the geometry track queued any slots — OCR
+  // NEVER runs on a fixed cadence. It reuses the OCR guards + watchdog so a slow
+  // read can never wedge either track, and it still honours the OCR interval so a
+  // burst of triggers cannot hammer the capture pipeline.
+  const identityProbeTick = useCallback(() => {
+    const action = nextProbeAction(
+      {
+        foreground: foregroundStateRef.current.gameWindowForeground,
+        activeGame: ocrPendingSlotsRef.current.length > 0,
         inFlight: probeInFlightRef.current,
         inFlightSince: probeInFlightSinceRef.current,
         lastProbeStartedAt: lastProbeStartedAtRef.current,
@@ -1510,9 +1674,6 @@ function App() {
       return;
     }
     if (action.kind === "restart") {
-      // Watchdog recovery: drop the wedged probe and re-arm. Clearing the
-      // ownership token neutralizes the wedged probe's eventual finally (it no
-      // longer owns the guard), so the replacement probe below runs alone.
       bumpScanSeq();
       probeInFlightRef.current = false;
       probeInFlightSinceRef.current = null;
@@ -1520,9 +1681,6 @@ function App() {
       probeRestartCountRef.current += 1;
       lastProbeFailureReasonRef.current = action.reason;
     }
-    // Capability gates (NOT telemetry): capture must be available and the OCR
-    // name catalog loaded, else there is nothing to scan. Neither can latch a
-    // stale value that permanently stops probing — both re-check every tick.
     if (!canRunOcr(ocrAvailability)) {
       lastProbeSkipReasonRef.current = "ocr-unavailable";
       return;
@@ -1531,28 +1689,39 @@ function App() {
       lastProbeSkipReasonRef.current = "names-not-loaded";
       return;
     }
+    const slots = ocrPendingSlotsRef.current;
+    if (slots.length === 0) return;
     lastProbeSkipReasonRef.current = action.kind === "restart" ? "watchdog-restart" : "due";
-    void runSurfaceProbe();
-  }, [bumpScanSeq, nameLookup, ocrAvailability, runSurfaceProbe]);
+    void runIdentityProbe(slots, ocrTriggerFingerprintsRef.current);
+  }, [bumpScanSeq, nameLookup, ocrAvailability, runIdentityProbe]);
+
+  // The single tick drives BOTH tracks: geometry (fast, authoritative) first so a
+  // fresh trigger decision is in place before the identity track reads it.
+  const surfaceProbeTick = useCallback(() => {
+    geometryProbeTick();
+    identityProbeTick();
+  }, [geometryProbeTick, identityProbeTick]);
 
   useEffect(() => {
     surfaceProbeTickRef.current = surfaceProbeTick;
   }, [surfaceProbeTick]);
 
-  // The single scan clock: fires every 250 ms for the life of the component and
-  // is never cleared by telemetry, phase, or cancellation. It only ever calls
-  // the latest tick via the ref, so re-created callbacks never orphan it.
+  // The single scan clock: fires on the fast GEOMETRY cadence for the life of the
+  // component and is never cleared by telemetry, phase, or cancellation. Each
+  // tick drives both tracks (geometry every tick; OCR only when triggered). It
+  // only ever calls the latest tick via the ref, so re-created callbacks never
+  // orphan it.
   useEffect(() => {
     const intervalId = setInterval(() => {
       surfaceProbeTickRef.current();
-    }, PROBE_INTERVAL_MS);
+    }, GEOMETRY_INTERVAL_MS);
     return () => clearInterval(intervalId);
   }, []);
 
   // Freshness re-evaluation clock: refresh renderClock every ~250 ms so the
-  // render gate re-runs visibleFrameFresh() and a positive frame fails closed
-  // once its capture ages past the TTL — even if no new probe publishes. In DEV
-  // it also maintains the frame-age diagnostics (compiled out of production).
+  // render gate re-runs geometryFrameFresh() and a positive frame fails closed
+  // once its GEOMETRY capture ages past the TTL — even if no new probe publishes.
+  // In DEV it also maintains the frame-age diagnostics (compiled out of prod).
   useEffect(() => {
     const intervalId = setInterval(() => {
       const now = performance.now();
@@ -1567,10 +1736,10 @@ function App() {
             frame != null &&
             frame.surfaceValidated &&
             ageMs != null &&
-            ageMs > FRAME_FRESHNESS_TTL_MS,
+            ageMs > GEOMETRY_FRESHNESS_TTL_MS,
         }));
       }
-    }, Math.floor(FRAME_FRESHNESS_TTL_MS / 2));
+    }, Math.floor(GEOMETRY_FRESHNESS_TTL_MS / 2));
     return () => clearInterval(intervalId);
   }, []);
 
@@ -1831,6 +2000,10 @@ function App() {
       probeInFlightRef.current = false;
       probeInFlightSinceRef.current = null;
       probeInFlightTokenRef.current = null;
+      geometrySeqRef.current += 1;
+      geometryInFlightRef.current = false;
+      geometryInFlightSinceRef.current = null;
+      geometryInFlightTokenRef.current = null;
     };
   }, [bumpScanSeq]);
 
