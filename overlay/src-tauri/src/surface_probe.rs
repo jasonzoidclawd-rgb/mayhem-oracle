@@ -376,6 +376,50 @@ mod tests {
         assert_eq!(o.cards.iter().filter(|c| c.present).count(), 3);
     }
 
+    #[cfg(target_os = "macos")]
+    #[test]
+    fn silver_fixture_resolves_all_three_titles_and_records_ocr_latency() {
+        use crate::ocr::{read_card_text, GameLocale};
+
+        let frame = load("offer-silver.png");
+        let expected = ["無敵大絕", "毫髮無傷", "重型打手"];
+        let known_names = expected
+            .iter()
+            .map(|value| value.to_string())
+            .collect::<Vec<_>>();
+        let rects = name_bands(&full_viewport());
+        let started = std::time::Instant::now();
+        let mut per_slot_ms = Vec::new();
+
+        for (region_index, rect) in rects.iter().enumerate() {
+            let slot_started = std::time::Instant::now();
+            let crop = frame.crop_imm(rect.x as u32, rect.y as u32, rect.width, rect.height);
+            let title = read_card_text(&crop, Some(GameLocale::ZhTw), &known_names)
+                .expect("Vision OCR")
+                .unwrap_or_default();
+            per_slot_ms.push(slot_started.elapsed().as_secs_f64() * 1000.0);
+            let normalized: String = title
+                .chars()
+                .filter(|value| !value.is_whitespace())
+                .collect();
+            assert!(
+                !normalized.is_empty()
+                    && (normalized.contains(expected[region_index])
+                        || expected[region_index].contains(&normalized)),
+                "slot {} expected {:?}, got {:?}",
+                region_index,
+                expected[region_index],
+                title,
+            );
+        }
+
+        eprintln!(
+            "[silver-ocr-replay] per-slot-ms={:?} sequential-total-ms={:.1}",
+            per_slot_ms,
+            started.elapsed().as_secs_f64() * 1000.0,
+        );
+    }
+
     #[test]
     fn afk_modal_is_present_but_occluded() {
         // Cards exist behind the AFK dialog → present=true, occluded=true. The
@@ -397,14 +441,35 @@ mod tests {
     // ── the exact live regression: identical static pixels, repeated probes ──
 
     #[test]
-    fn identical_pixels_stay_present_every_probe() {
+    fn silver_pixels_stay_present_and_stable_for_100_probes() {
         // The 22:29:31 failure: a static offer blinked present→absent→present.
-        // A geometry probe over unchanged pixels must be present EVERY time.
-        for seq in 0..8 {
+        // A geometry probe over unchanged SILVER pixels must be present and
+        // fingerprint-stable for at least 100 consecutive probes.
+        let expected = analyze("offer-silver.png");
+        let expected_fingerprints: Vec<_> = expected
+            .cards
+            .iter()
+            .map(|card| card.fingerprint.clone())
+            .collect();
+        for seq in 0..100 {
             let vp = full_viewport();
             let bands = name_bands(&vp);
-            let o = analyze_surface(&load("offer-gold-a.png"), &vp, &bands, seq, seq as f64, 0);
-            assert!(o.present && !o.occluded, "probe {} regressed: {:?}", seq, o.rejection_reasons);
+            let o = analyze_surface(&load("offer-silver.png"), &vp, &bands, seq, seq as f64, 0);
+            assert!(
+                o.present && !o.occluded,
+                "probe {} regressed: {:?}",
+                seq,
+                o.rejection_reasons
+            );
+            assert_eq!(
+                o.cards
+                    .iter()
+                    .map(|card| card.fingerprint.clone())
+                    .collect::<Vec<_>>(),
+                expected_fingerprints,
+                "probe {} fingerprint drifted",
+                seq,
+            );
         }
     }
 

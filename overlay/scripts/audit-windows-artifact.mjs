@@ -49,7 +49,7 @@ const FORBIDDEN_TEXT_PATTERNS = [
   /\brawLcu\b/i,
   /\braw_lcu\b/i,
   /ARAMGG\s+(?:PREVIEW|TIER\s+FIXTURE)/i,
-  /\baramgg\b/i,
+  /(?:\/aramgg-dev|https:\/\/aramgg\.com|mayhem-aramgg-fixture-cache|\[aramgg-fixture\])/i,
   /MAYHEM_OVERLAY_(?:TIER_FIXTURE|GEOMETRY_PREVIEW)/i,
   /data-dev-only/i,
   /OCR unavailable\s+—/i,

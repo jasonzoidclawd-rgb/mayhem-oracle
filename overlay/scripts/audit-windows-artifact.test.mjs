@@ -104,4 +104,24 @@ describe("windows artifact audit", () => {
 
     await expect(auditWindowsArtifact({ overlayRoot })).rejects.toThrow(/forbidden/i);
   });
+
+  test("allows inert ARAMGG resolution field names without a dev adapter", async () => {
+    const overlayRoot = await createOverlayFixture();
+    await writeFile(
+      join(overlayRoot, "dist", "assets", "app.js"),
+      "const resolution = { aramgg: null };",
+    );
+
+    await expect(auditWindowsArtifact({ overlayRoot })).resolves.toBeDefined();
+  });
+
+  test("rejects an ARAMGG development adapter in renderer output", async () => {
+    const overlayRoot = await createOverlayFixture();
+    await writeFile(
+      join(overlayRoot, "dist", "assets", "app.js"),
+      "fetch('/aramgg-dev/augment-stats.json');",
+    );
+
+    await expect(auditWindowsArtifact({ overlayRoot })).rejects.toThrow(/forbidden/i);
+  });
 });

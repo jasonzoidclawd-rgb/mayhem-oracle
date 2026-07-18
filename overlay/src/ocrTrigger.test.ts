@@ -82,6 +82,26 @@ describe("decideOcrTrigger", () => {
     expect(d.reason).toContain("reroll:1");
   });
 
+  it.each([0, 1, 2])(
+    "re-reads only changed slot %d",
+    (changedSlot) => {
+      const rerolledCards = [...PRESENT];
+      rerolledCards[changedSlot] = card(changedSlot, FP1_REROLL);
+      const identities = [rec(FP0, "left"), rec(FP1, "middle"), rec(FP2, "right")];
+      const d = decideOcrTrigger({
+        observation: obs(rerolledCards),
+        identities,
+        now: 100,
+        retryMs: IDENTITY_RETRY_MS,
+      });
+      expect(d.slots).toEqual([changedSlot]);
+      for (const slot of [0, 1, 2]) {
+        if (slot === changedSlot) continue;
+        expect(d.slots).not.toContain(slot);
+      }
+    },
+  );
+
   it("re-triggers an unresolved slot only after the retry deadline", () => {
     const identities = [rec(FP0, null, 0), rec(FP1, "b"), rec(FP2, "c")];
     const before = decideOcrTrigger({ observation: obs(PRESENT), identities, now: IDENTITY_RETRY_MS - 1, retryMs: IDENTITY_RETRY_MS });

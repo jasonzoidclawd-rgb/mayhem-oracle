@@ -1383,7 +1383,6 @@ function App() {
       // or watchdog-superseded probe can never restore an already-cleared frame.
       if (captureSeq !== scanSeqRef.current) return;
       if (foregroundEpoch !== foregroundEpochRef.current) return;
-      const capturedAt = performance.now();
       const matchStartMs = performance.now();
 
       const rawTitles: Array<string | null> = [0, 1, 2].map(
@@ -1646,11 +1645,11 @@ function App() {
       geometryInFlightTokenRef.current = null;
       geometryRestartCountRef.current += 1;
     }
-    // Capture availability is the only capability gate geometry needs (no name
-    // catalog); it re-checks every tick so it can never latch asleep.
-    if (!canRunOcr(ocrAvailability)) return;
+    // Geometry owns presence even when the OS OCR backend is unavailable. The
+    // native probe handles screen-capture failures as explicit absence, so OCR
+    // capability must never suppress this track.
     void runGeometryProbe();
-  }, [ocrAvailability, runGeometryProbe]);
+  }, [runGeometryProbe]);
 
   // ─── TRACK 2 scheduler tick: the TRIGGERED OCR/identity probe ────────────────
   // Its "active game" gate is whether the geometry track queued any slots — OCR

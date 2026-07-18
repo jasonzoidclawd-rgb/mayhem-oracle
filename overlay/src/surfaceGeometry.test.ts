@@ -1,3 +1,4 @@
+import { readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
 import {
   buildGeometryVisibleFrame,
@@ -81,6 +82,25 @@ describe("geometry freshness — decoupled from OCR duration", () => {
     const geoCapturedAt = 2950;
     expect(geometryFrameFresh(geoCapturedAt, 3000)).toBe(true);
   });
+
+  it.each([250, 500, 1000, 2000])(
+    "keeps a static offer renderable while OCR takes %d ms",
+    (ocrDurationMs) => {
+      for (let elapsed = 0; elapsed <= ocrDurationMs; elapsed += 150) {
+        const observation = obs({ probeSeq: elapsed / 150 + 1, capturedAt: 1000 + elapsed });
+        const frame = buildGeometryVisibleFrame({
+          revision: elapsed / 150 + 1,
+          captureSeq: observation.probeSeq,
+          observation,
+          generation: 1,
+          resolveIdentity: () => null,
+        });
+        expect(visibleFrameRenderable(frame, true)).toBe(true);
+        expect(geometryFrameFresh(frame.capturedAt, 1000 + elapsed + 149)).toBe(true);
+        expect(frame.slots.every((slot) => slot.resolution === null)).toBe(true);
+      }
+    },
+  );
 });
 
 describe("buildGeometryVisibleFrame — presence, occlusion, SCANNING", () => {
@@ -116,6 +136,26 @@ describe("buildGeometryVisibleFrame — presence, occlusion, SCANNING", () => {
     expect(frame.slots.every((s) => s.cardRect !== null)).toBe(true);
   });
 
+  it("keeps 100 identical geometry publications stable regardless of OCR outcome", () => {
+    const expectedFingerprints = obs().cards.map((entry) => entry.fingerprint);
+    for (let seq = 1; seq <= 100; seq += 1) {
+      const observation = obs({ probeSeq: seq, capturedAt: seq * 150 });
+      const frame = buildGeometryVisibleFrame({
+        revision: seq,
+        captureSeq: seq,
+        observation,
+        generation: 1,
+        resolveIdentity: (regionIndex) =>
+          seq < 34 ? null : seq < 67 ? `resolved-${regionIndex}` : null,
+      });
+      expect(observation.present).toBe(true);
+      expect(observation.occluded).toBe(false);
+      expect(observation.cards.map((entry) => entry.fingerprint)).toEqual(expectedFingerprints);
+      expect(visibleFrameRenderable(frame, true)).toBe(true);
+      expect(geometryFrameFresh(frame.capturedAt, frame.capturedAt + 149)).toBe(true);
+    }
+  });
+
   it("AFK modal → occluded → empty frame (zero chips)", () => {
     const frame = buildGeometryVisibleFrame({
       revision: 1,
@@ -123,6 +163,20 @@ describe("buildGeometryVisibleFrame — presence, occlusion, SCANNING", () => {
       observation: obs({ occluded: true, rejectionReasons: ["occluded-modal-panel"] }),
       generation: 1,
       resolveIdentity: resolveAll,
+    });
+    expect(frame.surfaceValidated).toBe(false);
+    expect(frame.slots).toEqual([]);
+    expect(visibleFrameRenderable(frame, true)).toBe(false);
+  });
+
+  it("a delayed successful OCR result cannot paint over an AFK modal", () => {
+    const lateIdentities = ["late-left", "late-middle", "late-right"];
+    const frame = buildGeometryVisibleFrame({
+      revision: 2,
+      captureSeq: 2,
+      observation: obs({ occluded: true, rejectionReasons: ["occluded-modal-panel"] }),
+      generation: 1,
+      resolveIdentity: (regionIndex) => lateIdentities[regionIndex],
     });
     expect(frame.surfaceValidated).toBe(false);
     expect(frame.slots).toEqual([]);
@@ -142,6 +196,49 @@ describe("buildGeometryVisibleFrame — presence, occlusion, SCANNING", () => {
     });
     expect(frame.surfaceValidated).toBe(false);
     expect(frame.slots).toEqual([]);
+  });
+
+  it("clears the offer on the next 150 ms negative probe and ignores stale identities", () => {
+    const present = buildGeometryVisibleFrame({
+      revision: 1,
+      captureSeq: 1,
+      observation: obs({ capturedAt: 1000 }),
+      generation: 1,
+      resolveIdentity: resolveAll,
+    });
+    expect(visibleFrameRenderable(present, true)).toBe(true);
+
+    const closed = buildGeometryVisibleFrame({
+      revision: 2,
+      captureSeq: 2,
+      observation: obs({
+        probeSeq: 2,
+        capturedAt: 1150,
+        present: false,
+        cards: [card(0, false, ""), card(1, false, ""), card(2, false, "")],
+      }),
+      generation: 1,
+      resolveIdentity: resolveAll,
+    });
+    expect(closed.capturedAt - present.capturedAt).toBe(150);
+    expect(closed.capturedAt - present.capturedAt).toBeLessThanOrEqual(250);
+    expect(closed.slots).toEqual([]);
+    expect(visibleFrameRenderable(closed, true)).toBe(false);
+  });
+});
+
+describe("geometry/OCR capability separation", () => {
+  it("does not gate the geometry scheduler on OCR availability", () => {
+    const source = readFileSync(new URL("./App.tsx", import.meta.url), "utf8");
+    expect(source.indexOf("const geometryProbeTick")).toBeGreaterThanOrEqual(0);
+    expect(source.indexOf("const identityProbeTick")).toBeGreaterThan(
+      source.indexOf("const geometryProbeTick"),
+    );
+    const geometryTick = source.slice(
+      source.indexOf("const geometryProbeTick"),
+      source.indexOf("const identityProbeTick"),
+    );
+    expect(geometryTick).not.toContain("canRunOcr");
   });
 });
 
@@ -168,6 +265,25 @@ describe("identityForSlot — stale-result guard for identity", () => {
     const staleRecord = rec(FP_A, "old-augment");
     expect(identityForSlot(staleRecord, FP_B)).toBeNull();
   });
+
+  it.each([0, 1, 2])(
+    "invalidates only rerolled slot %d and rejects its late old result",
+    (changedSlot) => {
+      const liveFingerprints = [FP_A, FP_B, FP_A_NUDGE];
+      const records = liveFingerprints.map((fingerprint, slot) =>
+        rec(fingerprint, `identity-${slot}`),
+      );
+      const changedFingerprint = changedSlot === 1 ? FP_A : FP_B;
+      liveFingerprints[changedSlot] = changedFingerprint;
+
+      expect(
+        records.map((record, slot) => identityForSlot(record, liveFingerprints[slot])),
+      ).toEqual(
+        [0, 1, 2].map((slot) => slot === changedSlot ? null : `identity-${slot}`),
+      );
+      expect(identityForSlot(records[changedSlot], changedFingerprint)).toBeNull();
+    },
+  );
 
   it("returns null for a never-resolved slot", () => {
     expect(identityForSlot(null, FP_A)).toBeNull();

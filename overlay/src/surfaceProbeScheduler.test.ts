@@ -8,6 +8,7 @@ import {
   nextProbeAction,
   type ProbeSchedulerState,
 } from "./surfaceProbeScheduler";
+import { GEOMETRY_INTERVAL_MS } from "./surfaceGeometry";
 
 const base: ProbeSchedulerState = {
   foreground: true,
@@ -96,6 +97,28 @@ describe("nextProbeAction — self-healing, telemetry-independent", () => {
       expect(action.kind).toBe("start");
       lastStart = now;
     }
+  });
+
+  it("keeps the 150 ms geometry track alive through 2000 completed negative probes", () => {
+    const geometryConfig = {
+      intervalMs: GEOMETRY_INTERVAL_MS,
+      timeoutMs: PROBE_TIMEOUT_MS,
+    };
+    let lastStart: number | null = null;
+    for (let tick = 0; tick < 2000; tick += 1) {
+      const now = tick * GEOMETRY_INTERVAL_MS;
+      expect(
+        nextProbeAction({ ...base, lastProbeStartedAt: lastStart }, geometryConfig, now),
+      ).toEqual({ kind: "start" });
+      lastStart = now;
+    }
+    expect(
+      nextProbeAction(
+        { ...base, lastProbeStartedAt: lastStart },
+        geometryConfig,
+        2000 * GEOMETRY_INTERVAL_MS,
+      ),
+    ).toEqual({ kind: "start" });
   });
 });
 
