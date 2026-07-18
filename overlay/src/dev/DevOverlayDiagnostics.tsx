@@ -170,8 +170,22 @@ export function DevOverlayDiagnostics({
                 Phase: {ocrLifecycle.phase} · current round: {ocrLifecycle.currentRound ?? "none"}
               </div>
               <div>
-                OCR active: {String(ocrLifecycle.active)} · scan run ID: {ocrLifecycle.scanRunId ?? "none"}
-                {" "}· activation: {ocrLifecycle.activationSource}
+                Probe active: {String(ocrLifecycle.active)} · seq: {ocrLifecycle.probeSeq}
+                {" "}· in-flight since:{" "}
+                {ocrLifecycle.probeInFlightSince != null
+                  ? `${Math.round(ocrLifecycle.probeInFlightSince)}ms`
+                  : "idle"}
+              </div>
+              <div>
+                Scheduler: skip/last {ocrLifecycle.probeSkipReason} · restarts{" "}
+                {ocrLifecycle.probeRestartCount}
+                {ocrLifecycle.probeFailureReason && ` · failure: ${ocrLifecycle.probeFailureReason}`}
+              </div>
+              <div>
+                Presence: plausible titles {ocrLifecycle.plausibleTitles}/3 · confidence{" "}
+                {ocrLifecycle.surfaceConfidence.toFixed(2)} · frame age{" "}
+                {ocrLifecycle.frameAgeMs != null ? `${Math.round(ocrLifecycle.frameAgeMs)}ms` : "?"}
+                {ocrLifecycle.frameHiddenByTtl && " · HIDDEN-BY-TTL"}
               </div>
               <div
                 style={{

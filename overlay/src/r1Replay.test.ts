@@ -5,8 +5,11 @@ import {
   offerActive,
   type OfferState,
 } from "./offerLifecycle";
-import { resolveScanActivation } from "./scanActivation";
-import { resolveRoundDelivery } from "./roundDelivery";
+import {
+  DEFAULT_PROBE_CONFIG,
+  nextProbeAction,
+  type ProbeSchedulerState,
+} from "./surfaceProbeScheduler";
 
 // The exact R1 offer from the 18:53:40 failed retest (champion level 3):
 // three validated cards visible while the overlay showed nothing.
@@ -22,6 +25,19 @@ function makeResolver() {
     return `resolved:${title}`;
   };
   return { calls, resolve };
+}
+
+// The scheduler gate is a pure function of THIS tick: foreground + active game,
+// nothing telemetry-derived. Only the foreground leg varies across these cases.
+function probe(foreground: boolean) {
+  const state: ProbeSchedulerState = {
+    foreground,
+    activeGame: true,
+    inFlight: false,
+    inFlightSince: null,
+    lastProbeStartedAt: null,
+  };
+  return nextProbeAction(state, DEFAULT_PROBE_CONFIG, 1000);
 }
 
 describe("R1 replay — real three-card screen activates scanning", () => {
@@ -48,7 +64,7 @@ describe("R1 replay — real three-card screen activates scanning", () => {
     );
   });
 
-  it("escalates to the fast loop once the R1 offer latches", () => {
+  it("keeps probing on the 250 ms scheduler once the R1 offer latches", () => {
     const { resolve } = makeResolver();
     const scan = applyScanToOffer(
       emptyOfferState<string>(),
@@ -57,51 +73,26 @@ describe("R1 replay — real three-card screen activates scanning", () => {
       resolve,
       validate,
     );
-    const decision = resolveRoundDelivery({
-      playerLevel: 3,
-      isDead: false,
-      completedRounds: 0,
-      offerLatched: offerActive(scan.state),
-    });
-    expect(decision.scanMode).toBe("fast");
-    expect(
-      resolveScanActivation({
-        gameWindowForeground: true,
-        phase: "augment_selection",
-        scanMode: decision.scanMode,
-        selectionCompleted: false,
-      }),
-    ).toBe("fast-loop");
+    expect(offerActive(scan.state)).toBe(true);
+    // Scanning is telemetry-independent: the latch never changes the gate, and
+    // there is no separate "fast loop" to escalate to — one 250 ms scheduler.
+    expect(probe(true)).toEqual({ kind: "start" });
   });
 
   it("cannot be suppressed by stale foreground state from an earlier tick", () => {
     // Tick 1: Terminal foreground — no scan runs, and crucially nothing about
     // that tick is stored anywhere the next decision reads from.
-    const terminalTick = resolveScanActivation({
-      gameWindowForeground: false,
-      phase: "in_game",
-      scanMode: "ambient",
-      selectionCompleted: false,
-    });
-    expect(terminalTick).toBe("none");
+    expect(probe(false)).toEqual({ kind: "skip", reason: "not-foreground" });
 
-    // Tick 2: GameClient foreground with the R1 screen up. Activation is a
-    // pure function of THIS tick's inputs, so the earlier "none" cannot leak
+    // Tick 2: GameClient foreground with the R1 screen up. The decision is a
+    // pure function of THIS tick's inputs, so the earlier skip cannot leak
     // forward — the probe runs and the scan latches all three cards.
-    const gameTick = resolveScanActivation({
-      gameWindowForeground: true,
-      phase: "in_game",
-      scanMode: "ambient",
-      selectionCompleted: false,
-    });
-    expect(gameTick).toBe("ambient-probe");
+    expect(probe(true)).toEqual({ kind: "start" });
 
     const { calls, resolve } = makeResolver();
-    let state: OfferState<string> = emptyOfferState<string>();
-    const scan = applyScanToOffer(state, [...R1_TITLES], normalize, resolve, validate);
-    state = scan.state;
+    const scan = applyScanToOffer(emptyOfferState<string>(), [...R1_TITLES], normalize, resolve, validate);
     expect(calls).toHaveLength(3);
-    expect(offerActive(state)).toBe(true);
+    expect(offerActive(scan.state)).toBe(true);
   });
 
   it("restores scanning after game → Terminal → game without clearing the latch prematurely", () => {
@@ -110,28 +101,14 @@ describe("R1 replay — real three-card screen activates scanning", () => {
     state = applyScanToOffer(state, [...R1_TITLES], normalize, resolve, validate).state;
     expect(offerActive(state)).toBe(true);
 
-    // Focus flips to Terminal: activation stops, the offer state is preserved
+    // Focus flips to Terminal: the scheduler skips, but the offer is preserved
     // as background state only (no scans applied, no pixels rendered).
-    expect(
-      resolveScanActivation({
-        gameWindowForeground: false,
-        phase: "augment_selection",
-        scanMode: "fast",
-        selectionCompleted: false,
-      }),
-    ).toBe("none");
+    expect(probe(false)).toEqual({ kind: "skip", reason: "not-foreground" });
     expect(offerActive(state)).toBe(true);
 
-    // Focus returns: the fast loop re-activates and the SAME offer is still
-    // latched — the next scan re-confirms it without re-resolving anything.
-    expect(
-      resolveScanActivation({
-        gameWindowForeground: true,
-        phase: "augment_selection",
-        scanMode: "fast",
-        selectionCompleted: false,
-      }),
-    ).toBe("fast-loop");
+    // Focus returns: probing resumes and the SAME offer is still latched — the
+    // next scan re-confirms it without re-resolving anything.
+    expect(probe(true)).toEqual({ kind: "start" });
     const { calls: rescanCalls, resolve: rescanResolve } = makeResolver();
     const rescan = applyScanToOffer(state, [...R1_TITLES], normalize, rescanResolve, validate);
     expect(rescanCalls).toHaveLength(0);

@@ -5,11 +5,15 @@ import {
   type OfferState,
 } from "./offerLifecycle";
 import {
+  FRAME_FRESHNESS_TTL_MS,
+} from "./surfaceProbeScheduler";
+import {
   buildVisibleFrame,
   emptyVisibleFrame,
   frameResultIsCurrent,
   slotHasCurrentRect,
   validateOfferSurface,
+  visibleFrameFresh,
   visibleFrameRenderable,
 } from "./visibleOfferFrame";
 import type { PhysicalRect } from "./calibration";
@@ -67,6 +71,7 @@ describe("buildVisibleFrame — fresh geometry or explicit empty", () => {
     const frame = buildVisibleFrame({
       revision: 5,
       captureSeq: 9,
+      capturedAt: 1000,
       offerState: offer,
       freshRects: [rect(0), rect(1), rect(2)],
       surfaceValidated: true,
@@ -82,6 +87,7 @@ describe("buildVisibleFrame — fresh geometry or explicit empty", () => {
     const frame = buildVisibleFrame({
       revision: 1,
       captureSeq: 1,
+      capturedAt: 1000,
       offerState: offer,
       freshRects: [rect(0), null, rect(2)],
       surfaceValidated: true,
@@ -96,6 +102,7 @@ describe("buildVisibleFrame — fresh geometry or explicit empty", () => {
     const frame = buildVisibleFrame({
       revision: 2,
       captureSeq: 4,
+      capturedAt: 1000,
       offerState: offer,
       freshRects: [rect(0), rect(1), rect(2)],
       surfaceValidated: false,
@@ -110,6 +117,7 @@ describe("visibleFrameRenderable — the single render gate", () => {
     const validated = buildVisibleFrame({
       revision: 1,
       captureSeq: 1,
+      capturedAt: 1000,
       offerState: offerFrom(["旋風鉤", "不祥契約", "靈光一閃"]),
       freshRects: [rect(0), rect(1), rect(2)],
       surfaceValidated: true,
@@ -121,6 +129,26 @@ describe("visibleFrameRenderable — the single render gate", () => {
   it("never renders a null or empty frame", () => {
     expect(visibleFrameRenderable(null, true)).toBe(false);
     expect(visibleFrameRenderable(emptyVisibleFrame(3, 3, 0), true)).toBe(false);
+  });
+});
+
+describe("visibleFrameFresh — the freshness TTL fails closed on a stalled scheduler", () => {
+  it("keeps a frame within the TTL and hides it once its capture ages out", () => {
+    const frame = buildVisibleFrame({
+      revision: 1,
+      captureSeq: 1,
+      capturedAt: 1000,
+      offerState: offerFrom(["旋風鉤", "不祥契約", "靈光一閃"]),
+      freshRects: [rect(0), rect(1), rect(2)],
+      surfaceValidated: true,
+    });
+    // Freshly captured (age 0) and just at the TTL boundary → still rendered.
+    expect(visibleFrameFresh(frame, 1000, FRAME_FRESHNESS_TTL_MS)).toBe(true);
+    expect(visibleFrameFresh(frame, 1000 + FRAME_FRESHNESS_TTL_MS, FRAME_FRESHNESS_TTL_MS)).toBe(true);
+    // One millisecond past the TTL with no fresh probe → fail closed (hidden).
+    expect(visibleFrameFresh(frame, 1000 + FRAME_FRESHNESS_TTL_MS + 1, FRAME_FRESHNESS_TTL_MS)).toBe(false);
+    // A null frame is never fresh.
+    expect(visibleFrameFresh(null, 1000, FRAME_FRESHNESS_TTL_MS)).toBe(false);
   });
 });
 

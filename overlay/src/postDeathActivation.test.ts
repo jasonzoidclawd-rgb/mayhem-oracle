@@ -1,13 +1,17 @@
 import { describe, expect, it } from "vitest";
-import { resolveRoundDelivery, TOTAL_AUGMENT_ROUNDS } from "./roundDelivery";
-import { resolveScanActivation } from "./scanActivation";
+import {
+  DEFAULT_PROBE_CONFIG,
+  nextProbeAction,
+  type ProbeSchedulerState,
+} from "./surfaceProbeScheduler";
+import { evaluateSurfacePresence, isPlausibleTitle } from "./surfacePresence";
 import {
   applyScanToOffer,
   emptyOfferState,
   offerActive,
   type OfferState,
 } from "./offerLifecycle";
-import { buildVisibleFrame, validateOfferSurface, visibleFrameRenderable } from "./visibleOfferFrame";
+import { buildVisibleFrame, visibleFrameRenderable } from "./visibleOfferFrame";
 import type { PhysicalRect } from "./calibration";
 
 // The real death-triggered R2 offer from the 01:52:34 retest, described
@@ -15,81 +19,68 @@ import type { PhysicalRect } from "./calibration";
 // state-machine replay; the R1 pixel replay covers the OCR-from-image path).
 const DEATH_OFFER = ["旋風鉤", "不祥契約", "靈光一閃"] as const;
 
-// Only real augment names resolve — garbage OCR over combat does not, exactly
-// as the live catalog lookup behaves.
+// Only real augment names resolve to a catalog identity — but presence (Stage 1)
+// never depends on that. Unknown-but-plausible titles still latch a live offer.
 const KNOWN = new Set<string>(DEATH_OFFER);
 const normalize = (title: string) => title.trim();
-const validate = (resolution: string) => resolution.startsWith("resolved:");
 const resolve = (title: string) => (KNOWN.has(title) ? `resolved:${title}` : `unmatched:${title}`);
+// Stage 2 latch predicate: presence, not catalog identity.
+const titlePresent = () => true;
 
 function freshRects(): Array<PhysicalRect | null> {
   return [0, 1, 2].map((i) => ({ x: 100 + i * 200, y: 250, width: 180, height: 60 }));
 }
 
-// Mirror App.tsx exactly: fresh validated count is gated on surfaceVisible, so
-// a grace-retained latch never validates a hidden surface.
-function freshValidatedSlots(state: OfferState<string>): number {
-  return state.surfaceVisible
-    ? state.slots.filter((slot) => slot.fingerprint !== null && slot.validated).length
-    : 0;
-}
-
-/** Simulate one scan of the death offer and return the visible frame it would
- *  publish, exactly as App.tsx does: apply → validate surface → build frame. */
-function scanDeathOffer(prev: OfferState<string>) {
-  const applied = applyScanToOffer(prev, [...DEATH_OFFER], normalize, resolve, validate);
-  const surface = validateOfferSurface({
+/**
+ * Simulate one probe exactly as App.tsx does: Stage 1 surface presence from
+ * plausible-title count (identity-independent), Stage 2 latch keyed on title
+ * presence, then build the visible frame from the presence verdict.
+ */
+function scan(
+  titles: Array<string | null>,
+  prev: OfferState<string> = emptyOfferState<string>(),
+) {
+  const plausible = titles.map((title) =>
+    title != null && isPlausibleTitle(normalize(title)) ? title : null,
+  );
+  const plausibleCount = plausible.filter((title) => title !== null).length;
+  const presence = evaluateSurfacePresence({
     cropsCaptured: 3,
-    validatedSlots: freshValidatedSlots(applied.state),
-    latched: prev.latched,
+    plausibleTitles: plausibleCount,
+    previouslyPresent: prev.latched,
   });
+  const applied = applyScanToOffer(prev, plausible, normalize, resolve, titlePresent);
   const frame = buildVisibleFrame({
     revision: prev.generation + 1,
     captureSeq: prev.generation + 1,
+    capturedAt: 1000,
     offerState: applied.state,
     freshRects: freshRects(),
-    surfaceValidated: surface.validated,
+    surfaceValidated: presence.present,
   });
-  return { applied, surface, frame };
+  return { applied, presence, frame };
 }
 
-describe("post-death R2 activation — visual surface overrides telemetry", () => {
-  it("scans and renders the death-triggered offer on the canonical sequence", () => {
-    // R1 completed → ordinary gameplay → level 11 alive (no offer) → dies at 12.
-    const aliveAt11 = resolveScanActivation({
-      gameWindowForeground: true,
-      phase: "in_game",
-      scanMode: resolveRoundDelivery({
-        playerLevel: 11,
-        isDead: false,
-        completedRounds: 1,
-        offerLatched: false,
-      }).scanMode,
-      selectionCompleted: false,
-    });
-    // Alive at a crossed threshold: a probe runs, but no surface is present so
-    // nothing renders (validated=false below is what matters).
-    expect(aliveAt11).not.toBe("none");
+describe("post-death R2 activation — the scheduler probes regardless of telemetry", () => {
+  it("probes on every foreground in-game tick, whatever the round bookkeeping says", () => {
+    // The 01:52 fix: the scheduler NEVER reads scanMode / round counts — an
+    // overcounted round that once drove scanMode 'off' can no longer veto a
+    // probe. foreground + active game is the whole gate.
+    const inGame: ProbeSchedulerState = {
+      foreground: true,
+      activeGame: true,
+      inFlight: false,
+      inFlightSince: null,
+      lastProbeStartedAt: null,
+    };
+    expect(nextProbeAction(inGame, DEFAULT_PROBE_CONFIG, 1000)).toEqual({ kind: "start" });
+  });
 
-    const deadAt12 = resolveRoundDelivery({
-      playerLevel: 12,
-      isDead: true,
-      completedRounds: 1,
-      offerLatched: false,
-    });
-    expect(
-      resolveScanActivation({
-        gameWindowForeground: true,
-        phase: "in_game",
-        scanMode: deadAt12.scanMode,
-        selectionCompleted: false,
-      }),
-    ).not.toBe("none");
-
-    // The three-card surface appears → currentOfferSurfaceValidated=true →
-    // crops → OCR → slot resolution → chips renderable.
-    const { applied, surface, frame } = scanDeathOffer(emptyOfferState<string>());
-    expect(surface.validated).toBe(true);
+  it("renders the death-triggered offer from title presence alone", () => {
+    // The three-card surface appears → presence.present=true → crops → OCR →
+    // slot resolution → chips renderable.
+    const { applied, presence, frame } = scan([...DEATH_OFFER]);
+    expect(presence.present).toBe(true);
     expect(offerActive(applied.state)).toBe(true);
     expect(frame.surfaceValidated).toBe(true);
     expect(frame.slots.filter((slot) => slot.cardRect !== null)).toHaveLength(3);
@@ -99,108 +90,58 @@ describe("post-death R2 activation — visual surface overrides telemetry", () =
     );
   });
 
-  it("still scans and renders under every stale-bookkeeping injection", () => {
-    // Telemetry may estimate the wrong round, but must NEVER veto scanning a
-    // visible surface. Each injection deliberately breaks the round count.
-    const injections = [
-      { label: "activeOfferRound too high", completedRounds: 0, extra: {} },
-      { label: "completedRoundCount undercounted", completedRounds: 0, extra: {} },
-      { label: "completedRoundCount overcounted by one", completedRounds: 2, extra: {} },
-      { label: "pendingRoundCount zero (overcounted to eligible)", completedRounds: TOTAL_AUGMENT_ROUNDS, extra: {} },
-    ];
-
-    for (const injection of injections) {
-      const decision = resolveRoundDelivery({
-        playerLevel: 12,
-        isDead: true,
-        completedRounds: injection.completedRounds,
-        offerLatched: false,
-      });
-      const activation = resolveScanActivation({
-        gameWindowForeground: true,
-        phase: "in_game", // stale phase still in_game
-        scanMode: decision.scanMode,
-        selectionCompleted: false,
-      });
-      expect(activation, injection.label).not.toBe("none");
-
-      const { surface, frame } = scanDeathOffer(emptyOfferState<string>());
-      expect(surface.validated, injection.label).toBe(true);
-      expect(visibleFrameRenderable(frame, true), injection.label).toBe(true);
-    }
+  it("renders even when NONE of the three titles resolve to a catalog identity", () => {
+    // Presence is decided from title quality, not catalog membership. A brand
+    // new patch's unknown augments are still a live, renderable offer.
+    const { presence, frame } = scan(["完全虛構甲名", "完全虛構乙名", "完全虛構丙名"]);
+    expect(presence.present).toBe(true);
+    expect(frame.slots.filter((slot) => slot.cardRect !== null)).toHaveLength(3);
+    expect(visibleFrameRenderable(frame, true)).toBe(true);
   });
 
-  it("overcounted rounds drive scanMode 'off' — the exact veto that suppressed 01:52", () => {
-    const decision = resolveRoundDelivery({
-      playerLevel: 12,
-      isDead: true,
-      completedRounds: TOTAL_AUGMENT_ROUNDS, // pending 0 → scanMode off
-      offerLatched: false,
-    });
-    expect(decision.scanMode).toBe("off");
-    // Before the fix this returned "none" and the visible offer was never
-    // scanned. Now it probes.
-    expect(
-      resolveScanActivation({
-        gameWindowForeground: true,
-        phase: "in_game",
-        scanMode: "off",
-        selectionCompleted: false,
-      }),
-    ).toBe("ambient-probe");
+  it("re-detects a real offer that appears long after the last probe (defect B: level-15)", () => {
+    // Defect B: the level-15 offer 不可通行 / 拍拍鼓勵 / 斗內 appeared 37 s after
+    // the scheduler had gone quiet and was never scanned. There is no 'asleep'
+    // state now — a foreground in-game tick starts a probe however old the last
+    // one is, and three plausible titles then evaluate present and render.
+    const longIdle: ProbeSchedulerState = {
+      foreground: true,
+      activeGame: true,
+      inFlight: false,
+      inFlightSince: null,
+      lastProbeStartedAt: 1000,
+    };
+    expect(nextProbeAction(longIdle, DEFAULT_PROBE_CONFIG, 1000 + 60_000)).toEqual({ kind: "start" });
+    const { presence, frame } = scan(["不可通行", "拍拍鼓勵", "斗內"]);
+    expect(presence.present).toBe(true);
+    expect(visibleFrameRenderable(frame, true)).toBe(true);
   });
 });
 
 describe("normal gameplay renders zero slots", () => {
-  it("does not validate a surface from combat noise or a single stray match", () => {
-    // No readable card titles (combat): nothing latches, nothing renders.
-    const combat = scanCombat([null, null, null], false);
-    expect(combat.surface.validated).toBe(false);
+  it("does not validate a surface from combat noise or a single stray title", () => {
+    // No readable card titles (combat): nothing is present, nothing renders.
+    const combat = scan([null, null, null]);
+    expect(combat.presence.present).toBe(false);
     expect(combat.frame.slots).toEqual([]);
     expect(visibleFrameRenderable(combat.frame, true)).toBe(false);
 
-    // One stray region matches a name over gameplay: still not an offer.
-    const stray = scanCombat(["旋風鉤", "噪音亂碼", "隨機文字"], false);
-    expect(stray.surface.validated).toBe(false);
+    // One plausible title plus bare-number combat noise: a new surface needs
+    // ≥2 plausible titles, so this is still not an offer.
+    const stray = scan(["旋風鉤", "9", "1234"]);
+    expect(stray.presence.present).toBe(false);
     expect(stray.frame.slots).toEqual([]);
   });
 
   it("clears a completed offer to an empty frame once the surface is gone", () => {
-    // A validated offer, then the cards close (combat): the very next scan
+    // A validated offer, then the cards close (combat): the very next probe
     // publishes an empty frame — no chip lingers over combat/respawn.
-    const offer = applyScanToOffer(
-      emptyOfferState<string>(),
-      [...DEATH_OFFER],
-      normalize,
-      resolve,
-      validate,
-    ).state;
+    const offer = scan([...DEATH_OFFER]).applied.state;
     expect(offer.latched).toBe(true);
 
-    const afterClose = scanCombat([null, null, null], offer.latched, offer);
-    expect(afterClose.surface.validated).toBe(false);
+    const afterClose = scan([null, null, null], offer);
+    expect(afterClose.presence.present).toBe(false);
     expect(afterClose.frame.slots).toEqual([]);
     expect(visibleFrameRenderable(afterClose.frame, true)).toBe(false);
   });
 });
-
-function scanCombat(
-  titles: Array<string | null>,
-  latched: boolean,
-  prev: OfferState<string> = emptyOfferState<string>(),
-) {
-  const applied = applyScanToOffer(prev, titles, normalize, resolve, validate);
-  const surface = validateOfferSurface({
-    cropsCaptured: 3,
-    validatedSlots: freshValidatedSlots(applied.state),
-    latched,
-  });
-  const frame = buildVisibleFrame({
-    revision: 1,
-    captureSeq: 1,
-    offerState: applied.state,
-    freshRects: freshRects(),
-    surfaceValidated: surface.validated,
-  });
-  return { applied, surface, frame };
-}

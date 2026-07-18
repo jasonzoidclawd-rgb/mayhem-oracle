@@ -4,6 +4,65 @@ This file captures recent overlay findings so future agents do not rediscover
 them from screenshots, terminal history, or old handoffs. It is context only.
 Do not treat it as permission to change runtime behavior without a task.
 
+## Two-Stage Decoupling + Self-Healing 250 ms Scheduler (2026-07-18, PR #46 round 5)
+
+Round-4 still failed a timed GUI retest: stale placeholders flashed over combat
+(~1 poll cycle), a real level-15 offer (不可通行 / 拍拍鼓勵 / 斗內) was never
+scanned for 37 s+, and detection latency ran ~6 s. Root cause was a circular
+dependency — resolved augment *identities* were used to decide whether a card
+*surface* existed, and scanning was gated by telemetry (`scanMode`) via the
+poll, so a wedged/asleep scan loop stayed asleep. Round 5 separates the two
+stages and replaces every scan trigger with one self-healing clock.
+
+- **Stage 1 (surface presence) vs Stage 2 (identity)**:
+  `overlay/src/surfacePresence.ts` decides presence from OCR *title quality*
+  alone — `isPlausibleTitle` (normalized length 2–16, not a bare number) counted
+  and fed to `evaluateSurfacePresence` (reuses `validateOfferSurface` thresholds:
+  ≥2 plausible titles for a NEW surface, ≥1 for an already-present one, all three
+  crops required). Catalog resolution (Riot/ARAMGG) NEVER gates presence, so a
+  brand-new patch's unknown augments still render. `SurfacePresenceProvider` is
+  the seam a future Rust geometry probe drops into without touching the
+  scheduler / freshness / rendering contracts.
+- **Single self-healing scheduler**: `overlay/src/surfaceProbeScheduler.ts` —
+  `nextProbeAction(state, config, now)` is a pure reducer returning
+  start / skip(reason) / restart(reason) from live refs ONLY (foreground,
+  active-game, in-flight timing). It reads no telemetry, so nothing can wedge it
+  asleep. A `setInterval` fires it every `PROBE_INTERVAL_MS` (250 ms) for the
+  component's life; the 1.5 s-poll ambient probe AND the 20 ms fast loop are
+  both gone. `startOcr`/`scheduleNextOcr`/`runAmbientProbe`/`resolveScanActivation`
+  and `scanActivation.ts` are deleted. The permanent-sleep path (phase stuck at
+  `augment_selection` → `stopOcr` from a flicker → `selectionCompleted` false →
+  `startOcr` no-ops) cannot recur: there is no `startOcr`, and phase now FOLLOWS
+  presence rather than gating scanning.
+- **Guard release + watchdog**: `runSurfaceProbe` acquires the in-flight guard
+  and releases it in a `finally` on EVERY path (success, stale-reject return,
+  throw, timeout) — this try/finally is the core anti-wedge fix. If a probe
+  overruns `PROBE_TIMEOUT_MS` (2000 ms) the reducer returns `restart`; the tick
+  bumps the seq (its late return stale-rejects), resets the guard, and starts a
+  fresh probe — recovery needs no remount or focus toggle.
+- **Immediate clear + freshness TTL**: every probe publishes a fresh frame or an
+  explicit EMPTY frame, so insufficient title-presence clears chips within one
+  250 ms tick (no waiting for a poll / two misses / latch expiry). A positive
+  frame also renders only while `visibleFrameFresh(frame, renderClock,
+  FRAME_FRESHNESS_TTL_MS=500ms)` holds; `renderClock` refreshes every ~250 ms so
+  a stalled/dead scheduler fails closed (hides) instead of freezing the surface.
+- **Stale-result rejection, two axes**: a probe result publishes only while its
+  `captureSeq === scanSeqRef` AND its captured `foregroundEpoch ===
+  foregroundEpochRef` (bumped on every focus flip). A delayed or superseded
+  probe can never restore an already-cleared frame.
+- **Dataset capture (dev-only, opt-in, OFF by default)**:
+  `overlay/src/dev/datasetCapture.ts` — enable with `MAYHEM_OVERLAY_DATASET_CAPTURE=1`
+  under a dev build; the wire is `import.meta.env.DEV`-gated and dead-code-
+  eliminated from production (verified: 0 capture strings in `dist`). To collect
+  fixtures for the future geometry provider, in the dev devtools call
+  `window.__captureOfferFixture('offer'|'combat'|'scoreboard'|'respawn'|'unknown')`
+  at the moment of interest, then `window.__exportOfferFixtures()` for a JSONL
+  manifest to save by hand. Records are redacted to card regions (three rects +
+  their OCR'd titles + the presence verdict) — no champion / player / game-hash /
+  full-screen data — and never auto-persisted, uploaded, or committed. Pixel-
+  level crop capture for training a geometry detector is a deliberate follow-up
+  (this patch ships OCR-based decoupling only; no unvalidated Rust detector).
+
 ## Visual-Surface Authority + Never-Veto Scanning (2026-07-18, PR #46 round 4)
 
 Round-4 fix after a timed GUI retest on HEAD `f8cee7e` still leaked resolved

@@ -71,10 +71,27 @@ export interface OcrLifecycleSnapshot {
   freshRectCount: number;
   /** Monotonic visible-frame revision (bumps on every publish, fresh or empty). */
   visibleFrameRevision: number;
-  /** How scanning was activated this tick: telemetry cadence vs visual probe. */
-  activationSource: string;
   /** Internal latch remembers an offer but the visible frame is empty. */
   lifecycleDisagreement: boolean;
+  // ─── Self-healing surface probe (Stage 1) ───
+  /** Monotonic probe sequence claimed at the last probe START. */
+  probeSeq: number;
+  /** performance.now() when the last probe STARTED / FINISHED (ms, monotonic). */
+  lastProbeStartedAt: number | null;
+  lastProbeFinishedAt: number | null;
+  /** Monotonic clock the current in-flight probe started at, or null. */
+  probeInFlightSince: number | null;
+  /** Times the watchdog restarted a stuck probe scheduler this session. */
+  probeRestartCount: number;
+  /** Why the most recent scheduler tick skipped, or the last failure reason. */
+  probeSkipReason: string;
+  probeFailureReason: string | null;
+  /** Stage-1 title-presence: confidence 0..1 and plausible-title count. */
+  surfaceConfidence: number;
+  plausibleTitles: number;
+  /** Age of the current visible frame (ms) and whether the TTL hides it. */
+  frameAgeMs: number | null;
+  frameHiddenByTtl: boolean;
   timings: OcrScanTimings;
 }
 

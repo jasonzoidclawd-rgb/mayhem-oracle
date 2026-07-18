@@ -44,8 +44,10 @@ export interface VisibleSlot<R> {
 export interface VisibleOfferFrame<R> {
   /** Monotonic, bumped on every publish (fresh or empty). Render/debug only. */
   revision: number;
-  /** Scan sequence that produced this frame; supersede guard uses it. */
+  /** Probe sequence that produced this frame; the supersede guard uses it. */
   captureSeq: number;
+  /** Monotonic clock (performance.now()) at capture — drives the freshness TTL. */
+  capturedAt: number;
   /** True ONLY when this capture independently validated a real offer surface. */
   surfaceValidated: boolean;
   /** Internal-latch generation this frame describes. */
@@ -57,8 +59,9 @@ export function emptyVisibleFrame<R>(
   revision: number,
   captureSeq: number,
   generation: number,
+  capturedAt = 0,
 ): VisibleOfferFrame<R> {
-  return { revision, captureSeq, surfaceValidated: false, generation, slots: [] };
+  return { revision, captureSeq, capturedAt, surfaceValidated: false, generation, slots: [] };
 }
 
 /**
@@ -120,18 +123,20 @@ export function validateOfferSurface(input: SurfaceValidationInput): SurfaceVali
 export function buildVisibleFrame<R>(params: {
   revision: number;
   captureSeq: number;
+  capturedAt: number;
   offerState: OfferState<R>;
   /** Per region: the fresh card rect from this capture, or null (no crop). */
   freshRects: Array<PhysicalRect | null>;
   surfaceValidated: boolean;
 }): VisibleOfferFrame<R> {
-  const { revision, captureSeq, offerState, freshRects, surfaceValidated } = params;
+  const { revision, captureSeq, capturedAt, offerState, freshRects, surfaceValidated } = params;
   if (!surfaceValidated) {
-    return emptyVisibleFrame(revision, captureSeq, offerState.generation);
+    return emptyVisibleFrame(revision, captureSeq, offerState.generation, capturedAt);
   }
   return {
     revision,
     captureSeq,
+    capturedAt,
     surfaceValidated: true,
     generation: offerState.generation,
     slots: offerState.slots.map((slot) => ({
@@ -153,12 +158,25 @@ export function frameResultIsCurrent(resultSeq: number, latestSeq: number): bool
   return resultSeq === latestSeq;
 }
 
-/** The single render gate: fresh, validated, and the game is actually in front. */
+/** Structural render gate: a validated frame while the game is in front. */
 export function visibleFrameRenderable<R>(
   frame: VisibleOfferFrame<R> | null,
   gameWindowForeground: boolean,
 ): boolean {
   return gameWindowForeground && frame != null && frame.surfaceValidated;
+}
+
+/**
+ * Freshness gate: a positive frame renders only while its capture is within the
+ * TTL. A stalled or dead probe scheduler stops refreshing `capturedAt`, so the
+ * UI fails closed (hides) instead of freezing the last surface on screen.
+ */
+export function visibleFrameFresh<R>(
+  frame: VisibleOfferFrame<R> | null,
+  now: number,
+  ttlMs: number,
+): boolean {
+  return frame != null && now - frame.capturedAt <= ttlMs;
 }
 
 /** A slot is renderable only when it carries a current card rect from its capture. */
