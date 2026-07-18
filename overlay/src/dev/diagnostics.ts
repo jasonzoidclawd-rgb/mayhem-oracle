@@ -63,6 +63,18 @@ export interface OcrLifecycleSnapshot {
   noCropReason: string | null;
   /** Monotonic latched-offer generation (bumps on reroll / new offer). */
   offerGeneration: number;
+  /** VisibleOfferFrame: the current capture independently validated a surface. */
+  surfaceValidated: boolean;
+  /** Why the surface was / wasn't accepted this scan (multi-signal validator). */
+  surfaceReason: string | null;
+  /** Regions whose fresh crop backed a renderable slot in the latest frame. */
+  freshRectCount: number;
+  /** Monotonic visible-frame revision (bumps on every publish, fresh or empty). */
+  visibleFrameRevision: number;
+  /** How scanning was activated this tick: telemetry cadence vs visual probe. */
+  activationSource: string;
+  /** Internal latch remembers an offer but the visible frame is empty. */
+  lifecycleDisagreement: boolean;
   timings: OcrScanTimings;
 }
 

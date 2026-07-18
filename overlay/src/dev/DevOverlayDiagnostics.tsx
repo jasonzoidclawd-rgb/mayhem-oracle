@@ -171,6 +171,19 @@ export function DevOverlayDiagnostics({
               </div>
               <div>
                 OCR active: {String(ocrLifecycle.active)} · scan run ID: {ocrLifecycle.scanRunId ?? "none"}
+                {" "}· activation: {ocrLifecycle.activationSource}
+              </div>
+              <div
+                style={{
+                  color: ocrLifecycle.lifecycleDisagreement ? "#fbbf24" : undefined,
+                }}
+              >
+                Visible frame: rev {ocrLifecycle.visibleFrameRevision} · surfaceValidated{" "}
+                {String(ocrLifecycle.surfaceValidated)} · reason{" "}
+                {ocrLifecycle.surfaceReason ?? "none"} · fresh rects{" "}
+                {ocrLifecycle.freshRectCount}/3 · latch gen {ocrLifecycle.offerGeneration}
+                {ocrLifecycle.lifecycleDisagreement &&
+                  " · LATCH≠VISIBLE (grace, not rendered)"}
               </div>
               <div>
                 Last scan: {formatTimestamp(ocrLifecycle.lastScanStart)} → {formatTimestamp(ocrLifecycle.lastScanEnd)}

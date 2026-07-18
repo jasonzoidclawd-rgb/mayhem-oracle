@@ -1,10 +1,9 @@
 import { describe, expect, it } from "vitest";
-import { resolveScanActivation } from "./scanActivation";
+import { activationSource, resolveScanActivation } from "./scanActivation";
 import { resolveRoundDelivery } from "./roundDelivery";
 
 describe("scan activation", () => {
-  it("activates capture when the game is foreground with a validated card screen open", () => {
-    // GameClient foreground + latched offer surface → the fast loop runs.
+  it("activates the fast loop while a selection is open and the game is foreground", () => {
     expect(
       resolveScanActivation({
         gameWindowForeground: true,
@@ -15,7 +14,7 @@ describe("scan activation", () => {
     ).toBe("fast-loop");
   });
 
-  it("runs the ambient probe when rounds are pending and the game is foreground", () => {
+  it("runs the ambient probe when a delivery window is pending", () => {
     const decision = resolveRoundDelivery({
       playerLevel: 3,
       isDead: false,
@@ -28,6 +27,20 @@ describe("scan activation", () => {
         gameWindowForeground: true,
         phase: "in_game",
         scanMode: decision.scanMode,
+        selectionCompleted: false,
+      }),
+    ).toBe("ambient-probe");
+  });
+
+  it("NEVER lets telemetry veto scanning: scanMode 'off' still probes in-game", () => {
+    // The 01:52 death-triggered offer: round bookkeeping said nothing was
+    // pending (scanMode 'off'), yet a real three-card surface was on screen.
+    // Foreground + in-game must always at least probe so that surface latches.
+    expect(
+      resolveScanActivation({
+        gameWindowForeground: true,
+        phase: "in_game",
+        scanMode: "off",
         selectionCompleted: false,
       }),
     ).toBe("ambient-probe");
@@ -47,17 +60,15 @@ describe("scan activation", () => {
   });
 
   it("restores scanning after game → Terminal → game with no stale state", () => {
-    // Activation is a pure function of FRESH inputs: the tick where Terminal
-    // was front cannot leave anything behind that suppresses the tick where
-    // the game is front again.
     const base = {
       phase: "in_game" as const,
-      scanMode: "ambient" as const,
+      scanMode: "off" as const,
       selectionCompleted: false,
     };
     const sequence = [true, false, true].map((gameWindowForeground) =>
       resolveScanActivation({ ...base, gameWindowForeground }),
     );
+    // Even with scanMode 'off', the game being in front always probes.
     expect(sequence).toEqual(["ambient-probe", "none", "ambient-probe"]);
   });
 
@@ -70,8 +81,6 @@ describe("scan activation", () => {
         selectionCompleted: true,
       }),
     ).toBe("none");
-    // scanMode is irrelevant while a selection is open — the latched offer
-    // owns the loop.
     expect(
       resolveScanActivation({
         gameWindowForeground: true,
@@ -80,5 +89,14 @@ describe("scan activation", () => {
         selectionCompleted: false,
       }),
     ).toBe("fast-loop");
+  });
+});
+
+describe("activation source (dev diagnostics)", () => {
+  it("labels how the tick reached its activation", () => {
+    expect(activationSource("none", "in_game", "off")).toBe("none");
+    expect(activationSource("fast-loop", "in_game", "fast")).toBe("telemetry-fast");
+    expect(activationSource("ambient-probe", "in_game", "off")).toBe("visual-ambient");
+    expect(activationSource("fast-loop", "augment_selection", "off")).toBe("selection-open");
   });
 });

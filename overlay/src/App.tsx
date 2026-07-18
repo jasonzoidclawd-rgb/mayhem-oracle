@@ -82,7 +82,19 @@ import {
   resolveWithTimeout,
   FOREGROUND_POLL_TIMEOUT_MS,
 } from "./foregroundWatchdog";
-import { resolveScanActivation } from "./scanActivation";
+import {
+  activationSource,
+  resolveScanActivation,
+  type ActivationSource,
+} from "./scanActivation";
+import {
+  buildVisibleFrame,
+  emptyVisibleFrame,
+  frameResultIsCurrent,
+  validateOfferSurface,
+  visibleFrameRenderable,
+  type VisibleOfferFrame,
+} from "./visibleOfferFrame";
 import {
   EMPTY_SCAN_TIMINGS,
   type OcrCardDiagnostic as DevOcrCardDiagnostic,
@@ -102,9 +114,7 @@ import {
   type OcrAvailability,
 } from "./ocrAvailability";
 import {
-  CARD_NAME_REGIONS,
   cssRectFromCalibratedRect,
-  physicalRectForNormalizedRegion,
   type OverlayCalibration,
   type PhysicalRect,
 } from "./calibration";
@@ -273,6 +283,18 @@ function App() {
     () => emptyOfferState(),
   );
   const offerStateRef = useRef(offerState);
+  // VisibleOfferFrame — the ONLY state rendered chips/placeholders read. The
+  // internal latch above (offerState) is nonvisual grace bookkeeping and never
+  // renders directly. Every scan publishes a fresh-or-empty frame here; the
+  // render gate is `visibleFrameRenderable`. See visibleOfferFrame.ts.
+  const [visibleFrame, setVisibleFrame] = useState<VisibleOfferFrame<SlotResolution> | null>(null);
+  const visibleFrameRef = useRef<VisibleOfferFrame<SlotResolution> | null>(null);
+  // Monotonic scan sequence: bumped at every scan START and every synchronous
+  // clear. A scan result may publish its frame only while its seq is still the
+  // latest — a delayed OCR result can never restore a superseded frame.
+  const scanSeqRef = useRef(0);
+  const visibleRevisionRef = useRef(0);
+  const activationSourceRef = useRef<ActivationSource>("none");
   const [, setOcrActive] = useState(false);
   const phaseRef = useRef<Phase>("idle");
   // Rounds completed on STRONG evidence only (confirmed pick / queued-offer
@@ -307,6 +329,12 @@ function App() {
     cropCount: 0,
     noCropReason: "not-started",
     offerGeneration: 0,
+    surfaceValidated: false,
+    surfaceReason: null,
+    freshRectCount: 0,
+    visibleFrameRevision: 0,
+    activationSource: "none",
+    lifecycleDisagreement: false,
     timings: EMPTY_SCAN_TIMINGS,
   });
   const [overlayData, setOverlayData] = useState<OverlayData | null>(null);
@@ -368,6 +396,58 @@ function App() {
   const resetOffer = useCallback(() => {
     publishOffer(emptyOfferState(offerStateRef.current.generation + 1));
   }, [publishOffer]);
+
+  // Advance the scan sequence (a new scan started, or a synchronous clear).
+  const bumpScanSeq = useCallback(() => (scanSeqRef.current += 1), []);
+
+  // Publish an EXPLICIT empty visible frame: zero chips, zero placeholders,
+  // zero card rects. Called whenever scanning stops or the current capture
+  // fails to validate a surface, so the previous frame is never left painted.
+  const publishEmptyVisibleFrame = useCallback((captureSeq: number) => {
+    const frame = emptyVisibleFrame<SlotResolution>(
+      (visibleRevisionRef.current += 1),
+      captureSeq,
+      offerStateRef.current.generation,
+    );
+    visibleFrameRef.current = frame;
+    setVisibleFrame(frame);
+    setOcrLifecycle((previous) => ({
+      ...previous,
+      surfaceValidated: false,
+      freshRectCount: 0,
+      visibleFrameRevision: frame.revision,
+      activationSource: activationSourceRef.current,
+    }));
+  }, []);
+
+  // Publish one scan's visible frame, rejecting stale async results: a frame
+  // may publish only while its capture seq is still the newest started.
+  const publishScanFrame = useCallback((
+    captureSeq: number,
+    applied: OfferState<SlotResolution>,
+    freshRects: Array<PhysicalRect | null>,
+    surface: { validated: boolean; reason: string },
+  ) => {
+    if (!frameResultIsCurrent(captureSeq, scanSeqRef.current)) return;
+    const frame = buildVisibleFrame<SlotResolution>({
+      revision: (visibleRevisionRef.current += 1),
+      captureSeq,
+      offerState: applied,
+      freshRects,
+      surfaceValidated: surface.validated,
+    });
+    visibleFrameRef.current = frame;
+    setVisibleFrame(frame);
+    setOcrLifecycle((previous) => ({
+      ...previous,
+      surfaceValidated: frame.surfaceValidated,
+      surfaceReason: surface.reason,
+      freshRectCount: frame.slots.filter((slot) => slot.cardRect !== null).length,
+      visibleFrameRevision: frame.revision,
+      activationSource: activationSourceRef.current,
+      lifecycleDisagreement: applied.latched && !frame.surfaceValidated,
+    }));
+  }, []);
 
   // STRONG completion evidence arrived (confirmed pick or a queued offer
   // replacing the current one): advance the round model immediately so
@@ -807,23 +887,19 @@ function App() {
   const badgeWinRateBySlug: Record<string, number | string | null> =
     fixturePayload?.winRateDisplayBySlug ?? winRateBySlug;
 
-  // Real per-slot chips: strictly gated on REAL focus + augment phase + a
-  // LATCHED offer whose validated surface is CURRENTLY on screen. Each slot
-  // renders its own pipeline state (matched tier / SCANNING / UNMATCHED /
-  // NO ARAMGG DATA) — never stale, never invented, and always from one offer
-  // generation. A latched offer whose surface is absent or occluded
-  // (scoreboard, death recap, tooltip) is internal state, never pixels.
-  // Preview chips: only in preview mode.
-  const realBadgesReady =
+  // Real per-slot chips: driven SOLELY by the VisibleOfferFrame — the current
+  // capture's fresh, multi-signal-validated evidence — never by the internal
+  // latch. A slot renders only when this capture supplied it a card rect; a
+  // capture that does not validate the surface yields an empty frame, so no
+  // chip or placeholder can linger over combat, respawn, the scoreboard, or a
+  // new map. Preview chips: only in preview mode.
+  const realFrameRenderable =
     !isPreviewMode &&
     effectiveMemberEnabled &&
-    phase === "augment_selection" &&
-    offerActive(offerState) &&
-    offerState.surfaceVisible &&
-    gameWindowForeground;
+    visibleFrameRenderable(visibleFrame, gameWindowForeground);
   const previewBadgesReady =
     isPreviewMode && fixturePayload != null && previewCards.length === 3;
-  const showBadgeLayer = realBadgesReady || previewBadgesReady;
+  const showBadgeLayer = realFrameRenderable || previewBadgesReady;
 
   const slotChips = useMemo((): SlotChip[] => {
     if (previewBadgesReady && fixturePayload) {
@@ -844,20 +920,23 @@ function App() {
         }];
       });
     }
-    if (!realBadgesReady) return [];
-    return offerState.slots.map((slot): SlotChip => {
+    if (!realFrameRenderable || !visibleFrame) return [];
+    return visibleFrame.slots.flatMap((slot): SlotChip[] => {
+      // A slot with no fresh rect from THIS capture is never rendered — the
+      // rectangle must belong to the current frame's generation, not history.
+      if (slot.cardRect === null) return [];
       const base = {
         regionIndex: slot.regionIndex,
-        key: `slot-${slot.regionIndex}-g${offerState.generation}`,
+        key: `slot-${slot.regionIndex}-g${visibleFrame.generation}`,
       };
       if (slot.fingerprint === null) {
         // Reroll in flight / unreadable slot — no identity to show yet.
-        return { ...base, state: "scanning", tier: null, winRateText: null, isNew: false };
+        return [{ ...base, state: "scanning", tier: null, winRateText: null, isNew: false }];
       }
       const staged = slot.resolution?.aramgg;
       if (staged) {
         if (staged.kind === "matched") {
-          return {
+          return [{
             ...base,
             state: "tier",
             tier: staged.stat.tierLetter,
@@ -865,31 +944,31 @@ function App() {
             // "59.2%"); the raw value stays on the stat for diagnostics.
             winRateText: compactWinRateFromFraction(staged.stat.rawWinRate),
             isNew: slot.resolution?.pool?.lifecycle === "added",
-          };
+          }];
         }
         if (staged.kind === "no-data") {
           // Riot identity resolved, but ARAMGG carries no stat record.
-          return { ...base, state: "no-data", tier: null, winRateText: null, isNew: false };
+          return [{ ...base, state: "no-data", tier: null, winRateText: null, isNew: false }];
         }
-        return { ...base, state: "unmatched", tier: null, winRateText: null, isNew: false };
+        return [{ ...base, state: "unmatched", tier: null, winRateText: null, isNew: false }];
       }
       // Engine path (no dev fixture): the local-catalog match backs the chip.
       const pool = slot.resolution?.pool ?? null;
       if (!pool) {
-        return { ...base, state: "unmatched", tier: null, winRateText: null, isNew: false };
+        return [{ ...base, state: "unmatched", tier: null, winRateText: null, isNew: false }];
       }
       const candidate = decisionResult?.candidates.find(
         (entry) => entry.augmentSlug === pool.slug,
       );
-      return {
+      return [{
         ...base,
         state: "tier",
         tier: candidate ? tierForGrade(candidate.grade) : pool.tier,
         winRateText: compactWinRateFromPercent(pool.win_rate),
         isNew: pool.lifecycle === "added",
-      };
+      }];
     });
-  }, [previewBadgesReady, fixturePayload, previewCards, realBadgesReady, offerState, decisionResult]);
+  }, [previewBadgesReady, fixturePayload, previewCards, realFrameRenderable, visibleFrame, decisionResult]);
 
   // Staged diagnostics counters (never conflate injected with detected).
   const diag = {
@@ -905,7 +984,7 @@ function App() {
     previewInjected: isPreviewMode ? previewCards.length : 0,
     offeredMatched: matchedCards.length,
     catalogResolved: aramgg.resolvedBySlug.size,
-    renderedRealBadges: realBadgesReady
+    renderedRealBadges: realFrameRenderable
       ? slotChips.filter((chip) => chip.state === "tier").length
       : 0,
     renderedPreviewBadges: previewBadgesReady ? slotChips.length : 0,
@@ -933,7 +1012,13 @@ function App() {
       resetOffer();
       setOcrDiagnostics([]);
     }
-  }, [resetOffer]);
+    // Stopping OCR means no CURRENT capture validates a surface: empty the
+    // visible frame immediately and advance the seq so any in-flight scan
+    // result is rejected instead of repainting a stale frame. This holds for
+    // both stop (clear latch) and finish (keep latch as grace).
+    bumpScanSeq();
+    publishEmptyVisibleFrame(scanSeqRef.current);
+  }, [bumpScanSeq, publishEmptyVisibleFrame, resetOffer]);
 
   const stopOcr = useCallback(() => {
     cancelOcrRun(true);
@@ -1035,6 +1120,11 @@ function App() {
       runId,
     })) return;
 
+    // Claim a fresh visible-frame seq at scan START and record whether an
+    // offer was already latched (surface validation needs ≥2 known identities
+    // to latch a NEW surface, ≥1 to keep a latched one through a reroll).
+    const captureSeq = bumpScanSeq();
+    const wasLatched = offerStateRef.current.latched;
     const scanStart = new Date().toISOString();
     setOcrLifecycle((previous) => ({
       ...previous,
@@ -1094,6 +1184,32 @@ function App() {
         recordRoundCompleted();
       }
       publishOffer(applied.state);
+      // Publish the VISIBLE frame from THIS capture's fresh evidence: per-slot
+      // rects only where a crop actually succeeded, and a multi-signal surface
+      // verdict (three crops + enough corroborating identities). A non-validated
+      // capture publishes an explicit empty frame — chips can never linger.
+      const freshRects: Array<PhysicalRect | null> = [0, 1, 2].map((regionIndex) => {
+        const diagnostic = scan.diagnostics.find((entry) => entry.regionIndex === regionIndex);
+        return diagnostic && diagnostic.captureSucceeded && diagnostic.cardRect
+          ? diagnostic.cardRect
+          : null;
+      });
+      // FRESH evidence only: surfaceVisible is true only when THIS capture
+      // resolved a validated surface. A grace pass (latched offer, first
+      // absent scan) retains the prior identities as nonvisual latch state —
+      // it must count as zero here so the validator never validates a hidden
+      // surface and no chip lingers over combat.
+      const validatedSlots = applied.state.surfaceVisible
+        ? applied.state.slots.filter(
+            (slot) => slot.fingerprint !== null && slot.validated,
+          ).length
+        : 0;
+      const surface = validateOfferSurface({
+        cropsCaptured: scan.diagnostics.filter((entry) => entry.captureSucceeded).length,
+        validatedSlots,
+        latched: wasLatched,
+      });
+      publishScanFrame(captureSeq, applied.state, freshRects, surface);
       if (offerActive(applied.state) && phaseRef.current !== "augment_selection") {
         // A validated card surface latching is what enters augment selection —
         // never a level threshold, and never blocked by stale telemetry.
@@ -1242,6 +1358,12 @@ function App() {
           () => false,
         );
         publishOffer(applied.state);
+        // A capture failure never validates a surface: publish an empty frame
+        // so no chip survives a failed scan.
+        publishScanFrame(captureSeq, applied.state, [null, null, null], {
+          validated: false,
+          reason: "scan-error",
+        });
         if (applied.cleared) {
           ocrSelectionCompletedRef.current = true;
           updatePhase("in_game");
@@ -1279,7 +1401,7 @@ function App() {
         }));
       }
     }
-  }, [collectorCaptureEnabled, nameLookup, ocrKnownNames, playerData, publishOffer, recordRoundCompleted, resolveSlotTitle, finishOcr, updatePhase]);
+  }, [bumpScanSeq, collectorCaptureEnabled, nameLookup, ocrKnownNames, playerData, publishOffer, publishScanFrame, recordRoundCompleted, resolveSlotTitle, finishOcr, updatePhase]);
 
   useEffect(() => {
     runOcrRef.current = runOcr;
@@ -1321,11 +1443,12 @@ function App() {
     scheduleNextOcr(runId);
   }, [ocrAvailability, scheduleNextOcr]);
 
-  // Ambient probe: ONE scan per poll tick while rounds are pending but no
-  // offer is latched and no death window is open. Telemetry must never block
-  // scanning a clearly visible surface — this latches a real offer even when
-  // death/level telemetry is briefly stale, without the 20ms fast loop burning
-  // capture during normal gameplay. On latch it escalates to the fast loop.
+  // Ambient probe: ONE scan per poll tick whenever the game is foreground and
+  // in-game. Telemetry never blocks scanning a clearly visible surface — this
+  // latches a real offer even when death/level/round telemetry is stale or
+  // overcounted (the 01:52 death-triggered offer that never scanned), without
+  // the 20ms fast loop burning capture during ordinary combat. On latch it
+  // escalates to the fast loop.
   const ambientProbeInFlightRef = useRef(false);
   const runAmbientProbe = useCallback(async () => {
     if (ocrActiveRef.current || ambientProbeInFlightRef.current) return;
@@ -1333,6 +1456,8 @@ function App() {
     if (!canRunOcr(ocrAvailability)) return;
     if (!nameLookup.size) return;
     ambientProbeInFlightRef.current = true;
+    const captureSeq = bumpScanSeq();
+    const wasLatched = offerStateRef.current.latched;
     try {
       const scan = await invoke<OcrScanResult>("detect_augment_names", {
         knownNames: ocrKnownNames,
@@ -1353,6 +1478,29 @@ function App() {
       );
       if (applied.replacedOffer) recordRoundCompleted();
       publishOffer(applied.state);
+      // Publish the visible frame every probe — fresh geometry when this
+      // capture validates a surface, an explicit empty frame otherwise. This
+      // is what actively clears a stale frame during combat/respawn.
+      const freshRects: Array<PhysicalRect | null> = [0, 1, 2].map((regionIndex) => {
+        const diagnostic = scan.diagnostics.find((entry) => entry.regionIndex === regionIndex);
+        return diagnostic && diagnostic.captureSucceeded && diagnostic.cardRect
+          ? diagnostic.cardRect
+          : null;
+      });
+      // FRESH evidence only: on a grace pass the retained identities must not
+      // validate the surface (surfaceVisible is false), so a stale frame during
+      // combat/respawn is actively cleared to empty.
+      const validatedSlots = applied.state.surfaceVisible
+        ? applied.state.slots.filter(
+            (slot) => slot.fingerprint !== null && slot.validated,
+          ).length
+        : 0;
+      const surface = validateOfferSurface({
+        cropsCaptured: scan.diagnostics.filter((entry) => entry.captureSucceeded).length,
+        validatedSlots,
+        latched: wasLatched,
+      });
+      publishScanFrame(captureSeq, applied.state, freshRects, surface);
       if (offerActive(applied.state)) {
         // A real surface latched from the probe: enter selection and escalate
         // to the fast loop for reroll/occlusion tracking.
@@ -1365,7 +1513,7 @@ function App() {
     } finally {
       ambientProbeInFlightRef.current = false;
     }
-  }, [nameLookup, ocrAvailability, ocrKnownNames, publishOffer, recordRoundCompleted, resolveSlotTitle, startOcr, updatePhase]);
+  }, [bumpScanSeq, nameLookup, ocrAvailability, ocrKnownNames, publishOffer, publishScanFrame, recordRoundCompleted, resolveSlotTitle, startOcr, updatePhase]);
 
   // Main polling loop
   const poll = useCallback(async () => {
@@ -1461,29 +1609,38 @@ function App() {
           }
           // Activation decides from FRESH inputs only (no memory): a stale
           // foreground value from an earlier tick can never suppress scanning
-          // once the game is actually in front again.
+          // once the game is actually in front again. Telemetry never vetoes:
+          // an in-game foreground tick always scans (ambient when no fast
+          // delivery window), so a real surface latches even when the round
+          // count is stale/overcounted.
           const activation = resolveScanActivation({
             gameWindowForeground: actualGameForeground,
             phase: phaseRef.current,
             scanMode: decision.scanMode,
             selectionCompleted: ocrSelectionCompletedRef.current,
           });
+          activationSourceRef.current = activationSource(
+            activation,
+            phaseRef.current,
+            decision.scanMode,
+          );
           if (phaseRef.current === "augment_selection") {
             // Level gained while the offer is still open must NOT end the
             // selection — completion comes only from the offer lifecycle
             // (surface absence / confirmed pick), never from champion level.
             if (activation === "fast-loop") startOcr();
-          } else if (decision.scanMode === "fast") {
+          } else if (activation === "fast-loop") {
             // Death sequence with rounds pending: the delivery window is open
             // RIGHT NOW. Run the fast loop so the offer latches immediately;
             // the phase flips to augment_selection only when a validated
             // surface actually latches (inside the scan).
             updatePhase("in_game");
-            if (activation === "fast-loop") startOcr();
+            startOcr();
           } else {
-            // ambient/off: no offer and no delivery window. Stop any leftover
-            // fast loop WITHOUT clearing state, and (ambient) run one probe
-            // this tick so a real surface still latches on stale telemetry.
+            // Ordinary in-game: stop any leftover fast loop WITHOUT clearing
+            // the latch, and run one ambient probe this tick. The probe also
+            // republishes the visible frame (empty during combat), which is
+            // what actively clears a stale surface.
             if (ocrActiveRef.current) finishOcr();
             updatePhase("in_game");
             if (activation === "ambient-probe") void runAmbientProbe();
@@ -1620,24 +1777,15 @@ function App() {
   // ─── Render ───
   const badgePositions = useMemo(() => {
     const positions = new Map<number, { left: string; top: string }>();
-    if (!calibration) return positions;
+    if (!calibration || !visibleFrame) return positions;
 
-    const detectedRects = new Map(
-      ocrDiagnostics
-        .filter((diagnostic) => diagnostic.cardRect !== null)
-        .map((diagnostic) => [diagnostic.regionIndex, diagnostic.cardRect!]),
-    );
-    // Every region resolves to a rect: the natively detected one when the last
-    // scan supplied it, else the calibrated normalized region — so SCANNING /
-    // reroll slots still anchor their chip to the right card position.
+    // Chip geometry comes ONLY from the current frame's fresh per-slot rects.
+    // A slot without a rect from THIS capture is never positioned — no
+    // historical or calibrated fallback geometry can anchor a stale chip.
     const regionRects = new Map<number, PhysicalRect>();
-    CARD_NAME_REGIONS.forEach((region, regionIndex) => {
-      const detected = detectedRects.get(regionIndex);
-      regionRects.set(
-        regionIndex,
-        detected ?? physicalRectForNormalizedRegion(region, calibration.viewport),
-      );
-    });
+    for (const slot of visibleFrame.slots) {
+      if (slot.cardRect) regionRects.set(slot.regionIndex, slot.cardRect);
+    }
 
     // THE coordinate boundary: every calibrated rect converts to
     // overlay-window CSS exactly once, as a pure ratio against the overlay
@@ -1670,7 +1818,7 @@ function App() {
     }
 
     return positions;
-  }, [calibration, cssWindow, ocrDiagnostics, slotChips]);
+  }, [calibration, cssWindow, visibleFrame, slotChips]);
 
   return (
     <div className="overlay-root">
