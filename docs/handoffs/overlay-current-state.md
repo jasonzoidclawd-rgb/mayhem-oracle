@@ -4,6 +4,56 @@ This file captures recent overlay findings so future agents do not rediscover
 them from screenshots, terminal history, or old handoffs. It is context only.
 Do not treat it as permission to change runtime behavior without a task.
 
+## Visual-Surface Authority + Never-Veto Scanning (2026-07-18, PR #46 round 4)
+
+Round-4 fix after a timed GUI retest on HEAD `f8cee7e` still leaked resolved
+chips and SCANNING/UNMATCHED placeholders over combat/respawn/other maps, and a
+real death-triggered R2 offer (旋風鉤 / 不祥契約 / 靈光一閃) never activated
+scanning. Root causes and current contracts:
+
+- **Internal latch vs visible frame separation**: rendering was driven by the
+  internal `OfferState` latch, whose invalidation depended on the scan loop
+  continuing to run. `overlay/src/visibleOfferFrame.ts` introduces
+  `VisibleOfferFrame` — the ONLY state rendered chips/placeholders read. The
+  latch is nonvisual grace bookkeeping. Every scan publishes either a
+  fresh-validated frame or an explicit EMPTY frame (`buildVisibleFrame` /
+  `publishEmptyVisibleFrame`), so a stale surface can never linger. The render
+  gate is `visibleFrameRenderable(frame, foreground)`; chip geometry comes
+  ONLY from the frame's fresh per-slot `cardRect` — the calibrated/historical
+  fallback in `badgePositions` is deleted, so normal gameplay can never anchor
+  a chip to old card coordinates.
+- **Stale-chip / stale-placeholder cause**: `validatedSlots` for surface
+  validation was counted from `applied.state.slots`, which on a grace pass (a
+  latched offer's first absent scan) still *retains* the prior validated
+  identities (`surfaceVisible:false`). That validated a hidden surface. Fix:
+  the count is now gated on `applied.state.surfaceVisible` (the authoritative
+  "this capture saw a validated surface" flag) — a grace pass counts zero, so
+  the first combat scan publishes an empty frame.
+- **Never-veto scanning (death-triggered offer cause)**: `resolveScanActivation`
+  returned `none` whenever `scanMode` was `off`, and `scanMode` went `off`
+  whenever round bookkeeping said nothing pending (level 12 + `completedRounds`
+  overcounted → `pendingRounds 0`). A real on-screen offer was never scanned.
+  Now foreground + in-game ALWAYS at least runs an ambient probe; `scanMode`
+  only ESCALATES cadence to the 20ms fast loop. Visual surface is ground truth
+  that an offer exists; telemetry only estimates which round it is.
+- **Stale-result rejection**: a monotonic `scanSeqRef` is claimed at scan START
+  and bumped on every synchronous clear; `frameResultIsCurrent(seq, latest)`
+  lets a scan publish only while its seq is still newest — a delayed OCR result
+  can never restore a superseded (hidden) frame.
+- **Multi-signal surface validation**: `validateOfferSurface` requires all
+  three name-band crops AND ≥2 known identities to latch a NEW surface (≥1 to
+  keep a latched offer through a single-slot reroll) — arbitrary combat UI with
+  one stray name-match is rejected.
+- Dev diagnostics (`import.meta.env.DEV` only, compiled out of release):
+  activation source (telemetry-fast / visual-ambient / selection-open), visible
+  frame revision, `surfaceValidated` + reason, fresh rect count, and a
+  `LATCH≠VISIBLE (grace, not rendered)` amber flag on lifecycle disagreement.
+- Tests: `visibleOfferFrame.test.ts`, `scanActivation.test.ts` (never-veto),
+  `postDeathActivation.test.ts` (post-death activation under injected stale
+  bookkeeping + normal-gameplay-renders-zero-slots). No new pixel fixtures were
+  supplied for the combat/death states, so these are state-machine replays; the
+  R1 pixel replay (`r1_replay.rs`) still covers OCR-from-image.
+
 ## Foreground Resolver Ground Truth (2026-07-17, PR #46 round 3)
 
 The round-2 build inverted foreground classification live (panels over
