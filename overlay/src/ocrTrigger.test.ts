@@ -38,6 +38,9 @@ function obs(cards: GeometryCard[], over: Partial<GeometryObservation> = {}): Ge
     confidence: 0.9,
     cards,
     rejectionReasons: [],
+    preCaptureMs: 5,
+    captureMs: 30,
+    analysisMs: 1,
     elapsedMs: 40,
     ...over,
   };

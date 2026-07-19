@@ -1,10 +1,8 @@
 import { describe, expect, it } from "vitest";
 import {
   DEFAULT_PROBE_CONFIG,
-  FRAME_FRESHNESS_TTL_MS,
   PROBE_INTERVAL_MS,
   PROBE_TIMEOUT_MS,
-  frameWithinTtl,
   nextProbeAction,
   type ProbeSchedulerState,
 } from "./surfaceProbeScheduler";
@@ -119,16 +117,5 @@ describe("nextProbeAction — self-healing, telemetry-independent", () => {
         2000 * GEOMETRY_INTERVAL_MS,
       ),
     ).toEqual({ kind: "start" });
-  });
-});
-
-describe("frameWithinTtl — fail closed when the scheduler stalls", () => {
-  it("keeps a fresh frame and expires a stale one", () => {
-    expect(frameWithinTtl(1000, 1000 + 200, FRAME_FRESHNESS_TTL_MS)).toBe(true);
-    expect(frameWithinTtl(1000, 1000 + FRAME_FRESHNESS_TTL_MS, FRAME_FRESHNESS_TTL_MS)).toBe(true);
-    expect(frameWithinTtl(1000, 1000 + FRAME_FRESHNESS_TTL_MS + 1, FRAME_FRESHNESS_TTL_MS)).toBe(
-      false,
-    );
-    expect(frameWithinTtl(null, 5000, FRAME_FRESHNESS_TTL_MS)).toBe(false);
   });
 });

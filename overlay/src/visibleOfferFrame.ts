@@ -46,7 +46,7 @@ export interface VisibleOfferFrame<R> {
   revision: number;
   /** Probe sequence that produced this frame; the supersede guard uses it. */
   captureSeq: number;
-  /** Monotonic clock (performance.now()) at capture — drives the freshness TTL. */
+  /** Monotonic clock (performance.now()) at capture — diagnostic provenance. */
   capturedAt: number;
   /** True ONLY when this capture independently validated a real offer surface. */
   surfaceValidated: boolean;
@@ -164,19 +164,6 @@ export function visibleFrameRenderable<R>(
   gameWindowForeground: boolean,
 ): boolean {
   return gameWindowForeground && frame != null && frame.surfaceValidated;
-}
-
-/**
- * Freshness gate: a positive frame renders only while its capture is within the
- * TTL. A stalled or dead probe scheduler stops refreshing `capturedAt`, so the
- * UI fails closed (hides) instead of freezing the last surface on screen.
- */
-export function visibleFrameFresh<R>(
-  frame: VisibleOfferFrame<R> | null,
-  now: number,
-  ttlMs: number,
-): boolean {
-  return frame != null && now - frame.capturedAt <= ttlMs;
 }
 
 /** A slot is renderable only when it carries a current card rect from its capture. */

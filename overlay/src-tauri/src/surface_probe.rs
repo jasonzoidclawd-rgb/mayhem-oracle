@@ -1,12 +1,11 @@
 //! Pixel/geometry augment-surface probe — Stage-1 PRESENCE without OCR.
 //!
-//! Round-6 root cause: presence, occlusion, and frame-freshness were decided by
-//! OCR title text. OCR is slow and variable (p95 far exceeds the 500 ms frame
-//! TTL, so a *static* offer's chips blinked as the TTL expired between passes),
-//! it false-negatives on unchanged pixels (a readable card OCR'd as noise), and
-//! it false-positives behind a modal (card names remained readable under the AFK
-//! dialog). OCR can never be the authority for whether the offer surface is
-//! *visibly usable*.
+//! Round 6 moved presence away from OCR, but the frontend still expired a valid
+//! frame 500 ms after the previous capture started. A newer native capture could
+//! legitimately still be in flight at that instant, so the three chips blinked
+//! together even though all card pixels remained strongly valid. Geometry now
+//! feeds confidence hysteresis, while scheduler health—not frame age—owns expiry.
+//! OCR remains unable to decide whether the offer surface is visibly usable.
 //!
 //! This module answers three questions from pixels alone — is a three-card
 //! augment surface on screen, is it occluded by a dialog/scoreboard, and what is
@@ -100,13 +99,13 @@ pub struct CardObservation {
     pub fingerprint: String,
 }
 
-/// One geometry probe's result. Presence/occlusion/freshness authority.
+/// One geometry probe's result. Presence/occlusion/visual-freshness authority.
 #[derive(Serialize, Deserialize, Clone, Debug)]
 #[serde(rename_all = "camelCase")]
 pub struct SurfaceObservation {
     /// Monotonic probe sequence claimed at probe START (stale-result guard).
     pub probe_seq: u64,
-    /// Caller's monotonic capture clock, echoed back (freshness authority).
+    /// Caller's monotonic capture clock, echoed back for diagnostic provenance.
     pub captured_at: f64,
     pub capture_width: u32,
     pub capture_height: u32,
@@ -118,6 +117,13 @@ pub struct SurfaceObservation {
     pub confidence: f32,
     pub cards: Vec<CardObservation>,
     pub rejection_reasons: Vec<String>,
+    /// Native work before screen capture starts (foreground/window discovery).
+    pub pre_capture_ms: u64,
+    /// Native monitor capture duration.
+    pub capture_ms: u64,
+    /// Pixel analysis duration after capture.
+    pub analysis_ms: u64,
+    /// Complete native probe latency, retained as the existing API field.
     pub elapsed_ms: u64,
 }
 
@@ -318,6 +324,9 @@ pub fn analyze_surface(
         confidence,
         cards,
         rejection_reasons,
+        pre_capture_ms: 0,
+        capture_ms: 0,
+        analysis_ms: 0,
         elapsed_ms,
     }
 }
@@ -347,6 +356,21 @@ mod tests {
         analyze_surface(&load(name), &vp, &bands, 1, 0.0, 0)
     }
 
+    fn analyze_live_crop(name: &str) -> SurfaceObservation {
+        // Live fixtures are the sanitized original-screen rect
+        // x=280..1005, y=125..535. A translated 1280x720 viewport preserves
+        // the production normalized geometry while keeping unrelated HUD/PII
+        // completely outside the committed image.
+        let viewport = Rect {
+            x: -280,
+            y: -125,
+            width: 1280,
+            height: 720,
+        };
+        let bands = name_bands(&full_viewport());
+        analyze_surface(&load(name), &viewport, &bands, 1, 0.0, 0)
+    }
+
     fn hamming(a: &str, b: &str) -> usize {
         a.chars().zip(b.chars()).filter(|(x, y)| x != y).count()
     }
@@ -374,6 +398,132 @@ mod tests {
         let o = analyze("offer-silver.png");
         assert!(o.present && !o.occluded, "silver offer present: {:?}", o.rejection_reasons);
         assert_eq!(o.cards.iter().filter(|c| c.present).count(), 3);
+    }
+
+    #[test]
+    fn live_blink_frames_are_independently_present_and_unoccluded() {
+        for name in [
+            "live-blink/offer-a-105715-0.png",
+            "live-blink/offer-a-105715-1.png",
+            "live-blink/offer-a-105716.png",
+            "live-blink/offer-b-105740.png",
+            "live-blink/offer-b-105741.png",
+        ] {
+            let observation = analyze_live_crop(name);
+            eprintln!(
+                "[live-blink-fixture] {} present={} occluded={} confidence={:.4} cards={:?} reasons={:?}",
+                name,
+                observation.present,
+                observation.occluded,
+                observation.confidence,
+                observation.cards.iter().map(|card| (
+                    card.interior_luma,
+                    card.interior_std,
+                    card.frame_contrast,
+                    card.present,
+                )).collect::<Vec<_>>(),
+                observation.rejection_reasons,
+            );
+            assert!(
+                observation.present,
+                "{}: {:?}",
+                name, observation.rejection_reasons
+            );
+            assert!(!observation.occluded, "{}", name);
+            assert_eq!(
+                observation.cards.iter().filter(|card| card.present).count(),
+                3
+            );
+        }
+    }
+
+    #[test]
+    fn live_blink_105715_and_105716_metrics_are_locked() {
+        let cases = [
+            (
+                "live-blink/offer-a-105715-0.png",
+                0.9224,
+                [
+                    (12.9257, 1.1238, 109.9109),
+                    (12.9248, 1.1239, 109.7117),
+                    (12.9164, 1.1251, 112.4532),
+                ],
+            ),
+            (
+                "live-blink/offer-a-105716.png",
+                0.9179,
+                [
+                    (12.9257, 1.1238, 109.4784),
+                    (12.9248, 1.1239, 109.1198),
+                    (12.9164, 1.1251, 111.8498),
+                ],
+            ),
+        ];
+        for (name, expected_confidence, expected_cards) in cases {
+            let observation = analyze_live_crop(name);
+            assert!((observation.confidence - expected_confidence).abs() < 0.001);
+            for (card, (mean, std, contrast)) in observation.cards.iter().zip(expected_cards) {
+                assert!(card.present, "{} card{}", name, card.region_index);
+                assert!((card.interior_luma - mean).abs() < 0.001);
+                assert!((card.interior_std - std).abs() < 0.001);
+                assert!((card.frame_contrast - contrast).abs() < 0.001);
+            }
+        }
+    }
+
+    #[test]
+    fn alternating_live_positive_frames_never_hide_for_500_probes() {
+        let fixtures = [
+            "live-blink/offer-a-105715-0.png",
+            "live-blink/offer-a-105715-1.png",
+            "live-blink/offer-a-105716.png",
+            "live-blink/offer-b-105740.png",
+            "live-blink/offer-b-105741.png",
+        ];
+        for seq in 0..500 {
+            let observation = analyze_live_crop(fixtures[seq % fixtures.len()]);
+            assert!(
+                observation.present && !observation.occluded,
+                "probe {} fixture {}: {:?}",
+                seq,
+                fixtures[seq % fixtures.len()],
+                observation.rejection_reasons,
+            );
+        }
+    }
+
+    #[test]
+    fn animated_sparkles_keep_each_static_offer_fingerprint_stable() {
+        for names in [
+            [
+                "live-blink/offer-a-105715-0.png",
+                "live-blink/offer-a-105715-1.png",
+                "live-blink/offer-a-105716.png",
+            ]
+            .as_slice(),
+            [
+                "live-blink/offer-b-105740.png",
+                "live-blink/offer-b-105741.png",
+            ]
+            .as_slice(),
+        ] {
+            let first = analyze_live_crop(names[0]);
+            for name in &names[1..] {
+                let current = analyze_live_crop(name);
+                assert!(current.present && !current.occluded);
+                for slot in 0..3 {
+                    assert!(
+                        hamming(
+                            &first.cards[slot].fingerprint,
+                            &current.cards[slot].fingerprint,
+                        ) <= 8,
+                        "{} slot{} fingerprint changed across sparkle animation",
+                        name,
+                        slot,
+                    );
+                }
+            }
+        }
     }
 
     #[cfg(target_os = "macos")]

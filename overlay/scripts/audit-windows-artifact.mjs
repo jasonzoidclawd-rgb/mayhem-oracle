@@ -56,6 +56,8 @@ const FORBIDDEN_TEXT_PATTERNS = [
   /force-refresh/i,
   /Foreground:\s*app=/i,
   /calibration-panel/i,
+  /\[geometry-(?:probe|full-latency|freshness-75|hidden|watchdog)\]/i,
+  /__getGeometryProbeDiagnostics/i,
 ];
 
 const REMOTE_RENDERER_PATTERNS = [

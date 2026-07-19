@@ -124,4 +124,14 @@ describe("windows artifact audit", () => {
 
     await expect(auditWindowsArtifact({ overlayRoot })).rejects.toThrow(/forbidden/i);
   });
+
+  test("rejects geometry rolling diagnostics in renderer output", async () => {
+    const overlayRoot = await createOverlayFixture();
+    await writeFile(
+      join(overlayRoot, "dist", "assets", "app.js"),
+      "window.__getGeometryProbeDiagnostics = () => []; console.info('[geometry-probe]');",
+    );
+
+    await expect(auditWindowsArtifact({ overlayRoot })).rejects.toThrow(/forbidden/i);
+  });
 });

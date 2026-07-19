@@ -2,10 +2,13 @@ import { readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
 import {
   buildGeometryVisibleFrame,
+  advanceGeometrySurface,
+  classifyGeometryObservation,
+  createGeometrySurfaceState,
   emptyGeometryObservation,
   fingerprintChanged,
-  geometryFrameFresh,
-  GEOMETRY_FRESHNESS_TTL_MS,
+  geometrySchedulerHealthy,
+  GEOMETRY_SCHEDULER_HEALTH_DEADLINE_MS,
   hammingDistance,
   identityForSlot,
   newOfferDetected,
@@ -44,6 +47,9 @@ function obs(overrides: Partial<GeometryObservation> = {}): GeometryObservation 
     confidence: 0.9,
     cards: [card(0, true, FP_A), card(1, true, FP_B), card(2, true, FP_A_NUDGE)],
     rejectionReasons: [],
+    preCaptureMs: 5,
+    captureMs: 30,
+    analysisMs: 1,
     elapsedMs: 40,
     ...overrides,
   };
@@ -68,39 +74,165 @@ describe("fingerprint comparison", () => {
 });
 
 describe("geometry freshness — decoupled from OCR duration", () => {
-  it("a positive frame stays fresh within the geometry TTL", () => {
-    expect(geometryFrameFresh(1000, 1000 + GEOMETRY_FRESHNESS_TTL_MS - 1)).toBe(true);
-  });
-  it("fails closed once the geometry capture ages past the TTL", () => {
-    expect(geometryFrameFresh(1000, 1000 + GEOMETRY_FRESHNESS_TTL_MS + 1)).toBe(false);
-    expect(geometryFrameFresh(null, 1000)).toBe(false);
-  });
-  it("stays renderable even when OCR has run far longer than 500 ms", () => {
-    // OCR started at t=1000 and is STILL running at t=3000 (2 s). The geometry
-    // probe refreshed capturedAt=2950 on its own cadence, so the frame is fresh
-    // regardless of OCR — the exact fix for the blinking.
-    const geoCapturedAt = 2950;
-    expect(geometryFrameFresh(geoCapturedAt, 3000)).toBe(true);
-  });
-
-  it.each([250, 500, 1000, 2000])(
-    "keeps a static offer renderable while OCR takes %d ms",
-    (ocrDurationMs) => {
-      for (let elapsed = 0; elapsed <= ocrDurationMs; elapsed += 150) {
-        const observation = obs({ probeSeq: elapsed / 150 + 1, capturedAt: 1000 + elapsed });
-        const frame = buildGeometryVisibleFrame({
-          revision: elapsed / 150 + 1,
-          captureSeq: observation.probeSeq,
-          observation,
-          generation: 1,
-          resolveIdentity: () => null,
-        });
-        expect(visibleFrameRenderable(frame, true)).toBe(true);
-        expect(geometryFrameFresh(frame.capturedAt, 1000 + elapsed + 149)).toBe(true);
-        expect(frame.slots.every((slot) => slot.resolution === null)).toBe(true);
-      }
+  it.each([150, 300, 500, 750, 1000])(
+    "keeps a valid frame visible during a legitimate %d ms geometry probe",
+    (durationMs) => {
+      const frame = buildGeometryVisibleFrame({
+        revision: 1,
+        captureSeq: 1,
+        observation: obs({ capturedAt: 900 }),
+        generation: 1,
+        resolveIdentity: (regionIndex) => `resolved-${regionIndex}`,
+      });
+      const healthy = geometrySchedulerHealthy({
+        now: 1000 + durationMs,
+        foreground: true,
+        activeGame: true,
+        inFlightSince: 1000,
+        lastProbeStartedAt: 1000,
+        lastProbeCompletedAt: 900,
+      });
+      expect(visibleFrameRenderable(frame, true) && healthy).toBe(true);
+      expect(frame.slots.map((slot) => slot.resolution)).toEqual([
+        "resolved-0",
+        "resolved-1",
+        "resolved-2",
+      ]);
     },
   );
+
+  it("reproduces the old 500 ms whole-frame blink and keeps the fixed gate healthy", () => {
+    // HEAD f9aa669 aged capturedAt while a newer probe was legitimately in
+    // flight. At 501 ms the old TTL hid all three chips simultaneously.
+    const now = 1501;
+    expect(now - 1000).toBeGreaterThan(500);
+    expect(geometrySchedulerHealthy({
+      now,
+      foreground: true,
+      activeGame: true,
+      inFlightSince: 1150,
+      lastProbeStartedAt: 1150,
+      lastProbeCompletedAt: 1000,
+    })).toBe(true);
+  });
+
+  it("fails closed after the scheduler health deadline and immediately on foreground loss", () => {
+    const baseHealth = {
+      foreground: true,
+      activeGame: true,
+      inFlightSince: null,
+      lastProbeStartedAt: 1000,
+      lastProbeCompletedAt: 1000,
+    };
+    expect(geometrySchedulerHealthy({
+      ...baseHealth,
+      now: 1000 + GEOMETRY_SCHEDULER_HEALTH_DEADLINE_MS,
+    })).toBe(true);
+    expect(geometrySchedulerHealthy({
+      ...baseHealth,
+      now: 1001 + GEOMETRY_SCHEDULER_HEALTH_DEADLINE_MS,
+    })).toBe(false);
+    expect(geometrySchedulerHealthy({ ...baseHealth, now: 1050, foreground: false })).toBe(false);
+    expect(geometrySchedulerHealthy({ ...baseHealth, now: 1050, activeGame: false })).toBe(false);
+    expect(geometrySchedulerHealthy({
+      ...baseHealth,
+      now: 1001 + GEOMETRY_SCHEDULER_HEALTH_DEADLINE_MS,
+      inFlightSince: 1000,
+    })).toBe(false);
+  });
+});
+
+describe("geometry confidence hysteresis", () => {
+  const oneStrong = (overrides: Partial<GeometryObservation> = {}) => obs({
+    present: false,
+    confidence: 0.9,
+    cards: [card(0, true, FP_A), card(1, false, FP_B), card(2, false, FP_A_NUDGE)],
+    rejectionReasons: ["insufficient-cards-1/3"],
+    ...overrides,
+  });
+  const zeroStrong = () => obs({
+    present: false,
+    confidence: 0,
+    cards: [card(0, false, FP_A), card(1, false, FP_B), card(2, false, FP_A_NUDGE)],
+    rejectionReasons: ["insufficient-cards-0/3"],
+  });
+
+  it("preserves resolved chips through one weak/uncertain observation", () => {
+    const entered = advanceGeometrySurface(createGeometrySurfaceState(), obs());
+    const uncertain = advanceGeometrySurface(entered.state, oneStrong());
+    expect(uncertain.classification).toBe("uncertain");
+    expect(uncertain.action).toBe("preserve");
+    expect(uncertain.state.visualObservation).toBe(entered.state.visualObservation);
+  });
+
+  it("retains a single weak slot when the other two cards remain strong", () => {
+    const entered = advanceGeometrySurface(createGeometrySurfaceState(), obs());
+    const oneWeakCard = obs({
+      cards: [card(0, true, FP_A), card(1, false, FP_B), card(2, true, FP_A_NUDGE)],
+      rejectionReasons: ["card1-frame-contrast-low"],
+    });
+    const next = advanceGeometrySurface(entered.state, oneWeakCard);
+    expect(next.classification).toBe("present");
+    expect(next.action).toBe("publish");
+    expect(next.state.visualObservation?.cards.every((entry) => entry.present)).toBe(true);
+  });
+
+  it("clears after two consecutive weak negatives", () => {
+    const entered = advanceGeometrySurface(
+      createGeometrySurfaceState(),
+      obs({ capturedAt: 1000 }),
+    );
+    const first = advanceGeometrySurface(
+      entered.state,
+      oneStrong({ probeSeq: 2, capturedAt: 1150 }),
+    );
+    const secondObservation = oneStrong({ probeSeq: 3, capturedAt: 1300 });
+    const second = advanceGeometrySurface(first.state, secondObservation);
+    expect(first.action).toBe("preserve");
+    expect(second.action).toBe("clear");
+    expect(second.hideReason).toBe("confirmed-weak-negative");
+    expect(secondObservation.capturedAt - 1000).toBe(300);
+  });
+
+  it("clears immediately on zero structures or explicit occlusion", () => {
+    const entered = advanceGeometrySurface(createGeometrySurfaceState(), obs());
+    const absent = advanceGeometrySurface(entered.state, zeroStrong());
+    expect(absent.classification).toBe("absent");
+    expect(absent.action).toBe("clear");
+    expect(absent.hideReason).toBe("confirmed-absent");
+
+    const occluded = advanceGeometrySurface(entered.state, obs({ occluded: true }));
+    expect(occluded.action).toBe("clear");
+    expect(occluded.hideReason).toBe("occluded");
+  });
+
+  it("does not let delayed OCR restore a frame after confirmed geometry absence", () => {
+    const entered = advanceGeometrySurface(createGeometrySurfaceState(), obs());
+    const cleared = advanceGeometrySurface(entered.state, zeroStrong());
+    expect(cleared.state.visualObservation).toBeNull();
+    const lateIdentity = identityForSlot(
+      { fingerprint: FP_A, resolution: "late", resolvedAt: 2000 },
+      FP_A,
+    );
+    expect(lateIdentity).toBe("late");
+    expect(cleared.state.visualObservation).toBeNull();
+  });
+
+  it("does not enter present from an uncertain first observation", () => {
+    const transition = advanceGeometrySurface(createGeometrySurfaceState(), oneStrong());
+    expect(transition.action).toBe("clear");
+    expect(transition.state.visualObservation).toBeNull();
+  });
+
+  it("treats a capture/IPC failure as uncertain, not confirmed combat absence", () => {
+    const failure = emptyGeometryObservation(2, 1150, "capture-failed: transient");
+    expect(classifyGeometryObservation(failure)).toBe("uncertain");
+
+    const entered = advanceGeometrySurface(createGeometrySurfaceState(), obs());
+    const transition = advanceGeometrySurface(entered.state, failure);
+    expect(transition.action).toBe("preserve");
+    expect(transition.state.visualObservation).toBe(entered.state.visualObservation);
+  });
 });
 
 describe("buildGeometryVisibleFrame — presence, occlusion, SCANNING", () => {
@@ -152,7 +284,7 @@ describe("buildGeometryVisibleFrame — presence, occlusion, SCANNING", () => {
       expect(observation.occluded).toBe(false);
       expect(observation.cards.map((entry) => entry.fingerprint)).toEqual(expectedFingerprints);
       expect(visibleFrameRenderable(frame, true)).toBe(true);
-      expect(geometryFrameFresh(frame.capturedAt, frame.capturedAt + 149)).toBe(true);
+      expect(frame.capturedAt).toBe(seq * 150);
     }
   });
 
@@ -239,6 +371,9 @@ describe("geometry/OCR capability separation", () => {
       source.indexOf("const identityProbeTick"),
     );
     expect(geometryTick).not.toContain("canRunOcr");
+    expect(source).toContain("advanceGeometrySurface(previousSurface, observation)");
+    expect(source).toContain("geometrySchedulerHealthy({");
+    expect(source).not.toContain("geometryFrameFresh(");
   });
 });
 

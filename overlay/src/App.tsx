@@ -103,14 +103,20 @@ import {
 } from "./visibleOfferFrame";
 import {
   GEOMETRY_INTERVAL_MS,
-  GEOMETRY_FRESHNESS_TTL_MS,
+  GEOMETRY_SCHEDULER_HEALTH_DEADLINE_MS,
   IDENTITY_RETRY_MS,
+  advanceGeometrySurface,
   buildGeometryVisibleFrame,
+  classifyGeometryObservation,
+  createGeometrySurfaceState,
   emptyGeometryObservation,
-  geometryFrameFresh,
+  geometrySchedulerHealthy,
   identityForSlot,
   newOfferDetected,
+  type GeometryClassification,
+  type GeometryHideReason,
   type GeometryObservation,
+  type GeometrySurfaceState,
   type IdentityRecord,
 } from "./surfaceGeometry";
 import { decideOcrTrigger } from "./ocrTrigger";
@@ -145,13 +151,48 @@ import {
 import "./App.css";
 
 // The geometry track runs the SAME self-healing scheduler as OCR (start / skip /
-// watchdog-restart) but on the fast cadence: presence/occlusion/freshness must
-// refresh sub-second, independent of a slow OCR pass. Timeout is the shared
+// watchdog-restart) but on the fast cadence: presence/occlusion/visual freshness
+// update independently of a slow OCR pass. Timeout is the shared
 // bounded watchdog so a wedged capture re-arms within one cycle.
 const GEOMETRY_PROBE_CONFIG: ProbeSchedulerConfig = {
   intervalMs: GEOMETRY_INTERVAL_MS,
   timeoutMs: PROBE_TIMEOUT_MS,
 };
+
+type GeometryDiagnosticHideReason = GeometryHideReason
+  | "ttl-expired"
+  | "foreground-lost"
+  | "probe-timeout"
+  | "other";
+
+interface GeometryProbeDiagnostic {
+  probeSeq: number;
+  scheduledAt: number;
+  startedAt: number;
+  captureStartedAt: number;
+  captureFinishedAt: number;
+  analysisFinishedAt: number;
+  publishedAt: number;
+  preCaptureMs: number;
+  captureMs: number;
+  nativeTotalMs: number;
+  ipcMs: number;
+  analysisMs: number;
+  totalProbeMs: number;
+  gapSincePreviousStartMs: number | null;
+  gapSincePreviousCompletedMs: number | null;
+  inFlightMs: number;
+  schedulerRestartCount: number;
+  classification: GeometryClassification;
+  present: boolean;
+  occluded: boolean;
+  confidence: number;
+  cards: GeometryObservation["cards"];
+  rejectionReasons: string[];
+  previousSurfaceState: "present" | "hidden";
+  nextSurfaceState: "present" | "hidden";
+  hiddenReason: GeometryDiagnosticHideReason | null;
+}
 
 // ─── Types ───
 
@@ -326,13 +367,14 @@ function App() {
   const probeRestartCountRef = useRef(0);
   const lastProbeSkipReasonRef = useRef<string>("idle");
   const lastProbeFailureReasonRef = useRef<string | null>(null);
-  // ─── Round-6 geometry track (the presence/occlusion/freshness AUTHORITY) ───
+  // ─── Round-6 geometry track (presence/occlusion/visual-freshness authority) ───
   // A cheap Rust pixel probe (probe_augment_surface) runs on its own fast
   // scheduler with its own single-in-flight guard, ownership token, seq, and
   // watchdog — a mirror of the OCR guards above so the two tracks never stall
   // each other. Geometry owns whether an offer is present, whether a modal has
-  // occluded it, and the capture clock the render gate ages against. OCR NEVER
-  // decides those; it only fills identity.
+  // occluded it, and the current card geometry/fingerprints. Scheduler health
+  // independently owns fail-closed expiry. OCR NEVER decides those; it only
+  // fills identity.
   const geometryInFlightRef = useRef(false);
   const geometryInFlightSinceRef = useRef<number | null>(null);
   const geometryInFlightTokenRef = useRef<number | null>(null);
@@ -340,6 +382,15 @@ function App() {
   const lastGeometryStartedAtRef = useRef<number | null>(null);
   const geometryRestartCountRef = useRef(0);
   const geometryObservationRef = useRef<GeometryObservation | null>(null);
+  const geometrySurfaceStateRef = useRef<GeometrySurfaceState>(
+    createGeometrySurfaceState(),
+  );
+  const lastGeometryCompletedAtRef = useRef<number | null>(null);
+  const geometryDiagnosticsRef = useRef<GeometryProbeDiagnostic[]>([]);
+  const lastRawGeometryClassificationRef = useRef<GeometryClassification | null>(null);
+  const lastGeometryRenderableRef = useRef(false);
+  const geometryFreshnessWarningSeqRef = useRef<number | null>(null);
+  const geometryExpiryWarningSeqRef = useRef<number | null>(null);
   // Render generation, bumped on each NEW offer (absent→present or a queued
   // round replacement) so chip keys reset between offers.
   const geometryGenerationRef = useRef(0);
@@ -427,10 +478,9 @@ function App() {
   // fold this to false and dead-code-eliminate the whole wire. See dev/datasetCapture.
   const datasetCaptureOn = import.meta.env.DEV && isDatasetCaptureEnabled();
   const lastFixtureInputRef = useRef<Omit<SurfaceFixtureInput, "timestamp" | "label"> | null>(null);
-  // Monotonic clock (performance.now()) refreshed every ~250 ms so the render
-  // gate re-checks the frame freshness TTL even when no probe publishes — a
-  // stalled/dead scheduler then fails closed (hides) instead of freezing.
-  const [renderClock, setRenderClock] = useState<number>(() => performance.now());
+  // Reactive scheduler-health gate. It remains true while a normal newer probe
+  // is in flight, then fails closed if probe activity exceeds the derived bound.
+  const [geometrySchedulerIsHealthy, setGeometrySchedulerIsHealthy] = useState(false);
   const lastGameTimeRef = useRef<number | null>(null);
   const lastRecordedRoundRef = useRef("");
   const [collectorStatus, setCollectorStatus] = useState<CollectorSnapshot | null>(null);
@@ -984,11 +1034,10 @@ function App() {
     !isPreviewMode &&
     effectiveMemberEnabled &&
     visibleFrameRenderable(visibleFrame, gameWindowForeground) &&
-    // Geometry freshness TTL: a positive frame renders only while its GEOMETRY
-    // capture is recent. renderClock forces this to re-run every ~250 ms, so the
-    // surface fails closed when the geometry scheduler stops refreshing it. This
-    // is decoupled from OCR duration — the exact blink fix.
-    geometryFrameFresh(visibleFrame?.capturedAt ?? null, renderClock, GEOMETRY_FRESHNESS_TTL_MS);
+    // Scheduler health, not the age of the last positive pixels, owns expiry.
+    // A valid frame therefore survives while the next normal probe is in flight,
+    // but still fails closed on a stalled scheduler, focus loss, or game exit.
+    geometrySchedulerIsHealthy;
   const previewBadgesReady =
     isPreviewMode && fixturePayload != null && previewCards.length === 3;
   const showBadgeLayer = realFrameRenderable || previewBadgesReady;
@@ -1099,8 +1148,14 @@ function App() {
       // the geometry seq stale-rejects any in-flight geometry probe too.
       identityStoreRef.current = [null, null, null];
       geometryObservationRef.current = null;
+      geometrySurfaceStateRef.current = createGeometrySurfaceState();
+      lastGeometryCompletedAtRef.current = null;
       ocrPendingSlotsRef.current = [];
     }
+    lastGeometryRenderableRef.current = false;
+    setGeometrySchedulerIsHealthy(false);
+    geometryFreshnessWarningSeqRef.current = null;
+    geometryExpiryWarningSeqRef.current = null;
     bumpScanSeq();
     geometrySeqRef.current += 1;
     publishEmptyVisibleFrame(scanSeqRef.current, performance.now());
@@ -1177,7 +1232,7 @@ function App() {
       }
       if (!nextForeground.gameWindowForeground && previousForeground.gameWindowForeground) {
         // Focus left the game: hide the surface immediately (the probe would
-        // skip anyway, but we must not wait out the freshness TTL on a blur).
+        // skip anyway, but we must not wait for the health clock on a blur).
         stopOcr();
       }
       return nextForeground;
@@ -1219,16 +1274,16 @@ function App() {
   // on catalog identity (an offer whose names are unknown is still an offer).
   const titlePresent = useCallback(() => true, []);
 
-  // ─── TRACK 1: geometry probe — presence / occlusion / freshness authority ───
+  // ─── TRACK 1: geometry probe — presence / occlusion / visual freshness ──────
   // A cheap Rust PIXEL probe classifies the surface (present / occluded / absent)
-  // and publishes the visible frame EVERY probe on the fast cadence. This is the
-  // blink fix: a static offer's freshness refreshes every ~150 ms regardless of
-  // how long OCR takes. It NEVER runs OCR — it only decides which slots the OCR
-  // track should (re)read. Its single-in-flight guard is released in `finally` on
-  // every path, and stale results are rejected by geometry seq + foreground epoch.
-  const runGeometryProbe = useCallback(async () => {
+  // and feeds a three-state hysteresis reducer. A single uncertain observation
+  // preserves the last accepted frame; explicit absence/occlusion clears. It
+  // NEVER runs OCR — it only decides which slots the OCR track should (re)read.
+  const runGeometryProbe = useCallback(async (scheduledAt: number) => {
     geometryInFlightRef.current = true;
     const startedAt = performance.now();
+    const previousStartedAt = lastGeometryStartedAtRef.current;
+    const previousCompletedAt = lastGeometryCompletedAtRef.current;
     geometryInFlightSinceRef.current = startedAt;
     lastGeometryStartedAtRef.current = startedAt;
     const captureSeq = (geometrySeqRef.current += 1);
@@ -1236,71 +1291,88 @@ function App() {
     const foregroundEpoch = foregroundEpochRef.current;
     const capturedAt = performance.now();
     try {
-      const observation = await invoke<GeometryObservation>("probe_augment_surface", {
-        probeSeq: captureSeq,
-        capturedAt,
-      });
+      let observation: GeometryObservation;
+      try {
+        observation = await invoke<GeometryObservation>("probe_augment_surface", {
+          probeSeq: captureSeq,
+          capturedAt,
+        });
+      } catch (error) {
+        const reason = error instanceof Error ? error.message : "geometry-probe-failed";
+        observation = emptyGeometryObservation(captureSeq, performance.now(), reason);
+      }
+      const completedAt = performance.now();
       // Stale-result rejection: apply only while this probe's seq is still newest
       // AND the foreground epoch it captured under is unchanged.
       if (captureSeq !== geometrySeqRef.current) return;
       if (foregroundEpoch !== foregroundEpochRef.current) return;
+      lastGeometryCompletedAtRef.current = completedAt;
+      setGeometrySchedulerIsHealthy(true);
 
-      if (import.meta.env.DEV) {
-        // Live p50/p95/p99 capture+analyze latency (compiled out of production).
-        const ring = geometryLatenciesRef.current;
-        ring.push(observation.elapsedMs);
-        if (ring.length > 200) ring.shift();
-        geometryProbeCountRef.current += 1;
-        if (geometryProbeCountRef.current % 40 === 0 && ring.length > 0) {
-          const sorted = [...ring].sort((a, b) => a - b);
-          const at = (q: number) => sorted[Math.min(sorted.length - 1, Math.floor(q * sorted.length))];
-          console.info(
-            `[geometry-latency] n=${sorted.length} p50=${at(0.5).toFixed(1)} ` +
-              `p95=${at(0.95).toFixed(1)} p99=${at(0.99).toFixed(1)} ms`,
-          );
-        }
-      }
-
-      const previous = geometryObservationRef.current;
-      geometryObservationRef.current = observation;
+      const previousSurface = geometrySurfaceStateRef.current;
+      const transition = advanceGeometrySurface(previousSurface, observation);
+      geometrySurfaceStateRef.current = transition.state;
+      geometryObservationRef.current = transition.action === "preserve"
+        ? previousSurface.visualObservation
+        : transition.action === "publish"
+          ? transition.state.visualObservation
+          : observation;
 
       // A NEW offer (absent→present or ≥2 slots swapped) bumps the render
       // generation; a queued-round REPLACEMENT (previous offer was present) is
       // strong round-completion evidence. A first appearance is NOT a completion.
-      if (newOfferDetected(previous, observation)) {
+      const publishedObservation = transition.state.visualObservation;
+      if (
+        transition.action === "publish" &&
+        publishedObservation != null &&
+        newOfferDetected(previousSurface.lastPositiveObservation, publishedObservation)
+      ) {
         geometryGenerationRef.current += 1;
-        if (previous?.present && !previous.occluded) recordRoundCompleted();
+        if (previousSurface.lastPositiveObservation != null) recordRoundCompleted();
       }
 
-      // Publish the visible frame from geometry presence + current identities.
+      // Publish/preserve/clear from the hysteresis result. A preserved uncertain
+      // frame retains its resolved chip content; geometry uncertainty alone never
+      // degrades the three slots to SCANNING.
       republishGeometryFrame(captureSeq);
+      const publishedAt = performance.now();
 
       // Phase follows the visible SURFACE: a present, unoccluded offer opens
-      // selection; an absent surface returns to in-game. Occlusion is transient
-      // (a modal over a live offer) — keep the phase and identities.
-      if (observation.present && !observation.occluded) {
+      // selection; confirmed absence returns to in-game. Occlusion is transient
+      // and an initial uncertainty is not evidence the selection closed.
+      if (transition.state.visualObservation != null) {
         if (phaseRef.current !== "augment_selection") {
           ocrSelectionCompletedRef.current = false;
           updatePhase("augment_selection");
         }
-      } else if (!observation.present && phaseRef.current === "augment_selection") {
+      } else if (
+        transition.hideReason !== "occluded" &&
+        transition.hideReason !== "uncertain-without-positive" &&
+        phaseRef.current === "augment_selection"
+      ) {
         ocrSelectionCompletedRef.current = true;
         updatePhase("in_game");
       }
 
       // Tell the OCR track which slots need a (re)read this cycle, keyed to the
       // live geometry fingerprints.
-      const decision = decideOcrTrigger<SlotResolution>({
-        observation,
-        identities: identityStoreRef.current,
-        now: performance.now(),
-        retryMs: IDENTITY_RETRY_MS,
-        forceSlots: forceOcrSlotsRef.current,
-      });
-      forceOcrSlotsRef.current = [];
-      ocrPendingSlotsRef.current = decision.slots;
-      if (decision.slots.length > 0) {
-        ocrTriggerFingerprintsRef.current = observation.cards.map((card) => card.fingerprint);
+      if (transition.action === "publish" && publishedObservation != null) {
+        const decision = decideOcrTrigger<SlotResolution>({
+          observation: publishedObservation,
+          identities: identityStoreRef.current,
+          now: performance.now(),
+          retryMs: IDENTITY_RETRY_MS,
+          forceSlots: forceOcrSlotsRef.current,
+        });
+        forceOcrSlotsRef.current = [];
+        ocrPendingSlotsRef.current = decision.slots;
+        if (decision.slots.length > 0) {
+          ocrTriggerFingerprintsRef.current = publishedObservation.cards.map(
+            (card) => card.fingerprint,
+          );
+        }
+      } else if (transition.action === "clear") {
+        ocrPendingSlotsRef.current = [];
       }
 
       if (datasetCaptureOn) {
@@ -1316,18 +1388,72 @@ function App() {
           rejectionReasons: observation.rejectionReasons,
         };
       }
-    } catch (error) {
-      if (captureSeq !== geometrySeqRef.current) return;
-      if (foregroundEpoch !== foregroundEpochRef.current) return;
-      // A geometry probe failure is screen-absence evidence: publish an empty
-      // frame so no chip survives, and stand the OCR track down.
-      const reason = error instanceof Error ? error.message : "geometry-probe-failed";
-      geometryObservationRef.current = emptyGeometryObservation(captureSeq, performance.now(), reason);
-      ocrPendingSlotsRef.current = [];
-      republishGeometryFrame(captureSeq);
-      if (phaseRef.current === "augment_selection") {
-        ocrSelectionCompletedRef.current = true;
-        updatePhase("in_game");
+
+      if (import.meta.env.DEV) {
+        const classification = classifyGeometryObservation(observation);
+        const totalProbeMs = publishedAt - startedAt;
+        const diagnostic: GeometryProbeDiagnostic = {
+          probeSeq: captureSeq,
+          scheduledAt,
+          startedAt,
+          captureStartedAt: startedAt + observation.preCaptureMs,
+          captureFinishedAt:
+            startedAt + observation.preCaptureMs + observation.captureMs,
+          analysisFinishedAt:
+            startedAt + observation.preCaptureMs + observation.captureMs + observation.analysisMs,
+          publishedAt,
+          preCaptureMs: observation.preCaptureMs,
+          captureMs: observation.captureMs,
+          nativeTotalMs: observation.elapsedMs,
+          ipcMs: Math.max(0, completedAt - startedAt - observation.elapsedMs),
+          analysisMs: observation.analysisMs,
+          totalProbeMs,
+          gapSincePreviousStartMs:
+            previousStartedAt == null ? null : startedAt - previousStartedAt,
+          gapSincePreviousCompletedMs:
+            previousCompletedAt == null ? null : completedAt - previousCompletedAt,
+          inFlightMs: completedAt - startedAt,
+          schedulerRestartCount: geometryRestartCountRef.current,
+          classification,
+          present: observation.present,
+          occluded: observation.occluded,
+          confidence: observation.confidence,
+          cards: observation.cards,
+          rejectionReasons: observation.rejectionReasons,
+          previousSurfaceState:
+            previousSurface.visualObservation == null ? "hidden" : "present",
+          nextSurfaceState:
+            transition.state.visualObservation == null ? "hidden" : "present",
+          hiddenReason: transition.action === "clear" ? transition.hideReason : null,
+        };
+        const diagnostics = geometryDiagnosticsRef.current;
+        diagnostics.push(diagnostic);
+        if (diagnostics.length > 200) diagnostics.shift();
+
+        const ring = geometryLatenciesRef.current;
+        ring.push(totalProbeMs);
+        if (ring.length > 200) ring.shift();
+        geometryProbeCountRef.current += 1;
+        const classificationChanged =
+          lastRawGeometryClassificationRef.current !== classification;
+        const chipsHidden =
+          diagnostic.previousSurfaceState === "present" &&
+          diagnostic.nextSurfaceState === "hidden";
+        if (classificationChanged || chipsHidden || totalProbeMs > 250) {
+          console.info("[geometry-probe]", JSON.stringify(diagnostic));
+        }
+        lastRawGeometryClassificationRef.current = classification;
+        if (geometryProbeCountRef.current % 40 === 0 && ring.length > 0) {
+          const sorted = [...ring].sort((a, b) => a - b);
+          const at = (q: number) => sorted[Math.min(
+            sorted.length - 1,
+            Math.floor(q * sorted.length),
+          )];
+          console.info(
+            `[geometry-full-latency] n=${sorted.length} p50=${at(0.5).toFixed(1)} ` +
+              `p95=${at(0.95).toFixed(1)} p99=${at(0.99).toFixed(1)} ms`,
+          );
+        }
       }
     } finally {
       // Release the guard ONLY if this probe still owns it (a watchdog restart
@@ -1341,7 +1467,7 @@ function App() {
   }, [datasetCaptureOn, recordRoundCompleted, republishGeometryFrame, updatePhase]);
 
   // ─── TRACK 2: OCR/identity probe — TRIGGERED by the geometry track ───────────
-  // Supplies per-slot identity ONLY: never presence, occlusion, or freshness. It
+  // Supplies per-slot identity ONLY: never presence, occlusion, or visual freshness. It
   // reads just the slots geometry flagged (new / reroll / retry / force) and
   // writes each result into the geometry-fingerprint-keyed identity store, so a
   // late result from a superseded generation can never paint the live card.
@@ -1626,6 +1752,7 @@ function App() {
   // branch IS the watchdog: a wedged geometry probe is invalidated (seq bumped →
   // late return stale-rejects), its guard reset, and a fresh probe starts.
   const geometryProbeTick = useCallback(() => {
+    const scheduledAt = performance.now();
     const action = nextProbeAction(
       {
         foreground: foregroundStateRef.current.gameWindowForeground,
@@ -1635,10 +1762,23 @@ function App() {
         lastProbeStartedAt: lastGeometryStartedAtRef.current,
       },
       GEOMETRY_PROBE_CONFIG,
-      performance.now(),
+      scheduledAt,
     );
     if (action.kind === "skip") return;
     if (action.kind === "restart") {
+      if (import.meta.env.DEV) {
+        console.info("[geometry-watchdog]", JSON.stringify({
+          probeSeq: geometrySeqRef.current,
+          scheduledAt,
+          inFlightSince: geometryInFlightSinceRef.current,
+          inFlightMs:
+            geometryInFlightSinceRef.current == null
+              ? null
+              : scheduledAt - geometryInFlightSinceRef.current,
+          schedulerRestartCount: geometryRestartCountRef.current + 1,
+          hiddenReason: "probe-timeout",
+        }));
+      }
       geometrySeqRef.current += 1;
       geometryInFlightRef.current = false;
       geometryInFlightSinceRef.current = null;
@@ -1646,9 +1786,9 @@ function App() {
       geometryRestartCountRef.current += 1;
     }
     // Geometry owns presence even when the OS OCR backend is unavailable. The
-    // native probe handles screen-capture failures as explicit absence, so OCR
-    // capability must never suppress this track.
-    void runGeometryProbe();
+    // native probe reports screen-capture failures explicitly (as uncertain,
+    // never confirmed combat), so OCR capability must never suppress this track.
+    void runGeometryProbe(scheduledAt);
   }, [runGeometryProbe]);
 
   // ─── TRACK 2 scheduler tick: the TRIGGERED OCR/identity probe ────────────────
@@ -1717,29 +1857,92 @@ function App() {
     return () => clearInterval(intervalId);
   }, []);
 
-  // Freshness re-evaluation clock: refresh renderClock every ~250 ms so the
-  // render gate re-runs geometryFrameFresh() and a positive frame fails closed
-  // once its GEOMETRY capture ages past the TTL — even if no new probe publishes.
-  // In DEV it also maintains the frame-age diagnostics (compiled out of prod).
+  // Scheduler-health clock: frame age is deliberately irrelevant while a newer
+  // probe is legitimately in flight. This clock fails closed only when geometry
+  // activity exceeds the derived health deadline (or foreground/game gates fail).
   useEffect(() => {
     const intervalId = setInterval(() => {
       const now = performance.now();
-      setRenderClock(now);
+      const inFlightSince = geometryInFlightSinceRef.current;
+      const healthy = geometrySchedulerHealthy({
+        now,
+        foreground: foregroundStateRef.current.gameWindowForeground,
+        activeGame: activeGameRef.current,
+        inFlightSince,
+        lastProbeStartedAt: lastGeometryStartedAtRef.current,
+        lastProbeCompletedAt: lastGeometryCompletedAtRef.current,
+      });
+      setGeometrySchedulerIsHealthy(healthy);
       if (import.meta.env.DEV) {
         const frame = visibleFrameRef.current;
-        const ageMs = frame ? now - frame.capturedAt : null;
+        const lastActivityAt = inFlightSince ?? Math.max(
+          lastGeometryStartedAtRef.current ?? Number.NEGATIVE_INFINITY,
+          lastGeometryCompletedAtRef.current ?? Number.NEGATIVE_INFINITY,
+        );
+        const ageMs = Number.isFinite(lastActivityAt) ? now - lastActivityAt : null;
+        const structurallyVisible =
+          frame != null &&
+          frame.surfaceValidated &&
+          foregroundStateRef.current.gameWindowForeground;
+        const renderable = structurallyVisible && healthy;
+        const probeSeq = geometrySeqRef.current;
+        if (
+          structurallyVisible &&
+          ageMs != null &&
+          ageMs >= GEOMETRY_SCHEDULER_HEALTH_DEADLINE_MS * 0.75 &&
+          geometryFreshnessWarningSeqRef.current !== probeSeq
+        ) {
+          geometryFreshnessWarningSeqRef.current = probeSeq;
+          console.info("[geometry-freshness-75]", JSON.stringify({
+            probeSeq,
+            ageMs,
+            deadlineMs: GEOMETRY_SCHEDULER_HEALTH_DEADLINE_MS,
+            inFlight: inFlightSince != null,
+          }));
+        }
+        if (
+          lastGeometryRenderableRef.current &&
+          !renderable &&
+          geometryExpiryWarningSeqRef.current !== probeSeq
+        ) {
+          geometryExpiryWarningSeqRef.current = probeSeq;
+          const hiddenReason: GeometryDiagnosticHideReason =
+            !foregroundStateRef.current.gameWindowForeground
+              ? "foreground-lost"
+              : inFlightSince != null && now - inFlightSince >= PROBE_TIMEOUT_MS
+                ? "probe-timeout"
+                : "ttl-expired";
+          console.info("[geometry-hidden]", JSON.stringify({
+            probeSeq,
+            hiddenReason,
+            ageMs,
+            deadlineMs: GEOMETRY_SCHEDULER_HEALTH_DEADLINE_MS,
+            inFlightMs: inFlightSince == null ? null : now - inFlightSince,
+            schedulerRestartCount: geometryRestartCountRef.current,
+          }));
+        }
+        lastGeometryRenderableRef.current = renderable;
         setOcrLifecycle((previous) => ({
           ...previous,
           frameAgeMs: ageMs,
-          frameHiddenByTtl:
-            frame != null &&
-            frame.surfaceValidated &&
-            ageMs != null &&
-            ageMs > GEOMETRY_FRESHNESS_TTL_MS,
+          frameHiddenByTtl: structurallyVisible && !healthy,
         }));
       }
-    }, Math.floor(GEOMETRY_FRESHNESS_TTL_MS / 2));
+    }, GEOMETRY_INTERVAL_MS);
     return () => clearInterval(intervalId);
+  }, []);
+
+  // Development-only rolling access to the last 200 complete geometry probes.
+  // The production build folds this branch away with all diagnostic strings.
+  useEffect(() => {
+    if (!import.meta.env.DEV) return;
+    const hooks = window as unknown as {
+      __getGeometryProbeDiagnostics?: () => GeometryProbeDiagnostic[];
+    };
+    hooks.__getGeometryProbeDiagnostics = () => [...geometryDiagnosticsRef.current];
+    return () => {
+      delete hooks.__getGeometryProbeDiagnostics;
+    };
   }, []);
 
   // DEV-ONLY, opt-in fixture capture (disabled by default). Exposes manual,

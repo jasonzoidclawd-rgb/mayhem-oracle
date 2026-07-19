@@ -647,7 +647,8 @@ async fn detect_augment_names(known_names: Option<Vec<String>>) -> Result<OcrSca
 }
 
 // ─── Geometry Surface Probe (pixel presence/occlusion; NO OCR) ──────────────
-// Round-6: presence/occlusion/freshness are decided from PIXELS here, not OCR.
+// Round-6: presence/occlusion/visual freshness are decided from PIXELS here,
+// not OCR. Scheduler health separately owns fail-closed expiry in the frontend.
 // This shares the OCR path's monitor/viewport selection but runs cheap CV
 // (surface_probe::analyze_surface) instead of the recognizer, so it can run on
 // a fast independent cadence while the slow OCR track only supplies identity.
@@ -680,6 +681,9 @@ fn absent_surface_observation(
             })
             .collect(),
         rejection_reasons: vec![reason.to_string()],
+        pre_capture_ms: elapsed_ms,
+        capture_ms: 0,
+        analysis_ms: 0,
         elapsed_ms,
     }
 }
@@ -717,17 +721,24 @@ async fn probe_augment_surface(
     let monitor_index = selected_monitor_index(&monitors, game_window.as_ref());
     let monitor = &monitors[monitor_index];
     let calibration = calibration::select_viewport(&monitor.info, game_window.as_ref());
+    let capture_started = std::time::Instant::now();
+    let pre_capture_ms = start.elapsed().as_millis() as u64;
     let screenshot = match monitor.monitor.capture_image() {
         Ok(screenshot) => screenshot,
         Err(error) => {
-            return Ok(absent_surface_observation(
+            let elapsed_ms = start.elapsed().as_millis() as u64;
+            let mut observation = absent_surface_observation(
                 probe_seq,
                 captured_at,
                 &format!("capture-failed: {}", error),
-                start.elapsed().as_millis() as u64,
-            ));
+                elapsed_ms,
+            );
+            observation.pre_capture_ms = pre_capture_ms;
+            observation.capture_ms = capture_started.elapsed().as_millis() as u64;
+            return Ok(observation);
         }
     };
+    let capture_ms = capture_started.elapsed().as_millis() as u64;
     let capture_width = screenshot.width();
     let capture_height = screenshot.height();
     // Map the calibrated LOGICAL viewport into capture-pixel space for CV, and
@@ -740,11 +751,21 @@ async fn probe_augment_surface(
         capture_height,
     );
     let name_band_rects = [
-        calibration::physical_rect_for_region(&calibration::CARD_NAME_REGIONS[0], &calibration.viewport),
-        calibration::physical_rect_for_region(&calibration::CARD_NAME_REGIONS[1], &calibration.viewport),
-        calibration::physical_rect_for_region(&calibration::CARD_NAME_REGIONS[2], &calibration.viewport),
+        calibration::physical_rect_for_region(
+            &calibration::CARD_NAME_REGIONS[0],
+            &calibration.viewport,
+        ),
+        calibration::physical_rect_for_region(
+            &calibration::CARD_NAME_REGIONS[1],
+            &calibration.viewport,
+        ),
+        calibration::physical_rect_for_region(
+            &calibration::CARD_NAME_REGIONS[2],
+            &calibration.viewport,
+        ),
     ];
     let dynamic = image::DynamicImage::ImageRgba8(screenshot);
+    let analysis_started = std::time::Instant::now();
     let mut observation = surface_probe::analyze_surface(
         &dynamic,
         &viewport_px,
@@ -753,6 +774,9 @@ async fn probe_augment_surface(
         captured_at,
         0,
     );
+    observation.pre_capture_ms = pre_capture_ms;
+    observation.capture_ms = capture_ms;
+    observation.analysis_ms = analysis_started.elapsed().as_millis() as u64;
     // Measure end-to-end native latency (capture + analysis) for instrumentation.
     observation.elapsed_ms = start.elapsed().as_millis() as u64;
     Ok(observation)

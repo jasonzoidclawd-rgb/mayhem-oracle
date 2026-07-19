@@ -5,15 +5,16 @@
  * things OCR must never decide:
  *   - present: is a three-card augment surface on screen right now;
  *   - occluded: is a dialog/scoreboard covering the offer (cards behind a panel);
- *   - freshness: the geometry capture clock the render gate ages against.
+ *   - visual freshness: the most recent accepted card rectangles/fingerprints.
  *
  * OCR is a separate, TRIGGERED track that only supplies per-slot identity. This
- * split fixes the live failures: a static offer no longer blinks (fast geometry
- * refreshes freshness every ~150 ms instead of waiting on a slow OCR pass), OCR
- * false-negatives on unchanged pixels no longer drop presence, and the AFK modal
+ * split fixes the live failures: confidence hysteresis preserves a positive
+ * static offer through one uncertain observation, and scheduler health keeps
+ * that frame renderable while a normal newer probe is in flight. OCR false-
+ * negatives on unchanged pixels never drop presence, and the AFK modal
  * (readable card text behind it) is classified occluded → zero chips.
  *
- * Every value here is pure so the presence/occlusion/freshness/reroll rules are
+ * Every value here is pure so presence/occlusion/health/reroll rules are
  * unit-tested without timers, IPC, or React. Mirrors the Rust SurfaceObservation
  * (serde camelCase).
  */
@@ -27,12 +28,17 @@ import {
 /** Fast geometry cadence — sub-second detection, independent of slow OCR. */
 export const GEOMETRY_INTERVAL_MS = 150;
 /**
- * A positive geometry frame older than this hides (fails closed). Tied to the
- * GEOMETRY cadence, NOT OCR duration: max(3× interval, measured p99 + margin).
- * At 150 ms cadence, 3× = 450 ms tolerates two missed geometry probes before a
- * static offer's chips drop — while a healthy scheduler refreshes it every tick.
+ * Longest full-probe duration treated as healthy by the deterministic latency
+ * matrix. The live rolling diagnostics collect the actual capture+analysis+IPC+
+ * publication distribution; this bound deliberately covers its 1 s test case.
  */
-export const GEOMETRY_FRESHNESS_TTL_MS = 500;
+export const GEOMETRY_FULL_PROBE_P99_BUDGET_MS = 1000;
+export const GEOMETRY_HEALTH_SAFETY_MARGIN_MS = 250;
+/** Scheduler health, never frame age, owns fail-closed expiry. */
+export const GEOMETRY_SCHEDULER_HEALTH_DEADLINE_MS = Math.max(
+  3 * GEOMETRY_INTERVAL_MS,
+  GEOMETRY_FULL_PROBE_P99_BUDGET_MS + GEOMETRY_HEALTH_SAFETY_MARGIN_MS,
+);
 /**
  * Two fingerprints (144-bit average-hash bitstrings) are "the same card" within
  * this Hamming tolerance. Identical pixels hash to distance 0; different augments
@@ -57,7 +63,7 @@ export interface GeometryCard {
   fingerprint: string;
 }
 
-/** One geometry probe result — presence/occlusion/freshness authority. */
+/** One geometry probe result — presence/occlusion/visual-freshness authority. */
 export interface GeometryObservation {
   probeSeq: number;
   capturedAt: number;
@@ -68,7 +74,38 @@ export interface GeometryObservation {
   confidence: number;
   cards: GeometryCard[];
   rejectionReasons: string[];
+  preCaptureMs: number;
+  captureMs: number;
+  analysisMs: number;
   elapsedMs: number;
+}
+
+export type GeometryClassification = "present" | "uncertain" | "absent";
+export type GeometryHideReason =
+  | "confirmed-absent"
+  | "confirmed-weak-negative"
+  | "occluded"
+  | "uncertain-without-positive";
+
+export interface GeometrySurfaceState {
+  visualObservation: GeometryObservation | null;
+  lastPositiveObservation: GeometryObservation | null;
+  consecutiveWeakNegatives: number;
+}
+
+export interface GeometrySurfaceTransition {
+  state: GeometrySurfaceState;
+  classification: GeometryClassification;
+  action: "publish" | "preserve" | "clear";
+  hideReason: GeometryHideReason | null;
+}
+
+export function createGeometrySurfaceState(): GeometrySurfaceState {
+  return {
+    visualObservation: null,
+    lastPositiveObservation: null,
+    consecutiveWeakNegatives: 0,
+  };
 }
 
 export function emptyGeometryObservation(
@@ -96,6 +133,9 @@ export function emptyGeometryObservation(
       fingerprint: "",
     })),
     rejectionReasons: [reason],
+    preCaptureMs: 0,
+    captureMs: 0,
+    analysisMs: 0,
     elapsedMs: 0,
   };
 }
@@ -119,6 +159,131 @@ export function fingerprintChanged(previous: string, current: string): boolean {
 }
 
 /**
+ * Three-way raw classification. Zero structures are confirmed absent only when
+ * native capture and analysis actually completed; a capture/IPC failure has no
+ * pixels and is uncertain. Occlusion is an orthogonal immediate-clear.
+ */
+export function classifyGeometryObservation(
+  observation: GeometryObservation,
+): GeometryClassification {
+  const strongCards = observation.cards.filter((card) => card.present).length;
+  if (strongCards >= 2) return "present";
+  if (
+    strongCards === 0 &&
+    observation.captureWidth > 0 &&
+    observation.captureHeight > 0
+  ) {
+    return "absent";
+  }
+  return "uncertain";
+}
+
+function stabilizePresentObservation(
+  previous: GeometryObservation | null,
+  current: GeometryObservation,
+): GeometryObservation {
+  if (previous == null) return current;
+  return {
+    ...current,
+    cards: current.cards.map((card, regionIndex) => {
+      if (card.present) return card;
+      const old = previous.cards[regionIndex];
+      if (
+        old?.present &&
+        !fingerprintChanged(old.fingerprint, card.fingerprint)
+      ) {
+        return old;
+      }
+      return card;
+    }),
+  };
+}
+
+/**
+ * Confidence hysteresis for the visual geometry surface.
+ *
+ * - ≥2 strong cards enters/remains present.
+ * - 1 strong card is uncertain: preserve one completed cycle, clear on two.
+ * - 0 strong cards is high-confidence absence and clears immediately.
+ * - explicit occlusion always clears immediately.
+ *
+ * Preserving uses the last accepted geometry observation, so resolved chips do
+ * not degrade to SCANNING merely because a borderline probe was uncertain.
+ */
+export function advanceGeometrySurface(
+  previous: GeometrySurfaceState,
+  observation: GeometryObservation,
+): GeometrySurfaceTransition {
+  const classification = classifyGeometryObservation(observation);
+  if (observation.occluded) {
+    return {
+      classification,
+      action: "clear",
+      hideReason: "occluded",
+      state: {
+        visualObservation: null,
+        lastPositiveObservation: previous.lastPositiveObservation,
+        consecutiveWeakNegatives: 0,
+      },
+    };
+  }
+  if (classification === "present") {
+    const stabilized = stabilizePresentObservation(
+      previous.lastPositiveObservation,
+      observation,
+    );
+    return {
+      classification,
+      action: "publish",
+      hideReason: null,
+      state: {
+        visualObservation: stabilized,
+        lastPositiveObservation: stabilized,
+        consecutiveWeakNegatives: 0,
+      },
+    };
+  }
+  if (classification === "absent") {
+    return {
+      classification,
+      action: "clear",
+      hideReason: "confirmed-absent",
+      state: {
+        visualObservation: null,
+        lastPositiveObservation: null,
+        consecutiveWeakNegatives: 0,
+      },
+    };
+  }
+
+  const weakCount = previous.consecutiveWeakNegatives + 1;
+  if (previous.visualObservation != null && weakCount < 2) {
+    return {
+      classification,
+      action: "preserve",
+      hideReason: null,
+      state: {
+        visualObservation: previous.visualObservation,
+        lastPositiveObservation: previous.lastPositiveObservation,
+        consecutiveWeakNegatives: weakCount,
+      },
+    };
+  }
+  return {
+    classification,
+    action: "clear",
+    hideReason: previous.visualObservation == null
+      ? "uncertain-without-positive"
+      : "confirmed-weak-negative",
+    state: {
+      visualObservation: null,
+      lastPositiveObservation: null,
+      consecutiveWeakNegatives: weakCount,
+    },
+  };
+}
+
+/**
  * The offer is a NEW offer relative to the previous observation when it went
  * absent→present, or when ≥2 slots changed fingerprint while staying present
  * (a queued round replaced the completed one). A single-slot change is a reroll.
@@ -139,17 +304,30 @@ export function newOfferDetected(
 }
 
 /**
- * Geometry freshness gate. A positive frame renders only while its GEOMETRY
- * capture is within the TTL. A stalled geometry scheduler stops refreshing
- * `capturedAt`, so the UI fails closed instead of freezing the last surface.
- * This replaces the invalid OCR-completion TTL that caused the blinking.
+ * Scheduler-health render gate. A valid frame remains visible while a newer
+ * probe is legitimately in flight; its old capture timestamp cannot expire the
+ * frame. Foreground/game loss is immediate, and a silent or over-budget
+ * scheduler fails closed at the derived health deadline.
  */
-export function geometryFrameFresh(
-  capturedAt: number | null,
-  now: number,
-  ttlMs: number = GEOMETRY_FRESHNESS_TTL_MS,
-): boolean {
-  return capturedAt != null && now - capturedAt <= ttlMs;
+export function geometrySchedulerHealthy(input: {
+  now: number;
+  foreground: boolean;
+  activeGame: boolean;
+  inFlightSince: number | null;
+  lastProbeStartedAt: number | null;
+  lastProbeCompletedAt: number | null;
+  healthDeadlineMs?: number;
+}): boolean {
+  if (!input.foreground || !input.activeGame) return false;
+  const deadline = input.healthDeadlineMs ?? GEOMETRY_SCHEDULER_HEALTH_DEADLINE_MS;
+  if (input.inFlightSince != null) {
+    return input.now - input.inFlightSince <= deadline;
+  }
+  const lastActivity = Math.max(
+    input.lastProbeStartedAt ?? Number.NEGATIVE_INFINITY,
+    input.lastProbeCompletedAt ?? Number.NEGATIVE_INFINITY,
+  );
+  return Number.isFinite(lastActivity) && input.now - lastActivity <= deadline;
 }
 
 /** A per-slot identity resolved by the OCR track, keyed to a geometry fingerprint. */

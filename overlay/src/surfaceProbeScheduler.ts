@@ -22,8 +22,6 @@
 export const PROBE_INTERVAL_MS = 250;
 /** A probe held longer than this is considered stuck; the watchdog restarts it. */
 export const PROBE_TIMEOUT_MS = 2000;
-/** A rendered frame older than this hides — a dead scheduler fails closed. */
-export const FRAME_FRESHNESS_TTL_MS = 500;
 
 export interface ProbeSchedulerState {
   /** Actual GameClient foreground (fresh this tick). */
@@ -75,13 +73,4 @@ export function nextProbeAction(
     return { kind: "start" };
   }
   return { kind: "skip", reason: "not-due" };
-}
-
-/** True while a positive frame is still within its freshness TTL. */
-export function frameWithinTtl(
-  capturedAt: number | null,
-  now: number,
-  ttlMs: number = FRAME_FRESHNESS_TTL_MS,
-): boolean {
-  return capturedAt != null && now - capturedAt <= ttlMs;
 }
