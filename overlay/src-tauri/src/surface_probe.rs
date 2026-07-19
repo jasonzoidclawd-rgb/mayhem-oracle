@@ -35,10 +35,10 @@ const CARD_HALF_W: f64 = 0.080;
 const CARD_TOP: f64 = 0.174;
 const CARD_BOTTOM: f64 = 0.667;
 
-// Interior sample: the lower-centre dead zone of the card, which is a near-black
-// dark-teal fill (very dark, very flat) on every offer and never so on combat.
+// Interior sample: the lower-centre dead zone of the card, below quest/reward
+// copy. It is a near-black, flat fill on every offer and never so on combat.
 const INTERIOR_HALF_W: f64 = 0.045;
-const INTERIOR_TOP: f64 = 0.54;
+const INTERIOR_TOP: f64 = 0.56;
 const INTERIOR_BOTTOM: f64 = 0.62;
 
 // Frame side strips: thin vertical slivers at the card's left/right borders,
@@ -58,11 +58,12 @@ const GAP2_X1: f64 = 0.612;
 const GAP_TOP: f64 = 0.24;
 const GAP_BOTTOM: f64 = 0.50;
 
-// Fingerprint window: the discriminative icon+name band. A coarse full-card hash
-// is dominated by the identical frame; this window changes strongly per augment.
-const FP_HALF_W: f64 = 0.075;
-const FP_TOP: f64 = 0.195;
-const FP_BOTTOM: f64 = 0.445;
+// Fingerprint window: the static centre of the icon+name band, excluding the
+// animated frame and portrait ornaments. Live animation drift is <=6 bits while
+// distinct slots in the labeled offers remain >=16 bits apart.
+const FP_HALF_W: f64 = 0.050;
+const FP_TOP: f64 = 0.220;
+const FP_BOTTOM: f64 = 0.430;
 const FP_GRID: usize = 12; // 12×12 = 144-bit average hash
 
 // ─── Thresholds (locked with margin from labeled fixtures) ─────────────────
@@ -208,7 +209,13 @@ impl LumaImage {
     /// 144-bit average hash of the icon+name window: FP_GRID×FP_GRID cell means,
     /// each bit set when its cell exceeds the window median.
     fn fingerprint(&self, viewport: &Rect, cx: f64) -> String {
-        let (x0, y0, x1, y1) = self.region_px(viewport, cx - FP_HALF_W, FP_TOP, cx + FP_HALF_W, FP_BOTTOM);
+        let (x0, y0, x1, y1) = self.region_px(
+            viewport,
+            cx - FP_HALF_W,
+            FP_TOP,
+            cx + FP_HALF_W,
+            FP_BOTTOM,
+        );
         let w = x1.saturating_sub(x0);
         let h = y1.saturating_sub(y0);
         if w == 0 || h == 0 {
@@ -442,20 +449,20 @@ mod tests {
         let cases = [
             (
                 "live-blink/offer-a-105715-0.png",
-                0.9224,
+                0.9221,
                 [
-                    (12.9257, 1.1238, 109.9109),
-                    (12.9248, 1.1239, 109.7117),
-                    (12.9164, 1.1251, 112.4532),
+                    (12.9687, 1.1279, 109.8679),
+                    (12.9676, 1.1281, 109.6689),
+                    (12.9599, 1.1292, 112.4096),
                 ],
             ),
             (
                 "live-blink/offer-a-105716.png",
-                0.9179,
+                0.9176,
                 [
-                    (12.9257, 1.1238, 109.4784),
-                    (12.9248, 1.1239, 109.1198),
-                    (12.9164, 1.1251, 111.8498),
+                    (12.9687, 1.1279, 109.4353),
+                    (12.9676, 1.1281, 109.0771),
+                    (12.9599, 1.1292, 111.8062),
                 ],
             ),
         ];
@@ -522,6 +529,84 @@ mod tests {
                         slot,
                     );
                 }
+            }
+        }
+    }
+
+    #[test]
+    fn round7_live_frames_keep_all_three_slots_structurally_stable() {
+        let frames = [
+            "live-round7/offer-purple-30310.png",
+            "live-round7/offer-purple-30312.png",
+            "live-round7/offer-purple-30314.png",
+            "live-round7/offer-gold-30741.png",
+            "live-round7/offer-gold-30748.png",
+            "live-round7/offer-silver-31259.png",
+            "live-round7/offer-gold-31557.png",
+        ];
+        let observations = frames.map(|name| {
+            let observation = analyze_live_crop(name);
+            eprintln!(
+                "[round7] {} present={} occluded={} confidence={:.4} metrics={:?}",
+                name,
+                observation.present,
+                observation.occluded,
+                observation.confidence,
+                observation.cards.iter().map(|card| (
+                    card.interior_luma,
+                    card.interior_std,
+                    card.frame_contrast,
+                    card.structural_score,
+                    card.present,
+                )).collect::<Vec<_>>(),
+            );
+            observation
+        });
+        for (frame, observation) in frames.iter().zip(&observations) {
+            assert!(observation.present, "{}: {:?}", frame, observation.rejection_reasons);
+            assert!(!observation.occluded, "{}", frame);
+            assert_eq!(
+                observation.cards.iter().filter(|card| card.present).count(),
+                3,
+                "{} must keep all three current slots",
+                frame,
+            );
+        }
+        for sequence in [[0, 1, 2].as_slice(), [3, 4].as_slice()] {
+            for pair in sequence.windows(2) {
+                for slot in 0..3 {
+                    assert!(
+                        hamming(
+                            &observations[pair[0]].cards[slot].fingerprint,
+                            &observations[pair[1]].cards[slot].fingerprint,
+                        ) <= 8,
+                        "{} -> {} slot{} fingerprint drift",
+                        frames[pair[0]],
+                        frames[pair[1]],
+                        slot,
+                    );
+                }
+            }
+        }
+
+        // Quest/reward copy animated inside the old sample on the first card.
+        // The corrected dead zone remains flat in both consecutive frames.
+        assert!(observations[3].cards[0].interior_std < 2.0);
+        assert!(observations[4].cards[0].interior_std < 2.0);
+
+        // Narrowing the window for animation must not collapse real identities.
+        for (frame, observation) in frames.iter().zip(&observations) {
+            for (left, right) in [(0, 1), (0, 2), (1, 2)] {
+                assert!(
+                    hamming(
+                        &observation.cards[left].fingerprint,
+                        &observation.cards[right].fingerprint,
+                    ) > 8,
+                    "{} slots {} and {} must remain distinct",
+                    frame,
+                    left,
+                    right,
+                );
             }
         }
     }
