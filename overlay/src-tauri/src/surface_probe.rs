@@ -572,6 +572,26 @@ mod tests {
                 frame,
             );
         }
+
+        for probe_seq in 0..500 {
+            let frame = frames[probe_seq % frames.len()];
+            let observation = analyze_live_crop(frame);
+            assert!(
+                observation.present && !observation.occluded,
+                "probe {} {}: {:?}",
+                probe_seq,
+                frame,
+                observation.rejection_reasons,
+            );
+            assert_eq!(
+                observation.cards.iter().filter(|card| card.present).count(),
+                3,
+                "probe {} {} must keep all three slots",
+                probe_seq,
+                frame,
+            );
+        }
+
         for sequence in [[0, 1, 2].as_slice(), [3, 4].as_slice()] {
             for pair in sequence.windows(2) {
                 for slot in 0..3 {
