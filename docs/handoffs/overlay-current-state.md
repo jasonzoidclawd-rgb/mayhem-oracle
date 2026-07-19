@@ -4,6 +4,38 @@ This file captures recent overlay findings so future agents do not rediscover
 them from screenshots, terminal history, or old handoffs. It is context only.
 Do not treat it as permission to change runtime behavior without a task.
 
+## Champion-Conditional ARAMGG Stats + LCU Shape Probe (2026-07-20, PR #46 round 8)
+
+- The dev/test ARAMGG path now parses each augment's sparse `top_champions`
+  rows and selects by Riot's numeric champion key. `scripts/scrape_base_stats.py`
+  joins that key by canonical champion identity (never localized display text),
+  and the generated internal/public/overlay champion catalogs carry
+  `champion_key`. A champion hit renders the champion row; a miss renders the
+  augment-wide row. Both the chip (`CHAMP` / `GLOBAL`) and dev diagnostics name
+  the provenance. Production still aliases every `src/dev/*` module to inert
+  stubs, so the release decision-engine behavior is unchanged.
+- Live ARAMGG raw data measured on 2026-07-20 (patch 16.14, dated 2026-07-18):
+  206 augment rows, 1,015 valid top-champion rows, 0 malformed rows, 166 unique
+  champions. This is 2.8481% of the 206×173 augment/champion matrix; every
+  uncovered cell deliberately falls back to the labeled global record.
+- The collector's unverified real LCU augment-field contract remains a hard
+  gate before persistent round matching or schema-v2 work. Debug builds now
+  emit one privacy-bounded `[collector-lcu-shape]` JSON line when the consented
+  collector fetches an owned queue-2400 match detail. It contains only queue ID,
+  augment-named field paths/value kinds/values, and the current parser output—
+  never game ID, PUUID, Riot ID, summoner name, chat, or unrelated stats. The
+  code and marker are compiled out of release builds.
+- Phase B (blue hide/show control) is still blocked on new user-captured,
+  full-frame labeled fixtures. Phase C2 onward remains blocked until one real
+  shape line proves the match-detail field name and string-vs-numeric format.
+  Do not invent either contract from the synthetic fixture.
+
+Safe user-run capture command (does not upload and does not automate League):
+
+```bash
+cd /Users/jason/Desktop/mayhem-oracle/.claude/worktrees/overlay-tier-card/overlay && env -u MAYHEM_TELEMETRY_ENDPOINT -u MAYHEM_DEVICE_TOKEN MAYHEM_OVERLAY_TIER_FIXTURE=1 npm run tauri -- dev 2>&1 | /usr/bin/grep --line-buffered -F '[collector-lcu-shape]'
+```
+
 ## Two-Stage Decoupling + Self-Healing 250 ms Scheduler (2026-07-18, PR #46 round 5)
 
 Round-4 still failed a timed GUI retest: stale placeholders flashed over combat
