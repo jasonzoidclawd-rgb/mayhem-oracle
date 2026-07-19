@@ -53,6 +53,13 @@ export interface AramggStat {
   tierLetter: TierLetter;
   /** Decision grade whose `tierForGrade` yields the same letter. */
   grade: DecisionGrade;
+  /** Whether this row is the augment-wide value or an ARAMGG top-champion row. */
+  provenance: "global" | "champion";
+  /** Numeric Riot champion key for champion rows; null for the global row. */
+  championId: string | null;
+  championRank: string | null;
+  /** Sparse ARAMGG top-champion rows, keyed by numeric Riot champion ID. */
+  topChampionsById: Map<string, AramggStat>;
 }
 
 export interface AramggCatalogEntry {
@@ -361,9 +368,11 @@ export function normalizeName(name: string | null | undefined): string | null {
 export function parseStatsList(raw: unknown): {
   stats: Map<string, AramggStat>;
   skipped: number;
+  skippedChampionStats: number;
 } {
   const stats = new Map<string, AramggStat>();
   let skipped = 0;
+  let skippedChampionStats = 0;
   if (!Array.isArray(raw)) {
     throw new Error("parseStatsList: expected a JSON array");
   }
@@ -400,7 +409,7 @@ export function parseStatsList(raw: unknown): {
         continue;
       }
       const tier = parseNumericTier(tierRaw); // throws on malformed → caught
-      stats.set(augmentId, {
+      const globalStat: AramggStat = {
         augmentId,
         rawWinRate,
         winRatePercent: decimalShiftPercent(rawWinRate), // throws → caught
@@ -409,12 +418,71 @@ export function parseStatsList(raw: unknown): {
         tier,
         tierLetter: TIER_LETTER_BY_NUM[tier],
         grade: GRADE_BY_NUM[tier],
-      });
+        provenance: "global",
+        championId: null,
+        championRank: null,
+        topChampionsById: new Map(),
+      };
+
+      if (Array.isArray(parsed.top_champions)) {
+        for (const candidate of parsed.top_champions) {
+          if (candidate === null || typeof candidate !== "object") {
+            skippedChampionStats++;
+            continue;
+          }
+          try {
+            const champion = candidate as Record<string, unknown>;
+            const championId = String(champion.champion_id ?? "");
+            const championRank = String(champion.champion_rank ?? "");
+            const championWinRate = champion.win_rate;
+            const championNumGames = champion.num_games;
+            const championTierRaw = champion.tier;
+            if (
+              !/^\d+$/.test(championId) ||
+              championRank.length === 0 ||
+              typeof championWinRate !== "string" ||
+              typeof championNumGames !== "string" ||
+              typeof championTierRaw !== "string"
+            ) {
+              skippedChampionStats++;
+              continue;
+            }
+            const championTier = parseNumericTier(championTierRaw);
+            globalStat.topChampionsById.set(championId, {
+              augmentId,
+              rawWinRate: championWinRate,
+              winRatePercent: decimalShiftPercent(championWinRate),
+              numGames: championNumGames,
+              pickRate: typeof champion.pick_rate === "string" ? champion.pick_rate : "",
+              tier: championTier,
+              tierLetter: TIER_LETTER_BY_NUM[championTier],
+              grade: GRADE_BY_NUM[championTier],
+              provenance: "champion",
+              championId,
+              championRank,
+              topChampionsById: new Map(),
+            });
+          } catch {
+            skippedChampionStats++;
+          }
+        }
+      }
+
+      stats.set(augmentId, globalStat);
     } catch {
       skipped++;
     }
   }
-  return { stats, skipped };
+  return { stats, skipped, skippedChampionStats };
+}
+
+/** Select the sparse champion row when ARAMGG publishes one, else the global row. */
+export function selectAramggStat(
+  globalStat: AramggStat,
+  championKey: string | null | undefined,
+): AramggStat {
+  if (!championKey) return globalStat;
+  return globalStat.topChampionsById.get(championKey) ?? globalStat;
 }
 
 // ─── Pure: build catalog index ───

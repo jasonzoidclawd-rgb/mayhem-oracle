@@ -253,6 +253,7 @@ interface SlotChip {
   tier: TierLetter | null;
   winRateText: string | null;
   isNew: boolean;
+  statScope: "champion" | "global" | null;
 }
 
 /**
@@ -291,6 +292,7 @@ interface OverlayAugment {
 
 interface OverlayChampion {
   slug: string;
+  champion_key: string;
   name: string;
   name_zh_TW?: string;
   name_zh_CN?: string;
@@ -927,6 +929,7 @@ function App() {
   const aramgg = useAramggTierFixture(
     tierFixtureOn || geometryPreviewOn,
     overlayData?.augments,
+    overlayData?.champions.find((champion) => champion.slug === championSlug)?.champion_key ?? null,
   );
   // Ref so the OCR loop always resolves against the freshest ARAMGG source
   // without re-creating the scan callback when the source loads.
@@ -1058,6 +1061,7 @@ function App() {
             fixturePayload.winRateDisplayBySlug[card.augment.slug],
           ),
           isNew: card.augment.lifecycle === "added",
+          statScope: aramgg.resolvedBySlug.get(card.augment.slug)?.stat.provenance ?? null,
         }];
       });
     }
@@ -1074,7 +1078,7 @@ function App() {
         // Geometry confirms a card here, but its identity is pending (fresh
         // trigger, reroll re-read in flight, or unreadable) — show SCANNING, not
         // nothing: the chip must never vanish merely because OCR hasn't caught up.
-        return [{ ...base, state: "scanning", tier: null, winRateText: null, isNew: false }];
+        return [{ ...base, state: "scanning", tier: null, winRateText: null, isNew: false, statScope: null }];
       }
       const staged = slot.resolution?.aramgg;
       if (staged) {
@@ -1087,18 +1091,19 @@ function App() {
             // "59.2%"); the raw value stays on the stat for diagnostics.
             winRateText: compactWinRateFromFraction(staged.stat.rawWinRate),
             isNew: slot.resolution?.pool?.lifecycle === "added",
+            statScope: staged.stat.provenance,
           }];
         }
         if (staged.kind === "no-data") {
           // Riot identity resolved, but ARAMGG carries no stat record.
-          return [{ ...base, state: "no-data", tier: null, winRateText: null, isNew: false }];
+          return [{ ...base, state: "no-data", tier: null, winRateText: null, isNew: false, statScope: null }];
         }
-        return [{ ...base, state: "unmatched", tier: null, winRateText: null, isNew: false }];
+        return [{ ...base, state: "unmatched", tier: null, winRateText: null, isNew: false, statScope: null }];
       }
       // Engine path (no dev fixture): the local-catalog match backs the chip.
       const pool = slot.resolution?.pool ?? null;
       if (!pool) {
-        return [{ ...base, state: "unmatched", tier: null, winRateText: null, isNew: false }];
+        return [{ ...base, state: "unmatched", tier: null, winRateText: null, isNew: false, statScope: null }];
       }
       const candidate = decisionResult?.candidates.find(
         (entry) => entry.augmentSlug === pool.slug,
@@ -1109,6 +1114,7 @@ function App() {
         tier: candidate ? tierForGrade(candidate.grade) : pool.tier,
         winRateText: compactWinRateFromPercent(pool.win_rate),
         isNew: pool.lifecycle === "added",
+        statScope: null,
       }];
     });
   }, [previewBadgesReady, fixturePayload, previewCards, realFrameRenderable, visibleFrame, decisionResult]);
@@ -2308,7 +2314,7 @@ function App() {
               <div
                 className={`badge-chip ${chip.tier ? tierClassName(chip.tier) : ""}${
                   isPreviewMode ? " badge-preview" : ""
-                }`}
+                }${chip.statScope ? " badge-chip-scoped" : ""}`}
                 key={chip.key}
                 style={{ left: pos.left, top: pos.top }}
               >
@@ -2316,6 +2322,11 @@ function App() {
                   <span className="preview-watermark">PREVIEW</span>
                 )}
                 {chip.isNew && <span className="badge-new">NEW</span>}
+                {chip.statScope && (
+                  <span className={`badge-stat-scope badge-stat-scope-${chip.statScope}`}>
+                    {chip.statScope === "champion" ? "CHAMP" : "GLOBAL"}
+                  </span>
+                )}
                 <span
                   className={`badge-tier${
                     chip.tier && chip.tier.length > 1 ? " badge-tier-two-char" : ""

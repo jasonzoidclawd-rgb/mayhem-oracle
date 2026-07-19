@@ -288,7 +288,8 @@ export function DevOverlayDiagnostics({
                           ? `${row.method} (LAST-RESORT fallback)`
                           : row.method}{" "}
                         · wr={row.rawWinRate} → {row.winRatePercent}% · n=
-                        {row.numGames} · tier {row.upstreamTier}→{row.cardTier}
+                        {row.numGames} · scope={row.statProvenance}
+                        {row.championId && ` (#${row.championId})`} · tier {row.upstreamTier}→{row.cardTier}
                       </div>
                     );
                   })}

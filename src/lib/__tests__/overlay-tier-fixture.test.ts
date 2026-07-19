@@ -22,6 +22,7 @@ import {
   parseNumericTier,
   parseStatsList,
   resolveAugmentId,
+  selectAramggStat,
   resolveOcrTitle,
   type AramggRaws,
   type AramggStat,
@@ -81,7 +82,34 @@ const CATALOG_ZH_TW = {
 };
 
 const STATS_RAW = [
-  ["1001", JSON.stringify({ win_rate: "0.563213", num_games: "988166", pick_rate: "0.008409", tier: "2" })],
+  ["1001", JSON.stringify({
+    win_rate: "0.563213",
+    num_games: "988166",
+    pick_rate: "0.008409",
+    tier: "2",
+    top_champions: [
+      {
+        champion_rank: "1",
+        champion_id: "30",
+        win_rate: "0.533",
+        num_games: "20000",
+        pick_rate: "0.01",
+        tier: "1",
+      },
+      {
+        champion_rank: "2",
+        champion_id: "54",
+        win_rate: "0.49",
+        num_games: "13595",
+        pick_rate: "0.009",
+        tier: "2",
+      },
+      { champion_rank: "bad", champion_id: "not-numeric", win_rate: 0.5 },
+    ],
+    augment_stage_stats: [
+      { augment_stage: "1", win_rate: "0.51", num_games: "123" },
+    ],
+  })],
   // length-5 entry: blob at index 1, trailing metadata (mirrors observed data)
   ["1002", JSON.stringify({ win_rate: "0.5", num_games: "60000", tier: "1" }), "m1", "m2", "m3"],
   ["1006", JSON.stringify({ win_rate: "0.641955", num_games: "1903216", pick_rate: "0.02", tier: "1" })],
@@ -177,6 +205,45 @@ describe("overlay ARAMGG tier fixture (dev-only)", () => {
       expect(stats.has("1009")).toBe(false); // bad tier
       expect(stats.has("1010")).toBe(false); // no blob
       expect(skipped).toBeGreaterThanOrEqual(3);
+    });
+    test("parses real-shaped top_champions and skips malformed children", () => {
+      const { stats, skippedChampionStats } = parseStatsList(STATS_RAW);
+      const global = stats.get("1001");
+      expect(global).toMatchObject({
+        provenance: "global",
+        championId: null,
+        winRatePercent: "56.3213",
+      });
+      expect(global?.topChampionsById.get("30")).toMatchObject({
+        provenance: "champion",
+        championId: "30",
+        championRank: "1",
+        winRatePercent: "53.3",
+        tierLetter: "S+",
+      });
+      expect(global?.topChampionsById.get("54")).toMatchObject({
+        provenance: "champion",
+        championId: "54",
+        winRatePercent: "49",
+        tierLetter: "S",
+      });
+      expect(global?.topChampionsById.has("not-numeric")).toBe(false);
+      expect(skippedChampionStats).toBe(1);
+    });
+    test("selects a champion row by numeric key and otherwise labels the global fallback", () => {
+      const { stats } = parseStatsList(STATS_RAW);
+      const global = stats.get("1001")!;
+      expect(selectAramggStat(global, "30")).toMatchObject({
+        provenance: "champion",
+        championId: "30",
+        winRatePercent: "53.3",
+      });
+      expect(selectAramggStat(global, "999")).toMatchObject({
+        provenance: "global",
+        championId: null,
+        winRatePercent: "56.3213",
+      });
+      expect(selectAramggStat(global, null).provenance).toBe("global");
     });
     test("throws on a non-array payload (never fabricates)", () => {
       expect(() => parseStatsList({} as unknown)).toThrow();
@@ -348,6 +415,10 @@ describe("overlay ARAMGG tier fixture (dev-only)", () => {
       tier: 2,
       tierLetter: "S",
       grade: "strong",
+      provenance: "global",
+      championId: null,
+      championRank: null,
+      topChampionsById: new Map(),
       ...over,
     });
     const cards: AramggFixtureCard[] = [
@@ -397,6 +468,22 @@ describe("overlay ARAMGG tier fixture (dev-only)", () => {
         winRatePercent: "56.3213",
         upstreamTier: 2,
         cardTier: "S",
+        statProvenance: "global",
+        championId: null,
+      });
+    });
+    test("decision reasons and diagnostics label champion-specific provenance", () => {
+      const payload = buildAramggDecisionResult([
+        {
+          slug: "alpha",
+          stat: stat({ provenance: "champion", championId: "30", championRank: "1" }),
+          method: "cdragon-icon",
+        },
+      ], 1);
+      expect(payload.result.candidates[0].reasons).toContain("aramgg:scope-champion");
+      expect(payload.debugRows[0]).toMatchObject({
+        statProvenance: "champion",
+        championId: "30",
       });
     });
   });
@@ -575,6 +662,10 @@ describe("overlay fixture STATE MACHINE — release-blocking regressions", () =>
         tier: 2,
         tierLetter: "S",
         grade: "strong",
+        provenance: "global",
+        championId: null,
+        championRank: null,
+        topChampionsById: new Map(),
       },
     };
     const payload = buildAramggDecisionResult([card], 1);

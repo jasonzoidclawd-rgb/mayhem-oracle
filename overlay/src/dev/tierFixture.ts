@@ -67,6 +67,8 @@ export interface AramggDebugRow {
   numGames: string;
   upstreamTier: number;
   cardTier: TierLetter;
+  statProvenance: AramggStat["provenance"];
+  championId: string | null;
 }
 
 export interface AramggFixturePayload {
@@ -104,6 +106,7 @@ function toCandidate(card: AramggFixtureCard): DecisionCandidateResult {
       `aramgg:tier-${stat.tier}`,
       `aramgg:games-${stat.numGames}`,
       `aramgg:match-${card.method}`,
+      `aramgg:scope-${stat.provenance}`,
     ],
     confidence: confidenceFromGames(stat.numGames),
     breakdown: { reliability: 0, synergy: 0, novelty: 0, penalties: 0, roundValue: 0 },
@@ -132,6 +135,8 @@ export function buildAramggDecisionResult(
       numGames: card.stat.numGames,
       upstreamTier: card.stat.tier,
       cardTier: card.stat.tierLetter,
+      statProvenance: card.stat.provenance,
+      championId: card.stat.championId,
     });
     return toCandidate(card);
   });

@@ -39,9 +39,11 @@ export interface AramggFixtureState {
 export function useAramggTierFixture(
   _enabled: boolean,
   _augments: MayhemAugmentIdentity[] | undefined,
+  _championKey: string | null,
 ): AramggFixtureState {
   void _enabled;
   void _augments;
+  void _championKey;
   const refresh = useCallback(() => {}, []);
   return {
     status: "idle",

@@ -24,6 +24,10 @@ export interface AramggFixtureCard {
     numGames: string;
     tier: number;
     tierLetter: TierLetter;
+    provenance: "global" | "champion";
+    championId: string | null;
+    championRank: string | null;
+    topChampionsById: Map<string, AramggFixtureCard["stat"]>;
   };
   method: string;
 }
@@ -37,6 +41,8 @@ export interface AramggDebugRow {
   numGames: string;
   upstreamTier: number;
   cardTier: TierLetter;
+  statProvenance: "global" | "champion";
+  championId: string | null;
 }
 
 export interface AramggFixturePayload {
