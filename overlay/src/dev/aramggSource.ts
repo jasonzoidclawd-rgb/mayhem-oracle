@@ -485,6 +485,19 @@ export function selectAramggStat(
   return globalStat.topChampionsById.get(championKey) ?? globalStat;
 }
 
+/** Rebuild every selected row for one champion; never mutate or reuse a prior selection map. */
+export function selectAramggStatsForChampion(
+  globalStatsById: ReadonlyMap<string, AramggStat>,
+  championKey: string | null | undefined,
+): Map<string, AramggStat> {
+  return new Map(
+    [...globalStatsById].map(([augmentId, globalStat]) => [
+      augmentId,
+      selectAramggStat(globalStat, championKey),
+    ]),
+  );
+}
+
 // ─── Pure: build catalog index ───
 
 export function buildCatalogIndex(catalog: unknown): AramggCatalogIndex {

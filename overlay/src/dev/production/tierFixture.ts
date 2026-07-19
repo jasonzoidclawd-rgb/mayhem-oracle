@@ -51,6 +51,12 @@ export interface AramggFixturePayload {
   debugRows: AramggDebugRow[];
 }
 
+export function aramggStatScopeLabel(
+  stat: { provenance: "champion" | "global" },
+): "CHAMP" | "GLOBAL" {
+  return stat.provenance === "champion" ? "CHAMP" : "GLOBAL";
+}
+
 export function buildAramggDecisionResult(
   _cards: AramggFixtureCard[],
   _round: AugmentRound,

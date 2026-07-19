@@ -65,6 +65,7 @@ import {
 } from "./winRateFormat";
 import {
   buildAramggDecisionResult,
+  aramggStatScopeLabel,
   isTierFixtureEnabled,
   TIER_FIXTURE_MEMBER,
   type AramggFixtureCard,
@@ -2324,7 +2325,7 @@ function App() {
                 {chip.isNew && <span className="badge-new">NEW</span>}
                 {chip.statScope && (
                   <span className={`badge-stat-scope badge-stat-scope-${chip.statScope}`}>
-                    {chip.statScope === "champion" ? "CHAMP" : "GLOBAL"}
+                    {aramggStatScopeLabel({ provenance: chip.statScope })}
                   </span>
                 )}
                 <span

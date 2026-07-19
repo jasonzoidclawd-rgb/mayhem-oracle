@@ -15,7 +15,7 @@ import {
   parseAramggSource,
   resolveAugmentId,
   resolveOcrTitle,
-  selectAramggStat,
+  selectAramggStatsForChampion,
   type AramggRaws,
   type AramggSource,
   type AramggStat,
@@ -155,6 +155,11 @@ export function useAramggTierFixture(
     };
   }, [enabled, nonce]);
 
+  const selectedStatsById = useMemo(
+    () => selectAramggStatsForChampion(source?.statsById ?? new Map(), championKey),
+    [source, championKey],
+  );
+
   const resolvedBySlug = useMemo(() => {
     const map = new Map<string, AramggFixtureCard>();
     if (!source || !augments) return map;
@@ -164,9 +169,8 @@ export function useAramggTierFixture(
         source.catalog,
       );
       if (res.augmentId === null) continue;
-      const globalStat = source.statsById.get(res.augmentId);
-      if (!globalStat) continue;
-      const stat = selectAramggStat(globalStat, championKey);
+      const stat = selectedStatsById.get(res.augmentId);
+      if (!stat) continue;
       if (res.method === "localized-name") {
         // Explicitly log the last-resort match path (requirement).
         console.info(
@@ -176,7 +180,7 @@ export function useAramggTierFixture(
       map.set(a.slug, { slug: a.slug, stat, method: res.method });
     }
     return map;
-  }, [source, augments, championKey]);
+  }, [source, augments, selectedStatsById]);
 
   // augmentId → local slug (unique inversions only) so a canonical Riot match
   // can be labeled with the local catalog slug when one exists.
@@ -203,12 +207,11 @@ export function useAramggTierFixture(
         );
       }
       const localSlug = localSlugByAugmentId.get(riot.augmentId) ?? null;
-      const globalStat = source.statsById.get(riot.augmentId);
-      if (!globalStat) return { kind: "no-data", riot, localSlug };
-      const stat = selectAramggStat(globalStat, championKey);
+      const stat = selectedStatsById.get(riot.augmentId);
+      if (!stat) return { kind: "no-data", riot, localSlug };
       return { kind: "matched", riot, stat, localSlug };
     };
-  }, [source, localSlugByAugmentId, championKey]);
+  }, [source, localSlugByAugmentId, selectedStatsById]);
 
   return {
     status,

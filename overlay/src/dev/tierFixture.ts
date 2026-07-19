@@ -78,6 +78,12 @@ export interface AramggFixturePayload {
   debugRows: AramggDebugRow[];
 }
 
+export function aramggStatScopeLabel(
+  stat: Pick<AramggStat, "provenance">,
+): "CHAMP" | "GLOBAL" {
+  return stat.provenance === "champion" ? "CHAMP" : "GLOBAL";
+}
+
 /**
  * Confidence reflects ARAMGG's real sample size — this is a genuine
  * reliability signal, not an invented grade. Thresholds are presentation-only.

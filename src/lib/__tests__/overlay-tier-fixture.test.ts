@@ -6,6 +6,7 @@ import {
 import { formatWinRate, tierForGrade } from "../../../overlay/src/model/tier";
 import {
   buildAramggDecisionResult,
+  aramggStatScopeLabel,
   isTierFixtureEnabled,
   tierFixtureEnabledFrom,
   TIER_FIXTURE_MEMBER,
@@ -23,6 +24,7 @@ import {
   parseStatsList,
   resolveAugmentId,
   selectAramggStat,
+  selectAramggStatsForChampion,
   resolveOcrTitle,
   type AramggRaws,
   type AramggStat,
@@ -244,6 +246,25 @@ describe("overlay ARAMGG tier fixture (dev-only)", () => {
         winRatePercent: "56.3213",
       });
       expect(selectAramggStat(global, null).provenance).toBe("global");
+    });
+    test("changing champion recomputes every selected stat without retaining stale rows", () => {
+      const { stats } = parseStatsList(STATS_RAW);
+      const karthus = selectAramggStatsForChampion(stats, "30");
+      const malphite = selectAramggStatsForChampion(stats, "54");
+
+      expect(karthus.get("1001")).toMatchObject({ provenance: "champion", championId: "30" });
+      expect(malphite.get("1001")).toMatchObject({ provenance: "champion", championId: "54" });
+      expect(malphite.get("1001")).not.toBe(karthus.get("1001"));
+      for (const [augmentId, selected] of malphite) {
+        expect(selected).toBe(selectAramggStat(stats.get(augmentId)!, "54"));
+        expect(selected.championId).not.toBe("30");
+      }
+    });
+    test("visible scope labels match the selected champion or global row", () => {
+      const { stats } = parseStatsList(STATS_RAW);
+      const global = stats.get("1001")!;
+      expect(aramggStatScopeLabel(selectAramggStat(global, "30"))).toBe("CHAMP");
+      expect(aramggStatScopeLabel(selectAramggStat(global, "999"))).toBe("GLOBAL");
     });
     test("throws on a non-array payload (never fabricates)", () => {
       expect(() => parseStatsList({} as unknown)).toThrow();

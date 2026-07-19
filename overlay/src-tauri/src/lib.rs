@@ -20,13 +20,62 @@ extern crate objc;
 
 // ─── Types ──────────────────────────────────────────────────────────────────
 
-#[derive(Serialize, Deserialize, Clone, Debug)]
+#[derive(Serialize, Deserialize, Clone, Debug, PartialEq)]
 pub struct LivePlayerData {
     pub champion: String,
     pub level: u32,
     pub is_dead: bool,
     pub game_time: f64,
     pub game_mode: String,
+}
+
+fn parse_live_player_data(
+    active: &serde_json::Value,
+    players: &[serde_json::Value],
+    game_data: &serde_json::Value,
+) -> Option<LivePlayerData> {
+    let summoner_name = active
+        .get("riotId")
+        .or_else(|| active.get("summonerName"))
+        .and_then(serde_json::Value::as_str)?;
+    let me = players.iter().find(|player| {
+        player
+            .get("riotId")
+            .or_else(|| player.get("summonerName"))
+            .and_then(serde_json::Value::as_str)
+            == Some(summoner_name)
+    })?;
+    let champion = me
+        .get("rawChampionName")
+        .and_then(serde_json::Value::as_str)
+        .map(|raw| raw.rsplit('_').next().unwrap_or(raw).to_string())
+        .unwrap_or_else(|| {
+            me.get("championName")
+                .and_then(serde_json::Value::as_str)
+                .unwrap_or("")
+                .to_string()
+        });
+
+    Some(LivePlayerData {
+        champion,
+        level: active
+            .get("level")
+            .and_then(serde_json::Value::as_u64)
+            .unwrap_or(1) as u32,
+        is_dead: me
+            .get("isDead")
+            .and_then(serde_json::Value::as_bool)
+            .unwrap_or(false),
+        game_time: game_data
+            .get("gameTime")
+            .and_then(serde_json::Value::as_f64)
+            .unwrap_or(0.0),
+        game_mode: game_data
+            .get("gameMode")
+            .and_then(serde_json::Value::as_str)
+            .unwrap_or("")
+            .to_string(),
+    })
 }
 
 // ─── Tauri Commands ─────────────────────────────────────────────────────────
@@ -96,14 +145,6 @@ async fn get_live_player_data() -> Option<LivePlayerData> {
         .await
         .ok()?;
 
-    let summoner_name = active
-        .get("riotId")
-        .or_else(|| active.get("summonerName"))
-        .and_then(|v| v.as_str())?
-        .to_string();
-
-    let level = active.get("level").and_then(|v| v.as_u64()).unwrap_or(1) as u32;
-
     // Get player list to find champion
     let players: Vec<serde_json::Value> = client
         .get("https://127.0.0.1:2999/liveclientdata/playerlist")
@@ -113,31 +154,6 @@ async fn get_live_player_data() -> Option<LivePlayerData> {
         .json()
         .await
         .ok()?;
-
-    let me = players.iter().find(|p| {
-        p.get("riotId")
-            .or_else(|| p.get("summonerName"))
-            .and_then(|v| v.as_str())
-            .map_or(false, |n| n == summoner_name)
-    })?;
-
-    // Prefer rawChampionName (always English internal ID like "Varus")
-    // Fall back to championName (may be localized like "法洛士")
-    let champion = me
-        .get("rawChampionName")
-        .and_then(|v| v.as_str())
-        .map(|s| {
-            // rawChampionName format: "game_character_displayname_Varus"
-            // Strip the prefix to get just the champion name
-            s.rsplit('_').next().unwrap_or(s).to_string()
-        })
-        .unwrap_or_else(|| {
-            me.get("championName")
-                .and_then(|v| v.as_str())
-                .unwrap_or("")
-                .to_string()
-        });
-    let is_dead = me.get("isDead").and_then(|v| v.as_bool()).unwrap_or(false);
 
     // Get game data for time and mode
     let game_data: serde_json::Value = client
@@ -149,24 +165,135 @@ async fn get_live_player_data() -> Option<LivePlayerData> {
         .await
         .ok()?;
 
-    let game_time = game_data
-        .get("gameTime")
-        .and_then(|v| v.as_f64())
-        .unwrap_or(0.0);
+    parse_live_player_data(&active, &players, &game_data)
+}
 
-    let game_mode = game_data
-        .get("gameMode")
-        .and_then(|v| v.as_str())
-        .unwrap_or("")
-        .to_string();
+#[cfg(test)]
+mod live_player_tests {
+    use super::*;
 
-    Some(LivePlayerData {
-        champion,
-        level,
-        is_dead,
-        game_time,
-        game_mode,
-    })
+    fn active(riot_id: &str) -> serde_json::Value {
+        serde_json::json!({ "riotId": riot_id, "level": 7 })
+    }
+
+    fn player(riot_id: &str, raw_champion_name: &str) -> serde_json::Value {
+        serde_json::json!({
+            "riotId": riot_id,
+            "rawChampionName": raw_champion_name,
+            "championName": "localized-name-must-not-win",
+            "isDead": false
+        })
+    }
+
+    fn game() -> serde_json::Value {
+        serde_json::json!({ "gameTime": 123.0, "gameMode": "ARAM" })
+    }
+
+    fn champion(active: &serde_json::Value, players: &[serde_json::Value]) -> Option<String> {
+        parse_live_player_data(active, players, &game()).map(|snapshot| snapshot.champion)
+    }
+
+    #[test]
+    fn initial_in_game_champion_comes_from_the_active_players_raw_champion_name() {
+        assert_eq!(
+            champion(
+                &active("self#TW"),
+                &[player("self#TW", "game_character_displayname_Varus")]
+            ),
+            Some("Varus".to_string())
+        );
+    }
+
+    #[test]
+    fn aram_reroll_replaces_the_active_players_champion() {
+        let active = active("self#TW");
+        assert_eq!(
+            champion(
+                &active,
+                &[player("self#TW", "game_character_displayname_Varus")]
+            ),
+            Some("Varus".to_string())
+        );
+        assert_eq!(
+            champion(
+                &active,
+                &[player("self#TW", "game_character_displayname_Ashe")]
+            ),
+            Some("Ashe".to_string())
+        );
+    }
+
+    #[test]
+    fn bench_swap_replaces_the_active_players_champion() {
+        let active = active("self#TW");
+        assert_eq!(
+            champion(
+                &active,
+                &[player("self#TW", "game_character_displayname_Malphite")]
+            ),
+            Some("Malphite".to_string())
+        );
+        assert_eq!(
+            champion(
+                &active,
+                &[player("self#TW", "game_character_displayname_Karthus")]
+            ),
+            Some("Karthus".to_string())
+        );
+    }
+
+    #[test]
+    fn teammate_champion_swap_does_not_change_the_active_player() {
+        let active = active("self#TW");
+        let before = [
+            player("self#TW", "game_character_displayname_Varus"),
+            player("ally#TW", "game_character_displayname_Jinx"),
+        ];
+        let after = [
+            player("self#TW", "game_character_displayname_Varus"),
+            player("ally#TW", "game_character_displayname_Sivir"),
+        ];
+        assert_eq!(champion(&active, &before), Some("Varus".to_string()));
+        assert_eq!(champion(&active, &after), Some("Varus".to_string()));
+    }
+
+    #[test]
+    fn reconnect_resolves_the_current_active_player_from_the_fresh_roster() {
+        let active = active("self#TW");
+        assert_eq!(champion(&active, &[]), None);
+        assert_eq!(
+            champion(
+                &active,
+                &[player("self#TW", "game_character_displayname_Ahri")]
+            ),
+            Some("Ahri".to_string())
+        );
+    }
+
+    #[test]
+    fn overlay_startup_after_game_start_needs_no_prior_champion_state() {
+        assert_eq!(
+            champion(
+                &active("self#TW"),
+                &[player("self#TW", "game_character_displayname_LeeSin")]
+            ),
+            Some("LeeSin".to_string())
+        );
+    }
+
+    #[test]
+    fn unknown_raw_champion_is_preserved_for_frontend_catalog_fallback() {
+        assert_eq!(
+            champion(
+                &active("self#TW"),
+                &[player(
+                    "self#TW",
+                    "game_character_displayname_FutureChampion"
+                )]
+            ),
+            Some("FutureChampion".to_string())
+        );
+    }
 }
 
 // ─── OCR Types ──────────────────────────────────────────────────────────────
