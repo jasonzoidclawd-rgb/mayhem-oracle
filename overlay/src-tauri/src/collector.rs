@@ -8,9 +8,7 @@ use std::sync::{
 use serde::{Deserialize, Serialize};
 use tauri::State;
 
-use crate::lcu::{
-    discover_lcu_credentials, normalize_gameflow_phase, LeagueClientCredentials,
-};
+use crate::lcu::{discover_lcu_credentials, normalize_gameflow_phase, LeagueClientCredentials};
 use crate::sanitize::{sanitize_match, ContributorRound, MatchSource};
 use crate::upload_queue::UploadQueue;
 
@@ -331,6 +329,24 @@ fn normalize_offers(offered_augment_slugs: Vec<String>) -> Result<Vec<String>, S
 }
 
 fn contributor_final_augments(detail: &serde_json::Value, contributor_puuid: &str) -> Vec<String> {
+    contributor_participant(detail, contributor_puuid)
+        .and_then(|participant| {
+            participant
+                .get("augmentSlugs")
+                .or_else(|| participant.get("augments"))
+        })
+        .and_then(serde_json::Value::as_array)
+        .into_iter()
+        .flatten()
+        .filter_map(serde_json::Value::as_str)
+        .map(str::to_string)
+        .collect()
+}
+
+fn contributor_participant<'a>(
+    detail: &'a serde_json::Value,
+    contributor_puuid: &str,
+) -> Option<&'a serde_json::Value> {
     let participant_id = detail
         .get("participantIdentities")
         .and_then(serde_json::Value::as_array)
@@ -351,17 +367,91 @@ fn contributor_final_augments(detail: &serde_json::Value, contributor_puuid: &st
                 .and_then(serde_json::Value::as_u64)
                 == participant_id
         })
-        .and_then(|participant| {
-            participant
-                .get("augmentSlugs")
-                .or_else(|| participant.get("augments"))
-        })
-        .and_then(serde_json::Value::as_array)
-        .into_iter()
-        .flatten()
-        .filter_map(serde_json::Value::as_str)
-        .map(str::to_string)
-        .collect()
+}
+
+#[cfg(any(debug_assertions, test))]
+#[derive(Debug, Serialize)]
+#[serde(rename_all = "camelCase")]
+struct MatchDetailShapeProbe {
+    queue_id: Option<u64>,
+    augment_fields: Vec<AugmentFieldShape>,
+    resolved_final_augments: Vec<String>,
+}
+
+#[cfg(any(debug_assertions, test))]
+#[derive(Debug, Serialize)]
+#[serde(rename_all = "camelCase")]
+struct AugmentFieldShape {
+    path: String,
+    value_kind: &'static str,
+    values: Vec<String>,
+}
+
+#[cfg(any(debug_assertions, test))]
+fn augment_value_kind(value: &serde_json::Value) -> &'static str {
+    match value {
+        serde_json::Value::Array(values) if values.iter().all(serde_json::Value::is_string) => {
+            "string-array"
+        }
+        serde_json::Value::Array(values) if values.iter().all(serde_json::Value::is_number) => {
+            "number-array"
+        }
+        serde_json::Value::Array(_) => "mixed-array",
+        serde_json::Value::Object(_) => "object",
+        serde_json::Value::String(_) => "string",
+        serde_json::Value::Number(_) => "number",
+        serde_json::Value::Bool(_) => "boolean",
+        serde_json::Value::Null => "null",
+    }
+}
+
+#[cfg(any(debug_assertions, test))]
+fn collect_augment_field_shapes(
+    value: &serde_json::Value,
+    path: &str,
+    output: &mut Vec<AugmentFieldShape>,
+) {
+    let Some(object) = value.as_object() else {
+        return;
+    };
+    for (key, child) in object {
+        let child_path = format!("{path}.{key}");
+        if key.to_ascii_lowercase().contains("augment") {
+            let values = child
+                .as_array()
+                .into_iter()
+                .flatten()
+                .filter_map(|entry| match entry {
+                    serde_json::Value::String(value) => Some(value.clone()),
+                    serde_json::Value::Number(value) => Some(value.to_string()),
+                    _ => None,
+                })
+                .collect();
+            output.push(AugmentFieldShape {
+                path: child_path.clone(),
+                value_kind: augment_value_kind(child),
+                values,
+            });
+        }
+        collect_augment_field_shapes(child, &child_path, output);
+    }
+}
+
+/// Debug-only, privacy-bounded evidence of the real LCU augment field contract.
+/// It emits no game ID, PUUID, Riot ID, summoner name, chat, or unrelated stats.
+#[cfg(any(debug_assertions, test))]
+fn build_match_detail_shape_probe(
+    detail: &serde_json::Value,
+    contributor_puuid: &str,
+) -> Option<MatchDetailShapeProbe> {
+    let participant = contributor_participant(detail, contributor_puuid)?;
+    let mut augment_fields = Vec::new();
+    collect_augment_field_shapes(participant, "participant", &mut augment_fields);
+    Some(MatchDetailShapeProbe {
+        queue_id: detail.get("queueId").and_then(serde_json::Value::as_u64),
+        augment_fields,
+        resolved_final_augments: contributor_final_augments(detail, contributor_puuid),
+    })
 }
 
 fn contributor_rounds_for_match(
@@ -446,6 +536,16 @@ async fn collect_one(state: &CollectorState, client: &LcuClient) -> Result<(), S
 
     if let Some(work) = runtime.match_frontier.pop_front() {
         let detail = client.match_detail(&work.game_id).await?;
+        #[cfg(debug_assertions)]
+        if matches!(work.source, MatchSource::OwnedHistory) {
+            if let Some(puuid) = runtime.contributor_puuid.as_deref() {
+                if let Some(probe) = build_match_detail_shape_probe(&detail, puuid) {
+                    if let Ok(serialized) = serde_json::to_string(&probe) {
+                        eprintln!("[collector-lcu-shape] {serialized}");
+                    }
+                }
+            }
+        }
         if !state.consented_and_resumed() || active_game_now(state, client).await? {
             runtime.match_frontier.push_front(work);
             return Ok(());
@@ -557,7 +657,10 @@ fn confirm_captured_round(
     let captured = rounds
         .get_mut(&round)
         .ok_or("captured contributor round not found".to_string())?;
-    if !captured.offered_augment_slugs.contains(&selected_augment_slug) {
+    if !captured
+        .offered_augment_slugs
+        .contains(&selected_augment_slug)
+    {
         return Err("selected augment was not in the captured offer".to_string());
     }
     captured.selected_augment_slug = Some(selected_augment_slug);
@@ -740,6 +843,38 @@ mod tests {
     }
 
     #[test]
+    fn dev_match_shape_probe_reports_augment_contract_without_identity_data() {
+        let detail: serde_json::Value =
+            serde_json::from_str(include_str!("../fixtures/lcu_match_2400.json")).unwrap();
+
+        let probe = build_match_detail_shape_probe(&detail, "forbidden-puuid-1").unwrap();
+        let serialized = serde_json::to_string(&probe).unwrap();
+
+        assert_eq!(probe.queue_id, Some(2400));
+        assert_eq!(probe.augment_fields.len(), 1);
+        assert_eq!(probe.augment_fields[0].path, "participant.augmentSlugs");
+        assert_eq!(probe.augment_fields[0].value_kind, "string-array");
+        assert_eq!(
+            probe.augment_fields[0].values,
+            vec!["deathtouch", "mad-scientist"]
+        );
+        assert_eq!(
+            probe.resolved_final_augments,
+            vec!["deathtouch", "mad-scientist"]
+        );
+        for forbidden in [
+            "forbidden-puuid",
+            "Forbidden Summoner",
+            "Forbidden Riot",
+            "CHAT",
+            "summonerName",
+            "riotIdGameName",
+        ] {
+            assert!(!serialized.contains(forbidden), "probe leaked {forbidden}");
+        }
+    }
+
+    #[test]
     fn reserves_at_most_one_hundred_export_slots_per_day() {
         let temp = tempfile::tempdir().unwrap();
         let state = CollectorState::new(temp.path().to_path_buf()).unwrap();
@@ -807,7 +942,9 @@ mod tests {
         assert!(confirm_captured_round(&mut rounds, 2, "unrelated".to_string()).is_err());
         confirm_captured_round(&mut rounds, 2, "big-brain".to_string()).unwrap();
         assert_eq!(
-            rounds.get(&2).and_then(|round| round.selected_augment_slug.as_deref()),
+            rounds
+                .get(&2)
+                .and_then(|round| round.selected_augment_slug.as_deref()),
             Some("big-brain")
         );
     }
