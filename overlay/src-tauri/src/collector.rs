@@ -125,6 +125,8 @@ struct CollectorRuntime {
     seen_puuids: HashSet<String>,
     seen_games: HashSet<String>,
     captured_rounds: BTreeMap<u8, CapturedRound>,
+    #[cfg(debug_assertions)]
+    shape_probed_games: HashSet<String>,
 }
 
 impl CollectorRuntime {
@@ -374,6 +376,8 @@ fn contributor_participant<'a>(
 #[serde(rename_all = "camelCase")]
 struct MatchDetailShapeProbe {
     queue_id: Option<u64>,
+    participant_resolved: bool,
+    participant_resolution_reason: Option<&'static str>,
     augment_fields: Vec<AugmentFieldShape>,
     resolved_final_augments: Vec<String>,
 }
@@ -384,16 +388,26 @@ struct MatchDetailShapeProbe {
 struct AugmentFieldShape {
     path: String,
     value_kind: &'static str,
-    values: Vec<String>,
+    array_length: Option<usize>,
+    representative_values: Vec<String>,
 }
+
+#[cfg(any(debug_assertions, test))]
+const MAX_AUGMENT_FIELDS: usize = 32;
+#[cfg(any(debug_assertions, test))]
+const MAX_REPRESENTATIVE_VALUES: usize = 8;
 
 #[cfg(any(debug_assertions, test))]
 fn augment_value_kind(value: &serde_json::Value) -> &'static str {
     match value {
-        serde_json::Value::Array(values) if values.iter().all(serde_json::Value::is_string) => {
+        serde_json::Value::Array(values)
+            if !values.is_empty() && values.iter().all(serde_json::Value::is_string) =>
+        {
             "string-array"
         }
-        serde_json::Value::Array(values) if values.iter().all(serde_json::Value::is_number) => {
+        serde_json::Value::Array(values)
+            if !values.is_empty() && values.iter().all(serde_json::Value::is_number) =>
+        {
             "number-array"
         }
         serde_json::Value::Array(_) => "mixed-array",
@@ -411,29 +425,50 @@ fn collect_augment_field_shapes(
     path: &str,
     output: &mut Vec<AugmentFieldShape>,
 ) {
-    let Some(object) = value.as_object() else {
+    if output.len() >= MAX_AUGMENT_FIELDS {
         return;
-    };
-    for (key, child) in object {
-        let child_path = format!("{path}.{key}");
-        if key.to_ascii_lowercase().contains("augment") {
-            let values = child
-                .as_array()
-                .into_iter()
-                .flatten()
-                .filter_map(|entry| match entry {
-                    serde_json::Value::String(value) => Some(value.clone()),
-                    serde_json::Value::Number(value) => Some(value.to_string()),
-                    _ => None,
-                })
-                .collect();
-            output.push(AugmentFieldShape {
-                path: child_path.clone(),
-                value_kind: augment_value_kind(child),
-                values,
-            });
+    }
+    match value {
+        serde_json::Value::Object(object) => {
+            for (key, child) in object {
+                if output.len() >= MAX_AUGMENT_FIELDS {
+                    return;
+                }
+                let child_path = format!("{path}.{key}");
+                if key.to_ascii_lowercase().contains("augment") {
+                    let representative_values = child
+                        .as_array()
+                        .into_iter()
+                        .flatten()
+                        .filter_map(|entry| match entry {
+                            serde_json::Value::String(value) => Some(value.clone()),
+                            serde_json::Value::Number(value) => Some(value.to_string()),
+                            _ => None,
+                        })
+                        .take(MAX_REPRESENTATIVE_VALUES)
+                        .collect();
+                    output.push(AugmentFieldShape {
+                        path: child_path.clone(),
+                        value_kind: augment_value_kind(child),
+                        array_length: child.as_array().map(Vec::len),
+                        representative_values,
+                    });
+                }
+                collect_augment_field_shapes(child, &child_path, output);
+            }
         }
-        collect_augment_field_shapes(child, &child_path, output);
+        serde_json::Value::Array(values) => {
+            let array_path = format!("{path}[]");
+            for child in values {
+                if matches!(
+                    child,
+                    serde_json::Value::Object(_) | serde_json::Value::Array(_)
+                ) {
+                    collect_augment_field_shapes(child, &array_path, output);
+                }
+            }
+        }
+        _ => {}
     }
 }
 
@@ -442,16 +477,50 @@ fn collect_augment_field_shapes(
 #[cfg(any(debug_assertions, test))]
 fn build_match_detail_shape_probe(
     detail: &serde_json::Value,
-    contributor_puuid: &str,
-) -> Option<MatchDetailShapeProbe> {
-    let participant = contributor_participant(detail, contributor_puuid)?;
+    contributor_puuid: Option<&str>,
+) -> MatchDetailShapeProbe {
     let mut augment_fields = Vec::new();
-    collect_augment_field_shapes(participant, "participant", &mut augment_fields);
-    Some(MatchDetailShapeProbe {
+    let (participant_resolved, participant_resolution_reason) = match contributor_puuid {
+        None => (false, Some("contributor-puuid-unavailable")),
+        Some(puuid) => match contributor_participant(detail, puuid) {
+            Some(participant) => {
+                collect_augment_field_shapes(participant, "participant", &mut augment_fields);
+                (true, None)
+            }
+            None => (false, Some("contributor-participant-not-found")),
+        },
+    };
+    MatchDetailShapeProbe {
         queue_id: detail.get("queueId").and_then(serde_json::Value::as_u64),
+        participant_resolved,
+        participant_resolution_reason,
         augment_fields,
-        resolved_final_augments: contributor_final_augments(detail, contributor_puuid),
-    })
+        resolved_final_augments: contributor_puuid
+            .map(|puuid| contributor_final_augments(detail, puuid))
+            .unwrap_or_default(),
+    }
+}
+
+#[cfg(any(debug_assertions, test))]
+fn prepare_match_detail_shape_probe(
+    consented_and_resumed: bool,
+    active_game: bool,
+    source: MatchSource,
+    game_id: &str,
+    detail: &serde_json::Value,
+    contributor_puuid: Option<&str>,
+    probed_games: &mut HashSet<String>,
+) -> Option<MatchDetailShapeProbe> {
+    if !consented_and_resumed
+        || active_game
+        || !matches!(source, MatchSource::OwnedHistory)
+        || detail.get("queueId").and_then(serde_json::Value::as_u64) != Some(2400)
+        || probed_games.contains(game_id)
+    {
+        return None;
+    }
+    probed_games.insert(game_id.to_string());
+    Some(build_match_detail_shape_probe(detail, contributor_puuid))
 }
 
 fn contributor_rounds_for_match(
@@ -525,7 +594,10 @@ fn today() -> String {
 
 async fn collect_one(state: &CollectorState, client: &LcuClient) -> Result<(), String> {
     let mut runtime = state.runtime.lock().await;
-    if !state.consented_and_resumed() || active_game_now(state, client).await? {
+    if !state.consented_and_resumed() {
+        return Ok(());
+    }
+    if active_game_now(state, client).await? {
         return Ok(());
     }
     if runtime.contributor_puuid.is_none() {
@@ -536,19 +608,30 @@ async fn collect_one(state: &CollectorState, client: &LcuClient) -> Result<(), S
 
     if let Some(work) = runtime.match_frontier.pop_front() {
         let detail = client.match_detail(&work.game_id).await?;
-        #[cfg(debug_assertions)]
-        if matches!(work.source, MatchSource::OwnedHistory) {
-            if let Some(puuid) = runtime.contributor_puuid.as_deref() {
-                if let Some(probe) = build_match_detail_shape_probe(&detail, puuid) {
-                    if let Ok(serialized) = serde_json::to_string(&probe) {
-                        eprintln!("[collector-lcu-shape] {serialized}");
-                    }
-                }
-            }
-        }
-        if !state.consented_and_resumed() || active_game_now(state, client).await? {
+        if !state.consented_and_resumed() {
             runtime.match_frontier.push_front(work);
             return Ok(());
+        }
+        if active_game_now(state, client).await? {
+            runtime.match_frontier.push_front(work);
+            return Ok(());
+        }
+        #[cfg(debug_assertions)]
+        {
+            let contributor_puuid = runtime.contributor_puuid.clone();
+            if let Some(probe) = prepare_match_detail_shape_probe(
+                true,
+                false,
+                work.source,
+                &work.game_id,
+                &detail,
+                contributor_puuid.as_deref(),
+                &mut runtime.shape_probed_games,
+            ) {
+                if let Ok(serialized) = serde_json::to_string(&probe) {
+                    eprintln!("[collector-lcu-shape] {serialized}");
+                }
+            }
         }
         let participant_puuids = extract_participant_puuids(&detail);
         let contributor_rounds = match (work.source, &runtime.contributor_puuid) {
@@ -847,7 +930,7 @@ mod tests {
         let detail: serde_json::Value =
             serde_json::from_str(include_str!("../fixtures/lcu_match_2400.json")).unwrap();
 
-        let probe = build_match_detail_shape_probe(&detail, "forbidden-puuid-1").unwrap();
+        let probe = build_match_detail_shape_probe(&detail, Some("forbidden-puuid-1"));
         let serialized = serde_json::to_string(&probe).unwrap();
 
         assert_eq!(probe.queue_id, Some(2400));
@@ -855,7 +938,7 @@ mod tests {
         assert_eq!(probe.augment_fields[0].path, "participant.augmentSlugs");
         assert_eq!(probe.augment_fields[0].value_kind, "string-array");
         assert_eq!(
-            probe.augment_fields[0].values,
+            probe.augment_fields[0].representative_values,
             vec!["deathtouch", "mad-scientist"]
         );
         assert_eq!(
@@ -872,6 +955,175 @@ mod tests {
         ] {
             assert!(!serialized.contains(forbidden), "probe leaked {forbidden}");
         }
+    }
+
+    #[test]
+    fn shape_probe_emits_nothing_without_explicit_consent() {
+        let detail: serde_json::Value =
+            serde_json::from_str(include_str!("../fixtures/lcu_match_2400.json")).unwrap();
+        let mut probed_games = HashSet::new();
+
+        let probe = prepare_match_detail_shape_probe(
+            false,
+            false,
+            MatchSource::OwnedHistory,
+            "991240001",
+            &detail,
+            Some("forbidden-puuid-1"),
+            &mut probed_games,
+        );
+
+        assert!(probe.is_none());
+        assert!(probed_games.is_empty());
+    }
+
+    #[test]
+    fn augment_shape_discovery_recurses_objects_and_arrays_with_bounded_values() {
+        let participant = serde_json::json!({
+            "augmentSlugs": ["alpha", "beta"],
+            "augmentIds": [101, 102],
+            "nested": { "nestedAugments": ["gamma"] },
+            "someArray": [
+                { "augmentIds": [201, 202] },
+                [{ "augmentSlugs": ["delta"] }]
+            ],
+            "mixedAugments": ["epsilon", 301, null, { "ignored": true }],
+            "nullAugment": null,
+            "items": [{ "itemIds": [3071, 3111] }],
+            "summonerName": "must-not-appear"
+        });
+        let mut fields = Vec::new();
+        collect_augment_field_shapes(&participant, "participant", &mut fields);
+        let by_path = fields
+            .into_iter()
+            .map(|field| (field.path.clone(), field))
+            .collect::<BTreeMap<_, _>>();
+
+        assert_eq!(
+            by_path["participant.augmentSlugs"].value_kind,
+            "string-array"
+        );
+        assert_eq!(by_path["participant.augmentSlugs"].array_length, Some(2));
+        assert_eq!(by_path["participant.augmentIds"].value_kind, "number-array");
+        assert_eq!(
+            by_path["participant.nested.nestedAugments"].value_kind,
+            "string-array"
+        );
+        assert_eq!(
+            by_path["participant.someArray[].augmentIds"].value_kind,
+            "number-array"
+        );
+        assert_eq!(
+            by_path["participant.someArray[][].augmentSlugs"].representative_values,
+            vec!["delta"]
+        );
+        assert_eq!(
+            by_path["participant.mixedAugments"].value_kind,
+            "mixed-array"
+        );
+        assert_eq!(by_path["participant.mixedAugments"].array_length, Some(4));
+        assert_eq!(
+            by_path["participant.mixedAugments"].representative_values,
+            vec!["epsilon", "301"]
+        );
+        assert_eq!(by_path["participant.nullAugment"].value_kind, "null");
+        assert_eq!(by_path["participant.nullAugment"].array_length, None);
+        assert!(!by_path.keys().any(|path| path.contains("item")));
+        assert!(!by_path.keys().any(|path| path.contains("summoner")));
+    }
+
+    #[test]
+    fn numeric_augment_arrays_are_diagnostic_values_not_resolved_slugs() {
+        let detail = serde_json::json!({
+            "queueId": 2400,
+            "participantIdentities": [{ "participantId": 1, "puuid": "self" }],
+            "participants": [{ "participantId": 1, "augmentIds": [101, 102] }]
+        });
+        let probe = build_match_detail_shape_probe(&detail, Some("self"));
+
+        assert!(probe.participant_resolved);
+        assert_eq!(probe.augment_fields[0].value_kind, "number-array");
+        assert_eq!(probe.augment_fields[0].array_length, Some(2));
+        assert_eq!(
+            probe.augment_fields[0].representative_values,
+            vec!["101", "102"]
+        );
+        assert!(probe.resolved_final_augments.is_empty());
+        assert!(contributor_final_augments(&detail, "self").is_empty());
+    }
+
+    #[test]
+    fn shape_probe_is_queue_2400_only_one_shot_and_sanitizes_resolution_failure() {
+        let mut detail = serde_json::json!({
+            "queueId": 420,
+            "participantIdentities": [],
+            "participants": [],
+            "summonerName": "must-not-appear",
+            "chat": "must-not-appear"
+        });
+        let mut probed_games = HashSet::new();
+        assert!(prepare_match_detail_shape_probe(
+            true,
+            false,
+            MatchSource::OwnedHistory,
+            "game-1",
+            &detail,
+            None,
+            &mut probed_games,
+        )
+        .is_none());
+        assert!(probed_games.is_empty());
+
+        detail["queueId"] = serde_json::json!(2400);
+        let first = prepare_match_detail_shape_probe(
+            true,
+            false,
+            MatchSource::OwnedHistory,
+            "game-1",
+            &detail,
+            None,
+            &mut probed_games,
+        )
+        .unwrap();
+        assert!(!first.participant_resolved);
+        assert_eq!(
+            first.participant_resolution_reason,
+            Some("contributor-puuid-unavailable")
+        );
+        let serialized = serde_json::to_string(&first).unwrap();
+        assert!(!serialized.contains("game-1"));
+        assert!(!serialized.contains("must-not-appear"));
+
+        assert!(prepare_match_detail_shape_probe(
+            true,
+            false,
+            MatchSource::OwnedHistory,
+            "game-1",
+            &detail,
+            None,
+            &mut probed_games,
+        )
+        .is_none());
+        assert!(prepare_match_detail_shape_probe(
+            true,
+            true,
+            MatchSource::OwnedHistory,
+            "game-2",
+            &detail,
+            None,
+            &mut probed_games,
+        )
+        .is_none());
+        assert!(prepare_match_detail_shape_probe(
+            true,
+            false,
+            MatchSource::Snowball,
+            "game-3",
+            &detail,
+            None,
+            &mut probed_games,
+        )
+        .is_none());
     }
 
     #[test]
