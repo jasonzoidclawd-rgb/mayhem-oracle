@@ -94,6 +94,26 @@ describe("native timeout and failure recovery", () => {
     vi.useRealTimers();
   });
 
+  it("ignores a native completion that arrives after timeout", async () => {
+    vi.useFakeTimers();
+    let finish!: (value: string) => void;
+    const native = new Promise<string>((resolve) => { finish = resolve; });
+    const result = executeOcrRun(() => native, (value) => value, 25);
+    await vi.advanceTimersByTimeAsync(25);
+    finish("late");
+    await expect(result).resolves.toEqual({ kind: "failure", reason: "timeout" });
+    vi.useRealTimers();
+  });
+
+  it("a timed-out run completing after replacement cannot release that replacement", () => {
+    const owners = new OcrOwnerRegistry();
+    const timedOut = owners.start(context(), 0);
+    expect(owners.expire(timedOut.runId, NATIVE_OCR_TIMEOUT_MS)).toBe(true);
+    const replacement = owners.start(context(), NATIVE_OCR_TIMEOUT_MS + 1);
+    expect(owners.release(timedOut.runId)).toBe(false);
+    expect(owners.current).toBe(replacement);
+  });
+
   it("contains a synchronous native throw", async () => {
     await expect(executeOcrRun(
       () => { throw new Error("sync"); },

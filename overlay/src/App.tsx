@@ -300,7 +300,7 @@ interface SlotResolution {
 function slotResolutionAugmentId(resolution: SlotResolution | null): string {
   if (!resolution) return "";
   const aramgg = resolution.aramgg;
-  if (aramgg && aramgg.kind === "matched") return aramgg.stat.augmentId;
+  if (aramgg && aramgg.kind !== "unmatched") return aramgg.riot.augmentId;
   return resolution.pool?.slug ?? "";
 }
 
