@@ -498,13 +498,19 @@ pub fn analyze_surface(
     let (gap2_l, gap2_std) = luma.mean_std(luma.region_px(viewport_px, GAP2_X0, GAP_TOP, GAP2_X1, GAP_BOTTOM));
     let gap1_paneled = gap1_l < T_GAP_PANEL_LUMA && gap1_std < T_GAP_PANEL_STD;
     let gap2_paneled = gap2_l < T_GAP_PANEL_LUMA && gap2_std < T_GAP_PANEL_STD;
-    let occluded = present && gap1_paneled && gap2_paneled;
+    let opaque_surface = gap1_l < T_GAP_PANEL_LUMA &&
+        gap2_l < T_GAP_PANEL_LUMA &&
+        gap1_std < 34.0 &&
+        gap2_std < 34.0;
+    let occluded = (present && gap1_paneled && gap2_paneled) || (!present && opaque_surface);
 
     if !present {
         rejection_reasons.push(format!("insufficient-cards-{}/3", n_present));
     }
     if occluded {
-        rejection_reasons.push("occluded-modal-panel".to_string());
+        rejection_reasons.push(
+            if present { "occluded-modal-panel" } else { "occluded-opaque-surface" }.to_string(),
+        );
     }
 
     let confidence = if present && n_present > 0 { score_sum / n_present as f32 } else { 0.0 };
@@ -782,10 +788,12 @@ mod tests {
 
     #[test]
     fn july20_shop_and_combat_render_no_surface() {
-        for name in ["july20-111048.png", "july20-111050.png"] {
-            let observation = analyze_july20(name);
-            assert!(!observation.present, "{}: {:?}", name, observation.cards);
-        }
+        let shop = analyze_july20("july20-111048.png");
+        assert!(!shop.present, "{:?}", shop.cards);
+        assert!(shop.occluded, "shop must be explicit occlusion evidence");
+        let combat = analyze_july20("july20-111050.png");
+        assert!(!combat.present, "{:?}", combat.cards);
+        assert!(!combat.occluded, "ordinary combat is NO_OFFER, not occlusion");
     }
 
     #[test]

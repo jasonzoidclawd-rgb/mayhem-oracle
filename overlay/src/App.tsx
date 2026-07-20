@@ -134,6 +134,11 @@ import {
   type OcrOwnerContext,
 } from "./ocrOwner";
 import {
+  advanceOfferSurface,
+  createOfferSurfaceState,
+  type OfferSurfaceState,
+} from "./offerSurfaceState";
+import {
   EMPTY_SCAN_TIMINGS,
   type OcrCardDiagnostic as DevOcrCardDiagnostic,
   type OcrLifecycleSnapshot,
@@ -411,6 +416,10 @@ function App() {
     () => emptyOfferState(),
   );
   const offerStateRef = useRef(offerState);
+  const [offerSurface, setOfferSurface] = useState<OfferSurfaceState>(
+    () => createOfferSurfaceState(),
+  );
+  const offerSurfaceRef = useRef(offerSurface);
   // VisibleOfferFrame — the ONLY state rendered chips/placeholders read. The
   // internal latch above (offerState) is nonvisual grace bookkeeping and never
   // renders directly. Every scan publishes a fresh-or-empty frame here; the
@@ -1148,6 +1157,7 @@ function App() {
     !isPreviewMode &&
     effectiveMemberEnabled &&
     visibleFrameRenderable(visibleFrame, gameWindowForeground) &&
+    offerSurface.render &&
     // Scheduler health, not the age of the last positive pixels, owns expiry.
     // A valid frame therefore survives while the next normal probe is in flight,
     // but still fails closed on a stalled scheduler, focus loss, or game exit.
@@ -1264,6 +1274,14 @@ function App() {
   // identity latch (game exit / focus loss); otherwise the latch stays as
   // nonvisual grace for brief restoration.
   const clearSurface = useCallback((clearLatch: boolean) => {
+    const closedSurface: OfferSurfaceState = {
+      ...createOfferSurfaceState(),
+      offerGeneration: offerSurfaceRef.current.offerGeneration + 1,
+      captureValid: true,
+    };
+    offerSurfaceRef.current = closedSurface;
+    geometryGenerationRef.current = closedSurface.offerGeneration;
+    setOfferSurface(closedSurface);
     if (clearLatch) {
       resetOffer();
       setOcrDiagnostics([]);
@@ -1500,9 +1518,47 @@ function App() {
         transition.action === "publish" &&
         publishedObservation != null &&
         newOfferDetected(previousSurface.lastPositiveObservation, publishedObservation);
-      if (detectedNewOffer) {
-        geometryGenerationRef.current += 1;
-        if (previousSurface.lastPositiveObservation != null) recordRoundCompleted();
+      const priorOfferSurface = offerSurfaceRef.current;
+      const nextOfferSurface = advanceOfferSurface(priorOfferSurface, {
+        now: completedAt,
+        captureValid: observation.captureWidth > 0 && observation.captureHeight > 0,
+        blueControlPresent: observation.blueControl?.present === true,
+        blueControlConfidence: observation.blueControl?.confidence ?? 0,
+        validCardCount: observation.cards.filter((card) => card.present).length,
+        occlusionReason: observation.occluded
+          ? observation.rejectionReasons.find((reason) => reason.startsWith("occluded-")) ?? "opaque-surface"
+          : null,
+        // No genuine collapsed-offer fixture exists yet. Never infer hidden from
+        // the control alone; keep OFFER_HIDDEN gated pending controlled evidence.
+        hiddenEvidence: false,
+        newOfferEvidence: detectedNewOffer,
+      });
+      offerSurfaceRef.current = nextOfferSurface;
+      geometryGenerationRef.current = nextOfferSurface.offerGeneration;
+      setOfferSurface(nextOfferSurface);
+      if (detectedNewOffer && previousSurface.lastPositiveObservation != null) {
+        recordRoundCompleted();
+      }
+      if (
+        nextOfferSurface.state === "NO_OFFER" &&
+        priorOfferSurface.state !== "NO_OFFER"
+      ) {
+        identityStoreRef.current = [null, null, null];
+        acceptedSlotFingerprintsRef.current = ["", "", ""];
+        slotGenerationsRef.current = slotGenerationsRef.current.map((generation) => generation + 1);
+        ocrPendingSlotsRef.current = [];
+        ocrOwnersRef.current.invalidate();
+        probeInFlightRef.current = false;
+        probeInFlightSinceRef.current = null;
+        bumpScanSeq();
+        resetOffer();
+      } else if (nextOfferSurface.state === "OCCLUDED") {
+        // Retain identities internally, but invalidate every async render owner.
+        ocrPendingSlotsRef.current = [];
+        ocrOwnersRef.current.invalidate();
+        probeInFlightRef.current = false;
+        probeInFlightSinceRef.current = null;
+        bumpScanSeq();
       }
 
       // PHASE B — atomic per-slot reroll invalidation. The first published
@@ -1673,7 +1729,7 @@ function App() {
         geometryInFlightTokenRef.current = null;
       }
     }
-  }, [datasetCaptureOn, recordRoundCompleted, republishGeometryFrame, updatePhase]);
+  }, [bumpScanSeq, datasetCaptureOn, recordRoundCompleted, republishGeometryFrame, resetOffer, updatePhase]);
 
   // ─── TRACK 2: OCR/identity probe — TRIGGERED by the geometry track ───────────
   // Supplies per-slot identity ONLY: never presence, occlusion, or visual freshness. It
