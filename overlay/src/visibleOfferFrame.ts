@@ -39,6 +39,7 @@ export interface VisibleSlot<R> {
   cardRect: PhysicalRect | null;
   fingerprint: string | null;
   resolution: R | null;
+  unresolvedState?: "scanning" | "unmatched" | "ocr-error";
 }
 
 export interface VisibleOfferFrame<R> {
@@ -144,6 +145,7 @@ export function buildVisibleFrame<R>(params: {
       cardRect: freshRects[slot.regionIndex] ?? null,
       fingerprint: slot.fingerprint,
       resolution: slot.resolution,
+      unresolvedState: slot.resolution === null ? "scanning" : undefined,
     })),
   };
 }

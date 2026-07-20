@@ -65,7 +65,8 @@ export function decideOcrTrigger<R>(input: OcrTriggerInput<R>): OcrTriggerDecisi
       reasons.push(`reroll:${i}`);
       continue;
     }
-    if (record.resolution == null && now - record.resolvedAt >= retryMs) {
+    const retryAt = record.retryAt ?? (record.resolvedAt + retryMs);
+    if (record.resolution == null && now >= retryAt) {
       slots.push(i);
       reasons.push(`retry:${i}`);
     }

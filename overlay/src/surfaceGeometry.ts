@@ -359,6 +359,9 @@ export interface IdentityRecord<R> {
   championRequestId?: number;
   championPatch?: string | null;
   conflictCount?: number;
+  unresolvedState?: "scanning" | "unmatched" | "ocr-error";
+  failureCount?: number;
+  retryAt?: number;
 }
 
 /**
@@ -392,6 +395,10 @@ export function buildGeometryVisibleFrame<R>(params: {
   observation: GeometryObservation;
   generation: number;
   resolveIdentity: (regionIndex: number, fingerprint: string) => R | null;
+  resolveUnresolvedState?: (
+    regionIndex: number,
+    fingerprint: string,
+  ) => "scanning" | "unmatched" | "ocr-error";
 }): VisibleOfferFrame<R> {
   const { revision, captureSeq, observation, generation, resolveIdentity } = params;
   const renderable = observation.present && !observation.occluded;
@@ -405,6 +412,7 @@ export function buildGeometryVisibleFrame<R>(params: {
       cardRect: card.cardRect,
       fingerprint: card.fingerprint,
       resolution: resolveIdentity(card.regionIndex, card.fingerprint),
+      unresolvedState: params.resolveUnresolvedState?.(card.regionIndex, card.fingerprint) ?? "scanning",
     }));
   return {
     revision,

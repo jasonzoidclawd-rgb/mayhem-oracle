@@ -127,6 +127,13 @@ import {
 } from "./publicationOwnership";
 import { decideOcrTrigger } from "./ocrTrigger";
 import {
+  OcrOwnerRegistry,
+  executeOcrRun,
+  failurePublication,
+  ownerCurrent,
+  type OcrOwnerContext,
+} from "./ocrOwner";
+import {
   EMPTY_SCAN_TIMINGS,
   type OcrCardDiagnostic as DevOcrCardDiagnostic,
   type OcrLifecycleSnapshot,
@@ -255,7 +262,7 @@ interface MatchedCard {
 interface SlotChip {
   regionIndex: number;
   key: string;
-  state: "tier" | "scanning" | "unmatched" | "no-data";
+  state: "tier" | "scanning" | "unmatched" | "ocr-error" | "no-data";
   tier: TierLetter | null;
   winRateText: string | null;
   isNew: boolean;
@@ -429,7 +436,7 @@ function App() {
   // in-flight guard. Only that probe may release the guard in its finally, so a
   // watchdog-superseded probe returning late can never free the guard held by
   // its replacement (which would let two probes overlap).
-  const probeInFlightTokenRef = useRef<number | null>(null);
+  const ocrOwnersRef = useRef(new OcrOwnerRegistry());
   const lastProbeStartedAtRef = useRef<number | null>(null);
   const lastProbeFinishedAtRef = useRef<number | null>(null);
   const probeRestartCountRef = useRef(0);
@@ -653,6 +660,11 @@ function App() {
       generation: geometryGenerationRef.current,
       resolveIdentity: (regionIndex, fingerprint) =>
         identityForSlot(identityStoreRef.current[regionIndex], fingerprint),
+      resolveUnresolvedState: (regionIndex, fingerprint) => {
+        const record = identityStoreRef.current[regionIndex];
+        if (!record || record.fingerprint !== fingerprint || record.resolution !== null) return "scanning";
+        return record.unresolvedState ?? "scanning";
+      },
     });
     visibleFrameRef.current = frame;
     setVisibleFrame(frame);
@@ -1021,6 +1033,9 @@ function App() {
   useEffect(() => {
     championGenerationRef.current += 1;
     championIdRef.current = currentChampionId;
+    ocrOwnersRef.current.invalidate();
+    probeInFlightRef.current = false;
+    probeInFlightSinceRef.current = null;
     identityStoreRef.current = [null, null, null];
     // Advance every slot generation so any in-flight OCR run from the previous
     // champion is superseded and rejected on completion (Phase B).
@@ -1174,7 +1189,14 @@ function App() {
         // Geometry confirms a card here, but its identity is pending (fresh
         // trigger, reroll re-read in flight, or unreadable) — show SCANNING, not
         // nothing: the chip must never vanish merely because OCR hasn't caught up.
-        return [{ ...base, state: "scanning", tier: null, winRateText: null, isNew: false, statScope: null }];
+        return [{
+          ...base,
+          state: slot.unresolvedState ?? "scanning",
+          tier: null,
+          winRateText: null,
+          isNew: false,
+          statScope: null,
+        }];
       }
       const staged = slot.resolution?.aramgg;
       if (staged) {
@@ -1260,6 +1282,9 @@ function App() {
     geometryFreshnessWarningSeqRef.current = null;
     geometryExpiryWarningSeqRef.current = null;
     bumpScanSeq();
+    ocrOwnersRef.current.invalidate();
+    probeInFlightRef.current = false;
+    probeInFlightSinceRef.current = null;
     geometrySeqRef.current += 1;
     publishEmptyVisibleFrame(scanSeqRef.current, performance.now());
     setOcrLifecycle((previous) => ({
@@ -1498,6 +1523,12 @@ function App() {
         identityStoreRef.current = reroll.store;
         slotGenerationsRef.current = reroll.slotGenerations;
         acceptedSlotFingerprintsRef.current = reroll.acceptedFingerprints;
+        if (reroll.invalidated.length > 0) {
+          ocrOwnersRef.current.invalidate();
+          probeInFlightRef.current = false;
+          probeInFlightSinceRef.current = null;
+          bumpScanSeq();
+        }
         if (import.meta.env.DEV && reroll.invalidated.length > 0) {
           console.info(
             "[slot-reroll]",
@@ -1659,7 +1690,6 @@ function App() {
     probeInFlightSinceRef.current = startedAt;
     lastProbeStartedAtRef.current = startedAt;
     const captureSeq = bumpScanSeq();
-    probeInFlightTokenRef.current = captureSeq;
     const foregroundEpoch = foregroundEpochRef.current;
     const gameEpoch = gameEpochRef.current;
     const championGenerationAtStart = championGenerationRef.current;
@@ -1667,6 +1697,26 @@ function App() {
     const offerGenerationAtStart = geometryGenerationRef.current;
     const championRequestIdAtStart = aramgg.championRequestId;
     const championPatchAtStart = aramgg.championPatch;
+    const owner = ocrOwnersRef.current.start({
+      foregroundEpoch,
+      gameEpoch,
+      championGeneration: championGenerationAtStart,
+      championId: championIdAtStart,
+      offerGeneration: offerGenerationAtStart,
+      requestedSlots: slots,
+      slotGenerations: triggerSlotGenerations,
+      fingerprints: triggerFingerprints,
+    }, startedAt);
+    const currentOwnerContext = (): OcrOwnerContext => ({
+      foregroundEpoch: foregroundEpochRef.current,
+      gameEpoch: gameEpochRef.current,
+      championGeneration: championGenerationRef.current,
+      championId: championIdRef.current,
+      offerGeneration: geometryGenerationRef.current,
+      requestedSlots: slots,
+      slotGenerations: slotGenerationsRef.current,
+      fingerprints: acceptedSlotFingerprintsRef.current,
+    });
     const scanStart = new Date().toISOString();
     setOcrLifecycle((previous) => ({
       ...previous,
@@ -1675,7 +1725,7 @@ function App() {
       active: true,
       lastScanStart: scanStart,
       lastScanEnd: null,
-      scanRunId: captureSeq,
+      scanRunId: owner.runId,
       probeSeq: captureSeq,
       lastProbeStartedAt: startedAt,
       probeInFlightSince: startedAt,
@@ -1688,14 +1738,18 @@ function App() {
 
     const scanStartMs = performance.now();
     try {
-      const scan = await invoke<OcrScanResult>("detect_augment_names", {
-        knownNames: ocrKnownNames,
-      });
+      const execution = await executeOcrRun(
+        () => invoke<OcrScanResult>("detect_augment_names", { knownNames: ocrKnownNames }),
+        (scan) => scan,
+      );
+      if (execution.kind === "failure") throw new Error(execution.reason);
+      const scan = execution.value;
 
       // Stale-result rejection: publish only while this probe's seq is still the
       // newest AND the foreground epoch it captured under is unchanged. A delayed
       // or watchdog-superseded probe can never restore an already-cleared frame.
       if (captureSeq !== scanSeqRef.current) return;
+      if (!ownerCurrent(owner, ocrOwnersRef.current.current, currentOwnerContext())) return;
       if (foregroundEpoch !== foregroundEpochRef.current) return;
       if (gameEpoch !== gameEpochRef.current) return;
       if (championGenerationAtStart !== championGenerationRef.current) return;
@@ -1751,6 +1805,9 @@ function App() {
         const fingerprint = triggerFingerprints[regionIndex] ?? "";
         const prev = identityStoreRef.current[regionIndex];
         const resolution = readable ? resolveSlotTitle(raw as string) : null;
+        const failure = resolution === null
+          ? failurePublication((prev?.failureCount ?? 0) + 1, resolvedAt)
+          : null;
         const incoming: IdentityRecord<SlotResolution> = {
           fingerprint,
           resolution,
@@ -1762,10 +1819,13 @@ function App() {
           gameEpoch,
           offerGeneration: offerGenerationAtStart,
           slotGeneration: triggerSlotGenerations[regionIndex] ?? 0,
-          ocrRunId: captureSeq,
+          ocrRunId: owner.runId,
           championRequestId: championRequestIdAtStart,
           championPatch: championPatchAtStart,
           conflictCount: 0,
+          unresolvedState: failure?.state,
+          failureCount: failure?.failureCount ?? 0,
+          retryAt: failure?.retryAt,
         };
         identityStoreRef.current[regionIndex] = reconcileIdentityRecord(prev, incoming);
       }
@@ -1895,6 +1955,7 @@ function App() {
       // A stale or superseded OCR probe (newer seq, or a foreground flip) must not
       // write identities — geometry, not OCR, decides presence and clearing.
       if (captureSeq !== scanSeqRef.current) return;
+      if (!ownerCurrent(owner, ocrOwnersRef.current.current, currentOwnerContext())) return;
       if (foregroundEpoch !== foregroundEpochRef.current) return;
       if (gameEpoch !== gameEpochRef.current) return;
       if (championGenerationAtStart !== championGenerationRef.current) return;
@@ -1911,6 +1972,8 @@ function App() {
       // keeps publishing, so a readable offer still shows SCANNING chips.
       const failedAt = performance.now();
       for (const regionIndex of slots) {
+        const priorFailures = identityStoreRef.current[regionIndex]?.failureCount ?? 0;
+        const failure = failurePublication(priorFailures + 1, failedAt);
         identityStoreRef.current[regionIndex] = {
           fingerprint: triggerFingerprints[regionIndex] ?? "",
           resolution: null,
@@ -1920,9 +1983,12 @@ function App() {
           gameEpoch,
           offerGeneration: offerGenerationAtStart,
           slotGeneration: triggerSlotGenerations[regionIndex] ?? 0,
-          ocrRunId: captureSeq,
+          ocrRunId: owner.runId,
           championRequestId: championRequestIdAtStart,
           championPatch: championPatchAtStart,
+          unresolvedState: failure.state,
+          failureCount: failure.failureCount,
+          retryAt: failure.retryAt,
         };
       }
       ocrPendingSlotsRef.current = [];
@@ -1966,12 +2032,11 @@ function App() {
       // ONLY if this probe still owns the guard: a watchdog restart hands
       // ownership to the replacement probe, whose guard a late return must not
       // free (that would let two probes overlap).
-      if (probeInFlightTokenRef.current === captureSeq) {
+      if (ocrOwnersRef.current.release(owner.runId)) {
         const finishedAt = performance.now();
         lastProbeFinishedAtRef.current = finishedAt;
         probeInFlightSinceRef.current = null;
         probeInFlightRef.current = false;
-        probeInFlightTokenRef.current = null;
         setOcrLifecycle((previous) => ({
           ...previous,
           active: false,
@@ -2053,7 +2118,7 @@ function App() {
       bumpScanSeq();
       probeInFlightRef.current = false;
       probeInFlightSinceRef.current = null;
-      probeInFlightTokenRef.current = null;
+      ocrOwnersRef.current.invalidate();
       probeRestartCountRef.current += 1;
       lastProbeFailureReasonRef.current = action.reason;
     }
@@ -2444,7 +2509,7 @@ function App() {
       bumpScanSeq();
       probeInFlightRef.current = false;
       probeInFlightSinceRef.current = null;
-      probeInFlightTokenRef.current = null;
+      ocrOwnersRef.current.invalidate();
       geometrySeqRef.current += 1;
       geometryInFlightRef.current = false;
       geometryInFlightSinceRef.current = null;
@@ -2534,7 +2599,9 @@ function App() {
               const label =
                 chip.state === "scanning"
                   ? "SCANNING"
-                  : chip.state === "no-data"
+                  : chip.state === "ocr-error"
+                    ? "OCR ERROR"
+                    : chip.state === "no-data"
                     ? "NO ARAMGG DATA"
                     : "UNMATCHED";
               return (

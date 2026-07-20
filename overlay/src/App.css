@@ -102,6 +102,8 @@ html, body, #root {
 .badge-chip-scanning .badge-chip-state { color: #a78bfa; }
 .badge-chip-unmatched { border-color: rgba(251, 113, 133, 0.5); }
 .badge-chip-unmatched .badge-chip-state { color: #fb7185; }
+.badge-chip-ocr-error { border-color: rgba(251, 113, 133, 0.5); }
+.badge-chip-ocr-error .badge-chip-state { color: #fb7185; }
 .badge-chip-no-data { border-color: rgba(148, 163, 184, 0.5); }
 .badge-chip-no-data .badge-chip-state { color: #94a3b8; }
 
