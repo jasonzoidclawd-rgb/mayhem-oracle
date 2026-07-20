@@ -338,6 +338,17 @@ export interface IdentityRecord<R> {
   resolution: R | null;
   /** Monotonic clock when this record was written (retry deadline base). */
   resolvedAt: number;
+  /**
+   * Champion generation the statistic was computed for. A champion change bumps
+   * it so `reconcileSlotIdentity` recomputes rather than treating a stale
+   * champion's value as immutable. Optional for backward compatibility.
+   */
+  championGeneration?: number;
+  /**
+   * Canonical numeric augment ID of the verified identity (empty while pending).
+   * Lets the immutability guard detect a conflicting re-read for the same card.
+   */
+  augmentId?: string;
 }
 
 /**

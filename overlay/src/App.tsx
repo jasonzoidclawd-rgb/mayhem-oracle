@@ -111,6 +111,7 @@ import {
   classifyGeometryObservation,
   createGeometrySurfaceState,
   emptyGeometryObservation,
+  fingerprintChanged,
   geometrySchedulerHealthy,
   identityForSlot,
   newOfferDetected,
@@ -269,6 +270,19 @@ interface SlotResolution {
   aramgg: SlotAramggResolution | null;
 }
 
+/**
+ * Canonical augment ID of a resolved slot (empty while pending/unmatched). The
+ * dev ARAMGG path carries the numeric Riot augment ID; the engine path uses the
+ * local catalog slug. Used by the immutability guard to detect a conflicting
+ * re-read of the same card (Phase A).
+ */
+function slotResolutionAugmentId(resolution: SlotResolution | null): string {
+  if (!resolution) return "";
+  const aramgg = resolution.aramgg;
+  if (aramgg && aramgg.kind === "matched") return aramgg.stat.augmentId;
+  return resolution.pool?.slug ?? "";
+}
+
 interface OverlayAugment {
   slug: string;
   name: string;
@@ -402,6 +416,10 @@ function App() {
   // live card, so a late OCR result from a superseded generation can never paint
   // the new card (the identity stale-result guard).
   const identityStoreRef = useRef<Array<IdentityRecord<SlotResolution> | null>>([null, null, null]);
+  // Champion generation: bumps on every final-champion change so each resolved
+  // slot recomputes against the new champion's dataset, while within a
+  // generation the reconcile guard keeps each verified identity immutable.
+  const championGenerationRef = useRef(0);
   // Cross-track OCR-trigger coordination: the geometry track decides which slots
   // need a (re)read and stamps the fingerprints those reads are keyed to.
   const ocrPendingSlotsRef = useRef<number[]>([]);
@@ -932,6 +950,15 @@ function App() {
     overlayData?.augments,
     overlayData?.champions.find((champion) => champion.slug === championSlug)?.champion_key ?? null,
   );
+  // A final-champion change starts a new champion generation and invalidates
+  // every resolved slot, so each re-resolves against the new champion's own
+  // dataset (Section 6: champion change recomputes every resolved slot). Within
+  // a generation the reconcile guard then holds each verified identity immutable.
+  useEffect(() => {
+    championGenerationRef.current += 1;
+    identityStoreRef.current = [null, null, null];
+  }, [championSlug]);
+
   // Ref so the OCR loop always resolves against the freshest ARAMGG source
   // without re-creating the scan callback when the source loads.
   const aramggResolveRef = useRef(aramgg.resolveSlotTitle);
@@ -1546,13 +1573,32 @@ function App() {
       // plausible title (never applyScanToOffer's grace) so a rerolled slot whose
       // new title was unreadable stays SCANNING instead of showing the stale one.
       const resolvedAt = performance.now();
+      const championGeneration = championGenerationRef.current;
       for (const regionIndex of slots) {
         const raw = rawTitles[regionIndex];
         const readable = raw != null && isPlausibleTitle(normalizeAugmentNameForLookup(raw));
+        const fingerprint = triggerFingerprints[regionIndex] ?? "";
+        const prev = identityStoreRef.current[regionIndex];
+        // Immutability guard (mirrors reconcileSlotIdentity): an already-verified
+        // slot whose champion generation and geometry fingerprint are unchanged
+        // keeps its identity+statistic. This is the July 20 fix — a conflicting or
+        // sparkle-drift re-read can never silently mutate an unchanged card. Only a
+        // real reroll (fingerprint change) or a champion change replaces it; a
+        // still-pending slot (null resolution) is freely adopted (a retry resolving).
+        const prevVerified =
+          prev != null &&
+          prev.resolution != null &&
+          (prev.augmentId ?? "").length > 0 &&
+          prev.championGeneration === championGeneration &&
+          !fingerprintChanged(prev.fingerprint, fingerprint);
+        if (prevVerified) continue;
+        const resolution = readable ? resolveSlotTitle(raw as string) : null;
         identityStoreRef.current[regionIndex] = {
-          fingerprint: triggerFingerprints[regionIndex] ?? "",
-          resolution: readable ? resolveSlotTitle(raw as string) : null,
+          fingerprint,
+          resolution,
           resolvedAt,
+          championGeneration,
+          augmentId: slotResolutionAugmentId(resolution),
         };
       }
       // Clear the pending queue; the next geometry tick re-populates it if any
