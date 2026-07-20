@@ -78,6 +78,10 @@ import { isGeometryPreviewEnabled, resolveOverlayFixtureMode } from "./dev/fixtu
 import { DevOverlayDiagnostics } from "./dev/DevOverlayDiagnostics";
 import { devPanelsVisible } from "./dev/productionSurfaces";
 import {
+  boundedDiagnosticHash,
+  logOverlayDiagnostic,
+} from "./dev/publicationDiagnostics";
+import {
   SurfaceFixtureBuffer,
   buildSurfaceFixtureRecord,
   isDatasetCaptureEnabled,
@@ -112,6 +116,7 @@ import {
   createGeometrySurfaceState,
   emptyGeometryObservation,
   geometrySchedulerHealthy,
+  hammingDistance,
   identityForSlot,
   newOfferDetected,
   type GeometryClassification,
@@ -1536,6 +1541,21 @@ function App() {
       offerSurfaceRef.current = nextOfferSurface;
       geometryGenerationRef.current = nextOfferSurface.offerGeneration;
       setOfferSurface(nextOfferSurface);
+      if (import.meta.env.DEV && (
+        priorOfferSurface.state !== nextOfferSurface.state ||
+        priorOfferSurface.render !== nextOfferSurface.render
+      )) {
+        logOverlayDiagnostic("[offer-state]", {
+          priorState: priorOfferSurface.state,
+          nextState: nextOfferSurface.state,
+          blueControlConfidence: nextOfferSurface.blueControlConfidence,
+          validCardCount: nextOfferSurface.validCardCount,
+          occlusionReason: nextOfferSurface.occlusionReason,
+          captureValid: nextOfferSurface.captureValid,
+          renderDecision: nextOfferSurface.render,
+          offerGeneration: nextOfferSurface.offerGeneration,
+        });
+      }
       if (detectedNewOffer && previousSurface.lastPositiveObservation != null) {
         recordRoundCompleted();
       }
@@ -1567,6 +1587,7 @@ function App() {
       // can paint the new card and any OCR run keyed to the old slot generation
       // is rejected on completion. Neighbours are retained untouched.
       if (transition.action === "publish" && publishedObservation != null) {
+        const priorAcceptedFingerprints = acceptedSlotFingerprintsRef.current;
         const reroll = applyRerollInvalidation({
           store: identityStoreRef.current,
           acceptedFingerprints: acceptedSlotFingerprintsRef.current,
@@ -1579,6 +1600,32 @@ function App() {
         identityStoreRef.current = reroll.store;
         slotGenerationsRef.current = reroll.slotGenerations;
         acceptedSlotFingerprintsRef.current = reroll.acceptedFingerprints;
+        if (import.meta.env.DEV) {
+          for (const slot of reroll.invalidated) {
+            const previousFingerprint = priorAcceptedFingerprints[slot] ?? "";
+            const currentFingerprint = publishedObservation.cards[slot]?.fingerprint ?? "";
+            logOverlayDiagnostic("[slot-publication]", {
+              foregroundEpoch: foregroundEpochRef.current,
+              gameEpoch: gameEpochRef.current,
+              championId: championIdRef.current,
+              championGeneration: championGenerationRef.current,
+              championDatasetRequestId: aramgg.championRequestId,
+              offerGeneration: nextOfferSurface.offerGeneration,
+              geometrySequence: captureSeq,
+              slot,
+              slotGeneration: reroll.slotGenerations[slot],
+              fingerprint: boundedDiagnosticHash(currentFingerprint),
+              fingerprintHammingDistance: hammingDistance(previousFingerprint, currentFingerprint),
+              ocrRunId: null,
+              normalizedOcrTitleHash: null,
+              canonicalAugmentId: null,
+              statProvenance: null,
+              rawWinRate: null,
+              tier: null,
+              publicationReason: detectedNewOffer ? "new-offer-invalidated" : "reroll-invalidated",
+            });
+          }
+        }
         if (reroll.invalidated.length > 0) {
           ocrOwnersRef.current.invalidate();
           probeInFlightRef.current = false;
@@ -1635,6 +1682,28 @@ function App() {
           ocrTriggerFingerprintsRef.current = publishedObservation.cards.map(
             (card) => card.fingerprint,
           );
+          if (import.meta.env.DEV) {
+            logOverlayDiagnostic("[identity-trigger]", {
+              foregroundEpoch: foregroundEpochRef.current,
+              gameEpoch: gameEpochRef.current,
+              championId: championIdRef.current,
+              championGeneration: championGenerationRef.current,
+              offerGeneration: nextOfferSurface.offerGeneration,
+              geometrySequence: captureSeq,
+              requestedSlots: decision.slots,
+              slotGenerations: decision.slots.map((slot) => slotGenerationsRef.current[slot]),
+              fingerprints: decision.slots.map((slot) =>
+                boundedDiagnosticHash(publishedObservation.cards[slot]?.fingerprint ?? null)),
+              reason: decision.reason,
+            });
+            if (decision.reason.includes("retry:")) {
+              logOverlayDiagnostic("[identity-retry]", {
+                requestedSlots: decision.slots,
+                reason: decision.reason,
+                offerGeneration: nextOfferSurface.offerGeneration,
+              });
+            }
+          }
         }
       } else if (transition.action === "clear") {
         ocrPendingSlotsRef.current = [];
@@ -1763,6 +1832,22 @@ function App() {
       slotGenerations: triggerSlotGenerations,
       fingerprints: triggerFingerprints,
     }, startedAt);
+    if (import.meta.env.DEV) {
+      logOverlayDiagnostic("[identity-start]", {
+        runId: owner.runId,
+        foregroundEpoch: owner.foregroundEpoch,
+        gameEpoch: owner.gameEpoch,
+        championId: owner.championId,
+        championGeneration: owner.championGeneration,
+        offerGeneration: owner.offerGeneration,
+        requestedSlots: owner.requestedSlots,
+        slotGenerations: owner.requestedSlots.map((slot) => owner.slotGenerations[slot]),
+        fingerprints: owner.requestedSlots.map((slot) =>
+          boundedDiagnosticHash(owner.fingerprints[slot] ?? null)),
+        startedAt: owner.startedAt,
+        timeoutDeadline: owner.timeoutDeadline,
+      });
+    }
     const currentOwnerContext = (): OcrOwnerContext => ({
       foregroundEpoch: foregroundEpochRef.current,
       gameEpoch: gameEpochRef.current,
@@ -1800,12 +1885,32 @@ function App() {
       );
       if (execution.kind === "failure") throw new Error(execution.reason);
       const scan = execution.value;
+      if (import.meta.env.DEV) {
+        logOverlayDiagnostic("[identity-native-finish]", {
+          runId: owner.runId,
+          captureAttempted: scan.captureAttempted,
+          cropCount: scan.cropCount,
+          captureMs: scan.captureMs,
+          ocrMs: scan.ocrMs,
+          nativeTotalMs: scan.totalMs,
+        });
+      }
 
       // Stale-result rejection: publish only while this probe's seq is still the
       // newest AND the foreground epoch it captured under is unchanged. A delayed
       // or watchdog-superseded probe can never restore an already-cleared frame.
-      if (captureSeq !== scanSeqRef.current) return;
-      if (!ownerCurrent(owner, ocrOwnersRef.current.current, currentOwnerContext())) return;
+      if (
+        captureSeq !== scanSeqRef.current ||
+        !ownerCurrent(owner, ocrOwnersRef.current.current, currentOwnerContext())
+      ) {
+        if (import.meta.env.DEV) {
+          logOverlayDiagnostic("[identity-stale-reject]", {
+            runId: owner.runId,
+            reason: "owner-superseded-before-publication",
+          });
+        }
+        return;
+      }
       if (foregroundEpoch !== foregroundEpochRef.current) return;
       if (gameEpoch !== gameEpochRef.current) return;
       if (championGenerationAtStart !== championGenerationRef.current) return;
@@ -1883,7 +1988,37 @@ function App() {
           failureCount: failure?.failureCount ?? 0,
           retryAt: failure?.retryAt,
         };
-        identityStoreRef.current[regionIndex] = reconcileIdentityRecord(prev, incoming);
+        const stored = reconcileIdentityRecord(prev, incoming);
+        identityStoreRef.current[regionIndex] = stored;
+        if (import.meta.env.DEV) {
+          const stat = stored.resolution?.aramgg?.kind === "matched"
+            ? stored.resolution.aramgg.stat
+            : null;
+          const diagnostic = {
+            foregroundEpoch,
+            gameEpoch,
+            championId: championIdAtStart,
+            championGeneration,
+            championDatasetRequestId: championRequestIdAtStart,
+            offerGeneration: offerGenerationAtStart,
+            geometrySequence: geometrySeqRef.current,
+            slot: regionIndex,
+            slotGeneration: triggerSlotGenerations[regionIndex] ?? 0,
+            fingerprint: boundedDiagnosticHash(fingerprint),
+            fingerprintHammingDistance: prev
+              ? hammingDistance(prev.fingerprint, fingerprint)
+              : null,
+            ocrRunId: owner.runId,
+            normalizedOcrTitleHash: boundedDiagnosticHash(readable ? raw : null),
+            canonicalAugmentId: stored.augmentId ?? null,
+            statProvenance: stat?.provenance ?? null,
+            rawWinRate: stat?.rawWinRate ?? null,
+            tier: stat?.tierLetter ?? null,
+            publicationReason: stored === prev ? "identity-conflict-rejected" : "identity-published",
+          };
+          logOverlayDiagnostic("[identity-publish]", diagnostic);
+          logOverlayDiagnostic("[slot-publication]", diagnostic);
+        }
       }
       // Clear the pending queue; the next geometry tick re-populates it if any
       // slot is still unresolved past the retry deadline (or rerolls again).
@@ -2010,8 +2145,18 @@ function App() {
     } catch (error) {
       // A stale or superseded OCR probe (newer seq, or a foreground flip) must not
       // write identities — geometry, not OCR, decides presence and clearing.
-      if (captureSeq !== scanSeqRef.current) return;
-      if (!ownerCurrent(owner, ocrOwnersRef.current.current, currentOwnerContext())) return;
+      if (
+        captureSeq !== scanSeqRef.current ||
+        !ownerCurrent(owner, ocrOwnersRef.current.current, currentOwnerContext())
+      ) {
+        if (import.meta.env.DEV) {
+          logOverlayDiagnostic("[identity-stale-reject]", {
+            runId: owner.runId,
+            reason: "owner-superseded-during-failure",
+          });
+        }
+        return;
+      }
       if (foregroundEpoch !== foregroundEpochRef.current) return;
       if (gameEpoch !== gameEpochRef.current) return;
       if (championGenerationAtStart !== championGenerationRef.current) return;
@@ -2050,6 +2195,17 @@ function App() {
       ocrPendingSlotsRef.current = [];
       republishGeometryFrame(geometrySeqRef.current);
       const message = error instanceof Error ? error.message : "ocr-scan-failed";
+      if (import.meta.env.DEV) {
+        logOverlayDiagnostic(
+          message === "timeout" ? "[identity-timeout]" : "[identity-retry]",
+          {
+            runId: owner.runId,
+            requestedSlots: slots,
+            reason: message,
+            failures: slots.map((slot) => identityStoreRef.current[slot]?.failureCount ?? 0),
+          },
+        );
+      }
       setOcrDiagnostics(
         [0, 1, 2].map((regionIndex) => ({
           regionIndex,
@@ -2171,6 +2327,14 @@ function App() {
       return;
     }
     if (action.kind === "restart") {
+      const expiredOwner = ocrOwnersRef.current.current;
+      if (import.meta.env.DEV) {
+        logOverlayDiagnostic("[identity-watchdog-restart]", {
+          runId: expiredOwner?.runId ?? null,
+          inFlightSince: probeInFlightSinceRef.current,
+          reason: action.reason,
+        });
+      }
       bumpScanSeq();
       probeInFlightRef.current = false;
       probeInFlightSinceRef.current = null;
