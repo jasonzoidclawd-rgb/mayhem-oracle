@@ -144,12 +144,12 @@ describe("native timeout and failure recovery", () => {
     expect(nextRetryDelay(5)).toBe(6_000);
   });
 
-  it("moves SCANNING to OCR ERROR and allows a later success", () => {
+  it("moves SCANNING to OCR ERROR and allows a later success", async () => {
     expect(failurePublication(1, 100)).toMatchObject({ state: "scanning" });
     expect(failurePublication(2, 100)).toMatchObject({ state: "scanning" });
     expect(failurePublication(3, 100)).toMatchObject({ state: "ocr-error" });
     expect(failurePublication(5, 100)).toMatchObject({ state: "ocr-error", failureCount: 5 });
-    expect(executeOcrRun(async () => "valid", (value) => value, 25)).resolves.toEqual({
+    await expect(executeOcrRun(async () => "valid", (value) => value, 25)).resolves.toEqual({
       kind: "success",
       value: "valid",
     });
