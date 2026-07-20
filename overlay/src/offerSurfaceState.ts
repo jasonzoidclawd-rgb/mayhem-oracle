@@ -79,7 +79,12 @@ export function advanceOfferSurface(
     };
   }
 
-  if (evidence.blueControlPresent && evidence.validCardCount >= 2) {
+  // Authority: at least two structurally valid usable cards with no card-area
+  // occlusion IS a visible offer. The blue central control is SUPPORTIVE
+  // evidence only while cards are visible — never mandatory — so a tooltip
+  // covering the control, or a control false-negative, can never leave
+  // OFFER_VISIBLE or blank the resolved badges (failures A + E).
+  if (evidence.validCardCount >= 2) {
     const freshGeneration = evidence.newOfferEvidence || previous.state === "NO_OFFER";
     return {
       ...common,
@@ -91,6 +96,8 @@ export function advanceOfferSurface(
     };
   }
 
+  // Cards absent: NOW the control is decisive. Control + genuine hidden evidence
+  // is a collapsed offer; control alone (no hidden evidence) stays UNCERTAIN.
   if (
     evidence.hiddenEvidence &&
     evidence.blueControlPresent &&

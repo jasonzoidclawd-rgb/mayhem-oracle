@@ -91,3 +91,56 @@ describe("offer surface state machine", () => {
     expect(noOffer.render).toBe(false);
   });
 });
+
+// Failures A + E: the blue central control is supportive evidence, never
+// mandatory for OFFER_VISIBLE. Two structurally valid cards with no card-area
+// occlusion is a visible offer regardless of the control, so a tooltip covering
+// the control (or a control false-negative) can never blank the badges.
+describe("blue control is supportive, not mandatory", () => {
+  it("two or more visible cards are OFFER_VISIBLE even with no detected control", () => {
+    const next = advanceOfferSurface(
+      createOfferSurfaceState(),
+      visible({ blueControlPresent: false, blueControlConfidence: 0, validCardCount: 3 }),
+    );
+    expect(next.state).toBe("OFFER_VISIBLE");
+    expect(next.render).toBe(true);
+  });
+
+  it("two visible cards (one mid-reroll) stay OFFER_VISIBLE without the control", () => {
+    const prior = advanceOfferSurface(createOfferSurfaceState(), visible());
+    const next = advanceOfferSurface(
+      prior,
+      visible({ now: 200, validCardCount: 2, blueControlPresent: false }),
+    );
+    expect(next.state).toBe("OFFER_VISIBLE");
+    expect(next.render).toBe(true);
+  });
+
+  it("a tooltip hiding the control keeps OFFER_VISIBLE and does not advance the generation", () => {
+    const withControl = advanceOfferSurface(createOfferSurfaceState(), visible());
+    const tooltipOpen = advanceOfferSurface(
+      withControl,
+      visible({ now: 200, blueControlPresent: false, blueControlConfidence: 0 }),
+    );
+    const tooltipClosed = advanceOfferSurface(tooltipOpen, visible({ now: 300 }));
+    expect(tooltipOpen.state).toBe("OFFER_VISIBLE");
+    expect(tooltipOpen.render).toBe(true);
+    expect(tooltipClosed.state).toBe("OFFER_VISIBLE");
+    // No generation churn: the same offer stayed visible throughout.
+    expect(tooltipOpen.offerGeneration).toBe(withControl.offerGeneration);
+    expect(tooltipClosed.offerGeneration).toBe(withControl.offerGeneration);
+  });
+
+  it("keeps the control decisive only when cards are absent (OFFER_HIDDEN vs NO_OFFER)", () => {
+    const hidden = advanceOfferSurface(
+      createOfferSurfaceState(),
+      visible({ validCardCount: 0, hiddenEvidence: true, blueControlPresent: true }),
+    );
+    expect(hidden.state).toBe("OFFER_HIDDEN");
+    const noOffer = advanceOfferSurface(
+      createOfferSurfaceState(),
+      visible({ validCardCount: 0, blueControlPresent: false }),
+    );
+    expect(noOffer.state).toBe("NO_OFFER");
+  });
+});
