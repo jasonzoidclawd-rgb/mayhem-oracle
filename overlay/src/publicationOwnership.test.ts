@@ -32,12 +32,16 @@ function token(overrides: Partial<OwnershipToken> = {}): OwnershipToken {
 
 function identity(overrides: Partial<SlotIdentity<string>> = {}): SlotIdentity<string> {
   return {
+    foregroundEpoch: 1,
+    gameEpoch: 1,
     fingerprint: "111100001111000011110000",
     championGeneration: 3,
+    offerGeneration: 2,
     augmentId: "1006",
     resolution: "S+/48.0096",
     slotGeneration: 7,
     ocrRunId: 11,
+    conflictCount: 0,
     ...overrides,
   };
 }
@@ -107,15 +111,24 @@ describe("reconcileSlotIdentity — immutable within a champion generation", () 
     expect(r.identity.resolution).toBe("S+/48.0096");
   });
 
-  it("keeps the statistic — unchanged canonical identity cannot change its statistic", () => {
-    // Same augment id, but a re-read carries a different (mutated) statistic.
-    const prev = identity({ augmentId: "1006", resolution: "C/45.3" });
-    const mutated = identity({ augmentId: "1006", resolution: "S/57.4" });
-    const r = reconcileSlotIdentity(prev, mutated);
-    expect(r.action).toBe("keep");
-    if (r.action !== "keep") throw new Error("unreachable");
-    expect(r.reason).toBe("immutable-stat");
-    expect(r.identity.resolution).toBe("C/45.3"); // first verified value is immutable
+  it("recomputes only the derived statistic for the same canonical identity", () => {
+    const prev = identity({ augmentId: "1006", resolution: "GLOBAL/C/45.3" });
+    const recomputed = identity({ augmentId: "1006", resolution: "CHAMP/S/57.4", ocrRunId: 12 });
+    const r = reconcileSlotIdentity(prev, recomputed);
+    expect(r.action).toBe("recompute-stat");
+    expect(r.identity.augmentId).toBe("1006");
+    expect(r.identity.resolution).toBe("CHAMP/S/57.4");
+  });
+
+  it("bounds repeated conflicting OCR without changing canonical identity", () => {
+    let current = identity({ augmentId: "1006" });
+    for (let i = 0; i < 20; i += 1) {
+      const r = reconcileSlotIdentity(current, identity({ augmentId: "1204", ocrRunId: 12 + i }));
+      expect(r.action).toBe("keep");
+      current = r.identity;
+    }
+    expect(current.augmentId).toBe("1006");
+    expect(current.conflictCount).toBe(3);
   });
 
   it("replaces on a genuine reroll (fingerprint changed past the Hamming band)", () => {

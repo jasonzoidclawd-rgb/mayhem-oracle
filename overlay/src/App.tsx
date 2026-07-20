@@ -111,7 +111,6 @@ import {
   classifyGeometryObservation,
   createGeometrySurfaceState,
   emptyGeometryObservation,
-  fingerprintChanged,
   geometrySchedulerHealthy,
   identityForSlot,
   newOfferDetected,
@@ -122,6 +121,10 @@ import {
   type IdentityRecord,
 } from "./surfaceGeometry";
 import { applyRerollInvalidation, ocrRunSuperseded } from "./rerollInvalidation";
+import {
+  reconcileSlotIdentity,
+  type SlotIdentity,
+} from "./publicationOwnership";
 import { decideOcrTrigger } from "./ocrTrigger";
 import {
   EMPTY_SCAN_TIMINGS,
@@ -284,6 +287,50 @@ function slotResolutionAugmentId(resolution: SlotResolution | null): string {
   return resolution.pool?.slug ?? "";
 }
 
+/**
+ * The one live reconciliation bridge. Canonical identity is immutable inside
+ * an ownership scope; the derived resolution may refresh for the same id when
+ * the current champion dataset moves from GLOBAL fallback to CHAMP.
+ */
+function reconcileIdentityRecord(
+  previous: IdentityRecord<SlotResolution> | null,
+  incoming: IdentityRecord<SlotResolution>,
+): IdentityRecord<SlotResolution> {
+  if (incoming.resolution === null || (incoming.augmentId ?? "").length === 0) {
+    return previous?.resolution ? previous : incoming;
+  }
+  const asIdentity = (record: IdentityRecord<SlotResolution>): SlotIdentity<SlotResolution> => ({
+    foregroundEpoch: record.foregroundEpoch ?? 0,
+    gameEpoch: record.gameEpoch ?? 0,
+    fingerprint: record.fingerprint,
+    championGeneration: record.championGeneration ?? 0,
+    offerGeneration: record.offerGeneration ?? 0,
+    augmentId: record.augmentId ?? "",
+    resolution: record.resolution as SlotResolution,
+    slotGeneration: record.slotGeneration ?? 0,
+    ocrRunId: record.ocrRunId ?? 0,
+    conflictCount: record.conflictCount ?? 0,
+  });
+  const reconciled = reconcileSlotIdentity(
+    previous?.resolution ? asIdentity(previous) : null,
+    asIdentity(incoming),
+  );
+  if (reconciled.action === "keep") {
+    return { ...previous!, conflictCount: reconciled.identity.conflictCount };
+  }
+  if (reconciled.action === "recompute-stat") {
+    return {
+      ...previous!,
+      resolution: reconciled.identity.resolution,
+      resolvedAt: incoming.resolvedAt,
+      ocrRunId: incoming.ocrRunId,
+      championRequestId: incoming.championRequestId,
+      championPatch: incoming.championPatch,
+    };
+  }
+  return incoming;
+}
+
 interface OverlayAugment {
   slug: string;
   name: string;
@@ -372,6 +419,9 @@ function App() {
   // Foreground epoch: bumped whenever gameWindowForeground flips, so a probe
   // that captured under an earlier focus can never publish after a change.
   const foregroundEpochRef = useRef(0);
+  // Active-game epoch changes on every capture-allowed game transition or
+  // reconnect. Async work from a previous game can never publish into the next.
+  const gameEpochRef = useRef(0);
   // Self-healing surface-probe scheduler bookkeeping (a single probe at a time).
   const probeInFlightRef = useRef(false);
   const probeInFlightSinceRef = useRef<number | null>(null);
@@ -421,10 +471,12 @@ function App() {
   // slot recomputes against the new champion's dataset, while within a
   // generation the reconcile guard keeps each verified identity immutable.
   const championGenerationRef = useRef(0);
+  const championIdRef = useRef<string | null>(null);
   // Per-slot generation: bumps ONLY for the slot whose fingerprint changed
   // (a single-slot reroll), so an OCR run stamped with the old generation is
   // rejected atomically and cannot repaint the new card (Phase B).
   const slotGenerationsRef = useRef<number[]>([0, 0, 0]);
+  const acceptedSlotFingerprintsRef = useRef<string[]>(["", "", ""]);
   // Cross-track OCR-trigger coordination: the geometry track decides which slots
   // need a (re)read and stamps the fingerprints those reads are keyed to.
   const ocrPendingSlotsRef = useRef<number[]>([]);
@@ -538,6 +590,11 @@ function App() {
     phaseRef.current = nextPhase;
     setPhase(nextPhase);
     setOcrLifecycle((previous) => ({ ...previous, phase: nextPhase }));
+  }, []);
+
+  const setActiveGame = useCallback((active: boolean) => {
+    if (activeGameRef.current !== active) gameEpochRef.current += 1;
+    activeGameRef.current = active;
   }, []);
 
   // Atomic offer publication: the ref and the rendered state always hold the
@@ -950,10 +1007,12 @@ function App() {
   // TIER_FIXTURE: canonical ARAMGG stats over REAL OCR-detected cards — never
   // injects geometry, never forces focus/phase, so it can never mask real OCR.
   // GEOMETRY_PREVIEW: synthetic cards, ONLY when League is absent, watermarked.
+  const currentChampionId =
+    overlayData?.champions.find((champion) => champion.slug === championSlug)?.champion_key ?? null;
   const aramgg = useAramggTierFixture(
     tierFixtureOn || geometryPreviewOn,
     overlayData?.augments,
-    overlayData?.champions.find((champion) => champion.slug === championSlug)?.champion_key ?? null,
+    currentChampionId,
   );
   // A final-champion change starts a new champion generation and invalidates
   // every resolved slot, so each re-resolves against the new champion's own
@@ -961,11 +1020,12 @@ function App() {
   // a generation the reconcile guard then holds each verified identity immutable.
   useEffect(() => {
     championGenerationRef.current += 1;
+    championIdRef.current = currentChampionId;
     identityStoreRef.current = [null, null, null];
     // Advance every slot generation so any in-flight OCR run from the previous
     // champion is superseded and rejected on completion (Phase B).
     slotGenerationsRef.current = slotGenerationsRef.current.map((g) => g + 1);
-  }, [championSlug]);
+  }, [championSlug, currentChampionId]);
 
   // Ref so the OCR loop always resolves against the freshest ARAMGG source
   // without re-creating the scan callback when the source loads.
@@ -1189,6 +1249,7 @@ function App() {
       // present result cannot repaint after a game exit / focus loss. Advancing
       // the geometry seq stale-rejects any in-flight geometry probe too.
       identityStoreRef.current = [null, null, null];
+      acceptedSlotFingerprintsRef.current = ["", "", ""];
       geometryObservationRef.current = null;
       geometrySurfaceStateRef.current = createGeometrySurfaceState();
       lastGeometryCompletedAtRef.current = null;
@@ -1285,7 +1346,7 @@ function App() {
 
   const clearGameOnlyState = useCallback((nextPhase: Phase) => {
     ocrSelectionCompletedRef.current = true;
-    activeGameRef.current = false;
+    setActiveGame(false);
     setPlayerData(null);
     setChampionSlug(null);
     completedRoundsRef.current = 0;
@@ -1298,7 +1359,7 @@ function App() {
     setCoachOpen(false);
     stopOcr();
     updatePhase(nextPhase);
-  }, [stopOcr, updatePhase]);
+  }, [setActiveGame, stopOcr, updatePhase]);
 
   // Stage 2 per-slot identity resolution: maps a plausible title to its catalog
   // (Riot/ARAMGG) identity for chip content. Presence (Stage 1) never depends on
@@ -1315,6 +1376,52 @@ function App() {
   // Stage 2 latch predicate: an offer latches on plausible TITLE presence, never
   // on catalog identity (an offer whose names are unknown is still an offer).
   const titlePresent = useCallback(() => true, []);
+
+  // Champion-data completion may legitimately change only the statistic for
+  // an already-verified canonical augment (GLOBAL → CHAMP). Reconcile the
+  // stored OCR identity without invoking OCR again.
+  useEffect(() => {
+    if (!aramgg.resolveSlotTitle) return;
+    let changed = false;
+    const nextStore = identityStoreRef.current.map((record, regionIndex) => {
+      if (!record?.resolution || !record.ocrTitle) return record;
+      const resolution = resolveSlotTitle(record.ocrTitle);
+      const incoming: IdentityRecord<SlotResolution> = {
+        ...record,
+        resolution,
+        resolvedAt: performance.now(),
+        championGeneration: championGenerationRef.current,
+        championRequestId: aramgg.championRequestId,
+        championPatch: aramgg.championPatch,
+        augmentId: slotResolutionAugmentId(resolution),
+        foregroundEpoch: foregroundEpochRef.current,
+        gameEpoch: gameEpochRef.current,
+        offerGeneration: geometryGenerationRef.current,
+        slotGeneration: slotGenerationsRef.current[regionIndex] ?? 0,
+      };
+      const reconciled = reconcileIdentityRecord(record, incoming);
+      if (reconciled.resolution !== record.resolution) changed = true;
+      return reconciled;
+    });
+    if (!changed) return;
+    identityStoreRef.current = nextStore;
+    const currentOffer = offerStateRef.current;
+    publishOffer({
+      ...currentOffer,
+      slots: currentOffer.slots.map((slot) => ({
+        ...slot,
+        resolution: nextStore[slot.regionIndex]?.resolution ?? slot.resolution,
+      })),
+    });
+    republishGeometryFrame(geometrySeqRef.current);
+  }, [
+    aramgg.championPatch,
+    aramgg.championRequestId,
+    aramgg.resolveSlotTitle,
+    publishOffer,
+    republishGeometryFrame,
+    resolveSlotTitle,
+  ]);
 
   // ─── TRACK 1: geometry probe — presence / occlusion / visual freshness ──────
   // A cheap Rust PIXEL probe classifies the surface (present / occluded / absent)
@@ -1364,11 +1471,11 @@ function App() {
       // generation; a queued-round REPLACEMENT (previous offer was present) is
       // strong round-completion evidence. A first appearance is NOT a completion.
       const publishedObservation = transition.state.visualObservation;
-      if (
+      const detectedNewOffer =
         transition.action === "publish" &&
         publishedObservation != null &&
-        newOfferDetected(previousSurface.lastPositiveObservation, publishedObservation)
-      ) {
+        newOfferDetected(previousSurface.lastPositiveObservation, publishedObservation);
+      if (detectedNewOffer) {
         geometryGenerationRef.current += 1;
         if (previousSurface.lastPositiveObservation != null) recordRoundCompleted();
       }
@@ -1381,13 +1488,16 @@ function App() {
       if (transition.action === "publish" && publishedObservation != null) {
         const reroll = applyRerollInvalidation({
           store: identityStoreRef.current,
+          acceptedFingerprints: acceptedSlotFingerprintsRef.current,
           slotGenerations: slotGenerationsRef.current,
           observation: publishedObservation,
           championGeneration: championGenerationRef.current,
           now: performance.now(),
+          newOffer: detectedNewOffer,
         });
         identityStoreRef.current = reroll.store;
         slotGenerationsRef.current = reroll.slotGenerations;
+        acceptedSlotFingerprintsRef.current = reroll.acceptedFingerprints;
         if (import.meta.env.DEV && reroll.invalidated.length > 0) {
           console.info(
             "[slot-reroll]",
@@ -1551,6 +1661,12 @@ function App() {
     const captureSeq = bumpScanSeq();
     probeInFlightTokenRef.current = captureSeq;
     const foregroundEpoch = foregroundEpochRef.current;
+    const gameEpoch = gameEpochRef.current;
+    const championGenerationAtStart = championGenerationRef.current;
+    const championIdAtStart = championIdRef.current;
+    const offerGenerationAtStart = geometryGenerationRef.current;
+    const championRequestIdAtStart = aramgg.championRequestId;
+    const championPatchAtStart = aramgg.championPatch;
     const scanStart = new Date().toISOString();
     setOcrLifecycle((previous) => ({
       ...previous,
@@ -1581,6 +1697,16 @@ function App() {
       // or watchdog-superseded probe can never restore an already-cleared frame.
       if (captureSeq !== scanSeqRef.current) return;
       if (foregroundEpoch !== foregroundEpochRef.current) return;
+      if (gameEpoch !== gameEpochRef.current) return;
+      if (championGenerationAtStart !== championGenerationRef.current) return;
+      if (championIdAtStart !== championIdRef.current) return;
+      if (offerGenerationAtStart !== geometryGenerationRef.current) return;
+      if (championRequestIdAtStart !== aramgg.championRequestId) return;
+      if (championPatchAtStart !== aramgg.championPatch) return;
+      if (slots.some((regionIndex) => ocrRunSuperseded(
+        triggerSlotGenerations[regionIndex] ?? 0,
+        slotGenerationsRef.current[regionIndex] ?? 0,
+      ))) return;
       const matchStartMs = performance.now();
 
       const rawTitles: Array<string | null> = [0, 1, 2].map(
@@ -1624,27 +1750,24 @@ function App() {
         )) continue;
         const fingerprint = triggerFingerprints[regionIndex] ?? "";
         const prev = identityStoreRef.current[regionIndex];
-        // Immutability guard (mirrors reconcileSlotIdentity): an already-verified
-        // slot whose champion generation and geometry fingerprint are unchanged
-        // keeps its identity+statistic. This is the July 20 fix — a conflicting or
-        // sparkle-drift re-read can never silently mutate an unchanged card. Only a
-        // real reroll (fingerprint change) or a champion change replaces it; a
-        // still-pending slot (null resolution) is freely adopted (a retry resolving).
-        const prevVerified =
-          prev != null &&
-          prev.resolution != null &&
-          (prev.augmentId ?? "").length > 0 &&
-          prev.championGeneration === championGeneration &&
-          !fingerprintChanged(prev.fingerprint, fingerprint);
-        if (prevVerified) continue;
         const resolution = readable ? resolveSlotTitle(raw as string) : null;
-        identityStoreRef.current[regionIndex] = {
+        const incoming: IdentityRecord<SlotResolution> = {
           fingerprint,
           resolution,
           resolvedAt,
           championGeneration,
           augmentId: slotResolutionAugmentId(resolution),
+          ocrTitle: readable ? raw : null,
+          foregroundEpoch,
+          gameEpoch,
+          offerGeneration: offerGenerationAtStart,
+          slotGeneration: triggerSlotGenerations[regionIndex] ?? 0,
+          ocrRunId: captureSeq,
+          championRequestId: championRequestIdAtStart,
+          championPatch: championPatchAtStart,
+          conflictCount: 0,
         };
+        identityStoreRef.current[regionIndex] = reconcileIdentityRecord(prev, incoming);
       }
       // Clear the pending queue; the next geometry tick re-populates it if any
       // slot is still unresolved past the retry deadline (or rerolls again).
@@ -1773,6 +1896,14 @@ function App() {
       // write identities — geometry, not OCR, decides presence and clearing.
       if (captureSeq !== scanSeqRef.current) return;
       if (foregroundEpoch !== foregroundEpochRef.current) return;
+      if (gameEpoch !== gameEpochRef.current) return;
+      if (championGenerationAtStart !== championGenerationRef.current) return;
+      if (championIdAtStart !== championIdRef.current) return;
+      if (offerGenerationAtStart !== geometryGenerationRef.current) return;
+      if (slots.some((regionIndex) => ocrRunSuperseded(
+        triggerSlotGenerations[regionIndex] ?? 0,
+        slotGenerationsRef.current[regionIndex] ?? 0,
+      ))) return;
       const unavailable = ocrAvailabilityFromError(error);
       if (unavailable) setOcrAvailability(unavailable);
       // Identity-only failure: mark the triggered slots unresolved (retry after
@@ -1784,6 +1915,14 @@ function App() {
           fingerprint: triggerFingerprints[regionIndex] ?? "",
           resolution: null,
           resolvedAt: failedAt,
+          championGeneration: championGenerationAtStart,
+          foregroundEpoch,
+          gameEpoch,
+          offerGeneration: offerGenerationAtStart,
+          slotGeneration: triggerSlotGenerations[regionIndex] ?? 0,
+          ocrRunId: captureSeq,
+          championRequestId: championRequestIdAtStart,
+          championPatch: championPatchAtStart,
         };
       }
       ocrPendingSlotsRef.current = [];
@@ -1841,7 +1980,7 @@ function App() {
         }));
       }
     }
-  }, [bumpScanSeq, collectorCaptureEnabled, ocrKnownNames, playerData, publishOffer, republishGeometryFrame, resolveSlotTitle, titlePresent]);
+  }, [aramgg.championPatch, aramgg.championRequestId, bumpScanSeq, collectorCaptureEnabled, ocrKnownNames, playerData, publishOffer, republishGeometryFrame, resolveSlotTitle, titlePresent]);
 
   // ─── TRACK 1 scheduler tick: the fast geometry probe ─────────────────────────
   // Same pure reducer (nextProbeAction) as OCR — start / skip / watchdog-restart
@@ -2094,7 +2233,7 @@ function App() {
 
     try {
       if (!collectorEnabled) {
-        activeGameRef.current = false;
+        setActiveGame(false);
         stopOcr();
         updatePhase("idle");
         return;
@@ -2108,7 +2247,7 @@ function App() {
       // The scheduler's coarse "active game" gate: capture is compliant only in
       // a live game. This is the ONLY telemetry the probe scheduler consults,
       // and it can never wedge asleep because the poll re-sets it every tick.
-      activeGameRef.current = gameflowCaptureAllowedRef.current;
+      setActiveGame(gameflowCaptureAllowedRef.current);
       if (shouldClearOcrStateForGameflow(gameflow)) {
         const clientFound = await invoke<boolean>("detect_league_client").catch(() => false);
         clearGameOnlyState(clientFound ? "client_found" : "idle");
@@ -2140,6 +2279,7 @@ function App() {
             completedRoundsRef.current = 0;
             setPickedAugments([]);
             lastRecordedRoundRef.current = "";
+            gameEpochRef.current += 1;
             stopOcr();
           }
           lastGameTimeRef.current = data.game_time;
@@ -2209,6 +2349,7 @@ function App() {
     collectorEnabled,
     finishOcr,
     refreshForeground,
+    setActiveGame,
     stopOcr,
     updatePhase,
   ]);

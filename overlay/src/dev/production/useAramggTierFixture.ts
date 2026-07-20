@@ -33,6 +33,8 @@ export interface AramggFixtureState {
   sourceUrls: { stats: string; catalog: string; catalogZhTw?: string } | null;
   resolvedBySlug: Map<string, AramggFixtureCard>;
   resolveSlotTitle: ((ocrTitle: string) => SlotAramggResolution) | null;
+  championRequestId: number;
+  championPatch: string | null;
   refresh: () => void;
 }
 
@@ -54,6 +56,8 @@ export function useAramggTierFixture(
     sourceUrls: null,
     resolvedBySlug: new Map(),
     resolveSlotTitle: null,
+    championRequestId: 0,
+    championPatch: null,
     refresh,
   };
 }

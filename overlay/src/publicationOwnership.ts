@@ -8,11 +8,10 @@
  * single guard that makes stale geometry, post-reroll OCR, post-champion-change
  * datasets, and late results after no-offer/occlusion all fail closed.
  *
- * Separately, within one champion generation a card's canonical identity and its
- * statistic are IMMUTABLE: `reconcileSlotIdentity` refuses to let a conflicting
- * OCR read replace a verified identity, or a re-read mutate the statistic of an
- * unchanged identity. This is the root-cause fix for the July 20 unchanged-card
- * value mutation (a sparkle-drift re-read silently overwrote the verified row).
+ * Separately, within one ownership scope a card's canonical identity is
+ * IMMUTABLE: `reconcileSlotIdentity` refuses to let a conflicting OCR read
+ * replace it. Derived statistics remain refreshable for that same canonical id
+ * so a current champion dataset can legitimately upgrade GLOBAL to CHAMP.
  *
  * All pure — no timers, IPC or React — so the ordering and immutability rules
  * are unit-tested deterministically. Fingerprint comparisons reuse the geometry
@@ -31,7 +30,7 @@ export interface OwnershipToken {
   championId: string | null;
   /** Champion-dataset request id (monotonic per champion load). */
   championRequestId: number;
-  /** Offer generation (bumps per new offer surface / reroll / clear). */
+  /** Offer generation (bumps per genuinely new offer surface or close). */
   offerGeneration: number;
   /** Geometry probe sequence. */
   geometrySeq: number;
@@ -67,31 +66,41 @@ export function ownershipCurrent(result: OwnershipToken, current: OwnershipToken
 // ─── Slot identity immutability & conflict reconciliation ───
 
 export interface SlotIdentity<R> {
+  foregroundEpoch: number;
+  gameEpoch: number;
   /** Geometry fingerprint this identity is bound to. */
   fingerprint: string;
   /** Champion generation the statistic was computed for. */
   championGeneration: number;
+  offerGeneration: number;
   /** Canonical numeric augment ID (a verified identity has a non-empty id). */
   augmentId: string;
   /** The published statistic payload for this slot. */
   resolution: R;
   slotGeneration: number;
   ocrRunId: number;
+  /** Saturating diagnostic count; conflicts never replace the canonical id. */
+  conflictCount: number;
 }
 
 export type IdentityReconciliation<R> =
   | { action: "adopt"; identity: SlotIdentity<R> }
   | { action: "replace"; identity: SlotIdentity<R> }
-  | { action: "keep"; identity: SlotIdentity<R>; reason: "immutable-stat" | "identity-conflict" };
+  | { action: "recompute-stat"; identity: SlotIdentity<R> }
+  | { action: "keep"; identity: SlotIdentity<R>; reason: "identity-conflict" };
+
+export const MAX_IDENTITY_CONFLICTS = 3;
 
 /**
  * Decide whether an incoming OCR-derived identity may publish over the slot's
- * current verified identity:
+ * current verified identity. Canonical identity and derived statistic have
+ * deliberately different mutability:
  *   - no prior verified identity → ADOPT the incoming one;
- *   - champion generation changed → REPLACE (recompute for the new champion);
+ *   - ownership generation/epoch changed → REPLACE;
  *   - fingerprint changed past the Hamming band (a real reroll) → REPLACE;
- *   - same champion + same fingerprint, same augment id → KEEP (statistic is
- *     immutable — a re-read can never mutate an unchanged card's value);
+ *   - same ownership + same fingerprint + same augment id → keep the
+ *     canonical identity but RECOMPUTE its derived statistic. This is required
+ *     for GLOBAL fallback → CHAMP once the current champion dataset loads;
  *   - same champion + same fingerprint, different augment id → KEEP (a
  *     conflicting OCR read never silently replaces the verified identity).
  */
@@ -102,14 +111,34 @@ export function reconcileSlotIdentity<R>(
   if (prev === null || prev.augmentId.length === 0) {
     return { action: "adopt", identity: incoming };
   }
-  if (prev.championGeneration !== incoming.championGeneration) {
+  if (
+    prev.foregroundEpoch !== incoming.foregroundEpoch ||
+    prev.gameEpoch !== incoming.gameEpoch ||
+    prev.championGeneration !== incoming.championGeneration ||
+    prev.offerGeneration !== incoming.offerGeneration ||
+    prev.slotGeneration !== incoming.slotGeneration
+  ) {
     return { action: "replace", identity: incoming };
   }
   if (fingerprintChanged(prev.fingerprint, incoming.fingerprint)) {
     return { action: "replace", identity: incoming };
   }
   if (prev.augmentId === incoming.augmentId) {
-    return { action: "keep", identity: prev, reason: "immutable-stat" };
+    return {
+      action: "recompute-stat",
+      identity: {
+        ...prev,
+        resolution: incoming.resolution,
+        ocrRunId: incoming.ocrRunId,
+      },
+    };
   }
-  return { action: "keep", identity: prev, reason: "identity-conflict" };
+  return {
+    action: "keep",
+    identity: {
+      ...prev,
+      conflictCount: Math.min(MAX_IDENTITY_CONFLICTS, prev.conflictCount + 1),
+    },
+    reason: "identity-conflict",
+  };
 }

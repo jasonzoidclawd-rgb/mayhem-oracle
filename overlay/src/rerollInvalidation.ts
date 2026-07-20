@@ -30,6 +30,8 @@ export interface RerollInvalidationResult<R> {
   slotGenerations: number[];
   /** Region indices whose fingerprint changed this observation. */
   invalidated: number[];
+  /** Last accepted per-slot fingerprints, independent of OCR completion. */
+  acceptedFingerprints: string[];
 }
 
 /**
@@ -41,29 +43,40 @@ export interface RerollInvalidationResult<R> {
  */
 export function applyRerollInvalidation<R>(params: {
   store: Array<IdentityRecord<R> | null>;
+  acceptedFingerprints?: string[];
   slotGenerations: number[];
   observation: GeometryObservation;
   championGeneration: number;
   now: number;
+  /** A genuinely new offer owns fresh slot generations even if pixels repeat. */
+  newOffer?: boolean;
 }): RerollInvalidationResult<R> {
   const { store, slotGenerations, observation } = params;
   const nextStore = store.slice();
   const nextGenerations = slotGenerations.slice();
+  const previousFingerprints = params.acceptedFingerprints ?? store.map((record) => record?.fingerprint ?? "");
+  const nextFingerprints = previousFingerprints.slice();
   const invalidated: number[] = [];
 
   for (const card of observation.cards) {
     const i = card.regionIndex;
     if (!card.present) continue;
-    const record = store[i];
-    if (record == null) continue;
-    if (fingerprintChanged(record.fingerprint, card.fingerprint)) {
+    const changed = params.newOffer === true ||
+      fingerprintChanged(previousFingerprints[i] ?? "", card.fingerprint);
+    if (changed) {
       nextStore[i] = null;
       nextGenerations[i] = slotGenerations[i] + 1;
       invalidated.push(i);
     }
+    nextFingerprints[i] = card.fingerprint;
   }
 
-  return { store: nextStore, slotGenerations: nextGenerations, invalidated };
+  return {
+    store: nextStore,
+    slotGenerations: nextGenerations,
+    invalidated,
+    acceptedFingerprints: nextFingerprints,
+  };
 }
 
 /**

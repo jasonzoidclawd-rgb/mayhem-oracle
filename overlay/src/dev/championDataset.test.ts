@@ -111,6 +111,10 @@ describe("championOwnershipCurrent — stale response cannot publish", () => {
     expect(championOwnershipCurrent(base, { ...base, requestId: 8 })).toBe(false);
   });
 
+  it("rejects a response from an older patch", () => {
+    expect(championOwnershipCurrent(base, { ...base, patch: "16.15" })).toBe(false);
+  });
+
   it("rejects a response after a foreground/game epoch change", () => {
     expect(championOwnershipCurrent(base, { ...base, gameEpoch: 2 })).toBe(false);
   });

@@ -74,6 +74,9 @@ export interface AramggFixtureState {
    * ARAMGG stats). Null until the source is ready.
    */
   resolveSlotTitle: ((ocrTitle: string) => SlotAramggResolution) | null;
+  /** Current champion-dataset publication ownership. */
+  championRequestId: number;
+  championPatch: string | null;
   refresh: () => void;
 }
 
@@ -202,7 +205,8 @@ export function useAramggTierFixture(
   // changes: only a dataset whose championId matches the CURRENT champion may
   // back a CHAMP statistic — no cascading setState needed to clear it.
   const activeChampionDataset =
-    championDataset && championKey && championDataset.championId === championKey
+    championDataset && championKey && championDataset.championId === championKey &&
+      championDataset.patch === source?.patch
       ? championDataset
       : null;
 
@@ -283,6 +287,8 @@ export function useAramggTierFixture(
     sourceUrls: source?.sourceUrls ?? null,
     resolvedBySlug,
     resolveSlotTitle,
+    championRequestId: championRequestIdRef.current,
+    championPatch: activeChampionDataset?.patch ?? source?.patch ?? null,
     refresh,
   };
 }

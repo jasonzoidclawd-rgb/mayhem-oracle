@@ -349,6 +349,16 @@ export interface IdentityRecord<R> {
    * Lets the immutability guard detect a conflicting re-read for the same card.
    */
   augmentId?: string;
+  /** Normalized/readable OCR title retained only to recompute derived stats. */
+  ocrTitle?: string | null;
+  foregroundEpoch?: number;
+  gameEpoch?: number;
+  offerGeneration?: number;
+  slotGeneration?: number;
+  ocrRunId?: number;
+  championRequestId?: number;
+  championPatch?: string | null;
+  conflictCount?: number;
 }
 
 /**

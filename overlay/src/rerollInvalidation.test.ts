@@ -16,6 +16,7 @@ const FP_A = "1".repeat(72) + "0".repeat(72);
 const FP_B = "0".repeat(72) + "1".repeat(72); // 144 bits differ from A → reroll
 const FP_C = "1".repeat(36) + "0".repeat(36) + "1".repeat(36) + "0".repeat(36);
 const FP_A_DRIFT = "1".repeat(71) + "0" + "0".repeat(72); // 1 bit from A → same card
+const drift = (bits: number) => "0".repeat(bits) + FP_A.slice(bits);
 
 function card(regionIndex: number, fingerprint: string, present = true) {
   return {
@@ -129,6 +130,72 @@ describe("applyRerollInvalidation — only the changed slot is invalidated", () 
     });
     expect(r.invalidated).toEqual([]);
     expect(r.store[1]).toBe(store[1]);
+  });
+
+  it("bumps an unresolved slot when its accepted fingerprint rerolls during OCR", () => {
+    const r = applyRerollInvalidation({
+      store: [null, resolved(FP_B, "1007"), resolved(FP_C, "1008")],
+      acceptedFingerprints: [FP_A, FP_B, FP_C],
+      slotGenerations: [3, 3, 3],
+      observation: observation([FP_C, FP_B, FP_C]),
+      championGeneration: CHAMP_GEN,
+      now: 500,
+    });
+    expect(r.invalidated).toEqual([0]);
+    expect(r.slotGenerations).toEqual([4, 3, 3]);
+  });
+
+  it("invalidates two changed slots atomically", () => {
+    const store = [resolved(FP_A, "1006"), resolved(FP_B, "1007"), resolved(FP_C, "1008")];
+    const r = applyRerollInvalidation({
+      store,
+      acceptedFingerprints: [FP_A, FP_B, FP_C],
+      slotGenerations: [3, 3, 3],
+      observation: observation([FP_C, FP_B, FP_A]),
+      championGeneration: CHAMP_GEN,
+      now: 500,
+    });
+    expect(r.invalidated).toEqual([0, 2]);
+    expect(r.slotGenerations).toEqual([4, 3, 4]);
+    expect(r.store).toEqual([null, store[1], null]);
+  });
+
+  it("a new chained offer invalidates all slots even when fingerprints look the same", () => {
+    const store = [resolved(FP_A, "1006"), resolved(FP_B, "1007"), resolved(FP_C, "1008")];
+    const r = applyRerollInvalidation({
+      store,
+      acceptedFingerprints: [FP_A, FP_B, FP_C],
+      slotGenerations: [3, 3, 3],
+      observation: observation([FP_A, FP_B, FP_C]),
+      championGeneration: CHAMP_GEN,
+      now: 500,
+      newOffer: true,
+    });
+    expect(r.invalidated).toEqual([0, 1, 2]);
+    expect(r.slotGenerations).toEqual([4, 4, 4]);
+    expect(r.store).toEqual([null, null, null]);
+  });
+
+  it("locks the Hamming boundary: 8 bits is sparkle, 9 bits is a reroll", () => {
+    const base = [resolved(FP_A, "1006"), resolved(FP_B, "1007"), resolved(FP_C, "1008")];
+    const same = applyRerollInvalidation({
+      store: base,
+      acceptedFingerprints: [FP_A, FP_B, FP_C],
+      slotGenerations: [3, 3, 3],
+      observation: observation([drift(8), FP_B, FP_C]),
+      championGeneration: CHAMP_GEN,
+      now: 500,
+    });
+    const changed = applyRerollInvalidation({
+      store: base,
+      acceptedFingerprints: [FP_A, FP_B, FP_C],
+      slotGenerations: [3, 3, 3],
+      observation: observation([drift(9), FP_B, FP_C]),
+      championGeneration: CHAMP_GEN,
+      now: 500,
+    });
+    expect(same.invalidated).toEqual([]);
+    expect(changed.invalidated).toEqual([0]);
   });
 });
 
