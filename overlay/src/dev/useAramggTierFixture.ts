@@ -8,20 +8,25 @@
  * live ARAMGG stat is simply absent from `resolvedBySlug` (diagnosed by the
  * debug panel, never faked).
  */
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import {
   fetchAramggRaws,
   normalizeIconBase,
   parseAramggSource,
   resolveAugmentId,
   resolveOcrTitle,
-  selectAramggStatsForChampion,
   type AramggRaws,
   type AramggSource,
   type AramggStat,
   type RiotTitleRejection,
   type RiotTitleResolution,
 } from "./aramggSource";
+import { ChampionDatasetCache } from "./championDataset";
+import {
+  resolvedStatToAramggStat,
+  selectAugmentStat,
+  type ChampionAugmentDataset,
+} from "./championStats";
 import type { AramggFixtureCard } from "./tierFixture";
 
 /** Minimal Mayhem augment identity the resolver needs (structural). */
@@ -155,9 +160,65 @@ export function useAramggTierFixture(
     };
   }, [enabled, nonce]);
 
-  const selectedStatsById = useMemo(
-    () => selectAramggStatsForChampion(source?.statsById ?? new Map(), championKey),
-    [source, championKey],
+  // ─── Champion-FIRST dataset: the current champion's OWN augment table from
+  // /champion-stats/{championKey}. Loaded once per (championKey, patch) and
+  // guarded so a superseded champion's response can never publish. This — not
+  // `top_champions` — is the source of every CHAMP-labeled statistic.
+  const championCacheRef = useRef<ChampionDatasetCache | null>(null);
+  const championRequestIdRef = useRef(0);
+  const [championDataset, setChampionDataset] = useState<ChampionAugmentDataset | null>(null);
+
+  useEffect(() => {
+    if (!enabled || !source || !championKey) return;
+    if (!championCacheRef.current) championCacheRef.current = new ChampionDatasetCache();
+    const requestId = (championRequestIdRef.current += 1);
+    let cancelled = false;
+    void championCacheRef.current
+      .get(championKey, source.patch)
+      .then((ds) => {
+        // Publish only when this request is still the newest (ownership current).
+        if (cancelled || championRequestIdRef.current !== requestId) return;
+        setChampionDataset(ds);
+      })
+      .catch((err) => {
+        if (cancelled) return;
+        // Offline / champion-page failure is explicit (diagnosed, never faked):
+        // every offered augment then falls back to its GLOBAL value, labeled so.
+        console.info(
+          `[aramgg-fixture] champion dataset load failed for ${championKey}: ${
+            err instanceof Error ? err.message : String(err)
+          }`,
+        );
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [enabled, source, championKey]);
+
+  // Resolve one canonical augment ID to its stat + provenance:
+  //   champion dataset row → CHAMP; else explicit global fallback → GLOBAL;
+  //   else null → NO CHAMP DATA. A global value is NEVER labeled CHAMP.
+  // A dataset for a superseded champion is invalidated the instant the champion
+  // changes: only a dataset whose championId matches the CURRENT champion may
+  // back a CHAMP statistic — no cascading setState needed to clear it.
+  const activeChampionDataset =
+    championDataset && championKey && championDataset.championId === championKey
+      ? championDataset
+      : null;
+
+  const resolveStatForAugmentId = useCallback(
+    (augmentId: string): AramggStat | null => {
+      const globalStat = source?.statsById.get(augmentId) ?? null;
+      if (activeChampionDataset) {
+        const sel = selectAugmentStat(activeChampionDataset, augmentId, globalStat, {
+          allowGlobalFallback: true,
+        });
+        return sel.kind === "resolved" ? resolvedStatToAramggStat(sel.stat) : null;
+      }
+      // Champion dataset not loaded yet: global-labeled fallback (never CHAMP).
+      return globalStat;
+    },
+    [source, activeChampionDataset],
   );
 
   const resolvedBySlug = useMemo(() => {
@@ -169,7 +230,7 @@ export function useAramggTierFixture(
         source.catalog,
       );
       if (res.augmentId === null) continue;
-      const stat = selectedStatsById.get(res.augmentId);
+      const stat = resolveStatForAugmentId(res.augmentId);
       if (!stat) continue;
       if (res.method === "localized-name") {
         // Explicitly log the last-resort match path (requirement).
@@ -180,7 +241,7 @@ export function useAramggTierFixture(
       map.set(a.slug, { slug: a.slug, stat, method: res.method });
     }
     return map;
-  }, [source, augments, selectedStatsById]);
+  }, [source, augments, resolveStatForAugmentId]);
 
   // augmentId → local slug (unique inversions only) so a canonical Riot match
   // can be labeled with the local catalog slug when one exists.
@@ -207,11 +268,11 @@ export function useAramggTierFixture(
         );
       }
       const localSlug = localSlugByAugmentId.get(riot.augmentId) ?? null;
-      const stat = selectedStatsById.get(riot.augmentId);
+      const stat = resolveStatForAugmentId(riot.augmentId);
       if (!stat) return { kind: "no-data", riot, localSlug };
       return { kind: "matched", riot, stat, localSlug };
     };
-  }, [source, localSlugByAugmentId, selectedStatsById]);
+  }, [source, localSlugByAugmentId, resolveStatForAugmentId]);
 
   return {
     status,
