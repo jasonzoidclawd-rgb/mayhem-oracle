@@ -12,7 +12,7 @@ Maintained by `scripts/update-state.sh` (post-commit hook via
 <!-- STATE:START -->
 - Patch: `26.13`
 - Augments: `268`
-- Tests passing: `814`
+- Tests passing: `816`
 - Cross-parity budget: `0` divergent champions
 - Last tag: `pre-docs-review-4a83c26`
 <!-- STATE:END -->
