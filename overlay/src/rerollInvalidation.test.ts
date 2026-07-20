@@ -16,6 +16,8 @@ const FP_A = "1".repeat(72) + "0".repeat(72);
 const FP_B = "0".repeat(72) + "1".repeat(72); // 144 bits differ from A → reroll
 const FP_C = "1".repeat(36) + "0".repeat(36) + "1".repeat(36) + "0".repeat(36);
 const FP_A_DRIFT = "1".repeat(71) + "0" + "0".repeat(72); // 1 bit from A → same card
+const FP_D = "1".repeat(48) + "0".repeat(48) + "1".repeat(48); // distinct new card
+const FP_E = "0".repeat(48) + "1".repeat(48) + "0".repeat(48); // distinct new card
 const drift = (bits: number) => "0".repeat(bits) + FP_A.slice(bits);
 
 function card(regionIndex: number, fingerprint: string, present = true) {
@@ -230,6 +232,88 @@ describe("applyRerollInvalidation — mixed per-slot states survive a single rer
     expect(r.store[1]?.unresolvedState).toBe("ocr-error");
     expect(r.store[2]).toBe(store[2]);
     expect(r.store[2]?.resolution).toBe("id:1008");
+  });
+});
+
+// FIX 3 — when an accepted frame changes MULTIPLE slots, EVERY changed slot is
+// invalidated atomically from the immutable previous snapshot; only truly
+// unchanged neighbours are retained. The live 00:14:55 frame (left unchanged,
+// middle+right changed) must never keep an old statistic over a new card.
+describe("applyRerollInvalidation — every changed slot invalidates atomically", () => {
+  const base = () => [resolved(FP_A, "1006"), resolved(FP_B, "1007"), resolved(FP_C, "1008")];
+  const run = (next: [string, string, string]) =>
+    applyRerollInvalidation({
+      store: base(),
+      acceptedFingerprints: [FP_A, FP_B, FP_C],
+      slotGenerations: [5, 5, 5],
+      observation: observation(next),
+      championGeneration: CHAMP_GEN,
+      now: 500,
+    });
+
+  it("00:14:55 repro — left unchanged, middle+right changed → both new slots SCANNING", () => {
+    const r = run([FP_A, FP_D, FP_E]);
+    expect(r.invalidated).toEqual([1, 2]);
+    expect(r.store[0]?.resolution).toBe("id:1006"); // left retains A
+    expect(r.store[1]).toBeNull(); // middle → SCANNING, no old B stat over D
+    expect(r.store[2]).toBeNull(); // right → SCANNING, no old C stat over E
+    expect(r.slotGenerations).toEqual([5, 6, 6]);
+    expect(r.acceptedFingerprints).toEqual([FP_A, FP_D, FP_E]);
+  });
+
+  it("all three changed simultaneously → all three SCANNING", () => {
+    const r = run([FP_D, FP_E, FP_A]); // each differs from prev A/B/C by >8 bits
+    expect(r.invalidated).toEqual([0, 1, 2]);
+    expect(r.store).toEqual([null, null, null]);
+    expect(r.slotGenerations).toEqual([6, 6, 6]);
+  });
+
+  it("left+middle changed → right retained", () => {
+    const r = run([FP_D, FP_E, FP_C]);
+    expect(r.invalidated).toEqual([0, 1]);
+    expect(r.store[2]?.resolution).toBe("id:1008");
+    expect(r.slotGenerations).toEqual([6, 6, 5]);
+  });
+
+  it("middle+right changed → left retained", () => {
+    const r = run([FP_A, FP_D, FP_E]);
+    expect(r.invalidated).toEqual([1, 2]);
+    expect(r.store[0]?.resolution).toBe("id:1006");
+  });
+
+  it("left+right changed → middle retained", () => {
+    const r = run([FP_D, FP_B, FP_E]);
+    expect(r.invalidated).toEqual([0, 2]);
+    expect(r.store[1]?.resolution).toBe("id:1007");
+    expect(r.slotGenerations).toEqual([6, 5, 6]);
+  });
+
+  it("one slot changes while another is OCR ERROR → error neighbour untouched", () => {
+    const middleError: IdentityRecord<string> = {
+      fingerprint: FP_B, resolution: null, resolvedAt: 100, championGeneration: 1,
+      augmentId: "", unresolvedState: "ocr-error", failureCount: 3,
+    };
+    const r = applyRerollInvalidation({
+      store: [resolved(FP_A, "1006"), middleError, resolved(FP_C, "1008")],
+      acceptedFingerprints: [FP_A, FP_B, FP_C],
+      slotGenerations: [5, 5, 5],
+      observation: observation([FP_A, FP_B, FP_E]), // only right changed
+      championGeneration: CHAMP_GEN,
+      now: 500,
+    });
+    expect(r.invalidated).toEqual([2]);
+    expect(r.store[1]).toBe(middleError); // OCR ERROR preserved
+    expect(r.store[1]?.unresolvedState).toBe("ocr-error");
+    expect(r.store[0]?.resolution).toBe("id:1006");
+  });
+
+  it("stale OCR from every replaced slot is rejected by its bumped generation", () => {
+    const r = run([FP_D, FP_E, FP_C]); // left+middle replaced, slotGen 5→6
+    // An OCR run stamped with the pre-reroll generation (5) for a replaced slot
+    // must be discarded; the unchanged right (still gen 5) is still accepted.
+    expect(ocrRunSuperseded(5, r.slotGenerations[0])).toBe(true);
+    expect(ocrRunSuperseded(5, r.slotGenerations[1])).toBe(true);
+    expect(ocrRunSuperseded(5, r.slotGenerations[2])).toBe(false);
   });
 });
 
