@@ -121,6 +121,7 @@ import {
   type GeometrySurfaceState,
   type IdentityRecord,
 } from "./surfaceGeometry";
+import { applyRerollInvalidation, ocrRunSuperseded } from "./rerollInvalidation";
 import { decideOcrTrigger } from "./ocrTrigger";
 import {
   EMPTY_SCAN_TIMINGS,
@@ -420,6 +421,10 @@ function App() {
   // slot recomputes against the new champion's dataset, while within a
   // generation the reconcile guard keeps each verified identity immutable.
   const championGenerationRef = useRef(0);
+  // Per-slot generation: bumps ONLY for the slot whose fingerprint changed
+  // (a single-slot reroll), so an OCR run stamped with the old generation is
+  // rejected atomically and cannot repaint the new card (Phase B).
+  const slotGenerationsRef = useRef<number[]>([0, 0, 0]);
   // Cross-track OCR-trigger coordination: the geometry track decides which slots
   // need a (re)read and stamps the fingerprints those reads are keyed to.
   const ocrPendingSlotsRef = useRef<number[]>([]);
@@ -957,6 +962,9 @@ function App() {
   useEffect(() => {
     championGenerationRef.current += 1;
     identityStoreRef.current = [null, null, null];
+    // Advance every slot generation so any in-flight OCR run from the previous
+    // champion is superseded and rejected on completion (Phase B).
+    slotGenerationsRef.current = slotGenerationsRef.current.map((g) => g + 1);
   }, [championSlug]);
 
   // Ref so the OCR loop always resolves against the freshest ARAMGG source
@@ -1365,6 +1373,32 @@ function App() {
         if (previousSurface.lastPositiveObservation != null) recordRoundCompleted();
       }
 
+      // PHASE B — atomic per-slot reroll invalidation. The first published
+      // observation whose slot fingerprint changed clears ONLY that slot's
+      // identity (→ SCANNING) and bumps ONLY its generation, so no stale chip
+      // can paint the new card and any OCR run keyed to the old slot generation
+      // is rejected on completion. Neighbours are retained untouched.
+      if (transition.action === "publish" && publishedObservation != null) {
+        const reroll = applyRerollInvalidation({
+          store: identityStoreRef.current,
+          slotGenerations: slotGenerationsRef.current,
+          observation: publishedObservation,
+          championGeneration: championGenerationRef.current,
+          now: performance.now(),
+        });
+        identityStoreRef.current = reroll.store;
+        slotGenerationsRef.current = reroll.slotGenerations;
+        if (import.meta.env.DEV && reroll.invalidated.length > 0) {
+          console.info(
+            "[slot-reroll]",
+            JSON.stringify({
+              invalidated: reroll.invalidated,
+              slotGenerations: reroll.slotGenerations,
+            }),
+          );
+        }
+      }
+
       // Publish/preserve/clear from the hysteresis result. A preserved uncertain
       // frame retains its resolved chip content; geometry uncertainty alone never
       // degrades the three slots to SCANNING.
@@ -1505,7 +1539,11 @@ function App() {
   // reads just the slots geometry flagged (new / reroll / retry / force) and
   // writes each result into the geometry-fingerprint-keyed identity store, so a
   // late result from a superseded generation can never paint the live card.
-  const runIdentityProbe = useCallback(async (slots: number[], triggerFingerprints: string[]) => {
+  const runIdentityProbe = useCallback(async (
+    slots: number[],
+    triggerFingerprints: string[],
+    triggerSlotGenerations: number[],
+  ) => {
     probeInFlightRef.current = true;
     const startedAt = performance.now();
     probeInFlightSinceRef.current = startedAt;
@@ -1577,6 +1615,13 @@ function App() {
       for (const regionIndex of slots) {
         const raw = rawTitles[regionIndex];
         const readable = raw != null && isPlausibleTitle(normalizeAugmentNameForLookup(raw));
+        // Reject a run whose slot rerolled again during the read: its generation
+        // is now behind. The store was already invalidated to SCANNING by the
+        // geometry track, and this stale read must not repaint the new card.
+        if (ocrRunSuperseded(
+          triggerSlotGenerations[regionIndex] ?? 0,
+          slotGenerationsRef.current[regionIndex] ?? 0,
+        )) continue;
         const fingerprint = triggerFingerprints[regionIndex] ?? "";
         const prev = identityStoreRef.current[regionIndex];
         // Immutability guard (mirrors reconcileSlotIdentity): an already-verified
@@ -1884,7 +1929,11 @@ function App() {
     const slots = ocrPendingSlotsRef.current;
     if (slots.length === 0) return;
     lastProbeSkipReasonRef.current = action.kind === "restart" ? "watchdog-restart" : "due";
-    void runIdentityProbe(slots, ocrTriggerFingerprintsRef.current);
+    void runIdentityProbe(
+      slots,
+      ocrTriggerFingerprintsRef.current,
+      slotGenerationsRef.current.slice(),
+    );
   }, [bumpScanSeq, nameLookup, ocrAvailability, runIdentityProbe]);
 
   // The single tick drives BOTH tracks: geometry (fast, authoritative) first so a
