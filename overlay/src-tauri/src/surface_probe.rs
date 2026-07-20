@@ -227,10 +227,8 @@ pub fn detect_blue_augment_control(
         CONTROL_BODY_Y1,
     );
     let icon = normalized_region_px(width, height, viewport, 0.485, 0.770, 0.515, 0.812);
-    let border_top =
-        normalized_region_px(width, height, viewport, 0.445, 0.760, 0.555, 0.765);
-    let border_bottom =
-        normalized_region_px(width, height, viewport, 0.445, 0.817, 0.555, 0.822);
+    let border_top = normalized_region_px(width, height, viewport, 0.445, 0.760, 0.555, 0.765);
+    let border_bottom = normalized_region_px(width, height, viewport, 0.445, 0.817, 0.555, 0.822);
 
     let mut body_count = 0usize;
     let mut blue_count = 0usize;
@@ -280,21 +278,19 @@ pub fn detect_blue_augment_control(
         }
     }
     let central_icon_coverage = icon_light as f32 / icon_count.max(1) as f32;
-    let aspect_ratio =
-        ((CONTROL_X1 - CONTROL_X0) * viewport.width as f64 /
-            ((CONTROL_Y1 - CONTROL_Y0) * viewport.height as f64)) as f32;
+    let aspect_ratio = ((CONTROL_X1 - CONTROL_X0) * viewport.width as f64
+        / ((CONTROL_Y1 - CONTROL_Y0) * viewport.height as f64)) as f32;
 
-    let confidence = (
-        (blue_body_coverage / 0.72).min(1.0) * 0.40 +
-        (body_saturation / 0.52).min(1.0) * 0.20 +
-        (border_contrast.max(0.0) / 8.0).min(1.0) * 0.20 +
-        (central_icon_coverage / 0.08).min(1.0) * 0.20
-    ).clamp(0.0, 1.0);
-    let present = blue_body_coverage >= 0.55 &&
-        body_saturation >= 0.42 &&
-        border_contrast >= 3.5 &&
-        central_icon_coverage >= 0.035 &&
-        confidence >= 0.72;
+    let confidence = ((blue_body_coverage / 0.72).min(1.0) * 0.40
+        + (body_saturation / 0.52).min(1.0) * 0.20
+        + (border_contrast.max(0.0) / 8.0).min(1.0) * 0.20
+        + (central_icon_coverage / 0.08).min(1.0) * 0.20)
+        .clamp(0.0, 1.0);
+    let present = blue_body_coverage >= 0.55
+        && body_saturation >= 0.42
+        && border_contrast >= 3.5
+        && central_icon_coverage >= 0.035
+        && confidence >= 0.72;
 
     BlueControlObservation {
         present,
@@ -498,10 +494,10 @@ pub fn analyze_surface(
     let (gap2_l, gap2_std) = luma.mean_std(luma.region_px(viewport_px, GAP2_X0, GAP_TOP, GAP2_X1, GAP_BOTTOM));
     let gap1_paneled = gap1_l < T_GAP_PANEL_LUMA && gap1_std < T_GAP_PANEL_STD;
     let gap2_paneled = gap2_l < T_GAP_PANEL_LUMA && gap2_std < T_GAP_PANEL_STD;
-    let opaque_surface = gap1_l < T_GAP_PANEL_LUMA &&
-        gap2_l < T_GAP_PANEL_LUMA &&
-        gap1_std < 34.0 &&
-        gap2_std < 34.0;
+    let opaque_surface = gap1_l < T_GAP_PANEL_LUMA
+        && gap2_l < T_GAP_PANEL_LUMA
+        && gap1_std < 34.0
+        && gap2_std < 34.0;
     let occluded = (present && gap1_paneled && gap2_paneled) || (!present && opaque_surface);
 
     if !present {
@@ -509,11 +505,20 @@ pub fn analyze_surface(
     }
     if occluded {
         rejection_reasons.push(
-            if present { "occluded-modal-panel" } else { "occluded-opaque-surface" }.to_string(),
+            if present {
+                "occluded-modal-panel"
+            } else {
+                "occluded-opaque-surface"
+            }
+            .to_string(),
         );
     }
 
-    let confidence = if present && n_present > 0 { score_sum / n_present as f32 } else { 0.0 };
+    let confidence = if present && n_present > 0 {
+        score_sum / n_present as f32
+    } else {
+        0.0
+    };
 
     SurfaceObservation {
         probe_seq,
@@ -750,7 +755,10 @@ mod tests {
         assert!(first.present && later.present);
         for slot in 0..3 {
             assert!(
-                hamming(&first.cards[slot].fingerprint, &later.cards[slot].fingerprint) <= 8,
+                hamming(
+                    &first.cards[slot].fingerprint,
+                    &later.cards[slot].fingerprint
+                ) <= 8,
                 "unchanged slot {} exceeded the stable-card Hamming band",
                 slot,
             );
@@ -765,7 +773,10 @@ mod tests {
         assert!(hamming(&before.cards[0].fingerprint, &after.cards[0].fingerprint) > 8);
         for slot in 1..3 {
             assert!(
-                hamming(&before.cards[slot].fingerprint, &after.cards[slot].fingerprint) <= 8,
+                hamming(
+                    &before.cards[slot].fingerprint,
+                    &after.cards[slot].fingerprint
+                ) <= 8,
                 "neighbor slot {} changed across a left-only reroll",
                 slot,
             );
@@ -781,7 +792,11 @@ mod tests {
             "july20-111042.png",
         ] {
             let observation = analyze_july20(name);
-            assert!(observation.present, "{}: {:?}", name, observation.rejection_reasons);
+            assert!(
+                observation.present,
+                "{}: {:?}",
+                name, observation.rejection_reasons
+            );
             assert!(!observation.occluded, "{}", name);
         }
     }
@@ -793,7 +808,10 @@ mod tests {
         assert!(shop.occluded, "shop must be explicit occlusion evidence");
         let combat = analyze_july20("july20-111050.png");
         assert!(!combat.present, "{:?}", combat.cards);
-        assert!(!combat.occluded, "ordinary combat is NO_OFFER, not occlusion");
+        assert!(
+            !combat.occluded,
+            "ordinary combat is NO_OFFER, not occlusion"
+        );
     }
 
     #[test]
