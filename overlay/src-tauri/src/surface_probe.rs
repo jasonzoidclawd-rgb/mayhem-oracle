@@ -378,6 +378,10 @@ mod tests {
         analyze_surface(&load(name), &viewport, &bands, 1, 0.0, 0)
     }
 
+    fn analyze_july20(name: &str) -> SurfaceObservation {
+        analyze_live_crop(&format!("july20/{}", name))
+    }
+
     fn hamming(a: &str, b: &str) -> usize {
         a.chars().zip(b.chars()).filter(|(x, y)| x != y).count()
     }
@@ -530,6 +534,57 @@ mod tests {
                     );
                 }
             }
+        }
+    }
+
+    #[test]
+    fn july20_unchanged_offer_fingerprints_are_stable() {
+        let first = analyze_july20("july20-110425.png");
+        let later = analyze_july20("july20-110439.png");
+        assert!(first.present && later.present);
+        for slot in 0..3 {
+            assert!(
+                hamming(&first.cards[slot].fingerprint, &later.cards[slot].fingerprint) <= 8,
+                "unchanged slot {} exceeded the stable-card Hamming band",
+                slot,
+            );
+        }
+    }
+
+    #[test]
+    fn july20_left_reroll_changes_only_left_fingerprint() {
+        let before = analyze_july20("july20-110708.png");
+        let after = analyze_july20("july20-110712.png");
+        assert!(before.present && after.present);
+        assert!(hamming(&before.cards[0].fingerprint, &after.cards[0].fingerprint) > 8);
+        for slot in 1..3 {
+            assert!(
+                hamming(&before.cards[slot].fingerprint, &after.cards[slot].fingerprint) <= 8,
+                "neighbor slot {} changed across a left-only reroll",
+                slot,
+            );
+        }
+    }
+
+    #[test]
+    fn july20_recovery_sequence_keeps_later_offers_detectable() {
+        for name in [
+            "july20-110714.png",
+            "july20-110954.png",
+            "july20-110956.png",
+            "july20-111042.png",
+        ] {
+            let observation = analyze_july20(name);
+            assert!(observation.present, "{}: {:?}", name, observation.rejection_reasons);
+            assert!(!observation.occluded, "{}", name);
+        }
+    }
+
+    #[test]
+    fn july20_shop_and_combat_render_no_surface() {
+        for name in ["july20-111048.png", "july20-111050.png"] {
+            let observation = analyze_july20(name);
+            assert!(!observation.present, "{}: {:?}", name, observation.cards);
         }
     }
 
