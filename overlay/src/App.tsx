@@ -56,6 +56,7 @@ import {
   type MemberSnapshot,
 } from "./auth/member";
 import { CoachPanel } from "./components/CoachPanel";
+import { TierBadgeLabel } from "./TierBadgeLabel";
 import { runLocalInference } from "./model/inference";
 import { confirmPickedAugment } from "./model/presentation";
 import { tierClassName, tierForGrade, type TierLetter } from "./model/tier";
@@ -65,7 +66,6 @@ import {
 } from "./winRateFormat";
 import {
   buildAramggDecisionResult,
-  aramggStatScopeLabel,
   isTierFixtureEnabled,
   TIER_FIXTURE_MEMBER,
   type AramggFixtureCard,
@@ -2839,7 +2839,7 @@ function App() {
               <div
                 className={`badge-chip ${chip.tier ? tierClassName(chip.tier) : ""}${
                   isPreviewMode ? " badge-preview" : ""
-                }${chip.statScope ? " badge-chip-scoped" : ""}`}
+                }`}
                 key={chip.key}
                 style={{ left: pos.left, top: pos.top }}
               >
@@ -2847,23 +2847,12 @@ function App() {
                   <span className="preview-watermark">PREVIEW</span>
                 )}
                 {chip.isNew && <span className="badge-new">NEW</span>}
-                {chip.statScope && (
-                  <span className={`badge-stat-scope badge-stat-scope-${chip.statScope}`}>
-                    {aramggStatScopeLabel({ provenance: chip.statScope })}
-                  </span>
-                )}
-                <span
-                  className={`badge-tier${
-                    chip.tier && chip.tier.length > 1 ? " badge-tier-two-char" : ""
-                  }`}
-                >
-                  {chip.tier}
-                </span>
-                {chip.winRateText !== null && (
-                  <>
-                    <span className="badge-chip-sep">·</span>
-                    <span className="badge-wr">{chip.winRateText}</span>
-                  </>
+                {chip.tier && (
+                  <TierBadgeLabel
+                    tier={chip.tier}
+                    winRateText={chip.winRateText}
+                    statScope={chip.statScope}
+                  />
                 )}
               </div>
             );

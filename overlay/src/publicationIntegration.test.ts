@@ -13,6 +13,10 @@ describe("live publication integration", () => {
     expect(app).toContain("ownerCurrent(");
     expect(app).toContain("advanceOfferSurface(");
     expect(app).not.toContain("const prevVerified");
+    expect(app).toContain('statScope: "champion" | "global" | null');
+    expect(app).toContain("statScope: staged.stat.provenance");
+    expect(app).toContain("statProvenance: stat?.provenance ?? null");
+    expect(app).toContain('logOverlayDiagnostic("[slot-publication]"');
   });
 
   it("guards live champion data by both champion id and patch", () => {
