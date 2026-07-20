@@ -169,12 +169,14 @@ export function useAramggTierFixture(
   // `top_champions` — is the source of every CHAMP-labeled statistic.
   const championCacheRef = useRef<ChampionDatasetCache | null>(null);
   const championRequestIdRef = useRef(0);
+  const [championRequestId, setChampionRequestId] = useState(0);
   const [championDataset, setChampionDataset] = useState<ChampionAugmentDataset | null>(null);
 
   useEffect(() => {
+    const requestId = (championRequestIdRef.current += 1);
+    setChampionRequestId(requestId);
     if (!enabled || !source || !championKey) return;
     if (!championCacheRef.current) championCacheRef.current = new ChampionDatasetCache();
-    const requestId = (championRequestIdRef.current += 1);
     let cancelled = false;
     void championCacheRef.current
       .get(championKey, source.patch)
@@ -287,7 +289,7 @@ export function useAramggTierFixture(
     sourceUrls: source?.sourceUrls ?? null,
     resolvedBySlug,
     resolveSlotTitle,
-    championRequestId: championRequestIdRef.current,
+    championRequestId,
     championPatch: activeChampionDataset?.patch ?? source?.patch ?? null,
     refresh,
   };

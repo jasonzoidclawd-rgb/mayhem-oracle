@@ -1250,7 +1250,7 @@ function App() {
         statScope: null,
       }];
     });
-  }, [previewBadgesReady, fixturePayload, previewCards, realFrameRenderable, visibleFrame, decisionResult]);
+  }, [previewBadgesReady, fixturePayload, previewCards, realFrameRenderable, visibleFrame, decisionResult, aramgg.resolvedBySlug]);
 
   // Staged diagnostics counters (never conflate injected with detected).
   const diag = {
@@ -1798,7 +1798,7 @@ function App() {
         geometryInFlightTokenRef.current = null;
       }
     }
-  }, [bumpScanSeq, datasetCaptureOn, recordRoundCompleted, republishGeometryFrame, resetOffer, updatePhase]);
+  }, [aramgg.championRequestId, bumpScanSeq, datasetCaptureOn, recordRoundCompleted, republishGeometryFrame, resetOffer, updatePhase]);
 
   // ─── TRACK 2: OCR/identity probe — TRIGGERED by the geometry track ───────────
   // Supplies per-slot identity ONLY: never presence, occlusion, or visual freshness. It
@@ -2725,11 +2725,12 @@ function App() {
   // Clearing the token also no-ops the wedged probe's finally (no setState on an
   // unmounted component).
   useEffect(() => {
+    const ocrOwners = ocrOwnersRef.current;
     return () => {
       bumpScanSeq();
       probeInFlightRef.current = false;
       probeInFlightSinceRef.current = null;
-      ocrOwnersRef.current.invalidate();
+      ocrOwners.invalidate();
       geometrySeqRef.current += 1;
       geometryInFlightRef.current = false;
       geometryInFlightSinceRef.current = null;
