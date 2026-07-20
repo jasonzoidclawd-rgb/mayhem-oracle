@@ -47,6 +47,14 @@ export const GEOMETRY_SCHEDULER_HEALTH_DEADLINE_MS = Math.max(
 export const FINGERPRINT_CHANGED_HAMMING = 8;
 /** An unresolved slot re-triggers OCR after this long (retry deadline). */
 export const IDENTITY_RETRY_MS = 1500;
+/**
+ * Bounded negative continuity (FIX 1). A NEGATIVE geometry observation (0 or 1
+ * strong card) following a stable positive preserves the prior visible state for
+ * up to this many consecutive frames before clearing, so a transient detector
+ * false-negative never blanks resolved chips or converts them to OCR ERROR. A
+ * value of 2 preserves one negative frame and clears on the second consecutive.
+ */
+export const GEOMETRY_NEGATIVE_CONTINUITY_FRAMES = 2;
 
 /** Per-card structural observation from the Rust geometry probe. */
 export interface GeometryCard {
@@ -260,21 +268,15 @@ export function advanceGeometrySurface(
       },
     };
   }
-  if (classification === "absent") {
-    return {
-      classification,
-      action: "clear",
-      hideReason: "confirmed-absent",
-      state: {
-        visualObservation: null,
-        lastPositiveObservation: null,
-        consecutiveWeakNegatives: 0,
-      },
-    };
-  }
-
+  // FIX 1 — a NEGATIVE observation (0 cards = "absent", or 1 card = "uncertain")
+  // that follows a stable positive is treated as bounded continuity, NOT an
+  // instant clear: a single detector false-negative preserves the prior visible
+  // state so resolved chips never flash empty (and are never converted to OCR
+  // ERROR) on a transient 0/3. Only a REPEATED negative past the bound — or an
+  // explicit occlusion (handled above) — clears. A negative with no prior
+  // positive (gameplay with no offer) still clears immediately.
   const weakCount = previous.consecutiveWeakNegatives + 1;
-  if (previous.visualObservation != null && weakCount < 2) {
+  if (previous.visualObservation != null && weakCount < GEOMETRY_NEGATIVE_CONTINUITY_FRAMES) {
     return {
       classification,
       action: "preserve",
@@ -289,9 +291,11 @@ export function advanceGeometrySurface(
   return {
     classification,
     action: "clear",
-    hideReason: previous.visualObservation == null
-      ? "uncertain-without-positive"
-      : "confirmed-weak-negative",
+    hideReason: classification === "absent"
+      ? "confirmed-absent"
+      : previous.visualObservation == null
+        ? "uncertain-without-positive"
+        : "confirmed-weak-negative",
     state: {
       visualObservation: null,
       lastPositiveObservation: null,

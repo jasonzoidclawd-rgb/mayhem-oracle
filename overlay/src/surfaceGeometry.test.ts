@@ -194,13 +194,25 @@ describe("geometry confidence hysteresis", () => {
     expect(secondObservation.capturedAt - 1000).toBe(300);
   });
 
-  it("clears immediately on zero structures or explicit occlusion", () => {
+  // FIX 1 — a single 0/3 probe (a transient detector false-negative) after a
+  // stable 3/3 must NOT clear instantly; it enters bounded negative continuity
+  // and preserves the prior visible state. Only a REPEATED 0/3 (past the bound)
+  // is confirmed absence. Explicit occlusion still clears immediately.
+  it("preserves one zero-structure probe, then clears on the second (bounded absence)", () => {
     const entered = advanceGeometrySurface(createGeometrySurfaceState(), obs());
-    const absent = advanceGeometrySurface(entered.state, zeroStrong());
-    expect(absent.classification).toBe("absent");
-    expect(absent.action).toBe("clear");
-    expect(absent.hideReason).toBe("confirmed-absent");
+    const firstAbsent = advanceGeometrySurface(entered.state, zeroStrong());
+    expect(firstAbsent.classification).toBe("absent");
+    expect(firstAbsent.action).toBe("preserve");
+    expect(firstAbsent.state.visualObservation).toBe(entered.state.visualObservation);
 
+    const secondAbsent = advanceGeometrySurface(firstAbsent.state, zeroStrong());
+    expect(secondAbsent.action).toBe("clear");
+    expect(secondAbsent.hideReason).toBe("confirmed-absent");
+    expect(secondAbsent.state.visualObservation).toBeNull();
+  });
+
+  it("clears immediately on explicit occlusion regardless of continuity", () => {
+    const entered = advanceGeometrySurface(createGeometrySurfaceState(), obs());
     const occluded = advanceGeometrySurface(entered.state, obs({ occluded: true }));
     expect(occluded.action).toBe("clear");
     expect(occluded.hideReason).toBe("occluded");
@@ -208,7 +220,9 @@ describe("geometry confidence hysteresis", () => {
 
   it("does not let delayed OCR restore a frame after confirmed geometry absence", () => {
     const entered = advanceGeometrySurface(createGeometrySurfaceState(), obs());
-    const cleared = advanceGeometrySurface(entered.state, zeroStrong());
+    // Two consecutive zero-structure probes are required for confirmed absence.
+    const preserved = advanceGeometrySurface(entered.state, zeroStrong());
+    const cleared = advanceGeometrySurface(preserved.state, zeroStrong());
     expect(cleared.state.visualObservation).toBeNull();
     const lateIdentity = identityForSlot(
       { fingerprint: FP_A, resolution: "late", resolvedAt: 2000 },
@@ -216,6 +230,13 @@ describe("geometry confidence hysteresis", () => {
     );
     expect(lateIdentity).toBe("late");
     expect(cleared.state.visualObservation).toBeNull();
+  });
+
+  it("a first-observation 0/3 with no prior positive clears immediately (gameplay, no offer)", () => {
+    const transition = advanceGeometrySurface(createGeometrySurfaceState(), zeroStrong());
+    expect(transition.action).toBe("clear");
+    expect(transition.hideReason).toBe("confirmed-absent");
+    expect(transition.state.visualObservation).toBeNull();
   });
 
   it("does not enter present from an uncertain first observation", () => {

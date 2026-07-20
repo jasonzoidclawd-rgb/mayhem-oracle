@@ -1524,12 +1524,19 @@ function App() {
         publishedObservation != null &&
         newOfferDetected(previousSurface.lastPositiveObservation, publishedObservation);
       const priorOfferSurface = offerSurfaceRef.current;
+      // FIX 1 — during bounded negative continuity (a preserved 0/3 or 1-card
+      // frame) the offer-surface machine must see the PRESERVED visible surface,
+      // not the raw negative capture, so it stays OFFER_VISIBLE in lock-step with
+      // geometry instead of independently flipping to NO_OFFER and blanking the
+      // resolved badges. On a clear, publishedObservation is null → the raw
+      // (0-card) observation drives the correct clear.
+      const effectiveObservation = publishedObservation ?? observation;
       const nextOfferSurface = advanceOfferSurface(priorOfferSurface, {
         now: completedAt,
         captureValid: observation.captureWidth > 0 && observation.captureHeight > 0,
-        blueControlPresent: observation.blueControl?.present === true,
-        blueControlConfidence: observation.blueControl?.confidence ?? 0,
-        validCardCount: observation.cards.filter((card) => card.present).length,
+        blueControlPresent: effectiveObservation.blueControl?.present === true,
+        blueControlConfidence: effectiveObservation.blueControl?.confidence ?? 0,
+        validCardCount: effectiveObservation.cards.filter((card) => card.present).length,
         occlusionReason: observation.occluded
           ? observation.rejectionReasons.find((reason) => reason.startsWith("occluded-")) ?? "opaque-surface"
           : null,
