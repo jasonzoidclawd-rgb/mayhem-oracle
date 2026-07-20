@@ -5,6 +5,7 @@ import type { OverlayFixtureMode } from "./fixtureMode";
 import type { OverlayCalibration } from "../calibration";
 import type { ForegroundState } from "../overlayVisibility";
 import type { DiagnosticCounters, OcrCardDiagnostic, OcrLifecycleSnapshot } from "./diagnostics";
+import type { AuthoritativeSnapshot } from "../authoritativePublication";
 
 export interface DevOverlayDiagnosticsProps {
   gameOverlayIsVisible: boolean;
@@ -18,6 +19,9 @@ export interface DevOverlayDiagnosticsProps {
   calibrationError: string | null;
   aramgg: AramggFixtureState;
   diag: DiagnosticCounters;
+  /** Render-authoritative snapshot (FIX 2) — the banner reads this, never the
+   * raw OCR pipeline counts or the internal latch. */
+  authoritative: AuthoritativeSnapshot;
   foregroundState: ForegroundState;
   ocrDiagnostics: OcrCardDiagnostic[];
   ocrLifecycle: OcrLifecycleSnapshot;
@@ -42,6 +46,7 @@ export function DevOverlayDiagnostics({
   calibrationError,
   aramgg,
   diag,
+  authoritative,
   foregroundState,
   ocrDiagnostics,
   ocrLifecycle,
@@ -114,9 +119,13 @@ export function DevOverlayDiagnostics({
 
       {fixtureModeKind === "ocr-unavailable" && (
         <div className="ocr-diagnostic" data-dev-only="ocr-diagnostic">
-          No latched offer — captured {diag.cardsCaptured}/3 · titles{" "}
-          {diag.titlesRead}/3 · Riot IDs {diag.riotResolved}/3 · ARAMGG{" "}
-          {diag.aramggMatched}/3
+          {/* FIX 2 — this banner reads the render-authoritative snapshot, so it
+              can never claim "no visible offer" while resolved badges render. */}
+          {authoritative.offerVisible
+            ? `Offer visible — cards ${authoritative.visibleCards}/3 · resolved ${authoritative.resolvedBadges}/3 · scanning ${authoritative.scanningSlots}/3`
+            : "No visible offer"}
+          {authoritative.retainedContinuity && " · retained-uncertainty"}
+          {` · gen ${authoritative.offerGeneration} · geoseq ${authoritative.geometrySeq}`}
           {aramgg.status !== "ready" && ` · ARAMGG source ${aramgg.status}`}
         </div>
       )}

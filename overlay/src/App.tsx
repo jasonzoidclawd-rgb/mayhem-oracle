@@ -126,6 +126,7 @@ import {
   type IdentityRecord,
 } from "./surfaceGeometry";
 import { applyRerollInvalidation, ocrRunSuperseded } from "./rerollInvalidation";
+import { summarizeAuthoritativePublication } from "./authoritativePublication";
 import {
   reconcileSlotIdentity,
   type SlotIdentity,
@@ -1271,6 +1272,22 @@ function App() {
       : 0,
     renderedPreviewBadges: previewBadgesReady ? slotChips.length : 0,
   };
+
+  // FIX 2 — the render-authoritative publication snapshot. The dev banner reads
+  // THIS (never the raw OCR pipeline counts in `diag`, nor the internal latch),
+  // so it can never claim "no visible offer" while resolved badges render. The
+  // geometry seq is the accepted frame's own captureSeq.
+  const authoritative = summarizeAuthoritativePublication({
+    renderable: realFrameRenderable,
+    slots: slotChips.map((chip) => ({
+      hasRect: true,
+      resolved: chip.state === "tier",
+      scanning: chip.state === "scanning",
+    })),
+    offerGeneration: offerSurface.offerGeneration,
+    geometrySeq: visibleFrame?.captureSeq ?? 0,
+    retainedContinuity: offerSurface.state === "UNCERTAIN",
+  });
 
   // Synchronously clear the visible surface. Advancing the probe seq invalidates
   // any in-flight probe's late result (it can never repaint a stale frame), then
@@ -2907,6 +2924,7 @@ function App() {
           calibrationError={calibrationError}
           aramgg={aramgg}
           diag={diag}
+          authoritative={authoritative}
           foregroundState={foregroundState}
           ocrDiagnostics={ocrDiagnostics}
           ocrLifecycle={ocrLifecycle}
