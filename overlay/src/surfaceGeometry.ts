@@ -72,6 +72,18 @@ export interface GeometryObservation {
   present: boolean;
   occluded: boolean;
   confidence: number;
+  blueControl?: {
+    present: boolean;
+    confidence: number;
+    normalizedRect: { x: number; y: number; width: number; height: number };
+    features?: {
+      aspectRatio: number;
+      blueBodyCoverage: number;
+      bodySaturation: number;
+      borderContrast: number;
+      centralIconCoverage: number;
+    };
+  };
   cards: GeometryCard[];
   rejectionReasons: string[];
   preCaptureMs: number;
@@ -121,6 +133,11 @@ export function emptyGeometryObservation(
     present: false,
     occluded: false,
     confidence: 0,
+    blueControl: {
+      present: false,
+      confidence: 0,
+      normalizedRect: { x: 0.435, y: 0.758, width: 0.13, height: 0.067 },
+    },
     cards: [0, 1, 2].map((regionIndex) => ({
       regionIndex,
       present: false,

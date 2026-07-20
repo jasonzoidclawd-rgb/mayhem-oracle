@@ -78,6 +78,65 @@ const T_GAP_PANEL_STD: f32 = 30.0;
 // a surface needs at least this many structurally-present cards
 const MIN_PRESENT_CARDS: usize = 2;
 
+const CONTROL_X0: f64 = 0.435;
+const CONTROL_X1: f64 = 0.565;
+const CONTROL_Y0: f64 = 0.758;
+const CONTROL_Y1: f64 = 0.825;
+const CONTROL_BODY_X0: f64 = 0.448;
+const CONTROL_BODY_X1: f64 = 0.552;
+const CONTROL_BODY_Y0: f64 = 0.770;
+const CONTROL_BODY_Y1: f64 = 0.812;
+
+#[derive(Serialize, Deserialize, Clone, Debug)]
+#[serde(rename_all = "camelCase")]
+pub struct NormalizedRect {
+    pub x: f32,
+    pub y: f32,
+    pub width: f32,
+    pub height: f32,
+}
+
+#[derive(Serialize, Deserialize, Clone, Debug)]
+#[serde(rename_all = "camelCase")]
+pub struct BlueControlFeatures {
+    pub aspect_ratio: f32,
+    pub blue_body_coverage: f32,
+    pub body_saturation: f32,
+    pub border_contrast: f32,
+    pub central_icon_coverage: f32,
+}
+
+#[derive(Serialize, Deserialize, Clone, Debug)]
+#[serde(rename_all = "camelCase")]
+pub struct BlueControlObservation {
+    pub present: bool,
+    pub confidence: f32,
+    pub normalized_rect: NormalizedRect,
+    /// Feature diagnostics are serialized only in debug builds.
+    #[cfg_attr(not(debug_assertions), serde(skip_serializing))]
+    pub features: BlueControlFeatures,
+}
+
+pub fn empty_blue_control() -> BlueControlObservation {
+    BlueControlObservation {
+        present: false,
+        confidence: 0.0,
+        normalized_rect: NormalizedRect {
+            x: CONTROL_X0 as f32,
+            y: CONTROL_Y0 as f32,
+            width: (CONTROL_X1 - CONTROL_X0) as f32,
+            height: (CONTROL_Y1 - CONTROL_Y0) as f32,
+        },
+        features: BlueControlFeatures {
+            aspect_ratio: 0.0,
+            blue_body_coverage: 0.0,
+            body_saturation: 0.0,
+            border_contrast: 0.0,
+            central_icon_coverage: 0.0,
+        },
+    }
+}
+
 /// Per-card structural observation. `present` is decided from `interior_luma` +
 /// `interior_std` + `frame_contrast` only (scale invariant); `edge_energy` and
 /// `structural_score` are diagnostics.
@@ -116,6 +175,7 @@ pub struct SurfaceObservation {
     pub occluded: bool,
     /// 0..1 offer-level confidence (mean present-card structural score).
     pub confidence: f32,
+    pub blue_control: BlueControlObservation,
     pub cards: Vec<CardObservation>,
     pub rejection_reasons: Vec<String>,
     /// Native work before screen capture starts (foreground/window discovery).
@@ -126,6 +186,133 @@ pub struct SurfaceObservation {
     pub analysis_ms: u64,
     /// Complete native probe latency, retained as the existing API field.
     pub elapsed_ms: u64,
+}
+
+fn normalized_region_px(
+    width: usize,
+    height: usize,
+    viewport: &Rect,
+    nx0: f64,
+    ny0: f64,
+    nx1: f64,
+    ny1: f64,
+) -> (usize, usize, usize, usize) {
+    let x0 = ((viewport.x as f64 + nx0 * viewport.width as f64).round() as i64)
+        .clamp(0, width as i64) as usize;
+    let x1 = ((viewport.x as f64 + nx1 * viewport.width as f64).round() as i64)
+        .clamp(0, width as i64) as usize;
+    let y0 = ((viewport.y as f64 + ny0 * viewport.height as f64).round() as i64)
+        .clamp(0, height as i64) as usize;
+    let y1 = ((viewport.y as f64 + ny1 * viewport.height as f64).round() as i64)
+        .clamp(0, height as i64) as usize;
+    (x0, y0, x1.max(x0), y1.max(y0))
+}
+
+/// Structural, locale-independent detector for the central cyan hide/show
+/// control. It combines body hue/saturation, gold/light border contrast, the
+/// central hand/icon highlight and the fixed relationship to the three columns.
+pub fn detect_blue_augment_control(
+    img: &image::DynamicImage,
+    viewport: &Rect,
+) -> BlueControlObservation {
+    let rgb = img.to_rgb8();
+    let (width, height) = (rgb.width() as usize, rgb.height() as usize);
+    let body = normalized_region_px(
+        width,
+        height,
+        viewport,
+        CONTROL_BODY_X0,
+        CONTROL_BODY_Y0,
+        CONTROL_BODY_X1,
+        CONTROL_BODY_Y1,
+    );
+    let icon = normalized_region_px(width, height, viewport, 0.485, 0.770, 0.515, 0.812);
+    let border_top =
+        normalized_region_px(width, height, viewport, 0.445, 0.760, 0.555, 0.765);
+    let border_bottom =
+        normalized_region_px(width, height, viewport, 0.445, 0.817, 0.555, 0.822);
+
+    let mut body_count = 0usize;
+    let mut blue_count = 0usize;
+    let mut saturation_sum = 0.0f32;
+    let mut body_luma_sum = 0.0f32;
+    for y in body.1..body.3 {
+        for x in body.0..body.2 {
+            let [r, g, b] = rgb.get_pixel(x as u32, y as u32).0;
+            let max = r.max(g).max(b) as f32;
+            let min = r.min(g).min(b) as f32;
+            let saturation = if max <= 0.0 { 0.0 } else { (max - min) / max };
+            if b >= 70 && g >= 45 && (b as f32) > r as f32 * 1.25 && saturation >= 0.35 {
+                blue_count += 1;
+            }
+            saturation_sum += saturation;
+            body_luma_sum += 0.299 * r as f32 + 0.587 * g as f32 + 0.114 * b as f32;
+            body_count += 1;
+        }
+    }
+    let body_count_f = body_count.max(1) as f32;
+    let blue_body_coverage = blue_count as f32 / body_count_f;
+    let body_saturation = saturation_sum / body_count_f;
+    let body_luma = body_luma_sum / body_count_f;
+
+    let mut border_luma_sum = 0.0f32;
+    let mut border_count = 0usize;
+    for region in [border_top, border_bottom] {
+        for y in region.1..region.3 {
+            for x in region.0..region.2 {
+                let [r, g, b] = rgb.get_pixel(x as u32, y as u32).0;
+                border_luma_sum += 0.299 * r as f32 + 0.587 * g as f32 + 0.114 * b as f32;
+                border_count += 1;
+            }
+        }
+    }
+    let border_contrast = border_luma_sum / border_count.max(1) as f32 - body_luma;
+
+    let mut icon_count = 0usize;
+    let mut icon_light = 0usize;
+    for y in icon.1..icon.3 {
+        for x in icon.0..icon.2 {
+            let [r, g, b] = rgb.get_pixel(x as u32, y as u32).0;
+            if b >= 140 && g >= 95 && b > r {
+                icon_light += 1;
+            }
+            icon_count += 1;
+        }
+    }
+    let central_icon_coverage = icon_light as f32 / icon_count.max(1) as f32;
+    let aspect_ratio =
+        ((CONTROL_X1 - CONTROL_X0) * viewport.width as f64 /
+            ((CONTROL_Y1 - CONTROL_Y0) * viewport.height as f64)) as f32;
+
+    let confidence = (
+        (blue_body_coverage / 0.72).min(1.0) * 0.40 +
+        (body_saturation / 0.52).min(1.0) * 0.20 +
+        (border_contrast.max(0.0) / 8.0).min(1.0) * 0.20 +
+        (central_icon_coverage / 0.08).min(1.0) * 0.20
+    ).clamp(0.0, 1.0);
+    let present = blue_body_coverage >= 0.55 &&
+        body_saturation >= 0.42 &&
+        border_contrast >= 3.5 &&
+        central_icon_coverage >= 0.035 &&
+        confidence >= 0.72;
+
+    BlueControlObservation {
+        present,
+        confidence,
+        normalized_rect: NormalizedRect {
+            x: CONTROL_X0 as f32,
+            y: CONTROL_Y0 as f32,
+            width: (CONTROL_X1 - CONTROL_X0) as f32,
+            height: (CONTROL_Y1 - CONTROL_Y0) as f32,
+        },
+        features: BlueControlFeatures {
+            aspect_ratio,
+            blue_body_coverage,
+            body_saturation,
+            border_contrast,
+            central_icon_coverage,
+        },
+    }
 }
 
 /// A luminance buffer (Rec601, matching the fixture tuning) over the capture.
@@ -253,6 +440,7 @@ pub fn analyze_surface(
     captured_at: f64,
     elapsed_ms: u64,
 ) -> SurfaceObservation {
+    let blue_control = detect_blue_augment_control(img, viewport_px);
     let luma = LumaImage::from_rgb(img);
     let mut cards = Vec::with_capacity(3);
     let mut rejection_reasons = Vec::new();
@@ -329,6 +517,7 @@ pub fn analyze_surface(
         present,
         occluded,
         confidence,
+        blue_control,
         cards,
         rejection_reasons,
         pre_capture_ms: 0,
@@ -380,6 +569,17 @@ mod tests {
 
     fn analyze_july20(name: &str) -> SurfaceObservation {
         analyze_live_crop(&format!("july20/{}", name))
+    }
+
+    fn detect_july20_control(name: &str) -> BlueControlObservation {
+        let image = load(&format!("july20/{}-control.png", name));
+        let viewport = Rect {
+            x: -540,
+            y: -530,
+            width: 1280,
+            height: 720,
+        };
+        detect_blue_augment_control(&image, &viewport)
     }
 
     fn hamming(a: &str, b: &str) -> usize {
@@ -586,6 +786,48 @@ mod tests {
             let observation = analyze_july20(name);
             assert!(!observation.present, "{}: {:?}", name, observation.cards);
         }
+    }
+
+    #[test]
+    fn july20_blue_control_is_present_on_every_visible_offer() {
+        for name in [
+            "july20-110425",
+            "july20-110439",
+            "july20-110708",
+            "july20-110712",
+            "july20-110714",
+            "july20-110954",
+            "july20-110956",
+            "july20-111042",
+        ] {
+            let control = detect_july20_control(name);
+            assert!(control.present, "{}: {:?}", name, control);
+            assert!(control.confidence >= 0.72, "{}: {:?}", name, control);
+        }
+    }
+
+    #[test]
+    fn july20_blue_control_is_absent_in_shop_and_combat() {
+        for name in ["july20-111048", "july20-111050"] {
+            let control = detect_july20_control(name);
+            eprintln!("[blue-control-negative] {} {:?}", name, control);
+            assert!(!control.present, "{}: {:?}", name, control);
+        }
+    }
+
+    #[test]
+    fn july20_blue_control_survives_two_x_scaling() {
+        let image = load("july20/july20-110425-control.png");
+        let scaled = image.resize_exact(400, 160, image::imageops::FilterType::Nearest);
+        let viewport = Rect {
+            x: -1080,
+            y: -1060,
+            width: 2560,
+            height: 1440,
+        };
+        let control = detect_blue_augment_control(&scaled, &viewport);
+        assert!(control.present, "{:?}", control);
+        assert!((control.features.aspect_ratio - 3.4494).abs() < 0.01);
     }
 
     #[test]

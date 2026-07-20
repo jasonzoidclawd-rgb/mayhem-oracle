@@ -794,6 +794,7 @@ fn absent_surface_observation(
         present: false,
         occluded: false,
         confidence: 0.0,
+        blue_control: surface_probe::empty_blue_control(),
         cards: (0..calibration::CARD_NAME_REGIONS.len())
             .map(|region_index| surface_probe::CardObservation {
                 region_index,
