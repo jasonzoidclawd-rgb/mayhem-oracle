@@ -199,6 +199,40 @@ describe("applyRerollInvalidation — only the changed slot is invalidated", () 
   });
 });
 
+// Failure C — a single-slot reroll must never mutate neighbour state, whatever
+// state those neighbours are in. A left reroll while middle is OCR ERROR and
+// right is resolved leaves middle and right byte-for-byte untouched.
+describe("applyRerollInvalidation — mixed per-slot states survive a single reroll", () => {
+  it("left reroll preserves a middle OCR ERROR and a resolved right", () => {
+    const middleError: IdentityRecord<string> = {
+      fingerprint: FP_B,
+      resolution: null,
+      resolvedAt: 100,
+      championGeneration: 1,
+      augmentId: "",
+      unresolvedState: "ocr-error",
+      failureCount: 3,
+    };
+    const store = [resolved(FP_A, "1006"), middleError, resolved(FP_C, "1008")];
+    const r = applyRerollInvalidation({
+      store,
+      acceptedFingerprints: [FP_A, FP_B, FP_C],
+      slotGenerations: [3, 3, 3],
+      observation: observation([FP_C, FP_B, FP_C]), // ONLY left changed (A → C)
+      championGeneration: CHAMP_GEN,
+      now: 500,
+    });
+    expect(r.invalidated).toEqual([0]);
+    expect(r.store[0]).toBeNull(); // left → SCANNING
+    expect(r.slotGenerations).toEqual([4, 3, 3]);
+    // middle stays OCR ERROR, right stays resolved — same object references.
+    expect(r.store[1]).toBe(middleError);
+    expect(r.store[1]?.unresolvedState).toBe("ocr-error");
+    expect(r.store[2]).toBe(store[2]);
+    expect(r.store[2]?.resolution).toBe("id:1008");
+  });
+});
+
 describe("ocrRunSuperseded — a reroll during OCR rejects the stale run", () => {
   it("rejects an OCR result whose slot generation is behind current", () => {
     expect(ocrRunSuperseded(3, 4)).toBe(true);
