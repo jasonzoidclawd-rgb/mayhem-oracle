@@ -10,9 +10,11 @@ mod foreground;
 mod lcu;
 pub mod member;
 pub mod ocr;
+pub mod overlay_window;
 mod sanitize;
 pub mod surface_probe;
 mod upload_queue;
+pub mod window_locator;
 
 #[cfg(target_os = "macos")]
 #[macro_use]
@@ -390,45 +392,44 @@ fn monitor_snapshots() -> Result<Vec<MonitorSnapshot>, String> {
     Ok(snapshots)
 }
 
+/// True when an enumerated window belongs to the overlay itself. `xcap` gives us
+/// only app name/title, so we match the overlay's product identity — a defensive
+/// guard on top of the game-window predicate, which already rejects it.
+fn is_own_overlay_window(app_name: &str, title: &str) -> bool {
+    let overlay = |value: &str| {
+        let normalized = value.to_lowercase();
+        normalized == "mayhem oracle" || normalized == "mayhem-oracle-overlay"
+    };
+    overlay(app_name) || overlay(title)
+}
+
 fn find_league_window() -> Option<calibration::Rect> {
     let windows = xcap::Window::all().ok()?;
-    let mut candidates: Vec<(u64, calibration::Rect)> = Vec::new();
+    let mut candidates: Vec<window_locator::WindowCandidate> = Vec::new();
 
     for window in windows {
-        if window.is_minimized().unwrap_or(false) {
-            continue;
-        }
-
         let app_name = window.app_name().unwrap_or_default();
         let title = window.title().unwrap_or_default();
-        if !foreground::is_actual_game_window(&app_name, &title) {
-            continue;
-        }
-
         let (Ok(x), Ok(y), Ok(width), Ok(height)) =
             (window.x(), window.y(), window.width(), window.height())
         else {
             continue;
         };
-        let rect = calibration::Rect {
-            x,
-            y,
-            width,
-            height,
-        };
-
-        if rect.width < 640 || rect.height < 480 {
-            continue;
-        }
-
-        let area = rect.width as u64 * rect.height as u64;
-        candidates.push((area, rect));
+        candidates.push(window_locator::WindowCandidate {
+            is_own_overlay: is_own_overlay_window(&app_name, &title),
+            app_name,
+            title,
+            rect: calibration::Rect {
+                x,
+                y,
+                width,
+                height,
+            },
+            minimized: window.is_minimized().unwrap_or(false),
+        });
     }
 
-    candidates
-        .into_iter()
-        .max_by_key(|(score, _)| *score)
-        .map(|(_, rect)| rect)
+    window_locator::select_league_window(&candidates)
 }
 
 fn selected_monitor_index(
@@ -523,6 +524,35 @@ fn get_overlay_calibration(
     Ok(calibration)
 }
 
+/// Diagnostics for a wholesale screen-capture failure: every card region is
+/// flagged `capture_succeeded = false` with the error, and NO crops are
+/// produced (`crop_count` stays 0). This is what keeps a capture failure
+/// distinguishable from a legitimate scan that captured every region but
+/// recognized no augment text (`crop_count == region count`): a capture failure
+/// must never be read as a valid zero-card observation.
+pub fn capture_failure_diagnostics(
+    viewport: &calibration::Rect,
+    error: &str,
+) -> Vec<OcrCardDiagnostic> {
+    calibration::CARD_NAME_REGIONS
+        .iter()
+        .enumerate()
+        .map(|(region_index, region)| {
+            let rect = calibration::physical_rect_for_region(region, viewport);
+            OcrCardDiagnostic {
+                region_index,
+                card_rect: Some(rect.clone()),
+                crop: Some(rect),
+                capture_succeeded: false,
+                raw_text: None,
+                error: Some(error.to_string()),
+                capture_width: None,
+                capture_height: None,
+            }
+        })
+        .collect()
+}
+
 struct CardCrop {
     region_index: usize,
     image: image::DynamicImage,
@@ -544,25 +574,10 @@ fn capture_card_name_crops() -> Result<CardCropSet, String> {
     let screenshot = match monitor.monitor.capture_image() {
         Ok(screenshot) => screenshot,
         Err(error) => {
+            // A capture failure is a flagged, crop-less outcome — never a clean
+            // zero-card scan (see `capture_failure_diagnostics`).
             let message = format!("Capture failed: {}", error);
-            for (region_index, region) in calibration::CARD_NAME_REGIONS.iter().enumerate() {
-                diagnostics.push(OcrCardDiagnostic {
-                    region_index,
-                    card_rect: Some(calibration::physical_rect_for_region(
-                        region,
-                        &calibration.viewport,
-                    )),
-                    crop: Some(calibration::physical_rect_for_region(
-                        region,
-                        &calibration.viewport,
-                    )),
-                    capture_succeeded: false,
-                    raw_text: None,
-                    error: Some(message.clone()),
-                    capture_width: None,
-                    capture_height: None,
-                });
-            }
+            diagnostics.extend(capture_failure_diagnostics(&calibration.viewport, &message));
             return Ok(CardCropSet {
                 crops: Vec::new(),
                 diagnostics,
@@ -997,6 +1012,22 @@ fn set_click_through(app: tauri::AppHandle, ignore: bool) {
             }
         }
     }
+
+    #[cfg(target_os = "windows")]
+    {
+        use tauri::Manager;
+        if let Some(window) = app.get_webview_window("overlay") {
+            if let Ok(hwnd) = window.hwnd() {
+                // `WS_EX_TRANSPARENT` makes the layered window pass mouse input
+                // to the game; the always-on tool-window/layered/no-activate
+                // bits are re-asserted at the same time.
+                overlay_window::apply_overlay_ex_styles(hwnd, ignore);
+            }
+        }
+    }
+
+    #[cfg(not(any(target_os = "macos", target_os = "windows")))]
+    let _ = (&app, ignore);
 }
 
 #[derive(Clone, Default)]
@@ -1539,6 +1570,12 @@ fn open_screen_recording_settings() {
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
+    // Per-Monitor DPI Awareness V2 must be set before any window/monitor
+    // geometry is read so xcap and the overlay window agree on physical pixels
+    // across mixed-DPI monitors (100–200% scaling). No-op on non-Windows.
+    #[cfg(target_os = "windows")]
+    overlay_window::set_process_dpi_aware_v2();
+
     tauri::Builder::default()
         .invoke_handler(tauri::generate_handler![
             detect_league_client,
@@ -1673,6 +1710,55 @@ pub fn run() {
                     }
                 });
 
+            }
+
+            #[cfg(target_os = "windows")]
+            {
+                use tauri::Manager;
+                let window = app
+                    .get_webview_window("overlay")
+                    .expect("overlay window not found");
+
+                // Assert the transparent / click-through / non-activating /
+                // tool-window styles once at startup, then set the initial
+                // z-order from the current foreground owner.
+                if let Ok(hwnd) = window.hwnd() {
+                    overlay_window::apply_overlay_ex_styles(hwnd, true);
+                    overlay_window::apply_overlay_topmost(
+                        hwnd,
+                        collect_foreground_state().game_window_foreground,
+                    );
+                }
+
+                // Window-lifecycle audit log (fix #7). Exactly ONE native
+                // overlay window: created from tauri.conf.json, only ever
+                // restyled/repositioned here and in apply_overlay_window_bounds,
+                // never created or destroyed at runtime. The single window is
+                // click-through (WS_EX_TRANSPARENT) and never activates
+                // (WS_EX_NOACTIVATE), so it cannot steal League input.
+                eprintln!(
+                    "[overlay-window] created single native window \"overlay\" \
+                     (Windows layered, click-through, no-activate, tool-window; \
+                     topmost only while League is foreground)"
+                );
+
+                // Re-assert styles and follow the foreground owner's z-order.
+                // WebView2 can reset extended styles, and dropping HWND_TOPMOST
+                // when League is not foreground keeps the overlay from floating
+                // over unrelated applications after an Alt+Tab. Handle work runs
+                // on the main thread, mirroring the macOS re-assert loop.
+                let win = window.clone();
+                std::thread::spawn(move || loop {
+                    std::thread::sleep(std::time::Duration::from_millis(1500));
+                    let game_foreground = collect_foreground_state().game_window_foreground;
+                    let win_ref = win.clone();
+                    let _ = win.run_on_main_thread(move || {
+                        if let Ok(hwnd) = win_ref.hwnd() {
+                            overlay_window::apply_overlay_ex_styles(hwnd, true);
+                            overlay_window::apply_overlay_topmost(hwnd, game_foreground);
+                        }
+                    });
+                });
             }
 
             Ok(())
