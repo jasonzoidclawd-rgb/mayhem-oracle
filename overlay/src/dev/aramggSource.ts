@@ -476,27 +476,10 @@ export function parseStatsList(raw: unknown): {
   return { stats, skipped, skippedChampionStats };
 }
 
-/** Select the sparse champion row when ARAMGG publishes one, else the global row. */
-export function selectAramggStat(
-  globalStat: AramggStat,
-  championKey: string | null | undefined,
-): AramggStat {
-  if (!championKey) return globalStat;
-  return globalStat.topChampionsById.get(championKey) ?? globalStat;
-}
-
-/** Rebuild every selected row for one champion; never mutate or reuse a prior selection map. */
-export function selectAramggStatsForChampion(
-  globalStatsById: ReadonlyMap<string, AramggStat>,
-  championKey: string | null | undefined,
-): Map<string, AramggStat> {
-  return new Map(
-    [...globalStatsById].map(([augmentId, globalStat]) => [
-      augmentId,
-      selectAramggStat(globalStat, championKey),
-    ]),
-  );
-}
+// NOTE: the former `selectAramggStat` / `selectAramggStatsForChampion`
+// (the reversed global-stat → sparse top_champions model) were removed with the
+// global-fallback policy change — this overlay reads champion-specific data only
+// via the complete per-champion file (see championStats.ts / championDataset.ts).
 
 // ─── Pure: build catalog index ───
 

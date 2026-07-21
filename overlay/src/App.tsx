@@ -268,16 +268,18 @@ interface MatchedCard {
 /**
  * One per-slot badge chip: a real recommendation (`tier`) or an explicit slot
  * state — SCANNING (reroll/unreadable), UNMATCHED (Riot identity unresolved),
- * NO ARAMGG DATA (identity resolved, no stat record).
+ * NO CHAMP DATA (complete champion dataset has no row), LOADING DATA (champion
+ * dataset still loading), DATA ERROR (champion dataset fetch failed). This
+ * overlay is champion-only: no global-sourced statistic ever reaches a chip.
  */
 interface SlotChip {
   regionIndex: number;
   key: string;
-  state: "tier" | "scanning" | "unmatched" | "ocr-error" | "no-data";
+  state: "tier" | "scanning" | "unmatched" | "ocr-error" | "no-data" | "loading-data" | "data-error";
   tier: TierLetter | null;
   winRateText: string | null;
   isNew: boolean;
-  statScope: "champion" | "global" | null;
+  statScope: "champion" | null;
 }
 
 /**
@@ -1064,6 +1066,22 @@ function App() {
     aramggResolveRef.current = aramgg.resolveSlotTitle;
   }, [aramgg.resolveSlotTitle]);
 
+  // Champion-dataset meta for privacy-safe diagnostics (completeness, load size,
+  // status). Kept in refs so the OCR scan callback reads the freshest values
+  // without re-creating on every dataset change.
+  const championDataMetaRef = useRef({
+    status: aramgg.championDataStatus,
+    completeness: aramgg.championCompleteness,
+    loadedCount: aramgg.championLoadedCount,
+  });
+  useEffect(() => {
+    championDataMetaRef.current = {
+      status: aramgg.championDataStatus,
+      completeness: aramgg.championCompleteness,
+      loadedCount: aramgg.championLoadedCount,
+    };
+  }, [aramgg.championDataStatus, aramgg.championCompleteness, aramgg.championLoadedCount]);
+
   const fixtureMode = resolveOverlayFixtureMode({
     tierFixtureOn,
     previewOn: geometryPreviewOn,
@@ -1188,7 +1206,11 @@ function App() {
             fixturePayload.winRateDisplayBySlug[card.augment.slug],
           ),
           isNew: card.augment.lifecycle === "added",
-          statScope: aramgg.resolvedBySlug.get(card.augment.slug)?.stat.provenance ?? null,
+          // Champion-only: a resolved stat is always champion-specific.
+          statScope:
+            aramgg.resolvedBySlug.get(card.augment.slug)?.stat.provenance === "champion"
+              ? "champion"
+              : null,
         }];
       });
     }
@@ -1225,12 +1247,21 @@ function App() {
             // "59.2%"); the raw value stays on the stat for diagnostics.
             winRateText: compactWinRateFromFraction(staged.stat.rawWinRate),
             isNew: slot.resolution?.pool?.lifecycle === "added",
-            statScope: staged.stat.provenance,
+            // Champion-only: a matched stat is always champion-specific.
+            statScope: staged.stat.provenance === "champion" ? "champion" : null,
           }];
         }
         if (staged.kind === "no-data") {
-          // Riot identity resolved, but ARAMGG carries no stat record.
+          // Identity resolved; the COMPLETE champion dataset has no row → NO CHAMP DATA.
           return [{ ...base, state: "no-data", tier: null, winRateText: null, isNew: false, statScope: null }];
+        }
+        if (staged.kind === "loading") {
+          // Champion dataset still loading (or partial): absence is unproven.
+          return [{ ...base, state: "loading-data", tier: null, winRateText: null, isNew: false, statScope: null }];
+        }
+        if (staged.kind === "error") {
+          // Champion dataset fetch failed — never fall back to a global value.
+          return [{ ...base, state: "data-error", tier: null, winRateText: null, isNew: false, statScope: null }];
         }
         return [{ ...base, state: "unmatched", tier: null, winRateText: null, isNew: false, statScope: null }];
       }
@@ -1443,8 +1474,9 @@ function App() {
   const titlePresent = useCallback(() => true, []);
 
   // Champion-data completion may legitimately change only the statistic for
-  // an already-verified canonical augment (GLOBAL → CHAMP). Reconcile the
-  // stored OCR identity without invoking OCR again.
+  // an already-verified canonical augment (LOADING/NO CHAMP DATA → the champion
+  // row, once the complete dataset arrives). Reconcile the stored OCR identity
+  // without invoking OCR again.
   useEffect(() => {
     if (!aramgg.resolveSlotTitle) return;
     let changed = false;
@@ -2015,15 +2047,35 @@ function App() {
         const stored = reconcileIdentityRecord(prev, incoming);
         identityStoreRef.current[regionIndex] = stored;
         if (import.meta.env.DEV) {
+          const aramggKind = stored.resolution?.aramgg?.kind ?? null;
           const stat = stored.resolution?.aramgg?.kind === "matched"
             ? stored.resolution.aramgg.stat
             : null;
+          // Champion-only invariant: a published statistic is ALWAYS champion
+          // provenance. A global source reaching a badge is a policy violation.
+          const selectionStatus =
+            aramggKind === "matched"
+              ? "champion-resolved"
+              : aramggKind === "no-data"
+                ? "champion-no-data"
+                : aramggKind === "loading"
+                  ? "champion-loading"
+                  : aramggKind === "error"
+                    ? "champion-fetch-error"
+                    : aramggKind === "unmatched"
+                      ? "riot-unmatched"
+                      : null;
+          const meta = championDataMetaRef.current;
           const diagnostic = {
             foregroundEpoch,
             gameEpoch,
             championId: championIdAtStart,
             championGeneration,
             championDatasetRequestId: championRequestIdAtStart,
+            datasetCompleteness: meta.completeness,
+            datasetLoadedCount: meta.loadedCount,
+            endpointKind: "champion-augments-file",
+            selectionStatus,
             offerGeneration: offerGenerationAtStart,
             geometrySequence: geometrySeqRef.current,
             slot: regionIndex,
@@ -2035,11 +2087,28 @@ function App() {
             ocrRunId: owner.runId,
             normalizedOcrTitleHash: boundedDiagnosticHash(readable ? raw : null),
             canonicalAugmentId: stored.augmentId ?? null,
+            statisticsAugmentId: stat?.augmentId ?? null,
             statProvenance: stat?.provenance ?? null,
             rawWinRate: stat?.rawWinRate ?? null,
+            formattedWinRate: stat ? compactWinRateFromFraction(stat.rawWinRate) : null,
             tier: stat?.tierLetter ?? null,
+            rejectionReason:
+              aramggKind === "no-data"
+                ? "champion-no-data"
+                : aramggKind === "loading"
+                  ? "champion-data-loading"
+                  : aramggKind === "error"
+                    ? "champion-data-error"
+                    : null,
             publicationReason: stored === prev ? "identity-conflict-rejected" : "identity-published",
           };
+          // A global-sourced statistic must never publish (removed by policy).
+          if (stat && stat.provenance !== "champion") {
+            logOverlayDiagnostic("[slot-publication-violation]", {
+              slot: regionIndex,
+              rejectionReason: "statistics-source-global",
+            });
+          }
           logOverlayDiagnostic("[identity-publish]", diagnostic);
           logOverlayDiagnostic("[slot-publication]", diagnostic);
         }
@@ -2109,8 +2178,12 @@ function App() {
                       : ""
                   }`
                 : aramggResolution?.kind === "no-data"
-                  ? "riot-resolved-no-aramgg-record"
-                  : poolDiagnostic?.rejectionReason ?? null,
+                  ? "champion-no-data"
+                  : aramggResolution?.kind === "loading"
+                    ? "champion-data-loading"
+                    : aramggResolution?.kind === "error"
+                      ? "champion-data-error"
+                      : poolDiagnostic?.rejectionReason ?? null,
             riotCanonicalName:
               aramggResolution && aramggResolution.kind !== "unmatched"
                 ? aramggResolution.riot.canonicalName
@@ -2847,8 +2920,12 @@ function App() {
                   : chip.state === "ocr-error"
                     ? "OCR ERROR"
                     : chip.state === "no-data"
-                    ? "NO ARAMGG DATA"
-                    : "UNMATCHED";
+                      ? "NO CHAMP DATA"
+                      : chip.state === "loading-data"
+                        ? "LOADING DATA"
+                        : chip.state === "data-error"
+                          ? "DATA ERROR"
+                          : "UNMATCHED";
               return (
                 <div
                   className={`badge-chip badge-chip-${chip.state}`}

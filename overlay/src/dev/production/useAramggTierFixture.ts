@@ -20,6 +20,16 @@ export type SlotAramggResolution =
       localSlug: string | null;
     }
   | {
+      kind: "loading";
+      riot: { augmentId: string; canonicalName: string | null; zhTwName: string | null; method: string; confidence: number };
+      localSlug: string | null;
+    }
+  | {
+      kind: "error";
+      riot: { augmentId: string; canonicalName: string | null; zhTwName: string | null; method: string; confidence: number };
+      localSlug: string | null;
+    }
+  | {
       kind: "unmatched";
       rejection: { augmentId: null; reason: string; detail?: string };
     };
@@ -35,6 +45,9 @@ export interface AramggFixtureState {
   resolveSlotTitle: ((ocrTitle: string) => SlotAramggResolution) | null;
   championRequestId: number;
   championPatch: string | null;
+  championDataStatus: "idle" | "loading" | "ready" | "error";
+  championCompleteness: "partial" | "complete" | null;
+  championLoadedCount: number | null;
   refresh: () => void;
 }
 
@@ -58,6 +71,9 @@ export function useAramggTierFixture(
     resolveSlotTitle: null,
     championRequestId: 0,
     championPatch: null,
+    championDataStatus: "idle",
+    championCompleteness: null,
+    championLoadedCount: null,
     refresh,
   };
 }

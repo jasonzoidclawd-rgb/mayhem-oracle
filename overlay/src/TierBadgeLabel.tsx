@@ -1,6 +1,8 @@
 import type { TierLetter } from "./model/tier";
 
-export type BadgeStatScope = "champion" | "global" | null;
+// This overlay is champion-only: a badge statistic is always champion-specific.
+// There is no "global" scope — a global-sourced statistic never reaches a badge.
+export type BadgeStatScope = "champion" | null;
 
 function accessibleWinRate(winRateText: string): string {
   return winRateText.endsWith("%")
@@ -13,11 +15,7 @@ export function tierBadgeAccessibleLabel(input: {
   winRateText: string | null;
   statScope: BadgeStatScope;
 }): string {
-  const provenance = input.statScope === "champion"
-    ? "Champion-specific "
-    : input.statScope === "global"
-      ? "Global fallback "
-      : "";
+  const provenance = input.statScope === "champion" ? "Champion-specific " : "";
   const winRate = input.winRateText === null
     ? ""
     : `, ${accessibleWinRate(input.winRateText)}`;

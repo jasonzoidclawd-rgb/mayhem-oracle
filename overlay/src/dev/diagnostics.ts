@@ -2,6 +2,8 @@ export type SlotDiagnosticState =
   | "scanning"
   | "matched"
   | "no-data"
+  | "loading"
+  | "error"
   | "unmatched";
 
 export type SlotRejectionStage =

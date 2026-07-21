@@ -47,8 +47,16 @@ export interface ChampionAugmentStat {
 export interface ChampionAugmentDataset {
   championId: string;
   patch: string | null;
-  /** Provenance URL, e.g. https://aramgg.com/en/champion-stats/56. */
+  /** Provenance URL, e.g. https://aramgg.com/data/champion-augments/56.json. */
   source: string;
+  /**
+   * `complete` = the authoritative per-champion augment file (every augment this
+   * champion has data for). `partial` = a subset (e.g. the champion page's
+   * embedded top-augments table) that must NOT be read as proof of absence.
+   */
+  completeness: "partial" | "complete";
+  /** Number of augment rows actually loaded (diagnostic + completeness signal). */
+  loadedCount: number;
   statsByAugmentId: Map<string, ChampionAugmentStat>;
 }
 
@@ -105,7 +113,13 @@ function parseRow(
  */
 export function parseChampionAugmentDataset(
   raw: unknown,
-  opts: { championId: string; patch: string | null; source: string },
+  opts: {
+    championId: string;
+    patch: string | null;
+    source: string;
+    /** Authoritative per-champion file → "complete" (default). A page subset is "partial". */
+    completeness?: "partial" | "complete";
+  },
 ): ChampionAugmentDataset {
   if (raw === null || typeof raw !== "object") {
     throw new Error("parseChampionAugmentDataset: expected a JSON object");
@@ -124,6 +138,8 @@ export function parseChampionAugmentDataset(
     championId: opts.championId,
     patch: opts.patch,
     source: opts.source,
+    completeness: opts.completeness ?? "complete",
+    loadedCount: statsByAugmentId.size,
     statsByAugmentId,
   };
 }
@@ -136,12 +152,16 @@ export function lookupChampionAugmentStat(
   return dataset.statsByAugmentId.get(augmentId) ?? null;
 }
 
-// ─── Provenance selection (Section 5): CHAMP / GLOBAL / NO CHAMP DATA ───
+// ─── Champion-ONLY selection (Section 2). No global fallback exists. ───
+// PRODUCT POLICY: this overlay answers only "how does this augment perform for
+// the champion currently being played?". The global augment record must never
+// supply a tier, win rate, rank, sample count or provenance here. Absence is
+// resolved to an explicit non-stat state, never to a global value.
 
 export interface ResolvedStat {
-  /** CHAMP = champion dataset row; GLOBAL = explicit global fallback. */
-  label: "CHAMP" | "GLOBAL";
-  championId: string | null;
+  /** Always CHAMP — the only valid source for this overlay. */
+  label: "CHAMP";
+  championId: string;
   augmentId: string;
   tier: number;
   tierLetter: TierLetter;
@@ -152,22 +172,23 @@ export interface ResolvedStat {
 }
 
 export type AugmentStatSelection =
+  /** The champion's own row for this augment. */
   | { kind: "resolved"; stat: ResolvedStat }
-  /** Dataset loaded but the augment row is absent and no approved fallback applies. */
-  | { kind: "no-champ-data"; augmentId: string };
+  /** COMPLETE dataset genuinely has no row for this augment → NO CHAMP DATA. */
+  | { kind: "no-champ-data"; augmentId: string }
+  /** PARTIAL dataset lacks the row: absence is unproven, keep loading. */
+  | { kind: "partial-pending"; augmentId: string };
 
 /**
- * Select the statistic and its provenance for one offered augment. The label,
- * tier and win rate ALWAYS originate from the same selected record:
- *   - champion row present → CHAMP (never the global value);
- *   - row absent + `allowGlobalFallback` + a global stat exists → GLOBAL;
- *   - otherwise → NO CHAMP DATA (a global value is never labeled CHAMP).
+ * Select one offered augment's champion-specific statistic. There is NO global
+ * fallback: a row present in this champion's table resolves; an absent row on a
+ * COMPLETE dataset is NO CHAMP DATA; an absent row on a PARTIAL dataset is
+ * unproven absence (`partial-pending`) and must keep loading, never publish
+ * NO CHAMP DATA and never substitute a global value.
  */
 export function selectAugmentStat(
   dataset: ChampionAugmentDataset,
   augmentId: string,
-  globalStat: AramggStat | null,
-  opts: { allowGlobalFallback: boolean },
 ): AugmentStatSelection {
   const champ = lookupChampionAugmentStat(dataset, augmentId);
   if (champ) {
@@ -186,31 +207,46 @@ export function selectAugmentStat(
       },
     };
   }
-  if (opts.allowGlobalFallback && globalStat) {
-    return {
-      kind: "resolved",
-      stat: {
-        label: "GLOBAL",
-        championId: null,
-        augmentId: globalStat.augmentId,
-        tier: globalStat.tier,
-        tierLetter: globalStat.tierLetter,
-        rawWinRate: globalStat.rawWinRate,
-        winRatePercent: globalStat.winRatePercent,
-        rank: null,
-        numGames: globalStat.numGames,
-      },
-    };
-  }
-  return { kind: "no-champ-data", augmentId };
+  if (dataset.completeness === "complete") return { kind: "no-champ-data", augmentId };
+  return { kind: "partial-pending", augmentId };
 }
 
 /**
- * Adapt a provenance-resolved statistic to the `AramggStat` shape the existing
- * render/decision path consumes, preserving its label as `provenance`
- * (CHAMP → "champion", GLOBAL → "global"). This is the single bridge between the
- * champion-first selection and the chip pipeline — the label, tier and win rate
- * all originate from the one selected record.
+ * The published slot statistic status the render path maps to a chip. There is
+ * no "global" outcome — the four states are the ONLY things a badge can be:
+ *   resolved (champion row) · loading · no-champ-data · error.
+ */
+export type ChampionSlotStat =
+  | { status: "resolved"; stat: ResolvedStat }
+  | { status: "loading" }
+  | { status: "no-champ-data" }
+  | { status: "error" };
+
+/**
+ * Decide one slot's statistic from the champion dataset load status alone. No
+ * global input exists. `dataset` must already be the ACTIVE champion's dataset
+ * (champion id + patch matched) or null. Absence on a complete dataset is
+ * no-champ-data; absence on a partial dataset (or no dataset yet) is loading;
+ * a fetch error is error — never a global value.
+ */
+export function selectChampionSlotStat(
+  dataStatus: "idle" | "loading" | "ready" | "error",
+  dataset: ChampionAugmentDataset | null,
+  augmentId: string,
+): ChampionSlotStat {
+  if (dataStatus === "error") return { status: "error" };
+  if (!dataset) return { status: "loading" };
+  const sel = selectAugmentStat(dataset, augmentId);
+  if (sel.kind === "resolved") return { status: "resolved", stat: sel.stat };
+  if (sel.kind === "no-champ-data") return { status: "no-champ-data" };
+  return { status: "loading" }; // partial-pending: absence unproven
+}
+
+/**
+ * Adapt a champion-resolved statistic to the `AramggStat` shape the render path
+ * consumes. Provenance is ALWAYS "champion" — this overlay never publishes a
+ * global-sourced statistic. Tier and win rate originate from the one champion
+ * record.
  */
 export function resolvedStatToAramggStat(sel: ResolvedStat): AramggStat {
   return {
@@ -222,7 +258,7 @@ export function resolvedStatToAramggStat(sel: ResolvedStat): AramggStat {
     tier: sel.tier,
     tierLetter: sel.tierLetter,
     grade: numericTierToGrade(String(sel.tier)),
-    provenance: sel.label === "CHAMP" ? "champion" : "global",
+    provenance: "champion",
     championId: sel.championId,
     championRank: sel.rank !== null ? String(sel.rank) : null,
     topChampionsById: new Map(),

@@ -106,6 +106,10 @@ html, body, #root {
 .badge-chip-ocr-error .badge-chip-state { color: #fb7185; }
 .badge-chip-no-data { border-color: rgba(148, 163, 184, 0.5); }
 .badge-chip-no-data .badge-chip-state { color: #94a3b8; }
+.badge-chip-loading-data { border-color: rgba(167, 139, 250, 0.5); }
+.badge-chip-loading-data .badge-chip-state { color: #a78bfa; }
+.badge-chip-data-error { border-color: rgba(251, 113, 133, 0.5); }
+.badge-chip-data-error .badge-chip-state { color: #fb7185; }
 
 .badge-chip-sep {
   color: #64748b;

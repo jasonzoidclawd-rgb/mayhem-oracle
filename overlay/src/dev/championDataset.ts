@@ -16,49 +16,82 @@
  */
 import { ARAMGG_DEV_PROXY_PREFIX, ARAMGG_SOURCE } from "./aramggSource";
 import {
-  extractChampionFlightObject,
   parseChampionAugmentDataset,
   type ChampionAugmentDataset,
 } from "./championStats";
 
-/** The public champion-stats page path, recorded verbatim for provenance. */
-export function championStatsPath(championId: string): string {
-  return `/en/champion-stats/${championId}`;
+/**
+ * The authoritative COMPLETE per-champion augment file. Unlike the champion
+ * PAGE (`/en/champion-stats/{id}`), which embeds only a top-augments subset
+ * (~60 rows) and so silently drops champion-specific rows for less-picked
+ * augments, this static data file carries EVERY augment the champion has data
+ * for. Reading the page subset is what caused absent rows to fall through to the
+ * (now removed) global fallback; the complete file makes absence provable.
+ */
+export function championAugmentsDataPath(championId: string): string {
+  return `/data/champion-augments/${championId}.json`;
 }
 
-/** Fetch one champion page's flight text through the dev proxy. Throws on HTTP error. */
-export async function fetchChampionPageText(
+/** Fetch one champion's complete augment data file through the dev proxy. Throws on HTTP error. */
+export async function fetchChampionAugmentsText(
   fetchImpl: typeof fetch,
   championId: string,
 ): Promise<string> {
-  const url = `${ARAMGG_DEV_PROXY_PREFIX}${championStatsPath(championId)}`;
-  // `RSC: 1` asks Next.js for the clean flight stream; the HTML form parses too.
-  const res = await fetchImpl(url, { headers: { RSC: "1" } });
+  const url = `${ARAMGG_DEV_PROXY_PREFIX}${championAugmentsDataPath(championId)}`;
+  const res = await fetchImpl(url);
   if (!res.ok) {
-    throw new Error(`champion-stats fetch failed: ${url} → HTTP ${res.status}`);
+    throw new Error(`champion-augments fetch failed: ${url} → HTTP ${res.status}`);
   }
   return res.text();
 }
 
 /**
- * Fetch and parse one champion's complete augment table. Fails EXPLICITLY
+ * The file is a list of `[championId, statsJSONString]` pairs (usually one). The
+ * second element is a JSON STRING that must be parsed again into the
+ * `{"augments":{…}, "tier", "win_rate", …}` champion detail object. Returns null
+ * when no matching champion entry is present. Never throws on malformed text.
+ */
+export function parseChampionAugmentsFile(text: string, championId: string): unknown {
+  let list: unknown;
+  try {
+    list = JSON.parse(text);
+  } catch {
+    return null;
+  }
+  if (!Array.isArray(list)) return null;
+  for (const entry of list) {
+    if (Array.isArray(entry) && String(entry[0]) === championId && typeof entry[1] === "string") {
+      try {
+        return JSON.parse(entry[1]);
+      } catch {
+        return null;
+      }
+    }
+  }
+  return null;
+}
+
+/**
+ * Fetch and parse one champion's COMPLETE augment table. Fails EXPLICITLY
  * (throws) on any retrieval or parse failure — offline/cache-miss is never a
- * silent empty dataset. `source` is the canonical (non-proxy) URL for display.
+ * silent empty dataset. The dataset is marked `complete`, so an absent augment
+ * row resolves to NO CHAMP DATA, never to a global value.
  */
 export async function loadChampionAugmentDataset(
   fetchImpl: typeof fetch,
   championId: string,
   patch: string | null,
 ): Promise<ChampionAugmentDataset> {
-  const text = await fetchChampionPageText(fetchImpl, championId);
-  const raw = extractChampionFlightObject(text);
+  const text = await fetchChampionAugmentsText(fetchImpl, championId);
+  const raw = parseChampionAugmentsFile(text, championId);
   if (raw === null) {
-    throw new Error(`champion-stats page for ${championId} had no augments block`);
+    throw new Error(`champion-augments file for ${championId} had no augments block`);
   }
   return parseChampionAugmentDataset(raw, {
     championId,
     patch,
-    source: `${ARAMGG_SOURCE.origin}${championStatsPath(championId)}`,
+    source: `${ARAMGG_SOURCE.origin}${championAugmentsDataPath(championId)}`,
+    completeness: "complete",
   });
 }
 

@@ -1,5 +1,6 @@
 export type DiagnosticMarker =
   | "[slot-publication]"
+  | "[slot-publication-violation]"
   | "[identity-trigger]"
   | "[identity-start]"
   | "[identity-native-finish]"
