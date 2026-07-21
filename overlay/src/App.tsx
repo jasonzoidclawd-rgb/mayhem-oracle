@@ -1567,11 +1567,19 @@ function App() {
       // A NEW offer (absent→present or ≥2 slots swapped) bumps the render
       // generation; a queued-round REPLACEMENT (previous offer was present) is
       // strong round-completion evidence. A first appearance is NOT a completion.
+      // A queued death-sequence round can close the UI for a single frame that
+      // negative-continuity preserved (consecutiveWeakNegatives > 0): when such a
+      // gap intervened, ANY changed slot marks a fresh session, so a later round
+      // that repeats ≥2 augments is not mistaken for a reroll (§4).
       const publishedObservation = transition.state.visualObservation;
       const detectedNewOffer =
         transition.action === "publish" &&
         publishedObservation != null &&
-        newOfferDetected(previousSurface.lastPositiveObservation, publishedObservation);
+        newOfferDetected(
+          previousSurface.lastPositiveObservation,
+          publishedObservation,
+          previousSurface.consecutiveWeakNegatives > 0,
+        );
       const priorOfferSurface = offerSurfaceRef.current;
       // FIX 1 — during bounded negative continuity (a preserved 0/3 or 1-card
       // frame) the offer-surface machine must see the PRESERVED visible surface,
