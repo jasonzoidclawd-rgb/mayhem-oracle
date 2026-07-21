@@ -44,12 +44,13 @@ describe("tier badge label", () => {
     expect(visibleText(markup)).toBe("S·57.4%");
   });
 
-  it("retains global fallback provenance in the accessible label only", () => {
+  it("has no scope prefix when statScope is null (never a global label)", () => {
     const markup = renderToStaticMarkup(
-      <TierBadgeLabel tier="B" winRateText="48.9%" statScope="global" />,
+      <TierBadgeLabel tier="B" winRateText="48.9%" statScope={null} />,
     );
 
-    expect(markup).toContain('aria-label="Global fallback B tier, 48.9 percent"');
+    expect(markup).toContain('aria-label="B tier, 48.9 percent"');
+    expect(markup).not.toContain("Global");
     expect(visibleText(markup)).toBe("B·48.9%");
   });
 

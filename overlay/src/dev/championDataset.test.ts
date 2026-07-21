@@ -1,43 +1,69 @@
 /**
- * Live champion-page fetch adapter + champion-id/patch cache + ownership token
- * (PR #46 Sections 3–4). The dataset is fetched ONCE when the final champion
- * becomes known, cached by (championId, patch), and a stale response from a
- * superseded champion can never publish.
+ * Complete per-champion augment-file fetch adapter + champion-id/patch cache +
+ * ownership token (PR #46 Sections 3–4). The overlay reads the AUTHORITATIVE
+ * complete file `/data/champion-augments/{id}.json` (every augment the champion
+ * has data for) — NOT the champion page's ~60-augment subset. The dataset is
+ * fetched ONCE when the final champion becomes known, cached by (championId,
+ * patch), and a stale response from a superseded champion can never publish.
  */
 import { describe, expect, it, vi } from "vitest";
 import {
   ChampionDatasetCache,
   championOwnershipCurrent,
   loadChampionAugmentDataset,
+  parseChampionAugmentsFile,
   type ChampionOwnershipToken,
 } from "./championDataset";
 
-// Minimal escaped-flight page, exactly the shape ARAMGG server-renders.
-function pageFor(championId: string, winRate: string): string {
-  return (
-    `self.__next_f.push([1,"31:T660c,{\\"augments\\":{\\"1006\\":{\\"tier\\":\\"1\\",` +
-    `\\"rank\\":\\"26\\",\\"win_rate\\":\\"${winRate}\\",\\"num_games\\":\\"3768\\",` +
-    `\\"pick_rate\\":\\"0.093247\\"}},\\"tier\\":\\"4\\",\\"win_rate\\":\\"0.464797\\"}"])`
-  );
+// The complete file is a list of [championId, statsJSONString] pairs, exactly
+// as ARAMGG serves `/data/champion-augments/{id}.json`.
+function fileFor(championId: string, winRate: string): string {
+  const inner = JSON.stringify({
+    augments: {
+      "1006": { tier: "1", rank: "26", win_rate: winRate, num_games: "3768", pick_rate: "0.093247" },
+    },
+    tier: "4",
+    win_rate: "0.464797",
+  });
+  return JSON.stringify([[championId, inner]]);
 }
 
 function okFetch(body: string): typeof fetch {
   return vi.fn(async () =>
-    new Response(body, { status: 200, headers: { "content-type": "text/html" } }),
+    new Response(body, { status: 200, headers: { "content-type": "application/json" } }),
   ) as unknown as typeof fetch;
 }
 
-describe("loadChampionAugmentDataset — fetch + parse one champion page", () => {
-  it("resolves the champion's own augment table from the page flight", async () => {
-    const fetchImpl = okFetch(pageFor("56", "0.480096"));
+describe("parseChampionAugmentsFile — [id, jsonString] list", () => {
+  it("extracts the matching champion's augments object", () => {
+    const obj = parseChampionAugmentsFile(fileFor("142", "0.42575"), "142") as {
+      augments: Record<string, unknown>;
+    };
+    expect(obj.augments["1006"]).toMatchObject({ tier: "1", win_rate: "0.42575" });
+  });
+
+  it("returns null when no entry matches the champion id", () => {
+    expect(parseChampionAugmentsFile(fileFor("103", "0.5"), "142")).toBeNull();
+  });
+
+  it("returns null on malformed text instead of throwing", () => {
+    expect(parseChampionAugmentsFile("not json", "142")).toBeNull();
+  });
+});
+
+describe("loadChampionAugmentDataset — fetch + parse the complete file", () => {
+  it("resolves the champion's complete augment table, marked complete", async () => {
+    const fetchImpl = okFetch(fileFor("56", "0.480096"));
     const ds = await loadChampionAugmentDataset(fetchImpl, "56", "16.14");
     expect(ds.championId).toBe("56");
-    expect(ds.source).toContain("/champion-stats/56");
+    expect(ds.source).toContain("/data/champion-augments/56.json");
+    expect(ds.completeness).toBe("complete");
+    expect(ds.loadedCount).toBe(1);
     expect(ds.statsByAugmentId.get("1006")!.winRatePercent).toBe("48.0096");
   });
 
-  it("throws explicitly when the page carries no augments block", async () => {
-    const fetchImpl = okFetch("no flight data");
+  it("throws explicitly when the file carries no matching augments block", async () => {
+    const fetchImpl = okFetch("[]");
     await expect(loadChampionAugmentDataset(fetchImpl, "56", "16.14")).rejects.toThrow();
   });
 
@@ -49,7 +75,7 @@ describe("loadChampionAugmentDataset — fetch + parse one champion page", () =>
 
 describe("ChampionDatasetCache — one fetch per (championId, patch)", () => {
   it("does not re-fetch for the same champion and patch", async () => {
-    const fetchImpl = okFetch(pageFor("56", "0.480096"));
+    const fetchImpl = okFetch(fileFor("56", "0.480096"));
     const cache = new ChampionDatasetCache(fetchImpl);
     const a = await cache.get("56", "16.14");
     const b = await cache.get("56", "16.14");
@@ -58,7 +84,7 @@ describe("ChampionDatasetCache — one fetch per (championId, patch)", () => {
   });
 
   it("dedupes concurrent in-flight requests for the same key", async () => {
-    const fetchImpl = okFetch(pageFor("56", "0.480096"));
+    const fetchImpl = okFetch(fileFor("56", "0.480096"));
     const cache = new ChampionDatasetCache(fetchImpl);
     const [a, b] = await Promise.all([cache.get("56", "16.14"), cache.get("56", "16.14")]);
     expect(a).toBe(b);
@@ -67,9 +93,9 @@ describe("ChampionDatasetCache — one fetch per (championId, patch)", () => {
 
   it("fetches a new dataset when the champion changes", async () => {
     const fetchImpl = vi.fn(async (url: string) =>
-      new Response(pageFor(url.includes("/103") ? "103" : "56", "0.480096"), {
+      new Response(fileFor(url.includes("/103") ? "103" : "56", "0.480096"), {
         status: 200,
-        headers: { "content-type": "text/html" },
+        headers: { "content-type": "application/json" },
       }),
     ) as unknown as typeof fetch;
     const cache = new ChampionDatasetCache(fetchImpl);
@@ -79,7 +105,7 @@ describe("ChampionDatasetCache — one fetch per (championId, patch)", () => {
   });
 
   it("fetches again when the patch changes for the same champion", async () => {
-    const fetchImpl = okFetch(pageFor("56", "0.480096"));
+    const fetchImpl = okFetch(fileFor("56", "0.480096"));
     const cache = new ChampionDatasetCache(fetchImpl);
     await cache.get("56", "16.14");
     await cache.get("56", "16.15");

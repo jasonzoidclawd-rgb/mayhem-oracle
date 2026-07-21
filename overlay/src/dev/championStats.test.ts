@@ -16,9 +16,9 @@ import {
   parseChampionAugmentDataset,
   resolvedStatToAramggStat,
   selectAugmentStat,
+  selectChampionSlotStat,
   type ChampionAugmentDataset,
 } from "./championStats";
-import type { AramggStat } from "./aramggSource";
 
 // ─── Real ARAMGG rows, verbatim from /en/champion-stats/56 (Nocturne) ───
 // Verified against the rendered page: e.g. augment 1006 shows tier 1, 48.0096%.
@@ -109,102 +109,103 @@ describe("same augment id, different champion → different champion-specific va
   });
 });
 
-describe("lookup + provenance (CHAMP / GLOBAL / NO CHAMP DATA)", () => {
-  const globalStat: AramggStat = {
-    augmentId: "1006",
-    rawWinRate: "0.500000",
-    winRatePercent: "50.0000",
-    numGames: "999999",
-    pickRate: "0.05",
-    tier: 3,
-    tierLetter: "A",
-    grade: "steady",
-    provenance: "global",
-    championId: null,
-    championRank: null,
-    topChampionsById: new Map(),
-  };
-
-  it("CHAMP comes from the champion dataset row, never the global value", () => {
-    const sel = selectAugmentStat(nocturne(), "1006", globalStat, { allowGlobalFallback: true });
+describe("champion-only selection — no global fallback exists", () => {
+  it("resolves the champion's own row for a present augment (never a global value)", () => {
+    const sel = selectAugmentStat(nocturne(), "1006");
     expect(sel.kind).toBe("resolved");
     if (sel.kind !== "resolved") throw new Error("unreachable");
     expect(sel.stat.label).toBe("CHAMP");
     expect(sel.stat.championId).toBe("56");
-    // The CHAMP value is Nocturne's own row (48.0096%), NOT the global 50.0000%.
     expect(sel.stat.winRatePercent).toBe("48.0096");
     expect(sel.stat.tier).toBe(1);
   });
 
-  it("labels an explicit global fallback GLOBAL when the champion row is absent", () => {
-    const sel = selectAugmentStat(nocturne(), "9999", globalStat, { allowGlobalFallback: true });
-    expect(sel.kind).toBe("resolved");
-    if (sel.kind !== "resolved") throw new Error("unreachable");
-    expect(sel.stat.label).toBe("GLOBAL");
-    expect(sel.stat.winRatePercent).toBe("50.0000");
-    expect(sel.stat.championId).toBeNull();
-  });
-
-  it("returns NO CHAMP DATA (never a global value labeled CHAMP) when fallback is disallowed", () => {
-    const sel = selectAugmentStat(nocturne(), "9999", globalStat, { allowGlobalFallback: false });
+  it("COMPLETE dataset + absent augment → NO CHAMP DATA (never global)", () => {
+    const sel = selectAugmentStat(nocturne(), "9999"); // nocturne() defaults to complete
     expect(sel.kind).toBe("no-champ-data");
   });
 
-  it("returns NO CHAMP DATA when the row is absent and no global stat exists", () => {
-    const sel = selectAugmentStat(nocturne(), "9999", null, { allowGlobalFallback: true });
-    expect(sel.kind).toBe("no-champ-data");
+  it("PARTIAL dataset + absent augment → partial-pending, NOT no-champ-data", () => {
+    const partial = parseChampionAugmentDataset(NOCTURNE_RAW, {
+      championId: "56",
+      patch: "16.14",
+      source: "https://aramgg.com/en/champion-stats/56",
+      completeness: "partial",
+    });
+    const sel = selectAugmentStat(partial, "9999");
+    expect(sel.kind).toBe("partial-pending");
   });
-});
 
-describe("CHAMP never comes from top_champions (the reversed model)", () => {
-  it("selects the champion-dataset row, not a global top_champions row", () => {
-    // A global stat carrying a sparse top_champions entry for champ 56 — exactly
-    // the reversed model. selectAugmentStat must IGNORE it and return Nocturne's
-    // own /champion-stats/56 row.
-    const globalWithTopChamp: AramggStat = {
-      augmentId: "1006",
-      rawWinRate: "0.500000",
-      winRatePercent: "50.0000",
-      numGames: "999999",
-      pickRate: "0.05",
-      tier: 3,
-      tierLetter: "A",
-      grade: "steady",
-      provenance: "global",
-      championId: null,
-      championRank: null,
-      topChampionsById: new Map([
-        [
-          "56",
-          {
-            augmentId: "1006",
-            rawWinRate: "0.999999", // a bogus top_champions value we must NOT use
-            winRatePercent: "99.9999",
-            numGames: "10",
-            pickRate: "0.9",
-            tier: 1,
-            tierLetter: "S+",
-            grade: "hot",
-            provenance: "champion",
-            championId: "56",
-            championRank: "1",
-            topChampionsById: new Map(),
-          },
-        ],
-      ]),
-    };
-    const sel = selectAugmentStat(nocturne(), "1006", globalWithTopChamp, { allowGlobalFallback: true });
+  it("PARTIAL dataset + present augment may still resolve the champion row", () => {
+    const partial = parseChampionAugmentDataset(NOCTURNE_RAW, {
+      championId: "56",
+      patch: "16.14",
+      source: "https://aramgg.com/en/champion-stats/56",
+      completeness: "partial",
+    });
+    const sel = selectAugmentStat(partial, "1006");
     expect(sel.kind).toBe("resolved");
-    if (sel.kind !== "resolved") throw new Error("unreachable");
-    expect(sel.stat.label).toBe("CHAMP");
-    // Nocturne's real champion-stats value, NOT the top_champions 99.9999%.
-    expect(sel.stat.winRatePercent).toBe("48.0096");
+  });
+
+  it("parseChampionAugmentDataset defaults to complete and reports loadedCount", () => {
+    const ds = nocturne();
+    expect(ds.completeness).toBe("complete");
+    expect(ds.loadedCount).toBe(4);
   });
 });
 
-describe("resolvedStatToAramggStat — provenance mapping for the render path", () => {
-  it("maps a CHAMP selection to provenance 'champion' with championId", () => {
-    const sel = selectAugmentStat(nocturne(), "1006", null, { allowGlobalFallback: false });
+describe("selectChampionSlotStat — the four badge states, never global", () => {
+  function partial(): ChampionAugmentDataset {
+    return parseChampionAugmentDataset(NOCTURNE_RAW, {
+      championId: "56",
+      patch: "16.14",
+      source: "https://aramgg.com/en/champion-stats/56",
+      completeness: "partial",
+    });
+  }
+
+  it("fetch error → error, regardless of any dataset", () => {
+    expect(selectChampionSlotStat("error", nocturne(), "1006").status).toBe("error");
+    expect(selectChampionSlotStat("error", null, "1006").status).toBe("error");
+  });
+
+  it("no active dataset yet (idle/loading) → loading", () => {
+    expect(selectChampionSlotStat("loading", null, "1006").status).toBe("loading");
+    expect(selectChampionSlotStat("idle", null, "1006").status).toBe("loading");
+  });
+
+  it("ready + complete + present → resolved with the champion row", () => {
+    const s = selectChampionSlotStat("ready", nocturne(), "1006");
+    expect(s.status).toBe("resolved");
+    if (s.status !== "resolved") throw new Error("unreachable");
+    expect(s.stat.winRatePercent).toBe("48.0096");
+    expect(s.stat.championId).toBe("56");
+  });
+
+  it("ready + complete + absent → no-champ-data (never a global value)", () => {
+    expect(selectChampionSlotStat("ready", nocturne(), "9999").status).toBe("no-champ-data");
+  });
+
+  it("ready + PARTIAL + absent → loading (absence unproven, keep loading)", () => {
+    expect(selectChampionSlotStat("ready", partial(), "9999").status).toBe("loading");
+  });
+
+  it("a partial dataset resolving to complete flips absence to no-champ-data", () => {
+    // Same augment (9999) absent in both; partial keeps loading, complete decides.
+    expect(selectChampionSlotStat("ready", partial(), "9999").status).toBe("loading");
+    expect(selectChampionSlotStat("ready", nocturne(), "9999").status).toBe("no-champ-data");
+  });
+
+  it("takes no global argument — a global record cannot influence the outcome", () => {
+    // The function's only inputs are load status, the champion dataset and the
+    // augment id. There is structurally no channel for a global value.
+    expect(selectChampionSlotStat.length).toBe(3);
+  });
+});
+
+describe("resolvedStatToAramggStat — always champion provenance", () => {
+  it("maps a resolved selection to provenance 'champion' with championId", () => {
+    const sel = selectAugmentStat(nocturne(), "1006");
     if (sel.kind !== "resolved") throw new Error("unreachable");
     const stat = resolvedStatToAramggStat(sel.stat);
     expect(stat.provenance).toBe("champion");
@@ -212,19 +213,6 @@ describe("resolvedStatToAramggStat — provenance mapping for the render path", 
     expect(stat.tierLetter).toBe("S+");
     expect(stat.grade).toBe("hot");
     expect(stat.rawWinRate).toBe("0.480096");
-  });
-
-  it("maps a GLOBAL selection to provenance 'global' with no championId", () => {
-    const globalStat: AramggStat = {
-      augmentId: "1006", rawWinRate: "0.500000", winRatePercent: "50.0000",
-      numGames: "999999", pickRate: "0.05", tier: 3, tierLetter: "A", grade: "steady",
-      provenance: "global", championId: null, championRank: null, topChampionsById: new Map(),
-    };
-    const sel = selectAugmentStat(nocturne(), "9999", globalStat, { allowGlobalFallback: true });
-    if (sel.kind !== "resolved") throw new Error("unreachable");
-    const stat = resolvedStatToAramggStat(sel.stat);
-    expect(stat.provenance).toBe("global");
-    expect(stat.championId).toBeNull();
   });
 });
 
