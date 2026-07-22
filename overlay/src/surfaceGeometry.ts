@@ -309,20 +309,19 @@ export function advanceGeometrySurface(
  * absent→present, or when ≥2 slots changed fingerprint while staying present
  * (a queued round replaced the completed one). A single-slot change is a reroll.
  *
- * `precededByNegative` is true when a negative (absent/uncertain) frame was just
- * masked by negative-continuity preservation since the last positive — i.e. the
- * surface briefly went away and came back. A reroll never has such a gap (the
- * card flips in place while the offer stays present), whereas a death-sequence
- * queued round closes the UI for a frame before the next offer opens. So when a
- * gap intervened, ANY single changed slot marks a fresh offer session — a
- * queued round that repeats ≥2 augments must not be mistaken for a reroll
- * (§4). Identical fingerprints after the gap are a genuine transient
- * false-negative on the SAME offer and stay preserved (no re-scan).
+ * Session identity does NOT key off a transient preserved-negative frame: a
+ * single masked false-negative is not proof a round closed (it also occurs on a
+ * dropped frame mid-offer), so treating it as a boundary would misclassify a
+ * one-slot reroll that coincides with a dropped frame as a whole new offer. A
+ * genuine close is the bounded session-ending signal (2 consecutive negatives →
+ * clear → lastPositiveObservation nulled → this returns true on the next
+ * present frame regardless of card overlap). Repeated augments across rounds
+ * legitimately keep their champion-specific badge, so retaining them is correct,
+ * not stale.
  */
 export function newOfferDetected(
   previous: GeometryObservation | null,
   current: GeometryObservation,
-  precededByNegative = false,
 ): boolean {
   if (!current.present || current.occluded) return false;
   if (previous == null || !previous.present) return true;
@@ -332,7 +331,6 @@ export function newOfferDetected(
     const curr = current.cards[i]?.fingerprint ?? "";
     if (current.cards[i]?.present && fingerprintChanged(prev, curr)) changed += 1;
   }
-  if (precededByNegative && changed >= 1) return true;
   return changed >= 2;
 }
 

@@ -132,11 +132,7 @@ class PublicationHarness {
     const detectedNewOffer =
       transition.action === "publish" &&
       publishedObservation != null &&
-      newOfferDetected(
-        prevGeom.lastPositiveObservation,
-        publishedObservation,
-        prevGeom.consecutiveWeakNegatives > 0,
-      );
+      newOfferDetected(prevGeom.lastPositiveObservation, publishedObservation);
 
     const priorOffer = this.offer;
     const effectiveObservation = publishedObservation ?? obs;
@@ -256,16 +252,15 @@ describe("later-round offer lifecycle (geometry publication path)", () => {
     }
   });
 
-  it("a queued death-sequence offer that repeats cards WITHOUT a clean absent gap still starts a fresh session (SCANNING, not a stale badge)", () => {
-    // ARAM death-sequence delivery: pick R(n) → R(n+1) swaps in on the very next
-    // frames with NO 2-frame absent gap. Here the new round REPEATS two of three
-    // augments (a real, common offer overlap). Per §4 the next positive frame
-    // must establish a fresh baseline WITHOUT requiring Hamming novelty.
+  it("a queued death-sequence offer delivered through a genuine close starts a fresh session even when it repeats cards", () => {
+    // ARAM death-sequence delivery: pick R(n) → the augment UI actually closes
+    // (>=2 negative geometry frames → clear) → R(n+1) opens. Even if the new
+    // round REPEATS two augments, the genuine close (not card novelty) mints the
+    // fresh session, so ownership/generation advance and every slot re-scans.
     const h = new PublicationHarness();
     let t = 0;
     let seq = 0;
 
-    // R(n) visible and fully resolved to champion badges.
     const roundN: [number, number, number] = [1, 2, 3];
     h.probe(presentObs((seq += 1), (t += 150), roundN), t);
     h.resolveAllIdentities(presentObs(seq, t, roundN), t);
@@ -273,19 +268,17 @@ describe("later-round offer lifecycle (geometry publication path)", () => {
     expect(h.resolvedCount()).toBe(3);
     const genN = h.offer.offerGeneration;
 
-    // Single transitional frame during the pick (< the 2-frame clear bound), so
-    // geometry PRESERVES rather than clearing to NO_OFFER.
+    // Genuine close: two consecutive valid absent frames end the session.
     h.probe(absentObs((seq += 1), (t += 150)), t);
+    h.probe(absentObs((seq += 1), (t += 150)), t);
+    expect(h.offer.render).toBe(false);
 
-    // R(n+1) swaps in: augment 1 repeats, augment 2 repeats, only slot 2 is new.
-    const roundNext: [number, number, number] = [1, 2, 99];
-    h.probe(presentObs((seq += 1), (t += 150), roundNext), t);
+    // R(n+1) opens, repeating augments 1 and 2; only slot 2 is a new augment.
+    h.probe(presentObs((seq += 1), (t += 150), [1, 2, 99]), t);
 
-    // The overlay must treat this as a NEW offer session:
     expect(h.renderable()).toBe(true);
     expect(h.offer.offerGeneration).toBeGreaterThan(genN); // fresh session
-    // No slot may keep the previous round's resolved badge — every slot of a new
-    // session re-scans, so the flanking repeated cards show SCANNING, not stale.
+    // A fresh session re-scans every slot: no chip carries over across a close.
     expect(h.resolvedCount()).toBe(0);
     expect(h.scanningCount()).toBe(3);
   });
@@ -311,6 +304,46 @@ describe("later-round offer lifecycle (geometry publication path)", () => {
     expect(h.offer.offerGeneration).toBeGreaterThan(gen1);
     expect(h.scanningCount()).toBe(3);
     expect(h.resolvedCount()).toBe(0);
+  });
+
+  it("a transient preserved negative followed by a one-slot reroll stays the SAME session (no false new-offer)", () => {
+    // Regression guard: a single dropped/transient geometry frame that
+    // negative-continuity preserves is NOT proof a round closed. If it coincides
+    // with an in-session one-slot reroll (A/B/C → · → A/D/C), the session must be
+    // unchanged — same offer generation, ONLY the changed slot invalidated, and
+    // the unchanged neighbours keep their existing publications.
+    const h = new PublicationHarness();
+    let t = 0;
+    let seq = 0;
+
+    // A/B/C latched and fully resolved.
+    const abc: [number, number, number] = [1, 2, 3];
+    h.probe(presentObs((seq += 1), (t += 150), abc), t);
+    h.resolveAllIdentities(presentObs(seq, t, abc), t);
+    h.probe(presentObs((seq += 1), (t += 150), abc), t);
+    expect(h.resolvedCount()).toBe(3);
+    const gen = h.offer.offerGeneration;
+    const slot0Before = h.visibleFrame?.slots.find((s) => s.regionIndex === 0)?.resolution;
+    const slot2Before = h.visibleFrame?.slots.find((s) => s.regionIndex === 2)?.resolution;
+
+    // One transient preserved-negative capture (single frame, within the clear
+    // bound) — the offer never actually closed.
+    h.probe(absentObs((seq += 1), (t += 150)), t);
+
+    // Slot 1 rerolls in place: A/D/C.
+    h.probe(presentObs((seq += 1), (t += 150), [1, 99, 3]), t);
+
+    // Same offer session — no fresh generation.
+    expect(h.offer.offerGeneration).toBe(gen);
+    // Only slot 1 was invalidated; neighbours retained their publications.
+    const slot0After = h.visibleFrame?.slots.find((s) => s.regionIndex === 0)?.resolution;
+    const slot1After = h.visibleFrame?.slots.find((s) => s.regionIndex === 1)?.resolution;
+    const slot2After = h.visibleFrame?.slots.find((s) => s.regionIndex === 2)?.resolution;
+    expect(slot1After).toBeNull();
+    expect(slot0After).toBe(slot0Before);
+    expect(slot2After).toBe(slot2Before);
+    expect(slot0After).not.toBeNull();
+    expect(slot2After).not.toBeNull();
   });
 
   it("a stale identity keyed to a previous card cannot paint the new card", () => {

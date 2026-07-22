@@ -1,3 +1,5 @@
+import { invoke } from "@tauri-apps/api/core";
+
 export type DiagnosticMarker =
   | "[slot-publication]"
   | "[slot-publication-violation]"
@@ -9,7 +11,8 @@ export type DiagnosticMarker =
   | "[identity-timeout]"
   | "[identity-watchdog-restart]"
   | "[identity-retry]"
-  | "[offer-state]";
+  | "[offer-state]"
+  | "[offer-session]";
 
 /** Bounded, irreversible FNV-1a hash; complete OCR text is never logged. */
 export function boundedDiagnosticHash(value: string | null | undefined): string | null {
@@ -29,4 +32,22 @@ export function logOverlayDiagnostic(
 ): void {
   if (!import.meta.env.DEV) return;
   console.info(marker, JSON.stringify(payload));
+}
+
+/**
+ * Development-only diagnostic that ALSO reaches TERMINAL stderr via the Rust
+ * bridge (not just the WebView console), for controlled retests where the
+ * terminal is the only visible sink. Payload must be bounded counts/booleans/
+ * enums — never OCR text, names, or account identifiers. Fire-and-forget.
+ */
+export function emitNativeDiagnostic(
+  marker: DiagnosticMarker,
+  payload: Record<string, unknown>,
+): void {
+  if (!import.meta.env.DEV) return;
+  const serialized = JSON.stringify(payload);
+  console.info(marker, serialized);
+  void invoke("emit_overlay_diagnostic", { marker, payload: serialized }).catch(() => {
+    // The native sink is best-effort; the WebView console line above always runs.
+  });
 }

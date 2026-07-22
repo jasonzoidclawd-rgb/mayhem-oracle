@@ -79,6 +79,7 @@ import { DevOverlayDiagnostics } from "./dev/DevOverlayDiagnostics";
 import { devPanelsVisible } from "./dev/productionSurfaces";
 import {
   boundedDiagnosticHash,
+  emitNativeDiagnostic,
   logOverlayDiagnostic,
 } from "./dev/publicationDiagnostics";
 import {
@@ -115,6 +116,7 @@ import {
   classifyGeometryObservation,
   createGeometrySurfaceState,
   emptyGeometryObservation,
+  fingerprintChanged,
   geometrySchedulerHealthy,
   hammingDistance,
   identityForSlot,
@@ -1567,19 +1569,30 @@ function App() {
       // A NEW offer (absent→present or ≥2 slots swapped) bumps the render
       // generation; a queued-round REPLACEMENT (previous offer was present) is
       // strong round-completion evidence. A first appearance is NOT a completion.
-      // A queued death-sequence round can close the UI for a single frame that
-      // negative-continuity preserved (consecutiveWeakNegatives > 0): when such a
-      // gap intervened, ANY changed slot marks a fresh session, so a later round
-      // that repeats ≥2 augments is not mistaken for a reroll (§4).
+      // A genuine close (2 negatives → clear → lastPositiveObservation nulled) is
+      // the session boundary; a single preserved-negative frame is NOT, so a
+      // one-slot reroll that coincides with a dropped frame stays the same
+      // session and only that slot re-arms.
       const publishedObservation = transition.state.visualObservation;
       const detectedNewOffer =
         transition.action === "publish" &&
         publishedObservation != null &&
-        newOfferDetected(
-          previousSurface.lastPositiveObservation,
-          publishedObservation,
-          previousSurface.consecutiveWeakNegatives > 0,
-        );
+        newOfferDetected(previousSurface.lastPositiveObservation, publishedObservation);
+      // Count how many present slots swapped identity vs the last positive
+      // observation — the same signal newOfferDetected thresholds on (≥2). Kept
+      // for the [offer-session] diagnostic so a controlled retest can see whether
+      // a blank frame was a genuine multi-slot re-offer or a one-slot reroll.
+      let changedFingerprintCount = 0;
+      if (publishedObservation != null && previousSurface.lastPositiveObservation != null) {
+        const priorObs = previousSurface.lastPositiveObservation;
+        for (let i = 0; i < publishedObservation.cards.length; i += 1) {
+          const prev = priorObs.cards[i]?.fingerprint ?? "";
+          const curr = publishedObservation.cards[i]?.fingerprint ?? "";
+          if (publishedObservation.cards[i]?.present && fingerprintChanged(prev, curr)) {
+            changedFingerprintCount += 1;
+          }
+        }
+      }
       const priorOfferSurface = offerSurfaceRef.current;
       // FIX 1 — during bounded negative continuity (a preserved 0/3 or 1-card
       // frame) the offer-surface machine must see the PRESERVED visible surface,
@@ -1620,9 +1633,11 @@ function App() {
           offerGeneration: nextOfferSurface.offerGeneration,
         });
       }
+      const roundBefore = roundDeliveryRef.current?.activeOfferRound ?? null;
       if (detectedNewOffer && previousSurface.lastPositiveObservation != null) {
         recordRoundCompleted();
       }
+      let invalidatedSlots: number[] = [];
       if (
         nextOfferSurface.state === "NO_OFFER" &&
         priorOfferSurface.state !== "NO_OFFER"
@@ -1664,6 +1679,7 @@ function App() {
         identityStoreRef.current = reroll.store;
         slotGenerationsRef.current = reroll.slotGenerations;
         acceptedSlotFingerprintsRef.current = reroll.acceptedFingerprints;
+        invalidatedSlots = reroll.invalidated;
         if (import.meta.env.DEV) {
           for (const slot of reroll.invalidated) {
             const previousFingerprint = priorAcceptedFingerprints[slot] ?? "";
@@ -1712,6 +1728,45 @@ function App() {
       // degrades the three slots to SCANNING.
       republishGeometryFrame(captureSeq);
       const publishedAt = performance.now();
+
+      // [offer-session] — native-visible (terminal stderr) diagnostic for the
+      // controlled Level 11/15 retest. Every field is a bounded count / boolean /
+      // enum; no OCR text, names, or identifiers are emitted. This is the single
+      // line that lets a live retest see WHY a fully-visible offer produced no
+      // rendered badge (the "zero render reason") and whether session identity
+      // moved or held.
+      const foreground = foregroundStateRef.current.gameWindowForeground;
+      const zeroRenderReason = nextOfferSurface.render
+        ? "rendered"
+        : !foreground
+          ? "game-window-not-foreground"
+          : nextOfferSurface.state === "OCCLUDED"
+            ? `occluded:${nextOfferSurface.occlusionReason ?? "unknown"}`
+            : nextOfferSurface.state === "NO_OFFER"
+              ? "no-offer-surface"
+              : !nextOfferSurface.captureValid
+                ? "capture-invalid"
+                : publishedObservation == null
+                  ? `no-published-observation:${transition.action}/${transition.hideReason ?? "none"}`
+                  : nextOfferSurface.validCardCount < 2
+                    ? `insufficient-valid-cards:${nextOfferSurface.validCardCount}`
+                    : `render-suppressed:${nextOfferSurface.state}`;
+      emitNativeDiagnostic("[offer-session]", {
+        geometrySequence: captureSeq,
+        consecutiveWeakNegatives: previousSurface.consecutiveWeakNegatives,
+        precededByNegative: previousSurface.consecutiveWeakNegatives > 0,
+        changedFingerprintCount,
+        newOfferDetected: detectedNewOffer,
+        offerGenerationBefore: priorOfferSurface.offerGeneration,
+        offerGenerationAfter: nextOfferSurface.offerGeneration,
+        roundBefore,
+        roundAfter: roundDeliveryRef.current?.activeOfferRound ?? null,
+        invalidatedSlots,
+        offerState: nextOfferSurface.state,
+        render: nextOfferSurface.render,
+        foreground,
+        zeroRenderReason,
+      });
 
       // Phase follows the visible SURFACE: a present, unoccluded offer opens
       // selection; confirmed absence returns to in-game. Occlusion is transient

@@ -87,6 +87,23 @@ fn detect_league_client() -> bool {
     lcu::discover_lcu_credentials().is_some()
 }
 
+/// Bridge a privacy-safe renderer diagnostic to TERMINAL stderr (not just the
+/// WebView console) for controlled retests. Payload is a pre-serialized JSON
+/// string of bounded counts/booleans/enums only — never OCR text, names, or
+/// account identifiers. The body is compiled out of release builds so production
+/// terminals stay silent; the renderer already gates the call on `import.meta.env.DEV`.
+#[tauri::command]
+fn emit_overlay_diagnostic(marker: String, payload: String) {
+    #[cfg(debug_assertions)]
+    {
+        eprintln!("{} {}", marker, payload);
+    }
+    #[cfg(not(debug_assertions))]
+    {
+        let _ = (marker, payload);
+    }
+}
+
 #[tauri::command]
 async fn get_game_phase() -> Option<String> {
     let credentials = lcu::discover_lcu_credentials()?;
@@ -1579,6 +1596,7 @@ pub fn run() {
     tauri::Builder::default()
         .invoke_handler(tauri::generate_handler![
             detect_league_client,
+            emit_overlay_diagnostic,
             get_game_phase,
             get_lcu_gameflow_state,
             get_game_hash,
