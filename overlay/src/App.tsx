@@ -11,8 +11,8 @@ import {
 } from "./scoring/offer-lookup";
 import {
   isCompleteThreeCardOffer,
+  resolveGameflowCaptureAllowed,
   shouldClearOcrStateForGameflow,
-  shouldRunOcrForGameflow,
 } from "./augmentSelection";
 import {
   resolveRoundDelivery,
@@ -2688,10 +2688,16 @@ function App() {
 
       const gameflow = await invoke<LcuGameflowState | null>("get_lcu_gameflow_state")
         .catch(() => null);
-      gameflowCaptureAllowedRef.current = shouldRunOcrForGameflow(gameflow);
       // The scheduler's coarse "active game" gate: capture is compliant only in
-      // a live game. This is the ONLY telemetry the probe scheduler consults,
-      // and it can never wedge asleep because the poll re-sets it every tick.
+      // a live game. This is the ONLY telemetry the probe scheduler consults.
+      // A missing sample (LCU read failure/timeout) is not a confirmed
+      // transition — carry the last confirmed value forward instead of
+      // collapsing to false, or a single transient blip mid-game instantly
+      // sleeps the geometry scheduler for a round that is actually still live.
+      gameflowCaptureAllowedRef.current = resolveGameflowCaptureAllowed(
+        gameflowCaptureAllowedRef.current,
+        gameflow,
+      );
       setActiveGame(gameflowCaptureAllowedRef.current);
       if (shouldClearOcrStateForGameflow(gameflow)) {
         const clientFound = await invoke<boolean>("detect_league_client").catch(() => false);

@@ -201,6 +201,7 @@ pub(crate) async fn get_allowed_lcu_json(
 
     reqwest::Client::builder()
         .danger_accept_invalid_certs(true)
+        .timeout(std::time::Duration::from_secs(3))
         .build()
         .map_err(|error| error.to_string())?
         .get(format!("https://127.0.0.1:{}{}", credentials.port, path))

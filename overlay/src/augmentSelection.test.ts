@@ -3,6 +3,7 @@ import {
   augmentRoundForLevel,
   isCompleteThreeCardOffer,
   ocrRunIsCurrent,
+  resolveGameflowCaptureAllowed,
   shouldClearOcrStateForGameflow,
 } from "./augmentSelection";
 import { resolveRoundDelivery } from "./roundDelivery";
@@ -17,6 +18,18 @@ describe("augment OCR lifecycle", () => {
   it("does not erase a round on a transient missing gameflow response", () => {
     expect(shouldClearOcrStateForGameflow(null)).toBe(false);
     expect(shouldClearOcrStateForGameflow({ liveCaptureAllowed: false })).toBe(true);
+  });
+
+  it("does not put the probe scheduler to sleep on a transient missing gameflow sample", () => {
+    // A single dropped/failed poll must not read as "not live" — that
+    // instantly sleeps the geometry scheduler (surfaceProbeScheduler.ts skips
+    // on activeGame=false) for a round that is actually still in progress. A
+    // confirmed sample always wins; only a missing one falls back to the last
+    // confirmed state instead of collapsing to false.
+    expect(resolveGameflowCaptureAllowed(true, null)).toBe(true);
+    expect(resolveGameflowCaptureAllowed(false, null)).toBe(false);
+    expect(resolveGameflowCaptureAllowed(true, { liveCaptureAllowed: false })).toBe(false);
+    expect(resolveGameflowCaptureAllowed(false, { liveCaptureAllowed: true })).toBe(true);
   });
 
   it("requires one fresh atomic offer across all three regions", () => {

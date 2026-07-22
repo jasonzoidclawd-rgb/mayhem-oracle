@@ -125,6 +125,7 @@ async fn get_game_hash() -> Option<String> {
     );
     let session: serde_json::Value = reqwest::Client::builder()
         .danger_accept_invalid_certs(true)
+        .timeout(std::time::Duration::from_secs(3))
         .build()
         .ok()?
         .get(url)
@@ -149,8 +150,19 @@ async fn get_game_hash() -> Option<String> {
 
 #[tauri::command]
 async fn get_live_player_data() -> Option<LivePlayerData> {
+    // A per-request timeout matters here more than on other LCU calls: this
+    // command issues three SEQUENTIAL requests inside the main poll loop
+    // (src/App.tsx `poll()`), which single-flights itself via a ref guard that
+    // only clears in a `finally` after the whole call settles. An unbounded
+    // hang on any one request — most likely during a death/respawn transition,
+    // when the Live Client Data API can briefly stop responding — would
+    // otherwise wedge the poll loop (and therefore playerData/level/round
+    // state, and the activeGame gate the geometry probe scheduler consults)
+    // permanently, since setInterval re-fires are no-ops while the guard is
+    // still held.
     let client = reqwest::Client::builder()
         .danger_accept_invalid_certs(true)
+        .timeout(std::time::Duration::from_secs(3))
         .build()
         .ok()?;
 

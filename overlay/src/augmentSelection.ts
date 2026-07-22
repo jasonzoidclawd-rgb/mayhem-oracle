@@ -172,6 +172,20 @@ export function shouldRunOcrForGameflow(
   return gameflow?.liveCaptureAllowed === true;
 }
 
+/**
+ * A missing/failed gameflow sample (LCU read error, timeout) is not a
+ * confirmed transition — it must not instantly sleep the probe scheduler for
+ * a round that is actually still in progress. Only a confirmed sample changes
+ * the gate; a missing one carries the last confirmed value forward, mirroring
+ * `shouldClearOcrStateForGameflow`'s existing "null never clears" policy.
+ */
+export function resolveGameflowCaptureAllowed(
+  previous: boolean,
+  gameflow: GameflowCaptureGate | null | undefined,
+): boolean {
+  return gameflow == null ? previous : shouldRunOcrForGameflow(gameflow);
+}
+
 export function shouldClearOcrStateForGameflow(
   gameflow: GameflowCaptureGate | null | undefined,
 ): boolean {
