@@ -12,7 +12,8 @@ export type DiagnosticMarker =
   | "[identity-watchdog-restart]"
   | "[identity-retry]"
   | "[offer-state]"
-  | "[offer-session]";
+  | "[offer-session]"
+  | "[game-poll]";
 
 /** Bounded, irreversible FNV-1a hash; complete OCR text is never logged. */
 export function boundedDiagnosticHash(value: string | null | undefined): string | null {

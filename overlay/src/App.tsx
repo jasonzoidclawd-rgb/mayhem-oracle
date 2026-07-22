@@ -14,6 +14,7 @@ import {
   resolveGameflowCaptureAllowed,
   shouldClearOcrStateForGameflow,
 } from "./augmentSelection";
+import { resolveLiveDataPoll } from "./liveGamePoll";
 import {
   resolveRoundDelivery,
   TOTAL_AUGMENT_ROUNDS,
@@ -522,6 +523,7 @@ function App() {
   const [roundDelivery, setRoundDelivery] = useState<RoundDeliveryDecision | null>(null);
   const ocrSelectionCompletedRef = useRef(false);
   const gameflowCaptureAllowedRef = useRef(false);
+  const liveDataFailureStartedAtRef = useRef<number | null>(null);
   const pollInFlightRef = useRef(false);
   const pollPendingRef = useRef(false);
   const pollRef = useRef<() => Promise<void>>(async () => {});
@@ -2678,6 +2680,7 @@ function App() {
 
     try {
       if (!collectorEnabled) {
+        liveDataFailureStartedAtRef.current = null;
         setActiveGame(false);
         stopOcr();
         updatePhase("idle");
@@ -2698,16 +2701,47 @@ function App() {
         gameflowCaptureAllowedRef.current,
         gameflow,
       );
-      setActiveGame(gameflowCaptureAllowedRef.current);
       if (shouldClearOcrStateForGameflow(gameflow)) {
+        liveDataFailureStartedAtRef.current = null;
+        emitNativeDiagnostic("[game-poll]", {
+          gameflowPhase: gameflow?.phase ?? "unavailable",
+          gameflowConfirmed: gameflow != null,
+          captureAllowed: gameflowCaptureAllowedRef.current,
+          liveDataStatus: "not-requested",
+          action: "clear-confirmed-non-live",
+          failureAgeMs: 0,
+        });
         const clientFound = await invoke<boolean>("detect_league_client").catch(() => false);
         clearGameOnlyState(clientFound ? "client_found" : "idle");
         return;
       }
 
-      try {
-        const data = await invoke<LivePlayerData | null>("get_live_player_data");
-        if (data) {
+      let data: LivePlayerData | null = null;
+      let liveDataStatus: "ready" | "unavailable" | "error" = "unavailable";
+      {
+        const liveDataResult: {
+          data: LivePlayerData | null;
+          status: "ready" | "unavailable" | "error";
+        } = await invoke<LivePlayerData | null>("get_live_player_data").then(
+          (value) => ({ data: value, status: value ? "ready" : "unavailable" }),
+          () => ({ data: null, status: "error" }),
+        );
+        data = liveDataResult.data;
+        liveDataStatus = liveDataResult.status;
+        if (data && gameflowCaptureAllowedRef.current) {
+          const priorFailureStartedAt = liveDataFailureStartedAtRef.current;
+          liveDataFailureStartedAtRef.current = null;
+          setActiveGame(true);
+          if (priorFailureStartedAt != null) {
+            emitNativeDiagnostic("[game-poll]", {
+              gameflowPhase: gameflow?.phase ?? "unavailable",
+              gameflowConfirmed: gameflow != null,
+              captureAllowed: true,
+              liveDataStatus,
+              action: "recover",
+              failureAgeMs: Math.round(Math.max(0, performance.now() - priorFailureStartedAt)),
+            });
+          }
           const gameHash = await invoke<string | null>("get_game_hash").catch(() => null);
           if (!gameHash) {
             setMemberSnapshot(disabledMember("game-hash-unavailable"));
@@ -2776,9 +2810,24 @@ function App() {
           }
           return;
         }
-      } catch {
-        // Live Client API not available
       }
+      const liveDataDecision = resolveLiveDataPoll({
+        now: performance.now(),
+        captureAllowed: gameflowCaptureAllowedRef.current,
+        liveDataAvailable: data != null,
+        failureStartedAt: liveDataFailureStartedAtRef.current,
+      });
+      liveDataFailureStartedAtRef.current = liveDataDecision.failureStartedAt;
+
+      emitNativeDiagnostic("[game-poll]", {
+        gameflowPhase: gameflow?.phase ?? "unavailable",
+        gameflowConfirmed: gameflow != null,
+        captureAllowed: gameflowCaptureAllowedRef.current,
+        liveDataStatus,
+        action: liveDataDecision.action,
+        failureAgeMs: Math.round(liveDataDecision.failureAgeMs),
+      });
+      if (liveDataDecision.action === "preserve") return;
 
       try {
         const clientFound = await invoke<boolean>("detect_league_client");
