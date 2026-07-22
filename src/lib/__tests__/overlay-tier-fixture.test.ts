@@ -23,8 +23,6 @@ import {
   parseNumericTier,
   parseStatsList,
   resolveAugmentId,
-  selectAramggStat,
-  selectAramggStatsForChampion,
   resolveOcrTitle,
   type AramggRaws,
   type AramggStat,
@@ -232,39 +230,41 @@ describe("overlay ARAMGG tier fixture (dev-only)", () => {
       expect(global?.topChampionsById.has("not-numeric")).toBe(false);
       expect(skippedChampionStats).toBe(1);
     });
-    test("selects a champion row by numeric key and otherwise labels the global fallback", () => {
+    test("selects a champion row by numeric key; a missing champion has no row (no global fallback)", () => {
+      // Champion-only contract: badges come from a champion's own row. A missing
+      // champion resolves to ABSENCE (→ NO CHAMP DATA), never a global-fallback
+      // number. The former global-fallback selectors were removed with that
+      // policy change (see aramggSource.ts) — this pins the no-fallback lookup.
       const { stats } = parseStatsList(STATS_RAW);
       const global = stats.get("1001")!;
-      expect(selectAramggStat(global, "30")).toMatchObject({
+      expect(global.topChampionsById.get("30")).toMatchObject({
         provenance: "champion",
         championId: "30",
         winRatePercent: "53.3",
       });
-      expect(selectAramggStat(global, "999")).toMatchObject({
-        provenance: "global",
-        championId: null,
-        winRatePercent: "56.3213",
-      });
-      expect(selectAramggStat(global, null).provenance).toBe("global");
+      expect(global.topChampionsById.get("999")).toBeUndefined();
     });
-    test("changing champion recomputes every selected stat without retaining stale rows", () => {
+    test("changing champion selects each augment's own champion row without retaining stale rows", () => {
       const { stats } = parseStatsList(STATS_RAW);
-      const karthus = selectAramggStatsForChampion(stats, "30");
-      const malphite = selectAramggStatsForChampion(stats, "54");
+      const karthus1001 = stats.get("1001")!.topChampionsById.get("30");
+      const malphite1001 = stats.get("1001")!.topChampionsById.get("54");
 
-      expect(karthus.get("1001")).toMatchObject({ provenance: "champion", championId: "30" });
-      expect(malphite.get("1001")).toMatchObject({ provenance: "champion", championId: "54" });
-      expect(malphite.get("1001")).not.toBe(karthus.get("1001"));
-      for (const [augmentId, selected] of malphite) {
-        expect(selected).toBe(selectAramggStat(stats.get(augmentId)!, "54"));
-        expect(selected.championId).not.toBe("30");
+      expect(karthus1001).toMatchObject({ provenance: "champion", championId: "30" });
+      expect(malphite1001).toMatchObject({ provenance: "champion", championId: "54" });
+      // Distinct rows per champion — one champion's stat never aliases another's.
+      expect(malphite1001).not.toBe(karthus1001);
+      // Every champion row is champion-specific: a champion-54 lookup never
+      // returns champion 30's row.
+      for (const [, stat] of stats) {
+        const row54 = stat.topChampionsById.get("54");
+        if (row54) expect(row54.championId).toBe("54");
       }
     });
-    test("visible scope labels match the selected champion or global row", () => {
+    test("visible scope labels match the champion row or the global row", () => {
       const { stats } = parseStatsList(STATS_RAW);
       const global = stats.get("1001")!;
-      expect(aramggStatScopeLabel(selectAramggStat(global, "30"))).toBe("CHAMP");
-      expect(aramggStatScopeLabel(selectAramggStat(global, "999"))).toBe("GLOBAL");
+      expect(aramggStatScopeLabel(global.topChampionsById.get("30")!)).toBe("CHAMP");
+      expect(aramggStatScopeLabel(global)).toBe("GLOBAL");
     });
     test("throws on a non-array payload (never fabricates)", () => {
       expect(() => parseStatsList({} as unknown)).toThrow();
