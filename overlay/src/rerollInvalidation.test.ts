@@ -8,7 +8,13 @@
  * 不可通行 card.
  */
 import { describe, expect, it } from "vitest";
-import { applyRerollInvalidation, ocrRunSuperseded } from "./rerollInvalidation";
+import {
+  advanceRerollConfirmation,
+  applyRerollInvalidation,
+  createRerollPending,
+  ocrRunSuperseded,
+  REROLL_CONFIRM_PROBES,
+} from "./rerollInvalidation";
 import type { GeometryObservation, IdentityRecord } from "./surfaceGeometry";
 
 // 144-char average-hash bitstrings; ">8" bits apart = a different card (reroll).
@@ -323,5 +329,127 @@ describe("ocrRunSuperseded — a reroll during OCR rejects the stale run", () =>
   });
   it("accepts an OCR result whose slot generation still matches", () => {
     expect(ocrRunSuperseded(4, 4)).toBe(false);
+  });
+});
+
+// Sustained fingerprint confirmation (hysteresis). A resolved slot's fingerprint
+// drift past the Hamming band is HOVER/ANIMATION NOISE until a single distinct
+// replacement fingerprint persists REROLL_CONFIRM_PROBES consecutive probes.
+// This gate produces the slots to invalidate; until confirmation a slot is
+// "held" (keeps its resolved tier, no SCANNING, no generation bump, no OCR
+// cancel). The accepted baseline (FP_A/B/C) never chases the drift.
+describe("advanceRerollConfirmation — sustained fingerprint confirmation", () => {
+  const ACCEPTED: [string, string, string] = [FP_A, FP_B, FP_C];
+
+  it("1. a one-frame drift neither confirms nor invalidates (slot held)", () => {
+    const r = advanceRerollConfirmation({
+      pending: createRerollPending(),
+      acceptedFingerprints: ACCEPTED,
+      observation: observation([FP_D, FP_B, FP_C]), // slot 0 drifts to a new card
+    });
+    expect(r.confirmed).toEqual([]);
+    expect(r.held).toEqual([0]);
+    expect(r.pending[0]).toEqual({ candidate: FP_D, count: 1 });
+  });
+
+  it("2. alternating animation fingerprints never confirm", () => {
+    let pending = createRerollPending();
+    // slot 0 flickers between two distinct hashes every probe (animation)
+    for (const fp of [FP_D, FP_E, FP_D, FP_E, FP_D, FP_E]) {
+      const r = advanceRerollConfirmation({
+        pending,
+        acceptedFingerprints: ACCEPTED,
+        observation: observation([fp, FP_B, FP_C]),
+      });
+      pending = r.pending;
+      expect(r.confirmed).toEqual([]); // candidate keeps changing → never streaks
+    }
+    expect(pending[0].count).toBe(1); // a fresh candidate resets the streak each probe
+  });
+
+  it("3. a distinct replacement confirms only after REROLL_CONFIRM_PROBES probes", () => {
+    expect(REROLL_CONFIRM_PROBES).toBe(3);
+    let pending = createRerollPending();
+    let result: ReturnType<typeof advanceRerollConfirmation> | undefined;
+    for (let probe = 1; probe <= REROLL_CONFIRM_PROBES; probe += 1) {
+      result = advanceRerollConfirmation({
+        pending,
+        acceptedFingerprints: ACCEPTED,
+        observation: observation([FP_D, FP_B, FP_C]), // FP_D persists
+      });
+      pending = result.pending;
+      if (probe < REROLL_CONFIRM_PROBES) {
+        expect(result.confirmed).toEqual([]);
+        expect(result.held).toEqual([0]);
+        expect(result.pending[0].count).toBe(probe);
+      }
+    }
+    expect(result!.confirmed).toEqual([0]); // invalidate exactly once, on the Nth probe
+    expect(result!.pending[0]).toEqual({ candidate: "", count: 0 }); // streak reset
+  });
+
+  it("3b. returning to the published fingerprint before confirmation resets pending", () => {
+    const first = advanceRerollConfirmation({
+      pending: createRerollPending(),
+      acceptedFingerprints: ACCEPTED,
+      observation: observation([FP_D, FP_B, FP_C]),
+    });
+    expect(first.pending[0].count).toBe(1);
+    const back = advanceRerollConfirmation({
+      pending: first.pending,
+      acceptedFingerprints: ACCEPTED,
+      observation: observation([FP_A, FP_B, FP_C]), // hover ended → back to published
+    });
+    expect(back.confirmed).toEqual([]);
+    expect(back.held).toEqual([]);
+    expect(back.pending[0]).toEqual({ candidate: "", count: 0 });
+  });
+
+  it("4. no repeated confirmation after a confirmed reroll adopts the new baseline", () => {
+    let pending = createRerollPending();
+    for (let probe = 0; probe < REROLL_CONFIRM_PROBES; probe += 1) {
+      pending = advanceRerollConfirmation({
+        pending,
+        acceptedFingerprints: ACCEPTED,
+        observation: observation([FP_D, FP_B, FP_C]),
+      }).pending;
+    }
+    // Caller adopted FP_D as slot 0's new accepted baseline; further FP_D frames
+    // are the SAME (new) card and must not re-confirm.
+    const after = advanceRerollConfirmation({
+      pending,
+      acceptedFingerprints: [FP_D, FP_B, FP_C],
+      observation: observation([FP_D, FP_B, FP_C]),
+    });
+    expect(after.confirmed).toEqual([]);
+    expect(after.held).toEqual([]);
+  });
+
+  it("5. three cards replaced together confirm atomically after N probes", () => {
+    let pending = createRerollPending();
+    let result: ReturnType<typeof advanceRerollConfirmation> | undefined;
+    for (let probe = 1; probe <= REROLL_CONFIRM_PROBES; probe += 1) {
+      result = advanceRerollConfirmation({
+        pending,
+        acceptedFingerprints: ACCEPTED,
+        observation: observation([FP_D, FP_E, FP_A]), // all three distinct & persistent
+      });
+      pending = result.pending;
+      if (probe < REROLL_CONFIRM_PROBES) expect(result.confirmed).toEqual([]);
+    }
+    expect(result!.confirmed).toEqual([0, 1, 2]); // all three invalidate together
+  });
+
+  it("an absent card clears its pending streak (absence is not a reroll)", () => {
+    const obs = observation([FP_D, FP_B, FP_C]);
+    obs.cards[0] = card(0, "", false);
+    const r = advanceRerollConfirmation({
+      pending: [{ candidate: FP_D, count: 2 }, { candidate: "", count: 0 }, { candidate: "", count: 0 }],
+      acceptedFingerprints: ACCEPTED,
+      observation: obs,
+    });
+    expect(r.confirmed).toEqual([]);
+    expect(r.held).toEqual([]);
+    expect(r.pending[0]).toEqual({ candidate: "", count: 0 });
   });
 });

@@ -90,6 +90,22 @@ describe("offer surface state machine", () => {
     expect(noOffer.state).toBe("NO_OFFER");
     expect(noOffer.render).toBe(false);
   });
+
+  // 6. Sustained-confirmation companion guard: transient OCCLUDED (hover
+  // tooltip) and UNCERTAIN (dropped frame) noise between two visible frames of
+  // the SAME offer must not churn the offer generation — a generation bump
+  // would re-arm all slots (SCANNING) and reset the coach. Only a genuine close
+  // (NO_OFFER) or a confirmed new offer may advance it.
+  it("6. brief OCCLUDED / UNCERTAIN noise between visible frames does not churn offer generation", () => {
+    let s = advanceOfferSurface(createOfferSurfaceState(), visible({ now: 100 }));
+    const gen = s.offerGeneration;
+    s = advanceOfferSurface(s, visible({ now: 200, occlusionReason: "shop" }));       // hover tooltip → OCCLUDED
+    s = advanceOfferSurface(s, visible({ now: 300, captureValid: false }));           // dropped frame → UNCERTAIN
+    s = advanceOfferSurface(s, visible({ now: 400, occlusionReason: "scoreboard" })); // OCCLUDED
+    s = advanceOfferSurface(s, visible({ now: 500 }));                                // same offer visible again
+    expect(s.state).toBe("OFFER_VISIBLE");
+    expect(s.offerGeneration).toBe(gen); // retained identities, no re-arm
+  });
 });
 
 // Failures A + E: the blue central control is supportive evidence, never

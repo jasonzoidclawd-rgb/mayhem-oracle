@@ -131,7 +131,13 @@ import {
   type GeometrySurfaceState,
   type IdentityRecord,
 } from "./surfaceGeometry";
-import { applyRerollInvalidation, ocrRunSuperseded } from "./rerollInvalidation";
+import {
+  advanceRerollConfirmation,
+  applyRerollInvalidation,
+  createRerollPending,
+  ocrRunSuperseded,
+  type SlotRerollPending,
+} from "./rerollInvalidation";
 import { summarizeAuthoritativePublication } from "./authoritativePublication";
 import {
   reconcileSlotIdentity,
@@ -507,6 +513,12 @@ function App() {
   // rejected atomically and cannot repaint the new card (Phase B).
   const slotGenerationsRef = useRef<number[]>([0, 0, 0]);
   const acceptedSlotFingerprintsRef = useRef<string[]>(["", "", ""]);
+  // Sustained-confirmation (hysteresis) state: a resolved slot's fingerprint
+  // drift is hover/animation noise until a distinct replacement persists
+  // REROLL_CONFIRM_PROBES probes. `heldRerollSlotsRef` are slots drifting but
+  // not yet confirmed — the render holds their resolved tier (no SCANNING).
+  const rerollPendingRef = useRef<SlotRerollPending[]>(createRerollPending());
+  const heldRerollSlotsRef = useRef<number[]>([]);
   // Cross-track OCR-trigger coordination: the geometry track decides which slots
   // need a (re)read and stamps the fingerprints those reads are keyed to.
   const ocrPendingSlotsRef = useRef<number[]>([]);
@@ -681,8 +693,17 @@ function App() {
       captureSeq,
       observation,
       generation: geometryGenerationRef.current,
-      resolveIdentity: (regionIndex, fingerprint) =>
-        identityForSlot(identityStoreRef.current[regionIndex], fingerprint),
+      resolveIdentity: (regionIndex, fingerprint) => {
+        const record = identityStoreRef.current[regionIndex];
+        // Sustained-confirmation hold: a resolved slot whose fingerprint drift
+        // is not yet a CONFIRMED reroll keeps its tier instead of flashing
+        // SCANNING through hover glow / card animation. Phase B is the sole
+        // authority that clears it, once the replacement is confirmed.
+        if (record?.resolution != null && heldRerollSlotsRef.current.includes(regionIndex)) {
+          return record.resolution;
+        }
+        return identityForSlot(record, fingerprint);
+      },
       resolveUnresolvedState: (regionIndex, fingerprint) => {
         const record = identityStoreRef.current[regionIndex];
         if (!record || record.fingerprint !== fingerprint || record.resolution !== null) return "scanning";
@@ -1578,10 +1599,40 @@ function App() {
       // one-slot reroll that coincides with a dropped frame stays the same
       // session and only that slot re-arms.
       const publishedObservation = transition.state.visualObservation;
+      // SUSTAINED CONFIRMATION (hysteresis) — the gate that feeds Phase B. On a
+      // present→present offer a resolved slot holds through hover / animation
+      // drift; a distinct replacement fingerprint must persist
+      // REROLL_CONFIRM_PROBES probes before it counts as a reroll. A genuine
+      // absent→present appearance resets the streak and is handled atomically.
+      const priorPositive = previousSurface.lastPositiveObservation;
+      const genuineAppear = priorPositive == null || !priorPositive.present;
+      let confirmedRerollSlots: number[] = [];
+      if (
+        transition.action === "publish" &&
+        publishedObservation != null &&
+        !genuineAppear
+      ) {
+        const confirmation = advanceRerollConfirmation({
+          pending: rerollPendingRef.current,
+          acceptedFingerprints: acceptedSlotFingerprintsRef.current,
+          observation: publishedObservation,
+        });
+        rerollPendingRef.current = confirmation.pending;
+        confirmedRerollSlots = confirmation.confirmed;
+        heldRerollSlotsRef.current = confirmation.held;
+      } else {
+        rerollPendingRef.current = createRerollPending();
+        heldRerollSlotsRef.current = [];
+      }
+      // A new offer (absent→present) is immediate; a present→present frame is a
+      // new offer only when ≥2 slots' replacements are CONFIRMED, so transient
+      // multi-slot drift can no longer churn the offer generation.
       const detectedNewOffer =
         transition.action === "publish" &&
         publishedObservation != null &&
-        newOfferDetected(previousSurface.lastPositiveObservation, publishedObservation);
+        (genuineAppear
+          ? newOfferDetected(priorPositive, publishedObservation)
+          : confirmedRerollSlots.length >= 2);
       // Count how many present slots swapped identity vs the last positive
       // observation — the same signal newOfferDetected thresholds on (≥2). Kept
       // for the [offer-session] diagnostic so a controlled retest can see whether
@@ -1678,7 +1729,11 @@ function App() {
           observation: publishedObservation,
           championGeneration: championGenerationRef.current,
           now: performance.now(),
-          newOffer: detectedNewOffer,
+          // Genuine appearance → atomic all-present invalidation (legacy path).
+          // Present→present → invalidate EXACTLY the confirmed reroll slots; a
+          // held (unconfirmed-drift) slot keeps its resolved tier.
+          newOffer: genuineAppear,
+          invalidateSlots: genuineAppear ? undefined : confirmedRerollSlots,
         });
         identityStoreRef.current = reroll.store;
         slotGenerationsRef.current = reroll.slotGenerations;

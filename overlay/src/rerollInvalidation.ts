@@ -23,6 +23,84 @@
  */
 import { fingerprintChanged, type GeometryObservation, type IdentityRecord } from "./surfaceGeometry";
 
+/** Per-slot sustained-confirmation state, threaded across geometry probes. */
+export interface SlotRerollPending {
+  /** Candidate replacement fingerprint under confirmation ("" = none pending). */
+  candidate: string;
+  /** Consecutive probes this candidate has persisted past the Hamming band. */
+  count: number;
+}
+
+/**
+ * Consecutive probes a distinct replacement fingerprint must persist before a
+ * resolved slot is treated as rerolled. ~450 ms at the 150 ms geometry cadence —
+ * long enough to reject hover glow and card-art animation drift, short enough
+ * that a genuine reroll settles almost immediately (accepted ~300–450 ms
+ * old-tier hold before the new card re-scans).
+ */
+export const REROLL_CONFIRM_PROBES = 3;
+
+export function createRerollPending(slots = 3): SlotRerollPending[] {
+  return Array.from({ length: slots }, () => ({ candidate: "", count: 0 }));
+}
+
+/**
+ * SUSTAINED FINGERPRINT CONFIRMATION (hysteresis) — the gate that feeds Phase B.
+ *
+ * A resolved slot's fingerprint drifting past the Hamming band is HOVER / CARD
+ * ANIMATION noise, not a reroll, until a single DISTINCT replacement fingerprint
+ * persists `confirmProbes` consecutive probes. This eliminated the churn where
+ * ~30% of stable-offer probes invalidated a slot (clearing identity, bumping the
+ * slot generation, and cancelling in-flight OCR) — starving OCR so badges sat at
+ * SCANNING and flickered on hover.
+ *
+ *  - `confirmed`: slots whose replacement just reached the threshold → invalidate
+ *    exactly once this probe.
+ *  - `held`: slots drifting from the accepted fingerprint but not yet confirmed →
+ *    keep their resolved tier (no SCANNING, no generation bump, no OCR cancel).
+ *
+ * The accepted (published) fingerprint is the STABLE baseline the caller holds
+ * for a slot; it must not chase the drift, or animation would keep re-arming the
+ * streak. Pure — pending state is threaded by the caller.
+ */
+export function advanceRerollConfirmation(params: {
+  pending: SlotRerollPending[];
+  acceptedFingerprints: string[];
+  observation: GeometryObservation;
+  confirmProbes?: number;
+}): { pending: SlotRerollPending[]; confirmed: number[]; held: number[] } {
+  const confirmProbes = params.confirmProbes ?? REROLL_CONFIRM_PROBES;
+  const pending = params.pending.map((slot) => ({ ...slot }));
+  const confirmed: number[] = [];
+  const held: number[] = [];
+  for (const card of params.observation.cards) {
+    const i = card.regionIndex;
+    if (!card.present) {
+      pending[i] = { candidate: "", count: 0 };
+      continue;
+    }
+    const accepted = params.acceptedFingerprints[i] ?? "";
+    // Within the band of the accepted fingerprint → still the same card. Any
+    // in-flight candidate was hover/animation noise that returned home; reset.
+    if (!fingerprintChanged(accepted, card.fingerprint)) {
+      pending[i] = { candidate: "", count: 0 };
+      continue;
+    }
+    const prior = pending[i];
+    const sameCandidate = prior.count > 0 && !fingerprintChanged(prior.candidate, card.fingerprint);
+    const candidate = sameCandidate ? prior.candidate : card.fingerprint;
+    const count = sameCandidate ? prior.count + 1 : 1;
+    if (count >= confirmProbes) {
+      confirmed.push(i);
+      pending[i] = { candidate: "", count: 0 };
+    } else {
+      held.push(i);
+      pending[i] = { candidate, count };
+    }
+  }
+  return { pending, confirmed, held };
+}
+
 export interface RerollInvalidationResult<R> {
   /** New identity store; changed slots set to null, neighbours retained by ref. */
   store: Array<IdentityRecord<R> | null>;
@@ -50,25 +128,41 @@ export function applyRerollInvalidation<R>(params: {
   now: number;
   /** A genuinely new offer owns fresh slot generations even if pixels repeat. */
   newOffer?: boolean;
+  /**
+   * When present, invalidate EXACTLY these present slots — the confirmed reroll
+   * set from `advanceRerollConfirmation` — instead of deriving the set from a
+   * raw per-frame fingerprint change. Retained (held) slots then keep their
+   * accepted baseline unchanged, so an unconfirmed drifting slot keeps measuring
+   * drift from its resolved fingerprint rather than chasing the animation.
+   */
+  invalidateSlots?: number[];
 }): RerollInvalidationResult<R> {
   const { store, slotGenerations, observation } = params;
   const nextStore = store.slice();
   const nextGenerations = slotGenerations.slice();
   const previousFingerprints = params.acceptedFingerprints ?? store.map((record) => record?.fingerprint ?? "");
   const nextFingerprints = previousFingerprints.slice();
+  const confirmed = params.invalidateSlots != null ? new Set(params.invalidateSlots) : null;
   const invalidated: number[] = [];
 
   for (const card of observation.cards) {
     const i = card.regionIndex;
     if (!card.present) continue;
-    const changed = params.newOffer === true ||
-      fingerprintChanged(previousFingerprints[i] ?? "", card.fingerprint);
+    const changed = confirmed != null
+      ? confirmed.has(i)
+      : params.newOffer === true || fingerprintChanged(previousFingerprints[i] ?? "", card.fingerprint);
     if (changed) {
       nextStore[i] = null;
       nextGenerations[i] = slotGenerations[i] + 1;
       invalidated.push(i);
+      nextFingerprints[i] = card.fingerprint; // adopt the new card as the baseline
+    } else if (confirmed != null) {
+      // Hysteresis mode: hold the accepted baseline for a retained/held slot so
+      // the confirmation streak keeps measuring from the resolved fingerprint.
+      nextFingerprints[i] = previousFingerprints[i] ?? "";
+    } else {
+      nextFingerprints[i] = card.fingerprint; // legacy: baseline tracks the frame
     }
-    nextFingerprints[i] = card.fingerprint;
   }
 
   return {
