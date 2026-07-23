@@ -14,7 +14,10 @@ import {
   resolveGameflowCaptureAllowed,
   shouldClearOcrStateForGameflow,
 } from "./augmentSelection";
-import { resolveLiveDataPoll } from "./liveGamePoll";
+import {
+  LiveGamePollOwnerRegistry,
+  resolveLiveDataPoll,
+} from "./liveGamePoll";
 import {
   resolveRoundDelivery,
   TOTAL_AUGMENT_ROUNDS,
@@ -524,8 +527,7 @@ function App() {
   const ocrSelectionCompletedRef = useRef(false);
   const gameflowCaptureAllowedRef = useRef(false);
   const liveDataFailureStartedAtRef = useRef<number | null>(null);
-  const pollInFlightRef = useRef(false);
-  const pollPendingRef = useRef(false);
+  const gamePollOwnersRef = useRef(new LiveGamePollOwnerRegistry());
   const pollRef = useRef<() => Promise<void>>(async () => {});
   const foregroundPollStartedAtRef = useRef<number | null>(null);
   const [showStartupTip, setShowStartupTip] = useState(true);
@@ -2672,11 +2674,41 @@ function App() {
 
   // Main polling loop
   const poll = useCallback(async () => {
-    if (pollInFlightRef.current) {
-      pollPendingRef.current = true;
+    const claim = gamePollOwnersRef.current.claim(performance.now());
+    const owner = claim.owner;
+    const pollOwnerIsCurrent = () =>
+      gamePollOwnersRef.current.isCurrent(owner.runId);
+    const emitPollStage = (
+      event: "queued" | "start" | "finish" | "stale-reject" | "error" | "release",
+      stage: string,
+      extra: Record<string, unknown> = {},
+    ) => {
+      const current = pollOwnerIsCurrent();
+      emitNativeDiagnostic("[game-poll-stage]", {
+        event,
+        stage,
+        runId: owner.runId,
+        ageMs: Math.round(Math.max(0, performance.now() - owner.startedAt)),
+        deadlineRemainingMs: Math.round(
+          Math.max(0, owner.timeoutDeadline - performance.now()),
+        ),
+        current,
+        ...extra,
+      });
+    };
+    if (claim.kind === "queued") {
+      if (import.meta.env.DEV) emitPollStage("queued", "claim");
       return;
     }
-    pollInFlightRef.current = true;
+    if (claim.kind === "replace") {
+      if (import.meta.env.DEV) {
+        emitPollStage("start", "watchdog-replacement", {
+          supersededRunId: claim.supersededRunId,
+        });
+      }
+    } else if (import.meta.env.DEV) {
+      emitPollStage("start", "poll");
+    }
 
     try {
       if (!collectorEnabled) {
@@ -2687,10 +2719,26 @@ function App() {
         return;
       }
 
+      if (import.meta.env.DEV) emitPollStage("start", "foreground");
       await refreshForeground();
+      if (!pollOwnerIsCurrent()) {
+        if (import.meta.env.DEV) emitPollStage("stale-reject", "foreground");
+        return;
+      }
+      if (import.meta.env.DEV) emitPollStage("finish", "foreground");
 
+      if (import.meta.env.DEV) emitPollStage("start", "gameflow");
       const gameflow = await invoke<LcuGameflowState | null>("get_lcu_gameflow_state")
         .catch(() => null);
+      if (!pollOwnerIsCurrent()) {
+        if (import.meta.env.DEV) emitPollStage("stale-reject", "gameflow");
+        return;
+      }
+      if (import.meta.env.DEV) {
+        emitPollStage("finish", "gameflow", {
+          result: gameflow == null ? "unavailable" : "ready",
+        });
+      }
       // The scheduler's coarse "active game" gate: capture is compliant only in
       // a live game. This is the ONLY telemetry the probe scheduler consults.
       // A missing sample (LCU read failure/timeout) is not a confirmed
@@ -2711,7 +2759,15 @@ function App() {
           action: "clear-confirmed-non-live",
           failureAgeMs: 0,
         });
+        if (import.meta.env.DEV) emitPollStage("start", "detect-client-after-non-live");
         const clientFound = await invoke<boolean>("detect_league_client").catch(() => false);
+        if (!pollOwnerIsCurrent()) {
+          if (import.meta.env.DEV) {
+            emitPollStage("stale-reject", "detect-client-after-non-live");
+          }
+          return;
+        }
+        if (import.meta.env.DEV) emitPollStage("finish", "detect-client-after-non-live");
         clearGameOnlyState(clientFound ? "client_found" : "idle");
         return;
       }
@@ -2719,6 +2775,7 @@ function App() {
       let data: LivePlayerData | null = null;
       let liveDataStatus: "ready" | "unavailable" | "error" = "unavailable";
       {
+        if (import.meta.env.DEV) emitPollStage("start", "live-player-data");
         const liveDataResult: {
           data: LivePlayerData | null;
           status: "ready" | "unavailable" | "error";
@@ -2726,8 +2783,15 @@ function App() {
           (value) => ({ data: value, status: value ? "ready" : "unavailable" }),
           () => ({ data: null, status: "error" }),
         );
+        if (!pollOwnerIsCurrent()) {
+          if (import.meta.env.DEV) emitPollStage("stale-reject", "live-player-data");
+          return;
+        }
         data = liveDataResult.data;
         liveDataStatus = liveDataResult.status;
+        if (import.meta.env.DEV) {
+          emitPollStage("finish", "live-player-data", { result: liveDataStatus });
+        }
         if (data && gameflowCaptureAllowedRef.current) {
           const priorFailureStartedAt = liveDataFailureStartedAtRef.current;
           liveDataFailureStartedAtRef.current = null;
@@ -2742,21 +2806,46 @@ function App() {
               failureAgeMs: Math.round(Math.max(0, performance.now() - priorFailureStartedAt)),
             });
           }
+          if (import.meta.env.DEV) emitPollStage("start", "game-hash");
           const gameHash = await invoke<string | null>("get_game_hash").catch(() => null);
+          if (!pollOwnerIsCurrent()) {
+            if (import.meta.env.DEV) emitPollStage("stale-reject", "game-hash");
+            return;
+          }
+          if (import.meta.env.DEV) {
+            emitPollStage("finish", "game-hash", {
+              result: gameHash ? "ready" : "unavailable",
+            });
+          }
           if (!gameHash) {
             setMemberSnapshot(disabledMember("game-hash-unavailable"));
           } else if (
             memberBootstrapCompleteRef.current &&
             shouldVerifyGameStart(activeGameHashRef.current, gameHash)
           ) {
-            activeGameHashRef.current = gameHash;
+            gamePollOwnersRef.current.renew(owner.runId, performance.now());
             setMemberSnapshot(disabledMember("game-session-verification-pending"));
+            if (import.meta.env.DEV) emitPollStage("start", "member-game-start");
             const snapshot = await verifyMemberGameStart(gameHash).catch((error) =>
               disabledMember(
                 error instanceof Error ? error.message : "game-session-verification-failed",
               ),
             );
+            if (!pollOwnerIsCurrent()) {
+              if (import.meta.env.DEV) emitPollStage("stale-reject", "member-game-start");
+              return;
+            }
+            if (import.meta.env.DEV) {
+              emitPollStage("finish", "member-game-start", {
+                result: snapshot.enabled ? "enabled" : "disabled",
+              });
+            }
+            activeGameHashRef.current = gameHash;
             setMemberSnapshot(snapshot);
+          }
+          if (!pollOwnerIsCurrent()) {
+            if (import.meta.env.DEV) emitPollStage("stale-reject", "publish-player-data");
+            return;
           }
           const lastGameTime = lastGameTimeRef.current;
           if (lastGameTime !== null && data.game_time + 5 < lastGameTime) {
@@ -2830,15 +2919,30 @@ function App() {
       if (liveDataDecision.action === "preserve") return;
 
       try {
+        if (import.meta.env.DEV) emitPollStage("start", "detect-client-after-grace");
         const clientFound = await invoke<boolean>("detect_league_client");
+        if (!pollOwnerIsCurrent()) {
+          if (import.meta.env.DEV) {
+            emitPollStage("stale-reject", "detect-client-after-grace");
+          }
+          return;
+        }
+        if (import.meta.env.DEV) emitPollStage("finish", "detect-client-after-grace");
         clearGameOnlyState(clientFound ? "client_found" : "idle");
       } catch {
+        if (!pollOwnerIsCurrent()) {
+          if (import.meta.env.DEV) {
+            emitPollStage("stale-reject", "detect-client-after-grace");
+          }
+          return;
+        }
+        if (import.meta.env.DEV) emitPollStage("error", "detect-client-after-grace");
         clearGameOnlyState("idle");
       }
     } finally {
-      pollInFlightRef.current = false;
-      if (pollPendingRef.current) {
-        pollPendingRef.current = false;
+      const release = gamePollOwnersRef.current.release(owner.runId);
+      if (import.meta.env.DEV) emitPollStage("release", "poll", { release });
+      if (release === "restart") {
         void pollRef.current();
       }
     }
@@ -2941,11 +3045,13 @@ function App() {
   // unmounted component).
   useEffect(() => {
     const ocrOwners = ocrOwnersRef.current;
+    const gamePollOwners = gamePollOwnersRef.current;
     return () => {
       bumpScanSeq();
       probeInFlightRef.current = false;
       probeInFlightSinceRef.current = null;
       ocrOwners.invalidate();
+      gamePollOwners.invalidate();
       geometrySeqRef.current += 1;
       geometryInFlightRef.current = false;
       geometryInFlightSinceRef.current = null;
