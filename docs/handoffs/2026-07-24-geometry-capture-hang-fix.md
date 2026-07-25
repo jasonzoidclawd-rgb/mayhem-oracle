@@ -304,3 +304,87 @@ publish or reset accepted health.
 This closes the previously separate hanging-badges issue offline. A manual
 four-phase test is still required; no new League run was performed during this
 implementation.
+
+## Round 5 — OCR stale-rejection audit and the diagnostic contract (2026-07-26)
+
+Trace: `/tmp/mayhem-four-phase-postfix-20260726-014355.log`.
+
+### Two of the three reported symptoms were diagnostic artifacts
+
+**"preCaptureMs max 34142"** — `absent_surface_observation` sets
+`pre_capture_ms: elapsed_ms` and `capture_ms: 0`. Every sample where
+`preCaptureMs == nativeElapsedMs && captureMs == 0` is an error/absent
+observation, not a window-enumeration measurement. The native path was healthy
+throughout: `nativeElapsedMs` median 612 ms across 616 samples. There is no
+34-second pre-capture stall to fix, so no capture-target cache and no killable
+helper process were built.
+
+**"11 stale rejects, 0 retries"** — the reject payload carried only
+`{runId, reason}`, and `[identity-retry]` is emitted only for the `retry:`
+trigger reason. Recovery after a stale reject actually runs through the `new:`
+reason (`applyRerollInvalidation` sets `store[i] = null`, which
+`decideOcrTrigger` re-triggers every geometry frame until a run publishes), so
+the recovery path was invisible to the summary. "Zero retries" was a
+classification gap, not silence.
+
+### All 11 rejections were correct; every slot resolved
+
+| run | slots | slotGen | trigger | native ms | outcome | first violated authority | slot end state |
+|----|----|----|----|----|----|----|----|
+| 2  | [1]   | 4  | reroll:1 | 776  | reject | fingerprint drift (seq 634) | → run 3 |
+| 3  | [1]   | 4  | reroll:1 | 702  | reject | fingerprint drift | → run 4 |
+| 4  | [1]   | 4  | reroll:1 | 972  | reject | slot generation 4→5 (seq 636) | → run 5 |
+| 5  | [1]   | 5  | new:1    | 974  | **publish** | — | resolved 1345 |
+| 6  | [0]   | 4  | reroll:0 | 817  | reject | fingerprint drift (seq 639) | → run 7 |
+| 7  | [0,2] | 4  | reroll:0,2 | 902 | reject | slot generation 4→5 (seq 641) | → run 8 |
+| 8  | [0]   | 5  | new:0    | 936  | **publish** | — | resolved 1211 |
+| 9  | [2]   | 4  | reroll:2 | 782  | reject | fingerprint drift (seq 655) | → run 10 |
+| 10 | [2]   | 4  | reroll:2 | 859  | reject | slot generation 4→5 (seq 656) | → run 11 |
+| 11 | [2]   | 5  | new:2    | 976  | **publish** | — | resolved 2100 |
+| 13 | [2]   | 23 | reroll:2 | 857  | reject | fingerprint drift (seq 978) | → run 14 |
+| 14 | [2]   | 23 | reroll:2 | 1009 | reject | slot generation 23→24 (seq 979) | → run 15 |
+| 15 | [2]   | 24 | new:2    | 1079 | **publish** | — | resolved 2043 |
+| 16 | [0]   | 23 | reroll:0 | 915  | reject | fingerprint drift (seq 985) | slot 0 already resolved 1061 |
+| 17 | [0]   | 23 | reroll:0 | 1387 | reject | offer closed (gen 639→640, seq 1006) | offer over |
+
+Offer 621 ended with slots 0/1/2 = 1211 / 1345 / 2100. Offer 639 ended with
+slots 0/1/2 = 1061 / 2091 / 2043. **No slot was left unresolved at the close of
+either offer**, and no rejection discarded a read the UI still needed. Runs 16
+and 17 re-read an already-resolved slot 0 after hover/animation fingerprint
+excursions; rejecting them preserved the correct published identity.
+
+No bounded retry budget was added. The recovery loop demonstrably converges
+(maximum three rejects before a publish), so an attempt cap could only truncate
+a working path — it would regress the levels that currently pass. The gap that
+was real is that the trace could not prove any of the above, so the diagnostics
+were fixed instead.
+
+### What changed
+
+`classifyStaleReject` (`overlay/src/ocrOwner.ts`) names the FIRST violated
+authority behind a rejection: foreground epoch → game epoch → champion id →
+champion generation → offer generation → slot generation → fingerprint drift →
+owner replaced → capture-seq-only. Semantic ownership outranks the registry
+swap, because a registry replacement is a *consequence* of a reroll and must
+never mask it. `capture-seq-only` is last and distinct: geometry capture
+sequence alone is not an ownership authority, so when it is the only thing that
+moved the trace must say so rather than report a supersede that did not happen.
+Rejection behaviour is unchanged — this classifies a decision already made.
+
+`[identity-stale-reject]` now carries stage, cause, requested slots,
+slot generations at start vs now, per-slot fingerprint Hamming drift, per-slot
+resolved state, offer/foreground/game/champion generations at start vs now, the
+current owner run id, `captureSeqStale`, and elapsed ms. Bounded integers,
+booleans and enums only — no fingerprints, titles or identifiers.
+
+`[geometry-hidden]` → `[geometry-stale-hide]`, counted by marker OCCURRENCE.
+The old summary counted a nested `staleHide === true` field while the runtime
+emitted `staleHide: false` for TTL-expired hides, so the supplied trace's 2 real
+hide events summarized as `stale hides 0` — read as "geometry never hid the
+card", the opposite of the truth. `parseOverlayTrace` still accepts the legacy
+marker so archived logs replay. Replaying the supplied trace now reports
+`stale-hide events 2`.
+
+Still unverified in a live game: the geometry backlog cap
+(`MAX_OUTSTANDING_NATIVE_PROBES`) and the new diagnostics. A manual four-phase
+test is required.
