@@ -17,7 +17,7 @@ export type DiagnosticMarker =
   | "[geometry-watchdog]"
   | "[identity-native-return]"
   | "[geometry-timing]"
-  | "[geometry-hidden]"
+  | "[geometry-stale-hide]"
   | "[geometry-recovery]";
 
 /** Bounded, irreversible FNV-1a hash; complete OCR text is never logged. */

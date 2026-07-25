@@ -18,6 +18,21 @@ export interface TraceEvent {
 
 const DIAGNOSTIC_LINE = /^\s*(\[[a-z0-9-]+\])\s+(\{.*\})\s*$/i;
 
+/**
+ * `[geometry-stale-hide]` is the canonical marker for "the render layer hid the
+ * card because its authoritative geometry frame was no longer fresh".
+ * `[geometry-hidden]` is the pre-2026-07-26 spelling, retained ONLY so archived
+ * logs still replay. Every occurrence counts as one hide: the old summary keyed
+ * off a nested `staleHide === true` field, so a trace with 2 `ttl-expired` hides
+ * reported 0 and read as "geometry never hid the card".
+ */
+export const GEOMETRY_STALE_HIDE_MARKER = "[geometry-stale-hide]";
+const LEGACY_GEOMETRY_HIDE_MARKER = "[geometry-hidden]";
+const GEOMETRY_HIDE_MARKERS = new Set([
+  GEOMETRY_STALE_HIDE_MARKER,
+  LEGACY_GEOMETRY_HIDE_MARKER,
+]);
+
 /** Parse a tee'd log into diagnostic events; non-diagnostic and malformed lines are skipped. */
 export function parseOverlayTrace(logText: string): TraceEvent[] {
   const events: TraceEvent[] = [];
@@ -160,8 +175,8 @@ export function summarizeOcrTrace(events: TraceEvent[]): OcrTraceSummary {
       }
       continue;
     }
-    if (event.marker === "[geometry-hidden]") {
-      if (event.payload.staleHide === true) geometryStaleHides += 1;
+    if (GEOMETRY_HIDE_MARKERS.has(event.marker)) {
+      geometryStaleHides += 1;
       continue;
     }
     if (event.marker === "[geometry-recovery]") continue;

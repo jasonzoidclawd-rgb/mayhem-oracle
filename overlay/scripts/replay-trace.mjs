@@ -63,7 +63,7 @@ console.log(`  nativeElapsedMs      ${ms(s.geometryNativeElapsedMs)}`);
 console.log(`  roundTripMs          ${ms(s.geometryRoundTripMs)}`);
 console.log(`  stale results        ${s.staleGeometryResults}`);
 console.log(`  timeout classes      ${JSON.stringify(s.geometryTimeoutClassifications)}`);
-console.log(`  stale hides          ${s.geometryStaleHides}`);
+console.log(`  stale-hide events    ${s.geometryStaleHides}`);
 console.log(`  recoveries           ${s.geometryRecoveries}`);
 console.log(`  unhealthy age ms     ${ms(s.continuousUnhealthyAgeMs)}`);
 console.log(`  accepted age ms      ${ms(s.acceptedGeometryAgeMs)}`);

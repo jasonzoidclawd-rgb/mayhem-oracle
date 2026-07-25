@@ -10,6 +10,7 @@ import {
   failurePublication,
   nextRetryDelay,
   ownerCurrent,
+  classifyStaleReject,
   requestedPendingStates,
   type OcrOwnerContext,
 } from "./ocrOwner";
@@ -166,5 +167,83 @@ describe("native timeout and failure recovery", () => {
     const later = owners.start(context({ offerGeneration: 9 }), 60_000);
     expect(later.runId).toBeGreaterThan(first.runId);
     expect(owners.current).toBe(later);
+  });
+});
+
+/**
+ * The 2026-07-26 four-phase trace contained 11 `[identity-stale-reject]` events
+ * carrying ONLY `{runId, reason: "owner-superseded-before-publication"}` — one
+ * opaque reason for eight structurally different authorities. That is why the
+ * trace could not answer "did OCR give up, or did the card legitimately change?"
+ * and why the run was misread as zero recovery. `classifyStaleReject` names the
+ * FIRST violated authority so the next trace is auditable per rejection.
+ */
+describe("stale-reject cause classification", () => {
+  const owner = { ...context(), runId: 7, startedAt: 0, timeoutDeadline: 2_000 };
+
+  it("returns null when nothing was violated", () => {
+    expect(classifyStaleReject(owner, owner, context(), false)).toBeNull();
+  });
+
+  it("names each semantic authority in first-violated order", () => {
+    const cases: Array<[Partial<OcrOwnerContext>, string]> = [
+      [{ foregroundEpoch: 2 }, "foreground-epoch"],
+      [{ gameEpoch: 3 }, "game-epoch"],
+      [{ championId: "99" }, "champion-id"],
+      [{ championGeneration: 4 }, "champion-generation"],
+      [{ offerGeneration: 5 }, "offer-generation"],
+      [{ slotGenerations: [6, 6, 7] }, "slot-generation"],
+    ];
+    for (const [overrides, expected] of cases) {
+      expect(classifyStaleReject(owner, owner, context(overrides), false)).toBe(expected);
+    }
+  });
+
+  it("reports fingerprint drift only for a REQUESTED slot", () => {
+    // Slot 1 was never requested: its drift is another card's business.
+    const untouched = context({ fingerprints: [FP[0], "0".repeat(144), FP[2]] });
+    expect(classifyStaleReject(owner, owner, untouched, false)).toBeNull();
+    const drifted = context({ fingerprints: [FP[0], FP[1], "0".repeat(144)] });
+    expect(classifyStaleReject(owner, owner, drifted, false)).toBe("fingerprint-drift");
+  });
+
+  it("treats sub-band drift on a requested slot as the same card", () => {
+    // 8 flipped bits — exactly FINGERPRINT_CHANGED_HAMMING, still the same card.
+    const nudged = `${"01".repeat(4)}${FP[0].slice(8)}`;
+    expect(classifyStaleReject(owner, owner, context({ fingerprints: [nudged, FP[1], FP[2]] }), false))
+      .toBeNull();
+  });
+
+  it("reports owner-replaced only after every semantic field matched", () => {
+    const replacement = { ...context(), runId: 8, startedAt: 0, timeoutDeadline: 2_000 };
+    expect(classifyStaleReject(owner, replacement, context(), false)).toBe("owner-replaced");
+    // A real semantic change outranks the registry swap: the registry is a
+    // consequence of the reroll, not the authority that invalidated the read.
+    expect(classifyStaleReject(owner, replacement, context({ offerGeneration: 5 }), false))
+      .toBe("offer-generation");
+  });
+
+  it("surfaces a bare capture-seq bump as its OWN cause, never as a supersede", () => {
+    // Geometry capture sequence alone is NOT an ownership authority; when it is
+    // the only thing that moved, the diagnostic must say so rather than hide
+    // behind `owner-superseded-before-publication`.
+    expect(classifyStaleReject(owner, owner, context(), true)).toBe("capture-seq-only");
+  });
+
+  it("classifies the trace's run-16 rejection as fingerprint drift", () => {
+    // slot 0 re-read triggered at geometry seq 984; the card's fingerprint moved
+    // again at seq 985 while the 915 ms native read was outstanding.
+    const run16 = {
+      ...context({ requestedSlots: [0], slotGenerations: [23, 23, 23], fingerprints: FP }),
+      runId: 16,
+      startedAt: 1_473_787,
+      timeoutDeadline: 1_475_787,
+    };
+    const atCompletion = context({
+      requestedSlots: [0],
+      slotGenerations: [23, 23, 23],
+      fingerprints: ["0".repeat(144), FP[1], FP[2]],
+    });
+    expect(classifyStaleReject(run16, run16, atCompletion, false)).toBe("fingerprint-drift");
   });
 });

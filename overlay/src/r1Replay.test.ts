@@ -36,6 +36,7 @@ function probe(foreground: boolean) {
     inFlight: false,
     inFlightSince: null,
     lastProbeStartedAt: null,
+    nativeOutstanding: 0,
   };
   return nextProbeAction(state, DEFAULT_PROBE_CONFIG, 1000);
 }

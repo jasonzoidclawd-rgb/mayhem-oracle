@@ -15,7 +15,7 @@ const SAMPLE = [
   '[identity-watchdog-restart] {"runId":11,"reason":"deadline-exceeded"}',
   '[geometry-watchdog] {"probeSeq":706,"inFlightMs":4200,"hiddenReason":"probe-timeout"}',
   '[geometry-timing] {"attemptGeneration":707,"preCaptureMs":110,"captureMs":220,"analysisMs":330,"nativeElapsedMs":660,"roundTripMs":700,"stale":true,"timeoutClassification":"capture-timeout","continuousUnhealthyAgeMs":2100,"acceptedGeometryAgeMs":1400}',
-  '[geometry-hidden] {"attemptGeneration":708,"staleHide":true,"continuousUnhealthyAgeMs":2300,"acceptedGeometryAgeMs":1600}',
+  '[geometry-stale-hide] {"attemptGeneration":708,"staleHide":true,"continuousUnhealthyAgeMs":2300,"acceptedGeometryAgeMs":1600}',
   '[geometry-recovery] {"attemptGeneration":709,"continuousUnhealthyAgeMs":2500,"acceptedGeometryAgeMs":0}',
   '[identity-native-return] {"runId":7,"nativeMs":5300,"cropCount":3,"captureMs":900,"ocrMs":4300}',
   "[identity-malformed] {this is not json}",
@@ -83,5 +83,47 @@ describe("overlay trace replay", () => {
     expect(numericSummary([])).toEqual({ count: 0, min: 0, median: 0, max: 0 });
     expect(numericSummary([5])).toEqual({ count: 1, min: 5, median: 5, max: 5 });
     expect(numericSummary([10, 2, 8, 4])).toEqual({ count: 4, min: 2, median: 6, max: 10 });
+  });
+});
+
+/**
+ * The hide marker had TWO defects the 2026-07-26 four-phase trace exposed:
+ * the runtime emitted `[geometry-hidden]` while the summary counted a nested
+ * `staleHide === true` field, so a trace containing 2 real hide events (both
+ * `ttl-expired`, `staleHide: false`) reported `stale hides 0` — the operator
+ * read that as "geometry never hid the card", which was the opposite of the
+ * truth. One canonical marker, counted by OCCURRENCE, removes both.
+ */
+describe("canonical geometry stale-hide marker", () => {
+  it("counts every stale-hide occurrence regardless of the staleHide field", () => {
+    const trace = [
+      '[geometry-stale-hide] {"probeSeq":1006,"hiddenReason":"ttl-expired","staleHide":false}',
+      '[geometry-stale-hide] {"probeSeq":1204,"hiddenReason":"probe-timeout","staleHide":false}',
+    ].join("\n");
+    // Exactly the supplied trace's shape: 2 hides, previously summarized as 0.
+    expect(summarizeOcrTrace(parseOverlayTrace(trace)).geometryStaleHides).toBe(2);
+  });
+
+  it("still replays logs written with the legacy `[geometry-hidden]` marker", () => {
+    const legacy = '[geometry-hidden] {"probeSeq":900,"hiddenReason":"ttl-expired","staleHide":false}';
+    expect(summarizeOcrTrace(parseOverlayTrace(legacy)).geometryStaleHides).toBe(1);
+  });
+
+  it("counts a mixed old/new log once per event", () => {
+    const mixed = [
+      '[geometry-hidden] {"probeSeq":900,"staleHide":true}',
+      '[geometry-stale-hide] {"probeSeq":901,"staleHide":false}',
+    ].join("\n");
+    expect(summarizeOcrTrace(parseOverlayTrace(mixed)).geometryStaleHides).toBe(2);
+  });
+
+  it("keeps hide events inside the geometry age samples under either marker", () => {
+    const trace = [
+      '[geometry-stale-hide] {"continuousUnhealthyAgeMs":40,"acceptedGeometryAgeMs":60}',
+      '[geometry-hidden] {"continuousUnhealthyAgeMs":80,"acceptedGeometryAgeMs":100}',
+    ].join("\n");
+    const summary = summarizeOcrTrace(parseOverlayTrace(trace));
+    expect(summary.continuousUnhealthyAgeMs.count).toBe(2);
+    expect(summary.acceptedGeometryAgeMs.count).toBe(2);
   });
 });

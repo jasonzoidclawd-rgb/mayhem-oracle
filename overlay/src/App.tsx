@@ -152,6 +152,8 @@ import {
   executeOcrRun,
   failurePublication,
   ownerCurrent,
+  classifyStaleReject,
+  staleRejectSlotDrift,
   type OcrOwnerContext,
 } from "./ocrOwner";
 import {
@@ -489,6 +491,8 @@ function App() {
   // into enumeration (preCaptureMs) vs capture_image (captureMs) vs round-trip so
   // a cross-game slowdown is attributable without flooding the log.
   const lastGeometryTimingEpochRef = useRef(0);
+  /** Native geometry invokes issued but not yet settled (abandonment ≠ cancel). */
+  const geometryNativeOutstandingRef = useRef(0);
   const geometrySeqRef = useRef(0);
   const lastGeometryStartedAtRef = useRef<number | null>(null);
   const geometryRestartCountRef = useRef(0);
@@ -1566,6 +1570,9 @@ function App() {
   // preserves the last accepted frame; explicit absence/occlusion clears. It
   // NEVER runs OCR — it only decides which slots the OCR track should (re)read.
   const runGeometryProbe = useCallback(async (scheduledAt: number) => {
+    // Counted BEFORE the invoke and released in the finally, so the scheduler
+    // sees calls the watchdog abandoned but the platform never cancelled.
+    geometryNativeOutstandingRef.current += 1;
     geometryInFlightRef.current = true;
     const startedAt = performance.now();
     const previousStartedAt = lastGeometryStartedAtRef.current;
@@ -2066,6 +2073,12 @@ function App() {
         }
       }
     } finally {
+      // This native call has settled, whether or not it still owns the guard.
+      // Abandoned-but-unsettled calls are exactly what the backlog cap counts.
+      geometryNativeOutstandingRef.current = Math.max(
+        0,
+        geometryNativeOutstandingRef.current - 1,
+      );
       // Release the guard ONLY if this probe still owns it (a watchdog restart
       // hands ownership to the replacement — its late return must not free it).
       if (geometryInFlightTokenRef.current === captureSeq) {
@@ -2134,6 +2147,54 @@ function App() {
       slotGenerations: slotGenerationsRef.current,
       fingerprints: acceptedSlotFingerprintsRef.current,
     });
+    /**
+     * A completed run that may not publish. The 2026-07-26 trace logged all 11
+     * of these as `{runId, reason}` alone, which could not answer whether the
+     * card legitimately changed (a replacement read is already queued) or OCR
+     * silently gave up — so the run was misread as zero recovery. Everything
+     * here is a bounded count / integer / enum: the fingerprints themselves and
+     * every OCR string stay out of the log.
+     */
+    const logStaleReject = (
+      rejected: typeof owner,
+      seq: number,
+      stage: "before-publication" | "during-failure",
+    ) => {
+      const context = currentOwnerContext();
+      const captureSeqStale = seq !== scanSeqRef.current;
+      logOverlayDiagnostic("[identity-stale-reject]", {
+        runId: rejected.runId,
+        stage,
+        // `cause` is the FIRST violated authority; the legacy opaque string is
+        // retained as `reason` so older replay tooling keeps parsing this line.
+        cause: classifyStaleReject(
+          rejected,
+          ocrOwnersRef.current.current,
+          context,
+          captureSeqStale,
+        ),
+        reason: `owner-superseded-${stage}`,
+        requestedSlots: rejected.requestedSlots,
+        slotGenerationsAtStart: rejected.requestedSlots.map((s) => rejected.slotGenerations[s]),
+        slotGenerationsNow: rejected.requestedSlots.map((s) => context.slotGenerations[s]),
+        slotFingerprintDrift: staleRejectSlotDrift(rejected, context, hammingDistance),
+        // Was the slot already showing a resolved identity? A rejection over a
+        // RESOLVED slot costs nothing; over an unresolved one it is a real gap.
+        slotResolved: rejected.requestedSlots.map(
+          (s) => identityStoreRef.current[s]?.resolution != null),
+        offerGenerationAtStart: rejected.offerGeneration,
+        offerGenerationNow: context.offerGeneration,
+        foregroundEpochAtStart: rejected.foregroundEpoch,
+        foregroundEpochNow: context.foregroundEpoch,
+        gameEpochAtStart: rejected.gameEpoch,
+        gameEpochNow: context.gameEpoch,
+        championGenerationAtStart: rejected.championGeneration,
+        championGenerationNow: context.championGeneration,
+        currentOwnerRunId: ocrOwnersRef.current.current?.runId ?? null,
+        captureSeqStale,
+        elapsedMs: Math.round(performance.now() - rejected.startedAt),
+      });
+    };
     const scanStart = new Date().toISOString();
     setOcrLifecycle((previous) => ({
       ...previous,
@@ -2198,10 +2259,7 @@ function App() {
         !ownerCurrent(owner, ocrOwnersRef.current.current, currentOwnerContext())
       ) {
         if (import.meta.env.DEV) {
-          logOverlayDiagnostic("[identity-stale-reject]", {
-            runId: owner.runId,
-            reason: "owner-superseded-before-publication",
-          });
+          logStaleReject(owner, captureSeq, "before-publication");
         }
         return;
       }
@@ -2485,10 +2543,7 @@ function App() {
         !ownerCurrent(owner, ocrOwnersRef.current.current, currentOwnerContext())
       ) {
         if (import.meta.env.DEV) {
-          logOverlayDiagnostic("[identity-stale-reject]", {
-            runId: owner.runId,
-            reason: "owner-superseded-during-failure",
-          });
+          logStaleReject(owner, captureSeq, "during-failure");
         }
         return;
       }
@@ -2609,12 +2664,13 @@ function App() {
         inFlight: geometryInFlightRef.current,
         inFlightSince: geometryInFlightSinceRef.current,
         lastProbeStartedAt: lastGeometryStartedAtRef.current,
+        nativeOutstanding: geometryNativeOutstandingRef.current,
       },
       GEOMETRY_PROBE_CONFIG,
       scheduledAt,
     );
     if (action.kind === "skip") return;
-    if (action.kind === "restart") {
+    if (action.kind === "restart" || action.kind === "abandon") {
       const attemptGeneration =
         geometryHealthRef.current.currentAttemptGeneration ??
         geometrySeqRef.current;
@@ -2644,12 +2700,18 @@ function App() {
         hiddenReason: "probe-timeout",
         continuousUnhealthyAgeMs,
         acceptedGeometryAgeMs,
+        nativeOutstanding: geometryNativeOutstandingRef.current,
+        action: action.kind,
       });
       geometrySeqRef.current += 1;
       geometryInFlightRef.current = false;
       geometryInFlightSinceRef.current = null;
       geometryInFlightTokenRef.current = null;
       geometryRestartCountRef.current += 1;
+      // Ownership released so no late result can publish — but with the native
+      // backlog at the cap we must NOT add another invoke. Issuing one is what
+      // grew roundTripMs to 47–63 s while the native side stayed healthy.
+      if (action.kind === "abandon") return;
     }
     // Geometry owns presence even when the OS OCR backend is unavailable. The
     // native probe reports screen-capture failures explicitly (as uncertain,
@@ -2670,6 +2732,11 @@ function App() {
         inFlight: probeInFlightRef.current,
         inFlightSince: probeInFlightSinceRef.current,
         lastProbeStartedAt: lastProbeStartedAtRef.current,
+        // OCR is TRIGGERED, never on a fixed cadence, so it cannot accumulate
+        // the timer-driven invoke backlog the geometry cap exists to bound
+        // (this trace: 0 OCR watchdog restarts vs 52 geometry). Held at 0 to
+        // leave OCR scheduling behaviour exactly unchanged.
+        nativeOutstanding: 0,
       },
       DEFAULT_PROBE_CONFIG,
       performance.now(),
@@ -2801,7 +2868,7 @@ function App() {
               : continuousUnhealthyAgeMs != null
                 ? "probe-timeout"
                 : "ttl-expired";
-          logOverlayDiagnostic("[geometry-hidden]", {
+          logOverlayDiagnostic("[geometry-stale-hide]", {
             probeSeq,
             attemptGeneration: health.currentAttemptGeneration,
             hiddenReason,

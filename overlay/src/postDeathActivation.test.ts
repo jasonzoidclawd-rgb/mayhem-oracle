@@ -72,6 +72,7 @@ describe("post-death R2 activation — the scheduler probes regardless of teleme
       inFlight: false,
       inFlightSince: null,
       lastProbeStartedAt: null,
+      nativeOutstanding: 0,
     };
     expect(nextProbeAction(inGame, DEFAULT_PROBE_CONFIG, 1000)).toEqual({ kind: "start" });
   });
@@ -110,6 +111,7 @@ describe("post-death R2 activation — the scheduler probes regardless of teleme
       inFlight: false,
       inFlightSince: null,
       lastProbeStartedAt: 1000,
+      nativeOutstanding: 0,
     };
     expect(nextProbeAction(longIdle, DEFAULT_PROBE_CONFIG, 1000 + 60_000)).toEqual({ kind: "start" });
     const { presence, frame } = scan(["不可通行", "拍拍鼓勵", "斗內"]);

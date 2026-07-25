@@ -50,6 +50,75 @@ export function ownerCurrent(
   );
 }
 
+/** The single authority that invalidated a completed-but-unpublishable OCR run. */
+export type StaleRejectCause =
+  | "foreground-epoch"
+  | "game-epoch"
+  | "champion-id"
+  | "champion-generation"
+  | "offer-generation"
+  | "slot-generation"
+  | "fingerprint-drift"
+  | "owner-replaced"
+  | "capture-seq-only";
+
+/**
+ * Name the FIRST violated authority behind an `ownerCurrent` rejection.
+ *
+ * `ownerCurrent` answers only yes/no, so the 2026-07-26 four-phase trace logged
+ * 11 rejections under one opaque `owner-superseded-before-publication` string.
+ * That single reason covers a legitimate reroll, a closed offer, a foreground
+ * flip and a bare bookkeeping bump alike — so the trace could not distinguish
+ * "the card genuinely changed and a replacement read is already running" from
+ * "OCR silently gave up", and the run was misread as zero recovery.
+ *
+ * Order is deliberate: SEMANTIC ownership first, then the registry swap, then
+ * the capture sequence. A registry replacement is a CONSEQUENCE of a reroll, so
+ * it must never mask the reroll that caused it. `capture-seq-only` is last and
+ * distinct because geometry capture sequence alone is NOT an ownership
+ * authority: when it is the only thing that moved, the diagnostic has to say so
+ * rather than report a supersede that did not happen.
+ *
+ * Diagnostic only — this classifies a rejection the caller has already decided.
+ */
+export function classifyStaleReject(
+  result: OcrOwnerToken,
+  currentOwner: OcrOwnerToken | null,
+  current: OcrOwnerContext,
+  captureSeqStale: boolean,
+): StaleRejectCause | null {
+  if (result.foregroundEpoch !== current.foregroundEpoch) return "foreground-epoch";
+  if (result.gameEpoch !== current.gameEpoch) return "game-epoch";
+  if (result.championId !== current.championId) return "champion-id";
+  if (result.championGeneration !== current.championGeneration) return "champion-generation";
+  if (result.offerGeneration !== current.offerGeneration) return "offer-generation";
+  for (const slot of result.requestedSlots) {
+    if (result.slotGenerations[slot] !== current.slotGenerations[slot]) return "slot-generation";
+  }
+  for (const slot of result.requestedSlots) {
+    if (fingerprintChanged(result.fingerprints[slot] ?? "", current.fingerprints[slot] ?? "")) {
+      return "fingerprint-drift";
+    }
+  }
+  if (currentOwner?.runId !== result.runId) return "owner-replaced";
+  if (captureSeqStale) return "capture-seq-only";
+  return null;
+}
+
+/**
+ * Per-requested-slot Hamming distance between the fingerprint a run was keyed to
+ * and the accepted fingerprint at completion. Bounded integers only — the
+ * fingerprints themselves never reach the log.
+ */
+export function staleRejectSlotDrift(
+  result: OcrOwnerToken,
+  current: OcrOwnerContext,
+  distance: (a: string, b: string) => number,
+): number[] {
+  return result.requestedSlots.map((slot) =>
+    distance(result.fingerprints[slot] ?? "", current.fingerprints[slot] ?? ""));
+}
+
 export class OcrOwnerRegistry {
   private nextRunId = 0;
   current: OcrOwnerToken | null = null;

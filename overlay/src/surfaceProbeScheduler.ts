@@ -22,6 +22,16 @@
 export const PROBE_INTERVAL_MS = 250;
 /** A probe held longer than this is considered stuck; the watchdog restarts it. */
 export const PROBE_TIMEOUT_MS = 2000;
+/**
+ * Max native calls issued but not yet settled. A watchdog restart abandons
+ * LOGICAL ownership but cannot cancel the native invoke, so the old call stays
+ * outstanding. Without this cap each restart added another invoke: the live
+ * trace showed healthy native work (nativeElapsedMs ~610 ms) behind a 47–63 s
+ * roundTripMs and ~70 outstanding calls, so no result ever arrived fresh and
+ * level 15 rendered nothing. Two = one active logical request plus one latest
+ * pending replacement.
+ */
+export const MAX_OUTSTANDING_NATIVE_PROBES = 2;
 
 export interface ProbeSchedulerState {
   /** Actual GameClient foreground (fresh this tick). */
@@ -34,6 +44,11 @@ export interface ProbeSchedulerState {
   inFlightSince: number | null;
   /** Monotonic clock when the last probe STARTED, or null (never). */
   lastProbeStartedAt: number | null;
+  /**
+   * Native calls issued but not yet settled, INCLUDING ones whose logical
+   * ownership the watchdog already abandoned. Abandoning is not cancelling.
+   */
+  nativeOutstanding: number;
 }
 
 export interface ProbeSchedulerConfig {
@@ -44,7 +59,12 @@ export interface ProbeSchedulerConfig {
 export type ProbeAction =
   | { kind: "start" }
   | { kind: "skip"; reason: string }
-  | { kind: "restart"; reason: string };
+  | { kind: "restart"; reason: string }
+  /**
+   * Release logical ownership so a late result can never publish, but do NOT
+   * issue another native call — the backlog is already at the cap.
+   */
+  | { kind: "abandon"; reason: string };
 
 export const DEFAULT_PROBE_CONFIG: ProbeSchedulerConfig = {
   intervalMs: PROBE_INTERVAL_MS,
@@ -58,14 +78,21 @@ export function nextProbeAction(
 ): ProbeAction {
   if (!state.foreground) return { kind: "skip", reason: "not-foreground" };
   if (!state.activeGame) return { kind: "skip", reason: "not-active-game" };
+  const backlogged = state.nativeOutstanding >= MAX_OUTSTANDING_NATIVE_PROBES;
   if (state.inFlight) {
     if (state.inFlightSince != null && now - state.inFlightSince >= config.timeoutMs) {
       // Watchdog: a probe that never completed within the bounded timeout is
-      // stuck (hung IPC, lost promise). Invalidate it and re-arm.
-      return { kind: "restart", reason: "in-flight-timeout" };
+      // stuck (hung IPC, lost promise). Invalidate it and re-arm — but only
+      // issue a replacement while the native backlog is beneath the cap.
+      // Otherwise release ownership alone, or restarts compound the very IPC
+      // backlog that is delaying the results.
+      return backlogged
+        ? { kind: "abandon", reason: "native-backlog" }
+        : { kind: "restart", reason: "in-flight-timeout" };
     }
     return { kind: "skip", reason: "in-flight" };
   }
+  if (backlogged) return { kind: "skip", reason: "native-backlog" };
   if (
     state.lastProbeStartedAt == null ||
     now - state.lastProbeStartedAt >= config.intervalMs
