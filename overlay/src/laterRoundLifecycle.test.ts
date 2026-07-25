@@ -100,6 +100,18 @@ function absentObs(seq: number, now: number): GeometryObservation {
   };
 }
 
+// An invalid capture is uncertainty, not authoritative evidence that the
+// visible offer closed. It may preserve the current visual state only until
+// the independent geometry-freshness deadline expires.
+function captureFailureObs(seq: number, now: number): GeometryObservation {
+  return {
+    ...absentObs(seq, now),
+    captureWidth: 0,
+    captureHeight: 0,
+    rejectionReasons: ["capture-timeout"],
+  };
+}
+
 // ── Faithful App publication harness ────────────────────────────────────────
 // Mirrors runGeometryProbe's composition (App.tsx 1558-1705): advanceGeometry →
 // newOfferDetected → advanceOfferSurface → NO_OFFER reset → reroll invalidation →
@@ -239,8 +251,7 @@ describe("later-round offer lifecycle (geometry publication path)", () => {
       h.probe(presentObs((seq += 1), (t += 150), ids), t);
       expect(h.resolvedCount()).toBe(3);
 
-      // Selection closes: two valid absent frames end the session.
-      h.probe(absentObs((seq += 1), (t += 150)), t);
+      // Selection closes: one fresh valid zero-card frame is authoritative.
       h.probe(absentObs((seq += 1), (t += 150)), t);
       expect(h.offer.render).toBe(false);
     }
@@ -254,7 +265,7 @@ describe("later-round offer lifecycle (geometry publication path)", () => {
 
   it("a queued death-sequence offer delivered through a genuine close starts a fresh session even when it repeats cards", () => {
     // ARAM death-sequence delivery: pick R(n) → the augment UI actually closes
-    // (>=2 negative geometry frames → clear) → R(n+1) opens. Even if the new
+    // (a fresh valid zero-card frame → clear) → R(n+1) opens. Even if the new
     // round REPEATS two augments, the genuine close (not card novelty) mints the
     // fresh session, so ownership/generation advance and every slot re-scans.
     const h = new PublicationHarness();
@@ -268,8 +279,7 @@ describe("later-round offer lifecycle (geometry publication path)", () => {
     expect(h.resolvedCount()).toBe(3);
     const genN = h.offer.offerGeneration;
 
-    // Genuine close: two consecutive valid absent frames end the session.
-    h.probe(absentObs((seq += 1), (t += 150)), t);
+    // Genuine close: a fresh valid zero-card frame ends the session.
     h.probe(absentObs((seq += 1), (t += 150)), t);
     expect(h.offer.render).toBe(false);
 
@@ -294,8 +304,7 @@ describe("later-round offer lifecycle (geometry publication path)", () => {
     h.probe(presentObs((seq += 1), (t += 150), ids), t);
     const gen1 = h.offer.offerGeneration;
 
-    // Clean close: two valid absent frames.
-    h.probe(absentObs((seq += 1), (t += 150)), t);
+    // Clean close: one fresh valid zero-card frame.
     h.probe(absentObs((seq += 1), (t += 150)), t);
 
     // The SAME three augments appear again (identical fingerprints).
@@ -326,9 +335,9 @@ describe("later-round offer lifecycle (geometry publication path)", () => {
     const slot0Before = h.visibleFrame?.slots.find((s) => s.regionIndex === 0)?.resolution;
     const slot2Before = h.visibleFrame?.slots.find((s) => s.regionIndex === 2)?.resolution;
 
-    // One transient preserved-negative capture (single frame, within the clear
-    // bound) — the offer never actually closed.
-    h.probe(absentObs((seq += 1), (t += 150)), t);
+    // One transient invalid capture — uncertainty is not proof the offer
+    // closed, so the session remains intact inside the freshness bound.
+    h.probe(captureFailureObs((seq += 1), (t += 150)), t);
 
     // Slot 1 rerolls in place: A/D/C.
     h.probe(presentObs((seq += 1), (t += 150), [1, 99, 3]), t);
@@ -360,5 +369,41 @@ describe("later-round offer lifecycle (geometry publication path)", () => {
     h.probe(presentObs((seq += 1), (t += 150), [50, 2, 3]), t);
     const slot0 = h.visibleFrame?.slots.find((s) => s.regionIndex === 0);
     expect(slot0?.resolution).toBeNull();
+  });
+
+  it("a later different offer cannot inherit badges from the prior offer", () => {
+    const h = new PublicationHarness();
+    let t = 0;
+    let seq = 0;
+
+    h.probe(presentObs((seq += 1), (t += 150), [1, 2, 3]), t);
+    h.resolveAllIdentities(presentObs(seq, t, [1, 2, 3]), t);
+    h.probe(presentObs((seq += 1), (t += 150), [1, 2, 3]), t);
+    const oldGeneration = h.offer.offerGeneration;
+    expect(h.resolvedCount()).toBe(3);
+
+    // Two changed slots are strong new-offer evidence even without a visible
+    // gap. The fresh generation invalidates all prior slot publications.
+    h.probe(presentObs((seq += 1), (t += 150), [50, 51, 3]), t);
+    expect(h.offer.offerGeneration).toBeGreaterThan(oldGeneration);
+    expect(h.resolvedCount()).toBe(0);
+    expect(h.scanningCount()).toBe(3);
+  });
+
+  it("a fresh valid zero-card frame removes all terrain output immediately", () => {
+    const h = new PublicationHarness();
+    let t = 0;
+    let seq = 0;
+
+    h.probe(presentObs((seq += 1), (t += 150), [1, 2, 3]), t);
+    h.resolveAllIdentities(presentObs(seq, t, [1, 2, 3]), t);
+    h.probe(presentObs((seq += 1), (t += 150), [1, 2, 3]), t);
+    expect(h.resolvedCount()).toBe(3);
+
+    h.probe(absentObs((seq += 1), (t += 150)), t);
+    expect(h.renderable()).toBe(false);
+    expect(h.visibleFrame?.slots).toEqual([]);
+    expect(h.resolvedCount()).toBe(0);
+    expect(h.scanningCount()).toBe(0);
   });
 });

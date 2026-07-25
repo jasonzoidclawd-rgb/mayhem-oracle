@@ -4,6 +4,8 @@ import {
   buildGeometryVisibleFrame,
   advanceGeometrySurface,
   classifyGeometryObservation,
+  completeGeometryAttempt,
+  createGeometryHealthClocks,
   createGeometrySurfaceState,
   emptyGeometryObservation,
   fingerprintChanged,
@@ -11,7 +13,10 @@ import {
   GEOMETRY_SCHEDULER_HEALTH_DEADLINE_MS,
   hammingDistance,
   identityForSlot,
+  markGeometryUnhealthyIfExpired,
   newOfferDetected,
+  restartGeometryAttempt,
+  startGeometryAttempt,
   type GeometryCard,
   type GeometryObservation,
   type IdentityRecord,
@@ -88,6 +93,7 @@ describe("geometry freshness — decoupled from OCR duration", () => {
         now: 1000 + durationMs,
         foreground: true,
         activeGame: true,
+        lastAcceptedGeometryAt: 900,
         inFlightSince: 1000,
         lastProbeStartedAt: 1000,
         lastProbeCompletedAt: 900,
@@ -110,6 +116,7 @@ describe("geometry freshness — decoupled from OCR duration", () => {
       now,
       foreground: true,
       activeGame: true,
+      lastAcceptedGeometryAt: 1000,
       inFlightSince: 1150,
       lastProbeStartedAt: 1150,
       lastProbeCompletedAt: 1000,
@@ -120,6 +127,7 @@ describe("geometry freshness — decoupled from OCR duration", () => {
     const baseHealth = {
       foreground: true,
       activeGame: true,
+      lastAcceptedGeometryAt: 1000,
       inFlightSince: null,
       lastProbeStartedAt: 1000,
       lastProbeCompletedAt: 1000,
@@ -139,6 +147,111 @@ describe("geometry freshness — decoupled from OCR duration", () => {
       now: 1001 + GEOMETRY_SCHEDULER_HEALTH_DEADLINE_MS,
       inFlightSince: 1000,
     })).toBe(false);
+  });
+
+  it("does not let a watchdog replacement re-certify stale rendering", () => {
+    expect(geometrySchedulerHealthy({
+      now: 4_000,
+      foreground: true,
+      activeGame: true,
+      inFlightSince: 3_900,
+      lastProbeStartedAt: 3_900,
+      lastProbeCompletedAt: 1_000,
+      lastAcceptedGeometryAt: 1_000,
+      healthDeadlineMs: 1_250,
+    })).toBe(false);
+  });
+
+  it("tracks continuous unhealthy age across replacements and ignores a late generation", () => {
+    let health = createGeometryHealthClocks();
+    health = startGeometryAttempt(health, 1, 900);
+    health = completeGeometryAttempt(health, {
+      attemptGeneration: 1,
+      completedAt: 1_000,
+      accepted: true,
+      renderAuthoritative: true,
+    });
+
+    health = startGeometryAttempt(health, 2, 1_100);
+    health = restartGeometryAttempt(health, 2, 3_100);
+    expect(health.continuousUnhealthyStartedAt).toBe(1_100);
+
+    health = startGeometryAttempt(health, 3, 3_250);
+    expect(health.continuousUnhealthyStartedAt).toBe(1_100);
+
+    health = completeGeometryAttempt(health, {
+      attemptGeneration: 2,
+      completedAt: 3_300,
+      accepted: true,
+      renderAuthoritative: true,
+    });
+    expect(health.lastAcceptedGeometryAt).toBe(1_000);
+    expect(health.continuousUnhealthyStartedAt).toBe(1_100);
+    expect(health.currentAttemptGeneration).toBe(3);
+
+    health = completeGeometryAttempt(health, {
+      attemptGeneration: 3,
+      completedAt: 3_400,
+      accepted: true,
+      renderAuthoritative: true,
+    });
+    expect(health.lastNativeCompletionAt).toBe(3_400);
+    expect(health.lastAcceptedGeometryAt).toBe(3_400);
+    expect(health.lastRenderAuthoritativeGeometryAt).toBe(3_400);
+    expect(health.continuousUnhealthyStartedAt).toBeNull();
+  });
+
+  it("starts the continuous unhealthy clock when accepted geometry expires", () => {
+    let health = createGeometryHealthClocks();
+    health = startGeometryAttempt(health, 1, 900);
+    health = completeGeometryAttempt(health, {
+      attemptGeneration: 1,
+      completedAt: 1_000,
+      accepted: true,
+      renderAuthoritative: true,
+    });
+    health = startGeometryAttempt(health, 2, 1_100);
+    health = markGeometryUnhealthyIfExpired(
+      health,
+      1_000 + GEOMETRY_SCHEDULER_HEALTH_DEADLINE_MS + 1,
+    );
+    expect(health.continuousUnhealthyStartedAt).toBe(
+      1_000 + GEOMETRY_SCHEDULER_HEALTH_DEADLINE_MS,
+    );
+  });
+
+  it("restores render health only after a fresh accepted geometry result", () => {
+    let health = createGeometryHealthClocks();
+    health = startGeometryAttempt(health, 1, 1_000);
+    health = completeGeometryAttempt(health, {
+      attemptGeneration: 1,
+      completedAt: 1_100,
+      accepted: true,
+      renderAuthoritative: true,
+    });
+    const staleAt = 1_100 + GEOMETRY_SCHEDULER_HEALTH_DEADLINE_MS + 1;
+    health = markGeometryUnhealthyIfExpired(health, staleAt);
+    expect(geometrySchedulerHealthy({
+      now: staleAt,
+      foreground: true,
+      activeGame: true,
+      lastAcceptedGeometryAt: health.lastAcceptedGeometryAt,
+    })).toBe(false);
+
+    health = startGeometryAttempt(health, 2, staleAt + 1);
+    health = completeGeometryAttempt(health, {
+      attemptGeneration: 2,
+      completedAt: staleAt + 100,
+      accepted: true,
+      renderAuthoritative: true,
+    });
+    expect(health.continuousUnhealthyStartedAt).toBeNull();
+    expect(geometrySchedulerHealthy({
+      now: staleAt + 100,
+      foreground: true,
+      activeGame: true,
+      lastAcceptedGeometryAt: health.lastAcceptedGeometryAt,
+    })).toBe(true);
   });
 });
 
@@ -194,21 +307,37 @@ describe("geometry confidence hysteresis", () => {
     expect(secondObservation.capturedAt - 1000).toBe(300);
   });
 
-  // FIX 1 — a single 0/3 probe (a transient detector false-negative) after a
-  // stable 3/3 must NOT clear instantly; it enters bounded negative continuity
-  // and preserves the prior visible state. Only a REPEATED 0/3 (past the bound)
-  // is confirmed absence. Explicit occlusion still clears immediately.
-  it("preserves one zero-structure probe, then clears on the second (bounded absence)", () => {
+  it("clears immediately on a valid zero-structure observation", () => {
     const entered = advanceGeometrySurface(createGeometrySurfaceState(), obs());
-    const firstAbsent = advanceGeometrySurface(entered.state, zeroStrong());
-    expect(firstAbsent.classification).toBe("absent");
-    expect(firstAbsent.action).toBe("preserve");
-    expect(firstAbsent.state.visualObservation).toBe(entered.state.visualObservation);
+    const absent = advanceGeometrySurface(entered.state, zeroStrong());
+    expect(absent.classification).toBe("absent");
+    expect(absent.action).toBe("clear");
+    expect(absent.hideReason).toBe("confirmed-absent");
+    expect(absent.state.visualObservation).toBeNull();
+  });
 
-    const secondAbsent = advanceGeometrySurface(firstAbsent.state, zeroStrong());
-    expect(secondAbsent.action).toBe("clear");
-    expect(secondAbsent.hideReason).toBe("confirmed-absent");
-    expect(secondAbsent.state.visualObservation).toBeNull();
+  it("does not convert repeated capture timeouts into confirmed absence", () => {
+    const entered = advanceGeometrySurface(createGeometrySurfaceState(), obs());
+    const timedOut = emptyGeometryObservation(2, 1_150, "capture-timeout");
+    const first = advanceGeometrySurface(entered.state, timedOut);
+    const second = advanceGeometrySurface(first.state, {
+      ...timedOut,
+      probeSeq: 3,
+      capturedAt: 1_300,
+    });
+    expect(first.action).toBe("preserve");
+    expect(second.action).toBe("preserve");
+    expect(second.state.visualObservation).toBe(entered.state.visualObservation);
+    expect(second.state.consecutiveWeakNegatives).toBe(0);
+  });
+
+  it("treats a fresh valid zero-card frame as authoritative offer close", () => {
+    const entered = advanceGeometrySurface(createGeometrySurfaceState(), obs());
+    const closed = advanceGeometrySurface(entered.state, zeroStrong());
+    expect(closed.classification).toBe("absent");
+    expect(closed.action).toBe("clear");
+    expect(closed.hideReason).toBe("confirmed-absent");
+    expect(closed.state.visualObservation).toBeNull();
   });
 
   it("clears immediately on explicit occlusion regardless of continuity", () => {
@@ -220,9 +349,7 @@ describe("geometry confidence hysteresis", () => {
 
   it("does not let delayed OCR restore a frame after confirmed geometry absence", () => {
     const entered = advanceGeometrySurface(createGeometrySurfaceState(), obs());
-    // Two consecutive zero-structure probes are required for confirmed absence.
-    const preserved = advanceGeometrySurface(entered.state, zeroStrong());
-    const cleared = advanceGeometrySurface(preserved.state, zeroStrong());
+    const cleared = advanceGeometrySurface(entered.state, zeroStrong());
     expect(cleared.state.visualObservation).toBeNull();
     const lateIdentity = identityForSlot(
       { fingerprint: FP_A, resolution: "late", resolvedAt: 2000 },
@@ -287,6 +414,45 @@ describe("buildGeometryVisibleFrame — presence, occlusion, SCANNING", () => {
     expect(frame.slots).toHaveLength(3);
     expect(frame.slots.every((s) => s.resolution === null)).toBe(true);
     expect(frame.slots.every((s) => s.cardRect !== null)).toBe(true);
+  });
+
+  it("hides SCANNING placeholders when accepted geometry exceeds the freshness bound", () => {
+    const frame = buildGeometryVisibleFrame({
+      revision: 1,
+      captureSeq: 1,
+      observation: obs(),
+      generation: 1,
+      resolveIdentity: () => null,
+    });
+    const healthy = geometrySchedulerHealthy({
+      now: 1_000 + GEOMETRY_SCHEDULER_HEALTH_DEADLINE_MS + 1,
+      foreground: true,
+      activeGame: true,
+      inFlightSince: 1_000 + GEOMETRY_SCHEDULER_HEALTH_DEADLINE_MS,
+      lastProbeStartedAt: 1_000 + GEOMETRY_SCHEDULER_HEALTH_DEADLINE_MS,
+      lastProbeCompletedAt: 1_000,
+      lastAcceptedGeometryAt: 1_000,
+    });
+    expect(frame.slots.every((slot) => slot.resolution === null)).toBe(true);
+    expect(visibleFrameRenderable(frame, true) && healthy).toBe(false);
+  });
+
+  it("hides resolved badges when accepted geometry exceeds the freshness bound", () => {
+    const frame = buildGeometryVisibleFrame({
+      revision: 1,
+      captureSeq: 1,
+      observation: obs(),
+      generation: 1,
+      resolveIdentity: resolveAll,
+    });
+    const healthy = geometrySchedulerHealthy({
+      now: 1_000 + GEOMETRY_SCHEDULER_HEALTH_DEADLINE_MS + 1,
+      foreground: true,
+      activeGame: true,
+      lastAcceptedGeometryAt: 1_000,
+    });
+    expect(frame.slots.every((slot) => slot.resolution !== null)).toBe(true);
+    expect(visibleFrameRenderable(frame, true) && healthy).toBe(false);
   });
 
   it("keeps 100 identical geometry publications stable regardless of OCR outcome", () => {

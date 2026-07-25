@@ -34,7 +34,7 @@ export const GEOMETRY_INTERVAL_MS = 150;
  */
 export const GEOMETRY_FULL_PROBE_P99_BUDGET_MS = 1000;
 export const GEOMETRY_HEALTH_SAFETY_MARGIN_MS = 250;
-/** Scheduler health, never frame age, owns fail-closed expiry. */
+/** Maximum wall-clock age of the last accepted geometry publication. */
 export const GEOMETRY_SCHEDULER_HEALTH_DEADLINE_MS = Math.max(
   3 * GEOMETRY_INTERVAL_MS,
   GEOMETRY_FULL_PROBE_P99_BUDGET_MS + GEOMETRY_HEALTH_SAFETY_MARGIN_MS,
@@ -240,6 +240,8 @@ export function advanceGeometrySurface(
   observation: GeometryObservation,
 ): GeometrySurfaceTransition {
   const classification = classifyGeometryObservation(observation);
+  const captureValid =
+    observation.captureWidth > 0 && observation.captureHeight > 0;
   if (observation.occluded) {
     return {
       classification,
@@ -268,13 +270,47 @@ export function advanceGeometrySurface(
       },
     };
   }
-  // FIX 1 — a NEGATIVE observation (0 cards = "absent", or 1 card = "uncertain")
-  // that follows a stable positive is treated as bounded continuity, NOT an
-  // instant clear: a single detector false-negative preserves the prior visible
-  // state so resolved chips never flash empty (and are never converted to OCR
-  // ERROR) on a transient 0/3. Only a REPEATED negative past the bound — or an
-  // explicit occlusion (handled above) — clears. A negative with no prior
-  // positive (gameplay with no offer) still clears immediately.
+  // A missing/failed/timed-out capture is uncertainty, never visual proof that
+  // the offer closed. Preserve the last authoritative pixels without consuming
+  // the bounded weak-negative budget; the independent accepted-geometry clock
+  // hides presentation if no authoritative result arrives before the deadline.
+  if (!captureValid) {
+    if (previous.visualObservation != null) {
+      return {
+        classification,
+        action: "preserve",
+        hideReason: null,
+        state: previous,
+      };
+    }
+    return {
+      classification,
+      action: "clear",
+      hideReason: "uncertain-without-positive",
+      state: previous,
+    };
+  }
+  // A completed, valid 0-card capture is authoritative no-offer evidence. It
+  // clears immediately so badges/placeholders cannot float over terrain after
+  // selection. The bounded continuity below is reserved for a structurally
+  // borderline 1-card frame (hover/animation), not a genuine zero-card frame.
+  if (classification === "absent") {
+    return {
+      classification,
+      action: "clear",
+      hideReason: "confirmed-absent",
+      state: {
+        visualObservation: null,
+        lastPositiveObservation: null,
+        consecutiveWeakNegatives: 0,
+      },
+    };
+  }
+  // A structurally borderline one-card observation that follows a stable
+  // positive gets bounded continuity. This is the hover/animation tolerance:
+  // one uncertain frame preserves the prior surface, while a repeated
+  // borderline frame clears. Valid zero-card observations were handled above
+  // as authoritative absence.
   const weakCount = previous.consecutiveWeakNegatives + 1;
   if (previous.visualObservation != null && weakCount < GEOMETRY_NEGATIVE_CONTINUITY_FRAMES) {
     return {
@@ -291,11 +327,9 @@ export function advanceGeometrySurface(
   return {
     classification,
     action: "clear",
-    hideReason: classification === "absent"
-      ? "confirmed-absent"
-      : previous.visualObservation == null
-        ? "uncertain-without-positive"
-        : "confirmed-weak-negative",
+    hideReason: previous.visualObservation == null
+      ? "uncertain-without-positive"
+      : "confirmed-weak-negative",
     state: {
       visualObservation: null,
       lastPositiveObservation: null,
@@ -313,9 +347,9 @@ export function advanceGeometrySurface(
  * single masked false-negative is not proof a round closed (it also occurs on a
  * dropped frame mid-offer), so treating it as a boundary would misclassify a
  * one-slot reroll that coincides with a dropped frame as a whole new offer. A
- * genuine close is the bounded session-ending signal (2 consecutive negatives →
- * clear → lastPositiveObservation nulled → this returns true on the next
- * present frame regardless of card overlap). Repeated augments across rounds
+ * genuine close is a fresh valid zero-card observation (clear →
+ * lastPositiveObservation nulled → this returns true on the next present frame
+ * regardless of card overlap). Repeated augments across rounds
  * legitimately keep their champion-specific badge, so retaining them is correct,
  * not stale.
  */
@@ -334,31 +368,134 @@ export function newOfferDetected(
   return changed >= 2;
 }
 
+export interface GeometryHealthClocks {
+  /** Generation and start time of the current logical attempt. */
+  currentAttemptGeneration: number | null;
+  currentAttemptStartedAt: number | null;
+  /** Start of one uninterrupted unhealthy period; replacements never reset it. */
+  continuousUnhealthyStartedAt: number | null;
+  /** Any native completion, including stale/invalid results. */
+  lastNativeCompletionAt: number | null;
+  /** Last fresh, owner-current, authoritative geometry result. */
+  lastAcceptedGeometryAt: number | null;
+  /** Last accepted result that published or cleared render authority. */
+  lastRenderAuthoritativeGeometryAt: number | null;
+}
+
+export function createGeometryHealthClocks(): GeometryHealthClocks {
+  return {
+    currentAttemptGeneration: null,
+    currentAttemptStartedAt: null,
+    continuousUnhealthyStartedAt: null,
+    lastNativeCompletionAt: null,
+    lastAcceptedGeometryAt: null,
+    lastRenderAuthoritativeGeometryAt: null,
+  };
+}
+
+export function startGeometryAttempt(
+  previous: GeometryHealthClocks,
+  attemptGeneration: number,
+  startedAt: number,
+): GeometryHealthClocks {
+  return {
+    ...previous,
+    currentAttemptGeneration: attemptGeneration,
+    currentAttemptStartedAt: startedAt,
+  };
+}
+
+export function restartGeometryAttempt(
+  previous: GeometryHealthClocks,
+  attemptGeneration: number,
+  restartedAt: number,
+): GeometryHealthClocks {
+  if (previous.currentAttemptGeneration !== attemptGeneration) return previous;
+  return {
+    ...previous,
+    currentAttemptGeneration: null,
+    currentAttemptStartedAt: null,
+    continuousUnhealthyStartedAt:
+      previous.continuousUnhealthyStartedAt ??
+      previous.currentAttemptStartedAt ??
+      restartedAt,
+  };
+}
+
+export function completeGeometryAttempt(
+  previous: GeometryHealthClocks,
+  input: {
+    attemptGeneration: number;
+    completedAt: number;
+    accepted: boolean;
+    renderAuthoritative: boolean;
+  },
+): GeometryHealthClocks {
+  const ownsCurrent =
+    previous.currentAttemptGeneration === input.attemptGeneration;
+  const accepted = ownsCurrent && input.accepted;
+  return {
+    ...previous,
+    currentAttemptGeneration: ownsCurrent
+      ? null
+      : previous.currentAttemptGeneration,
+    currentAttemptStartedAt: ownsCurrent
+      ? null
+      : previous.currentAttemptStartedAt,
+    lastNativeCompletionAt: Math.max(
+      previous.lastNativeCompletionAt ?? Number.NEGATIVE_INFINITY,
+      input.completedAt,
+    ),
+    lastAcceptedGeometryAt: accepted
+      ? input.completedAt
+      : previous.lastAcceptedGeometryAt,
+    lastRenderAuthoritativeGeometryAt:
+      accepted && input.renderAuthoritative
+        ? input.completedAt
+        : previous.lastRenderAuthoritativeGeometryAt,
+    continuousUnhealthyStartedAt: accepted
+      ? null
+      : previous.continuousUnhealthyStartedAt,
+  };
+}
+
+export function markGeometryUnhealthyIfExpired(
+  previous: GeometryHealthClocks,
+  now: number,
+  healthDeadlineMs = GEOMETRY_SCHEDULER_HEALTH_DEADLINE_MS,
+): GeometryHealthClocks {
+  const acceptedAt = previous.lastAcceptedGeometryAt;
+  if (acceptedAt != null && now - acceptedAt <= healthDeadlineMs) return previous;
+  if (previous.continuousUnhealthyStartedAt != null) return previous;
+  return {
+    ...previous,
+    continuousUnhealthyStartedAt:
+      acceptedAt != null
+        ? acceptedAt + healthDeadlineMs
+        : previous.currentAttemptStartedAt ?? now,
+  };
+}
+
 /**
- * Scheduler-health render gate. A valid frame remains visible while a newer
- * probe is legitimately in flight; its old capture timestamp cannot expire the
- * frame. Foreground/game loss is immediate, and a silent or over-budget
- * scheduler fails closed at the derived health deadline.
+ * Render health is certified only by the wall-clock freshness of the last
+ * accepted authoritative geometry result. Starting or watchdog-restarting a
+ * replacement attempt never extends stale presentation.
  */
 export function geometrySchedulerHealthy(input: {
   now: number;
   foreground: boolean;
   activeGame: boolean;
-  inFlightSince: number | null;
-  lastProbeStartedAt: number | null;
-  lastProbeCompletedAt: number | null;
+  lastAcceptedGeometryAt: number | null;
+  /** Diagnostic-only legacy fields; intentionally ignored for render health. */
+  inFlightSince?: number | null;
+  lastProbeStartedAt?: number | null;
+  lastProbeCompletedAt?: number | null;
   healthDeadlineMs?: number;
 }): boolean {
   if (!input.foreground || !input.activeGame) return false;
   const deadline = input.healthDeadlineMs ?? GEOMETRY_SCHEDULER_HEALTH_DEADLINE_MS;
-  if (input.inFlightSince != null) {
-    return input.now - input.inFlightSince <= deadline;
-  }
-  const lastActivity = Math.max(
-    input.lastProbeStartedAt ?? Number.NEGATIVE_INFINITY,
-    input.lastProbeCompletedAt ?? Number.NEGATIVE_INFINITY,
-  );
-  return Number.isFinite(lastActivity) && input.now - lastActivity <= deadline;
+  return input.lastAcceptedGeometryAt != null &&
+    input.now - input.lastAcceptedGeometryAt <= deadline;
 }
 
 /** A per-slot identity resolved by the OCR track, keyed to a geometry fingerprint. */

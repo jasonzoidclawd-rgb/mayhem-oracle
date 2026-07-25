@@ -115,14 +115,20 @@ import {
   advanceGeometrySurface,
   buildGeometryVisibleFrame,
   classifyGeometryObservation,
+  completeGeometryAttempt,
+  createGeometryHealthClocks,
   createGeometrySurfaceState,
   emptyGeometryObservation,
   fingerprintChanged,
   geometrySchedulerHealthy,
   hammingDistance,
   identityForSlot,
+  markGeometryUnhealthyIfExpired,
   newOfferDetected,
+  restartGeometryAttempt,
+  startGeometryAttempt,
   type GeometryClassification,
+  type GeometryHealthClocks,
   type GeometryHideReason,
   type GeometryObservation,
   type GeometrySurfaceState,
@@ -479,6 +485,10 @@ function App() {
   const geometryInFlightRef = useRef(false);
   const geometryInFlightSinceRef = useRef<number | null>(null);
   const geometryInFlightTokenRef = useRef<number | null>(null);
+  // Throttle (1 s) for the [geometry-timing] trace signal: splits a probe's cost
+  // into enumeration (preCaptureMs) vs capture_image (captureMs) vs round-trip so
+  // a cross-game slowdown is attributable without flooding the log.
+  const lastGeometryTimingEpochRef = useRef(0);
   const geometrySeqRef = useRef(0);
   const lastGeometryStartedAtRef = useRef<number | null>(null);
   const geometryRestartCountRef = useRef(0);
@@ -486,7 +496,13 @@ function App() {
   const geometrySurfaceStateRef = useRef<GeometrySurfaceState>(
     createGeometrySurfaceState(),
   );
-  const lastGeometryCompletedAtRef = useRef<number | null>(null);
+  // Render health is certified only by accepted authoritative geometry. These
+  // five clocks deliberately separate attempt churn, native liveness, accepted
+  // ownership, and render authority so watchdog replacement cannot make stale
+  // badges healthy merely by starting another promise.
+  const geometryHealthRef = useRef<GeometryHealthClocks>(
+    createGeometryHealthClocks(),
+  );
   const geometryDiagnosticsRef = useRef<GeometryProbeDiagnostic[]>([]);
   const lastRawGeometryClassificationRef = useRef<GeometryClassification | null>(null);
   const lastGeometryRenderableRef = useRef(false);
@@ -1207,9 +1223,8 @@ function App() {
     effectiveMemberEnabled &&
     visibleFrameRenderable(visibleFrame, gameWindowForeground) &&
     offerSurface.render &&
-    // Scheduler health, not the age of the last positive pixels, owns expiry.
-    // A valid frame therefore survives while the next normal probe is in flight,
-    // but still fails closed on a stalled scheduler, focus loss, or game exit.
+    // Only a recent accepted authoritative geometry result certifies rendering.
+    // Attempt starts/watchdog replacements never refresh this gate.
     geometrySchedulerIsHealthy;
   const previewBadgesReady =
     isPreviewMode && fixturePayload != null && previewCards.length === 3;
@@ -1370,7 +1385,7 @@ function App() {
       acceptedSlotFingerprintsRef.current = ["", "", ""];
       geometryObservationRef.current = null;
       geometrySurfaceStateRef.current = createGeometrySurfaceState();
-      lastGeometryCompletedAtRef.current = null;
+      geometryHealthRef.current = createGeometryHealthClocks();
       ocrPendingSlotsRef.current = [];
     }
     lastGeometryRenderableRef.current = false;
@@ -1554,11 +1569,16 @@ function App() {
     geometryInFlightRef.current = true;
     const startedAt = performance.now();
     const previousStartedAt = lastGeometryStartedAtRef.current;
-    const previousCompletedAt = lastGeometryCompletedAtRef.current;
+    const previousCompletedAt = geometryHealthRef.current.lastNativeCompletionAt;
     geometryInFlightSinceRef.current = startedAt;
     lastGeometryStartedAtRef.current = startedAt;
     const captureSeq = (geometrySeqRef.current += 1);
     geometryInFlightTokenRef.current = captureSeq;
+    geometryHealthRef.current = startGeometryAttempt(
+      geometryHealthRef.current,
+      captureSeq,
+      startedAt,
+    );
     const foregroundEpoch = foregroundEpochRef.current;
     const capturedAt = performance.now();
     try {
@@ -1575,13 +1595,93 @@ function App() {
       const completedAt = performance.now();
       // Stale-result rejection: apply only while this probe's seq is still newest
       // AND the foreground epoch it captured under is unchanged.
-      if (captureSeq !== geometrySeqRef.current) return;
-      if (foregroundEpoch !== foregroundEpochRef.current) return;
-      lastGeometryCompletedAtRef.current = completedAt;
-      setGeometrySchedulerIsHealthy(true);
-
+      const stale =
+        captureSeq !== geometrySeqRef.current ||
+        foregroundEpoch !== foregroundEpochRef.current;
+      const captureValid =
+        observation.captureWidth > 0 && observation.captureHeight > 0;
+      const classification = classifyGeometryObservation(observation);
       const previousSurface = geometrySurfaceStateRef.current;
-      const transition = advanceGeometrySurface(previousSurface, observation);
+      const transition = stale
+        ? null
+        : advanceGeometrySurface(previousSurface, observation);
+      const renderAuthoritative =
+        captureValid &&
+        transition != null &&
+        transition.action !== "preserve" &&
+        transition.hideReason !== "uncertain-without-positive";
+      const healthBeforeCompletion = geometryHealthRef.current;
+      geometryHealthRef.current = completeGeometryAttempt(
+        healthBeforeCompletion,
+        {
+          attemptGeneration: captureSeq,
+          completedAt,
+          accepted: renderAuthoritative,
+          renderAuthoritative,
+        },
+      );
+      const healthAfterCompletion = geometryHealthRef.current;
+      const continuousUnhealthyAgeMs =
+        healthAfterCompletion.continuousUnhealthyStartedAt == null
+          ? null
+          : completedAt - healthAfterCompletion.continuousUnhealthyStartedAt;
+      const acceptedGeometryAgeMs =
+        healthAfterCompletion.lastAcceptedGeometryAt == null
+          ? null
+          : completedAt - healthAfterCompletion.lastAcceptedGeometryAt;
+
+      // [geometry-timing] — throttled to 1/s, logged BEFORE the stale return. A
+      // wedge supersedes EVERY probe (the 2 s watchdog restarts the seq first), so
+      // logging after the return is silent in exactly the failure this diagnoses.
+      // `nativeElapsedMs` (Rust probe total) vs `roundTripMs` (JS invoke
+      // round-trip) is the decisive split: a large gap means the native work
+      // finished fast and the delay is IPC/main-thread (sync commands run on the
+      // main thread); a small gap means the capture path itself is slow.
+      // Bounded numerics only; no names/text.
+      const timingEpoch = Math.floor(completedAt / 1000);
+      if (!captureValid || timingEpoch !== lastGeometryTimingEpochRef.current) {
+        lastGeometryTimingEpochRef.current = timingEpoch;
+        logOverlayDiagnostic("[geometry-timing]", {
+          probeSeq: captureSeq,
+          stale,
+          preCaptureMs: observation.preCaptureMs,
+          captureMs: observation.captureMs,
+          analysisMs: observation.analysisMs,
+          nativeElapsedMs: observation.elapsedMs,
+          roundTripMs: Math.round(completedAt - startedAt),
+          timeoutClassification:
+            captureValid
+              ? "none"
+              : observation.rejectionReasons[0] ?? "capture-invalid",
+          attemptGeneration: captureSeq,
+          continuousUnhealthyAgeMs,
+          acceptedGeometryAgeMs,
+        });
+      }
+
+      if (stale) return;
+      const healthy = geometrySchedulerHealthy({
+        now: completedAt,
+        foreground: foregroundStateRef.current.gameWindowForeground,
+        activeGame: activeGameRef.current,
+        lastAcceptedGeometryAt: healthAfterCompletion.lastAcceptedGeometryAt,
+      });
+      setGeometrySchedulerIsHealthy(healthy);
+      if (
+        renderAuthoritative &&
+        healthBeforeCompletion.continuousUnhealthyStartedAt != null
+      ) {
+        logOverlayDiagnostic("[geometry-recovery]", {
+          attemptGeneration: captureSeq,
+          continuousUnhealthyAgeMs:
+            completedAt - healthBeforeCompletion.continuousUnhealthyStartedAt,
+          acceptedGeometryAgeMs: 0,
+          renderAuthoritativeGeometryAgeMs: 0,
+          classification,
+        });
+      }
+
+      if (transition == null) return;
       geometrySurfaceStateRef.current = transition.state;
       geometryObservationRef.current = transition.action === "preserve"
         ? previousSurface.visualObservation
@@ -1592,8 +1692,9 @@ function App() {
       // A NEW offer (absent→present or ≥2 slots swapped) bumps the render
       // generation; a queued-round REPLACEMENT (previous offer was present) is
       // strong round-completion evidence. A first appearance is NOT a completion.
-      // A genuine close (2 negatives → clear → lastPositiveObservation nulled) is
-      // the session boundary; a single preserved-negative frame is NOT, so a
+      // A genuine close (a fresh valid zero-card frame → clear →
+      // lastPositiveObservation nulled) is the session boundary; a single
+      // capture failure or preserved borderline frame is NOT, so a
       // one-slot reroll that coincides with a dropped frame stays the same
       // session and only that slot re-arms.
       const publishedObservation = transition.state.visualObservation;
@@ -1656,7 +1757,7 @@ function App() {
       const effectiveObservation = publishedObservation ?? observation;
       const nextOfferSurface = advanceOfferSurface(priorOfferSurface, {
         now: completedAt,
-        captureValid: observation.captureWidth > 0 && observation.captureHeight > 0,
+        captureValid,
         blueControlPresent: effectiveObservation.blueControl?.present === true,
         blueControlConfidence: effectiveObservation.blueControl?.confidence ?? 0,
         validCardCount: effectiveObservation.cards.filter((card) => card.present).length,
@@ -1900,7 +2001,6 @@ function App() {
       }
 
       if (import.meta.env.DEV) {
-        const classification = classifyGeometryObservation(observation);
         const totalProbeMs = publishedAt - startedAt;
         const diagnostic: GeometryProbeDiagnostic = {
           probeSeq: captureSeq,
@@ -2056,7 +2156,25 @@ function App() {
     const scanStartMs = performance.now();
     try {
       const execution = await executeOcrRun(
-        () => invoke<OcrScanResult>("detect_augment_names", { knownNames: ocrKnownNames }),
+        () => {
+          // Chained on the invoke itself so it still fires when the outer race
+          // has already timed out and abandoned this promise — that is exactly
+          // the case we need to see (how long the native OCR really ran).
+          const nativeStartedAt = performance.now();
+          return invoke<OcrScanResult>("detect_augment_names", {
+            knownNames: ocrKnownNames,
+          }).then((scan) => {
+            logOverlayDiagnostic("[identity-native-return]", {
+              runId: owner.runId,
+              nativeMs: Math.round(performance.now() - nativeStartedAt),
+              cropCount: scan.cropCount,
+              captureMs: scan.captureMs,
+              ocrMs: scan.ocrMs,
+              nativeTotalMs: scan.totalMs,
+            });
+            return scan;
+          });
+        },
         (scan) => scan,
       );
       if (execution.kind === "failure") throw new Error(execution.reason);
@@ -2497,19 +2615,36 @@ function App() {
     );
     if (action.kind === "skip") return;
     if (action.kind === "restart") {
-      if (import.meta.env.DEV) {
-        console.info("[geometry-watchdog]", JSON.stringify({
-          probeSeq: geometrySeqRef.current,
-          scheduledAt,
-          inFlightSince: geometryInFlightSinceRef.current,
-          inFlightMs:
-            geometryInFlightSinceRef.current == null
-              ? null
-              : scheduledAt - geometryInFlightSinceRef.current,
-          schedulerRestartCount: geometryRestartCountRef.current + 1,
-          hiddenReason: "probe-timeout",
-        }));
-      }
+      const attemptGeneration =
+        geometryHealthRef.current.currentAttemptGeneration ??
+        geometrySeqRef.current;
+      geometryHealthRef.current = restartGeometryAttempt(
+        geometryHealthRef.current,
+        attemptGeneration,
+        scheduledAt,
+      );
+      const continuousUnhealthyAgeMs =
+        geometryHealthRef.current.continuousUnhealthyStartedAt == null
+          ? null
+          : scheduledAt - geometryHealthRef.current.continuousUnhealthyStartedAt;
+      const acceptedGeometryAgeMs =
+        geometryHealthRef.current.lastAcceptedGeometryAt == null
+          ? null
+          : scheduledAt - geometryHealthRef.current.lastAcceptedGeometryAt;
+      logOverlayDiagnostic("[geometry-watchdog]", {
+        probeSeq: geometrySeqRef.current,
+        attemptGeneration,
+        scheduledAt,
+        inFlightSince: geometryInFlightSinceRef.current,
+        inFlightMs:
+          geometryInFlightSinceRef.current == null
+            ? null
+            : scheduledAt - geometryInFlightSinceRef.current,
+        schedulerRestartCount: geometryRestartCountRef.current + 1,
+        hiddenReason: "probe-timeout",
+        continuousUnhealthyAgeMs,
+        acceptedGeometryAgeMs,
+      });
       geometrySeqRef.current += 1;
       geometryInFlightRef.current = false;
       geometryInFlightSinceRef.current = null;
@@ -2600,29 +2735,40 @@ function App() {
     return () => clearInterval(intervalId);
   }, []);
 
-  // Scheduler-health clock: frame age is deliberately irrelevant while a newer
-  // probe is legitimately in flight. This clock fails closed only when geometry
-  // activity exceeds the derived health deadline (or foreground/game gates fail).
+  // Independent render-health clock. It runs even when no probe promise
+  // completes and certifies presentation only from the wall-clock age of the
+  // last accepted authoritative geometry. Starting/restarting an attempt never
+  // extends stale badges or SCANNING placeholders.
   useEffect(() => {
     const intervalId = setInterval(() => {
       const now = performance.now();
       const inFlightSince = geometryInFlightSinceRef.current;
+      geometryHealthRef.current = markGeometryUnhealthyIfExpired(
+        geometryHealthRef.current,
+        now,
+      );
+      const health = geometryHealthRef.current;
       const healthy = geometrySchedulerHealthy({
         now,
         foreground: foregroundStateRef.current.gameWindowForeground,
         activeGame: activeGameRef.current,
-        inFlightSince,
-        lastProbeStartedAt: lastGeometryStartedAtRef.current,
-        lastProbeCompletedAt: lastGeometryCompletedAtRef.current,
+        lastAcceptedGeometryAt: health.lastAcceptedGeometryAt,
       });
       setGeometrySchedulerIsHealthy(healthy);
       if (import.meta.env.DEV) {
         const frame = visibleFrameRef.current;
-        const lastActivityAt = inFlightSince ?? Math.max(
-          lastGeometryStartedAtRef.current ?? Number.NEGATIVE_INFINITY,
-          lastGeometryCompletedAtRef.current ?? Number.NEGATIVE_INFINITY,
-        );
-        const ageMs = Number.isFinite(lastActivityAt) ? now - lastActivityAt : null;
+        const acceptedGeometryAgeMs =
+          health.lastAcceptedGeometryAt == null
+            ? null
+            : now - health.lastAcceptedGeometryAt;
+        const renderAuthoritativeGeometryAgeMs =
+          health.lastRenderAuthoritativeGeometryAt == null
+            ? null
+            : now - health.lastRenderAuthoritativeGeometryAt;
+        const continuousUnhealthyAgeMs =
+          health.continuousUnhealthyStartedAt == null
+            ? null
+            : now - health.continuousUnhealthyStartedAt;
         const structurallyVisible =
           frame != null &&
           frame.surfaceValidated &&
@@ -2631,14 +2777,14 @@ function App() {
         const probeSeq = geometrySeqRef.current;
         if (
           structurallyVisible &&
-          ageMs != null &&
-          ageMs >= GEOMETRY_SCHEDULER_HEALTH_DEADLINE_MS * 0.75 &&
+          acceptedGeometryAgeMs != null &&
+          acceptedGeometryAgeMs >= GEOMETRY_SCHEDULER_HEALTH_DEADLINE_MS * 0.75 &&
           geometryFreshnessWarningSeqRef.current !== probeSeq
         ) {
           geometryFreshnessWarningSeqRef.current = probeSeq;
           console.info("[geometry-freshness-75]", JSON.stringify({
             probeSeq,
-            ageMs,
+            acceptedGeometryAgeMs,
             deadlineMs: GEOMETRY_SCHEDULER_HEALTH_DEADLINE_MS,
             inFlight: inFlightSince != null,
           }));
@@ -2652,22 +2798,26 @@ function App() {
           const hiddenReason: GeometryDiagnosticHideReason =
             !foregroundStateRef.current.gameWindowForeground
               ? "foreground-lost"
-              : inFlightSince != null && now - inFlightSince >= PROBE_TIMEOUT_MS
+              : continuousUnhealthyAgeMs != null
                 ? "probe-timeout"
                 : "ttl-expired";
-          console.info("[geometry-hidden]", JSON.stringify({
+          logOverlayDiagnostic("[geometry-hidden]", {
             probeSeq,
+            attemptGeneration: health.currentAttemptGeneration,
             hiddenReason,
-            ageMs,
+            staleHide: structurallyVisible,
+            continuousUnhealthyAgeMs,
+            acceptedGeometryAgeMs,
+            renderAuthoritativeGeometryAgeMs,
             deadlineMs: GEOMETRY_SCHEDULER_HEALTH_DEADLINE_MS,
             inFlightMs: inFlightSince == null ? null : now - inFlightSince,
             schedulerRestartCount: geometryRestartCountRef.current,
-          }));
+          });
         }
         lastGeometryRenderableRef.current = renderable;
         setOcrLifecycle((previous) => ({
           ...previous,
-          frameAgeMs: ageMs,
+          frameAgeMs: acceptedGeometryAgeMs,
           frameHiddenByTtl: structurallyVisible && !healthy,
         }));
       }
