@@ -23,6 +23,17 @@ export function resolveLiveDataPoll(input: {
   captureAllowed: boolean;
   liveDataAvailable: boolean;
   failureStartedAt: number | null;
+  /**
+   * The LCU gameflow FRESHLY confirmed a live match this poll (a non-null
+   * sample reporting an in-progress game), as opposed to `captureAllowed` being
+   * carried forward across a missing LCU read. When the LCU independently
+   * confirms the match is live, a Live Client Data (port 2999) outage — even one
+   * far longer than the grace window, as a death/respawn can cause — is never
+   * proof the match ended, so the game is preserved indefinitely. The bounded
+   * fail-closed below applies only when liveness is UNCONFIRMED (LCU also
+   * unavailable), where retaining state forever would be unsafe.
+   */
+  gameflowConfirmedLive?: boolean;
   graceMs?: number;
 }): LiveDataPollDecision {
   if (!input.captureAllowed) {
@@ -31,6 +42,10 @@ export function resolveLiveDataPoll(input: {
 
   if (input.liveDataAvailable) {
     return { action: "accept", failureStartedAt: null, failureAgeMs: 0 };
+  }
+
+  if (input.gameflowConfirmedLive) {
+    return { action: "preserve", failureStartedAt: null, failureAgeMs: 0 };
   }
 
   const failureStartedAt = input.failureStartedAt ?? input.now;

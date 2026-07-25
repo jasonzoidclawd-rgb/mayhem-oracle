@@ -2871,6 +2871,14 @@ function App() {
         captureAllowed: gameflowCaptureAllowedRef.current,
         liveDataAvailable: data != null,
         failureStartedAt: liveDataFailureStartedAtRef.current,
+        // A non-null gameflow here is a FRESH confirmation of a live match: a
+        // confirmed non-live phase already returned via
+        // shouldClearOcrStateForGameflow above, so reaching this point with a
+        // sample means the LCU reports the game in progress. That authoritatively
+        // survives an arbitrarily long port-2999 outage (e.g. a death/respawn),
+        // which would otherwise fail closed after grace and suspend the geometry
+        // probe — blanking the death-triggered augment badges.
+        gameflowConfirmedLive: gameflow != null,
       });
       liveDataFailureStartedAtRef.current = liveDataDecision.failureStartedAt;
 
