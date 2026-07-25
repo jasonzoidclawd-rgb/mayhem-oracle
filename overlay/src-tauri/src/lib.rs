@@ -2,7 +2,11 @@
 
 use image::GenericImageView;
 use serde::{Deserialize, Serialize};
-use std::sync::Arc;
+use std::sync::{
+    atomic::{AtomicUsize, Ordering},
+    Arc,
+};
+use std::time::Duration;
 
 pub mod calibration;
 mod collector;
@@ -327,6 +331,244 @@ mod live_player_tests {
     }
 }
 
+#[cfg(test)]
+mod bounded_capture_tests {
+    use super::*;
+    use std::sync::atomic::AtomicUsize;
+    use std::thread;
+    use std::time::{Duration, Instant};
+
+    #[tokio::test]
+    async fn bounded_capture_work_executes_off_the_async_runtime_thread() {
+        static TEST_CAPTURE_IN_FLIGHT: AtomicUsize = AtomicUsize::new(0);
+        let caller_thread = thread::current().id();
+
+        let worker_thread = run_bounded_capture_with_gate(
+            &TEST_CAPTURE_IN_FLIGHT,
+            1,
+            Duration::from_millis(250),
+            || Ok::<_, String>(thread::current().id()),
+        )
+        .await
+        .expect("bounded capture worker should complete");
+
+        assert_ne!(
+            worker_thread, caller_thread,
+            "capture and analysis must run on the blocking pool, not the async runtime thread"
+        );
+    }
+
+    #[tokio::test]
+    async fn capture_at_cap_is_refused_until_a_blocking_worker_returns() {
+        // Cap of 1 is the exclusive boundary: while the single permit is held by
+        // a hung worker the next capture is refused fast, and the channel becomes
+        // available again only once that worker truly returns.
+        static TEST_CAPTURE_IN_FLIGHT: AtomicUsize = AtomicUsize::new(0);
+        let (release_sender, release_receiver) = std::sync::mpsc::channel();
+        let started = Instant::now();
+
+        let first = run_bounded_capture_with_gate(
+            &TEST_CAPTURE_IN_FLIGHT,
+            1,
+            Duration::from_millis(25),
+            move || {
+                release_receiver.recv().map_err(|error| error.to_string())?;
+                Ok::<_, String>("released")
+            },
+        )
+        .await;
+
+        assert_eq!(first, Err(BoundedCaptureError::Timeout));
+        assert!(started.elapsed() < Duration::from_millis(500));
+
+        let second = run_bounded_capture_with_gate(
+            &TEST_CAPTURE_IN_FLIGHT,
+            1,
+            Duration::from_millis(25),
+            || Ok::<_, String>("must-not-run"),
+        )
+        .await;
+        assert_eq!(second, Err(BoundedCaptureError::Busy));
+
+        release_sender.send(()).unwrap();
+        tokio::time::timeout(Duration::from_millis(500), async {
+            while TEST_CAPTURE_IN_FLIGHT.load(std::sync::atomic::Ordering::Acquire) != 0 {
+                tokio::task::yield_now().await;
+            }
+        })
+        .await
+        .expect("blocking capture worker should release its permit");
+
+        let third = run_bounded_capture_with_gate(
+            &TEST_CAPTURE_IN_FLIGHT,
+            1,
+            Duration::from_millis(25),
+            || Ok::<_, String>("next-capture"),
+        )
+        .await;
+        assert_eq!(third, Ok("next-capture"));
+    }
+
+    #[tokio::test]
+    async fn stuck_capture_must_not_block_a_same_channel_retry() {
+        // Regression guard: a single hung capture used to hold the ONLY permit,
+        // so every death-round retry returned `capture-busy` -> absent for the
+        // whole hang (badges never rendered at levels 11/15). Under a cap > 1 a
+        // hung worker must not starve retries beneath the cap; the cap must still
+        // bound accumulation; and the channel must recover once workers return.
+        static TEST_CAPTURE_IN_FLIGHT: AtomicUsize = AtomicUsize::new(0);
+        const MAX: usize = 2;
+        let (release_sender, release_receiver) = std::sync::mpsc::channel::<()>();
+
+        // A hung capture times out on the async side but keeps holding one permit.
+        let stuck = run_bounded_capture_with_gate(
+            &TEST_CAPTURE_IN_FLIGHT,
+            MAX,
+            Duration::from_millis(25),
+            move || {
+                release_receiver.recv().map_err(|error| error.to_string())?;
+                Ok::<_, String>("stuck")
+            },
+        )
+        .await;
+        assert_eq!(stuck, Err(BoundedCaptureError::Timeout));
+
+        // A retry beneath the cap still runs -- the fix for the death-round blackout.
+        let retry = run_bounded_capture_with_gate(
+            &TEST_CAPTURE_IN_FLIGHT,
+            MAX,
+            Duration::from_millis(25),
+            || Ok::<_, String>("retry-ran"),
+        )
+        .await;
+        assert_eq!(retry, Ok("retry-ran"));
+
+        // Saturate the last slot with a second hung worker; the cap then refuses
+        // further captures fast instead of letting them pile up unbounded.
+        let (release_sender_2, release_receiver_2) = std::sync::mpsc::channel::<()>();
+        let stuck_2 = run_bounded_capture_with_gate(
+            &TEST_CAPTURE_IN_FLIGHT,
+            MAX,
+            Duration::from_millis(25),
+            move || {
+                release_receiver_2
+                    .recv()
+                    .map_err(|error| error.to_string())?;
+                Ok::<_, String>("stuck-2")
+            },
+        )
+        .await;
+        assert_eq!(stuck_2, Err(BoundedCaptureError::Timeout));
+
+        let refused = run_bounded_capture_with_gate(
+            &TEST_CAPTURE_IN_FLIGHT,
+            MAX,
+            Duration::from_millis(25),
+            || Ok::<_, String>("must-not-run"),
+        )
+        .await;
+        assert_eq!(refused, Err(BoundedCaptureError::Busy));
+
+        // Release both hung workers; their permits free and the channel recovers.
+        release_sender.send(()).unwrap();
+        release_sender_2.send(()).unwrap();
+        tokio::time::timeout(Duration::from_millis(500), async {
+            while TEST_CAPTURE_IN_FLIGHT.load(std::sync::atomic::Ordering::Acquire) != 0 {
+                tokio::task::yield_now().await;
+            }
+        })
+        .await
+        .expect("hung capture workers should release their permits");
+
+        let recovered = run_bounded_capture_with_gate(
+            &TEST_CAPTURE_IN_FLIGHT,
+            MAX,
+            Duration::from_millis(25),
+            || Ok::<_, String>("recovered"),
+        )
+        .await;
+        assert_eq!(recovered, Ok("recovered"));
+    }
+
+    #[tokio::test]
+    async fn timed_out_geometry_capture_does_not_starve_ocr_capture() {
+        let (release_sender, release_receiver) = std::sync::mpsc::channel();
+
+        let geometry = run_bounded_capture(CaptureChannel::Geometry, move || {
+            release_receiver.recv().map_err(|error| error.to_string())?;
+            Ok::<_, String>("geometry-released")
+        })
+        .await;
+        assert_eq!(geometry, Err(BoundedCaptureError::Timeout));
+
+        let ocr =
+            run_bounded_capture(CaptureChannel::Ocr, || Ok::<_, String>("ocr-captured")).await;
+        assert_eq!(ocr, Ok("ocr-captured"));
+
+        release_sender.send(()).unwrap();
+        tokio::time::timeout(Duration::from_millis(500), async {
+            while native_capture_gate(CaptureChannel::Geometry)
+                .load(std::sync::atomic::Ordering::Acquire)
+                != 0
+            {
+                tokio::task::yield_now().await;
+            }
+        })
+        .await
+        .expect("blocking geometry worker should eventually release its own permit");
+    }
+
+    #[tokio::test]
+    async fn timed_out_ocr_capture_does_not_starve_geometry_capture() {
+        let (release_sender, release_receiver) = std::sync::mpsc::channel();
+
+        let ocr = run_bounded_capture(CaptureChannel::Ocr, move || {
+            release_receiver.recv().map_err(|error| error.to_string())?;
+            Ok::<_, String>("ocr-released")
+        })
+        .await;
+        assert_eq!(ocr, Err(BoundedCaptureError::Timeout));
+
+        let geometry = run_bounded_capture(CaptureChannel::Geometry, || {
+            Ok::<_, String>("geometry-captured")
+        })
+        .await;
+        assert_eq!(geometry, Ok("geometry-captured"));
+
+        release_sender.send(()).unwrap();
+        tokio::time::timeout(Duration::from_millis(500), async {
+            while native_capture_gate(CaptureChannel::Ocr)
+                .load(std::sync::atomic::Ordering::Acquire)
+                != 0
+            {
+                tokio::task::yield_now().await;
+            }
+        })
+        .await
+        .expect("blocking OCR worker should eventually release its own permit");
+    }
+
+    #[test]
+    fn geometry_command_bounds_capture_and_analysis_as_one_worker() {
+        let source = include_str!("lib.rs");
+        let command = source
+            .rsplit("async fn probe_augment_surface(")
+            .next()
+            .and_then(|rest| rest.split("// ─── API Probe").next())
+            .expect("geometry command source");
+
+        assert!(
+            command.contains("move || {")
+                && command.contains("capture_and_analyze_surface(probe_seq, captured_at)"),
+            "the bounded geometry worker must own both capture and pixel analysis"
+        );
+        assert!(
+            !command.contains("surface_probe::analyze_surface"),
+            "pixel analysis must not run synchronously on the async command runtime"
+        );
+    }
+}
+
 // ─── OCR Types ──────────────────────────────────────────────────────────────
 
 #[derive(Serialize, Deserialize, Clone, Debug)]
@@ -419,6 +661,119 @@ fn monitor_snapshots() -> Result<Vec<MonitorSnapshot>, String> {
     }
 
     Ok(snapshots)
+}
+
+const NATIVE_CAPTURE_TIMEOUT: Duration = Duration::from_millis(1500);
+/// Max concurrent native captures per channel. A slow/hung capture keeps its
+/// permit until the OS call really returns, so a low cap bounds how many hung
+/// blocking workers can accumulate. It MUST be > 1: at a cap of 1 a single hung
+/// capture starves every death-round retry, so no frame is ever produced and
+/// badges never render at levels 11/15 (they render again once a retry that is
+/// admitted beneath the cap captures a frame).
+const MAX_CONCURRENT_CAPTURES: usize = 4;
+static GEOMETRY_CAPTURE_IN_FLIGHT: AtomicUsize = AtomicUsize::new(0);
+static OCR_CAPTURE_IN_FLIGHT: AtomicUsize = AtomicUsize::new(0);
+
+#[derive(Clone, Copy, Debug)]
+enum CaptureChannel {
+    Geometry,
+    Ocr,
+}
+
+fn native_capture_gate(channel: CaptureChannel) -> &'static AtomicUsize {
+    match channel {
+        CaptureChannel::Geometry => &GEOMETRY_CAPTURE_IN_FLIGHT,
+        CaptureChannel::Ocr => &OCR_CAPTURE_IN_FLIGHT,
+    }
+}
+
+#[derive(Debug, PartialEq)]
+enum BoundedCaptureError {
+    Busy,
+    Timeout,
+    Capture(String),
+    WorkerFailed,
+}
+
+struct CapturePermit {
+    in_flight: &'static AtomicUsize,
+}
+
+impl CapturePermit {
+    /// Admit a capture only while fewer than `max` are already outstanding on
+    /// this channel. Retries beneath the cap run concurrently instead of being
+    /// refused, so a single hung capture cannot black out the whole channel;
+    /// the cap still bounds how many hung workers can pile up.
+    fn try_acquire(in_flight: &'static AtomicUsize, max: usize) -> Option<Self> {
+        let mut current = in_flight.load(Ordering::Acquire);
+        loop {
+            if current >= max {
+                return None;
+            }
+            match in_flight.compare_exchange_weak(
+                current,
+                current + 1,
+                Ordering::AcqRel,
+                Ordering::Acquire,
+            ) {
+                Ok(_) => return Some(Self { in_flight }),
+                Err(actual) => current = actual,
+            }
+        }
+    }
+}
+
+impl Drop for CapturePermit {
+    fn drop(&mut self) {
+        self.in_flight.fetch_sub(1, Ordering::Release);
+    }
+}
+
+async fn run_bounded_capture_with_gate<T, F>(
+    in_flight: &'static AtomicUsize,
+    max_in_flight: usize,
+    timeout: Duration,
+    capture: F,
+) -> Result<T, BoundedCaptureError>
+where
+    T: Send + 'static,
+    F: FnOnce() -> Result<T, String> + Send + 'static,
+{
+    let permit =
+        CapturePermit::try_acquire(in_flight, max_in_flight).ok_or(BoundedCaptureError::Busy)?;
+    let worker = tokio::task::spawn_blocking(move || {
+        // The permit deliberately lives in the blocking worker: timing out the
+        // async wait cannot cancel an OS capture, so the permit is only released
+        // when that worker truly returns. The per-channel CAP (not a single
+        // permit) still admits retries while one worker is hung, so a slow
+        // capture no longer blacks out the channel for the whole hang.
+        let _permit = permit;
+        capture()
+    });
+
+    match tokio::time::timeout(timeout, worker).await {
+        Ok(Ok(Ok(captured))) => Ok(captured),
+        Ok(Ok(Err(error))) => Err(BoundedCaptureError::Capture(error)),
+        Ok(Err(_)) => Err(BoundedCaptureError::WorkerFailed),
+        Err(_) => Err(BoundedCaptureError::Timeout),
+    }
+}
+
+async fn run_bounded_capture<T, F>(
+    channel: CaptureChannel,
+    capture: F,
+) -> Result<T, BoundedCaptureError>
+where
+    T: Send + 'static,
+    F: FnOnce() -> Result<T, String> + Send + 'static,
+{
+    run_bounded_capture_with_gate(
+        native_capture_gate(channel),
+        MAX_CONCURRENT_CAPTURES,
+        NATIVE_CAPTURE_TIMEOUT,
+        capture,
+    )
+    .await
 }
 
 /// True when an enumerated window belongs to the overlay itself. `xcap` gives us
@@ -684,6 +1039,15 @@ fn capture_card_name_crops() -> Result<CardCropSet, String> {
     })
 }
 
+fn bounded_capture_reason(error: &BoundedCaptureError) -> String {
+    match error {
+        BoundedCaptureError::Busy => "capture-busy".to_string(),
+        BoundedCaptureError::Timeout => "capture-timeout".to_string(),
+        BoundedCaptureError::Capture(error) => error.clone(),
+        BoundedCaptureError::WorkerFailed => "capture-worker-failed".to_string(),
+    }
+}
+
 #[tauri::command]
 async fn detect_augment_names(known_names: Option<Vec<String>>) -> Result<OcrScanResult, String> {
     let scan_start = std::time::Instant::now();
@@ -712,9 +1076,10 @@ async fn detect_augment_names(known_names: Option<Vec<String>>) -> Result<OcrSca
     }
 
     let capture_start = std::time::Instant::now();
-    let crop_set = match capture_card_name_crops() {
+    let crop_set = match run_bounded_capture(CaptureChannel::Ocr, capture_card_name_crops).await {
         Ok(crop_set) => crop_set,
         Err(error) => {
+            let reason = bounded_capture_reason(&error);
             return Ok(OcrScanResult {
                 detected: Vec::new(),
                 diagnostics: (0..calibration::CARD_NAME_REGIONS.len())
@@ -724,12 +1089,15 @@ async fn detect_augment_names(known_names: Option<Vec<String>>) -> Result<OcrSca
                         crop: None,
                         capture_succeeded: false,
                         raw_text: None,
-                        error: Some(error.clone()),
+                        error: Some(reason.clone()),
                         capture_width: None,
                         capture_height: None,
                     })
                     .collect(),
-                capture_attempted: false,
+                capture_attempted: matches!(
+                    error,
+                    BoundedCaptureError::Timeout | BoundedCaptureError::WorkerFailed
+                ),
                 crop_count: 0,
                 capture_ms: capture_start.elapsed().as_millis() as u64,
                 ocr_ms: 0,
@@ -860,80 +1228,78 @@ fn absent_surface_observation(
     }
 }
 
-#[tauri::command]
-async fn probe_augment_surface(
-    probe_seq: u64,
-    captured_at: f64,
-) -> Result<surface_probe::SurfaceObservation, String> {
-    let start = std::time::Instant::now();
-    // Foreground gate: a probe only means anything while the actual game window
-    // is in front. Out of foreground → an explicit absent observation (the
-    // frontend clears output), never a stale positive.
-    if !collect_foreground_state().game_window_foreground {
-        return Ok(absent_surface_observation(
-            probe_seq,
-            captured_at,
-            "actual-game-window-not-foreground",
-            start.elapsed().as_millis() as u64,
-        ));
-    }
+struct SurfaceCapture {
+    screenshot: image::RgbaImage,
+    monitor_info: calibration::MonitorInfo,
+    calibration: calibration::OverlayCalibration,
+    pre_capture_ms: u64,
+    capture_ms: u64,
+}
 
-    let monitors = match monitor_snapshots() {
-        Ok(monitors) => monitors,
-        Err(error) => {
-            return Ok(absent_surface_observation(
-                probe_seq,
-                captured_at,
-                &error,
-                start.elapsed().as_millis() as u64,
-            ));
-        }
-    };
+fn capture_surface_frame() -> Result<SurfaceCapture, String> {
+    let start = std::time::Instant::now();
+    // Foreground gate runs INSIDE the bounded capture (off the async runtime).
+    // Its CGWindowList/window-server walk slows under sustained polling; on the
+    // runtime it starved the executor so the capture timeout could not fire and
+    // probes wedged >2 s (300 watchdogs / no badges in later games). Bounded here,
+    // a slow walk just times out to an absent observation. `pre_capture_ms` below
+    // now folds this walk in, so the trace attributes the cost to enumeration.
+    if !collect_foreground_state().game_window_foreground {
+        return Err("actual-game-window-not-foreground".to_string());
+    }
+    let monitors = monitor_snapshots()?;
     let game_window = find_league_window();
     let monitor_index = selected_monitor_index(&monitors, game_window.as_ref());
     let monitor = &monitors[monitor_index];
     let calibration = calibration::select_viewport(&monitor.info, game_window.as_ref());
     let capture_started = std::time::Instant::now();
     let pre_capture_ms = start.elapsed().as_millis() as u64;
-    let screenshot = match monitor.monitor.capture_image() {
-        Ok(screenshot) => screenshot,
-        Err(error) => {
-            let elapsed_ms = start.elapsed().as_millis() as u64;
-            let mut observation = absent_surface_observation(
-                probe_seq,
-                captured_at,
-                &format!("capture-failed: {}", error),
-                elapsed_ms,
-            );
-            observation.pre_capture_ms = pre_capture_ms;
-            observation.capture_ms = capture_started.elapsed().as_millis() as u64;
-            return Ok(observation);
-        }
-    };
-    let capture_ms = capture_started.elapsed().as_millis() as u64;
+    let screenshot = monitor
+        .monitor
+        .capture_image()
+        .map_err(|error| format!("capture-failed: {}", error))?;
+
+    Ok(SurfaceCapture {
+        screenshot,
+        monitor_info: monitor.info.clone(),
+        calibration,
+        pre_capture_ms,
+        capture_ms: capture_started.elapsed().as_millis() as u64,
+    })
+}
+
+fn capture_and_analyze_surface(
+    probe_seq: u64,
+    captured_at: f64,
+) -> Result<surface_probe::SurfaceObservation, String> {
+    let start = std::time::Instant::now();
+    let captured = capture_surface_frame()?;
+    let pre_capture_ms = captured.pre_capture_ms;
+    let capture_ms = captured.capture_ms;
+    let screenshot = captured.screenshot;
     let capture_width = screenshot.width();
     let capture_height = screenshot.height();
     // Map the calibrated LOGICAL viewport into capture-pixel space for CV, and
     // keep the LOGICAL name-band rects for chip rendering (same space the OCR
     // path publishes, so rendering geometry is unchanged).
     let viewport_px = calibration::capture_rect_for_monitor(
-        &calibration.viewport,
-        &monitor.info,
+        &captured.calibration.viewport,
+        &captured.monitor_info,
         capture_width,
         capture_height,
     );
     let name_band_rects = [
         calibration::physical_rect_for_region(
             &calibration::CARD_NAME_REGIONS[0],
-            &calibration.viewport,
+            &captured.calibration.viewport,
         ),
         calibration::physical_rect_for_region(
             &calibration::CARD_NAME_REGIONS[1],
-            &calibration.viewport,
+            &captured.calibration.viewport,
         ),
         calibration::physical_rect_for_region(
             &calibration::CARD_NAME_REGIONS[2],
-            &calibration.viewport,
+            &captured.calibration.viewport,
         ),
     ];
     let dynamic = image::DynamicImage::ImageRgba8(screenshot);
@@ -949,8 +1315,35 @@ async fn probe_augment_surface(
     observation.pre_capture_ms = pre_capture_ms;
     observation.capture_ms = capture_ms;
     observation.analysis_ms = analysis_started.elapsed().as_millis() as u64;
-    // Measure end-to-end native latency (capture + analysis) for instrumentation.
     observation.elapsed_ms = start.elapsed().as_millis() as u64;
+    Ok(observation)
+}
+
+#[tauri::command]
+async fn probe_augment_surface(
+    probe_seq: u64,
+    captured_at: f64,
+) -> Result<surface_probe::SurfaceObservation, String> {
+    let start = std::time::Instant::now();
+    // The foreground gate runs INSIDE the bounded capture (capture_surface_frame)
+    // so its blocking window-server enumeration cannot starve the async runtime;
+    // a not-foreground result surfaces as the same absent observation via the
+    // error path (reason "actual-game-window-not-foreground").
+    let observation = match run_bounded_capture(CaptureChannel::Geometry, move || {
+        capture_and_analyze_surface(probe_seq, captured_at)
+    })
+    .await
+    {
+        Ok(observation) => observation,
+        Err(error) => {
+            return Ok(absent_surface_observation(
+                probe_seq,
+                captured_at,
+                &bounded_capture_reason(&error),
+                start.elapsed().as_millis() as u64,
+            ));
+        }
+    };
     Ok(observation)
 }
 
