@@ -1344,6 +1344,17 @@ async fn probe_augment_surface(
             ));
         }
     };
+    // `elapsed_ms` MUST measure command entry → return on the success path too,
+    // not just the error path. `capture_and_analyze_surface` starts its own
+    // timer INSIDE the spawn_blocking closure, so the interval between the
+    // command being invoked and the closure actually being scheduled was
+    // invisible to it. That blind spot is why a trace whose round trips reached
+    // 89 s reported a flat, healthy `nativeElapsedMs` of ~600 ms and three
+    // separate investigations concluded the native side was fine. With this,
+    // `elapsed_ms − (pre_capture + capture + analysis)` is the in-Rust dispatch
+    // wait and `roundTripMs − elapsed_ms` is the transport wait.
+    let mut observation = observation;
+    observation.elapsed_ms = start.elapsed().as_millis() as u64;
     Ok(observation)
 }
 
