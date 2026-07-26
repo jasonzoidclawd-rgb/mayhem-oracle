@@ -388,3 +388,37 @@ marker so archived logs replay. Replaying the supplied trace now reports
 Still unverified in a live game: the geometry backlog cap
 (`MAX_OUTSTANDING_NATIVE_PROBES`) and the new diagnostics. A manual four-phase
 test is required.
+
+## Round 5 measurements — the freshness deadline is below the real frame budget
+
+Baseline from `/tmp/mayhem-four-phase-round5-20260726-025137.log` (cap at 2):
+
+| metric | p50 | p90 | p99 | max | n |
+|---|---|---|---|---|---|
+| nativeElapsedMs (all) | 620 | 706 | 1065 | 1920 | 447 |
+| roundTripMs (all) | 648 | 936 | 108126 | 370533 | 447 |
+| nativeElapsedMs (fresh) | 618 | 697 | 940 | 1322 | 421 |
+| roundTripMs (fresh) | 641 | 788 | **1731** | 1911 | 421 |
+
+Accepted-geometry cadence = the fresh round-trip figures. Max
+`nativeOutstanding` 2 (cap held). Watchdog: 15 abandon / 12 restart. The
+`roundTripMs` p99/max in the "all" row come entirely from the shutdown tail —
+the last 36 lines of a 23,460-line log.
+
+`GEOMETRY_SCHEDULER_HEALTH_DEADLINE_MS` is 1250 ms
+(`max(3 * 150, GEOMETRY_FULL_PROBE_P99_BUDGET_MS 1000 + margin 250)`). The
+measured fresh round-trip p99 is **1731 ms — 38 % above that deadline**, so
+roughly 1 % of healthy frames are already "expired" when they arrive. Nine of
+the trace's stale-hide events sit in the 1250–1500 ms band: one ordinary frame
+gap plus jitter, not a stall.
+
+The mismatch is a units error, not a tuning error. The deadline is derived from
+the NATIVE probe-duration budget, but it is measured against ACCEPTED FRAME AGE,
+which also carries scheduling and queueing. The native p99 budget of 1000 ms is
+accurate (measured 940 ms fresh); the end-to-end frame budget is ~800 ms larger.
+
+Not changed here. Raising the deadline directly weakens the hide that fixed
+"badges remained after the round is over", so the right correction is to derive
+freshness from an observed rolling frame budget with a floor and a ceiling
+rather than from a native-duration constant — a geometry-threshold change that
+needs review before it lands.
