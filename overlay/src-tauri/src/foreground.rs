@@ -10,6 +10,14 @@ pub struct ForegroundState {
     pub game_window_foreground: bool,
     pub league_client_foreground: bool,
     pub riot_client_foreground: bool,
+    /// DIAGNOSTIC ONLY, and bounded-stale by design: this is served from a 5 s
+    /// presence cache (`PROCESS_PRESENCE_TTL`) because enumerating the process
+    /// table on every poll was the dominant cost of the foreground path.
+    /// `classify_foreground` deliberately does NOT read it when computing
+    /// `game_window_foreground`, and the visual gate is
+    /// `gameWindowForeground || previewMode`, so this value authorizes nothing —
+    /// which is precisely what makes caching it safe. Do not promote it into an
+    /// authority without removing the cache first.
     pub game_running: bool,
     pub game_window_detected: bool,
     pub foreground_app_name: Option<String>,

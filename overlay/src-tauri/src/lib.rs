@@ -1628,6 +1628,13 @@ struct ForegroundAnalysis {
     window_title: Option<String>,
     game_window_detected: bool,
     workspace: FrontmostApplication,
+    /// False when the z-order walk made the NSWorkspace read unnecessary, so a
+    /// default `workspace` is a skipped read rather than an empty result.
+    workspace_consulted: bool,
+    /// Cost of the CGWindowList walk plus per-PID identity resolution. Paired
+    /// with the process-scan cost so a slow poll says WHICH half was slow
+    /// instead of leaving it to be guessed.
+    walk_ms: u64,
     candidates: Vec<foreground::WindowCandidate>,
     verdicts: Vec<&'static str>,
     selected_process_id: Option<u32>,
@@ -1649,7 +1656,7 @@ struct ForegroundAnalysis {
 /// - NSWorkspace.frontmostApplication read off the main thread can freeze
 ///   indefinitely; it is only a fallback when the walk yields NO candidate.
 #[cfg(target_os = "macos")]
-fn analyze_foreground() -> ForegroundAnalysis {
+fn analyze_foreground(consult_workspace: bool) -> ForegroundAnalysis {
     use core_foundation::base::TCFType;
     use core_foundation::dictionary::CFDictionary;
     use core_graphics::window::{
@@ -1657,7 +1664,7 @@ fn analyze_foreground() -> ForegroundAnalysis {
     };
     use std::collections::HashMap;
 
-    let workspace_application = workspace_frontmost_application();
+    let walk_started = std::time::Instant::now();
     let own_process_id = std::process::id();
 
     let mut candidates: Vec<foreground::WindowCandidate> = Vec::new();
@@ -1720,6 +1727,17 @@ fn analyze_foreground() -> ForegroundAnalysis {
     let selection = foreground::select_frontmost_window(&candidates);
     let selected = selection.selected_index.map(|index| &candidates[index]);
     let selected_process_id = selected.and_then(|candidate| candidate.process_id);
+
+    // Read NSWorkspace only where a consumer below can observe it (see
+    // `workspace_read_required`). This is the freeze-prone main-thread-only
+    // call, and `collect_foreground_state` reaches it from capture workers too.
+    let workspace_consulted = workspace_read_required(selected_process_id, consult_workspace);
+    let workspace_application = if workspace_consulted {
+        workspace_frontmost_application()
+    } else {
+        FrontmostApplication::default()
+    };
+
     let effective_process_id = foreground::effective_frontmost_pid(
         selected_process_id,
         workspace_application.process_id,
@@ -1755,6 +1773,8 @@ fn analyze_foreground() -> ForegroundAnalysis {
         window_title,
         game_window_detected,
         workspace: workspace_application,
+        workspace_consulted,
+        walk_ms: walk_started.elapsed().as_millis() as u64,
         candidates,
         verdicts: selection.verdicts,
         selected_process_id,
@@ -1765,7 +1785,7 @@ fn analyze_foreground() -> ForegroundAnalysis {
 
 #[cfg(target_os = "macos")]
 fn foreground_window_metadata() -> (FrontmostApplication, Option<String>, Option<String>, bool) {
-    let analysis = analyze_foreground();
+    let analysis = analyze_foreground(false);
     (
         analysis.frontmost,
         analysis.owner_name,
@@ -1797,6 +1817,12 @@ pub struct ForegroundPollDiagnostic {
     pub effective_process_id: Option<u32>,
     pub decision_reason: &'static str,
     pub state: foreground::ForegroundState,
+    /// Cost attribution for one poll: the window walk, the process-table scan,
+    /// and whether that scan was served from the presence cache. Numeric only.
+    pub walk_ms: u64,
+    pub process_scan_ms: u64,
+    pub process_scan_cached: bool,
+    pub workspace_consulted: bool,
 }
 
 /// DEVELOPMENT-ONLY full dump of one foreground poll: every window candidate
@@ -1806,7 +1832,14 @@ pub struct ForegroundPollDiagnostic {
 /// metadata.
 #[cfg(all(target_os = "macos", debug_assertions))]
 pub fn foreground_poll_diagnostic() -> ForegroundPollDiagnostic {
-    let analysis = analyze_foreground();
+    // `true`: the dump's whole diagnostic value is comparing the z-order
+    // authority against the REAL NSWorkspace value — that comparison is what
+    // identified the stale-frontmost leak. The hot path skips the read; this
+    // path must not.
+    let analysis = analyze_foreground(true);
+    let process_scan_started = std::time::Instant::now();
+    let game_running = game_process_running();
+    let process_scan_ms = process_scan_started.elapsed().as_millis() as u64;
     let state = foreground::classify_foreground(foreground::ForegroundObservation {
         app_name: analysis.frontmost.app_name.as_deref(),
         bundle_identifier: analysis.frontmost.bundle_identifier.as_deref(),
@@ -1814,7 +1847,7 @@ pub fn foreground_poll_diagnostic() -> ForegroundPollDiagnostic {
         window_title: analysis.window_title.as_deref(),
         executable_path: analysis.frontmost.executable_path.as_deref(),
         window_handle: analysis.frontmost.window_handle,
-        game_running: game_process_running(),
+        game_running,
         game_window_detected: analysis.game_window_detected,
     });
     ForegroundPollDiagnostic {
@@ -1833,6 +1866,12 @@ pub fn foreground_poll_diagnostic() -> ForegroundPollDiagnostic {
         effective_process_id: analysis.effective_process_id,
         decision_reason: analysis.decision_reason,
         state,
+        walk_ms: analysis.walk_ms,
+        workspace_consulted: analysis.workspace_consulted,
+        process_scan_ms,
+        // A sub-millisecond scan is a cache hit; a real `System::new_all` walk
+        // is orders of magnitude slower.
+        process_scan_cached: process_scan_ms == 0,
     }
 }
 
@@ -1927,13 +1966,145 @@ fn windows_foreground_metadata() -> (FrontmostApplication, Option<String>, Optio
     (application, process_name, title, game_window_detected)
 }
 
+/// How long a game-process-presence reading stays usable.
+///
+/// `game_process_running` enumerates the FULL process table
+/// (`sysinfo::System::new_all`). At the previous 250 ms foreground cadence that
+/// ran four times a second, inline on the IPC/main thread for
+/// `get_foreground_state` and on every capture worker for
+/// `capture_surface_frame`.
+///
+/// Caching it is authority-neutral by construction: `classify_foreground` never
+/// reads `observation.game_running` when computing `game_window_foreground` —
+/// it is copied straight through to the `game_running` diagnostic field — and
+/// the visual gate is `gameWindowForeground || previewMode`. A cached positive
+/// therefore cannot authorize capture, because an uncached positive cannot
+/// either. Presence changes only when the game launches or exits, a
+/// minutes-scale event, so 5 s cannot make the diagnostic misleading. Negatives
+/// are cached on exactly the same terms; the cache is not asymmetric.
+const PROCESS_PRESENCE_TTL: Duration = Duration::from_millis(5_000);
+
+static PROCESS_PRESENCE_CACHE: std::sync::Mutex<Option<(std::time::Instant, bool)>> =
+    std::sync::Mutex::new(None);
+
+/// The cached reading, or `None` when a fresh scan is required.
+fn cached_process_presence(
+    cache: Option<(std::time::Instant, bool)>,
+    now: std::time::Instant,
+    ttl: Duration,
+) -> Option<bool> {
+    cache.and_then(|(stamp, value)| (now.duration_since(stamp) < ttl).then_some(value))
+}
+
 fn game_process_running() -> bool {
+    let cached = {
+        let guard = PROCESS_PRESENCE_CACHE
+            .lock()
+            .unwrap_or_else(std::sync::PoisonError::into_inner);
+        *guard
+    };
+    if let Some(value) = cached_process_presence(cached, std::time::Instant::now(), PROCESS_PRESENCE_TTL)
+    {
+        return value;
+    }
+
+    // The lock is deliberately NOT held across the enumeration. Concurrent
+    // callers (the foreground command on the main thread plus up to
+    // MAX_CONCURRENT_CAPTURES workers per channel) would otherwise serialize
+    // behind the slowest process-table walk — trading a cheap duplicate scan
+    // for exactly the head-of-line blocking this cache exists to remove.
     let system = sysinfo::System::new_all();
-    system.processes().values().any(|process| {
+    let running = system.processes().values().any(|process| {
         let name = process.name().to_string_lossy();
         let executable_path = process.exe().map(|path| path.to_string_lossy());
         foreground::is_actual_game_process(&name, executable_path.as_deref())
-    })
+    });
+
+    let mut guard = PROCESS_PRESENCE_CACHE
+        .lock()
+        .unwrap_or_else(std::sync::PoisonError::into_inner);
+    *guard = Some((std::time::Instant::now(), running));
+    running
+}
+
+/// Whether the NSWorkspace frontmost application has to be read.
+///
+/// The z-order authority from `CGWindowListCopyWindowInfo` decides whenever any
+/// candidate window exists; NSWorkspace is documented (and regression-pinned in
+/// `foreground::effective_frontmost_pid`) as a fallback for the no-candidate
+/// case only. Reading it unconditionally put a main-thread-only Cocoa call that
+/// can freeze indefinitely into every poll AND every capture worker, since
+/// `collect_foreground_state` also runs off the main thread inside
+/// `capture_surface_frame`. Skipping it when a candidate PID exists is
+/// classification-identical: `effective_frontmost_pid` returns the selected PID,
+/// `decision_reason` takes the z-order branch, and `frontmost` resolves from the
+/// candidate's application entry.
+fn workspace_read_required(selected_process_id: Option<u32>, consult_for_diagnostic: bool) -> bool {
+    consult_for_diagnostic || selected_process_id.is_none()
+}
+
+#[cfg(test)]
+mod foreground_poll_cost_tests {
+    use super::*;
+    use std::time::Instant;
+
+    #[test]
+    fn cached_process_presence_is_reused_inside_the_ttl() {
+        let now = Instant::now();
+        let cache = Some((now, true));
+        assert_eq!(
+            cached_process_presence(cache, now + Duration::from_millis(4_999), PROCESS_PRESENCE_TTL),
+            Some(true)
+        );
+    }
+
+    #[test]
+    fn cached_process_presence_expires_after_the_ttl() {
+        let now = Instant::now();
+        let cache = Some((now, true));
+        assert_eq!(
+            cached_process_presence(cache, now + PROCESS_PRESENCE_TTL, PROCESS_PRESENCE_TTL),
+            None
+        );
+    }
+
+    #[test]
+    fn cached_process_presence_is_absent_before_the_first_scan() {
+        assert_eq!(
+            cached_process_presence(None, Instant::now(), PROCESS_PRESENCE_TTL),
+            None
+        );
+    }
+
+    #[test]
+    fn cached_process_presence_caches_a_negative_identically() {
+        // An asymmetric cache (positives only) would let a stale "game running"
+        // survive an exit while a "not running" rescanned constantly. Presence
+        // authorizes nothing either way, so both directions expire together.
+        let now = Instant::now();
+        assert_eq!(
+            cached_process_presence(Some((now, false)), now, PROCESS_PRESENCE_TTL),
+            Some(false)
+        );
+    }
+
+    #[test]
+    fn workspace_read_is_required_when_the_zorder_walk_found_no_candidate() {
+        assert!(workspace_read_required(None, false));
+    }
+
+    #[test]
+    fn workspace_read_is_skipped_when_a_zorder_candidate_owns_the_front_window() {
+        assert!(!workspace_read_required(Some(4242), false));
+    }
+
+    #[test]
+    fn workspace_read_is_always_performed_for_the_dev_diagnostic() {
+        // The DEV dump compares the z-order authority against the real
+        // NSWorkspace value; that comparison is what pinned the 13:33:54 stale
+        // frontmost leak, so the diagnostic must never report a placeholder.
+        assert!(workspace_read_required(Some(4242), true));
+    }
 }
 
 fn collect_foreground_state() -> foreground::ForegroundState {
