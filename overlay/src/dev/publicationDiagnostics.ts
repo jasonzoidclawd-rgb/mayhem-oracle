@@ -18,7 +18,8 @@ export type DiagnosticMarker =
   | "[identity-native-return]"
   | "[geometry-timing]"
   | "[geometry-stale-hide]"
-  | "[geometry-recovery]";
+  | "[geometry-recovery]"
+  | "[foreground-poll]";
 
 /** Bounded, irreversible FNV-1a hash; complete OCR text is never logged. */
 export function boundedDiagnosticHash(value: string | null | undefined): string | null {

@@ -91,10 +91,10 @@ import {
   type SurfaceFixtureInput,
 } from "./dev/datasetCapture";
 import {
-  foregroundPollMayStart,
-  resolveWithTimeout,
-  FOREGROUND_POLL_TIMEOUT_MS,
-} from "./foregroundWatchdog";
+  pollForeground,
+  FOREGROUND_POLL_INTERVAL_MS,
+  type ForegroundPollHost,
+} from "./foregroundPollScheduler";
 import { isPlausibleTitle } from "./surfacePresence";
 import {
   DEFAULT_PROBE_CONFIG,
@@ -568,7 +568,10 @@ function App() {
   const pollInFlightRef = useRef(false);
   const pollPendingRef = useRef(false);
   const pollRef = useRef<() => Promise<void>>(async () => {});
-  const foregroundPollStartedAtRef = useRef<number | null>(null);
+  // Physical single-flight ownership of the foreground invoke. Written only
+  // where a poll starts and in that poll's `finally` — never by a clock.
+  const foregroundNativeStartedAtRef = useRef<number | null>(null);
+  const foregroundLogicalTimeoutFiredForRef = useRef<number | null>(null);
   const [showStartupTip, setShowStartupTip] = useState(true);
   const [foregroundState, setForegroundState] = useState<ForegroundState>(
     unknownForegroundState(),
@@ -1437,67 +1440,94 @@ function App() {
     clearSurface(false);
   }, [clearSurface]);
 
-  const refreshForeground = useCallback(async (): Promise<ForegroundState | null> => {
-    const startedAt = Date.now();
-    if (!foregroundPollMayStart(startedAt, foregroundPollStartedAtRef.current)) return null;
-    foregroundPollStartedAtRef.current = startedAt;
-    try {
-      // A hung native call must never latch the previous state forever: after
-      // the timeout the state degrades to unknown (everything hidden), and the
-      // stuck deadline above lets later ticks poll again.
-      const nextForeground = await resolveWithTimeout(
-        invoke<ForegroundState>("get_foreground_state")
-          .catch(() => unknownForegroundState()),
-        FOREGROUND_POLL_TIMEOUT_MS,
-        unknownForegroundState(),
-      );
-      const previousForeground = foregroundStateRef.current;
-      foregroundStateRef.current = nextForeground;
-      if (nextForeground.gameWindowForeground !== previousForeground.gameWindowForeground) {
-        // A focus flip starts a new foreground epoch: a probe that captured
-        // under the old focus can never publish after the change.
-        foregroundEpochRef.current += 1;
-      }
-      const changed = [
-        "gameWindowForeground",
-        "leagueClientForeground",
-        "riotClientForeground",
-        "gameRunning",
-        "gameWindowDetected",
-        "foregroundAppName",
-        "foregroundBundleIdentifier",
-        "foregroundOwnerName",
-        "foregroundWindowTitle",
-        "foregroundExecutablePath",
-        "foregroundWindowHandle",
-      ].some((key) => (
-        nextForeground[key as keyof ForegroundState] !==
-        previousForeground[key as keyof ForegroundState]
-      ));
-      if (changed) setForegroundState(nextForeground);
-      if (
-        import.meta.env.DEV &&
-        nextForeground.gameWindowForeground !== previousForeground.gameWindowForeground
-      ) {
-        // DEV-only: dump the full native candidate walk (every window, its
-        // exclusion verdict, the selected authority, the decision reason)
-        // whenever the classification flips. Compiled out of production.
-        void invoke("get_foreground_diagnostic")
-          .then((diagnostic) => {
-            console.info("[foreground-diagnostic]", JSON.stringify(diagnostic));
-          })
-          .catch(() => {});
-      }
-      if (!nextForeground.gameWindowForeground && previousForeground.gameWindowForeground) {
-        // Focus left the game: hide the surface immediately (the probe would
-        // skip anyway, but we must not wait for the health clock on a blur).
-        stopOcr();
-      }
-      return nextForeground;
-    } finally {
-      foregroundPollStartedAtRef.current = null;
+  /**
+   * The ONLY way foreground truth reaches the app. A real settle and the
+   * logical-freshness degrade-to-unknown must both run every consequence of a
+   * classification change: the ref write, the epoch bump that invalidates
+   * in-flight probes, the setState change-detect, and the blur `stopOcr()`.
+   * Publishing `unknown` by hand from the timeout path would skip the blur and
+   * leave the surface painted after foreground truth had already expired.
+   */
+  const publishForeground = useCallback((nextForeground: ForegroundState): ForegroundState => {
+    const previousForeground = foregroundStateRef.current;
+    foregroundStateRef.current = nextForeground;
+    if (nextForeground.gameWindowForeground !== previousForeground.gameWindowForeground) {
+      // A focus flip starts a new foreground epoch: a probe that captured
+      // under the old focus can never publish after the change.
+      foregroundEpochRef.current += 1;
     }
+    const changed = [
+      "gameWindowForeground",
+      "leagueClientForeground",
+      "riotClientForeground",
+      "gameRunning",
+      "gameWindowDetected",
+      "foregroundAppName",
+      "foregroundBundleIdentifier",
+      "foregroundOwnerName",
+      "foregroundWindowTitle",
+      "foregroundExecutablePath",
+      "foregroundWindowHandle",
+    ].some((key) => (
+      nextForeground[key as keyof ForegroundState] !==
+      previousForeground[key as keyof ForegroundState]
+    ));
+    if (changed) setForegroundState(nextForeground);
+    if (
+      import.meta.env.DEV &&
+      nextForeground.gameWindowForeground !== previousForeground.gameWindowForeground
+    ) {
+      // DEV-only: dump the full native candidate walk (every window, its
+      // exclusion verdict, the selected authority, the decision reason)
+      // whenever the classification flips. Compiled out of production.
+      void invoke("get_foreground_diagnostic")
+        .then((diagnostic) => {
+          console.info("[foreground-diagnostic]", JSON.stringify(diagnostic));
+        })
+        .catch(() => {});
+    }
+    if (!nextForeground.gameWindowForeground && previousForeground.gameWindowForeground) {
+      // Focus left the game: hide the surface immediately (the probe would
+      // skip anyway, but we must not wait for the health clock on a blur).
+      stopOcr();
+    }
+    return nextForeground;
   }, [stopOcr]);
+
+  /**
+   * Bridge from the component's refs to the ownership loop. The loop itself
+   * lives in `foregroundPollScheduler` so that "one unsettled invoke, released
+   * only by the settle" is proven against a native call that never returns —
+   * `get_foreground_state` is a sync Tauri command executing inline on the
+   * IPC/main thread, so a second concurrent invoke queues in front of every
+   * geometry probe rather than running beside it.
+   */
+  const foregroundPollHost = useMemo<ForegroundPollHost<ForegroundState>>(() => ({
+    now: () => Date.now(),
+    read: () => ({
+      nativeStartedAt: foregroundNativeStartedAtRef.current,
+      logicalTimeoutFiredForStartedAt: foregroundLogicalTimeoutFiredForRef.current,
+    }),
+    setNativeStartedAt: (value) => {
+      foregroundNativeStartedAtRef.current = value;
+    },
+    latchLogicalTimeout: (startedAt) => {
+      foregroundLogicalTimeoutFiredForRef.current = startedAt;
+    },
+    epoch: () => foregroundEpochRef.current,
+    invoke: () => invoke<ForegroundState>("get_foreground_state")
+      .catch(() => unknownForegroundState()),
+    publish: publishForeground,
+    publishUnknown: () => {
+      publishForeground(unknownForegroundState());
+    },
+    log: (action, fields) => logOverlayDiagnostic("[foreground-poll]", { action, ...fields }),
+  }), [publishForeground]);
+
+  const refreshForeground = useCallback(
+    (): Promise<ForegroundState | null> => pollForeground(foregroundPollHost),
+    [foregroundPollHost],
+  );
 
   const clearGameOnlyState = useCallback((nextPhase: Phase) => {
     ocrSelectionCompletedRef.current = true;
@@ -3229,9 +3259,12 @@ function App() {
   }, [matchedCards, memberEnabled, phase, recordRoundCompleted, stopOcr, updatePhase]);
 
   useEffect(() => {
+    // The only demand signal for foreground polling. Ticks that land during an
+    // unsettled invoke coalesce into nothing, so this clock is also what
+    // re-polls after a settle and what enforces the logical freshness deadline.
     const foregroundIntervalId = setInterval(() => {
       void refreshForeground();
-    }, 250);
+    }, FOREGROUND_POLL_INTERVAL_MS);
     void refreshForeground();
     return () => clearInterval(foregroundIntervalId);
   }, [refreshForeground]);
