@@ -136,10 +136,13 @@ import {
 } from "./surfaceGeometry";
 import {
   advanceRerollConfirmation,
+  advanceBaselineSettlement,
+  beginBaselineSettlement,
   applyRerollInvalidation,
   createRerollPending,
   ocrRunSuperseded,
   type SlotRerollPending,
+  type BaselineSettlement,
 } from "./rerollInvalidation";
 import { summarizeAuthoritativePublication } from "./authoritativePublication";
 import {
@@ -536,6 +539,12 @@ function App() {
   // not yet confirmed — the render holds their resolved tier (no SCANNING).
   const rerollPendingRef = useRef<SlotRerollPending[]>(createRerollPending());
   const heldRerollSlotsRef = useRef<number[]>([]);
+  /**
+   * Provisional reroll baseline while a freshly appeared offer's cards animate
+   * in. Null outside an offer; cleared on close, confirmed absence, occlusion,
+   * foreground/game invalidation and champion change so no later offer inherits it.
+   */
+  const baselineSettlementRef = useRef<BaselineSettlement | null>(null);
   // Cross-track OCR-trigger coordination: the geometry track decides which slots
   // need a (re)read and stamps the fingerprints those reads are keyed to.
   const ocrPendingSlotsRef = useRef<number[]>([]);
@@ -1095,6 +1104,7 @@ function App() {
   useEffect(() => {
     championGenerationRef.current += 1;
     championIdRef.current = currentChampionId;
+    baselineSettlementRef.current = null;
     ocrOwnersRef.current.invalidate();
     probeInFlightRef.current = false;
     probeInFlightSinceRef.current = null;
@@ -1397,6 +1407,7 @@ function App() {
     geometryFreshnessWarningSeqRef.current = null;
     geometryExpiryWarningSeqRef.current = null;
     bumpScanSeq();
+    baselineSettlementRef.current = null;
     ocrOwnersRef.current.invalidate();
     probeInFlightRef.current = false;
     probeInFlightSinceRef.current = null;
@@ -1712,11 +1723,40 @@ function App() {
       // absent→present appearance resets the streak and is handled atomically.
       const priorPositive = previousSurface.lastPositiveObservation;
       const genuineAppear = priorPositive == null || !priorPositive.present;
+      // BASELINE SETTLEMENT — a freshly appeared offer's cards ANIMATE IN. Seeding
+      // the accepted reroll baseline from that first frame let the animation
+      // confirm itself as a three-slot reroll ~3 frames later, wiping badges that
+      // had already published (trace seq 21978 publish → 21979
+      // `invalidatedSlots:[0,1,2]`). While settling we hold a PROVISIONAL baseline:
+      // no confirmation, no invalidation, no offer-generation bump. Rendering and
+      // slot-local OCR are untouched, so SCANNING and badges appear immediately.
+      const wasLatched = baselineSettlementRef.current?.latched ?? false;
+      if (transition.action === "publish" && publishedObservation != null) {
+        baselineSettlementRef.current =
+          genuineAppear || baselineSettlementRef.current == null
+            ? beginBaselineSettlement(publishedObservation, performance.now())
+            : advanceBaselineSettlement({
+              settlement: baselineSettlementRef.current,
+              observation: publishedObservation,
+              now: performance.now(),
+            });
+      }
+      const settlement = baselineSettlementRef.current;
+      const settling = settlement != null && !settlement.latched;
+      // Adopt the settled cards as the accepted baseline exactly once. Without
+      // this the baseline would stay pinned to the first animation frame and the
+      // very next probe would read the settled cards as a fresh three-slot
+      // reroll — the same spurious new offer, one frame later.
+      if (settlement != null && settlement.latched && !wasLatched) {
+        acceptedSlotFingerprintsRef.current = settlement.provisional.slice();
+        rerollPendingRef.current = createRerollPending();
+      }
       let confirmedRerollSlots: number[] = [];
       if (
         transition.action === "publish" &&
         publishedObservation != null &&
-        !genuineAppear
+        !genuineAppear &&
+        !settling
       ) {
         const confirmation = advanceRerollConfirmation({
           pending: rerollPendingRef.current,
@@ -1807,6 +1847,7 @@ function App() {
         acceptedSlotFingerprintsRef.current = ["", "", ""];
         slotGenerationsRef.current = slotGenerationsRef.current.map((generation) => generation + 1);
         ocrPendingSlotsRef.current = [];
+        baselineSettlementRef.current = null;
         ocrOwnersRef.current.invalidate();
         probeInFlightRef.current = false;
         probeInFlightSinceRef.current = null;
@@ -1815,6 +1856,7 @@ function App() {
       } else if (nextOfferSurface.state === "OCCLUDED") {
         // Retain identities internally, but invalidate every async render owner.
         ocrPendingSlotsRef.current = [];
+        baselineSettlementRef.current = null;
         ocrOwnersRef.current.invalidate();
         probeInFlightRef.current = false;
         probeInFlightSinceRef.current = null;

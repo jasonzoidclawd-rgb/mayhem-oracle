@@ -87,3 +87,40 @@ describe("privacy-bounded overlay diagnostics", () => {
     expect(src).toContain("stale,");
   });
 });
+
+/**
+ * Source guard for the baseline-settlement wiring. The pure functions are unit
+ * tested in `rerollInvalidation.test.ts`; what cannot be proven there is that
+ * App.tsx actually GATES confirmation on settlement, adopts the settled baseline
+ * exactly once, and clears the provisional state at every lifecycle boundary.
+ * Getting any of those wrong silently restores the level-3 badge wipe.
+ */
+describe("baseline settlement wiring", () => {
+  const src = readFileSync(new URL("../App.tsx", import.meta.url), "utf8");
+
+  it("gates reroll confirmation on settlement", () => {
+    expect(src).toContain("!genuineAppear &&\n        !settling");
+  });
+
+  it("suppresses confirmation BEFORE the invalidation call reads it", () => {
+    const settlingGate = src.indexOf("const settling =");
+    const confirmation = src.indexOf("advanceRerollConfirmation({");
+    const invalidation = src.indexOf("applyRerollInvalidation({");
+    expect(settlingGate).toBeGreaterThan(-1);
+    expect(settlingGate).toBeLessThan(confirmation);
+    expect(confirmation).toBeLessThan(invalidation);
+  });
+
+  it("adopts the settled baseline exactly once, guarded on the latch edge", () => {
+    expect(src).toContain("settlement.latched && !wasLatched");
+    expect(src).toContain("acceptedSlotFingerprintsRef.current = settlement.provisional.slice()");
+    // The adoption must precede the confirmation that reads the accepted baseline.
+    expect(src.indexOf("settlement.provisional.slice()"))
+      .toBeLessThan(src.indexOf("advanceRerollConfirmation({"));
+  });
+
+  it("clears the provisional baseline at every lifecycle boundary", () => {
+    // Champion change, geometry/offer reset, offer close (NO_OFFER), occlusion.
+    expect(src.split("baselineSettlementRef.current = null;").length - 1).toBe(4);
+  });
+});

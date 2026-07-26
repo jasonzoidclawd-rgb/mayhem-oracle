@@ -101,6 +101,96 @@ export function advanceRerollConfirmation(params: {
   return { pending, confirmed, held };
 }
 
+// ─── Provisional baseline settlement (offer appearance) ───
+
+/**
+ * Consecutive EQUIVALENT observations a fresh offer's cards must hold before
+ * their fingerprints become the accepted reroll baseline.
+ */
+export const BASELINE_STABLE_OBSERVATIONS = 2;
+/**
+ * Wall-clock floor for the same decision. Both floors must be met, so the
+ * outcome does not depend on probe cadence — the level-3 defect was a pure
+ * frame count that closed in ~450 ms at high throughput and ~2 s once the
+ * native-outstanding cap slowed geometry to ~650 ms/frame.
+ */
+export const BASELINE_STABLE_MS = 300;
+
+/** Provisional per-slot baseline held while a freshly appeared offer animates in. */
+export interface BaselineSettlement {
+  /** Candidate baseline; entry-animation drift moves ONLY this. */
+  provisional: string[];
+  /** Consecutive observations equivalent to `provisional` (within the band). */
+  stableCount: number;
+  /** Monotonic clock when the current candidate was first observed. */
+  since: number;
+  /** True once `provisional` may be adopted as the accepted reroll baseline. */
+  latched: boolean;
+}
+
+/**
+ * Begin settling a freshly appeared offer. NEVER latched on the first frame:
+ * that frame is mid-animation, and adopting it as the baseline is exactly what
+ * let the cards' entry animation confirm itself as a three-slot reroll and wipe
+ * badges that had already published.
+ *
+ * A new offer always starts from a fresh settlement — it never inherits the
+ * previous offer's provisional baseline.
+ */
+export function beginBaselineSettlement(
+  observation: GeometryObservation,
+  now: number,
+): BaselineSettlement {
+  return {
+    provisional: observation.cards.map((card) => card.fingerprint),
+    stableCount: 1,
+    since: now,
+    latched: false,
+  };
+}
+
+/**
+ * Advance settlement with one geometry observation.
+ *
+ * Any present slot drifting past the Hamming band is still animating: the
+ * candidate is REPLACED and both floors restart. Sub-band sparkle is equivalent,
+ * and the baseline keeps the FIRST equivalent fingerprint rather than chasing
+ * the glow. An absent card suspends settlement — a partial offer must not latch.
+ */
+export function advanceBaselineSettlement(params: {
+  settlement: BaselineSettlement;
+  observation: GeometryObservation;
+  now: number;
+  minObservations?: number;
+  minStableMs?: number;
+}): BaselineSettlement {
+  const minObservations = params.minObservations ?? BASELINE_STABLE_OBSERVATIONS;
+  const minStableMs = params.minStableMs ?? BASELINE_STABLE_MS;
+  const { settlement, observation, now } = params;
+  const present = observation.cards.filter((card) => card.present);
+  if (present.length < observation.cards.length) {
+    // Incomplete surface: hold the candidate, do not advance either floor.
+    return { ...settlement, latched: false };
+  }
+  const drifted = observation.cards.some((card) =>
+    fingerprintChanged(settlement.provisional[card.regionIndex] ?? "", card.fingerprint));
+  if (drifted) {
+    return {
+      provisional: observation.cards.map((card) => card.fingerprint),
+      stableCount: 1,
+      since: now,
+      latched: false,
+    };
+  }
+  const stableCount = settlement.stableCount + 1;
+  return {
+    provisional: settlement.provisional,
+    stableCount,
+    since: settlement.since,
+    latched: stableCount >= minObservations && now - settlement.since >= minStableMs,
+  };
+}
+
 export interface RerollInvalidationResult<R> {
   /** New identity store; changed slots set to null, neighbours retained by ref. */
   store: Array<IdentityRecord<R> | null>;

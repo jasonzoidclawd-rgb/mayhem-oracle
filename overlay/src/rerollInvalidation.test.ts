@@ -14,6 +14,10 @@ import {
   createRerollPending,
   ocrRunSuperseded,
   REROLL_CONFIRM_PROBES,
+  BASELINE_STABLE_MS,
+  BASELINE_STABLE_OBSERVATIONS,
+  beginBaselineSettlement,
+  advanceBaselineSettlement,
 } from "./rerollInvalidation";
 import type { GeometryObservation, IdentityRecord } from "./surfaceGeometry";
 
@@ -451,5 +455,155 @@ describe("advanceRerollConfirmation — sustained fingerprint confirmation", () 
     expect(r.confirmed).toEqual([]);
     expect(r.held).toEqual([]);
     expect(r.pending[0]).toEqual({ candidate: "", count: 0 });
+  });
+});
+
+/**
+ * BASELINE SETTLEMENT — the level-3 defect in the 2026-07-26 round-5 trace.
+ *
+ * When an offer appears the three cards ANIMATE IN. The accepted reroll baseline
+ * was seeded from the first present frame (mid-animation), so as the cards
+ * settled all three fingerprints drifted past the Hamming band, the confirmation
+ * streak completed, and `confirmedRerollSlots.length >= 2` fired a SPURIOUS new
+ * offer three frames in — wiping the three badges that had published one frame
+ * earlier back to SCANNING (trace: publish at seq 21978, then seq 21979 with
+ * `invalidatedSlots:[0,1,2]`, `roundAfter:2`, `changedFingerprintCount:0`).
+ *
+ * The window was a FRAME COUNT, so it scaled with probe cadence: ~450 ms at the
+ * old throughput (invisible), ~2 s once the native-outstanding cap reduced
+ * geometry to ~650 ms/frame — an appear/blank/reappear flicker the player sees.
+ *
+ * Settlement holds a PROVISIONAL baseline while the cards animate and latches
+ * only after consecutive equivalent observations AND a wall-clock floor, so the
+ * outcome no longer depends on cadence.
+ */
+describe("provisional baseline settlement", () => {
+  const absentMiddle = (): GeometryObservation => ({
+    ...observation([FP_A, FP_B, FP_C]),
+    cards: [card(0, FP_A), card(1, FP_B, false), card(2, FP_C)],
+  });
+
+  it("does not latch on the first present frame", () => {
+    const settlement = beginBaselineSettlement(observation([FP_A, FP_B, FP_C]), 1_000);
+    expect(settlement.latched).toBe(false);
+    expect(settlement.provisional).toEqual([FP_A, FP_B, FP_C]);
+    expect(settlement.stableCount).toBe(1);
+  });
+
+  it("entry animation restarts the streak and moves ONLY the provisional baseline", () => {
+    let s = beginBaselineSettlement(observation([FP_A, FP_B, FP_C]), 0);
+    s = advanceBaselineSettlement({ settlement: s, observation: observation([FP_B, FP_C, FP_A]), now: 200 });
+    expect(s.latched).toBe(false);
+    expect(s.stableCount).toBe(1);
+    expect(s.provisional).toEqual([FP_B, FP_C, FP_A]);
+    s = advanceBaselineSettlement({ settlement: s, observation: observation([FP_C, FP_D, FP_E]), now: 400 });
+    expect(s.latched).toBe(false);
+    expect(s.provisional).toEqual([FP_C, FP_D, FP_E]);
+  });
+
+  it("latches only when BOTH the observation floor and the wall-clock floor are met", () => {
+    let s = beginBaselineSettlement(observation([FP_A, FP_B, FP_C]), 0);
+    s = advanceBaselineSettlement({ settlement: s, observation: observation([FP_A, FP_B, FP_C]), now: 20 });
+    s = advanceBaselineSettlement({ settlement: s, observation: observation([FP_A, FP_B, FP_C]), now: 40 });
+    expect(s.stableCount).toBeGreaterThanOrEqual(BASELINE_STABLE_OBSERVATIONS);
+    expect(s.latched).toBe(false); // fast cadence: clock floor not yet reached
+    s = advanceBaselineSettlement({
+      settlement: s, observation: observation([FP_A, FP_B, FP_C]), now: BASELINE_STABLE_MS,
+    });
+    expect(s.latched).toBe(true);
+    expect(s.provisional).toEqual([FP_A, FP_B, FP_C]);
+  });
+
+  it("a single slow frame clears the clock but still needs the observation floor", () => {
+    let s = beginBaselineSettlement(observation([FP_A, FP_B, FP_C]), 0);
+    s = advanceBaselineSettlement({ settlement: s, observation: observation([FP_A, FP_B, FP_C]), now: 5_000 });
+    expect(s.stableCount).toBe(BASELINE_STABLE_OBSERVATIONS);
+    expect(s.latched).toBe(true);
+  });
+
+  it("reaches the SAME latched baseline at fast and slow geometry cadences", () => {
+    const frames: Array<[string, string, string]> = [
+      [FP_A, FP_B, FP_C], [FP_B, FP_C, FP_A], [FP_C, FP_D, FP_E],
+      [FP_A, FP_B, FP_C], [FP_A, FP_B, FP_C], [FP_A, FP_B, FP_C], [FP_A, FP_B, FP_C],
+    ];
+    const run = (stepMs: number) => {
+      let s = beginBaselineSettlement(observation(frames[0]), 0);
+      frames.slice(1).forEach((fps, i) => {
+        s = advanceBaselineSettlement({ settlement: s, observation: observation(fps), now: (i + 1) * stepMs });
+      });
+      return s;
+    };
+    const fast = run(150);
+    const slow = run(650);
+    expect(fast.latched).toBe(true);
+    expect(slow.latched).toBe(true);
+    expect(fast.provisional).toEqual(slow.provisional);
+    expect(fast.provisional).toEqual([FP_A, FP_B, FP_C]);
+  });
+
+  it("treats sub-band sparkle as equivalent so glow cannot restart the streak", () => {
+    let s = beginBaselineSettlement(observation([FP_A, FP_B, FP_C]), 0);
+    s = advanceBaselineSettlement({
+      settlement: s, observation: observation([FP_A_DRIFT, FP_B, FP_C]), now: 200,
+    });
+    expect(s.stableCount).toBe(2);
+    // The baseline keeps the FIRST equivalent fingerprint, never chasing sparkle.
+    expect(s.provisional[0]).toBe(FP_A);
+    s = advanceBaselineSettlement({ settlement: s, observation: observation([FP_A, FP_B, FP_C]), now: 400 });
+    expect(s.latched).toBe(true);
+    expect(s.provisional[0]).toBe(FP_A);
+  });
+
+  it("alternating tooltip fingerprints never latch", () => {
+    let s = beginBaselineSettlement(observation([FP_A, FP_B, FP_C]), 0);
+    for (let i = 1; i <= 12; i += 1) {
+      const flipped: [string, string, string] =
+        i % 2 === 0 ? [FP_A, FP_B, FP_C] : [FP_B, FP_A, FP_C];
+      s = advanceBaselineSettlement({ settlement: s, observation: observation(flipped), now: i * 300 });
+      expect(s.stableCount).toBe(1);
+    }
+    expect(s.latched).toBe(false);
+  });
+
+  it("an absent card suspends settlement rather than latching a partial offer", () => {
+    let s = beginBaselineSettlement(observation([FP_A, FP_B, FP_C]), 0);
+    s = advanceBaselineSettlement({ settlement: s, observation: absentMiddle(), now: 5_000 });
+    expect(s.latched).toBe(false);
+  });
+
+  it("a later offer does not inherit the previous provisional baseline", () => {
+    let first = beginBaselineSettlement(observation([FP_A, FP_B, FP_C]), 0);
+    first = advanceBaselineSettlement({
+      settlement: first, observation: observation([FP_A, FP_B, FP_C]), now: 5_000,
+    });
+    expect(first.latched).toBe(true);
+    const second = beginBaselineSettlement(observation([FP_B, FP_C, FP_A]), 9_000);
+    expect(second.latched).toBe(false);
+    expect(second.stableCount).toBe(1);
+    expect(second.provisional).toEqual([FP_B, FP_C, FP_A]);
+  });
+
+  it("after latch, a one-slot reroll still invalidates ONLY that slot", () => {
+    let s = beginBaselineSettlement(observation([FP_A, FP_B, FP_C]), 0);
+    s = advanceBaselineSettlement({ settlement: s, observation: observation([FP_A, FP_B, FP_C]), now: 5_000 });
+    const confirmation = advanceRerollConfirmation({
+      pending: createRerollPending(),
+      acceptedFingerprints: s.provisional,
+      observation: observation([FP_A, FP_D, FP_C]),
+      confirmProbes: 1,
+    });
+    expect(confirmation.confirmed).toEqual([1]);
+  });
+
+  it("after latch, an atomic three-card replacement confirms all three", () => {
+    let s = beginBaselineSettlement(observation([FP_A, FP_B, FP_C]), 0);
+    s = advanceBaselineSettlement({ settlement: s, observation: observation([FP_A, FP_B, FP_C]), now: 5_000 });
+    const confirmation = advanceRerollConfirmation({
+      pending: createRerollPending(),
+      acceptedFingerprints: s.provisional,
+      observation: observation([FP_D, FP_E, FP_A]),
+      confirmProbes: 1,
+    });
+    expect(confirmation.confirmed).toEqual([0, 1, 2]);
   });
 });
