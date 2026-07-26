@@ -124,3 +124,44 @@ describe("baseline settlement wiring", () => {
     expect(src.split("baselineSettlementRef.current = null;").length - 1).toBe(4);
   });
 });
+
+/**
+ * GEOMETRY CAPTURE SEQUENCE OWNERSHIP.
+ *
+ * `visibleFrame.captureSeq` is the geometry track's capture authority and the
+ * ONLY source of the HUD's `geoseq`. `clearSurface` published `scanSeqRef` —
+ * the OCR track's counter — into that field, so after any foreground blur the
+ * displayed sequence jumped BACKWARD (observed live: 590 → 90) and then sat
+ * frozen while geometry was stalled. The two counters advance at ~20x different
+ * rates, so the wrong one is not a rounding error: it reads as "geometry is
+ * alive at frame 90" while geometry is in fact dead.
+ *
+ * The value is diagnostic-only today (grep confirms `App.tsx`'s
+ * `geometrySeq:` line is the single reader of `.captureSeq`), which is exactly
+ * why it must be right: it is the number a human trusts while debugging a live
+ * stall, and it lied during three separate investigations of this failure.
+ */
+describe("geometry capture-sequence ownership", () => {
+  const src = readFileSync(new URL("../App.tsx", import.meta.url), "utf8");
+
+  it("publishes the geometry counter, never the OCR scan counter", () => {
+    expect(src).toContain("publishEmptyVisibleFrame(geometrySeqRef.current");
+    expect(src).not.toContain("publishEmptyVisibleFrame(scanSeqRef.current");
+  });
+
+  it("never sources a published capture sequence from scanSeqRef", () => {
+    // Any future call site must take the geometry counter too.
+    expect(src).not.toMatch(/publishEmptyVisibleFrame\(\s*scanSeqRef/);
+  });
+
+  it("bumps the geometry sequence before publishing the cleared frame", () => {
+    // The empty frame must carry the POST-invalidation sequence, so a late
+    // in-flight result can never match it and re-publish.
+    const clearSurface = src.indexOf("const clearSurface = useCallback(");
+    expect(clearSurface).toBeGreaterThan(-1);
+    const bump = src.indexOf("geometrySeqRef.current += 1;", clearSurface);
+    const publish = src.indexOf("publishEmptyVisibleFrame(geometrySeqRef.current", clearSurface);
+    expect(bump).toBeGreaterThan(-1);
+    expect(bump).toBeLessThan(publish);
+  });
+});

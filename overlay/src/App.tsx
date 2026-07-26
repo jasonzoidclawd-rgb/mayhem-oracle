@@ -1412,7 +1412,11 @@ function App() {
     probeInFlightRef.current = false;
     probeInFlightSinceRef.current = null;
     geometrySeqRef.current += 1;
-    publishEmptyVisibleFrame(scanSeqRef.current, performance.now());
+    // The cleared frame carries the GEOMETRY capture sequence it was published
+    // under — never scanSeqRef, the OCR track's counter. The two advance ~20x
+    // apart, so publishing the OCR one sent the HUD's geoseq BACKWARD (590 → 90
+    // live) and left it frozen there, reading as healthy geometry during a stall.
+    publishEmptyVisibleFrame(geometrySeqRef.current, performance.now());
     setOcrLifecycle((previous) => ({
       ...previous,
       phase: phaseRef.current,
