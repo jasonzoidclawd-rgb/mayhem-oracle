@@ -68,6 +68,13 @@ console.log(`  recoveries           ${s.geometryRecoveries}`);
 console.log(`  unhealthy age ms     ${ms(s.continuousUnhealthyAgeMs)}`);
 console.log(`  accepted age ms      ${ms(s.acceptedGeometryAgeMs)}`);
 console.log("");
+console.log("foreground poll (single-flight invariant):");
+console.log(`  settles              ${s.foregroundSettles}`);
+console.log(`  late-rejects         ${s.foregroundLateRejects}   <- payload too old or epoch moved`);
+console.log(`  logical timeouts     ${s.foregroundLogicalTimeouts}   <- degraded to unknown mid-flight`);
+console.log(`  nativeMs             ${ms(s.foregroundNativeMs)}   <- main-thread occupancy per poll`);
+console.log(`  in-flight age ms     ${ms(s.foregroundPhysicalInFlightAgeMs)}   <- age at a coalesced tick`);
+console.log("");
 console.log("all markers:");
 for (const [marker, count] of Object.entries(s.markerCounts).sort()) {
   console.log(`  ${marker.padEnd(28)} ${count}`);

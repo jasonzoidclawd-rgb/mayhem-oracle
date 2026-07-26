@@ -106,6 +106,18 @@ export interface OcrTraceSummary {
   geometryRecoveries: number;
   continuousUnhealthyAgeMs: NumericSummary;
   acceptedGeometryAgeMs: NumericSummary;
+  /**
+   * Foreground poll health. The single-flight invariant is verifiable from a
+   * trace: `foregroundSettles + foregroundLateRejects` must equal the number of
+   * started polls, and `foregroundNativeMs.max` is the worst main-thread
+   * occupancy one poll ever caused. A high `foregroundLogicalTimeouts` with a
+   * low `foregroundNativeMs.median` means the native path stalls in bursts.
+   */
+  foregroundSettles: number;
+  foregroundLateRejects: number;
+  foregroundLogicalTimeouts: number;
+  foregroundNativeMs: NumericSummary;
+  foregroundPhysicalInFlightAgeMs: NumericSummary;
 }
 
 function readNumber(payload: Record<string, unknown>, key: string): number | null {
@@ -142,9 +154,24 @@ export function summarizeOcrTrace(events: TraceEvent[]): OcrTraceSummary {
   let nativeSamples = 0;
   let staleGeometryResults = 0;
   let geometryStaleHides = 0;
+  const foregroundNativeValues: number[] = [];
+  const foregroundInFlightAgeValues: number[] = [];
+  let foregroundSettles = 0;
+  let foregroundLateRejects = 0;
+  let foregroundLogicalTimeouts = 0;
 
   for (const event of events) {
     markerCounts[event.marker] = (markerCounts[event.marker] ?? 0) + 1;
+    if (event.marker === "[foreground-poll]") {
+      const nativeMs = readNumber(event.payload, "nativeMs");
+      if (nativeMs !== null) foregroundNativeValues.push(nativeMs);
+      const inFlightAge = readNumber(event.payload, "physicalInFlightAgeMs");
+      if (inFlightAge !== null) foregroundInFlightAgeValues.push(inFlightAge);
+      if (event.payload.action === "settle") foregroundSettles += 1;
+      if (event.payload.action === "late-reject") foregroundLateRejects += 1;
+      if (event.payload.action === "logical-timeout") foregroundLogicalTimeouts += 1;
+      continue;
+    }
     if (event.marker.startsWith("[geometry-")) {
       const continuousAge = readNumber(event.payload, "continuousUnhealthyAgeMs");
       if (continuousAge !== null) continuousUnhealthyAgeValues.push(continuousAge);
@@ -233,5 +260,10 @@ export function summarizeOcrTrace(events: TraceEvent[]): OcrTraceSummary {
     geometryRecoveries: markerCounts["[geometry-recovery]"] ?? 0,
     continuousUnhealthyAgeMs: numericSummary(continuousUnhealthyAgeValues),
     acceptedGeometryAgeMs: numericSummary(acceptedGeometryAgeValues),
+    foregroundSettles,
+    foregroundLateRejects,
+    foregroundLogicalTimeouts,
+    foregroundNativeMs: numericSummary(foregroundNativeValues),
+    foregroundPhysicalInFlightAgeMs: numericSummary(foregroundInFlightAgeValues),
   };
 }

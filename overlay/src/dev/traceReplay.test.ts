@@ -127,3 +127,41 @@ describe("canonical geometry stale-hide marker", () => {
     expect(summary.acceptedGeometryAgeMs.count).toBe(2);
   });
 });
+
+/**
+ * The foreground-poll fields are how a retest PROVES the single-flight
+ * invariant from a log rather than from reading code: every started poll ends
+ * as exactly one `settle` or one `late-reject`. The payload keys below must
+ * stay identical to the ones `pollForeground` passes to `host.log`.
+ */
+describe("foreground poll summary", () => {
+  const trace = [
+    '[foreground-poll] {"action":"settle","nativeMs":120,"epochMoved":false,"epoch":3}',
+    '[foreground-poll] {"action":"logical-timeout","physicalInFlightAgeMs":1500,"epoch":3}',
+    '[foreground-poll] {"action":"late-reject","nativeMs":4200,"epochMoved":true,"epoch":4}',
+    '[foreground-poll] {"action":"settle","nativeMs":80,"epochMoved":false,"epoch":4}',
+  ].join("\n");
+
+  it("counts each poll outcome separately", () => {
+    const summary = summarizeOcrTrace(parseOverlayTrace(trace));
+    expect(summary.foregroundSettles).toBe(2);
+    expect(summary.foregroundLateRejects).toBe(1);
+    expect(summary.foregroundLogicalTimeouts).toBe(1);
+  });
+
+  it("samples native duration and coalesced in-flight age independently", () => {
+    const summary = summarizeOcrTrace(parseOverlayTrace(trace));
+    // Only settles/late-rejects carry nativeMs; only coalesced ticks carry the age.
+    expect(summary.foregroundNativeMs.count).toBe(3);
+    expect(summary.foregroundNativeMs.max).toBe(4200);
+    expect(summary.foregroundPhysicalInFlightAgeMs.count).toBe(1);
+    expect(summary.foregroundPhysicalInFlightAgeMs.max).toBe(1500);
+  });
+
+  it("does not fold foreground polls into the geometry counters", () => {
+    const summary = summarizeOcrTrace(parseOverlayTrace(trace));
+    expect(summary.geometryTimings).toBe(0);
+    expect(summary.geometryNativeElapsedMs.count).toBe(0);
+    expect(summary.markerCounts["[foreground-poll]"]).toBe(4);
+  });
+});
