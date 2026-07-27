@@ -40,7 +40,31 @@ jobs:
 
       - name: Install NSIS and WiX v3
         shell: pwsh
-        run: choco install nsis wixtoolset -y --no-progress
+        run: |
+          choco install nsis wixtoolset -y --no-progress
+
+          $nsisCandidates = @(
+            "${env:ProgramFiles(x86)}\NSIS\makensis.exe",
+            "${env:ProgramFiles}\NSIS\makensis.exe",
+            "${env:ChocolateyInstall}\bin\makensis.exe"
+          )
+
+          $makensis = $nsisCandidates |
+            Where-Object { Test-Path $_ } |
+            Select-Object -First 1
+
+          if (-not $makensis) {
+            throw "Chocolatey completed, but makensis.exe was not found."
+          }
+
+          $nsisDirectory = Split-Path $makensis
+          $nsisDirectory | Out-File `
+            -FilePath $env:GITHUB_PATH `
+            -Encoding utf8 `
+            -Append
+
+          Write-Host "NSIS executable: $makensis"
+          & $makensis /VERSION
 
       - name: Build, audit, package, and run build-host installer smoke
         shell: powershell
