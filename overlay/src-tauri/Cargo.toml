@@ -41,6 +41,8 @@ windows = { version = "0.61", features = [
     "Foundation_Collections",
     "Globalization",
     "Graphics_Imaging",
+    "Win32_Graphics_Dwm",
+    "Win32_Graphics_Gdi",
     "Media_Ocr",
     "Storage_Streams",
     "Win32_Foundation",

@@ -263,7 +263,7 @@ interface NativeOcrCardDiagnostic {
   cardRect: { x: number; y: number; width: number; height: number } | null;
   crop: { x: number; y: number; width: number; height: number } | null;
   captureSucceeded: boolean;
-  rawText: string | null;
+  textRecognized: boolean;
   error: string | null;
   captureWidth: number | null;
   captureHeight: number | null;
@@ -1344,7 +1344,7 @@ function App() {
   // Staged diagnostics counters (never conflate injected with detected).
   const diag = {
     cardsCaptured: ocrDiagnostics.filter((d) => d.captureSucceeded).length,
-    titlesRead: ocrDiagnostics.filter((d) => d.rawText).length,
+    titlesRead: ocrDiagnostics.filter((d) => d.textRecognized).length,
     riotResolved: offerState.slots.filter(
       (slot) => slot.resolution?.aramgg && slot.resolution.aramgg.kind !== "unmatched",
     ).length,
@@ -1451,9 +1451,12 @@ function App() {
   const publishForeground = useCallback((nextForeground: ForegroundState): ForegroundState => {
     const previousForeground = foregroundStateRef.current;
     foregroundStateRef.current = nextForeground;
-    if (nextForeground.gameWindowForeground !== previousForeground.gameWindowForeground) {
-      // A focus flip starts a new foreground epoch: a probe that captured
-      // under the old focus can never publish after the change.
+    if (
+      nextForeground.gameWindowForeground !== previousForeground.gameWindowForeground ||
+      nextForeground.captureTargetGeneration !== previousForeground.captureTargetGeneration
+    ) {
+      // A focus flip or Windows HWND/client/monitor/DPI transition starts a new
+      // foreground epoch: a probe captured under the old target cannot publish.
       foregroundEpochRef.current += 1;
     }
     const changed = [
@@ -1468,6 +1471,8 @@ function App() {
       "foregroundWindowTitle",
       "foregroundExecutablePath",
       "foregroundWindowHandle",
+      "captureTargetGeneration",
+      "platformFailureReason",
     ].some((key) => (
       nextForeground[key as keyof ForegroundState] !==
       previousForeground[key as keyof ForegroundState]
@@ -2525,7 +2530,7 @@ function App() {
                   : "unmatched";
           const rejectionStage: SlotRejectionStage = !diagnostic.captureSucceeded
             ? "capture"
-            : !diagnostic.rawText
+            : !diagnostic.textRecognized
               ? "ocr"
               : slotState === "unmatched"
                 ? "riot-catalog"
@@ -2541,7 +2546,7 @@ function App() {
               aramggResolution && aramggResolution.kind !== "unmatched"
                 ? aramggResolution.riot.confidence
                 : poolDiagnostic?.confidence ?? null,
-            rejectionReason: !diagnostic.rawText
+            rejectionReason: !diagnostic.textRecognized
               ? diagnostic.error ?? "no-text-recognized"
               : aramggResolution?.kind === "unmatched"
                 ? `${aramggResolution.rejection.reason}${
@@ -2678,7 +2683,7 @@ function App() {
           cardRect: null,
           crop: null,
           captureSucceeded: false,
-          rawText: null,
+          textRecognized: false,
           error: message,
           captureWidth: null,
           captureHeight: null,

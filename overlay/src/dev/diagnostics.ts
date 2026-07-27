@@ -18,7 +18,7 @@ export interface OcrCardDiagnostic {
   cardRect: { x: number; y: number; width: number; height: number } | null;
   crop: { x: number; y: number; width: number; height: number } | null;
   captureSucceeded: boolean;
-  rawText: string | null;
+  textRecognized: boolean;
   error: string | null;
   captureWidth: number | null;
   captureHeight: number | null;

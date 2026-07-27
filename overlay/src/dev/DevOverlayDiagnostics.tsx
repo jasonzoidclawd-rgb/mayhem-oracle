@@ -6,6 +6,7 @@ import type { OverlayCalibration } from "../calibration";
 import type { ForegroundState } from "../overlayVisibility";
 import type { DiagnosticCounters, OcrCardDiagnostic, OcrLifecycleSnapshot } from "./diagnostics";
 import type { AuthoritativeSnapshot } from "../authoritativePublication";
+import { boundedDiagnosticHash } from "./publicationDiagnostics";
 
 export interface DevOverlayDiagnosticsProps {
   gameOverlayIsVisible: boolean;
@@ -67,7 +68,7 @@ export function DevOverlayDiagnostics({
       cardRect: null,
       crop: null,
       captureSucceeded: false,
-      rawText: null,
+      textRecognized: false,
       error: null,
       captureWidth: null,
       captureHeight: null,
@@ -244,6 +245,8 @@ export function DevOverlayDiagnostics({
                 {String(foregroundState.riotClientForeground)} · gameRunning=
                 {String(foregroundState.gameRunning)} · gameWindowDetected=
                 {String(foregroundState.gameWindowDetected)}
+                {" · targetGen="}{foregroundState.captureTargetGeneration ?? "?"}
+                {" · failure="}{foregroundState.platformFailureReason ?? "none"}
               </div>
               {diagnostics.map((diagnostic) => {
                 const cardRect = diagnostic.cardRect
@@ -262,7 +265,7 @@ export function DevOverlayDiagnostics({
                   <div key={`ocr-diagnostic-${diagnostic.regionIndex}`} style={{ marginTop: 2 }}>
                     card {diagnostic.regionIndex + 1} [{diagnostic.slotState}
                     {diagnostic.rejectionStage && ` @ ${diagnostic.rejectionStage}`}] · cardRect={cardRect} · crop={crop} · image={captureSize} · capture=
-                    {String(diagnostic.captureSucceeded)} · raw={diagnostic.rawText ?? ""} · normalized={diagnostic.normalizedText} · riot=
+                    {String(diagnostic.captureSucceeded)} · text={String(diagnostic.textRecognized)} · ocrHash={boundedDiagnosticHash(diagnostic.normalizedText) ?? "none"} · riot=
                     {diagnostic.riotCanonicalName ?? "none"}
                     {diagnostic.riotAugmentId && ` (#${diagnostic.riotAugmentId}, ${diagnostic.riotMethod})`} · aramgg=
                     {diagnostic.aramggResult ?? "none"} · best=

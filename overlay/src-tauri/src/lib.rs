@@ -15,6 +15,8 @@ mod lcu;
 pub mod member;
 pub mod ocr;
 pub mod overlay_window;
+#[cfg(any(target_os = "windows", test))]
+mod platform;
 mod sanitize;
 pub mod surface_probe;
 mod upload_queue;
@@ -584,7 +586,9 @@ pub struct OcrCardDiagnostic {
     pub card_rect: Option<calibration::Rect>,
     pub crop: Option<calibration::Rect>,
     pub capture_succeeded: bool,
-    pub raw_text: Option<String>,
+    /// Recognition presence only. OCR text travels exclusively in `detected`
+    /// for shared matching and is never duplicated into diagnostics.
+    pub text_recognized: bool,
     pub error: Option<String>,
     pub capture_width: Option<u32>,
     pub capture_height: Option<u32>,
@@ -779,6 +783,7 @@ where
 /// True when an enumerated window belongs to the overlay itself. `xcap` gives us
 /// only app name/title, so we match the overlay's product identity — a defensive
 /// guard on top of the game-window predicate, which already rejects it.
+#[cfg(not(target_os = "windows"))]
 fn is_own_overlay_window(app_name: &str, title: &str) -> bool {
     let overlay = |value: &str| {
         let normalized = value.to_lowercase();
@@ -787,6 +792,7 @@ fn is_own_overlay_window(app_name: &str, title: &str) -> bool {
     overlay(app_name) || overlay(title)
 }
 
+#[cfg(not(target_os = "windows"))]
 fn find_league_window() -> Option<calibration::Rect> {
     let windows = xcap::Window::all().ok()?;
     let mut candidates: Vec<window_locator::WindowCandidate> = Vec::new();
@@ -814,6 +820,13 @@ fn find_league_window() -> Option<calibration::Rect> {
     }
 
     window_locator::select_league_window(&candidates)
+}
+
+#[cfg(target_os = "windows")]
+fn find_league_window() -> Option<calibration::Rect> {
+    platform::windows::discover_capture_target()
+        .ok()
+        .map(|target| target.client_rect)
 }
 
 fn selected_monitor_index(
@@ -928,7 +941,7 @@ pub fn capture_failure_diagnostics(
                 card_rect: Some(rect.clone()),
                 crop: Some(rect),
                 capture_succeeded: false,
-                raw_text: None,
+                text_recognized: false,
                 error: Some(error.to_string()),
                 capture_width: None,
                 capture_height: None,
@@ -949,7 +962,13 @@ struct CardCropSet {
 }
 
 fn capture_card_name_crops() -> Result<CardCropSet, String> {
+    #[cfg(target_os = "windows")]
+    let capture_target = platform::windows::foreground_capture_target()
+        .map_err(|reason| reason.as_str().to_string())?;
     let monitors = monitor_snapshots()?;
+    #[cfg(target_os = "windows")]
+    let game_window = Some(capture_target.client_rect.clone());
+    #[cfg(not(target_os = "windows"))]
     let game_window = find_league_window();
     let monitor_index = selected_monitor_index(&monitors, game_window.as_ref());
     let monitor = &monitors[monitor_index];
@@ -960,6 +979,12 @@ fn capture_card_name_crops() -> Result<CardCropSet, String> {
         Err(error) => {
             // A capture failure is a flagged, crop-less outcome — never a clean
             // zero-card scan (see `capture_failure_diagnostics`).
+            #[cfg(target_os = "windows")]
+            let message = {
+                let _ = error;
+                "capture-failed".to_string()
+            };
+            #[cfg(not(target_os = "windows"))]
             let message = format!("Capture failed: {}", error);
             diagnostics.extend(capture_failure_diagnostics(&calibration.viewport, &message));
             return Ok(CardCropSet {
@@ -969,6 +994,12 @@ fn capture_card_name_crops() -> Result<CardCropSet, String> {
             });
         }
     };
+    #[cfg(target_os = "windows")]
+    if !platform::windows::capture_target_is_current(&capture_target.generation()) {
+        return Err(platform::PlatformFailureReason::CaptureTargetChanged
+            .as_str()
+            .to_string());
+    }
 
     let mut crops = Vec::with_capacity(calibration::CARD_NAME_REGIONS.len());
 
@@ -989,7 +1020,7 @@ fn capture_card_name_crops() -> Result<CardCropSet, String> {
                 card_rect: Some(logical_rect.clone()),
                 crop: Some(rect),
                 capture_succeeded: false,
-                raw_text: None,
+                text_recognized: false,
                 error: Some("crop-origin-outside-monitor".to_string()),
                 capture_width: Some(screenshot.width()),
                 capture_height: Some(screenshot.height()),
@@ -1008,7 +1039,7 @@ fn capture_card_name_crops() -> Result<CardCropSet, String> {
                 card_rect: Some(logical_rect.clone()),
                 crop: Some(rect),
                 capture_succeeded: false,
-                raw_text: None,
+                text_recognized: false,
                 error: Some("crop-outside-captured-monitor".to_string()),
                 capture_width: Some(screenshot.width()),
                 capture_height: Some(screenshot.height()),
@@ -1025,7 +1056,7 @@ fn capture_card_name_crops() -> Result<CardCropSet, String> {
             card_rect: Some(logical_rect),
             crop: Some(rect),
             capture_succeeded: true,
-            raw_text: None,
+            text_recognized: false,
             error: None,
             capture_width: Some(screenshot.width()),
             capture_height: Some(screenshot.height()),
@@ -1061,7 +1092,7 @@ async fn detect_augment_names(known_names: Option<Vec<String>>) -> Result<OcrSca
                     card_rect: None,
                     crop: None,
                     capture_succeeded: false,
-                    raw_text: None,
+                    text_recognized: false,
                     error: Some(reason.clone()),
                     capture_width: None,
                     capture_height: None,
@@ -1088,7 +1119,7 @@ async fn detect_augment_names(known_names: Option<Vec<String>>) -> Result<OcrSca
                         card_rect: None,
                         crop: None,
                         capture_succeeded: false,
-                        raw_text: None,
+                        text_recognized: false,
                         error: Some(reason.clone()),
                         capture_width: None,
                         capture_height: None,
@@ -1143,7 +1174,7 @@ async fn detect_augment_names(known_names: Option<Vec<String>>) -> Result<OcrSca
                     .iter_mut()
                     .find(|diagnostic| diagnostic.region_index == region_index)
                 {
-                    diagnostic.raw_text = Some(text.clone());
+                    diagnostic.text_recognized = true;
                 }
                 detected.push(DetectedAugment { text, region_index });
             }
@@ -1166,7 +1197,7 @@ async fn detect_augment_names(known_names: Option<Vec<String>>) -> Result<OcrSca
             Err(error) => {
                 let message = format!("OCR worker failed: {}", error);
                 for diagnostic in &mut diagnostics {
-                    if diagnostic.raw_text.is_none() && diagnostic.error.is_none() {
+                    if !diagnostic.text_recognized && diagnostic.error.is_none() {
                         diagnostic.error = Some(message.clone());
                     }
                 }
@@ -1244,20 +1275,40 @@ fn capture_surface_frame() -> Result<SurfaceCapture, String> {
     // probes wedged >2 s (300 watchdogs / no badges in later games). Bounded here,
     // a slow walk just times out to an absent observation. `pre_capture_ms` below
     // now folds this walk in, so the trace attributes the cost to enumeration.
+    #[cfg(target_os = "windows")]
+    let capture_target = platform::windows::foreground_capture_target()
+        .map_err(|reason| reason.as_str().to_string())?;
+    #[cfg(not(target_os = "windows"))]
     if !collect_foreground_state().game_window_foreground {
         return Err("actual-game-window-not-foreground".to_string());
     }
     let monitors = monitor_snapshots()?;
+    #[cfg(target_os = "windows")]
+    let game_window = Some(capture_target.client_rect.clone());
+    #[cfg(not(target_os = "windows"))]
     let game_window = find_league_window();
     let monitor_index = selected_monitor_index(&monitors, game_window.as_ref());
     let monitor = &monitors[monitor_index];
     let calibration = calibration::select_viewport(&monitor.info, game_window.as_ref());
     let capture_started = std::time::Instant::now();
     let pre_capture_ms = start.elapsed().as_millis() as u64;
-    let screenshot = monitor
-        .monitor
-        .capture_image()
-        .map_err(|error| format!("capture-failed: {}", error))?;
+    let screenshot = monitor.monitor.capture_image().map_err(|error| {
+        #[cfg(target_os = "windows")]
+        {
+            let _ = error;
+            "capture-failed".to_string()
+        }
+        #[cfg(not(target_os = "windows"))]
+        {
+            format!("capture-failed: {}", error)
+        }
+    })?;
+    #[cfg(target_os = "windows")]
+    if !platform::windows::capture_target_is_current(&capture_target.generation()) {
+        return Err(platform::PlatformFailureReason::CaptureTargetChanged
+            .as_str()
+            .to_string());
+    }
 
     Ok(SurfaceCapture {
         screenshot,
@@ -1882,88 +1933,27 @@ fn get_foreground_diagnostic() -> Result<serde_json::Value, String> {
         return serde_json::to_value(foreground_poll_diagnostic())
             .map_err(|error| error.to_string());
     }
-    #[cfg(not(all(target_os = "macos", debug_assertions)))]
+    #[cfg(all(target_os = "windows", debug_assertions))]
+    {
+        let state = collect_foreground_state();
+        return Ok(serde_json::json!({
+            "platform": "windows",
+            "gameWindowForeground": state.game_window_foreground,
+            "leagueClientForeground": state.league_client_foreground,
+            "riotClientForeground": state.riot_client_foreground,
+            "gameRunning": state.game_running,
+            "gameWindowDetected": state.game_window_detected,
+            "captureTargetGeneration": state.capture_target_generation,
+            "failureReason": state.platform_failure_reason,
+        }));
+    }
+    #[cfg(not(any(
+        all(target_os = "macos", debug_assertions),
+        all(target_os = "windows", debug_assertions)
+    )))]
     {
         Err("foreground diagnostic is development-only".to_string())
     }
-}
-
-#[cfg(target_os = "windows")]
-fn windows_foreground_metadata() -> (FrontmostApplication, Option<String>, Option<String>, bool) {
-    use std::path::Path;
-    use windows::core::PWSTR;
-    use windows::Win32::Foundation::CloseHandle;
-    use windows::Win32::System::Threading::{
-        OpenProcess, QueryFullProcessImageNameW, PROCESS_NAME_FORMAT,
-        PROCESS_QUERY_LIMITED_INFORMATION,
-    };
-    use windows::Win32::UI::WindowsAndMessaging::{
-        GetForegroundWindow, GetWindowTextW, GetWindowThreadProcessId,
-    };
-
-    fn executable_path(process_id: u32) -> Option<String> {
-        let process =
-            unsafe { OpenProcess(PROCESS_QUERY_LIMITED_INFORMATION, false, process_id) }.ok()?;
-        let mut buffer = [0u16; 32_768];
-        let mut length = buffer.len() as u32;
-        let result = unsafe {
-            QueryFullProcessImageNameW(
-                process,
-                PROCESS_NAME_FORMAT(0),
-                PWSTR(buffer.as_mut_ptr()),
-                &mut length,
-            )
-            .is_ok()
-        };
-        unsafe {
-            let _ = CloseHandle(process);
-        }
-        result.then(|| String::from_utf16_lossy(&buffer[..length as usize]))
-    }
-
-    fn window_title(hwnd: windows::Win32::Foundation::HWND) -> Option<String> {
-        let mut buffer = [0u16; 1_024];
-        let length = unsafe { GetWindowTextW(hwnd, &mut buffer) };
-        (length > 0).then(|| String::from_utf16_lossy(&buffer[..length as usize]))
-    }
-
-    let hwnd = unsafe { GetForegroundWindow() };
-    if hwnd.0.is_null() {
-        return (FrontmostApplication::default(), None, None, false);
-    }
-
-    let mut process_id = 0u32;
-    unsafe {
-        GetWindowThreadProcessId(hwnd, Some(&mut process_id));
-    }
-    if process_id == 0 {
-        return (
-            FrontmostApplication::default(),
-            None,
-            window_title(hwnd),
-            false,
-        );
-    }
-
-    let executable_path = executable_path(process_id);
-    let process_name = executable_path
-        .as_deref()
-        .and_then(|path| Path::new(path).file_stem())
-        .and_then(|name| name.to_str())
-        .map(str::to_string);
-    let title = window_title(hwnd);
-    let game_window_detected = process_name
-        .as_deref()
-        .is_some_and(|name| foreground::is_actual_game_process(name, executable_path.as_deref()));
-    let application = FrontmostApplication {
-        app_name: process_name.clone(),
-        bundle_identifier: None,
-        process_id: Some(process_id),
-        executable_path,
-        window_handle: Some(hwnd.0 as usize as u64),
-    };
-
-    (application, process_name, title, game_window_detected)
 }
 
 /// How long a game-process-presence reading stays usable.
@@ -1996,35 +1986,53 @@ fn cached_process_presence(
     cache.and_then(|(stamp, value)| (now.duration_since(stamp) < ttl).then_some(value))
 }
 
-fn game_process_running() -> bool {
+fn process_presence_with_refresh<F>(
+    cache: &std::sync::Mutex<Option<(std::time::Instant, bool)>>,
+    now: std::time::Instant,
+    ttl: Duration,
+    refresh: F,
+) -> bool
+where
+    F: FnOnce() -> bool,
+{
     let cached = {
-        let guard = PROCESS_PRESENCE_CACHE
+        let guard = cache
             .lock()
             .unwrap_or_else(std::sync::PoisonError::into_inner);
         *guard
     };
-    if let Some(value) = cached_process_presence(cached, std::time::Instant::now(), PROCESS_PRESENCE_TTL)
-    {
+    if let Some(value) = cached_process_presence(cached, now, ttl) {
         return value;
     }
 
+    // Never hold the cache lock across native process enumeration.
+    let value = refresh();
+    let mut guard = cache
+        .lock()
+        .unwrap_or_else(std::sync::PoisonError::into_inner);
+    *guard = Some((now, value));
+    value
+}
+
+fn game_process_running() -> bool {
     // The lock is deliberately NOT held across the enumeration. Concurrent
     // callers (the foreground command on the main thread plus up to
     // MAX_CONCURRENT_CAPTURES workers per channel) would otherwise serialize
     // behind the slowest process-table walk — trading a cheap duplicate scan
     // for exactly the head-of-line blocking this cache exists to remove.
-    let system = sysinfo::System::new_all();
-    let running = system.processes().values().any(|process| {
-        let name = process.name().to_string_lossy();
-        let executable_path = process.exe().map(|path| path.to_string_lossy());
-        foreground::is_actual_game_process(&name, executable_path.as_deref())
-    });
-
-    let mut guard = PROCESS_PRESENCE_CACHE
-        .lock()
-        .unwrap_or_else(std::sync::PoisonError::into_inner);
-    *guard = Some((std::time::Instant::now(), running));
-    running
+    process_presence_with_refresh(
+        &PROCESS_PRESENCE_CACHE,
+        std::time::Instant::now(),
+        PROCESS_PRESENCE_TTL,
+        || {
+            let system = sysinfo::System::new_all();
+            system.processes().values().any(|process| {
+                let name = process.name().to_string_lossy();
+                let executable_path = process.exe().map(|path| path.to_string_lossy());
+                foreground::is_actual_game_process(&name, executable_path.as_deref())
+            })
+        },
+    )
 }
 
 /// Whether the NSWorkspace frontmost application has to be read.
@@ -2053,7 +2061,11 @@ mod foreground_poll_cost_tests {
         let now = Instant::now();
         let cache = Some((now, true));
         assert_eq!(
-            cached_process_presence(cache, now + Duration::from_millis(4_999), PROCESS_PRESENCE_TTL),
+            cached_process_presence(
+                cache,
+                now + Duration::from_millis(4_999),
+                PROCESS_PRESENCE_TTL
+            ),
             Some(true)
         );
     }
@@ -2085,6 +2097,43 @@ mod foreground_poll_cost_tests {
         assert_eq!(
             cached_process_presence(Some((now, false)), now, PROCESS_PRESENCE_TTL),
             Some(false)
+        );
+    }
+
+    #[test]
+    fn process_cache_expires_and_refreshes_without_authorizing_capture() {
+        use std::sync::atomic::{AtomicUsize, Ordering};
+
+        let cache = std::sync::Mutex::new(None);
+        let refreshes = AtomicUsize::new(0);
+        let now = Instant::now();
+        let read = |at, value| {
+            process_presence_with_refresh(&cache, at, PROCESS_PRESENCE_TTL, || {
+                refreshes.fetch_add(1, Ordering::SeqCst);
+                value
+            })
+        };
+
+        assert!(read(now, true));
+        assert!(read(now + Duration::from_millis(4_999), false));
+        assert_eq!(refreshes.load(Ordering::SeqCst), 1);
+        assert!(!read(now + PROCESS_PRESENCE_TTL, false));
+        assert_eq!(refreshes.load(Ordering::SeqCst), 2);
+
+        // Presence is returned only as a diagnostic bool. Capture authority is
+        // independently absent when the foreground adapter has no game target.
+        assert!(
+            !foreground::classify_foreground(foreground::ForegroundObservation {
+                app_name: None,
+                bundle_identifier: None,
+                owner_name: None,
+                window_title: None,
+                executable_path: None,
+                window_handle: None,
+                game_running: true,
+                game_window_detected: true,
+            })
+            .game_window_foreground
         );
     }
 
@@ -2126,18 +2175,30 @@ fn collect_foreground_state() -> foreground::ForegroundState {
 
     #[cfg(target_os = "windows")]
     {
-        let (frontmost, owner_name, window_title, game_window_detected) =
-            windows_foreground_metadata();
-        return foreground::classify_foreground(foreground::ForegroundObservation {
-            app_name: frontmost.app_name.as_deref(),
-            bundle_identifier: frontmost.bundle_identifier.as_deref(),
-            owner_name: owner_name.as_deref(),
-            window_title: window_title.as_deref(),
-            executable_path: frontmost.executable_path.as_deref(),
-            window_handle: frontmost.window_handle,
+        let observation = platform::windows::foreground_observation();
+        return foreground::ForegroundState {
+            game_window_foreground: observation.target.is_some(),
+            league_client_foreground: observation.foreground_is_league_client_process
+                || observation.foreground_is_riot_client_process,
+            riot_client_foreground: observation.foreground_is_riot_client_process,
             game_running: game_process_running(),
-            game_window_detected,
-        });
+            game_window_detected: observation.game_window_detected,
+            // Windows diagnostics intentionally expose no process name, title,
+            // executable path, raw HWND, or other user-identifying metadata.
+            foreground_app_name: None,
+            foreground_bundle_identifier: None,
+            foreground_owner_name: None,
+            foreground_window_title: None,
+            foreground_executable_path: None,
+            foreground_window_handle: None,
+            capture_target_generation: observation
+                .target
+                .as_ref()
+                .map(platform::CaptureTarget::generation),
+            platform_failure_reason: observation
+                .failure
+                .map(|reason| reason.as_str().to_string()),
+        };
     }
 
     #[cfg(not(any(target_os = "macos", target_os = "windows")))]

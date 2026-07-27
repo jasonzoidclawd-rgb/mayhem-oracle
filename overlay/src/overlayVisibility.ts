@@ -10,6 +10,10 @@ export interface ForegroundState {
   foregroundWindowTitle: string | null;
   foregroundExecutablePath: string | null;
   foregroundWindowHandle: number | null;
+  /** Irreversible native target generation; raw HWND/PID never reach Windows JS. */
+  captureTargetGeneration: string | null;
+  /** Bounded native rejection enum, never a raw OS error or window/process name. */
+  platformFailureReason: string | null;
 }
 
 export function unknownForegroundState(): ForegroundState {
@@ -25,6 +29,8 @@ export function unknownForegroundState(): ForegroundState {
     foregroundWindowTitle: null,
     foregroundExecutablePath: null,
     foregroundWindowHandle: null,
+    captureTargetGeneration: null,
+    platformFailureReason: null,
   };
 }
 

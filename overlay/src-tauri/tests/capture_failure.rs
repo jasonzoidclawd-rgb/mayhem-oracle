@@ -25,9 +25,9 @@ fn capture_failure_flags_every_region_and_produces_no_crops() {
     assert!(diagnostics
         .iter()
         .all(|d| d.error.as_deref() == Some("Capture failed: device lost")));
-    // No raw text and no capture dimensions were produced — nothing that could
+    // No recognized text and no capture dimensions were produced — nothing that could
     // be mistaken for a real recognized-but-empty result.
-    assert!(diagnostics.iter().all(|d| d.raw_text.is_none()));
+    assert!(diagnostics.iter().all(|d| !d.text_recognized));
     assert!(diagnostics.iter().all(|d| d.capture_width.is_none()));
 }
 

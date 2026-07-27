@@ -211,3 +211,85 @@ fn safe_scale_factor(scale_factor: f64) -> f64 {
         1.0
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    fn monitor(x: i32, y: i32, width: u32, height: u32, scale_factor: f64) -> MonitorInfo {
+        MonitorInfo {
+            x,
+            y,
+            width,
+            height,
+            scale_factor,
+        }
+    }
+
+    fn rect(x: i32, y: i32, width: u32, height: u32) -> Rect {
+        Rect {
+            x,
+            y,
+            width,
+            height,
+        }
+    }
+
+    #[test]
+    fn borderless_fullscreen_uses_physical_monitor_bounds() {
+        let monitor = monitor(-2560, 0, 2560, 1440, 1.5);
+        let calibration = select_viewport(&monitor, Some(&rect(-2560, 0, 2560, 1440)));
+        assert_eq!(calibration.viewport, rect(-2560, 0, 2560, 1440));
+        assert_eq!(calibration.mode, "borderless-monitor-fallback");
+    }
+
+    #[test]
+    fn windowed_mode_uses_the_client_area_not_outer_window_borders() {
+        let monitor = monitor(0, 0, 1920, 1080, 1.25);
+        let outer_window = rect(300, 160, 1316, 759);
+        let client_area = rect(308, 191, 1300, 720);
+        let calibration = select_viewport(&monitor, Some(&client_area));
+        assert_eq!(calibration.viewport, client_area);
+        assert_ne!(calibration.viewport, outer_window);
+        assert_eq!(calibration.mode, "league-window");
+    }
+
+    #[test]
+    fn negative_virtual_screen_coordinates_map_into_capture_pixels() {
+        let monitor = monitor(-1920, -1080, 1920, 1080, 1.0);
+        let client = rect(-1800, -1000, 1280, 720);
+        let mapped = capture_rect_for_monitor(&client, &monitor, 1920, 1080);
+        assert_eq!(mapped, rect(120, 80, 1280, 720));
+    }
+
+    #[test]
+    fn capture_mapping_is_dpi_independent_and_uses_actual_frame_size() {
+        let logical_monitor = monitor(0, 0, 1536, 864, 1.25);
+        let client = rect(128, 72, 1280, 720);
+        let mapped = capture_rect_for_monitor(&client, &logical_monitor, 1920, 1080);
+        assert_eq!(mapped, rect(160, 90, 1600, 900));
+    }
+
+    #[test]
+    fn overlap_selects_a_secondary_monitor_left_or_above_primary() {
+        let client = rect(-1800, -1000, 1280, 720);
+        let left_above = monitor(-1920, -1080, 1920, 1080, 1.5);
+        let primary = monitor(0, 0, 1920, 1080, 1.0);
+        assert_eq!(overlap_area(&client, &left_above), 1280 * 720);
+        assert_eq!(overlap_area(&client, &primary), 0);
+    }
+
+    #[test]
+    fn common_windows_scaling_converts_physical_to_logical_deterministically() {
+        let physical = rect(-960, 540, 1920, 1080);
+        for (scale, expected) in [
+            (1.0, rect(-960, 540, 1920, 1080)),
+            (1.25, rect(-768, 432, 1536, 864)),
+            (1.5, rect(-640, 360, 1280, 720)),
+            (1.75, rect(-549, 309, 1097, 617)),
+            (2.0, rect(-480, 270, 960, 540)),
+        ] {
+            assert_eq!(physical_to_logical_rect(&physical, scale), expected);
+        }
+    }
+}

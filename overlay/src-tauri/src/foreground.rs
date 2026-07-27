@@ -26,6 +26,12 @@ pub struct ForegroundState {
     pub foreground_window_title: Option<String>,
     pub foreground_executable_path: Option<String>,
     pub foreground_window_handle: Option<u64>,
+    /// Privacy-safe digest of native HWND/PID/client/monitor/DPI identity.
+    /// Present on Windows so a move, resize, DPI, monitor, or HWND transition
+    /// invalidates in-flight capture without exposing the raw identifiers.
+    pub capture_target_generation: Option<String>,
+    /// Bounded enum from the native platform boundary; never a raw OS error.
+    pub platform_failure_reason: Option<String>,
 }
 
 pub struct ForegroundObservation<'a> {
@@ -116,6 +122,8 @@ pub fn classify_foreground(observation: ForegroundObservation<'_>) -> Foreground
         foreground_window_title: observation.window_title.map(str::to_string),
         foreground_executable_path: observation.executable_path.map(str::to_string),
         foreground_window_handle: observation.window_handle,
+        capture_target_generation: None,
+        platform_failure_reason: None,
     }
 }
 
