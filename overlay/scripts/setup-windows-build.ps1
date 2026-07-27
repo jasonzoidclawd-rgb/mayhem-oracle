@@ -203,7 +203,17 @@ foreach ($tool in @("cl.exe", "link.exe")) {
     $missing.Add("$tool from the MSVC x64 toolchain")
   } else {
     Write-Host "$tool`: $($command.Source)"
-    & $tool 2>&1 | Select-Object -First 2
+    $previousErrorActionPreference = $ErrorActionPreference
+    try {
+        $ErrorActionPreference = "Continue"
+        $toolOutput = & $tool 2>&1
+        $toolExitCode = $LASTEXITCODE
+    }
+    finally {
+        $ErrorActionPreference = $previousErrorActionPreference
+    }
+
+    $toolOutput | Select-Object -First 2
   }
 }
 
