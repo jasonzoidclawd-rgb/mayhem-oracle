@@ -130,6 +130,26 @@ Invoke-Logged -Command "npm.cmd" -Arguments @("run", "audit:windows-artifact") -
   -LogName "24-prepackage-artifact-audit.log" -Label "Prepackage artifact audit"
 
 $tauriRoot = Join-Path $overlayRoot "src-tauri"
+. (Join-Path $PSScriptRoot "audit-windows-runtime-lib.ps1")
+$rustRemapRoots = [ordered]@{
+  USERPROFILE = $env:USERPROFILE
+  HOME = $env:HOME
+  RUNNER_WORKSPACE = $env:RUNNER_WORKSPACE
+  GITHUB_WORKSPACE = $env:GITHUB_WORKSPACE
+  repository = $repoRoot
+  TEMP = $env:TEMP
+  TMP = $env:TMP
+  RUNNER_TEMP = $env:RUNNER_TEMP
+  CARGO_HOME = $env:CARGO_HOME
+  RUSTUP_HOME = $env:RUSTUP_HOME
+  executable_output = (Join-Path $tauriRoot "target\release")
+  artifact_output = $artifactRoot
+}
+$rustFlags = @(Get-RustPathRemapFlags -KnownRoots $rustRemapRoots)
+$env:CARGO_ENCODED_RUSTFLAGS = Join-CargoEncodedRustFlags -Flags $rustFlags
+$rustRemapCount = @($rustFlags | Where-Object { $_ -eq "--remap-path-prefix" }).Count
+Write-Driver "Rust object path remapping enabled for $rustRemapCount concrete path variants"
+
 $fmtLog = Join-Path $logsRoot "30-cargo-fmt.log"
 Push-Location $tauriRoot
 try {

@@ -93,6 +93,34 @@ function Get-ForbiddenBinaryMarkers {
   return $markers
 }
 
+function Get-RustPathRemapFlags {
+  param([Parameter(Mandatory)][System.Collections.IDictionary]$KnownRoots)
+
+  $flags = [Collections.Generic.List[string]]::new()
+  $flags.Add("-Ctarget-feature=+crt-static")
+  $seenPrefixes = [Collections.Generic.HashSet[string]]::new(
+    [StringComparer]::OrdinalIgnoreCase
+  )
+
+  foreach ($entry in $KnownRoots.GetEnumerator()) {
+    $safeLabel = (([string]$entry.Key) -replace '[^A-Za-z0-9_.-]', '_').ToLowerInvariant()
+    foreach ($variant in Get-ConcretePathVariants -PathValue ([string]$entry.Value)) {
+      if (-not $seenPrefixes.Add($variant)) {
+        continue
+      }
+      $flags.Add("--remap-path-prefix")
+      $flags.Add("$variant=/__mayhem_build/$safeLabel")
+    }
+  }
+
+  return $flags
+}
+
+function Join-CargoEncodedRustFlags {
+  param([Parameter(Mandatory)][string[]]$Flags)
+  return [string]::Join([char]0x1f, $Flags)
+}
+
 function Find-ForbiddenBinaryMarkers {
   param(
     [Parameter(Mandatory)][byte[]]$BinaryBytes,

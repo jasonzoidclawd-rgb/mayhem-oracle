@@ -142,4 +142,43 @@ Assert-True `
   (-not (($sensitiveHits | ForEach-Object Label) -join " " ).Contains("D:\a\project")) `
   "Match labels must not disclose concrete path values"
 
+$remapRoots = [ordered]@{
+  USERPROFILE = "C:\Users\BuildProfile"
+  CARGO_HOME = "C:\Users\BuildProfile\.cargo"
+  GITHUB_WORKSPACE = "D:\a\project\project"
+  EMPTY = ""
+  DRIVE_ROOT = "E:\"
+}
+$remapFlags = @(Get-RustPathRemapFlags -KnownRoots $remapRoots)
+Assert-True ($remapFlags -contains "-Ctarget-feature=+crt-static") `
+  "Dynamic Rust flags must preserve the static CRT strategy"
+Assert-True `
+  ($remapFlags -contains "C:\Users\BuildProfile=/__mayhem_build/userprofile") `
+  "Rust flags must remap the concrete profile path"
+Assert-True `
+  ($remapFlags -contains "C:/Users/BuildProfile=/__mayhem_build/userprofile") `
+  "Rust flags must remap the forward-slash profile path"
+Assert-True `
+  ($remapFlags -contains "D:\a\project\project=/__mayhem_build/github_workspace") `
+  "Rust flags must remap the concrete source checkout"
+Assert-True `
+  (-not ($remapFlags -match '^E:==|^E:\\?=/')) `
+  "Rust flags must not remap a drive root"
+
+$profileRemapIndex = [Array]::IndexOf(
+  $remapFlags,
+  "C:\Users\BuildProfile=/__mayhem_build/userprofile"
+)
+$cargoRemapIndex = [Array]::IndexOf(
+  $remapFlags,
+  "C:\Users\BuildProfile\.cargo=/__mayhem_build/cargo_home"
+)
+Assert-True ($cargoRemapIndex -gt $profileRemapIndex) `
+  "More-specific remaps must follow broad profile remaps"
+
+$encodedRustFlags = Join-CargoEncodedRustFlags -Flags $remapFlags
+$decodedRustFlags = @($encodedRustFlags -split [char]0x1f)
+Assert-Equal $decodedRustFlags.Count $remapFlags.Count `
+  "Cargo encoded Rust flags must preserve every argument"
+
 Write-Host "Windows runtime audit helper tests passed: $assertions assertions."
