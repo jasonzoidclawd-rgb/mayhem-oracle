@@ -11,8 +11,13 @@ if ($PSVersionTable.PSEdition -eq "Core" -and -not $IsWindows) {
   throw "The PE runtime audit must run on Windows."
 }
 
+. (Join-Path $PSScriptRoot "audit-windows-runtime-lib.ps1")
+
 $executablePath = (Resolve-Path $Executable).Path
 $executableDirectory = Split-Path -Parent $executablePath
+$reportDirectory = Split-Path -Parent $DependencyReport
+$overlayRoot = Split-Path -Parent $PSScriptRoot
+$repositoryRoot = Split-Path -Parent $overlayRoot
 $dumpbin = Get-Command dumpbin.exe -ErrorAction SilentlyContinue
 if (-not $dumpbin) {
   throw "dumpbin.exe is required. Run setup-windows-build.ps1 from an MSVC x64 developer environment."
@@ -65,34 +70,40 @@ if ($dynamicVcRuntime.Count -gt 0) {
 }
 
 $binaryBytes = [IO.File]::ReadAllBytes($executablePath)
-$binaryAscii = [Text.Encoding]::ASCII.GetString($binaryBytes)
-$binaryUtf16 = [Text.Encoding]::Unicode.GetString($binaryBytes)
-$forbiddenBinaryMarkers = @(
-  "MAYHEM_OVERLAY_TIER_FIXTURE",
-  "MAYHEM_OVERLAY_GEOMETRY_PREVIEW",
-  "MAYHEM_OVERLAY_TRACE",
-  "MAYHEM_OVERLAY_DATASET_CAPTURE",
-  "ARAMGG PREVIEW",
-  "TIER FIXTURE",
-  "[aramgg-fixture]",
-  "data-dev-only",
-  "/Users/",
-)
-
-if (-not [string]::IsNullOrWhiteSpace($env:USERPROFILE)) {
-  $profilePath = $env:USERPROFILE -replace '[\\/]+$', ''
-  $forbiddenBinaryMarkers += $profilePath
-  $forbiddenBinaryMarkers += $profilePath.Replace('\', '/')
+# Third-party COFF objects may retain upstream CodeView paths. Audit only the
+# active build/profile/output roots so those records cannot mask a real leak.
+$knownRoots = [ordered]@{
+  USERPROFILE = $env:USERPROFILE
+  HOME = $env:HOME
+  GITHUB_WORKSPACE = $env:GITHUB_WORKSPACE
+  RUNNER_TEMP = $env:RUNNER_TEMP
+  RUNNER_WORKSPACE = $env:RUNNER_WORKSPACE
+  TEMP = $env:TEMP
+  TMP = $env:TMP
+  CARGO_HOME = $env:CARGO_HOME
+  RUSTUP_HOME = $env:RUSTUP_HOME
+  repository = $repositoryRoot
+  executable_output = $executableDirectory
+  artifact_output = $reportDirectory
 }
-
+$forbiddenBinaryMarkers = @(
+  Get-ForbiddenBinaryMarkers -KnownRoots $knownRoots
+)
+$concretePathLabels = @(
+  $forbiddenBinaryMarkers |
+    Where-Object Kind -eq "concrete-path" |
+    ForEach-Object Label |
+    Sort-Object -Unique
+)
 $embeddedMarkers = @(
-  $forbiddenBinaryMarkers | Where-Object {
-    $binaryAscii.IndexOf($_, [StringComparison]::OrdinalIgnoreCase) -ge 0 -or
-    $binaryUtf16.IndexOf($_, [StringComparison]::OrdinalIgnoreCase) -ge 0
-  }
+  Find-ForbiddenBinaryMarkers `
+    -BinaryBytes $binaryBytes `
+    -Markers $forbiddenBinaryMarkers
 )
 if ($embeddedMarkers.Count -gt 0) {
-  throw "Production executable contains forbidden diagnostic, fixture, or local-path markers: $($embeddedMarkers -join ', ')"
+  $safeMatches = $embeddedMarkers |
+    ForEach-Object { "$($_.Label) [$($_.Encoding)]" }
+  throw "Production executable contains forbidden diagnostic, fixture, or concrete local-path markers: $($safeMatches -join ', ')"
 }
 
 $systemDirectory = [Environment]::SystemDirectory
@@ -120,7 +131,6 @@ $file = Get-Item $executablePath
 $version = $file.VersionInfo.FileVersion
 $sha256 = (Get-FileHash -Algorithm SHA256 -Path $executablePath).Hash.ToLowerInvariant()
 
-$reportDirectory = Split-Path -Parent $DependencyReport
 New-Item -ItemType Directory -Force -Path $reportDirectory | Out-Null
 @(
   "Mayhem Oracle Windows Runtime Dependencies"
@@ -133,6 +143,7 @@ New-Item -ItemType Directory -Force -Path $reportDirectory | Out-Null
   "SHA-256: $sha256"
   "Authenticode status: $($signature.Status)"
   "Forbidden production marker audit: passed"
+  "Concrete path roots audited without value disclosure: $($concretePathLabels -join ', ')"
   ""
   "Visual C++ runtime strategy:"
   "- Rust target feature +crt-static is enabled for x86_64-pc-windows-msvc."

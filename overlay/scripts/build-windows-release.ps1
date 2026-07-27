@@ -98,6 +98,17 @@ try {
 $verification.Add("Windows toolchain setup: passed")
 Write-Driver "PASS Windows toolchain setup"
 
+Invoke-Logged -Command "powershell.exe" `
+  -Arguments @(
+    "-NoLogo",
+    "-NoProfile",
+    "-ExecutionPolicy", "Bypass",
+    "-File", (Join-Path $PSScriptRoot "audit-windows-runtime.test.ps1")
+  ) `
+  -WorkingDirectory $repoRoot `
+  -LogName "02-runtime-audit-helper-tests.log" `
+  -Label "Windows runtime audit helper tests"
+
 Invoke-Logged -Command "npm.cmd" -Arguments @("ci") -WorkingDirectory $repoRoot `
   -LogName "10-root-npm-ci.log" -Label "Root npm ci"
 Invoke-Logged -Command "npm.cmd" -Arguments @("test") -WorkingDirectory $repoRoot `
