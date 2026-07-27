@@ -2,6 +2,9 @@ name: Windows Overlay Private Delivery
 
 on:
   workflow_dispatch:
+  push:
+    branches:
+      - feat/overlay-tier-card-windows-parity
 
 # Private, short-retention build evidence only. This workflow never publishes a
 # release and has no repository write permission.
