@@ -172,8 +172,19 @@ Invoke-Logged -Command "cargo.exe" -Arguments @("check") -WorkingDirectory $taur
 Invoke-Logged -Command "cargo.exe" -Arguments @("clippy", "--all-targets") -WorkingDirectory $tauriRoot `
   -LogName "34-cargo-clippy.log" -Label "Rust Clippy"
 
-$rootTestText = Get-Content (Join-Path $logsRoot "11-root-tests.log") -Raw
-$overlayTestText = Get-Content (Join-Path $logsRoot "21-overlay-tests.log") -Raw
+function Get-PlainLogText {
+  param([Parameter(Mandatory = $true)][string]$Path)
+
+  $text = Get-Content $Path -Raw
+  return [regex]::Replace(
+    $text,
+    '\x1B\[[0-?]*[ -/]*[@-~]',
+    ""
+  )
+}
+
+$rootTestText = Get-PlainLogText (Join-Path $logsRoot "11-root-tests.log")
+$overlayTestText = Get-PlainLogText (Join-Path $logsRoot "21-overlay-tests.log")
 $rootTestMatch = [regex]::Match(
   $rootTestText,
   "Test Files\s+(\d+) passed.*?Tests\s+(\d+) passed",
