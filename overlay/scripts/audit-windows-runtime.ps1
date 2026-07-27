@@ -77,8 +77,14 @@ $forbiddenBinaryMarkers = @(
   "[aramgg-fixture]",
   "data-dev-only",
   "/Users/",
-  "C:\Users\"
 )
+
+if (-not [string]::IsNullOrWhiteSpace($env:USERPROFILE)) {
+  $profilePath = $env:USERPROFILE -replace '[\\/]+$', ''
+  $forbiddenBinaryMarkers += $profilePath
+  $forbiddenBinaryMarkers += $profilePath.Replace('\', '/')
+}
+
 $embeddedMarkers = @(
   $forbiddenBinaryMarkers | Where-Object {
     $binaryAscii.IndexOf($_, [StringComparison]::OrdinalIgnoreCase) -ge 0 -or
