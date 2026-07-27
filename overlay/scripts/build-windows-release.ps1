@@ -60,7 +60,14 @@ function Invoke-Logged {
   Write-Driver "START $Label"
   Push-Location $WorkingDirectory
   try {
-    & $Command @Arguments 2>&1 | Tee-Object -FilePath $logPath
+    $previousErrorActionPreference = $ErrorActionPreference
+    try {
+      $ErrorActionPreference = "Continue"
+      & $Command @Arguments 2>&1 | Tee-Object -FilePath $logPath
+    }
+    finally {
+      $ErrorActionPreference = $previousErrorActionPreference
+    }
     $exitCode = $LASTEXITCODE
   } finally {
     Pop-Location
