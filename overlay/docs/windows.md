@@ -10,20 +10,20 @@ duplicated per OS.
 
 | Layer | Where | Windows specifics |
 |-------|-------|-------------------|
-| Window discovery | `xcap::Window::all` → `window_locator::select_league_window` | Cross-platform. Rejects launcher/minimized/too-small/own-overlay windows. |
-| Monitor enumeration | `xcap::Monitor::all` → `calibration` | Cross-platform physical-pixel rects + scale factor. |
+| Window discovery | `platform` adapter → `CaptureTarget` | `EnumWindows` + owning executable identity; rejects invalid/hidden/minimized/cloaked windows and uses the physical client area. |
+| Monitor enumeration | Win32 target observation + `xcap::Monitor::all` → `calibration` | `MonitorFromWindow`/`GetMonitorInfoW` establish identity and physical bounds; xcap selects the matching capture monitor. |
 | Screen capture | `xcap` `capture_image` | Cross-platform, external, read-only. No injection. |
-| Foreground detection | `foreground::classify_foreground` (pure) + `windows_foreground_metadata` | `GetForegroundWindow` / `QueryFullProcessImageNameW` / `GetWindowThreadProcessId`. |
+| Foreground detection | shared physical-single-flight scheduler + `platform::windows` | `GetForegroundWindow` / `GetWindowThreadProcessId` / owning executable identity. Process presence alone never authorizes capture. |
 | Overlay window styling | `overlay_window` | `WS_EX_TRANSPARENT/NOACTIVATE/TOOLWINDOW/LAYERED`, `SetWindowPos` topmost. |
 | DPI awareness | `overlay_window::set_process_dpi_aware_v2` | `SetProcessDpiAwarenessContext(PER_MONITOR_AWARE_V2)`. |
 | Coordinate math | `calibration` (pure) | Same functions on both platforms; tested at 100–200% + negative origins. |
 | Champion data / OCR / geometry / reroll / publication | shared TS + Rust | Identical on Windows. |
 
-The only non-portable Rust lives behind `#[cfg(target_os = "windows")]`
-(`overlay_window::windows_impl`, the Windows branch of `set_click_through`, the
-Windows setup block and `windows_foreground_metadata`). Pure policy (style-flag
-computation, topmost policy, window selection, DPI conversions) is unit-tested on
-every host.
+The non-portable window/capture-authority Rust lives behind
+`#[cfg(target_os = "windows")]` in `platform/windows.rs`,
+`overlay_window::windows_impl`, the Windows branch of `set_click_through`, and
+the Windows setup block. Pure adapter selection, style-flag computation,
+topmost policy and DPI conversions are unit-tested on every host.
 
 ## Capture backend rationale
 
@@ -43,6 +43,12 @@ A wholesale capture failure is a **flagged, crop-less outcome**
 never interpreted as a valid "the game shows zero cards" observation; card
 presence is owned by the separate geometry track.
 
+`xcap::Monitor::capture_image` is synchronous and not cancellable through the
+current backend. Running it on a blocking worker does not cancel it. Logical
+timeouts therefore publish uncertainty while the worker keeps its bounded
+native permit until the call settles. Geometry and OCR use independent channel
+limits, so one cannot starve the other.
+
 ## DPI behavior
 
 The process declares **Per-Monitor DPI Awareness V2** at startup
@@ -53,6 +59,10 @@ scaling. `calibration::capture_rect_for_monitor` and
 `calibration::physical_to_logical_rect` do the physical↔logical conversions and
 are unit-tested for each scale, for secondary monitors, and for negative-origin
 monitors (a display placed left of / above the primary).
+
+Windowed mode uses `GetClientRect` + `ClientToScreen`, excluding the title bar
+and borders. `GetDpiForWindow` and a privacy-safe target digest invalidate late
+work after any HWND, client-size, monitor, resolution, or DPI transition.
 
 If you prefer a manifest-based declaration instead of the runtime call, embed an
 application manifest with
@@ -86,24 +96,16 @@ or destroyed at runtime — only restyled/repositioned.
 - **NSIS** for the `-setup.exe` (`choco install nsis`). WiX for MSI is fetched by
   Tauri automatically.
 - MSVC build tools (Visual Studio C++ workload) for linking.
+- A Windows 10/11 SDK selected by the Visual Studio Installer.
 
 ## Build commands (Windows)
 
 ```powershell
 # from repo root
-npm ci
-cd overlay
-npm ci
-npm test                         # includes version-consistency guard
-npm run build                    # tsc + vite renderer build
-cd src-tauri
-cargo test                       # native Windows unit/integration tests
-cargo clippy --all-targets
-cd ..
-npm run package:windows          # NSIS + MSI installers
-npm run audit:windows-artifact       # forbidden-content / privacy audit
-npm run audit:windows-artifact-names # deterministic artifact-name audit
+powershell -ExecutionPolicy Bypass -File overlay/scripts/verify-windows.ps1
 ```
+
+Pass `-SkipInstallers` for the compile/test gates without NSIS/MSI packaging.
 
 Installers are written to
 `overlay/src-tauri/target/release/bundle/{nsis,msi}/`.
@@ -119,7 +121,7 @@ represent these as production-signed releases.
 
 | Symptom | Likely cause / fix |
 |---------|--------------------|
-| **League window not found** | Game not in a real match, window minimized, or below 640×480. Only the game window ("… (TM) Client") is selected — the launcher/LeagueClientUx is intentionally rejected. |
+| **League window not found** | Game not in a real match, foreground, visible, capturable client area, or the window is minimized/cloaked. Authority comes from the owning executable, not the window title. |
 | **Black / empty capture** | GPU/driver capture restriction or exclusive-fullscreen mode. Use borderless windowed. Capture is read-only; a failure shows as flagged diagnostics, not an empty offer. |
 | **Stale capture** | Capture session stalled; the re-assert loop and OCR watchdog recover. Alt+Tab to League to force re-acquire. |
 | **Wrong scale / offset overlay** | DPI awareness not applied. Confirm `SetProcessDpiAwarenessContext` runs (dev log) or embed a PerMonitorV2 manifest. Verify the monitor scale in the calibration diagnostic. |
