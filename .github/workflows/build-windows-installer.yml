@@ -1,0 +1,76 @@
+name: Build Windows installer
+
+on:
+  push:
+    branches:
+      - feat/overlay-tier-card-windows-parity
+
+permissions:
+  contents: read
+
+concurrency:
+  group: windows-installer-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build-windows:
+    runs-on: windows-latest
+    timeout-minutes: 60
+
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v4
+
+      - name: Install Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: |
+            package-lock.json
+            overlay/package-lock.json
+
+      - name: Install Rust stable MSVC
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          toolchain: stable
+          targets: x86_64-pc-windows-msvc
+
+      - name: Install root dependencies
+        shell: pwsh
+        run: npm ci
+
+      - name: Install overlay dependencies
+        shell: pwsh
+        working-directory: overlay
+        run: npm ci
+
+      - name: Run overlay tests
+        shell: pwsh
+        working-directory: overlay
+        run: npm test
+
+      - name: Build Windows NSIS installer
+        shell: pwsh
+        working-directory: overlay
+        run: npm run tauri -- build --bundles nsis
+
+      - name: List generated artifacts
+        shell: pwsh
+        run: |
+          Get-ChildItem `
+            -Path overlay/src-tauri/target `
+            -Recurse `
+            -Include *.exe |
+          Select-Object FullName, Length
+
+      - name: Upload installer
+        uses: actions/upload-artifact@v4
+        with:
+          name: mayhem-windows-installer
+          path: |
+            overlay/src-tauri/target/release/bundle/nsis/*.exe
+            overlay/src-tauri/target/release/mayhem-oracle-overlay.exe
+          if-no-files-found: error
+          retention-days: 1
+          compression-level: 0
