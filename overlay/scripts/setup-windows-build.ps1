@@ -221,9 +221,11 @@ $sdkRoot = Join-Path ${env:ProgramFiles(x86)} "Windows Kits\10"
 $sdkLib = Join-Path $sdkRoot "Lib"
 $sdkVersions = @()
 if (Test-Path $sdkLib) {
-  $sdkVersions = Get-ChildItem $sdkLib -Directory |
-    Where-Object { Test-Path (Join-Path $_.FullName "um\x64") } |
-    Sort-Object Name -Descending
+  $sdkVersions = @(
+    Get-ChildItem $sdkLib -Directory |
+      Where-Object { Test-Path (Join-Path $_.FullName "um\x64") } |
+      Sort-Object Name -Descending
+  )
 }
 if ($sdkVersions.Count -eq 0) {
   $missing.Add("Windows 10 or Windows 11 SDK with x64 libraries")
