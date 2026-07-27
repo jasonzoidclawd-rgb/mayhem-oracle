@@ -1,4 +1,7 @@
-import { readFileSync } from "node:fs";
+import { readFileSync as readFileSyncRaw } from "node:fs";
+
+const readFileSync = (path: string | URL, encoding: "utf8") =>
+  readFileSyncRaw(path, encoding).replace(/\r\n/g, "\n");
 import { describe, expect, it } from "vitest";
 
 describe("Windows diagnostic privacy boundary", () => {

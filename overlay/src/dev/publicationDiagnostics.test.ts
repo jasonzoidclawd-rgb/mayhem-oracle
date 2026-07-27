@@ -1,4 +1,7 @@
-import { readFileSync } from "node:fs";
+import { readFileSync as readFileSyncRaw } from "node:fs";
+
+const readFileSync = (path: string | URL, encoding: "utf8") =>
+  readFileSyncRaw(path, encoding).replace(/\r\n/g, "\n");
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { invoke } from "@tauri-apps/api/core";
 import {
