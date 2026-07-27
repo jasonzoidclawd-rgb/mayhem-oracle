@@ -1,0 +1,5 @@
+[target.x86_64-pc-windows-msvc]
+# Keep the Windows application independent of the separately installed
+# Microsoft Visual C++ Redistributable. The release PE audit fails if a dynamic
+# VCRUNTIME/MSVCP dependency appears despite this target setting.
+rustflags = ["-C", "target-feature=+crt-static"]

@@ -1,4 +1,4 @@
-import { mkdir, rm, writeFile } from "node:fs/promises";
+import { mkdir, readFile, rm, writeFile } from "node:fs/promises";
 import { join } from "node:path";
 import { tmpdir } from "node:os";
 import { mkdtempSync } from "node:fs";
@@ -15,6 +15,7 @@ async function createOverlayFixture() {
   await mkdir(join(overlayRoot, "dist", "data", "abilities"), { recursive: true });
   await mkdir(join(overlayRoot, "dist", "assets"), { recursive: true });
   await mkdir(join(overlayRoot, "src-tauri", "capabilities"), { recursive: true });
+  await mkdir(join(overlayRoot, "src-tauri", ".cargo"), { recursive: true });
   await mkdir(join(overlayRoot, "src-tauri", "target", "release", "bundle", "nsis"), {
     recursive: true,
   });
@@ -40,8 +41,18 @@ async function createOverlayFixture() {
     JSON.stringify({
       build: { frontendDist: "../dist" },
       app: { security: { csp: "default-src 'self'" } },
-      bundle: { active: true },
+      bundle: {
+        active: true,
+        windows: {
+          webviewInstallMode: { type: "offlineInstaller", silent: true },
+          nsis: { installMode: "currentUser" },
+        },
+      },
     }),
+  );
+  await writeFile(
+    join(overlayRoot, "src-tauri", ".cargo", "config.toml"),
+    '[target.x86_64-pc-windows-msvc]\nrustflags = ["-C", "target-feature=+crt-static"]\n',
   );
   await writeFile(
     join(overlayRoot, "src-tauri", "target", "release", "bundle", "nsis", "Mayhem.exe"),
@@ -76,6 +87,26 @@ describe("windows artifact audit", () => {
     await rm(join(overlayRoot, "dist", "data"), { recursive: true });
 
     await expect(auditWindowsArtifact({ overlayRoot })).rejects.toThrow(/dist\/data/i);
+  });
+
+  test("rejects an online-only WebView2 installer mode", async () => {
+    const overlayRoot = await createOverlayFixture();
+    const configPath = join(overlayRoot, "src-tauri", "tauri.conf.json");
+    const config = JSON.parse(await readFile(configPath, "utf8"));
+    config.bundle.windows.webviewInstallMode = { type: "downloadBootstrapper" };
+    await writeJson(configPath, config);
+
+    await expect(auditWindowsArtifact({ overlayRoot })).rejects.toThrow(/offline WebView2/i);
+  });
+
+  test("rejects a Windows build without the static CRT target contract", async () => {
+    const overlayRoot = await createOverlayFixture();
+    await writeFile(
+      join(overlayRoot, "src-tauri", ".cargo", "config.toml"),
+      "[target.x86_64-pc-windows-msvc]\n",
+    );
+
+    await expect(auditWindowsArtifact({ overlayRoot })).rejects.toThrow(/Visual C\+\+/i);
   });
 
   test("rejects built renderer output without packaged ability data", async () => {

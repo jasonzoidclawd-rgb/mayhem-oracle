@@ -50,7 +50,7 @@ const FORBIDDEN_TEXT_PATTERNS = [
   /\braw_lcu\b/i,
   /ARAMGG\s+(?:PREVIEW|TIER\s+FIXTURE)/i,
   /(?:\/aramgg-dev|https:\/\/aramgg\.com|mayhem-aramgg-fixture-cache|\[aramgg-fixture\])/i,
-  /MAYHEM_OVERLAY_(?:TIER_FIXTURE|GEOMETRY_PREVIEW)/i,
+  /MAYHEM_OVERLAY_(?:TIER_FIXTURE|GEOMETRY_PREVIEW|TRACE|DATASET_CAPTURE)/i,
   /data-dev-only/i,
   /OCR unavailable\s+—/i,
   /force-refresh/i,
@@ -159,6 +159,25 @@ async function assertTauriConfig(overlayRoot) {
   }
   if (config?.plugins?.updater) {
     throw new Error("artifact audit failed: Tauri updater config must stay disabled");
+  }
+  if (config?.bundle?.windows?.webviewInstallMode?.type !== "offlineInstaller") {
+    throw new Error(
+      "artifact audit failed: Windows installers must embed the offline WebView2 installer",
+    );
+  }
+  if (config?.bundle?.windows?.nsis?.installMode !== "currentUser") {
+    throw new Error("artifact audit failed: NSIS must remain a current-user install");
+  }
+
+  const cargoConfigPath = path.join(overlayRoot, "src-tauri", ".cargo", "config.toml");
+  const cargoConfig = await readFile(cargoConfigPath, "utf-8");
+  if (
+    !cargoConfig.includes("[target.x86_64-pc-windows-msvc]") ||
+    !cargoConfig.includes("target-feature=+crt-static")
+  ) {
+    throw new Error(
+      "artifact audit failed: Windows x64 must use the static Visual C++ runtime strategy",
+    );
   }
 }
 
