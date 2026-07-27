@@ -46,7 +46,6 @@ jobs:
         shell: powershell
         run: >
           .\overlay\scripts\build-windows-release.ps1
-          -InstallMissingDependencies
 
       - name: Upload private preliminary delivery
         uses: actions/upload-artifact@v4.6.2
