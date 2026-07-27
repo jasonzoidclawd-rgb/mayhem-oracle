@@ -1,0 +1,69 @@
+name: Windows Overlay Private Delivery
+
+on:
+  workflow_dispatch:
+
+# Private, short-retention build evidence only. This workflow never publishes a
+# release and has no repository write permission.
+permissions:
+  contents: read
+
+jobs:
+  build-windows-x64:
+    name: Build and smoke-test Windows x64 installers
+    runs-on: windows-latest
+    timeout-minutes: 120
+
+    steps:
+      - name: Check out selected commit
+        uses: actions/checkout@v5.0.1
+
+      - name: Set up Node.js 22
+        uses: actions/setup-node@v5.0.0
+        with:
+          node-version: "22"
+          cache: "npm"
+          cache-dependency-path: |
+            package-lock.json
+            overlay/package-lock.json
+
+      - name: Set up Rust stable MSVC
+        shell: pwsh
+        run: |
+          rustup toolchain install stable-x86_64-pc-windows-msvc --profile minimal
+          rustup default stable-x86_64-pc-windows-msvc
+          rustup target add x86_64-pc-windows-msvc
+          rustup component add clippy rustfmt
+
+      - name: Install NSIS and WiX v3
+        shell: pwsh
+        run: choco install nsis wixtoolset -y --no-progress
+
+      - name: Build, audit, package, and run build-host installer smoke
+        shell: powershell
+        run: >
+          .\overlay\scripts\build-windows-release.ps1
+          -InstallMissingDependencies
+
+      - name: Upload private preliminary delivery
+        uses: actions/upload-artifact@v4.6.2
+        with:
+          name: mayhem-windows-overlay-x64-${{ github.sha }}-preliminary
+          path: out/windows-x64/**
+          if-no-files-found: error
+          retention-days: 7
+
+      - name: Record clean-validation boundary
+        shell: pwsh
+        run: |
+          @"
+          ### Windows build result
+
+          The uploaded bundle contains Windows-produced raw/NSIS/MSI artifacts,
+          hashes, PE imports, dependency/license manifests, logs, and build-host
+          install smoke evidence.
+
+          It is deliberately marked PRELIMINARY. Run the included
+          complete-windows-clean-validation.ps1 on a disposable clean Windows
+          x64 VM with WebView2 initially absent to create the final ZIP.
+          "@ | Add-Content $env:GITHUB_STEP_SUMMARY
