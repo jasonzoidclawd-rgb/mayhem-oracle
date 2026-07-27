@@ -55,6 +55,8 @@ const FORBIDDEN_TEXT_PATTERNS = [
   /OCR unavailable\s+—/i,
   /force-refresh/i,
   /Foreground:\s*app=/i,
+  /ocrHash=/i,
+  /targetGen=/i,
   /calibration-panel/i,
   /\[geometry-(?:probe|full-latency|freshness-75|hidden|watchdog)\]/i,
   /__getGeometryProbeDiagnostics/i,

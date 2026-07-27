@@ -53,6 +53,15 @@ describe("foreground poll wiring", () => {
     expect(src.indexOf("stopOcr();", publisher)).toBeGreaterThan(publisher);
   });
 
+  it("invalidates native work when the Windows capture target generation changes", () => {
+    const publisher = src.indexOf("const publishForeground = useCallback(");
+    expect(src.indexOf(
+      "nextForeground.captureTargetGeneration !== previousForeground.captureTargetGeneration",
+      publisher,
+    )).toBeGreaterThan(publisher);
+    expect(src.indexOf("foregroundEpochRef.current += 1;", publisher)).toBeGreaterThan(publisher);
+  });
+
   it("issues no follow-up invoke and keeps no pending-request state", () => {
     // A follow-up invoke fired from the settle handler would run the main
     // thread at a 100% duty cycle under a slow native call. The 250 ms interval
