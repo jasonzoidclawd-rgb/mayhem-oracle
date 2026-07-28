@@ -9,7 +9,7 @@ export type DiagnosticMarker =
   | "[identity-publish]"
   | "[identity-stale-reject]"
   | "[identity-timeout]"
-  | "[identity-watchdog-restart]"
+  | "[identity-watchdog-abandon]"
   | "[identity-retry]"
   | "[offer-state]"
   | "[offer-session]"

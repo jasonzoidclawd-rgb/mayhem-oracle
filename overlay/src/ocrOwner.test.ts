@@ -11,9 +11,11 @@ import {
   nextRetryDelay,
   ownerCurrent,
   classifyStaleReject,
+  staleRejectSlotDrift,
   requestedPendingStates,
   type OcrOwnerContext,
 } from "./ocrOwner";
+import { hammingDistance } from "./surfaceGeometry";
 
 const FP = ["10".repeat(72), "1100".repeat(36), "1110".repeat(36)];
 
@@ -199,19 +201,34 @@ describe("stale-reject cause classification", () => {
     }
   });
 
-  it("reports fingerprint drift only for a REQUESTED slot", () => {
-    // Slot 1 was never requested: its drift is another card's business.
-    const untouched = context({ fingerprints: [FP[0], "0".repeat(144), FP[2]] });
-    expect(classifyStaleReject(owner, owner, untouched, false)).toBeNull();
-    const drifted = context({ fingerprints: [FP[0], FP[1], "0".repeat(144)] });
-    expect(classifyStaleReject(owner, owner, drifted, false)).toBe("fingerprint-drift");
+  it("never reports fingerprint drift, at any magnitude, on any slot", () => {
+    // Drift is no longer an ownership authority, so it can no longer be a cause.
+    // `current.fingerprints` is the accepted BASELINE, which the settlement
+    // re-latch rewrites on its own schedule — rejecting a correct read because
+    // the baseline moved is exactly the 2026-07-27 defect.
+    const nudged = `${"01".repeat(4)}${FP[0].slice(8)}`; // 8 bits: sub-band
+    const inverted = "0".repeat(144); // 144 bits: maximal
+    for (const fingerprints of [
+      [nudged, FP[1], FP[2]],
+      [inverted, FP[1], FP[2]], // requested slot, total movement
+      [FP[0], inverted, FP[2]], // an unrequested slot's card
+      [inverted, inverted, inverted],
+    ]) {
+      expect(classifyStaleReject(owner, owner, context({ fingerprints }), false)).toBeNull();
+    }
   });
 
-  it("treats sub-band drift on a requested slot as the same card", () => {
-    // 8 flipped bits — exactly FINGERPRINT_CHANGED_HAMMING, still the same card.
-    const nudged = `${"01".repeat(4)}${FP[0].slice(8)}`;
-    expect(classifyStaleReject(owner, owner, context({ fingerprints: [nudged, FP[1], FP[2]] }), false))
-      .toBeNull();
+  it("still reports the reroll that drift used to stand in for", () => {
+    // A genuine replacement is not detected by comparing pixels here — the
+    // confirmed-reroll path detects it and advances the counter, one line up.
+    expect(
+      classifyStaleReject(
+        owner,
+        owner,
+        context({ slotGenerations: [7, 6, 6], fingerprints: ["0".repeat(144), FP[1], FP[2]] }),
+        false,
+      ),
+    ).toBe("slot-generation");
   });
 
   it("reports owner-replaced only after every semantic field matched", () => {
@@ -230,9 +247,12 @@ describe("stale-reject cause classification", () => {
     expect(classifyStaleReject(owner, owner, context(), true)).toBe("capture-seq-only");
   });
 
-  it("classifies the trace's run-16 rejection as fingerprint drift", () => {
-    // slot 0 re-read triggered at geometry seq 984; the card's fingerprint moved
-    // again at seq 985 while the 915 ms native read was outstanding.
+  it("lets the trace's run-16 shape publish instead of rejecting it", () => {
+    // slot 0 re-read triggered at geometry seq 984; the accepted baseline moved
+    // again at seq 985 while the 915 ms native read was outstanding, and the
+    // read was discarded. Nothing had superseded it: slotGeneration was 23 at
+    // trigger AND at completion, and the run still owned the registry. 24 of the
+    // 25 stale rejects in the 2026-07-27 trace had exactly this shape.
     const run16 = {
       ...context({ requestedSlots: [0], slotGenerations: [23, 23, 23], fingerprints: FP }),
       runId: 16,
@@ -244,6 +264,12 @@ describe("stale-reject cause classification", () => {
       slotGenerations: [23, 23, 23],
       fingerprints: ["0".repeat(144), FP[1], FP[2]],
     });
-    expect(classifyStaleReject(run16, run16, atCompletion, false)).toBe("fingerprint-drift");
+    expect(ownerCurrent(run16, run16, atCompletion)).toBe(true);
+    expect(classifyStaleReject(run16, run16, atCompletion, false)).toBeNull();
+
+    // The drift is still MEASURED — as evidence, not as a verdict.
+    expect(
+      staleRejectSlotDrift(run16, atCompletion, hammingDistance),
+    ).toEqual([72]);
   });
 });

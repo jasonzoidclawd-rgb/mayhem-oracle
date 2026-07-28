@@ -42,22 +42,23 @@ describe("nextProbeAction — self-healing, telemetry-independent", () => {
     });
   });
 
-  it("watchdog restarts a probe stuck in flight past the bounded timeout", () => {
+  it("watchdog abandons a probe stuck in flight past the bounded timeout", () => {
     const state = { ...base, inFlight: true, inFlightSince: 1000, lastProbeStartedAt: 1000 };
     expect(nextProbeAction(state, DEFAULT_PROBE_CONFIG, 1000 + PROBE_TIMEOUT_MS)).toEqual({
-      kind: "restart",
+      kind: "abandon",
       reason: "in-flight-timeout",
     });
   });
 
-  it("recovers a wedged scheduler: timeout → restart → next tick starts fresh", () => {
-    // A probe wedged in flight past the timeout: the reducer asks for a restart.
+  it("recovers a wedged scheduler: timeout → abandon → next tick starts fresh", () => {
+    // A probe wedged in flight past the timeout: the reducer releases ownership.
     const wedged = { ...base, inFlight: true, inFlightSince: 1000, lastProbeStartedAt: 1000 };
     expect(nextProbeAction(wedged, DEFAULT_PROBE_CONFIG, 1000 + PROBE_TIMEOUT_MS)).toEqual({
-      kind: "restart",
+      kind: "abandon",
       reason: "in-flight-timeout",
     });
-    // Once the restart tick resets the guard (inFlight=false), the very next
+    // Once the abandon tick resets the guard (inFlight=false) AND the native
+    // call has drained (nativeOutstanding 0, which `base` holds), the very next
     // tick starts a fresh probe — recovery needs no remount or focus toggle.
     const recovered = { ...base, inFlight: false, inFlightSince: null, lastProbeStartedAt: 1000 };
     expect(nextProbeAction(recovered, DEFAULT_PROBE_CONFIG, 1000 + PROBE_TIMEOUT_MS)).toEqual({
@@ -123,13 +124,13 @@ describe("nextProbeAction — self-healing, telemetry-independent", () => {
 });
 
 /**
- * Backlog coalescing. A watchdog restart abandons LOGICAL ownership but cannot
- * cancel the native invoke, so the old call stays outstanding. The live trace
+ * Backlog coalescing. The watchdog releases LOGICAL ownership but cannot cancel
+ * the native invoke, so the old call stays outstanding. The live trace
  * (mayhem-four-phase-postfix-20260726-014355.log) showed the consequence: native
  * work stayed healthy (nativeElapsedMs ~610 ms) while roundTripMs reached
  * 47–63 s and ~70 invokes were outstanding — every 2.1 s watchdog restart added
- * one more. Geometry must therefore keep at most one active logical request plus
- * one latest pending replacement.
+ * one more. Geometry now keeps at most ONE native call in flight, so the queue
+ * depth this scheduler contributes is provably zero.
  */
 describe("native-outstanding coalescing", () => {
   const cfg = DEFAULT_PROBE_CONFIG;
@@ -145,16 +146,22 @@ describe("native-outstanding coalescing", () => {
       cfg,
       PROBE_TIMEOUT_MS,
     );
-    expect(action).toEqual({ kind: "abandon", reason: "native-backlog" });
+    expect(action).toEqual({ kind: "abandon", reason: "in-flight-timeout" });
   });
 
-  it("still restarts normally while beneath the cap", () => {
-    const action = nextProbeAction(
-      { ...base, inFlight: true, inFlightSince: 0, nativeOutstanding: 1 },
-      cfg,
-      PROBE_TIMEOUT_MS,
-    );
-    expect(action).toEqual({ kind: "restart", reason: "in-flight-timeout" });
+  it("abandons identically regardless of how deep the native backlog is", () => {
+    // The action must not depend on the backlog level: a timeout releases
+    // ownership and issues nothing, whether one native call is outstanding or
+    // several are left over from before the cap tightened.
+    for (const nativeOutstanding of [0, 1, 2, 5]) {
+      expect(
+        nextProbeAction(
+          { ...base, inFlight: true, inFlightSince: 0, nativeOutstanding },
+          cfg,
+          PROBE_TIMEOUT_MS,
+        ),
+      ).toEqual({ kind: "abandon", reason: "in-flight-timeout" });
+    }
   });
 
   it("does not start a fresh probe while the native backlog is at the cap", () => {
@@ -195,7 +202,7 @@ describe("native-outstanding coalescing", () => {
         { intervalMs: GEOMETRY_INTERVAL_MS, timeoutMs: PROBE_TIMEOUT_MS },
         now,
       );
-      if (action.kind === "start" || action.kind === "restart") {
+      if (action.kind === "start") {
         outstanding += 1; // native call issued; never resolves in this scenario
         inFlight = true;
         inFlightSince = now;

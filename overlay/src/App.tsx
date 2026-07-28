@@ -469,6 +469,12 @@ function App() {
   // Self-healing surface-probe scheduler bookkeeping (a single probe at a time).
   const probeInFlightRef = useRef(false);
   const probeInFlightSinceRef = useRef<number | null>(null);
+  // Native `detect_augment_names` calls issued but not yet settled, INCLUDING
+  // ones whose logical ownership the watchdog already released. The OCR run
+  // races a JS timeout, and a JS deadline cannot cancel an OS capture, so the
+  // logical guard going free says nothing about whether the native call still
+  // holds one of the four Rust capture permits.
+  const ocrNativeOutstandingRef = useRef(0);
   // Ownership token: the captureSeq of the probe that currently holds the
   // in-flight guard. Only that probe may release the guard in its finally, so a
   // watchdog-superseded probe returning late can never free the guard held by
@@ -723,7 +729,23 @@ function App() {
       captureSeq,
       observation,
       generation: geometryGenerationRef.current,
-      resolveIdentity: (regionIndex, fingerprint) => {
+      // SLOT GENERATION IS THE ONLY IDENTITY AUTHORITY HERE.
+      //
+      // These two closures used to compare the live frame's fingerprint against
+      // the stored record's — a scalar chasing a signal that is bistable while a
+      // card animates or the cursor sits on it. In the 2026-07-27 trace slot 1
+      // oscillated 17 bits between two poles that BOTH read augment 1051 / S /
+      // 52.0%, and the chip fell back to SCANNING on 24 of the offer's 72 frames
+      // (38% of its wall time) while the card never changed. Worse, publishing
+      // re-armed the mismatch: the record was stamped with whichever pole the
+      // ~1-2 s OCR read landed on, so the next frame at the other pole blanked
+      // it again. Phase B's confirmed-reroll path already owns replacement
+      // detection and already bumps the generation; comparing raw fingerprints
+      // here was a second, noisier authority racing it.
+      //
+      // Fingerprint evidence is NOT disabled and no threshold moved — it still
+      // drives `advanceRerollConfirmation`, which is where the hysteresis lives.
+      resolveIdentity: (regionIndex) => {
         const record = identityStoreRef.current[regionIndex];
         // Sustained-confirmation hold: a resolved slot whose fingerprint drift
         // is not yet a CONFIRMED reroll keeps its tier instead of flashing
@@ -732,11 +754,17 @@ function App() {
         if (record?.resolution != null && heldRerollSlotsRef.current.includes(regionIndex)) {
           return record.resolution;
         }
-        return identityForSlot(record, fingerprint);
+        return identityForSlot(record, slotGenerationsRef.current[regionIndex] ?? 0);
       },
-      resolveUnresolvedState: (regionIndex, fingerprint) => {
+      resolveUnresolvedState: (regionIndex) => {
         const record = identityStoreRef.current[regionIndex];
-        if (!record || record.fingerprint !== fingerprint || record.resolution !== null) return "scanning";
+        if (
+          !record
+          || (record.slotGeneration ?? 0) !== (slotGenerationsRef.current[regionIndex] ?? 0)
+          || record.resolution !== null
+        ) {
+          return "scanning";
+        }
         return record.unresolvedState ?? "scanning";
       },
     });
@@ -2032,6 +2060,9 @@ function App() {
         const decision = decideOcrTrigger<SlotResolution>({
           observation: publishedObservation,
           identities: identityStoreRef.current,
+          // Read AFTER Phase B has applied this frame's confirmed rerolls, so a
+          // slot cleared this tick is already sitting at its new generation.
+          slotGenerations: slotGenerationsRef.current,
           now: performance.now(),
           retryMs: IDENTITY_RETRY_MS,
           forceSlots: forceOcrSlotsRef.current,
@@ -2155,8 +2186,16 @@ function App() {
         0,
         geometryNativeOutstandingRef.current - 1,
       );
-      // Release the guard ONLY if this probe still owns it (a watchdog restart
-      // hands ownership to the replacement — its late return must not free it).
+      // Release the guard ONLY if this probe still owns it — the watchdog may
+      // already have released ownership on its behalf, in which case there is
+      // nothing here to free.
+      //
+      // With the outstanding cap at one, this probe's result always arrives
+      // BEFORE any successor can start (a successor needs `nativeOutstanding`
+      // to reach 0, which only this `finally` can do), so `geometrySeqRef` is
+      // still equal to `captureSeq` when the result lands and the frame always
+      // commits. Goodput is 100% by construction — the 6-of-6 `stale:true`
+      // window is unreachable.
       if (geometryInFlightTokenRef.current === captureSeq) {
         geometryInFlightSinceRef.current = null;
         geometryInFlightRef.current = false;
@@ -2298,6 +2337,7 @@ function App() {
           // has already timed out and abandoned this promise — that is exactly
           // the case we need to see (how long the native OCR really ran).
           const nativeStartedAt = performance.now();
+          ocrNativeOutstandingRef.current += 1;
           return invoke<OcrScanResult>("detect_augment_names", {
             knownNames: ocrKnownNames,
           }).then((scan) => {
@@ -2310,6 +2350,14 @@ function App() {
               nativeTotalMs: scan.totalMs,
             });
             return scan;
+          }).finally(() => {
+            // Chained on the INVOKE, not on the outer race, so the count falls
+            // when the native call truly returns its capture permit rather than
+            // when the 2 s JS deadline gives up on it.
+            ocrNativeOutstandingRef.current = Math.max(
+              0,
+              ocrNativeOutstandingRef.current - 1,
+            );
           });
         },
         (scan) => scan,
@@ -2637,11 +2685,20 @@ function App() {
       // Identity-only failure: mark the triggered slots unresolved (retry after
       // the deadline). Presence/freshness are unaffected — the geometry track
       // keeps publishing, so a readable offer still shows SCANNING chips.
+      //
+      // Routed through `reconcileIdentityRecord`, whose first rule is that an
+      // unresolved incoming record never displaces a resolved one. This block
+      // used to assign the store slot directly, so ANY failed read — including
+      // one the operator never asked for — downgraded an already-published
+      // augment to SCANNING with no generation bump and no card change. During
+      // the R4 duplicate-OCR storm (runIds 36-42, all timing out on saturated
+      // capture permits) that is what made already-painted badges vanish.
       const failedAt = performance.now();
       for (const regionIndex of slots) {
-        const priorFailures = identityStoreRef.current[regionIndex]?.failureCount ?? 0;
+        const previous = identityStoreRef.current[regionIndex];
+        const priorFailures = previous?.failureCount ?? 0;
         const failure = failurePublication(priorFailures + 1, failedAt);
-        identityStoreRef.current[regionIndex] = {
+        identityStoreRef.current[regionIndex] = reconcileIdentityRecord(previous, {
           fingerprint: triggerFingerprints[regionIndex] ?? "",
           resolution: null,
           resolvedAt: failedAt,
@@ -2656,7 +2713,7 @@ function App() {
           unresolvedState: failure.state,
           failureCount: failure.failureCount,
           retryAt: failure.retryAt,
-        };
+        });
       }
       ocrPendingSlotsRef.current = [];
       republishGeometryFrame(geometrySeqRef.current);
@@ -2746,7 +2803,7 @@ function App() {
       scheduledAt,
     );
     if (action.kind === "skip") return;
-    if (action.kind === "restart" || action.kind === "abandon") {
+    if (action.kind === "abandon") {
       const attemptGeneration =
         geometryHealthRef.current.currentAttemptGeneration ??
         geometrySeqRef.current;
@@ -2779,15 +2836,31 @@ function App() {
         nativeOutstanding: geometryNativeOutstandingRef.current,
         action: action.kind,
       });
-      geometrySeqRef.current += 1;
+      // NOTE: `geometrySeqRef` is deliberately NOT advanced here.
+      //
+      // The sequence exists so a REPLACEMENT probe's result beats the one it
+      // replaced. Abandonment issues no replacement, so bumping it had exactly
+      // one effect: the still-running probe's own result failed
+      // `frameResultIsCurrent` and returned at the top of the result handler —
+      // above the surface commit, the offer FSM, the slot publications and
+      // decideOcrTrigger. In the 2026-07-27 R4 window all 6 geometry results
+      // that landed were `stale:true`, the FSM froze at NO_OFFER for 32.657 s
+      // with three cards on screen, and the overlay painted neither a badge nor
+      // SCANNING. The watchdog was invalidating the very work it was waiting
+      // for: goodput zero at 100% utilization.
+      //
+      // Releasing ownership alone is enough to stop a late result from
+      // publishing under a new offer, because every publication is additionally
+      // gated on offerGeneration / slotGeneration / foregroundEpoch.
       geometryInFlightRef.current = false;
       geometryInFlightSinceRef.current = null;
       geometryInFlightTokenRef.current = null;
       geometryRestartCountRef.current += 1;
-      // Ownership released so no late result can publish — but with the native
-      // backlog at the cap we must NOT add another invoke. Issuing one is what
-      // grew roundTripMs to 47–63 s while the native side stayed healthy.
-      if (action.kind === "abandon") return;
+      // Ownership released so a slow probe cannot wedge the logical track — but
+      // the native call is still running and still holding its Rust capture
+      // permit, so we must NOT add another invoke. Issuing one is what grew
+      // roundTripMs to 47–63 s while the native side stayed healthy at ~650 ms.
+      return;
     }
     // Geometry owns presence even when the OS OCR backend is unavailable. The
     // native probe reports screen-capture failures explicitly (as uncertain,
@@ -2808,11 +2881,15 @@ function App() {
         inFlight: probeInFlightRef.current,
         inFlightSince: probeInFlightSinceRef.current,
         lastProbeStartedAt: lastProbeStartedAtRef.current,
-        // OCR is TRIGGERED, never on a fixed cadence, so it cannot accumulate
-        // the timer-driven invoke backlog the geometry cap exists to bound
-        // (this trace: 0 OCR watchdog restarts vs 52 geometry). Held at 0 to
-        // leave OCR scheduling behaviour exactly unchanged.
-        nativeOutstanding: 0,
+        // OCR is TRIGGERED rather than timed, which was the argument for pinning
+        // this at 0 — but the trigger fires off the geometry cadence, so it is
+        // timed by proxy. In the 2026-07-27 R4 collapse that produced SEVEN
+        // copies of one identical job (runIds 36-42, same requestedSlots [1,2],
+        // same fingerprints, 2109 ms apart — exactly the watchdog quantum) until
+        // they saturated the Rust MAX_CONCURRENT_CAPTURES = 4 gate and starved
+        // geometry. Counting the real outstanding natives caps the OCR track at
+        // one in flight, the same invariant the geometry track now holds.
+        nativeOutstanding: ocrNativeOutstandingRef.current,
       },
       DEFAULT_PROBE_CONFIG,
       performance.now(),
@@ -2821,21 +2898,33 @@ function App() {
       lastProbeSkipReasonRef.current = action.reason;
       return;
     }
-    if (action.kind === "restart") {
-      const expiredOwner = ocrOwnersRef.current.current;
+    if (action.kind === "abandon") {
+      // Release the LOGICAL guard only, and issue nothing. The previous branch
+      // bumped the scan sequence, invalidated the owner token and then fell
+      // through to `runIdentityProbe` — a replacement it could not cancel and
+      // whose predecessor it had just made unpublishable. At the 2109 ms
+      // watchdog quantum that emitted runIds 36-42: seven identical reads of
+      // slots [1,2] against four Rust capture permits.
+      //
+      // Neither `bumpScanSeq()` nor `invalidate()` happens now, so the
+      // outstanding read may still publish when it lands — it is the newest
+      // evidence there is, and offerGeneration / slotGeneration /
+      // foregroundEpoch / championGeneration all still gate it. The
+      // native-outstanding cap keeps a second read from starting underneath it,
+      // and this run's own `finally` releases the owner when it truly settles.
       if (import.meta.env.DEV) {
-        logOverlayDiagnostic("[identity-watchdog-restart]", {
-          runId: expiredOwner?.runId ?? null,
+        logOverlayDiagnostic("[identity-watchdog-abandon]", {
+          runId: ocrOwnersRef.current.current?.runId ?? null,
           inFlightSince: probeInFlightSinceRef.current,
+          nativeOutstanding: ocrNativeOutstandingRef.current,
           reason: action.reason,
         });
       }
-      bumpScanSeq();
       probeInFlightRef.current = false;
       probeInFlightSinceRef.current = null;
-      ocrOwnersRef.current.invalidate();
       probeRestartCountRef.current += 1;
       lastProbeFailureReasonRef.current = action.reason;
+      return;
     }
     if (!canRunOcr(ocrAvailability)) {
       lastProbeSkipReasonRef.current = "ocr-unavailable";
@@ -2847,13 +2936,13 @@ function App() {
     }
     const slots = ocrPendingSlotsRef.current;
     if (slots.length === 0) return;
-    lastProbeSkipReasonRef.current = action.kind === "restart" ? "watchdog-restart" : "due";
+    lastProbeSkipReasonRef.current = "due";
     void runIdentityProbe(
       slots,
       ocrTriggerFingerprintsRef.current,
       slotGenerationsRef.current.slice(),
     );
-  }, [bumpScanSeq, nameLookup, ocrAvailability, runIdentityProbe]);
+  }, [nameLookup, ocrAvailability, runIdentityProbe]);
 
   // The single tick drives BOTH tracks: geometry (fast, authoritative) first so a
   // fresh trigger decision is in place before the identity track reads it.

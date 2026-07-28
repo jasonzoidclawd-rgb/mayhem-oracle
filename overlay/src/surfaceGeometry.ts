@@ -533,18 +533,34 @@ export interface IdentityRecord<R> {
 }
 
 /**
- * Resolve a slot's current identity: the stored record ONLY when its fingerprint
- * still matches the live geometry fingerprint. A rerolled slot (fingerprint
- * changed) or an unwritten slot returns null → the chip shows SCANNING. This is
- * the stale-result guard for identity: a late OCR result keyed to an old
- * fingerprint can never paint over the new card.
+ * Resolve a slot's current identity: the stored record ONLY while the slot
+ * generation it was read under is still current. A confirmed reroll (or a new
+ * offer, champion change, or NO_OFFER teardown) advances the generation and
+ * clears the store, so the chip falls to SCANNING; an unwritten slot returns
+ * null for the same reason. This is the stale-result guard for identity: a late
+ * OCR result keyed to a superseded generation can never paint over the new card.
+ *
+ * It used to compare the LIVE fingerprint against `record.fingerprint` instead.
+ * That was a second, competing authority reading a different baseline from the
+ * confirmed-reroll path, and the 2026-07-27 trace shows exactly what it cost.
+ * Slot 1 of offerGeneration 29 oscillated between two fingerprints 17 bits apart
+ * that both OCR'd to the same augment 1051 / 52.0% / S; `record.fingerprint` is
+ * one scalar chasing a bistable signal, so it was wrong roughly half the time —
+ * a successful publication would itself re-arm the mismatch by storing whichever
+ * pole it happened to read. The result was SCANNING on 24 of 72 frames (38% of
+ * the offer's wall time) with the identity store intact and `slotGeneration`
+ * pinned at 28 the entire time.
+ *
+ * Fingerprint evidence is not disabled and no threshold moved: it still feeds
+ * `advanceRerollConfirmation`, which is the one reader with hysteresis. It is
+ * simply no longer consulted raw by the render path.
  */
 export function identityForSlot<R>(
   record: IdentityRecord<R> | null | undefined,
-  currentFingerprint: string,
+  currentSlotGeneration: number,
 ): R | null {
   if (record == null) return null;
-  if (fingerprintChanged(record.fingerprint, currentFingerprint)) return null;
+  if ((record.slotGeneration ?? 0) !== currentSlotGeneration) return null;
   return record.resolution;
 }
 
