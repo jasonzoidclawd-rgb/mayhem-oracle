@@ -147,9 +147,11 @@ import {
   advanceGeometrySurface,
   buildGeometryVisibleFrame,
   classifyGeometryObservation,
+  classifyProbeTimeout,
   completeGeometryAttempt,
   createGeometryHealthClocks,
   createGeometrySurfaceState,
+  decomposeGeometryTiming,
   emptyGeometryObservation,
   fingerprintChanged,
   geometrySchedulerHealthy,
@@ -2041,6 +2043,19 @@ function App() {
       const timingEpoch = Math.floor(completedAt / 1000);
       if (!captureValid || timingEpoch !== lastGeometryTimingEpochRef.current) {
         lastGeometryTimingEpochRef.current = timingEpoch;
+        const roundTripMs = Math.round(completedAt - startedAt);
+        // Attribution, not a decision: the split between the closure's own work
+        // and the segments only a tokio async-runtime worker can advance is what
+        // turns the next controlled game into a decisive experiment.
+        const timing = decomposeGeometryTiming({
+          roundTripMs,
+          nativeElapsedMs: observation.elapsedMs,
+          preCaptureMs: observation.preCaptureMs,
+          captureMs: observation.captureMs,
+          analysisMs: observation.analysisMs,
+          dispatchWaitMs: observation.dispatchWaitMs,
+          resumeWaitMs: observation.resumeWaitMs,
+        });
         logOverlayDiagnostic("[geometry-timing]", {
           probeSeq: captureSeq,
           stale,
@@ -2048,14 +2063,23 @@ function App() {
           captureMs: observation.captureMs,
           analysisMs: observation.analysisMs,
           nativeElapsedMs: observation.elapsedMs,
-          roundTripMs: Math.round(completedAt - startedAt),
-          timeoutClassification:
-            captureValid
-              ? "none"
-              : observation.rejectionReasons[0] ?? "capture-invalid",
+          roundTripMs,
+          timeoutClassification: classifyProbeTimeout({
+            captureWidth: observation.captureWidth,
+            captureHeight: observation.captureHeight,
+            rejectionReasons: observation.rejectionReasons,
+            roundTripMs,
+            nativeElapsedMs: observation.elapsedMs,
+          }),
           attemptGeneration: captureSeq,
           continuousUnhealthyAgeMs,
           acceptedGeometryAgeMs,
+          dispatchWaitMs: timing.dispatchWaitMs,
+          resumeWaitMs: timing.resumeWaitMs,
+          closureWorkMs: timing.closureWorkMs,
+          unattributedNativeMs: timing.unattributedNativeMs,
+          transportMs: timing.transportMs,
+          asyncRuntimeMs: timing.asyncRuntimeMs,
         });
       }
 

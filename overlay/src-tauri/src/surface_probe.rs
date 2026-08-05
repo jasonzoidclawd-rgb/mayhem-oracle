@@ -186,6 +186,29 @@ pub struct SurfaceObservation {
     pub analysis_ms: u64,
     /// Complete native probe latency, retained as the existing API field.
     pub elapsed_ms: u64,
+    /// Command entry (the first poll of this command's future) → the blocking
+    /// capture closure's body actually beginning.
+    ///
+    /// This is `spawn_blocking` QUEUE LATENCY, **not** async-runtime starvation.
+    /// No SUSPENSION POINT separates the command-entry clock from the
+    /// `spawn_blocking` call. (There are two syntactic `.await`s on the way, but
+    /// awaiting an `async fn` polls it inline within the same poll — the first
+    /// construct that can actually yield is the `timeout(..).await` *after* the
+    /// spawn.) Crossing this interval therefore needs no async worker. Against
+    /// tokio's default 512 blocking threads it should read ~0 even while the
+    /// async runtime is fully starved; a large value means the BLOCKING POOL is
+    /// saturated. Async-runtime starvation surfaces in `resume_wait_ms`, and —
+    /// for the segment before the first poll, which is outside `elapsed_ms`
+    /// entirely — in the JS-side `transportMs`.
+    /// Always a number; 0 when the segment was not measured.
+    pub dispatch_wait_ms: u64,
+    /// The blocking closure returning → the command being about to return.
+    ///
+    /// This one DOES measure async-runtime scheduling latency: the worker's
+    /// completion wakes `tokio::time::timeout(..)`, and crossing this interval
+    /// requires an async worker to poll that task again.
+    /// Always a number; 0 when the segment was not measured.
+    pub resume_wait_ms: u64,
 }
 
 fn normalized_region_px(
@@ -590,6 +613,10 @@ pub fn analyze_surface(
         capture_ms: 0,
         analysis_ms: 0,
         elapsed_ms,
+        // The async-runtime waits are measured by the command that dispatched
+        // this analysis, never by the pure analyzer. 0 until it fills them in.
+        dispatch_wait_ms: 0,
+        resume_wait_ms: 0,
     }
 }
 

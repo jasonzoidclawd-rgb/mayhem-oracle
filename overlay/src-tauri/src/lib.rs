@@ -1217,32 +1217,23 @@ fn bounded_ocr_recognition_reason(error: BoundedCaptureError) -> String {
 #[tauri::command]
 async fn detect_augment_names(known_names: Option<Vec<String>>) -> Result<OcrScanResult, String> {
     let scan_start = std::time::Instant::now();
-    if !collect_foreground_state().game_window_foreground {
-        let reason = "actual-game-window-not-foreground".to_string();
-        return Ok(OcrScanResult {
-            detected: Vec::new(),
-            diagnostics: (0..calibration::CARD_NAME_REGIONS.len())
-                .map(|region_index| OcrCardDiagnostic {
-                    region_index,
-                    card_rect: None,
-                    crop: None,
-                    capture_succeeded: false,
-                    raw_text: None,
-                    error: Some(reason.clone()),
-                    capture_width: None,
-                    capture_height: None,
-                })
-                .collect(),
-            capture_attempted: false,
-            crop_count: 0,
-            capture_ms: 0,
-            ocr_ms: 0,
-            total_ms: scan_start.elapsed().as_millis() as u64,
-        });
-    }
-
     let capture_start = std::time::Instant::now();
-    let crop_set = match run_bounded_capture(CaptureChannel::Ocr, capture_card_name_crops).await {
+    let crop_set = match run_bounded_capture(CaptureChannel::Ocr, || {
+        // Foreground gate runs INSIDE the bounded capture (off the async runtime),
+        // exactly as capture_surface_frame does. Its CGWindowList/window-server
+        // walk is an unbounded, uncancellable blocking call; on the async runtime
+        // it starved the executor that also has to poll the geometry command.
+        // Returning the reason as a capture error routes it through the existing
+        // error branch below, which reports `capture_attempted: false` for
+        // BoundedCaptureError::Capture(_) and carries the reason per region —
+        // the same observable outcome as the early return this replaces.
+        if !collect_foreground_state().game_window_foreground {
+            return Err("actual-game-window-not-foreground".to_string());
+        }
+        capture_card_name_crops()
+    })
+    .await
+    {
         Ok(crop_set) => crop_set,
         Err(error) => {
             let reason = bounded_capture_reason(&error);
@@ -1392,6 +1383,11 @@ fn absent_surface_observation(
         capture_ms: 0,
         analysis_ms: 0,
         elapsed_ms,
+        // Nothing measured either async-runtime segment on this path, and 0 keeps
+        // the field a number (never null) so the JS decomposition attributes the
+        // whole command body to the explicit unattributed residual instead.
+        dispatch_wait_ms: 0,
+        resume_wait_ms: 0,
     }
 }
 
@@ -1496,21 +1492,45 @@ async fn probe_augment_surface(
     // so its blocking window-server enumeration cannot starve the async runtime;
     // a not-foreground result surfaces as the same absent observation via the
     // error path (reason "actual-game-window-not-foreground").
-    let observation = match run_bounded_capture(CaptureChannel::Geometry, move || {
-        capture_and_analyze_surface(probe_seq, captured_at)
-    })
-    .await
-    {
-        Ok(observation) => observation,
-        Err(error) => {
-            return Ok(absent_surface_observation(
-                probe_seq,
-                captured_at,
-                &bounded_capture_reason(&error),
-                start.elapsed().as_millis() as u64,
-            ));
-        }
-    };
+    // The two measurements below split the previously opaque in-Rust wait
+    // (`elapsed_ms − (pre_capture + capture + analysis)`) into two segments with
+    // DIFFERENT causes. Read them separately; they are not one "runtime wait":
+    //   dispatch — command entry → this blocking closure's body begins. No
+    //     SUSPENSION POINT separates `start` from the `spawn_blocking` call in
+    //     run_bounded_capture_with_gate. (There ARE two syntactic `.await`s on
+    //     the way — awaiting an `async fn` polls it inline within the same poll,
+    //     so neither can yield; the first construct that can is the
+    //     `timeout(..).await` AFTER the spawn.) Crossing this therefore needs no
+    //     async worker: it is BLOCKING-POOL queue latency and should read ~0
+    //     (tokio defaults to 512 blocking threads) even under total starvation.
+    //   resume   — the closure's body ends → the command is about to return.
+    //     Crossing this DOES require an async worker to re-poll the woken
+    //     `tokio::time::timeout`, so this is the true starvation signal here.
+    // Starvation BEFORE the first poll of this command future is outside
+    // `elapsed_ms` altogether (Tauri spawns the future onto the runtime) and
+    // lands in the JS-side `transportMs` instead.
+    // Both are read off the SAME command-entry clock as `elapsed_ms`, so they are
+    // sub-intervals of it and can never sum past it.
+    let (observation, closure_end_ms) =
+        match run_bounded_capture(CaptureChannel::Geometry, move || {
+            let dispatch_wait_ms = start.elapsed().as_millis() as u64;
+            let mut observation = capture_and_analyze_surface(probe_seq, captured_at)?;
+            observation.dispatch_wait_ms = dispatch_wait_ms;
+            let closure_end_ms = start.elapsed().as_millis() as u64;
+            Ok::<_, String>((observation, closure_end_ms))
+        })
+        .await
+        {
+            Ok(captured) => captured,
+            Err(error) => {
+                return Ok(absent_surface_observation(
+                    probe_seq,
+                    captured_at,
+                    &bounded_capture_reason(&error),
+                    start.elapsed().as_millis() as u64,
+                ));
+            }
+        };
     // `elapsed_ms` MUST measure command entry → return on the success path too,
     // not just the error path. `capture_and_analyze_surface` starts its own
     // timer INSIDE the spawn_blocking closure, so the interval between the
@@ -1518,10 +1538,18 @@ async fn probe_augment_surface(
     // invisible to it. That blind spot is why a trace whose round trips reached
     // 89 s reported a flat, healthy `nativeElapsedMs` of ~600 ms and three
     // separate investigations concluded the native side was fine. With this,
-    // `elapsed_ms − (pre_capture + capture + analysis)` is the in-Rust dispatch
-    // wait and `roundTripMs − elapsed_ms` is the transport wait.
+    // `elapsed_ms − (pre_capture + capture + analysis)` is the in-Rust wait —
+    // but do NOT read that residual as one quantity: `dispatch_wait_ms` and
+    // `resume_wait_ms` above now split it, and they have different causes (see
+    // the block at the top of this function). `roundTripMs − elapsed_ms` is the
+    // transport wait, which includes pre-first-poll scheduling, not just IPC.
     let mut observation = observation;
-    observation.elapsed_ms = start.elapsed().as_millis() as u64;
+    let elapsed_ms = start.elapsed().as_millis() as u64;
+    // Saturating: `closure_end_ms` and `elapsed_ms` are two reads of the same
+    // monotonic clock, but truncation to whole milliseconds must never be able to
+    // produce a negative (wrapped) duration.
+    observation.resume_wait_ms = elapsed_ms.saturating_sub(closure_end_ms);
+    observation.elapsed_ms = elapsed_ms;
     Ok(observation)
 }
 
@@ -2341,6 +2369,72 @@ fn open_screen_recording_settings() {
     }
 }
 
+// ─── Async-Runtime Heartbeat (dev-only instrument) ──────────────────────────
+// Phase 1 proved the geometry probe's lost time sits entirely in the segments
+// that need a TOKIO ASYNC-RUNTIME WORKER TO POLL A TASK, and that the build
+// carries no instrument that can observe the runtime itself. This heartbeat is
+// that instrument: it is an ordinary async task on the SAME runtime the
+// `#[tauri::command] async fn`s run on, so the drift of its fixed tick IS the
+// scheduling latency of that runtime, measured independently of any capture.
+//
+// It must be `tauri::async_runtime::spawn` + `tokio::time::sleep`. A thread with
+// `std::thread::sleep` would stay perfectly on time while the runtime burned and
+// would therefore measure nothing.
+//
+// Emission is throttled to at most once per second and aggregates the ticks in
+// between; the payload is bounded numerics only (privacy-safe, no names, text,
+// paths, or account identifiers). Compiled out of release builds, mirroring
+// `emit_overlay_diagnostic`.
+
+/// Fixed heartbeat tick. Matches the geometry probe cadence so the drift is read
+/// on the same scale as the work it competes with.
+#[cfg(debug_assertions)]
+const HEARTBEAT_TICK_MS: u64 = 250;
+/// Aggregation window — one emission per second, never one line per tick.
+#[cfg(debug_assertions)]
+const HEARTBEAT_REPORT_MS: u64 = 1000;
+
+#[cfg(debug_assertions)]
+fn spawn_async_runtime_heartbeat() {
+    tauri::async_runtime::spawn(async move {
+        let mut window_started = std::time::Instant::now();
+        let mut last_tick = window_started;
+        let mut ticks: u64 = 0;
+        let mut max_drift_ms: u64 = 0;
+        loop {
+            tokio::time::sleep(Duration::from_millis(HEARTBEAT_TICK_MS)).await;
+            let now = std::time::Instant::now();
+            // Saturating throughout: this loop must never panic and never block.
+            let observed_ms = now.duration_since(last_tick).as_millis() as u64;
+            last_tick = now;
+            let last_drift_ms = observed_ms.saturating_sub(HEARTBEAT_TICK_MS);
+            max_drift_ms = max_drift_ms.max(last_drift_ms);
+            ticks = ticks.saturating_add(1);
+
+            let elapsed_ms = now.duration_since(window_started).as_millis() as u64;
+            if elapsed_ms >= HEARTBEAT_REPORT_MS {
+                eprintln!(
+                    "[async-runtime-heartbeat] {{\"intervalMs\":{},\"ticks\":{},\
+                     \"expectedTicks\":{},\"maxDriftMs\":{},\"lastDriftMs\":{},\
+                     \"elapsedMs\":{}}}",
+                    HEARTBEAT_TICK_MS,
+                    ticks,
+                    elapsed_ms / HEARTBEAT_TICK_MS,
+                    max_drift_ms,
+                    last_drift_ms,
+                    elapsed_ms
+                );
+                window_started = now;
+                ticks = 0;
+                max_drift_ms = 0;
+            }
+        }
+    });
+}
+
+#[cfg(not(debug_assertions))]
+fn spawn_async_runtime_heartbeat() {}
+
 // ─── App Entry ──────────────────────────────────────────────────────────────
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
@@ -2389,6 +2483,10 @@ pub fn run() {
             let member_state = member::MemberState::new(app.path().app_data_dir()?.join("member-models"))
                 .map_err(std::io::Error::other)?;
             app.manage(member_state);
+
+            // Dev-only async-runtime starvation instrument (see above). No-op in
+            // release builds.
+            spawn_async_runtime_heartbeat();
 
             // ─── System Tray Icon ──────────────────────────────────────
             {
