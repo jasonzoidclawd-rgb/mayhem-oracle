@@ -18,6 +18,7 @@ export interface OcrOwnerContext {
   championGeneration: number;
   championId: string | null;
   offerGeneration: number;
+  round: number | null;
   requestedSlots: number[];
   slotGenerations: number[];
   fingerprints: string[];
@@ -58,7 +59,8 @@ export function ownerCurrent(
     result.gameEpoch !== current.gameEpoch ||
     result.championGeneration !== current.championGeneration ||
     result.championId !== current.championId ||
-    result.offerGeneration !== current.offerGeneration
+    result.offerGeneration !== current.offerGeneration ||
+    result.round !== current.round
   ) return false;
   return result.requestedSlots.every((slot) =>
     result.slotGenerations[slot] === current.slotGenerations[slot]);
@@ -71,6 +73,7 @@ export type StaleRejectCause =
   | "champion-id"
   | "champion-generation"
   | "offer-generation"
+  | "round"
   | "slot-generation"
   | "owner-replaced"
   | "capture-seq-only";
@@ -112,6 +115,7 @@ export function classifyStaleReject(
   if (result.championId !== current.championId) return "champion-id";
   if (result.championGeneration !== current.championGeneration) return "champion-generation";
   if (result.offerGeneration !== current.offerGeneration) return "offer-generation";
+  if (result.round !== current.round) return "round";
   for (const slot of result.requestedSlots) {
     if (result.slotGenerations[slot] !== current.slotGenerations[slot]) return "slot-generation";
   }

@@ -48,10 +48,35 @@ export const PROBE_TIMEOUT_MS = 2000;
  * thing bounding it — it converted an unbounded blowup into a bounded permanent
  * stall (2 outstanding, 4 s round trips) instead of the ~70 outstanding and
  * 47–63 s round trips an uncapped run produced. One removes the pathology
- * rather than bounding it: at most one native geometry capture can be in flight,
- * so the queue depth this scheduler contributes is provably zero.
+ * rather than bounding it under ordinary operation. But a native call that
+ * never settles at all — a genuine wedge — is no longer left to suppress the
+ * scheduler forever: it is allowed exactly one bounded replacement
+ * (`WEDGED_NATIVE_PROBE_MS` / `MAX_OUTSTANDING_WITH_WEDGED_REPLACEMENT` below),
+ * so the true bound is one presumed-wedged zombie plus one active
+ * replacement — a hard ceiling of two, not the unconditional zero this
+ * comment used to claim.
  */
 export const MAX_OUTSTANDING_NATIVE_PROBES = 1;
+/**
+ * A native call outstanding at least this long is presumed WEDGED rather than
+ * merely slow. 4000 = 2x `PROBE_TIMEOUT_MS` (2000), mirroring the existing
+ * house precedent that `FOREGROUND_PAYLOAD_MAX_AGE_MS` (3000) is 2x
+ * `FOREGROUND_LOGICAL_DEADLINE_MS` (1500) in `foregroundPollScheduler.ts`. It
+ * comfortably clears Rust's own `NATIVE_CAPTURE_TIMEOUT` (1500 ms, lib.rs:790)
+ * and the observed healthy round trips (704 ms and 1593 ms; documented p99
+ * 1731 ms), so it fires only on genuine wedges, not ordinary tail latency.
+ */
+export const WEDGED_NATIVE_PROBE_MS = 4_000;
+/**
+ * Effective backlog cap once the oldest outstanding native call is presumed
+ * wedged: one written-off zombie plus one active replacement. `lib.rs:792-798`
+ * documents that `MAX_CONCURRENT_CAPTURES` "MUST be > 1: at a cap of 1 a
+ * single hung capture starves every death-round retry, so no frame is ever
+ * produced and badges never render at levels 11/15" — Rust already admits
+ * concurrent retries beneath a per-channel cap of 4. This raises the JS cap
+ * from 1 to 2 for the same reason, staying well under that cap of 4.
+ */
+export const MAX_OUTSTANDING_WITH_WEDGED_REPLACEMENT = 2;
 
 export interface ProbeSchedulerState {
   /** Actual GameClient foreground (fresh this tick). */
@@ -69,11 +94,15 @@ export interface ProbeSchedulerState {
    * ownership the watchdog already abandoned. Abandoning is not cancelling.
    */
   nativeOutstanding: number;
+  /** Monotonic start of the OLDEST still-unsettled native call, or null when none. */
+  oldestNativeStartedAt?: number | null;
 }
 
 export interface ProbeSchedulerConfig {
   intervalMs: number;
   timeoutMs: number;
+  /** When set, a native call outstanding this long is presumed wedged. */
+  wedgedNativeMs?: number;
 }
 
 export type ProbeAction =
@@ -93,6 +122,39 @@ export const DEFAULT_PROBE_CONFIG: ProbeSchedulerConfig = {
   timeoutMs: PROBE_TIMEOUT_MS,
 };
 
+/**
+ * Oldest still-unsettled native call's start time, computed from a per-request
+ * registry (`Map<captureSeq, startedAt>`) rather than a single scalar.
+ *
+ * Why per-request tracking is required, not optional: a scalar "set-if-null,
+ * clear-once-outstanding-hits-zero" ref cannot represent two concurrent native
+ * calls. Observed timeline: probe A starts at t0; the wedge discount
+ * (`WEDGED_NATIVE_PROBE_MS`) later admits replacement B while A is still
+ * outstanding. A settles FIRST, while B is still young — outstanding drops
+ * 2 -> 1, never reaching 0, so a scalar that only clears "once every native
+ * call has drained" is NEVER cleared and keeps reporting A's stale t0
+ * forever. Every following tick then computes `now - t0 >= WEDGED_NATIVE_PROBE_MS`
+ * as permanently true, so the wedge discount cap stays permanently active,
+ * and the moment B's own watchdog next opens the in-flight guard a THIRD
+ * probe C is admitted even though B itself is nowhere near the wedge
+ * threshold — C bumps the capture sequence, so B's otherwise-valid return is
+ * stale-rejected. Deleting only the settling request's OWN map entry (never
+ * a count-gated bulk clear) makes that failure structurally impossible: the
+ * map always reflects exactly what is still outstanding, so the minimum over
+ * its values is always the true oldest start.
+ *
+ * Pure: does not mutate `starts`. Empty map -> `null` (never `0`, never
+ * `Infinity` — both would be indistinguishable from a real, very-recent or
+ * very-old start and would corrupt the wedge comparison in `nextProbeAction`).
+ */
+export function oldestNativeStart(starts: ReadonlyMap<number, number>): number | null {
+  let oldest: number | null = null;
+  for (const startedAt of starts.values()) {
+    if (oldest === null || startedAt < oldest) oldest = startedAt;
+  }
+  return oldest;
+}
+
 export function nextProbeAction(
   state: ProbeSchedulerState,
   config: ProbeSchedulerConfig,
@@ -100,7 +162,14 @@ export function nextProbeAction(
 ): ProbeAction {
   if (!state.foreground) return { kind: "skip", reason: "not-foreground" };
   if (!state.activeGame) return { kind: "skip", reason: "not-active-game" };
-  const backlogged = state.nativeOutstanding >= MAX_OUTSTANDING_NATIVE_PROBES;
+  const wedged =
+    state.oldestNativeStartedAt != null &&
+    config.wedgedNativeMs != null &&
+    now - state.oldestNativeStartedAt >= config.wedgedNativeMs;
+  const cap = wedged
+    ? MAX_OUTSTANDING_WITH_WEDGED_REPLACEMENT
+    : MAX_OUTSTANDING_NATIVE_PROBES;
+  const backlogged = state.nativeOutstanding >= cap;
   if (state.inFlight) {
     if (state.inFlightSince != null && now - state.inFlightSince >= config.timeoutMs) {
       // Watchdog: the logical request has waited past the bounded timeout.

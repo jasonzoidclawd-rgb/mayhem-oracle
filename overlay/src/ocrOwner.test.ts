@@ -26,11 +26,21 @@ function context(overrides: Partial<OcrOwnerContext> = {}): OcrOwnerContext {
     championGeneration: 3,
     championId: "56",
     offerGeneration: 4,
+    round: 1,
     requestedSlots: [0, 2],
     slotGenerations: [5, 6, 7],
     fingerprints: FP,
     ...overrides,
   };
+}
+
+type RoundOwnedContext = OcrOwnerContext & { round: number | null };
+
+function roundContext(
+  round: number | null,
+  overrides: Partial<OcrOwnerContext> = {},
+): RoundOwnedContext {
+  return { ...context(overrides), round };
 }
 
 describe("explicit OCR owner", () => {
@@ -81,6 +91,33 @@ describe("explicit OCR owner", () => {
     const replacement = owners.start(context(), 3_000);
     expect(ownerCurrent(timedOut, owners.current, context())).toBe(false);
     expect(owners.current).toBe(replacement);
+  });
+
+  it("rejects a round-1 result after accepted ownership advances to round 2", () => {
+    const owners = new OcrOwnerRegistry();
+    const round1 = owners.start(roundContext(1), 100);
+
+    expect(ownerCurrent(round1, owners.current, roundContext(2))).toBe(false);
+  });
+
+  it("keeps an unchanged accepted round current", () => {
+    const owners = new OcrOwnerRegistry();
+    const round2 = owners.start(roundContext(2), 100);
+
+    expect(ownerCurrent(round2, owners.current, roundContext(2))).toBe(true);
+  });
+
+  it("a timed-out round-1 run cannot publish or release its round-2 replacement", () => {
+    const owners = new OcrOwnerRegistry();
+    const round1 = owners.start(roundContext(1), 0);
+    expect(owners.expire(round1.runId, NATIVE_OCR_TIMEOUT_MS)).toBe(true);
+
+    // Keep every pre-existing authority, including offerGeneration, equal. The
+    // accepted round itself is sufficient to invalidate the late native result.
+    const round2 = owners.start(roundContext(2), NATIVE_OCR_TIMEOUT_MS + 1);
+    expect(ownerCurrent(round1, owners.current, roundContext(2))).toBe(false);
+    expect(owners.release(round1.runId)).toBe(false);
+    expect(owners.current).toBe(round2);
   });
 });
 
@@ -238,6 +275,21 @@ describe("stale-reject cause classification", () => {
     // consequence of the reroll, not the authority that invalidated the read.
     expect(classifyStaleReject(owner, replacement, context({ offerGeneration: 5 }), false))
       .toBe("offer-generation");
+  });
+
+  it("classifies accepted-round drift before generic owner replacement", () => {
+    const round1 = { ...owner, round: 1 };
+    const round2Replacement = {
+      ...context(),
+      round: 2,
+      runId: 8,
+      startedAt: 0,
+      timeoutDeadline: 2_000,
+    };
+
+    expect(
+      classifyStaleReject(round1, round2Replacement, roundContext(2), false),
+    ).toBe("round");
   });
 
   it("surfaces a bare capture-seq bump as its OWN cause, never as a supersede", () => {

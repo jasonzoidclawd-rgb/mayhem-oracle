@@ -569,6 +569,130 @@ mod bounded_capture_tests {
     }
 }
 
+#[cfg(test)]
+mod bounded_ocr_recognition_tests {
+    use super::*;
+    use std::sync::atomic::{AtomicUsize, Ordering};
+    use std::time::Duration;
+
+    #[tokio::test]
+    async fn timed_out_recognition_recovers_below_cap_and_bounds_physical_workers() {
+        // OCR recognition is a separate blocking stage after capture. Its async
+        // deadline must return without pretending that the blocking worker was
+        // cancelled: the physical worker keeps its permit until it really exits.
+        static RECOGNITION_IN_FLIGHT: AtomicUsize = AtomicUsize::new(0);
+        static ATTEMPTS_STARTED: AtomicUsize = AtomicUsize::new(0);
+        const MAX: usize = 2;
+        let deadline = Duration::from_millis(25);
+        let (release_first, wait_first) = std::sync::mpsc::channel::<()>();
+
+        let first = tokio::spawn(run_bounded_ocr_recognition_with_gate(
+            &RECOGNITION_IN_FLIGHT,
+            MAX,
+            deadline,
+            move || {
+                ATTEMPTS_STARTED.fetch_add(1, Ordering::AcqRel);
+                wait_first.recv().map_err(|error| error.to_string())?;
+                Ok::<_, String>("late-first")
+            },
+        ));
+        while RECOGNITION_IN_FLIGHT.load(Ordering::Acquire) != 1 {
+            tokio::task::yield_now().await;
+        }
+        assert_eq!(
+            first.await.expect("recognition task should join"),
+            Err(BoundedCaptureError::Timeout),
+            "an over-deadline OCR recognition must fail the command-side wait"
+        );
+        assert_eq!(
+            RECOGNITION_IN_FLIGHT.load(Ordering::Acquire),
+            1,
+            "timing out must not release the still-running physical worker's permit"
+        );
+
+        // JavaScript invokes sequentially: after the first invocation returns a
+        // timeout, its next healthy invocation must run beneath the native cap.
+        let healthy =
+            run_bounded_ocr_recognition_with_gate(&RECOGNITION_IN_FLIGHT, MAX, deadline, || {
+                ATTEMPTS_STARTED.fetch_add(1, Ordering::AcqRel);
+                Ok::<_, String>("healthy")
+            })
+            .await;
+        assert_eq!(healthy, Ok("healthy"));
+        assert_eq!(RECOGNITION_IN_FLIGHT.load(Ordering::Acquire), 1);
+
+        // A second stuck physical worker fills the cap. Further sequential
+        // retries must be refused without spawning or running another closure.
+        let (release_second, wait_second) = std::sync::mpsc::channel::<()>();
+        let second = tokio::spawn(run_bounded_ocr_recognition_with_gate(
+            &RECOGNITION_IN_FLIGHT,
+            MAX,
+            deadline,
+            move || {
+                ATTEMPTS_STARTED.fetch_add(1, Ordering::AcqRel);
+                wait_second.recv().map_err(|error| error.to_string())?;
+                Ok::<_, String>("late-second")
+            },
+        ));
+        while RECOGNITION_IN_FLIGHT.load(Ordering::Acquire) != MAX {
+            tokio::task::yield_now().await;
+        }
+        assert_eq!(
+            second.await.expect("recognition task should join"),
+            Err(BoundedCaptureError::Timeout)
+        );
+
+        let refused =
+            run_bounded_ocr_recognition_with_gate(&RECOGNITION_IN_FLIGHT, MAX, deadline, || {
+                ATTEMPTS_STARTED.fetch_add(1, Ordering::AcqRel);
+                Ok::<_, String>("must-not-run")
+            })
+            .await;
+        assert_eq!(refused, Err(BoundedCaptureError::Busy));
+        assert_eq!(
+            ATTEMPTS_STARTED.load(Ordering::Acquire),
+            3,
+            "backpressure must refuse work before a third physical worker starts"
+        );
+
+        release_first.send(()).unwrap();
+        release_second.send(()).unwrap();
+        tokio::time::timeout(Duration::from_secs(1), async {
+            while RECOGNITION_IN_FLIGHT.load(Ordering::Acquire) != 0 {
+                tokio::task::yield_now().await;
+            }
+        })
+        .await
+        .expect("physical OCR workers should eventually release their own permits");
+    }
+
+    #[test]
+    fn detect_command_routes_card_recognition_through_bounded_worker() {
+        let source = include_str!("lib.rs");
+        let command = source
+            .rsplit("async fn detect_augment_names(")
+            .next()
+            .and_then(|rest| rest.split("// ─── Geometry Surface Probe").next())
+            .expect("detect_augment_names source");
+        let recognition = command
+            .split("let ocr_start = std::time::Instant::now();")
+            .nth(1)
+            .and_then(|rest| rest.split("detected.sort_by_key").next())
+            .expect("detect_augment_names recognition slice");
+
+        assert!(
+            recognition.contains("run_bounded_ocr_recognition")
+                && recognition.contains("ocr::read_card_text"),
+            "detect_augment_names must route read_card_text through the bounded recognition worker"
+        );
+        assert!(
+            !recognition.contains("tokio::task::spawn_blocking")
+                && !recognition.contains("handle.await"),
+            "detect_augment_names must not directly spawn and await raw recognition workers"
+        );
+    }
+}
+
 // ─── OCR Types ──────────────────────────────────────────────────────────────
 
 #[derive(Serialize, Deserialize, Clone, Debug)]
@@ -664,6 +788,7 @@ fn monitor_snapshots() -> Result<Vec<MonitorSnapshot>, String> {
 }
 
 const NATIVE_CAPTURE_TIMEOUT: Duration = Duration::from_millis(1500);
+const OCR_RECOGNITION_TIMEOUT: Duration = Duration::from_millis(1500);
 /// Max concurrent native captures per channel. A slow/hung capture keeps its
 /// permit until the OS call really returns, so a low cap bounds how many hung
 /// blocking workers can accumulate. It MUST be > 1: at a cap of 1 a single hung
@@ -671,8 +796,13 @@ const NATIVE_CAPTURE_TIMEOUT: Duration = Duration::from_millis(1500);
 /// badges never render at levels 11/15 (they render again once a retry that is
 /// admitted beneath the cap captures a frame).
 const MAX_CONCURRENT_CAPTURES: usize = 4;
+// Each scan recognizes three card regions concurrently. Six permits allow one
+// complete later scan to run after all three workers from a timed-out scan keep
+// running, while still bounding uncancellable native recognition work.
+const MAX_CONCURRENT_OCR_RECOGNITIONS: usize = 6;
 static GEOMETRY_CAPTURE_IN_FLIGHT: AtomicUsize = AtomicUsize::new(0);
 static OCR_CAPTURE_IN_FLIGHT: AtomicUsize = AtomicUsize::new(0);
+static OCR_RECOGNITION_IN_FLIGHT: AtomicUsize = AtomicUsize::new(0);
 
 #[derive(Clone, Copy, Debug)]
 enum CaptureChannel {
@@ -772,6 +902,33 @@ where
         MAX_CONCURRENT_CAPTURES,
         NATIVE_CAPTURE_TIMEOUT,
         capture,
+    )
+    .await
+}
+
+async fn run_bounded_ocr_recognition_with_gate<T, F>(
+    in_flight: &'static AtomicUsize,
+    max_in_flight: usize,
+    timeout: Duration,
+    recognize: F,
+) -> Result<T, BoundedCaptureError>
+where
+    T: Send + 'static,
+    F: FnOnce() -> Result<T, String> + Send + 'static,
+{
+    run_bounded_capture_with_gate(in_flight, max_in_flight, timeout, recognize).await
+}
+
+async fn run_bounded_ocr_recognition<T, F>(recognize: F) -> Result<T, BoundedCaptureError>
+where
+    T: Send + 'static,
+    F: FnOnce() -> Result<T, String> + Send + 'static,
+{
+    run_bounded_ocr_recognition_with_gate(
+        &OCR_RECOGNITION_IN_FLIGHT,
+        MAX_CONCURRENT_OCR_RECOGNITIONS,
+        OCR_RECOGNITION_TIMEOUT,
+        recognize,
     )
     .await
 }
@@ -1048,6 +1205,15 @@ fn bounded_capture_reason(error: &BoundedCaptureError) -> String {
     }
 }
 
+fn bounded_ocr_recognition_reason(error: BoundedCaptureError) -> String {
+    match error {
+        BoundedCaptureError::Busy => "ocr-recognition-busy".to_string(),
+        BoundedCaptureError::Timeout => "ocr-recognition-timeout".to_string(),
+        BoundedCaptureError::Capture(error) => error,
+        BoundedCaptureError::WorkerFailed => "ocr-recognition-worker-failed".to_string(),
+    }
+}
+
 #[tauri::command]
 async fn detect_augment_names(known_names: Option<Vec<String>>) -> Result<OcrScanResult, String> {
     let scan_start = std::time::Instant::now();
@@ -1122,22 +1288,23 @@ async fn detect_augment_names(known_names: Option<Vec<String>>) -> Result<OcrSca
     );
 
     let ocr_start = std::time::Instant::now();
-    let mut handles = Vec::with_capacity(crop_set.crops.len());
+    let mut workers = tokio::task::JoinSet::new();
     for crop in crop_set.crops {
         let region_index = crop.region_index;
         let known_names = known_names.clone();
-        handles.push(tokio::task::spawn_blocking(move || {
-            (
-                region_index,
-                ocr::read_card_text(&crop.image, locale, &known_names),
-            )
-        }));
+        workers.spawn(async move {
+            let result = run_bounded_ocr_recognition(move || {
+                ocr::read_card_text(&crop.image, locale, &known_names)
+            })
+            .await;
+            (region_index, result)
+        });
     }
 
     let mut diagnostics = crop_set.diagnostics;
-    let mut detected = Vec::with_capacity(handles.len());
-    for handle in handles {
-        match handle.await {
+    let mut detected = Vec::with_capacity(workers.len());
+    while let Some(worker) = workers.join_next().await {
+        match worker {
             Ok((region_index, Ok(Some(text)))) => {
                 if let Some(diagnostic) = diagnostics
                     .iter_mut()
@@ -1160,11 +1327,11 @@ async fn detect_augment_names(known_names: Option<Vec<String>>) -> Result<OcrSca
                     .iter_mut()
                     .find(|diagnostic| diagnostic.region_index == region_index)
                 {
-                    diagnostic.error = Some(error);
+                    diagnostic.error = Some(bounded_ocr_recognition_reason(error));
                 }
             }
             Err(error) => {
-                let message = format!("OCR worker failed: {}", error);
+                let message = format!("ocr-recognition-worker-failed: {}", error);
                 for diagnostic in &mut diagnostics {
                     if diagnostic.raw_text.is_none() && diagnostic.error.is_none() {
                         diagnostic.error = Some(message.clone());
@@ -1720,9 +1887,7 @@ fn analyze_foreground(consult_workspace: bool) -> ForegroundAnalysis {
 
     // A window owned by the actual game process (any layer, any size) proves
     // the game surface exists on-screen. Titles are useless here (empty).
-    let game_window_detected = candidates
-        .iter()
-        .any(|candidate| candidate.is_game_process);
+    let game_window_detected = candidates.iter().any(|candidate| candidate.is_game_process);
 
     let selection = foreground::select_frontmost_window(&candidates);
     let selected = selection.selected_index.map(|index| &candidates[index]);
@@ -1738,10 +1903,8 @@ fn analyze_foreground(consult_workspace: bool) -> ForegroundAnalysis {
         FrontmostApplication::default()
     };
 
-    let effective_process_id = foreground::effective_frontmost_pid(
-        selected_process_id,
-        workspace_application.process_id,
-    );
+    let effective_process_id =
+        foreground::effective_frontmost_pid(selected_process_id, workspace_application.process_id);
     let decision_reason = if selection.selected_index.is_some() {
         selection.reason
     } else if workspace_application.process_id.is_some() {
@@ -1761,7 +1924,10 @@ fn analyze_foreground(consult_workspace: bool) -> ForegroundAnalysis {
     // Owner/title metadata only ever describes the effective front window.
     let (owner_name, window_title) = match selected {
         Some(candidate) if effective_process_id == selected_process_id => (
-            candidate.owner_name.clone().filter(|value| !value.is_empty()),
+            candidate
+                .owner_name
+                .clone()
+                .filter(|value| !value.is_empty()),
             candidate.title.clone().filter(|value| !value.is_empty()),
         ),
         _ => (None, None),
@@ -2003,7 +2169,8 @@ fn game_process_running() -> bool {
             .unwrap_or_else(std::sync::PoisonError::into_inner);
         *guard
     };
-    if let Some(value) = cached_process_presence(cached, std::time::Instant::now(), PROCESS_PRESENCE_TTL)
+    if let Some(value) =
+        cached_process_presence(cached, std::time::Instant::now(), PROCESS_PRESENCE_TTL)
     {
         return value;
     }
@@ -2053,7 +2220,11 @@ mod foreground_poll_cost_tests {
         let now = Instant::now();
         let cache = Some((now, true));
         assert_eq!(
-            cached_process_presence(cache, now + Duration::from_millis(4_999), PROCESS_PRESENCE_TTL),
+            cached_process_presence(
+                cache,
+                now + Duration::from_millis(4_999),
+                PROCESS_PRESENCE_TTL
+            ),
             Some(true)
         );
     }

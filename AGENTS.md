@@ -159,3 +159,16 @@ is explicitly assigned. Avoid recursive agent nesting.
 
 Do not proceed past a failed gate without fixing it or explicitly documenting
 the deferral.
+
+### ARAM Mayhem augment cardinality invariant
+
+Do not equate four augment offer rounds with four final owned augments.
+
+- There are exactly four offer-round owners.
+- One round may produce multiple final augment results.
+- Final ownership representations must support at least five entries.
+- Transformation chains remain within their originating round.
+- Never derive round progression from final augment inventory length.
+
+Canonical contract:
+`docs/specs/overlay-v1-product-contract.md`
