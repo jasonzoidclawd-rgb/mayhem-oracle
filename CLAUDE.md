@@ -101,6 +101,10 @@ update-data step gate, data-integrity test).
 ## Pointers
 
 - `AGENTS.md` — agent operating rules · `CO_WORKFLOW.md` — Claude/Codex handoffs
+- `.claude/skills/slice-contract/SKILL.md` — the bounded-slice contract:
+  evidence pinning, phase reports, true-seam red tests, frozen tests, gate
+  lists, terminal states. `scripts/checkpoint.sh` snapshots the worktree
+  before risky work (`--help` documents the commit path).
 - `GAME_MECHANICS.md` — selection mechanics, 26.12 changes, live-gate checklist
 - `docs/handoffs/current-github-context.md` — recent PR/merge state to verify
   before assuming what is already on `main`.
