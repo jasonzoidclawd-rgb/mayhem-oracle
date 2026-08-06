@@ -12,9 +12,9 @@ Maintained by `scripts/update-state.sh` (post-commit hook via
 <!-- STATE:START -->
 - Patch: `26.13`
 - Augments: `268`
-- Tests passing: `1166`
+- Tests passing: `1209`
 - Cross-parity budget: `0` divergent champions
-- Last tag: `pre-docs-review-4a83c26`
+- Last tag: `overlay-collapse-diagnostics-2026-08-05`
 <!-- STATE:END -->
 
 ## Operating Principles
@@ -84,8 +84,8 @@ stat -f "%Sm %N" src-tauri/target/release/mayhem-oracle-overlay
 ```
 
 rtk caveat: when command output is verification evidence, use absolute tool
-paths (`/usr/bin/diff`, `/usr/bin/grep`, `/usr/bin/wc`) — the rtk shell hook
-has returned wrong results for bare `diff` / `ls` / `find`.
+paths (`/usr/bin/diff`, `/usr/bin/grep`, `/usr/bin/wc`, `/usr/bin/git`) — the rtk shell hook
+has returned wrong results for bare `diff` / `ls` / `find` / `git`.
 
 ## Data Pipeline
 
