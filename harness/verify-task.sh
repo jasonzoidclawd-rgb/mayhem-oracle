@@ -18,7 +18,18 @@ cd "$(git rev-parse --show-toplevel)"
 
 PROFILE="${1:-all}"
 fail=0
-declare -a NOT_COVERED=()
+ALL_SUITES=(harness web overlay skills rust)
+declare -a RAN=()
+
+describe() {
+  case "$1" in
+    harness) printf 'harness policy tests + task packet template' ;;
+    web)     printf 'web vitest + eslint' ;;
+    overlay) printf 'overlay vitest + overlay tsc' ;;
+    skills)  printf '.codex skill suite + workflow cwd check' ;;
+    rust)    printf 'cargo test — deferred, see the rust profile' ;;
+  esac
+}
 
 run() {
   local name="$1"; shift
@@ -50,14 +61,11 @@ suite_skills() {
 }
 
 case "$PROFILE" in
-  harness) suite_harness ;;
-  web)     suite_harness; suite_web ;;
-  overlay) suite_harness; suite_overlay ;;
-  skills)  suite_harness; suite_skills ;;
-  all)
-    suite_harness; suite_web; suite_overlay; suite_skills
-    NOT_COVERED+=("rust (cargo test) — deferred, see the rust profile")
-    ;;
+  harness) RAN=(harness);                    suite_harness ;;
+  web)     RAN=(harness web);                suite_harness; suite_web ;;
+  overlay) RAN=(harness overlay);            suite_harness; suite_overlay ;;
+  skills)  RAN=(harness skills);             suite_harness; suite_skills ;;
+  all)     RAN=(harness web overlay skills); suite_harness; suite_web; suite_overlay; suite_skills ;;
   rust)
     # DELIBERATELY NOT WIRED. `cargo test` runs in exactly one place today,
     # .github/workflows/windows-overlay.yml, so it never runs on macOS and
@@ -76,6 +84,15 @@ case "$PROFILE" in
     exit 2
     ;;
 esac
+
+# Every profile names what it did NOT run. A narrow profile printing a bare
+# GATE: PASS reads as a proven change; it is not one.
+declare -a NOT_COVERED=()
+for suite in "${ALL_SUITES[@]}"; do
+  covered=0
+  for ran in "${RAN[@]}"; do [ "$ran" = "$suite" ] && covered=1; done
+  [ "$covered" -eq 0 ] && NOT_COVERED+=("$suite ($(describe "$suite"))")
+done
 
 if [ "${#NOT_COVERED[@]}" -gt 0 ]; then
   printf '\nNOT COVERED BY THIS PROFILE:\n'

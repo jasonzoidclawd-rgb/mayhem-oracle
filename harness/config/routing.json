@@ -1,6 +1,7 @@
 {
   "version": 1,
   "description": "Capability-tier routing policy. Data only: changing a model name or a tier mapping must never require editing AGENTS.md or any harness code.",
+  "defaultParallel": 1,
   "effortLadder": [
     "low",
     "medium",

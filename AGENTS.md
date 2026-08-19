@@ -230,6 +230,13 @@ reasoning effort. The two highest effort levels are never a default; the router
 refuses them unless they are requested explicitly with one sentence of
 justification.
 
+**One executor per slice.** The router returns `defaultParallel: 1` for every
+task class. A class's `maxParallel` is a ceiling, never a target: dispatching a
+second concurrent agent requires a written answer to "what uncertainty does the
+second one resolve?", recorded with the work. Splitting the account pool evenly
+across concurrent executors leaves nothing for independent review, which is the
+scarcer resource.
+
 Only subscription-backed accounts are authorized. When no authorized account is
 available the router fails closed and names the setup gap; it never falls back
 to metered API access.

@@ -167,3 +167,20 @@ test("every effort the harness can emit is a level Pi accepts", () => {
   const piLevels = ["off", "minimal", "low", "medium", "high", "xhigh", "max"];
   for (const effort of config.routing.effortLadder) assert.ok(piLevels.includes(effort));
 });
+
+test("parallelism defaults to one executor; the cap is a ceiling, not a target", () => {
+  assert.equal(config.routing.defaultParallel, 1);
+  for (const taskClass of CLASSES) {
+    const r = route({ taskClass, available: ALL_FOUR, config });
+    assert.equal(r.defaultParallel, 1, `${taskClass} dispatches more than one executor by default`);
+    assert.ok(
+      r.maxParallel >= r.defaultParallel,
+      `${taskClass} caps below the default, making the default undispatchable`,
+    );
+  }
+  // A ceiling nobody can read is an invitation. The rule that governs exceeding
+  // it has to live where an executing agent already looks.
+  const agents = readFileSync(new URL("../../AGENTS.md", import.meta.url), "utf8");
+  assert.match(agents, /one executor per slice/i, "AGENTS.md does not state the default");
+  assert.match(agents, /ceiling, never a target/i, "AGENTS.md does not say the cap is not a target");
+});

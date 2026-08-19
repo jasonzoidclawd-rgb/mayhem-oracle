@@ -126,6 +126,7 @@ export function route({
     escalateTier: spec.escalateTier ?? null,
     effort: chosenEffort,
     risk: spec.risk,
+    defaultParallel: routing.defaultParallel,
     maxParallel: spec.maxParallel,
     primary: assignment(primary),
     verification,

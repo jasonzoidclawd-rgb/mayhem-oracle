@@ -57,8 +57,11 @@ classes T0–T4 map to a tier, a default effort, a parallelism cap, and a risk
 level. The mapping is data; the router is a pure function; `AGENTS.md` names no
 model at all, which a test enforces.
 
-Default concurrency is 1–2. Three or four executors only for genuinely
-independent work, and never a 25/25/25/25 split — one strong account is
+Default concurrency is 1 — `defaultParallel` in the config, emitted on every
+route. A class's `maxParallel` is a ceiling, and exceeding one executor requires
+a written answer to "what uncertainty does the second one resolve?". Three or
+four executors only for genuinely independent work, and never a 25/25/25/25
+split — one strong account is
 preserved for independent review, which the router enforces structurally by
 refusing to let an account review its own work.
 
