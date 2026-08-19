@@ -46,7 +46,7 @@ PYTHONDONTWRITEBYTECODE=1 python3 -m unittest discover \
 
 ```bash
 bash harness/verify-task.sh            # all suites
-bash harness/verify-task.sh <profile>  # harness | web | overlay | skills | all
+bash harness/verify-task.sh <profile>  # harness | web | overlay | skills | rust | all
 ```
 
 One command, not four remembered ones. It runs the Verification Floor above,
@@ -58,8 +58,9 @@ any model whether something is correct.
 - Never derive correctness from a review when the gate can decide it.
 - Never read a multi-megabyte runtime log into a model context. Grep it.
 - A profile that does not cover a suite says so in its output. If you need a
-  suite the gate does not yet run, wire it into `harness/verify-task.sh`
-  before claiming the change is proven.
+  suite the gate does not yet run, add it to `scripts/gate.sh` — the one place
+  a verification command is written down — and map it in
+  `harness/verify-task.sh` before claiming the change is proven.
 
 **"Passing" is three different claims. Never collapse them into "done":**
 

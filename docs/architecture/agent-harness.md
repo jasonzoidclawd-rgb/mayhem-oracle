@@ -16,7 +16,7 @@ discharged by a service that does.
 
 | Responsibility | Owner | Mutable state |
 |---|---|---|
-| Deterministic gates | `harness/verify-task.sh` | none — reads the tree, exits a code |
+| Deterministic gates | `scripts/gate.sh` (commands) + `harness/verify-task.sh` (profiles) | none — reads the tree, exits a code |
 | Worktree isolation | `git worktree` | git's own; no new store |
 | Handoff context | `docs/task-packets/<slice>.md` | none — a file per slice, versioned with the work |
 | Task classification / routing | `harness/config/routing.json` + `harness/route.mjs` | none — a lookup, re-read each call |
@@ -136,6 +136,6 @@ Two invariants sit above the protocol:
 - No worktree wrapper — `git worktree add` is already the right interface.
 - No quota ledger — unfillable under subscription auth; record proxies instead.
 - No Pi extension yet — untestable until a provider is authenticated in Pi.
-- No Rust gate profile — the validated command is owned by the parallel
-  native-starvation reproduction, and guessing it would let a red test report
-  green.
+- No second command list — the `rust` profile now runs
+  `cd overlay/src-tauri && cargo test` because `scripts/gate.sh` owns every
+  verification command and `verify-task` owns only the profile mapping.

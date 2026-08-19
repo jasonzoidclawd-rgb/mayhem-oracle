@@ -18,12 +18,26 @@ bash harness/verify-task.sh harness    # policy tests only — fast
 bash harness/verify-task.sh web        # + web unit + eslint
 bash harness/verify-task.sh overlay    # + overlay unit + overlay types
 bash harness/verify-task.sh skills     # + the .codex skill suite
-bash harness/verify-task.sh rust       # NOT WIRED — exits 2 on purpose
+bash harness/verify-task.sh rust       # + overlay/src-tauri cargo test
+bash harness/verify-task.sh all --plan # what a profile would run, run nothing
 ```
 
-Exits nonzero on any failure; prints what a profile does **not** cover rather
-than passing silently. `rust` fails closed until the native-reproduction task
-returns a validated `cargo test` command — see "Deferred" below.
+Two files, one command layer:
+
+| | Owns | Knows nothing about |
+|---|---|---|
+| `scripts/gate.sh` | the deterministic commands, one suite at a time (`--list` enumerates them) | profiles, providers, routing, effort, accounts |
+| `harness/verify-task.sh` | which suites a profile requires, and the coverage it declares | how any suite is actually run |
+
+`verify-task` spells out no test command of its own — a test enforces that, so a
+profile cannot drift from what the gate actually executes. Exits nonzero on any
+failure; prints what a profile does **not** cover rather than passing silently;
+an unknown profile or suite exits 2 before anything runs.
+
+`rust` is red on purpose today: `bounded_capture_timeout_must_survive_finite_async_worker_starvation`
+reproduces an unfixed native liveness defect, so `rust` and `all` exit nonzero
+until that defect is fixed. A deterministic gate reporting a real defect is the
+gate working.
 
 ## Routing
 
@@ -124,9 +138,6 @@ are deferred until a second account of each provider is authenticated.
 
 ## Deferred
 
-- **`rust` gate profile** — the validated `cargo test` command is owned by the
-  parallel native-starvation reproduction. Wiring a guessed command would let a
-  red Rust test report green.
 - **Pi extension (`.pi/extensions/oracle-router.ts`)** — a dispatch-time hook
   that would call `route.mjs` and inject the packet automatically. Deferred
   until at least one provider is authenticated in Pi, because an untested
