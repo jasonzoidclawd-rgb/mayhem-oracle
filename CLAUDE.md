@@ -4,18 +4,49 @@ ARAM Mayhem decision engine: Next.js 16 PWA (App Router, TypeScript, Tailwind
 v4, next-intl) + optional Tauri overlay in `overlay/`. $0 architecture: static
 JSON in `public/data/`, daily GitHub Actions scrape, Vercel deploy-on-push.
 
-## Live State
+## Loading Context
 
-Maintained by `scripts/update-state.sh` (post-commit hook via
-`scripts/install-hooks.sh`); do not hand-edit this block.
+Read `AGENTS.md` first — operating rules, routing, the gate, task packets, and
+review independence live there and are not repeated here. This file is the
+Claude-specific loader plus the durable project context AGENTS.md points at.
 
-<!-- STATE:START -->
-- Patch: `26.13`
-- Augments: `268`
-- Tests passing: `1209`
-- Cross-parity budget: `0` divergent champions
-- Last tag: `overlay-collapse-diagnostics-2026-08-05`
-<!-- STATE:END -->
+Load, in this order, and only what the task needs:
+
+1. `AGENTS.md`.
+2. The task packet, if you were given one (`docs/task-packets/<slice>.md`).
+3. The spec that governs the change — e.g.
+   `docs/specs/overlay-v1-product-contract.md`. A spec outranks any
+   restatement of it, including this file.
+4. The skill for the work: `.agents/skills/mayhem-task` to execute,
+   `.agents/skills/mayhem-review` to verify, `.claude/skills/slice-contract`
+   for an operator-scoped bounded slice.
+5. `docs/architecture/agent-harness.md` **only** when the task is about the
+   harness itself.
+
+Then inspect the repository rather than trusting conversation memory: recalled
+state is what was true when it was written. `git status --short --branch`,
+`git log --oneline -5`, and the gate are cheaper than being wrong.
+
+## Current State
+
+Do not record test counts, patch numbers, or tag names in this file — they go
+stale between commits and cannot be acted on. Query them:
+
+```bash
+bash harness/verify-task.sh          # every suite, with exact counts
+jq -r .patch public/data/meta.json
+git describe --tags --abbrev=0
+```
+
+## Working Posture
+
+- An executor stays inside the packet's paths; scope growth is a stop, not a
+  judgement call.
+- A reviewer is read-only and never sees the executor's reasoning transcript.
+- Surface uncertainty rather than resolving it silently: say which claims are
+  OBSERVED / SOURCE-PROVEN / TEST-PROVEN / INFERRED / HYPOTHESIS / UNVERIFIED,
+  and never report "done" when you mean IMPLEMENTED.
+- Do not push, tag, or merge unless explicitly asked.
 
 ## Operating Principles
 
@@ -101,6 +132,7 @@ update-data step gate, data-integrity test).
 ## Pointers
 
 - `AGENTS.md` — agent operating rules · `CO_WORKFLOW.md` — Claude/Codex handoffs
+- `harness/README.md` — the agent harness: gate profiles, routing, packets
 - `.claude/skills/slice-contract/SKILL.md` — the bounded-slice contract:
   evidence pinning, phase reports, true-seam red tests, frozen tests, gate
   lists, terminal states. `scripts/checkpoint.sh` snapshots the worktree

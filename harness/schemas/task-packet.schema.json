@@ -1,0 +1,50 @@
+{
+  "version": 1,
+  "description": "A task packet is the durable handoff unit. It is a superset of the CO_WORKFLOW.md handoff packet, adding the fields a delegated agent needs to work in an isolated worktree without conversation history.",
+  "headingPattern": "^##[ ]+([A-Z][A-Z_ ]*[A-Z])[ ]*$",
+  "requiredFields": [
+    "TASK",
+    "TASK_CLASS",
+    "BASE_SHA",
+    "WORKTREE",
+    "ROLE",
+    "SPEC",
+    "RELEVANT PATHS",
+    "INVARIANTS",
+    "KNOWN FACTS",
+    "OPEN QUESTIONS",
+    "ACCEPTANCE TESTS",
+    "DO NOT TOUCH",
+    "RETURN FORMAT"
+  ],
+  "constraints": {
+    "BASE_SHA": {
+      "pattern": "^[0-9a-f]{40}$"
+    },
+    "TASK_CLASS": {
+      "enum": [
+        "T0",
+        "T1",
+        "T2",
+        "T3",
+        "T4"
+      ]
+    },
+    "ROLE": {
+      "enum": [
+        "executor",
+        "verifier",
+        "scout"
+      ]
+    }
+  },
+  "crossPacketInvariants": [
+    "two packets that are open at the same time must not name the same WORKTREE",
+    "a packet's BASE_SHA is fixed for the life of the packet; re-baselining means writing a new packet",
+    "a verifier packet must not name the executor's worktree"
+  ],
+  "parsing": [
+    "HTML comments are stripped before parsing",
+    "for fields listed in constraints, the value is the first non-empty line of the section"
+  ]
+}

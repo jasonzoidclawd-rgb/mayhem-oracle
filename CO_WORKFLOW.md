@@ -39,6 +39,11 @@ Every handoff should include:
 6. Done criteria
 7. Open questions or risks
 
+For work that runs in its own worktree at a fixed base SHA, use the superset of
+this packet in `docs/task-packets/TEMPLATE.md` — same seven items plus task
+class, base SHA, worktree, role, invariants, graded known facts, and a return
+format. It validates with `node harness/route.mjs validate-packet`.
+
 ## Copy/Paste Template
 
 ```md

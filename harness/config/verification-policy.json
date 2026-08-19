@@ -1,0 +1,93 @@
+{
+  "version": 1,
+  "protocol": "Verifier-Lite",
+  "notAnImplementationOf": {
+    "work": "LLM-as-a-Verifier: A General-Purpose Verification Framework",
+    "arxiv": "2607.05391",
+    "repo": "https://github.com/llm-as-a-verifier/llm-as-a-verifier",
+    "blockingConstraint": "Its scoring primitive takes an expectation over score-token logprobs. Logprobs are not exposed by Claude Code or the Codex CLI under subscription authentication, and API billing is out of budget scope.",
+    "rule": "Never describe Verifier-Lite as an implementation of that method, in a commit message, a document, or a review comment."
+  },
+  "adopted": [
+    "decomposed criteria",
+    "independent reviewers",
+    "fixed-point diffs",
+    "mandatory evidence citations",
+    "reversed A/B ordering",
+    "disagreement escalation"
+  ],
+  "excluded": ["logprob-derived continuous scoring", "probabilistic pivot tournament (irrelevant at N<=2)"],
+  "deterministicGateOutranksVerifier": true,
+  "verifier": {
+    "readOnly": true,
+    "mayFixOwnFinding": false,
+    "receives": [
+      "spec",
+      "fixed-point diff",
+      "deterministic gate output",
+      "relevant architecture",
+      "invariants"
+    ],
+    "neverReceives": [
+      "executor reasoning transcript",
+      "write access to the candidate worktree"
+    ]
+  },
+  "criteria": [
+    "SPEC_FIDELITY",
+    "BEHAVIORAL_CORRECTNESS",
+    "CONCURRENCY_LIVENESS",
+    "OWNERSHIP_STALENESS",
+    "REGRESSION_RISK",
+    "ARCHITECTURE_LOCALITY",
+    "PRIVACY",
+    "SCOPE",
+    "TEST_ADEQUACY"
+  ],
+  "findingFields": ["CLAIM", "EVIDENCE", "SEVERITY", "CONFIDENCE", "VIOLATED_INVARIANT"],
+  "severities": ["BLOCKER", "MAJOR", "MINOR", "NIT"],
+  "confidences": ["HIGH", "MEDIUM", "LOW"],
+  "riskLevels": {
+    "0": {
+      "example": "docs, formatting, .gitignore",
+      "deterministic": true,
+      "reviewers": 0,
+      "optionalReviewers": 0,
+      "crossProvider": false,
+      "reversedAB": false
+    },
+    "1": {
+      "example": "isolated bugfix with an existing red test",
+      "deterministic": true,
+      "reviewers": 0,
+      "optionalReviewers": 1,
+      "crossProvider": false,
+      "reversedAB": false
+    },
+    "2": {
+      "example": "behavior change, e.g. a new scheduler threshold",
+      "deterministic": true,
+      "reviewers": 1,
+      "optionalReviewers": 0,
+      "crossProvider": false,
+      "reversedAB": false
+    },
+    "3": {
+      "example": "overlay lifecycle / native / concurrency / ownership",
+      "deterministic": true,
+      "reviewers": 1,
+      "optionalReviewers": 0,
+      "crossProvider": true,
+      "reversedAB": false
+    },
+    "4": {
+      "example": "release-critical arbitration between candidates",
+      "deterministic": true,
+      "reviewers": 2,
+      "optionalReviewers": 0,
+      "crossProvider": true,
+      "reversedAB": true
+    }
+  },
+  "completionLevels": ["IMPLEMENTED", "OFFLINE-PROVEN", "LIVE-PROVEN"]
+}

@@ -42,6 +42,36 @@ PYTHONDONTWRITEBYTECODE=1 python3 -m unittest discover \
   -s .codex/skills/test-league-augment-overlay/scripts -p 'test_*.py'
 ```
 
+## The Deterministic Gate Comes First
+
+```bash
+bash harness/verify-task.sh            # all suites
+bash harness/verify-task.sh <profile>  # harness | web | overlay | skills | all
+```
+
+One command, not four remembered ones. It runs the Verification Floor above,
+costs zero model tokens, and exits nonzero on any failure. Run it before asking
+any model whether something is correct.
+
+- A failing gate cannot be overruled by a higher-tier model, a higher effort
+  level, or a majority of reviewers.
+- Never derive correctness from a review when the gate can decide it.
+- Never read a multi-megabyte runtime log into a model context. Grep it.
+- A profile that does not cover a suite says so in its output. If you need a
+  suite the gate does not yet run, wire it into `harness/verify-task.sh`
+  before claiming the change is proven.
+
+**"Passing" is three different claims. Never collapse them into "done":**
+
+```
+IMPLEMENTED     the source contains the intended mechanism
+OFFLINE-PROVEN  a deterministic regression demonstrates it
+LIVE-PROVEN     controlled live acceptance demonstrates it
+```
+
+Report them independently, and name the level you actually reached.
+
+
 ## Repository Safety
 
 - Check `git status --short --branch` before editing; preserve unrelated
@@ -174,6 +204,86 @@ decides and records what was accepted or rejected. Keep advisory bounded to
 real decision points (scoring/data API design, route architecture, final
 review of non-trivial work); read-only prompts unless implementation authority
 is explicitly assigned. Avoid recursive agent nesting.
+
+## Model Routing and Effort
+
+Route by capability tier, never by model name — names change, tiers do not.
+The name-to-tier mapping, the account pool, and the task classes live in
+`harness/config/routing.json`, so model churn never edits this file:
+
+```bash
+node harness/route.mjs route T2        # -> tier, account, model, effort, review
+```
+
+| Task class | Tier | Effort |
+|---|---|---|
+| T0 retrieval / mechanical | throughput | low |
+| T1 bounded coding | balanced | medium |
+| T2 difficult debugging | balanced, escalating to frontier | high |
+| T3 concurrency / architecture / contradictory evidence | frontier | high |
+| T4 disputed or release-critical decision | frontier, cross-provider | high |
+
+**Default to medium effort.** Escalate on evidence — a failed hypothesis, a
+deterministic contradiction, a concurrency ambiguity — never because a task
+feels important. Importance raises *verification* rigor, not every agent's
+reasoning effort. The two highest effort levels are never a default; the router
+refuses them unless they are requested explicitly with one sentence of
+justification.
+
+Only subscription-backed accounts are authorized. When no authorized account is
+available the router fails closed and names the setup gap; it never falls back
+to metered API access.
+
+Public agent-evaluation results are a **routing prior, not an oracle**. They may
+inform which provider handles a class of work; they never override a
+deterministic gate or a reproduction. Two provider preferences in the config are
+backed by non-overlapping measured intervals and are tagged with that basis;
+everything else is quota balancing. Say which one you are doing rather than
+dressing a scheduling choice as a quality claim. The evidence behind those
+preferences, with its retrieval date, lives in
+`docs/architecture/agent-harness.md`.
+
+## Task Packets
+
+Delegated work is reconstructible from a packet, not from conversation history.
+A task packet is the `CO_WORKFLOW.md` handoff packet plus the fields an agent
+needs to work in an isolated worktree: task class, base SHA, worktree, role,
+relevant paths, invariants, graded known facts, open questions, acceptance
+tests, do-not-touch paths, and a return format.
+
+```bash
+cp docs/task-packets/TEMPLATE.md docs/task-packets/<slice>.md
+node harness/route.mjs validate-packet docs/task-packets/<slice>.md
+```
+
+A packet's base SHA is fixed for its life; re-baselining means a new packet.
+Concurrent packets must name different worktrees. Prefer a fresh bounded
+session over compaction when the old context is mostly irrelevant —
+conversation history is disposable cache; source, tests, specs, ADRs, and
+concise handoffs are the durable state.
+
+## Review Independence
+
+The review protocol is **Verifier-Lite**, defined in
+`harness/config/verification-policy.json`.
+
+- A reviewer is **read-only** and may not fix its own finding during the review
+  pass.
+- A reviewer never receives the executor's reasoning transcript — only the
+  spec, the fixed-point diff, the invariants, and the gate output. Independent
+  verification requires epistemic independence.
+- Findings carry CLAIM / EVIDENCE / SEVERITY / CONFIDENCE / VIOLATED
+  INVARIANT. "Looks good" is not a review.
+- Reviewer count and cross-provider requirements follow the change's risk
+  level, not its importance. The router assigns reviewer accounts and refuses
+  to let an account review its own work.
+- When choosing between two candidates, read them in both orders and report
+  whether the conclusion survived the reversal.
+- Verifier-Lite deliberately omits the logprob-derived continuous scoring that
+  defines the published verification method it borrows its structure from;
+  subscription authentication does not expose those logprobs. Do not describe
+  it as that method.
+
 
 ## Review Gates
 

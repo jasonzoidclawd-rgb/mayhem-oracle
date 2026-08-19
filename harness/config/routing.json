@@ -1,0 +1,170 @@
+{
+  "version": 1,
+  "description": "Capability-tier routing policy. Data only: changing a model name or a tier mapping must never require editing AGENTS.md or any harness code.",
+  "effortLadder": [
+    "low",
+    "medium",
+    "high",
+    "xhigh",
+    "max"
+  ],
+  "effortRequiringJustification": [
+    "xhigh",
+    "max"
+  ],
+  "accounts": {
+    "CLAUDE_A": {
+      "provider": "anthropic",
+      "auth": "subscription",
+      "plan": "claude_pro",
+      "conceptualRole": "architecture / orchestration candidate",
+      "authStatus": "authenticated"
+    },
+    "CLAUDE_B": {
+      "provider": "anthropic",
+      "auth": "subscription",
+      "plan": "claude_pro",
+      "conceptualRole": "independent Claude reviewer or second hard task",
+      "authStatus": "setup-required"
+    },
+    "GPT_A": {
+      "provider": "openai",
+      "auth": "subscription",
+      "plan": "chatgpt_plus",
+      "conceptualRole": "primary bounded executor",
+      "authStatus": "authenticated"
+    },
+    "GPT_B": {
+      "provider": "openai",
+      "auth": "subscription",
+      "plan": "chatgpt_plus",
+      "conceptualRole": "scout / second executor / independent reviewer",
+      "authStatus": "setup-required"
+    }
+  },
+  "tiers": {
+    "THROUGHPUT": {
+      "anthropic": {
+        "model": "claude-haiku-4-5"
+      },
+      "openai": {
+        "model": "gpt-5.6-luna"
+      }
+    },
+    "BALANCED": {
+      "anthropic": {
+        "model": "claude-sonnet-5"
+      },
+      "openai": {
+        "model": "gpt-5.6-terra"
+      }
+    },
+    "FRONTIER": {
+      "anthropic": {
+        "model": "claude-opus-5",
+        "alternates": [
+          "claude-fable-5"
+        ]
+      },
+      "openai": {
+        "model": "gpt-5.6-sol"
+      }
+    }
+  },
+  "taskClasses": {
+    "T0": {
+      "label": "retrieval / mechanical",
+      "tier": "THROUGHPUT",
+      "effort": "low",
+      "risk": 0,
+      "maxParallel": 4,
+      "preferAccounts": [
+        "CLAUDE_A",
+        "GPT_A",
+        "CLAUDE_B",
+        "GPT_B"
+      ]
+    },
+    "T1": {
+      "label": "bounded coding",
+      "tier": "BALANCED",
+      "effort": "medium",
+      "risk": 1,
+      "maxParallel": 2,
+      "preferAccounts": [
+        "GPT_A",
+        "GPT_B",
+        "CLAUDE_B",
+        "CLAUDE_A"
+      ]
+    },
+    "T2": {
+      "label": "difficult debugging",
+      "tier": "BALANCED",
+      "escalateTier": "FRONTIER",
+      "effort": "high",
+      "risk": 2,
+      "maxParallel": 1,
+      "preferAccounts": [
+        "CLAUDE_A",
+        "GPT_A",
+        "CLAUDE_B",
+        "GPT_B"
+      ]
+    },
+    "T3": {
+      "label": "concurrency / architecture / contradictory evidence",
+      "tier": "FRONTIER",
+      "effort": "high",
+      "risk": 3,
+      "maxParallel": 1,
+      "preferAccounts": [
+        "CLAUDE_A",
+        "CLAUDE_B",
+        "GPT_A",
+        "GPT_B"
+      ]
+    },
+    "T4": {
+      "label": "disputed / release-critical decision",
+      "tier": "FRONTIER",
+      "effort": "high",
+      "risk": 4,
+      "maxParallel": 2,
+      "preferAccounts": [
+        "CLAUDE_A",
+        "GPT_A",
+        "CLAUDE_B",
+        "GPT_B"
+      ]
+    }
+  },
+  "providerPreferences": [
+    {
+      "tag": "git-archaeology",
+      "provider": "anthropic",
+      "basis": "arena-bash-recovery-disjoint-ci"
+    },
+    {
+      "tag": "native-concurrency",
+      "provider": "anthropic",
+      "basis": "arena-bash-recovery-disjoint-ci"
+    }
+  ],
+  "evidence": {
+    "arena": {
+      "source": "https://arena.ai/leaderboard/agent",
+      "retrieved": "2026-08-20",
+      "leaderboardDated": "2026-08-18",
+      "standing": "routing prior, not an oracle; never overrides a deterministic gate or a reproduction",
+      "detail": "docs/architecture/agent-harness.md"
+    }
+  },
+  "billing": {
+    "authorizedAuth": [
+      "subscription"
+    ],
+    "apiBillingAuthorized": false,
+    "usageCreditFallbackAuthorized": false
+  }
+}
