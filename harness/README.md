@@ -39,6 +39,34 @@ reproduces an unfixed native liveness defect, so `rust` and `all` exit nonzero
 until that defect is fixed. A deterministic gate reporting a real defect is the
 gate working.
 
+### Native Vision verification
+
+`surface_probe::tests::silver_fixture_resolves_all_three_titles_and_records_ocr_latency`
+(`overlay/src-tauri/src/surface_probe.rs`, `#[cfg(target_os = "macos")]`) reaches
+the macOS Vision framework through `crate::ocr`. On one commit, with identical
+gate commands, an independent verifier ran the `rust` profile both ways:
+
+| Execution | `rust` profile |
+|---|---|
+| restricted agent sandbox | 113 passed, 2 failed — the intended red test **and** the Vision test |
+| host / unrestricted | 114 passed, 1 failed — the intended red test only |
+
+The Vision test failed 5/5 restricted with `OCR failed: unknown Vision error`
+and passed 5/5 on the host. `scripts/gate.sh` and `harness/verify-task.sh` are
+not the difference; sandboxed access to Vision is.
+
+Policy, for macOS Vision-dependent Rust verification only:
+
+- **Host/native execution is authoritative.** A `rust` result produced inside a
+  restricted agent sandbox does not verify this suite.
+- A Vision failure under such a sandbox is an **environment** failure, not
+  automatically a repository failure.
+- An agent reporting Rust results must state the execution capability it used.
+- This is not licence to retry away or ignore arbitrary Rust failures. Every
+  other failure is a repository failure until proven otherwise.
+- The exception applies only where a failure is shown to be environment-specific
+  by controlled comparison — same commit, same gate command, restricted vs host.
+
 ## Routing
 
 ```bash
