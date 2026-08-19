@@ -86,6 +86,12 @@ The router fails closed on an unknown task class, on an unjustified escalation
 to the top two effort levels, and when no authorized subscription account is
 available. It never emits a metered-API route.
 
+Every route names the `execution` mechanism and `runtime` it authorizes, so
+dispatch is a lookup rather than a choice. Subscription authentication alone
+does not qualify a mechanism: `executionMechanisms` in `config/routing.json`
+declares, per mechanism, whether execution consumes the plan's *included* usage,
+and the router refuses anything else instead of substituting a paid route.
+
 ## Task packets
 
 ```bash
@@ -137,6 +143,15 @@ PI_CODING_AGENT_DIR=~/.pi/accounts/gpt_b    pi   # then /login, pick OpenAI
 
 `/login` is interactive and account-specific. It is the one step that cannot be
 automated here.
+
+**Pi's Anthropic provider is not an authorized mechanism.** Claude Pro/Max
+credentials used through Pi are billed per token as Anthropic extra usage rather
+than against plan limits — subscription authentication, metered execution. The
+Claude slots therefore dispatch through the native Claude Code CLI, and a route
+that could only run through Pi's Anthropic provider is undispatchable rather
+than downgraded to another provider's paid path. Pi's OpenAI provider signs in
+through the Codex ChatGPT Plus/Pro OAuth path, which consumes that plan's
+included usage, and carries the GPT slots.
 
 ## Engineering skills
 

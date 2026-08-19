@@ -24,6 +24,17 @@ export class RoutingError extends Error {}
 
 // --- routing -------------------------------------------------------------
 
+function mechanismOf(routing, id, account) {
+  const mechanism = routing.executionMechanisms?.[account.execution];
+  if (!mechanism) {
+    throw new RoutingError(
+      `account ${id} declares no known execution mechanism (${JSON.stringify(account.execution ?? null)}); ` +
+        "an account is dispatchable only through a mechanism whose billing is declared in harness/config/routing.json",
+    );
+  }
+  return { id: account.execution, ...mechanism };
+}
+
 export function route({
   taskClass,
   tag = null,
@@ -67,13 +78,22 @@ export function route({
         .map(([id]) => id),
   );
   const out = new Set(exhausted);
-  const usable = Object.entries(routing.accounts)
-    .filter(([id]) => authed.has(id) && !out.has(id))
-    .map(([id, a]) => ({ id, ...a }));
+  // Subscription authentication is not subscription usage: a runtime can hold a
+  // plan credential and still bill per token. Only a mechanism that consumes the
+  // plan's included usage is dispatchable, and an undeclared one never is.
+  const usable = [];
+  const metered = [];
+  for (const [id, a] of Object.entries(routing.accounts)) {
+    if (!authed.has(id) || out.has(id)) continue;
+    const mechanism = mechanismOf(routing, id, a);
+    if (mechanism.consumesPlanIncludedUsage) usable.push({ id, ...a, mechanism });
+    else metered.push(`${id} executes through ${mechanism.id}, which is billed beyond the plan`);
+  }
 
   if (usable.length === 0) {
     throw new RoutingError(
       "no authorized subscription resource is available. " +
+        (metered.length ? `${metered.join("; ")}. ` : "") +
         "Authenticate another account from the 2+2 pool (CLAUDE_A/CLAUDE_B/GPT_A/GPT_B) or wait for quota to reset. " +
         "API billing and usage-credit fallback are NOT authorized.",
     );
@@ -113,6 +133,8 @@ export function route({
       model: t.model,
       alternates: t.alternates ?? [],
       auth: acct.auth,
+      execution: acct.mechanism.id,
+      runtime: acct.mechanism.runtime,
     };
   };
 
@@ -158,8 +180,15 @@ export function route({
     result.reviewers.push({ ...assignment(candidate), readOnly: true });
   }
 
-  if (result.primary.auth !== "subscription") {
-    throw new RoutingError("routed to a non-subscription resource; refusing");
+  for (const a of [result.primary, ...result.reviewers]) {
+    if (a.auth !== "subscription") {
+      throw new RoutingError("routed to a non-subscription resource; refusing");
+    }
+    if (!routing.executionMechanisms[a.execution]?.consumesPlanIncludedUsage) {
+      throw new RoutingError(
+        `routed ${a.account} through ${a.execution}, which does not consume the plan's included usage; refusing`,
+      );
+    }
   }
   return result;
 }

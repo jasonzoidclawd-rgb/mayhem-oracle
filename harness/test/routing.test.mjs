@@ -184,3 +184,119 @@ test("parallelism defaults to one executor; the cap is a ceiling, not a target",
   assert.match(agents, /one executor per slice/i, "AGENTS.md does not state the default");
   assert.match(agents, /ceiling, never a target/i, "AGENTS.md does not say the cap is not a target");
 });
+
+// --- execution mechanism vs. authentication ------------------------------
+//
+// Subscription authentication is not subscription usage. A runtime can hold a
+// Claude Pro credential and still bill per token as extra usage, which is the
+// exact route the first dry-routing run resolved to and called compliant.
+
+const meteredAnthropic = () => {
+  const c = structuredClone(config);
+  for (const id of ["CLAUDE_A", "CLAUDE_B"]) {
+    c.routing.accounts[id].execution = "pi-anthropic-oauth";
+  }
+  return c;
+};
+
+test("every declared execution mechanism states whether it consumes plan-included usage", () => {
+  const mechanisms = config.routing.executionMechanisms;
+  assert.ok(mechanisms, "routing.json declares no execution mechanisms");
+  for (const [id, m] of Object.entries(mechanisms)) {
+    assert.equal(
+      typeof m.consumesPlanIncludedUsage,
+      "boolean",
+      `${id} does not say whether it consumes the plan's included usage`,
+    );
+    assert.ok(m.basis && m.basis.trim(), `${id} states no basis for its billing claim`);
+  }
+  // The fact that made the dry route wrong, pinned as data.
+  assert.equal(mechanisms["pi-anthropic-oauth"].consumesPlanIncludedUsage, false);
+  assert.match(mechanisms["pi-anthropic-oauth"].basis, /extra usage|per token/i);
+
+  for (const [id, account] of Object.entries(config.routing.accounts)) {
+    const mechanism = mechanisms[account.execution];
+    assert.ok(mechanism, `${id} declares no known execution mechanism`);
+    assert.equal(mechanism.provider, account.provider, `${id}: mechanism provider mismatch`);
+    assert.equal(
+      mechanism.consumesPlanIncludedUsage,
+      true,
+      `${id} is configured to execute through a metered mechanism`,
+    );
+  }
+});
+
+test("Pi Anthropic OAuth is not a compliant CLAUDE_A mechanism, and fails closed", () => {
+  const c = meteredAnthropic();
+  // T0 carries no reviewer requirement, so the refusal is observably the
+  // billing rule and not a review-pool shortfall.
+  try {
+    route({ taskClass: "T0", available: ["CLAUDE_A"], config: c });
+    assert.fail("expected a routing error; a metered mechanism was dispatched");
+  } catch (err) {
+    assert.ok(err instanceof RoutingError);
+    assert.match(err.message, /pi-anthropic-oauth/);
+    assert.match(err.message, /NOT authorized/);
+    assert.doesNotMatch(err.message, /api[_ -]?key|credits|pay.?as.?you.?go/i);
+  }
+  assert.equal(c.routing.billing.apiBillingAuthorized, false);
+  assert.equal(c.routing.billing.usageCreditFallbackAuthorized, false);
+});
+
+test("an Anthropic-preferring route is undispatchable when only metered Anthropic execution exists", () => {
+  // The observed defect: T3, risk 3, primary CLAUDE_A, dispatched through Pi's
+  // Anthropic provider and reported subscription-compliant.
+  const c = meteredAnthropic();
+  try {
+    route({ taskClass: "T3", tag: "native-concurrency", available: ALL_FOUR, config: c });
+    assert.fail("expected a routing error");
+  } catch (err) {
+    assert.ok(err instanceof RoutingError);
+    assert.doesNotMatch(err.message, /api[_ -]?key|credits|pay.?as.?you.?go/i);
+  }
+  // ...and no route, from any class, silently substitutes a metered mechanism.
+  for (const taskClass of CLASSES) {
+    let r;
+    try {
+      r = route({ taskClass, available: ALL_FOUR, config: c });
+    } catch (err) {
+      assert.ok(err instanceof RoutingError);
+      continue;
+    }
+    for (const a of [r.primary, ...r.reviewers]) {
+      assert.equal(
+        c.routing.executionMechanisms[a.execution].consumesPlanIncludedUsage,
+        true,
+        `${taskClass} dispatched ${a.account} through metered ${a.execution}`,
+      );
+    }
+  }
+});
+
+test("Pi's OpenAI Codex ChatGPT OAuth stays eligible for the GPT slots", () => {
+  const r = route({ taskClass: "T1", available: ["GPT_A"], config });
+  assert.equal(r.primary.account, "GPT_A");
+  assert.equal(r.primary.auth, "subscription");
+  const mechanism = config.routing.executionMechanisms[r.primary.execution];
+  assert.equal(mechanism.runtime, "pi");
+  assert.equal(mechanism.provider, "openai");
+  assert.equal(mechanism.consumesPlanIncludedUsage, true);
+});
+
+test("every route names the execution mechanism instead of leaving it to the dispatcher", () => {
+  for (const taskClass of CLASSES) {
+    const r = route({ taskClass, available: ALL_FOUR, config });
+    for (const a of [r.primary, ...r.reviewers]) {
+      const mechanism = config.routing.executionMechanisms[a.execution];
+      assert.ok(mechanism, `${taskClass}: ${a.account} was dispatched with no named mechanism`);
+      assert.equal(a.runtime, mechanism.runtime);
+      assert.equal(mechanism.consumesPlanIncludedUsage, true);
+    }
+  }
+});
+
+test("an account with no declared mechanism is not dispatchable", () => {
+  const c = structuredClone(config);
+  delete c.routing.accounts.GPT_A.execution;
+  assert.throws(() => route({ taskClass: "T0", available: ["GPT_A"], config: c }), RoutingError);
+});

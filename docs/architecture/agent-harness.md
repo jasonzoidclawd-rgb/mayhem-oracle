@@ -57,6 +57,14 @@ classes T0–T4 map to a tier, a default effort, a parallelism cap, and a risk
 level. The mapping is data; the router is a pure function; `AGENTS.md` names no
 model at all, which a test enforces.
 
+**Authentication is not usage.** Each account slot declares the execution
+mechanism it dispatches through, and each mechanism declares one static fact:
+whether execution consumes the plan's included usage. A runtime that
+authenticates with a subscription credential but bills per token is metered
+execution on subscription auth — the router drops it from the pool and fails
+closed rather than substituting another paid route. One property per mechanism,
+no ledger, no state.
+
 Default concurrency is 1 — `defaultParallel` in the config, emitted on every
 route. A class's `maxParallel` is a ceiling, and exceeding one executor requires
 a written answer to "what uncertainty does the second one resolve?". Three or

@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "description": "Capability-tier routing policy. Data only: changing a model name or a tier mapping must never require editing AGENTS.md or any harness code.",
+  "description": "Capability-tier routing policy. Data only: changing a model name or a tier mapping must never require editing AGENTS.md or any harness code. Subscription authentication is not subscription usage: an account is dispatchable only through an execution mechanism that consumes its plan's included usage.",
   "defaultParallel": 1,
   "effortLadder": [
     "low",
@@ -17,6 +17,7 @@
     "CLAUDE_A": {
       "provider": "anthropic",
       "auth": "subscription",
+      "execution": "claude-code-cli",
       "plan": "claude_pro",
       "conceptualRole": "architecture / orchestration candidate",
       "authStatus": "authenticated"
@@ -24,6 +25,7 @@
     "CLAUDE_B": {
       "provider": "anthropic",
       "auth": "subscription",
+      "execution": "claude-code-cli",
       "plan": "claude_pro",
       "conceptualRole": "independent Claude reviewer or second hard task",
       "authStatus": "setup-required"
@@ -31,6 +33,7 @@
     "GPT_A": {
       "provider": "openai",
       "auth": "subscription",
+      "execution": "pi-openai-chatgpt-oauth",
       "plan": "chatgpt_plus",
       "conceptualRole": "primary bounded executor",
       "authStatus": "authenticated"
@@ -38,9 +41,30 @@
     "GPT_B": {
       "provider": "openai",
       "auth": "subscription",
+      "execution": "pi-openai-chatgpt-oauth",
       "plan": "chatgpt_plus",
       "conceptualRole": "scout / second executor / independent reviewer",
       "authStatus": "setup-required"
+    }
+  },
+  "executionMechanisms": {
+    "claude-code-cli": {
+      "runtime": "claude-code",
+      "provider": "anthropic",
+      "consumesPlanIncludedUsage": true,
+      "basis": "Claude Code signed in with a Claude Pro account draws that plan's included usage; observed locally as claude_pro / stripe_subscription (docs/reviews/2026-08-20-pi-harness-implementation.md, section C)."
+    },
+    "pi-anthropic-oauth": {
+      "runtime": "pi",
+      "provider": "anthropic",
+      "consumesPlanIncludedUsage": false,
+      "basis": "Pi provider documentation: Claude Pro/Max credentials used through Pi are billed per token as Anthropic extra usage rather than against plan limits. Subscription authentication, metered execution — not dispatchable here."
+    },
+    "pi-openai-chatgpt-oauth": {
+      "runtime": "pi",
+      "provider": "openai",
+      "consumesPlanIncludedUsage": true,
+      "basis": "Pi provider documentation: the OpenAI provider signs in with the Codex ChatGPT Plus/Pro OAuth path, which consumes that plan's included Codex usage."
     }
   },
   "tiers": {

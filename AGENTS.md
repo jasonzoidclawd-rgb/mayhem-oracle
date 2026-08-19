@@ -238,9 +238,14 @@ second one resolve?", recorded with the work. Splitting the account pool evenly
 across concurrent executors leaves nothing for independent review, which is the
 scarcer resource.
 
-Only subscription-backed accounts are authorized. When no authorized account is
-available the router fails closed and names the setup gap; it never falls back
-to metered API access.
+Only subscription-backed accounts are authorized, and authentication is not
+usage: a runtime can sign in with a subscription credential and still bill per
+token beyond the plan. Each account slot therefore declares the execution
+mechanism it dispatches through, and only a mechanism that consumes the plan's
+included usage is dispatchable. When no authorized mechanism is available the
+router fails closed and names the setup gap; it never falls back to metered API
+access, to usage beyond the plan, or to any other paid route. The mechanisms,
+and the basis for each billing claim, live in `harness/config/routing.json`.
 
 Public agent-evaluation results are a **routing prior, not an oracle**. They may
 inform which provider handles a class of work; they never override a
