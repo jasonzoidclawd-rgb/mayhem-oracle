@@ -334,9 +334,21 @@ mod live_player_tests {
 #[cfg(test)]
 mod bounded_capture_tests {
     use super::*;
-    use std::sync::atomic::AtomicUsize;
+    use std::sync::atomic::{AtomicU64, AtomicUsize, Ordering};
+    use std::sync::{mpsc, Arc, Barrier};
     use std::thread;
     use std::time::{Duration, Instant};
+    use tokio::runtime::Builder;
+
+    #[derive(Debug)]
+    struct StarvationObservation {
+        result: Result<&'static str, BoundedCaptureError>,
+        dispatch_wait_ms: u64,
+        resume_wait_ms: u64,
+        configured_timeout_ms: u64,
+        external_completion_ms: u64,
+        closure_end_ms: u64,
+    }
 
     #[tokio::test]
     async fn bounded_capture_work_executes_off_the_async_runtime_thread() {
@@ -356,6 +368,213 @@ mod bounded_capture_tests {
             worker_thread, caller_thread,
             "capture and analysis must run on the blocking pool, not the async runtime thread"
         );
+    }
+
+    #[test]
+    fn blocking_pool_saturation_keeps_async_timeout_within_wall_clock_budget() {
+        static TEST_CAPTURE_IN_FLIGHT: AtomicUsize = AtomicUsize::new(0);
+        const TIMEOUT: Duration = Duration::from_millis(40);
+        const ACCEPTABLE_COMPLETION: Duration = Duration::from_millis(160);
+
+        let runtime = Builder::new_multi_thread()
+            .worker_threads(2)
+            .max_blocking_threads(1)
+            .enable_time()
+            .build()
+            .expect("explicit Tokio runtime should build");
+        let handle = runtime.handle().clone();
+
+        let (blocker_started_sender, blocker_started_receiver) = mpsc::channel();
+        let (release_blocker_sender, release_blocker_receiver) = mpsc::channel();
+        let _blocker = handle.spawn_blocking(move || {
+            blocker_started_sender
+                .send(())
+                .expect("test thread should observe the saturated blocking pool");
+            release_blocker_receiver
+                .recv()
+                .expect("test thread should release the saturated blocking pool");
+        });
+        blocker_started_receiver
+            .recv_timeout(Duration::from_millis(500))
+            .expect("blocking-pool occupier should start");
+
+        let (capture_started_sender, capture_started_receiver) = mpsc::channel();
+        let (result_sender, result_receiver) = mpsc::channel();
+        let wall_started = Instant::now();
+        let _capture_task = handle.spawn(async move {
+            let result =
+                run_bounded_capture_with_gate(&TEST_CAPTURE_IN_FLIGHT, 1, TIMEOUT, move || {
+                    capture_started_sender
+                        .send(())
+                        .expect("test thread should still own the capture-start receiver");
+                    Ok::<_, String>("queued-capture")
+                })
+                .await;
+            result_sender
+                .send((result, wall_started.elapsed()))
+                .expect("external watchdog should still be listening");
+        });
+
+        let (result, external_completion) = result_receiver
+            .recv_timeout(Duration::from_millis(500))
+            .expect("external watchdog: bounded call did not complete");
+        eprintln!(
+            "blocking_pool_saturation configured_timeout_ms={} external_completion_ms={}",
+            TIMEOUT.as_millis(),
+            external_completion.as_millis()
+        );
+        assert_eq!(
+            result,
+            Err(BoundedCaptureError::Timeout),
+            "queued blocking work must not suppress the async timeout"
+        );
+        assert!(
+            external_completion < ACCEPTABLE_COMPLETION,
+            "blocking-pool saturation delayed a {} ms timeout to {} ms (limit {} ms)",
+            TIMEOUT.as_millis(),
+            external_completion.as_millis(),
+            ACCEPTABLE_COMPLETION.as_millis()
+        );
+        assert!(
+            matches!(
+                capture_started_receiver.try_recv(),
+                Err(mpsc::TryRecvError::Empty)
+            ),
+            "the capture closure must still be queued when its async timeout fires"
+        );
+
+        release_blocker_sender
+            .send(())
+            .expect("saturated blocker should still be waiting");
+        capture_started_receiver
+            .recv_timeout(Duration::from_millis(500))
+            .expect("timed-out queued capture should eventually run physically");
+        let permit_deadline = Instant::now() + Duration::from_millis(500);
+        while TEST_CAPTURE_IN_FLIGHT.load(Ordering::Acquire) != 0
+            && Instant::now() < permit_deadline
+        {
+            thread::yield_now();
+        }
+        assert_eq!(
+            TEST_CAPTURE_IN_FLIGHT.load(Ordering::Acquire),
+            0,
+            "queued physical work must release its permit after it really returns"
+        );
+
+        runtime.shutdown_timeout(Duration::from_millis(500));
+    }
+
+    #[test]
+    fn bounded_capture_timeout_must_survive_finite_async_worker_starvation() {
+        static TEST_CAPTURE_IN_FLIGHT: AtomicUsize = AtomicUsize::new(0);
+        const WORKER_THREADS: usize = 2;
+        const TIMEOUT: Duration = Duration::from_millis(25);
+        const ACCEPTABLE_COMPLETION: Duration = Duration::from_millis(100);
+        const STARVATION_WINDOW: Duration = Duration::from_millis(250);
+
+        let runtime = Builder::new_multi_thread()
+            .worker_threads(WORKER_THREADS)
+            .max_blocking_threads(2)
+            .enable_time()
+            .build()
+            .expect("explicit Tokio runtime should build");
+        let handle = runtime.handle().clone();
+
+        let dispatch_wait_ms = Arc::new(AtomicU64::new(u64::MAX));
+        let closure_end_ms = Arc::new(AtomicU64::new(u64::MAX));
+        let (dispatch_sender, dispatch_receiver) = mpsc::channel();
+        let (release_capture_sender, release_capture_receiver) = mpsc::channel();
+        let (result_sender, result_receiver) = mpsc::channel();
+        let external_started = Instant::now();
+
+        let task_dispatch_wait_ms = Arc::clone(&dispatch_wait_ms);
+        let task_closure_end_ms = Arc::clone(&closure_end_ms);
+        let _capture_task = handle.spawn(async move {
+            let command_started = Instant::now();
+            let closure_dispatch_wait_ms = Arc::clone(&task_dispatch_wait_ms);
+            let closure_end = Arc::clone(&task_closure_end_ms);
+            let result =
+                run_bounded_capture_with_gate(&TEST_CAPTURE_IN_FLIGHT, 1, TIMEOUT, move || {
+                    let dispatched_at = command_started.elapsed().as_millis() as u64;
+                    closure_dispatch_wait_ms.store(dispatched_at, Ordering::Release);
+                    dispatch_sender
+                        .send(dispatched_at)
+                        .expect("external watchdog should observe blocking dispatch");
+                    release_capture_receiver
+                        .recv()
+                        .map_err(|error| error.to_string())?;
+                    closure_end.store(
+                        command_started.elapsed().as_millis() as u64,
+                        Ordering::Release,
+                    );
+                    Ok::<_, String>("capture-completed")
+                })
+                .await;
+
+            let completion_ms = command_started.elapsed().as_millis() as u64;
+            let observed_closure_end_ms = task_closure_end_ms.load(Ordering::Acquire);
+            result_sender
+                .send(StarvationObservation {
+                    result,
+                    dispatch_wait_ms: task_dispatch_wait_ms.load(Ordering::Acquire),
+                    resume_wait_ms: completion_ms.saturating_sub(observed_closure_end_ms),
+                    configured_timeout_ms: TIMEOUT.as_millis() as u64,
+                    external_completion_ms: external_started.elapsed().as_millis() as u64,
+                    closure_end_ms: observed_closure_end_ms,
+                })
+                .expect("external watchdog should still be listening");
+        });
+
+        let observed_dispatch_ms = dispatch_receiver
+            .recv_timeout(Duration::from_millis(500))
+            .expect("blocking closure must dispatch before workers are occupied");
+        assert!(
+            observed_dispatch_ms < ACCEPTABLE_COMPLETION.as_millis() as u64,
+            "test setup invalid: blocking dispatch took {} ms before starvation",
+            observed_dispatch_ms
+        );
+
+        let starvation_barrier = Arc::new(Barrier::new(WORKER_THREADS + 1));
+        for _ in 0..WORKER_THREADS {
+            let worker_barrier = Arc::clone(&starvation_barrier);
+            let _starver = handle.spawn(async move {
+                worker_barrier.wait();
+                let occupied_at = Instant::now();
+                while occupied_at.elapsed() < STARVATION_WINDOW {
+                    std::hint::spin_loop();
+                }
+            });
+        }
+        starvation_barrier.wait();
+        release_capture_sender
+            .send(())
+            .expect("blocking closure should still be waiting for release");
+
+        let observation = result_receiver
+            .recv_timeout(Duration::from_secs(1))
+            .expect("external OS-thread watchdog: bounded call did not complete");
+        eprintln!("async_worker_starvation {observation:?}");
+        assert!(
+            observation.closure_end_ms < ACCEPTABLE_COMPLETION.as_millis() as u64,
+            "test setup invalid: blocking closure itself ended at {} ms (limit {} ms)",
+            observation.closure_end_ms,
+            ACCEPTABLE_COMPLETION.as_millis()
+        );
+        assert!(
+            observation.resume_wait_ms < ACCEPTABLE_COMPLETION.as_millis() as u64
+                && observation.external_completion_ms < ACCEPTABLE_COMPLETION.as_millis() as u64,
+            "bounded native operation violated its wall-clock liveness invariant: \
+             configured_timeout_ms={} dispatch_wait_ms={} resume_wait_ms={} \
+             external_completion_ms={} result={:?}; acceptable completion is < {} ms",
+            observation.configured_timeout_ms,
+            observation.dispatch_wait_ms,
+            observation.resume_wait_ms,
+            observation.external_completion_ms,
+            observation.result,
+            ACCEPTABLE_COMPLETION.as_millis()
+        );
+
+        runtime.shutdown_timeout(Duration::from_millis(500));
     }
 
     #[tokio::test]

@@ -1,0 +1,61 @@
+ M overlay/src-tauri/src/foreground.rs
+ M overlay/src-tauri/src/lcu.rs
+ M overlay/src-tauri/src/lib.rs
+ M overlay/src-tauri/src/member.rs
+ M overlay/src-tauri/src/surface_probe.rs
+ M overlay/src-tauri/tests/member_contract.rs
+ M overlay/src-tauri/tests/r1_replay.rs
+ M overlay/src/App.tsx
+ M overlay/src/auth/member.ts
+ M overlay/src/dev/championDataset.test.ts
+ M overlay/src/dev/championStats.test.ts
+ M overlay/src/dev/championStats.ts
+ M overlay/src/dev/production/tierFixture.ts
+ M overlay/src/dev/publicationDiagnostics.ts
+ M overlay/src/dev/tierFixture.ts
+ M overlay/src/liveGamePoll.test.ts
+ M overlay/src/liveGamePoll.ts
+ M overlay/src/liveGamePollIntegration.test.ts
+ M overlay/src/ocrOwner.test.ts
+ M overlay/src/ocrOwner.ts
+ M overlay/src/offerGeneration.test.ts
+ M overlay/src/publicationIntegration.test.ts
+ M src/lib/__tests__/overlay-tier-fixture.test.ts
+?? .codex/skills/test-league-augment-overlay/SKILL.md
+?? .codex/skills/test-league-augment-overlay/agents/openai.yaml
+?? .codex/skills/test-league-augment-overlay/references/validation-protocol.md
+?? .codex/skills/test-league-augment-overlay/scripts/analyze_trace.py
+?? .codex/skills/test-league-augment-overlay/scripts/extract_event_frames.py
+?? .codex/skills/test-league-augment-overlay/scripts/preflight.py
+?? .codex/skills/test-league-augment-overlay/scripts/record_session.py
+?? .codex/skills/test-league-augment-overlay/scripts/test_analyze_trace.py
+?? .codex/skills/test-league-augment-overlay/scripts/test_extract_event_frames.py
+?? .codex/skills/test-league-augment-overlay/scripts/test_preflight_record.py
+?? .codex/skills/test-league-augment-overlay/scripts/test_workflow_docs.py
+?? .codex/skills/test-league-augment-overlay/scripts/verify_workflow_cwd.sh
+?? docs/handoffs/codex-overlay-current-state.md
+?? docs/handoffs/overlay-mvp-residual-risk.md
+?? docs/handoffs/overlay-v1-current-state.md
+?? docs/plans/overlay-v1-implementation-plan.md
+?? docs/prompts/codex-sync-to-current-overlay.md
+?? docs/prompts/verify-worktree-root-resolution.sh
+?? docs/specs/overlay-v1-debug-session-contract.md
+?? docs/specs/overlay-v1-product-contract.md
+?? docs/testing/overlay-v1-acceptance-plan.md
+?? overlay/src/BadgeChipLayer.tsx
+?? overlay/src/augmentOverlayGate.test.ts
+?? overlay/src/augmentOverlayGate.ts
+?? overlay/src/auth/member.test.ts
+?? overlay/src/badgeLayerDiagnostic.test.ts
+?? overlay/src/badgeLayerDiagnostic.ts
+?? overlay/src/badgeLayerProductionStrip.test.ts
+?? overlay/src/ocrRoundOwnershipIntegration.test.ts
+?? overlay/src/offerRoundOwnership.test.ts
+?? overlay/src/offerRoundOwnership.ts
+?? overlay/src/overlayReplay.test.tsx
+?? overlay/src/overlayReplay.ts
+?? overlay/src/positionedBadgeChips.test.ts
+?? overlay/src/positionedBadgeChips.ts
+?? overlay/src/roundContentCompletion.test.tsx
+?? overlay/src/sameOfferDataRefresh.test.ts
+?? overlay/src/sameOfferDataRefresh.ts

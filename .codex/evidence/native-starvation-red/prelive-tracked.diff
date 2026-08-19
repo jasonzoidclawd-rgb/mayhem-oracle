@@ -1,0 +1,3958 @@
+diff --git a/overlay/src-tauri/src/foreground.rs b/overlay/src-tauri/src/foreground.rs
+index 50f5ad1..201a1bf 100644
+--- a/overlay/src-tauri/src/foreground.rs
++++ b/overlay/src-tauri/src/foreground.rs
+@@ -290,18 +290,12 @@ fn normalize_identity(value: &str) -> String {
+ mod tests {
+     use super::{
+         classify_foreground, effective_frontmost_pid, is_actual_game_process,
+-        is_actual_game_window, is_game_owner, is_league_client_ux_process,
+-        is_riot_client_process, select_frontmost_window, ForegroundObservation, WindowCandidate,
++        is_actual_game_window, is_game_owner, is_league_client_ux_process, is_riot_client_process,
++        select_frontmost_window, ForegroundObservation, WindowCandidate,
+         LEAGUE_CLIENT_UX_BUNDLE_ID, LEAGUE_GAME_BUNDLE_ID, RIOT_CLIENT_BUNDLE_ID,
+     };
+ 
+-    fn candidate(
+-        layer: i32,
+-        pid: u32,
+-        owner: &str,
+-        width: f64,
+-        height: f64,
+-    ) -> WindowCandidate {
++    fn candidate(layer: i32, pid: u32, owner: &str, width: f64, height: f64) -> WindowCandidate {
+         WindowCandidate {
+             window_number: None,
+             layer: Some(layer),
+@@ -383,7 +377,9 @@ mod tests {
+             bundle_identifier: Some("com.apple.Terminal"),
+             owner_name: selected.owner_name.as_deref(),
+             window_title: None,
+-            executable_path: Some("/System/Applications/Utilities/Terminal.app/Contents/MacOS/Terminal"),
++            executable_path: Some(
++                "/System/Applications/Utilities/Terminal.app/Contents/MacOS/Terminal",
++            ),
+             window_handle: None,
+             game_running: true,
+             game_window_detected: true,
+@@ -402,10 +398,7 @@ mod tests {
+                 title: Some(String::new()),
+                 ..candidate(layer, 1427, "League Of Legends", 1280.0, 720.0)
+             };
+-            let walk = vec![
+-                game,
+-                candidate(0, 482, "終端機", 1278.0, 665.0),
+-            ];
++            let walk = vec![game, candidate(0, 482, "終端機", 1278.0, 665.0)];
+             let selection = select_frontmost_window(&walk);
+             assert_eq!(selection.selected_index, Some(0), "layer {layer}");
+ 
+@@ -449,7 +442,11 @@ mod tests {
+             is_game_process: true,
+             ..candidate(0, 1427, "League Of Legends", 1.0, 2.0)
+         };
+-        let walk = vec![transparent, degenerate, candidate(0, 482, "終端機", 1278.0, 665.0)];
++        let walk = vec![
++            transparent,
++            degenerate,
++            candidate(0, 482, "終端機", 1278.0, 665.0),
++        ];
+         let selection = select_frontmost_window(&walk);
+         assert_eq!(selection.verdicts[0], "transparent");
+         assert_eq!(selection.verdicts[1], "zero-area");
+@@ -590,7 +587,10 @@ mod tests {
+         // layer-0 window is the authority whenever one exists.
+         let game_pid = Some(4242);
+         let terminal_pid = Some(7001);
+-        assert_eq!(effective_frontmost_pid(terminal_pid, game_pid), terminal_pid);
++        assert_eq!(
++            effective_frontmost_pid(terminal_pid, game_pid),
++            terminal_pid
++        );
+         assert_eq!(effective_frontmost_pid(game_pid, terminal_pid), game_pid);
+     }
+ 
+diff --git a/overlay/src-tauri/src/lcu.rs b/overlay/src-tauri/src/lcu.rs
+index 35ae15a..52cc76e 100644
+--- a/overlay/src-tauri/src/lcu.rs
++++ b/overlay/src-tauri/src/lcu.rs
+@@ -538,6 +538,8 @@ mod tests {
+         assert!(is_allowed_gameflow_path("/lol-gameflow/v1/gameflow-phase"));
+         assert!(is_allowed_gameflow_path("/lol-gameflow/v1/session"));
+         assert!(is_allowed_gameflow_path("/lol-champ-select/v1/session"));
+-        assert!(!is_allowed_gameflow_path("/lol-champ-select/v1/session/choice/1"));
++        assert!(!is_allowed_gameflow_path(
++            "/lol-champ-select/v1/session/choice/1"
++        ));
+     }
+ }
+diff --git a/overlay/src-tauri/src/lib.rs b/overlay/src-tauri/src/lib.rs
+index cf64051..dcb548a 100644
+--- a/overlay/src-tauri/src/lib.rs
++++ b/overlay/src-tauri/src/lib.rs
+@@ -569,6 +569,130 @@ mod bounded_capture_tests {
+     }
+ }
+ 
++#[cfg(test)]
++mod bounded_ocr_recognition_tests {
++    use super::*;
++    use std::sync::atomic::{AtomicUsize, Ordering};
++    use std::time::Duration;
++
++    #[tokio::test]
++    async fn timed_out_recognition_recovers_below_cap_and_bounds_physical_workers() {
++        // OCR recognition is a separate blocking stage after capture. Its async
++        // deadline must return without pretending that the blocking worker was
++        // cancelled: the physical worker keeps its permit until it really exits.
++        static RECOGNITION_IN_FLIGHT: AtomicUsize = AtomicUsize::new(0);
++        static ATTEMPTS_STARTED: AtomicUsize = AtomicUsize::new(0);
++        const MAX: usize = 2;
++        let deadline = Duration::from_millis(25);
++        let (release_first, wait_first) = std::sync::mpsc::channel::<()>();
++
++        let first = tokio::spawn(run_bounded_ocr_recognition_with_gate(
++            &RECOGNITION_IN_FLIGHT,
++            MAX,
++            deadline,
++            move || {
++                ATTEMPTS_STARTED.fetch_add(1, Ordering::AcqRel);
++                wait_first.recv().map_err(|error| error.to_string())?;
++                Ok::<_, String>("late-first")
++            },
++        ));
++        while RECOGNITION_IN_FLIGHT.load(Ordering::Acquire) != 1 {
++            tokio::task::yield_now().await;
++        }
++        assert_eq!(
++            first.await.expect("recognition task should join"),
++            Err(BoundedCaptureError::Timeout),
++            "an over-deadline OCR recognition must fail the command-side wait"
++        );
++        assert_eq!(
++            RECOGNITION_IN_FLIGHT.load(Ordering::Acquire),
++            1,
++            "timing out must not release the still-running physical worker's permit"
++        );
++
++        // JavaScript invokes sequentially: after the first invocation returns a
++        // timeout, its next healthy invocation must run beneath the native cap.
++        let healthy =
++            run_bounded_ocr_recognition_with_gate(&RECOGNITION_IN_FLIGHT, MAX, deadline, || {
++                ATTEMPTS_STARTED.fetch_add(1, Ordering::AcqRel);
++                Ok::<_, String>("healthy")
++            })
++            .await;
++        assert_eq!(healthy, Ok("healthy"));
++        assert_eq!(RECOGNITION_IN_FLIGHT.load(Ordering::Acquire), 1);
++
++        // A second stuck physical worker fills the cap. Further sequential
++        // retries must be refused without spawning or running another closure.
++        let (release_second, wait_second) = std::sync::mpsc::channel::<()>();
++        let second = tokio::spawn(run_bounded_ocr_recognition_with_gate(
++            &RECOGNITION_IN_FLIGHT,
++            MAX,
++            deadline,
++            move || {
++                ATTEMPTS_STARTED.fetch_add(1, Ordering::AcqRel);
++                wait_second.recv().map_err(|error| error.to_string())?;
++                Ok::<_, String>("late-second")
++            },
++        ));
++        while RECOGNITION_IN_FLIGHT.load(Ordering::Acquire) != MAX {
++            tokio::task::yield_now().await;
++        }
++        assert_eq!(
++            second.await.expect("recognition task should join"),
++            Err(BoundedCaptureError::Timeout)
++        );
++
++        let refused =
++            run_bounded_ocr_recognition_with_gate(&RECOGNITION_IN_FLIGHT, MAX, deadline, || {
++                ATTEMPTS_STARTED.fetch_add(1, Ordering::AcqRel);
++                Ok::<_, String>("must-not-run")
++            })
++            .await;
++        assert_eq!(refused, Err(BoundedCaptureError::Busy));
++        assert_eq!(
++            ATTEMPTS_STARTED.load(Ordering::Acquire),
++            3,
++            "backpressure must refuse work before a third physical worker starts"
++        );
++
++        release_first.send(()).unwrap();
++        release_second.send(()).unwrap();
++        tokio::time::timeout(Duration::from_secs(1), async {
++            while RECOGNITION_IN_FLIGHT.load(Ordering::Acquire) != 0 {
++                tokio::task::yield_now().await;
++            }
++        })
++        .await
++        .expect("physical OCR workers should eventually release their own permits");
++    }
++
++    #[test]
++    fn detect_command_routes_card_recognition_through_bounded_worker() {
++        let source = include_str!("lib.rs");
++        let command = source
++            .rsplit("async fn detect_augment_names(")
++            .next()
++            .and_then(|rest| rest.split("// ─── Geometry Surface Probe").next())
++            .expect("detect_augment_names source");
++        let recognition = command
++            .split("let ocr_start = std::time::Instant::now();")
++            .nth(1)
++            .and_then(|rest| rest.split("detected.sort_by_key").next())
++            .expect("detect_augment_names recognition slice");
++
++        assert!(
++            recognition.contains("run_bounded_ocr_recognition")
++                && recognition.contains("ocr::read_card_text"),
++            "detect_augment_names must route read_card_text through the bounded recognition worker"
++        );
++        assert!(
++            !recognition.contains("tokio::task::spawn_blocking")
++                && !recognition.contains("handle.await"),
++            "detect_augment_names must not directly spawn and await raw recognition workers"
++        );
++    }
++}
++
+ // ─── OCR Types ──────────────────────────────────────────────────────────────
+ 
+ #[derive(Serialize, Deserialize, Clone, Debug)]
+@@ -664,6 +788,7 @@ fn monitor_snapshots() -> Result<Vec<MonitorSnapshot>, String> {
+ }
+ 
+ const NATIVE_CAPTURE_TIMEOUT: Duration = Duration::from_millis(1500);
++const OCR_RECOGNITION_TIMEOUT: Duration = Duration::from_millis(1500);
+ /// Max concurrent native captures per channel. A slow/hung capture keeps its
+ /// permit until the OS call really returns, so a low cap bounds how many hung
+ /// blocking workers can accumulate. It MUST be > 1: at a cap of 1 a single hung
+@@ -671,8 +796,13 @@ const NATIVE_CAPTURE_TIMEOUT: Duration = Duration::from_millis(1500);
+ /// badges never render at levels 11/15 (they render again once a retry that is
+ /// admitted beneath the cap captures a frame).
+ const MAX_CONCURRENT_CAPTURES: usize = 4;
++// Each scan recognizes three card regions concurrently. Six permits allow one
++// complete later scan to run after all three workers from a timed-out scan keep
++// running, while still bounding uncancellable native recognition work.
++const MAX_CONCURRENT_OCR_RECOGNITIONS: usize = 6;
+ static GEOMETRY_CAPTURE_IN_FLIGHT: AtomicUsize = AtomicUsize::new(0);
+ static OCR_CAPTURE_IN_FLIGHT: AtomicUsize = AtomicUsize::new(0);
++static OCR_RECOGNITION_IN_FLIGHT: AtomicUsize = AtomicUsize::new(0);
+ 
+ #[derive(Clone, Copy, Debug)]
+ enum CaptureChannel {
+@@ -776,6 +906,33 @@ where
+     .await
+ }
+ 
++async fn run_bounded_ocr_recognition_with_gate<T, F>(
++    in_flight: &'static AtomicUsize,
++    max_in_flight: usize,
++    timeout: Duration,
++    recognize: F,
++) -> Result<T, BoundedCaptureError>
++where
++    T: Send + 'static,
++    F: FnOnce() -> Result<T, String> + Send + 'static,
++{
++    run_bounded_capture_with_gate(in_flight, max_in_flight, timeout, recognize).await
++}
++
++async fn run_bounded_ocr_recognition<T, F>(recognize: F) -> Result<T, BoundedCaptureError>
++where
++    T: Send + 'static,
++    F: FnOnce() -> Result<T, String> + Send + 'static,
++{
++    run_bounded_ocr_recognition_with_gate(
++        &OCR_RECOGNITION_IN_FLIGHT,
++        MAX_CONCURRENT_OCR_RECOGNITIONS,
++        OCR_RECOGNITION_TIMEOUT,
++        recognize,
++    )
++    .await
++}
++
+ /// True when an enumerated window belongs to the overlay itself. `xcap` gives us
+ /// only app name/title, so we match the overlay's product identity — a defensive
+ /// guard on top of the game-window predicate, which already rejects it.
+@@ -1048,6 +1205,15 @@ fn bounded_capture_reason(error: &BoundedCaptureError) -> String {
+     }
+ }
+ 
++fn bounded_ocr_recognition_reason(error: BoundedCaptureError) -> String {
++    match error {
++        BoundedCaptureError::Busy => "ocr-recognition-busy".to_string(),
++        BoundedCaptureError::Timeout => "ocr-recognition-timeout".to_string(),
++        BoundedCaptureError::Capture(error) => error,
++        BoundedCaptureError::WorkerFailed => "ocr-recognition-worker-failed".to_string(),
++    }
++}
++
+ #[tauri::command]
+ async fn detect_augment_names(known_names: Option<Vec<String>>) -> Result<OcrScanResult, String> {
+     let scan_start = std::time::Instant::now();
+@@ -1122,22 +1288,23 @@ async fn detect_augment_names(known_names: Option<Vec<String>>) -> Result<OcrSca
+     );
+ 
+     let ocr_start = std::time::Instant::now();
+-    let mut handles = Vec::with_capacity(crop_set.crops.len());
++    let mut workers = tokio::task::JoinSet::new();
+     for crop in crop_set.crops {
+         let region_index = crop.region_index;
+         let known_names = known_names.clone();
+-        handles.push(tokio::task::spawn_blocking(move || {
+-            (
+-                region_index,
+-                ocr::read_card_text(&crop.image, locale, &known_names),
+-            )
+-        }));
++        workers.spawn(async move {
++            let result = run_bounded_ocr_recognition(move || {
++                ocr::read_card_text(&crop.image, locale, &known_names)
++            })
++            .await;
++            (region_index, result)
++        });
+     }
+ 
+     let mut diagnostics = crop_set.diagnostics;
+-    let mut detected = Vec::with_capacity(handles.len());
+-    for handle in handles {
+-        match handle.await {
++    let mut detected = Vec::with_capacity(workers.len());
++    while let Some(worker) = workers.join_next().await {
++        match worker {
+             Ok((region_index, Ok(Some(text)))) => {
+                 if let Some(diagnostic) = diagnostics
+                     .iter_mut()
+@@ -1160,11 +1327,11 @@ async fn detect_augment_names(known_names: Option<Vec<String>>) -> Result<OcrSca
+                     .iter_mut()
+                     .find(|diagnostic| diagnostic.region_index == region_index)
+                 {
+-                    diagnostic.error = Some(error);
++                    diagnostic.error = Some(bounded_ocr_recognition_reason(error));
+                 }
+             }
+             Err(error) => {
+-                let message = format!("OCR worker failed: {}", error);
++                let message = format!("ocr-recognition-worker-failed: {}", error);
+                 for diagnostic in &mut diagnostics {
+                     if diagnostic.raw_text.is_none() && diagnostic.error.is_none() {
+                         diagnostic.error = Some(message.clone());
+@@ -1720,9 +1887,7 @@ fn analyze_foreground(consult_workspace: bool) -> ForegroundAnalysis {
+ 
+     // A window owned by the actual game process (any layer, any size) proves
+     // the game surface exists on-screen. Titles are useless here (empty).
+-    let game_window_detected = candidates
+-        .iter()
+-        .any(|candidate| candidate.is_game_process);
++    let game_window_detected = candidates.iter().any(|candidate| candidate.is_game_process);
+ 
+     let selection = foreground::select_frontmost_window(&candidates);
+     let selected = selection.selected_index.map(|index| &candidates[index]);
+@@ -1738,10 +1903,8 @@ fn analyze_foreground(consult_workspace: bool) -> ForegroundAnalysis {
+         FrontmostApplication::default()
+     };
+ 
+-    let effective_process_id = foreground::effective_frontmost_pid(
+-        selected_process_id,
+-        workspace_application.process_id,
+-    );
++    let effective_process_id =
++        foreground::effective_frontmost_pid(selected_process_id, workspace_application.process_id);
+     let decision_reason = if selection.selected_index.is_some() {
+         selection.reason
+     } else if workspace_application.process_id.is_some() {
+@@ -1761,7 +1924,10 @@ fn analyze_foreground(consult_workspace: bool) -> ForegroundAnalysis {
+     // Owner/title metadata only ever describes the effective front window.
+     let (owner_name, window_title) = match selected {
+         Some(candidate) if effective_process_id == selected_process_id => (
+-            candidate.owner_name.clone().filter(|value| !value.is_empty()),
++            candidate
++                .owner_name
++                .clone()
++                .filter(|value| !value.is_empty()),
+             candidate.title.clone().filter(|value| !value.is_empty()),
+         ),
+         _ => (None, None),
+@@ -2003,7 +2169,8 @@ fn game_process_running() -> bool {
+             .unwrap_or_else(std::sync::PoisonError::into_inner);
+         *guard
+     };
+-    if let Some(value) = cached_process_presence(cached, std::time::Instant::now(), PROCESS_PRESENCE_TTL)
++    if let Some(value) =
++        cached_process_presence(cached, std::time::Instant::now(), PROCESS_PRESENCE_TTL)
+     {
+         return value;
+     }
+@@ -2053,7 +2220,11 @@ mod foreground_poll_cost_tests {
+         let now = Instant::now();
+         let cache = Some((now, true));
+         assert_eq!(
+-            cached_process_presence(cache, now + Duration::from_millis(4_999), PROCESS_PRESENCE_TTL),
++            cached_process_presence(
++                cache,
++                now + Duration::from_millis(4_999),
++                PROCESS_PRESENCE_TTL
++            ),
+             Some(true)
+         );
+     }
+diff --git a/overlay/src-tauri/src/member.rs b/overlay/src-tauri/src/member.rs
+index 0ba901f..a7741ae 100644
+--- a/overlay/src-tauri/src/member.rs
++++ b/overlay/src-tauri/src/member.rs
+@@ -244,10 +244,7 @@ pub fn parse_bootstrap_response(status: u16, body: &str) -> Result<BootstrapResp
+     serde_json::from_str(body).map_err(|error| format!("invalid-bootstrap-response: {error}"))
+ }
+ 
+-pub fn parse_game_session_response(
+-    status: u16,
+-    body: &str,
+-) -> Result<GameSessionResponse, String> {
++pub fn parse_game_session_response(status: u16, body: &str) -> Result<GameSessionResponse, String> {
+     if status != 200 {
+         return Err(api_error(status, body));
+     }
+@@ -273,7 +270,11 @@ fn canonical_value(value: &Value) -> Value {
+ }
+ 
+ fn resolve_openssl() -> Result<String, String> {
+-    for candidate in ["/opt/homebrew/bin/openssl", "/usr/local/bin/openssl", "openssl"] {
++    for candidate in [
++        "/opt/homebrew/bin/openssl",
++        "/usr/local/bin/openssl",
++        "openssl",
++    ] {
+         if candidate.starts_with('/') && !Path::new(candidate).is_file() {
+             continue;
+         }
+@@ -298,13 +299,7 @@ fn verify_ed25519(data: &[u8], signature: &[u8], public_key_pem: &str) -> Result
+     std::fs::write(&data_path, data).map_err(|error| error.to_string())?;
+     std::fs::write(&signature_path, signature).map_err(|error| error.to_string())?;
+     let output = Command::new(resolve_openssl()?)
+-        .args([
+-            "pkeyutl",
+-            "-verify",
+-            "-rawin",
+-            "-pubin",
+-            "-inkey",
+-        ])
++        .args(["pkeyutl", "-verify", "-rawin", "-pubin", "-inkey"])
+         .arg(public_key_path)
+         .arg("-in")
+         .arg(data_path)
+@@ -338,18 +333,29 @@ pub fn verify_manifest(
+     let signature_bytes = base64::engine::general_purpose::STANDARD
+         .decode(&manifest.signature)
+         .map_err(|error| error.to_string())?;
+-    verify_ed25519(&canonical_json(&unsigned)?, &signature_bytes, public_key_pem)
++    verify_ed25519(
++        &canonical_json(&unsigned)?,
++        &signature_bytes,
++        public_key_pem,
++    )
+ }
+ 
+ fn tar_string(bytes: &[u8]) -> Result<String, String> {
+-    let end = bytes.iter().position(|byte| *byte == 0).unwrap_or(bytes.len());
++    let end = bytes
++        .iter()
++        .position(|byte| *byte == 0)
++        .unwrap_or(bytes.len());
+     std::str::from_utf8(&bytes[..end])
+         .map(str::to_string)
+         .map_err(|error| error.to_string())
+ }
+ 
+ fn tar_size(bytes: &[u8]) -> Result<usize, String> {
+-    let value = tar_string(bytes)?.trim().trim_matches('\0').trim().to_string();
++    let value = tar_string(bytes)?
++        .trim()
++        .trim_matches('\0')
++        .trim()
++        .to_string();
+     usize::from_str_radix(if value.is_empty() { "0" } else { &value }, 8)
+         .map_err(|error| error.to_string())
+ }
+@@ -410,8 +416,7 @@ pub fn verify_model_package(
+             }
+             "model-config.json" => {
+                 config = Some(
+-                    serde_json::from_slice::<Value>(&bytes)
+-                        .map_err(|error| error.to_string())?,
++                    serde_json::from_slice::<Value>(&bytes).map_err(|error| error.to_string())?,
+                 );
+             }
+             _ => return Err("model-package-has-unexpected-entry".to_string()),
+diff --git a/overlay/src-tauri/src/surface_probe.rs b/overlay/src-tauri/src/surface_probe.rs
+index 16fef78..2620903 100644
+--- a/overlay/src-tauri/src/surface_probe.rs
++++ b/overlay/src-tauri/src/surface_probe.rs
+@@ -327,7 +327,11 @@ impl LumaImage {
+             let [r, g, b] = px.0;
+             data.push(0.299 * r as f32 + 0.587 * g as f32 + 0.114 * b as f32);
+         }
+-        LumaImage { width: w, height: h, data }
++        LumaImage {
++            width: w,
++            height: h,
++            data,
++        }
+     }
+ 
+     #[inline]
+@@ -337,7 +341,14 @@ impl LumaImage {
+ 
+     /// Convert a normalized region (relative to `viewport`, in capture pixels)
+     /// into a clamped pixel rect [x0,x1) × [y0,y1).
+-    fn region_px(&self, viewport: &Rect, nx0: f64, ny0: f64, nx1: f64, ny1: f64) -> (usize, usize, usize, usize) {
++    fn region_px(
++        &self,
++        viewport: &Rect,
++        nx0: f64,
++        ny0: f64,
++        nx1: f64,
++        ny1: f64,
++    ) -> (usize, usize, usize, usize) {
+         let vx = viewport.x as f64;
+         let vy = viewport.y as f64;
+         let vw = viewport.width as f64;
+@@ -386,19 +397,18 @@ impl LumaImage {
+                 n += 1;
+             }
+         }
+-        if n == 0 { 0.0 } else { (sum / n as f64) as f32 }
++        if n == 0 {
++            0.0
++        } else {
++            (sum / n as f64) as f32
++        }
+     }
+ 
+     /// 144-bit average hash of the icon+name window: FP_GRID×FP_GRID cell means,
+     /// each bit set when its cell exceeds the window median.
+     fn fingerprint(&self, viewport: &Rect, cx: f64) -> String {
+-        let (x0, y0, x1, y1) = self.region_px(
+-            viewport,
+-            cx - FP_HALF_W,
+-            FP_TOP,
+-            cx + FP_HALF_W,
+-            FP_BOTTOM,
+-        );
++        let (x0, y0, x1, y1) =
++            self.region_px(viewport, cx - FP_HALF_W, FP_TOP, cx + FP_HALF_W, FP_BOTTOM);
+         let w = x1.saturating_sub(x0);
+         let h = y1.saturating_sub(y0);
+         if w == 0 || h == 0 {
+@@ -411,7 +421,12 @@ impl LumaImage {
+                 let cx1 = x0 + (gx + 1) * w / FP_GRID;
+                 let cy0 = y0 + gy * h / FP_GRID;
+                 let cy1 = y0 + (gy + 1) * h / FP_GRID;
+-                let (m, _) = self.mean_std((cx0, cy0, cx1.max(cx0 + 1).min(self.width), cy1.max(cy0 + 1).min(self.height)));
++                let (m, _) = self.mean_std((
++                    cx0,
++                    cy0,
++                    cx1.max(cx0 + 1).min(self.width),
++                    cy1.max(cy0 + 1).min(self.height),
++                ));
+                 cells[gy * FP_GRID + gx] = m;
+             }
+         }
+@@ -420,7 +435,10 @@ impl LumaImage {
+         // median of an even-length array: average of the two middle samples
+         let mid = sorted.len() / 2;
+         let median = (sorted[mid - 1] + sorted[mid]) * 0.5;
+-        cells.iter().map(|&c| if c > median { '1' } else { '0' }).collect()
++        cells
++            .iter()
++            .map(|&c| if c > median { '1' } else { '0' })
++            .collect()
+     }
+ }
+ 
+@@ -446,21 +464,52 @@ pub fn analyze_surface(
+     for (i, &cx) in CARD_CENTERS_X.iter().enumerate() {
+         let x0n = cx - CARD_HALF_W;
+         let x1n = cx + CARD_HALF_W;
+-        let (interior_luma, interior_std) =
+-            luma.mean_std(luma.region_px(viewport_px, cx - INTERIOR_HALF_W, INTERIOR_TOP, cx + INTERIOR_HALF_W, INTERIOR_BOTTOM));
+-        let (frame_l, _) =
+-            luma.mean_std(luma.region_px(viewport_px, x0n, CARD_TOP + FRAME_STRIP_INSET_Y, x0n + FRAME_STRIP_W, CARD_BOTTOM - FRAME_STRIP_INSET_Y));
+-        let (frame_r, _) =
+-            luma.mean_std(luma.region_px(viewport_px, x1n - FRAME_STRIP_W, CARD_TOP + FRAME_STRIP_INSET_Y, x1n, CARD_BOTTOM - FRAME_STRIP_INSET_Y));
++        let (interior_luma, interior_std) = luma.mean_std(luma.region_px(
++            viewport_px,
++            cx - INTERIOR_HALF_W,
++            INTERIOR_TOP,
++            cx + INTERIOR_HALF_W,
++            INTERIOR_BOTTOM,
++        ));
++        let (frame_l, _) = luma.mean_std(luma.region_px(
++            viewport_px,
++            x0n,
++            CARD_TOP + FRAME_STRIP_INSET_Y,
++            x0n + FRAME_STRIP_W,
++            CARD_BOTTOM - FRAME_STRIP_INSET_Y,
++        ));
++        let (frame_r, _) = luma.mean_std(luma.region_px(
++            viewport_px,
++            x1n - FRAME_STRIP_W,
++            CARD_TOP + FRAME_STRIP_INSET_Y,
++            x1n,
++            CARD_BOTTOM - FRAME_STRIP_INSET_Y,
++        ));
+         let frame_contrast = (frame_l + frame_r) * 0.5 - interior_luma;
+-        let edge_top = luma.edge_energy(luma.region_px(viewport_px, x0n, CARD_TOP, x1n, CARD_TOP + BORDER_BAND_H));
+-        let edge_bot = luma.edge_energy(luma.region_px(viewport_px, x0n, CARD_BOTTOM - BORDER_BAND_H, x1n, CARD_BOTTOM));
++        let edge_top = luma.edge_energy(luma.region_px(
++            viewport_px,
++            x0n,
++            CARD_TOP,
++            x1n,
++            CARD_TOP + BORDER_BAND_H,
++        ));
++        let edge_bot = luma.edge_energy(luma.region_px(
++            viewport_px,
++            x0n,
++            CARD_BOTTOM - BORDER_BAND_H,
++            x1n,
++            CARD_BOTTOM,
++        ));
+         let edge_energy = (edge_top + edge_bot) * 0.5;
+ 
+         let interior_ok = interior_luma < T_INTERIOR_LUMA && interior_std < T_INTERIOR_STD;
+         let frame_ok = frame_contrast > T_FRAME_CONTRAST;
+         let present = interior_ok && frame_ok;
+-        let structural_score = if present { (frame_contrast / 120.0).min(1.0) } else { 0.0 };
++        let structural_score = if present {
++            (frame_contrast / 120.0).min(1.0)
++        } else {
++            0.0
++        };
+         let fingerprint = luma.fingerprint(viewport_px, cx);
+ 
+         if present {
+@@ -475,7 +524,11 @@ pub fn analyze_surface(
+         cards.push(CardObservation {
+             region_index: i,
+             present,
+-            card_rect: if present { Some(name_band_rects[i].clone()) } else { None },
++            card_rect: if present {
++                Some(name_band_rects[i].clone())
++            } else {
++                None
++            },
+             interior_luma,
+             interior_std,
+             frame_contrast,
+@@ -490,8 +543,10 @@ pub fn analyze_surface(
+     // Occlusion: a large opaque panel (modal/scoreboard) crossing the card
+     // interiors fills BOTH inter-card gaps with a dark, smooth rectangle. Only
+     // meaningful when cards exist behind it.
+-    let (gap1_l, gap1_std) = luma.mean_std(luma.region_px(viewport_px, GAP1_X0, GAP_TOP, GAP1_X1, GAP_BOTTOM));
+-    let (gap2_l, gap2_std) = luma.mean_std(luma.region_px(viewport_px, GAP2_X0, GAP_TOP, GAP2_X1, GAP_BOTTOM));
++    let (gap1_l, gap1_std) =
++        luma.mean_std(luma.region_px(viewport_px, GAP1_X0, GAP_TOP, GAP1_X1, GAP_BOTTOM));
++    let (gap2_l, gap2_std) =
++        luma.mean_std(luma.region_px(viewport_px, GAP2_X0, GAP_TOP, GAP2_X1, GAP_BOTTOM));
+     let gap1_paneled = gap1_l < T_GAP_PANEL_LUMA && gap1_std < T_GAP_PANEL_STD;
+     let gap2_paneled = gap2_l < T_GAP_PANEL_LUMA && gap2_std < T_GAP_PANEL_STD;
+     let opaque_surface = gap1_l < T_GAP_PANEL_LUMA
+@@ -544,7 +599,12 @@ mod tests {
+     use crate::calibration::{physical_card_rects, Rect};
+ 
+     fn full_viewport() -> Rect {
+-        Rect { x: 0, y: 0, width: 1280, height: 720 }
++        Rect {
++            x: 0,
++            y: 0,
++            width: 1280,
++            height: 720,
++        }
+     }
+ 
+     fn name_bands(viewport: &Rect) -> [Rect; 3] {
+@@ -553,7 +613,11 @@ mod tests {
+     }
+ 
+     fn load(name: &str) -> image::DynamicImage {
+-        let path = format!("{}/tests/fixtures/surface/{}", env!("CARGO_MANIFEST_DIR"), name);
++        let path = format!(
++            "{}/tests/fixtures/surface/{}",
++            env!("CARGO_MANIFEST_DIR"),
++            name
++        );
+         image::open(&path).unwrap_or_else(|e| panic!("load {}: {}", path, e))
+     }
+ 
+@@ -602,7 +666,11 @@ mod tests {
+     #[test]
+     fn gold_offer_is_present_not_occluded() {
+         let o = analyze("offer-gold-a.png");
+-        assert!(o.present, "gold offer should be present: {:?}", o.rejection_reasons);
++        assert!(
++            o.present,
++            "gold offer should be present: {:?}",
++            o.rejection_reasons
++        );
+         assert!(!o.occluded, "gold offer is not occluded");
+         assert_eq!(o.cards.iter().filter(|c| c.present).count(), 3);
+     }
+@@ -618,7 +686,11 @@ mod tests {
+         // Silver-frame cards must pass exactly like gold — the gate is luminance
+         // contrast, never frame color.
+         let o = analyze("offer-silver.png");
+-        assert!(o.present && !o.occluded, "silver offer present: {:?}", o.rejection_reasons);
++        assert!(
++            o.present && !o.occluded,
++            "silver offer present: {:?}",
++            o.rejection_reasons
++        );
+         assert_eq!(o.cards.iter().filter(|c| c.present).count(), 3);
+     }
+ 
+@@ -875,18 +947,26 @@ mod tests {
+                 observation.present,
+                 observation.occluded,
+                 observation.confidence,
+-                observation.cards.iter().map(|card| (
+-                    card.interior_luma,
+-                    card.interior_std,
+-                    card.frame_contrast,
+-                    card.structural_score,
+-                    card.present,
+-                )).collect::<Vec<_>>(),
++                observation
++                    .cards
++                    .iter()
++                    .map(|card| (
++                        card.interior_luma,
++                        card.interior_std,
++                        card.frame_contrast,
++                        card.structural_score,
++                        card.present,
++                    ))
++                    .collect::<Vec<_>>(),
+             );
+             observation
+         });
+         for (frame, observation) in frames.iter().zip(&observations) {
+-            assert!(observation.present, "{}: {:?}", frame, observation.rejection_reasons);
++            assert!(
++                observation.present,
++                "{}: {:?}",
++                frame, observation.rejection_reasons
++            );
+             assert!(!observation.occluded, "{}", frame);
+             assert_eq!(
+                 observation.cards.iter().filter(|card| card.present).count(),
+@@ -1005,7 +1085,10 @@ mod tests {
+         let o = analyze("offer-occluded-modal.png");
+         assert!(o.present, "cards still exist behind the modal");
+         assert!(o.occluded, "AFK modal must classify as occluded");
+-        assert!(o.rejection_reasons.iter().any(|r| r == "occluded-modal-panel"));
++        assert!(o
++            .rejection_reasons
++            .iter()
++            .any(|r| r == "occluded-modal-panel"));
+     }
+ 
+     #[test]
+@@ -1060,7 +1143,8 @@ mod tests {
+         for i in 0..3 {
+             assert_eq!(
+                 a.cards[i].fingerprint, b.cards[i].fingerprint,
+-                "card{} fingerprint drifted on identical pixels", i
++                "card{} fingerprint drifted on identical pixels",
++                i
+             );
+         }
+     }
+@@ -1092,11 +1176,20 @@ mod tests {
+             base.height() * 2,
+             image::imageops::FilterType::Triangle,
+         );
+-        let vp = Rect { x: 0, y: 0, width: 2560, height: 1440 };
++        let vp = Rect {
++            x: 0,
++            y: 0,
++            width: 2560,
++            height: 1440,
++        };
+         // name-band rects are logical (unchanged by capture resolution)
+         let bands = name_bands(&full_viewport());
+         let o = analyze_surface(&scaled, &vp, &bands, 1, 0.0, 0);
+-        assert!(o.present && !o.occluded, "2x retina lost the offer: {:?}", o.rejection_reasons);
++        assert!(
++            o.present && !o.occluded,
++            "2x retina lost the offer: {:?}",
++            o.rejection_reasons
++        );
+         assert_eq!(o.capture_width, 2560);
+     }
+ 
+@@ -1108,10 +1201,19 @@ mod tests {
+             base.height() * 2,
+             image::imageops::FilterType::Triangle,
+         );
+-        let vp = Rect { x: 0, y: 0, width: 2560, height: 1440 };
++        let vp = Rect {
++            x: 0,
++            y: 0,
++            width: 2560,
++            height: 1440,
++        };
+         let bands = name_bands(&full_viewport());
+         let o = analyze_surface(&scaled, &vp, &bands, 1, 0.0, 0);
+-        assert!(o.present && o.occluded, "2x retina lost occlusion: {:?}", o.rejection_reasons);
++        assert!(
++            o.present && o.occluded,
++            "2x retina lost occlusion: {:?}",
++            o.rejection_reasons
++        );
+     }
+ 
+     // ── present cards carry a render rect; absent/occluded surfaces do not ──
+diff --git a/overlay/src-tauri/tests/member_contract.rs b/overlay/src-tauri/tests/member_contract.rs
+index 6af8cd9..3abd659 100644
+--- a/overlay/src-tauri/tests/member_contract.rs
++++ b/overlay/src-tauri/tests/member_contract.rs
+@@ -1,8 +1,8 @@
++use flate2::{write::GzEncoder, Compression};
+ use mayhem_oracle_lib::member::{
+     hash_game_id, parse_bootstrap_response, parse_game_session_response, resolve_api_base,
+     verify_manifest, verify_model_package, BootstrapManifest, DEFAULT_API_BASE,
+ };
+-use flate2::{write::GzEncoder, Compression};
+ use serde_json::{json, Value};
+ use std::io::Write;
+ 
+@@ -37,7 +37,10 @@ fn tar_entry(name: &str, contents: &[u8]) -> Vec<u8> {
+ 
+ fn model_package(config: &Value) -> Vec<u8> {
+     let mut archive = Vec::new();
+-    archive.extend(tar_entry("model-config.json", serde_json::to_string(config).unwrap().as_bytes()));
++    archive.extend(tar_entry(
++        "model-config.json",
++        serde_json::to_string(config).unwrap().as_bytes(),
++    ));
+     archive.extend(tar_entry("manifest.json", MANIFEST.as_bytes()));
+     archive.resize(archive.len() + 1024, 0);
+     let mut encoder = GzEncoder::new(Vec::new(), Compression::default());
+@@ -105,7 +108,10 @@ fn parses_frozen_bootstrap_and_game_session_contracts() {
+     assert_eq!(bootstrap.access.kind, "member");
+ 
+     let mut transcript_manifest = serde_json::from_str::<Value>(MANIFEST).unwrap();
+-    transcript_manifest.as_object_mut().unwrap().remove("createdAt");
++    transcript_manifest
++        .as_object_mut()
++        .unwrap()
++        .remove("createdAt");
+     assert!(parse_bootstrap_response(
+         200,
+         &json!({
+diff --git a/overlay/src-tauri/tests/r1_replay.rs b/overlay/src-tauri/tests/r1_replay.rs
+index 4cc9964..94de026 100644
+--- a/overlay/src-tauri/tests/r1_replay.rs
++++ b/overlay/src-tauri/tests/r1_replay.rs
+@@ -82,8 +82,7 @@ fn r1_frame_yields_three_card_resolutions_through_the_production_pipeline() {
+ 
+     for (region_index, region) in CARD_NAME_REGIONS.iter().enumerate() {
+         let logical_rect = physical_rect_for_region(region, &calibration.viewport);
+-        let rect =
+-            capture_rect_for_monitor(&logical_rect, &monitor, frame.width(), frame.height());
++        let rect = capture_rect_for_monitor(&logical_rect, &monitor, frame.width(), frame.height());
+ 
+         assert!(rect.x >= 0 && rect.y >= 0, "crop origin outside monitor");
+         assert!(
+diff --git a/overlay/src/App.tsx b/overlay/src/App.tsx
+index bc4efb0..723894f 100644
+--- a/overlay/src/App.tsx
++++ b/overlay/src/App.tsx
+@@ -14,12 +14,22 @@ import {
+   resolveGameflowCaptureAllowed,
+   shouldClearOcrStateForGameflow,
+ } from "./augmentSelection";
+-import { resolveLiveDataPoll } from "./liveGamePoll";
++import {
++  applyGameOwnershipObservation,
++  isBackwardGameTime,
++  resolveLiveDataPoll,
++  shouldAnnounceLiveActivation,
++} from "./liveGamePoll";
+ import {
+   resolveRoundDelivery,
+   TOTAL_AUGMENT_ROUNDS,
+   type RoundDeliveryDecision,
+ } from "./roundDelivery";
++import {
++  createOfferRoundOwnership,
++  reduceOfferRoundOwnership,
++  type OfferRoundOwnership,
++} from "./offerRoundOwnership";
+ import {
+   applyScanToOffer,
+   emptyOfferState,
+@@ -51,16 +61,20 @@ import type { DecisionEngineData } from "./decision/evaluate";
+ import {
+   bootstrapMember,
+   disabledMember,
++  IDLE_MEMBER_VERIFICATION_STATE,
+   memberRecommendationsVisible,
++  runMemberVerification,
++  shouldStartMemberVerification,
+   shouldVerifyGameStart,
+   verifyMemberGameStart,
+   type MemberSnapshot,
++  type MemberVerificationRequest,
++  type MemberVerificationState,
+ } from "./auth/member";
+ import { CoachPanel } from "./components/CoachPanel";
+-import { TierBadgeLabel } from "./TierBadgeLabel";
+ import { runLocalInference } from "./model/inference";
+ import { confirmPickedAugment } from "./model/presentation";
+-import { tierClassName, tierForGrade, type TierLetter } from "./model/tier";
++import { tierForGrade } from "./model/tier";
+ import {
+   compactWinRateFromFraction,
+   compactWinRateFromPercent,
+@@ -68,7 +82,6 @@ import {
+ import {
+   buildAramggDecisionResult,
+   isTierFixtureEnabled,
+-  TIER_FIXTURE_MEMBER,
+   type AramggFixtureCard,
+ } from "./dev/tierFixture";
+ import {
+@@ -76,6 +89,21 @@ import {
+   type SlotAramggResolution,
+ } from "./dev/useAramggTierFixture";
+ import { isGeometryPreviewEnabled, resolveOverlayFixtureMode } from "./dev/fixtureMode";
++import {
++  realAugmentOverlayRenderable,
++  type RealAugmentOverlayGate,
++} from "./augmentOverlayGate";
++import {
++  badgeLayerSignature,
++  describeBadgeLayerDecision,
++  evaluateRoundContentCompletion,
++  parseRoundContentAcknowledgements,
++  reduceRoundContentEmission,
++  reportBadgeLayerDecision,
++  type RoundContentFailureCategory,
++  type RoundContentOwner,
++  type SemanticPublication,
++} from "./badgeLayerDiagnostic";
+ import { DevOverlayDiagnostics } from "./dev/DevOverlayDiagnostics";
+ import { devPanelsVisible } from "./dev/productionSurfaces";
+ import {
+@@ -149,6 +177,7 @@ import {
+   reconcileSlotIdentity,
+   type SlotIdentity,
+ } from "./publicationOwnership";
++import { refreshSameOfferData } from "./sameOfferDataRefresh";
+ import { decideOcrTrigger } from "./ocrTrigger";
+ import {
+   OcrOwnerRegistry,
+@@ -182,16 +211,9 @@ import {
+   ocrAvailabilityFromError,
+   type OcrAvailability,
+ } from "./ocrAvailability";
+-import {
+-  cssRectFromCalibratedRect,
+-  type OverlayCalibration,
+-  type PhysicalRect,
+-} from "./calibration";
+-import {
+-  cardFrameFromNameRect,
+-  overlayAvoidRectsCss,
+-  placeBadgeAboveCard,
+-} from "./badgeLayout";
++import { type OverlayCalibration } from "./calibration";
++import { positionBadgeChips } from "./positionedBadgeChips";
++import { BadgeChipLayer, type SlotChip } from "./BadgeChipLayer";
+ import "./App.css";
+ 
+ // The geometry track runs the SAME self-healing scheduler as OCR (start / skip /
+@@ -285,23 +307,6 @@ interface MatchedCard {
+   ocrText: string;
+ }
+ 
+-/**
+- * One per-slot badge chip: a real recommendation (`tier`) or an explicit slot
+- * state — SCANNING (reroll/unreadable), UNMATCHED (Riot identity unresolved),
+- * NO CHAMP DATA (complete champion dataset has no row), LOADING DATA (champion
+- * dataset still loading), DATA ERROR (champion dataset fetch failed). This
+- * overlay is champion-only: no global-sourced statistic ever reaches a chip.
+- */
+-interface SlotChip {
+-  regionIndex: number;
+-  key: string;
+-  state: "tier" | "scanning" | "unmatched" | "ocr-error" | "no-data" | "loading-data" | "data-error";
+-  tier: TierLetter | null;
+-  winRateText: string | null;
+-  isNew: boolean;
+-  statScope: "champion" | null;
+-}
+-
+ /**
+  * Per-slot identity resolution, computed once when a slot's title fingerprint
+  * changes and retained while the fingerprint is stable.
+@@ -466,6 +471,13 @@ function App() {
+   // Active-game epoch changes on every capture-allowed game transition or
+   // reconnect. Async work from a previous game can never publish into the next.
+   const gameEpochRef = useRef(0);
++  const confirmedGameOwnershipRef = useRef({ ownsGame: false, gameEpoch: 0 });
++  // P2 fix (focus-loss-before-clear ordering): the offer generation whose
++  // badges the final gate certifies visible RIGHT NOW, or null. Read
++  // synchronously by publishForeground's foreground-loss branch so the
++  // deterministic [focus-transition] record can name the correct generation
++  // before stopOcr() runs.
++  const visibleBadgeGenerationRef = useRef<number | null>(null);
+   // Self-healing surface-probe scheduler bookkeeping (a single probe at a time).
+   const probeInFlightRef = useRef(false);
+   const probeInFlightSinceRef = useRef<number | null>(null);
+@@ -561,12 +573,19 @@ function App() {
+   const geometryProbeCountRef = useRef(0);
+   // Whether the last poll saw an active, capture-allowed game (coarse gate).
+   const activeGameRef = useRef(false);
++  // DEV-only: whether this live-ownership span already emitted its one
++  // confirmed [game-poll] activation record. Reset when ownership is released.
++  const liveOwnershipAnnouncedRef = useRef(false);
+   const phaseRef = useRef<Phase>("idle");
+   // Rounds completed on STRONG evidence only (confirmed pick / queued-offer
+   // replacement) — can only undercount, which keeps probing alive and never
+   // suppresses a real offer. See roundDelivery.ts.
+   const completedRoundsRef = useRef(0);
+   const roundDeliveryRef = useRef<RoundDeliveryDecision | null>(null);
++  const offerRoundOwnershipRef = useRef<OfferRoundOwnership>(
++    createOfferRoundOwnership(),
++  );
++  const [semanticOwner, setSemanticOwner] = useState<RoundContentOwner | null>(null);
+   const [roundDelivery, setRoundDelivery] = useState<RoundDeliveryDecision | null>(null);
+   const ocrSelectionCompletedRef = useRef(false);
+   const gameflowCaptureAllowedRef = useRef(false);
+@@ -650,18 +669,34 @@ function App() {
+   const [debugCollapsed, setDebugCollapsed] = useState(true);
+   const activeGameHashRef = useRef<string | null>(null);
+   const memberBootstrapCompleteRef = useRef(false);
++  // Monotonic token for the in-poll member-verification request: bumped by
++  // beginNewGameEpoch (any confirmed epoch boundary — new hash, backward
++  // game_time, or a confirmed close) so an in-flight verification for a
++  // superseded game can never publish, and bumped again on every new
++  // verification kickoff so an older overlapping request within the SAME
++  // epoch is superseded by a newer one. See the verifyGameHash branch in
++  // poll() for the capture/compare.
++  const memberVerificationTokenRef = useRef(0);
++  // Explicit per-game member-verification lifecycle (idle/pending/verified/
++  // retryable), separate from activeGameHashRef. Reset to idle only by
++  // beginNewGameEpoch — an inconclusive recheck marks the SAME hash
++  // retryable here without touching activeGameHashRef, so a later poll can
++  // start another verification attempt for the same game.
++  const memberVerificationStateRef = useRef<MemberVerificationState>(
++    IDLE_MEMBER_VERIFICATION_STATE,
++  );
+   const gameWindowForeground = foregroundState.gameWindowForeground;
+   const collectorEnabled = collectorStatus?.consent === "accepted";
+   const collectorCaptureEnabled = collectorEnabled && !collectorStatus?.paused;
+-  // Dev-only: bypass ONLY the member-coach auth/data. Everything else (OCR,
+-  // calibration, positioning, collector consent, focus, phase) stays on the
+-  // real path. Geometry preview is a SEPARATE, independently-gated flag.
++  // Development fixtures never alter the real member snapshot. The optional
++  // member coach stays authenticated; the local geometry/OCR badge pipeline
++  // gets its render allowance at realFrameRenderable ONLY under this explicit
++  // fixture flag — a plain dev launch authorizes nothing.
+   const tierFixtureOn = isTierFixtureEnabled();
+   const geometryPreviewOn = isGeometryPreviewEnabled();
+-  const effectiveMember = tierFixtureOn ? TIER_FIXTURE_MEMBER : memberSnapshot;
+-  const memberEnabled = memberRecommendationsVisible(
++  const memberCoachEnabled = memberRecommendationsVisible(
+     collectorEnabled,
+-    effectiveMember,
++    memberSnapshot,
+   );
+ 
+   const updatePhase = useCallback((nextPhase: Phase) => {
+@@ -670,8 +705,15 @@ function App() {
+     setOcrLifecycle((previous) => ({ ...previous, phase: nextPhase }));
+   }, []);
+ 
++  // The coarse "is a game currently active" render/capture gate. This is
++  // NEVER a source of epoch or activation-latch changes on its own — a
++  // telemetry outage fails this closed (see
++  // suspendGameRuntimeForUnavailableTelemetry) without proving the match
++  // ended, so toggling it here must not look like a new game to the
++  // analyzer. Epoch/latch resets happen only through beginNewGameEpoch,
++  // defined below, called exclusively from a CONFIRMED game-identity
++  // boundary.
+   const setActiveGame = useCallback((active: boolean) => {
+-    if (activeGameRef.current !== active) gameEpochRef.current += 1;
+     activeGameRef.current = active;
+   }, []);
+ 
+@@ -783,23 +825,26 @@ function App() {
+     }));
+   }, []);
+ 
+-  // STRONG completion evidence arrived (confirmed pick or a queued offer
+-  // replacing the current one): advance the round model immediately so
+-  // recording and labels carry the true round without waiting for a poll tick.
+-  const recordRoundCompleted = useCallback(() => {
+-    completedRoundsRef.current = Math.min(
+-      completedRoundsRef.current + 1,
+-      TOTAL_AUGMENT_ROUNDS,
+-    );
++  const updateOfferRoundOwnership = useCallback((next: OfferRoundOwnership) => {
++    offerRoundOwnershipRef.current = next;
++    setSemanticOwner(next.activeOwner == null ? null : {
++      gameEpoch: gameEpochRef.current,
++      round: next.activeOwner.round,
++      offerGeneration: next.activeOwner.offerGeneration,
++    });
++    completedRoundsRef.current = next.completedOwners.length;
+     const current = roundDeliveryRef.current;
+     if (!current) return;
+-    const next: RoundDeliveryDecision = {
++    const nextDelivery: RoundDeliveryDecision = {
+       ...current,
+       pendingRounds: Math.max(0, current.eligibleRounds - completedRoundsRef.current),
+-      activeOfferRound: Math.min(completedRoundsRef.current + 1, TOTAL_AUGMENT_ROUNDS),
++      activeOfferRound: next.activeOwner?.round ?? Math.min(
++        completedRoundsRef.current + 1,
++        TOTAL_AUGMENT_ROUNDS,
++      ),
+     };
+-    roundDeliveryRef.current = next;
+-    setRoundDelivery(next);
++    roundDeliveryRef.current = nextDelivery;
++    setRoundDelivery(nextDelivery);
+   }, []);
+ 
+   // Slots whose title resolved to a local-catalog augment — the decision-engine
+@@ -852,12 +897,6 @@ function App() {
+   }, []);
+ 
+   useEffect(() => {
+-    // Dev tier-fixture: skip the real auth fetch entirely; the effective member
+-    // snapshot is overridden above. Nothing else in the member path runs.
+-    if (tierFixtureOn) {
+-      memberBootstrapCompleteRef.current = true;
+-      return;
+-    }
+     let cancelled = false;
+     void bootstrapMember()
+       .then((snapshot) => {
+@@ -875,7 +914,7 @@ function App() {
+     return () => {
+       cancelled = true;
+     };
+-  }, [tierFixtureOn]);
++  }, []);
+ 
+   useEffect(() => {
+     if (!championSlug || abilityProfiles[championSlug] !== undefined) return;
+@@ -1082,7 +1121,7 @@ function App() {
+ 
+   const decisionResult = useMemo((): DecisionResult | null => {
+     if (
+-      !memberEnabled ||
++      !memberCoachEnabled ||
+       !memberSnapshot?.modelConfig ||
+       !decisionData ||
+       !roundDelivery ||
+@@ -1110,7 +1149,7 @@ function App() {
+   }, [
+     decisionData,
+     matchedCards,
+-    memberEnabled,
++    memberCoachEnabled,
+     memberSnapshot,
+     mode,
+     pickedAugments,
+@@ -1248,9 +1287,6 @@ function App() {
+     return null;
+   }, [fixtureMode.kind, offerState, previewCards, aramgg.resolvedBySlug, roundDelivery]);
+ 
+-  // Dev flag unlocks the member gate ONLY (no collector/entitlement) — it never
+-  // relaxes the focus/phase/complete-offer gates below.
+-  const effectiveMemberEnabled = tierFixtureOn ? effectiveMember?.enabled === true : memberEnabled;
+   const isFixtureBacked = fixturePayload != null; // ARAMGG-backed → no fake P:50%
+ 
+   const badgeDecisionResult = fixturePayload?.result ?? decisionResult;
+@@ -1263,14 +1299,20 @@ function App() {
+   // capture that does not validate the surface yields an empty frame, so no
+   // chip or placeholder can linger over combat, respawn, the scoreboard, or a
+   // new map. Preview chips: only in preview mode.
+-  const realFrameRenderable =
+-    !isPreviewMode &&
+-    effectiveMemberEnabled &&
+-    visibleFrameRenderable(visibleFrame, gameWindowForeground) &&
+-    offerSurface.render &&
++  const augmentOverlayGate: RealAugmentOverlayGate = {
++    devBuild: import.meta.env.DEV,
++    // The development bypass needs the EXPLICIT fixture flag; a plain dev
++    // launch is not authorization. See localOverlayAuthorized.
++    tierFixtureEnabled: tierFixtureOn,
++    memberCoachEnabled,
++    previewMode: isPreviewMode,
++    visibleFrameRenderable: visibleFrameRenderable(visibleFrame, gameWindowForeground),
++    offerSurfaceRenderable: offerSurface.render,
+     // Only a recent accepted authoritative geometry result certifies rendering.
+     // Attempt starts/watchdog replacements never refresh this gate.
+-    geometrySchedulerIsHealthy;
++    geometrySchedulerHealthy: geometrySchedulerIsHealthy,
++  };
++  const realFrameRenderable = realAugmentOverlayRenderable(augmentOverlayGate);
+   const previewBadgesReady =
+     isPreviewMode && fixturePayload != null && previewCards.length === 3;
+   const showBadgeLayer = realFrameRenderable || previewBadgesReady;
+@@ -1300,6 +1342,9 @@ function App() {
+       });
+     }
+     if (!realFrameRenderable || !visibleFrame) return [];
++    const publicationOwner = semanticOwner?.offerGeneration === offerSurface.offerGeneration
++      ? semanticOwner
++      : null;
+     return visibleFrame.slots.flatMap((slot): SlotChip[] => {
+       // A slot with no fresh rect from THIS capture is never rendered — the
+       // rectangle must belong to the current frame's generation, not history.
+@@ -1308,6 +1353,18 @@ function App() {
+         regionIndex: slot.regionIndex,
+         key: `slot-${slot.regionIndex}-g${visibleFrame.generation}`,
+       };
++      const semanticPublication = (
++        terminalState: SemanticPublication["terminalState"],
++        noDataVerified: boolean,
++        failureCategory: RoundContentFailureCategory,
++      ): SemanticPublication | undefined => publicationOwner == null ? undefined : {
++        ...publicationOwner,
++        slot: slot.regionIndex,
++        publicationGeneration: visibleFrame.generation,
++        terminalState,
++        noDataVerified,
++        failureCategory,
++      };
+       if (slot.resolution === null) {
+         // Geometry confirms a card here, but its identity is pending (fresh
+         // trigger, reroll re-read in flight, or unreadable) — show SCANNING, not
+@@ -1319,6 +1376,15 @@ function App() {
+           winRateText: null,
+           isNew: false,
+           statScope: null,
++          semanticPublication: semanticPublication(
++            slot.unresolvedState === "scanning" || slot.unresolvedState == null
++              ? "loading-data"
++              : "error",
++            false,
++            slot.unresolvedState === "scanning" || slot.unresolvedState == null
++              ? null
++              : "FAIL_IDENTITY",
++          ),
+         }];
+       }
+       const staged = slot.resolution?.aramgg;
+@@ -1334,26 +1400,27 @@ function App() {
+             isNew: slot.resolution?.pool?.lifecycle === "added",
+             // Champion-only: a matched stat is always champion-specific.
+             statScope: staged.stat.provenance === "champion" ? "champion" : null,
++            semanticPublication: semanticPublication("resolved", false, null),
+           }];
+         }
+         if (staged.kind === "no-data") {
+           // Identity resolved; the COMPLETE champion dataset has no row → NO CHAMP DATA.
+-          return [{ ...base, state: "no-data", tier: null, winRateText: null, isNew: false, statScope: null }];
++          return [{ ...base, state: "no-data", tier: null, winRateText: null, isNew: false, statScope: null, semanticPublication: semanticPublication("no-data", true, null) }];
+         }
+         if (staged.kind === "loading") {
+           // Champion dataset still loading (or partial): absence is unproven.
+-          return [{ ...base, state: "loading-data", tier: null, winRateText: null, isNew: false, statScope: null }];
++          return [{ ...base, state: "loading-data", tier: null, winRateText: null, isNew: false, statScope: null, semanticPublication: semanticPublication("loading-data", false, null) }];
+         }
+         if (staged.kind === "error") {
+           // Champion dataset fetch failed — never fall back to a global value.
+-          return [{ ...base, state: "data-error", tier: null, winRateText: null, isNew: false, statScope: null }];
++          return [{ ...base, state: "data-error", tier: null, winRateText: null, isNew: false, statScope: null, semanticPublication: semanticPublication("error", false, "FAIL_DATA") }];
+         }
+-        return [{ ...base, state: "unmatched", tier: null, winRateText: null, isNew: false, statScope: null }];
++        return [{ ...base, state: "unmatched", tier: null, winRateText: null, isNew: false, statScope: null, semanticPublication: semanticPublication("error", false, "FAIL_IDENTITY") }];
+       }
+       // Engine path (no dev fixture): the local-catalog match backs the chip.
+       const pool = slot.resolution?.pool ?? null;
+       if (!pool) {
+-        return [{ ...base, state: "unmatched", tier: null, winRateText: null, isNew: false, statScope: null }];
++        return [{ ...base, state: "unmatched", tier: null, winRateText: null, isNew: false, statScope: null, semanticPublication: semanticPublication("error", false, "FAIL_IDENTITY") }];
+       }
+       const candidate = decisionResult?.candidates.find(
+         (entry) => entry.augmentSlug === pool.slug,
+@@ -1365,9 +1432,126 @@ function App() {
+         winRateText: compactWinRateFromPercent(pool.win_rate),
+         isNew: pool.lifecycle === "added",
+         statScope: null,
++        semanticPublication: semanticPublication("resolved", false, null),
+       }];
+     });
+-  }, [previewBadgesReady, fixturePayload, previewCards, realFrameRenderable, visibleFrame, decisionResult, aramgg.resolvedBySlug]);
++  }, [previewBadgesReady, fixturePayload, previewCards, realFrameRenderable, visibleFrame, semanticOwner, offerSurface.offerGeneration, decisionResult, aramgg.resolvedBySlug]);
++
++  // THE render-ready badge collection. A chip only appears here once it has a
++  // real screen position, so this — not `slotChips` — is what the JSX maps and
++  // what the diagnostic counts. Missing calibration, a slot the current capture
++  // supplied no rect for, and a placement helper that finds nowhere to put the
++  // chip all drop it from BOTH at once, which is the only way the reported
++  // count can equal the number of badge elements actually on screen.
++  const positionedChips = useMemo(
++    () =>
++      positionBadgeChips({
++        chips: slotChips,
++        calibration,
++        slots: visibleFrame?.slots ?? null,
++        cssWindow,
++      }),
++    [slotChips, calibration, visibleFrame, cssWindow],
++  );
++
++  // DEV-only: the FINAL badge-layer gate — the ONE decision that knows whether
++  // augment badges actually reached the screen. `[offer-session].render` is an
++  // intermediate offer-surface decision taken before authorization, preview
++  // mode, the visible frame, and geometry-scheduler health are consulted, so it
++  // can never certify a visible badge; only this record can. Bounded booleans /
++  // enums / small counts only — no augment names, OCR text, identifiers, or raw
++  // geometry. One record per logical decision change, so a steady overlay does
++  // not flood the trace. The leading `import.meta.env.DEV` lets the production
++  // build fold the tag, the reason strings, and the helpers out of the bundle.
++  const badgeLayerVisibleFrame = augmentOverlayGate.visibleFrameRenderable;
++  const badgeLayerOfferSurface = augmentOverlayGate.offerSurfaceRenderable;
++  const badgeLayerOfferGeneration = offerSurface.offerGeneration;
++  // Counted from the positioned collection, never from `slotChips`: a chip with
++  // no DOM position paints nothing, so counting it would let the analyzer
++  // certify `rendered` for a badge layer that was never drawn.
++  const badgeLayerRealCount = realFrameRenderable ? positionedChips.length : 0;
++  const badgeLayerPreviewCount = previewBadgesReady ? positionedChips.length : 0;
++  const lastBadgeLayerSignatureRef = useRef<string | null>(null);
++  const emittedRoundContentOwnerKeyRef = useRef<string | null>(null);
++  useEffect(() => {
++    if (!import.meta.env.DEV) return;
++    const decision = describeBadgeLayerDecision({
++      devBuild: import.meta.env.DEV,
++      tierFixtureEnabled: tierFixtureOn,
++      memberCoachEnabled,
++      previewMode: isPreviewMode,
++      visibleFrameRenderable: badgeLayerVisibleFrame,
++      offerSurfaceRenderable: badgeLayerOfferSurface,
++      geometrySchedulerHealthy: geometrySchedulerIsHealthy,
++      offerGeneration: badgeLayerOfferGeneration,
++      renderedBadgeCount: badgeLayerRealCount,
++      previewBadgeCount: badgeLayerPreviewCount,
++    });
++    // Mirrors the analyzer's own `visibleBadgeGeneration`: the offer
++    // generation whose badges are certified visible RIGHT NOW, or null.
++    // publishForeground reads this synchronously (P2 fix) to name the
++    // generation a foreground-loss transition applies to, before stopOcr()
++    // tears anything down.
++    visibleBadgeGenerationRef.current = decision.badgeLayerVisible
++      ? decision.offerGeneration
++      : null;
++    const signature = badgeLayerSignature(decision, gameEpochRef.current);
++    if (lastBadgeLayerSignatureRef.current === signature) return;
++    lastBadgeLayerSignatureRef.current = signature;
++    reportBadgeLayerDecision(decision, gameEpochRef.current);
++  }, [
++    tierFixtureOn,
++    memberCoachEnabled,
++    isPreviewMode,
++    badgeLayerVisibleFrame,
++    badgeLayerOfferSurface,
++    geometrySchedulerIsHealthy,
++    badgeLayerOfferGeneration,
++    badgeLayerRealCount,
++    badgeLayerPreviewCount,
++  ]);
++
++  useEffect(() => {
++    if (!import.meta.env.DEV || isPreviewMode) return;
++    if (semanticOwner?.offerGeneration !== offerSurface.offerGeneration) return;
++    const root = document.querySelector<HTMLElement>(".overlay-root");
++    if (!root) return;
++    const expectedPublications = positionedChips.flatMap(({ chip }) =>
++      chip.semanticPublication ? [chip.semanticPublication] : []
++    );
++    const domAcknowledgements = parseRoundContentAcknowledgements(root);
++    const renderedContainerCount = root.querySelectorAll(".badge-chip").length;
++    const decision = evaluateRoundContentCompletion({
++      owner: {
++        gameEpoch: semanticOwner.gameEpoch,
++        round: semanticOwner.round,
++        offerGeneration: semanticOwner.offerGeneration,
++      },
++      expectedPublications,
++      domAcknowledgements,
++      renderedContainerCount,
++      schedulerHealthy: geometrySchedulerIsHealthy,
++    });
++    const emission = reduceRoundContentEmission(
++      emittedRoundContentOwnerKeyRef.current,
++      semanticOwner,
++      decision,
++    );
++    emittedRoundContentOwnerKeyRef.current = emission.emittedOwnerKey;
++    if (!emission.emit) return;
++    emitNativeDiagnostic("[round-content-complete]", {
++      gameEpoch: semanticOwner.gameEpoch,
++      round: semanticOwner.round,
++      offerGeneration: semanticOwner.offerGeneration,
++      result: decision.result,
++    });
++  }, [
++    isPreviewMode,
++    semanticOwner,
++    offerSurface.offerGeneration,
++    positionedChips,
++    geometrySchedulerIsHealthy,
++  ]);
+ 
+   // Staged diagnostics counters (never conflate injected with detected).
+   const diag = {
+@@ -1383,10 +1567,11 @@ function App() {
+     previewInjected: isPreviewMode ? previewCards.length : 0,
+     offeredMatched: matchedCards.length,
+     catalogResolved: aramgg.resolvedBySlug.size,
++    // Positioned, not merely intended: the dev banner reports what is painted.
+     renderedRealBadges: realFrameRenderable
+-      ? slotChips.filter((chip) => chip.state === "tier").length
++      ? positionedChips.filter(({ chip }) => chip.state === "tier").length
+       : 0,
+-    renderedPreviewBadges: previewBadgesReady ? slotChips.length : 0,
++    renderedPreviewBadges: previewBadgesReady ? positionedChips.length : 0,
+   };
+ 
+   // FIX 2 — the render-authoritative publication snapshot. The dev banner reads
+@@ -1412,6 +1597,13 @@ function App() {
+   // identity latch (game exit / focus loss); otherwise the latch stays as
+   // nonvisual grace for brief restoration.
+   const clearSurface = useCallback((clearLatch: boolean) => {
++    updateOfferRoundOwnership(reduceOfferRoundOwnership(
++      offerRoundOwnershipRef.current,
++      {
++        type: "presentation-cleared",
++        offerGeneration: offerSurfaceRef.current.offerGeneration,
++      },
++    ));
+     const closedSurface: OfferSurfaceState = {
+       ...createOfferSurfaceState(),
+       offerGeneration: offerSurfaceRef.current.offerGeneration + 1,
+@@ -1458,7 +1650,7 @@ function App() {
+       cropCount: 0,
+       noCropReason: "surface-cleared",
+     }));
+-  }, [bumpScanSeq, publishEmptyVisibleFrame, resetOffer]);
++  }, [bumpScanSeq, publishEmptyVisibleFrame, resetOffer, updateOfferRoundOwnership]);
+ 
+   const stopOcr = useCallback(() => {
+     clearSurface(true);
+@@ -1515,6 +1707,21 @@ function App() {
+         .catch(() => {});
+     }
+     if (!nextForeground.gameWindowForeground && previousForeground.gameWindowForeground) {
++      // P2 fix (focus-loss-before-clear ordering): record the deterministic
++      // foreground-loss transition BEFORE stopOcr() tears anything down, so
++      // the analyzer has an unambiguous, generation-bound trigger to open
++      // focus loss even when this is the ONLY trace evidence of the alt-tab
++      // (OCR stopping immediately means no later offer-session foreground:false
++      // record, and the scheduler halting means native geometry may never
++      // accumulate a qualifying not-foreground streak). Only fires when
++      // badges were actually certified visible — nothing to lose otherwise.
++      if (visibleBadgeGenerationRef.current !== null) {
++        emitNativeDiagnostic("[focus-transition]", {
++          transition: "foreground-loss",
++          offerGeneration: visibleBadgeGenerationRef.current,
++          gameEpoch: gameEpochRef.current,
++        });
++      }
+       // Focus left the game: hide the surface immediately (the probe would
+       // skip anyway, but we must not wait for the health clock on a blur).
+       stopOcr();
+@@ -1557,7 +1764,31 @@ function App() {
+     [foregroundPollHost],
+   );
+ 
+-  const clearGameOnlyState = useCallback((nextPhase: Phase) => {
++  // The single place that advances gameEpochRef and resets every per-game
++  // latch that must not cross a CONFIRMED game boundary: a changed
++  // authoritative game/session hash, backward valid game_time, or a
++  // confirmed non-live close. Callers are responsible for also calling
++  // stopOcr() to fail closed the offer/badge/publication/scheduler surface
++  // at the same boundary (closeConfirmedGame already does, via
++  // clearGameRenderState). An unconfirmed telemetry outage must never reach
++  // this function — see suspendGameRuntimeForUnavailableTelemetry.
++  const beginNewGameEpoch = useCallback(() => {
++    gameEpochRef.current += 1;
++    liveOwnershipAnnouncedRef.current = false;
++    ocrSelectionCompletedRef.current = true;
++    completedRoundsRef.current = 0;
++    offerRoundOwnershipRef.current = createOfferRoundOwnership();
++    setPickedAugments([]);
++    lastRecordedRoundRef.current = "";
++    memberVerificationTokenRef.current += 1;
++    memberVerificationStateRef.current = IDLE_MEMBER_VERIFICATION_STATE;
++  }, []);
++
++  // Clears rendered/runtime UI and the OCR/geometry pipeline only. Never
++  // touches game identity (lastGameTimeRef/activeGameHashRef) or the
++  // activation latch by itself — callers decide whether this is a confirmed
++  // close or a fail-closed suspend of an unconfirmed outage.
++  const clearGameRenderState = useCallback((nextPhase: Phase) => {
+     ocrSelectionCompletedRef.current = true;
+     setActiveGame(false);
+     setPlayerData(null);
+@@ -1566,14 +1797,32 @@ function App() {
+     roundDeliveryRef.current = null;
+     setRoundDelivery(null);
+     setPickedAugments([]);
+-    lastGameTimeRef.current = null;
+-    lastRecordedRoundRef.current = "";
+-    activeGameHashRef.current = null;
+     setCoachOpen(false);
+     stopOcr();
+     updatePhase(nextPhase);
+   }, [setActiveGame, stopOcr, updatePhase]);
+ 
++  // CONFIRMED non-live gameflow: the match actually ended. Close game
++  // identity ownership and reset the activation latch, so a later confirmed
++  // game announces a fresh live-active.
++  const closeConfirmedGame = useCallback((nextPhase: Phase) => {
++    clearGameRenderState(nextPhase);
++    lastGameTimeRef.current = null;
++    lastRecordedRoundRef.current = "";
++    activeGameHashRef.current = null;
++    beginNewGameEpoch();
++  }, [clearGameRenderState, beginNewGameEpoch]);
++
++  // UNCONFIRMED telemetry outage past the fail-closed grace window: LCU
++  // and/or Live Client Data are unavailable, so rendering/capture fail
++  // closed operationally — but this alone is never proof the match ended.
++  // Game identity ownership and the activation latch are preserved, so
++  // recovery of the SAME match resumes instead of announcing a second
++  // live-active or opening a new analyzer epoch.
++  const suspendGameRuntimeForUnavailableTelemetry = useCallback((nextPhase: Phase) => {
++    clearGameRenderState(nextPhase);
++  }, [clearGameRenderState]);
++
+   // Stage 2 per-slot identity resolution: maps a plausible title to its catalog
+   // (Riot/ARAMGG) identity for chip content. Presence (Stage 1) never depends on
+   // this succeeding — an offer whose names don't resolve is still a live offer.
+@@ -1596,38 +1845,32 @@ function App() {
+   // without invoking OCR again.
+   useEffect(() => {
+     if (!aramgg.resolveSlotTitle) return;
+-    let changed = false;
+-    const nextStore = identityStoreRef.current.map((record, regionIndex) => {
+-      if (!record?.resolution || !record.ocrTitle) return record;
+-      const resolution = resolveSlotTitle(record.ocrTitle);
+-      const incoming: IdentityRecord<SlotResolution> = {
+-        ...record,
+-        resolution,
+-        resolvedAt: performance.now(),
++    const refreshedAt = performance.now();
++    const refreshed = refreshSameOfferData({
++      identityRecords: identityStoreRef.current,
++      offer: offerStateRef.current,
++      resolveByCanonicalId: (canonicalAugmentId, regionIndex) => {
++        const record = identityStoreRef.current[regionIndex];
++        if (!record?.ocrTitle) return null;
++        const resolution = resolveSlotTitle(record.ocrTitle);
++        return {
++          canonicalAugmentId: slotResolutionAugmentId(resolution),
++          resolution,
++        };
++      },
++      recordMetadata: () => ({
++        resolvedAt: refreshedAt,
+         championGeneration: championGenerationRef.current,
+         championRequestId: aramgg.championRequestId,
+         championPatch: aramgg.championPatch,
+-        augmentId: slotResolutionAugmentId(resolution),
+         foregroundEpoch: foregroundEpochRef.current,
+         gameEpoch: gameEpochRef.current,
+-        offerGeneration: geometryGenerationRef.current,
+-        slotGeneration: slotGenerationsRef.current[regionIndex] ?? 0,
+-      };
+-      const reconciled = reconcileIdentityRecord(record, incoming);
+-      if (reconciled.resolution !== record.resolution) changed = true;
+-      return reconciled;
+-    });
+-    if (!changed) return;
+-    identityStoreRef.current = nextStore;
+-    const currentOffer = offerStateRef.current;
+-    publishOffer({
+-      ...currentOffer,
+-      slots: currentOffer.slots.map((slot) => ({
+-        ...slot,
+-        resolution: nextStore[slot.regionIndex]?.resolution ?? slot.resolution,
+-      })),
++      }),
+     });
+-    republishGeometryFrame(geometrySeqRef.current);
++    if (!refreshed.changed) return;
++    identityStoreRef.current = refreshed.identityRecords;
++    publishOffer(refreshed.offer);
++    if (refreshed.republish) republishGeometryFrame(geometrySeqRef.current);
+   }, [
+     aramgg.championPatch,
+     aramgg.championRequestId,
+@@ -1660,6 +1903,7 @@ function App() {
+       startedAt,
+     );
+     const foregroundEpoch = foregroundEpochRef.current;
++    const gameEpoch = gameEpochRef.current;
+     const capturedAt = performance.now();
+     try {
+       let observation: GeometryObservation;
+@@ -1673,11 +1917,17 @@ function App() {
+         observation = emptyGeometryObservation(captureSeq, performance.now(), reason);
+       }
+       const completedAt = performance.now();
+-      // Stale-result rejection: apply only while this probe's seq is still newest
+-      // AND the foreground epoch it captured under is unchanged.
++      // Stale-result rejection: apply only while this probe's seq is still newest,
++      // the foreground epoch it captured under is unchanged, AND the game epoch it
++      // captured under is unchanged. The seq bump in clearSurface()/stopOcr() is
++      // paired synchronously with every confirmed epoch change today, but that
++      // pairing is an implementation detail elsewhere in this file, not a contract
++      // this function should depend on — the explicit check makes the guarantee
++      // self-evident, matching runIdentityProbe's proven pattern.
+       const stale =
+         captureSeq !== geometrySeqRef.current ||
+-        foregroundEpoch !== foregroundEpochRef.current;
++        foregroundEpoch !== foregroundEpochRef.current ||
++        gameEpoch !== gameEpochRef.current;
+       const captureValid =
+         observation.captureWidth > 0 && observation.captureHeight > 0;
+       const classification = classifyGeometryObservation(observation);
+@@ -1896,15 +2146,28 @@ function App() {
+           offerGeneration: nextOfferSurface.offerGeneration,
+         });
+       }
+-      const roundBefore = roundDeliveryRef.current?.activeOfferRound ?? null;
+-      if (detectedNewOffer && previousSurface.lastPositiveObservation != null) {
+-        recordRoundCompleted();
++      const roundBefore = offerRoundOwnershipRef.current.activeOwner?.round ?? null;
++      if (nextOfferSurface.state === "OFFER_VISIBLE") {
++        updateOfferRoundOwnership(reduceOfferRoundOwnership(
++          offerRoundOwnershipRef.current,
++          {
++            type: "accepted-offer",
++            offerGeneration: nextOfferSurface.offerGeneration,
++          },
++        ));
+       }
+       let invalidatedSlots: number[] = [];
+       if (
+         nextOfferSurface.state === "NO_OFFER" &&
+         priorOfferSurface.state !== "NO_OFFER"
+       ) {
++        updateOfferRoundOwnership(reduceOfferRoundOwnership(
++          offerRoundOwnershipRef.current,
++          {
++            type: "offer-closed",
++            offerGeneration: priorOfferSurface.offerGeneration,
++          },
++        ));
+         identityStoreRef.current = [null, null, null];
+         acceptedSlotFingerprintsRef.current = ["", "", ""];
+         slotGenerationsRef.current = slotGenerationsRef.current.map((generation) => generation + 1);
+@@ -2029,7 +2292,7 @@ function App() {
+         offerGenerationBefore: priorOfferSurface.offerGeneration,
+         offerGenerationAfter: nextOfferSurface.offerGeneration,
+         roundBefore,
+-        roundAfter: roundDeliveryRef.current?.activeOfferRound ?? null,
++        roundAfter: offerRoundOwnershipRef.current.activeOwner?.round ?? null,
+         invalidatedSlots,
+         offerState: nextOfferSurface.state,
+         render: nextOfferSurface.render,
+@@ -2202,7 +2465,7 @@ function App() {
+         geometryInFlightTokenRef.current = null;
+       }
+     }
+-  }, [aramgg.championRequestId, bumpScanSeq, datasetCaptureOn, recordRoundCompleted, republishGeometryFrame, resetOffer, updatePhase]);
++  }, [aramgg.championRequestId, bumpScanSeq, datasetCaptureOn, republishGeometryFrame, resetOffer, updateOfferRoundOwnership, updatePhase]);
+ 
+   // ─── TRACK 2: OCR/identity probe — TRIGGERED by the geometry track ───────────
+   // Supplies per-slot identity ONLY: never presence, occlusion, or visual freshness. It
+@@ -2224,6 +2487,7 @@ function App() {
+     const championGenerationAtStart = championGenerationRef.current;
+     const championIdAtStart = championIdRef.current;
+     const offerGenerationAtStart = geometryGenerationRef.current;
++    const acceptedRoundAtStart = offerRoundOwnershipRef.current.activeOwner?.round ?? null;
+     const championRequestIdAtStart = aramgg.championRequestId;
+     const championPatchAtStart = aramgg.championPatch;
+     const owner = ocrOwnersRef.current.start({
+@@ -2232,6 +2496,7 @@ function App() {
+       championGeneration: championGenerationAtStart,
+       championId: championIdAtStart,
+       offerGeneration: offerGenerationAtStart,
++      round: acceptedRoundAtStart,
+       requestedSlots: slots,
+       slotGenerations: triggerSlotGenerations,
+       fingerprints: triggerFingerprints,
+@@ -2244,6 +2509,7 @@ function App() {
+         championId: owner.championId,
+         championGeneration: owner.championGeneration,
+         offerGeneration: owner.offerGeneration,
++        round: owner.round,
+         requestedSlots: owner.requestedSlots,
+         slotGenerations: owner.requestedSlots.map((slot) => owner.slotGenerations[slot]),
+         fingerprints: owner.requestedSlots.map((slot) =>
+@@ -2258,6 +2524,7 @@ function App() {
+       championGeneration: championGenerationRef.current,
+       championId: championIdRef.current,
+       offerGeneration: geometryGenerationRef.current,
++      round: offerRoundOwnershipRef.current.activeOwner?.round ?? null,
+       requestedSlots: slots,
+       slotGenerations: slotGenerationsRef.current,
+       fingerprints: acceptedSlotFingerprintsRef.current,
+@@ -2299,6 +2566,8 @@ function App() {
+           (s) => identityStoreRef.current[s]?.resolution != null),
+         offerGenerationAtStart: rejected.offerGeneration,
+         offerGenerationNow: context.offerGeneration,
++        roundAtStart: rejected.round,
++        roundNow: context.round,
+         foregroundEpochAtStart: rejected.foregroundEpoch,
+         foregroundEpochNow: context.foregroundEpoch,
+         gameEpochAtStart: rejected.gameEpoch,
+@@ -2314,7 +2583,7 @@ function App() {
+     setOcrLifecycle((previous) => ({
+       ...previous,
+       phase: phaseRef.current,
+-      currentRound: roundDeliveryRef.current?.activeOfferRound ?? null,
++      currentRound: owner.round,
+       active: true,
+       lastScanStart: scanStart,
+       lastScanEnd: null,
+@@ -2642,7 +2911,7 @@ function App() {
+         isCompleteThreeCardOffer(matched) &&
+         playerData
+       ) {
+-        const round = roundDeliveryRef.current?.activeOfferRound ?? 0;
++        const round = owner.round ?? 0;
+         const offeredAugmentSlugs = matched
+           .map((card) => card.augment.slug)
+           .sort();
+@@ -3107,6 +3376,40 @@ function App() {
+     };
+   }, [datasetCaptureOn]);
+ 
++  // P1 fix (member verification must not block game-boundary invalidation):
++  // detached, non-blocking member verification. poll() fires this with
++  // `void startMemberVerification(request)` and never awaits it, so
++  // pollInFlightRef releases immediately and every later poll stays free to
++  // detect a confirmed non-live gameflow, a changed game hash, or backward
++  // game_time while this request is still in flight. Any of those bump
++  // gameEpochRef/activeGameHashRef/memberVerificationTokenRef via
++  // beginNewGameEpoch (or the token alone, for a superseding verification
++  // request) — so the post-await checks below discard a stale success or
++  // failure rather than publish it into a game this request no longer owns.
++  const startMemberVerification = useCallback(
++    (request: MemberVerificationRequest) =>
++      runMemberVerification(
++        request,
++        {
++          epoch: () => gameEpochRef.current,
++          gameHash: () => activeGameHashRef.current,
++          token: () => memberVerificationTokenRef.current,
++          gameActive: () => activeGameRef.current,
++          verificationState: () => memberVerificationStateRef.current,
++          now: () => performance.now(),
++        },
++        {
++          setMemberSnapshot,
++          verifyMemberGameStart,
++          recheckGameHash: () => invoke<string | null>("get_game_hash").catch(() => null),
++          setVerificationState: (state) => {
++            memberVerificationStateRef.current = state;
++          },
++        },
++      ),
++    [],
++  );
++
+   // Main polling loop
+   const poll = useCallback(async () => {
+     if (pollInFlightRef.current) {
+@@ -3149,7 +3452,13 @@ function App() {
+           failureAgeMs: 0,
+         });
+         const clientFound = await invoke<boolean>("detect_league_client").catch(() => false);
+-        clearGameOnlyState(clientFound ? "client_found" : "idle");
++        // On the first owned close, the boundary invokes
++        // closeConfirmedGame(clientFound ? "client_found" : "idle");
++        applyGameOwnershipObservation({
++          ownershipRef: confirmedGameOwnershipRef,
++          observation: "confirmed-non-live",
++          closeOwnedGame: () => closeConfirmedGame(clientFound ? "client_found" : "idle"),
++        });
+         return;
+       }
+ 
+@@ -3166,6 +3475,13 @@ function App() {
+         data = liveDataResult.data;
+         liveDataStatus = liveDataResult.status;
+         if (data && gameflowCaptureAllowedRef.current) {
++          if (gameflow != null) {
++            applyGameOwnershipObservation({
++              ownershipRef: confirmedGameOwnershipRef,
++              observation: "confirmed-live",
++              closeOwnedGame: () => closeConfirmedGame("idle"),
++            });
++          }
+           const priorFailureStartedAt = liveDataFailureStartedAtRef.current;
+           liveDataFailureStartedAtRef.current = null;
+           setActiveGame(true);
+@@ -3179,32 +3495,109 @@ function App() {
+               failureAgeMs: Math.round(Math.max(0, performance.now() - priorFailureStartedAt)),
+             });
+           }
++          // Detect every confirmed new-game boundary — a changed authoritative
++          // game/session hash, or backward valid game_time — BEFORE the
++          // activation check below and before any downstream game-two offer,
++          // member-verification, geometry, or badge diagnostic is scheduled.
++          // Otherwise a boundary detected mid-poll doesn't get beginNewGameEpoch
++          // (and its fresh live-active) until the NEXT poll, by which time
++          // game-two evidence has already published under the still-open
++          // game-one epoch.
+           const gameHash = await invoke<string | null>("get_game_hash").catch(() => null);
++          let verifyGameHash: string | null = null;
++          let newGameBoundaryDetected = false;
+           if (!gameHash) {
+             setMemberSnapshot(disabledMember("game-hash-unavailable"));
+           } else if (
+             memberBootstrapCompleteRef.current &&
+             shouldVerifyGameStart(activeGameHashRef.current, gameHash)
+           ) {
++            // A changed game hash while ownership never released is an
++            // explicit game/session identity change — its own epoch boundary,
++            // independent of the backward-game_time signal below. Member
++            // verification is deferred until after the activation emission —
++            // it is downstream game-two work, not part of boundary detection.
++            if (activeGameHashRef.current !== null) {
++              newGameBoundaryDetected = true;
++            }
+             activeGameHashRef.current = gameHash;
+-            setMemberSnapshot(disabledMember("game-session-verification-pending"));
+-            const snapshot = await verifyMemberGameStart(gameHash).catch((error) =>
+-              disabledMember(
+-                error instanceof Error ? error.message : "game-session-verification-failed",
+-              ),
+-            );
+-            setMemberSnapshot(snapshot);
++            verifyGameHash = gameHash;
++          } else if (
++            memberBootstrapCompleteRef.current &&
++            shouldStartMemberVerification({
++              currentGameHash: gameHash,
++              verificationState: memberVerificationStateRef.current,
++              nowMs: performance.now(),
++              gameEpoch: gameEpochRef.current,
++              runtimeEligible: gameflowCaptureAllowedRef.current,
++            })
++          ) {
++            // Same authoritative hash as before, but a prior verification for
++            // it went inconclusive (null/throwing recheck) and its retry
++            // deadline has elapsed. activeGameHashRef is already this hash —
++            // it must NOT be reassigned or cleared here, since that would
++            // read as a new game boundary rather than a retry of this one.
++            verifyGameHash = gameHash;
+           }
+           const lastGameTime = lastGameTimeRef.current;
+-          if (lastGameTime !== null && data.game_time + 5 < lastGameTime) {
+-            ocrSelectionCompletedRef.current = true;
+-            completedRoundsRef.current = 0;
+-            setPickedAugments([]);
+-            lastRecordedRoundRef.current = "";
+-            gameEpochRef.current += 1;
+-            stopOcr();
++          if (isBackwardGameTime({ lastGameTime, gameTime: data.game_time })) {
++            newGameBoundaryDetected = true;
+           }
+           lastGameTimeRef.current = data.game_time;
++          if (newGameBoundaryDetected) {
++            beginNewGameEpoch();
++            stopOcr();
++          }
++          if (newGameBoundaryDetected) {
++            confirmedGameOwnershipRef.current.gameEpoch = gameEpochRef.current;
++          }
++
++          // [game-poll] — the ONLY authoritative proof that a healthy live game
++          // activated. This success branch returns early, so a session with no
++          // Live Client Data outage otherwise emits no in-progress record at all
++          // and a correct run reads as incomplete coverage. See
++          // shouldAnnounceLiveActivation for the authority rules. Positioned
++          // AFTER both boundary checks above, so a boundary crossed THIS poll
++          // announces in THIS poll — before any game-two offer/member/geometry/
++          // badge diagnostic is scheduled or emitted. Bounded
++          // enums/booleans/numbers only; DEV-only via emitNativeDiagnostic.
++          if (
++            shouldAnnounceLiveActivation({
++              devBuild: import.meta.env.DEV,
++              liveDataReady: liveDataStatus === "ready",
++              gameflowConfirmed: gameflow != null,
++              captureAllowed: gameflowCaptureAllowedRef.current,
++              alreadyAnnounced: liveOwnershipAnnouncedRef.current,
++            })
++          ) {
++            liveOwnershipAnnouncedRef.current = true;
++            emitNativeDiagnostic("[game-poll]", {
++              gameflowPhase: gameflow?.phase ?? "unavailable",
++              gameflowConfirmed: true,
++              captureAllowed: true,
++              liveDataStatus,
++              action: "live-active",
++              failureAgeMs: 0,
++            });
++          }
++
++          if (verifyGameHash) {
++            // Capture the owning context here, synchronously, at the exact
++            // boundary that determined verification is needed — then hand it
++            // to the DETACHED startMemberVerification helper via `void`. This
++            // poll never awaits it: pollInFlightRef releases as soon as the
++            // rest of THIS poll finishes, so a later poll can still detect a
++            // confirmed non-live close, a changed hash, or backward
++            // game_time while this request is in flight (see
++            // startMemberVerification for the stale-rejection checks).
++            const verificationRequest: MemberVerificationRequest = {
++              epoch: gameEpochRef.current,
++              gameHash: verifyGameHash,
++              token: ++memberVerificationTokenRef.current,
++            };
++            void startMemberVerification(verificationRequest);
++          }
++
+           setPlayerData(data);
+           const slug = champNameToSlug(data.champion);
+           if (slug !== championSlug) {
+@@ -3274,11 +3667,17 @@ function App() {
+       });
+       if (liveDataDecision.action === "preserve") return;
+ 
++      // This "clear" is an UNCONFIRMED telemetry outage past the fail-closed
++      // grace window (or a carried-forward capture gate), not a confirmed
++      // non-live gameflow phase — that already returned early above via
++      // shouldClearOcrStateForGameflow. Fail rendering/capture closed without
++      // touching game identity or the activation latch, so recovery of the
++      // SAME match resumes instead of opening a new analyzer epoch.
+       try {
+         const clientFound = await invoke<boolean>("detect_league_client");
+-        clearGameOnlyState(clientFound ? "client_found" : "idle");
++        suspendGameRuntimeForUnavailableTelemetry(clientFound ? "client_found" : "idle");
+       } catch {
+-        clearGameOnlyState("idle");
++        suspendGameRuntimeForUnavailableTelemetry("idle");
+       }
+     } finally {
+       pollInFlightRef.current = false;
+@@ -3288,21 +3687,24 @@ function App() {
+       }
+     }
+   }, [
++    beginNewGameEpoch,
+     champNameToSlug,
+     championSlug,
+-    clearGameOnlyState,
++    closeConfirmedGame,
+     collectorEnabled,
+     finishOcr,
+     refreshForeground,
+     setActiveGame,
++    startMemberVerification,
+     stopOcr,
++    suspendGameRuntimeForUnavailableTelemetry,
+     updatePhase,
+   ]);
+ 
+   useEffect(() => {
+     const onKeyDown = (event: KeyboardEvent) => {
+       if (event.repeat) return;
+-      if (event.key.toLowerCase() === "c" && memberEnabled) {
++      if (event.key.toLowerCase() === "c" && memberCoachEnabled) {
+         setCoachOpen((open) => !open);
+         return;
+       }
+@@ -3312,7 +3714,7 @@ function App() {
+       }
+       const regionIndex = Number(event.key) - 1;
+       if (
+-        !memberEnabled ||
++        !memberCoachEnabled ||
+         phase !== "augment_selection" ||
+         !isCompleteThreeCardOffer(matchedCards) ||
+         !Number.isInteger(regionIndex) ||
+@@ -3328,7 +3730,8 @@ function App() {
+         confirmPickedAugment(current, offered, regionIndex),
+       );
+       const selectedAugmentSlug = offered[regionIndex];
+-      const confirmRound = roundDeliveryRef.current?.activeOfferRound ?? null;
++      const confirmedOfferGeneration = offerSurfaceRef.current.offerGeneration;
++      const confirmRound = offerRoundOwnershipRef.current.activeOwner?.round ?? null;
+       if (selectedAugmentSlug && confirmRound) {
+         void invoke("confirm_contributor_round_selection", {
+           round: confirmRound,
+@@ -3338,14 +3741,20 @@ function App() {
+       // A confirmed choice is STRONG completion evidence and ends the offer:
+       // count the round, clear the latched state, and return to in-game
+       // immediately instead of waiting for surface absence.
+-      recordRoundCompleted();
++      updateOfferRoundOwnership(reduceOfferRoundOwnership(
++        offerRoundOwnershipRef.current,
++        {
++          type: "pick-confirmed",
++          offerGeneration: confirmedOfferGeneration,
++        },
++      ));
+       ocrSelectionCompletedRef.current = true;
+       stopOcr();
+       updatePhase("in_game");
+     };
+     window.addEventListener("keydown", onKeyDown);
+     return () => window.removeEventListener("keydown", onKeyDown);
+-  }, [matchedCards, memberEnabled, phase, recordRoundCompleted, stopOcr, updatePhase]);
++  }, [matchedCards, memberCoachEnabled, phase, stopOcr, updateOfferRoundOwnership, updatePhase]);
+ 
+   useEffect(() => {
+     // The only demand signal for foreground polling. Ticks that land during an
+@@ -3386,7 +3795,9 @@ function App() {
+   // Component teardown: invalidate any in-flight probe (its late return will be
+   // stale-rejected) and release the scheduler guard so a remount starts clean.
+   // Clearing the token also no-ops the wedged probe's finally (no setState on an
+-  // unmounted component).
++  // unmounted component). Also bumps memberVerificationTokenRef so a detached
++  // startMemberVerification request in flight at teardown is stale-rejected
++  // the same way, instead of calling setState after unmount.
+   useEffect(() => {
+     const ocrOwners = ocrOwnersRef.current;
+     return () => {
+@@ -3398,6 +3809,7 @@ function App() {
+       geometryInFlightRef.current = false;
+       geometryInFlightSinceRef.current = null;
+       geometryInFlightTokenRef.current = null;
++      memberVerificationTokenRef.current += 1;
+     };
+   }, [bumpScanSeq]);
+ 
+@@ -3409,51 +3821,6 @@ function App() {
+   }, []);
+ 
+   // ─── Render ───
+-  const badgePositions = useMemo(() => {
+-    const positions = new Map<number, { left: string; top: string }>();
+-    if (!calibration || !visibleFrame) return positions;
+-
+-    // Chip geometry comes ONLY from the current frame's fresh per-slot rects.
+-    // A slot without a rect from THIS capture is never positioned — no
+-    // historical or calibrated fallback geometry can anchor a stale chip.
+-    const regionRects = new Map<number, PhysicalRect>();
+-    for (const slot of visibleFrame.slots) {
+-      if (slot.cardRect) regionRects.set(slot.regionIndex, slot.cardRect);
+-    }
+-
+-    // THE coordinate boundary: every calibrated rect converts to
+-    // overlay-window CSS exactly once, as a pure ratio against the overlay
+-    // anchor. scaleFactor never re-enters, so a flapping monitor scale or a
+-    // detected-window↔monitor-fallback switch cannot move the chips.
+-    const toCss = (rect: PhysicalRect) =>
+-      cssRectFromCalibratedRect(rect, calibration.overlayAnchor, cssWindow);
+-    const cssGameRect = toCss(calibration.viewport);
+-    const cssRegionRects = new Map(
+-      [...regionRects.entries()].map(([regionIndex, rect]) => [regionIndex, toCss(rect)]),
+-    );
+-    const avoidRects = overlayAvoidRectsCss(cssWindow, cssGameRect);
+-
+-    for (const chip of slotChips) {
+-      const cardRect = cssRegionRects.get(chip.regionIndex);
+-      if (!cardRect) continue;
+-      // A chip must never cover a NEIGHBORING card either — the other card
+-      // frames are additional keep-out rects.
+-      const otherFrames = [...cssRegionRects.entries()]
+-        .filter(([regionIndex]) => regionIndex !== chip.regionIndex)
+-        .map(([, rect]) => cardFrameFromNameRect(rect, cssGameRect));
+-      const placement = placeBadgeAboveCard({
+-        cardRect,
+-        gameRect: cssGameRect,
+-        avoidRects: [...avoidRects, ...otherFrames],
+-      });
+-      if (placement) {
+-        positions.set(chip.regionIndex, placement);
+-      }
+-    }
+-
+-    return positions;
+-  }, [calibration, cssWindow, visibleFrame, slotChips]);
+-
+   return (
+     <div className="overlay-root">
+       {/* Status dot */}
+@@ -3475,60 +3842,14 @@ function App() {
+           preview (previewBadgesReady). Each chip reflects its slot's own
+           pipeline state — never stale, never invented. See fixtureMode.ts. */}
+       {showBadgeLayer && (
+-        <>
+-          {slotChips.map((chip) => {
+-            const pos = badgePositions.get(chip.regionIndex);
+-            if (!pos) return null;
+-            if (chip.state !== "tier") {
+-              const label =
+-                chip.state === "scanning"
+-                  ? "SCANNING"
+-                  : chip.state === "ocr-error"
+-                    ? "OCR ERROR"
+-                    : chip.state === "no-data"
+-                      ? "NO CHAMP DATA"
+-                      : chip.state === "loading-data"
+-                        ? "LOADING DATA"
+-                        : chip.state === "data-error"
+-                          ? "DATA ERROR"
+-                          : "UNMATCHED";
+-              return (
+-                <div
+-                  className={`badge-chip badge-chip-${chip.state}`}
+-                  key={chip.key}
+-                  style={{ left: pos.left, top: pos.top }}
+-                >
+-                  <span className="badge-chip-state">{label}</span>
+-                </div>
+-              );
+-            }
+-            return (
+-              <div
+-                className={`badge-chip ${chip.tier ? tierClassName(chip.tier) : ""}${
+-                  isPreviewMode ? " badge-preview" : ""
+-                }`}
+-                key={chip.key}
+-                style={{ left: pos.left, top: pos.top }}
+-              >
+-                {isPreviewMode && (
+-                  <span className="preview-watermark">PREVIEW</span>
+-                )}
+-                {chip.isNew && <span className="badge-new">NEW</span>}
+-                {chip.tier && (
+-                  <TierBadgeLabel
+-                    tier={chip.tier}
+-                    winRateText={chip.winRateText}
+-                    statScope={chip.statScope}
+-                  />
+-                )}
+-              </div>
+-            );
+-          })}
+-        </>
++        <BadgeChipLayer
++          positionedChips={positionedChips}
++          isPreviewMode={isPreviewMode}
++        />
+       )}
+ 
+       {/* Minimal HUD when in-game but not selecting */}
+-      {memberEnabled && phase === "in_game" && championSlug && gameOverlayIsVisible && (
++      {memberCoachEnabled && phase === "in_game" && championSlug && gameOverlayIsVisible && (
+         <div className="hud">
+           <span className="champion-tag">
+             {playerData?.champion ?? championSlug}
+@@ -3551,8 +3872,8 @@ function App() {
+       {collectorEnabled && gameOverlayIsVisible && dataError && (
+         <div className="idle-panel">Overlay data failed to load: {dataError}</div>
+       )}
+-      {collectorEnabled && gameOverlayIsVisible && effectiveMember?.error && (
+-        <div className="member-error">Member coach unavailable: {effectiveMember.error}</div>
++      {collectorEnabled && gameOverlayIsVisible && memberSnapshot?.error && (
++        <div className="member-error">Member coach unavailable: {memberSnapshot.error}</div>
+       )}
+       {devPanelsVisible({ devBuild: import.meta.env.DEV, gameOverlayIsVisible }) && (
+         <DevOverlayDiagnostics
+@@ -3587,7 +3908,7 @@ function App() {
+         </div>
+       )}
+       <CoachPanel
+-        open={effectiveMemberEnabled && coachOpen && gameOverlayIsVisible}
++        open={memberCoachEnabled && coachOpen && gameOverlayIsVisible}
+         result={badgeDecisionResult}
+         mode={mode}
+         onModeChange={setMode}
+diff --git a/overlay/src/auth/member.ts b/overlay/src/auth/member.ts
+index 99d74a4..df5ef2b 100644
+--- a/overlay/src/auth/member.ts
++++ b/overlay/src/auth/member.ts
+@@ -35,10 +35,112 @@ export function shouldVerifyGameStart(
+   return currentGameHash !== null && previousGameHash !== currentGameHash;
+ }
+ 
++export interface MemberVerificationRequest {
++  epoch: number;
++  gameHash: string;
++  token: number;
++}
++
++export interface MemberVerificationOwnership {
++  epoch: number;
++  gameHash: string | null;
++  token: number;
++}
++
++// A verifyMemberGameStart request is only safe to publish (success OR
++// failure) if the epoch, authoritative game hash, and request token it
++// captured before its await are all still current afterward. Any confirmed
++// game boundary (new hash, backward game_time, confirmed close) bumps both
++// epoch and token; a newer overlapping verification request bumps token
++// alone — either invalidates an older in-flight request regardless of which
++// promise settles first.
++export function isMemberVerificationCurrent(
++  request: MemberVerificationRequest,
++  ownership: MemberVerificationOwnership,
++): boolean {
++  return (
++    request.epoch === ownership.epoch &&
++    request.gameHash === ownership.gameHash &&
++    request.token === ownership.token
++  );
++}
++
+ export function disabledMember(error: string): MemberSnapshot {
+   return { enabled: false, error };
+ }
+ 
++// Explicit per-game member-verification lifecycle, separate from
++// `activeGameHashRef` (authoritative game identity). `activeGameHashRef` must
++// never be cleared just to force a retry — a hash change means a NEW game,
++// which is a different concept from "this same game's verification needs
++// another attempt". "verified" covers both a definitive grant AND a
++// definitive denial: either way the recheck settled the hash, so this hash
++// is never retried again — the actual grant/denial content lives entirely in
++// the published `MemberSnapshot`, never in this state.
++export type MemberVerificationState =
++  | { status: "idle"; gameHash: null }
++  | { status: "pending"; gameHash: string; epoch: number; token: number }
++  | { status: "verified"; gameHash: string; epoch: number }
++  | {
++      status: "retryable";
++      gameHash: string;
++      epoch: number;
++      nextAttemptAtMs: number;
++      attempts: number;
++    };
++
++export const IDLE_MEMBER_VERIFICATION_STATE: MemberVerificationState = {
++  status: "idle",
++  gameHash: null,
++};
++
++// Deterministic bounded backoff: ~1.5s first retry, doubling thereafter,
++// capped at 20s so one transient recheck failure can never silently disable
++// member badges/coach for the rest of a valid match, while also never
++// hammering a request every polling tick.
++const MEMBER_VERIFICATION_RETRY_BASE_MS = 1500;
++const MEMBER_VERIFICATION_RETRY_MAX_MS = 20_000;
++
++export function memberVerificationRetryDelayMs(attempts: number): number {
++  const exponent = Math.max(0, attempts - 1);
++  return Math.min(
++    MEMBER_VERIFICATION_RETRY_BASE_MS * 2 ** exponent,
++    MEMBER_VERIFICATION_RETRY_MAX_MS,
++  );
++}
++
++export interface ShouldStartMemberVerificationInput {
++  currentGameHash: string | null;
++  verificationState: MemberVerificationState;
++  nowMs: number;
++  gameEpoch: number;
++  runtimeEligible: boolean;
++}
++
++// Pure retry-eligibility gate. A hash/epoch this state was never captured
++// for is always eligible (either genuinely idle, or a fresh identity the
++// state doesn't know about yet) — poll() already handles the "hash actually
++// changed" case itself via `shouldVerifyGameStart`, so in practice this is
++// consulted for "hash unchanged, is a retry due" decisions, but it stays
++// correct regardless of how it's called.
++export function shouldStartMemberVerification(
++  input: ShouldStartMemberVerificationInput,
++): boolean {
++  const { currentGameHash, verificationState, nowMs, gameEpoch, runtimeEligible } = input;
++  if (!runtimeEligible || currentGameHash === null) return false;
++  if (verificationState.status === "idle" || verificationState.gameHash !== currentGameHash) {
++    return true;
++  }
++  // Same hash string, but this bookkeeping is from a game identity that has
++  // since moved on (confirmed close, changed hash, or backward game_time all
++  // bump the epoch) — superseded, never worth retrying under the old epoch.
++  if (verificationState.epoch !== gameEpoch) return false;
++  if (verificationState.status === "retryable") {
++    return nowMs >= verificationState.nextAttemptAtMs;
++  }
++  return false; // pending or verified
++}
++
+ export function bootstrapMember(): Promise<MemberSnapshot> {
+   return invoke<MemberSnapshot>("member_bootstrap");
+ }
+@@ -46,3 +148,103 @@ export function bootstrapMember(): Promise<MemberSnapshot> {
+ export function verifyMemberGameStart(gameHash: string): Promise<MemberSnapshot> {
+   return invoke<MemberSnapshot>("member_game_start", { gameHash });
+ }
++
++export interface MemberVerificationOwnershipReader {
++  epoch: () => number;
++  gameHash: () => string | null;
++  token: () => number;
++  // The coarse "is a game currently active" gate — false while runtime
++  // capture/rendering is suspended for either a confirmed close or an
++  // unconfirmed telemetry outage. Required in addition to epoch/hash/token
++  // so a result that resolves mid-outage cannot make stale authorization
++  // visible while capture is suspended.
++  gameActive: () => boolean;
++  // Current retry lifecycle for this hash, read fresh each call — never
++  // cached across the awaits below.
++  verificationState: () => MemberVerificationState;
++  // Injected clock so retry deadlines are deterministic and testable without
++  // sleeping; production passes `performance.now`.
++  now: () => number;
++}
++
++export interface MemberVerificationEffects {
++  setMemberSnapshot: (snapshot: MemberSnapshot) => void;
++  verifyMemberGameStart: (gameHash: string) => Promise<MemberSnapshot>;
++  // Must resolve to null rather than reject on failure — the recheck is a
++  // fail-closed signal, not a control-flow exception. Also defensively
++  // wrapped below in case an implementation violates that contract.
++  recheckGameHash: () => Promise<string | null>;
++  setVerificationState: (state: MemberVerificationState) => void;
++}
++
++// The detached, non-blocking member-verification worker: started via `void`
++// from poll() and never awaited by it, so the single-flight poll lock
++// releases immediately and a later poll stays free to detect a confirmed
++// non-live close, a changed game hash, or backward game_time while this is
++// still in flight — any of which invalidates `request` before it can
++// publish. Safe to call directly in tests with injected effects/ownership,
++// no React or Tauri runtime required.
++export async function runMemberVerification(
++  request: MemberVerificationRequest,
++  ownership: MemberVerificationOwnershipReader,
++  effects: MemberVerificationEffects,
++): Promise<void> {
++  const currentOwnership = (): MemberVerificationOwnership => ({
++    epoch: ownership.epoch(),
++    gameHash: ownership.gameHash(),
++    token: ownership.token(),
++  });
++  if (!isMemberVerificationCurrent(request, currentOwnership())) return;
++  const priorState = ownership.verificationState();
++  const priorAttempts =
++    priorState.status === "retryable" &&
++    priorState.gameHash === request.gameHash &&
++    priorState.epoch === request.epoch
++      ? priorState.attempts
++      : 0;
++  effects.setMemberSnapshot(disabledMember("game-session-verification-pending"));
++  effects.setVerificationState({
++    status: "pending",
++    gameHash: request.gameHash,
++    epoch: request.epoch,
++    token: request.token,
++  });
++  const snapshot = await effects.verifyMemberGameStart(request.gameHash).catch((error) =>
++    disabledMember(error instanceof Error ? error.message : "game-session-verification-failed"),
++  );
++  // Second, independent fail-closed check: re-query the authoritative game
++  // hash directly instead of trusting only the in-memory refs.
++  const recheckedHash = await effects.recheckGameHash().catch(() => null);
++  if (!isMemberVerificationCurrent(request, currentOwnership())) return;
++  if (recheckedHash === request.gameHash && ownership.gameActive()) {
++    effects.setVerificationState({
++      status: "verified",
++      gameHash: request.gameHash,
++      epoch: request.epoch,
++    });
++    effects.setMemberSnapshot(snapshot);
++    return;
++  }
++  if (recheckedHash !== null && recheckedHash !== request.gameHash) {
++    // A different, non-null hash supersedes this request entirely. The
++    // normal game-boundary path (poll's own hash comparison) owns
++    // processing the new hash next tick; never mark the superseded hash
++    // retryable.
++    return;
++  }
++  // Inconclusive: a null recheck (including a caught throw or a timeout the
++  // effect maps to null), or the recheck confirmed the same hash but runtime
++  // ownership dropped mid-flight (an unconfirmed telemetry outage). Retry
++  // the SAME hash later on a bounded backoff instead of leaving the UI stuck
++  // pending — never grant authorization and never touch activeGameHashRef
++  // or the game epoch.
++  const attempts = priorAttempts + 1;
++  effects.setMemberSnapshot(disabledMember("game-session-verification-retry"));
++  effects.setVerificationState({
++    status: "retryable",
++    gameHash: request.gameHash,
++    epoch: request.epoch,
++    nextAttemptAtMs: ownership.now() + memberVerificationRetryDelayMs(attempts),
++    attempts,
++  });
++}
+diff --git a/overlay/src/dev/championDataset.test.ts b/overlay/src/dev/championDataset.test.ts
+index f3220ca..aec4b66 100644
+--- a/overlay/src/dev/championDataset.test.ts
++++ b/overlay/src/dev/championDataset.test.ts
+@@ -14,6 +14,7 @@ import {
+   parseChampionAugmentsFile,
+   type ChampionOwnershipToken,
+ } from "./championDataset";
++import { selectChampionSlotStat, type ChampionAugmentDataset } from "./championStats";
+ 
+ // The complete file is a list of [championId, statsJSONString] pairs, exactly
+ // as ARAMGG serves `/data/champion-augments/{id}.json`.
+@@ -28,6 +29,10 @@ function fileFor(championId: string, winRate: string): string {
+   return JSON.stringify([[championId, inner]]);
+ }
+ 
++function emptyFileFor(championId: string): string {
++  return JSON.stringify([[championId, JSON.stringify({ augments: {} })]]);
++}
++
+ function okFetch(body: string): typeof fetch {
+   return vi.fn(async () =>
+     new Response(body, { status: 200, headers: { "content-type": "application/json" } }),
+@@ -67,6 +72,20 @@ describe("loadChampionAugmentDataset — fetch + parse the complete file", () =>
+     await expect(loadChampionAugmentDataset(fetchImpl, "56", "16.14")).rejects.toThrow();
+   });
+ 
++  it("rejects complete zero-row data before it can publish no-champ-data", async () => {
++    let dataset: ChampionAugmentDataset | null = null;
++    let status: "ready" | "error" = "ready";
++    try {
++      dataset = await loadChampionAugmentDataset(okFetch(emptyFileFor("56")), "56", "16.14");
++    } catch {
++      status = "error";
++    }
++
++    expect(status).toBe("error");
++    expect(dataset).toBeNull();
++    expect(selectChampionSlotStat(status, dataset, "1006").status).toBe("error");
++  });
++
+   it("throws explicitly on an HTTP error (offline/failure is never silent)", async () => {
+     const fetchImpl = vi.fn(async () => new Response("nope", { status: 503 })) as unknown as typeof fetch;
+     await expect(loadChampionAugmentDataset(fetchImpl, "56", "16.14")).rejects.toThrow();
+@@ -111,6 +130,23 @@ describe("ChampionDatasetCache — one fetch per (championId, patch)", () => {
+     await cache.get("56", "16.15");
+     expect(fetchImpl).toHaveBeenCalledTimes(2);
+   });
++
++  it("does not cache an invalid complete dataset and retries the same key successfully", async () => {
++    const fetchImpl = vi
++      .fn()
++      .mockResolvedValueOnce(new Response(emptyFileFor("56"), { status: 200 }))
++      .mockResolvedValueOnce(new Response(fileFor("56", "0.480096"), { status: 200 })) as unknown as typeof fetch;
++    const cache = new ChampionDatasetCache(fetchImpl);
++
++    await expect(cache.get("56", "16.14")).rejects.toThrow(/complete.*zero usable/i);
++    expect(cache.has("56", "16.14")).toBe(false);
++    expect(cache.peek("56", "16.14")).toBeNull();
++
++    const recovered = await cache.get("56", "16.14");
++    expect(recovered.loadedCount).toBe(1);
++    expect(recovered.statsByAugmentId.get("1006")?.winRatePercent).toBe("48.0096");
++    expect(fetchImpl).toHaveBeenCalledTimes(2);
++  });
+ });
+ 
+ describe("championOwnershipCurrent — stale response cannot publish", () => {
+diff --git a/overlay/src/dev/championStats.test.ts b/overlay/src/dev/championStats.test.ts
+index a113869..2faea02 100644
+--- a/overlay/src/dev/championStats.test.ts
++++ b/overlay/src/dev/championStats.test.ts
+@@ -152,6 +152,25 @@ describe("champion-only selection — no global fallback exists", () => {
+     expect(ds.completeness).toBe("complete");
+     expect(ds.loadedCount).toBe(4);
+   });
++
++  it("rejects a complete source with zero usable augment rows as an integrity error", () => {
++    expect(() =>
++      parseChampionAugmentDataset({
++        augments: {
++          "not-an-augment-id": { tier: "1", win_rate: "0.5" },
++          "1001": null,
++          "1002": { tier: "1" },
++          "1003": { tier: "1", win_rate: "not-a-rate" },
++          "1004": { tier: "not-a-tier", win_rate: "0.5" },
++        },
++      }, {
++        championId: "56",
++        patch: "16.14",
++        source: "https://aramgg.com/data/champion-augments/56.json",
++        completeness: "complete",
++      }),
++    ).toThrow(/complete.*zero usable/i);
++  });
+ });
+ 
+ describe("selectChampionSlotStat — the four badge states, never global", () => {
+diff --git a/overlay/src/dev/championStats.ts b/overlay/src/dev/championStats.ts
+index 9db634c..c5d4232 100644
+--- a/overlay/src/dev/championStats.ts
++++ b/overlay/src/dev/championStats.ts
+@@ -134,11 +134,15 @@ export function parseChampionAugmentDataset(
+     const stat = parseRow(opts.championId, augmentId, value as Record<string, unknown>, opts.patch);
+     if (stat) statsByAugmentId.set(augmentId, stat);
+   }
++  const completeness = opts.completeness ?? "complete";
++  if (completeness === "complete" && statsByAugmentId.size === 0) {
++    throw new Error("parseChampionAugmentDataset: complete dataset has zero usable augment rows");
++  }
+   return {
+     championId: opts.championId,
+     patch: opts.patch,
+     source: opts.source,
+-    completeness: opts.completeness ?? "complete",
++    completeness,
+     loadedCount: statsByAugmentId.size,
+     statsByAugmentId,
+   };
+diff --git a/overlay/src/dev/production/tierFixture.ts b/overlay/src/dev/production/tierFixture.ts
+index 08260ff..e697925 100644
+--- a/overlay/src/dev/production/tierFixture.ts
++++ b/overlay/src/dev/production/tierFixture.ts
+@@ -1,4 +1,3 @@
+-import type { MemberSnapshot } from "../../auth/member";
+ import type {
+   AugmentRound,
+   DecisionCandidateResult,
+@@ -10,10 +9,6 @@ export function isTierFixtureEnabled(): boolean {
+   return false;
+ }
+ 
+-export const TIER_FIXTURE_MEMBER: MemberSnapshot = {
+-  enabled: false,
+-};
+-
+ export interface AramggFixtureCard {
+   slug: string;
+   stat: {
+diff --git a/overlay/src/dev/publicationDiagnostics.ts b/overlay/src/dev/publicationDiagnostics.ts
+index e071a44..0862258 100644
+--- a/overlay/src/dev/publicationDiagnostics.ts
++++ b/overlay/src/dev/publicationDiagnostics.ts
+@@ -13,13 +13,16 @@ export type DiagnosticMarker =
+   | "[identity-retry]"
+   | "[offer-state]"
+   | "[offer-session]"
++  | "[badge-layer]"
++  | "[round-content-complete]"
+   | "[game-poll]"
+   | "[geometry-watchdog]"
+   | "[identity-native-return]"
+   | "[geometry-timing]"
+   | "[geometry-stale-hide]"
+   | "[geometry-recovery]"
+-  | "[foreground-poll]";
++  | "[foreground-poll]"
++  | "[focus-transition]";
+ 
+ /** Bounded, irreversible FNV-1a hash; complete OCR text is never logged. */
+ export function boundedDiagnosticHash(value: string | null | undefined): string | null {
+diff --git a/overlay/src/dev/tierFixture.ts b/overlay/src/dev/tierFixture.ts
+index 056475b..f8f1980 100644
+--- a/overlay/src/dev/tierFixture.ts
++++ b/overlay/src/dev/tierFixture.ts
+@@ -6,14 +6,13 @@
+  *   2. the env flag `MAYHEM_OVERLAY_TIER_FIXTURE=1` is set.
+  *
+  * In a production Tauri build `import.meta.env.DEV` is false, so this is inert
+- * regardless of the flag. It bypasses ONLY the member-coach auth/data fetch and
+- * drives the REAL overlay render path (badges + CoachPanel) with statistics
+- * sourced from ARAMGG (`aramggSource.ts`). Statistics are NEVER synthetic and
+- * NEVER fall back to local `augments.json`: only card geometry may be injected
+- * when live OCR detection is unavailable. It does not touch OCR, calibration,
+- * positioning, collector consent, or any production auth path.
++ * regardless of the flag. It drives the REAL local overlay badge path with
++ * statistics sourced from ARAMGG (`aramggSource.ts`) without changing the
++ * member snapshot or unlocking the authenticated CoachPanel. Statistics are
++ * NEVER synthetic and NEVER fall back to local `augments.json`: only card
++ * geometry may be injected when live OCR detection is unavailable. It does not
++ * touch OCR, calibration, positioning, collector consent, or production auth.
+  */
+-import type { MemberSnapshot } from "../auth/member";
+ import type {
+   AugmentRound,
+   DecisionCandidateResult,
+@@ -44,12 +43,6 @@ export function isTierFixtureEnabled(): boolean {
+   });
+ }
+ 
+-/** A member snapshot that unlocks the coach without any real entitlement. */
+-export const TIER_FIXTURE_MEMBER: MemberSnapshot = {
+-  enabled: true,
+-  accessKind: "member",
+-};
+-
+ /** One offered card resolved to its canonical ARAMGG record. */
+ export interface AramggFixtureCard {
+   slug: string;
+diff --git a/overlay/src/liveGamePoll.test.ts b/overlay/src/liveGamePoll.test.ts
+index b3ef54e..cde16c1 100644
+--- a/overlay/src/liveGamePoll.test.ts
++++ b/overlay/src/liveGamePoll.test.ts
+@@ -1,9 +1,39 @@
+ import { describe, expect, it } from "vitest";
++import * as liveGamePollModule from "./liveGamePoll";
+ import {
++  isBackwardGameTime,
+   LIVE_DATA_FAILURE_GRACE_MS,
+   resolveLiveDataPoll,
++  shouldAnnounceLiveActivation,
+ } from "./liveGamePoll";
+ 
++type ConfirmedGameOwnershipState = {
++  ownsGame: boolean;
++  gameEpoch: number;
++};
++
++type GameOwnershipObservation =
++  | "confirmed-live"
++  | "confirmed-non-live"
++  | "unconfirmed";
++
++type ApplyGameOwnershipObservation = (input: {
++  ownershipRef: { current: ConfirmedGameOwnershipState };
++  observation: GameOwnershipObservation;
++  closeOwnedGame: () => void;
++}) => void;
++
++function getApplyGameOwnershipObservation(): ApplyGameOwnershipObservation {
++  const candidate = (liveGamePollModule as Record<string, unknown>)[
++    "applyGameOwnershipObservation"
++  ];
++  expect(
++    typeof candidate,
++    "liveGamePoll.ts must export the effect-applying ownership observation boundary",
++  ).toBe("function");
++  return candidate as ApplyGameOwnershipObservation;
++}
++
+ describe("live game poll continuity", () => {
+   it("preserves an active game across the first transient Live Client miss", () => {
+     expect(resolveLiveDataPoll({
+@@ -117,3 +147,344 @@ describe("live game poll continuity", () => {
+     }).action).toBe("preserve");
+   });
+ });
++
++describe("confirmed game ownership transitions", () => {
++  it("applies each owned-game close once, aligns its epoch, and never closes for unconfirmed suspension", () => {
++    const observe = getApplyGameOwnershipObservation();
++    const ownershipRef = {
++      current: { ownsGame: true, gameEpoch: 7 },
++    };
++    const effects = {
++      presentationClears: 0,
++      identityClears: 0,
++      latchInvalidations: 0,
++      tokenInvalidations: 0,
++      gameEpoch: 7,
++    };
++    const closeOwnedGame = () => {
++      effects.presentationClears += 1;
++      effects.identityClears += 1;
++      effects.latchInvalidations += 1;
++      effects.tokenInvalidations += 1;
++      effects.gameEpoch += 1;
++    };
++
++    observe({ ownershipRef, observation: "unconfirmed", closeOwnedGame });
++    expect(effects).toEqual({
++      presentationClears: 0,
++      identityClears: 0,
++      latchInvalidations: 0,
++      tokenInvalidations: 0,
++      gameEpoch: 7,
++    });
++    expect(ownershipRef.current).toEqual({ ownsGame: true, gameEpoch: 7 });
++
++    for (let poll = 0; poll < 4; poll += 1) {
++      observe({ ownershipRef, observation: "confirmed-non-live", closeOwnedGame });
++    }
++    expect(effects).toEqual({
++      presentationClears: 1,
++      identityClears: 1,
++      latchInvalidations: 1,
++      tokenInvalidations: 1,
++      gameEpoch: 8,
++    });
++    expect(ownershipRef.current).toEqual({ ownsGame: false, gameEpoch: 8 });
++
++    observe({ ownershipRef, observation: "confirmed-live", closeOwnedGame });
++    observe({ ownershipRef, observation: "confirmed-non-live", closeOwnedGame });
++    observe({ ownershipRef, observation: "confirmed-non-live", closeOwnedGame });
++    expect(effects).toEqual({
++      presentationClears: 2,
++      identityClears: 2,
++      latchInvalidations: 2,
++      tokenInvalidations: 2,
++      gameEpoch: 9,
++    });
++    expect(ownershipRef.current).toEqual({ ownsGame: false, gameEpoch: 9 });
++  });
++});
++
++describe("backward game_time epoch detection", () => {
++  it("is not backward on the first sample (no prior game time to compare)", () => {
++    expect(isBackwardGameTime({ lastGameTime: null, gameTime: 0 })).toBe(false);
++  });
++
++  it("is not backward while game time increases", () => {
++    expect(isBackwardGameTime({ lastGameTime: 100, gameTime: 101 })).toBe(false);
++    expect(isBackwardGameTime({ lastGameTime: 100, gameTime: 100 })).toBe(false);
++  });
++
++  it("tolerates a small backward jitter within the 5 s slack", () => {
++    expect(isBackwardGameTime({ lastGameTime: 100, gameTime: 96 })).toBe(false);
++  });
++
++  it("is backward once game time drops by more than the slack", () => {
++    expect(isBackwardGameTime({ lastGameTime: 100, gameTime: 50 })).toBe(true);
++  });
++
++  it("never treats malformed or missing game time as a regression", () => {
++    expect(isBackwardGameTime({ lastGameTime: 100, gameTime: Number.NaN })).toBe(false);
++    expect(isBackwardGameTime({ lastGameTime: 100, gameTime: Number.POSITIVE_INFINITY })).toBe(false);
++    // -Infinity is numerically far below lastGameTime, but non-finite values
++    // are never a comparison basis, so this is not treated as a regression.
++    expect(isBackwardGameTime({ lastGameTime: 100, gameTime: Number.NEGATIVE_INFINITY })).toBe(false);
++  });
++});
++
++// Composed state machine proving App.tsx's actual wiring behaves correctly
++// end-to-end: gameEpochRef/activeGameRef/liveOwnershipAnnouncedRef advancing
++// and resetting together via beginNewGameEpoch, called only from a CONFIRMED
++// game-identity boundary (backward game_time, changed game hash, or a
++// confirmed non-live close) — never from setActiveGame's coarse
++// active-game toggle, so an unconfirmed telemetry outage (activeGame -> false
++// -> true) never looks like a new game. See liveGamePollIntegration.test.ts
++// for the source-text proof that App.tsx really is wired this way; this
++// proves the composed BEHAVIOR that wiring produces, without rendering React.
++describe("game-epoch activation across live-ownership spans (composed)", () => {
++  function createGamePollSimulator() {
++    let gameEpoch = 0;
++    let activeGame = false;
++    let announced = false;
++    let lastGameTime: number | null = null;
++    const activations: number[] = [];
++
++    function beginNewGameEpoch() {
++      gameEpoch += 1;
++      announced = false;
++    }
++
++    /** The coarse active-game gate — never itself a source of epoch/latch changes. */
++    function setActiveGame(active: boolean) {
++      activeGame = active;
++    }
++
++    /**
++     * One poll where Live Client Data was ready and gameflow freshly
++     * confirmed inProgress. Boundary detection (backward game_time) resolves
++     * BEFORE the announcement check, so a boundary crossed this poll
++     * announces in this SAME poll — mirroring App.tsx's poll() ordering.
++     */
++    function healthyPoll(gameTime: number) {
++      setActiveGame(true);
++      if (isBackwardGameTime({ lastGameTime, gameTime })) {
++        beginNewGameEpoch();
++      }
++      lastGameTime = gameTime;
++      if (
++        shouldAnnounceLiveActivation({
++          devBuild: true,
++          liveDataReady: true,
++          gameflowConfirmed: true,
++          captureAllowed: true,
++          alreadyAnnounced: announced,
++        })
++      ) {
++        announced = true;
++        activations.push(gameEpoch);
++      }
++    }
++
++    /** A transient Live Client Data miss inside the grace window: the "preserve" branch never touches activeGame, identity, or the latch. */
++    function transientUnavailablePoll() {
++      // Intentionally a no-op — this is the property under test.
++    }
++
++    /**
++     * An UNCONFIRMED telemetry outage past the fail-closed grace window,
++     * mirroring suspendGameRuntimeForUnavailableTelemetry: rendering fails
++     * closed (activeGame -> false), but game identity (lastGameTime) and the
++     * activation latch are preserved, so recovery of the SAME match resumes
++     * instead of announcing again.
++     */
++    function unconfirmedOutageSuspendPoll() {
++      setActiveGame(false);
++    }
++
++    /** A confirmed non-live gameflow phase, mirroring closeConfirmedGame: closes identity AND resets the latch via beginNewGameEpoch. */
++    function confirmedNonLivePoll() {
++      setActiveGame(false);
++      lastGameTime = null;
++      beginNewGameEpoch();
++    }
++
++    return {
++      healthyPoll,
++      transientUnavailablePoll,
++      unconfirmedOutageSuspendPoll,
++      confirmedNonLivePoll,
++      get gameEpoch() {
++        return gameEpoch;
++      },
++      get activations() {
++        return activations;
++      },
++      get activeGame() {
++        return activeGame;
++      },
++    };
++  }
++
++  it("increasing game time emits exactly one activation", () => {
++    const sim = createGamePollSimulator();
++    sim.healthyPoll(10);
++    sim.healthyPoll(20);
++    sim.healthyPoll(30);
++    expect(sim.activations).toHaveLength(1);
++  });
++
++  it("backward game time advances the epoch and announces the new activation in the SAME poll", () => {
++    const sim = createGamePollSimulator();
++    sim.healthyPoll(100);
++    expect(sim.activations).toHaveLength(1);
++    const epochBeforeBackwardJump = sim.gameEpoch;
++
++    sim.healthyPoll(50); // backward — boundary detected and announced in this same poll
++    expect(sim.gameEpoch).toBeGreaterThan(epochBeforeBackwardJump);
++    expect(sim.activations).toHaveLength(2);
++    expect(sim.activations[1]).toBeGreaterThan(sim.activations[0]);
++  });
++
++  it("repeated healthy polls in game two do not duplicate the activation", () => {
++    const sim = createGamePollSimulator();
++    sim.healthyPoll(100);
++    sim.healthyPoll(50);
++    sim.healthyPoll(60);
++    sim.healthyPoll(70);
++    sim.healthyPoll(80);
++    expect(sim.activations).toHaveLength(2);
++  });
++
++  it("requires no non-live poll between the two games, announcing within the boundary poll itself", () => {
++    const sim = createGamePollSimulator();
++    sim.healthyPoll(100);
++    // No confirmedNonLivePoll() anywhere in this sequence.
++    sim.healthyPoll(40); // the boundary poll — announces immediately, not on a later poll
++    expect(sim.activations).toHaveLength(2);
++    sim.healthyPoll(50);
++    expect(sim.activations).toHaveLength(2);
++  });
++
++  it("transient unavailable samples never reset the latch", () => {
++    const sim = createGamePollSimulator();
++    sim.healthyPoll(100);
++    sim.transientUnavailablePoll();
++    sim.transientUnavailablePoll();
++    sim.healthyPoll(110);
++    expect(sim.activations).toHaveLength(1);
++  });
++
++  it("confirmed non-live followed by a new game still announces exactly once", () => {
++    const sim = createGamePollSimulator();
++    sim.healthyPoll(100);
++    sim.confirmedNonLivePoll();
++    sim.healthyPoll(10);
++    expect(sim.activations).toHaveLength(2);
++    expect(sim.activations[1]).toBeGreaterThan(sim.activations[0]);
++  });
++
++  it("malformed or missing game time never creates an epoch on its own", () => {
++    const sim = createGamePollSimulator();
++    sim.healthyPoll(100);
++    const epochAfterFirstGame = sim.gameEpoch;
++    sim.healthyPoll(Number.NaN);
++    sim.healthyPoll(Number.NaN);
++    expect(sim.gameEpoch).toBe(epochAfterFirstGame);
++    expect(sim.activations).toHaveLength(1);
++  });
++
++  // P2 finding 2: an unconfirmed telemetry outage must never split the epoch
++  // or force a re-announcement when the SAME match recovers.
++  it("an unconfirmed outage suspend preserves the epoch and the activation latch", () => {
++    const sim = createGamePollSimulator();
++    sim.healthyPoll(100);
++    expect(sim.activations).toHaveLength(1);
++    const epochDuringGame = sim.gameEpoch;
++
++    sim.unconfirmedOutageSuspendPoll(); // grace exceeded — fails closed only
++    expect(sim.activeGame).toBe(false);
++    expect(sim.gameEpoch).toBe(epochDuringGame);
++
++    sim.healthyPoll(110); // same match recovers, forward game_time
++    expect(sim.activeGame).toBe(true);
++    expect(sim.gameEpoch).toBe(epochDuringGame);
++    expect(sim.activations).toHaveLength(1); // no second live-active
++  });
++
++  it("recovery after an outage does not re-announce even across multiple suspend polls", () => {
++    const sim = createGamePollSimulator();
++    sim.healthyPoll(100);
++    sim.unconfirmedOutageSuspendPoll();
++    sim.unconfirmedOutageSuspendPoll();
++    sim.healthyPoll(105);
++    sim.healthyPoll(110);
++    expect(sim.activations).toHaveLength(1);
++  });
++
++  it("a confirmed non-live poll still closes the game and permits a later fresh activation, even after an outage", () => {
++    const sim = createGamePollSimulator();
++    sim.healthyPoll(100);
++    sim.unconfirmedOutageSuspendPoll();
++    sim.confirmedNonLivePoll();
++    sim.healthyPoll(10);
++    expect(sim.activations).toHaveLength(2);
++  });
++
++  it("changed identity (backward game_time) after an outage still opens a new epoch", () => {
++    const sim = createGamePollSimulator();
++    sim.healthyPoll(100);
++    sim.unconfirmedOutageSuspendPoll();
++    const epochBeforeRecovery = sim.gameEpoch;
++
++    sim.healthyPoll(20); // backward relative to the preserved pre-outage lastGameTime=100
++    expect(sim.gameEpoch).toBeGreaterThan(epochBeforeRecovery);
++    expect(sim.activations).toHaveLength(2);
++  });
++
++  it("malformed recovery data after an outage does not create an epoch", () => {
++    const sim = createGamePollSimulator();
++    sim.healthyPoll(100);
++    sim.unconfirmedOutageSuspendPoll();
++    const epochBeforeRecovery = sim.gameEpoch;
++
++    sim.healthyPoll(Number.NaN);
++    expect(sim.gameEpoch).toBe(epochBeforeRecovery);
++    expect(sim.activations).toHaveLength(1);
++  });
++});
++
++describe("live activation announcement (development diagnostic)", () => {
++  const healthy = {
++    devBuild: true,
++    liveDataReady: true,
++    gameflowConfirmed: true,
++    captureAllowed: true,
++    alreadyAnnounced: false,
++  };
++
++  it("announces a healthy live game once per ownership span", () => {
++    expect(shouldAnnounceLiveActivation(healthy)).toBe(true);
++    expect(
++      shouldAnnounceLiveActivation({ ...healthy, alreadyAnnounced: true }),
++    ).toBe(false);
++  });
++
++  it("never announces without every independent authority", () => {
++    const degraded = [
++      // Port 2999 returned nothing: no real game snapshot exists.
++      { liveDataReady: false },
++      // Only a carried-forward capture gate; no fresh LCU confirmation.
++      { gameflowConfirmed: false },
++      // Compliance gate closed.
++      { captureAllowed: false },
++    ] as const;
++
++    for (const override of degraded) {
++      expect(shouldAnnounceLiveActivation({ ...healthy, ...override })).toBe(false);
++    }
++  });
++
++  it("is development-only and cannot fire in a production build", () => {
++    expect(shouldAnnounceLiveActivation({ ...healthy, devBuild: false })).toBe(false);
++  });
++});
+diff --git a/overlay/src/liveGamePoll.ts b/overlay/src/liveGamePoll.ts
+index 06d24aa..dc7763a 100644
+--- a/overlay/src/liveGamePoll.ts
++++ b/overlay/src/liveGamePoll.ts
+@@ -18,6 +18,57 @@ export interface LiveDataPollDecision {
+   failureAgeMs: number;
+ }
+ 
++export interface ConfirmedGameOwnershipState {
++  ownsGame: boolean;
++  gameEpoch: number;
++}
++
++export interface ConfirmedGameOwnershipTransition {
++  state: ConfirmedGameOwnershipState;
++  closeOwnedGame: boolean;
++}
++
++export type GameOwnershipObservation =
++  | "confirmed-live"
++  | "confirmed-non-live"
++  | "unconfirmed";
++
++export function transitionConfirmedGameOwnership(
++  state: ConfirmedGameOwnershipState,
++  confirmedLive: boolean,
++): ConfirmedGameOwnershipTransition {
++  if (confirmedLive) {
++    return {
++      state: state.ownsGame ? state : { ...state, ownsGame: true },
++      closeOwnedGame: false,
++    };
++  }
++
++  if (!state.ownsGame) {
++    return { state, closeOwnedGame: false };
++  }
++
++  return {
++    state: { ownsGame: false, gameEpoch: state.gameEpoch + 1 },
++    closeOwnedGame: true,
++  };
++}
++
++export function applyGameOwnershipObservation(input: {
++  ownershipRef: { current: ConfirmedGameOwnershipState };
++  observation: GameOwnershipObservation;
++  closeOwnedGame: () => void;
++}): void {
++  if (input.observation === "unconfirmed") return;
++
++  const transition = transitionConfirmedGameOwnership(
++    input.ownershipRef.current,
++    input.observation === "confirmed-live",
++  );
++  input.ownershipRef.current = transition.state;
++  if (transition.closeOwnedGame) input.closeOwnedGame();
++}
++
+ export function resolveLiveDataPoll(input: {
+   now: number;
+   captureAllowed: boolean;
+@@ -57,3 +108,54 @@ export function resolveLiveDataPoll(input: {
+     failureAgeMs,
+   };
+ }
++
++/**
++ * The healthy live path returns early, so no `[game-poll]` record would ever
++ * carry `gameflowPhase: "inProgress"` in a session with no Live Client Data
++ * outage — a correct run then reads as incomplete lifecycle coverage. Announce
++ * live ownership exactly once per span, and only when the poll holds EVERY
++ * independent authority at the same time:
++ *
++ * - `liveDataReady`: port 2999 returned a real player snapshot, which no
++ *   fixture, replay, lobby, or pre-game state can produce;
++ * - `gameflowConfirmed`: a FRESH LCU sample this poll (a confirmed non-live
++ *   phase has already cleared and returned, so a fresh sample here is
++ *   `inProgress`) — a carried-forward `captureAllowed` alone never announces;
++ * - `captureAllowed`: the compliance gate is open.
++ *
++ * Development-only: the record is a diagnostic, never product behavior.
++ */
++/**
++ * A `game_time` that dropped means the previous game ended and a new one
++ * started under the same live-ownership span (no confirmed non-live poll
++ * necessarily lands in between). `lastGameTime` is null before the first
++ * sample, which is continuity, not a regression. A non-finite `gameTime`
++ * (missing/malformed) is never a comparison basis, so it can never manufacture
++ * an epoch boundary on its own.
++ */
++export function isBackwardGameTime(input: {
++  lastGameTime: number | null;
++  gameTime: number;
++}): boolean {
++  return (
++    input.lastGameTime !== null &&
++    Number.isFinite(input.gameTime) &&
++    input.gameTime + 5 < input.lastGameTime
++  );
++}
++
++export function shouldAnnounceLiveActivation(input: {
++  devBuild: boolean;
++  liveDataReady: boolean;
++  gameflowConfirmed: boolean;
++  captureAllowed: boolean;
++  alreadyAnnounced: boolean;
++}): boolean {
++  return (
++    input.devBuild &&
++    input.liveDataReady &&
++    input.gameflowConfirmed &&
++    input.captureAllowed &&
++    !input.alreadyAnnounced
++  );
++}
+diff --git a/overlay/src/liveGamePollIntegration.test.ts b/overlay/src/liveGamePollIntegration.test.ts
+index 168c8d4..97a6094 100644
+--- a/overlay/src/liveGamePollIntegration.test.ts
++++ b/overlay/src/liveGamePollIntegration.test.ts
+@@ -1,5 +1,14 @@
+ import { readFileSync } from "node:fs";
+ import { describe, expect, it } from "vitest";
++import {
++  disabledMember,
++  IDLE_MEMBER_VERIFICATION_STATE,
++  runMemberVerification,
++  shouldStartMemberVerification,
++  shouldVerifyGameStart,
++  type MemberSnapshot,
++  type MemberVerificationState,
++} from "./auth/member";
+ 
+ describe("live game poll integration", () => {
+   const app = readFileSync(new URL("./App.tsx", import.meta.url), "utf8");
+@@ -25,3 +34,522 @@ describe("live game poll integration", () => {
+     expect(app).toContain("gameflowConfirmedLive: gameflow != null,");
+   });
+ });
++
++// REGRESSION GUARD (cross-game analyzer merge): gameEpochRef and the
++// liveOwnershipAnnouncedRef announcement latch must advance and reset
++// together at every CONFIRMED game-epoch boundary. A raw
++// `gameEpochRef.current += 1` outside beginNewGameEpoch's own definition
++// would bump the epoch counter without clearing the latch, silently
++// reintroducing the bug where a second live game emits no fresh
++// `live-active` diagnostic.
++describe("centralized game-epoch advancement", () => {
++  const app = readFileSync(new URL("./App.tsx", import.meta.url), "utf8");
++
++  it("defines a single beginNewGameEpoch callback that bumps the epoch, clears the announcement latch, and resets per-game latches", () => {
++    expect(app).toContain(
++      "const beginNewGameEpoch = useCallback(() => {\n" +
++        "    gameEpochRef.current += 1;\n" +
++        "    liveOwnershipAnnouncedRef.current = false;\n" +
++        "    ocrSelectionCompletedRef.current = true;\n" +
++        "    completedRoundsRef.current = 0;\n" +
++        "    offerRoundOwnershipRef.current = createOfferRoundOwnership();\n" +
++        "    setPickedAugments([]);\n" +
++        "    lastRecordedRoundRef.current = \"\";\n" +
++        "    memberVerificationTokenRef.current += 1;\n" +
++        "    memberVerificationStateRef.current = IDLE_MEMBER_VERIFICATION_STATE;\n" +
++        "  }, []);",
++    );
++  });
++
++  it("never advances the epoch counter anywhere outside beginNewGameEpoch's own definition", () => {
++    const rawIncrements = app.match(/gameEpochRef\.current \+= 1/g) ?? [];
++    expect(rawIncrements).toHaveLength(1);
++  });
++
++  // REGRESSION GUARD (P2 finding 2): setActiveGame toggling activeGameRef must
++  // never itself bump the epoch or reset the latch — a telemetry outage fails
++  // this closed (activeGame -> false) without proving the match ended, and
++  // recovery (activeGame -> true) must not look like a new game.
++  it("setActiveGame is a plain ref assignment with no epoch side effect", () => {
++    expect(app).toContain(
++      "const setActiveGame = useCallback((active: boolean) => {\n" +
++        "    activeGameRef.current = active;\n" +
++        "  }, []);",
++    );
++    expect(app).not.toMatch(/const setActiveGame[\s\S]{0,200}beginNewGameEpoch/);
++  });
++
++  it("routes a backward game_time regression through isBackwardGameTime + beginNewGameEpoch, before the live-active check", () => {
++    const boundaryCheck = app.indexOf(
++      "if (isBackwardGameTime({ lastGameTime, gameTime: data.game_time })) {",
++    );
++    expect(boundaryCheck).toBeGreaterThan(-1);
++    const activationCheck = app.indexOf("shouldAnnounceLiveActivation({", boundaryCheck);
++    expect(activationCheck).toBeGreaterThan(boundaryCheck);
++    expect(app.indexOf("beginNewGameEpoch();", boundaryCheck)).toBeLessThan(activationCheck);
++  });
++
++  it("routes a changed game hash (explicit session identity change) through beginNewGameEpoch, before the live-active check", () => {
++    expect(app).toContain("shouldVerifyGameStart(activeGameHashRef.current, gameHash)");
++    const hashBranch = app.indexOf(
++      "shouldVerifyGameStart(activeGameHashRef.current, gameHash)",
++    );
++    const nextHashAssignment = app.indexOf(
++      "activeGameHashRef.current = gameHash;",
++      hashBranch,
++    );
++    const activationCheck = app.indexOf("shouldAnnounceLiveActivation({", hashBranch);
++    expect(nextHashAssignment).toBeGreaterThan(hashBranch);
++    expect(nextHashAssignment).toBeLessThan(activationCheck);
++    expect(app.indexOf("beginNewGameEpoch();", hashBranch)).toBeLessThan(activationCheck);
++  });
++
++  // REGRESSION GUARD (P2 finding 1): both boundary checks — and their
++  // beginNewGameEpoch call, if a boundary fired — must resolve before the
++  // live-active activation check, so a boundary detected mid-poll announces
++  // in that SAME poll rather than the next one.
++  it("resolves both boundary signals into a single guarded beginNewGameEpoch call before the activation check", () => {
++    const gameHashFetch = app.indexOf('await invoke<string | null>("get_game_hash")');
++    const activationCheck = app.indexOf("shouldAnnounceLiveActivation({", gameHashFetch);
++    const guardedCall = app.indexOf(
++      "if (newGameBoundaryDetected) {\n" +
++        "            beginNewGameEpoch();\n" +
++        "            stopOcr();\n" +
++        "          }",
++      gameHashFetch,
++    );
++    expect(gameHashFetch).toBeGreaterThan(-1);
++    expect(guardedCall).toBeGreaterThan(gameHashFetch);
++    expect(guardedCall).toBeLessThan(activationCheck);
++  });
++
++  // REGRESSION GUARD (P2 finding 1): member verification is downstream
++  // game-two work — it must not run before the activation record for a
++  // boundary detected this poll.
++  it("defers member verification until after the live-active activation emission", () => {
++    const activationEmission = app.indexOf('action: "live-active",');
++    const memberVerification = app.indexOf("if (verifyGameHash) {", activationEmission);
++    expect(activationEmission).toBeGreaterThan(-1);
++    expect(memberVerification).toBeGreaterThan(activationEmission);
++  });
++
++  it("beginNewGameEpoch is invoked at exactly the two known confirmed-boundary call sites", () => {
++    const invocations = app.match(/beginNewGameEpoch\(\);/g) ?? [];
++    expect(invocations).toHaveLength(2);
++  });
++
++  // REGRESSION GUARD (P2 finding 2): the confirmed non-live close and the
++  // unconfirmed grace-exceeded suspend must route through structurally
++  // distinct operations — only the confirmed close may reach
++  // beginNewGameEpoch.
++  it("routes confirmed non-live gameflow through closeConfirmedGame", () => {
++    expect(app).toContain('closeConfirmedGame(clientFound ? "client_found" : "idle");');
++  });
++
++  it("routes an unconfirmed grace-exceeded outage through suspendGameRuntimeForUnavailableTelemetry, never closeConfirmedGame", () => {
++    expect(app).toContain(
++      'suspendGameRuntimeForUnavailableTelemetry(clientFound ? "client_found" : "idle");',
++    );
++    expect(app).toContain('suspendGameRuntimeForUnavailableTelemetry("idle");');
++    const suspendDefinition = app.indexOf(
++      "const suspendGameRuntimeForUnavailableTelemetry = useCallback((nextPhase: Phase) => {",
++    );
++    const suspendBodyEnd = app.indexOf("}, [clearGameRenderState]);", suspendDefinition);
++    expect(suspendDefinition).toBeGreaterThan(-1);
++    expect(app.slice(suspendDefinition, suspendBodyEnd)).not.toContain("beginNewGameEpoch");
++  });
++
++  it("closeConfirmedGame resets game identity and routes through beginNewGameEpoch", () => {
++    expect(app).toContain(
++      "const closeConfirmedGame = useCallback((nextPhase: Phase) => {\n" +
++        "    clearGameRenderState(nextPhase);\n" +
++        "    lastGameTimeRef.current = null;\n" +
++        "    lastRecordedRoundRef.current = \"\";\n" +
++        "    activeGameHashRef.current = null;\n" +
++        "    beginNewGameEpoch();\n" +
++        "  }, [clearGameRenderState, beginNewGameEpoch]);",
++    );
++  });
++
++  it("routes the concrete confirmed-non-live branch through the effect-applying boundary with the real ownership ref and close callback", () => {
++    const nonLiveBranchStart = app.indexOf("if (shouldClearOcrStateForGameflow(gameflow)) {");
++    const nonLiveBranchEnd = app.indexOf("let data: LivePlayerData | null = null;", nonLiveBranchStart);
++    expect(nonLiveBranchStart).toBeGreaterThan(-1);
++    expect(nonLiveBranchEnd).toBeGreaterThan(nonLiveBranchStart);
++    const nonLiveBranch = app.slice(nonLiveBranchStart, nonLiveBranchEnd);
++    expect(nonLiveBranch).toContain("applyGameOwnershipObservation({");
++    expect(nonLiveBranch).toContain("ownershipRef: confirmedGameOwnershipRef,");
++    expect(nonLiveBranch).toContain('observation: "confirmed-non-live",');
++    expect(nonLiveBranch).toContain(
++      'closeOwnedGame: () => closeConfirmedGame(clientFound ? "client_found" : "idle"),',
++    );
++  });
++
++  it("routes the concrete confirmed-live branch through the same boundary with the real ownership ref and close callback", () => {
++    const liveBranchStart = app.indexOf("if (data && gameflowCaptureAllowedRef.current) {");
++    const liveBranchEnd = app.indexOf("const priorFailureStartedAt", liveBranchStart);
++    expect(liveBranchStart).toBeGreaterThan(-1);
++    expect(liveBranchEnd).toBeGreaterThan(liveBranchStart);
++    const liveBranch = app.slice(liveBranchStart, liveBranchEnd);
++    expect(liveBranch).toContain("applyGameOwnershipObservation({");
++    expect(liveBranch).toContain("ownershipRef: confirmedGameOwnershipRef,");
++    expect(liveBranch).toContain('observation: "confirmed-live",');
++    expect(liveBranch).toContain('closeOwnedGame: () => closeConfirmedGame("idle"),');
++  });
++
++  it("imports and invokes the effect-applying boundary only at the two confirmed observation branches", () => {
++    expect(app).toContain("applyGameOwnershipObservation,");
++    expect(app.match(/applyGameOwnershipObservation\(\{/g) ?? []).toHaveLength(2);
++  });
++
++  it("imports isBackwardGameTime from the shared pure-function module", () => {
++    expect(app).toContain("isBackwardGameTime,");
++    expect(app).toContain('} from "./liveGamePoll";');
++  });
++
++  // REGRESSION GUARD (async stale-result rejection): runIdentityProbe must
++  // capture gameEpochRef before its first await, and reject publication in
++  // BOTH its success and failure paths if the epoch advanced while the probe
++  // was in flight — otherwise a game-one OCR/identity result can publish
++  // into game two after a boundary fires mid-probe.
++  it("runIdentityProbe captures gameEpoch before awaiting and rejects stale publication on both its success and failure paths", () => {
++    const probeStart = app.indexOf("const runIdentityProbe = useCallback(async (");
++    expect(probeStart).toBeGreaterThan(-1);
++    const epochCapture = app.indexOf("const gameEpoch = gameEpochRef.current;", probeStart);
++    const firstAwait = app.indexOf("await invoke", probeStart);
++    expect(epochCapture).toBeGreaterThan(probeStart);
++    expect(epochCapture).toBeLessThan(firstAwait);
++
++    const staleChecks = app
++      .slice(probeStart)
++      .match(/if \(gameEpoch !== gameEpochRef\.current\) return;/g) ?? [];
++    expect(staleChecks).toHaveLength(2);
++  });
++
++  // REGRESSION GUARD (member-verification must not block the single-flight
++  // poll): verifyMemberGameStart's stale-rejection semantics themselves are
++  // now proven behaviorally against the real runMemberVerification function
++  // in ./auth/member.test.ts (dependency-injected, no regex needed). What
++  // remains to prove here is the WIRING — that poll() never awaits the
++  // detached helper, so pollInFlightRef cannot be held hostage by a pending
++  // verification.
++  describe("member-verification is detached from the single-flight poll", () => {
++    const verifyBranchStart = app.indexOf("if (verifyGameHash) {");
++
++    it("captures the verification request synchronously and fires startMemberVerification without awaiting it", () => {
++      expect(verifyBranchStart).toBeGreaterThan(-1);
++      const branchEnd = app.indexOf("setPlayerData(data);", verifyBranchStart);
++      const branchText = app.slice(verifyBranchStart, branchEnd);
++      expect(branchText).toContain("const verificationRequest: MemberVerificationRequest = {");
++      expect(branchText).toContain("token: ++memberVerificationTokenRef.current,");
++      expect(branchText).toContain("void startMemberVerification(verificationRequest);");
++      // No await anywhere in the branch — the kickoff must be fire-and-forget.
++      expect(branchText).not.toMatch(/\bawait\b/);
++    });
++
++    it("startMemberVerification delegates to the real runMemberVerification with live refs, not an inline await chain", () => {
++      const def = app.indexOf("const startMemberVerification = useCallback(");
++      const defEnd = app.indexOf("[],\n  );", def);
++      expect(def).toBeGreaterThan(-1);
++      const body = app.slice(def, defEnd);
++      expect(body).toContain("runMemberVerification(");
++      expect(body).toContain("epoch: () => gameEpochRef.current,");
++      expect(body).toContain("gameHash: () => activeGameHashRef.current,");
++      expect(body).toContain("token: () => memberVerificationTokenRef.current,");
++      expect(body).toContain("gameActive: () => activeGameRef.current,");
++      expect(body).toContain(
++        'recheckGameHash: () => invoke<string | null>("get_game_hash").catch(() => null),',
++      );
++      // The useCallback itself must not be `async` / must not await the
++      // promise it returns — it hands the promise straight back to the
++      // fire-and-forget `void startMemberVerification(...)` call site.
++      expect(app.slice(def, def + 40)).not.toContain("async");
++    });
++
++    it("imports runMemberVerification from the shared, dependency-injected auth/member module", () => {
++      expect(app).toContain("runMemberVerification,");
++      expect(app).toContain('} from "./auth/member";');
++    });
++
++    // Scenario: a confirmed non-live close invalidates an in-flight
++    // verification. closeConfirmedGame routes through beginNewGameEpoch
++    // (proven above), and beginNewGameEpoch bumps memberVerificationTokenRef
++    // — composing the two proves a confirmed close invalidates any in-flight
++    // member-verification token.
++    it("beginNewGameEpoch bumps memberVerificationTokenRef, invalidating any in-flight verification", () => {
++      expect(app).toContain("memberVerificationTokenRef.current += 1;");
++      const beginDef = app.indexOf("const beginNewGameEpoch = useCallback(() => {");
++      const beginBody = app.indexOf("}, []);", beginDef);
++      expect(beginDef).toBeGreaterThan(-1);
++      expect(app.slice(beginDef, beginBody)).toContain("memberVerificationTokenRef.current += 1;");
++    });
++
++    // Scenario: an unconfirmed telemetry outage/recovery within the same
++    // game must not invalidate an in-flight member-verification request —
++    // suspendGameRuntimeForUnavailableTelemetry must never touch
++    // memberVerificationTokenRef (it already never calls beginNewGameEpoch,
++    // proven above). Instead, the outage is caught by the gameActive() check
++    // inside runMemberVerification, proven behaviorally in member.test.ts.
++    it("suspendGameRuntimeForUnavailableTelemetry never touches memberVerificationTokenRef", () => {
++      const suspendDefinition = app.indexOf(
++        "const suspendGameRuntimeForUnavailableTelemetry = useCallback((nextPhase: Phase) => {",
++      );
++      const suspendBodyEnd = app.indexOf("}, [clearGameRenderState]);", suspendDefinition);
++      expect(suspendDefinition).toBeGreaterThan(-1);
++      expect(app.slice(suspendDefinition, suspendBodyEnd)).not.toContain(
++        "memberVerificationTokenRef",
++      );
++    });
++
++    // Scenario: component teardown invalidates any in-flight verification —
++    // bumping the token makes runMemberVerification's post-recheck
++    // isMemberVerificationCurrent check fail, so it never calls
++    // setMemberSnapshot after unmount.
++    it("component teardown bumps memberVerificationTokenRef alongside the other in-flight-work invalidations", () => {
++      const teardownStart = app.indexOf("// Component teardown: invalidate any in-flight probe");
++      const teardownEnd = app.indexOf("}, [bumpScanSeq]);", teardownStart);
++      expect(teardownStart).toBeGreaterThan(-1);
++      expect(app.slice(teardownStart, teardownEnd)).toContain(
++        "memberVerificationTokenRef.current += 1;",
++      );
++    });
++  });
++
++  // P1 fix (requeue verification after an inconclusive authoritative hash
++  // recheck): the retry-kickoff branch sits ALONGSIDE the changed-hash
++  // boundary branch, not inside beginNewGameEpoch's territory. A retry of
++  // the SAME game must never look like a new game boundary — it must not
++  // reset the live-active announcement latch (which only beginNewGameEpoch
++  // clears) and must not reassign activeGameHashRef (already correct).
++  describe("member-verification retry-kickoff branch", () => {
++    const retryBranchStart = app.indexOf("shouldStartMemberVerification({");
++    const retryBranchEnd = app.indexOf(
++      "verifyGameHash = gameHash;\n          }",
++      retryBranchStart,
++    );
++
++    it("is wired as its own else-if branch alongside shouldVerifyGameStart, gated on memberBootstrapCompleteRef", () => {
++      expect(retryBranchStart).toBeGreaterThan(-1);
++      expect(retryBranchEnd).toBeGreaterThan(retryBranchStart);
++      const branchText = app.slice(retryBranchStart, retryBranchEnd);
++      expect(branchText).toContain("verificationState: memberVerificationStateRef.current,");
++      expect(branchText).toContain("gameEpoch: gameEpochRef.current,");
++      expect(branchText).toContain("runtimeEligible: gameflowCaptureAllowedRef.current,");
++    });
++
++    it("never calls beginNewGameEpoch or reassigns activeGameHashRef — a retry is never a new game boundary", () => {
++      const branchText = app.slice(retryBranchStart, retryBranchEnd);
++      expect(branchText).not.toContain("beginNewGameEpoch");
++      expect(branchText).not.toContain("activeGameHashRef.current =");
++    });
++
++    it("reuses the same downstream verifyGameHash kickoff as the changed-hash branch (single request-construction site)", () => {
++      const kickoffSites = app.match(/const verificationRequest: MemberVerificationRequest = \{/g) ?? [];
++      expect(kickoffSites).toHaveLength(1);
++    });
++  });
++
++  it("beginNewGameEpoch resets memberVerificationStateRef to idle, so a confirmed boundary (non-live close, changed hash, backward game_time) cannot leave a stale retryable/pending bookkeeping entry behind for the old game", () => {
++    const beginDef = app.indexOf("const beginNewGameEpoch = useCallback(() => {");
++    const beginBody = app.indexOf("}, []);", beginDef);
++    expect(beginDef).toBeGreaterThan(-1);
++    expect(app.slice(beginDef, beginBody)).toContain(
++      "memberVerificationStateRef.current = IDLE_MEMBER_VERIFICATION_STATE;",
++    );
++  });
++});
++
++function deferred<T>() {
++  let resolve!: (value: T) => void;
++  let reject!: (reason?: unknown) => void;
++  const promise = new Promise<T>((res, rej) => {
++    resolve = res;
++    reject = rej;
++  });
++  return { promise, resolve, reject };
++}
++
++interface PollRuntime {
++  epoch: number;
++  activeGameHash: string | null;
++  token: number;
++  verificationState: MemberVerificationState;
++  gameActive: boolean;
++  nowMs: number;
++  publishedSnapshots: MemberSnapshot[];
++}
++
++// A minimal harness mirroring poll()'s gameHash-handling branch closely
++// enough to prove the WIRING composition end to end: shouldVerifyGameStart
++// for a genuinely new hash, shouldStartMemberVerification for a same-hash
++// retry, both funneling into the same verifyGameHash -> runMemberVerification
++// kickoff. The structural tests above prove App.tsx's actual source wires
++// these same exported functions the same way; this proves the composition
++// behaves correctly when actually run, with real (deferred) promises and an
++// injected clock — never `Date.now()` or sleeping.
++function createRuntime(): PollRuntime {
++  return {
++    epoch: 0,
++    activeGameHash: null,
++    token: 0,
++    verificationState: IDLE_MEMBER_VERIFICATION_STATE,
++    gameActive: true,
++    nowMs: 0,
++    publishedSnapshots: [],
++  };
++}
++
++interface VerifyEffects {
++  verifyMemberGameStart: () => Promise<MemberSnapshot>;
++  recheckGameHash: () => Promise<string | null>;
++}
++
++function pollTick(runtime: PollRuntime, gameHash: string | null, verifyEffects: VerifyEffects) {
++  let verifyGameHash: string | null = null;
++  if (gameHash !== null && shouldVerifyGameStart(runtime.activeGameHash, gameHash)) {
++    runtime.activeGameHash = gameHash;
++    verifyGameHash = gameHash;
++  } else if (
++    gameHash !== null &&
++    shouldStartMemberVerification({
++      currentGameHash: gameHash,
++      verificationState: runtime.verificationState,
++      nowMs: runtime.nowMs,
++      gameEpoch: runtime.epoch,
++      runtimeEligible: runtime.gameActive,
++    })
++  ) {
++    verifyGameHash = gameHash;
++  }
++  if (verifyGameHash === null) return null;
++
++  const request = { epoch: runtime.epoch, gameHash: verifyGameHash, token: ++runtime.token };
++  const done = runMemberVerification(
++    request,
++    {
++      epoch: () => runtime.epoch,
++      gameHash: () => runtime.activeGameHash,
++      token: () => runtime.token,
++      gameActive: () => runtime.gameActive,
++      verificationState: () => runtime.verificationState,
++      now: () => runtime.nowMs,
++    },
++    {
++      setMemberSnapshot: (s) => runtime.publishedSnapshots.push(s),
++      verifyMemberGameStart: verifyEffects.verifyMemberGameStart,
++      recheckGameHash: verifyEffects.recheckGameHash,
++      setVerificationState: (s) => {
++        runtime.verificationState = s;
++      },
++    },
++  );
++  return { request, done };
++}
++
++describe("member-verification retry: deferred-promise poll simulation (P1 fix)", () => {
++  it("requeues verification after an inconclusive recheck without ever blocking polling; only the retry publishes", async () => {
++    const runtime = createRuntime();
++    const order: string[] = [];
++
++    // Step 1+2: poll detects game hash "hash-a"; verification request one
++    // starts without blocking polling.
++    const requestOneVerify = deferred<MemberSnapshot>();
++    const requestOneRecheck = deferred<string | null>();
++    const requestOne = pollTick(runtime, "hash-a", {
++      verifyMemberGameStart: () => requestOneVerify.promise,
++      recheckGameHash: () => requestOneRecheck.promise,
++    });
++    order.push("poll-one-fired-request-one");
++    if (requestOne === null) throw new Error("expected request one to start");
++
++    // Poll execution itself never blocks on the request: reaching this line
++    // synchronously, without awaiting requestOne.done, proves it.
++    order.push("poll-one-completed");
++
++    // Step 3: verification response succeeds.
++    requestOneVerify.resolve({ enabled: true, accessKind: "member" });
++    // Step 4: the final authoritative recheck returns null — inconclusive.
++    requestOneRecheck.resolve(null);
++    await requestOne.done;
++
++    // Step 5: request one is discarded and state becomes retryable, not
++    // permanently pending.
++    expect(runtime.verificationState.status).toBe("retryable");
++    expect(runtime.publishedSnapshots).toEqual([
++      disabledMember("game-session-verification-pending"),
++      disabledMember("game-session-verification-retry"),
++    ]);
++    order.push("request-one-settled-retryable");
++
++    // Step 6: another poll for hash-a runs before the deadline — no request.
++    const retryState = runtime.verificationState;
++    if (retryState.status !== "retryable") throw new Error("expected retryable");
++    runtime.nowMs = retryState.nextAttemptAtMs - 1;
++    const noRetry = pollTick(runtime, "hash-a", {
++      verifyMemberGameStart: () => Promise.reject(new Error("must not be called before the deadline")),
++      recheckGameHash: () => Promise.reject(new Error("must not be called before the deadline")),
++    });
++    expect(noRetry).toBeNull();
++    order.push("poll-before-deadline-no-retry");
++
++    // Step 7: clock advances beyond the retry deadline.
++    runtime.nowMs = retryState.nextAttemptAtMs;
++
++    // Step 8+9: another poll starts request two for hash-a; request two
++    // rechecks hash-a.
++    const requestTwoVerify = deferred<MemberSnapshot>();
++    const requestTwoRecheck = deferred<string | null>();
++    const requestTwo = pollTick(runtime, "hash-a", {
++      verifyMemberGameStart: () => requestTwoVerify.promise,
++      recheckGameHash: () => requestTwoRecheck.promise,
++    });
++    order.push("poll-two-fired-request-two");
++    if (requestTwo === null) throw new Error("expected request two to start");
++    order.push("poll-two-completed");
++
++    // Step 10: request two publishes successfully.
++    requestTwoVerify.resolve({ enabled: true, accessKind: "member" });
++    requestTwoRecheck.resolve("hash-a");
++    await requestTwo.done;
++
++    // Assertions: only request two publishes the real snapshot (last entry).
++    expect(runtime.publishedSnapshots.at(-1)).toEqual({ enabled: true, accessKind: "member" });
++    expect(runtime.verificationState).toEqual({ status: "verified", gameHash: "hash-a", epoch: 0 });
++
++    // Member state never remained permanently pending: pending -> retry ->
++    // pending -> verified.
++    const statuses = runtime.publishedSnapshots.map((s) => s.error ?? "verified");
++    expect(statuses).toEqual([
++      "game-session-verification-pending",
++      "game-session-verification-retry",
++      "game-session-verification-pending",
++      "verified",
++    ]);
++
++    // Game epoch and authoritative hash are unchanged throughout — this was
++    // a retry of the SAME game, never a new boundary.
++    expect(runtime.epoch).toBe(0);
++    expect(runtime.activeGameHash).toBe("hash-a");
++
++    order.push("request-two-settled-verified");
++    expect(order).toEqual([
++      "poll-one-fired-request-one",
++      "poll-one-completed",
++      "request-one-settled-retryable",
++      "poll-before-deadline-no-retry",
++      "poll-two-fired-request-two",
++      "poll-two-completed",
++      "request-two-settled-verified",
++    ]);
++  });
++
++  // NOTE: "an older request resolving after a retry begins cannot publish"
++  // is covered in ./auth/member.test.ts by calling runMemberVerification
++  // directly with a hand-bumped token. That scenario models component
++  // teardown / an out-of-band token bump — pollTick's realistic
++  // shouldStartMemberVerification gate correctly REFUSES to start a second
++  // request for the same hash while the first is still "pending" (proven by
++  // the "only one retry" test in member.test.ts), so it cannot be
++  // reproduced through this harness's poll() simulation without bypassing
++  // the very gate this fix adds.
++});
+diff --git a/overlay/src/ocrOwner.test.ts b/overlay/src/ocrOwner.test.ts
+index 4562ee5..063e147 100644
+--- a/overlay/src/ocrOwner.test.ts
++++ b/overlay/src/ocrOwner.test.ts
+@@ -26,6 +26,7 @@ function context(overrides: Partial<OcrOwnerContext> = {}): OcrOwnerContext {
+     championGeneration: 3,
+     championId: "56",
+     offerGeneration: 4,
++    round: 1,
+     requestedSlots: [0, 2],
+     slotGenerations: [5, 6, 7],
+     fingerprints: FP,
+@@ -33,6 +34,15 @@ function context(overrides: Partial<OcrOwnerContext> = {}): OcrOwnerContext {
+   };
+ }
+ 
++type RoundOwnedContext = OcrOwnerContext & { round: number | null };
++
++function roundContext(
++  round: number | null,
++  overrides: Partial<OcrOwnerContext> = {},
++): RoundOwnedContext {
++  return { ...context(overrides), round };
++}
++
+ describe("explicit OCR owner", () => {
+   it("documents the measured timeout, retry and watchdog policy", () => {
+     expect(NATIVE_OCR_TIMEOUT_MS).toBe(2_000);
+@@ -82,6 +92,33 @@ describe("explicit OCR owner", () => {
+     expect(ownerCurrent(timedOut, owners.current, context())).toBe(false);
+     expect(owners.current).toBe(replacement);
+   });
++
++  it("rejects a round-1 result after accepted ownership advances to round 2", () => {
++    const owners = new OcrOwnerRegistry();
++    const round1 = owners.start(roundContext(1), 100);
++
++    expect(ownerCurrent(round1, owners.current, roundContext(2))).toBe(false);
++  });
++
++  it("keeps an unchanged accepted round current", () => {
++    const owners = new OcrOwnerRegistry();
++    const round2 = owners.start(roundContext(2), 100);
++
++    expect(ownerCurrent(round2, owners.current, roundContext(2))).toBe(true);
++  });
++
++  it("a timed-out round-1 run cannot publish or release its round-2 replacement", () => {
++    const owners = new OcrOwnerRegistry();
++    const round1 = owners.start(roundContext(1), 0);
++    expect(owners.expire(round1.runId, NATIVE_OCR_TIMEOUT_MS)).toBe(true);
++
++    // Keep every pre-existing authority, including offerGeneration, equal. The
++    // accepted round itself is sufficient to invalidate the late native result.
++    const round2 = owners.start(roundContext(2), NATIVE_OCR_TIMEOUT_MS + 1);
++    expect(ownerCurrent(round1, owners.current, roundContext(2))).toBe(false);
++    expect(owners.release(round1.runId)).toBe(false);
++    expect(owners.current).toBe(round2);
++  });
+ });
+ 
+ describe("native timeout and failure recovery", () => {
+@@ -240,6 +277,21 @@ describe("stale-reject cause classification", () => {
+       .toBe("offer-generation");
+   });
+ 
++  it("classifies accepted-round drift before generic owner replacement", () => {
++    const round1 = { ...owner, round: 1 };
++    const round2Replacement = {
++      ...context(),
++      round: 2,
++      runId: 8,
++      startedAt: 0,
++      timeoutDeadline: 2_000,
++    };
++
++    expect(
++      classifyStaleReject(round1, round2Replacement, roundContext(2), false),
++    ).toBe("round");
++  });
++
+   it("surfaces a bare capture-seq bump as its OWN cause, never as a supersede", () => {
+     // Geometry capture sequence alone is NOT an ownership authority; when it is
+     // the only thing that moved, the diagnostic must say so rather than hide
+diff --git a/overlay/src/ocrOwner.ts b/overlay/src/ocrOwner.ts
+index e3ce83b..3e85981 100644
+--- a/overlay/src/ocrOwner.ts
++++ b/overlay/src/ocrOwner.ts
+@@ -18,6 +18,7 @@ export interface OcrOwnerContext {
+   championGeneration: number;
+   championId: string | null;
+   offerGeneration: number;
++  round: number | null;
+   requestedSlots: number[];
+   slotGenerations: number[];
+   fingerprints: string[];
+@@ -58,7 +59,8 @@ export function ownerCurrent(
+     result.gameEpoch !== current.gameEpoch ||
+     result.championGeneration !== current.championGeneration ||
+     result.championId !== current.championId ||
+-    result.offerGeneration !== current.offerGeneration
++    result.offerGeneration !== current.offerGeneration ||
++    result.round !== current.round
+   ) return false;
+   return result.requestedSlots.every((slot) =>
+     result.slotGenerations[slot] === current.slotGenerations[slot]);
+@@ -71,6 +73,7 @@ export type StaleRejectCause =
+   | "champion-id"
+   | "champion-generation"
+   | "offer-generation"
++  | "round"
+   | "slot-generation"
+   | "owner-replaced"
+   | "capture-seq-only";
+@@ -112,6 +115,7 @@ export function classifyStaleReject(
+   if (result.championId !== current.championId) return "champion-id";
+   if (result.championGeneration !== current.championGeneration) return "champion-generation";
+   if (result.offerGeneration !== current.offerGeneration) return "offer-generation";
++  if (result.round !== current.round) return "round";
+   for (const slot of result.requestedSlots) {
+     if (result.slotGenerations[slot] !== current.slotGenerations[slot]) return "slot-generation";
+   }
+diff --git a/overlay/src/offerGeneration.test.ts b/overlay/src/offerGeneration.test.ts
+index ff60c0b..f2367b6 100644
+--- a/overlay/src/offerGeneration.test.ts
++++ b/overlay/src/offerGeneration.test.ts
+@@ -82,6 +82,7 @@ describe("R1-R4 offer generations", () => {
+       championGeneration: 1,
+       championId: "56",
+       offerGeneration: first.offerGeneration,
++      round: 1,
+       requestedSlots: [0, 1, 2],
+       slotGenerations: [1, 1, 1],
+       fingerprints: ["10".repeat(72), "1100".repeat(36), "1110".repeat(36)],
+diff --git a/overlay/src/publicationIntegration.test.ts b/overlay/src/publicationIntegration.test.ts
+index ee8e55d..aa9b19f 100644
+--- a/overlay/src/publicationIntegration.test.ts
++++ b/overlay/src/publicationIntegration.test.ts
+@@ -7,6 +7,11 @@ describe("live publication integration", () => {
+     new URL("./dev/useAramggTierFixture.ts", import.meta.url),
+     "utf8",
+   );
++  // The SlotChip shape lives with the badge layer that renders it.
++  const badgeLayer = readFileSync(
++    new URL("./BadgeChipLayer.tsx", import.meta.url),
++    "utf8",
++  );
+ 
+   it("uses shared reconciliation, OCR ownership and offer-state helpers", () => {
+     expect(app).toContain("reconcileSlotIdentity(");
+@@ -15,7 +20,8 @@ describe("live publication integration", () => {
+     expect(app).not.toContain("const prevVerified");
+     // Champion-only: statScope has no "global" member and is never read straight
+     // from an unnarrowed provenance.
+-    expect(app).toContain('statScope: "champion" | null');
++    expect(badgeLayer).toContain('statScope: "champion" | null');
++    expect(badgeLayer).not.toContain('statScope: "champion" | "global" | null');
+     expect(app).not.toContain('statScope: "champion" | "global" | null');
+     expect(app).toContain('staged.stat.provenance === "champion"');
+     expect(app).toContain("statProvenance: stat?.provenance ?? null");
+@@ -35,4 +41,86 @@ describe("live publication integration", () => {
+     expect(championHook).not.toContain("statsById.get");
+     expect(championHook).not.toContain("allowGlobalFallback");
+   });
++
++  it("refreshes and republishes the existing geometry frame when champion data completes", () => {
++    const effectStart = app.indexOf("// Champion-data completion");
++    const effectEnd = app.indexOf("// ─── TRACK 1: geometry probe", effectStart);
++    expect(effectStart).toBeGreaterThan(-1);
++    expect(effectEnd).toBeGreaterThan(effectStart);
++    const effect = app.slice(effectStart, effectEnd);
++
++    expect(effect).toContain("refreshSameOfferData(");
++    expect(effect).toContain("identityStoreRef.current");
++    expect(effect).toContain("offerStateRef.current");
++    expect(effect).toContain("publishOffer(");
++    expect(effect).toContain("republishGeometryFrame(geometrySeqRef.current)");
++    expect(effect).not.toContain("runIdentityProbe");
++    expect(effect).not.toContain("applyScanToOffer");
++    expect(effect).not.toMatch(/(?:offer|geometry)GenerationRef\.current\s*\+=/);
++  });
++
++  it("wires accepted-offer round ownership through publication, close, confirm, diagnostics, and reset", () => {
++    expect(app).toContain('from "./offerRoundOwnership"');
++    expect(app).toContain("offerRoundOwnershipRef");
++
++    const geometryStart = app.indexOf("const runGeometryProbe = useCallback");
++    const geometryEnd = app.indexOf("// ─── TRACK 2", geometryStart);
++    expect(geometryStart).toBeGreaterThan(-1);
++    expect(geometryEnd).toBeGreaterThan(geometryStart);
++    const geometryPath = app.slice(geometryStart, geometryEnd);
++    expect(geometryPath).toContain("reduceOfferRoundOwnership(");
++    expect(geometryPath).toContain('type: "accepted-offer"');
++    expect(geometryPath).toContain("offerGeneration:");
++    // Visual acceptance must own the ordinal directly. Merely translating
++    // detectedNewOffer into telemetry completion preserves the round-1 defect.
++    expect(geometryPath).not.toMatch(
++      /if\s*\(detectedNewOffer[^)]*\)[\s\S]{0,160}recordRoundCompleted\(\)/,
++    );
++
++    const noOfferStart = geometryPath.indexOf(
++      'nextOfferSurface.state === "NO_OFFER"',
++    );
++    const noOfferEnd = geometryPath.indexOf(
++      '} else if (nextOfferSurface.state === "OCCLUDED")',
++      noOfferStart,
++    );
++    expect(noOfferStart).toBeGreaterThan(-1);
++    expect(noOfferEnd).toBeGreaterThan(noOfferStart);
++    const noOfferPath = geometryPath.slice(noOfferStart, noOfferEnd);
++    expect(noOfferPath).toContain("reduceOfferRoundOwnership(");
++    expect(noOfferPath).toContain('type: "offer-closed"');
++    expect(noOfferPath).toContain(
++      "offerGeneration: priorOfferSurface.offerGeneration",
++    );
++
++    const clearStart = app.indexOf("const clearSurface = useCallback");
++    const clearEnd = app.indexOf("const stopOcr", clearStart);
++    const clearPath = app.slice(clearStart, clearEnd);
++    expect(clearPath).toContain("reduceOfferRoundOwnership(");
++    expect(clearPath).toContain('type: "presentation-cleared"');
++    expect(clearPath).not.toContain('type: "offer-closed"');
++    expect(clearPath).toContain(
++      "offerGeneration: offerSurfaceRef.current.offerGeneration",
++    );
++
++    const keyboardStart = app.indexOf("const onKeyDown = (event: KeyboardEvent)");
++    const keyboardEnd = app.indexOf("window.addEventListener", keyboardStart);
++    const keyboardPath = app.slice(keyboardStart, keyboardEnd);
++    expect(keyboardStart).toBeGreaterThan(-1);
++    expect(keyboardEnd).toBeGreaterThan(keyboardStart);
++    expect(keyboardPath).toContain("reduceOfferRoundOwnership(");
++    expect(keyboardPath).toContain('type: "pick-confirmed"');
++    expect(keyboardPath).toContain("offerGeneration:");
++
++    const diagnosticStart = app.indexOf('emitNativeDiagnostic("[offer-session]"');
++    const diagnosticEnd = app.indexOf("});", diagnosticStart);
++    const diagnosticPath = app.slice(diagnosticStart, diagnosticEnd);
++    expect(diagnosticPath).toContain("offerRoundOwnershipRef.current.activeOwner?.round");
++    expect(diagnosticPath).not.toContain("roundDeliveryRef.current?.activeOfferRound");
++
++    const resetStart = app.indexOf("const beginNewGameEpoch = useCallback");
++    const resetEnd = app.indexOf("}, []);", resetStart);
++    const resetPath = app.slice(resetStart, resetEnd);
++    expect(resetPath).toContain("createOfferRoundOwnership()");
++  });
+ });
+diff --git a/src/lib/__tests__/overlay-tier-fixture.test.ts b/src/lib/__tests__/overlay-tier-fixture.test.ts
+index 1c3ac29..9f27151 100644
+--- a/src/lib/__tests__/overlay-tier-fixture.test.ts
++++ b/src/lib/__tests__/overlay-tier-fixture.test.ts
+@@ -9,7 +9,6 @@ import {
+   aramggStatScopeLabel,
+   isTierFixtureEnabled,
+   tierFixtureEnabledFrom,
+-  TIER_FIXTURE_MEMBER,
+   type AramggFixtureCard,
+ } from "../../../overlay/src/dev/tierFixture";
+ import {
+@@ -32,6 +31,7 @@ import {
+   resolveOverlayFixtureMode,
+   type FixtureModeInput,
+ } from "../../../overlay/src/dev/fixtureMode";
++import { localOverlayAuthorized } from "../../../overlay/src/augmentOverlayGate";
+ 
+ // ─── Fixtures modeling the real ARAMGG shapes ───
+ 
+@@ -144,10 +144,36 @@ describe("overlay ARAMGG tier fixture (dev-only)", () => {
+       expect(formatWinRate(50)).toBe("50.0% WR");
+       expect(formatWinRate(null)).toBe("WR —");
+     });
+-    test("real member gating still needs collector + real entitlement", () => {
+-      expect(memberRecommendationsVisible(false, TIER_FIXTURE_MEMBER)).toBe(false);
+-      expect(memberRecommendationsVisible(true, disabledMember("x"))).toBe(false);
+-      expect(memberRecommendationsVisible(true, TIER_FIXTURE_MEMBER)).toBe(true);
++    test("fixture enablement never fabricates a member entitlement", () => {
++      const unauthenticated = disabledMember("unauthenticated");
++
++      expect(tierFixtureEnabledFrom({ dev: true, flag: "1" })).toBe(true);
++      expect(memberRecommendationsVisible(false, unauthenticated)).toBe(false);
++      expect(memberRecommendationsVisible(true, unauthenticated)).toBe(false);
++    });
++    test("only the explicit flag authorizes local overlay content in dev", () => {
++      // A plain `npm run tauri dev` launch (flag unset, member unauthenticated)
++      // must expose no tiers, win rates, scope labels, or fallback data.
++      const unauthenticated = memberRecommendationsVisible(
++        true,
++        disabledMember("unauthenticated"),
++      );
++
++      expect(localOverlayAuthorized({
++        devBuild: true,
++        tierFixtureEnabled: tierFixtureEnabledFrom({ dev: true, flag: undefined }),
++        memberCoachEnabled: unauthenticated,
++      })).toBe(false);
++      expect(localOverlayAuthorized({
++        devBuild: true,
++        tierFixtureEnabled: tierFixtureEnabledFrom({ dev: true, flag: "1" }),
++        memberCoachEnabled: unauthenticated,
++      })).toBe(true);
++      expect(localOverlayAuthorized({
++        devBuild: false,
++        tierFixtureEnabled: tierFixtureEnabledFrom({ dev: false, flag: "1" }),
++        memberCoachEnabled: unauthenticated,
++      })).toBe(false);
+     });
+   });
+ 

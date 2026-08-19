@@ -1,0 +1,27 @@
+# Green controls and unrelated verification
+
+No production green transition was attempted or authorized.
+
+- Test A: 5/5 PASS; 40 ms timeout completed in 45-50 ms under a saturated
+  one-thread blocking pool, below the 160 ms ceiling.
+- Overlay data sync: exit 0; the ignored Rust OCR fixture is reproducibly
+  generated before local Rust execution.
+- Rust suite with only the intentional RED filtered: exit 0; 140 unrelated
+  tests passed, 1 ignored, 1 filtered.
+- Overlay unit: 727/727 PASS across 60 files.
+- Web unit: 1209/1209 PASS across 116 files.
+- Overlay TypeScript: exit 0.
+- ESLint: exit 0.
+- Skill unit suite: 317 tests, OK.
+- Workflow-CWD verification: all checks passed.
+- cargo check: exit 0 (existing warnings).
+- cargo fmt --check: exit 0.
+- cargo clippy --all-targets: exit 0 (existing warnings).
+- Root Next build: exit 0.
+- Overlay renderer build: exit 0.
+- Tauri release build/bundle: exit 0.
+- git diff --check: exit 0.
+- frozen-test SHA-256 check: exit 0.
+
+The full local gate exits 1 solely because Test B is the authorized, frozen
+regression RED. It was not weakened or skipped in the gate.
