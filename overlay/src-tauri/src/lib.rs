@@ -7,6 +7,7 @@ use std::sync::{
     Arc,
 };
 use std::time::Duration;
+use tauri::Emitter;
 
 pub mod calibration;
 mod collector;
@@ -1966,6 +1967,7 @@ fn capture_and_analyze_surface(
 
 #[tauri::command]
 async fn probe_augment_surface(
+    app: tauri::AppHandle,
     probe_seq: u64,
     captured_at: f64,
 ) -> Result<surface_probe::SurfaceObservation, String> {
@@ -2008,12 +2010,14 @@ async fn probe_augment_surface(
         {
             Ok(captured) => captured,
             Err(error) => {
-                return Ok(absent_surface_observation(
+                let observation = absent_surface_observation(
                     probe_seq,
                     captured_at,
                     &bounded_capture_reason(&error),
                     start.elapsed().as_millis() as u64,
-                ));
+                );
+                let _ = app.emit("geometry-native-complete", observation.clone());
+                return Ok(observation);
             }
         };
     // `elapsed_ms` MUST measure command entry → return on the success path too,
@@ -2035,6 +2039,7 @@ async fn probe_augment_surface(
     // produce a negative (wrapped) duration.
     observation.resume_wait_ms = elapsed_ms.saturating_sub(closure_end_ms);
     observation.elapsed_ms = elapsed_ms;
+    let _ = app.emit("geometry-native-complete", observation.clone());
     Ok(observation)
 }
 

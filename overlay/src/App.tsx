@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback, useMemo, useRef } from "react";
 import { invoke } from "@tauri-apps/api/core";
+import { listen } from "@tauri-apps/api/event";
 import {
   buildChampionPool,
 } from "./scoring";
@@ -125,6 +126,7 @@ import {
   FOREGROUND_POLL_INTERVAL_MS,
   type ForegroundPollHost,
 } from "./foregroundPollScheduler";
+import { createGeometryResponseMux } from "./geometryResponseMux";
 import { isPlausibleTitle } from "./surfacePresence";
 import {
   DEFAULT_PROBE_CONFIG,
@@ -536,6 +538,12 @@ function App() {
   // occluded it, and the current card geometry/fingerprints. Scheduler health
   // independently owns fail-closed expiry. OCR NEVER decides those; it only
   // fills identity.
+  const geometryResponseMux = useMemo(() => createGeometryResponseMux({ invoke, listen }), []);
+  useEffect(() => {
+    void geometryResponseMux.start();
+    return () => { void geometryResponseMux.stop(); };
+  }, [geometryResponseMux]);
+
   const geometryInFlightRef = useRef(false);
   const geometryInFlightSinceRef = useRef<number | null>(null);
   const geometryInFlightTokenRef = useRef<number | null>(null);
@@ -543,7 +551,7 @@ function App() {
   // into enumeration (preCaptureMs) vs capture_image (captureMs) vs round-trip so
   // a cross-game slowdown is attributable without flooding the log.
   const lastGeometryTimingEpochRef = useRef(0);
-  /** Native geometry invokes issued but not yet settled (abandonment ≠ cancel). */
+  /** Geometry requests not yet delivered by either native-complete event or command response. */
   const geometryNativeOutstandingRef = useRef(0);
   /** Per-request native call start times, keyed by captureSeq — each settling
    *  request deletes only its own entry (see runGeometryProbe / the settle
@@ -1960,11 +1968,11 @@ function App() {
     const capturedAt = performance.now();
     try {
       let observation: GeometryObservation;
+      let geometryDeliverySource: "native-complete-event" | "command-response" | "error" = "error";
       try {
-        observation = await invoke<GeometryObservation>("probe_augment_surface", {
-          probeSeq: captureSeq,
-          capturedAt,
-        });
+        const delivery = await geometryResponseMux.probe(captureSeq, capturedAt);
+        observation = delivery.observation;
+        geometryDeliverySource = delivery.source;
       } catch (error) {
         const reason = error instanceof Error ? error.message : "geometry-probe-failed";
         observation = emptyGeometryObservation(captureSeq, performance.now(), reason);
@@ -2104,6 +2112,7 @@ function App() {
           unattributedNativeMs: timing.unattributedNativeMs,
           transportMs: timing.transportMs,
           asyncRuntimeMs: timing.asyncRuntimeMs,
+          deliverySource: geometryDeliverySource,
         });
       }
 
@@ -2631,7 +2640,7 @@ function App() {
         geometryInFlightTokenRef.current = null;
       }
     }
-  }, [aramgg.championRequestId, bumpScanSeq, datasetCaptureOn, republishGeometryFrame, resetOffer, updateOfferRoundOwnership, updatePhase]);
+  }, [aramgg.championRequestId, bumpScanSeq, datasetCaptureOn, geometryResponseMux, republishGeometryFrame, resetOffer, updateOfferRoundOwnership, updatePhase]);
 
   // ─── TRACK 2: OCR/identity probe — TRIGGERED by the geometry track ───────────
   // Supplies per-slot identity ONLY: never presence, occlusion, or visual freshness. It
