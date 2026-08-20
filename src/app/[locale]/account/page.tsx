@@ -1,4 +1,4 @@
-import { RedeemForm } from "@/components/membership/AccountClient";
+import { LinkDeviceForm, RedeemForm } from "@/components/membership/AccountClient";
 import { AuthErrorBanner } from "@/components/auth/AuthErrorBanner";
 import { GoogleSignInButton } from "@/components/auth/GoogleSignInButton";
 import { Link } from "@/i18n/navigation";
@@ -131,6 +131,20 @@ export default async function AccountPage({
             redeemSuccess: t("redeemSuccess"),
             redeemError: t("redeemError"),
             redeemInvalidExpired: t("redeemInvalidExpired"),
+          }}
+        />
+      </section>
+
+      <section className="rounded-2xl border border-white/10 bg-white/[0.03] p-5">
+        <LinkDeviceForm
+          copy={{
+            linkDeviceTitle: t("linkDeviceTitle"),
+            linkDeviceHelp: t("linkDeviceHelp"),
+            linkDevicePlaceholder: t("linkDevicePlaceholder"),
+            linkDeviceButton: t("linkDeviceButton"),
+            linkDeviceSuccess: t("linkDeviceSuccess"),
+            linkDeviceError: t("linkDeviceError"),
+            linkDeviceInvalidExpired: t("linkDeviceInvalidExpired"),
           }}
         />
       </section>

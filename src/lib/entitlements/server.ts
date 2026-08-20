@@ -32,21 +32,45 @@ export type RequireEntitlementResult =
 /**
  * Gate for every member decision surface. Fails closed: missing user → 401,
  * anything less than a currently-active entitlement → 403.
+ *
+ * A `bearerToken` (desktop overlay requests, which carry no session cookie)
+ * is resolved via `resolveDeviceToken` instead of the cookie session. An
+ * unknown or revoked token is reported as the distinct reason
+ * "device-token-invalid" — separate from a merely-missing cookie session
+ * ("unauthenticated") — so a caller can tell "this credential is bad, throw
+ * it away" apart from "this user isn't a member" (status 403, never treated
+ * as a reason to delete a valid credential).
  */
 export async function requireActiveEntitlement(deps?: {
   client?: EntitlementClient;
+  bearerToken?: string | null;
+  resolveDeviceToken?: (token: string) => Promise<{ userId: string } | null>;
 }): Promise<RequireEntitlementResult> {
-  const client = deps?.client ?? ((await createClient()) as unknown as EntitlementClient);
+  let userId: string;
+  let userEmail: string | undefined;
+  let client: EntitlementClient;
 
-  const {
-    data: { user },
-  } = await client.auth.getUser();
-  if (!user) return { ok: false, status: 401, reason: "unauthenticated" };
+  if (deps?.bearerToken) {
+    const resolved = deps.resolveDeviceToken
+      ? await deps.resolveDeviceToken(deps.bearerToken)
+      : null;
+    if (!resolved) return { ok: false, status: 401, reason: "device-token-invalid" };
+    userId = resolved.userId;
+    client = deps.client ?? (createServiceClient() as unknown as EntitlementClient);
+  } else {
+    client = deps?.client ?? ((await createClient()) as unknown as EntitlementClient);
+    const {
+      data: { user },
+    } = await client.auth.getUser();
+    if (!user) return { ok: false, status: 401, reason: "unauthenticated" };
+    userId = user.id;
+    userEmail = user.email;
+  }
 
   const { data, error } = await client
     .from("entitlements")
     .select("kind,status,starts_at,expires_at")
-    .eq("user_id", user.id);
+    .eq("user_id", userId);
   if (error) return { ok: false, status: 403, reason: "lookup-failed" };
 
   const verdict = pickActiveMemberEntitlement(data ?? [], new Date());
@@ -54,7 +78,7 @@ export async function requireActiveEntitlement(deps?: {
 
   return {
     ok: true,
-    user: { id: user.id, email: user.email },
+    user: { id: userId, email: userEmail },
     entitlement: { kind: verdict.entitlement.kind as EntitlementKind },
   };
 }

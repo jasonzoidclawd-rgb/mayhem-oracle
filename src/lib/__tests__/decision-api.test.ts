@@ -426,4 +426,64 @@ describe("overlay bootstrap and game sessions", () => {
     const response = await handleGameSession(post({ gameHash: "x" }), overlayDeps());
     expect(response.status).toBe(400);
   });
+
+  function postWithBearer(body: unknown, token: string): Request {
+    return new Request("http://test.local/api", {
+      method: "POST",
+      headers: { authorization: `Bearer ${token}` },
+      body: JSON.stringify(body),
+    });
+  }
+
+  test("bootstrap authenticates a desktop request via Authorization: Bearer, no cookies", async () => {
+    let seenBearer: string | null | undefined;
+    const response = await handleOverlayBootstrap(
+      new Request("http://test.local", { headers: { authorization: "Bearer device-token-1" } }),
+      overlayDeps({
+        requireEntitlement: (bearerToken) => {
+          seenBearer = bearerToken;
+          return memberGate("device-user-1");
+        },
+      }),
+    );
+    expect(response.status).toBe(200);
+    expect(seenBearer).toBe("device-token-1");
+  });
+
+  test("an invalid or revoked bearer token surfaces device-token-invalid, not a bare 401", async () => {
+    const response = await handleOverlayBootstrap(
+      new Request("http://test.local", { headers: { authorization: "Bearer revoked" } }),
+      overlayDeps({
+        requireEntitlement: () => deniedGate(401, "device-token-invalid"),
+      }),
+    );
+    expect(response.status).toBe(401);
+    expect(await response.json()).toEqual({ error: "device-token-invalid" });
+  });
+
+  test("game session rejects an invalid bearer token before ever parsing the body", async () => {
+    const response = await handleGameSession(
+      postWithBearer({ gameHash: "abcdef1234" }, "revoked"),
+      overlayDeps({ requireEntitlement: () => deniedGate(401, "device-token-invalid") }),
+    );
+    expect(response.status).toBe(401);
+    expect(await response.json()).toEqual({ error: "device-token-invalid" });
+  });
+
+  test("a bearer-authenticated trial user still reserves a credit via getUserId(bearerToken)", async () => {
+    let seenBearer: string | null | undefined;
+    const response = await handleGameSession(
+      postWithBearer({ gameHash: "abcdef1234" }, "device-token-1"),
+      overlayDeps({
+        requireEntitlement: () => deniedGate(403, "none"),
+        getUserId: async (bearerToken) => {
+          seenBearer = bearerToken;
+          return "device-user-1";
+        },
+        reserveTrialCredit: async (userId, gameHash) => ({ gameHash, expiresAt: "2026-06-13T12:40:00Z" }),
+      }),
+    );
+    expect(response.status).toBe(200);
+    expect(seenBearer).toBe("device-token-1");
+  });
 });

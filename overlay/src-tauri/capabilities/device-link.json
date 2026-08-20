@@ -1,0 +1,10 @@
+{
+  "$schema": "../gen/schemas/desktop-schema.json",
+  "identifier": "device-link",
+  "description": "Least-privilege capability for the device-link window: it links/unlinks a device credential and closes itself, and creates no other windows.",
+  "windows": ["device-link"],
+  "permissions": [
+    "core:default",
+    "core:window:allow-close"
+  ]
+}

@@ -2,7 +2,7 @@ use std::collections::BTreeSet;
 use std::io::Read;
 use std::path::{Path, PathBuf};
 use std::process::Command;
-use std::sync::Mutex;
+use std::sync::{Arc, Mutex};
 
 use base64::Engine;
 use flate2::read::GzDecoder;
@@ -11,6 +11,8 @@ use serde::{Deserialize, Serialize};
 use serde_json::Value;
 use sha2::{Digest, Sha256};
 use tauri::State;
+
+use crate::device_auth::{should_invalidate_credential, DeviceAuthState};
 
 const PUBLIC_KEY: &str = include_str!("../../../docs/handoffs/fixtures/m4/public-key.txt");
 pub const DEFAULT_API_BASE: &str = "https://wasfun.lol";
@@ -91,6 +93,7 @@ pub struct MemberState {
     client: Client,
     cache_directory: PathBuf,
     snapshot: Mutex<MemberSnapshot>,
+    device_auth: Arc<DeviceAuthState>,
 }
 
 pub fn resolve_api_base(value: Option<&str>) -> Result<Url, String> {
@@ -102,7 +105,7 @@ pub fn resolve_api_base(value: Option<&str>) -> Result<Url, String> {
 }
 
 impl MemberState {
-    pub fn new(cache_directory: PathBuf) -> Result<Self, String> {
+    pub fn new(cache_directory: PathBuf, device_auth: Arc<DeviceAuthState>) -> Result<Self, String> {
         std::fs::create_dir_all(&cache_directory).map_err(|error| error.to_string())?;
         let api_base_env = std::env::var("MAYHEM_API_BASE").ok();
         let api_base = resolve_api_base(api_base_env.as_deref())?;
@@ -115,7 +118,31 @@ impl MemberState {
             client,
             cache_directory,
             snapshot: Mutex::new(MemberSnapshot::default()),
+            device_auth,
         })
+    }
+
+    /// A desktop request carries no browser session, so the stored device
+    /// bearer token (if this device is linked) is the only credential these
+    /// requests can present. Absent a token, the request is sent bare and the
+    /// backend's cookie-session path (also empty here) reports plain
+    /// `unauthenticated` — the ordinary "not linked yet" case.
+    fn authorize(&self, builder: reqwest::RequestBuilder) -> reqwest::RequestBuilder {
+        match self.device_auth.bearer_token() {
+            Some(token) => builder.bearer_auth(token),
+            None => builder,
+        }
+    }
+
+    /// A revoked/invalid credential (the backend's distinct
+    /// `device-token-invalid` 401 reason) must be wiped so the UI falls back
+    /// to the linking flow; a merely-unentitled request (403, or a plain
+    /// `unauthenticated` 401 from having no token at all) must never touch
+    /// the stored credential.
+    fn handle_response_status(&self, status: u16, body: &str) {
+        if should_invalidate_credential(status, &api_error(status, body)) {
+            self.device_auth.invalidate();
+        }
     }
 
     fn disabled(&self, error: String) -> MemberSnapshot {
@@ -134,14 +161,11 @@ impl MemberState {
     }
 
     async fn bootstrap(&self) -> Result<MemberSnapshot, String> {
-        let response = self
-            .client
-            .get(self.endpoint("/api/overlay/bootstrap")?)
-            .send()
-            .await
-            .map_err(|error| error.to_string())?;
+        let request = self.authorize(self.client.get(self.endpoint("/api/overlay/bootstrap")?));
+        let response = request.send().await.map_err(|error| error.to_string())?;
         let status = response.status().as_u16();
         let body = response.text().await.map_err(|error| error.to_string())?;
+        self.handle_response_status(status, &body);
         let bootstrap = parse_bootstrap_response(status, &body)?;
         let package_url = self.resolve_package_url(&bootstrap.package_url)?;
         let package = self.download_package(&package_url).await?;
@@ -167,15 +191,15 @@ impl MemberState {
     }
 
     async fn game_start(&self, game_hash: String) -> Result<MemberSnapshot, String> {
-        let response = self
-            .client
-            .post(self.endpoint("/api/overlay/game-session")?)
-            .json(&serde_json::json!({ "gameHash": game_hash }))
-            .send()
-            .await
-            .map_err(|error| error.to_string())?;
+        let request = self.authorize(
+            self.client
+                .post(self.endpoint("/api/overlay/game-session")?)
+                .json(&serde_json::json!({ "gameHash": game_hash })),
+        );
+        let response = request.send().await.map_err(|error| error.to_string())?;
         let status = response.status().as_u16();
         let body = response.text().await.map_err(|error| error.to_string())?;
+        self.handle_response_status(status, &body);
         let session = parse_game_session_response(status, &body)?;
         let current = self
             .snapshot
@@ -459,5 +483,94 @@ pub async fn member_game_start(
     match state.game_start(game_hash).await {
         Ok(snapshot) => Ok(state.store(snapshot)),
         Err(error) => Ok(state.disabled(error)),
+    }
+}
+
+#[cfg(test)]
+mod device_auth_wiring_tests {
+    use super::*;
+    use crate::device_auth::CredentialStore;
+    use std::sync::Mutex as StdMutex;
+
+    struct TestCredentialStore(StdMutex<Option<String>>);
+
+    impl TestCredentialStore {
+        fn prefilled(token: &str) -> Self {
+            Self(StdMutex::new(Some(token.to_string())))
+        }
+
+        fn empty() -> Self {
+            Self(StdMutex::new(None))
+        }
+    }
+
+    impl CredentialStore for TestCredentialStore {
+        fn get(&self) -> Option<String> {
+            self.0.lock().unwrap().clone()
+        }
+
+        fn set(&self, token: &str) -> Result<(), String> {
+            *self.0.lock().unwrap() = Some(token.to_string());
+            Ok(())
+        }
+
+        fn delete(&self) {
+            *self.0.lock().unwrap() = None;
+        }
+    }
+
+    fn member_state_with(
+        store: TestCredentialStore,
+    ) -> (tempfile::TempDir, MemberState, Arc<DeviceAuthState>) {
+        let device_auth = Arc::new(
+            DeviceAuthState::new_with_store(Url::parse("http://127.0.0.1:0").unwrap(), Box::new(store))
+                .unwrap(),
+        );
+        let dir = tempfile::tempdir().unwrap();
+        let state = MemberState::new(dir.path().to_path_buf(), Arc::clone(&device_auth)).unwrap();
+        (dir, state, device_auth)
+    }
+
+    #[test]
+    fn authorize_attaches_the_stored_bearer_token_when_linked() {
+        let (_dir, state, _device_auth) = member_state_with(TestCredentialStore::prefilled("device-token-1"));
+        let request = state.authorize(state.client.get(state.endpoint("/api/overlay/bootstrap").unwrap()));
+        let built = request.build().unwrap();
+        assert_eq!(
+            built.headers().get("authorization").unwrap(),
+            "Bearer device-token-1"
+        );
+    }
+
+    #[test]
+    fn authorize_sends_no_authorization_header_when_this_device_is_not_linked() {
+        let (_dir, state, _device_auth) = member_state_with(TestCredentialStore::empty());
+        let request = state.authorize(state.client.get(state.endpoint("/api/overlay/bootstrap").unwrap()));
+        let built = request.build().unwrap();
+        assert!(built.headers().get("authorization").is_none());
+    }
+
+    #[test]
+    fn an_invalid_or_revoked_device_token_response_wipes_the_stored_credential() {
+        let (_dir, state, device_auth) = member_state_with(TestCredentialStore::prefilled("device-token-1"));
+        state.handle_response_status(401, r#"{"error":"device-token-invalid"}"#);
+        assert_eq!(device_auth.bearer_token(), None);
+    }
+
+    #[test]
+    fn an_entitlement_denial_never_touches_a_valid_stored_credential() {
+        let (_dir, state, device_auth) = member_state_with(TestCredentialStore::prefilled("device-token-1"));
+        state.handle_response_status(403, r#"{"error":"none"}"#);
+        assert_eq!(device_auth.bearer_token(), Some("device-token-1".to_string()));
+    }
+
+    #[test]
+    fn a_plain_unauthenticated_reason_never_touches_a_valid_stored_credential() {
+        // Defensive: the bearer path never actually produces this reason
+        // (only a missing-cookie request without any token does), but the
+        // wiring itself must still refuse to wipe on it.
+        let (_dir, state, device_auth) = member_state_with(TestCredentialStore::prefilled("device-token-1"));
+        state.handle_response_status(401, r#"{"error":"unauthenticated"}"#);
+        assert_eq!(device_auth.bearer_token(), Some("device-token-1".to_string()));
     }
 }

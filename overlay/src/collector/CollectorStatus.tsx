@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { invoke } from "@tauri-apps/api/core";
 import { listen } from "@tauri-apps/api/event";
+import { DeviceLinkStatusRow, useDeviceAuthStatus } from "../auth/DeviceLinkWindow";
 import {
   closeCurrentWindow,
   closeWindow,
@@ -294,6 +295,7 @@ export function CollectorConsentWindow() {
 
 export function CollectorControlsWindow() {
   const { status, setConsent, setPaused } = useCollectorStatus(undefined, { poll: false });
+  const { status: deviceAuthStatus, refresh: refreshDeviceAuthStatus } = useDeviceAuthStatus();
 
   useEffect(() => {
     if (status?.consent === "pending") {
@@ -308,6 +310,7 @@ export function CollectorControlsWindow() {
         onConsent={(accepted) => void setConsent(accepted)}
         onPaused={(paused) => void setPaused(paused)}
       />
+      <DeviceLinkStatusRow status={deviceAuthStatus} onUnlinked={() => void refreshDeviceAuthStatus()} />
     </main>
   );
 }

@@ -10,6 +10,7 @@ use std::time::Duration;
 
 pub mod calibration;
 mod collector;
+pub mod device_auth;
 mod foreground;
 mod lcu;
 pub mod member;
@@ -2958,6 +2959,10 @@ pub fn run() {
             collector::collector_tick,
             member::member_bootstrap,
             member::member_game_start,
+            device_auth::device_auth_status,
+            device_auth::device_request_code,
+            device_auth::device_poll,
+            device_auth::device_reset,
         ])
         .setup(|app| {
             use tauri::Manager;
@@ -2965,8 +2970,18 @@ pub fn run() {
             let collector_state = collector::CollectorState::new(app.path().app_data_dir()?)
                 .map_err(std::io::Error::other)?;
             app.manage(collector_state);
-            let member_state = member::MemberState::new(app.path().app_data_dir()?.join("member-models"))
+
+            let api_base = member::resolve_api_base(std::env::var("MAYHEM_API_BASE").ok().as_deref())
                 .map_err(std::io::Error::other)?;
+            let device_auth_state = std::sync::Arc::new(
+                device_auth::DeviceAuthState::new(api_base).map_err(std::io::Error::other)?,
+            );
+            app.manage(device_auth_state.clone());
+            let member_state = member::MemberState::new(
+                app.path().app_data_dir()?.join("member-models"),
+                device_auth_state,
+            )
+            .map_err(std::io::Error::other)?;
             app.manage(member_state);
 
             // Dev-only async-runtime starvation instrument (see above). No-op in

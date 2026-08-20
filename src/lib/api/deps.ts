@@ -1,4 +1,5 @@
 import { loadInternalDecisionData } from "../data/internal-loader";
+import { resolveDeviceToken } from "../devices/server";
 import { createServiceClient, requireActiveEntitlement } from "../entitlements/server";
 import { createClient } from "../supabase/server";
 import type { DecisionApiDeps } from "./decision";
@@ -82,8 +83,13 @@ export function createOverlayDownloadDeps(): OverlayDownloadApiDeps {
 
 export function createOverlayDeps(): OverlayApiDeps {
   return {
-    requireEntitlement: () => requireActiveEntitlement(),
-    getUserId: async () => {
+    requireEntitlement: (bearerToken) =>
+      requireActiveEntitlement({ bearerToken, resolveDeviceToken }),
+    getUserId: async (bearerToken) => {
+      if (bearerToken) {
+        const resolved = await resolveDeviceToken(bearerToken);
+        return resolved?.userId ?? null;
+      }
       const client = await createClient();
       const {
         data: { user },

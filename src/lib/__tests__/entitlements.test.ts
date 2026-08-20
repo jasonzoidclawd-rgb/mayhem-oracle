@@ -411,4 +411,43 @@ describe("requireActiveEntitlement", () => {
     });
     expect(result).toMatchObject({ ok: false, status: 403, reason: "lookup-failed" });
   });
+
+  test("an unresolvable bearer token is device-token-invalid, distinct from unauthenticated", async () => {
+    const result = await requireActiveEntitlement({
+      bearerToken: "bad-token",
+      resolveDeviceToken: async () => null,
+      client: fakeClient({ user: null }),
+    });
+    expect(result).toMatchObject({ ok: false, status: 401, reason: "device-token-invalid" });
+  });
+
+  test("a resolvable bearer token authenticates without any cookie session", async () => {
+    const result = await requireActiveEntitlement({
+      bearerToken: "good-token",
+      resolveDeviceToken: async (token) =>
+        token === "good-token" ? { userId: "device-user-1" } : null,
+      client: fakeClient({
+        // fakeClient's auth.getUser would fail this test if the bearer path
+        // ever consulted it — the bearer branch must never call it.
+        user: null,
+        rows: [
+          { kind: "member", status: "active", starts_at: "2026-01-01T00:00:00Z", expires_at: null },
+        ],
+      }),
+    });
+    expect(result.ok).toBe(true);
+    if (result.ok) {
+      expect(result.user.id).toBe("device-user-1");
+      expect(result.entitlement.kind).toBe("member");
+    }
+  });
+
+  test("a valid bearer token with no active entitlement is 403, not device-token-invalid", async () => {
+    const result = await requireActiveEntitlement({
+      bearerToken: "good-token",
+      resolveDeviceToken: async () => ({ userId: "device-user-1" }),
+      client: fakeClient({ user: null, rows: [] }),
+    });
+    expect(result).toMatchObject({ ok: false, status: 403, reason: "none" });
+  });
 });
