@@ -5,6 +5,7 @@ import type { CollectorSnapshot } from "./CollectorStatus";
 export const OVERLAY_WINDOW_LABEL = "overlay";
 export const CONSENT_WINDOW_LABEL = "consent";
 export const COLLECTOR_CONTROLS_WINDOW_LABEL = "collector-controls";
+export const DEVICE_LINK_WINDOW_LABEL = "device-link";
 export const COLLECTOR_STATUS_EVENT = "collector-status";
 
 export const CONSENT_WINDOW_OPTIONS = {
@@ -40,6 +41,25 @@ export const COLLECTOR_CONTROLS_WINDOW_OPTIONS = {
   alwaysOnTop: true,
   skipTaskbar: true,
   focus: false,
+  focusable: true,
+  visible: true,
+} as const;
+
+export const DEVICE_LINK_WINDOW_OPTIONS = {
+  url: "/?window=device-link",
+  title: "Mayhem Oracle — Link Device",
+  width: 420,
+  height: 360,
+  minWidth: 380,
+  minHeight: 320,
+  center: true,
+  resizable: false,
+  decorations: true,
+  transparent: false,
+  fullscreen: false,
+  alwaysOnTop: false,
+  skipTaskbar: false,
+  focus: true,
   focusable: true,
   visible: true,
 } as const;
@@ -108,6 +128,10 @@ export async function openConsentWindow() {
 
 export async function openCollectorControlsWindow() {
   await ensureWindow(COLLECTOR_CONTROLS_WINDOW_LABEL, COLLECTOR_CONTROLS_WINDOW_OPTIONS);
+}
+
+export async function openDeviceLinkWindow() {
+  await ensureWindow(DEVICE_LINK_WINDOW_LABEL, DEVICE_LINK_WINDOW_OPTIONS);
 }
 
 export async function closeWindow(label: string) {

@@ -1,6 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import App from "./App";
+import { DeviceLinkWindow } from "./auth/DeviceLinkWindow";
 import {
   CollectorConsentWindow,
   CollectorControlsWindow,
@@ -8,6 +9,7 @@ import {
 import {
   COLLECTOR_CONTROLS_WINDOW_LABEL,
   CONSENT_WINDOW_LABEL,
+  DEVICE_LINK_WINDOW_LABEL,
   currentWindowLabel,
 } from "./collector/collectorWindows";
 
@@ -24,6 +26,10 @@ function Root() {
 
   if (label === COLLECTOR_CONTROLS_WINDOW_LABEL) {
     return <CollectorControlsWindow />;
+  }
+
+  if (label === DEVICE_LINK_WINDOW_LABEL) {
+    return <DeviceLinkWindow />;
   }
 
   return <App />;

@@ -34,8 +34,10 @@ cocoa = "0.26"
 objc = "0.2"
 core-graphics = "0.24"
 core-foundation = "0.10"
+keyring = { version = "3", features = ["apple-native"] }
 
 [target.'cfg(target_os = "windows")'.dependencies]
+keyring = { version = "3", features = ["windows-native"] }
 windows = { version = "0.61", features = [
     "Foundation",
     "Foundation_Collections",

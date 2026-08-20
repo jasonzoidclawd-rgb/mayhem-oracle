@@ -4,6 +4,7 @@ import { describe, expect, test } from "vitest";
 import { parseBatch } from "../telemetry/validate";
 import {
   handleDeviceCode,
+  handleDeviceExchange,
   handleDeviceLink,
   handleTelemetryUpload,
   type TelemetryDeps,
@@ -114,7 +115,8 @@ describe("telemetry upload handler", () => {
       },
       recordBatch: async () => {},
       createDeviceCode: async () => ({ code: "WXYZ-1234", expiresInSeconds: 600 }),
-      linkDevice: async () => ({ deviceToken: "issued-token" }),
+      linkDevice: async () => ({ approved: true }),
+      exchangeDeviceCode: async () => ({ status: "issued", deviceToken: "issued-token" }),
       getUserId: async () => "u1",
       ...overrides,
     };
@@ -209,7 +211,9 @@ describe("device code + link handlers", () => {
       putBatch: async () => {},
       recordBatch: async () => {},
       createDeviceCode: async () => ({ code: "WXYZ-1234", expiresInSeconds: 600 }),
-      linkDevice: async (code) => (code === "WXYZ-1234" ? { deviceToken: "issued-token" } : null),
+      linkDevice: async (code) => (code === "WXYZ-1234" ? { approved: true } : null),
+      exchangeDeviceCode: async (code) =>
+        code === "WXYZ-1234" ? { status: "issued", deviceToken: "issued-token" } : null,
       getUserId: async () => "u1",
       ...overrides,
     };
@@ -234,14 +238,16 @@ describe("device code + link handlers", () => {
     expect(response.status).toBe(401);
   });
 
-  test("device/link approves a valid code and returns a device token", async () => {
+  test("device/link approves a valid code without ever returning the device token", async () => {
     const request = new Request("http://test.local", {
       method: "POST",
       body: JSON.stringify({ code: "WXYZ-1234" }),
     });
     const response = await handleDeviceLink(request, deps());
     expect(response.status).toBe(200);
-    expect((await response.json()).deviceToken).toBe("issued-token");
+    const body = await response.json();
+    expect(body).toEqual({ approved: true });
+    expect("deviceToken" in body).toBe(false);
   });
 
   test("device/link rejects an unknown code", async () => {
@@ -250,6 +256,38 @@ describe("device code + link handlers", () => {
       body: JSON.stringify({ code: "NOPE-0000" }),
     });
     const response = await handleDeviceLink(request, deps());
+    expect(response.status).toBe(400);
+  });
+
+  test("device/token requires no auth and reports pending before approval", async () => {
+    const request = new Request("http://test.local", {
+      method: "POST",
+      body: JSON.stringify({ code: "WXYZ-1234" }),
+    });
+    const response = await handleDeviceExchange(
+      request,
+      deps({ exchangeDeviceCode: async () => ({ status: "pending" }) }),
+    );
+    expect(response.status).toBe(202);
+    expect(await response.json()).toEqual({ status: "pending" });
+  });
+
+  test("device/token returns the token exactly once the code is approved", async () => {
+    const request = new Request("http://test.local", {
+      method: "POST",
+      body: JSON.stringify({ code: "WXYZ-1234" }),
+    });
+    const response = await handleDeviceExchange(request, deps());
+    expect(response.status).toBe(200);
+    expect((await response.json()).deviceToken).toBe("issued-token");
+  });
+
+  test("device/token rejects an unknown or expired code", async () => {
+    const request = new Request("http://test.local", {
+      method: "POST",
+      body: JSON.stringify({ code: "NOPE-0000" }),
+    });
+    const response = await handleDeviceExchange(request, deps());
     expect(response.status).toBe(400);
   });
 });
@@ -266,6 +304,46 @@ describe("telemetry dependency wiring", () => {
     );
     expect(source).toMatch(
       /\.from\("devices"\)[\s\S]*?\.delete\(\)[\s\S]*?\.eq\("id", device\.id\)/,
+    );
+  });
+
+  test("device token exchange claims the pending token exactly once", () => {
+    const source = readFileSync(
+      path.join(process.cwd(), "src/lib/api/telemetry-deps.ts"),
+      "utf-8",
+    );
+
+    // The exchange is a delete-and-return, gated on the token still being
+    // present — two concurrent polls can never both receive the plaintext.
+    expect(source).toMatch(
+      /exchangeDeviceCode[\s\S]*?\.delete\(\)[\s\S]*?\.eq\("id", codeRow\.id\)[\s\S]*?\.not\("pending_device_token", "is", null\)/,
+    );
+  });
+
+  test("device code claim re-checks expiry inside the UPDATE predicate, not just at read time", () => {
+    const source = readFileSync(
+      path.join(process.cwd(), "src/lib/api/telemetry-deps.ts"),
+      "utf-8",
+    );
+
+    // A code expiring in the gap between the initial SELECT and this UPDATE
+    // must fail to claim -- the expiry check has to live in the same
+    // conditional UPDATE as the status check, not only in the earlier read.
+    expect(source).toMatch(
+      /\.update\(\{ status: "claimed"[\s\S]*?\.eq\("id", codeRow\.id\)[\s\S]*?\.eq\("status", "pending"\)[\s\S]*?\.gt\("expires_at", new Date\(\)\.toISOString\(\)\)/,
+    );
+  });
+
+  test("device token exchange re-checks expiry inside the DELETE predicate, not just at read time", () => {
+    const source = readFileSync(
+      path.join(process.cwd(), "src/lib/api/telemetry-deps.ts"),
+      "utf-8",
+    );
+
+    // Same boundary: a code expiring between the SELECT and this DELETE must
+    // not hand back its token.
+    expect(source).toMatch(
+      /exchangeDeviceCode[\s\S]*?\.delete\(\)[\s\S]*?\.eq\("id", codeRow\.id\)[\s\S]*?\.not\("pending_device_token", "is", null\)[\s\S]*?\.gt\("expires_at", new Date\(\)\.toISOString\(\)\)/,
     );
   });
 });
