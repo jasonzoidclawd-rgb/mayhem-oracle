@@ -3,7 +3,7 @@
 use image::GenericImageView;
 use serde::{Deserialize, Serialize};
 use std::sync::{
-    atomic::{AtomicUsize, Ordering},
+    atomic::{AtomicU64, AtomicUsize, Ordering},
     Arc,
 };
 use std::time::Duration;
@@ -933,6 +933,39 @@ pub struct OcrCardDiagnostic {
     pub capture_height: Option<u32>,
 }
 
+#[derive(Serialize, Deserialize, Clone, Debug, PartialEq, Eq)]
+#[serde(rename_all = "camelCase")]
+pub struct OcrOperationTiming {
+    /// Stable scan-local identifier for one OCR worker/native recognition
+    /// operation. This is deliberately the same as the card region today: one
+    /// worker is spawned per captured card, and keeping that identity on every
+    /// phase prevents causal timings from being mixed across workers.
+    pub operation_id: usize,
+    pub worker_id: usize,
+    pub region_index: usize,
+    /// Async worker enqueue/spawn -> first poll/start.
+    pub async_start_wait_ms: u64,
+    /// Async worker requested bounded native recognition -> blocking closure
+    /// entry/native operation start.
+    pub dispatch_wait_ms: u64,
+    /// Blocking closure/native recognition start -> native recognition end.
+    pub native_elapsed_ms: u64,
+    /// Native recognition end -> async continuation after the bounded wait.
+    pub resume_wait_ms: u64,
+}
+
+pub fn representative_ocr_timing(timings: &[OcrOperationTiming]) -> Option<&OcrOperationTiming> {
+    timings.iter().max_by_key(|timing| {
+        (
+            timing.async_start_wait_ms
+                .saturating_add(timing.dispatch_wait_ms)
+                .saturating_add(timing.native_elapsed_ms)
+                .saturating_add(timing.resume_wait_ms),
+            timing.operation_id,
+        )
+    })
+}
+
 #[derive(Serialize, Deserialize, Clone, Debug)]
 #[serde(rename_all = "camelCase")]
 pub struct OcrScanResult {
@@ -946,6 +979,40 @@ pub struct OcrScanResult {
     pub ocr_ms: u64,
     /// Total native scan duration, in milliseconds.
     pub total_ms: u64,
+    /// `spawn_blocking` queue latency before the capture closure begins
+    /// running (command entry -> closure start). Same segment as
+    /// `SurfaceObservation::dispatch_wait_ms` on the geometry probe path; a
+    /// delay here is blocking-pool queueing, not native capture work. 0 when
+    /// the closure never ran or never returned in time (see
+    /// `capture_attempted` and the per-region `error` for which).
+    pub capture_dispatch_wait_ms: u64,
+    /// Async-runtime resume latency after the capture closure has already
+    /// returned, before `run_bounded_capture`'s timeout future is re-polled.
+    /// This segment requires a Tokio async worker to advance; it is the true
+    /// starvation signal for the capture phase. 0 when unmeasured (see
+    /// `capture_dispatch_wait_ms`).
+    pub capture_resume_wait_ms: u64,
+    /// Representative OCR worker async enqueue/spawn -> first poll/start. This
+    /// is NOT native time; it exists so async worker starvation cannot inflate
+    /// `ocrNativeElapsedMs`.
+    pub ocr_async_start_wait_ms: u64,
+    /// Representative OCR worker `spawn_blocking` queue latency. The
+    /// representative is selected deterministically from a single
+    /// `ocrOperationTimings` record; summary OCR phase fields must never be
+    /// independent maxima from different workers.
+    pub ocr_dispatch_wait_ms: u64,
+    /// Representative OCR worker native recognition duration only: blocking
+    /// closure/native start -> native end. Overall concurrent JoinSet wall
+    /// clock remains `ocrMs` and must not be read as native elapsed.
+    pub ocr_native_elapsed_ms: u64,
+    /// Representative OCR worker async-runtime resume latency after native
+    /// recognition has already returned. Same-worker invariant as
+    /// `ocrDispatchWaitMs` and `ocrNativeElapsedMs`.
+    pub ocr_resume_wait_ms: u64,
+    /// Per-worker correlated causal timings. Any A/B/C classification must use
+    /// one of these records (or a summary copied wholesale from one record),
+    /// never independently aggregated phase maxima.
+    pub ocr_operation_timings: Vec<OcrOperationTiming>,
 }
 
 // ─── OCR Commands ───────────────────────────────────────────────────────────
@@ -1437,7 +1504,14 @@ fn bounded_ocr_recognition_reason(error: BoundedCaptureError) -> String {
 async fn detect_augment_names(known_names: Option<Vec<String>>) -> Result<OcrScanResult, String> {
     let scan_start = std::time::Instant::now();
     let capture_start = std::time::Instant::now();
-    let crop_set = match run_bounded_capture(CaptureChannel::Ocr, || {
+    // Same dispatch/resume split as `probe_augment_surface` (see its doc
+    // comment): `dispatch_wait_ms` is read at closure entry, BEFORE the
+    // foreground gate, so it measures pure spawn_blocking queue latency, not
+    // native work. `closure_end_ms` is read at closure exit; the gap between
+    // it and command return (`resume_wait_ms`, computed below) requires a
+    // Tokio async worker to re-poll the timeout future.
+    let capture_result = run_bounded_capture(CaptureChannel::Ocr, move || {
+        let dispatch_wait_ms = capture_start.elapsed().as_millis() as u64;
         // Foreground gate runs INSIDE the bounded capture (off the async runtime),
         // exactly as capture_surface_frame does. Its CGWindowList/window-server
         // walk is an unbounded, uncancellable blocking call; on the async runtime
@@ -1449,11 +1523,20 @@ async fn detect_augment_names(known_names: Option<Vec<String>>) -> Result<OcrSca
         if !collect_foreground_state().game_window_foreground {
             return Err("actual-game-window-not-foreground".to_string());
         }
-        capture_card_name_crops()
+        let crop_set = capture_card_name_crops()?;
+        let closure_end_ms = capture_start.elapsed().as_millis() as u64;
+        Ok::<_, String>((crop_set, dispatch_wait_ms, closure_end_ms))
     })
-    .await
-    {
-        Ok(crop_set) => crop_set,
+    .await;
+    let (crop_set, capture_dispatch_wait_ms, capture_resume_wait_ms) = match capture_result {
+        Ok((crop_set, dispatch_wait_ms, closure_end_ms)) => {
+            let capture_ms = capture_start.elapsed().as_millis() as u64;
+            (
+                crop_set,
+                dispatch_wait_ms,
+                capture_ms.saturating_sub(closure_end_ms),
+            )
+        }
         Err(error) => {
             let reason = bounded_capture_reason(&error);
             return Ok(OcrScanResult {
@@ -1478,6 +1561,20 @@ async fn detect_augment_names(known_names: Option<Vec<String>>) -> Result<OcrSca
                 capture_ms: capture_start.elapsed().as_millis() as u64,
                 ocr_ms: 0,
                 total_ms: scan_start.elapsed().as_millis() as u64,
+                // Neither async-runtime segment was measured on this path: the
+                // closure either never ran (Busy) or never returned in time
+                // (Timeout/WorkerFailed). 0 keeps the fields numbers, never
+                // null; `capture_attempted` and the per-region `error` above
+                // already carry which case this was — see
+                // `absent_surface_observation` for the same convention on the
+                // geometry probe path.
+                capture_dispatch_wait_ms: 0,
+                capture_resume_wait_ms: 0,
+                ocr_async_start_wait_ms: 0,
+                ocr_dispatch_wait_ms: 0,
+                ocr_native_elapsed_ms: 0,
+                ocr_resume_wait_ms: 0,
+                ocr_operation_timings: Vec::new(),
             });
         }
     };
@@ -1501,21 +1598,62 @@ async fn detect_augment_names(known_names: Option<Vec<String>>) -> Result<OcrSca
     let mut workers = tokio::task::JoinSet::new();
     for crop in crop_set.crops {
         let region_index = crop.region_index;
+        let operation_id = region_index;
+        let worker_id = region_index;
         let known_names = known_names.clone();
+        let worker_spawned_at = std::time::Instant::now();
         workers.spawn(async move {
+            let worker_first_poll_at = std::time::Instant::now();
+            let async_start_wait_ms = worker_first_poll_at
+                .duration_since(worker_spawned_at)
+                .as_millis() as u64;
+            let native_start_ms = Arc::new(AtomicU64::new(0));
+            let native_end_ms = Arc::new(AtomicU64::new(0));
+            let task_native_start_ms = Arc::clone(&native_start_ms);
+            let task_native_end_ms = Arc::clone(&native_end_ms);
+            let native_dispatch_requested_at = std::time::Instant::now();
             let result = run_bounded_ocr_recognition(move || {
-                ocr::read_card_text(&crop.image, locale, &known_names)
+                task_native_start_ms.store(
+                    native_dispatch_requested_at.elapsed().as_millis() as u64,
+                    Ordering::Release,
+                );
+                let text = ocr::read_card_text(&crop.image, locale, &known_names);
+                task_native_end_ms.store(
+                    native_dispatch_requested_at.elapsed().as_millis() as u64,
+                    Ordering::Release,
+                );
+                text
             })
             .await;
-            (region_index, result)
+            let async_resume_at = std::time::Instant::now();
+            let timing = if result.is_ok() {
+                let native_start_ms = native_start_ms.load(Ordering::Acquire);
+                let native_end_ms = native_end_ms.load(Ordering::Acquire);
+                Some(OcrOperationTiming {
+                    operation_id,
+                    worker_id,
+                    region_index,
+                    async_start_wait_ms,
+                    dispatch_wait_ms: native_start_ms,
+                    native_elapsed_ms: native_end_ms.saturating_sub(native_start_ms),
+                    resume_wait_ms: (async_resume_at
+                        .duration_since(native_dispatch_requested_at)
+                        .as_millis() as u64)
+                        .saturating_sub(native_end_ms),
+                })
+            } else {
+                None
+            };
+            (region_index, result, timing)
         });
     }
 
     let mut diagnostics = crop_set.diagnostics;
     let mut detected = Vec::with_capacity(workers.len());
+    let mut ocr_operation_timings = Vec::with_capacity(workers.len());
     while let Some(worker) = workers.join_next().await {
         match worker {
-            Ok((region_index, Ok(Some(text)))) => {
+            Ok((region_index, Ok(Some(text)), timing)) => {
                 if let Some(diagnostic) = diagnostics
                     .iter_mut()
                     .find(|diagnostic| diagnostic.region_index == region_index)
@@ -1523,8 +1661,14 @@ async fn detect_augment_names(known_names: Option<Vec<String>>) -> Result<OcrSca
                     diagnostic.raw_text = Some(text.clone());
                 }
                 detected.push(DetectedAugment { text, region_index });
+                if let Some(timing) = timing {
+                    ocr_operation_timings.push(timing);
+                }
             }
-            Ok((region_index, Ok(None))) => {
+            Ok((region_index, Ok(None), timing)) => {
+                if let Some(timing) = timing {
+                    ocr_operation_timings.push(timing);
+                }
                 if let Some(diagnostic) = diagnostics
                     .iter_mut()
                     .find(|diagnostic| diagnostic.region_index == region_index)
@@ -1532,7 +1676,7 @@ async fn detect_augment_names(known_names: Option<Vec<String>>) -> Result<OcrSca
                     diagnostic.error = Some("no-text-recognized".to_string());
                 }
             }
-            Ok((region_index, Err(error))) => {
+            Ok((region_index, Err(error), _timing)) => {
                 if let Some(diagnostic) = diagnostics
                     .iter_mut()
                     .find(|diagnostic| diagnostic.region_index == region_index)
@@ -1551,6 +1695,8 @@ async fn detect_augment_names(known_names: Option<Vec<String>>) -> Result<OcrSca
         }
     }
     detected.sort_by_key(|result| result.region_index);
+    ocr_operation_timings.sort_by_key(|timing| timing.operation_id);
+    let representative_ocr_timing = representative_ocr_timing(&ocr_operation_timings);
     Ok(OcrScanResult {
         detected,
         diagnostics,
@@ -1559,6 +1705,21 @@ async fn detect_augment_names(known_names: Option<Vec<String>>) -> Result<OcrSca
         capture_ms,
         ocr_ms: ocr_start.elapsed().as_millis() as u64,
         total_ms: scan_start.elapsed().as_millis() as u64,
+        capture_dispatch_wait_ms,
+        capture_resume_wait_ms,
+        ocr_async_start_wait_ms: representative_ocr_timing
+            .map(|timing| timing.async_start_wait_ms)
+            .unwrap_or(0),
+        ocr_dispatch_wait_ms: representative_ocr_timing
+            .map(|timing| timing.dispatch_wait_ms)
+            .unwrap_or(0),
+        ocr_native_elapsed_ms: representative_ocr_timing
+            .map(|timing| timing.native_elapsed_ms)
+            .unwrap_or(0),
+        ocr_resume_wait_ms: representative_ocr_timing
+            .map(|timing| timing.resume_wait_ms)
+            .unwrap_or(0),
+        ocr_operation_timings,
     })
 }
 

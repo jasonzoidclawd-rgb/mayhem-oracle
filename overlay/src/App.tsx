@@ -298,6 +298,16 @@ interface NativeOcrCardDiagnostic {
   captureHeight: number | null;
 }
 
+interface OcrOperationTiming {
+  operationId: number;
+  workerId: number;
+  regionIndex: number;
+  asyncStartWaitMs: number;
+  dispatchWaitMs: number;
+  nativeElapsedMs: number;
+  resumeWaitMs: number;
+}
+
 interface OcrScanResult {
   detected: DetectedAugment[];
   diagnostics: NativeOcrCardDiagnostic[];
@@ -306,6 +316,18 @@ interface OcrScanResult {
   captureMs: number;
   ocrMs: number;
   totalMs: number;
+  // Same dispatch/resume split as GeometryObservation (surfaceGeometry.ts):
+  // dispatchWaitMs is spawn_blocking queue latency (native op has not
+  // started), resumeWaitMs is async-runtime resume latency AFTER the native
+  // op already finished. Distinguishing them is what tells a starved-resume
+  // trace apart from a starved-dispatch or a genuinely slow native phase.
+  captureDispatchWaitMs: number;
+  captureResumeWaitMs: number;
+  ocrAsyncStartWaitMs: number;
+  ocrDispatchWaitMs: number;
+  ocrNativeElapsedMs: number;
+  ocrResumeWaitMs: number;
+  ocrOperationTimings: OcrOperationTiming[];
 }
 
 interface MatchedCard {
@@ -2759,6 +2781,13 @@ function App() {
               captureMs: scan.captureMs,
               ocrMs: scan.ocrMs,
               nativeTotalMs: scan.totalMs,
+              captureDispatchWaitMs: scan.captureDispatchWaitMs,
+              captureResumeWaitMs: scan.captureResumeWaitMs,
+              ocrAsyncStartWaitMs: scan.ocrAsyncStartWaitMs,
+              ocrDispatchWaitMs: scan.ocrDispatchWaitMs,
+              ocrNativeElapsedMs: scan.ocrNativeElapsedMs,
+              ocrResumeWaitMs: scan.ocrResumeWaitMs,
+              ocrOperationTimings: scan.ocrOperationTimings,
             });
             return scan;
           }).finally(() => {
@@ -2783,6 +2812,13 @@ function App() {
           captureMs: scan.captureMs,
           ocrMs: scan.ocrMs,
           nativeTotalMs: scan.totalMs,
+          captureDispatchWaitMs: scan.captureDispatchWaitMs,
+          captureResumeWaitMs: scan.captureResumeWaitMs,
+          ocrAsyncStartWaitMs: scan.ocrAsyncStartWaitMs,
+          ocrDispatchWaitMs: scan.ocrDispatchWaitMs,
+          ocrNativeElapsedMs: scan.ocrNativeElapsedMs,
+          ocrResumeWaitMs: scan.ocrResumeWaitMs,
+          ocrOperationTimings: scan.ocrOperationTimings,
         });
       }
 
