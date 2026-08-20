@@ -192,21 +192,22 @@ pub struct SurfaceObservation {
     /// This is `spawn_blocking` QUEUE LATENCY, **not** async-runtime starvation.
     /// No SUSPENSION POINT separates the command-entry clock from the
     /// `spawn_blocking` call. (There are two syntactic `.await`s on the way, but
-    /// awaiting an `async fn` polls it inline within the same poll — the first
-    /// construct that can actually yield is the `timeout(..).await` *after* the
-    /// spawn.) Crossing this interval therefore needs no async worker. Against
-    /// tokio's default 512 blocking threads it should read ~0 even while the
-    /// async runtime is fully starved; a large value means the BLOCKING POOL is
-    /// saturated. Async-runtime starvation surfaces in `resume_wait_ms`, and —
-    /// for the segment before the first poll, which is outside `elapsed_ms`
-    /// entirely — in the JS-side `transportMs`.
+    /// awaiting an `async fn` polls it inline within the same poll — and the
+    /// bounded wait *after* the spawn is an OS-thread wall-clock `recv_timeout`,
+    /// which does not yield either.) Crossing this interval therefore needs no
+    /// async worker. Against tokio's default 512 blocking threads it should read
+    /// ~0 even while the async runtime is fully starved; a large value means the
+    /// BLOCKING POOL is saturated. Async-runtime starvation before the first
+    /// poll is outside `elapsed_ms` entirely and surfaces in the JS-side
+    /// `transportMs`.
     /// Always a number; 0 when the segment was not measured.
     pub dispatch_wait_ms: u64,
     /// The blocking closure returning → the command being about to return.
     ///
-    /// This one DOES measure async-runtime scheduling latency: the worker's
-    /// completion wakes `tokio::time::timeout(..)`, and crossing this interval
-    /// requires an async worker to poll that task again.
+    /// The bounded wait is an OS-thread wall-clock `recv_timeout`, not
+    /// `tokio::time::timeout`: the worker's send releases it and the command
+    /// continues inline, so this measures the closure's return path plus that
+    /// handoff — NOT async-runtime scheduling latency.
     /// Always a number; 0 when the segment was not measured.
     pub resume_wait_ms: u64,
 }

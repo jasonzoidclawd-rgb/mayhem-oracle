@@ -318,9 +318,11 @@ interface OcrScanResult {
   totalMs: number;
   // Same dispatch/resume split as GeometryObservation (surfaceGeometry.ts):
   // dispatchWaitMs is spawn_blocking queue latency (native op has not
-  // started), resumeWaitMs is async-runtime resume latency AFTER the native
-  // op already finished. Distinguishing them is what tells a starved-resume
-  // trace apart from a starved-dispatch or a genuinely slow native phase.
+  // started), resumeWaitMs is resume latency AFTER the native op already
+  // finished — the OS-thread wall-clock wait being released and the command
+  // continuing inline, not async-runtime scheduling. Distinguishing them is
+  // what tells a slow resume/handoff apart from a starved-dispatch or a
+  // genuinely slow native phase.
   captureDispatchWaitMs: number;
   captureResumeWaitMs: number;
   ocrAsyncStartWaitMs: number;

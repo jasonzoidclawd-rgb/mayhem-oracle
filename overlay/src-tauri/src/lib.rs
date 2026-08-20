@@ -1066,11 +1066,13 @@ pub struct OcrScanResult {
     /// the closure never ran or never returned in time (see
     /// `capture_attempted` and the per-region `error` for which).
     pub capture_dispatch_wait_ms: u64,
-    /// Async-runtime resume latency after the capture closure has already
-    /// returned, before `run_bounded_capture`'s timeout future is re-polled.
-    /// This segment requires a Tokio async worker to advance; it is the true
-    /// starvation signal for the capture phase. 0 when unmeasured (see
-    /// `capture_dispatch_wait_ms`).
+    /// Resume latency after the capture closure's body has already ended:
+    /// closure return -> result handed across the worker channel -> this
+    /// command resuming from `run_bounded_capture`'s bounded wait. That wait is
+    /// an OS-thread wall-clock `recv_timeout`, not `tokio::time::timeout`, so
+    /// the continuation runs inline and needs no Tokio async worker to re-poll
+    /// a timeout future; this segment is therefore NOT an async-starvation
+    /// signal. 0 when unmeasured (see `capture_dispatch_wait_ms`).
     pub capture_resume_wait_ms: u64,
     /// Representative OCR worker async enqueue/spawn -> first poll/start. This
     /// is NOT native time; it exists so async worker starvation cannot inflate
@@ -1085,8 +1087,10 @@ pub struct OcrScanResult {
     /// closure/native start -> native end. Overall concurrent JoinSet wall
     /// clock remains `ocrMs` and must not be read as native elapsed.
     pub ocr_native_elapsed_ms: u64,
-    /// Representative OCR worker async-runtime resume latency after native
-    /// recognition has already returned. Same-worker invariant as
+    /// Representative OCR worker resume latency after native recognition has
+    /// already returned — the same wall-clock handoff segment as
+    /// `capture_resume_wait_ms`, not async-runtime scheduling latency.
+    /// Same-worker invariant as
     /// `ocrDispatchWaitMs` and `ocrNativeElapsedMs`.
     pub ocr_resume_wait_ms: u64,
     /// Per-worker correlated causal timings. Any A/B/C classification must use
@@ -1605,8 +1609,9 @@ async fn detect_augment_names(known_names: Option<Vec<String>>) -> Result<OcrSca
     // comment): `dispatch_wait_ms` is read at closure entry, BEFORE the
     // foreground gate, so it measures pure spawn_blocking queue latency, not
     // native work. `closure_end_ms` is read at closure exit; the gap between
-    // it and command return (`resume_wait_ms`, computed below) requires a
-    // Tokio async worker to re-poll the timeout future.
+    // it and command return (`resume_wait_ms`, computed below) covers the
+    // closure's return path and the result handoff that releases the wall-clock
+    // `recv_timeout` wait — no Tokio timeout future is re-polled.
     let capture_result = run_bounded_capture(CaptureChannel::Ocr, move || {
         let dispatch_wait_ms = capture_start.elapsed().as_millis() as u64;
         // Foreground gate runs INSIDE the bounded capture (off the async runtime),
@@ -1976,13 +1981,16 @@ async fn probe_augment_surface(
     //     SUSPENSION POINT separates `start` from the `spawn_blocking` call in
     //     run_bounded_capture_with_gate. (There ARE two syntactic `.await`s on
     //     the way — awaiting an `async fn` polls it inline within the same poll,
-    //     so neither can yield; the first construct that can is the
-    //     `timeout(..).await` AFTER the spawn.) Crossing this therefore needs no
-    //     async worker: it is BLOCKING-POOL queue latency and should read ~0
-    //     (tokio defaults to 512 blocking threads) even under total starvation.
+    //     so neither can yield; the bounded wait AFTER the spawn is an OS-thread
+    //     wall-clock `recv_timeout`, which does not yield either.) Crossing this
+    //     therefore needs no async worker: it is BLOCKING-POOL queue latency and
+    //     should read ~0 (tokio defaults to 512 blocking threads) even under
+    //     total starvation.
     //   resume   — the closure's body ends → the command is about to return.
-    //     Crossing this DOES require an async worker to re-poll the woken
-    //     `tokio::time::timeout`, so this is the true starvation signal here.
+    //     Crossing this needs no async worker either: the worker's send releases
+    //     the wall-clock `recv_timeout` and the command continues inline, so
+    //     this measures the closure's return path plus that handoff, NOT
+    //     async-runtime starvation.
     // Starvation BEFORE the first poll of this command future is outside
     // `elapsed_ms` altogether (Tauri spawns the future onto the runtime) and
     // lands in the JS-side `transportMs` instead.

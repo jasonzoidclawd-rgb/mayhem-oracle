@@ -103,17 +103,20 @@ export interface GeometryObservation {
    * Command entry → the blocking capture closure actually starting (Rust
    * `dispatchWaitMs`). This is `spawn_blocking` QUEUE latency, NOT async-runtime
    * starvation — no *suspension point* precedes the dispatch (the `.await`s on
-   * the way poll their `async fn`s inline; the first thing that can yield comes
-   * after the spawn), so it needs no async worker and reads ~0 even under total
-   * starvation. A large value means the blocking pool is saturated.
+   * the way poll their `async fn`s inline, and the bounded wait after the spawn
+   * is an OS-thread wall-clock wait, so nothing yields), so it needs no async
+   * worker and reads ~0 even under total starvation. A large value means the
+   * blocking pool is saturated.
    * OPTIONAL: absent on every observation recorded before the measurement
    * shipped, and absent on JS-built observations.
    */
   dispatchWaitMs?: number;
   /**
    * The blocking closure returning → the command returning (Rust
-   * `resumeWaitMs`). This one DOES measure async-runtime scheduling latency:
-   * re-polling the woken timeout requires an async worker.
+   * `resumeWaitMs`). This does NOT measure async-runtime scheduling latency:
+   * Rust waits on an OS-thread wall-clock `recv_timeout` and continues inline
+   * once the blocking worker sends its result, so this is the closure's return
+   * path plus that handoff.
    * OPTIONAL for the same reason as `dispatchWaitMs`.
    */
   resumeWaitMs?: number;
