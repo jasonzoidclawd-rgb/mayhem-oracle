@@ -101,6 +101,124 @@ node harness/route.mjs validate-packet docs/task-packets/<slice>.md
 node harness/route.mjs validate-packet docs/task-packets/*.md   # cross-packet checks too
 ```
 
+## GitHub issue dispatch
+
+```bash
+./harness/dispatch-github-issue.sh <issue-number>            # dispatch it
+./harness/dispatch-github-issue.sh <issue-number> --dry-run  # read-only: parse, route, refuse
+```
+
+One command, and the authority it borrows is unchanged:
+
+| | Owns |
+|---|---|
+| GitHub issues | the durable bug ledger — issue state *is* the record |
+| `route.mjs` | which slot executes, which reviews, at what tier and effort |
+| `git worktree` | execution isolation, one worktree per issue |
+| `verify-task.sh` | the deterministic gate, which outranks any reviewer |
+| `verification-policy.json` | review authority |
+| the executor | nothing. It is disposable and holds no authority at all |
+
+The adapter (`harness/github/`) contains no account slot, no vendor name, and
+no execution-mechanism id — a test enforces that. It reads the issue, asks
+`route()`, and interprets the mechanism the router already named. Each
+dispatchable mechanism declares its own `launch` argv per role in
+`config/routing.json`, next to the billing claim it already declared, so the
+dispatcher starts a runtime by lookup rather than by guessed syntax.
+
+### The issue contract
+
+A dispatchable issue is ordinary human Markdown plus one machine block:
+
+```markdown
+Prose describing the defect, its evidence, and its acceptance contract.
+
+<!-- mayhem-agent
+schema: 1
+fingerprint: geometry:response-delivery:async-transport
+task_class: T3
+base_ref: b9e12a98dcecd777e0abb425fb3f0cc24fce5286
+gate_profile: overlay
+-->
+```
+
+`schema`, `fingerprint`, `task_class`, and `base_ref` are required.
+`gate_profile` is optional and defaults to `harness`; `context_paths` is an
+optional comma-separated list. Every other condition is checked before anything
+is launched, and each failure has its own refusal code:
+
+`not-open` · `already-claimed` · `not-ready` · `no-machine-block` ·
+`unsupported-schema` · `missing-fingerprint` · `invalid-fingerprint` ·
+`unknown-task-class` · `unresolved-base-ref` · `unknown-gate-profile` ·
+`duplicate-fingerprint` · `missing-label` · `unroutable` · `blocked` · `locked`
+
+**The task class is never inferred.** An unparseable one is a refusal, not a
+guess — the router's own table is the only authority on what a class means.
+
+### Labels
+
+Labels are state on the ledger, not a replacement for issue structure. They
+must exist before the first dispatch; the run refuses with `missing-label`
+otherwise:
+
+```bash
+for l in needs-evidence ready-for-agent agent-working needs-review \
+         needs-human verified blocked; do
+  gh label create "status:$l" --repo <owner>/<name>
+done
+```
+
+Unrelated labels are tolerated and ignored.
+
+### Dedupe, claiming, and the lock
+
+Dedupe is **exact fingerprint equality over open issues** and nothing else — no
+embeddings, no fuzzy matching, no model comparison. A near-miss is a different
+defect until a human says otherwise. An issue whose fingerprint already belongs
+to an older open issue is refused rather than worked twice.
+
+Claiming re-reads the issue immediately before mutating it, then takes
+`status:ready-for-agent` → `status:agent-working`. A second dispatcher that
+arrives in between sees `already-claimed` and exits without launching anything.
+A local lock directory under the repository's git common directory guards two
+processes on one machine; it is a race guard, not distributed exactly-once.
+
+### Worktrees, results, and state
+
+Every issue gets its own worktree, derived from the main worktree's own
+location rather than configured:
+
+```
+<repo-parent>/<repo>-worktrees/issues/<number>-<slug>   branch issue/<number>-<slug>
+```
+
+An existing worktree for the same issue is **resumed exactly as found** — the
+resume path emits no git command at all, so uncommitted work cannot be
+discarded. A path that exists but is not a worktree, a branch already checked
+out elsewhere, or a worktree belonging to a different issue all fail closed.
+
+Run state lives outside every worktree, in `<git-common-dir>/mayhem-dispatch/`:
+the packet, the executor and reviewer reports, and `result.json`. The result
+JSON is written **before** GitHub is told anything, and the issue comment is a
+compact `KEY=VALUE` block — the ledger is not a log sink.
+
+### What counts as done
+
+The result vocabulary is closed: `FIX_PROPOSED`, `NEEDS_EVIDENCE`, `BLOCKED`,
+`INTERRUPTED`, `VERIFIED`. Anything else is rejected.
+
+- `FIX_PROPOSED` requires a **behavioral RED**: existing behavior violating the
+  issue's acceptance contract. A missing module, an unwritten file, a
+  scaffolding syntax error, or a missing fixture is not one, and is rejected as
+  one. "Could not reproduce" is `NEEDS_EVIDENCE` and never becomes a fix.
+- An executor cannot mark its own work `VERIFIED`. `VERIFIED` is concluded from
+  the deterministic gate plus, where the risk level requires one, an
+  independent cross-provider reviewer — assigned by `route()`, launched under
+  its runtime's read-only flag, and never handed the executor's transcript.
+- An independent defect found mid-slice is reported as `newBugs` with its
+  **own** fingerprint. Re-using the current issue's fingerprint is rejected:
+  that is scope expansion, not a wider bug.
+
 ## Worktrees
 
 No wrapper — git already does this well:
@@ -110,7 +228,8 @@ git worktree add -b <branch> ~/Desktop/mayhem-oracle-worktrees/<slice> <BASE_SHA
 ```
 
 Keep worktrees outside the repository tree so they do not appear as untracked
-paths in every other agent's `git status`.
+paths in every other agent's `git status`. Issue dispatch derives its own
+worktree path by that same rule; see **GitHub issue dispatch** above.
 
 ## Pi
 
@@ -221,6 +340,12 @@ are deferred until a second account of each provider is authenticated.
   that would call `route.mjs` and inject the packet automatically. Deferred
   until at least one provider is authenticated in Pi, because an untested
   extension is exactly the machinery this harness exists to avoid.
+- **Issue-triggered GitHub Actions** — V1 is deliberately local-only. The
+  follow-up shape is `status:ready-for-agent` → a trusted Action →
+  `repository_dispatch` → a self-hosted Mac runner → **this same**
+  `dispatch-github-issue.sh`. No runner is installed, and none is needed: the
+  local command is the acceptance criterion. See
+  `docs/architecture/agent-harness.md`.
 - **Quota ledger** — no provider exposes per-request token counts under
   subscription authentication. Record proxies (model, effort, files loaded,
   tool calls, duration, whether a quota warning appeared); do not invent numbers.

@@ -22,11 +22,22 @@ discharged by a service that does.
 | Task classification / routing | `harness/config/routing.json` + `harness/route.mjs` | none — a lookup, re-read each call |
 | Verification policy | `harness/config/verification-policy.json` | none |
 | Account availability / quota pressure | Pi, once authenticated | **the only genuinely stateful responsibility** |
+| Bug / work ledger | GitHub issues | **GitHub's own** — the harness reads and labels it, and stores none of it |
+| Issue dispatch run records | `<git-common-dir>/mayhem-dispatch/` | per-run packet, reports, `result.json`; disposable, outside every worktree |
 
-Five of six are dischargeable with zero new mutable state, and the sixth is not
-implemented here: the router takes exhaustion and local auth as *arguments*.
-Nothing in this directory remembers anything between calls. When Pi owns
-dispatch it will supply those arguments; until then the operator does.
+Five of the first six are dischargeable with zero new mutable state, and the
+sixth is not implemented here: the router takes exhaustion and local auth as
+*arguments*. Nothing in this directory remembers anything between calls. When
+Pi owns dispatch it will supply those arguments; until then the operator does.
+
+The last two rows are the deliberate exception, and the reason they are safe is
+*where* they live. A bug that outlives a session needs a durable record; that
+record is a GitHub issue, not a table in this repository. The harness never
+mirrors it, caches it, or reconciles against it — it re-reads the issue on
+every call, including once more immediately before it claims one. The run
+records are the opposite kind of state: write-once evidence of what a single
+run did, kept outside every worktree so no agent's `git status` ever sees them,
+and safe to delete.
 
 What that buys: the harness cannot go stale, cannot disagree with the
 repository, and needs no reconciliation after a crash. What it costs: quota
@@ -141,9 +152,68 @@ Two invariants sit above the protocol:
 ## What was deliberately not built
 
 - No workflow database, no review state machine, no persisted chains of thought.
+- No issue mirror, no job queue, no dedupe index — dedupe is exact fingerprint
+  equality evaluated against the live open issues at dispatch time.
+- No GitHub App, no PAT, no repository secret, and no fuzzy or model-driven
+  issue matching.
 - No worktree wrapper — `git worktree add` is already the right interface.
 - No quota ledger — unfillable under subscription auth; record proxies instead.
 - No Pi extension yet — untestable until a provider is authenticated in Pi.
 - No second command list — the `rust` profile now runs
   `cd overlay/src-tauri && cargo test` because `scripts/gate.sh` owns every
   verification command and `verify-task` owns only the profile mapping.
+
+## GitHub as the bug ledger
+
+The harness had no answer for a defect that outlives a session. A task packet
+is a good handoff and a bad ledger: it is one file, in one worktree, describing
+one attempt. `harness/dispatch-github-issue.sh <issue>` closes that gap without
+adding a control plane, by splitting the responsibilities that were previously
+conflated in "a task":
+
+- **GitHub owns the record.** Issue state is the truth about whether a defect
+  is known, ready, being worked, or resolved. Labels carry that state;
+  the machine block carries the four facts a dispatcher needs (schema,
+  fingerprint, task class, base ref). Everything else on the issue is prose for
+  humans, and stays prose.
+- **The router still routes.** The adapter contains no account slot, no vendor
+  name, and no execution-mechanism id — enforced by a test that greps its own
+  source. It hands `route()` a task class and interprets what comes back.
+- **A worktree is still the isolation.** One per issue, derived from the main
+  worktree's own location. An existing one is resumed exactly as found: the
+  resume path emits no git command at all, so there is no code path by which
+  uncommitted work could be discarded.
+- **The gate still decides correctness.** A reviewer is assigned by the risk
+  level in `verification-policy.json`, is launched under its runtime's
+  read-only flag, and never receives the executor's transcript. An executor
+  cannot mark its own work `VERIFIED`.
+
+The one genuinely new rule is epistemic rather than mechanical: a
+`FIX_PROPOSED` must carry a **behavioral RED** — existing behavior violating
+the issue's acceptance contract. A missing module, an unwritten file, a
+scaffolding syntax error, or a missing fixture is rejected as one. Without that
+rule the cheapest way to close an issue is to write a test that fails because
+nothing exists yet, then make it pass; that reports a fix and proves nothing.
+"Could not reproduce" is `NEEDS_EVIDENCE` and never becomes a fix.
+
+### Why not GitHub Actions yet
+
+The acceptance criterion for V1 is local, because the interesting failure modes
+— a mis-claimed issue, a worktree collision, a reviewer that is also the
+executor, a RED that is not a reproduction — are all reproducible on this
+machine and none of them need a runner. The follow-up shape is deliberately
+boring:
+
+```
+issue labelled status:ready-for-agent
+  -> a trusted, pinned Action in this repository
+  -> repository_dispatch
+  -> a self-hosted macOS runner
+  -> the SAME harness/dispatch-github-issue.sh
+```
+
+The runner adds a trigger, not a second dispatcher — if the Action ever needed
+its own logic, the split would be wrong. It stays unbuilt until the local
+command has proven itself on real issues, and it requires a self-hosted runner
+because the subscription-authenticated CLIs live on this machine; a hosted
+runner would have no authorized way to execute anything.

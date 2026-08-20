@@ -275,6 +275,38 @@ session over compaction when the old context is mostly irrelevant —
 conversation history is disposable cache; source, tests, specs, ADRs, and
 concise handoffs are the durable state.
 
+## The Bug Ledger
+
+A defect that outlives a session belongs in a **GitHub issue**, not in a
+handoff doc, a TODO comment, or conversation history. The issue is the durable
+record; the harness only reads and labels it.
+
+```bash
+./harness/dispatch-github-issue.sh <issue>            # dispatch
+./harness/dispatch-github-issue.sh <issue> --dry-run  # read-only preflight
+```
+
+An issue becomes dispatchable by carrying `status:ready-for-agent` and one
+`<!-- mayhem-agent -->` block naming its schema, fingerprint, task class, and
+base ref. The contract, the labels, and every refusal code are documented in
+`harness/README.md`. Three rules bind any agent working an issue, dispatched or
+not:
+
+- **A fix needs a behavioral RED.** Existing behavior must be shown violating
+  the issue's acceptance contract first. A missing module, an unwritten file, a
+  scaffolding syntax error, or a missing fixture is not a reproduction. If you
+  cannot reproduce it, the answer is NEEDS_EVIDENCE — "could not reproduce"
+  never becomes a fix.
+- **A second defect is a second issue.** An independent failure mechanism found
+  mid-slice gets its own issue and its own fingerprint. Widening the current
+  one to absorb it is scope expansion, and is rejected.
+- **You cannot verify yourself.** VERIFIED is concluded from the deterministic
+  gate plus, where the risk level requires one, the independent reviewer the
+  router assigned. Report IMPLEMENTED when that is what you reached.
+
+Issue identity is exact fingerprint equality. Two issues that look similar are
+two issues until a human merges them.
+
 ## Review Independence
 
 The review protocol is **Verifier-Lite**, defined in
