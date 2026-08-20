@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "description": "Capability-tier routing policy. Data only: changing a model name or a tier mapping must never require editing AGENTS.md or any harness code. Subscription authentication is not subscription usage: an account is dispatchable only through an execution mechanism that consumes its plan's included usage.",
+  "description": "Capability-tier routing policy. Data only: changing a model name or a tier mapping must never require editing AGENTS.md or any harness code. Subscription authentication is not subscription usage: an account is dispatchable only through an execution mechanism that consumes its plan's included usage. A logical account slot is not an auth context either: a slot executed through a directory-isolated runtime declares the concrete accountDir its credential lives in, and the mechanism declares the provider id that credential is filed under. `provider` is the vendor axis (tier lookup, cross-provider review independence); `authProvider` is what the runtime is invoked and probed with. They are not interchangeable.",
   "defaultParallel": 1,
   "effortLadder": [
     "low",
@@ -34,6 +34,7 @@
       "provider": "openai",
       "auth": "subscription",
       "execution": "pi-openai-chatgpt-oauth",
+      "accountDir": "~/.pi/accounts/gpt_a",
       "plan": "chatgpt_plus",
       "conceptualRole": "primary bounded executor",
       "authStatus": "authenticated"
@@ -42,6 +43,7 @@
       "provider": "openai",
       "auth": "subscription",
       "execution": "pi-openai-chatgpt-oauth",
+      "accountDir": "~/.pi/accounts/gpt_b",
       "plan": "chatgpt_plus",
       "conceptualRole": "scout / second executor / independent reviewer",
       "authStatus": "setup-required"
@@ -63,8 +65,19 @@
     "pi-openai-chatgpt-oauth": {
       "runtime": "pi",
       "provider": "openai",
+      "authProvider": "openai-codex",
+      "accountDirEnv": "PI_CODING_AGENT_DIR",
+      "authFile": "auth.json",
+      "readinessCommand": [
+        "pi",
+        "auth",
+        "check",
+        "--provider",
+        "openai-codex",
+        "--json"
+      ],
       "consumesPlanIncludedUsage": true,
-      "basis": "Pi provider documentation: the OpenAI provider signs in with the Codex ChatGPT Plus/Pro OAuth path, which consumes that plan's included Codex usage."
+      "basis": "Pi provider documentation: the OpenAI provider signs in with the Codex ChatGPT Plus/Pro OAuth path, which consumes that plan's included Codex usage. That credential is filed under provider id openai-codex, not openai; probing plain openai reports credentials_not_configured for an account that is in fact ready (observed 2026-08-20 against ~/.pi/accounts/gpt_a)."
     }
   },
   "tiers": {

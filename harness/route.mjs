@@ -8,7 +8,8 @@
 
 import { readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
-import { dirname, join, resolve } from "node:path";
+import { homedir } from "node:os";
+import { dirname, isAbsolute, join, resolve } from "node:path";
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 
@@ -33,6 +34,92 @@ function mechanismOf(routing, id, account) {
     );
   }
   return { id: account.execution, ...mechanism };
+}
+
+function expandHome(path) {
+  if (path === "~") return homedir();
+  return path.startsWith("~/") ? join(homedir(), path.slice(2)) : path;
+}
+
+// A logical slot is not an auth context. A runtime that isolates accounts by
+// directory must be handed the directory of the slot that was actually routed,
+// or it answers from whatever account its ambient environment points at — which
+// is how an authenticated GPT_A reported credentials_not_configured. The
+// assignment therefore carries the concrete launch context, resolved from
+// static config, and refuses to emit one it cannot name.
+function authContextOf(id, account, mechanism) {
+  const env = {};
+  let accountDir = null;
+  let authPath = null;
+  if (mechanism.accountDirEnv) {
+    if (!account.accountDir) {
+      throw new RoutingError(
+        `account ${id} executes through ${mechanism.id}, which isolates accounts by ` +
+          `${mechanism.accountDirEnv}, but declares no accountDir; a routed slot must name the ` +
+          "credential directory it binds to. The harness never falls back to the runtime's default account.",
+      );
+    }
+    accountDir = expandHome(account.accountDir);
+    if (!isAbsolute(accountDir)) {
+      throw new RoutingError(`account ${id} declares a non-absolute accountDir (${account.accountDir})`);
+    }
+    env[mechanism.accountDirEnv] = accountDir;
+    if (mechanism.authFile) authPath = join(accountDir, mechanism.authFile);
+  }
+  return {
+    runtime: mechanism.runtime,
+    provider: mechanism.authProvider ?? null,
+    accountDir,
+    authPath,
+    env,
+    readinessCommand: mechanism.readinessCommand ?? null,
+    consumesPlanIncludedUsage: mechanism.consumesPlanIncludedUsage,
+  };
+}
+
+// Readiness is proved against the routed account's own context, never assumed
+// from a slot's declared authStatus and never delegated to ambient state: both
+// facts are supplied by the caller, and any one of them missing is a refusal.
+export function checkAccountAuth(assignment, { exists, probe } = {}) {
+  const auth = assignment?.runtimeAuth;
+  if (!auth) {
+    throw new RoutingError(`assignment for ${assignment?.account ?? "?"} carries no runtime auth context`);
+  }
+  if (!auth.readinessCommand) {
+    throw new RoutingError(
+      `${assignment.account} executes through ${assignment.execution}, which declares no readiness ` +
+        "probe: that runtime owns its own sign-in and is not bound to a harness-declared account directory",
+    );
+  }
+  if (typeof exists !== "function" || typeof probe !== "function") {
+    throw new RoutingError("checkAccountAuth needs an exists() and a probe(); readiness is never assumed");
+  }
+  const no = (reason) => ({ account: assignment.account, accountDir: auth.accountDir, ready: false, reason });
+  if (auth.accountDir && !exists(auth.accountDir)) {
+    return no(`declared account directory ${auth.accountDir} does not exist`);
+  }
+  if (auth.authPath && !exists(auth.authPath)) {
+    return no(`no credential at ${auth.authPath} (credentials_not_configured)`);
+  }
+  let answer;
+  try {
+    answer = probe({ command: auth.readinessCommand, env: auth.env });
+  } catch (err) {
+    return no(`readiness probe failed: ${err.message}`);
+  }
+  if (answer?.status !== "ready") {
+    return no(
+      `readiness probe reported ${answer?.status ?? "no status"}` +
+        (answer?.reason ? ` (${answer.reason})` : ""),
+    );
+  }
+  if (answer.provider !== auth.provider) {
+    return no(
+      `readiness probe answered for provider ${JSON.stringify(answer.provider ?? null)}, ` +
+        `not ${JSON.stringify(auth.provider)}`,
+    );
+  }
+  return { account: assignment.account, accountDir: auth.accountDir, ready: true, reason: null };
 }
 
 export function route({
@@ -135,6 +222,7 @@ export function route({
       auth: acct.auth,
       execution: acct.mechanism.id,
       runtime: acct.mechanism.runtime,
+      runtimeAuth: authContextOf(acct.id, acct, acct.mechanism),
     };
   };
 

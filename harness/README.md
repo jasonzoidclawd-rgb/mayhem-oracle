@@ -86,11 +86,12 @@ The router fails closed on an unknown task class, on an unjustified escalation
 to the top two effort levels, and when no authorized subscription account is
 available. It never emits a metered-API route.
 
-Every route names the `execution` mechanism and `runtime` it authorizes, so
-dispatch is a lookup rather than a choice. Subscription authentication alone
-does not qualify a mechanism: `executionMechanisms` in `config/routing.json`
-declares, per mechanism, whether execution consumes the plan's *included* usage,
-and the router refuses anything else instead of substituting a paid route.
+Every route names the `execution` mechanism, the `runtime`, and the concrete
+`runtimeAuth` context it authorizes, so dispatch is a lookup rather than a
+choice. Subscription authentication alone does not qualify a mechanism:
+`executionMechanisms` in `config/routing.json` declares, per mechanism, whether
+execution consumes the plan's *included* usage, and the router refuses anything
+else instead of substituting a paid route.
 
 ## Task packets
 
@@ -129,8 +130,8 @@ trusted (`pi --approve`). The seams the harness relies on:
 | effort | `--thinking low\|medium\|high\|xhigh\|max` |
 | read-only verifier | `--tools read` (hard) + `allowed-tools` in the skill (declared) |
 | isolated session per packet | `--session-dir <worktree>/.pi-session` |
-| account slot | `PI_CODING_AGENT_DIR=~/.pi/accounts/<slot>` |
-| readiness probe | `pi auth check --provider <p> --json` |
+| account slot | `PI_CODING_AGENT_DIR=<slot.accountDir>` |
+| readiness probe | `pi auth check --provider <mechanism.authProvider> --json` |
 
 **Accounts.** Pi keeps one credential per provider in
 `$PI_CODING_AGENT_DIR/auth.json`, so a second account of the same provider is a
@@ -143,6 +144,41 @@ PI_CODING_AGENT_DIR=~/.pi/accounts/gpt_b    pi   # then /login, pick OpenAI
 
 `/login` is interactive and account-specific. It is the one step that cannot be
 automated here.
+
+**A logical account slot is not an auth context.** Selecting `GPT_A` only names
+a slot; the runtime still authenticates as whatever account its environment
+points at. Each slot on a directory-isolated runtime therefore declares its
+concrete `accountDir` in `config/routing.json`, and every route resolves it into
+the assignment's `runtimeAuth` — absolute `accountDir`, `authPath`, the `env`
+that binds it, and the readiness command to prove it:
+
+```json
+"runtimeAuth": {
+  "runtime": "pi",
+  "provider": "openai-codex",
+  "accountDir": "/Users/<you>/.pi/accounts/gpt_a",
+  "authPath": "/Users/<you>/.pi/accounts/gpt_a/auth.json",
+  "env": { "PI_CODING_AGENT_DIR": "/Users/<you>/.pi/accounts/gpt_a" },
+  "readinessCommand": [
+    "pi", "auth", "check", "--provider", "openai-codex", "--json"
+  ]
+}
+```
+
+`checkAccountAuth(assignment, { exists, probe })` proves that context before
+dispatch and fails closed on a missing directory, a missing credential, a
+not-ready probe, or a probe that answers for another provider. It never falls
+back to `~/.pi/agent`, to another slot, or to an API key. A slot's `authStatus`
+is an operator declaration; the probe is the proof. A route through a mechanism
+that isolates accounts by directory but names no `accountDir` is undispatchable.
+
+**ChatGPT/Codex subscription OAuth is provider `openai-codex`, not `openai`.**
+That is the id the credential is filed under, so `pi auth check --provider
+openai` reports `credentials_not_configured` for a GPT slot that is in fact
+ready — the defect that made an authenticated `GPT_A` skip its reviewer. The
+mechanism's `authProvider` is the only provider id that belongs in a Pi auth or
+launch flag; an account's `provider` is the vendor axis (tier lookup and
+cross-provider review independence) and is never a runtime flag.
 
 **Pi's Anthropic provider is not an authorized mechanism.** Claude Pro/Max
 credentials used through Pi are billed per token as Anthropic extra usage rather
