@@ -710,6 +710,86 @@ mod bounded_capture_tests {
     }
 
     #[tokio::test]
+    async fn native_stall_timeout_keeps_backlog_bounded_and_late_generation_stale() {
+        static TEST_CAPTURE_IN_FLIGHT: AtomicUsize = AtomicUsize::new(0);
+        const MAX: usize = 2;
+        const TIMEOUT: Duration = Duration::from_millis(25);
+
+        let current_generation = Arc::new(AtomicUsize::new(0));
+        let published_generation = Arc::new(AtomicUsize::new(usize::MAX));
+        let stale_rejected = Arc::new(AtomicUsize::new(0));
+        let (n_started_sender, n_started_receiver) = std::sync::mpsc::channel::<()>();
+        let (release_n_sender, release_n_receiver) = std::sync::mpsc::channel::<()>();
+
+        let n_generation = Arc::clone(&current_generation);
+        let n_published = Arc::clone(&published_generation);
+        let n_stale_rejected = Arc::clone(&stale_rejected);
+        let n = run_bounded_capture_with_gate(&TEST_CAPTURE_IN_FLIGHT, MAX, TIMEOUT, move || {
+            n_started_sender.send(()).unwrap();
+            release_n_receiver
+                .recv()
+                .map_err(|error| error.to_string())?;
+            if n_generation.load(Ordering::Acquire) == 0 {
+                n_published.store(0, Ordering::Release);
+            } else {
+                n_stale_rejected.fetch_add(1, Ordering::AcqRel);
+            }
+            Ok::<_, String>("late-n")
+        })
+        .await;
+
+        assert_eq!(n, Err(BoundedCaptureError::Timeout));
+        n_started_receiver
+            .recv_timeout(Duration::from_millis(100))
+            .expect("operation N should have physically begun");
+        assert_eq!(
+            TEST_CAPTURE_IN_FLIGHT.load(Ordering::Acquire),
+            1,
+            "operation N may still physically be executing after logical timeout"
+        );
+
+        current_generation.store(1, Ordering::Release);
+        let n_plus_1_generation = Arc::clone(&current_generation);
+        let n_plus_1_published = Arc::clone(&published_generation);
+        let n_plus_1 =
+            run_bounded_capture_with_gate(&TEST_CAPTURE_IN_FLIGHT, MAX, TIMEOUT, move || {
+                if n_plus_1_generation.load(Ordering::Acquire) == 1 {
+                    n_plus_1_published.store(1, Ordering::Release);
+                }
+                Ok::<_, String>("n-plus-1")
+            })
+            .await;
+        assert_eq!(n_plus_1, Ok("n-plus-1"));
+        assert_eq!(published_generation.load(Ordering::Acquire), 1);
+        assert!(
+            TEST_CAPTURE_IN_FLIGHT.load(Ordering::Acquire) <= MAX,
+            "replacement native work must remain bounded by the channel cap"
+        );
+
+        let refused = run_bounded_capture_with_gate(&TEST_CAPTURE_IN_FLIGHT, 1, TIMEOUT, || {
+            Ok::<_, String>("must-not-run")
+        })
+        .await;
+        assert_eq!(refused, Err(BoundedCaptureError::Busy));
+
+        release_n_sender.send(()).unwrap();
+        tokio::time::timeout(Duration::from_millis(500), async {
+            while TEST_CAPTURE_IN_FLIGHT.load(Ordering::Acquire) != 0 {
+                tokio::task::yield_now().await;
+            }
+        })
+        .await
+        .expect("late physical operation N should eventually release its permit");
+
+        assert_eq!(published_generation.load(Ordering::Acquire), 1);
+        assert_eq!(
+            stale_rejected.load(Ordering::Acquire),
+            1,
+            "generation N must not publish after N+1 supersedes it"
+        );
+    }
+
+    #[tokio::test]
     async fn timed_out_geometry_capture_does_not_starve_ocr_capture() {
         let (release_sender, release_receiver) = std::sync::mpsc::channel();
 
@@ -1157,21 +1237,38 @@ where
 {
     let permit =
         CapturePermit::try_acquire(in_flight, max_in_flight).ok_or(BoundedCaptureError::Busy)?;
-    let worker = tokio::task::spawn_blocking(move || {
+    let (result_sender, result_receiver) = std::sync::mpsc::channel();
+    let _worker = tokio::task::spawn_blocking(move || {
         // The permit deliberately lives in the blocking worker: timing out the
-        // async wait cannot cancel an OS capture, so the permit is only released
-        // when that worker truly returns. The per-channel CAP (not a single
-        // permit) still admits retries while one worker is hung, so a slow
-        // capture no longer blacks out the channel for the whole hang.
+        // logical wait cannot cancel an OS capture, so the permit is only
+        // released when that worker truly returns. The per-channel CAP (not a
+        // single permit) still admits retries while one worker is hung, so a
+        // slow capture no longer blacks out the channel for the whole hang.
         let _permit = permit;
-        capture()
+        let _ = result_sender.send(capture());
     });
 
-    match tokio::time::timeout(timeout, worker).await {
-        Ok(Ok(Ok(captured))) => Ok(captured),
-        Ok(Ok(Err(error))) => Err(BoundedCaptureError::Capture(error)),
-        Ok(Err(_)) => Err(BoundedCaptureError::WorkerFailed),
-        Err(_) => Err(BoundedCaptureError::Timeout),
+    // Use an OS-thread wall-clock wait instead of `tokio::time::timeout`.
+    // If Tokio async workers are temporarily unavailable, the task currently
+    // polling this future still returns by the logical deadline. A timeout only
+    // drops this receiver; it does NOT assume the physical native closure was
+    // cancelled, and the permit remains owned by that closure until it exits.
+    let wait_result = if matches!(
+        tokio::runtime::Handle::current().runtime_flavor(),
+        tokio::runtime::RuntimeFlavor::MultiThread
+    ) {
+        tokio::task::block_in_place(|| result_receiver.recv_timeout(timeout))
+    } else {
+        result_receiver.recv_timeout(timeout)
+    };
+
+    match wait_result {
+        Ok(Ok(captured)) => Ok(captured),
+        Ok(Err(error)) => Err(BoundedCaptureError::Capture(error)),
+        Err(std::sync::mpsc::RecvTimeoutError::Timeout) => Err(BoundedCaptureError::Timeout),
+        Err(std::sync::mpsc::RecvTimeoutError::Disconnected) => {
+            Err(BoundedCaptureError::WorkerFailed)
+        }
     }
 }
 
