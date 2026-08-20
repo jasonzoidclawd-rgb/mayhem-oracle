@@ -10,18 +10,18 @@
 // It never pushes, merges, tags, or touches a remote beyond the gh reads and
 // the one issue comment plus label transition it is explicitly asked to make.
 
-import { spawnSync } from "node:child_process";
 import { existsSync, mkdirSync, readFileSync, readdirSync, realpathSync, rmSync, writeFileSync } from "node:fs";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { loadConfig, route } from "./route.mjs";
 import { createGh } from "./github/gh.mjs";
+import { runProcess } from "./github/process.mjs";
 import { dispatchIssue } from "./github/dispatch.mjs";
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const AGENT_ROLES = new Set(["executor", "reviewer"]);
 
-const git = (argv, cwd = HERE) => spawnSync("git", argv, { cwd, encoding: "utf8", maxBuffer: 64 * 1024 * 1024 });
+const git = (argv, cwd = HERE) => runProcess(["git", ...argv], { cwd });
 
 function gitOrDie(argv) {
   const answer = git(argv);
@@ -63,7 +63,11 @@ function main(argv) {
   const config = loadConfig(HERE);
   const repo = flag("repo") ?? repoFromOrigin();
   const commonDir = resolve(HERE, "..", gitOrDie(["rev-parse", "--path-format=absolute", "--git-common-dir"]));
+  // Two different directories, deliberately. mainWorktree is where git runs and
+  // where issue worktrees are placed; harnessRoot is the checkout this
+  // dispatcher — and therefore this gate — is actually running out of.
   const mainWorktree = dirname(commonDir);
+  const harnessRoot = resolve(HERE, "..");
   const stateDir = join(commonDir, "mayhem-dispatch");
   const runsDir = join(stateDir, "runs");
   const lockDir = join(stateDir, "locks");
@@ -77,11 +81,11 @@ function main(argv) {
     available: flag("available")?.split(",").map((s) => s.trim()).filter(Boolean) ?? null,
     dryRun: argv.includes("--dry-run"),
     mainWorktree,
+    harnessRoot,
     runsDir,
     gh: createGh({
       repo,
-      run: (args, options = {}) =>
-        spawnSync("gh", args, { encoding: "utf8", input: options.input, maxBuffer: 32 * 1024 * 1024 }),
+      run: (args, options = {}) => runProcess(["gh", ...args], { input: options.input, maxBuffer: 32 * 1024 * 1024 }),
     }),
     git: (args) => git(args, mainWorktree),
     exists: (path) => existsSync(path),
@@ -94,12 +98,9 @@ function main(argv) {
       }
     },
     probe: ({ command, env }) => {
-      const answer = spawnSync(command[0], command.slice(1), {
-        encoding: "utf8",
-        env: { ...process.env, ...env },
-      });
+      const answer = runProcess(command, { env: env ?? {} });
       if (answer.status !== 0 && !answer.stdout) {
-        throw new Error((answer.stderr ?? answer.error?.message ?? "no output").trim());
+        throw new Error((answer.stderr || answer.error?.message || "no output").trim());
       }
       return JSON.parse(answer.stdout);
     },
@@ -107,13 +108,9 @@ function main(argv) {
       // The executor writes its report into the run directory, so that
       // directory has to exist before the runtime starts.
       if (AGENT_ROLES.has(role) && runDir) mkdirSync(runDir, { recursive: true });
-      const answer = spawnSync(args[0], args.slice(1), {
-        cwd,
-        encoding: "utf8",
-        env: { ...process.env, ...env },
-        maxBuffer: 64 * 1024 * 1024,
-      });
-      if (answer.error) throw answer.error;
+      // Returned, never thrown: a launch that never happened is a fact about
+      // the result, and only the caller knows what it means for what it asked.
+      const answer = runProcess(args, { cwd, env });
       if (AGENT_ROLES.has(role)) {
         captured.set(role, answer.stdout ?? "");
         if (answer.stdout) process.stdout.write(answer.stdout);

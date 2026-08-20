@@ -636,12 +636,22 @@ const gitFailingAt = (verb) => (argv) =>
     ? { status: 1, stdout: "", stderr: "fatal: could not create worktree: No space left on device" }
     : defaultGit(argv);
 
+// The real `verify-task.sh <profile> --plan` names the profile it planned. A
+// fake that answers a bare exit 0 cannot tell a gate that ran from one that was
+// never found — which is the gap the live issue-47 dry-run fell into, so the
+// fakes here answer the plan the way the real command does.
+const gateAnswer = (argv) => ({
+  status: 0,
+  stdout: argv.includes("--plan") ? `PROFILE: ${argv[2]}\nSUITES: harness\n` : "",
+  stderr: "",
+});
+
 const spawnThrowingAt = (role, message) => {
   const spawned = [];
   const fn = (argv, options = {}) => {
     spawned.push({ argv, ...options });
     if (options.role === role) throw new Error(message);
-    return { status: 0, stdout: "", stderr: "" };
+    return gateAnswer(argv);
   };
   fn.spawned = spawned;
   return fn;
@@ -838,6 +848,7 @@ function makeIo(over = {}) {
     route: over.route ?? ((args) => route({ ...args, config: io.config })),
     available: over.available ?? ["CLAUDE_A", "GPT_A"],
     mainWorktree: MAIN,
+    harnessRoot: over.harnessRoot ?? MAIN,
     startingHead: HEAD,
     order,
     spawned,
@@ -863,7 +874,7 @@ function makeIo(over = {}) {
     spawn: over.spawn ?? ((argv, opts) => {
       order.push(`launch:${opts.role ?? "gate"}`);
       spawned.push({ argv, ...opts });
-      return { status: 0, stdout: "", stderr: "" };
+      return gateAnswer(argv);
     }),
     readReport: over.readReport ?? ((runId, role) =>
       role === "reviewer"

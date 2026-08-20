@@ -23,6 +23,7 @@ import {
   normalizeExecutorReport,
   renderComment,
 } from "./issue-contract.mjs";
+import { didRun } from "./process.mjs";
 import { applyWorktreePlan, parseWorktreeList, planIssueWorktree } from "./worktree.mjs";
 
 export class DispatchError extends Error {}
@@ -33,6 +34,9 @@ export class DispatchError extends Error {}
 export class DispatchRecoveryError extends Error {}
 
 const DEFAULT_GATE_PROFILE = "harness";
+// The gate is invoked the same way in both places it is used, so the profile a
+// dry run proved is the profile a real run executes.
+const GATE_COMMAND = ["bash", "harness/verify-task.sh"];
 const DEFAULT_CONTEXT = ["AGENTS.md", "CLAUDE.md", "harness/README.md", "docs/architecture/agent-harness.md"];
 const RESULT_SCHEMA = 1;
 
@@ -46,6 +50,63 @@ function redact(text) {
   let clean = String(text ?? "");
   for (const shape of TOKEN_SHAPES) clean = clean.replace(shape, "[redacted]");
   return clean.slice(0, 500);
+}
+
+// What the gate preflight actually established.
+//
+// verify-task.sh is the profile authority, and it can only exercise that
+// authority if it ran. A script that was never found, a directory that does
+// not exist, and a profile the gate refused are three different facts about a
+// run, and reading `status` alone reports all three as the third one — which
+// is how a dispatcher run out of a checkout without a harness came back
+// claiming a valid profile had been rejected. Each cause therefore gets its
+// own refusal code, and anything unrecognised fails closed rather than
+// dispatching on an unproven profile.
+const CANNOT_LAUNCH = /No such file or directory|command not found|Permission denied|cannot execute/i;
+const REJECTED_PROFILE = /^unknown profile:/m;
+
+// Refusal text is operator-facing. A launch failure's message can carry the
+// absolute path it tried, which names the machine; one line, no paths, capped.
+const detail = (text) =>
+  String(text ?? "")
+    .trim()
+    .split("\n")[0]
+    .replace(/(^|\s)\/\S+/g, "$1<path>")
+    .slice(0, 200);
+
+export function classifyGatePreflight(result, profile) {
+  const launchFailed = (why) => ({
+    ok: false,
+    code: "gate-preflight-launch-failed",
+    reason: `the gate could not be started to plan profile ${profile}: ${why}`,
+  });
+  const failed = (why) => ({ ok: false, code: "gate-preflight-failed", reason: `${why} while planning profile ${profile}` });
+
+  if (result?.error) return launchFailed(detail(result.error.message) || result.error.code || "the launch failed");
+  if (!didRun(result)) {
+    return result?.signal ? failed(`the gate was killed by ${result.signal}`) : launchFailed("the gate never ran");
+  }
+  if (result.status === 0) {
+    // Proof it was this gate that answered, not something else exiting clean.
+    return new RegExp(`^PROFILE: ${profile.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}$`, "m").test(result.stdout)
+      ? { ok: true }
+      : failed("the gate exited 0 without planning the profile");
+  }
+  if (result.status === 127 || CANNOT_LAUNCH.test(result.stderr)) {
+    return launchFailed(detail(result.stderr) || "the gate script was not found");
+  }
+  if (REJECTED_PROFILE.test(result.stderr)) {
+    return { ok: false, code: "unknown-gate-profile", reason: `the gate rejected profile ${profile}` };
+  }
+  return failed(`the gate exited ${result.status}`);
+}
+
+// A subprocess that never launched has reported nothing, so its result may not
+// be read as one. Only the preflight classifies such a failure; everywhere
+// else it is a dispatcher fault, which the claim recovery already handles.
+function mustHaveRun(result, what) {
+  if (result?.error) throw new DispatchError(`${what} could not be started: ${detail(result.error.message)}`);
+  return result;
 }
 
 // The launch line is data the mechanism declares, not syntax invented here.
@@ -132,12 +193,16 @@ async function runDispatch(number, io) {
     return refuse("issue-changed", `fingerprint changed to ${again.machine.fingerprint} while routing`);
   }
 
+  // Proved against the checkout this dispatcher is running out of, not
+  // io.mainWorktree: that one is where issue worktrees are placed and where git
+  // runs, and it can sit on any branch — including one that carries no harness
+  // at all, where every profile looks rejected.
   const gateProfile = machine.gate_profile ?? DEFAULT_GATE_PROFILE;
-  const planned = io.spawn(["bash", "harness/verify-task.sh", gateProfile, "--plan"], {
-    cwd: io.mainWorktree,
-    role: "gate-plan",
-  });
-  if (planned?.status !== 0) return refuse("unknown-gate-profile", `the gate rejected profile ${gateProfile}`);
+  const preflight = classifyGatePreflight(
+    io.spawn([...GATE_COMMAND, gateProfile, "--plan"], { cwd: io.harnessRoot, role: "gate-plan" }),
+    gateProfile,
+  );
+  if (!preflight.ok) return refuse(preflight.code, preflight.reason);
 
   // A dry run stops here, one step short of the first mutation: everything
   // above is a read, so it proves parsing and routing against the real ledger
@@ -231,21 +296,21 @@ async function runDispatch(number, io) {
     const mechanismOf = (assignment) => config.routing.executionMechanisms[assignment.execution];
     const runDir = `${io.runsDir}/${runId}`;
     const reportPath = (role) => `${runDir}/report-${role}.json`;
-    const start = (assignment, role, prompt) =>
-      io.spawn(
-        launchArgv({
-          mechanism: mechanismOf(assignment),
-          role,
-          model: assignment.model,
-          effort: routed.effort,
-          authProvider: assignment.runtimeAuth?.provider,
-          prompt,
-          sessionDir: `${runDir}/session-${role}`,
-          worktree: plan.path,
-          runDir,
-        }),
-        { cwd: plan.path, env: assignment.runtimeAuth?.env ?? {}, role, account: assignment.account, runId, runDir },
-      );
+    const start = (assignment, role, prompt) => {
+      const argv = launchArgv({
+        mechanism: mechanismOf(assignment),
+        role,
+        model: assignment.model,
+        effort: routed.effort,
+        authProvider: assignment.runtimeAuth?.provider,
+        prompt,
+        sessionDir: `${runDir}/session-${role}`,
+        worktree: plan.path,
+        runDir,
+      });
+      const options = { cwd: plan.path, env: assignment.runtimeAuth?.env ?? {}, role, account: assignment.account, runId, runDir };
+      return mustHaveRun(io.spawn(argv, options), `the ${role} runtime`);
+    };
 
     stage = "executor-launch";
     const launched = start(
@@ -287,8 +352,8 @@ async function runDispatch(number, io) {
     record.newBugs = reported.newBugs;
 
     stage = "gate";
-    const gate = io.spawn(["bash", "harness/verify-task.sh", gateProfile], { cwd: plan.path, role: "gate" });
-    record.gateResult = gate?.status === 0 ? "PASS" : "FAIL";
+    const gate = mustHaveRun(io.spawn([...GATE_COMMAND, gateProfile], { cwd: plan.path, role: "gate" }), "the gate");
+    record.gateResult = gate.status === 0 ? "PASS" : "FAIL";
 
     stage = "review";
     if (reviewer && reported.result === "FIX_PROPOSED" && record.gateResult === "PASS") {
