@@ -196,6 +196,44 @@ rule the cheapest way to close an issue is to write a test that fails because
 nothing exists yet, then make it pass; that reports a fix and proves nothing.
 "Could not reproduce" is `NEEDS_EVIDENCE` and never becomes a fix.
 
+### A claim is a promise
+
+Splitting the record from the executor creates one failure mode that neither
+half owns alone: a dispatcher that has already written `status:agent-working`
+and then dies mid-slice. GitHub still says the issue is being worked; nothing
+is working it. That state is worse than never having claimed it, because it is
+indistinguishable from progress.
+
+The rule is therefore that a claim is a promise, and everything after it runs
+inside a single recovery boundary. Any bounded failure — worktree, base
+resolution, executor launch, executor report, gate, review, conclusion, result
+write, GitHub report — records the run `INTERRUPTED` with the stage that
+failed, writes `result.json` first so the durable evidence survives an
+unreachable GitHub, and hands the issue back as `status:blocked`.
+
+Three choices are deliberate:
+
+- **One recovery state, not a taxonomy.** The dispatcher does not classify a
+  failure as retryable, human, or transient; it names the stage and stops. A
+  state machine that guesses is a state machine that guesses wrong at 3am, and
+  the stage plus the error class is what a human actually reads.
+- **No retries.** A failed run leaves an issue a human can re-label. Automatic
+  retry converts one broken slice into a loop against a rate limit.
+- **Recovery arms only after the claim is genuinely held.** A refused claim
+  owes nothing back, so it never enters the boundary — and the failure
+  reporting never says GitHub was recovered when the label write itself failed:
+  that case raises an error carrying both facts and exits nonzero.
+
+Failure text is redacted and truncated before it is written or posted. An error
+message can carry a command line, and a command line can carry a token; issue
+comments are public relative to the repository.
+
+**The limit, stated rather than implied.** This covers in-process failures.
+`SIGKILL`, a crashed machine, and power loss run no handler, so they still
+strand a claim and leave a lock directory behind; recovering those needs a
+lease and a sweep, which V1 does not have. The harness would rather document a
+gap than imply exactly-once delivery it has not built.
+
 ### Why not GitHub Actions yet
 
 The acceptance criterion for V1 is local, because the interesting failure modes

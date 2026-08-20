@@ -15,7 +15,7 @@ import {
 } from "../github/issue-contract.mjs";
 import { createGh, GhError } from "../github/gh.mjs";
 import { parseWorktreeList, planIssueWorktree, WorktreeError } from "../github/worktree.mjs";
-import { dispatchIssue, launchArgv } from "../github/dispatch.mjs";
+import { dispatchIssue, launchArgv, DispatchRecoveryError } from "../github/dispatch.mjs";
 
 // GitHub is the durable bug ledger; the harness router is still the routing
 // authority. These tests prove the seam between them without touching the
@@ -625,6 +625,205 @@ test("a dry run reads the ledger and mutates nothing", async () => {
   assert.equal(io.spawned.filter((s) => s.role === "executor" || s.role === "reviewer").length, 0);
 });
 
+// --- claim recovery -------------------------------------------------------
+//
+// Once the claim succeeds the issue is ours, and every bounded failure after
+// it has to leave the ledger somewhere a human or a later run can act on.
+// Stranding it at status:agent-working is silent, permanent, and invisible.
+
+const gitFailingAt = (verb) => (argv) =>
+  argv[0] === "worktree" && argv[1] === verb
+    ? { status: 1, stdout: "", stderr: "fatal: could not create worktree: No space left on device" }
+    : defaultGit(argv);
+
+const spawnThrowingAt = (role, message) => {
+  const spawned = [];
+  const fn = (argv, options = {}) => {
+    spawned.push({ argv, ...options });
+    if (options.role === role) throw new Error(message);
+    return { status: 0, stdout: "", stderr: "" };
+  };
+  fn.spawned = spawned;
+  return fn;
+};
+
+// The claim happened, and it was undone in favour of a state that names itself.
+const assertRecovered = (io, out) => {
+  assert.ok(io.gh.labelWrites.length >= 1, "the issue was never claimed");
+  assert.deepEqual(io.gh.labelWrites[0].add, [LABELS.working], "the first write was not the claim");
+  assert.ok(
+    io.gh.labelWrites.length >= 2,
+    "the issue is still at status:agent-working — a post-claim failure stranded it",
+  );
+  const recovery = io.gh.labelWrites.at(-1);
+  assert.deepEqual(recovery.remove, [LABELS.working], "status:agent-working was never removed");
+  assert.deepEqual(recovery.add, [LABELS.blocked], "the issue was not moved to a recoverable status");
+  assert.ok(out?.result, "no durable result was produced for the failed run");
+  assert.equal(out.result.result, "INTERRUPTED");
+  assert.equal(out.result.nextStatus, LABELS.blocked);
+  assert.ok(out.result.failureStage, "the result names no failure stage");
+  assert.equal(io.lockReleased, true, "the local lock outlived the recovery");
+};
+
+test("23. a post-claim worktree failure recovers the issue instead of stranding it", async () => {
+  const io = makeIo({ git: gitFailingAt("add") });
+  const out = await dispatchIssue(147, io);
+  assertRecovered(io, out);
+  assert.equal(out.result.failureStage, "worktree");
+  // Nothing may read as a successful run.
+  assert.notEqual(out.code, "ran");
+  assert.equal(out.result.commitSha, null);
+  assert.equal(out.result.behavioralRed, null);
+  assert.equal(out.result.gateResult, null);
+  // Durable evidence is written before the ledger is touched.
+  const written = io.order.indexOf("write-result");
+  assert.ok(written !== -1, "no INTERRUPTED result was written");
+  assert.ok(written < io.order.lastIndexOf("status"), "GitHub was updated before the durable record");
+  // Enough to resume from.
+  assert.equal(out.result.issue, 147);
+  assert.equal(out.result.fingerprint, FINGERPRINT);
+  assert.match(out.result.runId, /^issue-147-attempt-/);
+  assert.equal(out.result.resolvedBaseSha, BASE);
+  assert.ok(out.result.primaryAccount, "the selected account was not recorded");
+});
+
+test("24. a post-claim launcher failure recovers too — not tied to one place", async () => {
+  const spawn = spawnThrowingAt("executor", "spawn claude ENOENT");
+  const io = makeIo({ spawn });
+  const out = await dispatchIssue(147, io);
+  assertRecovered(io, out);
+  assert.equal(out.result.failureStage, "executor-launch");
+  assert.ok(out.result.worktree, "the worktree reached before the failure was not recorded");
+  assert.equal(spawn.spawned.filter((s) => s.role === "reviewer").length, 0, "a reviewer ran after the executor died");
+});
+
+test("24b. a post-claim gate failure recovers too", async () => {
+  const io = makeIo({ spawn: spawnThrowingAt("gate", "bash: verify-task.sh: Input/output error") });
+  const out = await dispatchIssue(147, io);
+  assertRecovered(io, out);
+  assert.equal(out.result.failureStage, "gate");
+});
+
+test("25. a failed final comment still moves the issue off agent-working", async () => {
+  // The run concluded; only the delivery failed. The conclusion must survive
+  // in the durable record, and the issue must not stay claimed.
+  const io = makeIo({ ghOver: { comment: () => { throw new Error("gh: API rate limit exceeded"); } } });
+  const out = await dispatchIssue(147, io);
+  const recovery = io.gh.labelWrites.at(-1);
+  assert.deepEqual(recovery.remove, [LABELS.working]);
+  assert.deepEqual(recovery.add, [LABELS.blocked]);
+  assert.equal(out.result.failureStage, "github-report");
+  assert.equal(out.result.result, "VERIFIED", "the concluded result was overwritten by the reporting failure");
+  assert.equal(out.result.nextStatus, LABELS.blocked, "an undelivered conclusion must not read as delivered");
+  assert.equal(io.lockReleased, true);
+});
+
+test("26. a failed recovery write preserves BOTH failures and never claims success", async () => {
+  // The claim succeeds; the write that would hand the issue back does not.
+  let writes = 0;
+  const io = makeIo({
+    git: gitFailingAt("add"),
+    ghOver: {
+      setLabels: (number, change) => {
+        writes += 1;
+        if (writes === 1) return;
+        throw new Error("gh: 403 Resource not accessible");
+      },
+    },
+  });
+  const err = await dispatchIssue(147, io).then(
+    () => null,
+    (e) => e,
+  );
+  assert.ok(err, "a stranded issue was reported as handled");
+  assert.ok(err instanceof DispatchRecoveryError);
+  assert.match(err.message, /No space left on device/, "the original failure was hidden");
+  assert.match(err.message, /403 Resource not accessible/, "the recovery failure was hidden");
+  assert.equal(err.recovered, false);
+  assert.equal(err.result.nextStatus, LABELS.blocked, "the durable record does not say what was intended");
+  assert.equal(io.lockReleased, true);
+});
+
+test("26c. a claim that never succeeded is not 'recovered'", async () => {
+  // If the claiming write itself fails, this process does not own the issue.
+  // Retrying the same write as recovery would be both pointless and a lie.
+  const io = makeIo({ ghOver: { setLabels: () => { throw new Error("gh: 502 Bad Gateway"); } } });
+  const err = await dispatchIssue(147, io).then(() => null, (e) => e);
+  assert.ok(err, "a failed claim was reported as handled");
+  assert.ok(!(err instanceof DispatchRecoveryError), "a failed claim triggered claim recovery");
+  assert.match(err.message, /502 Bad Gateway/);
+  assert.equal(io.gh.comments.length, 0, "a failed claim commented on the issue");
+  assert.equal(io.spawned.filter((s) => s.role === "executor").length, 0);
+  assert.equal(io.lockReleased, true);
+});
+
+test("26b. recovery survives a failed local write and still frees the issue", async () => {
+  const io = makeIo({ git: gitFailingAt("add") });
+  io.writeResult = () => { throw new Error("EROFS: read-only file system"); };
+  const out = await dispatchIssue(147, io);
+  const recovery = io.gh.labelWrites.at(-1);
+  assert.deepEqual(recovery.add, [LABELS.blocked], "a local write failure blocked the ledger recovery");
+  assert.match(out.recovery.result, /EROFS/, "the local write failure was swallowed");
+});
+
+test("27. recovery never fires before this process holds the claim", async () => {
+  // A pre-claim failure must not touch labels: the dispatcher does not own the
+  // issue yet, and "recovering" it would clear someone else's state.
+  const io = makeIo({ ghOver: { listOpenIssues: () => { throw new Error("gh: network unreachable"); } } });
+  await assert.rejects(dispatchIssue(147, io));
+  assert.equal(io.gh.labelWrites.length, 0, "a pre-claim failure edited labels");
+  assert.equal(io.gh.comments.length, 0);
+  assert.equal(io.lockReleased, true);
+});
+
+test("27b. a racing dispatcher never recovers another process's claim", async () => {
+  let views = 0;
+  const io = makeIo({
+    ghOver: {
+      viewIssue: () => {
+        views += 1;
+        return views === 1
+          ? issue()
+          : issue({ labels: [{ name: "status:ready-for-agent" }, { name: "status:agent-working" }] });
+      },
+    },
+  });
+  const out = await dispatchIssue(147, io);
+  assert.equal(out.code, "already-claimed");
+  assert.equal(io.gh.labelWrites.length, 0, "the racer edited the holder's labels");
+  assert.equal(io.spawned.length, 0);
+});
+
+test("28. recovery evidence carries no stack trace and redacts token shapes", async () => {
+  const io = makeIo({
+    spawn: spawnThrowingAt("executor", "auth failed for gho_ABCDEFGHIJKLMNOPQRSTUVWXYZ012345 and sk-abcdefghijklmnopqrstuvwx"),
+  });
+  const out = await dispatchIssue(147, io);
+  const serialized = JSON.stringify(out.result);
+  assert.ok(!/gho_[A-Za-z0-9]{16,}/.test(serialized), "a token-shaped string reached the durable record");
+  assert.ok(!/sk-[A-Za-z0-9]{16,}/.test(serialized), "a key-shaped string reached the durable record");
+  assert.match(out.result.errorMessage, /\[redacted\]/);
+  assert.ok(!("stack" in out.result), "a stack trace was serialized");
+  assert.ok(!/ at .*\.mjs:\d+/.test(serialized), "a stack frame reached the durable record");
+  assert.ok(!/PI_CODING_AGENT_DIR|env/i.test(out.result.errorMessage ?? ""), "environment detail leaked");
+  const body = io.gh.comments.at(-1)?.body ?? "";
+  assert.ok(!/gho_|sk-/.test(body), "a credential shape reached the issue comment");
+});
+
+const defaultGit = (argv) => {
+  if (argv[0] === "worktree" && argv[1] === "list") {
+    return { status: 0, stdout: worktrees([{ path: MAIN, branch: "main" }]), stderr: "" };
+  }
+  // No issue branch exists in this fake repository.
+  if (argv[0] === "rev-parse" && String(argv.at(-1)).startsWith("refs/heads/")) {
+    return { status: 1, stdout: "", stderr: "" };
+  }
+  if (argv[0] === "rev-parse") return { status: 0, stdout: `${BASE}\n`, stderr: "" };
+  if (argv[0] === "status") return { status: 0, stdout: "", stderr: "" };
+  if (argv[0] === "log") return { status: 0, stdout: `${HEAD}\n`, stderr: "" };
+  return { status: 0, stdout: "", stderr: "" };
+};
+
 // --- fake io -------------------------------------------------------------
 
 function makeIo(over = {}) {
@@ -654,19 +853,7 @@ function makeIo(over = {}) {
       comment: (number, body) => { order.push("comment"); comments.push({ number, body }); },
       ...(over.ghOver ?? {}),
     },
-    git: over.git ?? ((argv) => {
-      if (argv[0] === "worktree" && argv[1] === "list") {
-        return { status: 0, stdout: worktrees([{ path: MAIN, branch: "main" }]), stderr: "" };
-      }
-      // No issue branch exists in this fake repository.
-      if (argv[0] === "rev-parse" && String(argv.at(-1)).startsWith("refs/heads/")) {
-        return { status: 1, stdout: "", stderr: "" };
-      }
-      if (argv[0] === "rev-parse") return { status: 0, stdout: `${BASE}\n`, stderr: "" };
-      if (argv[0] === "status") return { status: 0, stdout: "", stderr: "" };
-      if (argv[0] === "log") return { status: 0, stdout: `${HEAD}\n`, stderr: "" };
-      return { status: 0, stdout: "", stderr: "" };
-    }),
+    git: over.git ?? defaultGit,
     exists: over.exists ?? (() => true),
     pathExists: over.pathExists ?? (() => false),
     probe: over.probe ?? (({ command }) => {

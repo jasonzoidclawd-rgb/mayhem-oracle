@@ -202,6 +202,46 @@ the packet, the executor and reviewer reports, and `result.json`. The result
 JSON is written **before** GitHub is told anything, and the issue comment is a
 compact `KEY=VALUE` block — the ledger is not a log sink.
 
+### When a claimed run fails
+
+A claim is a promise: once an issue reads `status:agent-working`, something has
+taken responsibility for it. Every step after the claim therefore runs inside a
+single recovery boundary. A bounded failure anywhere in it — worktree, base
+resolution, executor launch, executor report, gate, review, conclusion, result
+write, GitHub report — hands the issue back rather than leaving it claimed:
+
+- the run is recorded `INTERRUPTED` with the stage that failed, the error
+  class, and a redacted, truncated message (never a stack trace, never an
+  environment dump — token-shaped substrings are replaced before anything is
+  written or posted),
+- `result.json` is written first, so the durable evidence exists even if GitHub
+  is unreachable,
+- the label moves `status:agent-working` → `status:blocked`,
+- a comment reports `RESULT=INTERRUPTED` and `FAILED_AT=<stage>`.
+
+There is exactly one recovery state. The dispatcher does not guess whether a
+failure was a human problem or a machine problem, does not retry, and does not
+grow a state machine per failure mode: a human reads the stage and decides.
+
+Recovery is armed **only after this process actually obtained the claim**. A
+refused or lost claim — `already-claimed`, `not-ready`, a failed claiming
+write — never enters it, because nothing is owed back.
+
+If recovery itself cannot reach GitHub, the command does not pretend otherwise:
+a label write that fails raises an error carrying both the original failure and
+the recovery failure, states that the issue is still `status:agent-working`, and
+exits nonzero. A comment that fails is reported as `FAILED` in the
+`RECOVERY result=… labels=… comment=…` line and also exits nonzero, while the
+label — the part that un-strands the issue — has already landed.
+
+**Limitation, stated exactly.** This covers *bounded in-process failures*:
+exceptions, nonzero commands, unreachable GitHub. It does **not** cover hard
+process death — `SIGKILL`, a panic that skips unwinding, a crashed machine, or
+power loss — because no in-process handler runs in those cases. Such a run
+leaves the issue at `status:agent-working` and its lock directory in place, and
+needs a human. There is no watchdog, no lease expiry, and no reconciliation
+sweep; V1 deliberately does not claim exactly-once semantics.
+
 ### What counts as done
 
 The result vocabulary is closed: `FIX_PROPOSED`, `NEEDS_EVIDENCE`, `BLOCKED`,
@@ -346,6 +386,15 @@ are deferred until a second account of each provider is authenticated.
   `dispatch-github-issue.sh`. No runner is installed, and none is needed: the
   local command is the acceptance criterion. See
   `docs/architecture/agent-harness.md`.
+- **Stranded-claim reconciliation** — nothing reclaims an issue whose
+  dispatcher was killed outright (see "When a claimed run fails"). A lease
+  stamp plus a sweep that hands back claims with no live process would close
+  it; V1 has neither, and says so rather than implying exactly-once delivery.
+- **P2: issue title rename can change slug/path and prevent automatic discovery
+  of an existing same-issue worktree.** The worktree path is derived from the
+  issue title, so renaming an issue mid-slice makes an existing worktree
+  invisible to the next dispatch. Deliberately not fixed in the recovery patch;
+  the fix is number-first identity with the slug as decoration.
 - **Quota ledger** — no provider exposes per-request token counts under
   subscription authentication. Record proxies (model, effort, files loaded,
   tool calls, duration, whether a quota warning appeared); do not invent numbers.

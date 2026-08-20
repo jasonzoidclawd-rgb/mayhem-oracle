@@ -233,6 +233,9 @@ export function renderComment(result) {
     `EXECUTOR=${result.primaryAccount}`,
     `BASE=${short(result.resolvedBaseSha)}`,
     `RESULT=${result.result}`,
+    ...(result.failureStage
+      ? [`FAILED_AT=${result.failureStage} (${result.errorClass}: ${String(result.errorMessage ?? "").slice(0, 160)})`]
+      : []),
     `RED=${result.behavioralRed ? "PASS" : "NONE"}`,
     `TESTS=${result.tests.length}`,
     `GATE=${result.gateResult} (${result.gateProfile})`,

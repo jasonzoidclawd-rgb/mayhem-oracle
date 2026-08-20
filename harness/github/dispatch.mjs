@@ -27,11 +27,26 @@ import { applyWorktreePlan, parseWorktreeList, planIssueWorktree } from "./workt
 
 export class DispatchError extends Error {}
 
+// Raised when a run failed AND the attempt to hand the issue back also failed.
+// It carries both facts, because reporting only one of them would either hide
+// the defect or falsely claim the ledger is healthy.
+export class DispatchRecoveryError extends Error {}
+
 const DEFAULT_GATE_PROFILE = "harness";
 const DEFAULT_CONTEXT = ["AGENTS.md", "CLAUDE.md", "harness/README.md", "docs/architecture/agent-harness.md"];
 const RESULT_SCHEMA = 1;
 
 const refuse = (code, reason) => ({ dispatched: false, code, reason, result: null });
+
+// Durable evidence records what failed, never a stack trace and never anything
+// token-shaped: a run's own error text is the one place a credential could
+// leak into a file or an issue comment.
+const TOKEN_SHAPES = [/\bgh[pousr]_[A-Za-z0-9]{16,}\b/g, /\bsk-[A-Za-z0-9_-]{16,}\b/g];
+function redact(text) {
+  let clean = String(text ?? "");
+  for (const shape of TOKEN_SHAPES) clean = clean.replace(shape, "[redacted]");
+  return clean.slice(0, 500);
+}
 
 // The launch line is data the mechanism declares, not syntax invented here.
 export function launchArgv({ mechanism, role, model, effort, authProvider, prompt, sessionDir, worktree, runDir }) {
@@ -146,109 +161,13 @@ async function runDispatch(number, io) {
     };
   }
 
-  io.gh.setLabels(number, { add: [LABELS.working], remove: [LABELS.ready] });
   const issue = io.gh.viewIssue(number);
   const runId = `issue-${number}-attempt-${String(io.nextAttempt ? io.nextAttempt(number) : 1).padStart(2, "0")}`;
-  say(`${runId}: ${routed.primary.account} via ${routed.primary.execution}`);
-
-  const plan = applyWorktreePlan(
-    planIssueWorktree({
-      number,
-      title: issue.title,
-      baseSha: resolvedBaseSha,
-      mainWorktree: io.mainWorktree,
-      worktrees: parseWorktreeList(io.git(["worktree", "list", "--porcelain"]).stdout),
-      branchExists: (branch) => io.git(["rev-parse", "--verify", "--quiet", `refs/heads/${branch}`])?.status === 0,
-      pathExists: io.pathExists ?? io.exists,
-      realPath: io.realPath,
-      dirty: false,
-    }),
-    { git: io.git },
-  );
-  const startingHead = (io.git(["-C", plan.path, "rev-parse", "HEAD"]).stdout ?? "").trim() || resolvedBaseSha;
-
-  const mechanismOf = (assignment) => config.routing.executionMechanisms[assignment.execution];
-  const runDir = `${io.runsDir}/${runId}`;
-  const reportPath = (role) => `${runDir}/report-${role}.json`;
-  const start = (assignment, role, prompt) =>
-    io.spawn(
-      launchArgv({
-        mechanism: mechanismOf(assignment),
-        role,
-        model: assignment.model,
-        effort: routed.effort,
-        authProvider: assignment.runtimeAuth?.provider,
-        prompt,
-        sessionDir: `${runDir}/session-${role}`,
-        worktree: plan.path,
-        runDir,
-      }),
-      { cwd: plan.path, env: assignment.runtimeAuth?.env ?? {}, role, account: assignment.account, runId, runDir },
-    );
-
-  const launched = start(
-    routed.primary,
-    "executor",
-    buildPacket({
-      issue,
-      machine,
-      resolvedBaseSha,
-      worktree: plan.path,
-      runId,
-      taskClass: routed.taskClass,
-      gateProfile,
-      reportPath: reportPath("executor"),
-      contextPaths: machine.context_paths ? machine.context_paths.split(",").map((s) => s.trim()) : DEFAULT_CONTEXT,
-    }),
-  );
-
-  // An unreadable or contract-violating report is an INTERRUPTED run, never a
-  // fix: the ledger records that the attempt happened and why it did not count.
-  let reported;
-  try {
-    const raw = io.readReport(runId, "executor");
-    reported = normalizeExecutorReport(
-      raw ?? { result: "INTERRUPTED", notes: `executor exited ${launched?.status ?? "?"} without a report` },
-      { fingerprint, role: "executor" },
-    );
-  } catch (err) {
-    reported = normalizeExecutorReport(
-      { result: "INTERRUPTED", notes: `report rejected: ${err.message}` },
-      { fingerprint, role: "executor" },
-    );
-  }
-
-  const gate = io.spawn(["bash", "harness/verify-task.sh", gateProfile], { cwd: plan.path, role: "gate" });
-  const gateResult = gate?.status === 0 ? "PASS" : "FAIL";
-
   const reviewer = routed.reviewers[0] ?? null;
-  let reviewVerdict = null;
-  if (reviewer && reported.result === "FIX_PROPOSED" && gateResult === "PASS") {
-    start(
-      reviewer,
-      "reviewer",
-      buildReviewBrief({
-        issue,
-        machine,
-        resolvedBaseSha,
-        worktree: plan.path,
-        diff: (io.git(["-C", plan.path, "diff", resolvedBaseSha]).stdout ?? "").slice(0, 60000),
-        gateOutput: `${gate?.stdout ?? ""}${gate?.stderr ?? ""}`.slice(-4000),
-        criteria: config.policy.criteria,
-      }),
-    );
-    const verdict = io.readReport(runId, "reviewer")?.verdict;
-    reviewVerdict = verdict === "PASS" || verdict === "FAIL" ? verdict : "NO_REPORT";
-  }
 
-  const concluded = concludeRun({
-    reported,
-    gateResult,
-    reviewVerdict,
-    reviewersRequired: routed.verification.reviewers,
-  });
-
-  const result = {
+  // One mutable record, so the evidence a failed run leaves behind and the
+  // result a finished run reports are the same object with the same schema.
+  const record = {
     schema: RESULT_SCHEMA,
     issue: number,
     fingerprint,
@@ -257,32 +176,215 @@ async function runDispatch(number, io) {
     effort: routed.effort,
     baseRef: machine.base_ref,
     resolvedBaseSha,
-    startingHead,
-    worktree: plan.path,
-    branch: plan.branch,
-    worktreeAction: plan.action,
+    startingHead: null,
+    worktree: null,
+    branch: null,
+    worktreeAction: null,
     primaryAccount: routed.primary.account,
     primaryExecution: routed.primary.execution,
     primaryRuntime: routed.primary.runtime,
     reviewerAccount: reviewer?.account ?? null,
     reviewerExecution: reviewer?.execution ?? null,
-    behavioralRed: reported.behavioralRed,
-    commitSha: reported.commitSha,
-    tests: reported.tests,
-    notes: reported.notes,
-    newBugs: reported.newBugs,
+    behavioralRed: null,
+    commitSha: null,
+    tests: [],
+    notes: "",
+    newBugs: [],
     gateProfile,
-    gateResult,
-    reviewVerdict,
-    result: concluded.result,
-    nextStatus: concluded.nextStatus,
+    gateResult: null,
+    reviewVerdict: null,
+    result: null,
+    nextStatus: null,
+    failureStage: null,
+    errorClass: null,
+    errorMessage: null,
   };
 
-  // Durable machine-readable record first; only then tell the ledger.
-  io.writeResult(runId, result);
-  io.gh.comment(number, renderComment(result));
-  io.gh.setLabels(number, { add: [result.nextStatus], remove: [LABELS.working] });
-  say(`${runId}: ${result.result} → ${result.nextStatus}`);
+  // Everything above this line is a read. From here the issue is ours, and
+  // every exit below — including an unexpected one — has to hand it back.
+  io.gh.setLabels(number, { add: [LABELS.working], remove: [LABELS.ready] });
+  say(`${runId}: ${routed.primary.account} via ${routed.primary.execution}`);
 
-  return { dispatched: true, code: "ran", reason: null, result };
+  let stage = "worktree";
+  try {
+    const plan = applyWorktreePlan(
+      planIssueWorktree({
+        number,
+        title: issue.title,
+        baseSha: resolvedBaseSha,
+        mainWorktree: io.mainWorktree,
+        worktrees: parseWorktreeList(io.git(["worktree", "list", "--porcelain"]).stdout),
+        branchExists: (branch) => io.git(["rev-parse", "--verify", "--quiet", `refs/heads/${branch}`])?.status === 0,
+        pathExists: io.pathExists ?? io.exists,
+        realPath: io.realPath,
+        dirty: false,
+      }),
+      { git: io.git },
+    );
+    record.worktree = plan.path;
+    record.branch = plan.branch;
+    record.worktreeAction = plan.action;
+
+    stage = "base-head";
+    record.startingHead = (io.git(["-C", plan.path, "rev-parse", "HEAD"]).stdout ?? "").trim() || resolvedBaseSha;
+
+    const mechanismOf = (assignment) => config.routing.executionMechanisms[assignment.execution];
+    const runDir = `${io.runsDir}/${runId}`;
+    const reportPath = (role) => `${runDir}/report-${role}.json`;
+    const start = (assignment, role, prompt) =>
+      io.spawn(
+        launchArgv({
+          mechanism: mechanismOf(assignment),
+          role,
+          model: assignment.model,
+          effort: routed.effort,
+          authProvider: assignment.runtimeAuth?.provider,
+          prompt,
+          sessionDir: `${runDir}/session-${role}`,
+          worktree: plan.path,
+          runDir,
+        }),
+        { cwd: plan.path, env: assignment.runtimeAuth?.env ?? {}, role, account: assignment.account, runId, runDir },
+      );
+
+    stage = "executor-launch";
+    const launched = start(
+      routed.primary,
+      "executor",
+      buildPacket({
+        issue,
+        machine,
+        resolvedBaseSha,
+        worktree: plan.path,
+        runId,
+        taskClass: routed.taskClass,
+        gateProfile,
+        reportPath: reportPath("executor"),
+        contextPaths: machine.context_paths ? machine.context_paths.split(",").map((s) => s.trim()) : DEFAULT_CONTEXT,
+      }),
+    );
+
+    // An unreadable or contract-violating report is an INTERRUPTED run, never a
+    // fix: the ledger records that the attempt happened and why it did not count.
+    stage = "executor-report";
+    let reported;
+    try {
+      const raw = io.readReport(runId, "executor");
+      reported = normalizeExecutorReport(
+        raw ?? { result: "INTERRUPTED", notes: `executor exited ${launched?.status ?? "?"} without a report` },
+        { fingerprint, role: "executor" },
+      );
+    } catch (err) {
+      reported = normalizeExecutorReport(
+        { result: "INTERRUPTED", notes: `report rejected: ${redact(err.message)}` },
+        { fingerprint, role: "executor" },
+      );
+    }
+    record.behavioralRed = reported.behavioralRed;
+    record.commitSha = reported.commitSha;
+    record.tests = reported.tests;
+    record.notes = reported.notes;
+    record.newBugs = reported.newBugs;
+
+    stage = "gate";
+    const gate = io.spawn(["bash", "harness/verify-task.sh", gateProfile], { cwd: plan.path, role: "gate" });
+    record.gateResult = gate?.status === 0 ? "PASS" : "FAIL";
+
+    stage = "review";
+    if (reviewer && reported.result === "FIX_PROPOSED" && record.gateResult === "PASS") {
+      start(
+        reviewer,
+        "reviewer",
+        buildReviewBrief({
+          issue,
+          machine,
+          resolvedBaseSha,
+          worktree: plan.path,
+          diff: (io.git(["-C", plan.path, "diff", resolvedBaseSha]).stdout ?? "").slice(0, 60000),
+          gateOutput: `${gate?.stdout ?? ""}${gate?.stderr ?? ""}`.slice(-4000),
+          criteria: config.policy.criteria,
+        }),
+      );
+      const verdict = io.readReport(runId, "reviewer")?.verdict;
+      record.reviewVerdict = verdict === "PASS" || verdict === "FAIL" ? verdict : "NO_REPORT";
+    }
+
+    stage = "conclude";
+    const concluded = concludeRun({
+      reported,
+      gateResult: record.gateResult,
+      reviewVerdict: record.reviewVerdict,
+      reviewersRequired: routed.verification.reviewers,
+    });
+    record.result = concluded.result;
+    record.nextStatus = concluded.nextStatus;
+
+    // Durable machine-readable record first; only then tell the ledger.
+    stage = "result-write";
+    io.writeResult(runId, record);
+
+    stage = "github-report";
+    io.gh.comment(number, renderComment(record));
+    io.gh.setLabels(number, { add: [record.nextStatus], remove: [LABELS.working] });
+    say(`${runId}: ${record.result} → ${record.nextStatus}`);
+
+    return { dispatched: true, code: "ran", reason: null, result: record };
+  } catch (err) {
+    return recoverClaim(err, { io, number, record, stage, say });
+  }
+}
+
+// One deterministic recovery state, not a state machine. A claim this process
+// took and could not finish is handed back as status:blocked, which says the
+// run can be retried once the mechanical failure is fixed; status:needs-human
+// is reserved for cases the dispatcher can actually establish need one, and a
+// generic exception is not such a case. Each action is attempted exactly once:
+// retrying here would turn a broken ledger into a broken ledger plus a loop.
+//
+// This covers failures inside the dispatcher's own control flow. It does NOT
+// cover process death, SIGKILL, or power loss — those still strand the claim,
+// and reconciling them needs a watchdog this deliberately does not build.
+function recoverClaim(err, { io, number, record, stage, say }) {
+  record.failureStage = stage;
+  record.errorClass = err?.name ?? "Error";
+  record.errorMessage = redact(err?.message ?? String(err));
+  // Nothing concluded means the run was interrupted. Something that did
+  // conclude keeps its conclusion — but an undelivered conclusion is not a
+  // delivered one, so the issue still goes back as blocked either way.
+  if (record.result === null) record.result = "INTERRUPTED";
+  record.nextStatus = LABELS.blocked;
+
+  const recovery = { result: "WRITTEN", labels: "RECOVERED", comment: "POSTED" };
+  try {
+    io.writeResult(record.runId, record);
+  } catch (writeErr) {
+    recovery.result = `FAILED: ${redact(writeErr.message)}`;
+  }
+
+  // The label matters more than the comment: an issue left at agent-working is
+  // invisible, so it is repaired first and its failure is fatal.
+  try {
+    io.gh.setLabels(number, { add: [LABELS.blocked], remove: [LABELS.working] });
+  } catch (labelErr) {
+    const stranded = new DispatchRecoveryError(
+      `issue ${number} failed at ${stage} (${record.errorClass}: ${record.errorMessage}) ` +
+        `and could not be handed back: ${redact(labelErr.message)}. ` +
+        `The issue is still ${LABELS.working} and needs a human.`,
+    );
+    stranded.recovered = false;
+    stranded.cause = err;
+    stranded.recoveryError = labelErr;
+    stranded.result = record;
+    stranded.recovery = { ...recovery, labels: `FAILED: ${redact(labelErr.message)}` };
+    throw stranded;
+  }
+
+  try {
+    io.gh.comment(number, renderComment(record));
+  } catch (commentErr) {
+    recovery.comment = `FAILED: ${redact(commentErr.message)}`;
+  }
+
+  say(`${record.runId}: ${record.result} → ${record.nextStatus} (recovered from ${stage})`);
+  return { dispatched: true, code: "interrupted", reason: record.errorMessage, result: record, recovery };
 }

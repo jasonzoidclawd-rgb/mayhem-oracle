@@ -153,6 +153,16 @@ function main(argv) {
   return dispatchIssue(number, io).then((outcome) => {
     if (outcome.dispatched) {
       console.log(`RESULT=${outcome.result.result}  NEXT=${outcome.result.nextStatus}  WORKTREE=${outcome.result.worktree}`);
+      if (outcome.result.failureStage) {
+        console.error(`FAILED_AT=${outcome.result.failureStage} (${outcome.result.errorClass}: ${outcome.result.errorMessage})`);
+      }
+      // Never let a partial recovery read as a clean one.
+      if (outcome.recovery) {
+        console.error(`RECOVERY result=${outcome.recovery.result} labels=${outcome.recovery.labels} comment=${outcome.recovery.comment}`);
+      }
+      const incomplete =
+        outcome.recovery && Object.values(outcome.recovery).some((s) => String(s).startsWith("FAILED"));
+      if (incomplete) return 1;
       return outcome.result.result === "BLOCKED" || outcome.result.result === "INTERRUPTED" ? 1 : 0;
     }
     console.log(`NOT DISPATCHED (${outcome.code}): ${outcome.reason}`);
