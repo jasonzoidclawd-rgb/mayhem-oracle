@@ -15,7 +15,7 @@ import {
   LABELS,
   STATUS_FOR_DISPOSITION,
 } from "../github/issue-contract.mjs";
-import { AttemptError, assertReviewerIsolation, DISPOSITIONS, launchArgv, runAttempt } from "../run/attempt.mjs";
+import { AttemptError, assertReviewerIsolation, DISPOSITIONS, gateArgv, launchArgv, runAttempt } from "../run/attempt.mjs";
 import { slugFor } from "../run/workspace.mjs";
 import { verifyCommitEvidence } from "../run/evidence.mjs";
 import { createGh, GhError } from "../github/gh.mjs";
@@ -1384,6 +1384,7 @@ test("W1. a Task that is not a GitHub issue runs the whole attempt lifecycle", a
   };
   const io = {
     mainWorktree: MAIN,
+    harnessRoot: MAIN,
     runsDir: "/state/runs",
     reviewsDir: "/state/reviews",
     git: (argv) => defaultGit(argv, repo),
@@ -1800,7 +1801,7 @@ function makeIo(over = {}) {
     route: over.route ?? ((args) => route({ ...args, config: io.config })),
     available: over.available ?? ["CLAUDE_A", "GPT_A"],
     mainWorktree: MAIN,
-    harnessRoot: over.harnessRoot ?? MAIN,
+    harnessRoot: "harnessRoot" in over ? over.harnessRoot : MAIN,
     startingHead: HEAD,
     order,
     spawned,
@@ -1849,3 +1850,70 @@ function makeIo(over = {}) {
   };
   return io;
 }
+
+// G. the gate authority is the controller's, never the candidate's ----------
+//
+// The gate outranks every reviewer, so whoever writes the gate outranks every
+// reviewer too. These hold the line that the workspace being judged supplies
+// only the subject: the runner, the suite inventory and the profile all come
+// from the checkout the dispatcher itself runs out of.
+
+test("G1. the gate runs the controller's runner against the candidate as an argument", async () => {
+  const io = makeIo();
+  const out = await dispatchIssue(147, io);
+  assert.equal(out.dispatched, true);
+
+  const gate = io.spawned.find((s) => s.role === "gate");
+  assert.ok(gate, "no gate ever ran");
+  assert.equal(gate.argv[0], "bash");
+  assert.equal(
+    gate.argv[1],
+    `${MAIN}/harness/verify-task.sh`,
+    "the gate script was not taken from the controller's own harness checkout",
+  );
+  const target = gate.argv[gate.argv.indexOf("--worktree") + 1];
+  assert.ok(gate.argv.includes("--worktree"), "the gate was never told which workspace to judge");
+  assert.equal(target, out.result.workspace, "the gate judged something other than the attempt's workspace");
+  assert.notEqual(gate.cwd, out.result.workspace, "the gate still ran from inside the candidate checkout");
+});
+
+test("G2. a gate with no trusted checkout to run from fails closed", async () => {
+  const io = makeIo({ harnessRoot: null });
+  const out = await dispatchIssue(147, io);
+  assert.equal(out.dispatched, false, "an attempt started with nothing trusted to gate it");
+  assert.equal(out.code, "no-gate-authority");
+  assert.equal(io.gh.labelWrites.length, 0, "the issue was claimed before the gate authority was known");
+  assert.equal(
+    io.spawned.filter((s) => s.role === "gate" || s.role === "gate-plan").length,
+    0,
+    "the gate ran anyway, resolving its script from somewhere untrusted",
+  );
+
+  // The lifecycle refuses on its own too, for callers that are not the adapter.
+  assert.throws(
+    () => gateArgv({ harnessRoot: null, profile: "harness", worktree: "/w" }),
+    /no trusted harness checkout/,
+  );
+});
+
+test("G3. the record says which gate authority judged which workspace", async () => {
+  const io = makeIo();
+  const out = await dispatchIssue(147, io);
+  assert.equal(out.result.gateResult, "PASS");
+  assert.equal(out.result.gateWorkspace, out.result.workspace);
+  assert.match(
+    out.result.gateAuthorityRevision,
+    /^[0-9a-f]{40}$/,
+    "the record cannot say which revision of the gate decided this attempt",
+  );
+});
+
+test("G4. the preflight and the authoritative gate share one trusted runner", async () => {
+  const io = makeIo();
+  await dispatchIssue(147, io);
+  const plan = io.spawned.find((s) => s.role === "gate-plan");
+  const gate = io.spawned.find((s) => s.role === "gate");
+  assert.ok(plan && gate, "preflight or gate never ran");
+  assert.equal(plan.argv[1], gate.argv[1], "the profile was planned by a different script than the one that ran");
+  assert.ok(plan.argv.includes("--plan"));
+});

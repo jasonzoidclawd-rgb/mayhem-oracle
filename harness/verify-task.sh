@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Profile adapter for the deterministic gate.
 #
-#   harness/verify-task.sh [profile] [--plan]
+#   harness/verify-task.sh [profile] [--plan] [--worktree <dir>]
 #
 # Selects which deterministic suites a change must clear, then hands every
 # command to scripts/gate.sh. This file deliberately spells out no verification
@@ -19,6 +19,11 @@
 #
 # --plan prints the profile, its suites, and what it does not cover, and exits
 # 0 without running anything.
+#
+# --worktree names the workspace to judge. The profile and the suite commands
+# always come from this file's own checkout, so a dispatcher runs the trusted
+# copy against a candidate worktree and the candidate cannot answer for its own
+# evaluator. Omitted, the subject is the enclosing worktree.
 set -uo pipefail
 
 HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
@@ -26,13 +31,24 @@ GATE="$HERE/../scripts/gate.sh"
 
 PROFILE=all
 PLAN=0
-for arg in "$@"; do
-  case "$arg" in
-    --plan) PLAN=1 ;;
-    -*)     printf 'unknown option: %s\n' "$arg" >&2; exit 2 ;;
-    *)      PROFILE="$arg" ;;
+WORKTREE=""
+while [ "$#" -gt 0 ]; do
+  case "$1" in
+    --plan) PLAN=1; shift ;;
+    --worktree)
+      WORKTREE="${2-}"
+      if [ -z "$WORKTREE" ]; then printf 'missing directory after --worktree\n' >&2; exit 2; fi
+      shift 2
+      ;;
+    -*) printf 'unknown option: %s\n' "$1" >&2; exit 2 ;;
+    *)  PROFILE="$1"; shift ;;
   esac
 done
+
+# Passed through, never interpreted here: this file selects suites and owns no
+# command, so where they run is the gate's business.
+TARGET=()
+[ -n "$WORKTREE" ] && TARGET=(--worktree "$WORKTREE")
 
 case "$PROFILE" in
   harness) SUITES="harness" ;;
@@ -72,7 +88,7 @@ if [ "$PLAN" -eq 1 ]; then
   exit 0
 fi
 
-bash "$GATE" $SUITES
+bash "$GATE" ${TARGET[@]+"${TARGET[@]}"} $SUITES
 status=$?
 
 print_not_covered

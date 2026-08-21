@@ -28,7 +28,24 @@ export class AttemptError extends Error {}
 // A schema-1 record's VERIFIED may mean either; a schema-2 one may not.
 export const ATTEMPT_SCHEMA = 2;
 
-const GATE_COMMAND = ["bash", "harness/verify-task.sh"];
+// The gate is the authority every other verdict is measured against, so it is
+// loaded from the controller's own checkout and *pointed at* the workspace it
+// must judge. Resolving `harness/verify-task.sh` relatively against the
+// candidate's directory let the subject supply its own evaluator: a diff that
+// rewrote that script — or scripts/gate.sh underneath it — decided what PASS
+// meant for itself. Absolute path in, subject as an argument, and no trusted
+// root is a refusal rather than a fallback.
+const GATE_SCRIPT = "harness/verify-task.sh";
+
+export function gateArgv({ harnessRoot, profile, worktree = null, plan = false }) {
+  if (!harnessRoot) {
+    throw new AttemptError("no trusted harness checkout was given to run the gate from");
+  }
+  const argv = ["bash", `${String(harnessRoot).replace(/\/+$/, "")}/${GATE_SCRIPT}`, profile];
+  if (worktree) argv.push("--worktree", worktree);
+  if (plan) argv.push("--plan");
+  return argv;
+}
 
 // Operator-facing text. A launch failure's message can carry the absolute path
 // it tried, which names the machine; one line, no paths, capped.
@@ -225,8 +242,12 @@ export function concludeAttempt({
 //   task  { id, identity: {kind, id, slug}, title, spec, taskClass,
 //           resolvedBaseSha, gateProfile, contextPaths, fingerprint }
 //   plan  { effort, primary, reviewers, verification, mechanismOf }
-//   io    { git, spawn, readReport, mainWorktree, runsDir, reviewsDir,
-//           pathExists, realPath, buildPacket, buildReviewBrief }
+//   io    { git, spawn, readReport, mainWorktree, harnessRoot, runsDir,
+//           reviewsDir, pathExists, realPath, buildPacket, buildReviewBrief }
+//
+// harnessRoot is the trusted checkout the gate is loaded from, and it is not
+// interchangeable with mainWorktree: mainWorktree is where candidate worktrees
+// are placed, so it is where the subject lives.
 //
 // The two builders are injected because the wording of a packet is the
 // caller's business; their shape is not. On failure the thrown error carries
@@ -266,6 +287,8 @@ export async function runAttempt(task, plan, io) {
     notes: "",
     newBugs: [],
     gateProfile: task.gateProfile,
+    gateAuthorityRevision: null,
+    gateWorkspace: null,
     gateResult: null,
     gateCoverage: null,
     reviewVerdict: null,
@@ -377,8 +400,16 @@ export async function runAttempt(task, plan, io) {
     attempt.changedFiles = evidence?.changedFiles ?? [];
 
     stage = "gate";
+    // Which definition of PASS ran, and over what. Both are read off the run
+    // rather than assumed, so a record can answer "whose gate was that?".
+    attempt.gateAuthorityRevision =
+      (io.git(["-C", io.harnessRoot ?? ".", "rev-parse", "HEAD"])?.stdout ?? "").trim() || null;
+    attempt.gateWorkspace = workspacePlan.path;
     const gate = mustHaveRun(
-      io.spawn([...GATE_COMMAND, task.gateProfile], { cwd: workspacePlan.path, role: "gate" }),
+      io.spawn(
+        gateArgv({ harnessRoot: io.harnessRoot, profile: task.gateProfile, worktree: workspacePlan.path }),
+        { cwd: io.harnessRoot, role: "gate" },
+      ),
       "the gate",
     );
     attempt.gateResult = gate.status === 0 ? "PASS" : "FAIL";
@@ -466,7 +497,6 @@ export async function runAttempt(task, plan, io) {
 const CANNOT_LAUNCH = /No such file or directory|command not found|Permission denied|cannot execute/i;
 const REJECTED_PROFILE = /^unknown profile:/m;
 
-export const gatePlanArgv = (profile) => [...GATE_COMMAND, profile, "--plan"];
 
 export function classifyGatePreflight(result, profile) {
   const launchFailed = (why) => ({

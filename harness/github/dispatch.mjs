@@ -18,7 +18,7 @@ import { checkAccountAuth } from "../route.mjs";
 import {
   AttemptError,
   classifyGatePreflight,
-  gatePlanArgv,
+  gateArgv,
   runAttempt,
 } from "../run/attempt.mjs";
 import { slugFor } from "../run/workspace.mjs";
@@ -180,8 +180,16 @@ async function runDispatch(number, io) {
   // runs, and it can sit on any branch — including one that carries no harness
   // at all, where every profile looks rejected.
   const gateProfile = again.machine.gate_profile ?? DEFAULT_GATE_PROFILE;
+  // No trusted checkout means no authority to gate with, and a gate resolved
+  // from anywhere else would be the candidate's. Refuse before claiming.
+  if (!io.harnessRoot) {
+    return refuse("no-gate-authority", "the dispatcher has no trusted harness checkout to run the gate from");
+  }
   const preflight = classifyGatePreflight(
-    io.spawn(gatePlanArgv(gateProfile), { cwd: io.harnessRoot, role: "gate-plan" }),
+    io.spawn(gateArgv({ harnessRoot: io.harnessRoot, profile: gateProfile, plan: true }), {
+      cwd: io.harnessRoot,
+      role: "gate-plan",
+    }),
     gateProfile,
   );
   if (!preflight.ok) return refuse(preflight.code, preflight.reason);

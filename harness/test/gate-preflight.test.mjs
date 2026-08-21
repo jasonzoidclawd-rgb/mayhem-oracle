@@ -101,7 +101,9 @@ test("a known profile is accepted when the harness checkout is where the harness
 
   const preflight = built.spawns.find((s) => s.argv.includes("--plan"));
   assert.ok(preflight, "the preflight never ran the real gate");
-  assert.deepEqual(preflight.argv, ["bash", "harness/verify-task.sh", "harness", "--plan"]);
+  // Absolute, and out of the dispatcher's own checkout: a relative path here
+  // would resolve against whatever the cwd happened to be.
+  assert.deepEqual(preflight.argv, ["bash", join(REPO, "harness/verify-task.sh"), "harness", "--plan"]);
   assert.equal(preflight.result.status, 0, `the real gate plan exited ${preflight.result.status}`);
   assert.match(preflight.result.stdout, /^PROFILE: harness$/m);
 });

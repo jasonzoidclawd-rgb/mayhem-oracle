@@ -4,6 +4,7 @@
 #
 #   scripts/gate.sh <suite>...   run those suites, in order
 #   scripts/gate.sh --list       print "<suite>TAB<description>", run nothing
+#   --worktree <dir>             judge that worktree instead of the enclosing one
 #
 # Provider-neutral by construction: it knows how to prove this repository and
 # nothing about who or what asked for the proof. Profile selection lives in
@@ -13,7 +14,39 @@
 # exits nonzero if any suite failed. Unknown suite names exit 2 before
 # anything runs.
 set -uo pipefail
-cd "$(git rev-parse --show-toplevel)"
+
+# The subject under test, named by the caller rather than inferred from wherever
+# the gate was invoked. This is what keeps the evaluator out of the candidate's
+# reach: a dispatcher runs the *trusted* copy of this script and points it at the
+# workspace it must judge, so the checkout being evaluated is never also the
+# checkout that decides what evaluation means. Without --worktree the enclosing
+# worktree is the subject, which is what a human running the gate by hand wants.
+TARGET=""
+ARGV=()
+while [ "$#" -gt 0 ]; do
+  case "$1" in
+    --worktree)
+      TARGET="${2-}"
+      if [ -z "$TARGET" ]; then printf 'missing directory after --worktree\n' >&2; exit 2; fi
+      shift 2
+      ;;
+    *) ARGV+=("$1"); shift ;;
+  esac
+done
+set -- ${ARGV[@]+"${ARGV[@]}"}
+
+if [ -n "$TARGET" ]; then
+  if [ ! -d "$TARGET" ]; then printf 'no such worktree: %s\n' "$TARGET" >&2; exit 2; fi
+else
+  # An empty toplevel would make `cd` fall through to $HOME and gate whatever
+  # happens to live there, so not knowing the subject is an error, not a default.
+  TARGET="$(git rev-parse --show-toplevel 2>/dev/null)"
+  if [ -z "$TARGET" ]; then
+    printf 'not inside a git worktree, and no --worktree was given\n' >&2
+    exit 2
+  fi
+fi
+cd "$TARGET" || exit 2
 
 SUITES=(harness web overlay skills rust)
 
@@ -81,6 +114,8 @@ for requested in "$@"; do
     exit 2
   fi
 done
+
+printf 'WORKTREE: %s\n' "$PWD"
 
 for requested in "$@"; do "suite_$requested"; done
 

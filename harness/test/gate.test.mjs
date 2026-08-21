@@ -1,7 +1,7 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import { spawnSync } from "node:child_process";
-import { chmodSync, mkdtempSync, readFileSync, writeFileSync } from "node:fs";
+import { chmodSync, mkdtempSync, readFileSync, realpathSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -145,4 +145,98 @@ test("an unknown suite fails closed before any suite runs", () => {
 
 test("harness verification runs independently of every product suite", () => {
   assert.deepEqual(plan("harness").suites, ["harness"]);
+});
+
+// H. the evaluator is not the subject ---------------------------------------
+//
+// A gate that lives in the checkout it judges is not an authority over it: the
+// diff under test can rewrite the script that decides whether it passed. These
+// prove the trusted copy stays in charge of *what a check is* while the given
+// worktree supplies only *what is checked*.
+
+// A throwaway worktree of this repository, sabotaged however the test needs.
+const candidate = () => {
+  const path = mkdtempSync(join(tmpdir(), "gate-candidate-"));
+  const dir = join(path, "work");
+  const added = spawnSync("git", ["worktree", "add", "--detach", "-q", dir, "HEAD"], { cwd: repo, encoding: "utf8" });
+  assert.equal(added.status, 0, `could not create candidate worktree: ${added.stderr}`);
+  return {
+    dir,
+    remove: () => spawnSync("git", ["worktree", "remove", "--force", dir], { cwd: repo, encoding: "utf8" }),
+  };
+};
+
+test("the gate judges the worktree it is given, not the one it lives in", () => {
+  const subject = candidate();
+  try {
+    const stubDir = mkdtempSync(join(tmpdir(), "gate-stub-"));
+    const log = join(stubDir, "invocation");
+    const stub = join(stubDir, "cargo");
+    writeFileSync(stub, `#!/bin/sh\nprintf '%s\\n' "$PWD" > ${log}\nexit 0\n`);
+    chmodSync(stub, 0o755);
+
+    const gated = bash(GATE, ["--worktree", subject.dir, "rust"], { PATH: `${stubDir}:${process.env.PATH}` });
+    assert.equal(gated.status, 0, `gate failed: ${gated.stderr}`);
+    const cwd = readFileSync(log, "utf8").trim();
+    assert.ok(
+      realpathSync(cwd).startsWith(realpathSync(subject.dir)),
+      `the suite ran in ${cwd}, which is not inside the worktree the gate was given`,
+    );
+  } finally {
+    subject.remove();
+  }
+});
+
+test("a candidate copy of the gate cannot answer for the trusted one", () => {
+  const subject = candidate();
+  try {
+    // The subject rewrites both halves of its own evaluator to always pass,
+    // and breaks a real suite so an honest gate must fail.
+    writeFileSync(join(subject.dir, "harness/verify-task.sh"), "#!/usr/bin/env bash\nprintf '\\nGATE: PASS\\n'\nexit 0\n");
+    writeFileSync(join(subject.dir, "scripts/gate.sh"), "#!/usr/bin/env bash\nprintf '\\nGATE SUITES: PASS\\n'\nexit 0\n");
+
+    const stubDir = mkdtempSync(join(tmpdir(), "gate-stub-"));
+    const stub = join(stubDir, "cargo");
+    writeFileSync(stub, "#!/bin/sh\nexit 101\n");
+    chmodSync(stub, 0o755);
+
+    const gated = bash(VERIFY, ["rust", "--worktree", subject.dir], { PATH: `${stubDir}:${process.env.PATH}` });
+    assert.notEqual(gated.status, 0, "a candidate-supplied gate script manufactured a passing gate");
+    assert.match(gated.stdout, /GATE: FAIL/);
+  } finally {
+    subject.remove();
+  }
+});
+
+test("verify-task forwards the subject worktree instead of inferring it", () => {
+  const subject = candidate();
+  try {
+    const stubDir = mkdtempSync(join(tmpdir(), "gate-stub-"));
+    const log = join(stubDir, "invocation");
+    const stub = join(stubDir, "cargo");
+    writeFileSync(stub, `#!/bin/sh\nprintf '%s\\n' "$PWD" > ${log}\nexit 0\n`);
+    chmodSync(stub, 0o755);
+
+    const gated = bash(VERIFY, ["rust", "--worktree", subject.dir], { PATH: `${stubDir}:${process.env.PATH}` });
+    assert.equal(gated.status, 0, `gate failed: ${gated.stderr}`);
+    assert.ok(realpathSync(readFileSync(log, "utf8").trim()).startsWith(realpathSync(subject.dir)));
+    assert.match(gated.stdout, /^WORKTREE: /m, "the gate never recorded which worktree it judged");
+  } finally {
+    subject.remove();
+  }
+});
+
+test("the gate fails closed rather than guessing a subject", () => {
+  const nowhere = mkdtempSync(join(tmpdir(), "gate-nogit-"));
+  const guessed = spawnSync("bash", [GATE, "harness"], { cwd: nowhere, encoding: "utf8", env: { ...process.env } });
+  assert.equal(guessed.status, 2, "the gate ran a suite without knowing what it was judging");
+  assert.match(guessed.stderr, /worktree/i);
+
+  const missing = bash(GATE, ["--worktree", join(nowhere, "absent"), "harness"]);
+  assert.equal(missing.status, 2);
+  assert.match(missing.stderr, /no such worktree/);
+
+  const bare = bash(GATE, ["--worktree"]);
+  assert.equal(bare.status, 2);
+  assert.match(bare.stderr, /missing directory/);
 });
