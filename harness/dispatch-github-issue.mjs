@@ -50,6 +50,15 @@ function takeLock(dir, number) {
   return { path, release: () => rmSync(path, { recursive: true, force: true }) };
 }
 
+// The operator's one line about the run. It reads the Attempt record's own
+// field names, and a test asserts it against a real record — the record renamed
+// worktree to workspace at schema 2 and this line did not, so every dispatch
+// printed `WORKTREE=undefined`. Nothing here reads a historical result.json, so
+// there is no schema-1 object to stay compatible with: the only records this
+// entry point ever sees are the ones it just produced.
+export const summaryLine = (result) =>
+  `RESULT=${result.result}  NEXT=${result.nextStatus}  WORKSPACE=${result.workspace}`;
+
 function main(argv) {
   const number = Number(argv.find((a) => /^\d+$/.test(a)));
   if (!Number.isInteger(number) || number <= 0) {
@@ -166,7 +175,7 @@ function main(argv) {
 
   return dispatchIssue(number, io).then((outcome) => {
     if (outcome.dispatched) {
-      console.log(`RESULT=${outcome.result.result}  NEXT=${outcome.result.nextStatus}  WORKTREE=${outcome.result.worktree}`);
+      console.log(summaryLine(outcome.result));
       if (outcome.result.failureStage) {
         console.error(`FAILED_AT=${outcome.result.failureStage} (${outcome.result.errorClass}: ${outcome.result.errorMessage})`);
       }

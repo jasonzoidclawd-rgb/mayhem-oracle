@@ -53,6 +53,20 @@ const DEFAULT_GATE_PROFILE = "harness";
 // it may not load.
 const DEFAULT_CONTEXT = ["AGENTS.md", "CLAUDE.md", ".agents/skills/mayhem-task/SKILL.md"];
 
+// The fields every derivation above the claim is made from: the route reads
+// task_class, the gate preflight reads gate_profile, dedupe and the report
+// contract read fingerprint, and the workspace is cut from base_ref. If one of
+// them moves between the read that fed those derivations and the claim, they
+// describe work the ledger no longer asks for. Everything else in the machine
+// block — context_paths among them — feeds nothing above and is simply taken
+// from the validated snapshot.
+//
+// What base_ref *resolves to* is deliberately not on this list. Nothing above
+// the claim is derived from the sha, so a branch that advanced while routing
+// invalidates nothing: the run is cut from the newer base it just validated.
+// Refusing there would stop every dispatch that raced a push, and buy nothing.
+const TASK_CONTRACT = ["fingerprint", "task_class", "base_ref", "gate_profile"];
+
 const refuse = (code, reason) => ({ dispatched: false, code, reason, result: null });
 
 // Durable evidence records what failed, never a stack trace and never anything
@@ -106,7 +120,13 @@ async function runDispatch(number, io) {
     const answer = io.git(["rev-parse", "--verify", "--quiet", `${ref}^{commit}`]);
     return answer?.status === 0 ? (answer.stdout ?? "").trim() || null : null;
   };
-  const readIssue = () => checkDispatchable(io.gh.viewIssue(number), { taskClasses, resolveRef });
+  // The snapshot checkDispatchable actually validated is kept, not discarded:
+  // the body an executor is handed as the spec has to be the body that was
+  // approved, and a later re-read is a different issue nobody checked.
+  const readIssue = () => {
+    const issue = io.gh.viewIssue(number);
+    return { ...checkDispatchable(issue, { taskClasses, resolveRef }), issue };
+  };
 
   const first = readIssue();
   if (!first.ok) return refuse(first.code, first.reason);
@@ -144,18 +164,22 @@ async function runDispatch(number, io) {
   }
 
   // Re-read immediately before claiming: everything above took time, and the
-  // ledger may have moved under us.
+  // ledger may have moved under us. This snapshot is the Task from here on, so
+  // what runs is the version that was validated — but the route above was
+  // decided from the first one, and the gate preflight below is planned from
+  // it, so a contract that moved has invalidated both and the run starts over.
   const again = readIssue();
   if (!again.ok) return refuse(again.code, again.reason);
-  if (again.machine.fingerprint !== fingerprint) {
-    return refuse("issue-changed", `fingerprint changed to ${again.machine.fingerprint} while routing`);
+  const moved = TASK_CONTRACT.filter((field) => again.machine[field] !== machine[field]);
+  if (moved.length) {
+    return refuse("issue-changed", `${moved.join(", ")} changed while routing`);
   }
 
   // Proved against the checkout this dispatcher is running out of, not
   // io.mainWorktree: that one is where issue worktrees are placed and where git
   // runs, and it can sit on any branch — including one that carries no harness
   // at all, where every profile looks rejected.
-  const gateProfile = machine.gate_profile ?? DEFAULT_GATE_PROFILE;
+  const gateProfile = again.machine.gate_profile ?? DEFAULT_GATE_PROFILE;
   const preflight = classifyGatePreflight(
     io.spawn(gatePlanArgv(gateProfile), { cwd: io.harnessRoot, role: "gate-plan" }),
     gateProfile,
@@ -184,9 +208,17 @@ async function runDispatch(number, io) {
     };
   }
 
-  const issue = io.gh.viewIssue(number);
+  // One snapshot, validated, and nothing read again: the spec, the title the
+  // slug is cut from, and the machine block are all `again`.
+  const { issue, machine: contract } = again;
   const runId = `issue-${number}-attempt-${String(io.nextAttempt ? io.nextAttempt(number) : 1).padStart(2, "0")}`;
-  const task = taskFromIssue({ issue, machine, resolvedBaseSha, taskClass: routed.taskClass, attemptId: runId });
+  const task = taskFromIssue({
+    issue,
+    machine: contract,
+    resolvedBaseSha: again.resolvedBaseSha,
+    taskClass: routed.taskClass,
+    attemptId: runId,
+  });
 
   // The execution plan the router already decided, plus the one lookup that
   // turns an assignment into the argv template it declares.
@@ -202,8 +234,8 @@ async function runDispatch(number, io) {
   const attemptIo = {
     ...io,
     normalizeReport: (raw) => normalizeExecutorReport(raw, { fingerprint, role: "executor" }),
-    buildPacket: (args) => buildPacket({ ...args, issue, machine }),
-    buildReviewBrief: (args) => buildReviewBrief({ ...args, issue, machine, criteria: config.policy.criteria }),
+    buildPacket: (args) => buildPacket({ ...args, issue, machine: contract }),
+    buildReviewBrief: (args) => buildReviewBrief({ ...args, issue, machine: contract, criteria: config.policy.criteria }),
   };
 
   // Everything above this line is a read. From here the issue is ours, and

@@ -21,6 +21,7 @@ import { verifyCommitEvidence } from "../run/evidence.mjs";
 import { createGh, GhError } from "../github/gh.mjs";
 import { parseWorktreeList, planWorkspace, WorkspaceError } from "../run/workspace.mjs";
 import { dispatchIssue, DispatchRecoveryError } from "../github/dispatch.mjs";
+import { summaryLine } from "../dispatch-github-issue.mjs";
 
 // GitHub is the durable bug ledger; the harness router is still the routing
 // authority. These tests prove the seam between them without touching the
@@ -1454,6 +1455,282 @@ test("W3. the GitHub adapter is the only place a disposition becomes a label", (
   for (const quoted of [...lifecycle.matchAll(/at\("[A-Z_]+",\s*"([a-z-]+)"/g)].map((m) => m[1])) {
     assert.ok(DISPOSITIONS.includes(quoted), `concludeAttempt can return unmapped disposition ${quoted}`);
   }
+});
+
+// --- X. capability vs content in the reviewer launch -----------------------
+//
+// An access-control check answers "what can the reviewer reach", not "what was
+// the reviewer told". The review brief quotes the diff under review, so it can
+// legitimately contain any string in the repository — the executor's own paths
+// among them. Scanning it conflates the two, and the failure is not harmless:
+// it throws at stage=review, which recovers the issue as INTERRUPTED/blocked
+// and discards a git-verified commit and a passing gate.
+
+const EXEC_STATE = { workspace: "/repo/wt/issues/147-y", runDir: "/state/runs/issue-147-attempt-01" };
+// Shaped like the mechanisms in routing.json: literals, path-bearing
+// substitutions, and one bare content placeholder at the end.
+const REVIEW_TEMPLATE = ["pi", "--print", "--session-dir", "{sessionDir}", "--tools", "read", "{prompt}"];
+const briefMentioning = (path) => `# Independent review\n\n## FIXED-POINT DIFF\n\`\`\`diff\n+// produced in ${path}/src/x.ts\n\`\`\`\n`;
+
+test("X1. a review brief that merely mentions the executor's path is not access", () => {
+  assert.doesNotThrow(() =>
+    assertReviewerIsolation({
+      argv: ["pi", "--print", "--session-dir", "/state/reviews/r1/0/session-reviewer", "--tools", "read", briefMentioning(EXEC_STATE.workspace)],
+      template: REVIEW_TEMPLATE,
+      cwd: "/repo/wt/reviews/r1",
+      runDir: "/state/reviews/r1/0",
+      env: {},
+      executor: EXEC_STATE,
+    }),
+  );
+  // The run directory reads the same way: quoting it is not holding it.
+  assert.doesNotThrow(() =>
+    assertReviewerIsolation({
+      argv: ["pi", "--print", "--session-dir", "/state/reviews/r1/0/session-reviewer", "--tools", "read", briefMentioning(EXEC_STATE.runDir)],
+      template: REVIEW_TEMPLATE,
+      cwd: "/repo/wt/reviews/r1",
+      runDir: "/state/reviews/r1/0",
+      env: {},
+      executor: EXEC_STATE,
+    }),
+  );
+});
+
+test("X2. a path-bearing launch argument naming the executor's root is still refused", () => {
+  // Same string, a different slot: this one is a capability.
+  assert.throws(
+    () =>
+      assertReviewerIsolation({
+        argv: ["pi", "--print", "--session-dir", `${EXEC_STATE.runDir}/session-reviewer`, "--tools", "read", "brief"],
+        template: REVIEW_TEMPLATE,
+        cwd: "/repo/wt/reviews/r1",
+        runDir: "/state/reviews/r1/0",
+        env: {},
+        executor: EXEC_STATE,
+      }),
+    AttemptError,
+    "a session directory inside the executor's run state was allowed",
+  );
+  // A literal in the template is not exempt either.
+  assert.throws(
+    () =>
+      assertReviewerIsolation({
+        argv: ["pi", "--print", "--session-dir", "/state/reviews/r1/0/session-reviewer", "--add-dir", EXEC_STATE.workspace, "brief"],
+        template: ["pi", "--print", "--session-dir", "{sessionDir}", "--add-dir", EXEC_STATE.workspace, "{prompt}"],
+        cwd: "/repo/wt/reviews/r1",
+        runDir: "/state/reviews/r1/0",
+        env: {},
+        executor: EXEC_STATE,
+      }),
+    AttemptError,
+    "a hardcoded grant of the executor's worktree was allowed",
+  );
+});
+
+test("X3. a reviewer run directory inside the executor's run state is refused", () => {
+  // Where the reviewer's own state is placed is a capability whether or not the
+  // launch template happens to pass it through: the dispatcher creates it.
+  assert.throws(
+    () =>
+      assertReviewerIsolation({
+        argv: ["claude", "--print", "--permission-mode", "plan", "brief"],
+        template: ["claude", "--print", "--permission-mode", "plan", "{prompt}"],
+        cwd: "/repo/wt/reviews/r1",
+        runDir: `${EXEC_STATE.runDir}/reviewer`,
+        env: {},
+        executor: EXEC_STATE,
+      }),
+    AttemptError,
+    "the reviewer's own state was placed inside the executor's run directory",
+  );
+});
+
+test("X4. a template that mixes the brief into a control argument is refused", () => {
+  // Content and capability cannot be told apart inside one token. Refusing the
+  // template is the honest answer; scanning it reintroduces X1 and skipping it
+  // opens a hole.
+  assert.throws(
+    () =>
+      assertReviewerIsolation({
+        argv: ["pi", "--prompt=brief"],
+        template: ["pi", "--prompt={prompt}"],
+        cwd: "/repo/wt/reviews/r1",
+        runDir: "/state/reviews/r1/0",
+        env: {},
+        executor: EXEC_STATE,
+      }),
+    AttemptError,
+    "a template mixing content into a control argument was accepted",
+  );
+});
+
+test("X5. a fixed-point diff quoting the executor's worktree does not abort the run", async () => {
+  // The whole point, end to end: a run that produced a git-verified commit and
+  // a passing gate must not be recorded INTERRUPTED because the diff it is
+  // being reviewed on mentions where it was produced.
+  const workspace = `${WT_ROOT}/147-${slugFor(issue().title)}`;
+  const io = makeIo();
+  const inner = io.git;
+  io.git = (argv) => {
+    const a = argv[0] === "-C" ? argv.slice(2) : argv;
+    if (a[0] === "diff" && !a.includes("--name-only")) {
+      io.gitCalls.push(argv);
+      return { status: 0, stdout: `--- a/docs/x.md\n+++ b/docs/x.md\n+built in ${workspace}\n`, stderr: "" };
+    }
+    return inner(argv);
+  };
+  const out = await dispatchIssue(147, io);
+  assert.equal(out.result.workspace, workspace, "the fixture no longer names the real workspace");
+  assert.equal(out.result.failureStage, null, `the run aborted at ${out.result.failureStage}`);
+  assert.equal(out.result.commitEvidence.ok, true, "the commit evidence was discarded");
+  assert.equal(out.result.gateResult, "PASS", "the gate result was discarded");
+  assert.equal(out.result.result, "VERIFIED");
+  const reviewer = io.spawned.find((s) => s.role === "reviewer");
+  assert.ok(reviewer, "no reviewer was launched");
+  assert.ok(reviewer.argv.some((t) => t.includes(workspace)), "the fixture never reached the brief");
+});
+
+// --- Y. one validated snapshot is the Task --------------------------------
+//
+// The task executed must be the task version that was validated. Everything
+// derived above the claim — the route, the gate preflight, the packet — comes
+// from one snapshot, and a contract that moved under it invalidates all three.
+
+test("Y1. a contract that moves between the read and the claim is refused", async () => {
+  // The route was already decided from the first task_class. Executing the
+  // second one under that route is a run nobody validated.
+  for (const [field, moved] of [
+    ["task_class", { task_class: "T1" }],
+    ["gate_profile", { gate_profile: "web" }],
+    ["fingerprint", { fingerprint: "geometry:something:else" }],
+  ]) {
+    let views = 0;
+    const io = makeIo({
+      ghOver: {
+        viewIssue: () => {
+          views += 1;
+          return views === 1 ? issue() : withMachine(moved);
+        },
+      },
+    });
+    const out = await dispatchIssue(147, io);
+    assert.equal(out.dispatched, false, `a changed ${field} still dispatched`);
+    assert.equal(out.code, "issue-changed", `a changed ${field} refused as ${out.code}`);
+    assert.match(out.reason, new RegExp(field));
+    assert.equal(io.spawned.length, 0, `a changed ${field} started a process`);
+    assert.equal(io.gh.labelWrites.length, 0, `a changed ${field} claimed the issue`);
+  }
+});
+
+test("Y2. the executor is handed the spec that was validated, never a later one", async () => {
+  // There used to be a third read, after the gate preflight and unchecked by
+  // anything, whose body became task.spec. Two reads now, and the second is
+  // the Task.
+  const VALIDATED = "the defect statement that was validated";
+  const LATER = "an entirely different defect nobody validated";
+  let views = 0;
+  const io = makeIo({
+    ghOver: {
+      viewIssue: () => {
+        views += 1;
+        return issue({ body: `## Summary\n\n${views >= 3 ? LATER : VALIDATED}\n\n${machine()}\n` });
+      },
+    },
+  });
+  const out = await dispatchIssue(147, io);
+  assert.equal(out.dispatched, true);
+  assert.equal(views, 2, "the issue was read a third time, and that read was validated by nothing");
+  const packet = io.spawned.find((s) => s.role === "executor").argv.at(-1);
+  assert.ok(packet.includes(VALIDATED), "the executor was not handed the validated spec");
+  assert.ok(!packet.includes(LATER), "the executor was handed a spec that was never validated");
+  // And the rest of the Task comes from that same snapshot.
+  assert.equal(out.result.fingerprint, FINGERPRINT);
+  assert.equal(out.result.resolvedBaseSha, BASE);
+  assert.ok(packet.includes(`RESOLVED_BASE_SHA: ${BASE}`), "the packet base sha is not the validated one");
+});
+
+test("Y3. a title edited between the reads dispatches and never orphans the worktree", async () => {
+  // A title is decoration, not contract: it must not refuse the run. Identity
+  // is kind+id, so the worktree the old slug created is resumed, not orphaned.
+  const oldSlug = slugFor(issue().title);
+  const renamed = "Overlay geometry no longer stalls";
+  let views = 0;
+  const io = makeIo({
+    ghOver: {
+      viewIssue: () => {
+        views += 1;
+        return views === 1 ? issue() : issue({ title: renamed });
+      },
+    },
+  });
+  const inner = io.git;
+  io.git = (argv) => {
+    const a = argv[0] === "-C" ? argv.slice(2) : argv;
+    if (a[0] === "worktree" && a[1] === "list") {
+      io.gitCalls.push(argv);
+      return {
+        status: 0,
+        stdout: worktrees([
+          { path: MAIN, branch: "main" },
+          { path: `${WT_ROOT}/147-${oldSlug}`, branch: `issue/147-${oldSlug}`, head: BASE },
+        ]),
+        stderr: "",
+      };
+    }
+    return inner(argv);
+  };
+  const out = await dispatchIssue(147, io);
+  assert.equal(out.dispatched, true, `a renamed issue refused with ${out.code}`);
+  assert.equal(out.result.workspaceAction, "resume", "a renamed issue did not resume its worktree");
+  assert.equal(out.result.workspace, `${WT_ROOT}/147-${oldSlug}`);
+  assert.ok(
+    !io.gitCalls.some((a) => a[0] === "worktree" && a[1] === "add" && !a.includes("--detach")),
+    "a renamed issue created a second worktree",
+  );
+  // The fresher title still reaches the packet: it is presentation, and stale
+  // presentation is its own defect.
+  assert.ok(io.spawned.find((s) => s.role === "executor").argv.at(-1).includes(renamed));
+});
+
+test("Y4. a base that advanced while routing is used, not refused", async () => {
+  // The contract is what the machine block says, not what its base_ref resolves
+  // to: nothing above the claim is derived from the sha, so a branch that moved
+  // invalidates nothing. Refusing here would stop every dispatch that raced a
+  // push, and the run would still have to be cut from some base.
+  let resolves = 0;
+  const io = makeIo();
+  const inner = io.git;
+  io.git = (argv) => {
+    const a = argv[0] === "-C" ? argv.slice(2) : argv;
+    if (a[0] === "rev-parse" && a.includes("--verify") && String(a.at(-1)).endsWith("^{commit}")) {
+      resolves += 1;
+      io.gitCalls.push(argv);
+      return { status: 0, stdout: `${resolves === 1 ? BASE : HEAD}\n`, stderr: "" };
+    }
+    return inner(argv);
+  };
+  const out = await dispatchIssue(147, io);
+  assert.equal(out.dispatched, true, `a moved base refused with ${out.code}`);
+  assert.equal(out.result.resolvedBaseSha, HEAD, "the run was cut from the stale base");
+  assert.ok(
+    io.gitCalls.some((a) => a[0] === "worktree" && a[1] === "add" && a.includes(HEAD)),
+    "the worktree was created from a base other than the validated one",
+  );
+});
+
+// --- Z. the operator-facing summary ---------------------------------------
+
+test("Z1. the CLI summary names the workspace the attempt actually used", async () => {
+  // The record renamed worktree -> workspace at schema 2 and this line did not,
+  // so every dispatch printed WORKSPACE=undefined. A field the record does not
+  // carry must fail a test rather than reach a terminal.
+  const io = makeIo();
+  const out = await dispatchIssue(147, io);
+  assert.ok(out.result.workspace, "the attempt recorded no workspace");
+  const line = summaryLine(out.result);
+  assert.ok(line.includes(out.result.workspace), `the summary does not name the workspace: ${line}`);
+  assert.doesNotMatch(line, /undefined/, `the summary printed a field the record does not carry: ${line}`);
+  assert.ok(line.includes(out.result.result) && line.includes(out.result.nextStatus));
 });
 
 // --- fake io -------------------------------------------------------------

@@ -46,6 +46,13 @@ export function mustHaveRun(result, what) {
   return result;
 }
 
+// Placeholders whose value is opaque content the process reads, as opposed to
+// a capability it holds. Rendering is a 1:1 map over the template, so a token's
+// position says which of the two it produced.
+const CONTENT_PLACEHOLDERS = ["prompt"];
+const CONTENT_TOKEN = new Set(CONTENT_PLACEHOLDERS.map((name) => `{${name}}`));
+const MENTIONS_CONTENT = new RegExp(`\\{(?:${CONTENT_PLACEHOLDERS.join("|")})\\}`);
+
 // The launch line is data the mechanism declares, not syntax invented here.
 export function launchArgv({ mechanism, role, model, effort, authProvider, prompt, sessionDir, workspace, runDir }) {
   const template = mechanism?.launch?.[role];
@@ -65,27 +72,62 @@ export function launchArgv({ mechanism, role, model, effort, authProvider, promp
 }
 
 // The reviewer must not be able to reach the executor's state, and a brief that
-// politely says so is not a mechanism — the argv and the cwd are. A reviewer
-// whose working directory is the workspace it is reviewing has write access to
-// its own subject; one handed the executor's run directory can read the report
-// and session it is supposed to be independent of. Both are refused here,
-// before the process starts, so the isolation cannot be lost by editing prose.
-export function assertReviewerIsolation({ argv, cwd, env, executor, realPath = (p) => p }) {
+// politely says so is not a mechanism — the argv, the cwd and the run directory
+// are. A reviewer whose working directory is the workspace it is reviewing has
+// write access to its own subject; one handed the executor's run directory can
+// read the report and session it is supposed to be independent of. Both are
+// refused here, before the process starts, so the isolation cannot be lost by
+// editing prose.
+//
+// What it inspects is the launch's capability-bearing fields, not its content.
+// The review brief quotes the fixed-point diff, so it may legitimately contain
+// any string in the repository — including the executor's own worktree path.
+// Scanning it answers "what was the reviewer told", which is not the question,
+// and answering it wrongly is expensive: this throws at stage=review, where the
+// caller recovers the issue as INTERRUPTED and discards a git-verified commit
+// and a passing gate. `template` is the mechanism's own launch line, whose
+// positions separate the two; with none supplied every argv entry is treated as
+// capability-bearing, which is the stricter reading.
+export function assertReviewerIsolation({ argv, template = null, cwd, runDir = null, env, executor, realPath = (p) => p }) {
   // Compare realised paths. git reports the path it resolved, while these roots
   // are derived from the configured main worktree, so a symlinked prefix
   // (/tmp -> /private/tmp) makes two names for one directory compare unequal —
   // and an isolation check that silently passes is worse than none.
   const norm = (path) => String(realPath(String(path ?? "")) ?? "").replace(/\/+$/, "");
   const inside = (path, root) => path === root || path.startsWith(`${root}/`);
+
+  // A literal flag and a rendered {sessionDir} are both part of the launch; a
+  // rendered {prompt} is the payload. A token that is neither — content spliced
+  // into a control argument — cannot be told apart at all, and refusing the
+  // template says so instead of picking one of the two wrong answers.
+  const launchArgs = (argv ?? []).filter((_, index) => {
+    if (!Array.isArray(template)) return true;
+    const slot = template[index];
+    if (slot === undefined) return true;
+    if (CONTENT_TOKEN.has(slot)) return false;
+    if (MENTIONS_CONTENT.test(slot)) {
+      throw new AttemptError(
+        `the reviewer launch template mixes the brief into the control argument ${slot}; ` +
+          "content and capability cannot be told apart inside one token",
+      );
+    }
+    return true;
+  });
+
   for (const raw of [executor?.workspace, executor?.runDir].filter(Boolean)) {
     const root = norm(raw);
     if (!root) continue;
     if (inside(norm(cwd), root)) {
       throw new AttemptError(`the reviewer would run inside the executor's ${raw}; a verifier does not work in the workspace it verifies`);
     }
+    // Where the reviewer's own state is placed is a capability whether or not
+    // the launch template happens to pass it through: the caller creates it.
+    if (runDir && inside(norm(runDir), root)) {
+      throw new AttemptError(`the reviewer's run directory is inside the executor's ${raw}; a verifier does not keep its state there`);
+    }
     // Either spelling of the root is a leak, so both are refused.
     const names = (value) => String(value).includes(root) || String(value).includes(String(raw));
-    for (const token of argv ?? []) {
+    for (const token of launchArgs) {
       if (names(token)) {
         throw new AttemptError(`the reviewer launch names the executor's ${raw}; a verifier is not handed the executor's state`);
       }
@@ -262,8 +304,9 @@ export async function runAttempt(task, plan, io) {
     const executorRunDir = `${io.runsDir}/${attemptId}`;
     const reviewRunDir = `${io.reviewsDir ?? `${io.runsDir}-reviews`}/${attemptId}`;
     const start = (assignment, role, prompt, { cwd, runDir }) => {
+      const mechanism = plan.mechanismOf(assignment);
       const argv = launchArgv({
-        mechanism: plan.mechanismOf(assignment),
+        mechanism,
         role,
         model: assignment.model,
         effort: plan.effort,
@@ -277,7 +320,9 @@ export async function runAttempt(task, plan, io) {
       if (role === "reviewer") {
         assertReviewerIsolation({
           argv,
+          template: mechanism?.launch?.[role],
           cwd,
+          runDir,
           env,
           executor: { workspace: workspacePlan.path, runDir: executorRunDir },
           realPath: io.realPath,
