@@ -334,7 +334,51 @@ concluded from evidence you do not own.
 // The read-only reviewer brief. It deliberately carries no executor reasoning
 // transcript — only the spec, the fixed-point diff, the gate output, and the
 // invariants — per harness/config/verification-policy.json.
-export function buildReviewBrief({ issue, task, commitSha, startingHead, diff, gateOutput, criteria, workspace }) {
+// What the gate's result is worth to the reviewer, which is not the same
+// question as what it says. "The gate outranks your judgement" is a true and
+// load-bearing instruction about a gate the controller owns end to end: the
+// runner, the suite list, the checks, and the tooling that executed them. Told
+// the same thing about a gate the candidate's own diff or the candidate's own
+// workspace shaped, a reviewer defers to the thing it was asked to check — so
+// the sentence is earned per run rather than printed every time. A failing gate
+// is never softened here, whoever owns it.
+export function gateStanding(authority, gateResult) {
+  const passed = gateResult === "PASS";
+  if (authority === "controller") {
+    return [
+      "This gate is the controller's own: its runner, its suite list and its checks",
+      "come from a trusted checkout rather than from the commit under review.",
+      "The deterministic gate outranks your judgement" +
+        (passed ? "." : ", and no finding of yours can turn a failing check into a passing one."),
+    ].join("\n");
+  }
+  const why =
+    {
+      "candidate-influenced": "the commit under review changes the checks it ran",
+      "environment-influenced":
+        "its checks were executed by tooling resolved out of ignored state inside the\nworkspace that produced this commit, which no diff can show",
+      unknown: "the controller could not establish what its result rests on",
+    }[authority] ?? "the controller cannot stand behind what produced it";
+  return [
+    `This gate is NOT an authority over this change: ${why}.`,
+    "Its output is supplemental observed evidence about what ran — it does not",
+    "outrank your judgement, and you are the independent check on whether this",
+    "change is correct." + (passed ? "" : " It also did not pass, and a failing check is not overturned by review."),
+  ].join("\n");
+}
+
+export function buildReviewBrief({
+  issue,
+  task,
+  commitSha,
+  startingHead,
+  diff,
+  gateOutput,
+  criteria,
+  workspace,
+  gateResult = null,
+  gateAuthority = "unknown",
+}) {
   return `# Independent review — issue ${issue.number}
 
 You are a READ-ONLY reviewer. ${workspace} is a detached checkout of the commit
@@ -362,12 +406,14 @@ ${diff}
 ${gateOutput}
 \`\`\`
 
+${gateStanding(gateAuthority, gateResult)}
+
 ## CRITERIA
 
 ${criteria.map((c) => `- ${c}`).join("\n")}
 
 Each finding carries CLAIM / EVIDENCE / SEVERITY / CONFIDENCE / VIOLATED_INVARIANT.
-"Looks good" is not a review. The deterministic gate outranks your judgement.
+"Looks good" is not a review.
 
 ## RETURN FORMAT
 

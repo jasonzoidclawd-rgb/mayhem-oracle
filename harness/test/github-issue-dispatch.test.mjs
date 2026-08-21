@@ -12,12 +12,21 @@ import {
   parseMachineBlock,
   ContractError,
   concludeRun,
+  buildReviewBrief,
   RESULTS,
   CONCLUDED_ONLY,
   LABELS,
   STATUS_FOR_DISPOSITION,
 } from "../github/issue-contract.mjs";
-import { AttemptError, assertReviewerIsolation, DISPOSITIONS, gateArgv, launchArgv, runAttempt } from "../run/attempt.mjs";
+import {
+  AttemptError,
+  assertReviewerIsolation,
+  classifyGatePreflight,
+  DISPOSITIONS,
+  gateArgv,
+  launchArgv,
+  runAttempt,
+} from "../run/attempt.mjs";
 import { slugFor } from "../run/workspace.mjs";
 import { verifyCommitEvidence } from "../run/evidence.mjs";
 import { createGh, GhError } from "../github/gh.mjs";
@@ -2052,4 +2061,141 @@ test("J8. an authority declaration that could not be read is not a clean one", a
   assert.equal(out.result.gateAuthority, "unknown");
   assert.notEqual(out.result.result, "GATE_PASSED", "an unreadable declaration produced an authoritative pass");
   assert.equal(out.result.disposition, "needs-review");
+});
+
+// K. the runtime the gate ran in is not the candidate's either ---------------
+//
+// Tracked authority asks who wrote the checks. It cannot ask what executed
+// them. npm, npx, cargo and python all resolve runners, libraries or cached
+// results out of ignored state inside the workspace — state the executor can
+// write and no commit diff can show. A pass produced that way is still evidence
+// and is still recorded; it is not an authority, and it may not certify alone.
+
+// Ignored runtime state the workspace is holding when the gate runs.
+const withRuntimeState = (io, ...present) => {
+  const inner = io.pathExists;
+  const tail = (p) => String(p).replace(/\/+$/, "");
+  io.pathExists = (p) => present.some((r) => tail(p).endsWith(tail(r))) || inner(p);
+  return io;
+};
+
+test("K1. a gate whose checks ran out of ignored state is recorded, and is not an authority", async () => {
+  const io = withRuntimeState(
+    changing(makeIo({ machine: { task_class: "T1", gate_profile: "web" } }), ["src/lib/scoring/round.ts"]),
+    "node_modules/",
+  );
+  const out = await dispatchIssue(147, io);
+  assert.equal(out.dispatched, true);
+  // The evidence is kept: the suites ran and they passed.
+  assert.equal(out.result.gateResult, "PASS", "a non-authoritative gate was not run, or its result was discarded");
+  // Nothing in the diff touched the tests, so the tracked classification is clean.
+  assert.deepEqual(out.result.gateAuthorityTouched, [], "the diff touched the declared examiner after all");
+  // And yet the runner, the linter and every library under test came out of a
+  // directory the executor can write and git cannot show.
+  assert.equal(out.result.gateAuthority, "environment-influenced");
+  assert.deepEqual(out.result.gateRuntimeInputs, ["node_modules/"]);
+  assert.notEqual(out.result.result, "GATE_PASSED", "a gate run out of candidate-writable state certified itself");
+  assert.equal(out.result.disposition, "needs-review");
+});
+
+test("K2. ignored state a profile does not consume does not demote it", async () => {
+  // The default profile runs node --test over builtins and relative imports. A
+  // node_modules sitting in the workspace is not one of its inputs, and
+  // treating every ignored file as an input would make every profile
+  // review-required for no reason anyone could point at.
+  const io = withRuntimeState(
+    changing(makeIo({ machine: { task_class: "T1" } }), ["src/lib/scoring/round.ts"]),
+    "node_modules/",
+    "overlay/src-tauri/target/",
+  );
+  const out = await dispatchIssue(147, io);
+  assert.equal(out.dispatched, true);
+  assert.deepEqual(out.result.gateRuntimeInputs, []);
+  assert.equal(out.result.gateAuthority, "controller");
+  assert.equal(out.result.result, "GATE_PASSED");
+  assert.equal(out.result.disposition, "accepted");
+});
+
+test("K3. a profile that consumes ignored state is authoritative only when it is not there", async () => {
+  const io = changing(makeIo({ machine: { task_class: "T1", gate_profile: "web" } }), ["src/lib/scoring/round.ts"]);
+  const out = await dispatchIssue(147, io);
+  assert.equal(out.result.gateAuthority, "controller", "a workspace holding no declared runtime state was demoted anyway");
+  assert.deepEqual(out.result.gateRuntimeInputs, []);
+});
+
+test("K4. an independent reviewer can still certify what the gate cannot", () => {
+  const base = {
+    reported: { result: "FIX_PROPOSED" },
+    gateResult: "PASS",
+    commitVerified: true,
+    gateComplete: true,
+    gateAuthoritative: false,
+  };
+  const out = concludeRun({ ...base, reviewersRequired: 1, reviewVerdicts: ["PASS"] });
+  assert.equal(out.result, "VERIFIED", "a reviewer's pass was discarded because the gate was not an authority");
+  assert.equal(out.disposition, "accepted");
+});
+
+test("K5. the runtime inventory lives in the gate, not in a second copy", () => {
+  const named = /node_modules|src-tauri\/target|__pycache__/;
+  for (const file of [
+    "harness/run/attempt.mjs",
+    "harness/github/dispatch.mjs",
+    "harness/github/issue-contract.mjs",
+    "harness/verify-task.sh",
+  ]) {
+    assert.doesNotMatch(
+      readFileSync(fileURLToPath(new URL(`../../${file}`, import.meta.url)), "utf8"),
+      named,
+      `${file} names a runtime path itself, so there are now two inventories to keep in step`,
+    );
+  }
+});
+
+test("K6. a profile that cannot certify alone is known before anything is executed", () => {
+  const planned = (profile) =>
+    classifyGatePreflight(spawnSync("bash", [VERIFY_TASK, profile, "--plan"], { encoding: "utf8" }), profile);
+  assert.equal(planned("harness").ok, true);
+  assert.equal(planned("harness").autonomous, true);
+  assert.equal(planned("web").ok, true, "planning the web profile failed outright");
+  assert.equal(planned("web").autonomous, false, "the plan claims a profile can certify itself out of ignored state");
+});
+
+// The brief the reviewer is handed. A reviewer told that a gate outranks its
+// judgement will defer to it; that instruction is only true of a gate the
+// controller can actually stand behind.
+
+const brief = (over = {}) =>
+  buildReviewBrief({
+    issue: { number: 147 },
+    task: { fingerprint: "f", spec: "s" },
+    commitSha: COMMIT,
+    startingHead: BASE,
+    diff: "d",
+    gateOutput: "GATE: PASS (profile=web)",
+    criteria: config.policy.criteria,
+    workspace: "/w",
+    gateResult: "PASS",
+    gateAuthority: "controller",
+    ...over,
+  });
+
+test("K7. a gate the candidate's runtime produced is not described as outranking the reviewer", () => {
+  for (const authority of ["environment-influenced", "candidate-influenced", "unknown"]) {
+    const text = brief({ gateAuthority: authority });
+    assert.doesNotMatch(
+      text,
+      /gate outranks your judgement/,
+      `a ${authority} gate is described to the reviewer as outranking it`,
+    );
+    assert.match(text, /supplemental|does not outrank/i, `a ${authority} gate pass is not qualified at all`);
+    assert.match(text, /independent/i, "the reviewer is not told to reach its own conclusion");
+  }
+});
+
+test("K8. a controller-owned gate still outranks the reviewer, and its failure still dominates", () => {
+  const passed = brief({ gateAuthority: "controller", gateResult: "PASS" });
+  assert.match(passed, /gate outranks your judgement/, "trusted deterministic evidence was demoted");
+  const failed = brief({ gateAuthority: "controller", gateResult: "FAIL", gateOutput: "GATE: FAIL (profile=web)" });
+  assert.match(failed, /gate outranks your judgement/, "an objective failure stopped dominating reviewer preference");
 });

@@ -248,19 +248,26 @@ test("the gate fails closed rather than guessing a subject", () => {
 // the gate must be able to say which paths decide what its PASS means. The
 // declaration lives beside the suite command, so there is still one inventory.
 
-const authority = (args) => {
+// One inventory, two kinds of row: `tracked` names the files a diff can show a
+// change to, `runtime` names the ignored state the suite's tooling consumes
+// anyway. Both come out of scripts/gate.sh, beside the command they describe.
+const authorityRows = (args = []) => {
   const listed = bash(GATE, ["--authority", ...args]);
   assert.equal(listed.status, 0, `gate --authority failed: ${listed.stderr}`);
-  const rows = listed.stdout.split("\n").filter(Boolean).map((line) => line.split("\t"));
-  for (const row of rows) assert.equal(row.length, 2, `malformed authority row: ${row.join("|")}`);
-  return rows;
+  return listed.stdout.split("\n").filter(Boolean).map((line) => {
+    const row = line.split("\t");
+    assert.equal(row.length, 3, `malformed authority row: ${row.join("|")}`);
+    return { suite: row[0], kind: row[1], path: row[2] };
+  });
 };
+
+const authority = (args = []) => authorityRows(args).filter((r) => r.kind === "tracked");
 
 test("every suite declares the paths that decide what its PASS means", () => {
   for (const suite of inventory()) {
     const declared = authority([suite]);
     assert.ok(declared.length, `suite ${suite} declares no acceptance authority`);
-    for (const [name] of declared) assert.equal(name, suite, `${suite} declared authority for ${name}`);
+    for (const { suite: name } of declared) assert.equal(name, suite, `${suite} declared authority for ${name}`);
   }
 });
 
@@ -270,13 +277,13 @@ test("a suite's declared authority covers the checks it actually runs", () => {
   // authority; if the command moves, this stops matching.
   assert.match(gate, /node --test harness\/test\//);
   assert.ok(
-    authority(["harness"]).some(([, path]) => path === "harness/test/"),
+    authority(["harness"]).some(({ path }) => path === "harness/test/"),
     "the harness suite does not claim the directory its own tests live in",
   );
   // Rust unit tests are #[cfg(test)] modules inside the sources, so the sources
   // are part of that suite's authority and the declaration has to admit it.
   assert.ok(
-    authority(["rust"]).some(([, path]) => path === "overlay/src-tauri/src/"),
+    authority(["rust"]).some(({ path }) => path === "overlay/src-tauri/src/"),
     "the rust suite hides that its tests live inside the files it is judging",
   );
 });
@@ -294,7 +301,7 @@ test("a declared authority path matches something that actually exists", () => {
   // no declaration: it reads as coverage and silently classifies every change to
   // that suite's real tests as untouched examiner.
   const tracked = spawnSync("git", ["ls-files"], { cwd: repo, encoding: "utf8" }).stdout.split("\n").filter(Boolean);
-  for (const [suite, path] of authority([])) {
+  for (const { suite, path } of authority([])) {
     // A prefix or a glob is a claim about how the repository is laid out, so it
     // has to match something. An exact filename may be preventive — .npmrc is
     // declared because a candidate could add one, not because one is there.
@@ -306,7 +313,7 @@ test("a declared authority path matches something that actually exists", () => {
 
 test("a suite's declaration covers every check that suite runs", () => {
   const tracked = spawnSync("git", ["ls-files"], { cwd: repo, encoding: "utf8" }).stdout.split("\n").filter(Boolean);
-  const declaredFor = (suite) => authority([suite]).map(([, path]) => path);
+  const declaredFor = (suite) => authority([suite]).map((r) => r.path);
   const covers = (suite, files) => {
     const missed = files.filter((f) => !matchesAuthority(f, declaredFor(suite)));
     assert.deepEqual(missed, [], `${suite} runs these checks but does not declare them`);
@@ -315,4 +322,130 @@ test("a suite's declaration covers every check that suite runs", () => {
   covers("web", tracked.filter((f) => f.startsWith("src/") && /\.test\./.test(f)));
   covers("overlay", tracked.filter((f) => f.startsWith("overlay/src/") && /\.test\./.test(f)));
   covers("rust", tracked.filter((f) => f.startsWith("overlay/src-tauri/tests/")));
+});
+
+// K. what the checks were executed by --------------------------------------
+//
+// Tracked authority answers who wrote the checks. It cannot answer what ran
+// them. A suite that shells out to a dependency tree resolves its runner, its
+// libraries, and sometimes its cached results out of ignored state the
+// candidate can write and no diff can show — so the inventory has to name that
+// state too, beside the command, for the same reason the tracked paths are.
+
+const runtimeFor = (suite) => authorityRows([suite]).filter((r) => r.kind === "runtime").map((r) => r.path);
+
+test("the inventory declares runtime inputs as well as tracked ones", () => {
+  const rows = authorityRows([]);
+  for (const row of rows) {
+    assert.ok(
+      row.kind === "tracked" || row.kind === "runtime",
+      `authority row for ${row.suite} declares no kind: ${JSON.stringify(row)}`,
+    );
+    assert.ok(row.path, `authority row for ${row.suite} declares no path`);
+  }
+  assert.ok(rows.some((r) => r.kind === "runtime"), "no suite admits to consuming any ignored runtime state");
+  assert.ok(rows.some((r) => r.kind === "tracked"), "the tracked declarations were lost");
+});
+
+test("a declared runtime path is one Git cannot show a change to", () => {
+  // The whole point of the kind is that these are invisible to the commit
+  // evidence. A path Git tracks belongs in the tracked declaration instead:
+  // classifying it as runtime would demote a profile that a diff already covers.
+  for (const { suite, path } of authorityRows([]).filter((r) => r.kind === "runtime")) {
+    const asDir = path.endsWith("/") ? path : `${path}/`;
+    const ignored = spawnSync("git", ["check-ignore", "-q", asDir], { cwd: repo });
+    assert.equal(ignored.status, 0, `${suite} declares ${path} as runtime state, but git can see changes to it`);
+  }
+});
+
+test("every suite that shells out to a dependency tree declares it", () => {
+  const gate = source("scripts/gate.sh");
+  // npm and npx resolve the test runner, the linter, and every library under
+  // test out of node_modules; the gate never installs one, so whatever is there
+  // when it runs is whatever the workspace already had.
+  assert.match(gate, /run "web unit" npm test/);
+  assert.match(gate, /run "eslint" npx eslint/);
+  assert.deepEqual(runtimeFor("web"), ["node_modules/"]);
+  assert.match(gate, /cd overlay && npm run test/);
+  assert.deepEqual(runtimeFor("overlay"), ["overlay/node_modules/"]);
+  // cargo runs the compiled artifact already in target/ whenever its fingerprint
+  // says the sources have not moved — it does not re-derive the binary it runs.
+  assert.match(gate, /cd overlay\/src-tauri && cargo test/);
+  assert.deepEqual(runtimeFor("rust"), ["overlay/src-tauri/target/"]);
+  // python loads __pycache__ bytecode in preference to compiling the source
+  // beside it, and PYTHONDONTWRITEBYTECODE stops it writing, never reading.
+  assert.match(gate, /python3 -m unittest discover/);
+  assert.deepEqual(runtimeFor("skills"), [".codex/skills/test-league-augment-overlay/scripts/__pycache__/"]);
+});
+
+test("the harness suite declares no runtime input because it resolves none", () => {
+  assert.deepEqual(runtimeFor("harness"), [], "the harness suite claims to need ignored state");
+  // Node consults node_modules only for a bare specifier. Every module the
+  // harness suite loads is a builtin or a relative path, so there is no
+  // dependency tree for a candidate to write into. This is the whole proof, so
+  // it is asserted over the files rather than described in a comment.
+  const files = spawnSync("git", ["ls-files", "harness"], { cwd: repo, encoding: "utf8" })
+    .stdout.split("\n")
+    .filter((f) => f.endsWith(".mjs"));
+  assert.ok(files.length > 5, "found no harness sources to check");
+  for (const file of files) {
+    for (const [, specifier] of source(file).matchAll(/^import [^"']*["']([^"']+)["']/gm)) {
+      assert.ok(
+        specifier.startsWith("node:") || specifier.startsWith("."),
+        `${file} imports ${specifier}, which node resolves through node_modules`,
+      );
+    }
+  }
+});
+
+test("a profile's plan says whether it can be an authority at all", () => {
+  // Known before anything is executed: a profile whose checks run out of
+  // ignored state cannot certify on its own no matter how it exits, and an
+  // operator should learn that from the plan rather than from the record.
+  assert.match(plan("harness").stdout, /^RUNTIME AUTHORITY: none$/m);
+  const web = plan("web").stdout;
+  assert.match(web, /^RUNTIME AUTHORITY: .*node_modules\//m);
+  assert.doesNotMatch(web, /^RUNTIME AUTHORITY: none$/m);
+});
+
+test("a suite that runs out of a dependency tree declares what fills it", () => {
+  // A lockfile is not a dependency: it is the tracked instruction that decides
+  // which runner and which libraries end up in the ignored tree beside it.
+  // Leaving it out declares the tree while leaving the thing that determines
+  // its contents classified as ordinary subject matter.
+  const LOCKS = /^(package-lock\.json|pnpm-lock\.yaml|yarn\.lock|Cargo\.lock)$/;
+  const tracked = spawnSync("git", ["ls-files"], { cwd: repo, encoding: "utf8" }).stdout.split("\n").filter(Boolean);
+  for (const suite of inventory()) {
+    const declared = authority([suite]).map((r) => r.path);
+    for (const path of runtimeFor(suite)) {
+      const beside = path.replace(/\/+$/, "").split("/").slice(0, -1).join("/");
+      const locks = tracked.filter(
+        (f) => f.split("/").slice(0, -1).join("/") === beside && LOCKS.test(f.split("/").pop()),
+      );
+      for (const lock of locks) {
+        assert.ok(
+          matchesAuthority(lock, declared),
+          `${suite} runs out of ${path} but does not declare ${lock}, which decides what is in it`,
+        );
+      }
+    }
+  }
+});
+
+test("the scripts a suite runs out of the workspace are part of what its PASS means", () => {
+  // These tests execute the workspace's own scripts/gate.sh and
+  // harness/verify-task.sh and then assert how they behaved. That makes those
+  // two files the examiner every bit as much as this file is: a diff that
+  // rewrites them decides the outcome of the checks that are meant to be
+  // judging it, while a declaration listing only harness/test/ reports the
+  // examiner as untouched.
+  const declared = authority(["harness"]).map((r) => r.path);
+  const suite = source("harness/test/gate.test.mjs");
+  for (const script of ["scripts/gate.sh", "harness/verify-task.sh"]) {
+    assert.ok(suite.includes(script), `the harness suite no longer runs ${script}; this test is stale`);
+    assert.ok(
+      matchesAuthority(script, declared),
+      `the harness suite runs ${script} and asserts on it, but does not declare it`,
+    );
+  }
 });

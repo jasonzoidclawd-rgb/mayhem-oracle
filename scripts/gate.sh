@@ -62,14 +62,33 @@ SUITES=(harness web overlay skills rust)
 # ** spans them; anything else is matched literally.
 authority_paths() {
   case "$1" in
-    harness) printf 'harness/test/\n' ;;
-    web)     printf 'src/**/*.test.*\npackage.json\n*.config.*\ntsconfig*.json\n.npmrc\n' ;;
-    overlay) printf 'overlay/src/**/*.test.*\noverlay/package.json\noverlay/*.config.*\noverlay/tsconfig*.json\noverlay/.npmrc\n' ;;
+    harness) printf 'harness/test/\nscripts/gate.sh\nharness/verify-task.sh\n' ;;
+    web)     printf 'src/**/*.test.*\npackage.json\npackage-lock.json\n*.config.*\ntsconfig*.json\n.npmrc\n' ;;
+    overlay) printf 'overlay/src/**/*.test.*\noverlay/package.json\noverlay/package-lock.json\noverlay/*.config.*\noverlay/tsconfig*.json\noverlay/.npmrc\n' ;;
     skills)  printf '.codex/skills/test-league-augment-overlay/scripts/test_*.py\n.codex/skills/test-league-augment-overlay/scripts/verify_workflow_cwd.sh\n' ;;
     # cargo test runs #[cfg(test)] modules that live inside the sources, so for
     # this suite the sources are the tests. Nothing separates examiner from
     # subject here, and the declaration says so rather than pretending.
-    rust)    printf 'overlay/src-tauri/tests/\noverlay/src-tauri/src/\noverlay/src-tauri/Cargo.toml\n' ;;
+    rust)    printf 'overlay/src-tauri/tests/\noverlay/src-tauri/src/\noverlay/src-tauri/Cargo.toml\noverlay/src-tauri/Cargo.lock\n' ;;
+  esac
+}
+
+# The ignored state a suite's checks are *executed by*, as opposed to the files
+# they are written in. npm and npx resolve the runner, the linter and every
+# library under test out of node_modules; cargo runs whatever compiled artifact
+# in target/ its fingerprint calls fresh; python loads __pycache__ bytecode in
+# preference to compiling the source beside it. None of that is in any commit,
+# so no diff can show a change to it — which is exactly why it is declared.
+#
+# A suite with no rows here resolves nothing it does not carry: the harness
+# suite runs node over builtins and relative imports and nothing else.
+runtime_paths() {
+  case "$1" in
+    harness) ;;
+    web)     printf 'node_modules/\n' ;;
+    overlay) printf 'overlay/node_modules/\n' ;;
+    skills)  printf '.codex/skills/test-league-augment-overlay/scripts/__pycache__/\n' ;;
+    rust)    printf 'overlay/src-tauri/target/\n' ;;
   esac
 }
 
@@ -130,12 +149,14 @@ if [ "$1" = "--authority" ]; then
     known=0
     for suite in "${SUITES[@]}"; do [ "$requested" = "$suite" ] && known=1; done
     if [ "$known" -eq 0 ]; then printf 'unknown suite: %s\n' "$requested" >&2; exit 2; fi
-    while IFS= read -r path; do
-      [ -n "$path" ] || continue
-      printf '%s\t%s\n' "$requested" "$path"
-    done <<EOF
-$(authority_paths "$requested")
+    for kind in tracked runtime; do
+      while IFS= read -r path; do
+        [ -n "$path" ] || continue
+        printf '%s\t%s\t%s\n' "$requested" "$kind" "$path"
+      done <<EOF
+$([ "$kind" = tracked ] && authority_paths "$requested" || runtime_paths "$requested")
 EOF
+    done
   done
   exit 0
 fi

@@ -70,15 +70,37 @@ export function matchesAuthority(file, paths) {
   });
 }
 
-// Which of the changed files decide what this profile's PASS means. The trusted
-// gate declares them per suite because it is already the one place a suite is
-// defined; asking it keeps the answer from drifting into a second list here.
+// What a profile's PASS rests on, read off the trusted gate's own declaration.
+// It is asked because it is already the one place a suite is defined; parsing
+// it here keeps the answer from drifting into a second list.
+//
+//   tracked  files a commit diff can show a change to
+//   runtime  ignored state the suite's tooling executes out of regardless
+export function parseAuthority(declared) {
+  const kinds = { tracked: [], runtime: [] };
+  for (const line of String(declared ?? "").split("\n")) {
+    const [, kind, path] = line.split("\t");
+    const named = path?.trim();
+    if (!named || !kinds[kind?.trim()]) continue;
+    kinds[kind.trim()].push(named);
+  }
+  return kinds;
+}
+
+// Which of the changed files decide what this profile's PASS means.
 export function authorityTouched(changedFiles, declared) {
-  const paths = String(declared ?? "")
-    .split("\n")
-    .map((line) => line.split("\t")[1]?.trim())
-    .filter(Boolean);
+  const paths = parseAuthority(declared).tracked;
   return (changedFiles ?? []).filter((file) => matchesAuthority(file, paths));
+}
+
+// Which of the declared runtime inputs the workspace was actually holding when
+// the gate ran. Presence is the whole question and it is answered by a stat:
+// what is inside one of these trees is not knowable from a commit, and reading
+// it would be answering a question the record cannot honestly ask.
+export function runtimeInputs(declared, { workspace, pathExists }) {
+  if (!workspace || typeof pathExists !== "function") return parseAuthority(declared).runtime;
+  const at = String(workspace).replace(/\/+$/, "");
+  return parseAuthority(declared).runtime.filter((path) => pathExists(`${at}/${path.replace(/\/+$/, "")}`));
 }
 
 // Operator-facing text. A launch failure's message can carry the absolute path
@@ -331,6 +353,7 @@ export async function runAttempt(task, plan, io) {
     gateWorkspace: null,
     gateAuthority: null,
     gateAuthorityTouched: [],
+    gateRuntimeInputs: [],
     gateResult: null,
     gateCoverage: null,
     reviewVerdict: null,
@@ -472,9 +495,27 @@ export async function runAttempt(task, plan, io) {
     if (declared?.status !== 0 || !(declared.stdout ?? "").trim()) {
       attempt.gateAuthority = "unknown";
       attempt.gateAuthorityTouched = [];
+      attempt.gateRuntimeInputs = [];
     } else {
       attempt.gateAuthorityTouched = authorityTouched(attempt.changedFiles, declared.stdout);
-      attempt.gateAuthority = attempt.gateAuthorityTouched.length ? "candidate-influenced" : "controller";
+      // A trusted runner reading trusted checks still executed them with
+      // whatever the workspace was already holding. npm resolves its runner and
+      // every library under test from a dependency tree, cargo re-runs a
+      // compiled artifact it considers fresh, python prefers cached bytecode to
+      // the source beside it — the executor can write all of it and no diff can
+      // show it. The gate declares which of those trees each suite consumes;
+      // this only asks whether they were there. A pass produced over one is an
+      // observation rather than a finding: kept, recorded, and not permitted to
+      // certify on its own.
+      attempt.gateRuntimeInputs = runtimeInputs(declared.stdout, {
+        workspace: workspacePlan.path,
+        pathExists: io.pathExists,
+      });
+      attempt.gateAuthority = attempt.gateAuthorityTouched.length
+        ? "candidate-influenced"
+        : attempt.gateRuntimeInputs.length
+          ? "environment-influenced"
+          : "controller";
     }
 
     stage = "review";
@@ -506,6 +547,11 @@ export async function runAttempt(task, plan, io) {
                 workspace: review.path,
                 diff,
                 gateOutput: `${gate?.stdout ?? ""}${gate?.stderr ?? ""}`.slice(-4000),
+                // Not decoration: "the gate outranks you" is only true of a gate
+                // the controller can stand behind, and a reviewer told it about
+                // any other one defers to the candidate's own runtime.
+                gateResult: attempt.gateResult,
+                gateAuthority: attempt.gateAuthority,
               }),
               // Its own run directory, so two reviewers do not share a session.
               { cwd: review.path, runDir: `${reviewRunDir}/${index}` },
@@ -575,9 +621,13 @@ export function classifyGatePreflight(result, profile) {
   }
   if (result.status === 0) {
     // Proof it was this gate that answered, not something else exiting clean.
-    return new RegExp(`^PROFILE: ${profile.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}$`, "m").test(result.stdout)
-      ? { ok: true }
-      : failed("the gate exited 0 without planning the profile");
+    if (!new RegExp(`^PROFILE: ${profile.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}$`, "m").test(result.stdout)) {
+      return failed("the gate exited 0 without planning the profile");
+    }
+    // Known before the executor is launched: a profile whose checks are run by
+    // ignored state inside the workspace cannot certify its own subject however
+    // it exits. A plan that does not say is not a plan that said none.
+    return { ok: true, autonomous: /^RUNTIME AUTHORITY: none$/m.test(result.stdout) };
   }
   if (result.status === 127 || CANNOT_LAUNCH.test(result.stderr)) {
     return launchFailed(detail(result.stderr) || "the gate script was not found");

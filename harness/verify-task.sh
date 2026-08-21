@@ -17,8 +17,9 @@
 #   rust     harness + rust
 #   all      every suite the gate knows
 #
-# --plan prints the profile, its suites, and what it does not cover, and exits
-# 0 without running anything.
+# --plan prints the profile, its suites, whether the profile can be a deterministic
+# authority in this workspace at all, and what it does not cover — then exits 0
+# without running anything.
 #
 # --worktree names the workspace to judge. The profile and the suite commands
 # always come from this file's own checkout, so a dispatcher runs the trusted
@@ -91,7 +92,23 @@ print_not_covered() {
   printf '\nNOT COVERED BY THIS PROFILE:\n%s' "$uncovered"
 }
 
+# Whether this profile could be an authority at all, asked before anything
+# runs. A suite whose checks are executed by ignored state inside the workspace
+# cannot certify its own subject however it exits — the paths come from the
+# gate's one inventory, never from a list here.
+print_runtime_authority() {
+  local paths
+  paths="$(bash "$GATE" --authority $SUITES | awk -F'\t' '$2 == "runtime" { print $3 }' | sort -u | tr '\n' ' ')"
+  paths="${paths%% }"
+  if [ -z "$paths" ]; then
+    printf 'RUNTIME AUTHORITY: none\n'
+  else
+    printf 'RUNTIME AUTHORITY: %s\n' "${paths% }"
+  fi
+}
+
 if [ "$PLAN" -eq 1 ]; then
+  print_runtime_authority
   print_not_covered
   printf '\nPLAN ONLY (profile=%s) — nothing executed\n' "$PROFILE"
   exit 0
