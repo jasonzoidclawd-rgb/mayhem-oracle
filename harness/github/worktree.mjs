@@ -43,16 +43,22 @@ export function planIssueWorktree({ number, title, baseSha, mainWorktree, worktr
   const { path, branch } = issuePaths(mainWorktree, number, slug);
   const same = (a, b) => a === b || realPath(a) === realPath(b);
 
-  const registered = worktrees.find((w) => same(w.path, path));
+  // The title-derived path is only a creation decoration. Once created, the
+  // immutable issue number in the branch identifies its worktree across title
+  // edits, so resume the registered path rather than deriving a second one.
+  const issueBranchPrefix = `issue/${number}-`;
+  const atExpectedPath = worktrees.find((w) => same(w.path, path));
+  if (atExpectedPath && atExpectedPath.branch !== branch) {
+    throw new WorktreeError(
+      `${path} is a worktree of branch ${atExpectedPath.branch ?? "(detached)"}, not ${branch}; it belongs to another task`,
+    );
+  }
+  const registered = atExpectedPath
+    ?? worktrees.find((w) => w.branch?.startsWith(issueBranchPrefix));
   if (registered) {
-    if (registered.branch !== branch) {
-      throw new WorktreeError(
-        `${path} is a worktree of branch ${registered.branch ?? "(detached)"}, not ${branch}; it belongs to another task`,
-      );
-    }
     // Resume exactly as found. No git command at all, so there is no path by
     // which uncommitted work could be discarded.
-    return { action: "resume", path: registered.path, branch, dirty: Boolean(dirty), git: [] };
+    return { action: "resume", path: registered.path, branch: registered.branch, dirty: Boolean(dirty), git: [] };
   }
 
   if (pathExists(path)) {

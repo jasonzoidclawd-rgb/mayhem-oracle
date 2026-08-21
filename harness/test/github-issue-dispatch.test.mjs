@@ -308,6 +308,30 @@ test("18. a matching issue worktree resumes and is never reset", () => {
   assert.deepEqual(plan.git, [], "resuming a worktree must issue no git command at all");
 });
 
+test("18c. an issue rename resumes its existing dirty worktree", () => {
+  const oldPath = `${WT_ROOT}/147-overlay-geometry-stalls`;
+  const plan = planIssueWorktree({
+    number: 147,
+    title: "Overlay geometry no longer stalls",
+    baseSha: BASE,
+    mainWorktree: MAIN,
+    worktrees: parseWorktreeList(
+      worktrees([
+        { path: MAIN, branch: "main" },
+        { path: oldPath, branch: "issue/147-overlay-geometry-stalls" },
+      ]),
+    ),
+    branchExists: () => true,
+    pathExists: () => false,
+    dirty: true,
+  });
+  assert.equal(plan.action, "resume");
+  assert.equal(plan.path, oldPath);
+  assert.equal(plan.branch, "issue/147-overlay-geometry-stalls");
+  assert.equal(plan.dirty, true);
+  assert.deepEqual(plan.git, [], "resuming after a rename must not touch dirty or untracked contents");
+});
+
 test("19. a dirty matching worktree is resumed, never discarded", () => {
   const path = `${WT_ROOT}/147-overlay-geometry-stalls`;
   const base = {

@@ -390,11 +390,6 @@ are deferred until a second account of each provider is authenticated.
   dispatcher was killed outright (see "When a claimed run fails"). A lease
   stamp plus a sweep that hands back claims with no live process would close
   it; V1 has neither, and says so rather than implying exactly-once delivery.
-- **P2: issue title rename can change slug/path and prevent automatic discovery
-  of an existing same-issue worktree.** The worktree path is derived from the
-  issue title, so renaming an issue mid-slice makes an existing worktree
-  invisible to the next dispatch. Deliberately not fixed in the recovery patch;
-  the fix is number-first identity with the slug as decoration.
 - **Quota ledger** — no provider exposes per-request token counts under
   subscription authentication. Record proxies (model, effort, files loaded,
   tool calls, duration, whether a quota warning appeared); do not invent numbers.
