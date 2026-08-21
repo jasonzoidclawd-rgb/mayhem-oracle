@@ -1733,6 +1733,47 @@ test("Z1. the CLI summary names the workspace the attempt actually used", async 
   assert.ok(line.includes(out.result.result) && line.includes(out.result.nextStatus));
 });
 
+// --- R. the candidate is subject data, not reviewer configuration ---------
+
+test("R1. a candidate that changes CLAUDE.md is reviewed like any other diff", async () => {
+  // Verification correctness must not be coupled to a filename. A task whose
+  // whole purpose is to edit the project instructions has to be reviewable, so
+  // the boundary is where the file is *loaded*, never whether it changed.
+  const io = makeIo();
+  const inner = io.git;
+  io.git = (argv) => {
+    const a = argv[0] === "-C" ? argv.slice(2) : argv;
+    if (a[0] === "diff" && a.includes("--name-only")) {
+      io.gitCalls.push(argv);
+      return { status: 0, stdout: "CLAUDE.md\n.claude/settings.json\n", stderr: "" };
+    }
+    return inner(argv);
+  };
+  const out = await dispatchIssue(147, io);
+  assert.deepEqual(out.result.changedFiles, ["CLAUDE.md", ".claude/settings.json"]);
+  assert.equal(out.result.commitEvidence.ok, true, "a project-instruction change was refused as evidence");
+  assert.equal(out.result.result, "VERIFIED", `a CLAUDE.md change concluded ${out.result.result}`);
+  assert.equal(out.result.reviewVerdict, "PASS");
+  assert.equal(out.result.nextStatus, LABELS.verified);
+});
+
+test("R2. the reviewer receives the controller's explicit brief", async () => {
+  // Disabling the candidate's own configuration must not leave the reviewer
+  // undefined: everything it needs is controller-authored and passed in argv.
+  const io = makeIo();
+  const out = await dispatchIssue(147, io);
+  const brief = io.spawned.find((s) => s.role === "reviewer").argv.at(-1);
+  assert.match(brief, /Independent review/, "the reviewer was not handed the review brief");
+  assert.ok(brief.includes(out.result.commitSha), "the brief does not pin the commit under review");
+  assert.ok(brief.includes(out.result.startingHead), "the brief does not pin the base");
+  assert.match(brief, /DETERMINISTIC GATE OUTPUT/, "the brief carries no gate evidence");
+  assert.match(brief, /FIXED-POINT DIFF/, "the brief carries no diff");
+  for (const criterion of config.policy.criteria) {
+    assert.ok(brief.includes(criterion), `the brief omits criterion ${criterion}`);
+  }
+  assert.match(brief, /"verdict"/, "the brief states no return format");
+});
+
 // --- fake io -------------------------------------------------------------
 
 function makeIo(over = {}) {

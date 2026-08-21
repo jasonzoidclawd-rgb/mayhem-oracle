@@ -2,6 +2,7 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import { route, loadConfig, RoutingError } from "../route.mjs";
+import { launchArgv } from "../run/attempt.mjs";
 
 const config = loadConfig();
 const CLASSES = Object.keys(config.routing.taskClasses);
@@ -299,4 +300,96 @@ test("an account with no declared mechanism is not dispatchable", () => {
   const c = structuredClone(config);
   delete c.routing.accounts.GPT_A.execution;
   assert.throws(() => route({ taskClass: "T0", available: ["GPT_A"], config: c }), RoutingError);
+});
+
+// --- reviewer configuration isolation ------------------------------------
+//
+// The candidate checkout is subject data. It must not also be reviewer
+// configuration. A reviewer runs in a detached checkout of the executor's own
+// commit, so whatever its runtime auto-discovers from that working directory —
+// CLAUDE.md, AGENTS.md, project skills, hooks in .claude/settings.json — is
+// content the executor wrote, configuring the process that judges it. The
+// reviewer must still be able to READ those files: a task whose purpose is to
+// edit the project instructions has to be reviewable. What it must not do is
+// load them as its own authority.
+//
+// Each runtime refuses them in its own vocabulary, and a flag from one is
+// meaningless to the other. What a flag disables is a property of the runtime,
+// established against the installed CLI and recorded in the mechanism's own
+// `basis`; these tests pin the launch that carries it.
+const PROJECT_CONFIG_ISOLATION = {
+  claude: ["--safe-mode"],
+  pi: ["--no-context-files", "--no-skills"],
+};
+const EVERY_ISOLATION_FLAG = Object.values(PROJECT_CONFIG_ISOLATION).flat();
+
+const launchesOf = (mechanism) =>
+  Object.entries(mechanism.launch ?? {}).filter(([, argv]) => Array.isArray(argv));
+
+test("every reviewer is launched with project-local config discovery disabled", () => {
+  let checked = 0;
+  for (const [id, mechanism] of Object.entries(config.routing.executionMechanisms)) {
+    const reviewer = mechanism.launch?.reviewer;
+    if (!Array.isArray(reviewer)) continue;
+    const required = PROJECT_CONFIG_ISOLATION[reviewer[0]];
+    assert.ok(required, `${id} reviews through ${reviewer[0]}, whose isolation flags nothing here declares`);
+    for (const flag of required) {
+      assert.ok(reviewer.includes(flag), `${id} reviews with the candidate's own project configuration loaded (no ${flag})`);
+    }
+    checked += 1;
+  }
+  assert.ok(checked >= 2, `only ${checked} reviewer launches were checked`);
+});
+
+test("an executor keeps the project instructions a reviewer refuses", () => {
+  // An executor works inside the project and needs its instructions — the
+  // packet names them deliberately. The isolation is reviewer-only.
+  for (const [id, mechanism] of Object.entries(config.routing.executionMechanisms)) {
+    const executor = mechanism.launch?.executor;
+    if (!Array.isArray(executor)) continue;
+    for (const flag of EVERY_ISOLATION_FLAG) {
+      assert.ok(!executor.includes(flag), `${id} strips project instructions from its executor, not just its reviewer`);
+    }
+  }
+});
+
+test("one runtime's launch flag never leaks into another", () => {
+  for (const [id, mechanism] of Object.entries(config.routing.executionMechanisms)) {
+    for (const [role, argv] of launchesOf(mechanism)) {
+      for (const [runtime, flags] of Object.entries(PROJECT_CONFIG_ISOLATION)) {
+        if (argv[0] === runtime) continue;
+        for (const flag of flags) {
+          assert.ok(!argv.includes(flag), `${id} passes ${runtime}'s ${flag} to ${argv[0]} in its ${role} launch`);
+        }
+      }
+    }
+  }
+});
+
+test("the reviewer isolation a mechanism declares survives rendering", () => {
+  // Config is not the launch; the rendered argv is. Proven here rather than
+  // inferred, with no placeholder left unsubstituted either way.
+  for (const [id, mechanism] of Object.entries(config.routing.executionMechanisms)) {
+    if (!Array.isArray(mechanism.launch?.reviewer)) continue;
+    const render = (role, prompt) =>
+      launchArgv({
+        mechanism,
+        role,
+        model: "a-model",
+        effort: "high",
+        authProvider: mechanism.authProvider,
+        prompt,
+        sessionDir: "/s",
+        workspace: "/w",
+        runDir: "/r",
+      });
+    const reviewer = render("reviewer", "BRIEF");
+    for (const flag of PROJECT_CONFIG_ISOLATION[mechanism.launch.reviewer[0]]) {
+      assert.ok(reviewer.includes(flag), `${id} rendered a reviewer launch without ${flag}: ${JSON.stringify(reviewer)}`);
+    }
+    assert.ok(!reviewer.some((a) => /[{}]/.test(a)), `unsubstituted placeholder in ${JSON.stringify(reviewer)}`);
+    for (const flag of EVERY_ISOLATION_FLAG) {
+      assert.ok(!render("executor", "PACKET").includes(flag), `${id} rendered an executor launch carrying ${flag}`);
+    }
+  }
 });

@@ -72,11 +72,12 @@
           "--print",
           "--permission-mode",
           "plan",
+          "--safe-mode",
           "--model",
           "{model}",
           "{prompt}"
         ],
-        "basis": "claude --help (2.x): --print is the non-interactive path, --permission-mode acceptEdits lets an executor write inside its own worktree, --add-dir grants the run directory it writes its report into, and --permission-mode plan is the hard read-only mode a Verifier-Lite reviewer runs under. A reviewer writes nothing at all, so its verdict is read from stdout rather than from a file."
+        "basis": "claude --help (2.x): --print is the non-interactive path, --permission-mode acceptEdits lets an executor write inside its own worktree, --add-dir grants the run directory it writes its report into, and --permission-mode plan is the hard read-only mode a Verifier-Lite reviewer runs under. A reviewer writes nothing at all, so its verdict is read from stdout rather than from a file. --safe-mode is reviewer-only: a reviewer works in a detached checkout of the executor's own commit, so CLAUDE.md, project skills and .claude/settings.json hooks discovered from that directory are files the executor wrote, and auto-loading them lets a candidate configure the process judging it. Verified against CLI 2.1.238 in a scratch checkout: without it the candidate's CLAUDE.md and project skill were both in context and a SessionStart hook executed; with it none of the three did, while the explicit brief was still received. --bare disables the same discovery but forces ANTHROPIC_API_KEY or apiKeyHelper auth (observed: 'Not logged in' with the subscription credential present), which no mechanism here may use. An executor keeps its project instructions; only the reviewer refuses them."
       }
     },
     "pi-anthropic-oauth": {
@@ -128,9 +129,11 @@
           "{sessionDir}",
           "--tools",
           "read",
+          "--no-context-files",
+          "--no-skills",
           "{prompt}"
         ],
-        "basis": "pi --help (0.84): --print is non-interactive, --thinking carries the effort ladder, --session-dir isolates the session per run, and --tools read is the hard read-only allowlist a reviewer runs under. The provider flag takes the mechanism authProvider, never an account provider. A reviewer writes nothing, so its verdict is read from stdout."
+        "basis": "pi --help (0.84): --print is non-interactive, --thinking carries the effort ladder, --session-dir isolates the session per run, and --tools read is the hard read-only allowlist a reviewer runs under. The provider flag takes the mechanism authProvider, never an account provider. A reviewer writes nothing, so its verdict is read from stdout. --no-context-files and --no-skills are reviewer-only, for the same reason --safe-mode is on the Claude side: a reviewer works in a detached checkout of the executor's own commit, so AGENTS.md, CLAUDE.md and any skill discovered from that directory are files the executor wrote. Verified against pi 0.84.2 in a scratch checkout: without them the candidate's AGENTS.md was in context; with them it was not, while the explicit brief was still received. An executor keeps its project instructions; only the reviewer refuses them."
       }
     }
   },
