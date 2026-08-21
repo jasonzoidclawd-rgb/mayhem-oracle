@@ -58,13 +58,14 @@ SUITES=(harness web overlay skills rust)
 # that catches it passes just as loudly as fixing the bug. Declared here, beside
 # the command, because this is already the one place a suite is defined.
 #
-# A trailing slash is a directory prefix; anything else is matched literally.
+# A trailing slash is a directory prefix; * matches within one path segment and
+# ** spans them; anything else is matched literally.
 authority_paths() {
   case "$1" in
     harness) printf 'harness/test/\n' ;;
-    web)     printf 'src/__tests__/\nsrc/lib/__tests__/\nsrc/lib/bigquery/\npackage.json\nvitest.config.ts\neslint.config.mjs\ntsconfig.json\n' ;;
-    overlay) printf 'overlay/src/__tests__/\noverlay/package.json\noverlay/vitest.config.ts\noverlay/tsconfig.json\n' ;;
-    skills)  printf '.codex/skills/test-league-augment-overlay/scripts/\n' ;;
+    web)     printf 'src/**/*.test.*\npackage.json\n*.config.*\ntsconfig*.json\n.npmrc\n' ;;
+    overlay) printf 'overlay/src/**/*.test.*\noverlay/package.json\noverlay/*.config.*\noverlay/tsconfig*.json\noverlay/.npmrc\n' ;;
+    skills)  printf '.codex/skills/test-league-augment-overlay/scripts/test_*.py\n.codex/skills/test-league-augment-overlay/scripts/verify_workflow_cwd.sh\n' ;;
     # cargo test runs #[cfg(test)] modules that live inside the sources, so for
     # this suite the sources are the tests. Nothing separates examiner from
     # subject here, and the declaration says so rather than pretending.

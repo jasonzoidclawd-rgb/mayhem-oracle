@@ -48,18 +48,37 @@ export function gateArgv({ harnessRoot, profile, worktree = null, plan = false, 
   return argv;
 }
 
+// Does this file fall under one of the declared authority paths? A trailing
+// slash is a directory prefix; `*` matches within one segment and `**` spans
+// them, so a suite whose tests sit beside its sources can still name just the
+// tests. Anything else is matched literally.
+const quote = (text) => text.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+
+export function matchesAuthority(file, paths) {
+  return (paths ?? []).some((path) => {
+    if (path.endsWith("/")) return file.startsWith(path);
+    if (!path.includes("*")) return file === path;
+    const pattern = quote(path)
+      // `/**/` spans zero or more directories, so src/**/*.test.* has to match
+      // src/x.test.ts as readily as src/lib/x.test.ts.
+      .replace(/\\\*\\\*\//g, "\u0000")
+      .replace(/\\\*\\\*/g, "\u0001")
+      .replace(/\\\*/g, "[^/]*")
+      .replace(/\u0000/g, "(?:.*/)?")
+      .replace(/\u0001/g, ".*");
+    return new RegExp(`^${pattern}$`).test(file);
+  });
+}
+
 // Which of the changed files decide what this profile's PASS means. The trusted
-// gate declares them per suite — a directory prefix, or an exact path — because
-// it is already the one place a suite is defined; asking it keeps the answer
-// from drifting into a second list here.
+// gate declares them per suite because it is already the one place a suite is
+// defined; asking it keeps the answer from drifting into a second list here.
 export function authorityTouched(changedFiles, declared) {
   const paths = String(declared ?? "")
     .split("\n")
     .map((line) => line.split("\t")[1]?.trim())
     .filter(Boolean);
-  return (changedFiles ?? []).filter((file) =>
-    paths.some((path) => (path.endsWith("/") ? file.startsWith(path) : file === path)),
-  );
+  return (changedFiles ?? []).filter((file) => matchesAuthority(file, paths));
 }
 
 // Operator-facing text. A launch failure's message can carry the absolute path

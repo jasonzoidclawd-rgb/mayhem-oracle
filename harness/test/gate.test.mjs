@@ -5,6 +5,7 @@ import { chmodSync, mkdtempSync, readFileSync, realpathSync, writeFileSync } fro
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { fileURLToPath } from "node:url";
+import { matchesAuthority } from "../run/attempt.mjs";
 
 // These tests exercise the command layer itself, so they never invoke the
 // harness suite through it — that would re-enter this file recursively. Suite
@@ -286,4 +287,32 @@ test("verify-task reports the acceptance authority of a whole profile", () => {
   const suites = new Set(declared.stdout.split("\n").filter(Boolean).map((l) => l.split("\t")[0]));
   assert.deepEqual([...suites].sort(), ["harness", "skills"], "the profile's authority is not its suites' authority");
   assert.doesNotMatch(declared.stdout, /===/, "reporting the authority ran a suite");
+});
+
+test("a declared authority path matches something that actually exists", () => {
+  // A declaration naming a directory the repository does not have is worse than
+  // no declaration: it reads as coverage and silently classifies every change to
+  // that suite's real tests as untouched examiner.
+  const tracked = spawnSync("git", ["ls-files"], { cwd: repo, encoding: "utf8" }).stdout.split("\n").filter(Boolean);
+  for (const [suite, path] of authority([])) {
+    // A prefix or a glob is a claim about how the repository is laid out, so it
+    // has to match something. An exact filename may be preventive — .npmrc is
+    // declared because a candidate could add one, not because one is there.
+    if (!path.endsWith("/") && !path.includes("*")) continue;
+    const matched = tracked.filter((file) => matchesAuthority(file, [path]));
+    assert.ok(matched.length, `${suite} declares ${path}, which matches no tracked file`);
+  }
+});
+
+test("a suite's declaration covers every check that suite runs", () => {
+  const tracked = spawnSync("git", ["ls-files"], { cwd: repo, encoding: "utf8" }).stdout.split("\n").filter(Boolean);
+  const declaredFor = (suite) => authority([suite]).map(([, path]) => path);
+  const covers = (suite, files) => {
+    const missed = files.filter((f) => !matchesAuthority(f, declaredFor(suite)));
+    assert.deepEqual(missed, [], `${suite} runs these checks but does not declare them`);
+  };
+  covers("harness", tracked.filter((f) => f.startsWith("harness/test/")));
+  covers("web", tracked.filter((f) => f.startsWith("src/") && /\.test\./.test(f)));
+  covers("overlay", tracked.filter((f) => f.startsWith("overlay/src/") && /\.test\./.test(f)));
+  covers("rust", tracked.filter((f) => f.startsWith("overlay/src-tauri/tests/")));
 });
