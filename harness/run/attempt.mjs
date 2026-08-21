@@ -70,18 +70,60 @@ export function launchArgv({ mechanism, role, model, effort, authProvider, promp
 // its own subject; one handed the executor's run directory can read the report
 // and session it is supposed to be independent of. Both are refused here,
 // before the process starts, so the isolation cannot be lost by editing prose.
-export function assertReviewerIsolation({ argv, cwd, executor }) {
-  const inside = (path, root) => path === root || String(path ?? "").startsWith(`${root}/`);
-  for (const root of [executor?.workspace, executor?.runDir].filter(Boolean)) {
-    if (inside(cwd, root)) {
-      throw new AttemptError(`the reviewer would run inside the executor's ${root}; a verifier does not work in the workspace it verifies`);
+export function assertReviewerIsolation({ argv, cwd, env, executor, realPath = (p) => p }) {
+  // Compare realised paths. git reports the path it resolved, while these roots
+  // are derived from the configured main worktree, so a symlinked prefix
+  // (/tmp -> /private/tmp) makes two names for one directory compare unequal —
+  // and an isolation check that silently passes is worse than none.
+  const norm = (path) => String(realPath(String(path ?? "")) ?? "").replace(/\/+$/, "");
+  const inside = (path, root) => path === root || path.startsWith(`${root}/`);
+  for (const raw of [executor?.workspace, executor?.runDir].filter(Boolean)) {
+    const root = norm(raw);
+    if (!root) continue;
+    if (inside(norm(cwd), root)) {
+      throw new AttemptError(`the reviewer would run inside the executor's ${raw}; a verifier does not work in the workspace it verifies`);
     }
+    // Either spelling of the root is a leak, so both are refused.
+    const names = (value) => String(value).includes(root) || String(value).includes(String(raw));
     for (const token of argv ?? []) {
-      if (String(token).includes(root)) {
-        throw new AttemptError(`the reviewer launch names the executor's ${root}; a verifier is not handed the executor's state`);
+      if (names(token)) {
+        throw new AttemptError(`the reviewer launch names the executor's ${raw}; a verifier is not handed the executor's state`);
+      }
+    }
+    // The environment is part of the launch. A root passed through env reaches
+    // the reviewer exactly as well as one passed through argv, and env is where
+    // a launcher is likeliest to forward state without meaning to.
+    for (const [key, value] of Object.entries(env ?? {})) {
+      if (names(value)) {
+        throw new AttemptError(`the reviewer's ${key} names the executor's ${raw}; a verifier is not handed the executor's state`);
       }
     }
   }
+}
+
+// The last JSON object a runtime printed, preferring a fenced block. Returns
+// null rather than guessing when nothing parses.
+export function lastJsonObject(text) {
+  const source = String(text ?? "");
+  for (const block of [...source.matchAll(/```json\s*([\s\S]*?)```/g)].map((m) => m[1]).reverse()) {
+    try {
+      return JSON.parse(block);
+    } catch {
+      /* try the next one */
+    }
+  }
+  const close = source.lastIndexOf("}");
+  if (close === -1) return null;
+  const opens = [];
+  for (let i = 0; i < close; i += 1) if (source[i] === "{") opens.push(i);
+  for (const open of opens.slice(-20).reverse()) {
+    try {
+      return JSON.parse(source.slice(open, close + 1));
+    } catch {
+      /* try an earlier brace */
+    }
+  }
+  return null;
 }
 
 // What the attempt established, in a vocabulary with no ledger in it. The
@@ -95,7 +137,14 @@ export const DISPOSITIONS = ["accepted", "needs-review", "needs-human", "needs-e
 // The completion level says how far the proof got, and stops where the
 // evidence stops. LIVE-PROVEN is never concluded here: no gate profile
 // establishes live behaviour, so nothing in this file may claim it.
-export function concludeAttempt({ reported, gateResult, reviewVerdict, reviewersRequired, commitVerified = false }) {
+export function concludeAttempt({
+  reported,
+  gateResult,
+  reviewVerdicts = [],
+  reviewersRequired = 0,
+  commitVerified = false,
+  gateComplete = false,
+}) {
   const at = (result, disposition, completionLevel = null) => ({ result, disposition, completionLevel });
 
   if (reported.result !== "FIX_PROPOSED") {
@@ -110,14 +159,23 @@ export function concludeAttempt({ reported, gateResult, reviewVerdict, reviewers
   // green the gate looks: the gate did not necessarily run on it.
   if (!commitVerified) return at("FIX_PROPOSED", "needs-human");
   if (gateResult !== "PASS") return at("FIX_PROPOSED", "needs-human", "IMPLEMENTED");
+  // A profile that skipped suites did not prove the change offline, however
+  // green the suites it did run came back. The default profile skips most of
+  // them, so treating any PASS as OFFLINE-PROVEN overstates nearly every run.
+  const proven = gateComplete ? "OFFLINE-PROVEN" : "IMPLEMENTED";
+  const verdicts = reviewVerdicts ?? [];
   if (reviewersRequired > 0) {
-    if (reviewVerdict === "PASS") return at("VERIFIED", "accepted", "OFFLINE-PROVEN");
-    if (reviewVerdict === "FAIL") return at("FIX_PROPOSED", "needs-human", "IMPLEMENTED");
+    // One dissent is enough; agreement has to be unanimous and complete. Risk 4
+    // asks for two independent reviewers, and one PASS is half an answer — it
+    // must not be recorded in the same word as the whole one.
+    if (verdicts.includes("FAIL")) return at("FIX_PROPOSED", "needs-human", "IMPLEMENTED");
+    const passed = verdicts.filter((v) => v === "PASS").length;
+    if (passed >= reviewersRequired) return at("VERIFIED", "accepted", proven);
     return at("FIX_PROPOSED", "needs-review", "IMPLEMENTED");
   }
   // The gate passed on a verified commit and this risk level requires no
   // reviewer. That is precisely what was proven, and it is not verification.
-  return at("GATE_PASSED", "accepted", "OFFLINE-PROVEN");
+  return at("GATE_PASSED", "accepted", proven);
 }
 
 // Run one attempt at one task.
@@ -133,7 +191,8 @@ export function concludeAttempt({ reported, gateResult, reviewVerdict, reviewers
 // `.stage` and `.attempt`, so a caller that took a claim can record exactly how
 // far the attempt got before handing that claim back.
 export async function runAttempt(task, plan, io) {
-  const reviewer = plan.reviewers?.[0] ?? null;
+  // Every reviewer the policy asked for, not the first of them.
+  const reviewers = plan.reviewers ?? [];
   const attemptId = task.attemptId;
   const attempt = {
     schema: ATTEMPT_SCHEMA,
@@ -152,8 +211,11 @@ export async function runAttempt(task, plan, io) {
     primaryAccount: plan.primary.account,
     primaryExecution: plan.primary.execution,
     primaryRuntime: plan.primary.runtime,
-    reviewerAccount: reviewer?.account ?? null,
-    reviewerExecution: reviewer?.execution ?? null,
+    reviewerAccount: reviewers.map((r) => r.account).join(",") || null,
+    reviewerExecution: reviewers.map((r) => r.execution).join(",") || null,
+    reviewersRequired: plan.verification.reviewers,
+    reviewVerdicts: [],
+    reviewNote: null,
     behavioralRed: null,
     commitSha: null,
     commitEvidence: null,
@@ -194,9 +256,9 @@ export async function runAttempt(task, plan, io) {
     attempt.startingHead =
       (io.git(["-C", workspacePlan.path, "rev-parse", "HEAD"]).stdout ?? "").trim() || task.resolvedBaseSha;
 
-    // Two run directories under two different roots, not two names under one.
-    // Siblings would put the executor's session and report one `..` away from
-    // everything the reviewer is given.
+    // Two run directories, so nothing handed to the reviewer names the
+    // executor's. Whether they are siblings on disk is the caller's choice and
+    // is not what makes this safe: assertReviewerIsolation below is.
     const executorRunDir = `${io.runsDir}/${attemptId}`;
     const reviewRunDir = `${io.reviewsDir ?? `${io.runsDir}-reviews`}/${attemptId}`;
     const start = (assignment, role, prompt, { cwd, runDir }) => {
@@ -211,10 +273,17 @@ export async function runAttempt(task, plan, io) {
         workspace: cwd,
         runDir,
       });
+      const env = assignment.runtimeAuth?.env ?? {};
       if (role === "reviewer") {
-        assertReviewerIsolation({ argv, cwd, executor: { workspace: workspacePlan.path, runDir: executorRunDir } });
+        assertReviewerIsolation({
+          argv,
+          cwd,
+          env,
+          executor: { workspace: workspacePlan.path, runDir: executorRunDir },
+          realPath: io.realPath,
+        });
       }
-      const options = { cwd, env: assignment.runtimeAuth?.env ?? {}, role, account: assignment.account, runId: attemptId, runDir };
+      const options = { cwd, env, role, account: assignment.account, runId: attemptId, runDir };
       return mustHaveRun(io.spawn(argv, options), `the ${role} runtime`);
     };
 
@@ -271,46 +340,63 @@ export async function runAttempt(task, plan, io) {
     attempt.gateCoverage = parseGateCoverage(gate.stdout, task.gateProfile);
 
     stage = "review";
-    if (reviewer && evidence?.ok && attempt.gateResult === "PASS") {
+    if (reviewers.length && evidence?.ok && attempt.gateResult === "PASS") {
       // A detached checkout of the commit git established, so the reviewer's
       // subject is fixed, is not the executor's mutable workspace, and cannot
       // move under it while it reads.
       const review = reviewPaths(io.mainWorktree, attemptId);
       const added = io.git(["worktree", "add", "--detach", review.path, evidence.commitSha]);
       if (!added || added.status !== 0) {
-        throw new AttemptError(`the review workspace could not be created: ${detail(added?.stderr) || `git exited ${added?.status ?? "?"}`}`);
+        // A review that could not be set up is a review that did not happen.
+        // Throwing here would throw away a git-verified commit and a passing
+        // gate and record the attempt as INTERRUPTED — a worse account of the
+        // run than "nobody reviewed it", and one that loses real evidence.
+        attempt.reviewNote = `the review workspace could not be created: ${detail(added?.stderr) || `git exited ${added?.status ?? "?"}`}`;
+        attempt.reviewVerdicts = reviewers.map(() => "NO_REPORT");
+      } else {
+        attempt.reviewWorkspace = review.path;
+        try {
+          const diff = (io.git(["-C", review.path, "diff", evidence.startingHead, evidence.commitSha]).stdout ?? "").slice(0, 60000);
+          for (const [index, reviewer] of reviewers.entries()) {
+            const answer = start(
+              reviewer,
+              "reviewer",
+              io.buildReviewBrief({
+                task,
+                commitSha: evidence.commitSha,
+                startingHead: evidence.startingHead,
+                workspace: review.path,
+                diff,
+                gateOutput: `${gate?.stdout ?? ""}${gate?.stderr ?? ""}`.slice(-4000),
+              }),
+              // Its own run directory, so two reviewers do not share a session.
+              { cwd: review.path, runDir: `${reviewRunDir}/${index}` },
+            );
+            // The verdict is read from what this reviewer's own process printed.
+            // A reviewer is launched read-only and writes nothing, so a
+            // report-reviewer.json on disk could only have been put there by
+            // something that is not the reviewer — and the executor is the one
+            // process with write access to that tree.
+            const verdict = lastJsonObject(answer?.stdout)?.verdict;
+            attempt.reviewVerdicts.push(verdict === "PASS" || verdict === "FAIL" ? verdict : "NO_REPORT");
+          }
+        } finally {
+          // A leaked review checkout is untidy; failing the attempt over it
+          // would discard verdicts that were already reached.
+          io.git(["worktree", "remove", "--force", review.path]);
+        }
       }
-      attempt.reviewWorkspace = review.path;
-      try {
-        start(
-          reviewer,
-          "reviewer",
-          io.buildReviewBrief({
-            task,
-            commitSha: evidence.commitSha,
-            startingHead: evidence.startingHead,
-            workspace: review.path,
-            diff: (io.git(["-C", review.path, "diff", evidence.startingHead, evidence.commitSha]).stdout ?? "").slice(0, 60000),
-            gateOutput: `${gate?.stdout ?? ""}${gate?.stderr ?? ""}`.slice(-4000),
-          }),
-          { cwd: review.path, runDir: reviewRunDir },
-        );
-        const verdict = io.readReport(attemptId, "reviewer")?.verdict;
-        attempt.reviewVerdict = verdict === "PASS" || verdict === "FAIL" ? verdict : "NO_REPORT";
-      } finally {
-        // A leaked review checkout is untidy; failing the attempt over it would
-        // discard a verdict that was already reached.
-        io.git(["worktree", "remove", "--force", review.path]);
-      }
+      attempt.reviewVerdict = attempt.reviewVerdicts.join("+") || null;
     }
 
     stage = "conclude";
     const concluded = concludeAttempt({
       reported,
       gateResult: attempt.gateResult,
-      reviewVerdict: attempt.reviewVerdict,
+      reviewVerdicts: attempt.reviewVerdicts,
       reviewersRequired: plan.verification.reviewers,
       commitVerified: Boolean(evidence?.ok),
+      gateComplete: (attempt.gateCoverage?.notCovered?.length ?? 0) === 0,
     });
     attempt.result = concluded.result;
     attempt.disposition = concluded.disposition;

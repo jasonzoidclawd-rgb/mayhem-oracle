@@ -286,15 +286,24 @@ The result vocabulary is closed: `FIX_PROPOSED`, `NEEDS_EVIDENCE`, `BLOCKED`,
   `GATE_PASSED` says the requested deterministic profile passed on a
   git-verified commit — and says nothing about the suites that profile did not
   run, which the record lists under `gateCoverage.notCovered`. `VERIFIED`
-  additionally says the risk level's verification policy was satisfied by an
-  independent reviewer.
+  additionally says the risk level's verification policy was satisfied — by
+  **every** reviewer it asks for, not merely by one of them. Risk 4 asks for
+  two, and one `PASS` out of two concludes `needs-review`, never `VERIFIED`.
+  A single `FAIL` from any reviewer ends it regardless of the others.
+- A reviewer's verdict is read from what its own process printed, never from a
+  file under `runs/`. A reviewer is launched read-only and writes nothing, so
+  a `report-reviewer.json` on disk could only have been placed there by the
+  executor — the one process with write access to that tree.
 - Before result schema 2 every gate pass was recorded as `VERIFIED`, so a
   schema-1 record reading `VERIFIED` may mean either. Schema 2 onward it means
   only the second.
 - The completion level stops where the evidence stops: `IMPLEMENTED` for a
-  verified commit whose gate did not pass, `OFFLINE-PROVEN` once it did. No
-  gate profile establishes live behaviour, so the dispatcher never concludes
-  `LIVE-PROVEN`.
+  verified commit whose gate did not pass, and `OFFLINE-PROVEN` only when the
+  gate that passed left **nothing** uncovered. The default `harness` profile
+  runs one suite of five, so most runs conclude `IMPLEMENTED` even when they
+  conclude `VERIFIED` — the reviewers agreed, and the offline proof is still
+  partial. No gate profile establishes live behaviour, so the dispatcher never
+  concludes `LIVE-PROVEN`.
 - An independent defect found mid-slice is reported as `newBugs` with its
   **own** fingerprint. Re-using the current issue's fingerprint is rejected:
   that is scope expansion, not a wider bug.

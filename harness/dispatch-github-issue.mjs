@@ -16,6 +16,7 @@ import { fileURLToPath } from "node:url";
 import { loadConfig, route } from "./route.mjs";
 import { createGh } from "./github/gh.mjs";
 import { runProcess } from "./run/process.mjs";
+import { lastJsonObject } from "./run/attempt.mjs";
 import { dispatchIssue } from "./github/dispatch.mjs";
 
 const HERE = dirname(fileURLToPath(import.meta.url));
@@ -70,8 +71,13 @@ function main(argv) {
   const harnessRoot = resolve(HERE, "..");
   const stateDir = join(commonDir, "mayhem-dispatch");
   const runsDir = join(stateDir, "runs");
-  // A separate root, not a sibling name under runs/: the reviewer is given its
-  // own directory, and that directory must not have the executor's next to it.
+  // The reviewer's own directory, so nothing the reviewer is handed points into
+  // runs/. It is still a sibling of runs/ under the same state directory, and
+  // the review worktree's .git resolves to this same common dir — so this is not
+  // a sandbox: a reviewer that goes looking can still walk to the executor's
+  // run. What is enforced is that it is never *given* the way there
+  // (assertReviewerIsolation), and that its verdict is read from its own output
+  // rather than from any file under runs/.
   const reviewsDir = join(stateDir, "reviews");
   const lockDir = join(stateDir, "locks");
   mkdirSync(runsDir, { recursive: true });
@@ -123,10 +129,16 @@ function main(argv) {
       }
       return answer;
     },
-    // A reviewer runs hard read-only and can write nothing at all, so its
-    // verdict is read from what it printed. An executor writes a file; the
-    // same fallback covers one that did not.
+    // An executor writes its report into its own run directory; the fallback
+    // covers one that did not. A reviewer is never read from disk: it runs
+    // read-only and writes nothing, so `runs/<id>/report-reviewer.json` could
+    // only ever be a file the executor placed there to grade itself. The
+    // lifecycle reads a reviewer's verdict from its own stdout, and this refuses
+    // the role outright so no future caller can reopen the hole.
     readReport: (runId, role) => {
+      if (role === "reviewer") {
+        throw new Error("a reviewer's verdict is read from its own output, never from the executor's run directory");
+      }
       const path = join(runsDir, runId, `report-${role}.json`);
       if (existsSync(path)) {
         try {
@@ -173,30 +185,6 @@ function main(argv) {
   });
 }
 
-// The last JSON object a runtime printed, preferring a fenced block. Returns
-// null rather than guessing when nothing parses.
-function lastJsonObject(text) {
-  const fenced = [...String(text).matchAll(/```json\s*([\s\S]*?)```/g)].map((m) => m[1]);
-  for (const block of fenced.reverse()) {
-    try {
-      return JSON.parse(block);
-    } catch {
-      /* try the next one */
-    }
-  }
-  const close = String(text).lastIndexOf("}");
-  if (close === -1) return null;
-  const opens = [];
-  for (let i = 0; i < close; i += 1) if (text[i] === "{") opens.push(i);
-  for (const open of opens.slice(-20).reverse()) {
-    try {
-      return JSON.parse(text.slice(open, close + 1));
-    } catch {
-      /* try an earlier brace */
-    }
-  }
-  return null;
-}
 
 if (process.argv[1] && resolve(process.argv[1]) === resolve(fileURLToPath(import.meta.url))) {
   main(process.argv.slice(2))

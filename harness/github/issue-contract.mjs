@@ -23,9 +23,16 @@ export const RESULTS = ["FIX_PROPOSED", "NEEDS_EVIDENCE", "BLOCKED", "INTERRUPTE
 // the requested deterministic profile passed on a mechanically verified commit
 // — nothing more, and in particular nothing about the suites that profile did
 // not run. VERIFIED additionally says the verification policy for this risk
-// level was satisfied by an independent reviewer. Before this split every
-// gate pass was recorded as VERIFIED, so a schema-1 record reading VERIFIED
-// may mean either; schema 2 onward, it means only the second.
+// level was satisfied — by every reviewer it asked for, not merely by one of
+// them. Before this split every gate pass was recorded as VERIFIED, so a
+// schema-1 record reading VERIFIED may mean either; schema 2 onward, it means
+// only the second.
+//
+// The split is visible in the comment's RESULT= line, which is where a human
+// reads it. Both still map to the same `status:verified` label, because the
+// label drives an existing ledger workflow and splitting it is a change to that
+// workflow rather than to this vocabulary. Do not read the label as the
+// distinction.
 export const CONCLUDED_ONLY = ["GATE_PASSED", "VERIFIED"];
 
 // Labels are state on the ledger, not a replacement for issue structure.
@@ -233,7 +240,15 @@ export function renderComment(result) {
     `TESTS=${result.tests.length}`,
     `GATE=${result.gateResult} (${result.gateProfile})`,
     ...(result.gateCoverage?.notCovered?.length ? [`NOT_COVERED=${result.gateCoverage.notCovered.join(",")}`] : []),
-    `REVIEW=${result.reviewVerdict ?? "NOT_REQUIRED"}${result.reviewerAccount ? ` by ${result.reviewerAccount}` : ""}`,
+    // How many of the required reviewers actually passed, not just that someone
+    // did: at risk 4 the policy asks for two, and "1/2 passed" must not read the
+    // same as "2/2 passed" in the ledger a human later trusts.
+    `REVIEW=${result.reviewVerdict ?? "NOT_REQUIRED"}${
+      result.reviewersRequired
+        ? ` (${(result.reviewVerdicts ?? []).filter((v) => v === "PASS").length}/${result.reviewersRequired} passed)`
+        : ""
+    }${result.reviewerAccount ? ` by ${result.reviewerAccount}` : ""}`,
+    ...(result.reviewNote ? [`REVIEW_NOTE=${result.reviewNote}`] : []),
     `COMMIT=${short(result.commitSha)} ${result.commitEvidence?.ok ? "(git-verified)" : `(UNVERIFIED: ${result.commitEvidence?.code ?? "not checked"})`}`,
     ...(result.completionLevel ? [`LEVEL=${result.completionLevel}`] : []),
     `WORKSPACE=${result.workspace}`,

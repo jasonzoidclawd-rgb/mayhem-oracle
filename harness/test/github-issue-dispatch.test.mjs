@@ -679,28 +679,40 @@ const gateAnswer = (argv) => {
   };
 };
 
+// A reviewer writes no file: it is launched read-only, so the only thing it can
+// leave behind is what it printed. The fakes therefore answer as a reviewer
+// process does, and never through a report on disk the executor could forge.
+const reviewerSaying = (verdict) => ({
+  status: 0,
+  stdout: `reviewed the diff\n\n\`\`\`json\n${JSON.stringify({ verdict, findings: [] })}\n\`\`\`\n`,
+  stderr: "",
+});
+
+const runtimeAnswer = (argv, options = {}) =>
+  (options.role === "reviewer" ? reviewerSaying("PASS") : gateAnswer(argv));
+
 const spawnThrowingAt = (role, message) => {
   const spawned = [];
   const fn = (argv, options = {}) => {
     spawned.push({ argv, ...options });
     if (options.role === role) throw new Error(message);
-    return gateAnswer(argv);
+    return runtimeAnswer(argv, options);
   };
   fn.spawned = spawned;
   return fn;
 };
 
 // The claim happened, and it was undone in favour of a state that names itself.
-const reportingCommit = (sha) => (runId, role) =>
-  role === "reviewer"
-    ? { verdict: "PASS", findings: [] }
-    : {
-        result: "FIX_PROPOSED",
-        behavioralRed:
-          "geometry round counter reports 0 where the contract requires 4 — observed at overlay/src/scoring/index.ts:88",
-        commitSha: sha,
-        tests: ["overlay/src/scoring/__tests__/geometry.test.ts"],
-      };
+const reportingCommit = (sha) => (runId, role) => {
+  if (role === "reviewer") throw new Error("a reviewer's verdict is read from its own output, never from a report on disk");
+  return {
+    result: "FIX_PROPOSED",
+    behavioralRed:
+      "geometry round counter reports 0 where the contract requires 4 — observed at overlay/src/scoring/index.ts:88",
+    commitSha: sha,
+    tests: ["overlay/src/scoring/__tests__/geometry.test.ts"],
+  };
+};
 
 const assertRecovered = (io, out) => {
   assert.ok(io.gh.labelWrites.length >= 1, "the issue was never claimed");
@@ -907,8 +919,14 @@ test("T1. the reviewer never runs inside the executor's mutable worktree", async
   const reviewer = io.spawned.find((s) => s.role === "reviewer");
   assert.ok(reviewer, "no reviewer process was launched");
   assert.equal(executor.cwd, out.result.workspace, "the executor did not run in its own worktree");
-  assert.notEqual(reviewer.cwd, executor.cwd, "the reviewer ran inside the executor's mutable worktree");
-  assert.notEqual(reviewer.cwd, out.result.workspace);
+  // "inside" is containment, not inequality: a subdirectory of the executor's
+  // worktree is still the executor's worktree, and notEqual would wave it past.
+  for (const root of [executor.cwd, out.result.workspace]) {
+    assert.ok(
+      reviewer.cwd !== root && !String(reviewer.cwd).startsWith(`${root}/`),
+      `the reviewer ran inside the executor's ${root}`,
+    );
+  }
   assert.ok(out.result.reviewWorkspace, "no review workspace was recorded");
   assert.equal(reviewer.cwd, out.result.reviewWorkspace);
 });
@@ -932,7 +950,9 @@ test("T3. the reviewer is handed no path into the executor's run state", async (
   const executor = io.spawned.find((s) => s.role === "executor");
   const reviewer = io.spawned.find((s) => s.role === "reviewer");
   const executorState = [out.result.workspace, executor.runDir].filter(Boolean);
-  const handed = [...reviewer.argv, reviewer.cwd, reviewer.runDir].filter(Boolean).map(String);
+  const handed = [...reviewer.argv, reviewer.cwd, reviewer.runDir, ...Object.values(reviewer.env ?? {})]
+    .filter(Boolean)
+    .map(String);
   for (const token of handed) {
     for (const leak of executorState) {
       assert.ok(!token.includes(leak), `the reviewer was handed the executor's ${leak} (in ${token.slice(0, 80)})`);
@@ -971,6 +991,111 @@ test("T4. reviewer isolation is enforced by the launcher, not by prompt wording"
 });
 
 // --- U. git evidence ------------------------------------------------------
+
+test("T4b. a subdirectory of the executor's worktree is still inside it", () => {
+  const executor = { workspace: "/repo/x-worktrees/issues/147-y", runDir: "/state/runs/issue-147-attempt-01" };
+  assert.throws(
+    () => assertReviewerIsolation({ argv: ["claude", "brief"], cwd: `${executor.workspace}/src/lib`, executor }),
+    AttemptError,
+    "a reviewer one directory down from the executor's worktree was allowed",
+  );
+  // A trailing slash is the same directory by another spelling.
+  assert.throws(
+    () => assertReviewerIsolation({ argv: ["claude", "brief"], cwd: `${executor.workspace}/`, executor }),
+    AttemptError,
+    "a trailing slash defeated the containment check",
+  );
+});
+
+test("T4c. the executor's roots may not reach the reviewer through the environment", () => {
+  // The launch is argv AND env. A root forwarded through env reaches the
+  // reviewer exactly as well as one in argv, and is easier to forward by accident.
+  const executor = { workspace: "/repo/x-worktrees/issues/147-y", runDir: "/state/runs/issue-147-attempt-01" };
+  const clean = { argv: ["pi", "brief"], cwd: "/repo/x-worktrees/reviews/r1", executor };
+  assert.throws(
+    () => assertReviewerIsolation({ ...clean, env: { MAYHEM_RUN_DIR: executor.runDir } }),
+    AttemptError,
+    "the executor's run directory was passed to the reviewer in the environment",
+  );
+  assert.throws(
+    () => assertReviewerIsolation({ ...clean, env: { PWD_HINT: `${executor.workspace}/src` } }),
+    AttemptError,
+    "the executor's workspace was passed to the reviewer in the environment",
+  );
+  assert.doesNotThrow(() => assertReviewerIsolation({ ...clean, env: { ANTHROPIC_AUTH: "oauth" } }));
+});
+
+test("T4d. a symlink-equivalent path is the same directory", () => {
+  // git reports realised paths while these roots are derived from the configured
+  // main worktree, so /tmp and /private/tmp name one directory. Comparing raw
+  // strings would let the reviewer run inside the executor's worktree.
+  const executor = { workspace: "/tmp/wt/issues/147-y", runDir: "/tmp/state/runs/a1" };
+  const realPath = (path) => String(path).replace(/^\/tmp\//, "/private/tmp/");
+  assert.throws(
+    () =>
+      assertReviewerIsolation({
+        argv: ["pi", "brief"],
+        cwd: "/private/tmp/wt/issues/147-y",
+        executor,
+        realPath,
+      }),
+    AttemptError,
+    "a symlinked spelling of the executor's worktree passed the isolation check",
+  );
+});
+
+test("T5. an executor cannot grade itself by planting a reviewer report", async () => {
+  // The executor owns its run directory. If a reviewer verdict were ever read
+  // from a file there, writing report-reviewer.json would be all it takes to be
+  // marked VERIFIED. The verdict comes from the reviewer's own output instead,
+  // so the forgery below is simply never consulted.
+  let forgeryRead = false;
+  const io = makeIo({
+    readReport: (runId, role) => {
+      if (role === "reviewer") {
+        forgeryRead = true;
+        return { verdict: "PASS", findings: [] };
+      }
+      return {
+        result: "FIX_PROPOSED",
+        behavioralRed: "round counter reports 0 where the contract requires 4 — observed at src/x.ts:88",
+        commitSha: COMMIT,
+        tests: ["src/__tests__/x.test.ts"],
+      };
+    },
+  });
+  const inner = io.spawn;
+  // The reviewer process itself says nothing at all, so the planted file is the
+  // only place a PASS could possibly come from.
+  io.spawn = (argv, opts) => {
+    const answer = inner(argv, opts);
+    return opts.role === "reviewer" ? { status: 0, signal: null, stdout: "", stderr: "", error: null } : answer;
+  };
+  const out = await dispatchIssue(147, io);
+  assert.equal(forgeryRead, false, "the lifecycle read a reviewer verdict from the executor's run directory");
+  assert.notEqual(out.result.result, "VERIFIED", "a planted report-reviewer.json produced VERIFIED");
+  assert.equal(out.result.reviewVerdict, "NO_REPORT");
+  assert.equal(out.result.nextStatus, LABELS.needsReview);
+});
+
+test("T6. a review workspace that cannot be created loses the review, not the evidence", async () => {
+  // Throwing here would record INTERRUPTED and status:blocked, discarding a
+  // git-verified commit and a passing gate — a worse account of the run than
+  // "nobody reviewed it", and one that destroys real evidence.
+  const io = makeIo();
+  const inner = io.git;
+  io.git = (argv) =>
+    argv[0] === "worktree" && argv.includes("--detach")
+      ? { status: 128, signal: null, stdout: "", stderr: "fatal: could not create work tree dir", error: null }
+      : inner(argv);
+  const out = await dispatchIssue(147, io);
+  assert.equal(out.result.gateResult, "PASS", "the gate result was discarded");
+  assert.equal(out.result.commitEvidence.ok, true, "the commit evidence was discarded");
+  assert.equal(out.result.result, "FIX_PROPOSED");
+  assert.equal(out.result.nextStatus, LABELS.needsReview);
+  assert.match(out.result.reviewNote, /could not be created/);
+  assert.equal(out.result.failureStage, null, "a missing review was recorded as a failed run");
+});
 
 test("U1. a reported commit that does not exist fails closed", async () => {
   const io = makeIo({ readReport: reportingCommit("d".repeat(40)) });
@@ -1074,24 +1199,62 @@ test("U8. git plumbing that never ran does not read as evidence", async () => {
 
 test("V1. a deterministic gate pass alone is GATE_PASSED, never VERIFIED", () => {
   const reported = { result: "FIX_PROPOSED" };
-  const out = concludeRun({ reported, gateResult: "PASS", reviewVerdict: null, reviewersRequired: 0, commitVerified: true });
+  const base = { reported, gateResult: "PASS", reviewVerdicts: [], reviewersRequired: 0, commitVerified: true };
+  const out = concludeRun({ ...base, gateComplete: true });
   assert.equal(out.result, "GATE_PASSED", "a gate pass with no independent review claimed VERIFIED");
   assert.equal(out.completionLevel, "OFFLINE-PROVEN");
 });
 
+test("V1b. a profile that skipped suites is not OFFLINE-PROVEN", () => {
+  // The default profile runs one suite out of five. Calling that outcome
+  // offline-proven overstates almost every run the dispatcher will ever do.
+  const reported = { result: "FIX_PROPOSED" };
+  const partial = { reported, gateResult: "PASS", commitVerified: true, gateComplete: false };
+  assert.equal(concludeRun({ ...partial, reviewVerdicts: [], reviewersRequired: 0 }).completionLevel, "IMPLEMENTED");
+  assert.equal(
+    concludeRun({ ...partial, reviewVerdicts: ["PASS"], reviewersRequired: 1 }).completionLevel,
+    "IMPLEMENTED",
+    "a partial gate was recorded as offline-proven because a reviewer agreed",
+  );
+  // The result itself is unaffected: coverage bounds the proof, not the verdict.
+  assert.equal(concludeRun({ ...partial, reviewVerdicts: ["PASS"], reviewersRequired: 1 }).result, "VERIFIED");
+});
+
 test("V2. VERIFIED requires an independent reviewer to have passed", () => {
   const reported = { result: "FIX_PROPOSED" };
-  const base = { reported, gateResult: "PASS", reviewersRequired: 1, commitVerified: true };
-  assert.equal(concludeRun({ ...base, reviewVerdict: "PASS" }).result, "VERIFIED");
-  assert.equal(concludeRun({ ...base, reviewVerdict: "FAIL" }).result, "FIX_PROPOSED");
-  assert.equal(concludeRun({ ...base, reviewVerdict: "NO_REPORT" }).result, "FIX_PROPOSED");
-  assert.equal(concludeRun({ ...base, reviewVerdict: "NO_REPORT" }).nextStatus, LABELS.needsReview);
+  const base = { reported, gateResult: "PASS", reviewersRequired: 1, commitVerified: true, gateComplete: true };
+  assert.equal(concludeRun({ ...base, reviewVerdicts: ["PASS"] }).result, "VERIFIED");
+  assert.equal(concludeRun({ ...base, reviewVerdicts: ["FAIL"] }).result, "FIX_PROPOSED");
+  assert.equal(concludeRun({ ...base, reviewVerdicts: ["NO_REPORT"] }).result, "FIX_PROPOSED");
+  assert.equal(concludeRun({ ...base, reviewVerdicts: [] }).result, "FIX_PROPOSED", "no review at all read as VERIFIED");
+  assert.equal(concludeRun({ ...base, reviewVerdicts: ["NO_REPORT"] }).nextStatus, LABELS.needsReview);
+});
+
+test("V2b. VERIFIED requires EVERY reviewer the policy asked for", () => {
+  // Risk 4 asks for two independent reviewers. One PASS is half an answer and
+  // must not be recorded in the same word as the whole one.
+  const reported = { result: "FIX_PROPOSED" };
+  const base = { reported, gateResult: "PASS", reviewersRequired: 2, commitVerified: true, gateComplete: true };
+  const half = concludeRun({ ...base, reviewVerdicts: ["PASS"] });
+  assert.equal(half.result, "FIX_PROPOSED", "one of two required reviewers passed and the run claimed VERIFIED");
+  assert.equal(half.nextStatus, LABELS.needsReview);
+  assert.equal(concludeRun({ ...base, reviewVerdicts: ["PASS", "PASS"] }).result, "VERIFIED");
+  // One dissent is enough, whichever reviewer it came from.
+  assert.equal(concludeRun({ ...base, reviewVerdicts: ["PASS", "FAIL"] }).result, "FIX_PROPOSED");
+  assert.equal(concludeRun({ ...base, reviewVerdicts: ["FAIL", "PASS"] }).nextStatus, LABELS.needsHuman);
 });
 
 test("V3. an unverified commit can conclude neither VERIFIED nor GATE_PASSED", () => {
   const reported = { result: "FIX_PROPOSED" };
   for (const reviewersRequired of [0, 1, 2]) {
-    const out = concludeRun({ reported, gateResult: "PASS", reviewVerdict: "PASS", reviewersRequired, commitVerified: false });
+    const out = concludeRun({
+      reported,
+      gateResult: "PASS",
+      reviewVerdicts: Array.from({ length: reviewersRequired }, () => "PASS"),
+      reviewersRequired,
+      commitVerified: false,
+      gateComplete: true,
+    });
     assert.ok(!["VERIFIED", "GATE_PASSED"].includes(out.result), `unverified work concluded ${out.result}`);
     assert.equal(out.nextStatus, LABELS.needsHuman);
     assert.equal(out.completionLevel, null, "an unverified commit claimed a completion level");
@@ -1161,17 +1324,17 @@ test("W1. a Task that is not a GitHub issue runs the whole attempt lifecycle", a
     spawn: (argv, opts) => {
       spawned.push({ argv, ...opts });
       if (opts.role === "executor" && repo.head === BASE) repo.head = repo.afterExecutor;
-      return gateAnswer(argv);
+      return runtimeAnswer(argv, opts);
     },
-    readReport: (_id, role) =>
-      role === "reviewer"
-        ? { verdict: "PASS", findings: [] }
-        : {
-            result: "FIX_PROPOSED",
-            behavioralRed: "round counter reports 0 where the contract requires 4 — observed at src/x.ts:88",
-            commitSha: COMMIT,
-            tests: ["src/__tests__/x.test.ts"],
-          },
+    readReport: (_id, role) => {
+      if (role === "reviewer") throw new Error("a reviewer's verdict is read from its own output, never from a report on disk");
+      return {
+        result: "FIX_PROPOSED",
+        behavioralRed: "round counter reports 0 where the contract requires 4 — observed at src/x.ts:88",
+        commitSha: COMMIT,
+        tests: ["src/__tests__/x.test.ts"],
+      };
+    },
     normalizeReport: (raw) => normalizeExecutorReport(raw, { fingerprint: task.fingerprint, role: "executor" }),
     buildPacket: ({ workspace, reportPath }) => `work in ${workspace}; report to ${reportPath}`,
     buildReviewBrief: ({ workspace, diff }) => `review ${workspace}\n${diff}`,
@@ -1188,7 +1351,10 @@ test("W1. a Task that is not a GitHub issue runs the whole attempt lifecycle", a
   assert.equal(attempt.reviewVerdict, "PASS");
   assert.equal(attempt.result, "VERIFIED");
   assert.equal(attempt.disposition, "accepted");
-  assert.equal(attempt.completionLevel, "OFFLINE-PROVEN");
+  // The fake gate reports web and overlay as not covered, so this run is not
+  // offline-proven however green the profile it did run came back.
+  assert.equal(attempt.completionLevel, "IMPLEMENTED");
+  assert.deepEqual(attempt.gateCoverage.notCovered, ["web", "overlay"]);
   assert.ok(spawned.some((x) => x.role === "reviewer"), "no reviewer ran for a risk-3 task");
   // The generic record carries no ledger state of any kind.
   const serialized = JSON.stringify(attempt);
@@ -1278,18 +1444,18 @@ function makeIo(over = {}) {
       order.push(`launch:${opts.role ?? "gate"}`);
       spawned.push({ argv, ...opts });
       if (opts.role === "executor" && repo.head === BASE) repo.head = repo.afterExecutor;
-      return gateAnswer(argv);
+      return runtimeAnswer(argv, opts);
     }),
-    readReport: over.readReport ?? ((runId, role) =>
-      role === "reviewer"
-        ? { verdict: "PASS", findings: [] }
-        : {
-            result: "FIX_PROPOSED",
-            behavioralRed:
-              "geometry round counter reports 0 where the contract requires 4 — observed at overlay/src/scoring/index.ts:88",
-            commitSha: COMMIT,
-            tests: ["overlay/src/scoring/__tests__/geometry.test.ts"],
-          }),
+    readReport: over.readReport ?? ((runId, role) => {
+      if (role === "reviewer") throw new Error("a reviewer's verdict is read from its own output, never from a report on disk");
+      return {
+        result: "FIX_PROPOSED",
+        behavioralRed:
+          "geometry round counter reports 0 where the contract requires 4 — observed at overlay/src/scoring/index.ts:88",
+        commitSha: COMMIT,
+        tests: ["overlay/src/scoring/__tests__/geometry.test.ts"],
+      };
+    }),
     writeResult: (runId, result) => { order.push("write-result"); results.push({ runId, result }); },
     runsDir: over.runsDir ?? "/state/runs",
     reviewsDir: over.reviewsDir ?? "/state/reviews",
