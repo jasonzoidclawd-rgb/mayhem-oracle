@@ -1291,13 +1291,19 @@ class TraceReplacementTest(unittest.TestCase):
         self.assertEqual(self.source.stat().st_ino, original_inode)
         self.assertFalse(thread.is_alive())
         self.assertTrue(self.stats["sourceReplaced"])
-        # truncate() and write() are two separate syscalls, so the tailer can
-        # observe either the momentary 0-byte gap ("size-decreased") or the
-        # regrown-but-different content ("content-mismatch") depending on
-        # exactly when it polls — both are correct fail-closed outcomes.
+        # truncate() and write() are two separate syscalls, so which checkpoint
+        # catches the race depends on exactly when the tailer polls: the
+        # momentary 0-byte gap ("size-decreased"), the regrown-but-different
+        # content ("content-mismatch"), or a checkpoint that could not be read
+        # across the gap at all ("trace-checkpoint-unreadable"). The set stays
+        # closed and explicit because it is a claim, not a shrug: every reason
+        # in it sets sourceReplaced, breaks out of the tailer loop, and is
+        # invalidated by drain_validation_error, which branches on
+        # sourceReplaced alone and never on the reason. A reason outside this
+        # set — or a run that kept recording — is still a failure here.
         self.assertIn(
             self.stats["sourceReplacedReason"],
-            ("content-mismatch", "size-decreased"),
+            ("content-mismatch", "size-decreased", "trace-checkpoint-unreadable"),
         )
         self.assertNotIn("replacement-one", self.recorded_lines())
         self.assertIn("original-record-one", self.recorded_lines())
