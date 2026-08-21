@@ -37,14 +37,29 @@ export const ATTEMPT_SCHEMA = 2;
 // root is a refusal rather than a fallback.
 const GATE_SCRIPT = "harness/verify-task.sh";
 
-export function gateArgv({ harnessRoot, profile, worktree = null, plan = false }) {
+export function gateArgv({ harnessRoot, profile, worktree = null, plan = false, authority = false }) {
   if (!harnessRoot) {
     throw new AttemptError("no trusted harness checkout was given to run the gate from");
   }
   const argv = ["bash", `${String(harnessRoot).replace(/\/+$/, "")}/${GATE_SCRIPT}`, profile];
   if (worktree) argv.push("--worktree", worktree);
   if (plan) argv.push("--plan");
+  if (authority) argv.push("--authority");
   return argv;
+}
+
+// Which of the changed files decide what this profile's PASS means. The trusted
+// gate declares them per suite — a directory prefix, or an exact path — because
+// it is already the one place a suite is defined; asking it keeps the answer
+// from drifting into a second list here.
+export function authorityTouched(changedFiles, declared) {
+  const paths = String(declared ?? "")
+    .split("\n")
+    .map((line) => line.split("\t")[1]?.trim())
+    .filter(Boolean);
+  return (changedFiles ?? []).filter((file) =>
+    paths.some((path) => (path.endsWith("/") ? file.startsWith(path) : file === path)),
+  );
 }
 
 // Operator-facing text. A launch failure's message can carry the absolute path
@@ -203,6 +218,7 @@ export function concludeAttempt({
   reviewersRequired = 0,
   commitVerified = false,
   gateComplete = false,
+  gateAuthoritative = true,
 }) {
   const at = (result, disposition, completionLevel = null) => ({ result, disposition, completionLevel });
 
@@ -234,6 +250,11 @@ export function concludeAttempt({
   }
   // The gate passed on a verified commit and this risk level requires no
   // reviewer. That is precisely what was proven, and it is not verification.
+  //
+  // Unless the candidate edited the checks that produced the pass. Then nobody
+  // independent has said anything about this change at all, and the one thing
+  // standing behind it was written by the thing it is standing behind.
+  if (!gateAuthoritative) return at("FIX_PROPOSED", "needs-review", "IMPLEMENTED");
   return at("GATE_PASSED", "accepted", proven);
 }
 
@@ -289,6 +310,8 @@ export async function runAttempt(task, plan, io) {
     gateProfile: task.gateProfile,
     gateAuthorityRevision: null,
     gateWorkspace: null,
+    gateAuthority: null,
+    gateAuthorityTouched: [],
     gateResult: null,
     gateCoverage: null,
     reviewVerdict: null,
@@ -415,6 +438,18 @@ export async function runAttempt(task, plan, io) {
     attempt.gateResult = gate.status === 0 ? "PASS" : "FAIL";
     attempt.gateCoverage = parseGateCoverage(gate.stdout, task.gateProfile);
 
+    // A trusted runner still reads its checks out of the workspace it judges,
+    // so running it is not the whole of independence: a diff that edits those
+    // checks decides what its own PASS means. The run is kept either way — the
+    // candidate's tests are evidence — but evidence is not authority, and a
+    // pass produced this way may not advance the ledger on its own.
+    const declared = io.spawn(
+      gateArgv({ harnessRoot: io.harnessRoot, profile: task.gateProfile, authority: true }),
+      { cwd: io.harnessRoot, role: "gate-authority" },
+    );
+    attempt.gateAuthorityTouched = authorityTouched(attempt.changedFiles, declared?.stdout);
+    attempt.gateAuthority = attempt.gateAuthorityTouched.length ? "candidate-influenced" : "controller";
+
     stage = "review";
     if (reviewers.length && evidence?.ok && attempt.gateResult === "PASS") {
       // A detached checkout of the commit git established, so the reviewer's
@@ -473,6 +508,7 @@ export async function runAttempt(task, plan, io) {
       reviewersRequired: plan.verification.reviewers,
       commitVerified: Boolean(evidence?.ok),
       gateComplete: (attempt.gateCoverage?.notCovered?.length ?? 0) === 0,
+      gateAuthoritative: attempt.gateAuthority !== "candidate-influenced",
     });
     attempt.result = concluded.result;
     attempt.disposition = concluded.disposition;

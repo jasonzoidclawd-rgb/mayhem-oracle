@@ -1,6 +1,8 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
+import { spawnSync } from "node:child_process";
+import { fileURLToPath } from "node:url";
 import { loadConfig, route, RoutingError } from "../route.mjs";
 import {
   checkDispatchable,
@@ -1777,6 +1779,11 @@ test("R2. the reviewer receives the controller's explicit brief", async () => {
 
 // --- fake io -------------------------------------------------------------
 
+// The gate's own acceptance-authority declaration, run for real.
+const VERIFY_TASK = fileURLToPath(new URL("../verify-task.sh", import.meta.url));
+const realAuthority = (profile) =>
+  spawnSync("bash", [VERIFY_TASK, profile, "--authority"], { encoding: "utf8" });
+
 function makeIo(over = {}) {
   const order = [];
   const spawned = [];
@@ -1810,8 +1817,8 @@ function makeIo(over = {}) {
       get views() { return views; },
       labelWrites,
       comments,
-      viewIssue: () => { views += 1; return issue(); },
-      listOpenIssues: () => [issue()],
+      viewIssue: () => { views += 1; return over.machine ? withMachine(over.machine) : issue(); },
+      listOpenIssues: () => [over.machine ? withMachine(over.machine) : issue()],
       repoLabels: () => Object.values(LABELS),
       setLabels: (number, change) => { order.push(labelWrites.length ? "status" : "claim"); labelWrites.push({ number, ...change }); },
       comment: (number, body) => { order.push("comment"); comments.push({ number, body }); },
@@ -1830,6 +1837,9 @@ function makeIo(over = {}) {
       order.push(`launch:${opts.role ?? "gate"}`);
       spawned.push({ argv, ...opts });
       if (opts.role === "executor" && repo.head === BASE) repo.head = repo.afterExecutor;
+      // Answered by the real gate, deliberately: a stub here would let the
+      // lifecycle agree with a declaration the gate does not actually make.
+      if (opts.role === "gate-authority") return realAuthority(argv[2]);
       return runtimeAnswer(argv, opts);
     }),
     readReport: over.readReport ?? ((runId, role) => {
@@ -1916,4 +1926,109 @@ test("G4. the preflight and the authoritative gate share one trusted runner", as
   assert.ok(plan && gate, "preflight or gate never ran");
   assert.equal(plan.argv[1], gate.argv[1], "the profile was planned by a different script than the one that ran");
   assert.ok(plan.argv.includes("--plan"));
+});
+
+// J. a candidate may not be its own examiner --------------------------------
+//
+// The trusted runner still reads its checks out of the workspace it judges, so
+// a diff that edits those checks is editing what PASS means. Such a run is not
+// refused and its result is not discarded — it simply stops being the kind of
+// pass that can advance the ledger on its own.
+
+// Every changed path a test wants, in place of the fake repo's diff.
+const changing = (io, files) => {
+  const inner = io.git;
+  io.git = (argv) => {
+    const a = argv[0] === "-C" ? argv.slice(2) : argv;
+    if (a[0] === "diff" && a.includes("--name-only")) {
+      io.gitCalls.push(argv);
+      return { status: 0, stdout: `${files.join("\n")}\n`, stderr: "" };
+    }
+    return inner(argv);
+  };
+  return io;
+};
+
+test("J1. a gate pass on an untouched examiner is authoritative", () => {
+  const base = {
+    reported: { result: "FIX_PROPOSED" },
+    gateResult: "PASS",
+    reviewVerdicts: [],
+    reviewersRequired: 0,
+    commitVerified: true,
+    gateComplete: true,
+  };
+  const out = concludeRun({ ...base, gateAuthoritative: true });
+  assert.equal(out.result, "GATE_PASSED");
+  assert.equal(out.disposition, "accepted");
+});
+
+test("J2. a gate pass produced by a candidate-edited examiner cannot advance alone", () => {
+  const base = {
+    reported: { result: "FIX_PROPOSED" },
+    gateResult: "PASS",
+    reviewVerdicts: [],
+    reviewersRequired: 0,
+    commitVerified: true,
+    gateComplete: true,
+  };
+  const out = concludeRun({ ...base, gateAuthoritative: false });
+  assert.notEqual(out.result, "GATE_PASSED", "the candidate's own examiner produced an authoritative pass");
+  assert.equal(out.disposition, "needs-review");
+  assert.equal(out.completionLevel, "IMPLEMENTED", "an examiner the candidate wrote proved the change offline");
+});
+
+test("J3. an independent reviewer still decides where one is required", () => {
+  const base = {
+    reported: { result: "FIX_PROPOSED" },
+    gateResult: "PASS",
+    commitVerified: true,
+    gateComplete: true,
+    gateAuthoritative: false,
+  };
+  assert.equal(concludeRun({ ...base, reviewVerdicts: ["PASS"], reviewersRequired: 1 }).result, "VERIFIED");
+  assert.equal(concludeRun({ ...base, reviewVerdicts: ["FAIL"], reviewersRequired: 1 }).result, "FIX_PROPOSED");
+});
+
+test("J4. weakening the tests that catch a bug does not manufacture an authoritative pass", async () => {
+  const io = changing(makeIo({ machine: { task_class: "T1" } }), ["src/lib/scoring/round.ts", "harness/test/policy.test.mjs"]);
+  const out = await dispatchIssue(147, io);
+  assert.equal(out.result.gateResult, "PASS", "the gate result itself was discarded rather than recorded");
+  assert.equal(out.result.gateAuthority, "candidate-influenced");
+  assert.deepEqual(out.result.gateAuthorityTouched, ["harness/test/policy.test.mjs"]);
+  assert.notEqual(out.result.result, "GATE_PASSED");
+});
+
+test("J5. an ordinary candidate keeps the behaviour it had", async () => {
+  const io = changing(makeIo({ machine: { task_class: "T1" } }), ["src/lib/scoring/round.ts", "src/app/page.tsx"]);
+  const out = await dispatchIssue(147, io);
+  assert.equal(out.result.gateAuthority, "controller");
+  assert.deepEqual(out.result.gateAuthorityTouched, []);
+  assert.equal(out.result.result, "GATE_PASSED");
+  assert.equal(out.result.nextStatus, LABELS.verified);
+});
+
+test("J6. a candidate that adds its own tests still runs them and is recorded", async () => {
+  const io = changing(makeIo({ machine: { task_class: "T1", gate_profile: "web" } }), [
+    "src/lib/scoring/round.ts",
+    "src/lib/__tests__/round.test.ts",
+  ]);
+  const out = await dispatchIssue(147, io);
+  assert.equal(io.spawned.filter((s) => s.role === "gate").length, 1, "the added tests never ran");
+  assert.equal(out.result.gateResult, "PASS");
+  assert.ok(
+    out.result.changedFiles.includes("src/lib/__tests__/round.test.ts"),
+    "a candidate-authored test vanished from the record",
+  );
+  // Its own tests are evidence, and evidence is not authority.
+  assert.equal(out.result.gateAuthority, "candidate-influenced");
+});
+
+test("J7. touching the examiner is reviewable, never a refusal", async () => {
+  const io = changing(makeIo(), ["harness/test/gate.test.mjs", "scripts/gate.sh"]);
+  const out = await dispatchIssue(147, io);
+  assert.equal(out.dispatched, true, "a task whose whole purpose is the gate could not be dispatched");
+  assert.equal(out.result.commitEvidence.ok, true);
+  assert.ok(io.spawned.some((s) => s.role === "reviewer"), "the change was never put in front of a reviewer");
+  assert.equal(out.result.result, "VERIFIED");
 });

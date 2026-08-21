@@ -240,3 +240,50 @@ test("the gate fails closed rather than guessing a subject", () => {
   assert.equal(bare.status, 2);
   assert.match(bare.stderr, /missing directory/);
 });
+
+// I. what a suite's PASS is made of ----------------------------------------
+//
+// A trusted runner still reads its checks out of the workspace it judges, so
+// the gate must be able to say which paths decide what its PASS means. The
+// declaration lives beside the suite command, so there is still one inventory.
+
+const authority = (args) => {
+  const listed = bash(GATE, ["--authority", ...args]);
+  assert.equal(listed.status, 0, `gate --authority failed: ${listed.stderr}`);
+  const rows = listed.stdout.split("\n").filter(Boolean).map((line) => line.split("\t"));
+  for (const row of rows) assert.equal(row.length, 2, `malformed authority row: ${row.join("|")}`);
+  return rows;
+};
+
+test("every suite declares the paths that decide what its PASS means", () => {
+  for (const suite of inventory()) {
+    const declared = authority([suite]);
+    assert.ok(declared.length, `suite ${suite} declares no acceptance authority`);
+    for (const [name] of declared) assert.equal(name, suite, `${suite} declared authority for ${name}`);
+  }
+});
+
+test("a suite's declared authority covers the checks it actually runs", () => {
+  const gate = source("scripts/gate.sh");
+  // The harness suite runs node --test over harness/test, so that is its
+  // authority; if the command moves, this stops matching.
+  assert.match(gate, /node --test harness\/test\//);
+  assert.ok(
+    authority(["harness"]).some(([, path]) => path === "harness/test/"),
+    "the harness suite does not claim the directory its own tests live in",
+  );
+  // Rust unit tests are #[cfg(test)] modules inside the sources, so the sources
+  // are part of that suite's authority and the declaration has to admit it.
+  assert.ok(
+    authority(["rust"]).some(([, path]) => path === "overlay/src-tauri/src/"),
+    "the rust suite hides that its tests live inside the files it is judging",
+  );
+});
+
+test("verify-task reports the acceptance authority of a whole profile", () => {
+  const declared = bash(VERIFY, ["skills", "--authority"]);
+  assert.equal(declared.status, 0, declared.stderr);
+  const suites = new Set(declared.stdout.split("\n").filter(Boolean).map((l) => l.split("\t")[0]));
+  assert.deepEqual([...suites].sort(), ["harness", "skills"], "the profile's authority is not its suites' authority");
+  assert.doesNotMatch(declared.stdout, /===/, "reporting the authority ran a suite");
+});

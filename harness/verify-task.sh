@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Profile adapter for the deterministic gate.
 #
-#   harness/verify-task.sh [profile] [--plan] [--worktree <dir>]
+#   harness/verify-task.sh [profile] [--plan] [--authority] [--worktree <dir>]
 #
 # Selects which deterministic suites a change must clear, then hands every
 # command to scripts/gate.sh. This file deliberately spells out no verification
@@ -31,10 +31,12 @@ GATE="$HERE/../scripts/gate.sh"
 
 PROFILE=all
 PLAN=0
+AUTHORITY=0
 WORKTREE=""
 while [ "$#" -gt 0 ]; do
   case "$1" in
     --plan) PLAN=1; shift ;;
+    --authority) AUTHORITY=1; shift ;;
     --worktree)
       WORKTREE="${2-}"
       if [ -z "$WORKTREE" ]; then printf 'missing directory after --worktree\n' >&2; exit 2; fi
@@ -63,6 +65,13 @@ case "$PROFILE" in
     exit 2
     ;;
 esac
+
+# Machine-readable and header-free: a caller parses these rows, so the profile
+# banner below would just be noise it has to strip.
+if [ "$AUTHORITY" -eq 1 ]; then
+  bash "$GATE" --authority $SUITES
+  exit $?
+fi
 
 printf 'PROFILE: %s\n' "$PROFILE"
 printf 'SUITES: %s\n' "$SUITES"
