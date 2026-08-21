@@ -17,6 +17,7 @@ import {
 } from "../github/issue-contract.mjs";
 import { AttemptError, assertReviewerIsolation, DISPOSITIONS, launchArgv, runAttempt } from "../run/attempt.mjs";
 import { slugFor } from "../run/workspace.mjs";
+import { verifyCommitEvidence } from "../run/evidence.mjs";
 import { createGh, GhError } from "../github/gh.mjs";
 import { parseWorktreeList, planWorkspace, WorkspaceError } from "../run/workspace.mjs";
 import { dispatchIssue, DispatchRecoveryError } from "../github/dispatch.mjs";
@@ -1180,7 +1181,7 @@ test("U7. a commit that changes no file is not the fix it claims to be", async (
 test("U8. git plumbing that never ran does not read as evidence", async () => {
   // spawnSync reports a launch that never happened as status:null. Every check
   // must treat that as "not established", never as "established clean".
-  for (const verb of ["cat-file", "merge-base", "status", "diff"]) {
+  for (const verb of ["rev-parse", "cat-file", "merge-base", "status", "diff"]) {
     const io = makeIo({
       git: (argv) => {
         const a = argv[0] === "-C" ? argv.slice(2) : argv;
@@ -1189,13 +1190,79 @@ test("U8. git plumbing that never ran does not read as evidence", async () => {
       },
     });
     const out = await dispatchIssue(147, io);
-    assert.equal(out.result.commitEvidence.ok, false, `a failed \`git ${verb}\` was read as evidence`);
-    assert.notEqual(out.result.result, "VERIFIED");
-    assert.notEqual(out.result.result, "GATE_PASSED");
+    // A verb that fails before the evidence stage ends the run outright; one
+    // that fails inside it leaves the evidence unestablished. Both are closed,
+    // and neither may reach a result that claims something was proven.
+    assert.ok(
+      !["VERIFIED", "GATE_PASSED"].includes(out.result?.result),
+      `a failed \`git ${verb}\` concluded ${out.result?.result}`,
+    );
+    if (out.result) {
+      assert.equal(out.result.commitEvidence?.ok ?? false, false, `a failed \`git ${verb}\` was read as evidence`);
+    }
   }
 });
 
 // --- V. result vocabulary -------------------------------------------------
+
+test("U9. every check in verifyCommitEvidence fails closed on its own", () => {
+  // Driven directly, so each git call can be broken in isolation. Reaching these
+  // only through dispatchIssue hides them: a broken `rev-parse` also breaks the
+  // stage that resolves the base head, so the run dies before the evidence code
+  // is asked anything and the check appears covered when it is not.
+  const NEVER_RAN = { status: null, signal: null, stdout: "", stderr: "", error: { code: "ENOENT" } };
+  const answers = {
+    "rev-parse": { status: 0, stdout: `${COMMIT}\n` },
+    "cat-file": { status: 0, stdout: "" },
+    "merge-base": { status: 0, stdout: "" },
+    status: { status: 0, stdout: "" },
+    diff: { status: 0, stdout: "src/x.ts\n" },
+  };
+  const gitWith = (over) => (argv) => {
+    const a = argv[0] === "-C" ? argv.slice(2) : argv;
+    return over[a[0]] ?? answers[a[0]] ?? { status: 0, stdout: "" };
+  };
+  const base = { reportedSha: COMMIT, startingHead: BASE, workspace: "/w" };
+
+  assert.equal(verifyCommitEvidence({ ...base, git: gitWith({}) }).ok, true, "the clean case does not pass");
+
+  // One broken verb per code, each proving that verb's check and no other.
+  const cases = [
+    ["rev-parse", NEVER_RAN, "head-unreadable"],
+    ["cat-file", { status: 1, stdout: "" }, "commit-not-found"],
+    ["merge-base", { status: 1, stdout: "" }, "commit-not-descended"],
+    ["status", NEVER_RAN, "cleanliness-unknown"],
+    ["status", { status: 0, stdout: " M src/x.ts\n" }, "worktree-dirty"],
+    ["diff", NEVER_RAN, "diff-unreadable"],
+    ["diff", { status: 0, stdout: "\n  \n" }, "commit-changes-nothing"],
+  ];
+  for (const [verb, answer, code] of cases) {
+    const out = verifyCommitEvidence({ ...base, git: gitWith({ [verb]: answer }) });
+    assert.equal(out.ok, false, `a broken \`git ${verb}\` was read as evidence`);
+    assert.equal(out.code, code, `a broken \`git ${verb}\` reported ${out.code}`);
+    assert.equal(out.commitSha, null, "a failed verification still returned a commit sha");
+  }
+
+  // Claims the caller makes, rather than answers git gives.
+  assert.equal(verifyCommitEvidence({ ...base, reportedSha: "nope", git: gitWith({}) }).code, "commit-missing");
+  assert.equal(verifyCommitEvidence({ ...base, startingHead: null, git: gitWith({}) }).code, "starting-head-unknown");
+  // The workspace moved past the commit the report names, so the gate ran on
+  // something else.
+  assert.equal(
+    verifyCommitEvidence({ ...base, git: gitWith({ "rev-parse": { status: 0, stdout: `${BASE}\n` } }) }).code,
+    "commit-not-head",
+  );
+  // A FIX_PROPOSED that committed nothing: head is the starting head.
+  assert.equal(
+    verifyCommitEvidence({
+      reportedSha: BASE,
+      startingHead: BASE,
+      workspace: "/w",
+      git: gitWith({ "rev-parse": { status: 0, stdout: `${BASE}\n` } }),
+    }).code,
+    "commit-is-starting-head",
+  );
+});
 
 test("V1. a deterministic gate pass alone is GATE_PASSED, never VERIFIED", () => {
   const reported = { result: "FIX_PROPOSED" };
