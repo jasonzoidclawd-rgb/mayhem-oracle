@@ -41,7 +41,17 @@ export class DispatchError extends Error {}
 export class DispatchRecoveryError extends Error {}
 
 const DEFAULT_GATE_PROFILE = "harness";
-const DEFAULT_CONTEXT = ["AGENTS.md", "CLAUDE.md", "harness/README.md", "docs/architecture/agent-harness.md"];
+// Stable repository instruction, plus the procedure for the role — and nothing
+// operator-level. harness/README.md and docs/architecture/agent-harness.md are
+// dispatcher documentation: an executor fixing a defect in its own workspace
+// needs neither, and CLAUDE.md already says to load the latter only when the
+// task is about the harness itself. An issue that genuinely is about the
+// harness says so in its own context_paths.
+//
+// The skill is named by path rather than left to discovery: the executor runs
+// as a fresh process in a worktree, and a skill it is told to find is a skill
+// it may not load.
+const DEFAULT_CONTEXT = ["AGENTS.md", "CLAUDE.md", ".agents/skills/mayhem-task/SKILL.md"];
 
 const refuse = (code, reason) => ({ dispatched: false, code, reason, result: null });
 

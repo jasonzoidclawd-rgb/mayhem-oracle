@@ -70,27 +70,83 @@ const frontmatter = (text) => {
   );
 };
 
-test("harness skills satisfy the skill-discovery contract", () => {
-  const dirs = readdirSync(new URL("../../.agents/skills", import.meta.url), { withFileTypes: true })
-    .filter((d) => d.isDirectory())
-    .map((d) => d.name);
-  assert.deepEqual(dirs.sort(), ["mayhem-review", "mayhem-task"]);
-  for (const dir of dirs) {
-    const fm = frontmatter(repo(`.agents/skills/${dir}/SKILL.md`));
-    assert.equal(fm.name, dir, `${dir}: frontmatter name must match its directory`);
+// Every skill this repository owns, wherever its runtime looks for it. Adding
+// a valid skill must not require editing an assertion that has nothing to do
+// with it, so this discovers rather than enumerates — and then names the few
+// skills the harness actually depends on, which is a different claim.
+const SKILL_ROOTS = [".agents/skills", ".claude/skills", ".codex/skills"];
+
+const repoSkills = () =>
+  SKILL_ROOTS.flatMap((root) => {
+    let entries = [];
+    try {
+      entries = readdirSync(new URL(`../../${root}`, import.meta.url), { withFileTypes: true });
+    } catch {
+      return [];
+    }
+    return entries.filter((d) => d.isDirectory()).map((d) => ({ root, name: d.name, path: `${root}/${d.name}/SKILL.md` }));
+  });
+
+test("every repository skill satisfies the discovery contract", () => {
+  const skills = repoSkills();
+  assert.ok(skills.length >= 3, "no skills were discovered; the roots moved");
+  for (const skill of skills) {
+    const fm = frontmatter(repo(skill.path));
+    assert.equal(fm.name, skill.name, `${skill.path}: frontmatter name must match its directory`);
     assert.match(fm.name, /^[a-z0-9-]{1,64}$/);
-    assert.ok(fm.description && fm.description.length <= 1024, `${dir}: description missing or too long`);
+    assert.ok(fm.description && fm.description.length <= 1024, `${skill.path}: description missing or too long`);
   }
 });
 
-test("the review skill cannot mutate a candidate worktree", () => {
-  const fm = frontmatter(repo(".agents/skills/mayhem-review/SKILL.md"));
-  const tools = fm["allowed-tools"].replace(/[[\]]/g, "").split(",").map((t) => t.trim()).filter(Boolean);
-  assert.ok(tools.length > 0, "the reviewer must declare an explicit tool allowlist");
-  for (const forbidden of ["write", "edit", "bash", "multiedit", "apply_patch"]) {
-    assert.ok(!tools.includes(forbidden), `mayhem-review may not hold the ${forbidden} tool`);
+test("the skills the harness depends on are present", () => {
+  // Named individually, because these three are load-bearing: the dispatcher
+  // hands the first to every executor, the policy tests assert on the second,
+  // and the operator contract is the third.
+  const found = new Set(repoSkills().map((s) => `${s.root}/${s.name}`));
+  for (const required of [
+    ".agents/skills/mayhem-task",
+    ".agents/skills/mayhem-review",
+    ".claude/skills/slice-contract",
+  ]) {
+    assert.ok(found.has(required), `${required} is missing`);
   }
-  assert.ok(tools.includes("read"));
+});
+
+test("no skill or instruction file keeps a suite inventory of its own", () => {
+  // scripts/gate.sh is the one place a verification command is written down.
+  // A document that lists suites is a second inventory, and a second inventory
+  // drifts: AGENTS.md, CLAUDE.md and slice-contract each carried one, and all
+  // three had already diverged from gate.sh and from each other. A block that
+  // names the canonical entry point is delegation, not a second list.
+  const canonical = /verify-task\.sh|gate\.sh/;
+  const suiteCommand = /^\s*(npm (test|run (test|build))|npx (eslint|vitest|tsc)|cargo (test|fmt|check))\b/m;
+  const documents = [...repoSkills().map((s) => s.path), "AGENTS.md", "CLAUDE.md"];
+  for (const path of documents) {
+    const text = repo(path);
+    for (const block of [...text.matchAll(/```(?:bash|sh)\n([\s\S]*?)```/g)].map((m) => m[1])) {
+      if (canonical.test(block)) continue;
+      assert.doesNotMatch(
+        block,
+        suiteCommand,
+        `${path} runs a suite directly; delegate to harness/verify-task.sh instead`,
+      );
+    }
+  }
+});
+
+test("a review skill cannot mutate a candidate worktree", () => {
+  // Any skill whose job is verification, not just the one named today.
+  const reviewSkills = repoSkills().filter((s) => /review|verif/i.test(s.name));
+  assert.ok(reviewSkills.length >= 1, "no review skill was discovered");
+  for (const skill of reviewSkills) {
+    const fm = frontmatter(repo(skill.path));
+    const tools = (fm["allowed-tools"] ?? "").replace(/[[\]]/g, "").split(",").map((t) => t.trim()).filter(Boolean);
+    assert.ok(tools.length > 0, `${skill.name} must declare an explicit tool allowlist`);
+    for (const forbidden of ["write", "edit", "bash", "multiedit", "apply_patch"]) {
+      assert.ok(!tools.includes(forbidden), `${skill.name} may not hold the ${forbidden} tool`);
+    }
+    assert.ok(tools.includes("read"), `${skill.name} must be able to read`);
+  }
 });
 
 // --- instruction-file hygiene -------------------------------------------

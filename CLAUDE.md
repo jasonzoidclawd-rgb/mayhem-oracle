@@ -99,15 +99,19 @@ Canonical contract:
 ## Verification
 
 ```bash
-npm test
-npx eslint src scripts
-npm run build
-(cd overlay && npm run build)
+bash harness/verify-task.sh <profile>          # harness | web | overlay | skills | rust | all
+bash harness/verify-task.sh <profile> --plan   # the suites it runs, and what it leaves uncovered
 ```
 
-(Bare `npm run lint` also crawls `.worktrees/*/.next` noise — scope it.)
-Rust changes additionally need a release build plus a binary timestamp check;
-`cargo check` alone is insufficient:
+`scripts/gate.sh` holds the suite commands and `harness/verify-task.sh` selects
+the profile. Do not copy their contents here or into a skill — a second list
+drifts, and then two documents disagree about what "verified" means.
+
+Beyond the gate, because no profile runs them: `npm run build` (and
+`cd overlay && npm run build`) for changes that must still compile for
+production. (Bare `npm run lint` also crawls `.worktrees/*/.next` noise —
+scope it.) Rust changes additionally need a release build plus a binary
+timestamp check; `cargo check` alone is insufficient:
 
 ```bash
 cd overlay && npx tauri build 2>&1 | tail -5

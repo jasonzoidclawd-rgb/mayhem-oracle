@@ -35,11 +35,18 @@ ruvector.db
 ruvector.db.lock
 agentdb.rvf
 agentdb.rvf.lock
-.claude/
-claude-flow.config.json
-.claude/
 claude-flow.config.json
 .superpowers/
+
+# Claude's runtime state is volatile and local; the skills and commands this
+# repository owns are neither, and were previously tracked only by force-add —
+# a new file under them would have been silently ignored.
+# `.claude/` as a whole would stop git descending, so no `!` rule beneath it
+# could ever match. Ignore the contents and re-include the two directories this
+# repository owns.
+.claude/*
+!.claude/skills/
+!.claude/commands/
 
 # Python
 __pycache__/

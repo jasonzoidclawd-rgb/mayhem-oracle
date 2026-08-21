@@ -22,15 +22,21 @@ and the data pipeline live in `CLAUDE.md` — read it first; don't duplicate it.
 Run the narrowest check that proves your change, then before handoff:
 
 ```bash
-npm test
-npx eslint src scripts
-npm run build
-(cd overlay && npm run build)   # overlay-touching changes
+bash harness/verify-task.sh <profile>          # the gate
+bash harness/verify-task.sh <profile> --plan   # what it covers, and what it does not
 ```
 
-Report every skipped or blocked gate. Rust changes: release build + binary
-timestamp (see CLAUDE.md). Verification evidence: use `/usr/bin/diff`,
-`/usr/bin/grep`, `/usr/bin/wc` (rtk hook caveat).
+`scripts/gate.sh` is the one place a verification command is written down and
+`harness/verify-task.sh` selects the profile; nothing here restates their
+suites, because a second list drifts from them. Pick the profile from what you
+touched, and record what `--plan` says it left uncovered — a narrow profile
+that passes is not a proven change.
+
+Two things no profile establishes, so run them yourself when they apply:
+`npm run build` (and `cd overlay && npm run build`) for a change that must
+still compile for production, and for Rust the release build plus binary
+timestamp (see CLAUDE.md). Report every skipped or blocked gate. Verification
+evidence: use `/usr/bin/diff`, `/usr/bin/grep`, `/usr/bin/wc` (rtk hook caveat).
 
 Changes under `.codex/skills/` must pass that skill's own suite — the CI job
 `validation-skill-tests` runs it, so a skill edit that breaks its tests now

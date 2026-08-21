@@ -1,6 +1,6 @@
 ---
 name: slice-contract
-description: Run one bounded, evidence-backed engineering slice in this repository under a hard scope cap. Use when a session must pin evidence, verify inherited claims, localize a root cause, write red tests at the true seam, implement under a cap, and hand the operator a committable package — or terminate honestly instead. Covers evidence pinning, phase reports, test freezing, gate lists, subagent briefing, diagnostic-only instrumentation, and live-validation acceptance.
+description: Run one bounded, evidence-backed engineering slice in this repository under a hard scope cap. Use when a session must pin evidence, verify inherited claims, localize a root cause, write red tests at the true seam, implement under a cap, and hand the operator a committable package — or terminate honestly instead. Covers evidence pinning, phase reports, test freezing, gate delegation, subagent briefing, diagnostic-only instrumentation, and live-validation acceptance.
 ---
 
 # Slice Contract
@@ -255,43 +255,43 @@ For a verification subagent, add: **read-only**, and the task is to
 **falsify** the claims, not to confirm them. A verifier told to confirm will
 confirm.
 
-## 12. Gate lists
+## 12. Gates
 
-Run the narrowest check that proves the change, then the full list for the
-change type. **Gates are re-run by a hand other than the implementer's**; the
+Run the narrowest check that proves the change, then the profile for the change
+type. **Gates are re-run by a hand other than the implementer's**; the
 implementer's reported results are recorded, not trusted.
 
-**Docs / tooling only**
+This skill keeps no suite commands of its own. `scripts/gate.sh` is the one
+place a verification command is written down, and `harness/verify-task.sh`
+selects which suites a change must clear. A second list here would drift from
+them, and a skill that has drifted is worse than a skill that delegates:
 
 ```bash
-git diff --check
-```
-Plus: the touched script's own test suite, and every command the docs tell a
-human to run, executed for real wherever it is read-only.
-
-**TypeScript only**
-
-```bash
-npm test                       # root
-npx eslint <touched paths>
-npm run build
-# overlay-local:
-cd overlay && npx vitest run && npx tsc --noEmit && npm run build
+bash harness/verify-task.sh <profile>            # run it
+bash harness/verify-task.sh <profile> --plan     # what it covers, and what it does not
+bash scripts/gate.sh --list                      # every suite the gate knows
 ```
 
-**TypeScript + Rust** — everything above, plus, from `overlay/`:
+Pick the profile from what the change touches — `--plan` names the suites it
+runs and, just as importantly, the ones it does not. A narrow profile that
+passes is not a proven change; record what it left uncovered.
+
+**Beyond the gate.** Two requirements are real and no profile establishes them,
+so they are stated here rather than assumed covered:
 
 ```bash
-cargo fmt --check
-cargo test
-cargo check
-npx tauri build
+# a Rust change: `cargo test` is not a release build
+cd overlay && npx tauri build
 stat -f "%Sm %N" src-tauri/target/release/mayhem-oracle-overlay
 ```
 
-`cargo check` alone is **insufficient** for a Rust change. The release build
-is mandatory, and the binary timestamp must be compared to the wall clock
+`cargo check` alone is **insufficient** for a Rust change. The release build is
+mandatory, and the binary timestamp must be compared to the wall clock
 immediately after the build — a stale binary fails the gate.
+
+For a docs or tooling change, add `git diff --check`, the touched script's own
+test suite, and every command the docs tell a human to run, executed for real
+wherever it is read-only.
 
 Dev-only instrumentation adds the production-strip check (§9.3).
 
