@@ -10,12 +10,14 @@ import {
   parseMachineBlock,
   slugFor,
   ContractError,
+  concludeRun,
   RESULTS,
+  CONCLUDED_ONLY,
   LABELS,
 } from "../github/issue-contract.mjs";
 import { createGh, GhError } from "../github/gh.mjs";
 import { parseWorktreeList, planIssueWorktree, WorktreeError } from "../github/worktree.mjs";
-import { dispatchIssue, launchArgv, DispatchRecoveryError } from "../github/dispatch.mjs";
+import { assertReviewerIsolation, dispatchIssue, launchArgv, DispatchError, DispatchRecoveryError } from "../github/dispatch.mjs";
 
 // GitHub is the durable bug ledger; the harness router is still the routing
 // authority. These tests prove the seam between them without touching the
@@ -28,6 +30,7 @@ const source = (p) => readFileSync(new URL(`../${p}`, import.meta.url), "utf8");
 const BASE = "b9e12a98dcecd777e0abb425fb3f0cc24fce5286";
 const HEAD = "e13884973a1dcf1af5dca79d4c98a62ab1c3b4c7";
 const FINGERPRINT = "geometry:response-delivery:async-transport";
+const COMMIT = "c0ffee11deadbeef2222333344445555666677a8";
 const MAIN = "/repo/mayhem-oracle";
 const WT_ROOT = "/repo/mayhem-oracle-worktrees/issues";
 
@@ -446,6 +449,7 @@ test("21. the result vocabulary is closed", () => {
   assert.deepEqual([...RESULTS].sort(), [
     "BLOCKED",
     "FIX_PROPOSED",
+    "GATE_PASSED",
     "INTERRUPTED",
     "NEEDS_EVIDENCE",
     "VERIFIED",
@@ -664,11 +668,20 @@ const gitFailingAt = (verb) => (argv) =>
 // fake that answers a bare exit 0 cannot tell a gate that ran from one that was
 // never found — which is the gap the live issue-47 dry-run fell into, so the
 // fakes here answer the plan the way the real command does.
-const gateAnswer = (argv) => ({
-  status: 0,
-  stdout: argv.includes("--plan") ? `PROFILE: ${argv[2]}\nSUITES: harness\n` : "",
-  stderr: "",
-});
+const gateAnswer = (argv) => {
+  const profile = argv[2];
+  const tail = argv.includes("--plan")
+    ? `PLAN ONLY (profile=${profile}) — nothing executed`
+    : `GATE: PASS (profile=${profile})`;
+  return {
+    status: 0,
+    stdout:
+      `PROFILE: ${profile}\nSUITES: harness\n\n` +
+      "NOT COVERED BY THIS PROFILE:\n  - web (web vitest + eslint)\n  - overlay (overlay vitest + overlay tsc)\n" +
+      `\n${tail}\n`,
+    stderr: "",
+  };
+};
 
 const spawnThrowingAt = (role, message) => {
   const spawned = [];
@@ -682,6 +695,17 @@ const spawnThrowingAt = (role, message) => {
 };
 
 // The claim happened, and it was undone in favour of a state that names itself.
+const reportingCommit = (sha) => (runId, role) =>
+  role === "reviewer"
+    ? { verdict: "PASS", findings: [] }
+    : {
+        result: "FIX_PROPOSED",
+        behavioralRed:
+          "geometry round counter reports 0 where the contract requires 4 — observed at overlay/src/scoring/index.ts:88",
+        commitSha: sha,
+        tests: ["overlay/src/scoring/__tests__/geometry.test.ts"],
+      };
+
 const assertRecovered = (io, out) => {
   assert.ok(io.gh.labelWrites.length >= 1, "the issue was never claimed");
   assert.deepEqual(io.gh.labelWrites[0].add, [LABELS.working], "the first write was not the claim");
@@ -844,19 +868,263 @@ test("28. recovery evidence carries no stack trace and redacts token shapes", as
   assert.ok(!/gho_|sk-/.test(body), "a credential shape reached the issue comment");
 });
 
-const defaultGit = (argv) => {
-  if (argv[0] === "worktree" && argv[1] === "list") {
+// `-C <path>` only says where git runs; it never changes which question is
+// being asked, so the fake answers the verb underneath it.
+const defaultGit = (argv, repo = { head: BASE, dirty: false, commits: [BASE, COMMIT], descendants: [COMMIT] }) => {
+  const a = argv[0] === "-C" ? argv.slice(2) : argv;
+  if (a[0] === "worktree" && a[1] === "list") {
     return { status: 0, stdout: worktrees([{ path: MAIN, branch: "main" }]), stderr: "" };
   }
+  if (a[0] === "worktree") return { status: 0, stdout: "", stderr: "" };
   // No issue branch exists in this fake repository.
-  if (argv[0] === "rev-parse" && String(argv.at(-1)).startsWith("refs/heads/")) {
+  if (a[0] === "rev-parse" && String(a.at(-1)).startsWith("refs/heads/")) {
     return { status: 1, stdout: "", stderr: "" };
   }
-  if (argv[0] === "rev-parse") return { status: 0, stdout: `${BASE}\n`, stderr: "" };
-  if (argv[0] === "status") return { status: 0, stdout: "", stderr: "" };
-  if (argv[0] === "log") return { status: 0, stdout: `${HEAD}\n`, stderr: "" };
+  if (a[0] === "rev-parse" && a.at(-1) === "HEAD") return { status: 0, stdout: `${repo.head}\n`, stderr: "" };
+  if (a[0] === "rev-parse") return { status: 0, stdout: `${BASE}\n`, stderr: "" };
+  // Object existence: only the shas this fake repository actually contains.
+  if (a[0] === "cat-file") {
+    const wanted = String(a.at(-1)).replace(/\^\{commit\}$/, "");
+    return { status: repo.commits.includes(wanted) ? 0 : 128, stdout: "", stderr: "fatal: Not a valid object name" };
+  }
+  // Ancestry: BASE precedes COMMIT, and every commit is its own ancestor.
+  if (a[0] === "merge-base" && a[1] === "--is-ancestor") {
+    const [, , older, newer] = a;
+    const ok = older === newer || (older === BASE && repo.descendants.includes(newer));
+    return { status: ok ? 0 : 1, stdout: "", stderr: "" };
+  }
+  if (a[0] === "status") return { status: 0, stdout: repo.dirty ? " M src/x.ts\n" : "", stderr: "" };
+  if (a[0] === "diff" && a.includes("--name-only")) {
+    return { status: 0, stdout: repo.emptyDiff ? "\n" : "overlay/src/scoring/index.ts\n", stderr: "" };
+  }
+  if (a[0] === "log") return { status: 0, stdout: `${HEAD}\n`, stderr: "" };
   return { status: 0, stdout: "", stderr: "" };
 };
+
+// --- T. reviewer isolation (trust boundary) -------------------------------
+
+test("T1. the reviewer never runs inside the executor's mutable worktree", async () => {
+  const io = makeIo();
+  const out = await dispatchIssue(147, io);
+  assert.equal(out.dispatched, true);
+  const executor = io.spawned.find((s) => s.role === "executor");
+  const reviewer = io.spawned.find((s) => s.role === "reviewer");
+  assert.ok(reviewer, "no reviewer process was launched");
+  assert.equal(executor.cwd, out.result.worktree, "the executor did not run in its own worktree");
+  assert.notEqual(reviewer.cwd, executor.cwd, "the reviewer ran inside the executor's mutable worktree");
+  assert.notEqual(reviewer.cwd, out.result.worktree);
+  assert.ok(out.result.reviewWorkspace, "no review workspace was recorded");
+  assert.equal(reviewer.cwd, out.result.reviewWorkspace);
+});
+
+test("T2. the review workspace is a detached checkout of the verified commit", async () => {
+  const io = makeIo();
+  const out = await dispatchIssue(147, io);
+  const add = io.gitCalls.find((a) => a[0] === "worktree" && a[1] === "add" && a.includes("--detach"));
+  assert.ok(add, "the reviewer was given no workspace of its own");
+  assert.equal(add.at(-1), out.result.commitSha, "the reviewer was not pointed at the verified commit");
+  assert.ok(add.includes(out.result.reviewWorkspace), "the recorded review workspace is not the one git created");
+  assert.ok(
+    io.gitCalls.some((a) => a[0] === "worktree" && a[1] === "remove" && a.includes(out.result.reviewWorkspace)),
+    "the review workspace outlived the run",
+  );
+});
+
+test("T3. the reviewer is handed no path into the executor's run state", async () => {
+  const io = makeIo();
+  const out = await dispatchIssue(147, io);
+  const executor = io.spawned.find((s) => s.role === "executor");
+  const reviewer = io.spawned.find((s) => s.role === "reviewer");
+  const executorState = [out.result.worktree, executor.runDir].filter(Boolean);
+  const handed = [...reviewer.argv, reviewer.cwd, reviewer.runDir].filter(Boolean).map(String);
+  for (const token of handed) {
+    for (const leak of executorState) {
+      assert.ok(!token.includes(leak), `the reviewer was handed the executor's ${leak} (in ${token.slice(0, 80)})`);
+    }
+  }
+  assert.ok(
+    !String(reviewer.runDir).startsWith(String(executor.runDir)),
+    "reviewer state was placed inside the executor's run directory",
+  );
+});
+
+test("T4. reviewer isolation is enforced by the launcher, not by prompt wording", () => {
+  const executor = { worktree: "/repo/x-worktrees/issues/147-y", runDir: "/state/runs/issue-147-attempt-01" };
+  assert.throws(
+    () => assertReviewerIsolation({ argv: ["claude", "--print", "brief"], cwd: executor.worktree, executor }),
+    DispatchError,
+    "a reviewer launched in the executor's worktree was allowed",
+  );
+  assert.throws(
+    () =>
+      assertReviewerIsolation({
+        argv: ["pi", "--session-dir", `${executor.runDir}/session-reviewer`, "brief"],
+        cwd: "/repo/x-worktrees/reviews/r1",
+        executor,
+      }),
+    DispatchError,
+    "a reviewer session adjacent to the executor's was allowed",
+  );
+  assert.doesNotThrow(() =>
+    assertReviewerIsolation({
+      argv: ["pi", "--session-dir", "/state/reviews/r1/session", "brief"],
+      cwd: "/repo/x-worktrees/reviews/r1",
+      executor,
+    }),
+  );
+});
+
+// --- U. git evidence ------------------------------------------------------
+
+test("U1. a reported commit that does not exist fails closed", async () => {
+  const io = makeIo({ readReport: reportingCommit("d".repeat(40)) });
+  const out = await dispatchIssue(147, io);
+  assert.equal(out.result.commitEvidence.ok, false);
+  assert.equal(out.result.commitEvidence.code, "commit-not-found");
+  assert.notEqual(out.result.result, "VERIFIED");
+  assert.notEqual(out.result.result, "GATE_PASSED");
+  assert.equal(out.result.nextStatus, LABELS.needsHuman);
+  assert.equal(io.spawned.filter((s) => s.role === "reviewer").length, 0, "a reviewer ran on unverified work");
+});
+
+test("U2. a real commit that does not descend from the starting head fails closed", async () => {
+  const UNRELATED = "a".repeat(40);
+  const io = makeIo({
+    readReport: reportingCommit(UNRELATED),
+    repo: { commits: [BASE, COMMIT, UNRELATED], descendants: [], afterExecutor: UNRELATED },
+  });
+  const out = await dispatchIssue(147, io);
+  assert.equal(out.result.commitEvidence.ok, false);
+  assert.equal(out.result.commitEvidence.code, "commit-not-descended");
+  assert.notEqual(out.result.result, "VERIFIED");
+  assert.equal(out.result.nextStatus, LABELS.needsHuman);
+});
+
+test("U3. a stale reported sha that is not the gated head fails closed", async () => {
+  // The executor reports its first commit but committed twice; the gate ran on
+  // the second. Nothing here may claim the reported sha was proven.
+  const io = makeIo({ readReport: reportingCommit(BASE) });
+  const out = await dispatchIssue(147, io);
+  assert.equal(out.result.commitEvidence.ok, false);
+  assert.equal(out.result.commitEvidence.code, "commit-not-head");
+  assert.match(out.result.commitEvidence.reason, /c0ffee11dead/);
+  assert.notEqual(out.result.result, "VERIFIED");
+});
+
+test("U4. a dirty worktree means the gate did not test the commit", async () => {
+  const io = makeIo({ repo: { dirty: true } });
+  const out = await dispatchIssue(147, io);
+  assert.equal(out.result.commitEvidence.ok, false);
+  assert.equal(out.result.commitEvidence.code, "worktree-dirty");
+  assert.notEqual(out.result.result, "VERIFIED");
+});
+
+test("U5. the recorded git facts are derived from git, never from the report", async () => {
+  const io = makeIo();
+  const out = await dispatchIssue(147, io);
+  const evidence = out.result.commitEvidence;
+  assert.equal(evidence.ok, true);
+  assert.equal(evidence.commitSha, COMMIT);
+  assert.equal(evidence.head, COMMIT, "the resulting HEAD was not read from git");
+  assert.equal(evidence.startingHead, BASE);
+  assert.deepEqual(evidence.changedFiles, ["overlay/src/scoring/index.ts"]);
+  // Object existence and ancestry are asked of git, not assumed from the sha.
+  assert.ok(
+    io.gitCalls.some((a) => a.includes("cat-file") && a.some((t) => String(t).startsWith(COMMIT))),
+    "the reported commit's existence was never checked",
+  );
+  assert.ok(
+    io.gitCalls.some((a) => a.includes("merge-base") && a.includes("--is-ancestor")),
+    "ancestry from the starting head was never checked",
+  );
+});
+
+test("U6. a FIX_PROPOSED that committed nothing fails closed", async () => {
+  // The executor reports the head it started from: no commit was made, and
+  // every relational check below would otherwise pass trivially.
+  const io = makeIo({ readReport: reportingCommit(BASE), repo: { afterExecutor: BASE } });
+  const out = await dispatchIssue(147, io);
+  assert.equal(out.result.commitEvidence.code, "commit-is-starting-head");
+  assert.notEqual(out.result.result, "VERIFIED");
+  assert.notEqual(out.result.result, "GATE_PASSED");
+});
+
+test("U7. a commit that changes no file is not the fix it claims to be", async () => {
+  const io = makeIo({ repo: { emptyDiff: true } });
+  const out = await dispatchIssue(147, io);
+  assert.equal(out.result.commitEvidence.code, "commit-changes-nothing");
+  assert.notEqual(out.result.result, "GATE_PASSED");
+});
+
+test("U8. git plumbing that never ran does not read as evidence", async () => {
+  // spawnSync reports a launch that never happened as status:null. Every check
+  // must treat that as "not established", never as "established clean".
+  for (const verb of ["cat-file", "merge-base", "status", "diff"]) {
+    const io = makeIo({
+      git: (argv) => {
+        const a = argv[0] === "-C" ? argv.slice(2) : argv;
+        if (a[0] === verb) return { status: null, signal: null, stdout: "", stderr: "", error: { code: "ENOENT", message: "spawn git ENOENT" } };
+        return defaultGit(argv, { head: COMMIT, dirty: false, commits: [BASE, COMMIT], descendants: [COMMIT] });
+      },
+    });
+    const out = await dispatchIssue(147, io);
+    assert.equal(out.result.commitEvidence.ok, false, `a failed \`git ${verb}\` was read as evidence`);
+    assert.notEqual(out.result.result, "VERIFIED");
+    assert.notEqual(out.result.result, "GATE_PASSED");
+  }
+});
+
+// --- V. result vocabulary -------------------------------------------------
+
+test("V1. a deterministic gate pass alone is GATE_PASSED, never VERIFIED", () => {
+  const reported = { result: "FIX_PROPOSED" };
+  const out = concludeRun({ reported, gateResult: "PASS", reviewVerdict: null, reviewersRequired: 0, commitVerified: true });
+  assert.equal(out.result, "GATE_PASSED", "a gate pass with no independent review claimed VERIFIED");
+  assert.equal(out.completionLevel, "OFFLINE-PROVEN");
+});
+
+test("V2. VERIFIED requires an independent reviewer to have passed", () => {
+  const reported = { result: "FIX_PROPOSED" };
+  const base = { reported, gateResult: "PASS", reviewersRequired: 1, commitVerified: true };
+  assert.equal(concludeRun({ ...base, reviewVerdict: "PASS" }).result, "VERIFIED");
+  assert.equal(concludeRun({ ...base, reviewVerdict: "FAIL" }).result, "FIX_PROPOSED");
+  assert.equal(concludeRun({ ...base, reviewVerdict: "NO_REPORT" }).result, "FIX_PROPOSED");
+  assert.equal(concludeRun({ ...base, reviewVerdict: "NO_REPORT" }).nextStatus, LABELS.needsReview);
+});
+
+test("V3. an unverified commit can conclude neither VERIFIED nor GATE_PASSED", () => {
+  const reported = { result: "FIX_PROPOSED" };
+  for (const reviewersRequired of [0, 1, 2]) {
+    const out = concludeRun({ reported, gateResult: "PASS", reviewVerdict: "PASS", reviewersRequired, commitVerified: false });
+    assert.ok(!["VERIFIED", "GATE_PASSED"].includes(out.result), `unverified work concluded ${out.result}`);
+    assert.equal(out.nextStatus, LABELS.needsHuman);
+    assert.equal(out.completionLevel, null, "an unverified commit claimed a completion level");
+  }
+});
+
+test("V4. a concluded-only result is not something an executor may report", () => {
+  for (const claimed of CONCLUDED_ONLY) {
+    assert.throws(
+      () =>
+        normalizeExecutorReport(
+          { result: claimed, behavioralRed: "real observed violation at :88", commitSha: HEAD },
+          { fingerprint: FINGERPRINT, role: "executor" },
+        ),
+      ContractError,
+      `an executor was allowed to claim ${claimed}`,
+    );
+  }
+  assert.ok(CONCLUDED_ONLY.includes("VERIFIED") && CONCLUDED_ONLY.includes("GATE_PASSED"));
+});
+
+test("V5. a gate pass records what the profile did not cover", async () => {
+  const io = makeIo();
+  const out = await dispatchIssue(147, io);
+  assert.equal(out.result.gateCoverage.profile, "harness");
+  assert.deepEqual(out.result.gateCoverage.suites, ["harness"]);
+  assert.deepEqual(out.result.gateCoverage.notCovered, ["web", "overlay"]);
+  assert.match(io.gh.comments.at(-1).body, /NOT_COVERED=web,overlay/);
+});
 
 // --- fake io -------------------------------------------------------------
 
@@ -866,6 +1134,18 @@ function makeIo(over = {}) {
   const labelWrites = [];
   const comments = [];
   const results = [];
+  const gitCalls = [];
+  // A fake repository with a head the fake executor advances, so "what the
+  // executor said it committed" and "what the worktree actually is" are two
+  // separate facts here exactly as they are on a real machine.
+  const repo = {
+    head: BASE,
+    dirty: false,
+    commits: [BASE, COMMIT],
+    descendants: [COMMIT],
+    afterExecutor: COMMIT,
+    ...(over.repo ?? {}),
+  };
   let views = 0;
   const io = {
     config: over.config ?? config,
@@ -888,7 +1168,9 @@ function makeIo(over = {}) {
       comment: (number, body) => { order.push("comment"); comments.push({ number, body }); },
       ...(over.ghOver ?? {}),
     },
-    git: over.git ?? defaultGit,
+    gitCalls,
+    repo,
+    git: over.git ?? ((argv) => { gitCalls.push(argv); return defaultGit(argv, repo); }),
     exists: over.exists ?? (() => true),
     pathExists: over.pathExists ?? (() => false),
     probe: over.probe ?? (({ command }) => {
@@ -898,6 +1180,7 @@ function makeIo(over = {}) {
     spawn: over.spawn ?? ((argv, opts) => {
       order.push(`launch:${opts.role ?? "gate"}`);
       spawned.push({ argv, ...opts });
+      if (opts.role === "executor" && repo.head === BASE) repo.head = repo.afterExecutor;
       return gateAnswer(argv);
     }),
     readReport: over.readReport ?? ((runId, role) =>
@@ -907,11 +1190,12 @@ function makeIo(over = {}) {
             result: "FIX_PROPOSED",
             behavioralRed:
               "geometry round counter reports 0 where the contract requires 4 — observed at overlay/src/scoring/index.ts:88",
-            commitSha: "1".repeat(40),
+            commitSha: COMMIT,
             tests: ["overlay/src/scoring/__tests__/geometry.test.ts"],
           }),
     writeResult: (runId, result) => { order.push("write-result"); results.push({ runId, result }); },
-    runsDir: "/runs",
+    runsDir: over.runsDir ?? "/state/runs",
+    reviewsDir: over.reviewsDir ?? "/state/reviews",
     lock: over.lock ?? ((number) => ({ number, release: () => { io.lockReleased = true; } })),
     log: () => {},
   };

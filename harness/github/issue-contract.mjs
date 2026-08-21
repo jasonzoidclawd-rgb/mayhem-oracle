@@ -12,7 +12,19 @@ export class ContractError extends Error {}
 export const SUPPORTED_SCHEMA = 1;
 
 // A closed vocabulary. An executor that answers outside it has not answered.
-export const RESULTS = ["FIX_PROPOSED", "NEEDS_EVIDENCE", "BLOCKED", "INTERRUPTED", "VERIFIED"];
+export const RESULTS = ["FIX_PROPOSED", "NEEDS_EVIDENCE", "BLOCKED", "INTERRUPTED", "GATE_PASSED", "VERIFIED"];
+
+// Results the run concludes from evidence the executor does not own, and which
+// an executor therefore may not report about itself.
+//
+// GATE_PASSED and VERIFIED are deliberately different claims. GATE_PASSED says
+// the requested deterministic profile passed on a mechanically verified commit
+// — nothing more, and in particular nothing about the suites that profile did
+// not run. VERIFIED additionally says the verification policy for this risk
+// level was satisfied by an independent reviewer. Before this split every
+// gate pass was recorded as VERIFIED, so a schema-1 record reading VERIFIED
+// may mean either; schema 2 onward, it means only the second.
+export const CONCLUDED_ONLY = ["GATE_PASSED", "VERIFIED"];
 
 // Labels are state on the ledger, not a replacement for issue structure.
 export const LABELS = {
@@ -141,8 +153,10 @@ export function normalizeExecutorReport(raw, { fingerprint, role = "executor" } 
       `result ${JSON.stringify(raw.result ?? null)} is outside the vocabulary (${RESULTS.join(", ")})`,
     );
   }
-  if (role === "executor" && raw.result === "VERIFIED") {
-    throw new ContractError("an executor cannot mark its own work VERIFIED; verification is independent");
+  if (role === "executor" && CONCLUDED_ONLY.includes(raw.result)) {
+    throw new ContractError(
+      `an executor cannot mark its own work ${raw.result}; that is concluded from evidence it does not own`,
+    );
   }
 
   const behavioralRed = typeof raw.behavioralRed === "string" ? raw.behavioralRed.trim() : "";
@@ -184,26 +198,38 @@ export function normalizeExecutorReport(raw, { fingerprint, role = "executor" } 
   };
 }
 
-// The run's verdict is assembled from evidence the executor does not own: the
-// deterministic gate and, where the risk level requires one, an independent
-// reviewer. A failing gate is never overruled here.
-export function concludeRun({ reported, gateResult, reviewVerdict, reviewersRequired }) {
+// The run's verdict is assembled from evidence the executor does not own: git,
+// the deterministic gate and, where the risk level requires one, an
+// independent reviewer. A failing gate is never overruled here.
+//
+// The completion level says how far the proof got, and stops where the
+// evidence stops. LIVE-PROVEN is never concluded here: no gate profile
+// establishes live behaviour, so nothing in this file may claim it.
+export function concludeRun({ reported, gateResult, reviewVerdict, reviewersRequired, commitVerified = false }) {
+  const at = (result, nextStatus, completionLevel = null) => ({ result, nextStatus, completionLevel });
+
   if (reported.result !== "FIX_PROPOSED") {
-    const status = {
-      NEEDS_EVIDENCE: LABELS.needsEvidence,
-      BLOCKED: LABELS.blocked,
-      INTERRUPTED: LABELS.needsHuman,
-      VERIFIED: LABELS.verified,
-    }[reported.result];
-    return { result: reported.result, nextStatus: status };
+    // Only results an executor may actually report reach here; a concluded-only
+    // one arriving means the report contract was bypassed, and guessing a label
+    // for it would write an undefined status onto the ledger.
+    const status = { NEEDS_EVIDENCE: LABELS.needsEvidence, BLOCKED: LABELS.blocked, INTERRUPTED: LABELS.needsHuman }[
+      reported.result
+    ];
+    if (!status) throw new ContractError(`${reported.result} is concluded, not reported; it has no reported-result status`);
+    return at(reported.result, status);
   }
-  if (gateResult !== "PASS") return { result: "FIX_PROPOSED", nextStatus: LABELS.needsHuman };
+  // A commit git could not establish is not work anyone can accept, however
+  // green the gate looks: the gate did not necessarily run on it.
+  if (!commitVerified) return at("FIX_PROPOSED", LABELS.needsHuman);
+  if (gateResult !== "PASS") return at("FIX_PROPOSED", LABELS.needsHuman, "IMPLEMENTED");
   if (reviewersRequired > 0) {
-    if (reviewVerdict === "PASS") return { result: "VERIFIED", nextStatus: LABELS.verified };
-    if (reviewVerdict === "FAIL") return { result: "FIX_PROPOSED", nextStatus: LABELS.needsHuman };
-    return { result: "FIX_PROPOSED", nextStatus: LABELS.needsReview };
+    if (reviewVerdict === "PASS") return at("VERIFIED", LABELS.verified, "OFFLINE-PROVEN");
+    if (reviewVerdict === "FAIL") return at("FIX_PROPOSED", LABELS.needsHuman, "IMPLEMENTED");
+    return at("FIX_PROPOSED", LABELS.needsReview, "IMPLEMENTED");
   }
-  return { result: "VERIFIED", nextStatus: LABELS.verified };
+  // The gate passed on a verified commit and this risk level requires no
+  // reviewer. That is precisely what was proven, and it is not verification.
+  return at("GATE_PASSED", LABELS.verified, "OFFLINE-PROVEN");
 }
 
 // Bounded, and never cut mid-word: a branch named ...-async-transpor reads as
@@ -239,8 +265,10 @@ export function renderComment(result) {
     `RED=${result.behavioralRed ? "PASS" : "NONE"}`,
     `TESTS=${result.tests.length}`,
     `GATE=${result.gateResult} (${result.gateProfile})`,
+    ...(result.gateCoverage?.notCovered?.length ? [`NOT_COVERED=${result.gateCoverage.notCovered.join(",")}`] : []),
     `REVIEW=${result.reviewVerdict ?? "NOT_REQUIRED"}${result.reviewerAccount ? ` by ${result.reviewerAccount}` : ""}`,
-    `COMMIT=${short(result.commitSha)}`,
+    `COMMIT=${short(result.commitSha)} ${result.commitEvidence?.ok ? "(git-verified)" : `(UNVERIFIED: ${result.commitEvidence?.code ?? "not checked"})`}`,
+    ...(result.completionLevel ? [`LEVEL=${result.completionLevel}`] : []),
     `WORKTREE=${result.worktree}`,
     `NEXT=${result.nextStatus}`,
     ...(result.newBugs?.length
@@ -314,21 +342,26 @@ with its **own** fingerprint. Re-using ${machine.fingerprint} is rejected.
 }
 \`\`\`
 
-VERIFIED is not yours to claim. Verification is independent.
+Neither GATE_PASSED nor VERIFIED is yours to claim. Both are concluded from
+evidence you do not own: git, the deterministic gate, and — where the risk
+level requires one — an independent reviewer.
 `;
 }
 
 // The read-only reviewer brief. It deliberately carries no executor reasoning
 // transcript — only the spec, the fixed-point diff, the gate output, and the
 // invariants — per harness/config/verification-policy.json.
-export function buildReviewBrief({ issue, machine, resolvedBaseSha, diff, gateOutput, criteria, worktree }) {
+export function buildReviewBrief({ issue, machine, commitSha, startingHead, diff, gateOutput, criteria, workspace }) {
   return `# Independent review — issue ${issue.number}
 
-You are a READ-ONLY reviewer. You may not modify ${worktree}, and you may not
-fix a finding you raise. You have not been given the executor's reasoning.
+You are a READ-ONLY reviewer. ${workspace} is a detached checkout of the commit
+under review, not the workspace that produced it; you may not modify it, and
+you may not fix a finding you raise. You have not been given the executor's
+reasoning, its session, or its worktree.
 
 FINGERPRINT: ${machine.fingerprint}
-BASE: ${resolvedBaseSha}
+BASE: ${startingHead}
+COMMIT UNDER REVIEW: ${commitSha} (existence and ancestry established by git)
 
 ## SPEC (the issue, verbatim)
 

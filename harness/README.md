@@ -245,19 +245,49 @@ sweep; V1 deliberately does not claim exactly-once semantics.
 ### What counts as done
 
 The result vocabulary is closed: `FIX_PROPOSED`, `NEEDS_EVIDENCE`, `BLOCKED`,
-`INTERRUPTED`, `VERIFIED`. Anything else is rejected.
+`INTERRUPTED`, `GATE_PASSED`, `VERIFIED`. Anything else is rejected.
 
 - `FIX_PROPOSED` requires a **behavioral RED**: existing behavior violating the
   issue's acceptance contract. A missing module, an unwritten file, a
   scaffolding syntax error, or a missing fixture is not one, and is rejected as
   one. "Could not reproduce" is `NEEDS_EVIDENCE` and never becomes a fix.
-- An executor cannot mark its own work `VERIFIED`. `VERIFIED` is concluded from
-  the deterministic gate plus, where the risk level requires one, an
-  independent cross-provider reviewer — assigned by `route()`, launched under
-  its runtime's read-only flag, and never handed the executor's transcript.
+- `GATE_PASSED` and `VERIFIED` are **concluded**, never reported. An executor
+  claiming either is rejected. They are deliberately different claims:
+  `GATE_PASSED` says the requested deterministic profile passed on a
+  git-verified commit — and says nothing about the suites that profile did not
+  run, which the record lists under `gateCoverage.notCovered`. `VERIFIED`
+  additionally says the risk level's verification policy was satisfied by an
+  independent reviewer.
+- Before result schema 2 every gate pass was recorded as `VERIFIED`, so a
+  schema-1 record reading `VERIFIED` may mean either. Schema 2 onward it means
+  only the second.
+- The completion level stops where the evidence stops: `IMPLEMENTED` for a
+  verified commit whose gate did not pass, `OFFLINE-PROVEN` once it did. No
+  gate profile establishes live behaviour, so the dispatcher never concludes
+  `LIVE-PROVEN`.
 - An independent defect found mid-slice is reported as `newBugs` with its
   **own** fingerprint. Re-using the current issue's fingerprint is rejected:
   that is scope expansion, not a wider bug.
+
+### The commit sha is a claim until git says otherwise
+
+A 40-hex string in a report is text a model wrote. Before it decides anything,
+`harness/run/evidence.mjs` asks git, in the executor's workspace, whether the
+object exists and is a commit, whether it descends from the head this attempt
+started at, whether it *is* the workspace head that the gate then ran on,
+whether the workspace is clean, and whether the commit changes any file. Any
+check that cannot be run — a `git` that never launched included — is "not
+established", never "established fine". A run whose commit is unverified can
+conclude neither `GATE_PASSED` nor `VERIFIED`, however green the gate looked.
+
+### The reviewer does not work in the workspace it reviews
+
+Isolation is structural, not a sentence in the brief. The reviewer runs in its
+own `git worktree add --detach` checkout of the verified commit, so its subject
+is fixed and cannot move under it; its session and run directory live under a
+separate state root rather than beside the executor's; and
+`assertReviewerIsolation()` refuses the launch outright if the reviewer's cwd
+or any argv token reaches the executor's worktree or run directory.
 
 ## Worktrees
 

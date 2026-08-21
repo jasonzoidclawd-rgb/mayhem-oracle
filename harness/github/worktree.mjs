@@ -26,6 +26,14 @@ export function parseWorktreeList(porcelain) {
   return entries;
 }
 
+// A reviewer's workspace, derived the same way an issue's is but under its own
+// root. It holds a detached checkout of the commit under review and is removed
+// when the review ends, so it is named by the run rather than by the issue.
+export function reviewPaths(mainWorktree, runId) {
+  const root = join(dirname(mainWorktree), `${basename(mainWorktree)}-worktrees`, "reviews");
+  return { path: join(root, runId) };
+}
+
 // Derived from the main worktree's own location, so no username, no home
 // directory, and no absolute path is written down anywhere.
 export function issuePaths(mainWorktree, number, slug) {

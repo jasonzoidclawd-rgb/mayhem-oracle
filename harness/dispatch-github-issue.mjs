@@ -70,8 +70,12 @@ function main(argv) {
   const harnessRoot = resolve(HERE, "..");
   const stateDir = join(commonDir, "mayhem-dispatch");
   const runsDir = join(stateDir, "runs");
+  // A separate root, not a sibling name under runs/: the reviewer is given its
+  // own directory, and that directory must not have the executor's next to it.
+  const reviewsDir = join(stateDir, "reviews");
   const lockDir = join(stateDir, "locks");
   mkdirSync(runsDir, { recursive: true });
+  mkdirSync(reviewsDir, { recursive: true });
   mkdirSync(lockDir, { recursive: true });
 
   const captured = new Map();
@@ -83,6 +87,7 @@ function main(argv) {
     mainWorktree,
     harnessRoot,
     runsDir,
+    reviewsDir,
     gh: createGh({
       repo,
       run: (args, options = {}) => runProcess(["gh", ...args], { input: options.input, maxBuffer: 32 * 1024 * 1024 }),

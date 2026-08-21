@@ -24,7 +24,8 @@ import {
   renderComment,
 } from "./issue-contract.mjs";
 import { didRun } from "./process.mjs";
-import { applyWorktreePlan, parseWorktreeList, planIssueWorktree } from "./worktree.mjs";
+import { parseGateCoverage, verifyCommitEvidence } from "../run/evidence.mjs";
+import { applyWorktreePlan, parseWorktreeList, planIssueWorktree, reviewPaths } from "./worktree.mjs";
 
 export class DispatchError extends Error {}
 
@@ -38,7 +39,10 @@ const DEFAULT_GATE_PROFILE = "harness";
 // dry run proved is the profile a real run executes.
 const GATE_COMMAND = ["bash", "harness/verify-task.sh"];
 const DEFAULT_CONTEXT = ["AGENTS.md", "CLAUDE.md", "harness/README.md", "docs/architecture/agent-harness.md"];
-const RESULT_SCHEMA = 1;
+// 2: git evidence, gate coverage and completion level are recorded, and a gate
+// pass with no independent reviewer concludes GATE_PASSED rather than VERIFIED.
+// A schema-1 record's VERIFIED may mean either; a schema-2 one may not.
+const RESULT_SCHEMA = 2;
 
 const refuse = (code, reason) => ({ dispatched: false, code, reason, result: null });
 
@@ -125,6 +129,26 @@ export function launchArgv({ mechanism, role, model, effort, authProvider, promp
       return String(value);
     }),
   );
+}
+
+// The reviewer must not be able to reach the executor's state, and a brief that
+// politely says so is not a mechanism — the argv and the cwd are. A reviewer
+// whose working directory is the worktree it is reviewing has write access to
+// its own subject; one handed the executor's run directory can read the report
+// and session it is supposed to be independent of. Both are refused here,
+// before the process starts, so the isolation cannot be lost by editing prose.
+export function assertReviewerIsolation({ argv, cwd, executor }) {
+  const inside = (path, root) => path === root || String(path ?? "").startsWith(`${root}/`);
+  for (const root of [executor?.worktree, executor?.runDir].filter(Boolean)) {
+    if (inside(cwd, root)) {
+      throw new DispatchError(`the reviewer would run inside the executor's ${root}; a verifier does not work in the workspace it verifies`);
+    }
+    for (const token of argv ?? []) {
+      if (String(token).includes(root)) {
+        throw new DispatchError(`the reviewer launch names the executor's ${root}; a verifier is not handed the executor's state`);
+      }
+    }
+  }
 }
 
 export async function dispatchIssue(number, io) {
@@ -250,15 +274,20 @@ async function runDispatch(number, io) {
     primaryRuntime: routed.primary.runtime,
     reviewerAccount: reviewer?.account ?? null,
     reviewerExecution: reviewer?.execution ?? null,
+    reviewWorkspace: null,
     behavioralRed: null,
     commitSha: null,
+    commitEvidence: null,
+    changedFiles: [],
     tests: [],
     notes: "",
     newBugs: [],
     gateProfile,
     gateResult: null,
+    gateCoverage: null,
     reviewVerdict: null,
     result: null,
+    completionLevel: null,
     nextStatus: null,
     failureStage: null,
     errorClass: null,
@@ -294,9 +323,13 @@ async function runDispatch(number, io) {
     record.startingHead = (io.git(["-C", plan.path, "rev-parse", "HEAD"]).stdout ?? "").trim() || resolvedBaseSha;
 
     const mechanismOf = (assignment) => config.routing.executionMechanisms[assignment.execution];
-    const runDir = `${io.runsDir}/${runId}`;
-    const reportPath = (role) => `${runDir}/report-${role}.json`;
-    const start = (assignment, role, prompt) => {
+    // Two run directories under two different roots, not two names under one.
+    // Siblings would put the executor's session and report one `..` away from
+    // everything the reviewer is given.
+    const executorRunDir = `${io.runsDir}/${runId}`;
+    const reviewRunDir = `${io.reviewsDir ?? `${io.runsDir}-reviews`}/${runId}`;
+    const reportPath = (role) => `${executorRunDir}/report-${role}.json`;
+    const start = (assignment, role, prompt, { cwd, runDir }) => {
       const argv = launchArgv({
         mechanism: mechanismOf(assignment),
         role,
@@ -305,10 +338,13 @@ async function runDispatch(number, io) {
         authProvider: assignment.runtimeAuth?.provider,
         prompt,
         sessionDir: `${runDir}/session-${role}`,
-        worktree: plan.path,
+        worktree: cwd,
         runDir,
       });
-      const options = { cwd: plan.path, env: assignment.runtimeAuth?.env ?? {}, role, account: assignment.account, runId, runDir };
+      if (role === "reviewer") {
+        assertReviewerIsolation({ argv, cwd, executor: { worktree: plan.path, runDir: executorRunDir } });
+      }
+      const options = { cwd, env: assignment.runtimeAuth?.env ?? {}, role, account: assignment.account, runId, runDir };
       return mustHaveRun(io.spawn(argv, options), `the ${role} runtime`);
     };
 
@@ -327,6 +363,7 @@ async function runDispatch(number, io) {
         reportPath: reportPath("executor"),
         contextPaths: machine.context_paths ? machine.context_paths.split(",").map((s) => s.trim()) : DEFAULT_CONTEXT,
       }),
+      { cwd: plan.path, runDir: executorRunDir },
     );
 
     // An unreadable or contract-violating report is an INTERRUPTED run, never a
@@ -351,27 +388,60 @@ async function runDispatch(number, io) {
     record.notes = reported.notes;
     record.newBugs = reported.newBugs;
 
+    // Before the gate, because a workspace that is dirty or not at the reported
+    // commit makes the gate's verdict a statement about something else.
+    stage = "commit-evidence";
+    const evidence =
+      reported.result === "FIX_PROPOSED"
+        ? verifyCommitEvidence({
+            reportedSha: reported.commitSha,
+            startingHead: record.startingHead,
+            workspace: plan.path,
+            git: io.git,
+          })
+        : null;
+    record.commitEvidence = evidence;
+    record.changedFiles = evidence?.changedFiles ?? [];
+
     stage = "gate";
     const gate = mustHaveRun(io.spawn([...GATE_COMMAND, gateProfile], { cwd: plan.path, role: "gate" }), "the gate");
     record.gateResult = gate.status === 0 ? "PASS" : "FAIL";
+    record.gateCoverage = parseGateCoverage(gate.stdout, gateProfile);
 
     stage = "review";
-    if (reviewer && reported.result === "FIX_PROPOSED" && record.gateResult === "PASS") {
-      start(
-        reviewer,
-        "reviewer",
-        buildReviewBrief({
-          issue,
-          machine,
-          resolvedBaseSha,
-          worktree: plan.path,
-          diff: (io.git(["-C", plan.path, "diff", resolvedBaseSha]).stdout ?? "").slice(0, 60000),
-          gateOutput: `${gate?.stdout ?? ""}${gate?.stderr ?? ""}`.slice(-4000),
-          criteria: config.policy.criteria,
-        }),
-      );
-      const verdict = io.readReport(runId, "reviewer")?.verdict;
-      record.reviewVerdict = verdict === "PASS" || verdict === "FAIL" ? verdict : "NO_REPORT";
+    if (reviewer && evidence?.ok && record.gateResult === "PASS") {
+      // A detached checkout of the commit git established, so the reviewer's
+      // subject is fixed, is not the executor's mutable worktree, and cannot
+      // move under it while it reads.
+      const review = reviewPaths(io.mainWorktree, runId);
+      const added = io.git(["worktree", "add", "--detach", review.path, evidence.commitSha]);
+      if (!added || added.status !== 0) {
+        throw new DispatchError(`the review workspace could not be created: ${detail(added?.stderr) || `git exited ${added?.status ?? "?"}`}`);
+      }
+      record.reviewWorkspace = review.path;
+      try {
+        start(
+          reviewer,
+          "reviewer",
+          buildReviewBrief({
+            issue,
+            machine,
+            commitSha: evidence.commitSha,
+            startingHead: evidence.startingHead,
+            workspace: review.path,
+            diff: (io.git(["-C", review.path, "diff", evidence.startingHead, evidence.commitSha]).stdout ?? "").slice(0, 60000),
+            gateOutput: `${gate?.stdout ?? ""}${gate?.stderr ?? ""}`.slice(-4000),
+            criteria: config.policy.criteria,
+          }),
+          { cwd: review.path, runDir: reviewRunDir },
+        );
+        const verdict = io.readReport(runId, "reviewer")?.verdict;
+        record.reviewVerdict = verdict === "PASS" || verdict === "FAIL" ? verdict : "NO_REPORT";
+      } finally {
+        // A leaked review checkout is untidy; failing the run over it would
+        // discard a verdict that was already reached.
+        io.git(["worktree", "remove", "--force", review.path]);
+      }
     }
 
     stage = "conclude";
@@ -380,9 +450,11 @@ async function runDispatch(number, io) {
       gateResult: record.gateResult,
       reviewVerdict: record.reviewVerdict,
       reviewersRequired: routed.verification.reviewers,
+      commitVerified: Boolean(evidence?.ok),
     });
     record.result = concluded.result;
     record.nextStatus = concluded.nextStatus;
+    record.completionLevel = concluded.completionLevel;
 
     // Durable machine-readable record first; only then tell the ledger.
     stage = "result-write";
