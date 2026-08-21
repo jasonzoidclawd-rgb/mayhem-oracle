@@ -466,8 +466,16 @@ export async function runAttempt(task, plan, io) {
       gateArgv({ harnessRoot: io.harnessRoot, profile: task.gateProfile, authority: true }),
       { cwd: io.harnessRoot, role: "gate-authority" },
     );
-    attempt.gateAuthorityTouched = authorityTouched(attempt.changedFiles, declared?.stdout);
-    attempt.gateAuthority = attempt.gateAuthorityTouched.length ? "candidate-influenced" : "controller";
+    // A declaration that did not arrive establishes nothing. Reading silence as
+    // "the examiner was untouched" would make every failed lookup an upgrade,
+    // so an unanswered question stays unanswered and does not advance alone.
+    if (declared?.status !== 0 || !(declared.stdout ?? "").trim()) {
+      attempt.gateAuthority = "unknown";
+      attempt.gateAuthorityTouched = [];
+    } else {
+      attempt.gateAuthorityTouched = authorityTouched(attempt.changedFiles, declared.stdout);
+      attempt.gateAuthority = attempt.gateAuthorityTouched.length ? "candidate-influenced" : "controller";
+    }
 
     stage = "review";
     if (reviewers.length && evidence?.ok && attempt.gateResult === "PASS") {
@@ -527,7 +535,7 @@ export async function runAttempt(task, plan, io) {
       reviewersRequired: plan.verification.reviewers,
       commitVerified: Boolean(evidence?.ok),
       gateComplete: (attempt.gateCoverage?.notCovered?.length ?? 0) === 0,
-      gateAuthoritative: attempt.gateAuthority !== "candidate-influenced",
+      gateAuthoritative: attempt.gateAuthority === "controller",
     });
     attempt.result = concluded.result;
     attempt.disposition = concluded.disposition;

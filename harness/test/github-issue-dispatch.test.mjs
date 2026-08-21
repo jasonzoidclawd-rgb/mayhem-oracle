@@ -2032,3 +2032,24 @@ test("J7. touching the examiner is reviewable, never a refusal", async () => {
   assert.ok(io.spawned.some((s) => s.role === "reviewer"), "the change was never put in front of a reviewer");
   assert.equal(out.result.result, "VERIFIED");
 });
+
+test("J8. an authority declaration that could not be read is not a clean one", async () => {
+  // Nothing a candidate does causes this — the declaration comes from the
+  // trusted checkout. But an unanswered question is not a reassuring answer,
+  // and silently reading it as "the examiner was untouched" would upgrade every
+  // such run to a pass that advances on its own.
+  const io = makeIo({ machine: { task_class: "T1" } });
+  const inner = io.spawn;
+  io.spawn = (argv, opts) => {
+    if (opts.role === "gate-authority") {
+      io.spawned.push({ argv, ...opts });
+      return { status: 1, stdout: "", stderr: "gate.sh: not found", error: null };
+    }
+    return inner(argv, opts);
+  };
+  const out = await dispatchIssue(147, io);
+  assert.equal(out.result.gateResult, "PASS");
+  assert.equal(out.result.gateAuthority, "unknown");
+  assert.notEqual(out.result.result, "GATE_PASSED", "an unreadable declaration produced an authoritative pass");
+  assert.equal(out.result.disposition, "needs-review");
+});
