@@ -6,7 +6,7 @@ import { join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { loadConfig, route } from "../route.mjs";
 import { LABELS } from "../github/issue-contract.mjs";
-import { runProcess } from "../github/process.mjs";
+import { runProcess } from "../run/process.mjs";
 import { dispatchIssue } from "../github/dispatch.mjs";
 
 // The gate preflight, proved through the production process adapter.

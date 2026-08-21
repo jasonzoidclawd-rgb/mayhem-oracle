@@ -1,31 +1,37 @@
-// Local dispatch of one GitHub issue.
+// The GitHub adapter for the attempt lifecycle.
 //
 // Division of authority, unchanged by this file:
 //   GitHub        durable bug ledger — issue state is the record
 //   route()       routing authority — which slot executes, which reviews
-//   git worktree  execution isolation
+//   runAttempt()  the execution lifecycle — workspace, gate, evidence, review
 //   verify-task   deterministic gate, which outranks any reviewer
 //   the executor  disposable; it holds no authority at all
 //
-// This adapter therefore contains no slot names, no vendor names, and no
-// mechanism ids. It reads the issue, asks the router, and interprets the
-// mechanism the router already named. Every effect — gh, git, subprocess,
-// filesystem, lock — is injected, so the whole flow is testable offline.
+// The dependency direction is one way. This file reads an issue, builds a Task,
+// claims it, hands that Task to runAttempt(), and reports the Attempt back onto
+// the ledger. runAttempt() knows nothing about any of that: it never sees gh,
+// an issue number, or a label. Everything GitHub-shaped — argv for gh, the
+// machine block, fingerprint dedupe, labels, comments, the claim and the
+// hand-back — lives here and nowhere below.
 
 import { checkAccountAuth } from "../route.mjs";
 import {
+  AttemptError,
+  classifyGatePreflight,
+  gatePlanArgv,
+  runAttempt,
+} from "../run/attempt.mjs";
+import { slugFor } from "../run/workspace.mjs";
+import {
   LABELS,
+  STATUS_FOR_DISPOSITION,
   buildPacket,
   buildReviewBrief,
   checkDispatchable,
-  concludeRun,
   findByFingerprint,
   normalizeExecutorReport,
   renderComment,
 } from "./issue-contract.mjs";
-import { didRun } from "./process.mjs";
-import { parseGateCoverage, verifyCommitEvidence } from "../run/evidence.mjs";
-import { applyWorktreePlan, parseWorktreeList, planIssueWorktree, reviewPaths } from "./worktree.mjs";
 
 export class DispatchError extends Error {}
 
@@ -35,14 +41,7 @@ export class DispatchError extends Error {}
 export class DispatchRecoveryError extends Error {}
 
 const DEFAULT_GATE_PROFILE = "harness";
-// The gate is invoked the same way in both places it is used, so the profile a
-// dry run proved is the profile a real run executes.
-const GATE_COMMAND = ["bash", "harness/verify-task.sh"];
 const DEFAULT_CONTEXT = ["AGENTS.md", "CLAUDE.md", "harness/README.md", "docs/architecture/agent-harness.md"];
-// 2: git evidence, gate coverage and completion level are recorded, and a gate
-// pass with no independent reviewer concludes GATE_PASSED rather than VERIFIED.
-// A schema-1 record's VERIFIED may mean either; a schema-2 one may not.
-const RESULT_SCHEMA = 2;
 
 const refuse = (code, reason) => ({ dispatched: false, code, reason, result: null });
 
@@ -56,99 +55,24 @@ function redact(text) {
   return clean.slice(0, 500);
 }
 
-// What the gate preflight actually established.
-//
-// verify-task.sh is the profile authority, and it can only exercise that
-// authority if it ran. A script that was never found, a directory that does
-// not exist, and a profile the gate refused are three different facts about a
-// run, and reading `status` alone reports all three as the third one — which
-// is how a dispatcher run out of a checkout without a harness came back
-// claiming a valid profile had been rejected. Each cause therefore gets its
-// own refusal code, and anything unrecognised fails closed rather than
-// dispatching on an unproven profile.
-const CANNOT_LAUNCH = /No such file or directory|command not found|Permission denied|cannot execute/i;
-const REJECTED_PROFILE = /^unknown profile:/m;
-
-// Refusal text is operator-facing. A launch failure's message can carry the
-// absolute path it tried, which names the machine; one line, no paths, capped.
-const detail = (text) =>
-  String(text ?? "")
-    .trim()
-    .split("\n")[0]
-    .replace(/(^|\s)\/\S+/g, "$1<path>")
-    .slice(0, 200);
-
-export function classifyGatePreflight(result, profile) {
-  const launchFailed = (why) => ({
-    ok: false,
-    code: "gate-preflight-launch-failed",
-    reason: `the gate could not be started to plan profile ${profile}: ${why}`,
-  });
-  const failed = (why) => ({ ok: false, code: "gate-preflight-failed", reason: `${why} while planning profile ${profile}` });
-
-  if (result?.error) return launchFailed(detail(result.error.message) || result.error.code || "the launch failed");
-  if (!didRun(result)) {
-    return result?.signal ? failed(`the gate was killed by ${result.signal}`) : launchFailed("the gate never ran");
-  }
-  if (result.status === 0) {
-    // Proof it was this gate that answered, not something else exiting clean.
-    return new RegExp(`^PROFILE: ${profile.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}$`, "m").test(result.stdout)
-      ? { ok: true }
-      : failed("the gate exited 0 without planning the profile");
-  }
-  if (result.status === 127 || CANNOT_LAUNCH.test(result.stderr)) {
-    return launchFailed(detail(result.stderr) || "the gate script was not found");
-  }
-  if (REJECTED_PROFILE.test(result.stderr)) {
-    return { ok: false, code: "unknown-gate-profile", reason: `the gate rejected profile ${profile}` };
-  }
-  return failed(`the gate exited ${result.status}`);
-}
-
-// A subprocess that never launched has reported nothing, so its result may not
-// be read as one. Only the preflight classifies such a failure; everywhere
-// else it is a dispatcher fault, which the claim recovery already handles.
-function mustHaveRun(result, what) {
-  if (result?.error) throw new DispatchError(`${what} could not be started: ${detail(result.error.message)}`);
-  return result;
-}
-
-// The launch line is data the mechanism declares, not syntax invented here.
-export function launchArgv({ mechanism, role, model, effort, authProvider, prompt, sessionDir, worktree, runDir }) {
-  const template = mechanism?.launch?.[role];
-  if (!Array.isArray(template) || template.length === 0) {
-    throw new DispatchError(`execution mechanism declares no ${role} launch argv; it cannot be started by guesswork`);
-  }
-  const values = { model, effort, authProvider, prompt, sessionDir, worktree, runDir };
-  return template.map((token) =>
-    token.replace(/\{(\w+)\}/g, (_, key) => {
-      const value = values[key];
-      if (value === undefined || value === null || value === "") {
-        throw new DispatchError(`launch template needs {${key}}, which this route did not supply`);
-      }
-      return String(value);
-    }),
-  );
-}
-
-// The reviewer must not be able to reach the executor's state, and a brief that
-// politely says so is not a mechanism — the argv and the cwd are. A reviewer
-// whose working directory is the worktree it is reviewing has write access to
-// its own subject; one handed the executor's run directory can read the report
-// and session it is supposed to be independent of. Both are refused here,
-// before the process starts, so the isolation cannot be lost by editing prose.
-export function assertReviewerIsolation({ argv, cwd, executor }) {
-  const inside = (path, root) => path === root || String(path ?? "").startsWith(`${root}/`);
-  for (const root of [executor?.worktree, executor?.runDir].filter(Boolean)) {
-    if (inside(cwd, root)) {
-      throw new DispatchError(`the reviewer would run inside the executor's ${root}; a verifier does not work in the workspace it verifies`);
-    }
-    for (const token of argv ?? []) {
-      if (String(token).includes(root)) {
-        throw new DispatchError(`the reviewer launch names the executor's ${root}; a verifier is not handed the executor's state`);
-      }
-    }
-  }
+// One GitHub issue, read as the authoritative statement of the work. Identity
+// is the immutable issue number; the slug is decoration from a title a human
+// may edit at any moment, and never decides anything.
+function taskFromIssue({ issue, machine, resolvedBaseSha, taskClass, attemptId }) {
+  return {
+    id: `github-issue-${issue.number}`,
+    attemptId,
+    identity: { kind: "issue", id: issue.number, slug: slugFor(issue.title) },
+    title: issue.title,
+    url: issue.url,
+    spec: issue.body,
+    fingerprint: machine.fingerprint,
+    taskClass,
+    baseRef: machine.base_ref,
+    resolvedBaseSha,
+    gateProfile: machine.gate_profile ?? DEFAULT_GATE_PROFILE,
+    contextPaths: machine.context_paths ? machine.context_paths.split(",").map((s) => s.trim()) : DEFAULT_CONTEXT,
+  };
 }
 
 export async function dispatchIssue(number, io) {
@@ -223,7 +147,7 @@ async function runDispatch(number, io) {
   // at all, where every profile looks rejected.
   const gateProfile = machine.gate_profile ?? DEFAULT_GATE_PROFILE;
   const preflight = classifyGatePreflight(
-    io.spawn([...GATE_COMMAND, gateProfile, "--plan"], { cwd: io.harnessRoot, role: "gate-plan" }),
+    io.spawn(gatePlanArgv(gateProfile), { cwd: io.harnessRoot, role: "gate-plan" }),
     gateProfile,
   );
   if (!preflight.ok) return refuse(preflight.code, preflight.reason);
@@ -252,46 +176,24 @@ async function runDispatch(number, io) {
 
   const issue = io.gh.viewIssue(number);
   const runId = `issue-${number}-attempt-${String(io.nextAttempt ? io.nextAttempt(number) : 1).padStart(2, "0")}`;
-  const reviewer = routed.reviewers[0] ?? null;
+  const task = taskFromIssue({ issue, machine, resolvedBaseSha, taskClass: routed.taskClass, attemptId: runId });
 
-  // One mutable record, so the evidence a failed run leaves behind and the
-  // result a finished run reports are the same object with the same schema.
-  const record = {
-    schema: RESULT_SCHEMA,
-    issue: number,
-    fingerprint,
-    runId,
-    taskClass: routed.taskClass,
+  // The execution plan the router already decided, plus the one lookup that
+  // turns an assignment into the argv template it declares.
+  const plan = {
     effort: routed.effort,
-    baseRef: machine.base_ref,
-    resolvedBaseSha,
-    startingHead: null,
-    worktree: null,
-    branch: null,
-    worktreeAction: null,
-    primaryAccount: routed.primary.account,
-    primaryExecution: routed.primary.execution,
-    primaryRuntime: routed.primary.runtime,
-    reviewerAccount: reviewer?.account ?? null,
-    reviewerExecution: reviewer?.execution ?? null,
-    reviewWorkspace: null,
-    behavioralRed: null,
-    commitSha: null,
-    commitEvidence: null,
-    changedFiles: [],
-    tests: [],
-    notes: "",
-    newBugs: [],
-    gateProfile,
-    gateResult: null,
-    gateCoverage: null,
-    reviewVerdict: null,
-    result: null,
-    completionLevel: null,
-    nextStatus: null,
-    failureStage: null,
-    errorClass: null,
-    errorMessage: null,
+    primary: routed.primary,
+    reviewers: routed.reviewers,
+    verification: routed.verification,
+    mechanismOf: (assignment) => config.routing.executionMechanisms[assignment.execution],
+  };
+
+  // Wording is this adapter's business; the lifecycle only needs the shape.
+  const attemptIo = {
+    ...io,
+    normalizeReport: (raw) => normalizeExecutorReport(raw, { fingerprint, role: "executor" }),
+    buildPacket: (args) => buildPacket({ ...args, issue, machine }),
+    buildReviewBrief: (args) => buildReviewBrief({ ...args, issue, machine, criteria: config.policy.criteria }),
   };
 
   // Everything above this line is a read. From here the issue is ours, and
@@ -299,162 +201,14 @@ async function runDispatch(number, io) {
   io.gh.setLabels(number, { add: [LABELS.working], remove: [LABELS.ready] });
   say(`${runId}: ${routed.primary.account} via ${routed.primary.execution}`);
 
-  let stage = "worktree";
+  let stage = "attempt";
+  let record = { issue: number, runId, nextStatus: null, result: null, errorClass: null, errorMessage: null };
   try {
-    const plan = applyWorktreePlan(
-      planIssueWorktree({
-        number,
-        title: issue.title,
-        baseSha: resolvedBaseSha,
-        mainWorktree: io.mainWorktree,
-        worktrees: parseWorktreeList(io.git(["worktree", "list", "--porcelain"]).stdout),
-        branchExists: (branch) => io.git(["rev-parse", "--verify", "--quiet", `refs/heads/${branch}`])?.status === 0,
-        pathExists: io.pathExists ?? io.exists,
-        realPath: io.realPath,
-        dirty: false,
-      }),
-      { git: io.git },
-    );
-    record.worktree = plan.path;
-    record.branch = plan.branch;
-    record.worktreeAction = plan.action;
-
-    stage = "base-head";
-    record.startingHead = (io.git(["-C", plan.path, "rev-parse", "HEAD"]).stdout ?? "").trim() || resolvedBaseSha;
-
-    const mechanismOf = (assignment) => config.routing.executionMechanisms[assignment.execution];
-    // Two run directories under two different roots, not two names under one.
-    // Siblings would put the executor's session and report one `..` away from
-    // everything the reviewer is given.
-    const executorRunDir = `${io.runsDir}/${runId}`;
-    const reviewRunDir = `${io.reviewsDir ?? `${io.runsDir}-reviews`}/${runId}`;
-    const reportPath = (role) => `${executorRunDir}/report-${role}.json`;
-    const start = (assignment, role, prompt, { cwd, runDir }) => {
-      const argv = launchArgv({
-        mechanism: mechanismOf(assignment),
-        role,
-        model: assignment.model,
-        effort: routed.effort,
-        authProvider: assignment.runtimeAuth?.provider,
-        prompt,
-        sessionDir: `${runDir}/session-${role}`,
-        worktree: cwd,
-        runDir,
-      });
-      if (role === "reviewer") {
-        assertReviewerIsolation({ argv, cwd, executor: { worktree: plan.path, runDir: executorRunDir } });
-      }
-      const options = { cwd, env: assignment.runtimeAuth?.env ?? {}, role, account: assignment.account, runId, runDir };
-      return mustHaveRun(io.spawn(argv, options), `the ${role} runtime`);
-    };
-
-    stage = "executor-launch";
-    const launched = start(
-      routed.primary,
-      "executor",
-      buildPacket({
-        issue,
-        machine,
-        resolvedBaseSha,
-        worktree: plan.path,
-        runId,
-        taskClass: routed.taskClass,
-        gateProfile,
-        reportPath: reportPath("executor"),
-        contextPaths: machine.context_paths ? machine.context_paths.split(",").map((s) => s.trim()) : DEFAULT_CONTEXT,
-      }),
-      { cwd: plan.path, runDir: executorRunDir },
-    );
-
-    // An unreadable or contract-violating report is an INTERRUPTED run, never a
-    // fix: the ledger records that the attempt happened and why it did not count.
-    stage = "executor-report";
-    let reported;
-    try {
-      const raw = io.readReport(runId, "executor");
-      reported = normalizeExecutorReport(
-        raw ?? { result: "INTERRUPTED", notes: `executor exited ${launched?.status ?? "?"} without a report` },
-        { fingerprint, role: "executor" },
-      );
-    } catch (err) {
-      reported = normalizeExecutorReport(
-        { result: "INTERRUPTED", notes: `report rejected: ${redact(err.message)}` },
-        { fingerprint, role: "executor" },
-      );
-    }
-    record.behavioralRed = reported.behavioralRed;
-    record.commitSha = reported.commitSha;
-    record.tests = reported.tests;
-    record.notes = reported.notes;
-    record.newBugs = reported.newBugs;
-
-    // Before the gate, because a workspace that is dirty or not at the reported
-    // commit makes the gate's verdict a statement about something else.
-    stage = "commit-evidence";
-    const evidence =
-      reported.result === "FIX_PROPOSED"
-        ? verifyCommitEvidence({
-            reportedSha: reported.commitSha,
-            startingHead: record.startingHead,
-            workspace: plan.path,
-            git: io.git,
-          })
-        : null;
-    record.commitEvidence = evidence;
-    record.changedFiles = evidence?.changedFiles ?? [];
-
-    stage = "gate";
-    const gate = mustHaveRun(io.spawn([...GATE_COMMAND, gateProfile], { cwd: plan.path, role: "gate" }), "the gate");
-    record.gateResult = gate.status === 0 ? "PASS" : "FAIL";
-    record.gateCoverage = parseGateCoverage(gate.stdout, gateProfile);
-
-    stage = "review";
-    if (reviewer && evidence?.ok && record.gateResult === "PASS") {
-      // A detached checkout of the commit git established, so the reviewer's
-      // subject is fixed, is not the executor's mutable worktree, and cannot
-      // move under it while it reads.
-      const review = reviewPaths(io.mainWorktree, runId);
-      const added = io.git(["worktree", "add", "--detach", review.path, evidence.commitSha]);
-      if (!added || added.status !== 0) {
-        throw new DispatchError(`the review workspace could not be created: ${detail(added?.stderr) || `git exited ${added?.status ?? "?"}`}`);
-      }
-      record.reviewWorkspace = review.path;
-      try {
-        start(
-          reviewer,
-          "reviewer",
-          buildReviewBrief({
-            issue,
-            machine,
-            commitSha: evidence.commitSha,
-            startingHead: evidence.startingHead,
-            workspace: review.path,
-            diff: (io.git(["-C", review.path, "diff", evidence.startingHead, evidence.commitSha]).stdout ?? "").slice(0, 60000),
-            gateOutput: `${gate?.stdout ?? ""}${gate?.stderr ?? ""}`.slice(-4000),
-            criteria: config.policy.criteria,
-          }),
-          { cwd: review.path, runDir: reviewRunDir },
-        );
-        const verdict = io.readReport(runId, "reviewer")?.verdict;
-        record.reviewVerdict = verdict === "PASS" || verdict === "FAIL" ? verdict : "NO_REPORT";
-      } finally {
-        // A leaked review checkout is untidy; failing the run over it would
-        // discard a verdict that was already reached.
-        io.git(["worktree", "remove", "--force", review.path]);
-      }
-    }
-
-    stage = "conclude";
-    const concluded = concludeRun({
-      reported,
-      gateResult: record.gateResult,
-      reviewVerdict: record.reviewVerdict,
-      reviewersRequired: routed.verification.reviewers,
-      commitVerified: Boolean(evidence?.ok),
-    });
-    record.result = concluded.result;
-    record.nextStatus = concluded.nextStatus;
-    record.completionLevel = concluded.completionLevel;
+    record = { ...record, ...(await runAttempt(task, plan, attemptIo)) };
+    record.issue = number;
+    record.runId = runId;
+    record.nextStatus = STATUS_FOR_DISPOSITION[record.disposition];
+    if (!record.nextStatus) throw new DispatchError(`the attempt concluded ${record.disposition}, which is not a ledger status`);
 
     // Durable machine-readable record first; only then tell the ledger.
     stage = "result-write";
@@ -467,7 +221,9 @@ async function runDispatch(number, io) {
 
     return { dispatched: true, code: "ran", reason: null, result: record };
   } catch (err) {
-    return recoverClaim(err, { io, number, record, stage, say });
+    // Whatever the attempt established before it failed is still evidence.
+    record = { ...record, ...(err.attempt ?? {}), issue: number, runId };
+    return recoverClaim(err, { io, number, record, stage: err.stage ?? stage, say });
   }
 }
 
@@ -485,7 +241,7 @@ function recoverClaim(err, { io, number, record, stage, say }) {
   record.failureStage = stage;
   record.errorClass = err?.name ?? "Error";
   record.errorMessage = redact(err?.message ?? String(err));
-  // Nothing concluded means the run was interrupted. Something that did
+  // Nothing concluded means the attempt was interrupted. Something that did
   // conclude keeps its conclusion — but an undelivered conclusion is not a
   // delivered one, so the issue still goes back as blocked either way.
   if (record.result === null) record.result = "INTERRUPTED";
@@ -525,3 +281,5 @@ function recoverClaim(err, { io, number, record, stage, say }) {
   say(`${record.runId}: ${record.result} → ${record.nextStatus} (recovered from ${stage})`);
   return { dispatched: true, code: "interrupted", reason: record.errorMessage, result: record, recovery };
 }
+
+export { AttemptError, classifyGatePreflight };

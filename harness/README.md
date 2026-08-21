@@ -126,6 +126,36 @@ dispatchable mechanism declares its own `launch` argv per role in
 `config/routing.json`, next to the billing claim it already declared, so the
 dispatcher starts a runtime by lookup rather than by guessed syntax.
 
+### Task, Attempt, and the one-way dependency
+
+Execution is not GitHub's. `harness/run/` owns the lifecycle and `harness/github/`
+adapts one source onto it, in that direction only:
+
+```
+GitHub issue → parse → Task → claim → runAttempt(task, plan, io) → Attempt
+                                                                     ↓
+                                          disposition → label, comment, hand-back
+```
+
+- **Task** — the authoritative requested work: identity, spec, base, gate
+  profile, required context. Identity is `{ kind, id, slug }`; `kind` and `id`
+  decide which workspace it owns, and `slug` is decoration from a title that may
+  be edited at any moment. That split is why renaming an issue mid-run resumes
+  the workspace its number already owns instead of orphaning it.
+- **Attempt** — one execution of one Task, from one declared base, inside one
+  isolated workspace. `runAttempt()` establishes the workspace, launches the
+  executor, checks its commit against git, runs the gate, and — only on verified
+  work — a reviewer, then concludes.
+- **Disposition** — what the attempt established, in a vocabulary with no ledger
+  in it: `accepted`, `needs-review`, `needs-human`, `needs-evidence`, `blocked`.
+  `STATUS_FOR_DISPOSITION` in the GitHub adapter is the single place one becomes
+  a `status:` label.
+
+`harness/run/` never imports from `harness/github/`, never names `gh`, an issue,
+or a label, and a test asserts all three against the source. A second test runs
+the whole lifecycle on a Task that is not a GitHub issue, with an `io` that has
+no `gh` at all.
+
 ### The issue contract
 
 A dispatchable issue is ordinary human Markdown plus one machine block:

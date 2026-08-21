@@ -7,6 +7,8 @@
 // classes, whether a ref resolves locally). Anything it cannot decide from
 // those is a refusal, never a guess.
 
+import { concludeAttempt } from "../run/attempt.mjs";
+
 export class ContractError extends Error {}
 
 export const SUPPORTED_SCHEMA = 1;
@@ -198,55 +200,20 @@ export function normalizeExecutorReport(raw, { fingerprint, role = "executor" } 
   };
 }
 
-// The run's verdict is assembled from evidence the executor does not own: git,
-// the deterministic gate and, where the risk level requires one, an
-// independent reviewer. A failing gate is never overruled here.
-//
-// The completion level says how far the proof got, and stops where the
-// evidence stops. LIVE-PROVEN is never concluded here: no gate profile
-// establishes live behaviour, so nothing in this file may claim it.
-export function concludeRun({ reported, gateResult, reviewVerdict, reviewersRequired, commitVerified = false }) {
-  const at = (result, nextStatus, completionLevel = null) => ({ result, nextStatus, completionLevel });
+// The one place a generic attempt disposition becomes a state on this ledger.
+// The lifecycle concludes what was established; GitHub decides what to call it.
+export const STATUS_FOR_DISPOSITION = {
+  accepted: LABELS.verified,
+  "needs-review": LABELS.needsReview,
+  "needs-human": LABELS.needsHuman,
+  "needs-evidence": LABELS.needsEvidence,
+  blocked: LABELS.blocked,
+};
 
-  if (reported.result !== "FIX_PROPOSED") {
-    // Only results an executor may actually report reach here; a concluded-only
-    // one arriving means the report contract was bypassed, and guessing a label
-    // for it would write an undefined status onto the ledger.
-    const status = { NEEDS_EVIDENCE: LABELS.needsEvidence, BLOCKED: LABELS.blocked, INTERRUPTED: LABELS.needsHuman }[
-      reported.result
-    ];
-    if (!status) throw new ContractError(`${reported.result} is concluded, not reported; it has no reported-result status`);
-    return at(reported.result, status);
-  }
-  // A commit git could not establish is not work anyone can accept, however
-  // green the gate looks: the gate did not necessarily run on it.
-  if (!commitVerified) return at("FIX_PROPOSED", LABELS.needsHuman);
-  if (gateResult !== "PASS") return at("FIX_PROPOSED", LABELS.needsHuman, "IMPLEMENTED");
-  if (reviewersRequired > 0) {
-    if (reviewVerdict === "PASS") return at("VERIFIED", LABELS.verified, "OFFLINE-PROVEN");
-    if (reviewVerdict === "FAIL") return at("FIX_PROPOSED", LABELS.needsHuman, "IMPLEMENTED");
-    return at("FIX_PROPOSED", LABELS.needsReview, "IMPLEMENTED");
-  }
-  // The gate passed on a verified commit and this risk level requires no
-  // reviewer. That is precisely what was proven, and it is not verification.
-  return at("GATE_PASSED", LABELS.verified, "OFFLINE-PROVEN");
-}
-
-// Bounded, and never cut mid-word: a branch named ...-async-transpor reads as
-// corruption rather than as a shortened title.
-export function slugFor(title, limit = 48) {
-  const words = String(title ?? "")
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, "-")
-    .replace(/^-+|-+$/g, "")
-    .split("-")
-    .filter(Boolean);
-  const kept = [];
-  for (const word of words) {
-    if (kept.length && [...kept, word].join("-").length > limit) break;
-    kept.push(word);
-  }
-  return kept.join("-").slice(0, limit) || "issue";
+// Kept for callers that want the ledger status alongside the conclusion.
+export function concludeRun(args) {
+  const concluded = concludeAttempt(args);
+  return { ...concluded, nextStatus: STATUS_FOR_DISPOSITION[concluded.disposition] };
 }
 
 const short = (sha) => (sha ? String(sha).slice(0, 12) : "-");
@@ -269,7 +236,7 @@ export function renderComment(result) {
     `REVIEW=${result.reviewVerdict ?? "NOT_REQUIRED"}${result.reviewerAccount ? ` by ${result.reviewerAccount}` : ""}`,
     `COMMIT=${short(result.commitSha)} ${result.commitEvidence?.ok ? "(git-verified)" : `(UNVERIFIED: ${result.commitEvidence?.code ?? "not checked"})`}`,
     ...(result.completionLevel ? [`LEVEL=${result.completionLevel}`] : []),
-    `WORKTREE=${result.worktree}`,
+    `WORKSPACE=${result.workspace}`,
     `NEXT=${result.nextStatus}`,
     ...(result.newBugs?.length
       ? [`NEW_BUG_DISCOVERED=${result.newBugs.map((b) => b.fingerprint).join(",")} (file separately; not fixed here)`]
@@ -279,24 +246,24 @@ export function renderComment(result) {
 
 // The bounded packet an executor receives instead of a transcript. Everything
 // it may do, and everything it may not, is stated here.
-export function buildPacket({ issue, machine, resolvedBaseSha, worktree, runId, taskClass, gateProfile, reportPath, contextPaths = [] }) {
+export function buildPacket({ issue, machine, task, attemptId, workspace, reportPath }) {
   return `# Issue ${issue.number} — ${issue.title}
 
-RUN_ID: ${runId}
-ISSUE_URL: ${issue.url}
-FINGERPRINT: ${machine.fingerprint}
-TASK_CLASS: ${taskClass}
-BASE_REF: ${machine.base_ref}
-RESOLVED_BASE_SHA: ${resolvedBaseSha}
-WORKTREE: ${worktree}
+RUN_ID: ${attemptId}
+ISSUE_URL: ${task.url}
+FINGERPRINT: ${task.fingerprint}
+TASK_CLASS: ${task.taskClass}
+BASE_REF: ${task.baseRef}
+RESOLVED_BASE_SHA: ${task.resolvedBaseSha}
+WORKTREE: ${workspace}
 
 ## ISSUE BODY (verbatim; the authoritative statement of the defect)
 
-${issue.body}
+${task.spec}
 
 ## REQUIRED CONTEXT
 
-${contextPaths.map((p) => `- ${p}`).join("\n")}
+${task.contextPaths.map((p) => `- ${p}`).join("\n")}
 
 ## ACCEPTANCE
 
@@ -306,13 +273,13 @@ ${contextPaths.map((p) => `- ${p}`).join("\n")}
    behavioral RED. If you cannot establish reproduction, the result is
    NEEDS_EVIDENCE — "could not reproduce" never becomes a fix.
 2. Make the RED go green with the smallest change that meets the contract.
-3. Run the deterministic gate: \`bash harness/verify-task.sh ${gateProfile}\`.
+3. Run the deterministic gate: \`bash harness/verify-task.sh ${task.gateProfile}\`.
 4. Commit on this worktree's branch only.
 
 ## ALLOWED
 
 - Read anything in the repository.
-- Write inside ${worktree}.
+- Write inside ${workspace}.
 - Create tests; modify in-scope code; commit on the issue branch.
 - Run deterministic gates.
 - Write the result JSON to ${reportPath}.
@@ -327,7 +294,7 @@ ${contextPaths.map((p) => `- ${p}`).join("\n")}
 ## IF YOU FIND AN INDEPENDENT BUG
 
 Do not fix it. Add it to the report as \`newBugs: [{fingerprint, title, summary}]\`
-with its **own** fingerprint. Re-using ${machine.fingerprint} is rejected.
+with its **own** fingerprint. Re-using ${task.fingerprint} is rejected.
 
 ## RETURN FORMAT — write exactly this JSON to ${reportPath}
 
@@ -342,16 +309,17 @@ with its **own** fingerprint. Re-using ${machine.fingerprint} is rejected.
 }
 \`\`\`
 
-Neither GATE_PASSED nor VERIFIED is yours to claim. Both are concluded from
-evidence you do not own: git, the deterministic gate, and — where the risk
-level requires one — an independent reviewer.
+Your commitSha is checked against git: it must exist, descend from the head
+this attempt started at, be the workspace head the gate ran on, and change at
+least one file. Neither GATE_PASSED nor VERIFIED is yours to claim — both are
+concluded from evidence you do not own.
 `;
 }
 
 // The read-only reviewer brief. It deliberately carries no executor reasoning
 // transcript — only the spec, the fixed-point diff, the gate output, and the
 // invariants — per harness/config/verification-policy.json.
-export function buildReviewBrief({ issue, machine, commitSha, startingHead, diff, gateOutput, criteria, workspace }) {
+export function buildReviewBrief({ issue, task, commitSha, startingHead, diff, gateOutput, criteria, workspace }) {
   return `# Independent review — issue ${issue.number}
 
 You are a READ-ONLY reviewer. ${workspace} is a detached checkout of the commit
@@ -359,13 +327,13 @@ under review, not the workspace that produced it; you may not modify it, and
 you may not fix a finding you raise. You have not been given the executor's
 reasoning, its session, or its worktree.
 
-FINGERPRINT: ${machine.fingerprint}
+FINGERPRINT: ${task.fingerprint}
 BASE: ${startingHead}
 COMMIT UNDER REVIEW: ${commitSha} (existence and ancestry established by git)
 
 ## SPEC (the issue, verbatim)
 
-${issue.body}
+${task.spec}
 
 ## FIXED-POINT DIFF
 

@@ -8,16 +8,18 @@ import {
   classifyBehavioralRed,
   normalizeExecutorReport,
   parseMachineBlock,
-  slugFor,
   ContractError,
   concludeRun,
   RESULTS,
   CONCLUDED_ONLY,
   LABELS,
+  STATUS_FOR_DISPOSITION,
 } from "../github/issue-contract.mjs";
+import { AttemptError, assertReviewerIsolation, DISPOSITIONS, launchArgv, runAttempt } from "../run/attempt.mjs";
+import { slugFor } from "../run/workspace.mjs";
 import { createGh, GhError } from "../github/gh.mjs";
-import { parseWorktreeList, planIssueWorktree, WorktreeError } from "../github/worktree.mjs";
-import { assertReviewerIsolation, dispatchIssue, launchArgv, DispatchError, DispatchRecoveryError } from "../github/dispatch.mjs";
+import { parseWorktreeList, planWorkspace, WorkspaceError } from "../run/workspace.mjs";
+import { dispatchIssue, DispatchRecoveryError } from "../github/dispatch.mjs";
 
 // GitHub is the durable bug ledger; the harness router is still the routing
 // authority. These tests prove the seam between them without touching the
@@ -257,9 +259,8 @@ const worktrees = (entries) =>
 
 test("17. a branch or path collision fails closed", () => {
   const plan = (over = {}) =>
-    planIssueWorktree({
-      number: 147,
-      title: "Overlay geometry stalls",
+    planWorkspace({
+      identity: { kind: "issue", id: 147, slug: slugFor("Overlay geometry stalls") },
       baseSha: BASE,
       mainWorktree: MAIN,
       worktrees: parseWorktreeList(worktrees([{ path: MAIN, branch: "main" }])),
@@ -270,9 +271,9 @@ test("17. a branch or path collision fails closed", () => {
 
   // The branch already exists but no worktree holds it: adopting it silently
   // would move someone else's branch.
-  assert.throws(() => plan({ branchExists: (b) => b === "issue/147-overlay-geometry-stalls" }), WorktreeError);
+  assert.throws(() => plan({ branchExists: (b) => b === "issue/147-overlay-geometry-stalls" }), WorkspaceError);
   // The path exists but git does not know it as a worktree.
-  assert.throws(() => plan({ pathExists: () => true }), WorktreeError);
+  assert.throws(() => plan({ pathExists: () => true }), WorkspaceError);
   // The path is a worktree, but it belongs to a different issue.
   assert.throws(
     () =>
@@ -285,15 +286,14 @@ test("17. a branch or path collision fails closed", () => {
           ]),
         ),
       }),
-    WorktreeError,
+    WorkspaceError,
   );
 });
 
 test("18. a matching issue worktree resumes and is never reset", () => {
   const path = `${WT_ROOT}/147-overlay-geometry-stalls`;
-  const plan = planIssueWorktree({
-    number: 147,
-    title: "Overlay geometry stalls",
+  const plan = planWorkspace({
+    identity: { kind: "issue", id: 147, slug: slugFor("Overlay geometry stalls") },
     baseSha: BASE,
     mainWorktree: MAIN,
     worktrees: parseWorktreeList(
@@ -313,9 +313,8 @@ test("18. a matching issue worktree resumes and is never reset", () => {
 
 test("18c. an issue rename resumes its existing dirty worktree", () => {
   const oldPath = `${WT_ROOT}/147-overlay-geometry-stalls`;
-  const plan = planIssueWorktree({
-    number: 147,
-    title: "Overlay geometry no longer stalls",
+  const plan = planWorkspace({
+    identity: { kind: "issue", id: 147, slug: slugFor("Overlay geometry no longer stalls") },
     baseSha: BASE,
     mainWorktree: MAIN,
     worktrees: parseWorktreeList(
@@ -338,8 +337,7 @@ test("18c. an issue rename resumes its existing dirty worktree", () => {
 test("19. a dirty matching worktree is resumed, never discarded", () => {
   const path = `${WT_ROOT}/147-overlay-geometry-stalls`;
   const base = {
-    number: 147,
-    title: "Overlay geometry stalls",
+    identity: { kind: "issue", id: 147, slug: slugFor("Overlay geometry stalls") },
     baseSha: BASE,
     mainWorktree: MAIN,
     worktrees: parseWorktreeList(
@@ -351,14 +349,14 @@ test("19. a dirty matching worktree is resumed, never discarded", () => {
     branchExists: () => true,
     pathExists: () => true,
   };
-  const plan = planIssueWorktree({ ...base, dirty: true });
+  const plan = planWorkspace({ ...base, dirty: true });
   assert.equal(plan.action, "resume");
   assert.equal(plan.dirty, true);
   const emitted = JSON.stringify(plan.git ?? []);
   for (const destructive of ["reset", "clean", "checkout", "restore", "stash", "worktree remove"]) {
     assert.ok(!emitted.includes(destructive), `resume plan emitted ${destructive}`);
   }
-  const text = source("github/worktree.mjs");
+  const text = source("run/workspace.mjs");
   assert.ok(!/--hard|\bclean\b|\bstash\b/.test(text), "worktree.mjs can discard work");
 });
 
@@ -367,9 +365,8 @@ test("18b. a worktree reported under a realised path still resumes", () => {
   // raw strings would miss it and then refuse to create it.
   const derived = `${WT_ROOT}/147-overlay-geometry-stalls`;
   const reported = `/private${derived}`;
-  const plan = planIssueWorktree({
-    number: 147,
-    title: "Overlay geometry stalls",
+  const plan = planWorkspace({
+    identity: { kind: "issue", id: 147, slug: slugFor("Overlay geometry stalls") },
     baseSha: BASE,
     mainWorktree: MAIN,
     worktrees: parseWorktreeList(
@@ -388,9 +385,8 @@ test("18b. a worktree reported under a realised path still resumes", () => {
 });
 
 test("19b. a fresh issue worktree is created from the resolved base sha", () => {
-  const plan = planIssueWorktree({
-    number: 147,
-    title: "Overlay geometry stalls",
+  const plan = planWorkspace({
+    identity: { kind: "issue", id: 147, slug: slugFor("Overlay geometry stalls") },
     baseSha: BASE,
     mainWorktree: MAIN,
     worktrees: parseWorktreeList(worktrees([{ path: MAIN, branch: "main" }])),
@@ -623,7 +619,7 @@ test("the result JSON is written before GitHub is told anything", async () => {
 
   for (const field of [
     "schema", "issue", "fingerprint", "runId", "baseRef", "resolvedBaseSha", "startingHead",
-    "worktree", "primaryAccount", "primaryExecution", "primaryRuntime", "reviewerAccount",
+    "workspace", "primaryAccount", "primaryExecution", "primaryRuntime", "reviewerAccount",
     "behavioralRed", "commitSha", "tests", "gateResult", "reviewVerdict", "result", "nextStatus",
   ]) {
     assert.ok(field in out.result, `result JSON is missing ${field}`);
@@ -727,7 +723,7 @@ test("23. a post-claim worktree failure recovers the issue instead of stranding 
   const io = makeIo({ git: gitFailingAt("add") });
   const out = await dispatchIssue(147, io);
   assertRecovered(io, out);
-  assert.equal(out.result.failureStage, "worktree");
+  assert.equal(out.result.failureStage, "workspace");
   // Nothing may read as a successful run.
   assert.notEqual(out.code, "ran");
   assert.equal(out.result.commitSha, null);
@@ -751,7 +747,7 @@ test("24. a post-claim launcher failure recovers too — not tied to one place",
   const out = await dispatchIssue(147, io);
   assertRecovered(io, out);
   assert.equal(out.result.failureStage, "executor-launch");
-  assert.ok(out.result.worktree, "the worktree reached before the failure was not recorded");
+  assert.ok(out.result.workspace, "the worktree reached before the failure was not recorded");
   assert.equal(spawn.spawned.filter((s) => s.role === "reviewer").length, 0, "a reviewer ran after the executor died");
 });
 
@@ -910,9 +906,9 @@ test("T1. the reviewer never runs inside the executor's mutable worktree", async
   const executor = io.spawned.find((s) => s.role === "executor");
   const reviewer = io.spawned.find((s) => s.role === "reviewer");
   assert.ok(reviewer, "no reviewer process was launched");
-  assert.equal(executor.cwd, out.result.worktree, "the executor did not run in its own worktree");
+  assert.equal(executor.cwd, out.result.workspace, "the executor did not run in its own worktree");
   assert.notEqual(reviewer.cwd, executor.cwd, "the reviewer ran inside the executor's mutable worktree");
-  assert.notEqual(reviewer.cwd, out.result.worktree);
+  assert.notEqual(reviewer.cwd, out.result.workspace);
   assert.ok(out.result.reviewWorkspace, "no review workspace was recorded");
   assert.equal(reviewer.cwd, out.result.reviewWorkspace);
 });
@@ -935,7 +931,7 @@ test("T3. the reviewer is handed no path into the executor's run state", async (
   const out = await dispatchIssue(147, io);
   const executor = io.spawned.find((s) => s.role === "executor");
   const reviewer = io.spawned.find((s) => s.role === "reviewer");
-  const executorState = [out.result.worktree, executor.runDir].filter(Boolean);
+  const executorState = [out.result.workspace, executor.runDir].filter(Boolean);
   const handed = [...reviewer.argv, reviewer.cwd, reviewer.runDir].filter(Boolean).map(String);
   for (const token of handed) {
     for (const leak of executorState) {
@@ -949,10 +945,10 @@ test("T3. the reviewer is handed no path into the executor's run state", async (
 });
 
 test("T4. reviewer isolation is enforced by the launcher, not by prompt wording", () => {
-  const executor = { worktree: "/repo/x-worktrees/issues/147-y", runDir: "/state/runs/issue-147-attempt-01" };
+  const executor = { workspace: "/repo/x-worktrees/issues/147-y", runDir: "/state/runs/issue-147-attempt-01" };
   assert.throws(
-    () => assertReviewerIsolation({ argv: ["claude", "--print", "brief"], cwd: executor.worktree, executor }),
-    DispatchError,
+    () => assertReviewerIsolation({ argv: ["claude", "--print", "brief"], cwd: executor.workspace, executor }),
+    AttemptError,
     "a reviewer launched in the executor's worktree was allowed",
   );
   assert.throws(
@@ -962,7 +958,7 @@ test("T4. reviewer isolation is enforced by the launcher, not by prompt wording"
         cwd: "/repo/x-worktrees/reviews/r1",
         executor,
       }),
-    DispatchError,
+    AttemptError,
     "a reviewer session adjacent to the executor's was allowed",
   );
   assert.doesNotThrow(() =>
@@ -1124,6 +1120,107 @@ test("V5. a gate pass records what the profile did not cover", async () => {
   assert.deepEqual(out.result.gateCoverage.suites, ["harness"]);
   assert.deepEqual(out.result.gateCoverage.notCovered, ["web", "overlay"]);
   assert.match(io.gh.comments.at(-1).body, /NOT_COVERED=web,overlay/);
+});
+
+// --- W. source neutrality -------------------------------------------------
+
+test("W1. a Task that is not a GitHub issue runs the whole attempt lifecycle", async () => {
+  // The io below has no `gh` key at all, and the task has no issue number. If
+  // the lifecycle still needed GitHub for anything, this could not run.
+  const repo = { head: BASE, dirty: false, commits: [BASE, COMMIT], descendants: [COMMIT], afterExecutor: COMMIT };
+  const spawned = [];
+  const task = {
+    id: "local-task-7",
+    attemptId: "local-task-7-attempt-01",
+    identity: { kind: "task", id: 7, slug: "async-transport" },
+    title: "Async transport stalls",
+    url: "file:///dev/null",
+    spec: "round counter reports 0 where the contract requires 4",
+    fingerprint: "local:async-transport",
+    taskClass: "T3",
+    baseRef: BASE,
+    resolvedBaseSha: BASE,
+    gateProfile: "harness",
+    contextPaths: ["AGENTS.md"],
+  };
+  const routed = route({ taskClass: "T3", available: ["CLAUDE_A", "GPT_A"], config });
+  const plan = {
+    effort: routed.effort,
+    primary: routed.primary,
+    reviewers: routed.reviewers,
+    verification: routed.verification,
+    mechanismOf: (a) => config.routing.executionMechanisms[a.execution],
+  };
+  const io = {
+    mainWorktree: MAIN,
+    runsDir: "/state/runs",
+    reviewsDir: "/state/reviews",
+    git: (argv) => defaultGit(argv, repo),
+    pathExists: () => false,
+    realPath: (p) => p,
+    spawn: (argv, opts) => {
+      spawned.push({ argv, ...opts });
+      if (opts.role === "executor" && repo.head === BASE) repo.head = repo.afterExecutor;
+      return gateAnswer(argv);
+    },
+    readReport: (_id, role) =>
+      role === "reviewer"
+        ? { verdict: "PASS", findings: [] }
+        : {
+            result: "FIX_PROPOSED",
+            behavioralRed: "round counter reports 0 where the contract requires 4 — observed at src/x.ts:88",
+            commitSha: COMMIT,
+            tests: ["src/__tests__/x.test.ts"],
+          },
+    normalizeReport: (raw) => normalizeExecutorReport(raw, { fingerprint: task.fingerprint, role: "executor" }),
+    buildPacket: ({ workspace, reportPath }) => `work in ${workspace}; report to ${reportPath}`,
+    buildReviewBrief: ({ workspace, diff }) => `review ${workspace}\n${diff}`,
+  };
+  assert.ok(!("gh" in io), "the lifecycle io was given a GitHub client");
+
+  const attempt = await runAttempt(task, plan, io);
+
+  assert.equal(attempt.taskId, "local-task-7");
+  assert.equal(attempt.workspace, "/repo/mayhem-oracle-worktrees/tasks/7-async-transport");
+  assert.equal(attempt.branch, "task/7-async-transport");
+  assert.equal(attempt.commitEvidence.ok, true);
+  assert.equal(attempt.gateResult, "PASS");
+  assert.equal(attempt.reviewVerdict, "PASS");
+  assert.equal(attempt.result, "VERIFIED");
+  assert.equal(attempt.disposition, "accepted");
+  assert.equal(attempt.completionLevel, "OFFLINE-PROVEN");
+  assert.ok(spawned.some((x) => x.role === "reviewer"), "no reviewer ran for a risk-3 task");
+  // The generic record carries no ledger state of any kind.
+  const serialized = JSON.stringify(attempt);
+  assert.ok(!serialized.includes("status:"), "a ledger label reached the generic attempt record");
+  assert.ok(!("nextStatus" in attempt), "the lifecycle decided a ledger status");
+  assert.ok(!("issue" in attempt), "the lifecycle recorded an issue number");
+});
+
+test("W2. nothing under harness/run/ depends on GitHub", () => {
+  // Comments may discuss the boundary; code may not cross it.
+  const codeOf = (text) => text.replace(/\/\*[\s\S]*?\*\//g, "").replace(/^\s*\/\/.*$/gm, "");
+  for (const file of ["run/attempt.mjs", "run/workspace.mjs", "run/evidence.mjs", "run/process.mjs"]) {
+    const code = codeOf(source(file));
+    for (const forbidden of [/\bgithub\b/i, /\bissue\b/i, /\bLABELS\b/, /status:[a-z-]+/, /\bgh\b/]) {
+      assert.ok(!forbidden.test(code), `${file} code names ${forbidden} — the lifecycle knows its caller`);
+    }
+    assert.ok(!/from\s+"\.\.\/github\//.test(code), `${file} imports from the GitHub adapter`);
+  }
+});
+
+test("W3. the GitHub adapter is the only place a disposition becomes a label", () => {
+  const adapter = source("github/issue-contract.mjs");
+  assert.match(adapter, /STATUS_FOR_DISPOSITION/, "no disposition mapping exists");
+  for (const disposition of DISPOSITIONS) {
+    assert.ok(STATUS_FOR_DISPOSITION[disposition], `disposition ${disposition} has no ledger status`);
+    assert.ok(Object.values(LABELS).includes(STATUS_FOR_DISPOSITION[disposition]));
+  }
+  // Every disposition the lifecycle can produce is one the ledger can express.
+  const lifecycle = source("run/attempt.mjs");
+  for (const quoted of [...lifecycle.matchAll(/at\("[A-Z_]+",\s*"([a-z-]+)"/g)].map((m) => m[1])) {
+    assert.ok(DISPOSITIONS.includes(quoted), `concludeAttempt can return unmapped disposition ${quoted}`);
+  }
 });
 
 // --- fake io -------------------------------------------------------------

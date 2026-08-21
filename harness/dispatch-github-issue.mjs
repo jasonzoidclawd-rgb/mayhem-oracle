@@ -15,7 +15,7 @@ import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { loadConfig, route } from "./route.mjs";
 import { createGh } from "./github/gh.mjs";
-import { runProcess } from "./github/process.mjs";
+import { runProcess } from "./run/process.mjs";
 import { dispatchIssue } from "./github/dispatch.mjs";
 
 const HERE = dirname(fileURLToPath(import.meta.url));
