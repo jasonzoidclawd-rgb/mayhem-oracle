@@ -334,17 +334,82 @@ test("a suite's declaration covers every check that suite runs", () => {
 
 const runtimeFor = (suite) => authorityRows([suite]).filter((r) => r.kind === "runtime").map((r) => r.path);
 
-test("the inventory declares runtime inputs as well as tracked ones", () => {
+test("the inventory declares runtime inputs and non-input roots as well as tracked ones", () => {
   const rows = authorityRows([]);
+  const KINDS = ["tracked", "runtime", "evidence"];
   for (const row of rows) {
-    assert.ok(
-      row.kind === "tracked" || row.kind === "runtime",
-      `authority row for ${row.suite} declares no kind: ${JSON.stringify(row)}`,
-    );
+    assert.ok(KINDS.includes(row.kind), `authority row for ${row.suite} declares no known kind: ${JSON.stringify(row)}`);
     assert.ok(row.path, `authority row for ${row.suite} declares no path`);
   }
   assert.ok(rows.some((r) => r.kind === "runtime"), "no suite admits to consuming any ignored runtime state");
   assert.ok(rows.some((r) => r.kind === "tracked"), "the tracked declarations were lost");
+  assert.ok(rows.some((r) => r.kind === "evidence"), "no suite declares any root it cannot reach");
+});
+
+test("a declared non-input root shares no lineage with anything the gate reads", () => {
+  // The exemption is a claim about reachability and it is checked here rather
+  // than trusted. A root holding something a suite reads would exempt the gate's
+  // own inputs from the cleanliness check; a root inside one is a subtree of
+  // something already being read. Either way it must not be honored, so either
+  // way the declaration must not contain it.
+  const rows = authorityRows([]);
+  const roots = [...new Set(rows.filter((r) => r.kind === "evidence").map((r) => r.path))];
+  const inputs = rows.filter((r) => r.kind !== "evidence");
+  for (const root of roots) {
+    assert.ok(root.endsWith("/"), `${root} is declared a non-input root but names no directory`);
+    for (const { suite, path } of inputs) {
+      assert.ok(!path.startsWith(root), `${suite} reads ${path}, which is inside the declared non-input root ${root}`);
+      const literal = path.slice(0, (path.includes("*") ? path.slice(0, path.indexOf("*")) : path).lastIndexOf("/") + 1);
+      assert.ok(
+        !literal || !root.startsWith(literal),
+        `the declared non-input root ${root} is inside ${suite}'s input ${path}`,
+      );
+    }
+  }
+});
+
+test("no tracked file reads anything out of a declared non-input root", () => {
+  // The other half of the proof, and the half that can rot silently. Path
+  // disjointness is structural and the tests above hold it; "nothing the gate
+  // runs actually opens one of these" is a property of the source, and a single
+  // readFileSync added to a test two years from now would quietly make the
+  // exemption false while every path check still passed.
+  //
+  // So the repository is asked. Prose may name a root — the overlay tests and
+  // one Rust test transcribe numbers copied out of a trace, and that is a
+  // citation, not a read — but a line that both names one and opens something is
+  // the thing this exemption cannot survive.
+  const roots = [...new Set(authorityRows([]).filter((r) => r.kind === "evidence").map((r) => r.path))];
+  const tracked = spawnSync("git", ["ls-files", "-z"], { cwd: repo, encoding: "utf8" });
+  assert.equal(tracked.status, 0, `git ls-files failed: ${tracked.stderr}`);
+  const READS = /include_str!|include_bytes!|readFileSync|readFile\(|open\(|File::open|fs::read|Path::new|require\(|import\s*\(/;
+
+  for (const file of tracked.stdout.split("\0").filter(Boolean)) {
+    if (file === "scripts/gate.sh" || file === "harness/test/gate.test.mjs") continue;
+    let text;
+    try {
+      text = source(file);
+    } catch {
+      continue; // a binary or unreadable blob reads nothing
+    }
+    if (!roots.some((root) => text.includes(root))) continue;
+    for (const [index, line] of text.split("\n").entries()) {
+      if (!roots.some((root) => line.includes(root))) continue;
+      assert.ok(
+        !READS.test(line),
+        `${file}:${index + 1} opens something inside a declared non-input root: ${line.trim()}`,
+      );
+    }
+  }
+});
+
+test("every suite declares every non-input root, so a new suite inherits no exemption", () => {
+  const rows = authorityRows([]);
+  const roots = [...new Set(rows.filter((r) => r.kind === "evidence").map((r) => r.path))].sort();
+  for (const suite of inventory()) {
+    const declared = [...new Set(rows.filter((r) => r.suite === suite && r.kind === "evidence").map((r) => r.path))].sort();
+    assert.deepEqual(declared, roots, `suite ${suite} does not declare the same non-input roots as the rest of the gate`);
+  }
 });
 
 test("a declared runtime path is one Git cannot show a change to", () => {

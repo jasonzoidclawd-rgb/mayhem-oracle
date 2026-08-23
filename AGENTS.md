@@ -67,6 +67,12 @@ any model whether something is correct.
   suite the gate does not yet run, add it to `scripts/gate.sh` — the one place
   a verification command is written down — and map it in
   `harness/verify-task.sh` before claiming the change is proven.
+- `scripts/gate.sh --authority` is where a suite says what it reads: `tracked`
+  paths that decide what its PASS means, `runtime` trees it executes out of, and
+  `evidence` roots it cannot reach at all. Adding a suite means declaring all
+  three. A new suite that can see `.codex/evidence/`, `.codex/gates/` or
+  `debug-evidence/` must narrow the root or move its output — never widen the
+  exemption, which the harness re-proves and refuses to honor on a collision.
 
 **"Passing" is three different claims. Never collapse them into "done":**
 
@@ -295,23 +301,134 @@ record; the harness only reads and labels it.
 An issue becomes dispatchable by carrying `status:ready-for-agent` and one
 `<!-- mayhem-agent -->` block naming its schema, fingerprint, task class, and
 base ref. The contract, the labels, and every refusal code are documented in
-`harness/README.md`. Three rules bind any agent working an issue, dispatched or
+`harness/README.md`. Five rules bind any agent working an issue, dispatched or
 not:
 
 - **A fix needs a behavioral RED.** Existing behavior must be shown violating
   the issue's acceptance contract first. A missing module, an unwritten file, a
-  scaffolding syntax error, or a missing fixture is not a reproduction. If you
-  cannot reproduce it, the answer is NEEDS_EVIDENCE — "could not reproduce"
-  never becomes a fix.
+  scaffolding syntax error, or a missing fixture is not a reproduction, and
+  "could not reproduce" never becomes a fix.
+- **NEEDS_EVIDENCE is a boundary, not a mood.** That result labels the issue as
+  owing a fact from a *human*, so it is available only when you can name the
+  specific missing fact, say why repository inspection, source and history, an
+  offline test, deterministic experimentation and static or runtime analysis
+  each fail to reach it, describe the concrete external condition that gates it
+  and which side holds it (`external-human`, `external-system`,
+  `external-hardware`), and supply the protocol for collecting it. The condition
+  itself is free-form — a real boundary is never refused for not being on a
+  list — while the source axis stays closed, because that is what makes the
+  claim checkable. "Root cause not identified", "more investigation required",
+  "cannot construct a RED yet" and "need to know which operation causes it" are
+  none of those things — they are **BLOCKED**. A NEEDS_EVIDENCE that cannot
+  show its clauses is refused, and the task is rerouted to another eligible
+  executor rather than handed to a person: unfinished agent work is not a debt
+  the operator owes. Only when no eligible executor remains does the run fail
+  closed as `INVALID_DISPOSITION` / `status:needs-human`, recording that
+  autonomous execution was exhausted and claiming no evidence requirement.
+- **BLOCKED is an obstacle, not a mood either.** It claims a requested action
+  became impossible, so it must name which engineering phase stopped
+  (`investigate`, `reproduce`, `implement`, `test`, `commit` — an obstacle does
+  not wait for the implement step to arrive), the concrete condition, who or
+  what owns it
+  (`dependency-unavailable`, `authorization-denied`, `platform-unavailable`,
+  `upstream-missing`, `infrastructure-failure`), why this worktree cannot get
+  past it, and what would clear it. An unidentified root cause, an unidentified
+  causal operation, an unbuilt RED, competing hypotheses, "more analysis is
+  needed", "the change would be speculative" and running out of ideas are none
+  of these: they describe a run that is unfinished, and they reroute to another
+  executor rather than ending the task.
+- **A broken checker caps a run; it does not end it.** Checking is not one of
+  the blockable phases, because a gate you cannot run does not stop you
+  investigating a defect, reproducing it, writing the repair, exercising it or
+  committing it. Report it as a `verificationBlocker` alongside whatever result
+  the work actually reached: it decides nothing about the disposition, and it
+  caps only what depends on the surface it names. An overlay checker nobody
+  could run withholds the unqualified `OFFLINE-PROVEN`, but it does not erase a
+  Rust suite the controller ran itself and watched pass — the suites that
+  survive are recorded as `provenSurfaces`, and only ever suites the controller
+  actually ran. What an executor writes in prose is never test evidence —
+  `tests` is declared, the gate is observed, and the ledger says which is which.
+- **The report file is the whole of what you said.** A lifecycle result is read
+  from the `report-executor.json` your packet names, and from nowhere else. That
+  path is a handoff directory the controller made for your try and proved
+  writable before you were launched; it is deliberately outside the
+  repository's `.git`, because a runtime whose policy makes `.git` sensitive
+  would do the work and then have nowhere to put the answer.
+  Captured stdout and stderr are diagnostic: they are echoed for the operator
+  and reach no lifecycle decision, so a perfectly-formed report printed to the
+  console is not a report. Writing the file is an act — the path is in your
+  packet — and an executor that exits cleanly without writing one has declined
+  the protocol, which is executor-incomplete work: `missing-required-report`,
+  rerouted to another executor, never recorded as an interruption.
+- **Being interrupted is not yours to declare.** Whether an execution was
+  interrupted is an observation about the runtime, so the controller makes it;
+  a report that parsed is an execution that reached the point of answering.
+  `INTERRUPTED` written into an executor report is refused and rerouted like any
+  other unshowable claim. Say what actually stopped instead. The controller
+  keeps its own record of how each try's process ended — exit status, signal,
+  whether it was a launch failure or a deadline, and both streams — beside that
+  try's report, so an interruption it synthesizes names a file rather than only
+  a sentence. That record holds no environment values and no credentials, and it
+  decides nothing: output is still evidence about the process, never about the
+  work.
 - **A second defect is a second issue.** An independent failure mechanism found
   mid-slice gets its own issue and its own fingerprint. Widening the current
   one to absorb it is scope expansion, and is rejected.
+- **A commit sha is a claim until git answers.** FIX_PROPOSED asserts something
+  about the repository, and the repository is the controller's to read. Before
+  the disposition is accepted at all, git must establish that the sha names a
+  commit, that it is the canonical object id for it, that it is the head the
+  gate ran on, that it descends from the point it is a change to, and that it
+  changes a file. A claim that fails any of those is refused and rerouted like
+  any other unshowable claim — never recorded as a fix with a caveat beside it.
+- **On a resumed attempt, the candidate may be the one you inherited.** Your
+  packet says which workspace you were given: `WORKSPACE_ACTION` is `create` or
+  `resume`, and `STARTING_HEAD` is where it starts. A fresh workspace starts at
+  `RESOLVED_BASE_SHA` and a candidate is a commit you make after it. A resumed
+  workspace starts wherever the previous attempt left it — which may be ahead of
+  the pinned base, and may already be this issue's candidate. That is the
+  expected state of a resumed workspace, not an obstacle and not a base
+  mismatch: inspect it, do not stop for it, and never rebase or reset to make a
+  head and a base agree. If you were sent to validate that candidate, report it;
+  an empty amend made only to move the sha is a worse record of what happened,
+  not a better one. The controller proves inheritance rather than believing it —
+  the candidate must descend from the pinned base, differ from it, and change a
+  file against it — and records `candidateOrigin` so a later reader can tell an
+  attempt that produced its own commit from one that validated an inherited one.
+- **Copy a sha; never complete one.** Every canonical commit id comes from git
+  observation. `git rev-parse --short` prints seven characters, and no executor
+  may supply the other thirty-three: a sha finished from memory is well-formed,
+  shares the prefix a human recognises, and names nothing. The record keeps
+  `executorClaimedCommitSha` and `controllerObservedCommitSha` apart, and only
+  the observed one decides anything.
 - **You cannot verify yourself.** VERIFIED is concluded from the deterministic
   gate plus, where the risk level requires one, the independent reviewer the
   router assigned. Report IMPLEMENTED when that is what you reached.
 
 Issue identity is exact fingerprint equality. Two issues that look similar are
 two issues until a human merges them.
+
+### A clean workspace is one the gate could only have read the commit from
+
+Commit evidence asks whether the gate tested the candidate commit and nothing
+else. It does not ask whether `git status` is empty, and the two are not the
+same question: an attempt whose worktree held sixteen attempts' worth of pinned
+traces under `.codex/evidence/`, `.codex/gates/` and `debug-evidence/` was
+refused twice on two correct canonical commits, and the same emptiness test
+would have called a workspace clean whose contamination had been committed.
+
+- Tracked modifications and staged changes always refuse the candidate. The
+  gate reads the working tree, so they reached it.
+- An untracked file refuses the candidate unless it sits inside a root the gate
+  declares it cannot reach. Everything else blocks, including an untracked
+  source, config, lockfile or test file left behind by an earlier try.
+- Do not delete evidence to obtain a clean `git status`. Permitted artifacts are
+  recorded, not required to be absent, and removing them destroys the record a
+  later attempt reads.
+- The run's record answers both questions separately —
+  `commitEvidence.worktree.cleanForCandidate` and `.statusEmpty` — and names the
+  blocking paths by category. Never report a repository as clean because the
+  first one is true.
 
 ## Review Independence
 

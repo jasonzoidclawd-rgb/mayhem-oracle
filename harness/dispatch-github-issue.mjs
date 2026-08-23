@@ -10,13 +10,13 @@
 // It never pushes, merges, tags, or touches a remote beyond the gh reads and
 // the one issue comment plus label transition it is explicitly asked to make.
 
-import { existsSync, mkdirSync, readFileSync, readdirSync, realpathSync, rmSync, writeFileSync } from "node:fs";
+import { existsSync, mkdirSync, readdirSync, realpathSync, rmSync, writeFileSync } from "node:fs";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { loadConfig, route } from "./route.mjs";
 import { createGh } from "./github/gh.mjs";
 import { runProcess } from "./run/process.mjs";
-import { lastJsonObject } from "./run/attempt.mjs";
+import { archiveReport, createReportSink, executorReportExists, readExecutorReport, reportSinkRoot } from "./run/report.mjs";
 import { dispatchIssue } from "./github/dispatch.mjs";
 
 const HERE = dirname(fileURLToPath(import.meta.url));
@@ -89,11 +89,15 @@ function main(argv) {
   // rather than from any file under runs/.
   const reviewsDir = join(stateDir, "reviews");
   const lockDir = join(stateDir, "locks");
+  // Deliberately not under stateDir. Everything above is the controller's own
+  // record and belongs beside the repository it describes; the handoff is a
+  // path an executor has to be able to write, and `.git` is a path a runtime is
+  // entitled to refuse. The controller copies what lands here back into runs/.
+  const handoffRoot = reportSinkRoot();
   mkdirSync(runsDir, { recursive: true });
   mkdirSync(reviewsDir, { recursive: true });
   mkdirSync(lockDir, { recursive: true });
 
-  const captured = new Map();
   const io = {
     config,
     route: (args) => route({ ...args, config }),
@@ -131,32 +135,35 @@ function main(argv) {
       // Returned, never thrown: a launch that never happened is a fact about
       // the result, and only the caller knows what it means for what it asked.
       const answer = runProcess(args, { cwd, env });
+      // Echoed for the operator watching the run, and kept nowhere the
+      // lifecycle can reach. Output is diagnostic: it is what the runtime said
+      // while working, not what it decided, and nothing downstream may read a
+      // claim out of it.
       if (AGENT_ROLES.has(role)) {
-        captured.set(role, answer.stdout ?? "");
         if (answer.stdout) process.stdout.write(answer.stdout);
         if (answer.stderr) process.stderr.write(answer.stderr);
       }
       return answer;
     },
-    // An executor writes its report into its own run directory; the fallback
-    // covers one that did not. A reviewer is never read from disk: it runs
-    // read-only and writes nothing, so `runs/<id>/report-reviewer.json` could
-    // only ever be a file the executor placed there to grade itself. The
-    // lifecycle reads a reviewer's verdict from its own stdout, and this refuses
-    // the role outright so no future caller can reopen the hole.
-    readReport: (runId, role) => {
-      if (role === "reviewer") {
-        throw new Error("a reviewer's verdict is read from its own output, never from the executor's run directory");
-      }
-      const path = join(runsDir, runId, `report-${role}.json`);
-      if (existsSync(path)) {
-        try {
-          return JSON.parse(readFileSync(path, "utf8"));
-        } catch {
-          /* fall through to what the runtime printed */
-        }
-      }
-      return lastJsonObject(captured.get(role) ?? "");
+    // An executor writes its report into its own handoff directory, and that
+    // file is the whole of what it said. There is no fallback: see
+    // run/report.mjs for why a runtime's output may not stand in for one.
+    createReportSink: (runId, role) => createReportSink(handoffRoot, runId, role),
+    readReport: (runId, role) => readExecutorReport(handoffRoot, runId, role),
+    reportExists: (runId, role) => executorReportExists(handoffRoot, runId, role),
+    archiveReport: (runId, role) => archiveReport(handoffRoot, runId, role, runsDir),
+    // The controller's own account of a process it ran, beside that try's
+    // report and under that try's run id — so a rerouted executor never writes
+    // over its predecessor's. What is written is decided in run/diagnostics.mjs;
+    // this only puts the bytes somewhere durable and answers with an identifier
+    // relative to the runs directory, because an absolute path names a machine.
+    recordProcess: (runId, role, described) => {
+      const dir = join(runsDir, runId);
+      mkdirSync(dir, { recursive: true });
+      writeFileSync(join(dir, `process-${role}.json`), `${JSON.stringify(described.process, null, 2)}\n`);
+      writeFileSync(join(dir, `process-${role}.stdout.log`), described.stdout);
+      writeFileSync(join(dir, `process-${role}.stderr.log`), described.stderr);
+      return join(runId, `process-${role}.json`);
     },
     writeResult: (runId, result) => {
       const dir = join(runsDir, runId);

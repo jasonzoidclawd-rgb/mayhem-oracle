@@ -62,7 +62,7 @@
           "--permission-mode",
           "acceptEdits",
           "--add-dir",
-          "{runDir}",
+          "{reportDir}",
           "--model",
           "{model}",
           "{prompt}"
@@ -77,7 +77,7 @@
           "{model}",
           "{prompt}"
         ],
-        "basis": "claude --help (2.x): --print is the non-interactive path, --permission-mode acceptEdits lets an executor write inside its own worktree, --add-dir grants the run directory it writes its report into, and --permission-mode plan is the hard read-only mode a Verifier-Lite reviewer runs under. A reviewer writes nothing at all, so its verdict is read from stdout rather than from a file. --safe-mode is reviewer-only: a reviewer works in a detached checkout of the executor's own commit, so CLAUDE.md, project skills and .claude/settings.json hooks discovered from that directory are files the executor wrote, and auto-loading them lets a candidate configure the process judging it. Verified against CLI 2.1.238 in a scratch checkout: without it the candidate's CLAUDE.md and project skill were both in context and a SessionStart hook executed; with it none of the three did, while the explicit brief was still received. --bare disables the same discovery but forces ANTHROPIC_API_KEY or apiKeyHelper auth (observed: 'Not logged in' with the subscription credential present), which no mechanism here may use. An executor keeps its project instructions; only the reviewer refuses them."
+        "basis": "claude --help (2.x): --print is the non-interactive path, --permission-mode acceptEdits lets an executor write inside its own worktree, --add-dir grants the handoff directory it writes its report into (deliberately not under .git, which this runtime treats as sensitive regardless of the grant), and --permission-mode plan is the hard read-only mode a Verifier-Lite reviewer runs under. A reviewer writes nothing at all, so its verdict is read from stdout rather than from a file. --safe-mode is reviewer-only: a reviewer works in a detached checkout of the executor's own commit, so CLAUDE.md, project skills and .claude/settings.json hooks discovered from that directory are files the executor wrote, and auto-loading them lets a candidate configure the process judging it. Verified against CLI 2.1.238 in a scratch checkout: without it the candidate's CLAUDE.md and project skill were both in context and a SessionStart hook executed; with it none of the three did, while the explicit brief was still received. --bare disables the same discovery but forces ANTHROPIC_API_KEY or apiKeyHelper auth (observed: 'Not logged in' with the subscription credential present), which no mechanism here may use. An executor keeps its project instructions; only the reviewer refuses them."
       }
     },
     "pi-anthropic-oauth": {

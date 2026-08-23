@@ -157,11 +157,16 @@ async function runDispatch(number, io) {
   // Readiness is proved per routed slot, against that slot's own context. A
   // slot that is not ready blocks the run; the harness never substitutes a
   // mechanism whose execution is billed beyond the plan.
-  for (const assignment of crew) {
-    if (!assignment.runtimeAuth?.readinessCommand) continue;
-    const answer = checkAccountAuth(assignment, { exists: io.exists, probe: io.probe });
-    if (!answer.ready) return refuse("blocked", `${assignment.account} is not ready: ${answer.reason}`);
-  }
+  const crewNotReady = (slots) => {
+    for (const assignment of slots) {
+      if (!assignment.runtimeAuth?.readinessCommand) continue;
+      const answer = checkAccountAuth(assignment, { exists: io.exists, probe: io.probe });
+      if (!answer.ready) return `${assignment.account} is not ready: ${answer.reason}`;
+    }
+    return null;
+  };
+  const notReady = crewNotReady(crew);
+  if (notReady) return refuse("blocked", notReady);
 
   // Re-read immediately before claiming: everything above took time, and the
   // ledger may have moved under us. This snapshot is the Task from here on, so
@@ -236,6 +241,27 @@ async function runDispatch(number, io) {
     reviewers: routed.reviewers,
     verification: routed.verification,
     mechanismOf: (assignment) => config.routing.executionMechanisms[assignment.execution],
+    // Who else could execute this, given everyone already tried. The router is
+    // the routing authority here as everywhere else: this asks it again with
+    // the spent accounts excluded rather than picking one locally, so tier,
+    // provider preference, subscription rules and reviewer independence are all
+    // decided by the same code that decided them the first time.
+    //
+    // Reviewers come back with it because an alternate executor may be the
+    // account that was reviewing, and a reviewer that is also the executor is
+    // not an independent check.
+    reroute: (tried) => {
+      let again;
+      try {
+        again = io.route({ taskClass: machine.task_class, available: io.available ?? null, exhausted: tried });
+      } catch (err) {
+        return { ok: false, reason: err.message };
+      }
+      // A slot the harness cannot actually start is not an alternate.
+      const unready = crewNotReady([again.primary, ...again.reviewers]);
+      if (unready) return { ok: false, reason: unready };
+      return { ok: true, primary: again.primary, reviewers: again.reviewers };
+    },
   };
 
   // Wording is this adapter's business; the lifecycle only needs the shape.

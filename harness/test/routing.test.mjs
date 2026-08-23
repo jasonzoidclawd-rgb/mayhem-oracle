@@ -382,6 +382,7 @@ test("the reviewer isolation a mechanism declares survives rendering", () => {
         sessionDir: "/s",
         workspace: "/w",
         runDir: "/r",
+        reportDir: "/handoff",
       });
     const reviewer = render("reviewer", "BRIEF");
     for (const flag of PROJECT_CONFIG_ISOLATION[mechanism.launch.reviewer[0]]) {

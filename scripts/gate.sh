@@ -92,6 +92,45 @@ runtime_paths() {
   esac
 }
 
+# The roots the gate cannot reach at all: paths where a file may appear, and
+# disappear, without any suite below being able to import, compile, execute,
+# discover or read it. Declared here because "can the gate see this?" is a
+# property of the gate, and the controller must not have to guess it from a
+# filename. A root is honored only when every suite that runs declares it, so a
+# suite added later inherits no exemption nobody checked for it.
+#
+# The claim is checkable, and here is the check. Every suite's discovery is
+# rooted somewhere explicit, and none of those roots is an ancestor of these:
+#
+#   harness  node --test harness/test/*.test.mjs  — a literal directory glob,
+#            plus one literal packet path. Nothing else is read.
+#   web      vitest.config.ts pins include to src/**/*.test.ts and
+#            overlay/src/**/*.test.ts; eslint is given src and scripts.
+#   overlay  vitest runs with overlay/ as its root, and tsc --noEmit with
+#            overlay/tsconfig.json's include of ["src"]. Both are confined to
+#            overlay/, and these roots are not under it.
+#   skills   unittest discover -s .codex/skills/test-league-augment-overlay/scripts
+#            — a sibling of .codex/evidence/ and .codex/gates/, not a parent.
+#   rust     cargo test with overlay/src-tauri as its manifest directory.
+#
+# And no tracked file any of those reaches reads out of these roots: the only
+# references in the repository are prose comments in overlay tests and one Rust
+# test, transcribing numbers that were copied into the source. There is no
+# include_str!, include_bytes!, File::open, fs::read or readFileSync among them.
+#
+# If that stops being true, narrow the root or move the evidence — do not widen
+# the exemption. The harness re-proves the disjointness against this same
+# declaration, and refuses to honor a root that collides with anything above.
+NON_INPUT_ROOTS='.codex/evidence/
+.codex/gates/
+debug-evidence/
+'
+evidence_paths() {
+  case "$1" in
+    harness|web|overlay|skills|rust) printf '%s' "$NON_INPUT_ROOTS" ;;
+  esac
+}
+
 describe() {
   case "$1" in
     harness) printf 'harness policy tests + task packet template' ;;
@@ -149,12 +188,18 @@ if [ "$1" = "--authority" ]; then
     known=0
     for suite in "${SUITES[@]}"; do [ "$requested" = "$suite" ] && known=1; done
     if [ "$known" -eq 0 ]; then printf 'unknown suite: %s\n' "$requested" >&2; exit 2; fi
-    for kind in tracked runtime; do
+    for kind in tracked runtime evidence; do
+      rows=""
+      case "$kind" in
+        tracked)  rows="$(authority_paths "$requested")" ;;
+        runtime)  rows="$(runtime_paths "$requested")" ;;
+        evidence) rows="$(evidence_paths "$requested")" ;;
+      esac
       while IFS= read -r path; do
         [ -n "$path" ] || continue
         printf '%s\t%s\t%s\n' "$requested" "$kind" "$path"
       done <<EOF
-$([ "$kind" = tracked ] && authority_paths "$requested" || runtime_paths "$requested")
+$rows
 EOF
     done
   done

@@ -17,11 +17,42 @@
 // commit that has already been verified, never on the workspace that produced
 // it.
 
+import { describeExecution, detail } from "./diagnostics.mjs";
 import { parseGateCoverage, verifyCommitEvidence } from "./evidence.mjs";
+import { classifyWorktree, evidenceRoots, matchesAuthority, parseAuthority } from "./worktree.mjs";
 import { didRun } from "./process.mjs";
 import { applyWorkspacePlan, parseWorktreeList, planWorkspace, reviewPaths } from "./workspace.mjs";
 
 export class AttemptError extends Error {}
+
+// How a runtime stopped, in the terms the process contract already draws: a
+// launch that never happened, a kernel that killed it, and a program that ran
+// and exited nonzero are three different facts, and "exited ?" reports all
+// three as the third.
+const howItEnded = (launched) =>
+  launched?.error
+    ? `could not be launched (${launched.error.code ?? "unknown"})`
+    : launched?.signal
+      ? `was killed by ${launched.signal}`
+      : `exited ${launched?.status ?? "?"}`;
+
+// A result nobody reported. The controller reaches these from what it observed
+// of the execution itself, so they carry no claim of any kind: no RED, no
+// evidence request, no obstacle, no commit and nothing declared. Built here
+// rather than read out of a file, because a report is where an executor makes
+// claims and these are not the executor's to make.
+const controllerResult = (fingerprint, result, notes) => ({
+  result,
+  fingerprint,
+  behavioralRed: null,
+  evidenceRequest: null,
+  blocker: null,
+  verificationBlockers: [],
+  commitSha: null,
+  tests: [],
+  notes,
+  newBugs: [],
+});
 
 // 2: git evidence, gate coverage and completion level are recorded, and a gate
 // pass with no independent reviewer concludes GATE_PASSED rather than VERIFIED.
@@ -48,44 +79,11 @@ export function gateArgv({ harnessRoot, profile, worktree = null, plan = false, 
   return argv;
 }
 
-// Does this file fall under one of the declared authority paths? A trailing
-// slash is a directory prefix; `*` matches within one segment and `**` spans
-// them, so a suite whose tests sit beside its sources can still name just the
-// tests. Anything else is matched literally.
-const quote = (text) => text.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-
-export function matchesAuthority(file, paths) {
-  return (paths ?? []).some((path) => {
-    if (path.endsWith("/")) return file.startsWith(path);
-    if (!path.includes("*")) return file === path;
-    const pattern = quote(path)
-      // `/**/` spans zero or more directories, so src/**/*.test.* has to match
-      // src/x.test.ts as readily as src/lib/x.test.ts.
-      .replace(/\\\*\\\*\//g, "\u0000")
-      .replace(/\\\*\\\*/g, "\u0001")
-      .replace(/\\\*/g, "[^/]*")
-      .replace(/\u0000/g, "(?:.*/)?")
-      .replace(/\u0001/g, ".*");
-    return new RegExp(`^${pattern}$`).test(file);
-  });
-}
-
-// What a profile's PASS rests on, read off the trusted gate's own declaration.
-// It is asked because it is already the one place a suite is defined; parsing
-// it here keeps the answer from drifting into a second list.
-//
-//   tracked  files a commit diff can show a change to
-//   runtime  ignored state the suite's tooling executes out of regardless
-export function parseAuthority(declared) {
-  const kinds = { tracked: [], runtime: [] };
-  for (const line of String(declared ?? "").split("\n")) {
-    const [, kind, path] = line.split("\t");
-    const named = path?.trim();
-    if (!named || !kinds[kind?.trim()]) continue;
-    kinds[kind.trim()].push(named);
-  }
-  return kinds;
-}
+// The gate's declared path policy — which files decide what a PASS means, which
+// ignored trees execute it, and which roots it cannot reach at all. Defined in
+// run/worktree.mjs beside the classification that needs it most, and re-exported
+// here because this module's callers already ask for it.
+export { matchesAuthority, parseAuthority };
 
 // Which of the changed files decide what this profile's PASS means.
 export function authorityTouched(changedFiles, declared) {
@@ -103,14 +101,9 @@ export function runtimeInputs(declared, { workspace, pathExists }) {
   return parseAuthority(declared).runtime.filter((path) => pathExists(`${at}/${path.replace(/\/+$/, "")}`));
 }
 
-// Operator-facing text. A launch failure's message can carry the absolute path
-// it tried, which names the machine; one line, no paths, capped.
-export const detail = (text) =>
-  String(text ?? "")
-    .trim()
-    .split("\n")[0]
-    .replace(/(^|\s)\/\S+/g, "$1<path>")
-    .slice(0, 200);
+// Operator-facing text, defined beside the diagnostics that need it most and
+// re-exported here because this module's callers already ask for it.
+export { detail };
 
 // A subprocess that never launched has reported nothing, so its result may not
 // be read as one.
@@ -127,12 +120,12 @@ const CONTENT_TOKEN = new Set(CONTENT_PLACEHOLDERS.map((name) => `{${name}}`));
 const MENTIONS_CONTENT = new RegExp(`\\{(?:${CONTENT_PLACEHOLDERS.join("|")})\\}`);
 
 // The launch line is data the mechanism declares, not syntax invented here.
-export function launchArgv({ mechanism, role, model, effort, authProvider, prompt, sessionDir, workspace, runDir }) {
+export function launchArgv({ mechanism, role, model, effort, authProvider, prompt, sessionDir, workspace, runDir, reportDir }) {
   const template = mechanism?.launch?.[role];
   if (!Array.isArray(template) || template.length === 0) {
     throw new AttemptError(`execution mechanism declares no ${role} launch argv; it cannot be started by guesswork`);
   }
-  const values = { model, effort, authProvider, prompt, sessionDir, worktree: workspace, runDir };
+  const values = { model, effort, authProvider, prompt, sessionDir, worktree: workspace, runDir, reportDir };
   return template.map((token) =>
     token.replace(/\{(\w+)\}/g, (_, key) => {
       const value = values[key];
@@ -259,35 +252,87 @@ export function concludeAttempt({
   reviewersRequired = 0,
   commitVerified = false,
   gateComplete = false,
+  gateSuites = [],
   gateAuthoritative = true,
+  verificationBlockers = [],
 }) {
-  const at = (result, disposition, completionLevel = null) => ({ result, disposition, completionLevel });
+  const at = (result, disposition, completionLevel = null, provenSurfaces = []) => ({
+    result,
+    disposition,
+    completionLevel,
+    provenSurfaces,
+  });
 
   if (reported.result !== "FIX_PROPOSED") {
-    const disposition = { NEEDS_EVIDENCE: "needs-evidence", BLOCKED: "blocked", INTERRUPTED: "needs-human" }[reported.result];
-    // Only results an executor may actually report reach here; a concluded-only
-    // one arriving means the report contract was bypassed, and guessing a
-    // disposition for it would write an undefined state onto the caller's ledger.
+    // INVALID_DISPOSITION is concluded here, never reported: it is what is left
+    // when every eligible executor has been tried and none produced an answer
+    // the contract accepts. It lands needs-human because a person genuinely has
+    // to look — but as executor-incomplete work, which is a different sentence
+    // from "the operator owes a fact", and must never be spelled the same way.
+    const disposition = {
+      NEEDS_EVIDENCE: "needs-evidence",
+      BLOCKED: "blocked",
+      INTERRUPTED: "needs-human",
+      INVALID_DISPOSITION: "needs-human",
+    }[reported.result];
+    // Everything above is either reportable or concluded by this controller.
+    // Anything else arriving means the report contract was bypassed, and
+    // guessing a disposition for it would write an undefined state onto the
+    // caller's ledger.
     if (!disposition) throw new AttemptError(`${reported.result} is concluded, not reported; it has no reported-result disposition`);
     return at(reported.result, disposition);
   }
   // A commit git could not establish is not work anyone can accept, however
-  // green the gate looks: the gate did not necessarily run on it.
-  if (!commitVerified) return at("FIX_PROPOSED", "needs-human");
+  // green the gate looks: the gate did not necessarily run on it, and the claim
+  // itself is unsupported. Recording it as FIX_PROPOSED wrote a fix that does
+  // not exist into the ledger — the disposition is invalid, not merely capped.
+  // The lifecycle refuses this before it ever gets here; this is the same rule
+  // for a caller that concluded without going through it.
+  if (!commitVerified) return at("INVALID_DISPOSITION", "needs-human");
   if (gateResult !== "PASS") return at("FIX_PROPOSED", "needs-human", "IMPLEMENTED");
   // A profile that skipped suites did not prove the change offline, however
   // green the suites it did run came back. The default profile skips most of
   // them, so treating any PASS as OFFLINE-PROVEN overstates nearly every run.
-  const proven = gateComplete ? "OFFLINE-PROVEN" : "IMPLEMENTED";
+  // A surface the executor could not run is a hole in the proof even when every
+  // suite that did run came back green. It caps what may be claimed; it never
+  // decides the disposition, because not being able to check the work is not
+  // the same as not having done it.
+  //
+  // A verification blocker caps what depends on the surface it names, and
+  // nothing else. Treating any blocker as a cap on everything erased proof the
+  // controller had actually produced: an overlay checker nobody could run says
+  // nothing whatever about a Rust suite this controller ran itself and watched
+  // pass, and answering "unrunnable overlay" with "then nothing is proven" is
+  // false in the direction that discards evidence. So the scope is recorded
+  // explicitly — the suites the controller ran, less the ones a blocker names.
+  //
+  // The whole-run word stays strict: OFFLINE-PROVEN means every suite ran and
+  // nothing was left unchecked, so any blocker at all withholds it. What
+  // survives a blocker is the scoped proof, never the unqualified claim. And
+  // provenSurfaces can only ever contain suites the gate actually ran, so
+  // coverage the controller did not produce still cannot be claimed — by an
+  // executor's declared tests least of all.
+  const named = new Set(
+    verificationBlockers
+      .flatMap((v) => String(v?.surface ?? v ?? "").toLowerCase().split(/[^a-z0-9]+/))
+      .filter(Boolean),
+  );
+  // And nothing is proven by an examiner the candidate could have edited. A
+  // scope is still a claim about what was established, so it inherits the gate's
+  // authority rather than merely its output.
+  const provenSurfaces = gateAuthoritative
+    ? gateSuites.filter((suite) => !named.has(String(suite).toLowerCase()))
+    : [];
+  const proven = gateComplete && verificationBlockers.length === 0 ? "OFFLINE-PROVEN" : "IMPLEMENTED";
   const verdicts = reviewVerdicts ?? [];
   if (reviewersRequired > 0) {
     // One dissent is enough; agreement has to be unanimous and complete. Risk 4
     // asks for two independent reviewers, and one PASS is half an answer — it
     // must not be recorded in the same word as the whole one.
-    if (verdicts.includes("FAIL")) return at("FIX_PROPOSED", "needs-human", "IMPLEMENTED");
+    if (verdicts.includes("FAIL")) return at("FIX_PROPOSED", "needs-human", "IMPLEMENTED", provenSurfaces);
     const passed = verdicts.filter((v) => v === "PASS").length;
-    if (passed >= reviewersRequired) return at("VERIFIED", "accepted", proven);
-    return at("FIX_PROPOSED", "needs-review", "IMPLEMENTED");
+    if (passed >= reviewersRequired) return at("VERIFIED", "accepted", proven, provenSurfaces);
+    return at("FIX_PROPOSED", "needs-review", "IMPLEMENTED", provenSurfaces);
   }
   // The gate passed on a verified commit and this risk level requires no
   // reviewer. That is precisely what was proven, and it is not verification.
@@ -295,8 +340,8 @@ export function concludeAttempt({
   // Unless the candidate edited the checks that produced the pass. Then nobody
   // independent has said anything about this change at all, and the one thing
   // standing behind it was written by the thing it is standing behind.
-  if (!gateAuthoritative) return at("FIX_PROPOSED", "needs-review", "IMPLEMENTED");
-  return at("GATE_PASSED", "accepted", proven);
+  if (!gateAuthoritative) return at("FIX_PROPOSED", "needs-review", "IMPLEMENTED", provenSurfaces);
+  return at("GATE_PASSED", "accepted", proven, provenSurfaces);
 }
 
 // Run one attempt at one task.
@@ -304,8 +349,9 @@ export function concludeAttempt({
 //   task  { id, identity: {kind, id, slug}, title, spec, taskClass,
 //           resolvedBaseSha, gateProfile, contextPaths, fingerprint }
 //   plan  { effort, primary, reviewers, verification, mechanismOf }
-//   io    { git, spawn, readReport, mainWorktree, harnessRoot, runsDir,
-//           reviewsDir, pathExists, realPath, buildPacket, buildReviewBrief }
+//   io    { git, spawn, createReportSink, readReport, archiveReport,
+//           mainWorktree, harnessRoot, runsDir, reviewsDir, pathExists,
+//           realPath, buildPacket, buildReviewBrief }
 //
 // harnessRoot is the trusted checkout the gate is loaded from, and it is not
 // interchangeable with mainWorktree: mainWorktree is where candidate worktrees
@@ -317,7 +363,7 @@ export function concludeAttempt({
 // far the attempt got before handing that claim back.
 export async function runAttempt(task, plan, io) {
   // Every reviewer the policy asked for, not the first of them.
-  const reviewers = plan.reviewers ?? [];
+  let reviewers = plan.reviewers ?? [];
   const attemptId = task.attemptId;
   const attempt = {
     schema: ATTEMPT_SCHEMA,
@@ -339,10 +385,22 @@ export async function runAttempt(task, plan, io) {
     reviewerAccount: reviewers.map((r) => r.account).join(",") || null,
     reviewerExecution: reviewers.map((r) => r.execution).join(",") || null,
     reviewersRequired: plan.verification.reviewers,
+    executorAttempts: [],
+    autonomousExecution: null,
     reviewVerdicts: [],
     reviewNote: null,
     behavioralRed: null,
+    evidenceRequest: null,
+    blocker: null,
+    verificationBlockers: [],
+    provenSurfaces: [],
     commitSha: null,
+    candidateOrigin: null,
+    candidateSha: null,
+    attemptProducedCommitSha: null,
+    inheritedCandidateSha: null,
+    executorClaimedCommitSha: null,
+    controllerObservedCommitSha: null,
     commitEvidence: null,
     changedFiles: [],
     tests: [],
@@ -386,12 +444,51 @@ export async function runAttempt(task, plan, io) {
     attempt.startingHead =
       (io.git(["-C", workspacePlan.path, "rev-parse", "HEAD"]).stdout ?? "").trim() || task.resolvedBaseSha;
 
+    // What the gate says it reads, and what it says it cannot reach. Asked once,
+    // here, because it is a property of the trusted checkout and the profile —
+    // neither of which changes across a reroute — and because the answer is
+    // needed before the first executor runs, not only after the gate has. A
+    // declaration that did not arrive establishes nothing: it leaves every
+    // untracked path blocking, which is the strict reading, and leaves the
+    // gate's own authority "unknown" below exactly as it did before.
+    stage = "gate-authority";
+    const declaredGate = io.spawn(
+      gateArgv({ harnessRoot: io.harnessRoot, profile: task.gateProfile, authority: true }),
+      { cwd: io.harnessRoot, role: "gate-authority" },
+    );
+    const declared =
+      declaredGate?.status === 0 && (declaredGate.stdout ?? "").trim() ? declaredGate.stdout : null;
+    attempt.gateEvidenceRoots = evidenceRoots(declared);
+
+    // What the workspace was already carrying before any executor of this
+    // attempt touched it. A resumed worktree arrives holding sixteen attempts'
+    // worth of artifacts, and "this executor left an untracked source file" is a
+    // different fact from "one did, nine attempts ago". The rule does not change
+    // with the answer — see run/worktree.mjs — but the record has to be able to
+    // tell them apart, so the baseline is taken before it can be disturbed.
+    stage = "worktree-baseline";
+    const baselineStatus = io.git(["-C", workspacePlan.path, "status", "--porcelain"]);
+    const gatePaths = parseAuthority(declared);
+    attempt.worktreeBaseline =
+      baselineStatus?.status === 0
+        ? classifyWorktree(baselineStatus.stdout, {
+            evidenceRoots: attempt.gateEvidenceRoots.honored,
+            gateInputs: [...gatePaths.tracked, ...gatePaths.runtime],
+          })
+        : null;
+
     // Two run directories, so nothing handed to the reviewer names the
     // executor's. Whether they are siblings on disk is the caller's choice and
-    // is not what makes this safe: assertReviewerIsolation below is.
+    // is not what makes this safe: assertReviewerIsolation below is. The first
+    // is the isolation root for every executor try, which all write inside it,
+    // so a reviewer kept out of it is kept out of all of them.
     const executorRunDir = `${io.runsDir}/${attemptId}`;
     const reviewRunDir = `${io.reviewsDir ?? `${io.runsDir}-reviews`}/${attemptId}`;
-    const start = (assignment, role, prompt, { cwd, runDir }) => {
+    const now = io.now ?? (() => Date.now());
+    // Started, and described. The controller is the only thing that can say how
+    // a runtime ended, so it keeps the launch line, the streams and the clock
+    // in one place rather than reading them back out of a verdict.
+    const launch = (assignment, role, prompt, { cwd, runDir, reportDir = null }) => {
       const mechanism = plan.mechanismOf(assignment);
       const argv = launchArgv({
         mechanism,
@@ -403,6 +500,10 @@ export async function runAttempt(task, plan, io) {
         sessionDir: `${runDir}/session-${role}`,
         workspace: cwd,
         runDir,
+        // Granted separately from runDir because it is somewhere else on
+        // purpose. A runtime told to write a file it was never given access to
+        // is a runtime that will exit clean having written nothing.
+        reportDir,
       });
       const env = assignment.runtimeAuth?.env ?? {};
       if (role === "reviewer") {
@@ -417,51 +518,301 @@ export async function runAttempt(task, plan, io) {
         });
       }
       const options = { cwd, env, role, account: assignment.account, runId: attemptId, runDir };
-      return mustHaveRun(io.spawn(argv, options), `the ${role} runtime`);
+      const startedAt = now();
+      const result = io.spawn(argv, options);
+      return {
+        result,
+        assignment,
+        role,
+        cwd,
+        argv,
+        env,
+        template: mechanism?.launch?.[role] ?? null,
+        startedAt,
+        endedAt: now(),
+      };
+    };
+    // A launch that never happened has reported nothing, so for every role but
+    // the executor it stops the attempt where it stands. The executor's own
+    // launch is described before that judgement is made — a launch failure is
+    // exactly the case the diagnostics exist for.
+    const start = (assignment, role, prompt, options) =>
+      mustHaveRun(launch(assignment, role, prompt, options).result, `the ${role} runtime`);
+
+    // What the controller saw of one executor try. It is written whatever
+    // happened, including a launch that never happened, and a failure to write
+    // it never costs the run: bookkeeping does not outrank work.
+    const describe = (started, { runId, reportPresentAtExit }) => {
+      const described = describeExecution({
+        role: started.role,
+        runId,
+        account: started.assignment.account,
+        execution: started.assignment.execution,
+        runtime: started.assignment.runtime,
+        model: started.assignment.model ?? null,
+        effort: plan.effort,
+        cwd: started.cwd,
+        argv: started.argv,
+        template: started.template,
+        env: started.env,
+        result: started.result,
+        startedAt: started.startedAt,
+        endedAt: started.endedAt,
+        reportPath: `${runId}/report-${started.role}.json`,
+        reportPresentAtExit,
+      });
+      try {
+        return { ...described, path: io.recordProcess?.(runId, started.role, described) ?? null, error: null };
+      } catch (err) {
+        return { ...described, path: null, error: detail(err.message) };
+      }
     };
 
-    stage = "executor-launch";
-    const launched = start(
-      plan.primary,
-      "executor",
-      io.buildPacket({
-        task,
-        attemptId,
-        workspace: workspacePlan.path,
-        reportPath: `${executorRunDir}/report-executor.json`,
-      }),
-      { cwd: workspacePlan.path, runDir: executorRunDir },
-    );
+    // A report the contract rejects means this executor did not deliver a usable
+    // answer. That is executor-incomplete work — not a fact anyone outside the
+    // run owes — so the next eligible executor gets the same workspace before a
+    // human is asked for anything.
+    //
+    // The loop replaces who is writing, never what has been written: the
+    // worktree, its branch, its starting head and everything already committed
+    // on it are established above and are not touched here. One executor holds
+    // it at a time, in sequence, so single-writer ownership is exactly what it
+    // was with one executor.
+    let executor = plan.primary;
+    const tried = [];
+    let reported = null;
+    let rejection = null;
 
-    // An unreadable or contract-violating report is an INTERRUPTED attempt,
-    // never a fix: the record says the attempt happened and why it did not count.
-    stage = "executor-report";
-    let reported;
-    try {
-      const raw = io.readReport(attemptId, "executor");
-      reported = io.normalizeReport(raw ?? { result: "INTERRUPTED", notes: `executor exited ${launched?.status ?? "?"} without a report` });
-    } catch (err) {
-      reported = io.normalizeReport({ result: "INTERRUPTED", notes: `report rejected: ${detail(err.message)}` });
+    for (;;) {
+      attempt.primaryAccount = executor.account;
+      attempt.primaryExecution = executor.execution;
+      attempt.primaryRuntime = executor.runtime;
+      attempt.reviewerAccount = reviewers.map((r) => r.account).join(",") || null;
+      attempt.reviewerExecution = reviewers.map((r) => r.execution).join(",") || null;
+
+      // Each try reports into its own directory. Sharing one would let a
+      // rerouted executor that wrote nothing be judged on the previous
+      // executor's file — the run would read the refusal twice and blame the
+      // wrong account. The first try keeps the original path.
+      const tryRunId = tried.length === 0 ? attemptId : `${attemptId}/executor-${tried.length + 1}`;
+      const tryRunDir = `${io.runsDir}/${tryRunId}`;
+
+      // Where this try's answer will be written, established before the turn
+      // is spent. The mandatory report used to be due inside the repository's
+      // own `.git`, and a runtime whose policy forbids writing there did the
+      // work, found nowhere to put it, and exited clean — which the lifecycle
+      // reads, correctly, as an executor that did not answer. The rule was
+      // right and the address was wrong. Creating the sink here also proves it
+      // writable now, when that costs a file operation rather than a turn.
+      stage = "report-sink";
+      const sink = io.createReportSink(tryRunId, "executor");
+
+      // What this try found the workspace holding, before it ran. The attempt
+      // baseline says what nobody in this attempt is answerable for; this says
+      // what nobody in this *try* is. On the first try they are the same
+      // snapshot taken twice, which costs one `git status` and keeps the record
+      // from having to explain a missing field.
+      stage = "worktree-try-baseline";
+      const tryStatus = io.git(["-C", workspacePlan.path, "status", "--porcelain"]);
+      const tryBaseline =
+        tryStatus?.status === 0
+          ? classifyWorktree(tryStatus.stdout, {
+              evidenceRoots: attempt.gateEvidenceRoots.honored,
+              gateInputs: [...gatePaths.tracked, ...gatePaths.runtime],
+            })
+          : null;
+
+      stage = "executor-launch";
+      const started = launch(
+        executor,
+        "executor",
+        io.buildPacket({
+          task,
+          attemptId,
+          workspace: workspacePlan.path,
+          reportPath: sink.path,
+          // What kind of workspace this is, and where it starts. A resumed
+          // workspace legitimately starts ahead of the pinned base — it may
+          // start *at* this issue's candidate — and an executor told only the
+          // base reads that as a mismatch it has to stop for.
+          workspaceAction: workspacePlan.action,
+          startingHead: attempt.startingHead,
+          // How many executors already worked this attempt here. A rerouted
+          // try inherits the workspace exactly as the refused one left it, so
+          // its head may be ahead of STARTING_HEAD for a reason that has
+          // nothing to do with resuming — and being told to stop for it would
+          // be the same defect one try later.
+          priorTries: tried.length,
+        }),
+        { cwd: workspacePlan.path, runDir: tryRunDir, reportDir: sink.dir },
+      );
+      const launched = started.result;
+
+      // Written before anything is concluded from how it ended, so a launch
+      // that never happened — which stops the attempt two lines below — is as
+      // diagnosable as a program that ran and exited 1.
+      stage = "executor-diagnostics";
+      const diagnosed = describe(started, {
+        runId: tryRunId,
+        reportPresentAtExit: io.reportExists ? io.reportExists(tryRunId, "executor") : null,
+      });
+      stage = "executor-launch";
+      mustHaveRun(launched, "the executor runtime");
+
+      // A report that parsed says the execution ran to the point of answering,
+      // so whatever it says, it was not interrupted; if the contract refuses
+      // it, that is the refusal this loop exists for.
+      //
+      // No report is two different facts, and they must not be spelled the same
+      // way. A runtime that never reached its own exit — killed, or dead on a
+      // nonzero abnormal termination — was interrupted, and that is the
+      // controller's observation to make. A runtime that ran to a clean exit
+      // and wrote nothing was not interrupted by anything: it was handed the
+      // report path in its packet and declined the protocol. That is
+      // executor-incomplete work, and it takes the road every other unshowable
+      // claim takes. Spelling it INTERRUPTED gave a protocol failure the one
+      // word that owes nobody an explanation, and stopped the run instead of
+      // rerouting it.
+      stage = "executor-report";
+      let candidate = null;
+      try {
+        const raw = io.readReport(tryRunId, "executor");
+        if (raw) {
+          candidate = io.normalizeReport(raw);
+        } else if (didRun(launched) && launched.status === 0) {
+          rejection = `missing-required-report: the executor exited 0 without writing report-executor.json`;
+        } else {
+          candidate = controllerResult(
+            task.fingerprint,
+            "INTERRUPTED",
+            `executor ${howItEnded(launched)} without a report` +
+              (diagnosed.path ? `; process diagnostics at ${diagnosed.path}` : ""),
+          );
+        }
+      } catch (err) {
+        rejection = detail(err.message);
+      }
+      // Run history belongs to the controller, so the controller is what writes
+      // it — and it keeps the raw bytes whether or not they parsed, because a
+      // file that is not a report is exactly the file a person debugging this
+      // needs to see.
+      stage = "report-archive";
+      io.archiveReport(tryRunId, "executor");
+
+      // FIX_PROPOSED is a claim about the repository, and the repository is the
+      // controller's to read. An executor cannot make a commit exist by naming
+      // it, so the claim is checked here — as part of whether the disposition
+      // is accepted at all, not afterwards as a cap on what it may conclude.
+      //
+      // Afterwards was the bug. The contract can check that a sha is
+      // well-formed; only git can check that it is real, and asking git after
+      // the answer had already been accepted meant a fix nobody committed
+      // reached the ledger as a proposed fix with the refusal filed beside it.
+      // A claim the repository refuses is not a weaker result: it is not a
+      // result, and it takes the road every other unshowable claim takes.
+      let evidence = null;
+      if (candidate?.result === "FIX_PROPOSED") {
+        stage = "commit-evidence";
+        evidence = verifyCommitEvidence({
+          reportedSha: candidate.commitSha,
+          startingHead: attempt.startingHead,
+          // A resumed workspace starts at the previous attempt's candidate, so
+          // "this attempt committed nothing" and "there is no candidate" are
+          // different facts. The pinned base is what tells them apart.
+          resolvedBaseSha: task.resolvedBaseSha,
+          workspace: workspacePlan.path,
+          git: io.git,
+          // Which of what git reports could have reached the gate, and what was
+          // already here before this attempt started.
+          declared,
+          baseline: attempt.worktreeBaseline,
+          tryBaseline,
+        });
+        attempt.commitEvidence = evidence;
+        if (!evidence.ok) {
+          rejection = detail(`the reported commit could not be established: ${evidence.code} — ${evidence.reason}`);
+          candidate = null;
+        }
+        stage = "executor-report";
+      }
+
+      tried.push(executor.account);
+      attempt.executorAttempts.push({
+        account: executor.account,
+        execution: executor.execution,
+        accepted: candidate !== null,
+        reason: candidate ? null : rejection,
+        commitEvidence: evidence,
+        // How the runtime ended, and where the rest of it was kept. The summary
+        // rides on the record so a ledger line can be rendered without opening
+        // the file; the file is where the streams are.
+        process: {
+          didRun: diagnosed.process.didRun,
+          termination: diagnosed.process.termination,
+          exitStatus: diagnosed.process.exitStatus,
+          signal: diagnosed.process.signal,
+          durationMs: diagnosed.process.durationMs,
+          reportPresentAtExit: diagnosed.process.report.presentAtExit,
+        },
+        diagnostics: diagnosed.path,
+        diagnosticsError: diagnosed.error,
+      });
+      if (candidate) {
+        reported = candidate;
+        break;
+      }
+
+      const next = plan.reroute?.(tried) ?? null;
+      // Fail closed on anything that is not a fresh, eligible, ready crew: a
+      // reroute that cannot name one is exhaustion, and exhaustion is recorded
+      // as what it is rather than dressed up as a missing external fact.
+      if (!next?.ok || !next.primary || tried.includes(next.primary.account)) {
+        attempt.autonomousExecution = {
+          state: "exhausted",
+          tried: [...tried],
+          reason: next?.reason ? `${rejection}; ${next.reason}` : rejection,
+        };
+        break;
+      }
+      executor = next.primary;
+      // Re-planned together, because an alternate executor drawn from the pool
+      // may be the account that was reviewing. A reviewer that is also the
+      // executor is not an independent check, and no reroute may create one.
+      reviewers = next.reviewers ?? [];
+    }
+
+    if (!reported) {
+      // Concluded by the controller, never reported: no executor said this.
+      reported = controllerResult(
+        task.fingerprint,
+        "INVALID_DISPOSITION",
+        `no eligible executor produced a valid disposition after ${tried.length}: ${attempt.autonomousExecution?.reason ?? rejection}`,
+      );
     }
     attempt.behavioralRed = reported.behavioralRed;
-    attempt.commitSha = reported.commitSha;
+    attempt.evidenceRequest = reported.evidenceRequest;
+    attempt.blocker = reported.blocker;
+    attempt.verificationBlockers = reported.verificationBlockers ?? [];
     attempt.tests = reported.tests;
     attempt.notes = reported.notes;
     attempt.newBugs = reported.newBugs;
 
-    // Before the gate, because a workspace that is dirty or not at the reported
-    // commit makes the gate's verdict a statement about something else.
-    stage = "commit-evidence";
-    const evidence =
-      reported.result === "FIX_PROPOSED"
-        ? verifyCommitEvidence({
-            reportedSha: reported.commitSha,
-            startingHead: attempt.startingHead,
-            workspace: workspacePlan.path,
-            git: io.git,
-          })
-        : null;
-    attempt.commitEvidence = evidence;
+    // Three separate facts, kept separate. What the executor said, what git
+    // said about it, and which of the two the rest of the lifecycle is allowed
+    // to use. Collapsing them is how a string a model wrote came to be filed as
+    // the commit a run produced; only the last of them is authoritative, and it
+    // is null until git has established it.
+    const evidence = attempt.commitEvidence;
+    attempt.executorClaimedCommitSha = evidence?.claimedSha ?? null;
+    attempt.controllerObservedCommitSha = evidence?.observedSha ?? null;
+    attempt.commitSha = evidence?.ok ? evidence.commitSha : null;
+    // And where the candidate came from, which a later reader cannot recover
+    // from the sha alone: an attempt that validated an inherited candidate and
+    // one that produced its own leave the same commit id behind.
+    attempt.candidateOrigin = evidence?.ok ? evidence.candidateOrigin : null;
+    attempt.candidateSha = evidence?.ok ? evidence.candidateSha : null;
+    attempt.attemptProducedCommitSha = evidence?.ok ? evidence.attemptProducedCommitSha : null;
+    attempt.inheritedCandidateSha = evidence?.ok ? evidence.inheritedCandidateSha : null;
     attempt.changedFiles = evidence?.changedFiles ?? [];
 
     stage = "gate";
@@ -485,19 +836,15 @@ export async function runAttempt(task, plan, io) {
     // checks decides what its own PASS means. The run is kept either way — the
     // candidate's tests are evidence — but evidence is not authority, and a
     // pass produced this way may not advance the ledger on its own.
-    const declared = io.spawn(
-      gateArgv({ harnessRoot: io.harnessRoot, profile: task.gateProfile, authority: true }),
-      { cwd: io.harnessRoot, role: "gate-authority" },
-    );
     // A declaration that did not arrive establishes nothing. Reading silence as
     // "the examiner was untouched" would make every failed lookup an upgrade,
     // so an unanswered question stays unanswered and does not advance alone.
-    if (declared?.status !== 0 || !(declared.stdout ?? "").trim()) {
+    if (declared === null) {
       attempt.gateAuthority = "unknown";
       attempt.gateAuthorityTouched = [];
       attempt.gateRuntimeInputs = [];
     } else {
-      attempt.gateAuthorityTouched = authorityTouched(attempt.changedFiles, declared.stdout);
+      attempt.gateAuthorityTouched = authorityTouched(attempt.changedFiles, declared);
       // A trusted runner reading trusted checks still executed them with
       // whatever the workspace was already holding. npm resolves its runner and
       // every library under test from a dependency tree, cargo re-runs a
@@ -507,7 +854,7 @@ export async function runAttempt(task, plan, io) {
       // this only asks whether they were there. A pass produced over one is an
       // observation rather than a finding: kept, recorded, and not permitted to
       // certify on its own.
-      attempt.gateRuntimeInputs = runtimeInputs(declared.stdout, {
+      attempt.gateRuntimeInputs = runtimeInputs(declared, {
         workspace: workspacePlan.path,
         pathExists: io.pathExists,
       });
@@ -535,7 +882,11 @@ export async function runAttempt(task, plan, io) {
       } else {
         attempt.reviewWorkspace = review.path;
         try {
-          const diff = (io.git(["-C", review.path, "diff", evidence.startingHead, evidence.commitSha]).stdout ?? "").slice(0, 60000);
+          // Measured from whatever the candidate is a change to. For an
+          // inherited candidate that is the pinned base; diffing it against the
+          // head this attempt started from is diffing it against itself, and
+          // would hand the reviewer nothing to review.
+          const diff = (io.git(["-C", review.path, "diff", evidence.diffBase, evidence.commitSha]).stdout ?? "").slice(0, 60000);
           for (const [index, reviewer] of reviewers.entries()) {
             const answer = start(
               reviewer,
@@ -543,7 +894,7 @@ export async function runAttempt(task, plan, io) {
               io.buildReviewBrief({
                 task,
                 commitSha: evidence.commitSha,
-                startingHead: evidence.startingHead,
+                startingHead: evidence.diffBase,
                 workspace: review.path,
                 diff,
                 gateOutput: `${gate?.stdout ?? ""}${gate?.stderr ?? ""}`.slice(-4000),
@@ -581,11 +932,14 @@ export async function runAttempt(task, plan, io) {
       reviewersRequired: plan.verification.reviewers,
       commitVerified: Boolean(evidence?.ok),
       gateComplete: (attempt.gateCoverage?.notCovered?.length ?? 0) === 0,
+      gateSuites: attempt.gateCoverage?.suites ?? [],
       gateAuthoritative: attempt.gateAuthority === "controller",
+      verificationBlockers: attempt.verificationBlockers,
     });
     attempt.result = concluded.result;
     attempt.disposition = concluded.disposition;
     attempt.completionLevel = concluded.completionLevel;
+    attempt.provenSurfaces = concluded.provenSurfaces;
     return attempt;
   } catch (err) {
     attempt.failureStage = stage;

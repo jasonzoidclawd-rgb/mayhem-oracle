@@ -280,7 +280,221 @@ The result vocabulary is closed: `FIX_PROPOSED`, `NEEDS_EVIDENCE`, `BLOCKED`,
 - `FIX_PROPOSED` requires a **behavioral RED**: existing behavior violating the
   issue's acceptance contract. A missing module, an unwritten file, a
   scaffolding syntax error, or a missing fixture is not one, and is rejected as
-  one. "Could not reproduce" is `NEEDS_EVIDENCE` and never becomes a fix.
+  one. "Could not reproduce" never becomes a fix.
+
+  It also requires **controller-observed commit evidence**, checked before the
+  disposition is accepted rather than after. git must establish that the sha
+  names a commit, that git's own canonical object id for it equals the claim,
+  that it is the head the gate ran on, that it descends from the point it is a
+  change to, that nothing the gate could reach is uncommitted, and that it
+  changes a file. Any refusal
+  makes the disposition invalid: the executor is added to the exhausted set, the
+  workspace and everything committed on it are preserved, and the task reroutes.
+  No reviewer is ever dispatched against a commit git could not establish.
+
+  **"Clean" is a question about the gate, not about `git status`.** The
+  invariant is that the gate tested the candidate commit plus the environment
+  inputs it declares, and nothing else — so what matters is whether a path could
+  reach the gate at all. Tracked modifications and staged changes could, always,
+  and refuse the candidate. An untracked file could only if some suite
+  discovers, imports, compiles or executes it, and that is a property of the
+  gate rather than of a filename: `scripts/gate.sh --authority` declares a third
+  kind, `evidence`, naming the roots no suite can reach, with the proof written
+  beside them. Everything untracked outside those roots blocks, so the default
+  stays fail-closed. The declaration is checked rather than trusted: a root that
+  contains anything the gate says it reads is not honored at all, a file
+  matching a declared gate input blocks wherever it sits, and a root every suite
+  has not declared stops being honored until somebody examines it for that
+  suite.
+
+  The record says both things separately, because they are two facts:
+  `worktree.cleanForCandidate` is whether the gate tested this commit, and
+  `worktree.statusEmpty` is whether `git status` was empty. A workspace carrying
+  sixteen attempts' worth of pinned traces is the first without being the
+  second, and a record that printed only the first would invite a reader to
+  believe the second. A refusal names the category and the paths —
+  `trackedModified`, `stagedModified`, `untrackedBlocking`, beside
+  `untrackedEvidence` — instead of the single word `dirty`, which named a
+  condition and identified nothing. `worktree.delta` and `worktree.deltaThisTry`
+  keep what the attempt found already here apart from what appeared since, per
+  try, so a rerouted executor refused for its predecessor's leftovers is
+  distinguishable from one refused for its own. The rule does not change with
+  that answer: permitted evidence blocks nobody, and an untracked source, config
+  or test file blocks whoever left it.
+
+  **A candidate need not be a commit this attempt made.** A resumed workspace
+  starts at the previous attempt's commit, and an executor sent to validate that
+  candidate is supposed to report it; reading "the head I started from" as
+  "nothing was committed" makes the only correct answer unreportable and pushes
+  a truthful executor toward an empty amend. So the evidence records
+  `candidateOrigin`: `produced-this-attempt` when the sha is ahead of the
+  starting head, `inherited` when it is the starting head. Inheritance is
+  proven, not asserted — against the pinned base, the one point in the history
+  the attempt did not choose. An inherited candidate must descend from
+  `resolvedBaseSha`, differ from it, and carry a non-empty diff against it, and
+  with no pinned base recorded it fails closed as `base-unknown`. The workspace
+  sitting on the untouched base is still `commit-is-starting-head`, which is the
+  case that rule was always about. `attemptProducedCommitSha` and
+  `inheritedCandidateSha` keep the two apart on the record, and the reviewer is
+  handed the diff from whichever base the candidate is a change to — diffing an
+  inherited candidate against the starting head would hand it nothing to review.
+
+  **And the executor is told this rule, not a second one.** The packet carries
+  `WORKSPACE_ACTION` and `STARTING_HEAD` beside `BASE_REF` and
+  `RESOLVED_BASE_SHA`, and states the candidate rule for the workspace the
+  controller actually planned: a fresh workspace's head is the pinned base and a
+  candidate is a commit made after it; a resumed workspace's head may be ahead of
+  that base, may already be this issue's candidate, and is to be inspected rather
+  than stopped for. `.agents/skills/mayhem-task/SKILL.md` reads the same two
+  fields. Attempt 16 is why: the controller had accepted inherited candidates
+  since a9662dd while the skill still said to confirm HEAD was `BASE_SHA` and
+  stop otherwise, so the executor did exactly what it was told and reported a
+  base mismatch as a blocker. Rerouting was correct and useless — the next
+  executor was handed the same brief. Neither document may state an
+  unconditional HEAD-equals-base rule again; a test refuses one.
+
+  Every canonical id comes from `git rev-parse`, never from the report. The
+  record keeps `executorClaimedCommitSha` and `controllerObservedCommitSha`
+  separate, `commitSha` holds only what git established (null otherwise), and a
+  refused claim is printed on the ledger as `COMMIT_CLAIM_REFUSED` with the
+  account that made it and the full sha it named.
+- `NEEDS_EVIDENCE` requires an **evidence request**, because it is the only
+  result that hands work back to a human: it moves the issue to
+  `status:needs-evidence`, which says a person owes a fact. The request names
+  the specific `missingFact`, says in `whyUnobtainable` (or
+  `whyExecutorCannotAcquire`) why repository inspection, source and history, an
+  offline test, deterministic experimentation and static or runtime analysis all
+  miss it, describes the concrete `externalCondition` gating it and the
+  `externalSource` holding it, and supplies a `protocol` (or
+  `collectionProtocol`) for collecting it.
+
+  The two axes are deliberately different kinds. `externalSource` is closed —
+  `external-human`, `external-system`, `external-hardware` — because it is what
+  makes "external" checkable rather than rhetorical. `externalCondition` is
+  open: any description concrete enough to act on is accepted, so a real
+  boundary is never refused merely because nobody anticipated its noun and no
+  harness source change is needed to express one. Recognized shorthands
+  (`live-game`, `user-only-reproduction`, `credentials`, `account-state`,
+  `production-system`, `physical-hardware`) are accepted as-is and imply their
+  own source.
+
+  An unfinished investigation is not an evidence request — "root cause not
+  identified", "more investigation required", "cannot construct a RED yet",
+  "need to know which operation causes it" and a bare failed reproduction are
+  all rejected, and the honest word for them is `BLOCKED`.
+- `BLOCKED` requires a **blocker**, for the same reason and by the same shape.
+  It claims a requested action became impossible, so it names the
+  `blockedAction` — the engineering phase that stopped, from `investigate`,
+  `reproduce`, `implement`, `test`, `commit` — the concrete
+  `condition`, the `blockerSource` from a closed axis
+  (`dependency-unavailable`, `authorization-denied`, `platform-unavailable`,
+  `upstream-missing`, `infrastructure-failure`), `whyExecutorCannotProceed`,
+  and the `recovery` that would clear it. An unidentified root cause or causal
+  operation, an unbuilt RED, competing hypotheses, "more analysis is needed",
+  "the change would be speculative" and running out of ideas are screened out:
+  each is true of an unfinished run and none is an obstacle.
+- **Verification blockers are not execution blockers.** Checking is deliberately
+  absent from `blockedAction`, at every phase: a gate that will not run does not
+  stop an executor investigating a defect, reproducing it, writing the repair,
+  exercising it or committing it. A blocker that names a checking authority —
+  gate, typecheck, lint, clippy, CI — in either its condition or its explanation
+  is refused with `verificationBlockers` named as the place for it. (The generic
+  word "test" is not screened, because `test` is a phase an obstacle can
+  genuinely land in: a toolchain a targeted regression needs and cannot get is a
+  missing dependency, not a red suite.)
+
+  Those ride along with any result and decide nothing about the disposition.
+  They cap **what depends on the surface they name**, and only that. The
+  unqualified `OFFLINE-PROVEN` means every suite ran and nothing was left
+  unchecked, so any blocker withholds it — but the scoped proof survives:
+  `provenSurfaces` records the suites the controller ran less the ones a blocker
+  names, so an unrunnable overlay checker does not erase a Rust suite this
+  controller ran and watched pass. Only suites the gate actually ran can appear
+  there, so coverage the controller did not produce still cannot be claimed.
+- **Being interrupted is an observation, not a report.** `INTERRUPTED` is
+  concluded by the controller, never reported: it is the only result that owes
+  nobody an explanation, so leaving it reportable left one unguarded way to
+  stop. A report that parsed is an execution that reached the point of
+  answering, so an executor-written `INTERRUPTED` is refused and rerouted like
+  any other unshowable claim.
+- **One authoritative report source, and output is not it.** An executor's
+  result is read from `report-executor.json` in that try's own handoff directory
+  (`run/report.mjs`). Captured stdout and stderr are diagnostic — echoed for the
+  operator, kept nowhere the lifecycle can reach — so no `result`,
+  `behavioralRed`, `evidenceRequest`, `blocker`, `verificationBlockers`,
+  `commitSha` or `tests` is ever derived from them. A JSON object printed to the
+  console that looks exactly like a valid report is not one. A report file that
+  will not parse is not one either, and falls through to nothing.
+- **A missing report is two different facts.** Which one it is comes from how
+  the runtime stopped, in the terms `run/process.mjs` already draws. A runtime
+  that never reached its own exit — a launch that failed, a process the kernel
+  killed, a nonzero abnormal termination — was interrupted, and the controller
+  synthesizes its own `INTERRUPTED`; the run lands `needs-human` and is not
+  rerouted, because nobody claimed anything. A runtime that ran to a clean exit
+  and wrote nothing was interrupted by nothing: it was handed the report path in
+  its packet and declined the protocol. That is `missing-required-report` — an
+  invalid disposition, `accepted: false`, the account added to the exhausted
+  set, the workspace and everything committed on it preserved, and the task
+  rerouted. With no alternate left it fails closed as `INVALID_DISPOSITION`,
+  fabricating neither `BLOCKED`, `NEEDS_EVIDENCE` nor `INTERRUPTED`.
+- **How a process ended is the controller's to record.** Every executor try —
+  every mechanism, Pi and Claude Code alike — leaves a controller-owned
+  diagnostic beside that try's report: `process-executor.json` with
+  `process-executor.stdout.log` and `process-executor.stderr.log`, under that
+  try's own run id, so a rerouted executor never writes over its predecessor's.
+  The record carries the account, the execution mechanism, the runtime, the
+  model and effort, the cwd, start and end timestamps and duration, `didRun`,
+  `exitStatus`, `signal`, a `termination` (`exit`, `signal`, `timeout`,
+  `launch-failed`, `unknown`) that keeps a controller deadline apart from an
+  ordinary kill and both apart from a program that never started, the report
+  path relative to the run, and whether that report existed when the process
+  stopped. It is written before anything is concluded from how the process
+  ended, so a launch that never happened is as diagnosable as an exit 1, and a
+  writer that fails never costs the run its work — the failure is recorded and
+  the attempt continues.
+
+  What may be written down is a real question, because a terminal is not a file.
+  Environment values never reach the record — only the key names — and the exact
+  values the controller injected are masked out of the captured streams along
+  with anything token-shaped. The launch line is recorded as the shape the
+  mechanism declared, so a rendered path or credential cannot arrive through a
+  substitution. Logs keep their tail under a cap and say how much was dropped.
+
+  None of it is authority. `INTERRUPTED` still comes from what the controller
+  observed of the runtime, the report file is still the only place a claim can be
+  made, and a perfectly-formed lifecycle result printed to stdout is now a string
+  in a log file exactly as it was a string on a terminal. What changes is that
+  "executor exited 1 without a report" names a file a person can open: the run
+  and the ledger both carry `EXECUTOR_PROCESS` and the diagnostic's path.
+- **The handoff is a path the executor may actually write.** The controller
+  creates a directory for each try before that try is launched, empties it, and
+  proves it writable then — when failing costs a file operation rather than a
+  spent turn. It is deliberately outside the repository's `.git`: a runtime
+  whose policy treats `.git` as sensitive will do the work, find nowhere to put
+  the answer, and exit clean, which the lifecycle reads — correctly — as an
+  executor that did not answer. The rule was right and the address was wrong.
+  The path is named in the packet and granted to the runtime, and the controller
+  copies the raw bytes back into `runs/` afterwards, parseable or not, because a
+  file that is not a report is exactly the file a person debugging needs.
+- **Declared is not observed.** `tests` is what the executor wrote down; the
+  gate is what the controller watched. The comment labels them
+  `TESTS(executor-declared)` and `GATE(controller-observed)`, adds
+  `UNVERIFIED_CLAIM` when declared tests fall in suites the profile left
+  uncovered, and never renders report prose at all — so a note claiming "117
+  tests passed" reaches no ledger line and elevates nothing.
+- A refused disposition is **rerouted, not billed to the operator**. An executor
+  whose report the contract rejects has produced executor-incomplete work, so
+  the router is asked for another eligible executor — excluding every account
+  already tried — and it inherits the same worktree, branch and starting head.
+  Executor and reviewers are re-planned together, because an alternate executor
+  may be the account that was reviewing and a reviewer that is also the executor
+  is not an independent check. Each try reports into its own handoff directory,
+  emptied as it is created, so a rerouted executor that writes nothing is never
+  judged on its predecessor's file. Only when no eligible, ready alternate remains does the run fail closed
+  as `INVALID_DISPOSITION` — a concluded-only result, disposition `needs-human`
+  — recording `autonomousExecution: exhausted` with the accounts tried, and
+  explicitly claiming no evidence requirement. `status:needs-evidence` is never
+  written without a valid external request behind it.
 - `GATE_PASSED` and `VERIFIED` are **concluded**, never reported. An executor
   claiming either is rejected. They are deliberately different claims:
   `GATE_PASSED` says the requested deterministic profile passed on a
