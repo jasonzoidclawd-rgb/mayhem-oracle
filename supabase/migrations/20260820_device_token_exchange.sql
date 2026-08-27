@@ -8,4 +8,5 @@
 -- (see exchangeDeviceCode in src/lib/api/telemetry-deps.ts), so the plaintext
 -- token never persists past a single poll cycle and is bounded by the code's
 -- existing short expiry even if no poll ever arrives.
-alter table public.device_codes add column pending_device_token text;
+alter table public.device_codes
+  add column if not exists pending_device_token text;
