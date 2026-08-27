@@ -15,13 +15,14 @@ export interface TrialLease {
 }
 
 export interface OverlayApiDeps {
-  requireEntitlement(): Promise<RequireEntitlementResult>;
+  /** A desktop request's `Authorization: Bearer <deviceToken>`, when present. */
+  requireEntitlement(bearerToken?: string | null): Promise<RequireEntitlementResult>;
   getActiveRelease(): Promise<ModelReleaseRow | null>;
   /** Active (unexpired) trial reservation for this user, if any. */
   findActiveLease(userId: string): Promise<TrialLease | null>;
   /** Reserve one trial credit; null when no credit is available. */
   reserveTrialCredit(userId: string, gameHash: string): Promise<TrialLease | null>;
-  getUserId(): Promise<string | null>;
+  getUserId(bearerToken?: string | null): Promise<string | null>;
   now?(): Date;
 }
 
@@ -31,22 +32,28 @@ export function leaseExpiry(now: Date): string {
   return new Date(now.getTime() + LEASE_MINUTES * 60_000).toISOString();
 }
 
+function bearerTokenFrom(request: Request): string | null {
+  const auth = request.headers.get("authorization") ?? "";
+  return auth.startsWith("Bearer ") ? auth.slice(7) : null;
+}
+
 /**
  * GET /api/overlay/bootstrap — members (or trial users holding an active
  * game lease) receive the active signed model manifest.
  */
 export async function handleOverlayBootstrap(
-  _request: Request,
+  request: Request,
   deps: OverlayApiDeps,
 ): Promise<Response> {
-  const gate = await deps.requireEntitlement();
+  const bearerToken = bearerTokenFrom(request);
+  const gate = await deps.requireEntitlement(bearerToken);
   let leased: TrialLease | null = null;
 
   if (!gate.ok) {
     if (gate.status === 401) {
       return Response.json({ error: gate.reason }, { status: 401 });
     }
-    const userId = await deps.getUserId();
+    const userId = await deps.getUserId(bearerToken);
     leased = userId ? await deps.findActiveLease(userId) : null;
     if (!leased) return Response.json({ error: gate.reason }, { status: 403 });
   }
@@ -75,8 +82,15 @@ export async function handleGameSession(
   request: Request,
   deps: OverlayApiDeps,
 ): Promise<Response> {
-  const userId = await deps.getUserId();
-  if (!userId) return Response.json({ error: "unauthenticated" }, { status: 401 });
+  const bearerToken = bearerTokenFrom(request);
+  // Checked first (not just gameHash/body parsing) so an invalid/revoked
+  // bearer token always surfaces its distinct 401 reason, the same way
+  // bootstrap does — the desktop side needs that distinction to know when to
+  // delete a bad credential vs. when it simply isn't a member.
+  const gate = await deps.requireEntitlement(bearerToken);
+  if (!gate.ok && gate.status === 401) {
+    return Response.json({ error: gate.reason }, { status: 401 });
+  }
 
   let body: unknown;
   try {
@@ -89,15 +103,15 @@ export async function handleGameSession(
     return Response.json({ error: "gameHash is required" }, { status: 400 });
   }
 
-  const gate = await deps.requireEntitlement();
-  const now = deps.now?.() ?? new Date();
-
   if (gate.ok) {
+    const now = deps.now?.() ?? new Date();
     return Response.json({
       lease: { kind: gate.entitlement.kind, gameHash, expiresAt: leaseExpiry(now) },
     });
   }
 
+  const userId = await deps.getUserId(bearerToken);
+  if (!userId) return Response.json({ error: "unauthenticated" }, { status: 401 });
   const lease = await deps.reserveTrialCredit(userId, gameHash);
   if (!lease) return Response.json({ error: "no-trial-credits" }, { status: 403 });
   return Response.json({ lease: { kind: "trial", ...lease } });

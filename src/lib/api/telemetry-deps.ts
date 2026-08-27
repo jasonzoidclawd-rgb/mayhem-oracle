@@ -2,6 +2,7 @@ import { randomBytes, createHash } from "node:crypto";
 import { createServiceClient } from "../entitlements/server";
 import { createClient } from "../supabase/server";
 import { createR2Storage } from "../telemetry/r2";
+import { resolveDeviceToken as resolveDevice } from "../devices/server";
 import type { TelemetryDeps } from "./telemetry";
 
 function sha256(value: string): string {
@@ -24,16 +25,7 @@ export function createTelemetryDeps(): TelemetryDeps {
   const r2 = createR2Storage();
 
   return {
-    resolveDeviceToken: async (token) => {
-      const service = createServiceClient();
-      const { data } = await service
-        .from("devices")
-        .select("id,user_id,revoked")
-        .eq("device_token_hash", sha256(token))
-        .maybeSingle();
-      if (!data || data.revoked) return null;
-      return { deviceId: data.id, userId: data.user_id };
-    },
+    resolveDeviceToken: resolveDevice,
 
     knownGameHashes: async (gameHashes) => {
       const service = createServiceClient();
@@ -109,11 +101,15 @@ export function createTelemetryDeps(): TelemetryDeps {
         .single();
       if (!device) return null;
 
+      // The expiry predicate is evaluated by Postgres at UPDATE time, not at
+      // the SELECT above -- a code that expires in the gap between the two
+      // can no longer be claimed, closing the read/mutate race.
       const { data: claimedCode } = await service
         .from("device_codes")
-        .update({ status: "claimed", claimed_by: userId, device_id: device.id })
+        .update({ status: "claimed", claimed_by: userId, device_id: device.id, pending_device_token: deviceToken })
         .eq("id", codeRow.id)
         .eq("status", "pending")
+        .gt("expires_at", new Date().toISOString())
         .select("id")
         .maybeSingle();
       if (!claimedCode) {
@@ -121,7 +117,41 @@ export function createTelemetryDeps(): TelemetryDeps {
         return null;
       }
 
-      return { deviceToken };
+      // The device token itself never leaves this function -- the browser
+      // caller only learns that approval succeeded. The desktop process
+      // retrieves the token via exchangeDeviceCode's own poll.
+      return { approved: true };
+    },
+
+    // The desktop process displayed the code and has no browser session, so
+    // it exchanges the code itself for the token linkDevice minted. The
+    // delete-and-return is an atomic single-retrieval claim: at most one
+    // concurrent poll gets the plaintext token back, and it never persists
+    // past that.
+    exchangeDeviceCode: async (code) => {
+      const service = createServiceClient();
+      const { data: codeRow } = await service
+        .from("device_codes")
+        .select("id,status,expires_at,pending_device_token")
+        .eq("code_hash", sha256(code))
+        .maybeSingle();
+      if (!codeRow || new Date(codeRow.expires_at) <= new Date()) return null;
+      if (codeRow.status === "pending") return { status: "pending" };
+      if (!codeRow.pending_device_token) return null;
+
+      // Same race as linkDevice's claim: re-check expiry inside the DELETE's
+      // own predicate so a code expiring in the gap since the SELECT above
+      // can no longer hand back its token.
+      const { data: claimed } = await service
+        .from("device_codes")
+        .delete()
+        .eq("id", codeRow.id)
+        .not("pending_device_token", "is", null)
+        .gt("expires_at", new Date().toISOString())
+        .select("pending_device_token")
+        .maybeSingle();
+      if (!claimed?.pending_device_token) return null;
+      return { status: "issued", deviceToken: claimed.pending_device_token as string };
     },
 
     getUserId: async () => {

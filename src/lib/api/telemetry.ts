@@ -15,8 +15,21 @@ export interface TelemetryDeps {
     gameHashes: string[];
   }): Promise<void>;
   createDeviceCode(platform: string): Promise<{ code: string; expiresInSeconds: number }>;
-  /** Approve a device code for the signed-in user; null if the code is unknown. */
-  linkDevice(code: string, userId: string, label: string | null): Promise<{ deviceToken: string } | null>;
+  /**
+   * Approve a device code for the signed-in user; null if the code is
+   * unknown. Never returns the minted device token — the browser must not
+   * hold a persistent device credential. The desktop process retrieves the
+   * token itself via exchangeDeviceCode.
+   */
+  linkDevice(code: string, userId: string, label: string | null): Promise<{ approved: true } | null>;
+  /**
+   * Desktop-side poll: exchange an approved code for the device token minted
+   * by linkDevice. Null when the code is unknown or expired; "pending" while
+   * still awaiting browser approval; "issued" delivers the token exactly once.
+   */
+  exchangeDeviceCode(
+    code: string,
+  ): Promise<{ status: "pending" } | { status: "issued"; deviceToken: string } | null>;
   getUserId(): Promise<string | null>;
 }
 
@@ -91,7 +104,24 @@ export async function handleDeviceLink(request: Request, deps: TelemetryDeps): P
   }
   const linked = await deps.linkDevice(code, userId, typeof label === "string" ? label : null);
   if (!linked) return json({ error: "invalid or expired code" }, 400);
-  return json({ deviceToken: linked.deviceToken }, 200);
+  return json({ approved: true }, 200);
+}
+
+export async function handleDeviceExchange(request: Request, deps: TelemetryDeps): Promise<Response> {
+  let body: unknown;
+  try {
+    body = await request.json();
+  } catch {
+    return json({ error: "invalid JSON body" }, 400);
+  }
+  const { code } = (body ?? {}) as Record<string, unknown>;
+  if (typeof code !== "string" || code.length < 4) {
+    return json({ error: "code is required" }, 400);
+  }
+  const result = await deps.exchangeDeviceCode(code);
+  if (!result) return json({ error: "invalid or expired code" }, 400);
+  if (result.status === "pending") return json({ status: "pending" }, 202);
+  return json({ deviceToken: result.deviceToken }, 200);
 }
 
 export async function handleTelemetryUpload(request: Request, deps: TelemetryDeps): Promise<Response> {
