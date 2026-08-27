@@ -12,7 +12,7 @@ Maintained by `scripts/update-state.sh` (post-commit hook via
 <!-- STATE:START -->
 - Patch: `26.13`
 - Augments: `268`
-- Tests passing: `1209`
+- Tests passing: `1234`
 - Cross-parity budget: `0` divergent champions
 - Last tag: `overlay-collapse-diagnostics-2026-08-05`
 <!-- STATE:END -->
