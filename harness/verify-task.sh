@@ -15,6 +15,7 @@
 #   overlay  harness + overlay
 #   skills   harness + skills
 #   rust     harness + rust
+#   pipeline harness + pipeline
 #   all      every suite the gate knows
 #
 # --plan prints the profile, its suites, whether the profile can be a deterministic
@@ -59,10 +60,11 @@ case "$PROFILE" in
   overlay) SUITES="harness overlay" ;;
   skills)  SUITES="harness skills" ;;
   rust)    SUITES="harness rust" ;;
-  all)     SUITES="harness web overlay skills rust" ;;
+  pipeline) SUITES="harness pipeline" ;;
+  all)     SUITES="harness web overlay skills rust pipeline" ;;
   *)
     printf 'unknown profile: %s\n' "$PROFILE" >&2
-    printf 'known profiles: harness web overlay skills rust all\n' >&2
+    printf 'known profiles: harness web overlay skills rust pipeline all\n' >&2
     exit 2
     ;;
 esac

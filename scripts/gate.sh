@@ -50,7 +50,7 @@ else
 fi
 cd "$TARGET" || exit 2
 
-SUITES=(harness web overlay skills rust)
+SUITES=(harness web overlay skills rust pipeline)
 
 # The paths that decide what a suite's PASS *means*, as opposed to the paths it
 # is judging. A suite reads its checks out of the workspace under test, so a
@@ -66,6 +66,9 @@ authority_paths() {
     web)     printf 'src/**/*.test.*\npackage.json\npackage-lock.json\n*.config.*\ntsconfig*.json\n.npmrc\n' ;;
     overlay) printf 'overlay/src/**/*.test.*\noverlay/package.json\noverlay/package-lock.json\noverlay/*.config.*\noverlay/tsconfig*.json\noverlay/.npmrc\n' ;;
     skills)  printf '.codex/skills/test-league-augment-overlay/scripts/test_*.py\n.codex/skills/test-league-augment-overlay/scripts/verify_workflow_cwd.sh\n' ;;
+    # Deliberately conservative: the manifest decides membership, while
+    # over-declaring examiner files is safe and under-declaring them is not.
+    pipeline) printf 'scripts/pipeline_suite.py\nscripts/test_*.py\n' ;;
     # cargo test runs #[cfg(test)] modules that live inside the sources, so for
     # this suite the sources are the tests. Nothing separates examiner from
     # subject here, and the declaration says so rather than pretending.
@@ -89,6 +92,7 @@ runtime_paths() {
     overlay) printf 'overlay/node_modules/\n' ;;
     skills)  printf '.codex/skills/test-league-augment-overlay/scripts/__pycache__/\n' ;;
     rust)    printf 'overlay/src-tauri/target/\n' ;;
+    pipeline) printf 'scripts/__pycache__/\n' ;;
   esac
 }
 
@@ -112,6 +116,7 @@ runtime_paths() {
 #   skills   unittest discover -s .codex/skills/test-league-augment-overlay/scripts
 #            — a sibling of .codex/evidence/ and .codex/gates/, not a parent.
 #   rust     cargo test with overlay/src-tauri as its manifest directory.
+#   pipeline python runs the explicit manifest in scripts/pipeline_suite.py.
 #
 # And no tracked file any of those reaches reads out of these roots: the only
 # references in the repository are prose comments in overlay tests and one Rust
@@ -127,17 +132,18 @@ debug-evidence/
 '
 evidence_paths() {
   case "$1" in
-    harness|web|overlay|skills|rust) printf '%s' "$NON_INPUT_ROOTS" ;;
+    harness|web|overlay|skills|rust|pipeline) printf '%s' "$NON_INPUT_ROOTS" ;;
   esac
 }
 
 describe() {
   case "$1" in
     harness) printf 'harness policy tests + task packet template' ;;
-    web)     printf 'web vitest + eslint' ;;
+    web)     printf 'web vitest + eslint + tsc' ;;
     overlay) printf 'overlay vitest + overlay tsc' ;;
     skills)  printf '.codex skill suite + workflow cwd check' ;;
     rust)    printf 'overlay/src-tauri cargo test' ;;
+    pipeline) printf 'data-pipeline and publication safety net' ;;
   esac
 }
 
@@ -160,6 +166,7 @@ suite_harness() {
 suite_web() {
   run "web unit" npm test
   run "eslint" npx eslint src scripts
+  run "web types" npx tsc --noEmit
 }
 suite_overlay() {
   run "overlay unit" bash -c 'cd overlay && npm run test'
@@ -173,6 +180,9 @@ suite_skills() {
 suite_rust() {
   # No pipe, no `|| true`: cargo's exit status is the suite's exit status.
   run "rust unit" bash -c 'cd overlay/src-tauri && cargo test'
+}
+suite_pipeline() {
+  run "pipeline suite" env PYTHONDONTWRITEBYTECODE=1 python3 scripts/pipeline_suite.py
 }
 
 if [ "$#" -eq 0 ]; then

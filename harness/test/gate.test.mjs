@@ -1,7 +1,7 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import { spawnSync } from "node:child_process";
-import { chmodSync, mkdtempSync, readFileSync, realpathSync, writeFileSync } from "node:fs";
+import { chmodSync, existsSync, mkdtempSync, readFileSync, realpathSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -48,7 +48,7 @@ const plan = (profile) => {
 // A. one command layer -----------------------------------------------------
 
 test("scripts/gate.sh owns the deterministic suite inventory", () => {
-  assert.deepEqual(inventory().sort(), ["harness", "overlay", "rust", "skills", "web"]);
+  assert.deepEqual(inventory().sort(), ["harness", "overlay", "pipeline", "rust", "skills", "web"]);
 });
 
 test("verify-task delegates execution instead of keeping a second command list", () => {
@@ -86,6 +86,70 @@ test("rust is a supported profile that runs cargo test in overlay/src-tauri", ()
   assert.ok(plan("rust").suites.includes("rust"), "the rust profile does not plan the rust suite");
 });
 
+test("pipeline is a supported profile that plans the pipeline suite", () => {
+  assert.ok(inventory().includes("pipeline"), "pipeline is not a suite the gate knows");
+  assert.ok(plan("pipeline").suites.includes("pipeline"), "the pipeline profile does not plan the pipeline suite");
+});
+
+test("the pipeline profile plan succeeds and names itself", () => {
+  const planned = bash(VERIFY, ["pipeline", "--plan"]);
+  assert.equal(planned.status, 0, `pipeline plan failed: ${planned.stderr}`);
+  assert.match(planned.stdout, /^PROFILE: pipeline$/m);
+});
+
+test("a failing pipeline test propagates out of the gate as a nonzero exit", () => {
+  const stubDir = mkdtempSync(join(tmpdir(), "gate-stub-"));
+  const log = join(stubDir, "invocation");
+  const stub = join(stubDir, "python3");
+  writeFileSync(stub, `#!/bin/sh\nprintf '%s\\n' "$*" > ${log}\nexit 1\n`);
+  chmodSync(stub, 0o755);
+
+  const gated = bash(GATE, ["pipeline"], { PATH: `${stubDir}:${process.env.PATH}` });
+  assert.notEqual(gated.status, 0, "a red pipeline run reported a clean gate");
+  assert.match(gated.stdout, /pipeline.*FAIL|FAIL.*pipeline/s);
+  assert.ok(existsSync(log), "the pipeline suite never invoked python3");
+  assert.equal(readFileSync(log, "utf8").trim(), "scripts/pipeline_suite.py");
+});
+
+test("a failing web type check fails the web gate independently", () => {
+  const stubDir = mkdtempSync(join(tmpdir(), "gate-stub-"));
+  const log = join(stubDir, "invocation");
+  const npmStub = join(stubDir, "npm");
+  const npxStub = join(stubDir, "npx");
+  writeFileSync(npmStub, `#!/bin/sh\nprintf 'npm %s\\n' "$*" >> ${log}\nexit 0\n`);
+  writeFileSync(
+    npxStub,
+    `#!/bin/sh\nprintf 'npx %s\\n' "$*" >> ${log}\ncase " $* " in *" tsc "*) exit 1 ;; esac\nexit 0\n`,
+  );
+  chmodSync(npmStub, 0o755);
+  chmodSync(npxStub, 0o755);
+
+  const gated = bash(GATE, ["web"], { PATH: `${stubDir}:${process.env.PATH}` });
+  assert.notEqual(gated.status, 0, "a red web type check reported a clean gate");
+  assert.match(gated.stdout, /--- web types: FAIL/);
+  assert.match(gated.stdout, /--- web unit: PASS/);
+  assert.match(gated.stdout, /--- eslint: PASS/);
+  assert.match(readFileSync(log, "utf8"), /^npx tsc --noEmit$/m);
+});
+
+test("a green web type check keeps the web gate green", () => {
+  const stubDir = mkdtempSync(join(tmpdir(), "gate-stub-"));
+  const log = join(stubDir, "invocation");
+  const npmStub = join(stubDir, "npm");
+  const npxStub = join(stubDir, "npx");
+  writeFileSync(npmStub, `#!/bin/sh\nprintf 'npm %s\\n' "$*" >> ${log}\nexit 0\n`);
+  writeFileSync(npxStub, `#!/bin/sh\nprintf 'npx %s\\n' "$*" >> ${log}\nexit 0\n`);
+  chmodSync(npmStub, 0o755);
+  chmodSync(npxStub, 0o755);
+
+  const gated = bash(GATE, ["web"], { PATH: `${stubDir}:${process.env.PATH}` });
+  assert.equal(gated.status, 0, `green web checks failed: ${gated.stdout}${gated.stderr}`);
+  assert.match(gated.stdout, /--- web unit: PASS/);
+  assert.match(gated.stdout, /--- eslint: PASS/);
+  assert.match(gated.stdout, /--- web types: PASS/);
+  assert.match(readFileSync(log, "utf8"), /^npx tsc --noEmit$/m);
+});
+
 test("a failing cargo test propagates out of the gate as a nonzero exit", () => {
   const stubDir = mkdtempSync(join(tmpdir(), "gate-stub-"));
   const log = join(stubDir, "invocation");
@@ -112,7 +176,7 @@ test("the all profile covers every suite the gate knows, rust included", () => {
 
 test("every profile names the profile and the suites it runs", () => {
   const known = inventory();
-  for (const profile of ["harness", "web", "overlay", "skills", "rust", "all"]) {
+  for (const profile of ["harness", "web", "overlay", "skills", "rust", "pipeline", "all"]) {
     const planned = plan(profile);
     assert.match(planned.stdout, new RegExp(`^PROFILE: ${profile}$`, "m"));
     for (const suite of planned.suites) {
@@ -123,7 +187,7 @@ test("every profile names the profile and the suites it runs", () => {
 
 test("a narrow profile still names what it did not cover", () => {
   const planned = plan("harness");
-  for (const uncovered of ["web", "overlay", "skills", "rust"]) {
+  for (const uncovered of ["web", "overlay", "skills", "rust", "pipeline"]) {
     assert.match(planned.stdout, new RegExp(`NOT COVERED[\\s\\S]*- ${uncovered} `));
   }
 });
@@ -146,6 +210,19 @@ test("an unknown suite fails closed before any suite runs", () => {
 
 test("harness verification runs independently of every product suite", () => {
   assert.deepEqual(plan("harness").suites, ["harness"]);
+});
+
+test("existing profiles keep their exact suite plans", () => {
+  const expected = {
+    harness: ["harness"],
+    web: ["harness", "web"],
+    overlay: ["harness", "overlay"],
+    skills: ["harness", "skills"],
+    rust: ["harness", "rust"],
+  };
+  for (const [profile, suites] of Object.entries(expected)) {
+    assert.deepEqual(plan(profile).suites, suites, `${profile} profile membership changed`);
+  }
 });
 
 // H. the evaluator is not the subject ---------------------------------------
