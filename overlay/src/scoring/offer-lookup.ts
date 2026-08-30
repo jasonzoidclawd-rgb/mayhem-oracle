@@ -154,7 +154,7 @@ function fallbackScoredAugment(args: {
     name: augment.name,
     name_zh_TW: augment.name_zh_TW,
     lifecycle: augment.flags?.lifecycle,
-    win_rate: augment.win_rate ?? 50,
+    win_rate: augment.win_rate,
     score: result.total,
     tier: scoreToTier(result.total),
     rarity: augment.rarity,

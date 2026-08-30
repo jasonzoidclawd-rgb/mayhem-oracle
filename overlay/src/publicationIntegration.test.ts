@@ -12,6 +12,18 @@ describe("live publication integration", () => {
     new URL("./BadgeChipLayer.tsx", import.meta.url),
     "utf8",
   );
+  // THE single authority for what a chip shows — both the renderer and the
+  // publication diagnostic must read it rather than deriving their own.
+  const presentation = readFileSync(
+    new URL("./slotStatPresentation.ts", import.meta.url),
+    "utf8",
+  );
+  // THE single decision behind `activeChampionDataset`, extracted so the reason
+  // a resolved dataset is withheld is observable in the log.
+  const championGate = readFileSync(
+    new URL("./dev/championDatasetTrace.ts", import.meta.url),
+    "utf8",
+  );
 
   it("uses shared reconciliation, OCR ownership and offer-state helpers", () => {
     expect(app).toContain("reconcileSlotIdentity(");
@@ -23,17 +35,85 @@ describe("live publication integration", () => {
     expect(badgeLayer).toContain('statScope: "champion" | null');
     expect(badgeLayer).not.toContain('statScope: "champion" | "global" | null');
     expect(app).not.toContain('statScope: "champion" | "global" | null');
-    expect(app).toContain('staged.stat.provenance === "champion"');
+    expect(presentation).toContain('staged.stat.provenance === "champion"');
     expect(app).toContain("statProvenance: stat?.provenance ?? null");
     expect(app).toContain('logOverlayDiagnostic("[slot-publication]"');
     // A global-sourced statistic reaching a badge is an explicit violation.
     expect(app).toContain('logOverlayDiagnostic("[slot-publication-violation]"');
   });
 
+  it("derives the rendered chip and its trace from ONE authority", () => {
+    // The live run of 2026-08-30 logged 38 `displayedStatText` percentages the
+    // screen never painted, because the diagnostic recomputed them from
+    // `pool.win_rate` while the renderer was in champion-loading. Both sides
+    // must now read the same derived presentation.
+    expect(app).toContain("deriveSlotStatPresentation({");
+    expect(app).toContain("displayedStatText: presentation.winRateText");
+    expect(app).toContain("statKind: presentation.statKind");
+    expect(app).toContain("renderedProvenance: presentation.provenance");
+    expect(app).toContain("winRateText: presentation.winRateText");
+
+    // No independent "displayed" value may be recomputed from the catalog.
+    expect(app).not.toContain(
+      "displayedStatText: compactWinRateFromPercent(pool?.win_rate ?? null)",
+    );
+    // The catalog value survives only under an explicit candidate/input name.
+    expect(app).toContain("candidateCatalogWinRate: pool?.win_rate ?? null");
+    expect(app).not.toContain("statValue: pool?.win_rate ?? null");
+
+    // Every non-matched ARAMGG stage renders no percentage at all.
+    for (const kind of ["no-data", "loading", "error"]) {
+      expect(presentation).toContain(`staged.kind === "${kind}"`);
+    }
+    expect(presentation).toContain("winRateText: null");
+  });
+
   it("guards live champion data by both champion id and patch", () => {
-    expect(championHook).toContain("championDataset.championId === championKey");
-    expect(championHook).toContain("championDataset.patch === source?.patch");
+    // The gate moved into `resolveActiveChampionDataset` so each withholding
+    // reason is nameable; the guard itself is unchanged.
+    expect(championGate).toContain("dataset.championId !== championKey");
+    expect(championGate).toContain('reason: "champion-changed"');
+    // Updated deliberately with the BUG-2 fix: a raw === treated two
+    // unresolved patches as the same patch. patchesMatch fails closed on null.
+    expect(championGate).not.toContain("dataset.patch === sourcePatch");
+    expect(championGate).toContain("patchesMatch(dataset.patch, sourcePatch)");
+    expect(championGate).toContain('reason: "patch-mismatch"');
+    expect(championHook).toContain("resolveActiveChampionDataset({");
     expect(championHook).toContain("championRequestIdRef.current !== requestId");
+  });
+
+  it("makes the champion-dataset load/publish seam observable", () => {
+    // The 2026-08-30 run could not say whether the loader resolved at all, so
+    // "never loaded" and "loaded then discarded" were indistinguishable.
+    for (const event of [
+      "request-start",
+      "loader-resolved",
+      "publish-attempt",
+      "published",
+      "discarded-stale",
+      "loader-failed",
+    ]) {
+      expect(championHook).toContain(`event: "${event}"`);
+    }
+    // The discard must name WHICH ownership check rejected it.
+    expect(championHook).toContain('reason: cancelled ? "effect-cancelled" : "superseded-request"');
+    // `loader-resolved` is emitted BEFORE the ownership check, or a discarded
+    // dataset would look like one that never arrived.
+    expect(championHook.indexOf('event: "loader-resolved"')).toBeLessThan(
+      championHook.indexOf("championRequestIdRef.current !== requestId"),
+    );
+  });
+
+  it("reports the dataset source that was actually used, never a fixed endpoint", () => {
+    // The previous publication hardcoded `champion-augments-file` through a
+    // whole session that issued no such request.
+    expect(app).not.toContain('endpointKind: "champion-augments-file"');
+    expect(app).toContain("datasetSourceKind: meta.sourceKind");
+    expect(championHook).toContain(
+      "championDatasetSourceKind: championDatasetSourceKind(activeChampionDataset?.source)",
+    );
+    // Path B reports the local artifact; nothing reports a path it did not take.
+    expect(championGate).toContain('return "local-artifact"');
   });
 
   it("has no global-fallback statistics selection in the champion hook", () => {

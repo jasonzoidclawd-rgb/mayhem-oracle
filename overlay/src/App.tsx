@@ -27,6 +27,7 @@ import {
 } from "./roundDelivery";
 import {
   createOfferRoundOwnership,
+  presentationClearedGeneration,
   reduceOfferRoundOwnership,
   type OfferRoundOwnership,
 } from "./offerRoundOwnership";
@@ -75,10 +76,8 @@ import { CoachPanel } from "./components/CoachPanel";
 import { runLocalInference } from "./model/inference";
 import { confirmPickedAugment } from "./model/presentation";
 import { tierForGrade } from "./model/tier";
-import {
-  compactWinRateFromFraction,
-  compactWinRateFromPercent,
-} from "./winRateFormat";
+import { deriveSlotStatPresentation } from "./slotStatPresentation";
+import { compactWinRateFromPercent } from "./winRateFormat";
 import {
   buildAramggDecisionResult,
   isTierFixtureEnabled,
@@ -1231,14 +1230,21 @@ function App() {
     status: aramgg.championDataStatus,
     completeness: aramgg.championCompleteness,
     loadedCount: aramgg.championLoadedCount,
+    sourceKind: aramgg.championDatasetSourceKind,
   });
   useEffect(() => {
     championDataMetaRef.current = {
       status: aramgg.championDataStatus,
       completeness: aramgg.championCompleteness,
       loadedCount: aramgg.championLoadedCount,
+      sourceKind: aramgg.championDatasetSourceKind,
     };
-  }, [aramgg.championDataStatus, aramgg.championCompleteness, aramgg.championLoadedCount]);
+  }, [
+    aramgg.championDataStatus,
+    aramgg.championCompleteness,
+    aramgg.championLoadedCount,
+    aramgg.championDatasetSourceKind,
+  ]);
 
   const fixtureMode = resolveOverlayFixtureMode({
     tierFixtureOn,
@@ -1266,7 +1272,7 @@ function App() {
         name: a.name,
         name_zh_TW: a.name_zh_TW,
         lifecycle: a.flags?.lifecycle,
-        win_rate: a.win_rate ?? 50,
+        win_rate: a.win_rate,
         score: 0,
         tier: "A",
         rarity: a.rarity,
@@ -1277,6 +1283,24 @@ function App() {
   }, [fixtureMode.kind, aramgg.resolvedBySlug, overlayData]);
 
   const isPreviewMode = fixtureMode.kind === "preview";
+
+  // The evidence that actually backs a rendered chip on the ENGINE path:
+  // the decision candidate (tier provenance) and the authorization state that
+  // decided whether a candidate exists at all. Held in a ref for the same
+  // reason as championDataMetaRef — the OCR scan callback must read the
+  // freshest values without re-creating on every decision change.
+  const evidenceContextRef = useRef({
+    decisionResult: null as DecisionResult | null,
+    memberCoachEnabled: false,
+    previewMode: false,
+  });
+  useEffect(() => {
+    evidenceContextRef.current = {
+      decisionResult,
+      memberCoachEnabled,
+      previewMode: isPreviewMode,
+    };
+  }, [decisionResult, memberCoachEnabled, isPreviewMode]);
   const gameOverlayIsVisible = gameOverlayVisible({
     gameWindowForeground,
     previewMode: isPreviewMode,
@@ -1403,74 +1427,30 @@ function App() {
         noDataVerified,
         failureCategory,
       };
-      if (slot.resolution === null) {
-        // Geometry confirms a card here, but its identity is pending (fresh
-        // trigger, reroll re-read in flight, or unreadable) — show SCANNING, not
-        // nothing: the chip must never vanish merely because OCR hasn't caught up.
-        return [{
-          ...base,
-          state: slot.unresolvedState ?? "scanning",
-          tier: null,
-          winRateText: null,
-          isNew: false,
-          statScope: null,
-          semanticPublication: semanticPublication(
-            slot.unresolvedState === "scanning" || slot.unresolvedState == null
-              ? "loading-data"
-              : "error",
-            false,
-            slot.unresolvedState === "scanning" || slot.unresolvedState == null
-              ? null
-              : "FAIL_IDENTITY",
-          ),
-        }];
-      }
-      const staged = slot.resolution?.aramgg;
-      if (staged) {
-        if (staged.kind === "matched") {
-          return [{
-            ...base,
-            state: "tier",
-            tier: staged.stat.tierLetter,
-            // Exact string pipeline from the raw ARAMGG fraction ("0.5915" →
-            // "59.2%"); the raw value stays on the stat for diagnostics.
-            winRateText: compactWinRateFromFraction(staged.stat.rawWinRate),
-            isNew: slot.resolution?.pool?.lifecycle === "added",
-            // Champion-only: a matched stat is always champion-specific.
-            statScope: staged.stat.provenance === "champion" ? "champion" : null,
-            semanticPublication: semanticPublication("resolved", false, null),
-          }];
-        }
-        if (staged.kind === "no-data") {
-          // Identity resolved; the COMPLETE champion dataset has no row → NO CHAMP DATA.
-          return [{ ...base, state: "no-data", tier: null, winRateText: null, isNew: false, statScope: null, semanticPublication: semanticPublication("no-data", true, null) }];
-        }
-        if (staged.kind === "loading") {
-          // Champion dataset still loading (or partial): absence is unproven.
-          return [{ ...base, state: "loading-data", tier: null, winRateText: null, isNew: false, statScope: null, semanticPublication: semanticPublication("loading-data", false, null) }];
-        }
-        if (staged.kind === "error") {
-          // Champion dataset fetch failed — never fall back to a global value.
-          return [{ ...base, state: "data-error", tier: null, winRateText: null, isNew: false, statScope: null, semanticPublication: semanticPublication("error", false, "FAIL_DATA") }];
-        }
-        return [{ ...base, state: "unmatched", tier: null, winRateText: null, isNew: false, statScope: null, semanticPublication: semanticPublication("error", false, "FAIL_IDENTITY") }];
-      }
-      // Engine path (no dev fixture): the local-catalog match backs the chip.
-      const pool = slot.resolution?.pool ?? null;
-      if (!pool) {
-        return [{ ...base, state: "unmatched", tier: null, winRateText: null, isNew: false, statScope: null, semanticPublication: semanticPublication("error", false, "FAIL_IDENTITY") }];
-      }
-      const candidate = decisionResult?.candidates.find(
-        (entry) => entry.augmentSlug === pool.slug,
-      );
+      // ONE authority decides what this chip shows; the [slot-publication]
+      // diagnostic reads the SAME derived value, so the trace can never claim
+      // a percentage the screen did not paint.
+      const presentation = deriveSlotStatPresentation({
+        resolution: slot.resolution,
+        unresolvedState: slot.unresolvedState,
+        candidate: slot.resolution?.pool
+          ? decisionResult?.candidates.find(
+              (entry) => entry.augmentSlug === slot.resolution?.pool?.slug,
+            ) ?? null
+          : null,
+      });
       return [{
         ...base,
-        state: "tier",
-        tier: candidate ? tierForGrade(candidate.grade) : pool.tier,
-        winRateText: compactWinRateFromPercent(pool.win_rate),
-        isNew: pool.lifecycle === "added",
-        statScope: null,
-        semanticPublication: semanticPublication("resolved", false, null),
+        state: presentation.state,
+        tier: presentation.tier,
+        winRateText: presentation.winRateText,
+        isNew: presentation.isNew,
+        statScope: presentation.statScope,
+        semanticPublication: semanticPublication(
+          presentation.terminalState,
+          presentation.noDataVerified,
+          presentation.failureCategory,
+        ),
       }];
     });
   }, [previewBadgesReady, fixturePayload, previewCards, realFrameRenderable, visibleFrame, semanticOwner, offerSurface.offerGeneration, decisionResult, aramgg.resolvedBySlug]);
@@ -2269,6 +2249,24 @@ function App() {
           },
         ));
       }
+      // Leaving OFFER_VISIBLE for a continuity-retaining state (UNCERTAIN /
+      // OCCLUDED) clears the PRESENTATION, not the round. Without this event a
+      // re-acquisition at a bumped generation reads as an unrelated successor
+      // offer and mints a new round — live, one physical round consumed R2, R3
+      // and R4 inside 7.6 s and every later round published no owner at all.
+      const clearedPresentationGeneration = presentationClearedGeneration(
+        priorOfferSurface,
+        nextOfferSurface,
+      );
+      if (clearedPresentationGeneration !== null) {
+        updateOfferRoundOwnership(reduceOfferRoundOwnership(
+          offerRoundOwnershipRef.current,
+          {
+            type: "presentation-cleared",
+            offerGeneration: clearedPresentationGeneration,
+          },
+        ));
+      }
       let invalidatedSlots: number[] = [];
       if (
         nextOfferSurface.state === "NO_OFFER" &&
@@ -2916,6 +2914,22 @@ function App() {
                       ? "riot-unmatched"
                       : null;
           const meta = championDataMetaRef.current;
+          const evidence = evidenceContextRef.current;
+          const pool = stored.resolution?.pool ?? null;
+          const candidate = pool
+            ? evidence.decisionResult?.candidates.find(
+                (entry) => entry.augmentSlug === pool.slug,
+              ) ?? null
+            : null;
+          // THE rendered outcome, from the same authority the badge renderer
+          // uses. Every "displayed"/"rendered" field below reads this and only
+          // this — a second computation is what made the previous acceptance
+          // log claim 38 percentages the screen never showed.
+          const presentation = deriveSlotStatPresentation({
+            resolution: stored.resolution,
+            unresolvedState: stored.unresolvedState,
+            candidate,
+          });
           const diagnostic = {
             foregroundEpoch,
             gameEpoch,
@@ -2924,7 +2938,9 @@ function App() {
             championDatasetRequestId: championRequestIdAtStart,
             datasetCompleteness: meta.completeness,
             datasetLoadedCount: meta.loadedCount,
-            endpointKind: "champion-augments-file",
+            // The path that actually backed the ACTIVE dataset, or null when
+            // none is active — never a hardcoded endpoint name.
+            datasetSourceKind: meta.sourceKind,
             selectionStatus,
             offerGeneration: offerGenerationAtStart,
             geometrySequence: geometrySeqRef.current,
@@ -2940,7 +2956,6 @@ function App() {
             statisticsAugmentId: stat?.augmentId ?? null,
             statProvenance: stat?.provenance ?? null,
             rawWinRate: stat?.rawWinRate ?? null,
-            formattedWinRate: stat ? compactWinRateFromFraction(stat.rawWinRate) : null,
             tier: stat?.tierLetter ?? null,
             rejectionReason:
               aramggKind === "no-data"
@@ -2951,6 +2966,57 @@ function App() {
                     ? "champion-data-error"
                     : null,
             publicationReason: stored === prev ? "identity-conflict-rejected" : "identity-published",
+            // ── Evidence contract ─────────────────────────────────
+            // Why this slot showed this tier and this percentage. The ARAMGG
+            // fields above stay null on the production/engine path; these are
+            // the ones that actually backed the chip. A field with no source on
+            // this path is null with an explicit reason — never a stand-in.
+            roundOwner: owner.round,
+            // ── What the screen ACTUALLY shows ───────────────────────────
+            // Derived once, by the renderer's own authority. `statKind` and
+            // `renderedProvenance` describe the SAME value as
+            // `displayedStatText`; when nothing is rendered all three are
+            // null/missing together.
+            statKind: presentation.statKind,
+            displayedStatText: presentation.winRateText,
+            renderedProvenance: presentation.provenance,
+            renderedChipState: presentation.state,
+            // ── Candidate INPUTS (never "displayed") ─────────────────────
+            // The local catalog is augment-global. It is recorded as the
+            // engine-path input it is, and is never presented as a rendered
+            // value under a `displayed*` name.
+            candidateCatalogWinRate: pool?.win_rate ?? null,
+            candidateCatalogSource: pool
+              ? (typeof pool.win_rate === "number" ? "local-catalog" : null)
+              : null,
+            statMissingReason: pool
+              ? (typeof pool.win_rate === "number" ? null : "catalog-win-rate-null")
+              : "no-pool-augment",
+            // Not derivable on the catalog path: the bundled catalog carries no
+            // per-row patch, revision, sample count or observation date, and no
+            // round-conditioned evidence exists anywhere. Null here is the
+            // truthful answer, and is what Slice A's artifact will populate.
+            statPatch: null,
+            sourceGamePatch: null,
+            dataRevision: null,
+            granularity: presentation.winRateText === null
+              ? null
+              : presentation.provenance === "champion"
+                ? "augment-champion"
+                : "augment-global",
+            selectionRound: null,
+            sampleSize: null,
+            minimumSampleSize: null,
+            observedAt: null,
+            validity: presentation.winRateText === null ? "not-applicable" : "unvalidated",
+            // Tier provenance: a candidate means the engine graded it; its
+            // absence means the chip fell back to the catalog's own tier.
+            engineGrade: candidate?.grade ?? null,
+            decisionConfidence: candidate?.confidence ?? null,
+            tierSource: candidate ? "decision-engine" : "catalog-fallback",
+            authorized: evidence.memberCoachEnabled,
+            authorizationSource: evidence.memberCoachEnabled ? "member" : null,
+            previewMode: evidence.previewMode,
           };
           // A global-sourced statistic must never publish (removed by policy).
           if (stat && stat.provenance !== "champion") {

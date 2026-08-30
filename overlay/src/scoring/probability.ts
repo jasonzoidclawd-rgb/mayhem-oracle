@@ -51,7 +51,7 @@ export interface PoolAugment {
   name: string;
   name_zh_TW?: string;
   lifecycle?: string;
-  win_rate: number;
+  win_rate: number | null;
   score: number;
   tier: "S" | "A" | "B" | "C";
   rarity: AugmentRarity;
@@ -158,7 +158,7 @@ export function buildChampionPool(
       name: aug.name,
       name_zh_TW: aug.name_zh_TW,
       lifecycle: aug.flags?.lifecycle,
-      win_rate: aug.win_rate ?? 50,
+      win_rate: aug.win_rate,
       score: result.total,
       tier: scoreToTier(result.total),
       rarity: aug.rarity,

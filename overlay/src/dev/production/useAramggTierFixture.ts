@@ -48,6 +48,7 @@ export interface AramggFixtureState {
   championDataStatus: "idle" | "loading" | "ready" | "error";
   championCompleteness: "partial" | "complete" | null;
   championLoadedCount: number | null;
+  championDatasetSourceKind: "local-artifact" | "aramgg-dev" | "unknown" | null;
   refresh: () => void;
 }
 
@@ -74,6 +75,7 @@ export function useAramggTierFixture(
     championDataStatus: "idle",
     championCompleteness: null,
     championLoadedCount: null,
+    championDatasetSourceKind: null,
     refresh,
   };
 }

@@ -31,11 +31,13 @@ interface ReplayOutput {
     ownershipBeforeCleanup?: {
       activeOwner: null;
       pendingClosedOwner: { offerGeneration: number; round: number } | null;
+      clearedOwner: null;
       completedOwners: Array<{ offerGeneration: number; round: number }>;
     };
     ownershipAfterCleanup?: {
       activeOwner: null;
       pendingClosedOwner: null;
+      clearedOwner: null;
       completedOwners: [];
     };
   }>;
@@ -51,6 +53,7 @@ interface ReplayOutput {
     ownership: {
       activeOwner: null;
       pendingClosedOwner: null;
+      clearedOwner: null;
       completedOwners: [];
     };
   };
@@ -211,6 +214,7 @@ describe("overlay-replay/v1 four-round-success", () => {
       ownershipBeforeCleanup: {
         activeOwner: null,
         pendingClosedOwner: { offerGeneration: 413, round: 4 },
+        clearedOwner: null,
         completedOwners: [
           { offerGeneration: 101, round: 1 },
           { offerGeneration: 205, round: 2 },
@@ -220,6 +224,7 @@ describe("overlay-replay/v1 four-round-success", () => {
       ownershipAfterCleanup: {
         activeOwner: null,
         pendingClosedOwner: null,
+        clearedOwner: null,
         completedOwners: [],
       },
     }]);
@@ -231,6 +236,7 @@ describe("overlay-replay/v1 four-round-success", () => {
       ownership: {
         activeOwner: null,
         pendingClosedOwner: null,
+        clearedOwner: null,
         completedOwners: [],
       },
     });

@@ -15,6 +15,8 @@ export type DiagnosticMarker =
   | "[identity-timeout]"
   | "[identity-watchdog-abandon]"
   | "[identity-retry]"
+  | "[aramgg-fetch]"
+  | "[champion-dataset-state]"
   | "[offer-state]"
   | "[offer-session]"
   | "[badge-layer]"

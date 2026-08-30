@@ -1,10 +1,44 @@
+import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { defineConfig } from "vite";
+import { defineConfig, type Plugin } from "vite";
 import react from "@vitejs/plugin-react";
 
 const host = process.env.TAURI_DEV_HOST;
 const overlayRoot = path.dirname(fileURLToPath(import.meta.url));
+
+// DEV-ONLY (`apply: "serve"`): serve the locally generated ARAMGG champion×
+// augment artifact from `data/internal/` at a same-origin path, so the
+// tier-fixture reads it under `connect-src 'self'` with no proxy and no
+// external request. `tauri build` never registers this, so production
+// networking and the internal-data disclosure boundary are untouched.
+function localAramggArtifactPlugin(): Plugin {
+  const artifactPath = path.resolve(
+    overlayRoot,
+    "..",
+    "data",
+    "internal",
+    "aramgg-champion-augments.artifact.json",
+  );
+  return {
+    name: "mayhem-local-aramgg-artifact",
+    apply: "serve",
+    configureServer(server) {
+      server.middlewares.use("/local-aramgg-artifact.json", (_req, res) => {
+        fs.readFile(artifactPath, (err, buf) => {
+          if (err) {
+            res.statusCode = 404;
+            res.end("local ARAMGG artifact not generated");
+            return;
+          }
+          res.setHeader("content-type", "application/json");
+          res.setHeader("cache-control", "no-store");
+          res.end(buf);
+        });
+      });
+    },
+  };
+}
 
 function productionDevAliases() {
   const modules = [
@@ -28,7 +62,7 @@ function productionDevAliases() {
 
 // https://vite.dev/config/
 export default defineConfig(async ({ command }) => ({
-  plugins: [react()],
+  plugins: [react(), localAramggArtifactPlugin()],
 
   // Production must not contain fixture data, ARAMGG adapters, or diagnostic
   // controls. Replace the dev modules at bundle time; Vite dev keeps the real

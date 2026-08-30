@@ -15,6 +15,7 @@
 import type { DecisionGrade } from "../contracts/decision";
 import type { TierLetter } from "../model/tier";
 import { decimalShiftPercent } from "../winRateFormat";
+import { traceAramggFetch, type AramggFetchEndpointKind } from "./aramggFetchTrace";
 
 // Canonical source URLs, recorded verbatim for provenance display. At dev
 // runtime the overlay fetches these THROUGH the Vite dev proxy
@@ -104,8 +105,12 @@ export interface AramggSource {
   catalog: AramggCatalogIndex;
   /** Riot-localized zh-TW title index (the canonical-language OCR bridge). */
   titleIndex: RiotTitleIndex;
-  /** ARAMGG data patch, e.g. "16.13" (site displays "26.13"). */
-  patch: string;
+  /**
+   * ARAMGG data patch in Riot's RUNTIME namespace, e.g. "16.13" (the site
+   * renders the display namespace, "26.13"). null when the changelog did not
+   * parse — never a sentinel string.
+   */
+  patch: string | null;
   fetchedAt: number;
   sourceUrls: { stats: string; catalog: string; catalogZhTw: string; changelog: string };
 }
@@ -398,13 +403,13 @@ export function parseStatsList(raw: unknown): {
     try {
       const parsed = JSON.parse(blob) as Record<string, unknown>;
       const rawWinRate = parsed.win_rate;
-      const numGames = parsed.num_games;
       const tierRaw = parsed.tier;
-      if (
-        typeof rawWinRate !== "string" ||
-        typeof numGames !== "string" ||
-        typeof tierRaw !== "string"
-      ) {
+      // Sample size is metadata, not the statistic: ARAMGG now sends
+      // `num_games: null` on every entry, and requiring it skipped the whole
+      // file (see aramggStatsParse.test.ts). Absent → "", the same convention
+      // pick_rate uses. win_rate and tier stay mandatory.
+      const numGames = typeof parsed.num_games === "string" ? parsed.num_games : "";
+      if (typeof rawWinRate !== "string" || typeof tierRaw !== "string") {
         skipped++;
         continue;
       }
@@ -591,12 +596,23 @@ export interface AramggRaws {
   changelog: unknown;
 }
 
-async function fetchJson(fetchImpl: typeof fetch, url: string): Promise<unknown> {
-  const res = await fetchImpl(url);
-  if (!res.ok) {
-    throw new Error(`ARAMGG fetch failed: ${url} → HTTP ${res.status}`);
-  }
-  return res.json();
+async function fetchJson(
+  fetchImpl: typeof fetch,
+  url: string,
+  endpointKind: AramggFetchEndpointKind,
+): Promise<unknown> {
+  // Mount-time identity/changelog work. Traced under phase "mount" so live
+  // acceptance can never conflate it with a gameplay champion-stat request.
+  return traceAramggFetch(
+    { source: "aramgg-dev", phase: "mount", endpointKind, path: url },
+    async () => {
+      const res = await fetchImpl(url);
+      if (!res.ok) {
+        throw new Error(`ARAMGG fetch failed: ${url} → HTTP ${res.status}`);
+      }
+      return res.json();
+    },
+  );
 }
 
 /** Fetch all four ARAMGG files through the dev proxy. Throws on any HTTP error. */
@@ -605,10 +621,10 @@ export async function fetchAramggRaws(
 ): Promise<AramggRaws> {
   const url = (path: string) => `${ARAMGG_DEV_PROXY_PREFIX}${path}`;
   const [stats, catalog, catalogZhTw, changelog] = await Promise.all([
-    fetchJson(fetchImpl, url(ARAMGG_SOURCE.stats)),
-    fetchJson(fetchImpl, url(ARAMGG_SOURCE.catalog)),
-    fetchJson(fetchImpl, url(ARAMGG_SOURCE.catalogZhTw)),
-    fetchJson(fetchImpl, url(ARAMGG_SOURCE.changelog)),
+    fetchJson(fetchImpl, url(ARAMGG_SOURCE.stats), "aramgg-stats"),
+    fetchJson(fetchImpl, url(ARAMGG_SOURCE.catalog), "aramgg-catalog"),
+    fetchJson(fetchImpl, url(ARAMGG_SOURCE.catalogZhTw), "aramgg-catalog-zh-tw"),
+    fetchJson(fetchImpl, url(ARAMGG_SOURCE.changelog), "aramgg-changelog"),
   ]);
   return { stats, catalog, catalogZhTw, changelog };
 }
@@ -638,12 +654,14 @@ export function parseAramggSource(raws: AramggRaws, fetchedAt: number): AramggSo
   if (titleIndex.byZhTwName.size === 0) {
     throw new Error("Riot zh-TW catalog parsed to zero localized titles");
   }
+  // null, never a sentinel string: two independent parse failures must not
+  // compare equal downstream (see patchesMatch in championDataset.ts).
   const patch =
     changelogRaw !== null &&
     typeof changelogRaw === "object" &&
     typeof (changelogRaw as Record<string, unknown>).latest === "string"
       ? ((changelogRaw as Record<string, unknown>).latest as string)
-      : "unknown";
+      : null;
 
   return {
     statsById: stats,

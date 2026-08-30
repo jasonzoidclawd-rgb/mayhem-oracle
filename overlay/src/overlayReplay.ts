@@ -69,6 +69,9 @@ function immutableOwnershipSnapshot(ownership: OfferRoundOwnership): OfferRoundO
     pendingClosedOwner: ownership.pendingClosedOwner === null
       ? null
       : { ...ownership.pendingClosedOwner },
+    clearedOwner: ownership.clearedOwner === null
+      ? null
+      : { ...ownership.clearedOwner },
     completedOwners: ownership.completedOwners.map((owner) => ({ ...owner })),
   };
   if (snapshot.activeOwner !== null) Object.freeze(snapshot.activeOwner);

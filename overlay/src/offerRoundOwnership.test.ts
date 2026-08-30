@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 
 import {
   createOfferRoundOwnership,
+  presentationClearedGeneration,
   reduceOfferRoundOwnership,
   type OfferRoundOwnership,
 } from "./offerRoundOwnership";
@@ -9,6 +10,7 @@ import {
   advanceOfferSurface,
   createOfferSurfaceState,
   type OfferSurfaceEvidence,
+  type OfferSurfaceKind,
 } from "./offerSurfaceState";
 
 function surfaceEvidence(
@@ -202,5 +204,220 @@ describe("accepted offer round ownership", () => {
     ]);
     expect(state.activeOwner).toBeNull();
     expect(state.completedOwners.some((owner) => owner.round === 5)).toBe(false);
+  });
+});
+
+/**
+ * Offer-surface flicker suite (live defect, 2026-08-30 acceptance run).
+ *
+ * A single physical Mayhem round re-acquires its surface many times: the live
+ * trace shows OFFER_VISIBLE → UNCERTAIN → OFFER_VISIBLE at a BUMPED generation
+ * 13 times, and OFFER_VISIBLE → OCCLUDED → OFFER_VISIBLE at a bumped generation
+ * 7 more. Every one of those used to mint a new round, so rounds 2, 3 and 4
+ * were consumed within 7.6 s of each other and 92 of 105 slot publications in
+ * the real game carried no round owner at all.
+ *
+ * `applySurfaceTransition` mirrors the App.tsx wiring exactly, so these tests
+ * exercise the same dispatch rules the overlay runs.
+ */
+function applySurfaceTransition(
+  ownership: OfferRoundOwnership,
+  prior: { state: OfferSurfaceKind; offerGeneration: number },
+  next: { state: OfferSurfaceKind; offerGeneration: number },
+): OfferRoundOwnership {
+  let state = ownership;
+  if (next.state === "OFFER_VISIBLE") {
+    state = accept(state, next.offerGeneration);
+  }
+  const clearedGeneration = presentationClearedGeneration(prior, next);
+  if (clearedGeneration !== null) {
+    state = clearPresentation(state, clearedGeneration);
+  }
+  if (next.state === "NO_OFFER" && prior.state !== "NO_OFFER") {
+    state = close(state, prior.offerGeneration);
+  }
+  return state;
+}
+
+/** Leave OFFER_VISIBLE for a continuity-retaining state, then come back at a
+ *  bumped generation — the exact live flicker. */
+function flicker(
+  ownership: OfferRoundOwnership,
+  generation: number,
+  through: "UNCERTAIN" | "OCCLUDED",
+): { state: OfferRoundOwnership; generation: number } {
+  let state = applySurfaceTransition(
+    ownership,
+    { state: "OFFER_VISIBLE", offerGeneration: generation },
+    { state: through, offerGeneration: generation },
+  );
+  const reacquired = generation + 1;
+  state = applySurfaceTransition(
+    state,
+    { state: through, offerGeneration: generation },
+    { state: "OFFER_VISIBLE", offerGeneration: reacquired },
+  );
+  return { state, generation: reacquired };
+}
+
+/** Drive a round to its genuine end: visible → OCCLUDED → NO_OFFER. */
+function closeRound(
+  ownership: OfferRoundOwnership,
+  generation: number,
+): OfferRoundOwnership {
+  let state = applySurfaceTransition(
+    ownership,
+    { state: "OFFER_VISIBLE", offerGeneration: generation },
+    { state: "OCCLUDED", offerGeneration: generation },
+  );
+  return applySurfaceTransition(
+    state,
+    { state: "OCCLUDED", offerGeneration: generation },
+    { state: "NO_OFFER", offerGeneration: generation + 1 },
+  );
+}
+
+describe("offer-surface flicker never advances round ownership", () => {
+  it("rebinds round 2 when OFFER_VISIBLE → UNCERTAIN → OFFER_VISIBLE bumps the generation", () => {
+    let state = accept(createOfferRoundOwnership(), 8);
+    state = closeRound(state, 8);
+    state = accept(state, 44);
+    expect(state.activeOwner).toEqual({ offerGeneration: 44, round: 2 });
+
+    const flickered = flicker(state, 44, "UNCERTAIN");
+
+    expect(flickered.state.activeOwner).toEqual({
+      offerGeneration: 45,
+      round: 2,
+    });
+    expect(flickered.state.completedOwners).toEqual([
+      { offerGeneration: 8, round: 1 },
+    ]);
+  });
+
+  it("never advances the round across repeated UNCERTAIN flickers", () => {
+    let state = accept(createOfferRoundOwnership(), 8);
+    state = closeRound(state, 8);
+    state = accept(state, 44);
+
+    let generation = 44;
+    for (let i = 0; i < 6; i += 1) {
+      const flickered = flicker(state, generation, "UNCERTAIN");
+      state = flickered.state;
+      generation = flickered.generation;
+      expect(state.activeOwner?.round).toBe(2);
+    }
+
+    expect(state.activeOwner).toEqual({ offerGeneration: 50, round: 2 });
+    expect(state.completedOwners).toEqual([{ offerGeneration: 8, round: 1 }]);
+  });
+
+  it("treats OCCLUDED the same as UNCERTAIN — both retain presentation continuity", () => {
+    let state = accept(createOfferRoundOwnership(), 8);
+    state = closeRound(state, 8);
+    state = accept(state, 44);
+
+    const flickered = flicker(state, 44, "OCCLUDED");
+
+    expect(flickered.state.activeOwner).toEqual({
+      offerGeneration: 45,
+      round: 2,
+    });
+    expect(flickered.state.completedOwners).toEqual([
+      { offerGeneration: 8, round: 1 },
+    ]);
+  });
+
+  it("still completes exactly one round on a genuine close taken after a clear", () => {
+    let state = accept(createOfferRoundOwnership(), 8);
+    state = closeRound(state, 8);
+    state = accept(state, 44);
+    const flickered = flicker(state, 44, "UNCERTAIN");
+    state = closeRound(flickered.state, flickered.generation);
+
+    // The close arrives while the presentation is already cleared — the round
+    // must still complete, or ownership stalls on round 2 forever.
+    state = accept(state, 87);
+
+    expect(state.activeOwner).toEqual({ offerGeneration: 87, round: 3 });
+    expect(state.completedOwners).toEqual([
+      { offerGeneration: 8, round: 1 },
+      { offerGeneration: 45, round: 2 },
+    ]);
+  });
+
+  it("yields exactly four owners across R1→R4 even with flickers in every round", () => {
+    let state = createOfferRoundOwnership();
+    let generation = 10;
+    const rounds: number[] = [];
+
+    for (let round = 1; round <= 4; round += 1) {
+      state = accept(state, generation);
+      rounds.push(state.activeOwner?.round ?? -1);
+      const first = flicker(state, generation, "UNCERTAIN");
+      const second = flicker(first.state, first.generation, "OCCLUDED");
+      state = second.state;
+      expect(state.activeOwner?.round).toBe(round);
+      state = closeRound(state, second.generation);
+      generation = second.generation + 10;
+    }
+
+    // The fourth close leaves its owner pending until the next accepted offer
+    // retires it — that is the existing close contract, unchanged here.
+    const owners = [...state.completedOwners, state.pendingClosedOwner]
+      .filter((owner): owner is NonNullable<typeof owner> => owner != null);
+
+    expect(rounds).toEqual([1, 2, 3, 4]);
+    expect(owners.map((owner) => owner.round)).toEqual([1, 2, 3, 4]);
+    expect(state.activeOwner).toBeNull();
+  });
+
+  it("never creates a fifth round when the fourth round flickers", () => {
+    let state = createOfferRoundOwnership();
+    let generation = 10;
+    for (let round = 1; round <= 4; round += 1) {
+      state = accept(state, generation);
+      state = closeRound(state, generation);
+      generation += 10;
+    }
+    state = accept(state, generation);
+    expect(state.activeOwner).toBeNull();
+
+    const flickered = flicker(state, generation, "UNCERTAIN");
+
+    expect(flickered.state.activeOwner).toBeNull();
+    expect(flickered.state.completedOwners.map((owner) => owner.round))
+      .toEqual([1, 2, 3, 4]);
+    expect(flickered.state.completedOwners.some((owner) => owner.round === 5))
+      .toBe(false);
+  });
+
+  it("leaves reroll semantics unchanged — the same generation re-observed never advances", () => {
+    let state = accept(createOfferRoundOwnership(), 8);
+    state = closeRound(state, 8);
+    state = accept(state, 44);
+
+    // A one-slot reroll re-accepts the SAME generation repeatedly.
+    state = accept(state, 44);
+    state = accept(state, 44);
+
+    expect(state.activeOwner).toEqual({ offerGeneration: 44, round: 2 });
+    expect(state.completedOwners).toEqual([{ offerGeneration: 8, round: 1 }]);
+  });
+
+  it("clears nothing when the surface never left OFFER_VISIBLE", () => {
+    expect(presentationClearedGeneration(
+      { state: "OFFER_VISIBLE", offerGeneration: 44 },
+      { state: "OFFER_VISIBLE", offerGeneration: 44 },
+    )).toBeNull();
+    expect(presentationClearedGeneration(
+      { state: "UNCERTAIN", offerGeneration: 44 },
+      { state: "OCCLUDED", offerGeneration: 44 },
+    )).toBeNull();
+    // NO_OFFER is a genuine close, not a retained presentation.
+    expect(presentationClearedGeneration(
+      { state: "OFFER_VISIBLE", offerGeneration: 44 },
+      { state: "NO_OFFER", offerGeneration: 45 },
+    )).toBeNull();
   });
 });

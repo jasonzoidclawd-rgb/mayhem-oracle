@@ -15,6 +15,7 @@
  * from a superseded champion/foreground epoch can never overwrite current state.
  */
 import { ARAMGG_DEV_PROXY_PREFIX, ARAMGG_SOURCE } from "./aramggSource";
+import { traceAramggFetch } from "./aramggFetchTrace";
 import {
   parseChampionAugmentDataset,
   type ChampionAugmentDataset,
@@ -37,12 +38,24 @@ export async function fetchChampionAugmentsText(
   fetchImpl: typeof fetch,
   championId: string,
 ): Promise<string> {
-  const url = `${ARAMGG_DEV_PROXY_PREFIX}${championAugmentsDataPath(championId)}`;
-  const res = await fetchImpl(url);
-  if (!res.ok) {
-    throw new Error(`champion-augments fetch failed: ${url} → HTTP ${res.status}`);
-  }
-  return res.text();
+  const path = championAugmentsDataPath(championId);
+  const url = `${ARAMGG_DEV_PROXY_PREFIX}${path}`;
+  return traceAramggFetch(
+    {
+      source: "aramgg-dev",
+      phase: "champion-dataset",
+      endpointKind: "champion-augments-file",
+      path: url,
+      championId,
+    },
+    async () => {
+      const res = await fetchImpl(url);
+      if (!res.ok) {
+        throw new Error(`champion-augments fetch failed: ${url} → HTTP ${res.status}`);
+      }
+      return res.text();
+    },
+  );
 }
 
 /**
@@ -95,6 +108,165 @@ export async function loadChampionAugmentDataset(
   });
 }
 
+// ─── Local Step-4 artifact loader (Path B: no /aramgg-dev at runtime) ───
+
+/**
+ * Dev-server URL for the locally generated ARAMGG champion×augment artifact
+ * (`data/internal/aramgg-champion-augments.artifact.json`), served same-origin
+ * by the Vite middleware in `vite.config.ts`. Same-origin so it satisfies the
+ * webview's `connect-src 'self'` CSP with no proxy and no external request.
+ * The `tauri build` bundle has no such middleware and never imports this module.
+ */
+export const LOCAL_ARTIFACT_URL = "/local-aramgg-artifact.json";
+
+/**
+ * Build one champion's COMPLETE augment dataset from the local Step-4 artifact.
+ *
+ * The artifact's per-champion `rows` carry the same numeric ARAMGG augment id
+ * (`aramggAugmentId`) the identity/OCR resolvers produce and the raw decimal
+ * strings ARAMGG published, so each row maps 1:1 onto the `{augments:{…}}`
+ * shape `parseChampionAugmentDataset` already consumes. A row ARAMGG published
+ * with no win rate (below its minimum sample size) is carried through verbatim
+ * and dropped by `parseRow`, so it resolves to NO CHAMP DATA — never a
+ * stand-in value.
+ *
+ * A rostered champion the artifact lists in `championsWithoutCurrentSource`
+ * (ARAMGG serves no current-patch file for it) THROWS, exactly as the live
+ * endpoint's 404 did: the slot shows DATA ERROR, never a percentage.
+ *
+ * The dataset is stamped with the artifact's OWN serving patch, not the
+ * caller's: the ownership guard in `useAramggTierFixture` then rejects display
+ * when the live changelog has moved past what the artifact actually observed,
+ * instead of relabelling stale numbers to the current patch.
+ */
+export function championDatasetFromArtifact(
+  artifact: unknown,
+  championId: string,
+  patch: string | null,
+): ChampionAugmentDataset {
+  const payload =
+    artifact !== null && typeof artifact === "object"
+      ? (artifact as Record<string, unknown>).payload
+      : null;
+  if (payload === null || typeof payload !== "object") {
+    throw new Error("local ARAMGG artifact: missing payload object");
+  }
+  const p = payload as Record<string, unknown>;
+
+  const champions = Array.isArray(p.champions) ? p.champions : [];
+  const champion = champions.find(
+    (c) =>
+      c !== null &&
+      typeof c === "object" &&
+      String((c as Record<string, unknown>).championKey) === championId,
+  ) as Record<string, unknown> | undefined;
+
+  if (!champion) {
+    const absent = (Array.isArray(p.championsWithoutCurrentSource)
+      ? p.championsWithoutCurrentSource
+      : []
+    ).find(
+      (c) =>
+        c !== null &&
+        typeof c === "object" &&
+        String((c as Record<string, unknown>).championKey) === championId,
+    ) as Record<string, unknown> | undefined;
+    if (absent) {
+      throw new Error(
+        `local ARAMGG artifact: champion ${championId} has no current-source file ` +
+          `(absent, HTTP ${String(absent.httpStatus)})`,
+      );
+    }
+    throw new Error(`local ARAMGG artifact: champion ${championId} not in artifact roster`);
+  }
+
+  const rows = Array.isArray(champion.rows) ? champion.rows : [];
+  const augments: Record<string, unknown> = {};
+  for (const entry of rows) {
+    if (entry === null || typeof entry !== "object") continue;
+    const row = entry as Record<string, unknown>;
+    const id =
+      typeof row.aramggAugmentId === "string"
+        ? row.aramggAugmentId
+        : String(row.aramggAugmentId ?? "");
+    if (!/^\d+$/.test(id)) continue;
+    augments[id] = {
+      tier: row.tier,
+      rank: row.rank,
+      win_rate: row.winRateRaw,
+      num_games: row.numGames,
+      pick_rate: row.pickRateRaw,
+    };
+  }
+
+  const servingPatch =
+    typeof champion.servingPatchRaw === "string" && champion.servingPatchRaw.length > 0
+      ? champion.servingPatchRaw
+      : readArtifactServingPatch(p) ?? patch;
+
+  return parseChampionAugmentDataset(
+    { augments },
+    {
+      championId,
+      patch: servingPatch,
+      source: `${LOCAL_ARTIFACT_URL}#${championId}`,
+      completeness: "complete",
+    },
+  );
+}
+
+function readArtifactServingPatch(payload: Record<string, unknown>): string | null {
+  const sp = payload.sourcePatch;
+  if (sp === null || typeof sp !== "object") return null;
+  const serving = (sp as Record<string, unknown>).serving;
+  if (serving === null || typeof serving !== "object") return null;
+  const raw = (serving as Record<string, unknown>).rawValue;
+  return typeof raw === "string" && raw.length > 0 ? raw : null;
+}
+
+let localArtifactPromise: Promise<unknown> | null = null;
+
+/**
+ * Fetch the local artifact JSON. Memoized for the real webview (one same-origin
+ * request per session); an injected `fetchImpl` (tests) is never memoized.
+ */
+export function fetchLocalArtifact(fetchImpl: typeof fetch = fetch): Promise<unknown> {
+  const load = async (): Promise<unknown> => traceAramggFetch(
+    {
+      source: "local-artifact",
+      phase: "champion-dataset",
+      endpointKind: "local-artifact-file",
+      path: LOCAL_ARTIFACT_URL,
+    },
+    async () => {
+      const res = await fetchImpl(LOCAL_ARTIFACT_URL);
+      if (!res.ok) {
+        throw new Error(
+          `local ARAMGG artifact fetch failed: ${LOCAL_ARTIFACT_URL} → HTTP ${res.status}`,
+        );
+      }
+      return res.json();
+    },
+  );
+  if (fetchImpl !== fetch) return load();
+  if (!localArtifactPromise) {
+    localArtifactPromise = load().catch((err) => {
+      localArtifactPromise = null; // a failed load must not poison later attempts
+      throw err;
+    });
+  }
+  return localArtifactPromise;
+}
+
+/** Local-artifact drop-in for `loadChampionAugmentDataset` (identical signature). */
+export async function loadChampionAugmentDatasetLocal(
+  fetchImpl: typeof fetch,
+  championId: string,
+  patch: string | null,
+): Promise<ChampionAugmentDataset> {
+  return championDatasetFromArtifact(await fetchLocalArtifact(fetchImpl), championId, patch);
+}
+
 // ─── Cache keyed by (championId, patch) with in-flight dedupe ───
 
 function cacheKey(championId: string, patch: string | null): string {
@@ -105,7 +277,20 @@ export class ChampionDatasetCache {
   private readonly ready = new Map<string, ChampionAugmentDataset>();
   private readonly inflight = new Map<string, Promise<ChampionAugmentDataset>>();
 
-  constructor(private readonly fetchImpl: typeof fetch = fetch) {}
+  constructor(
+    private readonly fetchImpl: typeof fetch = fetch,
+    /**
+     * How one champion's dataset is loaded. Defaults to the live
+     * `/aramgg-dev` endpoint; the dev fixture passes
+     * `loadChampionAugmentDatasetLocal` so gameplay reads the local Step-4
+     * artifact and issues no ARAMGG request.
+     */
+    private readonly loader: (
+      fetchImpl: typeof fetch,
+      championId: string,
+      patch: string | null,
+    ) => Promise<ChampionAugmentDataset> = loadChampionAugmentDataset,
+  ) {}
 
   /** Cached dataset for this champion+patch, fetching (once) if absent. */
   get(championId: string, patch: string | null): Promise<ChampionAugmentDataset> {
@@ -114,7 +299,7 @@ export class ChampionDatasetCache {
     if (ready) return Promise.resolve(ready);
     const inflight = this.inflight.get(key);
     if (inflight) return inflight;
-    const promise = loadChampionAugmentDataset(this.fetchImpl, championId, patch)
+    const promise = this.loader(this.fetchImpl, championId, patch)
       .then((ds) => {
         this.ready.set(key, ds);
         this.inflight.delete(key);
@@ -168,6 +353,22 @@ export function championOwnershipCurrent(
     token.championGeneration === current.championGeneration &&
     token.championId === current.championId &&
     token.requestId === current.requestId &&
-    token.patch === current.patch
+    patchesMatch(token.patch, current.patch)
   );
+}
+
+/**
+ * Patch equality where an UNRESOLVED patch matches nothing — not even another
+ * unresolved patch.
+ *
+ * A plain `===` treated two independent resolution failures as the same patch
+ * (`null === null`, and previously `"unknown" === "unknown"` once
+ * `aramggSource` had substituted its sentinel), which let a champion dataset
+ * fetched under one unknown patch satisfy the ownership guard for a different
+ * unknown patch. Cross-patch statistics could reach a badge that way.
+ *
+ * Absence is not a value, so it cannot be equal to anything.
+ */
+export function patchesMatch(a: string | null, b: string | null): boolean {
+  return a !== null && b !== null && a === b;
 }

@@ -21,7 +21,17 @@ import {
   type RiotTitleRejection,
   type RiotTitleResolution,
 } from "./aramggSource";
-import { ChampionDatasetCache } from "./championDataset";
+import {
+  ChampionDatasetCache,
+  loadChampionAugmentDatasetLocal,
+  patchesMatch,
+} from "./championDataset";
+import {
+  championDatasetSourceKind,
+  resolveActiveChampionDataset,
+  traceChampionDatasetState,
+  type ChampionDatasetSourceKind,
+} from "./championDatasetTrace";
 import {
   resolvedStatToAramggStat,
   selectChampionSlotStat,
@@ -93,6 +103,12 @@ export interface AramggFixtureState {
   championCompleteness: "partial" | "complete" | null;
   /** Augment rows loaded for the active champion dataset (diagnostic). */
   championLoadedCount: number | null;
+  /**
+   * Which path actually backs the ACTIVE champion dataset, or null when none is
+   * active. Never a hardcoded endpoint name: the previous diagnostic claimed
+   * `champion-augments-file` during a session that issued no such request.
+   */
+  championDatasetSourceKind: ChampionDatasetSourceKind;
   refresh: () => void;
 }
 
@@ -152,6 +168,12 @@ export function useAramggTierFixture(
         setSource(parsed);
         setFromCache(false);
         setStatus("ready");
+        traceChampionDatasetState({
+          event: "source-resolved",
+          requestedPatch: parsed.patch,
+          status: "ready",
+          reason: "live",
+        });
       } catch (liveError) {
         if (cancelled) return;
         // Transparent fallback: only a cache written by a PRIOR successful
@@ -164,6 +186,16 @@ export function useAramggTierFixture(
             setSource(parsed);
             setFromCache(true);
             setStatus("ready");
+            // A cached source is a STALE patch authority: it gates every
+            // champion dataset that follows. Silence here made the live run
+            // unexplainable.
+            traceChampionDatasetState({
+              event: "source-resolved",
+              requestedPatch: parsed.patch,
+              status: "ready",
+              reason: "cache-fallback",
+              detail: liveError instanceof Error ? liveError.message : String(liveError),
+            });
             return;
           } catch {
             /* fall through to error */
@@ -172,6 +204,13 @@ export function useAramggTierFixture(
         setSource(null);
         setError(liveError instanceof Error ? liveError.message : "ARAMGG load failed");
         setStatus("error");
+        traceChampionDatasetState({
+          event: "source-resolved",
+          requestedPatch: null,
+          status: "error",
+          reason: "failed",
+          detail: liveError instanceof Error ? liveError.message : String(liveError),
+        });
       }
     })();
     return () => {
@@ -197,22 +236,99 @@ export function useAramggTierFixture(
     setChampionRequestId(requestId);
     if (!enabled || !source || !championKey) {
       setChampionDataStatus("idle");
+      traceChampionDatasetState({
+        event: "cleared",
+        championId: championKey,
+        requestId,
+        currentRequestId: championRequestIdRef.current,
+        status: "idle",
+        reason: !enabled ? "fixture-disabled" : !source ? "no-source" : "no-champion",
+      });
       return;
     }
-    if (!championCacheRef.current) championCacheRef.current = new ChampionDatasetCache();
+    // Path B: gameplay reads the local Step-4 artifact (served same-origin by
+    // the dev-server middleware), never the `/aramgg-dev` champion endpoint.
+    if (!championCacheRef.current) {
+      championCacheRef.current = new ChampionDatasetCache(fetch, loadChampionAugmentDatasetLocal);
+    }
     let cancelled = false;
     // A new champion starts loading: never keep showing the previous champion's
     // rows. Absence during loading is `loading`, never NO CHAMP DATA / global.
     setChampionDataStatus("loading");
+    traceChampionDatasetState({
+      event: "request-start",
+      championId: championKey,
+      requestId,
+      currentRequestId: championRequestIdRef.current,
+      requestedPatch: source.patch,
+      status: "loading",
+    });
     void championCacheRef.current
       .get(championKey, source.patch)
       .then((ds) => {
+        // What the loader produced, BEFORE any ownership check — so the log
+        // separates "never resolved" from "resolved and then discarded".
+        traceChampionDatasetState({
+          event: "loader-resolved",
+          championId: championKey,
+          requestId,
+          currentRequestId: championRequestIdRef.current,
+          requestedPatch: source.patch,
+          datasetPatch: ds.patch,
+          patchesMatch: patchesMatch(ds.patch, source.patch),
+          completeness: ds.completeness,
+          loadedCount: ds.loadedCount,
+          sourceKind: championDatasetSourceKind(ds.source),
+        });
+        traceChampionDatasetState({
+          event: "publish-attempt",
+          championId: championKey,
+          requestId,
+          currentRequestId: championRequestIdRef.current,
+          reason: cancelled ? "effect-cancelled" : null,
+        });
         // Publish only when this request is still the newest (ownership current).
-        if (cancelled || championRequestIdRef.current !== requestId) return;
+        if (cancelled || championRequestIdRef.current !== requestId) {
+          traceChampionDatasetState({
+            event: "discarded-stale",
+            championId: championKey,
+            requestId,
+            currentRequestId: championRequestIdRef.current,
+            datasetPatch: ds.patch,
+            loadedCount: ds.loadedCount,
+            reason: cancelled ? "effect-cancelled" : "superseded-request",
+          });
+          return;
+        }
         setChampionDataset(ds);
         setChampionDataStatus("ready");
+        traceChampionDatasetState({
+          event: "published",
+          championId: championKey,
+          requestId,
+          currentRequestId: championRequestIdRef.current,
+          requestedPatch: source.patch,
+          datasetPatch: ds.patch,
+          patchesMatch: patchesMatch(ds.patch, source.patch),
+          completeness: ds.completeness,
+          loadedCount: ds.loadedCount,
+          sourceKind: championDatasetSourceKind(ds.source),
+          status: "ready",
+        });
       })
       .catch((err) => {
+        traceChampionDatasetState({
+          event: "loader-failed",
+          championId: championKey,
+          requestId,
+          currentRequestId: championRequestIdRef.current,
+          requestedPatch: source.patch,
+          reason: cancelled
+            ? "effect-cancelled"
+            : championRequestIdRef.current !== requestId
+              ? "superseded-request"
+              : "loader-error",
+        });
         if (cancelled || championRequestIdRef.current !== requestId) return;
         // Champion-data failure is explicit (diagnosed, never faked): the slot
         // shows DATA ERROR — it must NEVER fall back to a global value.
@@ -234,12 +350,58 @@ export function useAramggTierFixture(
   // A dataset for a superseded champion is invalidated the instant the champion
   // changes: only a dataset whose championId matches the CURRENT champion may
   // back a CHAMP statistic — no cascading setState needed to clear it.
-  const activeChampionDataset =
-    championDataStatus === "ready" &&
-    championDataset && championKey && championDataset.championId === championKey &&
-      championDataset.patch === source?.patch
-      ? championDataset
-      : null;
+  const championGate = resolveActiveChampionDataset({
+    status: championDataStatus,
+    dataset: championDataset,
+    championKey,
+    sourcePatch: source?.patch ?? null,
+  });
+  const activeChampionDataset = championGate.dataset;
+
+  // The gate runs every render; only a CHANGE of its decision is evidence.
+  // Without this, "no active dataset" is an unexplained null in the log.
+  const championGateSignatureRef = useRef<string | null>(null);
+  useEffect(() => {
+    const signature = [
+      championGate.reason ?? "active",
+      championDataStatus,
+      championKey ?? "none",
+      championDataset?.championId ?? "none",
+      championDataset?.patch ?? "none",
+      source?.patch ?? "none",
+    ].join("|");
+    if (championGateSignatureRef.current === signature) return;
+    championGateSignatureRef.current = signature;
+    traceChampionDatasetState({
+      event: "gate-evaluated",
+      championId: championDataset?.championId ?? null,
+      currentChampionId: championKey,
+      currentRequestId: championRequestIdRef.current,
+      requestedPatch: source?.patch ?? null,
+      datasetPatch: championDataset?.patch ?? null,
+      patchesMatch: patchesMatch(championDataset?.patch ?? null, source?.patch ?? null),
+      completeness: championGate.dataset?.completeness ?? null,
+      loadedCount: championGate.dataset?.loadedCount ?? null,
+      status: championDataStatus,
+      sourceKind: championDatasetSourceKind(championGate.dataset?.source),
+      reason: championGate.reason,
+    });
+  }, [championGate.reason, championGate.dataset, championDataStatus, championKey, championDataset, source]);
+
+  // Status transitions, so `idle → loading → ready|error` is readable directly.
+  const championStatusRef = useRef<typeof championDataStatus | null>(null);
+  useEffect(() => {
+    if (championStatusRef.current === championDataStatus) return;
+    const previous = championStatusRef.current;
+    championStatusRef.current = championDataStatus;
+    traceChampionDatasetState({
+      event: "status-changed",
+      championId: championKey,
+      currentRequestId: championRequestIdRef.current,
+      status: championDataStatus,
+      reason: previous === null ? "initial" : `from-${previous}`,
+    });
+  }, [championDataStatus, championKey]);
 
   // Champion-ONLY statistic selection. There is no global fallback: an augment
   // absent from the CURRENT champion's complete table resolves to an explicit
@@ -336,6 +498,7 @@ export function useAramggTierFixture(
     championDataStatus,
     championCompleteness: activeChampionDataset?.completeness ?? null,
     championLoadedCount: activeChampionDataset?.loadedCount ?? null,
+    championDatasetSourceKind: championDatasetSourceKind(activeChampionDataset?.source),
     refresh,
   };
 }
