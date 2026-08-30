@@ -1,3 +1,5 @@
+/// <reference types="vite/client" />
+
 import { invoke } from "@tauri-apps/api/core";
 import type { OfferSurfaceKind } from "../offerSurfaceState";
 import type { GeometryClassification } from "../surfaceGeometry";
