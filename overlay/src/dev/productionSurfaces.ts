@@ -13,6 +13,9 @@ export function developmentSurfaceVisible(devBuild: boolean): boolean {
 export function devPanelsVisible(input: {
   devBuild: boolean;
   gameOverlayIsVisible: boolean;
+  diagnosticsOptIn: boolean;
 }): boolean {
-  return developmentSurfaceVisible(input.devBuild) && input.gameOverlayIsVisible;
+  return developmentSurfaceVisible(input.devBuild)
+    && input.gameOverlayIsVisible
+    && input.diagnosticsOptIn;
 }

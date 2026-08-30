@@ -209,6 +209,7 @@ import {
 } from "./dev/diagnostics";
 import {
   gameOverlayVisible,
+  overlayChromeVisible,
   unknownForegroundState,
   type ForegroundState,
 } from "./overlayVisibility";
@@ -1348,6 +1349,11 @@ function App() {
   const previewBadgesReady =
     isPreviewMode && fixturePayload != null && previewCards.length === 3;
   const showBadgeLayer = realFrameRenderable || previewBadgesReady;
+  const showOverlayChrome = overlayChromeVisible({
+    gameOverlayIsVisible,
+    badgeLayerVisible: showBadgeLayer,
+    phase,
+  });
 
   const slotChips = useMemo((): SlotChip[] => {
     if (previewBadgesReady && fixturePayload) {
@@ -4039,7 +4045,7 @@ function App() {
   return (
     <div className="overlay-root">
       {/* Status dot */}
-      {collectorEnabled && gameOverlayIsVisible && <div
+      {collectorEnabled && showOverlayChrome && <div
         className={`status-dot ${
           phase === "augment_selection"
             ? "status-ocr"
@@ -4077,20 +4083,17 @@ function App() {
         </div>
       )}
 
-      {/* Idle / waiting */}
-      {collectorEnabled && gameOverlayIsVisible && phase === "idle" && (
-        <div className="idle-panel">Waiting for League client...</div>
-      )}
-      {collectorEnabled && gameOverlayIsVisible && phase === "client_found" && (
-        <div className="idle-panel">Client found — waiting for game...</div>
-      )}
       {collectorEnabled && gameOverlayIsVisible && dataError && (
         <div className="idle-panel">Overlay data failed to load: {dataError}</div>
       )}
       {collectorEnabled && gameOverlayIsVisible && memberSnapshot?.error && (
         <div className="member-error">Member coach unavailable: {memberSnapshot.error}</div>
       )}
-      {devPanelsVisible({ devBuild: import.meta.env.DEV, gameOverlayIsVisible }) && (
+      {devPanelsVisible({
+        devBuild: import.meta.env.DEV,
+        gameOverlayIsVisible,
+        diagnosticsOptIn: tierFixtureOn,
+      }) && (
         <DevOverlayDiagnostics
           gameOverlayIsVisible={gameOverlayIsVisible}
           fixtureModeKind={fixtureMode.kind}
@@ -4112,7 +4115,7 @@ function App() {
       )}
 
       {/* Startup tip — auto-dismisses after 6s */}
-      {collectorEnabled && gameOverlayIsVisible && showStartupTip && (
+      {collectorEnabled && showOverlayChrome && showStartupTip && (
         <div className="startup-tip">
           <img src="/icon.png" alt="" className="startup-icon" />
           <div className="startup-tip-text">

@@ -1,9 +1,23 @@
 import { describe, expect, it } from "vitest";
+import * as overlayVisibility from "./overlayVisibility";
 import {
   gameOverlayVisible,
   unknownForegroundState,
   type ForegroundState,
 } from "./overlayVisibility";
+
+type OverlayChromeVisible = (input: {
+  gameOverlayIsVisible: boolean;
+  badgeLayerVisible: boolean;
+  phase: string;
+}) => boolean;
+
+const overlayChromeVisible: OverlayChromeVisible =
+  "overlayChromeVisible" in overlayVisibility
+    ? (overlayVisibility as typeof overlayVisibility & {
+        overlayChromeVisible: OverlayChromeVisible;
+      }).overlayChromeVisible
+    : ({ gameOverlayIsVisible }) => gameOverlayIsVisible;
 
 function foreground(overrides: Partial<ForegroundState>): ForegroundState {
   return {
@@ -60,5 +74,45 @@ describe("game overlay visibility", () => {
 
   it("starts fail-closed before native foreground state is known", () => {
     expect(unknownForegroundState().gameWindowForeground).toBe(false);
+  });
+});
+
+describe("overlay chrome visibility", () => {
+  it("hides chrome when the game overlay is not visible", () => {
+    expect(overlayChromeVisible({
+      gameOverlayIsVisible: false,
+      badgeLayerVisible: true,
+      phase: "augment_selection",
+    })).toBe(false);
+  });
+
+  it.each(["idle", "client_found"])(
+    "hides chrome during %s when no badge presentation is visible",
+    (phase) => {
+      expect(overlayChromeVisible({
+        gameOverlayIsVisible: true,
+        badgeLayerVisible: false,
+        phase,
+      })).toBe(false);
+    },
+  );
+
+  it.each(["idle", "client_found", "in_game", "augment_selection"])(
+    "keeps a valid badge presentation visible during %s",
+    (phase) => {
+      expect(overlayChromeVisible({
+        gameOverlayIsVisible: true,
+        badgeLayerVisible: true,
+        phase,
+      })).toBe(true);
+    },
+  );
+
+  it("shows chrome during augment selection without requiring a badge", () => {
+    expect(overlayChromeVisible({
+      gameOverlayIsVisible: true,
+      badgeLayerVisible: false,
+      phase: "augment_selection",
+    })).toBe(true);
   });
 });

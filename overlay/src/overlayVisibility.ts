@@ -38,3 +38,17 @@ export function gameOverlayVisible({
 }): boolean {
   return gameWindowForeground || previewMode;
 }
+
+export function overlayChromeVisible({
+  gameOverlayIsVisible,
+  badgeLayerVisible,
+  phase,
+}: {
+  gameOverlayIsVisible: boolean;
+  badgeLayerVisible: boolean;
+  phase: string;
+}): boolean {
+  if (!gameOverlayIsVisible) return false;
+  if (badgeLayerVisible) return true;
+  return phase === "augment_selection" || phase === "in_game";
+}

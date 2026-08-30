@@ -3,6 +3,12 @@ import { developmentSurfaceVisible, devPanelsVisible } from "./productionSurface
 import { gameOverlayVisible } from "../overlayVisibility";
 import { resolveOverlayFixtureMode } from "./fixtureMode";
 
+const devPanelsVisibleWithOptIn = devPanelsVisible as (input: {
+  devBuild: boolean;
+  gameOverlayIsVisible: boolean;
+  diagnosticsOptIn: boolean;
+}) => boolean;
+
 describe("production overlay surface gate", () => {
   it("renders no fixture, calibration, OCR, or raw-focus surface in production", () => {
     expect(developmentSurfaceVisible(false)).toBe(false);
@@ -16,7 +22,11 @@ describe("production overlay surface gate", () => {
 describe("development panel gate", () => {
   it("may render dev panels while the GameClient is topmost", () => {
     expect(
-      devPanelsVisible({ devBuild: true, gameOverlayIsVisible: true }),
+      devPanelsVisibleWithOptIn({
+        devBuild: true,
+        gameOverlayIsVisible: true,
+        diagnosticsOptIn: true,
+      }),
     ).toBe(true);
   });
 
@@ -25,16 +35,28 @@ describe("development panel gate", () => {
     // canonical predicate is false there, so the gate must be false too —
     // regardless of dev build or any fixture flag.
     expect(
-      devPanelsVisible({ devBuild: true, gameOverlayIsVisible: false }),
+      devPanelsVisibleWithOptIn({
+        devBuild: true,
+        gameOverlayIsVisible: false,
+        diagnosticsOptIn: true,
+      }),
     ).toBe(false);
   });
 
   it("never renders dev panels in a production build", () => {
     expect(
-      devPanelsVisible({ devBuild: false, gameOverlayIsVisible: true }),
+      devPanelsVisibleWithOptIn({
+        devBuild: false,
+        gameOverlayIsVisible: true,
+        diagnosticsOptIn: true,
+      }),
     ).toBe(false);
     expect(
-      devPanelsVisible({ devBuild: false, gameOverlayIsVisible: false }),
+      devPanelsVisibleWithOptIn({
+        devBuild: false,
+        gameOverlayIsVisible: false,
+        diagnosticsOptIn: true,
+      }),
     ).toBe(false);
   });
 
@@ -57,6 +79,18 @@ describe("development panel gate", () => {
       previewMode: mode.kind === "preview",
     });
     expect(visible).toBe(false);
-    expect(devPanelsVisible({ devBuild: true, gameOverlayIsVisible: visible })).toBe(false);
+    expect(devPanelsVisibleWithOptIn({
+      devBuild: true,
+      gameOverlayIsVisible: visible,
+      diagnosticsOptIn: true,
+    })).toBe(false);
+  });
+
+  it("requires an explicit diagnostics opt-in even in a visible development overlay", () => {
+    expect(devPanelsVisibleWithOptIn({
+      devBuild: true,
+      gameOverlayIsVisible: true,
+      diagnosticsOptIn: false,
+    })).toBe(false);
   });
 });

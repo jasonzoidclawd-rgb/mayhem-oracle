@@ -62,55 +62,35 @@ describe("collector window routing", () => {
     expect(shouldShowCollectorControlsWindow(pending)).toBe(false);
   });
 
-  it("routes accepted and declined choices to bounded collector controls", () => {
+  it("never shows collector controls after accepted or declined consent", () => {
     expect(shouldShowConsentWindow(status("accepted"))).toBe(false);
-    expect(shouldShowCollectorControlsWindow(status("accepted"))).toBe(true);
+    expect(shouldShowCollectorControlsWindow(status("accepted"))).toBe(false);
 
     expect(shouldShowConsentWindow(status("declined"))).toBe(false);
-    expect(shouldShowCollectorControlsWindow(status("declined"))).toBe(true);
+    expect(shouldShowCollectorControlsWindow(status("declined"))).toBe(false);
   });
 
-  it("closes the collector controls window immediately when visible collector UI is off", () => {
-    expect(
-      resolveCollectorWindowVisibility({
-        status: status("accepted"),
-        controlsVisible: false,
-      }),
-    ).toEqual({
-      consentWindow: false,
-      collectorControlsWindow: false,
-    });
-
-    expect(
-      resolveCollectorWindowVisibility({
-        status: status("declined"),
-        controlsVisible: true,
-      }),
-    ).toEqual({
-      consentWindow: false,
-      collectorControlsWindow: true,
-    });
-
-    expect(
-      resolveCollectorWindowVisibility({
-        status: status("pending"),
-        controlsVisible: false,
-      }),
-    ).toEqual({
-      consentWindow: false,
-      collectorControlsWindow: false,
-    });
-
-    expect(
-      resolveCollectorWindowVisibility({
-        status: status("pending"),
-        controlsVisible: true,
-      }),
-    ).toEqual({
-      consentWindow: true,
-      collectorControlsWindow: false,
-    });
-  });
+  it.each([
+    { collectorStatus: null, controlsVisible: false },
+    { collectorStatus: null, controlsVisible: true },
+    { collectorStatus: status("pending"), controlsVisible: false },
+    { collectorStatus: status("pending"), controlsVisible: true },
+    { collectorStatus: status("accepted"), controlsVisible: false },
+    { collectorStatus: status("accepted"), controlsVisible: true },
+    { collectorStatus: status("declined"), controlsVisible: false },
+    { collectorStatus: status("declined"), controlsVisible: true },
+  ])(
+    "never shows collector controls for status $collectorStatus.consent with controlsVisible=$controlsVisible",
+    ({ collectorStatus, controlsVisible }) => {
+      expect(resolveCollectorWindowVisibility({
+        status: collectorStatus,
+        controlsVisible,
+      })).toEqual({
+        consentWindow: collectorStatus?.consent === "pending" && controlsVisible,
+        collectorControlsWindow: false,
+      });
+    },
+  );
 
   it("keeps the full-screen overlay click-through unless controls are explicitly open", () => {
     expect(overlayShouldIgnoreMouseEvents({ coachOpen: false })).toBe(true);

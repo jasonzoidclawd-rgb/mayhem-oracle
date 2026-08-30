@@ -85,7 +85,7 @@ describe("CollectorOverlayController", () => {
     vi.clearAllMocks();
   });
 
-  it("keeps collector state alive while the panel hides on blur and restores it on refocus", async () => {
+  it("keeps collector state alive while collector controls remain closed", async () => {
     const onStatus = vi.fn();
 
     await act(async () => {
@@ -98,7 +98,7 @@ describe("CollectorOverlayController", () => {
       await flush();
     });
 
-    expect(openCollectorControlsWindowMock).toHaveBeenCalledTimes(1);
+    expect(openCollectorControlsWindowMock).not.toHaveBeenCalled();
     expect(closeWindowMock).toHaveBeenCalledWith(CONSENT_WINDOW_LABEL);
     expect(onStatus).toHaveBeenLastCalledWith(
       expect.objectContaining({
@@ -154,7 +154,7 @@ describe("CollectorOverlayController", () => {
       closeWindowMock.mock.calls.filter(([label]) => label === COLLECTOR_CONTROLS_WINDOW_LABEL)
         .length,
     ).toBe(closeCountAfterBlur);
-    expect(openCollectorControlsWindowMock).toHaveBeenCalledTimes(1);
+    expect(openCollectorControlsWindowMock).not.toHaveBeenCalled();
 
     await act(async () => {
       root.update(
@@ -166,7 +166,7 @@ describe("CollectorOverlayController", () => {
       await flush();
     });
 
-    expect(openCollectorControlsWindowMock).toHaveBeenCalledTimes(2);
+    expect(openCollectorControlsWindowMock).not.toHaveBeenCalled();
     expect(onStatus).toHaveBeenLastCalledWith(
       expect.objectContaining({
         paused: true,
@@ -196,11 +196,11 @@ describe("CollectorOverlayController", () => {
     expect(
       invokeMock.mock.calls.filter(([command]) => command === "collector_tick").length,
     ).toBe(ticksBeforeFocusToggles);
-    expect(openCollectorControlsWindowMock).toHaveBeenCalledTimes(4);
+    expect(openCollectorControlsWindowMock).not.toHaveBeenCalled();
     expect(
       closeWindowMock.mock.calls.filter(([label]) => label === COLLECTOR_CONTROLS_WINDOW_LABEL)
         .length,
-    ).toBe(closeCountBeforeFocusToggles + 2);
+    ).toBe(closeCountBeforeFocusToggles);
   });
 
   it("closes stale native controls on the initial unfocused render", async () => {

@@ -58,8 +58,8 @@ export function shouldShowConsentWindow(status: CollectorSnapshot | null): boole
   return status?.consent === "pending";
 }
 
-export function shouldShowCollectorControlsWindow(status: CollectorSnapshot | null): boolean {
-  return status !== null && status.consent !== "pending";
+export function shouldShowCollectorControlsWindow(_status: CollectorSnapshot | null): boolean {
+  return false;
 }
 
 export function resolveCollectorWindowVisibility({
