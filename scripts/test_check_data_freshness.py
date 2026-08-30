@@ -1,8 +1,10 @@
 #!/usr/bin/env python3
 
 import json
+import tempfile
 import unittest
 from io import StringIO
+from pathlib import Path
 from unittest.mock import patch
 
 from check_data_freshness import (
@@ -43,6 +45,38 @@ class DataFreshnessTests(unittest.TestCase):
                 main()
 
         self.assertIn('"status": "fresh"', out.getvalue())
+
+    def test_main_json_names_statistics_feed_scope(self):
+        out = StringIO()
+        with patch("sys.argv", ["check", "--published-patch", "26.13", "--upstream-patch", "26.13", "--json"]):
+            with patch("sys.stdout", out):
+                main()
+
+        self.assertEqual(json.loads(out.getvalue())["scope"], "statistics-feed")
+
+    def test_main_reads_published_feed_patch_not_catalog_patch(self):
+        with tempfile.TemporaryDirectory() as tmpdir:
+            meta_path = Path(tmpdir) / "meta.json"
+            meta_path.write_text(
+                json.dumps({"patch": "26.16", "catalog_patch": "26.17"}),
+                encoding="utf-8",
+            )
+            out = StringIO()
+            with patch(
+                "sys.argv",
+                [
+                    "check",
+                    "--published-meta",
+                    str(meta_path),
+                    "--upstream-patch",
+                    "26.16",
+                    "--json",
+                ],
+            ):
+                with patch("sys.stdout", out):
+                    main()
+
+        self.assertEqual(json.loads(out.getvalue())["published_patch"], "26.16")
 
     def test_main_reports_stale_json_with_exit_2(self):
         out = StringIO()

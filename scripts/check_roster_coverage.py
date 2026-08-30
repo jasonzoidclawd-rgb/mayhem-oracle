@@ -37,6 +37,9 @@ ICON_ID_RE = re.compile(r"/champion-icons/(\d+)\.png(?:$|[?#])")
 GENERIC_ICON_ID_RE = re.compile(r"/(\d+)\.png(?:$|[?#])")
 
 
+LOCALIZED_NAME_FIELDS = ("name_zh_TW", "name_zh_CN", "name_ja", "name_ko")
+
+
 def load_json(path: Path) -> Any:
     return json.loads(path.read_text(encoding="utf-8"))
 
@@ -124,6 +127,13 @@ def published_entries(payload: Any) -> List[Dict[str, Any]]:
                 "raw_slug": str(raw_slug or ""),
                 "win_rate": row.get("win_rate"),
                 "pick_rate": row.get("pick_rate"),
+                # Carried through so identity collapse across locales is visible
+                # to the gate (see localized_name_collisions).
+                **{
+                    field: row[field]
+                    for field in LOCALIZED_NAME_FIELDS
+                    if isinstance(row.get(field), str) and row[field]
+                },
             }
         )
     return entries
@@ -193,6 +203,7 @@ def build_roster_report(
         "duplicate_upstream_ids": duplicate_values(authority, "id"),
         "duplicate_published_ids": duplicate_values(published, "id"),
         "alias_collisions": alias_collisions(published),
+        "localized_name_collisions": localized_name_collisions(published),
         "statistical_coverage_ratio": round(
             len(statistical_rows) / authority_count if authority_count else 0.0,
             6,
@@ -225,6 +236,37 @@ def load_corroboration_payload(path: Optional[Path]) -> Any:
     return load_json(path) if path else fetch_json(CDRAGON_SUMMARY_URL)
 
 
+def localized_name_collisions(rows: List[Dict[str, Any]]) -> Dict[str, Dict[str, List[str]]]:
+    """Localized names shared by champions with different Riot IDs.
+
+    A localized name IS the champion's identity in that locale, so two different
+    champion IDs publishing one name means an upstream join collapsed
+    many-to-one. BUG-4 published 171 champions as Lee Sin this way while every
+    count, ratio, and roster join stayed correct.
+
+    Structural on purpose: no threshold and no reference to any specific
+    champion, so it catches the next bad join rather than the last one. Rows
+    that simply have no localized name are ignored - absence is not collapse.
+    """
+    collisions: Dict[str, Dict[str, List[str]]] = {}
+    for field in LOCALIZED_NAME_FIELDS:
+        by_name: Dict[str, List[str]] = {}
+        for row in rows:
+            if not isinstance(row, dict):
+                continue
+            name = row.get(field)
+            champion_id = row.get("id")
+            if not isinstance(name, str) or not name or not champion_id:
+                continue
+            ids = by_name.setdefault(name, [])
+            if champion_id not in ids:
+                ids.append(champion_id)
+        shared = {name: sorted(ids) for name, ids in by_name.items() if len(ids) > 1}
+        if shared:
+            collisions[field] = shared
+    return collisions
+
+
 def report_errors(report: Dict[str, Any]) -> List[str]:
     errors = []
     if report["missing_active_champion_count"]:
@@ -238,6 +280,11 @@ def report_errors(report: Dict[str, Any]) -> List[str]:
         errors.append(f"duplicate published IDs: {report['duplicate_published_ids']}")
     if report["alias_collisions"]:
         errors.append(f"alias collisions: {report['alias_collisions']}")
+    for field, collisions in sorted(report["localized_name_collisions"].items()):
+        for name, ids in sorted(collisions.items()):
+            errors.append(
+                f"{field} collapsed: {name!r} published for champion IDs {', '.join(ids)}"
+            )
     return errors
 
 

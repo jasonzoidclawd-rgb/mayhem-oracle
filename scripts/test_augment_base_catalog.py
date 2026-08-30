@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 
+import json
 import unittest
 
 from scrape_mayhem_augments_cdragon import (
@@ -132,12 +133,25 @@ class AugmentBaseCatalogTests(unittest.TestCase):
         )
 
         by_id = {augment["augmentId"]: augment for augment in catalog["augments"]}
+        # ArcaneCometRecharge carries no parseable `kiwi_*` definition key, but
+        # its art is in Riot's Kiwi (Mayhem) asset namespace, so it IS a Mayhem
+        # registry row. Membership no longer depends on Riot having authored a
+        # Mayhem-specific display string -- that gate silently dropped four real
+        # offerable augments. It is admitted with no kiwi string evidence, which
+        # keeps it out of the live catalog downstream (no live signal), while
+        # the Cherry-namespace Arena row stays out entirely.
         self.assertEqual(set(by_id), {
             "ARAM_ADAPt",
             "ARAM_DivineDomain",
             "ARAM_MissingPingAugment",
             "ChainReaction",
+            "ArcaneCometRecharge",
         })
+        self.assertNotIn("ARAM_UnrelatedArenaRow", by_id)
+        self.assertEqual(
+            by_id["ArcaneCometRecharge"]["cdragon"]["mayhem"]["evidence"], "kiwi-asset-namespace"
+        )
+        self.assertFalse(by_id["ArcaneCometRecharge"]["cdragon"]["kiwi"]["present"])
 
         adapt = by_id["ARAM_ADAPt"]
         self.assertEqual(adapt["rarity"], "silver")
@@ -234,6 +248,139 @@ class AugmentBaseCatalogTests(unittest.TestCase):
         self.assertIn("BloodMoneyBurn", by_id)
         self.assertEqual(by_id["BloodMoneyBurn"]["name"], "Combusting Interest")
         self.assertEqual(catalog["reports"]["kiwiDefinitions"]["aliasedTokens"][0]["token"], "bloodmoney")
+
+
+def _kiwi_icon(name: str) -> str:
+    return f"/lol-game-data/assets/ASSETS/UX/Kiwi/Augments/Icons/{name}_small.png"
+
+
+def _cherry_icon(name: str) -> str:
+    return f"/lol-game-data/assets/ASSETS/UX/Cherry/Augments/Icons/{name}_small.png"
+
+
+class MayhemMembershipTests(unittest.TestCase):
+    """Membership is an asset-namespace fact, not a localization fact.
+
+    Riot marks an augment as ARAM Mayhem content by shipping its art under
+    /UX/Kiwi/. Whether it ALSO ships a `kiwi_*` display string is a
+    presentation detail: Upgrade_Ravenous, Quest_UltraHydra,
+    Upgrade_SunderedSky and Upgrade_DeathDance publish their text under
+    unprefixed `upgrade_*` / `quest_*` keys instead. Gating membership on the
+    `kiwi_` string dropped four real, offerable augments that ARAMGG has
+    thousands of games of evidence for.
+
+    Cherry-namespace rows stay out, so repairing this cannot pull Arena
+    content into the Mayhem catalog.
+    """
+
+    ROSTER = [
+        {
+            "id": 2140,
+            "augmentNameId": "Upgrade_Ravenous",
+            "nameTRA": "Upgrade Ravenous Hydra",
+            "augmentSmallIconPath": _kiwi_icon("UpgradeSheen"),
+            "rarity": "kGold",
+        },
+        {
+            "id": 1411,
+            "augmentNameId": "Upgrade_Thornmail",
+            "nameTRA": "Upgrade Thornmail",
+            "augmentSmallIconPath": _kiwi_icon("UpgradeCollector"),
+            "rarity": "kSilver",
+        },
+        {
+            "id": 1602,
+            "augmentNameId": "ARAM_UnrelatedArenaRow",
+            "nameTRA": "Unrelated Arena Row",
+            "augmentSmallIconPath": _cherry_icon("Unrelated"),
+            "rarity": "kSilver",
+        },
+        {
+            "id": 393,
+            "augmentNameId": "Quest_VoidImmolation",
+            "nameTRA": "Icathia's Fall",
+            "augmentSmallIconPath": _kiwi_icon("VoidImmolation"),
+            "rarity": "kPrismatic",
+        },
+        {
+            "id": 1361,
+            "augmentNameId": "ARAM_Quest_VoidImmolation",
+            "nameTRA": "Icathia's Fall",
+            "augmentSmallIconPath": _kiwi_icon("VoidImmolation"),
+            "rarity": "kPrismatic",
+        },
+    ]
+
+    STRINGTABLES = {
+        "en": {"entries": {
+            "kiwi_upgrade_thornmail_name": "Upgrade Thornmail",
+            "kiwi_questvoidimmolation_name": "Icathia's Fall",
+            "upgrade_ravenous_name": "Upgrade Ravenous Hydra",
+            "upgrade_ravenous_tooltip": "Upgrades Ravenous Hydra.",
+            # An unprefixed key whose token is not a registry token must never
+            # be read: the stringtable holds >130k unrelated game strings.
+            "upgrade_ravenous_unrelated_name": "Not an augment string",
+            "some_other_game_system_name": "Unrelated",
+        }},
+        "zh_cn": {"entries": {"upgrade_ravenous_name": "升级：贪欲九头蛇"}},
+        "zh_tw": {"entries": {"upgrade_ravenous_name": "升級狂怒九頭蛇"}},
+        "ja": {"entries": {"upgrade_ravenous_name": "ラヴァナス ハイドラ アップグレード"}},
+        "ko": {"entries": {"upgrade_ravenous_name": "굶주린 히드라 업그레이드"}},
+    }
+
+    ARENA = {loc: {"augments": []} for loc in ("en", "zh_cn", "zh_tw", "ja", "ko")}
+
+    def _catalog(self):
+        return build_base_catalog(
+            roster=self.ROSTER,
+            arena_by_locale=self.ARENA,
+            stringtables_by_locale=self.STRINGTABLES,
+            fetched_at="2026-08-29T00:00:00+00:00",
+        )
+
+    def test_kiwi_asset_row_without_a_kiwi_string_is_admitted(self):
+        by_id = {a["augmentId"]: a for a in self._catalog()["augments"]}
+        self.assertIn("Upgrade_Ravenous", by_id)
+
+    def test_cherry_asset_row_without_a_kiwi_string_stays_out(self):
+        by_id = {a["augmentId"]: a for a in self._catalog()["augments"]}
+        self.assertNotIn("ARAM_UnrelatedArenaRow", by_id)
+
+    def test_membership_evidence_names_which_signal_admitted_the_row(self):
+        by_id = {a["augmentId"]: a for a in self._catalog()["augments"]}
+        self.assertEqual(
+            by_id["Upgrade_Ravenous"]["cdragon"]["mayhem"]["evidence"], "kiwi-asset-namespace"
+        )
+        self.assertEqual(
+            by_id["Upgrade_Thornmail"]["cdragon"]["mayhem"]["evidence"], "kiwi-stringtable"
+        )
+
+    def test_localization_comes_from_the_riot_keys_the_augment_actually_uses(self):
+        by_id = {a["augmentId"]: a for a in self._catalog()["augments"]}
+        names = by_id["Upgrade_Ravenous"]["names"]
+        self.assertEqual(names["en"], "Upgrade Ravenous Hydra")
+        self.assertEqual(names["zh_cn"], "升级：贪欲九头蛇")
+        self.assertEqual(names["zh_tw"], "升級狂怒九頭蛇")
+        self.assertEqual(names["ja"], "ラヴァナス ハイドラ アップグレード")
+        self.assertEqual(names["ko"], "굶주린 히드라 업그레이드")
+        # Five-locale parity holds without inventing a kiwi_ key Riot never shipped.
+        self.assertEqual(set(names), {"en", "zh_cn", "zh_tw", "ja", "ko"})
+        self.assertNotIn("kiwi_", by_id["Upgrade_Ravenous"]["provenance"]["names"]["zh_cn"])
+
+    def test_an_unprefixed_key_for_an_unknown_token_is_never_read(self):
+        by_id = {a["augmentId"]: a for a in self._catalog()["augments"]}
+        self.assertNotIn("Not an augment string", json.dumps(by_id, ensure_ascii=False))
+
+    def test_a_duplicate_bare_codename_row_does_not_create_a_second_augment(self):
+        # 393 Quest_VoidImmolation and 1361 ARAM_Quest_VoidImmolation are one
+        # augment under two registry ids. Admitting Kiwi rows must not publish
+        # both -- the existing ARAM_-preference dedupe still decides.
+        ids = [a["augmentId"] for a in self._catalog()["augments"]]
+        self.assertIn("ARAM_Quest_VoidImmolation", ids)
+        self.assertNotIn("Quest_VoidImmolation", ids)
+        self.assertEqual(len([i for i in ids if i.endswith("Quest_VoidImmolation")]), 1)
+
+
 
 if __name__ == "__main__":
     unittest.main()

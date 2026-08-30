@@ -1,4 +1,4 @@
-name: Freshness Check
+name: Statistics Feed Freshness Check
 
 on:
   schedule:
@@ -46,11 +46,11 @@ jobs:
           fi
 
           if [ "$status" = "unknown" ]; then
-            title="Data freshness check is unknown: upstream $upstream, published $published"
-            body="UNKNOWN: upstream=$upstream published=$published. Freshness check could not determine patch freshness. Run: $RUN_URL"
+            title="Statistics-feed freshness is unknown: upstream $upstream, published $published"
+            body="UNKNOWN: arammayhem statistics feed upstream=$upstream published=$published. This check does not cover the Riot mechanics catalog. Run: $RUN_URL"
           else
-            title="Published data is stale: upstream $upstream, published $published"
-            body="STALE: upstream=$upstream published=$published. Freshness check run: $RUN_URL"
+            title="Statistics feed is stale: upstream $upstream, published $published"
+            body="STALE: arammayhem statistics feed upstream=$upstream published=$published. This check does not cover the Riot mechanics catalog. Run: $RUN_URL"
           fi
 
           if [ -n "$existing" ]; then

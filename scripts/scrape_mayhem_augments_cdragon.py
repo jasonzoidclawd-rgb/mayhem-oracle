@@ -106,6 +106,29 @@ def _stringtable_key_parts(key: str) -> tuple[str, str, str] | None:
     return m.group(1), token, kind
 
 
+def _base_stringtable_key_parts(
+    key: str, registry_tokens: frozenset[str] | None
+) -> tuple[str, str, str] | None:
+    """Parse an UNPREFIXED Riot string key, e.g. `upgrade_ravenous_name`.
+
+    Some Mayhem augments publish their display text with no `kiwi_`/`cherry_`
+    prefix at all. Those are still Riot-authored strings and are the only ones
+    those augments have. The stringtable also holds >130k unrelated game
+    strings, so an unprefixed key is read ONLY when its token is a known
+    registry token -- never on shape alone.
+    """
+    if not registry_tokens:
+        return None
+    low = key.lower()
+    suffix = _KEY_SUFFIX.search(low)
+    if not suffix:
+        return None
+    token = registry_token(_KEY_SUFFIX.sub("", low))
+    if token not in registry_tokens:
+        return None
+    return "base", token, suffix.group(1)
+
+
 def build_tooltip_index(stringtable: dict) -> dict[str, str]:
     """Map normalized augment token → best Riot-authored tooltip/description.
 
@@ -134,10 +157,16 @@ def build_tooltip_index(stringtable: dict) -> dict[str, str]:
 
 
 def _source_priority(prefix: str) -> int:
-    return 1 if prefix == "kiwi" else 0
+    if prefix == "kiwi":
+        return 1
+    # An unprefixed Riot key is a real string but the weakest evidence: it only
+    # applies when no namespaced key exists for the token.
+    return -1 if prefix == "base" else 0
 
 
-def build_stringtable_definition_index(stringtable: dict) -> dict[str, dict[str, dict]]:
+def build_stringtable_definition_index(
+    stringtable: dict, registry_tokens: frozenset[str] | None = None
+) -> dict[str, dict[str, dict]]:
     """Map normalized CDragon augment token to localized stringtable fields.
 
     The index keeps the selected value and the exact stringtable key. kiwi_* rows
@@ -152,7 +181,7 @@ def build_stringtable_definition_index(stringtable: dict) -> dict[str, dict[str,
     for key, value in entries.items():
         if not isinstance(key, str) or not isinstance(value, str):
             continue
-        parts = _stringtable_key_parts(key)
+        parts = _stringtable_key_parts(key) or _base_stringtable_key_parts(key, registry_tokens)
         if not parts:
             continue
         prefix, token, kind = parts
@@ -182,9 +211,13 @@ def _locale_payload(payloads: dict[str, dict | list], locale: str) -> dict | lis
     return payloads.get(locale) or payloads.get(CDRAGON_LOCALES[locale]) or {}
 
 
-def _stringtable_indexes(payloads: dict[str, dict | list]) -> dict[str, dict[str, dict[str, dict]]]:
+def _stringtable_indexes(
+    payloads: dict[str, dict | list], registry_tokens: frozenset[str] | None = None
+) -> dict[str, dict[str, dict[str, dict]]]:
     return {
-        locale: build_stringtable_definition_index(_locale_payload(payloads, locale))
+        locale: build_stringtable_definition_index(
+            _locale_payload(payloads, locale), registry_tokens
+        )
         for locale in CDRAGON_LOCALES
     }
 
@@ -227,6 +260,14 @@ def _arena_index(arena_en: dict | list) -> dict[str, list[dict]]:
             if token:
                 index.setdefault(token, []).append(row)
     return index
+
+
+def is_kiwi_asset_row(augment: dict) -> bool:
+    """Riot ships ARAM Mayhem augment art under /UX/Kiwi/ and Arena's under
+    /UX/Cherry/. The asset namespace is Riot's own mode marker and, unlike a
+    `kiwi_` display string, it does not depend on whether Mayhem-specific text
+    was authored."""
+    return "/ux/kiwi/" in str(augment.get("augmentSmallIconPath", "")).lower()
 
 
 def _roster_rows(roster: dict | list) -> list[dict]:
@@ -324,13 +365,61 @@ def _mayhem_roster_augments(
                 "tokens": [token],
                 "keys": list(definition["keys"]),
                 "kinds": list(definition["kinds"]),
+                "membership": "kiwi-stringtable",
             },
         )
+
+    # Membership is not a localization question. An augment whose art lives in
+    # Riot's Kiwi (Mayhem) asset namespace is Mayhem content even when Riot
+    # never authored a `kiwi_` display string for it -- Upgrade_Ravenous,
+    # Quest_UltraHydra, Upgrade_SunderedSky and Upgrade_DeathDance are all in
+    # that position. Admission runs through the SAME token dedupe as above, so
+    # a duplicate bare-codename row (Quest_VoidImmolation beside
+    # ARAM_Quest_VoidImmolation) can never publish a second canonical augment.
+    asset_admitted: list[dict] = []
+    matched_tokens = {
+        token for _augment, meta in matched_by_id.values() for token in meta["tokens"]
+    }
+    for token in sorted(registry_by_token):
+        if token in matched_tokens:
+            continue
+        candidates = [row for row in registry_by_token[token] if is_kiwi_asset_row(row)]
+        if not candidates:
+            continue
+        if len(candidates) > 1:
+            aram_rows = [
+                row for row in candidates
+                if str(row.get("augmentNameId", "")).startswith("ARAM_")
+            ]
+            if len(aram_rows) != 1:
+                ambiguous.append({
+                    "token": token,
+                    "keys": [],
+                    "augmentNameIds": sorted(row.get("augmentNameId", "") for row in candidates),
+                })
+                continue
+            candidates = aram_rows
+        augment = candidates[0]
+        augment_id = augment.get("augmentNameId", "")
+        if not augment_id or augment_id in matched_by_id:
+            continue
+        matched_by_id[augment_id] = (
+            augment,
+            {
+                "present": False,
+                "tokens": [token],
+                "keys": [],
+                "kinds": [],
+                "membership": "kiwi-asset-namespace",
+            },
+        )
+        asset_admitted.append({"token": token, "augmentNameId": augment_id})
 
     matched = sorted(matched_by_id.values(), key=lambda item: item[0].get("augmentNameId", ""))
     return matched, {
         "definitionTokens": len(kiwi_definitions),
         "matchedRegistryRows": len(matched),
+        "assetNamespaceAdmitted": asset_admitted,
         "unmatchedTokens": unmatched,
         "ambiguousTokens": ambiguous,
         "disambiguatedTokens": disambiguated,
@@ -552,7 +641,14 @@ def build_base_catalog(
     This function is deliberately pure so unit tests can pass committed fixtures
     and never fetch live CommunityDragon.
     """
-    stringtable_indexes = _stringtable_indexes(stringtables_by_locale)
+    registry_tokens = frozenset(
+        token
+        for token in (
+            registry_token(row.get("augmentNameId", "")) for row in _roster_rows(roster)
+        )
+        if token
+    )
+    stringtable_indexes = _stringtable_indexes(stringtables_by_locale, registry_tokens)
     arena_en = _locale_payload(arena_by_locale, "en")
     arena_by_token = _arena_index(arena_en)
     kiwi_definitions = _kiwi_definition_index(_locale_payload(stringtables_by_locale, "en"))
@@ -596,6 +692,10 @@ def build_base_catalog(
                 "arenaApiName": arena_row.get("apiName") if arena_row else None,
                 "stringtableTokens": tokens,
                 "kiwi": _kiwi_metadata(kiwi_definition),
+                "mayhem": {
+                    "member": True,
+                    "evidence": (kiwi_definition or {}).get("membership", "kiwi-stringtable"),
+                },
             },
             "name": names.get("en") or roster_row.get("nameTRA", ""),
             "names": names,

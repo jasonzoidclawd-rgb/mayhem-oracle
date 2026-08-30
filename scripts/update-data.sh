@@ -181,6 +181,13 @@ python3 scripts/generate_pool_rules.py
 step "17c/19 generate current internal combos  →  combos.json"
 npx --yes tsx scripts/generate_internal_combos.ts
 
+# Validate the internal catalog BEFORE it is published. The roster gate below
+# reads public/data, so on its own it can only report corruption that has
+# already shipped - BUG-4 reached public/data/champions.json that way while
+# every step exited 0. Structural identity checks belong ahead of promotion.
+step "18/19 internal catalog identity validation  →  pre-publish gate"
+python3 scripts/check_roster_coverage.py --published-file data/internal/champions.json
+
 step "19/19 export bounded public catalogs + patch/PBE presentation projections"
 python3 scripts/export_public_catalog.py
 

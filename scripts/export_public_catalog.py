@@ -14,7 +14,8 @@ from data_paths import INTERNAL_DATA_DIR, ROOT
 from patch_event_projection import build_patch_notes_projection, build_preview_projection
 
 PUBLIC_DATA_DIR = ROOT / "public" / "data"
-COPY_FILES = ("abilities.json", "champions.json", "meta.json")
+# meta.json is NOT a plain copy: it gains catalog_patch (see build_public_meta).
+COPY_FILES = ("abilities.json", "champions.json")
 LOCALIZED_AUGMENT_DESCRIPTION_FIELDS = {
     "zh_tw": "description_zh_TW",
     "zh_cn": "description_zh_CN",
@@ -169,12 +170,43 @@ def build_live_entity_lookup(internal_dir: Path) -> dict[str, set[str]]:
     }
 
 
+def build_public_meta(internal_dir: Path) -> dict:
+    """Public `meta.json`, naming the statistical and catalog patches separately.
+
+    `patch` stays exactly what the arammayhem scrape produced: the patch the
+    observed win-rate statistics describe. `catalog_patch` is the display patch
+    of the Riot/CDragon mechanics this catalog was actually built from, taken
+    from Riot's own patch-notes metadata.
+
+    They are independent observations of different things. When the feed lags,
+    they differ, and that difference is true rather than a problem to smooth
+    over -- collapsing them is what shipped 26.17 mechanics labelled 26.16 and
+    made the telemetry loader quarantine every live match. `catalog_patch` is
+    never derived from `patch`, and never by arithmetic on a runtime version;
+    absent a Riot authority it is omitted rather than guessed.
+    """
+    meta = dict(read_json(internal_dir / "meta.json"))
+
+    metadata_path = internal_dir / "patch-metadata.json"
+    if metadata_path.exists():
+        patches = read_json(metadata_path).get("patches")
+        if isinstance(patches, list) and patches:
+            current = patches[0]
+            if isinstance(current, dict):
+                version = current.get("version")
+                if isinstance(version, str) and version:
+                    meta["catalog_patch"] = version
+    return meta
+
+
 def export_public_catalog(
     internal_dir: Path = INTERNAL_DATA_DIR,
     public_dir: Path = PUBLIC_DATA_DIR,
 ) -> None:
     for filename in COPY_FILES:
         copy_json(internal_dir / filename, public_dir / filename)
+
+    write_json(public_dir / "meta.json", build_public_meta(internal_dir))
 
     forbidden_telemetry = {
         "win_rate",

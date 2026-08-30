@@ -1,78 +1,75 @@
 {
   "identity_key": "CDragon augmentNameId",
   "counts": {
-    "cdragon": 0,
-    "internal_augments": 21,
-    "wiki": 20,
+    "cdragon": 10,
+    "internal_augments": 5,
+    "wiki": 4,
     "arammayhem_win_rate": 0
   },
   "sources": {
-    "cdragon": [],
+    "cdragon": [
+      {
+        "augmentNameId": "DipDiveDodge",
+        "name": "Ragebait",
+        "slug": "dip-dive-dodge",
+        "rarity": "silver"
+      },
+      {
+        "augmentNameId": "DoubleStrike",
+        "name": "Double Strike",
+        "slug": "double-strike",
+        "rarity": "silver"
+      },
+      {
+        "augmentNameId": "HexCore",
+        "name": "The Hex Core",
+        "slug": "hex-core",
+        "rarity": "prismatic"
+      },
+      {
+        "augmentNameId": "Quest_UltraHydra",
+        "name": "Ultra Hydra",
+        "slug": "quest_-ultra-hydra",
+        "rarity": "prismatic"
+      },
+      {
+        "augmentNameId": "SpiritOfTheJungleMain",
+        "name": "Spirit of the Jungle Main",
+        "slug": "spirit-of-the-jungle-main",
+        "rarity": "gold"
+      },
+      {
+        "augmentNameId": "SummonersSafari",
+        "name": "Summoner's Safari",
+        "slug": "summoners-safari",
+        "rarity": "silver"
+      },
+      {
+        "augmentNameId": "TrueEternity",
+        "name": "True Eternity",
+        "slug": "true-eternity",
+        "rarity": "prismatic"
+      },
+      {
+        "augmentNameId": "Upgrade_DeathDance",
+        "name": "Upgrade Death's Dance",
+        "slug": "upgrade_-death-dance",
+        "rarity": "silver"
+      },
+      {
+        "augmentNameId": "Upgrade_Ravenous",
+        "name": "Upgrade Ravenous Hydra",
+        "slug": "upgrade_-ravenous",
+        "rarity": "gold"
+      },
+      {
+        "augmentNameId": "Upgrade_SunderedSky",
+        "name": "Upgrade Sundered Sky",
+        "slug": "upgrade_-sundered-sky",
+        "rarity": "gold"
+      }
+    ],
     "internal_augments": [
-      {
-        "sourceKey": "warlock-juicebox",
-        "name": "Warlock Juicebox",
-        "status": "unmatched",
-        "tokens": [
-          {
-            "field": "name",
-            "value": "Warlock Juicebox",
-            "token": "warlockjuicebox"
-          }
-        ],
-        "slug": "warlock-juicebox",
-        "rarity": "gold",
-        "lifecycle": "removed",
-        "hasWikiDescription": true
-      },
-      {
-        "sourceKey": "pursuit-of-haste",
-        "name": "Pursuit of Haste",
-        "status": "unmatched",
-        "tokens": [
-          {
-            "field": "name",
-            "value": "Pursuit of Haste",
-            "token": "pursuitofhaste"
-          }
-        ],
-        "slug": "pursuit-of-haste",
-        "rarity": "gold",
-        "lifecycle": "removed",
-        "hasWikiDescription": true
-      },
-      {
-        "sourceKey": "forged-by-the-master",
-        "name": "Forged By The Master",
-        "status": "unmatched",
-        "tokens": [
-          {
-            "field": "name",
-            "value": "Forged By The Master",
-            "token": "forgedbythemaster"
-          }
-        ],
-        "slug": "forged-by-the-master",
-        "rarity": "silver",
-        "lifecycle": "removed",
-        "hasWikiDescription": true
-      },
-      {
-        "sourceKey": "siphon",
-        "name": "Siphon",
-        "status": "unmatched",
-        "tokens": [
-          {
-            "field": "name",
-            "value": "Siphon",
-            "token": "siphon"
-          }
-        ],
-        "slug": "siphon",
-        "rarity": "silver",
-        "lifecycle": "removed",
-        "hasWikiDescription": true
-      },
       {
         "sourceKey": "terraind",
         "name": "Terrain'd",
@@ -86,150 +83,6 @@
         ],
         "slug": "terraind",
         "rarity": "gold",
-        "lifecycle": "removed",
-        "hasWikiDescription": true
-      },
-      {
-        "sourceKey": "from-downtown",
-        "name": "From Downtown",
-        "status": "unmatched",
-        "tokens": [
-          {
-            "field": "name",
-            "value": "From Downtown",
-            "token": "fromdowntown"
-          }
-        ],
-        "slug": "from-downtown",
-        "rarity": "gold",
-        "lifecycle": "removed",
-        "hasWikiDescription": true
-      },
-      {
-        "sourceKey": "dont-change-the-channel",
-        "name": "Don't Change the Channel",
-        "status": "unmatched",
-        "tokens": [
-          {
-            "field": "name",
-            "value": "Don't Change the Channel",
-            "token": "dontchangethechannel"
-          }
-        ],
-        "slug": "dont-change-the-channel",
-        "rarity": "silver",
-        "lifecycle": "removed",
-        "hasWikiDescription": true
-      },
-      {
-        "sourceKey": "its-go-time",
-        "name": "It's Go Time",
-        "status": "unmatched",
-        "tokens": [
-          {
-            "field": "name",
-            "value": "It's Go Time",
-            "token": "itsgotime"
-          }
-        ],
-        "slug": "its-go-time",
-        "rarity": "silver",
-        "lifecycle": "removed",
-        "hasWikiDescription": true
-      },
-      {
-        "sourceKey": "trusty-weapon",
-        "name": "Trusty Weapon",
-        "status": "unmatched",
-        "tokens": [
-          {
-            "field": "name",
-            "value": "Trusty Weapon",
-            "token": "trustyweapon"
-          }
-        ],
-        "slug": "trusty-weapon",
-        "rarity": "silver",
-        "lifecycle": "removed",
-        "hasWikiDescription": true
-      },
-      {
-        "sourceKey": "overloaded",
-        "name": "Overloaded",
-        "status": "unmatched",
-        "tokens": [
-          {
-            "field": "name",
-            "value": "Overloaded",
-            "token": "overloaded"
-          }
-        ],
-        "slug": "overloaded",
-        "rarity": "prismatic",
-        "lifecycle": "removed",
-        "hasWikiDescription": true
-      },
-      {
-        "sourceKey": "adaptive-ward",
-        "name": "Adaptive Ward",
-        "status": "unmatched",
-        "tokens": [
-          {
-            "field": "name",
-            "value": "Adaptive Ward",
-            "token": "adaptiveward"
-          }
-        ],
-        "slug": "adaptive-ward",
-        "rarity": "silver",
-        "lifecycle": "removed",
-        "hasWikiDescription": true
-      },
-      {
-        "sourceKey": "porcupine",
-        "name": "Porcupine",
-        "status": "unmatched",
-        "tokens": [
-          {
-            "field": "name",
-            "value": "Porcupine",
-            "token": "porcupine"
-          }
-        ],
-        "slug": "porcupine",
-        "rarity": "gold",
-        "lifecycle": "removed",
-        "hasWikiDescription": true
-      },
-      {
-        "sourceKey": "pin-cushion",
-        "name": "Pin Cushion",
-        "status": "unmatched",
-        "tokens": [
-          {
-            "field": "name",
-            "value": "Pin Cushion",
-            "token": "pincushion"
-          }
-        ],
-        "slug": "pin-cushion",
-        "rarity": "prismatic",
-        "lifecycle": "removed",
-        "hasWikiDescription": true
-      },
-      {
-        "sourceKey": "surge-field",
-        "name": "Surge Field",
-        "status": "unmatched",
-        "tokens": [
-          {
-            "field": "name",
-            "value": "Surge Field",
-            "token": "surgefield"
-          }
-        ],
-        "slug": "surge-field",
-        "rarity": "prismatic",
         "lifecycle": "removed",
         "hasWikiDescription": true
       },
@@ -266,22 +119,6 @@
         "hasWikiDescription": true
       },
       {
-        "sourceKey": "pat-on-the-back",
-        "name": "Pat On The Back",
-        "status": "unmatched",
-        "tokens": [
-          {
-            "field": "name",
-            "value": "Pat On The Back",
-            "token": "patontheback"
-          }
-        ],
-        "slug": "pat-on-the-back",
-        "rarity": "gold",
-        "lifecycle": "removed",
-        "hasWikiDescription": true
-      },
-      {
         "sourceKey": "pursuit-of-power",
         "name": "Pursuit of Power",
         "status": "unmatched",
@@ -294,38 +131,6 @@
         ],
         "slug": "pursuit-of-power",
         "rarity": "silver",
-        "lifecycle": "removed",
-        "hasWikiDescription": true
-      },
-      {
-        "sourceKey": "support-main",
-        "name": "Quest: Support Main",
-        "status": "unmatched",
-        "tokens": [
-          {
-            "field": "name",
-            "value": "Quest: Support Main",
-            "token": "supportmain"
-          }
-        ],
-        "slug": "support-main",
-        "rarity": "silver",
-        "lifecycle": "removed",
-        "hasWikiDescription": true
-      },
-      {
-        "sourceKey": "squishy-slappy-grab",
-        "name": "Squishy Slappy Grab",
-        "status": "unmatched",
-        "tokens": [
-          {
-            "field": "name",
-            "value": "Squishy Slappy Grab",
-            "token": "squishyslappygrab"
-          }
-        ],
-        "slug": "squishy-slappy-grab",
-        "rarity": "prismatic",
         "lifecycle": "removed",
         "hasWikiDescription": true
       },
@@ -348,58 +153,6 @@
     ],
     "wiki": [
       {
-        "sourceKey": "Warlock Juicebox",
-        "name": "Warlock Juicebox",
-        "status": "unmatched",
-        "tokens": [
-          {
-            "field": "name",
-            "value": "Warlock Juicebox",
-            "token": "warlockjuicebox"
-          }
-        ],
-        "hasWikiDescription": true
-      },
-      {
-        "sourceKey": "Pursuit of Haste",
-        "name": "Pursuit of Haste",
-        "status": "unmatched",
-        "tokens": [
-          {
-            "field": "name",
-            "value": "Pursuit of Haste",
-            "token": "pursuitofhaste"
-          }
-        ],
-        "hasWikiDescription": true
-      },
-      {
-        "sourceKey": "Forged By The Master",
-        "name": "Forged By The Master",
-        "status": "unmatched",
-        "tokens": [
-          {
-            "field": "name",
-            "value": "Forged By The Master",
-            "token": "forgedbythemaster"
-          }
-        ],
-        "hasWikiDescription": true
-      },
-      {
-        "sourceKey": "Siphon",
-        "name": "Siphon",
-        "status": "unmatched",
-        "tokens": [
-          {
-            "field": "name",
-            "value": "Siphon",
-            "token": "siphon"
-          }
-        ],
-        "hasWikiDescription": true
-      },
-      {
         "sourceKey": "Terrain'd",
         "name": "Terrain'd",
         "status": "unmatched",
@@ -408,123 +161,6 @@
             "field": "name",
             "value": "Terrain'd",
             "token": "terraind"
-          }
-        ],
-        "hasWikiDescription": true
-      },
-      {
-        "sourceKey": "From Downtown",
-        "name": "From Downtown",
-        "status": "unmatched",
-        "tokens": [
-          {
-            "field": "name",
-            "value": "From Downtown",
-            "token": "fromdowntown"
-          }
-        ],
-        "hasWikiDescription": true
-      },
-      {
-        "sourceKey": "Don't Change the Channel",
-        "name": "Don't Change the Channel",
-        "status": "unmatched",
-        "tokens": [
-          {
-            "field": "name",
-            "value": "Don't Change the Channel",
-            "token": "dontchangethechannel"
-          }
-        ],
-        "hasWikiDescription": true
-      },
-      {
-        "sourceKey": "It's Go Time",
-        "name": "It's Go Time",
-        "status": "unmatched",
-        "tokens": [
-          {
-            "field": "name",
-            "value": "It's Go Time",
-            "token": "itsgotime"
-          }
-        ],
-        "hasWikiDescription": true
-      },
-      {
-        "sourceKey": "Trusty Weapon",
-        "name": "Trusty Weapon",
-        "status": "unmatched",
-        "tokens": [
-          {
-            "field": "name",
-            "value": "Trusty Weapon",
-            "token": "trustyweapon"
-          }
-        ],
-        "hasWikiDescription": true
-      },
-      {
-        "sourceKey": "Overloaded",
-        "name": "Overloaded",
-        "status": "unmatched",
-        "tokens": [
-          {
-            "field": "name",
-            "value": "Overloaded",
-            "token": "overloaded"
-          }
-        ],
-        "hasWikiDescription": true
-      },
-      {
-        "sourceKey": "Adaptive Ward",
-        "name": "Adaptive Ward",
-        "status": "unmatched",
-        "tokens": [
-          {
-            "field": "name",
-            "value": "Adaptive Ward",
-            "token": "adaptiveward"
-          }
-        ],
-        "hasWikiDescription": true
-      },
-      {
-        "sourceKey": "Porcupine",
-        "name": "Porcupine",
-        "status": "unmatched",
-        "tokens": [
-          {
-            "field": "name",
-            "value": "Porcupine",
-            "token": "porcupine"
-          }
-        ],
-        "hasWikiDescription": true
-      },
-      {
-        "sourceKey": "Pin Cushion",
-        "name": "Pin Cushion",
-        "status": "unmatched",
-        "tokens": [
-          {
-            "field": "name",
-            "value": "Pin Cushion",
-            "token": "pincushion"
-          }
-        ],
-        "hasWikiDescription": true
-      },
-      {
-        "sourceKey": "Surge Field",
-        "name": "Surge Field",
-        "status": "unmatched",
-        "tokens": [
-          {
-            "field": "name",
-            "value": "Surge Field",
-            "token": "surgefield"
           }
         ],
         "hasWikiDescription": true
@@ -550,19 +186,6 @@
         "hasWikiDescription": true
       },
       {
-        "sourceKey": "Pat On The Back",
-        "name": "Pat On The Back",
-        "status": "unmatched",
-        "tokens": [
-          {
-            "field": "name",
-            "value": "Pat On The Back",
-            "token": "patontheback"
-          }
-        ],
-        "hasWikiDescription": true
-      },
-      {
         "sourceKey": "Pursuit of Power",
         "name": "Pursuit of Power",
         "status": "unmatched",
@@ -571,32 +194,6 @@
             "field": "name",
             "value": "Pursuit of Power",
             "token": "pursuitofpower"
-          }
-        ],
-        "hasWikiDescription": true
-      },
-      {
-        "sourceKey": "Quest: Support Main",
-        "name": "Quest: Support Main",
-        "status": "unmatched",
-        "tokens": [
-          {
-            "field": "name",
-            "value": "Quest: Support Main",
-            "token": "supportmain"
-          }
-        ],
-        "hasWikiDescription": true
-      },
-      {
-        "sourceKey": "Squishy Slappy Grab",
-        "name": "Squishy Slappy Grab",
-        "status": "unmatched",
-        "tokens": [
-          {
-            "field": "name",
-            "value": "Squishy Slappy Grab",
-            "token": "squishyslappygrab"
           }
         ],
         "hasWikiDescription": true

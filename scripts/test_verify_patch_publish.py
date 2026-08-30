@@ -68,6 +68,7 @@ class VerifyPatchPublishTests(unittest.TestCase):
         *,
         patch_notes: dict | None = None,
         meta_patch: str | None = "26.13",
+        catalog_patch: str | None = "26.13",
     ) -> None:
         public_dir = root / "public" / "data"
         public_dir.mkdir(parents=True)
@@ -77,8 +78,11 @@ class VerifyPatchPublishTests(unittest.TestCase):
                 encoding="utf-8",
             )
         if meta_patch is not None:
+            meta = {"patch": meta_patch}
+            if catalog_patch is not None:
+                meta["catalog_patch"] = catalog_patch
             (public_dir / "meta.json").write_text(
-                json.dumps({"patch": meta_patch}),
+                json.dumps(meta),
                 encoding="utf-8",
             )
 
@@ -116,16 +120,44 @@ class VerifyPatchPublishTests(unittest.TestCase):
             with self.assertRaisesRegex(PatchPublishError, "zh-TW text coverage"):
                 verify_patch_publish(root=root, changed_paths=[])
 
-    def test_patch_mismatch_fails(self):
+    def test_divergent_feed_and_catalog_patches_succeeds(self):
         with tempfile.TemporaryDirectory() as tmpdir:
             root = Path(tmpdir)
             self.write_public_data(
                 root,
-                patch_notes=public_patch_notes(patch="26.12"),
-                meta_patch="26.13",
+                patch_notes=public_patch_notes(patch="26.17"),
+                meta_patch="26.16",
+                catalog_patch="26.17",
             )
 
-            with self.assertRaisesRegex(PatchPublishError, "patch mismatch"):
+            summary = verify_patch_publish(root=root, changed_paths=[])
+
+        self.assertEqual(summary["patch"], "26.17")
+
+    def test_catalog_patch_mismatch_fails(self):
+        with tempfile.TemporaryDirectory() as tmpdir:
+            root = Path(tmpdir)
+            self.write_public_data(
+                root,
+                patch_notes=public_patch_notes(patch="26.17"),
+                meta_patch="26.17",
+                catalog_patch="26.16",
+            )
+
+            with self.assertRaisesRegex(PatchPublishError, "meta.catalog_patch"):
+                verify_patch_publish(root=root, changed_paths=[])
+
+    def test_missing_catalog_patch_fails(self):
+        with tempfile.TemporaryDirectory() as tmpdir:
+            root = Path(tmpdir)
+            self.write_public_data(
+                root,
+                patch_notes=public_patch_notes(patch="26.17"),
+                meta_patch="26.16",
+                catalog_patch=None,
+            )
+
+            with self.assertRaisesRegex(PatchPublishError, "catalog_patch"):
                 verify_patch_publish(root=root, changed_paths=[])
 
     def test_missing_public_patch_notes_file_fails(self):

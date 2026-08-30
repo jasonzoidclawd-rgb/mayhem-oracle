@@ -60,6 +60,11 @@ LOCALE_FIELDS = {
     "ko": "name_ko",
 }
 
+# What the base catalog writes into `provenance.names.<locale>` when Riot published
+# no localized string for the augment's key and the slot was filled with the English
+# `nameTRA` instead. Produced by scrape_mayhem_augments_cdragon._localized_names.
+ENGLISH_NAME_PLACEHOLDER_PROVENANCE = "cdragon:cherry-augments.nameTRA"
+
 
 def read_json(path: Path) -> dict:
     return json.loads(path.read_text(encoding="utf-8"))
@@ -150,6 +155,7 @@ def resolve_availability(
     kiwi_present: bool = False,
     kiwi_keys: list[str] | None = None,
     kiwi_tokens: list[str] | None = None,
+    mayhem_member: bool = False,
     wiki_row: dict | None,
     definition_placeholder: bool,
     tombstone_removed: bool,
@@ -204,11 +210,15 @@ def resolve_availability(
         status = "removed"
     elif stale_removed_sources:
         status = "removed"
-    elif cdragon_present and (kiwi_present or wiki["status"] == "live" or tencent_status == "live"):
-        # CDragon-primary: first-party registry presence plus a Mayhem kiwi
-        # stringtable entry is sufficient live evidence. Wiki/Tencent remain
-        # additive corroboration signals and every removal/disable/tombstone
-        # branch above still wins.
+    elif cdragon_present and (
+        kiwi_present or mayhem_member or wiki["status"] == "live" or tencent_status == "live"
+    ):
+        # CDragon-primary: first-party registry presence plus Mayhem membership
+        # is sufficient live evidence. Membership is proven by a kiwi
+        # stringtable entry OR by Riot's Kiwi asset namespace -- requiring the
+        # string would treat "Riot authored Mayhem-specific text" as if it were
+        # "Riot ships this in Mayhem". Wiki/Tencent remain additive
+        # corroboration and every removal/disable/tombstone branch still wins.
         status = "confirmed_live"
     elif cdragon_present:
         status = "candidate_registry_present"
@@ -228,6 +238,7 @@ def resolve_availability(
             "keys": kiwi_keys or [],
             "tokens": kiwi_tokens or [],
         },
+        "mayhem": {"member": mayhem_member},
         "wiki": wiki,
         "tencent": {"status": tencent_status},
         "telemetry": {"status": telemetry_status},
@@ -388,9 +399,16 @@ def build_cdragon_row(
         "cdragon": copy.deepcopy(base.get("cdragon", {})),
         "provenance": field_provenance(base.get("provenance", {}), wiki_row, has_win_rate, existing_row),
     }
+    name_provenance = (base.get("provenance") or {}).get("names") or {}
     for locale, output_field in LOCALE_FIELDS.items():
         existing_localized = (existing_row or {}).get(output_field, "")
+        placeholder = name_provenance.get(locale) == ENGLISH_NAME_PLACEHOLDER_PROVENANCE
         if availability["status"] == "removed" and existing_localized:
+            row[output_field] = existing_localized
+        elif placeholder and existing_localized:
+            # The base catalog filled this slot with the English name because Riot
+            # ships no string for this locale. That is a parity placeholder, not a
+            # translation, so it must not displace a real localized name we hold.
             row[output_field] = existing_localized
         else:
             row[output_field] = names.get(locale) or existing_localized
@@ -410,6 +428,7 @@ def build_legacy_row(
     win_rate: float | int | None,
     has_win_rate: bool,
     availability: dict,
+    disowned_augment_id: bool = False,
 ) -> dict:
     definition_placeholder = bool(
         ((availability.get("signals") or {}).get("cdragon_registry") or {}).get("definitionPlaceholder")
@@ -421,6 +440,11 @@ def build_legacy_row(
     row = copy.deepcopy(existing_row)
     if augment_id:
         row["augmentId"] = augment_id
+    elif disowned_augment_id:
+        # The copied row carries an augmentId that belongs to a different slug.
+        # `augment_id is None` alone must not clear it -- that is also how "the
+        # identity map has no opinion" looks, and those rows keep what they had.
+        row.pop("augmentId", None)
     row["win_rate"] = win_rate if has_win_rate else None
     row["kit_tags"] = copy.deepcopy(row.get("kit_tags") or [])
     row["flags"] = preserved_flags(row, lifecycle)
@@ -446,6 +470,15 @@ def build_legacy_row(
         row.setdefault("wikiNotes", [])
         row.setdefault("wikiAvailabilityNotes", [])
     return row
+
+
+def mayhem_member_from_base(base: dict | None) -> bool:
+    """Whether the CDragon base row was admitted as ARAM Mayhem content."""
+    if not isinstance(base, dict):
+        return False
+    cdragon = base.get("cdragon") if isinstance(base.get("cdragon"), dict) else {}
+    mayhem = cdragon.get("mayhem") if isinstance(cdragon.get("mayhem"), dict) else {}
+    return bool(mayhem.get("member"))
 
 
 def kiwi_signal_from_base(base: dict | None) -> dict:
@@ -502,6 +535,19 @@ def assemble_catalog(
                 (primary_slug is None and existing_augment_id == augment_id)
             )
         )
+        # A canonical augmentId identifies exactly one augment. When Riot renames
+        # an augment but keeps its augmentNameId (ARAM_RabbleRousing is now
+        # displayed as "Rejuvenation"), the scraped row under the old display
+        # name and the CDragon-named row both resolve to that one nameId. Only
+        # the primary row may carry it; otherwise two rows assert the same
+        # identity and no consumer keyed on augmentId can tell them apart.
+        disowned_augment_id = bool(
+            augment_id and primary_slug is not None and primary_slug != slug
+        )
+        if disowned_augment_id:
+            augment_id = None
+            base = None
+
         wiki_row = wiki_by_id.get(augment_id) if augment_id else None
         has_win_rate = bool(augment_id in win_rates)
         win_rate = win_rates.get(augment_id) if augment_id else None
@@ -516,6 +562,7 @@ def assemble_catalog(
                 kiwi_present=kiwi_signal["present"],
                 kiwi_keys=kiwi_signal["keys"],
                 kiwi_tokens=kiwi_signal["tokens"],
+                mayhem_member=mayhem_member_from_base(base),
                 wiki_row=wiki_row,
                 definition_placeholder=bool(base.get("definitionPlaceholder")),
                 tombstone_removed=tombstone_removed,
@@ -543,6 +590,7 @@ def assemble_catalog(
             kiwi_present=kiwi_signal["present"],
             kiwi_keys=kiwi_signal["keys"],
             kiwi_tokens=kiwi_signal["tokens"],
+            mayhem_member=mayhem_member_from_base(base),
             wiki_row=wiki_row,
             definition_placeholder=bool(base.get("definitionPlaceholder")) if base else False,
             tombstone_removed=tombstone_removed,
@@ -557,6 +605,7 @@ def assemble_catalog(
             win_rate=win_rate,
             has_win_rate=has_win_rate,
             availability=availability,
+            disowned_augment_id=disowned_augment_id,
         ))
 
     for augment_id, base in base_by_id.items():
@@ -577,6 +626,7 @@ def assemble_catalog(
             kiwi_present=kiwi_signal["present"],
             kiwi_keys=kiwi_signal["keys"],
             kiwi_tokens=kiwi_signal["tokens"],
+            mayhem_member=mayhem_member_from_base(base),
             wiki_row=wiki_row,
             definition_placeholder=bool(base.get("definitionPlaceholder")),
             tombstone_removed=False,

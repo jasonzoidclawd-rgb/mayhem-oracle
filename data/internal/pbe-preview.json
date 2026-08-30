@@ -2,9 +2,9 @@
   "schema_version": 1,
   "branch": "pbe",
   "lane": "preview",
-  "source_patch_label": "pbe-cycle-16.14.7942794+branch.releases-16-14.content.release",
-  "observed_at": "2026-07-13T19:16:25.768897Z",
-  "status": "not_yet_confirmed",
+  "source_patch_label": "pbe-cycle-16.18.8122924+branch.main.content.beta",
+  "observed_at": "2026-08-28T21:31:40.958192Z",
+  "status": "fresh",
   "events": [
     {
       "after": {
@@ -28,7 +28,7 @@
         "tooltip"
       ],
       "is_hotfix": false,
-      "landed": false,
+      "landed": true,
       "lane": "preview",
       "names": {
         "en": "Dropkick",
@@ -39,11 +39,12 @@
       },
       "slug": "dropkick",
       "source_patch_label": "pbe-cycle-16.14.7942794+branch.releases-16-14.content.release",
-      "lifecycle": "upcoming",
+      "lifecycle": "landed",
       "first_seen_cycle": "pbe-cycle-16.14.7942794+branch.releases-16-14.content.release",
-      "observed_cycles": 1,
-      "last_seen_cycle": "pbe-cycle-16.14.7942794+branch.releases-16-14.content.release",
-      "last_seen_at": "2026-07-11T11:22:04.994004Z"
+      "observed_cycles": 2,
+      "last_seen_cycle": "pbe-cycle-16.18.8117674+branch.main.content.beta",
+      "last_seen_at": "2026-07-11T11:22:04.994004Z",
+      "landed_at": "2026-08-28T20:27:48.035523Z"
     },
     {
       "after": {
@@ -78,10 +79,10 @@
       },
       "slug": "infernal-conduit",
       "source_patch_label": "pbe-cycle-16.14.7942794+branch.releases-16-14.content.release",
-      "lifecycle": "upcoming",
+      "lifecycle": "aged_out",
       "first_seen_cycle": "pbe-cycle-16.14.7942794+branch.releases-16-14.content.release",
-      "observed_cycles": 1,
-      "last_seen_cycle": "pbe-cycle-16.14.7942794+branch.releases-16-14.content.release",
+      "observed_cycles": 3,
+      "last_seen_cycle": "pbe-cycle-16.18.8122924+branch.main.content.beta",
       "last_seen_at": "2026-07-11T11:22:04.994004Z"
     },
     {
@@ -106,18 +107,19 @@
         "base_stats.attackDamagePerLevel"
       ],
       "is_hotfix": false,
-      "landed": false,
+      "landed": true,
       "lane": "preview",
       "names": {
         "en": "Corki"
       },
       "slug": "corki",
       "source_patch_label": "pbe-cycle-16.14.7942794+branch.releases-16-14.content.release",
-      "lifecycle": "upcoming",
+      "lifecycle": "landed",
       "first_seen_cycle": "pbe-cycle-16.14.7942794+branch.releases-16-14.content.release",
-      "observed_cycles": 1,
-      "last_seen_cycle": "pbe-cycle-16.14.7942794+branch.releases-16-14.content.release",
-      "last_seen_at": "2026-07-11T11:22:04.994004Z"
+      "observed_cycles": 2,
+      "last_seen_cycle": "pbe-cycle-16.18.8117674+branch.main.content.beta",
+      "last_seen_at": "2026-07-11T11:22:04.994004Z",
+      "landed_at": "2026-08-28T20:27:48.035523Z"
     },
     {
       "after": {
@@ -141,18 +143,54 @@
         "base_stats.attackDamagePerLevel"
       ],
       "is_hotfix": false,
-      "landed": false,
+      "landed": true,
       "lane": "preview",
       "names": {
         "en": "Yunara"
       },
       "slug": "yunara",
       "source_patch_label": "pbe-cycle-16.14.7942794+branch.releases-16-14.content.release",
-      "lifecycle": "upcoming",
+      "lifecycle": "landed",
       "first_seen_cycle": "pbe-cycle-16.14.7942794+branch.releases-16-14.content.release",
-      "observed_cycles": 1,
-      "last_seen_cycle": "pbe-cycle-16.14.7942794+branch.releases-16-14.content.release",
-      "last_seen_at": "2026-07-11T11:22:04.994004Z"
+      "observed_cycles": 2,
+      "last_seen_cycle": "pbe-cycle-16.18.8117674+branch.main.content.beta",
+      "last_seen_at": "2026-07-11T11:22:04.994004Z",
+      "landed_at": "2026-08-28T20:27:48.035523Z"
+    },
+    {
+      "after": {
+        "description": "<mainText><stats><attention> 450</attention> Health<br><attention> 55</attention> Magic Resist</stats><br><br><jadeUnique>Intangibility:</jadeUnique> Grants a <shield>Spell Shield</shield> that blocks the next enemy ability. This <shield>Shield</shield> refreshes after no damage is taken from enemy champions for 25 seconds.<br><jadeUnique>Shadow Mending:</jadeUnique> Grants <healing>45 Health Regen</healing> per 5 for up to 10 seconds after taking damage from an enemy champion or when the <shield>Spell Shield</shield> breaks.</mainText>"
+      },
+      "before": {
+        "description": "<mainText><stats><attention> 450</attention> Health<br><attention> 55</attention> Magic Resist</stats><br><br><jadeUnique>Intangibility:</jadeUnique> Grants a <shield>Spell Shield</shield> that blocks the next enemy ability. This <shield>Shield</shield> refreshes after no damage is taken from enemy champions for 25 seconds.<br><jadeUnique>Shadow Mending:</jadeUnique> Grants <healing>9 Health Regen</healing> per 5 for up to 10 seconds after taking damage from an enemy champion or when the <shield>Spell Shield</shield> breaks.</mainText>"
+      },
+      "branch": "pbe",
+      "canonical_id": "773102",
+      "change_kind": "text",
+      "comparison": {
+        "base_branch": "latest",
+        "base_version": "16.17.8104348+branch.releases-16-17.content.release",
+        "target_branch": "pbe",
+        "target_version": "16.18.8122924+branch.main.content.beta"
+      },
+      "detected_at": "2026-08-28T21:31:40.958192Z",
+      "entity_type": "item",
+      "fields_changed": [
+        "description"
+      ],
+      "is_hotfix": false,
+      "landed": false,
+      "lane": "preview",
+      "names": {
+        "en": "Banshee's Veil"
+      },
+      "slug": "banshee-s-veil",
+      "source_patch_label": "pbe-cycle-16.18.8122924+branch.main.content.beta",
+      "lifecycle": "upcoming",
+      "first_seen_cycle": "pbe-cycle-16.18.8117674+branch.main.content.beta",
+      "observed_cycles": 2,
+      "last_seen_cycle": "pbe-cycle-16.18.8122924+branch.main.content.beta",
+      "last_seen_at": "2026-08-28T21:31:40.958192Z"
     },
     {
       "after": {
@@ -176,18 +214,19 @@
         "description"
       ],
       "is_hotfix": false,
-      "landed": false,
+      "landed": true,
       "lane": "preview",
       "names": {
         "en": "Hextech Rocketbelt"
       },
       "slug": "hextech-rocketbelt",
       "source_patch_label": "pbe-cycle-16.14.7942794+branch.releases-16-14.content.release",
-      "lifecycle": "upcoming",
+      "lifecycle": "landed",
       "first_seen_cycle": "pbe-cycle-16.14.7942794+branch.releases-16-14.content.release",
-      "observed_cycles": 1,
-      "last_seen_cycle": "pbe-cycle-16.14.7942794+branch.releases-16-14.content.release",
-      "last_seen_at": "2026-07-11T11:22:04.994004Z"
+      "observed_cycles": 2,
+      "last_seen_cycle": "pbe-cycle-16.18.8117674+branch.main.content.beta",
+      "last_seen_at": "2026-07-11T11:22:04.994004Z",
+      "landed_at": "2026-08-28T20:27:48.035523Z"
     },
     {
       "after": {
@@ -211,18 +250,19 @@
         "description"
       ],
       "is_hotfix": false,
-      "landed": false,
+      "landed": true,
       "lane": "preview",
       "names": {
         "en": "Immortal Path"
       },
       "slug": "immortal-path",
       "source_patch_label": "pbe-cycle-16.14.7942794+branch.releases-16-14.content.release",
-      "lifecycle": "upcoming",
+      "lifecycle": "landed",
       "first_seen_cycle": "pbe-cycle-16.14.7942794+branch.releases-16-14.content.release",
-      "observed_cycles": 1,
-      "last_seen_cycle": "pbe-cycle-16.14.7942794+branch.releases-16-14.content.release",
-      "last_seen_at": "2026-07-11T11:22:04.994004Z"
+      "observed_cycles": 2,
+      "last_seen_cycle": "pbe-cycle-16.18.8117674+branch.main.content.beta",
+      "last_seen_at": "2026-07-11T11:22:04.994004Z",
+      "landed_at": "2026-08-28T20:27:48.035523Z"
     },
     {
       "after": {
@@ -246,18 +286,19 @@
         "description"
       ],
       "is_hotfix": false,
-      "landed": false,
+      "landed": true,
       "lane": "preview",
       "names": {
         "en": "Kraken Slayer"
       },
       "slug": "kraken-slayer",
       "source_patch_label": "pbe-cycle-16.14.7942794+branch.releases-16-14.content.release",
-      "lifecycle": "upcoming",
+      "lifecycle": "landed",
       "first_seen_cycle": "pbe-cycle-16.14.7942794+branch.releases-16-14.content.release",
-      "observed_cycles": 1,
-      "last_seen_cycle": "pbe-cycle-16.14.7942794+branch.releases-16-14.content.release",
-      "last_seen_at": "2026-07-11T11:22:04.994004Z"
+      "observed_cycles": 2,
+      "last_seen_cycle": "pbe-cycle-16.18.8117674+branch.main.content.beta",
+      "last_seen_at": "2026-07-11T11:22:04.994004Z",
+      "landed_at": "2026-08-28T20:27:48.035523Z"
     },
     {
       "after": {
@@ -281,18 +322,19 @@
         "description"
       ],
       "is_hotfix": false,
-      "landed": false,
+      "landed": true,
       "lane": "preview",
       "names": {
         "en": "Navori Flickerblades"
       },
       "slug": "navori-flickerblades",
       "source_patch_label": "pbe-cycle-16.14.7942794+branch.releases-16-14.content.release",
-      "lifecycle": "upcoming",
+      "lifecycle": "landed",
       "first_seen_cycle": "pbe-cycle-16.14.7942794+branch.releases-16-14.content.release",
-      "observed_cycles": 1,
-      "last_seen_cycle": "pbe-cycle-16.14.7942794+branch.releases-16-14.content.release",
-      "last_seen_at": "2026-07-11T11:22:04.994004Z"
+      "observed_cycles": 2,
+      "last_seen_cycle": "pbe-cycle-16.18.8117674+branch.main.content.beta",
+      "last_seen_at": "2026-07-11T11:22:04.994004Z",
+      "landed_at": "2026-08-28T20:27:48.035523Z"
     },
     {
       "after": {
@@ -316,18 +358,19 @@
         "description"
       ],
       "is_hotfix": false,
-      "landed": false,
+      "landed": true,
       "lane": "preview",
       "names": {
         "en": "Phantom Dancer"
       },
       "slug": "phantom-dancer",
       "source_patch_label": "pbe-cycle-16.14.7942794+branch.releases-16-14.content.release",
-      "lifecycle": "upcoming",
+      "lifecycle": "landed",
       "first_seen_cycle": "pbe-cycle-16.14.7942794+branch.releases-16-14.content.release",
-      "observed_cycles": 1,
-      "last_seen_cycle": "pbe-cycle-16.14.7942794+branch.releases-16-14.content.release",
-      "last_seen_at": "2026-07-11T11:22:04.994004Z"
+      "observed_cycles": 2,
+      "last_seen_cycle": "pbe-cycle-16.18.8117674+branch.main.content.beta",
+      "last_seen_at": "2026-07-11T11:22:04.994004Z",
+      "landed_at": "2026-08-28T20:27:48.035523Z"
     },
     {
       "after": {
@@ -351,18 +394,19 @@
         "cost"
       ],
       "is_hotfix": false,
-      "landed": false,
+      "landed": true,
       "lane": "preview",
       "names": {
         "en": "Protoplasm Harness"
       },
       "slug": "protoplasm-harness",
       "source_patch_label": "pbe-cycle-16.14.7942794+branch.releases-16-14.content.release",
-      "lifecycle": "upcoming",
+      "lifecycle": "landed",
       "first_seen_cycle": "pbe-cycle-16.14.7942794+branch.releases-16-14.content.release",
-      "observed_cycles": 1,
-      "last_seen_cycle": "pbe-cycle-16.14.7942794+branch.releases-16-14.content.release",
-      "last_seen_at": "2026-07-11T11:22:04.994004Z"
+      "observed_cycles": 2,
+      "last_seen_cycle": "pbe-cycle-16.18.8117674+branch.main.content.beta",
+      "last_seen_at": "2026-07-11T11:22:04.994004Z",
+      "landed_at": "2026-08-28T20:27:48.035523Z"
     },
     {
       "after": {
@@ -386,18 +430,54 @@
         "description"
       ],
       "is_hotfix": false,
-      "landed": false,
+      "landed": true,
       "lane": "preview",
       "names": {
         "en": "Rapid Firecannon"
       },
       "slug": "rapid-firecannon",
       "source_patch_label": "pbe-cycle-16.14.7942794+branch.releases-16-14.content.release",
-      "lifecycle": "upcoming",
+      "lifecycle": "landed",
       "first_seen_cycle": "pbe-cycle-16.14.7942794+branch.releases-16-14.content.release",
-      "observed_cycles": 1,
-      "last_seen_cycle": "pbe-cycle-16.14.7942794+branch.releases-16-14.content.release",
-      "last_seen_at": "2026-07-11T11:22:04.994004Z"
+      "observed_cycles": 2,
+      "last_seen_cycle": "pbe-cycle-16.18.8117674+branch.main.content.beta",
+      "last_seen_at": "2026-07-11T11:22:04.994004Z",
+      "landed_at": "2026-08-28T20:27:48.035523Z"
+    },
+    {
+      "after": {
+        "description": "<mainText><stats><attention> 200</attention> Health<br><attention> 45</attention> Magic Resist</stats><br><br><jadeUnique>Shadow Mending:</jadeUnique> Grants <healing>15 Health Regen</healing> per 5 seconds for up to 10 seconds after taking damage from an enemy champion.</mainText>"
+      },
+      "before": {
+        "description": "<mainText><stats><attention> 200</attention> Health<br><attention> 45</attention> Magic Resist</stats><br><br><jadeUnique>Shadow Mending:</jadeUnique> Grants <healing>3 Health Regen</healing> per 5 seconds for up to 10 seconds after taking damage from an enemy champion.</mainText>"
+      },
+      "branch": "pbe",
+      "canonical_id": "773211",
+      "change_kind": "text",
+      "comparison": {
+        "base_branch": "latest",
+        "base_version": "16.17.8104348+branch.releases-16-17.content.release",
+        "target_branch": "pbe",
+        "target_version": "16.18.8122924+branch.main.content.beta"
+      },
+      "detected_at": "2026-08-28T21:31:40.958192Z",
+      "entity_type": "item",
+      "fields_changed": [
+        "description"
+      ],
+      "is_hotfix": false,
+      "landed": false,
+      "lane": "preview",
+      "names": {
+        "en": "Spectre's Cowl"
+      },
+      "slug": "spectre-s-cowl",
+      "source_patch_label": "pbe-cycle-16.18.8122924+branch.main.content.beta",
+      "lifecycle": "upcoming",
+      "first_seen_cycle": "pbe-cycle-16.18.8117674+branch.main.content.beta",
+      "observed_cycles": 2,
+      "last_seen_cycle": "pbe-cycle-16.18.8122924+branch.main.content.beta",
+      "last_seen_at": "2026-08-28T21:31:40.958192Z"
     }
   ]
 }

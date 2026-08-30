@@ -536,5 +536,245 @@ class AssembleCatalogTests(unittest.TestCase):
         self.assertEqual(output["patch"], "26.13")
 
 
+
+class CanonicalIdentityUniquenessTests(unittest.TestCase):
+    """One CDragon augmentNameId is one canonical augment.
+
+    Riot renamed ARAM_RabbleRousing's display name to "Rejuvenation" while
+    keeping the legacy nameId. Our catalog then held two rows -- the scraped
+    legacy "Rabble Rousing" row and the CDragon-named "Rejuvenation" row --
+    and the assembler stamped BOTH with augmentId ARAM_RabbleRousing. Any
+    consumer keyed on augmentId then sees one identity claimed twice and
+    cannot tell which row a statistic belongs to.
+
+    The primary row (the one whose name matches CDragon's current name) owns
+    the identity. A non-primary row must not claim it.
+    """
+
+    def _assemble(self):
+        existing = {
+            "patch": "26.17",
+            "scraped_at": "old",
+            "augments": [
+                {
+                    "slug": "rabble-rousing",
+                    "name": "Rabble Rousing",
+                    "augmentId": "ARAM_RabbleRousing",
+                    "rarity": "gold",
+                    "win_rate": None,
+                    "icon": "https://arammayhem.test/rabble.webp",
+                    "name_zh_CN": "rabble zh-CN",
+                    "name_zh_TW": "rabble zh-TW",
+                    "name_ja": "rabble ja",
+                    "name_ko": "rabble ko",
+                    "kit_tags": [],
+                    "flags": {"system_breaker": False, "lifecycle": "active"},
+                    "availability": {"status": "confirmed_live", "signals": {"tombstone": {"removed": False}}},
+                    "type": "standalone",
+                },
+                {
+                    "slug": "rejuvenation",
+                    "name": "Rejuvenation",
+                    "augmentId": "ARAM_RabbleRousing",
+                    "rarity": "gold",
+                    "win_rate": None,
+                    "icon": "https://example.test/rejuvenation.png",
+                    "name_zh_CN": "rejuvenation zh-CN",
+                    "name_zh_TW": "rejuvenation zh-TW",
+                    "name_ja": "rejuvenation ja",
+                    "name_ko": "rejuvenation ko",
+                    "kit_tags": [],
+                    "flags": {"system_breaker": False, "lifecycle": "active"},
+                    "availability": {"status": "confirmed_live", "signals": {"tombstone": {"removed": False}}},
+                    "type": "ability",
+                },
+            ],
+        }
+        identity_map = {
+            "mappings": [
+                {
+                    "augmentId": "ARAM_RabbleRousing",
+                    "cdragon": {"augmentNameId": "ARAM_RabbleRousing", "name": "Rejuvenation"},
+                    "sources": {
+                        "internal_augments": [
+                            {"sourceKey": "rabble-rousing", "name": "Rabble Rousing", "slug": "rabble-rousing", "lifecycle": "active"},
+                            {"sourceKey": "rejuvenation", "name": "Rejuvenation", "slug": "rejuvenation", "lifecycle": "active"},
+                        ]
+                    },
+                }
+            ]
+        }
+        return assemble_catalog(
+            existing_catalog=existing,
+            base_catalog={
+                "generated_at": "2026-06-23T00:00:00+00:00",
+                "augments": [base_row("ARAM_RabbleRousing", "Rejuvenation")],
+            },
+            wiki_feed={"augments": {"ARAM_RabbleRousing": {"wikiDescription": "Heals on ability cast."}}},
+            winrate_feed={"win_rates": {}},
+            identity_map=identity_map,
+        )
+
+    def test_one_augment_id_is_claimed_by_exactly_one_row(self):
+        output = self._assemble()
+        claimants = [row["slug"] for row in output["augments"] if row.get("augmentId") == "ARAM_RabbleRousing"]
+        self.assertEqual(claimants, ["rejuvenation"])
+
+    def test_the_non_primary_row_survives_without_claiming_the_identity(self):
+        # The stale row is not deleted here -- deleting a catalog row is a
+        # lifecycle decision, not an identity one. It simply stops asserting an
+        # identity that belongs to another augment.
+        output = self._assemble()
+        stale = next(row for row in output["augments"] if row["slug"] == "rabble-rousing")
+        self.assertIsNone(stale.get("augmentId"))
+
+    def test_no_augment_id_is_duplicated_across_the_catalog(self):
+        output = self._assemble()
+        seen = [row["augmentId"] for row in output["augments"] if row.get("augmentId")]
+        self.assertEqual(len(seen), len(set(seen)))
+
+
+
+
+class MayhemMembershipAvailabilityTests(unittest.TestCase):
+    """Registry presence plus Mayhem membership is live evidence.
+
+    `resolve_availability` treated the `kiwi_` stringtable signal as the only
+    proof that a CDragon row was Mayhem content. That is the same conflation
+    the membership gate made: it is presentation evidence, not membership
+    authority. An augment admitted by Riot's Kiwi asset namespace is just as
+    much a Mayhem augment, so it reaches confirmed_live the same way.
+
+    Every removal branch still wins first, so admitting a row can never
+    resurrect a tombstoned augment.
+    """
+
+    def test_asset_namespace_membership_is_live_evidence(self):
+        availability = resolve_availability(
+            augment_id="Upgrade_Ravenous",
+            slug="upgrade-ravenous",
+            cdragon_present=True,
+            kiwi_present=False,
+            mayhem_member=True,
+            wiki_row=None,
+            definition_placeholder=False,
+            tombstone_removed=False,
+        )
+        self.assertEqual(availability["status"], "confirmed_live")
+        self.assertEqual(lifecycle_for_availability(availability["status"]), "active")
+
+    def test_registry_presence_without_membership_is_not_live(self):
+        availability = resolve_availability(
+            augment_id="SomeArenaRow",
+            slug="some-arena-row",
+            cdragon_present=True,
+            kiwi_present=False,
+            mayhem_member=False,
+            wiki_row=None,
+            definition_placeholder=False,
+            tombstone_removed=False,
+        )
+        self.assertEqual(availability["status"], "candidate_registry_present")
+
+    def test_a_tombstoned_augment_is_not_resurrected_by_membership(self):
+        availability = resolve_availability(
+            augment_id="ARAM_Retired",
+            slug="retired",
+            cdragon_present=True,
+            kiwi_present=False,
+            mayhem_member=True,
+            wiki_row=None,
+            definition_placeholder=False,
+            tombstone_removed=True,
+        )
+        self.assertEqual(availability["status"], "removed")
+
+    def test_membership_is_recorded_as_a_signal(self):
+        availability = resolve_availability(
+            augment_id="Upgrade_Ravenous",
+            slug="upgrade-ravenous",
+            cdragon_present=True,
+            kiwi_present=False,
+            mayhem_member=True,
+            wiki_row=None,
+            definition_placeholder=False,
+            tombstone_removed=False,
+        )
+        self.assertTrue(availability["signals"]["mayhem"]["member"])
+
+
+
+class EnglishFallbackNameTests(unittest.TestCase):
+    """An English placeholder is not localization and must not displace a real name.
+
+    Riot publishes some ARAM Mayhem augments only under an unprefixed base
+    stringtable key (`pincushion_name`) that exists in `en_US` and in no other
+    locale. For those rows the base catalog fills every locale slot with the
+    English `nameTRA` and says so in provenance. That keeps five-locale parity
+    non-empty, but the value is a placeholder -- treating it as a name lets it
+    overwrite the genuine localized text the catalog already carries.
+    """
+
+    LOCALES = {"zh_cn": "name_zh_CN", "zh_tw": "name_zh_TW", "ja": "name_ja", "ko": "name_ko"}
+    LOCALIZED = {
+        "name_zh_CN": "\u8c6a\u732a",
+        "name_zh_TW": "\u8c6a\u8c6c",
+        "name_ja": "\u30e4\u30de\u30a2\u30e9\u30b7",
+        "name_ko": "\uace0\uc2b4\ub3c4\uce58",
+    }
+
+    def _catalog(self, *, name_provenance: dict, existing_localized: dict) -> dict:
+        base = base_row("PinCushion", "Porcupine")
+        # Riot published no localized string, so every slot holds the English name.
+        base["names"] = {locale: "Porcupine" for locale in ("en", *self.LOCALES)}
+        base["provenance"] = {"definition": "cdragon", "names": name_provenance}
+        existing = {
+            "patch": "26.17",
+            "scraped_at": "old",
+            "augments": [{"slug": "porcupine", "name": "Porcupine", **existing_localized}],
+        }
+        identity_map = {
+            "mappings": [
+                {
+                    "augmentId": "PinCushion",
+                    "cdragon": {"name": "Porcupine", "slug": "porcupine", "rarity": "gold"},
+                    "sources": {"internal_augments": [{"slug": "porcupine", "name": "Porcupine"}]},
+                }
+            ]
+        }
+        output = assemble_catalog(
+            existing_catalog=existing,
+            base_catalog={"generated_at": "2026-08-29T00:00:00+00:00", "augments": [base]},
+            wiki_feed={"augments": {}},
+            winrate_feed={"win_rates": {}},
+            identity_map=identity_map,
+        )
+        return next(a for a in output["augments"] if a["slug"] == "porcupine")
+
+    def test_english_nametra_fallback_does_not_overwrite_existing_localized_name(self):
+        row = self._catalog(
+            name_provenance={locale: "cdragon:cherry-augments.nameTRA" for locale in self.LOCALES},
+            existing_localized=dict(self.LOCALIZED),
+        )
+        for field, expected in self.LOCALIZED.items():
+            self.assertEqual(row[field], expected, f"{field} lost its localized name to the English placeholder")
+
+    def test_real_stringtable_name_still_wins_over_existing_value(self):
+        row = self._catalog(
+            name_provenance={locale: f"cdragon:stringtable:pincushion_name:{locale}" for locale in self.LOCALES},
+            existing_localized=dict(self.LOCALIZED),
+        )
+        for field in self.LOCALIZED:
+            self.assertEqual(row[field], "Porcupine", f"{field} ignored a genuine stringtable name")
+
+    def test_english_placeholder_still_fills_a_slot_with_nothing_to_preserve(self):
+        row = self._catalog(
+            name_provenance={locale: "cdragon:cherry-augments.nameTRA" for locale in self.LOCALES},
+            existing_localized={},
+        )
+        for field in self.LOCALIZED:
+            self.assertEqual(row[field], "Porcupine", f"{field} left empty, breaking five-locale parity")
+
+
 if __name__ == "__main__":
     unittest.main()

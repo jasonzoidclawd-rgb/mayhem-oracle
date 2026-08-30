@@ -44,7 +44,10 @@ LOCALE_SUFFIX = {"zh_TW": "zh_TW", "zh_CN": "zh_CN", "ja_JP": "ja", "ko_KR": "ko
 # Our ability key → index into Data Dragon's spells[] (passive is separate).
 SPELL_INDEX = {"Q": 0, "W": 1, "E": 2, "R": 3}
 
-_ICON_KEY_RE = re.compile(r"/(\d+)\.png$")
+# CommunityDragon champion icons ONLY: the trailing number there is the Riot
+# champion key. Anchored to the champion-icons segment on purpose - an
+# unanchored trailing-number match silently accepts an image size (BUG-4).
+_ICON_KEY_RE = re.compile(r"/champion-icons/(\d+)\.png$")
 _TAG_RE = re.compile(r"<[^>]+>")
 _WS_RE = re.compile(r"\s+")
 
@@ -77,6 +80,25 @@ def item_names(version: str, dd_locale: str) -> dict[str, str]:
 
 
 def enrich(records: list[dict], key_of, name_maps: dict[str, dict[str, str]]) -> int:
+    """Localize records in place, keyed by an authoritative upstream identifier.
+
+    Two rows resolving to one source key means identity has collapsed upstream;
+    last-write-wins would publish one champion's names on another's row, which
+    is the failure this whole module now guards (BUG-4). Fail closed instead.
+    """
+    seen: dict[str, dict] = {}
+    for rec in records:
+        key = key_of(rec)
+        if not key:
+            continue
+        if key in seen:
+            raise ValueError(
+                f"source identity {key!r} claimed by two records: "
+                f"{seen[key].get('slug') or seen[key].get('id')!r} and "
+                f"{rec.get('slug') or rec.get('id')!r}"
+            )
+        seen[key] = rec
+
     enriched = 0
     for rec in records:
         key = key_of(rec)
@@ -93,6 +115,22 @@ def enrich(records: list[dict], key_of, name_maps: dict[str, dict[str, str]]) ->
 
 
 def champion_key(rec: dict) -> str | None:
+    """Riot champion key for a catalog row, from the authoritative field.
+
+    `champion_key` is written by `scrape_base_stats.py` (step 7) straight from
+    Data Dragon's `info.key`, so it is Riot's own identifier and it is already
+    present by the time this runs (step 10b).
+
+    The icon URL is a LAST RESORT, kept only for the CommunityDragon form whose
+    final path component genuinely is the champion key. arammayhem's newer CDN
+    ends its icons in the image SIZE instead (.../icons/aatrox/64.png), and 64
+    is Lee Sin, so trusting any trailing number collapsed 171 champions onto him
+    (BUG-4). The fallback therefore matches the champion-icons path explicitly
+    rather than "the last number in the URL".
+    """
+    key = rec.get("champion_key")
+    if isinstance(key, (str, int)) and str(key).isdigit():
+        return str(key)
     m = _ICON_KEY_RE.search(rec.get("icon", "") or "")
     return m.group(1) if m else None
 

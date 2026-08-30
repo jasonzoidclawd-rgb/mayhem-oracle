@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
-"""Compare published patch data against live upstream patch signals."""
+"""Compare the published arammayhem statistics-feed patch against its live patch.
+
+This does not prove Riot catalog or mechanics freshness. ``meta.catalog_patch``
+must not be substituted for the arammayhem feed authority in ``meta.patch``.
+"""
 
 from __future__ import annotations
 
@@ -51,6 +55,7 @@ def freshness_status(published_patch: str | None, upstream_patch: str | None) ->
 
 def load_published_patch(meta_path: Path) -> str | None:
     data = json.loads(meta_path.read_text(encoding="utf-8"))
+    # meta.patch is the arammayhem statistics-feed authority; catalog_patch is Riot-owned.
     patch = data.get("patch")
     return patch if isinstance(patch, str) else None
 
@@ -90,6 +95,7 @@ def main() -> None:
         upstream_error = str(exc)
     status = freshness_status(published_patch, upstream_patch)
     result = {
+        "scope": "statistics-feed",
         "status": status,
         "published_patch": published_patch,
         "upstream_patch": upstream_patch,
@@ -102,7 +108,11 @@ def main() -> None:
     if args.json:
         print(json.dumps(result, sort_keys=True))
     else:
-        print(f"{status}: published={published_patch or 'unknown'} upstream={upstream_patch or 'unknown'}")
+        print(
+            f"statistics-feed {status}: "
+            f"published_feed_patch={published_patch or 'unknown'} "
+            f"arammayhem_upstream_patch={upstream_patch or 'unknown'}",
+        )
 
     if status == "stale":
         raise SystemExit(2)

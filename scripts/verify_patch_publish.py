@@ -107,10 +107,13 @@ def verify_patch_publish(
 
     if meta_path.exists():
         meta = load_json(meta_path)
-        meta_patch = meta.get("patch") if isinstance(meta, dict) else None
-        if isinstance(meta_patch, str) and meta_patch and meta_patch != patch:
+        catalog_patch = meta.get("catalog_patch") if isinstance(meta, dict) else None
+        if not isinstance(catalog_patch, str) or not catalog_patch:
+            raise PatchPublishError("missing Riot patch authority: meta.catalog_patch")
+        if catalog_patch != patch:
             raise PatchPublishError(
-                f"patch mismatch: public patch-notes={patch} meta={meta_patch}",
+                "patch mismatch: "
+                f"public patch-notes.patch={patch} meta.catalog_patch={catalog_patch}",
             )
 
     scraped_at = data.get("scraped_at")

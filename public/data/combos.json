@@ -1,6 +1,6 @@
 {
-  "patch": "26.13",
-  "scraped_at": "2026-07-12T22:39:39.095225+00:00",
+  "patch": "26.16",
+  "scraped_at": "2026-08-28T21:21:33.031876+00:00",
   "generated_from": "internal-pool-mechanics",
   "combos": [
     {
@@ -20,17 +20,17 @@
     },
     {
       "champion": "ahri",
+      "augment": "From Downtown",
+      "tier": "S"
+    },
+    {
+      "champion": "ahri",
       "augment": "Jeweled Gauntlet",
       "tier": "S"
     },
     {
       "champion": "ahri",
       "augment": "Multishot",
-      "tier": "S"
-    },
-    {
-      "champion": "ahri",
-      "augment": "Spell Split",
       "tier": "S"
     },
     {
@@ -95,17 +95,17 @@
     },
     {
       "champion": "anivia",
+      "augment": "From Downtown",
+      "tier": "S"
+    },
+    {
+      "champion": "anivia",
       "augment": "Infernal Conduit",
       "tier": "S"
     },
     {
       "champion": "anivia",
       "augment": "Jeweled Gauntlet",
-      "tier": "S"
-    },
-    {
-      "champion": "anivia",
-      "augment": "Master of Duality",
       "tier": "S"
     },
     {
@@ -165,17 +165,17 @@
     },
     {
       "champion": "aurora",
+      "augment": "From Downtown",
+      "tier": "S"
+    },
+    {
+      "champion": "aurora",
       "augment": "Jeweled Gauntlet",
       "tier": "S"
     },
     {
       "champion": "aurora",
       "augment": "Multishot",
-      "tier": "S"
-    },
-    {
-      "champion": "aurora",
-      "augment": "Spell Split",
       "tier": "S"
     },
     {
@@ -225,6 +225,11 @@
     },
     {
       "champion": "blitzcrank",
+      "augment": "From Downtown",
+      "tier": "S"
+    },
+    {
+      "champion": "blitzcrank",
       "augment": "Jeweled Gauntlet",
       "tier": "S"
     },
@@ -234,8 +239,8 @@
       "tier": "S"
     },
     {
-      "champion": "blitzcrank",
-      "augment": "Spell Split",
+      "champion": "brand",
+      "augment": "From Downtown",
       "tier": "S"
     },
     {
@@ -246,11 +251,6 @@
     {
       "champion": "brand",
       "augment": "Multishot",
-      "tier": "S"
-    },
-    {
-      "champion": "brand",
-      "augment": "Spell Split",
       "tier": "S"
     },
     {
@@ -335,7 +335,7 @@
     },
     {
       "champion": "corki",
-      "augment": "Icathia's Fall",
+      "augment": "Infernal Conduit",
       "tier": "S"
     },
     {
@@ -360,12 +360,12 @@
     },
     {
       "champion": "diana",
-      "augment": "Jeweled Gauntlet",
+      "augment": "From Downtown",
       "tier": "S"
     },
     {
       "champion": "diana",
-      "augment": "Mercy's Strike",
+      "augment": "Jeweled Gauntlet",
       "tier": "S"
     },
     {
@@ -395,12 +395,12 @@
     },
     {
       "champion": "ekko",
-      "augment": "Jeweled Gauntlet",
+      "augment": "From Downtown",
       "tier": "S"
     },
     {
       "champion": "ekko",
-      "augment": "Mercy's Strike",
+      "augment": "Jeweled Gauntlet",
       "tier": "S"
     },
     {
@@ -415,7 +415,12 @@
     },
     {
       "champion": "elise",
-      "augment": "Jeweled Gauntlet",
+      "augment": "From Downtown",
+      "tier": "S"
+    },
+    {
+      "champion": "evelynn",
+      "augment": "From Downtown",
       "tier": "S"
     },
     {
@@ -429,8 +434,8 @@
       "tier": "S"
     },
     {
-      "champion": "evelynn",
-      "augment": "Multishot",
+      "champion": "ezreal",
+      "augment": "From Downtown",
       "tier": "S"
     },
     {
@@ -441,11 +446,6 @@
     {
       "champion": "ezreal",
       "augment": "Spell Split",
-      "tier": "S"
-    },
-    {
-      "champion": "ezreal",
-      "augment": "Tripleshot",
       "tier": "S"
     },
     {
@@ -535,17 +535,17 @@
     },
     {
       "champion": "gnar",
+      "augment": "From Downtown",
+      "tier": "S"
+    },
+    {
+      "champion": "gnar",
       "augment": "Jeweled Gauntlet",
       "tier": "S"
     },
     {
       "champion": "gnar",
       "augment": "Multishot",
-      "tier": "S"
-    },
-    {
-      "champion": "gnar",
-      "augment": "Spell Split",
       "tier": "S"
     },
     {
@@ -580,17 +580,17 @@
     },
     {
       "champion": "heimerdinger",
+      "augment": "From Downtown",
+      "tier": "S"
+    },
+    {
+      "champion": "heimerdinger",
       "augment": "Infernal Conduit",
       "tier": "S"
     },
     {
       "champion": "heimerdinger",
       "augment": "Jeweled Gauntlet",
-      "tier": "S"
-    },
-    {
-      "champion": "heimerdinger",
-      "augment": "Multishot",
       "tier": "S"
     },
     {
@@ -645,12 +645,12 @@
     },
     {
       "champion": "ivern",
-      "augment": "Jeweled Gauntlet",
+      "augment": "From Downtown",
       "tier": "S"
     },
     {
       "champion": "ivern",
-      "augment": "Mercy's Strike",
+      "augment": "Jeweled Gauntlet",
       "tier": "S"
     },
     {
@@ -665,7 +665,7 @@
     },
     {
       "champion": "janna",
-      "augment": "Jeweled Gauntlet",
+      "augment": "From Downtown",
       "tier": "S"
     },
     {
@@ -735,12 +735,12 @@
     },
     {
       "champion": "karma",
-      "augment": "Jeweled Gauntlet",
+      "augment": "From Downtown",
       "tier": "S"
     },
     {
       "champion": "karma",
-      "augment": "Mercy's Strike",
+      "augment": "Jeweled Gauntlet",
       "tier": "S"
     },
     {
@@ -795,12 +795,12 @@
     },
     {
       "champion": "kayle",
-      "augment": "Jeweled Gauntlet",
+      "augment": "From Downtown",
       "tier": "S"
     },
     {
       "champion": "kayle",
-      "augment": "Mercy's Strike",
+      "augment": "Jeweled Gauntlet",
       "tier": "S"
     },
     {
@@ -820,17 +820,17 @@
     },
     {
       "champion": "kennen",
+      "augment": "From Downtown",
+      "tier": "S"
+    },
+    {
+      "champion": "kennen",
       "augment": "Jeweled Gauntlet",
       "tier": "S"
     },
     {
       "champion": "kennen",
       "augment": "Multishot",
-      "tier": "S"
-    },
-    {
-      "champion": "kennen",
-      "augment": "Spell Split",
       "tier": "S"
     },
     {
@@ -870,17 +870,17 @@
     },
     {
       "champion": "kogmaw",
+      "augment": "From Downtown",
+      "tier": "S"
+    },
+    {
+      "champion": "kogmaw",
       "augment": "Jeweled Gauntlet",
       "tier": "S"
     },
     {
       "champion": "kogmaw",
       "augment": "Multishot",
-      "tier": "S"
-    },
-    {
-      "champion": "kogmaw",
-      "augment": "Spell Split",
       "tier": "S"
     },
     {
@@ -900,17 +900,17 @@
     },
     {
       "champion": "leblanc",
+      "augment": "From Downtown",
+      "tier": "S"
+    },
+    {
+      "champion": "leblanc",
       "augment": "Jeweled Gauntlet",
       "tier": "S"
     },
     {
       "champion": "leblanc",
       "augment": "Multishot",
-      "tier": "S"
-    },
-    {
-      "champion": "leblanc",
-      "augment": "Spell Split",
       "tier": "S"
     },
     {
@@ -960,6 +960,11 @@
     },
     {
       "champion": "lissandra",
+      "augment": "From Downtown",
+      "tier": "S"
+    },
+    {
+      "champion": "lissandra",
       "augment": "Jeweled Gauntlet",
       "tier": "S"
     },
@@ -969,8 +974,18 @@
       "tier": "S"
     },
     {
-      "champion": "lissandra",
-      "augment": "Spell Split",
+      "champion": "locke",
+      "augment": "Bolstered",
+      "tier": "S"
+    },
+    {
+      "champion": "locke",
+      "augment": "From Downtown",
+      "tier": "S"
+    },
+    {
+      "champion": "locke",
+      "augment": "Mercy's Strike",
       "tier": "S"
     },
     {
@@ -980,12 +995,12 @@
     },
     {
       "champion": "lulu",
-      "augment": "Jeweled Gauntlet",
+      "augment": "From Downtown",
       "tier": "S"
     },
     {
       "champion": "lulu",
-      "augment": "Mercy's Strike",
+      "augment": "Jeweled Gauntlet",
       "tier": "S"
     },
     {
@@ -995,12 +1010,12 @@
     },
     {
       "champion": "lux",
-      "augment": "Jeweled Gauntlet",
+      "augment": "From Downtown",
       "tier": "S"
     },
     {
       "champion": "lux",
-      "augment": "Mercy's Strike",
+      "augment": "Jeweled Gauntlet",
       "tier": "S"
     },
     {
@@ -1015,12 +1030,12 @@
     },
     {
       "champion": "malzahar",
-      "augment": "Icathia's Fall",
+      "augment": "Infernal Conduit",
       "tier": "S"
     },
     {
       "champion": "malzahar",
-      "augment": "Infernal Conduit",
+      "augment": "Jeweled Gauntlet",
       "tier": "S"
     },
     {
@@ -1060,12 +1075,12 @@
     },
     {
       "champion": "mel",
-      "augment": "Mercy's Strike",
+      "augment": "From Downtown",
       "tier": "S"
     },
     {
       "champion": "mel",
-      "augment": "Multishot",
+      "augment": "Mercy's Strike",
       "tier": "S"
     },
     {
@@ -1080,7 +1095,7 @@
     },
     {
       "champion": "milio",
-      "augment": "Jeweled Gauntlet",
+      "augment": "From Downtown",
       "tier": "S"
     },
     {
@@ -1125,12 +1140,12 @@
     },
     {
       "champion": "morgana",
-      "augment": "Jeweled Gauntlet",
+      "augment": "From Downtown",
       "tier": "S"
     },
     {
       "champion": "morgana",
-      "augment": "Mercy's Strike",
+      "augment": "Jeweled Gauntlet",
       "tier": "S"
     },
     {
@@ -1175,7 +1190,7 @@
     },
     {
       "champion": "nasus",
-      "augment": "Icathia's Fall",
+      "augment": "Infernal Conduit",
       "tier": "S"
     },
     {
@@ -1185,12 +1200,17 @@
     },
     {
       "champion": "nautilus",
-      "augment": "Jeweled Gauntlet",
+      "augment": "From Downtown",
       "tier": "S"
     },
     {
       "champion": "nautilus",
-      "augment": "Mercy's Strike",
+      "augment": "Jeweled Gauntlet",
+      "tier": "S"
+    },
+    {
+      "champion": "neeko",
+      "augment": "From Downtown",
       "tier": "S"
     },
     {
@@ -1204,23 +1224,18 @@
       "tier": "S"
     },
     {
-      "champion": "neeko",
-      "augment": "Spell Split",
-      "tier": "S"
-    },
-    {
       "champion": "nidalee",
       "augment": "Bolstered",
       "tier": "S"
     },
     {
       "champion": "nidalee",
-      "augment": "Jeweled Gauntlet",
+      "augment": "From Downtown",
       "tier": "S"
     },
     {
       "champion": "nidalee",
-      "augment": "Mercy's Strike",
+      "augment": "Jeweled Gauntlet",
       "tier": "S"
     },
     {
@@ -1240,17 +1255,17 @@
     },
     {
       "champion": "nocturne",
+      "augment": "From Downtown",
+      "tier": "S"
+    },
+    {
+      "champion": "nocturne",
       "augment": "Multishot",
       "tier": "S"
     },
     {
       "champion": "nocturne",
       "augment": "Spell Split",
-      "tier": "S"
-    },
-    {
-      "champion": "nocturne",
-      "augment": "Tripleshot",
       "tier": "S"
     },
     {
@@ -1265,7 +1280,7 @@
     },
     {
       "champion": "nunu",
-      "augment": "Jeweled Gauntlet",
+      "augment": "From Downtown",
       "tier": "S"
     },
     {
@@ -1290,12 +1305,12 @@
     },
     {
       "champion": "orianna",
-      "augment": "Jeweled Gauntlet",
+      "augment": "From Downtown",
       "tier": "S"
     },
     {
       "champion": "orianna",
-      "augment": "Mercy's Strike",
+      "augment": "Jeweled Gauntlet",
       "tier": "S"
     },
     {
@@ -1440,12 +1455,12 @@
     },
     {
       "champion": "renata",
-      "augment": "Jeweled Gauntlet",
+      "augment": "From Downtown",
       "tier": "S"
     },
     {
       "champion": "renata",
-      "augment": "Mercy's Strike",
+      "augment": "Jeweled Gauntlet",
       "tier": "S"
     },
     {
@@ -1560,12 +1575,12 @@
     },
     {
       "champion": "seraphine",
-      "augment": "Mercy's Strike",
+      "augment": "From Downtown",
       "tier": "S"
     },
     {
       "champion": "seraphine",
-      "augment": "Multishot",
+      "augment": "Mercy's Strike",
       "tier": "S"
     },
     {
@@ -1665,17 +1680,17 @@
     },
     {
       "champion": "smolder",
+      "augment": "From Downtown",
+      "tier": "S"
+    },
+    {
+      "champion": "smolder",
       "augment": "Jeweled Gauntlet",
       "tier": "S"
     },
     {
       "champion": "smolder",
       "augment": "Multishot",
-      "tier": "S"
-    },
-    {
-      "champion": "smolder",
-      "augment": "Spell Split",
       "tier": "S"
     },
     {
@@ -1825,7 +1840,7 @@
     },
     {
       "champion": "teemo",
-      "augment": "Icathia's Fall",
+      "augment": "Infernal Conduit",
       "tier": "S"
     },
     {
@@ -1840,7 +1855,7 @@
     },
     {
       "champion": "thresh",
-      "augment": "Jeweled Gauntlet",
+      "augment": "From Downtown",
       "tier": "S"
     },
     {
@@ -1955,17 +1970,17 @@
     },
     {
       "champion": "veigar",
+      "augment": "From Downtown",
+      "tier": "S"
+    },
+    {
+      "champion": "veigar",
       "augment": "Jeweled Gauntlet",
       "tier": "S"
     },
     {
       "champion": "veigar",
       "augment": "Multishot",
-      "tier": "S"
-    },
-    {
-      "champion": "veigar",
-      "augment": "Spell Split",
       "tier": "S"
     },
     {
@@ -1990,12 +2005,12 @@
     },
     {
       "champion": "vex",
-      "augment": "Mercy's Strike",
+      "augment": "From Downtown",
       "tier": "S"
     },
     {
       "champion": "vex",
-      "augment": "Multishot",
+      "augment": "Mercy's Strike",
       "tier": "S"
     },
     {
@@ -2080,12 +2095,17 @@
     },
     {
       "champion": "warwick",
-      "augment": "Jeweled Gauntlet",
+      "augment": "Mercy's Strike",
       "tier": "S"
     },
     {
       "champion": "warwick",
-      "augment": "Mercy's Strike",
+      "augment": "Ravenous Bind",
+      "tier": "S"
+    },
+    {
+      "champion": "xerath",
+      "augment": "From Downtown",
       "tier": "S"
     },
     {
@@ -2096,11 +2116,6 @@
     {
       "champion": "xerath",
       "augment": "Multishot",
-      "tier": "S"
-    },
-    {
-      "champion": "xerath",
-      "augment": "Spell Split",
       "tier": "S"
     },
     {
@@ -2115,7 +2130,7 @@
     },
     {
       "champion": "xinzhao",
-      "augment": "Jeweled Gauntlet",
+      "augment": "From Downtown",
       "tier": "S"
     },
     {
@@ -2240,6 +2255,11 @@
     },
     {
       "champion": "zoe",
+      "augment": "From Downtown",
+      "tier": "S"
+    },
+    {
+      "champion": "zoe",
       "augment": "Jeweled Gauntlet",
       "tier": "S"
     },
@@ -2249,8 +2269,8 @@
       "tier": "S"
     },
     {
-      "champion": "zoe",
-      "augment": "Spell Split",
+      "champion": "zyra",
+      "augment": "From Downtown",
       "tier": "S"
     },
     {
@@ -2261,11 +2281,6 @@
     {
       "champion": "zyra",
       "augment": "Multishot",
-      "tier": "S"
-    },
-    {
-      "champion": "zyra",
-      "augment": "Spell Split",
       "tier": "S"
     }
   ]

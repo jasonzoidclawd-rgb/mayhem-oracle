@@ -326,6 +326,17 @@ def _champion_bin_key(alias: str) -> str:
     return re.sub(r"[^a-z0-9]", "", alias.lower())
 
 
+def _is_variant_champion(detail: dict[str, Any]) -> bool:
+    """True when CDragon declares this row a variant of a prime champion.
+
+    Alternate-mode rosters (the `Jade_*` ids at 60001+) restate a prime
+    champion under a new id and carry a back-reference to it.  No
+    `game/data/characters/<key>` bin exists for them, so they are not
+    independent champions and never belong in the champion catalog.
+    """
+    return "relatedPrimeContentId" in detail or "relatedPrimeItemId" in detail
+
+
 def fetch_branch_entities(
     branch: str,
     *,
@@ -352,11 +363,13 @@ def fetch_branch_entities(
             continue
         champion_rows.append(row)
 
-    def fetch_champion(row: dict[str, Any]) -> tuple[str, dict[str, Any], dict[str, Any]]:
+    def fetch_champion(row: dict[str, Any]) -> tuple[str, dict[str, Any], dict[str, Any]] | None:
         raw_id = row["id"]
         detail = fetch_json(f"{api}/champions/{raw_id}.json")
         if not isinstance(detail, dict):
             raise SnapshotValidationError(f"malformed champion detail for {raw_id}")
+        if _is_variant_champion(detail):
+            return None
         alias = str(row.get("alias") or detail.get("alias") or "")
         if not alias:
             raise SnapshotValidationError(f"champion {raw_id} is missing alias for bin lookup")
@@ -370,7 +383,7 @@ def fetch_branch_entities(
     base_stats: dict[str, dict[str, Any]] = {}
     with ThreadPoolExecutor(max_workers=8) as pool:
         fetched = list(pool.map(fetch_champion, champion_rows))
-    for canonical_id, detail, stats in fetched:
+    for canonical_id, detail, stats in filter(None, fetched):
         details[canonical_id] = detail
         base_stats[canonical_id] = stats
 
@@ -382,7 +395,9 @@ def fetch_branch_entities(
         stringtable=stringtable if isinstance(stringtable, dict) else {},
         registry_token_aliases=aliases,
     ))
-    champions = normalize_champion_entities(summary, details, base_stats)
+    champions = normalize_champion_entities(
+        [row for row in champion_rows if str(row["id"]) in details], details, base_stats
+    )
     normalized_items = normalize_item_entities(items)
     return source_version, {
         "augment": augments,
@@ -396,9 +411,33 @@ def fetch_branch_entities(
 
 
 def _latest_patch_label(internal_dir: Path, source_version: str) -> str:
-    meta = _read_json(internal_dir / "meta.json") or {}
-    patch = meta.get("patch")
-    return str(patch) if isinstance(patch, str) and patch else source_version
+    """Display patch for the CURRENT CDragon build we just acquired.
+
+    The authority is Riot's own patch-notes metadata (`patch-metadata.json`,
+    written one step earlier by `scrape_patch_notes.py`), because the question
+    "which display patch do these mechanics belong to?" is Riot's to answer.
+
+    It is deliberately NOT `meta.json` `.patch`. That value comes from
+    arammayhem.com via `scrape_arammayhem.py` and means "the patch the win-rate
+    feed currently describes" -- a third party that lags Riot. On 2026-08-29 it
+    said 26.16 while CDragon served 16.17.x (= 26.17), so every acquisition was
+    stamped a patch behind its own mechanics (BUG-3). The two are separate
+    concepts and must stay independently representable: current mechanics on
+    26.17 and lagging observations on 26.16 is a truthful state, not a conflict.
+
+    With no Riot authority on disk we fall back to the runtime build string.
+    Naming the build is honest about not knowing the display patch; borrowing
+    the feed's patch would be a guess wearing the costume of an observation.
+    """
+    metadata = _read_json(internal_dir / "patch-metadata.json") or {}
+    patches = metadata.get("patches")
+    if isinstance(patches, list) and patches:
+        current = patches[0]
+        if isinstance(current, dict):
+            version = current.get("version")
+            if isinstance(version, str) and version:
+                return version
+    return source_version
 
 
 def promote_branch(
