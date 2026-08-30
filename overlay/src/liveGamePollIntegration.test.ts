@@ -109,7 +109,9 @@ describe("centralized game-epoch advancement", () => {
   // live-active activation check, so a boundary detected mid-poll announces
   // in that SAME poll rather than the next one.
   it("resolves both boundary signals into a single guarded beginNewGameEpoch call before the activation check", () => {
-    const gameHashFetch = app.indexOf('await invoke<string | null>("get_game_hash")');
+    const gameHashFetch = app.indexOf(
+      "const gameHashResult = await gameHashFlightRef.current.run({",
+    );
     const activationCheck = app.indexOf("shouldAnnounceLiveActivation({", gameHashFetch);
     const guardedCall = app.indexOf(
       "if (newGameBoundaryDetected) {\n" +
@@ -216,7 +218,7 @@ describe("centralized game-epoch advancement", () => {
     const probeStart = app.indexOf("const runIdentityProbe = useCallback(async (");
     expect(probeStart).toBeGreaterThan(-1);
     const epochCapture = app.indexOf("const gameEpoch = gameEpochRef.current;", probeStart);
-    const firstAwait = app.indexOf("await invoke", probeStart);
+    const firstAwait = app.indexOf("await executeOcrRun(", probeStart);
     expect(epochCapture).toBeGreaterThan(probeStart);
     expect(epochCapture).toBeLessThan(firstAwait);
 
@@ -249,7 +251,7 @@ describe("centralized game-epoch advancement", () => {
 
     it("startMemberVerification delegates to the real runMemberVerification with live refs, not an inline await chain", () => {
       const def = app.indexOf("const startMemberVerification = useCallback(");
-      const defEnd = app.indexOf("[],\n  );", def);
+      const defEnd = app.indexOf("[nativePollGeneration],\n  );", def);
       expect(def).toBeGreaterThan(-1);
       const body = app.slice(def, defEnd);
       expect(body).toContain("runMemberVerification(");
@@ -257,9 +259,8 @@ describe("centralized game-epoch advancement", () => {
       expect(body).toContain("gameHash: () => activeGameHashRef.current,");
       expect(body).toContain("token: () => memberVerificationTokenRef.current,");
       expect(body).toContain("gameActive: () => activeGameRef.current,");
-      expect(body).toContain(
-        'recheckGameHash: () => invoke<string | null>("get_game_hash").catch(() => null),',
-      );
+      expect(body).toContain("recheckGameHash: async () => {");
+      expect(body).toContain('invoke<string | null>("get_game_hash")');
       // The useCallback itself must not be `async` / must not await the
       // promise it returns — it hands the promise straight back to the
       // fire-and-forget `void startMemberVerification(...)` call site.

@@ -125,6 +125,7 @@ import {
   FOREGROUND_POLL_INTERVAL_MS,
   type ForegroundPollHost,
 } from "./foregroundPollScheduler";
+import { NativeSingleFlight } from "./nativeSingleFlight";
 import { isPlausibleTitle } from "./surfacePresence";
 import {
   DEFAULT_PROBE_CONFIG,
@@ -612,6 +613,11 @@ function App() {
   const pollInFlightRef = useRef(false);
   const pollPendingRef = useRef(false);
   const pollRef = useRef<() => Promise<void>>(async () => {});
+  const foregroundFlightRef = useRef(new NativeSingleFlight<ForegroundState | null>());
+  const gameflowFlightRef = useRef(new NativeSingleFlight<LcuGameflowState | null>());
+  const clientDetectionFlightRef = useRef(new NativeSingleFlight<boolean>());
+  const liveDataFlightRef = useRef(new NativeSingleFlight<LivePlayerData | null>());
+  const gameHashFlightRef = useRef(new NativeSingleFlight<string | null>());
   // Physical single-flight ownership of the foreground invoke. Written only
   // where a poll starts and in that poll's `finally` — never by a clock.
   const foregroundNativeStartedAtRef = useRef<number | null>(null);
@@ -723,6 +729,13 @@ function App() {
     setPhase(nextPhase);
     setOcrLifecycle((previous) => ({ ...previous, phase: nextPhase }));
   }, []);
+
+  const nativePollGeneration = useCallback(() => [
+    foregroundEpochRef.current,
+    gameEpochRef.current,
+    championGenerationRef.current,
+    phaseRef.current,
+  ].join(":"), []);
 
   // The coarse "is a game currently active" render/capture gate. This is
   // NEVER a source of epoch or activation-latch changes on its own — a
@@ -3545,13 +3558,19 @@ function App() {
         {
           setMemberSnapshot,
           verifyMemberGameStart,
-          recheckGameHash: () => invoke<string | null>("get_game_hash").catch(() => null),
+          recheckGameHash: async () => {
+            const result = await gameHashFlightRef.current.run({
+              invoke: () => invoke<string | null>("get_game_hash"),
+              generation: nativePollGeneration,
+            });
+            return result.status === "ready" ? result.value : null;
+          },
           setVerificationState: (state) => {
             memberVerificationStateRef.current = state;
           },
         },
       ),
-    [],
+    [nativePollGeneration],
   );
 
   // Main polling loop
@@ -3571,10 +3590,18 @@ function App() {
         return;
       }
 
-      await refreshForeground();
+      const foregroundResult = await foregroundFlightRef.current.run({
+        invoke: refreshForeground,
+        generation: nativePollGeneration,
+      });
+      if (foregroundResult.status === "stale") return;
 
-      const gameflow = await invoke<LcuGameflowState | null>("get_lcu_gameflow_state")
-        .catch(() => null);
+      const gameflowResult = await gameflowFlightRef.current.run({
+        invoke: () => invoke<LcuGameflowState | null>("get_lcu_gameflow_state"),
+        generation: nativePollGeneration,
+      });
+      if (gameflowResult.status === "stale") return;
+      const gameflow = gameflowResult.status === "ready" ? gameflowResult.value : null;
       // The scheduler's coarse "active game" gate: capture is compliant only in
       // a live game. This is the ONLY telemetry the probe scheduler consults.
       // A missing sample (LCU read failure/timeout) is not a confirmed
@@ -3595,7 +3622,12 @@ function App() {
           action: "clear-confirmed-non-live",
           failureAgeMs: 0,
         });
-        const clientFound = await invoke<boolean>("detect_league_client").catch(() => false);
+        const clientResult = await clientDetectionFlightRef.current.run({
+          invoke: () => invoke<boolean>("detect_league_client"),
+          generation: nativePollGeneration,
+        });
+        if (clientResult.status === "stale") return;
+        const clientFound = clientResult.status === "ready" ? clientResult.value : false;
         // On the first owned close, the boundary invokes
         // closeConfirmedGame(clientFound ? "client_found" : "idle");
         applyGameOwnershipObservation({
@@ -3609,15 +3641,18 @@ function App() {
       let data: LivePlayerData | null = null;
       let liveDataStatus: "ready" | "unavailable" | "error" = "unavailable";
       {
-        const liveDataResult: {
-          data: LivePlayerData | null;
-          status: "ready" | "unavailable" | "error";
-        } = await invoke<LivePlayerData | null>("get_live_player_data").then(
-          (value) => ({ data: value, status: value ? "ready" : "unavailable" }),
-          () => ({ data: null, status: "error" }),
-        );
-        data = liveDataResult.data;
-        liveDataStatus = liveDataResult.status;
+        const liveDataResult = await liveDataFlightRef.current.run({
+          invoke: () => invoke<LivePlayerData | null>("get_live_player_data"),
+          generation: nativePollGeneration,
+        });
+        if (liveDataResult.status === "stale") return;
+        if (liveDataResult.status === "ready") {
+          data = liveDataResult.value;
+          liveDataStatus = data ? "ready" : "unavailable";
+        } else {
+          data = null;
+          liveDataStatus = liveDataResult.reason === "rejected" ? "error" : "unavailable";
+        }
         if (import.meta.env.DEV) {
           const statusTransition = describeLiveClientStatusTransition({
             previousStatus: priorLiveClientStatusRef.current?.gameEpoch === gameEpochRef.current
@@ -3672,7 +3707,12 @@ function App() {
           // (and its fresh live-active) until the NEXT poll, by which time
           // game-two evidence has already published under the still-open
           // game-one epoch.
-          const gameHash = await invoke<string | null>("get_game_hash").catch(() => null);
+          const gameHashResult = await gameHashFlightRef.current.run({
+            invoke: () => invoke<string | null>("get_game_hash"),
+            generation: nativePollGeneration,
+          });
+          if (gameHashResult.status === "stale") return;
+          const gameHash = gameHashResult.status === "ready" ? gameHashResult.value : null;
           let verifyGameHash: string | null = null;
           let newGameBoundaryDetected = false;
           if (!gameHash) {
@@ -3843,7 +3883,12 @@ function App() {
       // touching game identity or the activation latch, so recovery of the
       // SAME match resumes instead of opening a new analyzer epoch.
       try {
-        const clientFound = await invoke<boolean>("detect_league_client");
+        const clientResult = await clientDetectionFlightRef.current.run({
+          invoke: () => invoke<boolean>("detect_league_client"),
+          generation: nativePollGeneration,
+        });
+        if (clientResult.status === "stale") return;
+        const clientFound = clientResult.status === "ready" ? clientResult.value : false;
         suspendGameRuntimeForUnavailableTelemetry(clientFound ? "client_found" : "idle");
       } catch {
         suspendGameRuntimeForUnavailableTelemetry("idle");
@@ -3862,6 +3907,7 @@ function App() {
     closeConfirmedGame,
     collectorEnabled,
     finishOcr,
+    nativePollGeneration,
     refreshForeground,
     setActiveGame,
     startMemberVerification,
