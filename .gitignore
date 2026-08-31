@@ -61,3 +61,5 @@ graphify-out/
 riot-discovery/
 *.riot-raw.json
 *.riot-timeline-raw.json
+
+/data/internal/aramgg-champion-augments.artifact.json
